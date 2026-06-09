@@ -32,6 +32,7 @@ class Olo_Finder_Tile extends Olo_Tile_Base {
         'zone_on'     => '#ffffff',
         'card_bg'     => '',
         'card_border' => '',
+        'media_bg'    => '',
         'align'       => 'center',
         // additive (default = aspetto storico)
         'default_index'     => '0',
@@ -87,6 +88,7 @@ class Olo_Finder_Tile extends Olo_Tile_Base {
         $cardbg = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
         $cardbd = $this->safe_color_css( $s['card_border'] ?? '' ) ?: 'var(--olo-color-border, #e5e7eb)';
         $chipbg = $this->safe_color_css( $s['chip_bg'] ?? '' ) ?: 'transparent';
+        $media_bg = $this->safe_color_css( $s['media_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #1e1e1e)';
         $center = ( ( $s['align'] ?? 'center' ) === 'center' );
         $serif  = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
         $sans   = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
@@ -143,6 +145,14 @@ class Olo_Finder_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .ofn-res.show{display:block;animation:ofnfade .35s ease;}
             @keyframes ofnfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
             .<?php echo $uid; ?> .ofn-res__meta{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--fn-accent);}
+            .<?php echo $uid; ?> .ofn-res--media{gap:32px;align-items:center;}
+            .<?php echo $uid; ?> .ofn-res--media.show{display:flex;}
+            .<?php echo $uid; ?> .ofn-media{width:190px;flex:0 0 auto;aspect-ratio:190/240;border-radius:2px;overflow:hidden;position:relative;background:<?php echo $media_bg; ?>;background-size:cover;background-position:center;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,.06) 0 16px, transparent 16px 32px);}
+            .<?php echo $uid; ?> .ofn-media__lbl{position:absolute;left:12px;bottom:10px;font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+            .<?php echo $uid; ?> .ofn-res__body{flex:1;min-width:0;}
+            .<?php echo $uid; ?> .ofn-kicker{display:block;font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--fn-accent);margin-bottom:6px;}
+            .<?php echo $uid; ?> .ofn-res--media .ofn-res__meta{margin-top:14px;}
+            @media(max-width:600px){.<?php echo $uid; ?> .ofn-res--media{flex-direction:column;}.<?php echo $uid; ?> .ofn-media{width:100%;aspect-ratio:auto;height:240px;}}
             .<?php echo $uid; ?> .ofn-res__t{font-family:<?php echo $serif; ?>;font-size:clamp(22px,3vw,30px);line-height:1.15;margin:8px 0 0;color:var(--olo-color-text,#111827);}
             .<?php echo $uid; ?> .ofn-res__x{font-size:15.5px;line-height:1.6;opacity:.8;margin:12px 0 0;}
             .<?php echo $uid; ?> .ofn-res__cta{display:inline-flex;align-items:center;gap:8px;margin-top:20px;font-weight:600;font-size:14px;color:var(--fn-on);background:var(--fn-accent);padding:11px 22px;border-radius:999px;text-decoration:none;transition:transform .18s;}
@@ -170,12 +180,34 @@ class Olo_Finder_Tile extends Olo_Tile_Base {
             </div>
             <?php foreach ( $items as $i => $it ) :
                 list( $t_cls, $t_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $it['title'] ?? '' ) );
+                $f_img    = isset( $it['image'] ) ? trim( $it['image'] ) : '';
+                $f_mlabel = $it['media_label'] ?? '';
+                $f_kicker = $it['kicker'] ?? '';
+                $f_mb     = $this->bg_media_parts( $it['media_bg'] ?? null, $uid . '-i' . $i );
+                $f_media  = ( $f_img !== '' || $f_mlabel !== '' || $f_mb['has'] );
+                if ( $f_mb['has'] ) {
+                    $f_mstyle = $f_mb['css'] !== '' ? ' style="' . esc_attr( $f_mb['css'] ) . '"' : '';
+                } else {
+                    $f_mstyle = $f_img !== '' ? ' style="background-image:url(' . esc_url( $f_img ) . ')"' : '';
+                }
             ?>
-                <div class="ofn-res<?php echo $i === $def_idx ? ' show' : ''; ?>" data-fn-res="<?php echo intval( $i ); ?>" role="tabpanel">
-                    <?php if ( ! empty( $it['meta'] ) ) : ?><div class="ofn-res__meta"><?php echo esc_html( $it['meta'] ); ?></div><?php endif; ?>
-                    <?php if ( ! empty( $it['title'] ) ) : ?><h3 class="ofn-res__t<?php echo $t_cls; ?>"<?php echo $t_data; ?>><?php echo esc_html( $it['title'] ); ?></h3><?php endif; ?>
-                    <?php if ( ! empty( $it['text'] ) ) : ?><p class="ofn-res__x"><?php echo esc_html( $it['text'] ); ?></p><?php endif; ?>
-                    <?php if ( ! empty( $it['cta_text'] ) ) : ?><a class="ofn-res__cta" href="<?php echo esc_url( $it['cta_url'] ?: '#' ); ?>"><?php echo esc_html( $it['cta_text'] ); ?></a><?php endif; ?>
+                <div class="ofn-res<?php echo $f_media ? ' ofn-res--media' : ''; ?><?php echo $i === $def_idx ? ' show' : ''; ?>" data-fn-res="<?php echo intval( $i ); ?>" role="tabpanel">
+                    <?php if ( $f_media ) : ?>
+                        <div class="ofn-media"<?php echo $f_mstyle; ?>><?php if ( $f_mb['has'] && $f_mb['markup'] !== '' ) { echo $f_mb['markup']; } ?><?php if ( ! $f_mb['has'] && $f_img === '' && $f_mlabel !== '' ) : ?><span class="ofn-media__lbl"><?php echo esc_html( $f_mlabel ); ?></span><?php endif; ?></div>
+                        <div class="ofn-res__body">
+                            <?php if ( $f_kicker !== '' ) : ?><span class="ofn-kicker"><?php echo esc_html( $f_kicker ); ?></span><?php endif; ?>
+                            <?php if ( ! empty( $it['title'] ) ) : ?><h3 class="ofn-res__t<?php echo $t_cls; ?>"<?php echo $t_data; ?>><?php echo esc_html( $it['title'] ); ?></h3><?php endif; ?>
+                            <?php if ( ! empty( $it['text'] ) ) : ?><p class="ofn-res__x"><?php echo esc_html( $it['text'] ); ?></p><?php endif; ?>
+                            <?php if ( ! empty( $it['meta'] ) ) : ?><div class="ofn-res__meta"><?php echo esc_html( $it['meta'] ); ?></div><?php endif; ?>
+                            <?php if ( ! empty( $it['cta_text'] ) ) : ?><a class="ofn-res__cta" href="<?php echo esc_url( $it['cta_url'] ?: '#' ); ?>"><?php echo esc_html( $it['cta_text'] ); ?></a><?php endif; ?>
+                        </div>
+                    <?php else : ?>
+                        <?php if ( $f_kicker !== '' ) : ?><span class="ofn-kicker"><?php echo esc_html( $f_kicker ); ?></span><?php endif; ?>
+                        <?php if ( ! empty( $it['meta'] ) ) : ?><div class="ofn-res__meta"><?php echo esc_html( $it['meta'] ); ?></div><?php endif; ?>
+                        <?php if ( ! empty( $it['title'] ) ) : ?><h3 class="ofn-res__t<?php echo $t_cls; ?>"<?php echo $t_data; ?>><?php echo esc_html( $it['title'] ); ?></h3><?php endif; ?>
+                        <?php if ( ! empty( $it['text'] ) ) : ?><p class="ofn-res__x"><?php echo esc_html( $it['text'] ); ?></p><?php endif; ?>
+                        <?php if ( ! empty( $it['cta_text'] ) ) : ?><a class="ofn-res__cta" href="<?php echo esc_url( $it['cta_url'] ?: '#' ); ?>"><?php echo esc_html( $it['cta_text'] ); ?></a><?php endif; ?>
+                    <?php endif; ?>
                 </div>
             <?php endforeach; ?>
         </div>

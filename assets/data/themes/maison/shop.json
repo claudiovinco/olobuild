@@ -1,0 +1,352 @@
+[
+ {
+  "id": "mas-se-1",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large",
+   "padding_bottom": 0
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f3eee4"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "mas-ro-1",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mas-co-1",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "mas-pagehead",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Everything we make",
+         "eyebrow_color": "#a9794f",
+         "eyebrow_dot_color": "#a9794f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "The ",
+           "color": "#2c2419",
+           "italic": false
+          },
+          {
+           "text": "shop",
+           "color": "#a9794f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 72,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Made in small batches in solid timber. Every piece ships flat-packed or fully assembled, with a 100-day trial.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#928572",
+         "tagline_text_size": 17,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mas-se-2",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f3eee4"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "mas-ro-2",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mas-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "mas-productgrid",
+        "type": "productgrid",
+        "settings": {
+         "columns": 4,
+         "gap": 22,
+         "media_aspect": "1/1",
+         "media_bg": "#faf6ee",
+         "stripe_dark": false,
+         "hover_zoom": true,
+         "card_bg": "",
+         "card_border": "",
+         "card_radius": 0,
+         "card_padding": 0,
+         "tag_bg": "#2c2419",
+         "tag_color": "#ffffff",
+         "quick_add_show": false,
+         "category_color": "#928572",
+         "title_font": "serif",
+         "title_size": 20,
+         "title_color": "#2c2419",
+         "price_color": "#a9794f",
+         "add_button": false,
+         "show_filters": true,
+         "filter_all_label": "All",
+         "filter_list": "Seating, Storage, Dining, Lighting",
+         "filter_text_color": "#5d5142",
+         "filter_border_color": "#c8b89e",
+         "filter_active_bg": "#2c2419",
+         "filter_active_color": "#f3eee4",
+         "footer_text": "",
+         "footer_url": "#",
+         "items": [
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "lounge chair",
+           "tag": "",
+           "category": "Seating",
+           "title": "Linden Lounge Chair",
+           "notes": "",
+           "roast": 0,
+           "price": "€890",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Seating"
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "sofa",
+           "tag": "",
+           "category": "Seating",
+           "title": "Hale Two-Seater",
+           "notes": "",
+           "roast": 0,
+           "price": "€1,950",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Seating"
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "sideboard",
+           "tag": "",
+           "category": "Storage",
+           "title": "Oak Sideboard",
+           "notes": "",
+           "roast": 0,
+           "price": "€1,640",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Storage"
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "shelf",
+           "tag": "",
+           "category": "Storage",
+           "title": "Ladder Shelf",
+           "notes": "",
+           "roast": 0,
+           "price": "€420",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Storage"
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "dining table",
+           "tag": "",
+           "category": "Dining",
+           "title": "Trestle Table",
+           "notes": "",
+           "roast": 0,
+           "price": "€1,280",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Dining"
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "dining chair",
+           "tag": "",
+           "category": "Dining",
+           "title": "Spindle Chair",
+           "notes": "",
+           "roast": 0,
+           "price": "€240",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Dining"
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "floor lamp",
+           "tag": "",
+           "category": "Lighting",
+           "title": "Paper Floor Lamp",
+           "notes": "",
+           "roast": 0,
+           "price": "€240",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Lighting"
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "table lamp",
+           "tag": "",
+           "category": "Lighting",
+           "title": "Dome Table Lamp",
+           "notes": "",
+           "roast": 0,
+           "price": "€180",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Lighting"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mas-se-3",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2c2419"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "mas-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mas-co-3",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "mas-cta",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Try it for",
+         "headline_accent": "100 days.",
+         "headline_accent_italic": true,
+         "subtitle": "Live with it. If it’s not right, send it back free — we’re confident it’ll stay.",
+         "cta_text": "Read our promise",
+         "cta_url": "#",
+         "bg": {
+          "type": "solid",
+          "color": "#2c2419"
+         },
+         "text_color": "#f3eee4",
+         "accent_color": "#a9794f",
+         "subtitle_color": "#c9bba6",
+         "cta_bg": "#a9794f",
+         "cta_color": "#ffffff",
+         "cta_radius": {
+          "tl": 2,
+          "tr": 2,
+          "br": 2,
+          "bl": 2,
+          "linked": true
+         },
+         "cta_size": 14,
+         "headline_font_family": "serif",
+         "headline_size": 60,
+         "headline_weight": "400",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "banner_padding": 96
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

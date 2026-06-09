@@ -1,1 +1,65 @@
-[{"id":"so-hse","type":"section","settings":{"style":"default","width":"expand","padding":"none"},"style":{"bg":{"type":"solid","color":"rgba(12,12,16,.84)"}},"advanced":{},"children":[{"id":"so-hro","type":"row","settings":{"layout":"100","gap":0,"vertical_align":"center"},"style":{},"advanced":{},"children":[{"id":"so-hco","type":"column","settings":{"width":"1-1","width_medium":"1-1"},"style":{},"advanced":{},"children":[{"id":"so-hmm","type":"megamenu","settings":{"menu_id":"auto","layout":"horizontal","alignment":"right","font_size":"14","font_weight":"600","text_color":"#74747f","sticky":true,"sticky_bg":"rgba(12,12,16,.92)","sticky_shadow":true,"social_icons":false,"search_icon":false,"logo_image":"","logo_width":"120","logo_position":"left","logo_link":"/","logo_sticky":"","mobile_logo":"","mobile_logo_height":"30","mobile_bar_logo":true,"logo_text":"KOVA","logo_dot":true},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "so-hse",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "none" } },
+  "advanced": {},
+  "children": [
+   { "id": "so-hro", "type": "row", "settings": { "layout": "100", "gap": 0, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
+    { "id": "so-hco", "type": "column", "settings": { "width": "1-1", "width_medium": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "so-hmm", "type": "megamenu", "settings": {
+        "menu_id": "auto",
+        "layout": "left",
+        "font_size": "14",
+        "font_weight": "600",
+        "text_color": "#74747f",
+        "hover_color": "#ffffff",
+        "active_color": "#ffffff",
+        "header_mode": "classic",
+        "sticky": true,
+        "sticky_bg": "rgba(12,12,16,.92)",
+        "sticky_shadow": false,
+        "nav_bg": "rgba(12,12,16,.84)",
+        "bar_width": "classic",
+        "social_icons": false,
+        "search_icon": false,
+        "logo_image": "",
+        "logo_width": "120",
+        "logo_position": "left",
+        "logo_link": "/",
+        "logo_sticky": "",
+        "mobile_logo": "",
+        "mobile_logo_height": "30",
+        "mobile_bar_logo": true,
+        "logo_text": "KOVA",
+        "logo_text_size": "19",
+        "logo_text_color": "#ffffff",
+        "logo_dot": true,
+        "button_mode": "none",
+        "btn_bg": "#27e0a3",
+        "btn_color": "#060608",
+        "btn_radius": 999,
+        "btn_hover_bg": "#1fc78f",
+        "extra_link_1_label": "Get tickets",
+        "extra_link_1_url": "#tour",
+        "extra_link_1_button": true,
+        "extra_links_right": true,
+        "mobile_breakpoint": "1024",
+        "mobile_style": "fullscreen",
+        "fullscreen_animation": "slide-up",
+        "mobile_link_font": "heading",
+        "mobile_bg": "#060608",
+        "mobile_text_color": "#ffffff",
+        "mobile_accent_color": "#27e0a3",
+        "mobile_heading_color": "#74747f",
+        "mobile_link_size": 28,
+        "mobile_footer_text": "Electronic producer & live act · Nightglass out now",
+        "mobile_footer_cta_text": "Get tickets",
+        "mobile_footer_cta_url": "#tour"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

@@ -120,7 +120,7 @@ class Olo_Countdown_Tile extends Olo_Tile_Base {
                 align-items: <?php echo $is_inline ? 'baseline' : 'center'; ?>;
                 flex-wrap: <?php echo $is_inline ? 'nowrap' : 'wrap'; ?>;
                 gap: <?php echo $is_inline ? '4px' : '8px'; ?>;
-                padding: <?php echo $is_inline ? max(8, round($pad / 2)) : $pad; ?>px;
+                padding: <?php echo $is_inline ? max(8, round((is_numeric($pad) ? (float)$pad : 32) / 2)) : $pad; ?>px;
                 <?php if ( $bg ) : ?>background: <?php echo $bg; ?>;<?php endif; ?>
                 color: <?php echo $fg; ?>;
             }

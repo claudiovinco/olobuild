@@ -1,1 +1,104 @@
-[{"id":"ve-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#0a2a1e"}},"advanced":{},"children":[{"id":"ve-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"ve-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"ve-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Archivo\", -apple-system, sans-serif;font-size:20px;color:#ffffff;font-weight:900;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#c8ff3c;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Verdano FC</div><p style=\"font-size:14px;color:#8a948d;max-width:260px\">Mainstreet 123, 20100 Verdano. A regional football club, powered by its community.</p>","text_color":"#142019","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"ve-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"ve-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">The Club</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8a948d\"><li>History</li><li>Sponsors</li><li>Membership</li><li>Facility</li></ul>","text_color":"#142019","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"ve-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"ve-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">News</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8a948d\"><li>Club</li><li>Events</li><li>Matches</li><li>People</li></ul>","text_color":"#142019","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"ve-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"ve-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Men teams</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8a948d\"><li>First Team</li><li>Second Team</li><li>Third Team</li></ul>","text_color":"#142019","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"ve-fco3","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"ve-ftb3","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Youth teams</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8a948d\"><li>Under 21</li><li>Under 18</li><li>Under 16</li><li>Under 14</li></ul>","text_color":"#142019","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"ve-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"ve-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"ve-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid #e2ddd0;padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#8a948d\"><span>© 2026 Verdano FC — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#142019","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "ve-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
+  "style": { "bg": { "type": "solid", "color": "#0a2a1e" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ve-fro1",
+    "type": "row",
+    "settings": { "gap": 28, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ve-fcb",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ve-fbrand", "type": "headline", "settings": { "heading": "Verdano FC", "tag": "div", "alignment": "left", "heading_font_size": "20", "heading_uppercase": true, "heading_color": "#ffffff", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ve-fbtext", "type": "text-block", "settings": { "content": "<p>Mainstreet 123, 20100 Verdano. A regional football club, powered by its community.</p>", "text_color": "rgba(255,255,255,.55)", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "240" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ve-fphone", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "font_weight": "700", "link_color": "#c8ff3c", "link_hover_color": "#aee61f", "items": [ { "title": "+39 02 123 456", "content": "tel:+390212345678", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ve-fsoc", "type": "iconlist", "settings": { "layout": "horizontal", "gap": "10", "icon_size": "16", "icon_color": "#ffffff", "icon_shape": "rounded", "icon_bg_color": "rgba(255,255,255,.07)", "text_size": "0", "items": [ { "id": "vs-1", "icon": "instagram", "text": "", "link": "#", "color": "" }, { "id": "vs-2", "icon": "facebook", "text": "", "link": "#", "color": "" }, { "id": "vs-3", "icon": "youtube", "text": "", "link": "#", "color": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "ve-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ve-fh1", "type": "headline", "settings": { "heading": "The Club", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "heading", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ve-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "rgba(255,255,255,.55)", "link_hover_color": "#ffffff", "items": [ { "title": "History", "content": "#", "tag": "" }, { "title": "Sponsors", "content": "#", "tag": "" }, { "title": "Membership", "content": "#membership", "tag": "" }, { "title": "Facility", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "ve-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ve-fh2", "type": "headline", "settings": { "heading": "News", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "heading", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ve-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "rgba(255,255,255,.55)", "link_hover_color": "#ffffff", "items": [ { "title": "Club", "content": "#", "tag": "" }, { "title": "Events", "content": "#", "tag": "" }, { "title": "Matches", "content": "#matches", "tag": "" }, { "title": "People", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "ve-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ve-fh3", "type": "headline", "settings": { "heading": "Men teams", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "heading", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ve-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "rgba(255,255,255,.55)", "link_hover_color": "#ffffff", "items": [ { "title": "First Team", "content": "#", "tag": "" }, { "title": "Second Team", "content": "#", "tag": "" }, { "title": "Third Team", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "ve-fc4",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ve-fh4", "type": "headline", "settings": { "heading": "Youth teams", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "heading", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ve-fn4", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "rgba(255,255,255,.55)", "link_hover_color": "#ffffff", "items": [ { "title": "Under 21", "content": "#", "tag": "" }, { "title": "Under 18", "content": "#", "tag": "" }, { "title": "Under 16", "content": "#", "tag": "" }, { "title": "Under 14", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ve-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "ve-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "ve-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.1)", "alignment": "center", "spacing": 22 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "ve-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "ve-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "ve-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Verdano FC — an OLOtheme demo.</p>", "text_color": "rgba(255,255,255,.55)", "font_size": "13", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "ve-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "ve-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "rgba(255,255,255,.55)", "font_size": "13", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

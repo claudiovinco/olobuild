@@ -5,12 +5,7 @@
   "settings": {
    "style": "default",
    "width": "full",
-   "padding": {
-    "top": 0,
-    "right": 0,
-    "bottom": 0,
-    "left": 0
-   },
+   "padding": "remove-vertical",
    "padding_top": 0,
    "padding_bottom": 0
   },
@@ -50,9 +45,9 @@
          "accent_italic": false,
          "stack_lines": true,
          "subhead": "Expert-led expeditions to the places worth the effort — twelve travellers, zero crowds, a footprint we keep light.",
-         "cta1_text": "Find a trip",
+         "cta1_text": "",
          "cta1_url": "#destinations",
-         "cta2_text": "Browse trips",
+         "cta2_text": "",
          "cta2_url": "#trips",
          "meta_text": "",
          "scroll_hint": "",
@@ -208,7 +203,7 @@
           }
          ],
          "headline_font_family": "serif",
-         "headline_font_size": 44,
+         "headline_font_size": 52,
          "headline_font_weight": "600",
          "headline_align": "left",
          "headline_inline": false,
@@ -393,7 +388,7 @@
           }
          ],
          "headline_font_family": "serif",
-         "headline_font_size": 44,
+         "headline_font_size": 48,
          "headline_font_weight": "600",
          "headline_align": "left",
          "headline_inline": false,
@@ -522,7 +517,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0d3b3f"
+    "color": "#ffffff"
    }
   },
   "advanced": {},
@@ -549,18 +544,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Find your pace",
-         "eyebrow_color": "#e9c46a",
-         "eyebrow_dot_color": "#e9c46a",
+         "eyebrow_color": "#e76f51",
+         "eyebrow_dot_color": "#e76f51",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Trips for every kind of traveller",
-           "color": "#ffffff",
+           "color": "#1d2a29",
            "italic": false
           }
          ],
          "headline_font_family": "serif",
-         "headline_font_size": 46,
+         "headline_font_size": 52,
          "headline_font_weight": "600",
          "headline_align": "center",
          "headline_inline": false,
@@ -874,18 +869,19 @@
          "author_name": "Hannah & Theo",
          "author_role": "Patagonia expedition",
          "rating": "5",
-         "layout": "single",
+         "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#1d2a29",
          "border_radius": "0",
          "avatar": "",
-         "quote_font_family": "serif",
+         "quote_font": "heading",
          "quote_size": 36,
-         "quote_weight": "500",
-         "quote_color": "#1d2a29",
-         "author_name_color": "#1d2a29",
-         "author_role_color": "#8a948f"
+         "quote_uppercase": false,
+         "author_uppercase": false,
+         "star_color": "#e9c46a",
+         "quote_accent_color": "#e76f51",
+         "author_color": "#8a948f"
         },
         "style": {},
         "advanced": {},

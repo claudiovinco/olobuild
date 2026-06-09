@@ -1,7 +1,7 @@
 <template>
   <section class="olo-imagehero oih" :style="rootStyle">
     <div class="oih-media" :style="mediaStyle">
-      <span v-if="!s.bg_image && s.media_label" class="oih-medialabel" :style="mediaLabelStyle">{{ s.media_label }}</span>
+      <span v-if="!s.bg_image && !hasMediaBg && s.media_label" class="oih-medialabel" :style="mediaLabelStyle">{{ s.media_label }}</span>
     </div>
     <div class="oih-grad" :style="gradStyle"></div>
     <div class="oih-in" :style="inStyle">
@@ -47,6 +47,7 @@ const defaults = {
   meta_text: '',
   scroll_hint: '',
   bg_image: '',
+  media_bg: { type: 'none' },
   bg_color: '#0c0c0c',
   media_label: 'campaign — figure in black tailoring, gold light, full bleed',
   text_position: 'left',
@@ -238,11 +239,12 @@ const rootStyle = computed(() => ({
   ...(wrapRadiusCss.value ? { borderRadius: wrapRadiusCss.value } : {}),
   ...(shadowCss.value ? { boxShadow: shadowCss.value } : {}),
 }));
-const mediaStyle = computed(() => ({
-  position: 'absolute', inset: 0, zIndex: 0, backgroundColor: bg.value,
-  backgroundImage: s.value.bg_image ? 'url(' + s.value.bg_image + ')' : 'repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px)',
-  backgroundSize: 'cover', backgroundPosition: 'center', aspectRatio: aspect.value, minHeight: '100%',
-}));
+const hasMediaBg = computed(() => { const m = s.value.media_bg; return !!(m && m.type && m.type !== 'none'); });
+const mediaStyle = computed(() => {
+  const base = { position: 'absolute', inset: 0, zIndex: 0, backgroundSize: 'cover', backgroundPosition: 'center', aspectRatio: aspect.value, minHeight: '100%' };
+  if (hasMediaBg.value) return { ...base, ...buildBgStyle(s.value.media_bg) };
+  return { ...base, backgroundColor: bg.value, backgroundImage: s.value.bg_image ? 'url(' + s.value.bg_image + ')' : 'repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px)' };
+});
 const mediaLabelStyle = { position: 'absolute', left: '20px', bottom: '16px', fontSize: '11px', letterSpacing: '.04em', textTransform: 'uppercase', fontWeight: 600, color: 'rgba(255,255,255,.42)', maxWidth: '60%' };
 const gradStyle = computed(() => ({ position: 'absolute', inset: 0, zIndex: 1, background: gradient.value }));
 const inStyle = computed(() => ({ position: 'relative', zIndex: 2, width: '100%', maxWidth: '1240px', margin: '0 auto', padding: padCss.value, display: 'flex', flexDirection: 'column', alignItems: alignH.value }));

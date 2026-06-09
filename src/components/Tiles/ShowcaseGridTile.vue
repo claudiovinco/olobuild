@@ -1,10 +1,10 @@
 <template>
   <div class="olo-showcasegrid ocg" :style="rootStyle">
-    <a v-for="(it, i) in items" :key="'c'+i" class="ocg-card" :style="cardStyle" :href="it.link || '#'">
-      <span class="ocg-media" :style="mediaStyle(it.image)"></span>
-      <span v-if="!it.image && it.media_label" class="ocg-medialabel" :style="mediaLabelStyle">{{ it.media_label }}</span>
+    <a v-for="(it, i) in items" :key="'c'+i" class="ocg-card" :style="cardStyle(it)" :href="it.link || '#'">
+      <span class="ocg-media" :style="mediaStyle(it)"></span>
+      <span v-if="!it.image && !itemHasBg(it) && it.media_label" class="ocg-medialabel" :style="mediaLabelStyle">{{ it.media_label }}</span>
       <span class="ocg-veil" :style="veilStyle"></span>
-      <span class="ocg-arr" :style="arrStyle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+      <span v-if="showArrow" class="ocg-arr" :style="arrStyle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
       <span v-if="it.kicker" class="ocg-k" :style="kStyle">{{ it.kicker }}</span>
       <span v-if="it.title" class="ocg-t" :style="tStyle">{{ it.title }}</span>
     </a>
@@ -27,6 +27,7 @@ const defaults = {
   columns: 3, gap: 18, aspect: '3/3.5', radius: 20, media_bg: '#0f3a2a', veil_color: '#0a2a1e',
   kicker_color: '', title_color: '#ffffff', arrow_bg: 'rgba(255,255,255,0.14)', arrow_color: '#ffffff',
   arrow_hover_bg: '', arrow_hover_color: '#0a2a1e',
+  show_arrow: true, title_size: 34, title_weight: '900', title_uppercase: true, kicker_size: 12,
 
   // Spaziatura interna card — default = padding attuale (26px) → no-op.
   card_padding: { top: 26, right: 26, bottom: 26, left: 26 },
@@ -51,6 +52,8 @@ const cols = computed(() => Math.max(1, Math.min(4, parseInt(s.value.columns, 10
 const mbg = computed(() => s.value.media_bg || '#0f3a2a');
 const accent = computed(() => s.value.kicker_color || 'var(--olo-color-primary, #c8ff3c)');
 const arrhbg = computed(() => s.value.arrow_hover_bg || 'var(--olo-color-primary, #c8ff3c)');
+const showArrow = computed(() => !!s.value.show_arrow);
+const hasSpans = computed(() => items.value.some(it => parseInt(it && it.span, 10) > 0));
 
 function hexRgb(hex, fb = '10,42,30') {
   let h = String(hex || '').replace('#', '');
@@ -109,7 +112,10 @@ const rootStyle = computed(() => {
   // position:relative se il KIT è valorizzato (parità con PHP, per gli effetti bordo).
   if (Object.keys(kit).length) kit.position = 'relative';
   return {
-    display: 'grid', gridTemplateColumns: 'repeat(' + cols.value + ', 1fr)', gap: (parseInt(s.value.gap, 10) || 18) + 'px', fontFamily: SANS,
+    display: 'grid',
+    gridTemplateColumns: hasSpans.value ? 'repeat(12, 1fr)' : ('repeat(' + cols.value + ', 1fr)'),
+    alignItems: hasSpans.value ? 'end' : undefined,
+    gap: (parseInt(s.value.gap, 10) || 18) + 'px', fontFamily: SANS,
     '--ocg-arrhbg': arrhbg.value, '--ocg-arrhc': s.value.arrow_hover_color || '#0a2a1e',
     ...kit,
   };
@@ -136,9 +142,21 @@ const cardPad = computed(() => {
   // Shorthand a valore unico se i 4 lati sono uguali (byte-identico al default '26px').
   return (t === r && r === b && b === l) ? `${t}px` : `${t}px ${r}px ${b}px ${l}px`;
 });
-const cardStyle = computed(() => ({ position: 'relative', borderRadius: cardRad.value, overflow: 'hidden', aspectRatio: String(s.value.aspect || '3/3.5').replace(/[^0-9.\/]/g, ''), display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: cardPad.value, color: '#fff', textDecoration: 'none', background: mbg.value }));
-function mediaStyle(img) {
-  const st = { position: 'absolute', inset: 0, zIndex: 0, background: mbg.value, backgroundSize: 'cover', backgroundPosition: 'center', transition: 'transform .5s ease' };
+function cardStyle(it) {
+  const base = { position: 'relative', borderRadius: cardRad.value, overflow: 'hidden', aspectRatio: String(s.value.aspect || '3/3.5').replace(/[^0-9.\/]/g, ''), display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: cardPad.value, color: '#fff', textDecoration: 'none', background: mbg.value };
+  if (hasSpans.value) {
+    const sp = parseInt(it && it.span, 10);
+    base.gridColumn = 'span ' + (sp > 0 ? Math.min(12, sp) : 4);
+    if (it && it.aspect) base.aspectRatio = String(it.aspect).replace(/[^0-9.\/]/g, '');
+  }
+  return base;
+}
+const itemHasBg = (it) => !!(it && it.media_bg && it.media_bg.type && it.media_bg.type !== 'none');
+function mediaStyle(it) {
+  const st = { position: 'absolute', inset: 0, zIndex: 0, backgroundSize: 'cover', backgroundPosition: 'center', transition: 'transform .5s ease' };
+  if (itemHasBg(it)) return { ...st, ...buildBgStyle(it.media_bg) };
+  const img = it && it.image ? it.image : '';
+  st.background = mbg.value;
   st.backgroundImage = img ? 'url(' + img + ')' : 'repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px)';
   return st;
 }
@@ -148,8 +166,8 @@ const veilStyle = computed(() => {
   return { position: 'absolute', inset: 0, zIndex: 1, background: `linear-gradient(180deg, rgba(${rgb},.05) 30%, rgba(${rgb},.9) 100%)` };
 });
 const arrStyle = computed(() => ({ position: 'absolute', zIndex: 2, top: '24px', right: '24px', width: '44px', height: '44px', borderRadius: '50%', background: s.value.arrow_bg || 'rgba(255,255,255,0.14)', display: 'grid', placeItems: 'center', color: s.value.arrow_color || '#ffffff', transition: 'background .25s, transform .25s' }));
-const kStyle = computed(() => ({ position: 'relative', zIndex: 2, fontWeight: 700, fontSize: '12px', letterSpacing: '.12em', textTransform: 'uppercase', color: accent.value }));
-const tStyle = computed(() => ({ position: 'relative', zIndex: 2, fontFamily: DISP, fontWeight: 900, fontSize: '34px', textTransform: 'uppercase', marginTop: '6px', color: s.value.title_color || '#fff', lineHeight: 1 }));
+const kStyle = computed(() => ({ position: 'relative', zIndex: 2, fontWeight: 700, fontSize: (parseInt(s.value.kicker_size, 10) || 12) + 'px', letterSpacing: '.12em', textTransform: 'uppercase', color: accent.value }));
+const tStyle = computed(() => ({ position: 'relative', zIndex: 2, fontFamily: DISP, fontWeight: s.value.title_weight || '900', fontSize: (parseInt(s.value.title_size, 10) || 34) + 'px', textTransform: s.value.title_uppercase ? 'uppercase' : 'none', marginTop: '6px', color: s.value.title_color || '#fff', lineHeight: 1 }));
 </script>
 
 <style scoped>

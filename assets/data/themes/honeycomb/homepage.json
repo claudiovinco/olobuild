@@ -33,130 +33,59 @@
       "children": [
        {
         "id": "hc-hero-split-1",
-        "type": "hero-split",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "Neighbourhood bakery · since 2016",
-         "eyebrow_dot_color": "#c8870f",
+         "eyebrow": "Neighbourhood bakery · since 2016",
          "eyebrow_color": "#c8870f",
-         "headline_lines": [
-          {
-           "text": "Real bread,",
-           "color": "#3a2a12",
-           "italic": false
-          },
-          {
-           "text": "real",
-           "color": "#c8870f",
-           "italic": true
-          },
-          {
-           "text": "early.",
-           "color": "#3a2a12",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "serif",
-         "headline_font_size": 76,
-         "headline_line_height": 1,
-         "headline_font_weight": "400",
-         "headline_align": "left",
-         "subhead": "Slow-proved sourdough, buttery viennoiserie and proper cakes — made by hand before the sun's up, every single day.",
-         "subhead_color": "#6b552f",
-         "subhead_size": 18,
-         "subhead_italic": false,
-         "subhead_max_width": 430,
-         "cta1_text": "See today's bakes",
-         "cta1_url": "#bakes",
-         "cta1_bg": "#e09a18",
-         "cta1_color": "#ffffff",
-         "cta1_size": 15,
-         "cta1_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
+         "headline": "Real bread,",
+         "accent": "real",
+         "accent_italic": true,
+         "accent_color": "#c8870f",
+         "headline_tail": "early.",
+         "uppercase": false,
+         "headline_color": "#3a2a12",
+         "headline_weight": "400",
+         "headline_size": "92",
+         "lead": "Slow-proved sourdough, buttery viennoiserie and proper cakes — made by hand before the sun's up, every single day.",
+         "lead_color": "#6b552f",
+         "signature": "",
+         "stats": [],
+         "cta_text": "See today's bakes",
+         "cta_url": "#bakes",
+         "cta_style": "button",
+         "cta_bg": "#e09a18",
+         "cta_color": "#ffffff",
          "cta2_text": "Our story",
          "cta2_url": "#story",
-         "cta2_bg": "transparent",
-         "cta2_color": "#3a2a12",
-         "cta2_border": "#cdb47f",
-         "cta2_size": 15,
-         "cta2_radius": {
+         "cta2_style": "outline",
+         "media_image": "",
+         "media_bg": {
+          "type": "none"
+         },
+         "media_label": "sourdough loaves, flour dust, morning",
+         "media_light": true,
+         "media_aspect": "1/1",
+         "media_radius": 24,
+         "media_position": "right",
+         "media_blob": false,
+         "badge_number": "5am",
+         "badge_label": "ovens on",
+         "badge_bg": "#fbf5e7",
+         "badge_color": "#3a2a12",
+         "badge_radius": {
+          "tl": 16,
+          "tr": 16,
+          "br": 16,
+          "bl": 16
+         },
+         "cta_radius": {
           "tl": 999,
           "tr": 999,
           "br": 999,
-          "bl": 999,
-          "linked": true
+          "bl": 999
          },
-         "cta2_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "stats": [],
-         "showcase_enabled": false,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#efe1c4"
-         },
-         "showcase_padding": 32,
-         "showcase_radius": {
-          "tl": 24,
-          "tr": 24,
-          "br": 24,
-          "bl": 24,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 24,
-          "tr": 24,
-          "br": 24,
-          "bl": 24,
-          "linked": true
-         },
-         "showcase_badge_text": "5am · ovens on",
-         "showcase_badge_dot": "#e09a18",
-         "showcase_badge_bg": "#3a2a12",
-         "showcase_badge_color": "#ffffff",
-         "showcase_items": [],
-         "showcase_card_radius": {
-          "tl": 12,
-          "tr": 12,
-          "br": 12,
-          "bl": 12,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 12,
-          "tr": 12,
-          "br": 12,
-          "bl": 12,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "",
-         "showcase_caption_right": "",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1.2fr 1fr",
-         "gap": 48,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "flush": false,
+         "content_bg": ""
         },
         "style": {},
         "advanced": {},
@@ -260,143 +189,92 @@
       "children": [
        {
         "id": "hc-product-cards-8",
-        "type": "product-cards",
+        "type": "productgrid",
         "settings": {
          "columns": 4,
          "gap": 20,
+         "media_aspect": "1/1",
+         "media_bg": "#efe1c4",
+         "stripe_dark": false,
+         "hover_zoom": true,
+         "card_bg": "#fbf5e7",
+         "card_border": "#e0cfa6",
+         "card_radius": 18,
+         "card_padding": 18,
+         "quick_add_show": false,
+         "category_color": "#9a6a2f",
+         "title_font": "heading",
+         "title_size": 21,
+         "title_color": "#3a2a12",
+         "notes_color": "#9c8253",
+         "notes_mono": false,
+         "price_color": "#c8870f",
+         "add_button": true,
+         "add_label": "Add",
+         "add_bg": "transparent",
+         "add_color": "#3a2a12",
+         "show_filters": false,
+         "footer_text": "Full menu & cakes",
+         "footer_url": "#bakes",
+         "footer_color": "#3a2a12",
          "items": [
           {
-           "letter": "S",
-           "letter_color": "#c8870f",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#efe1c4",
-            "gradient_to": "#e0cfa6",
-            "gradient_angle": 135
-           },
-           "screenshot_label": "SOURDOUGH LOAVES · FLOUR DUST",
-           "brand_label": "BREAD",
-           "brand_color": "#9a6a2f",
-           "show_badge": false,
-           "badge_text": "",
-           "badge_bg": "#3a2a12",
-           "badge_color": "#ffffff",
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "sourdough",
+           "tag": "",
+           "category": "Bread",
            "title": "Country Sourdough",
-           "title_accent": "",
-           "title_accent_italic": false,
-           "description": "48-hour ferment, blistered crust.",
-           "cta_text": "€6 — Add",
-           "cta_url": "#"
+           "notes": "48-hour ferment, blistered crust.",
+           "roast": 0,
+           "price": "€6",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": ""
           },
           {
-           "letter": "C",
-           "letter_color": "#c8870f",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#efe1c4",
-            "gradient_to": "#e0cfa6",
-            "gradient_angle": 135
-           },
-           "screenshot_label": "CROISSANT · LAMINATION",
-           "brand_label": "VIENNOISERIE",
-           "brand_color": "#9a6a2f",
-           "show_badge": false,
-           "badge_text": "",
-           "badge_bg": "#3a2a12",
-           "badge_color": "#ffffff",
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "croissant",
+           "tag": "",
+           "category": "Viennoiserie",
            "title": "Butter Croissant",
-           "title_accent": "",
-           "title_accent_italic": false,
-           "description": "27 layers, French butter.",
-           "cta_text": "€3.50 — Add",
-           "cta_url": "#"
+           "notes": "27 layers, French butter.",
+           "roast": 0,
+           "price": "€3.5",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": ""
           },
           {
-           "letter": "C",
-           "letter_color": "#c8870f",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#efe1c4",
-            "gradient_to": "#e0cfa6",
-            "gradient_angle": 135
-           },
-           "screenshot_label": "CINNAMON BUN · STICKY",
-           "brand_label": "SWEET",
-           "brand_color": "#9a6a2f",
-           "show_badge": false,
-           "badge_text": "GONE BY 10",
-           "badge_bg": "#3a2a12",
-           "badge_color": "#f6ecd6",
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "cinnamon bun",
+           "tag": "",
+           "category": "Sweet",
            "title": "Cardamom Bun",
-           "title_accent": "",
-           "title_accent_italic": false,
-           "description": "Sticky, fragrant, gone by 10.",
-           "cta_text": "€4 — Add",
-           "cta_url": "#"
+           "notes": "Sticky, fragrant, gone by 10.",
+           "roast": 0,
+           "price": "€4",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": ""
           },
           {
-           "letter": "F",
-           "letter_color": "#c8870f",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#efe1c4",
-            "gradient_to": "#e0cfa6",
-            "gradient_angle": 135
-           },
-           "screenshot_label": "FOCACCIA · OLIVE OIL",
-           "brand_label": "BREAD",
-           "brand_color": "#9a6a2f",
-           "show_badge": false,
-           "badge_text": "",
-           "badge_bg": "#3a2a12",
-           "badge_color": "#ffffff",
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "focaccia",
+           "tag": "",
+           "category": "Bread",
            "title": "Rosemary Focaccia",
-           "title_accent": "",
-           "title_accent_italic": false,
-           "description": "Olive oil, flaky salt, dimples.",
-           "cta_text": "€5 — Add",
-           "cta_url": "#"
+           "notes": "Olive oil, flaky salt, dimples.",
+           "roast": 0,
+           "price": "€5",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": ""
           }
-         ],
-         "card_bg": {
-          "type": "solid",
-          "color": "#fbf5e7"
-         },
-         "card_color": "#9c8253",
-         "card_radius": {
-          "tl": 18,
-          "tr": 18,
-          "br": 18,
-          "bl": 18,
-          "linked": true
-         },
-         "card_radius_hover": {
-          "tl": 18,
-          "tr": 18,
-          "br": 18,
-          "bl": 18,
-          "linked": true
-         },
-         "card_radius_hover_duration": 300,
-         "card_shadow": "sm",
-         "card_padding": 18,
-         "top_aspect_ratio": "1/1",
-         "top_padding": 24,
-         "letter_font_family": "serif",
-         "letter_size": 96,
-         "letter_italic": true,
-         "letter_align": "center",
-         "show_screenshot_label": true,
-         "screenshot_label_color": "rgba(58,42,18,.4)",
-         "brand_size": 10,
-         "brand_letter_spacing": 0.08,
-         "title_font_family": "serif",
-         "title_size": 21,
-         "title_weight": "400",
-         "description_size": 13,
-         "cta_size": 12,
-         "cta_arrow": false,
-         "card_hover_effect": "lift"
+         ]
         },
         "style": {},
         "advanced": {},
@@ -583,144 +461,44 @@
       "children": [
        {
         "id": "hc-hero-split-19",
-        "type": "hero-split",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "Our story",
-         "eyebrow_dot_color": "#c8870f",
+         "eyebrow": "Our story",
          "eyebrow_color": "#c8870f",
-         "headline_lines": [
-          {
-           "text": "One oven, one ",
-           "color": "#3a2a12",
-           "italic": false
-          },
-          {
-           "text": "starter,",
-           "color": "#c8870f",
-           "italic": true
-          },
-          {
-           "text": "a lot of mornings",
-           "color": "#3a2a12",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "serif",
-         "headline_font_size": 48,
-         "headline_line_height": 1.08,
-         "headline_font_weight": "400",
-         "headline_align": "left",
-         "subhead": "Honeycomb began with a wild yeast starter named Doris and a market stall. Ten years on, Doris is still going — and still the boss.\n\nWe mill some of our own flour, prove everything slowly, and bake in small batches so it's always fresh. When it's gone, it's gone.",
-         "subhead_color": "#6b552f",
-         "subhead_size": 16,
-         "subhead_italic": false,
-         "subhead_max_width": 520,
-         "cta1_text": "Meet the bakers",
-         "cta1_url": "#",
-         "cta1_bg": "transparent",
-         "cta1_color": "#3a2a12",
-         "cta1_border": "#cdb47f",
-         "cta1_size": 14,
-         "cta1_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
+         "headline": "One oven, one",
+         "accent": "starter,",
+         "accent_italic": true,
+         "accent_color": "#c8870f",
+         "headline_tail": "a lot of mornings",
+         "uppercase": false,
+         "headline_color": "#3a2a12",
+         "headline_weight": "400",
+         "headline_size": "52",
+         "lead": "Honeycomb began with a wild yeast starter named Doris and a market stall. Ten years on, Doris is still going — and still the boss.\n\nWe mill some of our own flour, prove everything slowly, and bake in small batches so it's always fresh. When it's gone, it's gone.",
+         "lead_color": "#6b552f",
+         "signature": "",
+         "stats": [],
+         "cta_text": "Meet the bakers",
+         "cta_url": "#",
+         "cta_style": "underline",
+         "cta_color": "#3a2a12",
          "cta2_text": "",
          "cta2_url": "",
-         "stats": [],
-         "showcase_enabled": true,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#efe1c4"
+         "cta2_style": "outline",
+         "media_image": "",
+         "media_bg": {
+          "type": "none"
          },
-         "showcase_padding": 32,
-         "showcase_radius": {
-          "tl": 18,
-          "tr": 18,
-          "br": 18,
-          "bl": 18,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 18,
-          "tr": 18,
-          "br": 18,
-          "bl": 18,
-          "linked": true
-         },
-         "showcase_badge_text": "SINCE 2016",
-         "showcase_badge_dot": "#e09a18",
-         "showcase_badge_bg": "#3a2a12",
-         "showcase_badge_color": "#ffffff",
-         "showcase_items": [
-          {
-           "number": "Sourdough starter",
-           "text": "Doris",
-           "italic": true,
-           "text_color": "#c8870f",
-           "bg": {
-            "type": "solid",
-            "color": "#fbf5e7"
-           }
-          },
-          {
-           "number": "Flour milled",
-           "text": "in-house",
-           "italic": false,
-           "text_color": "#3a2a12",
-           "bg": {
-            "type": "solid",
-            "color": "#fbf5e7"
-           }
-          },
-          {
-           "number": "Batch size",
-           "text": "small",
-           "italic": false,
-           "text_color": "#3a2a12",
-           "bg": {
-            "type": "solid",
-            "color": "#fbf5e7"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 11,
-          "tr": 11,
-          "br": 11,
-          "bl": 11,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 11,
-          "tr": 11,
-          "br": 11,
-          "bl": 11,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "HONEYCOMB",
-         "showcase_caption_right": "BAKERY",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1fr 1fr",
-         "gap": 56,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_label": "baker shaping dough at dawn",
+         "media_light": true,
+         "media_aspect": "4/5",
+         "media_radius": 18,
+         "media_position": "left",
+         "media_blob": false,
+         "badge_number": "",
+         "badge_label": "",
+         "flush": false,
+         "content_bg": ""
         },
         "style": {},
         "advanced": {},
@@ -824,51 +602,41 @@
       "children": [
        {
         "id": "hc-gallery-26",
-        "type": "gallery",
+        "type": "overlaygrid",
         "settings": {
-         "layout": "masonry",
+         "preset": "editorial-grid",
+         "bg": { "type": "none" },
          "columns": "4",
-         "gap": "12",
-         "img_height": "180px",
-         "object_fit": "cover",
-         "thumb_radius": "12",
-         "show_caption": false,
-         "fx_hover_zoom": true,
-         "fx_hover_zoom_scale": "1.06",
-         "fx_hover_tilt": false,
+         "columns_mobile": "2",
+         "gap": "small",
+         "height": "180",
+         "match_height": false,
+         "layout_mode": "masonry",
+         "overlay_position": "bottom",
+         "overlay_horizontal": "left",
+         "overlay_style": "overlay-default",
+         "overlay_color": "rgba(58,42,18,.62)",
+         "overlay_gradient": true,
+         "overlay_padding": "small",
+         "title_size": "h4",
+         "title_color": "#f6ecd6",
+         "title_weight": "400",
+         "title_letter_spacing": 0,
+         "title_uppercase": false,
+         "subtitle_size": 11,
+         "hover_effect": "zoom",
+         "hover_overlay": "fade",
+         "item_radius": 12,
+         "show_cta": false,
          "shadow": "none",
-         "images": [
-          {
-           "url": "",
-           "caption": "scoring a loaf"
-          },
-          {
-           "url": "",
-           "caption": "croissant lamination"
-          },
-          {
-           "url": "",
-           "caption": "cooling rack"
-          },
-          {
-           "url": "",
-           "caption": "the counter"
-          },
-          {
-           "url": "",
-           "caption": "cardamom buns"
-          },
-          {
-           "url": "",
-           "caption": "flour and hands"
-          }
-         ],
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "items": [
+          { "image": "", "title": "Scoring a loaf", "subtitle": "", "tall": true },
+          { "image": "", "title": "Croissant lamination", "subtitle": "" },
+          { "image": "", "title": "Cooling rack", "subtitle": "" },
+          { "image": "", "title": "The counter", "subtitle": "", "wide": true },
+          { "image": "", "title": "Cardamom buns", "subtitle": "" },
+          { "image": "", "title": "Flour & hands", "subtitle": "" }
+         ]
         },
         "style": {},
         "advanced": {},
@@ -916,14 +684,19 @@
         "id": "hc-testimonial-30",
         "type": "testimonial",
         "settings": {
-         "quote": "\"I've stopped pretending I'll bake my own. Honeycomb's sourdough ruined me for supermarket bread — in the best way.\"",
+         "quote": "“I've stopped pretending I'll bake my own. Honeycomb's sourdough ruined me for supermarket bread — in the best way.”",
          "author_name": "Greta H.",
          "author_role": "Saturday regular",
          "rating": "0",
-         "layout": "single",
+         "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#3a2a12",
+         "quote_font": "heading",
+         "quote_size": 40,
+         "quote_uppercase": false,
+         "author_uppercase": true,
+         "author_color": "#c8870f",
          "border_radius": "0",
          "avatar": ""
         },

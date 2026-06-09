@@ -34,7 +34,7 @@
       "advanced": {},
       "children": [
        {
-        "id": "pj-hero-split-1",
+        "id": "pj-hero-1",
         "type": "imagehero",
         "settings": {
          "eyebrow_text": "Boutique hotel · the old town",
@@ -86,12 +86,14 @@
   "settings": {
    "style": "default",
    "width": "large",
-   "padding": "small"
+   "padding": "none",
+   "padding_top": 0,
+   "padding_bottom": 0
   },
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#311f17"
+    "color": "#2a1a14"
    }
   },
   "advanced": {},
@@ -130,7 +132,7 @@
           {
            "label": "Guests",
            "value": "2 adults",
-           "options": "1 adult\n2 adults\n2 adults · 1 child\n3 adults\n4 adults"
+           "options": "1 adult\n2 adults\n2 adults · 1 child\n4 adults"
           }
          ],
          "button_text": "Check availability",
@@ -139,10 +141,10 @@
          "accent_on": "#1b110b",
          "bar_bg": "#f3e7d6",
          "field_bg": "transparent",
-         "field_border": "rgba(27,17,11,.14)",
-         "label_color": "#8a6f57",
-         "value_color": "#1b110b",
-         "radius": 12
+         "field_border": "#ddcdb8",
+         "label_color": "#967861",
+         "value_color": "#2a1a14",
+         "radius": 16
         },
         "style": {},
         "advanced": {},
@@ -187,149 +189,59 @@
       "advanced": {},
       "children": [
        {
-        "id": "pj-hero-split-9",
-        "type": "hero-split",
+        "id": "pj-introsplit-9",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "The stay",
-         "eyebrow_dot_color": "#d98a4e",
+         "eyebrow": "The stay",
          "eyebrow_color": "#d98a4e",
-         "headline_lines": [
-          {
-           "text": "A small hotel that",
-           "color": "#f3e7d6",
-           "italic": false
-          },
-          {
-           "text": "feels like a friend's house",
-           "color": "#f3e7d6",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "serif",
-         "headline_font_size": 46,
-         "headline_line_height": 1.1,
-         "headline_font_weight": "400",
-         "headline_align": "left",
-         "subhead": "Pasaje sits in a restored merchant's house off a quiet passage. Fourteen rooms, no two alike, all lime-washed walls, local linen and shutters that throw stripes of afternoon light.\n\nBreakfast is whatever the market gave us, served in the courtyard. The roof is yours at sundown.\n\n— Inés & the Pasaje team",
-         "subhead_color": "#c5ac96",
-         "subhead_size": 16,
-         "subhead_italic": false,
-         "subhead_max_width": 480,
-         "cta1_text": "Discover the hotel",
-         "cta1_url": "#stay",
-         "cta1_bg": "#d98a4e",
-         "cta1_color": "#1b110b",
-         "cta1_size": 13,
-         "cta1_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
+         "headline": "A small hotel that",
+         "accent": "",
+         "headline_tail": "feels like a friend's house",
+         "accent_italic": false,
+         "uppercase": false,
+         "headline_color": "#f3e7d6",
+         "accent_color": "#d98a4e",
+         "headline_weight": "400",
+         "headline_size": "52",
+         "lead": "Pasaje sits in a restored merchant's house off a quiet passage. Fourteen rooms, no two alike, all lime-washed walls, local linen and shutters that throw stripes of afternoon light.\n\nBreakfast is whatever the market gave us, served in the courtyard. The roof is yours at sundown.",
+         "lead_color": "#c5ac96",
+         "stats": [],
+         "signature": "— Inés & the Pasaje team",
+         "cta_text": "",
+         "cta_url": "#stay",
+         "cta_style": "underline",
+         "cta_bg": "#d98a4e",
+         "cta_color": "#1b110b",
          "cta2_text": "",
          "cta2_url": "",
-         "cta2_bg": "transparent",
-         "cta2_color": "#f3e7d6",
-         "cta2_border": "transparent",
-         "cta2_size": 13,
-         "cta2_radius": {
+         "cta2_style": "outline",
+         "cta_radius": {
           "tl": 999,
           "tr": 999,
           "br": 999,
-          "bl": 999,
-          "linked": true
+          "bl": 999
          },
-         "cta2_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
+         "media_image": "",
+         "media_bg": {
+          "type": "none"
          },
-         "stats": [],
-         "showcase_enabled": true,
-         "showcase_bg": {
-          "type": "pattern",
-          "color": "#3a261c",
-          "pattern_type": "diagonal-lines",
-          "pattern_color": "rgba(243,231,214,.07)"
-         },
-         "showcase_padding": 32,
-         "showcase_radius": {
+         "media_label": "a guest room, linen & light",
+         "media_light": false,
+         "media_aspect": "4/5",
+         "media_radius": 8,
+         "media_radius_top": 0,
+         "media_blob": false,
+         "badge_number": "",
+         "badge_label": "",
+         "badge_bg": "#d98a4e",
+         "badge_color": "#1b110b",
+         "badge_radius": {
           "tl": 10,
           "tr": 10,
           "br": 10,
-          "bl": 10,
-          "linked": true
+          "bl": 10
          },
-         "showcase_radius_hover": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "showcase_badge_text": "SINCE 2019",
-         "showcase_badge_dot": "#d98a4e",
-         "showcase_badge_bg": "#1b110b",
-         "showcase_badge_color": "#f3e7d6",
-         "showcase_items": [
-          {
-           "number": "Rooms, no two alike",
-           "text": "14",
-           "italic": false,
-           "text_color": "#d98a4e",
-           "bg": {
-            "type": "solid",
-            "color": "#311f17"
-           }
-          },
-          {
-           "number": "The courtyard kitchen",
-           "text": "Open every morning",
-           "italic": true,
-           "text_color": "#f3e7d6",
-           "bg": {
-            "type": "solid",
-            "color": "#311f17"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 8,
-          "tr": 8,
-          "br": 8,
-          "bl": 8,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 8,
-          "tr": 8,
-          "br": 8,
-          "bl": 8,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "LINEN & LIGHT",
-         "showcase_caption_right": "OLD TOWN",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1fr 1fr",
-         "gap": 56,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_position": "left"
         },
         "style": {},
         "advanced": {},
@@ -384,18 +296,13 @@
          "eyebrow_separator": "",
          "headline_lines": [
           {
-           "text": "The ",
+           "text": "The rooms",
            "color": "#f3e7d6",
            "italic": false
-          },
-          {
-           "text": "rooms",
-           "color": "#d98a4e",
-           "italic": true
           }
          ],
          "headline_font_family": "serif",
-         "headline_font_size": 48,
+         "headline_font_size": 60,
          "headline_font_weight": "400",
          "headline_align": "center",
          "headline_inline": true,
@@ -438,35 +345,35 @@
          "items": [
           {
            "image": "",
-           "media_label": "Courtyard room — garden & light",
+           "media_label": "courtyard room",
            "title": "Courtyard",
-           "meta": "from €140",
+           "meta": "€140/night",
            "description": "22 m² · garden view · queen",
-           "link_url": "OLOtheme - Pasaje - Rooms.html",
+           "link_url": "rooms",
            "tall": false
           },
           {
            "image": "",
-           "media_label": "Sea-view room — balcony & blue",
+           "media_label": "sea-view room",
            "title": "Sea View",
-           "meta": "from €190",
+           "meta": "€190/night",
            "description": "28 m² · balcony · king",
-           "link_url": "OLOtheme - Pasaje - Rooms.html",
+           "link_url": "rooms",
            "tall": false
           },
           {
            "image": "",
-           "media_label": "Rooftop suite — terrace & sky",
+           "media_label": "rooftop suite",
            "title": "Roof Suite",
-           "meta": "from €280",
+           "meta": "€280/night",
            "description": "40 m² · terrace · king",
-           "link_url": "OLOtheme - Pasaje - Rooms.html",
+           "link_url": "rooms",
            "tall": false
           }
          ],
          "columns": 3,
          "items_gap": 18,
-         "media_aspect": "3/2",
+         "media_aspect": "4/3",
          "media_tall_aspect": "4/5",
          "media_bg": "#3a261c",
          "media_label_color": "#f3e7d6",
@@ -476,11 +383,76 @@
          "title_size": 25,
          "title_weight": "400",
          "meta_color": "#d98a4e",
-         "meta_size": 12,
+         "meta_size": 22,
          "show_desc": true,
          "desc_color": "#967861",
          "desc_size": 13,
          "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "pj-ro-allrooms",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "pj-co-allrooms",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "pj-btn-allrooms",
+        "type": "button",
+        "settings": {
+         "text": "All rooms",
+         "url": "rooms",
+         "alignment": "center",
+         "bg_color": "transparent",
+         "text_color": "#f3e7d6",
+         "hover_bg_color": "transparent",
+         "hover_text_color": "#d98a4e",
+         "font_size": "13",
+         "font_weight": "700",
+         "text_transform": "uppercase",
+         "letter_spacing": "1",
+         "border_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "tile_padding": {
+          "top": 14,
+          "right": 28,
+          "bottom": 14,
+          "left": 28,
+          "linked": false
+         },
+         "border": {
+          "top": 1,
+          "right": 1,
+          "bottom": 1,
+          "left": 1,
+          "linked": true,
+          "style": "solid",
+          "color": "rgba(217,138,78,.42)"
+         },
+         "shadow": "none",
+         "hover_effect": "none"
         },
         "style": {},
         "advanced": {},
@@ -535,18 +507,13 @@
          "eyebrow_separator": "",
          "headline_lines": [
           {
-           "text": "Slow days, ",
+           "text": "Slow days, good evenings",
            "color": "#f3e7d6",
            "italic": false
-          },
-          {
-           "text": "good evenings",
-           "color": "#d98a4e",
-           "italic": true
           }
          ],
          "headline_font_family": "serif",
-         "headline_font_size": 48,
+         "headline_font_size": 60,
          "headline_font_weight": "400",
          "headline_align": "center",
          "headline_inline": true,
@@ -595,36 +562,37 @@
            "id": "pj-exp-1",
            "image": "",
            "title": "Courtyard breakfast",
-           "subtitle": "Laid out every morning, until ten",
+           "subtitle": "",
            "link": ""
           },
           {
            "id": "pj-exp-2",
            "image": "",
            "title": "Rooftop at sunset",
-           "subtitle": "The roof is yours from six",
+           "subtitle": "",
            "link": ""
           },
           {
            "id": "pj-exp-3",
            "image": "",
            "title": "Market mornings",
-           "subtitle": "The stalls worth your time",
+           "subtitle": "",
            "link": ""
           },
           {
            "id": "pj-exp-4",
            "image": "",
            "title": "Boat to the cove",
-           "subtitle": "A quiet cove, a packed lunch",
+           "subtitle": "",
            "link": ""
           }
          ],
          "columns": "4",
          "columns_mobile": "2",
          "gap": "small",
-         "height": 300,
+         "height": 240,
          "match_height": true,
+         "layout_mode": "uniform",
          "overlay_position": "bottom",
          "overlay_horizontal": "left",
          "overlay_style": "overlay-default",
@@ -637,9 +605,9 @@
          "ribbon_color": "",
          "shadow": "none",
          "item_radius": 10,
-         "overlay_color": "rgba(27,17,11,0.55)",
+         "overlay_color": "rgba(27,17,11,0.6)",
          "overlay_gradient": true,
-         "title_color": "#f3e7d6",
+         "title_color": "#ffffff",
          "title_weight": "400",
          "title_letter_spacing": 0,
          "title_uppercase": false,
@@ -647,7 +615,8 @@
          "subtitle_size": 13,
          "show_cta": false,
          "cta_text": "Discover",
-         "cta_style": "arrow"
+         "cta_style": "arrow",
+         "typography_preset": ""
         },
         "style": {},
         "advanced": {},
@@ -702,18 +671,13 @@
          "eyebrow_separator": "",
          "headline_lines": [
           {
-           "text": "Pasaje, ",
+           "text": "Pasaje, in frames",
            "color": "#f3e7d6",
            "italic": false
-          },
-          {
-           "text": "in frames",
-           "color": "#d98a4e",
-           "italic": true
           }
          ],
          "headline_font_family": "serif",
-         "headline_font_size": 48,
+         "headline_font_size": 60,
          "headline_font_weight": "400",
          "headline_align": "center",
          "headline_inline": true,
@@ -750,82 +714,99 @@
       "advanced": {},
       "children": [
        {
-        "id": "pj-workgrid-30",
-        "type": "workgrid",
+        "id": "pj-overlaygrid-gal",
+        "type": "overlaygrid",
         "settings": {
-         "columns": 3,
-         "items_gap": 12,
-         "media_aspect": "4/5",
-         "media_tall_aspect": "4/5",
-         "media_bg": "#3a261c",
-         "media_label_color": "#967861",
-         "hover_zoom": true,
-         "title_font_family": "heading",
-         "title_color": "#f3e7d6",
-         "title_size": 18,
-         "title_weight": "400",
-         "meta_color": "#d98a4e",
-         "meta_size": 11,
-         "show_desc": false,
-         "desc_color": "#967861",
-         "desc_size": 14,
-         "mono_font_family": "",
+         "preset": "custom",
+         "bg": {
+          "type": "none"
+         },
          "items": [
           {
+           "id": "pj-gal-1",
            "image": "",
-           "media_label": "the passage entrance",
-           "title": "The passage",
-           "meta": "",
-           "description": "",
-           "link_url": "#gallery",
-           "tall": true
+           "title": "",
+           "subtitle": "",
+           "link": "",
+           "tall": true,
+           "wide": false
           },
           {
+           "id": "pj-gal-2",
            "image": "",
-           "media_label": "room detail",
-           "title": "Room detail",
-           "meta": "",
-           "description": "",
-           "link_url": "#gallery",
-           "tall": false
+           "title": "",
+           "subtitle": "",
+           "link": "",
+           "tall": false,
+           "wide": false
           },
           {
+           "id": "pj-gal-3",
            "image": "",
-           "media_label": "courtyard",
-           "title": "Courtyard",
-           "meta": "",
-           "description": "",
-           "link_url": "#gallery",
-           "tall": false
+           "title": "",
+           "subtitle": "",
+           "link": "",
+           "tall": false,
+           "wide": false
           },
           {
+           "id": "pj-gal-4",
            "image": "",
-           "media_label": "rooftop view",
-           "title": "Rooftop view",
-           "meta": "",
-           "description": "",
-           "link_url": "#gallery",
-           "tall": true
+           "title": "",
+           "subtitle": "",
+           "link": "",
+           "tall": false,
+           "wide": true
           },
           {
+           "id": "pj-gal-5",
            "image": "",
-           "media_label": "breakfast table",
-           "title": "Breakfast table",
-           "meta": "",
-           "description": "",
-           "link_url": "#gallery",
-           "tall": false
+           "title": "",
+           "subtitle": "",
+           "link": "",
+           "tall": false,
+           "wide": false
           },
           {
+           "id": "pj-gal-6",
            "image": "",
-           "media_label": "tiled bathroom",
-           "title": "Tiled bathroom",
-           "meta": "",
-           "description": "",
-           "link_url": "#gallery",
-           "tall": false
+           "title": "",
+           "subtitle": "",
+           "link": "",
+           "tall": false,
+           "wide": false
           }
-         ]
+         ],
+         "columns": "4",
+         "columns_mobile": "2",
+         "gap": "small",
+         "height": 200,
+         "match_height": false,
+         "layout_mode": "masonry",
+         "overlay_position": "bottom",
+         "overlay_horizontal": "left",
+         "overlay_style": "overlay-default",
+         "overlay_padding": "medium",
+         "title_size": "h4",
+         "hover_effect": "zoom",
+         "hover_overlay": "fade",
+         "ribbon_position": "top-right",
+         "ribbon_bg": "",
+         "ribbon_color": "",
+         "shadow": "none",
+         "item_radius": 8,
+         "overlay_color": "rgba(27,17,11,0.5)",
+         "overlay_gradient": true,
+         "title_color": "#ffffff",
+         "title_weight": "400",
+         "title_letter_spacing": 0,
+         "title_uppercase": false,
+         "subtitle_color": "#c5ac96",
+         "subtitle_size": 13,
+         "show_cta": false,
+         "cta_text": "",
+         "cta_style": "arrow",
+         "typography_preset": ""
         },
         "style": {},
         "advanced": {},
@@ -874,108 +855,59 @@
         "type": "finder",
         "settings": {
          "eyebrow": "Which room is you?",
-         "heading": "Find your stay",
+         "heading": "Find your <em>stay</em>",
          "intro": "",
          "zone_accent": "#d98a4e",
          "zone_on": "#1b110b",
          "card_bg": "#3a261c",
-         "card_border": "1px solid rgba(217,138,78,.42)",
+         "card_border": "rgba(217,138,78,.42)",
          "align": "center",
          "items": [
           {
            "option": "A romantic escape",
+           "kicker": "We'd give you",
            "title": "The Garden Suite",
            "text": "A private courtyard, a deep copper tub and breakfast brought to your door. Tell us it's an occasion and we'll do the rest.",
            "meta": "from €280 / night",
            "cta_text": "",
            "cta_url": "#",
-           "icon": ""
+           "icon": "",
+           "media_label": "garden suite, candlelight"
           },
           {
            "option": "Solo & slow",
+           "kicker": "We'd give you",
            "title": "The Reading Room",
            "text": "A snug corner room with the best armchair in the house, a stack of books and a window onto the old town.",
            "meta": "from €150 / night",
            "cta_text": "",
            "cta_url": "#",
-           "icon": ""
+           "icon": "",
+           "media_label": "reading nook room"
           },
           {
            "option": "With the family",
+           "kicker": "We'd give you",
            "title": "The Casa Rooms",
            "text": "Two connecting rooms off a shared terrace — space for everyone, and a courtyard the kids can't get lost in.",
            "meta": "from €240 / night",
            "cta_text": "",
            "cta_url": "#",
-           "icon": ""
+           "icon": "",
+           "media_label": "connecting family rooms"
           },
           {
            "option": "All about the view",
+           "kicker": "We'd give you",
            "title": "The Rooftop",
            "text": "Our top-floor room opens straight onto the terrace — rooftops, bells and a sunset you'll talk about for years.",
            "meta": "from €320 / night",
            "cta_text": "",
            "cta_url": "#",
-           "icon": ""
+           "icon": "",
+           "media_label": "rooftop terrace room"
           }
          ]
-        },
-        "style": {},
-        "advanced": {},
-        "children": []
-       }
-      ]
-     }
-    ]
-   }
-  ]
- },
- {
-  "id": "pj-se-41",
-  "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#311f17"
-   }
-  },
-  "advanced": {},
-  "children": [
-   {
-    "id": "pj-ro-40",
-    "type": "row",
-    "settings": {},
-    "style": {},
-    "advanced": {},
-    "children": [
-     {
-      "id": "pj-co-39",
-      "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
-      "style": {},
-      "advanced": {},
-      "children": [
-       {
-        "id": "pj-testimonial-38",
-        "type": "testimonial",
-        "settings": {
-         "quote": "“We made Pasaje for people who want a room they remember and a city they discover slowly. Come stay with us.”",
-         "author_name": "Inés & the Pasaje team",
-         "author_role": "Pasaje del Mar 4 · old town",
-         "rating": "0",
-         "layout": "single",
-         "show_line": false,
-         "bg_color": "transparent",
-         "text_color": "#f3e7d6",
-         "border_radius": "0",
-         "avatar": ""
         },
         "style": {},
         "advanced": {},
@@ -1030,7 +962,7 @@
          "cta_text": "Book a room",
          "cta_url": "#book",
          "cta2_text": "See the rooms",
-         "cta2_url": "#rooms",
+         "cta2_url": "rooms",
          "cta2_bg": "#f3e7d6",
          "cta2_color": "#1b110b",
          "cta2_border": "transparent",
@@ -1040,19 +972,18 @@
          },
          "text_color": "#ffffff",
          "accent_color": "#d98a4e",
-         "subtitle_color": "#c5ac96",
+         "subtitle_color": "#f3e7d6",
          "cta_bg": "#d98a4e",
          "cta_color": "#1b110b",
          "cta_radius": {
           "tl": 999,
           "tr": 999,
           "br": 999,
-          "bl": 999,
-          "linked": true
+          "bl": 999
          },
          "cta_size": 13,
          "headline_font_family": "serif",
-         "headline_size": 56,
+         "headline_size": 64,
          "headline_weight": "400",
          "subtitle_size": 17,
          "layout": "stack",
@@ -1061,10 +992,9 @@
           "tl": 16,
           "tr": 16,
           "br": 16,
-          "bl": 16,
-          "linked": true
+          "bl": 16
          },
-         "banner_padding": 80
+         "banner_padding": 92
         },
         "style": {},
         "advanced": {},

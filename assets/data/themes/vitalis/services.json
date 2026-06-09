@@ -1,0 +1,287 @@
+[
+ {
+  "id": "vts-ph-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#0e3b3a" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vts-ph-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vts-ph-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vts-ph",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "What we offer",
+         "eyebrow_color": "#6fd6c4",
+         "eyebrow_dot_color": "#6fd6c4",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "Our ", "color": "#eaf6f2", "italic": false },
+          { "text": "services", "color": "#6fd6c4", "italic": true }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 84,
+         "headline_line_height": 1.04,
+         "headline_font_weight": "500",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Every path starts with a proper assessment — then a plan that fits your life, not a package we're trying to sell.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6f9a92",
+         "tagline_text_size": 17,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vts-cat-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small" },
+  "style": { "bg": { "type": "solid", "color": "#0e3b3a" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vts-cat-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vts-cat-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vts-overlaygrid",
+        "type": "overlaygrid",
+        "settings": {
+         "items": [
+          { "id": "vts-cat-1", "image": "", "title": "Physiotherapy", "subtitle": "Assessment · treatment · rehab", "link": "", "ribbon": "" },
+          { "id": "vts-cat-2", "image": "", "title": "Recovery suites", "subtitle": "Sauna · ice · compression", "link": "", "ribbon": "" },
+          { "id": "vts-cat-3", "image": "", "title": "Longevity", "subtitle": "Bloods · plans · coaching", "link": "", "ribbon": "" }
+         ],
+         "columns": "3",
+         "columns_mobile": "1",
+         "gap": "small",
+         "height": "320",
+         "match_height": true,
+         "overlay_position": "bottom",
+         "overlay_horizontal": "left",
+         "overlay_style": "overlay-primary",
+         "overlay_padding": "large",
+         "title_size": "h3",
+         "hover_effect": "zoom",
+         "hover_overlay": "always",
+         "preset": "custom",
+         "item_radius": 16,
+         "overlay_color": "rgba(7,36,34,.92)",
+         "overlay_gradient": true,
+         "title_color": "#ffffff",
+         "title_weight": "500",
+         "title_letter_spacing": 0,
+         "title_uppercase": false,
+         "subtitle_color": "#6fd6c4",
+         "subtitle_size": 13.5,
+         "show_cta": false,
+         "shadow": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vts-pl-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#103f3e" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vts-pl-ro1",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vts-pl-co1",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vts-pl-head",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Full price list",
+         "eyebrow_color": "#6fd6c4",
+         "eyebrow_dot_color": "#6fd6c4",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "Clear, ", "color": "#eaf6f2", "italic": false },
+          { "text": "upfront", "color": "#6fd6c4", "italic": true }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 50,
+         "headline_font_weight": "500",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "vts-pl-ro2",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vts-pl-co2",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vts-pricelist",
+        "type": "pricelist",
+        "settings": {
+         "preset": "custom",
+         "bg": { "type": "none" },
+         "show_image": false,
+         "price_position": "right",
+         "separator_style": "dotted",
+         "separator_color": "rgba(111,214,196,.42)",
+         "title_color": "#eaf6f2",
+         "price_color": "#6fd6c4",
+         "description_color": "#6f9a92",
+         "card_bg": "",
+         "card_border_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0, "linked": true },
+         "hover_lift": false,
+         "gap": "12",
+         "tile_padding": { "top": 8, "right": 0, "bottom": 8, "left": 0 },
+         "items": [
+          { "id": "vts-pl1", "title": "Physio · first visit", "description": "60 min assessment & plan.", "price": "€90", "image_url": "", "highlighted": false, "badge": "" },
+          { "id": "vts-pl2", "title": "Physio · follow-up", "description": "40 min treatment.", "price": "€65", "image_url": "", "highlighted": false, "badge": "" },
+          { "id": "vts-pl3", "title": "Sports massage", "description": "60 min, clinical therapist.", "price": "€70", "image_url": "", "highlighted": false, "badge": "" },
+          { "id": "vts-pl4", "title": "Dry needling", "description": "Add-on to any session.", "price": "€45", "image_url": "", "highlighted": false, "badge": "" },
+          { "id": "vts-pl5", "title": "Recovery day pass", "description": "All suites, all day.", "price": "€55", "image_url": "", "highlighted": false, "badge": "" },
+          { "id": "vts-pl6", "title": "Infrared sauna", "description": "45 min.", "price": "€35", "image_url": "", "highlighted": false, "badge": "" },
+          { "id": "vts-pl7", "title": "Longevity panel", "description": "Bloods + consult + plan.", "price": "€220", "image_url": "", "highlighted": false, "badge": "" },
+          { "id": "vts-pl8", "title": "Coaching · monthly", "description": "Check-ins & programming.", "price": "€120", "image_url": "", "highlighted": false, "badge": "" }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vts-cta-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#0e3b3a" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vts-cta-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vts-cta-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vts-cta-banner",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Not sure what you ",
+         "headline_accent": "need?",
+         "headline_accent_italic": true,
+         "subtitle": "Book a complimentary assessment — we'll point you to the right path, no pressure.",
+         "cta_text": "Book an assessment",
+         "cta_url": "#membership",
+         "bg": { "type": "solid", "color": "#072422" },
+         "text_color": "#eaf6f2",
+         "accent_color": "#6fd6c4",
+         "subtitle_color": "#a9cfc7",
+         "cta_bg": "#6fd6c4",
+         "cta_color": "#072422",
+         "cta_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999, "linked": true },
+         "cta_size": 15,
+         "headline_font_family": "serif",
+         "headline_size": 54,
+         "headline_weight": "500",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": { "tl": 24, "tr": 24, "br": 24, "bl": 24, "linked": true },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

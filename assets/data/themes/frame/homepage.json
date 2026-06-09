@@ -401,152 +401,41 @@
       "advanced": {},
       "children": [
        {
-        "id": "fr-hero-split-19",
-        "type": "hero-split",
+        "id": "fr-introsplit-19",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "About Frame",
-         "eyebrow_dot_color": "#ff4438",
+         "eyebrow": "About Frame",
          "eyebrow_color": "#ff4438",
-         "headline_lines": [
-          {
-           "text": "The story behind",
-           "color": "#f4f4f2",
-           "italic": false
-          },
-          {
-           "text": "the image",
-           "color": "#f4f4f2",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "sans-serif",
-         "headline_font_size": 46,
-         "headline_line_height": 1,
-         "headline_font_weight": "800",
-         "headline_align": "left",
-         "subhead": "Frame is an independent photo journal. We publish long-form visual essays — documentary, portrait, street and landscape — and the words that earn their place beside them.\n\nNo stock, no filler. Every issue is a handful of photographers given the room to say something.",
-         "subhead_color": "#9a9a9a",
-         "subhead_size": 16,
-         "subhead_italic": false,
-         "subhead_max_width": 520,
-         "cta1_text": "Read our story",
-         "cta1_url": "#about",
-         "cta1_bg": "transparent",
-         "cta1_color": "#f4f4f2",
-         "cta1_border": "rgba(255,255,255,.3)",
-         "cta1_size": 12,
-         "cta1_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
+         "headline": "The story behind",
+         "accent": "the image",
+         "headline_tail": "",
+         "uppercase": true,
+         "headline_color": "#f4f4f2",
+         "accent_color": "#f4f4f2",
+         "headline_weight": "700",
+         "headline_size": "46",
+         "lead": "Frame is an independent photo journal. We publish long-form visual essays — documentary, portrait, street and landscape — and the words that earn their place beside them. No stock, no filler. Every issue is a handful of photographers given the room to say something.",
+         "lead_color": "#9a9a9a",
+         "stats": [],
+         "signature": "",
+         "cta_text": "Read our story",
+         "cta_url": "#about",
+         "cta_style": "underline",
+         "cta_color": "#f4f4f2",
          "cta2_text": "",
          "cta2_url": "",
-         "cta2_bg": "transparent",
-         "cta2_color": "#f4f4f2",
-         "stats": [],
-         "showcase_enabled": true,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#222222"
-         },
-         "showcase_padding": 28,
-         "showcase_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "showcase_badge_text": "THE DARKROOM",
-         "showcase_badge_dot": "#ff4438",
-         "showcase_badge_bg": "#000000",
-         "showcase_badge_color": "#f4f4f2",
-         "showcase_items": [
-          {
-           "number": "Est.",
-           "text": "2015",
-           "italic": false,
-           "text_color": "#f4f4f2",
-           "bg": {
-            "type": "solid",
-            "color": "#1a1a1a"
-           }
-          },
-          {
-           "number": "Issues",
-           "text": "41",
-           "italic": false,
-           "text_color": "#f4f4f2",
-           "bg": {
-            "type": "solid",
-            "color": "#1a1a1a"
-           }
-          },
-          {
-           "number": "Photographers",
-           "text": "120+",
-           "italic": false,
-           "text_color": "#ff4438",
-           "bg": {
-            "type": "solid",
-            "color": "#1a1a1a"
-           }
-          },
-          {
-           "number": "Format",
-           "text": "Print + Digital",
-           "italic": true,
-           "text_color": "#9a9a9a",
-           "bg": {
-            "type": "solid",
-            "color": "#1a1a1a"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "FRAME",
-         "showcase_caption_right": "DARKROOM",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1fr 1fr",
-         "gap": 48,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_image": "",
+         "media_bg": { "type": "none" },
+         "media_label": "the darkroom",
+         "media_light": false,
+         "media_aspect": "1/1",
+         "media_radius": 0,
+         "media_radius_top": 0,
+         "media_blob": false,
+         "badge_number": "",
+         "badge_label": "",
+         "media_position": "left",
+         "flush": false
         },
         "style": {},
         "advanced": {},

@@ -31,6 +31,7 @@ export default {
     gap: 'medium',
     height: '320',
     match_height: true,
+    layout_mode: 'uniform',
     overlay_position: 'bottom',
     overlay_horizontal: 'left',
     overlay_style: 'overlay-primary',
@@ -87,8 +88,10 @@ export default {
           description: t('Vuoto = usa il colore globale impostato sotto.') },
         { key: 'link', label: t('Link'), type: 'link', placeholder: t('https://...') },
         { key: 'ribbon', label: t('Ribbon'), type: 'text' },
+        { key: 'tall', label: t('Masonry: cella alta (×2 righe)'), type: 'toggle' },
+        { key: 'wide', label: t('Masonry: cella larga (×2 colonne)'), type: 'toggle' },
       ],
-      newItemDefaults: { image: '', hover_image: '', hover_video: '', title: t('Nuovo elemento'), subtitle: '', link: '', ribbon: '', item_title_color: '', item_subtitle_color: '' },
+      newItemDefaults: { image: '', hover_image: '', hover_video: '', title: t('Nuovo elemento'), subtitle: '', link: '', ribbon: '', item_title_color: '', item_subtitle_color: '', tall: false, wide: false },
       itemLabel: 'Elemento',
     },
 
@@ -208,7 +211,12 @@ export default {
       { value: 'large', label: t('Grande') },
     ]},
     { key: 'height', label: t('Altezza (px)'), type: 'range', min: 150, max: 800, step: 25 },
-    { key: 'match_height', label: t('Altezza uniforme'), type: 'toggle' },
+    { key: 'match_height', label: t('Altezza uniforme'), type: 'toggle',
+      condition: { field: 'layout_mode', op: 'eq', value: 'uniform' } },
+    { key: 'layout_mode', label: t('Disposizione'), type: 'select', options: [
+      { value: 'uniform', label: t('Uniforme (griglia)') },
+      { value: 'masonry', label: t('Masonry (celle alte/larghe)') },
+    ], description: t('In Masonry le celle con “alta”/“larga” attive occupano 2 righe/colonne; l\'altezza diventa l\'altezza-riga di base.') },
 
     { type: 'separator', label: t('Overlay — aspetto') },
     { key: 'overlay_horizontal', label: t('Allineamento testo'), type: 'select', options: [

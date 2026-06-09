@@ -12,6 +12,9 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
     protected $category = 'marketing';
     protected $defaults = [
         'preset' => 'custom',
+        'eyebrow'            => '',
+        'eyebrow_color'      => '',
+        'title_accent_color' => '',
         'layout'            => 'horizontal',
         'title'             => 'Iscriviti alla newsletter',
         'subtitle'          => 'Ricevi aggiornamenti e contenuti esclusivi direttamente nella tua casella email.',
@@ -155,13 +158,17 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
         $br          = Olo_Tile_Utils::radius_int( $s['btn_radius'] );
         $is_h        = $s['layout'] === 'horizontal';
         $is_minimal  = $s['layout'] === 'minimal';
+        $eyebrow_col = $this->safe_color_css( $s['eyebrow_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
+        $accent_col  = $this->safe_color_css( $s['title_accent_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
 
         ob_start();
         ?>
         <style>
         .<?php echo $uid; ?>{display:flex;justify-content:<?php echo $align_css; ?>}
         .<?php echo $uid; ?> .olo-nl-box{max-width:<?php echo absint($s['max_width']) ?: 600; ?>px;width:100%;background:<?php echo esc_attr($bg); ?>;border-radius:<?php echo $radius; ?>px;padding: <?php echo $pad; ?>;<?php echo ! empty( $s['box_border'] ) ? 'border:1px solid ' . esc_attr( $s['box_border'] ) . ';' : ''; ?>text-align:center}
+        .<?php echo $uid; ?> .olo-nl-eyebrow{display:block;font-size:11px;font-weight:600;letter-spacing:.32em;text-transform:uppercase;color:<?php echo $eyebrow_col; ?>;margin:0 0 14px}
         .<?php echo $uid; ?> .olo-nl-title{font-size:<?php echo absint($s['title_size']); ?>px;font-weight:<?php echo esc_attr($s['title_weight']); ?>;color:<?php echo $s['title_color'] ? esc_attr($s['title_color']) : 'inherit'; ?>;margin:0 0 8px;line-height:1.3}
+        .<?php echo $uid; ?> .olo-nl-title em{font-style:italic;color:<?php echo $accent_col; ?>}
         .<?php echo $uid; ?> .olo-nl-sub{font-size:<?php echo absint($s['subtitle_size']); ?>px;color:<?php echo $s['subtitle_color'] ? esc_attr($s['subtitle_color']) : 'var(--olo-color-text-muted, #6B7280)'; ?>;margin:0 0 20px;line-height:1.5}
         .<?php echo $uid; ?> .olo-nl-icon{font-size:<?php echo absint($s['icon_size']); ?>px;margin-bottom:12px;<?php echo $s['icon_color'] ? 'color:' . esc_attr($s['icon_color']) . ';' : ''; ?>line-height:1}
         .<?php echo $uid; ?> .olo-nl-icon img{width:<?php echo absint($s['icon_size']); ?>px;height:auto;display:inline-block}
@@ -202,8 +209,11 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
             list( $nt_cls, $nt_data ) = $this->tfx_attrs( $s, 'title', $s['title'] ?? '' );
             list( $ns_cls, $ns_data ) = $this->tfx_attrs( $s, 'subtitle', $s['subtitle'] ?? '' );
             ?>
+            <?php if ( ! empty( $s['eyebrow'] ) ) : ?>
+              <span class="olo-nl-eyebrow"><?php echo esc_html( $s['eyebrow'] ); ?></span>
+            <?php endif; ?>
             <?php if ( ! empty( $s['title'] ) ) : ?>
-              <h3 class="olo-nl-title<?php echo $nt_cls; ?>"<?php echo $nt_data; ?>><?php echo esc_html( $s['title'] ); ?></h3>
+              <h3 class="olo-nl-title<?php echo $nt_cls; ?>"<?php echo $nt_data; ?>><?php echo wp_kses( $s['title'], [ 'em' => [], 'strong' => [], 'br' => [], 'span' => [] ] ); ?></h3>
             <?php endif; ?>
             <?php if ( ! empty( $s['subtitle'] ) ) : ?>
               <p class="olo-nl-sub<?php echo $ns_cls; ?>"<?php echo $ns_data; ?>><?php echo esc_html( $s['subtitle'] ); ?></p>

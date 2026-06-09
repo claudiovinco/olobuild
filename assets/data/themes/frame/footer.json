@@ -1,1 +1,91 @@
-[{"id":"fr-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#121212"}},"advanced":{},"children":[{"id":"fr-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"fr-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"fr-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Archivo\", -apple-system, sans-serif;font-size:20px;color:#f4f4f2;font-weight:800;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#ff4438;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Frame</div><p style=\"font-size:14px;color:#666666;max-width:260px\">An independent photo journal. Visual essays and the stories behind the image.</p>","text_color":"#9a9a9a","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"fr-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"fr-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#f4f4f2;font-family:\"Archivo\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Read</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#666666\"><li>Essays</li><li>Latest</li><li>Archive</li><li>Issues</li></ul>","text_color":"#9a9a9a","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"fr-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"fr-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#f4f4f2;font-family:\"Archivo\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Journal</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#666666\"><li>About</li><li>Photographers</li><li>Submit</li></ul>","text_color":"#9a9a9a","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"fr-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"fr-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#f4f4f2;font-family:\"Archivo\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Subscribe</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#666666\"><li>Newsletter</li><li>Print</li><li>Contact</li></ul>","text_color":"#9a9a9a","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"fr-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"fr-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"fr-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid rgba(255,255,255,.12);padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#666666\"><span>© 2026 Frame — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#9a9a9a","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "fr-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 54, "padding_bottom": 28 },
+  "style": { "bg": { "type": "solid", "color": "#121212" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fr-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fr-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "fr-fbrand", "type": "headline", "settings": { "heading": "Frame", "tag": "div", "alignment": "left", "heading_font_size": "21", "heading_uppercase": true, "heading_color": "#f4f4f2", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "fr-fbtext", "type": "text-block", "settings": { "content": "<p>An independent photo journal. Visual essays and the stories behind the image.</p>", "text_color": "#666666", "font_size": "13.5", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "fr-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "fr-fh1", "type": "headline", "settings": { "heading": "Read", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f4f4f2", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "fr-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "link_color": "#666666", "link_hover_color": "#f4f4f2", "items": [ { "title": "Essays", "content": "#essays", "tag": "" }, { "title": "Latest", "content": "#grid", "tag": "" }, { "title": "Archive", "content": "#", "tag": "" }, { "title": "Issues", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "fr-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "fr-fh2", "type": "headline", "settings": { "heading": "Journal", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f4f4f2", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "fr-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "link_color": "#666666", "link_hover_color": "#f4f4f2", "items": [ { "title": "About", "content": "#about", "tag": "" }, { "title": "Photographers", "content": "#", "tag": "" }, { "title": "Submit", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "fr-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "fr-fh3", "type": "headline", "settings": { "heading": "Subscribe", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f4f4f2", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "fr-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "link_color": "#666666", "link_hover_color": "#f4f4f2", "items": [ { "title": "Newsletter", "content": "#subscribe", "tag": "" }, { "title": "Print", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "fr-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "fr-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "fr-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.12)", "alignment": "center", "spacing": 22 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "fr-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "fr-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "fr-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Frame — an OLOtheme demo.</p>", "text_color": "#666666", "font_size": "11.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "fr-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "fr-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#666666", "font_size": "11.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

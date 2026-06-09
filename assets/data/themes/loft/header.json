@@ -1,1 +1,68 @@
-[{"id":"lo-hse","type":"section","settings":{"style":"default","width":"expand","padding":"none"},"style":{"bg":{"type":"solid","color":"rgba(28,28,30,.86)"}},"advanced":{},"children":[{"id":"lo-hro","type":"row","settings":{"layout":"100","gap":0,"vertical_align":"center"},"style":{},"advanced":{},"children":[{"id":"lo-hco","type":"column","settings":{"width":"1-1","width_medium":"1-1"},"style":{},"advanced":{},"children":[{"id":"lo-hmm","type":"megamenu","settings":{"menu_id":"auto","layout":"horizontal","alignment":"right","font_size":"14","font_weight":"600","text_color":"#646058","sticky":true,"sticky_bg":"rgba(28,28,30,.86)","sticky_shadow":true,"social_icons":false,"search_icon":false,"logo_image":"","logo_width":"120","logo_position":"left","logo_link":"/","logo_sticky":"","mobile_logo":"","mobile_logo_height":"30","mobile_bar_logo":true,"logo_text":"Loft","logo_dot":true},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "lo-hse",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "none" } },
+  "advanced": {},
+  "children": [
+   { "id": "lo-hro", "type": "row", "settings": { "layout": "100", "gap": 0, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
+    { "id": "lo-hco", "type": "column", "settings": { "width": "1-1", "width_medium": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "lo-hmm", "type": "megamenu", "settings": {
+        "menu_id": "auto",
+        "layout": "right",
+        "font_size": "13",
+        "font_weight": "600",
+        "text_transform": "uppercase",
+        "letter_spacing": "0.06",
+        "text_color": "#646058",
+        "hover_color": "#eeece6",
+        "active_color": "#eeece6",
+        "sticky": true,
+        "sticky_bg": "rgba(28,28,30,.86)",
+        "sticky_shadow": false,
+        "nav_bg": "rgba(28,28,30,.86)",
+        "nav_height": "70",
+        "bar_width": "wide",
+        "header_mode": "classic",
+        "social_icons": false,
+        "search_icon": false,
+        "logo_image": "",
+        "logo_width": "120",
+        "logo_position": "left",
+        "logo_link": "/",
+        "logo_sticky": "",
+        "mobile_logo": "",
+        "mobile_logo_height": "30",
+        "mobile_bar_logo": true,
+        "logo_text": "Loft",
+        "logo_text_size": "20",
+        "logo_text_color": "#eeece6",
+        "logo_dot": true,
+        "button_mode": "none",
+        "btn_bg": "#c9c2b6",
+        "btn_color": "#121214",
+        "btn_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0 },
+        "btn_hover_bg": "#d8d2c8",
+        "extra_link_1_label": "Start a project",
+        "extra_link_1_url": "#contact",
+        "extra_link_1_button": true,
+        "extra_links_right": true,
+        "mobile_breakpoint": "768",
+        "mobile_style": "fullscreen",
+        "mobile_link_font": "heading",
+        "mobile_bg": "#121214",
+        "mobile_text_color": "#eeece6",
+        "mobile_accent_color": "#c9c2b6",
+        "mobile_heading_color": "#646058",
+        "mobile_link_size": 38,
+        "mobile_numbers": true,
+        "mobile_footer_text": "Architecture & interiors · est. 2008",
+        "mobile_footer_cta_text": "Start a project",
+        "mobile_footer_cta_url": "#contact"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

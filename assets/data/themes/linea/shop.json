@@ -1,0 +1,189 @@
+[
+ {
+  "id": "ls-se-1",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_bottom": 0 },
+  "style": { "bg": { "type": "solid", "color": "#211f1d" } },
+  "advanced": {},
+  "children": [
+   { "id": "ls-ro-1", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "ls-co-1", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ls-pagehead", "type": "section-header", "settings": {
+        "eyebrow_show": true,
+        "eyebrow_text": "Everything, edited",
+        "eyebrow_color": "#bd9a6f",
+        "eyebrow_dot_color": "#bd9a6f",
+        "eyebrow_separator": "",
+        "headline_lines": [
+         { "text": "The ", "color": "#efe9df", "italic": false },
+         { "text": "shop", "color": "#bd9a6f", "italic": true }
+        ],
+        "headline_font_family": "serif",
+        "headline_font_size": 84,
+        "headline_font_weight": "400",
+        "headline_align": "center",
+        "headline_inline": true,
+        "tagline_show": true,
+        "tagline_text": "Forty-odd things, chosen with care. Filter by category — each piece comes with the story of who made it.",
+        "tagline_text_italic": false,
+        "tagline_text_color": "#827a6d",
+        "tagline_text_size": 16,
+        "layout": "center",
+        "gap": 18
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "ls-se-2",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#211f1d" } },
+  "advanced": {},
+  "children": [
+   { "id": "ls-ro-2", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "ls-co-2", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ls-productgrid", "type": "productgrid", "settings": {
+        "columns": 4,
+        "gap": 24,
+        "media_aspect": "3/4",
+        "media_bg": "#2c2925",
+        "stripe_dark": false,
+        "hover_zoom": true,
+        "card_bg": "",
+        "card_border": "",
+        "card_radius": 0,
+        "card_padding": 0,
+        "tag_bg": "",
+        "tag_color": "",
+        "quick_add_show": false,
+        "category_color": "#827a6d",
+        "title_font": "serif",
+        "title_size": 22,
+        "title_color": "#efe9df",
+        "price_color": "#bd9a6f",
+        "add_button": false,
+        "show_filters": true,
+        "filter_all_label": "All",
+        "filter_list": "Wear, Live, Scent",
+        "filter_text_color": "#b2a99c",
+        "filter_border_color": "rgba(239,233,223,.13)",
+        "filter_active_bg": "#bd9a6f",
+        "filter_active_color": "#161410",
+        "footer_text": "",
+        "footer_url": "#",
+        "items": [
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "wool coat", "tag": "", "category": "Outerwear", "title": "Boiled Wool Coat", "price": "€420", "filter_tags": "Wear", "link": "#", "quick_add": "" },
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "linen shirt", "tag": "", "category": "Ready-to-wear", "title": "Washed Linen Shirt", "price": "€140", "filter_tags": "Wear", "link": "#", "quick_add": "" },
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "trouser", "tag": "", "category": "Ready-to-wear", "title": "Pleated Trouser", "price": "€185", "filter_tags": "Wear", "link": "#", "quick_add": "" },
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "knit", "tag": "", "category": "Knitwear", "title": "Merino Crew", "price": "€160", "filter_tags": "Wear", "link": "#", "quick_add": "" },
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "vase", "tag": "", "category": "Object", "title": "Stoneware Vase", "price": "€86", "filter_tags": "Live", "link": "#", "quick_add": "" },
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "bowl set", "tag": "", "category": "Object", "title": "Ash Bowl, set of 2", "price": "€72", "filter_tags": "Live", "link": "#", "quick_add": "" },
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "scent", "tag": "", "category": "Scent", "title": "No. 4 Eau de Parfum", "price": "€95", "filter_tags": "Scent", "link": "#", "quick_add": "" },
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "candle", "tag": "", "category": "Scent", "title": "Cedar Candle", "price": "€48", "filter_tags": "Scent", "link": "#", "quick_add": "" }
+        ]
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "ls-se-3",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "solid", "color": "#2c2925" } },
+  "advanced": {},
+  "children": [
+   { "id": "ls-ro-3", "type": "row", "settings": { "gap": 0 }, "style": {}, "advanced": {}, "children": [
+    { "id": "ls-co-3", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ls-introsplit", "type": "introsplit", "settings": {
+        "eyebrow": "Made to last",
+        "eyebrow_color": "#bd9a6f",
+        "headline": "Buy",
+        "accent": "once",
+        "headline_tail": "",
+        "accent_italic": true,
+        "uppercase": false,
+        "headline_color": "#efe9df",
+        "headline_weight": "400",
+        "headline_size": "52",
+        "lead": "We'd rather sell you one thing you keep for a decade than ten you replace each year. Everything here is repairable, refillable or built to age well.",
+        "lead_color": "#b2a99c",
+        "signature": "",
+        "stats": [],
+        "cta_text": "Our philosophy",
+        "cta_url": "#story",
+        "cta_style": "underline",
+        "cta_color": "#efe9df",
+        "cta2_text": "",
+        "cta2_url": "#",
+        "cta2_style": "outline",
+        "media_image": "",
+        "media_bg": { "type": "none" },
+        "media_label": "maker at work",
+        "media_light": false,
+        "media_radius": 0,
+        "media_position": "right",
+        "flush": true,
+        "content_bg": "#2c2925",
+        "badge_number": "",
+        "badge_label": "",
+        "media_blob": false
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "ls-se-4",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#262320" } },
+  "advanced": {},
+  "children": [
+   { "id": "ls-ro-4", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "ls-co-4", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ls-newsletter", "type": "newsletter", "settings": {
+        "eyebrow": "Stay close",
+        "eyebrow_color": "#bd9a6f",
+        "title": "The <em>quiet</em> list",
+        "title_accent_color": "#bd9a6f",
+        "subtitle": "One considered email a month — new arrivals, maker stories and the occasional private preview.",
+        "layout": "horizontal",
+        "show_name": false,
+        "email_placeholder": "Email address",
+        "button_text": "Join",
+        "button_icon": false,
+        "privacy_text": "",
+        "max_width": "440",
+        "alignment": "center",
+        "bg_color": "transparent",
+        "box_border": "",
+        "border_radius": 0,
+        "tile_padding": { "top": 0, "right": 32, "bottom": 0, "left": 32 },
+        "title_size": "56",
+        "title_weight": "400",
+        "title_color": "#efe9df",
+        "subtitle_size": "16",
+        "subtitle_color": "#827a6d",
+        "input_bg": "transparent",
+        "input_color": "#efe9df",
+        "input_border": "rgba(189,154,111,.42)",
+        "input_focus_border": "#bd9a6f",
+        "input_radius": 0,
+        "input_height": "52",
+        "btn_bg": "#bd9a6f",
+        "btn_color": "#161410",
+        "btn_hover_bg": "#cfb088",
+        "btn_radius": 0,
+        "btn_font_size": "12",
+        "btn_font_weight": "500",
+        "shadow": "none",
+        "icon_type": "none"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

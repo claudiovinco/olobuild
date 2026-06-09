@@ -1,0 +1,415 @@
+[
+ {
+  "id": "wd-se-ph",
+  "type": "section",
+  "settings": { "style": "default", "width": "full", "padding": "remove-vertical", "padding_top": 0, "padding_bottom": 0 },
+  "style": { "bg": { "type": "solid", "color": "#0d3b3f" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "wd-ro-ph",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "wd-co-ph",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wd-ph-hero",
+        "type": "imagehero",
+        "settings": {
+         "eyebrow_text": "Trekking · Chile & Argentina",
+         "eyebrow_dot": false,
+         "headline_text": "Patagonia Expedition",
+         "accent_text": "",
+         "headline_tail": "",
+         "accent_italic": false,
+         "stack_lines": false,
+         "subhead": "",
+         "cta1_text": "",
+         "cta1_url": "#book",
+         "cta2_text": "",
+         "cta2_url": "#",
+         "meta_text": "11 days · Max 12 travellers · Moderate–challenging · From €3,200",
+         "scroll_hint": "",
+         "bg_image": "",
+         "bg_color": "#0d3b3f",
+         "media_label": "patagonia — torres del paine massif, full-bleed",
+         "text_position": "bottom-left",
+         "text_align": "left",
+         "content_width": 720,
+         "aspect_ratio": "21/10",
+         "min_height": 54,
+         "heading_font": "serif",
+         "overlay_color": "#0d3b3f",
+         "overlay_top": 0.4,
+         "overlay_bottom": 0.85,
+         "overlay_sides": false,
+         "accent": "#e9c46a",
+         "accent_on": "#0d3b3f",
+         "text_color": "#ffffff",
+         "sub_color": "rgba(255,255,255,.85)",
+         "eyebrow_color": "#e9c46a"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "wd-se-ov",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f5f1e8" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "wd-ro-ov",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "wd-co-ov",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wd-ov-split",
+        "type": "introsplit",
+        "settings": {
+         "eyebrow": "The trip",
+         "eyebrow_color": "#e76f51",
+         "headline": "Two countries, one great range",
+         "accent": "",
+         "headline_tail": "",
+         "uppercase": false,
+         "headline_color": "#1d2a29",
+         "accent_color": "#e76f51",
+         "headline_weight": "600",
+         "headline_size": "50",
+         "lead": "From the granite towers of Torres del Paine to the spires of Fitz Roy, this is Patagonia at its rawest — long days on foot, big weather, and the kind of silence you travel a long way to find. We move slowly enough to actually be there: nights in mountain refugios, meals cooked over fire, and a guide who reads the sky better than any forecast.",
+         "lead_color": "#566260",
+         "stats": [],
+         "signature": "",
+         "cta_text": "Check dates & book",
+         "cta_url": "#book",
+         "cta_style": "button",
+         "cta_bg": "#0d3b3f",
+         "cta_color": "#f5f1e8",
+         "cta2_text": "",
+         "cta2_url": "#",
+         "media_image": "",
+         "media_bg": { "type": "none" },
+         "media_label": "hikers below fitz roy",
+         "media_light": true,
+         "media_aspect": "4/4.4",
+         "media_radius": 20,
+         "media_radius_top": 0,
+         "media_blob": false,
+         "badge_number": "",
+         "badge_label": "",
+         "media_position": "right"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "wd-se-itin",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "border_top": "1px solid #e3ddcf", "border_bottom": "1px solid #e3ddcf" },
+  "style": { "bg": { "type": "solid", "color": "#ffffff" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "wd-ro-itin-h",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "wd-co-itin-h",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wd-itin-head",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Day by day",
+         "eyebrow_color": "#e76f51",
+         "eyebrow_dot_color": "#e76f51",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "The itinerary", "color": "#1d2a29", "italic": false }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "headline_inline": false,
+         "tagline_show": false,
+         "tagline_text": "",
+         "layout": "stack",
+         "gap": 12
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "wd-ro-itin",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "wd-co-itin",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wd-itin-tl",
+        "type": "timeline",
+        "settings": {
+         "tl_layout": "one",
+         "tl_reveal": "slot",
+         "tl_theme": "paper",
+         "tl_card": "bubble",
+         "tl_thread": "solid2",
+         "tl_node": "num",
+         "tl_color": "mono",
+         "tl_media": "off",
+         "tl_density": "comfy",
+         "tl_line": "solid",
+         "tl_transparent": true,
+         "tl_show_tag": true,
+         "tl_rail_color": "#e3ddcf",
+         "tl_fill_from": "#0d3b3f",
+         "tl_fill_to": "#0d3b3f",
+         "tl_card_bg": "transparent",
+         "tl_title_color": "#1d2a29",
+         "tl_title_family": "heading",
+         "tl_title_size": 22,
+         "tl_text_color": "#566260",
+         "tl_tag_color": "#e76f51",
+         "items": [
+          { "id": "wd-tl-1", "title": "Arrive Punta Arenas → Puerto Natales", "tag": "Day 1–2", "description": "Meet the group, gear check, and the long beautiful drive north to the edge of the park.", "date": "1", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
+          { "id": "wd-tl-2", "title": "The \"W\" — Torres del Paine", "tag": "Day 3–6", "description": "Four days through the park's classic circuit: the towers at dawn, the French Valley, and Grey Glacier up close.", "date": "2", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
+          { "id": "wd-tl-3", "title": "Cross into Argentina → El Chaltén", "tag": "Day 7–9", "description": "Trekking capital of the south. Day hikes to Laguna de los Tres beneath Fitz Roy.", "date": "3", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
+          { "id": "wd-tl-4", "title": "Perito Moreno → home", "tag": "Day 10–11", "description": "Stand before the moving wall of ice, then the journey back with a group of new friends.", "date": "4", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "wd-se-gal",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f5f1e8" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "wd-ro-gal-h",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "wd-co-gal-h",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wd-gal-head",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "A glimpse",
+         "eyebrow_color": "#e76f51",
+         "eyebrow_dot_color": "#e76f51",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "On the trail", "color": "#1d2a29", "italic": false }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "headline_inline": false,
+         "tagline_show": false,
+         "tagline_text": "",
+         "layout": "stack",
+         "gap": 12
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "wd-ro-gal",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "wd-co-gal",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wd-gal-grid",
+        "type": "overlaygrid",
+        "settings": {
+         "preset": "editorial-grid",
+         "bg": { "type": "none" },
+         "columns": "3",
+         "columns_mobile": "1",
+         "gap": "small",
+         "height": "260",
+         "layout_mode": "uniform",
+         "match_height": true,
+         "overlay_position": "bottom",
+         "overlay_style": "overlay-primary",
+         "overlay_color": "rgba(13,59,63,.7)",
+         "overlay_gradient": true,
+         "overlay_padding": "small",
+         "title_size": "h4",
+         "title_color": "#ffffff",
+         "title_weight": "600",
+         "title_letter_spacing": 0,
+         "title_uppercase": false,
+         "subtitle_color": "#e9c46a",
+         "subtitle_size": 11,
+         "hover_effect": "zoom",
+         "hover_overlay": "always",
+         "item_radius": 14,
+         "show_cta": false,
+         "items": [
+          { "image": "", "title": "Towers at dawn", "subtitle": "" },
+          { "image": "", "title": "Glacier", "subtitle": "" },
+          { "image": "", "title": "Refugio night", "subtitle": "" }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "wd-se-cta",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#0d3b3f" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "wd-ro-cta",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "wd-co-cta",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wd-cta-banner",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Join the next",
+         "headline_accent": "departure",
+         "headline_accent_italic": false,
+         "subtitle": "Small groups fill fast. Hold your place with a deposit, balance due 60 days before you fly.",
+         "cta_text": "Check dates & book",
+         "cta_url": "#book",
+         "bg": { "type": "solid", "color": "#114a4f" },
+         "text_color": "#ffffff",
+         "accent_color": "#e9c46a",
+         "subtitle_color": "rgba(255,255,255,.8)",
+         "cta_bg": "#e9c46a",
+         "cta_color": "#0d3b3f",
+         "cta_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999, "linked": true },
+         "cta_size": 15,
+         "headline_font_family": "serif",
+         "headline_size": 56,
+         "headline_weight": "600",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": { "tl": 24, "tr": 24, "br": 24, "bl": 24, "linked": true },
+         "banner_padding": 80,
+         "eyebrow_show": true,
+         "eyebrow_text": "From €3,200 · 11 days",
+         "eyebrow_color": "#e9c46a"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -14,6 +14,21 @@
         transition: 'filter 0.4s ease, transform 0.4s ease',
       }"
     />
+    <!-- media_bg: sfondo/media di ogni tipo (se senza immagine) -->
+    <div
+      v-else-if="hasMediaBg"
+      class="mb-w-full mb-block"
+      :style="{ height: aspectSet ? undefined : s.height, aspectRatio: aspectSet ? aspectRatioCss : undefined, borderRadius: brStyle, ...mediaBgStyle }"
+    ></div>
+    <!-- placeholder a righe + etichetta -->
+    <div
+      v-else-if="s.media_label"
+      class="mb-relative mb-overflow-hidden mb-w-full mb-block"
+      :style="{ height: aspectSet ? undefined : s.height, aspectRatio: aspectSet ? aspectRatioCss : undefined, borderRadius: brStyle, background: 'var(--olo-color-muted,#2b2b2b)', backgroundImage: 'repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 16px,transparent 16px 32px)' }"
+    >
+      <span class="mb-absolute" style="left:14px;bottom:12px;right:14px;font-size:10.5px;letter-spacing:.1em;color:rgba(255,255,255,.4);text-transform:uppercase">{{ s.media_label }}</span>
+    </div>
+    <!-- empty state -->
     <div
       v-else
       class="mb-flex mb-flex-col mb-items-center mb-justify-center"
@@ -51,6 +66,7 @@
 <script setup>
 import { computed } from 'vue';
 import { t } from '@/i18n';
+import { buildBgStyle } from '@/composables/useBackgroundStyle';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -75,8 +91,23 @@ const defaults = {
   hover_animation: 'none',
   lightbox: false,
   border_radius: '0',
+  media_bg: { type: 'none' },
+  media_label: '',
+  aspect_ratio: 'auto',
+  aspect_ratio_custom: '16/9',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
+
+const aspectSet = computed(() => s.value.aspect_ratio && s.value.aspect_ratio !== 'auto');
+const aspectRatioCss = computed(() => {
+  if (s.value.aspect_ratio === 'custom') return (s.value.aspect_ratio_custom || '16/9').replace(':', '/');
+  return aspectSet.value ? s.value.aspect_ratio : '16/9';
+});
+const hasMediaBg = computed(() => {
+  const b = s.value.media_bg;
+  return !!(b && b.type && b.type !== 'none');
+});
+const mediaBgStyle = computed(() => (hasMediaBg.value ? buildBgStyle(s.value.media_bg) : {}));
 
 const brStyle = computed(() => {
   const v = s.value.border_radius;

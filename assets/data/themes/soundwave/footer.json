@@ -1,1 +1,91 @@
-[{"id":"so-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#101016"}},"advanced":{},"children":[{"id":"so-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"so-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"so-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Unbounded\", -apple-system, sans-serif;font-size:20px;color:#ffffff;font-weight:700;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#27e0a3;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Kova</div><p style=\"font-size:14px;color:#74747f;max-width:260px\">Electronic producer & live act. New album Nightglass out now.</p>","text_color":"#b6b6c2","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"so-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"so-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Figtree\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Music</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#74747f\"><li>Nightglass</li><li>Discography</li><li>Streaming</li><li>Remixes</li></ul>","text_color":"#b6b6c2","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"so-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"so-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Figtree\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Live</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#74747f\"><li>Tour dates</li><li>Past shows</li><li>Booking</li></ul>","text_color":"#b6b6c2","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"so-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"so-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Figtree\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Connect</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#74747f\"><li>Instagram</li><li>Bandcamp</li><li>Newsletter</li><li>Press kit</li></ul>","text_color":"#b6b6c2","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"so-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"so-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"so-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid rgba(255,255,255,.09);padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#74747f\"><span>© 2026 Kova — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#b6b6c2","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "so-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 56, "padding_bottom": 30 },
+  "style": { "bg": { "type": "solid", "color": "#101016" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "so-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "so-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "so-fbrand", "type": "headline", "settings": { "heading": "KOVA", "tag": "div", "alignment": "left", "heading_font_size": "20", "heading_uppercase": false, "heading_color": "#ffffff", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "so-fbtext", "type": "text-block", "settings": { "content": "<p>Electronic producer & live act. New album Nightglass out now.</p>", "text_color": "#74747f", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "so-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "so-fh1", "type": "headline", "settings": { "heading": "Music", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "so-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#74747f", "link_hover_color": "#27e0a3", "font_size": "14", "gap": "10", "items": [ { "title": "Nightglass", "content": "#release", "tag": "" }, { "title": "Discography", "content": "#", "tag": "" }, { "title": "Streaming", "content": "#listen", "tag": "" }, { "title": "Remixes", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "so-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "so-fh2", "type": "headline", "settings": { "heading": "Live", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "so-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#74747f", "link_hover_color": "#27e0a3", "font_size": "14", "gap": "10", "items": [ { "title": "Tour dates", "content": "#tour", "tag": "" }, { "title": "Past shows", "content": "#", "tag": "" }, { "title": "Booking", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "so-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "so-fh3", "type": "headline", "settings": { "heading": "Connect", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "so-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#74747f", "link_hover_color": "#27e0a3", "font_size": "14", "gap": "10", "items": [ { "title": "Instagram", "content": "#", "tag": "" }, { "title": "Bandcamp", "content": "#", "tag": "" }, { "title": "Newsletter", "content": "#", "tag": "" }, { "title": "Press kit", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "so-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "so-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "so-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.09)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "so-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "so-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "so-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Kova — an OLOtheme demo.</p>", "text_color": "#74747f", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "so-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "so-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#74747f", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

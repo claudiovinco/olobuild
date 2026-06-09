@@ -1,0 +1,321 @@
+[
+ {
+  "id": "fd-se-ph",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "solid", "color": "#2c3327" } },
+  "advanced": {},
+  "children": [
+   { "id": "fd-ro-ph", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "fd-co-ph", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "fd-pageheader", "type": "imagehero", "settings": {
+        "eyebrow_text": "the details",
+        "eyebrow_dot": false,
+        "headline_text": "Travel & stay",
+        "accent_text": "",
+        "headline_tail": "",
+        "accent_italic": false,
+        "stack_lines": false,
+        "subhead": "",
+        "cta1_text": "",
+        "cta1_url": "",
+        "cta2_text": "",
+        "cta2_url": "",
+        "meta_text": "",
+        "scroll_hint": "",
+        "bg_image": "",
+        "media_bg": { "type": "none" },
+        "bg_color": "#2c3327",
+        "media_label": "villa & lake, full-bleed",
+        "text_position": "center",
+        "text_align": "center",
+        "content_width": 760,
+        "aspect_ratio": "21/9",
+        "min_height": 46,
+        "heading_font": "serif",
+        "overlay_color": "#2c3327",
+        "overlay_top": 0.45,
+        "overlay_bottom": 0.62,
+        "overlay_sides": false,
+        "accent": "#cfa6a0",
+        "accent_on": "#ffffff",
+        "text_color": "#ffffff",
+        "sub_color": "rgba(255,255,255,.85)",
+        "eyebrow_color": "#cfa6a0"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "fd-se-travel",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f3efe6" } },
+  "advanced": {},
+  "children": [
+   { "id": "fd-ro-th", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "fd-co-th", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "fd-travel-head", "type": "section-header", "settings": {
+        "eyebrow_show": true,
+        "eyebrow_text": "getting here",
+        "eyebrow_color": "#bb8b84",
+        "eyebrow_dot_color": "#bb8b84",
+        "eyebrow_separator": "",
+        "headline_lines": [ { "text": "Finding us", "color": "#34372e", "italic": false } ],
+        "headline_font_family": "serif",
+        "headline_font_size": 36,
+        "headline_font_weight": "400",
+        "headline_align": "center",
+        "headline_inline": false,
+        "tagline_show": false,
+        "tagline_text": "",
+        "tagline_text_color": "#6a6d60",
+        "tagline_text_size": 16,
+        "layout": "center",
+        "gap": 14
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]},
+   { "id": "fd-ro-tc", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "fd-co-tc", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "fd-travel-cards", "type": "info-cards", "settings": {
+        "container_bg": { "type": "solid", "color": "transparent" },
+        "container_padding": 0,
+        "container_gap": 24,
+        "columns": 3,
+        "items_gap": 24,
+        "card_bg": { "type": "solid", "color": "#fbf9f3" },
+        "card_color": "#6a6d60",
+        "card_radius": { "tl": 6, "tr": 6, "br": 6, "bl": 6, "linked": true },
+        "card_padding": 36,
+        "show_icon": true,
+        "show_counter": false,
+        "show_counter_label": false,
+        "show_arrow": false,
+        "show_footer": false,
+        "show_media": false,
+        "icon_color": "#5f6f4e",
+        "icon_bg_color": "transparent",
+        "icon_border_color": "#cfa6a0",
+        "icon_border_width": 1,
+        "icon_shape": "circle",
+        "icon_size": 24,
+        "icon_container_size": 54,
+        "title_color": "#34372e",
+        "title_font_family": "serif",
+        "title_size": 22,
+        "title_weight": "400",
+        "title_italic": false,
+        "description_size": 14,
+        "card_border": "#e3ddce",
+        "card_border_color": "#e3ddce",
+        "card_border_width": 1,
+        "card_hover_effect": "lift",
+        "items": [
+         { "icon": "plane", "title": "By air", "description": "Fly into Milan Malpensa or Linate. Both are about 90 minutes from Bellagio by car.", "footer_text": "" },
+         { "icon": "train-front", "title": "By train", "description": "Trains run Milan → Varenna in an hour, then a short ferry across the lake.", "footer_text": "" },
+         { "icon": "bus", "title": "Shuttle", "description": "We’ll run a shuttle from Bellagio centre to the villa from 3:00 pm.", "footer_text": "" }
+        ]
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "fd-se-stay",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#fbf9f3" } },
+  "advanced": {},
+  "children": [
+   { "id": "fd-ro-sh", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "fd-co-sh", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "fd-stay-head", "type": "section-header", "settings": {
+        "eyebrow_show": true,
+        "eyebrow_text": "where to stay",
+        "eyebrow_color": "#bb8b84",
+        "eyebrow_dot_color": "#bb8b84",
+        "eyebrow_separator": "",
+        "headline_lines": [ { "text": "Resting your head", "color": "#34372e", "italic": false } ],
+        "headline_font_family": "serif",
+        "headline_font_size": 36,
+        "headline_font_weight": "400",
+        "headline_align": "center",
+        "headline_inline": false,
+        "tagline_show": false,
+        "tagline_text": "",
+        "tagline_text_color": "#6a6d60",
+        "tagline_text_size": 16,
+        "layout": "center",
+        "gap": 14
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]},
+   { "id": "fd-ro-sc", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "fd-co-sc", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "fd-stay-cards", "type": "info-cards", "settings": {
+        "container_bg": { "type": "solid", "color": "transparent" },
+        "container_padding": 0,
+        "container_gap": 24,
+        "columns": 3,
+        "items_gap": 24,
+        "card_bg": { "type": "solid", "color": "#fbf9f3" },
+        "card_color": "#6a6d60",
+        "card_radius": { "tl": 6, "tr": 6, "br": 6, "bl": 6, "linked": true },
+        "card_padding": 36,
+        "show_icon": false,
+        "show_counter": false,
+        "show_counter_label": false,
+        "show_arrow": false,
+        "show_footer": true,
+        "show_media": false,
+        "title_color": "#34372e",
+        "title_font_family": "serif",
+        "title_size": 22,
+        "title_weight": "400",
+        "title_italic": false,
+        "description_size": 14,
+        "footer_size": 17,
+        "footer_color": "#bb8b84",
+        "footer_font_family": "serif",
+        "card_border": "#e3ddce",
+        "card_border_color": "#e3ddce",
+        "card_border_width": 1,
+        "card_hover_effect": "lift",
+        "items": [
+         { "icon": "", "title": "Hotel Belvedere", "description": "Lakeside, walkable to the villa. Ask for the “Marta & Elia” rate.", "footer_text": "€€€", "footer_dot_color": "#cfa6a0" },
+         { "icon": "", "title": "Albergo Centrale", "description": "Charming and central in Bellagio, a short shuttle ride away.", "footer_text": "€€", "footer_dot_color": "#cfa6a0" },
+         { "icon": "", "title": "Lakeside B&Bs", "description": "A handful of lovely small stays — book early, they go fast.", "footer_text": "€", "footer_dot_color": "#cfa6a0" }
+        ]
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "fd-se-faq",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f3efe6" } },
+  "advanced": {},
+  "children": [
+   { "id": "fd-ro-fh", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "fd-co-fh", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "fd-faq-head", "type": "section-header", "settings": {
+        "eyebrow_show": true,
+        "eyebrow_text": "good to know",
+        "eyebrow_color": "#bb8b84",
+        "eyebrow_dot_color": "#bb8b84",
+        "eyebrow_separator": "",
+        "headline_lines": [ { "text": "The usual questions", "color": "#34372e", "italic": false } ],
+        "headline_font_family": "serif",
+        "headline_font_size": 36,
+        "headline_font_weight": "400",
+        "headline_align": "center",
+        "headline_inline": false,
+        "tagline_show": false,
+        "tagline_text": "",
+        "tagline_text_color": "#6a6d60",
+        "tagline_text_size": 16,
+        "layout": "center",
+        "gap": 14
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]},
+   { "id": "fd-ro-fc", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "fd-co-fc", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "fd-faq-cards", "type": "info-cards", "settings": {
+        "container_bg": { "type": "solid", "color": "transparent" },
+        "container_padding": 0,
+        "container_gap": 24,
+        "columns": 3,
+        "items_gap": 24,
+        "card_bg": { "type": "solid", "color": "#fbf9f3" },
+        "card_color": "#6a6d60",
+        "card_radius": { "tl": 6, "tr": 6, "br": 6, "bl": 6, "linked": true },
+        "card_padding": 36,
+        "show_icon": false,
+        "show_counter": false,
+        "show_counter_label": false,
+        "show_arrow": false,
+        "show_footer": false,
+        "show_media": false,
+        "title_color": "#34372e",
+        "title_font_family": "serif",
+        "title_size": 22,
+        "title_weight": "400",
+        "title_italic": false,
+        "description_size": 14,
+        "card_border": "#e3ddce",
+        "card_border_color": "#e3ddce",
+        "card_border_width": 1,
+        "card_hover_effect": "lift",
+        "items": [
+         { "icon": "", "title": "Plus-ones", "description": "If your invitation named a guest, they’re very welcome. Otherwise, just you!", "footer_text": "" },
+         { "icon": "", "title": "Children", "description": "We love them, but this one’s an adults-only evening. Sitters can be arranged.", "footer_text": "" },
+         { "icon": "", "title": "Gifts", "description": "Your presence is plenty. If you insist, there’s a small honeymoon fund.", "footer_text": "" }
+        ]
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "fd-se-cta",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#2c3327" } },
+  "advanced": {},
+  "children": [
+   { "id": "fd-ro-cta-h", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "fd-co-cta-h", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "fd-cta-head", "type": "section-header", "settings": {
+        "eyebrow_show": true,
+        "eyebrow_text": "one more thing",
+        "eyebrow_color": "#cfa6a0",
+        "eyebrow_dot_color": "#cfa6a0",
+        "eyebrow_separator": "",
+        "headline_lines": [ { "text": "Have you replied?", "color": "#ffffff", "italic": false } ],
+        "headline_font_family": "serif",
+        "headline_font_size": 36,
+        "headline_font_weight": "400",
+        "headline_align": "center",
+        "headline_inline": false,
+        "tagline_show": true,
+        "tagline_text": "Let us know you’re coming by 1 July 2026 — we can’t wait to celebrate with you.",
+        "tagline_text_italic": false,
+        "tagline_text_color": "rgba(255,255,255,.82)",
+        "tagline_text_size": 16,
+        "layout": "center",
+        "gap": 14,
+        "tile_padding": { "top": 0, "right": 0, "bottom": 28, "left": 0 }
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]},
+   { "id": "fd-ro-cta-b", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "fd-co-cta-b", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "fd-cta-btn", "type": "button", "settings": {
+        "text": "RSVP now",
+        "url": "/#rsvp",
+        "target": "_self",
+        "alignment": "center",
+        "full_width": false,
+        "icon": "",
+        "bg_color": "#cfa6a0",
+        "text_color": "#ffffff",
+        "hover_bg_color": "#bb8b84",
+        "font_size": "12",
+        "font_weight": "600",
+        "text_transform": "uppercase",
+        "letter_spacing": "1",
+        "border_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999, "linked": true },
+        "tile_padding": { "top": 14, "right": 30, "bottom": 14, "left": 30 },
+        "shadow": "none",
+        "hover_effect": "lift"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

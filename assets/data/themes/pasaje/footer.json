@@ -1,1 +1,91 @@
-[{"id":"pa-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#311f17"}},"advanced":{},"children":[{"id":"pa-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"pa-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"pa-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Yeseva One\", Georgia, serif;font-size:20px;color:#f3e7d6;font-weight:400;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#d98a4e;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Pasaje</div><p style=\"font-size:14px;color:#967861;max-width:260px\">A fourteen-room boutique hotel down a quiet passage in the old town.</p>","text_color":"#c5ac96","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"pa-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"pa-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#f3e7d6;font-family:\"Karla\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Stay</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#967861\"><li>Rooms</li><li>Book</li><li>Experiences</li><li>Offers</li></ul>","text_color":"#c5ac96","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"pa-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"pa-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#f3e7d6;font-family:\"Karla\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Hotel</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#967861\"><li>The stay</li><li>Gallery</li><li>Dining</li></ul>","text_color":"#c5ac96","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"pa-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"pa-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#f3e7d6;font-family:\"Karla\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Find us</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#967861\"><li>Pasaje del Mar 4</li><li>+34 952 00 00</li><li>hola@pasaje.hotel</li></ul>","text_color":"#c5ac96","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"pa-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"pa-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"pa-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid rgba(243,231,214,.13);padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#967861\"><span>© 2026 Pasaje — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#c5ac96","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "pa-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
+  "style": { "bg": { "type": "solid", "color": "#311f17" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "pa-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "pa-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "pa-fbrand", "type": "headline", "settings": { "heading": "Pasaje", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "25", "heading_color": "#f3e7d6", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "pa-fbtext", "type": "text-block", "settings": { "content": "<p>A fourteen-room boutique hotel down a quiet passage in the old town.</p>", "text_color": "#967861", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "pa-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "pa-fh1", "type": "headline", "settings": { "heading": "Stay", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f3e7d6", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "pa-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#967861", "link_hover_color": "#d98a4e", "items": [ { "title": "Rooms", "content": "#rooms", "tag": "" }, { "title": "Book", "content": "#book", "tag": "" }, { "title": "Experiences", "content": "#experiences", "tag": "" }, { "title": "Offers", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "pa-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "pa-fh2", "type": "headline", "settings": { "heading": "Hotel", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f3e7d6", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "pa-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#967861", "link_hover_color": "#d98a4e", "items": [ { "title": "The stay", "content": "#stay", "tag": "" }, { "title": "Gallery", "content": "#gallery", "tag": "" }, { "title": "Dining", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "pa-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "pa-fh3", "type": "headline", "settings": { "heading": "Find us", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f3e7d6", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "pa-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#967861", "link_hover_color": "#d98a4e", "items": [ { "title": "Pasaje del Mar 4", "content": "#", "tag": "" }, { "title": "+34 952 00 00", "content": "tel:+34952000000", "tag": "" }, { "title": "hola@pasaje.hotel", "content": "mailto:hola@pasaje.hotel", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "pa-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "pa-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "pa-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(243,231,214,.13)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "pa-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "pa-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "pa-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Pasaje — an OLOtheme demo.</p>", "text_color": "#967861", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "pa-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "pa-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#967861", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

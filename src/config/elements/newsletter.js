@@ -19,6 +19,9 @@ export default {
     typography_preset: '',
     layout: 'horizontal',
     preset: 'custom',
+    eyebrow: '',
+    eyebrow_color: '',
+    title_accent_color: '',
     title: t('Iscriviti alla newsletter'),
     subtitle: t('Ricevi aggiornamenti e contenuti esclusivi direttamente nella tua casella email.'),
     icon_type: 'none',
@@ -96,7 +99,9 @@ export default {
   },
 
   fields: [
-    { key: 'title', label: t('Titolo'), type: 'text' },
+    { key: 'eyebrow', label: t('Occhiello (sopra il titolo)'), type: 'text' },
+    { key: 'title', label: t('Titolo'), type: 'text',
+      description: t('Usa <em>parola</em> per evidenziarla in corsivo con il colore accento.') },
     { key: 'subtitle', label: t('Sottotitolo'), type: 'textarea', rows: 2 },
     { key: 'icon_type', label: t('Icona'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
@@ -224,6 +229,8 @@ export default {
       },
       sizeMin: 14, sizeMax: 48, sizeStep: 1,
     },
+    { key: 'eyebrow_color', label: t('Colore occhiello'), type: 'color' },
+    { key: 'title_accent_color', label: t('Colore accento titolo (em)'), type: 'color' },
     { type: 'typography', label: t('Sottotitolo'),
       presetKey: 'typography_preset',
       responsiveKeys: ['size'],

@@ -217,7 +217,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         $count = count( $items );
         if ( $count === 0 ) { return ''; }
 
-        $layout = in_array( $s['tl_layout'], [ 'alt', 'one', 'horizontal', 'navigator' ], true ) ? $s['tl_layout'] : 'alt';
+        $layout = in_array( $s['tl_layout'], [ 'alt', 'one', 'horizontal', 'navigator', 'schedule' ], true ) ? $s['tl_layout'] : 'alt';
         $theme  = in_array( $s['tl_theme'], [ 'paper', 'night', 'neon', 'blue' ], true ) ? $s['tl_theme'] : 'paper';
         $mono   = ( $s['tl_color'] === 'mono' );
         $uid    = 'olo-tl-' . wp_rand( 10000, 99999 );
@@ -240,6 +240,8 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
             $this->render_horizontal( $items, $s, $mono );
         } elseif ( $layout === 'navigator' ) {
             $this->render_navigator( $items, $s );
+        } elseif ( $layout === 'schedule' ) {
+            $this->render_schedule( $items, $s, $uid );
         } else {
             $this->render_vertical( $items, $s, $layout, $mono );
         }
@@ -337,6 +339,40 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
             update();
         })();</script>
         <?php
+    }
+
+    /* ───────── SCHEDULE / RUN-OF-SHOW (orario a sx · filo · nodo) ───────── */
+    private function render_schedule( $items, $s, $uid ) {
+        $accent = $this->safe_color_css( $s['tl_yr_color'] ?? '' ) ?: 'var(--olo-color-primary, #e0afca)';
+        $title  = $this->safe_color_css( $s['tl_title_color'] ?? '' ) ?: 'var(--olo-color-text-emphasis, #f3e9ef)';
+        $text   = $this->safe_color_css( $s['tl_text_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #94809a)';
+        $rail   = $this->safe_color_css( $s['tl_rail_color'] ?? '' ) ?: 'var(--olo-color-border, rgba(255,255,255,.16))';
+        $halo   = 'var(--olo-color-background, #241430)';
+        $disp   = 'var(--olo-font-family-heading, Georgia, "Times New Roman", serif)';
+
+        echo '<div class="olo-tl-sched">';
+        foreach ( $items as $item ) {
+            echo '<div class="olo-tl-slot">';
+            echo '<div class="olo-tl-slot__t">' . esc_html( $item['date'] ) . '</div>';
+            echo '<div class="olo-tl-slot__c">';
+            if ( $item['title'] !== '' )       { echo '<h3>' . esc_html( $item['title'] ) . '</h3>'; }
+            if ( $item['description'] !== '' ) { echo '<p>' . esc_html( $item['description'] ) . '</p>'; }
+            echo '</div></div>';
+        }
+        echo '</div>';
+
+        echo '<style>'
+           . ".{$uid} .olo-tl-sched{max-width:760px;margin:0 auto;position:relative;}"
+           . ".{$uid} .olo-tl-sched::before{content:\"\";position:absolute;left:90px;top:8px;bottom:8px;width:1px;background:{$rail};}"
+           . ".{$uid} .olo-tl-slot{display:grid;grid-template-columns:80px 1fr;gap:30px;padding:0 0 28px;position:relative;}"
+           . ".{$uid} .olo-tl-slot:last-child{padding-bottom:0;}"
+           . ".{$uid} .olo-tl-slot__t{font-family:{$disp};font-size:20px;color:{$accent};text-align:right;line-height:1.25;}"
+           . ".{$uid} .olo-tl-slot__c{position:relative;padding-left:30px;}"
+           . ".{$uid} .olo-tl-slot__c::before{content:\"\";position:absolute;left:-25px;top:7px;width:11px;height:11px;border-radius:50%;background:{$accent};box-shadow:0 0 0 4px {$halo};}"
+           . ".{$uid} .olo-tl-slot__c h3{font-family:{$disp};font-size:20px;font-weight:400;margin:0 0 5px;color:{$title};line-height:1.2;}"
+           . ".{$uid} .olo-tl-slot__c p{font-size:14px;color:{$text};margin:0;line-height:1.6;}"
+           . "@media(max-width:600px){.{$uid} .olo-tl-sched::before{left:0;}.{$uid} .olo-tl-slot{grid-template-columns:1fr;gap:6px;}.{$uid} .olo-tl-slot__t{text-align:left;}.{$uid} .olo-tl-slot__c{padding-left:24px;}.{$uid} .olo-tl-slot__c::before{left:-24px;}}"
+           . '</style>';
     }
 
     /* ───────── ORIZZONTALE ───────── */

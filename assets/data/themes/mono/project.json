@@ -1,0 +1,289 @@
+[
+ {
+  "id": "mp-se-head",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f2efe8" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "mp-ro-head",
+    "type": "row",
+    "settings": { "gap": 0 },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mp-co-head",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "mp-eyebrow", "type": "headline", "settings": { "heading": "Project 01 / Brand identity", "tag": "div", "heading_font": "mono", "heading_size": "sm", "heading_font_size": "12", "heading_color": "#8d8a82", "heading_uppercase": true, "alignment": "left", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "mp-h1", "type": "headline", "settings": { "heading": "Marisol — a coastline, in one mark.", "tag": "h1", "heading_font": "heading", "heading_size": "xl", "heading_font_size": "80", "heading_color": "#18181a", "heading_weight": "500", "alignment": "left", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "mp-ro-metadiv",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "mp-co-metadiv", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "mp-metadiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "#d7d1c2", "alignment": "center", "spacing": 20 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "mp-ro-meta",
+    "type": "row",
+    "settings": { "gap": 20, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mp-co-m1",
+      "type": "column",
+      "settings": { "width": "1-4" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "mp-m1l", "type": "headline", "settings": { "heading": "Client", "tag": "div", "heading_font": "mono", "heading_size": "sm", "heading_font_size": "12", "heading_color": "#8d8a82", "heading_uppercase": true, "alignment": "left", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "mp-m1v", "type": "text-block", "settings": { "content": "<p>Marisol Hotels</p>", "text_color": "#18181a", "font_size": "16", "text_align": "left", "tile_padding": { "top": 7, "right": 0, "bottom": 0, "left": 0 } }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "mp-co-m2",
+      "type": "column",
+      "settings": { "width": "1-4" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "mp-m2l", "type": "headline", "settings": { "heading": "Year", "tag": "div", "heading_font": "mono", "heading_size": "sm", "heading_font_size": "12", "heading_color": "#8d8a82", "heading_uppercase": true, "alignment": "left", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "mp-m2v", "type": "text-block", "settings": { "content": "<p>2026</p>", "text_color": "#18181a", "font_size": "16", "text_align": "left", "tile_padding": { "top": 7, "right": 0, "bottom": 0, "left": 0 } }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "mp-co-m3",
+      "type": "column",
+      "settings": { "width": "1-4" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "mp-m3l", "type": "headline", "settings": { "heading": "Role", "tag": "div", "heading_font": "mono", "heading_size": "sm", "heading_font_size": "12", "heading_color": "#8d8a82", "heading_uppercase": true, "alignment": "left", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "mp-m3v", "type": "text-block", "settings": { "content": "<p>Identity, signage, web</p>", "text_color": "#18181a", "font_size": "16", "text_align": "left", "tile_padding": { "top": 7, "right": 0, "bottom": 0, "left": 0 } }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "mp-co-m4",
+      "type": "column",
+      "settings": { "width": "1-4" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "mp-m4l", "type": "headline", "settings": { "heading": "Recognition", "tag": "div", "heading_font": "mono", "heading_size": "sm", "heading_font_size": "12", "heading_color": "#8d8a82", "heading_uppercase": true, "alignment": "left", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "mp-m4v", "type": "text-block", "settings": { "content": "<p>D&amp;AD Wood Pencil</p>", "text_color": "#18181a", "font_size": "16", "text_align": "left", "tile_padding": { "top": 7, "right": 0, "bottom": 0, "left": 0 } }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-se-hero",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small" },
+  "style": { "bg": { "type": "solid", "color": "#f2efe8" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "mp-ro-hero",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "mp-co-hero", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "mp-img-hero", "type": "image", "settings": { "image_url": "", "media_bg": { "type": "none" }, "media_label": "hero — Marisol logotype on a sun-bleached wall", "image_width": "100%", "height": "auto", "aspect_ratio": "16/9", "object_fit": "cover", "image_alignment": "center", "border_radius": "0" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-se-body1",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f2efe8" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "mp-ro-body1",
+    "type": "row",
+    "settings": { "gap": 0 },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "mp-co-b1sp1", "type": "column", "settings": { "width": "1-6" }, "style": {}, "advanced": {}, "children": [] },
+     {
+      "id": "mp-co-body1",
+      "type": "column",
+      "settings": { "width": "2-3" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "mp-b1p1", "type": "text-block", "settings": { "content": "<p>Marisol runs six small hotels along one stretch of Atlantic coast. They'd grown by acquisition, which meant six logos, six tones of voice and a website that felt like a committee. The brief was deceptively simple: make it one place.</p>", "text_color": "#3a3a3c", "font_size": "19", "line_height": "1.7", "text_align": "left", "max_width": "0" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "mp-b1h3", "type": "headline", "settings": { "heading": "One mark, all weather", "tag": "h3", "heading_font": "heading", "heading_size": "md", "heading_font_size": "26", "heading_color": "#18181a", "heading_weight": "500", "alignment": "left", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "mp-b1p2", "type": "text-block", "settings": { "content": "<p>We built the identity around a single horizon line that bends into an \"M\" — a mark that works cast in brass on a door, embroidered on a robe, or animated on a phone. Everything else got out of its way: one typeface, two inks, a lot of paper-coloured space.</p>", "text_color": "#3a3a3c", "font_size": "19", "line_height": "1.7", "text_align": "left", "max_width": "0" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     { "id": "mp-co-b1sp2", "type": "column", "settings": { "width": "1-6" }, "style": {}, "advanced": {}, "children": [] }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-se-figs",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small" },
+  "style": { "bg": { "type": "solid", "color": "#f2efe8" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "mp-ro-two",
+    "type": "row",
+    "settings": { "gap": 28 },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "mp-co-two1", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "mp-img-two1", "type": "image", "settings": { "image_url": "", "media_bg": { "type": "none" }, "media_label": "brass signage detail", "image_width": "100%", "height": "auto", "aspect_ratio": "4/5", "object_fit": "cover", "image_alignment": "center", "border_radius": "0" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "mp-co-two2", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "mp-img-two2", "type": "image", "settings": { "image_url": "", "media_bg": { "type": "none" }, "media_label": "key card & stationery", "image_width": "100%", "height": "auto", "aspect_ratio": "4/5", "object_fit": "cover", "image_alignment": "center", "border_radius": "0" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "mp-ro-fig2",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "mp-co-fig2", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "mp-img-fig2", "type": "image", "settings": { "image_url": "", "media_bg": { "type": "none" }, "media_label": "website on laptop, booking flow", "image_width": "100%", "height": "auto", "aspect_ratio": "16/9", "object_fit": "cover", "image_alignment": "center", "border_radius": "0" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-se-body2",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f2efe8" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "mp-ro-body2",
+    "type": "row",
+    "settings": { "gap": 0 },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "mp-co-b2sp1", "type": "column", "settings": { "width": "1-6" }, "style": {}, "advanced": {}, "children": [] },
+     {
+      "id": "mp-co-body2",
+      "type": "column",
+      "settings": { "width": "2-3" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "mp-b2h3", "type": "headline", "settings": { "heading": "Restraint as luxury", "tag": "h3", "heading_font": "heading", "heading_size": "md", "heading_font_size": "26", "heading_color": "#18181a", "heading_weight": "500", "alignment": "left", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "mp-b2p1", "type": "text-block", "settings": { "content": "<p>The hospitality category loves to shout. Marisol wanted the opposite — the confidence of a place that doesn't need to. So we treated silence as a material: wide margins, slow transitions, and a booking flow you can finish in four taps without ever seeing a carousel.</p>", "text_color": "#3a3a3c", "font_size": "19", "line_height": "1.7", "text_align": "left", "max_width": "0" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "mp-b2p2", "type": "text-block", "settings": { "content": "<p>A year on, occupancy is up across all six properties and, more tellingly, guests have started getting the logo tattooed. We're choosing to read that as a good sign.</p>", "text_color": "#3a3a3c", "font_size": "19", "line_height": "1.7", "text_align": "left", "max_width": "0" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     { "id": "mp-co-b2sp2", "type": "column", "settings": { "width": "1-6" }, "style": {}, "advanced": {}, "children": [] }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-se-figtall",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small" },
+  "style": { "bg": { "type": "solid", "color": "#f2efe8" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "mp-ro-figtall",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "mp-co-figtall", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "mp-img-figtall", "type": "image", "settings": { "image_url": "", "media_bg": { "type": "none" }, "media_label": "full-bleed — robe & horizon mark", "image_width": "100%", "height": "auto", "aspect_ratio": "4/5", "object_fit": "cover", "image_alignment": "center", "border_radius": "0" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mp-se-next",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f2efe8" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "mp-ro-nextdiv",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "mp-co-nextdiv", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "mp-nextdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "#d7d1c2", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "mp-ro-next",
+    "type": "row",
+    "settings": { "gap": 20, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mp-co-nextl",
+      "type": "column",
+      "settings": { "width": "2-3" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "mp-nexteyebrow", "type": "headline", "settings": { "heading": "Next project", "tag": "div", "heading_font": "mono", "heading_size": "sm", "heading_font_size": "12", "heading_color": "#8d8a82", "heading_uppercase": true, "alignment": "left", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "mp-nexttitle", "type": "headline", "settings": { "heading": "Atlas Press →", "tag": "div", "heading_font": "heading", "heading_size": "xl", "heading_font_size": "56", "heading_color": "#18181a", "heading_weight": "500", "alignment": "left", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "mp-co-nextr",
+      "type": "column",
+      "settings": { "width": "1-3" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "mp-allwork", "type": "button", "settings": { "text": "All work", "url": "/", "alignment": "right", "preset": "custom", "bg_color": "transparent", "text_color": "#18181a", "font_size": "14", "font_weight": "600", "border_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999, "linked": true }, "tile_padding": { "top": 14, "right": 26, "bottom": 14, "left": 26 }, "shadow": "none", "hover_effect": "lift", "border": { "top": 1.5, "right": 1.5, "bottom": 1.5, "left": 1.5, "linked": true, "style": "solid", "color": "#c2bcab" } }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

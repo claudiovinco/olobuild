@@ -230,9 +230,12 @@ class Olo_Theme_Importer {
                 $json_str = str_replace( 'LOGO_PLACEHOLDER', $logo_url, $json_str );
             }
 
-            // Replace menu_id "auto" with actual menu ID
+            // Replace menu_id "auto" with actual menu ID.
+            // Regex tollerante agli spazi: i JSON pretty-printed hanno '"menu_id": "auto"'
+            // (con spazio) → uno str_replace senza spazio fallirebbe e lascerebbe menu_id="auto"
+            // (absint("auto")=0 → megamenu "Seleziona un menu"). Vedi gotcha header Atelier.
             if ( $menu_id ) {
-                $json_str = str_replace( '"menu_id":"auto"', '"menu_id":' . intval( $menu_id ), $json_str );
+                $json_str = preg_replace( '/"menu_id"\s*:\s*"auto"/', '"menu_id":' . intval( $menu_id ), $json_str );
             }
 
             $content = json_decode( $json_str, true );

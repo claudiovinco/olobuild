@@ -29,6 +29,8 @@ import PhotoCoverTile from './PhotoCoverTile.vue';
 import MastheadTile from './MastheadTile.vue';
 import MatchFixturesTile from './MatchFixturesTile.vue';
 import ShowcaseGridTile from './ShowcaseGridTile.vue';
+import ProductGridTile from './ProductGridTile.vue';
+import AnnouncementBarTile from './AnnouncementBarTile.vue';
 import IntroSplitTile from './IntroSplitTile.vue';
 import MediaCtaTile from './MediaCtaTile.vue';
 import ImageHeroTile from './ImageHeroTile.vue';
@@ -314,6 +316,8 @@ const tileComponents = {
   masthead: MastheadTile,
   matchfixtures: MatchFixturesTile,
   showcasegrid: ShowcaseGridTile,
+  productgrid: ProductGridTile,
+  announcementbar: AnnouncementBarTile,
   introsplit: IntroSplitTile,
   mediacta: MediaCtaTile,
   imagehero: ImageHeroTile,

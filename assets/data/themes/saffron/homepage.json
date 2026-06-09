@@ -4,13 +4,8 @@
   "type": "section",
   "settings": {
    "style": "default",
-   "width": "full",
-   "padding": {
-    "top": 0,
-    "right": 0,
-    "bottom": 0,
-    "left": 0
-   }
+   "width": "fullbleed",
+   "padding": "remove-vertical"
   },
   "style": {
    "bg": {
@@ -199,134 +194,56 @@
       "advanced": {},
       "children": [
        {
-        "id": "sf-hero-split-13",
-        "type": "hero-split",
+        "id": "sf-introsplit-13",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "Our story",
-         "eyebrow_dot_color": "#c75d3a",
+         "eyebrow": "Our story",
          "eyebrow_color": "#c75d3a",
-         "headline_lines": [
-          {
-           "text": "A neighbourhood kitchen,",
-           "color": "#241a16",
-           "italic": false
-          },
-          {
-           "text": "run by the people",
-           "color": "#241a16",
-           "italic": false
-          },
-          {
-           "text": "who cook in it.",
-           "color": "#c75d3a",
-           "italic": true
-          }
-         ],
-         "headline_font_family": "serif",
-         "headline_font_size": 46,
-         "headline_line_height": 1.04,
-         "headline_font_weight": "400",
-         "headline_align": "left",
-         "subhead": "Saffron started as a six-table room with one wood oven. We still cook the way we did then — buying what's good that morning, writing the menu in the afternoon, and serving it the same night. No deliveries we wouldn't eat ourselves, no dish that hasn't earned its place. Just a kitchen that takes its time.",
-         "subhead_color": "#6e6258",
-         "subhead_size": 16.5,
-         "subhead_italic": false,
-         "subhead_max_width": 480,
-         "cta1_text": "More about us",
-         "cta1_url": "#story",
-         "cta1_bg": "#241a16",
-         "cta1_color": "#f6efe2",
-         "cta1_size": 14,
-         "cta1_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
+         "headline": "A neighbourhood kitchen, run by the people who cook in it.",
+         "accent": "",
+         "headline_tail": "",
+         "accent_italic": false,
+         "uppercase": false,
+         "headline_color": "#241a16",
+         "accent_color": "#c75d3a",
+         "headline_weight": "400",
+         "headline_size": "52",
+         "lead": "Saffron started as a six-table room with one wood oven. We still cook the way we did then — buying what's good that morning, writing the menu in the afternoon, and serving it the same night. No deliveries we wouldn't eat ourselves, no dish that hasn't earned its place. Just a kitchen that takes its time.",
+         "lead_color": "#6e6258",
+         "stats": [],
+         "cta_text": "More about us",
+         "cta_url": "#story",
+         "cta_style": "button",
+         "cta_bg": "#241a16",
+         "cta_color": "#f6efe2",
          "cta2_text": "",
          "cta2_url": "",
-         "stats": [],
-         "showcase_enabled": true,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#efe6d4"
+         "cta_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999
          },
-         "showcase_padding": 32,
-         "showcase_radius": {
-          "tl": 8,
-          "tr": 8,
-          "br": 8,
-          "bl": 8,
-          "linked": true
+         "media_image": "",
+         "media_bg": {
+          "type": "none"
          },
-         "showcase_radius_hover": {
-          "tl": 8,
-          "tr": 8,
-          "br": 8,
-          "bl": 8,
-          "linked": true
+         "media_label": "the open kitchen / chef at the pass",
+         "media_light": true,
+         "media_aspect": "4/4.4",
+         "media_radius": 8,
+         "media_radius_top": 0,
+         "badge_number": "12",
+         "badge_label": "years",
+         "badge_bg": "#c75d3a",
+         "badge_color": "#ffffff",
+         "badge_radius": {
+          "tl": 70,
+          "tr": 70,
+          "br": 70,
+          "bl": 70
          },
-         "showcase_badge_text": "12 YEARS · OPEN KITCHEN",
-         "showcase_badge_dot": "#c75d3a",
-         "showcase_badge_bg": "#c75d3a",
-         "showcase_badge_color": "#ffffff",
-         "showcase_items": [
-          {
-           "number": "Est.",
-           "text": "2012",
-           "italic": false,
-           "text_color": "#c75d3a",
-           "bg": {
-            "type": "solid",
-            "color": "#fffdf8"
-           }
-          },
-          {
-           "number": "Tables",
-           "text": "6 → 24",
-           "italic": false,
-           "text_color": "#241a16",
-           "bg": {
-            "type": "solid",
-            "color": "#fffdf8"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 8,
-          "tr": 8,
-          "br": 8,
-          "bl": 8,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 8,
-          "tr": 8,
-          "br": 8,
-          "bl": 8,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "OUR STORY",
-         "showcase_caption_right": "",
-         "showcase_hover_effect": "none",
-         "split_ratio": ".75fr 1.25fr",
-         "gap": 54,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_position": "left"
         },
         "style": {},
         "advanced": {},
@@ -429,55 +346,73 @@
       "advanced": {},
       "children": [
        {
-        "id": "sf-workgrid-20",
-        "type": "workgrid",
+        "id": "sf-productgrid-20",
+        "type": "productgrid",
         "settings": {
          "items": [
           {
            "image": "",
-           "media_label": "Fire-roasted quail",
+           "media_bg": { "type": "none" },
+           "media_label": "dish photo",
+           "tag": "",
+           "category": "",
            "title": "Fire-roasted quail",
-           "meta": "€24",
-           "description": "Grape must, charred radicchio, toasted hazelnut.",
-           "link_url": "",
-           "tall": false
+           "price": "€24",
+           "shades": "",
+           "notes": "Grape must, charred radicchio, toasted hazelnut.",
+           "roast": 0,
+           "filter_tags": "",
+           "link": "#menu"
           },
           {
            "image": "",
-           "media_label": "Saffron tagliolini",
+           "media_bg": { "type": "none" },
+           "media_label": "dish photo",
+           "tag": "",
+           "category": "",
            "title": "Saffron tagliolini",
-           "meta": "€19",
-           "description": "Hand-cut pasta, mussels, bottarga, lemon.",
-           "link_url": "",
-           "tall": false
+           "price": "€19",
+           "shades": "",
+           "notes": "Hand-cut pasta, mussels, bottarga, lemon.",
+           "roast": 0,
+           "filter_tags": "",
+           "link": "#menu"
           },
           {
            "image": "",
-           "media_label": "Embered celeriac",
+           "media_bg": { "type": "none" },
+           "media_label": "dish photo",
+           "tag": "",
+           "category": "",
            "title": "Embered celeriac",
-           "meta": "€16",
-           "description": "Whole-roasted, brown butter, capers, herbs.",
-           "link_url": "",
-           "tall": false
+           "price": "€16",
+           "shades": "",
+           "notes": "Whole-roasted, brown butter, capers, herbs.",
+           "roast": 0,
+           "filter_tags": "",
+           "link": "#menu"
           }
          ],
          "columns": 3,
-         "items_gap": 28,
-         "media_aspect": "4/3",
-         "media_tall_aspect": "4/5",
-         "media_bg": "#e7ddca",
-         "media_label_color": "#6e6258",
+         "gap": 20,
+         "media_aspect": "16/11",
+         "media_bg": "#312420",
+         "stripe_dark": true,
          "hover_zoom": true,
-         "title_font_family": "heading",
-         "title_color": "#241a16",
+         "quick_add_show": false,
+         "title_font": "heading",
          "title_size": 22,
-         "title_weight": "400",
-         "meta_color": "#c75d3a",
-         "meta_size": 15,
-         "show_desc": true,
-         "desc_color": "#6e6258",
-         "desc_size": 14,
-         "mono_font_family": ""
+         "title_color": "#241a16",
+         "price_color": "#c75d3a",
+         "notes_color": "#6e6258",
+         "card_bg": "#fffdf8",
+         "card_border": "#e7ddca",
+         "card_radius": 10,
+         "card_padding": 20,
+         "footer_text": "Full menu",
+         "footer_url": "#menu",
+         "footer_color": "#c75d3a",
+         "show_filters": false
         },
         "style": {},
         "advanced": {},
@@ -538,17 +473,17 @@
           },
           {
            "text": "tonight",
-           "color": "#e0a23a",
-           "italic": true
+           "color": "#ffffff",
+           "italic": false
           }
          ],
          "headline_font_family": "serif",
          "headline_font_size": 48,
          "headline_font_weight": "400",
-         "headline_align": "center",
+         "headline_align": "left",
          "headline_inline": true,
          "tagline_show": false,
-         "layout": "center",
+         "layout": "stack",
          "gap": 16
         },
         "style": {},
@@ -810,10 +745,10 @@
          "headline_font_family": "serif",
          "headline_font_size": 48,
          "headline_font_weight": "400",
-         "headline_align": "center",
+         "headline_align": "left",
          "headline_inline": true,
          "tagline_show": false,
-         "layout": "center",
+         "layout": "stack",
          "gap": 16
         },
         "style": {},
@@ -841,25 +776,40 @@
       "advanced": {},
       "children": [
        {
-        "id": "sf-progallery-36",
-        "type": "progallery",
+        "id": "sf-overlaygrid-36",
+        "type": "overlaygrid",
         "settings": {
-         "images": [],
-         "layout": "masonry",
-         "layout_family": "classic",
-         "columns": "3",
-         "mobile_columns": "2",
-         "gap": "10",
-         "img_height": "260px",
-         "object_fit": "cover",
-         "thumb_radius": "10",
+         "items": [
+          { "id": "sf-og-1", "image": "", "title": "Dining room", "subtitle": "", "link": "", "ribbon": "", "tall": true, "wide": false },
+          { "id": "sf-og-2", "image": "", "title": "Dish", "subtitle": "", "link": "", "ribbon": "", "tall": false, "wide": false },
+          { "id": "sf-og-3", "image": "", "title": "Wine pour", "subtitle": "", "link": "", "ribbon": "", "tall": false, "wide": false },
+          { "id": "sf-og-4", "image": "", "title": "Open kitchen", "subtitle": "", "link": "", "ribbon": "", "tall": false, "wide": true },
+          { "id": "sf-og-5", "image": "", "title": "Dessert", "subtitle": "", "link": "", "ribbon": "", "tall": false, "wide": false },
+          { "id": "sf-og-6", "image": "", "title": "Terrace", "subtitle": "", "link": "", "ribbon": "", "tall": false, "wide": false }
+         ],
+         "columns": "4",
+         "columns_mobile": "2",
+         "gap": "small",
+         "height": "180",
+         "match_height": false,
+         "layout_mode": "masonry",
+         "overlay_position": "bottom-left",
+         "overlay_horizontal": "left",
+         "overlay_style": "overlay-default",
+         "overlay_padding": "medium",
+         "title_size": "h4",
+         "title_uppercase": true,
+         "title_color": "#ffffff",
+         "title_weight": "600",
+         "subtitle_color": "rgba(255,255,255,0.85)",
+         "preset": "custom",
+         "item_radius": 8,
+         "overlay_color": "rgba(36,26,22,0.45)",
+         "overlay_gradient": true,
          "hover_effect": "zoom",
-         "hover_caption": "slide-up",
-         "hover_caption_bg": "rgba(36,26,22,.72)",
-         "lightbox": true,
-         "lightbox_animation": "fade",
-         "show_caption": true,
-         "more_bg": "rgba(36,26,22,.55)"
+         "hover_overlay": "always",
+         "show_cta": false,
+         "shadow": "none"
         },
         "style": {},
         "advanced": {},
@@ -911,13 +861,17 @@
          "author_name": "Gambero Rosso",
          "author_role": "Two forks",
          "rating": "5",
-         "layout": "single",
+         "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#ffffff",
-         "quote_font_family": "serif",
-         "quote_size": 38,
-         "quote_weight": "400",
+         "star_color": "#e0a23a",
+         "author_color": "rgba(255,255,255,.9)",
+         "quote_accent_color": "#e0a23a",
+         "quote_font": "heading",
+         "quote_size": 42,
+         "quote_uppercase": false,
+         "author_uppercase": false,
          "border_radius": "0",
          "avatar": ""
         },
@@ -968,16 +922,17 @@
         "type": "finder",
         "settings": {
          "eyebrow": "Tonight, I feel like…",
-         "heading": "What are you in the mood for?",
+         "heading": "What are you <em>in the mood for?</em>",
          "intro": "",
          "zone_accent": "#e0a23a",
          "zone_on": "#241a16",
          "card_bg": "#fffdf8",
-         "card_border": "1px solid #e7ddca",
+         "card_border": "#e7ddca",
          "align": "center",
          "items": [
           {
            "option": "Something light",
+           "kicker": "We'd send out",
            "title": "The Garden Menu",
            "text": "Three lighter courses — a bright ceviche, grilled stone fruit salad and a citrus sorbet. Lunch that doesn’t slow you down.",
            "meta": "3 courses · €42",
@@ -987,6 +942,7 @@
           },
           {
            "option": "The full feast",
+           "kicker": "We'd send out",
            "title": "The Saffron Feast",
            "text": "Our full tasting — seven courses, the kitchen’s choice, paired if you like. Settle in; you’re here for the evening.",
            "meta": "7 courses · €98 · pairing +€55",
@@ -996,6 +952,7 @@
           },
           {
            "option": "Drinks & small plates",
+           "kicker": "We'd send out",
            "title": "At the Bar",
            "text": "A negroni flight and a run of small plates — spiced almonds, croquetas, the famous flatbread. Low lights, no rush.",
            "meta": "small plates from €8",
@@ -1005,6 +962,7 @@
           },
           {
            "option": "All vegetarian",
+           "kicker": "We'd send out",
            "title": "The Green Tasting",
            "text": "A full vegetarian journey that never feels like the afterthought — five courses built around the market that morning.",
            "meta": "5 courses · €68",
@@ -1070,7 +1028,7 @@
          "panel_bg": "#241a16",
          "card_bg": "#fffdf8",
          "card_border": "#e7ddca",
-         "align": "left",
+         "align": "center",
          "items": [
           {
            "x": 16,
@@ -1145,8 +1103,8 @@
   "type": "section",
   "settings": {
    "style": "default",
-   "width": "large",
-   "padding": "large"
+   "width": "fullbleed",
+   "padding": "remove-vertical"
   },
   "style": {
    "bg": {
@@ -1186,8 +1144,7 @@
          "cta2_text": "",
          "cta2_url": "",
          "bg": {
-          "type": "solid",
-          "color": "#2d1e18"
+          "type": "none"
          },
          "text_color": "#ffffff",
          "accent_color": "#e0a23a",
@@ -1203,19 +1160,19 @@
          },
          "cta_size": 15,
          "headline_font_family": "serif",
-         "headline_size": 58,
+         "headline_size": 74,
          "headline_weight": "400",
          "subtitle_size": 17,
          "layout": "stack",
          "vertical_align": "center",
          "banner_radius": {
-          "tl": 20,
-          "tr": 20,
-          "br": 20,
-          "bl": 20,
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
           "linked": true
          },
-         "banner_padding": 80
+         "banner_padding": 110
         },
         "style": {},
         "advanced": {},

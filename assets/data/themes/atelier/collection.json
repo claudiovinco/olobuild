@@ -1,0 +1,268 @@
+[
+ {
+  "id": "ac-se-1",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#141414" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ac-ro-1",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ac-co-1",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ac-pagehead",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Autumn / Winter '26",
+         "eyebrow_color": "#c9a86a",
+         "eyebrow_dot_color": "#c9a86a",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "The ", "color": "#efe9de", "italic": false },
+          { "text": "Nocturne", "color": "#c9a86a", "italic": true },
+          { "text": " Collection", "color": "#efe9de", "italic": false }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 72,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Thirty-six pieces in wool crêpe, silk and cashmere. Filter by category — every garment is finished by hand and ships within five days.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#7c776e",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 18
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ac-se-2",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small" },
+  "style": { "bg": { "type": "solid", "color": "#141414" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ac-ro-2",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ac-co-2",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ac-productgrid",
+        "type": "productgrid",
+        "settings": {
+         "columns": 4,
+         "gap": 22,
+         "media_aspect": "3/4",
+         "media_bg": "#1e1e1e",
+         "stripe_dark": false,
+         "hover_zoom": true,
+         "tag_bg": "#0c0c0c",
+         "tag_color": "#c9a86a",
+         "quick_add_show": true,
+         "quick_add_bg": "rgba(239,233,222,0.95)",
+         "quick_add_color": "#0c0c0c",
+         "category_color": "#7c776e",
+         "title_font": "heading",
+         "title_size": 21,
+         "title_color": "#efe9de",
+         "price_color": "#c9a86a",
+         "footer_text": "",
+         "footer_url": "#",
+         "footer_color": "#efe9de",
+         "show_filters": true,
+         "filter_all_label": "All",
+         "filter_text_color": "#b6b1a8",
+         "filter_border_color": "rgba(239,233,222,.14)",
+         "filter_active_bg": "#c9a86a",
+         "filter_active_color": "#0c0c0c",
+         "items": [
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "wool crêpe coat", "tag": "New", "category": "Outerwear", "title": "Crêpe Tailored Coat", "price": "€1,290", "link": "#", "quick_add": "Quick add" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "silk column dress", "tag": "", "category": "Eveningwear", "title": "Silk Column Dress", "price": "€980", "link": "#", "quick_add": "Quick add" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "tuxedo jacket", "tag": "", "category": "Tailoring", "title": "Le Smoking Jacket", "price": "€1,150", "link": "#", "quick_add": "Quick add" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "cashmere knit", "tag": "Atelier", "category": "Knitwear", "title": "Cashmere Roll-Neck", "price": "€620", "link": "#", "quick_add": "Quick add" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "wide-leg trouser", "tag": "", "category": "Tailoring", "title": "Wool Wide-Leg Trouser", "price": "€480", "link": "#", "quick_add": "Quick add" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "satin blouse", "tag": "", "category": "Ready-to-wear", "title": "Satin Tie Blouse", "price": "€390", "link": "#", "quick_add": "Quick add" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "evening gown", "tag": "New", "category": "Eveningwear", "title": "Bias-Cut Gown", "price": "€1,420", "link": "#", "quick_add": "Quick add" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "trench coat", "tag": "", "category": "Outerwear", "title": "Belted Wool Trench", "price": "€1,380", "link": "#", "quick_add": "Quick add" }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ac-se-3",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "solid", "color": "#1e1e1e" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ac-ro-3",
+    "type": "row",
+    "settings": { "gap": 0 },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ac-co-3",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ac-mtm",
+        "type": "introsplit",
+        "settings": {
+         "eyebrow": "Made-to-measure",
+         "eyebrow_color": "#c9a86a",
+         "headline": "Cut for",
+         "accent": "you",
+         "accent_color": "#c9a86a",
+         "accent_italic": true,
+         "headline_tail": ", in Paris",
+         "uppercase": false,
+         "headline_color": "#efe9de",
+         "headline_weight": "400",
+         "headline_size": "52",
+         "lead": "Book a private appointment at the atelier or by video. Choose the cloth, the cut and the finish — your pattern is kept on file for every order after.",
+         "lead_color": "#b6b1a8",
+         "signature": "",
+         "stats": [],
+         "cta_text": "Book an appointment",
+         "cta_url": "#",
+         "cta_style": "outline",
+         "cta_color": "#efe9de",
+         "media_image": "",
+         "media_bg": { "type": "none" },
+         "media_label": "fitting room — tape, mirror, cloth bolts",
+         "media_light": false,
+         "media_radius": 0,
+         "media_position": "right",
+         "flush": true,
+         "content_bg": "#1e1e1e",
+         "badge_number": "",
+         "badge_label": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ac-se-4",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#181818" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ac-ro-4",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ac-co-4",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ac-newsletter",
+        "type": "newsletter",
+        "settings": {
+         "eyebrow": "La Maison",
+         "eyebrow_color": "#c9a86a",
+         "title": "Join the <em>house list</em>",
+         "title_accent_color": "#c9a86a",
+         "subtitle": "Early access to collections, private appointments and invitations to our seasonal presentations.",
+         "layout": "horizontal",
+         "show_name": false,
+         "email_placeholder": "Email address",
+         "button_text": "Subscribe",
+         "button_icon": false,
+         "privacy_text": "",
+         "max_width": "600",
+         "alignment": "center",
+         "bg_color": "transparent",
+         "box_border": "",
+         "border_radius": 0,
+         "tile_padding": { "top": 8, "right": 32, "bottom": 8, "left": 32 },
+         "title_size": "52",
+         "title_weight": "400",
+         "title_color": "#efe9de",
+         "subtitle_size": "16",
+         "subtitle_color": "#7c776e",
+         "input_bg": "transparent",
+         "input_color": "#efe9de",
+         "input_border": "rgba(201,168,106,.4)",
+         "input_focus_border": "#c9a86a",
+         "input_radius": 0,
+         "input_height": "52",
+         "btn_bg": "#c9a86a",
+         "btn_color": "#0c0c0c",
+         "btn_hover_bg": "#ddc089",
+         "btn_radius": 0,
+         "btn_font_size": "12",
+         "btn_font_weight": "500",
+         "shadow": "none",
+         "icon_type": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

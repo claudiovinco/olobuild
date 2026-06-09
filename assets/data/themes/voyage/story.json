@@ -1,0 +1,224 @@
+[
+ {
+  "id": "vy-st-head-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#141d2e" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vy-st-head-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vy-st-head-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "vy-st-kicker", "type": "headline", "settings": { "heading": "The Long Way · Patagonia", "tag": "div", "alignment": "center", "heading_font": "body", "heading_font_size": "11.5", "heading_uppercase": true, "heading_color": "#ff8c69", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vy-st-title", "type": "headline", "settings": { "heading": "The road that goes nowhere, slowly", "tag": "h1", "alignment": "center", "heading_font": "heading", "heading_font_size": "66", "heading_color": "#eef2f7", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vy-st-stand", "type": "text-block", "settings": { "content": "<p>Forty hours of gravel, three flat tyres and one unrepeatable silence — a dispatch from the far end of the Carretera Austral.</p>", "text_color": "#eef2f7", "font_size": "21", "line_height": "1.5", "text_align": "center", "max_width": "720" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vy-st-byline", "type": "headline", "settings": { "heading": "Mara Quinn · Words & pictures · 16 min", "tag": "div", "alignment": "center", "heading_font": "body", "heading_font_size": "12.5", "heading_uppercase": true, "heading_color": "#6c7a90", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "vy-st-hero-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vy-st-hero-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "vy-st-hero-img", "type": "image", "settings": { "image_url": "", "media_bg": { "type": "solid", "color": "#27344c" }, "media_label": "lead — gravel road vanishing into cloud-wrapped peaks", "aspect_ratio": "custom", "aspect_ratio_custom": "16/8", "object_fit": "cover", "border_radius": "8", "caption": "Kilometre 1,180 of the Carretera Austral, somewhere south of Cochrane." }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vy-st-body-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_top": 0 },
+  "style": { "bg": { "type": "solid", "color": "#141d2e" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vy-st-body-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vy-st-body-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "vy-st-p1", "type": "text-block", "settings": { "content": "<p>There is a particular kind of quiet that only arrives after the last other car has gone. We hadn't seen one for two hours when the road finally gave up pretending to be a road and became a suggestion of one, scratched along a valley the map had stopped naming.</p>", "text_color": "#eef2f7", "font_size": "19", "line_height": "1.75", "text_align": "left", "max_width": "760" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vy-st-p2", "type": "text-block", "settings": { "content": "<p>The Carretera Austral runs for more than 1,200 kilometres through the bottom of Chile, and for most of them it is gravel. People talk about it like a challenge to be beaten. We had come, instead, to be slowed down by it — and it obliged immediately, with a flat tyre before lunch on the first day.</p>", "text_color": "#eef2f7", "font_size": "19", "line_height": "1.75", "text_align": "left", "max_width": "760" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vy-st-h3a", "type": "headline", "settings": { "heading": "What the gravel teaches", "tag": "h3", "alignment": "left", "heading_font": "heading", "heading_font_size": "26", "heading_color": "#eef2f7", "decoration": "none", "max_width": "760" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vy-st-p3", "type": "text-block", "settings": { "content": "<p>You cannot rush a road like this, and after a while you stop wanting to. The speed the surface allows turns out to be exactly the speed at which you can see things: the guanaco watching from the ridge, the colour the rivers turn under cloud, the way a single house earns its place in all that space.</p>", "text_color": "#eef2f7", "font_size": "19", "line_height": "1.75", "text_align": "left", "max_width": "760" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vy-st-pull", "type": "testimonial", "settings": { "layout": "editorial", "quote": "Out here, arriving felt almost rude — as if the whole point had been the <em>not-yet-arriving</em>.", "quote_font": "heading", "quote_size": 24, "quote_uppercase": false, "quote_accent_color": "#ff8c69", "rating": "0", "show_line": true, "line_color": "#ff8c69", "author_name": "", "author_role": "", "text_color": "#eef2f7", "bg_color": "", "border_radius": "0" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vy-st-p4", "type": "text-block", "settings": { "content": "<p>By the third day we had recalibrated. A hundred kilometres was a full, satisfying day. We learned to read the weather off the lake, to ration the good coffee, to wave at the few souls we passed like old friends, because out here that's what they were.</p>", "text_color": "#eef2f7", "font_size": "19", "line_height": "1.75", "text_align": "left", "max_width": "760" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vy-st-fig", "type": "image", "settings": { "image_url": "", "media_bg": { "type": "solid", "color": "#27344c" }, "media_label": "a single red-roofed house in an enormous green valley", "aspect_ratio": "16/9", "object_fit": "cover", "border_radius": "8", "max_width": "760", "caption": "The only building we'd see for forty kilometres in either direction." }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vy-st-h3b", "type": "headline", "settings": { "heading": "The end, and the point", "tag": "h3", "alignment": "left", "heading_font": "heading", "heading_font_size": "26", "heading_color": "#eef2f7", "decoration": "none", "max_width": "760" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vy-st-p5", "type": "text-block", "settings": { "content": "<p>The road does, eventually, end — at a small town that exists because the road does, where everyone has driven the same gravel and carries the same slightly stunned look. We sat by the water and felt the engine still humming in our hands.</p>", "text_color": "#eef2f7", "font_size": "19", "line_height": "1.75", "text_align": "left", "max_width": "760" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vy-st-p6", "type": "text-block", "settings": { "content": "<p>Going back, of course, meant doing all 1,200 kilometres again. We were glad. Out here, arriving had started to feel almost beside the point.</p>", "text_color": "#eef2f7", "font_size": "19", "line_height": "1.75", "text_align": "left", "max_width": "760" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vy-st-back", "type": "button", "settings": { "text": "← All dispatches", "url": "/", "target": "_self", "alignment": "left", "bg": { "type": "none" }, "bg_color": "", "text_color": "#eef2f7", "hover_text_color": "#ff8c69", "text_transform": "uppercase", "letter_spacing": "1", "font_size": "12", "font_weight": "700", "border_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0 }, "tile_padding": { "top": 0, "right": 0, "bottom": 4, "left": 0 }, "shadow": "none", "hover_effect": "none", "border": { "top": 0, "right": 0, "bottom": 1, "left": 0, "linked": false, "style": "solid", "color": "#ff8c69" } }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vy-st-keep-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#172338" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vy-st-keep-ro1",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vy-st-keep-co1",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "vy-st-keep-sh", "type": "section-header", "settings": { "eyebrow_show": false, "headline_lines": [ { "text": "Keep reading", "color": "#eef2f7", "italic": false } ], "headline_font_family": "serif", "headline_font_size": 38, "headline_font_weight": "700", "headline_align": "left", "tagline_show": true, "tagline_text": "All stories →", "tagline_text_color": "#ff8c69", "tagline_text_size": 12, "tagline_text_italic": false, "layout": "split", "gap": 0 }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "vy-st-keep-ro2",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vy-st-keep-co2",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "vy-st-keep-grid", "type": "workgrid", "settings": {
+          "items": [
+           { "image": "", "media_label": "night train", "title": "Sleeping across a continent", "meta": "", "description": "In praise of the night train.", "link_url": "#dispatches", "tall": true },
+           { "image": "", "media_label": "market", "title": "Eat where the drivers eat", "meta": "", "description": "A field guide to the roadside.", "link_url": "#dispatches", "tall": true },
+           { "image": "", "media_label": "ferry", "title": "The last ferry of the season", "meta": "", "description": "An island when the boats stop.", "link_url": "#dispatches", "tall": true }
+          ],
+          "columns": 3,
+          "items_gap": 30,
+          "media_aspect": "4/3",
+          "media_tall_aspect": "4/5",
+          "media_bg": "#27344c",
+          "media_label_color": "#a6b2c4",
+          "hover_zoom": true,
+          "title_font_family": "heading",
+          "title_color": "#eef2f7",
+          "title_size": 22,
+          "title_weight": "700",
+          "meta_color": "#ff8c69",
+          "meta_size": 12,
+          "show_desc": true,
+          "desc_color": "#a6b2c4",
+          "desc_size": 14,
+          "mono_font_family": ""
+         }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vy-st-news-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#141d2e" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vy-st-news-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vy-st-news-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "vy-st-news", "type": "newsletter", "settings": {
+          "title": "Dispatches, every Sunday",
+          "subtitle": "One long read and three short ones from the road — free, no noise.",
+          "icon_type": "none",
+          "icon_name": "",
+          "layout": "horizontal",
+          "show_name": false,
+          "email_placeholder": "you@example.com",
+          "button_text": "Subscribe",
+          "button_icon": false,
+          "privacy_text": "",
+          "privacy_required": false,
+          "bg_color": "#ff8c69",
+          "box_border": "",
+          "border_radius": 14,
+          "tile_padding": { "top": 56, "right": 56, "bottom": 56, "left": 56 },
+          "max_width": "0",
+          "alignment": "center",
+          "title_size": "46",
+          "title_weight": "700",
+          "title_color": "#0c1320",
+          "subtitle_size": "16",
+          "subtitle_color": "rgba(12,19,32,.78)",
+          "input_bg": "rgba(12,19,32,.10)",
+          "input_color": "#0c1320",
+          "input_border": "rgba(12,19,32,.25)",
+          "input_focus_border": "#ff8c69",
+          "input_radius": 999,
+          "input_height": "50",
+          "btn_bg": "#0c1320",
+          "btn_color": "#eef2f7",
+          "btn_hover_bg": "#1e2a40",
+          "btn_radius": 999,
+          "btn_font_size": "13",
+          "btn_font_weight": "700",
+          "shadow": "none"
+         }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

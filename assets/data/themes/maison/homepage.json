@@ -32,172 +32,58 @@
       "advanced": {},
       "children": [
        {
-        "id": "ma-hero-split-1",
-        "type": "hero-split",
+        "id": "ma-hero-intro-1",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "Furniture & objects",
-         "eyebrow_dot_color": "#a9794f",
+         "eyebrow": "Furniture & objects",
          "eyebrow_color": "#a9794f",
-         "headline_lines": [
-          {
-           "text": "Pieces you’ll",
-           "color": "#2c2419",
-           "italic": false
-          },
-          {
-           "text": "keep for ",
-           "color": "#2c2419",
-           "italic": false
-          },
-          {
-           "text": "life.",
-           "color": "#a9794f",
-           "italic": true
-          }
-         ],
-         "headline_font_family": "serif",
-         "headline_font_size": 72,
-         "headline_line_height": 1.06,
-         "headline_font_weight": "400",
-         "headline_align": "left",
-         "subhead": "Solid materials, honest joinery and shapes that don’t date. Made in small runs to be lived with, not replaced.",
-         "subhead_color": "#5d5142",
-         "subhead_size": 18,
-         "subhead_italic": false,
-         "subhead_max_width": 420,
-         "cta1_text": "Shop the collection",
-         "cta1_url": "/shop/",
-         "cta1_bg": "#a9794f",
-         "cta1_color": "#ffffff",
-         "cta1_size": 14,
-         "cta1_radius": {
-          "tl": 2,
-          "tr": 2,
-          "br": 2,
-          "bl": 2,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 2,
-          "tr": 2,
-          "br": 2,
-          "bl": 2,
-          "linked": true
-         },
+         "headline": "Pieces you’ll keep for",
+         "accent": "life.",
+         "headline_tail": "",
+         "accent_italic": true,
+         "uppercase": false,
+         "headline_color": "#2c2419",
+         "accent_color": "#a9794f",
+         "headline_weight": "400",
+         "headline_size": "84",
+         "lead": "Solid materials, honest joinery and shapes that don’t date. Made in small runs to be lived with, not replaced.",
+         "lead_color": "#5d5142",
+         "stats": [],
+         "cta_text": "Shop the collection",
+         "cta_url": "/shop/",
+         "cta_style": "button",
+         "cta_bg": "#a9794f",
+         "cta_color": "#ffffff",
          "cta2_text": "Shop the room",
          "cta2_url": "#room",
-         "cta2_bg": "transparent",
-         "cta2_color": "#2c2419",
-         "cta2_border": "#c8b89e",
-         "cta2_size": 14,
-         "cta2_radius": {
+         "cta2_style": "outline",
+         "cta_radius": {
           "tl": 2,
           "tr": 2,
           "br": 2,
-          "bl": 2,
-          "linked": true
+          "bl": 2
          },
-         "cta2_radius_hover": {
-          "tl": 2,
-          "tr": 2,
-          "br": 2,
-          "bl": 2,
-          "linked": true
+         "media_image": "",
+         "media_bg": {
+          "type": "none"
          },
-         "stats": [],
-         "showcase_enabled": false,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#e9e1d2"
-         },
-         "showcase_padding": 32,
-         "showcase_radius": {
-          "tl": 6,
-          "tr": 6,
-          "br": 6,
-          "bl": 6,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 6,
-          "tr": 6,
-          "br": 6,
-          "bl": 6,
-          "linked": true
-         },
-         "showcase_badge_text": "MAISON · MADE TO LAST",
-         "showcase_badge_dot": "#a9794f",
-         "showcase_badge_bg": "#f3eee4",
-         "showcase_badge_color": "#2c2419",
-         "showcase_items": [
-          {
-           "number": "Solid timber & natural stone",
-           "text": "Materials",
-           "italic": false,
-           "text_color": "#a9794f",
-           "bg": {
-            "type": "solid",
-            "color": "#faf6ee"
-           }
-          },
-          {
-           "number": "Small-batch production",
-           "text": "Method",
-           "italic": false,
-           "text_color": "#2c2419",
-           "bg": {
-            "type": "solid",
-            "color": "#faf6ee"
-           }
-          },
-          {
-           "number": "Repaired, not replaced",
-           "text": "Promise",
-           "italic": false,
-           "text_color": "#2c2419",
-           "bg": {
-            "type": "solid",
-            "color": "#faf6ee"
-           }
-          },
-          {
-           "number": "Free delivery over €500",
-           "text": "Offer",
-           "italic": false,
-           "text_color": "#a9794f",
-           "bg": {
-            "type": "solid",
-            "color": "#faf6ee"
-           }
-          }
-         ],
-         "showcase_card_radius": {
+         "media_label": "hero — sunlit room, lounge chair & sideboard",
+         "media_light": true,
+         "media_aspect": "1/1",
+         "media_radius": 4,
+         "media_radius_top": 0,
+         "media_blob": false,
+         "badge_number": "",
+         "badge_label": "",
+         "badge_bg": "#a9794f",
+         "badge_color": "#ffffff",
+         "badge_radius": {
           "tl": 4,
           "tr": 4,
           "br": 4,
-          "bl": 4,
-          "linked": true
+          "bl": 4
          },
-         "showcase_card_radius_hover": {
-          "tl": 4,
-          "tr": 4,
-          "br": 4,
-          "bl": 4,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "MAISON",
-         "showcase_caption_right": "EST. 2018",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1fr 1.1fr",
-         "gap": 48,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_position": "right"
         },
         "style": {},
         "advanced": {},
@@ -397,21 +283,21 @@
            "image": "",
            "title": "Living",
            "subtitle": "Seating & storage",
-           "link": "#collections"
+           "link": "/shop/"
           },
           {
            "id": "og-dining",
            "image": "",
            "title": "Dining",
            "subtitle": "Tables & chairs",
-           "link": "#collections"
+           "link": "/shop/"
           },
           {
            "id": "og-objects",
            "image": "",
            "title": "Objects",
            "subtitle": "Light & home",
-           "link": "#collections"
+           "link": "/shop/"
           }
          ],
          "columns": "3",
@@ -535,136 +421,98 @@
       "advanced": {},
       "children": [
        {
-        "id": "ma-product-cards-19",
-        "type": "product-cards",
+        "id": "ma-productgrid-19",
+        "type": "productgrid",
         "settings": {
          "columns": 4,
          "gap": 22,
+         "media_aspect": "1/1",
+         "media_bg": "#faf6ee",
+         "stripe_dark": false,
+         "hover_zoom": true,
+         "card_bg": "",
+         "card_border": "",
+         "card_radius": 0,
+         "card_padding": 0,
+         "tag_bg": "#2c2419",
+         "tag_color": "#ffffff",
+         "quick_add_show": false,
+         "category_color": "#928572",
+         "title_font": "serif",
+         "title_size": 20,
+         "title_color": "#2c2419",
+         "price_color": "#a9794f",
+         "add_button": false,
+         "show_filters": false,
+         "footer_text": "Shop everything",
+         "footer_url": "/shop/",
+         "footer_color": "#2c2419",
          "items": [
           {
-           "letter": "",
-           "logo_image": "",
-           "top_bg": {
-            "type": "solid",
-            "color": "#e9e1d2"
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "lounge chair",
-           "brand_label": "Seating",
-           "brand_color": "#a9794f",
-           "show_badge": true,
-           "badge_text": "€890",
-           "badge_bg": "#2c2419",
-           "badge_color": "#ffffff",
-           "title": "Linden Lounge ",
-           "title_accent": "Chair",
-           "title_accent_italic": false,
-           "description": "",
-           "cta_text": "View piece",
-           "cta_url": "#shop"
+           "media_label": "lounge chair",
+           "tag": "",
+           "category": "Seating",
+           "title": "Linden Lounge Chair",
+           "notes": "",
+           "roast": 0,
+           "price": "€890",
+           "link": "/shop/",
+           "quick_add": "",
+           "filter_tags": ""
           },
           {
-           "letter": "",
-           "logo_image": "",
-           "top_bg": {
-            "type": "solid",
-            "color": "#e9e1d2"
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "sideboard",
-           "brand_label": "Storage",
-           "brand_color": "#a9794f",
-           "show_badge": true,
-           "badge_text": "€1,640",
-           "badge_bg": "#2c2419",
-           "badge_color": "#ffffff",
-           "title": "Oak ",
-           "title_accent": "Sideboard",
-           "title_accent_italic": false,
-           "description": "",
-           "cta_text": "View piece",
-           "cta_url": "#shop"
+           "media_label": "sideboard",
+           "tag": "",
+           "category": "Storage",
+           "title": "Oak Sideboard",
+           "notes": "",
+           "roast": 0,
+           "price": "€1,640",
+           "link": "/shop/",
+           "quick_add": "",
+           "filter_tags": ""
           },
           {
-           "letter": "",
-           "logo_image": "",
-           "top_bg": {
-            "type": "solid",
-            "color": "#e9e1d2"
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "dining table",
-           "brand_label": "Dining",
-           "brand_color": "#a9794f",
-           "show_badge": true,
-           "badge_text": "€1,280",
-           "badge_bg": "#2c2419",
-           "badge_color": "#ffffff",
-           "title": "Trestle ",
-           "title_accent": "Table",
-           "title_accent_italic": false,
-           "description": "",
-           "cta_text": "View piece",
-           "cta_url": "#shop"
+           "media_label": "dining table",
+           "tag": "",
+           "category": "Dining",
+           "title": "Trestle Table",
+           "notes": "",
+           "roast": 0,
+           "price": "€1,280",
+           "link": "/shop/",
+           "quick_add": "",
+           "filter_tags": ""
           },
           {
-           "letter": "",
-           "logo_image": "",
-           "top_bg": {
-            "type": "solid",
-            "color": "#e9e1d2"
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "floor lamp",
-           "brand_label": "Lighting",
-           "brand_color": "#a9794f",
-           "show_badge": true,
-           "badge_text": "€240",
-           "badge_bg": "#2c2419",
-           "badge_color": "#ffffff",
-           "title": "Paper Floor ",
-           "title_accent": "Lamp",
-           "title_accent_italic": false,
-           "description": "",
-           "cta_text": "View piece",
-           "cta_url": "#shop"
+           "media_label": "floor lamp",
+           "tag": "",
+           "category": "Lighting",
+           "title": "Paper Floor Lamp",
+           "notes": "",
+           "roast": 0,
+           "price": "€240",
+           "link": "/shop/",
+           "quick_add": "",
+           "filter_tags": ""
           }
-         ],
-         "card_bg": {
-          "type": "solid",
-          "color": "#f3eee4"
-         },
-         "card_color": "#5d5142",
-         "card_radius": {
-          "tl": 4,
-          "tr": 4,
-          "br": 4,
-          "bl": 4,
-          "linked": true
-         },
-         "card_radius_hover": {
-          "tl": 4,
-          "tr": 4,
-          "br": 4,
-          "bl": 4,
-          "linked": true
-         },
-         "card_shadow": "none",
-         "card_padding": 24,
-         "top_aspect_ratio": "4/5",
-         "top_padding": 20,
-         "letter_font_family": "serif",
-         "letter_size": 120,
-         "letter_italic": true,
-         "letter_align": "center",
-         "logo_height": 52,
-         "show_screenshot_label": true,
-         "screenshot_label_color": "#928572",
-         "brand_size": 12,
-         "brand_letter_spacing": 0.08,
-         "title_font_family": "serif",
-         "title_size": 22,
-         "title_weight": "400",
-         "description_size": 14,
-         "cta_size": 11,
-         "cta_arrow": true,
-         "card_hover_effect": "lift"
+         ]
         },
         "style": {},
         "advanced": {},
@@ -709,155 +557,57 @@
       "advanced": {},
       "children": [
        {
-        "id": "ma-hero-split-23",
-        "type": "hero-split",
+        "id": "ma-story-intro-23",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "Our story",
-         "eyebrow_dot_color": "#a9794f",
+         "eyebrow": "Our story",
          "eyebrow_color": "#a9794f",
-         "headline_lines": [
-          {
-           "text": "Made in a ",
-           "color": "#2c2419",
-           "italic": false
-          },
-          {
-           "text": "workshop,",
-           "color": "#a9794f",
-           "italic": true
-          },
-          {
-           "text": "not a factory",
-           "color": "#2c2419",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "serif",
-         "headline_font_size": 52,
-         "headline_line_height": 1.1,
-         "headline_font_weight": "400",
-         "headline_align": "left",
-         "subhead": "Maison began with two cabinetmakers who were tired of furniture built to be thrown away. We work in solid timber, joined the old way, finished by hand. Everything is made in small batches in our own workshop — and built to be repaired, not replaced.",
-         "subhead_color": "#5d5142",
-         "subhead_size": 16,
-         "subhead_italic": false,
-         "subhead_max_width": 460,
-         "cta1_text": "Meet the makers",
-         "cta1_url": "#story",
-         "cta1_bg": "transparent",
-         "cta1_color": "#2c2419",
-         "cta1_border": "#c8b89e",
-         "cta1_size": 13,
-         "cta1_radius": {
-          "tl": 2,
-          "tr": 2,
-          "br": 2,
-          "bl": 2,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 2,
-          "tr": 2,
-          "br": 2,
-          "bl": 2,
-          "linked": true
-         },
+         "headline": "Made in a",
+         "accent": "workshop,",
+         "headline_tail": "not a factory",
+         "accent_italic": true,
+         "uppercase": false,
+         "headline_color": "#2c2419",
+         "accent_color": "#a9794f",
+         "headline_weight": "400",
+         "headline_size": "52",
+         "lead": "Maison began with two cabinetmakers who were tired of furniture built to be thrown away. We work in solid timber, joined the old way, finished by hand. Everything is made in small batches in our own workshop — and built to be repaired, not replaced.",
+         "lead_color": "#5d5142",
+         "stats": [],
+         "cta_text": "Meet the makers",
+         "cta_url": "#story",
+         "cta_style": "underline",
+         "cta_bg": "",
+         "cta_color": "#2c2419",
          "cta2_text": "",
          "cta2_url": "",
-         "stats": [],
-         "showcase_enabled": true,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#e9e1d2"
+         "cta_radius": {
+          "tl": 2,
+          "tr": 2,
+          "br": 2,
+          "bl": 2
          },
-         "showcase_padding": 32,
-         "showcase_radius": {
-          "tl": 6,
-          "tr": 6,
-          "br": 6,
-          "bl": 6,
-          "linked": true
+         "media_image": "",
+         "media_bg": {
+          "type": "none"
          },
-         "showcase_radius_hover": {
-          "tl": 6,
-          "tr": 6,
-          "br": 6,
-          "bl": 6,
-          "linked": true
-         },
-         "showcase_badge_text": "THE WORKSHOP",
-         "showcase_badge_dot": "#a9794f",
-         "showcase_badge_bg": "#f3eee4",
-         "showcase_badge_color": "#2c2419",
-         "showcase_items": [
-          {
-           "number": "Solid timber",
-           "text": "Primary material",
-           "italic": false,
-           "text_color": "#a9794f",
-           "bg": {
-            "type": "solid",
-            "color": "#faf6ee"
-           }
-          },
-          {
-           "number": "Hand-finished",
-           "text": "Every piece",
-           "italic": false,
-           "text_color": "#2c2419",
-           "bg": {
-            "type": "solid",
-            "color": "#faf6ee"
-           }
-          },
-          {
-           "number": "Small batches",
-           "text": "Production method",
-           "italic": false,
-           "text_color": "#2c2419",
-           "bg": {
-            "type": "solid",
-            "color": "#faf6ee"
-           }
-          },
-          {
-           "number": "Repair service",
-           "text": "Lifetime support",
-           "italic": false,
-           "text_color": "#a9794f",
-           "bg": {
-            "type": "solid",
-            "color": "#faf6ee"
-           }
-          }
-         ],
-         "showcase_card_radius": {
+         "media_label": "the workshop",
+         "media_light": true,
+         "media_aspect": "4/5",
+         "media_radius": 4,
+         "media_radius_top": 0,
+         "media_blob": false,
+         "badge_number": "",
+         "badge_label": "",
+         "badge_bg": "#a9794f",
+         "badge_color": "#ffffff",
+         "badge_radius": {
           "tl": 4,
           "tr": 4,
           "br": 4,
-          "bl": 4,
-          "linked": true
+          "bl": 4
          },
-         "showcase_card_radius_hover": {
-          "tl": 4,
-          "tr": 4,
-          "br": 4,
-          "bl": 4,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "SINCE 2018",
-         "showcase_caption_right": "LONDON",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1fr 1fr",
-         "gap": 56,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_position": "left"
         },
         "style": {},
         "advanced": {},
@@ -909,7 +659,7 @@
          "heading": "Find your room",
          "intro": "Four curated room edits — everything you need, chosen together.",
          "zone_accent": "#a9794f",
-         "zone_on": "#2c2419",
+         "zone_on": "#ffffff",
          "card_bg": "#faf6ee",
          "card_border": "#ddd1bd",
          "align": "center",
@@ -1003,7 +753,7 @@
          "headline_accent_italic": true,
          "subtitle": "Free delivery on orders over €500, and a 100-day trial in your own space.",
          "cta_text": "Shop the collection",
-         "cta_url": "#shop",
+         "cta_url": "/shop/",
          "bg": {
           "type": "solid",
           "color": "#2c2419"

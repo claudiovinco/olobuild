@@ -4,8 +4,8 @@
   "type": "section",
   "settings": {
    "style": "default",
-   "width": "full",
-   "padding": "large",
+   "width": "fullbleed",
+   "padding": "remove-vertical",
    "padding_top": 0,
    "padding_bottom": 0
   },
@@ -20,7 +20,9 @@
    {
     "id": "ln-ro-3",
     "type": "row",
-    "settings": {},
+    "settings": {
+     "gap": 0
+    },
     "style": {},
     "advanced": {},
     "children": [
@@ -68,7 +70,13 @@
          "accent_on": "#161410",
          "text_color": "#ffffff",
          "sub_color": "#efe9df",
-         "eyebrow_color": "#bd9a6f"
+         "eyebrow_color": "#bd9a6f",
+         "cta_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0
+         }
         },
         "style": {},
         "advanced": {},
@@ -172,134 +180,85 @@
       "children": [
        {
         "id": "ln-product-cards-8",
-        "type": "product-cards",
+        "type": "productgrid",
         "settings": {
          "columns": 4,
          "gap": 24,
+         "media_aspect": "3/4",
+         "media_bg": "#2c2925",
+         "stripe_dark": false,
+         "hover_zoom": true,
+         "card_bg": "",
+         "card_border": "",
+         "card_radius": 0,
+         "card_padding": 0,
+         "tag_bg": "",
+         "tag_color": "",
+         "quick_add_show": false,
+         "category_color": "#827a6d",
+         "title_font": "serif",
+         "title_size": 22,
+         "title_color": "#efe9df",
+         "price_color": "#bd9a6f",
+         "add_button": false,
+         "show_filters": false,
+         "footer_text": "Shop everything",
+         "footer_url": "#edit",
+         "footer_color": "#efe9df",
          "items": [
           {
-           "letter": "C",
-           "letter_color": "#bd9a6f",
-           "top_bg": {
-            "type": "solid",
-            "color": "#2c2925"
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "WOOL COAT",
-           "brand_label": "OUTERWEAR",
-           "brand_color": "#bd9a6f",
-           "show_badge": true,
-           "badge_text": "€420",
-           "badge_bg": "#161410",
-           "badge_color": "#efe9df",
-           "title": "Boiled Wool",
-           "title_accent": " Coat",
-           "title_accent_italic": true,
-           "description": "Made in Portugal — boiled wool, bone buttons, unlined. Will outlast everything else in your wardrobe.",
-           "cta_text": "Add to bag",
-           "cta_url": "#edit"
+           "media_label": "wool coat",
+           "tag": "",
+           "category": "Outerwear",
+           "title": "Boiled Wool Coat",
+           "price": "€420",
+           "link": "#edit",
+           "quick_add": ""
           },
           {
-           "letter": "V",
-           "letter_color": "#bd9a6f",
-           "top_bg": {
-            "type": "solid",
-            "color": "#2c2925"
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "CERAMIC VASE",
-           "brand_label": "OBJECT",
-           "brand_color": "#bd9a6f",
-           "show_badge": true,
-           "badge_text": "€86",
-           "badge_bg": "#161410",
-           "badge_color": "#efe9df",
-           "title": "Stoneware",
-           "title_accent": " Vase",
-           "title_accent_italic": true,
-           "description": "Wheel-thrown by a solo maker in Lisbon. Each piece unique, reactive glaze in warm stone.",
-           "cta_text": "Add to bag",
-           "cta_url": "#edit"
+           "media_label": "ceramic vase",
+           "tag": "",
+           "category": "Object",
+           "title": "Stoneware Vase",
+           "price": "€86",
+           "link": "#edit",
+           "quick_add": ""
           },
           {
-           "letter": "S",
-           "letter_color": "#bd9a6f",
-           "top_bg": {
-            "type": "solid",
-            "color": "#2c2925"
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "LINEN SHIRT",
-           "brand_label": "READY-TO-WEAR",
-           "brand_color": "#bd9a6f",
-           "show_badge": true,
-           "badge_text": "€140",
-           "badge_bg": "#161410",
-           "badge_color": "#efe9df",
-           "title": "Washed Linen",
-           "title_accent": " Shirt",
-           "title_accent_italic": true,
-           "description": "Prewashed Italian linen, slightly oversized, works as a layer or standalone. Ivory.",
-           "cta_text": "Add to bag",
-           "cta_url": "#edit"
+           "media_label": "linen shirt",
+           "tag": "",
+           "category": "Ready-to-wear",
+           "title": "Washed Linen Shirt",
+           "price": "€140",
+           "link": "#edit",
+           "quick_add": ""
           },
           {
-           "letter": "N",
-           "letter_color": "#bd9a6f",
-           "top_bg": {
-            "type": "solid",
-            "color": "#2c2925"
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "SCENT BOTTLE",
-           "brand_label": "SCENT",
-           "brand_color": "#bd9a6f",
-           "show_badge": true,
-           "badge_text": "€95",
-           "badge_bg": "#161410",
-           "badge_color": "#efe9df",
-           "title": "No. 4",
-           "title_accent": " Eau de Parfum",
-           "title_accent_italic": true,
-           "description": "Cedar, vetiver and quiet smoke. An independent perfumer's fourth release — sparse, precise, lasting.",
-           "cta_text": "Add to bag",
-           "cta_url": "#edit"
+           "media_label": "scent bottle",
+           "tag": "",
+           "category": "Scent",
+           "title": "No. 4 Eau de Parfum",
+           "price": "€95",
+           "link": "#edit",
+           "quick_add": ""
           }
-         ],
-         "card_bg": {
-          "type": "solid",
-          "color": "#262320"
-         },
-         "card_color": "#827a6d",
-         "card_radius": {
-          "tl": 2,
-          "tr": 2,
-          "br": 2,
-          "bl": 2,
-          "linked": true
-         },
-         "card_radius_hover": {
-          "tl": 2,
-          "tr": 2,
-          "br": 2,
-          "bl": 2,
-          "linked": true
-         },
-         "card_shadow": "none",
-         "card_padding": 24,
-         "top_aspect_ratio": "3/4",
-         "top_padding": 24,
-         "letter_font_family": "serif",
-         "letter_size": 120,
-         "letter_italic": true,
-         "letter_align": "center",
-         "show_screenshot_label": true,
-         "screenshot_label_color": "#5c554c",
-         "brand_size": 11,
-         "brand_letter_spacing": 0.14,
-         "title_font_family": "serif",
-         "title_size": 24,
-         "title_weight": "400",
-         "description_size": 13,
-         "cta_size": 11,
-         "cta_arrow": true,
-         "card_hover_effect": "lift"
+         ]
         },
         "style": {},
         "advanced": {},
@@ -411,21 +370,21 @@
          "items": [
           {
            "id": "og-wear",
-           "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&q=75&auto=format&fit=crop",
+           "image": "",
            "title": "Wear",
            "subtitle": "Clothing",
            "link": "#edit"
           },
           {
            "id": "og-live",
-           "image": "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=1200&q=75&auto=format&fit=crop",
+           "image": "",
            "title": "Live",
            "subtitle": "Objects & home",
            "link": "#edit"
           },
           {
            "id": "og-scent",
-           "image": "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1200&q=75&auto=format&fit=crop",
+           "image": "",
            "title": "Scent",
            "subtitle": "Fragrance & skin",
            "link": "#edit"
@@ -434,9 +393,9 @@
          "columns": "3",
          "columns_mobile": "1",
          "gap": "medium",
-         "height": 420,
+         "height": 380,
          "match_height": true,
-         "overlay_position": "bottom-left",
+         "overlay_position": "bottom",
          "title_size": "h3",
          "hover_effect": "zoom",
          "hover_overlay": "always",
@@ -445,18 +404,18 @@
          "ribbon_color": "",
          "shadow": "none",
          "preset": "editorial-grid",
-         "item_radius": 2,
-         "overlay_color": "rgba(22,20,16,0.55)",
+         "item_radius": 0,
+         "overlay_color": "rgba(22,20,16,0.7)",
          "overlay_gradient": true,
-         "overlay_horizontal": "left",
+         "overlay_horizontal": "center",
          "overlay_style": "overlay-default",
          "overlay_padding": "large",
-         "title_color": "#efe9df",
+         "title_color": "#ffffff",
          "title_weight": "400",
          "title_letter_spacing": 0,
          "title_uppercase": false,
          "subtitle_color": "#bd9a6f",
-         "subtitle_size": 13,
+         "subtitle_size": 12,
          "show_cta": false,
          "cta_text": "Shop",
          "cta_style": "arrow"
@@ -476,13 +435,13 @@
   "type": "section",
   "settings": {
    "style": "default",
-   "width": "large",
-   "padding": "large"
+   "width": "fullbleed",
+   "padding": "remove-vertical"
   },
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#211f1d"
+    "color": "#2c2925"
    }
   },
   "advanced": {},
@@ -490,7 +449,9 @@
    {
     "id": "ln-ro-21",
     "type": "row",
-    "settings": {},
+    "settings": {
+     "gap": 0
+    },
     "style": {},
     "advanced": {},
     "children": [
@@ -505,146 +466,42 @@
       "children": [
        {
         "id": "ln-hero-split-19",
-        "type": "hero-split",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "About Linea",
-         "eyebrow_dot_color": "#bd9a6f",
+         "eyebrow": "About Linea",
          "eyebrow_color": "#bd9a6f",
-         "headline_lines": [
-          {
-           "text": "A shop that ",
-           "color": "#efe9df",
-           "italic": false
-          },
-          {
-           "text": "says no",
-           "color": "#bd9a6f",
-           "italic": true
-          },
-          {
-           "text": "for you",
-           "color": "#efe9df",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "serif",
-         "headline_font_size": 52,
-         "headline_line_height": 1.1,
-         "headline_font_weight": "400",
-         "headline_align": "left",
-         "subhead": "We see thousands of things and choose a few. Everything in Linea is here because it's beautifully made, will last, and earns its place on your shelf.\n\nWe work directly with small makers, in small runs, and we'll tell you the story behind every piece.\n\n— Sora & Idris, founders",
-         "subhead_color": "#b2a99c",
-         "subhead_size": 16,
-         "subhead_italic": false,
-         "subhead_max_width": 460,
-         "cta1_text": "Read more",
-         "cta1_url": "#",
-         "cta1_bg": "transparent",
-         "cta1_color": "#efe9df",
-         "cta1_border": "rgba(189,154,111,.42)",
-         "cta1_size": 12,
-         "cta1_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "cta2_text": "",
-         "cta2_url": "",
-         "cta2_bg": "transparent",
-         "cta2_color": "#efe9df",
+         "headline": "A shop that",
+         "accent": "says no",
+         "headline_tail": "for you",
+         "accent_italic": true,
+         "uppercase": false,
+         "headline_color": "#efe9df",
+         "headline_weight": "400",
+         "headline_size": "52",
+         "lead": "We see thousands of things and choose a few. Everything in Linea is here because it's beautifully made, will last, and earns its place on your shelf.\n\nWe work directly with small makers, in small runs, and we'll tell you the story behind every piece.",
+         "lead_color": "#b2a99c",
+         "signature": "— Sora & Idris, founders",
          "stats": [],
-         "showcase_enabled": true,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#2c2925"
+         "cta_text": "Read more",
+         "cta_url": "#",
+         "cta_style": "underline",
+         "cta_color": "#efe9df",
+         "cta2_text": "",
+         "cta2_url": "#",
+         "cta2_style": "outline",
+         "media_image": "",
+         "media_bg": {
+          "type": "none"
          },
-         "showcase_padding": 40,
-         "showcase_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "showcase_badge_text": "THE SHOP",
-         "showcase_badge_dot": "#bd9a6f",
-         "showcase_badge_bg": "#161410",
-         "showcase_badge_color": "#efe9df",
-         "showcase_items": [
-          {
-           "number": "Small runs",
-           "text": "Every piece is made in limited quantity — when it's gone, it's gone.",
-           "italic": true,
-           "text_color": "#b2a99c",
-           "bg": {
-            "type": "solid",
-            "color": "#262320"
-           }
-          },
-          {
-           "number": "Est. 2018",
-           "text": "Eight years curating what's worth owning.",
-           "italic": false,
-           "text_color": "#efe9df",
-           "bg": {
-            "type": "solid",
-            "color": "#262320"
-           }
-          },
-          {
-           "number": "Independent makers",
-           "text": "We work directly with craftspeople, no middlemen.",
-           "italic": false,
-           "text_color": "#efe9df",
-           "bg": {
-            "type": "solid",
-            "color": "#262320"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "OUR STORY",
-         "showcase_caption_right": "EST. 2018",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1fr 1fr",
-         "gap": 0,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_label": "the shop interior, considered",
+         "media_light": false,
+         "media_radius": 0,
+         "media_position": "left",
+         "flush": true,
+         "content_bg": "#2c2925",
+         "badge_number": "",
+         "badge_label": "",
+         "media_blob": false
         },
         "style": {},
         "advanced": {},
@@ -693,49 +550,75 @@
         "type": "finder",
         "settings": {
          "eyebrow": "Personal edit",
-         "heading": "Find your edit",
+         "heading": "Find your <em>edit</em>",
          "intro": "",
          "zone_accent": "#bd9a6f",
          "zone_on": "#161410",
          "card_bg": "#2c2925",
          "card_border": "rgba(189,154,111,.42)",
+         "card_radius": "2",
          "align": "center",
+         "default_index": "0",
          "items": [
           {
            "option": "Quiet minimal",
+           "kicker": "Curated for you",
            "title": "The Essentials",
            "text": "Stone, ecru and ink. Clean lines, the right weight of cotton, nothing shouting. Pieces that quietly do everything.",
            "meta": "12 pieces · from €90",
            "cta_text": "",
            "cta_url": "#",
-           "icon": ""
+           "icon": "",
+           "image": "",
+           "media_bg": {
+            "type": "none"
+           },
+           "media_label": "quiet minimal edit"
           },
           {
            "option": "Sharp & tailored",
+           "kicker": "Curated for you",
            "title": "The Tailored",
            "text": "A precise blazer, straight wool trouser and a crisp poplin shirt. Structure that reads considered, never stiff.",
            "meta": "9 pieces · from €140",
            "cta_text": "",
            "cta_url": "#",
-           "icon": ""
+           "icon": "",
+           "image": "",
+           "media_bg": {
+            "type": "none"
+           },
+           "media_label": "sharp tailored edit"
           },
           {
            "option": "Soft & relaxed",
+           "kicker": "Curated for you",
            "title": "The Soft Edit",
            "text": "Washed linen, dropped shoulders and easy knits. Made for slow weekends and warm light.",
            "meta": "10 pieces · from €85",
            "cta_text": "",
            "cta_url": "#",
-           "icon": ""
+           "icon": "",
+           "image": "",
+           "media_bg": {
+            "type": "none"
+           },
+           "media_label": "soft relaxed edit"
           },
           {
            "option": "A statement",
+           "kicker": "Curated for you",
            "title": "The One Thing",
            "text": "A single sculptural piece to build a look around — the coat, the dress, the bag people remember.",
            "meta": "Hero pieces · from €220",
            "cta_text": "",
            "cta_url": "#",
-           "icon": ""
+           "icon": "",
+           "image": "",
+           "media_bg": {
+            "type": "none"
+           },
+           "media_label": "statement edit"
           }
          ]
         },
@@ -785,7 +668,10 @@
         "id": "ln-newsletter-27",
         "type": "newsletter",
         "settings": {
+         "eyebrow": "Stay close",
+         "eyebrow_color": "#bd9a6f",
          "title": "The <em>quiet</em> list",
+         "title_accent_color": "#bd9a6f",
          "subtitle": "One considered email a month — new arrivals, maker stories and the occasional private preview.",
          "layout": "horizontal",
          "show_name": false,
@@ -799,9 +685,9 @@
          "box_border": "",
          "border_radius": 0,
          "tile_padding": {
-          "top": 56,
+          "top": 0,
           "right": 32,
-          "bottom": 56,
+          "bottom": 0,
           "left": 32
          },
          "title_size": "56",

@@ -1,1 +1,92 @@
-[{"id":"sa-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#241a16"}},"advanced":{},"children":[{"id":"sa-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"sa-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"sa-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"DM Serif Display\", Georgia, serif;font-size:20px;color:#e0a23a;font-weight:400;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#c75d3a;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Saffron</div><p style=\"font-size:14px;color:#6e6258;max-width:260px\">A seasonal neighbourhood kitchen. Open fire, market produce, a short honest list.</p>","text_color":"#2a201b","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"sa-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"sa-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#e0a23a;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Visit</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#6e6258\"><li>Menu</li><li>Our story</li><li>Gallery</li><li>Reservations</li></ul>","text_color":"#2a201b","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"sa-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"sa-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#e0a23a;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Hours</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#6e6258\"><li>Lunch · 12:00 13 14:30</li><li>Dinner · 19:00 13 23:00</li><li>Closed Mondays</li></ul>","text_color":"#2a201b","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"sa-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"sa-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#e0a23a;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Find us</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#6e6258\"><li>Via Brera 18, Milan</li><li>+39 02 555 12</li><li>hello@saffron.kitchen</li></ul>","text_color":"#2a201b","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"sa-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"sa-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"sa-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid #e7ddca;padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#6e6258\"><span>© 2026 Saffron  14 an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#2a201b","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "sa-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 64, "padding_bottom": 32 },
+  "style": { "bg": { "type": "solid", "color": "#241a16" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sa-fro1",
+    "type": "row",
+    "settings": { "gap": 34, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sa-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "sa-fbrand", "type": "headline", "settings": { "heading": "Saffron", "tag": "div", "alignment": "left", "heading_font_size": "24", "heading_font": "heading", "heading_color": "#e0a23a", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "sa-fbtext", "type": "text-block", "settings": { "content": "<p>A seasonal neighbourhood kitchen. Open fire, market produce, a short honest list.</p>", "text_color": "#6e6258", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "240" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "sa-fsoc", "type": "nav", "settings": { "show_icons": true, "icon_size": "16", "icon_color": "#ffffff", "direction": "horizontal", "alignment": "left", "gap": "10", "tile_padding": { "top": 8, "right": 0, "bottom": 0, "left": 0 }, "link_color": "#6e6258", "link_hover_color": "#e0a23a", "items": [ { "title": "", "content": "#", "tag": "instagram" }, { "title": "", "content": "#", "tag": "facebook" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "sa-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "sa-fh1", "type": "headline", "settings": { "heading": "Visit", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#e0a23a", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "sa-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "10", "font_size": "14", "link_color": "#6e6258", "link_hover_color": "#e0a23a", "items": [ { "title": "Menu", "content": "#menu", "tag": "" }, { "title": "Our story", "content": "#story", "tag": "" }, { "title": "Gallery", "content": "#gallery", "tag": "" }, { "title": "Reservations", "content": "#visit", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "sa-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "sa-fh2", "type": "headline", "settings": { "heading": "Hours", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#e0a23a", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "sa-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "10", "font_size": "14", "link_color": "#6e6258", "link_hover_color": "#e0a23a", "items": [ { "title": "Lunch · 12:00–14:30", "content": "", "tag": "" }, { "title": "Dinner · 19:00–23:00", "content": "", "tag": "" }, { "title": "Closed Mondays", "content": "", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "sa-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "sa-fh3", "type": "headline", "settings": { "heading": "Find us", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#e0a23a", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "sa-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "10", "font_size": "14", "link_color": "#6e6258", "link_hover_color": "#e0a23a", "items": [ { "title": "Via Brera 18, Milan", "content": "", "tag": "" }, { "title": "+39 02 555 12", "content": "tel:+390255512", "tag": "" }, { "title": "hello@saffron.kitchen", "content": "mailto:hello@saffron.kitchen", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "sa-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "sa-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "sa-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.12)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "sa-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "sa-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "sa-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Saffron — an OLOtheme demo.</p>", "text_color": "#6e6258", "font_size": "13", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "sa-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "sa-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#6e6258", "font_size": "13", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

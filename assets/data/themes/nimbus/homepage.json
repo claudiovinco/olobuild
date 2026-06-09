@@ -33,159 +33,52 @@
       "children": [
        {
         "id": "nb-hero-split-1",
-        "type": "hero-split",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "All systems operational · 30 regions",
-         "eyebrow_dot_color": "#46d18a",
+         "eyebrow": "● All systems operational · 30 regions",
          "eyebrow_color": "#5aa9ff",
-         "eyebrow_bg": "rgba(90,169,255,.10)",
-         "eyebrow_border": "rgba(90,169,255,.34)",
-         "headline_lines": [
-          {
-           "text": "Ship to the edge",
-           "color": "#ffffff",
-           "italic": false
-          },
-          {
-           "text": "in one command.",
-           "color": "#5aa9ff",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "sans-serif",
-         "headline_font_size": 68,
-         "headline_line_height": 1.04,
-         "headline_font_weight": "700",
-         "headline_align": "left",
-         "subhead": "Nimbus runs your apps on a global network with cold starts under 40ms. Push once — we place it in every region your users are in.",
-         "subhead_color": "#6b7a96",
-         "subhead_size": 18,
-         "subhead_italic": false,
-         "subhead_max_width": 480,
-         "cta1_text": "Deploy free",
-         "cta1_url": "#pricing",
-         "cta1_bg": "#5aa9ff",
-         "cta1_color": "#060a14",
-         "cta1_size": 15,
-         "cta1_radius": {
-          "tl": 9,
-          "tr": 9,
-          "br": 9,
-          "bl": 9,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 9,
-          "tr": 9,
-          "br": 9,
-          "bl": 9,
-          "linked": true
-         },
-         "cta2_text": "Read the docs",
-         "cta2_url": "#platform",
-         "cta2_bg": "rgba(255,255,255,.05)",
-         "cta2_color": "#ffffff",
-         "cta2_border": "rgba(255,255,255,.16)",
-         "cta2_size": 15,
-         "cta2_radius": {
-          "tl": 9,
-          "tr": 9,
-          "br": 9,
-          "bl": 9,
-          "linked": true
-         },
-         "cta2_radius_hover": {
-          "tl": 9,
-          "tr": 9,
-          "br": 9,
-          "bl": 9,
-          "linked": true
-         },
+         "headline": "Ship to the edge",
+         "accent": "in one command.",
+         "accent_color": "#5aa9ff",
+         "accent_italic": false,
+         "headline_tail": "",
+         "uppercase": false,
+         "headline_color": "#ffffff",
+         "headline_weight": "700",
+         "headline_size": "72",
+         "lead": "Nimbus runs your apps on a global network with cold starts under 40ms. Push once — we place it in every region your users are in.",
+         "lead_color": "#6b7a96",
+         "signature": "",
          "stats": [],
-         "showcase_enabled": true,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#111a30"
+         "cta_text": "Deploy free",
+         "cta_url": "#pricing",
+         "cta_style": "button",
+         "cta_bg": "#5aa9ff",
+         "cta_color": "#060a14",
+         "cta_radius": {
+          "tl": 9,
+          "tr": 9,
+          "br": 9,
+          "bl": 9
          },
-         "showcase_padding": 0,
-         "showcase_radius": {
-          "tl": 14,
-          "tr": 14,
-          "br": 14,
-          "bl": 14,
-          "linked": true
+         "cta2_text": "Read the docs →",
+         "cta2_url": "#platform",
+         "cta2_style": "outline",
+         "media_image": "",
+         "media_bg": {
+          "type": "none"
          },
-         "showcase_radius_hover": {
-          "tl": 14,
-          "tr": 14,
-          "br": 14,
-          "bl": 14,
-          "linked": true
-         },
-         "showcase_badge_text": "zsh — nimbus deploy",
-         "showcase_badge_dot": "#5aa9ff",
-         "showcase_badge_bg": "#16223c",
-         "showcase_badge_color": "#aebbd0",
-         "showcase_items": [
-          {
-           "number": "~/app ❯ nimbus deploy",
-           "text": "✓ built in 8.2s",
-           "italic": false,
-           "text_color": "#46d18a",
-           "bg": {
-            "type": "solid",
-            "color": "#111a30"
-           }
-          },
-          {
-           "number": "✓ pushed to 30 regions",
-           "text": "✓ live at app.nimbus.dev",
-           "italic": false,
-           "text_color": "#46d18a",
-           "bg": {
-            "type": "solid",
-            "color": "#111a30"
-           }
-          },
-          {
-           "number": "# cold start p50",
-           "text": "37ms",
-           "italic": false,
-           "text_color": "#5aa9ff",
-           "bg": {
-            "type": "solid",
-            "color": "#111a30"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "NIMBUS DEPLOY",
-         "showcase_caption_right": "LIVE",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1.1fr .9fr",
-         "gap": 48,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         },
-         "subhead_align": "left"
+         "media_label": "zsh — nimbus deploy · built 8.2s · 30 regions · cold start 37ms",
+         "media_light": false,
+         "media_aspect": "4/4.4",
+         "media_radius": 14,
+         "media_radius_top": 0,
+         "media_blob": false,
+         "badge_number": "",
+         "badge_label": "",
+         "media_position": "right",
+         "flush": false,
+         "content_bg": ""
         },
         "style": {},
         "advanced": {},
@@ -797,204 +690,60 @@
       "children": [
        {
         "id": "nb-hero-split-36",
-        "type": "hero-split",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "// scaling",
-         "eyebrow_dot_color": "#5aa9ff",
+         "eyebrow": "// scaling",
          "eyebrow_color": "#5aa9ff",
-         "eyebrow_bg": "transparent",
-         "eyebrow_border": "transparent",
-         "headline_lines": [
-          {
-           "text": "Scales to zero,",
-           "color": "#ffffff",
-           "italic": false
-          },
-          {
-           "text": "and to millions",
-           "color": "#5aa9ff",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "sans-serif",
-         "headline_font_size": 44,
-         "headline_line_height": 1.06,
-         "headline_font_weight": "700",
-         "headline_align": "left",
-         "subhead": "Nimbus spins capacity up the instant traffic arrives and back to nothing when it leaves. You pay for requests served, never for idle machines.",
-         "subhead_color": "#6b7a96",
-         "subhead_size": 16,
-         "subhead_italic": false,
-         "subhead_max_width": 480,
-         "cta1_text": "How autoscaling works",
-         "cta1_url": "#platform",
-         "cta1_bg": "rgba(255,255,255,.05)",
-         "cta1_color": "#ffffff",
-         "cta1_size": 14,
-         "cta1_radius": {
-          "tl": 9,
-          "tr": 9,
-          "br": 9,
-          "bl": 9,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 9,
-          "tr": 9,
-          "br": 9,
-          "bl": 9,
-          "linked": true
-         },
-         "cta2_text": "",
-         "cta2_url": "",
-         "cta2_bg": "transparent",
-         "cta2_color": "#ffffff",
-         "cta2_border": "transparent",
-         "cta2_size": 14,
-         "cta2_radius": {
-          "tl": 9,
-          "tr": 9,
-          "br": 9,
-          "bl": 9,
-          "linked": true
-         },
-         "cta2_radius_hover": {
-          "tl": 9,
-          "tr": 9,
-          "br": 9,
-          "bl": 9,
-          "linked": true
-         },
+         "headline": "Scales to zero,",
+         "accent": "and to millions",
+         "accent_color": "#5aa9ff",
+         "accent_italic": false,
+         "headline_tail": "",
+         "uppercase": false,
+         "headline_color": "#ffffff",
+         "headline_weight": "700",
+         "headline_size": "44",
+         "lead": "Nimbus spins capacity up the instant traffic arrives and back to nothing when it leaves. You pay for requests served, never for idle machines.",
+         "lead_color": "#6b7a96",
+         "signature": "",
          "stats": [
           {
-           "label": "No min instances, no warm-up tax",
-           "value": "✓",
-           "value_color": "#46d18a"
+           "number": "✓",
+           "label": "No min instances, no warm-up tax"
           },
           {
-           "label": "Per-region autoscaling in milliseconds",
-           "value": "✓",
-           "value_color": "#46d18a"
+           "number": "✓",
+           "label": "Per-region autoscaling in milliseconds"
           },
           {
-           "label": "Hard spend caps you actually control",
-           "value": "✓",
-           "value_color": "#46d18a"
+           "number": "✓",
+           "label": "Hard spend caps you actually control"
           }
          ],
-         "showcase_enabled": true,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#111a30"
+         "stat_number_color": "#46d18a",
+         "stat_label_color": "#aebbd0",
+         "cta_text": "How autoscaling works →",
+         "cta_url": "#platform",
+         "cta_style": "outline",
+         "cta_color": "#ffffff",
+         "cta2_text": "",
+         "cta2_url": "",
+         "cta2_style": "outline",
+         "media_image": "",
+         "media_bg": {
+          "type": "none"
          },
-         "showcase_padding": 0,
-         "showcase_radius": {
-          "tl": 14,
-          "tr": 14,
-          "br": 14,
-          "bl": 14,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 14,
-          "tr": 14,
-          "br": 14,
-          "bl": 14,
-          "linked": true
-         },
-         "showcase_badge_text": "nimbus scale --live",
-         "showcase_badge_dot": "#46d18a",
-         "showcase_badge_bg": "#16223c",
-         "showcase_badge_color": "#aebbd0",
-         "showcase_items": [
-          {
-           "number": "# live · eu-central",
-           "text": "",
-           "italic": false,
-           "text_color": "#6b7a96",
-           "bg": {
-            "type": "solid",
-            "color": "#111a30"
-           }
-          },
-          {
-           "number": "req/s   12,408  ▲",
-           "text": "",
-           "italic": false,
-           "text_color": "#ffffff",
-           "bg": {
-            "type": "solid",
-            "color": "#111a30"
-           }
-          },
-          {
-           "number": "isolates 86 (auto)",
-           "text": "",
-           "italic": false,
-           "text_color": "#aebbd0",
-           "bg": {
-            "type": "solid",
-            "color": "#111a30"
-           }
-          },
-          {
-           "number": "p99   41ms",
-           "text": "",
-           "italic": false,
-           "text_color": "#5aa9ff",
-           "bg": {
-            "type": "solid",
-            "color": "#111a30"
-           }
-          },
-          {
-           "number": "errors 0.00%",
-           "text": "",
-           "italic": false,
-           "text_color": "#46d18a",
-           "bg": {
-            "type": "solid",
-            "color": "#111a30"
-           }
-          },
-          {
-           "number": "cost/hr $0.84",
-           "text": "",
-           "italic": false,
-           "text_color": "#f0b95a",
-           "bg": {
-            "type": "solid",
-            "color": "#111a30"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "NIMBUS SCALE",
-         "showcase_caption_right": "LIVE",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1fr 1fr",
-         "gap": 54,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_label": "nimbus scale --live · req/s 12,408 · isolates 86 · p99 41ms · cost/hr $0.84",
+         "media_light": false,
+         "media_aspect": "4/4.4",
+         "media_radius": 14,
+         "media_radius_top": 0,
+         "media_blob": false,
+         "badge_number": "",
+         "badge_label": "",
+         "media_position": "right",
+         "flush": false,
+         "content_bg": ""
         },
         "style": {},
         "advanced": {},
@@ -1265,16 +1014,22 @@
         "id": "nb-testimonial-51",
         "type": "testimonial",
         "settings": {
-         "quote": "\"We moved our whole API to Nimbus over a weekend. Latency dropped by half in Asia and the idle bill just vanished.\"",
+         "quote": "“We moved our whole API to Nimbus over a weekend. Latency dropped by half in Asia and <em>the idle bill just vanished.</em>”",
          "author_name": "Wei Chen",
          "author_role": "Platform Lead, Tideline",
          "rating": "0",
-         "layout": "single",
+         "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#ffffff",
          "border_radius": "0",
-         "avatar": ""
+         "avatar": "",
+         "quote_accent_color": "#5aa9ff",
+         "quote_font": "heading",
+         "quote_uppercase": false,
+         "author_uppercase": false,
+         "author_color": "#6b7a96",
+         "quote_size": 0
         },
         "style": {},
         "advanced": {},
@@ -1400,7 +1155,7 @@
          "cta_text": "Deploy free",
          "cta_url": "#pricing",
          "cta2_text": "See live status",
-         "cta2_url": "#status",
+         "cta2_url": "/status",
          "cta2_bg": "rgba(255,255,255,.05)",
          "cta2_color": "#ffffff",
          "cta2_border": "rgba(255,255,255,.16)",

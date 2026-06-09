@@ -32,7 +32,7 @@ const defaults = {
   name_font_family: 'heading', name_color: '#f6e9ec', name_size: 22,
   sub_color: '#9c7e8c', sub_size: 12, sub_uppercase: true,
   row_padding_y: 20, hover_indent: 20, hover_bg: '#4d2f40', line_color: 'rgba(246,233,236,.13)',
-  peek: true, mono_font_family: '',
+  peek: true, peek_width: 170, peek_ratio: '4/5', mono_font_family: '',
 };
 
 const HEADING = "var(--olo-font-family-heading, 'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";

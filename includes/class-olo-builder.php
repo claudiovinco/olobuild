@@ -3006,6 +3006,8 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-masthead-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-matchfixtures-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-showcasegrid-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-productgrid-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-announcementbar-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-introsplit-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-mediacta-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-imagehero-tile.php';
@@ -3233,6 +3235,8 @@ class Olo_Builder {
         $manager->register_tile( new Olo_Masthead_Tile() );
         $manager->register_tile( new Olo_MatchFixtures_Tile() );
         $manager->register_tile( new Olo_ShowcaseGrid_Tile() );
+        $manager->register_tile( new Olo_ProductGrid_Tile() );
+        $manager->register_tile( new Olo_AnnouncementBar_Tile() );
         $manager->register_tile( new Olo_IntroSplit_Tile() );
         $manager->register_tile( new Olo_MediaCTA_Tile() );
         $manager->register_tile( new Olo_ImageHero_Tile() );

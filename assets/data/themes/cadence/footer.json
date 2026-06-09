@@ -1,1 +1,91 @@
-[{"id":"ca-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#101218"}},"advanced":{},"children":[{"id":"ca-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"ca-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"ca-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Big Shoulders Display\", sans-serif;font-size:20px;color:#ffffff;font-weight:800;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#ff6b54;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Cadence</div><p style=\"font-size:14px;color:#6f7785;max-width:260px\">1:1 personal training & online coaching that fits your life and gets results.</p>","text_color":"#aab1be","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"ca-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"ca-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Figtree\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Train</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#6f7785\"><li>Programmes</li><li>Results</li><li>How it works</li><li>Pricing</li></ul>","text_color":"#aab1be","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"ca-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"ca-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Figtree\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Coach</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#6f7785\"><li>About Theo</li><li>The studio</li><li>Blog</li></ul>","text_color":"#aab1be","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"ca-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"ca-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Figtree\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Get in touch</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#6f7785\"><li>The Forge Gym, Unit 4</li><li>train@cadence.coach</li><li>@cadence.coach</li></ul>","text_color":"#aab1be","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"ca-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"ca-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"ca-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid rgba(255,255,255,.09);padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#6f7785\"><span>© 2026 Cadence — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#aab1be","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "ca-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
+  "style": { "bg": { "type": "solid", "color": "#101218" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ca-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ca-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ca-fbrand", "type": "headline", "settings": { "heading": "Cadence", "tag": "div", "alignment": "left", "heading_font_size": "22", "heading_uppercase": true, "heading_color": "#ffffff", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ca-fbtext", "type": "text-block", "settings": { "content": "<p>1:1 personal training & online coaching that fits your life and gets results.</p>", "text_color": "#6f7785", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "ca-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ca-fh1", "type": "headline", "settings": { "heading": "Train", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ca-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#6f7785", "link_hover_color": "#ff6b54", "items": [ { "title": "Programmes", "content": "#programmes", "tag": "" }, { "title": "Results", "content": "#results", "tag": "" }, { "title": "How it works", "content": "#process", "tag": "" }, { "title": "Pricing", "content": "#pricing", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "ca-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ca-fh2", "type": "headline", "settings": { "heading": "Coach", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ca-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#6f7785", "link_hover_color": "#ff6b54", "items": [ { "title": "About Theo", "content": "#", "tag": "" }, { "title": "The studio", "content": "#", "tag": "" }, { "title": "Blog", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "ca-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ca-fh3", "type": "headline", "settings": { "heading": "Get in touch", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ca-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#6f7785", "link_hover_color": "#ff6b54", "items": [ { "title": "The Forge Gym, Unit 4", "content": "#", "tag": "" }, { "title": "train@cadence.coach", "content": "mailto:train@cadence.coach", "tag": "" }, { "title": "@cadence.coach", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ca-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "ca-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "ca-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.09)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "ca-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "ca-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "ca-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Cadence — an OLOtheme demo.</p>", "text_color": "#6f7785", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "ca-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "ca-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#6f7785", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

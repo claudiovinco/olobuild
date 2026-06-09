@@ -1,1 +1,66 @@
-[{"id":"ca-hse","type":"section","settings":{"style":"default","width":"expand","padding":"none"},"style":{"bg":{"type":"solid","color":"#1a1a22"}},"advanced":{},"children":[{"id":"ca-hro","type":"row","settings":{"layout":"100","gap":0,"vertical_align":"center"},"style":{},"advanced":{},"children":[{"id":"ca-hco","type":"column","settings":{"width":"1-1","width_medium":"1-1"},"style":{},"advanced":{},"children":[{"id":"ca-hmm","type":"megamenu","settings":{"menu_id":"auto","layout":"horizontal","alignment":"right","font_size":"14","font_weight":"600","text_color":"#6c6c7c","sticky":true,"sticky_bg":"rgba(26,26,34,.86)","sticky_shadow":true,"social_icons":false,"search_icon":false,"logo_image":"","logo_width":"140","logo_position":"left","logo_link":"/","logo_sticky":"","mobile_logo":"","mobile_logo_height":"30","mobile_bar_logo":true,"logo_text":"Carrello","logo_dot":true},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "ca-hse",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "none" } },
+  "advanced": {},
+  "children": [
+   { "id": "ca-hro", "type": "row", "settings": { "layout": "100", "gap": 0, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
+    { "id": "ca-hco", "type": "column", "settings": { "width": "1-1", "width_medium": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ca-hmm", "type": "megamenu", "settings": {
+        "menu_id": "auto",
+        "layout": "horizontal",
+        "alignment": "left",
+        "font_size": "14",
+        "font_weight": "600",
+        "text_color": "#6c6c7c",
+        "link_hover_color": "#ffffff",
+        "sticky": true,
+        "sticky_bg": "rgba(26,26,34,.86)",
+        "sticky_shadow": false,
+        "nav_bg": "rgba(26,26,34,.86)",
+        "bar_width": "classic",
+        "header_mode": "classic",
+        "social_icons": false,
+        "search_icon": false,
+        "logo_image": "",
+        "logo_width": "140",
+        "logo_position": "left",
+        "logo_link": "/",
+        "logo_sticky": "",
+        "mobile_logo": "",
+        "mobile_logo_height": "30",
+        "mobile_bar_logo": true,
+        "logo_text": "Carrello",
+        "logo_text_size": "21",
+        "logo_text_color": "#ffffff",
+        "logo_dot": true,
+        "button_mode": "none",
+        "btn_bg": "#ff5a5f",
+        "btn_color": "#ffffff",
+        "btn_radius": { "tl": 10, "tr": 10, "br": 10, "bl": 10 },
+        "btn_hover_bg": "#ec474c",
+        "extra_link_1_label": "Cart · 3",
+        "extra_link_1_url": "#",
+        "extra_link_2_label": "Open a shop",
+        "extra_link_2_url": "#vendors",
+        "extra_link_2_button": true,
+        "extra_links_right": true,
+        "mobile_style": "fullscreen",
+        "mobile_link_font": "heading",
+        "mobile_bg": "#101015",
+        "mobile_text_color": "#ffffff",
+        "mobile_accent_color": "#ff5a5f",
+        "mobile_heading_color": "#6c6c7c",
+        "mobile_link_size": 34,
+        "mobile_numbers": true,
+        "mobile_footer_text": "Thousands of shops · one cart",
+        "mobile_footer_cta_text": "Open a shop",
+        "mobile_footer_cta_url": "#vendors"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

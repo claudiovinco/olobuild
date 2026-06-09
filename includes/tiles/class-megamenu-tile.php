@@ -122,6 +122,12 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         'mob_toggle_size'    => '20',
         'mob_toggle_color'   => '',
         'mobile_font_size'   => '17',
+        'mobile_link_font'   => 'inherit',
+        'mobile_link_size'   => 0,
+        'mobile_numbers'     => false,
+        'mobile_footer_text' => '',
+        'mobile_footer_cta_text' => '',
+        'mobile_footer_cta_url'  => '',
         'mobile_item_padding'=> [ 'top' => 16, 'right' => 16, 'bottom' => 16, 'left' => 16 ],
         'mobile_logo'        => '',
         'mobile_logo_height' => '36',
@@ -141,6 +147,9 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         'extra_link_2_blank' => false,
         'extra_link_3_blank' => false,
         'extra_link_4_blank' => false,
+        'extra_link_1_button' => false,
+        'extra_link_2_button' => false,
+        'extra_links_right'  => false,
         // Social Icons
         // Predefiniti '#' SOLO sui principali (FB/IG/X/LinkedIn) come punto di partenza;
         // gli altri vuoti (nessuna icona finché non si inserisce l'URL).
@@ -385,6 +394,14 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         // Offcanvas extras
         $mob_slide_dir   = $s['mobile_slide_direction'] ?? 'left';
         $oc_fullscreen   = ! empty( $s['offcanvas_fullscreen'] );
+        // Fullscreen menu: tipografia link + numeri + footer (pixel-perfect overlay temi)
+        $mob_link_font   = $s['mobile_link_font'] ?? 'inherit';
+        $mob_link_fam    = ( $mob_link_font === 'heading' ) ? 'var(--olo-font-family-heading, Georgia, serif)' : ( ( $mob_link_font === 'body' ) ? 'var(--olo-font-family, -apple-system, sans-serif)' : '' );
+        $mob_link_size   = intval( $s['mobile_link_size'] ?? 0 );
+        $mob_numbers     = ! empty( $s['mobile_numbers'] );
+        $mob_foot_text   = trim( (string) ( $s['mobile_footer_text'] ?? '' ) );
+        $mob_foot_cta    = trim( (string) ( $s['mobile_footer_cta_text'] ?? '' ) );
+        $mob_foot_url    = trim( (string) ( $s['mobile_footer_cta_url'] ?? '' ) );
 
         // Social
         $soc_size    = intval( $s['social_size'] ?? 20 );
@@ -462,6 +479,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
             <?php elseif ( $s['layout'] === 'right' ) : ?>justify-content: flex-end;
             <?php endif; ?>
         }
+        .<?php echo $uid; ?> .olo-mm-nav.olo-mm-nav-utils { flex: 0 0 auto; }
         .<?php echo $uid; ?> .olo-mm-nav > li,
         .<?php echo $uid; ?> .olo-mm-nav-left > li,
         .<?php echo $uid; ?> .olo-mm-nav-right > li {
@@ -1510,15 +1528,30 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
             width: 20px; height: 20px; stroke: <?php echo $mob_tc; ?>; fill: none; stroke-width: 2;
         }
         .<?php echo $uid; ?> .olo-mm-fullscreen .olo-mm-fs-nav {
-            list-style: none; margin: 0; padding: 0 24px;
+            list-style: none; margin: 0; padding: 0 24px; counter-reset: olommfs;
         }
         .<?php echo $uid; ?> .olo-mm-fs-nav > li > a,
         .<?php echo $uid; ?> .olo-mm-fs-nav > li > .olo-mm-dp-item > a {
             display: block; padding: 14px 0;
             color: <?php echo $mob_tc; ?>; text-decoration: none;
-            font-size: 22px; font-weight: 600;
+            font-size: <?php echo $mob_link_size > 0 ? $mob_link_size : 22; ?>px;
+            <?php if ( $mob_link_fam !== '' ) : ?>font-family: <?php echo $mob_link_fam; ?>; font-weight: 400; letter-spacing: .02em;<?php else : ?>font-weight: 600;<?php endif; ?>
             border-bottom: 1px solid rgba(255,255,255,.1);
         }
+        .<?php echo $uid; ?> .olo-mm-numbered .olo-mm-fs-nav > li { counter-increment: olommfs; }
+        .<?php echo $uid; ?> .olo-mm-numbered .olo-mm-fs-nav > li > a::before,
+        .<?php echo $uid; ?> .olo-mm-numbered .olo-mm-fs-nav > li > .olo-mm-dp-item > a::before {
+            content: counter(olommfs, decimal-leading-zero);
+            color: <?php echo $mob_acc; ?>; font-family: var(--olo-font-family, sans-serif);
+            font-size: 12px; font-weight: 600; letter-spacing: .1em; margin-right: 16px; vertical-align: middle;
+        }
+        .<?php echo $uid; ?> .olo-mm-fs-foot {
+            margin-top: auto; padding: 24px; border-top: 1px solid rgba(255,255,255,.1);
+            display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+        }
+        .<?php echo $uid; ?> .olo-mm-fs-foot span { color: <?php echo $mob_hc; ?>; font-size: 12px; letter-spacing: .04em; }
+        .<?php echo $uid; ?> .olo-mm-fs-foot a { color: <?php echo $mob_acc; ?>; font-weight: 600; font-size: 13px; text-decoration: none; }
+        .<?php echo $uid; ?>.olo-mm-mob-active .olo-mm-fullscreen { display: flex !important; flex-direction: column; }
         .<?php echo $uid; ?> .olo-mm-fullscreen .olo-mm-dp-chevron { color: rgba(255,255,255,.5); }
         .<?php echo $uid; ?> .olo-mm-fullscreen .olo-mm-dp-sub {
             background: rgba(255,255,255,.05);
@@ -1971,8 +2004,11 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
             if ( $label === '' || $url === '' ) continue;
             $blank = ! empty( $s["extra_link_{$i}_blank"] );
             $tgt   = $blank ? ' target="_blank" rel="noopener noreferrer"' : '';
+            $is_btn = ! empty( $s["extra_link_{$i}_button"] );
             if ( $context === 'mobile' ) : ?>
-                <li><a href="<?php echo esc_url( $url ); ?>"<?php echo $tgt; ?>><?php echo esc_html( $label ); ?></a></li>
+                <li><a href="<?php echo esc_url( $url ); ?>"<?php echo $is_btn ? ' class="olo-mm-btn olo-mm-mob-btn"' : ''; ?><?php echo $tgt; ?>><?php echo esc_html( $label ); ?></a></li>
+            <?php elseif ( $is_btn ) : ?>
+                <li role="none"><a class="olo-mm-btn" href="<?php echo esc_url( $url ); ?>"<?php echo $tgt; ?>><?php echo esc_html( $label ); ?></a></li>
             <?php else : ?>
                 <li role="none"><a href="<?php echo esc_url( $url ); ?>" data-text="<?php echo esc_attr( $label ); ?>"<?php echo $tgt; ?>><?php echo esc_html( $label ); ?></a></li>
             <?php endif;
@@ -2283,8 +2319,11 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                             <?php endif; ?>
                         </li>
                     <?php endforeach; ?>
-                    <?php $this->render_extra_links( $s ); ?>
+                    <?php if ( empty( $s['extra_links_right'] ) ) { $this->render_extra_links( $s ); } ?>
                 </ul>
+                <?php if ( ! empty( $s['extra_links_right'] ) ) : ?>
+                <ul class="olo-mm-nav olo-mm-nav-utils" role="menubar"><?php $this->render_extra_links( $s ); ?></ul>
+                <?php endif; ?>
 
                 <?php // Desktop search icon — search_style: expand (inline) | overlay | command ?>
                 <?php if ( $search_icon ) :
@@ -2392,7 +2431,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
             <?php // Dropdown panel (alternative to offcanvas) ?>
             <?php $mob_style_val = $s['mobile_style'] ?? 'offcanvas'; ?>
             <?php if ( $mob_style_val === 'dropdown' || $mob_style_val === 'fullscreen' ) : ?>
-            <div class="olo-mm-<?php echo $mob_style_val === 'fullscreen' ? 'fullscreen' : 'dropdown-panel'; ?>">
+            <div class="olo-mm-<?php echo $mob_style_val === 'fullscreen' ? 'fullscreen' : 'dropdown-panel'; ?><?php echo ( $mob_style_val === 'fullscreen' && $mob_numbers ) ? ' olo-mm-numbered' : ''; ?>">
                 <?php if ( $mob_style_val === 'fullscreen' ) : ?>
                 <div class="olo-mm-fs-header">
                     <?php if ( $logo_img ) : ?>
@@ -2478,6 +2517,12 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                     </ul>
                     <?php $this->render_social_icons( $s, 'footer' ); ?>
                 </nav>
+                <?php if ( $mob_style_val === 'fullscreen' && ( $mob_foot_text !== '' || $mob_foot_cta !== '' ) ) : ?>
+                <div class="olo-mm-fs-foot">
+                    <?php if ( $mob_foot_text !== '' ) : ?><span><?php echo esc_html( $mob_foot_text ); ?></span><?php endif; ?>
+                    <?php if ( $mob_foot_cta !== '' ) : ?><a href="<?php echo esc_url( $mob_foot_url ?: '#' ); ?>"><?php echo esc_html( $mob_foot_cta ); ?> &rarr;</a><?php endif; ?>
+                </div>
+                <?php endif; ?>
             </div>
             <?php endif; ?>
 

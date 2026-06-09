@@ -1,0 +1,358 @@
+[
+ {
+  "id": "fcs-se-1",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large",
+   "padding_bottom": 0
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#232a1c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fcs-ro-1",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fcs-co-1",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fcs-pagehead",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "56 products · all guaranteed for life",
+         "eyebrow_color": "#c2ab63",
+         "eyebrow_dot_color": "#c2ab63",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "The ",
+           "color": "#eef0e3",
+           "italic": false
+          },
+          {
+           "text": "kit",
+           "color": "#c2ab63",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 96,
+         "headline_font_weight": "600",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Everything we make, in one place. Over-built and field-tested — filter by what you're heading out to do.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#79806a",
+         "tagline_text_size": 17,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fcs-se-2",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#232a1c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fcs-ro-2",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fcs-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fcs-productgrid",
+        "type": "productgrid",
+        "settings": {
+         "columns": 4,
+         "gap": 18,
+         "media_aspect": "4/3",
+         "media_bg": "#384430",
+         "stripe_dark": false,
+         "hover_zoom": true,
+         "card_bg": "#2e3826",
+         "card_border": "rgba(238,240,227,.12)",
+         "card_radius": 10,
+         "card_padding": 18,
+         "tag_bg": "#161b11",
+         "tag_color": "#c2ab63",
+         "quick_add_show": false,
+         "category_color": "#79806a",
+         "title_font": "heading",
+         "title_size": 22,
+         "title_color": "#eef0e3",
+         "notes_color": "#79806a",
+         "notes_mono": false,
+         "price_color": "#eef0e3",
+         "add_button": true,
+         "add_label": "Add",
+         "add_bg": "#eef0e3",
+         "add_color": "#161b11",
+         "show_filters": true,
+         "filter_all_label": "All",
+         "filter_list": "Packs, Shells, Footwear, Tools",
+         "filter_text_color": "#aab09a",
+         "filter_border_color": "rgba(238,240,227,.12)",
+         "filter_active_bg": "#c2ab63",
+         "filter_active_color": "#161b11",
+         "footer_text": "",
+         "footer_url": "#",
+         "items": [
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "40L pack",
+           "tag": "New",
+           "category": "Packs",
+           "title": "Ridgeline 40L",
+           "notes": "",
+           "roast": 0,
+           "price": "€180",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Packs"
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "daypack",
+           "tag": "",
+           "category": "Packs",
+           "title": "Scout 22L",
+           "notes": "",
+           "roast": 0,
+           "price": "€120",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Packs"
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "hardshell",
+           "tag": "",
+           "category": "Shells",
+           "title": "Storm Shell",
+           "notes": "",
+           "roast": 0,
+           "price": "€240",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Shells"
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "windbreaker",
+           "tag": "",
+           "category": "Shells",
+           "title": "Gust Anorak",
+           "notes": "",
+           "roast": 0,
+           "price": "€160",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Shells"
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "boots",
+           "tag": "Restocked",
+           "category": "Footwear",
+           "title": "Scout Boot",
+           "notes": "",
+           "roast": 0,
+           "price": "€195",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Footwear"
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "trail shoe",
+           "tag": "",
+           "category": "Footwear",
+           "title": "Fell Runner",
+           "notes": "",
+           "roast": 0,
+           "price": "€140",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Footwear"
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "flask",
+           "tag": "",
+           "category": "Tools",
+           "title": "Trail Flask",
+           "notes": "",
+           "roast": 0,
+           "price": "€38",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Tools"
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "multi-tool",
+           "tag": "",
+           "category": "Tools",
+           "title": "Field Tool",
+           "notes": "",
+           "roast": 0,
+           "price": "€52",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Tools"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fcs-se-3",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large",
+   "padding_top": 0
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#232a1c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fcs-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fcs-co-3",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fcs-cta",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Broke it? We'll ",
+         "headline_accent": "fix it",
+         "headline_accent_italic": true,
+         "subtitle": "Every Field & Co product is repaired free for life. Send it in, we'll send it back ready for the next trip.",
+         "cta_text": "Start a repair",
+         "cta_url": "#",
+         "bg": {
+          "type": "solid",
+          "color": "#283020"
+         },
+         "text_color": "#eef0e3",
+         "accent_color": "#c2ab63",
+         "subtitle_color": "#aab09a",
+         "cta_bg": "#c2ab63",
+         "cta_color": "#161b11",
+         "cta_radius": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "cta_size": 14,
+         "headline_font_family": "serif",
+         "headline_size": 64,
+         "headline_weight": "600",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

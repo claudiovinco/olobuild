@@ -1,0 +1,346 @@
+[
+ {
+  "id": "hcm-se-ph",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_bottom": 0 },
+  "style": { "bg": { "type": "solid", "color": "#f6ecd6" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "hcm-ro-ph",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hcm-co-ph",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hcm-pagehead",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "What we bake",
+         "eyebrow_color": "#c8870f",
+         "eyebrow_dot_color": "#c8870f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "The ", "color": "#3a2a12", "italic": false },
+          { "text": "bakes", "color": "#c8870f", "italic": true }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 76,
+         "headline_line_height": 1.08,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Baked in small batches from 5am. Quantities are limited and they go fast — pre-order if it's a must-have.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#9c8253",
+         "tagline_text_size": 17,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "hcm-se-loaves",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f6ecd6" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "hcm-ro-lh",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hcm-co-lh",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hcm-loaves-head",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Bread",
+         "eyebrow_color": "#c8870f",
+         "eyebrow_dot_color": "#c8870f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "The ", "color": "#3a2a12", "italic": false },
+          { "text": "loaves", "color": "#c8870f", "italic": true }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_line_height": 1.08,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "layout": "stack",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "hcm-ro-lg",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hcm-co-lg",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hcm-loaves-grid",
+        "type": "productgrid",
+        "settings": {
+         "columns": 4,
+         "gap": 20,
+         "media_aspect": "1/1",
+         "media_bg": "#efe1c4",
+         "stripe_dark": false,
+         "hover_zoom": true,
+         "card_bg": "#fbf5e7",
+         "card_border": "#e0cfa6",
+         "card_radius": 18,
+         "card_padding": 18,
+         "quick_add_show": false,
+         "category_color": "#9a6a2f",
+         "title_font": "heading",
+         "title_size": 21,
+         "title_color": "#3a2a12",
+         "notes_color": "#9c8253",
+         "notes_mono": false,
+         "price_color": "#c8870f",
+         "add_button": true,
+         "add_label": "Add",
+         "add_bg": "transparent",
+         "add_color": "#3a2a12",
+         "show_filters": false,
+         "footer_text": "",
+         "footer_url": "#",
+         "items": [
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "sourdough", "tag": "", "category": "Daily", "title": "Country Sourdough", "notes": "48-hour ferment.", "roast": 0, "price": "€6", "link": "#", "quick_add": "", "filter_tags": "" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "rye", "tag": "", "category": "Daily", "title": "Dark Rye", "notes": "Caraway & molasses.", "roast": 0, "price": "€6.5", "link": "#", "quick_add": "", "filter_tags": "" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "focaccia", "tag": "", "category": "Daily", "title": "Rosemary Focaccia", "notes": "Olive oil & salt.", "roast": 0, "price": "€5", "link": "#", "quick_add": "", "filter_tags": "" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "baguette", "tag": "", "category": "Weekends", "title": "Baguette", "notes": "Crisp, airy crumb.", "roast": 0, "price": "€3", "link": "#", "quick_add": "", "filter_tags": "" }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "hcm-se-pastries",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#fbf5e7" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "hcm-ro-ph2",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hcm-co-ph2",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hcm-pastries-head",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Viennoiserie & sweet",
+         "eyebrow_color": "#c8870f",
+         "eyebrow_dot_color": "#c8870f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "The ", "color": "#3a2a12", "italic": false },
+          { "text": "pastries", "color": "#c8870f", "italic": true }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_line_height": 1.08,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "layout": "stack",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "hcm-ro-pg",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hcm-co-pg",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hcm-pastries-grid",
+        "type": "productgrid",
+        "settings": {
+         "columns": 4,
+         "gap": 20,
+         "media_aspect": "1/1",
+         "media_bg": "#efe1c4",
+         "stripe_dark": false,
+         "hover_zoom": true,
+         "card_bg": "#fbf5e7",
+         "card_border": "#e0cfa6",
+         "card_radius": 18,
+         "card_padding": 18,
+         "quick_add_show": false,
+         "category_color": "#9a6a2f",
+         "title_font": "heading",
+         "title_size": 21,
+         "title_color": "#3a2a12",
+         "notes_color": "#9c8253",
+         "notes_mono": false,
+         "price_color": "#c8870f",
+         "add_button": true,
+         "add_label": "Add",
+         "add_bg": "transparent",
+         "add_color": "#3a2a12",
+         "show_filters": false,
+         "footer_text": "",
+         "footer_url": "#",
+         "items": [
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "croissant", "tag": "", "category": "Daily", "title": "Butter Croissant", "notes": "27 layers.", "roast": 0, "price": "€3.5", "link": "#", "quick_add": "", "filter_tags": "" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "pain au chocolat", "tag": "", "category": "Daily", "title": "Pain au Chocolat", "notes": "Two batons, dark chocolate.", "roast": 0, "price": "€4", "link": "#", "quick_add": "", "filter_tags": "" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "cardamom bun", "tag": "", "category": "Daily", "title": "Cardamom Bun", "notes": "Sticky & fragrant.", "roast": 0, "price": "€4", "link": "#", "quick_add": "", "filter_tags": "" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "cake slice", "tag": "", "category": "Sat", "title": "Seasonal Cake", "notes": "Ask what's on today.", "roast": 0, "price": "€5", "link": "#", "quick_add": "", "filter_tags": "" }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "hcm-se-cta",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#3a2a12" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "hcm-ro-cta",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hcm-co-cta",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hcm-cta",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Need a ",
+         "headline_accent": "whole cake?",
+         "headline_accent_italic": true,
+         "subtitle": "We make celebration cakes to order with 48 hours' notice — tell us the occasion.",
+         "cta_text": "Order a cake",
+         "cta_url": "#",
+         "cta2_text": "",
+         "cta2_url": "",
+         "bg": { "type": "solid", "color": "#3a2a12" },
+         "text_color": "#f6ecd6",
+         "accent_color": "#e09a18",
+         "subtitle_color": "#e3d3ad",
+         "cta_bg": "#e09a18",
+         "cta_color": "#ffffff",
+         "cta_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999, "linked": true },
+         "cta_size": 15,
+         "headline_font_family": "serif",
+         "headline_size": 60,
+         "headline_weight": "400",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0, "linked": true },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

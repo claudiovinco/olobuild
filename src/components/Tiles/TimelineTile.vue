@@ -75,6 +75,17 @@
     </div>
 
     <!-- ═══ NAVIGATORE ═══ -->
+    <!-- ═══ SCHEDULE / RUN-OF-SHOW (orario a sx · filo · nodo) ═══ -->
+    <div v-else-if="layout === 'schedule'" class="olo-tl-sched">
+      <div v-for="(item, i) in items" :key="i" class="olo-tl-slot">
+        <div class="olo-tl-slot__t">{{ item.date }}</div>
+        <div class="olo-tl-slot__c">
+          <h3 v-if="item.title">{{ item.title }}</h3>
+          <p v-if="item.description">{{ item.description }}</p>
+        </div>
+      </div>
+    </div>
+
     <div v-else class="navd">
       <div class="nv-nav">
         <button type="button" class="nv-arrow nv-prev" :disabled="nvIdx === 0" @click="nvGo(nvIdx - 1)" :aria-label="t('Precedente')">
@@ -181,7 +192,7 @@ const items = computed(() => {
   }));
 });
 
-const layout = computed(() => ['alt', 'one', 'horizontal', 'navigator'].includes(s.value.tl_layout) ? s.value.tl_layout : 'alt');
+const layout = computed(() => ['alt', 'one', 'schedule', 'horizontal', 'navigator'].includes(s.value.tl_layout) ? s.value.tl_layout : 'alt');
 const theme = computed(() => ['paper', 'night', 'neon', 'blue'].includes(s.value.tl_theme) ? s.value.tl_theme : 'paper');
 const mono = computed(() => s.value.tl_color === 'mono');
 const isScroll = computed(() => s.value.tl_line !== 'solid');

@@ -1,1 +1,91 @@
-[{"id":"ci-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#141a2e"}},"advanced":{},"children":[{"id":"ci-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"ci-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"ci-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Space Grotesk\", -apple-system, sans-serif;font-size:20px;color:#ffffff;font-weight:600;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#6c8cff;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Circuit</div><p style=\"font-size:14px;color:#8a90a8;max-width:260px\">The workflow platform for teams that ship. Connect, automate, measure.</p>","text_color":"#c9cde0","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"ci-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"ci-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Product</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8a90a8\"><li>Features</li><li>Integrations</li><li>Pricing</li><li>Changelog</li></ul>","text_color":"#c9cde0","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"ci-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"ci-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Developers</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8a90a8\"><li>Docs</li><li>API</li><li>CLI</li><li>Status</li></ul>","text_color":"#c9cde0","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"ci-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"ci-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Company</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8a90a8\"><li>About</li><li>Careers</li><li>Blog</li><li>Contact</li></ul>","text_color":"#c9cde0","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"ci-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"ci-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"ci-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid rgba(255,255,255,.09);padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#8a90a8\"><span>© 2026 Circuit — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#c9cde0","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "ci-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 32 },
+  "style": { "bg": { "type": "solid", "color": "#0b0d18" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ci-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ci-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ci-fbrand", "type": "headline", "settings": { "heading": "Circuit", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "19", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ci-fbtext", "type": "text-block", "settings": { "content": "<p>The workflow platform for teams that ship. Connect, automate, measure.</p>", "text_color": "#8a90a8", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "ci-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ci-fh1", "type": "headline", "settings": { "heading": "Product", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "12", "heading_uppercase": true, "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ci-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#8a90a8", "link_hover_color": "#ffffff", "items": [ { "title": "Features", "content": "#features", "tag": "" }, { "title": "Integrations", "content": "#integrations", "tag": "" }, { "title": "Pricing", "content": "#pricing", "tag": "" }, { "title": "Changelog", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "ci-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ci-fh2", "type": "headline", "settings": { "heading": "Developers", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "12", "heading_uppercase": true, "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ci-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#8a90a8", "link_hover_color": "#ffffff", "items": [ { "title": "Docs", "content": "#", "tag": "" }, { "title": "API", "content": "#", "tag": "" }, { "title": "CLI", "content": "#", "tag": "" }, { "title": "Status", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "ci-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ci-fh3", "type": "headline", "settings": { "heading": "Company", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "12", "heading_uppercase": true, "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ci-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#8a90a8", "link_hover_color": "#ffffff", "items": [ { "title": "About", "content": "#", "tag": "" }, { "title": "Careers", "content": "#", "tag": "" }, { "title": "Blog", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ci-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "ci-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "ci-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.09)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "ci-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "ci-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "ci-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Circuit — an OLOtheme demo.</p>", "text_color": "#8a90a8", "font_size": "13", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "ci-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "ci-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#8a90a8", "font_size": "13", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

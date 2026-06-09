@@ -233,85 +233,41 @@
    {
     "id": "ca-ro-14",
     "type": "row",
-    "settings": {},
-    "style": {},
+    "settings": { "layout": "66-33", "gap": 24, "vertical_align": "center", "stack_mobile": true },
+    "style": {
+     "bg": {
+      "type": "gradient",
+      "gradient_from": "#ff5a5f",
+      "gradient_to": "#ff8a5f",
+      "gradient_angle": 100
+     },
+     "padding_top": 40,
+     "padding_right": 40,
+     "padding_bottom": 40,
+     "padding_left": 40,
+     "border_radius": { "tl": 16, "tr": 16, "br": 16, "bl": 16, "linked": true }
+    },
     "advanced": {},
     "children": [
      {
       "id": "ca-co-13",
       "type": "column",
       "settings": {
-       "width": "1-1"
+       "width": "2-3"
       },
       "style": {},
       "advanced": {},
       "children": [
-       {
-        "id": "ca-cta-banner-12",
-        "type": "cta-banner",
-        "settings": {
-         "eyebrow": "Maker's Week",
-         "eyebrow_color": "#ffffff",
-         "headline": "Up to 40% off,",
-         "headline_accent": "this week only",
-         "headline_accent_italic": false,
-         "subtitle": "Hand-picked deals across thousands of shops.",
-         "cta_text": "Shop deals",
-         "cta_url": "#trending",
-         "bg": {
-          "type": "gradient",
-          "gradient_from": "#ff5a5f",
-          "gradient_to": "#ff8a5f",
-          "gradient_angle": 100
-         },
-         "text_color": "#ffffff",
-         "accent_color": "#ffffff",
-         "subtitle_color": "rgba(255,255,255,.85)",
-         "cta_bg": "#101015",
-         "cta_color": "#ffffff",
-         "cta_radius": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "cta_size": 14,
-         "headline_font_family": "sans-serif",
-         "headline_size": 40,
-         "headline_weight": "800",
-         "subtitle_size": 16,
-         "layout": "split-2",
-         "vertical_align": "center",
-         "banner_radius": {
-          "tl": 16,
-          "tr": 16,
-          "br": 16,
-          "bl": 16,
-          "linked": true
-         },
-         "banner_padding": 40
-        },
-        "style": {},
-        "advanced": {},
-        "children": []
-       }
+       { "id": "ca-deal-eyebrow", "type": "headline", "settings": { "heading": "Maker's Week", "tag": "div", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_color": "rgba(255,255,255,.85)", "heading_font": "body", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ca-deal-h", "type": "headline", "settings": { "heading": "Up to 40% off, this week only", "tag": "h2", "alignment": "left", "heading_font_size": "40", "heading_uppercase": false, "heading_color": "#ffffff", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ca-deal-p", "type": "text-block", "settings": { "content": "<p>Hand-picked deals across thousands of shops.</p>", "text_color": "rgba(255,255,255,.85)", "font_size": "16", "line_height": "1.6", "text_align": "left", "max_width": "" }, "style": {}, "advanced": {}, "children": [] }
       ]
-     }
-    ]
-   },
-   {
-    "id": "ca-ro-17",
-    "type": "row",
-    "settings": {},
-    "style": {},
-    "advanced": {},
-    "children": [
+     },
      {
       "id": "ca-co-16",
       "type": "column",
       "settings": {
-       "width": "1-1"
+       "width": "1-3"
       },
       "style": {},
       "advanced": {},
@@ -347,9 +303,9 @@
          "label_font_weight": "500",
          "item_min_width": "64",
          "tile_padding": {
-          "top": 8,
+          "top": 0,
           "right": 0,
-          "bottom": 16,
+          "bottom": 0,
           "left": 0
          },
          "preset": "custom"
@@ -401,17 +357,22 @@
         "type": "finder",
         "settings": {
          "eyebrow": "Gift mode",
-         "heading": "Who are you shopping for?",
-         "intro": "Four curated edits from our independent makers — pick yours and discover pieces that mean something.",
+         "heading": "Who are you <em>shopping for?</em>",
+         "intro": "",
          "zone_accent": "#ff5a5f",
          "zone_on": "#ffffff",
          "card_bg": "#26262f",
          "card_border": "rgba(255,255,255,.09)",
+         "media_bg": "#26262f",
          "align": "center",
          "items": [
           {
            "option": "A partner",
-           "icon": "heart",
+           "icon": "",
+           "kicker": "Curated collection",
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "jewellery & ceramics flatlay",
            "title": "The Thoughtful Edit",
            "text": "Pieces made to last and to mean something — hand-thrown, hand-set, hand-finished by makers who sign their work.",
            "meta": "Jewellery · Ceramics · Leather",
@@ -420,7 +381,11 @@
           },
           {
            "option": "A close friend",
-           "icon": "gift",
+           "icon": "",
+           "kicker": "Curated collection",
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "prints & candles",
            "title": "Small Joys",
            "text": "The little luxuries that always land — a riso print, a good candle, the notebook they'll actually use. All under forty euro.",
            "meta": "Prints · Candles · Stationery",
@@ -429,7 +394,11 @@
           },
           {
            "option": "A new home",
-           "icon": "home",
+           "icon": "",
+           "kicker": "Curated collection",
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "homeware & linen textiles",
            "title": "The Housewarming",
            "text": "Everything that makes a new place feel lived-in fast — linen for the table, wool for the sofa, something warm for the kitchen.",
            "meta": "Homeware · Textiles · Kitchen",
@@ -438,7 +407,11 @@
           },
           {
            "option": "Treat yourself",
-           "icon": "star",
+           "icon": "",
+           "kicker": "Curated collection",
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "vintage & art finds",
            "title": "Just Because",
            "text": "The treat you'd never quite buy at full price — a vintage find, a small original, the self-care thing you keep almost adding to cart.",
            "meta": "Vintage · Art · Self-care",
@@ -544,144 +517,94 @@
       "advanced": {},
       "children": [
        {
-        "id": "ca-product-cards-26",
-        "type": "product-cards",
+        "id": "ca-productgrid-26",
+        "type": "productgrid",
         "settings": {
          "columns": 4,
          "gap": 16,
+         "media_aspect": "1/1",
+         "media_bg": "#26262f",
+         "stripe_dark": false,
+         "hover_zoom": true,
+         "card_bg": "#26262f",
+         "card_border": "rgba(255,255,255,.09)",
+         "card_radius": 12,
+         "card_padding": 16,
+         "tag_bg": "#ff5a5f",
+         "tag_color": "#ffffff",
+         "quick_add_show": false,
+         "category_color": "#6c6c7c",
+         "title_font": "sans",
+         "title_size": 15,
+         "title_color": "#ffffff",
+         "notes_color": "#3fd6a8",
+         "notes_mono": false,
+         "price_color": "#ffffff",
+         "add_button": true,
+         "add_label": "Add",
+         "add_bg": "#ff5a5f",
+         "add_color": "#ffffff",
+         "show_filters": false,
+         "footer_text": "",
+         "footer_url": "#",
          "items": [
           {
-           "letter": "",
-           "logo_image": "",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#2a2a35",
-            "gradient_to": "#26262f",
-            "gradient_angle": 180
-           },
-           "screenshot_label": "ceramic mug",
-           "brand_label": "Kiln Studio",
-           "brand_color": "#ff5a5f",
-           "show_badge": true,
-           "badge_text": "-25%",
-           "badge_bg": "#ff5a5f",
-           "badge_color": "#ffffff",
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "ceramic mug",
+           "tag": "-25%",
+           "category": "Kiln Studio",
            "title": "Speckled Tea Mug",
-           "title_accent": "",
-           "title_accent_italic": false,
-           "description": "★ 4.9 (212)",
-           "cta_text": "Add · €24",
-           "cta_url": "#"
+           "notes": "★ 4.9 (212)",
+           "roast": 0,
+           "price": "€24",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": ""
           },
           {
-           "letter": "",
-           "logo_image": "",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#2a2a35",
-            "gradient_to": "#26262f",
-            "gradient_angle": 180
-           },
-           "screenshot_label": "risograph print",
-           "brand_label": "Press Yan",
-           "brand_color": "#ff5a5f",
-           "show_badge": false,
-           "badge_text": "",
-           "badge_bg": "#ff5a5f",
-           "badge_color": "#ffffff",
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "risograph print",
+           "tag": "",
+           "category": "Press Yan",
            "title": "Riso Print, A2",
-           "title_accent": "",
-           "title_accent_italic": false,
-           "description": "★ 5.0 (88)",
-           "cta_text": "Add · €34",
-           "cta_url": "#"
+           "notes": "★ 5.0 (88)",
+           "roast": 0,
+           "price": "€34",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": ""
           },
           {
-           "letter": "",
-           "logo_image": "",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#2a2a35",
-            "gradient_to": "#26262f",
-            "gradient_angle": 180
-           },
-           "screenshot_label": "brass earrings",
-           "brand_label": "Mara Made",
-           "brand_color": "#ff5a5f",
-           "show_badge": true,
-           "badge_text": "-15%",
-           "badge_bg": "#ff5a5f",
-           "badge_color": "#ffffff",
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "brass earrings",
+           "tag": "-15%",
+           "category": "Mara Made",
            "title": "Brass Arc Earrings",
-           "title_accent": "",
-           "title_accent_italic": false,
-           "description": "★ 4.8 (340)",
-           "cta_text": "Add · €42",
-           "cta_url": "#"
+           "notes": "★ 4.8 (340)",
+           "roast": 0,
+           "price": "€42",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": ""
           },
           {
-           "letter": "",
-           "logo_image": "",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#2a2a35",
-            "gradient_to": "#26262f",
-            "gradient_angle": 180
-           },
-           "screenshot_label": "linen napkins",
-           "brand_label": "Flax & Co",
-           "brand_color": "#ff5a5f",
-           "show_badge": false,
-           "badge_text": "",
-           "badge_bg": "#ff5a5f",
-           "badge_color": "#ffffff",
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "linen napkins",
+           "tag": "",
+           "category": "Flax & Co",
            "title": "Linen Napkins, 4",
-           "title_accent": "",
-           "title_accent_italic": false,
-           "description": "★ 4.9 (156)",
-           "cta_text": "Add · €38",
-           "cta_url": "#"
+           "notes": "★ 4.9 (156)",
+           "roast": 0,
+           "price": "€38",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": ""
           }
-         ],
-         "card_bg": {
-          "type": "solid",
-          "color": "#26262f"
-         },
-         "card_color": "#a6a6b4",
-         "card_radius": {
-          "tl": 12,
-          "tr": 12,
-          "br": 12,
-          "bl": 12,
-          "linked": true
-         },
-         "card_radius_hover": {
-          "tl": 12,
-          "tr": 12,
-          "br": 12,
-          "bl": 12,
-          "linked": true
-         },
-         "card_shadow": "none",
-         "card_padding": 18,
-         "top_aspect_ratio": "1/1",
-         "top_padding": 16,
-         "letter_font_family": "sans-serif",
-         "letter_size": 80,
-         "letter_italic": false,
-         "letter_align": "center",
-         "logo_height": 52,
-         "show_screenshot_label": true,
-         "screenshot_label_color": "#6c6c7c",
-         "brand_size": 11,
-         "brand_letter_spacing": 0.06,
-         "title_font_family": "sans-serif",
-         "title_size": 16,
-         "title_weight": "700",
-         "description_size": 12,
-         "cta_size": 12,
-         "cta_arrow": false,
-         "card_hover_effect": "lift"
+         ]
         },
         "style": {},
         "advanced": {},
@@ -990,55 +913,61 @@
         "type": "builder",
         "settings": {
          "eyebrow": "Try the cart",
-         "heading": "Build a basket",
+         "heading": "Build a",
+         "heading_accent": "basket",
          "intro": "Tap to add a few finds from makers on Carrello — the total ticks up live, like the real thing.",
          "currency": "€",
          "cap": 0,
          "total_label": "Total",
          "count_label": "items",
-         "cta_text": "Go to cart",
+         "cta_text": "",
          "cta_url": "#",
          "zone_accent": "#ff5a5f",
          "zone_on": "#ffffff",
          "card_bg": "#26262f",
-         "card_border": "1px solid rgba(255,255,255,.09)",
+         "card_border": "rgba(255,255,255,.09)",
          "align": "left",
+         "layout": "split",
+         "heading_color": "#ffffff",
+         "tally_bg": "#ff5a5f",
+         "item_name_color": "#f0f0f4",
+         "item_price_color": "#ffffff",
          "items": [
           {
            "name": "Hand-thrown Mug",
            "price": 32,
            "note": "Clayfolk",
-           "start": false
+           "start": 0
           },
           {
            "name": "Linen Tote",
            "price": 58,
            "note": "Norra Goods",
-           "start": false
+           "start": 0
           },
           {
            "name": "Beeswax Candle",
            "price": 24,
            "note": "Hearth & Co",
-           "start": false
+           "start": 0
           },
           {
            "name": "Notebook Set",
            "price": 45,
            "note": "Paper Lab",
-           "start": false
+           "start": 0
           },
           {
            "name": "Wool Throw",
            "price": 76,
            "note": "Loom & Field",
-           "start": false
+           "start": 0
           },
           {
            "name": "Herb Seed Kit",
            "price": 19,
            "note": "Sprout",
-           "start": false
+           "start": 0
           }
          ]
         },

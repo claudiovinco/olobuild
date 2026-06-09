@@ -33,132 +33,60 @@
       "children": [
        {
         "id": "md-hero-split-1",
-        "type": "hero-split",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "Independent advisory · since 2004",
-         "eyebrow_dot_color": "#caa45a",
+         "eyebrow": "Independent advisory · since 2004",
          "eyebrow_color": "#caa45a",
-         "headline_lines": [
-          {
-           "text": "Clear thinking",
-           "color": "#ffffff",
-           "italic": false
-          },
-          {
-           "text": "for complex decisions.",
-           "color": "#ffffff",
-           "italic": true
-          }
-         ],
-         "headline_font_family": "serif",
-         "headline_font_size": 72,
-         "headline_line_height": 1.04,
-         "headline_font_weight": "600",
-         "headline_align": "left",
-         "subhead": "Meridian helps boards and management teams cut through noise — on strategy, capital and growth — and act with conviction.",
-         "subhead_color": "rgba(255,255,255,.72)",
-         "subhead_size": 18,
-         "subhead_italic": false,
-         "subhead_max_width": 480,
-         "cta1_text": "Book a consultation",
-         "cta1_url": "#contact",
-         "cta1_bg": "#caa45a",
-         "cta1_color": "#16263d",
-         "cta1_size": 15,
-         "cta1_radius": {
-          "tl": 4,
-          "tr": 4,
-          "br": 4,
-          "bl": 4,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 4,
-          "tr": 4,
-          "br": 4,
-          "bl": 4,
-          "linked": true
-         },
+         "headline": "Clear thinking for",
+         "accent": "complex",
+         "accent_italic": true,
+         "accent_color": "#caa45a",
+         "headline_tail": " decisions.",
+         "uppercase": false,
+         "headline_color": "#ffffff",
+         "headline_weight": "600",
+         "headline_size": "72",
+         "lead": "Meridian helps boards and management teams cut through noise — on strategy, capital and growth — and act with conviction.",
+         "lead_color": "rgba(255,255,255,.72)",
+         "signature": "",
+         "stats": [],
+         "cta_text": "Book a consultation",
+         "cta_url": "#contact",
+         "cta_style": "button",
+         "cta_bg": "#caa45a",
+         "cta_color": "#16263d",
          "cta2_text": "Our services",
          "cta2_url": "#services",
-         "cta2_bg": "rgba(255,255,255,.06)",
-         "cta2_color": "#ffffff",
-         "cta2_border": "rgba(255,255,255,.3)",
-         "cta2_size": 15,
-         "cta2_radius": {
+         "cta2_style": "outline",
+         "cta_radius": {
           "tl": 4,
           "tr": 4,
           "br": 4,
-          "bl": 4,
-          "linked": true
+          "bl": 4
          },
-         "cta2_radius_hover": {
-          "tl": 4,
-          "tr": 4,
-          "br": 4,
-          "bl": 4,
-          "linked": true
+         "media_image": "",
+         "media_bg": {
+          "type": "none"
          },
-         "stats": [
-          {
-           "value": "€18B+",
-           "value_color": "#caa45a",
-           "label": "TRANSACTIONS ADVISED"
-          }
-         ],
-         "showcase_enabled": false,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#1e3350"
-         },
-         "showcase_padding": 28,
-         "showcase_radius": {
+         "media_label": "boardroom / partners in discussion",
+         "media_light": false,
+         "media_aspect": "4/4.4",
+         "media_radius": 10,
+         "media_radius_top": 0,
+         "media_blob": false,
+         "media_position": "right",
+         "badge_number": "€18B+",
+         "badge_label": "Transactions advised",
+         "badge_bg": "#caa45a",
+         "badge_color": "#16263d",
+         "badge_radius": {
           "tl": 10,
           "tr": 10,
           "br": 10,
-          "bl": 10,
-          "linked": true
+          "bl": 10
          },
-         "showcase_radius_hover": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "showcase_badge_text": "",
-         "showcase_badge_dot": "#caa45a",
-         "showcase_badge_bg": "#2a456a",
-         "showcase_badge_color": "#ffffff",
-         "showcase_items": [],
-         "showcase_card_radius": {
-          "tl": 8,
-          "tr": 8,
-          "br": 8,
-          "bl": 8,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 8,
-          "tr": 8,
-          "br": 8,
-          "bl": 8,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "",
-         "showcase_caption_right": "",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1.1fr .9fr",
-         "gap": 48,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         },
-         "subhead_align": "left"
+         "flush": false,
+         "content_bg": ""
         },
         "style": {},
         "advanced": {},
@@ -434,7 +362,7 @@
            "description": "Buy-side, sell-side and integration — disciplined process, fewer surprises."
           },
           {
-           "icon": "layout",
+           "icon": "landmark",
            "title": "Capital & funding",
            "description": "Structure the balance sheet for the next phase, not the last one."
           },
@@ -884,14 +812,21 @@
         "id": "md-testimonial-43",
         "type": "testimonial",
         "settings": {
-         "quote": "\"Meridian told us what we needed to hear, not what we wanted to. That's exactly why we keep calling them back.\"",
+         "quote": "Meridian told us what we needed to hear, <em>not what we wanted to</em>. That's exactly why we keep calling them back.",
          "author_name": "Margaret Hale",
          "author_role": "Chair, Caldera Group",
          "rating": "0",
-         "layout": "single",
+         "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#ffffff",
+         "star_color": "#caa45a",
+         "author_color": "#caa45a",
+         "quote_accent_color": "#caa45a",
+         "quote_font": "heading",
+         "quote_size": 0,
+         "quote_uppercase": false,
+         "author_uppercase": false,
          "border_radius": "0",
          "avatar": ""
         },

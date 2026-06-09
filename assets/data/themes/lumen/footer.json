@@ -1,1 +1,91 @@
-[{"id":"lu-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#fffaf8"}},"advanced":{},"children":[{"id":"lu-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"lu-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"lu-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Cormorant Garamond\", Georgia, serif;font-size:20px;color:#251f24;font-weight:600;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#c4877e;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Lumen</div><p style=\"font-size:14px;color:#6e636a;max-width:260px\">Clean, results-led skincare. Made in small batches, packed in glass you bring back.</p>","text_color":"#2a2228","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"lu-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"lu-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#251f24;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Shop</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#6e636a\"><li>All products</li><li>Serums</li><li>Cleansers</li><li>Refills</li></ul>","text_color":"#2a2228","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"lu-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"lu-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#251f24;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">About</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#6e636a\"><li>Our ritual</li><li>Ingredients</li><li>Journal</li><li>Sustainability</li></ul>","text_color":"#2a2228","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"lu-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"lu-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#251f24;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Help</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#6e636a\"><li>Shipping</li><li>Returns</li><li>Contact</li><li>FAQ</li></ul>","text_color":"#2a2228","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"lu-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"lu-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"lu-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid #ece0db;padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#6e636a\"><span>© 2026 Lumen — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#2a2228","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "lu-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 64, "padding_bottom": 30 },
+  "style": { "bg": { "type": "solid", "color": "#fffaf8" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lu-fro1",
+    "type": "row",
+    "settings": { "gap": 34, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lu-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "lu-fbrand", "type": "headline", "settings": { "heading": "Lumen", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "30", "heading_uppercase": false, "heading_color": "#251f24", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "lu-fbtext", "type": "text-block", "settings": { "content": "<p>Clean, results-led skincare. Made in small batches, packed in glass you bring back.</p>", "text_color": "#6e636a", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "240" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "lu-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "lu-fh1", "type": "headline", "settings": { "heading": "Shop", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "11.5", "heading_uppercase": true, "heading_color": "#251f24", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "lu-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "gap": "9", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "active_style": "none", "link_color": "#6e636a", "link_hover_color": "#251f24", "items": [ { "title": "All products", "content": "#shop", "tag": "" }, { "title": "Serums", "content": "#", "tag": "" }, { "title": "Cleansers", "content": "#", "tag": "" }, { "title": "Refills", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "lu-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "lu-fh2", "type": "headline", "settings": { "heading": "About", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "11.5", "heading_uppercase": true, "heading_color": "#251f24", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "lu-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "gap": "9", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "active_style": "none", "link_color": "#6e636a", "link_hover_color": "#251f24", "items": [ { "title": "Our ritual", "content": "#ritual", "tag": "" }, { "title": "Ingredients", "content": "#", "tag": "" }, { "title": "Journal", "content": "#journal", "tag": "" }, { "title": "Sustainability", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "lu-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "lu-fh3", "type": "headline", "settings": { "heading": "Help", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "11.5", "heading_uppercase": true, "heading_color": "#251f24", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "lu-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "gap": "9", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "active_style": "none", "link_color": "#6e636a", "link_hover_color": "#251f24", "items": [ { "title": "Shipping", "content": "#", "tag": "" }, { "title": "Returns", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" }, { "title": "FAQ", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "lu-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "lu-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "lu-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "#ece0db", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "lu-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "lu-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "lu-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Lumen — an OLOtheme demo.</p>", "text_color": "#6e636a", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "lu-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "lu-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#6e636a", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

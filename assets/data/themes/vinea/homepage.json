@@ -5,12 +5,7 @@
   "settings": {
    "style": "default",
    "width": "full",
-   "padding": {
-    "top": 0,
-    "right": 0,
-    "bottom": 0,
-    "left": 0
-   },
+   "padding": "remove-vertical",
    "padding_top": 0,
    "padding_bottom": 0
   },
@@ -53,7 +48,7 @@
          "cta1_text": "Book a tasting",
          "cta1_url": "#experiences",
          "cta2_text": "Explore the wines",
-         "cta2_url": "#wines",
+         "cta2_url": "/vinea-wines/",
          "meta_text": "",
          "scroll_hint": "",
          "bg_image": "",
@@ -119,140 +114,39 @@
       "children": [
        {
         "id": "vn-hero-split-5",
-        "type": "hero-split",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "Our estate",
-         "eyebrow_dot_color": "#c79a4e",
+         "eyebrow": "Our estate",
          "eyebrow_color": "#c79a4e",
-         "headline_lines": [
-          {
-           "text": "Three generations,",
-           "color": "#f1e4d8",
-           "italic": false
-          },
-          {
-           "text": "one hillside",
-           "color": "#c79a4e",
-           "italic": true
-          }
-         ],
-         "headline_font_family": "serif",
-         "headline_font_size": 52,
-         "headline_font_weight": "400",
-         "headline_align": "left",
-         "subhead": "We farm eleven hectares on a south-facing slope our family has worked since 1962. Organic in the vineyard, patient in the cellar, and stubborn about letting the place speak.\n\nEverything is hand-picked, wild-fermented and aged unhurried. We make about thirty thousand bottles a year — and not one more than the hill can give well.\n\n— The Aldobrandi family",
-         "subhead_color": "#cbb0b8",
-         "subhead_size": 16,
-         "subhead_italic": false,
-         "subhead_max_width": 520,
-         "cta1_text": "",
-         "cta1_url": "",
-         "cta1_bg": "transparent",
-         "cta1_color": "transparent",
-         "cta1_size": 0,
-         "cta1_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
+         "headline": "Three generations,",
+         "accent": "one hillside",
+         "headline_tail": "",
+         "accent_italic": true,
+         "uppercase": false,
+         "headline_color": "#f1e4d8",
+         "accent_color": "#c79a4e",
+         "headline_weight": "400",
+         "headline_size": "52",
+         "lead": "We farm eleven hectares on a south-facing slope our family has worked since 1962. Organic in the vineyard, patient in the cellar, and stubborn about letting the place speak.\n\nEverything is hand-picked, wild-fermented and aged unhurried. We make about thirty thousand bottles a year — and not one more than the hill can give well.",
+         "lead_color": "#cbb0b8",
+         "signature": "— The Aldobrandi family",
+         "stats": [],
+         "cta_text": "",
+         "cta_url": "",
+         "cta_style": "underline",
          "cta2_text": "",
          "cta2_url": "",
-         "stats": [],
-         "showcase_enabled": true,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#3a1626"
-         },
-         "showcase_padding": 36,
-         "showcase_radius": {
-          "tl": 4,
-          "tr": 4,
-          "br": 4,
-          "bl": 4,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 4,
-          "tr": 4,
-          "br": 4,
-          "bl": 4,
-          "linked": true
-         },
-         "showcase_badge_text": "ESTATE · TOSCANA",
-         "showcase_badge_dot": "#c79a4e",
-         "showcase_badge_bg": "#1c0a12",
-         "showcase_badge_color": "#f1e4d8",
-         "showcase_items": [
-          {
-           "number": "Est.",
-           "text": "1962",
-           "italic": false,
-           "text_color": "#c79a4e",
-           "bg": {
-            "type": "solid",
-            "color": "#2a0f1a"
-           }
-          },
-          {
-           "number": "Hectares",
-           "text": "11",
-           "italic": false,
-           "text_color": "#f1e4d8",
-           "bg": {
-            "type": "solid",
-            "color": "#2a0f1a"
-           }
-          },
-          {
-           "number": "Bottles/yr",
-           "text": "30k",
-           "italic": false,
-           "text_color": "#f1e4d8",
-           "bg": {
-            "type": "solid",
-            "color": "#2a0f1a"
-           }
-          },
-          {
-           "number": "Farming",
-           "text": "Organic",
-           "italic": false,
-           "text_color": "#c79a4e",
-           "bg": {
-            "type": "solid",
-            "color": "#2a0f1a"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 8,
-          "tr": 8,
-          "br": 8,
-          "bl": 8,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 8,
-          "tr": 8,
-          "br": 8,
-          "bl": 8,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "PODERE VINEA",
-         "showcase_caption_right": "EST. 1962",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1.05fr .95fr",
-         "gap": 56,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_image": "",
+         "media_bg": { "type": "none" },
+         "media_label": "winemaker in the cellar",
+         "media_light": false,
+         "media_aspect": "4/5",
+         "media_radius": 4,
+         "media_radius_top": 0,
+         "media_blob": false,
+         "badge_number": "",
+         "badge_label": "",
+         "media_position": "left"
         },
         "style": {},
         "advanced": {},
@@ -275,7 +169,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#3a1626"
+    "color": "#33121f"
    }
   },
   "advanced": {},
@@ -352,138 +246,92 @@
       "children": [
        {
         "id": "vn-product-cards-12",
-        "type": "product-cards",
+        "type": "productgrid",
         "settings": {
          "columns": 4,
-         "gap": 24,
-         "card_bg": {
-          "type": "solid",
-          "color": "#3a1626"
-         },
-         "card_color": "#cbb0b8",
-         "card_radius": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "card_radius_hover": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "card_shadow": "none",
+         "gap": 18,
+         "media_aspect": "3/4",
+         "media_bg": "#481d30",
+         "stripe_dark": true,
+         "hover_zoom": false,
+         "quick_add_show": false,
+         "card_bg": "#3a1626",
+         "card_border": "rgba(241,228,216,.13)",
+         "card_radius": 10,
          "card_padding": 22,
-         "top_aspect_ratio": "3/4",
-         "top_padding": 28,
-         "letter_font_family": "serif",
-         "letter_size": 110,
-         "letter_italic": true,
-         "letter_align": "center",
-         "show_screenshot_label": true,
-         "screenshot_label_color": "#d9b370",
-         "brand_size": 11,
-         "brand_letter_spacing": 0.14,
-         "title_font_family": "serif",
-         "title_size": 23,
-         "title_weight": "400",
-         "description_size": 13,
-         "cta_size": 16,
-         "cta_arrow": false,
-         "card_hover_effect": "lift",
+         "category_color": "#c79a4e",
+         "title_font": "serif",
+         "title_size": 20,
+         "title_color": "#f1e4d8",
+         "notes_color": "#977483",
+         "price_color": "#f1e4d8",
+         "footer_text": "See the full cellar",
+         "footer_url": "/vinea-wines/",
+         "footer_color": "#f1e4d8",
          "items": [
           {
-           "letter": "",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#7d2230",
-            "gradient_to": "#3a1020",
-            "gradient_angle": 160
-           },
-           "screenshot_label": "2022",
-           "brand_label": "Sangiovese · red",
-           "brand_color": "#c79a4e",
-           "show_badge": false,
-           "badge_text": "",
-           "badge_bg": "#1c0a12",
-           "badge_color": "#f1e4d8",
-           "title": "Costa ",
-           "title_accent": "Rossa",
-           "title_accent_italic": true,
-           "description": "",
-           "cta_text": "€28",
-           "cta_url": "#wines"
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "Costa Rossa bottle",
+           "tag": "",
+           "category": "2022",
+           "title": "Costa Rossa",
+           "notes": "Sangiovese · red",
+           "price": "€28",
+           "shades": "",
+           "roast": 0,
+           "filter_tags": "",
+           "link": "/vinea-wines/",
+           "quick_add": ""
           },
           {
-           "letter": "",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#e8dcae",
-            "gradient_to": "#a8953f",
-            "gradient_angle": 160
-           },
-           "screenshot_label": "2023",
-           "brand_label": "Vermentino · white",
-           "brand_color": "#c79a4e",
-           "show_badge": false,
-           "badge_text": "",
-           "badge_bg": "#1c0a12",
-           "badge_color": "#f1e4d8",
-           "title": "Bianco di ",
-           "title_accent": "Sasso",
-           "title_accent_italic": true,
-           "description": "",
-           "cta_text": "€24",
-           "cta_url": "#wines"
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "Bianco di Sasso bottle",
+           "tag": "",
+           "category": "2023",
+           "title": "Bianco di Sasso",
+           "notes": "Vermentino · white",
+           "price": "€24",
+           "shades": "",
+           "roast": 0,
+           "filter_tags": "",
+           "link": "/vinea-wines/",
+           "quick_add": ""
           },
           {
-           "letter": "",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#5a1822",
-            "gradient_to": "#26090f",
-            "gradient_angle": 160
-           },
-           "screenshot_label": "2021",
-           "brand_label": "Sangiovese · reserve",
-           "brand_color": "#c79a4e",
-           "show_badge": true,
-           "badge_text": "Reserve",
-           "badge_bg": "#1c0a12",
-           "badge_color": "#d9b370",
-           "title": "Riserva del ",
-           "title_accent": "Nonno",
-           "title_accent_italic": true,
-           "description": "",
-           "cta_text": "€46",
-           "cta_url": "#wines"
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "Riserva del Nonno bottle",
+           "tag": "Reserve",
+           "category": "2021",
+           "title": "Riserva del Nonno",
+           "notes": "Sangiovese · reserve",
+           "price": "€46",
+           "shades": "",
+           "roast": 0,
+           "filter_tags": "",
+           "link": "/vinea-wines/",
+           "quick_add": ""
           },
           {
-           "letter": "",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#e0a0a8",
-            "gradient_to": "#c2737c",
-            "gradient_angle": 160
-           },
-           "screenshot_label": "2024",
-           "brand_label": "Rosé · skin contact",
-           "brand_color": "#c79a4e",
-           "show_badge": false,
-           "badge_text": "",
-           "badge_bg": "#1c0a12",
-           "badge_color": "#f1e4d8",
-           "title": "Rosa ",
-           "title_accent": "d'Estate",
-           "title_accent_italic": true,
-           "description": "",
-           "cta_text": "€22",
-           "cta_url": "#wines"
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "Rosa d'Estate bottle",
+           "tag": "",
+           "category": "2024",
+           "title": "Rosa d'Estate",
+           "notes": "Rosé · skin contact",
+           "price": "€22",
+           "shades": "",
+           "roast": 0,
+           "filter_tags": "",
+           "link": "/vinea-wines/",
+           "quick_add": ""
           }
-         ]
+         ],
+         "tag_bg": "#1c0a12",
+         "tag_color": "#d9b370"
         },
         "style": {},
         "advanced": {},
@@ -583,74 +431,59 @@
       "children": [
        {
         "id": "vn-info-cards-19",
-        "type": "info-cards",
+        "type": "overlaygrid",
         "settings": {
-         "container_bg": {
-          "type": "solid",
-          "color": "transparent"
-         },
-         "container_padding": 0,
-         "container_gap": 0,
-         "columns": 3,
-         "items_gap": 24,
-         "card_bg": {
-          "type": "solid",
-          "color": "#3a1626"
-         },
-         "card_color": "#f1e4d8",
-         "card_radius": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "card_padding": 0,
-         "show_icon": false,
-         "show_counter": false,
-         "show_counter_label": false,
-         "show_arrow": false,
-         "show_footer": true,
-         "show_media": true,
-         "media_aspect_ratio": "3/2",
-         "media_radius": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
+         "preset": "custom",
+         "columns": "3",
+         "columns_mobile": "1",
+         "gap": "small",
+         "height": "340",
+         "match_height": true,
+         "layout_mode": "uniform",
+         "overlay_position": "bottom",
+         "overlay_horizontal": "left",
+         "overlay_style": "overlay-default",
+         "overlay_padding": "large",
+         "overlay_color": "rgba(28,10,18,0.92)",
+         "overlay_gradient": true,
+         "item_radius": 10,
+         "title_size": "h3",
          "title_color": "#ffffff",
-         "title_font_family": "serif",
-         "title_size": 25,
          "title_weight": "400",
-         "title_italic": false,
-         "description_size": 14,
-         "description_color": "#f1e4d8",
-         "footer_size": 12,
-         "footer_color": "#c79a4e",
-         "card_hover_effect": "lift",
+         "title_uppercase": false,
+         "subtitle_color": "#f1e4d8",
+         "subtitle_size": 14,
+         "hover_effect": "zoom",
+         "hover_overlay": "always",
+         "show_cta": false,
+         "ribbon_position": "top-left",
+         "ribbon_bg": "#1c0a12",
+         "ribbon_color": "#c79a4e",
+         "shadow": "none",
          "items": [
           {
-           "media_label": "tasting on the terrace",
+           "id": "vn-exp-1",
+           "image": "",
            "title": "Cellar Tasting",
-           "description": "Five wines, a tour of the cellar and a seat on the terrace overlooking the rows.",
-           "footer_text": "From €25 · 1 hr",
-           "footer_dot_color": "#c79a4e"
+           "subtitle": "Five wines, a tour of the cellar and a seat on the terrace overlooking the rows.",
+           "ribbon": "From €25 · 1 hr",
+           "link": ""
           },
           {
-           "media_label": "vineyard walk & lunch",
+           "id": "vn-exp-2",
+           "image": "",
            "title": "Walk & Long Lunch",
-           "description": "A walk through the vines into a slow estate lunch paired with the full range.",
-           "footer_text": "From €65 · 3 hrs",
-           "footer_dot_color": "#c79a4e"
+           "subtitle": "A walk through the vines into a slow estate lunch paired with the full range.",
+           "ribbon": "From €65 · 3 hrs",
+           "link": ""
           },
           {
-           "media_label": "harvest day",
+           "id": "vn-exp-3",
+           "image": "",
            "title": "Harvest Day",
-           "description": "Pick with us at dawn, press by hand, and eat like family. Our favourite day of the year.",
-           "footer_text": "Sept · by request",
-           "footer_dot_color": "#c79a4e"
+           "subtitle": "Pick with us at dawn, press by hand, and eat like family. Our favourite day of the year.",
+           "ribbon": "Sept · by request",
+           "link": ""
           }
          ]
         },
@@ -837,19 +670,21 @@
         "id": "vn-testimonial-30",
         "type": "testimonial",
         "settings": {
-         "quote": "\"We tasted six wines and bought a case of each. But it's the afternoon on that terrace we keep talking about.\"",
+         "quote": "We tasted six wines and bought a case of each. But it's the afternoon on that <em>terrace</em> we keep talking about.",
          "author_name": "Claire & Yann",
          "author_role": "cellar club members",
          "rating": "0",
-         "layout": "single",
+         "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
-         "text_color": "#f1e4d8",
+         "text_color": "#cbb0b8",
+         "star_color": "#c79a4e",
+         "quote_accent_color": "#c79a4e",
          "author_color": "#c79a4e",
-         "quote_font_family": "serif",
-         "quote_size": 34,
-         "quote_style": "italic",
-         "border_radius": "0",
+         "author_uppercase": true,
+         "quote_uppercase": false,
+         "quote_font": "heading",
+         "quote_size": 38,
          "avatar": ""
         },
         "style": {},

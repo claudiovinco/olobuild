@@ -1,1 +1,849 @@
-[{"id":"lu-se-4","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#251f24"}},"advanced":{},"children":[{"id":"lu-ro-3","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"lu-co-2","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"lu-newsticker-1","type":"newsticker","settings":{"items":[{"text":"Free carbon-neutral shipping over €45 · 30-day returns"}],"speed":0,"separator":"","font_size":"12","font_weight":"500","text_color":"#f4ece8","bg_color":"#251f24","letter_spacing":"0.1em","text_transform":"uppercase","gap":0,"pause_on_hover":false},"style":{},"advanced":{},"children":[]}]}]}]},{"id":"lu-se-8","type":"section","settings":{"style":"default","width":"large","padding":"large"},"style":{"bg":{"type":"solid","color":"#f4ece8"}},"advanced":{},"children":[{"id":"lu-ro-7","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"lu-co-6","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"lu-hero-split-5","type":"hero-split","settings":{"eyebrow_text":"Clean · vegan · refillable","eyebrow_dot_color":"#c4877e","eyebrow_color":"#c4877e","headline_lines":[{"text":"Skin that","color":"#251f24","italic":false},{"text":"feels like","color":"#251f24","italic":false},{"text":"itself again.","color":"#c4877e","italic":true}],"headline_font_family":"serif","headline_font_size":72,"headline_line_height":1.04,"headline_font_weight":"600","headline_align":"left","subhead":"Short ingredient lists that actually do something. Made in small batches, packed in glass you bring back.","subhead_color":"#6e636a","subhead_size":17,"subhead_italic":false,"subhead_max_width":430,"cta1_text":"Shop the range","cta1_url":"#shop","cta1_bg":"#251f24","cta1_color":"#f4ece8","cta1_size":13,"cta1_radius":{"tl":2,"tr":2,"br":2,"bl":2,"linked":true},"cta1_radius_hover":{"tl":2,"tr":2,"br":2,"bl":2,"linked":true},"cta2_text":"Our ritual","cta2_url":"#ritual","cta2_bg":"transparent","cta2_color":"#251f24","cta2_border":"rgba(42,34,40,.28)","cta2_size":13,"cta2_radius":{"tl":2,"tr":2,"br":2,"bl":2,"linked":true},"cta2_radius_hover":{"tl":2,"tr":2,"br":2,"bl":2,"linked":true},"stats":[],"showcase_enabled":true,"showcase_bg":{"type":"solid","color":"#ede1db"},"showcase_padding":0,"showcase_radius":{"tl":3,"tr":3,"br":3,"bl":3,"linked":true},"showcase_radius_hover":{"tl":3,"tr":3,"br":3,"bl":3,"linked":true},"showcase_badge_text":"THE DAILY THREE","showcase_badge_dot":"#c4877e","showcase_badge_bg":"#fffaf8","showcase_badge_color":"#251f24","showcase_items":[{"number":"The Daily Three","text":"Cleanse · treat · protect","italic":false,"text_color":"#9c9098","bg":{"type":"solid","color":"#fffaf8"}}],"showcase_card_radius":{"tl":3,"tr":3,"br":3,"bl":3,"linked":true},"showcase_card_radius_hover":{"tl":3,"tr":3,"br":3,"bl":3,"linked":true},"showcase_card_shadow":"none","showcase_caption_left":"LUMEN","showcase_caption_right":"SKINCARE","showcase_hover_effect":"none","split_ratio":"1.02fr 1fr","gap":40,"min_height":0,"tile_padding":{"top":0,"right":0,"bottom":0,"left":0}},"style":{},"advanced":{},"children":[]}]}]}]},{"id":"lu-se-12","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#fffaf8"}},"advanced":{},"children":[{"id":"lu-ro-11","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"lu-co-10","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"lu-info-cards-9","type":"info-cards","settings":{"container_bg":{"type":"solid","color":"transparent"},"container_padding":0,"container_gap":0,"columns":4,"items_gap":20,"card_bg":{"type":"solid","color":"transparent"},"card_color":"#9c9098","card_radius":{"tl":0,"tr":0,"br":0,"bl":0,"linked":true},"card_padding":16,"show_icon":true,"show_counter":false,"show_arrow":false,"show_footer":false,"show_media":false,"icon_color":"#c4877e","icon_bg_color":"transparent","title_color":"#251f24","title_font_family":"sans-serif","title_size":13,"title_weight":"600","title_italic":false,"description_size":11.5,"items":[{"icon":"flame","title":"Clean formulas","description":"No nasties, ever"},{"icon":"heart","title":"Cruelty-free","description":"Never tested on animals"},{"icon":"shield-check","title":"Derm-approved","description":"Tested & reviewed"},{"icon":"refresh-cw","title":"Refillable","description":"Return your glass"}],"card_hover_effect":"none"},"style":{},"advanced":{},"children":[]}]}]}]},{"id":"lu-se-19","type":"section","settings":{"style":"default","width":"large","padding":"large"},"style":{"bg":{"type":"solid","color":"#f4ece8"}},"advanced":{},"children":[{"id":"lu-ro-15","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"lu-co-14","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"lu-section-header-13","type":"section-header","settings":{"eyebrow_show":true,"eyebrow_text":"Bestsellers","eyebrow_color":"#c4877e","eyebrow_dot_color":"#c4877e","eyebrow_separator":"","headline_lines":[{"text":"Loved on ","color":"#251f24","italic":false},{"text":"repeat","color":"#c4877e","italic":true}],"headline_font_family":"serif","headline_font_size":46,"headline_font_weight":"600","headline_align":"center","headline_inline":true,"tagline_show":false,"tagline_text":"","tagline_text_italic":false,"tagline_text_color":"#6e636a","tagline_text_size":16,"layout":"center","gap":16},"style":{},"advanced":{},"children":[]}]}]},{"id":"lu-ro-18","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"lu-co-17","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"lu-product-cards-16","type":"product-cards","settings":{"columns":4,"gap":22,"card_bg":{"type":"solid","color":"#fffaf8"},"card_color":"#6e636a","card_radius":{"tl":3,"tr":3,"br":3,"bl":3,"linked":true},"card_radius_hover":{"tl":3,"tr":3,"br":3,"bl":3,"linked":true},"card_radius_hover_duration":300,"card_shadow":"sm","card_padding":20,"card_hover_effect":"lift","top_aspect_ratio":"3/4","top_padding":24,"letter_font_family":"serif","letter_size":120,"letter_italic":true,"letter_align":"center","show_screenshot_label":true,"screenshot_label_color":"#9c9098","brand_size":11,"brand_letter_spacing":0.06,"title_font_family":"serif","title_size":22,"title_weight":"600","description_size":12,"cta_size":12,"cta_arrow":false,"items":[{"letter":"Q","letter_color":"#c4877e","top_bg":{"type":"gradient","gradient_from":"#ede1db","gradient_to":"#eccdc7","gradient_angle":160},"screenshot_label":"SERUM","brand_label":"SERUM","brand_color":"#c4877e","show_badge":true,"badge_text":"Bestseller","badge_bg":"#d9a7a0","badge_color":"#251f24","title":"Quiet Glow","title_accent":"Vitamin C","title_accent_italic":false,"description":"Brightening serum — slowly, steadily.","cta_text":"Add to bag · €38","cta_url":"#shop"},{"letter":"S","letter_color":"#6e636a","top_bg":{"type":"gradient","gradient_from":"#f4ece8","gradient_to":"#ede1db","gradient_angle":160},"screenshot_label":"CLEANSER","brand_label":"CLEANSER","brand_color":"#6e636a","show_badge":false,"badge_text":"","badge_bg":"#251f24","badge_color":"#ffffff","title":"Soft Reset","title_accent":"Gel","title_accent_italic":false,"description":"Lifts the day without stripping.","cta_text":"Add to bag · €28","cta_url":"#shop"},{"letter":"B","letter_color":"#c4877e","top_bg":{"type":"gradient","gradient_from":"#eccdc7","gradient_to":"#ede1db","gradient_angle":160},"screenshot_label":"MOISTURISER","brand_label":"MOISTURISER","brand_color":"#c4877e","show_badge":true,"badge_text":"New","badge_bg":"#251f24","badge_color":"#f4ece8","title":"Barrier Cloud","title_accent":"Cream","title_accent_italic":false,"description":"Seal it all in — morning and night.","cta_text":"Add to bag · €42","cta_url":"#shop"},{"letter":"M","letter_color":"#b89b78","top_bg":{"type":"gradient","gradient_from":"#ede1db","gradient_to":"#f4ece8","gradient_angle":160},"screenshot_label":"TREATMENT","brand_label":"TREATMENT","brand_color":"#b89b78","show_badge":false,"badge_text":"","badge_bg":"#251f24","badge_color":"#ffffff","title":"Midnight Retinal","title_accent":"0.2","title_accent_italic":false,"description":"Overnight renewal — €34 (was €44).","cta_text":"Add to bag · €34","cta_url":"#shop"}]},"style":{},"advanced":{},"children":[]}]}]}]},{"id":"lu-se-27","type":"section","settings":{"style":"default","width":"large","padding":"large"},"style":{"bg":{"type":"solid","color":"#251f24"}},"advanced":{},"children":[{"id":"lu-ro-26","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"lu-co-21","type":"column","settings":{"width":"1-2"},"style":{},"advanced":{},"children":[{"id":"lu-section-header-20","type":"section-header","settings":{"eyebrow_show":false,"eyebrow_text":"","headline_lines":[],"headline_font_family":"serif","headline_font_size":14,"headline_font_weight":"400","headline_align":"center","headline_inline":false,"tagline_show":true,"tagline_text":"model applying serum / texture macro","tagline_text_italic":true,"tagline_text_color":"rgba(255,255,255,.35)","tagline_text_size":11,"layout":"center","gap":0,"tile_padding":{"top":160,"right":20,"bottom":160,"left":20},"bg_color":"#322a30","bg_radius":{"tl":3,"tr":3,"br":3,"bl":3,"linked":true}},"style":{},"advanced":{},"children":[]}]},{"id":"lu-co-25","type":"column","settings":{"width":"1-2"},"style":{},"advanced":{},"children":[{"id":"lu-section-header-22","type":"section-header","settings":{"eyebrow_show":true,"eyebrow_text":"The Lumen ritual","eyebrow_color":"#d9a7a0","eyebrow_dot_color":"#d9a7a0","eyebrow_separator":"","headline_lines":[{"text":"Three steps,","color":"#ffffff","italic":false},{"text":"every day.","color":"#d9a7a0","italic":true}],"headline_font_family":"serif","headline_font_size":44,"headline_font_weight":"600","headline_align":"left","headline_inline":false,"tagline_show":true,"tagline_text":"Skincare shouldn't need a diagram. Three products, morning and night — the rest is just patience.","tagline_text_italic":false,"tagline_text_color":"rgba(255,255,255,.7)","tagline_text_size":16,"layout":"stack","gap":14},"style":{},"advanced":{},"children":[]},{"id":"lu-process-steps-23","type":"process-steps","settings":{"columns":1,"gap":0,"align":"left","auto_number":false,"item_gap":6,"number_style":"plain","number_color":"#d9a7a0","number_size":22,"number_font":"serif","number_weight":"600","title_color":"#ffffff","title_size":14,"title_font":"sans-serif","title_weight":"600","desc_color":"rgba(255,255,255,.6)","desc_size":13,"card_bg":"","card_border":"1px solid rgba(255,255,255,.13)","card_padding":14,"card_radius":{"tl":0,"tr":0,"br":0,"bl":0,"linked":true},"items":[{"number":"01","title":"Cleanse","description":"Soft Reset Gel — lifts the day without stripping."},{"number":"02","title":"Treat","description":"Quiet Glow Vitamin C — brightness, slowly."},{"number":"03","title":"Protect","description":"Barrier Cloud Cream — seal it all in."}]},"style":{},"advanced":{},"children":[]},{"id":"lu-cta-banner-24","type":"cta-banner","settings":{"headline":"","subheadline":"","cta1_text":"Build your routine","cta1_url":"#shop","cta1_bg":"#d9a7a0","cta1_color":"#251f24","cta1_size":13,"cta1_radius":{"tl":2,"tr":2,"br":2,"bl":2,"linked":true},"bg_color":"transparent","text_color":"#ffffff","align":"left","tile_padding":{"top":20,"right":0,"bottom":0,"left":0}},"style":{},"advanced":{},"children":[]}]}]}]},{"id":"lu-se-34","type":"section","settings":{"style":"default","width":"large","padding":"large"},"style":{"bg":{"type":"solid","color":"#f4ece8"}},"advanced":{},"children":[{"id":"lu-ro-30","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"lu-co-29","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"lu-section-header-28","type":"section-header","settings":{"eyebrow_show":true,"eyebrow_text":"4.9 / 5 · 2,400 reviews","eyebrow_color":"#c4877e","eyebrow_dot_color":"#c4877e","eyebrow_separator":"","headline_lines":[{"text":"Words from ","color":"#251f24","italic":false},{"text":"real skin","color":"#c4877e","italic":true}],"headline_font_family":"serif","headline_font_size":46,"headline_font_weight":"600","headline_align":"center","headline_inline":true,"tagline_show":false,"tagline_text":"","tagline_text_italic":false,"tagline_text_color":"#6e636a","tagline_text_size":16,"layout":"center","gap":16},"style":{},"advanced":{},"children":[]}]}]},{"id":"lu-ro-33","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"lu-co-32","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"lu-testimonial-31","type":"testimonial","settings":{"layout":"grid","grid_columns":3,"items":[{"quote":"\"Six weeks in and my texture has never been calmer. Nothing else changed — just these three.\"","author_name":"Amara","author_role":"Combination skin","avatar":"","rating":"5"},{"quote":"\"Finally a vitamin C that doesn't sting. And the refill turns up before I run out.\"","author_name":"Jonas","author_role":"Sensitive skin","avatar":"","rating":"5"},{"quote":"\"The glass packaging alone made me switch. The results made me stay.\"","author_name":"Priya","author_role":"Dry skin","avatar":"","rating":"5"}],"bg_color":"#fffaf8","text_color":"#251f24","show_line":true,"line_color":"#ece0db","border_radius":"4","author_position":"bottom-left","quote_font_family":"serif","quote_font_size":21,"avatar":""},"style":{},"advanced":{},"children":[]}]}]}]},{"id":"lu-se-41","type":"section","settings":{"style":"default","width":"large","padding":"large"},"style":{"bg":{"type":"solid","color":"#fffaf8"}},"advanced":{},"children":[{"id":"lu-ro-37","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"lu-co-36","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"lu-section-header-35","type":"section-header","settings":{"eyebrow_show":true,"eyebrow_text":"The Journal","eyebrow_color":"#c4877e","eyebrow_dot_color":"#c4877e","eyebrow_separator":"","headline_lines":[{"text":"Notes on ","color":"#251f24","italic":false},{"text":"skin","color":"#c4877e","italic":true}],"headline_font_family":"serif","headline_font_size":40,"headline_font_weight":"600","headline_align":"left","headline_inline":true,"tagline_show":false,"layout":"stack","gap":12},"style":{},"advanced":{},"children":[]}]}]},{"id":"lu-ro-40","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"lu-co-39","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"lu-workgrid-38","type":"workgrid","settings":{"columns":3,"items_gap":24,"media_aspect":"4/3","media_tall_aspect":"4/5","media_bg":"#ede1db","media_label_color":"#251f24","hover_zoom":true,"title_font_family":"heading","title_color":"#251f24","title_size":24,"title_weight":"600","meta_color":"#c4877e","meta_size":11,"show_desc":false,"desc_color":"#6e636a","desc_size":14,"mono_font_family":"","items":[{"image":"","media_label":"journal photo","title":"Why we keep our lists short","meta":"Ingredients","description":"","link_url":"#","tall":false},{"image":"","media_label":"journal photo","title":"How to layer without the pilling","meta":"Routine","description":"","link_url":"#","tall":false},{"image":"","media_label":"journal photo","title":"What \"refillable\" really costs","meta":"Sustainability","description":"","link_url":"#","tall":false}]},"style":{},"advanced":{},"children":[]}]}]}]},{"id":"lu-se-45","type":"section","settings":{"style":"default","width":"large","padding":"large"},"style":{"bg":{"type":"solid","color":"#ede1db"}},"advanced":{},"children":[{"id":"lu-ro-44","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"lu-co-43","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"lu-finder-42","type":"finder","settings":{"eyebrow":"Skin quiz","heading":"Find your ritual","intro":"","zone_accent":"#c4877e","zone_on":"#ffffff","card_bg":"#fffaf8","card_border":"#ece0db","align":"center","items":[{"option":"Dry & tight","title":"The Quench Ritual","text":"Cream cleanser, hyaluronic essence and the ceramide moisturiser — layered to lock water in and stop the afternoon tightness.","meta":"3 steps · from €68","cta_text":"","cta_url":"#","icon":""},{"option":"Oily / combination","title":"The Balance Ritual","text":"Gel cleanser, niacinamide serum and the oil-free gel-cream — to calm shine without stripping, morning and night.","meta":"3 steps · from €62","cta_text":"","cta_url":"#","icon":""},{"option":"Sensitive","title":"The Calm Ritual","text":"Fragrance-free milk cleanser, centella serum and the barrier balm — a short, gentle routine for reactive skin.","meta":"3 steps · from €70","cta_text":"","cta_url":"#","icon":""},{"option":"Dull & uneven","title":"The Glow Ritual","text":"Vitamin C in the morning, a gentle overnight exfoliating serum, and SPF — to even tone and bring back the light.","meta":"3 steps · from €74","cta_text":"","cta_url":"#","icon":""}]},"style":{},"advanced":{},"children":[]}]}]}]},{"id":"lu-se-49","type":"section","settings":{"style":"default","width":"large","padding":"large"},"style":{"bg":{"type":"solid","color":"#d9a7a0"}},"advanced":{},"children":[{"id":"lu-ro-48","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"lu-co-47","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"lu-newsletter-46","type":"newsletter","settings":{"title":"Get 10% off your first ritual","subtitle":"Skin notes, restock alerts and the occasional honest word. No daily emails — promise.","layout":"horizontal","icon_type":"none","show_name":false,"email_placeholder":"Your email address","button_text":"Subscribe","button_icon":false,"max_width":"440","alignment":"center","bg_color":"transparent","border_radius":{"tl":2,"tr":2,"br":2,"bl":2,"linked":true},"tile_padding":{"top":0,"right":0,"bottom":0,"left":0},"title_size":"48","title_weight":"600","title_color":"#251f24","subtitle_size":"16","subtitle_color":"rgba(42,34,40,.7)","input_bg":"rgba(255,255,255,.5)","input_color":"#251f24","input_border":"rgba(42,34,40,.3)","input_focus_border":"#251f24","input_radius":{"tl":2,"tr":2,"br":2,"bl":2,"linked":true},"input_height":"50","btn_bg":"#251f24","btn_color":"#f4ece8","btn_hover_bg":"#322a30","btn_radius":{"tl":2,"tr":2,"br":2,"bl":2,"linked":true},"btn_font_size":"13","btn_font_weight":"600"},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "lu-se-hero",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f4ece8" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lu-ro-hero",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lu-co-hero",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lu-introsplit-hero",
+        "type": "introsplit",
+        "settings": {
+         "eyebrow": "Clean · vegan · refillable",
+         "eyebrow_color": "#c4877e",
+         "headline": "Skin that feels like",
+         "accent": "itself again.",
+         "accent_color": "#c4877e",
+         "accent_italic": true,
+         "headline_tail": "",
+         "uppercase": false,
+         "headline_color": "#251f24",
+         "headline_weight": "600",
+         "headline_size": "92",
+         "lead": "Short ingredient lists that actually do something. Made in small batches, packed in glass you bring back.",
+         "lead_color": "#6e636a",
+         "signature": "",
+         "stats": [],
+         "cta_text": "Shop the range",
+         "cta_url": "#shop",
+         "cta_style": "button",
+         "cta_bg": "#251f24",
+         "cta_color": "#f4ece8",
+         "cta2_text": "Our ritual",
+         "cta2_url": "#ritual",
+         "cta2_style": "outline",
+         "media_image": "",
+         "media_bg": { "type": "none" },
+         "media_label": "hero — product flatlay on linen, soft daylight",
+         "media_light": true,
+         "media_radius": 3,
+         "media_radius_top": 0,
+         "media_position": "right",
+         "media_aspect": "4/5",
+         "flush": false,
+         "content_bg": "",
+         "badge_number": "The Daily Three",
+         "badge_label": "Cleanse · treat · protect",
+         "badge_bg": "#fffaf8",
+         "badge_color": "#251f24",
+         "badge_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0 },
+         "media_blob": false
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lu-se-trust",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 26, "padding_bottom": 26 },
+  "style": { "bg": { "type": "solid", "color": "#fffaf8" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lu-ro-trust",
+    "type": "row",
+    "settings": { "gap": 20, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lu-co-trust-1",
+      "type": "column",
+      "settings": { "width": "1-4", "width_medium": "1-2" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lu-iconbox-trust-1",
+        "type": "iconbox",
+        "settings": {
+         "icon_emoji": "flame",
+         "title": "Clean formulas",
+         "description": "No nasties, ever",
+         "link_url": "",
+         "link_text": "",
+         "alignment": "left",
+         "icon_position": "left",
+         "icon_size": "1.5",
+         "icon_color": "#c4877e",
+         "icon_bg_color": "",
+         "title_font_size": "13",
+         "title_font_weight": "600",
+         "title_color": "#251f24",
+         "text_color": "#9c9098",
+         "icon_gap": "12",
+         "title_gap": "2",
+         "desc_gap": "0",
+         "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "lu-co-trust-2",
+      "type": "column",
+      "settings": { "width": "1-4", "width_medium": "1-2" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lu-iconbox-trust-2",
+        "type": "iconbox",
+        "settings": {
+         "icon_emoji": "heart",
+         "title": "Cruelty-free",
+         "description": "Never tested on animals",
+         "link_url": "",
+         "link_text": "",
+         "alignment": "left",
+         "icon_position": "left",
+         "icon_size": "1.5",
+         "icon_color": "#c4877e",
+         "icon_bg_color": "",
+         "title_font_size": "13",
+         "title_font_weight": "600",
+         "title_color": "#251f24",
+         "text_color": "#9c9098",
+         "icon_gap": "12",
+         "title_gap": "2",
+         "desc_gap": "0",
+         "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "lu-co-trust-3",
+      "type": "column",
+      "settings": { "width": "1-4", "width_medium": "1-2" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lu-iconbox-trust-3",
+        "type": "iconbox",
+        "settings": {
+         "icon_emoji": "shield-check",
+         "title": "Derm-approved",
+         "description": "Tested & reviewed",
+         "link_url": "",
+         "link_text": "",
+         "alignment": "left",
+         "icon_position": "left",
+         "icon_size": "1.5",
+         "icon_color": "#c4877e",
+         "icon_bg_color": "",
+         "title_font_size": "13",
+         "title_font_weight": "600",
+         "title_color": "#251f24",
+         "text_color": "#9c9098",
+         "icon_gap": "12",
+         "title_gap": "2",
+         "desc_gap": "0",
+         "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "lu-co-trust-4",
+      "type": "column",
+      "settings": { "width": "1-4", "width_medium": "1-2" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lu-iconbox-trust-4",
+        "type": "iconbox",
+        "settings": {
+         "icon_emoji": "refresh-cw",
+         "title": "Refillable",
+         "description": "Return your glass",
+         "link_url": "",
+         "link_text": "",
+         "alignment": "left",
+         "icon_position": "left",
+         "icon_size": "1.5",
+         "icon_color": "#c4877e",
+         "icon_bg_color": "",
+         "title_font_size": "13",
+         "title_font_weight": "600",
+         "title_color": "#251f24",
+         "text_color": "#9c9098",
+         "icon_gap": "12",
+         "title_gap": "2",
+         "desc_gap": "0",
+         "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lu-se-best",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f4ece8" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lu-ro-best-h",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lu-co-best-h",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lu-section-header-best",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Bestsellers",
+         "eyebrow_color": "#c4877e",
+         "eyebrow_dot_color": "#c4877e",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "Loved on ", "color": "#251f24", "italic": false },
+          { "text": "repeat", "color": "#c4877e", "italic": true }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 48,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "headline_line_height": 1.04,
+         "tagline_show": false,
+         "tagline_text": "",
+         "layout": "stack",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "lu-ro-best-g",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lu-co-best-g",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lu-productgrid-best",
+        "type": "productgrid",
+        "settings": {
+         "columns": 4,
+         "gap": 22,
+         "media_aspect": "3/3.5",
+         "media_bg": "#ede1db",
+         "stripe_dark": false,
+         "hover_zoom": true,
+         "card_bg": "",
+         "card_border": "",
+         "card_radius": 0,
+         "card_padding": 0,
+         "tag_bg": "#d9a7a0",
+         "tag_color": "#251f24",
+         "quick_add_show": true,
+         "quick_add_bg": "#251f24",
+         "quick_add_color": "#f4ece8",
+         "category_color": "#9c9098",
+         "title_font": "heading",
+         "title_size": 22,
+         "title_color": "#251f24",
+         "price_color": "#251f24",
+         "add_button": false,
+         "footer_text": "",
+         "footer_url": "#shop",
+         "items": [
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "Bestseller", "category": "Serum", "title": "Quiet Glow Vitamin C", "price": "€38", "shades": "", "notes": "", "roast": 0, "filter_tags": "", "link": "#", "quick_add": "Add to bag · €38" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "", "category": "Cleanser", "title": "Soft Reset Gel", "price": "€28", "shades": "", "notes": "", "roast": 0, "filter_tags": "", "link": "#", "quick_add": "Add to bag · €28" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "New", "category": "Moisturiser", "title": "Barrier Cloud Cream", "price": "€42", "shades": "", "notes": "", "roast": 0, "filter_tags": "", "link": "#", "quick_add": "Add to bag · €42" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "", "category": "Treatment", "title": "Midnight Retinal 0.2", "price": "€34 (was €44)", "shades": "", "notes": "", "roast": 0, "filter_tags": "", "link": "#", "quick_add": "Add to bag · €34" }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lu-se-ritual",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#251f24" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lu-ro-ritual",
+    "type": "row",
+    "settings": { "gap": 54, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lu-co-ritual-m",
+      "type": "column",
+      "settings": { "width": "1-2" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lu-image-ritual",
+        "type": "image",
+        "settings": {
+         "image_url": "",
+         "media_bg": { "type": "none" },
+         "media_label": "model applying serum / texture macro",
+         "alt_text": "",
+         "image_width": "100%",
+         "height": "auto",
+         "aspect_ratio": "custom",
+         "aspect_ratio_custom": "4/4.4",
+         "object_fit": "cover",
+         "border_radius": "3"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "lu-co-ritual-t",
+      "type": "column",
+      "settings": { "width": "1-2" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lu-section-header-ritual",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "The Lumen ritual",
+         "eyebrow_color": "#d9a7a0",
+         "eyebrow_dot_color": "#d9a7a0",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "Three steps,", "color": "#ffffff", "italic": false },
+          { "text": "every day.", "color": "#d9a7a0", "italic": true }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 44,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "headline_line_height": 1.04,
+         "tagline_show": true,
+         "tagline_text": "Skincare shouldn't need a diagram. Three products, morning and night — the rest is just patience.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "rgba(255,255,255,.7)",
+         "tagline_text_size": 16,
+         "layout": "stack",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "lu-process-steps-ritual",
+        "type": "process-steps",
+        "settings": {
+         "columns": 1,
+         "gap": 0,
+         "align": "left",
+         "auto_number": false,
+         "item_gap": 4,
+         "number_style": "plain",
+         "number_color": "#d9a7a0",
+         "number_size": 22,
+         "number_font": "serif",
+         "number_weight": "600",
+         "title_color": "#ffffff",
+         "title_size": 14,
+         "title_font": "sans-serif",
+         "title_weight": "600",
+         "desc_color": "rgba(255,255,255,.6)",
+         "desc_size": 13,
+         "card_bg": "",
+         "card_border": "",
+         "card_padding": 0,
+         "card_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0, "linked": true },
+         "items": [
+          { "number": "01", "title": "Cleanse", "description": "Soft Reset Gel — lifts the day without stripping." },
+          { "number": "02", "title": "Treat", "description": "Quiet Glow Vitamin C — brightness, slowly." },
+          { "number": "03", "title": "Protect", "description": "Barrier Cloud Cream — seal it all in." }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "lu-button-ritual",
+        "type": "button",
+        "settings": {
+         "text": "Build your routine",
+         "url": "#shop",
+         "alignment": "left",
+         "bg_color": "#d9a7a0",
+         "text_color": "#251f24",
+         "hover_bg_color": "#c4877e"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lu-se-reviews",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f4ece8" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lu-ro-reviews-h",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lu-co-reviews-h",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lu-section-header-reviews",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "4.9 / 5 · 2,400 reviews",
+         "eyebrow_color": "#c4877e",
+         "eyebrow_dot_color": "#c4877e",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "Words from ", "color": "#251f24", "italic": false },
+          { "text": "real skin", "color": "#c4877e", "italic": true }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 48,
+         "headline_font_weight": "600",
+         "headline_align": "center",
+         "headline_line_height": 1.04,
+         "tagline_show": false,
+         "tagline_text": "",
+         "layout": "center",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "lu-ro-reviews-g",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lu-co-reviews-g",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lu-testimonial-reviews",
+        "type": "testimonial",
+        "settings": {
+         "layout": "grid",
+         "grid_columns": 3,
+         "items": [
+          { "quote": "Six weeks in and my texture has never been calmer. Nothing else changed — just these three.", "author_name": "Amara", "author_role": "Combination skin", "avatar": "", "rating": "5" },
+          { "quote": "Finally a vitamin C that doesn't sting. And the refill turns up before I run out.", "author_name": "Jonas", "author_role": "Sensitive skin", "avatar": "", "rating": "5" },
+          { "quote": "The glass packaging alone made me switch. The results made me stay.", "author_name": "Priya", "author_role": "Dry skin", "avatar": "", "rating": "5" }
+         ],
+         "bg_color": "#fffaf8",
+         "text_color": "#251f24",
+         "show_line": true,
+         "line_color": "#ece0db",
+         "border_radius": "4",
+         "author_position": "bottom-left",
+         "quote_font_family": "serif",
+         "quote_font_size": 21,
+         "star_color": "#b89b78",
+         "avatar": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lu-se-journal",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f4ece8" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lu-ro-journal-h",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lu-co-journal-h",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lu-section-header-journal",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "The Journal",
+         "eyebrow_color": "#c4877e",
+         "eyebrow_dot_color": "#c4877e",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "Notes on ", "color": "#251f24", "italic": false },
+          { "text": "skin", "color": "#c4877e", "italic": true }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 44,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "headline_line_height": 1.04,
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 12
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "lu-ro-journal-g",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lu-co-journal-g",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lu-workgrid-journal",
+        "type": "workgrid",
+        "settings": {
+         "columns": 3,
+         "items_gap": 24,
+         "media_aspect": "4/2.8",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#ede1db",
+         "media_label_color": "#251f24",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#251f24",
+         "title_size": 24,
+         "title_weight": "600",
+         "meta_color": "#c4877e",
+         "meta_size": 11,
+         "show_desc": false,
+         "desc_color": "#6e636a",
+         "desc_size": 14,
+         "mono_font_family": "",
+         "items": [
+          { "image": "", "media_label": "journal photo", "title": "Why we keep our lists short", "meta": "Ingredients", "description": "", "link_url": "#", "tall": false },
+          { "image": "", "media_label": "journal photo", "title": "How to layer without the pilling", "meta": "Routine", "description": "", "link_url": "#", "tall": false },
+          { "image": "", "media_label": "journal photo", "title": "What \"refillable\" really costs", "meta": "Sustainability", "description": "", "link_url": "#", "tall": false }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lu-se-finder",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#ede1db" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lu-ro-finder-h",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lu-co-finder-h",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lu-section-header-finder",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Skin quiz",
+         "eyebrow_color": "#c4877e",
+         "eyebrow_dot_color": "#c4877e",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "Find your ", "color": "#251f24", "italic": false },
+          { "text": "ritual", "color": "#c4877e", "italic": true }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 48,
+         "headline_font_weight": "600",
+         "headline_align": "center",
+         "headline_line_height": 1.04,
+         "tagline_show": false,
+         "layout": "center",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "lu-ro-finder",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lu-co-finder",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lu-finder",
+        "type": "finder",
+        "settings": {
+         "eyebrow": "",
+         "heading": "",
+         "intro": "",
+         "zone_accent": "#c4877e",
+         "zone_on": "#ffffff",
+         "card_bg": "#fffaf8",
+         "card_border": "#ece0db",
+         "card_radius": "14",
+         "align": "center",
+         "default_index": "0",
+         "items": [
+          { "option": "Dry & tight", "kicker": "Your ritual", "title": "The Quench Ritual", "text": "Cream cleanser, hyaluronic essence and the ceramide moisturiser — layered to lock water in and stop the afternoon tightness.", "meta": "3 steps · from €68", "cta_text": "", "cta_url": "#", "icon": "", "image": "", "media_bg": { "type": "none" }, "media_label": "hydrating ritual set" },
+          { "option": "Oily / combination", "kicker": "Your ritual", "title": "The Balance Ritual", "text": "Gel cleanser, niacinamide serum and the oil-free gel-cream — to calm shine without stripping, morning and night.", "meta": "3 steps · from €62", "cta_text": "", "cta_url": "#", "icon": "", "image": "", "media_bg": { "type": "none" }, "media_label": "balancing ritual set" },
+          { "option": "Sensitive", "kicker": "Your ritual", "title": "The Calm Ritual", "text": "Fragrance-free milk cleanser, centella serum and the barrier balm — a short, gentle routine for reactive skin.", "meta": "3 steps · from €70", "cta_text": "", "cta_url": "#", "icon": "", "image": "", "media_bg": { "type": "none" }, "media_label": "soothing ritual set" },
+          { "option": "Dull & uneven", "kicker": "Your ritual", "title": "The Glow Ritual", "text": "Vitamin C in the morning, a gentle overnight exfoliating serum, and SPF — to even tone and bring back the light.", "meta": "3 steps · from €74", "cta_text": "", "cta_url": "#", "icon": "", "image": "", "media_bg": { "type": "none" }, "media_label": "glow ritual set" }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lu-se-news",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#d9a7a0" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lu-ro-news",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lu-co-news",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lu-newsletter",
+        "type": "newsletter",
+        "settings": {
+         "title": "Get <em>10% off</em> your first ritual",
+         "title_accent_color": "#251f24",
+         "subtitle": "Skin notes, restock alerts and the occasional honest word. No daily emails — promise.",
+         "layout": "horizontal",
+         "icon_type": "none",
+         "show_name": false,
+         "email_placeholder": "Your email address",
+         "button_text": "Subscribe",
+         "button_icon": false,
+         "max_width": "440",
+         "alignment": "center",
+         "bg_color": "transparent",
+         "box_border": "",
+         "border_radius": 2,
+         "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 },
+         "title_size": "56",
+         "title_weight": "600",
+         "title_color": "#251f24",
+         "subtitle_size": "16",
+         "subtitle_color": "rgba(42,34,40,.7)",
+         "input_bg": "rgba(255,255,255,.5)",
+         "input_color": "#251f24",
+         "input_placeholder_color": "rgba(42,34,40,.5)",
+         "input_border": "rgba(42,34,40,.3)",
+         "input_focus_border": "#251f24",
+         "input_radius": 2,
+         "input_height": "50",
+         "btn_bg": "#251f24",
+         "btn_color": "#f4ece8",
+         "btn_hover_bg": "#322a30",
+         "btn_radius": 2,
+         "btn_font_size": "13",
+         "btn_font_weight": "600",
+         "shadow": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

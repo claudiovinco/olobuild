@@ -1,0 +1,304 @@
+[
+ {
+  "id": "sts-se-ph",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#14241c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sts-ro-ph",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sts-co-ph",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sts-pagehead",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "How we help",
+         "eyebrow_color": "#c9a44a",
+         "eyebrow_dot_color": "#c9a44a",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "Our ", "color": "#eef2e9", "italic": false },
+          { "text": "services", "color": "#c9a44a", "italic": true }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 74,
+         "headline_font_weight": "500",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Three disciplines, one joined-up plan. We rarely do just one — the value is in how they fit together.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#74866f",
+         "tagline_text_size": 17,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sts-se-svcs",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 0, "padding_bottom": 64 },
+  "style": { "bg": { "type": "solid", "color": "#14241c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sts-ro-svcs",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sts-co-svcs",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sts-info-cards",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": { "type": "solid", "color": "transparent" },
+         "container_padding": 0,
+         "container_gap": 16,
+         "columns": 3,
+         "items_gap": 16,
+         "card_bg": { "type": "solid", "color": "#1d3328" },
+         "card_color": "#74866f",
+         "card_radius": { "tl": 12, "tr": 12, "br": 12, "bl": 12, "linked": true },
+         "card_padding": 30,
+         "show_icon": true,
+         "show_counter": false,
+         "show_arrow": false,
+         "show_footer": false,
+         "show_media": false,
+         "icon_color": "#c9a44a",
+         "icon_bg_color": "rgba(201,164,74,.14)",
+         "title_color": "#eef2e9",
+         "title_font_family": "serif",
+         "title_size": 24,
+         "title_weight": "500",
+         "title_italic": false,
+         "description_size": 14.5,
+         "items": [
+          {
+           "icon": "trending-up",
+           "title": "Investment management",
+           "description": "Discretionary, multi-asset portfolios run to your mandate. Diversified, low-cost where it matters, and reviewed against the things you actually care about."
+          },
+          {
+           "icon": "layers",
+           "title": "Financial planning",
+           "description": "Cashflow modelling, tax efficiency, retirement and protection — brought together so you can see the consequences of any choice before you make it."
+          },
+          {
+           "icon": "shield-check",
+           "title": "Legacy & estate",
+           "description": "Succession, trusts, philanthropy and the next generation — structured carefully so your intentions are honoured and tax doesn't erode them."
+          }
+         ],
+         "card_hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sts-se-fees",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#172a20" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sts-ro-feeh",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sts-co-feeh",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sts-fees-head",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Fees, plainly",
+         "eyebrow_color": "#c9a44a",
+         "eyebrow_dot_color": "#c9a44a",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "No surprises, ", "color": "#eef2e9", "italic": false },
+          { "text": "ever", "color": "#c9a44a", "italic": true }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 54,
+         "headline_font_weight": "500",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "A single, transparent annual fee as a percentage of assets — no commissions, no product kickbacks, no hidden layers.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#74866f",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "sts-ro-fees",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sts-co-fees",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sts-fees-steps",
+        "type": "process-steps",
+        "settings": {
+         "columns": 4,
+         "gap": 16,
+         "align": "left",
+         "auto_number": false,
+         "item_gap": 10,
+         "number_style": "plain",
+         "number_color": "#c9a44a",
+         "number_size": 40,
+         "number_font": "serif",
+         "number_weight": "500",
+         "title_color": "#eef2e9",
+         "title_size": 21,
+         "title_font": "serif",
+         "title_weight": "500",
+         "desc_color": "#74866f",
+         "desc_size": 14,
+         "card_bg": "",
+         "card_border": "",
+         "card_padding": 0,
+         "items": [
+          { "number": "01", "title": "Up to £2m", "description": "1.0% per annum, all-in." },
+          { "number": "02", "title": "£2m – £5m", "description": "0.80% per annum." },
+          { "number": "03", "title": "£5m – £10m", "description": "0.60% per annum." },
+          { "number": "04", "title": "Above £10m", "description": "By agreement." }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sts-se-cta",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#14241c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sts-ro-cta",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sts-co-cta",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sts-cta-banner",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Start with a",
+         "headline_accent": "conversation",
+         "headline_accent_italic": true,
+         "subtitle": "No obligation, no jargon — just an honest look at where you are and where you'd like to be.",
+         "cta_text": "Arrange a call",
+         "cta_url": "#contact",
+         "cta2_text": "",
+         "cta2_url": "#",
+         "bg": { "type": "solid", "color": "#0c1812" },
+         "text_color": "#eef2e9",
+         "accent_color": "#c9a44a",
+         "subtitle_color": "#aebcae",
+         "cta_bg": "#c9a44a",
+         "cta_color": "#0c1812",
+         "cta_radius": { "tl": 4, "tr": 4, "br": 4, "bl": 4, "linked": true },
+         "cta_size": 13,
+         "headline_font_family": "serif",
+         "headline_size": 58,
+         "headline_weight": "500",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": { "tl": 18, "tr": 18, "br": 18, "bl": 18, "linked": true },
+         "banner_padding": 84
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

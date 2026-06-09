@@ -1,1 +1,91 @@
-[{"id":"lo-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#202022"}},"advanced":{},"children":[{"id":"lo-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"lo-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"lo-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Archivo\", -apple-system, sans-serif;font-size:20px;color:#eeece6;font-weight:600;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#c9c2b6;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Loft</div><p style=\"font-size:14px;color:#646058;max-width:260px\">Architecture & interiors studio. Calm, material-led buildings for living and working.</p>","text_color":"#9a958c","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"lo-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"lo-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#eeece6;font-family:\"Archivo\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Studio</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#646058\"><li>Projects</li><li>Approach</li><li>Team</li></ul>","text_color":"#9a958c","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"lo-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"lo-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#eeece6;font-family:\"Archivo\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">About</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#646058\"><li>Awards</li><li>Press</li><li>Careers</li></ul>","text_color":"#9a958c","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"lo-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"lo-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#eeece6;font-family:\"Archivo\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Contact</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#646058\"><li>studio@loft.archi</li><li>+39 02 7700</li><li>Milan</li></ul>","text_color":"#9a958c","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"lo-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"lo-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"lo-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid rgba(238,236,230,.12);padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#646058\"><span>© 2026 Loft — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#9a958c","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "lo-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 56, "padding_bottom": 28 },
+  "style": { "bg": { "type": "solid", "color": "#202022" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lo-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lo-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "lo-fbrand", "type": "headline", "settings": { "heading": "Loft", "tag": "div", "alignment": "left", "heading_font_size": "20", "heading_uppercase": true, "heading_color": "#eeece6", "heading_font": "heading", "heading_font_weight": "700", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "lo-fbtext", "type": "text-block", "settings": { "content": "<p>Architecture & interiors studio. Calm, material-led buildings for living and working.</p>", "text_color": "#646058", "font_size": "13.5", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "lo-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "lo-fh1", "type": "headline", "settings": { "heading": "Studio", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eeece6", "heading_font_weight": "600", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "lo-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "link_color": "#646058", "link_hover_color": "#c9c2b6", "gap": "9", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "items": [ { "title": "Projects", "content": "#projects", "tag": "" }, { "title": "Approach", "content": "#approach", "tag": "" }, { "title": "Team", "content": "#studio", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "lo-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "lo-fh2", "type": "headline", "settings": { "heading": "About", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eeece6", "heading_font_weight": "600", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "lo-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "link_color": "#646058", "link_hover_color": "#c9c2b6", "gap": "9", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "items": [ { "title": "Awards", "content": "#", "tag": "" }, { "title": "Press", "content": "#", "tag": "" }, { "title": "Careers", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "lo-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "lo-fh3", "type": "headline", "settings": { "heading": "Contact", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eeece6", "heading_font_weight": "600", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "lo-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "link_color": "#646058", "link_hover_color": "#c9c2b6", "gap": "9", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "items": [ { "title": "studio@loft.archi", "content": "mailto:studio@loft.archi", "tag": "" }, { "title": "+39 02 7700", "content": "tel:+39027700", "tag": "" }, { "title": "Milan", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "lo-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "lo-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "lo-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(238,236,230,.12)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "lo-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "lo-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "lo-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Loft — an OLOtheme demo.</p>", "text_color": "#646058", "font_size": "11.5", "text_align": "left", "line_height": "1.6" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "lo-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "lo-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#646058", "font_size": "11.5", "text_align": "right", "line_height": "1.6" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

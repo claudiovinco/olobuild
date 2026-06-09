@@ -1,0 +1,445 @@
+[
+ {
+  "id": "sy-uc-ph-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_top": 96, "padding_bottom": 40 },
+  "style": { "bg": { "type": "solid", "color": "#140e22" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sy-uc-ph-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sy-uc-ph-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-uc-ph",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// use cases",
+         "eyebrow_color": "#a06bff",
+         "eyebrow_dot_color": "#a06bff",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "One workspace, ", "color": "#ffffff", "italic": false },
+          { "text": "every team", "color": "#a06bff", "italic": false }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 60,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Synapse adapts to how each team works — same memory, same sources, different superpowers.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#776e92",
+         "tagline_text_size": 17,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sy-uc-grid-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_top": 48, "padding_bottom": 100 },
+  "style": { "bg": { "type": "solid", "color": "#140e22" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sy-uc-grid-ro1",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "stretch" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sy-uc-c1",
+      "type": "column",
+      "settings": { "width": "1-3" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-uc-ib1",
+        "type": "iconbox",
+        "settings": {
+         "icon_emoji": "message-square",
+         "title": "Support",
+         "description": "Draft replies grounded in your docs and past tickets — cited, on-brand, and ready to send.",
+         "link_url": "",
+         "link_text": "",
+         "alignment": "left",
+         "icon_size": "1.3",
+         "icon_position": "top",
+         "icon_color": "#a06bff",
+         "icon_bg_color": "rgba(160,107,255,.14)",
+         "icon_bg_shape": "rounded",
+         "title_color": "#ffffff",
+         "title_font_size": "19",
+         "title_font_weight": "700",
+         "text_color": "#776e92",
+         "icon_gap": "16",
+         "title_gap": "8",
+         "bg_type": "color",
+         "bg_color": "#1e1633",
+         "tile_padding": { "top": 26, "right": 26, "bottom": 26, "left": 26 },
+         "border_radius": { "tl": 14, "tr": 14, "br": 14, "bl": 14, "linked": true },
+         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "linked": true, "style": "solid", "color": "rgba(255,255,255,.08)" },
+         "shadow": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "sy-uc-c2",
+      "type": "column",
+      "settings": { "width": "1-3" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-uc-ib2",
+        "type": "iconbox",
+        "settings": {
+         "icon_emoji": "trending-up",
+         "title": "Sales",
+         "description": "Prep for every call with account history, summarise after, and push the next steps to your CRM.",
+         "link_url": "",
+         "link_text": "",
+         "alignment": "left",
+         "icon_size": "1.3",
+         "icon_position": "top",
+         "icon_color": "#a06bff",
+         "icon_bg_color": "rgba(160,107,255,.14)",
+         "icon_bg_shape": "rounded",
+         "title_color": "#ffffff",
+         "title_font_size": "19",
+         "title_font_weight": "700",
+         "text_color": "#776e92",
+         "icon_gap": "16",
+         "title_gap": "8",
+         "bg_type": "color",
+         "bg_color": "#1e1633",
+         "tile_padding": { "top": 26, "right": 26, "bottom": 26, "left": 26 },
+         "border_radius": { "tl": 14, "tr": 14, "br": 14, "bl": 14, "linked": true },
+         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "linked": true, "style": "solid", "color": "rgba(255,255,255,.08)" },
+         "shadow": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "sy-uc-c3",
+      "type": "column",
+      "settings": { "width": "1-3" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-uc-ib3",
+        "type": "iconbox",
+        "settings": {
+         "icon_emoji": "layers",
+         "title": "Product",
+         "description": "Synthesise feedback across calls, tickets and surveys into themes you can actually act on.",
+         "link_url": "",
+         "link_text": "",
+         "alignment": "left",
+         "icon_size": "1.3",
+         "icon_position": "top",
+         "icon_color": "#a06bff",
+         "icon_bg_color": "rgba(160,107,255,.14)",
+         "icon_bg_shape": "rounded",
+         "title_color": "#ffffff",
+         "title_font_size": "19",
+         "title_font_weight": "700",
+         "text_color": "#776e92",
+         "icon_gap": "16",
+         "title_gap": "8",
+         "bg_type": "color",
+         "bg_color": "#1e1633",
+         "tile_padding": { "top": 26, "right": 26, "bottom": 26, "left": 26 },
+         "border_radius": { "tl": 14, "tr": 14, "br": 14, "bl": 14, "linked": true },
+         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "linked": true, "style": "solid", "color": "rgba(255,255,255,.08)" },
+         "shadow": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "sy-uc-grid-ro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "stretch" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sy-uc-c4",
+      "type": "column",
+      "settings": { "width": "1-3" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-uc-ib4",
+        "type": "iconbox",
+        "settings": {
+         "icon_emoji": "clock",
+         "title": "Operations",
+         "description": "Turn scattered SOPs into answers, and automate the recurring busywork with shared agents.",
+         "link_url": "",
+         "link_text": "",
+         "alignment": "left",
+         "icon_size": "1.3",
+         "icon_position": "top",
+         "icon_color": "#a06bff",
+         "icon_bg_color": "rgba(160,107,255,.14)",
+         "icon_bg_shape": "rounded",
+         "title_color": "#ffffff",
+         "title_font_size": "19",
+         "title_font_weight": "700",
+         "text_color": "#776e92",
+         "icon_gap": "16",
+         "title_gap": "8",
+         "bg_type": "color",
+         "bg_color": "#1e1633",
+         "tile_padding": { "top": 26, "right": 26, "bottom": 26, "left": 26 },
+         "border_radius": { "tl": 14, "tr": 14, "br": 14, "bl": 14, "linked": true },
+         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "linked": true, "style": "solid", "color": "rgba(255,255,255,.08)" },
+         "shadow": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "sy-uc-c5",
+      "type": "column",
+      "settings": { "width": "1-3" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-uc-ib5",
+        "type": "iconbox",
+        "settings": {
+         "icon_emoji": "book-open",
+         "title": "People & HR",
+         "description": "Answer policy questions instantly and onboard new hires with a workspace that knows the ropes.",
+         "link_url": "",
+         "link_text": "",
+         "alignment": "left",
+         "icon_size": "1.3",
+         "icon_position": "top",
+         "icon_color": "#a06bff",
+         "icon_bg_color": "rgba(160,107,255,.14)",
+         "icon_bg_shape": "rounded",
+         "title_color": "#ffffff",
+         "title_font_size": "19",
+         "title_font_weight": "700",
+         "text_color": "#776e92",
+         "icon_gap": "16",
+         "title_gap": "8",
+         "bg_type": "color",
+         "bg_color": "#1e1633",
+         "tile_padding": { "top": 26, "right": 26, "bottom": 26, "left": 26 },
+         "border_radius": { "tl": 14, "tr": 14, "br": 14, "bl": 14, "linked": true },
+         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "linked": true, "style": "solid", "color": "rgba(255,255,255,.08)" },
+         "shadow": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "sy-uc-c6",
+      "type": "column",
+      "settings": { "width": "1-3" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-uc-ib6",
+        "type": "iconbox",
+        "settings": {
+         "icon_emoji": "git-pull-request",
+         "title": "Engineering",
+         "description": "Search code, docs and incidents together — and let agents open the PR or write the post-mortem.",
+         "link_url": "",
+         "link_text": "",
+         "alignment": "left",
+         "icon_size": "1.3",
+         "icon_position": "top",
+         "icon_color": "#a06bff",
+         "icon_bg_color": "rgba(160,107,255,.14)",
+         "icon_bg_shape": "rounded",
+         "title_color": "#ffffff",
+         "title_font_size": "19",
+         "title_font_weight": "700",
+         "text_color": "#776e92",
+         "icon_gap": "16",
+         "title_gap": "8",
+         "bg_type": "color",
+         "bg_color": "#1e1633",
+         "tile_padding": { "top": 26, "right": 26, "bottom": 26, "left": 26 },
+         "border_radius": { "tl": 14, "tr": 14, "br": 14, "bl": 14, "linked": true },
+         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "linked": true, "style": "solid", "color": "rgba(255,255,255,.08)" },
+         "shadow": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sy-uc-tst-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#171029" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sy-uc-tst-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sy-uc-tst-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-uc-tst",
+        "type": "testimonial",
+        "settings": {
+         "layout": "editorial",
+         "quote": "We rolled Synapse out to five teams in a week. Now nobody asks <em>'where's that doc?'</em> — they just ask Synapse.",
+         "author_name": "Maya Lindqvist",
+         "author_role": "COO, Northwind",
+         "rating": "0",
+         "quote_font": "heading",
+         "quote_size": 34,
+         "quote_uppercase": false,
+         "quote_accent_color": "#a06bff",
+         "author_uppercase": false,
+         "author_color": "#776e92",
+         "text_color": "#ffffff",
+         "bg_color": "transparent",
+         "show_line": false
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sy-uc-cta-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#140e22" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sy-uc-cta-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sy-uc-cta-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-uc-cta",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Find your",
+         "headline_accent": "use case",
+         "headline_accent_italic": false,
+         "subtitle": "Connect a couple of tools and ask one real question. You'll see it in two minutes.",
+         "cta_text": "Try free",
+         "cta_url": "#pricing",
+         "bg": {
+          "type": "gradient",
+          "gradient_angle": 160,
+          "gradient_from": "rgba(160,107,255,.18)",
+          "gradient_to": "rgba(255,122,209,.05)"
+         },
+         "text_color": "#ffffff",
+         "accent_color": "#a06bff",
+         "subtitle_color": "#b3a9cc",
+         "cta_bg": "#a06bff",
+         "cta_color": "#ffffff",
+         "cta_radius": { "tl": 9, "tr": 9, "br": 9, "bl": 9, "linked": true },
+         "cta_size": 15,
+         "headline_font_family": "sans-serif",
+         "headline_size": 50,
+         "headline_weight": "700",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": { "tl": 24, "tr": 24, "br": 24, "bl": 24, "linked": true },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

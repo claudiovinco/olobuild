@@ -51,7 +51,7 @@
           }
          ],
          "headline_font_family": "serif",
-         "headline_font_size": 72,
+         "headline_font_size": 80,
          "headline_line_height": 1.1,
          "headline_font_weight": "500",
          "headline_align": "left",
@@ -342,7 +342,7 @@
           }
          ],
          "headline_font_family": "serif",
-         "headline_font_size": 48,
+         "headline_font_size": 54,
          "headline_font_weight": "500",
          "headline_align": "center",
          "headline_inline": true,
@@ -495,7 +495,7 @@
           }
          ],
          "headline_font_family": "serif",
-         "headline_font_size": 48,
+         "headline_font_size": 54,
          "headline_font_weight": "500",
          "headline_align": "center",
          "headline_inline": true,
@@ -544,7 +544,7 @@
          "title_color": "#eef2e9",
          "title_size": 21,
          "title_font": "serif",
-         "title_weight": "600",
+         "title_weight": "500",
          "desc_color": "#74866f",
          "desc_size": 14,
          "card_bg": "",
@@ -637,7 +637,7 @@
           }
          ],
          "headline_font_family": "serif",
-         "headline_font_size": 48,
+         "headline_font_size": 54,
          "headline_font_weight": "500",
          "headline_align": "center",
          "headline_inline": true,
@@ -890,12 +890,19 @@
          "author_name": "Client family",
          "author_role": "with Sterling since 2009",
          "rating": "0",
-         "layout": "single",
+         "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#eef2e9",
          "border_radius": "0",
-         "avatar": ""
+         "avatar": "",
+         "quote_font": "heading",
+         "quote_size": 42,
+         "quote_uppercase": false,
+         "quote_accent_color": "#c9a44a",
+         "author_uppercase": false,
+         "author_color": "#74866f",
+         "star_color": "#c9a44a"
         },
         "style": {},
         "advanced": {},
@@ -1043,7 +1050,7 @@
          },
          "cta_size": 13,
          "headline_font_family": "serif",
-         "headline_size": 52,
+         "headline_size": 58,
          "headline_weight": "500",
          "subtitle_size": 17,
          "layout": "stack",
@@ -1055,7 +1062,7 @@
           "bl": 18,
           "linked": true
          },
-         "banner_padding": 80
+         "banner_padding": 84
         },
         "style": {},
         "advanced": {},

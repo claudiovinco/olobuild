@@ -4,8 +4,8 @@
   "type": "section",
   "settings": {
    "style": "default",
-   "width": "large",
-   "padding": "none"
+   "width": "fullbleed",
+   "padding": "remove-vertical"
   },
   "style": {
    "bg": {
@@ -38,7 +38,7 @@
          "items": [
           {
            "id": "sg-t1",
-           "title": "The case against microservices (again)",
+           "title": "The case against microservices (again)  //",
            "url": "#",
            "badge": "",
            "icon": "",
@@ -46,7 +46,7 @@
           },
           {
            "id": "sg-t2",
-           "title": "What we got wrong about caching",
+           "title": "What we got wrong about caching  //",
            "url": "#",
            "badge": "",
            "icon": "",
@@ -54,7 +54,7 @@
           },
           {
            "id": "sg-t3",
-           "title": "A love letter to the CLI",
+           "title": "A love letter to the CLI  //",
            "url": "#",
            "badge": "",
            "icon": "",
@@ -62,7 +62,7 @@
           },
           {
            "id": "sg-t4",
-           "title": "Why your tests are slow",
+           "title": "Why your tests are slow  //",
            "url": "#",
            "badge": "",
            "icon": "",
@@ -73,13 +73,10 @@
          "animation_type": "marquee",
          "marquee_direction": "left",
          "marquee_duration": 32,
-         "marquee_gap": 60,
+         "marquee_gap": 28,
          "pause_on_hover": true,
-         "show_label": true,
-         "label_text": "//",
-         "label_shape": "square",
-         "label_bg": "#0a0e12",
-         "label_color": "#a3e635",
+         "show_label": false,
+         "label_text": "",
          "show_controls": false,
          "show_indicators": false,
          "show_counter": false,
@@ -117,8 +114,8 @@
   "type": "section",
   "settings": {
    "style": "default",
-   "width": "large",
-   "padding": "large"
+   "width": "fullbleed",
+   "padding": "remove-vertical"
   },
   "style": {
    "bg": {
@@ -145,119 +142,48 @@
       "advanced": {},
       "children": [
        {
-        "id": "sg-hero-split-5",
-        "type": "hero-split",
+        "id": "sg-featuredstory-5",
+        "type": "featuredstory",
         "settings": {
-         "eyebrow_text": "// featured · systems",
-         "eyebrow_dot_color": "#a3e635",
-         "eyebrow_color": "#a3e635",
-         "headline_lines": [
-          {
-           "text": "The cache that",
-           "color": "#eef2ec",
-           "italic": false
-          },
-          {
-           "text": "lied to us",
-           "color": "#eef2ec",
-           "italic": false
-          },
-          {
-           "text": "for three months",
-           "color": "#eef2ec",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "sans-serif",
-         "headline_font_size": 58,
-         "headline_line_height": 1.05,
-         "headline_font_weight": "600",
-         "headline_align": "left",
-         "subhead": "A debugging story about stale reads, false confidence, and the one-line config that quietly broke production — plus what we changed so it can't happen again.",
-         "subhead_color": "#9aa6b0",
-         "subhead_size": 17,
-         "subhead_italic": false,
-         "subhead_max_width": 520,
+         "kicker_text": "// featured · systems",
+         "headline_text": "The cache that lied to us for three months",
+         "headline_url": "/signal-article/",
+         "standfirst": "A debugging story about stale reads, false confidence, and the one-line config that quietly broke production — plus what we changed so it can't happen again.",
+         "byline_pre": "by",
+         "byline_name": "Devin Cho",
+         "byline_meta": "14 min read · 2 days ago",
+         "cover_image": "",
+         "cover_url": "/signal-article/",
+         "cover_label": "diagram — cache invalidation flow",
          "cta1_text": "Read the post",
          "cta1_url": "/signal-article/",
-         "cta1_bg": "#a3e635",
-         "cta1_color": "#0a0e12",
-         "cta1_size": 14,
-         "cta1_radius": {
-          "tl": 8,
-          "tr": 8,
-          "br": 8,
-          "bl": 8,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 8,
-          "tr": 8,
-          "br": 8,
-          "bl": 8,
-          "linked": true
-         },
          "cta2_text": "",
          "cta2_url": "",
-         "cta2_bg": "",
-         "cta2_color": "",
-         "cta2_border": "",
-         "stats": [],
-         "showcase_enabled": false,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#1a212a"
-         },
-         "showcase_padding": 28,
-         "showcase_radius": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "showcase_badge_text": "",
-         "showcase_badge_dot": "#a3e635",
-         "showcase_badge_bg": "#0a0e12",
-         "showcase_badge_color": "#9aa6b0",
-         "showcase_items": [],
-         "showcase_card_radius": {
-          "tl": 9,
-          "tr": 9,
-          "br": 9,
-          "bl": 9,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 9,
-          "tr": 9,
-          "br": 9,
-          "bl": 9,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "",
-         "showcase_caption_right": "",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1.1fr 0.9fr",
-         "gap": 44,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         },
-         "subhead_align": "left",
-         "cta1_target": "_self",
-         "cta2_target": "_self"
+         "media_side": "right",
+         "col_ratio": "1.1fr .9fr",
+         "cover_aspect": "16 / 10",
+         "media_radius": 10,
+         "standfirst_italic": false,
+         "placeholder_dark": false,
+         "bg_color": "#11161c",
+         "kicker_color": "#a3e635",
+         "headline_color": "#eef2ec",
+         "accent_color": "#a3e635",
+         "standfirst_color": "#9aa6b0",
+         "byline_color": "#5f6b76",
+         "byline_name_color": "#eef2ec",
+         "media_bg": "#1a212a",
+         "cta_solid_bg": "#a3e635",
+         "cta_solid_text": "#0a0e12",
+         "heading_font": "\"IBM Plex Sans\", -apple-system, sans-serif",
+         "serif_font": "\"IBM Plex Sans\", -apple-system, sans-serif",
+         "sans_font": "\"IBM Plex Sans\", -apple-system, sans-serif",
+         "cta_radius": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8
+         }
         },
         "style": {},
         "advanced": {},
@@ -275,8 +201,7 @@
   "settings": {
    "style": "default",
    "width": "large",
-   "padding": "large",
-   "border_top": "1px solid rgba(238,242,236,.1)"
+   "padding": "large"
   },
   "style": {
    "bg": {
@@ -306,23 +231,21 @@
         "id": "sg-section-header-9",
         "type": "section-header",
         "settings": {
-         "eyebrow_show": true,
-         "eyebrow_text": "// latest",
-         "eyebrow_color": "#a3e635",
-         "eyebrow_dot_color": "#a3e635",
-         "eyebrow_separator": "",
+         "eyebrow_show": false,
+         "eyebrow_text": "",
          "headline_lines": [
           {
-           "text": "latest",
+           "text": "// latest",
            "color": "#5f6b76",
            "italic": false
           }
          ],
          "headline_font_family": "mono",
          "headline_font_size": 16,
+         "headline_line_height": 1.2,
          "headline_font_weight": "500",
          "headline_align": "left",
-         "headline_inline": false,
+         "headline_inline": true,
          "tagline_show": false,
          "layout": "stack",
          "gap": 8
@@ -357,21 +280,21 @@
         "settings": {
          "columns": 3,
          "items_gap": 24,
-         "media_aspect": "16/9",
+         "media_aspect": "16/10",
          "media_tall_aspect": "4/5",
          "media_bg": "#1a212a",
          "media_label_color": "#eef2ec",
          "hover_zoom": true,
-         "title_font_family": "sans-serif",
+         "title_font_family": "heading",
          "title_color": "#eef2ec",
          "title_size": 21,
          "title_weight": "600",
          "meta_color": "#a3e635",
          "meta_size": 12,
          "show_desc": true,
-         "desc_color": "#9aa6b0",
+         "desc_color": "#5f6b76",
          "desc_size": 14,
-         "mono_font_family": "",
+         "mono_font_family": "IBM Plex Mono",
          "items": [
           {
            "image": "",
@@ -380,7 +303,7 @@
            "meta": "// tooling",
            "description": "Why the command line keeps outliving the GUIs built to replace it. — 9 min · R. Mensah",
            "tall": false,
-           "link_url": "#"
+           "link_url": "/signal-article/"
           },
           {
            "image": "",
@@ -389,7 +312,7 @@
            "meta": "// architecture",
            "description": "Again. But this time with the bill attached. — 12 min · D. Cho",
            "tall": false,
-           "link_url": "#"
+           "link_url": "/signal-article/"
           },
           {
            "image": "",
@@ -398,7 +321,7 @@
            "meta": "// testing",
            "description": "Five culprits, ranked by how much they're costing your team. — 7 min · L. Adeyemi",
            "tall": false,
-           "link_url": "#"
+           "link_url": "/signal-article/"
           }
          ]
         },
@@ -418,8 +341,7 @@
   "settings": {
    "style": "default",
    "width": "large",
-   "padding": "large",
-   "border_top": "1px solid rgba(238,242,236,.1)"
+   "padding": "large"
   },
   "style": {
    "bg": {
@@ -449,23 +371,21 @@
         "id": "sg-section-header-16",
         "type": "section-header",
         "settings": {
-         "eyebrow_show": true,
-         "eyebrow_text": "// topics",
-         "eyebrow_color": "#a3e635",
-         "eyebrow_dot_color": "#a3e635",
-         "eyebrow_separator": "",
+         "eyebrow_show": false,
+         "eyebrow_text": "",
          "headline_lines": [
           {
-           "text": "topics",
+           "text": "// topics",
            "color": "#5f6b76",
            "italic": false
           }
          ],
          "headline_font_family": "mono",
          "headline_font_size": 16,
+         "headline_line_height": 1.2,
          "headline_font_weight": "500",
          "headline_align": "left",
-         "headline_inline": false,
+         "headline_inline": true,
          "tagline_show": false,
          "layout": "stack",
          "gap": 8

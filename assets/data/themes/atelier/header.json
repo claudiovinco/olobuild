@@ -1,1 +1,157 @@
-[{"id":"at-hse","type":"section","settings":{"style":"default","width":"expand","padding":"none"},"style":{"bg":{"type":"solid","color":"rgba(20,20,20,.85)"}},"advanced":{},"children":[{"id":"at-hro","type":"row","settings":{"layout":"100","gap":0,"vertical_align":"center"},"style":{},"advanced":{},"children":[{"id":"at-hco","type":"column","settings":{"width":"1-1","width_medium":"1-1"},"style":{},"advanced":{},"children":[{"id":"at-hmm","type":"megamenu","settings":{"menu_id":"auto","layout":"horizontal","alignment":"right","font_size":"14","font_weight":"600","text_color":"#b6b1a8","sticky":true,"sticky_bg":"rgba(20,20,20,.92)","sticky_shadow":true,"social_icons":false,"search_icon":false,"logo_image":"","logo_width":"140","logo_position":"left","logo_link":"/","logo_sticky":"","mobile_logo":"","mobile_logo_height":"30","mobile_bar_logo":true,"logo_text":"Atelier Noir","logo_dot":true},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "at-ann-sec",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "fullbleed",
+   "padding": "remove-vertical"
+  },
+  "style": {},
+  "advanced": {},
+  "children": [
+   {
+    "id": "at-ann-row",
+    "type": "row",
+    "settings": {
+     "layout": "100",
+     "gap": 0,
+     "vertical_align": "center"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "at-ann-col",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "at-annbar",
+        "type": "announcementbar",
+        "settings": {
+         "text": "Complimentary shipping & returns worldwide · ",
+         "accent_text": "The Nocturne collection has arrived",
+         "link_url": "",
+         "dismissible": false,
+         "bg_color": "#0c0c0c",
+         "text_color": "#efe9de",
+         "accent_color": "#c9a86a",
+         "font_size": "11",
+         "font_weight": "500",
+         "letter_spacing": "0.2em",
+         "text_transform": "uppercase",
+         "alignment": "center",
+         "tile_padding": {
+          "top": 10,
+          "right": 20,
+          "bottom": 10,
+          "left": 20
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "at-hse",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "fullbleed",
+   "padding": "remove-vertical"
+  },
+  "style": {},
+  "advanced": {},
+  "children": [
+   {
+    "id": "at-hro",
+    "type": "row",
+    "settings": {
+     "layout": "100",
+     "gap": 0,
+     "vertical_align": "center"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "at-hco",
+      "type": "column",
+      "settings": {
+       "width": "1-1",
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "at-hmm",
+        "type": "megamenu",
+        "settings": {
+         "menu_id": "auto",
+         "layout": "left",
+         "logo_position": "center",
+         "logo_image": "",
+         "logo_text": "Atelier Noir",
+         "logo_dot": false,
+         "logo_text_color": "#efe9de",
+         "logo_text_size": "26",
+         "logo_link": "/",
+         "font_size": "12",
+         "font_weight": "500",
+         "text_color": "#b6b1a8",
+         "hover_color": "#c9a86a",
+         "text_transform": "uppercase",
+         "letter_spacing": "0.16",
+         "item_gap": "30",
+         "nav_height": "78",
+         "nav_bg": "rgba(20,20,20,.85)",
+         "sticky": true,
+         "sticky_bg": "rgba(20,20,20,.92)",
+         "sticky_shadow": true,
+         "header_mode": "classic",
+         "bar_width": "classic",
+         "extra_links_right": true,
+         "search_icon": false,
+         "social_in_navbar": false,
+         "social_facebook": "",
+         "social_instagram": "",
+         "social_x": "",
+         "social_linkedin": "",
+         "extra_link_1_label": "Search",
+         "extra_link_1_url": "#",
+         "extra_link_2_label": "Account",
+         "extra_link_2_url": "#",
+         "extra_link_3_label": "Bag (0)",
+         "extra_link_3_url": "#",
+         "mobile_bar_logo": true,
+         "mobile_logo_height": "30",
+         "mobile_style": "fullscreen",
+         "mobile_link_font": "heading",
+         "mobile_bg": "#0c0c0c",
+         "mobile_text_color": "#efe9de",
+         "mobile_accent_color": "#c9a86a",
+         "mobile_link_size": 34
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

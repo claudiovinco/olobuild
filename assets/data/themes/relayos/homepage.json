@@ -18,7 +18,10 @@
    {
     "id": "ro-ro-3",
     "type": "row",
-    "settings": {},
+    "settings": {
+     "gap": 48,
+     "vertical_align": "center"
+    },
     "style": {},
     "advanced": {},
     "children": [
@@ -26,7 +29,7 @@
       "id": "ro-co-2",
       "type": "column",
       "settings": {
-       "width": "1-1"
+       "width": "1-2"
       },
       "style": {},
       "advanced": {},
@@ -51,7 +54,7 @@
           }
          ],
          "headline_font_family": "sans-serif",
-         "headline_font_size": 72,
+         "headline_font_size": 76,
          "headline_line_height": 1,
          "headline_font_weight": "700",
          "headline_align": "left",
@@ -100,82 +103,9 @@
           "linked": true
          },
          "stats": [],
-         "showcase_enabled": true,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#161b22"
-         },
-         "showcase_padding": 24,
-         "showcase_radius": {
-          "tl": 14,
-          "tr": 14,
-          "br": 14,
-          "bl": 14,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 14,
-          "tr": 14,
-          "br": 14,
-          "bl": 14,
-          "linked": true
-         },
-         "showcase_badge_text": "// FLOW CANVAS — LIVE",
-         "showcase_badge_dot": "#3fb950",
-         "showcase_badge_bg": "#080b0f",
-         "showcase_badge_color": "#ffffff",
-         "showcase_items": [
-          {
-           "number": "New form submission",
-           "text": "trigger · Typeform",
-           "italic": false,
-           "text_color": "#646e7c",
-           "bg": {
-            "type": "solid",
-            "color": "#10151c"
-           }
-          },
-          {
-           "number": "Enrich & score lead",
-           "text": "action · Clearbit",
-           "italic": false,
-           "text_color": "#646e7c",
-           "bg": {
-            "type": "solid",
-            "color": "#10151c"
-           }
-          },
-          {
-           "number": "Add to CRM + Slack",
-           "text": "action · HubSpot, Slack",
-           "italic": false,
-           "text_color": "#646e7c",
-           "bg": {
-            "type": "solid",
-            "color": "#10151c"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "TRIGGERS",
-         "showcase_caption_right": "ACTIONS",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1.05fr .95fr",
-         "gap": 48,
+         "showcase_enabled": false,
+         "split_ratio": "1fr 1fr",
+         "gap": 0,
          "min_height": 0,
          "tile_padding": {
           "top": 0,
@@ -183,6 +113,101 @@
           "bottom": 0,
           "left": 0
          }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ro-co-2b",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-hero-flow",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": {
+          "type": "solid",
+          "color": "#161b22"
+         },
+         "container_padding": 24,
+         "container_gap": 12,
+         "columns": 1,
+         "items_gap": 12,
+         "card_bg": {
+          "type": "solid",
+          "color": "#10151c"
+         },
+         "card_color": "#646e7c",
+         "card_accent_color": "#3fb950",
+         "card_radius": {
+          "tl": 10,
+          "tr": 10,
+          "br": 10,
+          "bl": 10,
+          "linked": true
+         },
+         "card_padding": 16,
+         "card_border": "rgba(255,255,255,.08)",
+         "show_icon": true,
+         "show_counter": true,
+         "show_counter_label": false,
+         "counter_shape": "plain",
+         "show_arrow": false,
+         "show_footer": false,
+         "show_divider": false,
+         "show_media": false,
+         "icon_color": "#3fb950",
+         "icon_bg_color": "rgba(63,185,80,.16)",
+         "icon_size": 16,
+         "title_color": "#ffffff",
+         "title_font_family": "sans-serif",
+         "title_size": 14,
+         "title_weight": "600",
+         "title_italic": false,
+         "counter_color": "#3fb950",
+         "counter_size": 10,
+         "description_size": 11,
+         "items": [
+          {
+           "icon": "zap",
+           "counter": "when",
+           "counter_label": "",
+           "title": "New form submission",
+           "title_accent": "",
+           "description": "trigger · Typeform",
+           "footer_text": "",
+           "link_url": ""
+          },
+          {
+           "icon": "user-plus",
+           "counter": "then",
+           "counter_label": "",
+           "title": "Enrich & score lead",
+           "title_accent": "",
+           "description": "action · Clearbit",
+           "footer_text": "",
+           "link_url": ""
+          },
+          {
+           "icon": "send",
+           "counter": "then",
+           "counter_label": "",
+           "title": "Add to CRM + Slack",
+           "title_accent": "",
+           "description": "action · HubSpot, Slack",
+           "footer_text": "",
+           "link_url": ""
+          }
+         ],
+         "card_hover_effect": "none"
         },
         "style": {},
         "advanced": {},
@@ -377,7 +402,7 @@
          "band_padding_y": 18,
          "show_dividers": true,
          "divider_color": "rgba(255,255,255,.08)",
-         "band_border": false,
+         "band_border": true,
          "value_font_family": "heading",
          "value_color": "#3fb950",
          "value_size": 48,
@@ -503,7 +528,7 @@
          "show_media": false,
          "icon_color": "#3fb950",
          "icon_bg_color": "transparent",
-         "title_color": "#ffffff",
+         "title_color": "#9ba6b4",
          "title_font_family": "sans-serif",
          "title_size": 14.5,
          "title_weight": "500",
@@ -567,26 +592,44 @@
       "advanced": {},
       "children": [
        {
-        "id": "ro-buildermock-26",
-        "type": "buildermock",
+        "id": "ro-image-26",
+        "type": "image",
         "settings": {
-         "bg_color": "#161b22",
-         "border_color": "rgba(255,255,255,.08)",
-         "border_radius": {
-          "tl": 16,
-          "tr": 16,
-          "br": 16,
-          "bl": 16,
-          "linked": true
+         "image_url": "",
+         "media_bg": {
+          "type": "none"
          },
-         "bar_bg": "#1c232c",
-         "bar_dot_color": "rgba(255,255,255,.16)",
-         "content_label": "flow canvas — nodes & connectors",
-         "content_bg": "#161b22",
-         "content_pattern": "grid",
-         "aspect_ratio": "16/10",
-         "label_color": "rgba(255,255,255,.4)",
-         "label_font": "mono"
+         "media_label": "flow canvas — nodes & connectors",
+         "alt_text": "Relay OS flow canvas — nodes & connectors",
+         "image_width": "100%",
+         "height": "",
+         "aspect_ratio": "custom",
+         "aspect_ratio_custom": "16/10",
+         "object_fit": "cover",
+         "image_alignment": "center",
+         "border_radius": "16",
+         "border": {
+          "top": {
+           "width": 1,
+           "style": "solid",
+           "color": "rgba(255,255,255,.08)"
+          },
+          "right": {
+           "width": 1,
+           "style": "solid",
+           "color": "rgba(255,255,255,.08)"
+          },
+          "bottom": {
+           "width": 1,
+           "style": "solid",
+           "color": "rgba(255,255,255,.08)"
+          },
+          "left": {
+           "width": 1,
+           "style": "solid",
+           "color": "rgba(255,255,255,.08)"
+          }
+         }
         },
         "style": {},
         "advanced": {},
@@ -641,23 +684,28 @@
          "eyebrow_separator": "",
          "headline_lines": [
           {
-           "text": "One flow,",
+           "text": "One flow, ",
            "color": "#ffffff",
            "italic": false
           },
           {
-           "text": "a hundred hands off your plate",
+           "text": "a hundred ",
            "color": "#3fb950",
+           "italic": false
+          },
+          {
+           "text": "hands off your plate",
+           "color": "#ffffff",
            "italic": false
           }
          ],
          "headline_font_family": "sans-serif",
-         "headline_font_size": 44,
+         "headline_font_size": 46,
          "headline_font_weight": "700",
          "headline_align": "center",
-         "headline_inline": false,
+         "headline_inline": true,
          "tagline_show": true,
-         "tagline_text": "Every step you'd do by hand becomes a block that runs itself.",
+         "tagline_text": "Move your cursor here. Every step you'd do by hand becomes a block that runs itself.",
          "tagline_text_italic": false,
          "tagline_text_color": "#646e7c",
          "tagline_text_size": 16,
@@ -811,7 +859,7 @@
           }
          ],
          "headline_font_family": "sans-serif",
-         "headline_font_size": 46,
+         "headline_font_size": 50,
          "headline_font_weight": "700",
          "headline_align": "center",
          "headline_inline": true,
@@ -1014,7 +1062,7 @@
           }
          ],
          "headline_font_family": "sans-serif",
-         "headline_font_size": 46,
+         "headline_font_size": 50,
          "headline_font_weight": "700",
          "headline_align": "center",
          "headline_inline": true,
@@ -1112,7 +1160,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#161b22"
+    "color": "#10151c"
    }
   },
   "advanced": {},
@@ -1149,13 +1197,18 @@
            "italic": false
           },
           {
-           "text": "task, not per seat",
+           "text": "task",
            "color": "#3fb950",
+           "italic": false
+          },
+          {
+           "text": ", not per seat",
+           "color": "#ffffff",
            "italic": false
           }
          ],
          "headline_font_family": "sans-serif",
-         "headline_font_size": 46,
+         "headline_font_size": 50,
          "headline_font_weight": "700",
          "headline_align": "center",
          "headline_inline": true,
@@ -1205,7 +1258,7 @@
          "description": "For personal automations.",
          "features": "500 tasks / mo\nUnlimited flows\n5-min polling",
          "is_popular": false,
-         "bg_color": "#1c232c",
+         "bg_color": "#161b22",
          "price_color": "#ffffff",
          "accent_color": "#3fb950",
          "cta_text": "Start free",
@@ -1254,13 +1307,13 @@
          "badge_text": "Most popular",
          "badge_bg_color": "rgba(63,185,80,.12)",
          "badge_text_color": "#3fb950",
-         "bg_color": "#1c232c",
+         "bg_color": "#161b22",
          "price_color": "#ffffff",
          "accent_color": "#3fb950",
          "cta_text": "Start 14-day trial",
          "cta_url": "#pricing",
          "cta_bg": "#3fb950",
-         "cta_color": "#080b0f",
+         "cta_color": "#04210a",
          "border_radius": {
           "tl": 18,
           "tr": 18,
@@ -1299,7 +1352,7 @@
          "description": "Scale, SSO & governance.",
          "features": "Unlimited tasks\nSSO & audit log\nDedicated support",
          "is_popular": false,
-         "bg_color": "#1c232c",
+         "bg_color": "#161b22",
          "price_color": "#ffffff",
          "accent_color": "#3fb950",
          "cta_text": "Talk to sales",
@@ -1377,37 +1430,41 @@
           {
            "option": "New leads",
            "icon": "zap",
+           "kicker": "Prebuilt recipe",
            "title": "Lead → CRM → Slack",
-           "text": "Every new lead enriched, deduped and in front of the right rep in seconds — no copy-paste, no missed follow-ups.",
-           "meta": "Prebuilt recipe",
-           "cta_text": "Use this recipe",
+           "text": "on form.submit → enrich(clearbit) → upsert(crm) → notify(#sales) — every new lead enriched, deduped and in front of the right rep in seconds, no copy-paste, no missed follow-ups.",
+           "meta": "",
+           "cta_text": "",
            "cta_url": "#"
           },
           {
            "option": "Support tickets",
            "icon": "cpu",
+           "kicker": "Prebuilt recipe",
            "title": "Triage & Route",
-           "text": "Inbound tickets read, tagged and routed by intent and urgency the moment they land.",
-           "meta": "Prebuilt recipe",
-           "cta_text": "Use this recipe",
+           "text": "on ticket.created → classify(ai) → set.priority → assign(team) — inbound tickets read, tagged and routed by intent and urgency the moment they land.",
+           "meta": "",
+           "cta_text": "",
            "cta_url": "#"
           },
           {
            "option": "Ops & reporting",
            "icon": "calendar",
+           "kicker": "Prebuilt recipe",
            "title": "Nightly Rollup",
-           "text": "Yesterday's numbers, compiled and in every inbox before the first coffee. Runs while you sleep.",
-           "meta": "Prebuilt recipe",
-           "cta_text": "Use this recipe",
+           "text": "on schedule(02:00) → query(warehouse) → build(report) → send(email) — yesterday's numbers, compiled and in every inbox before the first coffee. Runs while you sleep.",
+           "meta": "",
+           "cta_text": "",
            "cta_url": "#"
           },
           {
            "option": "Onboarding",
            "icon": "users",
+           "kicker": "Prebuilt recipe",
            "title": "Day-One Setup",
-           "text": "New starters fully provisioned and scheduled before they walk in — IT, access and intros, automatically.",
-           "meta": "Prebuilt recipe",
-           "cta_text": "Use this recipe",
+           "text": "on hire.signed → create(accounts) → grant(access) → schedule(checkins) — new starters fully provisioned and scheduled before they walk in: IT, access and intros, automatically.",
+           "meta": "",
+           "cta_text": "",
            "cta_url": "#"
           }
          ]
@@ -1487,7 +1544,7 @@
          },
          "cta_size": 15,
          "headline_font_family": "sans-serif",
-         "headline_size": 52,
+         "headline_size": 58,
          "headline_weight": "700",
          "subtitle_size": 17,
          "layout": "stack",

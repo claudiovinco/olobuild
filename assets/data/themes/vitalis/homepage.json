@@ -32,172 +32,57 @@
       "advanced": {},
       "children": [
        {
-        "id": "vt-hero-split-1",
-        "type": "hero-split",
+        "id": "vt-hero-intro-1",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "Wellness & recovery clinic",
-         "eyebrow_dot_color": "#6fd6c4",
+         "eyebrow": "Wellness & recovery clinic",
          "eyebrow_color": "#6fd6c4",
-         "headline_lines": [
-          {
-           "text": "Feel like",
-           "color": "#eaf6f2",
-           "italic": false
-          },
-          {
-           "text": "yourself",
-           "color": "#6fd6c4",
-           "italic": true
-          },
-          {
-           "text": "again.",
-           "color": "#eaf6f2",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "serif",
-         "headline_font_size": 78,
-         "headline_line_height": 1.04,
-         "headline_font_weight": "500",
-         "headline_align": "left",
-         "subhead": "Physiotherapy, recovery suites and longevity care under one calm roof — evidence-led, unhurried, and built around you.",
-         "subhead_color": "#a9cfc7",
-         "subhead_size": 18,
-         "subhead_italic": false,
-         "subhead_max_width": 440,
-         "cta1_text": "Book a first visit",
-         "cta1_url": "#membership",
-         "cta1_bg": "#6fd6c4",
-         "cta1_color": "#072422",
-         "cta1_size": 15,
-         "cta1_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
+         "headline": "Feel like",
+         "accent": "yourself",
+         "headline_tail": "again.",
+         "accent_italic": true,
+         "uppercase": false,
+         "headline_color": "#eaf6f2",
+         "accent_color": "#6fd6c4",
+         "headline_weight": "500",
+         "headline_size": "86",
+         "lead": "Physiotherapy, recovery suites and longevity care under one calm roof — evidence-led, unhurried, and built around you.",
+         "lead_color": "#a9cfc7",
+         "stats": [],
+         "cta_text": "Book a first visit",
+         "cta_url": "#membership",
+         "cta_style": "button",
+         "cta_bg": "#6fd6c4",
+         "cta_color": "#072422",
          "cta2_text": "Explore services",
          "cta2_url": "#services",
-         "cta2_bg": "transparent",
-         "cta2_color": "#eaf6f2",
-         "cta2_border": "rgba(111,214,196,.42)",
-         "cta2_size": 15,
-         "cta2_radius": {
+         "cta2_style": "outline",
+         "cta_radius": {
           "tl": 999,
           "tr": 999,
           "br": 999,
-          "bl": 999,
-          "linked": true
+          "bl": 999
          },
-         "cta2_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
+         "media_image": "",
+         "media_bg": {
+          "type": "none"
          },
-         "stats": [],
-         "showcase_enabled": false,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#14504d"
+         "media_label": "treatment room, soft daylight, plants",
+         "media_light": false,
+         "media_aspect": "4/5",
+         "media_radius": 18,
+         "media_radius_top": 0,
+         "badge_number": "1:1",
+         "badge_label": "always",
+         "badge_bg": "#072422",
+         "badge_color": "#eaf6f2",
+         "badge_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14
          },
-         "showcase_padding": 28,
-         "showcase_radius": {
-          "tl": 18,
-          "tr": 18,
-          "br": 18,
-          "bl": 18,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 18,
-          "tr": 18,
-          "br": 18,
-          "bl": 18,
-          "linked": true
-         },
-         "showcase_badge_text": "1:1 always",
-         "showcase_badge_dot": "#6fd6c4",
-         "showcase_badge_bg": "#072422",
-         "showcase_badge_color": "#eaf6f2",
-         "showcase_items": [
-          {
-           "number": "Your team",
-           "text": "12 clinicians",
-           "italic": false,
-           "text_color": "#6fd6c4",
-           "bg": {
-            "type": "solid",
-            "color": "#1a5d59"
-           }
-          },
-          {
-           "number": "Recovery suites",
-           "text": "4 suites",
-           "italic": false,
-           "text_color": "#eaf6f2",
-           "bg": {
-            "type": "solid",
-            "color": "#1a5d59"
-           }
-          },
-          {
-           "number": "Members",
-           "text": "3,200+",
-           "italic": false,
-           "text_color": "#eaf6f2",
-           "bg": {
-            "type": "solid",
-            "color": "#1a5d59"
-           }
-          },
-          {
-           "number": "Google rating",
-           "text": "4.9",
-           "italic": false,
-           "text_color": "#eaf6f2",
-           "bg": {
-            "type": "solid",
-            "color": "#1a5d59"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 12,
-          "tr": 12,
-          "br": 12,
-          "bl": 12,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 12,
-          "tr": 12,
-          "br": 12,
-          "bl": 12,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "VITALIS",
-         "showcase_caption_right": "WELLNESS CLINIC",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1.05fr .95fr",
-         "gap": 48,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_position": "right"
         },
         "style": {},
         "advanced": {},
@@ -525,7 +410,7 @@
            "price": "€90",
            "image_url": "",
            "highlighted": false,
-           "badge": "Most popular"
+           "badge": ""
           },
           {
            "id": "vt-pl6",
@@ -1080,20 +965,22 @@
         "id": "vt-testimonial-49",
         "type": "testimonial",
         "settings": {
-         "quote": "\"Six weeks at Vitalis did more for my back than two years of guessing. Calm place, sharp people.\"",
+         "quote": "Six weeks at Vitalis did more for my back than two years of guessing. Calm place, <em>sharp people.</em>",
          "author_name": "Daniel R.",
          "author_role": "member since 2024",
          "rating": "0",
-         "layout": "single",
+         "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#eaf6f2",
          "border_radius": "0",
          "avatar": "",
-         "font_family": "serif",
-         "font_size": 38,
-         "font_style": "italic",
-         "font_weight": "400"
+         "quote_font": "heading",
+         "quote_size": 40,
+         "quote_accent_color": "#6fd6c4",
+         "quote_uppercase": false,
+         "author_uppercase": true,
+         "author_color": "#6fd6c4"
         },
         "style": {},
         "advanced": {},
@@ -1285,7 +1172,14 @@
          "banner_padding": 80
         },
         "style": {},
-        "advanced": {},
+        "advanced": {
+         "cursor_spotlight": true,
+         "cursor_spotlight_color": "#6fd6c4",
+         "cursor_spotlight_blend": "screen",
+         "cursor_spotlight_size": 460,
+         "cursor_spotlight_softness": 68,
+         "cursor_spotlight_easing": 18
+        },
         "children": []
        }
       ]

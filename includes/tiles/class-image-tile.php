@@ -12,6 +12,8 @@ class Olo_Image_Tile extends Olo_Tile_Base {
     protected $category = 'essential';
     protected $defaults = [
         'image_url'   => '',
+        'media_bg'    => [ 'type' => 'none' ],
+        'media_label' => '',
         'hover_image' => '',
         'hover_video' => '',
         'alt_text'    => '',
@@ -499,6 +501,7 @@ class Olo_Image_Tile extends Olo_Tile_Base {
         ?>
         <figure class="olo-image <?php echo esc_attr( $uid ); ?>"<?php echo $align_data_attr; ?><?php if ( ! empty( $s['lightbox'] ) && empty( $s['link_url'] ) ) echo ' data-uk-lightbox'; ?> style="<?php echo esc_attr( $figure_style ); ?>">
             <?php
+            if ( ! empty( $s['image_url'] ) ) :
             $att_id = absint( $s['image_url_id'] ?? 0 );
             // No border-radius on the <img>: figure has overflow:hidden + radius which clips correctly.
             // Applying radius on both could conflict when the figure changes radius on :hover.
@@ -539,6 +542,18 @@ class Olo_Image_Tile extends Olo_Tile_Base {
             } else {
                 echo $img;
             }
+            else :
+                // Media slot universale: media_bg (ogni tipo) o placeholder a righe + etichetta
+                $parts = $this->bg_media_parts( $s['media_bg'] ?? [], '.' . $uid );
+                if ( $parts['has'] ) {
+                    echo '<div class="olo-img-media" style="position:relative;width:100%;height:100%;min-height:inherit;overflow:hidden;' . $parts['css'] . '">' . $parts['markup'] . '</div>';
+                } else {
+                    $lbl = trim( (string) ( $s['media_label'] ?? '' ) );
+                    echo '<div class="olo-img-ph" style="position:relative;width:100%;height:100%;min-height:inherit;overflow:hidden;background:var(--olo-color-muted,#2b2b2b);background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 16px,transparent 16px 32px);">'
+                       . ( $lbl !== '' ? '<span style="position:absolute;left:14px;bottom:12px;right:14px;font-size:10.5px;letter-spacing:.1em;color:rgba(255,255,255,.4);text-transform:uppercase;">' . esc_html( $lbl ) . '</span>' : '' )
+                       . '</div>';
+                }
+            endif;
             // SpotlightFX overlay (decorativo, sopra l'immagine, sotto la didascalia)
             echo $spot_html;
             ?>

@@ -1,7 +1,14 @@
 <template>
   <div class="mb-p-6" :style="wrapStyle">
+    <!-- Layout: editorial (centrato) -->
+    <div v-if="s.layout === 'editorial'" class="olo-test-ed" :style="{ textAlign: 'center', maxWidth: '840px', margin: '0 auto', '--ed-accent': edAccent }">
+      <div v-if="rating > 0" :style="{ color: edStar, letterSpacing: '.2em', fontSize: '18px', marginBottom: '18px', lineHeight: 1 }">{{ stars }}</div>
+      <q class="olo-test-ed__q" :style="edQuoteStyle" v-html="s.quote"></q>
+      <div v-if="s.author_name || s.author_role" :style="edByStyle">{{ edByText }}</div>
+    </div>
+
     <!-- Layout: left -->
-    <div v-if="s.author_position === 'left'" class="mb-flex mb-gap-5 mb-items-start">
+    <div v-else-if="s.author_position === 'left'" class="mb-flex mb-gap-5 mb-items-start">
       <div class="mb-shrink-0">
         <AuthorBlock :s="s" :avatarStyle="avatarStyle" />
       </div>
@@ -60,10 +67,29 @@ const s = computed(() => ({
   border_radius: '12',
   border_width: '0',
   border_color: '',
+  layout: 'single',
+  star_color: '',
+  author_color: '',
+  quote_accent_color: '',
+  quote_font: 'inherit',
+  quote_size: 0,
+  author_uppercase: false,
+  quote_uppercase: false,
   ...props.settings,
 }));
 
 const rating = computed(() => parseInt(s.value.rating) || 0);
+const stars = computed(() => '★'.repeat(Math.max(0, rating.value)));
+const edAccent = computed(() => resolveColor(s.value.quote_accent_color, TOKENS.primary));
+const edStar = computed(() => (s.value.star_color ? resolveColor(s.value.star_color, '#FBBF24') : '#FBBF24'));
+const edQuoteStyle = computed(() => {
+  const qf = s.value.quote_font;
+  const fam = qf === 'heading' ? 'var(--olo-font-family-heading, Georgia, serif)' : (qf === 'body' ? 'var(--olo-font-family, -apple-system, sans-serif)' : 'inherit');
+  const qs = parseInt(s.value.quote_size) || 0;
+  return { display: 'block', fontFamily: fam, fontSize: qs > 0 ? qs + 'px' : 'clamp(24px,3.4vw,40px)', lineHeight: 1.28, color: resolveColor(s.value.text_color, TOKENS.text), quotes: 'none', margin: 0, textTransform: s.value.quote_uppercase ? 'uppercase' : 'none' };
+});
+const edByStyle = computed(() => ({ marginTop: '22px', fontWeight: 700, fontSize: '12px', letterSpacing: '.1em', color: resolveColor(s.value.author_color || s.value.quote_accent_color, TOKENS.primary), textTransform: s.value.author_uppercase ? 'uppercase' : 'none' }));
+const edByText = computed(() => [s.value.author_name, s.value.author_role].filter(Boolean).join(' · '));
 
 const wrapStyle = computed(() => {
   const bw = parseInt(s.value.border_width) || 0;
@@ -177,3 +203,7 @@ const AuthorBlock = {
   },
 };
 </script>
+
+<style scoped>
+.olo-test-ed__q :deep(em) { font-style: italic; color: var(--ed-accent, currentColor); }
+</style>

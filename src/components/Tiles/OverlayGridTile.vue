@@ -1,11 +1,12 @@
 <template>
   <div class="olo-overlaygrid" :class="'olo-og--preset-' + (s.preset || 'editorial-grid')">
-    <div class="mog-grid" :style="{ '--mog-cols': cols, '--mog-gap': gap }">
+    <div class="mog-grid" :class="{ 'mog-grid--masonry': masonry }" :style="gridStyle">
       <div
         v-for="(item, i) in items"
         :key="item.id || i"
         class="mog-cell"
-        :style="{ height: itemHeight + 'px' }"
+        :class="cellClass(item)"
+        :style="masonry ? null : { height: itemHeight + 'px' }"
       >
         <!-- Image layer (receives hover effects) -->
         <div
@@ -53,6 +54,7 @@ const defaults = {
   ribbon_position: 'top-right',
   ribbon_bg: '#e11d48',
   ribbon_color: '#ffffff',
+  layout_mode: 'uniform',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
@@ -79,7 +81,16 @@ const itemHeight = computed(() => {
 const gapMap = { collapse: '0px', small: '8px', medium: '16px', large: '24px' };
 const gap = computed(() => gapMap[s.value.gap || 'medium'] || '16px');
 
-// gridStyle replaced with CSS custom properties on .mog-grid
+const masonry = computed(() => (s.value.layout_mode || 'uniform') === 'masonry');
+const gridStyle = computed(() => {
+  const st = { '--mog-cols': cols.value, '--mog-gap': gap.value };
+  if (masonry.value) st['--mog-row'] = itemHeight.value + 'px';
+  return st;
+});
+function cellClass(item) {
+  if (!masonry.value) return '';
+  return [item.tall ? 'mog-tall' : '', item.wide ? 'mog-wide' : ''];
+}
 
 function bgStyle(item) {
   if (item.image) {
@@ -138,6 +149,12 @@ const hoverOverlayClass = computed(() => {
   grid-template-columns: repeat(var(--mog-cols, 3), 1fr) !important;
   gap: var(--mog-gap, 16px) !important;
 }
+.mog-grid--masonry {
+  grid-auto-rows: var(--mog-row, 150px);
+  grid-auto-flow: dense;
+}
+.mog-grid--masonry .mog-tall { grid-row: span 2; }
+.mog-grid--masonry .mog-wide { grid-column: span 2; }
 
 .mog-cell {
   position: relative;

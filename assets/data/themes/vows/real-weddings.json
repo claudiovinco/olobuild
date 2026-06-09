@@ -1,0 +1,172 @@
+[
+ {
+  "id": "vw-ph-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_bottom": 48 },
+  "style": { "bg": { "type": "solid", "color": "#2a2620" } },
+  "advanced": {},
+  "children": [
+   { "id": "vw-ph-ro", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "vw-ph-co", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "vw-ph-head", "type": "section-header", "settings": {
+        "eyebrow_show": true,
+        "eyebrow_text": "Real couples, real days",
+        "eyebrow_color": "#cbab6a",
+        "eyebrow_dot_color": "#cbab6a",
+        "eyebrow_separator": "",
+        "headline_lines": [
+         { "text": "Real ", "color": "#f3ecdf", "italic": false },
+         { "text": "weddings", "color": "#cbab6a", "italic": true }
+        ],
+        "headline_font_family": "serif",
+        "headline_font_size": 76,
+        "headline_font_weight": "500",
+        "headline_align": "center",
+        "headline_inline": true,
+        "tagline_show": true,
+        "tagline_text": "A handful of the days we've had the joy of planning — each one entirely different, because each couple is.",
+        "tagline_text_italic": false,
+        "tagline_text_color": "#8a7f6c",
+        "tagline_text_size": 16,
+        "layout": "center",
+        "gap": 18
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "vw-gal-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_top": 48 },
+  "style": { "bg": { "type": "solid", "color": "#2a2620" } },
+  "advanced": {},
+  "children": [
+   { "id": "vw-gal-ro", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "vw-gal-co", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "vw-gal", "type": "overlaygrid", "settings": {
+        "preset": "editorial-grid",
+        "bg": { "type": "none" },
+        "columns": "4",
+        "columns_mobile": "2",
+        "gap": "small",
+        "height": "200",
+        "layout_mode": "masonry",
+        "match_height": false,
+        "overlay_position": "bottom",
+        "overlay_style": "overlay-primary",
+        "overlay_color": "rgba(27,24,19,.7)",
+        "overlay_gradient": true,
+        "overlay_padding": "small",
+        "title_size": "h4",
+        "title_color": "#f3ecdf",
+        "title_weight": "500",
+        "title_letter_spacing": 0,
+        "title_uppercase": false,
+        "subtitle_color": "#cbab6a",
+        "subtitle_size": 11,
+        "hover_effect": "zoom",
+        "hover_overlay": "fade",
+        "item_radius": 10,
+        "show_cta": false,
+        "items": [
+         { "image": "", "title": "Amara & James", "subtitle": "Lake Garda", "wide": true },
+         { "image": "", "title": "Noor & Sam", "subtitle": "City loft" },
+         { "image": "", "title": "Lena & Pia", "subtitle": "Vineyard", "tall": true },
+         { "image": "", "title": "Theo & Mara", "subtitle": "Coast" },
+         { "image": "", "title": "Yara & Otis", "subtitle": "Garden" },
+         { "image": "", "title": "Ines & Bea", "subtitle": "Castle", "wide": true },
+         { "image": "", "title": "Ravi & Kit", "subtitle": "Barn" }
+        ]
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "vw-testi-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#312c25" } },
+  "advanced": {},
+  "children": [
+   { "id": "vw-testi-ro", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "vw-testi-co", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "vw-testi", "type": "testimonial", "settings": {
+        "quote": "Three hundred guests, two countries, one very relaxed couple. Vows made the impossible feel <em>effortless.</em>",
+        "author_name": "Lena & Pia",
+        "author_role": "married 2025",
+        "rating": "0",
+        "layout": "editorial",
+        "show_line": false,
+        "bg_color": "transparent",
+        "text_color": "#f3ecdf",
+        "quote_font": "heading",
+        "quote_size": 40,
+        "quote_accent_color": "#cbab6a",
+        "quote_uppercase": false,
+        "star_color": "#cbab6a",
+        "author_color": "#cbab6a",
+        "author_uppercase": true,
+        "border_radius": "0",
+        "avatar": ""
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "vw-cta-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#2a2620" } },
+  "advanced": {},
+  "children": [
+   { "id": "vw-cta-ro", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "vw-cta-co", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "vw-cta-head", "type": "section-header", "settings": {
+        "eyebrow_show": true,
+        "eyebrow_text": "Your turn",
+        "eyebrow_color": "#cbab6a",
+        "eyebrow_dot_color": "#cbab6a",
+        "eyebrow_separator": "",
+        "headline_lines": [
+         { "text": "Let's plan ", "color": "#f3ecdf", "italic": false },
+         { "text": "yours", "color": "#cbab6a", "italic": true }
+        ],
+        "headline_font_family": "serif",
+        "headline_font_size": 56,
+        "headline_font_weight": "500",
+        "headline_align": "center",
+        "headline_inline": true,
+        "tagline_show": true,
+        "tagline_text": "We take a limited number of weddings a year. Check whether your date is free.",
+        "tagline_text_italic": false,
+        "tagline_text_color": "#8a7f6c",
+        "tagline_text_size": 16,
+        "layout": "center",
+        "gap": 18
+       }, "style": {}, "advanced": {}, "children": [] },
+     { "id": "vw-cta-btn", "type": "button", "settings": {
+        "text": "Check our availability",
+        "url": "/#enquire",
+        "target": "_self",
+        "alignment": "center",
+        "full_width": false,
+        "bg_color": "#cbab6a",
+        "text_color": "#1b1813",
+        "hover_bg_color": "#d9bd82",
+        "hover_text_color": "#1b1813",
+        "border_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999, "linked": true },
+        "tile_padding": { "top": 14, "right": 30, "bottom": 14, "left": 30 },
+        "font_size": "12",
+        "font_weight": "600",
+        "text_transform": "uppercase",
+        "letter_spacing": "2",
+        "shadow": "none"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

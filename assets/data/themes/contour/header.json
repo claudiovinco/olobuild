@@ -1,1 +1,66 @@
-[{"id":"co-hse","type":"section","settings":{"style":"default","width":"expand","padding":"none"},"style":{"bg":{"type":"solid","color":"rgba(244,239,230,.88)"}},"advanced":{},"children":[{"id":"co-hro","type":"row","settings":{"layout":"100","gap":0,"vertical_align":"center"},"style":{},"advanced":{},"children":[{"id":"co-hco","type":"column","settings":{"width":"1-1","width_medium":"1-1"},"style":{},"advanced":{},"children":[{"id":"co-hmm","type":"megamenu","settings":{"menu_id":"auto","layout":"horizontal","alignment":"right","font_size":"14","font_weight":"600","text_color":"#5e584e","sticky":true,"sticky_bg":"rgba(244,239,230,.95)","sticky_shadow":true,"social_icons":false,"search_icon":false,"logo_image":"","logo_width":"130","logo_position":"left","logo_link":"/","logo_sticky":"","mobile_logo":"","mobile_logo_height":"30","mobile_bar_logo":true,"logo_text":"Contour","logo_dot":true},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "co-hse",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "none" } },
+  "advanced": {},
+  "children": [
+   { "id": "co-hro", "type": "row", "settings": { "layout": "100", "gap": 0, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
+    { "id": "co-hco", "type": "column", "settings": { "width": "1-1", "width_medium": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "co-hmm", "type": "megamenu", "settings": {
+        "menu_id": "auto",
+        "layout": "left",
+        "font_size": "14",
+        "font_weight": "500",
+        "text_color": "#5e584e",
+        "hover_color": "#cf7e4f",
+        "active_color": "#cf7e4f",
+        "item_gap": "28",
+        "sticky": true,
+        "header_mode": "classic",
+        "nav_bg": "rgba(244,239,230,.88)",
+        "sticky_bg": "rgba(244,239,230,.95)",
+        "sticky_shadow": false,
+        "bar_width": "classic",
+        "social_icons": false,
+        "search_icon": false,
+        "logo_image": "",
+        "logo_width": "130",
+        "logo_position": "left",
+        "logo_link": "/",
+        "logo_sticky": "",
+        "mobile_logo": "",
+        "mobile_logo_height": "30",
+        "mobile_bar_logo": true,
+        "logo_text": "Contour",
+        "logo_text_size": "24",
+        "logo_text_color": "#2c2a26",
+        "logo_dot": true,
+        "button_mode": "none",
+        "btn_bg": "#cf7e4f",
+        "btn_color": "#ffffff",
+        "btn_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999, "linked": true },
+        "btn_hover_bg": "#bb6a3c",
+        "extra_link_1_label": "Book a class",
+        "extra_link_1_url": "#pricing",
+        "extra_link_1_button": true,
+        "extra_links_right": true,
+        "mobile_breakpoint": "880",
+        "mobile_style": "fullscreen",
+        "mobile_link_font": "heading",
+        "mobile_bg": "#2c2a26",
+        "mobile_text_color": "#f4efe6",
+        "mobile_accent_color": "#cf7e4f",
+        "mobile_heading_color": "#cf7e4f",
+        "mobile_link_size": 34,
+        "mobile_numbers": true,
+        "mobile_footer_text": "22 Linden Mews · open from 7am",
+        "mobile_footer_cta_text": "Intro offer · €49 →",
+        "mobile_footer_cta_url": "#pricing"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

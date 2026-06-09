@@ -1,1 +1,91 @@
-[{"id":"bl-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#432838"}},"advanced":{},"children":[{"id":"bl-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"bl-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"bl-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Rozha One\", Georgia, serif;font-size:20px;color:#f6e9ec;font-weight:400;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#e7a0b4;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Bloom</div><p style=\"font-size:14px;color:#9c7e8c;max-width:260px\">Clean colour cosmetics in shades for everyone. Cruelty-free, refillable, made in the EU.</p>","text_color":"#cdb1bd","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"bl-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"bl-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#f6e9ec;font-family:\"Plus Jakarta Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Shop</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#9c7e8c\"><li>All products</li><li>Lips</li><li>Cheeks</li><li>Base</li></ul>","text_color":"#cdb1bd","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"bl-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"bl-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#f6e9ec;font-family:\"Plus Jakarta Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Help</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#9c7e8c\"><li>Shade finder</li><li>Shipping</li><li>Returns</li><li>Refills</li></ul>","text_color":"#cdb1bd","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"bl-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"bl-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#f6e9ec;font-family:\"Plus Jakarta Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Bloom</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#9c7e8c\"><li>Our values</li><li>Ingredients</li><li>Journal</li><li>Contact</li></ul>","text_color":"#cdb1bd","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"bl-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"bl-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"bl-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid rgba(246,233,236,.13);padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#9c7e8c\"><span>© 2026 Bloom — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#cdb1bd","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "bl-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
+  "style": { "bg": { "type": "solid", "color": "#432838" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "bl-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "bl-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "bl-fbrand", "type": "headline", "settings": { "heading": "Bloom", "tag": "div", "alignment": "left", "heading_font_size": "26", "heading_uppercase": false, "heading_color": "#f6e9ec", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "bl-fbtext", "type": "text-block", "settings": { "content": "<p>Clean colour cosmetics in shades for everyone. Cruelty-free, refillable, made in the EU.</p>", "text_color": "#9c7e8c", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "bl-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "bl-fh1", "type": "headline", "settings": { "heading": "Shop", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f6e9ec", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "bl-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#9c7e8c", "link_hover_color": "#e7a0b4", "items": [ { "title": "All products", "content": "#shop", "tag": "" }, { "title": "Lips", "content": "#", "tag": "" }, { "title": "Cheeks", "content": "#", "tag": "" }, { "title": "Base", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "bl-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "bl-fh2", "type": "headline", "settings": { "heading": "Help", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f6e9ec", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "bl-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#9c7e8c", "link_hover_color": "#e7a0b4", "items": [ { "title": "Shade finder", "content": "#finder", "tag": "" }, { "title": "Shipping", "content": "#", "tag": "" }, { "title": "Returns", "content": "#", "tag": "" }, { "title": "Refills", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "bl-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "bl-fh3", "type": "headline", "settings": { "heading": "Bloom", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f6e9ec", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "bl-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#9c7e8c", "link_hover_color": "#e7a0b4", "items": [ { "title": "Our values", "content": "#values", "tag": "" }, { "title": "Ingredients", "content": "#", "tag": "" }, { "title": "Journal", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "bl-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "bl-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "bl-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(246,233,236,.13)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "bl-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "bl-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "bl-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Bloom — an OLOtheme demo.</p>", "text_color": "#9c7e8c", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "bl-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "bl-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#9c7e8c", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

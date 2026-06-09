@@ -1,1 +1,91 @@
-[{"id":"ve-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#192f22"}},"advanced":{},"children":[{"id":"ve-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"ve-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"ve-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Darker Grotesque\", sans-serif;font-size:20px;color:#eef3e4;font-weight:700;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#9bd35a;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Verde</div><p style=\"font-size:14px;color:#71886c;max-width:260px\">Plant-based bistro. Vegetables first, cooked with ambition, sourced nearby.</p>","text_color":"#aac0a4","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"ve-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"ve-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#eef3e4;font-family:\"Figtree\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Eat</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#71886c\"><li>Menu</li><li>Drinks</li><li>Sourcing</li><li>Private dining</li></ul>","text_color":"#aac0a4","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"ve-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"ve-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#eef3e4;font-family:\"Figtree\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">About</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#71886c\"><li>Our story</li><li>Growers</li><li>Work with us</li></ul>","text_color":"#aac0a4","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"ve-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"ve-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#eef3e4;font-family:\"Figtree\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Visit</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#71886c\"><li>30 Garden Walk</li><li>Tue–Sun · from 11</li><li>eat@verde.bistro</li></ul>","text_color":"#aac0a4","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"ve-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"ve-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"ve-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid rgba(238,243,228,.13);padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#71886c\"><span>© 2026 Verde — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#aac0a4","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "ve-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
+  "style": { "bg": { "type": "solid", "color": "#15281c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ve-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ve-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ve-fbrand", "type": "headline", "settings": { "heading": "Verde", "tag": "div", "alignment": "left", "heading_font_size": "30", "heading_uppercase": false, "heading_color": "#eef3e4", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ve-fbtext", "type": "text-block", "settings": { "content": "<p>Plant-based bistro. Vegetables first, cooked with ambition, sourced nearby.</p>", "text_color": "#71886c", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "ve-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ve-fh1", "type": "headline", "settings": { "heading": "Eat", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eef3e4", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ve-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#71886c", "link_hover_color": "#9bd35a", "items": [ { "title": "Menu", "content": "#menu", "tag": "" }, { "title": "Drinks", "content": "#menu", "tag": "" }, { "title": "Sourcing", "content": "#sourcing", "tag": "" }, { "title": "Private dining", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "ve-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ve-fh2", "type": "headline", "settings": { "heading": "About", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eef3e4", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ve-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#71886c", "link_hover_color": "#9bd35a", "items": [ { "title": "Our story", "content": "#", "tag": "" }, { "title": "Growers", "content": "#sourcing", "tag": "" }, { "title": "Work with us", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "ve-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ve-fh3", "type": "headline", "settings": { "heading": "Visit", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eef3e4", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ve-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#71886c", "link_hover_color": "#9bd35a", "items": [ { "title": "30 Garden Walk", "content": "#", "tag": "" }, { "title": "Tue–Sun · from 11", "content": "#hours", "tag": "" }, { "title": "eat@verde.bistro", "content": "mailto:eat@verde.bistro", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ve-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "ve-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "ve-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(238,243,228,.13)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "ve-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "ve-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "ve-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Verde — an OLOtheme demo.</p>", "text_color": "#71886c", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "ve-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "ve-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#71886c", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

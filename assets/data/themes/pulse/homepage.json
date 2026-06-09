@@ -5,12 +5,7 @@
   "settings": {
    "style": "default",
    "width": "full",
-   "padding": {
-    "top": 0,
-    "right": 0,
-    "bottom": 0,
-    "left": 0
-   },
+   "padding": "remove-vertical",
    "padding_top": 0,
    "padding_bottom": 0
   },
@@ -81,8 +76,10 @@
   "type": "section",
   "settings": {
    "style": "default",
-   "width": "large",
-   "padding": "small"
+   "width": "fullbleed",
+   "padding": "remove-vertical",
+   "padding_top": 0,
+   "padding_bottom": 0
   },
   "style": {
    "bg": {
@@ -112,57 +109,26 @@
         "id": "pu-marquee-5",
         "type": "marquee",
         "settings": {
-         "items": [
-          {
-           "text": "Strength"
-          },
-          {
-           "text": "Conditioning"
-          },
-          {
-           "text": "Olympic lifting"
-          },
-          {
-           "text": "Mobility"
-          },
-          {
-           "text": "Coached every rep"
-          },
-          {
-           "text": "No egos"
-          },
-          {
-           "text": "Strength"
-          },
-          {
-           "text": "Conditioning"
-          },
-          {
-           "text": "Olympic lifting"
-          },
-          {
-           "text": "Mobility"
-          },
-          {
-           "text": "Coached every rep"
-          },
-          {
-           "text": "No egos"
-          }
-         ],
-         "speed": 26,
-         "font_family": "sans-serif",
-         "font_size": 22,
+         "content_type": "text",
+         "text_items": "Strength · Conditioning · Olympic lifting · Mobility · Coached every rep · No egos",
+         "separator": " ● ",
+         "speed": "26",
+         "direction": "left",
+         "pause_hover": true,
+         "gap": "60",
+         "font_family": "heading",
+         "font_size": "22",
          "font_weight": "400",
+         "letter_spacing": "0.5",
+         "text_transform": "uppercase",
          "text_color": "#0c0d10",
-         "separator": "●",
-         "separator_color": "#0c0d10",
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "separator_color": "rgba(12,13,16,.6)",
+         "bg_color": "#c6f24e",
+         "height": "50",
+         "full_width": true,
+         "border_top": "2",
+         "border_bottom": "2",
+         "border_color": "#0c0d10"
         },
         "style": {},
         "advanced": {},
@@ -180,7 +146,9 @@
   "settings": {
    "style": "default",
    "width": "large",
-   "padding": "small"
+   "padding": "remove-vertical",
+   "padding_top": 0,
+   "padding_bottom": 0
   },
   "style": {
    "bg": {
@@ -212,7 +180,7 @@
         "settings": {
          "items": [
           {
-           "value": "640+",
+           "value": "640",
            "label": "Active members"
           },
           {
@@ -229,10 +197,10 @@
           }
          ],
          "columns": 4,
-         "band_padding_y": 24,
+         "band_padding_y": 48,
          "show_dividers": true,
-         "divider_color": "rgba(255,255,255,.12)",
-         "band_border": false,
+         "divider_color": "rgba(255,255,255,.09)",
+         "band_border": true,
          "value_font_family": "heading",
          "value_color": "#c6f24e",
          "value_size": 64,
@@ -240,7 +208,7 @@
          "label_color": "#8b919c",
          "label_size": 12,
          "label_uppercase": true,
-         "align": "left",
+         "align": "center",
          "mono_font_family": ""
         },
         "style": {},
@@ -306,7 +274,7 @@
            "italic": false
           }
          ],
-         "headline_font_family": "sans-serif",
+         "headline_font_family": "serif",
          "headline_font_size": 56,
          "headline_font_weight": "400",
          "headline_align": "left",
@@ -454,7 +422,7 @@
            "italic": false
           }
          ],
-         "headline_font_family": "sans-serif",
+         "headline_font_family": "serif",
          "headline_font_size": 56,
          "headline_font_weight": "400",
          "headline_align": "center",
@@ -527,6 +495,74 @@
       ]
      }
     ]
+   },
+   {
+    "id": "pu-ro-31b",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "pu-co-31b",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "pu-sched-btn",
+        "type": "button",
+        "settings": {
+         "text": "Full weekly schedule",
+         "icon": "dashicons-arrow-right-alt",
+         "icon_position": "after",
+         "url": "#schedule",
+         "target": "_self",
+         "full_width": false,
+         "alignment": "left",
+         "bg_color": "transparent",
+         "text_color": "#ffffff",
+         "hover_bg_color": "transparent",
+         "hover_text_color": "#c6f24e",
+         "font_size": "13",
+         "font_weight": "700",
+         "letter_spacing": "1",
+         "text_transform": "uppercase",
+         "border_radius": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "tile_padding": {
+          "top": 14,
+          "right": 26,
+          "bottom": 14,
+          "left": 26
+         },
+         "border": {
+          "top": 2,
+          "right": 2,
+          "bottom": 2,
+          "left": 2,
+          "linked": true,
+          "style": "solid",
+          "color": "rgba(255,255,255,.16)"
+         },
+         "shadow": "none",
+         "hover_effect": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
    }
   ]
  },
@@ -583,7 +619,7 @@
            "italic": false
           }
          ],
-         "headline_font_family": "sans-serif",
+         "headline_font_family": "serif",
          "headline_font_size": 56,
          "headline_font_weight": "400",
          "headline_align": "left",
@@ -854,7 +890,7 @@
            "italic": false
           }
          ],
-         "headline_font_family": "sans-serif",
+         "headline_font_family": "serif",
          "headline_font_size": 56,
          "headline_font_weight": "400",
          "headline_align": "center",
@@ -1053,11 +1089,17 @@
         "id": "pu-testimonial-57",
         "type": "testimonial",
         "settings": {
-         "quote": "“I came in to lose a bit of weight. Two years later I’m deadlifting double bodyweight and it’s the best room I’ve ever trained in.”",
+         "quote": "“I came in to lose a bit of weight. Two years later I’m <em>deadlifting double bodyweight</em> and it’s the best room I’ve ever trained in.”",
          "author_name": "Hannah V.",
          "author_role": "member since 2023",
          "rating": "0",
-         "layout": "single",
+         "layout": "editorial",
+         "quote_font": "heading",
+         "quote_size": 48,
+         "quote_uppercase": true,
+         "quote_accent_color": "#c6f24e",
+         "author_uppercase": true,
+         "author_color": "#8b919c",
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#ffffff",
@@ -1226,7 +1268,7 @@
           "linked": true
          },
          "cta_size": 14,
-         "headline_font_family": "sans-serif",
+         "headline_font_family": "serif",
          "headline_size": 80,
          "headline_weight": "400",
          "subtitle_size": 17,

@@ -37,6 +37,8 @@ export default {
     line_color: 'rgba(246,233,236,.13)',
 
     peek: true,
+    peek_width: 170,
+    peek_ratio: '4/5',
     mono_font_family: '',
   },
 
@@ -45,17 +47,27 @@ export default {
     { type: 'separator', label: t('Righe') },
     { key: 'items', label: t('Voci'), type: 'content-items',
       itemLabel: t('Voce'),
-      defaults: { color: '#e79aa6', name: 'Nuova voce', sub: 'Etichetta', link_url: '' },
+      defaults: { color: '#e79aa6', name: 'Nuova voce', sub: 'Etichetta', image: '', link_url: '' },
       itemFields: [
         { key: 'color',    label: t('Colore pastiglia'), type: 'color' },
         { key: 'name',     label: t('Nome'),             type: 'text' },
         { key: 'sub',      label: t('Sotto-etichetta'),  type: 'text' },
+        { key: 'image',    label: t('Immagine anteprima (peek)'), type: 'image' },
         { key: 'link_url', label: t('Link'),             type: 'link' },
       ],
     },
 
     { type: 'separator', label: t('Anteprima al hover') },
-    { key: 'peek', label: t('Pannello "peek" che segue il cursore'), type: 'toggle' },
+    { key: 'peek', label: t('Pannello "peek" immagine che segue il cursore'), type: 'toggle' },
+    { key: 'peek_width', label: t('Larghezza anteprima (px)'), type: 'range', min: 100, max: 320, step: 10,
+      condition: { field: 'peek', value: true } },
+    { key: 'peek_ratio', label: t('Proporzioni anteprima'), type: 'select',
+      condition: { field: 'peek', value: true }, options: [
+        { value: '4/5', label: '4:5' },
+        { value: '1/1', label: '1:1' },
+        { value: '3/4', label: '3:4' },
+        { value: '16/11', label: '16:11' },
+      ]},
   ],
 
   // ═══ STILE ════════════════════════════════════════════════════

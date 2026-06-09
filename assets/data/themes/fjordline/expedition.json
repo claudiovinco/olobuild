@@ -1,0 +1,459 @@
+[
+ {
+  "id": "fe-se-ph",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "fullbleed",
+   "padding": "remove-vertical",
+   "padding_top": 0,
+   "padding_bottom": 0
+  },
+  "style": { "bg": { "type": "solid", "color": "#16273a" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fe-ro-ph",
+    "type": "row",
+    "settings": { "layout": "100", "gap": 0 },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fe-co-ph",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fe-pagehead",
+        "type": "imagehero",
+        "settings": {
+         "eyebrow_text": "Norway · Lofoten",
+         "eyebrow_dot": false,
+         "headline_text": "The Lofoten",
+         "accent_text": "Traverse",
+         "headline_tail": "",
+         "accent_italic": true,
+         "stack_lines": false,
+         "subhead": "",
+         "cta1_text": "",
+         "cta1_url": "#",
+         "cta2_text": "",
+         "cta2_url": "#",
+         "meta_text": "8 days · Moderate · hiking + kayak · Max 12 travellers · From €2,150 pp",
+         "scroll_hint": "",
+         "bg_image": "",
+         "bg_color": "#16273a",
+         "media_label": "Lofoten — peaks & red cabins over the fjord",
+         "text_position": "bottom-left",
+         "text_align": "left",
+         "content_width": 760,
+         "aspect_ratio": "21/8",
+         "min_height": 420,
+         "heading_font": "serif",
+         "overlay_color": "#0e1c2c",
+         "overlay_top": 0.35,
+         "overlay_bottom": 0.95,
+         "overlay_sides": false,
+         "accent": "#8fc7e0",
+         "accent_on": "#0e1c2c",
+         "text_color": "#ffffff",
+         "sub_color": "#eef4f8",
+         "eyebrow_color": "#8fc7e0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fe-se-over",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#16273a" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fe-ro-over",
+    "type": "row",
+    "settings": { "gap": 56, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fe-co-over-a",
+      "type": "column",
+      "settings": { "width": "1-2" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fe-over-head",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "The journey",
+         "eyebrow_color": "#8fc7e0",
+         "eyebrow_dot_color": "#8fc7e0",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "Island to island, ", "color": "#eef4f8", "italic": false },
+          { "text": "peak to sea", "color": "#8fc7e0", "italic": true }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 44,
+         "headline_line_height": 1.05,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "tagline_show": false,
+         "tagline_text": "",
+         "layout": "stack",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "fe-over-p1",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>We start in the fishing village of Reine and work our way north — hiking the ridgelines by day, paddling the sheltered sounds, and sleeping in rorbu cabins and a wild camp or two.</p><p>It's a real traverse, not a basecamp loop. You'll feel the distance in your legs and earn every view. No technical climbing — just steady days on good trails with one of our Lofoten-born guides.</p>",
+         "text_color": "#6f87a0",
+         "font_size": "16",
+         "line_height": "1.7",
+         "text_align": "left",
+         "max_width": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "fe-co-over-b",
+      "type": "column",
+      "settings": { "width": "1-2" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fe-over-img",
+        "type": "image",
+        "settings": {
+         "image_url": "",
+         "media_bg": { "type": "none" },
+         "media_label": "kayaks pulled up on a quiet beach",
+         "image_width": "100%",
+         "aspect_ratio": "custom",
+         "aspect_ratio_custom": "5/4",
+         "object_fit": "cover",
+         "border_radius": "16"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fe-se-itin",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#1a2e44" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fe-ro-itin-a",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fe-co-itin-a",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fe-itin-head",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Day by day",
+         "eyebrow_color": "#8fc7e0",
+         "eyebrow_dot_color": "#8fc7e0",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "Eight days, ", "color": "#eef4f8", "italic": false },
+          { "text": "north", "color": "#8fc7e0", "italic": true }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 46,
+         "headline_line_height": 1.05,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "tagline_show": false,
+         "tagline_text": "",
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "fe-ro-itin-b",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fe-co-itin-b",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fe-timeline",
+        "type": "timeline",
+        "settings": {
+         "tl_layout": "one",
+         "tl_reveal": "slot",
+         "tl_theme": "night",
+         "tl_card": "bubble",
+         "tl_thread": "solid2",
+         "tl_node": "num",
+         "tl_color": "mono",
+         "tl_media": "off",
+         "tl_density": "comfy",
+         "tl_line": "solid",
+         "tl_transparent": true,
+         "tl_show_tag": true,
+         "tl_rail_color": "rgba(238,244,248,.12)",
+         "tl_card_bg": "#1f3550",
+         "tl_card_radius": 14,
+         "tl_title_color": "#eef4f8",
+         "tl_title_family": "heading",
+         "tl_text_color": "#6f87a0",
+         "tl_yr_color": "#8fc7e0",
+         "tl_yr_family": "heading",
+         "tl_tag_color": "#8fc7e0",
+         "items": [
+          { "title": "Arrival & first light", "tag": "Reine", "description": "Meet the group over dinner in a harbour rorbu. Kit check, route briefing, and an easy sunset stroll to shake off the journey. Welcome dinner · rorbu cabin.", "date": "", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
+          { "title": "The classic ridge", "tag": "Reinebringen", "description": "A steep stone stairway to one of the north's great viewpoints, then down to a hidden beach for lunch. Afternoon at your own pace. 6 hrs hiking · +440m.", "date": "", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
+          { "title": "Paddle to the sands", "tag": "Bunes Bay", "description": "Sea kayak across a still sound to a beach reachable only by water. Wild camp under the cliffs, dinner cooked on the shore. Sea kayak · wild camp.", "date": "", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
+          { "title": "Coast path & weather day", "tag": "Moskenes", "description": "A gentler coastal walk between fishing hamlets — and a built-in buffer if the weather wants to reshuffle the week. Flexible day · 4 hrs walking.", "date": "", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
+          { "title": "Over the saddle", "tag": "Kvalvika", "description": "Cross a high saddle to the surf beach at Kvalvika, with the option to scramble Ryten for the postcard view down to the sand. 7 hrs hiking · +520m.", "date": "", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
+          { "title": "The island village", "tag": "Henningsvær", "description": "A rest day in the \"Venice of Lofoten\" — galleries, a harbour swim for the brave, and the best cinnamon buns on the archipelago. Rest day · guesthouse.", "date": "", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
+          { "title": "Final summit", "tag": "Austvågøya", "description": "Our last big day on the trail, finishing with a long descent to the sea and a farewell feast of the day's catch. 8 hrs hiking · farewell dinner.", "date": "", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
+          { "title": "Departure", "tag": "Svolvær", "description": "A slow morning and transfer to Svolvær for onward flights. Goodbyes, photos, and plans for the next one. Transfer included.", "date": "", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fe-se-incl",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#16273a" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fe-ro-incl-a",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fe-co-incl-a",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fe-incl-head",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "What's included",
+         "eyebrow_color": "#8fc7e0",
+         "eyebrow_dot_color": "#8fc7e0",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "Everything but the ", "color": "#eef4f8", "italic": false },
+          { "text": "flights", "color": "#8fc7e0", "italic": true }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 46,
+         "headline_line_height": 1.05,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "tagline_show": false,
+         "tagline_text": "",
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "fe-ro-incl-b",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fe-co-incl-b",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fe-incl-cards",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": { "type": "none" },
+         "container_padding": 0,
+         "container_gap": 0,
+         "columns": 4,
+         "items_gap": 14,
+         "items": [
+          { "counter": "", "counter_label": "", "title": "7 nights' lodging", "title_accent": "", "title_accent_italic": false, "description": "Rorbu cabins, a guesthouse and one wild camp.", "icon": "home", "footer_text": "", "footer_dot_color": "", "link_url": "", "media_image": "", "media_label": "" },
+          { "counter": "", "counter_label": "", "title": "All meals on trail", "title_accent": "", "title_accent_italic": false, "description": "Breakfasts, packed lunches and group dinners.", "icon": "utensils", "footer_text": "", "footer_dot_color": "", "link_url": "", "media_image": "", "media_label": "" },
+          { "counter": "", "counter_label": "", "title": "Local guides", "title_accent": "", "title_accent_italic": false, "description": "Two certified, Lofoten-born mountain guides.", "icon": "map-pin", "footer_text": "", "footer_dot_color": "", "link_url": "", "media_image": "", "media_label": "" },
+          { "counter": "", "counter_label": "", "title": "Kayaks & gear", "title_accent": "", "title_accent_italic": false, "description": "Boats, dry bags, safety kit and group equipment.", "icon": "eye", "footer_text": "", "footer_dot_color": "", "link_url": "", "media_image": "", "media_label": "" }
+         ],
+         "card_bg": { "type": "solid", "color": "#1f3550" },
+         "card_color": "#6f87a0",
+         "card_accent_color": "#8fc7e0",
+         "card_padding": 22,
+         "card_border": "rgba(238,244,248,.12)",
+         "card_radius": { "tl": 12, "tr": 12, "br": 12, "bl": 12, "linked": true },
+         "show_icon": true,
+         "show_counter": false,
+         "show_counter_label": false,
+         "show_arrow": false,
+         "show_footer": false,
+         "show_divider": false,
+         "show_media": false,
+         "title_font_family": "sans-serif",
+         "title_size": 15,
+         "title_weight": "700",
+         "title_italic": false,
+         "description_size": 13,
+         "card_hover_effect": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fe-se-cta",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#16273a" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fe-ro-cta",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fe-co-cta",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fe-cta-banner",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Three departures",
+         "headline_accent": "left this season",
+         "headline_accent_italic": true,
+         "subtitle": "March, June and September. Reserve with a €400 deposit; balance due 60 days before you fly.",
+         "cta_text": "Reserve a place",
+         "cta_url": "#",
+         "cta2_text": "Ask a question",
+         "cta2_url": "#",
+         "cta2_bg": "#eef4f8",
+         "cta2_color": "#0e1c2c",
+         "cta2_border": "",
+         "bg": { "type": "solid", "color": "#122133" },
+         "text_color": "#ffffff",
+         "accent_color": "#8fc7e0",
+         "subtitle_color": "#eef4f8",
+         "cta_bg": "#8fc7e0",
+         "cta_color": "#0e1c2c",
+         "cta_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999, "linked": true },
+         "cta_size": 15,
+         "cta_padding_y": 16,
+         "cta_padding_x": 30,
+         "headline_font_family": "sans-serif",
+         "headline_size": 56,
+         "headline_weight": "700",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": { "tl": 24, "tr": 24, "br": 24, "bl": 24, "linked": true },
+         "banner_padding": 88
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

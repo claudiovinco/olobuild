@@ -1,1 +1,91 @@
-[{"id":"pu-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#0c0d10"}},"advanced":{},"children":[{"id":"pu-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"pu-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"pu-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Anton\", \"Arial Narrow\", sans-serif;font-size:20px;color:#ffffff;font-weight:400;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#c6f24e;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Pulse</div><p style=\"font-size:14px;color:#8b919c;max-width:260px\">Strength & conditioning studio. Coached classes, honest programming, no egos.</p>","text_color":"#c7ccd4","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"pu-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"pu-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Barlow\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Train</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8b919c\"><li>Programs</li><li>Schedule</li><li>Coaches</li><li>Membership</li></ul>","text_color":"#c7ccd4","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"pu-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"pu-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Barlow\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Studio</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8b919c\"><li>About us</li><li>The space</li><li>Careers</li><li>Contact</li></ul>","text_color":"#c7ccd4","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"pu-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"pu-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Barlow\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Visit</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8b919c\"><li>14 Forge Lane</li><li>Open 6am–9pm</li><li>hello@pulse.studio</li></ul>","text_color":"#c7ccd4","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"pu-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"pu-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"pu-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid rgba(255,255,255,.09);padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#8b919c\"><span>© 2026 Pulse — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#c7ccd4","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "pu-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 64, "padding_bottom": 34 },
+  "style": { "bg": { "type": "solid", "color": "#0c0d10" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "pu-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "pu-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "pu-fbrand", "type": "headline", "settings": { "heading": "Pulse", "tag": "div", "alignment": "left", "heading_font_size": "25", "heading_uppercase": true, "heading_color": "#ffffff", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "pu-fbtext", "type": "text-block", "settings": { "content": "<p>Strength &amp; conditioning studio. Coached classes, honest programming, no egos.</p>", "text_color": "#8b919c", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "pu-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "pu-fh1", "type": "headline", "settings": { "heading": "Train", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "pu-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#8b919c", "link_hover_color": "#c6f24e", "font_size": "14", "items": [ { "title": "Programs", "content": "#programs", "tag": "" }, { "title": "Schedule", "content": "#schedule", "tag": "" }, { "title": "Coaches", "content": "#coaches", "tag": "" }, { "title": "Membership", "content": "#membership", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "pu-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "pu-fh2", "type": "headline", "settings": { "heading": "Studio", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "pu-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#8b919c", "link_hover_color": "#c6f24e", "font_size": "14", "items": [ { "title": "About us", "content": "#", "tag": "" }, { "title": "The space", "content": "#", "tag": "" }, { "title": "Careers", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "pu-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "pu-fh3", "type": "headline", "settings": { "heading": "Visit", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "pu-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#8b919c", "link_hover_color": "#c6f24e", "font_size": "14", "items": [ { "title": "14 Forge Lane", "content": "#", "tag": "" }, { "title": "Open 6am–9pm", "content": "#", "tag": "" }, { "title": "hello@pulse.studio", "content": "mailto:hello@pulse.studio", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "pu-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "pu-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "pu-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.09)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "pu-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "pu-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "pu-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Pulse — an OLOtheme demo.</p>", "text_color": "#8b919c", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "pu-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "pu-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#8b919c", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

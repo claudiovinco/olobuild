@@ -41,6 +41,7 @@ class Olo_ImageHero_Tile extends Olo_Tile_Base {
         'scroll_hint'      => '',
         // sfondo / media
         'bg_image'         => '',
+        'media_bg'         => [ 'type' => 'none' ],
         'bg_color'         => '#0c0c0c',
         'media_label'      => 'campaign — figure in black tailoring, gold light, full bleed',
         // layout
@@ -146,6 +147,11 @@ class Olo_ImageHero_Tile extends Olo_Tile_Base {
         $imgCss  = $img !== ''
             ? 'url(' . esc_url( $img ) . ')'
             : 'repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px)';
+        // Media slot di OGNI tipo (stesso sistema bg dello Stile): override del placeholder.
+        $mb = $this->bg_media_parts( $s['media_bg'] ?? null, $uid );
+        $media_decl = ( $mb['has'] && $mb['css'] !== '' )
+            ? $mb['css']
+            : ( 'background-color:' . $bg . ';background-image:' . $imgCss . ';background-size:cover;background-position:center;' );
 
         // gradiente verticale (sempre) + laterale (opzionale, stile atelier)
         $gradV = 'linear-gradient(180deg, rgba(' . $orgb . ',' . $oTop . ') 0%, rgba(' . $orgb . ',' . $oMid . ') 38%, rgba(' . $orgb . ',' . $oBot . ') 100%)';
@@ -194,8 +200,8 @@ class Olo_ImageHero_Tile extends Olo_Tile_Base {
         <style>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;background:<?php echo $bg; ?>;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;display:flex;flex-direction:column;justify-content:<?php echo $justifyV; ?>;min-height:<?php echo $mhCss; ?>;<?php echo $border_css; ?><?php if ( $wrap_radius_css ) { echo 'border-radius:' . $wrap_radius_css . ';'; } ?><?php if ( $shadow_css ) { echo 'box-shadow:' . $shadow_css . ';'; } ?>}
             <?php if ( $bg_decl ) : ?>.<?php echo $uid; ?>{<?php echo $bg_decl; ?>;}<?php endif; ?>
-            .<?php echo $uid; ?> .oih-media{position:absolute;inset:0;z-index:0;background-color:<?php echo $bg; ?>;background-image:<?php echo $imgCss; ?>;background-size:cover;background-position:center;aspect-ratio:<?php echo $ar; ?>;min-height:100%;}
-            <?php if ( $img === '' && ! empty( $s['media_label'] ) ) : ?>
+            .<?php echo $uid; ?> .oih-media{position:absolute;inset:0;z-index:0;<?php echo $media_decl; ?>aspect-ratio:<?php echo $ar; ?>;min-height:100%;}
+            <?php if ( ! $mb['has'] && $img === '' && ! empty( $s['media_label'] ) ) : ?>
             .<?php echo $uid; ?> .oih-media::after{content:"<?php echo esc_attr( $s['media_label'] ); ?>";position:absolute;left:20px;bottom:16px;font-size:11px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;color:rgba(255,255,255,.42);max-width:60%;}
             <?php endif; ?>
             .<?php echo $uid; ?> .oih-grad{position:absolute;inset:0;z-index:1;background:<?php echo $grad; ?>;}
@@ -221,7 +227,7 @@ class Olo_ImageHero_Tile extends Olo_Tile_Base {
             @media(max-width:700px){.<?php echo $uid; ?> .oih-media{min-height:600px;}.<?php echo $uid; ?> .oih-cta{flex-direction:column;align-items:stretch;}}
         </style>
         <section class="olo-imagehero <?php echo esc_attr( $uid ); ?>">
-            <div class="oih-media"></div>
+            <div class="oih-media"><?php if ( $mb['has'] && $mb['markup'] !== '' ) { echo $mb['markup']; } ?></div>
             <div class="oih-grad"></div>
             <div class="oih-in">
                 <div class="oih-c">

@@ -1,0 +1,360 @@
+[
+ {
+  "id": "kls-se-ph",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large",
+   "padding_bottom": 0
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#efe5da"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "kls-ro-ph",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "kls-co-ph",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "kls-section-header-ph",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Everything available",
+         "eyebrow_color": "#bd6a40",
+         "eyebrow_dot_color": "#bd6a40",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "The ",
+           "color": "#2a211c",
+           "italic": false
+          },
+          {
+           "text": "collection",
+           "color": "#bd6a40",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 80,
+         "headline_line_height": 1.05,
+         "headline_font_weight": "500",
+         "headline_align": "center",
+         "tagline_show": true,
+         "tagline_text": "Each piece is one of a kind — when it’s gone, it’s gone. New work lands after every firing, roughly once a month.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#928271",
+         "tagline_text_size": 17,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "kls-se-grid",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large",
+   "padding_top": 56
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#efe5da"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "kls-ro-grid",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "kls-co-grid",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "kls-productgrid",
+        "type": "productgrid",
+        "settings": {
+         "columns": 3,
+         "gap": 24,
+         "media_aspect": "1/1",
+         "media_bg": "#e5d8c9",
+         "stripe_dark": false,
+         "hover_zoom": true,
+         "card_bg": "",
+         "card_border": "",
+         "card_radius": 10,
+         "card_padding": 0,
+         "tag_bg": "",
+         "tag_color": "",
+         "quick_add_show": false,
+         "category_color": "#928271",
+         "title_font": "serif",
+         "title_size": 22,
+         "title_color": "#2a211c",
+         "price_color": "#bd6a40",
+         "footer_text": "",
+         "footer_url": "#",
+         "show_filters": false,
+         "items": [
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "ash bowl",
+           "tag": "",
+           "category": "Stoneware · 1/1",
+           "title": "Ash Bowl",
+           "notes": "",
+           "roast": 0,
+           "price": "€90",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": ""
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "celadon vase",
+           "tag": "",
+           "category": "Porcelain · 1/1",
+           "title": "Celadon Vase",
+           "notes": "",
+           "roast": 0,
+           "price": "€180",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": ""
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "tea cups",
+           "tag": "",
+           "category": "Wood-fired",
+           "title": "Tea Cups, pair",
+           "notes": "",
+           "roast": 0,
+           "price": "€64",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": ""
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "carafe",
+           "tag": "",
+           "category": "Wood-fired · 1/1",
+           "title": "Water Carafe",
+           "notes": "",
+           "roast": 0,
+           "price": "€120",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": ""
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "planter",
+           "tag": "",
+           "category": "Stoneware",
+           "title": "Footed Planter",
+           "notes": "",
+           "roast": 0,
+           "price": "€78",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": ""
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "dinner plates",
+           "tag": "",
+           "category": "Stoneware",
+           "title": "Dinner Plates, 4",
+           "notes": "",
+           "roast": 0,
+           "price": "€160",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": ""
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "mug",
+           "tag": "",
+           "category": "Wood-fired · 1/1",
+           "title": "Morning Mug",
+           "notes": "",
+           "roast": 0,
+           "price": "€42",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": ""
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "serving platter",
+           "tag": "Sold",
+           "category": "Stoneware · 1/1",
+           "title": "Serving Platter",
+           "notes": "",
+           "roast": 0,
+           "price": "Sold",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": ""
+          },
+          {
+           "image": "",
+           "media_bg": { "type": "none" },
+           "media_label": "bud vase",
+           "tag": "",
+           "category": "Porcelain",
+           "title": "Bud Vase",
+           "notes": "",
+           "roast": 0,
+           "price": "€48",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": ""
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "kls-se-cta",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "fullbleed",
+   "padding": "remove-vertical"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2a211c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "kls-ro-cta",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "kls-co-cta",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "kls-cta-banner",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Want it",
+         "headline_accent": "your way?",
+         "headline_accent_italic": true,
+         "subtitle": "I take a handful of commissions each season — sets, colours and forms made to your brief.",
+         "cta_text": "Start a commission",
+         "cta_url": "/#commission",
+         "bg": {
+          "type": "solid",
+          "color": "#2a211c"
+         },
+         "text_color": "#efe5da",
+         "accent_color": "#bd6a40",
+         "subtitle_color": "#cdbfad",
+         "cta_bg": "#bd6a40",
+         "cta_color": "#ffffff",
+         "cta_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta_size": 14,
+         "headline_font_family": "serif",
+         "headline_size": 68,
+         "headline_weight": "500",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "banner_padding": 100
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

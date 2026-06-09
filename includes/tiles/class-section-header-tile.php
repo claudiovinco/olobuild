@@ -88,7 +88,8 @@ class Olo_SectionHeader_Tile extends Olo_Tile_Base {
         $eb_sep   = $s['eyebrow_separator'] ?? '';
         $is_bullet = ( trim( $eb_sep ) === '·' );
 
-        $show_tagline = ! empty( $s['tagline_show'] ) && $layout === 'split';
+        $show_tagline  = ! empty( $s['tagline_show'] ) && $layout === 'split';
+        $show_subtitle = ! empty( $s['tagline_show'] ) && $layout !== 'split' && ! empty( $s['tagline_text'] );
 
         ob_start();
         ?>
@@ -121,6 +122,17 @@ class Olo_SectionHeader_Tile extends Olo_Tile_Base {
                             <span style="display:<?php echo $inline ? 'inline' : 'block'; ?>;color:<?php echo esc_attr( $lcolor ); ?>;<?php echo $litalic; ?>" data-olo-editable="<?php echo 'headline_lines.' . intval( $idx ) . '.text'; ?>"><?php echo esc_html( $ltext ); ?></span>
                         <?php endforeach; ?>
                     </h2>
+                <?php endif; ?>
+
+                <?php if ( $show_subtitle ) :
+                    $sub_clr    = $this->safe_color_css( $s['tagline_text_color'] ) ?: '#475569';
+                    $sub_size   = absint( $s['tagline_text_size'] ) ?: 18;
+                    $sub_italic = ! empty( $s['tagline_text_italic'] ) ? 'font-style:italic;' : '';
+                    $sub_align  = ( $layout === 'center' ) ? 'center' : $halign;
+                    $sub_mx     = ( $layout === 'center' ) ? 'margin-left:auto;margin-right:auto;' : '';
+                    $sub_mt     = max( 8, min( 80, $gap ) );
+                ?>
+                    <p class="olo-sechead__sub" style="font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo $sub_size; ?>px;line-height:1.6;color:<?php echo esc_attr( $sub_clr ); ?>;<?php echo $sub_italic; ?>max-width:62ch;<?php echo $sub_mx; ?>margin-top:<?php echo $sub_mt; ?>px;text-align:<?php echo esc_attr( $sub_align ); ?>" data-olo-editable="tagline_text"><?php echo esc_html( $s['tagline_text'] ); ?></p>
                 <?php endif; ?>
             </div>
 

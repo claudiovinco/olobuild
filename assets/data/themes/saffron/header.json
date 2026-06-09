@@ -1,1 +1,91 @@
-[{"id":"sa-hse","type":"section","settings":{"style":"default","width":"expand","padding":"none"},"style":{"bg":{"type":"solid","color":"rgba(36,26,22,.9)"}},"advanced":{},"children":[{"id":"sa-hro","type":"row","settings":{"layout":"100","gap":0,"vertical_align":"center"},"style":{},"advanced":{},"children":[{"id":"sa-hco","type":"column","settings":{"width":"1-1","width_medium":"1-1"},"style":{},"advanced":{},"children":[{"id":"sa-hmm","type":"megamenu","settings":{"menu_id":"auto","layout":"horizontal","alignment":"right","font_size":"14","font_weight":"600","text_color":"rgba(255,255,255,.66)","sticky":true,"sticky_bg":"rgba(36,26,22,.96)","sticky_shadow":true,"social_icons":false,"search_icon":false,"logo_image":"","logo_width":"130","logo_position":"left","logo_link":"/","logo_sticky":"","mobile_logo":"","mobile_logo_height":"30","mobile_bar_logo":true,"logo_text":"Saffron","logo_dot":true},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "sa-hse",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "none" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sa-hro",
+    "type": "row",
+    "settings": { "layout": "100", "gap": 0, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sa-hco",
+      "type": "column",
+      "settings": { "width": "1-1", "width_medium": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sa-hmm",
+        "type": "megamenu",
+        "settings": {
+         "menu_id": "auto",
+         "layout": "left",
+         "font_size": "14.5",
+         "font_weight": "500",
+         "text_color": "rgba(255,255,255,.66)",
+         "hover_color": "#e0a23a",
+         "active_color": "#e0a23a",
+         "item_gap": "28",
+         "nav_bg": "rgba(36,26,22,.9)",
+         "nav_height": "74",
+         "sticky": true,
+         "header_mode": "overlay",
+         "sticky_bg": "rgba(36,26,22,.96)",
+         "sticky_shadow": false,
+         "search_icon": false,
+         "social_facebook": "",
+         "social_instagram": "",
+         "social_x": "",
+         "social_linkedin": "",
+         "logo_image": "",
+         "logo_text": "Saffron",
+         "logo_text_size": "24",
+         "logo_text_color": "#f6efe2",
+         "logo_dot": true,
+         "logo_width": "140",
+         "logo_position": "left",
+         "logo_link": "/",
+         "nav_phone": "+39 02 555 12",
+         "nav_phone_url": "tel:+390255512",
+         "nav_phone_color": "rgba(255,255,255,.82)",
+         "button_mode": "none",
+         "btn_bg": "#e0a23a",
+         "btn_color": "#241a16",
+         "btn_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999 },
+         "btn_hover_bg": "#c8862a",
+         "extra_link_1_label": "Reserve a table",
+         "extra_link_1_url": "#visit",
+         "extra_link_1_button": true,
+         "extra_links_right": true,
+         "mobile_bar_logo": true,
+         "mobile_breakpoint": "1024",
+         "mobile_style": "fullscreen",
+         "mobile_link_font": "heading",
+         "mobile_link_size": 32,
+         "mobile_numbers": false,
+         "mobile_bg": "#241a16",
+         "mobile_text_color": "#f6efe2",
+         "mobile_accent_color": "#e0a23a",
+         "mobile_heading_color": "#9c8f82",
+         "hamburger_color": "#f6efe2",
+         "mobile_footer_text": "Open fire · market produce · Via Brera 18, Milan",
+         "mobile_footer_cta_text": "Reserve a table",
+         "mobile_footer_cta_url": "#visit"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

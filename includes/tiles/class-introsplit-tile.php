@@ -14,7 +14,7 @@ class Olo_IntroSplit_Tile extends Olo_Tile_Base {
     protected $category = 'marketing';
     protected $defaults = [
         'eyebrow' => 'One unit · since 1974', 'eyebrow_color' => '',
-        'headline' => 'A regional club with a', 'accent' => 'rich history', 'uppercase' => true,
+        'headline' => 'A regional club with a', 'accent' => 'rich history', 'headline_tail' => '', 'uppercase' => true,
         'headline_color' => '', 'accent_color' => '',
         'lead' => "From a handful of friends on a muddy field to eight competitive teams across men's, women's and youth football — Verdano FC is built on the people who keep showing up.",
         'lead_color' => '',
@@ -25,8 +25,9 @@ class Olo_IntroSplit_Tile extends Olo_Tile_Base {
         ],
         'stat_number_color' => '', 'stat_label_color' => '',
         'cta_text' => 'About the club', 'cta_url' => '#', 'cta_bg' => '', 'cta_color' => '#ffffff',
-        'media_image' => '', 'media_label' => 'club portrait — squad on the pitch', 'media_light' => true,
-        'media_aspect' => '4/4.4', 'media_radius' => 20,
+        'cta2_text' => '', 'cta2_url' => '#', 'cta2_style' => 'outline',
+        'media_image' => '', 'media_bg' => [ 'type' => 'none' ], 'media_label' => 'club portrait — squad on the pitch', 'media_light' => true,
+        'media_aspect' => '4/4.4', 'media_radius' => 20, 'media_radius_top' => 0, 'media_blob' => false, 'media_blob_color' => '',
         // Spaziatura/forma additive — default no-op (padding gated OFF, raggi = valori attuali).
         'pad_custom'      => false,
         'content_padding' => [ 'top' => 0, 'right' => 0, 'bottom' => 0, 'left' => 0 ],
@@ -34,6 +35,8 @@ class Olo_IntroSplit_Tile extends Olo_Tile_Base {
         'cta_radius'      => [ 'tl' => 999, 'tr' => 999, 'br' => 999, 'bl' => 999 ],
         'badge_number' => '1974', 'badge_label' => 'Established', 'badge_bg' => '', 'badge_color' => '',
         'media_position' => 'right',
+        'flush' => false, 'content_bg' => '', 'signature' => '', 'cta_style' => 'button',
+        'accent_italic' => false, 'headline_weight' => '900', 'headline_size' => '',
 
         // KIT standard OLObuild — sfondo completo + ombra + bordo sul contenitore.
         // Default no-op (bg none, shadow none, border 0) → render invariato.
@@ -66,7 +69,11 @@ class Olo_IntroSplit_Tile extends Olo_Tile_Base {
         $bbg   = $this->safe_color_css( $s['badge_bg'] ?? '' ) ?: 'var(--olo-color-primary, #c8ff3c)';
         $bcol  = $this->safe_color_css( $s['badge_color'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #0a2a1e)';
         $asp   = preg_replace( '/[^0-9.\/]/', '', $s['media_aspect'] ?: '4/4.4' ) ?: '4/4.4';
-        $mrad  = intval( $s['media_radius'] ) . 'px';
+        $mr_b  = intval( $s['media_radius'] );
+        $mr_t  = intval( $s['media_radius_top'] ?? 0 );
+        $mrad  = ( $mr_t > 0 ) ? "{$mr_t}px {$mr_t}px {$mr_b}px {$mr_b}px" : "{$mr_b}px";
+        $blob_on    = ! empty( $s['media_blob'] );
+        $blob_color = $this->safe_color_css( $s['media_blob_color'] ?? '' ) ?: 'var(--olo-color-primary, #e7a0b4)';
 
         // ── Spaziatura/forma additive (no-op ai default) ──
         // Padding gated: applicato al contenitore principale SOLO se pad_custom è true.
@@ -87,6 +94,23 @@ class Olo_IntroSplit_Tile extends Olo_Tile_Base {
         $disp  = "var(--olo-font-family-heading, 'Archivo',-apple-system,sans-serif)";
         $sans  = "var(--olo-font-family, 'Work Sans',-apple-system,sans-serif)";
         $ratio = $left ? '.95fr 1.05fr' : '1.05fr .95fr';
+        // Flush 50/50 + tipografia titolo + firma + CTA underline (additivi, default no-op).
+        $flush  = ! empty( $s['flush'] );
+        $acc_it = ! empty( $s['accent_italic'] ) ? 'font-style:italic;' : '';
+        $h_wt   = in_array( (string) ( $s['headline_weight'] ?? '900' ), [ '400', '500', '600', '700', '900' ], true ) ? (string) $s['headline_weight'] : '900';
+        $hsz    = intval( $s['headline_size'] ?? 0 );
+        $h_fs   = $hsz > 0 ? "clamp(30px,4.2vw,{$hsz}px)" : 'clamp(34px,5.2vw,68px)';
+        $content_bg    = $this->safe_color_css( $s['content_bg'] ?? '' );
+        $cta_underline = ( ( $s['cta_style'] ?? 'button' ) === 'underline' );
+        $cta_outline   = ( ( $s['cta_style'] ?? 'button' ) === 'outline' );
+        if ( $flush ) { $ratio = '1fr 1fr'; }
+        $grid_gap   = $flush ? '0' : '54px';
+        $grid_align = $flush ? 'stretch' : 'center';
+        $content_decl = '';
+        if ( $flush ) { $content_decl = 'display:flex;flex-direction:column;justify-content:center;padding:clamp(40px,6vw,80px);'; }
+        if ( $content_bg !== '' ) { $content_decl .= 'background:' . $content_bg . ';'; }
+        $media_size = $flush ? 'height:100%;min-height:440px;' : 'aspect-ratio:' . $asp . ';';
+        $sigcol = $hcol;
 
         $img   = trim( (string) ( $s['media_image'] ?? '' ) );
         $media_bg = $light ? '#d8d2c2' : 'var(--olo-color-surface-alt, #0f3a2a)';
@@ -105,24 +129,33 @@ class Olo_IntroSplit_Tile extends Olo_Tile_Base {
         $shadow_css = $this->build_shadow_decl( $s );
 
         // media block (riusato)
+        $mb = $this->bg_media_parts( $s['media_bg'] ?? null, $uid );
+        $media_sty = $mb['has'] ? ( $mb['css'] !== '' ? ' style="' . esc_attr( $mb['css'] ) . '"' : '' ) : ( $img !== '' ? ' style="background-image:url(' . esc_url( $img ) . ')"' : '' );
         ob_start();
         ?>
-        <div class="ois-media"<?php echo $img !== '' ? ' style="background-image:url(' . esc_url( $img ) . ')"' : ''; ?>>
-            <?php if ( $img === '' && ! empty( $s['media_label'] ) ) : ?><span class="ois-media__lbl"><?php echo esc_html( $s['media_label'] ); ?></span><?php endif; ?>
+        <div class="ois-media"<?php echo $media_sty; ?>>
+            <?php if ( $mb['has'] && $mb['markup'] !== '' ) { echo $mb['markup']; } ?>
+            <?php if ( ! $mb['has'] && $img === '' && ! empty( $s['media_label'] ) ) : ?><span class="ois-media__lbl"><?php echo esc_html( $s['media_label'] ); ?></span><?php endif; ?>
             <?php if ( ! empty( $s['badge_number'] ) || ! empty( $s['badge_label'] ) ) : ?>
             <div class="ois-badge"><?php if ( ! empty( $s['badge_number'] ) ) : ?><b><?php echo esc_html( $s['badge_number'] ); ?></b><?php endif; ?><?php if ( ! empty( $s['badge_label'] ) ) : ?><span><?php echo esc_html( $s['badge_label'] ); ?></span><?php endif; ?></div>
             <?php endif; ?>
         </div>
+        <?php if ( $blob_on ) : ?><span class="ois-blob" aria-hidden="true"></span><?php endif; ?>
         <?php
         $media_html = ob_get_clean();
 
         ob_start();
         ?>
         <style>
-            .<?php echo $uid; ?>{position:relative;display:grid;grid-template-columns:<?php echo $ratio; ?>;gap:54px;align-items:center;font-family:<?php echo $sans; ?>;<?php echo $pad_decl; ?><?php echo $bg_decl ? esc_attr( $bg_decl ) . ';' : ''; ?><?php echo $shadow_css ? 'box-shadow:' . esc_attr( $shadow_css ) . ';' : ''; ?>}
+            .<?php echo $uid; ?>{position:relative;display:grid;grid-template-columns:<?php echo $ratio; ?>;gap:<?php echo $grid_gap; ?>;align-items:<?php echo $grid_align; ?>;font-family:<?php echo $sans; ?>;<?php echo $pad_decl; ?><?php echo $bg_decl ? esc_attr( $bg_decl ) . ';' : ''; ?><?php echo $shadow_css ? 'box-shadow:' . esc_attr( $shadow_css ) . ';' : ''; ?>}
+            <?php if ( $content_decl !== '' ) : ?>.<?php echo $uid; ?> .ois-content{<?php echo $content_decl; ?>}<?php endif; ?>
             .<?php echo $uid; ?> .ois-eyebrow{font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:<?php echo $eyec; ?>;display:block;margin-bottom:16px;}
-            .<?php echo $uid; ?> .ois-h{font-family:<?php echo $disp; ?>;font-weight:900;font-size:clamp(34px,5.2vw,68px);line-height:.9;letter-spacing:-.01em;text-transform:<?php echo $up; ?>;margin:0;color:<?php echo $hcol; ?>;}
-            .<?php echo $uid; ?> .ois-h .acc{color:<?php echo $accc; ?>;}
+            .<?php echo $uid; ?> .ois-h{font-family:<?php echo $disp; ?>;font-weight:<?php echo $h_wt; ?>;font-size:<?php echo $h_fs; ?>;line-height:<?php echo $flush ? '1.05' : '.9'; ?>;letter-spacing:-.01em;text-transform:<?php echo $up; ?>;margin:0;color:<?php echo $hcol; ?>;}
+            .<?php echo $uid; ?> .ois-h .acc{color:<?php echo $accc; ?>;<?php echo $acc_it; ?>}
+            .<?php echo $uid; ?> .ois-sig{font-family:<?php echo $disp; ?>;font-style:italic;font-size:24px;color:<?php echo $sigcol; ?>;margin:18px 0 0;}
+            .<?php echo $uid; ?> .ois-link{display:inline-block;margin-top:24px;font-weight:500;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:<?php echo $ctac; ?>;border-bottom:1px solid <?php echo $accc; ?>;padding-bottom:3px;text-decoration:none;transition:opacity .2s;}
+            .<?php echo $uid; ?> .ois-link:hover{opacity:.7;}
+            .<?php echo $uid; ?> .ois-link:focus-visible{outline:2px solid <?php echo $accc; ?>;outline-offset:3px;}
             .<?php echo $uid; ?> .ois-lead{margin:24px 0;font-size:16.5px;line-height:1.65;color:<?php echo $lcol; ?>;max-width:440px;}
             .<?php echo $uid; ?> .ois-stats{display:flex;gap:34px;margin:26px 0 30px;flex-wrap:wrap;}
             .<?php echo $uid; ?> .ois-stats b{font-family:<?php echo $disp; ?>;font-weight:900;font-size:46px;color:<?php echo $snc; ?>;display:block;line-height:1;}
@@ -130,8 +163,11 @@ class Olo_IntroSplit_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .ois-cta{display:inline-flex;align-items:center;gap:8px;background:<?php echo $ctabg; ?>;color:<?php echo $ctac; ?>;font-weight:700;font-size:14px;padding:14px 24px;border-radius:<?php echo $crad_css; ?>;text-decoration:none;transition:transform .15s,filter .2s;}
             .<?php echo $uid; ?> .ois-cta:hover{transform:translateY(-2px);filter:brightness(1.08);}
             .<?php echo $uid; ?> .ois-cta:focus-visible{outline:2px solid <?php echo $bbg; ?>;outline-offset:3px;}
+            .<?php echo $uid; ?> .ois-cta--outline{background:transparent;color:<?php echo $ctac; ?>;border:1px solid <?php echo $accc; ?>;}
+            .<?php echo $uid; ?> .ois-cta--outline:hover{background:<?php echo $ctac; ?>;color:#0c0c0c;filter:none;}
             .<?php echo $uid; ?> .ois-mediawrap{position:relative;}
-            .<?php echo $uid; ?> .ois-media{position:relative;aspect-ratio:<?php echo $asp; ?>;border-radius:<?php echo $mrad; ?>;overflow:hidden;background:<?php echo $media_bg; ?>;background-size:cover;background-position:center;background-image:repeating-linear-gradient(135deg, <?php echo $stripe; ?> 0 18px, transparent 18px 36px);}
+            .<?php echo $uid; ?> .ois-media{position:relative;z-index:1;<?php echo $media_size; ?>border-radius:<?php echo $mrad; ?>;overflow:hidden;background:<?php echo $media_bg; ?>;background-size:cover;background-position:center;background-image:repeating-linear-gradient(135deg, <?php echo $stripe; ?> 0 18px, transparent 18px 36px);}
+            <?php if ( $blob_on ) : ?>.<?php echo $uid; ?> .ois-blob{position:absolute;left:-24px;bottom:-24px;width:130px;height:130px;border-radius:50%;background:<?php echo $blob_color; ?>;mix-blend-mode:screen;opacity:.5;filter:blur(6px);pointer-events:none;z-index:0;}<?php endif; ?>
             .<?php echo $uid; ?> .ois-media__lbl{position:absolute;left:16px;bottom:14px;font-size:11px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;color:<?php echo $lblcol; ?>;}
             .<?php echo $uid; ?> .ois-badge{position:absolute;left:-18px;bottom:24px;background:<?php echo $bbg; ?>;color:<?php echo $bcol; ?>;border-radius:<?php echo $brad_css; ?>;padding:18px 22px;box-shadow:0 18px 40px -16px rgba(10,42,30,.5);}
             .<?php echo $uid; ?> .ois-badge b{font-family:<?php echo $disp; ?>;font-weight:900;font-size:34px;display:block;line-height:1;}
@@ -142,14 +178,23 @@ class Olo_IntroSplit_Tile extends Olo_Tile_Base {
             <?php if ( $left ) : ?><div class="ois-mediawrap"><?php echo $media_html; ?></div><?php endif; ?>
             <div class="ois-content">
                 <?php if ( ! empty( $s['eyebrow'] ) ) : ?><span class="ois-eyebrow"><?php echo esc_html( $s['eyebrow'] ); ?></span><?php endif; ?>
-                <?php if ( ! empty( $s['headline'] ) ) : ?><h2 class="ois-h"><?php echo esc_html( $s['headline'] ); ?><?php if ( ! empty( $s['accent'] ) ) : ?> <span class="acc"><?php echo esc_html( $s['accent'] ); ?></span><?php endif; ?></h2><?php endif; ?>
+                <?php if ( ! empty( $s['headline'] ) ) : ?><h2 class="ois-h"><?php echo esc_html( $s['headline'] ); ?><?php if ( ! empty( $s['accent'] ) ) : ?> <span class="acc"><?php echo esc_html( $s['accent'] ); ?></span><?php endif; ?><?php if ( ! empty( $s['headline_tail'] ) ) { echo esc_html( $s['headline_tail'] ); } ?></h2><?php endif; ?>
                 <?php if ( ! empty( $s['lead'] ) ) : ?><p class="ois-lead"><?php echo esc_html( $s['lead'] ); ?></p><?php endif; ?>
+                <?php if ( ! empty( $s['signature'] ) ) : ?><p class="ois-sig"><?php echo esc_html( $s['signature'] ); ?></p><?php endif; ?>
                 <?php if ( ! empty( $stats ) ) : ?>
                 <div class="ois-stats">
                     <?php foreach ( $stats as $st ) : ?><div><b><?php echo esc_html( $st['number'] ?? '' ); ?></b><span><?php echo esc_html( $st['label'] ?? '' ); ?></span></div><?php endforeach; ?>
                 </div>
                 <?php endif; ?>
-                <?php if ( ! empty( $s['cta_text'] ) ) : ?><a class="ois-cta" href="<?php echo esc_url( $s['cta_url'] ?: '#' ); ?>"><?php echo esc_html( $s['cta_text'] ); ?></a><?php endif; ?>
+                <?php
+                $cta2_text  = trim( (string) ( $s['cta2_text'] ?? '' ) );
+                $cta2_style = $s['cta2_style'] ?? 'outline';
+                if ( ! empty( $s['cta_text'] ) || $cta2_text !== '' ) : ?>
+                <div class="ois-ctas" style="display:flex;gap:13px;flex-wrap:wrap;align-items:center;margin-top:30px">
+                    <?php if ( ! empty( $s['cta_text'] ) ) : ?><?php if ( $cta_underline ) : ?><a class="ois-link" href="<?php echo esc_url( $s['cta_url'] ?: '#' ); ?>"><?php echo esc_html( $s['cta_text'] ); ?></a><?php else : ?><a class="ois-cta<?php echo $cta_outline ? ' ois-cta--outline' : ''; ?>" href="<?php echo esc_url( $s['cta_url'] ?: '#' ); ?>"><?php echo esc_html( $s['cta_text'] ); ?></a><?php endif; ?><?php endif; ?>
+                    <?php if ( $cta2_text !== '' ) : $c2u = ( $cta2_style === 'underline' ); $c2o = ( $cta2_style === 'outline' ); ?><?php if ( $c2u ) : ?><a class="ois-link" href="<?php echo esc_url( $s['cta2_url'] ?: '#' ); ?>"><?php echo esc_html( $cta2_text ); ?></a><?php else : ?><a class="ois-cta<?php echo $c2o ? ' ois-cta--outline' : ''; ?>" href="<?php echo esc_url( $s['cta2_url'] ?: '#' ); ?>"><?php echo esc_html( $cta2_text ); ?></a><?php endif; ?><?php endif; ?>
+                </div>
+                <?php endif; ?>
             </div>
             <?php if ( ! $left ) : ?><div class="ois-mediawrap"><?php echo $media_html; ?></div><?php endif; ?>
         </div>

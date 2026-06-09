@@ -1,0 +1,390 @@
+[
+ {
+  "id": "brs-se-1",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large",
+   "padding_bottom": 0
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#20160f"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "brs-ro-1",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "brs-co-1",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "brs-pagehead",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// the whole roaster",
+         "eyebrow_color": "#c98a4b",
+         "eyebrow_dot_color": "#c98a4b",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Shop all coffee",
+           "color": "#ead9c2",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 66,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "headline_inline": false,
+         "tagline_show": true,
+         "tagline_text": "Twenty-four lots, roasted to order. Filter by how you brew — every bag ships within a day of roasting.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#8f7a63",
+         "tagline_text_size": 17,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "brs-se-2",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#20160f"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "brs-ro-2",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "brs-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "brs-productgrid",
+        "type": "productgrid",
+        "settings": {
+         "columns": 3,
+         "gap": 20,
+         "media_aspect": "1/1",
+         "media_bg": "#251a12",
+         "stripe_dark": false,
+         "hover_zoom": true,
+         "card_bg": "#2d2017",
+         "card_border": "rgba(234,217,194,.12)",
+         "card_radius": 16,
+         "card_padding": 20,
+         "tag_bg": "#170f0a",
+         "tag_color": "#c98a4b",
+         "quick_add_show": false,
+         "category_color": "#8f7a63",
+         "title_font": "heading",
+         "title_size": 21,
+         "title_color": "#ead9c2",
+         "notes_color": "#8f7a63",
+         "notes_mono": false,
+         "roast_label": "Roast",
+         "roast_on_color": "#c98a4b",
+         "roast_off_color": "rgba(234,217,194,.15)",
+         "price_color": "#ead9c2",
+         "add_button": true,
+         "add_label": "Add",
+         "add_bg": "#ead9c2",
+         "add_color": "#170f0a",
+         "show_filters": true,
+         "footer_text": "",
+         "footer_url": "#",
+         "items": [
+          {
+           "image": "",
+           "media_bg": {
+            "type": "none"
+           },
+           "media_label": "bag — Yirgacheffe",
+           "tag": "New lot",
+           "category": "Ethiopia · Yirgacheffe",
+           "title": "Idido Washed",
+           "notes": "Jasmine · bergamot · stone fruit",
+           "roast": 2,
+           "price": "€19",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Filter, Light roast"
+          },
+          {
+           "image": "",
+           "media_bg": {
+            "type": "none"
+           },
+           "media_label": "bag — Huila",
+           "tag": "",
+           "category": "Colombia · Huila",
+           "title": "La Esperanza",
+           "notes": "Red apple · caramel · cocoa",
+           "roast": 3,
+           "price": "€17",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Filter, Under €18"
+          },
+          {
+           "image": "",
+           "media_bg": {
+            "type": "none"
+           },
+           "media_label": "bag — Sumatra",
+           "tag": "Espresso",
+           "category": "Indonesia · Sumatra",
+           "title": "Lintong Dark",
+           "notes": "Dark chocolate · cedar · molasses",
+           "roast": 5,
+           "price": "€18",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Espresso"
+          },
+          {
+           "image": "",
+           "media_bg": {
+            "type": "none"
+           },
+           "media_label": "bag — Antigua",
+           "tag": "",
+           "category": "Guatemala · Antigua",
+           "title": "Bella Vista",
+           "notes": "Toffee · orange · almond",
+           "roast": 3,
+           "price": "€17",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Filter, Under €18"
+          },
+          {
+           "image": "",
+           "media_bg": {
+            "type": "none"
+           },
+           "media_label": "bag — Decaf",
+           "tag": "Decaf",
+           "category": "Brazil · Cerrado · SWP",
+           "title": "Lights Out",
+           "notes": "Milk chocolate · hazelnut · brown sugar",
+           "roast": 4,
+           "price": "€18",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Decaf"
+          },
+          {
+           "image": "",
+           "media_bg": {
+            "type": "none"
+           },
+           "media_label": "bag — Kenya",
+           "tag": "New lot",
+           "category": "Kenya · Nyeri",
+           "title": "Gatomboya AA",
+           "notes": "Blackcurrant · tomato · cane sugar",
+           "roast": 2,
+           "price": "€21",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Filter, Light roast"
+          },
+          {
+           "image": "",
+           "media_bg": {
+            "type": "none"
+           },
+           "media_label": "bag — Honduras",
+           "tag": "",
+           "category": "Honduras · Marcala",
+           "title": "El Pilar",
+           "notes": "Honey · apricot · cocoa nib",
+           "roast": 3,
+           "price": "€16",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Filter, Under €18"
+          },
+          {
+           "image": "",
+           "media_bg": {
+            "type": "none"
+           },
+           "media_label": "bag — house espresso",
+           "tag": "Espresso",
+           "category": "Blend · house",
+           "title": "Harbour Espresso",
+           "notes": "Dark cherry · cocoa · malt",
+           "roast": 5,
+           "price": "€15",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Espresso, Under €18"
+          },
+          {
+           "image": "",
+           "media_bg": {
+            "type": "none"
+           },
+           "media_label": "bag — Rwanda",
+           "tag": "",
+           "category": "Rwanda · Huye",
+           "title": "Bufcafe",
+           "notes": "Red grape · black tea · honey",
+           "roast": 2,
+           "price": "€19",
+           "link": "#",
+           "quick_add": "",
+           "filter_tags": "Filter, Light roast"
+          }
+         ],
+         "filter_all_label": "All · 24",
+         "filter_list": "Filter, Espresso, Decaf, Light roast, Under €18",
+         "filter_text_color": "#cbb89f",
+         "filter_border_color": "rgba(234,217,194,.12)",
+         "filter_active_bg": "#c98a4b",
+         "filter_active_color": "#170f0a"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "brs-se-3",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large",
+   "padding_top": 0
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#20160f"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "brs-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "brs-co-3",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "brs-cta",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Can't choose?",
+         "headline_accent": "Let us.",
+         "headline_accent_italic": true,
+         "subtitle": "Start a subscription and we'll send our pick of the month's best lot — at 10% off, shipping free.",
+         "cta_text": "Build a subscription",
+         "cta_url": "#subscribe",
+         "bg": {
+          "type": "gradient",
+          "gradient_from": "rgba(201,138,75,.18)",
+          "gradient_to": "rgba(201,138,75,.04)",
+          "gradient_angle": 150
+         },
+         "text_color": "#ead9c2",
+         "accent_color": "#c98a4b",
+         "subtitle_color": "#cbb89f",
+         "cta_bg": "#c98a4b",
+         "cta_color": "#170f0a",
+         "cta_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta_size": 15,
+         "headline_font_family": "sans-serif",
+         "headline_size": 48,
+         "headline_weight": "700",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 24,
+          "tr": 24,
+          "br": 24,
+          "bl": 24,
+          "linked": true
+         },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

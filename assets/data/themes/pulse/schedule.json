@@ -1,0 +1,205 @@
+[
+ {
+  "id": "pus-se-1",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_bottom": 0 },
+  "style": { "bg": { "type": "solid", "color": "#0c0d10" } },
+  "advanced": {},
+  "children": [
+   { "id": "pus-ro-1", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "pus-co-1", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "pus-ph", "type": "section-header", "settings": {
+        "eyebrow_show": true,
+        "eyebrow_text": "// timetable · week of 9 Jun",
+        "eyebrow_color": "#c6f24e",
+        "eyebrow_dot_color": "#c6f24e",
+        "eyebrow_separator": "",
+        "headline_lines": [
+         { "text": "The whole ", "color": "#ffffff", "italic": false },
+         { "text": "week.", "color": "#c6f24e", "italic": false }
+        ],
+        "headline_font_family": "serif",
+        "headline_font_size": 92,
+        "headline_font_weight": "400",
+        "headline_align": "left",
+        "headline_inline": true,
+        "tagline_show": true,
+        "tagline_text": "Filter by what you're chasing. Lime cells are coached signature classes, the rest are open classes and self-led open gym. Tap any class in the app to reserve.",
+        "tagline_text_italic": false,
+        "tagline_text_color": "#8b919c",
+        "tagline_text_size": 17,
+        "layout": "stack",
+        "gap": 16
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]},
+   { "id": "pus-ro-tabs", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "pus-co-tabs", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "pus-tabs", "type": "nav", "settings": {
+        "items": [
+         { "title": "All", "content": "#", "tag": "" },
+         { "title": "Strength", "content": "#", "tag": "" },
+         { "title": "Conditioning", "content": "#", "tag": "" },
+         { "title": "Weightlifting", "content": "#", "tag": "" },
+         { "title": "Open gym", "content": "#", "tag": "" }
+        ],
+        "show_icons": false,
+        "style": "pill",
+        "direction": "horizontal",
+        "alignment": "left",
+        "gap": 8,
+        "font_size": "12",
+        "font_weight": "600",
+        "text_transform": "uppercase",
+        "letter_spacing": "0.6",
+        "link_color": "#c7ccd4",
+        "link_hover_color": "#0c0d10",
+        "active_color": "#0c0d10",
+        "active_style": "background",
+        "active_bg": "#c6f24e",
+        "hover_bg": "#c6f24e",
+        "border_radius": "999",
+        "tile_padding": { "top": 9, "right": 18, "bottom": 9, "left": 18 },
+        "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "linked": true, "style": "solid", "color": "rgba(255,255,255,.16)" }
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "pus-se-2",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_top": 48 },
+  "style": { "bg": { "type": "solid", "color": "#14161a" } },
+  "advanced": {},
+  "children": [
+   { "id": "pus-ro-2", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "pus-co-2", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "pus-sched", "type": "schedule", "settings": {
+        "eyebrow": "",
+        "heading": "",
+        "days": "Mon, Tue, Wed, Thu, Fri",
+        "corner_label": "Time",
+        "rows": [
+         { "time": "06:00", "cells": "!Engine · Rae · 45m | Foundations · Milo · 60m | !Engine · Rae · 45m | Strength · Devi · 60m | !Engine · Rae · 45m" },
+         { "time": "07:15", "cells": "Strength · Devi · 60m | !Platform · Yuki · 75m | Strength · Devi · 60m | !Platform · Yuki · 75m | Strength · Devi · 60m" },
+         { "time": "12:15", "cells": "Lunch WOD · 45m | Open gym · Self-led | Lunch WOD · 45m | Open gym · Self-led | Lunch WOD · 45m" },
+         { "time": "17:30", "cells": "!Engine · Rae · 45m | Foundations · Milo · 60m | !Engine · Rae · 45m | Foundations · Milo · 60m | Open gym · Self-led" },
+         { "time": "18:30", "cells": "Strength · Devi · 60m | !Platform · Yuki · 75m | Strength · Devi · 60m | !Platform · Yuki · 75m | Mobility · Waitlist" }
+        ],
+        "zone_accent": "#c6f24e",
+        "zone_on": "#0c0d10",
+        "cell_bg": "#23272f",
+        "card_border": "rgba(255,255,255,.09)",
+        "head_color": "#ffffff",
+        "align": "left"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "pus-se-3",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_top": 0 },
+  "style": { "bg": { "type": "solid", "color": "#14161a" } },
+  "advanced": {},
+  "children": [
+   { "id": "pus-ro-3a", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "pus-co-3a", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "pus-notes-head", "type": "section-header", "settings": {
+        "eyebrow_show": true,
+        "eyebrow_text": "// before you book",
+        "eyebrow_color": "#c6f24e",
+        "eyebrow_dot_color": "#c6f24e",
+        "eyebrow_separator": "",
+        "headline_lines": [
+         { "text": "Good to ", "color": "#ffffff", "italic": false },
+         { "text": "know", "color": "#c6f24e", "italic": false }
+        ],
+        "headline_font_family": "serif",
+        "headline_font_size": 56,
+        "headline_font_weight": "400",
+        "headline_align": "left",
+        "headline_inline": true,
+        "tagline_show": false,
+        "tagline_text": "",
+        "layout": "stack",
+        "gap": 16
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]},
+   { "id": "pus-ro-3b", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "pus-co-3b", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "pus-notes", "type": "info-cards", "settings": {
+        "columns": 3,
+        "items_gap": 16,
+        "container_bg": { "type": "none" },
+        "container_padding": 0,
+        "card_bg": { "type": "solid", "color": "#1c2026" },
+        "card_color": "#8b919c",
+        "card_accent_color": "#ffffff",
+        "card_padding": 26,
+        "card_border": "rgba(255,255,255,.09)",
+        "card_radius": { "tl": 10, "tr": 10, "br": 10, "bl": 10, "linked": true },
+        "show_media": false,
+        "show_icon": false,
+        "show_counter": false,
+        "show_counter_label": false,
+        "show_arrow": false,
+        "show_footer": false,
+        "show_divider": false,
+        "title_font_family": "serif",
+        "title_size": 20,
+        "title_weight": "400",
+        "title_italic": false,
+        "description_size": 14,
+        "card_hover_effect": "none",
+        "items": [
+         { "counter": "", "counter_label": "", "title": "Arrive 10 early", "title_accent": "", "title_accent_italic": false, "description": "First time in a class? Get there ten minutes before so a coach can walk you through the warm-up and any new movements.", "icon": "", "footer_text": "", "footer_dot_color": "#c6f24e", "link_url": "", "media_image": "", "media_label": "" },
+         { "counter": "", "counter_label": "", "title": "Everything scales", "title_accent": "", "title_accent_italic": false, "description": "Every session is written with options. Coaches adjust load, range and pace on the spot — beginners and lifters train side by side.", "icon": "", "footer_text": "", "footer_dot_color": "#c6f24e", "link_url": "", "media_image": "", "media_label": "" },
+         { "counter": "", "counter_label": "", "title": "Cancel by 2 hours", "title_accent": "", "title_accent_italic": false, "description": "Free up your spot for the waitlist by cancelling at least two hours out. No-shows on unlimited plans cost a strike — three and we'll have a chat.", "icon": "", "footer_text": "", "footer_dot_color": "#c6f24e", "link_url": "", "media_image": "", "media_label": "" }
+        ]
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "pus-se-4",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#c6f24e" } },
+  "advanced": {},
+  "children": [
+   { "id": "pus-ro-4", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "pus-co-4", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "pus-cta", "type": "cta-banner", "settings": {
+        "headline": "See a class",
+        "headline_accent": "that fits?",
+        "headline_accent_italic": false,
+        "subtitle": "Your first one is free. Book it from the app or grab a coach at the door.",
+        "cta_text": "Book your free session",
+        "cta_url": "#membership",
+        "bg": { "type": "solid", "color": "#c6f24e" },
+        "text_color": "#0c0d10",
+        "accent_color": "#0c0d10",
+        "subtitle_color": "rgba(12,13,16,.78)",
+        "cta_bg": "#0c0d10",
+        "cta_color": "#ffffff",
+        "cta_radius": { "tl": 4, "tr": 4, "br": 4, "bl": 4, "linked": true },
+        "cta_size": 14,
+        "headline_font_family": "serif",
+        "headline_size": 80,
+        "headline_weight": "400",
+        "subtitle_size": 17,
+        "layout": "stack",
+        "vertical_align": "center",
+        "banner_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0, "linked": true },
+        "banner_padding": 80
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

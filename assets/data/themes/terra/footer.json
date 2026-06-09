@@ -1,1 +1,103 @@
-[{"id":"te-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#f3f5ee"}},"advanced":{},"children":[{"id":"te-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"te-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"te-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Outfit\", -apple-system, sans-serif;font-size:20px;color:#1d2a1c;font-weight:700;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#5e9442;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Terra</div><p style=\"font-size:14px;color:#8a957f;max-width:260px\">Plants & garden, delivered happy. Matched to your light, guaranteed for 30 days.</p>","text_color":"#566053","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"te-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"te-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#1d2a1c;font-family:\"Outfit\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Shop</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8a957f\"><li>All plants</li><li>Easy care</li><li>Pots</li><li>Soil & tools</li></ul>","text_color":"#566053","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"te-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"te-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#1d2a1c;font-family:\"Outfit\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Learn</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8a957f\"><li>Care guides</li><li>Repotting</li><li>Plant quiz</li></ul>","text_color":"#566053","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"te-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"te-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#1d2a1c;font-family:\"Outfit\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Help</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8a957f\"><li>Our guarantee</li><li>Delivery</li><li>Contact</li></ul>","text_color":"#566053","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"te-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"te-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"te-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid #dde3d4;padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#8a957f\"><span>© 2026 Terra — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#566053","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "te-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
+  "style": { "bg": { "type": "solid", "color": "#f3f5ee" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "te-fro-top-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "te-fcol-topdiv", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "te-ftopdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "#dde3d4", "alignment": "center", "spacing": 0 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "te-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "te-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "te-fbrand", "type": "headline", "settings": { "heading": "Terra", "tag": "div", "alignment": "left", "heading_font_size": "21", "heading_uppercase": false, "heading_color": "#1d2a1c", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "te-fbtext", "type": "text-block", "settings": { "content": "<p>Plants &amp; garden, delivered happy. Matched to your light, guaranteed for 30 days.</p>", "text_color": "#8a957f", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "te-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "te-fh1", "type": "headline", "settings": { "heading": "Shop", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#1d2a1c", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "te-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#8a957f", "link_hover_color": "#5e9442", "items": [ { "title": "All plants", "content": "#shop", "tag": "" }, { "title": "Easy care", "content": "#", "tag": "" }, { "title": "Pots", "content": "#", "tag": "" }, { "title": "Soil & tools", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "te-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "te-fh2", "type": "headline", "settings": { "heading": "Learn", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#1d2a1c", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "te-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#8a957f", "link_hover_color": "#5e9442", "items": [ { "title": "Care guides", "content": "#care", "tag": "" }, { "title": "Repotting", "content": "#repot", "tag": "" }, { "title": "Plant quiz", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "te-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "te-fh3", "type": "headline", "settings": { "heading": "Help", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#1d2a1c", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "te-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#8a957f", "link_hover_color": "#5e9442", "items": [ { "title": "Our guarantee", "content": "#promise", "tag": "" }, { "title": "Delivery", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "te-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "te-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "te-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "#dde3d4", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "te-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "te-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "te-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Terra — an OLOtheme demo.</p>", "text_color": "#8a957f", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "te-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "te-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#8a957f", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

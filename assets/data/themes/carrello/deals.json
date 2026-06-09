@@ -1,0 +1,330 @@
+[
+ {
+  "id": "cr-dl-se-1",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_bottom": 0 },
+  "style": { "bg": { "type": "solid", "color": "#1a1a22" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cr-dl-ro-1",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cr-dl-co-1",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cr-dl-pagehead",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Maker's Week",
+         "eyebrow_color": "#ff5a5f",
+         "eyebrow_dot_color": "#ff5a5f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "Up to ", "color": "#ffffff", "italic": false },
+          { "text": "40% off", "color": "#ff5a5f", "italic": false }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 60,
+         "headline_font_weight": "800",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Hand-picked deals from independent shops, this week only. New markdowns drop every morning.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6c6c7c",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cr-dl-se-2",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "medium" },
+  "style": { "bg": { "type": "solid", "color": "#1a1a22" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cr-dl-ro-2",
+    "type": "row",
+    "settings": { "layout": "66-33", "gap": 24, "vertical_align": "center", "stack_mobile": true },
+    "style": {
+     "bg": {
+      "type": "gradient",
+      "gradient_from": "#ff5a5f",
+      "gradient_to": "#ff8a5f",
+      "gradient_angle": 100
+     },
+     "padding_top": 40,
+     "padding_right": 40,
+     "padding_bottom": 40,
+     "padding_left": 40,
+     "border_radius": { "tl": 16, "tr": 16, "br": 16, "bl": 16, "linked": true }
+    },
+    "advanced": {},
+    "children": [
+     {
+      "id": "cr-dl-co-2a",
+      "type": "column",
+      "settings": { "width": "2-3" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "cr-dl-deal-eyebrow", "type": "headline", "settings": { "heading": "Sale ends in", "tag": "div", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_color": "rgba(255,255,255,.85)", "heading_font": "body", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "cr-dl-deal-h", "type": "headline", "settings": { "heading": "Don't miss the drop", "tag": "h2", "alignment": "left", "heading_font_size": "40", "heading_uppercase": false, "heading_color": "#ffffff", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "cr-dl-deal-p", "type": "text-block", "settings": { "content": "<p>Prices return to normal when the clock hits zero.</p>", "text_color": "rgba(255,255,255,.85)", "font_size": "16", "line_height": "1.6", "text_align": "left", "max_width": "" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "cr-dl-co-2b",
+      "type": "column",
+      "settings": { "width": "1-3" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cr-dl-countdown",
+        "type": "countdown",
+        "settings": {
+         "countdown_style": "custom",
+         "countdown_type": "date",
+         "target_date": "2026-06-30T23:59",
+         "show_days": true,
+         "show_hours": true,
+         "show_minutes": true,
+         "show_seconds": true,
+         "label_days": "Days",
+         "label_hours": "Hrs",
+         "label_minutes": "Min",
+         "label_seconds": "Sec",
+         "separator": "",
+         "display_mode": "inline",
+         "bg": { "type": "none" },
+         "accent_color": "#ffffff",
+         "text_color": "rgba(255,255,255,.8)",
+         "item_bg_color": "rgba(16,16,21,.25)",
+         "item_radius": 10,
+         "item_padding": 14,
+         "number_font_size": "30",
+         "number_font_weight": "800",
+         "label_font_size": "10",
+         "label_font_weight": "500",
+         "item_min_width": "64",
+         "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cr-dl-se-3",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_top": 0 },
+  "style": { "bg": { "type": "solid", "color": "#1a1a22" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cr-dl-ro-3a",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cr-dl-co-3a",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cr-dl-secheader",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "eyebrow_text": "",
+         "eyebrow_color": "#ff5a5f",
+         "eyebrow_dot_color": "#ff5a5f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "On ", "color": "#ffffff", "italic": false },
+          { "text": "sale", "color": "#ff5a5f", "italic": false },
+          { "text": " now", "color": "#ffffff", "italic": false }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 38,
+         "headline_font_weight": "800",
+         "headline_align": "left",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "488 deals",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6c6c7c",
+         "tagline_text_size": 14,
+         "layout": "stack",
+         "gap": 8
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "cr-dl-ro-3b",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cr-dl-co-3b",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cr-dl-productgrid",
+        "type": "productgrid",
+        "settings": {
+         "columns": 4,
+         "gap": 16,
+         "media_aspect": "1/1",
+         "media_bg": "#26262f",
+         "stripe_dark": false,
+         "hover_zoom": true,
+         "card_bg": "#26262f",
+         "card_border": "rgba(255,255,255,.09)",
+         "card_radius": 12,
+         "card_padding": 16,
+         "tag_bg": "#ff5a5f",
+         "tag_color": "#ffffff",
+         "quick_add_show": false,
+         "category_color": "#6c6c7c",
+         "title_font": "sans",
+         "title_size": 15,
+         "title_color": "#ffffff",
+         "notes_color": "#3fd6a8",
+         "notes_mono": false,
+         "price_color": "#ffffff",
+         "add_button": true,
+         "add_label": "Add",
+         "add_bg": "#ff5a5f",
+         "add_color": "#ffffff",
+         "show_filters": false,
+         "footer_text": "",
+         "footer_url": "#",
+         "items": [
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "mug", "tag": "-25%", "category": "Kiln Studio", "title": "Speckled Tea Mug", "notes": "★ 4.9 (212)", "roast": 0, "price": "€24", "link": "#", "quick_add": "", "filter_tags": "" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "tote", "tag": "-30%", "category": "Flax & Co", "title": "Canvas Tote", "notes": "★ 4.7 (510)", "roast": 0, "price": "€21", "link": "#", "quick_add": "", "filter_tags": "" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "earrings", "tag": "-15%", "category": "Mara Made", "title": "Brass Arc Earrings", "notes": "★ 4.8 (340)", "roast": 0, "price": "€42", "link": "#", "quick_add": "", "filter_tags": "" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "candle", "tag": "-20%", "category": "Ember Goods", "title": "Soy Candle, Fig", "notes": "★ 4.9 (98)", "roast": 0, "price": "€18", "link": "#", "quick_add": "", "filter_tags": "" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "print", "tag": "-40%", "category": "Press Yan", "title": "Riso Print, A2", "notes": "★ 5.0 (88)", "roast": 0, "price": "€20", "link": "#", "quick_add": "", "filter_tags": "" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "bowl", "tag": "-25%", "category": "Kiln Studio", "title": "Stoneware Bowl", "notes": "★ 4.9 (176)", "roast": 0, "price": "€27", "link": "#", "quick_add": "", "filter_tags": "" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "scarf", "tag": "-35%", "category": "Loom & Co", "title": "Wool Scarf", "notes": "★ 4.8 (243)", "roast": 0, "price": "€39", "link": "#", "quick_add": "", "filter_tags": "" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "notebook", "tag": "-20%", "category": "Paper Path", "title": "Linen Notebook", "notes": "★ 4.7 (134)", "roast": 0, "price": "€14", "link": "#", "quick_add": "", "filter_tags": "" }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cr-dl-se-4",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#1a1a22" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cr-dl-ro-4",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cr-dl-co-4",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cr-dl-cta",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Never miss a",
+         "headline_accent": "drop",
+         "headline_accent_italic": false,
+         "subtitle": "Get the week's best maker deals in your inbox every Monday morning.",
+         "cta_text": "Get deal alerts",
+         "cta_url": "#",
+         "bg": {
+          "type": "gradient",
+          "gradient_from": "rgba(255,90,95,.16)",
+          "gradient_to": "rgba(63,214,168,.05)",
+          "gradient_angle": 160
+         },
+         "text_color": "#ffffff",
+         "accent_color": "#ff5a5f",
+         "subtitle_color": "#a6a6b4",
+         "cta_bg": "#ff5a5f",
+         "cta_color": "#ffffff",
+         "cta_radius": { "tl": 10, "tr": 10, "br": 10, "bl": 10, "linked": true },
+         "cta_size": 15,
+         "headline_font_family": "sans-serif",
+         "headline_size": 50,
+         "headline_weight": "800",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": { "tl": 20, "tr": 20, "br": 20, "bl": 20, "linked": true },
+         "banner_padding": 72
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

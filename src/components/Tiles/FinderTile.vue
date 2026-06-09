@@ -10,11 +10,24 @@
         {{ it.option || ('Opzione ' + (i + 1)) }}
       </button>
     </div>
-    <div v-if="current" class="ofn-res" :style="resStyle">
-      <div v-if="current.meta" :style="metaStyle">{{ current.meta }}</div>
-      <h3 v-if="current.title" :style="resTitleStyle" :data-olo-editable="'items.' + active + '.title'">{{ current.title }}</h3>
-      <p v-if="current.text" :style="resTextStyle" :data-olo-editable="'items.' + active + '.text'">{{ current.text }}</p>
-      <a v-if="current.cta_text" :href="current.cta_url || '#'" :style="ctaStyle" @click.prevent>{{ current.cta_text }}</a>
+    <div v-if="current" class="ofn-res" :class="{ 'ofn-res--media': hasMedia(current) }" :style="resStyle">
+      <template v-if="hasMedia(current)">
+        <div class="ofn-media" :style="mediaStyle(current)"><span v-if="!current.image && !itemHasBg(current) && current.media_label" class="ofn-media__lbl">{{ current.media_label }}</span></div>
+        <div class="ofn-res__body">
+          <span v-if="current.kicker" class="ofn-kicker" :style="kickerStyle">{{ current.kicker }}</span>
+          <h3 v-if="current.title" :style="resTitleStyle" :data-olo-editable="'items.' + active + '.title'">{{ current.title }}</h3>
+          <p v-if="current.text" :style="resTextStyle" :data-olo-editable="'items.' + active + '.text'">{{ current.text }}</p>
+          <div v-if="current.meta" :style="[metaStyle, { marginTop: '14px' }]">{{ current.meta }}</div>
+          <a v-if="current.cta_text" :href="current.cta_url || '#'" :style="ctaStyle" @click.prevent>{{ current.cta_text }}</a>
+        </div>
+      </template>
+      <template v-else>
+        <span v-if="current.kicker" class="ofn-kicker" :style="kickerStyle">{{ current.kicker }}</span>
+        <div v-if="current.meta" :style="metaStyle">{{ current.meta }}</div>
+        <h3 v-if="current.title" :style="resTitleStyle" :data-olo-editable="'items.' + active + '.title'">{{ current.title }}</h3>
+        <p v-if="current.text" :style="resTextStyle" :data-olo-editable="'items.' + active + '.text'">{{ current.text }}</p>
+        <a v-if="current.cta_text" :href="current.cta_url || '#'" :style="ctaStyle" @click.prevent>{{ current.cta_text }}</a>
+      </template>
     </div>
   </div>
 </template>
@@ -22,6 +35,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue';
 import { resolveColor, TOKENS, SHADOW } from '@/composables/oloTileDefaults';
+import { buildBgStyle } from '@/composables/useBackgroundStyle';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -33,7 +47,7 @@ const defaults = {
     { option: 'Opzione B', title: 'Risultato B', text: 'Descrizione del risultato.', meta: '', cta_text: '', cta_url: '#', icon: '' },
     { option: 'Opzione C', title: 'Risultato C', text: 'Descrizione del risultato.', meta: '', cta_text: '', cta_url: '#', icon: '' },
   ],
-  zone_accent: '', zone_on: '#ffffff', card_bg: '', card_border: '', align: 'center',
+  zone_accent: '', zone_on: '#ffffff', card_bg: '', card_border: '', media_bg: '', align: 'center',
   default_index: '0', chip_bg: '', chip_radius: '999',
   card_radius: '16', card_padding: { top: 34, right: 38, bottom: 34, left: 38 },
   card_max_width: '680', tile_padding: { top: 0, right: 0, bottom: 0, left: 0 }, shadow: 'none',
@@ -52,6 +66,19 @@ const SANS = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
 const accent = computed(() => resolveColor(s.value.zone_accent, TOKENS.primary));
 const on = computed(() => resolveColor(s.value.zone_on, '#ffffff'));
 const center = computed(() => s.value.align === 'center');
+const itemHasBg = (it) => !!(it && it.media_bg && it.media_bg.type && it.media_bg.type !== 'none');
+const hasMedia = (it) => !!(it && ((it.image && String(it.image).trim()) || it.media_label || itemHasBg(it)));
+const mediaBg = computed(() => resolveColor(s.value.media_bg, 'var(--olo-color-surface-alt, #1e1e1e)'));
+function mediaStyle(it) {
+  if (itemHasBg(it)) return { backgroundSize: 'cover', backgroundPosition: 'center', ...buildBgStyle(it.media_bg) };
+  const img = it && it.image ? String(it.image).trim() : '';
+  return {
+    background: mediaBg.value,
+    backgroundImage: img ? `url(${img})` : 'repeating-linear-gradient(135deg, rgba(255,255,255,.06) 0 16px, transparent 16px 32px)',
+    backgroundSize: 'cover', backgroundPosition: 'center',
+  };
+}
+const kickerStyle = computed(() => ({ display: 'block', fontSize: '10.5px', fontWeight: 700, letterSpacing: '.18em', textTransform: 'uppercase', color: accent.value, marginBottom: '6px' }));
 
 function radiusStr(v, fb) {
   if (v && typeof v === 'object') return `${v.tl||0}px ${v.tr||0}px ${v.br||0}px ${v.bl||0}px`;
@@ -118,4 +145,9 @@ function renderIcon(icon) {
 <style scoped>
 .ofn-h :deep(em) { font-style: italic; color: var(--fn-accent); }
 .ofn-chip:focus-visible { outline: 2px solid var(--fn-accent); outline-offset: 3px; }
+.ofn-res--media { display: flex; gap: 32px; align-items: center; }
+.ofn-media { width: 190px; flex: 0 0 auto; aspect-ratio: 190/240; border-radius: 2px; overflow: hidden; position: relative; }
+.ofn-media__lbl { position: absolute; left: 12px; bottom: 10px; font-size: 10px; letter-spacing: .04em; text-transform: uppercase; color: rgba(255,255,255,.4); }
+.ofn-res__body { flex: 1; min-width: 0; }
+@media (max-width: 600px) { .ofn-res--media { flex-direction: column; } .ofn-media { width: 100%; aspect-ratio: auto; height: 240px; } }
 </style>

@@ -1,1 +1,91 @@
-[{"id":"lg-se-93","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#192531"}},"advanced":{},"children":[{"id":"lg-ro-89","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"lg-co-82","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"lg-te-81","type":"text-block","settings":{"content":"<div style=\"font-family:'Libre Franklin',-apple-system,sans-serif;font-size:20px;color:#eaf1f0;font-weight:800;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#4fb3a6;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Ledger</div><p style=\"font-size:14px;color:#697b88;max-width:260px\">Modern accountancy for small business. Real accountants, clever software.</p>","text_color":"#a3b4bf","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"lg-co-84","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"lg-te-83","type":"text-block","settings":{"content":"<h4 style=\"color:#eaf1f0;font-family:'Libre Franklin',-apple-system,sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Product</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#697b88\"><li>Services</li><li>How it works</li><li>Pricing</li><li>The app</li></ul>","text_color":"#a3b4bf","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"lg-co-86","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"lg-te-85","type":"text-block","settings":{"content":"<h4 style=\"color:#eaf1f0;font-family:'Libre Franklin',-apple-system,sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Resources</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#697b88\"><li>Tax guides</li><li>Calculators</li><li>Blog</li></ul>","text_color":"#a3b4bf","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"lg-co-88","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"lg-te-87","type":"text-block","settings":{"content":"<h4 style=\"color:#eaf1f0;font-family:'Libre Franklin',-apple-system,sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Company</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#697b88\"><li>About</li><li>Careers</li><li>Contact</li></ul>","text_color":"#a3b4bf","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"lg-ro-92","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"lg-co-91","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"lg-te-90","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid rgba(234,241,240,.1);padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#697b88\"><span>© 2026 Ledger — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#a3b4bf","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "lg-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 32 },
+  "style": { "bg": { "type": "solid", "color": "#192531" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lg-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lg-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "lg-fbrand", "type": "headline", "settings": { "heading": "Ledger", "tag": "div", "alignment": "left", "heading_font_size": "20", "heading_color": "#eaf1f0", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "lg-fbtext", "type": "text-block", "settings": { "content": "<p>Modern accountancy for small business. Real accountants, clever software.</p>", "text_color": "#697b88", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "lg-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "lg-fh1", "type": "headline", "settings": { "heading": "Product", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eaf1f0", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "lg-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#697b88", "link_hover_color": "#eaf1f0", "items": [ { "title": "Services", "content": "#services", "tag": "" }, { "title": "How it works", "content": "#how", "tag": "" }, { "title": "Pricing", "content": "#pricing", "tag": "" }, { "title": "The app", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "lg-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "lg-fh2", "type": "headline", "settings": { "heading": "Resources", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eaf1f0", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "lg-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#697b88", "link_hover_color": "#eaf1f0", "items": [ { "title": "Tax guides", "content": "#", "tag": "" }, { "title": "Calculators", "content": "#", "tag": "" }, { "title": "Blog", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "lg-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "lg-fh3", "type": "headline", "settings": { "heading": "Company", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eaf1f0", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "lg-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#697b88", "link_hover_color": "#eaf1f0", "items": [ { "title": "About", "content": "#", "tag": "" }, { "title": "Careers", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "lg-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "lg-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "lg-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(234,241,240,.1)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "lg-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "lg-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "lg-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Ledger — an OLOtheme demo.</p>", "text_color": "#697b88", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "lg-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "lg-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#697b88", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

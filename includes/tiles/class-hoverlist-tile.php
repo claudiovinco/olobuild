@@ -35,6 +35,8 @@ class Olo_HoverList_Tile extends Olo_Tile_Base {
         'hover_bg'         => '#4d2f40',
         'line_color'       => 'rgba(246,233,236,.13)',
         'peek'             => true,
+        'peek_width'       => 170,
+        'peek_ratio'       => '4/5',
         'mono_font_family' => '',
     ];
 
@@ -64,6 +66,9 @@ class Olo_HoverList_Tile extends Olo_Tile_Base {
         $line    = $this->safe_color_css( $s['line_color'] ) ?: 'rgba(255,255,255,.13)';
         $upper   = ! empty( $s['sub_uppercase'] );
         $peek    = ! empty( $s['peek'] );
+        $peek_w  = max( 100, min( 320, absint( $s['peek_width'] ?? 170 ) ) );
+        $peek_r  = preg_replace( '/[^0-9.\/]/', '', $s['peek_ratio'] ?? '4/5' ) ?: '4/5';
+        $peek_ph = 'var(--olo-color-muted, #2b2b2b)';
 
         $items   = is_array( $s['items'] ) ? $s['items'] : [];
         $row_base = 'display:flex;align-items:center;gap:18px;padding:' . $pad_y . 'px 8px;border-bottom:1px solid ' . $line . ';color:inherit;text-decoration:none;transition:padding .25s ease,background .2s ease;';
@@ -76,10 +81,11 @@ class Olo_HoverList_Tile extends Olo_Tile_Base {
                 $name  = $it['name'] ?? '';
                 $sub   = $it['sub'] ?? '';
                 $link  = $it['link_url'] ?? '';
+                $pimg  = trim( (string) ( $it['image'] ?? '' ) );
                 $tag   = $link ? 'a' : 'div';
                 $attrs = $link ? ' href="' . esc_url( $link ) . '"' : '';
             ?>
-                <<?php echo $tag . $attrs; ?> class="olo-hoverlist__row" data-color="<?php echo esc_attr( $color ); ?>" data-name="<?php echo esc_attr( $name ); ?>" style="<?php echo esc_attr( $row_base ); ?>">
+                <<?php echo $tag . $attrs; ?> class="olo-hoverlist__row" data-color="<?php echo esc_attr( $color ); ?>" data-name="<?php echo esc_attr( $name ); ?>" data-image="<?php echo esc_url( $pimg ); ?>" style="<?php echo esc_attr( $row_base ); ?>">
                     <span class="olo-hoverlist__sw" style="width:<?php echo $sw_size; ?>px;height:<?php echo $sw_size; ?>px;border-radius:<?php echo $sw_rad; ?>;flex:none;background:<?php echo esc_attr( $color ); ?>;box-shadow:inset 0 0 0 1.5px rgba(246,233,236,.3);"></span>
                     <span class="olo-hoverlist__nm" style="font-family:<?php echo esc_attr( $nfam ); ?>;font-size:<?php echo $name_sz; ?>px;color:<?php echo esc_attr( $name_c ); ?>;line-height:1.1;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.name'; ?>"><?php echo esc_html( $name ); ?></span>
                     <?php if ( $sub !== '' ) : ?>
@@ -88,9 +94,8 @@ class Olo_HoverList_Tile extends Olo_Tile_Base {
                 </<?php echo $tag; ?>>
             <?php endforeach; ?>
             <?php if ( $peek ) : ?>
-            <div class="olo-hoverlist__peek" aria-hidden="true" style="position:fixed;z-index:90;pointer-events:none;opacity:0;transform:translate(14px,-50%);transition:opacity .15s ease;display:flex;align-items:center;gap:10px;background:<?php echo esc_attr( $hbg ); ?>;border:1px solid <?php echo esc_attr( $line ); ?>;border-radius:999px;padding:8px 16px 8px 8px;backdrop-filter:blur(6px);box-shadow:0 10px 30px rgba(0,0,0,.35);">
-                <span class="olo-hl-peek-sw" style="width:28px;height:28px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1.5px rgba(246,233,236,.3);"></span>
-                <span class="olo-hl-peek-nm" style="font-family:<?php echo esc_attr( $nfam ); ?>;font-size:16px;color:<?php echo esc_attr( $name_c ); ?>;white-space:nowrap;"></span>
+            <div class="olo-hoverlist__peek" aria-hidden="true" style="position:fixed;z-index:90;pointer-events:none;opacity:0;transform:translate(16px,-50%);transition:opacity .18s ease;">
+                <span class="olo-hl-peek-img" style="display:block;width:<?php echo $peek_w; ?>px;aspect-ratio:<?php echo $peek_r; ?>;border-radius:14px;overflow:hidden;background:<?php echo $peek_ph; ?>;background-size:cover;background-position:center;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.06) 0 16px,transparent 16px 32px);box-shadow:0 18px 50px rgba(0,0,0,.45);"></span>
             </div>
             <?php endif; ?>
         </div>
@@ -104,13 +109,17 @@ class Olo_HoverList_Tile extends Olo_Tile_Base {
             if (!root) { return; }
             var peek = root.querySelector('.olo-hoverlist__peek');
             if (!peek) { return; }
-            var sw = peek.querySelector('.olo-hl-peek-sw');
-            var nm = peek.querySelector('.olo-hl-peek-nm');
+            // Sposta il peek nel <body>: position:fixed si rompe se un antenato ha transform
+            // (entrance/reveal animations del frontend) — nel builder non c'è quel transform, da cui
+            // "funziona solo nel builder". Nel body il fixed segue sempre il viewport.
+            document.body.appendChild(peek);
+            var img = peek.querySelector('.olo-hl-peek-img');
+            var ph = 'repeating-linear-gradient(135deg,rgba(255,255,255,.06) 0 16px,transparent 16px 32px)';
             var rows = root.querySelectorAll('.olo-hoverlist__row');
             rows.forEach(function (r) {
                 r.addEventListener('mouseenter', function () {
-                    sw.style.background = r.getAttribute('data-color') || '#000';
-                    nm.textContent = r.getAttribute('data-name') || '';
+                    var src = r.getAttribute('data-image') || '';
+                    img.style.backgroundImage = src ? ('url(' + src + ')') : ph;
                     peek.style.opacity = '1';
                 });
                 r.addEventListener('mousemove', function (e) {

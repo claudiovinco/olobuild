@@ -1,1 +1,167 @@
-[{"id":"bl-hse","type":"section","settings":{"style":"default","width":"expand","padding":"none"},"style":{"bg":{"type":"solid","color":"rgba(58,34,48,.86)"}},"advanced":{},"children":[{"id":"bl-hro","type":"row","settings":{"layout":"100","gap":0,"vertical_align":"center"},"style":{},"advanced":{},"children":[{"id":"bl-hco","type":"column","settings":{"width":"1-1","width_medium":"1-1"},"style":{},"advanced":{},"children":[{"id":"bl-hmm","type":"megamenu","settings":{"menu_id":"auto","layout":"horizontal","alignment":"right","font_size":"14","font_weight":"600","text_color":"#cdb1bd","sticky":true,"sticky_bg":"rgba(58,34,48,.92)","sticky_shadow":true,"social_icons":false,"search_icon":false,"logo_image":"","logo_width":"130","logo_position":"left","logo_link":"/","logo_sticky":"","mobile_logo":"","mobile_logo_height":"30","mobile_bar_logo":true,"logo_text":"Bloom","logo_dot":true},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "bl-anse",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "fullbleed",
+   "padding": "remove-vertical"
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "bl-anro",
+    "type": "row",
+    "settings": {
+     "gap": 0
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "bl-anco",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "bl-ann",
+        "type": "announcementbar",
+        "settings": {
+         "text": "Free shipping over €35 · ",
+         "accent_text": "New: the Dewdrop blush in 12 shades",
+         "link_url": "",
+         "dismissible": false,
+         "bg_color": "#23131d",
+         "text_color": "#f6e9ec",
+         "accent_color": "#e7a0b4",
+         "font_size": 12,
+         "font_weight": "500",
+         "letter_spacing": "0.08em",
+         "text_transform": "none",
+         "alignment": "center",
+         "tile_padding": {
+          "top": 10,
+          "right": 20,
+          "bottom": 10,
+          "left": 20
+         },
+         "border_bottom": 0,
+         "bg": {
+          "type": "none"
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "bl-hse",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "fullbleed",
+   "padding": "remove-vertical"
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "bl-hro",
+    "type": "row",
+    "settings": {
+     "layout": "100",
+     "gap": 0,
+     "vertical_align": "center"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "bl-hco",
+      "type": "column",
+      "settings": {
+       "width": "1-1",
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "bl-hmm",
+        "type": "megamenu",
+        "settings": {
+         "menu_id": "auto",
+         "layout": "horizontal",
+         "alignment": "left",
+         "font_size": "14",
+         "font_weight": "500",
+         "text_color": "#cdb1bd",
+         "link_hover_color": "#e7a0b4",
+         "sticky": true,
+         "sticky_bg": "rgba(58,34,48,.92)",
+         "sticky_shadow": false,
+         "nav_bg": "rgba(58,34,48,.86)",
+         "bar_width": "classic",
+         "header_mode": "classic",
+         "social_icons": false,
+         "search_icon": false,
+         "logo_image": "",
+         "logo_width": "130",
+         "logo_position": "left",
+         "logo_link": "/",
+         "logo_sticky": "",
+         "mobile_logo": "",
+         "mobile_logo_height": "30",
+         "mobile_bar_logo": true,
+         "logo_text": "Bloom",
+         "logo_text_size": "26",
+         "logo_text_color": "#f6e9ec",
+         "logo_dot": true,
+         "button_mode": "none",
+         "extra_link_1_label": "Bag (0)",
+         "extra_link_1_url": "#",
+         "extra_link_2_label": "Shop all",
+         "extra_link_2_url": "#shop",
+         "extra_link_2_button": true,
+         "extra_links_right": true,
+         "mobile_style": "fullscreen",
+         "mobile_link_font": "heading",
+         "mobile_bg": "#23131d",
+         "mobile_text_color": "#f6e9ec",
+         "mobile_accent_color": "#e7a0b4",
+         "mobile_link_size": 32,
+         "mobile_numbers": true,
+         "mobile_footer_text": "Clean colour · cruelty-free · made in the EU",
+         "mobile_footer_cta_text": "Shop all",
+         "mobile_footer_cta_url": "#shop"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

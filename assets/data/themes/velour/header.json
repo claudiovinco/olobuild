@@ -1,1 +1,67 @@
-[{"id":"ve-hse","type":"section","settings":{"style":"default","width":"expand","padding":"none"},"style":{"bg":{"type":"solid","color":"rgba(36,24,32,.86)"}},"advanced":{},"children":[{"id":"ve-hro","type":"row","settings":{"layout":"100","gap":0,"vertical_align":"center"},"style":{},"advanced":{},"children":[{"id":"ve-hco","type":"column","settings":{"width":"1-1","width_medium":"1-1"},"style":{},"advanced":{},"children":[{"id":"ve-hmm","type":"megamenu","settings":{"menu_id":"auto","layout":"horizontal","alignment":"right","font_size":"14","font_weight":"600","text_color":"#c1aab2","sticky":true,"sticky_bg":"rgba(36,24,32,.88)","sticky_shadow":true,"social_icons":false,"search_icon":false,"logo_image":"","logo_width":"130","logo_position":"left","logo_link":"/","logo_sticky":"","mobile_logo":"","mobile_logo_height":"30","mobile_bar_logo":true,"logo_text":"Vélour","logo_dot":true},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "ve-hse",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "none" } },
+  "advanced": {},
+  "children": [
+   { "id": "ve-hro", "type": "row", "settings": { "layout": "100", "gap": 0, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
+    { "id": "ve-hco", "type": "column", "settings": { "width": "1-1", "width_medium": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ve-hmm", "type": "megamenu", "settings": {
+        "menu_id": "auto",
+        "layout": "right",
+        "font_size": "13",
+        "font_weight": "500",
+        "letter_spacing": "0.4",
+        "text_color": "#c1aab2",
+        "hover_color": "#cf8e6f",
+        "active_color": "#cf8e6f",
+        "sticky": true,
+        "sticky_bg": "rgba(36,24,32,.92)",
+        "sticky_shadow": false,
+        "nav_bg": "rgba(36,24,32,.86)",
+        "nav_height": "76",
+        "bar_width": "classic",
+        "header_mode": "overlay",
+        "social_icons": false,
+        "search_icon": false,
+        "logo_image": "",
+        "logo_width": "130",
+        "logo_position": "left",
+        "logo_link": "/",
+        "logo_sticky": "",
+        "mobile_logo": "",
+        "mobile_logo_height": "30",
+        "mobile_bar_logo": true,
+        "logo_text": "Vélour",
+        "logo_text_size": "27",
+        "logo_text_color": "#f2e8e6",
+        "logo_dot": true,
+        "button_mode": "none",
+        "btn_bg": "#cf8e6f",
+        "btn_color": "#170f14",
+        "btn_radius": 999,
+        "btn_hover_bg": "#dda588",
+        "extra_link_1_label": "Book now",
+        "extra_link_1_url": "#book",
+        "extra_link_1_button": true,
+        "extra_links_right": true,
+        "mobile_breakpoint": "1024",
+        "mobile_style": "fullscreen",
+        "mobile_link_font": "heading",
+        "mobile_link_size": 40,
+        "mobile_numbers": true,
+        "mobile_bg": "#170f14",
+        "mobile_text_color": "#f2e8e6",
+        "mobile_accent_color": "#cf8e6f",
+        "mobile_heading_color": "#8f7780",
+        "mobile_footer_text": "Tue–Sat · by appointment",
+        "mobile_footer_cta_text": "Book a chair",
+        "mobile_footer_cta_url": "#book"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

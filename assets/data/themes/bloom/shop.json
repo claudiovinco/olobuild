@@ -1,0 +1,141 @@
+[
+ {
+  "id": "bs-se-1",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_bottom": 0 },
+  "style": { "bg": { "type": "solid", "color": "#3a2230" } },
+  "advanced": {},
+  "children": [
+   { "id": "bs-ro-1", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "bs-co-1", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "bs-pagehead", "type": "section-header", "settings": {
+        "eyebrow_show": true,
+        "eyebrow_text": "The full range",
+        "eyebrow_color": "#e7a0b4",
+        "eyebrow_dot_color": "#e7a0b4",
+        "eyebrow_separator": "",
+        "headline_lines": [
+         { "text": "Shop ", "color": "#f6e9ec", "italic": false },
+         { "text": "everything", "color": "#e7a0b4", "italic": true }
+        ],
+        "headline_font_family": "serif",
+        "headline_font_size": 80,
+        "headline_font_weight": "400",
+        "headline_align": "center",
+        "headline_inline": true,
+        "tagline_show": true,
+        "tagline_text": "Lips, cheeks, base and eyes — high pigment, skin-kind, and refillable. Filter to find your category.",
+        "tagline_text_italic": false,
+        "tagline_text_color": "#9c7e8c",
+        "tagline_text_size": 17,
+        "layout": "center",
+        "gap": 18
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "bs-se-2",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#3a2230" } },
+  "advanced": {},
+  "children": [
+   { "id": "bs-ro-2", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "bs-co-2", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "bs-productgrid", "type": "productgrid", "settings": {
+        "columns": 4,
+        "gap": 20,
+        "media_aspect": "1/1",
+        "media_bg": "#5a384c",
+        "stripe_dark": false,
+        "hover_zoom": true,
+        "card_bg": "#4d2f40",
+        "card_border": "rgba(246,233,236,.13)",
+        "card_radius": 18,
+        "card_padding": 20,
+        "tag_bg": "#e7a0b4",
+        "tag_color": "#23131d",
+        "quick_add_show": false,
+        "category_color": "#9c7e8c",
+        "title_font": "heading",
+        "title_size": 22,
+        "title_color": "#f6e9ec",
+        "price_color": "#f6e9ec",
+        "shade_size": 16,
+        "shade_border": "rgba(246,233,236,.3)",
+        "add_button": true,
+        "add_label": "Add",
+        "add_bg": "#f6e9ec",
+        "add_color": "#23131d",
+        "show_filters": true,
+        "filter_all_label": "All",
+        "filter_text_color": "#cdb1bd",
+        "filter_border_color": "rgba(246,233,236,.13)",
+        "filter_active_bg": "#e7a0b4",
+        "filter_active_color": "#23131d",
+        "footer_text": "",
+        "footer_url": "#",
+        "items": [
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "lipstick", "tag": "New", "category": "Lips", "title": "Velvet Matte Lip", "price": "€22", "shades": "#b5564f, #9a3b52, #c77a6a, #7d2e3e", "link": "#", "quick_add": "" },
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "gloss", "tag": "", "category": "Lips", "title": "Glass Gloss", "price": "€18", "shades": "#e7a0b4, #d98aa1, #c96f6a", "link": "#", "quick_add": "" },
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "blush", "tag": "", "category": "Cheeks", "title": "Dewdrop Blush", "price": "€19", "shades": "#e79aa6, #d97a86, #e6a17e", "link": "#", "quick_add": "" },
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "bronzer", "tag": "", "category": "Cheeks", "title": "Sun-Warmed Bronzer", "price": "€24", "shades": "#b07a4f, #8a5a36", "link": "#", "quick_add": "" },
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "foundation", "tag": "40 shades", "category": "Base", "title": "Second-Skin Tint", "price": "€28", "shades": "#f0d3bd, #d8a982, #a9794f, #6e4a2f", "link": "#", "quick_add": "" },
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "concealer", "tag": "", "category": "Base", "title": "Bright Concealer", "price": "€20", "shades": "#f0d3bd, #d8a982, #a9794f", "link": "#", "quick_add": "" },
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "palette", "tag": "", "category": "Eyes", "title": "Everyday Palette", "price": "€34", "shades": "#caa07a, #8a5a44, #c98a8a, #5a4636", "link": "#", "quick_add": "" },
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "mascara", "tag": "Vegan", "category": "Eyes", "title": "Full Bloom Mascara", "price": "€21", "shades": "#1a1a1a, #3a2a44", "link": "#", "quick_add": "" }
+        ]
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "bs-se-3",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#432838" } },
+  "advanced": {},
+  "children": [
+   { "id": "bs-ro-3", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "bs-co-3", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "bs-newsletter", "type": "newsletter", "settings": {
+        "title": "Not sure where to <em>start?</em>",
+        "title_accent_color": "#e7a0b4",
+        "subtitle": "Take the 30-second shade quiz and we'll build your first kit — three products, your undertone, 10% off.",
+        "layout": "minimal",
+        "email_placeholder": "you@example.com",
+        "button_text": "Start the quiz",
+        "button_icon": false,
+        "max_width": "520",
+        "alignment": "center",
+        "bg_color": "#4d2f40",
+        "box_border": "rgba(231,160,180,.42)",
+        "border_radius": 24,
+        "tile_padding": { "top": 68, "right": 68, "bottom": 68, "left": 68 },
+        "title_size": "46",
+        "title_weight": "400",
+        "title_color": "#f6e9ec",
+        "subtitle_size": "17",
+        "subtitle_color": "#cdb1bd",
+        "input_bg": "rgba(246,233,236,.08)",
+        "input_color": "#f6e9ec",
+        "input_border": "rgba(231,160,180,.42)",
+        "input_focus_border": "#e7a0b4",
+        "input_radius": 999,
+        "input_height": "48",
+        "btn_bg": "#e7a0b4",
+        "btn_color": "#23131d",
+        "btn_hover_bg": "#d98aa1",
+        "btn_radius": 999,
+        "btn_font_size": "15",
+        "btn_font_weight": "700",
+        "shadow": "none"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

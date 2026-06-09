@@ -33,171 +33,60 @@
       "children": [
        {
         "id": "co-hero-split-1",
-        "type": "hero-split",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "Reformer · mat · private",
-         "eyebrow_dot_color": "#cf7e4f",
+         "eyebrow": "Reformer · mat · private",
          "eyebrow_color": "#cf7e4f",
-         "headline_lines": [
-          {
-           "text": "Move better,",
-           "color": "#2c2a26",
-           "italic": false
-          },
-          {
-           "text": "breathe ",
-           "color": "#2c2a26",
-           "italic": false
-          },
-          {
-           "text": "easier.",
-           "color": "#cf7e4f",
-           "italic": true
-          }
-         ],
-         "headline_font_family": "serif",
-         "headline_font_size": 68,
-         "headline_line_height": 1.04,
-         "headline_font_weight": "400",
-         "headline_align": "left",
-         "subhead": "A pilates studio built around small classes and good attention — so every session meets your body where it is today.",
-         "subhead_color": "#5e584e",
-         "subhead_size": 18,
-         "subhead_italic": false,
-         "subhead_max_width": 440,
-         "cta1_text": "Start with an intro offer",
-         "cta1_url": "#pricing",
-         "cta1_bg": "#cf7e4f",
-         "cta1_color": "#ffffff",
-         "cta1_size": 15,
-         "cta1_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
+         "headline": "Move better, breathe",
+         "accent": "easier.",
+         "headline_tail": "",
+         "accent_italic": true,
+         "uppercase": false,
+         "headline_color": "#2c2a26",
+         "accent_color": "#cf7e4f",
+         "headline_weight": "400",
+         "headline_size": "82",
+         "lead": "A pilates studio built around small classes and good attention — so every session meets your body where it is today.",
+         "lead_color": "#5e584e",
+         "stats": [],
+         "signature": "",
+         "cta_text": "Start with an intro offer",
+         "cta_url": "#pricing",
+         "cta_style": "button",
+         "cta_bg": "#cf7e4f",
+         "cta_color": "#ffffff",
          "cta2_text": "See timetable",
          "cta2_url": "#timetable",
-         "cta2_bg": "transparent",
-         "cta2_color": "#2c2a26",
-         "cta2_border": "#cabfa9",
-         "cta2_size": 15,
-         "cta2_radius": {
+         "cta2_style": "outline",
+         "cta_radius": {
           "tl": 999,
           "tr": 999,
           "br": 999,
           "bl": 999,
           "linked": true
          },
-         "cta2_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
+         "media_image": "",
+         "media_bg": {
+          "type": "none"
          },
-         "stats": [],
-         "showcase_enabled": false,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#ebe3d5"
-         },
-         "showcase_padding": 28,
-         "showcase_radius": {
-          "tl": 200,
-          "tr": 200,
-          "br": 200,
-          "bl": 200,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 200,
-          "tr": 200,
-          "br": 200,
-          "bl": 200,
-          "linked": true
-         },
-         "showcase_badge_text": "STUDIO · AT A GLANCE",
-         "showcase_badge_dot": "#cf7e4f",
-         "showcase_badge_bg": "#fbf7f0",
-         "showcase_badge_color": "#2c2a26",
-         "showcase_items": [
-          {
-           "number": "Max per class",
-           "text": "8",
-           "italic": false,
-           "text_color": "#cf7e4f",
-           "bg": {
-            "type": "solid",
-            "color": "#fbf7f0"
-           }
-          },
-          {
-           "number": "Classes weekly",
-           "text": "30+",
-           "italic": false,
-           "text_color": "#2c2a26",
-           "bg": {
-            "type": "solid",
-            "color": "#fbf7f0"
-           }
-          },
-          {
-           "number": "Instructors",
-           "text": "6",
-           "italic": false,
-           "text_color": "#2c2a26",
-           "bg": {
-            "type": "solid",
-            "color": "#fbf7f0"
-           }
-          },
-          {
-           "number": "Years open",
-           "text": "9",
-           "italic": false,
-           "text_color": "#2c2a26",
-           "bg": {
-            "type": "solid",
-            "color": "#fbf7f0"
-           }
-          }
-         ],
-         "showcase_card_radius": {
+         "media_label": "reformer studio, morning light",
+         "media_light": true,
+         "media_aspect": "4/5",
+         "media_radius": 18,
+         "media_radius_top": 200,
+         "media_blob": false,
+         "badge_number": "Max 8",
+         "badge_label": "per class",
+         "badge_bg": "#fbf7f0",
+         "badge_color": "#2c2a26",
+         "badge_radius": {
           "tl": 14,
           "tr": 14,
           "br": 14,
           "bl": 14,
           "linked": true
          },
-         "showcase_card_radius_hover": {
-          "tl": 14,
-          "tr": 14,
-          "br": 14,
-          "bl": 14,
-          "linked": true
-         },
-         "showcase_card_shadow": "sm",
-         "showcase_caption_left": "Contour Studio",
-         "showcase_caption_right": "Since 2017",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1.05fr .95fr",
-         "gap": 48,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_position": "right"
         },
         "style": {},
         "advanced": {},
@@ -674,6 +563,67 @@
          "card_border": "#ddd3c2",
          "head_color": "#2c2a26",
          "align": "left"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "co-ro-tt-cta",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "co-co-tt-cta",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-btn-tt",
+        "type": "button",
+        "settings": {
+         "text": "Full class guide",
+         "url": "/classes/",
+         "alignment": "center",
+         "bg_color": "transparent",
+         "text_color": "#2c2a26",
+         "hover_text_color": "#2c2a26",
+         "font_size": "14",
+         "font_weight": "600",
+         "border_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "tile_padding": {
+          "top": 14,
+          "right": 28,
+          "bottom": 14,
+          "left": 28
+         },
+         "border": {
+          "top": 1.5,
+          "right": 1.5,
+          "bottom": 1.5,
+          "left": 1.5,
+          "linked": true,
+          "style": "solid",
+          "color": "#cabfa9"
+         },
+         "shadow": "none",
+         "hover_effect": "lift"
         },
         "style": {},
         "advanced": {},
@@ -1219,14 +1169,21 @@
         "id": "co-testimonial-57",
         "type": "testimonial",
         "settings": {
-         "quote": "\"I came in with a cranky back and left, three months later, standing taller than I have in years. The teaching here is just exceptional.\"",
+         "quote": "“I came in with a cranky back and left, three months later, standing taller than I have in years. The teaching here is just <em>exceptional.</em>”",
          "author_name": "Federica M.",
-         "author_role": "Member since 2024",
+         "author_role": "member since 2024",
          "rating": "0",
-         "layout": "single",
+         "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#2c2a26",
+         "star_color": "#cf7e4f",
+         "quote_accent_color": "#cf7e4f",
+         "quote_font": "heading",
+         "quote_size": 40,
+         "quote_uppercase": false,
+         "author_uppercase": true,
+         "author_color": "#cf7e4f",
          "border_radius": "0",
          "avatar": ""
         },
@@ -1276,10 +1233,9 @@
         "id": "co-cta-banner-61",
         "type": "cta-banner",
         "settings": {
-         "headline": "Your first ",
-         "headline_accent": "two weeks,",
+         "headline": "Your first",
+         "headline_accent": "two weeks, €49.",
          "headline_accent_italic": true,
-         "headline_line2": "€49.",
          "subtitle": "Unlimited classes, no contract. Come find out what good movement feels like.",
          "cta_text": "Claim the intro offer",
          "cta_url": "#pricing",

@@ -4,8 +4,8 @@
   "type": "section",
   "settings": {
    "style": "default",
-   "width": "full",
-   "padding": "none",
+   "width": "fullbleed",
+   "padding": "remove-vertical",
    "padding_top": 0,
    "padding_bottom": 0
   },
@@ -20,7 +20,7 @@
    {
     "id": "fj-ro-3",
     "type": "row",
-    "settings": {},
+    "settings": { "layout": "100", "gap": 0 },
     "style": {},
     "advanced": {},
     "children": [
@@ -91,7 +91,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1f3550"
+    "color": "#16273a"
    }
   },
   "advanced": {},
@@ -142,7 +142,7 @@
          "field_border": "rgba(238,244,248,.12)",
          "label_color": "#6f87a0",
          "value_color": "#eef4f8",
-         "radius": 12
+         "radius": 16
         },
         "style": {},
         "advanced": {},
@@ -209,18 +209,18 @@
           }
          ],
          "columns": 4,
-         "band_padding_y": 40,
-         "show_dividers": true,
+         "band_padding_y": 36,
+         "show_dividers": false,
          "divider_color": "rgba(238,244,248,.12)",
          "band_border": true,
          "value_font_family": "heading",
          "value_color": "#eef4f8",
-         "value_size": 54,
+         "value_size": 52,
          "value_weight": "700",
          "label_color": "#6f87a0",
          "label_size": 13,
          "label_uppercase": false,
-         "align": "left",
+         "align": "center",
          "mono_font_family": ""
         },
         "style": {},
@@ -288,16 +288,16 @@
          ],
          "headline_font_family": "sans-serif",
          "headline_font_size": 46,
+         "headline_line_height": 1.05,
          "headline_font_weight": "700",
          "headline_align": "left",
-         "headline_inline": true,
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
          "tagline_text_color": "#6f87a0",
          "tagline_text_size": 16,
          "layout": "stack",
-         "gap": 12
+         "gap": 14
         },
         "style": {},
         "advanced": {},
@@ -324,55 +324,61 @@
       "advanced": {},
       "children": [
        {
-        "id": "fj-workgrid-22",
-        "type": "workgrid",
+        "id": "fj-dests-22",
+        "type": "overlaygrid",
         "settings": {
+         "preset": "custom",
+         "bg": { "type": "none" },
+         "columns": "3",
+         "columns_mobile": "1",
+         "gap": "small",
+         "height": "400",
+         "match_height": true,
+         "layout_mode": "uniform",
+         "overlay_position": "bottom",
+         "overlay_horizontal": "left",
+         "overlay_style": "overlay-primary",
+         "overlay_color": "rgba(14,28,44,.92)",
+         "overlay_gradient": true,
+         "overlay_padding": "medium",
+         "title_size": "h3",
+         "title_color": "#ffffff",
+         "title_weight": "700",
+         "title_letter_spacing": -0.02,
+         "title_uppercase": false,
+         "subtitle_color": "#8fc7e0",
+         "subtitle_size": 12,
+         "hover_effect": "zoom",
+         "hover_overlay": "always",
+         "item_radius": 16,
+         "show_cta": false,
+         "ribbon_position": "top-left",
+         "ribbon_bg": "rgba(14,28,44,.55)",
+         "ribbon_color": "#eef4f8",
+         "shadow": "none",
          "items": [
           {
            "image": "",
-           "media_label": "Lofoten — jagged peaks over the sea",
            "title": "The Lofoten Traverse",
-           "meta": "8 days",
-           "description": "Norway · Lofoten — Hiking · kayak · Moderate · from €2,150/pp",
-           "link_url": "",
-           "tall": false
+           "subtitle": "Norway · Lofoten · Hiking · kayak · from €2,150/pp",
+           "ribbon": "8 days · Moderate",
+           "link": ""
           },
           {
            "image": "",
-           "media_label": "Iceland — glacier & black sand",
            "title": "Fire & Ice Crossing",
-           "meta": "6 days",
-           "description": "Iceland · Highlands — Trek · hot springs · Easy · from €1,890/pp",
-           "link_url": "",
-           "tall": false
+           "subtitle": "Iceland · Highlands · Trek · hot springs · from €1,890/pp",
+           "ribbon": "6 days · Easy",
+           "link": ""
           },
           {
            "image": "",
-           "media_label": "Greenland — icebergs, small boat",
            "title": "Scoresby Sound by Sea",
-           "meta": "10 days",
-           "description": "East Greenland — Expedition cruise · Challenging · from €4,300/pp",
-           "link_url": "",
-           "tall": false
+           "subtitle": "East Greenland · Expedition cruise · from €4,300/pp",
+           "ribbon": "10 days · Challenging",
+           "link": ""
           }
-         ],
-         "columns": 3,
-         "items_gap": 32,
-         "media_aspect": "4/3",
-         "media_tall_aspect": "4/5",
-         "media_bg": "#1f3550",
-         "media_label_color": "#aec3d6",
-         "hover_zoom": true,
-         "title_font_family": "heading",
-         "title_color": "#eef4f8",
-         "title_size": 22,
-         "title_weight": "700",
-         "meta_color": "#8fc7e0",
-         "meta_size": 12,
-         "show_desc": true,
-         "desc_color": "#aec3d6",
-         "desc_size": 14,
-         "mono_font_family": ""
+         ]
         },
         "style": {},
         "advanced": {},
@@ -399,46 +405,27 @@
       "advanced": {},
       "children": [
        {
-        "id": "fj-cta-banner-25",
-        "type": "cta-banner",
+        "id": "fj-allbtn-25",
+        "type": "button",
         "settings": {
-         "headline": "",
-         "headline_accent": "",
-         "headline_accent_italic": false,
-         "subtitle": "",
-         "cta_text": "Browse all 42 expeditions",
-         "cta_url": "#",
-         "bg": {
-          "type": "solid",
-          "color": "transparent"
-         },
+         "text": "Browse all 42 expeditions",
+         "icon": "arrow-right",
+         "icon_position": "after",
+         "url": "#itineraries",
+         "target": "_self",
+         "full_width": false,
+         "preset": "custom",
+         "alignment": "center",
+         "bg_color": "rgba(238,244,248,.06)",
          "text_color": "#eef4f8",
-         "accent_color": "#8fc7e0",
-         "subtitle_color": "#aec3d6",
-         "cta_bg": "rgba(238,244,248,.06)",
-         "cta_color": "#eef4f8",
-         "cta_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta_size": 14,
-         "cta_padding_y": 14,
-         "cta_padding_x": 26,
-         "headline_size": 0,
-         "subtitle_size": 0,
-         "layout": "stack",
-         "vertical_align": "center",
-         "banner_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "banner_padding": 0
+         "hover_text_color": "#8fc7e0",
+         "font_size": "14",
+         "font_weight": "600",
+         "border_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999 },
+         "tile_padding": { "top": 14, "right": 26, "bottom": 14, "left": 26 },
+         "shadow": "none",
+         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "style": "solid", "color": "rgba(143,199,224,.4)" },
+         "hover_effect": "lift"
         },
         "style": {},
         "advanced": {},
@@ -470,7 +457,8 @@
     "id": "fj-ro-35",
     "type": "row",
     "settings": {
-     "gap": 56
+     "gap": 56,
+     "vertical_align": "center"
     },
     "style": {},
     "advanced": {},
@@ -511,17 +499,17 @@
           }
          ],
          "headline_font_family": "sans-serif",
-         "headline_font_size": 46,
+         "headline_font_size": 44,
+         "headline_line_height": 1.05,
          "headline_font_weight": "700",
          "headline_align": "left",
-         "headline_inline": true,
          "tagline_show": true,
          "tagline_text": "We cap every departure at twelve and never run the same trail as the tour buses. Our guides are born-and-raised locals who read the weather and know where the light falls.",
          "tagline_text_italic": false,
          "tagline_text_color": "#6f87a0",
          "tagline_text_size": 16,
          "layout": "stack",
-         "gap": 12
+         "gap": 14
         },
         "style": {},
         "advanced": {},
@@ -568,46 +556,26 @@
         "children": []
        },
        {
-        "id": "fj-cta-banner-31",
-        "type": "cta-banner",
+        "id": "fj-approachbtn-31",
+        "type": "button",
         "settings": {
-         "headline": "",
-         "headline_accent": "",
-         "headline_accent_italic": false,
-         "subtitle": "",
-         "cta_text": "Our approach",
-         "cta_url": "#",
-         "bg": {
-          "type": "solid",
-          "color": "transparent"
-         },
+         "text": "Our approach",
+         "icon": "",
+         "url": "#why",
+         "target": "_self",
+         "full_width": false,
+         "preset": "custom",
+         "alignment": "left",
+         "bg_color": "rgba(238,244,248,.06)",
          "text_color": "#eef4f8",
-         "accent_color": "#8fc7e0",
-         "subtitle_color": "#aec3d6",
-         "cta_bg": "rgba(238,244,248,.06)",
-         "cta_color": "#eef4f8",
-         "cta_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta_size": 14,
-         "cta_padding_y": 14,
-         "cta_padding_x": 26,
-         "headline_size": 0,
-         "subtitle_size": 0,
-         "layout": "stack",
-         "vertical_align": "center",
-         "banner_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "banner_padding": 0
+         "hover_text_color": "#8fc7e0",
+         "font_size": "14",
+         "font_weight": "600",
+         "border_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999 },
+         "tile_padding": { "top": 14, "right": 26, "bottom": 14, "left": 26 },
+         "shadow": "none",
+         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "style": "solid", "color": "rgba(143,199,224,.4)" },
+         "hover_effect": "lift"
         },
         "style": {},
         "advanced": {},
@@ -625,37 +593,17 @@
       "advanced": {},
       "children": [
        {
-        "id": "fj-workgrid-33",
-        "type": "workgrid",
+        "id": "fj-feat-img-33",
+        "type": "image",
         "settings": {
-         "items": [
-          {
-           "image": "",
-           "media_label": "guide pointing across a valley to the group",
-           "title": "",
-           "meta": "",
-           "description": "",
-           "link_url": "",
-           "tall": true
-          }
-         ],
-         "columns": 1,
-         "items_gap": 0,
-         "media_aspect": "4/3",
-         "media_tall_aspect": "3/4",
-         "media_bg": "#1f3550",
-         "media_label_color": "#aec3d6",
-         "hover_zoom": false,
-         "title_font_family": "heading",
-         "title_color": "#eef4f8",
-         "title_size": 22,
-         "title_weight": "700",
-         "meta_color": "#8fc7e0",
-         "meta_size": 12,
-         "show_desc": false,
-         "desc_color": "#aec3d6",
-         "desc_size": 15,
-         "mono_font_family": ""
+         "image_url": "",
+         "media_bg": { "type": "none" },
+         "media_label": "guide pointing across a valley to the group",
+         "image_width": "100%",
+         "aspect_ratio": "custom",
+         "aspect_ratio_custom": "5/4",
+         "object_fit": "cover",
+         "border_radius": "16"
         },
         "style": {},
         "advanced": {},
@@ -726,7 +674,7 @@
           "left": 44
          },
          "border_radius": "18",
-         "shadow": "sm"
+         "shadow": "lg"
         },
         "style": {},
         "advanced": {},
@@ -774,17 +722,20 @@
         "id": "fj-testimonial-41",
         "type": "testimonial",
         "settings": {
-         "quote": "”Twelve strangers on day one, friends by day eight. The guiding was flawless — and we saw the aurora three nights running.”",
+         "quote": "“Twelve strangers on day one, friends by day eight. The guiding was <em>flawless</em> — and we saw the aurora three nights running.”",
          "author_name": "Priya & Tom",
          "author_role": "The Lofoten Traverse, March",
          "rating": "0",
-         "layout": "single",
+         "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#eef4f8",
-         "quote_font_family": "sans-serif",
-         "quote_size": 32,
-         "quote_weight": "600",
+         "quote_accent_color": "#8fc7e0",
+         "author_color": "#6f87a0",
+         "quote_font": "heading",
+         "quote_size": 40,
+         "quote_uppercase": false,
+         "author_uppercase": false,
          "border_radius": "0",
          "avatar": ""
         },
@@ -853,9 +804,9 @@
          ],
          "headline_font_family": "sans-serif",
          "headline_font_size": 46,
+         "headline_line_height": 1.05,
          "headline_font_weight": "700",
          "headline_align": "center",
-         "headline_inline": true,
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
@@ -898,37 +849,53 @@
          "items": [
           {
            "option": "Quiet & remote",
-           "icon": "moon",
+           "icon": "",
+           "kicker": "We'd send you to",
            "title": "The Silent Fjords",
-           "text": "A cabin at the water's edge, a wood-fired sauna and a rowboat. Days measured in tides, not hours. — 7 nights · from €1,980",
-           "meta": "We'd send you to",
+           "text": "A cabin at the water's edge, a wood-fired sauna and a rowboat. Days measured in tides, not hours.",
+           "meta": "7 nights · from €1,980",
+           "media_label": "lone cabin on a still fjord",
+           "media_bg": { "type": "none" },
+           "image": "",
            "cta_text": "",
            "cta_url": "#"
           },
           {
            "option": "Big adventure",
-           "icon": "mountain",
+           "icon": "",
+           "kicker": "We'd send you to",
            "title": "The High Traverse",
-           "text": "Guided ridge hikes, a glacier crossing and kayaking the inlets. Earn every view, sleep like the dead. — 9 nights · from €2,640",
-           "meta": "We'd send you to",
+           "text": "Guided ridge hikes, a glacier crossing and kayaking the inlets. Earn every view, sleep like the dead.",
+           "meta": "9 nights · from €2,640",
+           "media_label": "hikers on a ridge above cloud",
+           "media_bg": { "type": "none" },
+           "image": "",
            "cta_text": "",
            "cta_url": "#"
           },
           {
            "option": "Northern lights",
-           "icon": "sparkles",
+           "icon": "",
+           "kicker": "We'd send you to",
            "title": "Chasing the Aurora",
-           "text": "North of the circle in winter — dog-sled by day, aurora-watch by night from a glass-roofed lodge. — 6 nights · from €2,310",
-           "meta": "We'd send you to",
+           "text": "North of the circle in winter — dog-sled by day, aurora-watch by night from a glass-roofed lodge.",
+           "meta": "6 nights · from €2,310",
+           "media_label": "aurora over snow",
+           "media_bg": { "type": "none" },
+           "image": "",
            "cta_text": "",
            "cta_url": "#"
           },
           {
            "option": "With the family",
-           "icon": "compass",
+           "icon": "",
+           "kicker": "We'd send you to",
            "title": "The Coastal Hop",
-           "text": "Gentle island-hopping by ferry, fishing-village harbours and short walks everyone can manage — even the small ones. — 8 nights · from €1,740",
-           "meta": "We'd send you to",
+           "text": "Gentle island-hopping by ferry, fishing-village harbours and short walks everyone can manage — even the small ones.",
+           "meta": "8 nights · from €1,740",
+           "media_label": "family on a harbour boat",
+           "media_bg": { "type": "none" },
+           "image": "",
            "cta_text": "",
            "cta_url": "#"
           }
@@ -936,7 +903,8 @@
          "zone_accent": "#8fc7e0",
          "zone_on": "#0e1c2c",
          "card_bg": "#1f3550",
-         "card_border": "rgba(238,244,248,.12)",
+         "card_border": "rgba(143,199,224,.4)",
+         "media_bg": "#264062",
          "align": "center"
         },
         "style": {},

@@ -19,6 +19,7 @@ export default {
     heading: t('Nuovo Titolo'),
     subtitle: '',
     tag: 'h2',
+    heading_font: 'inherit',
     alignment: 'center',
     typography_preset: '',
     heading_size: 'lg',
@@ -109,6 +110,14 @@ export default {
     ]},
     { key: 'heading_italic', label: t('Corsivo'), type: 'toggle' },
     { key: 'heading_uppercase', label: t('Maiuscolo'), type: 'toggle' },
+    { key: 'heading_font', label: t('Famiglia font'), type: 'select', options: [
+      { value: 'inherit', label: t('Predefinito (titoli del tema)') },
+      { value: 'body', label: t('Corpo testo (sans del tema)') },
+      { value: 'heading', label: t('Titoli (serif del tema)') },
+      { value: 'serif', label: t('Serif') },
+      { value: 'sans', label: t('Sans-serif') },
+      { value: 'mono', label: t('Monospace') },
+    ]},
 
     { type: 'separator', label: t('Decorazione') },
     { key: 'decoration', label: t('Tipo'), type: 'select', options: [

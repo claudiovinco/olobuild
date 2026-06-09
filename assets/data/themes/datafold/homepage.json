@@ -32,7 +32,7 @@
       "advanced": {},
       "children": [
        {
-        "id": "df-hero-split-1",
+        "id": "df-producthero-1",
         "type": "producthero",
         "settings": {
          "pill_pre": "v4",
@@ -851,7 +851,10 @@
    {
     "id": "df-ro-36",
     "type": "row",
-    "settings": {},
+    "settings": {
+     "gap": 54,
+     "vertical_align": "center"
+    },
     "style": {},
     "advanced": {},
     "children": [
@@ -859,18 +862,20 @@
       "id": "df-co-35",
       "type": "column",
       "settings": {
-       "width": "1-1"
+       "width": "1-2"
       },
       "style": {},
       "advanced": {},
       "children": [
        {
-        "id": "df-hero-split-34",
-        "type": "hero-split",
+        "id": "df-feat1-head",
+        "type": "section-header",
         "settings": {
+         "eyebrow_show": true,
          "eyebrow_text": "// modelling",
-         "eyebrow_dot_color": "#36d6c3",
          "eyebrow_color": "#36d6c3",
+         "eyebrow_dot_color": "#36d6c3",
+         "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Model once,",
@@ -878,7 +883,7 @@
            "italic": false
           },
           {
-           "text": "in plain SQL.",
+           "text": "in plain SQL",
            "color": "#ffffff",
            "italic": false
           }
@@ -888,116 +893,130 @@
          "headline_line_height": 1.08,
          "headline_font_weight": "700",
          "headline_align": "left",
-         "subhead": "Define your metrics as version-controlled models. DataFold compiles them into fast, governed queries — so everyone’s numbers come from the same place.",
-         "subhead_color": "#aebec6",
-         "subhead_size": 16,
-         "subhead_italic": false,
-         "subhead_max_width": 500,
-         "cta1_text": "Read the docs",
-         "cta1_url": "#",
-         "cta1_bg": "rgba(255,255,255,.05)",
-         "cta1_color": "#ffffff",
-         "cta1_border": "rgba(255,255,255,.16)",
-         "cta1_size": 14,
-         "cta1_radius": {
+         "tagline_show": true,
+         "tagline_text": "Define your metrics as version-controlled models. DataFold compiles them into fast, governed queries — so everyone’s numbers come from the same place.",
+         "tagline_text_color": "#aebec6",
+         "tagline_text_size": 16,
+         "layout": "stack",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "df-feat1-list",
+        "type": "list",
+        "settings": {
+         "items": [
+          {
+           "text": "Git-backed semantic layer",
+           "icon": "check"
+          },
+          {
+           "text": "Column-level lineage",
+           "icon": "check"
+          },
+          {
+           "text": "Tests that block bad data shipping",
+           "icon": "check"
+          }
+         ],
+         "icon_default": "check",
+         "icon_color": "#36d6c3",
+         "text_color": "#aebec6",
+         "text_align": "left",
+         "spacing": "12",
+         "icon_size": "18",
+         "icon_gap": "11",
+         "tile_padding": {
+          "top": 4,
+          "right": 0,
+          "bottom": 16,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "df-feat1-btn",
+        "type": "button",
+        "settings": {
+         "text": "Read the docs",
+         "url": "#",
+         "target": "_self",
+         "alignment": "left",
+         "full_width": false,
+         "bg_color": "rgba(255,255,255,.05)",
+         "text_color": "#ffffff",
+         "font_size": 14,
+         "font_weight": "600",
+         "border_radius": {
           "tl": 8,
           "tr": 8,
           "br": 8,
           "bl": 8,
           "linked": true
          },
-         "cta1_radius_hover": {
-          "tl": 8,
-          "tr": 8,
-          "br": 8,
-          "bl": 8,
-          "linked": true
+         "tile_padding": {
+          "top": 12,
+          "right": 22,
+          "bottom": 12,
+          "left": 22
          },
-         "cta2_text": "",
-         "cta2_url": "",
-         "stats": [],
-         "showcase_enabled": true,
-         "showcase_bg": {
+         "border": {
+          "top": 1,
+          "right": 1,
+          "bottom": 1,
+          "left": 1,
+          "linked": true,
+          "style": "solid",
+          "color": "rgba(255,255,255,.16)"
+         },
+         "shadow": "none",
+         "hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "df-co-35b",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-feat1-media",
+        "type": "image",
+        "settings": {
+         "image_url": "",
+         "media_bg": {
           "type": "solid",
           "color": "#13212a"
          },
-         "showcase_padding": 24,
-         "showcase_radius": {
-          "tl": 14,
-          "tr": 14,
-          "br": 14,
-          "bl": 14,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 14,
-          "tr": 14,
-          "br": 14,
-          "bl": 14,
-          "linked": true
-         },
-         "showcase_badge_text": "GIT-BACKED SEMANTIC LAYER",
-         "showcase_badge_dot": "#36d6c3",
-         "showcase_badge_bg": "#070e11",
-         "showcase_badge_color": "#aebec6",
-         "showcase_items": [
-          {
-           "number": "Git-backed semantic layer",
-           "text": "check",
-           "italic": false,
-           "text_color": "#36d6c3",
-           "bg": {
-            "type": "solid",
-            "color": "#0e171c"
-           }
-          },
-          {
-           "number": "Column-level lineage",
-           "text": "check",
-           "italic": false,
-           "text_color": "#36d6c3",
-           "bg": {
-            "type": "solid",
-            "color": "#0e171c"
-           }
-          },
-          {
-           "number": "Tests that block bad data shipping",
-           "text": "check",
-           "italic": false,
-           "text_color": "#36d6c3",
-           "bg": {
-            "type": "solid",
-            "color": "#0e171c"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "MODELLING",
-         "showcase_caption_right": "v4",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1fr 1fr",
-         "gap": 48,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
+         "media_label": "models/revenue.sql — net_revenue metric · ✓ tested · ✓ governed · ✓ live",
+         "alt_text": "DataFold SQL model editor",
+         "height": "",
+         "aspect_ratio": "custom",
+         "aspect_ratio_custom": "16/10",
+         "object_fit": "cover",
+         "border_radius": "16",
+         "border": {
+          "top": 1,
+          "right": 1,
+          "bottom": 1,
+          "left": 1,
+          "linked": true,
+          "style": "solid",
+          "color": "rgba(255,255,255,.08)"
          }
         },
         "style": {},
@@ -1029,26 +1048,72 @@
    {
     "id": "df-ro-40",
     "type": "row",
-    "settings": {},
+    "settings": {
+     "gap": 54,
+     "vertical_align": "center"
+    },
     "style": {},
     "advanced": {},
     "children": [
      {
-      "id": "df-co-39",
+      "id": "df-co-39m",
       "type": "column",
       "settings": {
-       "width": "1-1"
+       "width": "1-2"
       },
       "style": {},
       "advanced": {},
       "children": [
        {
-        "id": "df-hero-split-38",
-        "type": "hero-split",
+        "id": "df-feat2-media",
+        "type": "image",
         "settings": {
+         "image_url": "",
+         "media_bg": {
+          "type": "solid",
+          "color": "#13212a"
+         },
+         "media_label": "anomaly alert — Slack card, metric spiked 3.2σ",
+         "alt_text": "DataFold anomaly alert card",
+         "height": "",
+         "aspect_ratio": "custom",
+         "aspect_ratio_custom": "16/10",
+         "object_fit": "cover",
+         "border_radius": "16",
+         "border": {
+          "top": 1,
+          "right": 1,
+          "bottom": 1,
+          "left": 1,
+          "linked": true,
+          "style": "solid",
+          "color": "rgba(255,255,255,.08)"
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "df-co-39",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-feat2-head",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
          "eyebrow_text": "// monitoring",
-         "eyebrow_dot_color": "#36d6c3",
          "eyebrow_color": "#36d6c3",
+         "eyebrow_dot_color": "#36d6c3",
+         "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "It tells you",
@@ -1056,7 +1121,7 @@
            "italic": false
           },
           {
-           "text": "before they ask.",
+           "text": "before they ask",
            "color": "#ffffff",
            "italic": false
           }
@@ -1066,118 +1131,90 @@
          "headline_line_height": 1.08,
          "headline_font_weight": "700",
          "headline_align": "left",
-         "subhead": "DataFold watches every metric for anomalies and routes the alert to the right channel — with the context to act, not just a red number.",
-         "subhead_color": "#aebec6",
-         "subhead_size": 16,
-         "subhead_italic": false,
-         "subhead_max_width": 500,
-         "cta1_text": "See monitoring",
-         "cta1_url": "#",
-         "cta1_bg": "rgba(255,255,255,.05)",
-         "cta1_color": "#ffffff",
-         "cta1_border": "rgba(255,255,255,.16)",
-         "cta1_size": 14,
-         "cta1_radius": {
-          "tl": 8,
-          "tr": 8,
-          "br": 8,
-          "bl": 8,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 8,
-          "tr": 8,
-          "br": 8,
-          "bl": 8,
-          "linked": true
-         },
-         "cta2_text": "",
-         "cta2_url": "",
-         "stats": [],
-         "showcase_enabled": true,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#13212a"
-         },
-         "showcase_padding": 24,
-         "showcase_radius": {
-          "tl": 14,
-          "tr": 14,
-          "br": 14,
-          "bl": 14,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 14,
-          "tr": 14,
-          "br": 14,
-          "bl": 14,
-          "linked": true
-         },
-         "showcase_badge_text": "ANOMALY DETECTION · ML-POWERED",
-         "showcase_badge_dot": "#f0b35a",
-         "showcase_badge_bg": "#070e11",
-         "showcase_badge_color": "#aebec6",
-         "showcase_items": [
+         "tagline_show": true,
+         "tagline_text": "DataFold watches every metric for anomalies and routes the alert to the right channel — with the context to act, not just a red number.",
+         "tagline_text_color": "#aebec6",
+         "tagline_text_size": 16,
+         "layout": "stack",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "df-feat2-list",
+        "type": "list",
+        "settings": {
+         "items": [
           {
-           "number": "ML anomaly detection on any metric",
-           "text": "zap",
-           "italic": false,
-           "text_color": "#36d6c3",
-           "bg": {
-            "type": "solid",
-            "color": "#0e171c"
-           }
+           "text": "ML anomaly detection on any metric",
+           "icon": "check"
           },
           {
-           "number": "Slack, email and webhook routing",
-           "text": "zap",
-           "italic": false,
-           "text_color": "#36d6c3",
-           "bg": {
-            "type": "solid",
-            "color": "#0e171c"
-           }
+           "text": "Slack, email & webhook routing",
+           "icon": "check"
           },
           {
-           "number": "Root-cause drill-downs in one click",
-           "text": "zap",
-           "italic": false,
-           "text_color": "#36d6c3",
-           "bg": {
-            "type": "solid",
-            "color": "#0e171c"
-           }
+           "text": "Root-cause drill-downs in one click",
+           "icon": "check"
           }
          ],
-         "showcase_card_radius": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "MONITORING",
-         "showcase_caption_right": "LIVE",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1fr 1fr",
-         "gap": 48,
-         "min_height": 0,
-         "layout_direction": "reverse",
+         "icon_default": "check",
+         "icon_color": "#36d6c3",
+         "text_color": "#aebec6",
+         "text_align": "left",
+         "spacing": "12",
+         "icon_size": "18",
+         "icon_gap": "11",
          "tile_padding": {
-          "top": 0,
+          "top": 4,
           "right": 0,
-          "bottom": 0,
+          "bottom": 16,
           "left": 0
          }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "df-feat2-btn",
+        "type": "button",
+        "settings": {
+         "text": "See monitoring",
+         "url": "#",
+         "target": "_self",
+         "alignment": "left",
+         "full_width": false,
+         "bg_color": "rgba(255,255,255,.05)",
+         "text_color": "#ffffff",
+         "font_size": 14,
+         "font_weight": "600",
+         "border_radius": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "tile_padding": {
+          "top": 12,
+          "right": 22,
+          "bottom": 12,
+          "left": 22
+         },
+         "border": {
+          "top": 1,
+          "right": 1,
+          "bottom": 1,
+          "left": 1,
+          "linked": true,
+          "style": "solid",
+          "color": "rgba(255,255,255,.16)"
+         },
+         "shadow": "none",
+         "hover_effect": "lift"
         },
         "style": {},
         "advanced": {},
@@ -1668,14 +1705,20 @@
         "id": "df-testimonial-60",
         "type": "testimonial",
         "settings": {
-         "quote": "“We deleted four spreadsheets and a BI tool the week we switched. Now one number means one thing — and the whole company finally agrees on it.”",
+         "quote": "“We deleted four spreadsheets and a BI tool the week we switched. Now <em>one number means one thing</em> — and the whole company finally agrees on it.”",
          "author_name": "Priya Nair",
          "author_role": "Head of Data, Northbeam",
          "rating": "0",
-         "layout": "single",
+         "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#ffffff",
+         "quote_accent_color": "#36d6c3",
+         "quote_font": "heading",
+         "quote_uppercase": false,
+         "author_uppercase": false,
+         "author_color": "#6e8088",
+         "quote_size": 0,
          "border_radius": "0",
          "avatar": ""
         },

@@ -1,0 +1,425 @@
+[
+ {
+  "id": "nbs-se-ph",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#0a1020" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "nbs-ro-ph",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nbs-co-ph",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nbs-section-header-ph",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// status.nimbus.dev",
+         "eyebrow_color": "#5aa9ff",
+         "eyebrow_dot_color": "#5aa9ff",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "System status", "color": "#ffffff", "italic": false }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 60,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "tagline_show": true,
+         "tagline_text": "Real-time health across every Nimbus service and region. Subscribe to get notified the moment anything changes.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6b7a96",
+         "tagline_text_size": 17,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "nbs-se-board",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small" },
+  "style": { "bg": { "type": "solid", "color": "#0a1020" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "nbs-ro-banner",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nbs-co-banner",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nbs-alert-banner",
+        "type": "alert",
+        "settings": {
+         "alert_type": "success",
+         "title": "All systems operational",
+         "message": "Updated 30s ago · last 90 days",
+         "show_icon": true,
+         "custom_icon": "circle",
+         "dismissible": false,
+         "custom_bg_color": "rgba(70,209,138,.10)",
+         "custom_text_color": "#ffffff",
+         "text_align": "left"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "nbs-ro-services",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nbs-co-services",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nbs-desclist-services",
+        "type": "desclist",
+        "settings": {
+         "items": [
+          { "id": "svc-1", "term": "Edge compute", "definition": "99.99% uptime · 90-day", "icon": "" },
+          { "id": "svc-2", "term": "Anycast network", "definition": "100.00% uptime · 90-day", "icon": "" },
+          { "id": "svc-3", "term": "Edge data (KV + SQL)", "definition": "99.94% uptime · 90-day", "icon": "" },
+          { "id": "svc-4", "term": "Dashboard & API", "definition": "99.98% uptime · 90-day", "icon": "" }
+         ],
+         "layout": "inline",
+         "show_icon": false,
+         "separator": true,
+         "striped": false,
+         "term_color": "#ffffff",
+         "term_font_size": "16",
+         "term_font_weight": "600",
+         "definition_color": "#46d18a",
+         "definition_font_size": "13",
+         "text_align": "left",
+         "border_color": "rgba(255,255,255,.08)",
+         "spacing": "20"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "nbs-se-regions",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small" },
+  "style": { "bg": { "type": "solid", "color": "#0a1020" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "nbs-ro-rh-head",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nbs-co-rh-head",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nbs-section-header-rh",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          { "text": "Regional health", "color": "#ffffff", "italic": false }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 30,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 12
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "nbs-ro-rh-grid",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nbs-co-rh-grid",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nbs-info-cards-rh",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": { "type": "solid", "color": "transparent" },
+         "container_padding": 0,
+         "container_gap": 12,
+         "columns": 4,
+         "items_gap": 12,
+         "card_bg": { "type": "solid", "color": "#111a30" },
+         "card_border": "rgba(255,255,255,.08)",
+         "card_color": "#6b7a96",
+         "card_radius": { "tl": 11, "tr": 11, "br": 11, "bl": 11, "linked": true },
+         "card_padding": 16,
+         "show_icon": false,
+         "show_counter": false,
+         "show_counter_label": false,
+         "show_arrow": false,
+         "show_footer": true,
+         "show_media": false,
+         "title_color": "#ffffff",
+         "title_font_family": "sans-serif",
+         "title_size": 14,
+         "title_weight": "600",
+         "title_italic": false,
+         "description_size": 12,
+         "card_hover_effect": "lift",
+         "items": [
+          { "title": "us-west", "description": "38ms · operational", "footer_text": "● operational", "footer_dot_color": "#46d18a" },
+          { "title": "us-east", "description": "31ms · operational", "footer_text": "● operational", "footer_dot_color": "#46d18a" },
+          { "title": "london", "description": "26ms · operational", "footer_text": "● operational", "footer_dot_color": "#46d18a" },
+          { "title": "frankfurt", "description": "29ms · operational", "footer_text": "● operational", "footer_dot_color": "#46d18a" },
+          { "title": "singapore", "description": "61ms · elevated latency", "footer_text": "● elevated latency", "footer_dot_color": "#f0b95a" },
+          { "title": "tokyo", "description": "44ms · operational", "footer_text": "● operational", "footer_dot_color": "#46d18a" },
+          { "title": "sao-paulo", "description": "52ms · operational", "footer_text": "● operational", "footer_dot_color": "#46d18a" },
+          { "title": "sydney", "description": "58ms · operational", "footer_text": "● operational", "footer_dot_color": "#46d18a" }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "nbs-se-incidents",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#0d1426" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "nbs-ro-inc-head",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nbs-co-inc-head",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nbs-section-header-inc",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// incident history",
+         "eyebrow_color": "#5aa9ff",
+         "eyebrow_dot_color": "#5aa9ff",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "Past 30 days", "color": "#ffffff", "italic": false }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 36,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 12
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "nbs-ro-inc",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nbs-co-inc",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nbs-timeline-inc",
+        "type": "timeline",
+        "settings": {
+         "items": [
+          { "id": "inc-1", "title": "Elevated latency in singapore", "tag": "Minor", "description": "A peering partner degraded for 18 minutes. Traffic auto-rerouted to tokyo; no requests dropped. Resolved 09:42 UTC.", "date": "14 May", "image": "", "video": "", "icon": "alert-triangle", "category": "warning", "icon_color": "" },
+          { "id": "inc-2", "title": "Edge data write delays", "tag": "Minor", "description": "Replication lag in eu-central reached 4s for some KV namespaces. Reads unaffected. Resolved in 26 minutes.", "date": "2 May", "image": "", "video": "", "icon": "alert-triangle", "category": "warning", "icon_color": "" },
+          { "id": "inc-3", "title": "Dashboard sign-in errors", "tag": "Resolved", "description": "An auth deploy caused intermittent 500s on the dashboard for 7 minutes. The API and your apps were never affected. Rolled back automatically.", "date": "21 Apr", "image": "", "video": "", "icon": "check", "category": "success", "icon_color": "" },
+          { "id": "inc-4", "title": "Scheduled network maintenance", "tag": "Resolved", "description": "Planned anycast routing upgrade across all regions. Completed with zero downtime as designed.", "date": "9 Apr", "image": "", "video": "", "icon": "check", "category": "success", "icon_color": "" }
+         ],
+         "tl_layout": "schedule",
+         "tl_node": "dot",
+         "tl_color": "cat",
+         "tl_media": "off",
+         "tl_density": "comfy",
+         "tl_line": "solid",
+         "tl_theme": "night",
+         "tl_card": "glass",
+         "tl_thread": "solid2",
+         "tl_transparent": true,
+         "tl_title_color": "#ffffff",
+         "tl_text_color": "#6b7a96",
+         "tl_yr_color": "#6b7a96",
+         "tl_show_tag": true,
+         "tl_tag_color": "#5aa9ff"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "nbs-se-cta",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#0a1020" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "nbs-ro-cta",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nbs-co-cta",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nbs-cta-banner",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Never miss an update",
+         "headline_accent": "",
+         "headline_accent_italic": false,
+         "subtitle": "Subscribe to status changes by email, webhook or RSS — and build on infrastructure that tells you the truth.",
+         "cta_text": "Subscribe to status",
+         "cta_url": "#",
+         "cta2_text": "Back to Nimbus",
+         "cta2_url": "/",
+         "cta2_bg": "rgba(255,255,255,.05)",
+         "cta2_color": "#ffffff",
+         "cta2_border": "rgba(255,255,255,.16)",
+         "bg": {
+          "type": "gradient",
+          "value": "linear-gradient(160deg, rgba(90,169,255,.16), rgba(86,224,224,.05))",
+          "angle": 160,
+          "stops": [
+           { "color": "rgba(90,169,255,.16)", "position": 0 },
+           { "color": "rgba(86,224,224,.05)", "position": 100 }
+          ]
+         },
+         "border_color": "rgba(90,169,255,.34)",
+         "text_color": "#ffffff",
+         "accent_color": "#5aa9ff",
+         "subtitle_color": "#aebbd0",
+         "cta_bg": "#5aa9ff",
+         "cta_color": "#060a14",
+         "cta_radius": { "tl": 9, "tr": 9, "br": 9, "bl": 9, "linked": true },
+         "cta_size": 15,
+         "headline_font_family": "sans-serif",
+         "headline_size": 48,
+         "headline_weight": "700",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": { "tl": 24, "tr": 24, "br": 24, "bl": 24, "linked": true },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -33,161 +33,45 @@
       "children": [
        {
         "id": "br-hero-split-1",
-        "type": "hero-split",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "Roasted to order · shipped in 24h",
-         "eyebrow_dot_color": "#c98a4b",
+         "eyebrow": "Roasted to order · shipped in 24h",
          "eyebrow_color": "#c98a4b",
-         "headline_lines": [
-          {
-           "text": "Coffee with",
-           "color": "#ead9c2",
-           "italic": false
-          },
-          {
-           "text": "a provenance,",
-           "color": "#c98a4b",
-           "italic": true
-          },
-          {
-           "text": "not a label.",
-           "color": "#ead9c2",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "sans-serif",
-         "headline_font_size": 72,
-         "headline_line_height": 1,
-         "headline_font_weight": "700",
-         "headline_align": "left",
-         "subhead": "We buy whole-lot, roast in small batches the morning your order lands, and tell you exactly who grew it. No blends hiding behind a brand.",
-         "subhead_color": "#cbb89f",
-         "subhead_size": 18,
-         "subhead_italic": false,
-         "subhead_max_width": 440,
-         "cta1_text": "Find your roast",
-         "cta1_url": "#shop",
-         "cta1_bg": "#c98a4b",
-         "cta1_color": "#170f0a",
-         "cta1_size": 15,
-         "cta1_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
+         "headline": "Coffee with a",
+         "accent": "provenance,",
+         "accent_color": "#c98a4b",
+         "accent_italic": true,
+         "headline_tail": " not a label.",
+         "uppercase": false,
+         "headline_color": "#ead9c2",
+         "headline_weight": "700",
+         "headline_size": "72",
+         "lead": "We buy whole-lot, roast in small batches the morning your order lands, and tell you exactly who grew it. No blends hiding behind a brand.",
+         "lead_color": "#cbb89f",
+         "signature": "",
+         "stats": [],
+         "cta_text": "Find your roast",
+         "cta_url": "#shop",
+         "cta_style": "button",
+         "cta_bg": "#c98a4b",
+         "cta_color": "#170f0a",
          "cta2_text": "Start a subscription",
          "cta2_url": "#subscribe",
-         "cta2_bg": "transparent",
-         "cta2_color": "#ead9c2",
-         "cta2_border": "rgba(201,138,75,.4)",
-         "cta2_size": 15,
-         "cta2_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
+         "cta2_style": "outline",
+         "media_image": "",
+         "media_bg": {
+          "type": "none"
          },
-         "cta2_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "stats": [],
-         "showcase_enabled": false,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#2d2017"
-         },
-         "showcase_padding": 26,
-         "showcase_radius": {
-          "tl": 16,
-          "tr": 16,
-          "br": 16,
-          "bl": 16,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 16,
-          "tr": 16,
-          "br": 16,
-          "bl": 16,
-          "linked": true
-         },
-         "showcase_badge_text": "THIS MONTH'S LOTS",
-         "showcase_badge_dot": "#c98a4b",
-         "showcase_badge_bg": "#170f0a",
-         "showcase_badge_color": "#ead9c2",
-         "showcase_items": [
-          {
-           "number": "Ethiopia · Yirgacheffe",
-           "text": "Idido Washed",
-           "italic": false,
-           "text_color": "#ead9c2",
-           "bg": {
-            "type": "solid",
-            "color": "#251a12"
-           }
-          },
-          {
-           "number": "Colombia · Huila",
-           "text": "La Esperanza",
-           "italic": false,
-           "text_color": "#ead9c2",
-           "bg": {
-            "type": "solid",
-            "color": "#251a12"
-           }
-          },
-          {
-           "number": "Indonesia · Sumatra",
-           "text": "Lintong Dark",
-           "italic": false,
-           "text_color": "#c98a4b",
-           "bg": {
-            "type": "solid",
-            "color": "#251a12"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 11,
-          "tr": 11,
-          "br": 11,
-          "bl": 11,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 11,
-          "tr": 11,
-          "br": 11,
-          "bl": 11,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "SPECIALTY",
-         "showcase_caption_right": "DIRECT TRADE",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1.05fr .95fr",
-         "gap": 52,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_label": "hero — coffee bag & loose beans on warm linen",
+         "media_light": false,
+         "media_radius": 14,
+         "media_position": "right",
+         "media_aspect": "4/5",
+         "flush": false,
+         "badge_number": "€19",
+         "badge_label": "Yirgacheffe G1",
+         "media_blob": false,
+         "content_bg": ""
         },
         "style": {},
         "advanced": {},
@@ -235,28 +119,8 @@
         "id": "br-marquee-5",
         "type": "marquee",
         "settings": {
-         "items": [
-          {
-           "text": "Single origin"
-          },
-          {
-           "text": "Roasted to order"
-          },
-          {
-           "text": "Direct trade"
-          },
-          {
-           "text": "Free shipping over €40"
-          },
-          {
-           "text": "Compostable bags"
-          },
-          {
-           "text": "Roasted in Trieste"
-          }
-         ],
          "speed": 40,
-         "separator": "✶",
+         "separator": "✦",
          "separator_color": "#170f0a",
          "font_family": "monospace",
          "font_size": "13",
@@ -270,7 +134,9 @@
           "right": 0,
           "bottom": 11,
           "left": 0
-         }
+         },
+         "content_type": "text",
+         "text_items": "Single origin ✦ Roasted to order ✦ Direct trade ✦ Free shipping over €40 ✦ Compostable bags ✦ Roasted in Trieste"
         },
         "style": {},
         "advanced": {},
@@ -369,117 +235,85 @@
       "children": [
        {
         "id": "br-product-cards-12",
-        "type": "product-cards",
+        "type": "productgrid",
         "settings": {
          "columns": 3,
          "gap": 20,
+         "media_aspect": "1/1",
+         "media_bg": "#251a12",
+         "stripe_dark": false,
+         "hover_zoom": true,
+         "card_bg": "#2d2017",
+         "card_border": "rgba(234,217,194,.12)",
+         "card_radius": 16,
+         "card_padding": 20,
+         "tag_bg": "#170f0a",
+         "tag_color": "#c98a4b",
+         "quick_add_show": false,
+         "category_color": "#8f7a63",
+         "title_font": "heading",
+         "title_size": 21,
+         "title_color": "#ead9c2",
+         "notes_color": "#8f7a63",
+         "notes_mono": false,
+         "roast_label": "Roast",
+         "roast_on_color": "#c98a4b",
+         "roast_off_color": "rgba(234,217,194,.15)",
+         "price_color": "#ead9c2",
+         "add_button": true,
+         "add_label": "Add",
+         "add_bg": "#ead9c2",
+         "add_color": "#170f0a",
+         "footer_text": "View all 24 →",
+         "footer_url": "#shop",
+         "footer_color": "#ead9c2",
          "items": [
           {
-           "letter": "I",
-           "letter_color": "#c98a4b",
-           "letter_italic": false,
-           "top_bg": {
-            "type": "solid",
-            "color": "#251a12"
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "Jasmine · bergamot · stone fruit",
-           "brand_label": "Ethiopia · Yirgacheffe",
-           "brand_color": "#8f7a63",
-           "show_badge": true,
-           "badge_text": "New lot",
-           "badge_bg": "#170f0a",
-           "badge_color": "#c98a4b",
+           "media_label": "bag — Yirgacheffe",
+           "tag": "New lot",
+           "category": "Ethiopia · Yirgacheffe",
            "title": "Idido Washed",
-           "title_accent": "",
-           "title_accent_italic": false,
-           "description": "Washed process · light roast · <strong>€19</strong> per 250g",
-           "cta_text": "Add to cart",
-           "cta_url": "#shop"
+           "notes": "Jasmine · bergamot · stone fruit",
+           "roast": 2,
+           "price": "€19",
+           "link": "#",
+           "quick_add": ""
           },
           {
-           "letter": "L",
-           "letter_color": "#c98a4b",
-           "letter_italic": false,
-           "top_bg": {
-            "type": "solid",
-            "color": "#251a12"
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "Red apple · caramel · cocoa",
-           "brand_label": "Colombia · Huila",
-           "brand_color": "#8f7a63",
-           "show_badge": false,
-           "badge_text": "",
-           "badge_bg": "#170f0a",
-           "badge_color": "#c98a4b",
+           "media_label": "bag — Huila",
+           "tag": "",
+           "category": "Colombia · Huila",
            "title": "La Esperanza",
-           "title_accent": "",
-           "title_accent_italic": false,
-           "description": "Washed process · medium roast · <strong>€17</strong> per 250g",
-           "cta_text": "Add to cart",
-           "cta_url": "#shop"
+           "notes": "Red apple · caramel · cocoa",
+           "roast": 3,
+           "price": "€17",
+           "link": "#",
+           "quick_add": ""
           },
           {
-           "letter": "L",
-           "letter_color": "#c98a4b",
-           "letter_italic": false,
-           "top_bg": {
-            "type": "solid",
-            "color": "#251a12"
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "Dark chocolate · cedar · molasses",
-           "brand_label": "Indonesia · Sumatra",
-           "brand_color": "#8f7a63",
-           "show_badge": true,
-           "badge_text": "Espresso",
-           "badge_bg": "#170f0a",
-           "badge_color": "#c98a4b",
+           "media_label": "bag — Sumatra",
+           "tag": "Espresso",
+           "category": "Indonesia · Sumatra",
            "title": "Lintong Dark",
-           "title_accent": "",
-           "title_accent_italic": false,
-           "description": "Natural process · dark roast · <strong>€18</strong> per 250g",
-           "cta_text": "Add to cart",
-           "cta_url": "#shop"
+           "notes": "Dark chocolate · cedar · molasses",
+           "roast": 5,
+           "price": "€18",
+           "link": "#",
+           "quick_add": ""
           }
-         ],
-         "card_bg": {
-          "type": "solid",
-          "color": "#2d2017"
-         },
-         "card_color": "#cbb89f",
-         "card_radius": {
-          "tl": 16,
-          "tr": 16,
-          "br": 16,
-          "bl": 16,
-          "linked": true
-         },
-         "card_radius_hover": {
-          "tl": 16,
-          "tr": 16,
-          "br": 16,
-          "bl": 16,
-          "linked": true
-         },
-         "card_radius_hover_duration": 300,
-         "card_shadow": "none",
-         "card_padding": 20,
-         "top_aspect_ratio": "1/1",
-         "top_padding": 18,
-         "letter_font_family": "sans-serif",
-         "letter_size": 96,
-         "letter_italic": false,
-         "letter_align": "center",
-         "show_screenshot_label": true,
-         "screenshot_label_color": "#8f7a63",
-         "brand_size": 11,
-         "brand_letter_spacing": 0.05,
-         "title_font_family": "sans-serif",
-         "title_size": 21,
-         "title_weight": "700",
-         "description_size": 13,
-         "cta_size": 13,
-         "cta_arrow": true,
-         "card_hover_effect": "lift"
+         ]
         },
         "style": {},
         "advanced": {},
@@ -588,17 +422,50 @@
   "advanced": {},
   "children": [
    {
-    "id": "br-ro-28",
+    "id": "br-ro-sub",
     "type": "row",
-    "settings": {},
+    "settings": {
+     "gap": 52,
+     "vertical_align": "center"
+    },
     "style": {},
     "advanced": {},
     "children": [
      {
-      "id": "br-co-27",
+      "id": "br-co-subm",
       "type": "column",
       "settings": {
-       "width": "1-1"
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "br-sub-img",
+        "type": "image",
+        "settings": {
+         "image_url": "",
+         "media_bg": {
+          "type": "none"
+         },
+         "media_label": "subscription box — two bags, kraft card",
+         "image_width": "100%",
+         "aspect_ratio": "custom",
+         "aspect_ratio_custom": "5/4",
+         "object_fit": "cover",
+         "border_radius": "16"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "br-co-subt",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
       },
       "style": {},
       "advanced": {},
@@ -627,40 +494,20 @@
          "headline_font_family": "sans-serif",
          "headline_font_size": 48,
          "headline_font_weight": "700",
-         "headline_align": "center",
+         "headline_align": "left",
          "headline_inline": true,
          "tagline_show": true,
          "tagline_text": "Tell us how you brew and how much you drink. We pick the lot, roast it the day it ships, and you can skip, swap or pause whenever.",
          "tagline_text_italic": false,
          "tagline_text_color": "#8f7a63",
          "tagline_text_size": 16.5,
-         "layout": "center",
-         "gap": 16
+         "layout": "stack",
+         "gap": 14
         },
         "style": {},
         "advanced": {},
         "children": []
-       }
-      ]
-     }
-    ]
-   },
-   {
-    "id": "br-ro-31",
-    "type": "row",
-    "settings": {},
-    "style": {},
-    "advanced": {},
-    "children": [
-     {
-      "id": "br-co-30",
-      "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
-      "style": {},
-      "advanced": {},
-      "children": [
+       },
        {
         "id": "br-iconlist-29",
         "type": "iconlist",
@@ -688,10 +535,10 @@
          "title_color": "#cbb89f",
          "title_size": "14.5",
          "layout": "vertical",
-         "align": "center",
+         "align": "left",
          "gap": "14",
          "tile_padding": {
-          "top": 8,
+          "top": 18,
           "right": 0,
           "bottom": 24,
           "left": 0
@@ -700,69 +547,17 @@
         "style": {},
         "advanced": {},
         "children": []
-       }
-      ]
-     }
-    ]
-   },
-   {
-    "id": "br-ro-34",
-    "type": "row",
-    "settings": {},
-    "style": {},
-    "advanced": {},
-    "children": [
-     {
-      "id": "br-co-33",
-      "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
-      "style": {},
-      "advanced": {},
-      "children": [
+       },
        {
-        "id": "br-cta-banner-32",
-        "type": "cta-banner",
+        "id": "br-sub-btn",
+        "type": "button",
         "settings": {
-         "headline": "Build my subscription",
-         "headline_accent": "— from €15/mo",
-         "headline_accent_italic": false,
-         "subtitle": "",
-         "cta_text": "Build my subscription — from €15/mo",
-         "cta_url": "#subscribe",
-         "bg": {
-          "type": "none",
-          "color": "transparent"
-         },
-         "text_color": "#ead9c2",
-         "accent_color": "#c98a4b",
-         "subtitle_color": "#cbb89f",
-         "cta_bg": "#c98a4b",
-         "cta_color": "#170f0a",
-         "cta_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta_size": 15,
-         "headline_font_family": "sans-serif",
-         "headline_size": 0,
-         "headline_weight": "700",
-         "subtitle_size": 0,
-         "layout": "stack",
-         "vertical_align": "center",
-         "banner_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "banner_padding": 0,
-         "show_headline": false
+         "text": "Build my subscription — from €15/mo",
+         "url": "#subscribe",
+         "alignment": "left",
+         "bg_color": "#c98a4b",
+         "text_color": "#170f0a",
+         "hover_bg_color": "#dba869"
         },
         "style": {},
         "advanced": {},
@@ -957,157 +752,44 @@
       "children": [
        {
         "id": "br-hero-split-43",
-        "type": "hero-split",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "// our roastery",
-         "eyebrow_dot_color": "#c98a4b",
+         "eyebrow": "// our roastery",
          "eyebrow_color": "#c98a4b",
-         "headline_lines": [
-          {
-           "text": "A drum roaster, a harbour,",
-           "color": "#ead9c2",
-           "italic": false
-          },
-          {
-           "text": "and a lot of notebooks",
-           "color": "#ead9c2",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "sans-serif",
-         "headline_font_size": 38,
-         "headline_line_height": 1.05,
-         "headline_font_weight": "700",
-         "headline_align": "left",
-         "subhead": "Brewline started in a Trieste workshop with one second-hand roaster and a stubborn idea: that you should know your coffee’s farm by name. We still roast every batch by ear and log every curve. When a lot’s gone, it’s gone — that’s the point of buying it fresh.",
-         "subhead_color": "#cbb89f",
-         "subhead_size": 16.5,
-         "subhead_italic": false,
-         "subhead_max_width": 480,
-         "cta1_text": "Read our sourcing promise",
-         "cta1_url": "#",
-         "cta1_bg": "transparent",
-         "cta1_color": "#ead9c2",
-         "cta1_border": "rgba(201,138,75,.4)",
-         "cta1_size": 15,
-         "cta1_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
+         "headline": "A drum roaster, a harbour, and a lot of notebooks",
+         "accent": "",
+         "accent_color": "#c98a4b",
+         "accent_italic": false,
+         "headline_tail": "",
+         "uppercase": false,
+         "headline_color": "#ead9c2",
+         "headline_weight": "700",
+         "headline_size": "42",
+         "lead": "Brewline started in a Trieste workshop with one second-hand roaster and a stubborn idea: that you should know your coffee’s farm by name. We still roast every batch by ear and log every curve — when a lot’s gone, it’s gone.",
+         "lead_color": "#cbb89f",
+         "signature": "",
+         "stats": [],
+         "cta_text": "Read our sourcing promise",
+         "cta_url": "#",
+         "cta_style": "outline",
+         "cta_color": "#ead9c2",
          "cta2_text": "",
          "cta2_url": "#",
-         "cta2_bg": "transparent",
-         "cta2_color": "#ead9c2",
-         "cta2_border": "transparent",
-         "cta2_size": 15,
-         "cta2_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
+         "cta2_style": "outline",
+         "media_image": "",
+         "media_bg": {
+          "type": "none"
          },
-         "cta2_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "stats": [],
-         "showcase_enabled": true,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#2d2017"
-         },
-         "showcase_padding": 26,
-         "showcase_radius": {
-          "tl": 16,
-          "tr": 16,
-          "br": 16,
-          "bl": 16,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 16,
-          "tr": 16,
-          "br": 16,
-          "bl": 16,
-          "linked": true
-         },
-         "showcase_badge_text": "SINCE 2018 · TRIESTE",
-         "showcase_badge_dot": "#c98a4b",
-         "showcase_badge_bg": "#170f0a",
-         "showcase_badge_color": "#ead9c2",
-         "showcase_items": [
-          {
-           "number": "01",
-           "text": "Source whole-lot, direct",
-           "italic": false,
-           "text_color": "#ead9c2",
-           "bg": {
-            "type": "solid",
-            "color": "#251a12"
-           }
-          },
-          {
-           "number": "02",
-           "text": "Roast by ear, log the curve",
-           "italic": false,
-           "text_color": "#ead9c2",
-           "bg": {
-            "type": "solid",
-            "color": "#251a12"
-           }
-          },
-          {
-           "number": "03",
-           "text": "Ship within 24 hours",
-           "italic": false,
-           "text_color": "#c98a4b",
-           "bg": {
-            "type": "solid",
-            "color": "#251a12"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 11,
-          "tr": 11,
-          "br": 11,
-          "bl": 11,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 11,
-          "tr": 11,
-          "br": 11,
-          "bl": 11,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "DRUM ROASTED",
-         "showcase_caption_right": "HARBOUR LIGHT",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1fr 0.8fr",
-         "gap": 52,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_label": "roastery — drum roaster, sacks, harbour light",
+         "media_light": false,
+         "media_radius": 16,
+         "media_position": "right",
+         "media_aspect": "4/4.4",
+         "flush": false,
+         "badge_number": "",
+         "badge_label": "",
+         "media_blob": false,
+         "content_bg": ""
         },
         "style": {},
         "advanced": {},
@@ -1155,14 +837,20 @@
         "id": "br-testimonial-49",
         "type": "testimonial",
         "settings": {
-         "quote": "“The first subscription that actually changed how I drink coffee. Every fortnight there’s something I’d never have ordered, and it’s always good.”",
+         "quote": "“The first subscription that <em>actually changed how I drink coffee.</em> Every fortnight there’s something I’d never have ordered, and it’s always good.”",
          "author_name": "Sara L.",
          "author_role": "subscriber, 14 months",
          "rating": "0",
-         "layout": "single",
+         "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#ead9c2",
+         "star_color": "#c98a4b",
+         "quote_accent_color": "#c98a4b",
+         "author_color": "#8f7a63",
+         "quote_font": "heading",
+         "quote_size": 0,
+         "author_uppercase": false,
          "border_radius": "0",
          "avatar": ""
         },

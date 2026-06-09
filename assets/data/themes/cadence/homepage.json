@@ -32,177 +32,57 @@
       "advanced": {},
       "children": [
        {
-        "id": "cd-hero-split-1",
-        "type": "hero-split",
+        "id": "cd-hero-intro",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "Coach Theo · 1:1 & online",
-         "eyebrow_dot_color": "#ff6b54",
+         "eyebrow": "Coach Theo · 1:1 & online",
          "eyebrow_color": "#ff6b54",
-         "headline_lines": [
-          {
-           "text": "Stronger",
-           "color": "#ffffff",
-           "italic": false
-          },
-          {
-           "text": "on",
-           "color": "#ffffff",
-           "italic": false
-          },
-          {
-           "text": "your",
-           "color": "#ff6b54",
-           "italic": false
-          },
-          {
-           "text": "terms.",
-           "color": "#ffffff",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "sans-serif",
-         "headline_font_size": 96,
-         "headline_line_height": 0.9,
-         "headline_font_weight": "800",
-         "headline_align": "left",
-         "subhead": "Personal training and online coaching built around your life — proper programming, weekly check-ins, and the accountability that finally makes it stick.",
-         "subhead_color": "#aab1be",
-         "subhead_size": 18,
-         "subhead_italic": false,
-         "subhead_max_width": 420,
-         "cta1_text": "Book a free consult",
-         "cta1_url": "#pricing",
-         "cta1_bg": "#ff6b54",
-         "cta1_color": "#ffffff",
-         "cta1_size": 14,
-         "cta1_radius": {
-          "tl": 6,
-          "tr": 6,
-          "br": 6,
-          "bl": 6,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 6,
-          "tr": 6,
-          "br": 6,
-          "bl": 6,
-          "linked": true
-         },
+         "headline": "Stronger on",
+         "accent": "your",
+         "headline_tail": "terms.",
+         "accent_italic": false,
+         "uppercase": true,
+         "headline_color": "#ffffff",
+         "accent_color": "#ff6b54",
+         "headline_weight": "800",
+         "headline_size": "120",
+         "lead": "Personal training and online coaching built around your life — proper programming, weekly check-ins, and the accountability that finally makes it stick.",
+         "lead_color": "#aab1be",
+         "stats": [],
+         "cta_text": "Book a free consult",
+         "cta_url": "#pricing",
+         "cta_style": "button",
+         "cta_bg": "#ff6b54",
+         "cta_color": "#ffffff",
          "cta2_text": "See results",
          "cta2_url": "#results",
-         "cta2_bg": "transparent",
-         "cta2_color": "#ffffff",
-         "cta2_border": "rgba(255,107,84,.42)",
-         "cta2_size": 14,
-         "cta2_radius": {
+         "cta2_style": "outline",
+         "cta_radius": {
           "tl": 6,
           "tr": 6,
           "br": 6,
-          "bl": 6,
-          "linked": true
+          "bl": 6
          },
-         "cta2_radius_hover": {
-          "tl": 6,
-          "tr": 6,
-          "br": 6,
-          "bl": 6,
-          "linked": true
+         "media_image": "",
+         "media_bg": {
+          "type": "none"
          },
-         "stats": [],
-         "showcase_enabled": false,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#252932"
-         },
-         "showcase_padding": 28,
-         "showcase_radius": {
-          "tl": 12,
-          "tr": 12,
-          "br": 12,
-          "bl": 12,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 12,
-          "tr": 12,
-          "br": 12,
-          "bl": 12,
-          "linked": true
-         },
-         "showcase_badge_text": "COACH THEO · AT A GLANCE",
-         "showcase_badge_dot": "#ff6b54",
-         "showcase_badge_bg": "#101218",
-         "showcase_badge_color": "#ffffff",
-         "showcase_items": [
-          {
-           "number": "Clients coached",
-           "text": "500+",
-           "italic": false,
-           "text_color": "#ff6b54",
-           "bg": {
-            "type": "solid",
-            "color": "#1e2129"
-           }
-          },
-          {
-           "number": "Years coaching",
-           "text": "9",
-           "italic": false,
-           "text_color": "#ffffff",
-           "bg": {
-            "type": "solid",
-            "color": "#1e2129"
-           }
-          },
-          {
-           "number": "Hit their goal",
-           "text": "92%",
-           "italic": false,
-           "text_color": "#ffffff",
-           "bg": {
-            "type": "solid",
-            "color": "#1e2129"
-           }
-          },
-          {
-           "number": "Avg. rating",
-           "text": "4.9",
-           "italic": false,
-           "text_color": "#ffffff",
-           "bg": {
-            "type": "solid",
-            "color": "#1e2129"
-           }
-          }
-         ],
-         "showcase_card_radius": {
+         "media_label": "coach & client mid-session",
+         "media_light": false,
+         "media_aspect": "4/5",
+         "media_radius": 12,
+         "media_radius_top": 0,
+         "badge_number": "500+",
+         "badge_label": "transformed",
+         "badge_bg": "#ff6b54",
+         "badge_color": "#ffffff",
+         "badge_radius": {
           "tl": 10,
           "tr": 10,
           "br": 10,
-          "bl": 10,
-          "linked": true
+          "bl": 10
          },
-         "showcase_card_radius_hover": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "RESULTS",
-         "showcase_caption_right": "2026",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1.1fr .9fr",
-         "gap": 48,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_position": "right"
         },
         "style": {},
         "advanced": {},
@@ -421,7 +301,7 @@
          ],
          "columns": 3,
          "items_gap": 18,
-         "media_aspect": "4/3",
+         "media_aspect": "16/10",
          "media_tall_aspect": "4/5",
          "media_bg": "#101218",
          "media_label_color": "#ff6b54",
@@ -1074,16 +954,22 @@
         "id": "cd-testimonial-51",
         "type": "testimonial",
         "settings": {
-         "quote": "\"Theo's the first coach who got me to actually keep going. Strongest I've been in my life.\"",
+         "quote": "Theo's the first coach who got me to <em>actually keep going</em>. Strongest I've been in my life.",
          "author_name": "Marcus B.",
          "author_role": "16-week client",
          "rating": "0",
-         "layout": "single",
+         "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#ffffff",
          "border_radius": "0",
-         "avatar": ""
+         "avatar": "",
+         "quote_accent_color": "#ff6b54",
+         "quote_font": "heading",
+         "quote_uppercase": true,
+         "author_uppercase": true,
+         "author_color": "#6f7785",
+         "quote_size": 0
         },
         "style": {},
         "advanced": {},

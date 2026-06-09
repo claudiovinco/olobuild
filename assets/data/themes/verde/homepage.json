@@ -2,17 +2,8 @@
  {
   "id": "vd-se-4",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#15281c"
-   }
-  },
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#15281c" } },
   "advanced": {},
   "children": [
    {
@@ -25,139 +16,50 @@
      {
       "id": "vd-co-2",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
        {
-        "id": "vd-hero-split-1",
-        "type": "hero-split",
+        "id": "vd-intro-hero",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "Plant-based bistro",
-         "eyebrow_dot_color": "#9bd35a",
+         "eyebrow": "Plant-based bistro",
          "eyebrow_color": "#9bd35a",
-         "headline_lines": [
-          {
-           "text": "Vegetables,",
-           "color": "#eef3e4",
-           "italic": false
-          },
-          {
-           "text": "taken",
-           "color": "#eef3e4",
-           "italic": false
-          },
-          {
-           "text": "seriously.",
-           "color": "#9bd35a",
-           "italic": true
-          }
-         ],
-         "headline_font_family": "sans-serif",
-         "headline_font_size": 80,
-         "headline_line_height": 0.92,
-         "headline_font_weight": "800",
-         "headline_align": "left",
-         "subhead": "A short, seasonal menu that puts plants at the centre — cooked with the ambition you'd expect from any great kitchen. No imitation, just flavour.",
-         "subhead_color": "#aac0a4",
-         "subhead_size": 18,
-         "subhead_italic": false,
-         "subhead_max_width": 420,
-         "cta1_text": "Book a table",
-         "cta1_url": "#book",
-         "cta1_bg": "#9bd35a",
-         "cta1_color": "#0c1a12",
-         "cta1_size": 15,
-         "cta1_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
+         "headline": "Vegetables, taken",
+         "accent": "seriously.",
+         "headline_tail": "",
+         "accent_italic": false,
+         "uppercase": false,
+         "headline_color": "#eef3e4",
+         "accent_color": "#9bd35a",
+         "headline_weight": "700",
+         "headline_size": "116",
+         "lead": "A short, seasonal menu that puts plants at the centre — cooked with the ambition you'd expect from any great kitchen. No imitation, just flavour.",
+         "lead_color": "#aac0a4",
+         "stats": [],
+         "cta_text": "Book a table",
+         "cta_url": "#book",
+         "cta_style": "button",
+         "cta_bg": "#9bd35a",
+         "cta_color": "#0c1a12",
          "cta2_text": "See the menu",
          "cta2_url": "#menu",
-         "cta2_bg": "transparent",
-         "cta2_color": "#eef3e4",
-         "cta2_border": "rgba(155,211,90,.42)",
-         "cta2_size": 15,
-         "cta2_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta2_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "stats": [],
-         "showcase_enabled": false,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#1f3a2a"
-         },
-         "showcase_padding": 28,
-         "showcase_radius": {
-          "tl": 24,
-          "tr": 24,
-          "br": 24,
-          "bl": 24,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 24,
-          "tr": 24,
-          "br": 24,
-          "bl": 24,
-          "linked": true
-         },
-         "showcase_badge_text": "SEASONAL · CHANGES WEEKLY",
-         "showcase_badge_dot": "#9bd35a",
-         "showcase_badge_bg": "#0c1a12",
-         "showcase_badge_color": "#eef3e4",
-         "showcase_items": [],
-         "showcase_card_radius": {
-          "tl": 12,
-          "tr": 12,
-          "br": 12,
-          "bl": 12,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 12,
-          "tr": 12,
-          "br": 12,
-          "bl": 12,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "",
-         "showcase_caption_right": "",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1.05fr .95fr",
-         "gap": 48,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         },
-         "subhead_align": "left"
+         "cta2_style": "outline",
+         "cta_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999 },
+         "media_image": "",
+         "media_bg": { "type": "none" },
+         "media_label": "vivid plated vegetable dish, overhead",
+         "media_light": false,
+         "media_aspect": "1/1",
+         "media_radius": 24,
+         "media_radius_top": 0,
+         "badge_number": "Seasonal",
+         "badge_label": "changes weekly",
+         "badge_bg": "#eef3e4",
+         "badge_color": "#0c1a12",
+         "badge_radius": { "tl": 14, "tr": 14, "br": 14, "bl": 14 },
+         "media_position": "right"
         },
         "style": {},
         "advanced": {},
@@ -172,17 +74,8 @@
  {
   "id": "vd-se-17",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#15281c"
-   }
-  },
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#15281c" } },
   "advanced": {},
   "children": [
    {
@@ -195,9 +88,7 @@
      {
       "id": "vd-co-10",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
@@ -211,19 +102,11 @@
          "eyebrow_dot_color": "#9bd35a",
          "eyebrow_separator": "",
          "headline_lines": [
-          {
-           "text": "On the ",
-           "color": "#eef3e4",
-           "italic": false
-          },
-          {
-           "text": "plate",
-           "color": "#9bd35a",
-           "italic": true
-          }
+          { "text": "On the ", "color": "#eef3e4", "italic": false },
+          { "text": "plate", "color": "#9bd35a", "italic": true }
          ],
-         "headline_font_family": "sans-serif",
-         "headline_font_size": 54,
+         "headline_font_family": "serif",
+         "headline_font_size": 72,
          "headline_font_weight": "700",
          "headline_align": "center",
          "headline_inline": true,
@@ -246,29 +129,33 @@
    {
     "id": "vd-ro-16",
     "type": "row",
-    "settings": {
-     "gap": 40
-    },
+    "settings": { "gap": 56 },
     "style": {},
     "advanced": {},
     "children": [
      {
       "id": "vd-co-13",
       "type": "column",
-      "settings": {
-       "width": "1-2"
-      },
+      "settings": { "width": "1-2" },
       "style": {},
       "advanced": {},
       "children": [
+       {
+        "id": "vd-h-start",
+        "type": "headline",
+        "settings": { "heading": "To start", "tag": "h3", "heading_font": "heading", "alignment": "left", "heading_font_size": "26", "heading_uppercase": false, "heading_color": "#9bd35a", "decoration": "line", "decoration_color": "rgba(238,243,228,.13)" },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
        {
         "id": "vd-pricelist-12",
         "type": "pricelist",
         "settings": {
          "show_image": false,
          "price_position": "right",
-         "separator_style": "dotted",
-         "separator_color": "rgba(155,211,90,.42)",
+         "separator_style": "dashed",
+         "separator_color": "rgba(238,243,228,.13)",
          "title_color": "#eef3e4",
          "price_color": "#9bd35a",
          "description_color": "#71886c",
@@ -279,46 +166,11 @@
          "badge_bg": "#9bd35a",
          "badge_color": "#0c1a12",
          "badge_border_radius": "999",
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         },
+         "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 },
          "items": [
-          {
-           "id": "vd-1",
-           "title": "To start",
-           "description": "",
-           "price": "",
-           "highlighted": false,
-           "badge": "",
-           "_heading": true
-          },
-          {
-           "id": "vd-2",
-           "title": "Charred leeks, hazelnut",
-           "description": "Romesco, brown butter (vegan), crisp shallot.",
-           "price": "€11",
-           "highlighted": false,
-           "badge": ""
-          },
-          {
-           "id": "vd-3",
-           "title": "Heritage tomato",
-           "description": "Basil oil, sourdough crumb, aged balsamic.",
-           "price": "€12",
-           "highlighted": false,
-           "badge": "GF"
-          },
-          {
-           "id": "vd-4",
-           "title": "Smoked beetroot",
-           "description": "Cashew cream, dill, rye.",
-           "price": "€10",
-           "highlighted": false,
-           "badge": ""
-          }
+          { "id": "vd-2", "title": "Charred leeks, hazelnut", "description": "Romesco, brown butter (vegan), crisp shallot.", "price": "€11", "highlighted": false, "badge": "" },
+          { "id": "vd-3", "title": "Heritage tomato", "description": "Basil oil, sourdough crumb, aged balsamic.", "price": "€12", "highlighted": false, "badge": "GF" },
+          { "id": "vd-4", "title": "Smoked beetroot", "description": "Cashew cream, dill, rye.", "price": "€10", "highlighted": false, "badge": "" }
          ]
         },
         "style": {},
@@ -330,20 +182,26 @@
      {
       "id": "vd-co-15",
       "type": "column",
-      "settings": {
-       "width": "1-2"
-      },
+      "settings": { "width": "1-2" },
       "style": {},
       "advanced": {},
       "children": [
+       {
+        "id": "vd-h-mains",
+        "type": "headline",
+        "settings": { "heading": "Mains", "tag": "h3", "heading_font": "heading", "alignment": "left", "heading_font_size": "26", "heading_uppercase": false, "heading_color": "#9bd35a", "decoration": "line", "decoration_color": "rgba(238,243,228,.13)" },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
        {
         "id": "vd-pricelist-14",
         "type": "pricelist",
         "settings": {
          "show_image": false,
          "price_position": "right",
-         "separator_style": "dotted",
-         "separator_color": "rgba(155,211,90,.42)",
+         "separator_style": "dashed",
+         "separator_color": "rgba(238,243,228,.13)",
          "title_color": "#eef3e4",
          "price_color": "#9bd35a",
          "description_color": "#71886c",
@@ -354,47 +212,56 @@
          "badge_bg": "#9bd35a",
          "badge_color": "#0c1a12",
          "badge_border_radius": "999",
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         },
+         "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 },
          "items": [
-          {
-           "id": "vd-5",
-           "title": "Mains",
-           "description": "",
-           "price": "",
-           "highlighted": false,
-           "badge": "",
-           "_heading": true
-          },
-          {
-           "id": "vd-6",
-           "title": "King oyster \"scallops\"",
-           "description": "Pea purée, capers, brown butter.",
-           "price": "€19",
-           "highlighted": false,
-           "badge": ""
-          },
-          {
-           "id": "vd-7",
-           "title": "Celeriac shawarma",
-           "description": "Flatbread, pickles, toum, harissa.",
-           "price": "€17",
-           "highlighted": false,
-           "badge": "GF"
-          },
-          {
-           "id": "vd-8",
-           "title": "Wild mushroom risotto",
-           "description": "Carnaroli, thyme, truffle.",
-           "price": "€18",
-           "highlighted": false,
-           "badge": ""
-          }
+          { "id": "vd-6", "title": "King oyster \"scallops\"", "description": "Pea purée, capers, brown butter.", "price": "€19", "highlighted": false, "badge": "" },
+          { "id": "vd-7", "title": "Celeriac shawarma", "description": "Flatbread, pickles, toum, harissa.", "price": "€17", "highlighted": false, "badge": "GF" },
+          { "id": "vd-8", "title": "Wild mushroom risotto", "description": "Carnaroli, thyme, truffle.", "price": "€18", "highlighted": false, "badge": "" }
          ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "vd-ro-menu-link",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vd-co-menu-link",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vd-menu-link-btn",
+        "type": "button",
+        "settings": {
+         "text": "Full menu & drinks",
+         "url": "#menu",
+         "preset": "custom",
+         "alignment": "center",
+         "bg_color": "transparent",
+         "text_color": "#eef3e4",
+         "hover_text_color": "#9bd35a",
+         "text_transform": "uppercase",
+         "letter_spacing": "0.14em",
+         "font_size": "12",
+         "font_weight": "700",
+         "icon": "",
+         "shadow": "none",
+         "hover_effect": "none",
+         "tile_padding": { "top": 4, "right": 0, "bottom": 4, "left": 0 },
+         "border_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0, "linked": true },
+         "border": { "top": 0, "right": 0, "bottom": 1, "left": 0, "linked": false, "style": "solid", "color": "#9bd35a" }
         },
         "style": {},
         "advanced": {},
@@ -409,17 +276,8 @@
  {
   "id": "vd-se-21",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#192f22"
-   }
-  },
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#192f22" } },
   "advanced": {},
   "children": [
    {
@@ -432,150 +290,44 @@
      {
       "id": "vd-co-19",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
        {
-        "id": "vd-hero-split-18",
-        "type": "hero-split",
+        "id": "vd-intro-sourcing",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "Our sourcing",
-         "eyebrow_dot_color": "#9bd35a",
+         "eyebrow": "Our sourcing",
          "eyebrow_color": "#9bd35a",
-         "headline_lines": [
-          {
-           "text": "Picked",
-           "color": "#eef3e4",
-           "italic": false
-          },
-          {
-           "text": "nearby,",
-           "color": "#9bd35a",
-           "italic": true
-          },
-          {
-           "text": "cooked today",
-           "color": "#eef3e4",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "sans-serif",
-         "headline_font_size": 52,
-         "headline_line_height": 1,
-         "headline_font_weight": "700",
-         "headline_align": "left",
-         "subhead": "We buy from growers within fifty miles and let the harvest write the menu. If it’s not in season, it’s not on the plate.\n\nRoots, leaves, pulses and grains — treated with the same care a great kitchen gives anything. Turns out that’s the whole secret.",
-         "subhead_color": "#aac0a4",
-         "subhead_size": 16,
-         "subhead_italic": false,
-         "subhead_max_width": 540,
-         "cta1_text": "Meet our growers",
-         "cta1_url": "#sourcing",
-         "cta1_bg": "transparent",
-         "cta1_color": "#eef3e4",
-         "cta1_border": "rgba(155,211,90,.42)",
-         "cta1_size": 12,
-         "cta1_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
+         "headline": "Picked",
+         "accent": "nearby,",
+         "headline_tail": "cooked today",
+         "accent_italic": false,
+         "uppercase": false,
+         "headline_color": "#eef3e4",
+         "accent_color": "#9bd35a",
+         "headline_weight": "700",
+         "headline_size": "64",
+         "lead": "We buy from growers within fifty miles and let the harvest write the menu. If it's not in season, it's not on the plate.\n\nRoots, leaves, pulses and grains — treated with the same care a great kitchen gives anything. Turns out that's the whole secret.",
+         "lead_color": "#aac0a4",
          "stats": [],
-         "showcase_enabled": true,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#274733"
-         },
-         "showcase_padding": 32,
-         "showcase_radius": {
-          "tl": 24,
-          "tr": 24,
-          "br": 24,
-          "bl": 24,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 24,
-          "tr": 24,
-          "br": 24,
-          "bl": 24,
-          "linked": true
-         },
-         "showcase_badge_text": "SEASONAL GROWERS NETWORK",
-         "showcase_badge_dot": "#9bd35a",
-         "showcase_badge_bg": "#0c1a12",
-         "showcase_badge_color": "#eef3e4",
-         "showcase_items": [
-          {
-           "number": "Sourcing radius",
-           "text": "50 miles",
-           "italic": false,
-           "text_color": "#9bd35a",
-           "bg": {
-            "type": "solid",
-            "color": "#15281c"
-           }
-          },
-          {
-           "number": "On the menu",
-           "text": "In season only",
-           "italic": true,
-           "text_color": "#eef3e4",
-           "bg": {
-            "type": "solid",
-            "color": "#15281c"
-           }
-          },
-          {
-           "number": "Our growers",
-           "text": "Local & named",
-           "italic": false,
-           "text_color": "#eef3e4",
-           "bg": {
-            "type": "solid",
-            "color": "#15281c"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "LOCAL",
-         "showcase_caption_right": "50 MILES",
-         "showcase_hover_effect": "none",
-         "split_ratio": ".9fr 1.1fr",
-         "gap": 56,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "cta_text": "Meet our growers",
+         "cta_url": "#sourcing",
+         "cta_style": "underline",
+         "cta_bg": "transparent",
+         "cta_color": "#eef3e4",
+         "cta_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0 },
+         "media_image": "",
+         "media_bg": { "type": "none" },
+         "media_label": "market produce crates",
+         "media_light": false,
+         "media_aspect": "4/5",
+         "media_radius": 24,
+         "media_radius_top": 0,
+         "badge_number": "",
+         "badge_label": "",
+         "media_position": "left"
         },
         "style": {},
         "advanced": {},
@@ -590,17 +342,8 @@
  {
   "id": "vd-se-28",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#15281c"
-   }
-  },
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#15281c" } },
   "advanced": {},
   "children": [
    {
@@ -613,9 +356,7 @@
      {
       "id": "vd-co-23",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
@@ -629,19 +370,12 @@
          "eyebrow_dot_color": "#9bd35a",
          "eyebrow_separator": "",
          "headline_lines": [
-          {
-           "text": "Come ",
-           "color": "#eef3e4",
-           "italic": false
-          },
-          {
-           "text": "sit a while",
-           "color": "#9bd35a",
-           "italic": true
-          }
+          { "text": "Come ", "color": "#eef3e4", "italic": false },
+          { "text": "sit", "color": "#9bd35a", "italic": true },
+          { "text": " a while", "color": "#eef3e4", "italic": false }
          ],
-         "headline_font_family": "sans-serif",
-         "headline_font_size": 54,
+         "headline_font_family": "serif",
+         "headline_font_size": 72,
          "headline_font_weight": "700",
          "headline_align": "center",
          "headline_inline": true,
@@ -671,89 +405,48 @@
      {
       "id": "vd-co-26",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
        {
-        "id": "vd-workgrid-25",
-        "type": "workgrid",
+        "id": "vd-overlaygrid-25",
+        "type": "overlaygrid",
         "settings": {
+         "preset": "custom",
+         "bg": { "type": "none" },
          "items": [
-          {
-           "image": "",
-           "media_label": "Dining room, plants",
-           "title": "Dining room",
-           "meta": "",
-           "description": "",
-           "link_url": "",
-           "tall": true
-          },
-          {
-           "image": "",
-           "media_label": "Plated dish",
-           "title": "On the plate",
-           "meta": "",
-           "description": "",
-           "link_url": "",
-           "tall": false
-          },
-          {
-           "image": "",
-           "media_label": "Open kitchen",
-           "title": "Open kitchen",
-           "meta": "",
-           "description": "",
-           "link_url": "",
-           "tall": false
-          },
-          {
-           "image": "",
-           "media_label": "The bar",
-           "title": "The bar",
-           "meta": "",
-           "description": "",
-           "link_url": "",
-           "tall": false
-          },
-          {
-           "image": "",
-           "media_label": "Dessert",
-           "title": "Dessert",
-           "meta": "",
-           "description": "",
-           "link_url": "",
-           "tall": false
-          },
-          {
-           "image": "",
-           "media_label": "Natural wine",
-           "title": "Natural wine",
-           "meta": "",
-           "description": "",
-           "link_url": "",
-           "tall": false
-          }
+          { "id": "vg-1", "image": "", "title": "dining room, plants", "subtitle": "", "link": "", "tall": true, "wide": false },
+          { "id": "vg-2", "image": "", "title": "plated dish", "subtitle": "", "link": "", "tall": false, "wide": false },
+          { "id": "vg-3", "image": "", "title": "open kitchen", "subtitle": "", "link": "", "tall": false, "wide": false },
+          { "id": "vg-4", "image": "", "title": "the bar", "subtitle": "", "link": "", "tall": false, "wide": true },
+          { "id": "vg-5", "image": "", "title": "dessert", "subtitle": "", "link": "", "tall": false, "wide": false },
+          { "id": "vg-6", "image": "", "title": "natural wine", "subtitle": "", "link": "", "tall": false, "wide": false }
          ],
-         "columns": 4,
-         "items_gap": 12,
-         "media_aspect": "4/3",
-         "media_tall_aspect": "4/5",
-         "media_bg": "#1f3a2a",
-         "media_label_color": "#9bd35a",
-         "hover_zoom": true,
-         "title_font_family": "heading",
-         "title_color": "#eef3e4",
-         "title_size": 20,
-         "title_weight": "700",
-         "meta_color": "#71886c",
-         "meta_size": 12,
-         "show_desc": false,
-         "desc_color": "#71886c",
-         "desc_size": 15,
-         "mono_font_family": ""
+         "columns": "4",
+         "columns_mobile": "2",
+         "gap": "small",
+         "height": "180",
+         "match_height": true,
+         "layout_mode": "masonry",
+         "overlay_position": "bottom-left",
+         "overlay_horizontal": "left",
+         "overlay_style": "overlay-default",
+         "overlay_padding": "small",
+         "title_size": "h4",
+         "hover_effect": "zoom",
+         "hover_overlay": "always",
+         "show_cta": false,
+         "item_radius": 14,
+         "overlay_color": "rgba(12,26,18,0.0)",
+         "overlay_gradient": false,
+         "title_color": "rgba(238,243,228,.42)",
+         "title_weight": "600",
+         "title_uppercase": true,
+         "title_letter_spacing": 0.05,
+         "subtitle_color": "rgba(238,243,228,.42)",
+         "subtitle_size": 11,
+         "shadow": "none"
         },
         "style": {},
         "advanced": {},
@@ -768,17 +461,8 @@
  {
   "id": "vd-se-41",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#192f22"
-   }
-  },
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#192f22" } },
   "advanced": {},
   "children": [
    {
@@ -791,9 +475,7 @@
      {
       "id": "vd-co-30",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
@@ -802,24 +484,16 @@
         "type": "section-header",
         "settings": {
          "eyebrow_show": true,
-         "eyebrow_text": "When we’re open",
+         "eyebrow_text": "When we're open",
          "eyebrow_color": "#9bd35a",
          "eyebrow_dot_color": "#9bd35a",
          "eyebrow_separator": "",
          "headline_lines": [
-          {
-           "text": "Find ",
-           "color": "#eef3e4",
-           "italic": false
-          },
-          {
-           "text": "us",
-           "color": "#9bd35a",
-           "italic": true
-          }
+          { "text": "Find ", "color": "#eef3e4", "italic": false },
+          { "text": "us", "color": "#9bd35a", "italic": true }
          ],
-         "headline_font_family": "sans-serif",
-         "headline_font_size": 54,
+         "headline_font_family": "serif",
+         "headline_font_size": 72,
          "headline_font_weight": "700",
          "headline_align": "center",
          "headline_inline": true,
@@ -849,9 +523,7 @@
      {
       "id": "vd-co-33",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
@@ -860,37 +532,21 @@
         "type": "hoursstrip",
         "settings": {
          "items": [
-          {
-           "day": "Tue – Thu",
-           "time": "12 – 22",
-           "note": "Lunch & dinner"
-          },
-          {
-           "day": "Fri – Sat",
-           "time": "12 – 23",
-           "note": "Late kitchen"
-          },
-          {
-           "day": "Sunday",
-           "time": "11 – 16",
-           "note": "Brunch"
-          },
-          {
-           "day": "Monday",
-           "time": "Closed",
-           "note": "At the market"
-          }
+          { "day": "Tue – Thu", "time": "12 – 22", "note": "Lunch & dinner" },
+          { "day": "Fri – Sat", "time": "12 – 23", "note": "Late kitchen" },
+          { "day": "Sunday", "time": "11 – 16", "note": "Brunch" },
+          { "day": "Monday", "time": "Closed", "note": "At the market" }
          ],
          "columns": 4,
-         "band_padding_y": 36,
+         "band_padding_y": 24,
          "show_dividers": true,
-         "divider_color": "rgba(155,211,90,.42)",
+         "divider_color": "rgba(238,243,228,.13)",
          "band_border": true,
          "day_color": "#9bd35a",
-         "day_size": 12,
+         "day_size": 11,
          "time_font_family": "heading",
          "time_color": "#eef3e4",
-         "time_size": 30,
+         "time_size": 24,
          "time_weight": "700",
          "note_color": "#71886c",
          "note_size": 13,
@@ -909,17 +565,8 @@
  {
   "id": "vd-se-45",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#15281c"
-   }
-  },
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#15281c" } },
   "advanced": {},
   "children": [
    {
@@ -932,9 +579,7 @@
      {
       "id": "vd-co-43",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
@@ -942,14 +587,20 @@
         "id": "vd-testimonial-42",
         "type": "testimonial",
         "settings": {
-         "quote": "“I brought my most sceptical, steak-loving friend. He’s now booked his birthday here.”",
+         "quote": "I brought my most sceptical, steak-loving friend. He's now <em>booked his birthday here.</em>",
          "author_name": "Nadia F.",
          "author_role": "regular",
          "rating": "0",
-         "layout": "single",
+         "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#eef3e4",
+         "quote_accent_color": "#9bd35a",
+         "quote_font": "heading",
+         "quote_size": 0,
+         "quote_uppercase": false,
+         "author_uppercase": true,
+         "author_color": "#9bd35a",
          "border_radius": "0",
          "avatar": "",
          "author_position": "bottom-center"
@@ -967,17 +618,8 @@
  {
   "id": "vd-se-49",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#192f22"
-   }
-  },
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#192f22" } },
   "advanced": {},
   "children": [
    {
@@ -990,9 +632,7 @@
      {
       "id": "vd-co-47",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
@@ -1001,56 +641,32 @@
         "type": "builder",
         "settings": {
          "eyebrow": "Make it yours",
-         "heading": "Build a bowl",
+         "heading": "Build a",
+         "heading_accent": "bowl",
          "intro": "Start with a base, pile on what you fancy. Tap to add — your bowl totals up as you go.",
          "currency": "€",
          "cap": 0,
          "total_label": "Total",
          "count_label": "add-ons",
-         "cta_text": "Add to order",
+         "cta_text": "",
          "cta_url": "#bowl",
          "zone_accent": "#9bd35a",
          "zone_on": "#0c1a12",
          "card_bg": "#1f3a2a",
          "card_border": "rgba(238,243,228,.13)",
+         "layout": "split",
+         "heading_color": "#eef3e4",
+         "tally_bg": "#9bd35a",
+         "item_name_color": "#eef3e4",
+         "item_price_color": "#aac0a4",
          "align": "left",
          "items": [
-          {
-           "name": "Ancient grains",
-           "price": "9",
-           "note": "Base",
-           "start": 0
-          },
-          {
-           "name": "Leaves & herbs",
-           "price": "9",
-           "note": "Base",
-           "start": 0
-          },
-          {
-           "name": "Miso tempeh",
-           "price": "4",
-           "note": "Protein",
-           "start": 0
-          },
-          {
-           "name": "Smoked chickpea",
-           "price": "4",
-           "note": "Protein",
-           "start": 0
-          },
-          {
-           "name": "Avocado",
-           "price": "2",
-           "note": "Extra",
-           "start": 0
-          },
-          {
-           "name": "Pickles & seeds",
-           "price": "2",
-           "note": "Extra",
-           "start": 0
-          }
+          { "name": "Ancient grains", "price": "9", "note": "Base", "start": 0 },
+          { "name": "Leaves & herbs", "price": "9", "note": "Base", "start": 0 },
+          { "name": "Miso tempeh", "price": "4", "note": "Protein", "start": 0 },
+          { "name": "Smoked chickpea", "price": "4", "note": "Protein", "start": 0 },
+          { "name": "Avocado", "price": "2", "note": "Extra", "start": 0 },
+          { "name": "Pickles & seeds", "price": "2", "note": "Extra", "start": 0 }
          ]
         },
         "style": {},
@@ -1066,17 +682,8 @@
  {
   "id": "vd-se-53",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#9bd35a"
-   }
-  },
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "solid", "color": "#9bd35a" } },
   "advanced": {},
   "children": [
    {
@@ -1089,9 +696,7 @@
      {
       "id": "vd-co-51",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
@@ -1101,41 +706,26 @@
         "settings": {
          "headline": "Pull up a",
          "headline_accent": "chair.",
-         "headline_accent_italic": true,
+         "headline_accent_italic": false,
          "subtitle": "Dinner books up fast — reserve your table and let the kitchen surprise you.",
          "cta_text": "Book a table",
          "cta_url": "#book",
-         "bg": {
-          "type": "solid",
-          "color": "#9bd35a"
-         },
+         "bg": { "type": "solid", "color": "#9bd35a" },
          "text_color": "#0c1a12",
          "accent_color": "#15281c",
          "subtitle_color": "rgba(12,26,18,.78)",
          "cta_bg": "#eef3e4",
          "cta_color": "#0c1a12",
-         "cta_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
+         "cta_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999 },
          "cta_size": 15,
-         "headline_font_family": "sans-serif",
-         "headline_size": 72,
-         "headline_weight": "800",
+         "headline_font_family": "serif",
+         "headline_size": 80,
+         "headline_weight": "700",
          "subtitle_size": 17,
          "layout": "stack",
          "vertical_align": "center",
-         "banner_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "banner_padding": 80
+         "banner_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0 },
+         "banner_padding": 100
         },
         "style": {},
         "advanced": {},

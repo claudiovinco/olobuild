@@ -1,0 +1,363 @@
+[
+ {
+  "id": "swt-se-ph",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": { "type": "solid", "color": "#0c0c10" }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "swt-ro-ph",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "swt-co-ph",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "swt-pagehead",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Nightglass world tour",
+         "eyebrow_color": "#27e0a3",
+         "eyebrow_dot_color": "#27e0a3",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "Live, 2026", "color": "#ffffff", "italic": false }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 80,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "headline_inline": false,
+         "tagline_show": true,
+         "tagline_text": "Eighteen nights across Europe and North America. New live A/V show built for the album — come early, stay late.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#74747f",
+         "tagline_text_size": 17,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "swt-se-eu",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": { "type": "solid", "color": "#0c0c10" }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "swt-ro-euh",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "swt-co-euh",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "swt-euh",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Europe · leg 1",
+         "eyebrow_color": "#27e0a3",
+         "eyebrow_dot_color": "#27e0a3",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "June — July", "color": "#ffffff", "italic": false }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 42,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "headline_inline": false,
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 12
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "swt-ro-eul",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "swt-co-eul",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "swt-eul",
+        "type": "worklist",
+        "settings": {
+         "items": [
+          { "number": "FRI 12 JUN", "title": "Berlin", "category": "Säälchen · DE", "year": "Sold out", "link_url": "" },
+          { "number": "SUN 14 JUN", "title": "Hamburg", "category": "Uebel & Gefährlich · DE", "year": "Tickets", "link_url": "#" },
+          { "number": "SAT 20 JUN", "title": "Amsterdam", "category": "Paradiso Noord · NL", "year": "Tickets", "link_url": "#" },
+          { "number": "WED 24 JUN", "title": "Brussels", "category": "Botanique · BE", "year": "Tickets", "link_url": "#" },
+          { "number": "THU 02 JUL", "title": "London", "category": "Village Underground · UK", "year": "Tickets", "link_url": "#" },
+          { "number": "SAT 11 JUL", "title": "Paris", "category": "La Gaîté Lyrique · FR", "year": "Sold out", "link_url": "" }
+         ],
+         "divider_color": "rgba(255,255,255,.09)",
+         "row_padding_y": 22,
+         "row_hover_bg": "rgba(255,255,255,.03)",
+         "hover_indent": 12,
+         "number_color": "#27e0a3",
+         "number_size": 14,
+         "title_font_family": "heading",
+         "title_color": "#ffffff",
+         "title_size": 24,
+         "title_weight": "700",
+         "show_category": true,
+         "category_color": "#74747f",
+         "category_size": 12,
+         "show_year": true,
+         "year_color": "#27e0a3",
+         "year_size": 14,
+         "show_arrow": true,
+         "arrow_color": "#27e0a3",
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "swt-se-na",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": { "type": "solid", "color": "#101016" }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "swt-ro-nah",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "swt-co-nah",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "swt-nah",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "North America · leg 2",
+         "eyebrow_color": "#27e0a3",
+         "eyebrow_dot_color": "#27e0a3",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "September", "color": "#ffffff", "italic": false }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 42,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "headline_inline": false,
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 12
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "swt-ro-nal",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "swt-co-nal",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "swt-nal",
+        "type": "worklist",
+        "settings": {
+         "items": [
+          { "number": "FRI 04 SEP", "title": "New York", "category": "Brooklyn Steel · US", "year": "Tickets", "link_url": "#" },
+          { "number": "SUN 06 SEP", "title": "Montréal", "category": "Le National · CA", "year": "Tickets", "link_url": "#" },
+          { "number": "THU 10 SEP", "title": "Chicago", "category": "Thalia Hall · US", "year": "Tickets", "link_url": "#" },
+          { "number": "SAT 12 SEP", "title": "Los Angeles", "category": "The Regent · US", "year": "Sold out", "link_url": "" },
+          { "number": "TUE 15 SEP", "title": "San Francisco", "category": "The Independent · US", "year": "Tickets", "link_url": "#" }
+         ],
+         "divider_color": "rgba(255,255,255,.09)",
+         "row_padding_y": 22,
+         "row_hover_bg": "rgba(255,255,255,.03)",
+         "hover_indent": 12,
+         "number_color": "#27e0a3",
+         "number_size": 14,
+         "title_font_family": "heading",
+         "title_color": "#ffffff",
+         "title_size": 24,
+         "title_weight": "700",
+         "show_category": true,
+         "category_color": "#74747f",
+         "category_size": 12,
+         "show_year": true,
+         "year_color": "#27e0a3",
+         "year_size": 14,
+         "show_arrow": true,
+         "arrow_color": "#27e0a3",
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "swt-se-cta",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": { "type": "solid", "color": "#0c0c10" }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "swt-ro-cta",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "swt-co-cta",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "swt-cta",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Can't make a date?",
+         "headline_accent": "",
+         "headline_accent_italic": false,
+         "subtitle": "Join the list and you'll be first to know when we add cities — and first through the door for presale.",
+         "cta_text": "Join the mailing list",
+         "cta_url": "#",
+         "cta2_text": "Stream Nightglass",
+         "cta2_url": "#listen",
+         "cta2_bg": "rgba(255,255,255,.05)",
+         "cta2_color": "#ffffff",
+         "cta2_border": "rgba(255,255,255,.09)",
+         "bg": {
+          "type": "gradient",
+          "direction": "150deg",
+          "stops": [
+           { "color": "rgba(39,224,163,.16)", "position": 0 },
+           { "color": "rgba(255,93,158,.06)", "position": 100 }
+          ]
+         },
+         "text_color": "#ffffff",
+         "accent_color": "#27e0a3",
+         "subtitle_color": "#b6b6c2",
+         "cta_bg": "#27e0a3",
+         "cta_color": "#060608",
+         "cta_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999, "linked": true },
+         "cta_size": 15,
+         "headline_font_family": "sans-serif",
+         "headline_size": 64,
+         "headline_weight": "700",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": { "tl": 24, "tr": 24, "br": 24, "bl": 24, "linked": true },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -178,7 +178,7 @@
            "title": "Tideline No.4",
            "meta": "'26 · Oil",
            "description": "180 × 140 cm · private collection",
-           "link_url": "#works",
+           "link_url": "/tideline/",
            "tall": true
           },
           {
@@ -187,7 +187,7 @@
            "title": "Weatherfront",
            "meta": "'25 · Pigment",
            "description": "120 × 90 cm · available",
-           "link_url": "#works",
+           "link_url": "/tideline/",
            "tall": false
           },
           {
@@ -196,7 +196,7 @@
            "title": "Field Study 11",
            "meta": "'25 · Oil",
            "description": "60 × 60 cm · available",
-           "link_url": "#works",
+           "link_url": "/tideline/",
            "tall": false
           },
           {
@@ -205,7 +205,7 @@
            "title": "Nightfall",
            "meta": "'24 · Oil",
            "description": "200 × 150 cm · on loan",
-           "link_url": "#works",
+           "link_url": "/tideline/",
            "tall": true
           }
          ]
@@ -253,113 +253,52 @@
       "advanced": {},
       "children": [
        {
-        "id": "cv-hero-split-12",
-        "type": "hero-split",
+        "id": "cv-introsplit-12",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "About",
-         "eyebrow_dot_color": "#e0b13a",
+         "eyebrow": "About",
          "eyebrow_color": "#e0b13a",
-         "headline_lines": [
-          {
-           "text": "Painting the ",
-           "color": "#f0ebe1",
-           "italic": false
-          },
-          {
-           "text": "edges",
-           "color": "#e0b13a",
-           "italic": true
-          },
-          {
-           "text": "of weather",
-           "color": "#f0ebe1",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "serif",
-         "headline_font_size": 48,
-         "headline_line_height": 1.06,
-         "headline_font_weight": "400",
-         "headline_align": "left",
-         "subhead": "Jonah Veld (b. 1986) works in oil and hand-ground pigment from a harbour studio. His large abstracts begin outdoors, in notebooks and weather, and are finished slowly indoors over months.\n\nExhibited across Europe and held in private and public collections, his work is represented by Atelier 9.\n\n— studio notes",
-         "subhead_color": "#b3aa9b",
-         "subhead_size": 16,
-         "subhead_italic": false,
-         "subhead_max_width": 520,
-         "cta1_text": "Enquire",
-         "cta1_url": "#contact",
-         "cta1_bg": "#e0b13a",
-         "cta1_color": "#100e0c",
-         "cta1_size": 13,
-         "cta1_radius": {
-          "tl": 2,
-          "tr": 2,
-          "br": 2,
-          "bl": 2,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 2,
-          "tr": 2,
-          "br": 2,
-          "bl": 2,
-          "linked": true
-         },
+         "headline": "Painting the",
+         "accent": "edges",
+         "headline_tail": "of weather",
+         "accent_italic": true,
+         "uppercase": false,
+         "headline_color": "#f0ebe1",
+         "accent_color": "#e0b13a",
+         "headline_weight": "400",
+         "headline_size": "52",
+         "lead": "Jonah Veld (b. 1986) works in oil and hand-ground pigment from a harbour studio. His large abstracts begin outdoors, in notebooks and weather, and are finished slowly indoors over months.\n\nExhibited across Europe and held in private and public collections, his work is represented by Atelier 9.",
+         "lead_color": "#b3aa9b",
+         "signature": "— studio notes",
+         "stats": [],
+         "cta_text": "",
+         "cta_url": "#contact",
+         "cta_style": "button",
+         "cta_bg": "#e0b13a",
+         "cta_color": "#100e0c",
          "cta2_text": "",
          "cta2_url": "",
-         "stats": [],
-         "showcase_enabled": true,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#1c1a17"
+         "cta2_style": "outline",
+         "media_image": "",
+         "media_bg": {
+          "type": "none"
          },
-         "showcase_padding": 0,
-         "showcase_radius": {
+         "media_label": "the artist in the studio",
+         "media_light": false,
+         "media_aspect": "4/5",
+         "media_radius": 0,
+         "media_radius_top": 0,
+         "badge_number": "",
+         "badge_label": "",
+         "badge_bg": "#312c27",
+         "badge_color": "#f0ebe1",
+         "badge_radius": {
           "tl": 0,
           "tr": 0,
           "br": 0,
-          "bl": 0,
-          "linked": true
+          "bl": 0
          },
-         "showcase_radius_hover": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "showcase_badge_text": "",
-         "showcase_badge_dot": "#e0b13a",
-         "showcase_badge_bg": "#312c27",
-         "showcase_badge_color": "#f0ebe1",
-         "showcase_items": [],
-         "showcase_card_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "",
-         "showcase_caption_right": "",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1.3fr 1fr",
-         "gap": 56,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_position": "left"
         },
         "style": {},
         "advanced": {},
@@ -650,7 +589,7 @@
          "cta_text": "Enquire about a work",
          "cta_url": "#contact",
          "cta2_text": "View the series",
-         "cta2_url": "#works",
+         "cta2_url": "/tideline/",
          "cta2_bg": "transparent",
          "cta2_color": "#f0ebe1",
          "cta2_border": "rgba(224,177,58,.42)",

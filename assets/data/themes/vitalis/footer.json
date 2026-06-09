@@ -1,1 +1,91 @@
-[{"id":"vi-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#103f3e"}},"advanced":{},"children":[{"id":"vi-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"vi-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"vi-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Crimson Pro\",Georgia,serif;font-size:20px;color:#eaf6f2;font-weight:500;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#6fd6c4;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Vitalis</div><p style=\"font-size:14px;color:#6f9a92;max-width:260px\">Wellness & recovery clinic. Physiotherapy, recovery and longevity care under one roof.</p>","text_color":"#a9cfc7","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"vi-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"vi-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#eaf6f2;font-family:\"Lexend\",-apple-system,sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Clinic</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#6f9a92\"><li>Services</li><li>Recovery</li><li>Team</li><li>Membership</li></ul>","text_color":"#a9cfc7","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"vi-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"vi-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#eaf6f2;font-family:\"Lexend\",-apple-system,sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">About</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#6f9a92\"><li>Our approach</li><li>Facilities</li><li>Careers</li></ul>","text_color":"#a9cfc7","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"vi-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"vi-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#eaf6f2;font-family:\"Lexend\",-apple-system,sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Visit</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#6f9a92\"><li>5 Cedar Court</li><li>Mon–Sat · by appt</li><li>care@vitalis.clinic</li></ul>","text_color":"#a9cfc7","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"vi-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"vi-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"vi-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid rgba(234,246,242,.13);padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#6f9a92\"><span>© 2026 Vitalis — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#a9cfc7","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "vi-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
+  "style": { "bg": { "type": "solid", "color": "#103f3e" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vi-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vi-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "vi-fbrand", "type": "headline", "settings": { "heading": "Vitalis", "tag": "div", "alignment": "left", "heading_font_size": "25", "heading_font": "heading", "heading_color": "#eaf6f2", "heading_font_weight": "600", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vi-fbtext", "type": "text-block", "settings": { "content": "<p>Wellness & recovery clinic. Physiotherapy, recovery and longevity care under one roof.</p>", "text_color": "#6f9a92", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "vi-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "vi-fh1", "type": "headline", "settings": { "heading": "Clinic", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eaf6f2", "heading_font_weight": "600", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vi-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#6f9a92", "link_hover_color": "#6fd6c4", "items": [ { "title": "Services", "content": "#services", "tag": "" }, { "title": "Recovery", "content": "#recovery", "tag": "" }, { "title": "Team", "content": "#team", "tag": "" }, { "title": "Membership", "content": "#membership", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "vi-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "vi-fh2", "type": "headline", "settings": { "heading": "About", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eaf6f2", "heading_font_weight": "600", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vi-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#6f9a92", "link_hover_color": "#6fd6c4", "items": [ { "title": "Our approach", "content": "#", "tag": "" }, { "title": "Facilities", "content": "#", "tag": "" }, { "title": "Careers", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "vi-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "vi-fh3", "type": "headline", "settings": { "heading": "Visit", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eaf6f2", "heading_font_weight": "600", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vi-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#6f9a92", "link_hover_color": "#6fd6c4", "items": [ { "title": "5 Cedar Court", "content": "", "tag": "" }, { "title": "Mon–Sat · by appt", "content": "", "tag": "" }, { "title": "care@vitalis.clinic", "content": "mailto:care@vitalis.clinic", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "vi-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "vi-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "vi-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(234,246,242,.13)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "vi-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "vi-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "vi-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Vitalis — an OLOtheme demo.</p>", "text_color": "#6f9a92", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "vi-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "vi-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#6f9a92", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

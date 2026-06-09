@@ -1,1 +1,72 @@
-[{"id":"pu-hse","type":"section","settings":{"style":"default","width":"expand","padding":"none"},"style":{"bg":{"type":"solid","color":"rgba(20,22,26,.84)"}},"advanced":{},"children":[{"id":"pu-hro","type":"row","settings":{"layout":"100","gap":0,"vertical_align":"center"},"style":{},"advanced":{},"children":[{"id":"pu-hco","type":"column","settings":{"width":"1-1","width_medium":"1-1"},"style":{},"advanced":{},"children":[{"id":"pu-hmm","type":"megamenu","settings":{"menu_id":"auto","layout":"horizontal","alignment":"right","font_size":"14","font_weight":"600","text_color":"#8b919c","sticky":true,"sticky_bg":"rgba(20,22,26,.92)","sticky_shadow":true,"social_icons":false,"search_icon":false,"logo_image":"","logo_width":"130","logo_position":"left","logo_link":"/","logo_sticky":"","mobile_logo":"","mobile_logo_height":"30","mobile_bar_logo":true,"logo_text":"Pulse","logo_dot":true},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "pu-hse",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "none" } },
+  "advanced": {},
+  "children": [
+   { "id": "pu-hro", "type": "row", "settings": { "layout": "100", "gap": 0, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
+    { "id": "pu-hco", "type": "column", "settings": { "width": "1-1", "width_medium": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "pu-hmm", "type": "megamenu", "settings": {
+        "menu_id": "auto",
+        "layout": "left",
+        "alignment": "left",
+        "font_size": "13",
+        "font_weight": "600",
+        "text_transform": "uppercase",
+        "letter_spacing": "0.6",
+        "text_color": "#8b919c",
+        "hover_color": "#ffffff",
+        "active_color": "#ffffff",
+        "item_gap": "28",
+        "sticky": true,
+        "sticky_bg": "rgba(20,22,26,.92)",
+        "sticky_shadow": false,
+        "nav_bg": "rgba(20,22,26,.84)",
+        "bar_width": "classic",
+        "header_mode": "classic",
+        "social_in_navbar": false,
+        "social_in_mobile": false,
+        "search_icon": false,
+        "logo_image": "",
+        "logo_width": "130",
+        "logo_position": "left",
+        "logo_link": "/",
+        "logo_sticky": "",
+        "mobile_logo": "",
+        "mobile_logo_height": "30",
+        "mobile_bar_logo": true,
+        "logo_text": "Pulse",
+        "logo_text_size": "25",
+        "logo_text_color": "#ffffff",
+        "logo_dot": true,
+        "button_mode": "none",
+        "btn_bg": "#c6f24e",
+        "btn_color": "#0c0d10",
+        "btn_radius": { "tl": 4, "tr": 4, "br": 4, "bl": 4, "linked": true },
+        "btn_hover_bg": "#b2e02f",
+        "extra_link_1_label": "Member login",
+        "extra_link_1_url": "#",
+        "extra_link_1_button": false,
+        "extra_link_2_label": "Free session",
+        "extra_link_2_url": "#membership",
+        "extra_link_2_button": true,
+        "extra_links_right": true,
+        "mobile_breakpoint": "1024",
+        "mobile_style": "fullscreen",
+        "mobile_link_font": "heading",
+        "mobile_link_size": 34,
+        "mobile_bg": "#0c0d10",
+        "mobile_text_color": "#ffffff",
+        "mobile_accent_color": "#c6f24e",
+        "mobile_heading_color": "#8b919c",
+        "mobile_footer_text": "Strength & conditioning · Est. 2019",
+        "mobile_footer_cta_text": "Free session",
+        "mobile_footer_cta_url": "#membership"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

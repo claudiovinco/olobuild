@@ -1,0 +1,310 @@
+[
+ {
+  "id": "hp-sec-ph",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "none" } },
+  "advanced": {},
+  "children": [
+   { "id": "hp-ph-row", "type": "row", "settings": { "layout": "100", "gap": 0 }, "style": {}, "advanced": {}, "children": [
+    { "id": "hp-ph-col", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     {
+      "id": "hp-ph",
+      "type": "imagehero",
+      "settings": {
+       "eyebrow_text": "Residential · Milan",
+       "eyebrow_dot": false,
+       "eyebrow_color": "#ece3d3",
+       "headline_text": "Casa",
+       "accent_text": "Navigli",
+       "headline_tail": "",
+       "accent_italic": true,
+       "stack_lines": false,
+       "subhead": "",
+       "cta1_text": "",
+       "cta1_url": "#",
+       "cta2_text": "",
+       "cta2_url": "#",
+       "meta_text": "Full interior · 110 m² · 2025 · Photography S. Conti",
+       "scroll_hint": "",
+       "bg_image": "",
+       "media_bg": { "type": "none" },
+       "bg_color": "#2a211c",
+       "media_label": "casa navigli — living room, full-bleed",
+       "text_position": "bottom-left",
+       "text_align": "left",
+       "content_width": 760,
+       "aspect_ratio": "16/9",
+       "min_height": 52,
+       "heading_font": "serif",
+       "overlay_color": "#2a211c",
+       "overlay_top": 0.4,
+       "overlay_bottom": 0.82,
+       "overlay_sides": false,
+       "accent": "#b06a4f",
+       "accent_on": "#ffffff",
+       "text_color": "#ffffff",
+       "sub_color": "rgba(255,255,255,.82)",
+       "cta_radius": { "tl": 2, "tr": 2, "br": 2, "bl": 2 }
+      },
+      "style": {},
+      "advanced": {},
+      "children": []
+     }
+    ]}
+   ]}
+  ]
+ },
+
+ {
+  "id": "hp-sec-body",
+  "type": "section",
+  "settings": { "style": "default", "width": "default", "padding": "large" },
+  "style": { "bg": { "type": "none" } },
+  "advanced": {},
+  "children": [
+   { "id": "hp-body-r1", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "hp-body-c1", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     {
+      "id": "hp-lead",
+      "type": "text-block",
+      "settings": {
+       "preset": "editorial-serif",
+       "content": "<p><em>A 1930s apartment that had been “modernised” one too many times — our job was to give it back its bones, and a lot of its warmth.</em></p>",
+       "text_color": "#2c241d",
+       "font_size": "26",
+       "line_height": "1.4",
+       "text_align": "left",
+       "max_width": "760"
+      },
+      "style": {},
+      "advanced": {},
+      "children": []
+     },
+     {
+      "id": "hp-p1",
+      "type": "text-block",
+      "settings": {
+       "content": "<p>We stripped away the laminate and dropped ceilings to find original parquet and generous proportions underneath. From there it was a careful rebuild: lime plaster walls, restored doors, and a palette pulled from the terracotta rooftops outside the window.</p>",
+       "text_color": "#6a5f53",
+       "font_size": "18",
+       "line_height": "1.75",
+       "text_align": "left",
+       "max_width": "760"
+      },
+      "style": {},
+      "advanced": {},
+      "children": []
+     }
+    ]}
+   ]},
+   { "id": "hp-body-split", "type": "row", "settings": { "gap": 14 }, "style": {}, "advanced": {}, "children": [
+    { "id": "hp-split-c1", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+     {
+      "id": "hp-split-img1",
+      "type": "image",
+      "settings": {
+       "image_url": "",
+       "media_bg": { "type": "solid", "color": "#e2d6c1" },
+       "media_label": "before / structural",
+       "image_width": "100%",
+       "aspect_ratio": "4/3",
+       "object_fit": "cover",
+       "border_radius": "4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": []
+     }
+    ]},
+    { "id": "hp-split-c2", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+     {
+      "id": "hp-split-img2",
+      "type": "image",
+      "settings": {
+       "image_url": "",
+       "media_bg": { "type": "solid", "color": "#e2d6c1" },
+       "media_label": "after / finished",
+       "image_width": "100%",
+       "aspect_ratio": "4/3",
+       "object_fit": "cover",
+       "border_radius": "4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": []
+     }
+    ]}
+   ]},
+   { "id": "hp-body-r2", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "hp-body-c2", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     {
+      "id": "hp-p2",
+      "type": "text-block",
+      "settings": {
+       "content": "<p>The furniture is a mix of vintage finds and a few custom pieces — a long oak table built for actual dinners, a reading chair positioned for the afternoon light. Nothing too precious; everything meant to be used.</p>",
+       "text_color": "#6a5f53",
+       "font_size": "18",
+       "line_height": "1.75",
+       "text_align": "left",
+       "max_width": "760"
+      },
+      "style": {},
+      "advanced": {},
+      "children": []
+     }
+    ]}
+   ]}
+  ]
+ },
+
+ {
+  "id": "hp-sec-gal",
+  "type": "section",
+  "settings": { "style": "default", "width": "default", "padding": "small" },
+  "style": { "bg": { "type": "none" } },
+  "advanced": {},
+  "children": [
+   { "id": "hp-gal-row", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "hp-gal-col", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     {
+      "id": "hp-gal",
+      "type": "overlaygrid",
+      "settings": {
+       "preset": "editorial-grid",
+       "bg": { "type": "none" },
+       "columns": "4",
+       "columns_mobile": "2",
+       "gap": "small",
+       "height": "180",
+       "layout_mode": "masonry",
+       "match_height": false,
+       "overlay_position": "bottom",
+       "overlay_style": "overlay-default",
+       "overlay_color": "rgba(42,33,28,.55)",
+       "overlay_gradient": true,
+       "overlay_padding": "small",
+       "title_size": "h4",
+       "title_color": "#faf5ec",
+       "title_weight": "500",
+       "title_letter_spacing": 0,
+       "title_uppercase": false,
+       "subtitle_color": "#e2d6c1",
+       "subtitle_size": 11,
+       "hover_effect": "zoom",
+       "hover_overlay": "fade",
+       "item_radius": 4,
+       "show_cta": false,
+       "items": [
+        { "image": "", "title": "Living room", "subtitle": "", "wide": true },
+        { "image": "", "title": "Kitchen", "subtitle": "" },
+        { "image": "", "title": "Detail", "subtitle": "" },
+        { "image": "", "title": "Bedroom", "subtitle": "" },
+        { "image": "", "title": "Bathroom", "subtitle": "" },
+        { "image": "", "title": "Study", "subtitle": "", "wide": true }
+       ]
+      },
+      "style": {},
+      "advanced": {},
+      "children": []
+     }
+    ]}
+   ]}
+  ]
+ },
+
+ {
+  "id": "hp-sec-testi",
+  "type": "section",
+  "settings": { "style": "default", "width": "default", "padding": "large", "bg_scope": "section" },
+  "style": { "bg": { "type": "solid", "color": "#b06a4f" } },
+  "advanced": {},
+  "children": [
+   { "id": "hp-testi-row", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "hp-testi-col", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     {
+      "id": "hp-testi",
+      "type": "testimonial",
+      "settings": {
+       "quote": "They found the apartment our home was hiding inside it. We can’t imagine living anywhere else now.",
+       "author_name": "Chiara & Luca",
+       "author_role": "owners",
+       "rating": "0",
+       "layout": "editorial",
+       "show_line": false,
+       "bg_color": "transparent",
+       "text_color": "#ffffff",
+       "quote_font": "heading",
+       "quote_size": 38,
+       "quote_uppercase": false,
+       "author_uppercase": false,
+       "author_color": "rgba(255,255,255,.82)",
+       "border_radius": "0",
+       "avatar": ""
+      },
+      "style": {},
+      "advanced": {},
+      "children": []
+     }
+    ]}
+   ]}
+  ]
+ },
+
+ {
+  "id": "hp-sec-cta",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "none" } },
+  "advanced": {},
+  "children": [
+   { "id": "hp-cta-row", "type": "row", "settings": { "layout": "100", "gap": 0 }, "style": {}, "advanced": {}, "children": [
+    { "id": "hp-cta-col", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     {
+      "id": "hp-cta",
+      "type": "imagehero",
+      "settings": {
+       "eyebrow_text": "Next project",
+       "eyebrow_dot": false,
+       "eyebrow_color": "#b06a4f",
+       "headline_text": "Bar",
+       "accent_text": "Tonda",
+       "headline_tail": "",
+       "accent_italic": true,
+       "stack_lines": false,
+       "subhead": "",
+       "cta1_text": "View project",
+       "cta1_url": "#project",
+       "cta2_text": "",
+       "cta2_url": "#",
+       "meta_text": "",
+       "scroll_hint": "",
+       "bg_image": "",
+       "media_bg": { "type": "none" },
+       "bg_color": "#2a211c",
+       "media_label": "warm interior · background",
+       "text_position": "center",
+       "text_align": "center",
+       "content_width": 600,
+       "aspect_ratio": "21/9",
+       "min_height": 460,
+       "heading_font": "serif",
+       "overlay_color": "#2a211c",
+       "overlay_top": 0.78,
+       "overlay_bottom": 0.9,
+       "overlay_sides": false,
+       "accent": "#b06a4f",
+       "accent_on": "#ffffff",
+       "text_color": "#ffffff",
+       "sub_color": "rgba(255,255,255,.8)",
+       "cta_radius": { "tl": 2, "tr": 2, "br": 2, "bl": 2 }
+      },
+      "style": {},
+      "advanced": {},
+      "children": []
+     }
+    ]}
+   ]}
+  ]
+ }
+]

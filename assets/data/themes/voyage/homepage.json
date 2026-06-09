@@ -191,14 +191,14 @@
            "link": "#dispatches"
           }
          ],
-         "card_width": 320,
-         "card_aspect": "4/5",
-         "gap": 16,
-         "media_bg": "#172338",
+         "card_width": 360,
+         "card_aspect": "3/2",
+         "gap": 22,
+         "media_bg": "#27344c",
          "overlay_color": "rgba(12,19,32,0.55)",
          "title_color": "#eef2f7",
          "subtitle_color": "#ff8c69",
-         "radius": 12,
+         "radius": 8,
          "show_hint": true,
          "hint_text": "← drag →",
          "hint_color": "#6c7a90"
@@ -851,7 +851,7 @@
          "layout": "horizontal",
          "show_name": false,
          "email_placeholder": "you@example.com",
-         "button_text": "Subscribe free",
+         "button_text": "Subscribe",
          "button_icon": false,
          "privacy_text": "",
          "privacy_required": false,

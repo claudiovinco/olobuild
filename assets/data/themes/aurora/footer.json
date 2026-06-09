@@ -1,1 +1,249 @@
-[{"id":"au-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#2a1838"}},"advanced":{},"children":[{"id":"au-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"au-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"au-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Italiana\", Didot, serif;font-size:20px;color:#f3e9ef;font-weight:400;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#e0afca;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Aurora</div><p style=\"font-size:14px;color:#94809a;max-width:260px\">A full-service events studio. Weddings, galas and private celebrations since 2011.</p>","text_color":"#c8b3c6","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"au-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"au-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#f3e9ef;font-family:\"Tenor Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Studio</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#94809a\"><li>What we do</li><li>Process</li><li>Gallery</li><li>Showcase</li></ul>","text_color":"#c8b3c6","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"au-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"au-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#f3e9ef;font-family:\"Tenor Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Occasions</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#94809a\"><li>Weddings</li><li>Galas</li><li>Corporate</li><li>Private</li></ul>","text_color":"#c8b3c6","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"au-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"au-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#f3e9ef;font-family:\"Tenor Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Contact</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#94809a\"><li>hello@aurora.events</li><li>+39 02 8841</li><li>Milan · Como · worldwide</li></ul>","text_color":"#c8b3c6","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"au-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"au-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"au-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid rgba(243,233,239,.14);padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#94809a\"><span>© 2026 Aurora — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#c8b3c6","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "au-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
+  "style": { "bg": { "type": "solid", "color": "#2a1838" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "au-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "au-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-fbrand",
+        "type": "headline",
+        "settings": {
+         "heading": "Aurora",
+         "tag": "div",
+         "alignment": "left",
+         "heading_font_size": "25",
+         "heading_uppercase": false,
+         "heading_color": "#f3e9ef",
+         "decoration": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "au-fbtext",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>A full-service events studio. Weddings, galas and private celebrations since 2011.</p>",
+         "text_color": "#94809a",
+         "font_size": "14",
+         "line_height": "1.7",
+         "text_align": "left",
+         "max_width": "260"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "au-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-fh1",
+        "type": "headline",
+        "settings": { "heading": "Studio", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f3e9ef", "decoration": "none" },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "au-fn1",
+        "type": "nav",
+        "settings": {
+         "show_icons": false,
+         "direction": "vertical",
+         "alignment": "left",
+         "link_color": "#94809a",
+         "link_hover_color": "#e0afca",
+         "items": [
+          { "title": "What we do", "content": "#services", "tag": "" },
+          { "title": "Process", "content": "#process", "tag": "" },
+          { "title": "Gallery", "content": "#gallery", "tag": "" },
+          { "title": "Showcase", "content": "#showcase", "tag": "" }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "au-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-fh2",
+        "type": "headline",
+        "settings": { "heading": "Occasions", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f3e9ef", "decoration": "none" },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "au-fn2",
+        "type": "nav",
+        "settings": {
+         "show_icons": false,
+         "direction": "vertical",
+         "alignment": "left",
+         "link_color": "#94809a",
+         "link_hover_color": "#e0afca",
+         "items": [
+          { "title": "Weddings", "content": "#", "tag": "" },
+          { "title": "Galas", "content": "#", "tag": "" },
+          { "title": "Corporate", "content": "#", "tag": "" },
+          { "title": "Private", "content": "#", "tag": "" }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "au-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-fh3",
+        "type": "headline",
+        "settings": { "heading": "Contact", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f3e9ef", "decoration": "none" },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "au-fn3",
+        "type": "nav",
+        "settings": {
+         "show_icons": false,
+         "direction": "vertical",
+         "alignment": "left",
+         "link_color": "#94809a",
+         "link_hover_color": "#e0afca",
+         "items": [
+          { "title": "hello@aurora.events", "content": "#", "tag": "" },
+          { "title": "+39 02 8841", "content": "#", "tag": "" },
+          { "title": "Milan · Como · worldwide", "content": "#", "tag": "" }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "au-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "au-fcol-div",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-fdiv",
+        "type": "divider",
+        "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(243,233,239,.14)", "alignment": "center", "spacing": 24 },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "au-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "au-fbot-l",
+      "type": "column",
+      "settings": { "width": "1-2" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-fcopy",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>© 2026 Aurora — an OLOtheme demo.</p>",
+         "text_color": "#94809a",
+         "font_size": "12",
+         "text_align": "left"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "au-fbot-r",
+      "type": "column",
+      "settings": { "width": "1-2" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-fbuilt",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>Built with OLObuild</p>",
+         "text_color": "#94809a",
+         "font_size": "12",
+         "text_align": "right"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

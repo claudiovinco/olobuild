@@ -1,1 +1,91 @@
-[{"id":"si-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#141b22"}},"advanced":{},"children":[{"id":"si-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"si-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"si-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"IBM Plex Sans\", -apple-system, sans-serif;font-size:20px;color:#eef2ec;font-weight:600;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#a3e635;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Signal</div><p style=\"font-size:14px;color:#5f6b76;max-width:260px\">A tech & ideas blog. Essays on software, systems and the people who build them.</p>","text_color":"#9aa6b0","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"si-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"si-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#eef2ec;font-family:\"IBM Plex Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Read</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#5f6b76\"><li>Articles</li><li>Topics</li><li>Archive</li></ul>","text_color":"#9aa6b0","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"si-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"si-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#eef2ec;font-family:\"IBM Plex Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Signal</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#5f6b76\"><li>About</li><li>Write for us</li><li>RSS</li></ul>","text_color":"#9aa6b0","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"si-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"si-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#eef2ec;font-family:\"IBM Plex Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Subscribe</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#5f6b76\"><li>Newsletter</li><li>Podcast</li><li>Contact</li></ul>","text_color":"#9aa6b0","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"si-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"si-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"si-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid rgba(238,242,236,.1);padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#5f6b76\"><span>© 2026 Signal — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#9aa6b0","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "sg-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 54, "padding_bottom": 28 },
+  "style": { "bg": { "type": "solid", "color": "#141b22" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sg-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sg-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "sg-fbrand", "type": "headline", "settings": { "heading": "Signal", "tag": "div", "alignment": "left", "heading_font_size": "19", "heading_uppercase": false, "heading_color": "#eef2ec", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "sg-fbtext", "type": "text-block", "settings": { "content": "<p>A tech & ideas blog. Essays on software, systems and the people who build them.</p>", "text_color": "#5f6b76", "font_size": "13.5", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "sg-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "sg-fh1", "type": "headline", "settings": { "heading": "// Read", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": false, "heading_font": "mono", "heading_color": "#eef2ec", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "sg-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "gap": "8", "link_color": "#5f6b76", "link_hover_color": "#a3e635", "items": [ { "title": "Articles", "content": "/signal-article/", "tag": "" }, { "title": "Topics", "content": "#topics", "tag": "" }, { "title": "Archive", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "sg-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "sg-fh2", "type": "headline", "settings": { "heading": "// Signal", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": false, "heading_font": "mono", "heading_color": "#eef2ec", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "sg-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "gap": "8", "link_color": "#5f6b76", "link_hover_color": "#a3e635", "items": [ { "title": "About", "content": "#", "tag": "" }, { "title": "Write for us", "content": "#", "tag": "" }, { "title": "RSS", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "sg-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "sg-fh3", "type": "headline", "settings": { "heading": "// Subscribe", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": false, "heading_font": "mono", "heading_color": "#eef2ec", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "sg-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "gap": "8", "link_color": "#5f6b76", "link_hover_color": "#a3e635", "items": [ { "title": "Newsletter", "content": "#subscribe", "tag": "" }, { "title": "Podcast", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "sg-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "sg-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "sg-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(238,242,236,.1)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "sg-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "sg-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "sg-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Signal — an OLOtheme demo.</p>", "text_color": "#5f6b76", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "sg-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "sg-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#5f6b76", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

@@ -1,0 +1,198 @@
+[
+ {
+  "id": "lgs-se-ph",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_top": 96, "padding_bottom": 40 },
+  "style": { "bg": { "type": "solid", "color": "#16202a" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lgs-ro-ph",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lgs-co-ph",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lgs-section-header-ph",
+        "type": "section-header",
+        "settings": {
+          "eyebrow_show": true,
+          "eyebrow_text": "WHAT WE HANDLE",
+          "eyebrow_color": "#4fb3a6",
+          "eyebrow_dot_color": "#4fb3a6",
+          "eyebrow_separator": "",
+          "headline_lines": [
+            { "text": "Our", "color": "#eaf1f0", "italic": false },
+            { "text": "services", "color": "#4fb3a6", "italic": false }
+          ],
+          "headline_font_family": "sans-serif",
+          "headline_font_size": 60,
+          "headline_line_height": 1.04,
+          "headline_font_weight": "800",
+          "headline_align": "center",
+          "headline_inline": true,
+          "tagline_show": false,
+          "layout": "center",
+          "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "lgs-sub-ph",
+        "type": "text-block",
+        "settings": {
+          "content": "<p>Everything the numbers side of your business needs — done by a named accountant, backed by software that never forgets a deadline.</p>",
+          "text_color": "#697b88",
+          "font_size": "17",
+          "line_height": "1.6",
+          "text_align": "center",
+          "max_width": "540"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lgs-se-grid",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 56, "padding_bottom": 96 },
+  "style": { "bg": { "type": "solid", "color": "#16202a" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lgs-ro-grid",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lgs-co-grid",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lgs-info-cards-grid",
+        "type": "info-cards",
+        "settings": {
+          "container_bg": { "type": "solid", "color": "transparent" },
+          "container_padding": 0,
+          "container_gap": 16,
+          "columns": 3,
+          "items_gap": 16,
+          "card_bg": { "type": "solid", "color": "#1f2d3a" },
+          "card_color": "#697b88",
+          "card_radius": { "tl": 14, "tr": 14, "br": 14, "bl": 14, "linked": true },
+          "card_padding": 28,
+          "show_icon": true,
+          "show_counter": false,
+          "show_arrow": false,
+          "show_footer": false,
+          "show_media": false,
+          "icon_color": "#4fb3a6",
+          "icon_bg_color": "rgba(79,179,166,.14)",
+          "title_color": "#eaf1f0",
+          "title_font_family": "sans-serif",
+          "title_size": 21,
+          "title_weight": "800",
+          "title_italic": false,
+          "description_size": 15,
+          "items": [
+            { "icon": "book", "title": "Bookkeeping", "description": "Bank feeds reconciled automatically and checked by a human. Your books are always current, not a year-end scramble." },
+            { "icon": "shield-check", "title": "Tax & filing", "description": "VAT, self-assessment and corporation tax prepared, optimised and filed on time — every time, guaranteed." },
+            { "icon": "users", "title": "Payroll", "description": "Run payroll in a click — payslips, pensions and HMRC submissions handled, your team paid on the dot." },
+            { "icon": "trending-up", "title": "Advisory", "description": "Quarterly calls to read the numbers together — cashflow, forecasts and the decisions that move the needle." },
+            { "icon": "pound-sterling", "title": "Company setup", "description": "Incorporating? We'll register the company, sort the paperwork and set the foundations up right." },
+            { "icon": "calendar", "title": "Management accounts", "description": "Monthly reports you'll actually read — clear, visual, and built around the metrics you care about." }
+          ],
+          "card_hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lgs-se-cta",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#192531" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lgs-ro-cta",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lgs-co-cta",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lgs-cta-banner",
+        "type": "cta-banner",
+        "settings": {
+          "headline": "One plan covers",
+          "headline_accent": "all of it",
+          "headline_accent_italic": false,
+          "subtitle": "No à la carte surprises — pick a plan and the services for your business type are included.",
+          "cta_text": "See pricing",
+          "cta_url": "#pricing",
+          "cta2_text": "",
+          "cta2_url": "#",
+          "bg": { "type": "gradient", "gradient": "linear-gradient(160deg,rgba(79,179,166,.16),rgba(166,217,106,.05))" },
+          "text_color": "#eaf1f0",
+          "accent_color": "#4fb3a6",
+          "subtitle_color": "#a3b4bf",
+          "cta_bg": "#4fb3a6",
+          "cta_color": "#0d141b",
+          "cta_radius": { "tl": 9, "tr": 9, "br": 9, "bl": 9, "linked": true },
+          "cta_size": 15,
+          "headline_font_family": "sans-serif",
+          "headline_size": 44,
+          "headline_weight": "800",
+          "subtitle_size": 17,
+          "layout": "stack",
+          "vertical_align": "center",
+          "banner_radius": { "tl": 20, "tr": 20, "br": 20, "bl": 20, "linked": true },
+          "banner_padding": 64
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

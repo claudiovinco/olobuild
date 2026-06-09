@@ -131,8 +131,9 @@
         "type": "marquee",
         "settings": {
          "content_type": "text",
-         "text_items": "Branding · Identity · Digital · Art Direction · Motion · Strategy",
+         "text_items": "Branding ✦ Identity ✦ Digital ✦ Art Direction ✦ Motion ✦ Strategy",
          "separator": " ✦ ",
+         "separator_color": "#f4a23b",
          "speed": "28",
          "direction": "left",
          "pause_hover": true,
@@ -203,12 +204,12 @@
          "eyebrow_separator": "",
          "headline_lines": [
           {
-           "text": "Recent",
+           "text": "RECENT",
            "color": "#ece9e3",
            "italic": false
           },
           {
-           "text": "projects",
+           "text": "PROJECTS",
            "color": "#ece9e3",
            "italic": false
           }
@@ -251,19 +252,19 @@
         "type": "workgrid",
         "settings": {
          "columns": 2,
-         "items_gap": 32,
-         "media_aspect": "4/3",
+         "items_gap": 24,
+         "media_aspect": "16/10",
          "media_tall_aspect": "4/5",
          "media_bg": "#1a1a20",
          "media_label_color": "#ece9e3",
          "hover_zoom": true,
          "title_font_family": "heading",
          "title_color": "#ece9e3",
-         "title_size": 24,
+         "title_size": 30,
          "title_weight": "700",
-         "meta_color": "#f4a23b",
-         "meta_size": 12,
-         "show_desc": true,
+         "meta_color": "#6a6862",
+         "meta_size": 13,
+         "show_desc": false,
          "desc_color": "#9b988f",
          "desc_size": 14,
          "mono_font_family": "",
@@ -272,44 +273,44 @@
            "image": "",
            "media_label": "project — full-bleed brand campaign",
            "title": "Helio — solar brand",
-           "meta": "2025 · Branding",
-           "description": "Full-bleed brand campaign and identity system for a solar energy challenger rewriting the category.",
+           "meta": "Branding · Campaign · 2025",
+           "description": "",
            "link_url": "#work",
            "tall": false
           },
           {
            "image": "",
-           "media_label": "project — identity",
+           "media_label": "project",
            "title": "Møya",
-           "meta": "2025 · Identity",
-           "description": "Minimal Scandinavian identity for a contemporary womenswear label. Wordmark, colour and materials.",
-           "link_url": "#work",
-           "tall": true
-          },
-          {
-           "image": "",
-           "media_label": "project — digital app",
-           "title": "Pace fitness",
-           "meta": "2024 · Digital",
-           "description": "Product design and full-stack delivery for a fitness tracking app with 80k users at launch.",
-           "link_url": "#work",
-           "tall": true
-          },
-          {
-           "image": "",
-           "media_label": "project — packaging",
-           "title": "Forma coffee",
-           "meta": "2024 · Packaging",
-           "description": "Structural packaging and print system for a specialty roaster entering the premium grocery market.",
+           "meta": "Identity · 2025",
+           "description": "",
            "link_url": "#work",
            "tall": false
           },
           {
            "image": "",
-           "media_label": "project — art direction",
+           "media_label": "project",
+           "title": "Pace fitness",
+           "meta": "Digital · App · 2024",
+           "description": "",
+           "link_url": "#work",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "project",
+           "title": "Forma coffee",
+           "meta": "Packaging · 2024",
+           "description": "",
+           "link_url": "#work",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "project",
            "title": "Atlas journal",
-           "meta": "2023 · Art Direction",
-           "description": "Editorial art direction and digital edition for an independent travel journal now distributed in 24 countries.",
+           "meta": "Art Direction · 2023",
+           "description": "",
            "link_url": "#work",
            "tall": false
           }
@@ -364,13 +365,13 @@
          "eyebrow_show": false,
          "headline_lines": [
           {
-           "text": "The studio",
-           "color": "#6a6862",
+           "text": "THE STUDIO",
+           "color": "#9b988f",
            "italic": false
           }
          ],
          "headline_font_family": "\"Work Sans\", -apple-system, sans-serif",
-         "headline_font_size": 11,
+         "headline_font_size": 12,
          "headline_font_weight": "600",
          "headline_align": "left",
          "headline_inline": false,
@@ -557,7 +558,7 @@
          "number_size": 13,
          "title_font_family": "heading",
          "title_color": "#ece9e3",
-         "title_size": 48,
+         "title_size": 52,
          "title_weight": "700",
          "show_category": true,
          "category_color": "#9b988f",
@@ -565,7 +566,7 @@
          "show_year": false,
          "year_color": "#ece9e3",
          "year_size": 13,
-         "show_arrow": true,
+         "show_arrow": false,
          "arrow_color": "#f4a23b",
          "mono_font_family": ""
         },
@@ -622,18 +623,18 @@
          "eyebrow_separator": "",
          "headline_lines": [
           {
-           "text": "A few nice",
+           "text": "A FEW NICE",
            "color": "#ece9e3",
            "italic": false
           },
           {
-           "text": "surprises",
+           "text": "SURPRISES",
            "color": "#ece9e3",
            "italic": false
           }
          ],
          "headline_font_family": "\"Syne\", -apple-system, sans-serif",
-         "headline_font_size": 48,
+         "headline_font_size": 56,
          "headline_font_weight": "800",
          "headline_align": "left",
          "tagline_show": false,
@@ -676,7 +677,7 @@
          "label": "Awwwards & FWA",
          "icon_emoji": "",
          "text_color": "#ece9e3",
-         "number_color": "#f4a23b",
+         "number_color": "#ece9e3",
          "number_font_size": "40",
          "number_font_weight": "700",
          "label_color": "#9b988f",
@@ -726,7 +727,7 @@
          "label": "Brands shipped",
          "icon_emoji": "",
          "text_color": "#ece9e3",
-         "number_color": "#f4a23b",
+         "number_color": "#ece9e3",
          "number_font_size": "40",
          "number_font_weight": "700",
          "label_color": "#9b988f",
@@ -776,7 +777,7 @@
          "label": "Years independent",
          "icon_emoji": "",
          "text_color": "#ece9e3",
-         "number_color": "#f4a23b",
+         "number_color": "#ece9e3",
          "number_font_size": "40",
          "number_font_weight": "700",
          "label_color": "#9b988f",
@@ -826,7 +827,7 @@
          "label": "People, no suits",
          "icon_emoji": "",
          "text_color": "#ece9e3",
-         "number_color": "#f4a23b",
+         "number_color": "#ece9e3",
          "number_font_size": "40",
          "number_font_weight": "700",
          "label_color": "#9b988f",
@@ -898,7 +899,7 @@
         "type": "finder",
         "settings": {
          "eyebrow": "Where do we start?",
-         "heading": "What are you making?",
+         "heading": "What are you <em>making?</em>",
          "intro": "",
          "zone_accent": "#f4a23b",
          "zone_on": "#0a0a0c",
@@ -909,6 +910,7 @@
           {
            "option": "A brand",
            "icon": "",
+           "kicker": "We'd run",
            "title": "Brand Identity",
            "text": "Strategy, naming, a full visual system and the guidelines to keep it alive. Everything from the logo to the way you sound.",
            "meta": "6–9 weeks · from €18k",
@@ -918,6 +920,7 @@
           {
            "option": "A website",
            "icon": "",
+           "kicker": "We'd run",
            "title": "Site Design & Build",
            "text": "Art direction, design and a fast, hand-built front end. Marketing sites and product surfaces that feel like the brand.",
            "meta": "8–12 weeks · from €24k",
@@ -927,6 +930,7 @@
           {
            "option": "Motion & film",
            "icon": "",
+           "kicker": "We'd run",
            "title": "Motion & Film",
            "text": "Launch films, social cutdowns and the animated identity that ties it together. Storyboard to final grade.",
            "meta": "4–8 weeks · from €12k",
@@ -936,6 +940,7 @@
           {
            "option": "A campaign",
            "icon": "",
+           "kicker": "We'd run",
            "title": "Campaign",
            "text": "A single big idea, art-directed across every channel — from the hero film to the last story frame. Concept to rollout.",
            "meta": "Scoped per brief · from €30k",
@@ -987,47 +992,46 @@
       "advanced": {},
       "children": [
        {
-        "id": "vl-cta-banner-46",
-        "type": "cta-banner",
+        "id": "vl-cta-46",
+        "type": "glowhero",
         "settings": {
-         "headline": "LET'S",
-         "headline_accent": "MAKE IT MOVE.",
-         "headline_accent_italic": false,
-         "subtitle": "Got something in mind? We read every brief that comes through the door — no warm intro required. Tell us what you're making.",
-         "cta_text": "hello@vela.studio",
-         "cta_url": "#contact",
+         "eyebrow": "Got something in mind?",
+         "eyebrow_dots": false,
+         "lines": [
+          { "text": "Let's", "mode": "" },
+          { "text": "make it", "mode": "" },
+          { "text": "move.", "mode": "accent" }
+         ],
+         "uppercase": true,
+         "subhead": "",
+         "cta1_text": "hello@vela.studio",
+         "cta1_url": "mailto:hello@vela.studio",
          "cta2_text": "",
-         "bg": {
-          "type": "solid",
-          "color": "#0a0a0c"
-         },
+         "cta2_url": "#",
+         "show_scroll": false,
+         "scroll_text": "",
+         "bottom_split": false,
+         "bg_color": "#0a0a0c",
+         "accent": "#f4a23b",
+         "accent2": "#e08e26",
+         "accent_on": "#0a0a0c",
          "text_color": "#ece9e3",
-         "accent_color": "#f4a23b",
-         "subtitle_color": "#9b988f",
-         "cta_bg": "#f4a23b",
-         "cta_color": "#0a0a0c",
-         "cta_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta_size": 14,
-         "headline_font_family": "\"Syne\", -apple-system, sans-serif",
-         "headline_size": 80,
-         "headline_weight": "800",
-         "subtitle_size": 16,
-         "layout": "stack",
-         "vertical_align": "center",
-         "banner_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "banner_padding": 80
+         "sub_color": "#9b988f",
+         "eyebrow_color": "#f4a23b",
+         "glow_color": "rgba(244,162,59,0.2)",
+         "glow_w": 680,
+         "glow_h": 480,
+         "glow_blur": 100,
+         "glow_x": 50,
+         "glow_y": 80,
+         "h_size_min": 44,
+         "h_size_vw": 9,
+         "h_size_max": 140,
+         "h_line_height": 0.9,
+         "stroke_width": 2,
+         "align": "center",
+         "max_width": 1300,
+         "min_height": 60
         },
         "style": {},
         "advanced": {},

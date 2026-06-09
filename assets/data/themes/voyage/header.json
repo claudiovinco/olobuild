@@ -1,1 +1,66 @@
-[{"id":"vo-hse","type":"section","settings":{"style":"default","width":"expand","padding":"none"},"style":{"bg":{"type":"solid","color":"rgba(20,29,46,.85)"}},"advanced":{},"children":[{"id":"vo-hro","type":"row","settings":{"layout":"100","gap":0,"vertical_align":"center"},"style":{},"advanced":{},"children":[{"id":"vo-hco","type":"column","settings":{"width":"1-1","width_medium":"1-1"},"style":{},"advanced":{},"children":[{"id":"vo-hmm","type":"megamenu","settings":{"menu_id":"auto","layout":"horizontal","alignment":"right","font_size":"14","font_weight":"600","text_color":"#6c7a90","sticky":true,"sticky_bg":"rgba(20,29,46,.92)","sticky_shadow":true,"social_icons":false,"search_icon":false,"logo_image":"","logo_width":"130","logo_position":"left","logo_link":"/","logo_sticky":"","mobile_logo":"","mobile_logo_height":"30","mobile_bar_logo":true,"logo_text":"Voyage","logo_dot":true},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "vo-hse",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "none" } },
+  "advanced": {},
+  "children": [
+   { "id": "vo-hro", "type": "row", "settings": { "layout": "100", "gap": 0, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
+    { "id": "vo-hco", "type": "column", "settings": { "width": "1-1", "width_medium": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "vo-hmm", "type": "megamenu", "settings": {
+        "menu_id": "auto",
+        "layout": "left",
+        "font_size": "13.5",
+        "font_weight": "600",
+        "text_color": "#6c7a90",
+        "hover_color": "#eef2f7",
+        "link_hover_color": "#eef2f7",
+        "active_color": "#eef2f7",
+        "item_gap": "24",
+        "sticky": true,
+        "sticky_bg": "rgba(20,29,46,.92)",
+        "sticky_shadow": false,
+        "nav_bg": "rgba(20,29,46,.85)",
+        "bar_width": "classic",
+        "header_mode": "classic",
+        "social_icons": false,
+        "search_icon": false,
+        "logo_image": "",
+        "logo_width": "130",
+        "logo_position": "left",
+        "logo_link": "/",
+        "logo_sticky": "",
+        "mobile_logo": "",
+        "mobile_logo_height": "30",
+        "mobile_bar_logo": true,
+        "logo_text": "Voyage",
+        "logo_text_size": "24",
+        "logo_text_color": "#eef2f7",
+        "logo_dot": true,
+        "button_mode": "none",
+        "btn_bg": "#ff8c69",
+        "btn_color": "#0c1320",
+        "btn_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999 },
+        "btn_hover_bg": "#ffa585",
+        "extra_link_1_label": "Subscribe",
+        "extra_link_1_url": "#subscribe",
+        "extra_link_1_button": true,
+        "extra_links_right": true,
+        "mobile_style": "fullscreen",
+        "mobile_link_font": "heading",
+        "mobile_bg": "#0c1320",
+        "mobile_text_color": "#eef2f7",
+        "mobile_accent_color": "#ff8c69",
+        "mobile_heading_color": "#6c7a90",
+        "mobile_link_size": 38,
+        "mobile_numbers": true,
+        "mobile_footer_text": "A travel journal · since 2017",
+        "mobile_footer_cta_text": "Subscribe →",
+        "mobile_footer_cta_url": "#subscribe"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

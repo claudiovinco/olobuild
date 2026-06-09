@@ -7,8 +7,10 @@
         <img :src="s.icon_image" :style="{ width: s.icon_size + 'px' }" class="mb-inline-block" />
       </div>
 
+      <!-- Eyebrow -->
+      <span v-if="s.eyebrow" class="olo-nl-eyebrow" :style="eyebrowStyle">{{ s.eyebrow }}</span>
       <!-- Title -->
-      <h3 v-if="s.title" :style="titleStyle" class="mb-mb-2 mb-leading-tight">{{ s.title }}</h3>
+      <h3 v-if="s.title" :style="titleStyle" class="olo-nl-title mb-mb-2 mb-leading-tight" v-html="s.title"></h3>
       <p v-if="s.subtitle" :style="subStyle" class="mb-mb-5 mb-leading-relaxed">{{ s.subtitle }}</p>
 
       <!-- Form -->
@@ -53,6 +55,7 @@ const defaults = {
   email_placeholder: 'La tua email', button_text: 'Iscriviti', button_icon: true,
   privacy_text: '', privacy_required: false, content_lock: false,
   max_width: '600', bg_color: '', box_border: '', border_radius: 12, padding: '32',
+  eyebrow: '', eyebrow_color: '', title_accent_color: '',
   title_size: '24', title_weight: '700', title_color: '', subtitle_size: '14', subtitle_color: '',
   input_bg: '#ffffff', input_color: '#1F2937', input_placeholder_color: '', input_border: '#D1D5DB', input_radius: 8, input_height: '44',
   btn_bg: '', btn_color: '#ffffff', btn_radius: 8, btn_font_size: '14', btn_font_weight: '600',
@@ -62,9 +65,18 @@ const defaults = {
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
 // Colore placeholder via CSS variable (il ::placeholder non è inline-style-abile)
-const rootStyle = computed(() => (
-  s.value.input_placeholder_color ? { '--olo-nl-ph': s.value.input_placeholder_color } : {}
-));
+const rootStyle = computed(() => {
+  const st = {};
+  if (s.value.input_placeholder_color) st['--olo-nl-ph'] = s.value.input_placeholder_color;
+  st['--olo-nl-accent'] = s.value.title_accent_color || 'var(--olo-color-primary, #e1474f)';
+  return st;
+});
+
+const eyebrowStyle = computed(() => ({
+  display: 'block', fontSize: '11px', fontWeight: 600, letterSpacing: '.32em',
+  textTransform: 'uppercase', color: s.value.eyebrow_color || 'var(--olo-color-primary, #e1474f)',
+  margin: '0 0 14px',
+}));
 
 const boxStyle = computed(() => ({
   maxWidth: (s.value.max_width || 600) + 'px',
@@ -137,4 +149,6 @@ const lockBadgeStyle = computed(() => ({
 }
 /* Colore placeholder configurabile (var impostata solo se valorizzata) */
 .olo-newsletter input::placeholder { color: var(--olo-nl-ph); opacity: 1; }
+/* Accento <em> nel titolo (corsivo + colore accento) */
+.olo-newsletter .olo-nl-title :deep(em) { font-style: italic; color: var(--olo-nl-accent, var(--olo-color-primary, #e1474f)); }
 </style>

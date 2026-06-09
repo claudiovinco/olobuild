@@ -87,6 +87,18 @@ const headingStyle = computed(() => {
     st.letterSpacing = '0.05em';
   }
 
+  // Famiglia font (default 'inherit' = font titoli del tema)
+  const hfMap = {
+    body: "var(--olo-font-family, -apple-system,'Segoe UI',Roboto,sans-serif)",
+    heading: "var(--olo-font-family-heading, Georgia,'Times New Roman',serif)",
+    serif: "Georgia,'Times New Roman',serif",
+    sans: "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif",
+    mono: "ui-monospace,'SF Mono',Menlo,Consolas,monospace",
+  };
+  if (hfMap[s.value.heading_font]) {
+    st.fontFamily = hfMap[s.value.heading_font];
+  }
+
   // Gradient wins over heading_color — token-first (primario → accento brand)
   if (s.value.gradient_text) {
     const angle = parseInt(s.value.gradient_angle) || 90;

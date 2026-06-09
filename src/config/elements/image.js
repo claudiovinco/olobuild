@@ -16,6 +16,8 @@ export default {
     typography_preset: '',
     preset: 'custom',
     image_url: '',
+    media_bg: { type: 'none' },
+    media_label: '',
     hover_image: '',
     hover_video: '',
     alt_text: '',
@@ -78,6 +80,10 @@ export default {
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'image_url', label: t('Immagine'), type: 'image' },
+    { key: 'media_bg', label: t('Sfondo / media (se senza immagine — ogni tipo)'), type: 'background', showParallax: false,
+      description: t('Usato quando il campo Immagine è vuoto: colore, gradiente, pattern, video o galleria. Vuoto = placeholder a righe.') },
+    { key: 'media_label', label: t('Etichetta placeholder'), type: 'text',
+      description: t('Testo mostrato sul placeholder a righe quando non c\'è né immagine né sfondo.') },
     { key: 'alt_text', label: t('Testo alternativo'), type: 'text', aiGenerate: 'alt' },
     { key: 'caption', label: t('Didascalia'), type: 'text' },
     { key: 'link_url', label: t('URL link'), type: 'link' },

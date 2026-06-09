@@ -1,1 +1,138 @@
-[{"id":"ho-hse","type":"section","settings":{"style":"default","width":"expand","padding":"none"},"style":{"bg":{"type":"solid","color":"rgba(246,236,214,.92)"}},"advanced":{},"children":[{"id":"ho-hro","type":"row","settings":{"layout":"100","gap":0,"vertical_align":"center"},"style":{},"advanced":{},"children":[{"id":"ho-hco","type":"column","settings":{"width":"1-1","width_medium":"1-1"},"style":{},"advanced":{},"children":[{"id":"ho-hmm","type":"megamenu","settings":{"menu_id":"auto","layout":"horizontal","alignment":"right","font_size":"14","font_weight":"600","text_color":"#6b552f","sticky":true,"sticky_bg":"rgba(246,236,214,.95)","sticky_shadow":true,"social_icons":false,"search_icon":false,"logo_image":"","logo_width":"130","logo_position":"left","logo_link":"/","logo_sticky":"","mobile_logo":"","mobile_logo_height":"30","mobile_bar_logo":true,"logo_text":"Honeycomb","logo_dot":true},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "ho-ann-sec",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": {},
+  "advanced": {},
+  "children": [
+   {
+    "id": "ho-ann-row",
+    "type": "row",
+    "settings": { "layout": "100", "gap": 0, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ho-ann-col",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ho-annbar",
+        "type": "announcementbar",
+        "settings": {
+         "text": "Baked fresh from 5am · ",
+         "accent_text": "Sourdough out at 8, croissants at 7:30 · Sells out, come early",
+         "link_url": "",
+         "dismissible": false,
+         "bg_color": "#3a2a12",
+         "text_color": "#f6ecd6",
+         "accent_color": "#e09a18",
+         "font_size": "12",
+         "font_weight": "500",
+         "letter_spacing": "0.06em",
+         "text_transform": "none",
+         "alignment": "center",
+         "tile_padding": { "top": 10, "right": 20, "bottom": 10, "left": 20 }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ho-hse",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "none" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ho-hro",
+    "type": "row",
+    "settings": { "layout": "100", "gap": 0, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ho-hco",
+      "type": "column",
+      "settings": { "width": "1-1", "width_medium": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ho-hmm",
+        "type": "megamenu",
+        "settings": {
+         "menu_id": "auto",
+         "layout": "left",
+         "logo_position": "left",
+         "logo_image": "",
+         "logo_text": "Honeycomb",
+         "logo_dot": true,
+         "logo_text_color": "#3a2a12",
+         "logo_text_size": "25",
+         "logo_link": "/",
+         "logo_width": "130",
+         "font_size": "14",
+         "font_weight": "500",
+         "text_color": "#6b552f",
+         "hover_color": "#c8870f",
+         "text_transform": "none",
+         "item_gap": "26",
+         "nav_height": "74",
+         "nav_bg": "rgba(246,236,214,.9)",
+         "sticky": true,
+         "sticky_bg": "rgba(246,236,214,.95)",
+         "sticky_shadow": false,
+         "header_mode": "classic",
+         "bar_width": "classic",
+         "search_icon": false,
+         "social_in_navbar": false,
+         "social_facebook": "",
+         "social_instagram": "",
+         "social_x": "",
+         "social_linkedin": "",
+         "button_mode": "none",
+         "extra_link_1_label": "Pre-order",
+         "extra_link_1_url": "#",
+         "extra_link_1_button": true,
+         "extra_links_right": true,
+         "btn_bg": "#e09a18",
+         "btn_color": "#ffffff",
+         "btn_hover_bg": "#c8870f",
+         "btn_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999 },
+         "mobile_bar_logo": true,
+         "mobile_logo_height": "30",
+         "mobile_style": "fullscreen",
+         "mobile_link_font": "heading",
+         "mobile_bg": "#3a2a12",
+         "mobile_text_color": "#f6ecd6",
+         "mobile_accent_color": "#e09a18",
+         "mobile_heading_color": "#f6ecd6",
+         "mobile_link_size": 34,
+         "mobile_numbers": true,
+         "mobile_footer_text": "14 Mill Street · open from 7am",
+         "mobile_footer_cta_text": "Pre-order",
+         "mobile_footer_cta_url": "#"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

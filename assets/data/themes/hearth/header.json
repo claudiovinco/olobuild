@@ -1,1 +1,62 @@
-[{"id":"he-hse","type":"section","settings":{"style":"default","width":"expand","padding":"none"},"style":{"bg":{"type":"solid","color":"#faf5ec"}},"advanced":{},"children":[{"id":"he-hro","type":"row","settings":{"layout":"100","gap":0,"vertical_align":"center"},"style":{},"advanced":{},"children":[{"id":"he-hco","type":"column","settings":{"width":"1-1","width_medium":"1-1"},"style":{},"advanced":{},"children":[{"id":"he-hmm","type":"megamenu","settings":{"menu_id":"auto","layout":"horizontal","alignment":"right","font_size":"14","font_weight":"600","text_color":"#6a5f53","sticky":true,"sticky_bg":"rgba(250,245,236,.92)","sticky_shadow":true,"social_icons":false,"search_icon":false,"logo_image":"","logo_width":"138","logo_position":"left","logo_link":"/","logo_sticky":"","mobile_logo":"","mobile_logo_height":"30","mobile_bar_logo":true,"logo_text":"Hearth","logo_dot":true},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "he-hse",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "none" } },
+  "advanced": {},
+  "children": [
+   { "id": "he-hro", "type": "row", "settings": { "layout": "100", "gap": 0, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
+    { "id": "he-hco", "type": "column", "settings": { "width": "1-1", "width_medium": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "he-hmm", "type": "megamenu", "settings": {
+        "menu_id": "auto",
+        "layout": "left",
+        "header_mode": "overlay",
+        "font_size": "13",
+        "font_weight": "500",
+        "text_transform": "uppercase",
+        "letter_spacing": "0.04",
+        "text_color": "rgba(255,255,255,.82)",
+        "hover_color": "#ffffff",
+        "item_gap": "28",
+        "bar_width": "classic",
+        "nav_height": "88",
+        "sticky": true,
+        "sticky_bg": "rgba(250,245,236,.94)",
+        "sticky_shadow": true,
+        "sticky_text_color": "#6a5f53",
+        "social_icons": false,
+        "search_icon": false,
+        "logo_image": "",
+        "logo_width": "130",
+        "logo_position": "left",
+        "logo_link": "/",
+        "logo_text": "Hearth",
+        "logo_text_size": "25",
+        "logo_text_color": "#ffffff",
+        "logo_dot": true,
+        "button_mode": "none",
+        "extra_link_1_label": "Start a project",
+        "extra_link_1_url": "#contact",
+        "extra_link_1_button": true,
+        "extra_links_right": true,
+        "btn_bg": "#b06a4f",
+        "btn_color": "#ffffff",
+        "btn_radius": { "tl": 2, "tr": 2, "br": 2, "bl": 2 },
+        "btn_hover_bg": "#97593f",
+        "mobile_style": "fullscreen",
+        "mobile_link_font": "heading",
+        "mobile_bg": "#2a211c",
+        "mobile_text_color": "#ece3d3",
+        "mobile_accent_color": "#b06a4f",
+        "mobile_heading_color": "#9a8e7e",
+        "mobile_link_size": 32,
+        "mobile_footer_text": "Interior design studio · Milan",
+        "mobile_footer_cta_text": "Start a project",
+        "mobile_footer_cta_url": "#contact"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

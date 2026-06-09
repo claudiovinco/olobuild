@@ -1,1 +1,91 @@
-[{"id":"br-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#251a12"}},"advanced":{},"children":[{"id":"br-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"br-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"br-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Familjen Grotesk\", -apple-system, sans-serif;font-size:20px;color:#ead9c2;font-weight:700;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#c98a4b;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Brewline</div><p style=\"font-size:14px;color:#8f7a63;max-width:260px\">Specialty coffee, roasted to order in Trieste and shipped within 24 hours.</p>","text_color":"#cbb89f","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"br-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"br-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#ead9c2;font-family:\"Familjen Grotesk\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Shop</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8f7a63\"><li>All coffee</li><li>Espresso</li><li>Decaf</li><li>Equipment</li></ul>","text_color":"#cbb89f","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"br-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"br-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#ead9c2;font-family:\"Familjen Grotesk\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Learn</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8f7a63\"><li>Brew guides</li><li>Our roastery</li><li>Sourcing</li><li>Journal</li></ul>","text_color":"#cbb89f","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"br-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"br-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#ead9c2;font-family:\"Familjen Grotesk\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Help</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8f7a63\"><li>Subscriptions</li><li>Shipping & returns</li><li>Wholesale</li><li>Contact</li></ul>","text_color":"#cbb89f","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"br-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"br-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"br-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid rgba(234,217,194,.12);padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#8f7a63\"><span>© 2026 Brewline — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#cbb89f","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "br-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
+  "style": { "bg": { "type": "solid", "color": "#251a12" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "br-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "br-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "br-fbrand", "type": "headline", "settings": { "heading": "Brewline", "tag": "div", "alignment": "left", "heading_font_size": "21", "heading_uppercase": false, "heading_color": "#ead9c2", "heading_font": "body", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "br-fbtext", "type": "text-block", "settings": { "content": "<p>Specialty coffee, roasted to order in Trieste and shipped within 24 hours.</p>", "text_color": "#8f7a63", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "br-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "br-fh1", "type": "headline", "settings": { "heading": "Shop", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ead9c2", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "br-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#8f7a63", "link_hover_color": "#c98a4b", "items": [ { "title": "All coffee", "content": "#shop", "tag": "" }, { "title": "Espresso", "content": "#", "tag": "" }, { "title": "Decaf", "content": "#", "tag": "" }, { "title": "Equipment", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "br-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "br-fh2", "type": "headline", "settings": { "heading": "Learn", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ead9c2", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "br-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#8f7a63", "link_hover_color": "#c98a4b", "items": [ { "title": "Brew guides", "content": "#brew", "tag": "" }, { "title": "Our roastery", "content": "#story", "tag": "" }, { "title": "Sourcing", "content": "#", "tag": "" }, { "title": "Journal", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "br-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "br-fh3", "type": "headline", "settings": { "heading": "Help", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ead9c2", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "br-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#8f7a63", "link_hover_color": "#c98a4b", "items": [ { "title": "Subscriptions", "content": "#subscribe", "tag": "" }, { "title": "Shipping & returns", "content": "#", "tag": "" }, { "title": "Wholesale", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "br-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "br-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "br-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(234,217,194,.12)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "br-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "br-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "br-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Brewline — an OLOtheme demo.</p>", "text_color": "#8f7a63", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "br-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "br-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#8f7a63", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

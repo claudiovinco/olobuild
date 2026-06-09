@@ -33,6 +33,7 @@ export default {
     meta_text: '',
     scroll_hint: '',
     bg_image: '',
+    media_bg: { type: 'none' },
     bg_color: '#0c0c0c',
     media_label: 'campaign — figure in black tailoring, gold light, full bleed',
     text_position: 'left',
@@ -87,6 +88,7 @@ export default {
 
     { type: 'separator', label: t('Sfondo / media') },
     { key: 'bg_image', label: t('Immagine di sfondo (vuoto = placeholder)'), type: 'image' },
+    { key: 'media_bg', label: t('Sfondo / media (ogni tipo)'), type: 'background', showParallax: false },
     { key: 'media_label', label: t('Etichetta placeholder'), type: 'text' },
   ],
 

@@ -4,8 +4,8 @@
   "type": "section",
   "settings": {
    "style": "default",
-   "width": "large",
-   "padding": "large"
+   "width": "fullbleed",
+   "padding": "remove-vertical"
   },
   "style": {
    "bg": {
@@ -18,7 +18,9 @@
    {
     "id": "ve-ro-3",
     "type": "row",
-    "settings": {},
+    "settings": {
+     "gap": 0
+    },
     "style": {},
     "advanced": {},
     "children": [
@@ -32,168 +34,50 @@
       "advanced": {},
       "children": [
        {
-        "id": "ve-hero-split-1",
-        "type": "hero-split",
+        "id": "ve-imagehero-1",
+        "type": "imagehero",
         "settings": {
          "eyebrow_text": "Hair & beauty salon",
-         "eyebrow_dot_color": "#cf8e6f",
+         "eyebrow_dot": false,
          "eyebrow_color": "#cf8e6f",
-         "headline_lines": [
-          {
-           "text": "Leave feeling",
-           "color": "#ffffff",
-           "italic": false
-          },
-          {
-           "text": "like you.",
-           "color": "#cf8e6f",
-           "italic": true
-          }
-         ],
-         "headline_font_family": "serif",
-         "headline_font_size": 80,
-         "headline_line_height": 1.08,
-         "headline_font_weight": "400",
-         "headline_align": "left",
+         "headline_text": "Leave feeling",
+         "accent_text": "like you.",
+         "headline_tail": "",
+         "accent_italic": true,
+         "stack_lines": true,
          "subhead": "Colour, cuts and care by senior stylists who actually listen — in a warm, unhurried space where you're never rushed out the door.",
-         "subhead_color": "#f2e8e6",
-         "subhead_size": 17,
-         "subhead_italic": false,
-         "subhead_max_width": 400,
          "cta1_text": "Book your chair",
          "cta1_url": "#book",
-         "cta1_bg": "#cf8e6f",
-         "cta1_color": "#170f14",
-         "cta1_size": 12,
-         "cta1_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
          "cta2_text": "View services",
-         "cta2_url": "#services",
-         "cta2_bg": "transparent",
-         "cta2_color": "#f2e8e6",
-         "cta2_border": "rgba(207,142,111,.42)",
-         "cta2_size": 12,
-         "cta2_radius": {
+         "cta2_url": "/services/",
+         "meta_text": "",
+         "scroll_hint": "",
+         "bg_image": "",
+         "media_bg": {
+          "type": "none"
+         },
+         "bg_color": "#352630",
+         "media_label": "salon interior, warm light, mirrors",
+         "text_position": "left",
+         "text_align": "left",
+         "content_width": 560,
+         "aspect_ratio": "21/10",
+         "min_height": 540,
+         "heading_font": "serif",
+         "overlay_color": "#170f14",
+         "overlay_top": 0.2,
+         "overlay_bottom": 0.65,
+         "overlay_sides": true,
+         "accent": "#cf8e6f",
+         "accent_on": "#170f14",
+         "text_color": "#ffffff",
+         "sub_color": "#f2e8e6",
+         "cta_radius": {
           "tl": 999,
           "tr": 999,
           "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta2_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "stats": [],
-         "showcase_enabled": false,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#352630"
-         },
-         "showcase_padding": 32,
-         "showcase_radius": {
-          "tl": 20,
-          "tr": 20,
-          "br": 20,
-          "bl": 20,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 20,
-          "tr": 20,
-          "br": 20,
-          "bl": 20,
-          "linked": true
-         },
-         "showcase_badge_text": "VÉLOUR SALON",
-         "showcase_badge_dot": "#cf8e6f",
-         "showcase_badge_bg": "#170f14",
-         "showcase_badge_color": "#f2e8e6",
-         "showcase_items": [
-          {
-           "number": "Senior stylists",
-           "text": "4",
-           "italic": false,
-           "text_color": "#f2e8e6",
-           "bg": {
-            "type": "solid",
-            "color": "#2a1d26"
-           }
-          },
-          {
-           "number": "Years open",
-           "text": "9",
-           "italic": false,
-           "text_color": "#cf8e6f",
-           "bg": {
-            "type": "solid",
-            "color": "#2a1d26"
-           }
-          },
-          {
-           "number": "Open",
-           "text": "Tue – Sat",
-           "italic": false,
-           "text_color": "#f2e8e6",
-           "bg": {
-            "type": "solid",
-            "color": "#2a1d26"
-           }
-          },
-          {
-           "number": "New client welcome",
-           "text": "Consultation included",
-           "italic": false,
-           "text_color": "#f2e8e6",
-           "bg": {
-            "type": "solid",
-            "color": "#2a1d26"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 12,
-          "tr": 12,
-          "br": 12,
-          "bl": 12,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 12,
-          "tr": 12,
-          "br": 12,
-          "bl": 12,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "EST. 2017",
-         "showcase_caption_right": "BY APPOINTMENT",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1.25fr .75fr",
-         "gap": 52,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         },
-         "subhead_align": "left"
+          "bl": 999
+         }
         },
         "style": {},
         "advanced": {},
@@ -433,6 +317,51 @@
       ]
      }
     ]
+   },
+   {
+    "id": "ve-ro-menulink",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ve-co-menulink",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ve-btn-fulllist",
+        "type": "button",
+        "settings": {
+         "text": "Full service list",
+         "url": "/services/",
+         "target": "_self",
+         "alignment": "center",
+         "full_width": false,
+         "bg_color": "transparent",
+         "hover_bg_color": "transparent",
+         "text_color": "#f2e8e6",
+         "hover_text_color": "#cf8e6f",
+         "font_size": "12",
+         "font_weight": "600",
+         "letter_spacing": "1.9",
+         "text_transform": "uppercase",
+         "shadow": "none",
+         "hover_effect": "none",
+         "border_radius": "0",
+         "tile_padding": { "top": 10, "right": 2, "bottom": 6, "left": 2 },
+         "border": { "top": 0, "right": 0, "bottom": 1, "left": 0, "linked": false, "style": "solid", "color": "#cf8e6f" }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
    }
   ]
  },
@@ -538,8 +467,14 @@
          "bio": "",
          "link_url": "",
          "link_text": "",
-         "photo_size": "120",
-         "photo_shape": "circle",
+         "photo_size": "190",
+         "photo_shape": "rounded",
+         "photo_radius": {
+          "tl": 120,
+          "tr": 120,
+          "br": 12,
+          "bl": 12
+         },
          "photo_border_width": "0",
          "photo_shadow": "none",
          "photo_gap": "16",
@@ -584,8 +519,14 @@
          "bio": "",
          "link_url": "",
          "link_text": "",
-         "photo_size": "120",
-         "photo_shape": "circle",
+         "photo_size": "190",
+         "photo_shape": "rounded",
+         "photo_radius": {
+          "tl": 120,
+          "tr": 120,
+          "br": 12,
+          "bl": 12
+         },
          "photo_border_width": "0",
          "photo_shadow": "none",
          "photo_gap": "16",
@@ -630,8 +571,14 @@
          "bio": "",
          "link_url": "",
          "link_text": "",
-         "photo_size": "120",
-         "photo_shape": "circle",
+         "photo_size": "190",
+         "photo_shape": "rounded",
+         "photo_radius": {
+          "tl": 120,
+          "tr": 120,
+          "br": 12,
+          "bl": 12
+         },
          "photo_border_width": "0",
          "photo_shadow": "none",
          "photo_gap": "16",
@@ -676,8 +623,14 @@
          "bio": "",
          "link_url": "",
          "link_text": "",
-         "photo_size": "120",
-         "photo_shape": "circle",
+         "photo_size": "190",
+         "photo_shape": "rounded",
+         "photo_radius": {
+          "tl": 120,
+          "tr": 120,
+          "br": 12,
+          "bl": 12
+         },
          "photo_border_width": "0",
          "photo_shadow": "none",
          "photo_gap": "16",
@@ -920,14 +873,21 @@
         "id": "ve-testimonial-34",
         "type": "testimonial",
         "settings": {
-         "quote": "\"Noor is the first colourist who actually got what I meant by 'natural'. I won't go anywhere else now.\"",
+         "quote": "Noor is the first colourist who actually got what I meant by <em>'natural'</em>. I won't go anywhere else now.",
          "author_name": "Hannah V.",
          "author_role": "client since 2022",
          "rating": "0",
-         "layout": "single",
+         "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#f2e8e6",
+         "star_color": "#cf8e6f",
+         "author_color": "#cf8e6f",
+         "quote_accent_color": "#cf8e6f",
+         "quote_font": "heading",
+         "quote_size": 40,
+         "quote_uppercase": false,
+         "author_uppercase": true,
          "border_radius": "0",
          "avatar": ""
         },

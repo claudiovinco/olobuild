@@ -11,9 +11,11 @@
         <span
           v-for="(line, i) in headlines"
           :key="i"
-          :style="{ display: 'block', color: line.color || '#0f172a', fontStyle: line.italic ? 'italic' : 'normal' }"
+          :style="{ display: s.headline_inline ? 'inline' : 'block', color: line.color || '#0f172a', fontStyle: line.italic ? 'italic' : 'normal' }"
         >{{ line.text }}</span>
       </h2>
+
+      <p v-if="showSubtitle" class="olo-sechead__sub" :style="subtitleStyle">{{ s.tagline_text }}</p>
     </div>
 
     <div v-if="showTagline" class="olo-sechead__right" style="text-align:right">
@@ -43,6 +45,7 @@ const defaults = {
   headline_line_height: 1.0,
   headline_font_weight: '700',
   headline_align: 'left',
+  headline_inline: false,
   tagline_show: true,
   tagline_text: 'Try before you trust',
   tagline_text_italic: true,
@@ -67,7 +70,8 @@ const hfam  = computed(() => fmap[s.value.headline_font_family] || SERIF);
 
 const headlines = computed(() => (Array.isArray(s.value.headline_lines) ? s.value.headline_lines : []).filter(h => h && h.text));
 const isBullet  = computed(() => (s.value.eyebrow_separator || '').trim() === '·');
-const showTagline = computed(() => s.value.tagline_show && s.value.layout === 'split');
+const showTagline  = computed(() => s.value.tagline_show && s.value.layout === 'split');
+const showSubtitle = computed(() => s.value.tagline_show && s.value.layout !== 'split' && !!s.value.tagline_text);
 
 const gridStyle = computed(() => {
   const base = {
@@ -112,6 +116,22 @@ const captionStyle = computed(() => ({
   letterSpacing: '0.1em', textTransform: 'uppercase',
   color: s.value.tagline_caption_color || 'var(--olo-color-text-faint, #9ca3af)',
 }));
+
+const subtitleStyle = computed(() => {
+  const centered = s.value.layout === 'center';
+  return {
+    fontFamily: SANS,
+    fontSize: (s.value.tagline_text_size || 18) + 'px',
+    lineHeight: 1.6,
+    color: s.value.tagline_text_color || '#475569',
+    fontStyle: s.value.tagline_text_italic ? 'italic' : 'normal',
+    maxWidth: '62ch',
+    marginLeft: centered ? 'auto' : null,
+    marginRight: centered ? 'auto' : null,
+    marginTop: Math.max(8, Math.min(80, s.value.gap || 18)) + 'px',
+    textAlign: centered ? 'center' : (s.value.headline_align || 'left'),
+  };
+});
 </script>
 
 <style scoped>

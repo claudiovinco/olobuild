@@ -1,6 +1,6 @@
 [
  {
-  "id": "kl-se-4",
+  "id": "kl-se-hero",
   "type": "section",
   "settings": {
    "style": "default",
@@ -16,14 +16,14 @@
   "advanced": {},
   "children": [
    {
-    "id": "kl-ro-3",
+    "id": "kl-ro-hero",
     "type": "row",
     "settings": {},
     "style": {},
     "advanced": {},
     "children": [
      {
-      "id": "kl-co-2",
+      "id": "kl-co-hero",
       "type": "column",
       "settings": {
        "width": "1-1"
@@ -32,172 +32,59 @@
       "advanced": {},
       "children": [
        {
-        "id": "kl-hero-split-1",
-        "type": "hero-split",
+        "id": "kl-introsplit-hero",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "Ceramic artist · studio of Mara Sole",
-         "eyebrow_dot_color": "#bd6a40",
+         "eyebrow": "Ceramic artist · studio of Mara Sole",
          "eyebrow_color": "#bd6a40",
-         "headline_lines": [
-          {
-           "text": "Made by",
-           "color": "#2a211c",
-           "italic": false
-          },
-          {
-           "text": "hand, kept",
-           "color": "#bd6a40",
-           "italic": true
-          },
-          {
-           "text": "for years.",
-           "color": "#2a211c",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "serif",
-         "headline_font_size": 72,
-         "headline_line_height": 1.04,
-         "headline_font_weight": "500",
-         "headline_align": "left",
-         "subhead": "Wheel-thrown, wood-fired vessels — each one a little different, none of them in a hurry. Functional pieces for slow mornings and long tables.",
-         "subhead_color": "#5e5043",
-         "subhead_size": 18,
-         "subhead_italic": false,
-         "subhead_max_width": 420,
-         "cta1_text": "Shop the collection",
-         "cta1_url": "#collection",
-         "cta1_bg": "#bd6a40",
-         "cta1_color": "#ffffff",
-         "cta1_size": 14,
-         "cta1_radius": {
+         "headline": "Made by hand,",
+         "accent": "kept",
+         "headline_tail": "for years.",
+         "accent_italic": true,
+         "uppercase": false,
+         "headline_color": "#2a211c",
+         "accent_color": "#bd6a40",
+         "headline_weight": "500",
+         "headline_size": "88",
+         "lead": "Wheel-thrown, wood-fired vessels — each one a little different, none of them in a hurry. Functional pieces for slow mornings and long tables.",
+         "lead_color": "#5e5043",
+         "signature": "",
+         "stats": [],
+         "cta_text": "Shop the collection",
+         "cta_url": "/the-collection/",
+         "cta_style": "button",
+         "cta_bg": "#bd6a40",
+         "cta_color": "#ffffff",
+         "cta_radius": {
           "tl": 999,
           "tr": 999,
           "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
+          "bl": 999
          },
          "cta2_text": "Commission a piece",
          "cta2_url": "#commission",
-         "cta2_bg": "transparent",
-         "cta2_color": "#2a211c",
-         "cta2_border": "#c7b29a",
-         "cta2_size": 14,
-         "cta2_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
+         "cta2_style": "outline",
+         "media_image": "",
+         "media_bg": {
+          "type": "none"
          },
-         "cta2_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
+         "media_label": "hero — a single glazed vessel, raking light",
+         "media_light": true,
+         "media_aspect": "4/5",
+         "media_radius": 12,
+         "media_radius_top": 180,
+         "media_blob": false,
+         "badge_number": "1 of 1",
+         "badge_label": "every piece",
+         "badge_bg": "#f7f0e7",
+         "badge_color": "#2a211c",
+         "badge_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14
          },
-         "stats": [],
-         "showcase_enabled": false,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#f7f0e7"
-         },
-         "showcase_padding": 28,
-         "showcase_radius": {
-          "tl": 180,
-          "tr": 180,
-          "br": 180,
-          "bl": 180,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 180,
-          "tr": 180,
-          "br": 180,
-          "bl": 180,
-          "linked": true
-         },
-         "showcase_badge_text": "1 OF 1 · EVERY PIECE",
-         "showcase_badge_dot": "#bd6a40",
-         "showcase_badge_bg": "#e5d8c9",
-         "showcase_badge_color": "#2a211c",
-         "showcase_items": [
-          {
-           "number": "Material",
-           "text": "Stoneware",
-           "italic": false,
-           "text_color": "#2a211c",
-           "bg": {
-            "type": "solid",
-            "color": "#e5d8c9"
-           }
-          },
-          {
-           "number": "Firing",
-           "text": "Wood-fired",
-           "italic": false,
-           "text_color": "#2a211c",
-           "bg": {
-            "type": "solid",
-            "color": "#e5d8c9"
-           }
-          },
-          {
-           "number": "Edition",
-           "text": "One of one",
-           "italic": false,
-           "text_color": "#bd6a40",
-           "bg": {
-            "type": "solid",
-            "color": "#e5d8c9"
-           }
-          },
-          {
-           "number": "Glaze",
-           "text": "Mixed in-house",
-           "italic": false,
-           "text_color": "#2a211c",
-           "bg": {
-            "type": "solid",
-            "color": "#e5d8c9"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "KILN STUDIO",
-         "showcase_caption_right": "MARA SOLE",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1.05fr .95fr",
-         "gap": 48,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_position": "right"
         },
         "style": {},
         "advanced": {},
@@ -210,7 +97,7 @@
   ]
  },
  {
-  "id": "kl-se-8",
+  "id": "kl-se-studio",
   "type": "section",
   "settings": {
    "style": "default",
@@ -226,14 +113,14 @@
   "advanced": {},
   "children": [
    {
-    "id": "kl-ro-7",
+    "id": "kl-ro-studio",
     "type": "row",
     "settings": {},
     "style": {},
     "advanced": {},
     "children": [
      {
-      "id": "kl-co-6",
+      "id": "kl-co-studio",
       "type": "column",
       "settings": {
        "width": "1-1"
@@ -242,7 +129,7 @@
       "advanced": {},
       "children": [
        {
-        "id": "kl-hotspots-5",
+        "id": "kl-hotspots-studio",
         "type": "hotspots",
         "settings": {
          "eyebrow": "Have a look around",
@@ -278,7 +165,7 @@
          "panel_bg": "#e5d8c9",
          "card_bg": "#efe5da",
          "card_border": "#dac9b6",
-         "align": "left"
+         "align": "center"
         },
         "style": {},
         "advanced": {},
@@ -291,7 +178,7 @@
   ]
  },
  {
-  "id": "kl-se-15",
+  "id": "kl-se-pieces",
   "type": "section",
   "settings": {
    "style": "default",
@@ -307,14 +194,14 @@
   "advanced": {},
   "children": [
    {
-    "id": "kl-ro-11",
+    "id": "kl-ro-pieces-head",
     "type": "row",
     "settings": {},
     "style": {},
     "advanced": {},
     "children": [
      {
-      "id": "kl-co-10",
+      "id": "kl-co-pieces-head",
       "type": "column",
       "settings": {
        "width": "1-1"
@@ -323,7 +210,7 @@
       "advanced": {},
       "children": [
        {
-        "id": "kl-section-header-9",
+        "id": "kl-section-header-pieces",
         "type": "section-header",
         "settings": {
          "eyebrow_show": true,
@@ -344,10 +231,10 @@
           }
          ],
          "headline_font_family": "serif",
-         "headline_font_size": 46,
+         "headline_font_size": 52,
+         "headline_line_height": 1.1,
          "headline_font_weight": "500",
          "headline_align": "center",
-         "headline_inline": true,
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
@@ -365,14 +252,14 @@
     ]
    },
    {
-    "id": "kl-ro-14",
+    "id": "kl-ro-pieces-grid",
     "type": "row",
     "settings": {},
     "style": {},
     "advanced": {},
     "children": [
      {
-      "id": "kl-co-13",
+      "id": "kl-co-pieces-grid",
       "type": "column",
       "settings": {
        "width": "1-1"
@@ -381,188 +268,127 @@
       "advanced": {},
       "children": [
        {
-        "id": "kl-product-cards-12",
-        "type": "product-cards",
+        "id": "kl-productgrid-pieces",
+        "type": "productgrid",
         "settings": {
          "columns": 3,
          "gap": 24,
-         "card_bg": {
-          "type": "solid",
-          "color": "#f7f0e7"
-         },
-         "card_color": "#928271",
-         "card_radius": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "card_radius_hover": {
-          "tl": 10,
-          "tr": 10,
-          "br": 10,
-          "bl": 10,
-          "linked": true
-         },
-         "card_radius_hover_duration": 300,
-         "card_shadow": "sm",
-         "card_padding": 20,
-         "top_aspect_ratio": "1/1",
-         "top_padding": 20,
-         "letter_font_family": "serif",
-         "letter_size": 120,
-         "letter_italic": true,
-         "letter_align": "center",
-         "show_screenshot_label": true,
-         "screenshot_label_color": "#928271",
-         "brand_size": 12,
-         "brand_letter_spacing": 0.06,
-         "title_font_family": "serif",
+         "media_aspect": "1/1",
+         "media_bg": "#e5d8c9",
+         "stripe_dark": false,
+         "hover_zoom": true,
+         "card_bg": "",
+         "card_border": "",
+         "card_radius": 10,
+         "card_padding": 0,
+         "tag_bg": "",
+         "tag_color": "",
+         "quick_add_show": false,
+         "category_color": "#928271",
+         "title_font": "serif",
          "title_size": 22,
-         "title_weight": "500",
-         "description_size": 13,
-         "cta_size": 12,
-         "cta_arrow": true,
-         "card_hover_effect": "lift",
+         "title_color": "#2a211c",
+         "price_color": "#bd6a40",
+         "footer_text": "See the whole collection",
+         "footer_url": "/the-collection/",
+         "footer_color": "#2a211c",
+         "show_filters": false,
          "items": [
           {
-           "letter": "A",
-           "letter_color": "#bd6a40",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#efe5da",
-            "gradient_to": "#e5d8c9",
-            "gradient_angle": 180
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "Stoneware · 1/1",
-           "brand_label": "ASH BOWL",
-           "brand_color": "#bd6a40",
-           "show_badge": false,
-           "badge_text": "",
-           "badge_bg": "#2a211c",
-           "badge_color": "#ffffff",
+           "media_label": "ash-glaze bowl",
+           "tag": "",
+           "category": "Stoneware · 1/1",
            "title": "Ash Bowl",
-           "title_accent": "",
-           "title_accent_italic": false,
-           "description": "Wheel-thrown stoneware with natural ash glaze from the firing.",
-           "cta_text": "€90",
-           "cta_url": "#"
+           "notes": "",
+           "roast": 0,
+           "price": "€90",
+           "link": "/the-collection/",
+           "quick_add": "",
+           "filter_tags": ""
           },
           {
-           "letter": "C",
-           "letter_color": "#9a7b5e",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#efe5da",
-            "gradient_to": "#e5d8c9",
-            "gradient_angle": 180
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "Porcelain · 1/1",
-           "brand_label": "CELADON VASE",
-           "brand_color": "#9a7b5e",
-           "show_badge": false,
-           "badge_text": "",
-           "badge_bg": "#2a211c",
-           "badge_color": "#ffffff",
+           "media_label": "tall vase, celadon",
+           "tag": "",
+           "category": "Porcelain · 1/1",
            "title": "Celadon Vase",
-           "title_accent": "",
-           "title_accent_italic": false,
-           "description": "Tall form in translucent porcelain with pale jade celadon glaze.",
-           "cta_text": "€180",
-           "cta_url": "#"
+           "notes": "",
+           "roast": 0,
+           "price": "€180",
+           "link": "/the-collection/",
+           "quick_add": "",
+           "filter_tags": ""
           },
           {
-           "letter": "T",
-           "letter_color": "#473a31",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#efe5da",
-            "gradient_to": "#e5d8c9",
-            "gradient_angle": 180
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "Wood-fired",
-           "brand_label": "TEA CUPS, PAIR",
-           "brand_color": "#473a31",
-           "show_badge": false,
-           "badge_text": "",
-           "badge_bg": "#2a211c",
-           "badge_color": "#ffffff",
+           "media_label": "cups set",
+           "tag": "",
+           "category": "Wood-fired",
            "title": "Tea Cups, pair",
-           "title_accent": "",
-           "title_accent_italic": false,
-           "description": "Two cups that belong together, different enough to tell apart.",
-           "cta_text": "€64",
-           "cta_url": "#"
+           "notes": "",
+           "roast": 0,
+           "price": "€64",
+           "link": "/the-collection/",
+           "quick_add": "",
+           "filter_tags": ""
           },
           {
-           "letter": "S",
-           "letter_color": "#9a7b5e",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#efe5da",
-            "gradient_to": "#e5d8c9",
-            "gradient_angle": 180
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "Stoneware · 1/1",
-           "brand_label": "SERVING PLATE",
-           "brand_color": "#9a7b5e",
-           "show_badge": true,
-           "badge_text": "SOLD",
-           "badge_bg": "#9a7b5e",
-           "badge_color": "#ffffff",
+           "media_label": "serving plate",
+           "tag": "Sold",
+           "category": "Stoneware · 1/1",
            "title": "Serving Plate",
-           "title_accent": "",
-           "title_accent_italic": false,
-           "description": "Wide flat form for slow meals. This one found its home already.",
-           "cta_text": "Sold",
-           "cta_url": "#"
+           "notes": "",
+           "roast": 0,
+           "price": "Sold",
+           "link": "/the-collection/",
+           "quick_add": "",
+           "filter_tags": ""
           },
           {
-           "letter": "W",
-           "letter_color": "#bd6a40",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#efe5da",
-            "gradient_to": "#e5d8c9",
-            "gradient_angle": 180
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "Wood-fired · 1/1",
-           "brand_label": "WATER CARAFE",
-           "brand_color": "#bd6a40",
-           "show_badge": false,
-           "badge_text": "",
-           "badge_bg": "#2a211c",
-           "badge_color": "#ffffff",
+           "media_label": "carafe",
+           "tag": "",
+           "category": "Wood-fired · 1/1",
            "title": "Water Carafe",
-           "title_accent": "",
-           "title_accent_italic": false,
-           "description": "Tall, narrow, balanced in the hand. A morning ritual object.",
-           "cta_text": "€120",
-           "cta_url": "#"
+           "notes": "",
+           "roast": 0,
+           "price": "€120",
+           "link": "/the-collection/",
+           "quick_add": "",
+           "filter_tags": ""
           },
           {
-           "letter": "F",
-           "letter_color": "#473a31",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#efe5da",
-            "gradient_to": "#e5d8c9",
-            "gradient_angle": 180
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "Stoneware",
-           "brand_label": "FOOTED PLANTER",
-           "brand_color": "#473a31",
-           "show_badge": false,
-           "badge_text": "",
-           "badge_bg": "#2a211c",
-           "badge_color": "#ffffff",
+           "media_label": "planter",
+           "tag": "",
+           "category": "Stoneware",
            "title": "Footed Planter",
-           "title_accent": "",
-           "title_accent_italic": false,
-           "description": "A planter that deserves a good plant. Drainage hole included.",
-           "cta_text": "€78",
-           "cta_url": "#"
+           "notes": "",
+           "roast": 0,
+           "price": "€78",
+           "link": "/the-collection/",
+           "quick_add": "",
+           "filter_tags": ""
           }
          ]
         },
@@ -577,7 +403,7 @@
   ]
  },
  {
-  "id": "kl-se-22",
+  "id": "kl-se-process",
   "type": "section",
   "settings": {
    "style": "default",
@@ -593,14 +419,14 @@
   "advanced": {},
   "children": [
    {
-    "id": "kl-ro-18",
+    "id": "kl-ro-process-head",
     "type": "row",
     "settings": {},
     "style": {},
     "advanced": {},
     "children": [
      {
-      "id": "kl-co-17",
+      "id": "kl-co-process-head",
       "type": "column",
       "settings": {
        "width": "1-1"
@@ -609,7 +435,7 @@
       "advanced": {},
       "children": [
        {
-        "id": "kl-section-header-16",
+        "id": "kl-section-header-process",
         "type": "section-header",
         "settings": {
          "eyebrow_show": true,
@@ -630,10 +456,10 @@
           }
          ],
          "headline_font_family": "serif",
-         "headline_font_size": 46,
+         "headline_font_size": 52,
+         "headline_line_height": 1.1,
          "headline_font_weight": "500",
          "headline_align": "center",
-         "headline_inline": true,
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
@@ -651,14 +477,14 @@
     ]
    },
    {
-    "id": "kl-ro-21",
+    "id": "kl-ro-process-steps",
     "type": "row",
     "settings": {},
     "style": {},
     "advanced": {},
     "children": [
      {
-      "id": "kl-co-20",
+      "id": "kl-co-process-steps",
       "type": "column",
       "settings": {
        "width": "1-1"
@@ -667,7 +493,7 @@
       "advanced": {},
       "children": [
        {
-        "id": "kl-process-steps-19",
+        "id": "kl-process-steps-main",
         "type": "process-steps",
         "settings": {
          "columns": 4,
@@ -686,7 +512,7 @@
          "title_font": "serif",
          "title_weight": "500",
          "desc_color": "#928271",
-         "desc_size": 13,
+         "desc_size": 13.5,
          "card_bg": "",
          "card_border": "",
          "card_padding": 0,
@@ -724,7 +550,7 @@
   ]
  },
  {
-  "id": "kl-se-35",
+  "id": "kl-se-gallery",
   "type": "section",
   "settings": {
    "style": "default",
@@ -740,14 +566,14 @@
   "advanced": {},
   "children": [
    {
-    "id": "kl-ro-25",
+    "id": "kl-ro-gallery-head",
     "type": "row",
     "settings": {},
     "style": {},
     "advanced": {},
     "children": [
      {
-      "id": "kl-co-24",
+      "id": "kl-co-gallery-head",
       "type": "column",
       "settings": {
        "width": "1-1"
@@ -756,7 +582,7 @@
       "advanced": {},
       "children": [
        {
-        "id": "kl-section-header-23",
+        "id": "kl-section-header-gallery",
         "type": "section-header",
         "settings": {
          "eyebrow_show": true,
@@ -777,10 +603,10 @@
           }
          ],
          "headline_font_family": "serif",
-         "headline_font_size": 46,
+         "headline_font_size": 52,
+         "headline_line_height": 1.1,
          "headline_font_weight": "500",
          "headline_align": "center",
-         "headline_inline": true,
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
@@ -798,14 +624,14 @@
     ]
    },
    {
-    "id": "kl-ro-25b",
+    "id": "kl-ro-gallery-grid",
     "type": "row",
     "settings": {},
     "style": {},
     "advanced": {},
     "children": [
      {
-      "id": "kl-co-24b",
+      "id": "kl-co-gallery-grid",
       "type": "column",
       "settings": {
        "width": "1-1"
@@ -814,82 +640,83 @@
       "advanced": {},
       "children": [
        {
-        "id": "kl-workgrid-25c",
-        "type": "workgrid",
+        "id": "kl-overlaygrid-gallery",
+        "type": "overlaygrid",
         "settings": {
-         "columns": 3,
-         "items_gap": 24,
-         "media_aspect": "4/3",
-         "media_tall_aspect": "4/5",
-         "media_bg": "#e5d8c9",
-         "media_label_color": "#2a211c",
-         "hover_zoom": true,
-         "title_font_family": "serif",
-         "title_color": "#2a211c",
-         "title_size": 20,
-         "title_weight": "500",
-         "meta_color": "#928271",
-         "meta_size": 12,
-         "show_desc": false,
-         "desc_color": "#928271",
-         "desc_size": 14,
-         "mono_font_family": "",
          "items": [
           {
            "image": "",
-           "media_label": "glaze detail",
-           "title": "glaze detail",
-           "meta": "Celadon",
-           "description": "",
-           "link_url": "",
-           "tall": true
+           "title": "",
+           "subtitle": "",
+           "link": "",
+           "ribbon": "",
+           "tall": true,
+           "wide": false
           },
           {
            "image": "",
-           "media_label": "hands at the wheel",
-           "title": "hands at the wheel",
-           "meta": "Process",
-           "description": "",
-           "link_url": "",
-           "tall": false
+           "title": "",
+           "subtitle": "",
+           "link": "",
+           "ribbon": "",
+           "tall": false,
+           "wide": false
           },
           {
            "image": "",
-           "media_label": "kiln glow",
-           "title": "kiln glow",
-           "meta": "Wood-fired",
-           "description": "",
-           "link_url": "",
-           "tall": false
+           "title": "",
+           "subtitle": "",
+           "link": "",
+           "ribbon": "",
+           "tall": false,
+           "wide": false
           },
           {
            "image": "",
-           "media_label": "finished set on linen",
-           "title": "finished set on linen",
-           "meta": "Finished set",
-           "description": "",
-           "link_url": "",
-           "tall": true
+           "title": "",
+           "subtitle": "",
+           "link": "",
+           "ribbon": "",
+           "tall": false,
+           "wide": true
           },
           {
            "image": "",
-           "media_label": "cup in hand",
-           "title": "cup in hand",
-           "meta": "Everyday",
-           "description": "",
-           "link_url": "",
-           "tall": false
+           "title": "",
+           "subtitle": "",
+           "link": "",
+           "ribbon": "",
+           "tall": false,
+           "wide": false
           },
           {
            "image": "",
-           "media_label": "studio shelf",
-           "title": "studio shelf",
-           "meta": "Studio",
-           "description": "",
-           "link_url": "",
-           "tall": false
+           "title": "",
+           "subtitle": "",
+           "link": "",
+           "ribbon": "",
+           "tall": false,
+           "wide": false
           }
-         ]
+         ],
+         "columns": "4",
+         "columns_mobile": "2",
+         "gap": "small",
+         "height": "180",
+         "match_height": true,
+         "layout_mode": "masonry",
+         "preset": "minimal-square",
+         "item_radius": 12,
+         "overlay_color": "rgba(42,33,28,0.0)",
+         "overlay_gradient": false,
+         "hover_effect": "zoom",
+         "hover_overlay": "fade",
+         "show_cta": false,
+         "title_color": "#ffffff",
+         "subtitle_color": "rgba(255,255,255,0.85)",
+         "bg": {
+          "type": "none"
+         }
         },
         "style": {},
         "advanced": {},
@@ -902,7 +729,7 @@
   ]
  },
  {
-  "id": "kl-se-39",
+  "id": "kl-se-glaze",
   "type": "section",
   "settings": {
    "style": "default",
@@ -912,20 +739,20 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f7f0e7"
+    "color": "#efe5da"
    }
   },
   "advanced": {},
   "children": [
    {
-    "id": "kl-ro-38",
+    "id": "kl-ro-glaze",
     "type": "row",
     "settings": {},
     "style": {},
     "advanced": {},
     "children": [
      {
-      "id": "kl-co-37",
+      "id": "kl-co-glaze",
       "type": "column",
       "settings": {
        "width": "1-1"
@@ -934,7 +761,7 @@
       "advanced": {},
       "children": [
        {
-        "id": "kl-mixer-36",
+        "id": "kl-mixer-glaze",
         "type": "mixer",
         "settings": {
          "eyebrow": "Glaze studio",
@@ -943,7 +770,7 @@
          "max": 3,
          "empty_label": "Tap a glaze to begin",
          "zone_accent": "#c2724a",
-         "zone_on": "#fff",
+         "zone_on": "#ffffff",
          "card_bg": "#efe5da",
          "card_border": "#dac9b6",
          "align": "left",
@@ -985,127 +812,12 @@
   ]
  },
  {
-  "id": "kl-se-46",
+  "id": "kl-se-commission",
   "type": "section",
   "settings": {
    "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#efe5da"
-   }
-  },
-  "advanced": {},
-  "children": [
-   {
-    "id": "kl-ro-42",
-    "type": "row",
-    "settings": {},
-    "style": {},
-    "advanced": {},
-    "children": [
-     {
-      "id": "kl-co-41",
-      "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
-      "style": {},
-      "advanced": {},
-      "children": [
-       {
-        "id": "kl-section-header-40",
-        "type": "section-header",
-        "settings": {
-         "eyebrow_show": true,
-         "eyebrow_text": "The studio",
-         "eyebrow_color": "#bd6a40",
-         "eyebrow_dot_color": "#bd6a40",
-         "eyebrow_separator": "",
-         "headline_lines": [
-          {
-           "text": "About the ",
-           "color": "#2a211c",
-           "italic": false
-          },
-          {
-           "text": "maker",
-           "color": "#bd6a40",
-           "italic": true
-          }
-         ],
-         "headline_font_family": "serif",
-         "headline_font_size": 46,
-         "headline_font_weight": "500",
-         "headline_align": "center",
-         "headline_inline": true,
-         "tagline_show": true,
-         "tagline_text": "Mara Sole has been throwing pots in Lisbon since 2014. The studio is small, the kiln is large, and every piece goes through the same four steps.",
-         "tagline_text_italic": false,
-         "tagline_text_color": "#928271",
-         "tagline_text_size": 16.5,
-         "layout": "center",
-         "gap": 16
-        },
-        "style": {},
-        "advanced": {},
-        "children": []
-       }
-      ]
-     }
-    ]
-   },
-   {
-    "id": "kl-ro-45",
-    "type": "row",
-    "settings": {},
-    "style": {},
-    "advanced": {},
-    "children": [
-     {
-      "id": "kl-co-44",
-      "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
-      "style": {},
-      "advanced": {},
-      "children": [
-       {
-        "id": "kl-testimonial-43",
-        "type": "testimonial",
-        "settings": {
-         "quote": "“I’m not making pottery at scale. I’m making things I would want to own — objects that hold heat, hold light, and hold up to twenty years of slow mornings.”",
-         "author_name": "Mara Sole",
-         "author_role": "Maker & studio founder",
-         "rating": "0",
-         "layout": "single",
-         "show_line": false,
-         "bg_color": "transparent",
-         "text_color": "#2a211c",
-         "border_radius": "0",
-         "avatar": ""
-        },
-        "style": {},
-        "advanced": {},
-        "children": []
-       }
-      ]
-     }
-    ]
-   }
-  ]
- },
- {
-  "id": "kl-se-50",
-  "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
+   "width": "fullbleed",
+   "padding": "remove-vertical"
   },
   "style": {
    "bg": {
@@ -1116,14 +828,14 @@
   "advanced": {},
   "children": [
    {
-    "id": "kl-ro-49",
+    "id": "kl-ro-commission",
     "type": "row",
     "settings": {},
     "style": {},
     "advanced": {},
     "children": [
      {
-      "id": "kl-co-48",
+      "id": "kl-co-commission",
       "type": "column",
       "settings": {
        "width": "1-1"
@@ -1132,7 +844,7 @@
       "advanced": {},
       "children": [
        {
-        "id": "kl-cta-banner-47",
+        "id": "kl-cta-banner-commission",
         "type": "cta-banner",
         "settings": {
          "headline": "Commission",
@@ -1159,7 +871,7 @@
          },
          "cta_size": 14,
          "headline_font_family": "serif",
-         "headline_size": 56,
+         "headline_size": 68,
          "headline_weight": "500",
          "subtitle_size": 17,
          "layout": "stack",
@@ -1171,7 +883,7 @@
           "bl": 0,
           "linked": true
          },
-         "banner_padding": 80
+         "banner_padding": 100
         },
         "style": {},
         "advanced": {},

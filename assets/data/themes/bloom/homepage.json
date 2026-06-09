@@ -33,130 +33,47 @@
       "children": [
        {
         "id": "bl-hero-split-1",
-        "type": "hero-split",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "Clean colour cosmetics",
-         "eyebrow_dot_color": "#e7a0b4",
+         "eyebrow": "Clean colour cosmetics",
          "eyebrow_color": "#e7a0b4",
-         "headline_lines": [
-          {
-           "text": "Your colour,",
-           "color": "#f6e9ec",
-           "italic": false
-          },
-          {
-           "text": "your",
-           "color": "#f6e9ec",
-           "italic": false
-          },
-          {
-           "text": "rules.",
-           "color": "#e7a0b4",
-           "italic": true
-          }
-         ],
-         "headline_font_family": "serif",
-         "headline_font_size": 80,
-         "headline_line_height": 1,
-         "headline_font_weight": "400",
-         "headline_align": "left",
-         "subhead": "High-pigment, skin-kind makeup in shades for every undertone — built to be mixed, layered and absolutely yours.",
-         "subhead_color": "#cdb1bd",
-         "subhead_size": 18,
-         "subhead_italic": false,
-         "subhead_max_width": 420,
-         "cta1_text": "Shop the range",
-         "cta1_url": "#new",
-         "cta1_bg": "#e7a0b4",
-         "cta1_color": "#23131d",
-         "cta1_size": 15,
-         "cta1_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
+         "headline": "Your colour, your",
+         "accent": "rules.",
+         "accent_color": "#e7a0b4",
+         "accent_italic": true,
+         "headline_tail": "",
+         "uppercase": false,
+         "headline_color": "#f6e9ec",
+         "headline_weight": "400",
+         "headline_size": "88",
+         "lead": "High-pigment, skin-kind makeup in shades for every undertone — built to be mixed, layered and absolutely yours.",
+         "lead_color": "#cdb1bd",
+         "signature": "",
+         "stats": [],
+         "cta_text": "Shop the range",
+         "cta_url": "#new",
+         "cta_style": "button",
+         "cta_bg": "#e7a0b4",
+         "cta_color": "#23131d",
          "cta2_text": "Find your shade",
          "cta2_url": "#finder",
-         "cta2_bg": "transparent",
-         "cta2_color": "#f6e9ec",
-         "cta2_border": "rgba(231,160,180,.42)",
-         "cta2_size": 15,
-         "cta2_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
+         "cta2_style": "outline",
+         "media_image": "",
+         "media_bg": {
+          "type": "none"
          },
-         "cta2_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "stats": [],
-         "showcase_enabled": false,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#4d2f40"
-         },
-         "showcase_padding": 28,
-         "showcase_radius": {
-          "tl": 200,
-          "tr": 200,
-          "br": 200,
-          "bl": 200,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 200,
-          "tr": 200,
-          "br": 200,
-          "bl": 200,
-          "linked": true
-         },
-         "showcase_badge_text": "",
-         "showcase_badge_dot": "#e7a0b4",
-         "showcase_badge_bg": "#23131d",
-         "showcase_badge_color": "#f6e9ec",
-         "showcase_items": [],
-         "showcase_card_radius": {
-          "tl": 14,
-          "tr": 14,
-          "br": 14,
-          "bl": 14,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 14,
-          "tr": 14,
-          "br": 14,
-          "bl": 14,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "",
-         "showcase_caption_right": "",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1.05fr .95fr",
-         "gap": 48,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_label": "hero — lipstick bullets & blush, soft pink light",
+         "media_light": false,
+         "media_radius": 24,
+         "media_position": "right",
+         "media_aspect": "4/5",
+         "flush": false,
+         "content_bg": "",
+         "badge_number": "",
+         "badge_label": "",
+         "media_radius_top": 200,
+         "media_blob": true,
+         "media_blob_color": "#f4c9d4"
         },
         "style": {},
         "advanced": {},
@@ -261,132 +178,91 @@
       "children": [
        {
         "id": "bl-product-cards-8",
-        "type": "product-cards",
+        "type": "productgrid",
         "settings": {
          "columns": 4,
          "gap": 20,
-         "card_bg": {
-          "type": "solid",
-          "color": "#4d2f40"
-         },
-         "card_color": "#cdb1bd",
-         "card_radius": {
-          "tl": 18,
-          "tr": 18,
-          "br": 18,
-          "bl": 18,
-          "linked": true
-         },
-         "card_radius_hover": {
-          "tl": 18,
-          "tr": 18,
-          "br": 18,
-          "bl": 18,
-          "linked": true
-         },
-         "card_shadow": "none",
-         "card_padding": 24,
-         "top_aspect_ratio": "1/1",
-         "top_padding": 24,
-         "show_screenshot_label": true,
-         "screenshot_label_color": "#f6e9ec",
-         "brand_size": 12,
-         "brand_letter_spacing": 0.1,
-         "title_font_family": "serif",
-         "title_size": 24,
-         "title_weight": "400",
-         "description_size": 13,
-         "cta_size": 12,
-         "cta_arrow": false,
-         "card_hover_effect": "lift",
+         "media_aspect": "1/1",
+         "media_bg": "#5a384c",
+         "stripe_dark": false,
+         "hover_zoom": true,
+         "card_bg": "#4d2f40",
+         "card_border": "rgba(246,233,236,.13)",
+         "card_radius": 18,
+         "card_padding": 20,
+         "tag_bg": "#e7a0b4",
+         "tag_color": "#23131d",
+         "quick_add_show": false,
+         "category_color": "#9c7e8c",
+         "title_font": "heading",
+         "title_size": 22,
+         "title_color": "#f6e9ec",
+         "price_color": "#f6e9ec",
+         "shade_size": 16,
+         "shade_border": "rgba(246,233,236,.3)",
+         "add_button": true,
+         "add_label": "Add",
+         "add_bg": "#f6e9ec",
+         "add_color": "#23131d",
+         "footer_text": "Shop all products",
+         "footer_url": "#",
+         "footer_color": "#f6e9ec",
          "items": [
           {
-           "letter": "",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#b5564f",
-            "gradient_to": "#7d2e3e",
-            "gradient_angle": 135
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "NEW",
-           "brand_label": "Lips",
-           "brand_color": "#e7a0b4",
-           "show_badge": true,
-           "badge_text": "€22",
-           "badge_bg": "#23131d",
-           "badge_color": "#f6e9ec",
-           "title": "Velvet Matte ",
-           "title_accent": "Lip",
-           "title_accent_italic": true,
-           "description": "Rich, long-wear matte in four classic shades — cool berry to warm terracotta.",
-           "cta_text": "Add to bag",
-           "cta_url": "#"
+           "media_label": "lipstick",
+           "tag": "New",
+           "category": "Lips",
+           "title": "Velvet Matte Lip",
+           "price": "€22",
+           "shades": "#b5564f, #9a3b52, #c77a6a, #7d2e3e",
+           "link": "#",
+           "quick_add": ""
           },
           {
-           "letter": "",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#e79aa6",
-            "gradient_to": "#c96f6a",
-            "gradient_angle": 135
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "",
-           "brand_label": "Cheeks",
-           "brand_color": "#e7a0b4",
-           "show_badge": true,
-           "badge_text": "€19",
-           "badge_bg": "#23131d",
-           "badge_color": "#f6e9ec",
-           "title": "Dewdrop ",
-           "title_accent": "Blush",
-           "title_accent_italic": true,
-           "description": "Buildable powder blush in 12 natural shades for a fresh-from-the-garden glow.",
-           "cta_text": "Add to bag",
-           "cta_url": "#"
+           "media_label": "blush",
+           "tag": "",
+           "category": "Cheeks",
+           "title": "Dewdrop Blush",
+           "price": "€19",
+           "shades": "#e79aa6, #d97a86, #c96f6a, #e6a17e",
+           "link": "#",
+           "quick_add": ""
           },
           {
-           "letter": "",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#f0d3bd",
-            "gradient_to": "#6e4a2f",
-            "gradient_angle": 135
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "40 SHADES",
-           "brand_label": "Base",
-           "brand_color": "#e3b778",
-           "show_badge": true,
-           "badge_text": "€28",
-           "badge_bg": "#23131d",
-           "badge_color": "#f6e9ec",
-           "title": "Second-Skin ",
-           "title_accent": "Tint",
-           "title_accent_italic": true,
-           "description": "Featherlight skin tint with SPF 20, matched to every undertone in forty shades.",
-           "cta_text": "Add to bag",
-           "cta_url": "#"
+           "media_label": "foundation",
+           "tag": "40 shades",
+           "category": "Base",
+           "title": "Second-Skin Tint",
+           "price": "€28",
+           "shades": "#f0d3bd, #d8a982, #a9794f, #6e4a2f",
+           "link": "#",
+           "quick_add": ""
           },
           {
-           "letter": "",
-           "top_bg": {
-            "type": "gradient",
-            "gradient_from": "#caa07a",
-            "gradient_to": "#5a4636",
-            "gradient_angle": 135
+           "image": "",
+           "media_bg": {
+            "type": "none"
            },
-           "screenshot_label": "",
-           "brand_label": "Eyes",
-           "brand_color": "#e7a0b4",
-           "show_badge": true,
-           "badge_text": "€34",
-           "badge_bg": "#23131d",
-           "badge_color": "#f6e9ec",
-           "title": "Everyday ",
-           "title_accent": "Palette",
-           "title_accent_italic": true,
-           "description": "Eight versatile shades — matte to shimmer — for a one-and-done eye look any day.",
-           "cta_text": "Add to bag",
-           "cta_url": "#"
+           "media_label": "palette",
+           "tag": "",
+           "category": "Eyes",
+           "title": "Everyday Palette",
+           "price": "€34",
+           "shades": "#caa07a, #8a5a44, #c98a8a, #5a4636",
+           "link": "#",
+           "quick_add": ""
           }
          ]
         },
@@ -419,15 +295,82 @@
    {
     "id": "bl-ro-14",
     "type": "row",
-    "settings": {},
+    "settings": {
+     "gap": 48,
+     "vertical_align": "center"
+    },
     "style": {},
     "advanced": {},
     "children": [
      {
+      "id": "bl-co-fl",
+      "type": "column",
+      "settings": {
+       "width": "2-5"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "bl-finder-head",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Shade finder",
+         "eyebrow_color": "#e7a0b4",
+         "eyebrow_dot_color": "#e7a0b4",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Hover to ",
+           "color": "#f6e9ec",
+           "italic": false
+          },
+          {
+           "text": "try it on",
+           "color": "#e7a0b4",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 48,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Run your cursor down the list — each shade previews as you go. Or take the 30-second quiz and we'll match you in three picks.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#9c7e8c",
+         "tagline_text_size": 16,
+         "layout": "stack",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "bl-finder-cta",
+        "type": "button",
+        "settings": {
+         "text": "Take the quiz",
+         "url": "#",
+         "alignment": "left",
+         "bg_color": "#e7a0b4",
+         "text_color": "#23131d",
+         "hover_bg_color": "#d98aa1"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
       "id": "bl-co-13",
       "type": "column",
       "settings": {
-       "width": "1-1"
+       "width": "3-5"
       },
       "style": {},
       "advanced": {},
@@ -794,7 +737,29 @@
           }
          ],
          "columns": "3",
-         "columns_mobile": "1"
+         "columns_mobile": "1",
+         "preset": "editorial-grid",
+         "bg": {
+          "type": "none"
+         },
+         "gap": "medium",
+         "height": "300",
+         "match_height": true,
+         "overlay_position": "bottom",
+         "overlay_style": "overlay-primary",
+         "overlay_color": "rgba(35,19,29,.9)",
+         "overlay_gradient": true,
+         "overlay_padding": "medium",
+         "title_size": "h3",
+         "title_color": "#ffffff",
+         "title_weight": "400",
+         "title_uppercase": false,
+         "subtitle_color": "#f4c9d4",
+         "subtitle_size": 13,
+         "hover_effect": "zoom",
+         "hover_overlay": "always",
+         "item_radius": 16,
+         "show_cta": false
         },
         "style": {},
         "advanced": {},
@@ -842,16 +807,20 @@
         "id": "bl-testimonial-30",
         "type": "testimonial",
         "settings": {
-         "quote": "“Finally a brand that had my exact undertone — and the formula lasts all day without going cakey. I've repurchased three times.”",
+         "quote": "“Finally a brand that had <em>my exact undertone</em> — and the formula lasts all day without going cakey. I've repurchased three times.”",
          "author_name": "Aisha K.",
          "author_role": "verified buyer",
          "rating": "5",
-         "layout": "single",
+         "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#f6e9ec",
-         "text_size": 36,
+         "star_color": "#e7a0b4",
+         "quote_accent_color": "#e7a0b4",
          "author_color": "#e7a0b4",
+         "quote_font": "heading",
+         "quote_size": 0,
+         "author_uppercase": true,
          "border_radius": "0",
          "avatar": ""
         },

@@ -1,16 +1,20 @@
 <template>
   <div class="olo-introsplit ois" :style="rootStyle">
-    <div v-if="left" class="ois-mediawrap" style="position:relative"><component :is="MediaBlock" /></div>
-    <div class="ois-content">
+    <div v-if="left" class="ois-mediawrap" style="position:relative"><component :is="MediaBlock" /><span v-if="s.media_blob" :style="blobStyle"></span></div>
+    <div class="ois-content" :style="contentStyle">
       <span v-if="s.eyebrow" :style="eyebrowStyle">{{ s.eyebrow }}</span>
-      <h2 v-if="s.headline" :style="hStyle">{{ s.headline }}<span v-if="s.accent" :style="{ color: accc }"> {{ s.accent }}</span></h2>
+      <h2 v-if="s.headline" :style="hStyle">{{ s.headline }}<span v-if="s.accent" :style="{ color: accc, fontStyle: s.accent_italic ? 'italic' : 'normal' }"> {{ s.accent }}</span><template v-if="s.headline_tail">{{ s.headline_tail }}</template></h2>
       <p v-if="s.lead" :style="leadStyle">{{ s.lead }}</p>
+      <p v-if="s.signature" :style="sigStyle">{{ s.signature }}</p>
       <div v-if="stats.length" :style="statsStyle">
         <div v-for="(st, i) in stats" :key="i"><b :style="statNumStyle">{{ st.number }}</b><span :style="statLblStyle">{{ st.label }}</span></div>
       </div>
-      <a v-if="s.cta_text" :href="s.cta_url || '#'" :style="ctaStyle">{{ s.cta_text }}</a>
+      <div v-if="s.cta_text || s.cta2_text" style="display:flex;gap:13px;flex-wrap:wrap;align-items:center;margin-top:30px">
+        <a v-if="s.cta_text" :href="s.cta_url || '#'" :style="ctaUnderline ? linkStyle : (ctaOutline ? outlineStyle : ctaStyle)">{{ s.cta_text }}</a>
+        <a v-if="s.cta2_text" :href="s.cta2_url || '#'" :style="cta2Underline ? linkStyle : (cta2Outline ? outlineStyle : ctaStyle)">{{ s.cta2_text }}</a>
+      </div>
     </div>
-    <div v-if="!left" class="ois-mediawrap" style="position:relative"><component :is="MediaBlock" /></div>
+    <div v-if="!left" class="ois-mediawrap" style="position:relative"><component :is="MediaBlock" /><span v-if="s.media_blob" :style="blobStyle"></span></div>
   </div>
 </template>
 
@@ -21,20 +25,21 @@ import { buildBgStyle } from '@/composables/useBackgroundStyle';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
 const defaults = {
-  eyebrow: 'One unit · since 1974', eyebrow_color: '', headline: 'A regional club with a', accent: 'rich history', uppercase: true,
+  eyebrow: 'One unit · since 1974', eyebrow_color: '', headline: 'A regional club with a', accent: 'rich history', headline_tail: '', uppercase: true,
   headline_color: '', accent_color: '',
   lead: "From a handful of friends on a muddy field to eight competitive teams across men's, women's and youth football — Verdano FC is built on the people who keep showing up.",
   lead_color: '',
   stats: [{ number: '50', label: 'Years of football' }, { number: '8', label: 'Competitive teams' }, { number: '600+', label: 'Active members' }],
   stat_number_color: '', stat_label_color: '',
-  cta_text: 'About the club', cta_url: '#', cta_bg: '', cta_color: '#ffffff',
-  media_image: '', media_label: 'club portrait — squad on the pitch', media_light: true, media_aspect: '4/4.4', media_radius: 20,
+  cta_text: 'About the club', cta_url: '#', cta2_text: '', cta2_url: '#', cta2_style: 'outline', cta_bg: '', cta_color: '#ffffff',
+  media_image: '', media_label: 'club portrait — squad on the pitch', media_light: true, media_aspect: '4/4.4', media_radius: 20, media_radius_top: 0, media_blob: false, media_blob_color: '',
   // Spaziatura/forma additive — default no-op (padding gated OFF, raggi = valori attuali).
   pad_custom: false,
   content_padding: { top: 0, right: 0, bottom: 0, left: 0 },
   badge_radius: { tl: 16, tr: 16, br: 16, bl: 16 },
   cta_radius: { tl: 999, tr: 999, br: 999, bl: 999 },
   badge_number: '1974', badge_label: 'Established', badge_bg: '', badge_color: '', media_position: 'right',
+  flush: false, content_bg: '', signature: '', cta_style: 'button', accent_italic: false, headline_weight: '900', headline_size: '',
   // KIT standard OLObuild — default no-op (parità col PHP): bg none, shadow none, border 0.
   bg: { type: 'none' },
   shadow: 'none',
@@ -47,6 +52,11 @@ const defaults = {
 const s = computed(() => ({ ...defaults, ...props.settings }));
 const stats = computed(() => Array.isArray(s.value.stats) ? s.value.stats : []);
 const left = computed(() => s.value.media_position === 'left');
+const flush = computed(() => !!s.value.flush);
+const ctaUnderline = computed(() => s.value.cta_style === 'underline');
+const ctaOutline = computed(() => s.value.cta_style === 'outline');
+const cta2Underline = computed(() => s.value.cta2_style === 'underline');
+const cta2Outline = computed(() => s.value.cta2_style === 'outline');
 
 const DISP = "var(--olo-font-family-heading, 'Archivo',-apple-system,sans-serif)";
 const SANS = "var(--olo-font-family, 'Work Sans',-apple-system,sans-serif)";
@@ -118,31 +128,52 @@ const bradCss = computed(() => radiusCss(s.value.badge_radius, '16px'));
 const cradCss = computed(() => radiusCss(s.value.cta_radius, '999px'));
 
 const rootStyle = computed(() => {
-  const base = { position: 'relative', display: 'grid', gridTemplateColumns: left.value ? '.95fr 1.05fr' : '1.05fr .95fr', gap: '54px', alignItems: 'center', fontFamily: SANS, ...kitBgStyle.value, ...kitBorder.value };
+  const cols = flush.value ? '1fr 1fr' : (left.value ? '.95fr 1.05fr' : '1.05fr .95fr');
+  const base = { position: 'relative', display: 'grid', gridTemplateColumns: cols, gap: flush.value ? '0' : '54px', alignItems: flush.value ? 'stretch' : 'center', fontFamily: SANS, ...kitBgStyle.value, ...kitBorder.value };
   if (padCss.value) base.padding = padCss.value;
   if (kitShadow.value) base.boxShadow = kitShadow.value;
   return base;
 });
+const contentStyle = computed(() => {
+  const st = {};
+  if (flush.value) { st.display = 'flex'; st.flexDirection = 'column'; st.justifyContent = 'center'; st.padding = 'clamp(40px,6vw,80px)'; }
+  if (s.value.content_bg) st.background = s.value.content_bg;
+  return st;
+});
 const eyebrowStyle = computed(() => ({ fontWeight: 700, fontSize: '12px', letterSpacing: '.18em', textTransform: 'uppercase', color: eyec.value, display: 'block', marginBottom: '16px' }));
-const hStyle = computed(() => ({ fontFamily: DISP, fontWeight: 900, fontSize: 'clamp(34px,5.2vw,68px)', lineHeight: .9, letterSpacing: '-.01em', textTransform: s.value.uppercase ? 'uppercase' : 'none', margin: 0, color: s.value.headline_color || 'var(--olo-color-text, #142019)' }));
+const hStyle = computed(() => {
+  const n = parseInt(s.value.headline_size, 10);
+  const fs = n > 0 ? `clamp(30px,4.2vw,${n}px)` : 'clamp(34px,5.2vw,68px)';
+  return { fontFamily: DISP, fontWeight: s.value.headline_weight || '900', fontSize: fs, lineHeight: flush.value ? 1.05 : .9, letterSpacing: '-.01em', textTransform: s.value.uppercase ? 'uppercase' : 'none', margin: 0, color: s.value.headline_color || 'var(--olo-color-text, #142019)' };
+});
 const leadStyle = computed(() => ({ margin: '24px 0', fontSize: '16.5px', lineHeight: 1.65, color: s.value.lead_color || 'var(--olo-color-text-muted, #4f5b54)', maxWidth: '440px' }));
 const statsStyle = { display: 'flex', gap: '34px', margin: '26px 0 30px', flexWrap: 'wrap' };
 const statNumStyle = computed(() => ({ fontFamily: DISP, fontWeight: 900, fontSize: '46px', color: s.value.stat_number_color || 'var(--olo-color-text, #142019)', display: 'block', lineHeight: 1 }));
 const statLblStyle = computed(() => ({ fontSize: '12.5px', color: s.value.stat_label_color || 'var(--olo-color-text-muted, #8a948d)', textTransform: 'uppercase', letterSpacing: '.06em', marginTop: '5px', display: 'block' }));
 const ctaStyle = computed(() => ({ display: 'inline-flex', alignItems: 'center', gap: '8px', background: s.value.cta_bg || 'var(--olo-color-text, #0a2a1e)', color: s.value.cta_color || '#fff', fontWeight: 700, fontSize: '14px', padding: '14px 24px', borderRadius: cradCss.value, textDecoration: 'none' }));
+const sigStyle = computed(() => ({ fontFamily: DISP, fontStyle: 'italic', fontSize: '24px', color: s.value.headline_color || 'var(--olo-color-text, #142019)', margin: '18px 0 0' }));
+const linkStyle = computed(() => ({ display: 'inline-block', marginTop: '24px', fontWeight: 500, fontSize: '12px', letterSpacing: '.18em', textTransform: 'uppercase', color: s.value.cta_color || 'var(--olo-color-text, #142019)', borderBottom: `1px solid ${accc.value}`, paddingBottom: '3px', textDecoration: 'none' }));
+const outlineStyle = computed(() => ({ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'transparent', color: s.value.cta_color || '#fff', fontWeight: 700, fontSize: '14px', padding: '14px 24px', borderRadius: cradCss.value, textDecoration: 'none', border: `1px solid ${accc.value}` }));
 
 const MediaBlock = computed(() => {
   const img = String(s.value.media_image || '').trim();
   const stripe = light.value ? 'rgba(20,32,25,.06)' : 'rgba(255,255,255,.05)';
   const mbg = light.value ? '#d8d2c2' : 'var(--olo-color-surface-alt, #0f3a2a)';
   const lblcol = light.value ? 'rgba(20,32,25,.45)' : 'rgba(255,255,255,.4)';
+  const mbgObj = s.value.media_bg;
+  const hasBg = !!(mbgObj && mbgObj.type && mbgObj.type !== 'none');
+  const mrb = Number.isNaN(parseInt(s.value.media_radius, 10)) ? 20 : parseInt(s.value.media_radius, 10);
+  const mrt = parseInt(s.value.media_radius_top, 10) || 0;
   const media = {
-    position: 'relative', aspectRatio: String(s.value.media_aspect || '4/4.4').replace(/[^0-9.\/]/g, ''), borderRadius: (parseInt(s.value.media_radius, 10) || 20) + 'px',
-    overflow: 'hidden', background: mbg, backgroundSize: 'cover', backgroundPosition: 'center',
-    backgroundImage: img ? 'url(' + img + ')' : 'repeating-linear-gradient(135deg, ' + stripe + ' 0 18px, transparent 18px 36px)',
+    position: 'relative', zIndex: 1,
+    borderRadius: mrt > 0 ? `${mrt}px ${mrt}px ${mrb}px ${mrb}px` : `${mrb}px`,
+    overflow: 'hidden', backgroundSize: 'cover', backgroundPosition: 'center',
   };
+  if (hasBg) { Object.assign(media, buildBgStyle(mbgObj)); }
+  else { media.background = mbg; media.backgroundImage = img ? 'url(' + img + ')' : 'repeating-linear-gradient(135deg, ' + stripe + ' 0 18px, transparent 18px 36px)'; }
+  if (flush.value) { media.height = '100%'; media.minHeight = '440px'; } else { media.aspectRatio = String(s.value.media_aspect || '4/4.4').replace(/[^0-9.\/]/g, ''); }
   const children = [];
-  if (!img && s.value.media_label) children.push(h('span', { style: { position: 'absolute', left: '16px', bottom: '14px', fontSize: '11px', letterSpacing: '.04em', textTransform: 'uppercase', fontWeight: 600, color: lblcol } }, s.value.media_label));
+  if (!hasBg && !img && s.value.media_label) children.push(h('span', { style: { position: 'absolute', left: '16px', bottom: '14px', fontSize: '11px', letterSpacing: '.04em', textTransform: 'uppercase', fontWeight: 600, color: lblcol } }, s.value.media_label));
   if (s.value.badge_number || s.value.badge_label) {
     const bc = [];
     if (s.value.badge_number) bc.push(h('b', { style: { fontFamily: DISP, fontWeight: 900, fontSize: '34px', display: 'block', lineHeight: 1 } }, s.value.badge_number));
@@ -151,4 +182,5 @@ const MediaBlock = computed(() => {
   }
   return () => h('div', { style: media }, children);
 });
+const blobStyle = computed(() => ({ position: 'absolute', left: '-24px', bottom: '-24px', width: '130px', height: '130px', borderRadius: '50%', background: s.value.media_blob_color || 'var(--olo-color-primary, #e7a0b4)', mixBlendMode: 'screen', opacity: 0.5, filter: 'blur(6px)', pointerEvents: 'none', zIndex: 0 }));
 </script>

@@ -73,6 +73,7 @@ export default {
     { type: 'separator', label: t('Media') },
     { key: 'media_aspect', label: t('Aspect ratio'), type: 'select', options: [
       { value: '16/9', label: '16 / 9' },
+      { value: '16/10', label: '16 / 10' },
       { value: '4/3',  label: '4 / 3' },
       { value: '3/2',  label: '3 / 2' },
       { value: '1/1',  label: t('1 / 1 (quadrato)') },

@@ -60,7 +60,7 @@ class Olo_WorkGrid_Tile extends Olo_Tile_Base {
         $meta_size  = max( 10, min( 18, absint( $s['meta_size'] ) ) );
         $desc_size  = max( 12, min( 20, absint( $s['desc_size'] ) ) );
 
-        $aspect_allow = [ '16/9', '4/3', '3/2', '1/1' ];
+        $aspect_allow = [ '16/9', '16/10', '4/3', '3/2', '1/1' ];
         $aspect       = in_array( $s['media_aspect'] ?? '4/3', $aspect_allow, true ) ? $s['media_aspect'] : '4/3';
         $tall_allow   = [ '4/5', '3/4', '2/3' ];
         $tall_aspect  = in_array( $s['media_tall_aspect'] ?? '4/5', $tall_allow, true ) ? $s['media_tall_aspect'] : '4/5';

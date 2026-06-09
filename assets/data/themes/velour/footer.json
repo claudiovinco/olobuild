@@ -1,1 +1,91 @@
-[{"id":"ve-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#2a1d26"}},"advanced":{},"children":[{"id":"ve-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"ve-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"ve-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Forum\", Georgia, serif;font-size:20px;color:#f2e8e6;font-weight:400;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#cf8e6f;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Vélour</div><p style=\"font-size:14px;color:#8f7780;max-width:260px\">Hair & beauty salon. Colour, cuts and care in a warm, unhurried space.</p>","text_color":"#c1aab2","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"ve-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"ve-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#f2e8e6;font-family:\"Albert Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Salon</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8f7780\"><li>Services</li><li>Stylists</li><li>Gallery</li><li>Book</li></ul>","text_color":"#c1aab2","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"ve-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"ve-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#f2e8e6;font-family:\"Albert Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">About</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8f7780\"><li>Our story</li><li>Products</li><li>Careers</li></ul>","text_color":"#c1aab2","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"ve-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"ve-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#f2e8e6;font-family:\"Albert Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Visit</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#8f7780\"><li>8 Rosewood Lane</li><li>Tue–Sat · by appt</li><li>hello@velour.salon</li></ul>","text_color":"#c1aab2","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"ve-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"ve-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"ve-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid rgba(242,232,230,.13);padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#8f7780\"><span>© 2026 Vélour — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#c1aab2","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "ve-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
+  "style": { "bg": { "type": "solid", "color": "#2a1d26" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ve-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ve-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ve-fbrand", "type": "headline", "settings": { "heading": "Vélour", "tag": "div", "alignment": "left", "heading_font_size": "24", "heading_uppercase": false, "heading_color": "#f2e8e6", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ve-fbtext", "type": "text-block", "settings": { "content": "<p>Hair & beauty salon. Colour, cuts and care in a warm, unhurried space.</p>", "text_color": "#8f7780", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "ve-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ve-fh1", "type": "headline", "settings": { "heading": "Salon", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f2e8e6", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ve-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#8f7780", "link_hover_color": "#cf8e6f", "items": [ { "title": "Services", "content": "/services/", "tag": "" }, { "title": "Stylists", "content": "#team", "tag": "" }, { "title": "Gallery", "content": "#gallery", "tag": "" }, { "title": "Book", "content": "#book", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "ve-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ve-fh2", "type": "headline", "settings": { "heading": "About", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f2e8e6", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ve-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#8f7780", "link_hover_color": "#cf8e6f", "items": [ { "title": "Our story", "content": "#", "tag": "" }, { "title": "Products", "content": "#", "tag": "" }, { "title": "Careers", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "ve-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "ve-fh3", "type": "headline", "settings": { "heading": "Visit", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f2e8e6", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ve-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#8f7780", "link_hover_color": "#cf8e6f", "items": [ { "title": "8 Rosewood Lane", "content": "#", "tag": "" }, { "title": "Tue–Sat · by appt", "content": "#", "tag": "" }, { "title": "hello@velour.salon", "content": "mailto:hello@velour.salon", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ve-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "ve-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "ve-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(242,232,230,.13)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "ve-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "ve-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "ve-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Vélour — an OLOtheme demo.</p>", "text_color": "#8f7780", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "ve-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "ve-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#8f7780", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

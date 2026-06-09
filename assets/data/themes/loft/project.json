@@ -1,0 +1,194 @@
+[
+ {
+  "id": "lp-se-1",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "remove-vertical", "padding_top": 96, "padding_bottom": 42 },
+  "style": { "bg": { "type": "solid", "color": "#1c1c1e" } },
+  "advanced": {},
+  "children": [
+   { "id": "lp-ro-1", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "lp-co-1", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "lp-ph", "type": "section-header", "settings": {
+        "eyebrow_show": true,
+        "eyebrow_text": "Private residence · 2025 · 240 m²",
+        "eyebrow_color": "#c9c2b6",
+        "eyebrow_separator": "",
+        "headline_lines": [
+         { "text": "House on the Slope", "color": "#eeece6", "italic": false }
+        ],
+        "headline_font_family": "sans-serif",
+        "headline_font_size": 92,
+        "headline_line_height": 0.96,
+        "headline_font_weight": "600",
+        "headline_align": "left",
+        "tagline_show": true,
+        "tagline_text": "A family house built into a north-Italian hillside — organised around a single concrete spine, opening south to the valley and the light.",
+        "tagline_text_italic": false,
+        "tagline_text_color": "#646058",
+        "tagline_text_size": 17,
+        "tagline_caption": "",
+        "layout": "stack",
+        "gap": 18
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "lp-se-2",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "remove-vertical", "padding_top": 48, "padding_bottom": 0 },
+  "style": { "bg": { "type": "solid", "color": "#1c1c1e" } },
+  "advanced": {},
+  "children": [
+   { "id": "lp-ro-2", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "lp-co-2", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "lp-hero-img", "type": "image", "settings": {
+        "image_url": "",
+        "media_bg": { "type": "none" },
+        "media_label": "hero — the house from the valley, dusk",
+        "image_width": "100%",
+        "aspect_ratio": "custom",
+        "aspect_ratio_custom": "16/9",
+        "object_fit": "cover",
+        "border_radius": "0"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "lp-se-3",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#1c1c1e" } },
+  "advanced": {},
+  "children": [
+   { "id": "lp-ro-3", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "lp-co-3", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "lp-lead", "type": "text-block", "settings": {
+        "content": "<p>The site fell away sharply to the south. Rather than fight the slope, we used it: a board-marked concrete spine steps down the hill, holding back the earth on one side and carrying the house on the other. Everything hangs off that one decisive line.</p>",
+        "text_color": "#eeece6",
+        "font_size": "19",
+        "line_height": "1.8",
+        "text_align": "left",
+        "max_width": "740"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "lp-se-4",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "remove-vertical", "padding_top": 0, "padding_bottom": 56 },
+  "style": { "bg": { "type": "solid", "color": "#1c1c1e" } },
+  "advanced": {},
+  "children": [
+   { "id": "lp-ro-4", "type": "row", "settings": { "gap": 16, "vertical_align": "top" }, "style": {}, "advanced": {}, "children": [
+    { "id": "lp-co-4a", "type": "column", "settings": { "width": "2-3" }, "style": {}, "advanced": {}, "children": [
+     { "id": "lp-img-1", "type": "image", "settings": {
+        "image_url": "",
+        "media_bg": { "type": "none" },
+        "media_label": "living space, full-height glazing",
+        "image_width": "100%",
+        "aspect_ratio": "3/2",
+        "object_fit": "cover",
+        "border_radius": "0"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]},
+    { "id": "lp-co-4b", "type": "column", "settings": { "width": "1-3" }, "style": {}, "advanced": {}, "children": [
+     { "id": "lp-img-2", "type": "image", "settings": {
+        "image_url": "",
+        "media_bg": { "type": "none" },
+        "media_label": "the concrete stair",
+        "image_width": "100%",
+        "aspect_ratio": "custom",
+        "aspect_ratio_custom": "3/4",
+        "object_fit": "cover",
+        "border_radius": "0"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "lp-se-5",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#202022" } },
+  "advanced": {},
+  "children": [
+   { "id": "lp-ro-5", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "lp-co-5", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "lp-stats", "type": "statstrip", "settings": {
+        "columns": 4,
+        "items_gap": 0,
+        "band_padding_y": 12,
+        "show_dividers": true,
+        "divider_color": "rgba(238,236,230,.12)",
+        "band_border": false,
+        "value_font_family": "heading",
+        "value_color": "#eeece6",
+        "value_size": 52,
+        "value_weight": "600",
+        "label_color": "#646058",
+        "label_size": 12,
+        "label_uppercase": false,
+        "align": "left",
+        "mono_font_family": "",
+        "items": [
+         { "value": "240", "label": "m² floor area" },
+         { "value": "2 yr", "label": "Design to completion" },
+         { "value": "A+", "label": "Energy rating" },
+         { "value": "1", "label": "Concrete spine" }
+        ]
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "lp-se-6",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "remove-vertical", "padding_top": 52, "padding_bottom": 96 },
+  "style": { "bg": { "type": "solid", "color": "#1c1c1e" } },
+  "advanced": {},
+  "children": [
+   { "id": "lp-ro-6", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "lp-co-6", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "lp-cta", "type": "mediacta", "settings": {
+        "eyebrow": "",
+        "headline": "Have a site in mind?",
+        "accent_text": "",
+        "uppercase": false,
+        "headline_color": "#ffffff",
+        "subhead": "Every Loft project starts with a long conversation on the land. Let's have it.",
+        "subhead_color": "#eeece6",
+        "cta1_text": "Start a project",
+        "cta1_url": "#contact",
+        "cta2_text": "",
+        "cta2_url": "",
+        "bg_image": "",
+        "media_bg": { "type": "none" },
+        "media_label": "the house at night, glowing",
+        "overlay_type": "linear",
+        "overlay_color": "#121214",
+        "overlay_top": 0.7,
+        "overlay_bottom": 0.85,
+        "accent": "#c9c2b6",
+        "accent_on": "#121214",
+        "btn_bg": "#c9c2b6",
+        "btn_color": "#121214",
+        "btn_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0 },
+        "text_color": "#ffffff",
+        "align": "center",
+        "headline_size": "72",
+        "pad_y": 96,
+        "bg": { "type": "none" }
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

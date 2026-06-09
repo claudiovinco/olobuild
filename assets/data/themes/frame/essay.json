@@ -1,0 +1,468 @@
+[
+ {
+  "id": "fr-es-head",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#0c0c0c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fr-es-head-ro",
+    "type": "row",
+    "settings": { "gap": 0 },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fr-es-head-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fr-es-head-sh",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Photo Essay · Issue 41",
+         "eyebrow_color": "#ff4438",
+         "eyebrow_dot_color": "#ff4438",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "The City After Rain", "color": "#f4f4f2", "italic": false }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 84,
+         "headline_line_height": 1.0,
+         "headline_font_weight": "800",
+         "headline_align": "center",
+         "tagline_show": false,
+         "layout": "center",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "fr-es-head-lead",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>Twenty-eight frames shot across one wet night in the old quarter, when the streets empty and the light does its best work. Photographs by Yuki Mori.</p>",
+         "text_color": "#f4f4f2",
+         "font_size": "18",
+         "line_height": "1.6",
+         "text_align": "center",
+         "max_width": "640"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fr-es-shots1",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "remove-vertical", "padding_bottom": 16 },
+  "style": { "bg": { "type": "solid", "color": "#0c0c0c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fr-es-s1-ro1",
+    "type": "row",
+    "settings": { "gap": 0 },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fr-es-s1-co1",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fr-es-shot01",
+        "type": "image",
+        "settings": {
+         "image_url": "",
+         "media_bg": { "type": "none" },
+         "media_label": "01 — empty boulevard, reflected neon",
+         "caption": "01 · Boulevard — 23:40",
+         "aspect_ratio": "16/9",
+         "image_width": "100%",
+         "height": "",
+         "object_fit": "cover",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "fr-es-s1-ro2",
+    "type": "row",
+    "settings": { "gap": 16 },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fr-es-s1-co2a",
+      "type": "column",
+      "settings": { "width": "1-2" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fr-es-shot02",
+        "type": "image",
+        "settings": {
+         "image_url": "",
+         "media_bg": { "type": "none" },
+         "media_label": "02 — figure with umbrella",
+         "caption": "",
+         "aspect_ratio": "3/4",
+         "image_width": "100%",
+         "height": "",
+         "object_fit": "cover",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "fr-es-s1-co2b",
+      "type": "column",
+      "settings": { "width": "1-2" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fr-es-shot03",
+        "type": "image",
+        "settings": {
+         "image_url": "",
+         "media_bg": { "type": "none" },
+         "media_label": "03 — tram window, rain",
+         "caption": "",
+         "aspect_ratio": "3/4",
+         "image_width": "100%",
+         "height": "",
+         "object_fit": "cover",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "fr-es-s1-ro3",
+    "type": "row",
+    "settings": { "gap": 0 },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fr-es-s1-co3",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fr-es-shot04",
+        "type": "image",
+        "settings": {
+         "image_url": "",
+         "media_bg": { "type": "none" },
+         "media_label": "04 — crossing, long exposure",
+         "caption": "04 · The crossing at Rua Nova",
+         "aspect_ratio": "16/9",
+         "image_width": "100%",
+         "height": "",
+         "object_fit": "cover",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fr-es-quote",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#0c0c0c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fr-es-q-ro",
+    "type": "row",
+    "settings": { "gap": 0 },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fr-es-q-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fr-es-testi",
+        "type": "testimonial",
+        "settings": {
+         "layout": "editorial",
+         "quote": "The rain doesn't change the city. It just clears it of everyone who isn't paying attention.",
+         "quote_font": "heading",
+         "quote_size": 30,
+         "quote_uppercase": false,
+         "rating": "0",
+         "author_name": "Yuki Mori",
+         "author_role": "on the shoot",
+         "author_uppercase": true,
+         "author_color": "#666666",
+         "text_color": "#f4f4f2",
+         "bg_color": "transparent",
+         "show_line": false
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fr-es-shots2",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "remove-vertical", "padding_bottom": 48 },
+  "style": { "bg": { "type": "solid", "color": "#0c0c0c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fr-es-s2-ro1",
+    "type": "row",
+    "settings": { "gap": 16 },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fr-es-s2-co1a",
+      "type": "column",
+      "settings": { "width": "1-2" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fr-es-shot05",
+        "type": "image",
+        "settings": {
+         "image_url": "",
+         "media_bg": { "type": "none" },
+         "media_label": "05 — doorway light",
+         "caption": "",
+         "aspect_ratio": "3/4",
+         "image_width": "100%",
+         "height": "",
+         "object_fit": "cover",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "fr-es-s2-co1b",
+      "type": "column",
+      "settings": { "width": "1-2" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fr-es-shot06",
+        "type": "image",
+        "settings": {
+         "image_url": "",
+         "media_bg": { "type": "none" },
+         "media_label": "06 — cat, awning",
+         "caption": "",
+         "aspect_ratio": "3/4",
+         "image_width": "100%",
+         "height": "",
+         "object_fit": "cover",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "fr-es-s2-ro2",
+    "type": "row",
+    "settings": { "gap": 0 },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fr-es-s2-co2",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fr-es-shot07",
+        "type": "image",
+        "settings": {
+         "image_url": "",
+         "media_bg": { "type": "none" },
+         "media_label": "07 — bridge, dawn coming",
+         "caption": "07 · First light over the bridge",
+         "aspect_ratio": "16/9",
+         "image_width": "100%",
+         "height": "",
+         "object_fit": "cover",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fr-es-more",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#121212" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fr-es-more-ro1",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fr-es-more-co1",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fr-es-more-sh",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "eyebrow_text": "",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "More essays", "color": "#f4f4f2", "italic": false }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 34,
+         "headline_font_weight": "800",
+         "headline_align": "left",
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 8
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "fr-es-more-ro2",
+    "type": "row",
+    "settings": { "gap": 24 },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fr-es-more-co2",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fr-es-more-grid",
+        "type": "workgrid",
+        "settings": {
+         "columns": 3,
+         "items_gap": 16,
+         "media_aspect": "4/3",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#1a1a1a",
+         "media_label_color": "#f4f4f2",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#f4f4f2",
+         "title_size": 21,
+         "title_weight": "700",
+         "meta_color": "#ff4438",
+         "meta_size": 11,
+         "show_desc": false,
+         "desc_color": "#9a9a9a",
+         "desc_size": 13,
+         "mono_font_family": "",
+         "items": [
+          { "image": "", "media_label": "harbour", "title": "Last of the Harbour", "meta": "Documentary", "description": "", "link_url": "#", "tall": false },
+          { "image": "", "media_label": "night shift", "title": "The Night Shift", "meta": "Portrait", "description": "", "link_url": "#", "tall": false },
+          { "image": "", "media_label": "highway", "title": "Two Lanes", "meta": "Landscape", "description": "", "link_url": "#", "tall": false }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

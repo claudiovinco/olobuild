@@ -81,6 +81,7 @@ class Olo_Team_Tile extends Olo_Tile_Base {
 
         // Photo shape
         $hex_clip = 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)';
+        $outer_radius_hover_css = '';
         if ( $ph_shape === 'circle' ) {
             $outer_radius = '50%';
             $inner_radius = '50%';

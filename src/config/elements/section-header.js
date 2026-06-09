@@ -112,7 +112,7 @@ export default {
     { key: 'tagline_caption_color', label: t('Colore caption'),              type: 'color' },
     { key: 'tagline_caption_size',  label: t('Dimensione caption (px)'),     type: 'range', min: 9, max: 18, step: 1 },
 
-    { type: 'separator', label: t('Layout') },
+    { type: 'separator', label: t('Composizione (headline / tagline)') },
     { key: 'layout', label: t('Modalità'), type: 'select', options: [
       { value: 'split',  label: t('Split (headline sx, tagline dx)') },
       { value: 'stack',  label: t('Stack (solo headline)') },

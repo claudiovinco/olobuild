@@ -1,0 +1,224 @@
+[
+ {
+  "id": "mp-se-pdp",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_top": 40, "padding_bottom": 48 },
+  "style": { "bg": { "type": "solid", "color": "#f5f2ec" } },
+  "advanced": {},
+  "children": [
+   { "id": "mp-ro-pdp", "type": "row", "settings": { "gap": 48, "vertical_align": "top" }, "style": {}, "advanced": {}, "children": [
+    {
+     "id": "mp-co-gal",
+     "type": "column",
+     "settings": { "width": "1-2" },
+     "style": {},
+     "advanced": {},
+     "children": [
+      { "id": "mp-img-main", "type": "image", "settings": {
+         "image_url": "",
+         "media_bg": { "type": "none" },
+         "media_label": "product — main shot",
+         "alt_text": "Stoneware Dinner Set — main shot",
+         "image_width": "100%",
+         "height": "auto",
+         "aspect_ratio": "custom",
+         "aspect_ratio_custom": "16/12",
+         "object_fit": "cover",
+         "border_radius": "0"
+        }, "style": {}, "advanced": {}, "children": [] },
+      { "id": "mp-ro-thumbs", "type": "row", "settings": { "gap": 12 }, "style": {}, "advanced": {}, "children": [
+       { "id": "mp-co-th1", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+        { "id": "mp-img-detail", "type": "image", "settings": {
+           "image_url": "",
+           "media_bg": { "type": "none" },
+           "media_label": "detail",
+           "alt_text": "Stoneware Dinner Set — detail",
+           "image_width": "100%",
+           "height": "auto",
+           "aspect_ratio": "custom",
+           "aspect_ratio_custom": "3/3.5",
+           "object_fit": "cover",
+           "border_radius": "0"
+          }, "style": {}, "advanced": {}, "children": [] }
+       ]},
+       { "id": "mp-co-th2", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+        { "id": "mp-img-use", "type": "image", "settings": {
+           "image_url": "",
+           "media_bg": { "type": "none" },
+           "media_label": "in use",
+           "alt_text": "Stoneware Dinner Set — in use",
+           "image_width": "100%",
+           "height": "auto",
+           "aspect_ratio": "custom",
+           "aspect_ratio_custom": "3/3.5",
+           "object_fit": "cover",
+           "border_radius": "0"
+          }, "style": {}, "advanced": {}, "children": [] }
+       ]}
+      ]}
+     ]
+    },
+    {
+     "id": "mp-co-info",
+     "type": "column",
+     "settings": { "width": "1-2" },
+     "style": {},
+     "advanced": {},
+     "children": [
+      { "id": "mp-crumb", "type": "text-block", "settings": { "content": "<p>Homeware / Tableware</p>", "text_color": "#8e897f", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] },
+      { "id": "mp-title", "type": "headline", "settings": { "heading": "Stoneware Dinner Set", "tag": "h1", "alignment": "left", "heading_font_size": "46", "heading_uppercase": true, "heading_color": "#141414", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+      { "id": "mp-price", "type": "headline", "settings": { "heading": "€74", "tag": "div", "alignment": "left", "heading_font_size": "26", "heading_uppercase": false, "heading_color": "#141414", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+      { "id": "mp-desc", "type": "text-block", "settings": { "content": "<p>A four-piece, hand-glazed stoneware set in a soft matte finish. Oven, microwave and dishwasher safe — built for everyday dinners, not the display cabinet.</p>", "text_color": "#5a5650", "font_size": "15", "line_height": "1.65", "text_align": "left", "max_width": "440" }, "style": {}, "advanced": {}, "children": [] },
+      { "id": "mp-opt-colour", "type": "text-block", "settings": { "content": "<p><strong>Colour</strong> — Clay · Pine · Bone · Charcoal</p>", "text_color": "#181715", "font_size": "13", "line_height": "1.6", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] },
+      { "id": "mp-opt-size", "type": "text-block", "settings": { "content": "<p><strong>Set size</strong> — 2pc · 4pc · 8pc</p>", "text_color": "#181715", "font_size": "13", "line_height": "1.6", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] },
+      { "id": "mp-ro-buy", "type": "row", "settings": { "gap": 12, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
+       { "id": "mp-co-buy1", "type": "column", "settings": { "width": "4-5" }, "style": {}, "advanced": {}, "children": [
+        { "id": "mp-btn-cart", "type": "button", "settings": {
+           "text": "Add to cart · €74",
+           "url": "#",
+           "alignment": "left",
+           "full_width": true,
+           "bg_color": "#141414",
+           "text_color": "#ffffff",
+           "hover_bg_color": "#1f1f1f",
+           "font_size": "13",
+           "font_weight": "600",
+           "text_transform": "uppercase",
+           "letter_spacing": "0.04em",
+           "border_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0, "linked": true },
+           "tile_padding": { "top": 17, "right": 34, "bottom": 17, "left": 34 },
+           "shadow": "none",
+           "hover_effect": "lift"
+          }, "style": {}, "advanced": {}, "children": [] }
+       ]},
+       { "id": "mp-co-buy2", "type": "column", "settings": { "width": "1-5" }, "style": {}, "advanced": {}, "children": [
+        { "id": "mp-btn-save", "type": "button", "settings": {
+           "text": "",
+           "icon": "heart",
+           "icon_position": "before",
+           "url": "#",
+           "alignment": "center",
+           "full_width": true,
+           "bg_color": "transparent",
+           "text_color": "#141414",
+           "hover_bg_color": "#141414",
+           "hover_text_color": "#ffffff",
+           "font_size": "16",
+           "border_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0, "linked": true },
+           "tile_padding": { "top": 15, "right": 15, "bottom": 15, "left": 15 },
+           "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "linked": true, "style": "solid", "color": "#141414" },
+           "shadow": "none",
+           "hover_effect": "none"
+          }, "style": {}, "advanced": {}, "children": [] }
+       ]}
+      ]},
+      { "id": "mp-acc", "type": "accordion", "settings": {
+         "preset": "custom",
+         "panels": [
+          { "id": "mp-acc-1", "title": "Details", "content": "Stoneware, reactive matte glaze. Set of 4: dinner plate, side plate, bowl, mug. Each piece slightly unique.", "image": "", "video": "", "icon": "" },
+          { "id": "mp-acc-2", "title": "Care", "content": "Dishwasher, microwave and oven safe to 180°C. Avoid sudden temperature changes.", "image": "", "video": "", "icon": "" },
+          { "id": "mp-acc-3", "title": "Shipping & returns", "content": "Free shipping over €60. 60-day returns, packed plastic-free.", "image": "", "video": "", "icon": "" }
+         ],
+         "toggle_mode": true,
+         "default_open": "none",
+         "icon_position": "right",
+         "icon_style": "plus",
+         "animate_icon": true,
+         "separator_style": "border",
+         "header_bg": "#f5f2ec",
+         "header_bg_active": "#f5f2ec",
+         "header_text_color": "#141414",
+         "header_text_color_active": "#141414",
+         "header_font_family": "heading",
+         "header_font_size": "14",
+         "header_font_weight": "700",
+         "header_padding_y": "16",
+         "header_padding_x": "0",
+         "content_bg": "#f5f2ec",
+         "content_padding_y": "0",
+         "content_padding_x": "0",
+         "content_font_size": "14",
+         "text_color": "#5a5650",
+         "border_color": "#e3ddd1",
+         "border_width": "1",
+         "border_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0, "linked": true },
+         "gap": "0",
+         "shadow": "none"
+        }, "style": {}, "advanced": {}, "children": [] }
+     ]
+    }
+   ]}
+  ]
+ },
+ {
+  "id": "mp-se-rel",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f5f2ec" } },
+  "advanced": {},
+  "children": [
+   { "id": "mp-ro-relhd", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "mp-co-relhd", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "mp-sh-rel", "type": "section-header", "settings": {
+        "eyebrow_show": true,
+        "eyebrow_text": "Goes well with",
+        "eyebrow_color": "#e1474f",
+        "eyebrow_dot_color": "#e1474f",
+        "eyebrow_separator": "",
+        "headline_lines": [ { "text": "Complete the table", "color": "#141414", "italic": false } ],
+        "headline_font_family": "sans-serif",
+        "headline_font_size": 48,
+        "headline_line_height": 1.0,
+        "headline_font_weight": "800",
+        "headline_align": "left",
+        "tagline_show": true,
+        "tagline_text": "Shop all →",
+        "tagline_text_italic": false,
+        "tagline_text_color": "#141414",
+        "tagline_text_size": 12,
+        "tagline_caption": "",
+        "layout": "split",
+        "split_ratio": "2fr 1fr",
+        "gap": 24,
+        "vertical_align": "end"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]},
+   { "id": "mp-ro-rel", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "mp-co-rel", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "mp-productgrid-rel", "type": "productgrid", "settings": {
+        "columns": 4,
+        "gap": 20,
+        "media_aspect": "3/3.5",
+        "media_bg": "#ffffff",
+        "stripe_dark": false,
+        "hover_zoom": true,
+        "tag_bg": "#e1474f",
+        "tag_color": "#ffffff",
+        "quick_add_show": true,
+        "quick_add_bg": "#141414",
+        "quick_add_color": "#ffffff",
+        "category_color": "#8e897f",
+        "title_font": "heading",
+        "title_size": 17,
+        "title_color": "#141414",
+        "price_color": "#181715",
+        "card_bg": "",
+        "card_border": "",
+        "card_radius": 0,
+        "card_padding": 0,
+        "footer_text": "",
+        "footer_url": "#",
+        "show_filters": false,
+        "items": [
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "", "category": "Homeware", "title": "Glass carafe", "price": "€54", "link": "#", "quick_add": "Quick add · €54", "shades": "", "notes": "", "roast": 0, "filter_tags": "" },
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "", "category": "Kitchen", "title": "Linen apron", "price": "€38", "link": "#", "quick_add": "Quick add · €38", "shades": "", "notes": "", "roast": 0, "filter_tags": "" },
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "New", "category": "Textiles", "title": "Linen napkins", "price": "€46", "link": "#", "quick_add": "Quick add · €46", "shades": "", "notes": "", "roast": 0, "filter_tags": "" },
+         { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "", "category": "Homeware", "title": "Ceramic planter", "price": "€32", "link": "#", "quick_add": "Quick add · €32", "shades": "", "notes": "", "roast": 0, "filter_tags": "" }
+        ]
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

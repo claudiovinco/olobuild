@@ -4,8 +4,8 @@
   "type": "section",
   "settings": {
    "style": "default",
-   "width": "large",
-   "padding": "large"
+   "width": "fullbleed",
+   "padding": "remove-vertical"
   },
   "style": {
    "bg": {
@@ -96,56 +96,32 @@
       "id": "sw-co-6",
       "type": "column",
       "settings": {
-       "width": "1-3"
+       "width": "2-5"
       },
       "style": {},
       "advanced": {},
       "children": [
        {
-        "id": "sw-info-cards-5",
-        "type": "info-cards",
+        "id": "sw-rel-cover-5",
+        "type": "image",
         "settings": {
-         "container_bg": {
-          "type": "solid",
-          "color": "transparent"
-         },
-         "container_padding": 0,
-         "container_gap": 0,
-         "columns": 1,
-         "items_gap": 0,
-         "card_bg": {
-          "type": "solid",
-          "color": "#16161d"
-         },
-         "card_color": "#74747f",
-         "card_radius": {
-          "tl": 18,
-          "tr": 18,
-          "br": 18,
-          "bl": 18,
+         "image_url": "",
+         "media_bg": { "type": "none" },
+         "media_label": "Nightglass cover",
+         "alt_text": "Nightglass — album cover",
+         "image_width": "100%",
+         "height": "auto",
+         "aspect_ratio": "1/1",
+         "object_fit": "cover",
+         "image_alignment": "center",
+         "border_radius": "18",
+         "border": {
+          "top": { "width": 1, "style": "solid", "color": "rgba(255,255,255,.09)" },
+          "right": { "width": 1, "style": "solid", "color": "rgba(255,255,255,.09)" },
+          "bottom": { "width": 1, "style": "solid", "color": "rgba(255,255,255,.09)" },
+          "left": { "width": 1, "style": "solid", "color": "rgba(255,255,255,.09)" },
           "linked": true
-         },
-         "card_padding": 40,
-         "show_icon": false,
-         "show_counter": false,
-         "show_arrow": false,
-         "show_footer": true,
-         "show_media": false,
-         "title_color": "#74747f",
-         "title_font_family": "sans-serif",
-         "title_size": 12,
-         "title_weight": "600",
-         "title_italic": false,
-         "description_size": 0,
-         "footer_size": 12,
-         "items": [
-          {
-           "title": "NIGHTGLASS",
-           "footer_text": "Kova · 2026",
-           "footer_dot_color": "#27e0a3"
-          }
-         ],
-         "card_hover_effect": "none"
+         }
         },
         "style": {},
         "advanced": {},
@@ -157,7 +133,7 @@
       "id": "sw-co-10",
       "type": "column",
       "settings": {
-       "width": "2-3"
+       "width": "3-5"
       },
       "style": {},
       "advanced": {},
@@ -569,13 +545,8 @@
          "eyebrow_separator": "",
          "headline_lines": [
           {
-           "text": "Everything ",
+           "text": "Everything else",
            "color": "#ffffff",
-           "italic": false
-          },
-          {
-           "text": "else",
-           "color": "#27e0a3",
            "italic": false
           }
          ],
@@ -729,13 +700,8 @@
          "eyebrow_separator": "",
          "headline_lines": [
           {
-           "text": "Build ",
+           "text": "Build a beat",
            "color": "#ffffff",
-           "italic": false
-          },
-          {
-           "text": "a beat",
-           "color": "#27e0a3",
            "italic": false
           }
          ],
@@ -881,152 +847,43 @@
       "advanced": {},
       "children": [
        {
-        "id": "sw-hero-split-37",
-        "type": "hero-split",
+        "id": "sw-bio-introsplit-37",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "About",
-         "eyebrow_dot_color": "#27e0a3",
+         "eyebrow": "About",
          "eyebrow_color": "#27e0a3",
-         "headline_lines": [
-          {
-           "text": "Kova",
-           "color": "#ffffff",
-           "italic": false
-          }
+         "headline": "Kova",
+         "accent": "",
+         "headline_tail": "",
+         "uppercase": false,
+         "headline_color": "#ffffff",
+         "accent_color": "#27e0a3",
+         "headline_weight": "700",
+         "headline_size": "46",
+         "lead": "Producer, multi-instrumentalist and live performer. Kova builds tracks the slow way — field recordings, modular synths and a refusal to quantise the life out of anything. Since 2019, three records, two continents, and one very patient sound engineer.",
+         "lead_color": "#74747f",
+         "stats": [
+          { "number": "2.4M", "label": "Monthly listeners" },
+          { "number": "3", "label": "Albums" },
+          { "number": "140+", "label": "Shows played" }
          ],
-         "headline_font_family": "sans-serif",
-         "headline_font_size": 46,
-         "headline_line_height": 1.02,
-         "headline_font_weight": "700",
-         "headline_align": "left",
-         "subhead": "Producer, multi-instrumentalist and live performer. Kova builds tracks the slow way — field recordings, modular synths and a refusal to quantise the life out of anything. Since 2019, three records, two continents, and one very patient sound engineer.",
-         "subhead_color": "#b6b6c2",
-         "subhead_size": 16,
-         "subhead_italic": false,
-         "subhead_max_width": 500,
-         "cta1_text": "Streaming",
-         "cta1_url": "#listen",
-         "cta1_bg": "#27e0a3",
-         "cta1_color": "#060608",
-         "cta1_size": 14,
-         "cta1_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta2_text": "Press kit",
+         "stat_number_color": "#27e0a3",
+         "stat_label_color": "#74747f",
+         "cta_text": "",
+         "cta_url": "#",
+         "cta2_text": "",
          "cta2_url": "#",
-         "cta2_bg": "rgba(255,255,255,.05)",
-         "cta2_color": "#ffffff",
-         "cta2_border": "rgba(255,255,255,.09)",
-         "cta2_size": 14,
-         "cta2_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta2_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "stats": [],
-         "showcase_enabled": true,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#16161d"
-         },
-         "showcase_padding": 32,
-         "showcase_radius": {
-          "tl": 18,
-          "tr": 18,
-          "br": 18,
-          "bl": 18,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 18,
-          "tr": 18,
-          "br": 18,
-          "bl": 18,
-          "linked": true
-         },
-         "showcase_badge_text": "KOVA · AT A GLANCE",
-         "showcase_badge_dot": "#27e0a3",
-         "showcase_badge_bg": "#060608",
-         "showcase_badge_color": "#ffffff",
-         "showcase_items": [
-          {
-           "number": "Monthly listeners",
-           "text": "2.4M",
-           "italic": false,
-           "text_color": "#27e0a3",
-           "bg": {
-            "type": "solid",
-            "color": "#101016"
-           }
-          },
-          {
-           "number": "Albums",
-           "text": "3",
-           "italic": false,
-           "text_color": "#ffffff",
-           "bg": {
-            "type": "solid",
-            "color": "#101016"
-           }
-          },
-          {
-           "number": "Shows played",
-           "text": "140+",
-           "italic": false,
-           "text_color": "#ffffff",
-           "bg": {
-            "type": "solid",
-            "color": "#101016"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 11,
-          "tr": 11,
-          "br": 11,
-          "bl": 11,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 11,
-          "tr": 11,
-          "br": 11,
-          "bl": 11,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "KOVA",
-         "showcase_caption_right": "2019 – NOW",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1fr 1fr",
-         "gap": 52,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_image": "",
+         "media_bg": { "type": "none" },
+         "media_label": "press photo — Kova in low light",
+         "media_light": false,
+         "media_aspect": "4/5",
+         "media_radius": 18,
+         "media_radius_top": 0,
+         "media_blob": false,
+         "badge_number": "",
+         "badge_label": "",
+         "media_position": "left"
         },
         "style": {},
         "advanced": {},
@@ -1074,8 +931,8 @@
         "id": "sw-cta-banner-41",
         "type": "cta-banner",
         "settings": {
-         "headline": "Press",
-         "headline_accent": "play.",
+         "headline": "Press play.",
+         "headline_accent": "",
          "headline_accent_italic": false,
          "subtitle": "Stream Nightglass wherever you listen, or come hear it the way it's meant to be — loud.",
          "cta_text": "Stream the album",

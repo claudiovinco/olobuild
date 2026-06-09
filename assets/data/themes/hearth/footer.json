@@ -1,1 +1,91 @@
-[{"id":"he-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#2a211c"}},"advanced":{},"children":[{"id":"he-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"he-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"he-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Lora\", Georgia, serif;font-size:20px;color:#b06a4f;font-weight:600;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#b06a4f;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Hearth</div><p style=\"font-size:14px;color:#6a5f53;max-width:260px\">An interior design studio making warm, lived-in homes across Italy.</p>","text_color":"#2c241d","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"he-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"he-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#b06a4f;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Studio</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#6a5f53\"><li>Projects</li><li>About</li><li>Services</li><li>Press</li></ul>","text_color":"#2c241d","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"he-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"he-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#b06a4f;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Connect</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#6a5f53\"><li>Instagram</li><li>Pinterest</li><li>Contact</li></ul>","text_color":"#2c241d","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"he-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"he-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#b06a4f;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Studio</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#6a5f53\"><li>Via Solferino 7, Milan</li><li>studio@hearth.design</li></ul>","text_color":"#2c241d","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"he-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"he-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"he-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid #ddd0bb;padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#6a5f53\"><span>© 2026 Hearth Studio — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#2c241d","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "he-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
+  "style": { "bg": { "type": "solid", "color": "#2a211c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "he-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "he-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "he-fbrand", "type": "headline", "settings": { "heading": "Hearth", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "25", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "he-fbtext", "type": "text-block", "settings": { "content": "<p>An interior design studio making warm, lived-in homes across Italy.</p>", "text_color": "#9a8e7e", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "250" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "he-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "he-fh1", "type": "headline", "settings": { "heading": "Studio", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#b06a4f", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "he-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#9a8e7e", "link_hover_color": "#ffffff", "items": [ { "title": "Projects", "content": "#projects", "tag": "" }, { "title": "About", "content": "#studio", "tag": "" }, { "title": "Services", "content": "#services", "tag": "" }, { "title": "Press", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "he-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "he-fh2", "type": "headline", "settings": { "heading": "Connect", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#b06a4f", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "he-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#9a8e7e", "link_hover_color": "#ffffff", "items": [ { "title": "Instagram", "content": "#", "tag": "" }, { "title": "Pinterest", "content": "#", "tag": "" }, { "title": "Contact", "content": "#contact", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "he-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "he-fh3", "type": "headline", "settings": { "heading": "Studio", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#b06a4f", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "he-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#9a8e7e", "link_hover_color": "#ffffff", "items": [ { "title": "Via Solferino 7, Milan", "content": "#", "tag": "" }, { "title": "studio@hearth.design", "content": "mailto:studio@hearth.design", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "he-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "he-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "he-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.15)", "alignment": "center", "spacing": 22 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "he-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "he-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "he-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Hearth Studio — an OLOtheme demo.</p>", "text_color": "#9a8e7e", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "he-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "he-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#9a8e7e", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

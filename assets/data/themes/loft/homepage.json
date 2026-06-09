@@ -5,12 +5,7 @@
   "settings": {
    "style": "default",
    "width": "full",
-   "padding": {
-    "top": 0,
-    "right": 0,
-    "bottom": 0,
-    "left": 0
-   },
+   "padding": "remove-vertical",
    "padding_top": 0,
    "padding_bottom": 0
   },
@@ -96,7 +91,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#202022"
+    "color": "#1c1c1e"
    }
   },
   "advanced": {},
@@ -231,7 +226,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1c1c1e"
+    "color": "#202022"
    }
   },
   "advanced": {},
@@ -260,7 +255,7 @@
          "heading": "House on the Slope · in plan",
          "intro": "",
          "panel_label": "ground-floor plan — concrete spine, glazed south face",
-         "aspect_ratio": "16/10",
+         "aspect_ratio": "16/9",
          "items": [
           {
            "x": 24,
@@ -578,9 +573,7 @@
    {
     "id": "lo-ro-44",
     "type": "row",
-    "settings": {
-     "gap": 16
-    },
+    "settings": {},
     "style": {},
     "advanced": {},
     "children": [
@@ -588,179 +581,37 @@
       "id": "lo-co-37",
       "type": "column",
       "settings": {
-       "width": "1-4"
+       "width": "1-1"
       },
       "style": {},
       "advanced": {},
       "children": [
        {
-        "id": "lo-team-36",
-        "type": "team",
+        "id": "lo-team-grid-36",
+        "type": "workgrid",
         "settings": {
-         "photo": "",
-         "name": "Ana Roca",
-         "role": "Founding partner",
-         "bio": "",
-         "link_url": "",
-         "link_text": "",
-         "photo_size": "120",
-         "photo_shape": "circle",
-         "photo_border_width": "0",
-         "photo_shadow": "none",
-         "photo_gap": "14",
-         "info_bg_color": "transparent",
-         "info_text_color": "#eeece6",
-         "role_color": "#c9c2b6",
-         "info_align": "left",
-         "name_size": "18",
-         "name_weight": "600",
-         "role_size": "12",
-         "bg_color": "transparent",
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         },
-         "border_radius": "0"
-        },
-        "style": {},
-        "advanced": {},
-        "children": []
-       }
-      ]
-     },
-     {
-      "id": "lo-co-39",
-      "type": "column",
-      "settings": {
-       "width": "1-4"
-      },
-      "style": {},
-      "advanced": {},
-      "children": [
-       {
-        "id": "lo-team-38",
-        "type": "team",
-        "settings": {
-         "photo": "",
-         "name": "Ito Vesa",
-         "role": "Partner",
-         "bio": "",
-         "link_url": "",
-         "link_text": "",
-         "photo_size": "120",
-         "photo_shape": "circle",
-         "photo_border_width": "0",
-         "photo_shadow": "none",
-         "photo_gap": "14",
-         "info_bg_color": "transparent",
-         "info_text_color": "#eeece6",
-         "role_color": "#c9c2b6",
-         "info_align": "left",
-         "name_size": "18",
-         "name_weight": "600",
-         "role_size": "12",
-         "bg_color": "transparent",
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         },
-         "border_radius": "0"
-        },
-        "style": {},
-        "advanced": {},
-        "children": []
-       }
-      ]
-     },
-     {
-      "id": "lo-co-41",
-      "type": "column",
-      "settings": {
-       "width": "1-4"
-      },
-      "style": {},
-      "advanced": {},
-      "children": [
-       {
-        "id": "lo-team-40",
-        "type": "team",
-        "settings": {
-         "photo": "",
-         "name": "Priya Nair",
-         "role": "Associate",
-         "bio": "",
-         "link_url": "",
-         "link_text": "",
-         "photo_size": "120",
-         "photo_shape": "circle",
-         "photo_border_width": "0",
-         "photo_shadow": "none",
-         "photo_gap": "14",
-         "info_bg_color": "transparent",
-         "info_text_color": "#eeece6",
-         "role_color": "#c9c2b6",
-         "info_align": "left",
-         "name_size": "18",
-         "name_weight": "600",
-         "role_size": "12",
-         "bg_color": "transparent",
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         },
-         "border_radius": "0"
-        },
-        "style": {},
-        "advanced": {},
-        "children": []
-       }
-      ]
-     },
-     {
-      "id": "lo-co-43",
-      "type": "column",
-      "settings": {
-       "width": "1-4"
-      },
-      "style": {},
-      "advanced": {},
-      "children": [
-       {
-        "id": "lo-team-42",
-        "type": "team",
-        "settings": {
-         "photo": "",
-         "name": "Karl Weiss",
-         "role": "Interiors lead",
-         "bio": "",
-         "link_url": "",
-         "link_text": "",
-         "photo_size": "120",
-         "photo_shape": "circle",
-         "photo_border_width": "0",
-         "photo_shadow": "none",
-         "photo_gap": "14",
-         "info_bg_color": "transparent",
-         "info_text_color": "#eeece6",
-         "role_color": "#c9c2b6",
-         "info_align": "left",
-         "name_size": "18",
-         "name_weight": "600",
-         "role_size": "12",
-         "bg_color": "transparent",
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         },
-         "border_radius": "0"
+         "items": [
+          { "image": "", "media_label": "architect", "title": "Ana Roca", "meta": "Founding partner", "description": "", "link_url": "", "tall": true },
+          { "image": "", "media_label": "architect", "title": "Ito Vesa", "meta": "Partner", "description": "", "link_url": "", "tall": true },
+          { "image": "", "media_label": "architect", "title": "Priya Nair", "meta": "Associate", "description": "", "link_url": "", "tall": true },
+          { "image": "", "media_label": "architect", "title": "Karl Weiss", "meta": "Interiors lead", "description": "", "link_url": "", "tall": true }
+         ],
+         "columns": 4,
+         "items_gap": 16,
+         "media_aspect": "3/2",
+         "media_tall_aspect": "3/4",
+         "media_bg": "#26262a",
+         "media_label_color": "rgba(238,236,230,.4)",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#eeece6",
+         "title_size": 18,
+         "title_weight": "600",
+         "meta_color": "#c9c2b6",
+         "meta_size": 12,
+         "show_desc": false,
+         "desc_color": "#646058",
+         "desc_size": 14
         },
         "style": {},
         "advanced": {},
@@ -783,7 +634,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#202022"
+    "color": "#1c1c1e"
    }
   },
   "advanced": {},
@@ -861,7 +712,9 @@
   "settings": {
    "style": "default",
    "width": "large",
-   "padding": "large"
+   "padding": "remove-vertical",
+   "padding_top": 52,
+   "padding_bottom": 96
   },
   "style": {
    "bg": {
@@ -889,57 +742,36 @@
       "children": [
        {
         "id": "lo-cta-banner-50",
-        "type": "cta-banner",
+        "type": "mediacta",
         "settings": {
+         "eyebrow": "",
          "headline": "Building something?",
-         "headline_accent": "",
-         "headline_accent_italic": false,
-         "subtitle": "We take on a handful of projects a year. Tell us about the site and the idea — we'll tell you honestly if we're the right studio.",
-         "cta_text": "Start a project",
-         "cta_url": "#contact",
-         "bg": {
-          "type": "solid",
-          "color": "#26262a"
-         },
-         "text_color": "#eeece6",
-         "accent_color": "#c9c2b6",
-         "subtitle_color": "#9a958c",
-         "cta_bg": "#c9c2b6",
-         "cta_color": "#121214",
-         "cta_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "cta_size": 13,
+         "accent_text": "",
+         "uppercase": false,
+         "headline_color": "#ffffff",
+         "subhead": "We take on a handful of projects a year. Tell us about the site and the idea — we'll tell you honestly if we're the right studio.",
+         "subhead_color": "#eeece6",
+         "cta1_text": "Start a project",
+         "cta1_url": "#contact",
          "cta2_text": "See the work",
          "cta2_url": "#projects",
-         "cta2_bg": "transparent",
-         "cta2_color": "#eeece6",
-         "cta2_border": "rgba(201,194,182,.4)",
-         "cta2_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "headline_font_family": "sans-serif",
-         "headline_size": 56,
-         "headline_weight": "600",
-         "subtitle_size": 17,
-         "layout": "stack",
-         "vertical_align": "center",
-         "banner_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "banner_padding": 80
+         "bg_image": "",
+         "media_bg": { "type": "none" },
+         "media_label": "studio model on a table",
+         "overlay_type": "linear",
+         "overlay_color": "#121214",
+         "overlay_top": 0.7,
+         "overlay_bottom": 0.85,
+         "accent": "#c9c2b6",
+         "accent_on": "#121214",
+         "btn_bg": "#c9c2b6",
+         "btn_color": "#121214",
+         "btn_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0 },
+         "text_color": "#ffffff",
+         "align": "center",
+         "headline_size": "72",
+         "pad_y": 96,
+         "bg": { "type": "none" }
         },
         "style": {},
         "advanced": {},

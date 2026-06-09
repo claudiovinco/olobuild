@@ -1,0 +1,387 @@
+[
+ {
+  "id": "vp-ph-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "full", "padding": "none", "padding_top": 0, "padding_bottom": 0 },
+  "style": { "bg": { "type": "solid", "color": "#0a0a0c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vp-ph-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vp-ph-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vp-ph",
+        "type": "glowhero",
+        "settings": {
+         "eyebrow": "Branding · Campaign · 2025",
+         "eyebrow_dots": false,
+         "lines": [
+          { "text": "Helio —", "mode": "" },
+          { "text": "solar, reframed.", "mode": "" }
+         ],
+         "uppercase": true,
+         "subhead": "",
+         "cta1_text": "",
+         "cta1_url": "#",
+         "cta2_text": "",
+         "cta2_url": "#",
+         "show_scroll": false,
+         "scroll_text": "",
+         "bottom_split": false,
+         "bg_color": "#0a0a0c",
+         "accent": "#f4a23b",
+         "accent2": "#e08e26",
+         "accent_on": "#0a0a0c",
+         "text_color": "#ece9e3",
+         "sub_color": "#9b988f",
+         "eyebrow_color": "#f4a23b",
+         "glow_color": "rgba(244,162,59,0.14)",
+         "glow_w": 700,
+         "glow_h": 520,
+         "glow_blur": 110,
+         "glow_x": 30,
+         "glow_y": 10,
+         "h_size_min": 44,
+         "h_size_vw": 8,
+         "h_size_max": 120,
+         "h_line_height": 0.9,
+         "stroke_width": 2,
+         "align": "left",
+         "max_width": 1300,
+         "min_height": 56
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vp-meta-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "none", "padding_top": 0, "padding_bottom": 20 },
+  "style": { "bg": { "type": "solid", "color": "#0a0a0c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vp-meta-div-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "vp-meta-div-co", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "vp-meta-div", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.1)", "alignment": "center", "spacing": 16 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "vp-meta-ro",
+    "type": "row",
+    "settings": { "gap": 48, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vp-meta-c1",
+      "type": "column",
+      "settings": { "width": "1-4" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "vp-m1l", "type": "headline", "settings": { "heading": "CLIENT", "tag": "div", "alignment": "left", "heading_font": "body", "heading_font_size": "11", "heading_uppercase": true, "heading_color": "#6a6862", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vp-m1v", "type": "headline", "settings": { "heading": "Helio Energy", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "17", "heading_font_weight": "600", "heading_color": "#ece9e3", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "vp-meta-c2",
+      "type": "column",
+      "settings": { "width": "1-4" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "vp-m2l", "type": "headline", "settings": { "heading": "SERVICES", "tag": "div", "alignment": "left", "heading_font": "body", "heading_font_size": "11", "heading_uppercase": true, "heading_color": "#6a6862", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vp-m2v", "type": "headline", "settings": { "heading": "Brand · Identity · Campaign", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "17", "heading_font_weight": "600", "heading_color": "#ece9e3", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "vp-meta-c3",
+      "type": "column",
+      "settings": { "width": "1-4" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "vp-m3l", "type": "headline", "settings": { "heading": "YEAR", "tag": "div", "alignment": "left", "heading_font": "body", "heading_font_size": "11", "heading_uppercase": true, "heading_color": "#6a6862", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vp-m3v", "type": "headline", "settings": { "heading": "2025", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "17", "heading_font_weight": "600", "heading_color": "#ece9e3", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "vp-meta-c4",
+      "type": "column",
+      "settings": { "width": "1-4" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "vp-m4l", "type": "headline", "settings": { "heading": "RECOGNITION", "tag": "div", "alignment": "left", "heading_font": "body", "heading_font_size": "11", "heading_uppercase": true, "heading_color": "#6a6862", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vp-m4v", "type": "headline", "settings": { "heading": "Awwwards SOTD", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "17", "heading_font_weight": "600", "heading_color": "#ece9e3", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vp-feat-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "none", "padding_top": 20, "padding_bottom": 0 },
+  "style": { "bg": { "type": "solid", "color": "#0a0a0c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vp-feat-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vp-feat-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vp-feat-img",
+        "type": "image",
+        "settings": {
+         "image_url": "",
+         "media_bg": { "type": "none" },
+         "media_label": "hero — Helio brand campaign key visual",
+         "alt_text": "Helio brand campaign key visual",
+         "aspect_ratio": "custom",
+         "aspect_ratio_custom": "16/8",
+         "object_fit": "cover",
+         "image_width": "100%",
+         "border_radius": "16"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vp-body-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#0a0a0c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vp-body-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vp-body-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vp-lead",
+        "type": "headline",
+        "settings": {
+         "heading": "Helio came to us with great technology and a brand that looked like everyone else's in the category — blue gradients, stock skies, the lot.",
+         "tag": "p",
+         "alignment": "left",
+         "heading_font": "heading",
+         "heading_font_size": "30",
+         "heading_font_weight": "600",
+         "heading_color": "#ece9e3",
+         "decoration": "none",
+         "max_width": "720"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "vp-body-1",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>We started by throwing out the clichés. Instead of selling panels, Helio would sell the feeling of independence — your own power, your own terms. That single idea reshaped the name, the identity and the entire launch.</p><p>The result is a warm, confident system built around a single graphic device — the rising mark — that works as a logo, a loading state, a billboard and everything in between.</p>",
+         "text_color": "#9b988f",
+         "font_size": "18",
+         "line_height": "1.7",
+         "text_align": "left",
+         "max_width": "720"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "vp-split-ro",
+    "type": "row",
+    "settings": { "gap": 16 },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vp-split-c1",
+      "type": "column",
+      "settings": { "width": "1-2" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "vp-split-i1", "type": "image", "settings": { "image_url": "", "media_bg": { "type": "none" }, "media_label": "identity — logo & mark", "alt_text": "Helio logo and mark", "aspect_ratio": "4/3", "object_fit": "cover", "image_width": "100%", "border_radius": "12" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "vp-split-c2",
+      "type": "column",
+      "settings": { "width": "1-2" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "vp-split-i2", "type": "image", "settings": { "image_url": "", "media_bg": { "type": "none" }, "media_label": "identity — colour & type", "alt_text": "Helio colour and type", "aspect_ratio": "4/3", "object_fit": "cover", "image_width": "100%", "border_radius": "12" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "vp-body2-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vp-body2-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vp-body-2",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>Across out-of-home, social and a new site, the campaign lifted brand search by a third in its first quarter — and gave the team an identity they're genuinely proud to ship.</p>",
+         "text_color": "#9b988f",
+         "font_size": "18",
+         "line_height": "1.7",
+         "text_align": "left",
+         "max_width": "720"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vp-cta-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#0a0a0c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vp-cta-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vp-cta-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vp-cta",
+        "type": "glowhero",
+        "settings": {
+         "eyebrow": "Next project",
+         "eyebrow_dots": false,
+         "lines": [
+          { "text": "Møya", "mode": "accent" },
+          { "text": "identity", "mode": "" }
+         ],
+         "uppercase": true,
+         "subhead": "",
+         "cta1_text": "View project",
+         "cta1_url": "#work",
+         "cta2_text": "",
+         "cta2_url": "#",
+         "show_scroll": false,
+         "scroll_text": "",
+         "bottom_split": false,
+         "bg_color": "#0a0a0c",
+         "accent": "#f4a23b",
+         "accent2": "#e08e26",
+         "accent_on": "#0a0a0c",
+         "text_color": "#ece9e3",
+         "sub_color": "#9b988f",
+         "eyebrow_color": "#f4a23b",
+         "glow_color": "rgba(244,162,59,0.2)",
+         "glow_w": 680,
+         "glow_h": 480,
+         "glow_blur": 100,
+         "glow_x": 50,
+         "glow_y": 80,
+         "h_size_min": 44,
+         "h_size_vw": 9,
+         "h_size_max": 140,
+         "h_line_height": 0.9,
+         "stroke_width": 2,
+         "align": "center",
+         "max_width": 1300,
+         "min_height": 56
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

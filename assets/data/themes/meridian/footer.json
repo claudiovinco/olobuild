@@ -1,1 +1,91 @@
-[{"id":"me-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#16263d"}},"advanced":{},"children":[{"id":"me-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"me-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"me-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Spectral\", Georgia, serif;font-size:20px;color:#ffffff;font-weight:600;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#caa45a;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Meridian</div><p style=\"font-size:14px;color:#54607a;max-width:260px\">Independent strategy & financial advisory. Clear thinking for complex decisions.</p>","text_color":"#1b2433","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"me-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"me-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Services</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#54607a\"><li>Strategy</li><li>M&A advisory</li><li>Capital</li><li>Transformation</li></ul>","text_color":"#1b2433","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"me-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"me-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Firm</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#54607a\"><li>About us</li><li>Clients</li><li>Insights</li><li>Careers</li></ul>","text_color":"#1b2433","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"me-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"me-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Work Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Offices</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#54607a\"><li>Milan · London</li><li>Frankfurt · Zurich</li><li>Contact</li></ul>","text_color":"#1b2433","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"me-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"me-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"me-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid #e4e1d6;padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#54607a\"><span>© 2026 Meridian Advisory — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#1b2433","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "me-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
+  "style": { "bg": { "type": "solid", "color": "#16263d" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "me-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "me-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "me-fbrand", "type": "headline", "settings": { "heading": "Meridian", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "23", "heading_color": "#ffffff", "heading_uppercase": false, "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "me-fbtext", "type": "text-block", "settings": { "content": "<p>Independent strategy & financial advisory. Clear thinking for complex decisions.</p>", "text_color": "#54607a", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "250" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "me-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "me-fh1", "type": "headline", "settings": { "heading": "Services", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "12", "heading_uppercase": true, "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "me-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#54607a", "link_hover_color": "#caa45a", "items": [ { "title": "Strategy", "content": "#services", "tag": "" }, { "title": "M&A advisory", "content": "#services", "tag": "" }, { "title": "Capital", "content": "#services", "tag": "" }, { "title": "Transformation", "content": "#services", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "me-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "me-fh2", "type": "headline", "settings": { "heading": "Firm", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "12", "heading_uppercase": true, "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "me-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#54607a", "link_hover_color": "#caa45a", "items": [ { "title": "About us", "content": "#", "tag": "" }, { "title": "Clients", "content": "#cases", "tag": "" }, { "title": "Insights", "content": "#insights", "tag": "" }, { "title": "Careers", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "me-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "me-fh3", "type": "headline", "settings": { "heading": "Offices", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "12", "heading_uppercase": true, "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "me-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#54607a", "link_hover_color": "#caa45a", "items": [ { "title": "Milan · London", "content": "", "tag": "" }, { "title": "Frankfurt · Zurich", "content": "", "tag": "" }, { "title": "Contact", "content": "#contact", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "me-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "me-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "me-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.13)", "alignment": "center", "spacing": 22 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "me-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "me-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "me-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Meridian Advisory — an OLOtheme demo.</p>", "text_color": "#54607a", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "me-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "me-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#54607a", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

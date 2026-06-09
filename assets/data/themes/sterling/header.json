@@ -1,1 +1,87 @@
-[{"id":"st-hse","type":"section","settings":{"style":"default","width":"expand","padding":"none"},"style":{"bg":{"type":"solid","color":"rgba(20,36,28,.86)"}},"advanced":{},"children":[{"id":"st-hro","type":"row","settings":{"layout":"100","gap":0,"vertical_align":"center"},"style":{},"advanced":{},"children":[{"id":"st-hco","type":"column","settings":{"width":"1-1","width_medium":"1-1"},"style":{},"advanced":{},"children":[{"id":"st-hmm","type":"megamenu","settings":{"menu_id":"auto","layout":"horizontal","alignment":"right","font_size":"14","font_weight":"600","text_color":"#aebcae","sticky":true,"sticky_bg":"rgba(20,36,28,.92)","sticky_shadow":true,"social_icons":false,"search_icon":false,"logo_image":"","logo_width":"138","logo_position":"left","logo_link":"/","logo_sticky":"","mobile_logo":"","mobile_logo_height":"30","mobile_bar_logo":true,"logo_text":"Sterling","logo_dot":true},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "st-hse",
+  "type": "section",
+  "settings": { "style": "default", "width": "expand", "padding": "none" },
+  "style": { "bg": { "type": "solid", "color": "rgba(20,36,28,.86)" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "st-hro",
+    "type": "row",
+    "settings": { "layout": "100", "gap": 0, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "st-hco",
+      "type": "column",
+      "settings": { "width": "1-1", "width_medium": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "st-hmm",
+        "type": "megamenu",
+        "settings": {
+         "menu_id": "auto",
+         "layout": "left",
+         "alignment": "left",
+         "font_size": "14",
+         "font_weight": "500",
+         "text_color": "#aebcae",
+         "hover_color": "#c9a44a",
+         "active_color": "#c9a44a",
+         "sticky": true,
+         "sticky_bg": "rgba(20,36,28,.92)",
+         "sticky_shadow": false,
+         "nav_bg": "rgba(20,36,28,.86)",
+         "bar_width": "classic",
+         "header_mode": "classic",
+         "social_icons": false,
+         "search_icon": false,
+         "logo_image": "",
+         "logo_width": "138",
+         "logo_position": "left",
+         "logo_link": "/",
+         "logo_sticky": "",
+         "mobile_logo": "",
+         "mobile_logo_height": "30",
+         "mobile_bar_logo": true,
+         "logo_text": "Sterling",
+         "logo_text_size": "25",
+         "logo_text_color": "#eef2e9",
+         "logo_dot": true,
+         "button_mode": "none",
+         "btn_bg": "#c9a44a",
+         "btn_color": "#0c1812",
+         "btn_radius": { "tl": 4, "tr": 4, "br": 4, "bl": 4 },
+         "btn_hover_bg": "#d8b766",
+         "extra_link_1_label": "Arrange a call",
+         "extra_link_1_url": "#contact",
+         "extra_link_1_button": true,
+         "extra_links_right": true,
+         "mobile_breakpoint": "1024",
+         "mobile_style": "fullscreen",
+         "mobile_link_font": "heading",
+         "mobile_bg": "#0c1812",
+         "mobile_text_color": "#eef2e9",
+         "mobile_accent_color": "#c9a44a",
+         "mobile_heading_color": "#74866f",
+         "mobile_link_size": 34,
+         "mobile_numbers": true,
+         "mobile_footer_text": "Independent · est. 1994 · regulated",
+         "mobile_footer_cta_text": "Arrange a call",
+         "mobile_footer_cta_url": "#contact"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

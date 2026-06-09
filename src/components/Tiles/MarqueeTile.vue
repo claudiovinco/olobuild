@@ -51,6 +51,10 @@ const s = computed(() => ({
   font_weight: '500',
   letter_spacing: '1',
   text_transform: 'uppercase',
+  font_family: '',
+  font_style: 'normal',
+  separator_color: '',
+  separator_size: '',
   height: '50',
   full_width: true,
   border_top: '0',
@@ -97,20 +101,35 @@ const trackStyle = computed(() => {
   };
 });
 
+const mqFontFamily = computed(() => {
+  const k = s.value.font_family || '';
+  if (k === 'sans') return 'var(--olo-font-family, inherit)';
+  if (k === 'serif' || k === 'heading') return "var(--olo-font-family-heading, Georgia, serif)";
+  return undefined;
+});
+
 const textStyle = computed(() => ({
   color: s.value.text_color || 'var(--olo-color-text, #374151)',
   fontSize: (parseInt(s.value.font_size) || 16) + 'px',
   fontWeight: s.value.font_weight || '500',
   letterSpacing: (parseInt(s.value.letter_spacing) || 0) + 'px',
   textTransform: s.value.text_transform || 'uppercase',
+  fontFamily: mqFontFamily.value,
+  fontStyle: s.value.font_style === 'italic' ? 'italic' : 'normal',
   whiteSpace: 'nowrap',
   flexShrink: 0,
 }));
 
-const sepStyle = computed(() => ({
-  ...textStyle.value,
-  opacity: 0.5,
-}));
+const sepStyle = computed(() => {
+  const sepsize = parseInt(s.value.separator_size, 10);
+  return {
+    ...textStyle.value,
+    fontStyle: 'normal',
+    color: s.value.separator_color || textStyle.value.color,
+    fontSize: (sepsize > 0 ? sepsize : (parseInt(s.value.font_size) || 16)) + 'px',
+    opacity: s.value.separator_color ? 1 : 0.5,
+  };
+});
 
 const imgStyle = computed(() => ({
   height: (parseInt(s.value.image_height) || 40) + 'px',

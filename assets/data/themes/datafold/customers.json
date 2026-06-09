@@ -1,0 +1,333 @@
+[
+ {
+  "id": "dc-ph-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#0c1418" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "dc-ph-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "dc-ph-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "dc-ph-head",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// customer stories",
+         "eyebrow_color": "#36d6c3",
+         "eyebrow_dot_color": "#36d6c3",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "Teams that ship", "color": "#ffffff", "italic": false },
+          { "text": "on one number", "color": "#36d6c3", "italic": false }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 60,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "headline_inline": false,
+         "tagline_show": true,
+         "tagline_text": "From seed-stage startups to public companies — here's what changes when everyone finally trusts the dashboard.",
+         "tagline_text_color": "#6e8088",
+         "tagline_text_size": 17,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "dc-stats-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small" },
+  "style": { "bg": { "type": "solid", "color": "#0e171c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "dc-stats-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "dc-stats-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "dc-statstrip",
+        "type": "statstrip",
+        "settings": {
+         "items": [
+          { "value": "3,200+", "label": "Data teams" },
+          { "value": "46%", "label": "Avg. faster reporting" },
+          { "value": "9h", "label": "Saved per analyst / wk" },
+          { "value": "4.9/5", "label": "G2 rating" }
+         ],
+         "columns": 4,
+         "items_gap": 0,
+         "band_padding_y": 24,
+         "show_dividers": true,
+         "divider_color": "rgba(255,255,255,.10)",
+         "band_border": true,
+         "value_font_family": "heading",
+         "value_color": "#36d6c3",
+         "value_size": 50,
+         "value_weight": "700",
+         "label_color": "#6e8088",
+         "label_size": 13,
+         "label_uppercase": false,
+         "align": "center",
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "dc-cases-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#0c1418" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "dc-cases-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "dc-cases-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "dc-cases",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": { "type": "solid", "color": "transparent" },
+         "container_padding": 0,
+         "container_gap": 0,
+         "columns": 2,
+         "items_gap": 18,
+         "card_bg": { "type": "solid", "color": "#13212a" },
+         "card_color": "#6e8088",
+         "card_accent_color": "#ffffff",
+         "card_radius": { "tl": 16, "tr": 16, "br": 16, "bl": 16, "linked": true },
+         "card_padding": 26,
+         "card_border": "rgba(255,255,255,.08)",
+         "show_icon": false,
+         "show_counter": false,
+         "show_counter_label": false,
+         "show_arrow": false,
+         "show_footer": true,
+         "show_divider": false,
+         "show_media": true,
+         "media_aspect_ratio": "21/9",
+         "media_radius": { "tl": 11, "tr": 11, "br": 11, "bl": 11, "linked": true },
+         "media_position": "top",
+         "title_font_family": "sans-serif",
+         "title_size": 21,
+         "title_weight": "700",
+         "title_italic": false,
+         "description_size": 14.5,
+         "footer_size": 12,
+         "items": [
+          {
+           "media_image": "",
+           "media_label": "NORTHBEAM DASHBOARD",
+           "title": "Northbeam killed four spreadsheets",
+           "description": "<p>The growth team modelled revenue once in DataFold and retired a tangle of sheets and a legacy BI tool — reporting went from Mondays to real-time.</p>",
+           "footer_text": "−71% reporting time   ·   1 source of truth",
+           "footer_dot_color": "#36d6c3"
+          },
+          {
+           "media_image": "",
+           "media_label": "LUMIO COHORT ANALYSIS",
+           "title": "Lumio caught churn before the board did",
+           "description": "<p>Anomaly monitoring flagged a retention dip three weeks early. The team shipped a fix before it ever showed up in a QBR.</p>",
+           "footer_text": "3 wks earlier warning   ·   +4 pts retention saved",
+           "footer_dot_color": "#36d6c3"
+          },
+          {
+           "media_image": "",
+           "media_label": "CARTWHEEL FINANCE CLOSE",
+           "title": "Cartwheel closes the books in a day",
+           "description": "<p>Finance and data share one semantic layer, so month-end numbers reconcile automatically instead of over a week of cross-checking.</p>",
+           "footer_text": "6 → 1 days to close   ·   100% reconciled",
+           "footer_dot_color": "#36d6c3"
+          },
+          {
+           "media_image": "",
+           "media_label": "PELLET SELF-SERVE ANALYTICS",
+           "title": "Pellet went fully self-serve",
+           "description": "<p>Governed models mean PMs and ops answer their own questions — the data team moved from ticket queue to platform work.</p>",
+           "footer_text": "−58% ad-hoc requests   ·   240 self-serve users",
+           "footer_dot_color": "#36d6c3"
+          }
+         ],
+         "card_hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "dc-testi-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#0e171c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "dc-testi-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "dc-testi-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "dc-testi",
+        "type": "testimonial",
+        "settings": {
+         "quote": "“Onboarding took an afternoon. Within a week we'd <em>replaced our entire reporting stack</em> and nobody asked ‘which number is right?’ again.”",
+         "author_name": "Tom Iversen",
+         "author_role": "VP Analytics, Cartwheel",
+         "rating": "0",
+         "layout": "editorial",
+         "show_line": false,
+         "bg_color": "transparent",
+         "text_color": "#ffffff",
+         "quote_accent_color": "#36d6c3",
+         "quote_font": "heading",
+         "quote_uppercase": false,
+         "author_uppercase": false,
+         "author_color": "#6e8088",
+         "quote_size": 0,
+         "border_radius": "0",
+         "avatar": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "dc-cta-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#0c1418" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "dc-cta-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "dc-cta-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "dc-cta",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Be the next",
+         "headline_accent": "story",
+         "headline_accent_italic": false,
+         "subtitle": "Connect a warehouse, model one metric, and see what one source of truth does for your team.",
+         "cta_text": "Start free",
+         "cta_url": "#pricing",
+         "cta2_text": "Book a demo",
+         "cta2_url": "#",
+         "cta2_bg": "transparent",
+         "cta2_color": "#ffffff",
+         "cta2_border": "rgba(54,214,195,.28)",
+         "bg": {
+          "type": "gradient",
+          "color": "rgba(54,214,195,.16)",
+          "color2": "rgba(182,232,90,.05)",
+          "angle": 160
+         },
+         "text_color": "#ffffff",
+         "accent_color": "#36d6c3",
+         "subtitle_color": "#aebec6",
+         "cta_bg": "#36d6c3",
+         "cta_color": "#070e11",
+         "cta_radius": { "tl": 8, "tr": 8, "br": 8, "bl": 8, "linked": true },
+         "cta_size": 15,
+         "headline_font_family": "sans-serif",
+         "headline_size": 50,
+         "headline_weight": "700",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": { "tl": 24, "tr": 24, "br": 24, "bl": 24, "linked": true },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

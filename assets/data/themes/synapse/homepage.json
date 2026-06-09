@@ -402,6 +402,28 @@
         "style": {},
         "advanced": {},
         "children": []
+       },
+       {
+        "id": "sy-feat-btn-23b",
+        "type": "button",
+        "settings": {
+         "text": "How memory works",
+         "url": "#",
+         "alignment": "left",
+         "bg_color": "rgba(255,255,255,.05)",
+         "text_color": "#ffffff",
+         "hover_bg_color": "rgba(255,255,255,.1)",
+         "font_size": "14",
+         "font_weight": "600",
+         "border_radius": { "tl": 9, "tr": 9, "br": 9, "bl": 9, "linked": true },
+         "tile_padding": { "top": 12, "right": 22, "bottom": 12, "left": 22 },
+         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "linked": true, "style": "solid", "color": "rgba(255,255,255,.16)" },
+         "shadow": "none",
+         "hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
        }
       ]
      },
@@ -415,51 +437,20 @@
       "advanced": {},
       "children": [
        {
-        "id": "sy-info-cards-25",
-        "type": "info-cards",
+        "id": "sy-feat-media-25",
+        "type": "image",
         "settings": {
-         "container_bg": {
-          "type": "solid",
-          "color": "transparent"
-         },
-         "container_padding": 0,
-         "container_gap": 0,
-         "columns": 1,
-         "items_gap": 0,
-         "card_bg": {
-          "type": "solid",
-          "color": "#1e1633"
-         },
-         "card_color": "#776e92",
-         "card_radius": {
-          "tl": 16,
-          "tr": 16,
-          "br": 16,
-          "bl": 16,
-          "linked": true
-         },
-         "card_padding": 32,
-         "show_icon": true,
-         "show_counter": false,
-         "show_arrow": false,
-         "show_footer": false,
-         "show_media": false,
-         "icon_color": "#a06bff",
-         "icon_bg_color": "rgba(160,107,255,.14)",
-         "title_color": "#ffffff",
-         "title_font_family": "sans-serif",
-         "title_size": 18,
-         "title_weight": "600",
-         "title_italic": false,
-         "description_size": 14,
-         "items": [
-          {
-           "icon": "database",
-           "title": "Private memory graph",
-           "description": "Connected to your docs, Slack, GitHub and every tool in your stack — so context lives where your team already works."
-          }
-         ],
-         "card_hover_effect": "none"
+         "image_url": "",
+         "media_bg": { "type": "none" },
+         "media_label": "memory graph — people, docs, decisions linked",
+         "alt_text": "memory graph — people, docs, decisions linked",
+         "aspect_ratio": "custom",
+         "aspect_ratio_custom": "16/10",
+         "object_fit": "cover",
+         "image_width": "100%",
+         "border_radius": { "tl": 16, "tr": 16, "br": 16, "bl": 16, "linked": true },
+         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "linked": true, "style": "solid", "color": "rgba(255,255,255,.08)" },
+         "shadow": "none"
         },
         "style": {},
         "advanced": {},

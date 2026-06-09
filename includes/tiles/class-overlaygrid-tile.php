@@ -105,6 +105,7 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
         $columns   = absint( $s['columns'] ) ?: 3;
         $cols_mob  = absint( $s['columns_mobile'] ) ?: 1;
         $height    = absint( $s['height'] ) ?: 300;
+        $masonry   = ( ( $s['layout_mode'] ?? 'uniform' ) === 'masonry' );
         $position  = esc_attr( $s['overlay_position'] ?: 'bottom' );
         $style     = in_array( $s['overlay_style'], [ 'overlay-primary', 'overlay-default' ], true ) ? $s['overlay_style'] : 'overlay-primary';
 
@@ -130,7 +131,7 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
 
         // Match height
         $grid_attr = 'uk-grid';
-        if ( ! empty( $s['match_height'] ) ) {
+        if ( ! empty( $s['match_height'] ) && ! $masonry ) {
             $grid_attr .= ' uk-height-match';
         }
 
@@ -170,7 +171,7 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
 
         $uid = 'mos-og-' . wp_rand( 10000, 99999 );
 
-        $wrap_class = 'olo-overlaygrid olo-og--preset-' . esc_attr( $preset_id ) . ' ' . $uid;
+        $wrap_class = 'olo-overlaygrid olo-og--preset-' . esc_attr( $preset_id ) . ( $masonry ? ' olo-og--masonry' : '' ) . ' ' . $uid;
 
         // Shadow
         $shadow_v = $s['shadow'] ?? 'none';
@@ -258,6 +259,21 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
             echo $this->get_preset_extra_css( $preset_id, '.' . $uid, $s );
             echo $this->build_wow_effects_css( $s, '.' . $uid, '.olo-grid-title' );
             ?>
+            <?php if ( $masonry ) :
+                $gap_px = [ 'collapse' => 0, 'small' => 15, 'medium' => 30, 'large' => 40 ];
+                $mgap   = $gap_px[ $gap ] ?? 30;
+                $mrow_m = max( 140, (int) round( $height * 0.9 ) );
+            ?>
+            .<?php echo $uid; ?>.olo-og--masonry > div { display:grid !important; grid-template-columns:repeat(<?php echo $columns; ?>,1fr); grid-auto-rows:<?php echo $height; ?>px; grid-auto-flow:dense; gap:<?php echo $mgap; ?>px; margin:0 !important; }
+            .<?php echo $uid; ?>.olo-og--masonry > div > div { width:auto !important; padding:0 !important; margin:0 !important; }
+            .<?php echo $uid; ?>.olo-og--masonry > div > div.olo-og-tall { grid-row:span 2; }
+            .<?php echo $uid; ?>.olo-og--masonry > div > div.olo-og-wide { grid-column:span 2; }
+            .<?php echo $uid; ?>.olo-og--masonry > div > div > .uk-panel,
+            .<?php echo $uid; ?>.olo-og--masonry > div > div > a { height:100%; display:block; }
+            .<?php echo $uid; ?>.olo-og--masonry .mos-og-img { height:100% !important; }
+            .<?php echo $uid; ?>.olo-og--masonry .olo-og-ph { height:100% !important; }
+            @media(max-width:640px){ .<?php echo $uid; ?>.olo-og--masonry > div { grid-template-columns:repeat(<?php echo $cols_mob; ?>,1fr) !important; grid-auto-rows:<?php echo $mrow_m; ?>px; } .<?php echo $uid; ?>.olo-og--masonry > div > div.olo-og-tall, .<?php echo $uid; ?>.olo-og--masonry > div > div.olo-og-wide { grid-row:auto; grid-column:auto; } }
+            <?php endif; ?>
         </style>
         <div class="<?php echo $wrap_class; ?>">
             <div class="uk-child-width-1-<?php echo $cols_mob; ?> uk-child-width-1-<?php echo $columns; ?>@m <?php echo $gap_class; ?>" <?php echo $grid_attr; ?>>
@@ -269,8 +285,9 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
                     $wrapper_attr = $has_link
                         ? 'href="' . $link_url . '" class="uk-link-reset uk-display-block' . $toggle_cls . '" style="overflow:hidden;position:relative;" tabindex="0"'
                         : 'class="uk-panel' . $toggle_cls . '" style="overflow:hidden;position:relative;" tabindex="0"';
+                    $cell_cls = $masonry ? trim( ( ! empty( $item['tall'] ) ? 'olo-og-tall ' : '' ) . ( ! empty( $item['wide'] ) ? 'olo-og-wide' : '' ) ) : '';
                 ?>
-                    <div>
+                    <div<?php echo $cell_cls ? ' class="' . esc_attr( $cell_cls ) . '"' : ''; ?>>
                         <<?php echo $wrapper_tag; ?> <?php echo $wrapper_attr; ?>>
                             <?php if ( ! empty( $item['image'] ) ) : ?>
                                 <?php
@@ -278,7 +295,7 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
                                 echo $this->render_hover_wrap( $og_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' );
                                 ?>
                             <?php else : ?>
-                                <div style="height:<?php echo $height; ?>px;background:#1F2937;width:100%;"></div>
+                                <div class="olo-og-ph" style="height:<?php echo $height; ?>px;background:#1F2937;width:100%;"></div>
                             <?php endif; ?>
                             <?php if ( ! empty( $item['ribbon'] ) ) : ?>
                                 <span class="mos-og-ribbon mos-og-ribbon--<?php echo $ribbon_position; ?>"><?php echo esc_html( $item['ribbon'] ); ?></span>

@@ -323,6 +323,29 @@ abstract class Olo_Tile_Base {
     }
 
     /**
+     * Media slot con sfondo/media di OGNI tipo — STESSO sistema del bg della tab Stile.
+     * Dato un oggetto bg (type:'background': solid/gradient/pattern/image/video/gallery),
+     * restituisce:
+     *   - has    (bool)   : true se il bg è valorizzato (≠ none) → il chiamante lo usa al
+     *                       posto del placeholder a righe / immagine semplice.
+     *   - css    (string) : dichiarazioni CSS (solid/gradient/pattern/immagine) da mettere
+     *                       nello style del media element.
+     *   - markup (string) : HTML (video / slideshow gallery) da iniettare DENTRO il wrapper
+     *                       del media (che deve essere position:relative; overflow:hidden).
+     * Per i tipi solo-CSS markup è ''. $scope = classe univoca della tile (per lo scoping gallery).
+     */
+    protected function bg_media_parts( $bg, $scope = '' ) {
+        $out = [ 'has' => false, 'css' => '', 'markup' => '' ];
+        if ( is_array( $bg ) && ! empty( $bg['type'] ) && $bg['type'] !== 'none' && class_exists( 'Olo_CSS_Builder' ) ) {
+            $cssb = new Olo_CSS_Builder();
+            $out['css']    = (string) $cssb->get_bg_inline_css( $bg );
+            $out['markup'] = (string) $cssb->get_bg_html_markup( $bg, $scope );
+            $out['has']    = ( $out['css'] !== '' || $out['markup'] !== '' );
+        }
+        return $out;
+    }
+
+    /**
      * Genera le proprietà CSS di bordo inline (senza selettore).
      * Restituisce stringa vuota se il bordo è inattivo.
      */

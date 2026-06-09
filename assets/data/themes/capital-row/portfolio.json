@@ -1,0 +1,242 @@
+[
+ {
+  "id": "cp-se-ph",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#1a1730" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cp-ro-ph",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cp-co-ph",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cp-ph-head",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "84 companies · €600M deployed",
+         "eyebrow_color": "#8f7aef",
+         "eyebrow_dot_color": "#8f7aef",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "The ", "color": "#ffffff", "italic": false },
+          { "text": "portfolio", "color": "#8f7aef", "italic": true }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 64,
+         "headline_line_height": 1.08,
+         "headline_font_weight": "500",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Every company we've led or co-led, across four funds. Filter by sector — we're proud of all of them, even the ones that didn't make it.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#7a769a",
+         "tagline_text_size": 17,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "cp-ro-filters",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cp-co-filters",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cp-filters",
+        "type": "nav",
+        "settings": {
+         "items": [
+          { "title": "All", "content": "#", "tag": "" },
+          { "title": "Fintech", "content": "#", "tag": "" },
+          { "title": "Climate", "content": "#", "tag": "" },
+          { "title": "Dev tools", "content": "#", "tag": "" },
+          { "title": "Health", "content": "#", "tag": "" },
+          { "title": "Exited", "content": "#", "tag": "" }
+         ],
+         "show_icons": false,
+         "direction": "horizontal",
+         "alignment": "center",
+         "style": "boxed",
+         "active_style": "background",
+         "active_bg": "#8f7aef",
+         "active_color": "#ffffff",
+         "link_color": "#b6b2cf",
+         "link_hover_color": "#ffffff",
+         "font_size": "12.5",
+         "font_weight": "600",
+         "gap": "8",
+         "border_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999, "linked": true },
+         "tile_padding": { "top": 9, "right": 18, "bottom": 9, "left": 18, "linked": false },
+         "hover_effect": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cp-se-grid",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#1a1730" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cp-ro-grid",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cp-co-grid",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cp-info-cards",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": { "type": "solid", "color": "transparent" },
+         "container_padding": 0,
+         "container_gap": 16,
+         "columns": 3,
+         "items_gap": 16,
+         "card_bg": { "type": "solid", "color": "#252244" },
+         "card_color": "#7a769a",
+         "card_accent_color": "#ffffff",
+         "card_radius": { "tl": 14, "tr": 14, "br": 14, "bl": 14, "linked": true },
+         "card_padding": 26,
+         "card_border": "rgba(255,255,255,.09)",
+         "show_icon": false,
+         "show_counter": true,
+         "show_counter_label": true,
+         "show_arrow": false,
+         "show_footer": true,
+         "show_media": false,
+         "title_font_family": "serif",
+         "title_size": 21,
+         "title_weight": "500",
+         "title_italic": false,
+         "description_size": 14,
+         "counter_size": 18,
+         "footer_size": 12,
+         "items": [
+          { "counter": "Ar", "counter_label": "Series A", "title": "Arclight", "description": "Climate · grid software. Balancing the grid for utilities running on renewables.", "footer_text": "Led Series A · 2024", "footer_dot_color": "#8f7aef" },
+          { "counter": "Tk", "counter_label": "Seed", "title": "Tollkeep", "description": "Fintech · payments rails. Settlement infrastructure for cross-border marketplaces.", "footer_text": "Led Seed · 2025", "footer_dot_color": "#8f7aef" },
+          { "counter": "Vx", "counter_label": "Series B", "title": "Vellum", "description": "Dev tools · data. The versioned data layer for AI teams in production.", "footer_text": "Co-led Series A · 2023", "footer_dot_color": "#8f7aef" },
+          { "counter": "Hl", "counter_label": "Series A", "title": "Helio", "description": "Climate · solar finance. Financing rooftop solar for small businesses across the EU.", "footer_text": "Led Series A · 2024", "footer_dot_color": "#8f7aef" },
+          { "counter": "Pn", "counter_label": "Seed", "title": "Paneo", "description": "Health · diagnostics. At-home blood panels with clinician-grade accuracy.", "footer_text": "Led Seed · 2025", "footer_dot_color": "#8f7aef" },
+          { "counter": "Qd", "counter_label": "Exited", "title": "Quadra", "description": "Fintech · treasury. Treasury automation for mid-market. Acquired 2023.", "footer_text": "Acquired · 2023", "footer_dot_color": "#8f7aef" },
+          { "counter": "Sf", "counter_label": "Series B", "title": "Sift", "description": "Dev tools · observability. Tracing and logs that explain themselves, for small teams.", "footer_text": "Co-led Seed · 2022", "footer_dot_color": "#8f7aef" },
+          { "counter": "Mr", "counter_label": "Seed", "title": "Mara", "description": "Climate · materials. Low-carbon cement from industrial byproducts.", "footer_text": "Led Seed · 2025", "footer_dot_color": "#8f7aef" },
+          { "counter": "Lm", "counter_label": "Exited", "title": "Lumen Health", "description": "Health · care ops. Scheduling for clinics. IPO'd 2021.", "footer_text": "IPO · 2021", "footer_dot_color": "#8f7aef" }
+         ],
+         "card_hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cp-se-cta",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#1a1730" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cp-ro-cta",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cp-co-cta",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cp-cta-banner",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Want to be on this",
+         "headline_accent": "page?",
+         "headline_accent_italic": true,
+         "subtitle": "We back founders at seed and Series A across fintech, climate, dev tools and health. No warm intro required.",
+         "cta_text": "Pitch us",
+         "cta_url": "#pitch",
+         "cta2_text": "",
+         "cta2_url": "#",
+         "bg": { "type": "gradient", "gradient": "linear-gradient(160deg, rgba(143,122,239,.18), rgba(143,122,239,.04))" },
+         "text_color": "#ffffff",
+         "accent_color": "#8f7aef",
+         "subtitle_color": "#b6b2cf",
+         "cta_bg": "#8f7aef",
+         "cta_color": "#ffffff",
+         "cta_radius": { "tl": 8, "tr": 8, "br": 8, "bl": 8, "linked": true },
+         "cta_size": 15,
+         "headline_font_family": "serif",
+         "headline_size": 48,
+         "headline_weight": "500",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": { "tl": 24, "tr": 24, "br": 24, "bl": 24, "linked": true },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -16,9 +16,72 @@
   "advanced": {},
   "children": [
    {
+    "id": "mo-ro-3top",
+    "type": "row",
+    "settings": { "gap": 20, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mo-co-3a",
+      "type": "column",
+      "settings": { "width": "1-2" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "mo-hcap-l",
+        "type": "headline",
+        "settings": {
+         "heading": "Independent designer · brand & digital · working worldwide from Lisbon",
+         "tag": "div",
+         "heading_font": "mono",
+         "heading_size": "sm",
+         "heading_font_size": "12",
+         "heading_color": "#8d8a82",
+         "heading_uppercase": true,
+         "alignment": "left",
+         "decoration": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "mo-co-3b",
+      "type": "column",
+      "settings": { "width": "1-2" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "mo-hcap-r",
+        "type": "headline",
+        "settings": {
+         "heading": "Selected work\n2018 — 2026",
+         "tag": "div",
+         "heading_font": "mono",
+         "heading_size": "sm",
+         "heading_font_size": "12",
+         "heading_color": "#8d8a82",
+         "heading_uppercase": true,
+         "alignment": "right",
+         "decoration": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
     "id": "mo-ro-3",
     "type": "row",
-    "settings": {},
+    "settings": { "gap": 0 },
     "style": {},
     "advanced": {},
     "children": [
@@ -32,89 +95,82 @@
       "advanced": {},
       "children": [
        {
-        "id": "mo-hero-split-1",
-        "type": "hero-split",
+        "id": "mo-hh1",
+        "type": "headline",
         "settings": {
-         "eyebrow_text": "Independent designer · brand & digital · working worldwide from Lisbon",
-         "eyebrow_dot_color": "transparent",
-         "eyebrow_color": "#8d8a82",
-         "headline_lines": [
-          {
-           "text": "Design that",
-           "color": "#18181a",
-           "italic": false
-          },
-          {
-           "text": "says less,",
-           "color": "#8d8a82",
-           "italic": false
-          },
-          {
-           "text": "means more.",
-           "color": "#18181a",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "sans-serif",
-         "headline_font_size": 80,
-         "headline_line_height": 0.94,
-         "headline_font_weight": "500",
-         "headline_align": "left",
-         "subhead": "I help founders and cultural institutions find the simplest version of their idea — then make it unmistakable.",
-         "subhead_color": "#3a3a3c",
-         "subhead_size": 19,
-         "subhead_italic": false,
-         "subhead_max_width": 440,
-         "cta1_text": "",
-         "cta1_url": "#",
-         "cta1_bg": "transparent",
-         "cta1_color": "#18181a",
-         "cta1_size": 14,
-         "cta1_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta2_text": "",
-         "cta2_url": "#",
-         "cta2_bg": "transparent",
-         "cta2_color": "#18181a",
-         "cta2_border": "#c2bcab",
-         "cta2_size": 14,
-         "cta2_radius": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "cta2_radius_hover": {
-          "tl": 999,
-          "tr": 999,
-          "br": 999,
-          "bl": 999,
-          "linked": true
-         },
-         "stats": [],
-         "showcase_enabled": false,
-         "split_ratio": "1fr",
-         "gap": 0,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "heading": "Design that says less, means more.",
+         "tag": "h1",
+         "heading_font": "heading",
+         "heading_size": "xl",
+         "heading_font_size": "104",
+         "heading_color": "#18181a",
+         "heading_weight": "500",
+         "alignment": "left",
+         "decoration": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "mo-ro-3foot",
+    "type": "row",
+    "settings": { "gap": 24, "vertical_align": "bottom" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mo-co-3c",
+      "type": "column",
+      "settings": { "width": "2-3" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "mo-hlead",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>I help founders and cultural institutions find the simplest version of their idea — then make it unmistakable.</p>",
+         "text_color": "#3a3a3c",
+         "font_size": "19",
+         "line_height": "1.5",
+         "text_align": "left",
+         "max_width": "440"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "mo-co-3d",
+      "type": "column",
+      "settings": { "width": "1-3" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "mo-havail",
+        "type": "badge",
+        "settings": {
+         "text": "Available from August 2026",
+         "badge_live": true,
+         "badge_live_color": "success",
+         "variant": "outline",
+         "alignment": "right",
+         "bg_color": "#c2bcab",
+         "text_color": "#18181a",
+         "font_size": "12",
+         "font_weight": "400",
+         "text_transform": "none",
+         "badge_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999 },
+         "padding_y": 9,
+         "padding_x": 16
         },
         "style": {},
         "advanced": {},
@@ -579,39 +635,45 @@
       "id": "mo-co-27",
       "type": "column",
       "settings": {
-       "width": "2-3"
+       "width": "1-1"
       },
       "style": {},
       "advanced": {},
       "children": [
        {
-        "id": "mo-section-header-26",
-        "type": "section-header",
+        "id": "mo-introsplit-26",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_show": true,
-         "eyebrow_text": "About",
+         "eyebrow": "About",
          "eyebrow_color": "#8d8a82",
-         "eyebrow_dot_color": "transparent",
-         "eyebrow_separator": "",
-         "headline_lines": [
-          {
-           "text": "I'm Nadia — a designer who'd rather remove ten things than add one.",
-           "color": "#18181a",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "sans-serif",
-         "headline_font_size": 36,
-         "headline_font_weight": "500",
-         "headline_align": "left",
-         "headline_inline": false,
-         "tagline_show": true,
-         "tagline_text": "For eight years I've worked between brand and digital, mostly with small teams who care about craft. Before going independent I led design at a studio in Copenhagen; now it's just me, which is exactly the right number of people.\n\nI work in tight loops, show early, and treat your constraints as the brief — not the obstacle.",
-         "tagline_text_italic": false,
-         "tagline_text_color": "#3a3a3c",
-         "tagline_text_size": 16,
-         "layout": "stack",
-         "gap": 20
+         "headline": "I'm Nadia — a designer who'd rather remove ten things than add one.",
+         "accent": "",
+         "headline_tail": "",
+         "uppercase": false,
+         "headline_color": "#18181a",
+         "headline_weight": "500",
+         "headline_size": "42",
+         "accent_color": "#18181a",
+         "lead": "For eight years I've worked between brand and digital, mostly with small teams who care about craft. Before going independent I led design at a studio in Copenhagen; now it's just me, which is exactly the right number of people.\n\nI work in tight loops, show early, and treat your constraints as the brief — not the obstacle.",
+         "lead_color": "#3a3a3c",
+         "stats": [],
+         "signature": "",
+         "cta_text": "",
+         "cta_url": "#",
+         "cta_style": "underline",
+         "cta2_text": "",
+         "cta2_url": "#",
+         "media_image": "",
+         "media_bg": { "type": "none" },
+         "media_label": "portrait — Nadia, plain backdrop",
+         "media_light": true,
+         "media_aspect": "4/5",
+         "media_radius": 0,
+         "media_radius_top": 0,
+         "media_blob": false,
+         "badge_number": "",
+         "badge_label": "",
+         "media_position": "left"
         },
         "style": {},
         "advanced": {},
@@ -624,15 +686,25 @@
    {
     "id": "mo-ro-31",
     "type": "row",
-    "settings": {},
+    "settings": { "gap": 54 },
     "style": {},
     "advanced": {},
     "children": [
      {
+      "id": "mo-co-30sp",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": []
+     },
+     {
       "id": "mo-co-30",
       "type": "column",
       "settings": {
-       "width": "1-1"
+       "width": "1-2"
       },
       "style": {},
       "advanced": {},
@@ -747,37 +819,26 @@
         "id": "mo-marquee-33",
         "type": "marquee",
         "settings": {
-         "items": [
-          {
-           "text": "Brand identity"
-          },
-          {
-           "text": "Editorial"
-          },
-          {
-           "text": "Web design"
-          },
-          {
-           "text": "Art direction"
-          },
-          {
-           "text": "Type"
-          },
-          {
-           "text": "Packaging"
-          }
-         ],
-         "speed": 34,
+         "content_type": "text",
+         "text_items": "Brand identity   Editorial   Web design   Art direction   Type   Packaging",
+         "separator": "  ✺  ",
+         "speed": "34",
          "direction": "left",
-         "separator": "✺",
+         "pause_hover": true,
+         "gap": "60",
          "separator_color": "#8d8a82",
-         "font_family": "sans-serif",
-         "font_size": 52,
+         "font_family": "heading",
+         "font_style": "normal",
+         "font_size": "52",
          "font_weight": "500",
+         "text_transform": "none",
          "text_color": "#18181a",
          "bg_color": "transparent",
-         "pause_on_hover": true,
-         "letter_spacing": "-0.03em"
+         "height": "104",
+         "border_top": "1",
+         "border_bottom": "1",
+         "border_color": "#d7d1c2",
+         "letter_spacing": "0"
         },
         "style": {},
         "advanced": {},

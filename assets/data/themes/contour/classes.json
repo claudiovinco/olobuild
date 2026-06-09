@@ -1,0 +1,300 @@
+[
+ {
+  "id": "cocl-se-1",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large",
+   "padding_bottom": 0
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f4efe6"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cocl-ro-1",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cocl-co-1",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cocl-pagehead",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "The class guide",
+         "eyebrow_color": "#cf7e4f",
+         "eyebrow_dot_color": "#cf7e4f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Find your ",
+           "color": "#2c2a26",
+           "italic": false
+          },
+          {
+           "text": "practice",
+           "color": "#cf7e4f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 64,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Every class is capped at eight so you're always seen. New to pilates? Start with Mat & Breath or an intro reformer workshop.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#938c7e",
+         "tagline_text_size": 17,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cocl-se-2",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f4efe6"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cocl-ro-2",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cocl-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cocl-cards",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "container_padding": 0,
+         "container_gap": 18,
+         "columns": 3,
+         "items_gap": 18,
+         "card_bg": {
+          "type": "solid",
+          "color": "#fbf7f0"
+         },
+         "card_color": "#5e584e",
+         "card_accent_color": "#2c2a26",
+         "card_radius": {
+          "tl": 16,
+          "tr": 16,
+          "br": 16,
+          "bl": 16,
+          "linked": true
+         },
+         "card_padding": 26,
+         "card_border": "#ddd3c2",
+         "show_icon": false,
+         "show_counter": true,
+         "show_counter_label": false,
+         "show_arrow": false,
+         "show_footer": false,
+         "show_media": true,
+         "media_aspect_ratio": "4/3",
+         "media_position": "top",
+         "media_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "counter_color": "#cf7e4f",
+         "counter_size": 11,
+         "title_font_family": "serif",
+         "title_size": 25,
+         "title_weight": "400",
+         "title_italic": false,
+         "description_size": 14.5,
+         "items": [
+          {
+           "counter": "All levels · 50 min",
+           "title": "Reformer Flow",
+           "description": "Our signature class. Spring resistance builds strength and length while teaching control. Expect to work, never to rush.",
+           "media_image": "",
+           "media_label": "reformer"
+          },
+          {
+           "counter": "Beginner · 45 min",
+           "title": "Mat & Breath",
+           "description": "Classical mat work paired with breathwork. The best place to start, and the one regulars keep coming back to.",
+           "media_image": "",
+           "media_label": "mat"
+          },
+          {
+           "counter": "All levels · 30 min",
+           "title": "Express Reformer",
+           "description": "A focused lunchtime burst — core, control and out the door. Same quality, half the clock.",
+           "media_image": "",
+           "media_label": "express"
+          },
+          {
+           "counter": "Specialist · 45 min",
+           "title": "Pre & Postnatal",
+           "description": "Safe, gentle work for every trimester and beyond, led by our specialist-trained teachers.",
+           "media_image": "",
+           "media_label": "prenatal"
+          },
+          {
+           "counter": "One-to-one · 55 min",
+           "title": "Private Session",
+           "description": "Fully tailored to you — rehab, technique or going deeper. The fastest way to progress.",
+           "media_image": "",
+           "media_label": "private"
+          },
+          {
+           "counter": "Monthly · 90 min",
+           "title": "Foundations Workshop",
+           "description": "A deep dive into the reformer for newcomers, run on the first Saturday of each month.",
+           "media_image": "",
+           "media_label": "workshop"
+          }
+         ],
+         "card_hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cocl-se-3",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2c2a26"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cocl-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cocl-co-3",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cocl-cta",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Not sure where to",
+         "headline_accent": "start?",
+         "headline_accent_italic": true,
+         "subtitle": "Book a Mat & Breath or message us — we'll point you to the right first class.",
+         "cta_text": "See pricing & book",
+         "cta_url": "#pricing",
+         "bg": {
+          "type": "solid",
+          "color": "#2c2a26"
+         },
+         "text_color": "#f4efe6",
+         "accent_color": "#cf7e4f",
+         "subtitle_color": "#cfc7b9",
+         "cta_bg": "#cf7e4f",
+         "cta_color": "#ffffff",
+         "cta_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta_size": 15,
+         "headline_font_family": "serif",
+         "headline_size": 56,
+         "headline_weight": "400",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

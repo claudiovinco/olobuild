@@ -1,0 +1,392 @@
+[
+ {
+  "id": "cip-se-ph",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_bottom": 0 },
+  "style": { "bg": { "type": "solid", "color": "#0b0d18" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cip-ro-ph",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cip-co-ph",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cip-pagehead",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          { "text": "Pricing that scales", "color": "#ffffff", "italic": false },
+          { "text": "with your team", "color": "#ffffff", "italic": false }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 66,
+         "headline_font_weight": "600",
+         "headline_align": "center",
+         "headline_inline": false,
+         "tagline_show": true,
+         "tagline_text": "Start free, upgrade when you grow. Every plan includes unlimited projects and the full integration library.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#8a90a8",
+         "tagline_text_size": 17,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cip-se-grid",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#0b0d18" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cip-ro-grid",
+    "type": "row",
+    "settings": { "gap": 18, "vertical_align": "stretch" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cip-co-1",
+      "type": "column",
+      "settings": { "width": "1-3" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cip-pricing-1",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Starter",
+         "plan_description": "For small teams getting started.",
+         "price": "0",
+         "currency": "€",
+         "currency_position": "before",
+         "period": "/mo",
+         "features": "Up to 5 members\n3 active workflows\n10 integrations\nCommunity support",
+         "feature_dividers": true,
+         "cta_text": "Get started free",
+         "cta_url": "#",
+         "cta_target": "_self",
+         "cta_bg_color": "rgba(255,255,255,.06)",
+         "cta_text_color": "#ffffff",
+         "cta_border_width": "1",
+         "cta_border_color": "rgba(255,255,255,.09)",
+         "cta_width": "100",
+         "cta_radius": "9",
+         "cta_hover_effect": "lift",
+         "is_popular": false,
+         "check_style": "checkmark",
+         "check_size": "14",
+         "check_color": "#4fe0c0",
+         "price_color": "#ffffff",
+         "text_color": "#c9cde0",
+         "accent_color": "#6c8cff",
+         "bg_color": "#141a2e",
+         "border_radius": "18",
+         "border_color": "rgba(255,255,255,.09)"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "cip-co-2",
+      "type": "column",
+      "settings": { "width": "1-3" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cip-pricing-2",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Team",
+         "plan_description": "For teams shipping in production.",
+         "price": "24",
+         "currency": "€",
+         "currency_position": "before",
+         "period": "/user/mo",
+         "features": "Everything in Starter\nUnlimited workflows\nAll 120+ integrations\nInsights dashboard\nPriority support",
+         "feature_dividers": true,
+         "cta_text": "Start 14-day trial",
+         "cta_url": "#",
+         "cta_target": "_self",
+         "cta_bg_color": "#6c8cff",
+         "cta_text_color": "#ffffff",
+         "cta_border_width": "0",
+         "cta_border_color": "",
+         "cta_width": "100",
+         "cta_radius": "9",
+         "cta_hover_effect": "lift",
+         "is_popular": true,
+         "badge_text": "Most popular",
+         "badge_style": "pill",
+         "badge_radius": "6",
+         "badge_bg_color": "rgba(108,140,255,.14)",
+         "badge_text_color": "#6c8cff",
+         "check_style": "checkmark",
+         "check_size": "14",
+         "check_color": "#4fe0c0",
+         "price_color": "#ffffff",
+         "text_color": "#c9cde0",
+         "accent_color": "#6c8cff",
+         "bg_color": "#141a2e",
+         "border_radius": "18",
+         "border_color": "#6c8cff"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "cip-co-3",
+      "type": "column",
+      "settings": { "width": "1-3" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cip-pricing-3",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Enterprise",
+         "plan_description": "For orgs with scale & compliance needs.",
+         "price": "Custom",
+         "currency": "",
+         "currency_position": "before",
+         "period": "",
+         "features": "Everything in Team\nSSO, SAML & SCIM\nAudit log & compliance\nDedicated success manager\n99.99% SLA",
+         "feature_dividers": true,
+         "cta_text": "Talk to sales",
+         "cta_url": "#",
+         "cta_target": "_self",
+         "cta_bg_color": "rgba(255,255,255,.06)",
+         "cta_text_color": "#ffffff",
+         "cta_border_width": "1",
+         "cta_border_color": "rgba(255,255,255,.09)",
+         "cta_width": "100",
+         "cta_radius": "9",
+         "cta_hover_effect": "lift",
+         "is_popular": false,
+         "check_style": "checkmark",
+         "check_size": "14",
+         "check_color": "#4fe0c0",
+         "price_color": "#ffffff",
+         "text_color": "#c9cde0",
+         "accent_color": "#6c8cff",
+         "bg_color": "#141a2e",
+         "border_radius": "18",
+         "border_color": "rgba(255,255,255,.09)"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cip-se-faq",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_top": 0 },
+  "style": { "bg": { "type": "solid", "color": "#0b0d18" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cip-ro-faqh",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cip-co-faqh",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cip-faqhead",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// faq",
+         "eyebrow_color": "#6c8cff",
+         "eyebrow_dot_color": "#6c8cff",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "Questions, answered", "color": "#ffffff", "italic": false }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "600",
+         "headline_align": "center",
+         "tagline_show": false,
+         "layout": "center",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "cip-ro-faq",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cip-co-faq",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cip-accordion",
+        "type": "accordion",
+        "settings": {
+         "panels": [
+          { "id": "cip-faq-1", "title": "Is there really a free plan?", "content": "Yes — Starter is free forever for up to 5 members, with 3 active workflows and 10 integrations. No card required.", "image": "", "video": "", "icon": "" },
+          { "id": "cip-faq-2", "title": "Can I switch plans anytime?", "content": "Absolutely. Upgrade, downgrade or cancel from your billing settings — changes are prorated automatically.", "image": "", "video": "", "icon": "" },
+          { "id": "cip-faq-3", "title": "Do you offer discounts for non-profits?", "content": "We offer 50% off Team plans for registered non-profits and open-source projects. Reach out and we'll set you up.", "image": "", "video": "", "icon": "" },
+          { "id": "cip-faq-4", "title": "What happens to my data if I cancel?", "content": "You can export everything at any time. After cancellation we keep your data for 30 days, then permanently delete it.", "image": "", "video": "", "icon": "" }
+         ],
+         "preset": "custom",
+         "toggle_mode": true,
+         "default_open": "none",
+         "icon_position": "right",
+         "icon_style": "plus",
+         "animate_icon": true,
+         "animation_speed": "280",
+         "content_transition": "fade",
+         "header_bg": "transparent",
+         "header_bg_active": "transparent",
+         "header_text_color": "#ffffff",
+         "header_text_color_active": "#ffffff",
+         "header_padding_y": "22",
+         "header_padding_x": "0",
+         "header_font_size": "18",
+         "header_font_weight": "500",
+         "header_font_family": "heading",
+         "content_bg": "transparent",
+         "content_padding_y": "0",
+         "content_padding_x": "0",
+         "content_font_size": "15",
+         "text_color": "#8a90a8",
+         "separator_style": "border",
+         "border_color": "rgba(255,255,255,.09)",
+         "border_width": "1",
+         "gap": "0",
+         "border_radius": "0",
+         "shadow": "none",
+         "faq_schema": true
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cip-se-cta",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_top": 0 },
+  "style": { "bg": { "type": "solid", "color": "#0b0d18" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cip-ro-cta",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cip-co-cta",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cip-cta-banner",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Try Circuit free for",
+         "headline_accent": "14 days",
+         "headline_accent_italic": false,
+         "subtitle": "Full Team plan, no card. Bring your tools and see your cycle time drop.",
+         "cta_text": "Start free trial",
+         "cta_url": "#",
+         "cta2_text": "Book a demo",
+         "cta2_url": "#",
+         "cta2_bg": "rgba(255,255,255,.06)",
+         "cta2_color": "#ffffff",
+         "cta2_border": "rgba(255,255,255,.16)",
+         "bg": { "type": "gradient", "gradient": "linear-gradient(160deg, rgba(108,140,255,.18), rgba(176,139,255,.06))" },
+         "text_color": "#ffffff",
+         "accent_color": "#6c8cff",
+         "subtitle_color": "#c9cde0",
+         "cta_bg": "#ffffff",
+         "cta_color": "#0e1020",
+         "cta_radius": { "tl": 9, "tr": 9, "br": 9, "bl": 9, "linked": true },
+         "cta_size": 15,
+         "headline_font_family": "sans-serif",
+         "headline_size": 52,
+         "headline_weight": "700",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": { "tl": 24, "tr": 24, "br": 24, "bl": 24, "linked": true },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

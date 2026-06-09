@@ -1,1 +1,91 @@
-[{"id":"sy-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#171029"}},"advanced":{},"children":[{"id":"sy-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"sy-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"sy-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Instrument Sans\", -apple-system, sans-serif;font-size:20px;color:#ffffff;font-weight:700;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#a06bff;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Synapse</div><p style=\"font-size:14px;color:#776e92;max-width:260px\">The AI workspace that remembers. Chat, agents and your knowledge in one place.</p>","text_color":"#b3a9cc","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"sy-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"sy-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Instrument Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Product</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#776e92\"><li>Memory</li><li>Integrations</li><li>Use cases</li><li>Pricing</li></ul>","text_color":"#b3a9cc","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"sy-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"sy-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Instrument Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Developers</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#776e92\"><li>Docs</li><li>API</li><li>Security</li><li>Status</li></ul>","text_color":"#b3a9cc","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"sy-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"sy-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Instrument Sans\", -apple-system, sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Company</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#776e92\"><li>About</li><li>Blog</li><li>Careers</li><li>Contact</li></ul>","text_color":"#b3a9cc","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"sy-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"sy-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"sy-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid rgba(255,255,255,.08);padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#776e92\"><span>© 2026 Synapse — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#b3a9cc","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "sy-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 32 },
+  "style": { "bg": { "type": "solid", "color": "#171029" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sy-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sy-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "sy-fbrand", "type": "headline", "settings": { "heading": "Synapse", "tag": "div", "alignment": "left", "heading_font_size": "20", "heading_uppercase": false, "heading_color": "#ffffff", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "sy-fbtext", "type": "text-block", "settings": { "content": "<p>The AI workspace that remembers. Chat, agents and your knowledge in one place.</p>", "text_color": "#776e92", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "sy-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "sy-fh1", "type": "headline", "settings": { "heading": "Product", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "sy-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#776e92", "link_hover_color": "#ffffff", "gap": "10", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "items": [ { "title": "Memory", "content": "#features", "tag": "" }, { "title": "Integrations", "content": "#integrations", "tag": "" }, { "title": "Use cases", "content": "#", "tag": "" }, { "title": "Pricing", "content": "#pricing", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "sy-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "sy-fh2", "type": "headline", "settings": { "heading": "Developers", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "sy-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#776e92", "link_hover_color": "#ffffff", "gap": "10", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "items": [ { "title": "Docs", "content": "#", "tag": "" }, { "title": "API", "content": "#", "tag": "" }, { "title": "Security", "content": "#", "tag": "" }, { "title": "Status", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "sy-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "sy-fh3", "type": "headline", "settings": { "heading": "Company", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "sy-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#776e92", "link_hover_color": "#ffffff", "gap": "10", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "items": [ { "title": "About", "content": "#", "tag": "" }, { "title": "Blog", "content": "#", "tag": "" }, { "title": "Careers", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "sy-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "sy-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "sy-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.08)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "sy-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "sy-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "sy-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Synapse — an OLOtheme demo.</p>", "text_color": "#776e92", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "sy-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "sy-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#776e92", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

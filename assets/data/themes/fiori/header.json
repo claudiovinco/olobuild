@@ -1,1 +1,67 @@
-[{"id":"fi-hse","type":"section","settings":{"style":"default","width":"expand","padding":"none"},"style":{"bg":{"type":"solid","color":"#2c3327"}},"advanced":{},"children":[{"id":"fi-hro","type":"row","settings":{"layout":"100","gap":0,"vertical_align":"center"},"style":{},"advanced":{},"children":[{"id":"fi-hco","type":"column","settings":{"width":"1-1","width_medium":"1-1"},"style":{},"advanced":{},"children":[{"id":"fi-hmm","type":"megamenu","settings":{"menu_id":"auto","layout":"horizontal","alignment":"right","font_size":"14","font_weight":"600","text_color":"rgba(255,255,255,.75)","sticky":true,"sticky_bg":"rgba(44,51,39,.9)","sticky_shadow":true,"social_icons":false,"search_icon":false,"logo_image":"","logo_width":"130","logo_position":"left","logo_link":"/","logo_sticky":"","mobile_logo":"","mobile_logo_height":"30","mobile_bar_logo":true,"logo_text":"Fiori","logo_dot":true},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "fi-hse",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "none" } },
+  "advanced": {},
+  "children": [
+   { "id": "fi-hro", "type": "row", "settings": { "layout": "100", "gap": 0, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
+    { "id": "fi-hco", "type": "column", "settings": { "width": "1-1", "width_medium": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "fi-hmm", "type": "megamenu", "settings": {
+        "menu_id": "auto",
+        "preset": "custom",
+        "logo_position": "split",
+        "logo_text": "M & E",
+        "logo_dot": false,
+        "logo_text_color": "#ffffff",
+        "logo_text_size": "22",
+        "logo_link": "/",
+        "layout": "center",
+        "font_size": "12",
+        "font_weight": "500",
+        "text_transform": "uppercase",
+        "letter_spacing": "0.14",
+        "text_color": "rgba(255,255,255,.85)",
+        "hover_color": "#ffffff",
+        "item_gap": "30",
+        "nav_bg": "transparent",
+        "nav_height": "84",
+        "bar_width": "classic",
+        "header_mode": "overlay",
+        "sticky": false,
+        "sticky_bg": "rgba(44,51,39,.92)",
+        "sticky_shadow": false,
+        "sticky_text_color": "rgba(255,255,255,.85)",
+        "search_icon": false,
+        "social_facebook": "",
+        "social_instagram": "",
+        "social_x": "",
+        "social_linkedin": "",
+        "social_in_navbar": false,
+        "social_in_mobile": false,
+        "button_mode": "none",
+        "mobile_breakpoint": "1024",
+        "mobile_style": "fullscreen",
+        "fullscreen_animation": "slide-up",
+        "mobile_link_font": "heading",
+        "mobile_link_size": 28,
+        "mobile_numbers": false,
+        "mobile_bg": "#2c3327",
+        "mobile_text_color": "#ffffff",
+        "mobile_accent_color": "#cfa6a0",
+        "mobile_heading_color": "#cfa6a0",
+        "hamburger_style": "classic",
+        "hamburger_color": "#ffffff",
+        "mobile_bar_logo": true,
+        "mobile_logo_height": "26",
+        "mobile_search": false,
+        "mobile_footer_text": "12 September 2026 · Lago di Como",
+        "mobile_footer_cta_text": "RSVP now",
+        "mobile_footer_cta_url": "#rsvp"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

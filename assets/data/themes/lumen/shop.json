@@ -1,0 +1,202 @@
+[
+ {
+  "id": "ls-se-ph",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#fffaf8" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ls-ro-ph",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ls-co-ph",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ls-section-header-ph",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "The full range",
+         "eyebrow_color": "#c4877e",
+         "eyebrow_dot_color": "#c4877e",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          { "text": "Shop ", "color": "#251f24", "italic": false },
+          { "text": "everything", "color": "#c4877e", "italic": true }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 76,
+         "headline_font_weight": "600",
+         "headline_align": "center",
+         "headline_line_height": 1.04,
+         "tagline_show": true,
+         "tagline_text": "Twelve products, end to end. Short formulas, refillable glass, free returns within 30 days.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6e636a",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ls-se-grid",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f4ece8" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ls-ro-grid",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ls-co-grid",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ls-productgrid",
+        "type": "productgrid",
+        "settings": {
+         "columns": 4,
+         "gap": 22,
+         "media_aspect": "3/3.5",
+         "media_bg": "#ede1db",
+         "stripe_dark": false,
+         "hover_zoom": true,
+         "card_bg": "",
+         "card_border": "",
+         "card_radius": 0,
+         "card_padding": 0,
+         "tag_bg": "#d9a7a0",
+         "tag_color": "#251f24",
+         "quick_add_show": true,
+         "quick_add_bg": "#251f24",
+         "quick_add_color": "#f4ece8",
+         "category_color": "#9c9098",
+         "title_font": "heading",
+         "title_size": 22,
+         "title_color": "#251f24",
+         "price_color": "#251f24",
+         "add_button": false,
+         "show_filters": true,
+         "filter_all_label": "All",
+         "filter_list": "Cleansers, Serums, Moisturisers, Treatments, Refills",
+         "filter_text_color": "#6e636a",
+         "filter_border_color": "#ece0db",
+         "filter_active_bg": "#251f24",
+         "filter_active_color": "#f4ece8",
+         "footer_text": "",
+         "footer_url": "#",
+         "items": [
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "Bestseller", "category": "Serum", "title": "Quiet Glow Vitamin C", "price": "€38", "shades": "", "notes": "", "roast": 0, "filter_tags": "Serums", "link": "#", "quick_add": "Add to bag · €38" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "", "category": "Cleanser", "title": "Soft Reset Gel", "price": "€28", "shades": "", "notes": "", "roast": 0, "filter_tags": "Cleansers", "link": "#", "quick_add": "Add to bag · €28" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "New", "category": "Moisturiser", "title": "Barrier Cloud Cream", "price": "€42", "shades": "", "notes": "", "roast": 0, "filter_tags": "Moisturisers", "link": "#", "quick_add": "Add to bag · €42" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "", "category": "Treatment", "title": "Midnight Retinal 0.2", "price": "€34 (was €44)", "shades": "", "notes": "", "roast": 0, "filter_tags": "Treatments", "link": "#", "quick_add": "Add to bag · €34" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "", "category": "Cleanser", "title": "Morning Splash Foam", "price": "€22", "shades": "", "notes": "", "roast": 0, "filter_tags": "Cleansers", "link": "#", "quick_add": "Add to bag · €22" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "", "category": "Serum", "title": "Plump Hyaluronic Drops", "price": "€36", "shades": "", "notes": "", "roast": 0, "filter_tags": "Serums", "link": "#", "quick_add": "Add to bag · €36" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "Bestseller", "category": "Moisturiser", "title": "Velvet Night Balm", "price": "€40", "shades": "", "notes": "", "roast": 0, "filter_tags": "Moisturisers", "link": "#", "quick_add": "Add to bag · €40" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "", "category": "Treatment", "title": "Smooth Exfoliant PHA", "price": "€30", "shades": "", "notes": "", "roast": 0, "filter_tags": "Treatments", "link": "#", "quick_add": "Add to bag · €30" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "", "category": "Eye", "title": "Bright Eyes Gel", "price": "€26", "shades": "", "notes": "", "roast": 0, "filter_tags": "Treatments", "link": "#", "quick_add": "Add to bag · €26" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "", "category": "SPF", "title": "Daily Shield SPF 30", "price": "€18", "shades": "", "notes": "", "roast": 0, "filter_tags": "Moisturisers", "link": "#", "quick_add": "Add to bag · €18" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "Refill", "category": "Refill", "title": "Vitamin C Refill Pouch", "price": "€24", "shades": "", "notes": "", "roast": 0, "filter_tags": "Refills, Serums", "link": "#", "quick_add": "Add to bag · €24" },
+          { "image": "", "media_bg": { "type": "none" }, "media_label": "product", "tag": "", "category": "Set", "title": "The Daily Three Set", "price": "€58 (was €88)", "shades": "", "notes": "", "roast": 0, "filter_tags": "", "link": "#", "quick_add": "Add to bag · €58" }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ls-se-cta",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#d9a7a0" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ls-ro-cta",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ls-co-cta",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ls-cta-banner",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Not sure where to",
+         "headline_accent": "start?",
+         "headline_accent_italic": true,
+         "subtitle": "Take the 30-second skin quiz and we'll build a routine around you.",
+         "cta_text": "Take the skin quiz",
+         "cta_url": "#",
+         "cta2_text": "",
+         "bg": { "type": "solid", "color": "transparent" },
+         "text_color": "#251f24",
+         "accent_color": "#251f24",
+         "subtitle_color": "rgba(42,34,40,.7)",
+         "cta_bg": "#251f24",
+         "cta_color": "#f4ece8",
+         "cta_bg_hover": "#322a30",
+         "cta_color_hover": "#f4ece8",
+         "cta_radius": { "tl": 2, "tr": 2, "br": 2, "bl": 2, "linked": true },
+         "cta_radius_hover": { "tl": 2, "tr": 2, "br": 2, "bl": 2, "linked": true },
+         "cta_size": 13,
+         "headline_font_family": "serif",
+         "headline_size": 56,
+         "headline_weight": "600",
+         "subtitle_size": 16,
+         "layout": "stack",
+         "vertical_align": "center",
+         "gap": 20,
+         "banner_padding": 16,
+         "banner_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0, "linked": true }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

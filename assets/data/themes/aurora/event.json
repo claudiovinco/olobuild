@@ -1,0 +1,337 @@
+[
+ {
+  "id": "ae-se-1",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large", "padding_bottom": 0 },
+  "style": { "bg": { "type": "solid", "color": "#241430" } },
+  "advanced": {},
+  "children": [
+   { "id": "ae-ro-1", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "ae-co-1", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ae-pagehead", "type": "section-header", "settings": {
+        "eyebrow_show": true,
+        "eyebrow_text": "A Midsummer evening · by invitation",
+        "eyebrow_color": "#e0afca",
+        "eyebrow_dot_color": "#e0afca",
+        "eyebrow_separator": "",
+        "headline_lines": [
+         { "text": "The Midsummer ", "color": "#f3e9ef", "italic": false },
+         { "text": "Gala", "color": "#e0afca", "italic": true }
+        ],
+        "headline_font_family": "serif",
+        "headline_font_size": 76,
+        "headline_font_weight": "400",
+        "headline_align": "center",
+        "headline_inline": true,
+        "tagline_show": true,
+        "tagline_text": "21 June 2026 · Villa Speranza, Lake Como · 7pm until late. An evening of dinner under the stars, music on the water and dancing till the sun comes up.",
+        "tagline_text_italic": false,
+        "tagline_text_color": "#94809a",
+        "tagline_text_size": 17,
+        "layout": "center",
+        "gap": 18
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "ae-se-2",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#241430" } },
+  "advanced": {},
+  "children": [
+   { "id": "ae-ro-2", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "ae-co-2", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ae-hero-img", "type": "image", "settings": {
+        "image_url": "",
+        "media_bg": { "type": "none" },
+        "media_label": "hero — villa terrace at dusk, lanterns over the lake",
+        "image_width": "100%",
+        "aspect_ratio": "custom",
+        "aspect_ratio_custom": "16/7",
+        "object_fit": "cover",
+        "border_radius": "14"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "ae-se-3",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#2a1838" } },
+  "advanced": {},
+  "children": [
+   { "id": "ae-ro-3a", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "ae-co-3a", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ae-count-head", "type": "section-header", "settings": {
+        "eyebrow_show": true,
+        "eyebrow_text": "The evening begins in",
+        "eyebrow_color": "#e0afca",
+        "eyebrow_dot_color": "#e0afca",
+        "eyebrow_separator": "",
+        "headline_lines": [],
+        "tagline_show": false,
+        "layout": "center",
+        "gap": 8
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]},
+   { "id": "ae-ro-3b", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "ae-co-3b", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ae-countdown", "type": "countdown", "settings": {
+        "countdown_type": "date",
+        "target_date": "2026-06-21T19:00",
+        "show_days": true, "show_hours": true, "show_minutes": true, "show_seconds": true,
+        "label_days": "Days", "label_hours": "Hours", "label_minutes": "Minutes", "label_seconds": "Seconds",
+        "separator": ":",
+        "display_mode": "block",
+        "expire_action": "message",
+        "expired_message": "The evening has begun!",
+        "accent_color": "#e0afca",
+        "text_color": "#94809a",
+        "separator_color": "rgba(224,175,202,.42)",
+        "number_font_size": "72",
+        "number_font_weight": "400",
+        "label_font_size": "11",
+        "label_font_weight": "500",
+        "separator_font_size": "56",
+        "item_min_width": "100",
+        "item_bg_color": "transparent",
+        "item_radius": "0",
+        "item_padding": "20",
+        "tile_padding": { "top": 8, "right": 0, "bottom": 0, "left": 0 },
+        "bg": { "type": "none" },
+        "preset": "custom",
+        "countdown_style": "custom"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "ae-se-4",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#241430" } },
+  "advanced": {},
+  "children": [
+   { "id": "ae-ro-4a", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "ae-co-4a", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ae-run-head", "type": "section-header", "settings": {
+        "eyebrow_show": true,
+        "eyebrow_text": "Run of show",
+        "eyebrow_color": "#e0afca",
+        "eyebrow_dot_color": "#e0afca",
+        "eyebrow_separator": "",
+        "headline_lines": [
+         { "text": "The ", "color": "#f3e9ef", "italic": false },
+         { "text": "evening", "color": "#e0afca", "italic": true }
+        ],
+        "headline_font_family": "serif",
+        "headline_font_size": 52,
+        "headline_font_weight": "400",
+        "headline_align": "center",
+        "headline_inline": true,
+        "tagline_show": false,
+        "layout": "center",
+        "gap": 16
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]},
+   { "id": "ae-ro-4b", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "ae-co-4b", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ae-timeline", "type": "timeline", "settings": {
+        "tl_layout": "schedule",
+        "tl_reveal": "slot",
+        "tl_theme": "night",
+        "tl_card": "glass",
+        "tl_thread": "solid2",
+        "tl_node": "dot",
+        "tl_color": "mono",
+        "tl_media": "off",
+        "tl_density": "comfy",
+        "tl_line": "solid",
+        "tl_transparent": true,
+        "tl_show_tag": false,
+        "tl_rail_color": "rgba(243,233,239,.16)",
+        "tl_card_bg": "transparent",
+        "tl_title_color": "#f3e9ef",
+        "tl_title_family": "heading",
+        "tl_text_color": "#94809a",
+        "tl_yr_color": "#e0afca",
+        "tl_yr_family": "heading",
+        "items": [
+         { "title": "Arrival & aperitivo", "tag": "", "description": "Welcome spritz on the terrace as the sun drops behind the mountains.", "date": "19:00", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
+         { "title": "Dinner under the stars", "tag": "", "description": "A five-course seasonal menu at long tables in the garden, paired with local wines.", "date": "20:00", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
+         { "title": "Music on the water", "tag": "", "description": "A string quartet aboard a lit boat, drifting just offshore.", "date": "22:00", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
+         { "title": "The dancefloor opens", "tag": "", "description": "DJ and live band trade off until the early hours. Fireworks at midnight.", "date": "23:00", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
+         { "title": "Late supper & farewell", "tag": "", "description": "Espresso, cornetti and one last dance as the sky lightens.", "date": "02:00", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" }
+        ]
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "ae-se-5",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#2a1838" } },
+  "advanced": {},
+  "children": [
+   { "id": "ae-ro-5a", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "ae-co-5a", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ae-gal-head", "type": "section-header", "settings": {
+        "eyebrow_show": true,
+        "eyebrow_text": "A taste of last year",
+        "eyebrow_color": "#e0afca",
+        "eyebrow_dot_color": "#e0afca",
+        "eyebrow_separator": "",
+        "headline_lines": [
+         { "text": "2025 in ", "color": "#f3e9ef", "italic": false },
+         { "text": "frames", "color": "#e0afca", "italic": true }
+        ],
+        "headline_font_family": "serif",
+        "headline_font_size": 52,
+        "headline_font_weight": "400",
+        "headline_align": "center",
+        "headline_inline": true,
+        "tagline_show": false,
+        "layout": "center",
+        "gap": 16
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]},
+   { "id": "ae-ro-5b", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
+    { "id": "ae-co-5b", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ae-gallery", "type": "overlaygrid", "settings": {
+        "preset": "editorial-grid",
+        "bg": { "type": "none" },
+        "columns": "4",
+        "columns_mobile": "2",
+        "gap": "small",
+        "height": "180",
+        "layout_mode": "masonry",
+        "match_height": false,
+        "overlay_position": "bottom",
+        "overlay_style": "overlay-primary",
+        "overlay_color": "rgba(36,20,48,.7)",
+        "overlay_gradient": true,
+        "overlay_padding": "small",
+        "title_size": "h4",
+        "title_color": "#f3e9ef",
+        "title_weight": "400",
+        "title_letter_spacing": 0,
+        "title_uppercase": false,
+        "subtitle_color": "#e0afca",
+        "subtitle_size": 11,
+        "hover_effect": "zoom",
+        "hover_overlay": "always",
+        "item_radius": 10,
+        "show_cta": false,
+        "items": [
+         { "image": "", "title": "Terrace at dusk", "subtitle": "", "wide": true },
+         { "image": "", "title": "Table detail", "subtitle": "" },
+         { "image": "", "title": "Quartet on boat", "subtitle": "" },
+         { "image": "", "title": "Dancing", "subtitle": "" },
+         { "image": "", "title": "Fireworks", "subtitle": "" },
+         { "image": "", "title": "Guests, candlelight", "subtitle": "", "tall": true },
+         { "image": "", "title": "Late supper", "subtitle": "" }
+        ]
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ },
+ {
+  "id": "ae-se-6",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#241430" } },
+  "advanced": {},
+  "children": [
+   { "id": "ae-ro-6", "type": "row", "settings": { "gap": 56, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
+    { "id": "ae-co-6a", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ae-rsvp-head", "type": "section-header", "settings": {
+        "eyebrow_show": true,
+        "eyebrow_text": "RSVP",
+        "eyebrow_color": "#e0afca",
+        "eyebrow_dot_color": "#e0afca",
+        "eyebrow_separator": "",
+        "headline_lines": [
+         { "text": "Will you ", "color": "#f3e9ef", "italic": false },
+         { "text": "join us?", "color": "#e0afca", "italic": true }
+        ],
+        "headline_font_family": "serif",
+        "headline_font_size": 48,
+        "headline_font_weight": "400",
+        "headline_align": "left",
+        "headline_inline": false,
+        "tagline_show": true,
+        "tagline_text": "Kindly respond by 1 June. Dress is black tie; the evening is outdoors, so bring something warm for the small hours.",
+        "tagline_text_italic": false,
+        "tagline_text_color": "#94809a",
+        "tagline_text_size": 16,
+        "layout": "stack",
+        "gap": 16
+       }, "style": {}, "advanced": {}, "children": [] },
+     { "id": "ae-rsvp-contact", "type": "text-block", "settings": {
+        "content": "<p><strong>gala@aurora.events</strong> &middot; +39 02 8841</p>",
+        "text_color": "#f3e9ef",
+        "font_size": "15",
+        "line_height": "1.6",
+        "text_align": "left",
+        "max_width": ""
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]},
+    { "id": "ae-co-6b", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ae-rsvp-form", "type": "form", "settings": {
+        "preset": "custom",
+        "fields": [
+         { "id": "ae-f1", "field_type": "text", "label": "Name(s)", "name": "names", "required": true, "width": "1-1", "placeholder": "As you'd like them on the place card", "icon": "user" },
+         { "id": "ae-f2", "field_type": "select", "label": "Attending", "name": "attending", "required": true, "width": "1-2", "placeholder": "", "options": "Joyfully accepts\nRegretfully declines", "icon": "" },
+         { "id": "ae-f3", "field_type": "select", "label": "Guests", "name": "guests", "required": false, "width": "1-2", "placeholder": "", "options": "Just me\nTwo\nTable of 4", "icon": "" },
+         { "id": "ae-f4", "field_type": "text", "label": "Dietary notes", "name": "dietary", "required": false, "width": "1-1", "placeholder": "Anything we should know", "icon": "" }
+        ],
+        "submit_text": "Send RSVP",
+        "submit_full_width": true,
+        "submit_alignment": "left",
+        "submit_bg": "#e0afca",
+        "submit_color": "#170c1f",
+        "submit_radius": "999",
+        "submit_font_size": "13",
+        "submit_font_weight": "600",
+        "submit_letter_spacing": "0.14",
+        "submit_text_transform": "uppercase",
+        "submit_hover_bg": "#cf94b4",
+        "email_subject": "New RSVP — The Midsummer Gala",
+        "success_message": "Thank you! Your RSVP is received.",
+        "input_bg": "#241430",
+        "input_color": "#f3e9ef",
+        "input_border_color": "rgba(224,175,202,.42)",
+        "input_border_width": "1",
+        "input_border_style": "box",
+        "input_radius": { "tl": 8, "tr": 8, "br": 8, "bl": 8, "linked": true },
+        "input_size": "default",
+        "input_focus_border": "#e0afca",
+        "input_focus_shadow": false,
+        "label_color": "#94809a",
+        "label_size": "11",
+        "label_weight": "500",
+        "label_transform": "uppercase",
+        "label_letter_spacing": "0.12",
+        "gap": "18",
+        "form_layout": "stacked",
+        "honeypot": true,
+        "tile_padding": { "top": 32, "right": 32, "bottom": 32, "left": 32 },
+        "bg": { "type": "solid", "color": "#33203f" }
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

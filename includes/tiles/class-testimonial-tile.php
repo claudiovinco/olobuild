@@ -19,6 +19,12 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
         'rating'          => '5',
         'bg_color'        => '',
         'text_color'      => '',
+        'star_color'        => '',
+        'author_color'      => '',
+        'quote_accent_color' => '',
+        'quote_font'        => 'inherit',
+        'quote_size'        => 0,
+        'author_uppercase'  => false,
         'layout'          => 'single',
         'autoplay'        => false,
         'autoplay_interval' => 5,
@@ -60,7 +66,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
     public function render( $settings ) {
         $s      = wp_parse_args( $settings, $this->defaults );
         $uid    = 'olo-test-' . wp_rand( 10000, 99999 );
-        $layout = in_array( $s['layout'], [ 'single', 'carousel', 'grid' ], true ) ? $s['layout'] : 'single';
+        $layout = in_array( $s['layout'], [ 'single', 'editorial', 'carousel', 'grid' ], true ) ? $s['layout'] : 'single';
 
         // Preparazione stili comuni
         $bg          = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-surface-alt, #F3F4F6)';
@@ -76,7 +82,8 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
         $tile_radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $tile_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
-        $star_svg = '<svg width="18" height="18" viewBox="0 0 20 20" fill="#FBBF24" style="vertical-align:-2px;display:inline-block"><polygon points="10,1.5 12.5,7 18.5,7.6 14,11.5 15.3,17.5 10,14.5 4.7,17.5 6,11.5 1.5,7.6 7.5,7"/></svg>';
+        $star_color = $this->safe_color_css( $s['star_color'] ?? '' ) ?: '#FBBF24';
+        $star_svg = '<svg width="18" height="18" viewBox="0 0 20 20" fill="' . esc_attr( $star_color ) . '" style="vertical-align:-2px;display:inline-block"><polygon points="10,1.5 12.5,7 18.5,7.6 14,11.5 15.3,17.5 10,14.5 4.7,17.5 6,11.5 1.5,7.6 7.5,7"/></svg>';
 
         $bottom_jc = 'flex-start';
         if ( $position === 'bottom-center' ) $bottom_jc = 'center';
@@ -87,7 +94,9 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
         // CSS comune
         $this->render_common_styles( $uid, $bg, $fg, $line_col, $show_line, $is_bottom, $position, $av_size, $av_radius, $tile_radius, $tile_radius_hover_css, $bottom_jc, $s );
 
-        if ( $layout === 'single' ) {
+        if ( $layout === 'editorial' ) {
+            $this->render_editorial( $uid, $s, $star_color );
+        } elseif ( $layout === 'single' ) {
             $this->render_single( $uid, $s, $star_svg, $is_bottom, $position );
         } elseif ( $layout === 'carousel' ) {
             $this->render_carousel( $uid, $s, $star_svg, $is_bottom );
@@ -222,6 +231,36 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
             }
             <?php endif; ?>
         </style>
+        <?php
+    }
+
+    /* Layout EDITORIALE: centrato — stelle · citazione serif (con <em> accento) · autore "Nome · Ruolo" */
+    private function render_editorial( $uid, $s, $star_color ) {
+        $fg      = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-text-emphasis, #f6e9ec)';
+        $accent  = $this->safe_color_css( $s['quote_accent_color'] ?? '' ) ?: 'var(--olo-color-primary, #e7a0b4)';
+        $authclr = $this->safe_color_css( $s['author_color'] ?? '' ) ?: $accent;
+        $rating  = absint( $s['rating'] );
+        $qfont   = $s['quote_font'] ?? 'inherit';
+        $qfam    = ( $qfont === 'heading' ) ? 'var(--olo-font-family-heading, Georgia, serif)' : ( ( $qfont === 'body' ) ? 'var(--olo-font-family, -apple-system, sans-serif)' : 'inherit' );
+        $qsize   = intval( $s['quote_size'] ?? 0 );
+        $qsize_css = $qsize > 0 ? ( $qsize . 'px' ) : 'clamp(24px,3.4vw,40px)';
+        $upper   = ! empty( $s['author_uppercase'] );
+        $qupper  = ! empty( $s['quote_uppercase'] );
+        $quote   = wp_kses( (string) ( $s['quote'] ?? '' ), [ 'em' => [], 'strong' => [], 'br' => [] ] );
+        $name    = esc_html( wp_strip_all_tags( $s['author_name'] ?? '' ) );
+        $role    = esc_html( wp_strip_all_tags( $s['author_role'] ?? '' ) );
+        $stars   = str_repeat( '★', max( 0, $rating ) );
+        ?>
+        <div class="olo-testimonial <?php echo esc_attr( $uid ); ?> olo-test-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
+            <div class="olo-test-ed" style="text-align:center;max-width:840px;margin:0 auto;">
+                <?php if ( $rating > 0 ) : ?><div class="olo-test-ed__stars" style="color:<?php echo esc_attr( $star_color ); ?>;letter-spacing:.2em;font-size:18px;margin-bottom:18px;line-height:1;"><?php echo $stars; ?></div><?php endif; ?>
+                <q class="olo-test-ed__q" style="display:block;font-family:<?php echo $qfam; ?>;font-size:<?php echo $qsize_css; ?>;line-height:1.28;color:<?php echo esc_attr( $fg ); ?>;quotes:none;margin:0;<?php echo $qupper ? 'text-transform:uppercase;' : ''; ?>"><?php echo $quote; ?></q>
+                <?php if ( $name !== '' || $role !== '' ) : ?>
+                <div class="olo-test-ed__by" style="margin-top:22px;font-weight:700;font-size:12px;letter-spacing:.1em;color:<?php echo esc_attr( $authclr ); ?>;<?php echo $upper ? 'text-transform:uppercase;' : ''; ?>"><?php echo $name; ?><?php if ( $name !== '' && $role !== '' ) echo ' · '; ?><?php echo $role; ?></div>
+                <?php endif; ?>
+            </div>
+        </div>
+        <style>.<?php echo $uid; ?> .olo-test-ed__q em{font-style:italic;color:<?php echo esc_attr( $accent ); ?>;}</style>
         <?php
     }
 

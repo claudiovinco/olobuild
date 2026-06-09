@@ -1,0 +1,295 @@
+[
+ {
+  "id": "pjr-se-ph",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2a1a14"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "pjr-ro-ph",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "pjr-co-ph",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "pjr-section-header-ph",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Fourteen, all different",
+         "eyebrow_color": "#d98a4e",
+         "eyebrow_dot_color": "#d98a4e",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "The rooms",
+           "color": "#f3e7d6",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 92,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#967861",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 18
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "pjr-ph-lead",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>No two rooms at Pasaje are the same — they follow the old house, not a floor plan. Rates include breakfast and the roof at sunset.</p>",
+         "text_color": "#967861",
+         "font_size": "16.5",
+         "line_height": "1.7",
+         "text_align": "center",
+         "max_width": "520"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "pjr-se-grid",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2a1a14"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "pjr-ro-grid",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "pjr-co-grid",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "pjr-workgrid",
+        "type": "workgrid",
+        "settings": {
+         "items": [
+          {
+           "image": "",
+           "media_label": "courtyard double",
+           "title": "Courtyard Double",
+           "meta": "€140/night",
+           "description": "22 m² · garden view · queen bed",
+           "link_url": "#book",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "passage room",
+           "title": "Passage Room",
+           "meta": "€120/night",
+           "description": "18 m² · quiet · queen bed",
+           "link_url": "#book",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "sea view",
+           "title": "Sea View",
+           "meta": "€190/night",
+           "description": "28 m² · balcony · king bed",
+           "link_url": "#book",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "terrace double",
+           "title": "Terrace Double",
+           "meta": "€210/night",
+           "description": "26 m² · private terrace · king",
+           "link_url": "#book",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "family room",
+           "title": "Family Room",
+           "meta": "€240/night",
+           "description": "34 m² · sleeps 4 · two rooms",
+           "link_url": "#book",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "roof suite",
+           "title": "Roof Suite",
+           "meta": "€280/night",
+           "description": "40 m² · terrace · freestanding bath",
+           "link_url": "#book",
+           "tall": false
+          }
+         ],
+         "columns": 3,
+         "items_gap": 18,
+         "media_aspect": "4/3",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#3a261c",
+         "media_label_color": "#f3e7d6",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#f3e7d6",
+         "title_size": 25,
+         "title_weight": "400",
+         "meta_color": "#d98a4e",
+         "meta_size": 22,
+         "show_desc": true,
+         "desc_color": "#967861",
+         "desc_size": 13,
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "pjr-se-cta",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#311f17"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "pjr-ro-cta",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "pjr-co-cta",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "pjr-cta-banner",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Book direct, stay",
+         "headline_accent": "better",
+         "headline_accent_italic": false,
+         "subtitle": "Best rate guaranteed, late checkout when we can, and a welcome drink on the roof.",
+         "cta_text": "Check availability",
+         "cta_url": "#book",
+         "cta2_text": "",
+         "cta2_url": "",
+         "cta2_bg": "transparent",
+         "cta2_color": "#1b110b",
+         "cta2_border": "transparent",
+         "bg": {
+          "type": "solid",
+          "color": "#472f22"
+         },
+         "text_color": "#ffffff",
+         "accent_color": "#d98a4e",
+         "subtitle_color": "#f3e7d6",
+         "cta_bg": "#d98a4e",
+         "cta_color": "#1b110b",
+         "cta_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999
+         },
+         "cta_size": 13,
+         "headline_font_family": "serif",
+         "headline_size": 64,
+         "headline_weight": "400",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 16,
+          "tr": 16,
+          "br": 16,
+          "bl": 16
+         },
+         "banner_padding": 92
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

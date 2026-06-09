@@ -100,6 +100,7 @@ export default {
     { key: 'tl_layout', label: t('Disposizione'), type: 'select', options: [
       { value: 'alt',        label: t('Alternato') },
       { value: 'one',        label: t('Una colonna') },
+      { value: 'schedule',   label: t('Scaletta (orario a sinistra)') },
       { value: 'horizontal', label: t('Orizzontale') },
       { value: 'navigator',  label: t('Navigatore (asse date)') },
     ]},

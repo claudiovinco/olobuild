@@ -1,1 +1,91 @@
-[{"id":"re-fse","type":"section","settings":{"style":"default","width":"large","padding":"small"},"style":{"bg":{"type":"solid","color":"#10151c"}},"advanced":{},"children":[{"id":"re-fro1","type":"row","settings":{"gap":32},"style":{},"advanced":{},"children":[{"id":"re-fcb","type":"column","settings":{"width":"2-5"},"style":{},"advanced":{},"children":[{"id":"re-ftbb","type":"text-block","settings":{"content":"<div style=\"font-family:\"Wix Madefor Display\",-apple-system,sans-serif;font-size:20px;color:#ffffff;font-weight:700;margin-bottom:14px;letter-spacing:-.02em\"><span style=\"display:inline-block;width:24px;height:24px;background:#3fb950;border-radius:7px;vertical-align:middle;margin-right:10px\"></span>Relay OS</div><p style=\"font-size:14px;color:#646e7c;max-width:260px\">Visual automation for everyone. Connect apps, build flows, let the busywork run itself.</p>","text_color":"#9ba6b4","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"re-fco0","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"re-ftb0","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Wix Madefor Text\",-apple-system,sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Product</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#646e7c\"><li>Product</li><li>Integrations</li><li>Templates</li><li>Pricing</li></ul>","text_color":"#9ba6b4","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"re-fco1","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"re-ftb1","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Wix Madefor Text\",-apple-system,sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Developers</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#646e7c\"><li>Docs</li><li>API</li><li>Status</li></ul>","text_color":"#9ba6b4","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]},{"id":"re-fco2","type":"column","settings":{"width":"1-5"},"style":{},"advanced":{},"children":[{"id":"re-ftb2","type":"text-block","settings":{"content":"<h4 style=\"color:#ffffff;font-family:\"Wix Madefor Text\",-apple-system,sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 16px\">Company</h4><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:#646e7c\"><li>About</li><li>Blog</li><li>Careers</li></ul>","text_color":"#9ba6b4","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]},{"id":"re-fro2","type":"row","settings":{},"style":{},"advanced":{},"children":[{"id":"re-fcbot","type":"column","settings":{"width":"1-1"},"style":{},"advanced":{},"children":[{"id":"re-ftbot","type":"text-block","settings":{"content":"<div style=\"border-top:1px solid rgba(255,255,255,.08);padding-top:24px;margin-top:42px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:#646e7c\"><span>© 2026 Relay OS — an OLOtheme demo.</span><span>Built with OLObuild</span></div>","text_color":"#9ba6b4","font_size":"16","text_align":"left","line_height":"1.6","max_width":""},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "re-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 32 },
+  "style": { "bg": { "type": "solid", "color": "#10151c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "re-fro1",
+    "type": "row",
+    "settings": { "gap": 32, "vertical_align": "top" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "re-fcb",
+      "type": "column",
+      "settings": { "width": "2-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "re-fbrand", "type": "headline", "settings": { "heading": "Relay OS", "tag": "div", "alignment": "left", "heading_font_size": "20", "heading_color": "#ffffff", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "re-fbtext", "type": "text-block", "settings": { "content": "<p>Visual automation for everyone. Connect apps, build flows, let the busywork run itself.</p>", "text_color": "#646e7c", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "re-fc1",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "re-fh1", "type": "headline", "settings": { "heading": "Product", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "re-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#646e7c", "link_hover_color": "#ffffff", "font_size": "14", "items": [ { "title": "Product", "content": "#features", "tag": "" }, { "title": "Integrations", "content": "#integrations", "tag": "" }, { "title": "Templates", "content": "#templates", "tag": "" }, { "title": "Pricing", "content": "#pricing", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "re-fc2",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "re-fh2", "type": "headline", "settings": { "heading": "Developers", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "re-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#646e7c", "link_hover_color": "#ffffff", "font_size": "14", "items": [ { "title": "Docs", "content": "#", "tag": "" }, { "title": "API", "content": "#", "tag": "" }, { "title": "Status", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     },
+     {
+      "id": "re-fc3",
+      "type": "column",
+      "settings": { "width": "1-5" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       { "id": "re-fh3", "type": "headline", "settings": { "heading": "Company", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "re-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#646e7c", "link_hover_color": "#ffffff", "font_size": "14", "items": [ { "title": "About", "content": "#", "tag": "" }, { "title": "Blog", "content": "#", "tag": "" }, { "title": "Careers", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "re-fro-div",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "re-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
+      { "id": "re-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.08)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   },
+   {
+    "id": "re-fro2",
+    "type": "row",
+    "settings": { "gap": 16, "vertical_align": "center" },
+    "style": {},
+    "advanced": {},
+    "children": [
+     { "id": "re-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "re-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Relay OS — an OLOtheme demo.</p>", "text_color": "#646e7c", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+     ]},
+     { "id": "re-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
+      { "id": "re-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#646e7c", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+     ]}
+    ]
+   }
+  ]
+ }
+]

@@ -1,1 +1,70 @@
-[{"id":"wa-hse","type":"section","settings":{"style":"default","width":"expand","padding":"none"},"style":{"bg":{"type":"solid","color":"#0d3b3f"}},"advanced":{},"children":[{"id":"wa-hro","type":"row","settings":{"layout":"100","gap":0,"vertical_align":"center"},"style":{},"advanced":{},"children":[{"id":"wa-hco","type":"column","settings":{"width":"1-1","width_medium":"1-1"},"style":{},"advanced":{},"children":[{"id":"wa-hmm","type":"megamenu","settings":{"menu_id":"auto","layout":"horizontal","alignment":"right","font_size":"14","font_weight":"600","text_color":"rgba(255,255,255,.82)","sticky":true,"sticky_bg":"rgba(13,59,63,.9)","sticky_shadow":true,"social_icons":false,"search_icon":false,"logo_image":"","logo_width":"140","logo_position":"left","logo_link":"/","logo_sticky":"","mobile_logo":"","mobile_logo_height":"30","mobile_bar_logo":true,"logo_text":"Wander","logo_dot":true},"style":{},"advanced":{},"children":[]}]}]}]}]
+[
+ {
+  "id": "wa-hse",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "none" } },
+  "advanced": {},
+  "children": [
+   { "id": "wa-hro", "type": "row", "settings": { "layout": "100", "gap": 0, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
+    { "id": "wa-hco", "type": "column", "settings": { "width": "1-1", "width_medium": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "wa-hmm", "type": "megamenu", "settings": {
+        "menu_id": "auto",
+        "layout": "left",
+        "alignment": "left",
+        "font_size": "14",
+        "font_weight": "500",
+        "text_color": "rgba(255,255,255,.82)",
+        "hover_color": "#ffffff",
+        "link_hover_color": "#ffffff",
+        "header_mode": "overlay",
+        "sticky": true,
+        "sticky_bg": "rgba(13,59,63,.9)",
+        "sticky_shadow": true,
+        "nav_bg": "transparent",
+        "bar_width": "classic",
+        "social_icons": false,
+        "search_icon": false,
+        "logo_image": "",
+        "logo_width": "140",
+        "logo_position": "left",
+        "logo_link": "/",
+        "logo_sticky": "",
+        "mobile_logo": "",
+        "mobile_logo_height": "30",
+        "mobile_bar_logo": true,
+        "logo_text": "Wander",
+        "logo_text_size": "23",
+        "logo_text_color": "#ffffff",
+        "logo_dot": true,
+        "button_mode": "last",
+        "btn_bg": "#e9c46a",
+        "btn_color": "#0d3b3f",
+        "btn_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999 },
+        "btn_hover_bg": "#d9ab47",
+        "extra_link_1_label": "Browse trips",
+        "extra_link_1_url": "#destinations",
+        "extra_link_1_button": false,
+        "extra_link_2_label": "Plan my trip",
+        "extra_link_2_url": "#cta",
+        "extra_link_2_button": true,
+        "extra_links_right": true,
+        "mobile_breakpoint": "1024",
+        "mobile_style": "fullscreen",
+        "mobile_link_font": "heading",
+        "fullscreen_animation": "slide-up",
+        "mobile_bg": "#0d3b3f",
+        "mobile_text_color": "#ffffff",
+        "mobile_accent_color": "#e9c46a",
+        "mobile_heading_color": "rgba(255,255,255,.5)",
+        "mobile_link_size": 32,
+        "mobile_numbers": false,
+        "mobile_footer_text": "Small groups · big places · since 2009",
+        "mobile_footer_cta_text": "Plan my trip",
+        "mobile_footer_cta_url": "#cta"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

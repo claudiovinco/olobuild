@@ -2,17 +2,8 @@
  {
   "id": "tv-se-4",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "small"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#2a1512"
-   }
-  },
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "solid", "color": "#2a1512" } },
   "advanced": {},
   "children": [
    {
@@ -25,43 +16,29 @@
      {
       "id": "tv-co-2",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
        {
-        "id": "tv-newsticker-1",
-        "type": "newsticker",
+        "id": "tv-annbar-1",
+        "type": "announcementbar",
         "settings": {
-         "items": [
-          {
-           "text": "Open for Sunday lunch from 12:30"
-          },
-          {
-           "text": "Fresh pasta made daily"
-          },
-          {
-           "text": "Walk-ins welcome at the bar"
-          }
-         ],
-         "speed": 40,
-         "gap": 60,
-         "separator": "·",
+         "text": "Open for Sunday lunch from 12:30 · Fresh pasta made daily · Walk-ins welcome at the bar",
+         "accent_text": "",
+         "link_url": "",
+         "dismissible": false,
+         "bg_color": "#2a1512",
          "text_color": "#f4e9dc",
          "accent_color": "#d6552f",
-         "font_family": "sans-serif",
-         "font_size": 12,
-         "font_weight": "600",
+         "font_size": "12.5",
+         "font_weight": "500",
          "letter_spacing": "0.06em",
-         "bg_color": "#2a1512",
-         "tile_padding": {
-          "top": 9,
-          "right": 20,
-          "bottom": 9,
-          "left": 20
-         }
+         "text_transform": "none",
+         "alignment": "center",
+         "tile_padding": { "top": 9, "right": 20, "bottom": 9, "left": 20 },
+         "border_bottom": "0",
+         "bg": { "type": "none" }
         },
         "style": {},
         "advanced": {},
@@ -76,17 +53,8 @@
  {
   "id": "tv-se-8",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#f4e9dc"
-   }
-  },
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f4e9dc" } },
   "advanced": {},
   "children": [
    {
@@ -99,169 +67,51 @@
      {
       "id": "tv-co-6",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
        {
-        "id": "tv-hero-split-5",
-        "type": "hero-split",
+        "id": "tv-introsplit-5",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "Cucina di famiglia, dal 1987",
-         "eyebrow_dot_color": "#d6552f",
+         "eyebrow": "Cucina di famiglia, dal 1987",
          "eyebrow_color": "#d6552f",
-         "headline_lines": [
-          {
-           "text": "A table that's",
-           "color": "#2a1512",
-           "italic": false
-          },
-          {
-           "text": "always set for",
-           "color": "#2a1512",
-           "italic": false
-          },
-          {
-           "text": "one more.",
-           "color": "#d6552f",
-           "italic": true
-          }
-         ],
-         "headline_font_family": "serif",
-         "headline_font_size": 72,
-         "headline_line_height": 1,
-         "headline_font_weight": "600",
-         "headline_align": "left",
-         "subhead": "Handmade pasta, a menu that changes with the market, and the kind of long lunch you don't want to end. Three generations, one small kitchen.",
-         "subhead_color": "#54453d",
-         "subhead_size": 18,
-         "subhead_italic": false,
-         "subhead_max_width": 460,
-         "cta1_text": "Reserve a table",
-         "cta1_url": "#reserve",
-         "cta1_bg": "#d6552f",
-         "cta1_color": "#ffffff",
-         "cta1_size": 14,
-         "cta1_radius": {
-          "tl": 2,
-          "tr": 2,
-          "br": 2,
-          "bl": 2,
-          "linked": true
-         },
-         "cta1_radius_hover": {
-          "tl": 2,
-          "tr": 2,
-          "br": 2,
-          "bl": 2,
-          "linked": true
-         },
+         "headline": "A table that's always set for one more.",
+         "accent": "",
+         "headline_tail": "",
+         "accent_italic": false,
+         "uppercase": false,
+         "headline_color": "#2a1512",
+         "headline_weight": "600",
+         "headline_size": "84",
+         "lead": "Handmade pasta, a menu that changes with the market, and the kind of long lunch you don't want to end. Three generations, one small kitchen.",
+         "lead_color": "#54453d",
+         "stats": [],
+         "signature": "",
+         "cta_text": "Reserve a table",
+         "cta_url": "#reserve",
+         "cta_style": "button",
+         "cta_bg": "#d6552f",
+         "cta_color": "#ffffff",
          "cta2_text": "See the menu",
          "cta2_url": "/menu/",
-         "cta2_bg": "transparent",
-         "cta2_color": "#2a1512",
-         "cta2_border": "#c9b49a",
-         "cta2_size": 14,
-         "cta2_radius": {
-          "tl": 2,
-          "tr": 2,
-          "br": 2,
-          "bl": 2,
-          "linked": true
-         },
-         "cta2_radius_hover": {
-          "tl": 2,
-          "tr": 2,
-          "br": 2,
-          "bl": 2,
-          "linked": true
-         },
-         "stats": [],
-         "showcase_enabled": false,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#ecdfcd"
-         },
-         "showcase_padding": 28,
-         "showcase_radius": {
-          "tl": 4,
-          "tr": 4,
-          "br": 4,
-          "bl": 4,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 4,
-          "tr": 4,
-          "br": 4,
-          "bl": 4,
-          "linked": true
-         },
-         "showcase_badge_text": "TAVOLA · DAL 1987",
-         "showcase_badge_dot": "#d6552f",
-         "showcase_badge_bg": "#2a1512",
-         "showcase_badge_color": "#f4e9dc",
-         "showcase_items": [
-          {
-           "number": "38 years",
-           "text": "at the stove",
-           "italic": false,
-           "text_color": "#2a1512",
-           "bg": {
-            "type": "solid",
-            "color": "#fbf5ec"
-           }
-          },
-          {
-           "number": "Fresh pasta",
-           "text": "every morning",
-           "italic": false,
-           "text_color": "#2a1512",
-           "bg": {
-            "type": "solid",
-            "color": "#fbf5ec"
-           }
-          },
-          {
-           "number": "Three generations",
-           "text": "one kitchen",
-           "italic": false,
-           "text_color": "#d6552f",
-           "bg": {
-            "type": "solid",
-            "color": "#fbf5ec"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 3,
-          "tr": 3,
-          "br": 3,
-          "bl": 3,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 3,
-          "tr": 3,
-          "br": 3,
-          "bl": 3,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "LA FAMIGLIA",
-         "showcase_caption_right": "BERTOLINI",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1.05fr .95fr",
-         "gap": 48,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "cta2_style": "outline",
+         "cta_radius": { "tl": 2, "tr": 2, "br": 2, "bl": 2 },
+         "media_image": "",
+         "media_bg": { "type": "none" },
+         "media_label": "hero — tagliatelle being plated, hands & flour",
+         "media_light": true,
+         "media_aspect": "4/5",
+         "media_radius": 4,
+         "media_radius_top": 0,
+         "media_blob": false,
+         "badge_number": "38",
+         "badge_label": "years at the stove",
+         "badge_bg": "#2a1512",
+         "badge_color": "#f4e9dc",
+         "badge_radius": { "tl": 70, "tr": 70, "br": 70, "bl": 70 },
+         "media_position": "right"
         },
         "style": {},
         "advanced": {},
@@ -276,17 +126,8 @@
  {
   "id": "tv-se-18",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "small"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#2a1512"
-   }
-  },
+  "settings": { "style": "default", "width": "large", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "solid", "color": "#2a1512" } },
   "advanced": {},
   "children": [
    {
@@ -299,9 +140,7 @@
      {
       "id": "tv-co-16",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
@@ -310,29 +149,13 @@
         "type": "hoursstrip",
         "settings": {
          "items": [
-          {
-           "day": "Tue — Thu",
-           "time": "12:30 – 22:00",
-           "note": "Lunch & dinner"
-          },
-          {
-           "day": "Fri — Sat",
-           "time": "12:30 – 23:30",
-           "note": "Late kitchen"
-          },
-          {
-           "day": "Sunday",
-           "time": "12:30 – 16:00",
-           "note": "Family lunch only"
-          },
-          {
-           "day": "Monday",
-           "time": "Chiuso",
-           "note": "Resting the ovens"
-          }
+          { "day": "Tue – Thu", "time": "12:30 – 22:00", "note": "Lunch & dinner" },
+          { "day": "Fri – Sat", "time": "12:30 – 23:30", "note": "Late kitchen" },
+          { "day": "Sunday", "time": "12:30 – 16:00", "note": "Family lunch only" },
+          { "day": "Monday", "time": "Chiuso", "note": "Resting the ovens" }
          ],
          "columns": 4,
-         "band_padding_y": 18,
+         "band_padding_y": 26,
          "show_dividers": true,
          "band_border": false,
          "divider_color": "rgba(244,233,220,.16)",
@@ -342,7 +165,7 @@
          "time_color": "#f4e9dc",
          "time_size": 21,
          "time_weight": "500",
-         "note_color": "#a98c7a",
+         "note_color": "rgba(244,233,220,.6)",
          "note_size": 12.5
         },
         "style": {},
@@ -358,17 +181,8 @@
  {
   "id": "tv-se-30",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#fbf5ec"
-   }
-  },
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f4e9dc" } },
   "advanced": {},
   "children": [
    {
@@ -381,9 +195,7 @@
      {
       "id": "tv-co-20",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
@@ -397,24 +209,15 @@
          "eyebrow_dot_color": "#d6552f",
          "eyebrow_separator": "",
          "headline_lines": [
-          {
-           "text": "This week`s",
-           "color": "#2a1512",
-           "italic": false
-          },
-          {
-           "text": "table",
-           "color": "#d6552f",
-           "italic": true
-          }
+          { "text": "This week's table", "color": "#2a1512", "italic": false }
          ],
          "headline_font_family": "serif",
-         "headline_font_size": 48,
+         "headline_font_size": 58,
          "headline_font_weight": "600",
          "headline_align": "center",
          "headline_inline": true,
          "tagline_show": true,
-         "tagline_text": "A short menu, cooked properly. Everything`s made in-house — ask us about today`s specials on the board.",
+         "tagline_text": "A short menu, cooked properly. Everything's made in-house — ask us about today's specials on the board.",
          "tagline_text_italic": false,
          "tagline_text_color": "#8a7567",
          "tagline_text_size": 16.5,
@@ -432,70 +235,52 @@
    {
     "id": "tv-ro-26",
     "type": "row",
-    "settings": {
-     "gap": 64
-    },
+    "settings": { "gap": 64 },
     "style": {},
     "advanced": {},
     "children": [
      {
       "id": "tv-co-23",
       "type": "column",
-      "settings": {
-       "width": "1-2"
-      },
+      "settings": { "width": "1-2" },
       "style": {},
       "advanced": {},
       "children": [
        {
+        "id": "tv-mh-anti",
+        "type": "headline",
+        "settings": {
+         "heading": "Antipasti",
+         "tag": "h3",
+         "heading_font": "heading",
+         "alignment": "left",
+         "heading_font_size": "15",
+         "heading_uppercase": true,
+         "heading_color": "#d6552f",
+         "decoration": "line",
+         "decoration_color": "#ddcdb8"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
         "id": "tv-pricelist-22",
         "type": "pricelist",
         "settings": {
-         "section_title": "Antipasti",
-         "section_title_color": "#d6552f",
-         "section_title_font": "serif",
-         "section_title_size": "15",
-         "section_title_weight": "700",
-         "section_title_letter_spacing": "0.16em",
-         "section_title_transform": "uppercase",
-         "section_title_border_bottom": "#ddcdb8",
          "items": [
-          {
-           "id": "a1",
-           "title": "Burrata & pesche",
-           "description": "Creamy burrata, grilled peaches, basil, toasted almonds.",
-           "price": "€12",
-           "image_url": "",
-           "highlighted": false,
-           "badge": ""
-          },
-          {
-           "id": "a2",
-           "title": "Vitello tonnato",
-           "description": "Thin-sliced veal, caper & tuna cream, the way nonna made it.",
-           "price": "€14",
-           "image_url": "",
-           "highlighted": false,
-           "badge": ""
-          },
-          {
-           "id": "a3",
-           "title": "Verdure del banco",
-           "description": "Whatever the market gave us this morning, char-grilled.",
-           "price": "€10",
-           "image_url": "",
-           "highlighted": false,
-           "badge": "Veg"
-          }
+          { "id": "a1", "title": "Burrata & pesche", "description": "Creamy burrata, grilled peaches, basil, toasted almonds.", "price": "€12", "image_url": "", "highlighted": false, "badge": "" },
+          { "id": "a2", "title": "Vitello tonnato", "description": "Thin-sliced veal, caper & tuna cream, the way nonna made it.", "price": "€14", "image_url": "", "highlighted": false, "badge": "" },
+          { "id": "a3", "title": "Verdure del banco", "description": "Whatever the market gave us this morning, char-grilled.", "price": "€10", "image_url": "", "highlighted": false, "badge": "Veg" }
          ],
          "show_image": false,
          "price_position": "right",
          "separator_style": "dotted",
-         "separator_color": "#ddcdb8",
+         "separator_color": "#c9b49a",
          "title_color": "#2a1512",
          "price_color": "#d6552f",
          "description_color": "#8a7567",
-         "card_bg": "",
+         "card_bg": "transparent",
          "card_border_radius": "0",
          "card_border_color": "transparent",
          "hover_lift": false,
@@ -505,12 +290,7 @@
          "badge_border_width": "1",
          "badge_border_radius": "999",
          "gap": "0",
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         },
+         "tile_padding": { "top": 16, "right": 0, "bottom": 16, "left": 0 },
          "shadow": "none",
          "preset": "custom"
         },
@@ -523,62 +303,45 @@
      {
       "id": "tv-co-25",
       "type": "column",
-      "settings": {
-       "width": "1-2"
-      },
+      "settings": { "width": "1-2" },
       "style": {},
       "advanced": {},
       "children": [
        {
+        "id": "tv-mh-primi",
+        "type": "headline",
+        "settings": {
+         "heading": "Primi · Pasta fresca",
+         "tag": "h3",
+         "heading_font": "heading",
+         "alignment": "left",
+         "heading_font_size": "15",
+         "heading_uppercase": true,
+         "heading_color": "#d6552f",
+         "decoration": "line",
+         "decoration_color": "#ddcdb8"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
         "id": "tv-pricelist-24",
         "type": "pricelist",
         "settings": {
-         "section_title": "Primi · Pasta fresca",
-         "section_title_color": "#d6552f",
-         "section_title_font": "serif",
-         "section_title_size": "15",
-         "section_title_weight": "700",
-         "section_title_letter_spacing": "0.16em",
-         "section_title_transform": "uppercase",
-         "section_title_border_bottom": "#ddcdb8",
          "items": [
-          {
-           "id": "p1",
-           "title": "Tagliatelle al ragù",
-           "description": "Eight-hour beef & pork ragù, hand-cut ribbons.",
-           "price": "€16",
-           "image_url": "",
-           "highlighted": true,
-           "badge": ""
-          },
-          {
-           "id": "p2",
-           "title": "Cacio e pepe",
-           "description": "Tonnarelli, pecorino, a lot of black pepper. That`s it.",
-           "price": "€14",
-           "image_url": "",
-           "highlighted": false,
-           "badge": ""
-          },
-          {
-           "id": "p3",
-           "title": "Ravioli di zucca",
-           "description": "Pumpkin & amaretti, brown butter, crisp sage.",
-           "price": "€15",
-           "image_url": "",
-           "highlighted": false,
-           "badge": "Veg"
-          }
+          { "id": "p1", "title": "Tagliatelle al ragù", "description": "Eight-hour beef & pork ragù, hand-cut ribbons.", "price": "€16", "image_url": "", "highlighted": false, "badge": "" },
+          { "id": "p2", "title": "Cacio e pepe", "description": "Tonnarelli, pecorino, a lot of black pepper. That's it.", "price": "€14", "image_url": "", "highlighted": false, "badge": "" },
+          { "id": "p3", "title": "Ravioli di zucca", "description": "Pumpkin & amaretti, brown butter, crisp sage.", "price": "€15", "image_url": "", "highlighted": false, "badge": "Veg" }
          ],
          "show_image": false,
          "price_position": "right",
          "separator_style": "dotted",
-         "separator_color": "#ddcdb8",
+         "separator_color": "#c9b49a",
          "title_color": "#2a1512",
          "price_color": "#d6552f",
          "description_color": "#8a7567",
-         "highlighted_bg": "#ecdfcd",
-         "card_bg": "",
+         "card_bg": "transparent",
          "card_border_radius": "0",
          "card_border_color": "transparent",
          "hover_lift": false,
@@ -588,12 +351,7 @@
          "badge_border_width": "1",
          "badge_border_radius": "999",
          "gap": "0",
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         },
+         "tile_padding": { "top": 16, "right": 0, "bottom": 16, "left": 0 },
          "shadow": "none",
          "preset": "custom"
         },
@@ -608,59 +366,39 @@
    {
     "id": "tv-ro-29",
     "type": "row",
-    "settings": {
-     "gap": 0
-    },
+    "settings": {},
     "style": {},
     "advanced": {},
     "children": [
      {
       "id": "tv-co-28",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
        {
-        "id": "tv-cta-banner-27",
-        "type": "cta-banner",
+        "id": "tv-menubtn-27",
+        "type": "button",
         "settings": {
-         "headline": "Full menu",
-         "headline_accent": "& wine list",
-         "headline_accent_italic": false,
-         "subtitle": "",
-         "cta_text": "Full menu & wine list",
-         "cta_url": "#menu",
-         "bg": {
-          "type": "none"
-         },
-         "text_color": "#2a1512",
-         "accent_color": "#d6552f",
-         "cta_bg": "#2a1512",
-         "cta_color": "#f4e9dc",
-         "cta_radius": {
-          "tl": 2,
-          "tr": 2,
-          "br": 2,
-          "bl": 2,
-          "linked": true
-         },
-         "cta_size": 13,
-         "headline_font_family": "sans-serif",
-         "headline_size": 0,
-         "headline_weight": "600",
-         "layout": "inline",
-         "vertical_align": "center",
-         "banner_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "banner_padding": 0
+         "text": "Full menu & wine list",
+         "url": "/menu/",
+         "alignment": "center",
+         "bg_color": "#2a1512",
+         "text_color": "#f4e9dc",
+         "hover_bg_color": "#3a2018",
+         "hover_text_color": "#f4e9dc",
+         "font_size": "13",
+         "font_weight": "700",
+         "letter_spacing": "0.08em",
+         "text_transform": "uppercase",
+         "icon": "arrow-right",
+         "icon_position": "after",
+         "icon_spacing": "8",
+         "shadow": "none",
+         "hover_effect": "lift",
+         "border_radius": { "tl": 2, "tr": 2, "br": 2, "bl": 2 },
+         "tile_padding": { "top": 13, "right": 24, "bottom": 13, "left": 24 }
         },
         "style": {},
         "advanced": {},
@@ -675,17 +413,8 @@
  {
   "id": "tv-se-37",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#fbf5ec"
-   }
-  },
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#fbf5ec" } },
   "advanced": {},
   "children": [
    {
@@ -698,9 +427,7 @@
      {
       "id": "tv-co-32",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
@@ -714,16 +441,8 @@
          "eyebrow_dot_color": "#d6552f",
          "eyebrow_separator": "",
          "headline_lines": [
-          {
-           "text": "Made by hand,",
-           "color": "#2a1512",
-           "italic": false
-          },
-          {
-           "text": "every morning",
-           "color": "#2a1512",
-           "italic": false
-          }
+          { "text": "Made by hand,", "color": "#2a1512", "italic": false },
+          { "text": "every morning", "color": "#2a1512", "italic": false }
          ],
          "headline_font_family": "serif",
          "headline_font_size": 52,
@@ -751,9 +470,7 @@
      {
       "id": "tv-co-35",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
@@ -762,60 +479,12 @@
         "type": "workgrid",
         "settings": {
          "items": [
-          {
-           "image": "",
-           "media_label": "rolling pasta",
-           "title": "",
-           "meta": "",
-           "description": "",
-           "tall": true,
-           "link_url": ""
-          },
-          {
-           "image": "",
-           "media_label": "ragù pot",
-           "title": "",
-           "meta": "",
-           "description": "",
-           "tall": false,
-           "link_url": ""
-          },
-          {
-           "image": "",
-           "media_label": "market veg",
-           "title": "",
-           "meta": "",
-           "description": "",
-           "tall": false,
-           "link_url": ""
-          },
-          {
-           "image": "",
-           "media_label": "the dining room",
-           "title": "",
-           "meta": "",
-           "description": "",
-           "tall": false,
-           "link_url": ""
-          },
-          {
-           "image": "",
-           "media_label": "espresso",
-           "title": "",
-           "meta": "",
-           "description": "",
-           "tall": false,
-           "link_url": ""
-          },
-          {
-           "image": "",
-           "media_label": "dessert trolley",
-           "title": "",
-           "meta": "",
-           "description": "",
-           "tall": true,
-           "link_url": ""
-          }
+          { "image": "", "media_label": "rolling pasta", "title": "", "meta": "", "description": "", "tall": true, "link_url": "" },
+          { "image": "", "media_label": "ragù pot", "title": "", "meta": "", "description": "", "tall": false, "link_url": "" },
+          { "image": "", "media_label": "market veg", "title": "", "meta": "", "description": "", "tall": false, "link_url": "" },
+          { "image": "", "media_label": "the dining room", "title": "", "meta": "", "description": "", "tall": false, "link_url": "" },
+          { "image": "", "media_label": "espresso", "title": "", "meta": "", "description": "", "tall": false, "link_url": "" },
+          { "image": "", "media_label": "dessert trolley", "title": "", "meta": "", "description": "", "tall": true, "link_url": "" }
          ],
          "columns": 4,
          "items_gap": 12,
@@ -839,17 +508,8 @@
  {
   "id": "tv-se-41",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#fbf5ec"
-   }
-  },
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#fbf5ec" } },
   "advanced": {},
   "children": [
    {
@@ -862,9 +522,7 @@
      {
       "id": "tv-co-39",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
@@ -873,58 +531,30 @@
         "type": "scaler",
         "settings": {
          "eyebrow": "From our kitchen",
-         "heading": "Nonna`s ragù, to scale",
-         "intro": "The sauce we`ve simmered since 1962. Set how many you`re feeding and the quantities follow.",
+         "heading": "Nonna's ragù, to scale",
+         "intro": "The sauce we've simmered since 1962. Set how many you're feeding and the quantities follow.",
          "mode": "scale",
-         "base_label": "Coperti",
+         "base_label": "covers",
          "base_value": 4,
          "base_min": 2,
          "base_max": 12,
          "base_step": 1,
          "base_suffix": "",
          "items": [
-          {
-           "name": "Beef & pork mince",
-           "amount": 500,
-           "unit": "g"
-          },
-          {
-           "name": "Soffritto, finely diced",
-           "amount": 200,
-           "unit": "g"
-          },
-          {
-           "name": "San Marzano tomatoes",
-           "amount": 400,
-           "unit": "g"
-          },
-          {
-           "name": "Whole milk",
-           "amount": 150,
-           "unit": "ml"
-          },
-          {
-           "name": "Red wine",
-           "amount": 120,
-           "unit": "ml"
-          },
-          {
-           "name": "Olive oil",
-           "amount": 3,
-           "unit": "tbsp"
-          },
-          {
-           "name": "Sea salt",
-           "amount": 1,
-           "unit": "tsp"
-          }
+          { "name": "Beef & pork mince", "amount": 500, "unit": "g" },
+          { "name": "Soffritto, finely diced", "amount": 200, "unit": "g" },
+          { "name": "San Marzano tomatoes", "amount": 400, "unit": "g" },
+          { "name": "Whole milk", "amount": 150, "unit": "ml" },
+          { "name": "Red wine", "amount": 120, "unit": "ml" },
+          { "name": "Olive oil", "amount": 3, "unit": "tbsp" },
+          { "name": "Sea salt", "amount": 1, "unit": "tsp" }
          ],
          "show_total": false,
          "total_label": "",
          "total_unit": "",
          "zone_accent": "#d6552f",
          "card_bg": "#fbf5ec",
-         "card_border": "1px solid #ddcdb8",
+         "card_border": "#ddcdb8",
          "align": "left"
         },
         "style": {},
@@ -940,17 +570,8 @@
  {
   "id": "tv-se-45",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#f4e9dc"
-   }
-  },
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f4e9dc" } },
   "advanced": {},
   "children": [
    {
@@ -963,119 +584,46 @@
      {
       "id": "tv-co-43",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
        {
-        "id": "tv-hero-split-42",
-        "type": "hero-split",
+        "id": "tv-introsplit-42",
+        "type": "introsplit",
         "settings": {
-         "eyebrow_text": "Our story",
-         "eyebrow_dot_color": "#d6552f",
+         "eyebrow": "Our story",
          "eyebrow_color": "#d6552f",
-         "headline_lines": [
-          {
-           "text": "One small kitchen,",
-           "color": "#2a1512",
-           "italic": false
-          },
-          {
-           "text": "three generations",
-           "color": "#2a1512",
-           "italic": false
-          }
-         ],
-         "headline_font_family": "serif",
-         "headline_font_size": 50,
-         "headline_line_height": 1.04,
-         "headline_font_weight": "600",
-         "headline_align": "left",
-         "subhead": "Nonna Lucia opened Tavola with eight tables and one rule: cook for people the way you`d cook for family. Her ragù still simmers on the same stove.\n\nToday her grandchildren run the pass — same recipes, same market at dawn, the same long Sunday lunches that go on until the coffee`s cold.\n\n— La famiglia Bertolini",
-         "subhead_color": "#54453d",
-         "subhead_size": 16,
-         "subhead_italic": false,
-         "subhead_max_width": 500,
-         "cta1_text": "",
-         "cta1_url": "",
+         "headline": "One small kitchen, three generations",
+         "accent": "",
+         "headline_tail": "",
+         "accent_italic": false,
+         "uppercase": false,
+         "headline_color": "#2a1512",
+         "headline_weight": "600",
+         "headline_size": "52",
+         "lead": "Nonna Lucia opened Tavola with eight tables and one rule: cook for people the way you'd cook for family. Her ragù still simmers on the same stove. Today her grandchildren run the pass — same recipes, same market at dawn, the same long Sunday lunches that go on until the coffee's cold.",
+         "lead_color": "#54453d",
+         "stats": [],
+         "signature": "— La famiglia Bertolini",
+         "cta_text": "",
+         "cta_url": "",
          "cta2_text": "",
          "cta2_url": "",
-         "stats": [],
-         "showcase_enabled": true,
-         "showcase_bg": {
-          "type": "solid",
-          "color": "#2a1512"
-         },
-         "showcase_padding": 32,
-         "showcase_radius": {
-          "tl": 4,
-          "tr": 4,
-          "br": 4,
-          "bl": 4,
-          "linked": true
-         },
-         "showcase_radius_hover": {
-          "tl": 4,
-          "tr": 4,
-          "br": 4,
-          "bl": 4,
-          "linked": true
-         },
-         "showcase_badge_text": "Since 1987",
-         "showcase_badge_dot": "#d6552f",
-         "showcase_badge_bg": "#d6552f",
-         "showcase_badge_color": "#ffffff",
-         "showcase_items": [
-          {
-           "number": "La regola di nonna",
-           "text": "Cucina per gli ospiti come cucini per la famiglia",
-           "italic": true,
-           "text_color": "#f4e9dc",
-           "bg": {
-            "type": "solid",
-            "color": "#3a2018"
-           }
-          },
-          {
-           "number": "Il mercato all`alba",
-           "text": "Ogni mattina, prima che apra la cucina",
-           "italic": false,
-           "text_color": "#f4e9dc",
-           "bg": {
-            "type": "solid",
-            "color": "#3a2018"
-           }
-          }
-         ],
-         "showcase_card_radius": {
-          "tl": 3,
-          "tr": 3,
-          "br": 3,
-          "bl": 3,
-          "linked": true
-         },
-         "showcase_card_radius_hover": {
-          "tl": 3,
-          "tr": 3,
-          "br": 3,
-          "bl": 3,
-          "linked": true
-         },
-         "showcase_card_shadow": "none",
-         "showcase_caption_left": "1987",
-         "showcase_caption_right": "OGGI",
-         "showcase_hover_effect": "none",
-         "split_ratio": "1fr 1fr",
-         "gap": 56,
-         "min_height": 0,
-         "tile_padding": {
-          "top": 0,
-          "right": 0,
-          "bottom": 0,
-          "left": 0
-         }
+         "media_image": "",
+         "media_bg": { "type": "none" },
+         "media_label": "the family at the pass",
+         "media_light": true,
+         "media_aspect": "4/5",
+         "media_radius": 4,
+         "media_radius_top": 0,
+         "media_blob": false,
+         "badge_number": "",
+         "badge_label": "Since 1987",
+         "badge_bg": "#fbf5ec",
+         "badge_color": "#2a1512",
+         "badge_radius": { "tl": 2, "tr": 2, "br": 2, "bl": 2 },
+         "media_position": "left"
         },
         "style": {},
         "advanced": {},
@@ -1090,17 +638,8 @@
  {
   "id": "tv-se-49",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#2a1512"
-   }
-  },
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#2a1512" } },
   "advanced": {},
   "children": [
    {
@@ -1113,9 +652,7 @@
      {
       "id": "tv-co-47",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
@@ -1123,14 +660,21 @@
         "id": "tv-testimonial-46",
         "type": "testimonial",
         "settings": {
-         "quote": "\"The kind of place you leave already planning your next visit. The tagliatelle is worth the trip on its own — and they treat you like you`ve been coming for years.\"",
+         "quote": "The kind of place you leave already planning your next visit. The tagliatelle is worth the trip on its own — and they treat you like you've been coming for years.",
          "author_name": "Marco D.",
          "author_role": "Local guide · 240 reviews",
          "rating": "5",
-         "layout": "single",
+         "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#f4e9dc",
+         "star_color": "#d6552f",
+         "author_color": "#d6552f",
+         "quote_accent_color": "#d6552f",
+         "quote_font": "heading",
+         "quote_size": 40,
+         "quote_uppercase": false,
+         "author_uppercase": true,
          "border_radius": "0",
          "avatar": ""
         },
@@ -1147,17 +691,8 @@
  {
   "id": "tv-se-53",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#f4e9dc"
-   }
-  },
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#f4e9dc" } },
   "advanced": {},
   "children": [
    {
@@ -1170,9 +705,7 @@
      {
       "id": "tv-co-51",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
@@ -1181,8 +714,9 @@
         "type": "builder",
         "settings": {
          "eyebrow": "Plan your evening",
-         "heading": "Compose your table",
-         "intro": "Pick a few plates to share — antipasti to dolci. We`ll total it up so there are no surprises but the good ones.",
+         "heading": "Compose your",
+         "heading_accent": "table",
+         "intro": "Pick a few plates to share — antipasti to dolci. We'll total it up so there are no surprises but the good ones.",
          "currency": "€",
          "cap": 0,
          "total_label": "Total",
@@ -1192,45 +726,20 @@
          "zone_accent": "#d6552f",
          "zone_on": "#ffffff",
          "card_bg": "#fbf5ec",
-         "card_border": "1px solid #ddcdb8",
+         "card_border": "#ddcdb8",
          "align": "left",
+         "layout": "split",
+         "heading_color": "#2a1512",
+         "tally_bg": "#2a1512",
+         "item_name_color": "#2a1512",
+         "item_price_color": "#54453d",
          "items": [
-          {
-           "name": "Burrata & peach",
-           "price": 9,
-           "note": "Antipasti",
-           "start": false
-          },
-          {
-           "name": "Fritto misto",
-           "price": 11,
-           "note": "Antipasti",
-           "start": false
-          },
-          {
-           "name": "Cacio e pepe",
-           "price": 14,
-           "note": "Primi",
-           "start": false
-          },
-          {
-           "name": "Wild boar ragù",
-           "price": 16,
-           "note": "Primi",
-           "start": false
-          },
-          {
-           "name": "Bistecca, shared",
-           "price": 24,
-           "note": "Secondi",
-           "start": false
-          },
-          {
-           "name": "Tiramisù",
-           "price": 8,
-           "note": "Dolci",
-           "start": false
-          }
+          { "name": "Burrata & peach", "price": 9, "note": "Antipasti", "start": 0 },
+          { "name": "Fritto misto", "price": 11, "note": "Antipasti", "start": 0 },
+          { "name": "Cacio e pepe", "price": 14, "note": "Primi", "start": 0 },
+          { "name": "Wild boar ragù", "price": 16, "note": "Primi", "start": 0 },
+          { "name": "Bistecca, shared", "price": 24, "note": "Secondi", "start": 0 },
+          { "name": "Tiramisù", "price": 8, "note": "Dolci", "start": 0 }
          ]
         },
         "style": {},
@@ -1246,34 +755,21 @@
  {
   "id": "tv-se-59",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#ecdfcd"
-   }
-  },
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#fbf5ec" } },
   "advanced": {},
   "children": [
    {
     "id": "tv-ro-58",
     "type": "row",
-    "settings": {
-     "gap": 52
-    },
+    "settings": { "gap": 52 },
     "style": {},
     "advanced": {},
     "children": [
      {
       "id": "tv-co-55",
       "type": "column",
-      "settings": {
-       "width": "2-5"
-      },
+      "settings": { "width": "2-5" },
       "style": {},
       "advanced": {},
       "children": [
@@ -1287,19 +783,11 @@
          "eyebrow_dot_color": "#d6552f",
          "eyebrow_separator": "",
          "headline_lines": [
-          {
-           "text": "Book your",
-           "color": "#2a1512",
-           "italic": false
-          },
-          {
-           "text": "seat at Tavola",
-           "color": "#2a1512",
-           "italic": false
-          }
+          { "text": "Book your", "color": "#2a1512", "italic": false },
+          { "text": "seat at Tavola", "color": "#2a1512", "italic": false }
          ],
          "headline_font_family": "serif",
-         "headline_font_size": 44,
+         "headline_font_size": 52,
          "headline_font_weight": "600",
          "headline_align": "left",
          "tagline_show": true,
@@ -1319,9 +807,7 @@
      {
       "id": "tv-co-57",
       "type": "column",
-      "settings": {
-       "width": "3-5"
-      },
+      "settings": { "width": "3-5" },
       "style": {},
       "advanced": {},
       "children": [
@@ -1330,71 +816,18 @@
         "type": "form",
         "settings": {
          "fields": [
-          {
-           "id": "rv-1",
-           "field_type": "date",
-           "label": "Date",
-           "name": "date",
-           "placeholder": "",
-           "required": true,
-           "width": "1-2",
-           "options": "",
-           "icon": "calendar"
-          },
-          {
-           "id": "rv-2",
-           "field_type": "select",
-           "label": "Time",
-           "name": "time",
-           "placeholder": "",
-           "required": true,
-           "width": "1-2",
-           "options": "12:30\n13:00\n20:00\n20:30\n21:00",
-           "icon": ""
-          },
-          {
-           "id": "rv-3",
-           "field_type": "select",
-           "label": "Covers",
-           "name": "covers",
-           "placeholder": "",
-           "required": true,
-           "width": "1-2",
-           "options": "2 people\n4 people\n6 people\n8+ (call us)",
-           "icon": ""
-          },
-          {
-           "id": "rv-4",
-           "field_type": "text",
-           "label": "Name",
-           "name": "name",
-           "placeholder": "Your name",
-           "required": true,
-           "width": "1-2",
-           "options": "",
-           "icon": "user"
-          },
-          {
-           "id": "rv-5",
-           "field_type": "tel",
-           "label": "Phone",
-           "name": "phone",
-           "placeholder": "So we can confirm",
-           "required": false,
-           "width": "1-1",
-           "options": "",
-           "icon": "phone"
-          }
+          { "id": "rv-1", "field_type": "date", "label": "Date", "name": "date", "placeholder": "", "required": true, "width": "1-2", "options": "", "icon": "calendar" },
+          { "id": "rv-2", "field_type": "select", "label": "Time", "name": "time", "placeholder": "", "required": true, "width": "1-2", "options": "12:30\n13:00\n20:00\n20:30\n21:00", "icon": "" },
+          { "id": "rv-3", "field_type": "select", "label": "Covers", "name": "covers", "placeholder": "", "required": true, "width": "1-2", "options": "2 people\n4 people\n6 people\n8+ (call us)", "icon": "" },
+          { "id": "rv-4", "field_type": "text", "label": "Name", "name": "name", "placeholder": "Your name", "required": true, "width": "1-2", "options": "", "icon": "user" },
+          { "id": "rv-5", "field_type": "tel", "label": "Phone", "name": "phone", "placeholder": "So we can confirm", "required": false, "width": "1-1", "options": "", "icon": "phone" }
          ],
          "submit_text": "Request a table",
          "submit_full_width": true,
          "submit_alignment": "center",
          "email_subject": "Prenotazione tavolo — Tavola",
-         "success_message": "Your table request has been received! We`ll confirm shortly.",
-         "bg": {
-          "type": "solid",
-          "color": "#fbf5ec"
-         },
+         "success_message": "Your table request has been received! We'll confirm shortly.",
+         "bg": { "type": "solid", "color": "#fbf5ec" },
          "input_bg": "#f4e9dc",
          "input_color": "#2a1512",
          "input_border_color": "#c9b49a",
@@ -1418,12 +851,7 @@
          "submit_text_transform": "uppercase",
          "submit_hover_bg": "#bf471f",
          "gap": "16",
-         "tile_padding": {
-          "top": 30,
-          "right": 30,
-          "bottom": 30,
-          "left": 30
-         },
+         "tile_padding": { "top": 30, "right": 30, "bottom": 30, "left": 30 },
          "preset": "custom"
         },
         "style": {},
@@ -1439,17 +867,8 @@
  {
   "id": "tv-se-63",
   "type": "section",
-  "settings": {
-   "style": "default",
-   "width": "large",
-   "padding": "large"
-  },
-  "style": {
-   "bg": {
-    "type": "solid",
-    "color": "#d6552f"
-   }
-  },
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "solid", "color": "#d6552f" } },
   "advanced": {},
   "children": [
    {
@@ -1462,9 +881,7 @@
      {
       "id": "tv-co-61",
       "type": "column",
-      "settings": {
-       "width": "1-1"
-      },
+      "settings": { "width": "1-1" },
       "style": {},
       "advanced": {},
       "children": [
@@ -1474,41 +891,26 @@
         "settings": {
          "headline": "Come hungry.",
          "headline_accent": "Stay late.",
-         "headline_accent_italic": true,
-         "subtitle": "There`s always a seat, a glass of something local, and a plate of pasta with your name on it.",
+         "headline_accent_italic": false,
+         "subtitle": "There's always a seat, a glass of something local, and a plate of pasta with your name on it.",
          "cta_text": "Book a table",
          "cta_url": "#reserve",
-         "bg": {
-          "type": "solid",
-          "color": "#d6552f"
-         },
+         "bg": { "type": "none" },
          "text_color": "#ffffff",
          "accent_color": "#ffffff",
          "subtitle_color": "rgba(255,255,255,.9)",
          "cta_bg": "#f4e9dc",
          "cta_color": "#2a1512",
-         "cta_radius": {
-          "tl": 2,
-          "tr": 2,
-          "br": 2,
-          "bl": 2,
-          "linked": true
-         },
+         "cta_radius": { "tl": 2, "tr": 2, "br": 2, "bl": 2, "linked": true },
          "cta_size": 14,
          "headline_font_family": "serif",
-         "headline_size": 64,
+         "headline_size": 72,
          "headline_weight": "600",
          "subtitle_size": 17,
          "layout": "stack",
          "vertical_align": "center",
-         "banner_radius": {
-          "tl": 0,
-          "tr": 0,
-          "br": 0,
-          "bl": 0,
-          "linked": true
-         },
-         "banner_padding": 80
+         "banner_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0, "linked": true },
+         "banner_padding": 88
         },
         "style": {},
         "advanced": {},

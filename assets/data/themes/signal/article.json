@@ -1,0 +1,463 @@
+[
+ {
+  "id": "sg-art-tk-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
+  "style": { "bg": { "type": "solid", "color": "#a3e635" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sg-art-tk-ro",
+    "type": "row",
+    "settings": { "layout": "100", "gap": 0 },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sg-art-tk-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sg-art-newsticker",
+        "type": "newsticker",
+        "settings": {
+         "items": [
+          { "id": "sg-at1", "title": "A love letter to the CLI  //", "url": "#", "badge": "", "icon": "", "timestamp": "" },
+          { "id": "sg-at2", "title": "Why your tests are slow  //", "url": "#", "badge": "", "icon": "", "timestamp": "" },
+          { "id": "sg-at3", "title": "The case against microservices  //", "url": "#", "badge": "", "icon": "", "timestamp": "" },
+          { "id": "sg-at4", "title": "What we got wrong about caching  //", "url": "#", "badge": "", "icon": "", "timestamp": "" }
+         ],
+         "direction": "horizontal",
+         "animation_type": "marquee",
+         "marquee_direction": "left",
+         "marquee_duration": 32,
+         "marquee_gap": 28,
+         "pause_on_hover": true,
+         "show_label": false,
+         "label_text": "",
+         "show_controls": false,
+         "show_indicators": false,
+         "show_counter": false,
+         "bg_color": "#a3e635",
+         "text_color": "#0a0e12",
+         "font_size": 12,
+         "font_weight": "500",
+         "height": "38",
+         "separator": "//",
+         "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 },
+         "border_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0 }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sg-art-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "small", "padding": "small", "padding_top": 56, "padding_bottom": 56 },
+  "style": { "bg": { "type": "solid", "color": "#11161c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sg-art-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sg-art-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sg-art-kicker",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>// systems · debugging</p>",
+         "text_color": "#a3e635",
+         "font_size": "12",
+         "line_height": "1.4",
+         "text_align": "left",
+         "tile_padding": { "top": 0, "right": 0, "bottom": 14, "left": 0 }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "sg-art-h1",
+        "type": "headline",
+        "settings": {
+         "heading": "The cache that lied to us for three months",
+         "tag": "h1",
+         "alignment": "left",
+         "heading_font": "heading",
+         "heading_font_size": "52",
+         "heading_line_height": "1.06",
+         "heading_font_weight": "600",
+         "heading_color": "#eef2ec",
+         "decoration": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "sg-art-meta",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>by Devin Cho · 14 min read · updated 2 days ago</p>",
+         "text_color": "#5f6b76",
+         "font_size": "12.5",
+         "line_height": "1.4",
+         "text_align": "left",
+         "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }
+        },
+        "style": { "margin_top": 18, "padding_bottom": 0, "margin_bottom": 0 },
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "sg-art-cover",
+        "type": "workgrid",
+        "settings": {
+         "columns": 1,
+         "items_gap": 0,
+         "media_aspect": "16/9",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#1a212a",
+         "media_label_color": "#eef2ec",
+         "hover_zoom": false,
+         "title_font_family": "heading",
+         "title_color": "#eef2ec",
+         "title_size": 20,
+         "title_weight": "600",
+         "meta_color": "#a3e635",
+         "meta_size": 11,
+         "show_desc": false,
+         "desc_color": "#9aa6b0",
+         "desc_size": 13,
+         "mono_font_family": "IBM Plex Mono",
+         "items": [
+          { "image": "", "media_label": "cover diagram — read path with a stale node", "title": "", "meta": "", "description": "", "link_url": "", "tall": false }
+         ]
+        },
+        "style": { "margin_top": 30, "margin_bottom": 36 },
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "sg-art-p1",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>It started, as these things do, with a graph that looked too good. Our p99 read latency had dropped off a cliff in March and stayed there. We congratulated ourselves on the new caching layer and moved on. We should not have moved on.</p>",
+         "text_color": "#9aa6b0",
+         "font_size": "18",
+         "line_height": "1.8",
+         "text_align": "left",
+         "tile_padding": { "top": 0, "right": 0, "bottom": 22, "left": 0 }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "sg-art-h3a",
+        "type": "headline",
+        "settings": {
+         "heading": "# The symptom",
+         "tag": "h3",
+         "alignment": "left",
+         "heading_font": "heading",
+         "heading_font_size": "24",
+         "heading_font_weight": "600",
+         "heading_color": "#eef2ec",
+         "decoration": "none"
+        },
+        "style": { "margin_top": 34, "margin_bottom": 14 },
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "sg-art-p2",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>Three months later, support started seeing reports of users seeing <code>old</code> data — profile changes that \"didn't save\", settings that reverted. Intermittent, unreproducible, maddening. The writes were succeeding. The reads were just… wrong.</p>",
+         "text_color": "#9aa6b0",
+         "font_size": "18",
+         "line_height": "1.8",
+         "text_align": "left",
+         "tile_padding": { "top": 0, "right": 0, "bottom": 22, "left": 0 }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "sg-art-p3",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>The cache wasn't slow. It was <em>confident</em>. And it was confidently serving stale values because of a single line:</p>",
+         "text_color": "#9aa6b0",
+         "font_size": "18",
+         "line_height": "1.8",
+         "text_align": "left",
+         "tile_padding": { "top": 0, "right": 0, "bottom": 22, "left": 0 }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "sg-art-code",
+        "type": "code",
+        "settings": {
+         "code": "// cache.ts — the line that cost us a quarter\nconst ttl = process.env.CACHE_TTL ?? 86400;  // seconds\n// CACHE_TTL was unset in prod → 24h TTL, never invalidated on write",
+         "language": "typescript",
+         "theme": "github-dark",
+         "show_line_numbers": false,
+         "show_copy_button": true,
+         "font_size": "13.5",
+         "wrap_lines": false
+        },
+        "style": { "margin_bottom": 24 },
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "sg-art-h3b",
+        "type": "headline",
+        "settings": {
+         "heading": "# The fix, and the lesson",
+         "tag": "h3",
+         "alignment": "left",
+         "heading_font": "heading",
+         "heading_font_size": "24",
+         "heading_font_weight": "600",
+         "heading_color": "#eef2ec",
+         "decoration": "none"
+        },
+        "style": { "margin_top": 34, "margin_bottom": 14 },
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "sg-art-p4",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>The fix was trivial: invalidate on write, and fail loudly when a config the system depends on is missing. The lesson was not. A metric that only ever looks good is not a metric — it's a blind spot with a dashboard.</p>",
+         "text_color": "#9aa6b0",
+         "font_size": "18",
+         "line_height": "1.8",
+         "text_align": "left",
+         "tile_padding": { "top": 0, "right": 0, "bottom": 22, "left": 0 }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "sg-art-p5",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>We now treat \"suspiciously good\" the same way we treat \"suspiciously bad\": as something to investigate before we trust it.</p>",
+         "text_color": "#9aa6b0",
+         "font_size": "18",
+         "line_height": "1.8",
+         "text_align": "left",
+         "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sg-art-keep-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#141b22" }, "border": { "top": 1, "style": "solid", "color": "rgba(238,242,236,.1)" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sg-art-keep-ro1",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sg-art-keep-co1",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sg-art-keep-head",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "eyebrow_text": "",
+         "headline_lines": [ { "text": "// keep reading", "color": "#5f6b76", "italic": false } ],
+         "headline_font_family": "mono",
+         "headline_font_size": 16,
+         "headline_line_height": 1.2,
+         "headline_font_weight": "500",
+         "headline_align": "left",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "all posts →",
+         "tagline_text_color": "#a3e635",
+         "tagline_text_size": 13,
+         "tagline_text_italic": false,
+         "layout": "split",
+         "split_ratio": "2fr 1fr",
+         "vertical_align": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "sg-art-keep-ro2",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sg-art-keep-co2",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sg-art-keep-grid",
+        "type": "workgrid",
+        "settings": {
+         "columns": 3,
+         "items_gap": 24,
+         "media_aspect": "16/10",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#1a212a",
+         "media_label_color": "#eef2ec",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#eef2ec",
+         "title_size": 21,
+         "title_weight": "600",
+         "meta_color": "#a3e635",
+         "meta_size": 12,
+         "show_desc": true,
+         "desc_color": "#5f6b76",
+         "desc_size": 12,
+         "mono_font_family": "IBM Plex Mono",
+         "items": [
+          { "image": "", "media_label": "terminal", "title": "A love letter to the CLI", "meta": "// tooling", "description": "9 min · R. Mensah", "link_url": "/signal-article/", "tall": false },
+          { "image": "", "media_label": "tests", "title": "Why your tests are slow", "meta": "// testing", "description": "7 min · L. Adeyemi", "link_url": "/signal-article/", "tall": false },
+          { "image": "", "media_label": "graph", "title": "The case against microservices", "meta": "// architecture", "description": "12 min · D. Cho", "link_url": "/signal-article/", "tall": false }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sg-art-news-se",
+  "type": "section",
+  "settings": { "style": "default", "width": "large", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#11161c" } },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sg-art-news-ro",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sg-art-news-co",
+      "type": "column",
+      "settings": { "width": "1-1" },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sg-art-newsletter",
+        "type": "newsletter",
+        "settings": {
+         "title": "One good read, every Tuesday",
+         "subtitle": "No hot takes, no churn — just one carefully edited essay on building software.",
+         "layout": "horizontal",
+         "email_placeholder": "you@company.dev",
+         "button_text": "Subscribe",
+         "button_icon": false,
+         "privacy_text": "",
+         "max_width": "420",
+         "alignment": "center",
+         "bg_color": "#1a212a",
+         "box_border": "rgba(163,230,53,.4)",
+         "border_radius": 14,
+         "tile_padding": { "top": 52, "right": 52, "bottom": 52, "left": 52 },
+         "title_size": "36",
+         "title_weight": "600",
+         "title_color": "#eef2ec",
+         "subtitle_size": "15",
+         "subtitle_color": "#9aa6b0",
+         "input_bg": "#11161c",
+         "input_color": "#eef2ec",
+         "input_border": "rgba(163,230,53,.4)",
+         "input_focus_border": "#a3e635",
+         "input_radius": 8,
+         "input_height": "46",
+         "btn_bg": "#a3e635",
+         "btn_color": "#0a0e12",
+         "btn_hover_bg": "#8fce28",
+         "btn_radius": 8,
+         "btn_font_size": "14",
+         "btn_font_weight": "600",
+         "shadow": "none",
+         "icon_type": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

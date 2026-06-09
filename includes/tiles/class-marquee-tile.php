@@ -35,6 +35,10 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
         'font_weight'    => '500',
         'letter_spacing' => '1',
         'text_transform' => 'uppercase',
+        'font_family'    => '',
+        'font_style'     => 'normal',
+        'separator_color'=> '',
+        'separator_size' => '',
         'height'         => '50',
         'full_width'     => false,
         'border_top'     => '0',
@@ -95,6 +99,21 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
         $font_weight = in_array( $s['font_weight'], [ '400', '500', '600', '700', '900' ] ) ? $s['font_weight'] : '500';
         $ls          = max( 0, intval( $s['letter_spacing'] ) );
         $tt          = in_array( $s['text_transform'], [ 'none', 'uppercase', 'lowercase' ] ) ? $s['text_transform'] : 'uppercase';
+
+        // Font famiglia/stile + separatore (additivi, default no-op).
+        $ffkey = $s['font_family'] ?? '';
+        if ( $ffkey === 'sans' ) {
+            $font_family = "var(--olo-font-family, inherit)";
+        } elseif ( $ffkey === 'serif' || $ffkey === 'heading' ) {
+            $font_family = "var(--olo-font-family-heading, Georgia, serif)";
+        } else {
+            $font_family = '';
+        }
+        $fstyle  = ( ( $s['font_style'] ?? 'normal' ) === 'italic' ) ? 'italic' : 'normal';
+        $sepcol  = $this->safe_color_css( $s['separator_color'] ?? '' ) ?: $text_color;
+        $sep_op  = ( ( $s['separator_color'] ?? '' ) !== '' ) ? '1' : '0.5';
+        $sepsize = intval( $s['separator_size'] ?? 0 );
+        $sepsize = $sepsize > 0 ? $sepsize : $font_size;
 
         // Image settings
         $images      = is_array( $s['images'] ) ? $s['images'] : [];
@@ -193,6 +212,8 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
                 font-weight: <?php echo $font_weight; ?>;
                 letter-spacing: <?php echo $ls; ?>px;
                 text-transform: <?php echo $tt; ?>;
+                <?php if ( $font_family ) : ?>font-family: <?php echo $font_family; ?>;<?php endif; ?>
+                font-style: <?php echo $fstyle; ?>;
                 line-height: 1;
                 white-space: nowrap;
             }
@@ -203,11 +224,11 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
                 flex-shrink: 0;
             }
             .<?php echo $uid; ?> .olo-mq-sep {
-                color: <?php echo $text_color; ?>;
-                font-size: <?php echo $font_size; ?>px;
+                color: <?php echo $sepcol; ?>;
+                font-size: <?php echo $sepsize; ?>px;
                 font-weight: <?php echo $font_weight; ?>;
                 line-height: 1;
-                opacity: 0.5;
+                opacity: <?php echo $sep_op; ?>;
                 white-space: nowrap;
                 flex-shrink: 0;
             }

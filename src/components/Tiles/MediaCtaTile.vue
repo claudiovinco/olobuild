@@ -1,10 +1,10 @@
 <template>
   <section class="olo-mediacta omc" :style="rootStyle">
-    <div class="omc-media" :style="mediaStyle"><span v-if="!s.bg_image && s.media_label" :style="mediaLabelStyle">{{ s.media_label }}</span></div>
+    <div class="omc-media" :style="mediaStyle"><span v-if="!s.bg_image && !hasMediaBg && s.media_label" :style="mediaLabelStyle">{{ s.media_label }}</span></div>
     <div class="omc-grad" :style="gradStyle"></div>
     <div class="omc-in" :style="inStyle">
       <span v-if="s.eyebrow" :style="eyebrowStyle">{{ s.eyebrow }}</span>
-      <h2 v-if="s.headline" :style="hStyle">{{ s.headline }}<span v-if="s.accent_text" :style="{ color: accent }"> {{ s.accent_text }}</span></h2>
+      <h2 v-if="s.headline" :style="hStyle">{{ s.headline }}<span v-if="s.accent_text" :style="{ color: accent, fontStyle: s.accent_italic ? 'italic' : 'normal' }"> {{ s.accent_text }}</span></h2>
       <p v-if="s.subhead" :style="subStyle">{{ s.subhead }}</p>
       <div v-if="s.cta1_text || s.cta2_text" :style="ctaWrap">
         <a v-if="s.cta1_text" class="omc-btn" :style="solidStyle" :href="s.cta1_url || '#'">{{ s.cta1_text }}
@@ -28,7 +28,7 @@ const defaults = {
   eyebrow: 'Membership', eyebrow_color: '', headline: 'Become a member of our', accent_text: 'club', uppercase: true, headline_color: '#ffffff',
   subhead: '', subhead_color: 'rgba(255,255,255,0.78)', cta1_text: 'Go to membership', cta1_url: '#', cta2_text: '', cta2_url: '',
   bg_image: '', media_label: 'membership — supporters in the stands · background video',
-  overlay_color: '#0a2a1e', overlay_top: 0.78, overlay_bottom: 0.9, accent: '', accent_on: '#0a2a1e', text_color: '#ffffff', align: 'center', pad_y: 160,
+  overlay_color: '#0a2a1e', overlay_top: 0.78, overlay_bottom: 0.9, overlay_type: 'linear', accent: '', accent_on: '#0a2a1e', accent_italic: false, btn_bg: '', btn_color: '', headline_size: '', text_color: '#ffffff', align: 'center', pad_y: 160,
 
   // SPAZIATURA (additivo, no-op coi default)
   content_padding: { top: 0, right: 28, bottom: 0, left: 28 },
@@ -51,6 +51,9 @@ const s = computed(() => ({ ...defaults, ...props.settings }));
 const DISP = "var(--olo-font-family-heading, 'Archivo',-apple-system,sans-serif)";
 const SANS = "var(--olo-font-family, 'Work Sans',-apple-system,sans-serif)";
 const accent = computed(() => s.value.accent || 'var(--olo-color-primary, #c8ff3c)');
+const accOn = computed(() => s.value.accent_on || '#0a2a1e');
+const btnBg = computed(() => s.value.btn_bg || accent.value);
+const btnColor = computed(() => s.value.btn_color || accOn.value);
 const txt = computed(() => s.value.text_color || '#ffffff');
 const center = computed(() => s.value.align !== 'left');
 
@@ -128,18 +131,30 @@ const rootStyle = computed(() => {
   if (kitShadow.value) st.boxShadow = kitShadow.value;
   return st;
 });
-const mediaStyle = computed(() => ({ position: 'absolute', inset: 0, zIndex: 0, background: s.value.overlay_color || '#0a2a1e', backgroundImage: s.value.bg_image ? 'url(' + s.value.bg_image + ')' : 'repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px)', backgroundSize: 'cover', backgroundPosition: 'center' }));
+const hasMediaBg = computed(() => { const m = s.value.media_bg; return !!(m && m.type && m.type !== 'none'); });
+const mediaStyle = computed(() => {
+  const base = { position: 'absolute', inset: 0, zIndex: 0, backgroundSize: 'cover', backgroundPosition: 'center' };
+  if (hasMediaBg.value) return { ...base, ...buildBgStyle(s.value.media_bg) };
+  return { ...base, background: s.value.overlay_color || '#0a2a1e', backgroundImage: s.value.bg_image ? 'url(' + s.value.bg_image + ')' : 'repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px)' };
+});
 const mediaLabelStyle = { position: 'absolute', left: '18px', bottom: '14px', zIndex: 1, fontSize: '11px', letterSpacing: '.04em', textTransform: 'uppercase', fontWeight: 600, color: 'rgba(255,255,255,.4)' };
 const gradStyle = computed(() => {
   const rgb = hexRgb(s.value.overlay_color || '#0a2a1e');
-  return { position: 'absolute', inset: 0, zIndex: 1, background: `linear-gradient(180deg, rgba(${rgb},${s.value.overlay_top}), rgba(${rgb},${s.value.overlay_bottom}))` };
+  const bg = s.value.overlay_type === 'radial'
+    ? `radial-gradient(120% 100% at 50% 100%, rgba(${rgb},${s.value.overlay_bottom}), rgba(${rgb},${s.value.overlay_top}))`
+    : `linear-gradient(180deg, rgba(${rgb},${s.value.overlay_top}), rgba(${rgb},${s.value.overlay_bottom}))`;
+  return { position: 'absolute', inset: 0, zIndex: 1, background: bg };
 });
 const inStyle = computed(() => ({ position: 'relative', zIndex: 2, maxWidth: '1240px', margin: '0 auto', padding: padCss(s.value.content_padding, { top: 0, right: 28, bottom: 0, left: 28 }) }));
 const eyebrowStyle = computed(() => ({ fontWeight: 700, fontSize: '12px', letterSpacing: '.18em', textTransform: 'uppercase', color: s.value.eyebrow_color || accent.value, display: 'block', marginBottom: '18px' }));
-const hStyle = computed(() => ({ fontFamily: DISP, fontWeight: 900, fontSize: 'clamp(40px,7.2vw,104px)', lineHeight: .88, letterSpacing: '-.01em', textTransform: s.value.uppercase ? 'uppercase' : 'none', margin: 0, color: txt.value }));
+const hStyle = computed(() => {
+  const n = parseInt(s.value.headline_size, 10);
+  const fs = n > 0 ? `clamp(34px,6vw,${n}px)` : 'clamp(40px,7.2vw,104px)';
+  return { fontFamily: DISP, fontWeight: 900, fontSize: fs, lineHeight: .88, letterSpacing: '-.01em', textTransform: s.value.uppercase ? 'uppercase' : 'none', margin: 0, color: txt.value };
+});
 const subStyle = computed(() => ({ fontSize: '17px', lineHeight: 1.6, color: s.value.subhead_color || 'rgba(255,255,255,0.78)', margin: center.value ? '18px auto 0' : '18px 0 0', maxWidth: '560px' }));
 const ctaWrap = computed(() => ({ display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '32px', justifyContent: center.value ? 'center' : 'flex-start' }));
 const btnRadius = computed(() => radiusCss(s.value.btn_radius) || '999px');
-const solidStyle = computed(() => ({ display: 'inline-flex', alignItems: 'center', gap: '9px', padding: '17px 30px', borderRadius: btnRadius.value, fontWeight: 700, fontSize: '15px', textDecoration: 'none', background: accent.value, color: s.value.accent_on || '#0a2a1e', border: 0 }));
+const solidStyle = computed(() => ({ display: 'inline-flex', alignItems: 'center', gap: '9px', padding: '17px 30px', borderRadius: btnRadius.value, fontWeight: 700, fontSize: '15px', textDecoration: 'none', background: btnBg.value, color: btnColor.value, border: 0 }));
 const ghostStyle = computed(() => ({ display: 'inline-flex', alignItems: 'center', gap: '9px', padding: '17px 30px', borderRadius: btnRadius.value, fontWeight: 700, fontSize: '15px', textDecoration: 'none', background: 'rgba(255,255,255,.08)', color: txt.value, border: '1.5px solid rgba(255,255,255,.26)' }));
 </script>

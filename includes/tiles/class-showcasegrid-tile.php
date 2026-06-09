@@ -28,6 +28,11 @@ class Olo_ShowcaseGrid_Tile extends Olo_Tile_Base {
         'arrow_color'       => '#ffffff',
         'arrow_hover_bg'    => '',
         'arrow_hover_color' => '#0a2a1e',
+        'show_arrow'        => true,
+        'title_size'        => 34,
+        'title_weight'      => '900',
+        'title_uppercase'   => true,
+        'kicker_size'       => 12,
 
         // Spaziatura interna card — default = padding attuale (26px) → no-op.
         'card_padding'      => [ 'top' => 26, 'right' => 26, 'bottom' => 26, 'left' => 26 ],
@@ -91,8 +96,20 @@ class Olo_ShowcaseGrid_Tile extends Olo_Tile_Base {
         $disp   = "var(--olo-font-family-heading, 'Archivo',-apple-system,sans-serif)";
         $sans   = "var(--olo-font-family, 'Work Sans',-apple-system,sans-serif)";
 
+        $show_arrow  = ! empty( $s['show_arrow'] );
+        $title_size  = max( 10, intval( $s['title_size'] ?? 34 ) );
+        $title_wt    = in_array( (string) ( $s['title_weight'] ?? '900' ), [ '400', '500', '600', '700', '900' ], true ) ? (string) $s['title_weight'] : '900';
+        $title_tt    = ! empty( $s['title_uppercase'] ) ? 'uppercase' : 'none';
+        $kicker_size = max( 8, intval( $s['kicker_size'] ?? 12 ) );
+
         $items = is_array( $s['items'] ) ? array_values( $s['items'] ) : [];
         if ( empty( $items ) ) return '';
+
+        // Modalità editoriale asimmetrica: attiva se almeno un item ha span > 0.
+        $has_spans = false;
+        foreach ( $items as $it_chk ) { if ( intval( $it_chk['span'] ?? 0 ) > 0 ) { $has_spans = true; break; } }
+        $grid_tpl   = $has_spans ? 'repeat(12,1fr)' : "repeat({$cols},1fr)";
+        $grid_align = $has_spans ? 'align-items:end;' : '';
 
         // ── KIT standard OLObuild (contenitore) ───────────────────────────
         // Sfondo completo opzionale: override SOLO se valorizzato (default none → invariato).
@@ -117,13 +134,13 @@ class Olo_ShowcaseGrid_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <style>
-            .<?php echo $uid; ?>{display:grid;grid-template-columns:repeat(<?php echo $cols; ?>,1fr);gap:<?php echo $gap; ?>;font-family:<?php echo $sans; ?>;<?php echo $kit_pos . $kit_decl; ?>}
+            .<?php echo $uid; ?>{display:grid;grid-template-columns:<?php echo $grid_tpl; ?>;gap:<?php echo $gap; ?>;<?php echo $grid_align; ?>font-family:<?php echo $sans; ?>;<?php echo $kit_pos . $kit_decl; ?>}
             .<?php echo $uid; ?> .ocg-card{position:relative;border-radius:<?php echo $card_rad; ?>;overflow:hidden;aspect-ratio:<?php echo $asp; ?>;display:flex;flex-direction:column;justify-content:flex-end;padding:<?php echo $card_pad; ?>;color:#fff;text-decoration:none;background:<?php echo $mbg; ?>;}
             .<?php echo $uid; ?> .ocg-media{position:absolute;inset:0;z-index:0;background:<?php echo $mbg; ?>;background-size:cover;background-position:center;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px);}
             .<?php echo $uid; ?> .ocg-medialabel{position:absolute;left:14px;bottom:12px;font-size:11px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;color:rgba(255,255,255,.4);z-index:1;}
             .<?php echo $uid; ?> .ocg-veil{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg, rgba(<?php echo $veilrgb; ?>,.05) 30%, rgba(<?php echo $veilrgb; ?>,.9) 100%);}
-            .<?php echo $uid; ?> .ocg-k{position:relative;z-index:2;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:<?php echo $kick; ?>;}
-            .<?php echo $uid; ?> .ocg-t{position:relative;z-index:2;font-family:<?php echo $disp; ?>;font-weight:900;font-size:34px;text-transform:uppercase;margin-top:6px;color:<?php echo $tcol; ?>;line-height:1;}
+            .<?php echo $uid; ?> .ocg-k{position:relative;z-index:2;font-weight:700;font-size:<?php echo $kicker_size; ?>px;letter-spacing:.12em;text-transform:uppercase;color:<?php echo $kick; ?>;}
+            .<?php echo $uid; ?> .ocg-t{position:relative;z-index:2;font-family:<?php echo $disp; ?>;font-weight:<?php echo $title_wt; ?>;font-size:<?php echo $title_size; ?>px;text-transform:<?php echo $title_tt; ?>;margin-top:6px;color:<?php echo $tcol; ?>;line-height:1;}
             .<?php echo $uid; ?> .ocg-arr{position:absolute;z-index:2;top:24px;right:24px;width:44px;height:44px;border-radius:50%;background:<?php echo $arrbg; ?>;display:grid;place-items:center;transition:background .25s, transform .25s;}
             .<?php echo $uid; ?> .ocg-arr svg{width:19px;height:19px;color:<?php echo $arrcol; ?>;transition:color .25s;}
             .<?php echo $uid; ?> .ocg-card:hover .ocg-arr{background:<?php echo $arrhbg; ?>;transform:rotate(-45deg);}
@@ -134,16 +151,28 @@ class Olo_ShowcaseGrid_Tile extends Olo_Tile_Base {
             @media(max-width:880px){.<?php echo $uid; ?>{grid-template-columns:1fr;}}
         </style>
         <div class="olo-showcasegrid <?php echo esc_attr( $uid ); ?>">
-            <?php foreach ( $items as $it ) :
+            <?php foreach ( $items as $ci => $it ) :
                 $img = isset( $it['image'] ) ? trim( $it['image'] ) : '';
                 $href = ! empty( $it['link'] ) ? $it['link'] : '#';
-                $msty = $img !== '' ? ' style="background-image:url(' . esc_url( $img ) . ')"' : '';
+                $mb  = $this->bg_media_parts( $it['media_bg'] ?? null, $uid . '-i' . $ci );
+                if ( $mb['has'] ) {
+                    $msty = $mb['css'] !== '' ? ' style="' . esc_attr( $mb['css'] ) . '"' : '';
+                } else {
+                    $msty = $img !== '' ? ' style="background-image:url(' . esc_url( $img ) . ')"' : '';
+                }
+                $card_inline = '';
+                if ( $has_spans ) {
+                    $sp = intval( $it['span'] ?? 0 ); $sp = $sp > 0 ? min( 12, $sp ) : 4;
+                    $it_asp = ! empty( $it['aspect'] ) ? preg_replace( '/[^0-9.\/]/', '', $it['aspect'] ) : $asp;
+                    $card_inline = ' style="grid-column:span ' . $sp . ';aspect-ratio:' . $it_asp . '"';
+                }
             ?>
-                <a class="ocg-card" href="<?php echo esc_url( $href ); ?>">
+                <a class="ocg-card" href="<?php echo esc_url( $href ); ?>"<?php echo $card_inline; ?>>
                     <span class="ocg-media"<?php echo $msty; ?>></span>
-                    <?php if ( $img === '' && ! empty( $it['media_label'] ) ) : ?><span class="ocg-medialabel"><?php echo esc_html( $it['media_label'] ); ?></span><?php endif; ?>
+                    <?php if ( $mb['has'] && $mb['markup'] !== '' ) { echo $mb['markup']; } ?>
+                    <?php if ( ! $mb['has'] && $img === '' && ! empty( $it['media_label'] ) ) : ?><span class="ocg-medialabel"><?php echo esc_html( $it['media_label'] ); ?></span><?php endif; ?>
                     <span class="ocg-veil"></span>
-                    <span class="ocg-arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+                    <?php if ( $show_arrow ) : ?><span class="ocg-arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span><?php endif; ?>
                     <?php if ( ! empty( $it['kicker'] ) ) : ?><span class="ocg-k"><?php echo esc_html( $it['kicker'] ); ?></span><?php endif; ?>
                     <?php if ( ! empty( $it['title'] ) ) : ?><span class="ocg-t"><?php echo esc_html( $it['title'] ); ?></span><?php endif; ?>
                 </a>
