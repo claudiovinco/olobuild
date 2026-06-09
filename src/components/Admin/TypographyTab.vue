@@ -157,6 +157,7 @@ const BODY_FONTS = [
 const display = ref({ family: 'Instrument Serif', weight: 400 });
 const body    = ref({ family: 'Work Sans', weight: 500 });
 const scale   = ref({ base: 16, ratio: 1.25, lineHeight: 1.55 });
+const fullStyles = ref({});   // tutto olo_styles, per non perdere gli altri blocchi al PUT
 
 const displayFontFamily = computed(() => `'${display.value.family}', serif`);
 const bodyFontFamily    = computed(() => `'${body.value.family}', sans-serif`);
@@ -192,25 +193,53 @@ function uploadCustomFont() {
 
 async function loadSettings() {
   try {
-    const res = await fetch(`${window.oloData.restUrl}settings/global-typography`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    const res = await fetch(`${window.oloData.restUrl}styles`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) {
       const data = await res.json();
-      if (data?.display) Object.assign(display.value, data.display);
-      if (data?.body)    Object.assign(body.value, data.body);
-      if (data?.scale)   Object.assign(scale.value, data.scale);
+      fullStyles.value = data.styles || {};
+      const tp = (data.styles && data.styles.typography) || {};
+      if (tp.font_family_heading) display.value.family = tp.font_family_heading;
+      if (tp.font_weight_heading) display.value.weight = parseInt(tp.font_weight_heading) || 400;
+      if (tp.font_family)         body.value.family = tp.font_family;
+      if (tp.font_weight_body)    body.value.weight = parseInt(tp.font_weight_body) || 500;
+      if (tp.font_size_base)      scale.value.base = parseInt(tp.font_size_base) || 16;
+      if (tp.line_height)         scale.value.lineHeight = parseFloat(tp.line_height) || 1.55;
+      if (tp.scale_ratio)         scale.value.ratio = parseFloat(tp.scale_ratio) || 1.25;
       ensureFontLoaded(display.value.family);
       ensureFontLoaded(body.value.family);
     }
   } catch (e) { /* defaults */ }
 }
 
+// Ricostruisce il blocco flat olo_styles.typography dal modello UI (display/body/scale),
+// derivando le dimensioni h1..h6 dalla scala modulare (base * ratio^k, in rem su root 16px).
+function buildTypographyBlock() {
+  const b = scale.value.base, r = scale.value.ratio;
+  const rem = (k) => (Math.round((b * Math.pow(r, k) / 16) * 1000) / 1000) + 'rem';
+  return {
+    ...(fullStyles.value.typography || {}),
+    font_family: body.value.family === 'system-ui' ? '' : body.value.family,
+    font_family_heading: display.value.family,
+    font_weight_body: String(body.value.weight),
+    font_weight_heading: String(display.value.weight),
+    font_size_base: `${scale.value.base}px`,
+    line_height: String(scale.value.lineHeight),
+    scale_ratio: String(scale.value.ratio),
+    font_size_h1: rem(6), font_size_h2: rem(5), font_size_h3: rem(4),
+    font_size_h4: rem(3), font_size_h5: rem(2), font_size_h6: rem(1),
+  };
+}
+
 async function saveSettings() {
   try {
-    await fetch(`${window.oloData.restUrl}settings/global-typography`, {
+    const payload = { ...fullStyles.value, typography: buildTypographyBlock() };
+    const res = await fetch(`${window.oloData.restUrl}styles`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-      body: JSON.stringify({ display: display.value, body: body.value, scale: scale.value }),
+      body: JSON.stringify(payload),
     });
+    if (!res.ok) throw new Error();
+    fullStyles.value = payload;
   } catch (e) { showToast(t('Errore di salvataggio tipografia'), 'error'); }
 }
 

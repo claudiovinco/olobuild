@@ -181,6 +181,34 @@ class Olo_Rest_Api {
             'permission_callback' => [ $this, 'check_permission' ],
         ] );
 
+        // Stock media — comportamento default (pagina admin "Stock media")
+        register_rest_route( $this->namespace, '/stockmedia-behavior', [
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'get_stockmedia_behavior' ],
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+            [
+                'methods'             => 'PUT',
+                'callback'            => [ $this, 'save_stockmedia_behavior' ],
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
+        // Stock media — chiavi API provider (dati sensibili → manage_options)
+        register_rest_route( $this->namespace, '/api-keys', [
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'get_api_keys' ],
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+            [
+                'methods'             => 'PUT',
+                'callback'            => [ $this, 'save_api_keys' ],
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
         // Header activation
         register_rest_route( $this->namespace, '/header/activate', [
             [
@@ -1976,6 +2004,51 @@ class Olo_Rest_Api {
         update_option( 'olo_global_typography', $sanitized, false );
 
         return rest_ensure_response( $sanitized );
+    }
+
+    // === Stock Media (comportamento + chiavi API provider) ===
+
+    public function get_stockmedia_behavior() {
+        return rest_ensure_response( olo_stockmedia_behavior() );
+    }
+
+    public function save_stockmedia_behavior( $request ) {
+        $b = $request->get_json_params();
+        if ( ! is_array( $b ) ) {
+            return new WP_Error( 'invalid_data', __( 'Dati non validi.', 'olobuild' ), [ 'status' => 400 ] );
+        }
+        $allowed = [ 'unsplash', 'pexels', 'pixabay', 'freesound' ];
+        $pref    = sanitize_key( $b['preferred'] ?? 'unsplash' );
+        if ( ! in_array( $pref, $allowed, true ) ) {
+            $pref = 'unsplash';
+        }
+        $s = [
+            'preferred'            => $pref,
+            'download_local'       => ! empty( $b['download_local'] ),
+            'optimize_on_download' => ! empty( $b['optimize_on_download'] ),
+        ];
+        update_option( 'olo_stockmedia_behavior', $s, false );
+        return rest_ensure_response( $s );
+    }
+
+    public function get_api_keys() {
+        return rest_ensure_response( [
+            'olo_unsplash_api_key'  => (string) get_option( 'olo_unsplash_api_key', '' ),
+            'olo_pexels_api_key'    => (string) get_option( 'olo_pexels_api_key', '' ),
+            'olo_pixabay_api_key'   => (string) get_option( 'olo_pixabay_api_key', '' ),
+            'olo_freesound_api_key' => (string) get_option( 'olo_freesound_api_key', '' ),
+        ] );
+    }
+
+    public function save_api_keys( $request ) {
+        $b    = $request->get_json_params();
+        $keys = [ 'olo_unsplash_api_key', 'olo_pexels_api_key', 'olo_pixabay_api_key', 'olo_freesound_api_key' ];
+        foreach ( $keys as $k ) {
+            if ( is_array( $b ) && array_key_exists( $k, $b ) ) {
+                update_option( $k, sanitize_text_field( $b[ $k ] ?? '' ), false );
+            }
+        }
+        return $this->get_api_keys();
     }
 
     // === Custom Code Snippets ===

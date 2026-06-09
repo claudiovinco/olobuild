@@ -149,6 +149,26 @@ class Olo_Style_System {
                 'link'               => '#818CF8',
             ],
             'google_fonts' => [],
+            // Scala neutri + meta dark mode — gestiti dalla pagina admin "Palette colori".
+            'neutrals' => [
+                'mode'  => 'auto',
+                'tint'  => 'zinc',
+                'scale' => [ '#FAFAFA', '#F4F4F5', '#E4E4E7', '#A1A1AA', '#52525B', '#27272A', '#09090B' ],
+            ],
+            'dark_mode' => [
+                'enabled'  => true,
+                'strategy' => 'auto',
+            ],
+            // Breakpoint responsive — pagina admin "Breakpoint responsive"
+            'breakpoints' => [
+                [ 'id' => 'desktop_xl', 'name' => 'Desktop XL', 'min' => '1440', 'max' => '∞',    'icon' => '🖥️', 'is_default' => false ],
+                [ 'id' => 'desktop',    'name' => 'Desktop',    'min' => '1200', 'max' => '1439', 'icon' => '🖥️', 'is_default' => true  ],
+                [ 'id' => 'laptop',     'name' => 'Laptop',     'min' => '992',  'max' => '1199', 'icon' => '💻', 'is_default' => false ],
+                [ 'id' => 'tablet',     'name' => 'Tablet',     'min' => '768',  'max' => '991',  'icon' => '📱', 'is_default' => false ],
+                [ 'id' => 'mobile_l',   'name' => 'Mobile L',   'min' => '576',  'max' => '767',  'icon' => '📱', 'is_default' => false ],
+                [ 'id' => 'mobile',     'name' => 'Mobile',     'min' => '0',    'max' => '575',  'icon' => '📱', 'is_default' => false ],
+            ],
+            'breakpoint_strategy' => 'mobile',
         ];
     }
 
@@ -173,6 +193,10 @@ class Olo_Style_System {
             'gutter'          => wp_parse_args( $saved['gutter'] ?? [], $defaults['gutter'] ),
             'fluid_scaling'   => wp_parse_args( $saved['fluid_scaling'] ?? [], $defaults['fluid_scaling'] ),
             'grain'           => wp_parse_args( $saved['grain'] ?? [], $defaults['grain'] ),
+            'neutrals'        => wp_parse_args( $saved['neutrals'] ?? [], $defaults['neutrals'] ),
+            'dark_mode'       => wp_parse_args( $saved['dark_mode'] ?? [], $defaults['dark_mode'] ),
+            'breakpoints'         => ( isset( $saved['breakpoints'] ) && is_array( $saved['breakpoints'] ) ) ? $saved['breakpoints'] : $defaults['breakpoints'],
+            'breakpoint_strategy' => $saved['breakpoint_strategy'] ?? $defaults['breakpoint_strategy'],
         ];
     }
 
@@ -188,6 +212,30 @@ class Olo_Style_System {
         if ( ! is_array( $existing ) ) $existing = [];
         $merged    = array_replace( $existing, $sanitized );
         update_option( 'olo_styles', $merged, false );
+
+        // Allinea i global color dei ruoli core (primary/secondary/...) al valore appena salvato.
+        // In generate_css i olo_global_colors[id core] sono emessi DOPO olo_styles.colors e
+        // VINCONO nel CSS: senza questo sync server-side un cambio dal pannello non si vedrebbe
+        // sul frontend. Robusto: vale per ogni flusso di salvataggio (UI, API), indipendente
+        // dalla cache del bundle JS.
+        if ( isset( $sanitized['colors'] ) && is_array( $sanitized['colors'] ) ) {
+            $gc = get_option( 'olo_global_colors', [] );
+            if ( is_array( $gc ) && $gc ) {
+                $changed = false;
+                foreach ( $gc as &$g ) {
+                    $id = isset( $g['id'] ) ? $g['id'] : '';
+                    if ( $id && isset( $sanitized['colors'][ $id ] ) && ( ! isset( $g['value'] ) || $g['value'] !== $sanitized['colors'][ $id ] ) ) {
+                        $g['value'] = $sanitized['colors'][ $id ];
+                        $changed    = true;
+                    }
+                }
+                unset( $g );
+                if ( $changed ) {
+                    update_option( 'olo_global_colors', $gc, false );
+                }
+            }
+        }
+
         return $merged;
     }
 
@@ -367,6 +415,69 @@ class Olo_Style_System {
                 'opacity' => max( 0, min( 30, absint( $gr['opacity'] ?? 6 ) ) ),
                 'scale'   => max( 60, min( 400, absint( $gr['scale'] ?? 180 ) ) ),
             ];
+        }
+
+        // Neutrals (scala grigi + modalità/tinta) — pagina admin "Palette colori"
+        if ( isset( $styles['neutrals'] ) && is_array( $styles['neutrals'] ) ) {
+            $nz    = $styles['neutrals'];
+            $clean = [];
+            if ( isset( $nz['mode'] ) ) {
+                $clean['mode'] = in_array( $nz['mode'], [ 'auto', 'manual' ], true ) ? $nz['mode'] : 'auto';
+            }
+            if ( isset( $nz['tint'] ) ) {
+                $tints         = [ 'slate', 'gray', 'zinc', 'neutral', 'stone' ];
+                $clean['tint'] = in_array( $nz['tint'], $tints, true ) ? $nz['tint'] : 'zinc';
+            }
+            if ( isset( $nz['scale'] ) && is_array( $nz['scale'] ) ) {
+                $scale = [];
+                foreach ( $nz['scale'] as $hex ) {
+                    $h = sanitize_hex_color( $hex );
+                    if ( $h ) {
+                        $scale[] = $h;
+                    }
+                }
+                if ( $scale ) {
+                    $clean['scale'] = $scale;
+                }
+            }
+            if ( $clean ) {
+                $sanitized['neutrals'] = $clean;
+            }
+        }
+
+        // Dark mode meta (enabled + strategy) — pagina admin "Palette colori"
+        if ( isset( $styles['dark_mode'] ) && is_array( $styles['dark_mode'] ) ) {
+            $dm         = $styles['dark_mode'];
+            $strategies = [ 'auto', 'manual', 'luminance' ];
+            $strategy   = sanitize_text_field( $dm['strategy'] ?? 'auto' );
+            $sanitized['dark_mode'] = [
+                'enabled'  => ! empty( $dm['enabled'] ),
+                'strategy' => in_array( $strategy, $strategies, true ) ? $strategy : 'auto',
+            ];
+        }
+
+        // Breakpoints (lista device) + strategia — pagina admin "Breakpoint responsive"
+        if ( isset( $styles['breakpoints'] ) && is_array( $styles['breakpoints'] ) ) {
+            $clean_bps = [];
+            foreach ( $styles['breakpoints'] as $bp ) {
+                if ( ! is_array( $bp ) ) {
+                    continue;
+                }
+                $clean_bps[] = [
+                    'id'         => sanitize_key( $bp['id'] ?? '' ),
+                    'name'       => sanitize_text_field( $bp['name'] ?? '' ),
+                    'min'        => sanitize_text_field( (string) ( $bp['min'] ?? '0' ) ),
+                    'max'        => sanitize_text_field( (string) ( $bp['max'] ?? '∞' ) ), // stringa: accetta '∞'
+                    'icon'       => sanitize_text_field( $bp['icon'] ?? '' ),
+                    'is_default' => ! empty( $bp['is_default'] ),
+                ];
+            }
+            if ( $clean_bps ) {
+                $sanitized['breakpoints'] = $clean_bps;
+            }
+        }
+        if ( isset( $styles['breakpoint_strategy'] ) ) {
+            $sanitized['breakpoint_strategy'] = in_array( $styles['breakpoint_strategy'], [ 'mobile', 'desktop' ], true ) ? $styles['breakpoint_strategy'] : 'mobile';
         }
 
         return $sanitized;

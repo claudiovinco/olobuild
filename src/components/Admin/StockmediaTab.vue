@@ -165,7 +165,7 @@ function setBehavior(k, v) { behavior.value[k] = v; setDirty(true); }
 
 async function loadKeys() {
   try {
-    const res = await fetch(`${window.oloData.restUrl}settings/api-keys`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    const res = await fetch(`${window.oloData.restUrl}api-keys`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) {
       const data = await res.json();
       services.value.forEach(s => {
@@ -174,25 +174,26 @@ async function loadKeys() {
     }
   } catch (e) { /* defaults */ }
   try {
-    const res2 = await fetch(`${window.oloData.restUrl}settings/stockmedia-behavior`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    const res2 = await fetch(`${window.oloData.restUrl}stockmedia-behavior`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res2.ok) Object.assign(behavior.value, await res2.json());
   } catch (e) { /* defaults */ }
 }
 
 async function saveKeys() {
   const body = {};
-  services.value.forEach(s => { body[s.optionKey] = s.key.trim(); });
+  services.value.forEach(s => { body[s.optionKey] = (s.key || '').trim(); });
   try {
-    await fetch(`${window.oloData.restUrl}settings/api-keys`, {
+    const r1 = await fetch(`${window.oloData.restUrl}api-keys`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
       body: JSON.stringify(body),
     });
-    await fetch(`${window.oloData.restUrl}settings/stockmedia-behavior`, {
-      method: 'POST',
+    const r2 = await fetch(`${window.oloData.restUrl}stockmedia-behavior`, {
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
       body: JSON.stringify(behavior.value),
     });
+    if (!r1.ok || !r2.ok) throw new Error();
   } catch (e) {
     showToast(t('Errore di salvataggio'), 'error');
   }

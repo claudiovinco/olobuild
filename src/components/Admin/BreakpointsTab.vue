@@ -129,6 +129,7 @@ const DEFAULT_BPS = [
 
 const breakpoints = ref(JSON.parse(JSON.stringify(DEFAULT_BPS)));
 const advanced = ref({ strategy: 'mobile' });
+const fullStyles = ref({});   // tutto olo_styles, per non perdere gli altri blocchi al PUT
 
 const PALETTE = ['#fde2e4', '#fbd5d8', '#f5959c', '#ec5a62', '#c8323a', '#8a1f24', '#5a1015'];
 const INFINITE_SHARE = 15; // % a destra riservata al breakpoint senza max
@@ -213,22 +214,27 @@ function goToSpaziature() {
 
 async function loadSettings() {
   try {
-    const res = await fetch(`${window.oloData.restUrl}settings/breakpoints`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    const res = await fetch(`${window.oloData.restUrl}styles`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) {
       const data = await res.json();
-      if (Array.isArray(data?.breakpoints) && data.breakpoints.length) breakpoints.value = data.breakpoints;
-      if (data?.advanced) Object.assign(advanced.value, data.advanced);
+      fullStyles.value = data.styles || {};
+      const s = data.styles || {};
+      if (Array.isArray(s.breakpoints) && s.breakpoints.length) breakpoints.value = s.breakpoints;
+      if (s.breakpoint_strategy) advanced.value.strategy = s.breakpoint_strategy;
     }
   } catch (e) { /* defaults */ }
 }
 
 async function saveSettings() {
   try {
-    await fetch(`${window.oloData.restUrl}settings/breakpoints`, {
+    const payload = { ...fullStyles.value, breakpoints: breakpoints.value, breakpoint_strategy: advanced.value.strategy };
+    const res = await fetch(`${window.oloData.restUrl}styles`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
-      body: JSON.stringify({ breakpoints: breakpoints.value, advanced: advanced.value }),
+      body: JSON.stringify(payload),
     });
+    if (!res.ok) throw new Error();
+    fullStyles.value = payload;
   } catch (e) { showToast(t('Errore di salvataggio breakpoint'), 'error'); }
 }
 

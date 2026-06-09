@@ -21,6 +21,7 @@ export const useStylesStore = defineStore('styles', {
     generatedCss: oloData.stylesCss || '',
     isDirty: false,
     isSaving: false,
+    savingColors: false, // flag dedicato al save dei global colors (non condiviso con isSaving)
     globalColors: JSON.parse(JSON.stringify(oloData.globalColors || [])),
     globalTypography: JSON.parse(JSON.stringify(oloData.globalTypography || [])),
     globalColorsDirty: false,
@@ -439,16 +440,29 @@ export const useStylesStore = defineStore('styles', {
     },
 
     async saveGlobalColors() {
-      if (this.isSaving) return;
-      this.isSaving = true;
+      // Flag DEDICATO (non this.isSaving, condiviso con saveStyles): aggiungere un colore
+      // globale non deve essere saltato durante un salvataggio stili/autosave.
+      if (this.savingColors) return;
+      this.savingColors = true;
       try {
+        // Merge-safe: rileggi dal server e unisci, per non perdere colori aggiunti altrove
+        // (es. dal pannello admin) con uno store stale del builder.
+        let server = [];
+        try {
+          const rr = await fetch(`${oloData.restUrl}global-colors`, { headers: { 'X-WP-Nonce': oloData.nonce } });
+          if (rr.ok) { const s = await rr.json(); if (Array.isArray(s)) server = s; }
+        } catch (e) { /* offline: usa solo lo stato locale */ }
+        const byId = new Map();
+        for (const g of this.globalColors) { if (g && g.id) byId.set(g.id, g); }
+        for (const sg of server) { if (sg && sg.id && !byId.has(sg.id)) byId.set(sg.id, sg); }
+        const merged = Array.from(byId.values());
         const res = await fetch(`${oloData.restUrl}global-colors`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
             'X-WP-Nonce': oloData.nonce,
           },
-          body: JSON.stringify(this.globalColors),
+          body: JSON.stringify(merged),
         });
         if (!res.ok) throw new Error('Failed to save global colors');
         const data = await res.json();
@@ -457,7 +471,7 @@ export const useStylesStore = defineStore('styles', {
       } catch (err) {
         console.error('saveGlobalColors error:', err);
       } finally {
-        this.isSaving = false;
+        this.savingColors = false;
       }
     },
 

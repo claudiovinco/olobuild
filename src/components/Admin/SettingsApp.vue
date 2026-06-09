@@ -145,7 +145,6 @@ import { t } from '@/i18n';
 // I 6 tab esistenti vengono importati con i loro nomi attuali; i 5 migrati
 // sono nuovi component PHP-backed; "Stili & Preset" riusa lo StylesTab esistente
 // (è di fatto già un "preset switcher"); "Spaziature" è uno scaffold soon.
-import PresetsTab from './PresetsTab.vue';
 import ColorsTab from './ColorsTab.vue';
 import TypographyTab from './TypographyTab.vue';
 import SpaziatureTab from './SpaziatureTab.vue';
@@ -168,8 +167,7 @@ import PermessiTab from './PermessiTab.vue';
 const IA_GROUPS = [
   {
     id: 'design', title: 'Design', items: [
-      { id: 'presets',    label: 'Stili & Preset',        icon: 'layers',  component: PresetsTab },
-      { id: 'colori',     label: 'Palette colori',        icon: 'palette', component: ColorsTab },
+      { id: 'colori',     label: 'Palette & Stili',       icon: 'palette', component: ColorsTab },
       { id: 'tipografia', label: 'Tipografia',            icon: 'type',    component: TypographyTab },
       { id: 'spaziature', label: 'Spaziature & layout',   icon: 'layers',  component: SpaziatureTab },
       { id: 'responsive', label: 'Breakpoint responsive', icon: 'devices', component: BreakpointsTab },
@@ -237,7 +235,7 @@ function initialTab() {
     const stored = localStorage.getItem('olo_cfg_active_tab');
     if (stored && ALL_ITEMS.find(i => i.id === stored && !i.soon)) return stored;
   } catch (e) { /* ignore */ }
-  return 'presets';
+  return 'colori';
 }
 
 // ─── Filtered groups (live search) ──────────────────────────────────
@@ -251,7 +249,7 @@ const filteredGroups = computed(() => {
 
 const currentItem    = computed(() => ALL_ITEMS.find(i => i.id === activeTab.value));
 const activeTabLabel = computed(() => t(currentItem.value?.label || ''));
-const currentTabComponent = computed(() => currentItem.value?.component || PresetsTab);
+const currentTabComponent = computed(() => currentItem.value?.component || ColorsTab);
 const currentTabProps = computed(() => ({}));
 
 // ─── Icon mapping (Lucide-style inline SVG) ─────────────────────────

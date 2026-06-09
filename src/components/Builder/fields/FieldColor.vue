@@ -4,24 +4,24 @@
     <div v-if="showGlobals" class="fc-global">
       <div class="fc-global-swatches">
         <span
-          v-for="gc in globalColors"
-          :key="gc.id"
+          v-for="sc in swatchColors"
+          :key="sc.id"
           class="fc-swatch-wrap"
         >
           <button
             type="button"
             class="fc-swatch"
-            :class="{ 'fc-swatch--active': isGlobalSelected(gc.id) }"
-            :style="{ background: gc.value }"
-            :title="gc.label + ' — var(--olo-color-' + gc.id + ')'"
-            @click="selectGlobalColor(gc.id)"
+            :class="{ 'fc-swatch--active': isSwatchSelected(sc.id) }"
+            :style="{ background: sc.value }"
+            :title="sc.label + ' — var(--olo-color-' + sc.id + ')'"
+            @click="selectColor(sc.id)"
           ></button>
           <button
-            v-if="gc.quick"
+            v-if="sc.quick"
             type="button"
             class="fc-swatch-del"
             :title="t('Rimuovi colore')"
-            @click.stop="removeQuickColor(gc.id)"
+            @click.stop="removeQuickColor(sc.id)"
           >{{ t('&times;') }}</button>
         </span>
         <button
@@ -90,7 +90,33 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const stylesStore = useStylesStore();
-const globalColors = computed(() => stylesStore.globalColors || []);
+
+// Ruoli del tema selezionabili come token, oltre ai globali custom.
+const ROLE_SWATCHES = [
+  { id: 'primary', label: 'Primary' }, { id: 'secondary', label: 'Secondary' },
+  { id: 'success', label: 'Success' }, { id: 'warning', label: 'Warning' },
+  { id: 'danger', label: 'Danger' }, { id: 'link', label: 'Link' },
+  { id: 'text', label: 'Testo' }, { id: 'background', label: 'Sfondo' },
+  { id: 'muted', label: 'Superficie' }, { id: 'border', label: 'Bordo' },
+];
+
+// Swatch mostrate: ruoli del tema (olo_styles.colors) + globali custom (accent, "+").
+const swatchColors = computed(() => {
+  const c = stylesStore.colors || {};
+  const roleIds = new Set(ROLE_SWATCHES.map(r => r.id));
+  const roles = ROLE_SWATCHES
+    .filter(r => c[r.id])
+    .map(r => ({ id: r.id, label: r.label, value: c[r.id], quick: false }));
+  const globals = (stylesStore.globalColors || [])
+    .filter(g => g && g.id && !roleIds.has(g.id))
+    .map(g => ({ id: g.id, label: g.label || g.id, value: g.value, quick: !!g.quick }));
+  return [...roles, ...globals];
+});
+
+function resolveSwatch(id) {
+  const sc = swatchColors.value.find(c => c.id === id);
+  return sc ? sc.value : null;
+}
 
 const showGlobals = ref(false);
 
@@ -98,30 +124,20 @@ const isGlobalActive = computed(() => {
   const cur = (props.modelValue || '').toLowerCase();
   if (!cur) return false;
   if (cur.startsWith('var(--olo-color-')) return true;
-  return (stylesStore.globalColors || []).some(gc => gc.value?.toLowerCase() === cur);
+  return swatchColors.value.some(sc => sc.value?.toLowerCase() === cur);
 });
 
-/**
- * Check if a global color is currently selected.
- */
-function isGlobalSelected(colorId) {
-  const gc = (stylesStore.globalColors || []).find(c => c.id === colorId);
-  if (!gc) return false;
-  const gcHex = gc.value?.toLowerCase();
-  const cur = props.modelValue?.toLowerCase();
-  return cur === `var(--olo-color-${colorId})` || cur === gcHex;
+function isSwatchSelected(id) {
+  const cur = (props.modelValue || '').toLowerCase();
+  if (!cur) return false;
+  if (cur === `var(--olo-color-${id})`.toLowerCase()) return true;
+  const hex = resolveSwatch(id);
+  return !!hex && cur === hex.toLowerCase();
 }
 
-/**
- * Select a global color — stores the resolved hex value directly.
- */
-function selectGlobalColor(colorId) {
-  const gc = (stylesStore.globalColors || []).find(c => c.id === colorId);
-  if (gc && gc.value) {
-    emit('update:modelValue', gc.value);
-  } else {
-    emit('update:modelValue', `var(--olo-color-${colorId})`);
-  }
+// Seleziona un colore come TOKEN var(--olo-color-id): così segue la palette globale.
+function selectColor(id) {
+  emit('update:modelValue', `var(--olo-color-${id})`);
 }
 
 /**
@@ -130,14 +146,12 @@ function selectGlobalColor(colorId) {
 function parseColor(val) {
   if (!val) return { hex: '#000000', alpha: 1 };
 
-  // var(--olo-color-*) — resolve from global colors for preview
+  // var(--olo-color-*) — resolve from roles/globals for preview
   if (val.startsWith('var(--olo-color-')) {
     const idMatch = val.match(/^var\(--olo-color-([^)]+)\)$/);
     if (idMatch) {
-      const gc = (stylesStore.globalColors || []).find(c => c.id === idMatch[1]);
-      if (gc) {
-        return parseColor(gc.value);
-      }
+      const hex = resolveSwatch(idMatch[1]);
+      if (hex) return parseColor(hex);
     }
     return { hex: '#000000', alpha: 1 };
   }
@@ -230,7 +244,7 @@ async function addCurrentAsGlobal() {
   );
   if (existing) {
     // Already exists — just select it
-    selectGlobalColor(existing.id);
+    selectColor(existing.id);
     return;
   }
   const id = 'c' + Date.now().toString(36);
@@ -239,7 +253,7 @@ async function addCurrentAsGlobal() {
   stylesStore.setGlobalColors(newColors);
   await stylesStore.saveGlobalColors();
   // Auto-select the newly added color
-  selectGlobalColor(id);
+  selectColor(id);
 }
 
 /**
@@ -250,7 +264,7 @@ async function removeQuickColor(colorId) {
   stylesStore.setGlobalColors(newColors);
   await stylesStore.saveGlobalColors();
   // If this color was selected, revert to its resolved hex
-  if (isGlobalSelected(colorId)) {
+  if (isSwatchSelected(colorId)) {
     emit('update:modelValue', parsed.value.hex);
   }
 }
