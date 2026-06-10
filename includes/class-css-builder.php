@@ -82,7 +82,10 @@ class Olo_CSS_Builder {
         if ( $bg['type'] === 'gradient' ) {
             return $this->build_gradient_css( $bg );
         }
-        if ( $bg['type'] === 'pattern' && ! empty( $bg['pattern_type'] ) ) {
+        // Niente guard su pattern_type: appena scelto il tipo "pattern" la chiave
+        // non è ancora salvata (la UI mostra "dots" solo come fallback visivo) e
+        // build_pattern_css ha già il default ?? 'dots'.
+        if ( $bg['type'] === 'pattern' ) {
             return $this->build_pattern_css( $bg );
         }
         if ( $bg['type'] === 'mesh' ) {

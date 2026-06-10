@@ -111,9 +111,11 @@ export function buildBgStyle(bg) {
     return { backgroundColor: '#1a1a2e' };
   }
 
-  if (bg.type === 'pattern' && bg.pattern_type) {
+  // Niente guard su pattern_type: appena scelto il tipo "pattern" la chiave non
+  // è ancora salvata — il default è 'dots', come nel pannello e nel PHP.
+  if (bg.type === 'pattern') {
     return getPatternCSS(
-      bg.pattern_type,
+      bg.pattern_type || 'dots',
       bg.pattern_color || '#000000',
       bg.pattern_bg_color || '#ffffff',
       bg.pattern_size || 20,
