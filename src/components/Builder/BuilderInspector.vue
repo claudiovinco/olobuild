@@ -1458,9 +1458,13 @@ const magStatus = ref('');
 let magSaveTimer = null;
 let magStatusTimer = null;
 
+// ⚠️ oloData.restUrl del BUILDER è senza trailing slash (a differenza della
+// pagina cfg, che lo include): normalizziamo per non dipendere dal contesto.
+const MAG_ENDPOINT = `${(window.oloData?.restUrl || '').replace(/\/$/, '')}/magnetic-cursor`;
+
 async function loadMagneticCursor() {
   try {
-    const res = await fetch(`${window.oloData.restUrl}magnetic-cursor`, {
+    const res = await fetch(MAG_ENDPOINT, {
       headers: { 'X-WP-Nonce': window.oloData.nonce },
     });
     if (res.ok) {
@@ -1480,7 +1484,7 @@ function updateMag(key, value) {
 async function saveMagneticCursor() {
   magStatus.value = 'saving';
   try {
-    const res = await fetch(`${window.oloData.restUrl}magnetic-cursor`, {
+    const res = await fetch(MAG_ENDPOINT, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
       body: JSON.stringify(magCursor.value),
