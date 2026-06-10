@@ -1041,8 +1041,15 @@
                   <FieldSelect ui="dropdown" :model-value="magCursor.blend_mode" :options="MAG_BLEND_OPTIONS" @update:model-value="updateMag('blend_mode', $event)" />
                 </div>
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Elementi che attraggono (selettore CSS)') }}</label>
-                  <input type="text" :value="magCursor.magnetic_selector" @change="updateMag('magnetic_selector', $event.target.value)" placeholder="button, a.btn" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-900 mb-font-mono" />
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Elementi che attraggono') }}</label>
+                  <div class="mb-grid mb-grid-cols-2 mb-gap-x-2 mb-gap-y-1.5">
+                    <label v-for="p in MAG_TARGET_PRESETS" :key="p.key" class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                      <input type="checkbox" :checked="magPresetOn(p)" @change="toggleMagPreset(p, $event.target.checked)" class="mb-accent-primary-500" />
+                      <span class="mb-text-xs mb-text-gray-300">{{ t(p.label) }}</span>
+                    </label>
+                  </div>
+                  <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-500 mb-mt-2 mb-mb-1">{{ t('Altri selettori CSS (avanzato)') }}</label>
+                  <input type="text" :value="magCustomSel" @change="setMagCustomSel($event.target.value)" placeholder=".mia-classe, #mio-id" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-900 mb-font-mono" />
                 </div>
                 <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                   <input type="checkbox" :checked="magCursor.hide_system === true" @change="updateMag('hide_system', $event.target.checked)" class="mb-accent-primary-500" />
@@ -1451,6 +1458,43 @@ const MAG_BLEND_OPTIONS = [
   { value: 'lighten', label: 'Schiarisci' },
   { value: 'multiply', label: 'Moltiplica' },
 ];
+
+// Preset "elementi che attraggono": checkbox umane che compongono la stringa
+// magnetic_selector (il formato salvato resta il selettore CSS, invariato).
+// Un preset risulta spuntato se ALMENO UNO dei suoi token è nel selettore;
+// spuntarlo aggiunge tutti i token, toglierlo li rimuove tutti.
+const MAG_TARGET_PRESETS = [
+  { key: 'links',    label: 'Link',          tokens: ['a'] },
+  { key: 'buttons',  label: 'Bottoni',       tokens: ['button', '.olo-btn-link', 'input[type=submit]'] },
+  { key: 'images',   label: 'Immagini',      tokens: ['img'] },
+  { key: 'headings', label: 'Titoli',        tokens: ['h1', 'h2', 'h3'] },
+  { key: 'fields',   label: 'Campi modulo',  tokens: ['input', 'textarea', 'select'] },
+];
+
+const magSelTokens = computed(() =>
+  (magCursor.value?.magnetic_selector || '').split(',').map(s => s.trim()).filter(Boolean)
+);
+const magCustomSel = computed(() => {
+  const known = new Set(MAG_TARGET_PRESETS.flatMap(p => p.tokens));
+  return magSelTokens.value.filter(tk => !known.has(tk)).join(', ');
+});
+
+function magPresetOn(p) {
+  return p.tokens.some(tk => magSelTokens.value.includes(tk));
+}
+
+function toggleMagPreset(p, on) {
+  let tokens = magSelTokens.value.filter(tk => !p.tokens.includes(tk));
+  if (on) tokens = tokens.concat(p.tokens);
+  updateMag('magnetic_selector', tokens.join(', '));
+}
+
+function setMagCustomSel(value) {
+  const known = new Set(MAG_TARGET_PRESETS.flatMap(p => p.tokens));
+  const presetTokens = magSelTokens.value.filter(tk => known.has(tk));
+  const custom = String(value).split(',').map(s => s.trim()).filter(Boolean);
+  updateMag('magnetic_selector', presetTokens.concat(custom).join(', '));
+}
 
 const magCursor = ref(null);
 const magLoaded = ref(false);

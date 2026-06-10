@@ -142,10 +142,12 @@ class Olo_Magnetic_Cursor {
         $bm = sanitize_text_field( $input['blend_mode'] ?? $d['blend_mode'] );
         $clean['blend_mode'] = in_array( $bm, self::BLEND_MODES, true ) ? $bm : 'screen';
 
-        // Selettore: niente virgolette/angolari (evita di rompere querySelectorAll / HTML)
+        // Selettore: niente virgolette/angolari (evita di rompere querySelectorAll / HTML).
+        // Stringa vuota = legittima: nessun pull magnetico (l'anello "hot" resta sui
+        // soli elementi interattivi base).
         $sel = sanitize_text_field( $input['magnetic_selector'] ?? $d['magnetic_selector'] );
         $sel = str_replace( [ '"', "'", '<', '>' ], '', $sel );
-        $clean['magnetic_selector'] = $sel !== '' ? $sel : $d['magnetic_selector'];
+        $clean['magnetic_selector'] = $sel;
 
         return $clean;
     }
@@ -307,7 +309,7 @@ html.<?php echo $uid; ?>-on [role="button"]{cursor:none;}
 
   /* Stato "hot": anello ingrandito su qualsiasi elemento interattivo. Delegato → regge
      anche nodi aggiunti dopo (no bind per-elemento che si perde su contenuto dinamico). */
-  var HOT_SEL = 'a, button, [role="button"], input, select, textarea, label, summary, ' + (CFG.sel || '');
+  var HOT_SEL = 'a, button, [role="button"], input, select, textarea, label, summary' + (CFG.sel ? ', ' + CFG.sel : '');
   function isHot(t){ return t && t.closest && t.closest(HOT_SEL); }
   document.addEventListener('pointerover', function(e){ if (isHot(e.target)) ring.classList.add('is-hot'); }, { passive: true });
   document.addEventListener('pointerout',  function(e){ if (isHot(e.target)) ring.classList.remove('is-hot'); }, { passive: true });
