@@ -133,6 +133,79 @@ watch(() => {
   return [a.cursor_spotlight, a.cursor_spotlight_blend, a.cursor_spotlight_color, a.cursor_spotlight_size, a.cursor_spotlight_softness, a.cursor_spotlight_easing].join('|');
 }, setupSpotlight);
 
+// ── Anteprima "Tilt 3D" e "Segui cursore" nel canvas builder ────────────────
+// Stessa fisica del runtime frontend (gradi/spostamento clampati), ma confinata
+// all'hover sull'elemento: nel frontend il track segue il mouse su tutta la
+// pagina, nel canvas disturberebbe l'editing. Sospesa durante il drag.
+let _fxH = null;
+function teardownMouseFx() {
+  const host = cellRef.value;
+  if (host && _fxH) {
+    host.removeEventListener('pointermove', _fxH.move);
+    host.removeEventListener('pointerleave', _fxH.leave);
+    _fxH.leave();
+  }
+  _fxH = null;
+}
+function setupMouseFx() {
+  teardownMouseFx();
+  const host = cellRef.value, adv = props.tile.advanced || {}, st = props.tile.settings || {};
+  if (!host) return;
+  // Come il frontend: le chiavi possono stare in advanced (pannello Effetti
+  // mouse) o in settings (styleField _shared).
+  const tiltOn = adv.mouse_tilt === true || st.mouse_tilt === true;
+  const trackOn = adv.mouse_track === true || st.mouse_track === true;
+  if (!tiltOn && !trackOn) return;
+  const intensity = parseInt(adv.mouse_tilt_intensity ?? st.mouse_tilt_intensity) || 15;
+  const speed = parseInt(adv.mouse_track_speed ?? st.mouse_track_speed) || 3;
+  const items = (adv.mouse_tilt_target ?? st.mouse_tilt_target) === 'items';
+  const tiltOf = (el, e) => {
+    const r = el.getBoundingClientRect();
+    let rx = -((e.clientY - (r.top + r.height / 2)) / (r.height / 2)) * intensity;
+    let ry = ((e.clientX - (r.left + r.width / 2)) / (r.width / 2)) * intensity;
+    rx = Math.max(-intensity, Math.min(intensity, rx));
+    ry = Math.max(-intensity, Math.min(intensity, ry));
+    return 'perspective(1000px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+  };
+  const move = (e) => {
+    if (e.pointerType === 'touch' || document.body.classList.contains('olo-dragging')) return;
+    const parts = [];
+    if (tiltOn && !items) parts.push(tiltOf(host, e));
+    if (trackOn) {
+      const r = host.getBoundingClientRect();
+      const max = speed * 10;
+      const tx = Math.max(-max, Math.min(max, ((e.clientX - (r.left + r.width / 2)) / r.width) * max));
+      const ty = Math.max(-max, Math.min(max, ((e.clientY - (r.top + r.height / 2)) / r.height) * max));
+      parts.push('translate(' + tx + 'px,' + ty + 'px)');
+    }
+    if (parts.length) {
+      host.style.transition = 'transform .15s ease-out';
+      host.style.transform = parts.join(' ');
+    }
+    if (tiltOn && items) {
+      host.querySelectorAll('img, video').forEach((it) => {
+        const r = it.getBoundingClientRect();
+        const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+        it.style.transition = 'transform .15s ease-out';
+        it.style.transform = inside ? tiltOf(it, e) : '';
+      });
+    }
+  };
+  const leave = () => {
+    if (cellRef.value) cellRef.value.style.transform = '';
+    if (items && cellRef.value) cellRef.value.querySelectorAll('img, video').forEach((it) => { it.style.transform = ''; });
+  };
+  host.addEventListener('pointermove', move);
+  host.addEventListener('pointerleave', leave);
+  _fxH = { move, leave };
+}
+onMounted(setupMouseFx);
+onBeforeUnmount(teardownMouseFx);
+watch(() => {
+  const a = props.tile.advanced || {}, s = props.tile.settings || {};
+  return [a.mouse_tilt, s.mouse_tilt, a.mouse_tilt_intensity, s.mouse_tilt_intensity, a.mouse_tilt_target, s.mouse_tilt_target, a.mouse_track, s.mouse_track, a.mouse_track_speed, s.mouse_track_speed].join('|');
+}, setupMouseFx);
+
 const isSelected = computed(() => builderStore.selectedTileId === props.tile.id);
 
 // Responsive visibility: check if tile is hidden in current viewMode
