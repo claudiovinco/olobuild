@@ -412,7 +412,6 @@ import { t } from '@/i18n';
 import { ref, reactive, computed, nextTick, watch } from 'vue';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
-import { loadScrollFlashPrefs } from '@/utils/scrollFlashPrefs';
 import { requestScrollToTile } from '@/utils/scrollToTileChannel';
 import {
   vOloDraggable,

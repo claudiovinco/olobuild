@@ -18,7 +18,7 @@ function ensureContainer() {
     '.olo-toast.olo-toast-show{opacity:1;transform:translateY(0)}' +
     '.olo-toast-error{background:#ef4444}' +
     '.olo-toast-success{background:#10b981}' +
-    '.olo-toast-info{background:#6366f1}' +
+    '.olo-toast-info{background:var(--olo-ui-accent,#e8622a)}' +
     '.olo-toast-warning{background:#f59e0b}';
   document.head.appendChild(style);
   document.body.appendChild(container);

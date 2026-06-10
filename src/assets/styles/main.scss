@@ -697,23 +697,8 @@ body.olo-dragging * {
   .hover\:mb-bg-gray-700:hover { background-color: #e5e7eb !important; }
 }
 
-// ── Scroll-to-tile effects ──
-@keyframes olo-flash {
-  0%   { box-shadow: 0 0 0 0 var(--sf-color, rgba(99, 102, 241, 1)); }
-  35%  { box-shadow: 0 0 0 var(--sf-size, 6px) var(--sf-color, rgba(99, 102, 241, 1)); }
-  70%  { box-shadow: 0 0 0 var(--sf-size, 6px) var(--sf-color-soft, rgba(99, 102, 241, 0.7)); }
-  100% { box-shadow: 0 0 0 0 transparent; }
-}
-@keyframes olo-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 transparent; }
-  50% { box-shadow: 0 0 0 var(--sf-size, 6px) var(--sf-color, rgba(99, 102, 241, 1)); }
-}
-.olo-tile-flash {
-  animation: olo-flash var(--sf-dur, 1s) ease-out;
-}
-.olo-tile-pulse {
-  animation: olo-pulse var(--sf-cycle, 500ms) ease-in-out var(--sf-count, 2);
-}
+// Scroll-to-tile flash: vive nel CSS del canvas (iframe-builder.css, keyframes
+// olo-sf-*) — la tile evidenziata sta nell'iframe, non in questo documento.
 
 // ============================================
 // Container Queries — Responsive canvas preview

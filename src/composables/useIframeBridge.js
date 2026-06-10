@@ -6,6 +6,7 @@ import { useTilesStore, createRow, createColumn } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { useDragDrop } from '@/composables/useDragDrop';
 import { onScrollToTileRequest } from '@/utils/scrollToTileChannel';
+import { loadScrollFlashPrefs } from '@/utils/scrollFlashPrefs';
 
 let debounceTimer = null;
 let patchTimer = null;
@@ -565,7 +566,9 @@ export function useIframeBridge(iframeRef) {
     window.__oloBridgeForceRerender = scheduleFullRender;
     window.__oloBridgePostToIframe = postToIframe;
     unsubScroll = onScrollToTileRequest((tileId) => {
-      if (tileId) postToIframe('olo:scroll-to', { tileId });
+      // Le prefs flash viaggiano nel messaggio: l'iframe non ha accesso al
+      // localStorage del builder (origin/document diversi).
+      if (tileId) postToIframe('olo:scroll-to', { tileId, flash: loadScrollFlashPrefs() });
     });
   });
 

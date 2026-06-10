@@ -502,3 +502,26 @@ body.olo-preview-mode [data-olo-empty="1"] {
   outline: none !important;
   background-color: transparent !important;
 }
+
+/* ─────────────────────────────────────────────────────────
+   Scroll-to-tile flash — evidenzia la tile raggiunta dal click
+   sulla Struttura. Variabili --sf-* settate da iframe-bridge.js
+   con le preferenze olo_scroll_flash (vedi scrollFlashPrefs.js).
+   Nomi olo-sf-*: "olo-pulse" è già il keyframe del badge live.
+   ───────────────────────────────────────────────────────── */
+@keyframes olo-sf-flash {
+  0%   { box-shadow: 0 0 0 0 var(--sf-color, rgba(232, 98, 42, 1)); }
+  35%  { box-shadow: 0 0 0 var(--sf-size, 6px) var(--sf-color, rgba(232, 98, 42, 1)); }
+  70%  { box-shadow: 0 0 0 var(--sf-size, 6px) var(--sf-color-soft, rgba(232, 98, 42, 0.7)); }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+@keyframes olo-sf-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 transparent; }
+  50% { box-shadow: 0 0 0 var(--sf-size, 6px) var(--sf-color, rgba(232, 98, 42, 1)); }
+}
+.olo-tile-flash {
+  animation: olo-sf-flash var(--sf-dur, 1s) ease-out;
+}
+.olo-tile-pulse {
+  animation: olo-sf-pulse var(--sf-cycle, 500ms) ease-in-out var(--sf-count, 2);
+}

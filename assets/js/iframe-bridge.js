@@ -116,6 +116,48 @@
     return root.querySelector('[data-olo-tile-id="' + tileId + '"]');
   }
 
+  // ── Scroll-flash: evidenzia la tile raggiunta dal click sulla Struttura ──
+  // Le preferenze (olo_scroll_flash) viaggiano nel messaggio 'olo:scroll-to':
+  // vivono nel localStorage del documento builder, non in quello dell'iframe.
+  // Animazioni CSS olo-sf-flash/olo-sf-pulse in iframe-builder.css.
+  function hexToRgba(hex, alpha) {
+    var m = /^#?([0-9a-f]{6})$/i.exec(String(hex || '').trim());
+    if (!m) return null;
+    var n = parseInt(m[1], 16);
+    return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + alpha + ')';
+  }
+  var sfTimer = null;
+  function applyScrollFlash(el, sf, delayMs) {
+    var color = hexToRgba(sf.color, 1) || 'rgba(232,98,42,1)';
+    var soft = hexToRgba(sf.color, 0.7) || 'rgba(232,98,42,0.7)';
+    var isPulse = sf.effect === 'pulse';
+    var cls = isPulse ? 'olo-tile-pulse' : 'olo-tile-flash';
+    var duration = parseInt(sf.duration, 10) || 1000;
+    var count = Math.max(1, parseInt(sf.pulse_count, 10) || 2);
+    clearTimeout(sfTimer);
+    // Click rapidi su più nodi: spegni il flash precedente ovunque sia.
+    var prev = root.querySelector('.olo-tile-flash, .olo-tile-pulse');
+    if (prev) prev.classList.remove('olo-tile-flash', 'olo-tile-pulse');
+    // Il flash parte quando lo scroll smooth è (circa) arrivato.
+    sfTimer = setTimeout(function () {
+      el.style.setProperty('--sf-color', color);
+      el.style.setProperty('--sf-color-soft', soft);
+      el.style.setProperty('--sf-size', (parseInt(sf.size, 10) || 6) + 'px');
+      if (isPulse) {
+        // "Durata effetto" = totale; un ciclo = durata/ripetizioni.
+        el.style.setProperty('--sf-cycle', Math.round(duration / count) + 'ms');
+        el.style.setProperty('--sf-count', String(count));
+      } else {
+        el.style.setProperty('--sf-dur', duration + 'ms');
+      }
+      el.classList.add(cls);
+      el.addEventListener('animationend', function onEnd() {
+        el.removeEventListener('animationend', onEnd);
+        el.classList.remove(cls);
+      });
+    }, delayMs);
+  }
+
   // ── Force-hover preview ──
   // L'utente attiva il toggle "modifica hover" nell'inspector e si aspetta di
   // vedere la tile come fosse :hover. CSS :hover non è forzabile da JS, quindi
@@ -1232,7 +1274,13 @@
       case 'olo:scroll-to':
         if (d.tileId) {
           var scrollEl = findTileEl(d.tileId);
-          if (scrollEl) scrollEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          if (scrollEl) {
+            var sf = d.flash || {};
+            // scroll_ms: 0 = salto istantaneo, altrimenti smooth + attesa prima del flash.
+            var scrollMs = (sf.scroll_ms === undefined) ? 500 : (parseInt(sf.scroll_ms, 10) || 0);
+            scrollEl.scrollIntoView({ behavior: scrollMs === 0 ? 'auto' : 'smooth', block: 'center' });
+            applyScrollFlash(scrollEl, sf, scrollMs);
+          }
         }
         break;
 

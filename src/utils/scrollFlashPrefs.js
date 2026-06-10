@@ -1,6 +1,6 @@
 var KEY = 'olo_scroll_flash';
 var DEFAULTS = {
-  color: '#6366F1',
+  color: '#E8622A', // arancio chrome builder (--olo-ui-accent); hex pieno: viaggia verso l'iframe canvas dove la var non esiste
   effect: 'flash',
   size: 6,
   duration: 1000,

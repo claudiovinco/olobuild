@@ -20,9 +20,9 @@
     </template>
 
     <!-- Mini preview del popup -->
-    <div style="margin-top:12px;border:1px dashed #4b5563;border-radius:8px;padding:16px 20px;background:rgba(30,27,75,0.3);max-width:320px;position:relative;">
-      <div style="position:absolute;top:-8px;left:12px;background:#1e1b4b;padding:0 6px;font-size:9px;color:#a5b4fc;font-weight:600;border-radius:3px;">POPUP CONTENT</div>
-      <div style="font-size:11px;color:#c7d2fe;opacity:0.7;text-align:center;padding:8px 0;">
+    <div style="margin-top:12px;border:1px dashed #4b5563;border-radius:8px;padding:16px 20px;background:rgba(17,24,39,0.35);max-width:320px;position:relative;">
+      <div style="position:absolute;top:-8px;left:12px;background:#111827;padding:0 6px;font-size:9px;color:var(--olo-ui-accent,#e8622a);font-weight:600;border-radius:3px;">POPUP CONTENT</div>
+      <div style="font-size:11px;color:#9ca3af;opacity:0.85;text-align:center;padding:8px 0;">
         {{ s.mode === 'simple' ? 'Contenuto popup (children tiles)' : 'Template popup' }}
       </div>
     </div>
@@ -167,8 +167,8 @@ const triggerBadgeStyle = computed(() => ({
   display: 'inline-flex',
   flexDirection: 'column',
   gap: '4px',
-  background: '#1e1b4b',
-  color: '#c7d2fe',
+  background: '#111827',
+  color: '#d1d5db',
   border: '1px dashed #e1474f',
   borderRadius: '8px',
   padding: '12px 18px',
@@ -191,12 +191,12 @@ const triggerIconStyle = computed(() => ({
 
 const triggerLabelStyle = computed(() => ({
   fontWeight: '600',
-  color: '#e0e7ff',
+  color: '#f3f4f6',
   fontSize: '13px',
 }));
 
 const triggerDetailStyle = computed(() => ({
-  color: '#a5b4fc',
+  color: '#9ca3af',
   fontSize: '11px',
   paddingLeft: '22px',
 }));
