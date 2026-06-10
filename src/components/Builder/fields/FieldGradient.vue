@@ -73,7 +73,28 @@ function removeStop(i) {
   emitUpdate({ stops: stops.value.filter((_, idx) => idx !== i) });
 }
 function addStop() {
-  const last = stops.value[stops.value.length - 1];
-  emitUpdate({ stops: [...stops.value, { color: '#9ca3af', position: Math.min((last?.position ?? 50) + 25, 100) }] });
+  // Il nuovo stop atterra a metà del gap più ampio tra gli stop esistenti:
+  // con [0%, 100%] va al 50% ed è subito visibile (prima finiva a 100%,
+  // sovrapposto all'ultimo = zero pixel nel gradiente).
+  const sorted = [...stops.value].sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+  let position = 50;
+  let insertAt = sorted.length;
+  if (sorted.length >= 2) {
+    let bestGap = -1;
+    for (let i = 0; i < sorted.length - 1; i++) {
+      const gap = (sorted[i + 1].position ?? 0) - (sorted[i].position ?? 0);
+      if (gap > bestGap) {
+        bestGap = gap;
+        position = Math.round(((sorted[i].position ?? 0) + (sorted[i + 1].position ?? 0)) / 2);
+        insertAt = i + 1;
+      }
+    }
+  } else if (sorted.length === 1) {
+    position = (sorted[0].position ?? 50) < 50 ? 100 : 0;
+    insertAt = position > (sorted[0].position ?? 50) ? 1 : 0;
+  }
+  const next = [...sorted];
+  next.splice(insertAt, 0, { color: '#9ca3af', position });
+  emitUpdate({ stops: next });
 }
 </script>

@@ -1289,6 +1289,15 @@ class Olo_Frontend_Renderer {
             $inline_styles[] = "top: {$sticky_top}px";
         }
 
+        // Padding verticale "Personalizzato (px)": valori espliciti sopra/sotto,
+        // vincono sul default di .uk-section via inline style.
+        if ( 'custom' === $padding ) {
+            $pt = max( 0, intval( $s['padding_top_custom'] ?? 70 ) );
+            $pb = max( 0, intval( $s['padding_bottom_custom'] ?? 70 ) );
+            $inline_styles[] = 'padding-top: ' . $pt . 'px';
+            $inline_styles[] = 'padding-bottom: ' . $pb . 'px';
+        }
+
         // Background handling
         // Il field `bg` (type=background) di section è dichiarato in `fields[]` (settings),
         // quindi BuilderInspector lo salva via updateSetting → finisce in $s['bg'], NON in

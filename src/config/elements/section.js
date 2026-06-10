@@ -17,6 +17,8 @@ export default {
     style: 'default',
     width: 'default',
     padding: 'default',
+    padding_top_custom: 70,
+    padding_bottom_custom: 70,
     bg_scope: 'container',
     sticky_effect: 'none',
     sticky_top: '',
@@ -55,7 +57,12 @@ export default {
       { value: 'default',         label: t('Predefinito') },
       { value: 'large',           label: t('Grande') },
       { value: 'xlarge',          label: t('Extra grande') },
-    ], description: t('Spazio sopra e sotto il contenuto della sezione. Imposta "Nessuno" per eliminare lo spazio verticale (es. band a contatto). Per un controllo px-preciso usa il padding fine nel tab Stile → Spazi & Bordi.') },
+      { value: 'custom',          label: t('Personalizzato (px)') },
+    ], description: t('Spazio sopra e sotto il contenuto della sezione. Imposta "Nessuno" per eliminare lo spazio verticale (es. band a contatto), "Personalizzato" per valori px precisi.') },
+    { key: 'padding_top_custom', label: t('Padding sopra (px)'), type: 'number', min: 0, max: 600,
+      condition: { field: 'padding', op: 'eq', value: 'custom' } },
+    { key: 'padding_bottom_custom', label: t('Padding sotto (px)'), type: 'number', min: 0, max: 600,
+      condition: { field: 'padding', op: 'eq', value: 'custom' } },
 
     { type: 'separator', label: t('Aspetto preset') },
     { key: 'style', label: t('Variante colore'), type: 'select', options: [
