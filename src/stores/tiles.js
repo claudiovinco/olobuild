@@ -604,6 +604,26 @@ export const useTilesStore = defineStore('tiles', {
       this.canvasTiles.push(sourceNode);
     },
 
+    /**
+     * Sposta un nodo di una posizione su/giù dentro il suo parent (Alt+↑/↓).
+     * delta: -1 = su, +1 = giù. Ritorna true se lo spostamento è avvenuto.
+     */
+    nudgeNode(nodeId, delta) {
+      const allRoots = [this.canvasTiles, this.headerTiles, this.footerTiles];
+      for (const root of allRoots) {
+        const result = findParentAndIndex(root, nodeId);
+        if (!result) continue;
+        const { parent, index } = result;
+        const to = index + delta;
+        if (to < 0 || to >= parent.length) return false;
+        const node = parent.splice(index, 1)[0];
+        parent.splice(to, 0, node);
+        this._bumpVersion();
+        return true;
+      }
+      return false;
+    },
+
     // === Row layout restructuring ===
 
     changeRowLayout(rowId, layoutKey) {

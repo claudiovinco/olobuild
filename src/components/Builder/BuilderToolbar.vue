@@ -557,6 +557,18 @@ function onGlobalKeydown(e) {
       builderStore.isDirty = true;
     }
   }
+  // Alt+↑/↓ → sposta il nodo selezionato su/giù dentro il suo parent
+  // (riordino senza drag: tastiera = accessibilità + precisione)
+  if (e.altKey && !e.ctrlKey && !e.metaKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown') && !isEditing) {
+    const id = builderStore.selectedTileId;
+    if (id) {
+      e.preventDefault();
+      if (tilesStore.nudgeNode(id, e.key === 'ArrowUp' ? -1 : 1)) {
+        builderStore.markDirtyForTile(id);
+      }
+      return;
+    }
+  }
   // Ctrl+C → Copia tile
   if ((e.ctrlKey || e.metaKey) && e.key === 'c' && !e.altKey && !e.shiftKey && !isEditing) {
     const id = builderStore.selectedTileId;

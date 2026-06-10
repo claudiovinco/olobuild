@@ -67,6 +67,11 @@ const isActive = computed(() => {
   return p.source === 'sidebar';
 });
 
+// Durante il drag l'iframe può rifluire (immagini lazy, font, auto-scroll):
+// ri-richiedi lo snapshot layout a intervalli così l'hit-test non lavora su
+// rettangoli stale (lo snapshot iniziale arriva dall'onDragStart della sidebar).
+let layoutRefreshTimer = null;
+
 function onNativeDragStart() {
   nativeDragActive.value = true;
   // Sync DOM update: attiva pointer-events E visibilità immediatamente, bypass
@@ -75,10 +80,19 @@ function onNativeDragStart() {
     overlayEl.value.style.pointerEvents = 'auto';
     overlayEl.value.style.opacity = '1';
   }
+  if (!layoutRefreshTimer) {
+    layoutRefreshTimer = setInterval(() => {
+      const iframe = getIframeEl();
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage({ type: 'olo:request-layout' }, '*');
+      }
+    }, 400);
+  }
 }
 function onNativeDragEnd() {
   nativeDragActive.value = false;
   stopAutoScroll();
+  if (layoutRefreshTimer) { clearInterval(layoutRefreshTimer); layoutRefreshTimer = null; }
   if (overlayEl.value) {
     overlayEl.value.style.pointerEvents = '';
     overlayEl.value.style.opacity = '';
@@ -87,15 +101,23 @@ function onNativeDragEnd() {
 
 // ── Auto-scroll iframe ────────────────────────────────────────
 // Quando il pointer è in una "hot zone" ai bordi superiore/inferiore dell'iframe,
-// invia un messaggio allo runtime iframe-side per scrollare il contenuto in quella
-// direzione. Il parent non può scrollare direttamente l'iframe (contenuto cross-doc).
+// un loop RAF invia messaggi allo runtime iframe-side per scrollare il contenuto.
+// Il parent non può scrollare direttamente l'iframe (contenuto cross-doc).
+// Il loop continua anche a PUNTATORE FERMO nella zona (il gesto naturale è
+// "porta il mouse al bordo e aspetta") e ricalcola l'hit mentre il contenuto
+// scorre, così dropline/insertIndex restano allineati a ciò che si vede.
 const AUTO_SCROLL_ZONE = 80; // px
 let autoScrollActive = false;
-let autoScrollDir = 0; // -1 = up, 0 = idle, +1 = down
+let autoScrollDir = 0;       // -1 = up, 0 = idle, +1 = down
+let autoScrollStrength = 0;  // 0..1 (più vicino al bordo = più veloce)
+let autoScrollRaf = null;
+let autoScrollLastTs = 0;
+let lastDragInput = null;
 
 function updateAutoScroll(input) {
   if (!input) { stopAutoScroll(); return; }
-  const iframe = (props.iframeRef && 'value' in props.iframeRef) ? props.iframeRef.value : props.iframeRef;
+  lastDragInput = input;
+  const iframe = getIframeEl();
   if (!iframe || typeof iframe.getBoundingClientRect !== 'function') { stopAutoScroll(); return; }
   const rect = iframe.getBoundingClientRect();
   const y = input.clientY;
@@ -110,29 +132,52 @@ function updateAutoScroll(input) {
   }
   if (dir === 0) { stopAutoScroll(); return; }
 
-  const speed = Math.round(4 + strength * 18); // 4–22 px per tick
-  if (autoScrollActive && autoScrollDir === dir) {
-    // già attivo nella stessa direzione: aggiorna solo la velocità
-    postScroll(speed * dir);
-    return;
-  }
-  autoScrollActive = true;
   autoScrollDir = dir;
-  postScroll(speed * dir);
+  autoScrollStrength = strength;
+  if (!autoScrollActive) {
+    autoScrollActive = true;
+    autoScrollLastTs = 0;
+    autoScrollRaf = requestAnimationFrame(autoScrollTick);
+  }
+}
+
+function autoScrollTick(ts) {
+  if (!autoScrollActive || !nativeDragActive.value) { stopAutoScroll(); return; }
+  // Delta scalato sul tempo reale del frame: stessa velocità su 60/120/144Hz.
+  const dt = autoScrollLastTs ? Math.min(ts - autoScrollLastTs, 50) : 16.7;
+  autoScrollLastTs = ts;
+  const perFrame = (4 + autoScrollStrength * 18) * (dt / 16.7); // 4–22 px @60fps
+  postScroll(Math.round(perFrame * autoScrollDir) || autoScrollDir);
+
+  // Il contenuto scorre sotto il puntatore (anche fermo): ricalcola l'hit così
+  // la dropline e il punto di inserimento seguono ciò che l'utente vede.
+  if (lastDragInput) {
+    const result = hitTest(lastDragInput.clientX, lastDragInput.clientY);
+    hit.value = result;
+    dnd.setDropTarget(
+      result
+        ? (result.columnId ? { kind: 'column', id: result.columnId } : { kind: 'section-gap', index: result.insertIndex })
+        : null,
+      result?.colRect || null
+    );
+  }
+  autoScrollRaf = requestAnimationFrame(autoScrollTick);
 }
 
 function stopAutoScroll() {
+  if (autoScrollRaf) { cancelAnimationFrame(autoScrollRaf); autoScrollRaf = null; }
   if (!autoScrollActive) return;
   autoScrollActive = false;
   autoScrollDir = 0;
-  const iframe = (props.iframeRef && 'value' in props.iframeRef) ? props.iframeRef.value : props.iframeRef;
+  autoScrollStrength = 0;
+  const iframe = getIframeEl();
   if (iframe && iframe.contentWindow) {
     iframe.contentWindow.postMessage({ type: 'olo:auto-scroll-stop' }, '*');
   }
 }
 
 function postScroll(delta) {
-  const iframe = (props.iframeRef && 'value' in props.iframeRef) ? props.iframeRef.value : props.iframeRef;
+  const iframe = getIframeEl();
   if (!iframe || !iframe.contentWindow) return;
   iframe.contentWindow.postMessage({ type: 'olo:auto-scroll', delta }, '*');
 }
@@ -366,7 +411,9 @@ const dropTargetOpts = {
   onDrop: ({ source, self } = {}) => {
     if (!source?.data || !self?.data) return;
     const data = source.data;
-    const target = self.data.hit;
+    // Usa hit.value (tenuto fresco anche dal tick di auto-scroll a puntatore
+    // fermo) e fallback su self.data.hit (ultimo getData del motore).
+    const target = hit.value || self.data.hit;
     hit.value = null;
     if (!target) return;
 
@@ -397,7 +444,11 @@ const dropTargetOpts = {
 
 <style scoped>
 .olo-dnd-overlay {
-  /* Sempre montato per garantire che Pragmatic registri il drop target in anticipo.
+  /* Accent fisso del chrome builder (mai --olo-color-primary, che è rimappato
+     col colore cliente). Definito locale al componente come da convenzione. */
+  --olo-ui-accent: #e8622a;
+  --olo-ui-accent-rgb: 232, 98, 42;
+  /* Sempre montato per garantire che il motore registri il drop target in anticipo.
      Invisibile e inerte quando non c'è drag (pointer-events: none non blocca
      l'iframe sotto per i click normali dell'utente). */
   position: absolute;
@@ -405,8 +456,8 @@ const dropTargetOpts = {
   z-index: 100;
   pointer-events: none;
   opacity: 0;
-  background: rgba(99, 102, 241, 0.08);
-  border: 3px dashed rgba(99, 102, 241, 0.8);
+  background: rgba(var(--olo-ui-accent-rgb), 0.08);
+  border: 3px dashed rgba(var(--olo-ui-accent-rgb), 0.8);
   border-radius: 6px;
   cursor: copy;
   /* NO transition: l'overlay deve apparire istantaneamente al dragstart,
@@ -418,13 +469,13 @@ const dropTargetOpts = {
   animation: olo-dnd-pulse 1.6s ease-in-out infinite;
 }
 .olo-dnd-overlay--hit {
-  background: rgba(99, 102, 241, 0.07);
-  border-color: rgba(99, 102, 241, 0.6);
+  background: rgba(var(--olo-ui-accent-rgb), 0.07);
+  border-color: rgba(var(--olo-ui-accent-rgb), 0.6);
   animation: none;
 }
 @keyframes olo-dnd-pulse {
-  0%, 100% { border-color: rgba(99, 102, 241, 0.25); }
-  50%      { border-color: rgba(99, 102, 241, 0.55); }
+  0%, 100% { border-color: rgba(232, 98, 42, 0.25); }
+  50%      { border-color: rgba(232, 98, 42, 0.55); }
 }
 
 .olo-dnd-dropline {
@@ -433,12 +484,12 @@ const dropTargetOpts = {
   right: 0;
   height: 3px;
   background: linear-gradient(90deg,
-    rgba(99, 102, 241, 0) 0%,
-    rgba(99, 102, 241, 0.9) 20%,
-    rgba(99, 102, 241, 0.9) 80%,
-    rgba(99, 102, 241, 0) 100%);
+    rgba(var(--olo-ui-accent-rgb), 0) 0%,
+    rgba(var(--olo-ui-accent-rgb), 0.9) 20%,
+    rgba(var(--olo-ui-accent-rgb), 0.9) 80%,
+    rgba(var(--olo-ui-accent-rgb), 0) 100%);
   border-radius: 2px;
-  box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 8px rgba(var(--olo-ui-accent-rgb), 0.5);
   pointer-events: none;
   transform: translateY(-1.5px);
   transition: top 120ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -451,20 +502,20 @@ const dropTargetOpts = {
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: rgb(99, 102, 241);
+  background: var(--olo-ui-accent);
   transform: translateY(-50%);
-  box-shadow: 0 0 6px rgba(99, 102, 241, 0.7);
+  box-shadow: 0 0 6px rgba(var(--olo-ui-accent-rgb), 0.7);
 }
 .olo-dnd-dropline::before { left: -4px; }
 .olo-dnd-dropline::after  { right: -4px; }
 
 .olo-dnd-colhi {
   position: absolute;
-  background: rgba(99, 102, 241, 0.12);
-  border: 2px solid rgba(99, 102, 241, 0.7);
+  background: rgba(var(--olo-ui-accent-rgb), 0.12);
+  border: 2px solid rgba(var(--olo-ui-accent-rgb), 0.7);
   border-radius: 6px;
   pointer-events: none;
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 0 0 4px rgba(var(--olo-ui-accent-rgb), 0.15);
   transition: top 120ms cubic-bezier(0.4, 0, 0.2, 1),
               left 120ms cubic-bezier(0.4, 0, 0.2, 1),
               width 120ms cubic-bezier(0.4, 0, 0.2, 1),
@@ -475,12 +526,12 @@ const dropTargetOpts = {
   position: absolute;
   transform: translateX(-50%);
   padding: 3px 10px;
-  background: rgb(99, 102, 241);
+  background: var(--olo-ui-accent);
   color: #fff;
   font-size: 11px;
   font-weight: 600;
   border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 2px 8px rgba(var(--olo-ui-accent-rgb), 0.4);
   pointer-events: none;
   white-space: nowrap;
   letter-spacing: 0.02em;

@@ -9,6 +9,7 @@
  * API mantenuta identica al precedente per non rompere i call site:
  *   - vOloDraggable  direttiva v-olo-draggable="{ getInitialData, onDragStart, onDrop, dragHandle, ... }"
  *   - vOloDropTarget direttiva v-olo-drop-target="{ canDrop, getData, onDragEnter, onDrag, onDragLeave, onDrop, getIsSticky }"
+ *     (getIsSticky: il target resta attivo nei gap senza target entro STICKY_RADIUS px)
  *   - useDragMonitor composable per monitor globale
  *   - useAutoScroll  composable per auto-scroll su container
  *   - installDnDSafetyNet() — registra Esc/blur/visibilitychange/pagehide/pointercancel
@@ -31,11 +32,16 @@ import { useDnDStore } from '@/stores/dnd';
 const DRAG_THRESHOLD = 5; // px
 const CLOSEST_EDGE_KEY = '__olo_closest_edge__';
 
-// Mappe di registrazione: element → opts. WeakMap consentirebbe GC, ma serve
-// iterare per hit-test → uso Map e cleanup esplicito su unmount.
-const draggableRegistry = new Map();   // element → opts
-const dropTargetRegistry = new Map();  // element → opts
-const monitors = new Set();            // { canMonitor, onDragStart, onDrag, onDrop }
+// Registry drop target: element → opts. WeakMap: l'hit-test non itera la mappa
+// (usa .get(el) sugli elementi da elementsFromPoint), quindi il GC può liberare
+// gli elementi smontati anche se l'unmounted della direttiva non firasse.
+const dropTargetRegistry = new WeakMap();  // element → opts
+const monitors = new Set();                // { canMonitor, onDragStart, onDrag, onDrop }
+
+// Raggio (px) entro cui un drop target sticky resta attivo quando il pointer
+// è su una zona senza target (gap tra sezioni/righe). Oltre, decade — così
+// trascinare lontano (es. sopra la sidebar) e rilasciare resta un annullo.
+const STICKY_RADIUS = 48;
 
 // Stato del drag corrente
 const dragState = {
@@ -86,23 +92,56 @@ if (typeof document !== 'undefined') {
   document.addEventListener('drag', (e) => e.preventDefault(), true);
 }
 
+// RAF-throttle dell'hit-test: i pointermove possono firare ben oltre i 60Hz
+// (mouse gaming 500-1000Hz). Il ghost segue OGNI evento (solo un transform,
+// economico); hit-test + callback girano al massimo una volta per frame.
+let _moveRafId = null;
+let _pendingMoveEvent = null;
+
+function flushPendingMove() {
+  if (_moveRafId) { cancelAnimationFrame(_moveRafId); _moveRafId = null; }
+  if (_pendingMoveEvent && dragState.phase === 'dragging') {
+    const e = _pendingMoveEvent;
+    _pendingMoveEvent = null;
+    updateActiveDrag(e);
+  } else {
+    _pendingMoveEvent = null;
+  }
+}
+
 function onGlobalPointerMove(e) {
   if (dragState.phase === 'idle') return;
+  // Ignora pointer diversi da quello che ha iniziato il drag (es. tocco
+  // accidentale sul touchscreen durante un drag col mouse).
+  if (dragState.pointerId !== null && e.pointerId !== dragState.pointerId) return;
 
   if (dragState.phase === 'pending') {
     const dx = e.clientX - dragState.startInput.clientX;
     const dy = e.clientY - dragState.startInput.clientY;
     if ((dx * dx + dy * dy) < (DRAG_THRESHOLD * DRAG_THRESHOLD)) return;
     startActiveDrag(e);
+    return; // startActiveDrag fa già un updateActiveDrag sincrono
   }
 
   if (dragState.phase === 'dragging') {
-    updateActiveDrag(e);
+    moveGhost(e);
+    _pendingMoveEvent = e;
+    if (!_moveRafId) {
+      _moveRafId = requestAnimationFrame(() => {
+        _moveRafId = null;
+        if (_pendingMoveEvent && dragState.phase === 'dragging') {
+          const ev = _pendingMoveEvent;
+          _pendingMoveEvent = null;
+          updateActiveDrag(ev);
+        }
+      });
+    }
   }
 }
 
 function onGlobalPointerUp(e) {
   if (dragState.phase === 'idle') return;
+  if (dragState.pointerId !== null && e.pointerId !== dragState.pointerId) return;
 
   if (dragState.phase === 'pending') {
     // Mai partito drag effettivo: cancel silenzioso.
@@ -110,9 +149,20 @@ function onGlobalPointerUp(e) {
     return;
   }
 
+  // Applica l'eventuale ultimo move non ancora processato dal RAF, così il
+  // drop usa i drop target dell'ultima posizione reale del puntatore.
+  flushPendingMove();
+
   // v3.55.32 — segna SUBITO la fase come 'finalizing' per evitare doppio drop.
   if (dragState.phase !== 'dragging') return;
   dragState.phase = 'finalizing';
+
+  // Il browser genera un click sintetico dopo il pointerup anche a fine drag
+  // (pointer captured → pointerdown e pointerup risultano sullo stesso target).
+  // Senza soppressione, droppare una tile dalla sidebar firava anche il
+  // @click="addTile" del bottone sorgente → inserimento doppio (prima mascherato
+  // dal dedup 500ms in useDragDrop, che però scartava anche click legittimi).
+  suppressPostDragClick(dragState.source?.element);
 
   const source = dragState.source;
   const dropTargets = dragState.current?.dropTargets || [];
@@ -143,13 +193,40 @@ function onGlobalPointerUp(e) {
   resetState();
 }
 
-function onGlobalPointerCancel() {
+function onGlobalPointerCancel(e) {
   if (dragState.phase === 'idle') return;
+  if (e && dragState.pointerId !== null && e.pointerId !== dragState.pointerId) return;
   cancelActiveDrag();
+}
+
+/**
+ * Sopprime il PRIMO click che arriva subito dopo un drag, se il suo target è
+ * dentro l'elemento sorgente del drag. One-shot con finestra breve: i click
+ * successivi (intenzionali) passano normalmente.
+ */
+function suppressPostDragClick(sourceEl) {
+  if (!sourceEl) return;
+  let tid = null;
+  const onClick = (ev) => {
+    if (sourceEl === ev.target || (sourceEl.contains && sourceEl.contains(ev.target))) {
+      ev.stopPropagation();
+      ev.preventDefault();
+    }
+    cleanup();
+  };
+  const cleanup = () => {
+    window.removeEventListener('click', onClick, true);
+    if (tid) { clearTimeout(tid); tid = null; }
+  };
+  window.addEventListener('click', onClick, true);
+  tid = setTimeout(cleanup, 300);
 }
 
 function cancelActiveDrag() {
   if (dragState.phase === 'dragging') {
+    // Anche un drag cancellato (Esc/pointercancel) può essere seguito da un
+    // pointerup → click sintetico sul source: va soppresso pure qui.
+    suppressPostDragClick(dragState.source?.element);
     const source = dragState.source;
     const location = makeLocationSnapshot({ dropTargets: [] });
     // onDragLeave su tutti i target attualmente attivi
@@ -218,17 +295,44 @@ function startActiveDrag(e) {
   updateActiveDrag(e);
 }
 
+function moveGhost(e) {
+  if (!dragState.ghost) return;
+  const off = dragState.ghost.offset;
+  dragState.ghost.element.style.transform = `translate(${e.clientX + off.x}px, ${e.clientY + off.y}px)`;
+}
+
 function updateActiveDrag(e) {
   const source = dragState.source;
 
-  // Move ghost
-  if (dragState.ghost) {
-    const off = dragState.ghost.offset;
-    dragState.ghost.element.style.transform = `translate(${e.clientX + off.x}px, ${e.clientY + off.y}px)`;
-  }
+  moveGhost(e);
 
   // Hit-test drop targets sotto il puntatore
-  const newTargets = hitTestDropTargets(e, source);
+  let newTargets = hitTestDropTargets(e, source);
+
+  // Stickiness: se il puntatore è su una zona senza target (gap tra sezioni,
+  // padding), mantieni i target precedenti che dichiarano getIsSticky() e il
+  // cui elemento è ancora vicino (entro STICKY_RADIUS) e nel DOM. Evita il
+  // flicker dell'indicatore di drop nei gap. Il data viene ricalcolato con
+  // l'input corrente (getData può dipendere dalla posizione, es. hit-test
+  // overlay o closest-edge).
+  if (newTargets.length === 0) {
+    const prev = dragState.current?.dropTargets || [];
+    const sticky = [];
+    for (const t of prev) {
+      if (!t.element || !t.element.isConnected) continue;
+      if (typeof t.opts.getIsSticky !== 'function' || !t.opts.getIsSticky({ source })) continue;
+      const r = t.element.getBoundingClientRect();
+      if (
+        e.clientX < r.left - STICKY_RADIUS || e.clientX > r.right + STICKY_RADIUS ||
+        e.clientY < r.top - STICKY_RADIUS || e.clientY > r.bottom + STICKY_RADIUS
+      ) continue;
+      const arg = { source, element: t.element, input: { clientX: e.clientX, clientY: e.clientY } };
+      if (t.opts.canDrop && !t.opts.canDrop(arg)) continue;
+      const data = t.opts.getData ? (t.opts.getData(arg) ?? {}) : {};
+      sticky.push({ element: t.element, opts: t.opts, data });
+    }
+    newTargets = sticky;
+  }
 
   // Calcola enter/leave rispetto allo stato precedente
   const prevTargets = dragState.current?.dropTargets || [];
@@ -318,6 +422,9 @@ function resetState() {
   dragState.initial = null;
   dragState.previous = null;
   dragState.current = null;
+  dragState.captureTarget = null;
+  if (_moveRafId) { cancelAnimationFrame(_moveRafId); _moveRafId = null; }
+  _pendingMoveEvent = null;
   document.body.classList.remove('olo-dragging');
   document.body.style.userSelect = '';
   document.body.style.webkitUserSelect = '';
@@ -413,7 +520,6 @@ export const vOloDraggable = {
   updated(el, binding) {
     const newOpts = binding.value || {};
     el.__oloDraggableOpts = newOpts;
-    draggableRegistry.set(el, newOpts);
     // Se il dragHandle è cambiato (selettore stringa o ref), ricrea il listener.
     if (typeof newOpts.dragHandle === 'string') {
       const currentHandle = el.querySelector(newOpts.dragHandle) || null;
@@ -444,7 +550,6 @@ export const vOloDropTarget = {
 function applyDraggable(el, opts) {
   installGlobalListeners();
   el.__oloDraggableOpts = opts;
-  draggableRegistry.set(el, opts);
 
   // Resolve dragHandle (string selector → element, oppure passa l'element già)
   const handle = (() => {
@@ -491,7 +596,6 @@ function applyDraggable(el, opts) {
 
   el.__oloDraggableCleanup = () => {
     target.removeEventListener('pointerdown', onPointerDown);
-    draggableRegistry.delete(el);
   };
 }
 
@@ -548,16 +652,30 @@ export function useDragMonitor(opts) {
 export function useAutoScroll(getElement, opts = {}) {
   let cleanup = null;
   let rafId = null;
+  // Velocità corrente letta dal tick RAF: aggiornata a ogni pointermove, così
+  // avvicinarsi al bordo accelera lo scroll del tick già attivo (prima il tick
+  // chiudeva sulla velocità del primo move e non si aggiornava più).
+  let curDx = 0, curDy = 0;
+
+  // Risoluzione lazy: l'elemento può non esistere al mount (es. canvas classico
+  // montato solo fuori da live preview) o cambiare nel tempo.
+  const resolveEl = () => {
+    const el = typeof getElement === 'function' ? getElement() : getElement?.value;
+    return el || null;
+  };
+
+  const stopTick = () => {
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+  };
 
   onMounted(() => {
-    const el = typeof getElement === 'function' ? getElement() : getElement?.value;
-    if (!el) return;
-
     const ZONE = 60; // px from edge
 
     const onMove = (e) => {
-      if (dragState.phase !== 'dragging') return;
-      if (opts.canScroll && !opts.canScroll({ source: dragState.source })) return;
+      if (dragState.phase !== 'dragging') { stopTick(); return; }
+      const el = resolveEl();
+      if (!el) { stopTick(); return; }
+      if (opts.canScroll && !opts.canScroll({ source: dragState.source })) { stopTick(); return; }
 
       const axis = opts.getAllowedAxis ? opts.getAllowedAxis({ source: dragState.source }) : 'both';
       const cfg  = opts.getConfiguration ? opts.getConfiguration({ source: dragState.source }) : {};
@@ -574,23 +692,21 @@ export function useAutoScroll(getElement, opts = {}) {
         if (e.clientX > rect.right - ZONE)  dx = speed;
       }
 
-      if (dx === 0 && dy === 0) {
-        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-        return;
-      }
+      if (dx === 0 && dy === 0) { stopTick(); return; }
 
-      if (rafId) return; // tick già attivo
+      curDx = dx; curDy = dy;
+      if (rafId) return; // tick già attivo: ha già la nuova velocità via curDx/curDy
       const tick = () => {
         if (dragState.phase !== 'dragging') { rafId = null; return; }
-        try { el.scrollBy({ top: dy, left: dx, behavior: 'auto' }); } catch (err) {}
+        const elNow = resolveEl();
+        if (!elNow) { rafId = null; return; }
+        try { elNow.scrollBy({ top: curDy, left: curDx, behavior: 'auto' }); } catch (err) {}
         rafId = requestAnimationFrame(tick);
       };
       rafId = requestAnimationFrame(tick);
     };
 
-    const onUpOrCancel = () => {
-      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-    };
+    const onUpOrCancel = () => stopTick();
 
     window.addEventListener('pointermove', onMove, true);
     window.addEventListener('pointerup',   onUpOrCancel, true);
@@ -600,7 +716,7 @@ export function useAutoScroll(getElement, opts = {}) {
       window.removeEventListener('pointermove', onMove, true);
       window.removeEventListener('pointerup',   onUpOrCancel, true);
       window.removeEventListener('pointercancel', onUpOrCancel, true);
-      if (rafId) cancelAnimationFrame(rafId);
+      stopTick();
     };
   });
 

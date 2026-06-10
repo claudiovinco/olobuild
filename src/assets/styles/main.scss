@@ -276,6 +276,30 @@ body.olo-dragging * {
   cursor: var(--olo-cursor-grabbing), grabbing !important;
 }
 
+// Touch: il drag custom è a pointer events — senza touch-action il browser
+// interpreta il gesto col dito come pan/scroll e fira pointercancel appena
+// si supera la soglia, uccidendo il drag. touch-action dichiara chi gestisce cosa:
+// - handle dedicati (grip): il drag vince sempre
+// - card sidebar: drag (orizzontale, verso il canvas) nostro; pan verticale
+//   resta al browser così la lista tile scrolla normalmente col dito
+// - righe structure tree: drag touch abilitato solo su device con puntatore
+//   fine (desktop/laptop touchscreen). Su tablet/mobile lo scroll del pannello
+//   ha priorità: il reorder touch si fa dal canvas (grip della toolbar hover).
+.olo-section-grip,
+.olo-row-grip,
+.st-handle,
+.fg-grip {
+  touch-action: none;
+}
+.olo-sb-card {
+  touch-action: pan-y;
+}
+@media (pointer: fine) {
+  .st-row {
+    touch-action: none;
+  }
+}
+
 // Row/Columns drop zones
 .olo-col-dropzone {
   transition: border-color 0.15s, background-color 0.15s;

@@ -25,6 +25,76 @@
   var gripDropTarget = null;
   var gripDropBefore = true;
   var gripIndicator = null;
+  var gripPointerId = null;     // pointer che ha iniziato il grip drag (filtro multi-pointer)
+
+  // ── Auto-scroll della pagina durante il grip drag interno ──
+  // Hot zone ai bordi del viewport iframe: RAF loop che continua anche a
+  // puntatore fermo (lo scroll qui è same-document, niente postMessage).
+  var GRIP_SCROLL_ZONE = 60;
+  var gripScrollRaf = null;
+  var gripScrollDelta = 0;
+  var gripScrollLastTs = 0;
+
+  function updateGripAutoScroll(clientY) {
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    var delta = 0;
+    if (clientY < GRIP_SCROLL_ZONE) {
+      delta = -(4 + ((GRIP_SCROLL_ZONE - clientY) / GRIP_SCROLL_ZONE) * 18);
+    } else if (vh - clientY < GRIP_SCROLL_ZONE) {
+      delta = 4 + ((GRIP_SCROLL_ZONE - (vh - clientY)) / GRIP_SCROLL_ZONE) * 18;
+    }
+    gripScrollDelta = delta;
+    if (delta === 0) { stopGripAutoScroll(); return; }
+    if (gripScrollRaf) return;
+    gripScrollLastTs = 0;
+    gripScrollRaf = requestAnimationFrame(gripScrollTick);
+  }
+
+  function gripScrollTick(ts) {
+    if (!gripDragging || gripScrollDelta === 0) { stopGripAutoScroll(); return; }
+    var dt = gripScrollLastTs ? Math.min(ts - gripScrollLastTs, 50) : 16.7;
+    gripScrollLastTs = ts;
+    window.scrollBy({ top: gripScrollDelta * (dt / 16.7), behavior: 'auto' });
+    gripScrollRaf = requestAnimationFrame(gripScrollTick);
+  }
+
+  function stopGripAutoScroll() {
+    if (gripScrollRaf) { cancelAnimationFrame(gripScrollRaf); gripScrollRaf = null; }
+    gripScrollDelta = 0;
+  }
+
+  /**
+   * Chiude il grip drag. applyReorder=false → annullo (Esc/pointercancel):
+   * ripristina tutto senza postare il reorder al parent.
+   */
+  function endGripDrag(applyReorder) {
+    if (!gripDragging) return;
+
+    var srcEl = gripDragId ? findTileEl(gripDragId) : null;
+    if (srcEl) {
+      srcEl.style.opacity = '';
+      srcEl.style.transition = '';
+    }
+    if (gripGhost) { gripGhost.remove(); gripGhost = null; }
+    if (gripIndicator) gripIndicator.style.display = 'none';
+    stopGripAutoScroll();
+    document.body.classList.remove('olo-dragging');
+
+    if (applyReorder && gripDropTarget && gripDragId && gripDropTarget !== gripDragId) {
+      post('olo:reorder', {
+        sourceId: gripDragId,
+        targetId: gripDropTarget,
+        before: gripDropBefore
+      });
+    }
+
+    gripDragging = false;
+    gripDragId = null;
+    gripDropTarget = null;
+    gripPointerId = null;
+    if (hoverToolbar) hoverToolbar.style.display = '';
+    hideHoverToolbar();
+  }
 
   // ── Helpers ──
 
@@ -238,7 +308,7 @@
 
   function onEdgeMouseDown(e) {
     if (previewMode || gripDragging) return;
-    if (e.button !== 0) return;
+    if (e.button !== 0 && e.pointerType === 'mouse') return;
     if (isBuilderChrome(e.target)) return;
     // Skip editable text regions
     if (e.target.closest('[data-olo-editable], [contenteditable="true"]')) return;
@@ -249,12 +319,13 @@
     // Il drag parte da qualunque punto del tile. DRAG_THRESHOLD (movimento > 5px)
     // distingue click (selezione) da drag — il check nearBorderOf era una restrizione
     // di troppo che impediva di afferrare tile larghi (es. headline centrato) dal centro.
-    edgeDownState = { tileId: tileId, el: el, startX: e.clientX, startY: e.clientY };
+    edgeDownState = { tileId: tileId, el: el, startX: e.clientX, startY: e.clientY, pointerId: e.pointerId };
   }
 
   function onEdgeMouseMove(e) {
-    // 1. Se abbiamo un mousedown pending, verifica threshold per avviare drag
+    // 1. Se abbiamo un pointerdown pending, verifica threshold per avviare drag
     if (edgeDownState && !gripDragging) {
+      if (edgeDownState.pointerId != null && e.pointerId !== edgeDownState.pointerId) return;
       var dx = e.clientX - edgeDownState.startX;
       var dy = e.clientY - edgeDownState.startY;
       if ((dx * dx + dy * dy) >= (DRAG_THRESHOLD * DRAG_THRESHOLD)) {
@@ -262,6 +333,7 @@
         edgeDownState = null;
         suppressNextClick = true;
         if (!hoverToolbar) getHoverToolbar();
+        gripPointerId = e.pointerId;
         if (typeof startTileDrag === 'function') startTileDrag(s.tileId, s.el);
       }
       return;
@@ -860,24 +932,33 @@
         document.body.classList.add('olo-dragging');
       };
 
+      // Pointer events (non mouse events): funzionano anche con touch/pen.
+      // Il grip ha touch-action: none (iframe-builder.css) così il browser non
+      // interpreta il gesto col dito come scroll (pointercancel = drag morto).
       var grip = hoverToolbar.querySelector('.olo-iframe-tb-grip');
       if (grip) {
-        grip.addEventListener('mousedown', function(e) {
+        grip.addEventListener('pointerdown', function(e) {
+          if (e.button !== 0 && e.pointerType === 'mouse') return;
           var tileId = hoverToolbar.getAttribute('data-for-tile');
           var el = tileId ? findTileEl(tileId) : null;
           if (!el) return;
           e.preventDefault();
           e.stopPropagation();
+          gripPointerId = e.pointerId;
           startTileDrag(tileId, el);
         });
       }
 
-      document.addEventListener('mousemove', function(e) {
+      document.addEventListener('pointermove', function(e) {
         if (!gripDragging || !gripGhost) return;
+        if (gripPointerId !== null && e.pointerId !== gripPointerId) return;
 
         // Move ghost
         gripGhost.style.left = (e.clientX + 12) + 'px';
         gripGhost.style.top = (e.clientY - 20) + 'px';
+
+        // Auto-scroll quando il pointer è vicino ai bordi del viewport
+        updateGripAutoScroll(e.clientY);
 
         // Find drop target
         gripGhost.style.pointerEvents = 'none';
@@ -910,38 +991,17 @@
         }
       });
 
-      document.addEventListener('mouseup', function(e) {
+      document.addEventListener('pointerup', function(e) {
         if (!gripDragging) return;
+        if (gripPointerId !== null && e.pointerId !== gripPointerId) return;
+        endGripDrag(true);
+      });
 
-        // Restore source element
-        var srcEl = gripDragId ? findTileEl(gripDragId) : null;
-        if (srcEl) {
-          srcEl.style.opacity = '';
-          srcEl.style.transition = '';
-        }
-
-        // Remove ghost and indicator
-        if (gripGhost) { gripGhost.remove(); gripGhost = null; }
-        if (gripIndicator) gripIndicator.style.display = 'none';
-
-        // v3.55.30 — rimuovi la classe globale olo-dragging (vedi startTileDrag).
-        document.body.classList.remove('olo-dragging');
-
-        // Execute reorder
-        if (gripDropTarget && gripDragId && gripDropTarget !== gripDragId) {
-          post('olo:reorder', {
-            sourceId: gripDragId,
-            targetId: gripDropTarget,
-            before: gripDropBefore
-          });
-        }
-
-        // Reset
-        gripDragging = false;
-        gripDragId = null;
-        gripDropTarget = null;
-        hoverToolbar.style.display = '';
-        hideHoverToolbar();
+      // pointercancel (es. pan del browser, palm rejection): annulla senza reorder.
+      document.addEventListener('pointercancel', function(e) {
+        if (!gripDragging) return;
+        if (gripPointerId !== null && e.pointerId !== gripPointerId) return;
+        endGripDrag(false);
       });
     }
     return hoverToolbar;
@@ -1329,10 +1389,14 @@
   root.addEventListener('contextmenu', onContextMenu, true);
   root.addEventListener('mouseover', onMouseOver, true);
   root.addEventListener('mouseout', onMouseOut, true);
-  // Edge-hotzone drag: mousedown vicino ai bordi di una tile + movimento > 5px = drag
-  root.addEventListener('mousedown', onEdgeMouseDown, true);
-  document.addEventListener('mousemove', onEdgeMouseMove);
-  document.addEventListener('mouseup', onEdgeMouseUp, true);
+  // Edge-hotzone drag: pointerdown su una tile + movimento > 5px = drag.
+  // Pointer events (non mouse) così funziona anche con pen; con touch resta
+  // soggetto al touch-action della tile (di default il pan/scroll vince — il
+  // reorder touch passa dal grip della toolbar, che ha touch-action: none).
+  root.addEventListener('pointerdown', onEdgeMouseDown, true);
+  document.addEventListener('pointermove', onEdgeMouseMove);
+  document.addEventListener('pointerup', onEdgeMouseUp, true);
+  document.addEventListener('pointercancel', onEdgeMouseUp, true);
   document.addEventListener('click', blockLinks, true);
   // (HTML5 drag già bloccato al top del modulo, vedi commento v3.55.29.)
   window.addEventListener('message', onMessage, false);
@@ -1341,11 +1405,19 @@
 
     // Forward key events to parent so shortcuts (Delete, Ctrl+C/V) work
   document.addEventListener('keydown', function(e) {
+    // Esc durante un grip drag interno: annulla senza reorder (il safety net
+    // del parent non vede i keydown di questo document).
+    if (e.key === 'Escape' && gripDragging) {
+      e.preventDefault();
+      e.stopPropagation();
+      endGripDrag(false);
+      return;
+    }
     // Skip if editing text
     var tag = e.target.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return;
-    // Forward Delete, Backspace, Ctrl+C, Ctrl+V, Ctrl+Alt+C, Ctrl+Alt+V
-    if (e.key === 'Delete' || e.key === 'Backspace' || (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'z' || e.key === 's' || e.code === 'KeyC' || e.code === 'KeyV'))) {
+    // Forward Delete, Backspace, Ctrl+C/V/Z/S, Ctrl+Alt+C/V, Alt+frecce (nudge)
+    if (e.key === 'Delete' || e.key === 'Backspace' || (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'z' || e.key === 's' || e.code === 'KeyC' || e.code === 'KeyV')) || (e.altKey && !e.ctrlKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown'))) {
       e.preventDefault();
       parent.postMessage({ type: 'olo:keydown', key: e.key, code: e.code, ctrlKey: e.ctrlKey, shiftKey: e.shiftKey, altKey: e.altKey, metaKey: e.metaKey }, '*');
     }

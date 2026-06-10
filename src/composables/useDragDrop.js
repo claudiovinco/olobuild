@@ -75,16 +75,17 @@ function applyContentPlaceholders(settings, fields) {
   }
 }
 
-// v3.55.49 — guard di idempotenza AGGRESSIVO: blocca insert duplicati con stessa
-// tile-type entro 500ms, IGNORANDO indice/columnId/parentId. Causa: 2 path di
-// drop (CanvasDragOverlay.onDrop + monitor applyPragmaticDrop) possono firare
-// quasi simultaneamente con signature diverse (es. insertIndex=0 vs columnId='x')
-// per la stessa tile dropped → il dedup precedente non li riconosceva come duplicati.
-// Rischio teorico: utente che droppa 2 tile dello stesso tipo entro 500ms → la 2a
-// viene ignorata. Trade-off accettabile (raro caso reale).
+// Guard di idempotenza del SOLO dispatcher monitor (applyPragmaticDrop):
+// cintura di sicurezza contro un eventuale doppio fire dello stesso drop.
+// NON è più applicato agli handler pubblici (handleDropFromSidebar & co.):
+// il click fantasma post-drag — la vera causa dei doppi insert — è ora
+// soppresso alla fonte in useDnD (suppressPostDragClick), e il drop su
+// canvas-overlay è gestito SOLO dall'overlay (il monitor lo salta prima del
+// dedup). Così un doppio click intenzionale sulla stessa tile della sidebar
+// inserisce correttamente 2 tile.
 let _lastInsertKind = null;
 let _lastInsertAt = 0;
-const INSERT_DEDUP_MS = 500;
+const INSERT_DEDUP_MS = 300;
 
 function shouldDedupInsert(kind) {
   const now = Date.now();
@@ -152,7 +153,6 @@ export function useDragDrop() {
    * Row tiles get wrapped in Section only.
    */
   function handleDropFromSidebar(tileType, index) {
-    if (shouldDedupInsert('tile:' + tileType)) return;
     const newTile = createTileFromType(tileType);
     if (!newTile) return;
 
@@ -207,7 +207,6 @@ export function useDragDrop() {
    */
   function handleDropIntoColumn(tileType, columnId) {
     if (!tileType || tileType === 'row' || tileType === 'section') return null;
-    if (shouldDedupInsert('tile:' + tileType)) return null;
     const newTile = createTileFromType(tileType);
     if (!newTile) return null;
 
@@ -222,7 +221,6 @@ export function useDragDrop() {
    * Creates the tile from the stored global widget data and wraps it.
    */
   function handleGlobalWidgetDrop(globalId, index) {
-    if (shouldDedupInsert('gw:' + globalId)) return null;
     const newTile = tilesStore.insertGlobalWidget(globalId);
     if (!newTile) return null;
 
@@ -246,7 +244,6 @@ export function useDragDrop() {
    * Handle drop of a global widget into a specific column.
    */
   function handleGlobalWidgetDropIntoColumn(globalId, columnId) {
-    if (shouldDedupInsert('gw:' + globalId)) return null;
     const newTile = tilesStore.insertGlobalWidget(globalId);
     if (!newTile) return null;
 
@@ -408,9 +405,13 @@ export function useDragDrop() {
     const payload = source.data;
     if (!isOloData(target) || !isOloData(payload)) return;
 
-    // v3.55.49 — guard signature semplificato: solo tile/node/widget identifier,
-    // ignoro target. Stesso fix di handleDropFromSidebar per evitare che 2 path
-    // con target diversi (es. canvas-overlay vs column-body) bypassino il dedup.
+    // Drop sull'overlay iframe: gestito internamente da CanvasDragOverlay
+    // (hit-test + handleDropFromSidebar). Esci PRIMA del dedup, così il
+    // monitor non "consuma" la signature di un insert che non fa lui.
+    if (target.kind === 'canvas-overlay') return;
+
+    // Cintura di sicurezza contro doppio fire dello stesso drop (vedi nota
+    // su INSERT_DEDUP_MS in cima al file).
     const sig = 'tile:' + (payload.tileType || payload.nodeId || payload.globalId || '');
     if (shouldDedupInsert(sig)) return;
 
@@ -432,9 +433,6 @@ export function useDragDrop() {
       } else if (target.kind === 'list-end') {
         applyDropAtListEnd(payload, target.listKind, target.parentId);
         placedTileId = builderStore.selectedTileId;
-      } else if (target.kind === 'canvas-overlay') {
-        // Gestito internamente da CanvasDragOverlay (hit-test + handleDropFromSidebar)
-        return;
       }
 
       if (placedTileId) builderStore.markDirtyForTile(placedTileId);

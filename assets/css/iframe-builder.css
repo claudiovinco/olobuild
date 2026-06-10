@@ -237,6 +237,9 @@ footer.olo-site-footer {
   width: 22px;
   height: 26px;
   cursor: var(--olo-cursor-grab), grab;
+  /* Il grip drag è a pointer events: senza touch-action none il browser
+     interpreta il dito come scroll e fira pointercancel (drag morto). */
+  touch-action: none;
   opacity: 0.6;
   transition: opacity 0.15s, color 0.15s, background 0.15s;
   color: #64748b;

@@ -421,6 +421,7 @@ import {
   extractClosestEdge,
   makeNodePayload,
   isOloData,
+  useAutoScroll,
 } from '@/composables/useDnD';
 
 const emit = defineEmits(['save-as-template']);
@@ -506,6 +507,14 @@ function isVisible(id) {
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
 const stRoot = ref(null);
+
+// Auto-scroll del pannello durante un drag: senza, trascinare un nodo oltre
+// la porzione visibile dell'albero è impossibile. Il container scrollabile è
+// un ancestor del tree (stessa risoluzione usata dallo scroll-to-selected).
+useAutoScroll(
+  () => stRoot.value?.closest('.mb-overflow-y-auto, [data-olo-scroll]') || stRoot.value?.parentElement || null,
+  { getAllowedAxis: () => 'vertical' }
+);
 
 // Inline rename
 const renamingId = ref(null);

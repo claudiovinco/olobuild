@@ -1,17 +1,15 @@
 /**
- * DnD Store — Finite State Machine per il drag & drop.
+ * DnD Store — stato condiviso del drag & drop (parte UI/Pinia; la macchina
+ * a stati fine del gesto — pending/threshold/finalizing — vive in useDnD.js).
  *
  * Stati:
  *   idle       → nessun drag attivo
- *   picking    → pointerdown partito, attesa soglia movimento
- *   dragging   → drag in corso
- *   dropping   → drop triggered, in attesa di settle
- *   settled    → drop completato (torna a idle dopo tick)
+ *   dragging   → drag in corso (da startDrag)
+ *   dropping   → drop in corso (markDropping → endDrag)
  *
  * Unico source-of-truth per:
  *   - payload del drag (cosa si sta trascinando)
  *   - drop target corrente (dove il pointer sta passando)
- *   - ghost element ref (per spostamenti custom)
  *
  * Safety net: ogni uscita anomala (Esc, blur, visibilitychange, window blur,
  * pagehide, pointercancel) entra nel ramo cancelDrag() che azzera tutto.

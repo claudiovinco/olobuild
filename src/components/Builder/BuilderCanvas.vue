@@ -248,7 +248,7 @@ import { useDnDStore } from '@/stores/dnd';
 import { useInlineEdit } from '@/composables/useInlineEdit';
 import { useIframeBridge } from '@/composables/useIframeBridge';
 import { useDragDrop } from '@/composables/useDragDrop';
-import { useDragMonitor, installDnDSafetyNet, isOloData } from '@/composables/useDnD';
+import { useDragMonitor, useAutoScroll, installDnDSafetyNet, isOloData } from '@/composables/useDnD';
 import OlobuilderGrid from '@/components/Grid/OlobuilderGrid.vue';
 import ContextMenu from '@/components/Builder/ContextMenu.vue';
 import CanvasDragOverlay from '@/components/Builder/CanvasDragOverlay.vue';
@@ -278,6 +278,19 @@ useDragMonitor({
     if (!dndStore.isIdle) dndStore.endDrag();
   },
 });
+
+// Auto-scroll del canvas Vue classico durante un drag (in live preview il
+// canvasRef non esiste e la risoluzione lazy ritorna null → no-op; lo scroll
+// dell'iframe è gestito da CanvasDragOverlay via postMessage).
+// Con device frame attivo il contenitore scrollabile è lo screen-wrap interno.
+useAutoScroll(
+  () => {
+    const c = canvasRef.value;
+    if (!c) return null;
+    return c.querySelector('.olo-device-screen-wrap') || c;
+  },
+  { getAllowedAxis: () => 'vertical' }
+);
 
 // ── Live iframe preview ──
 const { iframeReady, iframeHeight, postToIframe } = useIframeBridge(iframeRef);
