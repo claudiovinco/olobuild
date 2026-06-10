@@ -42,7 +42,7 @@
     '.olo-pdfv-thumbs.olo-pdfv-dark { background:#1a1a1a; }',
     '.olo-pdfv-thumbs.olo-pdfv-light { background:#f0f0f0; }',
     '.olo-pdfv-thumb { cursor:pointer; margin-bottom:8px; border:2px solid transparent; border-radius:3px; overflow:hidden; }',
-    '.olo-pdfv-thumb.olo-pdfv-active { border-color:#6366f1; }',
+    '.olo-pdfv-thumb.olo-pdfv-active { border-color:var(--olo-color-primary, #e1474f); }',
     '.olo-pdfv-thumb canvas { display:block; width:100%; height:auto; }',
     '.olo-pdfv-thumb-num { text-align:center; font-size:10px; opacity:.6; margin-top:2px; }',
 
@@ -68,7 +68,7 @@
 
     /* Loading */
     '.olo-pdfv-loading { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:3; }',
-    '.olo-pdfv-spinner { width:36px; height:36px; border:3px solid rgba(128,128,128,.2); border-top-color:#6366f1; border-radius:50%; animation:olo-pdfv-spin .8s linear infinite; }',
+    '.olo-pdfv-spinner { width:36px; height:36px; border:3px solid rgba(128,128,128,.2); border-top-color:var(--olo-color-primary, #e1474f); border-radius:50%; animation:olo-pdfv-spin .8s linear infinite; }',
     '@keyframes olo-pdfv-spin { to { transform:rotate(360deg); } }',
 
     /* Fullscreen */

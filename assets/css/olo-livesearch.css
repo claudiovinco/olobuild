@@ -323,7 +323,7 @@
 .olo-ls-footer a {
   font-size: 12px;
   font-weight: 600;
-  color: #6366f1;
+  color: var(--olo-color-primary, #e1474f);
   text-decoration: none;
 }
 
@@ -349,7 +349,7 @@
   width: 20px;
   height: 20px;
   border: 2px solid #e5e7eb;
-  border-top-color: #6366f1;
+  border-top-color: var(--olo-color-primary, #e1474f);
   border-radius: 50%;
   animation: olo-ls-spin .6s linear infinite;
 }
