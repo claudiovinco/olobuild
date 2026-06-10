@@ -13,7 +13,7 @@
 .olo-pdfv-toolbar button { background:none; border:1px solid transparent; border-radius:4px; padding:4px 7px; cursor:pointer; color:inherit; font-size:14px; line-height:1; display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:28px; }
 .olo-pdfv-toolbar button:hover { background:rgba(128,128,128,.15); }
 .olo-pdfv-toolbar button:active { background:rgba(128,128,128,.25); }
-.olo-pdfv-toolbar button.olo-pdfv-active { background:rgba(99,102,241,.15); color:#6366f1; }
+.olo-pdfv-toolbar button.olo-pdfv-active { background:rgba(225,71,79,.15); background:color-mix(in srgb, var(--olo-color-primary, #e1474f) 15%, transparent); color:var(--olo-color-primary, #e1474f); }
 .olo-pdfv-toolbar .olo-pdfv-sep { width:1px; height:20px; background:rgba(128,128,128,.25); flex-shrink:0; }
 .olo-pdfv-toolbar .olo-pdfv-page-info { font-size:12px; white-space:nowrap; }
 .olo-pdfv-toolbar .olo-pdfv-page-input { width:40px; text-align:center; border:1px solid rgba(128,128,128,.3); border-radius:3px; padding:2px 4px; font-size:12px; background:transparent; color:inherit; }

@@ -1,6 +1,12 @@
 /**
  * Olobuild iframe builder — overlay styles for live preview canvas.
+ *
+ * Chrome canvas = arancio --olo-ui-accent (come il resto del chrome builder),
+ * MAI --olo-color-primary: il chrome non deve cambiare col tema del cliente.
  */
+:root {
+  --olo-ui-accent: #e8622a;
+}
 
 /* No user text selection inside the builder iframe: editing happens via
    double-click → inline editor, never via native selection. Prevents
@@ -27,12 +33,12 @@ body.olo-preview-mode,
 }
 
 [data-olo-tile-id].olo-builder-hover {
-  outline-color: rgba(99, 102, 241, 0.35);
+  outline-color: rgba(232, 98, 42, 0.35);
 }
 
 /* Selected tile */
 [data-olo-tile-id].olo-builder-selected {
-  outline-color: #6366f1;
+  outline-color: var(--olo-ui-accent, #e8622a);
   outline-offset: -2px;
   z-index: 1;
   position: relative;
@@ -56,10 +62,10 @@ a {
   left: 0;
   right: 0;
   height: 3px;
-  background: #6366f1;
+  background: var(--olo-ui-accent, #e8622a);
   z-index: 99999;
   pointer-events: none;
-  box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 8px rgba(232, 98, 42, 0.5);
 }
 
 /* Zone wrappers — remove gap between header/body/footer */
@@ -110,15 +116,15 @@ footer.olo-site-footer {
   width: 34px;
   height: 34px;
   border-radius: 6px;
-  border: 2px solid #6366f1;
+  border: 2px solid var(--olo-ui-accent, #e8622a);
   background: #fff;
-  color: #6366f1;
+  color: var(--olo-ui-accent, #e8622a);
   cursor: pointer;
   position: relative;
   z-index: 10;
   pointer-events: auto;
   transition: background 0.15s, transform 0.15s, opacity 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 2px 8px rgba(232, 98, 42, 0.25);
   opacity: 0;
   transform: translateY(-50%);
 }
@@ -128,13 +134,13 @@ footer.olo-site-footer {
   animation: olo-add-pulse 1.4s ease-in-out infinite;
 }
 .olo-iframe-add-circle:hover {
-  background: #6366f1;
+  background: var(--olo-ui-accent, #e8622a);
   color: #fff;
   transform: translateY(-50%) scale(1.08);
 }
 @keyframes olo-add-pulse {
-  0%, 100% { box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25), 0 0 0 0 rgba(99, 102, 241, 0.45); }
-  50%      { box-shadow: 0 2px 10px rgba(99, 102, 241, 0.35), 0 0 0 8px rgba(99, 102, 241, 0); }
+  0%, 100% { box-shadow: 0 2px 8px rgba(232, 98, 42, 0.25), 0 0 0 0 rgba(232, 98, 42, 0.45); }
+  50%      { box-shadow: 0 2px 10px rgba(232, 98, 42, 0.35), 0 0 0 8px rgba(232, 98, 42, 0); }
 }
 /* Clickable hover zone around the button (invisible, no layout shift) */
 .olo-iframe-add-btn::after {
@@ -155,7 +161,7 @@ footer.olo-site-footer {
   right: 0;
   top: 0;
   height: 2px;
-  background: rgba(99, 102, 241, 0.4);
+  background: rgba(232, 98, 42, 0.4);
   transform: translateY(-50%);
   opacity: 0;
   transition: opacity 0.2s;
@@ -250,12 +256,12 @@ footer.olo-site-footer {
 }
 .olo-iframe-tb-grip:hover {
   opacity: 1;
-  color: #6366f1;
-  background: rgba(99, 102, 241, 0.08);
+  color: var(--olo-ui-accent, #e8622a);
+  background: rgba(232, 98, 42, 0.08);
 }
 .olo-iframe-tb-grip:active {
   cursor: var(--olo-cursor-grabbing), grabbing;
-  background: rgba(99, 102, 241, 0.15);
+  background: rgba(232, 98, 42, 0.15);
 }
 
 /* Cursor di drag globale dell'iframe builder durante un trascinamento attivo
@@ -270,7 +276,7 @@ body.olo-dragging * {
   position: fixed;
   z-index: 100001;
   padding: 6px 14px;
-  background: rgba(99, 102, 241, 0.9);
+  background: rgba(232, 98, 42, 0.9);
   color: #fff;
   font: 600 12px/1 system-ui, sans-serif;
   border-radius: 6px;
@@ -291,11 +297,11 @@ body.olo-dragging * {
   position: fixed;
   z-index: 100000;
   height: 3px;
-  background: #6366f1;
+  background: var(--olo-ui-accent, #e8622a);
   display: none;
   pointer-events: none;
   border-radius: 2px;
-  box-shadow: 0 0 8px rgba(99, 102, 241, 0.6);
+  box-shadow: 0 0 8px rgba(232, 98, 42, 0.6);
 }
 .olo-grip-indicator::before,
 .olo-grip-indicator::after {
@@ -303,7 +309,7 @@ body.olo-dragging * {
   position: absolute;
   width: 8px;
   height: 8px;
-  background: #6366f1;
+  background: var(--olo-ui-accent, #e8622a);
   border-radius: 50%;
   top: -3px;
 }
@@ -361,14 +367,14 @@ body.olo-dragging * {
   color: #065f46;
 }
 .olo-iframe-tb-btn.olo-tb-addcol {
-  color: #4338ca;
-  background: rgba(99, 102, 241, 0.1);
+  color: #c2410c;
+  background: rgba(232, 98, 42, 0.1);
   opacity: 0.95;
 }
 .olo-iframe-tb-btn.olo-tb-addcol:hover {
-  background: rgba(99, 102, 241, 0.22);
+  background: rgba(232, 98, 42, 0.22);
   opacity: 1;
-  color: #3730a3;
+  color: #9a3412;
 }
 
 /* Preview mode: hide controls */
@@ -442,17 +448,17 @@ body.olo-preview-mode .olo-iframe-toolbar {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 .olo-iframe-empty-btn:hover {
-  border-color: var(--olo-color-primary, #6366F1);
-  color: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-ui-accent, #e8622a);
+  color: var(--olo-ui-accent, #e8622a);
   background: #fff;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.12);
+  box-shadow: 0 4px 12px rgba(232, 98, 42, 0.12);
 }
 .olo-iframe-empty-btn:active {
   transform: translateY(0);
 }
 .olo-iframe-empty-btn:focus-visible {
-  outline: 2px solid var(--olo-color-primary, #6366F1);
+  outline: 2px solid var(--olo-ui-accent, #e8622a);
   outline-offset: 2px;
 }
 .olo-iframe-empty-btn-icon {
@@ -467,8 +473,8 @@ body.olo-preview-mode .olo-iframe-toolbar {
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 .olo-iframe-empty-btn:hover .olo-iframe-empty-btn-icon {
-  background: rgba(99, 102, 241, 0.1);
-  color: var(--olo-color-primary, #6366F1);
+  background: rgba(232, 98, 42, 0.1);
+  color: var(--olo-ui-accent, #e8622a);
 }
 .olo-iframe-empty-btn-label {
   font-size: 13px;
@@ -486,7 +492,7 @@ body.olo-preview-mode .olo-iframe-toolbar {
 [data-olo-empty="1"][data-olo-tile-type="column"],
 [data-olo-empty="1"][data-olo-tile-type="inner-column"] {
   min-height: 30px !important;
-  outline: 1px dashed rgba(99, 102, 241, 0.5);
+  outline: 1px dashed rgba(232, 98, 42, 0.5);
   outline-offset: -1px;
 }
 [data-olo-empty="1"][data-olo-tile-type="row"],

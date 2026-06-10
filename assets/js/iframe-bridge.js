@@ -1342,9 +1342,11 @@
             var st = document.createElement('style');
             st.id = wfId;
             st.textContent =
-              '.olo-wireframe-mode .olo-frontend-grid > section { outline: 2px dashed rgba(245,158,11,0.35) !important; outline-offset: -2px; position: relative; }' +
-              '.olo-wireframe-mode .olo-frontend-grid > section::after { content: "SEZIONE"; position: absolute; top: 4px; right: 8px; font-size: 9px; font-weight: 700; letter-spacing: 1px; color: rgba(245,158,11,0.5); pointer-events: none; z-index: 10; }' +
-              '.olo-wireframe-mode [data-olo-tile-id][class*="olo-row"], .olo-wireframe-mode .uk-grid { outline: 1px dashed rgba(99,102,241,0.35) !important; outline-offset: -1px; }' +
+              // Color-coding livelli = stessa lingua dei bottoni add del canvas:
+              // sezione arancio chrome, row verde, tile blu.
+              '.olo-wireframe-mode .olo-frontend-grid > section { outline: 2px dashed rgba(232,98,42,0.35) !important; outline-offset: -2px; position: relative; }' +
+              '.olo-wireframe-mode .olo-frontend-grid > section::after { content: "SEZIONE"; position: absolute; top: 4px; right: 8px; font-size: 9px; font-weight: 700; letter-spacing: 1px; color: rgba(232,98,42,0.55); pointer-events: none; z-index: 10; }' +
+              '.olo-wireframe-mode [data-olo-tile-id][class*="olo-row"], .olo-wireframe-mode .uk-grid { outline: 1px dashed rgba(16,185,129,0.35) !important; outline-offset: -1px; }' +
               '.olo-wireframe-mode [data-olo-tile-id] { outline: 1px solid rgba(59,130,246,0.18) !important; outline-offset: -1px; position: relative; }' +
               '.olo-wireframe-mode [data-olo-tile-id]:hover { outline-color: rgba(59,130,246,0.5) !important; }';
             document.head.appendChild(st);
