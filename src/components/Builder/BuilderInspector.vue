@@ -1056,8 +1056,11 @@
                   <span class="mb-text-xs mb-text-gray-300">{{ t('Nascondi il cursore di sistema') }}</span>
                 </label>
               </template>
-              <p v-if="magStatus" class="mb-text-[10px]" :class="magStatus === 'error' ? 'mb-text-red-400' : 'mb-text-gray-500'">
-                {{ magStatus === 'saving' ? t('Salvataggio…') : magStatus === 'error' ? t('Errore di salvataggio') : t('Salvato ✓') }}
+              <p v-if="magLoaded" class="mb-text-[10px]" :class="magStatus === 'error' ? 'mb-text-red-400' : magStatus === 'saved' ? 'mb-text-green-500' : 'mb-text-gray-500'">
+                {{ magStatus === 'saving' ? t('Salvataggio…')
+                  : magStatus === 'error' ? t('Errore di salvataggio — riprova')
+                  : magStatus === 'saved' ? t('✓ Salvato sul sito')
+                  : t('Si salva da solo a ogni modifica — non serve il tasto Salva del template.') }}
               </p>
             </div>
           </CollapseSection>
