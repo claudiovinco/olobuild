@@ -960,6 +960,11 @@
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Intensità: {{ tileAdvanced.mouse_tilt_intensity || 15 }}</label>
                   <input type="range" min="5" max="30" step="1" :value="tileAdvanced.mouse_tilt_intensity || 15" @input="updateAdvanced('mouse_tilt_intensity', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
                 </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Applica a') }}</label>
+                  <FieldSelect ui="segmented" :model-value="tileAdvanced.mouse_tilt_target || 'block'" :options="TILT_TARGET_OPTIONS" @update:model-value="updateAdvanced('mouse_tilt_target', $event)" />
+                  <p class="mb-text-[10px] mb-text-gray-500 mb-leading-snug mb-mt-1">{{ t('"Foto interne": ogni immagine o video dentro la tile (gallerie, griglie) si inclina singolarmente.') }}</p>
+                </div>
               </template>
               <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                 <input type="checkbox" :checked="tileAdvanced.mouse_track === true" @change="updateAdvanced('mouse_track', $event.target.checked)" class="mb-accent-primary-500" />
@@ -1448,6 +1453,11 @@ const SPOTLIGHT_BLEND_OPTIONS = [
   { value: 'screen', label: 'Schermo' },
   { value: 'overlay', label: 'Sovrapposizione' },
   { value: 'hard-light', label: 'Hard Light' },
+];
+
+const TILT_TARGET_OPTIONS = [
+  { value: 'block', label: 'Blocco intero' },
+  { value: 'items', label: 'Foto interne' },
 ];
 
 // ── Cursore magnetico (impostazione GLOBALE, option olo_magnetic_cursor) ──

@@ -241,7 +241,10 @@ class Olo_Animation_Builder {
         $attrs = '';
         if ( ! empty( $advanced['mouse_tilt'] ) ) {
             $intensity = intval( $advanced['mouse_tilt_intensity'] ?? 15 );
-            $attrs .= ' data-olo-tilt="' . $intensity . '"';
+            // target 'items': tilt sulle foto/media interni invece che sul blocco
+            // (il runtime espande l'attr sugli img/video figli).
+            $tilt_attr = ( 'items' === ( $advanced['mouse_tilt_target'] ?? 'block' ) ) ? 'data-olo-tilt-items' : 'data-olo-tilt';
+            $attrs    .= ' ' . $tilt_attr . '="' . $intensity . '"';
         }
         if ( ! empty( $advanced['mouse_track'] ) ) {
             $speed = intval( $advanced['mouse_track_speed'] ?? 3 );

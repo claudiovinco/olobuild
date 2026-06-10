@@ -2946,7 +2946,11 @@ class Olo_Frontend_Renderer {
         $elem_mouse_attrs = '';
         if ( ! empty( $settings['mouse_tilt'] ) || ! empty( $advanced['mouse_tilt'] ) ) {
             $tilt_intensity = intval( $settings['mouse_tilt_intensity'] ?? $advanced['mouse_tilt_intensity'] ?? 15 );
-            $elem_mouse_attrs .= ' data-olo-tilt="' . $tilt_intensity . '"';
+            // target 'items': il tilt va sulle foto/media INTERNI (gallerie, griglie)
+            // invece che sul blocco — il runtime espande l'attr sugli img/video figli.
+            $tilt_target = $settings['mouse_tilt_target'] ?? $advanced['mouse_tilt_target'] ?? 'block';
+            $tilt_attr   = ( 'items' === $tilt_target ) ? 'data-olo-tilt-items' : 'data-olo-tilt';
+            $elem_mouse_attrs .= ' ' . $tilt_attr . '="' . $tilt_intensity . '"';
         }
         if ( ! empty( $settings['mouse_track'] ) || ! empty( $advanced['mouse_track'] ) ) {
             $track_speed = intval( $settings['mouse_track_speed'] ?? $advanced['mouse_track_speed'] ?? 3 );
@@ -4507,6 +4511,15 @@ class Olo_Frontend_Renderer {
             <script>
             (function(){
               if(!window.matchMedia('(min-width:960px)').matches) return;
+              /* Tilt "per item": [data-olo-tilt-items] sul wrapper (gallerie, griglie)
+                 propaga l'attributo a foto e video interni, che entrano nella raccolta
+                 sottostante come qualsiasi altro elemento tilt. */
+              document.querySelectorAll('[data-olo-tilt-items]').forEach(function(host){
+                var v = host.getAttribute('data-olo-tilt-items') || '15';
+                host.querySelectorAll('img, video').forEach(function(it){
+                  if(!it.hasAttribute('data-olo-tilt')) it.setAttribute('data-olo-tilt', v);
+                });
+              });
               var tilts = document.querySelectorAll('[data-olo-tilt]');
               var tracks = document.querySelectorAll('[data-olo-track]');
               if(!tilts.length){ if(!tracks.length) return; }
