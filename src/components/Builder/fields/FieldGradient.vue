@@ -1,5 +1,18 @@
 <template>
   <div class="mb-space-y-2">
+    <!-- Rampa stop con marker alle posizioni (sempre sinistra→destra, come
+         nei gradient editor professionali; l'angolo si vede nella preview
+         in fondo) -->
+    <div class="fg-ramp-wrap">
+      <div class="fg-ramp" :style="{ background: rampGradient }"></div>
+      <span
+        v-for="(stop, i) in stops"
+        :key="'m' + i"
+        class="fg-marker"
+        :style="{ left: clampPos(stop.position) + '%', background: stop.color }"
+        :title="clampPos(stop.position) + '%'"
+      ></span>
+    </div>
     <!-- Gradient type -->
     <div class="mb-flex mb-gap-1">
       <button v-for="t in ['linear','radial']" :key="t"
@@ -19,11 +32,13 @@
     <!-- Color stops -->
     <div class="mb-space-y-2">
       <div v-for="(stop, i) in stops" :key="i" class="mb-space-y-1">
-        <div class="mb-flex mb-items-center mb-gap-1">
-          <span class="mb-text-[10px] mb-text-gray-500 mb-w-6">{{ stop.position }}%</span>
+        <div class="mb-flex mb-items-center mb-gap-1.5">
+          <span class="fg-dot" :style="{ background: stop.color }"></span>
+          <span class="mb-text-[10px] mb-text-gray-500">{{ t('Posizione') }}</span>
           <input type="number" :value="stop.position" @input="updateStop(i, 'position', $event.target.value)"
             min="0" max="100" class="mb-w-14 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-1.5 mb-py-1 mb-text-[10px] mb-text-gray-200" />
-          <button v-if="stops.length > 2" @click="removeStop(i)" class="mb-text-gray-500 hover:mb-text-red-400 mb-text-xs">&times;</button>
+          <span class="mb-text-[10px] mb-text-gray-400">%</span>
+          <button v-if="stops.length > 2" @click="removeStop(i)" :title="t('Rimuovi colore')" class="mb-ml-auto mb-text-gray-500 hover:mb-text-red-400 mb-text-xs">&times;</button>
         </div>
         <FieldColor :modelValue="stop.color" @update:modelValue="updateStop(i, 'color', $event)" />
       </div>
@@ -31,7 +46,7 @@
     <button @click="addStop" class="mb-w-full mb-py-1 mb-text-[10px] mb-text-gray-400 mb-bg-gray-700 mb-rounded hover:mb-bg-gray-600">
       {{ t('+ Aggiungi colore') }}
     </button>
-    <!-- Preview -->
+    <!-- Preview reale (con angolo / radiale) -->
     <div class="mb-h-6 mb-rounded mb-border mb-border-gray-600" :style="{ background: previewGradient }"></div>
   </div>
 </template>
@@ -59,6 +74,17 @@ const previewGradient = computed(() => {
   const s = stops.value.map(st => `${st.color} ${st.position}%`).join(', ');
   return type.value === 'radial' ? `radial-gradient(circle, ${s})` : `linear-gradient(${angle.value}deg, ${s})`;
 });
+
+// Rampa orizzontale fissa (90°) per la barra con i marker: le posizioni %
+// corrispondono visivamente, indipendentemente dall'angolo reale.
+const rampGradient = computed(() => {
+  const s = stops.value.map(st => `${st.color} ${clampPos(st.position)}%`).join(', ');
+  return `linear-gradient(90deg, ${s})`;
+});
+
+function clampPos(p) {
+  return Math.max(0, Math.min(100, parseInt(p) || 0));
+}
 
 function emitUpdate(partial) {
   emit('update:modelValue', { type: type.value, angle: angle.value, stops: [...stops.value], ...partial });
@@ -98,3 +124,35 @@ function addStop() {
   emitUpdate({ stops: next });
 }
 </script>
+
+<style scoped>
+.fg-ramp-wrap {
+  position: relative;
+  padding: 6px 5px 10px; /* spazio per i marker che sbordano */
+}
+.fg-ramp {
+  height: 22px;
+  border-radius: 6px;
+  border: 1px solid rgba(16, 24, 40, 0.18);
+  /* scacchiera sotto la rampa: rende leggibili gli stop semi-trasparenti */
+  background-color: #fff;
+}
+.fg-marker {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(16, 24, 40, 0.35), 0 1px 3px rgba(16, 24, 40, 0.3);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.fg-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(16, 24, 40, 0.25);
+  flex-shrink: 0;
+}
+</style>
