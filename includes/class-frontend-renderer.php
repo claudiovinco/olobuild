@@ -1210,7 +1210,11 @@ class Olo_Frontend_Renderer {
             return $html;
         }
 
-        return '<div data-olo-lazy><template class="olo-lazy-content">' . $html . '</template><div class="olo-lazy-ph" style="min-height:50px"></div></div>';
+        // Il wrapper eredita la larghezza "Contenuto" dell'elemento: senza, un
+        // div block romperebbe l'affiancamento delle tile inline (la tile lazy
+        // andrebbe a capo da sola anche con tile_width=inline).
+        $lazy_class = ( ( $advanced['tile_width'] ?? 'full' ) === 'inline' ) ? ' class="olo-tile-inline"' : '';
+        return '<div data-olo-lazy' . $lazy_class . '><template class="olo-lazy-content">' . $html . '</template><div class="olo-lazy-ph" style="min-height:50px"></div></div>';
     }
 
     /**
