@@ -19,7 +19,7 @@ Page builder WordPress professionale olonico con sistema a griglia (tile drag & 
 
 ## Struttura
 ```
-mosaic-builder.php          → Entry point plugin WP (filename = slug WP)
+olobuild.php                → Entry point plugin WP (filename = slug WP)
 includes/                   → Classi PHP (olo-builder, database, rest-api, tile-manager, etc.)
 includes/tiles/             → Tile classes (base + 50 elementi)
 src/                        → Vue.js source
@@ -42,7 +42,7 @@ database/                   → schema.sql
 - **Due bundle**: oltre a `builder.js` esiste `assets/js/theme-picker.js` (selettore temi
   condiviso `src/theme-picker/`, usato dal modale del builder E dal setup wizard). Dopo
   modifiche al picker buildare ANCHE: `node node_modules/vite/bin/vite.js build --config vite.picker.config.js`
-- Version bump obbligatorio dopo modifiche JS/CSS: `OLO_VERSION` in mosaic-builder.php
+- Version bump obbligatorio dopo modifiche JS/CSS: `OLO_VERSION` in olobuild.php
 
 ## Regole
 - Tailwind prefix: `mb-` (evita conflitti con WordPress)
