@@ -76,17 +76,17 @@ function onReset() {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--olo-color-primary, #6366f1);
+  background: var(--olo-ui-accent, #e8622a);
   cursor: pointer;
-  border: 2px solid var(--olo-color-primary, #6366F1);
+  border: 2px solid var(--olo-ui-accent, #e8622a);
 }
 .field-range::-moz-range-thumb {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--olo-color-primary, #6366f1);
+  background: var(--olo-ui-accent, #e8622a);
   cursor: pointer;
-  border: 2px solid var(--olo-color-primary, #6366F1);
+  border: 2px solid var(--olo-ui-accent, #e8622a);
 }
 .field-range::-moz-range-track {
   height: 4px;

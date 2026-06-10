@@ -22,9 +22,7 @@
       <!-- Post Type -->
       <div class="dqp-field">
         <label class="dqp-label">{{ t('Post Type') }}</label>
-        <select :value="localQuery.post_type" @change="updateQuery('post_type', $event.target.value)" class="dqp-select">
-          <option v-for="pt in postTypes" :key="pt.value" :value="pt.value">{{ pt.label }}</option>
-        </select>
+        <FieldSelect ui="dropdown" theme="dark" :model-value="localQuery.post_type" :options="postTypes" @update:model-value="updateQuery('post_type', $event)" />
       </div>
 
       <!-- Posts per page -->
@@ -44,30 +42,18 @@
       <div class="dqp-row">
         <div class="dqp-field dqp-field--half">
           <label class="dqp-label">{{ t('Ordina per') }}</label>
-          <select :value="localQuery.orderby" @change="updateQuery('orderby', $event.target.value)" class="dqp-select">
-            <option value="date">{{ t('Data') }}</option>
-            <option value="title">{{ t('Titolo') }}</option>
-            <option value="modified">{{ t('Ultima modifica') }}</option>
-            <option value="rand">{{ t('Casuale') }}</option>
-            <option value="menu_order">{{ t('Ordine menu') }}</option>
-          </select>
+          <FieldSelect ui="dropdown" theme="dark" :model-value="localQuery.orderby" :options="ORDERBY_OPTS" @update:model-value="updateQuery('orderby', $event)" />
         </div>
         <div class="dqp-field dqp-field--half">
           <label class="dqp-label">{{ t('Ordine') }}</label>
-          <select :value="localQuery.order" @change="updateQuery('order', $event.target.value)" class="dqp-select">
-            <option value="DESC">{{ t('DESC') }}</option>
-            <option value="ASC">{{ t('ASC') }}</option>
-          </select>
+          <FieldSelect ui="dropdown" theme="dark" :model-value="localQuery.order" :options="ORDER_OPTS" @update:model-value="updateQuery('order', $event)" />
         </div>
       </div>
 
       <!-- Taxonomy filter -->
       <div class="dqp-field">
         <label class="dqp-label">{{ t('Filtra per tassonomia') }}</label>
-        <select :value="localQuery.taxonomy" @change="onTaxonomyChange($event.target.value)" class="dqp-select">
-          <option value="">{{ t('Nessuna') }}</option>
-          <option v-for="tax in taxonomies" :key="tax.value" :value="tax.value">{{ tax.label }}</option>
-        </select>
+        <FieldSelect ui="dropdown" theme="dark" :model-value="localQuery.taxonomy" :options="taxonomyOpts" @update:model-value="onTaxonomyChange($event)" />
       </div>
 
       <!-- Terms multi-select -->
@@ -90,14 +76,14 @@
         <label class="dqp-label dqp-label--section">{{ t('Mappatura campi') }}</label>
         <div v-for="field in itemFields" :key="field.key" class="dqp-map-row">
           <span class="dqp-map-key">{{ field.label }}</span>
-          <select
-            :value="localItemMap[field.key] || ''"
-            @change="updateItemMap(field.key, $event.target.value)"
-            class="dqp-select dqp-select--small"
-          >
-            <option value="">{{ t('— Non mappato —') }}</option>
-            <option v-for="wf in wpFields" :key="wf.key" :value="wf.key">{{ wf.label }}</option>
-          </select>
+          <FieldSelect
+            ui="dropdown"
+            theme="dark"
+            size="compact"
+            :model-value="localItemMap[field.key] || ''"
+            :options="WP_FIELD_OPTS"
+            @update:model-value="updateItemMap(field.key, $event)"
+          />
         </div>
       </div>
     </div>
@@ -108,6 +94,7 @@
 import { t } from '@/i18n';
 import { ref, computed, watch, onMounted } from 'vue';
 import { useDynamicContent } from '@/composables/useDynamicContent';
+import FieldSelect from './fields/FieldSelect.vue';
 
 const props = defineProps({
   query: { type: Object, default: () => ({}) },
@@ -137,21 +124,41 @@ const isEnabled = computed(() => !!localQuery.value.enabled);
 const postTypes = computed(() => sources.value?.post_types || []);
 const taxonomies = computed(() => sources.value?.taxonomies || []);
 
+// Opzioni FieldSelect (label RAW: t() la applica FieldSelect internamente)
+const taxonomyOpts = computed(() => [
+  { value: '', label: 'Nessuna' },
+  ...taxonomies.value.map(tax => ({ value: tax.value, label: tax.label })),
+]);
+
 const selectedTaxTerms = computed(() => {
   if (!localQuery.value.taxonomy) return [];
   const tax = taxonomies.value.find(t => t.value === localQuery.value.taxonomy);
   return tax?.terms || [];
 });
 
-const wpFields = [
-  { key: 'post_title', label: 'Titolo' },
-  { key: 'post_excerpt', label: 'Estratto' },
-  { key: 'post_content', label: 'Contenuto' },
-  { key: 'featured_image', label: 'Immagine in evidenza' },
-  { key: 'post_date', label: 'Data' },
-  { key: 'author_name', label: 'Autore' },
-  { key: 'permalink', label: 'Permalink' },
-  { key: 'first_term', label: 'Primo termine tassonomia' },
+const ORDERBY_OPTS = [
+  { value: 'date', label: 'Data' },
+  { value: 'title', label: 'Titolo' },
+  { value: 'modified', label: 'Ultima modifica' },
+  { value: 'rand', label: 'Casuale' },
+  { value: 'menu_order', label: 'Ordine menu' },
+];
+
+const ORDER_OPTS = [
+  { value: 'DESC', label: 'DESC' },
+  { value: 'ASC', label: 'ASC' },
+];
+
+const WP_FIELD_OPTS = [
+  { value: '', label: '— Non mappato —' },
+  { value: 'post_title', label: 'Titolo' },
+  { value: 'post_excerpt', label: 'Estratto' },
+  { value: 'post_content', label: 'Contenuto' },
+  { value: 'featured_image', label: 'Immagine in evidenza' },
+  { value: 'post_date', label: 'Data' },
+  { value: 'author_name', label: 'Autore' },
+  { value: 'permalink', label: 'Permalink' },
+  { value: 'first_term', label: 'Primo termine tassonomia' },
 ];
 
 onMounted(() => {
@@ -245,7 +252,7 @@ function emitQuery() {
 }
 
 .dqp-switch--on {
-  background: var(--olo-color-primary, #6366f1);
+  background: var(--olo-ui-accent, #e8622a);
 }
 
 .dqp-switch-thumb {
@@ -299,7 +306,6 @@ function emitQuery() {
   margin-bottom: 4px;
 }
 
-.dqp-select,
 .dqp-input {
   width: 100%;
   background: #111827;
@@ -310,28 +316,9 @@ function emitQuery() {
   color: #e5e7eb;
 }
 
-.dqp-select option {
-  background: #111827;
-  color: #e5e7eb;
-  padding: 4px 8px;
-}
-
-.dqp-select optgroup {
-  background: #1e293b;
-  color: #94a3b8;
-  font-weight: 700;
-  font-style: normal;
-}
-
-.dqp-select:focus,
 .dqp-input:focus {
   outline: none;
-  border-color: var(--olo-color-primary, #6366f1);
-}
-
-.dqp-select--small {
-  padding: 3px 6px;
-  font-size: 11px;
+  border-color: var(--olo-ui-accent, #e8622a);
 }
 
 .dqp-terms {

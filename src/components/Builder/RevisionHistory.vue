@@ -106,7 +106,7 @@ function renderModal() {
         + '<span style="font-size:0.875rem;font-weight:500;color:#e5e7eb">'
         + (idx === 0 ? 'Revisione più recente' : 'Revisione #' + rev.id)
         + '</span>'
-        + (idx === 0 ? '<span style="font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(79,70,229,0.2);color:#a5b4fc;font-weight:500">Ultima</span>' : '')
+        + (idx === 0 ? '<span style="font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(232,98,42,0.2);color:#f6a06b;font-weight:500">Ultima</span>' : '')
         + '</div>'
         + '<div style="display:flex;align-items:center;gap:0.75rem;margin-top:4px;font-size:0.75rem;color:#6b7280">'
         + '<span>' + formatDate(rev.created_at) + '</span>'
@@ -114,7 +114,7 @@ function renderModal() {
         + '<span>' + formatTimeAgo(rev.created_at) + '</span>'
         + '</div></div>'
         + '<div style="display:flex;align-items:center;gap:0.5rem">'
-        + '<button data-action="restore" data-rev-id="' + rev.id + '" style="padding:4px 10px;font-size:0.75rem;font-weight:500;border-radius:4px;border:none;background:#4f46e5;color:white;cursor:pointer">Ripristina</button>'
+        + '<button data-action="restore" data-rev-id="' + rev.id + '" style="padding:4px 10px;font-size:0.75rem;font-weight:500;border-radius:4px;border:none;background:var(--olo-ui-accent, #e8622a);color:white;cursor:pointer">Ripristina</button>'
         + '</div></div></div>';
     }).join('');
   }

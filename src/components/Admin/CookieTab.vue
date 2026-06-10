@@ -61,10 +61,7 @@
           <div class="hint">{{ t('Mesi dopo i quali il banner ricompare.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-input mono">
-            <input type="number" min="1" max="36" :value="form.reshow_months" @input="set('reshow_months', parseInt($event.target.value) || 6)" />
-            <span class="suffix">{{ t('mesi') }}</span>
-          </div>
+          <CfgNumber :model-value="form.reshow_months" :min="1" :max="36" :suffix="t('mesi')" @update:model-value="set('reshow_months', $event)" />
         </div>
       </div>
     </div>
@@ -160,6 +157,7 @@
 <script setup>
 import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import CfgNumber from './controls/CfgNumber.vue';
 
 const showToast = inject('showToast', () => {});
 const setDirty  = inject('setDirty',  () => {});

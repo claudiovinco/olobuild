@@ -17,22 +17,21 @@
       :aria-label="ariaLabel || placeholder"
     />
     <div class="olo-dim-unitwrap">
-      <select
+      <FieldSelect
+        ui="dropdown"
+        size="compact"
         class="olo-dim-unit"
-        :value="unitPart"
-        @change="onUnit($event.target.value)"
-        :aria-label="t('Unità')"
-      >
-        <option v-for="u in units" :key="u" :value="u">{{ u }}</option>
-      </select>
-      <svg class="olo-dim-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        :model-value="unitPart"
+        :options="unitOptions"
+        @update:model-value="onUnit($event)"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
-import { t } from '@/i18n';
+import FieldSelect from './FieldSelect.vue';
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
@@ -58,6 +57,9 @@ const parsed = computed(() => {
 });
 const numPart = computed(() => parsed.value.num);
 const unitPart = computed(() => parsed.value.unit);
+
+// Opzioni del dropdown unità (label tecniche px/%/vh… as-is)
+const unitOptions = computed(() => props.units.map((u) => ({ value: u, label: u })));
 
 function emitVal(num, unit) {
   const n = String(num).trim();
@@ -105,30 +107,23 @@ function onUnit(u) {
 .olo-dim-unitwrap {
   position: relative;
   flex-shrink: 0;
+  width: 64px;
   border-left: 1px solid #eef0f3;
   background: #f6f7f9;
 }
+/* FieldSelect unità "blended" nel controllo combinato: il trigger perde
+   bordo/sfondo propri (li fornisce il wrap) e riempie l'altezza della riga */
 .olo-dim-unit {
   height: 100%;
-  padding: 0 26px 0 10px;
+}
+.olo-dim-unit :deep(.fsel-trigger) {
+  height: 100%;
   border: none;
-  outline: none;
+  border-radius: 0;
   background: transparent;
+  padding: 0 8px 0 10px;
   font-size: 12px;
   font-weight: 600;
   color: #6b7280;
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-}
-.olo-dim-chev {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 12px;
-  height: 12px;
-  color: #9ca3af;
-  pointer-events: none;
 }
 </style>

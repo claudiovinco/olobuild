@@ -53,32 +53,15 @@
               <div class="mb-grid mb-grid-cols-3 mb-gap-3">
                 <div>
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Tipo') }}</label>
-                  <select v-model="gen.type" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                    <option value="headline">{{ t('Titolo') }}</option>
-                    <option value="paragraph">{{ t('Paragrafo') }}</option>
-                    <option value="list">{{ t('Lista') }}</option>
-                    <option value="cta">{{ t('Call to Action') }}</option>
-                    <option value="seo_description">{{ t('Meta Description SEO') }}</option>
-                  </select>
+                  <FieldSelect ui="dropdown" :model-value="gen.type" :options="GEN_TYPE_OPTS" @update:model-value="gen.type = $event" />
                 </div>
                 <div>
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Tono') }}</label>
-                  <select v-model="gen.tone" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                    <option value="professionale">{{ t('Professionale') }}</option>
-                    <option value="creativo">{{ t('Creativo') }}</option>
-                    <option value="informale">{{ t('Informale') }}</option>
-                    <option value="formale">{{ t('Formale') }}</option>
-                  </select>
+                  <FieldSelect ui="dropdown" :model-value="gen.tone" :options="GEN_TONE_OPTS" @update:model-value="gen.tone = $event" />
                 </div>
                 <div>
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Lingua') }}</label>
-                  <select v-model="gen.language" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                    <option value="it">{{ t('Italiano') }}</option>
-                    <option value="en">{{ t('English') }}</option>
-                    <option value="de">{{ t('Deutsch') }}</option>
-                    <option value="fr">{{ t('Fran&ccedil;ais') }}</option>
-                    <option value="es">{{ t('Espa&ntilde;ol') }}</option>
-                  </select>
+                  <FieldSelect ui="dropdown" :model-value="gen.language" :options="LANGUAGE_OPTS" @update:model-value="gen.language = $event" />
                 </div>
               </div>
 
@@ -217,18 +200,11 @@
               <div class="mb-grid mb-grid-cols-2 mb-gap-3">
                 <div>
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Dimensione') }}</label>
-                  <select v-model="img.size" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                    <option value="1024x1024">{{ t('Quadrata (1024x1024)') }}</option>
-                    <option value="1792x1024">{{ t('Orizzontale (1792x1024)') }}</option>
-                    <option value="1024x1792">{{ t('Verticale (1024x1792)') }}</option>
-                  </select>
+                  <FieldSelect ui="dropdown" :model-value="img.size" :options="IMG_SIZE_OPTS" @update:model-value="img.size = $event" />
                 </div>
                 <div>
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Stile') }}</label>
-                  <select v-model="img.style" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                    <option value="vivid">{{ t('Vivido') }}</option>
-                    <option value="natural">{{ t('Naturale') }}</option>
-                  </select>
+                  <FieldSelect ui="dropdown" :model-value="img.style" :options="IMG_STYLE_OPTS" @update:model-value="img.style = $event" />
                 </div>
               </div>
 
@@ -285,13 +261,7 @@
 
               <div>
                 <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Lingua di destinazione') }}</label>
-                <select v-model="translate.targetLanguage" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                  <option value="it">{{ t('Italiano') }}</option>
-                  <option value="en">{{ t('English') }}</option>
-                  <option value="de">{{ t('Deutsch') }}</option>
-                  <option value="fr">{{ t('Fran&ccedil;ais') }}</option>
-                  <option value="es">{{ t('Espa&ntilde;ol') }}</option>
-                </select>
+                <FieldSelect ui="dropdown" :model-value="translate.targetLanguage" :options="LANGUAGE_OPTS" @update:model-value="translate.targetLanguage = $event" />
               </div>
 
               <button
@@ -338,21 +308,11 @@
               <div class="mb-grid mb-grid-cols-2 mb-gap-3">
                 <div>
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Stile') }}</label>
-                  <select v-model="layout.style" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                    <option value="corporate">{{ t('Corporate') }}</option>
-                    <option value="creative">{{ t('Creativo') }}</option>
-                    <option value="minimal">{{ t('Minimale') }}</option>
-                    <option value="bold">{{ t('Bold / Impattante') }}</option>
-                  </select>
+                  <FieldSelect ui="dropdown" :model-value="layout.style" :options="LAYOUT_STYLE_OPTS" @update:model-value="layout.style = $event" />
                 </div>
                 <div>
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Colonne') }}</label>
-                  <select v-model="layout.columns" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                    <option value="1">{{ t('1 colonna') }}</option>
-                    <option value="2">{{ t('2 colonne') }}</option>
-                    <option value="3">{{ t('3 colonne') }}</option>
-                    <option value="4">{{ t('4 colonne') }}</option>
-                  </select>
+                  <FieldSelect ui="dropdown" :model-value="layout.columns" :options="LAYOUT_COLUMNS_OPTS" @update:model-value="layout.columns = $event" />
                 </div>
               </div>
 
@@ -395,14 +355,7 @@
 
               <div>
                 <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Tipo di palette') }}</label>
-                <select v-model="styleSuggest.palette" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                  <option value="auto">{{ t('Automatica (analisi colori attuali)') }}</option>
-                  <option value="warm">{{ t('Toni caldi') }}</option>
-                  <option value="cool">{{ t('Toni freddi') }}</option>
-                  <option value="pastel">{{ t('Pastello') }}</option>
-                  <option value="dark">{{ t('Dark mode') }}</option>
-                  <option value="vibrant">{{ t('Vivace / Bold') }}</option>
-                </select>
+                <FieldSelect ui="dropdown" :model-value="styleSuggest.palette" :options="PALETTE_OPTS" @update:model-value="styleSuggest.palette = $event" />
               </div>
 
               <button
@@ -460,13 +413,7 @@
 
               <div>
                 <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Lingua') }}</label>
-                <select v-model="alt.language" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                  <option value="it">{{ t('Italiano') }}</option>
-                  <option value="en">{{ t('English') }}</option>
-                  <option value="de">{{ t('Deutsch') }}</option>
-                  <option value="fr">{{ t('Fran&ccedil;ais') }}</option>
-                  <option value="es">{{ t('Espa&ntilde;ol') }}</option>
-                </select>
+                <FieldSelect ui="dropdown" :model-value="alt.language" :options="LANGUAGE_OPTS" @update:model-value="alt.language = $event" />
               </div>
 
               <button
@@ -585,6 +532,7 @@ import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
 import { useToast } from '@/composables/useToast.js';
 import { t } from '@/i18n';
+import FieldSelect from './fields/FieldSelect.vue';
 
 const builderStore = useBuilderStore();
 const tilesStore = useTilesStore();
@@ -605,6 +553,64 @@ const tabs = [
   { id: 'style', label: 'Stile' },
   { id: 'alt', label: 'Alt Text' },
   { id: 'css', label: 'CSS' },
+];
+
+// Opzioni dei FieldSelect (label RAW: t() la applica FieldSelect internamente)
+const GEN_TYPE_OPTS = [
+  { value: 'headline', label: 'Titolo' },
+  { value: 'paragraph', label: 'Paragrafo' },
+  { value: 'list', label: 'Lista' },
+  { value: 'cta', label: 'Call to Action' },
+  { value: 'seo_description', label: 'Meta Description SEO' },
+];
+
+const GEN_TONE_OPTS = [
+  { value: 'professionale', label: 'Professionale' },
+  { value: 'creativo', label: 'Creativo' },
+  { value: 'informale', label: 'Informale' },
+  { value: 'formale', label: 'Formale' },
+];
+
+const LANGUAGE_OPTS = [
+  { value: 'it', label: 'Italiano' },
+  { value: 'en', label: 'English' },
+  { value: 'de', label: 'Deutsch' },
+  { value: 'fr', label: 'Français' },
+  { value: 'es', label: 'Español' },
+];
+
+const IMG_SIZE_OPTS = [
+  { value: '1024x1024', label: 'Quadrata (1024x1024)' },
+  { value: '1792x1024', label: 'Orizzontale (1792x1024)' },
+  { value: '1024x1792', label: 'Verticale (1024x1792)' },
+];
+
+const IMG_STYLE_OPTS = [
+  { value: 'vivid', label: 'Vivido' },
+  { value: 'natural', label: 'Naturale' },
+];
+
+const LAYOUT_STYLE_OPTS = [
+  { value: 'corporate', label: 'Corporate' },
+  { value: 'creative', label: 'Creativo' },
+  { value: 'minimal', label: 'Minimale' },
+  { value: 'bold', label: 'Bold / Impattante' },
+];
+
+const LAYOUT_COLUMNS_OPTS = [
+  { value: '1', label: '1 colonna' },
+  { value: '2', label: '2 colonne' },
+  { value: '3', label: '3 colonne' },
+  { value: '4', label: '4 colonne' },
+];
+
+const PALETTE_OPTS = [
+  { value: 'auto', label: 'Automatica (analisi colori attuali)' },
+  { value: 'warm', label: 'Toni caldi' },
+  { value: 'cool', label: 'Toni freddi' },
+  { value: 'pastel', label: 'Pastello' },
+  { value: 'dark', label: 'Dark mode' },
+  { value: 'vibrant', label: 'Vivace / Bold' },
 ];
 
 const improveActions = [

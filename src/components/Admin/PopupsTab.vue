@@ -43,60 +43,36 @@
     <div class="cfg-card-body">
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Nome interno') }}</label></div>
-        <div class="control-col"><div class="cfg-input"><input type="text" :value="popup.name" @input="setField(idx, 'name', $event.target.value)" :placeholder="t('Es. Newsletter signup')" /></div></div>
+        <div class="control-col"><div class="cfg-input cfg-w-md"><input type="text" :value="popup.name" @input="setField(idx, 'name', $event.target.value)" :placeholder="t('Es. Newsletter signup')" /></div></div>
       </div>
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Template') }}</label><div class="hint">{{ t('Quale template Olobuild usare come contenuto del popup.') }}</div></div>
         <div class="control-col">
-          <div class="cfg-select">
-            <select :value="popup.template_id" @change="setField(idx, 'template_id', parseInt($event.target.value) || 0)">
-              <option value="0">{{ t('— Seleziona template —') }}</option>
-              <option v-for="tpl in templates" :key="tpl.id" :value="tpl.id">{{ tpl.title }}</option>
-            </select>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
-          </div>
+          <CfgSelect :model-value="popup.template_id" :options="templateOptions" @update:model-value="setField(idx, 'template_id', parseInt($event) || 0)" />
         </div>
       </div>
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Trigger') }}</label></div>
         <div class="control-col">
-          <div class="cfg-select">
-            <select :value="popup.trigger" @change="setField(idx, 'trigger', $event.target.value)">
-              <option value="page_load">{{ t('Al caricamento pagina') }}</option>
-              <option value="scroll_percent">{{ t('Dopo % scroll') }}</option>
-              <option value="exit_intent">{{ t('Exit intent (mouse esce dal viewport)') }}</option>
-              <option value="timer">{{ t('Dopo timer') }}</option>
-              <option value="inactivity">{{ t('Dopo inattività') }}</option>
-            </select>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
-          </div>
+          <CfgSelect size="md" :model-value="popup.trigger" :options="TRIGGER_OPTIONS" @update:model-value="setField(idx, 'trigger', $event)" />
         </div>
       </div>
       <div v-show="popup.trigger === 'page_load' || popup.trigger === 'timer'" class="cfg-row">
         <div class="label-col"><label>{{ t('Ritardo (secondi)') }}</label></div>
-        <div class="control-col"><div class="cfg-input"><input type="number" min="0" :value="popup.delay" @input="setField(idx, 'delay', parseInt($event.target.value) || 0)" /><span class="suffix">s</span></div></div>
+        <div class="control-col"><CfgNumber :model-value="popup.delay" :min="0" suffix="s" @update:model-value="setField(idx, 'delay', $event)" /></div>
       </div>
       <div v-show="popup.trigger === 'scroll_percent'" class="cfg-row">
         <div class="label-col"><label>{{ t('% scroll') }}</label></div>
-        <div class="control-col"><div class="cfg-input"><input type="number" min="1" max="100" :value="popup.scroll_percent" @input="setField(idx, 'scroll_percent', parseInt($event.target.value) || 50)" /><span class="suffix">%</span></div></div>
+        <div class="control-col"><CfgNumber :model-value="popup.scroll_percent" :min="1" :max="100" suffix="%" @update:model-value="setField(idx, 'scroll_percent', $event)" /></div>
       </div>
       <div v-show="popup.trigger === 'inactivity'" class="cfg-row">
         <div class="label-col"><label>{{ t('Secondi di inattività') }}</label></div>
-        <div class="control-col"><div class="cfg-input"><input type="number" min="5" :value="popup.inactivity_delay" @input="setField(idx, 'inactivity_delay', parseInt($event.target.value) || 30)" /><span class="suffix">s</span></div></div>
+        <div class="control-col"><CfgNumber :model-value="popup.inactivity_delay" :min="5" suffix="s" @update:model-value="setField(idx, 'inactivity_delay', $event)" /></div>
       </div>
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Frequenza') }}</label></div>
         <div class="control-col">
-          <div class="cfg-select">
-            <select :value="popup.frequency" @change="setField(idx, 'frequency', $event.target.value)">
-              <option value="always">{{ t('Sempre') }}</option>
-              <option value="once_session">{{ t('Una volta per sessione') }}</option>
-              <option value="once_day">{{ t('Una volta al giorno') }}</option>
-              <option value="once_week">{{ t('Una volta a settimana') }}</option>
-              <option value="once_ever">{{ t('Una sola volta in assoluto') }}</option>
-            </select>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
-          </div>
+          <CfgSelect size="md" :model-value="popup.frequency" :options="FREQUENCY_OPTIONS" @update:model-value="setField(idx, 'frequency', $event)" />
         </div>
       </div>
       <div class="cfg-row">
@@ -110,21 +86,43 @@
       </div>
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Larghezza massima (px)') }}</label></div>
-        <div class="control-col"><div class="cfg-input"><input type="number" min="200" max="1400" :value="popup.max_width" @input="setField(idx, 'max_width', parseInt($event.target.value) || 700)" /></div></div>
+        <div class="control-col"><CfgNumber :model-value="popup.max_width" :min="200" :max="1400" @update:model-value="setField(idx, 'max_width', $event)" /></div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import CfgSelect from './controls/CfgSelect.vue';
+import CfgNumber from './controls/CfgNumber.vue';
 
 const showToast = inject('showToast', () => {});
 const setDirty  = inject('setDirty',  () => {});
 
 const popups = ref([]);
 const templates = ref([]);
+
+const TRIGGER_OPTIONS = [
+  { value: 'page_load',      label: t('Al caricamento pagina') },
+  { value: 'scroll_percent', label: t('Dopo % scroll') },
+  { value: 'exit_intent',    label: t('Exit intent (mouse esce dal viewport)') },
+  { value: 'timer',          label: t('Dopo timer') },
+  { value: 'inactivity',     label: t('Dopo inattività') },
+];
+const FREQUENCY_OPTIONS = [
+  { value: 'always',       label: t('Sempre') },
+  { value: 'once_session', label: t('Una volta per sessione') },
+  { value: 'once_day',     label: t('Una volta al giorno') },
+  { value: 'once_week',    label: t('Una volta a settimana') },
+  { value: 'once_ever',    label: t('Una sola volta in assoluto') },
+];
+
+const templateOptions = computed(() => [
+  { value: 0, label: t('— Seleziona template —') },
+  ...templates.value.map(tpl => ({ value: tpl.id, label: tpl.title })),
+]);
 
 function defaultPopup() {
   return {

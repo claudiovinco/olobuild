@@ -39,7 +39,7 @@
                     :key="ri"
                     :x="r.x" :y="r.y" :width="r.w" :height="r.h"
                     rx="2"
-                    :fill="selectedId === tpl.id ? '#818cf8' : '#c7d2e0'"
+                    :fill="selectedId === tpl.id ? '#f0833f' : '#c7d2e0'"
                   />
                 </svg>
               </button>
@@ -67,7 +67,7 @@
                   :key="ci"
                   :x="c.x" :y="c.y" :width="c.w" :height="c.h"
                   rx="2"
-                  :fill="selectedFlex === fp.key ? '#818cf8' : '#c7d2e0'"
+                  :fill="selectedFlex === fp.key ? '#f0833f' : '#c7d2e0'"
                 />
               </svg>
             </button>
@@ -304,7 +304,7 @@ function selectFlex(fp) {
   padding: 8px;
 }
 .glp-card:hover { border-color: #b4b4c8; background: #f0f0f8; }
-.glp-card--active { border-color: #6366f1; background: #eef2ff; }
+.glp-card--active { border-color: var(--olo-ui-accent, #e8622a); background: #fdefe8; }
 
 .glp-svg {
   width: 100%;

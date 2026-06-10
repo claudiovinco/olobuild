@@ -113,17 +113,7 @@
           <!-- Tag HTML (semantica) -->
           <div v-if="keys.tag" class="typo-row">
             <label class="typo-label">{{ t('Tag HTML') }}</label>
-            <select :value="values[keys.tag] || ''" @change="emitKey(keys.tag, $event.target.value)" class="typo-select">
-              <option value="h1">H1</option>
-              <option value="h2">H2</option>
-              <option value="h3">H3</option>
-              <option value="h4">H4</option>
-              <option value="h5">H5</option>
-              <option value="h6">H6</option>
-              <option value="p">{{ t('Paragrafo') }}</option>
-              <option value="span">Span</option>
-              <option value="div">Div</option>
-            </select>
+            <FieldSelect ui="dropdown" :model-value="values[keys.tag] || ''" :options="TAG_OPTIONS" @update:model-value="emitKey(keys.tag, $event)" />
           </div>
 
           <!-- Famiglia -->
@@ -167,53 +157,25 @@
           <!-- Peso -->
           <div v-if="keys.weight" class="typo-row">
             <label class="typo-label">{{ t('Peso') }}</label>
-            <select :value="values[keys.weight] || ''" @change="emitKey(keys.weight, $event.target.value)" class="typo-select">
-              <option value="">{{ t('Predefinito') }}</option>
-              <option value="100">100 — Thin</option>
-              <option value="200">200 — Extra Light</option>
-              <option value="300">300 — Light</option>
-              <option value="400">400 — {{ t('Normale') }}</option>
-              <option value="500">500 — Medium</option>
-              <option value="600">600 — Semibold</option>
-              <option value="700">700 — Bold</option>
-              <option value="800">800 — Extra Bold</option>
-              <option value="900">900 — Black</option>
-            </select>
+            <FieldSelect ui="dropdown" :model-value="values[keys.weight] || ''" :options="WEIGHT_OPTIONS" @update:model-value="emitKey(keys.weight, $event)" />
           </div>
 
           <!-- Trasformazione -->
           <div v-if="keys.transform" class="typo-row">
             <label class="typo-label">{{ t('Trasformazione') }}</label>
-            <select :value="values[keys.transform] || ''" @change="emitKey(keys.transform, $event.target.value)" class="typo-select">
-              <option value="">{{ t('Predefinito') }}</option>
-              <option value="none">{{ t('Nessuna') }}</option>
-              <option value="uppercase">{{ t('MAIUSCOLO') }}</option>
-              <option value="lowercase">{{ t('minuscolo') }}</option>
-              <option value="capitalize">{{ t('Capitalizza') }}</option>
-            </select>
+            <FieldSelect ui="dropdown" :model-value="values[keys.transform] || ''" :options="TRANSFORM_OPTIONS" @update:model-value="emitKey(keys.transform, $event)" />
           </div>
 
           <!-- Stile -->
           <div v-if="keys.style" class="typo-row">
             <label class="typo-label">{{ t('Stile') }}</label>
-            <select :value="values[keys.style] || ''" @change="emitKey(keys.style, $event.target.value)" class="typo-select">
-              <option value="">{{ t('Predefinito') }}</option>
-              <option value="normal">{{ t('Normale') }}</option>
-              <option value="italic">{{ t('Corsivo') }}</option>
-              <option value="oblique">{{ t('Obliquo') }}</option>
-            </select>
+            <FieldSelect ui="dropdown" :model-value="values[keys.style] || ''" :options="STYLE_OPTIONS" @update:model-value="emitKey(keys.style, $event)" />
           </div>
 
           <!-- Decorazione -->
           <div v-if="keys.decoration" class="typo-row">
             <label class="typo-label">{{ t('Decorazione') }}</label>
-            <select :value="values[keys.decoration] || ''" @change="emitKey(keys.decoration, $event.target.value)" class="typo-select">
-              <option value="">{{ t('Predefinito') }}</option>
-              <option value="none">{{ t('Nessuna') }}</option>
-              <option value="underline">{{ t('Sottolineato') }}</option>
-              <option value="overline">{{ t('Sopralineato') }}</option>
-              <option value="line-through">{{ t('Barrato') }}</option>
-            </select>
+            <FieldSelect ui="dropdown" :model-value="values[keys.decoration] || ''" :options="DECORATION_OPTIONS" @update:model-value="emitKey(keys.decoration, $event)" />
           </div>
 
           <!-- Interlinea (responsive) -->
@@ -314,17 +276,7 @@
           <!-- Ombra testo preset -->
           <div v-if="keys.shadow" class="typo-row">
             <label class="typo-label">{{ t('Ombra testo') }}</label>
-            <select :value="values[keys.shadow] || ''" @change="emitKey(keys.shadow, $event.target.value)" class="typo-select">
-              <option value="">{{ t('Nessuna') }}</option>
-              <option value="2px 2px 4px rgba(0,0,0,0.3)">{{ t('Leggera') }}</option>
-              <option value="3px 3px 6px rgba(0,0,0,0.4)">{{ t('Media') }}</option>
-              <option value="3px 3px 8px rgba(0,0,0,0.5)">{{ t('Media+') }}</option>
-              <option value="4px 4px 10px rgba(0,0,0,0.5)">{{ t('Forte') }}</option>
-              <option value="4px 4px 12px rgba(0,0,0,0.6)">{{ t('Forte+') }}</option>
-              <option value="0 0 10px rgba(99,102,241,0.6)">{{ t('Bagliore primario') }}</option>
-              <option value="0 0 20px rgba(0,0,0,0.8)">{{ t('Alone scuro') }}</option>
-              <option value="0 0 30px rgba(255,255,255,0.6)">{{ t('Alone chiaro') }}</option>
-            </select>
+            <FieldSelect ui="dropdown" :model-value="values[keys.shadow] || ''" :options="SHADOW_OPTIONS" @update:model-value="emitKey(keys.shadow, $event)" />
           </div>
         </div>
       </div>
@@ -338,6 +290,64 @@ import { ref, reactive, computed, watch, nextTick } from 'vue';
 import { useStylesStore } from '@/stores/styles';
 import FieldFontFamily from './FieldFontFamily.vue';
 import FieldColor from './FieldColor.vue';
+import FieldSelect from './FieldSelect.vue';
+
+// Opzioni dei select del popover. Label RAW: FieldSelect applica t() internamente.
+// I value (incluse le stringhe CSS dell'ombra) restano IDENTICI al vecchio select.
+const TAG_OPTIONS = [
+  { value: 'h1', label: 'H1' },
+  { value: 'h2', label: 'H2' },
+  { value: 'h3', label: 'H3' },
+  { value: 'h4', label: 'H4' },
+  { value: 'h5', label: 'H5' },
+  { value: 'h6', label: 'H6' },
+  { value: 'p', label: 'Paragrafo' },
+  { value: 'span', label: 'Span' },
+  { value: 'div', label: 'Div' },
+];
+const WEIGHT_OPTIONS = [
+  { value: '', label: 'Predefinito' },
+  { value: '100', label: '100 — Thin' },
+  { value: '200', label: '200 — Extra Light' },
+  { value: '300', label: '300 — Light' },
+  { value: '400', label: '400 — Normale' },
+  { value: '500', label: '500 — Medium' },
+  { value: '600', label: '600 — Semibold' },
+  { value: '700', label: '700 — Bold' },
+  { value: '800', label: '800 — Extra Bold' },
+  { value: '900', label: '900 — Black' },
+];
+const TRANSFORM_OPTIONS = [
+  { value: '', label: 'Predefinito' },
+  { value: 'none', label: 'Nessuna' },
+  { value: 'uppercase', label: 'MAIUSCOLO' },
+  { value: 'lowercase', label: 'minuscolo' },
+  { value: 'capitalize', label: 'Capitalizza' },
+];
+const STYLE_OPTIONS = [
+  { value: '', label: 'Predefinito' },
+  { value: 'normal', label: 'Normale' },
+  { value: 'italic', label: 'Corsivo' },
+  { value: 'oblique', label: 'Obliquo' },
+];
+const DECORATION_OPTIONS = [
+  { value: '', label: 'Predefinito' },
+  { value: 'none', label: 'Nessuna' },
+  { value: 'underline', label: 'Sottolineato' },
+  { value: 'overline', label: 'Sopralineato' },
+  { value: 'line-through', label: 'Barrato' },
+];
+const SHADOW_OPTIONS = [
+  { value: '', label: 'Nessuna' },
+  { value: '2px 2px 4px rgba(0,0,0,0.3)', label: 'Leggera' },
+  { value: '3px 3px 6px rgba(0,0,0,0.4)', label: 'Media' },
+  { value: '3px 3px 8px rgba(0,0,0,0.5)', label: 'Media+' },
+  { value: '4px 4px 10px rgba(0,0,0,0.5)', label: 'Forte' },
+  { value: '4px 4px 12px rgba(0,0,0,0.6)', label: 'Forte+' },
+  { value: '0 0 10px rgba(99,102,241,0.6)', label: 'Bagliore primario' },
+  { value: '0 0 20px rgba(0,0,0,0.8)', label: 'Alone scuro' },
+  { value: '0 0 30px rgba(255,255,255,0.6)', label: 'Alone chiaro' },
+];
 
 const props = defineProps({
   keys: { type: Object, default: () => ({}) },
@@ -513,12 +523,12 @@ watch(presetOpen, (val) => {
   transition: all 0.12s;
 }
 .typo-trigger:hover {
-  border-color: var(--olo-color-primary, #6366f1);
-  color: var(--olo-color-primary, #6366f1);
+  border-color: var(--olo-ui-accent, #e8622a);
+  color: var(--olo-ui-accent, #e8622a);
 }
 .typo-trigger--has-value {
-  color: var(--olo-color-primary, #6366f1);
-  border-color: var(--olo-color-primary, #6366f1);
+  color: var(--olo-ui-accent, #e8622a);
+  border-color: var(--olo-ui-accent, #e8622a);
 }
 
 .typo-backdrop {
@@ -620,20 +630,9 @@ watch(presetOpen, (val) => {
   color: #1f2937;
 }
 .typo-bp-toggle.active {
-  color: var(--olo-color-primary, #6366f1);
-  background: rgba(99, 102, 241, 0.08);
+  color: var(--olo-ui-accent, #e8622a);
+  background: rgba(232, 98, 42, 0.08);
 }
-.typo-select {
-  width: 100%;
-  background: #fff;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  padding: 5px 8px;
-  font-size: 12px;
-  color: #1f2937;
-}
-.typo-select:focus { outline: none; border-color: var(--olo-color-primary, #6366f1); }
-
 .typo-range-row {
   display: flex;
   align-items: center;
@@ -651,7 +650,7 @@ watch(presetOpen, (val) => {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--olo-color-primary, #6366f1);
+  background: var(--olo-ui-accent, #e8622a);
   cursor: pointer;
   border: 2px solid #fff;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
@@ -666,7 +665,7 @@ watch(presetOpen, (val) => {
   color: #1f2937;
   text-align: right;
 }
-.typo-number:focus { outline: none; border-color: var(--olo-color-primary, #6366f1); }
+.typo-number:focus { outline: none; border-color: var(--olo-ui-accent, #e8622a); }
 
 .typo-preset-list {
   display: flex;
@@ -687,7 +686,7 @@ watch(presetOpen, (val) => {
   background: #f3f4f6;
 }
 .typo-preset-item--active {
-  background: var(--olo-color-primary, #6366f1);
+  background: var(--olo-ui-accent, #e8622a);
   color: #fff;
 }
 .typo-preset-item--active:hover { filter: brightness(0.92); }

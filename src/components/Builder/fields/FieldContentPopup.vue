@@ -178,7 +178,7 @@ function onFieldUpdate(key, value) {
   transition: all 0.15s;
 }
 .cp-btn--primary {
-  background: var(--olo-color-primary, #6366F1);
+  background: var(--olo-ui-accent, #e8622a);
   color: #fff;
 }
 .cp-btn--primary:hover { filter: brightness(1.08); }

@@ -624,10 +624,10 @@ function onZoneClick(zone) {
   position: relative;
 }
 .olo-preview-header {
-  border-bottom: 2px dashed rgba(99, 102, 241, 0.3);
+  border-bottom: 2px dashed rgba(232, 98, 42, 0.3);
 }
 .olo-preview-footer {
-  border-top: 2px dashed rgba(99, 102, 241, 0.3);
+  border-top: 2px dashed rgba(232, 98, 42, 0.3);
 }
 
 /* === Unified Editing Zones === */
@@ -645,13 +645,13 @@ function onZoneClick(zone) {
   border-top: 2px dashed rgba(59, 130, 246, 0.25);
 }
 .olo-unified-zone--active {
-  box-shadow: inset 0 0 0 2px rgba(99, 102, 241, 0.35);
+  box-shadow: inset 0 0 0 2px rgba(232, 98, 42, 0.35);
 }
 .olo-unified-zone--active.olo-unified-zone--header {
-  border-bottom-color: rgba(99, 102, 241, 0.5);
+  border-bottom-color: rgba(232, 98, 42, 0.5);
 }
 .olo-unified-zone--active.olo-unified-zone--footer {
-  border-top-color: rgba(99, 102, 241, 0.5);
+  border-top-color: rgba(232, 98, 42, 0.5);
 }
 
 /* Zone label */
@@ -675,9 +675,9 @@ function onZoneClick(zone) {
   user-select: none;
 }
 .olo-unified-zone--active .olo-zone-label {
-  color: #A5B4FC;
-  background: rgba(99, 102, 241, 0.12);
-  border-bottom-color: rgba(99, 102, 241, 0.2);
+  color: #F6A06B;
+  background: rgba(232, 98, 42, 0.12);
+  border-bottom-color: rgba(232, 98, 42, 0.2);
 }
 .olo-zone-label:hover {
   color: #C8CCD0;
@@ -697,11 +697,11 @@ function onZoneClick(zone) {
 }
 /* In clean mode, subtle separator on hover between zones */
 .olo-unified-zone--clean:hover {
-  outline: 1px dashed rgba(99, 102, 241, 0.15);
+  outline: 1px dashed rgba(232, 98, 42, 0.15);
   outline-offset: -1px;
 }
 .olo-unified-zone--clean.olo-unified-zone--active {
-  outline: 1px dashed rgba(99, 102, 241, 0.3);
+  outline: 1px dashed rgba(232, 98, 42, 0.3);
   outline-offset: -1px;
 }
 /* Reduce gap between zones in normal editing mode */
@@ -730,7 +730,7 @@ function onZoneClick(zone) {
   position: relative;
 }
 .wireframe-mode :deep(.olo-row-block) {
-  outline: 1px dashed rgba(99, 102, 241, 0.35) !important;
+  outline: 1px dashed rgba(232, 98, 42, 0.35) !important;
   outline-offset: -1px;
 }
 .wireframe-mode :deep(.olo-grid-cell) {
@@ -753,7 +753,7 @@ function onZoneClick(zone) {
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 1px;
-  color: rgba(99, 102, 241, 0.5);
+  color: rgba(232, 98, 42, 0.5);
   margin-left: 8px;
 }
 </style>

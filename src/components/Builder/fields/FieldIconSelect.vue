@@ -144,8 +144,8 @@ defineEmits(['update:modelValue']);
   background: #333340;
 }
 .olo-is-btn--active {
-  border-color: #6366f1;
-  color: #a5b4fc;
+  border-color: var(--olo-ui-accent, #e8622a);
+  color: #f6a06b;
   background: #2d2b55;
 }
 .olo-is-icon {

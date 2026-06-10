@@ -55,13 +55,13 @@
       <span class="olo-ls-lab">{{ t('Overflow') }}</span>
       <div class="olo-ls-selwrap">
         <span class="olo-ls-selic" v-html="OVERFLOW_ICON[overflow] || OVERFLOW_ICON.visible"></span>
-        <select class="olo-ls-sel" :value="overflow" @change="onOverflow($event.target.value)" :aria-label="t('Overflow')">
-          <option value="visible">{{ t('Visibile') }}</option>
-          <option value="hidden">{{ t('Nascosto') }}</option>
-          <option value="auto">{{ t('Auto (scroll)') }}</option>
-          <option value="clip">{{ t('Clip') }}</option>
-        </select>
-        <svg class="olo-ls-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        <FieldSelect
+          ui="dropdown"
+          class="olo-ls-sel"
+          :model-value="overflow"
+          :options="OVERFLOW_OPTIONS"
+          @update:model-value="onOverflow($event)"
+        />
       </div>
     </div>
 
@@ -85,6 +85,15 @@
 import { ref, computed, watch } from 'vue';
 import FieldToggle from '../fields/FieldToggle.vue';
 import FieldDimension from '../fields/FieldDimension.vue';
+import FieldSelect from '../fields/FieldSelect.vue';
+
+// Label RAW: FieldSelect applica t() internamente. Value INVARIATI.
+const OVERFLOW_OPTIONS = [
+  { value: 'visible', label: 'Visibile' },
+  { value: 'hidden', label: 'Nascosto' },
+  { value: 'auto', label: 'Auto (scroll)' },
+  { value: 'clip', label: 'Clip' },
+];
 import { useBuilderStore } from '@/stores/builder';
 import { t } from '@/i18n';
 
@@ -243,29 +252,20 @@ const pvBoxStyle = computed(() => {
   flex-shrink: 0;
   pointer-events: none;
 }
-.olo-ls-sel {
+/* FieldSelect "blended" nel wrap (bordo/sfondo li fornisce .olo-ls-selwrap):
+   il trigger perde i propri, riempie l'altezza e mantiene font/padding originali */
+.olo-ls-selwrap .olo-ls-sel {
   flex: 1;
   min-width: 0;
   height: 100%;
-  padding: 0 30px 0 9px;
-  border: none;
-  outline: none;
-  background: transparent;
-  font-size: 14px;
-  color: #1f2937;
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
 }
-.olo-ls-chev {
-  position: absolute;
-  right: 11px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 14px;
-  height: 14px;
-  color: #9ca3af;
-  pointer-events: none;
+.olo-ls-sel :deep(.fsel-trigger) {
+  height: 100%;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 0 11px 0 9px;
+  font-size: 14px;
 }
 
 /* Anteprima vincoli */

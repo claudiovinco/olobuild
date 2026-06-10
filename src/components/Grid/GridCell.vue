@@ -534,13 +534,13 @@ function remove() {
   z-index: 2;
 }
 .olo-grid-cell--fullwidth {
-  border-left: 3px solid var(--olo-color-primary, #6366F1);
+  border-left: 3px solid var(--olo-ui-accent, #e8622a);
 }
 .olo-fullwidth-badge {
   position: absolute;
   top: 2px;
   left: 6px;
-  background: var(--olo-color-primary, #6366F1);
+  background: var(--olo-ui-accent, #e8622a);
   color: #fff;
   font-size: 9px;
   font-weight: 700;

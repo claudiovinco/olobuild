@@ -7,14 +7,9 @@
         <button @click="showGlobalBg = false" class="mb-text-gray-500 mb-text-xs">&times;</button>
       </div>
       <div class="mb-flex mb-gap-3 mb-flex-wrap mb-items-end">
-        <div>
+        <div class="mb-w-32">
           <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Tipo</label>
-          <select :value="globalBg.type" @change="updateGlobalBg('type', $event.target.value)" class="mps-select-sm">
-            <option value="color">Colore</option>
-            <option value="image">Immagine</option>
-            <option value="video">Video</option>
-            <option value="gradient">Gradiente</option>
-          </select>
+          <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="globalBg.type" :options="OPTS_BG_TYPE" @update:model-value="updateGlobalBg('type', $event)" />
         </div>
         <div v-if="globalBg.type === 'color'" class="mb-w-48">
           <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Colore</label>
@@ -63,6 +58,15 @@
 <script setup>
 import { ref, computed } from 'vue';
 import FieldColor from '../Builder/fields/FieldColor.vue';
+import FieldSelect from '../Builder/fields/FieldSelect.vue';
+
+// Option array per FieldSelect (stessi value dei vecchi <option>: dati salvati invariati)
+const OPTS_BG_TYPE = [
+  { value: 'color', label: 'Colore' },
+  { value: 'image', label: 'Immagine' },
+  { value: 'video', label: 'Video' },
+  { value: 'gradient', label: 'Gradiente' },
+];
 
 const props = defineProps({
   settings: { type: Object, required: true },
@@ -113,13 +117,5 @@ function pickGlobalBgVideo() {
   font-size: 11px;
   color: #111827;
   text-align: center;
-}
-.mps-select-sm {
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  border-radius: 0.25rem;
-  padding: 2px 6px;
-  font-size: 11px;
-  color: #111827;
 }
 </style>

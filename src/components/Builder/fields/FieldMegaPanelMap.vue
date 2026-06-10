@@ -12,19 +12,15 @@
       <span class="mb-text-xs mb-text-gray-300 mb-flex-1 mb-truncate" :title="item.title">
         {{ item.title }}
       </span>
-      <select
-        :value="getMapping(item.id)"
-        @change="setMapping(item.id, $event.target.value)"
-        class="mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-1.5 mb-py-0.5 mb-text-xs mb-text-gray-200 mb-w-36"
-      >
-        <option
-          v-for="opt in templateOptions"
-          :key="opt.value"
-          :value="opt.value"
-        >
-          {{ opt.label }}
-        </option>
-      </select>
+      <div class="mb-w-36 mb-flex-none">
+        <FieldSelect
+          ui="dropdown"
+          size="compact"
+          :model-value="getMapping(item.id)"
+          :options="templateOptions"
+          @update:model-value="setMapping(item.id, $event)"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -34,6 +30,7 @@ import { t } from '@/i18n';
 import { ref, watch, onMounted } from 'vue';
 import { useBuilderStore } from '../../../stores/builder';
 import { useTilesStore } from '../../../stores/tiles';
+import FieldSelect from './FieldSelect.vue';
 
 const props = defineProps({
   modelValue: { default: () => ({}) },

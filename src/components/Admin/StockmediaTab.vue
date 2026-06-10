@@ -78,12 +78,7 @@
           <div class="hint">{{ t('Quello che si apre per primo dalla ricerca media nell\'editor.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-select">
-            <select :value="behavior.preferred" @change="setBehavior('preferred', $event.target.value)">
-              <option v-for="s in services" :key="s.id" :value="s.id">{{ s.name }}</option>
-            </select>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
-          </div>
+          <CfgSelect size="md" :model-value="behavior.preferred" :options="providerOptions" @update:model-value="setBehavior('preferred', $event)" />
         </div>
       </div>
       <div class="cfg-row">
@@ -111,6 +106,7 @@
 <script setup>
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import CfgSelect from './controls/CfgSelect.vue';
 
 const showToast = inject('showToast', () => {});
 const setDirty  = inject('setDirty',  () => {});
@@ -127,6 +123,9 @@ const behavior = ref({
   download_local: true,
   optimize_on_download: false,
 });
+
+// Option per CfgSelect: nomi propri dei provider, niente t()
+const providerOptions = computed(() => services.value.map(s => ({ value: s.id, label: s.name })));
 
 const providerSummary = computed(() => {
   const connected = services.value.filter(s => !!s.key).length;

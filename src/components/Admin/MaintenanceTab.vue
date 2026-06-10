@@ -34,13 +34,7 @@
       <div class="cfg-row" v-show="form.mode === 'coming_soon'">
         <div class="label-col"><label>{{ t('Template Coming Soon') }}</label><div class="hint">{{ t('Quale template Olobuild mostrare come "Coming Soon".') }}</div></div>
         <div class="control-col template-select-row">
-          <div class="cfg-select">
-            <select :value="form.coming_soon_template_id" @change="set('coming_soon_template_id', parseInt($event.target.value) || 0)">
-              <option value="0">{{ t('— Seleziona template —') }}</option>
-              <option v-for="tpl in templates" :key="tpl.id" :value="tpl.id">{{ tpl.title }}</option>
-            </select>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-          </div>
+          <CfgSelect :model-value="form.coming_soon_template_id" :options="templateOptions" @update:model-value="set('coming_soon_template_id', parseInt($event) || 0)" />
           <button class="cfg-btn cfg-btn-secondary" :disabled="generating === 'coming_soon'" @click="generateTemplate('coming_soon')" :title="t('Crea un template Coming Soon precaricato (headline + countdown +30gg + CTA) e selezionalo')">
             <svg v-if="generating !== 'coming_soon'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/></svg>
             <svg v-else class="spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7l3 2.7"/></svg>
@@ -52,13 +46,7 @@
       <div class="cfg-row" v-show="form.mode === 'maintenance'">
         <div class="label-col"><label>{{ t('Template Manutenzione') }}</label><div class="hint">{{ t('Quale template Olobuild mostrare durante la manutenzione (HTTP 503).') }}</div></div>
         <div class="control-col template-select-row">
-          <div class="cfg-select">
-            <select :value="form.template_id" @change="set('template_id', parseInt($event.target.value) || 0)">
-              <option value="0">{{ t('— Seleziona template —') }}</option>
-              <option v-for="tpl in templates" :key="tpl.id" :value="tpl.id">{{ tpl.title }}</option>
-            </select>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-          </div>
+          <CfgSelect :model-value="form.template_id" :options="templateOptions" @update:model-value="set('template_id', parseInt($event) || 0)" />
           <button class="cfg-btn cfg-btn-secondary" :disabled="generating === 'maintenance'" @click="generateTemplate('maintenance')" :title="t('Crea un template Manutenzione precaricato e selezionalo')">
             <svg v-if="generating !== 'maintenance'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/></svg>
             <svg v-else class="spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7l3 2.7"/></svg>
@@ -91,7 +79,7 @@
       </div>
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('URL segreta di bypass') }}</label><div class="hint">{{ t('Aggiungi ?bypass=SECRET all\'URL del sito per accedere. Lascia vuoto per disabilitare.') }}</div></div>
-        <div class="control-col"><div class="cfg-input mono"><input type="text" :value="form.bypass_secret" @input="set('bypass_secret', $event.target.value)" placeholder="cambia-questo-secret" /></div></div>
+        <div class="control-col"><div class="cfg-input mono cfg-w-md"><input type="text" :value="form.bypass_secret" @input="set('bypass_secret', $event.target.value)" placeholder="cambia-questo-secret" /></div></div>
       </div>
     </div>
   </div>
@@ -100,6 +88,7 @@
 <script setup>
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import CfgSelect from './controls/CfgSelect.vue';
 
 const showToast = inject('showToast', () => {});
 const setDirty  = inject('setDirty',  () => {});
@@ -120,6 +109,11 @@ const availableRoles = ref([
   { slug: 'author',        label: 'Author' },
   { slug: 'contributor',   label: 'Contributor' },
   { slug: 'subscriber',    label: 'Subscriber' },
+]);
+
+const templateOptions = computed(() => [
+  { value: 0, label: t('— Seleziona template —') },
+  ...templates.value.map(tpl => ({ value: tpl.id, label: tpl.title })),
 ]);
 
 const modeLabel = computed(() => {

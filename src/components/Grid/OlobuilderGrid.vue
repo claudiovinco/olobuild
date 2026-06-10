@@ -1041,11 +1041,11 @@ function changeRowLayout(row, layoutKey) {
   transform: translateY(100%);
 }
 .olo-shapedivider-overlay:hover {
-  outline: 2px dashed rgba(99, 102, 241, 0.4);
+  outline: 2px dashed rgba(232, 98, 42, 0.4);
   outline-offset: -2px;
 }
 .olo-shapedivider-overlay.olo-grid-cell--selected {
-  outline: 2px solid var(--olo-color-primary, #6366F1);
+  outline: 2px solid var(--olo-ui-accent, #e8622a);
   outline-offset: -2px;
 }
 
@@ -1087,7 +1087,7 @@ function changeRowLayout(row, layoutKey) {
   z-index: 2;
 }
 .olo-section-block--selected {
-  border-color: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-ui-accent, #e8622a);
 }
 
 /* === Bars (section & row headers) === */
@@ -1111,7 +1111,7 @@ function changeRowLayout(row, layoutKey) {
   background: rgba(0, 0, 0, 0.05);
 }
 .olo-section-block--selected > .olo-section-bar {
-  background: rgba(99, 102, 241, 0.06);
+  background: rgba(232, 98, 42, 0.06);
 }
 
 .olo-section-grip,
@@ -1198,7 +1198,7 @@ function changeRowLayout(row, layoutKey) {
   position: relative;
 }
 .olo-row-block--selected {
-  border-color: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-ui-accent, #e8622a);
 }
 .olo-row-bar {
   border-bottom: 1px solid #d1d5db;
@@ -1226,7 +1226,7 @@ function changeRowLayout(row, layoutKey) {
 .olo-col-resize-handle:hover .olo-col-resize-grip,
 .olo-col-resize-handle:active .olo-col-resize-grip {
   opacity: 1;
-  background: var(--olo-color-primary, #6366F1);
+  background: var(--olo-ui-accent, #e8622a);
 }
 .olo-col-resize-grip {
   width: 3px;
@@ -1251,10 +1251,10 @@ function changeRowLayout(row, layoutKey) {
 }
 .olo-column-block--selected,
 .olo-row-block:hover .olo-column-block--selected {
-  border-color: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-ui-accent, #e8622a);
 }
 .olo-column-block--dragover {
-  border-color: var(--olo-color-primary, #6366F1) !important;
+  border-color: var(--olo-ui-accent, #e8622a) !important;
   background: rgba(107, 114, 128, 0.08);
 }
 
@@ -1303,8 +1303,8 @@ function changeRowLayout(row, layoutKey) {
   color: #6B7280;
 }
 .olo-preset-btn--active {
-  border-color: var(--olo-color-primary, #6366F1);
-  color: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-ui-accent, #e8622a);
+  color: var(--olo-ui-accent, #e8622a);
   background: rgba(107, 114, 128, 0.1);
 }
 .olo-preset-btn--grid {
@@ -1368,8 +1368,8 @@ function changeRowLayout(row, layoutKey) {
   transition: all 0.15s;
 }
 .olo-add-row button:hover {
-  border-color: var(--olo-color-primary, #6366F1);
-  color: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-ui-accent, #e8622a);
+  color: var(--olo-ui-accent, #e8622a);
 }
 
 /* === Empty canvas === */
@@ -1398,20 +1398,20 @@ function changeRowLayout(row, layoutKey) {
   cursor: default;
 }
 .olo-canvas-bottom-drop:hover {
-  border-color: var(--olo-color-primary, #6366F1);
-  color: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-ui-accent, #e8622a);
+  color: var(--olo-ui-accent, #e8622a);
 }
 
 /* === Drag states === */
 .olo-ghost {
   opacity: 0.3;
-  border: 2px dashed var(--olo-color-primary, #6366F1) !important;
+  border: 2px dashed var(--olo-ui-accent, #e8622a) !important;
   border-radius: 4px;
-  background: rgba(99, 102, 241, 0.05) !important;
+  background: rgba(232, 98, 42, 0.05) !important;
 }
 .olo-chosen {
   opacity: 0.8;
-  box-shadow: 0 0 0 2px var(--olo-color-primary, #6366F1);
+  box-shadow: 0 0 0 2px var(--olo-ui-accent, #e8622a);
   border-radius: 4px;
 }
 
@@ -1422,15 +1422,15 @@ function changeRowLayout(row, layoutKey) {
 }
 .olo-column-block.sortable-ghost-adjacent,
 .olo-column-empty:not(:has(.olo-tile-wrapper)) {
-  border: 2px dashed rgba(99, 102, 241, 0.4);
-  background: rgba(99, 102, 241, 0.04);
+  border: 2px dashed rgba(232, 98, 42, 0.4);
+  background: rgba(232, 98, 42, 0.04);
   border-radius: 4px;
 }
 
 /* Drag-over active state on columns */
 .olo-column-block:has(.sortable-ghost) {
-  border-color: var(--olo-color-primary, #6366F1) !important;
-  background: rgba(99, 102, 241, 0.06);
+  border-color: var(--olo-ui-accent, #e8622a) !important;
+  background: rgba(232, 98, 42, 0.06);
 }
 
 /* Visual cue for empty columns during drag */
@@ -1441,17 +1441,17 @@ function changeRowLayout(row, layoutKey) {
 
 /* === Sidebar drag active: highlight all drop targets === */
 .olo-drag-active .olo-column-empty {
-  border: 2px dashed rgba(99, 102, 241, 0.35) !important;
-  background: rgba(99, 102, 241, 0.04);
+  border: 2px dashed rgba(232, 98, 42, 0.35) !important;
+  background: rgba(232, 98, 42, 0.04);
   min-height: 80px;
 }
 .olo-drag-active .olo-column-block {
-  border-color: rgba(99, 102, 241, 0.25) !important;
+  border-color: rgba(232, 98, 42, 0.25) !important;
   transition: border-color 0.15s ease;
 }
 .olo-drag-active .olo-canvas-bottom-drop {
-  border: 2px dashed rgba(99, 102, 241, 0.4);
-  background: rgba(99, 102, 241, 0.04);
+  border: 2px dashed rgba(232, 98, 42, 0.4);
+  background: rgba(232, 98, 42, 0.04);
   padding: 24px;
 }
 /* Pulse animation on the empty canvas drop hint */
@@ -1465,7 +1465,7 @@ function changeRowLayout(row, layoutKey) {
 }
 @keyframes olo-drop-pulse {
   0%, 100% { border-color: transparent; }
-  50% { border-color: rgba(99, 102, 241, 0.3); }
+  50% { border-color: rgba(232, 98, 42, 0.3); }
 }
 
 /* ========================================
@@ -1541,7 +1541,7 @@ function changeRowLayout(row, layoutKey) {
   transition: border-color 0.15s;
 }
 .olo-custom-input:focus {
-  border-color: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-ui-accent, #e8622a);
 }
 .olo-custom-input::placeholder {
   color: #9CA3AF;

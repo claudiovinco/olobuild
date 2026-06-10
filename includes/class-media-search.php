@@ -55,7 +55,7 @@ class Olo_Media_Search {
             <div class="olo-ms-search-bar">
                 <div class="olo-ms-providers" id="olo-ms-providers"></div>
                 <div class="olo-ms-input-wrap">
-                    <input type="text" id="olo-ms-query" class="olo-field-input olo-ms-query" placeholder="<?php echo esc_attr__( 'Cerca foto, video, audio...', 'olobuild' ); ?>" autocomplete="off" />
+                    <input type="text" id="olo-ms-query" class="olo-input olo-ms-query" placeholder="<?php echo esc_attr__( 'Cerca foto, video, audio...', 'olobuild' ); ?>" autocomplete="off" />
                     <button id="olo-ms-search-btn" class="olo-btn-save olo-btn-sm"><?php esc_html_e( 'Cerca', 'olobuild' ); ?></button>
                 </div>
             </div>
@@ -66,8 +66,8 @@ class Olo_Media_Search {
                     <?php esc_html_e( 'Incolla un URL Google Maps, coordinate (lat,lng) o un pano_id per scaricare un panorama Street View.', 'olobuild' ); ?>
                 </div>
                 <div class="olo-ms-input-wrap olo-ms-gsv-inputs">
-                    <input type="text" id="olo-ms-gsv-input" class="olo-field-input olo-ms-gsv-field" placeholder="<?php echo esc_attr__( 'https://www.google.com/maps/@45.4642,9.1900,3a... oppure 45.4642,9.1900', 'olobuild' ); ?>" autocomplete="off" />
-                    <select id="olo-ms-gsv-zoom" class="olo-field-input olo-ms-gsv-select">
+                    <input type="text" id="olo-ms-gsv-input" class="olo-input olo-ms-gsv-field" placeholder="<?php echo esc_attr__( 'https://www.google.com/maps/@45.4642,9.1900,3a... oppure 45.4642,9.1900', 'olobuild' ); ?>" autocomplete="off" />
+                    <select id="olo-ms-gsv-zoom" class="olo-select olo-ms-gsv-select">
                         <option value="2"><?php esc_html_e( 'Zoom 2 (bassa)', 'olobuild' ); ?></option>
                         <option value="3" selected><?php esc_html_e( 'Zoom 3 (media)', 'olobuild' ); ?></option>
                         <option value="4"><?php esc_html_e( 'Zoom 4 (alta)', 'olobuild' ); ?></option>
@@ -81,7 +81,7 @@ class Olo_Media_Search {
                 <div class="olo-ms-filters-row">
                     <span class="olo-ms-pf olo-ms-filter-group" data-pf="orientation">
                         <label class="olo-ms-filter-label"><?php esc_html_e( 'Orientamento:', 'olobuild' ); ?></label>
-                        <select id="olo-ms-orientation" class="olo-field-input olo-ms-filter-select">
+                        <select id="olo-ms-orientation" class="olo-select olo-ms-filter-select">
                             <option value=""><?php esc_html_e( 'Qualsiasi', 'olobuild' ); ?></option>
                             <option value="landscape"><?php esc_html_e( 'Orizzontale', 'olobuild' ); ?></option>
                             <option value="portrait"><?php esc_html_e( 'Verticale', 'olobuild' ); ?></option>
@@ -90,7 +90,7 @@ class Olo_Media_Search {
                     </span>
                     <span class="olo-ms-pf olo-ms-filter-group" data-pf="size">
                         <label class="olo-ms-filter-label"><?php esc_html_e( 'Dimensione:', 'olobuild' ); ?></label>
-                        <select id="olo-ms-size" class="olo-field-input olo-ms-filter-select">
+                        <select id="olo-ms-size" class="olo-select olo-ms-filter-select">
                             <option value=""><?php esc_html_e( 'Qualsiasi', 'olobuild' ); ?></option>
                             <option value="small"><?php esc_html_e( 'Piccola', 'olobuild' ); ?></option>
                             <option value="medium"><?php esc_html_e( 'Media', 'olobuild' ); ?></option>
@@ -99,11 +99,11 @@ class Olo_Media_Search {
                     </span>
                     <span class="olo-ms-pf olo-ms-filter-group" data-pf="min_width">
                         <label class="olo-ms-filter-label"><?php esc_html_e( 'Min larghezza:', 'olobuild' ); ?></label>
-                        <input type="number" id="olo-ms-min-width" class="olo-field-input olo-ms-filter-num" placeholder="px" min="0" step="100" />
+                        <input type="number" id="olo-ms-min-width" class="olo-input olo-ms-filter-num" placeholder="px" min="0" step="100" />
                     </span>
                     <span class="olo-ms-pf olo-ms-filter-group" data-pf="min_height">
                         <label class="olo-ms-filter-label"><?php esc_html_e( 'Min altezza:', 'olobuild' ); ?></label>
-                        <input type="number" id="olo-ms-min-height" class="olo-field-input olo-ms-filter-num" placeholder="px" min="0" step="100" />
+                        <input type="number" id="olo-ms-min-height" class="olo-input olo-ms-filter-num" placeholder="px" min="0" step="100" />
                     </span>
                 </div>
             </div>
@@ -112,7 +112,7 @@ class Olo_Media_Search {
             <div id="olo-ms-duration-filters" class="olo-ms-filters">
                 <div class="olo-ms-filters-row">
                     <label class="olo-ms-filter-label"><?php esc_html_e( 'Durata:', 'olobuild' ); ?></label>
-                    <select id="olo-ms-dur-preset" class="olo-field-input olo-ms-filter-select">
+                    <select id="olo-ms-dur-preset" class="olo-select olo-ms-filter-select">
                         <option value=""><?php esc_html_e( 'Qualsiasi', 'olobuild' ); ?></option>
                         <option value="0,5"><?php esc_html_e( 'Brevissimo (< 5s)', 'olobuild' ); ?></option>
                         <option value="0,15"><?php esc_html_e( 'Breve (< 15s)', 'olobuild' ); ?></option>
@@ -123,9 +123,9 @@ class Olo_Media_Search {
                         <option value="300,"><?php esc_html_e( 'Lungo (> 5 min)', 'olobuild' ); ?></option>
                     </select>
                     <span class="olo-ms-filter-sep"><?php esc_html_e( 'oppure', 'olobuild' ); ?></span>
-                    <input type="number" id="olo-ms-dur-min" class="olo-field-input olo-ms-filter-num" placeholder="<?php echo esc_attr__( 'min sec', 'olobuild' ); ?>" min="0" />
+                    <input type="number" id="olo-ms-dur-min" class="olo-input olo-ms-filter-num" placeholder="<?php echo esc_attr__( 'min sec', 'olobuild' ); ?>" min="0" />
                     <span class="olo-ms-filter-dash">&mdash;</span>
-                    <input type="number" id="olo-ms-dur-max" class="olo-field-input olo-ms-filter-num" placeholder="<?php echo esc_attr__( 'max sec', 'olobuild' ); ?>" min="0" />
+                    <input type="number" id="olo-ms-dur-max" class="olo-input olo-ms-filter-num" placeholder="<?php echo esc_attr__( 'max sec', 'olobuild' ); ?>" min="0" />
                     <span class="olo-ms-filter-sep"><?php esc_html_e( 'secondi', 'olobuild' ); ?></span>
                 </div>
             </div>
@@ -169,23 +169,24 @@ class Olo_Media_Search {
             .olo-ms-dot-no { background: #dc2626; }
 
             .olo-ms-input-wrap { display: flex; gap: 8px; align-items: center; }
-            .olo-ms-query { flex: 1; max-width: 600px; width: auto !important; }
+            .olo-ms-input-wrap .olo-btn-save { height: 38px; padding: 0 18px; border-radius: 8px; flex-shrink: 0; }
+            .olo-ms-query { flex: 1; max-width: 600px; }
 
             /* Filters */
             .olo-ms-filters { display: none; margin-bottom: 16px; }
             .olo-ms-filters-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
             .olo-ms-filter-group { display: flex; gap: 6px; align-items: center; }
             .olo-ms-filter-label { font-size: 13px; font-weight: 600; color: #1a1a1a; white-space: nowrap; }
-            .olo-ms-filter-select { width: auto !important; padding: 7px 12px !important; }
-            .olo-ms-filter-num { width: 80px !important; padding: 7px 10px !important; text-align: center; }
+            .olo-ms-filter-select { width: auto; min-width: 140px; max-width: 320px; }
+            .olo-ms-filter-num { width: 90px; padding: 0 10px; text-align: center; }
             .olo-ms-filter-sep { font-size: 12px; color: #999; }
             .olo-ms-filter-dash { font-size: 13px; color: #999; }
 
             /* GSV panel */
             .olo-ms-gsv-panel { display: none; }
             .olo-ms-gsv-inputs { margin-top: 12px; }
-            .olo-ms-gsv-field { flex: 1; max-width: 600px; width: auto !important; }
-            .olo-ms-gsv-select { width: auto !important; padding: 9px 12px !important; }
+            .olo-ms-gsv-field { flex: 1; max-width: 600px; }
+            .olo-ms-gsv-select { width: auto; flex-shrink: 0; }
             .olo-ms-gsv-preview {
                 display: flex; gap: 20px; padding: 20px; background: #fff;
                 border: 1px solid #eaeaea; border-radius: 14px; margin-top: 16px; align-items: flex-start;

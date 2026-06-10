@@ -45,18 +45,14 @@
     <!-- Origin -->
     <div class="mb-flex mb-items-center mb-gap-2">
       <label class="mb-text-[10px] mb-text-gray-500 mb-w-16">{{ t('Origine') }}</label>
-      <select :value="val.origin" @change="update('origin', $event.target.value)"
-        class="mb-flex-1 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200">
-        <option value="center">{{ t('Centro') }}</option>
-        <option value="top left">{{ t('Alto SX') }}</option>
-        <option value="top center">{{ t('Alto Centro') }}</option>
-        <option value="top right">{{ t('Alto DX') }}</option>
-        <option value="center left">{{ t('Centro SX') }}</option>
-        <option value="center right">{{ t('Centro DX') }}</option>
-        <option value="bottom left">{{ t('Basso SX') }}</option>
-        <option value="bottom center">{{ t('Basso Centro') }}</option>
-        <option value="bottom right">{{ t('Basso DX') }}</option>
-      </select>
+      <FieldSelect
+        ui="dropdown"
+        size="compact"
+        class="mb-flex-1 mb-min-w-0"
+        :model-value="val.origin"
+        :options="ORIGIN_OPTIONS"
+        @update:model-value="update('origin', $event)"
+      />
     </div>
   </div>
 </template>
@@ -64,6 +60,20 @@
 <script setup>
 import { t } from '@/i18n';
 import { computed } from 'vue';
+import FieldSelect from './FieldSelect.vue';
+
+// Label RAW: FieldSelect applica t() internamente
+const ORIGIN_OPTIONS = [
+  { value: 'center', label: 'Centro' },
+  { value: 'top left', label: 'Alto SX' },
+  { value: 'top center', label: 'Alto Centro' },
+  { value: 'top right', label: 'Alto DX' },
+  { value: 'center left', label: 'Centro SX' },
+  { value: 'center right', label: 'Centro DX' },
+  { value: 'bottom left', label: 'Basso SX' },
+  { value: 'bottom center', label: 'Basso Centro' },
+  { value: 'bottom right', label: 'Basso DX' },
+];
 
 const props = defineProps({
   modelValue: { type: Object, default: () => ({ rotate: 0, scale: 1, translateX: 0, translateY: 0, skewX: 0, skewY: 0, origin: 'center' }) }

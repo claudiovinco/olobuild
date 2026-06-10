@@ -38,11 +38,7 @@
     <!-- Modello testo -->
     <div>
       <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Modello Claude') }}</label>
-      <select v-model="settings.model" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-        <option value="claude-sonnet-4-6">{{ t('Claude Sonnet 4.6 (bilanciato)') }}</option>
-        <option value="claude-haiku-4-5-20251001">{{ t('Claude Haiku 4.5 (veloce, economico)') }}</option>
-        <option value="claude-opus-4-6">{{ t('Claude Opus 4.6 (massima qualit&agrave;)') }}</option>
-      </select>
+      <FieldSelect ui="dropdown" :model-value="settings.model" :options="MODEL_OPTS" @update:model-value="settings.model = $event" />
     </div>
 
     <!-- Separatore immagini -->
@@ -74,10 +70,7 @@
     <!-- Modello immagine -->
     <div>
       <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Modello immagine') }}</label>
-      <select v-model="settings.image_model" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-        <option value="dall-e-3">{{ t('DALL-E 3 (alta qualit&agrave;)') }}</option>
-        <option value="dall-e-2">{{ t('DALL-E 2 (pi&ugrave; economico)') }}</option>
-      </select>
+      <FieldSelect ui="dropdown" :model-value="settings.image_model" :options="IMAGE_MODEL_OPTS" @update:model-value="settings.image_model = $event" />
     </div>
 
     <!-- Pulsanti -->
@@ -120,8 +113,21 @@
 import { ref, reactive, onMounted } from 'vue';
 import { useToast } from '@/composables/useToast.js';
 import { t } from '@/i18n';
+import FieldSelect from './fields/FieldSelect.vue';
 
 const toast = useToast();
+
+// Opzioni dei FieldSelect (label RAW: t() la applica FieldSelect internamente)
+const MODEL_OPTS = [
+  { value: 'claude-sonnet-4-6', label: 'Claude Sonnet 4.6 (bilanciato)' },
+  { value: 'claude-haiku-4-5-20251001', label: 'Claude Haiku 4.5 (veloce, economico)' },
+  { value: 'claude-opus-4-6', label: 'Claude Opus 4.6 (massima qualità)' },
+];
+
+const IMAGE_MODEL_OPTS = [
+  { value: 'dall-e-3', label: 'DALL-E 3 (alta qualità)' },
+  { value: 'dall-e-2', label: 'DALL-E 2 (più economico)' },
+];
 
 const showKey = ref(false);
 const showOpenaiKey = ref(false);

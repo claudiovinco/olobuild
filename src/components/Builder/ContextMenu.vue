@@ -598,12 +598,12 @@ defineExpose({ open, close });
   transition: border-color 0.15s, background 0.15s;
 }
 .olo-ctx-layout:hover {
-  border-color: #818cf8;
-  background: rgba(99, 102, 241, 0.1);
+  border-color: #f0833f;
+  background: rgba(232, 98, 42, 0.1);
 }
 .olo-ctx-layout--active {
-  border-color: #6366f1;
-  background: rgba(99, 102, 241, 0.2);
+  border-color: var(--olo-ui-accent, #e8622a);
+  background: rgba(232, 98, 42, 0.2);
 }
 .olo-ctx-layout-preview {
   display: flex;
@@ -617,7 +617,7 @@ defineExpose({ open, close });
   min-width: 3px;
 }
 .olo-ctx-layout--active .olo-ctx-layout-col {
-  background: #818cf8;
+  background: #f0833f;
 }
 .olo-ctx-grid-svg {
   width: 100%;
@@ -625,6 +625,6 @@ defineExpose({ open, close });
   color: #6b7280;
 }
 .olo-ctx-layout--active .olo-ctx-grid-svg {
-  color: #818cf8;
+  color: #f0833f;
 }
 </style>

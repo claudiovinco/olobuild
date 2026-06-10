@@ -58,7 +58,7 @@
           <div class="hint">{{ t('Per testi lunghi e blog, leggibilità ottimale.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-input mono">
+          <div class="cfg-input mono cfg-w-sm">
             <input type="text" :value="layout.container_narrow || '720px'" @input="stylesStore.updateLayout('container_narrow', $event.target.value)" />
           </div>
         </div>
@@ -69,7 +69,7 @@
           <div class="hint">{{ t('Larghezza standard del contenuto del sito.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-input mono">
+          <div class="cfg-input mono cfg-w-sm">
             <input type="text" :value="layout.container_max_width || '1200px'" @input="stylesStore.updateLayout('container_max_width', $event.target.value)" />
           </div>
         </div>
@@ -80,7 +80,7 @@
           <div class="hint">{{ t('Per hero, gallerie ampie, layout immersivi.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-input mono">
+          <div class="cfg-input mono cfg-w-sm">
             <input type="text" :value="layout.container_wide || '1440px'" @input="stylesStore.updateLayout('container_wide', $event.target.value)" />
           </div>
         </div>
@@ -140,30 +140,15 @@
         </div>
         <div class="gutter-tr">
           <label>{{ t('Gap colonne') }}</label>
-          <div class="cfg-input mono">
-            <input type="number" min="0" max="120" :value="gutter.desktop ?? 32" @input="stylesStore.updateGutter('desktop', parseInt($event.target.value) || 0)" />
-            <span class="suffix">px</span>
-          </div>
-          <div class="cfg-input mono">
-            <input type="number" min="0" max="120" :value="gutter.tablet ?? 24" @input="stylesStore.updateGutter('tablet', parseInt($event.target.value) || 0)" />
-            <span class="suffix">px</span>
-          </div>
-          <div class="cfg-input mono">
-            <input type="number" min="0" max="120" :value="gutter.mobile ?? 16" @input="stylesStore.updateGutter('mobile', parseInt($event.target.value) || 0)" />
-            <span class="suffix">px</span>
-          </div>
+          <CfgNumber size="" :min="0" :max="120" suffix="px" :model-value="gutter.desktop ?? 32" @update:model-value="stylesStore.updateGutter('desktop', $event)" />
+          <CfgNumber size="" :min="0" :max="120" suffix="px" :model-value="gutter.tablet ?? 24" @update:model-value="stylesStore.updateGutter('tablet', $event)" />
+          <CfgNumber size="" :min="0" :max="120" suffix="px" :model-value="gutter.mobile ?? 16" @update:model-value="stylesStore.updateGutter('mobile', $event)" />
         </div>
         <div class="gutter-tr">
           <label>{{ t('Padding laterale') }}</label>
-          <div class="cfg-input mono">
-            <input type="number" min="0" max="120" :value="gutter.side_desktop ?? 32" @input="stylesStore.updateGutter('side_desktop', parseInt($event.target.value) || 0)" />
-            <span class="suffix">px</span>
-          </div>
+          <CfgNumber size="" :min="0" :max="120" suffix="px" :model-value="gutter.side_desktop ?? 32" @update:model-value="stylesStore.updateGutter('side_desktop', $event)" />
           <div class="gutter-cell-dash">—</div>
-          <div class="cfg-input mono">
-            <input type="number" min="0" max="120" :value="gutter.side_mobile ?? 16" @input="stylesStore.updateGutter('side_mobile', parseInt($event.target.value) || 0)" />
-            <span class="suffix">px</span>
-          </div>
+          <CfgNumber size="" :min="0" :max="120" suffix="px" :model-value="gutter.side_mobile ?? 16" @update:model-value="stylesStore.updateGutter('side_mobile', $event)" />
         </div>
       </div>
     </div>
@@ -224,6 +209,7 @@
 import { computed, inject, onMounted, onBeforeUnmount, watch } from 'vue';
 import { t } from '@/i18n';
 import { useStylesStore } from '@/stores/styles';
+import CfgNumber from './controls/CfgNumber.vue';
 
 const stylesStore = useStylesStore();
 const showToast = inject('showToast', () => {});

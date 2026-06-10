@@ -13,18 +13,12 @@
       </button>
     </div>
 
-    <select
-      :value="preset"
-      @change="onPresetUpdate($event.target.value)"
-      class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
-    >
-      <option value="none">{{ t('Nessuna') }}</option>
-      <option value="sm">{{ t('Piccola') }}</option>
-      <option value="md">{{ t('Media') }}</option>
-      <option value="lg">{{ t('Grande') }}</option>
-      <option value="xl">{{ t('Extra grande') }}</option>
-      <option value="custom">{{ t('Personalizzata') }}</option>
-    </select>
+    <FieldSelect
+      ui="dropdown"
+      :model-value="preset"
+      :options="PRESET_OPTIONS"
+      @update:model-value="onPresetUpdate($event)"
+    />
 
     <FieldBoxShadow
       v-if="preset === 'custom'"
@@ -49,19 +43,12 @@
           :title="t('Reset')"
         >×</button>
       </div>
-      <select
-        :value="hoverPreset"
-        @change="onHoverPresetUpdate($event.target.value)"
-        class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
-      >
-        <option value="">{{ t('Invariata') }}</option>
-        <option value="none">{{ t('Nessuna') }}</option>
-        <option value="sm">{{ t('Piccola') }}</option>
-        <option value="md">{{ t('Media') }}</option>
-        <option value="lg">{{ t('Grande') }}</option>
-        <option value="xl">{{ t('Extra grande') }}</option>
-        <option value="custom">{{ t('Personalizzata') }}</option>
-      </select>
+      <FieldSelect
+        ui="dropdown"
+        :model-value="hoverPreset"
+        :options="HOVER_PRESET_OPTIONS"
+        @update:model-value="onHoverPresetUpdate($event)"
+      />
       <FieldBoxShadow
         v-if="hoverPreset === 'custom'"
         :modelValue="hoverCustomValue"
@@ -75,7 +62,22 @@
 <script setup>
 import { computed, ref } from 'vue';
 import FieldBoxShadow from '../fields/FieldBoxShadow.vue';
+import FieldSelect from '../fields/FieldSelect.vue';
 import { t } from '@/i18n';
+
+// Label RAW: FieldSelect applica t() internamente. Value preset INVARIATI.
+const PRESET_OPTIONS = [
+  { value: 'none', label: 'Nessuna' },
+  { value: 'sm', label: 'Piccola' },
+  { value: 'md', label: 'Media' },
+  { value: 'lg', label: 'Grande' },
+  { value: 'xl', label: 'Extra grande' },
+  { value: 'custom', label: 'Personalizzata' },
+];
+const HOVER_PRESET_OPTIONS = [
+  { value: '', label: 'Invariata' },
+  ...PRESET_OPTIONS,
+];
 
 /**
  * StyleShadowBlock — pseudo-field "shadow_block" del tab Stile.

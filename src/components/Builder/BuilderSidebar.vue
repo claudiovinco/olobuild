@@ -338,7 +338,7 @@ function isCategoryOpen(category) {
 }
 
 const categoryColors = {
-  essential: 'var(--olo-color-primary, #6366F1)',
+  essential: 'var(--olo-ui-accent, #e8622a)',
   layout: '#3B82F6',
   text: '#22C55E',
   media: '#A855F7',
@@ -818,7 +818,7 @@ function makeTileGhost(iconHtml, labelText, catColor) {
     'padding:8px 14px',
     'border-radius:10px',
     'background:#fff',
-    'border:2px solid ' + (catColor || '#6366F1'),
+    'border:2px solid ' + (catColor || '#e8622a'),
     'box-shadow:0 10px 24px rgba(0,0,0,0.18),0 2px 6px rgba(0,0,0,0.1)',
     'font-family:inherit',
     'font-size:11px',
@@ -829,7 +829,7 @@ function makeTileGhost(iconHtml, labelText, catColor) {
     'pointer-events:none',
   ].join(';');
   ghost.innerHTML = `
-    <span style="display:inline-flex;align-items:center;color:${catColor || '#6366F1'}">${iconHtml}</span>
+    <span style="display:inline-flex;align-items:center;color:${catColor || '#e8622a'}">${iconHtml}</span>
     <span>${labelText}</span>
   `;
   return ghost;
@@ -845,7 +845,7 @@ function draggableTileOpts(tileType) {
           const srcEl = source.element;
           const iconEl = srcEl.querySelector('.tp-btn-icon');
           const labelEl = srcEl.querySelector('.tp-btn-label');
-          const catColor = getComputedStyle(srcEl).getPropertyValue('--cat-color').trim() || '#6366F1';
+          const catColor = getComputedStyle(srcEl).getPropertyValue('--cat-color').trim() || '#e8622a';
           const ghost = makeTileGhost(
             iconEl?.innerHTML || '',
             labelEl?.textContent || tileType,

@@ -397,19 +397,12 @@
             <div class="mb-space-y-3">
               <div>
                 <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Mostra solo a</label>
-                <select
-                  :value="tileAdvanced.cond_user_role || ''"
-                  @change="updateAdvanced('cond_user_role', $event.target.value)"
-                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
-                >
-                  <option value="">Tutti (nessun filtro)</option>
-                  <option value="logged_in">Utenti autenticati</option>
-                  <option value="logged_out">Visitatori non autenticati</option>
-                  <option value="administrator">Amministratori</option>
-                  <option value="editor">Editor</option>
-                  <option value="author">Autori</option>
-                  <option value="subscriber">Subscriber</option>
-                </select>
+                <FieldSelect
+                  ui="dropdown"
+                  :model-value="tileAdvanced.cond_user_role || ''"
+                  :options="COND_USER_ROLE_OPTIONS"
+                  @update:model-value="updateAdvanced('cond_user_role', $event)"
+                />
               </div>
               <div>
                 <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Mostra da data</label>
@@ -511,26 +504,23 @@
                       />
                       <button @click="removeAbOverride(key)" class="mb-text-red-400 hover:mb-text-red-300 mb-text-xs mb-px-1">x</button>
                     </div>
-                    <select
-                      @change="addAbOverride($event.target.value); $event.target.value = ''"
-                      class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-500"
-                    >
-                      <option value="">+ Aggiungi proprietà...</option>
-                      <option v-for="f in abAvailableFields" :key="f.key" :value="f.key">{{ f.label }}</option>
-                    </select>
+                    <FieldSelect
+                      ui="dropdown"
+                      model-value=""
+                      :options="abOverrideAddOptions"
+                      @update:model-value="addAbOverride($event)"
+                    />
                   </div>
 
                   <!-- Goal type -->
                   <div>
                     <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Obiettivo conversione</label>
-                    <select
-                      :value="abTest.goal_type || 'click'"
-                      @change="updateAbField('goal_type', $event.target.value)"
-                      class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
-                    >
-                      <option value="click">Click sulla tile</option>
-                      <option value="submit">Invio form</option>
-                    </select>
+                    <FieldSelect
+                      ui="dropdown"
+                      :model-value="abTest.goal_type || 'click'"
+                      :options="AB_GOAL_TYPE_OPTIONS"
+                      @update:model-value="updateAbField('goal_type', $event)"
+                    />
                   </div>
 
                   <!-- Goal selector (optional) -->
@@ -611,22 +601,12 @@
               <!-- ARIA Role -->
               <div>
                 <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Role</label>
-                <select
-                  :value="tileAdvanced.aria_role || ''"
-                  @change="updateAdvanced('aria_role', $event.target.value)"
-                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
-                >
-                  <option value="">Automatico</option>
-                  <option value="region">Region</option>
-                  <option value="navigation">Navigation</option>
-                  <option value="complementary">Complementary</option>
-                  <option value="banner">Banner</option>
-                  <option value="contentinfo">Content Info</option>
-                  <option value="main">Main</option>
-                  <option value="search">Search</option>
-                  <option value="form">Form</option>
-                  <option value="none">None (decorativo)</option>
-                </select>
+                <FieldSelect
+                  ui="dropdown"
+                  :model-value="tileAdvanced.aria_role || ''"
+                  :options="ARIA_ROLE_OPTIONS"
+                  @update:model-value="updateAdvanced('aria_role', $event)"
+                />
               </div>
               <!-- Link Rel (for tiles with links) -->
               <div v-if="tileHasLink">
@@ -657,39 +637,32 @@
               <!-- Image Loading Strategy -->
               <div v-if="tileHasImage">
                 <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Caricamento immagine</label>
-                <select
-                  :value="tileAdvanced.img_loading || 'lazy'"
-                  @change="updateAdvanced('img_loading', $event.target.value)"
-                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
-                >
-                  <option value="lazy">Lazy (default — carica quando visibile)</option>
-                  <option value="eager">Eager (carica subito — per above the fold)</option>
-                </select>
+                <FieldSelect
+                  ui="dropdown"
+                  :model-value="tileAdvanced.img_loading || 'lazy'"
+                  :options="IMG_LOADING_OPTIONS"
+                  @update:model-value="updateAdvanced('img_loading', $event)"
+                />
               </div>
               <!-- Fetch Priority -->
               <div v-if="tileHasImage">
                 <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Fetch Priority</label>
-                <select
-                  :value="tileAdvanced.fetch_priority || 'auto'"
-                  @change="updateAdvanced('fetch_priority', $event.target.value)"
-                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
-                >
-                  <option value="auto">Auto (default)</option>
-                  <option value="high">High (LCP — hero, slider, prima immagine)</option>
-                  <option value="low">Low (sotto il fold)</option>
-                </select>
+                <FieldSelect
+                  ui="dropdown"
+                  :model-value="tileAdvanced.fetch_priority || 'auto'"
+                  :options="FETCH_PRIORITY_OPTIONS"
+                  @update:model-value="updateAdvanced('fetch_priority', $event)"
+                />
               </div>
               <!-- Schema.org Type -->
               <div v-if="schemaOptions.length">
                 <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Schema.org</label>
-                <select
-                  :value="tileAdvanced.schema_type || ''"
-                  @change="updateAdvanced('schema_type', $event.target.value)"
-                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
-                >
-                  <option value="">Nessuno</option>
-                  <option v-for="opt in schemaOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
-                </select>
+                <FieldSelect
+                  ui="dropdown"
+                  :model-value="tileAdvanced.schema_type || ''"
+                  :options="schemaTypeOptions"
+                  @update:model-value="updateAdvanced('schema_type', $event)"
+                />
               </div>
               <!-- Data attributes -->
               <div>
@@ -714,48 +687,12 @@
             <div class="mb-space-y-3">
               <div>
                 <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Animazione</label>
-                <select
-                  :value="selectedTile?.settings?.entrance_animation || 'none'"
-                  @change="updateSetting('entrance_animation', $event.target.value)"
-                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
-                >
-                  <option value="none">Nessuna</option>
-                  <option value="fade">Dissolvenza</option>
-                  <option value="slide-up">Scorrimento dal basso</option>
-                  <option value="slide-left">Scorrimento da sinistra</option>
-                  <option value="slide-right">Scorrimento da destra</option>
-                  <option value="slide-down">Scorrimento dall'alto</option>
-                  <option value="zoom-in">Zoom in</option>
-                  <option value="zoom-out">Zoom out</option>
-                  <option value="flip">Flip</option>
-                  <option value="rotate-in">Rotazione oraria</option>
-                  <option value="rotate-ccw">Rotazione antioraria</option>
-                  <option value="bounce">Rimbalzo</option>
-                  <option value="elastic">Elastico</option>
-                  <option value="blur-in">Sfocatura</option>
-                  <option value="swing">Oscillazione</option>
-                  <option value="rubber">Gomma</option>
-                  <option value="jello">Gelatina</option>
-                  <option value="back-in-left">Ritorno da sinistra</option>
-                  <option value="back-in-right">Ritorno da destra</option>
-                  <option value="typewriter">Macchina da scrivere</option>
-                  <option value="fade-up-big">Grande dissolvenza dal basso</option>
-                  <option value="fade-down-big">Grande dissolvenza dall'alto</option>
-                  <option value="lightspeed-left">Velocità luce da sinistra</option>
-                  <option value="lightspeed-right">Velocità luce da destra</option>
-                  <option value="roll-in">Rotolamento in entrata</option>
-                  <option value="jack-in-box">Scatola sorpresa</option>
-                  <option value="hinge">Cardine che cade</option>
-                  <option value="flip-y">Capovolgimento asse Y</option>
-                  <option value="flip-x">Capovolgimento asse X</option>
-                  <option value="zoom-in-down">Zoom + discesa</option>
-                  <option value="zoom-in-up">Zoom + salita</option>
-                  <option value="bounce-left">Rimbalzo da sinistra</option>
-                  <option value="bounce-right">Rimbalzo da destra</option>
-                  <option value="skew-in">Distorsione in entrata</option>
-                  <option value="curtain-reveal">Effetto tendina</option>
-                  <option value="blur-zoom">Sfocatura + Zoom</option>
-                </select>
+                <FieldSelect
+                  ui="dropdown"
+                  :model-value="selectedTile?.settings?.entrance_animation || 'none'"
+                  :options="ENTRANCE_ANIMATION_OPTIONS"
+                  @update:model-value="updateSetting('entrance_animation', $event)"
+                />
               </div>
               <template v-if="selectedTile?.settings?.entrance_animation && selectedTile.settings.entrance_animation !== 'none'">
                 <div>
@@ -837,21 +774,12 @@
                 <!-- Easing -->
                 <div>
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Curva di animazione</label>
-                  <select
-                    :value="selectedTile?.settings?.entrance_easing || 'auto'"
-                    @change="updateSetting('entrance_easing', $event.target.value)"
-                    class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
-                  >
-                    <option value="auto">Automatica (per effetto)</option>
-                    <option value="linear">Lineare</option>
-                    <option value="ease">Ease (default)</option>
-                    <option value="ease-in">Ease in (parte lento)</option>
-                    <option value="ease-out">Ease out (finisce lento)</option>
-                    <option value="ease-in-out">Ease in-out</option>
-                    <option value="cubic-bezier(.34,1.56,.64,1)">Overshoot (rimbalzo)</option>
-                    <option value="cubic-bezier(.68,-.55,.27,1.55)">Bounce forte</option>
-                    <option value="cubic-bezier(.4,0,.2,1)">Material</option>
-                  </select>
+                  <FieldSelect
+                    ui="dropdown"
+                    :model-value="selectedTile?.settings?.entrance_easing || 'auto'"
+                    :options="ENTRANCE_EASING_OPTIONS"
+                    @update:model-value="updateSetting('entrance_easing', $event)"
+                  />
                 </div>
               </template>
             </div>
@@ -862,13 +790,12 @@
             <div class="mb-space-y-3">
               <div>
                 <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Animazione</label>
-                <select
-                  :value="tileAdvanced.scrollspy_animation || ''"
-                  @change="updateAdvanced('scrollspy_animation', $event.target.value)"
-                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
-                >
-                  <option v-for="anim in scrollspyAnimations" :key="anim.value" :value="anim.value">{{ anim.label }}</option>
-                </select>
+                <FieldSelect
+                  ui="dropdown"
+                  :model-value="tileAdvanced.scrollspy_animation || ''"
+                  :options="scrollspyAnimations"
+                  @update:model-value="updateAdvanced('scrollspy_animation', $event)"
+                />
               </div>
               <template v-if="tileAdvanced.scrollspy_animation">
                 <div>
@@ -982,14 +909,12 @@
                 <!-- Posizione -->
                 <div>
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Posizione</label>
-                  <select
-                    :value="tileAdvanced.sticky_position || 'top'"
-                    @change="updateAdvanced('sticky_position', $event.target.value)"
-                    class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
-                  >
-                    <option value="top">In alto</option>
-                    <option value="bottom">In basso</option>
-                  </select>
+                  <FieldSelect
+                    ui="dropdown"
+                    :model-value="tileAdvanced.sticky_position || 'top'"
+                    :options="STICKY_POSITION_OPTIONS"
+                    @update:model-value="updateAdvanced('sticky_position', $event)"
+                  />
                 </div>
 
                 <!-- Offset -->
@@ -1056,13 +981,7 @@
               <template v-if="tileAdvanced.cursor_spotlight">
                 <div>
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Inversione (blend)</label>
-                  <select :value="tileAdvanced.cursor_spotlight_blend || 'difference'" @change="updateAdvanced('cursor_spotlight_blend', $event.target.value)" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900">
-                    <option value="difference">Differenza</option>
-                    <option value="exclusion">Esclusione</option>
-                    <option value="screen">Schermo</option>
-                    <option value="overlay">Sovrapposizione</option>
-                    <option value="hard-light">Hard Light</option>
-                  </select>
+                  <FieldSelect ui="dropdown" :model-value="tileAdvanced.cursor_spotlight_blend || 'difference'" :options="SPOTLIGHT_BLEND_OPTIONS" @update:model-value="updateAdvanced('cursor_spotlight_blend', $event)" />
                 </div>
                 <div>
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Colore luce</label>
@@ -1089,17 +1008,7 @@
             <div class="mb-space-y-3">
               <div>
                 <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Animazione</label>
-                <select :value="tileAdvanced.infinite_animation || 'none'" @change="updateAdvanced('infinite_animation', $event.target.value)" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900">
-                  <option value="none">Nessuna</option>
-                  <option value="float">Galleggiamento</option>
-                  <option value="float-rot">Galleggiamento + rotazione</option>
-                  <option value="pulse">Pulsazione</option>
-                  <option value="spin">Rotazione</option>
-                  <option value="wiggle">Dondolio</option>
-                  <option value="bounce">Rimbalzo</option>
-                  <option value="swing">Oscillazione</option>
-                  <option value="breathe">Respiro</option>
-                </select>
+                <FieldSelect ui="dropdown" :model-value="tileAdvanced.infinite_animation || 'none'" :options="INFINITE_ANIMATION_OPTIONS" @update:model-value="updateAdvanced('infinite_animation', $event)" />
               </div>
               <template v-if="(tileAdvanced.infinite_animation || 'none') !== 'none'">
                 <div>
@@ -1116,11 +1025,7 @@
                 </div>
                 <div>
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Direzione</label>
-                  <select :value="tileAdvanced.infinite_direction || 'normal'" @change="updateAdvanced('infinite_direction', $event.target.value)" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900">
-                    <option value="normal">Normale</option>
-                    <option value="alternate">Alternata</option>
-                    <option value="reverse">Inversa</option>
-                  </select>
+                  <FieldSelect ui="dropdown" :model-value="tileAdvanced.infinite_direction || 'normal'" :options="INFINITE_DIRECTION_OPTIONS" @update:model-value="updateAdvanced('infinite_direction', $event)" />
                 </div>
               </template>
             </div>
@@ -1131,17 +1036,7 @@
             <div class="mb-space-y-3">
               <div>
                 <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Tipo maschera</label>
-                <select :value="tileAdvanced.mask_type || 'none'" @change="updateAdvanced('mask_type', $event.target.value)" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900">
-                  <option value="none">Nessuna</option>
-                  <option value="circle">Cerchio</option>
-                  <option value="ellipse">Ellisse</option>
-                  <option value="triangle">Triangolo</option>
-                  <option value="hexagon">Esagono</option>
-                  <option value="star">Stella</option>
-                  <option value="diamond">Diamante</option>
-                  <option value="blob">Blob</option>
-                  <option value="custom">Personalizzata</option>
-                </select>
+                <FieldSelect ui="dropdown" :model-value="tileAdvanced.mask_type || 'none'" :options="MASK_TYPE_OPTIONS" @update:model-value="updateAdvanced('mask_type', $event)" />
               </div>
               <template v-if="tileAdvanced.mask_type === 'custom'">
                 <div>
@@ -1196,17 +1091,12 @@
             <div class="mb-space-y-3">
               <div>
                 <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Modalità</label>
-                <select
-                  :value="tileAdvanced.position_mode || 'static'"
-                  @change="updateAdvanced('position_mode', $event.target.value)"
-                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
-                >
-                  <option value="static">Normale (nel flusso)</option>
-                  <option value="relative">Relativo (offset dal flusso)</option>
-                  <option value="absolute">Assoluto (libero nella sezione)</option>
-                  <option value="fixed">Fisso (libero nella pagina)</option>
-                  <option value="sticky">Sticky (fisso durante lo scroll)</option>
-                </select>
+                <FieldSelect
+                  ui="dropdown"
+                  :model-value="tileAdvanced.position_mode || 'static'"
+                  :options="POSITION_MODE_OPTIONS"
+                  @update:model-value="updateAdvanced('position_mode', $event)"
+                />
               </div>
               <template v-if="tileAdvanced.position_mode && tileAdvanced.position_mode !== 'static'">
                 <!-- Position breakpoint switcher -->
@@ -1354,6 +1244,7 @@ import InspectorField from './InspectorField.vue';
 import StyleFieldsRenderer from './StyleFieldsRenderer.vue';
 import { styleFieldsBase } from '@/config/elements/_styleFieldsBase.js';
 import FieldSpacing from './fields/FieldSpacing.vue';
+import FieldSelect from './fields/FieldSelect.vue';
 import CollapseSection from './CollapseSection.vue';
 import FieldBoxShadow from './fields/FieldBoxShadow.vue';
 import FieldTransform from './fields/FieldTransform.vue';
@@ -1392,6 +1283,147 @@ const scrollspyAnimations = [
   { value: 'slide-right-medium', label: 'Scorrimento destra (medio)' },
   { value: 'kenburns', label: 'Ken Burns' },
   { value: 'shake', label: 'Tremolio' },
+];
+
+const COND_USER_ROLE_OPTIONS = [
+  { value: '', label: 'Tutti (nessun filtro)' },
+  { value: 'logged_in', label: 'Utenti autenticati' },
+  { value: 'logged_out', label: 'Visitatori non autenticati' },
+  { value: 'administrator', label: 'Amministratori' },
+  { value: 'editor', label: 'Editor' },
+  { value: 'author', label: 'Autori' },
+  { value: 'subscriber', label: 'Subscriber' },
+];
+
+const AB_GOAL_TYPE_OPTIONS = [
+  { value: 'click', label: 'Click sulla tile' },
+  { value: 'submit', label: 'Invio form' },
+];
+
+const ARIA_ROLE_OPTIONS = [
+  { value: '', label: 'Automatico' },
+  { value: 'region', label: 'Region' },
+  { value: 'navigation', label: 'Navigation' },
+  { value: 'complementary', label: 'Complementary' },
+  { value: 'banner', label: 'Banner' },
+  { value: 'contentinfo', label: 'Content Info' },
+  { value: 'main', label: 'Main' },
+  { value: 'search', label: 'Search' },
+  { value: 'form', label: 'Form' },
+  { value: 'none', label: 'None (decorativo)' },
+];
+
+const IMG_LOADING_OPTIONS = [
+  { value: 'lazy', label: 'Lazy (default — carica quando visibile)' },
+  { value: 'eager', label: 'Eager (carica subito — per above the fold)' },
+];
+
+const FETCH_PRIORITY_OPTIONS = [
+  { value: 'auto', label: 'Auto (default)' },
+  { value: 'high', label: 'High (LCP — hero, slider, prima immagine)' },
+  { value: 'low', label: 'Low (sotto il fold)' },
+];
+
+const ENTRANCE_ANIMATION_OPTIONS = [
+  { value: 'none', label: 'Nessuna' },
+  { value: 'fade', label: 'Dissolvenza' },
+  { value: 'slide-up', label: 'Scorrimento dal basso' },
+  { value: 'slide-left', label: 'Scorrimento da sinistra' },
+  { value: 'slide-right', label: 'Scorrimento da destra' },
+  { value: 'slide-down', label: "Scorrimento dall'alto" },
+  { value: 'zoom-in', label: 'Zoom in' },
+  { value: 'zoom-out', label: 'Zoom out' },
+  { value: 'flip', label: 'Flip' },
+  { value: 'rotate-in', label: 'Rotazione oraria' },
+  { value: 'rotate-ccw', label: 'Rotazione antioraria' },
+  { value: 'bounce', label: 'Rimbalzo' },
+  { value: 'elastic', label: 'Elastico' },
+  { value: 'blur-in', label: 'Sfocatura' },
+  { value: 'swing', label: 'Oscillazione' },
+  { value: 'rubber', label: 'Gomma' },
+  { value: 'jello', label: 'Gelatina' },
+  { value: 'back-in-left', label: 'Ritorno da sinistra' },
+  { value: 'back-in-right', label: 'Ritorno da destra' },
+  { value: 'typewriter', label: 'Macchina da scrivere' },
+  { value: 'fade-up-big', label: 'Grande dissolvenza dal basso' },
+  { value: 'fade-down-big', label: "Grande dissolvenza dall'alto" },
+  { value: 'lightspeed-left', label: 'Velocità luce da sinistra' },
+  { value: 'lightspeed-right', label: 'Velocità luce da destra' },
+  { value: 'roll-in', label: 'Rotolamento in entrata' },
+  { value: 'jack-in-box', label: 'Scatola sorpresa' },
+  { value: 'hinge', label: 'Cardine che cade' },
+  { value: 'flip-y', label: 'Capovolgimento asse Y' },
+  { value: 'flip-x', label: 'Capovolgimento asse X' },
+  { value: 'zoom-in-down', label: 'Zoom + discesa' },
+  { value: 'zoom-in-up', label: 'Zoom + salita' },
+  { value: 'bounce-left', label: 'Rimbalzo da sinistra' },
+  { value: 'bounce-right', label: 'Rimbalzo da destra' },
+  { value: 'skew-in', label: 'Distorsione in entrata' },
+  { value: 'curtain-reveal', label: 'Effetto tendina' },
+  { value: 'blur-zoom', label: 'Sfocatura + Zoom' },
+];
+
+const ENTRANCE_EASING_OPTIONS = [
+  { value: 'auto', label: 'Automatica (per effetto)' },
+  { value: 'linear', label: 'Lineare' },
+  { value: 'ease', label: 'Ease (default)' },
+  { value: 'ease-in', label: 'Ease in (parte lento)' },
+  { value: 'ease-out', label: 'Ease out (finisce lento)' },
+  { value: 'ease-in-out', label: 'Ease in-out' },
+  { value: 'cubic-bezier(.34,1.56,.64,1)', label: 'Overshoot (rimbalzo)' },
+  { value: 'cubic-bezier(.68,-.55,.27,1.55)', label: 'Bounce forte' },
+  { value: 'cubic-bezier(.4,0,.2,1)', label: 'Material' },
+];
+
+const STICKY_POSITION_OPTIONS = [
+  { value: 'top', label: 'In alto' },
+  { value: 'bottom', label: 'In basso' },
+];
+
+const SPOTLIGHT_BLEND_OPTIONS = [
+  { value: 'difference', label: 'Differenza' },
+  { value: 'exclusion', label: 'Esclusione' },
+  { value: 'screen', label: 'Schermo' },
+  { value: 'overlay', label: 'Sovrapposizione' },
+  { value: 'hard-light', label: 'Hard Light' },
+];
+
+const INFINITE_ANIMATION_OPTIONS = [
+  { value: 'none', label: 'Nessuna' },
+  { value: 'float', label: 'Galleggiamento' },
+  { value: 'float-rot', label: 'Galleggiamento + rotazione' },
+  { value: 'pulse', label: 'Pulsazione' },
+  { value: 'spin', label: 'Rotazione' },
+  { value: 'wiggle', label: 'Dondolio' },
+  { value: 'bounce', label: 'Rimbalzo' },
+  { value: 'swing', label: 'Oscillazione' },
+  { value: 'breathe', label: 'Respiro' },
+];
+
+const INFINITE_DIRECTION_OPTIONS = [
+  { value: 'normal', label: 'Normale' },
+  { value: 'alternate', label: 'Alternata' },
+  { value: 'reverse', label: 'Inversa' },
+];
+
+const MASK_TYPE_OPTIONS = [
+  { value: 'none', label: 'Nessuna' },
+  { value: 'circle', label: 'Cerchio' },
+  { value: 'ellipse', label: 'Ellisse' },
+  { value: 'triangle', label: 'Triangolo' },
+  { value: 'hexagon', label: 'Esagono' },
+  { value: 'star', label: 'Stella' },
+  { value: 'diamond', label: 'Diamante' },
+  { value: 'blob', label: 'Blob' },
+  { value: 'custom', label: 'Personalizzata' },
+];
+
+const POSITION_MODE_OPTIONS = [
+  { value: 'static', label: 'Normale (nel flusso)' },
+  { value: 'relative', label: 'Relativo (offset dal flusso)' },
+  { value: 'absolute', label: 'Assoluto (libero nella sezione)' },
+  { value: 'fixed', label: 'Fisso (libero nella pagina)' },
+  { value: 'sticky', label: 'Sticky (fisso durante lo scroll)' },
 ];
 
 const builderStore = useBuilderStore();
@@ -1875,6 +1907,7 @@ const schemaMap = {
 };
 
 const schemaOptions = computed(() => schemaMap[currentTileType.value] || []);
+const schemaTypeOptions = computed(() => [{ value: '', label: 'Nessuno' }, ...schemaOptions.value]);
 
 function toggleLinkRel(relValue) {
   const current = (selectedTile.value?.advanced?.link_rel || '').split(' ').filter(Boolean);
@@ -2213,6 +2246,11 @@ const abAvailableFields = computed(() => {
     .filter(f => f.key && f.type !== 'separator' && f.type !== 'content-items' && !(f.key in used))
     .map(f => ({ key: f.key, label: f.label || f.key }));
 });
+
+const abOverrideAddOptions = computed(() => [
+  { value: '', label: '+ Aggiungi proprietà...' },
+  ...abAvailableFields.value.map(f => ({ value: f.key, label: f.label })),
+]);
 
 function abFieldLabel(key) {
   const f = elementFields.value.find(x => x.key === key);
@@ -5723,7 +5761,7 @@ function updateDynamicItemMap(itemMap) {
 }
 .insp-search-input::placeholder { color: #6B7280; }
 .insp-search-input:focus {
-  border-color: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-ui-accent, #e8622a);
   background: rgba(255,255,255,0.1);
 }
 .insp-search-clear {
@@ -5755,8 +5793,8 @@ function updateDynamicItemMap(itemMap) {
   border-radius: 3px;
 }
 .insp-filter-modified:hover { color: #D1D5DB; background: rgba(255,255,255,0.06); }
-.insp-filter-modified--active { color: var(--olo-color-primary, #6366F1); }
-.insp-filter-modified--active:hover { color: var(--olo-color-primary, #6366F1); }
+.insp-filter-modified--active { color: var(--olo-ui-accent, #e8622a); }
+.insp-filter-modified--active:hover { color: var(--olo-ui-accent, #e8622a); }
 
 /* Tile state badges (hover/responsive/cond/anim/sticky/...) */
 .insp-badge {

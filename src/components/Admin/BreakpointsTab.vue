@@ -272,13 +272,13 @@ onBeforeUnmount(() => {
   gap: 8px;
   margin-top: 12px;
   padding: 10px 14px;
-  background: #fef8f0;
-  border: 1px dashed #fcd9b6;
+  background: var(--c-warning-soft);
+  border: 1px dashed var(--c-warning);
   border-radius: 8px;
   font-size: 12.5px;
-  color: #92541a;
+  color: var(--c-warning);
 }
-.bp-moved-hint svg { flex-shrink: 0; color: #e8622a; }
-.bp-moved-hint a { color: #c54a18; font-weight: 600; text-decoration: underline; cursor: pointer; }
-.bp-moved-hint a:hover { color: #8a3410; }
+.bp-moved-hint svg { flex-shrink: 0; color: var(--c-warning); }
+.bp-moved-hint a { color: var(--c-warning); font-weight: 600; text-decoration: underline; cursor: pointer; }
+.bp-moved-hint a:hover { color: var(--c-navy); }
 </style>

@@ -66,12 +66,7 @@
           <div class="hint">{{ t('Modelli più potenti = risposte migliori ma costo maggiore per chiamata.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-select">
-            <select :value="form.model" @change="setField('model', $event.target.value)">
-              <option v-for="m in availableModels" :key="m.value" :value="m.value">{{ m.label }}</option>
-            </select>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
-          </div>
+          <CfgSelect :model-value="form.model" :options="availableModels" @update:model-value="setField('model', $event)" />
         </div>
       </div>
       <div class="cfg-row no-divider">
@@ -80,11 +75,7 @@
           <div class="hint">{{ t('Soglia di spesa oltre la quale le funzioni AI vengono disattivate.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-input mono">
-            <span class="prefix">€</span>
-            <input type="number" min="0" step="5" :value="form.budget" @input="setField('budget', parseFloat($event.target.value) || 0)" />
-            <span class="suffix">/ {{ t('mese') }}</span>
-          </div>
+          <CfgNumber size="sm" :model-value="form.budget" :min="0" :step="5" :suffix="'€ / ' + t('mese')" @update:model-value="setField('budget', $event)" />
         </div>
       </div>
     </div>
@@ -108,14 +99,7 @@
           <div class="hint">{{ t('Il modello risponderà in questa lingua se non specifichi altrimenti.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-select">
-            <select :value="form.language" @change="setField('language', $event.target.value)">
-              <option value="it">{{ t('Italiano') }}</option>
-              <option value="en">{{ t('Inglese') }}</option>
-              <option value="auto">{{ t('Auto (lingua del sito)') }}</option>
-            </select>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
-          </div>
+          <CfgSelect size="md" :model-value="form.language" :options="LANGUAGE_OPTIONS" @update:model-value="setField('language', $event)" />
         </div>
       </div>
       <div class="cfg-row">
@@ -185,6 +169,8 @@
 <script setup>
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import CfgSelect from './controls/CfgSelect.vue';
+import CfgNumber from './controls/CfgNumber.vue';
 
 const showToast = inject('showToast', () => {});
 const setDirty  = inject('setDirty',  () => {});
@@ -222,6 +208,12 @@ const MODELS = {
     { value: 'custom', label: 'Custom endpoint' },
   ],
 };
+
+const LANGUAGE_OPTIONS = [
+  { value: 'it',   label: t('Italiano') },
+  { value: 'en',   label: t('Inglese') },
+  { value: 'auto', label: t('Auto (lingua del sito)') },
+];
 
 const revealKey = ref(false);
 const availableModels = computed(() => MODELS[form.value.provider] || []);

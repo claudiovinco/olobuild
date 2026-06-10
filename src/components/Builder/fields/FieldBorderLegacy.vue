@@ -27,21 +27,13 @@
         min="0" max="20" step="1"
         class="mb-w-16 mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
       />
-      <select
-        :value="value.style"
-        @change="onUpdate('style', $event.target.value)"
-        class="mb-flex-1 mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
-      >
-        <option value="solid">{{ t('Continuo') }}</option>
-        <option value="dashed">{{ t('Tratteggiato') }}</option>
-        <option value="dotted">{{ t('Punteggiato') }}</option>
-        <option value="double">{{ t('Doppio') }}</option>
-        <option value="groove">{{ t('Incasso') }}</option>
-        <option value="ridge">{{ t('Rilievo') }}</option>
-        <option value="inset">{{ t('Inset') }}</option>
-        <option value="outset">{{ t('Outset') }}</option>
-        <option value="none">{{ t('Nessuno') }}</option>
-      </select>
+      <FieldSelect
+        ui="dropdown"
+        class="mb-flex-1 mb-min-w-0"
+        :model-value="value.style"
+        :options="STYLE_OPTIONS"
+        @update:model-value="onUpdate('style', $event)"
+      />
     </div>
     <FieldColor
       :modelValue="value.color || '#cccccc'"
@@ -60,18 +52,13 @@
           min="0" max="20" step="1"
           class="mb-w-16 mb-bg-white mb-border mb-border-amber-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
         />
-        <select
-          :value="hoverValue.style"
-          @change="onHoverUpdate('style', $event.target.value)"
-          class="mb-flex-1 mb-bg-white mb-border mb-border-amber-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
-        >
-          <option value="">{{ t('— invariato —') }}</option>
-          <option value="solid">{{ t('Continuo') }}</option>
-          <option value="dashed">{{ t('Tratteggiato') }}</option>
-          <option value="dotted">{{ t('Punteggiato') }}</option>
-          <option value="double">{{ t('Doppio') }}</option>
-          <option value="none">{{ t('Nessuno') }}</option>
-        </select>
+        <FieldSelect
+          ui="dropdown"
+          class="mb-flex-1 mb-min-w-0"
+          :model-value="hoverValue.style"
+          :options="HOVER_STYLE_OPTIONS"
+          @update:model-value="onHoverUpdate('style', $event)"
+        />
       </div>
       <FieldColor
         :modelValue="hoverValue.color || ''"
@@ -92,7 +79,29 @@
 <script setup>
 import { computed, ref } from 'vue';
 import FieldColor from './FieldColor.vue';
+import FieldSelect from './FieldSelect.vue';
 import { t } from '@/i18n';
+
+// Label RAW: FieldSelect applica t() internamente
+const STYLE_OPTIONS = [
+  { value: 'solid', label: 'Continuo' },
+  { value: 'dashed', label: 'Tratteggiato' },
+  { value: 'dotted', label: 'Punteggiato' },
+  { value: 'double', label: 'Doppio' },
+  { value: 'groove', label: 'Incasso' },
+  { value: 'ridge', label: 'Rilievo' },
+  { value: 'inset', label: 'Inset' },
+  { value: 'outset', label: 'Outset' },
+  { value: 'none', label: 'Nessuno' },
+];
+const HOVER_STYLE_OPTIONS = [
+  { value: '', label: '— invariato —' },
+  { value: 'solid', label: 'Continuo' },
+  { value: 'dashed', label: 'Tratteggiato' },
+  { value: 'dotted', label: 'Punteggiato' },
+  { value: 'double', label: 'Doppio' },
+  { value: 'none', label: 'Nessuno' },
+];
 
 /**
  * FieldBorderLegacy — UI legacy per il "border" del tab Stile, che usa

@@ -45,15 +45,15 @@
           @input="setAll($event.target.value)"
           @wheel="handleNumberWheel"
         />
-        <select
+        <FieldSelect
           v-if="showUnitDropdown"
+          ui="dropdown"
+          size="compact"
           class="olo-bf-unitsel"
-          :value="unit"
-          @change="unit = $event.target.value"
-          :aria-label="t('Unità')"
-        >
-          <option v-for="u in units" :key="u" :value="u">{{ u }}</option>
-        </select>
+          :model-value="unit"
+          :options="unitOptions"
+          @update:model-value="unit = $event"
+        />
         <span v-else class="olo-bf-unit">{{ unit }}</span>
       </div>
 
@@ -88,6 +88,7 @@
 import { ref, computed, watch } from 'vue';
 import { t } from '@/i18n';
 import { handleNumberWheel } from '@/utils/numberInputWheel';
+import FieldSelect from './FieldSelect.vue';
 
 const props = defineProps({
   modelValue: { default: 0 },
@@ -127,6 +128,8 @@ const modeIcon = computed(() => (props.mode === 'sides' ? EDGE_SVG : CORNER_SVG)
 
 const unit = ref(props.defaultUnit || props.units[0] || 'px');
 const showUnitDropdown = computed(() => props.units.length > 1);
+// Opzioni dropdown unità (label tecniche as-is)
+const unitOptions = computed(() => props.units.map((u) => ({ value: u, label: u })));
 
 // collegato = modelValue scalare; separato = oggetto
 const linked = ref(!(props.modelValue && typeof props.modelValue === 'object'));
@@ -203,7 +206,7 @@ function toggleLink() {
   /* Accento del controllo: arancio CHROME del builder quando un contenitore
      espone --olo-ui-accent (es. FieldBorder), altrimenti fallback INVARIATO al
      primario — nessuna regressione per margine/padding/raggio usati altrove. */
-  --olo-bf-accent: var(--olo-ui-accent, var(--olo-color-primary, #6366f1));
+  --olo-bf-accent: var(--olo-ui-accent, #e8622a);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -312,15 +315,21 @@ function toggleLink() {
   padding-right: 4px;
   text-transform: lowercase;
 }
-.olo-bf-unitsel {
+/* FieldSelect unità "blended" nel box valore: niente bordo/sfondo propri
+   (li fornisce .olo-bf-value), larghezza al contenuto e non al 100% */
+.olo-bf-value .olo-bf-unitsel {
+  flex: 0 0 auto;
+  width: auto;
+}
+.olo-bf-unitsel :deep(.fsel-trigger) {
+  height: 100%;
   border: none;
-  outline: none;
+  border-radius: 0;
   background: transparent;
+  padding: 0 2px;
   font-size: 10px;
   font-weight: 600;
   color: #6b7280;
-  cursor: pointer;
-  padding: 0 2px;
 }
 
 /* chip anteprima radius */

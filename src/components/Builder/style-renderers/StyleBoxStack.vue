@@ -379,13 +379,13 @@ const borderPreviewStyle = computed(() => {
 }
 .olo-bs-pv-inner {
   height: 30px;
-  background: var(--olo-color-primary, #6366f1);
+  background: var(--olo-ui-accent, #e8622a);
   border-radius: 7px;
 }
 .olo-bs-pv-chip {
   width: 66px;
   height: 46px;
-  background: var(--olo-color-primary, #6366f1);
+  background: var(--olo-ui-accent, #e8622a);
   transition: border-radius 0.2s ease;
 }
 /* anteprima bordo: box neutro con il bordo reale applicato (width/style/color inline) */

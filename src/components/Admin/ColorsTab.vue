@@ -310,14 +310,7 @@
           <div class="hint">{{ t('Come generare i colori scuri.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-select">
-            <select :value="darkMode.strategy" @change="setDark('strategy', $event.target.value)">
-              <option value="auto">{{ t('Automatica (consigliata)') }}</option>
-              <option value="manual">{{ t('Manuale, palette separata') }}</option>
-              <option value="luminance">{{ t('Solo aggiusta luminanza') }}</option>
-            </select>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
-          </div>
+          <CfgSelect :model-value="darkMode.strategy" :options="DARK_STRATEGY_OPTS" size="md" @update:model-value="setDark('strategy', $event)" />
         </div>
       </div>
     </div>
@@ -328,6 +321,7 @@
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
 import { HARMONY_RULES, harmonize, paletteToRoles, neutralsFromSeed, readableText, contrastRatio, isValidHex } from '@/utils/colorHarmony';
+import CfgSelect from './controls/CfgSelect.vue';
 
 const showToast = inject('showToast', () => {});
 const setDirty  = inject('setDirty',  () => {});
@@ -362,6 +356,11 @@ const NEUTRAL_PRESETS = {
 const tintOptions = [
   { id: 'slate', label: 'Slate' }, { id: 'gray', label: 'Gray' }, { id: 'zinc', label: 'Zinc' },
   { id: 'neutral', label: 'Neutral' }, { id: 'stone', label: 'Stone' },
+];
+const DARK_STRATEGY_OPTS = [
+  { value: 'auto', label: t('Automatica (consigliata)') },
+  { value: 'manual', label: t('Manuale, palette separata') },
+  { value: 'luminance', label: t('Solo aggiusta luminanza') },
 ];
 
 const fullStyles = ref({});            // tutto olo_styles (per non perdere typography/layout al save)
@@ -760,8 +759,8 @@ onBeforeUnmount(() => {
   padding: 4px 6px; border-radius: 6px;
   background: var(--c-bg-soft, #f1f5f9); color: var(--c-text-mute);
 }
-.contrast-badge.ok   { background: #dcfce7; color: #15803d; }
-.contrast-badge.warn { background: #fef9c3; color: #a16207; }
+.contrast-badge.ok   { background: var(--c-success-soft); color: var(--c-success); }
+.contrast-badge.warn { background: var(--c-warning-soft); color: var(--c-warning); }
 
 .xg-label { border: 0; background: transparent; font: 600 14px var(--c-sans); color: var(--c-navy); padding: 1px 0; outline: none; width: 100%; border-bottom: 1px solid transparent; }
 .xg-label:focus { border-bottom-color: var(--c-line); }
@@ -778,12 +777,12 @@ onBeforeUnmount(() => {
 }
 .preset-del {
   position: absolute; top: 6px; right: 6px; width: 22px; height: 22px;
-  border: 0; border-radius: 6px; background: rgba(255,255,255,.92); color: #b42318;
+  border: 0; border-radius: 6px; background: rgba(255,255,255,.92); color: var(--c-red-dark);
   cursor: pointer; display: grid; place-items: center; padding: 0; opacity: 0;
   box-shadow: 0 1px 4px rgba(0,0,0,.15); transition: opacity .12s, background .12s; z-index: 2;
 }
 .preset-card:hover .preset-del { opacity: 1; }
-.preset-del:hover { background: #fee2e2; }
+.preset-del:hover { background: var(--c-red-soft-2); }
 .preset-del svg { width: 13px; height: 13px; }
 .preset-tag { font-size: 10px; background: var(--c-bg-soft, #f1f5f9); color: var(--c-text-mute); }
 .preset-card:hover { border-color: var(--c-text-faint); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,0,0,.06); }

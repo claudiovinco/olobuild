@@ -116,7 +116,7 @@
         @click="addEmbedVideo"
         :disabled="!embedUrl.trim()"
         class="mb-px-3 mb-py-1.5 mb-rounded-md mb-text-xs mb-text-white mb-transition-colors"
-        style="background: var(--olo-color-primary, #6366F1);"
+        style="background: var(--olo-ui-accent, #e8622a);"
       >
         Aggiungi
       </button>
@@ -138,7 +138,7 @@
             @click="searchStock(1)"
             :disabled="stockLoading || !stockQuery.trim()"
             class="mb-px-3 mb-py-1 mb-rounded-md mb-text-xs mb-text-white mb-transition-colors"
-            style="background: var(--olo-color-primary, #6366F1);"
+            style="background: var(--olo-ui-accent, #e8622a);"
           >
             Cerca
           </button>
@@ -545,7 +545,7 @@ function formatDuration(sec) {
 <style scoped>
 .fg-ghost {
   opacity: 0.4;
-  border: 1px dashed #6366f1;
+  border: 1px dashed var(--olo-ui-accent, #e8622a);
   border-radius: 6px;
 }
 .fg-grip:active {

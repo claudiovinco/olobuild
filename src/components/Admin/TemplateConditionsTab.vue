@@ -40,7 +40,7 @@
     <div class="cfg-card-body">
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Nome regola') }}</label></div>
-        <div class="control-col"><div class="cfg-input"><input type="text" :value="rule.name" @input="setField(idx, 'name', $event.target.value)" :placeholder="t('Es. Header WooCommerce')" /></div></div>
+        <div class="control-col"><div class="cfg-input cfg-w-md"><input type="text" :value="rule.name" @input="setField(idx, 'name', $event.target.value)" :placeholder="t('Es. Header WooCommerce')" /></div></div>
       </div>
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Contesto') }}</label><div class="hint">{{ t('Dove si applica la regola.') }}</div></div>
@@ -56,18 +56,12 @@
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Template') }}</label></div>
         <div class="control-col">
-          <div class="cfg-select">
-            <select :value="rule.template_id" @change="setField(idx, 'template_id', parseInt($event.target.value) || 0)">
-              <option value="0">{{ t('— Seleziona template —') }}</option>
-              <option v-for="tpl in templates" :key="tpl.id" :value="tpl.id">{{ tpl.title }}</option>
-            </select>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
-          </div>
+          <CfgSelect :model-value="rule.template_id" :options="templateOptions" @update:model-value="setField(idx, 'template_id', parseInt($event) || 0)" />
         </div>
       </div>
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Priorità') }}</label><div class="hint">{{ t('1-999. Più basso = vince. Default 10.') }}</div></div>
-        <div class="control-col"><div class="cfg-input"><input type="number" min="1" max="999" :value="rule.priority" @input="setField(idx, 'priority', parseInt($event.target.value) || 10)" /></div></div>
+        <div class="control-col"><CfgNumber :model-value="rule.priority" :min="1" :max="999" @update:model-value="setField(idx, 'priority', $event)" /></div>
       </div>
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Operatore condizioni') }}</label></div>
@@ -82,9 +76,7 @@
         <div class="label-col"><label>{{ t('Condizioni di match') }}</label><div class="hint">{{ t('Aggiungi condizioni per cui la regola si applica.') }}</div></div>
         <div class="control-col">
           <div v-for="(cond, ci) in (rule.conditions || [])" :key="ci" class="cfg-cond-row">
-            <select :value="cond.type" @change="setCond(idx, ci, 'type', $event.target.value)">
-              <option v-for="opt in conditionTypes" :key="opt.value" :value="opt.value">{{ t(opt.label) }}</option>
-            </select>
+            <CfgSelect :model-value="cond.type" :options="conditionTypeOptions" @update:model-value="setCond(idx, ci, 'type', $event)" />
             <input type="text" :value="cond.value" @input="setCond(idx, ci, 'value', $event.target.value)" :placeholder="t('Valore (se richiesto)')" />
             <button class="cfg-btn-icon cfg-btn-danger" @click="removeCond(idx, ci)" :title="t('Rimuovi')">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
@@ -101,8 +93,10 @@
 </template>
 
 <script setup>
-import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import CfgSelect from './controls/CfgSelect.vue';
+import CfgNumber from './controls/CfgNumber.vue';
 
 const showToast = inject('showToast', () => {});
 const setDirty  = inject('setDirty',  () => {});
@@ -110,26 +104,31 @@ const setDirty  = inject('setDirty',  () => {});
 const rules = ref([]);
 const templates = ref([]);
 
-const conditionTypes = [
-  { value: 'entire_site',      label: 'Tutto il sito' },
-  { value: 'front_page',       label: 'Solo homepage' },
-  { value: 'singular',         label: 'Tutte le pagine singole' },
-  { value: 'page',             label: 'Pagina (slug)' },
-  { value: 'post',             label: 'Post (slug)' },
-  { value: 'post_type',        label: 'Custom post type' },
-  { value: 'archive',          label: 'Pagina di archivio' },
-  { value: 'category',         label: 'Categoria (slug)' },
-  { value: 'tag',              label: 'Tag (slug)' },
-  { value: 'user_logged_in',   label: 'Utente loggato' },
-  { value: 'user_logged_out',  label: 'Utente non loggato' },
-  { value: 'user_role',        label: 'Ruolo utente' },
-  { value: '404',              label: 'Pagina 404' },
-  { value: 'search',           label: 'Pagina ricerca' },
-  { value: 'woo_shop',         label: 'WooCommerce shop' },
-  { value: 'woo_product',      label: 'WooCommerce singolo prodotto' },
-  { value: 'woo_cart',         label: 'WooCommerce carrello' },
-  { value: 'woo_checkout',     label: 'WooCommerce checkout' },
+const conditionTypeOptions = [
+  { value: 'entire_site',      label: t('Tutto il sito') },
+  { value: 'front_page',       label: t('Solo homepage') },
+  { value: 'singular',         label: t('Tutte le pagine singole') },
+  { value: 'page',             label: t('Pagina (slug)') },
+  { value: 'post',             label: t('Post (slug)') },
+  { value: 'post_type',        label: t('Custom post type') },
+  { value: 'archive',          label: t('Pagina di archivio') },
+  { value: 'category',         label: t('Categoria (slug)') },
+  { value: 'tag',              label: t('Tag (slug)') },
+  { value: 'user_logged_in',   label: t('Utente loggato') },
+  { value: 'user_logged_out',  label: t('Utente non loggato') },
+  { value: 'user_role',        label: t('Ruolo utente') },
+  { value: '404',              label: t('Pagina 404') },
+  { value: 'search',           label: t('Pagina ricerca') },
+  { value: 'woo_shop',         label: t('WooCommerce shop') },
+  { value: 'woo_product',      label: t('WooCommerce singolo prodotto') },
+  { value: 'woo_cart',         label: t('WooCommerce carrello') },
+  { value: 'woo_checkout',     label: t('WooCommerce checkout') },
 ];
+
+const templateOptions = computed(() => [
+  { value: 0, label: t('— Seleziona template —') },
+  ...templates.value.map(tpl => ({ value: tpl.id, label: tpl.title })),
+]);
 
 function defaultRule() {
   return {
@@ -212,7 +211,7 @@ onBeforeUnmount(() => {
   margin-bottom: 6px;
   align-items: center;
 }
-.cfg-cond-row select, .cfg-cond-row input {
+.cfg-cond-row input {
   padding: 6px 10px;
   background: #fff;
   border: 1px solid var(--c-line);
@@ -220,7 +219,7 @@ onBeforeUnmount(() => {
   font: 13px var(--c-sans);
   outline: none;
 }
-.cfg-cond-row select:focus, .cfg-cond-row input:focus {
+.cfg-cond-row input:focus {
   border-color: var(--c-red);
   box-shadow: 0 0 0 2px var(--c-red-soft);
 }

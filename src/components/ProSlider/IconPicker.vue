@@ -211,8 +211,8 @@ async function uploadIcons(event) {
 }
 .mps-iconpicker-input::placeholder { color: #9ca3af; }
 .mps-iconpicker-input:focus {
-  border-color: var(--olo-color-primary, #6366f1);
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.12);
+  border-color: var(--olo-ui-accent, #e8622a);
+  box-shadow: 0 0 0 2px rgba(232, 98, 42, 0.12);
 }
 
 .mps-iconpicker-grid {
@@ -317,7 +317,7 @@ async function uploadIcons(event) {
 }
 .mps-tab--active {
   color: #1f2937;
-  border-bottom-color: var(--olo-color-primary, #6366f1);
+  border-bottom-color: var(--olo-ui-accent, #e8622a);
 }
 .mps-tab:hover { color: #374151; }
 

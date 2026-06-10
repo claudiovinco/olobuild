@@ -30,7 +30,7 @@
           <div class="hint">{{ t('Schema del title delle pagine. Variabili: {page}, {sep}, {site}.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-input mono"><input type="text" :value="titles.pattern" @input="setT('pattern', $event.target.value)" placeholder="{page} {sep} {site}" /></div>
+          <div class="cfg-input mono cfg-w-md"><input type="text" :value="titles.pattern" @input="setT('pattern', $event.target.value)" placeholder="{page} {sep} {site}" /></div>
         </div>
       </div>
       <div class="cfg-row">
@@ -39,15 +39,7 @@
           <div class="hint">{{ t('Carattere che separa i blocchi nel title.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-select">
-            <select :value="titles.separator" @change="setT('separator', $event.target.value)">
-              <option value="—">— (em dash)</option>
-              <option value="|">|</option>
-              <option value="·">·</option>
-              <option value="-">-</option>
-            </select>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
-          </div>
+          <CfgSelect size="md" :model-value="titles.separator" :options="SEPARATOR_OPTIONS" @update:model-value="setT('separator', $event)" />
         </div>
       </div>
       <div class="cfg-row">
@@ -68,16 +60,7 @@
           <div class="hint">{{ t('Attributo lang dell\'HTML.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-select">
-            <select :value="titles.language" @change="setT('language', $event.target.value)">
-              <option value="it_IT">{{ t('Italiano (it_IT)') }}</option>
-              <option value="en_US">{{ t('English (en_US)') }}</option>
-              <option value="es_ES">{{ t('Español (es_ES)') }}</option>
-              <option value="fr_FR">{{ t('Français (fr_FR)') }}</option>
-              <option value="de_DE">{{ t('Deutsch (de_DE)') }}</option>
-            </select>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
-          </div>
+          <CfgSelect size="md" :model-value="titles.language" :options="LANGUAGE_OPTIONS" @update:model-value="setT('language', $event)" />
         </div>
       </div>
       <div class="cfg-row no-divider">
@@ -136,7 +119,7 @@
           <div class="hint">{{ t('Username Twitter del sito (con @).') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-input mono with-prefix">
+          <div class="cfg-input mono with-prefix cfg-w-sm">
             <span class="prefix">@</span>
             <input type="text" :value="(social.twitter_handle || '').replace(/^@/, '')" @input="setS('twitter_handle', $event.target.value)" placeholder="hotelcomo" />
           </div>
@@ -184,17 +167,7 @@
           <div class="hint">{{ t('Schema.org markup iniettato in ogni pagina.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-select">
-            <select :value="schema.type" @change="setSch('type', $event.target.value)">
-              <option value="Organization">Organization</option>
-              <option value="LocalBusiness">LocalBusiness</option>
-              <option value="Hotel">Hotel</option>
-              <option value="Restaurant">Restaurant</option>
-              <option value="Store">Store</option>
-              <option value="ProfessionalService">ProfessionalService</option>
-            </select>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
-          </div>
+          <CfgSelect size="md" :model-value="schema.type" :options="SCHEMA_TYPE_OPTIONS" @update:model-value="setSch('type', $event)" />
         </div>
       </div>
       <div class="cfg-row no-divider">
@@ -213,9 +186,32 @@
 <script setup>
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import CfgSelect from './controls/CfgSelect.vue';
 
 const showToast = inject('showToast', () => {});
 const setDirty  = inject('setDirty',  () => {});
+
+const SEPARATOR_OPTIONS = [
+  { value: '—', label: t('— (em dash)') },
+  { value: '|', label: '|' },
+  { value: '·', label: '·' },
+  { value: '-', label: '-' },
+];
+const LANGUAGE_OPTIONS = [
+  { value: 'it_IT', label: t('Italiano (it_IT)') },
+  { value: 'en_US', label: t('English (en_US)') },
+  { value: 'es_ES', label: t('Español (es_ES)') },
+  { value: 'fr_FR', label: t('Français (fr_FR)') },
+  { value: 'de_DE', label: t('Deutsch (de_DE)') },
+];
+const SCHEMA_TYPE_OPTIONS = [
+  { value: 'Organization',        label: 'Organization' },
+  { value: 'LocalBusiness',       label: 'LocalBusiness' },
+  { value: 'Hotel',               label: 'Hotel' },
+  { value: 'Restaurant',          label: 'Restaurant' },
+  { value: 'Store',               label: 'Store' },
+  { value: 'ProfessionalService', label: 'ProfessionalService' },
+];
 
 const titles = ref({
   pattern: '{page} {sep} {site}',

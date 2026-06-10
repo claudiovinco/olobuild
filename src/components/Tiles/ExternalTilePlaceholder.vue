@@ -259,14 +259,14 @@ const iconStyle = computed(() => ({
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: '8px',
-  background: '#EEF2FF',
-  color: '#4F46E5',
+  background: '#FDEFE8',
+  color: 'var(--olo-ui-accent, #e8622a)',
   flexShrink: 0,
 }));
 
 const wrapStyle = computed(() => ({
   padding: '16px 20px',
-  background: 'linear-gradient(135deg, #F8FAFC, #EEF2FF)',
+  background: 'linear-gradient(135deg, #F8FAFC, #FDEFE8)',
   border: '1px solid #CBD5E1',
   borderRadius: '10px',
   minHeight: '60px',
@@ -291,7 +291,7 @@ const wrapStyle = computed(() => ({
 }
 .olo-ext-tile__spinner {
   width: 14px; height: 14px; border-radius: 50%;
-  border: 2px solid #CBD5E1; border-top-color: #4F46E5;
+  border: 2px solid #CBD5E1; border-top-color: var(--olo-ui-accent, #e8622a);
   margin-left: auto;
   animation: olo-ext-spin .8s linear infinite;
 }

@@ -105,13 +105,13 @@ function removeDynamic() {
 }
 
 .dft-btn:hover {
-  color: #a5b4fc;
-  background: rgb(var(--olo-primary-rgb, 99 102 241) / 0.15);
+  color: #f6a06b;
+  background: rgb(var(--olo-primary-rgb, 232 98 42) / 0.15);
 }
 
 .dft-btn--active {
-  color: var(--olo-color-primary, #6366F1);
-  background: rgb(var(--olo-primary-rgb, 99 102 241) / 0.2);
+  color: var(--olo-ui-accent, #e8622a);
+  background: rgb(var(--olo-primary-rgb, 232 98 42) / 0.2);
 }
 
 .dft-badge {
@@ -119,8 +119,8 @@ function removeDynamic() {
   align-items: center;
   gap: 6px;
   padding: 6px 8px;
-  background: rgb(var(--olo-primary-rgb, 99 102 241) / 0.12);
-  border: 1px solid rgb(var(--olo-primary-rgb, 99 102 241) / 0.3);
+  background: rgb(var(--olo-primary-rgb, 232 98 42) / 0.12);
+  border: 1px solid rgb(var(--olo-primary-rgb, 232 98 42) / 0.3);
   border-radius: 6px;
   font-size: 11px;
   color: #c7d2fe;

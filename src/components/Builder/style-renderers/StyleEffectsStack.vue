@@ -112,20 +112,13 @@
       </div>
       <div v-if="!isHover && bp === 'desktop'" class="olo-es-row">
         <span class="olo-es-lab">{{ t('Origine') }}</span>
-        <div class="olo-es-selwrap">
-          <select class="olo-es-sel" :value="tget('origin', 'center')" @change="tset('origin', $event.target.value)" :aria-label="t('Origine trasformazione')">
-            <option value="center">{{ t('Centro') }}</option>
-            <option value="top left">{{ t('Alto SX') }}</option>
-            <option value="top center">{{ t('Alto Centro') }}</option>
-            <option value="top right">{{ t('Alto DX') }}</option>
-            <option value="center left">{{ t('Centro SX') }}</option>
-            <option value="center right">{{ t('Centro DX') }}</option>
-            <option value="bottom left">{{ t('Basso SX') }}</option>
-            <option value="bottom center">{{ t('Basso Centro') }}</option>
-            <option value="bottom right">{{ t('Basso DX') }}</option>
-          </select>
-          <svg class="olo-es-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-        </div>
+        <FieldSelect
+          ui="dropdown"
+          class="olo-es-selwrap"
+          :model-value="tget('origin', 'center')"
+          :options="ORIGIN_OPTIONS"
+          @update:model-value="tset('origin', $event)"
+        />
       </div>
     </div>
 
@@ -198,19 +191,13 @@
       <span class="olo-es-gtitle">{{ t('Maschera') }}</span>
       <div class="olo-es-row">
         <span class="olo-es-lab">{{ t('Forma') }}</span>
-        <div class="olo-es-selwrap">
-          <select class="olo-es-sel" :value="mask" @change="onMask($event.target.value)" :aria-label="t('Maschera')">
-            <option value="none">{{ t('Nessuna') }}</option>
-            <option value="circle">{{ t('Cerchio') }}</option>
-            <option value="triangle">{{ t('Triangolo') }}</option>
-            <option value="diamond">{{ t('Diamante') }}</option>
-            <option value="hexagon">{{ t('Esagono') }}</option>
-            <option value="star">{{ t('Stella') }}</option>
-            <option value="blob">{{ t('Blob') }}</option>
-            <option value="wave">{{ t('Onda') }}</option>
-          </select>
-          <svg class="olo-es-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-        </div>
+        <FieldSelect
+          ui="dropdown"
+          class="olo-es-selwrap"
+          :model-value="mask"
+          :options="MASK_OPTIONS"
+          @update:model-value="onMask($event)"
+        />
       </div>
     </div>
 
@@ -225,6 +212,30 @@
 import { ref, computed, watch } from 'vue';
 import FieldColor from '../fields/FieldColor.vue';
 import FieldBoxShadow from '../fields/FieldBoxShadow.vue';
+import FieldSelect from '../fields/FieldSelect.vue';
+
+// Label RAW: FieldSelect applica t() internamente. Value INVARIATI.
+const ORIGIN_OPTIONS = [
+  { value: 'center', label: 'Centro' },
+  { value: 'top left', label: 'Alto SX' },
+  { value: 'top center', label: 'Alto Centro' },
+  { value: 'top right', label: 'Alto DX' },
+  { value: 'center left', label: 'Centro SX' },
+  { value: 'center right', label: 'Centro DX' },
+  { value: 'bottom left', label: 'Basso SX' },
+  { value: 'bottom center', label: 'Basso Centro' },
+  { value: 'bottom right', label: 'Basso DX' },
+];
+const MASK_OPTIONS = [
+  { value: 'none', label: 'Nessuna' },
+  { value: 'circle', label: 'Cerchio' },
+  { value: 'triangle', label: 'Triangolo' },
+  { value: 'diamond', label: 'Diamante' },
+  { value: 'hexagon', label: 'Esagono' },
+  { value: 'star', label: 'Stella' },
+  { value: 'blob', label: 'Blob' },
+  { value: 'wave', label: 'Onda' },
+];
 import { useBuilderStore } from '@/stores/builder';
 import { t } from '@/i18n';
 
@@ -559,28 +570,8 @@ const previewStyle = computed(() => {
   color: #9ca3af;
 }
 
-/* select */
-.olo-es-selwrap { position: relative; flex: 1; min-width: 0; }
-.olo-es-sel {
-  width: 100%;
-  height: 38px;
-  padding: 0 32px 0 11px;
-  border: 1px solid #e5e7eb;
-  border-radius: 9px;
-  background: #fff;
-  font-size: 14px;
-  color: #1f2937;
-  outline: none;
-  appearance: none;
-  -webkit-appearance: none;
-  cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-.olo-es-sel:focus { border-color: var(--olo-ui-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-ui-accent) 18%, transparent); }
-.olo-es-chev {
-  position: absolute; right: 11px; top: 50%; transform: translateY(-50%);
-  width: 14px; height: 14px; color: #9ca3af; pointer-events: none;
-}
+/* select (FieldSelect dropdown custom) */
+.olo-es-row .olo-es-selwrap { flex: 1; min-width: 0; }
 
 /* scala segmented ombra (chip = anteprima elevazione, fallback box-shadow inline) */
 .olo-es-scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }

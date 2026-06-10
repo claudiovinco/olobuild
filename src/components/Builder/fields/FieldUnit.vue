@@ -20,15 +20,21 @@
         class="fu-num"
         @input="onNum($event.target.value)"
       />
-      <select :value="unitPart" class="fu-unit" @change="onUnit($event.target.value)">
-        <option v-for="u in units" :key="u" :value="u">{{ u }}</option>
-      </select>
+      <FieldSelect
+        ui="dropdown"
+        size="compact"
+        class="fu-unit"
+        :model-value="unitPart"
+        :options="unitOptions"
+        @update:model-value="onUnit($event)"
+      />
     </template>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
+import FieldSelect from './FieldSelect.vue';
 
 /**
  * FieldUnit — dimensione CSS con unità ('200px', '0.2em', '50%', '120ms').
@@ -65,6 +71,9 @@ const rawMode = computed(() => parsed.value.raw);
 const numPart = computed(() => parsed.value.num);
 const unitPart = computed(() => parsed.value.unit);
 
+// Opzioni per il dropdown unità (label tecniche: px/em/rem/%… restano as-is)
+const unitOptions = computed(() => props.units.map((u) => ({ value: u, label: u })));
+
 function onNum(n) {
   const v = String(n).trim();
   emit('update:modelValue', v === '' ? '' : v + unitPart.value);
@@ -94,18 +103,16 @@ function onUnit(u) {
   font-family: ui-monospace, Menlo, Consolas, monospace;
   font-size: 12px;
 }
-.fu-unit {
-  flex: 0 0 auto;
-  width: 58px;
-  background: #f9fafb;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  padding: 5px 4px;
-  font-size: 12px;
-  color: #374151;
+/* FieldSelect unità: larghezza fissa nel flex row (flex-basis vince sul
+   width:100% del root .fsel), trigger allineato all'altezza dell'input numero */
+.fu-wrap .fu-unit {
+  flex: 0 0 58px;
+  min-width: 0;
 }
-.fu-num:focus-visible,
-.fu-unit:focus-visible {
+.fu-unit :deep(.fsel-trigger) {
+  height: 100%;
+}
+.fu-num:focus-visible {
   outline: 2px solid var(--olo-ui-accent, #e8622a);
   outline-offset: -1px;
 }

@@ -549,7 +549,7 @@ class Olo_Site_Import_Export {
                                 <label><?php esc_html_e( 'Singolo template', 'olobuild' ); ?></label>
                             </div>
                             <div class="olo-field-input-wrap">
-                                <select id="olo-export-tpl" class="olo-field-input">
+                                <select id="olo-export-tpl" class="olo-select olo-w-md">
                                     <?php foreach ( $templates as $t ) : ?>
                                     <option value="<?php echo intval( $t->id ); ?>"><?php echo esc_html( $t->name ); ?> (<?php echo esc_html( $t->type ); ?>)</option>
                                     <?php endforeach; ?>
@@ -557,7 +557,7 @@ class Olo_Site_Import_Export {
                             </div>
                         </div>
                         <div class="olo-check-row">
-                            <input type="checkbox" id="olo-export-media" checked />
+                            <input type="checkbox" id="olo-export-media" class="olo-checkbox" checked />
                             <label for="olo-export-media"><?php esc_html_e( 'Includi media (immagini, video, PDF)', 'olobuild' ); ?></label>
                         </div>
                         <div class="olo-actions" style="margin-top:12px">
@@ -593,10 +593,10 @@ class Olo_Site_Import_Export {
                     </div>
                     <div class="olo-card-body">
                         <div style="margin-bottom:16px">
-                            <input type="file" id="olo-import-file" accept=".json" class="olo-field-input" style="width:100%;padding:8px 12px" />
+                            <input type="file" id="olo-import-file" accept=".json" class="olo-file" />
                         </div>
                         <div class="olo-check-row">
-                            <input type="checkbox" id="olo-import-media" checked />
+                            <input type="checkbox" id="olo-import-media" class="olo-checkbox" checked />
                             <label for="olo-import-media"><?php esc_html_e( 'Importa media (scarica e ricarica immagini)', 'olobuild' ); ?></label>
                         </div>
                         <div class="olo-actions" style="margin-top:12px">

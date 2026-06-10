@@ -304,75 +304,139 @@ class Olo_Newsletter {
         );
 
         ?>
-        <div class="wrap">
-            <h1 style="display:flex;align-items:center;gap:12px">
-                <?php esc_html_e( 'Newsletter', 'olobuild' ); ?>
-                <span class="title-count theme-count"><?php echo esc_html( number_format_i18n( $total ) ); ?></span>
-                <a href="<?php echo esc_url( $export_url ); ?>" class="page-title-action"><?php esc_html_e( 'Esporta CSV', 'olobuild' ); ?></a>
-            </h1>
-            <p class="description">
-                <?php
-                printf(
-                    /* translators: %s: numero iscritti */
-                    esc_html__( '%s iscritti attivi raccolti dalle tile Newsletter del sito.', 'olobuild' ),
-                    '<b>' . esc_html( number_format_i18n( $total ) ) . '</b>'
-                );
-                ?>
-            </p>
+        <div class="wrap olo-nl-page">
+            <div class="olo-nl-wrap">
 
-            <table class="wp-list-table widefat fixed striped">
-                <thead>
-                    <tr>
-                        <th style="width:60px">ID</th>
-                        <th><?php esc_html_e( 'Email', 'olobuild' ); ?></th>
-                        <th><?php esc_html_e( 'Nome', 'olobuild' ); ?></th>
-                        <th><?php esc_html_e( 'Origine', 'olobuild' ); ?></th>
-                        <th style="width:90px"><?php esc_html_e( 'Stato', 'olobuild' ); ?></th>
-                        <th style="width:150px"><?php esc_html_e( 'Data', 'olobuild' ); ?></th>
-                        <th style="width:80px"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ( empty( $rows ) ) : ?>
-                        <tr><td colspan="7"><em><?php esc_html_e( 'Nessun iscritto ancora.', 'olobuild' ); ?></em></td></tr>
-                    <?php else : foreach ( $rows as $r ) :
-                        $del = wp_nonce_url(
-                            add_query_arg( [ 'page' => 'olo-newsletter', 'action' => 'delete', 'id' => $r['id'] ], admin_url( 'admin.php' ) ),
-                            'olo_nl_delete_' . $r['id']
-                        );
+                <div class="olo-admin-header">
+                    <div class="olo-admin-header-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg>
+                    </div>
+                    <div>
+                        <h1><?php esc_html_e( 'Newsletter', 'olobuild' ); ?></h1>
+                        <p>
+                            <?php
+                            printf(
+                                /* translators: %s: numero iscritti */
+                                esc_html__( '%s iscritti attivi raccolti dalle tile Newsletter del sito.', 'olobuild' ),
+                                '<b>' . esc_html( number_format_i18n( $total ) ) . '</b>'
+                            );
+                            ?>
+                        </p>
+                    </div>
+                    <a href="<?php echo esc_url( $export_url ); ?>" class="olo-btn-reset olo-btn-sm olo-nl-export">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        <?php esc_html_e( 'Esporta CSV', 'olobuild' ); ?>
+                    </a>
+                </div>
+
+                <div class="olo-card">
+                    <div class="olo-card-body olo-nl-card-body">
+                        <table class="olo-table olo-nl-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:60px">ID</th>
+                                    <th><?php esc_html_e( 'Email', 'olobuild' ); ?></th>
+                                    <th><?php esc_html_e( 'Nome', 'olobuild' ); ?></th>
+                                    <th><?php esc_html_e( 'Origine', 'olobuild' ); ?></th>
+                                    <th style="width:90px"><?php esc_html_e( 'Stato', 'olobuild' ); ?></th>
+                                    <th style="width:150px"><?php esc_html_e( 'Data', 'olobuild' ); ?></th>
+                                    <th style="width:80px"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if ( empty( $rows ) ) : ?>
+                                    <tr><td colspan="7" class="olo-nl-empty"><?php esc_html_e( 'Nessun iscritto ancora.', 'olobuild' ); ?></td></tr>
+                                <?php else : foreach ( $rows as $r ) :
+                                    $del = wp_nonce_url(
+                                        add_query_arg( [ 'page' => 'olo-newsletter', 'action' => 'delete', 'id' => $r['id'] ], admin_url( 'admin.php' ) ),
+                                        'olo_nl_delete_' . $r['id']
+                                    );
+                                    ?>
+                                    <tr>
+                                        <td class="olo-nl-id"><?php echo esc_html( $r['id'] ); ?></td>
+                                        <td><a class="olo-nl-email" href="mailto:<?php echo esc_attr( $r['email'] ); ?>"><?php echo esc_html( $r['email'] ); ?></a></td>
+                                        <td><?php echo esc_html( $r['name'] ?: '—' ); ?></td>
+                                        <td><span class="olo-nl-source"><?php echo esc_html( $r['source'] ?: '—' ); ?></span></td>
+                                        <td>
+                                            <?php if ( $r['status'] === 'subscribed' ) : ?>
+                                                <span class="olo-badge green"><?php esc_html_e( 'Attivo', 'olobuild' ); ?></span>
+                                            <?php else : ?>
+                                                <span class="olo-badge gray"><?php echo esc_html( $r['status'] ); ?></span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="olo-nl-date"><?php echo esc_html( $r['created_at'] ); ?></td>
+                                        <td><a href="<?php echo esc_url( $del ); ?>" class="submitdelete olo-nl-delete" onclick="return confirm('<?php echo esc_js( __( 'Eliminare questo iscritto?', 'olobuild' ) ); ?>')"><?php esc_html_e( 'Elimina', 'olobuild' ); ?></a></td>
+                                    </tr>
+                                <?php endforeach; endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <?php if ( $pages > 1 ) : ?>
+                    <div class="tablenav olo-nl-pagination"><div class="tablenav-pages">
+                        <?php
+                        echo paginate_links( [
+                            'base'    => add_query_arg( 'paged', '%#%' ),
+                            'format'  => '',
+                            'current' => $paged,
+                            'total'   => $pages,
+                        ] );
                         ?>
-                        <tr>
-                            <td><?php echo esc_html( $r['id'] ); ?></td>
-                            <td><strong><a href="mailto:<?php echo esc_attr( $r['email'] ); ?>"><?php echo esc_html( $r['email'] ); ?></a></strong></td>
-                            <td><?php echo esc_html( $r['name'] ?: '—' ); ?></td>
-                            <td><span style="color:#666;font-size:12px"><?php echo esc_html( $r['source'] ?: '—' ); ?></span></td>
-                            <td>
-                                <?php if ( $r['status'] === 'subscribed' ) : ?>
-                                    <span style="color:#46b450">&#10003; <?php esc_html_e( 'Attivo', 'olobuild' ); ?></span>
-                                <?php else : ?>
-                                    <span style="color:#999"><?php echo esc_html( $r['status'] ); ?></span>
-                                <?php endif; ?>
-                            </td>
-                            <td><?php echo esc_html( $r['created_at'] ); ?></td>
-                            <td><a href="<?php echo esc_url( $del ); ?>" class="submitdelete" onclick="return confirm('<?php echo esc_js( __( 'Eliminare questo iscritto?', 'olobuild' ) ); ?>')"><?php esc_html_e( 'Elimina', 'olobuild' ); ?></a></td>
-                        </tr>
-                    <?php endforeach; endif; ?>
-                </tbody>
-            </table>
-
-            <?php if ( $pages > 1 ) : ?>
-                <div class="tablenav"><div class="tablenav-pages">
-                    <?php
-                    echo paginate_links( [
-                        'base'    => add_query_arg( 'paged', '%#%' ),
-                        'format'  => '',
-                        'current' => $paged,
-                        'total'   => $pages,
-                    ] );
-                    ?>
-                </div></div>
-            <?php endif; ?>
+                    </div></div>
+                <?php endif; ?>
+            </div>
         </div>
+
+        <style>
+            /* ── Newsletter — card e tabella coerenti col design admin ── */
+            .olo-nl-wrap {
+                max-width: 1060px;
+                margin: 28px auto 40px;
+                padding: 0 24px;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            }
+            .olo-nl-wrap * { box-sizing: border-box; }
+            .olo-nl-wrap .olo-admin-header h1 {
+                font-size: 20px;
+                font-weight: 700;
+                color: #1a1a1a;
+                margin: 0;
+                padding: 0;
+                letter-spacing: -0.02em;
+                line-height: 1.2;
+            }
+            .olo-nl-export { margin-left: auto; text-decoration: none; flex-shrink: 0; }
+            .olo-nl-export:focus { color: #1a1a1a; box-shadow: none; outline: 2px solid rgba(232,98,42,.4); outline-offset: 2px; }
+            .olo-nl-card-body { padding: 6px 10px; }
+            .olo-nl-table { table-layout: fixed; }
+            .olo-nl-id { color: #999; font-size: 12px; }
+            .olo-nl-email { font-weight: 600; color: #1a1a1a; text-decoration: none; }
+            .olo-nl-email:hover { color: #e8622a; }
+            .olo-nl-source { color: #999; font-size: 12px; }
+            .olo-nl-date { color: #666; font-size: 12px; white-space: nowrap; }
+            .olo-nl-delete { color: #dc2626 !important; font-size: 12px; font-weight: 600; text-decoration: none; }
+            .olo-nl-delete:hover { text-decoration: underline; }
+            .olo-nl-empty { text-align: center; padding: 36px 20px !important; color: #999; }
+            .olo-nl-pagination { margin-top: 16px; height: auto; }
+            .olo-nl-pagination .tablenav-pages { float: none; display: flex; justify-content: flex-end; gap: 4px; }
+            .olo-nl-pagination .page-numbers {
+                display: inline-flex;
+                align-items: center;
+                padding: 6px 12px;
+                border: 1.5px solid #e5e0d8;
+                border-radius: 8px;
+                background: #fff;
+                color: #666;
+                font-size: 13px;
+                font-weight: 600;
+                text-decoration: none;
+                transition: all .15s;
+            }
+            .olo-nl-pagination a.page-numbers:hover { border-color: #1a1a1a; color: #1a1a1a; }
+            .olo-nl-pagination .page-numbers.current { background: #1a1a1a; border-color: #1a1a1a; color: #fff; }
+            .olo-nl-pagination .page-numbers.dots { border: none; background: none; }
+        </style>
         <?php
     }
 }

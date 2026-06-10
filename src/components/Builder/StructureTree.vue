@@ -952,7 +952,7 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
     var prevBoxShadow = el.style.boxShadow;
     var prevTransition = el.style.transition;
     el.style.transition = 'box-shadow 0.18s ease-out';
-    el.style.boxShadow = '0 0 0 2px var(--olo-color-primary, #6366F1)';
+    el.style.boxShadow = '0 0 0 2px var(--olo-ui-accent, #e8622a)';
     setTimeout(function() {
       el.style.transition = 'box-shadow 0.45s ease-in';
       el.style.boxShadow = prevBoxShadow || '';
@@ -985,11 +985,11 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
   background: rgba(0, 0, 0, 0.04);
 }
 .st-row--active {
-  background: rgb(var(--olo-primary-rgb, 99 102 241) / 0.1);
-  border-left-color: var(--olo-color-primary, #6366F1);
+  background: rgb(var(--olo-primary-rgb, 232 98 42) / 0.1);
+  border-left-color: var(--olo-ui-accent, #e8622a);
 }
 .st-row--active:hover {
-  background: rgb(var(--olo-primary-rgb, 99 102 241) / 0.14);
+  background: rgb(var(--olo-primary-rgb, 232 98 42) / 0.14);
 }
 
 /* Section row styling */
@@ -1063,7 +1063,7 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
   color: #94A3B8;
 }
 .st-row--active .st-icon {
-  color: #6366F1;
+  color: var(--olo-ui-accent, #e8622a);
 }
 
 /* Label */
@@ -1184,8 +1184,8 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
 }
 .st-dropzone:empty {
   min-height: 24px;
-  border-color: rgba(99, 102, 241, 0.2);
-  background: rgba(99, 102, 241, 0.03);
+  border-color: rgba(232, 98, 42, 0.2);
+  background: rgba(232, 98, 42, 0.03);
 }
 .st-dropzone:empty::after {
   content: 'Trascina qui';

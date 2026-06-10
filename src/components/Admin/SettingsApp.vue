@@ -363,7 +363,9 @@ onMounted(() => {
 .wrap.olo-cfg-wrap { margin: 0; padding: 0; }
 .wrap.olo-cfg-wrap > h1.screen-reader-text { display: none; }
 
-.cfg-root {
+/* Token condivisi: .cfg-root (shell) + .cfg-layer (popup/dropdown teleportati
+   su body, che altrimenti non erediterebbero le variabili). */
+.cfg-root, .cfg-layer {
   --c-red:        #e1474f;
   --c-red-dark:   #c8323a;
   --c-red-soft:   #fef2f3;
@@ -386,6 +388,13 @@ onMounted(() => {
   --c-sans:    'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --c-display: 'Instrument Serif', 'Playfair Display', Georgia, serif;
   --c-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+}
+.cfg-layer {
+  font-family: var(--c-sans);
+  color: var(--c-text);
+  -webkit-font-smoothing: antialiased;
+}
+.cfg-root {
   font-family: var(--c-sans);
   color: var(--c-text);
   font-size: 14px;
@@ -605,6 +614,9 @@ onMounted(() => {
   overflow-y: auto;
   padding: 32px 40px 40px;
 }
+/* Righe di lettura contenute: su viewport larghi le card non si stirano
+   all'infinito (look da console professionale, à la Stripe/Linear). */
+.cfg-content > * { max-width: 1080px; }
 .cfg-page-head {
   display: flex; align-items: flex-end; gap: 24px;
   margin-bottom: 28px;
@@ -732,6 +744,22 @@ onMounted(() => {
 }
 .cfg-select .chev { color: var(--c-text-faint); pointer-events: none; }
 .cfg-select .chev svg { width: 14px; height: 14px; }
+
+/* Larghezza dei controlli: un campo dev'essere largo quanto il dato che
+   contiene. Default contenuto dentro le cfg-row; taglie esplicite cfg-w-*. */
+.cfg-row .control-col .cfg-input,
+.cfg-row .control-col .cfg-select,
+.cfg-row .control-col .cfg-slider { max-width: 440px; }
+.cfg-input.cfg-w-xs,  .cfg-select.cfg-w-xs  { width: 130px; flex: 0 0 auto; }
+.cfg-input.cfg-w-sm,  .cfg-select.cfg-w-sm  { width: 210px; flex: 0 0 auto; }
+.cfg-input.cfg-w-md,  .cfg-select.cfg-w-md  { width: 320px; flex: 0 0 auto; }
+.cfg-input.cfg-w-lg,  .cfg-select.cfg-w-lg  { width: 480px; flex: 0 0 auto; }
+.cfg-input.cfg-w-full, .cfg-select.cfg-w-full { width: 100%; max-width: none; }
+
+/* Niente spinner nativi del browser sugli input numerici. */
+.cfg-input input[type='number'] { -moz-appearance: textfield; appearance: textfield; }
+.cfg-input input[type='number']::-webkit-outer-spin-button,
+.cfg-input input[type='number']::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
 /* Segmented control */
 .cfg-segment {

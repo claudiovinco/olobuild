@@ -24,23 +24,23 @@
     <div class="cfg-card-body">
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Google Analytics 4') }}</label><div class="hint">{{ t('Measurement ID (es. G-XXXXXXXX).') }}</div></div>
-        <div class="control-col"><div class="cfg-input mono"><input type="text" :value="form.ga_id" @input="set('ga_id', $event.target.value)" placeholder="G-XXXXXXXX" /></div></div>
+        <div class="control-col"><div class="cfg-input mono cfg-w-md"><input type="text" :value="form.ga_id" @input="set('ga_id', $event.target.value)" placeholder="G-XXXXXXXX" /></div></div>
       </div>
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Facebook Pixel') }}</label></div>
-        <div class="control-col"><div class="cfg-input mono"><input type="text" :value="form.fb_pixel_id" @input="set('fb_pixel_id', $event.target.value)" placeholder="123456789012345" /></div></div>
+        <div class="control-col"><div class="cfg-input mono cfg-w-md"><input type="text" :value="form.fb_pixel_id" @input="set('fb_pixel_id', $event.target.value)" placeholder="123456789012345" /></div></div>
       </div>
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Google Tag Manager') }}</label></div>
-        <div class="control-col"><div class="cfg-input mono"><input type="text" :value="form.gtm_id" @input="set('gtm_id', $event.target.value)" placeholder="GTM-XXXXXXX" /></div></div>
+        <div class="control-col"><div class="cfg-input mono cfg-w-md"><input type="text" :value="form.gtm_id" @input="set('gtm_id', $event.target.value)" placeholder="GTM-XXXXXXX" /></div></div>
       </div>
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Microsoft Clarity') }}</label></div>
-        <div class="control-col"><div class="cfg-input mono"><input type="text" :value="form.clarity_id" @input="set('clarity_id', $event.target.value)" placeholder="xxxxxxxxx" /></div></div>
+        <div class="control-col"><div class="cfg-input mono cfg-w-md"><input type="text" :value="form.clarity_id" @input="set('clarity_id', $event.target.value)" placeholder="xxxxxxxxx" /></div></div>
       </div>
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Hotjar Site ID') }}</label></div>
-        <div class="control-col"><div class="cfg-input mono"><input type="text" :value="form.hotjar_id" @input="set('hotjar_id', $event.target.value)" placeholder="1234567" /></div></div>
+        <div class="control-col"><div class="cfg-input mono cfg-w-md"><input type="text" :value="form.hotjar_id" @input="set('hotjar_id', $event.target.value)" placeholder="1234567" /></div></div>
       </div>
     </div>
   </div>
@@ -63,11 +63,11 @@
       </div>
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Percentuali scroll (CSV)') }}</label><div class="hint">{{ t('Quando tracciare scroll depth, es. 25,50,75,100.') }}</div></div>
-        <div class="control-col"><div class="cfg-input mono"><input type="text" :value="form.scroll_milestones" @input="set('scroll_milestones', $event.target.value)" /></div></div>
+        <div class="control-col"><div class="cfg-input mono cfg-w-md"><input type="text" :value="form.scroll_milestones" @input="set('scroll_milestones', $event.target.value)" /></div></div>
       </div>
       <div class="cfg-row">
         <div class="label-col"><label>{{ t('Estensioni download (CSV)') }}</label></div>
-        <div class="control-col"><div class="cfg-input mono"><input type="text" :value="form.download_extensions" @input="set('download_extensions', $event.target.value)" placeholder="pdf,zip,docx" /></div></div>
+        <div class="control-col"><div class="cfg-input mono cfg-w-md"><input type="text" :value="form.download_extensions" @input="set('download_extensions', $event.target.value)" placeholder="pdf,zip,docx" /></div></div>
       </div>
     </div>
   </div>

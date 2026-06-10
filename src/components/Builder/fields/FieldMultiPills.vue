@@ -99,13 +99,13 @@ const iconPaths = {
 }
 
 .fmp-pill--active {
-  background: rgb(var(--olo-primary-rgb, 99 102 241) / 0.2);
-  border-color: var(--olo-color-primary, #6366F1);
+  background: rgb(var(--olo-primary-rgb, 232 98 42) / 0.2);
+  border-color: var(--olo-ui-accent, #e8622a);
   color: #c7d2fe;
 }
 
 .fmp-pill--active:hover {
-  background: rgb(var(--olo-primary-rgb, 99 102 241) / 0.3);
+  background: rgb(var(--olo-primary-rgb, 232 98 42) / 0.3);
 }
 
 .fmp-pill-icon {

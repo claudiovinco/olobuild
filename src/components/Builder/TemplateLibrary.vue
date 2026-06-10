@@ -39,16 +39,15 @@
           <!-- Category filter -->
           <div style="display:flex;align-items:center;gap:10px;padding:8px 20px;background:#111827;border-bottom:1px solid #374151">
             <label style="color:#9CA3AF;font-size:11px;white-space:nowrap">{{ t('Categoria:') }}</label>
-            <select
-              v-model="activeCategory"
-              style="flex:1;background:#374151;color:#E5E7EB;border:1px solid #4B5563;border-radius:6px;padding:5px 10px;font-size:12px;outline:none;cursor:pointer;max-width:220px"
-            >
-              <option
-                v-for="cat in categoriesWithCount"
-                :key="cat.key"
-                :value="cat.key"
-              >{{ cat.label }} ({{ cat.count }})</option>
-            </select>
+            <div style="flex:1;max-width:220px">
+              <FieldSelect
+                ui="dropdown"
+                theme="dark"
+                :modelValue="activeCategory"
+                :options="categoryFilterOptions"
+                @update:modelValue="activeCategory = $event"
+              />
+            </div>
             <span style="color:#6B7280;font-size:10px">{{ filteredTemplates.length }} risultati</span>
           </div>
 
@@ -69,7 +68,7 @@
                 class="olo-tpl-card"
                 style="background:#374151;border-radius:8px;border:1px solid #4B5563;cursor:pointer;overflow:hidden;transition:border-color 0.15s, box-shadow 0.15s"
                 @click="onCardClick(tpl)"
-                @mouseenter="$event.currentTarget.style.borderColor='#6366F1';$event.currentTarget.style.boxShadow='0 4px 12px rgba(99,102,241,0.15)'"
+                @mouseenter="$event.currentTarget.style.borderColor='#e8622a';$event.currentTarget.style.boxShadow='0 4px 12px rgba(232,98,42,0.15)'"
                 @mouseleave="$event.currentTarget.style.borderColor='#4B5563';$event.currentTarget.style.boxShadow='none'"
               >
                 <!-- Thumbnail image (for page templates with thumbnail) -->
@@ -98,7 +97,7 @@
                   <div style="min-width:0;flex:1">
                     <div style="display:flex;align-items:center;gap:4px">
                       <span style="font-size:11px;font-weight:500;color:#E5E7EB;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ tpl.name }}</span>
-                      <span v-if="tpl.category === 'page'" style="font-size:8px;padding:1px 5px;background:rgba(99,102,241,0.15);color:#A5B4FC;border-radius:3px;flex-shrink:0">{{ t('Pagina') }}</span>
+                      <span v-if="tpl.category === 'page'" style="font-size:8px;padding:1px 5px;background:rgba(232,98,42,0.15);color:#F6A06B;border-radius:3px;flex-shrink:0">{{ t('Pagina') }}</span>
                       <span v-if="tpl.is_user" style="font-size:8px;padding:1px 4px;background:rgba(245,158,11,0.15);color:#FCD34D;border-radius:3px;flex-shrink:0">{{ t('Personale') }}</span>
                     </div>
                     <span style="font-size:9px;text-transform:capitalize" :style="{ color: getCategoryColor(tpl.category) }">{{ getCategoryLabel(tpl.category) }}</span>
@@ -142,7 +141,7 @@
         >
           <!-- Header -->
           <div style="padding:16px 20px;border-bottom:1px solid #374151;display:flex;align-items:center;gap:8px">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e8622a" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
             <span style="color:#F3F4F6;font-size:14px;font-weight:600">{{ t('Salva come template') }}</span>
           </div>
           <!-- Body -->
@@ -155,19 +154,20 @@
                 type="text"
                 :placeholder="t('es. Hero con video e CTA')"
                 style="width:100%;background:#374151;border:1px solid #4B5563;border-radius:6px;color:#E5E7EB;padding:8px 12px;font-size:13px;outline:none;box-sizing:border-box"
-                @focus="$event.target.style.borderColor='#6366F1'"
+                @focus="$event.target.style.borderColor='#e8622a'"
                 @blur="$event.target.style.borderColor='#4B5563'"
                 @keydown.enter="doSave"
               />
             </div>
             <div style="margin-bottom:14px">
               <label style="display:block;color:#9CA3AF;font-size:11px;margin-bottom:4px">{{ t('Categoria') }}</label>
-              <select
-                v-model="saveCategory"
-                style="width:100%;background:#374151;border:1px solid #4B5563;border-radius:6px;color:#E5E7EB;padding:8px 12px;font-size:13px;outline:none;cursor:pointer;box-sizing:border-box"
-              >
-                <option v-for="cat in saveCategoryOptions" :key="cat.key" :value="cat.key">{{ cat.label }}</option>
-              </select>
+              <FieldSelect
+                ui="dropdown"
+                theme="dark"
+                :modelValue="saveCategory"
+                :options="saveCategorySelectOptions"
+                @update:modelValue="saveCategory = $event"
+              />
             </div>
             <div style="margin-bottom:14px">
               <label style="display:block;color:#9CA3AF;font-size:11px;margin-bottom:4px">{{ t('Descrizione (opzionale)') }}</label>
@@ -176,7 +176,7 @@
                 type="text"
                 :placeholder="t('Breve descrizione del template')"
                 style="width:100%;background:#374151;border:1px solid #4B5563;border-radius:6px;color:#E5E7EB;padding:8px 12px;font-size:13px;outline:none;box-sizing:border-box"
-                @focus="$event.target.style.borderColor='#6366F1'"
+                @focus="$event.target.style.borderColor='#e8622a'"
                 @blur="$event.target.style.borderColor='#4B5563'"
               />
             </div>
@@ -196,7 +196,7 @@
             <button
               @click="doSave"
               :disabled="!saveName.trim() || saving"
-              style="padding:7px 16px;border-radius:6px;border:none;background:#6366F1;color:#fff;font-size:12px;font-weight:500;cursor:pointer;transition:opacity 0.15s"
+              style="padding:7px 16px;border-radius:6px;border:none;background:#e8622a;color:#fff;font-size:12px;font-weight:500;cursor:pointer;transition:opacity 0.15s"
               :style="{ opacity: (!saveName.trim() || saving) ? '0.5' : '1' }"
             >{{ saving ? 'Salvataggio...' : 'Salva template' }}</button>
           </div>
@@ -249,14 +249,14 @@
       <div v-if="pageInsertMode === 'ask'" style="position:fixed;inset:0;z-index:99500;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center" @click.self="cancelPageInsert">
         <div style="background:#1F2937;border:1px solid #374151;border-radius:12px;padding:24px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.5)" @click.stop>
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A5B4FC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F6A06B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
             <span style="color:#E5E7EB;font-size:14px;font-weight:600">{{ t('Inserisci pagina completa') }}</span>
           </div>
           <p style="color:#9CA3AF;font-size:12px;line-height:1.5;margin:0 0 16px">
             Il canvas contiene già del contenuto. Come vuoi procedere con il template <strong style="color:#E5E7EB">{{ pendingPageTpl?.name }}</strong>?
           </p>
           <div style="display:flex;gap:8px">
-            <button @click="confirmPageInsert('replace')" style="flex:1;padding:8px 12px;background:#4F46E5;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:background 0.15s" @mouseenter="$event.target.style.background='#4338CA'" @mouseleave="$event.target.style.background='#4F46E5'">
+            <button @click="confirmPageInsert('replace')" style="flex:1;padding:8px 12px;background:#e8622a;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:background 0.15s" @mouseenter="$event.target.style.background='#c44d1d'" @mouseleave="$event.target.style.background='#e8622a'">
               {{ t('Sostituisci tutto') }}
             </button>
             <button @click="confirmPageInsert('append')" style="flex:1;padding:8px 12px;background:#374151;color:#E5E7EB;border:1px solid #4B5563;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:background 0.15s" @mouseenter="$event.target.style.background='#4B5563'" @mouseleave="$event.target.style.background='#374151'">
@@ -278,6 +278,7 @@ import { useFocusTrap } from '@/composables/useFocusTrap';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { useToast } from '@/composables/useToast.js';
+import FieldSelect from './fields/FieldSelect.vue';
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
@@ -337,6 +338,9 @@ const categoryDefs = [
 // Category options for save dialog (exclude 'all')
 const saveCategoryOptions = categoryDefs.filter(c => c.key !== 'all');
 
+// Options { value, label } per i dropdown custom FieldSelect
+const saveCategorySelectOptions = saveCategoryOptions.map(cat => ({ value: cat.key, label: cat.label }));
+
 const categoriesWithCount = computed(() => {
   return categoryDefs
     .map(cat => ({
@@ -347,6 +351,10 @@ const categoriesWithCount = computed(() => {
     }))
     .filter(cat => cat.count > 0 || cat.key === 'all');
 });
+
+const categoryFilterOptions = computed(() =>
+  categoriesWithCount.value.map(cat => ({ value: cat.key, label: `${cat.label} (${cat.count})` }))
+);
 
 const filteredTemplates = computed(() => {
   let list = templates.value;
@@ -465,7 +473,7 @@ function getSvgElements(tpl) {
   const isDark = bgColor && /^#[0-3][0-9a-fA-F]{5}$/.test(bgColor);
   const elColor = isDark ? '#ffffff' : '#374151';
   const elColorLight = isDark ? '#ffffff' : '#9CA3AF';
-  const accentHex = '#6366F1';
+  const accentHex = '#e8622a';
 
   if (!sec?.children?.length) {
     els.push({ shape: 'rect', x: W*0.2, y: 30, w: W*0.6, h: 8, fill: elColor, opacity: 0.35, rx: 2 });

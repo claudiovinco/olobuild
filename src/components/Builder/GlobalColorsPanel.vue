@@ -229,7 +229,7 @@ watch(() => stylesStore.globalColors, (newVal) => {
 }
 
 .gcp-input:focus {
-  border-color: var(--olo-color-primary, #6366f1);
+  border-color: var(--olo-ui-accent, #e8622a);
 }
 
 .gcp-input--label {
@@ -286,7 +286,7 @@ watch(() => stylesStore.globalColors, (newVal) => {
 }
 
 .gcp-add:hover {
-  border-color: var(--olo-color-primary, #6366f1);
+  border-color: var(--olo-ui-accent, #e8622a);
   color: #e5e7eb;
 }
 
@@ -297,7 +297,7 @@ watch(() => stylesStore.globalColors, (newVal) => {
 }
 
 .gcp-save {
-  background: var(--olo-color-primary, #6366f1);
+  background: var(--olo-ui-accent, #e8622a);
   color: #fff;
   border: none;
   border-radius: 6px;

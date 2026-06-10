@@ -492,7 +492,7 @@ onBeforeUnmount(() => {
   outline: none;
 }
 .ff-search:focus {
-  border-color: var(--olo-color-primary, #6366f1);
+  border-color: var(--olo-ui-accent, #e8622a);
 }
 .ff-search::placeholder {
   color: #9CA3AF;
@@ -527,7 +527,7 @@ onBeforeUnmount(() => {
   color: #1a1a1a;
 }
 .ff-item--active {
-  background: var(--olo-color-primary, #6366F1);
+  background: var(--olo-ui-accent, #e8622a);
   color: #fff;
 }
 .ff-item--active:hover {

@@ -25,13 +25,7 @@
           <div class="hint">{{ t(pt.hint) }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-select">
-            <select :value="form[pt.optionKey]" @change="set(pt.optionKey, parseInt($event.target.value) || 0)">
-              <option value="0">{{ t('Default WooCommerce') }}</option>
-              <option v-for="tpl in templates" :key="tpl.id" :value="tpl.id">{{ tpl.title }}</option>
-            </select>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
-          </div>
+          <CfgSelect :model-value="form[pt.optionKey]" :options="templateOptions" @update:model-value="set(pt.optionKey, parseInt($event) || 0)" />
         </div>
       </div>
     </div>
@@ -39,8 +33,9 @@
 </template>
 
 <script setup>
-import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import CfgSelect from './controls/CfgSelect.vue';
 
 const showToast = inject('showToast', () => {});
 const setDirty  = inject('setDirty',  () => {});
@@ -63,6 +58,11 @@ const form = ref({
 
 const templates = ref([]);
 const wooActive = ref(true);
+
+const templateOptions = computed(() => [
+  { value: 0, label: t('Default WooCommerce') },
+  ...templates.value.map(tpl => ({ value: tpl.id, label: tpl.title })),
+]);
 
 function set(k, v) { form.value[k] = v; setDirty(true); }
 

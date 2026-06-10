@@ -14,14 +14,12 @@
     <!-- Single Post Type selector (only for single templates) -->
     <div v-if="isSingleTemplate">
       <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">{{ t('Post Type') }}</label>
-      <select
-        :value="pageSettings.single_post_type || ''"
-        @change="builderStore.updatePageSetting('single_post_type', $event.target.value)"
-        class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
-      >
-        <option value="" disabled>{{ t('Seleziona post type...') }}</option>
-        <option v-for="pt in postTypes" :key="pt.value" :value="pt.value">{{ pt.label }}</option>
-      </select>
+      <FieldSelect
+        ui="dropdown"
+        :modelValue="pageSettings.single_post_type || ''"
+        :options="postTypes"
+        @update:modelValue="builderStore.updatePageSetting('single_post_type', $event)"
+      />
     </div>
 
     <!-- Separator (single) -->
@@ -30,16 +28,12 @@
     <!-- Layout -->
     <div>
       <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">{{ t('Larghezza max contenuto') }}</label>
-      <select
-        :value="pageSettings.content_max_width"
-        @change="builderStore.updatePageSetting('content_max_width', parseInt($event.target.value))"
-        class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
-      >
-        <option :value="960">{{ t('960px (Stretto)') }}</option>
-        <option :value="1200">{{ t('1200px (Predefinito)') }}</option>
-        <option :value="1400">{{ t('1400px (Largo)') }}</option>
-        <option :value="9999">{{ t('Larghezza piena') }}</option>
-      </select>
+      <FieldSelect
+        ui="dropdown"
+        :modelValue="pageSettings.content_max_width"
+        :options="contentWidthOptions"
+        @update:modelValue="builderStore.updatePageSetting('content_max_width', $event)"
+      />
     </div>
 
     <!-- Separator -->
@@ -81,13 +75,7 @@
         </div>
         <div>
           <label class="mb-block mb-text-xs mb-text-gray-400 mb-mb-1">{{ t('Fusione') }}</label>
-          <select :value="pageSettings.page_crt_blend_mode || 'overlay'" @change="builderStore.updatePageSetting('page_crt_blend_mode', $event.target.value)" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900">
-            <option value="overlay">Overlay</option>
-            <option value="screen">Screen</option>
-            <option value="soft-light">Soft Light</option>
-            <option value="multiply">Multiply</option>
-            <option value="normal">{{ t('Normale') }}</option>
-          </select>
+          <FieldSelect ui="dropdown" :modelValue="pageSettings.page_crt_blend_mode || 'overlay'" :options="crtBlendOptions" @update:modelValue="builderStore.updatePageSetting('page_crt_blend_mode', $event)" />
         </div>
         <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
           <input type="checkbox" :checked="pageSettings.page_crt_flicker === true" @change="builderStore.updatePageSetting('page_crt_flicker', $event.target.checked)" class="mb-accent-primary-500" />
@@ -241,24 +229,12 @@
       <div v-else-if="seoTab === 'schema'" class="mb-space-y-3">
         <div>
           <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Schema.org type (auto se vuoto)') }}</label>
-          <select
-            :value="seo.data.value.schema_type"
-            @change="seoUpdate('schema_type', $event.target.value)"
-            class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
-          >
-            <option value="">{{ t('Automatico') }}</option>
-            <option value="Article">Article</option>
-            <option value="BlogPosting">BlogPosting</option>
-            <option value="NewsArticle">NewsArticle</option>
-            <option value="WebPage">WebPage</option>
-            <option value="FAQPage">FAQPage</option>
-            <option value="HowTo">HowTo</option>
-            <option value="Product">Product</option>
-            <option value="Event">Event</option>
-            <option value="Recipe">Recipe</option>
-            <option value="LocalBusiness">LocalBusiness</option>
-            <option value="none">{{ t('Nessuno') }}</option>
-          </select>
+          <FieldSelect
+            ui="dropdown"
+            :modelValue="seo.data.value.schema_type"
+            :options="schemaTypeOptions"
+            @update:modelValue="seoUpdate('schema_type', $event)"
+          />
         </div>
         <div>
           <label class="mb-flex mb-justify-between mb-text-[10px] mb-text-gray-400 mb-mb-1">
@@ -326,14 +302,12 @@
       <!-- Effect type -->
       <div class="mb-mb-3">
         <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Tipo effetto') }}</label>
-        <select
-          :value="sf.effect"
-          @change="updateSf('effect', $event.target.value)"
-          class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
-        >
-          <option value="flash">{{ t('Flash (singolo)') }}</option>
-          <option value="pulse">{{ t('Pulse (ripetuto)') }}</option>
-        </select>
+        <FieldSelect
+          ui="dropdown"
+          :modelValue="sf.effect"
+          :options="scrollEffectOptions"
+          @update:modelValue="updateSf('effect', $event)"
+        />
       </div>
 
       <!-- Color -->
@@ -391,11 +365,47 @@ import { loadScrollFlashPrefs, saveScrollFlashPrefs } from '@/utils/scrollFlashP
 import { useMediaPicker } from '@/composables/useMediaPicker';
 import { usePageSeo } from '@/composables/usePageSeo';
 import FieldColor from './fields/FieldColor.vue';
+import FieldSelect from './fields/FieldSelect.vue';
 
 const builderStore = useBuilderStore();
 const pageSettings = computed(() => builderStore.pageSettings);
 const sf = reactive(loadScrollFlashPrefs());
 const { openSingleImage } = useMediaPicker();
+
+// Opzioni dei dropdown custom (FieldSelect applica t() alle label).
+// Value numerici per content_max_width: FieldSelect emette il value originale,
+// quindi il setting resta un number come col vecchio parseInt.
+const contentWidthOptions = [
+  { value: 960, label: '960px (Stretto)' },
+  { value: 1200, label: '1200px (Predefinito)' },
+  { value: 1400, label: '1400px (Largo)' },
+  { value: 9999, label: 'Larghezza piena' },
+];
+const crtBlendOptions = [
+  { value: 'overlay', label: 'Overlay' },
+  { value: 'screen', label: 'Screen' },
+  { value: 'soft-light', label: 'Soft Light' },
+  { value: 'multiply', label: 'Multiply' },
+  { value: 'normal', label: 'Normale' },
+];
+const schemaTypeOptions = [
+  { value: '', label: 'Automatico' },
+  { value: 'Article', label: 'Article' },
+  { value: 'BlogPosting', label: 'BlogPosting' },
+  { value: 'NewsArticle', label: 'NewsArticle' },
+  { value: 'WebPage', label: 'WebPage' },
+  { value: 'FAQPage', label: 'FAQPage' },
+  { value: 'HowTo', label: 'HowTo' },
+  { value: 'Product', label: 'Product' },
+  { value: 'Event', label: 'Event' },
+  { value: 'Recipe', label: 'Recipe' },
+  { value: 'LocalBusiness', label: 'LocalBusiness' },
+  { value: 'none', label: 'Nessuno' },
+];
+const scrollEffectOptions = [
+  { value: 'flash', label: 'Flash (singolo)' },
+  { value: 'pulse', label: 'Pulse (ripetuto)' },
+];
 
 function updateSf(key, value) {
   sf[key] = value;

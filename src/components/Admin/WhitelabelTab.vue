@@ -27,7 +27,7 @@
           <div class="hint">{{ t('Sostituisce "Olobuild" nelle voci di menu WP, nell\'editor e nei messaggi di sistema.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-input"><input type="text" :value="form.plugin_name" @input="set('plugin_name', $event.target.value)" :placeholder="t('Es. Studio Builder')" /></div>
+          <div class="cfg-input cfg-w-md"><input type="text" :value="form.plugin_name" @input="set('plugin_name', $event.target.value)" :placeholder="t('Es. Studio Builder')" /></div>
         </div>
       </div>
       <div class="cfg-row">
@@ -36,7 +36,7 @@
           <div class="hint">{{ t('Visibile in footer di alcune schermate e nei meta dei file esportati.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-input"><input type="text" :value="form.author_name" @input="set('author_name', $event.target.value)" :placeholder="t('Es. Studio Conti & Associati')" /></div>
+          <div class="cfg-input cfg-w-md"><input type="text" :value="form.author_name" @input="set('author_name', $event.target.value)" :placeholder="t('Es. Studio Conti & Associati')" /></div>
         </div>
       </div>
       <div class="cfg-row">

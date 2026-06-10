@@ -126,28 +126,27 @@ class Olo_Tools {
             .olo-tools-page .olo-notice { padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 13px; }
             .olo-tools-page .olo-notice-success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
             .olo-tools-page .olo-notice-error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
-            .olo-tools-page .olo-field-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f0f0f0; }
+            .olo-tools-page .olo-field-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 14px 0; border-bottom: 1px solid #f0f0f0; }
             .olo-tools-page .olo-field-row:last-child { border-bottom: none; }
             .olo-tools-page .olo-field-info { flex: 1; }
-            .olo-tools-page .olo-field-info label { font-weight: 500; display: block; margin-bottom: 2px; }
-            .olo-tools-page .olo-field-hint { font-size: 12px; color: #888; }
-            .olo-tools-page .olo-field-input { min-width: 160px; padding: 6px 10px; border: 1px solid #d0d5dd; border-radius: 6px; font-size: 13px; }
-            .olo-tools-page .olo-field-input-full { width: 100%; padding: 8px 12px; border: 1px solid #d0d5dd; border-radius: 6px; font-size: 13px; box-sizing: border-box; }
-            .olo-tools-page .olo-btn-action { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: none; border-radius: 6px; font-size: 13px; cursor: pointer; color: #fff; background: #1a1a1a; }
-            .olo-tools-page .olo-btn-action:hover { background: #333; }
-            .olo-tools-page .olo-btn-action:disabled { opacity: 0.5; cursor: not-allowed; }
+            .olo-tools-page .olo-field-info label { font-weight: 600; font-size: 13px; color: #1a1a1a; display: block; margin-bottom: 2px; }
+            .olo-tools-page .olo-field-hint { font-size: 12px; color: #999; }
+            .olo-tools-page .olo-btn-action { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; color: #fff; background: #1a1a1a; transition: all .15s; }
+            .olo-tools-page .olo-btn-action:hover { background: #333; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+            .olo-tools-page .olo-btn-action:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
             .olo-tools-page .olo-btn-action.red { background: #dc2626; }
             .olo-tools-page .olo-btn-action.red:hover { background: #b91c1c; }
-            .olo-tools-page .olo-btn-small { padding: 4px 10px; font-size: 12px; border: 1px solid #d0d5dd; border-radius: 4px; background: #fff; cursor: pointer; }
-            .olo-tools-page .olo-btn-small:hover { background: #f5f5f5; }
+            .olo-tools-page .olo-btn-small { padding: 5px 12px; font-size: 12px; font-weight: 600; font-family: inherit; border: 1.5px solid #e5e0d8; border-radius: 8px; background: #fff; color: #666; cursor: pointer; transition: all .15s; }
+            .olo-tools-page .olo-btn-small:hover { background: #f5f0eb; color: #1a1a1a; border-color: #d8d0c4; }
             .olo-tools-page .olo-tpl-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-            .olo-tools-page .olo-tpl-table th { text-align: left; padding: 8px 12px; border-bottom: 2px solid #e5e7eb; font-weight: 600; font-size: 12px; color: #666; text-transform: uppercase; }
-            .olo-tools-page .olo-tpl-table td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
-            .olo-tools-page .olo-rev-row { background: #fafafa; }
-            .olo-tools-page .olo-rev-row td { padding: 8px 12px 8px 32px; font-size: 12px; }
-            .olo-tools-page .olo-maint-warning { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 10px 14px; border-radius: 6px; font-size: 13px; margin-top: 12px; }
+            .olo-tools-page .olo-tpl-table th { text-align: left; padding: 10px 14px; border-bottom: 2px solid #f0f0f0; font-weight: 700; font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: .05em; }
+            .olo-tools-page .olo-tpl-table td { padding: 12px 14px; border-bottom: 1px solid #f5f5f5; color: #1a1a1a; vertical-align: middle; }
+            .olo-tools-page .olo-tpl-table tbody tr:hover td { background: #fafafa; }
+            .olo-tools-page .olo-rev-row td, .olo-tools-page .olo-rev-row:hover td { background: #faf8f5; }
+            .olo-tools-page .olo-rev-row td { padding: 10px 14px 10px 32px; font-size: 12px; }
+            .olo-tools-page .olo-maint-warning { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-top: 12px; }
             .olo-tools-page .olo-field-group { margin-bottom: 16px; }
-            .olo-tools-page .olo-field-group label { display: block; font-weight: 500; margin-bottom: 4px; font-size: 13px; }
+            .olo-tools-page .olo-field-group label { display: block; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; font-size: 13px; }
         </style>
         <?php
     }
@@ -196,7 +195,7 @@ class Olo_Tools {
                     <div class="olo-field-info">
                         <label>Stato</label>
                     </div>
-                    <select class="olo-field-input" id="olo-tools-safe-mode" data-key="olo_safe_mode">
+                    <select class="olo-select olo-w-md" id="olo-tools-safe-mode" data-key="olo_safe_mode">
                         <option value="" <?php selected( $safe_mode, '' ); ?>>Disabilita</option>
                         <option value="1" <?php selected( $safe_mode, '1' ); ?>>Abilita</option>
                     </select>
@@ -220,7 +219,7 @@ class Olo_Tools {
                     <div class="olo-field-info">
                         <label>Stato</label>
                     </div>
-                    <select class="olo-field-input" id="olo-tools-debug-bar" data-key="olo_debug_bar">
+                    <select class="olo-select olo-w-md" id="olo-tools-debug-bar" data-key="olo_debug_bar">
                         <option value="" <?php selected( $debug_bar, '' ); ?>>Disabilita</option>
                         <option value="1" <?php selected( $debug_bar, '1' ); ?>>Abilita</option>
                     </select>
@@ -298,11 +297,11 @@ class Olo_Tools {
             <div class="olo-card-body">
                 <div class="olo-field-group">
                     <label for="olo-url-old">URL vecchio:</label>
-                    <input type="text" id="olo-url-old" class="olo-field-input-full" placeholder="https://vecchio-dominio.it" />
+                    <input type="text" id="olo-url-old" class="olo-input olo-w-lg" placeholder="https://vecchio-dominio.it" />
                 </div>
                 <div class="olo-field-group">
                     <label for="olo-url-new">URL nuovo:</label>
-                    <input type="text" id="olo-url-new" class="olo-field-input-full" placeholder="https://nuovo-dominio.it" />
+                    <input type="text" id="olo-url-new" class="olo-input olo-w-lg" placeholder="https://nuovo-dominio.it" />
                 </div>
                 <button type="button" class="olo-btn-action" id="olo-tools-url-replace">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
@@ -528,7 +527,7 @@ class Olo_Tools {
                     <div class="olo-field-info">
                         <label>Seleziona la modalit&agrave;</label>
                     </div>
-                    <select class="olo-field-input" id="olo-maint-mode">
+                    <select class="olo-select olo-w-md" id="olo-maint-mode">
                         <option value="off" <?php selected( $mode, 'off' ); ?>>Disabilitato</option>
                         <option value="coming_soon" <?php selected( $mode, 'coming_soon' ); ?>>Coming Soon</option>
                         <option value="maintenance" <?php selected( $mode, 'maintenance' ); ?>>Manutenzione</option>
@@ -540,7 +539,7 @@ class Olo_Tools {
                         <label>Chi pu&ograve; accedere</label>
                         <span class="olo-field-hint">Seleziona i ruoli che possono bypassare la modalit&agrave; di manutenzione.</span>
                     </div>
-                    <select class="olo-field-input" id="olo-maint-roles" multiple style="min-height: 80px;">
+                    <select class="olo-select olo-w-md" id="olo-maint-roles" multiple style="min-height: 80px;">
                         <?php foreach ( $wp_roles as $role_key => $role_name ) : ?>
                         <option value="<?php echo esc_attr( $role_key ); ?>" <?php echo in_array( $role_key, $bypass_roles, true ) ? 'selected' : ''; ?>>
                             <?php echo esc_html( translate_user_role( $role_name ) ); ?>
@@ -554,7 +553,7 @@ class Olo_Tools {
                         <label>Template Manutenzione</label>
                         <span class="olo-field-hint">Pagina mostrata quando il sito &egrave; in manutenzione (HTTP 503).</span>
                     </div>
-                    <select class="olo-field-input" id="olo-maint-template">
+                    <select class="olo-select olo-w-md" id="olo-maint-template">
                         <option value="">— Pagina predefinita —</option>
                         <?php foreach ( $templates as $tpl ) : ?>
                         <option value="<?php echo intval( $tpl->id ); ?>" <?php selected( $template_id, $tpl->id ); ?>>
@@ -569,7 +568,7 @@ class Olo_Tools {
                         <label>Template Coming Soon</label>
                         <span class="olo-field-hint">Pagina mostrata quando il sito &egrave; in modalit&agrave; Coming Soon (HTTP 200).</span>
                     </div>
-                    <select class="olo-field-input" id="olo-maint-coming-soon-template">
+                    <select class="olo-select olo-w-md" id="olo-maint-coming-soon-template">
                         <option value="">— Pagina predefinita —</option>
                         <?php foreach ( $templates as $tpl ) : ?>
                         <option value="<?php echo intval( $tpl->id ); ?>" <?php selected( $coming_soon_template_id, $tpl->id ); ?>>
@@ -584,7 +583,7 @@ class Olo_Tools {
                         <label>URL segreta di bypass</label>
                         <span class="olo-field-hint">Aggiungi <code>?bypass=CHIAVE</code> all'URL per bypassare la manutenzione.</span>
                     </div>
-                    <input type="text" class="olo-field-input" id="olo-maint-secret" value="<?php echo esc_attr( $bypass_secret ); ?>" placeholder="chiave-segreta" />
+                    <input type="text" class="olo-input olo-w-md" id="olo-maint-secret" value="<?php echo esc_attr( $bypass_secret ); ?>" placeholder="chiave-segreta" />
                 </div>
 
                 <div style="margin-top: 16px;">
@@ -701,7 +700,7 @@ class Olo_Tools {
             <div class="olo-card-body">
                 <div class="olo-field-group">
                     <label for="olo-tw-export-tpl">Template da esportare</label>
-                    <select id="olo-tw-export-tpl" class="olo-field-input-full">
+                    <select id="olo-tw-export-tpl" class="olo-select olo-w-lg">
                         <?php foreach ( $templates as $t ) : ?>
                         <option value="<?php echo intval( $t->id ); ?>"><?php echo esc_html( $t->title ); ?> (<?php echo esc_html( $t->type ); ?>)</option>
                         <?php endforeach; ?>
@@ -728,7 +727,7 @@ class Olo_Tools {
             <div class="olo-card-body">
                 <div class="olo-field-group">
                     <label for="olo-tw-import-file">Seleziona file JSON</label>
-                    <input type="file" id="olo-tw-import-file" accept=".json" class="olo-field-input-full" />
+                    <input type="file" id="olo-tw-import-file" accept=".json" class="olo-file olo-w-lg" />
                 </div>
                 <button type="button" class="olo-btn-action" id="olo-tw-import-btn">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>

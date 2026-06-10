@@ -27,18 +27,14 @@
       </span>
     </div>
 
-    <!-- Select -->
-    <div v-else-if="field.type === 'select'" class="olo-nf-selwrap">
-      <select
-        class="olo-nf-sel"
-        :value="value"
-        :aria-label="t(field.label)"
-        @change="onUpdate($event.target.value)"
-      >
-        <option v-for="opt in (field.options || [])" :key="opt.value" :value="opt.value">{{ t(opt.label) }}</option>
-      </select>
-      <svg class="olo-nf-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-    </div>
+    <!-- Select (FieldSelect dropdown custom; t() sulle label lo applica lui) -->
+    <FieldSelect
+      v-else-if="field.type === 'select'"
+      ui="dropdown"
+      :model-value="value"
+      :options="field.options || []"
+      @update:model-value="onUpdate($event)"
+    />
 
     <!-- Text fallback -->
     <input
@@ -54,6 +50,7 @@
 <script setup>
 import { computed } from 'vue';
 import { t } from '@/i18n';
+import FieldSelect from '../fields/FieldSelect.vue';
 
 /**
  * StyleNestedField — gestisce field con chiave "path" annidata via "."
@@ -185,29 +182,6 @@ function onUpdateClamped(raw) {
 .olo-nf-valinput::-webkit-outer-spin-button,
 .olo-nf-valinput::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .olo-nf-val i { font-style: normal; font-size: 11px; color: #9ca3af; padding-right: 8px; flex-shrink: 0; }
-
-/* select coerente */
-.olo-nf-selwrap { position: relative; }
-.olo-nf-sel {
-  width: 100%;
-  height: 38px;
-  padding: 0 32px 0 11px;
-  border: 1px solid #e5e7eb;
-  border-radius: 9px;
-  background: #fff;
-  font-size: 14px;
-  color: #1f2937;
-  outline: none;
-  appearance: none;
-  -webkit-appearance: none;
-  cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-.olo-nf-sel:focus { border-color: var(--olo-ui-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-ui-accent) 18%, transparent); }
-.olo-nf-chev {
-  position: absolute; right: 11px; top: 50%; transform: translateY(-50%);
-  width: 14px; height: 14px; color: #9ca3af; pointer-events: none;
-}
 
 /* text fallback */
 .olo-nf-text {

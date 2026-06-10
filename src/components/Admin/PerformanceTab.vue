@@ -81,10 +81,7 @@
           <div class="hint">{{ t('Dopo quanti giorni il critical CSS viene rigenerato. Invalidato comunque al save di un template.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-input mono">
-            <input type="number" min="1" max="30" :value="form.critical_css_ttl" @input="set('critical_css_ttl', parseInt($event.target.value) || 7)" />
-            <span class="suffix">giorni</span>
-          </div>
+          <CfgNumber :min="1" :max="30" :suffix="t('giorni')" :model-value="form.critical_css_ttl" @update:model-value="set('critical_css_ttl', $event)" />
         </div>
       </div>
       <div class="cfg-row no-divider">
@@ -93,10 +90,7 @@
           <div class="hint">{{ t('Quante sezioni iniziali analizzare per estrarre il CSS critico.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-input mono">
-            <input type="number" min="1" max="5" :value="form.critical_css_sections" @input="set('critical_css_sections', parseInt($event.target.value) || 2)" />
-            <span class="suffix">sezioni</span>
-          </div>
+          <CfgNumber :min="1" :max="5" :suffix="t('sezioni')" :model-value="form.critical_css_sections" @update:model-value="set('critical_css_sections', $event)" />
         </div>
       </div>
     </div>
@@ -272,6 +266,7 @@
 <script setup>
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import CfgNumber from './controls/CfgNumber.vue';
 
 const showToast = inject('showToast', () => {});
 const setDirty  = inject('setDirty',  () => {});

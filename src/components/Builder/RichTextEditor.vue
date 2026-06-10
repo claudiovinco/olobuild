@@ -638,7 +638,7 @@ onBeforeUnmount(() => {
 }
 
 .rte-row > button.active {
-  background: var(--olo-color-primary, #6366F1);
+  background: var(--olo-ui-accent, #e8622a);
   color: #fff;
 }
 
@@ -747,7 +747,7 @@ onBeforeUnmount(() => {
 }
 
 .rte-dropdown-item.active {
-  background: var(--olo-color-primary, #6366F1);
+  background: var(--olo-ui-accent, #e8622a);
   color: #fff;
 }
 
@@ -851,9 +851,9 @@ onBeforeUnmount(() => {
 }
 
 .rte-link-action-apply {
-  background: var(--olo-color-primary, #6366F1);
+  background: var(--olo-ui-accent, #e8622a);
   color: #fff;
-  border-color: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-ui-accent, #e8622a);
 }
 
 .rte-link-action-apply:disabled {

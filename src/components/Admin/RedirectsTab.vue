@@ -47,12 +47,7 @@
             <td><input class="inline-input" v-model="newRow.from_url" :placeholder="t('/vecchia-url o ~/regex/.*')" /></td>
             <td><input class="inline-input" v-model="newRow.to_url" placeholder="/nuova-url" /></td>
             <td>
-              <select v-model.number="newRow.type" class="inline-input">
-                <option value="301">301</option>
-                <option value="302">302</option>
-                <option value="307">307</option>
-                <option value="410">410</option>
-              </select>
+              <CfgSelect v-model="newRow.type" :options="REDIRECT_TYPE_OPTIONS" />
             </td>
             <td>—</td>
             <td>
@@ -142,9 +137,17 @@
 <script setup>
 import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import CfgSelect from './controls/CfgSelect.vue';
 
 const showToast = inject('showToast', () => {});
 const setDirty  = inject('setDirty',  () => {});
+
+const REDIRECT_TYPE_OPTIONS = [
+  { value: 301, label: '301' },
+  { value: 302, label: '302' },
+  { value: 307, label: '307' },
+  { value: 410, label: '410' },
+];
 
 const section = ref('redirects');
 const redirects = ref([]);

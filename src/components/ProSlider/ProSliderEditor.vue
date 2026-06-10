@@ -67,15 +67,9 @@
             </div>
             <div class="mb-flex mb-gap-3 mb-flex-wrap mb-items-end">
               <!-- Type -->
-              <div>
+              <div class="mb-w-32">
                 <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Tipo</label>
-                <select :value="currentBg.type" @change="updateBg('type', $event.target.value)" class="mps-sel">
-                  <option value="color">Colore</option>
-                  <option value="image">Immagine</option>
-                  <option value="video">Video</option>
-                  <option value="gradient">Gradiente</option>
-                  <option value="transparent">Trasparente</option>
-                </select>
+                <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="currentBg.type" :options="OPTS_BG_TYPE" @update:model-value="updateBg('type', $event)" />
               </div>
               <!-- Transparent note -->
               <div v-if="currentBg.type === 'transparent'" class="mb-flex mb-items-center mb-gap-1">
@@ -100,10 +94,9 @@
                   <span class="mb-text-[10px] mb-text-gray-400">Ken Burns</span>
                 </label>
                 <template v-if="currentBg.kenBurns">
-                  <select :value="currentBg.kenBurnsDirection || 'in'" @change="updateBg('kenBurnsDirection', $event.target.value)" class="mps-sel">
-                    <option value="in">Zoom In</option>
-                    <option value="out">Zoom Out</option>
-                  </select>
+                  <div class="mb-w-28">
+                    <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="currentBg.kenBurnsDirection || 'in'" :options="OPTS_KENBURNS_DIR" @update:model-value="updateBg('kenBurnsDirection', $event)" />
+                  </div>
                   <div class="mb-flex mb-items-center mb-gap-1">
                     <label class="mb-text-[10px] mb-text-gray-400">Pan X%</label>
                     <input type="number" :value="currentBg.kenBurnsPanX || 0" @input="updateBg('kenBurnsPanX', parseFloat($event.target.value) || 0)" min="-50" max="50" step="5" class="mps-inp mb-w-12" />
@@ -291,6 +284,20 @@ import LayerBar from './LayerBar.vue';
 import SliderSettings from './SliderSettings.vue';
 import KeyframeTimeline from './KeyframeTimeline.vue';
 import FieldColor from '@/components/Builder/fields/FieldColor.vue';
+import FieldSelect from '../Builder/fields/FieldSelect.vue';
+
+// Option arrays per FieldSelect (stessi value dei vecchi <option>: dati salvati invariati)
+const OPTS_BG_TYPE = [
+  { value: 'color', label: 'Colore' },
+  { value: 'image', label: 'Immagine' },
+  { value: 'video', label: 'Video' },
+  { value: 'gradient', label: 'Gradiente' },
+  { value: 'transparent', label: 'Trasparente' },
+];
+const OPTS_KENBURNS_DIR = [
+  { value: 'in', label: 'Zoom In' },
+  { value: 'out', label: 'Zoom Out' },
+];
 
 const props = defineProps({
   tileId: { type: String, required: true },

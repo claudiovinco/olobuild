@@ -8,10 +8,7 @@
     <!-- Step 1: Select source -->
     <div class="dbp-section">
       <label class="dbp-label">{{ t('Sorgente') }}</label>
-      <select v-model="selectedSource" class="dbp-select" @change="selectedField = ''">
-        <option value="">{{ t('Seleziona sorgente...') }}</option>
-        <option v-for="s in bindingSources" :key="s.value" :value="s.value">{{ s.label }}</option>
-      </select>
+      <FieldSelect ui="dropdown" theme="dark" :model-value="selectedSource" :options="sourceOpts" @update:model-value="onSourceChange" />
     </div>
 
     <!-- Step 2: Select field -->
@@ -40,10 +37,7 @@
 
       <!-- Standard flat fields -->
       <template v-else-if="Array.isArray(fieldsForSource)">
-        <select v-model="selectedField" class="dbp-select">
-          <option value="">Seleziona campo...</option>
-          <option v-for="f in fieldsForSource" :key="f.key" :value="f.key">{{ f.label }}</option>
-        </select>
+        <FieldSelect ui="dropdown" theme="dark" :model-value="selectedField" :options="flatFieldOpts" @update:model-value="selectedField = $event" />
       </template>
     </div>
 
@@ -78,6 +72,7 @@
 import { t } from '@/i18n';
 import { ref, computed, watch, onMounted } from 'vue';
 import { useDynamicContent } from '@/composables/useDynamicContent';
+import FieldSelect from './fields/FieldSelect.vue';
 
 const props = defineProps({
   binding: { type: Object, default: null },
@@ -95,9 +90,33 @@ const previewLoading = ref(false);
 
 const bindingSources = computed(() => getBindingSources());
 
+// Opzioni FieldSelect (label RAW: t() la applica FieldSelect internamente;
+// le label dinamiche passano per t() come fallback identità).
+const sourceOpts = computed(() => [
+  { value: '', label: 'Seleziona sorgente...' },
+  ...bindingSources.value.map(s => ({ value: s.value, label: s.label })),
+]);
+
+// Cambio sorgente: stessa semantica del vecchio @change (reset del campo solo
+// se la sorgente cambia davvero).
+function onSourceChange(value) {
+  if (value === selectedSource.value) return;
+  selectedSource.value = value;
+  selectedField.value = '';
+}
+
 const fieldsForSource = computed(() => {
   if (!selectedSource.value) return [];
   return getFieldsForSource(selectedSource.value);
+});
+
+const flatFieldOpts = computed(() => {
+  const f = fieldsForSource.value;
+  if (!Array.isArray(f)) return [];
+  return [
+    { value: '', label: 'Seleziona campo...' },
+    ...f.map(x => ({ value: x.key, label: x.label })),
+  ];
 });
 
 const isGroupedFields = computed(() => {
@@ -238,7 +257,7 @@ function applyBinding() {
 .dbp-select:focus,
 .dbp-input:focus {
   outline: none;
-  border-color: var(--olo-color-primary, #6366f1);
+  border-color: var(--olo-ui-accent, #e8622a);
 }
 
 .dbp-preview {
@@ -287,7 +306,7 @@ function applyBinding() {
 }
 
 .dbp-btn--apply {
-  background: var(--olo-color-primary, #6366F1);
+  background: var(--olo-ui-accent, #e8622a);
   color: #fff;
 }
 

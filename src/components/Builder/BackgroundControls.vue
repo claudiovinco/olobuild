@@ -79,29 +79,13 @@
         <div class="row">
           <span class="rowlab">{{ t('Dimensione') }}</span>
           <div class="selwrap">
-            <select class="sel" :value="bg.image_size || 'cover'" :aria-label="t('Dimensione')" @change="updateField('image_size', $event.target.value)">
-              <option value="cover">{{ t('Cover') }}</option>
-              <option value="contain">{{ t('Contain') }}</option>
-              <option value="auto">{{ t('Auto') }}</option>
-            </select>
-            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <FieldSelect ui="dropdown" :model-value="bg.image_size || 'cover'" :options="SIZE_OPTS" @update:model-value="updateField('image_size', $event)" />
           </div>
         </div>
         <div class="row">
           <span class="rowlab">{{ t('Posizione') }}</span>
           <div class="selwrap">
-            <select class="sel" :value="bg.image_position || 'center center'" :aria-label="t('Posizione')" @change="updateField('image_position', $event.target.value)">
-              <option value="center center">{{ t('Centro') }}</option>
-              <option value="top center">{{ t('Alto') }}</option>
-              <option value="bottom center">{{ t('Basso') }}</option>
-              <option value="left center">{{ t('Sinistra') }}</option>
-              <option value="right center">{{ t('Destra') }}</option>
-              <option value="top left">{{ t('Alto sinistra') }}</option>
-              <option value="top right">{{ t('Alto destra') }}</option>
-              <option value="bottom left">{{ t('Basso sinistra') }}</option>
-              <option value="bottom right">{{ t('Basso destra') }}</option>
-            </select>
-            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <FieldSelect ui="dropdown" :model-value="bg.image_position || 'center center'" :options="POSITION_OPTS" @update:model-value="updateField('image_position', $event)" />
           </div>
         </div>
 
@@ -131,30 +115,13 @@
         <div class="row">
           <span class="rowlab">{{ t('Adattamento') }}</span>
           <div class="selwrap">
-            <select class="sel" :value="bg.video_fit || 'cover'" :aria-label="t('Adattamento')" @change="updateField('video_fit', $event.target.value)">
-              <option value="cover">{{ t('Cover') }}</option>
-              <option value="contain">{{ t('Contain') }}</option>
-              <option value="fill">{{ t('Riempi') }}</option>
-              <option value="none">{{ t('Nessuno (dimensione originale)') }}</option>
-            </select>
-            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <FieldSelect ui="dropdown" :model-value="bg.video_fit || 'cover'" :options="VIDEO_FIT_OPTS" @update:model-value="updateField('video_fit', $event)" />
           </div>
         </div>
         <div class="row">
           <span class="rowlab">{{ t('Posizione') }}</span>
           <div class="selwrap">
-            <select class="sel" :value="bg.image_position || 'center center'" :aria-label="t('Posizione')" @change="updateField('image_position', $event.target.value)">
-              <option value="center center">{{ t('Centro') }}</option>
-              <option value="top center">{{ t('Alto') }}</option>
-              <option value="bottom center">{{ t('Basso') }}</option>
-              <option value="left center">{{ t('Sinistra') }}</option>
-              <option value="right center">{{ t('Destra') }}</option>
-              <option value="top left">{{ t('Alto sinistra') }}</option>
-              <option value="top right">{{ t('Alto destra') }}</option>
-              <option value="bottom left">{{ t('Basso sinistra') }}</option>
-              <option value="bottom right">{{ t('Basso destra') }}</option>
-            </select>
-            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <FieldSelect ui="dropdown" :model-value="bg.image_position || 'center center'" :options="POSITION_OPTS" @update:model-value="updateField('image_position', $event)" />
           </div>
         </div>
         <div class="row">
@@ -210,17 +177,7 @@
         <div class="row">
           <span class="rowlab">{{ t('Transizione') }}</span>
           <div class="selwrap">
-            <select class="sel" :value="bg.gallery_transition || 'fade'" :aria-label="t('Transizione')" @change="updateField('gallery_transition', $event.target.value)">
-              <option value="fade">{{ t('Fade') }}</option>
-              <option value="crossfade">{{ t('Crossfade') }}</option>
-              <option value="slide">{{ t('Slide') }}</option>
-              <option value="slide-up">{{ t('Slide Up') }}</option>
-              <option value="zoom">{{ t('Zoom') }}</option>
-              <option value="blur">{{ t('Blur') }}</option>
-              <option value="flip">{{ t('Flip') }}</option>
-              <option value="none">{{ t('Nessuna') }}</option>
-            </select>
-            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <FieldSelect ui="dropdown" :model-value="bg.gallery_transition || 'fade'" :options="GALLERY_TRANSITION_OPTS" @update:model-value="updateField('gallery_transition', $event)" />
           </div>
         </div>
         <div class="row">
@@ -231,25 +188,13 @@
         <div class="row">
           <span class="rowlab">{{ t('Dimensione') }}</span>
           <div class="selwrap">
-            <select class="sel" :value="bg.image_size || 'cover'" :aria-label="t('Dimensione sfondo')" @change="updateField('image_size', $event.target.value)">
-              <option value="cover">{{ t('Cover') }}</option>
-              <option value="contain">{{ t('Contain') }}</option>
-              <option value="auto">{{ t('Auto') }}</option>
-            </select>
-            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <FieldSelect ui="dropdown" :model-value="bg.image_size || 'cover'" :options="SIZE_OPTS" @update:model-value="updateField('image_size', $event)" />
           </div>
         </div>
         <div class="row">
           <span class="rowlab">{{ t('Posizione') }}</span>
           <div class="selwrap">
-            <select class="sel" :value="bg.image_position || 'center center'" :aria-label="t('Posizione sfondo')" @change="updateField('image_position', $event.target.value)">
-              <option value="center center">{{ t('Centro') }}</option>
-              <option value="top center">{{ t('Alto') }}</option>
-              <option value="bottom center">{{ t('Basso') }}</option>
-              <option value="left center">{{ t('Sinistra') }}</option>
-              <option value="right center">{{ t('Destra') }}</option>
-            </select>
-            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <FieldSelect ui="dropdown" :model-value="bg.image_position || 'center center'" :options="POSITION_BASE_OPTS" @update:model-value="updateField('image_position', $event)" />
           </div>
         </div>
         <div class="tgl-row">
@@ -263,12 +208,7 @@
         <div v-if="bg.gallery_kenburns" class="row">
           <span class="rowlab">{{ t('Direzione') }}</span>
           <div class="selwrap">
-            <select class="sel" :value="bg.gallery_kenburns_dir || 'in'" :aria-label="t('Direzione')" @change="updateField('gallery_kenburns_dir', $event.target.value)">
-              <option value="in">{{ t('Dentro') }} (Zoom in)</option>
-              <option value="out">{{ t('Fuori') }} (Zoom out)</option>
-              <option value="alternate">{{ t('Alternato') }}</option>
-            </select>
-            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <FieldSelect ui="dropdown" :model-value="bg.gallery_kenburns_dir || 'in'" :options="KENBURNS_DIR_OPTS" @update:model-value="updateField('gallery_kenburns_dir', $event)" />
           </div>
         </div>
       </div>
@@ -281,10 +221,7 @@
         <div class="row">
           <span class="rowlab">{{ t('Disposiz.') }}</span>
           <div class="selwrap">
-            <select class="sel" :value="bg.mesh_preset || 'spread'" :aria-label="t('Disposizione')" @change="updateField('mesh_preset', $event.target.value)">
-              <option v-for="p in meshPresets" :key="p.value" :value="p.value">{{ t(p.label) }}</option>
-            </select>
-            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <FieldSelect ui="dropdown" :model-value="bg.mesh_preset || 'spread'" :options="meshPresets" @update:model-value="updateField('mesh_preset', $event)" />
           </div>
         </div>
 
@@ -380,10 +317,7 @@
         <div class="row">
           <span class="rowlab">{{ t('Disposiz.') }}</span>
           <div class="selwrap">
-            <select class="sel" :value="bg.glow_preset || 'spread'" :aria-label="t('Disposizione')" @change="updateField('glow_preset', $event.target.value)">
-              <option v-for="p in glowPresets" :key="p.value" :value="p.value">{{ t(p.label) }}</option>
-            </select>
-            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <FieldSelect ui="dropdown" :model-value="bg.glow_preset || 'spread'" :options="glowPresets" @update:model-value="updateField('glow_preset', $event)" />
           </div>
         </div>
         <div class="pv" :style="glowPreviewStyle"><span class="pv-tag">{{ t('anteprima live') }}</span></div>
@@ -417,17 +351,7 @@
         <div class="field field--sep">
           <span class="cl">{{ t('Animazione bagliore') }}</span>
           <div class="selwrap">
-            <select class="sel" :value="bg.glow_anim || 'none'" :aria-label="t('Animazione bagliore')" @change="updateField('glow_anim', $event.target.value)">
-              <option value="none">{{ t('Nessuna (statico)') }}</option>
-              <option value="pulse">{{ t('Pulsazione (respiro)') }}</option>
-              <option value="drift">{{ t('Deriva (movimento lento)') }}</option>
-              <option value="wander">{{ t('Vagare (respiro + deriva)') }}</option>
-              <option value="flicker">{{ t('Sfarfallio (energia neon)') }}</option>
-              <option value="vivo">{{ t('Vivo (respiro + orbita) ✦') }}</option>
-              <option value="tempesta">{{ t('Tempesta (sfarfallio + ondeggio) ✦') }}</option>
-              <option value="scroll">{{ t('Reattivo allo scroll') }}</option>
-            </select>
-            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <FieldSelect ui="dropdown" :model-value="bg.glow_anim || 'none'" :options="GLOW_ANIM_OPTS" @update:model-value="updateField('glow_anim', $event)" />
           </div>
         </div>
         <div v-if="(bg.glow_anim || 'none') !== 'none' && bg.glow_anim !== 'scroll'" class="row">
@@ -448,10 +372,7 @@
         <div class="row">
           <span class="rowlab">{{ t('Modello') }}</span>
           <div class="selwrap">
-            <select class="sel" :value="bg.crt_model || 'classic'" :aria-label="t('Modello')" @change="updateField('crt_model', $event.target.value)">
-              <option v-for="m in crtModels" :key="m.value" :value="m.value">{{ t(m.label) }}</option>
-            </select>
-            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <FieldSelect ui="dropdown" :model-value="bg.crt_model || 'classic'" :options="crtModels" @update:model-value="updateField('crt_model', $event)" />
           </div>
         </div>
 
@@ -540,6 +461,66 @@ import { handleNumberWheel } from '@/utils/numberInputWheel';
 import ParallaxEditor from './ParallaxEditor.vue';
 import FieldGradient from './fields/FieldGradient.vue';
 import FieldColor from './fields/FieldColor.vue';
+import FieldSelect from './fields/FieldSelect.vue';
+
+// Opzioni dei FieldSelect (label RAW: t() la applica FieldSelect internamente).
+// meshPresets / glowPresets / crtModels sono già array { value, label } e si
+// passano direttamente a :options.
+const SIZE_OPTS = [
+  { value: 'cover', label: 'Cover' },
+  { value: 'contain', label: 'Contain' },
+  { value: 'auto', label: 'Auto' },
+];
+
+const POSITION_OPTS = [
+  { value: 'center center', label: 'Centro' },
+  { value: 'top center', label: 'Alto' },
+  { value: 'bottom center', label: 'Basso' },
+  { value: 'left center', label: 'Sinistra' },
+  { value: 'right center', label: 'Destra' },
+  { value: 'top left', label: 'Alto sinistra' },
+  { value: 'top right', label: 'Alto destra' },
+  { value: 'bottom left', label: 'Basso sinistra' },
+  { value: 'bottom right', label: 'Basso destra' },
+];
+
+// Galleria: solo le 5 posizioni base (come il select originale)
+const POSITION_BASE_OPTS = POSITION_OPTS.slice(0, 5);
+
+const VIDEO_FIT_OPTS = [
+  { value: 'cover', label: 'Cover' },
+  { value: 'contain', label: 'Contain' },
+  { value: 'fill', label: 'Riempi' },
+  { value: 'none', label: 'Nessuno (dimensione originale)' },
+];
+
+const GALLERY_TRANSITION_OPTS = [
+  { value: 'fade', label: 'Fade' },
+  { value: 'crossfade', label: 'Crossfade' },
+  { value: 'slide', label: 'Slide' },
+  { value: 'slide-up', label: 'Slide Up' },
+  { value: 'zoom', label: 'Zoom' },
+  { value: 'blur', label: 'Blur' },
+  { value: 'flip', label: 'Flip' },
+  { value: 'none', label: 'Nessuna' },
+];
+
+const KENBURNS_DIR_OPTS = [
+  { value: 'in', label: 'Dentro (Zoom in)' },
+  { value: 'out', label: 'Fuori (Zoom out)' },
+  { value: 'alternate', label: 'Alternato' },
+];
+
+const GLOW_ANIM_OPTS = [
+  { value: 'none', label: 'Nessuna (statico)' },
+  { value: 'pulse', label: 'Pulsazione (respiro)' },
+  { value: 'drift', label: 'Deriva (movimento lento)' },
+  { value: 'wander', label: 'Vagare (respiro + deriva)' },
+  { value: 'flicker', label: 'Sfarfallio (energia neon)' },
+  { value: 'vivo', label: 'Vivo (respiro + orbita) ✦' },
+  { value: 'tempesta', label: 'Tempesta (sfarfallio + ondeggio) ✦' },
+  { value: 'scroll', label: 'Reattivo allo scroll' },
+];
 
 const bgParallaxProperties = [
   { key: 'bgx', label: 'Spostamento X', min: -800, max: 800, step: 10, unit: 'px' },

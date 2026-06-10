@@ -41,22 +41,13 @@
     <!-- STILE -->
     <div class="olo-border2-row">
       <span class="olo-border2-lab">{{ t('Stile') }}</span>
-      <div class="olo-border2-selwrap">
-        <select
-          class="olo-border2-sel"
-          :value="val.style"
-          @change="emit({ style: $event.target.value })"
-          :aria-label="t('Stile bordo')"
-        >
-          <option value="solid">{{ t('Solido') }}</option>
-          <option value="dashed">{{ t('Tratteggiato') }}</option>
-          <option value="dotted">{{ t('Punteggiato') }}</option>
-          <option value="double">{{ t('Doppio') }}</option>
-          <option value="groove">{{ t('Incasso') }}</option>
-          <option value="ridge">{{ t('Rilievo') }}</option>
-        </select>
-        <svg class="olo-border2-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-      </div>
+      <FieldSelect
+        ui="dropdown"
+        class="olo-border2-selwrap"
+        :model-value="val.style"
+        :options="BORDER_STYLE_OPTIONS"
+        @update:model-value="emit({ style: $event })"
+      />
     </div>
 
     <!-- COLORE — FieldColor standard del builder: palette globali, pulsante colori
@@ -84,6 +75,17 @@ import { computed } from 'vue';
 import { t } from '@/i18n';
 import FieldBox from './FieldBox.vue';
 import FieldColor from './FieldColor.vue';
+import FieldSelect from './FieldSelect.vue';
+
+// Label RAW: FieldSelect applica t() internamente
+const BORDER_STYLE_OPTIONS = [
+  { value: 'solid', label: 'Solido' },
+  { value: 'dashed', label: 'Tratteggiato' },
+  { value: 'dotted', label: 'Punteggiato' },
+  { value: 'double', label: 'Doppio' },
+  { value: 'groove', label: 'Incasso' },
+  { value: 'ridge', label: 'Rilievo' },
+];
 
 const props = defineProps({
   // { top, right, bottom, left, linked, style, color }
@@ -181,39 +183,8 @@ function emit(patch) {
 /* lo spessore (FieldBox) occupa il resto della riga */
 .olo-border2-width { flex: 1; min-width: 0; }
 
-/* select Stile */
-.olo-border2-selwrap { flex: 1; position: relative; min-width: 0; }
-.olo-border2-sel {
-  width: 100%;
-  height: 34px;
-  padding: 0 30px 0 10px;
-  border: 1px solid var(--line);
-  border-radius: 9px;
-  background: #fff;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--ink);
-  outline: none;
-  appearance: none;
-  -webkit-appearance: none;
-  cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-.olo-border2-sel:focus,
-.olo-border2-sel:focus-visible {
-  border-color: var(--ui);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui) 20%, transparent);
-}
-.olo-border2-chev {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 14px;
-  height: 14px;
-  color: var(--faint);
-  pointer-events: none;
-}
+/* select Stile (FieldSelect dropdown custom) */
+.olo-border2-row .olo-border2-selwrap { flex: 1; min-width: 0; }
 
 /* colore — la riga ospita FieldColor (blocco multi-riga): label allineata in alto */
 .olo-border2-row--top { align-items: flex-start; }

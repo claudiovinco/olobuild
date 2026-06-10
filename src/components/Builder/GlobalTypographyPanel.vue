@@ -43,36 +43,25 @@
           <!-- Weight -->
           <div class="gtp-field">
             <label class="gtp-field-label">{{ t('Peso') }}</label>
-            <select
-              :value="set.weight"
-              @change="updateField(index, 'weight', $event.target.value)"
-              class="gtp-select"
-            >
-              <option value="100">{{ t('100 - Thin') }}</option>
-              <option value="200">{{ t('200 - Extra Light') }}</option>
-              <option value="300">{{ t('300 - Light') }}</option>
-              <option value="400">{{ t('400 - Regular') }}</option>
-              <option value="500">{{ t('500 - Medium') }}</option>
-              <option value="600">{{ t('600 - Semi Bold') }}</option>
-              <option value="700">{{ t('700 - Bold') }}</option>
-              <option value="800">{{ t('800 - Extra Bold') }}</option>
-              <option value="900">{{ t('900 - Black') }}</option>
-            </select>
+            <FieldSelect
+              ui="dropdown"
+              theme="dark"
+              :modelValue="set.weight"
+              :options="weightOptions"
+              @update:modelValue="updateField(index, 'weight', $event)"
+            />
           </div>
 
           <!-- Transform -->
           <div class="gtp-field">
             <label class="gtp-field-label">{{ t('Trasformazione') }}</label>
-            <select
-              :value="set.transform"
-              @change="updateField(index, 'transform', $event.target.value)"
-              class="gtp-select"
-            >
-              <option value="none">{{ t('Nessuna') }}</option>
-              <option value="uppercase">{{ t('MAIUSCOLO') }}</option>
-              <option value="lowercase">minuscolo</option>
-              <option value="capitalize">{{ t('Capitalizza') }}</option>
-            </select>
+            <FieldSelect
+              ui="dropdown"
+              theme="dark"
+              :modelValue="set.transform"
+              :options="transformOptions"
+              @update:modelValue="updateField(index, 'transform', $event)"
+            />
           </div>
 
           <!-- Line Height -->
@@ -144,9 +133,30 @@ import { ref, watch, computed } from 'vue';
 import { useStylesStore } from '@/stores/styles';
 import { useToast } from '@/composables/useToast.js';
 import FieldFontFamily from './fields/FieldFontFamily.vue';
+import FieldSelect from './fields/FieldSelect.vue';
 
 const stylesStore = useStylesStore();
 const toast = useToast();
+
+// Opzioni dei dropdown custom (FieldSelect applica t() alle label).
+// Value stringa: set.weight/set.transform restano stringhe come col select nativo.
+const weightOptions = [
+  { value: '100', label: '100 - Thin' },
+  { value: '200', label: '200 - Extra Light' },
+  { value: '300', label: '300 - Light' },
+  { value: '400', label: '400 - Regular' },
+  { value: '500', label: '500 - Medium' },
+  { value: '600', label: '600 - Semi Bold' },
+  { value: '700', label: '700 - Bold' },
+  { value: '800', label: '800 - Extra Bold' },
+  { value: '900', label: '900 - Black' },
+];
+const transformOptions = [
+  { value: 'none', label: 'Nessuna' },
+  { value: 'uppercase', label: 'MAIUSCOLO' },
+  { value: 'lowercase', label: 'minuscolo' },
+  { value: 'capitalize', label: 'Capitalizza' },
+];
 
 // Local copy for editing
 const localSets = ref(JSON.parse(JSON.stringify(stylesStore.globalTypography || [])));
@@ -290,7 +300,7 @@ watch(() => stylesStore.globalTypography, (newVal) => {
 }
 
 .gtp-input:focus {
-  border-color: var(--olo-color-primary, #6366f1);
+  border-color: var(--olo-ui-accent, #e8622a);
 }
 
 .gtp-input--label {
@@ -302,23 +312,6 @@ watch(() => stylesStore.globalTypography, (newVal) => {
 .gtp-input--small {
   width: 60px;
   flex: none;
-}
-
-.gtp-select {
-  flex: 1;
-  background: #111827;
-  border: 1px solid #374151;
-  border-radius: 4px;
-  padding: 4px 6px;
-  font-size: 11px;
-  color: #e5e7eb;
-  outline: none;
-  font-family: inherit;
-  cursor: pointer;
-}
-
-.gtp-select:focus {
-  border-color: var(--olo-color-primary, #6366f1);
 }
 
 .gtp-vars {
@@ -382,7 +375,7 @@ watch(() => stylesStore.globalTypography, (newVal) => {
 }
 
 .gtp-add:hover {
-  border-color: var(--olo-color-primary, #6366f1);
+  border-color: var(--olo-ui-accent, #e8622a);
   color: #e5e7eb;
 }
 
@@ -393,7 +386,7 @@ watch(() => stylesStore.globalTypography, (newVal) => {
 }
 
 .gtp-save {
-  background: var(--olo-color-primary, #6366f1);
+  background: var(--olo-ui-accent, #e8622a);
   color: #fff;
   border: none;
   border-radius: 6px;

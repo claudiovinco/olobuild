@@ -144,17 +144,14 @@
                 @update:modelValue="updateField(index, field.key, $event)"
               />
 
-              <!-- select -->
-              <select
+              <!-- select (dropdown custom, popup nativo non stilizzabile) -->
+              <FieldSelect
                 v-else-if="field.type === 'select'"
-                :value="element[field.key] || ''"
-                @change="updateField(index, field.key, $event.target.value)"
-                class="cie-input"
-              >
-                <option v-for="opt in resolveSelectOptions(field)" :key="opt.value" :value="opt.value">
-                  {{ opt.label }}
-                </option>
-              </select>
+                ui="dropdown"
+                :modelValue="element[field.key] || ''"
+                :options="resolveSelectOptions(field)"
+                @update:modelValue="updateField(index, field.key, $event)"
+              />
 
               <!-- icon picker -->
               <div v-else-if="field.type === 'icon'" class="cie-icon-wrap">
@@ -290,6 +287,7 @@ import draggable from 'vuedraggable';
 import RichTextEditor from './RichTextEditor.vue';
 import FieldColor from './fields/FieldColor.vue';
 import FieldFontFamily from './fields/FieldFontFamily.vue';
+import FieldSelect from './fields/FieldSelect.vue';
 import FieldLink from './fields/FieldLink.vue';
 import FieldToggle from './fields/FieldToggle.vue';
 import BackgroundControls from './BackgroundControls.vue';
@@ -323,7 +321,10 @@ const ensureArray = (v) => Array.isArray(v) ? v : [];
 // `field.options` (statiche) sia `field.optionsSource` (dinamiche da oloData).
 // Mirror della logica in InspectorField.vue per i sub-field nei content-items.
 function resolveSelectOptions(field) {
-  if (Array.isArray(field.options) && field.options.length) return field.options;
+  if (Array.isArray(field.options) && field.options.length) {
+    // Supporta sia array di { value, label } sia array di stringhe semplici
+    return field.options.map(o => (o && typeof o === 'object') ? o : { value: o, label: String(o) });
+  }
   if (!field.optionsSource) return [];
   const md = window.oloData || {};
   switch (field.optionsSource) {

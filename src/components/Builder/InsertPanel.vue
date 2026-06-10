@@ -623,8 +623,8 @@ defineExpose({ open, close });
   color: #374151;
 }
 .ip-tab--active {
-  color: var(--olo-color-primary, #6366F1);
-  border-bottom-color: var(--olo-color-primary, #6366F1);
+  color: var(--olo-ui-accent, #e8622a);
+  border-bottom-color: var(--olo-ui-accent, #e8622a);
 }
 
 /* Search */
@@ -640,7 +640,7 @@ defineExpose({ open, close });
   transition: border-color 0.15s;
 }
 .ip-search:focus-within {
-  border-color: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-ui-accent, #e8622a);
   background: #fff;
 }
 .ip-search-icon {
@@ -686,9 +686,9 @@ defineExpose({ open, close });
   transition: all 0.15s;
 }
 .ip-module-card:hover {
-  border-color: var(--olo-color-primary, #6366F1);
-  background: rgba(99, 102, 241, 0.04);
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.12);
+  border-color: var(--olo-ui-accent, #e8622a);
+  background: rgba(232, 98, 42, 0.04);
+  box-shadow: 0 2px 8px rgba(232, 98, 42, 0.12);
   transform: translateY(-1px);
 }
 .ip-module-icon {
@@ -703,8 +703,8 @@ defineExpose({ open, close });
   transition: all 0.15s;
 }
 .ip-module-card:hover .ip-module-icon {
-  background: rgba(99, 102, 241, 0.1);
-  color: var(--olo-color-primary, #6366F1);
+  background: rgba(232, 98, 42, 0.1);
+  color: var(--olo-ui-accent, #e8622a);
 }
 .ip-module-name {
   font-size: 10px;
@@ -737,9 +737,9 @@ defineExpose({ open, close });
   transition: all 0.15s;
 }
 .ip-row-card:hover {
-  border-color: var(--olo-color-primary, #6366F1);
-  background: rgba(99, 102, 241, 0.04);
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.12);
+  border-color: var(--olo-ui-accent, #e8622a);
+  background: rgba(232, 98, 42, 0.04);
+  box-shadow: 0 2px 8px rgba(232, 98, 42, 0.12);
 }
 .ip-row-preview {
   display: flex;
@@ -753,7 +753,7 @@ defineExpose({ open, close });
   transition: background 0.15s;
 }
 .ip-row-card:hover .ip-row-col {
-  background: rgba(99, 102, 241, 0.25);
+  background: rgba(232, 98, 42, 0.25);
 }
 .ip-row-label {
   font-size: 11px;
@@ -790,8 +790,8 @@ defineExpose({ open, close });
   font-weight: 600;
   padding: 1px 5px;
   border-radius: 3px;
-  background: rgba(99, 102, 241, 0.1);
-  color: var(--olo-color-primary, #6366F1);
+  background: rgba(232, 98, 42, 0.1);
+  color: var(--olo-ui-accent, #e8622a);
   text-transform: none;
   letter-spacing: 0;
 }
@@ -816,8 +816,8 @@ defineExpose({ open, close });
 .ip-library-btn {
   padding: 8px 20px;
   border-radius: 8px;
-  border: 1px solid var(--olo-color-primary, #6366F1);
-  background: var(--olo-color-primary, #6366F1);
+  border: 1px solid var(--olo-ui-accent, #e8622a);
+  background: var(--olo-ui-accent, #e8622a);
   color: #fff;
   font-size: 13px;
   font-weight: 500;
@@ -826,7 +826,7 @@ defineExpose({ open, close });
 }
 .ip-library-btn:hover {
   opacity: 0.9;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 2px 8px rgba(232, 98, 42, 0.3);
 }
 
 /* Empty state */

@@ -32,9 +32,7 @@
             </div>
             <div>
               <label class="mps-label">Tag</label>
-              <select :value="layer.tag" @change="up('tag', $event.target.value)" class="mps-select">
-                <option v-for="t in ['h1','h2','h3','h4','h5','h6','p','span','div']" :key="t" :value="t">{{ t }}</option>
-              </select>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.tag" :options="OPTS_TAG" @update:model-value="up('tag', $event)" />
             </div>
           </template>
           <!-- Image -->
@@ -59,10 +57,7 @@
             </div>
             <div>
               <label class="mps-label">Destinazione</label>
-              <select :value="layer.buttonTarget" @change="up('buttonTarget', $event.target.value)" class="mps-select">
-                <option value="_self">Stessa scheda</option>
-                <option value="_blank">Nuova scheda</option>
-              </select>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.buttonTarget" :options="OPTS_LINK_TARGET" @update:model-value="up('buttonTarget', $event)" />
             </div>
           </template>
           <!-- Icon -->
@@ -136,15 +131,7 @@
           <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Azione Click</p>
           <div>
             <label class="mps-label">Tipo azione</label>
-            <select :value="layer.action?.type || 'none'" @change="setAction('type', $event.target.value)" class="mps-select">
-              <option value="none">Nessuna</option>
-              <option value="nextSlide">Slide successiva</option>
-              <option value="prevSlide">Slide precedente</option>
-              <option value="goToSlide">Vai a slide N</option>
-              <option value="openUrl">Apri URL</option>
-              <option value="scrollBelow">Scroll sotto slider</option>
-              <option value="toggleLayer">Toggle visibilita layer</option>
-            </select>
+            <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.action?.type || 'none'" :options="OPTS_ACTION_TYPE" @update:model-value="setAction('type', $event)" />
           </div>
           <template v-if="layer.action?.type === 'goToSlide'">
             <div>
@@ -159,26 +146,19 @@
             </div>
             <div>
               <label class="mps-label">Destinazione</label>
-              <select :value="layer.action.urlTarget || '_self'" @change="setAction('urlTarget', $event.target.value)" class="mps-select">
-                <option value="_self">Stessa scheda</option>
-                <option value="_blank">Nuova scheda</option>
-              </select>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.action.urlTarget || '_self'" :options="OPTS_LINK_TARGET" @update:model-value="setAction('urlTarget', $event)" />
             </div>
           </template>
           <template v-if="layer.action?.type === 'toggleLayer'">
             <div>
               <label class="mps-label">Layer target</label>
-              <select
+              <FieldSelect
                 v-if="targetableLayers.length"
-                :value="layer.action.target || ''"
-                @change="setAction('target', $event.target.value)"
-                class="mps-select"
-              >
-                <option value="">— Seleziona un layer —</option>
-                <option v-for="l in targetableLayers" :key="l.id" :value="l.id">
-                  {{ targetLayerLabel(l) }}
-                </option>
-              </select>
+                ui="dropdown" size="compact" theme="dark"
+                :model-value="layer.action.target || ''"
+                :options="targetLayerOptions"
+                @update:model-value="setAction('target', $event)"
+              />
               <p v-else class="mb-text-[10px] mb-text-gray-500 mb-italic">Nessun altro layer in questa slide</p>
               <p v-if="layer.action.target" class="mb-text-[9px] mb-text-gray-500 mb-mt-1 mb-font-mono">id: {{ layer.action.target }}</p>
             </div>
@@ -300,16 +280,11 @@
             </div>
             <div>
               <label class="mps-label">Peso font</label>
-              <select :value="layer.fontWeight" @change="up('fontWeight', $event.target.value)" class="mps-select">
-                <option v-for="w in ['300','400','500','600','700','800','900']" :key="w" :value="w">{{ w }}</option>
-              </select>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.fontWeight" :options="OPTS_FONT_WEIGHT" @update:model-value="up('fontWeight', $event)" />
             </div>
             <div>
               <label class="mps-label">Stile font</label>
-              <select :value="layer.fontStyle || 'normal'" @change="up('fontStyle', $event.target.value)" class="mps-select">
-                <option value="normal">Normale</option>
-                <option value="italic">Corsivo</option>
-              </select>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.fontStyle || 'normal'" :options="OPTS_FONT_STYLE" @update:model-value="up('fontStyle', $event)" />
             </div>
             <div>
               <label class="mps-label">Colore</label>
@@ -340,21 +315,11 @@
             </div>
             <div>
               <label class="mps-label">Trasformazione</label>
-              <select :value="layer.textTransform || 'none'" @change="up('textTransform', $event.target.value)" class="mps-select">
-                <option value="none">Nessuna</option>
-                <option value="uppercase">MAIUSCOLO</option>
-                <option value="lowercase">minuscolo</option>
-                <option value="capitalize">Capitalizzato</option>
-              </select>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.textTransform || 'none'" :options="OPTS_TEXT_TRANSFORM" @update:model-value="up('textTransform', $event)" />
             </div>
             <div>
               <label class="mps-label">Decorazione</label>
-              <select :value="layer.textDecoration || 'none'" @change="up('textDecoration', $event.target.value)" class="mps-select">
-                <option value="none">Nessuna</option>
-                <option value="underline">Sottolineato</option>
-                <option value="line-through">Barrato</option>
-                <option value="overline">Sopralineato</option>
-              </select>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.textDecoration || 'none'" :options="OPTS_TEXT_DECORATION" @update:model-value="up('textDecoration', $event)" />
             </div>
             <!-- Text Stroke -->
             <div>
@@ -530,12 +495,7 @@
           <template v-if="(layer.borderWidth ?? 0) > 0 || (layer.borderWidthLinked === false && ((layer.borderWidthTop ?? 0) > 0 || (layer.borderWidthRight ?? 0) > 0 || (layer.borderWidthBottom ?? 0) > 0 || (layer.borderWidthLeft ?? 0) > 0))">
             <div>
               <label class="mps-label">Stile</label>
-              <select :value="layer.borderStyle || 'solid'" @change="up('borderStyle', $event.target.value)" class="mps-select">
-                <option value="solid">Solido</option>
-                <option value="dashed">Tratteggiato</option>
-                <option value="dotted">Puntinato</option>
-                <option value="double">Doppio</option>
-              </select>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.borderStyle || 'solid'" :options="OPTS_BORDER_STYLE" @update:model-value="up('borderStyle', $event)" />
             </div>
             <div>
               <label class="mps-label">Colore</label>
@@ -578,26 +538,11 @@
             <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Immagine</p>
             <div>
               <label class="mps-label">Adattamento</label>
-              <select :value="layer.objectFit || 'cover'" @change="up('objectFit', $event.target.value)" class="mps-select">
-                <option value="cover">Cover</option>
-                <option value="contain">Contain</option>
-                <option value="fill">Fill</option>
-                <option value="none">Nessuno</option>
-              </select>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.objectFit || 'cover'" :options="OPTS_OBJECT_FIT" @update:model-value="up('objectFit', $event)" />
             </div>
             <div>
               <label class="mps-label">Posizione</label>
-              <select :value="layer.objectPosition || 'center'" @change="up('objectPosition', $event.target.value)" class="mps-select">
-                <option value="center">Centro</option>
-                <option value="top">Alto</option>
-                <option value="bottom">Basso</option>
-                <option value="left">Sinistra</option>
-                <option value="right">Destra</option>
-                <option value="top left">Alto Sinistra</option>
-                <option value="top right">Alto Destra</option>
-                <option value="bottom left">Basso Sinistra</option>
-                <option value="bottom right">Basso Destra</option>
-              </select>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.objectPosition || 'center'" :options="OPTS_OBJECT_POSITION" @update:model-value="up('objectPosition', $event)" />
             </div>
           </template>
 
@@ -783,9 +728,7 @@
           </div>
           <div>
             <label class="mps-label">Blend Mode</label>
-            <select :value="layer.blendMode || 'normal'" @change="up('blendMode', $event.target.value)" class="mps-select">
-              <option v-for="bm in blendModes" :key="bm" :value="bm">{{ bm }}</option>
-            </select>
+            <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.blendMode || 'normal'" :options="OPTS_BLEND_MODE" @update:model-value="up('blendMode', $event)" />
           </div>
 
           <!-- SFX Block Reveal (solo text/button/icon) -->
@@ -799,12 +742,7 @@
           <template v-if="layer.sfx">
             <div>
               <label class="mps-label">Effetto</label>
-              <select :value="layer.sfx.effect || 'blockRight'" @change="upSfx('effect', $event.target.value)" class="mps-select">
-                <option value="blockRight">Block da destra</option>
-                <option value="blockLeft">Block da sinistra</option>
-                <option value="blockDown">Block dall'alto</option>
-                <option value="blockUp">Block dal basso</option>
-              </select>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.sfx.effect || 'blockRight'" :options="OPTS_SFX_EFFECT" @update:model-value="upSfx('effect', $event)" />
             </div>
             <div>
               <label class="mps-label">Colore blocco</label>
@@ -825,16 +763,7 @@
           <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Cursore</p>
           <div>
             <label class="mps-label">Mouse cursor</label>
-            <select :value="layer.cursor || 'auto'" @change="up('cursor', $event.target.value)" class="mps-select">
-              <option value="auto">Auto</option>
-              <option value="pointer">Pointer</option>
-              <option value="default">Default</option>
-              <option value="move">Move</option>
-              <option value="crosshair">Crosshair</option>
-              <option value="text">Text</option>
-              <option value="grab">Grab</option>
-              <option value="none">Nascosto</option>
-            </select>
+            <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.cursor || 'auto'" :options="OPTS_CURSOR" @update:model-value="up('cursor', $event)" />
           </div>
 
           <!-- ── Attributi personalizzati ── -->
@@ -923,9 +852,7 @@
             </div>
             <div>
               <label class="mps-label">Curva di easing</label>
-              <select :value="layer.animEasing" @change="up('animEasing', $event.target.value)" class="mps-select">
-                <option v-for="e in ['ease','ease-in','ease-out','ease-in-out','linear']" :key="e" :value="e">{{ e }}</option>
-              </select>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animEasing" :options="OPTS_EASING" @update:model-value="up('animEasing', $event)" />
             </div>
 
             <!-- Character Animation (solo per text) -->
@@ -939,21 +866,11 @@
               <template v-if="layer.charAnim">
                 <div>
                   <label class="mps-label">Dividi per</label>
-                  <select :value="layer.charAnim.split || 'chars'" @change="upCharAnim('split', $event.target.value)" class="mps-select">
-                    <option value="chars">Caratteri</option>
-                    <option value="words">Parole</option>
-                    <option value="lines">Righe</option>
-                  </select>
+                  <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.charAnim.split || 'chars'" :options="OPTS_CHAR_SPLIT" @update:model-value="upCharAnim('split', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">Direzione</label>
-                  <select :value="layer.charAnim.direction || 'forward'" @change="upCharAnim('direction', $event.target.value)" class="mps-select">
-                    <option value="forward">Avanti</option>
-                    <option value="backward">Indietro</option>
-                    <option value="random">Casuale</option>
-                    <option value="middletoedge">Centro → Bordi</option>
-                    <option value="edgetomiddle">Bordi → Centro</option>
-                  </select>
+                  <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.charAnim.direction || 'forward'" :options="OPTS_CHAR_DIRECTION" @update:model-value="upCharAnim('direction', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">Stagger (ms)</label>
@@ -1032,9 +949,7 @@
               </div>
               <div>
                 <label class="mps-label">Easing loop</label>
-                <select :value="layer.animLoopEasing || 'ease-in-out'" @change="up('animLoopEasing', $event.target.value)" class="mps-select">
-                  <option v-for="e in ['ease','ease-in','ease-out','ease-in-out','linear']" :key="e" :value="e">{{ e }}</option>
-                </select>
+                <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animLoopEasing || 'ease-in-out'" :options="OPTS_EASING" @update:model-value="up('animLoopEasing', $event)" />
               </div>
             </template>
 
@@ -1172,18 +1087,11 @@
               </div>
               <div>
                 <label class="mps-label">Easing</label>
-                <select :value="layer.hover.easing || 'ease'" @change="upHover('easing', $event.target.value)" class="mps-select">
-                  <option v-for="e in ['ease','ease-in','ease-out','ease-in-out','linear']" :key="e" :value="e">{{ e }}</option>
-                </select>
+                <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.hover.easing || 'ease'" :options="OPTS_EASING" @update:model-value="upHover('easing', $event)" />
               </div>
               <div>
                 <label class="mps-label">Cursore hover</label>
-                <select :value="layer.hover.cursor || ''" @change="upHover('cursor', $event.target.value)" class="mps-select">
-                  <option value="">Nessun cambio</option>
-                  <option value="pointer">Pointer</option>
-                  <option value="default">Default</option>
-                  <option value="grab">Grab</option>
-                </select>
+                <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.hover.cursor || ''" :options="OPTS_HOVER_CURSOR" @update:model-value="upHover('cursor', $event)" />
               </div>
             </template>
 
@@ -1197,15 +1105,7 @@
             <template v-if="layer.mask">
               <div>
                 <label class="mps-label">Preset</label>
-                <select :value="layer.mask.preset || 'custom'" @change="applyMaskPreset($event.target.value)" class="mps-select">
-                  <option value="custom">Personalizzato</option>
-                  <option value="revealRight">Reveal da destra</option>
-                  <option value="revealLeft">Reveal da sinistra</option>
-                  <option value="revealDown">Reveal dall'alto</option>
-                  <option value="revealUp">Reveal dal basso</option>
-                  <option value="curtainH">Sipario orizzontale</option>
-                  <option value="curtainV">Sipario verticale</option>
-                </select>
+                <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.mask.preset || 'custom'" :options="OPTS_MASK_PRESET" @update:model-value="applyMaskPreset($event)" />
               </div>
               <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                 <div>
@@ -1250,14 +1150,7 @@
               <template v-if="layer.kenBurns">
                 <div>
                   <label class="mps-label">Tipo</label>
-                  <select :value="layer.kenBurns.type || 'zoomIn'" @change="upKenBurns('type', $event.target.value)" class="mps-select">
-                    <option value="zoomIn">Zoom In</option>
-                    <option value="zoomOut">Zoom Out</option>
-                    <option value="panLeft">Pan Sinistra</option>
-                    <option value="panRight">Pan Destra</option>
-                    <option value="panUp">Pan Alto</option>
-                    <option value="panDown">Pan Basso</option>
-                  </select>
+                  <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.kenBurns.type || 'zoomIn'" :options="OPTS_KENBURNS_TYPE" @update:model-value="upKenBurns('type', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">Intensita (%)</label>
@@ -1286,14 +1179,7 @@
             <template v-if="layer.motionPath">
               <div>
                 <label class="mps-label">Preset percorso</label>
-                <select :value="layer.motionPath.preset || 'circle'" @change="applyMotionPreset($event.target.value)" class="mps-select">
-                  <option value="circle">Cerchio</option>
-                  <option value="figure8">Otto</option>
-                  <option value="wave">Onda</option>
-                  <option value="zigzag">Zigzag</option>
-                  <option value="arc">Arco</option>
-                  <option value="custom">SVG personalizzato</option>
-                </select>
+                <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.motionPath.preset || 'circle'" :options="OPTS_MOTION_PRESET" @update:model-value="applyMotionPreset($event)" />
               </div>
               <template v-if="layer.motionPath.preset === 'custom'">
                 <div>
@@ -1319,9 +1205,7 @@
               </label>
               <div>
                 <label class="mps-label">Easing</label>
-                <select :value="layer.motionPath.easing || 'linear'" @change="upMotionPath('easing', $event.target.value)" class="mps-select">
-                  <option v-for="e in ['linear','ease','ease-in','ease-out','ease-in-out']" :key="e" :value="e">{{ e }}</option>
-                </select>
+                <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.motionPath.easing || 'linear'" :options="OPTS_EASING_LINEAR_FIRST" @update:model-value="upMotionPath('easing', $event)" />
               </div>
             </template>
 
@@ -1335,11 +1219,7 @@
             <template v-if="layer.parallax">
               <div>
                 <label class="mps-label">Tipo</label>
-                <select :value="layer.parallax.type || 'mouse'" @change="upParallax('type', $event.target.value)" class="mps-select">
-                  <option value="mouse">Mouse</option>
-                  <option value="scroll">Scroll</option>
-                  <option value="both">Mouse + Scroll</option>
-                </select>
+                <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.parallax.type || 'mouse'" :options="OPTS_PARALLAX_TYPE" @update:model-value="upParallax('type', $event)" />
               </div>
               <div>
                 <label class="mps-label">Profondita (1-20)</label>
@@ -1395,6 +1275,7 @@ import { ref, computed } from 'vue';
 import IconPicker from './IconPicker.vue';
 import iconsSvg from './uikitIconsSvg.js';
 import FieldColor from '@/components/Builder/fields/FieldColor.vue';
+import FieldSelect from '../Builder/fields/FieldSelect.vue';
 import KeyframeProperties from './KeyframeProperties.vue';
 import { defaultTimeline } from './timelineUtils.js';
 
@@ -1409,6 +1290,11 @@ const targetableLayers = computed(() => {
   const cur = props.layer?.id;
   return (props.slideLayers || []).filter(l => l && l.id && l.id !== cur);
 });
+
+const targetLayerOptions = computed(() => [
+  { value: '', label: '— Seleziona un layer —' },
+  ...targetableLayers.value.map(l => ({ value: l.id, label: targetLayerLabel(l) })),
+]);
 
 function fmt(v) {
   if (v === 'auto' || v === undefined || v === null) return v ?? '';
@@ -1730,6 +1616,129 @@ function pickAudio() {
 }
 
 const blendModes = ['normal','multiply','screen','overlay','darken','lighten','color-dodge','color-burn','hard-light','soft-light','difference','exclusion','hue','saturation','color','luminosity'];
+
+// Option arrays per FieldSelect (stessi value dei vecchi <option>: dati salvati invariati)
+const OPTS_TAG = ['h1','h2','h3','h4','h5','h6','p','span','div'].map(v => ({ value: v, label: v }));
+const OPTS_LINK_TARGET = [
+  { value: '_self', label: 'Stessa scheda' },
+  { value: '_blank', label: 'Nuova scheda' },
+];
+const OPTS_ACTION_TYPE = [
+  { value: 'none', label: 'Nessuna' },
+  { value: 'nextSlide', label: 'Slide successiva' },
+  { value: 'prevSlide', label: 'Slide precedente' },
+  { value: 'goToSlide', label: 'Vai a slide N' },
+  { value: 'openUrl', label: 'Apri URL' },
+  { value: 'scrollBelow', label: 'Scroll sotto slider' },
+  { value: 'toggleLayer', label: 'Toggle visibilita layer' },
+];
+const OPTS_FONT_WEIGHT = ['300','400','500','600','700','800','900'].map(v => ({ value: v, label: v }));
+const OPTS_FONT_STYLE = [
+  { value: 'normal', label: 'Normale' },
+  { value: 'italic', label: 'Corsivo' },
+];
+const OPTS_TEXT_TRANSFORM = [
+  { value: 'none', label: 'Nessuna' },
+  { value: 'uppercase', label: 'MAIUSCOLO' },
+  { value: 'lowercase', label: 'minuscolo' },
+  { value: 'capitalize', label: 'Capitalizzato' },
+];
+const OPTS_TEXT_DECORATION = [
+  { value: 'none', label: 'Nessuna' },
+  { value: 'underline', label: 'Sottolineato' },
+  { value: 'line-through', label: 'Barrato' },
+  { value: 'overline', label: 'Sopralineato' },
+];
+const OPTS_BORDER_STYLE = [
+  { value: 'solid', label: 'Solido' },
+  { value: 'dashed', label: 'Tratteggiato' },
+  { value: 'dotted', label: 'Puntinato' },
+  { value: 'double', label: 'Doppio' },
+];
+const OPTS_OBJECT_FIT = [
+  { value: 'cover', label: 'Cover' },
+  { value: 'contain', label: 'Contain' },
+  { value: 'fill', label: 'Fill' },
+  { value: 'none', label: 'Nessuno' },
+];
+const OPTS_OBJECT_POSITION = [
+  { value: 'center', label: 'Centro' },
+  { value: 'top', label: 'Alto' },
+  { value: 'bottom', label: 'Basso' },
+  { value: 'left', label: 'Sinistra' },
+  { value: 'right', label: 'Destra' },
+  { value: 'top left', label: 'Alto Sinistra' },
+  { value: 'top right', label: 'Alto Destra' },
+  { value: 'bottom left', label: 'Basso Sinistra' },
+  { value: 'bottom right', label: 'Basso Destra' },
+];
+const OPTS_BLEND_MODE = blendModes.map(v => ({ value: v, label: v }));
+const OPTS_SFX_EFFECT = [
+  { value: 'blockRight', label: 'Block da destra' },
+  { value: 'blockLeft', label: 'Block da sinistra' },
+  { value: 'blockDown', label: "Block dall'alto" },
+  { value: 'blockUp', label: 'Block dal basso' },
+];
+const OPTS_CURSOR = [
+  { value: 'auto', label: 'Auto' },
+  { value: 'pointer', label: 'Pointer' },
+  { value: 'default', label: 'Default' },
+  { value: 'move', label: 'Move' },
+  { value: 'crosshair', label: 'Crosshair' },
+  { value: 'text', label: 'Text' },
+  { value: 'grab', label: 'Grab' },
+  { value: 'none', label: 'Nascosto' },
+];
+const OPTS_EASING = ['ease','ease-in','ease-out','ease-in-out','linear'].map(v => ({ value: v, label: v }));
+const OPTS_EASING_LINEAR_FIRST = ['linear','ease','ease-in','ease-out','ease-in-out'].map(v => ({ value: v, label: v }));
+const OPTS_CHAR_SPLIT = [
+  { value: 'chars', label: 'Caratteri' },
+  { value: 'words', label: 'Parole' },
+  { value: 'lines', label: 'Righe' },
+];
+const OPTS_CHAR_DIRECTION = [
+  { value: 'forward', label: 'Avanti' },
+  { value: 'backward', label: 'Indietro' },
+  { value: 'random', label: 'Casuale' },
+  { value: 'middletoedge', label: 'Centro → Bordi' },
+  { value: 'edgetomiddle', label: 'Bordi → Centro' },
+];
+const OPTS_HOVER_CURSOR = [
+  { value: '', label: 'Nessun cambio' },
+  { value: 'pointer', label: 'Pointer' },
+  { value: 'default', label: 'Default' },
+  { value: 'grab', label: 'Grab' },
+];
+const OPTS_MASK_PRESET = [
+  { value: 'custom', label: 'Personalizzato' },
+  { value: 'revealRight', label: 'Reveal da destra' },
+  { value: 'revealLeft', label: 'Reveal da sinistra' },
+  { value: 'revealDown', label: "Reveal dall'alto" },
+  { value: 'revealUp', label: 'Reveal dal basso' },
+  { value: 'curtainH', label: 'Sipario orizzontale' },
+  { value: 'curtainV', label: 'Sipario verticale' },
+];
+const OPTS_KENBURNS_TYPE = [
+  { value: 'zoomIn', label: 'Zoom In' },
+  { value: 'zoomOut', label: 'Zoom Out' },
+  { value: 'panLeft', label: 'Pan Sinistra' },
+  { value: 'panRight', label: 'Pan Destra' },
+  { value: 'panUp', label: 'Pan Alto' },
+  { value: 'panDown', label: 'Pan Basso' },
+];
+const OPTS_MOTION_PRESET = [
+  { value: 'circle', label: 'Cerchio' },
+  { value: 'figure8', label: 'Otto' },
+  { value: 'wave', label: 'Onda' },
+  { value: 'zigzag', label: 'Zigzag' },
+  { value: 'arc', label: 'Arco' },
+  { value: 'custom', label: 'SVG personalizzato' },
+];
+const OPTS_PARALLAX_TYPE = [
+  { value: 'mouse', label: 'Mouse' },
+  { value: 'scroll', label: 'Scroll' },
+  { value: 'both', label: 'Mouse + Scroll' },
+];
 
 // Font families
 const fontsSans = ['Inter', 'Roboto', 'Open Sans', 'Lato', 'Montserrat', 'Poppins', 'Nunito', 'Raleway', 'Source Sans 3', 'Work Sans', 'DM Sans', 'Manrope'];

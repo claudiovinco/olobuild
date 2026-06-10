@@ -336,8 +336,8 @@ async function removeQuickColor(colorId) {
 }
 
 .fc-swatch--active {
-  border-color: var(--olo-color-primary, #6366f1);
-  box-shadow: 0 0 0 1px var(--olo-color-primary, #6366f1);
+  border-color: var(--olo-ui-accent, #e8622a);
+  box-shadow: 0 0 0 1px var(--olo-ui-accent, #e8622a);
 }
 
 .fc-swatch--add {
@@ -417,11 +417,11 @@ async function removeQuickColor(colorId) {
   background: #f3f4f6;
 }
 .fc-globe-btn--active {
-  color: var(--olo-color-primary, #6366f1);
+  color: var(--olo-ui-accent, #e8622a);
 }
 .fc-globe-btn--active:hover {
-  color: var(--olo-color-primary, #6366f1);
-  background: rgba(99, 102, 241, 0.08);
+  color: var(--olo-ui-accent, #e8622a);
+  background: rgba(232, 98, 42, 0.08);
 }
 
 /* ── Barra Alfa (checkerboard + gradiente trasparenza→colore) ── */
@@ -486,6 +486,6 @@ async function removeQuickColor(colorId) {
   background: transparent;
 }
 .fc-alpha-range:focus-visible {
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 0 2px rgba(232, 98, 42, 0.5);
 }
 </style>

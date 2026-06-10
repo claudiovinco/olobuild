@@ -67,7 +67,7 @@ function select(key) {
 }
 .olo-devsw button:hover { color: #e5e7eb; }
 .olo-devsw button.on {
-  background: var(--olo-color-primary, #6366f1);
+  background: var(--olo-ui-accent, #e8622a);
   color: #fff;
 }
 </style>

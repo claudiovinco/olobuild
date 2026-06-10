@@ -27,12 +27,7 @@
         <div class="font-card">
           <div class="font-card-label">{{ t('Display · titoli') }}</div>
           <div class="font-card-preview" :style="{ fontFamily: displayFontFamily }">Abc · Æg</div>
-          <div class="cfg-select">
-            <select :value="display.family" @change="setDisplay('family', $event.target.value)">
-              <option v-for="f in DISPLAY_FONTS" :key="f.value" :value="f.value">{{ f.label }}</option>
-            </select>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
-          </div>
+          <CfgSelect :model-value="display.family" :options="DISPLAY_FONTS" @update:model-value="setDisplay('family', $event)" />
           <div class="font-pills">
             <span class="cfg-pill off">italic</span>
             <span class="cfg-pill off">400</span>
@@ -42,12 +37,7 @@
         <div class="font-card">
           <div class="font-card-label">{{ t('Body · testo corrente') }}</div>
           <div class="font-card-preview body" :style="{ fontFamily: bodyFontFamily }">Abc · 123</div>
-          <div class="cfg-select">
-            <select :value="body.family" @change="setBody('family', $event.target.value)">
-              <option v-for="f in BODY_FONTS" :key="f.value" :value="f.value">{{ f.label }}</option>
-            </select>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
-          </div>
+          <CfgSelect :model-value="body.family" :options="BODY_FONTS" @update:model-value="setBody('family', $event)" />
           <div class="font-pills">
             <span class="cfg-pill off">400</span>
             <span class="cfg-pill off">500</span>
@@ -58,12 +48,7 @@
         <div class="font-card">
           <div class="font-card-label">{{ t('Mono · codice e dati') }}</div>
           <div class="font-card-preview body" :style="{ fontFamily: monoFontFamily }">{ 01 · Aa }</div>
-          <div class="cfg-select">
-            <select :value="mono.family" @change="setMono('family', $event.target.value)">
-              <option v-for="f in MONO_FONTS" :key="f.value" :value="f.value">{{ f.label }}</option>
-            </select>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
-          </div>
+          <CfgSelect :model-value="mono.family" :options="MONO_FONTS" @update:model-value="setMono('family', $event)" />
           <div class="font-pills">
             <span class="cfg-pill ok">var(--olo-font-family-mono)</span>
           </div>
@@ -89,10 +74,7 @@
           <div class="hint">{{ t('Punto di partenza, di solito 16px per il corpo del testo.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-input mono">
-            <input type="number" min="10" max="32" :value="scale.base" @input="setScale('base', parseInt($event.target.value) || 16)" />
-            <span class="suffix">px</span>
-          </div>
+          <CfgNumber :model-value="scale.base" :min="10" :max="32" suffix="px" @update:model-value="setScale('base', $event)" />
         </div>
       </div>
       <div class="cfg-row">
@@ -101,17 +83,7 @@
           <div class="hint">{{ t('Più alto = differenza più marcata fra body e h1.') }}</div>
         </div>
         <div class="control-col">
-          <div class="cfg-select">
-            <select :value="scale.ratio" @change="setScale('ratio', parseFloat($event.target.value))">
-              <option value="1.125">1.125 · Major Second</option>
-              <option value="1.2">1.2 · Minor Third</option>
-              <option value="1.25">1.25 · Major Third</option>
-              <option value="1.333">1.333 · Perfect Fourth</option>
-              <option value="1.414">1.414 · Augmented Fourth</option>
-              <option value="1.5">1.5 · Perfect Fifth</option>
-            </select>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
-          </div>
+          <CfgSelect size="md" :model-value="String(scale.ratio)" :options="RATIO_OPTIONS" @update:model-value="setScale('ratio', parseFloat($event))" />
         </div>
       </div>
       <div class="cfg-row">
@@ -147,6 +119,8 @@
 <script setup>
 import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import CfgSelect from './controls/CfgSelect.vue';
+import CfgNumber from './controls/CfgNumber.vue';
 
 const showToast = inject('showToast', () => {});
 const setDirty  = inject('setDirty',  () => {});
@@ -175,6 +149,14 @@ const MONO_FONTS = [
   { value: 'IBM Plex Mono',    label: 'IBM Plex Mono' },
   { value: 'Fira Code',        label: 'Fira Code' },
   { value: 'Source Code Pro',  label: 'Source Code Pro' },
+];
+const RATIO_OPTIONS = [
+  { value: '1.125', label: '1.125 · Major Second' },
+  { value: '1.2',   label: '1.2 · Minor Third' },
+  { value: '1.25',  label: '1.25 · Major Third' },
+  { value: '1.333', label: '1.333 · Perfect Fourth' },
+  { value: '1.414', label: '1.414 · Augmented Fourth' },
+  { value: '1.5',   label: '1.5 · Perfect Fifth' },
 ];
 
 const display = ref({ family: 'Instrument Serif', weight: 400 });
