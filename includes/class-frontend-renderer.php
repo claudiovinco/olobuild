@@ -4554,8 +4554,11 @@ class Olo_Frontend_Renderer {
                   var dx = e.clientX - cx;
                   var dy = e.clientY - cy;
                   var speed = parseInt(el.dataset.oloTrack) || 3;
-                  var tx = (dx / rect.width) * speed * 10;
-                  var ty = (dy / rect.height) * speed * 10;
+                  /* Clamp a ±speed*10px: senza limite, su elementi piccoli con mouse
+                     lontano lo spostamento esplodeva a centinaia di px. */
+                  var max = speed * 10;
+                  var tx = Math.max(-max, Math.min(max, (dx / rect.width) * max));
+                  var ty = Math.max(-max, Math.min(max, (dy / rect.height) * max));
                   el.style.transform = 'translate(' + tx + 'px, ' + ty + 'px)';
                 });
               });
