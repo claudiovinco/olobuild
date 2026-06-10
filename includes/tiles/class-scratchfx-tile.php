@@ -326,13 +326,25 @@ class Olo_Scratchfx_Tile extends Olo_Tile_Base {
             var ctx = canvas.getContext('2d');
             if ( ! ctx ) { return; }
 
+            /* I color picker token-first salvano var(--olo-color-*): valide nel CSS
+               ma NON sul canvas 2D (fillStyle le ignora). Risolviamo via computed style. */
+            function resolveVarColor( c ) {
+                if ( typeof c === 'string' && c.indexOf( 'var(' ) !== -1 ) {
+                    var m = c.match( /var\(\s*(--[A-Za-z0-9_-]+)/ );
+                    if ( m ) {
+                        var v = getComputedStyle( canvas.parentElement || document.documentElement ).getPropertyValue( m[1] ).trim();
+                        if ( v ) { return v; }
+                    }
+                }
+                return c;
+            }
             var COVER_TYPE = <?php echo json_encode( $cover_type ); ?>;
-            var COVER_C1   = <?php echo json_encode( $cover_c1 ); ?>;
-            var COVER_C2   = <?php echo json_encode( $cover_c2 ); ?>;
+            var COVER_C1   = resolveVarColor( <?php echo json_encode( $cover_c1 ); ?> );
+            var COVER_C2   = resolveVarColor( <?php echo json_encode( $cover_c2 ); ?> );
             var COVER_ANG  = <?php echo json_encode( $cover_angle ); ?>;
             var COVER_IMG  = <?php echo json_encode( $cover_img ); ?>;
             var COVER_TEXT = <?php echo json_encode( $cover_text ); ?>;
-            var COVER_TXTC = <?php echo json_encode( $cover_txt_c ); ?>;
+            var COVER_TXTC = resolveVarColor( <?php echo json_encode( $cover_txt_c ); ?> );
             var BRUSH      = <?php echo json_encode( $brush ); ?>;
             var THRESHOLD  = <?php echo json_encode( $threshold ); ?>;   // 0 = no auto-reveal
             var RESET      = <?php echo $reset ? 'true' : 'false'; ?>;

@@ -248,6 +248,21 @@ class Olo_Particlefx_Tile extends Olo_Tile_Base {
             var ctx = canvas.getContext('2d');
             if ( ! ctx ) { return; }
 
+            /* I color picker token-first salvano var(--olo-color-*): valide nel CSS
+               ma NON sul canvas 2D (fillStyle le ignora → particelle col colore di
+               fallback). Risolviamo i token via computed style dell'host. */
+            function resolveVarColor( c ) {
+                if ( typeof c === 'string' && c.indexOf( 'var(' ) !== -1 ) {
+                    var m = c.match( /var\(\s*(--[A-Za-z0-9_-]+)/ );
+                    if ( m ) {
+                        var v = getComputedStyle( host ).getPropertyValue( m[1] ).trim();
+                        if ( v ) { return v; }
+                    }
+                }
+                return c;
+            }
+            if ( CFG.colors && CFG.colors.map ) { CFG.colors = CFG.colors.map( resolveVarColor ); }
+
             var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             var coarse = window.matchMedia && window.matchMedia('(hover: none), (pointer: coarse)').matches;
             var canHover = CFG.hover && ! coarse;
