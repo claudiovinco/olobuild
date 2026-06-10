@@ -4565,6 +4565,16 @@ class Olo_Frontend_Renderer {
                 var size = +cfg.size || 300, soft = (cfg.soft != null ? +cfg.soft : 40);
                 var blend = cfg.blend || 'difference', color = cfg.color || '#ffffff', ease = +cfg.ease || 0.22;
                 var inner = Math.max(0, 100 - soft), half = size / 2;
+                /* Falloff a curva: una rampa lineare verso transparent lascia un bordo
+                   percepibile (Mach band) anche a morbidezza 100. Gli stop modulano
+                   l'alpha del colore con coda dolce che arriva a 0 a derivata ~0. */
+                var hx = String(color).replace('#',''); if(hx.length === 3) hx = hx[0]+hx[0]+hx[1]+hx[1]+hx[2]+hx[2];
+                var nn = parseInt(hx, 16); if(isNaN(nn)) nn = 16777215;
+                var rgb = (nn>>16&255) + ',' + (nn>>8&255) + ',' + (nn&255);
+                var C = function(a){ return 'rgba(' + rgb + ',' + a + ')'; };
+                var span = 100 - inner;
+                var st = function(f){ return (inner + span * f).toFixed(1) + '%'; };
+                var grad = 'radial-gradient(circle, ' + C(1) + ' 0%, ' + C(1) + ' ' + inner + '%, ' + C(.82) + ' ' + st(.25) + ', ' + C(.5) + ' ' + st(.5) + ', ' + C(.22) + ' ' + st(.75) + ', ' + C(.07) + ' ' + st(.9) + ', ' + C(0) + ' 100%)';
                 var disc = null, tx = 0, ty = 0, cx = 0, cy = 0, running = false, inside = false;
                 function build(){          // creazione lazy: solo al primo hover con mouse/pen
                   if(disc) return;
@@ -4573,7 +4583,7 @@ class Olo_Frontend_Renderer {
                   host.style.isolation = 'isolate';     // confina il mix-blend al contenuto del box
                   disc = document.createElement('div');
                   disc.setAttribute('aria-hidden', 'true');
-                  disc.style.cssText = 'position:absolute;top:0;left:0;z-index:99999;width:' + size + 'px;height:' + size + 'px;border-radius:50%;pointer-events:none;will-change:transform,opacity;opacity:0;transition:opacity .2s ease;background:radial-gradient(circle, ' + color + ' 0%, ' + color + ' ' + inner + '%, transparent 100%);mix-blend-mode:' + blend + ';';
+                  disc.style.cssText = 'position:absolute;top:0;left:0;z-index:99999;width:' + size + 'px;height:' + size + 'px;border-radius:50%;pointer-events:none;will-change:transform,opacity;opacity:0;transition:opacity .2s ease;background:' + grad + ';mix-blend-mode:' + blend + ';';
                   host.appendChild(disc);
                 }
                 function frame(){

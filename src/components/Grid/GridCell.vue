@@ -93,6 +93,15 @@ function setupSpotlight() {
   const color = adv.cursor_spotlight_color || '#ffffff';
   const ease = (+adv.cursor_spotlight_easing || 22) / 100;
   const inner = Math.max(0, 100 - soft), half = size / 2;
+  // Falloff a curva, IDENTICO al runtime frontend PHP: una rampa lineare verso
+  // transparent lascia un bordo percepibile (Mach band) anche a morbidezza 100.
+  let hx = String(color).replace('#', ''); if (hx.length === 3) hx = hx[0]+hx[0]+hx[1]+hx[1]+hx[2]+hx[2];
+  let nn = parseInt(hx, 16); if (isNaN(nn)) nn = 16777215;
+  const rgb = (nn>>16&255) + ',' + (nn>>8&255) + ',' + (nn&255);
+  const C = (a) => 'rgba(' + rgb + ',' + a + ')';
+  const span = 100 - inner;
+  const st = (f) => (inner + span * f).toFixed(1) + '%';
+  const grad = 'radial-gradient(circle, ' + C(1) + ' 0%, ' + C(1) + ' ' + inner + '%, ' + C(.82) + ' ' + st(.25) + ', ' + C(.5) + ' ' + st(.5) + ', ' + C(.22) + ' ' + st(.75) + ', ' + C(.07) + ' ' + st(.9) + ', ' + C(0) + ' 100%)';
   let disc = null, tx = 0, ty = 0, cx = 0, cy = 0, running = false, inside = false;
   function build() {
     if (disc) return;
@@ -100,7 +109,7 @@ function setupSpotlight() {
     host.style.overflow = 'hidden'; host.style.isolation = 'isolate';
     disc = document.createElement('div');
     disc.setAttribute('aria-hidden', 'true');
-    disc.style.cssText = 'position:absolute;top:0;left:0;z-index:99999;width:' + size + 'px;height:' + size + 'px;border-radius:50%;pointer-events:none;will-change:transform,opacity;opacity:0;transition:opacity .2s ease;background:radial-gradient(circle, ' + color + ' 0%, ' + color + ' ' + inner + '%, transparent 100%);mix-blend-mode:' + blend + ';';
+    disc.style.cssText = 'position:absolute;top:0;left:0;z-index:99999;width:' + size + 'px;height:' + size + 'px;border-radius:50%;pointer-events:none;will-change:transform,opacity;opacity:0;transition:opacity .2s ease;background:' + grad + ';mix-blend-mode:' + blend + ';';
     host.appendChild(disc); _spotDisc = disc;
   }
   function frame() {
