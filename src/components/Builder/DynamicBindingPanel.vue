@@ -27,12 +27,7 @@
 
       <!-- ACF grouped fields -->
       <template v-else-if="selectedSource === 'acf' && isGroupedFields">
-        <select v-model="selectedField" class="dbp-select">
-          <option value="">Seleziona campo...</option>
-          <optgroup v-for="group in fieldsForSource" :key="group.group_label" :label="group.group_label">
-            <option v-for="f in group.fields" :key="f.key" :value="f.key">{{ f.label }}</option>
-          </optgroup>
-        </select>
+        <FieldSelect ui="dropdown" theme="dark" :model-value="selectedField" :options="groupedFieldOpts" @update:model-value="selectedField = $event" />
       </template>
 
       <!-- Standard flat fields -->
@@ -116,6 +111,19 @@ const flatFieldOpts = computed(() => {
   return [
     { value: '', label: 'Seleziona campo...' },
     ...f.map(x => ({ value: x.key, label: x.label })),
+  ];
+});
+
+// Campi ACF raggruppati: stessi value (f.key) del vecchio select nativo.
+const groupedFieldOpts = computed(() => {
+  const f = fieldsForSource.value;
+  if (!Array.isArray(f)) return [];
+  return [
+    { value: '', label: 'Seleziona campo...' },
+    ...f.map(g => ({
+      group: g.group_label,
+      options: (g.fields || []).map(x => ({ value: x.key, label: x.label })),
+    })),
   ];
 });
 
@@ -221,7 +229,6 @@ function applyBinding() {
   letter-spacing: 0.05em;
 }
 
-.dbp-select,
 .dbp-input {
   width: 100%;
   background: #111827;
@@ -232,29 +239,6 @@ function applyBinding() {
   color: #e5e7eb;
 }
 
-.dbp-select option {
-  background: #111827;
-  color: #e5e7eb;
-  padding: 4px 8px;
-}
-
-.dbp-select optgroup {
-  background: #1e293b;
-  color: #94a3b8;
-  font-weight: 700;
-  font-style: normal;
-  font-size: 11px;
-  letter-spacing: 0.03em;
-}
-
-.dbp-select optgroup option {
-  background: #111827;
-  color: #e5e7eb;
-  font-weight: 400;
-  padding-left: 12px;
-}
-
-.dbp-select:focus,
 .dbp-input:focus {
   outline: none;
   border-color: var(--olo-ui-accent, #e8622a);

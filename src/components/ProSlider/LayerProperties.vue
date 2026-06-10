@@ -255,21 +255,7 @@
             <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Tipografia</p>
             <div>
               <label class="mps-label">Font</label>
-              <select :value="layer.fontFamily || ''" @change="up('fontFamily', $event.target.value)" class="mps-select">
-                <option value="">Default</option>
-                <optgroup label="Sans-serif">
-                  <option v-for="f in fontsSans" :key="f" :value="f">{{ f }}</option>
-                </optgroup>
-                <optgroup label="Serif">
-                  <option v-for="f in fontsSerif" :key="f" :value="f">{{ f }}</option>
-                </optgroup>
-                <optgroup label="Mono">
-                  <option v-for="f in fontsMono" :key="f" :value="f">{{ f }}</option>
-                </optgroup>
-                <optgroup label="Display">
-                  <option v-for="f in fontsDisplay" :key="f" :value="f">{{ f }}</option>
-                </optgroup>
-              </select>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.fontFamily || ''" :options="fontGroupOpts" @update:model-value="up('fontFamily', $event)" />
             </div>
             <div>
               <label class="mps-label">Dimensione font (px)</label>
@@ -805,11 +791,7 @@
             <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Entrata</p>
             <div>
               <label class="mps-label">Animazione entrata</label>
-              <select :value="layer.animIn" @change="up('animIn', $event.target.value)" class="mps-select">
-                <optgroup v-for="g in animationsInGroups" :key="g.label" :label="g.label">
-                  <option v-for="a in g.options" :key="a.value" :value="a.value">{{ a.label }}</option>
-                </optgroup>
-              </select>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animIn" :options="animationsInGroups" @update:model-value="up('animIn', $event)" />
             </div>
             <div>
               <label class="mps-label">Durata (ms)</label>
@@ -830,11 +812,7 @@
             <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Uscita</p>
             <div>
               <label class="mps-label">Animazione uscita</label>
-              <select :value="layer.animOut" @change="up('animOut', $event.target.value)" class="mps-select">
-                <optgroup v-for="g in animationsOutGroups" :key="g.label" :label="g.label">
-                  <option v-for="a in g.options" :key="a.value" :value="a.value">{{ a.label }}</option>
-                </optgroup>
-              </select>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animOut" :options="animationsOutGroups" @update:model-value="up('animOut', $event)" />
             </div>
             <div>
               <label class="mps-label">Durata (ms)</label>
@@ -933,11 +911,7 @@
             <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Loop</p>
             <div>
               <label class="mps-label">Animazione continua</label>
-              <select :value="layer.animLoop || 'none'" @change="up('animLoop', $event.target.value)" class="mps-select">
-                <optgroup v-for="g in loopAnimGroups" :key="g.label" :label="g.label">
-                  <option v-for="a in g.options" :key="a.value" :value="a.value">{{ a.label }}</option>
-                </optgroup>
-              </select>
+              <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animLoop || 'none'" :options="loopAnimGroups" @update:model-value="up('animLoop', $event)" />
             </div>
             <template v-if="layer.animLoop && layer.animLoop !== 'none'">
               <div>
@@ -1745,6 +1719,13 @@ const fontsSans = ['Inter', 'Roboto', 'Open Sans', 'Lato', 'Montserrat', 'Poppin
 const fontsSerif = ['Playfair Display', 'Merriweather', 'Lora', 'PT Serif', 'Libre Baskerville', 'Cormorant Garamond', 'Crimson Text', 'Noto Serif'];
 const fontsMono = ['JetBrains Mono', 'Fira Code', 'Source Code Pro', 'IBM Plex Mono', 'Space Mono'];
 const fontsDisplay = ['Bebas Neue', 'Oswald', 'Anton', 'Permanent Marker', 'Abril Fatface', 'Righteous', 'Pacifico', 'Dancing Script', 'Lobster', 'Satisfy'];
+const fontGroupOpts = [
+  { value: '', label: 'Default' },
+  { group: 'Sans-serif', options: fontsSans.map(f => ({ value: f, label: f })) },
+  { group: 'Serif', options: fontsSerif.map(f => ({ value: f, label: f })) },
+  { group: 'Mono', options: fontsMono.map(f => ({ value: f, label: f })) },
+  { group: 'Display', options: fontsDisplay.map(f => ({ value: f, label: f })) },
+];
 
 function toggleSfx(enabled) {
   if (enabled) {
@@ -1862,15 +1843,6 @@ function upParallax(key, val) {
   flex-shrink: 0;
 }
 .mps-input {
-  width: 100%;
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
-  padding: 4px 8px;
-  font-size: 0.75rem;
-  color: #111827;
-}
-.mps-select {
   width: 100%;
   background: #ffffff;
   border: 1px solid #d1d5db;

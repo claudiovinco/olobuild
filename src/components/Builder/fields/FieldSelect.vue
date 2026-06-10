@@ -4,7 +4,7 @@
        select: emette gli stessi value stringa — è SOLO una resa alternativa. -->
   <div v-if="isSegmented" class="fsel-seg" role="radiogroup">
     <button
-      v-for="opt in options"
+      v-for="opt in flatOptions"
       :key="opt.value"
       type="button"
       role="radio"
@@ -45,20 +45,22 @@
         role="listbox"
         @keydown="onPopKeydown"
       >
-        <button
-          v-for="(opt, i) in options"
-          :key="String(opt.value)"
-          type="button"
-          class="fsel-item"
-          :class="{ 'fsel-item--selected': isActive(opt), 'fsel-item--hl': i === highlight }"
-          role="option"
-          :aria-selected="isActive(opt)"
-          @click="pick(opt)"
-          @mousemove="highlight = i"
-        >
-          <span class="fsel-item-label">{{ t(opt.label) }}</span>
-          <svg v-if="isActive(opt)" class="fsel-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-        </button>
+        <template v-for="(row, ri) in renderList" :key="row.kind === 'group' ? 'g-' + ri : 'o-' + String(row.opt.value)">
+          <div v-if="row.kind === 'group'" class="fsel-group-label" role="presentation">{{ t(row.label) }}</div>
+          <button
+            v-else
+            type="button"
+            class="fsel-item"
+            :class="{ 'fsel-item--selected': isActive(row.opt), 'fsel-item--hl': row.idx === highlight }"
+            role="option"
+            :aria-selected="isActive(row.opt)"
+            @click="pick(row.opt)"
+            @mousemove="highlight = row.idx"
+          >
+            <span class="fsel-item-label">{{ t(row.opt.label) }}</span>
+            <svg v-if="isActive(row.opt)" class="fsel-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </button>
+        </template>
       </div>
     </Teleport>
   </div>
@@ -70,6 +72,9 @@ import { ref, computed, nextTick, onBeforeUnmount } from 'vue';
 
 const props = defineProps({
   modelValue: { type: [String, Number], default: '' },
+  // Entry piatta { value, label } oppure gruppo { group|label, options: [...] }
+  // (auto-rilevato via Array.isArray(o.options)); i due formati possono
+  // convivere nello stesso array (es. "Default" piatto + gruppi font).
   options: { type: Array, default: () => [] },
   // 'auto' (default): segmented se 2-4 opzioni con label corte; 'segmented' /
   // 'dropdown' forzano la resa. Dal config si passa con `ui: 'dropdown'`.
@@ -88,10 +93,35 @@ const emit = defineEmits(['update:modelValue']);
 const SEG_MAX_OPTIONS = 4;
 const SEG_MAX_LABEL = 11; // char: oltre, le label vanno strette e si troncano
 
+const hasGroups = computed(() => (props.options || []).some(o => o && Array.isArray(o.options)));
+
+// Opzioni appiattite nell'ordine visivo: è la lista su cui lavorano selezione,
+// highlight e navigazione tastiera (le intestazioni di gruppo non sono focusabili).
+const flatOptions = computed(() =>
+  (props.options || []).flatMap(o => (o && Array.isArray(o.options)) ? o.options : [o])
+);
+
+// Righe del popup: intestazioni di gruppo intercalate alle opzioni; idx è
+// l'indice in flatOptions, così highlight/keyboard nav restano allineati.
+const renderList = computed(() => {
+  const rows = [];
+  let idx = 0;
+  for (const o of props.options || []) {
+    if (o && Array.isArray(o.options)) {
+      rows.push({ kind: 'group', label: o.group ?? o.label ?? '' });
+      for (const opt of o.options) rows.push({ kind: 'opt', opt, idx: idx++ });
+    } else {
+      rows.push({ kind: 'opt', opt: o, idx: idx++ });
+    }
+  }
+  return rows;
+});
+
 const isSegmented = computed(() => {
   if (props.ui === 'dropdown') return false;
+  if (hasGroups.value) return false; // i gruppi hanno senso solo nel popup
   if (props.ui === 'segmented') return true;
-  const opts = props.options || [];
+  const opts = flatOptions.value;
   if (opts.length < 2 || opts.length > SEG_MAX_OPTIONS) return false;
   return opts.every(o => String(t(o.label || '')).length <= SEG_MAX_LABEL);
 });
@@ -108,7 +138,7 @@ const popEl = ref(null);
 const popStyle = ref({});
 
 const displayLabel = computed(() => {
-  const sel = props.options.find(o => isActive(o));
+  const sel = flatOptions.value.find(o => isActive(o));
   return sel ? t(sel.label) : '—';
 });
 
@@ -118,7 +148,7 @@ function toggle() {
 
 async function openPop() {
   open.value = true;
-  highlight.value = Math.max(0, props.options.findIndex(o => isActive(o)));
+  highlight.value = Math.max(0, flatOptions.value.findIndex(o => isActive(o)));
   await nextTick();
   position();
   const el = popEl.value?.querySelector('.fsel-item--selected') || popEl.value?.querySelector('.fsel-item');
@@ -169,8 +199,8 @@ function position() {
 }
 
 function move(delta) {
-  if (!props.options.length) return;
-  const n = props.options.length;
+  if (!flatOptions.value.length) return;
+  const n = flatOptions.value.length;
   highlight.value = ((highlight.value + delta) % n + n) % n;
   scrollHighlightIntoView();
 }
@@ -194,7 +224,7 @@ function onPopKeydown(e) {
   else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
   else if (e.key === 'Enter' || e.key === ' ') {
     e.preventDefault();
-    const opt = props.options[highlight.value];
+    const opt = flatOptions.value[highlight.value];
     if (opt) pick(opt);
   } else if (e.key === 'Escape' || e.key === 'Tab') {
     e.preventDefault();
@@ -331,6 +361,16 @@ onBeforeUnmount(() => close(false));
 }
 .fsel-item--hl { background: #f3f4f6; }
 .fsel-item--selected { color: #111827; font-weight: 600; }
+/* Intestazione di gruppo: stessa lingua di .ff-group-label (FieldFontFamily) */
+.fsel-group-label {
+  padding: 7px 8px 3px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #9ca3af;
+}
+.fsel-group-label:not(:first-child) { margin-top: 2px; }
 .fsel-pop--dark {
   background: #1f2937;
   border-color: #374151;
@@ -338,6 +378,7 @@ onBeforeUnmount(() => close(false));
 .fsel-pop--dark .fsel-item { color: #d1d5db; }
 .fsel-pop--dark .fsel-item--hl { background: #374151; }
 .fsel-pop--dark .fsel-item--selected { color: #f9fafb; }
+.fsel-pop--dark .fsel-group-label { color: #6b7280; }
 .fsel-check {
   width: 13px; height: 13px;
   color: var(--olo-ui-accent, #e8622a);

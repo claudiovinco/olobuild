@@ -277,12 +277,7 @@
         <div class="field">
           <span class="cl">{{ t('Pattern') }}</span>
           <div class="selwrap">
-            <select class="sel" :value="bg.pattern_type || 'dots'" :aria-label="t('Pattern')" @change="updateField('pattern_type', $event.target.value)">
-              <optgroup v-for="group in patternGroups" :key="group.label" :label="group.label">
-                <option v-for="p in group.items" :key="p.value" :value="p.value">{{ p.label }}</option>
-              </optgroup>
-            </select>
-            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <FieldSelect ui="dropdown" :model-value="bg.pattern_type || 'dots'" :options="patternGroupOpts" :aria-label="t('Pattern')" @update:model-value="updateField('pattern_type', $event)" />
           </div>
         </div>
         <div class="pv" :style="patternPreviewStyle"></div>
@@ -634,7 +629,7 @@ const typeGroups = [
 const allTypes = typeGroups.flatMap((g) => g.items);
 const currentTypeLabel = computed(() => (allTypes.find((it) => it.value === bg.value.type) || {}).label || '');
 
-// Pattern groups for select optgroup
+// Pattern groups for FieldSelect (formato gruppi { group, options })
 const patternGroups = [
   { label: 'Linee', items: patternList.filter(p => ['horizontal-lines','vertical-lines','diagonal-lines','diagonal-lines-reverse','crosshatch','diagonal-crosshatch'].includes(p.value)) },
   { label: 'Punti', items: patternList.filter(p => ['dots','dots-large','dots-grid','polka-dots'].includes(p.value)) },
@@ -643,6 +638,10 @@ const patternGroups = [
   { label: 'Texture', items: patternList.filter(p => ['carbon-fiber','graph-paper','lined-paper','blueprint','noise','brick','wood-grain'].includes(p.value)) },
   { label: 'Decorativi', items: patternList.filter(p => ['stars','crosses','plus-signs','hearts'].includes(p.value)) },
 ];
+const patternGroupOpts = patternGroups.map((g) => ({
+  group: g.label,
+  options: g.items.map((p) => ({ value: p.value, label: p.label })),
+}));
 
 // Mesh/aurora preview: stesso util getMeshCSS della resa canvas/PHP (WYSIWYG).
 const meshPreviewStyle = computed(() => bg.value.type === 'mesh' ? getMeshCSS(bg.value) : {});
@@ -1097,38 +1096,8 @@ function updateParallaxData(newData) {
 }
 .spacer { flex: 1; }
 
-/* select custom */
+/* contenitore dei FieldSelect nelle row */
 .selwrap { flex: 1; position: relative; min-width: 0; }
-.sel {
-  width: 100%;
-  height: 34px;
-  padding: 0 30px 0 10px;
-  border: 1px solid var(--line);
-  border-radius: 9px;
-  background: #fff;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--ink);
-  outline: none;
-  appearance: none;
-  -webkit-appearance: none;
-  cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-.sel:focus-visible {
-  border-color: var(--ui);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui) 20%, transparent);
-}
-.chev {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 14px;
-  height: 14px;
-  color: var(--faint);
-  pointer-events: none;
-}
 
 /* slider — track con riempimento arancio (WebKit via :style; FF via progress) */
 .uirange {

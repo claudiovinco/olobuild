@@ -19,15 +19,7 @@
       <!-- Easing -->
       <div>
         <label class="mps-label">Easing</label>
-        <select
-          :value="keyframe.easing || 'ease'"
-          @change="upKf('easing', $event.target.value)"
-          class="mps-select"
-        >
-          <optgroup v-for="g in EASING_GROUPS" :key="g.label" :label="g.label">
-            <option v-for="e in g.options" :key="e.value" :value="e.value">{{ e.label }}</option>
-          </optgroup>
-        </select>
+        <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="keyframe.easing || 'ease'" :options="EASING_GROUPS" @update:model-value="upKf('easing', $event)" />
       </div>
 
       <div class="mb-border-t mb-border-gray-700 mb-pt-2"></div>
@@ -73,6 +65,7 @@
 
 <script setup>
 import { ANIMATABLE_PROPS, EASING_GROUPS } from './timelineUtils.js';
+import FieldSelect from '../Builder/fields/FieldSelect.vue';
 
 const props = defineProps({
   keyframe: { type: Object, default: null },
