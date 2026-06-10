@@ -241,7 +241,10 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
         $authclr = $this->safe_color_css( $s['author_color'] ?? '' ) ?: $accent;
         $rating  = absint( $s['rating'] );
         $qfont   = $s['quote_font'] ?? 'inherit';
-        $qfam    = ( $qfont === 'heading' ) ? 'var(--olo-font-family-heading, Georgia, serif)' : ( ( $qfont === 'body' ) ? 'var(--olo-font-family, -apple-system, sans-serif)' : 'inherit' );
+        // Valori legacy ('heading'/'body') → stack storici della tile;
+        // valori nuovi (type 'font-family') → CSS pronto via resolver condiviso.
+        $qlegacy = [ 'heading' => 'var(--olo-font-family-heading, Georgia, serif)', 'body' => 'var(--olo-font-family, -apple-system, sans-serif)' ];
+        $qfam    = $this->resolve_font_family( $qfont, $qlegacy ) ?: 'inherit';
         $qsize   = intval( $s['quote_size'] ?? 0 );
         $qsize_css = $qsize > 0 ? ( $qsize . 'px' ) : 'clamp(24px,3.4vw,40px)';
         $upper   = ! empty( $s['author_uppercase'] );

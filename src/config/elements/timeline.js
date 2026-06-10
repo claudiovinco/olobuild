@@ -200,7 +200,7 @@ export default {
     // ── Card ──
     { type: 'separator', label: t('Personalizza · Card') },
     { key: 'tl_card_bg', label: t('Sfondo card'), type: 'color' },
-    { key: 'tl_card_radius', label: t('Arrotondamento card (px · 0 = auto)'), type: 'range', min: 0, max: 40, step: 1 },
+    { key: 'tl_card_radius', label: t('Arrotondamento card (px · 0 = auto)'), type: 'border-radius' },
     { key: 'tl_card_maxw', label: t('Larghezza max card (px · 0 = auto)'), type: 'range', min: 0, max: 600, step: 10 },
     { key: 'tl_card_pad', label: t('Padding card (px · 0 = auto)'), type: 'range', min: 0, max: 32, step: 1 },
 
@@ -220,7 +220,7 @@ export default {
       { value: 'cover',   label: t('Riempi (cover)') },
       { value: 'contain', label: t('Contieni (contain)') },
     ]},
-    { key: 'tl_media_radius', label: t('Arrotondamento immagine (px · 0 = auto)'), type: 'range', min: 0, max: 30, step: 1 },
+    { key: 'tl_media_radius', label: t('Arrotondamento immagine (px · 0 = auto)'), type: 'border-radius' },
     { key: 'tl_media_bar', label: t('Barra colore sopra immagine'), type: 'toggle' },
 
     // ── Testi (popup tipografia — convenzione OLObuild) ──

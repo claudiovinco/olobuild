@@ -63,7 +63,7 @@ export default {
     },
 
     { type: 'separator', label: t('Comportamento') },
-    { key: 'default_index', label: t('Scheda attiva iniziale (0-based)'), type: 'text' },
+    { key: 'default_index', label: t('Scheda attiva iniziale (0-based)'), type: 'number', min: 0, step: 1 },
   ],
 
   styleFields: [

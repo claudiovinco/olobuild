@@ -68,11 +68,7 @@ export default {
     { key: 'divider_color', label: t('Colore linee'),          type: 'color' },
 
     { type: 'separator', label: t('Valore') },
-    { key: 'value_font_family', label: t('Famiglia'), type: 'select', options: [
-      { value: 'heading', label: t('Heading (del tema)') },
-      { value: 'body',    label: t('Body (del tema)') },
-      { value: 'mono',    label: t('Monospace') },
-    ]},
+    { key: 'value_font_family', label: t('Famiglia'), type: 'font-family' },
     { key: 'value_color',  label: t('Colore'),          type: 'color' },
     { key: 'value_size',   label: t('Dimensione (px)'), type: 'range', min: 20, max: 96, step: 1, responsive: true },
     { key: 'value_weight', label: t('Peso'), type: 'select', options: [
@@ -80,7 +76,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Etichetta') },
-    { key: 'mono_font_family', label: t('Font etichetta (vuoto = monospace di sistema)'), type: 'text' },
+    { key: 'mono_font_family', label: t('Font etichetta (vuoto = mono del tema)'), type: 'font-family' },
     { key: 'label_color',     label: t('Colore'),          type: 'color' },
     { key: 'label_size',      label: t('Dimensione (px)'), type: 'range', min: 10, max: 22, step: 1 },
     { key: 'label_uppercase', label: t('Maiuscolo'),       type: 'toggle' },

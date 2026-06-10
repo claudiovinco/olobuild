@@ -11,6 +11,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { resolveFontFamily } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -35,7 +36,8 @@ const items = computed(() => Array.isArray(s.value.items) ? s.value.items : []);
 const SERIF = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
 const SANS  = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
 const MONO  = "ui-monospace,Menlo,Consolas,monospace";
-const fmap  = { serif: SERIF, 'sans-serif': SANS, mono: MONO };
+// Stack storici della tile per i valori legacy ancora salvati nei template.
+const FONT_LEGACY = { serif: SERIF, 'sans-serif': SANS, mono: MONO };
 
 const isCircle = computed(() => s.value.number_style === 'circle' || s.value.number_style === 'outline');
 
@@ -68,7 +70,7 @@ const itemStyle = computed(() => {
   return st;
 });
 
-const nfont = computed(() => fmap[s.value.number_font] || SERIF);
+const nfont = computed(() => resolveFontFamily(s.value.number_font, FONT_LEGACY) || SERIF);
 const ncolor = computed(() => s.value.number_color || 'var(--olo-color-primary, #e1474f)');
 const nsize = computed(() => Math.max(12, Math.min(96, parseInt(s.value.number_size) || 40)));
 
@@ -91,7 +93,7 @@ const circleStyle = computed(() => {
 });
 
 const titleStyle = computed(() => ({
-  fontFamily: fmap[s.value.title_font] || SERIF, fontWeight: s.value.title_weight || '600',
+  fontFamily: resolveFontFamily(s.value.title_font, FONT_LEGACY) || SERIF, fontWeight: s.value.title_weight || '600',
   fontSize: (parseInt(s.value.title_size) || 21) + 'px', lineHeight: 1.2,
   color: s.value.title_color || 'var(--olo-color-text, #111827)', margin: 0,
 }));

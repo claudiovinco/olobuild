@@ -81,7 +81,7 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
             [ 'key' => 'title_color',    'type' => 'color',  'label' => 'Colore titolo' ],
             [ 'key' => 'text_color',     'type' => 'color',  'label' => 'Colore testo' ],
             [ 'key' => 'link_color',     'type' => 'color',  'label' => 'Colore link' ],
-            [ 'key' => 'default_index',  'type' => 'text',   'label' => 'Scheda attiva iniziale (0-based)' ],
+            [ 'key' => 'default_index',  'type' => 'number', 'label' => 'Scheda attiva iniziale (0-based)' ],
         ];
     }
 

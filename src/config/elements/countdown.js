@@ -163,7 +163,7 @@ export default {
 
     { type: 'separator', label: t('Card unità (giorni/ore/min/sec)') },
     { key: 'item_bg_color', label: t('Sfondo card'), type: 'color' },
-    { key: 'item_radius', label: t('Raggio angoli card (px)'), type: 'range', min: 0, max: 40, step: 1 },
+    { key: 'item_radius', label: t('Raggio angoli card (px)'), type: 'border-radius' },
     { key: 'item_padding', label: t('Padding interno card (px)'), type: 'range', min: 0, max: 40, step: 2 },
 
     ...shadowField,

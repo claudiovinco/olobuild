@@ -111,6 +111,38 @@ export function resolveColor(userValue, token) {
   return userValue && userValue !== '' ? userValue : token;
 }
 
+/* ─── Famiglia font — ruoli del tema + retrocompatibilità ───────────────────
+   Gemello JS di Olo_Tile_Base::resolve_font_family (PHP): UNICA mappa dei
+   valori-ruolo legacy salvati dalle vecchie select per-tile. Il formato NUOVO
+   (FieldFontFamily / type 'font') salva CSS pronto: `var(--olo-font-family-…)`
+   per i ruoli, `'Poppins', sans-serif` per font specifici, '' = eredita. */
+export const FONT_ROLE_VARS = {
+  body:         "var(--olo-font-family, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif)",
+  sans:         "var(--olo-font-family, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif)",
+  'sans-serif': "var(--olo-font-family, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif)",
+  heading:      "var(--olo-font-family-heading, Georgia, 'Times New Roman', serif)",
+  serif:        "var(--olo-font-family-heading, 'Playfair Display', Georgia, serif)",
+  mono:         "var(--olo-font-family-mono, ui-monospace, 'SF Mono', Menlo, Consolas, monospace)",
+};
+
+/**
+ * resolveFontFamily — risolve il valore di un campo famiglia in CSS pronto.
+ *
+ * @param {string} value      Valore salvato: '' (eredita) | ruolo legacy
+ *                            ('serif','sans','mono','heading','body') | CSS pronto.
+ * @param {Object} legacyMap  Mappa per-tile opzionale che sovrascrive i ruoli
+ *                            legacy con gli stack storici della tile (così le
+ *                            tile convertite mantengono il loro fallback font).
+ * @returns {string} font-family CSS, '' se da ereditare.
+ */
+export function resolveFontFamily(value, legacyMap = null) {
+  const v = (value == null ? '' : String(value)).trim();
+  if (v === '' || v === 'inherit') return v === 'inherit' ? 'inherit' : '';
+  if (legacyMap && legacyMap[v]) return legacyMap[v];
+  if (FONT_ROLE_VARS[v]) return FONT_ROLE_VARS[v];
+  return v; // CSS pronto (var(...), stack, nome font)
+}
+
 /**
  * Default curati per tipo di tile. Pensati per essere "belli appena inseriti":
  * colore brand, testo leggibile, raggio/padding dalla scala condivisa, micro-ombra.

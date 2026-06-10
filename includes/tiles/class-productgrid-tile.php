@@ -85,9 +85,10 @@ class Olo_ProductGrid_Tile extends Olo_Tile_Base {
         // Card (sfondo opzionale) — default trasparente → tile minimale invariata
         $card_bg  = $this->safe_color_css( $s['card_bg'] ?? '' );
         $card_bd  = $this->safe_color_css( $s['card_border'] ?? '' );
-        $card_rad = max( 0, intval( $s['card_radius'] ?? 0 ) );
+        // Dual-format: numero legacy (range) E oggetto {tl,tr,br,bl}; '' se zero/vuoto.
+        $card_rad = $this->build_border_radius_css( $s['card_radius'] ?? 0 );
         $card_pad = max( 0, intval( $s['card_padding'] ?? 0 ) );
-        $has_card = ( $card_bg !== '' || $card_bd !== '' || $card_rad > 0 || $card_pad > 0 );
+        $has_card = ( $card_bg !== '' || $card_bd !== '' || $card_rad !== '' || $card_pad > 0 );
         // Shade swatches
         $shsize = max( 8, intval( $s['shade_size'] ?? 16 ) );
         $shbd   = $this->safe_color_css( $s['shade_border'] ?? '' ) ?: 'rgba(255,255,255,0.3)';
@@ -105,13 +106,12 @@ class Olo_ProductGrid_Tile extends Olo_Tile_Base {
         $add_col = $this->safe_color_css( $s['add_color'] ?? '' ) ?: 'var(--olo-color-text, #111111)';
         $mw_mb   = $has_card ? '0' : '16px';
 
-        $tf = $s['title_font'] ?? 'heading';
-        if ( $tf === 'sans' ) {
-            $title_font = "var(--olo-font-family, -apple-system, sans-serif)";
-        } else {
-            // 'heading' e 'serif' usano il font heading del tema (serif nei temi editoriali).
-            $title_font = "var(--olo-font-family-heading, Georgia, serif)";
-        }
+        $tf   = $s['title_font'] ?? 'heading';
+        // Valori legacy: 'heading' e 'serif' → font heading del tema (serif nei temi
+        // editoriali), 'sans' → sans; valori nuovi (type 'font-family') → CSS pronto.
+        $head = "var(--olo-font-family-heading, Georgia, serif)";
+        $title_legacy = [ 'heading' => $head, 'serif' => $head, 'sans' => "var(--olo-font-family, -apple-system, sans-serif)" ];
+        $title_font   = $this->resolve_font_family( $tf, $title_legacy ) ?: $head;
         $sans = "var(--olo-font-family, -apple-system, sans-serif)";
 
         $items = is_array( $s['items'] ) ? array_values( $s['items'] ) : [];
@@ -161,7 +161,7 @@ class Olo_ProductGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .opg-filter{font-family:<?php echo $sans; ?>;font-weight:500;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:<?php echo $f_txt; ?>;border:1px solid <?php echo $f_bd; ?>;padding:10px 20px;cursor:pointer;background:transparent;transition:all .2s;}
             .<?php echo $uid; ?> .opg-filter.on,.<?php echo $uid; ?> .opg-filter:hover{background:<?php echo $f_abg; ?>;color:<?php echo $f_acol; ?>;border-color:<?php echo $f_abg; ?>;}
             .<?php echo $uid; ?> .opg-filter:focus-visible{outline:2px solid <?php echo $f_abg; ?>;outline-offset:2px;}
-            .<?php echo $uid; ?> .opg-card{display:flex;flex-direction:column;<?php if ( $has_card ) : ?>background:<?php echo $card_bg ?: 'transparent'; ?>;<?php if ( $card_bd ) : ?>border:1px solid <?php echo $card_bd; ?>;<?php endif; ?>border-radius:<?php echo $card_rad; ?>px;overflow:hidden;<?php endif; ?>}
+            .<?php echo $uid; ?> .opg-card{display:flex;flex-direction:column;<?php if ( $has_card ) : ?>background:<?php echo $card_bg ?: 'transparent'; ?>;<?php if ( $card_bd ) : ?>border:1px solid <?php echo $card_bd; ?>;<?php endif; ?>border-radius:<?php echo $card_rad ?: '0px'; ?>;overflow:hidden;<?php endif; ?>}
             .<?php echo $uid; ?> .opg-mw{position:relative;overflow:hidden;margin-bottom:<?php echo $mw_mb; ?>;display:block;}
             .<?php echo $uid; ?> .opg-body{display:flex;flex-direction:column;flex:1;<?php if ( $has_card && $card_pad > 0 ) : ?>padding:<?php echo $card_pad; ?>px;<?php endif; ?>}
             .<?php echo $uid; ?> .opg-notes{font-size:13.5px;color:<?php echo $notes_col; ?>;margin:2px 0 14px;line-height:1.5;<?php if ( $notes_mono ) : ?>font-family:<?php echo $mono; ?>;<?php endif; ?>}

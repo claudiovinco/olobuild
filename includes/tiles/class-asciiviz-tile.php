@@ -95,7 +95,8 @@ class Olo_Asciiviz_Tile extends Olo_Tile_Base {
         $fsize   = max( 6, min( 24, intval( $s['font_size'] ) ) );
         $lh      = max( 0.8, min( 1.6, floatval( $s['line_height'] ) ) );
         $ls      = max( 0.0, min( 6.0, floatval( $s['letter_spacing'] ) ) );
-        $radius  = max( 0, min( 60, intval( $s['radius'] ) ) );
+        // Dual-format: numero legacy ("18") E oggetto {tl,tr,br,bl} dal type 'border-radius'.
+        $radius  = $this->build_border_radius_css( $s['radius'] ) ?: '0px';
         $pad     = max( 0, min( 80, intval( $s['padding'] ) ) );
 
         // ── Player ──
@@ -158,7 +159,7 @@ class Olo_Asciiviz_Tile extends Olo_Tile_Base {
         <style>
             .<?php echo $uid; ?>-wrap {
                 border: 1px solid var(--olo-color-border, rgba(241,232,216,.12));
-                border-radius: <?php echo $radius; ?>px;
+                border-radius: <?php echo $radius; ?>;
                 background: <?php echo $bg; ?>;
                 overflow: hidden;
             }

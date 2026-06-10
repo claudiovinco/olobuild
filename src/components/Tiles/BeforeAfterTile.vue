@@ -20,6 +20,7 @@
 <script setup>
 import { computed } from 'vue';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
+import { radiusToCss } from '@/composables/useRadius';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -53,7 +54,8 @@ const cols = computed(() => Math.max(1, Math.min(4, parseInt(s.value.columns, 10
 const mbg = computed(() => s.value.media_bg || 'var(--olo-color-surface-alt, #eceff3)');
 const asp = computed(() => String(s.value.media_aspect || '1/1').replace(/[^0-9/]/g, '') || '1/1');
 const accent = computed(() => s.value.accent || 'var(--olo-color-primary, #e1474f)');
-const rad = computed(() => (parseInt(s.value.radius, 10) || 0) + 'px');
+// Dual-format: numero legacy (12) E oggetto {tl,tr,br,bl} dal type 'border-radius'.
+const rad = computed(() => radiusToCss(s.value.radius, { fallback: '0px' }));
 
 // ── Override additivi gated (parità col PHP, no-op coi default) ──
 // Padding didascalia: '' (usa '16px 4px 4px') se cap_padding == default.

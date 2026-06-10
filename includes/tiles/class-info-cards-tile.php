@@ -91,8 +91,8 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
         $serif = "var(--olo-font-family-heading, 'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif)";
         $sans  = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
         $mono  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
-        $fmap  = [ 'serif' => $serif, 'sans-serif' => $sans, 'mono' => $mono ];
-        $tfam  = $fmap[ $s['title_font_family'] ] ?? $serif;
+        $legacy = [ 'serif' => $serif, 'sans-serif' => $sans, 'mono' => $mono ];
+        $tfam  = $this->resolve_font_family( $s['title_font_family'] ?? '', $legacy ) ?: $serif;
 
         $cols       = max( 1, min( 6, absint( $s['columns'] ) ) );
         $items_gap  = max( 0, min( 60, absint( $s['items_gap'] ) ) );

@@ -137,7 +137,8 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
         $preset_id    = $s['preset'] ?? 'editorial-overlay';
         $hero_image   = $s['hero_image'] ?? '';
         $hero_height  = max( 100, intval( $s['hero_height'] ?? 400 ) );
-        $hero_radius  = max( 0, intval( $s['hero_radius'] ?? 0 ) );
+        // Dual-format: Number legacy E oggetto {tl,tr,br,bl} (build_border_radius_css ritorna '' se zero/vuoto).
+        $hero_rad_css = $this->build_border_radius_css( $s['hero_radius'] ?? 0 );
         $img_position = ( $s['image_position'] ?? 'right' ) === 'left' ? 'left' : 'right';
         $nav_position = $s['nav_position'] ?? 'overlay';
         $animation    = $s['animation'] ?? 'fade';
@@ -154,13 +155,13 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
         $nav_ls       = floatval( $s['nav_letter_spacing'] ?? 0.08 );
         $nav_uppercase = ! empty( $s['nav_uppercase'] );
         $nav_gap      = max( 0, intval( $s['nav_gap'] ?? 0 ) );
-        $nav_rad      = max( 0, intval( $s['nav_radius'] ?? 0 ) );
+        $nav_rad_css  = $this->build_border_radius_css( $s['nav_radius'] ?? 0 ) ?: '0px';
         $nav_cont_pad = max( 0, intval( $s['nav_container_padding'] ?? 0 ) );
-        $nav_cont_rad = max( 0, intval( $s['nav_container_radius'] ?? 0 ) );
+        $nav_cont_rad_css = $this->build_border_radius_css( $s['nav_container_radius'] ?? 0 );
         $ind_thickness = max( 1, intval( $s['nav_indicator_thickness'] ?? 2 ) );
         $panel_gap    = max( 0, intval( $s['panel_gap'] ?? 24 ) );
-        $panel_rad    = max( 0, intval( $s['panel_radius'] ?? 0 ) );
-        $panel_img_rad = max( 0, intval( $s['panel_image_radius'] ?? 0 ) );
+        $panel_rad_css = $this->build_border_radius_css( $s['panel_radius'] ?? 0 );
+        $panel_img_rad_css = $this->build_border_radius_css( $s['panel_image_radius'] ?? 0 );
         $panel_img_w  = max( 20, min( 70, intval( $s['panel_image_width'] ?? 40 ) ) );
         $panel_title_size = max( 12, intval( $s['panel_title_size'] ?? 28 ) );
         $panel_title_weight = preg_match( '/^[1-9]00$/', (string) ( $s['panel_title_weight'] ?? '700' ) ) ? $s['panel_title_weight'] : '700';
@@ -255,7 +256,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
                 position: relative;
                 overflow: hidden;
                 height: <?php echo $hero_height; ?>px;
-                <?php if ( $hero_radius ) : ?>border-radius: <?php echo $hero_radius; ?>px;<?php endif; ?>
+                <?php if ( $hero_rad_css ) : ?>border-radius: <?php echo $hero_rad_css; ?>;<?php endif; ?>
                 background: #e5e7eb;
             }
             .<?php echo $uid; ?> .olo-sp-hero__img {
@@ -309,7 +310,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
                 gap: <?php echo $nav_gap; ?>px;
                 <?php if ( $is_vertical ) : ?>flex-direction: column;<?php endif; ?>
                 <?php if ( $nav_cont_bg ) : ?>background: <?php echo $nav_cont_bg; ?>;<?php endif; ?>
-                <?php if ( $nav_cont_rad ) : ?>border-radius: <?php echo $nav_cont_rad; ?>px;<?php endif; ?>
+                <?php if ( $nav_cont_rad_css ) : ?>border-radius: <?php echo $nav_cont_rad_css; ?>;<?php endif; ?>
                 <?php echo $shadow_css; ?>
             }
             .<?php echo $uid; ?> .olo-sp-nav > li { margin: 0; padding: 0; <?php if ( $ind_underline && ! $is_vertical ) : ?>margin-bottom: -<?php echo $ind_thickness; ?>px;<?php endif; ?> }
@@ -328,7 +329,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
                 cursor: pointer;
                 background: transparent;
                 border: 0;
-                border-radius: <?php echo $nav_rad; ?>px;
+                border-radius: <?php echo $nav_rad_css; ?>;
                 transition: all <?php echo $duration; ?>ms ease;
                 white-space: nowrap;
                 <?php if ( $is_vertical ) : ?>justify-content: flex-start; width: 100%;<?php endif; ?>
@@ -367,7 +368,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
                 padding: <?php echo $padding; ?>;
                 background: <?php echo $panel_bg; ?>;
                 color: <?php echo $panel_text_clr; ?>;
-                <?php if ( $panel_rad ) : ?>border-radius: <?php echo $panel_rad; ?>px;<?php endif; ?>
+                <?php if ( $panel_rad_css ) : ?>border-radius: <?php echo $panel_rad_css; ?>;<?php endif; ?>
                 align-items: stretch;
             }
             .<?php echo $uid; ?>.olo-sp--img-left .olo-sp-panel { flex-direction: row-reverse; }
@@ -398,7 +399,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-sp-panel__media {
                 flex: 0 0 <?php echo $panel_img_w; ?>%;
                 max-width: <?php echo $panel_img_w; ?>%;
-                <?php if ( $panel_img_rad ) : ?>border-radius: <?php echo $panel_img_rad; ?>px; overflow: hidden;<?php endif; ?>
+                <?php if ( $panel_img_rad_css ) : ?>border-radius: <?php echo $panel_img_rad_css; ?>; overflow: hidden;<?php endif; ?>
             }
             @media (max-width: 767px) {
                 .<?php echo $uid; ?> .olo-sp-panel__media { max-width: 100%; flex: 1 1 auto; }
@@ -408,7 +409,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
                 height: 100%;
                 <?php echo $img_ratio_css; ?>
                 display: block;
-                <?php if ( $panel_img_rad ) : ?>border-radius: <?php echo $panel_img_rad; ?>px;<?php endif; ?>
+                <?php if ( $panel_img_rad_css ) : ?>border-radius: <?php echo $panel_img_rad_css; ?>;<?php endif; ?>
             }
 
             /* Buttons */

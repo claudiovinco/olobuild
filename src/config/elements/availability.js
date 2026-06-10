@@ -44,7 +44,7 @@ export default {
     { type: 'separator', label: t('Soglie verdetto (min crescente)') },
     { key: 'tiers', label: t('Tier'), type: 'content-items',
       itemLabel: t('Tier'),
-      defaults: { min: 0, label: 'Tier', text: 'Descrizione.' },
+      newItemDefaults: { min: 0, label: 'Tier', text: 'Descrizione.' },
       itemFields: [
         { key: 'min', label: t('Slot minimi'), type: 'number' },
         { key: 'label', label: t('Etichetta'), type: 'text' },

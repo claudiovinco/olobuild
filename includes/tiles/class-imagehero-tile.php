@@ -137,10 +137,10 @@ class Olo_ImageHero_Tile extends Olo_Tile_Base {
         // min_height: numeri <=100 trattati come vh, altrimenti px (compat 520/540 px e 84/100 vh)
         $mhCss   = ( $mh > 0 && $mh <= 100 ) ? ( $mh . 'vh' ) : ( max( 200, $mh ) . 'px' );
 
-        $disp    = ( ( $s['heading_font'] ?? 'serif' ) === 'sans' )
-            ? "var(--olo-font-family, 'Work Sans',-apple-system,sans-serif)"
-            : "var(--olo-font-family-heading, 'Marcellus','Cormorant Garamond',Georgia,serif)";
         $sans    = "var(--olo-font-family, 'Work Sans',-apple-system,sans-serif)";
+        $serif   = "var(--olo-font-family-heading, 'Marcellus','Cormorant Garamond',Georgia,serif)";
+        $legacy  = [ 'serif' => $serif, 'sans' => $sans ];
+        $disp    = $this->resolve_font_family( $s['heading_font'] ?? '', $legacy ) ?: $serif;
         $italic  = ! empty( $s['accent_italic'] ) ? 'italic' : 'normal';
 
         $img     = trim( (string) ( $s['bg_image'] ?? '' ) );

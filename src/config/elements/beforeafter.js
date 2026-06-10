@@ -82,7 +82,7 @@ export default {
       { value: '4/3', label: '4:3' },
       { value: '3/2', label: '3:2' },
     ]},
-    { key: 'radius', label: t('Raggio bordo (px)'), type: 'range', min: 0, max: 32, step: 1 },
+    { key: 'radius', label: t('Raggio bordo (px)'), type: 'border-radius' },
     { key: 'gap', label: t('Spazio tra card (px)'), type: 'range', min: 8, max: 48, step: 2 },
 
     { type: 'separator', label: t('Spaziatura') },

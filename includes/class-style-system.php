@@ -41,6 +41,7 @@ class Olo_Style_System {
             'typography' => [
                 'font_family'              => '',
                 'font_family_heading'      => '',
+                'font_family_mono'         => '',
                 'font_size_base'           => '16px',
                 'font_size_h1'             => '2.5rem',
                 'font_size_h2'             => '2rem',
@@ -539,6 +540,32 @@ class Olo_Style_System {
             }
         }
 
+        // Famiglie della typography base (testo/titoli/mono): vanno self-hostate
+        // anche quando non compaiono in google_fonts (es. scelte dal pannello cfg
+        // → Typography, che salva solo il blocco typography). I generici di
+        // sistema vengono saltati; Font_Host fallisce comunque in modo pulito
+        // sui nomi non-Google.
+        $system_families = [ 'system-ui', 'sans-serif', 'serif', 'monospace', 'ui-monospace', 'inherit', 'georgia', 'arial', 'verdana', 'tahoma', 'consolas', 'menlo', 'courier new', 'times new roman' ];
+        $typo_families = [];
+        foreach ( [ 'font_family', 'font_family_heading', 'font_family_mono' ] as $tk ) {
+            $val = trim( (string) ( $t[ $tk ] ?? '' ) );
+            if ( $val === '' || strpos( $val, 'var(' ) !== false ) {
+                continue;
+            }
+            $first = trim( explode( ',', $val )[0], " '\"" );
+            if ( $first === '' || in_array( strtolower( $first ), $system_families, true ) ) {
+                continue;
+            }
+            $typo_families[] = $first;
+        }
+        $typo_extra = array_diff( array_unique( $typo_families ), $existing_fonts, $global_font_families );
+        if ( ! empty( $typo_extra ) ) {
+            $typo_import = $this->generate_google_fonts_import( array_values( $typo_extra ) );
+            if ( $typo_import ) {
+                $css .= $typo_import . "\n";
+            }
+        }
+
         // Custom properties
         $css .= ".olo-template {\n";
         // Colors
@@ -568,6 +595,11 @@ class Olo_Style_System {
         }
         if ( ! empty( $t['font_family_heading'] ) ) {
             $css .= "  --olo-font-family-heading: {$t['font_family_heading']};\n";
+        }
+        // Ruolo mono: referenziato dalle tile (var(--olo-font-family-mono, fallback))
+        // — emesso solo se personalizzato, altrimenti vale il fallback per-tile.
+        if ( ! empty( $t['font_family_mono'] ) ) {
+            $css .= "  --olo-font-family-mono: {$t['font_family_mono']};\n";
         }
         $css .= "  --olo-font-size-base: {$t['font_size_base']};\n";
         for ( $i = 1; $i <= 6; $i++ ) {

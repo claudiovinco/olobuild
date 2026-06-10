@@ -41,9 +41,13 @@ class Olo_LookbookMixer_Tile extends Olo_Tile_Base {
         $heading = "var(--olo-font-family-heading, 'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
         $body    = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
         $mono_fb = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
-        $mono_name = trim( preg_replace( '/[^A-Za-z0-9 \-]/', '', (string) ( $s['mono_font_family'] ?? '' ) ) );
-        $mono    = $mono_name !== '' ? "'" . $mono_name . "'," . $mono_fb : $mono_fb;
-        $nfam    = ( ( $s['name_font_family'] ?? 'heading' ) === 'body' ) ? $body : $heading;
+        $mono_fam = $this->resolve_font_family( $s['mono_font_family'] ?? '' );
+        // Nome font puro (legacy campo text) → wrap con lo stack mono di fallback storico.
+        if ( $mono_fam !== '' && preg_match( '/^[A-Za-z0-9 \-]+$/', $mono_fam ) ) {
+            $mono_fam = "'" . $mono_fam . "'," . $mono_fb;
+        }
+        $mono    = $mono_fam !== '' ? $mono_fam : $mono_fb;
+        $nfam    = $this->resolve_font_family( $s['name_font_family'] ?? '', [ 'heading' => $heading, 'body' => $body ] ) ?: $heading;
 
         $panel  = $this->safe_color_css( $s['panel_bg'] ) ?: '#4d2f40';
         $slotbg = $this->safe_color_css( $s['slot_bg'] ) ?: '#432838';

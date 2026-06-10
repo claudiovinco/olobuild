@@ -131,10 +131,14 @@ export default {
     { key: 'accent_on', label: t('Testo su CTA solida'), type: 'color' },
     { key: 'down_color', label: t('Colore variazione negativa'), type: 'color',
       description: t('Vuoto = usa accento 2.') },
+
+    { type: 'separator', label: t('Colori — testo & pill') },
     { key: 'text_color', label: t('Colore titolo / valori'), type: 'color' },
     { key: 'sub_color', label: t('Colore testo secondario'), type: 'color' },
     { key: 'pill_text_color', label: t('Colore testo pill'), type: 'color' },
     { key: 'pill_bg', label: t('Sfondo pill'), type: 'color' },
+
+    { type: 'separator', label: t('Colori — superfici') },
     { key: 'bg_color', label: t('Sfondo sezione'), type: 'color' },
     { key: 'panel_color', label: t('Sfondo cornice'), type: 'color' },
     { key: 'panel2_color', label: t('Sfondo barra browser'), type: 'color' },

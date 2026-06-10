@@ -53,7 +53,7 @@ export default {
       { value: 'paypal', label: t('PayPal') },
       { value: 'both', label: t('Entrambi') },
     ]},
-    { key: 'amount', label: t('Importo'), type: 'text' },
+    { key: 'amount', label: t('Importo'), type: 'number', min: 0, step: 0.01 },
     { key: 'currency', label: t('Valuta'), type: 'select', options: [
       { value: 'EUR', label: t('EUR (€)') },
       { value: 'USD', label: t('USD ($)') },

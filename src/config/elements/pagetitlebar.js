@@ -116,14 +116,28 @@ export default {
         color: 'breadcrumb_color',
       },
     },
-    { key: 'title_align', label: t('Allineamento'), type: 'select', options: { left: 'Sinistra', center: 'Centro', right: 'Destra' } },
+    { key: 'title_align', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+    ] },
 
     { type: 'separator', label: t('Sfondo') },
     { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
     { key: 'bg_overlay', label: t('Opacita overlay (%)'), type: 'range', min: 0, max: 100, show: s => !!s.bg_image },
     { key: 'bg_overlay_color', label: t('Colore overlay'), type: 'color', show: s => !!s.bg_image },
-    { key: 'bg_size', label: t('Dimensione sfondo'), type: 'select', options: { cover: 'Cover', contain: 'Contain', auto: 'Auto' }, show: s => !!s.bg_image },
-    { key: 'bg_position', label: t('Posizione sfondo'), type: 'select', options: { 'center center': 'Centro', 'top center': 'Alto', 'bottom center': 'Basso', 'left center': 'Sinistra', 'right center': 'Destra' }, show: s => !!s.bg_image },
+    { key: 'bg_size', label: t('Dimensione sfondo'), type: 'select', options: [
+      { value: 'cover', label: t('Cover') },
+      { value: 'contain', label: t('Contain') },
+      { value: 'auto', label: t('Auto') },
+    ], show: s => !!s.bg_image },
+    { key: 'bg_position', label: t('Posizione sfondo'), type: 'select', options: [
+      { value: 'center center', label: t('Centro') },
+      { value: 'top center', label: t('Alto') },
+      { value: 'bottom center', label: t('Basso') },
+      { value: 'left center', label: t('Sinistra') },
+      { value: 'right center', label: t('Destra') },
+    ], show: s => !!s.bg_image },
 
     { type: 'separator', label: t('Layout') },
     { key: 'min_height', label: t('Altezza minima (px)'), type: 'range', min: 0, max: 600, step: 10 },

@@ -109,11 +109,13 @@ class Olo_Builder_Tile extends Olo_Tile_Base {
                 <?php foreach ( $items as $i => $it ) :
                     $start = max( 0, intval( $it['start'] ?? 0 ) );
                     $price = is_numeric( $it['price'] ?? '' ) ? $it['price'] : '0';
+                    // Display: stringhe esistenti raw (render identico); Number (field number editor) a 2 decimali — come BuilderTile.vue.
+                    $price_disp = ( is_int( $price ) || is_float( $price ) ) ? number_format( (float) $price, 2, '.', '' ) : $price;
                 ?>
                     <div class="obds-item<?php echo $start > 0 ? ' on' : ''; ?>" data-bd-item data-n="<?php echo intval( $start ); ?>" data-price="<?php echo esc_attr( $price ); ?>">
                         <div class="obds-meta"><h3><?php echo esc_html( $it['name'] ?? '' ); ?></h3><?php if ( ! empty( $it['note'] ) ) : ?><span class="no"><?php echo esc_html( $it['note'] ); ?></span><?php endif; ?></div>
                         <div class="obds-r">
-                            <span class="pr"><?php echo esc_html( $cur . $price ); ?></span>
+                            <span class="pr"><?php echo esc_html( $cur . $price_disp ); ?></span>
                             <div class="obds-step"><button type="button" data-bd-dec aria-label="-">&minus;</button><span data-bd-c><?php echo intval( $start ); ?></span><button type="button" data-bd-inc aria-label="+">+</button></div>
                         </div>
                     </div>
@@ -154,13 +156,15 @@ class Olo_Builder_Tile extends Olo_Tile_Base {
                 <?php foreach ( $items as $i => $it ) :
                     $start = max( 0, intval( $it['start'] ?? 0 ) );
                     $price = is_numeric( $it['price'] ?? '' ) ? $it['price'] : '0';
+                    // Display: stringhe esistenti raw (render identico); Number (field number editor) a 2 decimali — come BuilderTile.vue.
+                    $price_disp = ( is_int( $price ) || is_float( $price ) ) ? number_format( (float) $price, 2, '.', '' ) : $price;
                 ?>
                     <div class="obd-row<?php echo $start > 0 ? ' on' : ''; ?>" data-bd-item data-n="<?php echo intval( $start ); ?>" data-price="<?php echo esc_attr( $price ); ?>">
                         <div class="obd-row__main">
                             <div class="obd-row__name"><?php echo esc_html( $it['name'] ?? '' ); ?></div>
                             <?php if ( ! empty( $it['note'] ) ) : ?><div class="obd-row__note"><?php echo esc_html( $it['note'] ); ?></div><?php endif; ?>
                         </div>
-                        <div class="obd-row__price"><?php echo esc_html( $cur . $price ); ?></div>
+                        <div class="obd-row__price"><?php echo esc_html( $cur . $price_disp ); ?></div>
                         <div class="obd-step">
                             <button type="button" data-bd-dec aria-label="-">&minus;</button>
                             <span data-bd-c><?php echo intval( $start ); ?></span>

@@ -112,6 +112,8 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
             #<?php echo $uid; ?> .olo-lib-btn--minimal:hover { background: <?php echo $link_hover_bg; ?>; }
             #<?php echo $uid; ?> .olo-lib-btn:hover { transform: translateY(-1px); }
             #<?php echo $uid; ?> .olo-lib-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
+            #<?php echo $uid; ?> .olo-lib-icon { margin-right: 8px; opacity: 0.7; display: inline-flex; width: 1em; height: 1em; vertical-align: -0.1em; }
+            #<?php echo $uid; ?> .olo-lib-icon svg { width: 100%; height: 100%; fill: currentColor; stroke: currentColor; }
             <?php if ( $radius_hover_css !== '' ) : ?>#<?php echo $uid; ?> .olo-lib-btn{transition:border-radius 400ms cubic-bezier(.4,0,.2,1),background-color 0.2s,color 0.2s,transform 0.2s}#<?php echo $uid; ?> .olo-lib-btn:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
         </style>
         <div id="<?php echo esc_attr( $uid ); ?>" class="olo-linkinbio">
@@ -139,6 +141,7 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
                         $title = isset( $item['title'] ) ? sanitize_text_field( $item['title'] ) : '';
                         $url   = isset( $item['url'] )   ? esc_url( $item['url'] ) : '#';
                         $style = isset( $item['style'] )  ? sanitize_key( $item['style'] ) : 'filled';
+                        $icon  = isset( $item['icon'] )  ? trim( (string) $item['icon'] ) : '';
 
                         if ( ! in_array( $style, [ 'filled', 'outline', 'minimal' ], true ) ) {
                             $style = 'filled';
@@ -150,6 +153,10 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
                     ?>
                         <?php list( $lt_cls, $lt_data ) = $this->tfx_attrs( $s, 'title', $title ); ?>
                         <a href="<?php echo $url; ?>" class="olo-lib-btn olo-lib-btn--<?php echo $style; ?><?php echo $lt_cls; ?>" target="_blank" rel="noopener noreferrer"<?php echo $lt_data; ?>>
+                            <?php if ( $icon !== '' ) :
+                                // Parity col builder (LinkInBioTile.vue): icona dal set SVG, fallback testo/emoji letterale.
+                                $icon_html = $this->render_icon_html( $icon, 1 );
+                            ?><span class="olo-lib-icon"><?php echo $icon_html !== '' ? $icon_html : esc_html( $icon ); ?></span><?php endif; ?>
                             <?php echo esc_html( $title ); ?>
                         </a>
                     <?php endforeach; ?>

@@ -35,7 +35,11 @@ export default {
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'page_url', label: t('URL pagina Facebook'), type: 'text', placeholder: t('https://www.facebook.com/...') },
-    { key: 'tabs', label: t('Tab (timeline,events,messages)'), type: 'text', placeholder: t('timeline') },
+    { key: 'tabs', label: t('Tab da mostrare'), type: 'multi_pills', options: [
+      { value: 'timeline', label: t('Timeline') },
+      { value: 'events',   label: t('Eventi') },
+      { value: 'messages', label: t('Messaggi') },
+    ]},
     { key: 'show_cover', label: t('Mostra copertina'), type: 'toggle' },
     { key: 'show_facepile', label: t('Mostra facce amici'), type: 'toggle' },
     { key: 'small_header', label: t('Header compatto'), type: 'toggle' },

@@ -80,16 +80,12 @@ export default {
     ]},
 
     { type: 'separator', label: t('Nome') },
-    { key: 'name_font_family', label: t('Famiglia'), type: 'select', options: [
-      { value: 'heading', label: t('Heading (del tema)') },
-      { value: 'body',    label: t('Body (del tema)') },
-      { value: 'mono',    label: t('Monospace') },
-    ]},
+    { key: 'name_font_family', label: t('Famiglia'), type: 'font-family' },
     { key: 'name_color', label: t('Colore'),          type: 'color' },
     { key: 'name_size',  label: t('Dimensione (px)'), type: 'range', min: 14, max: 36, step: 1 },
 
     { type: 'separator', label: t('Sotto-etichetta') },
-    { key: 'mono_font_family', label: t('Font (vuoto = monospace di sistema)'), type: 'text' },
+    { key: 'mono_font_family', label: t('Font (vuoto = mono del tema)'), type: 'font-family' },
     { key: 'sub_color',     label: t('Colore'),     type: 'color' },
     { key: 'sub_size',      label: t('Dimensione (px)'), type: 'range', min: 10, max: 18, step: 1 },
     { key: 'sub_uppercase', label: t('Maiuscolo'),  type: 'toggle' },

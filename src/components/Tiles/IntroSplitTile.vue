@@ -21,6 +21,7 @@
 <script setup>
 import { computed, h } from 'vue';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
+import { radiusToCss } from '@/composables/useRadius';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -162,11 +163,23 @@ const MediaBlock = computed(() => {
   const lblcol = light.value ? 'rgba(20,32,25,.45)' : 'rgba(255,255,255,.4)';
   const mbgObj = s.value.media_bg;
   const hasBg = !!(mbgObj && mbgObj.type && mbgObj.type !== 'none');
-  const mrb = Number.isNaN(parseInt(s.value.media_radius, 10)) ? 20 : parseInt(s.value.media_radius, 10);
+  // media_radius dual-format: numero legacy O oggetto {tl,tr,br,bl} (type border-radius).
+  const mrRaw = s.value.media_radius;
+  const mrObj = (mrRaw && typeof mrRaw === 'object') ? mrRaw : null;
   const mrt = parseInt(s.value.media_radius_top, 10) || 0;
+  let mediaRadius;
+  if (mrt > 0) {
+    // Arco: angoli superiori da media_radius_top, inferiori da media_radius (scalare o br/bl dell'oggetto).
+    const mrb = Number.isNaN(parseInt(mrRaw, 10)) ? 20 : parseInt(mrRaw, 10);
+    const brC = mrObj ? (parseInt(mrObj.br, 10) || 0) : mrb;
+    const blC = mrObj ? (parseInt(mrObj.bl, 10) || 0) : mrb;
+    mediaRadius = `${mrt}px ${mrt}px ${brC}px ${blC}px`;
+  } else {
+    mediaRadius = radiusToCss(mrRaw, { fallback: '20px' });
+  }
   const media = {
     position: 'relative', zIndex: 1,
-    borderRadius: mrt > 0 ? `${mrt}px ${mrt}px ${mrb}px ${mrb}px` : `${mrb}px`,
+    borderRadius: mediaRadius,
     overflow: 'hidden', backgroundSize: 'cover', backgroundPosition: 'center',
   };
   if (hasBg) { Object.assign(media, buildBgStyle(mbgObj)); }

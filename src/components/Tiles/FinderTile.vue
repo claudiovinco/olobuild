@@ -36,6 +36,7 @@
 import { computed, ref, watch } from 'vue';
 import { resolveColor, TOKENS, SHADOW } from '@/composables/oloTileDefaults';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
+import { radiusToCss } from '@/composables/useRadius';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -105,9 +106,10 @@ const introStyle = computed(() => ({ fontSize: '15.5px', lineHeight: 1.6, opacit
 const chipsWrap = computed(() => ({ display: 'flex', flexWrap: 'wrap', gap: '10px', margin: '26px 0 24px', justifyContent: center.value ? 'center' : 'flex-start' }));
 function chipStyle(i) {
   const onSel = i === active.value;
-  const r = Math.max(0, Math.min(999, parseInt(s.value.chip_radius) || 0));
+  // dual-format: Number legacy ('999') E oggetto {tl,tr,br,bl}; '' → 0px come storico
+  const r = radiusToCss(s.value.chip_radius, { fallback: '0px' });
   return {
-    fontFamily: SANS, fontWeight: 600, fontSize: '13.5px', borderRadius: r + 'px', padding: '10px 18px',
+    fontFamily: SANS, fontWeight: 600, fontSize: '13.5px', borderRadius: r, padding: '10px 18px',
     cursor: 'pointer', transition: 'all .18s', display: 'inline-flex', alignItems: 'center', gap: '8px',
     border: '1px solid ' + (onSel ? accent.value : 'var(--olo-color-border,#e5e7eb)'),
     background: onSel ? accent.value : (resolveColor(s.value.chip_bg, 'transparent')),

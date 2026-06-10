@@ -125,6 +125,13 @@ export default {
     ]},
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
+    { key: 'style', label: t('Stile UIkit'), type: 'select', options: [
+      { value: 'default', label: t('Predefinito') },
+      { value: 'primary', label: t('Primary') },
+      { value: 'secondary', label: t('Secondary') },
+      { value: 'hover', label: t('Hover') },
+    ]},
+
     { type: 'separator', label: t('Tweak effetto preset'),
       condition: { field: 'preset', op: 'in', value: ['liquid-glass','neon-cyber','brutalist-block','magnetic-liquid','sticker','retro-terminal','3d-tilt'] } },
     { key: 'effect_color', label: t('Colore effetto'), type: 'color',
@@ -139,13 +146,6 @@ export default {
     { key: 'effect_speed', label: t('Velocità animazioni (ms)'), type: 'range',
       min: 0, max: 4000, step: 100,
       condition: { field: 'preset', op: 'in', value: ['neon-cyber','magnetic-liquid','retro-terminal','3d-tilt'] } },
-
-    { key: 'style', label: t('Stile UIkit'), type: 'select', options: [
-      { value: 'default', label: t('Predefinito') },
-      { value: 'primary', label: t('Primary') },
-      { value: 'secondary', label: t('Secondary') },
-      { value: 'hover', label: t('Hover') },
-    ]},
 
     ...textEffectsFields([
       { value: 'title', label: t('Solo Titolo') },

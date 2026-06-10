@@ -105,8 +105,18 @@ const panelStyle = computed(() => ({
   borderTop: '1px solid rgba(0,0,0,.08)',
 }));
 
+// panel_item_padding dual-format: oggetto spacing {top,right,bottom,left} (standard)
+// O scalare legacy (resa storica invariata).
+const itemPadding = computed(() => {
+  const pp = s.value.panel_item_padding;
+  if (pp && typeof pp === 'object') {
+    return `${parseInt(pp.top) || 0}px ${parseInt(pp.right) || 0}px ${parseInt(pp.bottom) || 0}px ${parseInt(pp.left) || 0}px`;
+  }
+  return (parseInt(pp) || 16) + 'px';
+});
+
 const itemStyle = computed(() => ({
-  padding: (parseInt(s.value.panel_item_padding) || 16) + 'px',
+  padding: itemPadding.value,
   fontSize: (parseInt(s.value.panel_font_size) || 17) + 'px',
   color: s.value.panel_text_color || '#222',
   borderBottom: s.value.panel_separator ? '1px solid rgba(0,0,0,.06)' : 'none',

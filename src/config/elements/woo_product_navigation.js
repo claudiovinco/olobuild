@@ -68,12 +68,11 @@ export default {
       responsiveKeys: ['size'],
       keys: {
         color: 'text_color',
+        colorHover: 'hover_color',
       },
       sizeMin: 12, sizeMax: 60,
     },
 
-    { type: 'separator', label: t('Colori') },
-    { key: 'hover_color', label: t('Colore hover'), type: 'color' },
     ...borderFields(),
   ],
 };

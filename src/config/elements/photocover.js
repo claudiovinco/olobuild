@@ -63,7 +63,7 @@ export default {
     { type: 'separator', label: t('Meta / byline') },
     { key: 'meta_items', label: t('Voci meta'), type: 'content-items',
       itemLabel: t('Voce'),
-      defaults: { text: 'Nuova voce' },
+      newItemDefaults: { text: 'Nuova voce' },
       itemFields: [
         { key: 'text', label: t('Testo'), type: 'text' },
       ],

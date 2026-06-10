@@ -64,7 +64,8 @@ class Olo_BeforeAfter_Tile extends Olo_Tile_Base {
         $tc     = $this->safe_color_css( $s['title_color'] ?? '' ) ?: 'var(--olo-color-text, #111827)';
         $xc     = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #6b7280)';
         $cbg    = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'transparent';
-        $rad    = intval( $s['radius'] ) . 'px';
+        // Dual-format: numero legacy ("12") E oggetto {tl,tr,br,bl} dal type 'border-radius'.
+        $rad    = $this->build_border_radius_css( $s['radius'] ) ?: '0px';
         $serif  = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
         $sans   = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
 

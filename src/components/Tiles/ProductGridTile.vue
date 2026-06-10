@@ -41,7 +41,9 @@
 
 <script setup>
 import { computed } from 'vue';
+import { resolveFontFamily } from '@/composables/oloTileDefaults';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
+import { radiusToCss } from '@/composables/useRadius';
 import { borderDefault, borderHoverDefault, borderEffectDefaults } from '@/config/elements/_shared.js';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
@@ -100,16 +102,25 @@ function filterChipStyle(active) {
 }
 const fcol = computed(() => s.value.footer_color || 'var(--olo-color-text, #111827)');
 const tsize = computed(() => Math.max(12, parseInt(s.value.title_size, 10) || 21));
-const titleFont = computed(() => s.value.title_font === 'sans' ? SANS : "var(--olo-font-family-heading, Georgia, serif)");
+const HEAD = "var(--olo-font-family-heading, Georgia, serif)";
+// Stack storici per i valori legacy: 'heading' e 'serif' → heading del tema, 'sans' → sans.
+const FONT_LEGACY = { heading: HEAD, serif: HEAD, sans: SANS };
+const titleFont = computed(() => resolveFontFamily(s.value.title_font, FONT_LEGACY) || HEAD);
 
 // Card (sfondo opzionale) + shades + add button
-const hasCard = computed(() => !!(s.value.card_bg || s.value.card_border || (parseInt(s.value.card_radius, 10) || 0) > 0 || (parseInt(s.value.card_padding, 10) || 0) > 0));
+// card_radius dual-format: numero legacy (range) E oggetto {tl,tr,br,bl} (border-radius).
+// Parity con build_border_radius_css PHP: '' se zero/vuoto.
+const cardRadiusCss = computed(() => {
+  const css = radiusToCss(s.value.card_radius, { fallback: '' });
+  return css && css.split(' ').some((p) => (parseInt(p, 10) || 0) > 0) ? css : '';
+});
+const hasCard = computed(() => !!(s.value.card_bg || s.value.card_border || cardRadiusCss.value || (parseInt(s.value.card_padding, 10) || 0) > 0));
 const cardStyle = computed(() => {
   if (!hasCard.value) return {};
   const o = { overflow: 'hidden' };
   if (s.value.card_bg) o.background = s.value.card_bg;
   if (s.value.card_border) o.border = '1px solid ' + s.value.card_border;
-  const r = parseInt(s.value.card_radius, 10) || 0; if (r) o.borderRadius = r + 'px';
+  if (cardRadiusCss.value) o.borderRadius = cardRadiusCss.value;
   return o;
 });
 const mwStyle = computed(() => ({ marginBottom: hasCard.value ? '0' : '16px' }));

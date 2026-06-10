@@ -92,7 +92,7 @@ export default {
     { key: 'columns', label: t('Colonne'), type: 'range', min: 2, max: 12, step: 1 },
     { key: 'rows', label: t('Righe visibili (0 = tutte)'), type: 'range', min: 0, max: 5, step: 1 },
     { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 32, step: 2 },
-    { key: 'img_height', label: t('Altezza immagine'), type: 'text' },
+    { key: 'img_height', label: t('Altezza immagine'), type: 'unit', units: ['px'], min: 0, step: 10 },
     { key: 'object_fit', label: t('Adattamento'), type: 'select', options: [
       { value: 'cover', label: t('Riempi') },
       { value: 'contain', label: t('Contieni') },

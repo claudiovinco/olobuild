@@ -29,7 +29,8 @@ const emit = defineEmits(['update:modelValue']);
 
 const selected = computed(() => {
   if (!props.modelValue) return [];
-  return props.modelValue.split(',').map(s => s.trim()).filter(Boolean);
+  // Split su virgola + pipe legacy (es. sort_options 'date|title' di postgrid).
+  return props.modelValue.split(/[|,]/).map(s => s.trim()).filter(Boolean);
 });
 
 function toggle(val) {

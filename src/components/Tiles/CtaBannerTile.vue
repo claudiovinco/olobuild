@@ -14,6 +14,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { resolveFontFamily } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -41,7 +42,7 @@ const s = computed(() => ({ ...defaults, ...props.settings }));
 const SERIF = "'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif";
 const SANS  = "'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
 const MONO  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
-const fmap  = { serif: SERIF, 'sans-serif': SANS, mono: MONO };
+const FONT_LEGACY = { serif: SERIF, 'sans-serif': SANS, mono: MONO };
 
 function radiusToCss(r) {
   if (!r) return '0';
@@ -82,7 +83,7 @@ const bannerStyle = computed(() => ({
 }));
 
 const headlineStyle = computed(() => ({
-  fontFamily: fmap[s.value.headline_font_family] || SERIF,
+  fontFamily: resolveFontFamily(s.value.headline_font_family, FONT_LEGACY) || SERIF,
   fontSize: (s.value.headline_size || 36) + 'px',
   fontWeight: s.value.headline_weight || '400',
   lineHeight: 1.15,

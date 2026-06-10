@@ -49,9 +49,13 @@ class Olo_HoverList_Tile extends Olo_Tile_Base {
         $heading = "var(--olo-font-family-heading, 'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
         $body    = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
         $mono_fb = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
-        $mono_name = trim( preg_replace( '/[^A-Za-z0-9 \-]/', '', (string) ( $s['mono_font_family'] ?? '' ) ) );
-        $mono    = $mono_name !== '' ? "'" . $mono_name . "'," . $mono_fb : $mono_fb;
-        $nfam    = [ 'heading' => $heading, 'body' => $body, 'mono' => $mono ][ $s['name_font_family'] ?? 'heading' ] ?? $heading;
+        $mono_fam = $this->resolve_font_family( $s['mono_font_family'] ?? '' );
+        // Nome font puro (legacy campo text) → wrap con lo stack mono di fallback storico.
+        if ( $mono_fam !== '' && preg_match( '/^[A-Za-z0-9 \-]+$/', $mono_fam ) ) {
+            $mono_fam = "'" . $mono_fam . "'," . $mono_fb;
+        }
+        $mono    = $mono_fam !== '' ? $mono_fam : $mono_fb;
+        $nfam    = $this->resolve_font_family( $s['name_font_family'] ?? '', [ 'heading' => $heading, 'body' => $body, 'mono' => $mono ] ) ?: $heading;
 
         $sw_size = max( 14, min( 44, absint( $s['swatch_size'] ) ) );
         $sw_rad  = ( ( $s['swatch_shape'] ?? 'circle' ) === 'square' ) ? '7px' : '50%';

@@ -24,6 +24,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { resolveFontFamily } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -52,10 +53,12 @@ const aspect = computed(() => s.value.media_aspect || '4/3');
 const tallAspect = computed(() => s.value.media_tall_aspect || '4/5');
 const mediaBg = computed(() => s.value.media_bg || '#ebe7dc');
 const mono = computed(() => {
-  const n = String(s.value.mono_font_family || '').replace(/[^A-Za-z0-9 \-]/g, '').trim();
-  return n ? `'${n}',${MONO_FB}` : MONO_FB;
+  const fam = resolveFontFamily(s.value.mono_font_family);
+  if (!fam) return MONO_FB;
+  // Nome font puro (legacy campo text) → wrap con lo stack mono di fallback storico.
+  return /^[A-Za-z0-9 \-]+$/.test(fam) ? `'${fam}',${MONO_FB}` : fam;
 });
-const tfam = computed(() => ({ heading: HEADING, body: BODY, mono: mono.value }[s.value.title_font_family] || HEADING));
+const tfam = computed(() => resolveFontFamily(s.value.title_font_family, { heading: HEADING, body: BODY, mono: mono.value }) || HEADING);
 const hexAlpha = (hex, a) => {
   const h = String(hex || '').replace('#', '');
   return (h.length === 6 && /^[0-9a-f]{6}$/i.test(h)) ? '#' + h + a : hex;

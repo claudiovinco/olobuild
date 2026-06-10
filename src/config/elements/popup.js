@@ -213,7 +213,7 @@ export default {
       { value: 'small', label: t('Small') },
       { value: 'large', label: t('Large') },
     ]},
-    { key: 'button_radius', label: t('Arrotondamento pulsante (px)'), type: 'range', min: 0, max: 999, step: 1 },
+    { key: 'button_radius', label: t('Arrotondamento pulsante (px)'), type: 'border-radius' },
     { key: 'button_uppercase', label: t('Pulsante maiuscolo'), type: 'toggle' },
 
     { type: 'separator', label: t('Modale — Aspetto') },
@@ -255,12 +255,7 @@ export default {
     { key: 'modal_text_color', label: t('Colore testo modale'), type: 'color' },
     { key: 'modal_backdrop_blur', label: t('Sfocatura sfondo modale (blur)'), type: 'range', min: 0, max: 40, step: 1 },
     { key: 'modal_backdrop_saturate', label: t('Saturazione sfondo modale (%)'), type: 'range', min: 100, max: 200, step: 5 },
-    { key: 'modal_font_family', label: t('Font modale'), type: 'select', options: [
-      { value: 'inherit',   label: t('Default (eredita)') },
-      { value: 'monospace', label: t('Monospaziato') },
-      { value: 'serif',     label: t('Serif') },
-      { value: 'sans',      label: t('Sans-serif') },
-    ]},
+    { key: 'modal_font_family', label: t('Font modale'), type: 'font-family' },
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo modale'),
@@ -285,6 +280,8 @@ export default {
       },
     },
     { key: 'modal_title_uppercase', label: t('Titolo maiuscolo'), type: 'toggle' },
+
+    { type: 'separator', label: t('Overlay & Animazione') },
     { key: 'modal_overlay', label: t('Oscuramento sfondo'), type: 'range', min: 0, max: 100, step: 5 },
     { key: 'popup_overlay_blur', label: t('Sfocatura overlay'), type: 'range', min: 0, max: 20, step: 1 },
     { key: 'popup_animation', label: t('Animazione apertura'), type: 'select', options: [

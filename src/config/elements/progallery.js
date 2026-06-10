@@ -255,7 +255,8 @@ export default {
     // ─── Dimensioni visive ───
     { type: 'separator', label: t('Dimensioni') },
     { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 24, step: 2 },
-    { key: 'img_height', label: t('Altezza immagine'), type: 'text',
+    // type 'unit': stessa stringa CSS salvata del vecchio text ('250px', 'auto' resta editabile raw)
+    { key: 'img_height', label: t('Altezza immagine'), type: 'unit', units: ['px', 'vh'], min: 0,
       show: s => !(s.layout && s.layout.startsWith('strip')) },
     { key: 'object_fit', label: t('Adattamento'), type: 'select', options: [
       { value: 'cover', label: t('Riempi') },

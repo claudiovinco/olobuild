@@ -93,9 +93,9 @@ class Olo_FeaturedStory_Tile extends Olo_Tile_Base {
         $csolid  = $this->safe_color_css( $s['cta_solid_bg'] ) ?: $hcol;
         $csoltxt = $this->safe_color_css( $s['cta_solid_text'] ) ?: $bg;
 
-        $disp    = (string) $s['heading_font'];
-        $serif   = (string) $s['serif_font'];
-        $sans    = (string) $s['sans_font'];
+        $disp    = $this->resolve_font_family( (string) $s['heading_font'] ) ?: $this->defaults['heading_font'];
+        $serif   = $this->resolve_font_family( (string) $s['serif_font'] ) ?: $this->defaults['serif_font'];
+        $sans    = $this->resolve_font_family( (string) $s['sans_font'] ) ?: $this->defaults['sans_font'];
 
         $ratio   = preg_match( '/^[\d.\sfr]+$/', (string) $s['col_ratio'] ) ? (string) $s['col_ratio'] : '1.15fr .85fr';
         $aspect  = preg_match( '/^[\d.\s\/]+$/', (string) $s['cover_aspect'] ) ? (string) $s['cover_aspect'] : '4 / 3';

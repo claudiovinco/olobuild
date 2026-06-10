@@ -207,9 +207,10 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
         $tab_fs    = max( 10, intval( $s['tab_font_size'] ?? 14 ) );
         $tab_fw    = preg_match( '/^[1-9]00$/', (string) ($s['tab_font_weight'] ?? '500') ) ? $s['tab_font_weight'] : '500';
         $tab_gap   = max( 0, intval( $s['tab_gap'] ?? 4 ) );
-        $tab_rad   = max( 0, intval( $s['tab_radius'] ?? 8 ) );
+        // Dual-format: Number legacy E oggetto {tl,tr,br,bl} (build_border_radius_css ritorna '' se zero/vuoto).
+        $tab_rad_css  = $this->build_border_radius_css( $s['tab_radius'] ?? 8 ) ?: '0px';
         $cont_pad  = max( 0, intval( $s['container_padding'] ?? 4 ) );
-        $cont_rad  = max( 0, intval( $s['container_radius'] ?? 10 ) );
+        $cont_rad_css = $this->build_border_radius_css( $s['container_radius'] ?? 10 );
         $content_pad_y = max( 0, intval( $s['content_padding_y'] ?? 20 ) );
         $content_pad_x = max( 0, intval( $s['content_padding_x'] ?? 0 ) );
         $indicator = $s['indicator_type'] ?? 'none';
@@ -235,7 +236,7 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
                 margin: 0;
                 padding: <?php echo $cont_pad; ?>px;
                 <?php if ( $container_bg ) : ?>background: <?php echo $container_bg; ?>;<?php endif; ?>
-                <?php if ( $cont_rad ) : ?>border-radius: <?php echo $cont_rad; ?>px;<?php endif; ?>
+                <?php if ( $cont_rad_css ) : ?>border-radius: <?php echo $cont_rad_css; ?>;<?php endif; ?>
                 <?php echo $shadow_css; ?>
                 gap: <?php echo $tab_gap; ?>px;
                 list-style: none;
@@ -269,7 +270,7 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
                 color: <?php echo $tab_color_inact; ?>;
                 text-transform: none;
                 text-decoration: none;
-                border-radius: <?php echo $tab_rad; ?>px;
+                border-radius: <?php echo $tab_rad_css; ?>;
                 transition: background-color <?php echo $duration; ?>ms ease, color <?php echo $duration; ?>ms ease, box-shadow <?php echo $duration; ?>ms ease;
                 white-space: nowrap;
                 <?php if ( $vertical ) : ?>

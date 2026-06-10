@@ -165,7 +165,7 @@ export default {
       condition: { field: 'chip_style', op: 'neq', value: 'none' } },
     { key: 'chip_padding_y', label: t('Padding verticale chip (px)'), type: 'range', min: 0, max: 16, step: 1,
       condition: { field: 'chip_style', op: 'neq', value: 'none' } },
-    { key: 'chip_radius', label: t('Raggio bordi chip (px)'), type: 'range', min: 0, max: 999, step: 1,
+    { key: 'chip_radius', label: t('Raggio bordi chip (px)'), type: 'border-radius',
       condition: { field: 'chip_style', op: 'neq', value: 'none' } },
 
     ...wowEffectsFields(),

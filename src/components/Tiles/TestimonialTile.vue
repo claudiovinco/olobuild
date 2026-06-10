@@ -39,7 +39,7 @@
 
 <script setup>
 import { computed, h } from 'vue';
-import { resolveColor, TOKENS, SHADOW } from '@/composables/oloTileDefaults';
+import { resolveColor, resolveFontFamily, TOKENS, SHADOW } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -82,9 +82,10 @@ const rating = computed(() => parseInt(s.value.rating) || 0);
 const stars = computed(() => '★'.repeat(Math.max(0, rating.value)));
 const edAccent = computed(() => resolveColor(s.value.quote_accent_color, TOKENS.primary));
 const edStar = computed(() => (s.value.star_color ? resolveColor(s.value.star_color, '#FBBF24') : '#FBBF24'));
+// Stack storici della tile per i valori legacy ancora salvati nei template (IDENTICI al PHP).
+const FONT_LEGACY = { heading: 'var(--olo-font-family-heading, Georgia, serif)', body: 'var(--olo-font-family, -apple-system, sans-serif)' };
 const edQuoteStyle = computed(() => {
-  const qf = s.value.quote_font;
-  const fam = qf === 'heading' ? 'var(--olo-font-family-heading, Georgia, serif)' : (qf === 'body' ? 'var(--olo-font-family, -apple-system, sans-serif)' : 'inherit');
+  const fam = resolveFontFamily(s.value.quote_font, FONT_LEGACY) || 'inherit';
   const qs = parseInt(s.value.quote_size) || 0;
   return { display: 'block', fontFamily: fam, fontSize: qs > 0 ? qs + 'px' : 'clamp(24px,3.4vw,40px)', lineHeight: 1.28, color: resolveColor(s.value.text_color, TOKENS.text), quotes: 'none', margin: 0, textTransform: s.value.quote_uppercase ? 'uppercase' : 'none' };
 });

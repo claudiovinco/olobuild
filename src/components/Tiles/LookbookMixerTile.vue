@@ -27,6 +27,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue';
+import { resolveFontFamily } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -53,10 +54,12 @@ const MONO_FB = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
 const s = computed(() => ({ ...defaults, ...props.settings }));
 const currency = computed(() => s.value.currency || '');
 const mono = computed(() => {
-  const n = String(s.value.mono_font_family || '').replace(/[^A-Za-z0-9 \-]/g, '').trim();
-  return n ? `'${n}',${MONO_FB}` : MONO_FB;
+  const fam = resolveFontFamily(s.value.mono_font_family);
+  if (!fam) return MONO_FB;
+  // Nome font puro (legacy campo text) → wrap con lo stack mono di fallback storico.
+  return /^[A-Za-z0-9 \-]+$/.test(fam) ? `'${fam}',${MONO_FB}` : fam;
 });
-const nfam = computed(() => s.value.name_font_family === 'body' ? BODY : HEADING);
+const nfam = computed(() => resolveFontFamily(s.value.name_font_family, { heading: HEADING, body: BODY }) || HEADING);
 
 const groups = computed(() => {
   const map = {}, order = [];

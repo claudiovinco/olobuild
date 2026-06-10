@@ -49,7 +49,12 @@ export default {
     key_sequence: false,
     key_sequence_keys: '↑↑↓↓←→←→ba',
     key_sequence_confetti: false,
+    // Colori coriandoli: 3 slot color picker (vuoti = palette brand).
+    // key_sequence_confetti_colors (CSV legacy) resta letta dal PHP come fallback.
     key_sequence_confetti_colors: '',
+    confetti_color_1: '',
+    confetti_color_2: '',
+    confetti_color_3: '',
     popup_frequency: 'always',
     show_max_times: 0,
     // Display rules
@@ -119,11 +124,18 @@ export default {
     { key: 'key_sequence_confetti', label: t('Coriandoli alla scoperta'), type: 'toggle',
       description: t('Lancia un effetto coriandoli quando la sequenza viene completata.'),
       condition: { field: 'key_sequence', op: 'eq', value: true } },
-    { key: 'key_sequence_confetti_colors', label: t('Colori coriandoli'), type: 'text',
-      placeholder: 'var(--olo-color-primary), var(--olo-color-secondary), var(--olo-color-accent)',
-      description: t('Colori separati da virgola. Lascia vuoto per usare la palette del brand.'),
+    // Palette coriandoli: 3 slot color picker (pattern goo.js color_1..color_5).
+    // Il PHP raccoglie i non-vuoti; se tutti vuoti fallback alla CSV legacy
+    // key_sequence_confetti_colors e poi alla palette brand.
+    { key: 'confetti_color_1', label: t('Colore coriandoli 1'), type: 'color',
+      description: t('Lascia vuoti gli slot per usare la palette del brand.'),
+      condition: { field: 'key_sequence_confetti', op: 'eq', value: true } },
+    { key: 'confetti_color_2', label: t('Colore coriandoli 2'), type: 'color',
+      condition: { field: 'key_sequence_confetti', op: 'eq', value: true } },
+    { key: 'confetti_color_3', label: t('Colore coriandoli 3'), type: 'color',
       condition: { field: 'key_sequence_confetti', op: 'eq', value: true } },
 
+    { type: 'separator', label: t('Frequenza') },
     { key: 'popup_frequency', label: t('Frequenza'), type: 'select', options: [
       { value: 'always', label: t('Sempre') },
       { value: 'once_session', label: t('Una volta per sessione') },
@@ -191,6 +203,8 @@ export default {
     withHover({ key: 'modal_radius', label: t('Bordo arrotondato'), type: 'border-radius' }),
     { key: 'modal_border_width', label: t('Spessore bordo'), type: 'range', min: 0, max: 10, step: 1 },
     { key: 'modal_border_color', label: t('Colore bordo'), type: 'color' },
+
+    { type: 'separator', label: t('Overlay e comportamento') },
     { key: 'modal_overlay', label: t('Oscuramento sfondo'), type: 'range', min: 0, max: 100, step: 5 },
     { key: 'modal_close_button', label: t('Pulsante chiudi (X)'), type: 'toggle' },
     { key: 'popup_close_overlay', label: t('Chiudi su click overlay'), type: 'toggle' },

@@ -198,11 +198,7 @@ export default {
     { key: 'timeline_margin_bottom', label: t('Spazio sotto timeline (px)'), type: 'range', min: 0, max: 120, step: 4 },
 
     { type: 'separator', label: t('Numero step') },
-    { key: 'counter_font_family', label: t('Famiglia'), type: 'select', options: [
-      { value: 'serif',      label: t('Serif (editoriale)') },
-      { value: 'sans-serif', label: t('Sans-serif') },
-      { value: 'mono',       label: t('Monospace') },
-    ]},
+    { key: 'counter_font_family', label: t('Famiglia'), type: 'font-family' },
     { key: 'counter_size',   label: t('Dimensione (px)'), type: 'range', min: 40, max: 200, step: 4 },
     { key: 'counter_color',  label: t('Colore'),          type: 'color' },
     { key: 'counter_italic', label: t('Italico'),         type: 'toggle' },
@@ -239,11 +235,7 @@ export default {
     { key: 'pre_title_color', label: t('Colore'),          type: 'color' },
 
     { type: 'separator', label: t('Titolo') },
-    { key: 'title_font_family', label: t('Famiglia'), type: 'select', options: [
-      { value: 'serif',      label: t('Serif (editoriale)') },
-      { value: 'sans-serif', label: t('Sans-serif') },
-      { value: 'mono',       label: t('Monospace') },
-    ]},
+    { key: 'title_font_family', label: t('Famiglia'), type: 'font-family' },
     { key: 'title_size',         label: t('Dimensione (px)'), type: 'range', min: 18, max: 60, step: 2 },
     { key: 'title_weight',       label: t('Peso'), type: 'select', options: [
       { value: '300', label: t('300 — Light') },

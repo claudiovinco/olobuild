@@ -47,9 +47,11 @@ class Olo_TrustStrip_Tile extends Olo_Tile_Base {
 
         $serif = "var(--olo-font-family-heading, 'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif)";
         $sans  = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
-        $mono  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
-        $fmap  = [ 'serif' => $serif, 'sans-serif' => $sans, 'mono' => $mono ];
-        $fam   = $fmap[ $s['font_family'] ] ?? $sans;
+        $mono  = "var(--olo-font-family-mono, ui-monospace,'SF Mono',Menlo,Consolas,monospace)";
+        // Valori legacy ('serif'/'sans-serif'/'mono') → stack storici della tile;
+        // valori nuovi (type 'font-family') → CSS pronto via resolver condiviso.
+        $legacy = [ 'serif' => $serif, 'sans-serif' => $sans, 'mono' => $mono ];
+        $fam    = $this->resolve_font_family( $s['font_family'], $legacy ) ?: $sans;
 
         $text_color = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $sep_color  = $this->safe_color_css( $s['separator_color'] ) ?: 'var(--olo-color-text-faint, #9ca3af)';
@@ -82,8 +84,8 @@ class Olo_TrustStrip_Tile extends Olo_Tile_Base {
         // ── Variante PILL: ogni voce in un box "glass" (logo + label + badge) ──
         if ( $variant === 'pill' ) {
             $logo_h    = max( 10, min( 64, absint( $s['logo_height'] ?? 18 ) ) );
-            $pill_bg   = $s['pill_bg'] ?? 'rgba(255,255,255,0.05)';
-            $pill_bd   = $s['pill_border'] ?? 'rgba(255,255,255,0.12)';
+            $pill_bg   = $this->safe_color_css( $s['pill_bg'] ?? '' ) ?: 'rgba(255,255,255,0.05)';
+            $pill_bd   = $this->safe_color_css( $s['pill_border'] ?? '' ) ?: 'rgba(255,255,255,0.12)';
             $pill_txt  = $this->safe_color_css( $s['pill_text_color'] ?? '' ) ?: $text_color;
             $badge_bg  = $this->safe_color_css( $s['badge_bg'] ?? '' ) ?: '#D8FF4A';
             $badge_clr = $this->safe_color_css( $s['badge_color'] ?? '' ) ?: '#1B2A4E';

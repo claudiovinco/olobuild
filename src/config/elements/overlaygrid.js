@@ -211,12 +211,12 @@ export default {
       { value: 'large', label: t('Grande') },
     ]},
     { key: 'height', label: t('Altezza (px)'), type: 'range', min: 150, max: 800, step: 25 },
-    { key: 'match_height', label: t('Altezza uniforme'), type: 'toggle',
-      condition: { field: 'layout_mode', op: 'eq', value: 'uniform' } },
     { key: 'layout_mode', label: t('Disposizione'), type: 'select', options: [
       { value: 'uniform', label: t('Uniforme (griglia)') },
       { value: 'masonry', label: t('Masonry (celle alte/larghe)') },
     ], description: t('In Masonry le celle con “alta”/“larga” attive occupano 2 righe/colonne; l\'altezza diventa l\'altezza-riga di base.') },
+    { key: 'match_height', label: t('Altezza uniforme'), type: 'toggle',
+      condition: { field: 'layout_mode', op: 'eq', value: 'uniform' } },
 
     { type: 'separator', label: t('Overlay — aspetto') },
     { key: 'overlay_horizontal', label: t('Allineamento testo'), type: 'select', options: [
@@ -235,7 +235,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Stile elementi') },
-    { key: 'item_radius', label: t('Arrotondamento elementi (px)'), type: 'range', min: 0, max: 32, step: 1 },
+    { key: 'item_radius', label: t('Arrotondamento elementi (px)'), type: 'border-radius' },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
     { key: 'overlay_gradient', label: t('Overlay gradiente (alto→basso)'), type: 'toggle' },
 

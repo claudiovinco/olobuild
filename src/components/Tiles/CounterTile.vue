@@ -34,6 +34,7 @@
 <script setup>
 import { computed } from 'vue';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
+import { toRadiusCss, toSpacingCss } from '@/composables/useBoxModel';
 import { t } from '@/i18n';
 
 const props = defineProps({
@@ -60,11 +61,13 @@ const showOverlay = computed(() => {
 });
 
 const wrapStyle = computed(() => {
-  const pad = parseInt(s.value.padding) || 0;
   const bw = parseInt(s.value.border_width) || 0;
   const st = {
-    padding: pad + 'px',
-    borderRadius: (parseInt(s.value.border_radius) || 0) + 'px',
+    // tile_padding (oggetto spacing) con fallback al legacy 'padding' scalare —
+    // come il PHP: Olo_Tile_Utils::spacing_css($s['tile_padding'] ?? $s['padding'] ?? 32, 32).
+    padding: toSpacingCss(s.value.tile_padding ?? s.value.padding, { fallback: [32, 32, 32, 32] }),
+    // border_radius dual-format: oggetto {tl,tr,br,bl} dal type 'border-radius' O numero legacy.
+    borderRadius: toRadiusCss(s.value.border_radius, 0),
     color: s.value.text_color || 'var(--olo-color-text, #374151)',
     minHeight: '80px',
   };

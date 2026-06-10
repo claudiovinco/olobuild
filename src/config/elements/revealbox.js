@@ -75,7 +75,7 @@ export default {
       { value: 'flip-y', label: t('Giro 3D verticale') },
       { value: 'rotate-in', label: t('Rotazione') },
     ]},
-    { key: 'reveal_amount', label: t('Scorrimento (px, vuoto = auto)'), type: 'text', placeholder: t('auto'),
+    { key: 'reveal_amount', label: t('Scorrimento (px, 0 = auto)'), type: 'number', min: 0, max: 800, placeholder: t('auto'),
       condition: { field: 'reveal_effect', operator: 'in', value: ['slide-up', 'slide-down', 'slide-left', 'slide-right'] } },
 
     { type: 'separator', label: t('Sfondo globale') },

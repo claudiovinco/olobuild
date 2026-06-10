@@ -155,7 +155,7 @@ export default {
 
     // ── LAYOUT (dimensione) ──
     { type: 'separator', label: t('Layout') },
-    { key: 'max_width', label: t('Larghezza max (px, vuoto = 100%)'), type: 'text' },
+    { key: 'max_width', label: t('Larghezza max (vuoto = 100%)'), type: 'unit', units: ['px', '%'], min: 0 },
 
     ...shadowField,
     ...borderFields(),

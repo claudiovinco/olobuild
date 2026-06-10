@@ -130,6 +130,11 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
             $n = intval( $s[ $k ] ?? 0 );
             if ( $n > 0 ) { $v[] = $css . ':' . $n . 'px'; }
         };
+        // Dual-format radius: Number legacy E oggetto {tl,tr,br,bl}; '' (zero/vuoto) = usa default variante.
+        $rad = function ( $k, $css ) use ( $s, &$v ) {
+            $r = $this->build_border_radius_css( $s[ $k ] ?? 0 );
+            if ( $r !== '' ) { $v[] = $css . ':' . $r; }
+        };
         // font-family: valore verbatim ripulito (no CSS injection); l'attributo style è poi esc_attr nel render.
         $str = function ( $k, $css ) use ( $s, &$v ) {
             $raw = trim( (string) ( $s[ $k ] ?? '' ) );
@@ -143,7 +148,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         $px( 'tl_node_size', '--tl-node-size' );
         $px( 'tl_node_border', '--tl-node-bd' );
         $color( 'tl_card_bg', '--tl-card-bg' );
-        $px( 'tl_card_radius', '--tl-card-radius' );
+        $rad( 'tl_card_radius', '--tl-card-radius' );
         $px( 'tl_card_maxw', '--tl-card-maxw' );
         $px( 'tl_card_pad', '--tl-card-pad' );
         $ratio = $s['tl_media_ratio'] ?? 'auto';
@@ -155,7 +160,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         }
         $fit = $s['tl_media_fit'] ?? 'cover';
         if ( in_array( $fit, [ 'contain', 'fill', 'none' ], true ) ) { $v[] = '--tl-media-fit:' . $fit; }
-        $px( 'tl_media_radius', '--tl-media-radius' );
+        $rad( 'tl_media_radius', '--tl-media-radius' );
         $px( 'tl_title_size', '--tl-title-size' );
         $w = intval( $s['tl_title_weight'] ?? 0 );
         if ( $w > 0 ) { $v[] = '--tl-title-weight:' . $w; }

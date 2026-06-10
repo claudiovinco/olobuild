@@ -30,6 +30,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { resolveFontFamily } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -101,12 +102,12 @@ const trackStyle = computed(() => {
   };
 });
 
-const mqFontFamily = computed(() => {
-  const k = s.value.font_family || '';
-  if (k === 'sans') return 'var(--olo-font-family, inherit)';
-  if (k === 'serif' || k === 'heading') return "var(--olo-font-family-heading, Georgia, serif)";
-  return undefined;
-});
+const FONT_LEGACY = {
+  sans: 'var(--olo-font-family, inherit)',
+  serif: "var(--olo-font-family-heading, Georgia, serif)",
+  heading: "var(--olo-font-family-heading, Georgia, serif)",
+};
+const mqFontFamily = computed(() => resolveFontFamily(s.value.font_family, FONT_LEGACY) || undefined);
 
 const textStyle = computed(() => ({
   color: s.value.text_color || 'var(--olo-color-text, #374151)',

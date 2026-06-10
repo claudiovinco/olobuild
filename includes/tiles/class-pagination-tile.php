@@ -20,7 +20,6 @@ class Olo_Pagination_Tile extends Olo_Tile_Base {
         'gap'                => '8',
         'button_padding'     => '8 16',
         'text_color'         => '',
-        'active_color'       => '',
         'active_text_color'  => '',
         'background_color'   => '',
         'active_background'  => '',
@@ -71,21 +70,25 @@ class Olo_Pagination_Tile extends Olo_Tile_Base {
         $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $bw          = max( 0, min( 4, absint( $s['border_width'] ) ) );
 
-        // Sanitize padding
-        $raw_padding = preg_replace( '/[^0-9\s]/', '', $s['button_padding'] );
-        $pad_parts   = preg_split( '/\s+/', trim( $raw_padding ) );
-        $padding_css = '';
-        if ( count( $pad_parts ) === 1 ) {
-            $padding_css = absint( $pad_parts[0] ) . 'px';
-        } elseif ( count( $pad_parts ) >= 2 ) {
-            $padding_css = absint( $pad_parts[0] ) . 'px ' . absint( $pad_parts[1] ) . 'px';
+        // Sanitize padding — dual-format: oggetto spacing {top,right,bottom,left}
+        // (type 'spacing') oppure stringa legacy 'V H' (es. '8 16').
+        if ( is_array( $s['button_padding'] ) ) {
+            $padding_css = Olo_Tile_Utils::spacing_css( $s['button_padding'] );
         } else {
-            $padding_css = '8px 16px';
+            $raw_padding = preg_replace( '/[^0-9\s]/', '', (string) $s['button_padding'] );
+            $pad_parts   = preg_split( '/\s+/', trim( $raw_padding ) );
+            $padding_css = '';
+            if ( count( $pad_parts ) === 1 ) {
+                $padding_css = absint( $pad_parts[0] ) . 'px';
+            } elseif ( count( $pad_parts ) >= 2 ) {
+                $padding_css = absint( $pad_parts[0] ) . 'px ' . absint( $pad_parts[1] ) . 'px';
+            } else {
+                $padding_css = '8px 16px';
+            }
         }
 
         // Colors — TOKEN-FIRST: voce attiva = primario brand (era #e1474f blu off-brand)
         $text_color      = $this->safe_color_css( $s['text_color'] );
-        $active_color    = $this->safe_color_css( $s['active_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $active_text     = $this->safe_color_css( $s['active_text_color'] ) ?: 'var(--olo-color-primary-contrast, #ffffff)';
         $bg_color        = $this->safe_color_css( $s['background_color'] );
         $active_bg       = $this->safe_color_css( $s['active_background'] ) ?: 'var(--olo-color-primary, #e1474f)';

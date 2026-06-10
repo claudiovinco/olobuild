@@ -66,6 +66,8 @@ export default {
       { value: 'custom',          label: t('Personalizzato') },
     ] },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+
+    { type: 'separator', label: t('Stile') },
     { key: 'avatar_size', label: t('Dimensione avatar (px)'), type: 'range', min: 32, max: 128, step: 8 },
     withHover({ key: 'border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
 

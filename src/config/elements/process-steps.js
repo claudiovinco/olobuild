@@ -77,11 +77,7 @@ export default {
     { key: 'number_bg', label: t('Sfondo/bordo cerchio'), type: 'color',
       condition: { field: 'number_style', operator: '!=', value: 'plain' } },
     { key: 'number_size', label: t('Dimensione (px)'), type: 'range', min: 12, max: 96, step: 2 },
-    { key: 'number_font', label: t('Famiglia'), type: 'select', options: [
-      { value: 'serif', label: t('Serif') },
-      { value: 'sans-serif', label: t('Sans-serif') },
-      { value: 'mono', label: t('Monospace') },
-    ]},
+    { key: 'number_font', label: t('Famiglia'), type: 'font-family' },
     { key: 'number_weight', label: t('Peso'), type: 'select', options: [
       { value: '300', label: '300' }, { value: '400', label: '400' }, { value: '500', label: '500' },
       { value: '600', label: '600' }, { value: '700', label: '700' }, { value: '800', label: '800' },
@@ -90,11 +86,7 @@ export default {
     { type: 'separator', label: t('Titolo') },
     { key: 'title_color', label: t('Colore titolo'), type: 'color' },
     { key: 'title_size', label: t('Dimensione (px)'), type: 'range', min: 14, max: 48, step: 1 },
-    { key: 'title_font', label: t('Famiglia'), type: 'select', options: [
-      { value: 'serif', label: t('Serif') },
-      { value: 'sans-serif', label: t('Sans-serif') },
-      { value: 'mono', label: t('Monospace') },
-    ]},
+    { key: 'title_font', label: t('Famiglia'), type: 'font-family' },
     { key: 'title_weight', label: t('Peso'), type: 'select', options: [
       { value: '400', label: '400' }, { value: '500', label: '500' }, { value: '600', label: '600' },
       { value: '700', label: '700' }, { value: '800', label: '800' },

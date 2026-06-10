@@ -123,7 +123,12 @@ const sides = computed(() => {
       left: parseInt(v.left) || 0,
     };
   }
-  const n = parseInt(String(v || '0')) || 0;
+  // Stringa legacy multi-valore (es. '8 16' = V H, o 'T R B L'): semantica
+  // shorthand CSS — prima un singolo parseInt collassava tutto sul primo numero.
+  const parts = String(v || '0').trim().split(/\s+/).map(p => parseInt(p)).filter(p => !isNaN(p));
+  if (parts.length === 2) return { top: parts[0], right: parts[1], bottom: parts[0], left: parts[1] };
+  if (parts.length === 4) return { top: parts[0], right: parts[1], bottom: parts[2], left: parts[3] };
+  const n = parts.length ? parts[0] : 0;
   return { top: n, right: n, bottom: n, left: n };
 });
 

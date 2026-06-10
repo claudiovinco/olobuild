@@ -108,10 +108,15 @@ const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const avatarStyle = computed(() => {
   const size = parseInt(s.value.avatar_size) || 48;
+  // Stessa logica di Olo_Tile_Utils::radius_int (PHP): oggetto {tl,tr,br,bl} → max angoli, scalare → int, clamp 0-50.
+  const raw = s.value.avatar_border_radius;
+  const r = (raw && typeof raw === 'object')
+    ? Math.max(parseInt(raw.tl) || 0, parseInt(raw.tr) || 0, parseInt(raw.br) || 0, parseInt(raw.bl) || 0)
+    : parseInt(raw);
   return {
     width: size + 'px',
     height: size + 'px',
-    borderRadius: ((v => isNaN(v) ? 50 : v)(parseInt(s.value.avatar_border_radius))) + '%',
+    borderRadius: Math.max(0, Math.min(50, isNaN(r) ? 50 : r)) + '%',
   };
 });
 

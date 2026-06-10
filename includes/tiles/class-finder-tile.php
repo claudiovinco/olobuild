@@ -99,7 +99,9 @@ class Olo_Finder_Tile extends Olo_Tile_Base {
         $def_idx = max( 0, min( intval( $s['default_index'] ?? 0 ), count( $items ) - 1 ) );
 
         // ── box-model ──
-        $chip_r = max( 0, min( 999, intval( $s['chip_radius'] ?? 999 ) ) );
+        // chip_radius dual-format: Number legacy ('999') E oggetto {tl,tr,br,bl}.
+        // '' / 0 / oggetto tutto-zero → '0px' (= comportamento storico per il vuoto).
+        $chip_r = $this->build_border_radius_css( $s['chip_radius'] ?? 999 ) ?: '0px';
         $cr     = $this->build_border_radius_css( $s['card_radius'] ?? '16' );
         $card_radius_css = 'border-radius:' . ( $cr ?: '16px' ) . ';';
         $cp     = is_array( $s['card_padding'] ?? null ) ? $s['card_padding'] : [];
@@ -135,7 +137,7 @@ class Olo_Finder_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .ofn-h em{font-style:italic;color:var(--fn-accent);}
             .<?php echo $uid; ?> .ofn-intro{font-size:15.5px;line-height:1.6;opacity:.8;margin:14px auto 0;max-width:560px;<?php echo $center ? '' : 'margin-left:0;'; ?>}
             .<?php echo $uid; ?> .ofn-chips{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 24px;<?php echo $center ? 'justify-content:center;' : ''; ?>}
-            .<?php echo $uid; ?> .ofn-chip{font-family:<?php echo $sans; ?>;font-weight:600;font-size:13.5px;color:var(--olo-color-text,#111827);background:<?php echo $chipbg; ?>;border:1px solid var(--olo-color-border,#e5e7eb);border-radius:<?php echo $chip_r; ?>px;padding:10px 18px;cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;gap:8px;}
+            .<?php echo $uid; ?> .ofn-chip{font-family:<?php echo $sans; ?>;font-weight:600;font-size:13.5px;color:var(--olo-color-text,#111827);background:<?php echo $chipbg; ?>;border:1px solid var(--olo-color-border,#e5e7eb);border-radius:<?php echo $chip_r; ?>;padding:10px 18px;cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;gap:8px;}
             .<?php echo $uid; ?> .ofn-chip:hover{border-color:var(--fn-accent);color:var(--fn-accent);}
             .<?php echo $uid; ?> .ofn-chip.on{background:var(--fn-accent);border-color:var(--fn-accent);color:var(--fn-on);}
             .<?php echo $uid; ?> .ofn-chip:focus-visible{outline:2px solid var(--fn-accent);outline-offset:3px;}

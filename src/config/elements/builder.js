@@ -51,7 +51,7 @@ export default {
       defaults: { name: 'Nuova voce', price: '10', note: '', start: 0 },
       itemFields: [
         { key: 'name', label: t('Nome'), type: 'text' },
-        { key: 'price', label: t('Prezzo'), type: 'text' },
+        { key: 'price', label: t('Prezzo'), type: 'number', min: 0, step: 0.01 },
         { key: 'note', label: t('Nota (opzionale)'), type: 'text' },
         { key: 'start', label: t('Quantità iniziale'), type: 'number' },
       ],
@@ -72,16 +72,18 @@ export default {
     { key: 'zone_on', label: t('Testo su accento'), type: 'color' },
     { key: 'card_bg', label: t('Sfondo pannello'), type: 'color' },
     { key: 'card_border', label: t('Bordo pannello'), type: 'color' },
-    { key: 'align', label: t('Allineamento'), type: 'select', options: [
-      { value: 'left', label: t('Sinistra') },
-      { value: 'center', label: t('Centro') },
-    ]},
 
     { type: 'separator', label: t('Layout') },
     { key: 'layout', label: t('Disposizione'), type: 'select', options: [
       { value: 'panel', label: t('Pannello (lista + footer)') },
       { value: 'split', label: t('Split (header + griglia card)') },
     ]},
+    { key: 'align', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+    ]},
+
+    { type: 'separator', label: t('Colori (split)'), condition: { field: 'layout', value: 'split' } },
     { key: 'heading_color', label: t('Colore titolo (split)'), type: 'color', condition: { field: 'layout', value: 'split' } },
     { key: 'tally_bg', label: t('Sfondo pill totale (split)'), type: 'color', condition: { field: 'layout', value: 'split' } },
     { key: 'item_name_color', label: t('Colore nome voce (split)'), type: 'color', condition: { field: 'layout', value: 'split' } },

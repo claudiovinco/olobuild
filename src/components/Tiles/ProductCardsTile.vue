@@ -41,7 +41,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { resolveColor, TOKENS, SHADOW } from '@/composables/oloTileDefaults';
+import { resolveColor, resolveFontFamily, TOKENS, SHADOW } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -80,10 +80,11 @@ const defaults = {
 
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
-const SERIF = "'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif";
-const SANS  = "'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
+const SERIF = "var(--olo-font-family-heading, 'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif)";
+const SANS  = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
 const MONO  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
-const fmap  = { serif: SERIF, 'sans-serif': SANS, mono: MONO };
+// Stack storici della tile per i valori legacy ancora salvati nei template (IDENTICI al PHP).
+const FONT_LEGACY = { serif: SERIF, 'sans-serif': SANS, mono: MONO };
 
 const items = computed(() => Array.isArray(s.value.items) ? s.value.items : []);
 const hoverClass = computed(() => 'olo-pcards-hover-' + (s.value.card_hover_effect || 'lift'));
@@ -146,7 +147,7 @@ function letterStyle(it) {
   return {
     position: 'relative',
     zIndex: 2,
-    fontFamily: fmap[s.value.letter_font_family] || SERIF,
+    fontFamily: resolveFontFamily(s.value.letter_font_family, FONT_LEGACY) || SERIF,
     fontSize: (s.value.letter_size || 140) + 'px',
     fontStyle: s.value.letter_italic ? 'italic' : 'normal',
     color: it.letter_color || '#0f172a',
@@ -229,7 +230,7 @@ function badgeStyle(it) {
 }
 
 const titleStyle = computed(() => ({
-  fontFamily: fmap[s.value.title_font_family] || SERIF,
+  fontFamily: resolveFontFamily(s.value.title_font_family, FONT_LEGACY) || SERIF,
   fontSize: (s.value.title_size || 30) + 'px',
   fontWeight: s.value.title_weight || '500',
   color: resolveColor(s.value.card_color, TOKENS.text),

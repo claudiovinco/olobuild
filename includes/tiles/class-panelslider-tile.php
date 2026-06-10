@@ -325,7 +325,8 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
         $img_ratio  = $s['image_ratio'] ?? '4/3';
         $img_height = absint( $s['image_height'] ?? 0 );
         $img_fit    = in_array( $s['image_fit'] ?? 'cover', [ 'cover', 'contain', 'fill' ], true ) ? $s['image_fit'] : 'cover';
-        $img_radius = max( 0, intval( $s['card_image_radius'] ?? 0 ) );
+        // Dual-format: numero legacy O oggetto {tl,tr,br,bl}; '' se zero/vuoto.
+        $img_radius_css = $this->build_border_radius_css( $s['card_image_radius'] ?? 0 );
 
         $css .= $sel . ' .olo-ps-media{position:relative;overflow:hidden;width:100%;flex:0 0 auto;}';
         if ( $img_ratio && $img_ratio !== 'auto' ) {
@@ -333,8 +334,8 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
         } elseif ( $img_height > 0 ) {
             $css .= $sel . ' .olo-ps-media{height:' . $img_height . 'px;}';
         }
-        if ( $img_radius > 0 ) {
-            $css .= $sel . ' .olo-ps-media,' . $sel . ' .olo-ps-img{border-radius:' . $img_radius . 'px;}';
+        if ( $img_radius_css !== '' ) {
+            $css .= $sel . ' .olo-ps-media,' . $sel . ' .olo-ps-img{border-radius:' . $img_radius_css . ';}';
         }
         $css .= $sel . ' .olo-ps-img{width:100%;height:100%;object-fit:' . esc_attr( $img_fit ) . ';display:block;transition:transform 0.5s cubic-bezier(.4,0,.2,1);}';
 

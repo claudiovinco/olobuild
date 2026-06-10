@@ -121,7 +121,7 @@ export default {
     { key: 'letter_spacing', label: t('Spaziatura lettere (px)'), type: 'range', min: 0, max: 6, step: 0.5 },
 
     { type: 'separator', label: t('Contenitore') },
-    { key: 'radius', label: t('Raggio angoli (px)'), type: 'range', min: 0, max: 40, step: 1 },
+    { key: 'radius', label: t('Raggio angoli (px)'), type: 'border-radius' },
     { key: 'padding', label: t('Padding interno (px)'), type: 'range', min: 0, max: 60, step: 2 },
 
     ...shadowField,

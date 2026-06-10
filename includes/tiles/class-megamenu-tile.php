@@ -396,7 +396,11 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         $oc_fullscreen   = ! empty( $s['offcanvas_fullscreen'] );
         // Fullscreen menu: tipografia link + numeri + footer (pixel-perfect overlay temi)
         $mob_link_font   = $s['mobile_link_font'] ?? 'inherit';
-        $mob_link_fam    = ( $mob_link_font === 'heading' ) ? 'var(--olo-font-family-heading, Georgia, serif)' : ( ( $mob_link_font === 'body' ) ? 'var(--olo-font-family, -apple-system, sans-serif)' : '' );
+        // Valori legacy ('heading'/'body') → stack storici della tile; 'inherit' = non
+        // settare font-family (ramo font-weight 600); valori nuovi (type 'font-family')
+        // → CSS pronto via resolver condiviso.
+        $mob_font_legacy = [ 'heading' => 'var(--olo-font-family-heading, Georgia, serif)', 'body' => 'var(--olo-font-family, -apple-system, sans-serif)' ];
+        $mob_link_fam    = ( $mob_link_font === 'inherit' ) ? '' : $this->resolve_font_family( $mob_link_font, $mob_font_legacy );
         $mob_link_size   = intval( $s['mobile_link_size'] ?? 0 );
         $mob_numbers     = ! empty( $s['mobile_numbers'] );
         $mob_foot_text   = trim( (string) ( $s['mobile_footer_text'] ?? '' ) );

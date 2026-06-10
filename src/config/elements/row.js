@@ -82,6 +82,7 @@ export default {
       { value: 'DESC', label: t('Decrescente') },
       { value: 'ASC', label: t('Crescente') },
     ], condition: { field: 'loop_enabled', value: true } },
+    { type: 'separator', label: t('Filtro tassonomia'), condition: { field: 'loop_enabled', value: true } },
     { key: 'loop_taxonomy', label: t('Tassonomia filtro'), type: 'text', placeholder: t('category, post_tag...'),
       condition: { field: 'loop_enabled', value: true } },
     { key: 'loop_terms', label: t('Includi termini (slug, virgola)'), type: 'text', placeholder: t('news, tutorial'),
@@ -92,6 +93,7 @@ export default {
       condition: { field: 'loop_enabled', value: true } },
     { key: 'loop_exclude_current', label: t('Escludi post corrente'), type: 'toggle',
       condition: { field: 'loop_enabled', value: true } },
+    { type: 'separator', label: t('Filtro meta'), condition: { field: 'loop_enabled', value: true } },
     { key: 'loop_meta_key', label: t('Meta key filtro'), type: 'text', placeholder: t('prezzo, colore...'),
       condition: { field: 'loop_enabled', value: true } },
     { key: 'loop_meta_value', label: t('Meta value'), type: 'text',
@@ -106,6 +108,7 @@ export default {
       { value: 'NOT EXISTS', label: t('NOT EXISTS') },
     ], condition: { field: 'loop_enabled', value: true } },
 
+    { type: 'separator', label: t('Paginazione'), condition: { field: 'loop_enabled', value: true } },
     { key: 'loop_pagination', label: t('Paginazione'), type: 'select', options: [
       { value: 'none',      label: t('Nessuna') },
       { value: 'numbers',   label: t('Numerica (link)') },

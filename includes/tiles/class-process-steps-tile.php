@@ -53,7 +53,9 @@ class Olo_Process_Steps_Tile extends Olo_Tile_Base {
 
         $serif = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
         $sans  = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
-        $fmap  = [ 'serif' => $serif, 'sans-serif' => $sans, 'mono' => "ui-monospace,Menlo,Consolas,monospace" ];
+        // Valori legacy ('serif'/'sans-serif'/'mono') → stack storici della tile;
+        // valori nuovi (type 'font-family') → CSS pronto via resolver condiviso.
+        $legacy = [ 'serif' => $serif, 'sans-serif' => $sans, 'mono' => "ui-monospace,Menlo,Consolas,monospace" ];
 
         $cols    = max( 1, min( 6, absint( $s['columns'] ) ) );
         $gap     = max( 0, min( 80, absint( $s['gap'] ) ) );
@@ -62,12 +64,12 @@ class Olo_Process_Steps_Tile extends Olo_Tile_Base {
         $ncolor  = $this->safe_color_css( $s['number_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $nbg     = $this->safe_color_css( $s['number_bg'] ?? '' );
         $nsize   = max( 12, min( 96, absint( $s['number_size'] ) ) );
-        $nfont   = $fmap[ $s['number_font'] ] ?? $serif;
+        $nfont   = $this->resolve_font_family( $s['number_font'], $legacy ) ?: $serif;
         $nweight = preg_match( '/^\d+$/', (string) $s['number_weight'] ) ? $s['number_weight'] : '500';
         $tcolor  = $this->safe_color_css( $s['title_color'] ?? '' ) ?: 'var(--olo-color-text, #111827)';
         $tsize   = max( 14, min( 48, absint( $s['title_size'] ) ) );
         $tweight = preg_match( '/^\d+$/', (string) $s['title_weight'] ) ? $s['title_weight'] : '600';
-        $tfont   = $fmap[ $s['title_font'] ] ?? $serif;
+        $tfont   = $this->resolve_font_family( $s['title_font'], $legacy ) ?: $serif;
         $dcolor  = $this->safe_color_css( $s['desc_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #6b7280)';
         $dsize   = max( 11, min( 22, absint( $s['desc_size'] ) ) );
         $igap    = max( 0, min( 40, absint( $s['item_gap'] ) ) );

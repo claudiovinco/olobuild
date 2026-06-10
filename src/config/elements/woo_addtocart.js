@@ -72,6 +72,8 @@ export default {
       { value: 'custom',          label: t('Personalizzato') },
     ] },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+
+    { type: 'separator', label: t('Pulsante') },
     { key: 'style', label: t('Stile'), type: 'select', options: [
       { value: 'filled', label: t('Pieno') },
       { value: 'outline', label: t('Contorno') },
@@ -86,10 +88,8 @@ export default {
     withHover({ key: 'border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Colori') },
-    { key: 'bg_color', label: t('Sfondo'), type: 'color' },
-    { key: 'text_color', label: t('Colore testo'), type: 'color' },
-    { key: 'hover_bg', label: t('Sfondo hover'), type: 'color' },
-    { key: 'hover_text', label: t('Colore testo hover'), type: 'color' },
+    withHover({ key: 'bg_color', label: t('Sfondo'), type: 'color' }, { hoverKey: 'hover_bg' }),
+    withHover({ key: 'text_color', label: t('Colore testo'), type: 'color' }, { hoverKey: 'hover_text' }),
     ...borderFields(),
   ],
 };

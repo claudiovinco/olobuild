@@ -39,7 +39,7 @@ export default {
   fields: [
     { type: 'separator', label: t('Intestazione') },
     { key: 'show_heading', label: t('Mostra titolo sezione'), type: 'toggle' },
-    { key: 'title_text', label: t('Testo titolo'), type: 'text', condition: { key: 'show_heading', value: true } },
+    { key: 'title_text', label: t('Testo titolo'), type: 'text', condition: { field: 'show_heading', value: true } },
 
     { type: 'separator', label: t('Colonne responsive') },
     { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1 },

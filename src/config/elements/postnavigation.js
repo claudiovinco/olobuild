@@ -49,7 +49,7 @@ export default {
 
     { type: 'separator', label: t('Tassonomia') },
     { key: 'same_taxonomy', label: t('Stesso termine tassonomia'), type: 'toggle' },
-    { key: 'taxonomy', label: t('Tassonomia'), type: 'text',
+    { key: 'taxonomy', label: t('Tassonomia'), type: 'select', optionsSource: 'taxonomies',
       condition: { field: 'same_taxonomy', value: true } },
   ],
 

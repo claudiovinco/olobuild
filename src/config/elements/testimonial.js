@@ -147,24 +147,19 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
 
+    { type: 'separator', label: t('Citazione — tipografia') },
+    { key: 'quote_font', label: t('Famiglia font citazione'), type: 'font-family' },
+    { key: 'quote_size', label: t('Dim. citazione (px, 0 = auto)'), type: 'range', min: 0, max: 56, step: 1 },
+    { key: 'quote_uppercase', label: t('Citazione in maiuscolo (editoriale)'), type: 'toggle' },
+    { key: 'author_uppercase', label: t('Autore in maiuscolo'), type: 'toggle' },
+
     { type: 'separator', label: t('Colori') },
     { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
-    { key: 'text_color', label: t('Colore citazione'), type: 'color' },
     { key: 'star_color', label: t('Colore stelle (vuoto = ambra)'), type: 'color' },
     { key: 'quote_accent_color', label: t('Colore accento citazione (<em>)'), type: 'color' },
     { key: 'author_color', label: t('Colore autore'), type: 'color' },
     { key: 'line_color', label: t('Colore linea decorativa'), type: 'color',
       condition: { field: 'show_line', value: true } },
-
-    { type: 'separator', label: t('Citazione — tipografia') },
-    { key: 'quote_font', label: t('Famiglia font citazione'), type: 'select', options: [
-      { value: 'inherit', label: t('Predefinito') },
-      { value: 'heading', label: t('Titoli (serif del tema)') },
-      { value: 'body', label: t('Corpo (sans del tema)') },
-    ]},
-    { key: 'quote_size', label: t('Dim. citazione (px, 0 = auto)'), type: 'range', min: 0, max: 56, step: 1 },
-    { key: 'quote_uppercase', label: t('Citazione in maiuscolo (editoriale)'), type: 'toggle' },
-    { key: 'author_uppercase', label: t('Autore in maiuscolo'), type: 'toggle' },
 
     { type: 'separator', label: t('Testimone') },
     { key: 'author_position', label: t('Posizione testimone'), type: 'select', options: [

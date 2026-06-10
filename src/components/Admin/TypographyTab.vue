@@ -55,6 +55,19 @@
             <span class="cfg-pill off">700</span>
           </div>
         </div>
+        <div class="font-card">
+          <div class="font-card-label">{{ t('Mono · codice e dati') }}</div>
+          <div class="font-card-preview body" :style="{ fontFamily: monoFontFamily }">{ 01 · Aa }</div>
+          <div class="cfg-select">
+            <select :value="mono.family" @change="setMono('family', $event.target.value)">
+              <option v-for="f in MONO_FONTS" :key="f.value" :value="f.value">{{ f.label }}</option>
+            </select>
+            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+          </div>
+          <div class="font-pills">
+            <span class="cfg-pill ok">var(--olo-font-family-mono)</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -153,14 +166,26 @@ const BODY_FONTS = [
   { value: 'Plus Jakarta Sans', label: 'Plus Jakarta Sans' },
   { value: 'system-ui',         label: 'System UI stack' },
 ];
+// Ruolo mono: '' = nessun override → le tile usano il fallback del proprio
+// var(--olo-font-family-mono, …). Un valore = emesso come var globale.
+const MONO_FONTS = [
+  { value: '',                 label: 'Predefinito (per tile)' },
+  { value: 'JetBrains Mono',   label: 'JetBrains Mono' },
+  { value: 'Space Mono',       label: 'Space Mono' },
+  { value: 'IBM Plex Mono',    label: 'IBM Plex Mono' },
+  { value: 'Fira Code',        label: 'Fira Code' },
+  { value: 'Source Code Pro',  label: 'Source Code Pro' },
+];
 
 const display = ref({ family: 'Instrument Serif', weight: 400 });
 const body    = ref({ family: 'Work Sans', weight: 500 });
+const mono    = ref({ family: '' });
 const scale   = ref({ base: 16, ratio: 1.25, lineHeight: 1.55 });
 const fullStyles = ref({});   // tutto olo_styles, per non perdere gli altri blocchi al PUT
 
 const displayFontFamily = computed(() => `'${display.value.family}', serif`);
 const bodyFontFamily    = computed(() => `'${body.value.family}', sans-serif`);
+const monoFontFamily    = computed(() => mono.value.family ? `'${mono.value.family}', monospace` : 'ui-monospace, Menlo, Consolas, monospace');
 
 const sizes = computed(() => {
   const b = scale.value.base;
@@ -175,6 +200,7 @@ const sizes = computed(() => {
 
 function setDisplay(k, v) { display.value[k] = v; setDirty(true); ensureFontLoaded(v); }
 function setBody(k, v)    { body.value[k]    = v; setDirty(true); ensureFontLoaded(v); }
+function setMono(k, v)    { mono.value[k]    = v; setDirty(true); if (v) ensureFontLoaded(v); }
 function setScale(k, v)   { scale.value[k]   = v; setDirty(true); }
 
 const loadedFonts = new Set();
@@ -201,12 +227,14 @@ async function loadSettings() {
       if (tp.font_family_heading) display.value.family = tp.font_family_heading;
       if (tp.font_weight_heading) display.value.weight = parseInt(tp.font_weight_heading) || 400;
       if (tp.font_family)         body.value.family = tp.font_family;
+      if (tp.font_family_mono)    mono.value.family = tp.font_family_mono;
       if (tp.font_weight_body)    body.value.weight = parseInt(tp.font_weight_body) || 500;
       if (tp.font_size_base)      scale.value.base = parseInt(tp.font_size_base) || 16;
       if (tp.line_height)         scale.value.lineHeight = parseFloat(tp.line_height) || 1.55;
       if (tp.scale_ratio)         scale.value.ratio = parseFloat(tp.scale_ratio) || 1.25;
       ensureFontLoaded(display.value.family);
       ensureFontLoaded(body.value.family);
+      if (mono.value.family) ensureFontLoaded(mono.value.family);
     }
   } catch (e) { /* defaults */ }
 }
@@ -220,6 +248,7 @@ function buildTypographyBlock() {
     ...(fullStyles.value.typography || {}),
     font_family: body.value.family === 'system-ui' ? '' : body.value.family,
     font_family_heading: display.value.family,
+    font_family_mono: mono.value.family,
     font_weight_body: String(body.value.weight),
     font_weight_heading: String(display.value.weight),
     font_size_base: `${scale.value.base}px`,

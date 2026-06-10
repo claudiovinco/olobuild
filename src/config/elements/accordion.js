@@ -229,6 +229,8 @@ export default {
     { type: 'separator', label: t('Glassmorphism') },
     { key: 'backdrop_blur', label: t('Sfocatura sfondo (px)'), type: 'range', min: 0, max: 20, step: 1 },
     { key: 'backdrop_saturate', label: t('Saturazione sfondo (%)'), type: 'range', min: 100, max: 200, step: 5 },
+
+    { type: 'separator', label: t('Forma') },
     { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 48, step: 4 },
     withHover({ key: 'border_radius', label: t('Border Radius'), type: 'border-radius' }),
 

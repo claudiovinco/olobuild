@@ -140,7 +140,7 @@ export default {
     { type: 'separator', label: t('Card (sfondo opzionale)') },
     { key: 'card_bg', label: t('Card — sfondo (vuoto = trasparente)'), type: 'color' },
     { key: 'card_border', label: t('Card — bordo'), type: 'color' },
-    { key: 'card_radius', label: t('Card — raggio (px)'), type: 'range', min: 0, max: 32, step: 1 },
+    { key: 'card_radius', label: t('Card — raggio (px)'), type: 'border-radius' },
     { key: 'card_padding', label: t('Card — padding interno (px)'), type: 'range', min: 0, max: 32, step: 1 },
 
     { type: 'separator', label: t('Shade swatches') },
@@ -162,11 +162,7 @@ export default {
 
     { type: 'separator', label: t('Testo') },
     { key: 'category_color', label: t('Categoria'), type: 'color' },
-    { key: 'title_font', label: t('Font titolo'), type: 'select', options: [
-      { value: 'heading', label: t('Heading (tema)') },
-      { value: 'serif', label: t('Serif') },
-      { value: 'sans', label: t('Sans') },
-    ]},
+    { key: 'title_font', label: t('Font titolo'), type: 'font-family' },
     { key: 'title_size', label: t('Dim. titolo (px)'), type: 'range', min: 14, max: 32, step: 1 },
     { key: 'title_color', label: t('Titolo'), type: 'color' },
     { key: 'price_color', label: t('Prezzo (accento)'), type: 'color' },

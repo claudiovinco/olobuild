@@ -127,13 +127,8 @@ export default {
 
     { type: 'separator', label: t('Font & separatore'),
       condition: { field: 'content_type', value: 'text' } },
-    { key: 'font_family', label: t('Famiglia font'), type: 'select',
-      condition: { field: 'content_type', value: 'text' }, options: [
-      { value: '', label: t('Predefinito') },
-      { value: 'serif', label: t('Serif (heading tema)') },
-      { value: 'heading', label: t('Heading tema') },
-      { value: 'sans', label: t('Sans tema') },
-    ]},
+    { key: 'font_family', label: t('Famiglia font'), type: 'font-family',
+      condition: { field: 'content_type', value: 'text' } },
     { key: 'font_style', label: t('Corsivo'), type: 'select',
       condition: { field: 'content_type', value: 'text' }, options: [
       { value: 'normal', label: t('Normale') },
@@ -141,7 +136,7 @@ export default {
     ]},
     { key: 'separator_color', label: t('Colore separatore (vuoto = come testo)'), type: 'color',
       condition: { field: 'content_type', value: 'text' } },
-    { key: 'separator_size', label: t('Dim. separatore (px, vuoto = come testo)'), type: 'text',
+    { key: 'separator_size', label: t('Dim. separatore (px, 0 = come testo)'), type: 'range', min: 0, max: 48, step: 1,
       condition: { field: 'content_type', value: 'text' } },
 
     { type: 'separator', label: t('Aspetto') },

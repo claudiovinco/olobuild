@@ -34,12 +34,18 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'url', label: t('URL profilo X / Tweet'), type: 'text', placeholder: t('https://x.com/username') },
+    { key: 'url', label: t('URL profilo X / Tweet'), type: 'link', placeholder: t('https://x.com/username') },
     { key: 'embed_type', label: t('Tipo embed'), type: 'select', options: [
       { value: 'timeline', label: t('Timeline') },
       { value: 'tweet', label: t('Tweet singolo') },
     ]},
-    { key: 'chrome', label: t('Chrome (noheader,nofooter,...)'), type: 'text' },
+    { key: 'chrome', label: t('Chrome (noheader,nofooter,...)'), type: 'multi_pills', options: [
+      { value: 'noheader', label: t('Senza header') },
+      { value: 'nofooter', label: t('Senza footer') },
+      { value: 'noborders', label: t('Senza bordi') },
+      { value: 'noscrollbar', label: t('Senza scrollbar') },
+      { value: 'transparent', label: t('Sfondo trasparente') },
+    ]},
     { key: 'tweet_limit', label: t('Limite tweet'), type: 'range', min: 1, max: 20, step: 1 },
     { key: 'language', label: t('Lingua'), type: 'select', options: [
       { value: 'it', label: t('Italiano') },
@@ -69,11 +75,13 @@ export default {
       { value: 'custom',          label: t('Personalizzato') },
     ] },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+
+    { type: 'separator', label: t('Aspetto') },
     { key: 'theme', label: t('Tema'), type: 'select', options: [
       { value: 'light', label: t('Chiaro') },
       { value: 'dark', label: t('Scuro') },
     ]},
-    { key: 'width', label: t('Larghezza (px, vuoto = auto)'), type: 'text', placeholder: '' },
+    { key: 'width', label: t('Larghezza (px, vuoto = auto)'), type: 'number', min: 0, max: 1200, step: 10 },
     { key: 'height', label: t('Altezza (px)'), type: 'range', min: 200, max: 1200, step: 50 },
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },

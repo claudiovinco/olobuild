@@ -54,12 +54,15 @@
 
           <!-- Expanded editor -->
           <div v-if="expandedId === element.id" class="cie-body">
-            <div v-for="field in itemFields" :key="field.key" v-show="isFieldVisible(field, element)" class="cie-field">
-              <label class="cie-label">{{ field.label }}</label>
+            <div v-for="field in itemFields" :key="field.key || 'sep-' + field.label" v-show="isFieldVisible(field, element)" class="cie-field">
+              <label v-if="field.type !== 'separator'" class="cie-label">{{ field.label }}</label>
+
+              <!-- separator (intestazione di sezione, nessun input) -->
+              <div v-if="field.type === 'separator'" class="cie-separator">{{ field.label }}</div>
 
               <!-- editor (RichTextEditor) -->
               <RichTextEditor
-                v-if="field.type === 'editor'"
+                v-else-if="field.type === 'editor'"
                 :modelValue="element[field.key] || ''"
                 :mode="field.mode || 'inline'"
                 @update:modelValue="updateField(index, field.key, $event)"
@@ -131,6 +134,13 @@
               <FieldColor
                 v-else-if="field.type === 'color'"
                 :modelValue="element[field.key] || '#000000'"
+                @update:modelValue="updateField(index, field.key, $event)"
+              />
+
+              <!-- font family (picker con ruoli tema + Google/custom) -->
+              <FieldFontFamily
+                v-else-if="field.type === 'font-family'"
+                :modelValue="element[field.key] || ''"
                 @update:modelValue="updateField(index, field.key, $event)"
               />
 
@@ -279,6 +289,7 @@ import { ref, computed, watch } from 'vue';
 import draggable from 'vuedraggable';
 import RichTextEditor from './RichTextEditor.vue';
 import FieldColor from './fields/FieldColor.vue';
+import FieldFontFamily from './fields/FieldFontFamily.vue';
 import FieldLink from './fields/FieldLink.vue';
 import FieldToggle from './fields/FieldToggle.vue';
 import BackgroundControls from './BackgroundControls.vue';
@@ -771,6 +782,17 @@ function removeItem(index) {
   font-size: 10px;
   font-weight: 600;
   color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cie-separator {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 10px;
+  font-weight: 700;
+  color: #888;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }

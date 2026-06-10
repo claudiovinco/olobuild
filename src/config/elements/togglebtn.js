@@ -110,8 +110,8 @@ export default {
     ]},
 
     { type: 'separator', label: t('Stile pulsante') },
-    { key: 'btn_bg', label: t('Sfondo'), type: 'color' },
-    { key: 'btn_hover_bg', label: t('Sfondo hover'), type: 'color' },
+    // withHover: l'occhio scrive sulla chiave legacy btn_hover_bg (formato dati invariato).
+    withHover({ key: 'btn_bg', label: t('Sfondo'), type: 'color' }, { hoverKey: 'btn_hover_bg' }),
     { key: 'btn_border_width', label: t('Bordo (px)'), type: 'range', min: 0, max: 4 },
     { key: 'btn_border_color', label: t('Colore bordo'), type: 'color' },
     withHover({ key: 'btn_border_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),

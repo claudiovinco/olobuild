@@ -118,17 +118,17 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
         if ( ! empty( $s['heading_uppercase'] ) ) {
             $heading_style .= 'text-transform:uppercase;letter-spacing:0.05em;';
         }
-        // Famiglia font: override esplicito (default 'inherit' = font titoli del tema)
-        $hf = $s['heading_font'] ?? 'inherit';
-        $hf_map = [
+        // Famiglia font: override esplicito (default 'inherit' = font titoli del tema → non settare)
+        $hf_legacy = [
             'body'    => "var(--olo-font-family, -apple-system,'Segoe UI',Roboto,sans-serif)",
             'heading' => "var(--olo-font-family-heading, Georgia,'Times New Roman',serif)",
             'serif'   => "Georgia,'Times New Roman',serif",
             'sans'    => "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif",
             'mono'    => "ui-monospace,'SF Mono',Menlo,Consolas,monospace",
         ];
-        if ( isset( $hf_map[ $hf ] ) ) {
-            $heading_style .= 'font-family:' . $hf_map[ $hf ] . ' !important;';
+        $hf = $this->resolve_font_family( $s['heading_font'] ?? 'inherit', $hf_legacy );
+        if ( $hf !== '' && $hf !== 'inherit' ) {
+            $heading_style .= 'font-family:' . $hf . ' !important;';
         }
         // Font size custom: override del preset uk-heading-* quando > 0
         $hd_fs = absint( $s['heading_font_size'] ?? 0 );

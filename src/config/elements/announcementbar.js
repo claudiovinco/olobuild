@@ -49,7 +49,7 @@ export default {
     { key: 'font_weight', label: t('Peso'), type: 'select', options: [
       { value: '400', label: '400' }, { value: '500', label: '500' }, { value: '600', label: '600' }, { value: '700', label: '700' },
     ]},
-    { key: 'letter_spacing', label: t('Spaziatura lettere (es. 0.2em)'), type: 'text' },
+    { key: 'letter_spacing', label: t('Spaziatura lettere (es. 0.2em)'), type: 'unit', units: ['em', 'px', 'rem'], min: 0, step: 0.05 },
     { key: 'text_transform', label: t('Trasformazione'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') }, { value: 'uppercase', label: t('MAIUSCOLO') }, { value: 'lowercase', label: t('minuscolo') },
     ]},

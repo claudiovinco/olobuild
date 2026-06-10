@@ -43,6 +43,9 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
         'key_sequence_keys'            => '↑↑↓↓←→←→ba',
         'key_sequence_confetti'        => false,
         'key_sequence_confetti_colors' => '',
+        'confetti_color_1'             => '',
+        'confetti_color_2'             => '',
+        'confetti_color_3'             => '',
         'popup_frequency'     => 'always',
         'show_max_times'      => 0,
         'display_device'      => '',
@@ -140,13 +143,22 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
             $key_seq_arr = [ 'ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a' ];
         }
 
-        // Colori coriandoli: lista CSS-safe via virgola, fallback palette brand (token).
+        // Colori coriandoli — dual-format:
+        //   1) slot color picker confetti_color_1..3 (formato nuovo),
+        //   2) fallback CSV legacy key_sequence_confetti_colors (template esistenti),
+        //   3) fallback palette brand (token).
         $confetti_colors = [];
         if ( $key_seq_confetti ) {
-            $raw_cols = (string) ( $s['key_sequence_confetti_colors'] ?? '' );
-            foreach ( explode( ',', $raw_cols ) as $col ) {
-                $col = $this->safe_color_css( trim( $col ) );
+            foreach ( [ 'confetti_color_1', 'confetti_color_2', 'confetti_color_3' ] as $slot ) {
+                $col = $this->safe_color_css( trim( (string) ( $s[ $slot ] ?? '' ) ) );
                 if ( $col !== '' ) { $confetti_colors[] = $col; }
+            }
+            if ( empty( $confetti_colors ) ) {
+                $raw_cols = (string) ( $s['key_sequence_confetti_colors'] ?? '' );
+                foreach ( explode( ',', $raw_cols ) as $col ) {
+                    $col = $this->safe_color_css( trim( $col ) );
+                    if ( $col !== '' ) { $confetti_colors[] = $col; }
+                }
             }
             if ( empty( $confetti_colors ) ) {
                 $confetti_colors = [

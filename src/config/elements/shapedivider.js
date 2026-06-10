@@ -60,8 +60,8 @@ export default {
     { key: 'z_index', label: t('Z-Index'), type: 'range', min: 0, max: 99, step: 1 },
 
     { type: 'separator', label: t('Responsive') },
-    { key: 'responsive_height_tablet', label: t('Altezza tablet (px)'), type: 'text' },
-    { key: 'responsive_height_mobile', label: t('Altezza mobile (px)'), type: 'text' },
+    { key: 'responsive_height_tablet', label: t('Altezza tablet (px)'), type: 'number', min: 10, max: 500 },
+    { key: 'responsive_height_mobile', label: t('Altezza mobile (px)'), type: 'number', min: 10, max: 500 },
     ...borderFields(),
   ],
 };

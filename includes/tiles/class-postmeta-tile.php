@@ -118,7 +118,8 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
         $chip_bg     = $this->safe_color_css( $s['chip_bg'] ?? '' );
         $chip_px     = max( 0, min( 24, absint( $s['chip_padding_x'] ) ) );
         $chip_py     = max( 0, min( 16, absint( $s['chip_padding_y'] ) ) );
-        $chip_radius = max( 0, min( 999, absint( $s['chip_radius'] ) ) );
+        // Dual-format: numero legacy O oggetto {tl,tr,br,bl}; '' se zero/vuoto (storico: nessuna regola).
+        $chip_radius = $this->build_border_radius_css( $s['chip_radius'] ?? 0 );
 
         // Container padding/radius
         $cp = $s['container_padding'] ?? [];
@@ -299,7 +300,7 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
         $extra_style = '';
         if ( $chip_bg ) $extra_style .= 'background:' . $chip_bg . ';';
         if ( $chip_px || $chip_py ) $extra_style .= "padding:{$chip_py}px {$chip_px}px;";
-        if ( $chip_radius > 0 ) $extra_style .= "border-radius:{$chip_radius}px;";
+        if ( $chip_radius !== '' ) $extra_style .= "border-radius:{$chip_radius};";
 
         // Inietta stili nello span esistente
         return preg_replace(

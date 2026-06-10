@@ -56,7 +56,7 @@ export default {
     },
 
     { type: 'separator', label: t('Dimensioni') },
-    { key: 'max_height', label: t('Altezza massima (px, vuoto = auto)'), type: 'text' },
+    { key: 'max_height', label: t('Altezza massima (px, vuoto = auto)'), type: 'number', min: 0 },
 
     ...shadowField,
     ...borderFields(),

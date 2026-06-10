@@ -46,6 +46,7 @@
 <script setup>
 import { t } from '@/i18n';
 import { computed } from 'vue';
+import { radiusToCss } from '@/composables/useRadius';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -61,7 +62,6 @@ const defaults = {
   gap: '8',
   button_padding: '8 16',
   text_color: '',
-  active_color: '',
   active_text_color: '',
   background_color: '',
   active_background: '',
@@ -87,6 +87,11 @@ const navStyle = computed(() => ({
 }));
 
 function parsePadding(val) {
+  // Dual-format: oggetto spacing {top,right,bottom,left} (type 'spacing') o stringa legacy 'V H'.
+  if (val && typeof val === 'object') {
+    const n = (x) => parseInt(x) || 0;
+    return `${n(val.top)}px ${n(val.right)}px ${n(val.bottom)}px ${n(val.left)}px`;
+  }
   const parts = (val || '8 16').split(/\s+/).map(Number);
   if (parts.length === 1) return parts[0] + 'px';
   if (parts.length === 2) return parts[0] + 'px ' + parts[1] + 'px';
@@ -97,7 +102,7 @@ const btnStyle = computed(() => {
   const st = {
     padding: parsePadding(s.value.button_padding),
     fontSize: (parseInt(s.value.font_size) || 14) + 'px',
-    borderRadius: ((v => isNaN(v) ? 4 : v)(parseInt(s.value.border_radius))) + 'px',
+    borderRadius: radiusToCss(s.value.border_radius, { fallback: '4px' }),
     lineHeight: '1',
     cursor: 'pointer',
     display: 'inline-flex',

@@ -31,7 +31,7 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'url', label: t('URL Instagram'), type: 'text', placeholder: t('https://www.instagram.com/p/...') },
+    { key: 'url', label: t('URL Instagram'), type: 'link', placeholder: t('https://www.instagram.com/p/...') },
     { key: 'embed_type', label: t('Tipo embed'), type: 'select', options: [
       { value: 'post', label: t('Post / Reel') },
       { value: 'profile', label: t('Profilo') },
@@ -58,7 +58,7 @@ export default {
       { value: 'custom',          label: t('Personalizzato') },
     ] },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-    { key: 'width', label: t('Larghezza'), type: 'text', placeholder: '100%' },
+    { key: 'width', label: t('Larghezza'), type: 'unit', units: ['px', '%'], min: 0, placeholder: '100%' },
     { key: 'background_color', label: t('Colore sfondo'), type: 'color' },
     withHover({ key: 'border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [

@@ -27,6 +27,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { resolveFontFamily } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -62,11 +63,12 @@ const defaults = {
 
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
-const SERIF = "'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif";
-const SANS  = "'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
+const SERIF = "var(--olo-font-family-heading, 'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif)";
+const SANS  = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
 const MONO  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
-const fmap  = { serif: SERIF, 'sans-serif': SANS, mono: MONO };
-const hfam  = computed(() => fmap[s.value.headline_font_family] || SERIF);
+// Stack storici della tile per i valori legacy ancora salvati nei template (IDENTICI al PHP).
+const FONT_LEGACY = { serif: SERIF, 'sans-serif': SANS, mono: MONO };
+const hfam  = computed(() => resolveFontFamily(s.value.headline_font_family, FONT_LEGACY) || SERIF);
 
 const headlines = computed(() => (Array.isArray(s.value.headline_lines) ? s.value.headline_lines : []).filter(h => h && h.text));
 const isBullet  = computed(() => (s.value.eyebrow_separator || '').trim() === '·');

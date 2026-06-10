@@ -47,6 +47,7 @@
 import { computed } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import { resolveResponsive } from '@/composables/useResponsiveValue';
+import { resolveFontFamily } from '@/composables/oloTileDefaults';
 import iconsSvg from '../ProSlider/iconsLibrary.js';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
@@ -85,12 +86,12 @@ const s = computed(() => ({ ...defaults, ...props.settings }));
 const SERIF = "'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif";
 const SANS  = "'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
 const MONO  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
-const fmap  = { serif: SERIF, 'sans-serif': SANS, mono: MONO };
+const FONT_LEGACY = { serif: SERIF, 'sans-serif': SANS, mono: MONO };
 
 const items = computed(() => Array.isArray(s.value.items) ? s.value.items : []);
 const cardColor = computed(() => s.value.card_color || '#e5e7eb');
 const accentColor = computed(() => s.value.card_accent_color || 'var(--olo-color-primary, #e1474f)');
-const tfam = computed(() => fmap[s.value.title_font_family] || SERIF);
+const tfam = computed(() => resolveFontFamily(s.value.title_font_family, FONT_LEGACY) || SERIF);
 const hoverClass = computed(() => 'olo-icards-hover-' + (s.value.card_hover_effect || 'none'));
 
 function bgToCss(bg, fallback = '') {

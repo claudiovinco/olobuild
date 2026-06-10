@@ -106,7 +106,7 @@ export default {
       { value: 'left', label: t('Sinistra') },
     ]},
     { key: 'pad_y', label: t('Padding verticale (px)'), type: 'range', min: 60, max: 220, step: 4 },
-    { key: 'headline_size', label: t('Dim. max titolo (px, vuoto = auto)'), type: 'text' },
+    { key: 'headline_size', label: t('Dim. max titolo (px, 0 = auto)'), type: 'range', min: 0, max: 160, step: 2 },
 
     { type: 'separator', label: t('Spaziatura') },
     { key: 'content_padding', label: t('Padding contenuto'), type: 'spacing',

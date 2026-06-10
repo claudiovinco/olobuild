@@ -17,7 +17,7 @@
         <div v-for="(it, i) in rows" :key="i" :style="splitItemStyle(i)">
           <div><h3 :style="splitNameStyle">{{ it.name }}</h3><span v-if="it.note" :style="splitNoteStyle">{{ it.note }}</span></div>
           <div style="display:flex;align-items:center;gap:14px;flex:0 0 auto">
-            <span :style="splitPriceStyle">{{ cur }}{{ it.price }}</span>
+            <span :style="splitPriceStyle">{{ cur }}{{ priceLabel(it.price) }}</span>
             <div :style="splitStepWrap"><button type="button" :style="splitStepBtn" @click="dec(i)">−</button><span :style="splitCountStyle">{{ counts[i] }}</span><button type="button" :style="splitStepBtn" @click="inc(i)">+</button></div>
           </div>
         </div>
@@ -35,7 +35,7 @@
             <div :style="nameStyle">{{ it.name }}</div>
             <div v-if="it.note" :style="noteStyle">{{ it.note }}</div>
           </div>
-          <div :style="priceStyle">{{ cur }}{{ it.price }}</div>
+          <div :style="priceStyle">{{ cur }}{{ priceLabel(it.price) }}</div>
           <div style="display:inline-flex;align-items:center;gap:12px">
             <button type="button" :style="stepBtn" @click="dec(i)">−</button>
             <span :style="countStyle">{{ counts[i] }}</span>
@@ -85,6 +85,12 @@ const totalFmt = computed(() => {
   rows.value.forEach((it, i) => { t += (counts.value[i] || 0) * (parseFloat(it.price) || 0); });
   return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(t);
 });
+/* Display prezzo: le stringhe esistenti passano raw (render identico); i Number
+   (salvati dal field number dell'editor) sono formattati a 2 decimali. */
+function priceLabel(p) {
+  if (typeof p === 'number') return Number.isFinite(p) ? p.toFixed(2) : '';
+  return p;
+}
 function inc(i) {
   if (cap.value !== 0 && totalCount.value >= cap.value) return;
   counts.value[i] = (counts.value[i] || 0) + 1;

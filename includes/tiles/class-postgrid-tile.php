@@ -807,7 +807,8 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
 
     private function render_sort_select( $s ) {
         $options_str = $s['sort_options'] ?? 'date|title';
-        $available   = array_map( 'trim', explode( '|', $options_str ) );
+        // Legacy pipe-separated + nuovo formato comma-separated (multi_pills).
+        $available   = array_map( 'trim', preg_split( '/[|,]/', $options_str ) );
 
         $all_options = [
             'date'  => [ 'date-desc' => 'Più recenti', 'date-asc' => 'Meno recenti' ],

@@ -110,14 +110,7 @@ export default {
     ]},
     { key: 'heading_italic', label: t('Corsivo'), type: 'toggle' },
     { key: 'heading_uppercase', label: t('Maiuscolo'), type: 'toggle' },
-    { key: 'heading_font', label: t('Famiglia font'), type: 'select', options: [
-      { value: 'inherit', label: t('Predefinito (titoli del tema)') },
-      { value: 'body', label: t('Corpo testo (sans del tema)') },
-      { value: 'heading', label: t('Titoli (serif del tema)') },
-      { value: 'serif', label: t('Serif') },
-      { value: 'sans', label: t('Sans-serif') },
-      { value: 'mono', label: t('Monospace') },
-    ]},
+    { key: 'heading_font', label: t('Famiglia font'), type: 'font-family' },
 
     { type: 'separator', label: t('Decorazione') },
     { key: 'decoration', label: t('Tipo'), type: 'select', options: [
@@ -150,8 +143,12 @@ export default {
       { value: '2px 2px 4px rgba(0,0,0,0.3)', label: t('Leggera') },
       { value: '3px 3px 6px rgba(0,0,0,0.4)', label: t('Media') },
       { value: '4px 4px 10px rgba(0,0,0,0.5)', label: t('Forte') },
-      { value: '0 0 10px rgba(99,102,241,0.6)', label: t('Bagliore') },
-      { value: '0 0 20px rgba(99,102,241,0.8)', label: t('Bagliore forte') },
+      { value: '0 0 10px var(--olo-color-primary)', label: t('Bagliore') },
+      { value: '0 0 20px var(--olo-color-primary)', label: t('Bagliore forte') },
+      // Value legacy (indaco hardcoded) mantenute riconosciute per i template esistenti:
+      // i renderer emettono la stringa as-is, quindi la resa salvata resta identica.
+      { value: '0 0 10px rgba(99,102,241,0.6)', label: t('Bagliore (legacy)') },
+      { value: '0 0 20px rgba(99,102,241,0.8)', label: t('Bagliore forte (legacy)') },
       { value: 'custom', label: t('Personalizzata') },
     ]},
     { key: 'text_shadow_h', label: t('Offset H (px)'), type: 'range', min: -20, max: 20, step: 1,

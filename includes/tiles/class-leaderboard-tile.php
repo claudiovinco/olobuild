@@ -123,7 +123,8 @@ class Olo_Leaderboard_Tile extends Olo_Tile_Base {
 
         // ── Dimensioni ──
         $bar_h       = max( 4, min( 28, intval( $s['bar_height'] ?? 8 ) ) );
-        $bar_r       = max( 0, min( 16, intval( $s['bar_radius'] ?? 6 ) ) );
+        // bar_radius dual-format: numero legacy O oggetto {tl,tr,br,bl} (type border-radius).
+        $bar_r_css   = $this->build_border_radius_css( $s['bar_radius'] ?? 6 ) ?: '0px';
         $row_gap     = max( 0, min( 40, intval( $s['row_gap'] ?? 12 ) ) );
         $name_size   = max( 12, min( 32, intval( $s['name_size'] ?? 16 ) ) );
         $name_weight = in_array( (string) ( $s['name_weight'] ?? '700' ), [ '400', '500', '600', '700', '800', '900' ], true ) ? (string) $s['name_weight'] : '700';
@@ -205,7 +206,7 @@ class Olo_Leaderboard_Tile extends Olo_Tile_Base {
             <?php endif; ?>
             .<?php echo $uid; ?> .olo-lb-track {
                 height: <?php echo $bar_h; ?>px;
-                border-radius: <?php echo $bar_r; ?>px;
+                border-radius: <?php echo $bar_r_css; ?>;
                 background: <?php echo $track_color; ?>;
                 overflow: hidden;
                 width: 100%;
@@ -213,7 +214,7 @@ class Olo_Leaderboard_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-lb-fill {
                 display: block;
                 height: 100%;
-                border-radius: <?php echo $bar_r; ?>px;
+                border-radius: <?php echo $bar_r_css; ?>;
                 background: <?php echo $bar_grad; ?>;
                 <?php if ( $animate ) : ?>
                 transition: width <?php echo $anim_dur; ?>ms cubic-bezier(.2,.7,.2,1);

@@ -35,7 +35,7 @@
 <script setup>
 import { computed } from 'vue';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
-import { SHADOW } from '@/composables/oloTileDefaults';
+import { SHADOW, resolveFontFamily } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -111,9 +111,9 @@ const mediabg = computed(() => s.value.media_bg || 'var(--olo-color-surface-2, #
 const csolid = computed(() => s.value.cta_solid_bg || hcol.value);
 const csoltxt = computed(() => s.value.cta_solid_text || bg.value);
 
-const disp = computed(() => s.value.heading_font);
-const serif = computed(() => s.value.serif_font);
-const sans = computed(() => s.value.sans_font);
+const disp = computed(() => resolveFontFamily(s.value.heading_font) || defaults.heading_font);
+const serif = computed(() => resolveFontFamily(s.value.serif_font) || defaults.serif_font);
+const sans = computed(() => resolveFontFamily(s.value.sans_font) || defaults.sans_font);
 
 const ratioRe = /^[\d.\sfr]+$/;
 const aspectRe = /^[\d.\s/]+$/;

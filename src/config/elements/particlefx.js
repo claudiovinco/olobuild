@@ -110,5 +110,30 @@ export default {
     { key: 'palette_4', label: t('Colore 4'), type: 'color' },
     { key: 'palette_5', label: t('Colore 5'), type: 'color' },
     { key: 'particle_opacity', label: t('Opacità particelle (%)'), type: 'range', min: 10, max: 100, step: 5 },
+
+    { type: 'separator', label: t('Sezione') },
+    { key: 'min_height', label: t('Altezza minima (px)'), type: 'range', min: 80, max: 1000, step: 10 },
+    { key: 'padding_y', label: t('Padding verticale (px)'), type: 'range', min: 0, max: 200, step: 5 },
+    { key: 'content_max_width', label: t('Larghezza max contenuto (px)'), type: 'range', min: 200, max: 1400, step: 10 },
+    { key: 'align_v', label: t('Allineamento verticale'), type: 'select', options: [
+      { value: 'flex-start', label: t('Alto') },
+      { value: 'center', label: t('Centro') },
+      { value: 'flex-end', label: t('Basso') },
+    ]},
+    { key: 'align_h', label: t('Allineamento orizzontale'), type: 'select', options: [
+      { value: 'flex-start', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'flex-end', label: t('Destra') },
+    ]},
+    { key: 'text_align', label: t('Allineamento testo'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+    ]},
+    { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
+    { key: 'full_width', label: t('Larghezza piena'), type: 'toggle' },
+
+    ...shadowField,
+    ...borderFields(),
   ],
 };

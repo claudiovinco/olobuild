@@ -91,9 +91,6 @@ export default {
       { value: '_self',  label: t('Stessa scheda') },
       { value: '_blank', label: t('Nuova scheda') },
     ]},
-    { key: 'cta2_bg',     label: t('Sfondo CTA 2'),   type: 'color' },
-    { key: 'cta2_color',  label: t('Colore testo CTA 2'), type: 'color' },
-    { key: 'cta2_border', label: t('Bordo CTA 2'),    type: 'color' },
   ],
 
   // ═══ STILE ════════════════════════════════════════════════════
@@ -104,11 +101,7 @@ export default {
     withHover({ key: 'banner_radius', label: t('Border radius'), type: 'border-radius' }, { hoverKey: 'banner_radius_hover', hoverDurationKey: 'banner_radius_hover_duration' }),
 
     { type: 'separator', label: t('Headline stile') },
-    { key: 'headline_font_family', label: t('Famiglia'), type: 'select', options: [
-      { value: 'serif',      label: t('Serif (editoriale)') },
-      { value: 'sans-serif', label: t('Sans-serif (moderno)') },
-      { value: 'mono',       label: t('Monospace') },
-    ]},
+    { key: 'headline_font_family', label: t('Famiglia'), type: 'font-family' },
     { key: 'headline_size',   label: t('Dimensione (px)'), type: 'range', min: 18, max: 80, step: 2 },
     { key: 'headline_weight', label: t('Peso'), type: 'select', options: [
       { value: '300', label: t('300 — Light') },
@@ -131,6 +124,11 @@ export default {
     { key: 'cta_padding_y', label: t('Padding verticale (px)'), type: 'range', min: 10, max: 30, step: 1 },
     { key: 'cta_padding_x', label: t('Padding orizzontale (px)'), type: 'range', min: 16, max: 60, step: 2 },
     withHover({ key: 'cta_radius', label: t('Border radius CTA'), type: 'border-radius' }, { hoverKey: 'cta_radius_hover', hoverDurationKey: 'cta_radius_hover_duration' }),
+
+    { type: 'separator', label: t('CTA 2 stile') },
+    { key: 'cta2_bg',     label: t('Sfondo CTA 2'),   type: 'color' },
+    { key: 'cta2_color',  label: t('Colore testo CTA 2'), type: 'color' },
+    { key: 'cta2_border', label: t('Bordo CTA 2'),    type: 'color' },
 
     { type: 'separator', label: t('Layout') },
     { key: 'layout', label: t('Modalità'), type: 'select', options: [

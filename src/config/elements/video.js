@@ -67,8 +67,8 @@ export default {
     { key: 'muted', label: t('Silenziato'), type: 'toggle' },
     { key: 'loop', label: t('Ripeti'), type: 'toggle' },
     { key: 'controls', label: t('Mostra controlli'), type: 'toggle' },
-    { key: 'start_time', label: t('Inizio (secondi)'), type: 'text' },
-    { key: 'end_time', label: t('Fine (secondi)'), type: 'text' },
+    { key: 'start_time', label: t('Inizio (secondi)'), type: 'number', min: 0, step: 1 },
+    { key: 'end_time', label: t('Fine (secondi)'), type: 'number', min: 0, step: 1 },
     { key: 'facade', label: t('Lazy Load (Facade)'), type: 'toggle' },
     { key: 'show_play_icon', label: t('Mostra icona play'), type: 'toggle' },
 

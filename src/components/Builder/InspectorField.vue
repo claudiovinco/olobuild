@@ -85,6 +85,7 @@
         v-else-if="field.type === 'select'"
         :modelValue="effectiveValue"
         :options="resolvedOptions"
+        :ui="field.ui || 'auto'"
         @update:modelValue="onFieldUpdate($event)"
       />
 
@@ -337,6 +338,36 @@
         <div v-if="geocodeResult" class="mb-text-[10px] mb-text-green-400 mb-truncate" :title="geocodeResult">{{ geocodeResult }}</div>
       </div>
 
+      <!-- number: input numerico nativo (spinner, min/max, tastiera numerica).
+           Emette $event.target.value RAW (stringa, '' se vuoto): stesso formato
+           del fallback FieldText che usava prima — i renderer che distinguono
+           '' (es. "Auto") e quelli che fanno parseInt restano identici. -->
+      <input
+        v-else-if="field.type === 'number'"
+        type="number"
+        :value="effectiveValue"
+        :min="field.min"
+        :max="field.max"
+        :step="field.step ?? 'any'"
+        :placeholder="field.placeholder || ''"
+        class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
+        @input="onFieldUpdate($event.target.value)"
+      />
+
+      <!-- unit: dimensione CSS con unità ('200px', '0.2em', '50%'). Salva la
+           STESSA stringa CSS del vecchio campo testo ('' se vuoto = auto);
+           valori non parsabili (calc, keyword) restano editabili raw. -->
+      <FieldUnit
+        v-else-if="field.type === 'unit'"
+        :modelValue="effectiveValue"
+        :units="field.units"
+        :min="field.min"
+        :max="field.max"
+        :step="field.step"
+        :placeholder="field.placeholder || ''"
+        @update:modelValue="onFieldUpdate($event)"
+      />
+
       <FieldText
         v-else
         :modelValue="effectiveValue"
@@ -400,6 +431,7 @@ import FieldBoxShadow from './fields/FieldBoxShadow.vue';
 import FieldGradient from './fields/FieldGradient.vue';
 import FieldTransform from './fields/FieldTransform.vue';
 import FieldFontFamily from './fields/FieldFontFamily.vue';
+import FieldUnit from './fields/FieldUnit.vue';
 import FieldTypography from './fields/FieldTypography.vue';
 import FieldDatetime from './fields/FieldDatetime.vue';
 import FieldDate from './fields/FieldDate.vue';
@@ -733,7 +765,7 @@ const fieldDefaultValue = computed(() => {
 const fieldProps = computed(() => {
   const base = { modelValue: effectiveValue.value };
   switch (props.field.type) {
-    case 'select': return { ...base, options: resolvedOptions.value };
+    case 'select': return { ...base, options: resolvedOptions.value, ui: props.field.ui || 'auto' };
     case 'range': return { ...base, min: props.field.min || 0, max: props.field.max || 100, step: props.field.step || 1, defaultValue: fieldDefaultValue.value };
     case 'spacing': return { ...base, min: props.field.min ?? 0, max: props.field.max ?? 200, defaultValue: fieldDefaultValue.value };
     case 'media': return { ...base, accept: mediaAccept.value };

@@ -147,12 +147,12 @@ export default {
     { key: 'tab_padding_y', label: t('Padding verticale (px)'), type: 'range', min: 4, max: 24, step: 1 },
     { key: 'tab_padding_x', label: t('Padding orizzontale (px)'), type: 'range', min: 8, max: 32, step: 1 },
     { key: 'tab_gap', label: t('Spazio tra tab (px)'), type: 'range', min: 0, max: 24, step: 1 },
-    { key: 'tab_radius', label: t('Arrotondamento tab (px)'), type: 'range', min: 0, max: 999, step: 1 },
+    { key: 'tab_radius', label: t('Arrotondamento tab (px)'), type: 'border-radius' },
 
     { type: 'separator', label: t('Container nav') },
     { key: 'container_bg', label: t('Sfondo container'), type: 'color' },
     { key: 'container_padding', label: t('Padding container (px)'), type: 'range', min: 0, max: 16, step: 1 },
-    { key: 'container_radius', label: t('Arrotondamento container (px)'), type: 'range', min: 0, max: 999, step: 1 },
+    { key: 'container_radius', label: t('Arrotondamento container (px)'), type: 'border-radius' },
 
     { type: 'separator', label: t('Colori tab') },
     { key: 'active_bg', label: t('Sfondo tab attiva'), type: 'color' },

@@ -112,7 +112,8 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
         $preset_id = $s['preset'] ?? 'editorial-grid';
 
         // New granular controls
-        $item_radius  = max( 0, intval( $s['item_radius'] ?? 12 ) );
+        // item_radius dual-format: numero legacy O oggetto {tl,tr,br,bl} (type border-radius).
+        $item_radius_css = $this->build_border_radius_css( $s['item_radius'] ?? 12 );
         $overlay_clr  = $this->safe_color_css( $s['overlay_color'] ?? 'rgba(0,0,0,0.45)' );
         $overlay_grad = ! empty( $s['overlay_gradient'] );
         $title_clr    = $this->safe_color_css( $s['title_color'] ?? '#ffffff' ) ?: '#ffffff';
@@ -198,7 +199,7 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .mos-og-img { transition: transform 0.5s ease, filter 0.5s ease; width: 100%; height: <?php echo $height; ?>px; object-fit: cover; }
             .<?php echo $uid; ?> > div > div > .uk-panel,
             .<?php echo $uid; ?> > div > div > a {
-                <?php if ( $item_radius ) : ?>border-radius: <?php echo $item_radius; ?>px;<?php endif; ?>
+                <?php if ( $item_radius_css ) : ?>border-radius: <?php echo $item_radius_css; ?>;<?php endif; ?>
                 <?php echo $shadow_css; ?>
             }
             .<?php echo $uid; ?> .mos-og-hover-zoom:hover,

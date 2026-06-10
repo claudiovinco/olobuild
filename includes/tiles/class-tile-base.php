@@ -133,6 +133,44 @@ abstract class Olo_Tile_Base {
     }
 
     /**
+     * Risolve il valore di un campo "famiglia font" in CSS pronto.
+     * Gemello PHP di resolveFontFamily (oloTileDefaults.js) — UNICA mappa dei
+     * valori-ruolo legacy ('serif','sans','mono','heading','body') salvati
+     * dalle vecchie select per-tile. Il formato nuovo (type 'font') salva CSS
+     * pronto: var(--olo-font-family-…) per i ruoli, "'Poppins', sans-serif"
+     * per font specifici, '' = eredita.
+     *
+     * @param string $value      Valore salvato.
+     * @param array  $legacy_map Mappa per-tile opzionale che sovrascrive i ruoli
+     *                           legacy con gli stack storici della tile.
+     * @return string font-family CSS-safe, '' se da ereditare.
+     */
+    protected function resolve_font_family( $value, $legacy_map = [] ) {
+        $v = trim( (string) $value );
+        if ( $v === '' ) return '';
+        if ( $v === 'inherit' ) return 'inherit';
+        if ( ! empty( $legacy_map[ $v ] ) ) return $legacy_map[ $v ];
+        static $roles = [
+            'body'       => "var(--olo-font-family, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif)",
+            'sans'       => "var(--olo-font-family, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif)",
+            'sans-serif' => "var(--olo-font-family, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif)",
+            'heading'    => "var(--olo-font-family-heading, Georgia, 'Times New Roman', serif)",
+            'serif'      => "var(--olo-font-family-heading, 'Playfair Display', Georgia, serif)",
+            'mono'       => "var(--olo-font-family-mono, ui-monospace, 'SF Mono', Menlo, Consolas, monospace)",
+        ];
+        if ( isset( $roles[ $v ] ) ) return $roles[ $v ];
+        // CSS pronto: consenti solo caratteri leciti per un font-family
+        // (lettere, cifre, spazi, virgole, apici, trattini, parentesi per var()).
+        if ( preg_match( '/^[\w\s,\'"()\-]+$/u', $v ) && strpos( $v, '--' ) === false ) {
+            return $v;
+        }
+        if ( preg_match( '/^var\(\s*--[\w-]+(?:\s*,\s*[^;{}<>]+)?\)$/', $v ) ) {
+            return $v;
+        }
+        return '';
+    }
+
+    /**
      * Convert a color (hex, rgb, rgba) to "r,g,b" triplet for use inside rgba().
      * V3.26.0 — shared helper used by audacious preset extra CSS.
      *

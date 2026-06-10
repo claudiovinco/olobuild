@@ -3,7 +3,8 @@
     <template v-if="isPill">
       <span v-for="(it, idx) in items" :key="idx" class="olo-tstrip__pill" :style="pillStyle">
         <img v-if="it.logo" :src="it.logo" alt="" :style="{ height: logoH + 'px', width: 'auto', display: 'block', flexShrink: 0 }" />
-        <span v-else-if="it.icon" class="olo-tstrip__icon" :style="{ color: resolveColor(it.icon_color, TOKENS.success.fg) }" v-html="resolveIcon(it.icon)"></span>
+        <!-- Fallback icona = colore testo pill, come il PHP (in pill l'icona non è "success") -->
+        <span v-else-if="it.icon" class="olo-tstrip__icon" :style="{ color: resolveColor(it.icon_color, pillTxtColor) }" v-html="resolveIcon(it.icon)"></span>
         <span v-if="it.text" class="olo-tstrip__pill-txt" :style="pillTextStyle(it)" v-html="it.text"></span>
         <span v-if="it.badge" :style="badgeStyle">{{ it.badge }}</span>
       </span>
@@ -23,7 +24,7 @@
 <script setup>
 import { computed } from 'vue';
 import iconsSvg from '../ProSlider/iconsLibrary.js';
-import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
+import { resolveColor, resolveFontFamily, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -55,10 +56,11 @@ const defaults = {
 const s = computed(() => ({ ...defaults, ...props.settings }));
 const items = computed(() => Array.isArray(s.value.items) ? s.value.items : []);
 
-const SERIF = "'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif";
-const SANS  = "'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
-const MONO  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
-const fmap  = { serif: SERIF, 'sans-serif': SANS, mono: MONO };
+const SERIF = "var(--olo-font-family-heading, 'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif)";
+const SANS  = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
+const MONO  = "var(--olo-font-family-mono, ui-monospace,'SF Mono',Menlo,Consolas,monospace)";
+// Stack storici della tile per i valori legacy ancora salvati nei template.
+const FONT_LEGACY = { serif: SERIF, 'sans-serif': SANS, mono: MONO };
 
 const alignMap = { left: 'flex-start', center: 'center', right: 'flex-end', 'space-between': 'space-between' };
 
@@ -68,7 +70,7 @@ const rowStyle = computed(() => ({
   alignItems: 'center',
   justifyContent: alignMap[s.value.align] || 'center',
   gap: (s.value.gap || 24) + 'px',
-  fontFamily: fmap[s.value.font_family] || SANS,
+  fontFamily: resolveFontFamily(s.value.font_family, FONT_LEGACY) || SANS,
   fontSize: (s.value.text_size || 14) + 'px',
   color: resolveColor(s.value.text_color, TOKENS.text),
   lineHeight: 1.5,
@@ -76,6 +78,12 @@ const rowStyle = computed(() => ({
 
 const isPill = computed(() => s.value.variant === 'pill');
 const logoH = computed(() => s.value.logo_height || 18);
+// Colore testo pill effettivo — stessa catena di fallback del PHP
+// ($pill_txt = pill_text_color || text_color || token text): un solo valore
+// risolto, riusato da testo E icona così canvas e frontend coincidono.
+const pillTxtColor = computed(() =>
+  resolveColor(s.value.pill_text_color, resolveColor(s.value.text_color, TOKENS.text))
+);
 const pillStyle = computed(() => ({
   display: 'inline-flex',
   alignItems: 'center',
@@ -100,7 +108,7 @@ const badgeStyle = computed(() => ({
   borderRadius: '5px',
 }));
 function pillTextStyle(it) {
-  const st = { color: resolveColor(s.value.pill_text_color, TOKENS.text) };
+  const st = { color: pillTxtColor.value };
   if (it.logo || it.icon) {
     st.borderLeft = '1px solid ' + (s.value.pill_border || 'rgba(255,255,255,0.12)');
     st.paddingLeft = '11px';

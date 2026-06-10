@@ -36,12 +36,7 @@ export default {
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Contenuto') },
-    { key: 'title', label: t('Titolo sezione'), type: 'select', options: [
-      { value: '', label: t('Nessun titolo') },
-      { value: 'Prenota questa sala', label: t('Prenota questa sala') },
-      { value: 'Calendario prenotazioni', label: t('Calendario prenotazioni') },
-      { value: 'Disponibilità e prenotazione', label: t('Disponibilità e prenotazione') },
-    ]},
+    { key: 'title', label: t('Titolo sezione'), type: 'text' },
     { key: 'default_view', label: t('Vista iniziale'), type: 'select', options: [
       { value: 'dayGridMonth', label: t('Mese') },
       { value: 'timeGridWeek', label: t('Settimana') },

@@ -80,6 +80,7 @@
 <script setup>
 import { t } from '@/i18n';
 import { ref, computed, watch } from 'vue';
+import { radiusToCss } from '@/composables/useRadius';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -118,7 +119,8 @@ const heroStyle = computed(() => {
   const capped = Math.min(h, 220);
   return {
     height: capped + 'px',
-    borderRadius: (parseInt(s.value.hero_radius) || 0) + 'px',
+    // Dual-format: Number legacy E oggetto {tl,tr,br,bl}.
+    borderRadius: radiusToCss(s.value.hero_radius, { fallback: '0px' }),
   };
 });
 
@@ -141,7 +143,7 @@ const navStyle = computed(() => {
     gap: (parseInt(s.value.nav_gap) || 0) + 'px',
     flexDirection: isVert ? 'column' : 'row',
     background: s.value.nav_container_bg && s.value.nav_container_bg !== 'transparent' ? s.value.nav_container_bg : '',
-    borderRadius: (parseInt(s.value.nav_container_radius) || 0) + 'px',
+    borderRadius: radiusToCss(s.value.nav_container_radius, { fallback: '0px' }),
     minWidth: isVert ? '100px' : 'auto',
   };
 });
@@ -167,7 +169,7 @@ function navBtnStyle(isActive) {
     color: isActive ? (s.value.nav_active_color || '#ffffff') : (s.value.nav_inactive_color || 'rgba(255,255,255,0.65)'),
     background: 'transparent',
     border: 0,
-    borderRadius: (parseInt(s.value.nav_radius) || 0) + 'px',
+    borderRadius: radiusToCss(s.value.nav_radius, { fallback: '0px' }),
     cursor: 'pointer',
     transition: 'all 250ms ease',
     whiteSpace: 'nowrap',
@@ -201,7 +203,7 @@ const panelStyle = computed(() => {
     padding: `${shrink(pad.top)}px ${shrink(pad.right)}px ${shrink(pad.bottom)}px ${shrink(pad.left)}px`,
     background: s.value.panel_bg || '#ffffff',
     color: s.value.panel_text_color || '#1e293b',
-    borderRadius: (parseInt(s.value.panel_radius) || 0) + 'px',
+    borderRadius: radiusToCss(s.value.panel_radius, { fallback: '0px' }),
     flexDirection: s.value.image_position === 'left' ? 'row-reverse' : 'row',
     alignItems: 'stretch',
   };
@@ -231,7 +233,7 @@ const mediaStyle = computed(() => {
   return {
     flex: `0 0 ${w}%`,
     maxWidth: `${w}%`,
-    borderRadius: (parseInt(s.value.panel_image_radius) || 0) + 'px',
+    borderRadius: radiusToCss(s.value.panel_image_radius, { fallback: '0px' }),
     overflow: 'hidden',
   };
 });
@@ -246,7 +248,7 @@ const imgStyle = computed(() => {
     aspectRatio: arOk || 'auto',
     objectFit: 'cover',
     display: 'block',
-    borderRadius: (parseInt(s.value.panel_image_radius) || 0) + 'px',
+    borderRadius: radiusToCss(s.value.panel_image_radius, { fallback: '0px' }),
   };
 });
 </script>

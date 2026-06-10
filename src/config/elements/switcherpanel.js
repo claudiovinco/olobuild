@@ -164,7 +164,7 @@ export default {
     ]),
 
     { type: 'separator', label: t('Hero — Aspetto') },
-    { key: 'hero_radius', label: t('Arrotondamento hero (px)'), type: 'range', min: 0, max: 40, step: 1 },
+    { key: 'hero_radius', label: t('Arrotondamento hero (px)'), type: 'border-radius' },
     { key: 'hero_overlay_color', label: t('Overlay colore'), type: 'color',
       condition: { field: 'nav_position', op: 'eq', value: 'overlay' } },
     { key: 'hero_overlay_gradient', label: t('Overlay gradiente (alto→basso)'), type: 'toggle',
@@ -181,8 +181,8 @@ export default {
     ]},
     { key: 'panel_gap', label: t('Spazio testo↔immagine (px)'), type: 'range', min: 0, max: 80, step: 4 },
     { key: 'tile_padding', label: t('Padding pannello (px)'), type: 'spacing', max: 80 },
-    { key: 'panel_radius', label: t('Arrotondamento pannello (px)'), type: 'range', min: 0, max: 40, step: 1 },
-    { key: 'panel_image_radius', label: t('Arrotondamento immagine (px)'), type: 'range', min: 0, max: 40, step: 1 },
+    { key: 'panel_radius', label: t('Arrotondamento pannello (px)'), type: 'border-radius' },
+    { key: 'panel_image_radius', label: t('Arrotondamento immagine (px)'), type: 'border-radius' },
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Voce nav'),
@@ -223,12 +223,12 @@ export default {
     { key: 'nav_padding_x', label: t('Padding orizzontale (px)'), type: 'range', min: 8, max: 32, step: 1 },
     { key: 'nav_uppercase', label: t('Maiuscole'), type: 'toggle' },
     { key: 'nav_gap', label: t('Spazio tra voci (px)'), type: 'range', min: 0, max: 32, step: 1 },
-    { key: 'nav_radius', label: t('Arrotondamento voce (px)'), type: 'range', min: 0, max: 999, step: 1 },
+    { key: 'nav_radius', label: t('Arrotondamento voce (px)'), type: 'border-radius' },
 
     { type: 'separator', label: t('Nav — Container') },
     { key: 'nav_container_bg', label: t('Sfondo container'), type: 'color' },
     { key: 'nav_container_padding', label: t('Padding container (px)'), type: 'range', min: 0, max: 24, step: 1 },
-    { key: 'nav_container_radius', label: t('Arrotondamento container (px)'), type: 'range', min: 0, max: 999, step: 1 },
+    { key: 'nav_container_radius', label: t('Arrotondamento container (px)'), type: 'border-radius' },
 
     { type: 'separator', label: t('Nav — Stati') },
     { key: 'nav_active_bg', label: t('Sfondo voce attiva'), type: 'color' },

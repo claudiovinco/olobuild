@@ -17,7 +17,6 @@ export default {
   category: 'navigation',
   defaults: {
     preset: 'custom',
-    bg: { type: 'none' },
     typography_preset: '',
     style: 'flags',
     flag_shape: 'circle',

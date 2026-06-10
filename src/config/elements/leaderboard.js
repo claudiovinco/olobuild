@@ -128,7 +128,7 @@ export default {
     { key: 'bar_gradient_to',   label: t('Gradiente barra — colore 2'), type: 'color' },
     { key: 'bar_gradient_angle', label: t('Angolo gradiente (°)'), type: 'range', min: 0, max: 360, step: 5 },
     { key: 'bar_height', label: t('Altezza barra (px)'), type: 'range', min: 4, max: 28, step: 1 },
-    { key: 'bar_radius', label: t('Raggio barra (px)'), type: 'range', min: 0, max: 16, step: 1 },
+    { key: 'bar_radius', label: t('Raggio barra (px)'), type: 'border-radius' },
 
     { type: 'separator', label: t('Colori') },
     { key: 'text_color',     label: t('Colore nome'), type: 'color' },

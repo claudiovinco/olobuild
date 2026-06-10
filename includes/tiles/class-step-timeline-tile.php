@@ -91,10 +91,12 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
         $serif = "var(--olo-font-family-heading, 'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif)";
         $sans  = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
         $mono  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
-        $fmap  = [ 'serif' => $serif, 'sans-serif' => $sans, 'mono' => $mono ];
+        // Valori legacy ('serif'/'sans-serif'/'mono') → stack storici della tile;
+        // valori nuovi (type 'font-family') → CSS pronto via resolver condiviso.
+        $legacy = [ 'serif' => $serif, 'sans-serif' => $sans, 'mono' => $mono ];
 
-        $counter_family = $fmap[ $s['counter_font_family'] ] ?? $serif;
-        $title_family   = $fmap[ $s['title_font_family'] ]   ?? $serif;
+        $counter_family = $this->resolve_font_family( $s['counter_font_family'], $legacy ) ?: $serif;
+        $title_family   = $this->resolve_font_family( $s['title_font_family'], $legacy )   ?: $serif;
 
         $cols       = max( 1, min( 5, absint( $s['columns'] ) ) );
         $gap        = max( 0, min( 80, absint( $s['gap'] ) ) );

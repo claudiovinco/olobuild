@@ -11,17 +11,19 @@ export default {
   icon: 'dashicons-yes-alt',
   category: 'layout',
 
+  // Allineati alla fonte unica (PHP get_defaults via REST): colori vuoti =
+  // token di sistema via resolveColor/safe_color_css (success, text, text-faint).
   defaults: {
     items: [
-      { icon: 'check', icon_color: '#10b981', text: 'Licenza <b>GPL-v3</b>' },
-      { icon: 'check', icon_color: '#10b981', text: '<b>WCAG 2.2 AA</b>' },
-      { icon: 'check', icon_color: '#10b981', text: 'Hosting <b>a scelta tua</b>' },
-      { icon: 'check', icon_color: '#10b981', text: 'Export <b>HTML/JSON</b> totale' },
-      { icon: 'check', icon_color: '#10b981', text: 'Trento, <b>Italia 🇮🇹</b>' },
+      { icon: 'check', icon_color: '', text: 'Licenza <b>GPL-v3</b>' },
+      { icon: 'check', icon_color: '', text: '<b>WCAG 2.2 AA</b>' },
+      { icon: 'check', icon_color: '', text: 'Hosting <b>a scelta tua</b>' },
+      { icon: 'check', icon_color: '', text: 'Export <b>HTML/JSON</b> totale' },
+      { icon: 'check', icon_color: '', text: 'Trento, <b>Italia 🇮🇹</b>' },
     ],
     separator_char: '·',
-    separator_color: '#9ca3af',
-    text_color: '#374151',
+    separator_color: '',
+    text_color: '',
     text_size:  14,
     font_family: 'sans-serif',
     align: 'center',
@@ -41,7 +43,7 @@ export default {
     { type: 'separator', label: t('Items') },
     { key: 'items', label: t('Voci'), type: 'content-items',
       itemLabel: t('Voce'),
-      defaults: { icon: 'check', icon_color: '#10b981', text: 'Nuova garanzia' },
+      defaults: { icon: 'check', icon_color: '', text: 'Nuova garanzia' },
       itemFields: [
         { key: 'icon',       label: t('Icona'),        type: 'icon' },
         { key: 'logo',       label: t('Logo (immagine — variante Pill)'), type: 'image' },
@@ -53,30 +55,33 @@ export default {
   ],
 
   // ═══ STILE ════════════════════════════════════════════════════
+  // Un solo controllo per ogni proprietà visiva, raggruppato per variante:
+  // - sezioni "Pill"/"Badge" appaiono SOLO in variante pill
+  // - sezione "Separatore" e "Colore testo" SOLO in variante inline (in pill i
+  //   separatori non sono renderizzati e il testo si colora con "Colore testo"
+  //   della sezione Pill — prima erano due controlli sullo stesso elemento)
+  // NB: condition inline-only via operator '!=' pill (non value:'inline'): i tile
+  // salvati prima della variante non hanno `variant` nei settings ma il render
+  // fa fallback a inline — devono vedere i controlli inline.
   styleFields: [
     { type: 'separator', label: t('Variante') },
     { key: 'variant', label: t('Stile'), type: 'select', options: [
       { value: 'inline', label: t('Inline (icona + testo, separatori)') },
       { value: 'pill',   label: t('Pill (box glass: logo + testo + badge)') },
     ]},
-    { key: 'logo_height',     label: t('Altezza logo (px)'),  type: 'range', min: 10, max: 64, step: 1, condition: { field: 'variant', value: 'pill' } },
-    { key: 'pill_bg',         label: t('Sfondo pill (CSS)'),  type: 'text',  condition: { field: 'variant', value: 'pill' } },
-    { key: 'pill_border',     label: t('Bordo pill (CSS)'),   type: 'text',  condition: { field: 'variant', value: 'pill' } },
-    { key: 'pill_text_color', label: t('Colore testo pill'),  type: 'color', condition: { field: 'variant', value: 'pill' } },
-    { key: 'badge_bg',        label: t('Badge sfondo'),       type: 'color', condition: { field: 'variant', value: 'pill' } },
-    { key: 'badge_color',     label: t('Badge testo'),        type: 'color', condition: { field: 'variant', value: 'pill' } },
 
-    { type: 'separator', label: t('Tipografia') },
-    { key: 'font_family', label: t('Famiglia'), type: 'select', options: [
-      { value: 'sans-serif', label: t('Sans-serif (default)') },
-      { value: 'serif',      label: t('Serif') },
-      { value: 'mono',       label: t('Monospace') },
-    ]},
-    { key: 'text_color', label: t('Colore testo'),     type: 'color' },
-    { key: 'text_size',  label: t('Dimensione (px)'),  type: 'range', min: 10, max: 24, step: 1 },
+    { type: 'separator', label: t('Pill') },
+    { key: 'pill_bg',         label: t('Sfondo'),             type: 'color', condition: { field: 'variant', value: 'pill' } },
+    { key: 'pill_border',     label: t('Colore bordo'),       type: 'color', condition: { field: 'variant', value: 'pill' } },
+    { key: 'pill_text_color', label: t('Colore testo'),       type: 'color', condition: { field: 'variant', value: 'pill' } },
+    { key: 'logo_height',     label: t('Altezza logo (px)'),  type: 'range', min: 10, max: 64, step: 1, condition: { field: 'variant', value: 'pill' } },
+
+    { type: 'separator', label: t('Badge (pill)') },
+    { key: 'badge_bg',    label: t('Sfondo'), type: 'color', condition: { field: 'variant', value: 'pill' } },
+    { key: 'badge_color', label: t('Testo'),  type: 'color', condition: { field: 'variant', value: 'pill' } },
 
     { type: 'separator', label: t('Separatore') },
-    { key: 'separator_char',  label: t('Carattere'), type: 'select', options: [
+    { key: 'separator_char',  label: t('Carattere'), type: 'select', condition: { field: 'variant', operator: '!=', value: 'pill' }, options: [
       { value: '·',  label: t('· (bullet)') },
       { value: '•',  label: t('• (filled bullet)') },
       { value: '|',  label: t('| (pipe)') },
@@ -84,7 +89,12 @@ export default {
       { value: '—',  label: t('— (em-dash)') },
       { value: '',   label: t('Nessuno') },
     ]},
-    { key: 'separator_color', label: t('Colore separatore'), type: 'color' },
+    { key: 'separator_color', label: t('Colore separatore'), type: 'color', condition: { field: 'variant', operator: '!=', value: 'pill' } },
+
+    { type: 'separator', label: t('Tipografia') },
+    { key: 'font_family', label: t('Famiglia'), type: 'font-family' },
+    { key: 'text_size',  label: t('Dimensione (px)'),  type: 'range', min: 10, max: 24, step: 1 },
+    { key: 'text_color', label: t('Colore testo'),     type: 'color', condition: { field: 'variant', operator: '!=', value: 'pill' } },
 
     { type: 'separator', label: t('Layout') },
     { key: 'align', label: t('Allineamento'), type: 'select', options: [

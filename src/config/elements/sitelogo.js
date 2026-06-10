@@ -97,8 +97,8 @@ export default {
 
     { type: 'separator', label: t('Dimensioni') },
     { key: 'max_height', label: t('Altezza massima (px)'), type: 'range', min: 16, max: 200, step: 2 },
-    { key: 'max_height_sticky', label: t('Altezza in sticky (px, vuoto = uguale)'), type: 'text', placeholder: t('es. 36') },
-    { key: 'max_width', label: t('Larghezza massima (px, vuoto = auto)'), type: 'text' },
+    { key: 'max_height_sticky', label: t('Altezza in sticky (px, vuoto = uguale)'), type: 'number', min: 0, placeholder: t('es. 36') },
+    { key: 'max_width', label: t('Larghezza massima (px, vuoto = auto)'), type: 'number', min: 0 },
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },

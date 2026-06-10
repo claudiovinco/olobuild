@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 import { t } from '@/i18n';
 
 /**
@@ -90,6 +90,8 @@ export default {
       condition: { field: 'show_toolbar', value: true } },
     { key: 'show_print', label: t('Stampa'), type: 'toggle',
       condition: { field: 'show_toolbar', value: true } },
+    { key: 'show_search', label: t('Ricerca nel PDF'), type: 'toggle',
+      condition: { field: 'show_toolbar', value: true } },
     { key: 'show_thumbnails', label: t('Miniature'), type: 'toggle',
       condition: { field: 'show_toolbar', value: true } },
 
@@ -143,10 +145,10 @@ export default {
         { key: 'btn_bg', label: t('Sfondo pulsante'), type: 'color' },
         { key: 'btn_color', label: t('Colore testo'), type: 'color' },
         // Spaziatura interna
-        { key: 'btn_padding_v', label: t('Padding verticale (px)'), type: 'spacing', max: 30 },
-        { key: 'btn_padding_h', label: t('Padding orizzontale (px)'), type: 'spacing', max: 50 },
+        { key: 'btn_padding_v', label: t('Padding verticale (px)'), type: 'range', min: 0, max: 30, step: 1 },
+        { key: 'btn_padding_h', label: t('Padding orizzontale (px)'), type: 'range', min: 0, max: 50, step: 1 },
         // Bordo
-        withHover({ key: 'btn_radius', label: t('Raggio angoli (px)'), type: 'border-radius' }),
+        { key: 'btn_radius', label: t('Raggio angoli (px)'), type: 'number', min: 0 },
         { key: 'btn_border_width', label: t('Spessore bordo (px)'), type: 'range', min: 0, max: 5, step: 1 },
         { key: 'btn_border_color', label: t('Colore bordo'), type: 'color' },
         { key: 'btn_border_style', label: t('Stile bordo'), type: 'select', options: [
@@ -166,7 +168,7 @@ export default {
       newItemDefaults: { page: 1, x: 50, y: 50, title: t('Nuovo hotspot'), description: '',
         color: '', icon: '', image_url: '', video_url: '', btn_label: '', btn_url: '', btn_target: false,
         btn_font_size: '', btn_font_weight: '', btn_letter_spacing: '', btn_text_transform: '',
-        btn_bg: '', btn_color: '', btn_padding_v: '', btn_padding_h: '',
+        btn_bg: '', btn_color: '', btn_padding_v: 0, btn_padding_h: 0,
         btn_radius: '', btn_border_width: '', btn_border_color: '', btn_border_style: 'solid',
         btn_align: '' },
       itemLabel: 'Hotspot',

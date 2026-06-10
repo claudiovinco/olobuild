@@ -76,11 +76,7 @@ export default {
     { key: 'hover_indent',  label: t('Indentazione hover (px)'), type: 'range', min: 0, max: 48, step: 2 },
 
     { type: 'separator', label: t('Titolo') },
-    { key: 'title_font_family', label: t('Famiglia titolo'), type: 'select', options: [
-      { value: 'heading', label: t('Heading (del tema)') },
-      { value: 'body',    label: t('Body (del tema)') },
-      { value: 'mono',    label: t('Monospace') },
-    ]},
+    { key: 'title_font_family', label: t('Famiglia titolo'), type: 'font-family' },
     { key: 'title_color',  label: t('Colore'), type: 'color' },
     { key: 'title_size',   label: t('Dimensione (px)'), type: 'range', min: 20, max: 72, step: 1, responsive: true },
     { key: 'title_weight', label: t('Peso'), type: 'select', options: [
@@ -91,7 +87,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Meta (numero · categoria · anno)') },
-    { key: 'mono_font_family', label: t('Font meta (vuoto = monospace di sistema)'), type: 'text' },
+    { key: 'mono_font_family', label: t('Font meta (vuoto = mono del tema)'), type: 'font-family' },
     { key: 'number_color',   label: t('Colore numero'),    type: 'color' },
     { key: 'number_size',    label: t('Numero (px)'),      type: 'range', min: 10, max: 20, step: 1 },
     { key: 'category_color', label: t('Colore categoria'), type: 'color' },

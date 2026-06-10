@@ -82,6 +82,8 @@ export default {
       condition: { field: 'show_toolbar', value: true } },
     { key: 'show_print', label: t('Stampa'), type: 'toggle',
       condition: { field: 'show_toolbar', value: true } },
+    { key: 'show_search', label: t('Ricerca nel PDF'), type: 'toggle',
+      condition: { field: 'show_toolbar', value: true } },
     { key: 'show_thumbnails', label: t('Miniature'), type: 'toggle',
       condition: { field: 'show_toolbar', value: true } },
 

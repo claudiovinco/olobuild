@@ -161,8 +161,9 @@ function itemStyle(idx) {
     const px = parseInt(s.value.chip_padding_x) || 0;
     const py = parseInt(s.value.chip_padding_y) || 0;
     if (px || py) base.padding = `${py}px ${px}px`;
-    const r = parseInt(s.value.chip_radius) || 0;
-    if (r > 0) base.borderRadius = r + 'px';
+    // Dual-format: numero legacy O oggetto {tl,tr,br,bl}.
+    const rCss = radiusToCssRaw(s.value.chip_radius, { fallback: '0px', zero: '0px' });
+    if (rCss !== '0px') base.borderRadius = rCss;
     if (preset.value === 'sticker-scrap') {
       base.border = '2px dashed rgba(15,23,42,0.4)';
       const rotations = [-1.5, 1, -0.6, 1.2, -1, 0.8];

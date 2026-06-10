@@ -108,10 +108,7 @@ export default {
     { key: 'content_width', label: t('Larghezza max contenuto (px)'), type: 'range', min: 280, max: 1200, step: 10 },
     { key: 'aspect_ratio', label: t('Aspect ratio immagine (es. 21/10)'), type: 'text' },
     { key: 'min_height', label: t('Altezza minima (≤100 = vh, altrimenti px)'), type: 'range', min: 50, max: 900, step: 1 },
-    { key: 'heading_font', label: t('Font titolo'), type: 'select', options: [
-      { value: 'serif', label: t('Serif (display)') },
-      { value: 'sans', label: t('Sans') },
-    ]},
+    { key: 'heading_font', label: t('Font titolo'), type: 'font-family' },
     { key: 'accent_italic', label: t('Parola accento in corsivo'), type: 'toggle' },
     { key: 'stack_lines', label: t('Titolo su righe separate (stack)'), type: 'toggle',
       description: t('Manda inizio / accento / coda su tre righe (stile Atelier/Saffron).') },

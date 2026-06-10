@@ -116,8 +116,11 @@ export default {
     { key: 'taxonomy', label: t('Tassonomia'), type: 'select', optionsSource: 'taxonomies' },
     { key: 'show_filters', label: t('Mostra filtri tassonomia'), type: 'toggle' },
     { key: 'show_sort', label: t('Mostra dropdown ordinamento'), type: 'toggle' },
-    { key: 'sort_options', label: t('Opzioni ordinamento (separate da pipe)'), type: 'text',
-      condition: { field: 'show_sort', value: true } },
+    { key: 'sort_options', label: t('Opzioni ordinamento'), type: 'multi_pills', options: [
+      { value: 'date', label: t('Data') },
+      { value: 'price', label: t('Prezzo') },
+      { value: 'title', label: t('Titolo') },
+    ], condition: { field: 'show_sort', value: true } },
 
     { type: 'separator', label: t('Contenuto card') },
     { key: 'show_image', label: t('Mostra immagine'), type: 'toggle' },

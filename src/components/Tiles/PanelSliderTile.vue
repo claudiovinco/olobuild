@@ -59,6 +59,7 @@
 import { ref, computed } from 'vue';
 import { t } from '@/i18n';
 import { SHADOW } from '@/composables/oloTileDefaults';
+import { radiusToCss } from '@/composables/useRadius';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -168,7 +169,8 @@ const mediaStyle = computed(() => {
   const h = parseInt(s.value.image_height) || 0;
   const isSide = imgPosition.value === 'side-left' || imgPosition.value === 'side-right';
   const isBg = imgPosition.value === 'bg';
-  const radius = parseInt(s.value.card_image_radius) || 0;
+  // Dual-format: numero legacy O oggetto {tl,tr,br,bl}.
+  const radiusCss = radiusToCss(s.value.card_image_radius, { fallback: '0px', zero: '0px' });
 
   const style = {
     position: isBg ? 'absolute' : 'relative',
@@ -177,7 +179,7 @@ const mediaStyle = computed(() => {
     flex: isSide ? '0 0 45%' : '0 0 auto',
     inset: isBg ? '0' : 'auto',
     zIndex: isBg ? '0' : 'auto',
-    borderRadius: radius > 0 ? radius + 'px' : '',
+    borderRadius: radiusCss !== '0px' ? radiusCss : '',
   };
   if (isBg) {
     style.height = '100%';
@@ -210,7 +212,7 @@ const imgStyle = computed(() => ({
   height: '100%',
   objectFit: s.value.image_fit || 'cover',
   display: 'block',
-  borderRadius: (parseInt(s.value.card_image_radius) || 0) + 'px' || '',
+  borderRadius: radiusToCss(s.value.card_image_radius, { fallback: '0px', zero: '0px' }),
 }));
 
 const paddingCss = computed(() => {

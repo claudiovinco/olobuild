@@ -73,7 +73,7 @@ export default {
       { value: 'cover-h', label: t('Cover orizzontale') },
       { value: 'reveal-h', label: t('Reveal orizzontale') },
     ]},
-    { key: 'sticky_top', label: t('Offset dall\'alto (px)'), type: 'text', placeholder: '0', condition: { field: 'sticky_effect', operator: '!=', value: 'none' } },
+    { key: 'sticky_top', label: t('Offset dall\'alto (px)'), type: 'number', min: 0, placeholder: '0', condition: { field: 'sticky_effect', operator: '!=', value: 'none' } },
 
     { type: 'separator', label: t('Scroll Snap') },
     { key: 'scroll_snap', label: t('Sezione full-screen con snap'), type: 'toggle' },

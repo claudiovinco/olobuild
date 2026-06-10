@@ -63,7 +63,17 @@ class Olo_Mobilebar_Tile extends Olo_Tile_Base {
         $p_color     = $this->safe_color_css( $s['panel_text_color'] ) ?: '#222';
         $p_active    = $this->safe_color_css( $s['panel_active_color'] ) ?: 'var(--olo-color-primary, #e74c3c)';
         $p_fs        = intval( $s['panel_font_size'] ) ?: 17;
-        $p_pad       = intval( $s['panel_item_padding'] ) ?: 16;
+        // Dual-format: oggetto spacing {top,right,bottom,left} (standard) O scalare legacy.
+        // Scalare → comportamento storico invariato (V = n, H = n+8); oggetto → padding esplicito,
+        // con il lato top come scalare derivato per i valori calcolati (chevron, sub-menu).
+        $p_pad_raw   = $s['panel_item_padding'] ?? '';
+        if ( is_array( $p_pad_raw ) ) {
+            $p_pad     = max( 0, intval( $p_pad_raw['top'] ?? 16 ) );
+            $p_pad_css = Olo_Tile_Utils::spacing_css( $p_pad_raw, 16 );
+        } else {
+            $p_pad     = intval( $p_pad_raw ) ?: 16;
+            $p_pad_css = $p_pad . 'px ' . ( $p_pad + 8 ) . 'px';
+        }
         $p_sep       = ! empty( $s['panel_separator'] );
         $p_chev      = $this->safe_color_css( $s['panel_chevron_color'] ) ?: 'var(--olo-color-text-faint, #94a3b8)';
         $search_on   = ! empty( $s['search_enabled'] );
@@ -73,7 +83,7 @@ class Olo_Mobilebar_Tile extends Olo_Tile_Base {
         ob_start();
 
         // ─── CSS ───
-        $this->render_css( $uid, $bp, $bar_h, $bar_bg, $bar_pad, $bar_shadow, $ham_color, $ham_size, $p_bg, $p_color, $p_active, $p_fs, $p_pad, $p_sep, $p_chev, $search_ic );
+        $this->render_css( $uid, $bp, $bar_h, $bar_bg, $bar_pad, $bar_shadow, $ham_color, $ham_size, $p_bg, $p_color, $p_active, $p_fs, $p_pad, $p_sep, $p_chev, $search_ic, $p_pad_css );
 
         // ─── HTML ───
         $this->render_html( $uid, $logo_img, $logo_w, $logo_link, $ham_style, $search_on, $search_ph, $menu_id, $bar_h );
@@ -97,7 +107,10 @@ class Olo_Mobilebar_Tile extends Olo_Tile_Base {
        CSS
        ═══════════════════════════════════════════ */
 
-    private function render_css( $uid, $bp, $bar_h, $bar_bg, $bar_pad, $bar_shadow, $ham_color, $ham_size, $p_bg, $p_color, $p_active, $p_fs, $p_pad, $p_sep, $p_chev, $search_ic ) {
+    private function render_css( $uid, $bp, $bar_h, $bar_bg, $bar_pad, $bar_shadow, $ham_color, $ham_size, $p_bg, $p_color, $p_active, $p_fs, $p_pad, $p_sep, $p_chev, $search_ic, $p_pad_css = '' ) {
+        if ( ! $p_pad_css ) {
+            $p_pad_css = $p_pad . 'px ' . ( $p_pad + 8 ) . 'px';
+        }
         ?>
         <style>
         /* ── Mobilebar: hidden on desktop ── */
@@ -311,7 +324,7 @@ class Olo_Mobilebar_Tile extends Olo_Tile_Base {
         .<?php echo $uid; ?> .olo-mb-nav > ul > li > a {
             display: block;
             flex: 1;
-            padding: <?php echo $p_pad; ?>px <?php echo $p_pad + 8; ?>px;
+            padding: <?php echo $p_pad_css; ?>;
             color: <?php echo $p_color; ?>;
             text-decoration: none;
             font-size: <?php echo $p_fs; ?>px;

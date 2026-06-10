@@ -146,8 +146,8 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
         $serif_stack = "var(--olo-font-family-heading, 'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif)";
         $sans_stack  = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
         $mono_stack  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
-        $family_map  = [ 'serif' => $serif_stack, 'sans-serif' => $sans_stack, 'mono' => $mono_stack ];
-        $headline_family = $family_map[ $s['headline_font_family'] ] ?? $serif_stack;
+        $legacy      = [ 'serif' => $serif_stack, 'sans-serif' => $sans_stack, 'mono' => $mono_stack ];
+        $headline_family = $this->resolve_font_family( $s['headline_font_family'] ?? '', $legacy ) ?: $serif_stack;
 
         // Wrapper interno: padding fallback se non configurato dallo style.padding del wrapper esterno
         $wrap_style = '';

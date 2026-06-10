@@ -75,6 +75,8 @@ export default {
     { key: 'accent_color', label: t('Colore accento'), type: 'color' },
     { key: 'active_color', label: t('Colore step attivo'), type: 'color' },
     { key: 'step_bg', label: t('Sfondo step'), type: 'color' },
+
+    { type: 'separator', label: t('Stile') },
     withHover({ key: 'card_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
     ...borderFields(),
   ],

@@ -46,7 +46,7 @@ export default {
           { value: 'video', label: t('Video (URL)') },
           { value: 'iframe', label: t('iFrame (URL)') },
         ] },
-        { key: 'url', label: t('URL media'), type: 'text' },
+        { key: 'url', label: t('URL media'), type: 'link' },
         { key: 'thumb', label: t('Miniatura'), type: 'image' },
         { key: 'caption', label: t('Didascalia'), type: 'text' },
       ],

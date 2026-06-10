@@ -123,11 +123,7 @@ export default {
       { value: '3/2', label: '3 / 2' },
     ]},
     { key: 'top_padding',       label: t('Padding interno (px)'), type: 'range', min: 0, max: 60, step: 2 },
-    { key: 'letter_font_family', label: t('Famiglia lettera'), type: 'select', options: [
-      { value: 'serif',      label: t('Serif (editoriale)') },
-      { value: 'sans-serif', label: t('Sans-serif') },
-      { value: 'mono',       label: t('Monospace') },
-    ]},
+    { key: 'letter_font_family', label: t('Famiglia lettera'), type: 'font-family' },
     { key: 'letter_size',   label: t('Dimensione lettera (px)'), type: 'range', min: 40, max: 280, step: 4 },
     { key: 'logo_height',   label: t('Altezza logo (px)'),       type: 'range', min: 16, max: 160, step: 2 },
     { key: 'letter_italic', label: t('Lettera in italico'),      type: 'toggle' },
@@ -141,11 +137,7 @@ export default {
     { type: 'separator', label: t('Metà bassa') },
     { key: 'brand_size',           label: t('Brand label dimensione (px)'), type: 'range', min: 10, max: 22, step: 1 },
     { key: 'brand_letter_spacing', label: t('Brand letter-spacing (em)'),   type: 'range', min: 0, max: 0.3, step: 0.01 },
-    { key: 'title_font_family', label: t('Titolo famiglia'), type: 'select', options: [
-      { value: 'serif',      label: t('Serif (editoriale)') },
-      { value: 'sans-serif', label: t('Sans-serif') },
-      { value: 'mono',       label: t('Monospace') },
-    ]},
+    { key: 'title_font_family', label: t('Titolo famiglia'), type: 'font-family' },
     { key: 'title_size',   label: t('Titolo dimensione (px)'), type: 'range', min: 16, max: 80, step: 2 },
     { key: 'title_weight', label: t('Titolo peso'), type: 'select', options: [
       { value: '300', label: t('300 — Light') },

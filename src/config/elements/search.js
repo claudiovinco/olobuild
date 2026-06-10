@@ -108,7 +108,7 @@ export default {
       { value: 'large', label: t('Grande') },
     ]},
     { key: 'full_width', label: t('Larghezza piena'), type: 'toggle' },
-    { key: 'max_width', label: t('Larghezza massima (px)'), type: 'text',
+    { key: 'max_width', label: t('Larghezza massima (px)'), type: 'number', min: 0,
       show: s => !s.full_width },
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },

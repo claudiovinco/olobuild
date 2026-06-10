@@ -161,6 +161,8 @@ export default {
     { type: 'separator', label: t('Colori') },
     { key: 'active_color', label: t('Colore attivo'), type: 'color' },
     withHover({ key: 'active_bg',  label: t('Sfondo attivo'), type: 'color' }, { hoverKey: 'hover_bg' }),
+
+    { type: 'separator', label: t('Separatori') },
     { key: 'separator', label: t('Mostra separatori'), type: 'toggle' },
     { key: 'separator_color', label: t('Colore separatore'), type: 'color', show: s => s.separator },
 

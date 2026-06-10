@@ -69,9 +69,17 @@ class Olo_IntroSplit_Tile extends Olo_Tile_Base {
         $bbg   = $this->safe_color_css( $s['badge_bg'] ?? '' ) ?: 'var(--olo-color-primary, #c8ff3c)';
         $bcol  = $this->safe_color_css( $s['badge_color'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #0a2a1e)';
         $asp   = preg_replace( '/[^0-9.\/]/', '', $s['media_aspect'] ?: '4/4.4' ) ?: '4/4.4';
-        $mr_b  = intval( $s['media_radius'] );
-        $mr_t  = intval( $s['media_radius_top'] ?? 0 );
-        $mrad  = ( $mr_t > 0 ) ? "{$mr_t}px {$mr_t}px {$mr_b}px {$mr_b}px" : "{$mr_b}px";
+        // media_radius dual-format: numero legacy O oggetto {tl,tr,br,bl} (type border-radius).
+        $mr_raw = $s['media_radius'] ?? 20;
+        $mr_t   = intval( $s['media_radius_top'] ?? 0 );
+        if ( $mr_t > 0 ) {
+            // Arco: angoli superiori da media_radius_top, inferiori da media_radius (scalare o br/bl dell'oggetto).
+            $mr_br = is_array( $mr_raw ) ? intval( $mr_raw['br'] ?? 0 ) : intval( $mr_raw );
+            $mr_bl = is_array( $mr_raw ) ? intval( $mr_raw['bl'] ?? 0 ) : intval( $mr_raw );
+            $mrad  = "{$mr_t}px {$mr_t}px {$mr_br}px {$mr_bl}px";
+        } else {
+            $mrad = $this->build_border_radius_css( $mr_raw ) ?: '0px';
+        }
         $blob_on    = ! empty( $s['media_blob'] );
         $blob_color = $this->safe_color_css( $s['media_blob_color'] ?? '' ) ?: 'var(--olo-color-primary, #e7a0b4)';
 

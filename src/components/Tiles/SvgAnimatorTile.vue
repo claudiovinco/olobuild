@@ -60,7 +60,12 @@ const sanitizedSvg = computed(() => {
 
 const wrapStyle = computed(() => {
   const st = {};
-  if (s.value.max_width) st.maxWidth = s.value.max_width + (String(s.value.max_width).includes('%') ? '' : 'px');
+  if (s.value.max_width) {
+    // Dual-format come il PHP (is_numeric): numero nudo legacy '300' → '300px',
+    // stringa CSS con unità ('300px', '50%') usata as-is.
+    const mw = String(s.value.max_width).trim();
+    st.maxWidth = /^-?\d*\.?\d+$/.test(mw) ? mw + 'px' : mw;
+  }
   st.textAlign = s.value.alignment || 'center';
   if (s.value.alignment === 'center') st.margin = '0 auto';
   else if (s.value.alignment === 'right') st.marginLeft = 'auto';

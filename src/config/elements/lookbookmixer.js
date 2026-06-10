@@ -52,7 +52,7 @@ export default {
       itemFields: [
         { key: 'step',  label: t('Step (gruppo)'), type: 'text' },
         { key: 'name',  label: t('Nome'),          type: 'text' },
-        { key: 'price', label: t('Prezzo (numero)'), type: 'text' },
+        { key: 'price', label: t('Prezzo (numero)'), type: 'number', min: 0, step: 0.01 },
         { key: 'color', label: t('Colore pastiglia'), type: 'color' },
       ],
     },
@@ -78,10 +78,7 @@ export default {
     { key: 'line_color',  label: t('Colore bordi'),    type: 'color' },
 
     { type: 'separator', label: t('Tipografia') },
-    { key: 'name_font_family', label: t('Famiglia nome/totale'), type: 'select', options: [
-      { value: 'heading', label: t('Heading (del tema)') },
-      { value: 'body',    label: t('Body (del tema)') },
-    ]},
-    { key: 'mono_font_family', label: t('Font etichette (vuoto = monospace di sistema)'), type: 'text' },
+    { key: 'name_font_family', label: t('Famiglia nome/totale'), type: 'font-family' },
+    { key: 'mono_font_family', label: t('Font etichette (vuoto = mono del tema)'), type: 'font-family' },
   ],
 };

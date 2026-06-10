@@ -20,7 +20,7 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'html_content', label: t('Contenuto HTML'), type: 'textarea' },
+    { key: 'html_content', label: t('Contenuto HTML'), type: 'code' },
     { key: 'sandbox', label: t('Sandbox (iframe)'), type: 'toggle',
       description: t('Esegue l\'HTML in un iframe isolato (più sicuro per codice esterno).') },
   ],

@@ -33,7 +33,40 @@
             class="ff-item ff-item--default"
             :class="{ 'ff-item--active': !modelValue }"
             @click="selectFont('')"
-          >{{ t('Predefinito (browser)') }}</div>
+          >{{ t('Predefinito (eredita)') }}</div>
+
+          <!-- Ruoli del tema: la tile segue la tipografia globale del sito
+               (pattern FieldColor: ruoli prima, valori specifici poi) -->
+          <template v-if="filteredThemeRoles.length">
+            <div class="ff-group-label">{{ t('Ruoli del tema') }}</div>
+            <div
+              v-for="role in filteredThemeRoles"
+              :key="'role-' + role.value"
+              class="ff-item"
+              :class="{ 'ff-item--active': modelValue === role.value || legacyOfRole(role) === modelValue }"
+              :style="{ fontFamily: role.value }"
+              @click="selectFont(role.value)"
+            >
+              {{ role.label }}
+              <span class="ff-badge ff-badge--role">{{ t('Tema') }}</span>
+            </div>
+          </template>
+
+          <!-- Set tipografici globali (GlobalTypographyPanel) -->
+          <template v-if="filteredTypoSets.length">
+            <div class="ff-group-label">{{ t('Set tipografici') }}</div>
+            <div
+              v-for="set in filteredTypoSets"
+              :key="'set-' + set.id"
+              class="ff-item"
+              :class="{ 'ff-item--active': modelValue === set.value }"
+              :style="{ fontFamily: set.family + ', sans-serif' }"
+              @click="selectFont(set.value)"
+            >
+              {{ set.label }}
+              <span class="ff-badge ff-badge--role">{{ t('Set') }}</span>
+            </div>
+          </template>
 
           <!-- Custom Fonts (uploaded) -->
           <template v-if="filteredCustomFonts.length">
@@ -109,10 +142,30 @@ import { t } from '@/i18n';
 import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { useStylesStore } from '@/stores/styles';
 import { useFocusTrap } from '@/composables/useFocusTrap';
+import { FONT_ROLE_VARS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
 });
+
+// Ruoli del tema: selezionarli salva il var() CSS pronto, così la tile segue
+// la tipografia globale (cfg → Typography). `legacy` = i valori-codice che le
+// vecchie select salvavano per lo stesso ruolo (per evidenziare l'attivo).
+const THEME_ROLES = [
+  { value: 'var(--olo-font-family)',         label: t('Testo'),  legacy: ['sans', 'body'] },
+  { value: 'var(--olo-font-family-heading)', label: t('Titoli'), legacy: ['heading', 'serif'] },
+  { value: 'var(--olo-font-family-mono)',    label: t('Mono'),   legacy: ['mono'] },
+];
+
+// Label umane per i valori legacy ancora salvati nei template.
+const LEGACY_LABELS = {
+  sans: t('Testo (tema)'),
+  body: t('Testo (tema)'),
+  serif: t('Titoli (tema)'),
+  heading: t('Titoli (tema)'),
+  mono: t('Mono (tema)'),
+  inherit: t('Eredita'),
+};
 
 const emit = defineEmits(['update:modelValue']);
 
@@ -209,6 +262,28 @@ const popularGoogleFonts = [
 // Project fonts from store
 const projectFonts = computed(() => stylesStore.googleFonts || []);
 
+const filteredThemeRoles = computed(() => {
+  if (!search.value) return THEME_ROLES;
+  const q = search.value.toLowerCase();
+  return THEME_ROLES.filter(r => r.label.toLowerCase().includes(q));
+});
+
+// Set tipografici globali con una family definita → var(--olo-font-{id}-family)
+const typoSets = computed(() =>
+  (stylesStore.globalTypography || [])
+    .filter(s => s && s.id && s.family)
+    .map(s => ({ id: s.id, label: s.label || s.id, family: s.family, value: `var(--olo-font-${s.id}-family)` }))
+);
+const filteredTypoSets = computed(() => {
+  if (!search.value) return typoSets.value;
+  const q = search.value.toLowerCase();
+  return typoSets.value.filter(s => s.label.toLowerCase().includes(q) || s.family.toLowerCase().includes(q));
+});
+
+function legacyOfRole(role) {
+  return (role.legacy || []).find(l => l === props.modelValue) || null;
+}
+
 const filteredProjectFonts = computed(() => {
   if (!search.value) return projectFonts.value;
   const q = search.value.toLowerCase();
@@ -233,17 +308,35 @@ const filteredGoogle = computed(() => {
 });
 
 const displayLabel = computed(() => {
-  if (!props.modelValue) return 'Predefinito';
+  const v = props.modelValue;
+  if (!v) return t('Predefinito');
+  // Ruoli del tema (formato nuovo var(...)) — prefix-match così anche i var
+  // con fallback inline (es. legacy "var(--olo-font-family-heading, 'Libre…')")
+  // mostrano la label del ruolo invece della stringa CSS grezza.
+  if (v.startsWith('var(--olo-font-family-heading')) return t('Titoli') + ' (tema)';
+  if (v.startsWith('var(--olo-font-family-mono')) return t('Mono') + ' (tema)';
+  if (v.startsWith('var(--olo-font-family')) return t('Testo') + ' (tema)';
+  const role = THEME_ROLES.find(r => r.value === v);
+  if (role) return role.label + ' (tema)';
+  // Set tipografici globali
+  const set = typoSets.value.find(s => s.value === v);
+  if (set) return set.label + ' (set)';
+  // Valori legacy delle vecchie select per-tile
+  if (LEGACY_LABELS[v]) return LEGACY_LABELS[v];
   // Try to match web-safe label
-  const ws = webSafeFonts.find(f => f.value === props.modelValue);
+  const ws = webSafeFonts.find(f => f.value === v);
   if (ws) return ws.label;
   // Return raw value (probably a Google Font name)
-  return props.modelValue;
+  return v;
 });
 
 const previewStyle = computed(() => {
-  if (!props.modelValue) return {};
-  return { fontFamily: props.modelValue + ', sans-serif' };
+  const v = props.modelValue;
+  if (!v || v === 'inherit') return {};
+  // I valori legacy si vedono in anteprima col var del ruolo corrispondente.
+  if (FONT_ROLE_VARS[v]) return { fontFamily: FONT_ROLE_VARS[v] };
+  if (v.startsWith('var(')) return { fontFamily: v };
+  return { fontFamily: v + ', sans-serif' };
 });
 
 function selectFont(value, isGoogle = false) {
@@ -459,6 +552,10 @@ onBeforeUnmount(() => {
 }
 .ff-badge--custom {
   background: #10b981;
+  color: #fff;
+}
+.ff-badge--role {
+  background: #e8622a;
   color: #fff;
 }
 

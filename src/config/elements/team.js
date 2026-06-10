@@ -57,12 +57,15 @@ export default {
   },
 
   fields: [
+    { type: 'separator', label: t('Media') },
     { key: 'photo', label: t('Foto / Video'), type: 'media' },
     { key: 'hover_image', label: t('Immagine hover'), type: 'image' },
     { key: 'hover_video', label: t('Video hover'), type: 'media' },
+    { type: 'separator', label: t('Contenuto') },
     { key: 'name', label: t('Nome'), type: 'text' },
     { key: 'role', label: t('Ruolo'), type: 'text' },
     { key: 'bio', label: t('Biografia'), type: 'textarea' },
+    { type: 'separator', label: t('Link') },
     { key: 'link_text', label: t('Testo link'), type: 'text' },
     { key: 'link_url', label: t('URL link'), type: 'link' },
   ],

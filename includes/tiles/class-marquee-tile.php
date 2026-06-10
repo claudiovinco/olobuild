@@ -101,14 +101,12 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
         $tt          = in_array( $s['text_transform'], [ 'none', 'uppercase', 'lowercase' ] ) ? $s['text_transform'] : 'uppercase';
 
         // Font famiglia/stile + separatore (additivi, default no-op).
-        $ffkey = $s['font_family'] ?? '';
-        if ( $ffkey === 'sans' ) {
-            $font_family = "var(--olo-font-family, inherit)";
-        } elseif ( $ffkey === 'serif' || $ffkey === 'heading' ) {
-            $font_family = "var(--olo-font-family-heading, Georgia, serif)";
-        } else {
-            $font_family = '';
-        }
+        $ff_legacy = [
+            'sans'    => "var(--olo-font-family, inherit)",
+            'serif'   => "var(--olo-font-family-heading, Georgia, serif)",
+            'heading' => "var(--olo-font-family-heading, Georgia, serif)",
+        ];
+        $font_family = $this->resolve_font_family( $s['font_family'] ?? '', $ff_legacy );
         $fstyle  = ( ( $s['font_style'] ?? 'normal' ) === 'italic' ) ? 'italic' : 'normal';
         $sepcol  = $this->safe_color_css( $s['separator_color'] ?? '' ) ?: $text_color;
         $sep_op  = ( ( $s['separator_color'] ?? '' ) !== '' ) ? '1' : '0.5';

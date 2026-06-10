@@ -111,7 +111,7 @@ class Olo_Stackscroll_Tile extends Olo_Tile_Base {
 
         // ── Aspetto ──
         $min_h     = max( 120, min( 900, intval( $s['card_min_height'] ) ) );
-        $round     = max( 0,   min( 60,  intval( $s['round'] ) ) );
+        $round_css = $this->build_border_radius_css( $s['round'] ) ?: '0'; // dual-format: Number legacy E oggetto {tl,tr,br,bl}
         $pad       = max( 8,   min( 120, intval( $s['card_padding'] ) ) );
         $media_pos = in_array( $s['media_position'], [ 'left', 'right', 'none' ], true ) ? $s['media_position'] : 'right';
         $has_media = $media_pos !== 'none';
@@ -150,7 +150,7 @@ class Olo_Stackscroll_Tile extends Olo_Tile_Base {
                 grid-template-columns: <?php echo $grid_cols; ?>;
                 min-height: <?php echo $min_h; ?>px;
                 margin-bottom: <?php echo $card_gap; ?>px;
-                border-radius: <?php echo $round; ?>px;
+                border-radius: <?php echo $round_css; ?>;
                 overflow: hidden;
                 background: <?php echo $bg_def; ?>;
                 color: <?php echo $txt_def; ?>;

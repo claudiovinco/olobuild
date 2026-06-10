@@ -1,4 +1,4 @@
-import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
@@ -80,10 +80,10 @@ export default {
       { value: '4/5', label: '4:5' },
       { value: '3/4', label: '3:4' },
     ]},
-    { key: 'radius', label: t('Raggio (px)'), type: 'range', min: 0, max: 40, step: 1 },
     { key: 'gap', label: t('Spazio tra card (px)'), type: 'range', min: 8, max: 32, step: 2 },
 
     { type: 'separator', label: t('Raggio') },
+    { key: 'radius', label: t('Raggio (px)'), type: 'range', min: 0, max: 40, step: 1 },
     // 4 angoli indipendenti. Default {0,0,0,0} → si usa il raggio legacy sopra (no-op).
     { key: 'card_radius', label: t('Raggio card a 4 angoli (0 = usa raggio sopra)'), type: 'border-radius' },
 
@@ -104,10 +104,8 @@ export default {
 
     { type: 'separator', label: t('Freccia') },
     { key: 'show_arrow', label: t('Mostra freccia'), type: 'toggle' },
-    { key: 'arrow_bg', label: t('Cerchio (riposo)'), type: 'color' },
-    { key: 'arrow_color', label: t('Freccia (riposo)'), type: 'color' },
-    { key: 'arrow_hover_bg', label: t('Cerchio (hover, vuoto = accento)'), type: 'color' },
-    { key: 'arrow_hover_color', label: t('Freccia (hover)'), type: 'color' },
+    withHover({ key: 'arrow_bg', label: t('Cerchio (hover vuoto = accento)'), type: 'color' }, { hoverKey: 'arrow_hover_bg' }),
+    withHover({ key: 'arrow_color', label: t('Freccia'), type: 'color' }, { hoverKey: 'arrow_hover_color' }),
 
     { type: 'separator', label: t('Sfondo') },
     { key: 'bg', label: t('Sfondo completo'), type: 'background', showParallax: false },

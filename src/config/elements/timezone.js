@@ -35,10 +35,13 @@ export default {
   },
 
   fields: [
+    { type: 'separator', label: t('Testi') },
     { key: 'eyebrow', label: t('Occhiello'), type: 'text' },
     { key: 'heading', label: t('Titolo'), type: 'text' },
     { key: 'intro', label: t('Introduzione'), type: 'textarea' },
     { key: 'base_label', label: t('Etichetta slider (città base = 1ª)'), type: 'text' },
+
+    { type: 'separator', label: t('Orari') },
     { key: 'input_value', label: t('Ora iniziale (0-23)'), type: 'number' },
     { key: 'work_start', label: t('Inizio orario lavoro'), type: 'number' },
     { key: 'work_end', label: t('Fine orario lavoro'), type: 'number' },

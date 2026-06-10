@@ -228,14 +228,15 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
         // Effetti avanzati modale (v1.0.60+)
         $backdrop_blur     = max( 0, min( 40, intval( $s['modal_backdrop_blur'] ?? 0 ) ) );
         $backdrop_saturate = max( 100, min( 200, intval( $s['modal_backdrop_saturate'] ?? 100 ) ) );
+        // Valori legacy ('monospace'/'serif'/'sans') → stack storici della tile;
+        // valori nuovi (type 'font-family') → CSS pronto via resolver condiviso.
         $font_family_map   = [
-            'inherit'   => 'inherit',
             'monospace' => 'ui-monospace, SFMono-Regular, Menlo, monospace',
             'serif'     => 'Georgia, "Times New Roman", serif',
             'sans'      => '"Helvetica Neue", Helvetica, Arial, sans-serif',
         ];
         $font_family_key   = $s['modal_font_family'] ?? 'inherit';
-        $font_family_css   = $font_family_map[ $font_family_key ] ?? 'inherit';
+        $font_family_css   = $this->resolve_font_family( $font_family_key, $font_family_map ) ?: 'inherit';
         $modal_rotation    = max( -10, min( 10, floatval( $s['modal_rotation'] ?? 0 ) ) );
         $modal_perspective = max( 0, min( 2000, intval( $s['modal_perspective'] ?? 0 ) ) );
         $modal_tilt_x      = max( -10, min( 10, floatval( $s['modal_tilt_x'] ?? 0 ) ) );
@@ -257,7 +258,11 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
         $modal_t_ls   = floatval( $s['modal_title_letter_spacing'] ?? 0 );
 
         // Button typography
-        $btn_radius  = max( 0, intval( $s['button_radius'] ?? 6 ) );
+        // Dual-format: numero legacy O oggetto {tl,tr,br,bl}; vuoto/0 = storico 0px.
+        $btn_radius_css = $this->build_border_radius_css( $s['button_radius'] ?? 6 );
+        if ( $btn_radius_css === '' ) {
+            $btn_radius_css = '0px';
+        }
         $btn_upper   = ! empty( $s['button_uppercase'] );
         $btn_ls      = floatval( $s['button_letter_spacing'] ?? 0.02 );
         $btn_weight  = preg_match( '/^[1-9]00$/', (string) ($s['button_weight'] ?? '600') ) ? $s['button_weight'] : '600';
@@ -375,7 +380,7 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
             }
             .olo-popup-<?php echo esc_attr( $uid ); ?> > button {
-                border-radius: <?php echo $btn_radius; ?>px;
+                border-radius: <?php echo $btn_radius_css; ?>;
                 font-weight: <?php echo $btn_weight; ?>;
                 <?php if ( $btn_upper ) : ?>text-transform: uppercase;<?php endif; ?>
                 letter-spacing: <?php echo $btn_ls; ?>em;

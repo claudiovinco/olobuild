@@ -40,7 +40,7 @@ export default {
   fields: [
     { type: 'separator', label: t('Intestazione') },
     { key: 'show_heading', label: t('Mostra titolo sezione'), type: 'toggle' },
-    { key: 'heading_text', label: t('Testo titolo'), type: 'text', condition: { key: 'show_heading', value: true } },
+    { key: 'heading_text', label: t('Testo titolo'), type: 'text', condition: { field: 'show_heading', value: true } },
 
     { type: 'separator', label: t('Query') },
     { key: 'posts_per_page', label: t('Numero prodotti'), type: 'range', min: 1, max: 12, step: 1 },

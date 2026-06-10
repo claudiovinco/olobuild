@@ -72,15 +72,19 @@ export default {
       itemLabel: t('Card'),
       defaults: { counter: '00', counter_label: 'Label', title: 'Titolo', title_accent: '', title_accent_italic: false, description: 'Descrizione…', icon: '', footer_dot_color: '#10b981', footer_text: '', link_url: '', media_image: '', media_label: 'SCREENSHOT' },
       itemFields: [
+        { type: 'separator', label: t('Media') },
         { key: 'media_image',         label: t('Immagine media'),          type: 'image' },
         { key: 'media_label',         label: t('Label placeholder media'), type: 'text' },
         { key: 'icon',                label: t('Icona'),                   type: 'icon' },
+        { type: 'separator', label: t('Counter') },
         { key: 'counter',             label: t('Counter (es. 01)'),        type: 'text' },
         { key: 'counter_label',       label: t('Counter label'),           type: 'text' },
+        { type: 'separator', label: t('Testi') },
         { key: 'title',               label: t('Titolo'),                  type: 'text' },
         { key: 'title_accent',        label: t('Suffisso titolo'),         type: 'text' },
         { key: 'title_accent_italic', label: t('Suffisso italico'),        type: 'toggle' },
         { key: 'description',         label: t('Descrizione'),             type: 'editor', mode: 'block' },
+        { type: 'separator', label: t('Footer & Link') },
         { key: 'footer_text',         label: t('Footer testo'),            type: 'text' },
         { key: 'footer_dot_color',    label: t('Footer pallino'),          type: 'color' },
         { key: 'link_url',            label: t('Link (opzionale)'),        type: 'link' },
@@ -128,11 +132,7 @@ export default {
     withHover({ key: 'media_radius', label: t('Border radius media'), type: 'border-radius' }, { hoverKey: 'media_radius_hover', hoverDurationKey: 'media_radius_hover_duration' }),
 
     { type: 'separator', label: t('Tipografia titolo') },
-    { key: 'title_font_family', label: t('Famiglia'), type: 'select', options: [
-      { value: 'serif',      label: t('Serif (editoriale)') },
-      { value: 'sans-serif', label: t('Sans-serif (moderno)') },
-      { value: 'mono',       label: t('Monospace') },
-    ]},
+    { key: 'title_font_family', label: t('Famiglia'), type: 'font-family' },
     { key: 'title_size',   label: t('Dimensione (px)'), type: 'range', min: 18, max: 160, step: 2 },
     { key: 'title_weight', label: t('Peso'), type: 'select', options: [
       { value: '300', label: t('300 — Light') },

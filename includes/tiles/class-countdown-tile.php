@@ -108,7 +108,8 @@ class Olo_Countdown_Tile extends Olo_Tile_Base {
         $is_inline = ( $s['display_mode'] === 'inline' );
         // Card per singola unità (giorni/ore/min/sec) — opzionali, default 0 = no card.
         $item_bg     = $this->safe_color_css( $s['item_bg_color'] ?? '' );
-        $item_radius = absint( $s['item_radius'] ?? 0 );
+        // Dual-format: numero legacy ('8') O oggetto {tl,tr,br,bl} dal type 'border-radius'. '' se zero/vuoto.
+        $item_radius_css = $this->build_border_radius_css( $s['item_radius'] ?? 0 );
         $item_pad    = absint( $s['item_padding'] ?? 0 );
 
         ob_start();
@@ -127,7 +128,7 @@ class Olo_Countdown_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .mcd-item {
                 text-align: center;
                 <?php if ( $item_bg ) : ?>background: <?php echo $item_bg; ?>;<?php endif; ?>
-                <?php if ( $item_radius > 0 ) : ?>border-radius: <?php echo $item_radius; ?>px;<?php endif; ?>
+                <?php if ( $item_radius_css ) : ?>border-radius: <?php echo $item_radius_css; ?>;<?php endif; ?>
                 <?php if ( $item_pad > 0 ) : ?>padding: <?php echo $item_pad; ?>px;<?php endif; ?>
                 <?php if ( ! $is_inline ) : ?>
                 min-width: <?php echo $min_w; ?>px;
@@ -305,7 +306,8 @@ class Olo_Countdown_Tile extends Olo_Tile_Base {
         $fg      = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $accent  = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $item_bg     = $this->safe_color_css( $s['item_bg_color'] ?? '' );
-        $item_radius = absint( $s['item_radius'] ?? 0 );
+        // Dual-format: numero legacy ('8') O oggetto {tl,tr,br,bl} dal type 'border-radius'. '' se zero/vuoto.
+        $item_radius_css = $this->build_border_radius_css( $s['item_radius'] ?? 0 );
         $item_pad    = absint( $s['item_padding'] ?? 0 );
 
         $units = [];
@@ -324,7 +326,7 @@ class Olo_Countdown_Tile extends Olo_Tile_Base {
             }
             .<?php echo $uid; ?> .uk-countdown > div > div:not(.uk-countdown-separator) {
                 <?php if ( $item_bg ) : ?>background: <?php echo $item_bg; ?>;<?php endif; ?>
-                <?php if ( $item_radius > 0 ) : ?>border-radius: <?php echo $item_radius; ?>px;<?php endif; ?>
+                <?php if ( $item_radius_css ) : ?>border-radius: <?php echo $item_radius_css; ?>;<?php endif; ?>
                 <?php if ( $item_pad > 0 ) : ?>padding: <?php echo $item_pad; ?>px;<?php endif; ?>
             }
             .<?php echo $uid; ?> .uk-countdown-number {

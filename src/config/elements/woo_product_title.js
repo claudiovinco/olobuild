@@ -74,6 +74,7 @@ export default {
         weight:     'font_weight',
         lineHeight: 'line_height',
         color:      'color',
+        colorHover: 'link_color_hover',
       },
       sizeMin: 12, sizeMax: 96,
     },
@@ -85,8 +86,6 @@ export default {
       { value: 'right', label: t('Destra') },
     ]},
 
-    { type: 'separator', label: t('Colori') },
-    { key: 'link_color_hover', label: t('Colore link hover'), type: 'color' },
     ...borderFields(),
   ],
 };

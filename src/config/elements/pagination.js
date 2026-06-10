@@ -24,7 +24,6 @@ export default {
     gap: '8',
     button_padding: '8 16',
     text_color: '',
-    active_color: '',
     active_text_color: '',
     background_color: '',
     active_background: '',
@@ -88,14 +87,13 @@ export default {
 
     { type: 'separator', label: t('Dimensioni') },
     { key: 'gap', label: t('Distanza tra pulsanti (px)'), type: 'range', min: 0, max: 24, step: 2 },
-    { key: 'button_padding', label: t('Padding pulsanti (px)'), type: 'text' },
+    { key: 'button_padding', label: t('Padding pulsanti (px)'), type: 'spacing', max: 50 },
     withHover({ key: 'border_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
     { key: 'border_width', label: t('Spessore bordo (px)'), type: 'range', min: 0, max: 4, step: 1 },
 
     { type: 'separator', label: t('Colori') },
     withHover({ key: 'background_color', label: t('Sfondo pulsanti'), type: 'color' }, { hoverKey: 'hover_background' }),
     { key: 'border_color', label: t('Colore bordo'), type: 'color' },
-    { key: 'active_color', label: t('Colore testo pagina attiva'), type: 'color' },
     { key: 'active_text_color', label: t('Testo pagina attiva'), type: 'color' },
     { key: 'active_background', label: t('Sfondo pagina attiva'), type: 'color' },
 

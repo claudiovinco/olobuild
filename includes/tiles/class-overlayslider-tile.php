@@ -119,7 +119,8 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
         $preset_id = $s['preset'] ?? 'cinematic-overlay';
 
         // Slide radius + custom overlay color/gradient
-        $slide_radius = max( 0, intval( $s['slide_radius'] ?? 0 ) );
+        // slide_radius dual-format: numero legacy O oggetto {tl,tr,br,bl} (type border-radius).
+        $slide_radius_css = $this->build_border_radius_css( $s['slide_radius'] ?? 0 );
         $overlay_clr  = $this->safe_color_css( $s['overlay_color'] ?? 'rgba(0,0,0,0.45)' );
         $overlay_grad = ! empty( $s['overlay_gradient'] );
 
@@ -208,7 +209,7 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
                 width: 100%;
                 <?php echo $frame_css; ?>
                 overflow: hidden;
-                <?php if ( $slide_radius ) : ?>border-radius: <?php echo $slide_radius; ?>px;<?php endif; ?>
+                <?php if ( $slide_radius_css ) : ?>border-radius: <?php echo $slide_radius_css; ?>;<?php endif; ?>
                 <?php echo $shadow_css; ?>
             }
             .<?php echo $uid; ?> .mos-os-img { transition: transform 0.5s ease, filter 0.5s ease; <?php echo $img_size_css; ?> }

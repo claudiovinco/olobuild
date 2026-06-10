@@ -185,8 +185,8 @@ export default {
         { value: 'spogliatoi-con-docce', label: t('Spogliatoi con docce') },
         { value: 'tappetini', label: t('Tappetini') },
       ],
-      desc: 'Vuoto = mostra tutte le dotazioni nel filtro',
     },
+    { type: 'description', description: t('Vuoto = mostra tutte le dotazioni nel filtro') },
 
     // ═══════════════════════════════════════════
     // 2. Mappa
@@ -318,17 +318,15 @@ export default {
     // Card bordo
     // ═══════════════════════════════════════════
     { type: 'separator', label: t('Card — Bordo') },
-    { key: 'card_border_width', label: t('Spessore bordo (px)'), type: 'range', min: 0, max: 5, step: 1 },
+    withHover({ key: 'card_border_width', label: t('Spessore bordo (px)'), type: 'range', min: 0, max: 5, step: 1 }, { hoverKey: 'card_hover_border_width' }),
     { key: 'card_border_style', label: t('Stile bordo'), type: 'select', options: [
       { value: 'solid', label: t('Continuo') },
       { value: 'dashed', label: t('Tratteggiato') },
       { value: 'dotted', label: t('Puntinato') },
       { value: 'none', label: t('Nessuno') },
     ]},
-    { key: 'card_border_color', label: t('Colore bordo'), type: 'color' },
+    withHover({ key: 'card_border_color', label: t('Colore bordo'), type: 'color' }, { hoverKey: 'card_border_hover' }),
     withHover({ key: 'card_border_radius', label: t('Raggio angoli (4 valori)'), type: 'border-radius' }),
-    { key: 'card_border_hover', label: t('Colore bordo hover'), type: 'color' },
-    { key: 'card_hover_border_width', label: t('Spessore bordo hover (px)'), type: 'range', min: 0, max: 5, step: 1 },
 
     { type: 'separator', label: t('Card — Ombra normale') },
     { key: 'card_shadow', label: t('Ombra card'), type: 'select', options: [

@@ -61,7 +61,7 @@ export default {
           { value: 'email',     label: t('Email') },
           { value: 'website',   label: t('Sito web') },
         ]},
-        { key: 'url', label: t('URL'), type: 'text' },
+        { key: 'url', label: t('URL'), type: 'link', placeholder: t('https://...') },
       ],
     },
     { key: 'show_labels', label: t('Mostra nomi piattaforma'), type: 'toggle' },

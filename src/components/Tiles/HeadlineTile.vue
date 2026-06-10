@@ -35,7 +35,7 @@
 import { computed } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import { rv } from '@/composables/useResponsiveValue';
-import { resolveColor, TOKENS, buildDefaults } from '@/composables/oloTileDefaults';
+import { resolveColor, resolveFontFamily, TOKENS, buildDefaults } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -87,16 +87,17 @@ const headingStyle = computed(() => {
     st.letterSpacing = '0.05em';
   }
 
-  // Famiglia font (default 'inherit' = font titoli del tema)
-  const hfMap = {
+  // Famiglia font (default 'inherit' = font titoli del tema → non settare)
+  const FONT_LEGACY = {
     body: "var(--olo-font-family, -apple-system,'Segoe UI',Roboto,sans-serif)",
     heading: "var(--olo-font-family-heading, Georgia,'Times New Roman',serif)",
     serif: "Georgia,'Times New Roman',serif",
     sans: "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif",
     mono: "ui-monospace,'SF Mono',Menlo,Consolas,monospace",
   };
-  if (hfMap[s.value.heading_font]) {
-    st.fontFamily = hfMap[s.value.heading_font];
+  const hf = resolveFontFamily(s.value.heading_font, FONT_LEGACY);
+  if (hf && hf !== 'inherit') {
+    st.fontFamily = hf;
   }
 
   // Gradient wins over heading_color — token-first (primario → accento brand)

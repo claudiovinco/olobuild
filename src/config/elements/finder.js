@@ -91,7 +91,7 @@ export default {
     },
 
     { type: 'separator', label: t('Comportamento') },
-    { key: 'default_index', label: t('Opzione attiva iniziale (0-based)'), type: 'text' },
+    { key: 'default_index', label: t('Opzione attiva iniziale (0-based)'), type: 'number', min: 0, step: 1 },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -134,7 +134,7 @@ export default {
 
     { type: 'separator', label: t('Chip') },
     { key: 'chip_bg', label: t('Sfondo chip (inattiva)'), type: 'color' },
-    { key: 'chip_radius', label: t('Raggio chip (px)'), type: 'range', min: 0, max: 999, step: 1 },
+    { key: 'chip_radius', label: t('Raggio chip (px)'), type: 'border-radius' },
 
     { type: 'separator', label: t('Card risultato') },
     { key: 'card_bg', label: t('Sfondo card'), type: 'color' },

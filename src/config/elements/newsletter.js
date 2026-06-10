@@ -207,14 +207,14 @@ export default {
     ]},
 
     { type: 'separator', label: t('Contenitore') },
-    { key: 'max_width', label: t('Larghezza max (px)'), type: 'text' },
+    { key: 'max_width', label: t('Larghezza max (px)'), type: 'range', min: 320, max: 1200, step: 10 },
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
     ]},
     { key: 'bg_color', label: t('Sfondo'), type: 'color' },
-    { key: 'box_border', label: t('Bordo box (CSS, es. rgba(255,255,255,.14))'), type: 'text' },
+    { key: 'box_border', label: t('Colore bordo box'), type: 'color' },
     withHover({ key: 'border_radius', label: t('Raggio bordi'), type: 'border-radius'}),
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 60 },
 
@@ -244,9 +244,10 @@ export default {
       presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
-        size:   'btn_font_size',
-        weight: 'btn_font_weight',
-        color:  'btn_color',
+        size:       'btn_font_size',
+        weight:     'btn_font_weight',
+        color:      'btn_color',
+        colorHover: 'btn_color_hover',
       },
       sizeMin: 11, sizeMax: 20, sizeStep: 1,
     },
@@ -265,9 +266,7 @@ export default {
     { key: 'input_height', label: t('Altezza input (px)'), type: 'range', min: 32, max: 56, step: 2 },
 
     { type: 'separator', label: t('Stile pulsante') },
-    { key: 'btn_bg', label: t('Sfondo pulsante'), type: 'color' },
-    { key: 'btn_hover_bg', label: t('Sfondo hover'), type: 'color' },
-    { key: 'btn_color_hover', label: t('Colore testo hover'), type: 'color' },
+    withHover({ key: 'btn_bg', label: t('Sfondo pulsante'), type: 'color' }, { hoverKey: 'btn_hover_bg' }),
     withHover({ key: 'btn_radius', label: t('Raggio pulsante'), type: 'border-radius'}),
 
     { type: 'separator', label: t('Messaggi & Privacy') },

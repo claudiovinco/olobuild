@@ -18,6 +18,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { resolveFontFamily } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -42,10 +43,12 @@ const s = computed(() => ({ ...defaults, ...props.settings }));
 const items = computed(() => Array.isArray(s.value.items) ? s.value.items : []);
 const line = computed(() => s.value.divider_color || '#d7d1c2');
 const mono = computed(() => {
-  const n = String(s.value.mono_font_family || '').replace(/[^A-Za-z0-9 \-]/g, '').trim();
-  return n ? `'${n}',${MONO_FB}` : MONO_FB;
+  const fam = resolveFontFamily(s.value.mono_font_family);
+  if (!fam) return MONO_FB;
+  // Nome font puro (legacy campo text) → wrap con lo stack mono di fallback storico.
+  return /^[A-Za-z0-9 \-]+$/.test(fam) ? `'${fam}',${MONO_FB}` : fam;
 });
-const tfam = computed(() => ({ heading: HEADING, body: BODY, mono: mono.value }[s.value.time_font_family] || HEADING));
+const tfam = computed(() => resolveFontFamily(s.value.time_font_family, { heading: HEADING, body: BODY, mono: mono.value }) || HEADING);
 
 const bandStyle = computed(() => {
   const st = { padding: (s.value.band_padding_y || 0) + 'px 0' };

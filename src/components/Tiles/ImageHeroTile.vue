@@ -26,6 +26,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { resolveFontFamily } from '@/composables/oloTileDefaults';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 import { borderDefault, borderHoverDefault, borderEffectDefaults } from '@/config/elements/_shared.js';
 
@@ -92,7 +93,8 @@ const accOn = computed(() => s.value.accent_on || '#0c0c0c');
 const txt = computed(() => s.value.text_color || '#ffffff');
 const sub = computed(() => s.value.sub_color || '#efe9de');
 const eyeCol = computed(() => s.value.eyebrow_color || accent.value);
-const disp = computed(() => (s.value.heading_font === 'sans' ? SANS : SERIF));
+const FONT_LEGACY = { serif: SERIF, sans: SANS };
+const disp = computed(() => resolveFontFamily(s.value.heading_font, FONT_LEGACY) || SERIF);
 
 function hexRgb(hex, fb = '12,12,12') {
   let h = String(hex || '').replace('#', '');

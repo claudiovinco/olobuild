@@ -127,22 +127,30 @@ export default {
   ],
 
   styleFields: [
-    { type: 'separator', label: t('Colori') },
+    { type: 'separator', label: t('Colori — testo') },
     { key: 'eyebrow_color', label: t('Occhiello (vuoto = secondario)'), type: 'color' },
     { key: 'headline_color', label: t('Titolo'), type: 'color' },
-    { key: 'headline_weight', label: t('Peso titolo'), type: 'select', options: [
-      { value: '400', label: '400' }, { value: '500', label: '500' }, { value: '600', label: '600' }, { value: '700', label: '700' }, { value: '900', label: '900' },
-    ]},
-    { key: 'headline_size', label: t('Dim. max titolo (px, vuoto = auto)'), type: 'text' },
     { key: 'accent_color', label: t('Parola accento (vuoto = secondario)'), type: 'color' },
     { key: 'lead_color', label: t('Testo'), type: 'color' },
+
+    { type: 'separator', label: t('Colori — statistiche') },
     { key: 'stat_number_color', label: t('Numeri stat'), type: 'color' },
     { key: 'stat_label_color', label: t('Etichette stat'), type: 'color' },
+
+    { type: 'separator', label: t('Colori — CTA') },
     { key: 'cta_bg', label: t('CTA sfondo (vuoto = testo del tema)'), type: 'color' },
     { key: 'cta_color', label: t('CTA testo'), type: 'color' },
+
+    { type: 'separator', label: t('Colori — pannello & badge') },
     { key: 'content_bg', label: t('Sfondo pannello testo'), type: 'color' },
     { key: 'badge_bg', label: t('Badge sfondo (vuoto = primario)'), type: 'color' },
     { key: 'badge_color', label: t('Badge testo (vuoto = contrasto primario)'), type: 'color' },
+
+    { type: 'separator', label: t('Tipografia titolo') },
+    { key: 'headline_weight', label: t('Peso titolo'), type: 'select', options: [
+      { value: '400', label: '400' }, { value: '500', label: '500' }, { value: '600', label: '600' }, { value: '700', label: '700' }, { value: '900', label: '900' },
+    ]},
+    { key: 'headline_size', label: t('Dim. max titolo (px, 0 = auto)'), type: 'range', min: 0, max: 120, step: 2 },
 
     { type: 'separator', label: t('Media') },
     { key: 'media_aspect', label: t('Proporzioni media'), type: 'select', options: [
@@ -151,7 +159,7 @@ export default {
       { value: '4/5', label: '4:5' },
       { value: '3/4', label: '3:4' },
     ]},
-    { key: 'media_radius', label: t('Raggio media (px)'), type: 'range', min: 0, max: 40, step: 1 },
+    { key: 'media_radius', label: t('Raggio media (px)'), type: 'border-radius' },
     { key: 'media_radius_top', label: t('Raggio angoli superiori (arco, px — 0 = uniforme)'), type: 'range', min: 0, max: 300, step: 4 },
     { key: 'media_blob', label: t('Blob decorativo dietro il media'), type: 'toggle' },
     { key: 'media_blob_color', label: t('Blob — colore (vuoto = primario)'), type: 'color', condition: { field: 'media_blob', value: true } },

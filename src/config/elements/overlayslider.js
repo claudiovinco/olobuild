@@ -244,7 +244,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Stile slide') },
-    { key: 'slide_radius', label: t('Arrotondamento slide (px)'), type: 'range', min: 0, max: 40, step: 1 },
+    { key: 'slide_radius', label: t('Arrotondamento slide (px)'), type: 'border-radius' },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
     { key: 'overlay_gradient', label: t('Overlay gradiente (alto→basso)'), type: 'toggle' },
 

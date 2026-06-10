@@ -163,6 +163,8 @@ export default {
         ]},
         { key: 'options', label: t('Opzioni (una per riga)'), type: 'textarea',
           condition: { field: 'field_type', op: 'in', value: ['select', 'radio', 'checkbox'] } },
+        { type: 'separator', label: t('Impostazioni tipo campo'),
+          condition: { field: 'field_type', op: 'in', value: ['file', 'range', 'star_rating', 'hidden', 'calculation'] } },
         { key: 'file_allowed_types', label: t('Tipi file ammessi'), type: 'text',
           condition: { field: 'field_type', op: 'in', value: ['file'] } },
         { key: 'file_max_size', label: t('Max dimensione (MB)'), type: 'number',
@@ -191,6 +193,7 @@ export default {
           condition: { field: 'field_type', op: 'in', value: ['calculation'] } },
         { key: 'calc_decimals', label: t('Decimali'), type: 'number',
           condition: { field: 'field_type', op: 'in', value: ['calculation'] } },
+        { type: 'separator', label: t('Visibilità condizionale') },
         { key: 'condition_field', label: t('Condizione: campo'), type: 'text', placeholder: t('Nome campo (es. nome)') },
         { key: 'condition_operator', label: t('Condizione: operatore'), type: 'select', options: [
           { value: 'equals', label: t('Uguale a') },
@@ -408,9 +411,8 @@ export default {
     { key: 'gap', label: t('Gap tra campi (px)'), type: 'range', min: 8, max: 32, step: 4 },
 
     { type: 'separator', label: t('Stile pulsante') },
-    { key: 'submit_bg', label: t('Sfondo pulsante'), type: 'color' },
+    withHover({ key: 'submit_bg', label: t('Sfondo pulsante'), type: 'color' }, { hoverKey: 'submit_hover_bg' }),
     { key: 'submit_color', label: t('Colore testo pulsante'), type: 'color' },
-    { key: 'submit_hover_bg', label: t('Sfondo pulsante hover'), type: 'color' },
     withHover({ key: 'submit_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 48 },
     { type: 'typography', label: t('Pulsante'),

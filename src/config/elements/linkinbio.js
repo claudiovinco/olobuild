@@ -56,7 +56,7 @@ export default {
       itemFields: [
         { key: 'title', label: t('Titolo'), type: 'text' },
         { key: 'url', label: t('URL'), type: 'link' },
-        { key: 'icon', label: t('Icona (nome)'), type: 'text', placeholder: t('globe, mail, instagram...') },
+        { key: 'icon', label: t('Icona (nome)'), type: 'icon' },
         { key: 'image_url', label: t('Immagine icona'), type: 'image' },
         { key: 'style', label: t('Stile'), type: 'select', options: [
           { value: 'filled', label: t('Pieno') },

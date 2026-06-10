@@ -64,7 +64,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { SHADOW as SHADOW_SCALE } from '@/composables/oloTileDefaults';
+import { SHADOW as SHADOW_SCALE, resolveFontFamily } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -138,8 +138,8 @@ const SERIF = "'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman'
 const SANS  = "'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
 const MONO  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
 
-const familyMap = { serif: SERIF, 'sans-serif': SANS, mono: MONO };
-const headlineFamily = computed(() => familyMap[s.value.headline_font_family] || SERIF);
+const FONT_LEGACY = { serif: SERIF, 'sans-serif': SANS, mono: MONO };
+const headlineFamily = computed(() => resolveFontFamily(s.value.headline_font_family, FONT_LEGACY) || SERIF);
 
 const headlines = computed(() => (Array.isArray(s.value.headline_lines) ? s.value.headline_lines : []).filter(h => h && h.text));
 const stats     = computed(() => (Array.isArray(s.value.stats)          ? s.value.stats          : []).slice(0, 4));

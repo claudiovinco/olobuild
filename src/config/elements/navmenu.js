@@ -183,10 +183,8 @@ export default {
         { value: 'background', label: t('Sfondo') },
         { value: 'bold', label: t('Grassetto') },
       ]},
-    { key: 'v_active_bg', label: t('Sfondo attivo'), type: 'color',
-      show: s => s.style === 'vertical' && (s.v_active_indicator === 'background' || s.v_active_indicator === 'left-border') },
-    { key: 'v_hover_bg', label: t('Sfondo hover'), type: 'color',
-      show: s => s.style === 'vertical' },
+    withHover({ key: 'v_active_bg', label: t('Sfondo attivo'), type: 'color',
+      show: s => s.style === 'vertical' }, { hoverKey: 'v_hover_bg' }),
     withHover({ key: 'v_border_radius', label: t('Raggio bordo voci (px)'), type: 'border-radius',
       show: s => s.style === 'vertical' }),
 

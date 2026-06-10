@@ -16,11 +16,6 @@ const TARGET_OPTIONS = () => [
   { value: '_self',  label: t('Stessa scheda') },
   { value: '_blank', label: t('Nuova scheda') },
 ];
-const FONT_FAMILY_OPTIONS = () => [
-  { value: 'serif',      label: t('Serif (editoriale)') },
-  { value: 'sans-serif', label: t('Sans-serif (moderno)') },
-  { value: 'mono',       label: t('Monospace') },
-];
 const FONT_WEIGHT_OPTIONS = () => [
   { value: '300', label: t('300 — Light') },
   { value: '400', label: t('400 — Regular') },
@@ -211,7 +206,7 @@ export default {
     { key: 'eyebrow_dot_color', label: t('Colore pallino'),  type: 'color' },
 
     { type: 'separator', label: t('Tipografia headline') },
-    { key: 'headline_font_family', label: t('Famiglia'),        type: 'select', options: FONT_FAMILY_OPTIONS() },
+    { key: 'headline_font_family', label: t('Famiglia'),        type: 'font-family' },
     { key: 'headline_font_size',   label: t('Dimensione (px)'), type: 'range', min: 32, max: 160, step: 2 },
     { key: 'headline_line_height', label: t('Interlinea'),      type: 'range', min: 0.8, max: 1.8, step: 0.05 },
     { key: 'headline_font_weight', label: t('Peso'),            type: 'select', options: FONT_WEIGHT_OPTIONS() },

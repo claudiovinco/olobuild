@@ -34,12 +34,8 @@ export default {
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { type: 'separator', label: t('Contenuto') },
-    { key: 'title', label: t('Titolo sezione'), type: 'select', options: [
-      { value: 'Disponibilità', label: t('Disponibilità') },
-      { value: 'Calendario disponibilità', label: t('Calendario disponibilità') },
-      { value: 'Verifica disponibilità', label: t('Verifica disponibilità') },
-      { value: '', label: t('Nessun titolo') },
-    ]},
+    { key: 'title', label: t('Titolo sezione'), type: 'text',
+      description: t('Vuoto = nessun titolo.') },
     { key: 'show_legend', label: t('Mostra legenda colori'), type: 'toggle' },
     { key: 'show_navigation', label: t('Navigazione tra mesi'), type: 'toggle' },
     { key: 'months_ahead', label: t('Mesi navigabili in avanti'), type: 'select', options: [

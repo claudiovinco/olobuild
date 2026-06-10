@@ -132,7 +132,8 @@ class Olo_Scrollscrub_Tile extends Olo_Tile_Base {
         // ── Aspetto item ──
         $item_w   = max( 120, min( 900, intval( $s['item_width'] ) ) );
         $item_mh  = max( 160, min( 900, intval( $s['item_min_height'] ) ) );
-        $round    = max( 0,   min( 60,  intval( $s['round'] ) ) );
+        // Dual-format: numero legacy (range) E oggetto {tl,tr,br,bl}; vuoto/zero → 0px (default storico).
+        $round    = $this->build_border_radius_css( $s['round'] ?? 0 ) ?: '0px';
         $pad      = max( 0,   min( 80,  intval( $s['item_padding'] ) ) );
         $overlay  = $pad === 0; // 0 = immagine a tutto bordo, testo sovrapposto in basso
 
@@ -230,7 +231,7 @@ class Olo_Scrollscrub_Tile extends Olo_Tile_Base {
                 flex: 0 0 auto;
                 width: <?php echo $item_w; ?>px;
                 min-height: <?php echo $item_mh; ?>px;
-                border-radius: <?php echo $round; ?>px;
+                border-radius: <?php echo $round; ?>;
                 overflow: hidden;
                 background: <?php echo $bg_def; ?>;
                 color: <?php echo $txt_def; ?>;

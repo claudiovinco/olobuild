@@ -133,6 +133,7 @@
 <script setup>
 import { t } from '@/i18n';
 import { ref, computed } from 'vue';
+import { radiusToCss } from '@/composables/useRadius';
 // CSS condiviso col frontend PHP (assets/css/timeline-super.css) — Vite lo bundla.
 import '../../../assets/css/timeline-super.css';
 
@@ -211,16 +212,18 @@ const customVars = computed(() => {
   const v = {};
   const col = (k, css) => { const c = s.value[k]; if (c) v[css] = c; };
   const px = (k, css) => { const n = parseInt(s.value[k]) || 0; if (n > 0) v[css] = n + 'px'; };
+  // Dual-format radius: Number legacy E oggetto {tl,tr,br,bl}; zero/vuoto = usa default variante (parità PHP).
+  const rad = (k, css) => { const r = radiusToCss(s.value[k], { fallback: '', zero: '0px' }); if (r && r !== '0px') v[css] = r; };
   col('tl_rail_color', '--tl-rail-color'); px('tl_rail_w', '--tl-rail-w');
   col('tl_fill_from', '--tl-fill-from'); col('tl_fill_to', '--tl-fill-to');
   px('tl_node_size', '--tl-node-size'); px('tl_node_border', '--tl-node-bd');
-  col('tl_card_bg', '--tl-card-bg'); px('tl_card_radius', '--tl-card-radius'); px('tl_card_maxw', '--tl-card-maxw'); px('tl_card_pad', '--tl-card-pad');
+  col('tl_card_bg', '--tl-card-bg'); rad('tl_card_radius', '--tl-card-radius'); px('tl_card_maxw', '--tl-card-maxw'); px('tl_card_pad', '--tl-card-pad');
   const ratio = s.value.tl_media_ratio || 'auto';
   if (ratio !== 'auto' && /^\d+\/\d+$/.test(ratio)) { v['--tl-media-ar'] = ratio; v['--tl-media-h'] = 'auto'; }
   else px('tl_media_h', '--tl-media-h');
   const fit = s.value.tl_media_fit || 'cover';
   if (['contain', 'fill', 'none'].includes(fit)) v['--tl-media-fit'] = fit;
-  px('tl_media_radius', '--tl-media-radius');
+  rad('tl_media_radius', '--tl-media-radius');
   px('tl_title_size', '--tl-title-size');
   const w = parseInt(s.value.tl_title_weight) || 0; if (w > 0) v['--tl-title-weight'] = String(w);
   col('tl_title_color', '--tl-title-color');

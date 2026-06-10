@@ -80,9 +80,9 @@ class Olo_CtaBanner_Tile extends Olo_Tile_Base {
 
         $serif = "var(--olo-font-family-heading, 'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif)";
         $sans  = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
-        $fmap  = [ 'serif' => $serif, 'sans-serif' => $sans, 'mono' => "ui-monospace,'SF Mono',Menlo,Consolas,monospace" ];
+        $legacy = [ 'serif' => $serif, 'sans-serif' => $sans, 'mono' => "ui-monospace,'SF Mono',Menlo,Consolas,monospace" ];
 
-        $h_family = $fmap[ $s['headline_font_family'] ] ?? $serif;
+        $h_family = $this->resolve_font_family( $s['headline_font_family'] ?? '', $legacy ) ?: $serif;
         $h_size   = max( 18, min( 80, absint( $s['headline_size'] ) ) );
         $h_weight = preg_match( '/^\d+$/', (string) $s['headline_weight'] ) ? $s['headline_weight'] : '400';
         $text_c   = $this->safe_color_css( $s['text_color'] ) ?: '#ffffff';

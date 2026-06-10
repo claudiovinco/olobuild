@@ -264,7 +264,7 @@ export default {
 
     // ────────── Immagine (stile) ──────────
     { type: 'separator', label: t('Immagine — stile') },
-    { key: 'card_image_radius', label: t('Arrotondamento immagine (px)'), type: 'range', min: 0, max: 40, step: 1,
+    { key: 'card_image_radius', label: t('Arrotondamento immagine (px)'), type: 'border-radius',
       description: t('0 = eredita dal raggio card') },
 
     // ────────── Caption overlay (per overlay-caption preset) ──────────

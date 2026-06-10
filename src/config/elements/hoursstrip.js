@@ -64,16 +64,12 @@ export default {
     { key: 'divider_color', label: t('Colore linee'),          type: 'color' },
 
     { type: 'separator', label: t('Giorno') },
-    { key: 'mono_font_family', label: t('Font etichette (vuoto = monospace di sistema)'), type: 'text' },
+    { key: 'mono_font_family', label: t('Font etichette (vuoto = mono del tema)'), type: 'font-family' },
     { key: 'day_color', label: t('Colore'),          type: 'color' },
     { key: 'day_size',  label: t('Dimensione (px)'), type: 'range', min: 10, max: 18, step: 1 },
 
     { type: 'separator', label: t('Orario') },
-    { key: 'time_font_family', label: t('Famiglia'), type: 'select', options: [
-      { value: 'heading', label: t('Heading (del tema)') },
-      { value: 'body',    label: t('Body (del tema)') },
-      { value: 'mono',    label: t('Monospace') },
-    ]},
+    { key: 'time_font_family', label: t('Famiglia'), type: 'font-family' },
     { key: 'time_color',  label: t('Colore'),          type: 'color' },
     { key: 'time_size',   label: t('Dimensione (px)'), type: 'range', min: 16, max: 56, step: 1 },
     { key: 'time_weight', label: t('Peso'), type: 'select', options: [

@@ -74,7 +74,7 @@ export default {
       { value: 'circles_7', label: t('Cerchi (7 hex)') },
       { value: 'circles_scattered', label: t('Cerchi sparsi (9)') },
     ]},
-    { key: 'height', label: t('Altezza'), type: 'text' },
+    { key: 'height', label: t('Altezza'), type: 'unit', units: ['px', 'vh'], min: 0 },
     { key: 'image_position', label: t('Posizione immagine'), type: 'select', options: [
       { value: 'center center', label: t('Centro') },
       { value: 'top center', label: t('Alto') },
