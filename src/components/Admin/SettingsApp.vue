@@ -142,9 +142,6 @@ import { ref, computed, provide, watch, onMounted, nextTick } from 'vue';
 import { t } from '@/i18n';
 
 // ─── Tab components ─────────────────────────────────────────────────
-// I 6 tab esistenti vengono importati con i loro nomi attuali; i 5 migrati
-// sono nuovi component PHP-backed; "Stili & Preset" riusa lo StylesTab esistente
-// (è di fatto già un "preset switcher"); "Spaziature" è uno scaffold soon.
 import ColorsTab from './ColorsTab.vue';
 import TypographyTab from './TypographyTab.vue';
 import SpaziatureTab from './SpaziatureTab.vue';
