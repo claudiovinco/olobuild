@@ -93,7 +93,10 @@ class Olo_Particlefx_Tile extends Olo_Tile_Base {
         // ── Parametri sistema (clampati) ──────────────────────────────────
         $presets = [ 'petals', 'snow', 'bubbles', 'stars', 'confetti', 'soccer' ];
         $preset  = in_array( $s['preset'], $presets, true ) ? $s['preset'] : 'petals';
-        $scope   = 'section';   // modalità "tutta la pagina" rimossa: sempre sfondo di sezione
+        // 'section' (default) = sfondo della sezione ospite; 'page' = overlay fisso
+        // su tutto il documento (il runtime ha già il ramo dedicato: canvas fixed,
+        // campo alto quanto la pagina, pointer-events none).
+        $scope   = ( ( $s['scope'] ?? 'section' ) === 'page' ) ? 'page' : 'section';
 
         $count    = max( 1,   min( 400,  intval( $s['count'] ) ) );
         $speed    = max( 0.1, min( 6,     floatval( $s['speed'] ) ) );

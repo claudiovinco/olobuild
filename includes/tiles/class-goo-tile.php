@@ -99,8 +99,9 @@ class Olo_Goo_Tile extends Olo_Tile_Base {
         // ── Parametri (clampati) ──────────────────────────────────────────
         $mode    = ( $s['mode'] === 'aurora' ) ? 'aurora' : 'goo';
         // 'section' (default) = sfondo della sezione ospite; 'column' = sfondo della
-        // colonna ospite (utile per card/box con goo per-cella, es. showcase landing).
-        $scope   = ( ( $s['scope'] ?? 'section' ) === 'column' ) ? 'column' : 'section';
+        // colonna ospite (utile per card/box con goo per-cella, es. showcase landing);
+        // 'page' = overlay fisso su tutta la pagina (layer fixed, pointer-events none).
+        $scope   = in_array( $s['scope'] ?? 'section', [ 'column', 'page' ], true ) ? $s['scope'] : 'section';
         // Builder: l'effetto "tutta la pagina" è un overlay a runtime, non rappresentabile
         // nella cella del tile → si mostra un box-anteprima coi blob, con altezza propria.
         $preview = ! empty( $s['_builder_mode'] ) && $scope === 'page';

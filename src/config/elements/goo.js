@@ -86,7 +86,8 @@ export default {
     { key: 'scope', label: t('Riempi'), type: 'select', options: [
       { value: 'section', label: t('Sezione (sfondo intera sezione)') },
       { value: 'column',  label: t('Colonna (sfondo della singola card)') },
-    ], description: t('Sezione: il layer di blob riempie la sezione che ospita il tile (sfondo full). Colonna: riempie solo la colonna contenitore — utile per dare il goo a una singola card/box (es. showcase).') },
+      { value: 'page',    label: t('Tutta la pagina (overlay fisso del sito)') },
+    ], description: t('Sezione: il layer di blob riempie la sezione che ospita il tile. Colonna: solo la colonna contenitore (es. una card). Tutta la pagina: overlay fisso su tutto il sito, dietro al contenuto, senza bloccare i click — nel canvas si mostra un box-anteprima.') },
 
     { type: 'separator', label: t('Sfondo') },
     { key: 'mode', label: t('Modalità'), type: 'select', options: [

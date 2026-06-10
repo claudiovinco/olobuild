@@ -73,6 +73,12 @@ export default {
   },
 
   fields: [
+    { type: 'separator', label: t('Ambito') },
+    { key: 'scope', label: t('Riempi'), type: 'select', options: [
+      { value: 'section', label: t('Sezione (sfondo della sezione ospite)') },
+      { value: 'page',    label: t('Tutta la pagina (overlay fisso del sito)') },
+    ], description: t('Tutta la pagina: le particelle vivono su tutto il documento e scorrono con esso, dietro al contenuto, senza mai bloccare i click.') },
+
     { type: 'separator', label: t('Sistema particelle') },
     { key: 'preset', label: t('Preset'), type: 'select', options: [
       { value: 'petals',   label: t('Petali (cadono)') },
