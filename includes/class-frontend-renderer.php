@@ -1781,6 +1781,12 @@ class Olo_Frontend_Renderer {
         $row_scrollspy_attr = $this->anim->build_scrollspy_attr( $advanced );
         $row_el_parallax_attr = $this->anim->build_element_parallax_attr( $advanced );
         $row_mouse_attrs = $this->anim->build_mouse_attrs( $advanced );
+        $row_spotlight_attr = $this->anim->build_spotlight_attr( $advanced );
+        // Tutti gli attributi-effetto della row in un'unica stringa: vanno sul
+        // wrapper quando esiste, altrimenti direttamente sul nodo griglia
+        // (prima i mouse attrs venivano calcolati ma mai stampati, e le row
+        // senza wrapper perdevano anche lo spotlight).
+        $row_fx_attrs = $row_scrollspy_attr . $row_el_parallax_attr . $row_mouse_attrs . $row_spotlight_attr;
 
         // Open row wrapper (for background)
         if ( $needs_wrapper ) {
@@ -1788,7 +1794,7 @@ class Olo_Frontend_Renderer {
             if ( $wrapper_styles ) {
                 $html .= ' style="' . esc_attr( implode( '; ', $wrapper_styles ) ) . '"';
             }
-            $html .= $row_scrollspy_attr . $row_el_parallax_attr . $this->anim->build_spotlight_attr( $advanced ) . '>';
+            $html .= $row_fx_attrs . '>';
 
             // Background image layer (with optional UIkit parallax)
             if ( $has_bg_image ) {
@@ -1838,7 +1844,7 @@ class Olo_Frontend_Renderer {
         $row_flex_styles = $this->css->build_flex_container_css( $s );
 
         // Grid — if no wrapper, put scrollspy/parallax on the grid div itself
-        $grid_extra_attrs = $needs_wrapper ? '' : ( $row_scrollspy_attr . $row_el_parallax_attr );
+        $grid_extra_attrs = $needs_wrapper ? '' : $row_fx_attrs;
         $grid_style_parts = $row_flex_styles;
         if ( $needs_wrapper && ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay ) ) {
             $grid_style_parts[] = 'position: relative';
@@ -1897,7 +1903,7 @@ class Olo_Frontend_Renderer {
                 $grid_css_parts[] = 'position: relative';
                 $grid_css_parts[] = 'z-index: 1';
             }
-            $grid_extra_attrs = $needs_wrapper ? '' : ( $row_scrollspy_attr . $row_el_parallax_attr );
+            $grid_extra_attrs = $needs_wrapper ? '' : $row_fx_attrs;
             $grid_class_list = [];
             if ( $stack ) $grid_class_list[] = 'olo-grid-stack';
             $grid_class_attr = ! empty( $grid_class_list ) ? ' class="' . esc_attr( implode( ' ', $grid_class_list ) ) . '"' : '';
@@ -1940,7 +1946,7 @@ class Olo_Frontend_Renderer {
         } else {
             // === Classic Flexbox mode ===
             $grid_style_attr = ! empty( $grid_style_parts ) ? ' style="' . esc_attr( implode( '; ', $grid_style_parts ) ) . '"' : '';
-            $grid_extra_attrs = $needs_wrapper ? '' : ( $row_scrollspy_attr . $row_el_parallax_attr );
+            $grid_extra_attrs = $needs_wrapper ? '' : $row_fx_attrs;
             $html .= '<div' . $class_attr . ' ' . $uk_grid . $grid_style_attr . $grid_extra_attrs . '>';
 
             // Loop mode: repeat children for each post from WP_Query
@@ -2304,12 +2310,13 @@ class Olo_Frontend_Renderer {
         // Scrollspy & element parallax attributes for column
         $col_scrollspy_attr = $this->anim->build_scrollspy_attr( $advanced );
         $col_el_parallax_attr = $this->anim->build_element_parallax_attr( $advanced );
+        $col_mouse_attrs = $this->anim->build_mouse_attrs( $advanced );
 
         $html = '<div id="' . esc_attr( $col_css_id ) . '" class="' . esc_attr( implode( ' ', $classes ) ) . '"';
         if ( ! empty( $inline_styles ) ) {
             $html .= ' style="' . esc_attr( implode( '; ', $inline_styles ) ) . '"';
         }
-        $html .= $col_scrollspy_attr . $col_el_parallax_attr . $this->anim->build_spotlight_attr( $advanced ) . '>';
+        $html .= $col_scrollspy_attr . $col_el_parallax_attr . $col_mouse_attrs . $this->anim->build_spotlight_attr( $advanced ) . '>';
 
         // Background image cover for column
         if ( $has_col_bg_image ) {

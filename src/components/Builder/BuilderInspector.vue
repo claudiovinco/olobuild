@@ -1000,6 +1000,58 @@
                   <input type="range" min="5" max="100" step="1" :value="tileAdvanced.cursor_spotlight_easing || 22" @input="updateAdvanced('cursor_spotlight_easing', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
                 </div>
               </template>
+
+              <!-- Cursore magnetico — impostazione GLOBALE del sito (option
+                   olo_magnetic_cursor), non della tile: esposta qui perché è
+                   qui che si cercano le impostazioni del puntatore. -->
+              <div class="mb-border-t mb-border-gray-700 mb-pt-3 mb-mt-1"></div>
+              <div class="mb-flex mb-items-center mb-justify-between">
+                <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                  <input type="checkbox" :checked="magCursor?.enabled === true" :disabled="!magLoaded" @change="updateMag('enabled', $event.target.checked)" class="mb-accent-primary-500" />
+                  <span class="mb-text-xs mb-text-gray-300">{{ t('Cursore magnetico') }}</span>
+                </label>
+                <span class="mb-text-[9px] mb-uppercase mb-tracking-wide mb-text-gray-500 mb-bg-gray-800 mb-rounded mb-px-1.5 mb-py-0.5">{{ t('Globale sito') }}</span>
+              </div>
+              <p class="mb-text-[10px] mb-text-gray-500 mb-leading-snug">{{ t('Anello + dot che sostituiscono il puntatore su tutto il sito, con attrazione magnetica sugli elementi interattivi. Vale per tutte le pagine; nel canvas resta il cursore di sistema.') }}</p>
+              <template v-if="magLoaded && magCursor?.enabled">
+                <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+                  <div>
+                    <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Colore anello') }}</label>
+                    <input type="color" :value="magCursor.ring_color" @input="updateMag('ring_color', $event.target.value)" class="mb-w-full mb-h-8 mb-rounded mb-cursor-pointer" />
+                  </div>
+                  <div>
+                    <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Colore dot') }}</label>
+                    <input type="color" :value="magCursor.dot_color" @input="updateMag('dot_color', $event.target.value)" class="mb-w-full mb-h-8 mb-rounded mb-cursor-pointer" />
+                  </div>
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Dimensione anello') }}: {{ magCursor.ring_size }}px</label>
+                  <input type="range" min="8" max="120" step="2" :value="magCursor.ring_size" @input="updateMag('ring_size', parseInt($event.target.value))" class="mb-w-full mb-accent-primary-500" />
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Ingrandimento su elementi') }}: ×{{ magCursor.hot_scale }}</label>
+                  <input type="range" min="1" max="3" step="0.1" :value="magCursor.hot_scale" @input="updateMag('hot_scale', parseFloat($event.target.value))" class="mb-w-full mb-accent-primary-500" />
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Forza magnetica') }}: {{ magCursor.pull_strength }}</label>
+                  <input type="range" min="0" max="1" step="0.05" :value="magCursor.pull_strength" @input="updateMag('pull_strength', parseFloat($event.target.value))" class="mb-w-full mb-accent-primary-500" />
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Fusione colore (blend)') }}</label>
+                  <FieldSelect ui="dropdown" :model-value="magCursor.blend_mode" :options="MAG_BLEND_OPTIONS" @update:model-value="updateMag('blend_mode', $event)" />
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Elementi che attraggono (selettore CSS)') }}</label>
+                  <input type="text" :value="magCursor.magnetic_selector" @change="updateMag('magnetic_selector', $event.target.value)" placeholder="button, a.btn" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-900 mb-font-mono" />
+                </div>
+                <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                  <input type="checkbox" :checked="magCursor.hide_system === true" @change="updateMag('hide_system', $event.target.checked)" class="mb-accent-primary-500" />
+                  <span class="mb-text-xs mb-text-gray-300">{{ t('Nascondi il cursore di sistema') }}</span>
+                </label>
+              </template>
+              <p v-if="magStatus" class="mb-text-[10px]" :class="magStatus === 'error' ? 'mb-text-red-400' : 'mb-text-gray-500'">
+                {{ magStatus === 'saving' ? t('Salvataggio…') : magStatus === 'error' ? t('Errore di salvataggio') : t('Salvato ✓') }}
+              </p>
             </div>
           </CollapseSection>
 
@@ -1388,6 +1440,61 @@ const SPOTLIGHT_BLEND_OPTIONS = [
   { value: 'hard-light', label: 'Hard Light' },
 ];
 
+// ── Cursore magnetico (impostazione GLOBALE, option olo_magnetic_cursor) ──
+// Whitelist allineata a Olo_Magnetic_Cursor::BLEND_MODES.
+const MAG_BLEND_OPTIONS = [
+  { value: 'normal', label: 'Normale' },
+  { value: 'screen', label: 'Schermo' },
+  { value: 'difference', label: 'Differenza' },
+  { value: 'exclusion', label: 'Esclusione' },
+  { value: 'overlay', label: 'Sovrapposizione' },
+  { value: 'lighten', label: 'Schiarisci' },
+  { value: 'multiply', label: 'Moltiplica' },
+];
+
+const magCursor = ref(null);
+const magLoaded = ref(false);
+const magStatus = ref('');
+let magSaveTimer = null;
+let magStatusTimer = null;
+
+async function loadMagneticCursor() {
+  try {
+    const res = await fetch(`${window.oloData.restUrl}magnetic-cursor`, {
+      headers: { 'X-WP-Nonce': window.oloData.nonce },
+    });
+    if (res.ok) {
+      magCursor.value = await res.json();
+      magLoaded.value = true;
+    }
+  } catch (e) { /* pannello resta disabilitato */ }
+}
+
+function updateMag(key, value) {
+  if (!magCursor.value) return;
+  magCursor.value[key] = value;
+  clearTimeout(magSaveTimer);
+  magSaveTimer = setTimeout(saveMagneticCursor, 600);
+}
+
+async function saveMagneticCursor() {
+  magStatus.value = 'saving';
+  try {
+    const res = await fetch(`${window.oloData.restUrl}magnetic-cursor`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+      body: JSON.stringify(magCursor.value),
+    });
+    if (!res.ok) throw new Error();
+    magCursor.value = await res.json();
+    magStatus.value = 'saved';
+  } catch (e) {
+    magStatus.value = 'error';
+  }
+  clearTimeout(magStatusTimer);
+  magStatusTimer = setTimeout(() => { magStatus.value = ''; }, 2000);
+}
+
 const INFINITE_ANIMATION_OPTIONS = [
   { value: 'none', label: 'Nessuna' },
   { value: 'float', label: 'Galleggiamento' },
@@ -1612,6 +1719,7 @@ function setupScrollSpy() {
 }
 
 onMounted(() => nextTick(setupScrollSpy));
+onMounted(loadMagneticCursor);
 onUnmounted(() => {
   if (_scrollSpyObserver) {
     _scrollSpyObserver.disconnect();

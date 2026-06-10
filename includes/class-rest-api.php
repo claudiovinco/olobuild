@@ -209,6 +209,20 @@ class Olo_Rest_Api {
             ],
         ] );
 
+        // Cursore magnetico globale (option olo_magnetic_cursor → Olo_Magnetic_Cursor)
+        register_rest_route( $this->namespace, '/magnetic-cursor', [
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'get_magnetic_cursor' ],
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+            [
+                'methods'             => 'PUT',
+                'callback'            => [ $this, 'save_magnetic_cursor' ],
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
         // Header activation
         register_rest_route( $this->namespace, '/header/activate', [
             [
@@ -2049,6 +2063,31 @@ class Olo_Rest_Api {
             }
         }
         return $this->get_api_keys();
+    }
+
+    // === Cursore magnetico globale ===
+
+    public function get_magnetic_cursor() {
+        if ( ! class_exists( 'Olo_Magnetic_Cursor' ) ) {
+            require_once OLO_PATH . 'includes/class-magnetic-cursor.php';
+        }
+        return rest_ensure_response( Olo_Magnetic_Cursor::get_settings() );
+    }
+
+    public function save_magnetic_cursor( $request ) {
+        if ( ! class_exists( 'Olo_Magnetic_Cursor' ) ) {
+            require_once OLO_PATH . 'includes/class-magnetic-cursor.php';
+        }
+        $b = $request->get_json_params();
+        if ( ! is_array( $b ) ) {
+            return new WP_Error( 'invalid_data', __( 'Dati non validi.', 'olobuild' ), [ 'status' => 400 ] );
+        }
+        // Merge sull'esistente: il pannello può inviare anche solo un sottoinsieme
+        // di chiavi (es. il toggle enabled) senza azzerare le altre.
+        $merged = array_merge( Olo_Magnetic_Cursor::get_settings(), $b );
+        $clean  = Olo_Magnetic_Cursor::sanitize( $merged );
+        update_option( Olo_Magnetic_Cursor::OPT, $clean, false );
+        return rest_ensure_response( $clean );
     }
 
     // === Custom Code Snippets ===
