@@ -810,7 +810,10 @@ function nodeEdgeDrop(nodeKind, node, parentId, index, allowedEdges) {
       if (!isOloData(source.data)) return false;
       const p = source.data;
       if (p.kind === 'node') {
-        return p.nodeKind === nodeKind && p.fromParentId === parentId && p.nodeId !== node.id;
+        // Anche cross-parent (element verso un'altra colonna/sezione, row verso
+        // un'altra sezione): moveNodeTo gestisce lo spostamento tra contenitori,
+        // e così l'indicatore di drop appare ovunque il rilascio sia valido.
+        return p.nodeKind === nodeKind && p.nodeId !== node.id;
       }
       if (p.kind === 'tile-type' && nodeKind === 'element') {
         return p.tileType !== 'section' && p.tileType !== 'row';

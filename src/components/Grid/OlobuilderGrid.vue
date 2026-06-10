@@ -433,9 +433,10 @@ function makeEdgeDrop(nodeKind, node, parentId, index, allowedEdges) {
     canDrop: ({ source }) => {
       if (!isOloData(source.data)) return false;
       const p = source.data;
-      // Reorder-only: stesso kind, stesso parent (sezioni top-level: parent=null)
+      // Stesso kind, anche cross-parent: moveNodeTo gestisce lo spostamento tra
+      // contenitori e l'indicatore di drop appare ovunque il rilascio sia valido.
       if (p.kind === 'node') {
-        return p.nodeKind === nodeKind && p.fromParentId === parentId && p.nodeId !== node.id;
+        return p.nodeKind === nodeKind && p.nodeId !== node.id;
       }
       // Sidebar drop dentro elemento: solo se non è section/row e nodeKind è element
       if (p.kind === 'tile-type' && nodeKind === 'element') {
