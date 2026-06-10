@@ -203,6 +203,17 @@ body:has(.olo-template) .wp-site-blocks {
   min-width: 0;
 }
 
+/* Larghezza adattata al contenuto (Avanzate → Posizionamento → Larghezza
+   elemento): la tile è larga quanto il contenuto e più tile "adattate"
+   consecutive si affiancano sulla stessa riga (pattern Elementor Inline auto). */
+.olo-tile-inline {
+  display: inline-block;
+  width: -moz-fit-content;
+  width: fit-content;
+  max-width: 100%;
+  vertical-align: top;
+}
+
 /* ========================================
    Container width overrides (use global CSS variable)
    ======================================== */

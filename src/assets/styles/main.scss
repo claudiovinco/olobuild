@@ -125,6 +125,16 @@
   font-weight: 300;
 }
 
+// Larghezza adattata al contenuto (Avanzate → Posizionamento): nel canvas la
+// classe va sul wrapper draggable della cella — più tile "adattate"
+// consecutive si affiancano, speculare a .olo-tile-inline del frontend.
+.olo-el-inline-wrap {
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
+  vertical-align: top;
+}
+
 // Tile in canvas
 .olo-grid-cell {
   position: relative;

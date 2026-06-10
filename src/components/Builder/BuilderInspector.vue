@@ -1157,6 +1157,11 @@
           <CollapseSection id="v2i-sec-adv-position" title="Posizionamento" :macro="true">
             <div class="mb-space-y-3">
               <div>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Larghezza elemento') }}</label>
+                <FieldSelect ui="segmented" :model-value="tileAdvanced.tile_width || 'full'" :options="TILE_WIDTH_OPTIONS" @update:model-value="updateAdvanced('tile_width', $event)" />
+                <p class="mb-text-[10px] mb-text-gray-500 mb-leading-snug mb-mt-1">{{ t('Adattata: la tile è larga quanto il suo contenuto; più tile adattate consecutive si affiancano sulla stessa riga (es. pulsanti vicini).') }}</p>
+              </div>
+              <div>
                 <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Modalità</label>
                 <FieldSelect
                   ui="dropdown"
@@ -1458,6 +1463,11 @@ const SPOTLIGHT_BLEND_OPTIONS = [
 const TILT_TARGET_OPTIONS = [
   { value: 'block', label: 'Blocco intero' },
   { value: 'items', label: 'Foto interne' },
+];
+
+const TILE_WIDTH_OPTIONS = [
+  { value: 'full', label: 'Piena' },
+  { value: 'inline', label: 'Contenuto' },
 ];
 
 // ── Cursore magnetico (impostazione GLOBALE, option olo_magnetic_cursor) ──

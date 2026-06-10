@@ -136,13 +136,13 @@
                     >
                       <div class="olo-column-elements" v-olo-drop-target="listEndDrop('elements', col.id)">
                         <template v-for="(tile, elIdx) in (col.children || [])" :key="tile.id">
-                          <div v-olo-draggable="elementDraggable(tile, col.id, elIdx)" v-olo-drop-target="elementDrop(tile, col.id, elIdx)">
+                          <div :class="{ 'olo-el-inline-wrap': tile.advanced?.tile_width === 'inline' }" v-olo-draggable="elementDraggable(tile, col.id, elIdx)" v-olo-drop-target="elementDrop(tile, col.id, elIdx)">
                             <GridCell :tile="tile" @contextmenu="onTileContextMenu">
                               <template v-if="tile.type === 'floatingpanel'" #after>
                                 <div class="olo-fp-children-zone">
                                   <div class="olo-fp-children-list" v-olo-drop-target="listEndDrop('elements', tile.id)">
                                     <template v-for="(child, chIdx) in (tile.children || [])" :key="child.id">
-                                      <div v-olo-draggable="elementDraggable(child, tile.id, chIdx)" v-olo-drop-target="elementDrop(child, tile.id, chIdx)">
+                                      <div :class="{ 'olo-el-inline-wrap': child.advanced?.tile_width === 'inline' }" v-olo-draggable="elementDraggable(child, tile.id, chIdx)" v-olo-drop-target="elementDrop(child, tile.id, chIdx)">
                                         <GridCell :tile="child" @contextmenu="onTileContextMenu" />
                                       </div>
                                     </template>
@@ -194,14 +194,14 @@
                         <!-- Elements inside column -->
                         <div class="olo-column-elements" v-olo-drop-target="listEndDrop('elements', col.id)">
                           <template v-for="(tile, elIdx) in (col.children || [])" :key="tile.id">
-                            <div v-olo-draggable="elementDraggable(tile, col.id, elIdx)" v-olo-drop-target="elementDrop(tile, col.id, elIdx)">
+                            <div :class="{ 'olo-el-inline-wrap': tile.advanced?.tile_width === 'inline' }" v-olo-draggable="elementDraggable(tile, col.id, elIdx)" v-olo-drop-target="elementDrop(tile, col.id, elIdx)">
                               <GridCell :tile="tile" @contextmenu="onTileContextMenu">
                                 <!-- Floating panel children drop zone -->
                                 <template v-if="tile.type === 'floatingpanel'" #after>
                                   <div class="olo-fp-children-zone">
                                     <div class="olo-fp-children-list" v-olo-drop-target="listEndDrop('elements', tile.id)">
                                       <template v-for="(child, chIdx) in (tile.children || [])" :key="child.id">
-                                        <div v-olo-draggable="elementDraggable(child, tile.id, chIdx)" v-olo-drop-target="elementDrop(child, tile.id, chIdx)">
+                                        <div :class="{ 'olo-el-inline-wrap': child.advanced?.tile_width === 'inline' }" v-olo-draggable="elementDraggable(child, tile.id, chIdx)" v-olo-drop-target="elementDrop(child, tile.id, chIdx)">
                                           <GridCell :tile="child" @contextmenu="onTileContextMenu" />
                                         </div>
                                       </template>

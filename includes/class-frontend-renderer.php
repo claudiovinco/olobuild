@@ -2846,6 +2846,9 @@ class Olo_Frontend_Renderer {
         $classes = [ 'olo-frontend-tile' ];
         if ( $shadow_class ) $classes[] = $shadow_class;
         if ( $is_fullwidth ) $classes[] = 'olo-tile-fullwidth';
+        // Larghezza adattata al contenuto (Avanzate → Posizionamento): tile
+        // inline-block, più tile "adattate" consecutive si affiancano.
+        if ( ( $advanced['tile_width'] ?? 'full' ) === 'inline' ) $classes[] = 'olo-tile-inline';
         if ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay ) { $classes[] = 'uk-position-relative'; $inline_styles[] = 'overflow: clip'; }
         if ( ! empty( $style['border_radius'] ) ) $inline_styles[] = 'overflow: clip';
         if ( ! empty( $advanced['css_classes'] ) ) {
