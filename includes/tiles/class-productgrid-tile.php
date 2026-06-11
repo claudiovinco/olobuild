@@ -14,6 +14,14 @@ class Olo_ProductGrid_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-products';
     protected $category = 'media';
     protected $defaults = [
+        // Sorgente: 'custom' (voci manuali, default storico) | 'woocommerce' (prodotti reali)
+        'source'           => 'custom',
+        'woo_category'     => '',
+        'woo_limit'        => 8,
+        'woo_orderby'      => 'date',
+        'woo_order'        => 'DESC',
+        'woo_on_sale'      => false,
+        'woo_quick_add'    => 'Quick add',
         'items' => [
             [ 'image' => '', 'media_label' => 'product', 'tag' => '', 'category' => 'Category', 'title' => 'Product', 'price' => '', 'link' => '#', 'quick_add' => 'Quick add' ],
         ],
@@ -57,6 +65,89 @@ class Olo_ProductGrid_Tile extends Olo_Tile_Base {
     ];
 
     public function get_controls() { return []; }
+
+    /**
+     * Sorgente WooCommerce: costruisce gli item della griglia dai prodotti reali,
+     * nello STESSO formato delle voci manuali (render Vue/PHP invariato).
+     * Statico perché riusato dall'endpoint REST /productgrid-products (anteprima builder).
+     */
+    public static function woo_items( $s ) {
+        if ( ! function_exists( 'wc_get_products' ) ) { return []; }
+
+        $limit   = max( 1, min( 24, intval( $s['woo_limit'] ?? 8 ) ) );
+        $orderby = in_array( $s['woo_orderby'] ?? 'date', [ 'date', 'title', 'price', 'popularity', 'rand' ], true ) ? $s['woo_orderby'] : 'date';
+        $order   = ( strtoupper( (string) ( $s['woo_order'] ?? 'DESC' ) ) === 'ASC' ) ? 'ASC' : 'DESC';
+        $qa      = trim( (string) ( $s['woo_quick_add'] ?? 'Quick add' ) );
+
+        $args = [ 'limit' => $limit, 'status' => 'publish', 'order' => $order ];
+        if ( 'price' === $orderby ) {
+            $args['orderby']  = 'meta_value_num';
+            $args['meta_key'] = '_price'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+        } elseif ( 'popularity' === $orderby ) {
+            $args['orderby']  = 'meta_value_num';
+            $args['meta_key'] = 'total_sales'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+        } else {
+            $args['orderby'] = $orderby;
+        }
+
+        $cat = trim( (string) ( $s['woo_category'] ?? '' ) );
+        if ( $cat !== '' ) {
+            // Slug (anche CSV); i nomi vengono convertiti in slug se esiste il termine.
+            $slugs = [];
+            foreach ( array_filter( array_map( 'trim', explode( ',', $cat ) ) ) as $c ) {
+                $term = get_term_by( 'slug', sanitize_title( $c ), 'product_cat' );
+                if ( ! $term ) { $term = get_term_by( 'name', $c, 'product_cat' ); }
+                if ( $term ) { $slugs[] = $term->slug; }
+            }
+            if ( empty( $slugs ) ) { return []; }
+            $args['category'] = $slugs;
+        }
+
+        if ( ! empty( $s['woo_on_sale'] ) ) {
+            $on_sale = wc_get_product_ids_on_sale();
+            if ( empty( $on_sale ) ) { return []; }
+            $args['include'] = $on_sale;
+        }
+
+        $items = [];
+        foreach ( wc_get_products( $args ) as $p ) {
+            $pid   = $p->get_id();
+            $image = get_the_post_thumbnail_url( $pid, 'large' ) ?: '';
+
+            $cat_name = '';
+            $terms = get_the_terms( $pid, 'product_cat' );
+            if ( $terms && ! is_wp_error( $terms ) ) {
+                foreach ( $terms as $t ) {
+                    if ( 'uncategorized' !== $t->slug ) { $cat_name = $t->name; break; }
+                }
+            }
+
+            $tag = '';
+            if ( $p->is_on_sale() ) {
+                $tag = __( 'Sale', 'olobuild' );
+            } else {
+                $ptags = get_the_terms( $pid, 'product_tag' );
+                if ( $ptags && ! is_wp_error( $ptags ) ) { $tag = $ptags[0]->name; }
+            }
+
+            $price_raw = (float) $p->get_price();
+            $decimals  = ( fmod( $price_raw, 1 ) > 0 ) ? wc_get_price_decimals() : 0;
+            $price     = html_entity_decode( wp_strip_all_tags( wc_price( $price_raw, [ 'decimals' => $decimals ] ) ), ENT_QUOTES, 'UTF-8' );
+
+            $items[] = [
+                'image'       => $image,
+                'media_label' => mb_strtolower( $p->get_name() ),
+                'tag'         => $tag,
+                'category'    => $cat_name,
+                'title'       => $p->get_name(),
+                'price'       => $price,
+                'link'        => get_permalink( $pid ),
+                'quick_add'   => $qa,
+                'filter_tags' => $cat_name,
+            ];
+        }
+        return $items;
+    }
 
     public function render( $settings, $style = [] ) {
         $s   = wp_parse_args( $settings, $this->defaults );
@@ -115,6 +206,9 @@ class Olo_ProductGrid_Tile extends Olo_Tile_Base {
         $sans = "var(--olo-font-family, -apple-system, sans-serif)";
 
         $items = is_array( $s['items'] ) ? array_values( $s['items'] ) : [];
+        if ( ( $s['source'] ?? 'custom' ) === 'woocommerce' ) {
+            $items = self::woo_items( $s );
+        }
         if ( empty( $items ) ) { return ''; }
 
         // Filtri (additivo): chip espliciti `filter_list` (filtrano per `filter_tags`) oppure,

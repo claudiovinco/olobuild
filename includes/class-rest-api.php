@@ -147,6 +147,13 @@ class Olo_Rest_Api {
             'permission_callback' => [ $this, 'check_permission' ],
         ] );
 
+        // Anteprima prodotti WooCommerce per la tile productgrid (canvas builder)
+        register_rest_route( $this->namespace, '/productgrid-products', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'get_productgrid_products' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
+
         // Dynamic content sources catalog
         register_rest_route( $this->namespace, '/dynamic-sources', [
             'methods'             => 'GET',
@@ -1322,6 +1329,25 @@ class Olo_Rest_Api {
     public function get_dynamic_sources() {
         $dc = new Olo_Dynamic_Content();
         return rest_ensure_response( $dc->get_available_sources() );
+    }
+
+    /**
+     * Prodotti WooCommerce normalizzati per l'anteprima della tile productgrid.
+     * Stessa logica del render frontend (Olo_ProductGrid_Tile::woo_items).
+     */
+    public function get_productgrid_products( $request ) {
+        if ( ! class_exists( 'WooCommerce' ) || ! class_exists( 'Olo_ProductGrid_Tile' ) ) {
+            return rest_ensure_response( [ 'woo' => false, 'items' => [] ] );
+        }
+        $items = Olo_ProductGrid_Tile::woo_items( [
+            'woo_category'  => sanitize_text_field( (string) $request->get_param( 'category' ) ),
+            'woo_limit'     => intval( $request->get_param( 'limit' ) ?: 8 ),
+            'woo_orderby'   => sanitize_key( (string) ( $request->get_param( 'orderby' ) ?: 'date' ) ),
+            'woo_order'     => sanitize_key( (string) ( $request->get_param( 'order' ) ?: 'DESC' ) ),
+            'woo_on_sale'   => '1' === (string) $request->get_param( 'on_sale' ),
+            'woo_quick_add' => sanitize_text_field( (string) ( $request->get_param( 'quick_add' ) ?: 'Quick add' ) ),
+        ] );
+        return rest_ensure_response( [ 'woo' => true, 'items' => $items ] );
     }
 
     public function get_styles() {

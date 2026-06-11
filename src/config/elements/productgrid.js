@@ -15,6 +15,13 @@ export default {
   category: 'media',
 
   defaults: {
+    source: 'custom',
+    woo_category: '',
+    woo_limit: 8,
+    woo_orderby: 'date',
+    woo_order: 'DESC',
+    woo_on_sale: false,
+    woo_quick_add: 'Quick add',
     items: [
       { image: '', media_label: 'wool crêpe coat', tag: 'New', category: 'Outerwear', title: 'Crêpe Tailored Coat', price: '€1,290', link: '#', quick_add: 'Quick add' },
       { image: '', media_label: 'silk column dress', tag: '', category: 'Eveningwear', title: 'Silk Column Dress', price: '€980', link: '#', quick_add: 'Quick add' },
@@ -79,8 +86,36 @@ export default {
   },
 
   fields: [
-    { type: 'separator', label: t('Prodotti') },
+    { type: 'separator', label: t('Sorgente') },
+    { key: 'source', label: t('Prodotti da'), type: 'select', options: [
+      { value: 'custom', label: t('Voci manuali') },
+      { value: 'woocommerce', label: t('WooCommerce') },
+    ]},
+    { key: 'woo_category', label: t('Categoria prodotto (slug, vuoto = tutte)'), type: 'text',
+      condition: { field: 'source', value: 'woocommerce' }, placeholder: 'outerwear, knitwear' },
+    { key: 'woo_limit', label: t('Numero prodotti'), type: 'range', min: 1, max: 24, step: 1,
+      condition: { field: 'source', value: 'woocommerce' } },
+    { key: 'woo_orderby', label: t('Ordina per'), type: 'select',
+      condition: { field: 'source', value: 'woocommerce' }, options: [
+      { value: 'date', label: t('Data') },
+      { value: 'title', label: t('Titolo') },
+      { value: 'price', label: t('Prezzo') },
+      { value: 'popularity', label: t('Popolarità') },
+      { value: 'rand', label: t('Casuale') },
+    ]},
+    { key: 'woo_order', label: t('Direzione'), type: 'select',
+      condition: { field: 'source', value: 'woocommerce' }, options: [
+      { value: 'DESC', label: t('Decrescente') },
+      { value: 'ASC', label: t('Crescente') },
+    ]},
+    { key: 'woo_on_sale', label: t('Solo prodotti in saldo'), type: 'toggle',
+      condition: { field: 'source', value: 'woocommerce' } },
+    { key: 'woo_quick_add', label: t('Testo hover (Quick add)'), type: 'text',
+      condition: { field: 'source', value: 'woocommerce' } },
+
+    { type: 'separator', label: t('Prodotti'), condition: { field: 'source', value: 'custom' } },
     { key: 'items', label: t('Voci'), type: 'content-items',
+      condition: { field: 'source', value: 'custom' },
       itemLabel: t('Prodotto'),
       defaults: { image: '', media_bg: { type: 'none' }, media_label: 'product', tag: '', category: 'Category', title: 'Product', price: '€0', shades: '', notes: '', roast: 0, filter_tags: '', link: '#', quick_add: 'Quick add' },
       itemFields: [

@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { resolveFontFamily } from '@/composables/oloTileDefaults';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 import { radiusToCss } from '@/composables/useRadius';
@@ -49,6 +49,8 @@ import { borderDefault, borderHoverDefault, borderEffectDefaults } from '@/confi
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
 const defaults = {
+  source: 'custom',
+  woo_category: '', woo_limit: 8, woo_orderby: 'date', woo_order: 'DESC', woo_on_sale: false, woo_quick_add: 'Quick add',
   items: [
     { image: '', media_label: 'wool crêpe coat', tag: 'New', category: 'Outerwear', title: 'Crêpe Tailored Coat', price: '€1,290', link: '#', quick_add: 'Quick add' },
     { image: '', media_label: 'silk column dress', tag: '', category: 'Eveningwear', title: 'Silk Column Dress', price: '€980', link: '#', quick_add: 'Quick add' },
@@ -69,7 +71,47 @@ const defaults = {
 };
 
 const s = computed(() => ({ ...defaults, ...props.settings }));
-const items = computed(() => Array.isArray(s.value.items) ? s.value.items : []);
+
+// ── Sorgente WooCommerce: anteprima reale nel canvas via REST ──
+const isWoo = computed(() => (s.value.source || 'custom') === 'woocommerce');
+const wooItems = ref(null); // null = non ancora caricato
+let wooTimer = null;
+function fetchWooItems() {
+  const od = window.oloData || {};
+  if (!od.restUrl) { wooItems.value = []; return; }
+  const params = new URLSearchParams({
+    category: s.value.woo_category || '',
+    limit: String(s.value.woo_limit || 8),
+    orderby: s.value.woo_orderby || 'date',
+    order: s.value.woo_order || 'DESC',
+    on_sale: s.value.woo_on_sale ? '1' : '0',
+    quick_add: s.value.woo_quick_add || 'Quick add',
+  });
+  fetch(`${od.restUrl}productgrid-products?${params}`, { headers: { 'X-WP-Nonce': od.nonce || '' } })
+    .then(r => r.json())
+    .then(d => { wooItems.value = Array.isArray(d.items) ? d.items : []; })
+    .catch(() => { wooItems.value = []; });
+}
+watch(
+  [isWoo, () => s.value.woo_category, () => s.value.woo_limit, () => s.value.woo_orderby, () => s.value.woo_order, () => s.value.woo_on_sale, () => s.value.woo_quick_add],
+  () => {
+    if (!isWoo.value) return;
+    clearTimeout(wooTimer);
+    wooTimer = setTimeout(fetchWooItems, 350);
+  },
+  { immediate: true }
+);
+// Placeholder informativi finché i prodotti reali non arrivano (o se il negozio è vuoto)
+const WOO_PLACEHOLDER = [1, 2, 3, 4].map(n => ({
+  image: '', media_label: 'woocommerce', tag: '', category: '—', title: `Prodotto ${n}`, price: '', link: '#', quick_add: '',
+}));
+const items = computed(() => {
+  if (isWoo.value) {
+    if (wooItems.value === null) return WOO_PLACEHOLDER;          // loading
+    return wooItems.value.length ? wooItems.value : WOO_PLACEHOLDER; // negozio vuoto
+  }
+  return Array.isArray(s.value.items) ? s.value.items : [];
+});
 const itemHasBg = (it) => !!(it && it.media_bg && it.media_bg.type && it.media_bg.type !== 'none');
 const flist = computed(() => { const raw = String(s.value.filter_list || '').trim(); return raw ? raw.split(',').map(x => x.trim()).filter(Boolean) : []; });
 const cats = computed(() => { if (flist.value.length) return flist.value; const out = []; items.value.forEach(it => { const c = (it && it.category) ? String(it.category).trim() : ''; if (c && !out.includes(c)) out.push(c); }); return out; });
