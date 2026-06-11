@@ -19,6 +19,7 @@ class Olo_Setup_Wizard {
 
         // Show activation notice with link to wizard (safer than auto-redirect)
         add_action( 'admin_notices', [ $this, 'show_activation_notice' ] );
+        add_action( 'admin_init', [ $this, 'maybe_dismiss_welcome' ], 3 );
 
         // AJAX handlers
         add_action( 'wp_ajax_olo_setup_install_theme', [ $this, 'ajax_install_theme' ] );
@@ -60,22 +61,75 @@ class Olo_Setup_Wizard {
     }
 
     /**
-     * Show a dismissible admin notice after activation (replaces auto-redirect).
+     * "Più tardi": nasconde il pannello di benvenuto in modo persistente (option).
+     */
+    public function maybe_dismiss_welcome() {
+        if ( ! isset( $_GET['olo_welcome_dismiss'] ) ) return;
+        if ( ! current_user_can( 'manage_options' ) ) return;
+        $nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
+        if ( ! wp_verify_nonce( $nonce, 'olo_welcome_dismiss' ) ) return;
+
+        update_option( 'olo_welcome_dismissed', 1, false );
+        wp_safe_redirect( remove_query_arg( [ 'olo_welcome_dismiss', '_wpnonce' ] ) );
+        exit;
+    }
+
+    /**
+     * Welcome hero post-attivazione: pannello brandizzato con CTA al wizard.
+     * Mostrato solo in Bacheca e nella pagina Plugin finché il setup non è
+     * completato (o finché l'utente non sceglie "Più tardi").
      */
     public function show_activation_notice() {
         if ( ! current_user_can( 'manage_options' ) ) return;
-        if ( get_option( 'olo_setup_complete' ) ) return;
+        if ( get_option( 'olo_setup_complete' ) || get_option( 'olo_welcome_dismissed' ) ) return;
         if ( isset( $_GET['page'] ) && $_GET['page'] === 'olo-setup' ) return;
 
-        $wizard_url = admin_url( 'admin.php?page=olo-setup' );
+        $screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+        if ( $screen && ! in_array( $screen->id, [ 'dashboard', 'plugins' ], true ) ) return;
+
+        $wizard_url  = admin_url( 'admin.php?page=olo-setup' );
+        $dismiss_url = wp_nonce_url( add_query_arg( 'olo_welcome_dismiss', '1' ), 'olo_welcome_dismiss' );
+        $logo_url    = OLO_URL . 'assets/img/olobuild-logo-200-white.png';
         ?>
-        <div class="notice notice-info is-dismissible">
-            <p>
-                <strong>Olobuild</strong> — <?php esc_html_e( 'Configurazione iniziale disponibile', 'olobuild' ); ?>
-                <a href="<?php echo esc_url( $wizard_url ); ?>" class="button button-primary" style="margin-left:12px;">
-                    <?php esc_html_e( 'Avvia configurazione', 'olobuild' ); ?>
-                </a>
-            </p>
+        <style>
+            .olo-welcome{position:relative;overflow:hidden;margin:20px 20px 20px 2px;padding:0;border:0;border-radius:14px;
+                background:linear-gradient(135deg,#0F172A 0%,#1E293B 60%,#2A1220 100%);box-shadow:0 12px 32px rgba(15,23,42,.28);}
+            .olo-welcome::before{content:"";position:absolute;right:-90px;top:-90px;width:320px;height:320px;border-radius:50%;
+                background:radial-gradient(circle,rgba(225,71,79,.38),transparent 70%);pointer-events:none;}
+            .olo-welcome__inner{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:24px 32px;padding:30px 36px;}
+            .olo-welcome__logo{height:44px;width:auto;flex:0 0 auto;}
+            .olo-welcome__text{flex:1 1 340px;min-width:260px;}
+            .olo-welcome__text h2{margin:0 0 7px;font-size:22px;line-height:1.25;color:#F8FAFC;}
+            .olo-welcome__text p{margin:0 0 10px;font-size:14px;line-height:1.6;color:#CBD5E1;max-width:56em;}
+            .olo-welcome__steps{margin:0;font-size:12.5px;color:#94A3B8;letter-spacing:.2px;}
+            .olo-welcome__steps b{color:#E2E8F0;font-weight:600;}
+            .olo-welcome__actions{flex:0 0 auto;display:flex;align-items:center;gap:18px;}
+            .olo-welcome__cta{display:inline-block;padding:13px 28px;background:#e1474f;color:#fff !important;border-radius:9px;
+                font-size:14.5px;font-weight:600;text-decoration:none;box-shadow:0 6px 18px rgba(225,71,79,.42);
+                transition:transform .15s ease,box-shadow .15s ease;}
+            .olo-welcome__cta:hover{transform:translateY(-1px);box-shadow:0 9px 22px rgba(225,71,79,.5);}
+            .olo-welcome__cta:focus-visible{outline:2px solid #fff;outline-offset:3px;}
+            .olo-welcome__later{color:#94A3B8 !important;font-size:13px;text-decoration:none;}
+            .olo-welcome__later:hover{color:#CBD5E1 !important;}
+            .olo-welcome__later:focus-visible{outline:2px solid #94A3B8;outline-offset:3px;border-radius:4px;}
+        </style>
+        <div class="notice olo-welcome">
+            <div class="olo-welcome__inner">
+                <img class="olo-welcome__logo" src="<?php echo esc_url( $logo_url ); ?>" alt="Olobuild">
+                <div class="olo-welcome__text">
+                    <h2><?php esc_html_e( 'Ti diamo il benvenuto in Olobuild!', 'olobuild' ); ?></h2>
+                    <p><?php esc_html_e( 'Il tuo page builder è installato e pronto. Ti accompagniamo nei primi passi: in un paio di minuti il sito prende già forma.', 'olobuild' ); ?></p>
+                    <p class="olo-welcome__steps">
+                        <b>1</b> <?php esc_html_e( 'Scegli un tema', 'olobuild' ); ?> &nbsp;·&nbsp;
+                        <b>2</b> <?php esc_html_e( 'Importa i contenuti demo', 'olobuild' ); ?> &nbsp;·&nbsp;
+                        <b>3</b> <?php esc_html_e( 'Personalizza e pubblica', 'olobuild' ); ?>
+                    </p>
+                </div>
+                <div class="olo-welcome__actions">
+                    <a class="olo-welcome__cta" href="<?php echo esc_url( $wizard_url ); ?>"><?php esc_html_e( 'Avvia la configurazione', 'olobuild' ); ?></a>
+                    <a class="olo-welcome__later" href="<?php echo esc_url( $dismiss_url ); ?>"><?php esc_html_e( 'Più tardi', 'olobuild' ); ?></a>
+                </div>
+            </div>
         </div>
         <?php
     }
