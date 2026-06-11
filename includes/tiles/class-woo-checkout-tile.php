@@ -20,6 +20,13 @@ class Olo_Woo_Checkout_Tile extends Olo_Tile_Base {
         'border_color'     => '',
         'button_color'     => '',
         'button_bg'        => '',
+        // Campi/pannelli (additivi, vuoto = resa storica)
+        'input_bg'         => '',
+        'input_text_color' => '',
+        'input_radius'     => '',
+        'panel_bg'         => '',
+        'notice_bg'        => '',
+        'notice_text'      => '',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -64,6 +71,15 @@ class Olo_Woo_Checkout_Tile extends Olo_Tile_Base {
         $border_radius = ( $form_style === 'modern' ) ? '8px' : '4px';
         $input_padding = ( $form_style === 'modern' ) ? '12px 16px' : '8px 12px';
 
+        // Campi/pannelli — fallback = resa storica (input bianchi, pannelli muted)
+        $input_bg     = $this->safe_color_css( $s['input_bg'] ?? '' ) ?: '#ffffff';
+        $input_text   = $this->safe_color_css( $s['input_text_color'] ?? '' ) ?: ( $text_color ?: 'inherit' );
+        $input_radius = trim( (string) ( $s['input_radius'] ?? '' ) );
+        $input_radius = ( $input_radius !== '' && preg_match( '/^\d{1,3}$/', $input_radius ) ) ? $input_radius . 'px' : $border_radius;
+        $panel_bg     = $this->safe_color_css( $s['panel_bg'] ?? '' ) ?: 'var(--olo-color-muted, #F3F4F6)';
+        $notice_bg    = $this->safe_color_css( $s['notice_bg'] ?? '' ) ?: 'var(--olo-color-muted, #F3F4F6)';
+        $notice_text  = $this->safe_color_css( $s['notice_text'] ?? '' ) ?: ( $text_color ?: 'inherit' );
+
         ob_start();
         ?>
 <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from safe_color_css()-validated colors, fixed literal ternaries ($border_radius/$input_padding) gated by in_array() whitelists, and the internally generated $uid. Column 0 + closing tag so this line emits zero bytes. ?>
@@ -72,21 +88,65 @@ class Olo_Woo_Checkout_Tile extends Olo_Tile_Base {
                 color: <?php echo $text_color; ?>;
             }
             <?php if ( $layout === 'two_columns' ) : ?>
-            .<?php echo $uid; ?> .woocommerce .col2-set {
+            /* Due colonne vere: dati cliente | riepilogo+pagamento (sticky) */
+            .<?php echo $uid; ?> form.woocommerce-checkout {
                 display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 32px;
+                grid-template-columns: 1.15fr 0.85fr;
+                grid-template-rows: auto 1fr;
+                column-gap: 48px;
+                align-items: start;
             }
-            @media (max-width: 768px) {
-                .<?php echo $uid; ?> .woocommerce .col2-set {
-                    grid-template-columns: 1fr;
-                }
+            .<?php echo $uid; ?> form.woocommerce-checkout #customer_details { grid-column: 1; grid-row: 1 / span 2; }
+            .<?php echo $uid; ?> form.woocommerce-checkout #order_review_heading { grid-column: 2; grid-row: 1; margin-top: 0; }
+            .<?php echo $uid; ?> form.woocommerce-checkout #order_review { grid-column: 2; grid-row: 2; position: sticky; top: 110px; }
+            @media (max-width: 900px) {
+                .<?php echo $uid; ?> form.woocommerce-checkout { display: block; }
+                .<?php echo $uid; ?> form.woocommerce-checkout #order_review { position: static; }
             }
             <?php else : ?>
-            .<?php echo $uid; ?> .woocommerce .col2-set {
-                max-width: 640px;
-            }
+            .<?php echo $uid; ?> form.woocommerce-checkout { max-width: 640px; margin: 0 auto; }
             <?php endif; ?>
+            /* Fatturazione/spedizione in stack pieno (annulla i float/width del CSS Woo) */
+            .<?php echo $uid; ?> .woocommerce .col2-set { display: block; width: 100%; }
+            .<?php echo $uid; ?> .woocommerce .col2-set .col-1,
+            .<?php echo $uid; ?> .woocommerce .col2-set .col-2 { float: none; width: 100%; max-width: none; margin-bottom: 24px; }
+            /* Notice WooCommerce (coupon, errori, messaggi) coerenti col tema */
+            .<?php echo $uid; ?> .woocommerce-info,
+            .<?php echo $uid; ?> .woocommerce-message,
+            .<?php echo $uid; ?> .woocommerce-error,
+            .<?php echo $uid; ?> .woocommerce-NoticeGroup .woocommerce-error {
+                background: <?php echo $notice_bg; ?>;
+                color: <?php echo $notice_text; ?>;
+                border: 1px solid <?php echo $border_color; ?>;
+                border-left: 3px solid <?php echo $accent_color; ?>;
+                border-radius: <?php echo $border_radius; ?>;
+                padding: 14px 18px 14px 44px;
+                margin: 0 0 28px;
+                list-style: none;
+                position: relative;
+            }
+            .<?php echo $uid; ?> .woocommerce-info::before,
+            .<?php echo $uid; ?> .woocommerce-message::before,
+            .<?php echo $uid; ?> .woocommerce-error::before { color: <?php echo $accent_color; ?>; left: 16px; top: 14px; position: absolute; }
+            .<?php echo $uid; ?> .woocommerce-info a,
+            .<?php echo $uid; ?> .woocommerce-message a { color: <?php echo $accent_color; ?>; }
+            /* Form coupon a scomparsa */
+            .<?php echo $uid; ?> form.checkout_coupon {
+                background: <?php echo $panel_bg; ?>;
+                border: 1px solid <?php echo $border_color; ?>;
+                border-radius: <?php echo $border_radius; ?>;
+                padding: 20px;
+                margin: 0 0 28px;
+            }
+            .<?php echo $uid; ?> form.checkout_coupon .button {
+                background: <?php echo $btn_bg; ?>;
+                color: <?php echo $btn_color; ?>;
+                border: none;
+                border-radius: <?php echo $input_radius; ?>;
+                padding: <?php echo $input_padding; ?>;
+                font-weight: 700;
+                cursor: pointer;
+            }
             .<?php echo $uid; ?> .woocommerce h3 {
                 font-size: 20px;
                 font-weight: 700;
@@ -109,12 +169,17 @@ class Olo_Woo_Checkout_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .woocommerce .form-row textarea {
                 width: 100%;
                 padding: <?php echo $input_padding; ?>;
+                background: <?php echo $input_bg; ?>;
                 border: 1px solid <?php echo $border_color; ?>;
-                border-radius: <?php echo $border_radius; ?>;
+                border-radius: <?php echo $input_radius; ?>;
                 font-size: 14px;
-                color: <?php echo $text_color; ?>;
+                color: <?php echo $input_text; ?>;
                 transition: border-color 0.2s ease;
                 box-sizing: border-box;
+            }
+            .<?php echo $uid; ?> .woocommerce .form-row input::placeholder,
+            .<?php echo $uid; ?> .woocommerce .form-row textarea::placeholder {
+                color: color-mix(in srgb, <?php echo $input_text; ?> 45%, transparent);
             }
             .<?php echo $uid; ?> .woocommerce .form-row input:focus-visible,
             .<?php echo $uid; ?> .woocommerce .form-row select:focus-visible,
@@ -143,7 +208,7 @@ class Olo_Woo_Checkout_Tile extends Olo_Tile_Base {
                 margin-bottom: 24px;
             }
             .<?php echo $uid; ?> .woocommerce table.shop_table th {
-                background: var(--olo-color-muted, #F3F4F6);
+                background: <?php echo $panel_bg; ?>;
                 color: <?php echo $heading_color; ?>;
                 font-weight: 600;
                 font-size: 13px;
@@ -179,11 +244,18 @@ class Olo_Woo_Checkout_Tile extends Olo_Tile_Base {
                 opacity: 0.9;
             }
             .<?php echo $uid; ?> .woocommerce .woocommerce-checkout-payment {
-                background: var(--olo-color-muted, #F3F4F6);
+                background: <?php echo $panel_bg; ?>;
                 border: 1px solid <?php echo $border_color; ?>;
                 border-radius: <?php echo $border_radius; ?>;
                 padding: 20px;
             }
+            .<?php echo $uid; ?> .woocommerce .wc_payment_methods .payment_box {
+                background: transparent;
+                color: <?php echo $text_color; ?>;
+                padding: 10px 0 0;
+                font-size: 13px;
+            }
+            .<?php echo $uid; ?> .woocommerce .wc_payment_methods .payment_box::before { display: none; }
             .<?php echo $uid; ?> .woocommerce .wc_payment_methods {
                 list-style: none;
                 padding: 0;
