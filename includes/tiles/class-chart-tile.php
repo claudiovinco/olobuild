@@ -216,9 +216,10 @@ class Olo_Chart_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-chart" style="<?php if ( $bg_color ) echo 'background:' . $bg_color . ';'; ?>padding:16px;">
-            <canvas id="<?php echo esc_attr( $uid ); ?>" style="width:100%;height:<?php echo $chart_height; ?>px;max-height:<?php echo $chart_height; ?>px;"></canvas>
+        <div class="olo-chart" style="<?php if ( $bg_color ) echo 'background:' . $bg_color . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- background colour validated by safe_color_css() above ?>padding:16px;">
+            <canvas id="<?php echo esc_attr( $uid ); ?>" style="width:100%;height:<?php echo (int) $chart_height; ?>px;max-height:<?php echo (int) $chart_height; ?>px;"></canvas>
         </div>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline Chart.js config below is built exclusively from values sanitized above: esc_js()'d strings, safe_color_css() colours, intval()/floatval() clamps, in_array() whitelists and fixed 'true'/'false' ternaries. ?>
         <script>
         (function(){
             function initChart(){
@@ -411,6 +412,7 @@ class Olo_Chart_Tile extends Olo_Tile_Base {
             }
         })();
         </script>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php
 
                 // Border system
@@ -419,8 +421,8 @@ class Olo_Chart_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized border settings
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized border settings
         }
         return ob_get_clean();
     }

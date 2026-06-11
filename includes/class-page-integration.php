@@ -304,7 +304,7 @@ class Olo_Page_Integration {
                 $tile_count = $this->count_elements( $template['content'] ?? [] );
             ?>
                 <p style="margin: 0 0 8px; color: #50575e; font-size: 11px; text-align: center;">
-                    <?php echo $tile_count; ?> elementi &middot;
+                    <?php echo (int) $tile_count; ?> elementi &middot;
                     <code style="font-size: 10px;">[olo_template id="<?php echo esc_attr( $template_id ); ?>"]</code>
                 </p>
                 <a href="<?php echo esc_url( $url ); ?>"

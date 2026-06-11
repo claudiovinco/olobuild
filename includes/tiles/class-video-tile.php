@@ -196,7 +196,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <div class="olo-video uk-responsive-width <?php echo esc_attr( $this->_v_uid ); ?>">
-            <div style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; <?php echo $this->_vbr; ?>">
+            <div style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; <?php echo $this->_vbr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built internally from build_border_radius_css() integer radii, Olo_Tile_Utils::shadow_value() and fixed literals ?>">
                 <?php if ( $has_poster ) : ?>
                     <?php
                     $icon_size  = absint( $s['play_icon_size'] ) ?: 80;
@@ -208,7 +208,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                         <img src="<?php echo esc_url( $poster_url ); ?>" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" />
                         <?php if ( $show_icon ) : ?>
                         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
-                            <svg width="<?php echo $icon_size; ?>" height="<?php echo $icon_size; ?>" viewBox="0 0 80 80">
+                            <svg width="<?php echo (int) $icon_size; ?>" height="<?php echo (int) $icon_size; ?>" viewBox="0 0 80 80">
                                 <circle cx="40" cy="40" r="38" fill="rgba(0,0,0,0.5)" stroke-width="2" stroke="<?php echo esc_attr( $icon_color ); ?>"/>
                                 <polygon points="32,24 32,56 58,40" fill="<?php echo esc_attr( $icon_color ); ?>"/>
                             </svg>
@@ -230,7 +230,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                         <?php echo esc_html__( 'Inserisci un URL video', 'olobuild' ); ?>
                     </div>
                 <?php endif; ?>
-                <?php echo $this->render_overlay_layers( $s ); ?>
+                <?php echo $this->render_overlay_layers( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- overlay HTML built internally with esc_attr()/esc_html()/safe_color_css()/absint() ?>
             </div>
             <?php $this->render_caption( $s ); ?>
         </div>
@@ -256,7 +256,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <div class="olo-video uk-responsive-width <?php echo esc_attr( $this->_v_uid ); ?>">
-            <div style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; <?php echo $this->_vbr; ?> background: #1F2937;">
+            <div style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; <?php echo $this->_vbr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built internally from build_border_radius_css() integer radii, Olo_Tile_Utils::shadow_value() and fixed literals ?> background: #1F2937;">
                 <?php if ( $src ) : ?>
                     <video
                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"
@@ -275,7 +275,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                         <?php echo esc_html__( 'Seleziona un file video', 'olobuild' ); ?>
                     </div>
                 <?php endif; ?>
-                <?php echo $this->render_overlay_layers( $s ); ?>
+                <?php echo $this->render_overlay_layers( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- overlay HTML built internally with esc_attr()/esc_html()/safe_color_css()/absint() ?>
             </div>
             <?php $this->render_caption( $s ); ?>
         </div>
@@ -314,7 +314,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-video olo-video-cover uk-position-relative uk-overflow-hidden <?php echo esc_attr( $this->_v_uid ); ?>" style="height: <?php echo $height; ?>px; <?php echo $this->_vbr; ?>">
+        <div class="olo-video olo-video-cover uk-position-relative uk-overflow-hidden <?php echo esc_attr( $this->_v_uid ); ?>" style="height: <?php echo (int) $height; ?>px; <?php echo $this->_vbr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built internally from build_border_radius_css() integer radii, Olo_Tile_Utils::shadow_value() and fixed literals ?>">
             <?php if ( $src ) : ?>
                 <video
                     class="uk-position-cover"
@@ -336,7 +336,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                         <img src="<?php echo esc_url( $poster_url ); ?>" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" />
                         <?php if ( $show_icon ) : ?>
                         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
-                            <svg width="<?php echo $icon_size; ?>" height="<?php echo $icon_size; ?>" viewBox="0 0 80 80">
+                            <svg width="<?php echo (int) $icon_size; ?>" height="<?php echo (int) $icon_size; ?>" viewBox="0 0 80 80">
                                 <circle cx="40" cy="40" r="38" fill="rgba(0,0,0,0.5)" stroke-width="2" stroke="<?php echo esc_attr( $icon_color ); ?>"/>
                                 <polygon points="32,24 32,56 58,40" fill="<?php echo esc_attr( $icon_color ); ?>"/>
                             </svg>
@@ -360,7 +360,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                 </div>
             <?php endif; ?>
 
-            <?php echo $this->render_overlay_layers( $s ); ?>
+            <?php echo $this->render_overlay_layers( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- overlay HTML built internally with esc_attr()/esc_html()/safe_color_css()/absint() ?>
         </div>
         <?php $this->render_caption( $s ); ?>
         <?php
@@ -380,7 +380,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
 
         ob_start();
         if ( $has_overlay ) {
-            ?><div style="position:absolute;inset:0;background-color:<?php echo esc_attr( $ov_color ); ?>;opacity:<?php echo $ov_opacity / 100; ?>;pointer-events:none;z-index:1;"></div><?php
+            ?><div style="position:absolute;inset:0;background-color:<?php echo esc_attr( $ov_color ); ?>;opacity:<?php echo (float) ( $ov_opacity / 100 ); ?>;pointer-events:none;z-index:1;"></div><?php
         }
         if ( $has_text ) {
             $ov_size    = max( 8, absint( $s['overlay_text_size'] ?? 32 ) );
@@ -392,7 +392,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                 esc_attr( $ov_align ), $ov_t_color, $ov_size, esc_attr( $ov_weight )
             );
             list( $ov_tfx_cls, $ov_tfx_data ) = $this->tfx_attrs( $s, 'overlay_text', wp_strip_all_tags( $s['overlay_text'] ) );
-            ?><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;pointer-events:none;"><div class="olo-video-overlay-text<?php echo $ov_tfx_cls; ?>" style="<?php echo $ov_text_style; ?>"<?php echo $ov_tfx_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $s['overlay_text'] ) ) ); ?></div></div><?php
+            ?><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;pointer-events:none;"><div class="olo-video-overlay-text<?php echo $ov_tfx_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); style string built above via sprintf from esc_attr()'d enums, safe_color_css() colour and %d size; text esc_html()'d (nl2br only adds <br /> tags) ?>" style="<?php echo $ov_text_style; ?>"<?php echo $ov_tfx_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $s['overlay_text'] ) ) ); ?></div></div><?php
         }
         return ob_get_clean();
     }
@@ -462,7 +462,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
             // Wrap in a div with the per-instance class so scoped tfx CSS (`.olo-v-XXX …`) catches it
             // even when the caption sits OUTSIDE the cover wrapper.
             echo '<div class="' . esc_attr( $this->_v_uid ) . '">';
-            echo '<p class="uk-text-center uk-text-small' . $tfx_caption_cls . '" style="padding: 8px 0; color: var(--olo-color-text-muted, #9CA3AF);"' . $tfx_caption_data . '>';
+            echo '<p class="uk-text-center uk-text-small' . $tfx_caption_cls . '" style="padding: 8px 0; color: var(--olo-color-text-muted, #9CA3AF);"' . $tfx_caption_data . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); the rest is a fixed literal
             echo esc_html( wp_strip_all_tags( $s['caption'] ) );
             echo '</p>';
             echo '</div>';

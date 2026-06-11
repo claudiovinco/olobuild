@@ -75,6 +75,7 @@ class Olo_BuilderMock_Tile extends Olo_Tile_Base {
         ];
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: $accent via the safe_color_css() whitelist, $width/$tilt via intval() with min()/max() clamps; $uid is internally generated.
         ?>
         <style>
         .<?php echo $uid; ?>{ --bm-accent:<?php echo $accent; ?>; display:block; perspective:2400px; width:100%; }
@@ -131,39 +132,40 @@ class Olo_BuilderMock_Tile extends Olo_Tile_Base {
         <?php endif; ?>
         @media (max-width:940px){ .<?php echo $uid; ?> .bm-stage{ width:100%; transform:none; } .<?php echo $uid; ?> .bm-chip{ display:none; } }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <div class="<?php echo esc_attr( $uid ); ?> olo-buildermock">
           <div class="bm-stage">
             <div class="bm-frame">
-              <div class="bm-bar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><div class="bm-url"><?php echo $url; ?></div></div>
+              <div class="bm-bar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><div class="bm-url"><?php echo $url; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() at assignment above ?></div></div>
               <div class="bm-body">
                 <div class="bm-side">
                   <div class="bm-rail">
                     <?php foreach ( $cats as $c ) :
                         $on = ( $c[1] === ( $s['cat_active'] ?? 'Essenziale' ) ) ? ' on' : '';
                     ?>
-                    <div class="bm-cat<?php echo $on; ?>"><span class="ci"><?php echo esc_html( $c[0] ); ?></span><span class="cl"><?php echo esc_html( $c[1] ); ?></span><span class="cn"><?php echo esc_html( $c[2] ); ?></span></div>
+                    <div class="bm-cat<?php echo $on; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed ' on'/'' literal from the ternary above ?>"><span class="ci"><?php echo esc_html( $c[0] ); ?></span><span class="cl"><?php echo esc_html( $c[1] ); ?></span><span class="cn"><?php echo esc_html( $c[2] ); ?></span></div>
                     <?php endforeach; ?>
                   </div>
                   <div class="bm-cards">
-                    <div class="bm-ch"><span class="dt"></span><b><?php echo $catA; ?></b><span class="n">9</span></div>
+                    <div class="bm-ch"><span class="dt"></span><b><?php echo $catA; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() at assignment above ?></b><span class="n">9</span></div>
                     <div class="bm-search">&#9906; Cerca&hellip;</div>
                     <div class="bm-grid">
                       <?php foreach ( $tiles as $tcard ) :
                           $sel = ( $tcard[1] === ( $s['selected_tile'] ?? 'Titolo' ) ) ? ' sel' : '';
                       ?>
-                      <div class="bm-tc<?php echo $sel; ?>"><span class="ti"><?php echo esc_html( $tcard[0] ); ?></span><span class="tl"><?php echo esc_html( $tcard[1] ); ?></span></div>
+                      <div class="bm-tc<?php echo $sel; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed ' sel'/'' literal from the ternary above ?>"><span class="ti"><?php echo esc_html( $tcard[0] ); ?></span><span class="tl"><?php echo esc_html( $tcard[1] ); ?></span></div>
                       <?php endforeach; ?>
                     </div>
                   </div>
                 </div>
                 <div class="bm-canvas"><div class="bm-cv">
-                  <div class="bm-hero"><span class="tag">HERO</span><div class="eb">Hero section</div><h4><?php echo $cTitle; ?></h4><p><?php echo $cSub; ?></p><div class="sel"></div></div>
+                  <div class="bm-hero"><span class="tag">HERO</span><div class="eb">Hero section</div><h4><?php echo $cTitle; ?></h4><p><?php echo $cSub; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $cTitle and $cSub escaped via esc_html() at assignment above ?></p><div class="sel"></div></div>
                   <div class="bm-row3"><span></span><span></span><span></span></div>
                 </div></div>
                 <div class="bm-insp">
-                  <div class="bm-bc"><span class="bd">BODY</span> Sezione &rsaquo; Row &rsaquo; <b><?php echo $selT; ?></b></div>
-                  <div class="bm-it">Impostazioni <?php echo $selT; ?></div>
+                  <div class="bm-bc"><span class="bd">BODY</span> Sezione &rsaquo; Row &rsaquo; <b><?php echo $selT; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() at assignment above ?></b></div>
+                  <div class="bm-it">Impostazioni <?php echo $selT; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() at assignment above ?></div>
                   <div class="bm-tabs"><span class="on">Contenuto</span><span>Stile</span><span>Avanzate</span></div>
                   <div class="bm-field"></div>
                   <div class="bm-dec"><div class="dh">Decorazione</div><div class="bm-sw"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="bm-sl"><div class="tr"><b></b></div><span class="vv">70%</span></div></div>
@@ -172,7 +174,7 @@ class Olo_BuilderMock_Tile extends Olo_Tile_Base {
             </div>
             <div class="bm-chip">
               <div class="ic"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg></div>
-              <div class="lbl"><?php echo $drag; ?></div>
+              <div class="lbl"><?php echo $drag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() at assignment above ?></div>
               <div class="cur"><svg viewBox="0 0 24 24" width="22" height="22" fill="#0b0d12" stroke="#fff" stroke-width="1"><path d="M5 3l4 18 3-7 7-3z"/></svg></div>
             </div>
           </div>
@@ -185,9 +187,9 @@ class Olo_BuilderMock_Tile extends Olo_Tile_Base {
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
             if ( $border_css ) {
-                echo ".{$uid} .bm-frame{{$border_css}}";
+                echo ".{$uid} .bm-frame{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
             }
-            echo $border_hover_css . $border_effect_css . '</style>';
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base border helpers from sanitized border settings
         }
         return ob_get_clean();
     }

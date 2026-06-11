@@ -122,17 +122,17 @@ class Olo_Spacer_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-sp-shape olo-sp-shape--<?php echo $position; ?>" style="<?php echo $pos_css; ?>">
+        <div class="olo-sp-shape olo-sp-shape--<?php echo esc_attr( $position ); ?>" style="<?php echo esc_attr( $pos_css ); ?>">
         <?php if ( $fill === 'video' && ! empty( $fill_video ) ) : ?>
             <svg preserveAspectRatio="none" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg"
-                 style="width:100%;height:<?php echo $shape_h; ?>px;display:block;<?php echo $transform_css; ?>">
+                 style="width:100%;height:<?php echo (int) $shape_h; ?>px;display:block;<?php echo esc_attr( $transform_css ); ?>">
                 <defs>
                     <clipPath id="<?php echo esc_attr( $block_id ); ?>-clip">
                         <path d="<?php echo esc_attr( $path ); ?>" />
                     </clipPath>
                 </defs>
                 <?php if ( $layer2 ) : ?>
-                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $l2_color; ?>" opacity="<?php echo esc_attr( $l2_opacity ); ?>" transform="translate(-30, 8) scale(1.05, 1)" />
+                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $l2_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>" opacity="<?php echo esc_attr( $l2_opacity ); ?>" transform="translate(-30, 8) scale(1.05, 1)" />
                 <?php endif; ?>
                 <foreignObject x="0" y="0" width="1200" height="120" clip-path="url(#<?php echo esc_attr( $block_id ); ?>-clip)">
                     <video xmlns="http://www.w3.org/1999/xhtml"
@@ -143,24 +143,24 @@ class Olo_Spacer_Tile extends Olo_Tile_Base {
             </svg>
         <?php elseif ( $fill === 'image' && ! empty( $fill_image ) ) : ?>
             <svg preserveAspectRatio="none" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                 style="width:100%;height:<?php echo $shape_h; ?>px;display:block;<?php echo $transform_css; ?>">
+                 style="width:100%;height:<?php echo (int) $shape_h; ?>px;display:block;<?php echo esc_attr( $transform_css ); ?>">
                 <defs>
                     <clipPath id="<?php echo esc_attr( $block_id ); ?>-clip">
                         <path d="<?php echo esc_attr( $path ); ?>" />
                     </clipPath>
                 </defs>
                 <?php if ( $layer2 ) : ?>
-                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $l2_color; ?>" opacity="<?php echo esc_attr( $l2_opacity ); ?>" transform="translate(-30, 8) scale(1.05, 1)" />
+                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $l2_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>" opacity="<?php echo esc_attr( $l2_opacity ); ?>" transform="translate(-30, 8) scale(1.05, 1)" />
                 <?php endif; ?>
                 <image href="<?php echo esc_url( $fill_image ); ?>" x="0" y="0" width="1200" height="120" preserveAspectRatio="xMidYMid slice" clip-path="url(#<?php echo esc_attr( $block_id ); ?>-clip)" />
             </svg>
         <?php else : ?>
             <svg preserveAspectRatio="none" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg"
-                 style="width:100%;height:<?php echo $shape_h; ?>px;display:block;<?php echo $transform_css; ?>">
+                 style="width:100%;height:<?php echo (int) $shape_h; ?>px;display:block;<?php echo esc_attr( $transform_css ); ?>">
                 <?php if ( $layer2 ) : ?>
-                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $l2_color; ?>" opacity="<?php echo esc_attr( $l2_opacity ); ?>" transform="translate(-30, 8) scale(1.05, 1)" />
+                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $l2_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>" opacity="<?php echo esc_attr( $l2_opacity ); ?>" transform="translate(-30, 8) scale(1.05, 1)" />
                 <?php endif; ?>
-                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $color; ?>" opacity="<?php echo esc_attr( $opacity ); ?>" />
+                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>" opacity="<?php echo esc_attr( $opacity ); ?>" />
             </svg>
         <?php endif; ?>
         </div>
@@ -237,6 +237,7 @@ class Olo_Spacer_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: absint() height/overlaps, safe_color_css() colours with absint() gradient angle, fixed literals; $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?> {
                 position: relative;
@@ -274,21 +275,22 @@ class Olo_Spacer_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-sp-custom-svg svg { max-width: 100%; max-height: 100%; }
             <?php endif; ?>
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <div class="olo-spacer <?php echo esc_attr( $uid ); ?>">
-            <?php echo $this->render_shape_block( $uid, $s, 'shape_top', 'top' ); ?>
+            <?php echo $this->render_shape_block( $uid, $s, 'shape_top', 'top' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG markup built by render_shape_block() above from esc_attr()/esc_url()'d values and safe_color_css() colours ?>
 
             <?php if ( $show_divider ) : ?>
             <div style="display: flex; align-items: center; justify-content: center; height: 100%; position: relative; z-index: 20;">
-                <hr style="width: <?php echo $div_width; ?>%; border: 0; border-top: <?php echo $div_thick; ?>px <?php echo esc_attr( $div_style ); ?> <?php echo $div_color; ?>; margin: 0;" />
+                <hr style="width: <?php echo (int) $div_width; ?>%; border: 0; border-top: <?php echo (int) $div_thick; ?>px <?php echo esc_attr( $div_style ); ?> <?php echo $div_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>; margin: 0;" />
             </div>
             <?php endif; ?>
 
             <?php if ( ! empty( $custom_svg ) ) : ?>
-            <div class="olo-sp-custom-svg"><?php echo $custom_svg; ?></div>
+            <div class="olo-sp-custom-svg"><?php echo $custom_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized above via wp_kses() with the explicit SVG whitelist ?></div>
             <?php endif; ?>
 
-            <?php echo $this->render_shape_block( $uid, $s, 'shape_bottom', 'bottom' ); ?>
+            <?php echo $this->render_shape_block( $uid, $s, 'shape_bottom', 'bottom' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG markup built by render_shape_block() above from esc_attr()/esc_url()'d values and safe_color_css() colours ?>
         </div>
         <?php
         return ob_get_clean();

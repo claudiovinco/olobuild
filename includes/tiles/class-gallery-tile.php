@@ -104,12 +104,13 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
         $more_size = max( 16, min( 48, absint( $s['more_size'] ) ) );
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist colors, absint()/floatval() clamped numbers, esc_attr()'d strings, Olo_Tile_Utils radius helpers and the internally generated $uid.
         ?>
         <style>
             <?php if ( $layout === 'masonry' ) : ?>
             .<?php echo $uid; ?> {
-                column-count: <?php echo $cols; ?>;
-                column-gap: <?php echo $gap; ?>px;
+                column-count: <?php echo (int) $cols; ?>;
+                column-gap: <?php echo (int) $gap; ?>px;
             }
             .<?php echo $uid; ?> .olo-gal-item {
                 position: relative;
@@ -118,7 +119,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                 overflow: hidden;
                 cursor: pointer;
                 break-inside: avoid;
-                margin-bottom: <?php echo $gap; ?>px;
+                margin-bottom: <?php echo (int) $gap; ?>px;
             }
             <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-gal-item{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-gal-item:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-gal-item img {
@@ -133,7 +134,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> {
                 display: flex;
                 flex-wrap: wrap;
-                gap: <?php echo $gap; ?>px;
+                gap: <?php echo (int) $gap; ?>px;
             }
             .<?php echo $uid; ?> .olo-gal-item {
                 position: relative;
@@ -156,8 +157,8 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
             <?php else : ?>
             .<?php echo $uid; ?> {
                 display: grid;
-                grid-template-columns: repeat(<?php echo $cols; ?>, 1fr);
-                gap: <?php echo $gap; ?>px;
+                grid-template-columns: repeat(<?php echo (int) $cols; ?>, 1fr);
+                gap: <?php echo (int) $gap; ?>px;
             }
             .<?php echo $uid; ?> .olo-gal-item {
                 position: relative;
@@ -205,12 +206,12 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
             <?php if ( ! empty( $s['fx_kenburns'] ) ) : ?>
             @keyframes <?php echo $uid; ?>-kb {
                 0%   { transform: scale(1) translate(0,0); }
-                33%  { transform: scale(<?php echo $kb_scale; ?>) translate(-1.5%,-1%); }
+                33%  { transform: scale(<?php echo (float) $kb_scale; ?>) translate(-1.5%,-1%); }
                 66%  { transform: scale(<?php echo $kb_scale - 0.03; ?>) translate(1%,0.5%); }
                 100% { transform: scale(1) translate(0,0); }
             }
             .<?php echo $uid; ?> .olo-gal-item img {
-                animation: <?php echo $uid; ?>-kb <?php echo $kb_speed; ?>s ease-in-out infinite;
+                animation: <?php echo $uid; ?>-kb <?php echo (int) $kb_speed; ?>s ease-in-out infinite;
             }
             .<?php echo $uid; ?> .olo-gal-item:nth-child(2n) img { animation-delay: -<?php echo round( $kb_speed / 3 ); ?>s; }
             .<?php echo $uid; ?> .olo-gal-item:nth-child(3n) img { animation-delay: -<?php echo round( $kb_speed * 2 / 3 ); ?>s; }
@@ -222,7 +223,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                 transition: transform 0.4s ease, box-shadow 0.4s ease;
             }
             .<?php echo $uid; ?> .olo-gal-item:hover {
-                transform: scale(<?php echo $hz_scale; ?>);
+                transform: scale(<?php echo (float) $hz_scale; ?>);
                 box-shadow: 0 8px 25px rgba(0,0,0,0.3);
                 z-index: 2;
             }
@@ -244,7 +245,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                 position: absolute;
                 inset: 0;
                 border-radius: <?php echo $radius; ?>;
-                box-shadow: inset 0 0 <?php echo $vig_str * 2; ?>px <?php echo $vig_str; ?>px rgba(0,0,0,0.<?php echo min( 45, $vig_str ); ?>);
+                box-shadow: inset 0 0 <?php echo (int) ( $vig_str * 2 ); ?>px <?php echo (int) $vig_str; ?>px rgba(0,0,0,0.<?php echo (int) min( 45, $vig_str ); ?>);
                 pointer-events: none;
                 z-index: 2;
             }
@@ -292,7 +293,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                 justify-content: center;
                 background: <?php echo $this->safe_color_css( $s['more_bg'] ); ?>;
                 color: <?php echo $this->safe_color_css( $s['more_color'] ); ?>;
-                font-size: <?php echo $more_size; ?>px;
+                font-size: <?php echo (int) $more_size; ?>px;
                 font-weight: 700;
                 letter-spacing: -0.5px;
                 pointer-events: none;
@@ -317,7 +318,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
             @media (max-width: 640px) {
                 <?php if ( $layout === 'masonry' ) : ?>
                 .<?php echo $uid; ?> {
-                    column-count: <?php echo $mob_cols; ?>;
+                    column-count: <?php echo (int) $mob_cols; ?>;
                 }
                 <?php elseif ( $layout === 'justified' ) : ?>
                 .<?php echo $uid; ?> .olo-gal-item {
@@ -326,11 +327,12 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                 }
                 <?php else : ?>
                 .<?php echo $uid; ?> {
-                    grid-template-columns: repeat(<?php echo $mob_cols; ?>, 1fr);
+                    grid-template-columns: repeat(<?php echo (int) $mob_cols; ?>, 1fr);
                 }
                 <?php endif; ?>
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php
         // Build categories from image alt text for filter bar
         $categories = [];
@@ -352,7 +354,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
             <?php endforeach; ?>
         </div>
         <?php endif; ?>
-        <div class="<?php echo esc_attr( $uid ); ?> olo-gallery-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" id="<?php echo esc_attr( $uid ); ?>" uk-lightbox="animation: <?php echo $lb_anim; ?>">
+        <div class="<?php echo esc_attr( $uid ); ?> olo-gallery-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" id="<?php echo esc_attr( $uid ); ?>" uk-lightbox="animation: <?php echo $lb_anim; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_attr() at assignment above ?>">
             <?php
             $i = 0;
             foreach ( $images as $img ) :
@@ -372,24 +374,24 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                 $cat_attr = $cat_slug ? ' data-category="' . esc_attr( $cat_slug ) . '"' : '';
             ?>
                 <?php if ( $is_visible ) : ?>
-                <a class="olo-gal-item" href="<?php echo esc_url( $url ); ?>"<?php echo $caption_attr . $cat_attr; ?>>
-                    <?php echo Olo_Tile_Utils::img_srcset( $att_id, $url, $alt ); ?>
+                <a class="olo-gal-item" href="<?php echo esc_url( $url ); ?>"<?php echo $caption_attr . $cat_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute strings assembled above from esc_attr()'d values and integer counters only ?>>
+                    <?php echo Olo_Tile_Utils::img_srcset( $att_id, $url, $alt ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- img_srcset() returns an <img> tag escaped internally (esc_url/esc_attr/intval). ?>
                     <?php if ( ! empty( $s['fx_tint'] ) ) : ?><div class="olo-gal-tint"></div><?php endif; ?>
                     <?php if ( ! empty( $s['fx_grain'] ) ) : ?><div class="olo-gal-grain"></div><?php endif; ?>
                     <?php if ( $is_last_vis ) : ?>
-                        <div class="olo-gal-more">+<?php echo $extra; ?></div>
+                        <div class="olo-gal-more">+<?php echo (int) $extra; ?></div>
                     <?php endif; ?>
                 </a>
                 <?php else : ?>
-                <a class="olo-gal-hidden" href="<?php echo esc_url( $url ); ?>"<?php echo $caption_attr . $cat_attr; ?>></a>
+                <a class="olo-gal-hidden" href="<?php echo esc_url( $url ); ?>"<?php echo $caption_attr . $cat_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute strings assembled above from esc_attr()'d values and integer counters only ?>></a>
                 <?php endif; ?>
             <?php endforeach; ?>
         </div>
         <?php if ( ! empty( $s['filter_bar'] ) ) : ?>
         <script>
         (function(){
-            var filterBar = document.getElementById('<?php echo $uid; ?>-filter');
-            var gallery = document.getElementById('<?php echo $uid; ?>');
+            var filterBar = document.getElementById('<?php echo esc_js( $uid ); ?>-filter');
+            var gallery = document.getElementById('<?php echo esc_js( $uid ); ?>');
             if(!filterBar){return}
             if(!gallery){return}
             var buttons = filterBar.querySelectorAll('button');
@@ -419,10 +421,10 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
         <?php if ( ! empty( $s['fx_hover_tilt'] ) ) : ?>
         <script>
         (function(){
-            var gallery = document.getElementById('<?php echo $uid; ?>');
+            var gallery = document.getElementById('<?php echo esc_js( $uid ); ?>');
             if(!gallery){return}
             var doZoom = <?php echo ! empty( $s['fx_hover_zoom'] ) ? 'true' : 'false'; ?>;
-            var zoomScale = <?php echo $hz_scale; ?>;
+            var zoomScale = <?php echo (float) $hz_scale; ?>;
             var items = gallery.querySelectorAll('.olo-gal-item');
             items.forEach(function(el){
                 el.addEventListener('mouseenter', function(){
@@ -457,8 +459,8 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by build_border_hover_css()/build_border_effect_css() base-class helpers
         }
         return ob_get_clean();
     }

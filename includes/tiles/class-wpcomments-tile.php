@@ -114,6 +114,7 @@ class Olo_Wpcomments_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/absint clamps/generated uid). ?>
         <style>
             .<?php echo $uid; ?> .olo-comment {
                 padding: 16px 0;
@@ -127,7 +128,7 @@ class Olo_Wpcomments_Tile extends Olo_Tile_Base {
                 gap: 12px;
             }
             .<?php echo $uid; ?> .olo-comment-avatar img {
-                border-radius: <?php echo $avatar_radius; ?>%;
+                border-radius: <?php echo (int) $avatar_radius; ?>%;
                 display: block;
             }
             .<?php echo $uid; ?> .olo-comment-meta {
@@ -216,15 +217,16 @@ class Olo_Wpcomments_Tile extends Olo_Tile_Base {
                 box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
-        <div class="olo-wpcomments <?php echo $uid; ?>">
+        <div class="olo-wpcomments <?php echo esc_attr( $uid ); ?>">
         <?php
         // Title
         if ( $show_title ) {
             $title_style = $title_color ? ' style="color:' . $title_color . '"' : '';
-            echo '<' . $title_tag . ' class="olo-comments-title"' . $title_style . '>';
-            echo $title_text . ' (' . absint( $count ) . ')';
-            echo '</' . $title_tag . '>';
+            echo '<' . $title_tag . ' class="olo-comments-title"' . $title_style . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tag whitelisted via in_array() above, inline color sanitized via safe_color_css()
+            echo $title_text . ' (' . absint( $count ) . ')'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $title_text escaped via esc_html() above
+            echo '</' . $title_tag . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tag whitelisted via in_array() above
         }
 
         // Comment list
@@ -267,8 +269,8 @@ class Olo_Wpcomments_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized values (intval/safe color whitelist)
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized values
         }
         return ob_get_clean();
     }
@@ -281,11 +283,11 @@ class Olo_Wpcomments_Tile extends Olo_Tile_Base {
 
         $tag = ( $args['style'] === 'div' ) ? 'div' : 'li';
         ?>
-        <<?php echo $tag; ?> id="comment-<?php comment_ID(); ?>" <?php comment_class( 'olo-comment' ); ?>>
+        <<?php echo tag_escape( $tag ); ?> id="comment-<?php comment_ID(); ?>" <?php comment_class( 'olo-comment' ); ?>>
             <div class="olo-comment-body">
                 <?php if ( $ctx['show_avatar'] ) : ?>
                 <div class="olo-comment-avatar">
-                    <?php echo get_avatar( $comment, $ctx['avatar_size'] ); ?>
+                    <?php echo get_avatar( $comment, $ctx['avatar_size'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_avatar() returns escaped img HTML built by WordPress core ?>
                 </div>
                 <?php endif; ?>
                 <div class="olo-comment-content-wrap" style="flex:1;min-width:0">
@@ -331,6 +333,6 @@ class Olo_Wpcomments_Tile extends Olo_Tile_Base {
      */
     public function comment_end_callback( $comment, $args, $depth ) {
         $tag = ( $args['style'] === 'div' ) ? 'div' : 'li';
-        echo '</' . $tag . '>';
+        echo '</' . tag_escape( $tag ) . '>';
     }
 }

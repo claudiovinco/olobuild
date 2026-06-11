@@ -142,7 +142,7 @@ class Olo_Builder {
                 $msg = '<h2>Permessi insufficienti</h2><p>L\'utente <strong>' . esc_html( $user->user_login ) . '</strong> (ruoli: ' . esc_html( $roles ) . ') non ha la capability <code>edit_pages</code>.</p>'
                      . '<p>Aggiungi il ruolo Editor o Administrator all\'utente, oppure usa un plugin di gestione capability.</p>';
             }
-            wp_die( $msg, 'Olobuild Builder', [ 'response' => 403 ] );
+            wp_die( $msg, 'Olobuild Builder', [ 'response' => 403 ] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $msg is static diagnostic HTML built above; the only dynamic parts (user_login, roles) are esc_html()'d.
         }
 
         $tpl_id = isset( $_GET['olo_tpl'] ) ? (int) $_GET['olo_tpl'] : 0;
@@ -423,6 +423,7 @@ class Olo_Builder {
             'olo-tools'           => '\f533', // dashicons-admin-tools
         ];
 
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- $slug/$code come from the hardcoded internal $icons map above (fixed page slugs + dashicon codepoints).
         echo '<style>';
         foreach ( $icons as $slug => $code ) {
             echo '#adminmenu .wp-submenu a[href*="page=' . $slug . '"]::before{';
@@ -430,6 +431,7 @@ class Olo_Builder {
             echo '}';
         }
         echo '</style>';
+        // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
     }
 
     private function detect_theme_colors() {
@@ -922,7 +924,7 @@ class Olo_Builder {
                     <span class="olo-shell-topbar-label">website builder</span>
                 </div>
                 <div class="olo-shell-topbar-actions">
-                    <span class="olo-shell-topbar-version">v<?php echo OLO_VERSION; ?></span>
+                    <span class="olo-shell-topbar-version">v<?php echo esc_html( OLO_VERSION ); ?></span>
                 </div>
             </div>
 
@@ -1036,7 +1038,7 @@ class Olo_Builder {
                     ?>
                         <li class="olo-shell-nav-group <?php echo $is_open ? 'open' : ''; ?>">
                             <button class="olo-shell-nav-group-btn" onclick="this.parentElement.classList.toggle('open')" type="button">
-                                <span class="olo-shell-nav-icon"><?php echo $icons[ $item['icon'] ] ?? ''; ?></span>
+                                <span class="olo-shell-nav-icon"><?php echo $icons[ $item['icon'] ] ?? ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from the hardcoded internal $icons map above. ?></span>
                                 <span><?php echo esc_html( $item['group'] ); ?></span>
                                 <svg class="olo-shell-nav-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
                             </button>
@@ -1061,7 +1063,7 @@ class Olo_Builder {
                         <li>
                             <a href="<?php echo esc_url( $item_href ); ?>"
                                class="olo-shell-nav-item <?php echo $current_page === $item['slug'] ? 'active' : ''; ?>">
-                                <span class="olo-shell-nav-icon"><?php echo $icons[ $item['icon'] ] ?? ''; ?></span>
+                                <span class="olo-shell-nav-icon"><?php echo $icons[ $item['icon'] ] ?? ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from the hardcoded internal $icons map above. ?></span>
                                 <span><?php echo esc_html( $item['label'] ); ?></span>
                             </a>
                         </li>
@@ -1344,7 +1346,7 @@ class Olo_Builder {
                 </a>
                 <button type="button" class="ver" data-olo-app-mode-toggle title="<?php esc_attr_e( 'Cambia modalità', 'olobuild' ); ?>">v<?php echo esc_html( OLO_VERSION ); ?></button>
                 <span class="sep"></span>
-                <span class="crumb"><a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuild' ) ); ?>" style="color:inherit;text-decoration:none">Olobuild</a> · <?php echo $crumb_html ?: '<b>' . esc_html__( 'Dashboard', 'olobuild' ) . '</b>'; ?></span>
+                <span class="crumb"><a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuild' ) ); ?>" style="color:inherit;text-decoration:none">Olobuild</a> · <?php echo $crumb_html ?: '<b>' . esc_html__( 'Dashboard', 'olobuild' ) . '</b>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- breadcrumb HTML built by internal callers from esc_html()/esc_url()'d parts. ?></span>
                 <span class="spc"></span>
                 <div class="search-mini" data-olo-palette-trigger>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--olo-text-muted)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -1408,7 +1410,7 @@ class Olo_Builder {
                 <?php endif; ?>
             </div>
             <?php if ( $args['actions'] ) : ?>
-                <div class="actions"><?php echo $args['actions']; // markup pre-validato ?></div>
+                <div class="actions"><?php echo $args['actions']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- pre-built markup from cockpit_button(), which escapes all parts internally. ?></div>
             <?php endif; ?>
         </header>
         <?php
@@ -1498,8 +1500,8 @@ class Olo_Builder {
                         $tag   = $href ? 'a' : 'button';
                         $extra_attr = $href ? ' href="' . esc_url( $href ) . '"' : ' type="button"';
                     ?>
-                        <<?php echo $tag; ?> class="olo-chip <?php echo $on ? 'on' : ''; ?>"
-                            data-chip-id="<?php echo esc_attr( $id ); ?>"<?php echo $extra_attr; ?>>
+                        <<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tag is 'a' or 'button' from the fixed ternary above. ?> class="olo-chip <?php echo $on ? 'on' : ''; ?>"
+                            data-chip-id="<?php echo esc_attr( $id ); ?>"<?php echo $extra_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute built above from esc_url() or the fixed literal type="button". ?>>
                             <?php if ( $dot ) : ?>
                                 <span class="dot" style="background: <?php echo esc_attr( $dot ); ?>"></span>
                             <?php endif; ?>
@@ -1507,7 +1509,7 @@ class Olo_Builder {
                             <?php if ( $count !== null ) : ?>
                                 <span class="num"><?php echo (int) $count; ?></span>
                             <?php endif; ?>
-                        </<?php echo $tag; ?>>
+                        </<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tag is 'a' or 'button' from the fixed ternary above. ?>>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
@@ -1520,7 +1522,7 @@ class Olo_Builder {
                 </div>
             <?php endif; ?>
             <?php if ( $args['extra'] ) : ?>
-                <?php echo $args['extra']; // markup pre-validato ?>
+                <?php echo $args['extra']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- pre-built markup provided by internal callers (escaped at construction). ?>
             <?php endif; ?>
         </div>
         <?php
@@ -1638,7 +1640,7 @@ class Olo_Builder {
                     <p><?php echo esc_html( $args['empty_message'] ); ?></p>
                 <?php endif; ?>
                 <?php if ( $args['empty_actions'] ) : ?>
-                    <div><?php echo $args['empty_actions']; // markup pre-validato ?></div>
+                    <div><?php echo $args['empty_actions']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- pre-built markup from cockpit_button(), which escapes all parts internally. ?></div>
                 <?php endif; ?>
             </div>
             <?php
@@ -1652,7 +1654,7 @@ class Olo_Builder {
             <?php
             if ( is_callable( $args['render'] ) ) {
                 foreach ( $args['items'] as $item ) {
-                    echo call_user_func( $args['render'], $item ); // markup dal renderer
+                    echo call_user_func( $args['render'], $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- card HTML returned by the caller-supplied renderer, which escapes its own dynamic parts.
                 }
             }
             ?>
@@ -1825,7 +1827,7 @@ class Olo_Builder {
                         <div class="olo-manage-grid">
                             <?php foreach ( $manage as $i => $t ) : ?>
                             <a class="olo-manage-tile" href="<?php echo esc_url( $t['href'] ); ?>" data-id="<?php echo esc_attr( $t['id'] ); ?>" data-order="<?php echo esc_attr( $i ); ?>">
-                                <div class="ic-sq" style="background: <?php echo esc_attr( $t['color'] ); ?>"><?php echo self::dashboard_svg( $t['icon'], 18 ); ?></div>
+                                <div class="ic-sq" style="background: <?php echo esc_attr( $t['color'] ); ?>"><?php echo self::dashboard_svg( $t['icon'], 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded dashboard_svg() map, size is int-cast. ?></div>
                                 <div class="lab">
                                     <span class="t"><?php echo esc_html( $t['label'] ); ?></span>
                                     <span class="h"><?php echo esc_html( $t['hint'] ); ?></span>
@@ -1847,7 +1849,7 @@ class Olo_Builder {
                         <div class="olo-system-row">
                             <?php foreach ( $system as $s ) : ?>
                             <a class="olo-system-chip" href="<?php echo esc_url( $s['href'] ); ?>">
-                                <span class="ic"><?php echo self::dashboard_svg( $s['icon'], 13 ); ?></span>
+                                <span class="ic"><?php echo self::dashboard_svg( $s['icon'], 13 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded dashboard_svg() map, size is int-cast. ?></span>
                                 <?php echo esc_html( $s['label'] ); ?>
                             </a>
                             <?php endforeach; ?>
@@ -1992,7 +1994,7 @@ class Olo_Builder {
                 echo '<input type="text" name="olo_pexels_api_key" value="' . esc_attr( $val ) . '" class="regular-text"' . ( $via_const ? ' placeholder="' . esc_attr__( 'Definita in wp-config.php (OLO_PEXELS_API_KEY)', 'olobuild' ) . '" disabled' : '' ) . ' />';
                 echo '<p class="description">' . sprintf(
                     /* translators: %s = URL */
-                    __( 'Ottieni una chiave su %s', 'olobuild' ),
+                    esc_html__( 'Ottieni una chiave su %s', 'olobuild' ),
                     '<a href="https://www.pexels.com/api/" target="_blank" rel="noopener">pexels.com/api</a>'
                 ) . '</p>';
             },
@@ -2014,7 +2016,7 @@ class Olo_Builder {
                 $via_const = defined( 'OLO_PIXABAY_API_KEY' ) && OLO_PIXABAY_API_KEY;
                 echo '<input type="text" name="olo_pixabay_api_key" value="' . esc_attr( $val ) . '" class="regular-text"' . ( $via_const ? ' placeholder="' . esc_attr__( 'Definita in wp-config.php (OLO_PIXABAY_API_KEY)', 'olobuild' ) . '" disabled' : '' ) . ' />';
                 echo '<p class="description">' . sprintf(
-                    __( 'Ottieni una chiave su %s', 'olobuild' ),
+                    esc_html__( 'Ottieni una chiave su %s', 'olobuild' ),
                     '<a href="https://pixabay.com/api/docs/" target="_blank" rel="noopener">pixabay.com/api/docs</a>'
                 ) . '</p>';
             },
@@ -2036,7 +2038,7 @@ class Olo_Builder {
                 $via_const = defined( 'OLO_UNSPLASH_API_KEY' ) && OLO_UNSPLASH_API_KEY;
                 echo '<input type="text" name="olo_unsplash_api_key" value="' . esc_attr( $val ) . '" class="regular-text"' . ( $via_const ? ' placeholder="' . esc_attr__( 'Definita in wp-config.php (OLO_UNSPLASH_API_KEY)', 'olobuild' ) . '" disabled' : '' ) . ' />';
                 echo '<p class="description">' . sprintf(
-                    __( 'Ottieni una chiave su %s', 'olobuild' ),
+                    esc_html__( 'Ottieni una chiave su %s', 'olobuild' ),
                     '<a href="https://unsplash.com/developers" target="_blank" rel="noopener">unsplash.com/developers</a>'
                 ) . '</p>';
             },
@@ -2057,7 +2059,7 @@ class Olo_Builder {
                 $val = get_option( 'olo_freesound_api_key', '' );
                 echo '<input type="text" name="olo_freesound_api_key" value="' . esc_attr( $val ) . '" class="regular-text" placeholder="xbKm7Gp3..." />';
                 echo '<p class="description">' . sprintf(
-                    __( 'Ottieni una chiave su %s', 'olobuild' ),
+                    esc_html__( 'Ottieni una chiave su %s', 'olobuild' ),
                     '<a href="https://freesound.org/apiv2/apply" target="_blank" rel="noopener">freesound.org/apiv2/apply</a>'
                 ) . '</p>';
             },
@@ -2129,7 +2131,7 @@ class Olo_Builder {
                 $val = get_option( 'olo_mailchimp_api_key', '' );
                 echo '<input type="text" name="olo_mailchimp_api_key" value="' . esc_attr( $val ) . '" class="regular-text" placeholder="xxxxxxxxxxxxxxxx-us1" />';
                 echo '<p class="description">' . sprintf(
-                    __( 'Ottieni una chiave su %s', 'olobuild' ),
+                    esc_html__( 'Ottieni una chiave su %s', 'olobuild' ),
                     '<a href="https://mailchimp.com/help/about-api-keys/" target="_blank" rel="noopener">mailchimp.com</a>'
                 ) . '</p>';
             },

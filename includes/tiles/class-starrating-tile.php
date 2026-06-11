@@ -45,13 +45,13 @@ class Olo_Starrating_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <?php $sr_uid = 'olo-sr-' . wp_unique_id(); ?>
-        <div class="olo-starrating <?php echo $sr_uid; ?> olo-sr-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="text-align:<?php echo $align; ?>;padding:16px;">
+        <div class="olo-starrating <?php echo esc_attr( $sr_uid ); ?> olo-sr-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="text-align:<?php echo esc_attr( $align ); ?>;padding:16px;">
             <?php
             list( $srt_cls, $srt_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $s['title'] ?? '' ) );
             list( $srs_cls, $srs_data ) = $this->tfx_attrs( $s, 'subtitle', wp_strip_all_tags( $s['subtitle'] ?? '' ) );
             ?>
             <?php if ( ! empty( $s['title'] ) ) : ?>
-                <div class="olo-sr-title<?php echo $srt_cls; ?>" style="font-weight:600;margin-bottom:8px;color:<?php echo $this->safe_color_css($s['title_color']) ?: 'var(--olo-color-text, #374151)'; ?>;font-size:16px;"<?php echo $srt_data; ?>>
+                <div class="olo-sr-title<?php echo $srt_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); colour validated by safe_color_css() whitelist or fixed var() fallback ?>" style="font-weight:600;margin-bottom:8px;color:<?php echo $this->safe_color_css($s['title_color']) ?: 'var(--olo-color-text, #374151)'; ?>;font-size:16px;"<?php echo $srt_data; ?>>
                     <?php echo esc_html( wp_strip_all_tags( $s['title'] ) ); ?>
                 </div>
             <?php endif; ?>
@@ -60,29 +60,29 @@ class Olo_Starrating_Tile extends Olo_Tile_Base {
                     $fill = $i <= floor($rating) ? $clr : $empty;
                     $is_half = ($i === ceil($rating)) && (fmod($rating, 1) !== 0.0);
                     ?>
-                    <svg width="<?php echo $size; ?>" height="<?php echo $size; ?>" viewBox="0 0 24 24">
+                    <svg width="<?php echo (int) $size; ?>" height="<?php echo (int) $size; ?>" viewBox="0 0 24 24">
                         <?php if ( $is_half ) : ?>
-                            <defs><clipPath id="olo-half-<?php echo $i; ?>"><rect x="0" y="0" width="12" height="24"/></clipPath></defs>
-                            <path d="<?php echo $star_d; ?>" fill="<?php echo $empty; ?>" <?php if ($is_outline) echo 'stroke="' . $empty . '" stroke-width="1.5" fill="none"'; ?>/>
-                            <path d="<?php echo $star_d; ?>" fill="<?php echo $clr; ?>" clip-path="url(#olo-half-<?php echo $i; ?>)"/>
+                            <defs><clipPath id="olo-half-<?php echo (int) $i; ?>"><rect x="0" y="0" width="12" height="24"/></clipPath></defs>
+                            <path d="<?php echo $star_d; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $star_d is a hardcoded SVG path literal; colours validated by safe_color_css() whitelist or fixed var() fallbacks ?>" fill="<?php echo $empty; ?>" <?php if ($is_outline) echo 'stroke="' . $empty . '" stroke-width="1.5" fill="none"'; ?>/>
+                            <path d="<?php echo $star_d; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $star_d is a hardcoded SVG path literal; $clr validated by safe_color_css() whitelist or fixed var() fallback ?>" fill="<?php echo $clr; ?>" clip-path="url(#olo-half-<?php echo (int) $i; ?>)"/>
                         <?php else : ?>
-                            <path d="<?php echo $star_d; ?>" fill="<?php echo $is_outline ? 'none' : $fill; ?>" <?php if ($is_outline) echo 'stroke="' . $fill . '" stroke-width="1.5"'; ?>/>
+                            <path d="<?php echo $star_d; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $star_d is a hardcoded SVG path literal; $fill validated by safe_color_css() whitelist or fixed var() fallbacks ?>" fill="<?php echo $is_outline ? 'none' : $fill; ?>" <?php if ($is_outline) echo 'stroke="' . $fill . '" stroke-width="1.5"'; ?>/>
                         <?php endif; ?>
                     </svg>
                 <?php endfor; ?>
             </div>
-            <div style="margin-top:4px;font-size:13px;color:<?php echo $clr; ?>;font-weight:600;">
+            <div style="margin-top:4px;font-size:13px;color:<?php echo $clr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist or fixed var() fallback ?>;font-weight:600;">
                 <?php echo esc_html( $rating . ' / ' . $max ); ?>
             </div>
             <?php if ( ! empty( $s['subtitle'] ) ) : ?>
-                <div class="olo-sr-subtitle<?php echo $srs_cls; ?>" style="margin-top:4px;font-size:13px;color:<?php echo $this->safe_color_css($s['subtitle_color']) ?: 'var(--olo-color-text-faint, #94a3b8)'; ?>;"<?php echo $srs_data; ?>>
+                <div class="olo-sr-subtitle<?php echo $srs_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); colour validated by safe_color_css() whitelist or fixed var() fallback ?>" style="margin-top:4px;font-size:13px;color:<?php echo $this->safe_color_css($s['subtitle_color']) ?: 'var(--olo-color-text-faint, #94a3b8)'; ?>;"<?php echo $srs_data; ?>>
                     <?php echo esc_html( wp_strip_all_tags( $s['subtitle'] ) ); ?>
                 </div>
             <?php endif; ?>
         </div>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $sr_uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -90,8 +90,8 @@ class Olo_Starrating_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$sr_uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$sr_uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$sr_uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $sr_uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

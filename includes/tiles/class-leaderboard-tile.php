@@ -144,10 +144,11 @@ class Olo_Leaderboard_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval clamps/whitelists/build_border_radius_css/generated uid). ?>
         <style>
             .<?php echo $uid; ?> {
                 display: grid;
-                gap: <?php echo $row_gap; ?>px;
+                gap: <?php echo (int) $row_gap; ?>px;
                 width: 100%;
             }
             .<?php echo $uid; ?> .olo-lb-row {
@@ -162,7 +163,7 @@ class Olo_Leaderboard_Tile extends Olo_Tile_Base {
             }
             <?php if ( $show_pos ) : ?>
             .<?php echo $uid; ?> .olo-lb-pos {
-                font-size: <?php echo $pos_size; ?>px;
+                font-size: <?php echo (int) $pos_size; ?>px;
                 font-weight: 700;
                 line-height: 1;
                 color: <?php echo $pos_color; ?>;
@@ -185,14 +186,14 @@ class Olo_Leaderboard_Tile extends Olo_Tile_Base {
                 align-items: center;
                 gap: 9px;
                 flex-wrap: wrap;
-                font-size: <?php echo $name_size; ?>px;
+                font-size: <?php echo (int) $name_size; ?>px;
                 font-weight: <?php echo $name_weight; ?>;
                 line-height: 1.2;
                 color: <?php echo $text_color; ?>;
             }
             <?php if ( $show_role ) : ?>
             .<?php echo $uid; ?> .olo-lb-badge {
-                font-size: <?php echo $role_size; ?>px;
+                font-size: <?php echo (int) $role_size; ?>px;
                 font-weight: 600;
                 letter-spacing: .04em;
                 text-transform: uppercase;
@@ -205,7 +206,7 @@ class Olo_Leaderboard_Tile extends Olo_Tile_Base {
             }
             <?php endif; ?>
             .<?php echo $uid; ?> .olo-lb-track {
-                height: <?php echo $bar_h; ?>px;
+                height: <?php echo (int) $bar_h; ?>px;
                 border-radius: <?php echo $bar_r_css; ?>;
                 background: <?php echo $track_color; ?>;
                 overflow: hidden;
@@ -217,7 +218,7 @@ class Olo_Leaderboard_Tile extends Olo_Tile_Base {
                 border-radius: <?php echo $bar_r_css; ?>;
                 background: <?php echo $bar_grad; ?>;
                 <?php if ( $animate ) : ?>
-                transition: width <?php echo $anim_dur; ?>ms cubic-bezier(.2,.7,.2,1);
+                transition: width <?php echo (int) $anim_dur; ?>ms cubic-bezier(.2,.7,.2,1);
                 will-change: width;
                 <?php endif; ?>
             }
@@ -241,8 +242,9 @@ class Olo_Leaderboard_Tile extends Olo_Tile_Base {
                 .<?php echo $uid; ?> .olo-lb-row { gap: 12px; }
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
-        <div class="<?php echo esc_attr( $uid ); ?> olo-lb"<?php echo $animate ? ' data-olo-lb-animate="1"' : ''; ?> role="list" aria-label="<?php esc_attr_e( 'Classifica', 'olobuild' ); ?>">
+        <div class="<?php echo esc_attr( $uid ); ?> olo-lb"<?php echo $animate ? ' data-olo-lb-animate="1"' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ternary outputs fixed literal strings only ?> role="list" aria-label="<?php esc_attr_e( 'Classifica', 'olobuild' ); ?>">
             <?php foreach ( $rows as $i => $r ) :
                 $name  = (string) ( $r['name'] ?? '' );
                 $role  = (string) ( $r['role'] ?? '' );
@@ -257,7 +259,7 @@ class Olo_Leaderboard_Tile extends Olo_Tile_Base {
                 // la riazzera e la rianima all'ingresso. data-olo-lb-w preserva il valore target.
                 $aria_lbl = trim( $disp_name . ' — ' . $value . ' ' . $val_suffix );
             ?>
-                <div class="olo-lb-row<?php echo $is_top ? ' is-top' : ''; ?> olo-lb-row--<?php echo $pos_num; ?>" role="listitem">
+                <div class="olo-lb-row<?php echo $is_top ? ' is-top' : ''; ?> olo-lb-row--<?php echo (int) $pos_num; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ternary outputs fixed literal strings, position is cast to int ?>" role="listitem">
                     <?php if ( $show_pos ) : ?>
                         <div class="olo-lb-pos" aria-hidden="true"><?php echo esc_html( $pos_num ); ?></div>
                     <?php endif; ?>
@@ -352,8 +354,8 @@ class Olo_Leaderboard_Tile extends Olo_Tile_Base {
         $wrap_decls = $border_css . $shadow_css;
         if ( $wrap_decls || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $wrap_decls ) { echo ".{$uid}{{$wrap_decls}}"; }
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $wrap_decls ) { echo ".{$uid}{{$wrap_decls}}"; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() and collect_shadow_css() from sanitized values (intval/safe color whitelist/fixed presets)
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized values
         }
         return ob_get_clean();
     }

@@ -125,7 +125,7 @@ class Olo_Critical_CSS {
         }
 
         if ( ! empty( $css ) ) {
-            echo '<style id="olo-critical-css">' . $css . '</style>' . "\n";
+            echo '<style id="olo-critical-css">' . $css . '</style>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by generate_critical_css() exclusively from values escaped at build time (esc_attr/esc_url/intval) plus static rules, then cached in a transient
         }
     }
 

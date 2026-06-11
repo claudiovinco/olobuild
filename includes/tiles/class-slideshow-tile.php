@@ -87,31 +87,31 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div id="<?php echo esc_attr( $id ); ?>" class="olo-slideshow olo-ss-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" uk-slideshow="autoplay: <?php echo $s['autoplay'] ? 'true' : 'false'; ?>; autoplay-interval: <?php echo $speed; ?>; animation: <?php echo esc_attr( $transition ); ?>" style="height:<?php echo $h; ?>px;">
-            <div class="uk-slideshow-items" style="height:<?php echo $h; ?>px;">
+        <div id="<?php echo esc_attr( $id ); ?>" class="olo-slideshow olo-ss-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" uk-slideshow="autoplay: <?php echo esc_attr( $s['autoplay'] ? 'true' : 'false' ); ?>; autoplay-interval: <?php echo (int) $speed; ?>; animation: <?php echo esc_attr( $transition ); ?>" style="height:<?php echo (int) $h; ?>px;">
+            <div class="uk-slideshow-items" style="height:<?php echo (int) $h; ?>px;">
                 <?php foreach ( $slides as $slide ) : ?>
                     <div>
                         <?php if ( ! empty( $slide['image'] ) ) : ?>
-                            <?php echo Olo_Tile_Utils::img_srcset( absint( $slide['image_id'] ?? 0 ), $slide['image'], $slide['title'] ?? '', '', 'full', 'uk-cover' ); ?>
+                            <?php echo Olo_Tile_Utils::img_srcset( absint( $slide['image_id'] ?? 0 ), $slide['image'], $slide['title'] ?? '', '', 'full', 'uk-cover' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <img> markup built by Olo_Tile_Utils::img_srcset() with esc_url()/esc_attr() internally ?>
                         <?php else : ?>
                             <div style="position:absolute;inset:0;background:#1F2937;" uk-cover></div>
                         <?php endif; ?>
                         <?php $sl_bg = $this->safe_color_css( $s['overlay_color'] ); $sl_fg = $this->safe_color_css( $s['text_color'] ); ?>
-                        <div class="uk-position-cover" style="<?php if ( $sl_bg ) echo 'background:' . $sl_bg . ';'; ?>opacity:0.45;"></div>
+                        <div class="uk-position-cover" style="<?php if ( $sl_bg ) echo 'background:' . $sl_bg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist ?>opacity:0.45;"></div>
                         <?php
                         list( $sst_cls, $sst_data ) = $this->tfx_attrs( $s, 'title', $slide['title'] ?? '' );
                         list( $sss_cls, $sss_data ) = $this->tfx_attrs( $s, 'subtitle', $slide['subtitle'] ?? '' );
                         ?>
-                        <div class="uk-position-center uk-text-center" style="<?php if ( $sl_fg ) echo 'color:' . $sl_fg . ';'; ?>z-index:1;padding:24px;">
+                        <div class="uk-position-center uk-text-center" style="<?php if ( $sl_fg ) echo 'color:' . $sl_fg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist ?>z-index:1;padding:24px;">
                             <?php $widget_html = $this->render_widget_template( $slide['widget_template_id'] ?? 0 ); ?>
                             <?php if ( $widget_html ) : ?>
-                                <div class="olo-item-widget"><?php echo $widget_html; ?></div>
+                                <div class="olo-item-widget"><?php echo $widget_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML produced by render_widget_template() (internal template renderer, escapes its own output) ?></div>
                             <?php endif; ?>
                             <?php if ( ! empty( $slide['title'] ) ) : ?>
-                                <div class="olo-ss-title<?php echo $sst_cls; ?>" style="font-size:2em;font-weight:700;margin-bottom:8px;"<?php echo $sst_data; ?>><?php echo esc_html( $slide['title'] ); ?></div>
+                                <div class="olo-ss-title<?php echo $sst_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); title is esc_html()'d ?>" style="font-size:2em;font-weight:700;margin-bottom:8px;"<?php echo $sst_data; ?>><?php echo esc_html( $slide['title'] ); ?></div>
                             <?php endif; ?>
                             <?php if ( ! empty( $slide['subtitle'] ) ) : ?>
-                                <div class="olo-ss-sub<?php echo $sss_cls; ?>" style="font-size:1.1em;opacity:0.85;"<?php echo $sss_data; ?>><?php echo esc_html( $slide['subtitle'] ); ?></div>
+                                <div class="olo-ss-sub<?php echo $sss_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); subtitle is esc_html()'d ?>" style="font-size:1.1em;opacity:0.85;"<?php echo $sss_data; ?>><?php echo esc_html( $slide['subtitle'] ); ?></div>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -129,21 +129,21 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
         </div>
         <?php
         $tfx_css = $this->tfx_css( $s, '#' . $id );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
 
         // v1.0.73 — refactor profondo: get_preset_extra_css svuotato, ora i preset audaci
         // settano i field standard tramite TILE_PRESETS.slideshow + helper wow_*.
         $preset_css = $this->build_wow_effects_css( $s, '#' . $id, '.olo-slide-title' );
-        if ( $preset_css ) echo '<style>' . $preset_css . '</style>';
+        if ( $preset_css ) echo '<style>' . $preset_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by the Olo_Tile_Base::build_wow_effects_css() shared helper (sanitized internally)
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
         $border_hover_css  = $this->build_border_hover_css( ".{$id}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
         $border_effect_css = $this->build_border_effect_css( ".{$id}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$id}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$id}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $id is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

@@ -102,8 +102,12 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
         // Heading inline style
         $heading_style = 'margin:0;font-weight:bold;';
 
-        // Apply global typography preset if set
+        // Apply global typography preset if set — slug whitelist: il valore finisce
+        // interpolato nei nomi delle custom property CSS, quindi solo [A-Za-z0-9_-].
         $tp = sanitize_text_field( $s['typography_preset'] ?? '' );
+        if ( $tp !== '' && ! preg_match( '/^[A-Za-z0-9_-]+$/', $tp ) ) {
+            $tp = '';
+        }
         if ( $tp ) {
             $heading_style .= "font-family:var(--olo-font-{$tp}-family);";
             $heading_style .= "font-weight:var(--olo-font-{$tp}-weight);";
@@ -173,6 +177,7 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
         $needs_style = $has_gradient || $dec_clr;
         if ( $needs_style ) :
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for gradient/decoration colors, absint() for the angle and the internally generated $uid. ?>
         <style>
         <?php if ( $has_gradient ) :
             $gf = $this->safe_color_css( $s['gradient_from'] ) ?: 'var(--olo-color-primary, #e1474f)';
@@ -186,17 +191,18 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
         .<?php echo $uid; ?> .uk-heading-divider { border-color: <?php echo $dec_clr; ?>; }
         <?php endif; ?>
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php endif; ?>
-        <div class="olo-headline <?php echo $uid; ?> <?php echo $align_class; ?>" style="display:block;width:100%;">
+        <div class="olo-headline <?php echo esc_attr( $uid ); ?> <?php echo $align_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- literal prefix + esc_attr()'d alignment, assembled above ?>" style="display:block;width:100%;">
             <?php if ( $s['decoration'] === 'line' ) : ?>
-                <<?php echo $tag; ?> class="<?php echo esc_attr( $heading_class ); ?> uk-heading-line<?php echo $heading_extra; ?><?php echo $h_tfx_cls; ?>" style="<?php echo $heading_style; ?>"<?php echo $h_tfx_data; ?>>
-                    <span><?php echo $heading_text; ?></span>
-                </<?php echo $tag; ?>>
+                <<?php echo tag_escape( $tag ); ?> class="<?php echo esc_attr( $heading_class ); ?> uk-heading-line<?php echo $heading_extra; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal class ternary; tfx_attrs() fragments escaped internally; $heading_style built above from sanitized values (safe_color_css/absint/esc_attr/whitelisted font stack) ?><?php echo $h_tfx_cls; ?>" style="<?php echo $heading_style; ?>"<?php echo $h_tfx_data; ?>>
+                    <span><?php echo $heading_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_html()'d above (nl2br only adds <br /> tags) ?></span>
+                </<?php echo tag_escape( $tag ); ?>>
 
             <?php elseif ( $s['decoration'] === 'divider' ) : ?>
-                <<?php echo $tag; ?> class="<?php echo esc_attr( $heading_class ); ?> uk-heading-divider<?php echo $heading_extra; ?><?php echo $h_tfx_cls; ?>" style="<?php echo $heading_style; ?>"<?php echo $h_tfx_data; ?>>
-                    <?php echo $heading_text; ?>
-                </<?php echo $tag; ?>>
+                <<?php echo tag_escape( $tag ); ?> class="<?php echo esc_attr( $heading_class ); ?> uk-heading-divider<?php echo $heading_extra; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal class ternary; tfx_attrs() fragments escaped internally; $heading_style built above from sanitized values (safe_color_css/absint/esc_attr/whitelisted font stack) ?><?php echo $h_tfx_cls; ?>" style="<?php echo $heading_style; ?>"<?php echo $h_tfx_data; ?>>
+                    <?php echo $heading_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_html()'d above (nl2br only adds <br /> tags) ?>
+                </<?php echo tag_escape( $tag ); ?>>
 
             <?php else : ?>
                 <?php
@@ -206,32 +212,32 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
                 $jc           = $jc_map[ $s['alignment'] ] ?? 'center';
                 ?>
                 <?php if ( $s['decoration'] === 'dot' ) : ?>
-                    <div style="display:flex;justify-content:<?php echo $jc; ?>;gap:<?php echo $deco_spacing; ?>px;margin-bottom:12px;">
+                    <div style="display:flex;justify-content:<?php echo $jc; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed flexbox keyword from literal map; spacing absint()-clamped ?>;gap:<?php echo (int) $deco_spacing; ?>px;margin-bottom:12px;">
                     <?php for ( $di = 0; $di < $deco_count; $di++ ) : ?>
-                        <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:<?php echo $dec_css; ?>;"></span>
+                        <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:<?php echo $dec_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- safe_color_css() whitelisted color or fixed var() fallback ?>;"></span>
                     <?php endfor; ?>
                     </div>
                 <?php elseif ( $s['decoration'] === 'star' ) : ?>
-                    <div style="display:flex;justify-content:<?php echo $jc; ?>;gap:<?php echo $deco_spacing; ?>px;font-size:1.5em;margin-bottom:8px;<?php if ( $dec_clr ) echo 'color:' . $dec_clr . ';'; ?>">
+                    <div style="display:flex;justify-content:<?php echo $jc; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed flexbox keyword from literal map; spacing absint()-clamped; color via safe_color_css() ?>;gap:<?php echo (int) $deco_spacing; ?>px;font-size:1.5em;margin-bottom:8px;<?php if ( $dec_clr ) echo 'color:' . $dec_clr . ';'; ?>">
                     <?php for ( $di = 0; $di < $deco_count; $di++ ) : ?>
                         <span><?php echo esc_html( olo_t( '&#x2605;' ) ); ?></span>
                     <?php endfor; ?>
                     </div>
                 <?php endif; ?>
-                <<?php echo $tag; ?> class="<?php echo esc_attr( $heading_class ); ?><?php echo $heading_extra; ?><?php echo $h_tfx_cls; ?>" style="<?php echo $heading_style; ?>"<?php echo $h_tfx_data; ?>>
-                    <?php echo $heading_text; ?>
-                </<?php echo $tag; ?>>
+                <<?php echo tag_escape( $tag ); ?> class="<?php echo esc_attr( $heading_class ); ?><?php echo $heading_extra; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal class ternary; tfx_attrs() fragments escaped internally; $heading_style built above from sanitized values (safe_color_css/absint/esc_attr/whitelisted font stack) ?><?php echo $h_tfx_cls; ?>" style="<?php echo $heading_style; ?>"<?php echo $h_tfx_data; ?>>
+                    <?php echo $heading_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_html()'d above (nl2br only adds <br /> tags) ?>
+                </<?php echo tag_escape( $tag ); ?>>
             <?php endif; ?>
 
             <?php if ( ! empty( $subtitle_text ) ) : ?>
                 <?php $sub_fs = absint( $s['subtitle_font_size'] ?? 0 ); ?>
-                <p class="olo-hl-subtitle<?php echo $s_tfx_cls; ?>" style="margin:12px 0 0;font-size:<?php echo $sub_fs > 0 ? $sub_fs . 'px' : '1em'; ?>;line-height:1.5;<?php if ( $sub_clr ) echo 'color:' . $sub_clr . ';'; ?>"<?php echo $s_tfx_data; ?>><?php echo $subtitle_text; ?></p>
+                <p class="olo-hl-subtitle<?php echo $s_tfx_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments escaped internally; font-size absint()-built; color via safe_color_css(); subtitle esc_html()'d above ?>" style="margin:12px 0 0;font-size:<?php echo $sub_fs > 0 ? $sub_fs . 'px' : '1em'; ?>;line-height:1.5;<?php if ( $sub_clr ) echo 'color:' . $sub_clr . ';'; ?>"<?php echo $s_tfx_data; ?>><?php echo $subtitle_text; ?></p>
             <?php endif; ?>
         </div>
         <?php
         // Text-effects scoped CSS + runtime script
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -239,8 +245,8 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

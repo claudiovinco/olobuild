@@ -151,6 +151,7 @@ class Olo_Performance_Settings {
         <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Performance', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy olo-perf-page">
             <?php
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- cockpit_page_head() escapes internally (esc_html title, wp_kses_post sub).
             echo Olo_Builder::cockpit_page_head( [
                 'title' => __( 'Performance', 'olobuild' ),
                 'sub'   => sprintf(
@@ -160,7 +161,7 @@ class Olo_Performance_Settings {
                     '<b>' . esc_html( $cache_size ) . '</b>'
                 ),
             ] );
-            echo Olo_Builder::cockpit_subnav( $subnav, $tab );
+            echo Olo_Builder::cockpit_subnav( $subnav, $tab ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- cockpit_subnav() escapes internally (esc_url/esc_html/int cast).
             ?>
 
             <form method="post" action="options.php" class="olo-perf-form" style="margin-top:16px">
@@ -184,7 +185,9 @@ class Olo_Performance_Settings {
                 ?>
 
                 <div class="olo-actions" style="margin-top: 24px;">
-                    <?php echo Olo_Builder::cockpit_button( [
+                    <?php
+                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- cockpit_button() escapes internally (sanitize_html_class/esc_attr/esc_html); icon is a fixed SVG path literal.
+                    echo Olo_Builder::cockpit_button( [
                         'label'   => __( 'Salva impostazioni', 'olobuild' ),
                         'variant' => 'pri',
                         'type'    => 'submit',
@@ -222,7 +225,7 @@ class Olo_Performance_Settings {
                         <span class="olo-field-hint"><?php esc_html_e( 'Migliora FCP e LCP inlinando il CSS critico e deferendo il resto.', 'olobuild' ); ?></span>
                     </div>
                     <label class="olo-toggle">
-                        <input type="checkbox" name="<?php echo $n; ?>[critical_css_enabled]" value="1" <?php checked( $opt['critical_css_enabled'] ); ?> />
+                        <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[critical_css_enabled]" value="1" <?php checked( $opt['critical_css_enabled'] ); ?> />
                         <span class="olo-toggle-slider"></span>
                     </label>
                 </div>
@@ -232,7 +235,7 @@ class Olo_Performance_Settings {
                         <span class="olo-field-hint"><?php esc_html_e( 'Il CSS critico viene rigenerato automaticamente alla scadenza. Invalidato quando salvi un template.', 'olobuild' ); ?></span>
                     </div>
                     <div class="olo-perf-number-wrap">
-                        <input type="number" name="<?php echo $n; ?>[critical_css_ttl]" value="<?php echo esc_attr( $opt['critical_css_ttl'] ); ?>"
+                        <input type="number" name="<?php echo esc_attr( $n ); ?>[critical_css_ttl]" value="<?php echo esc_attr( $opt['critical_css_ttl'] ); ?>"
                                min="1" max="30" class="olo-field-input olo-perf-number" />
                         <span class="olo-perf-number-unit"><?php esc_html_e( 'giorni', 'olobuild' ); ?></span>
                     </div>
@@ -242,7 +245,7 @@ class Olo_Performance_Settings {
                         <label><?php esc_html_e( 'Sezioni above-the-fold', 'olobuild' ); ?></label>
                         <span class="olo-field-hint"><?php esc_html_e( 'Quante sezioni del template analizzare per il CSS critico. 2 è il valore consigliato.', 'olobuild' ); ?></span>
                     </div>
-                    <input type="number" name="<?php echo $n; ?>[critical_css_sections]" value="<?php echo esc_attr( $opt['critical_css_sections'] ); ?>"
+                    <input type="number" name="<?php echo esc_attr( $n ); ?>[critical_css_sections]" value="<?php echo esc_attr( $opt['critical_css_sections'] ); ?>"
                            min="1" max="5" class="olo-field-input olo-perf-number" />
                 </div>
             </div>
@@ -261,7 +264,7 @@ class Olo_Performance_Settings {
             <div class="olo-card-body">
                 <div class="olo-status-grid">
                     <div class="olo-status-card">
-                        <div class="olo-status-card-icon" style="background: <?php echo $opt['critical_css_enabled'] ? '#ecfdf5' : '#fef2f2'; ?>; color: <?php echo $opt['critical_css_enabled'] ? '#059669' : '#dc2626'; ?>;">
+                        <div class="olo-status-card-icon" style="background: <?php echo esc_attr( $opt['critical_css_enabled'] ? '#ecfdf5' : '#fef2f2' ); ?>; color: <?php echo esc_attr( $opt['critical_css_enabled'] ? '#059669' : '#dc2626' ); ?>;">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <?php if ( $opt['critical_css_enabled'] ) : ?>
                                     <polyline points="20 6 9 17 4 12"/>
@@ -315,7 +318,7 @@ class Olo_Performance_Settings {
 
         <script>
         (function(){
-            var nonce = '<?php echo wp_create_nonce( 'olo_perf_action' ); ?>';
+            var nonce = '<?php echo esc_js( wp_create_nonce( 'olo_perf_action' ) ); ?>';
             var msg   = document.getElementById('olo-ccss-msg');
 
             document.getElementById('olo-ccss-regenerate').addEventListener('click', function(){
@@ -383,7 +386,7 @@ class Olo_Performance_Settings {
                         <span class="olo-field-hint"><?php esc_html_e( 'Aggiunge l\'attributo defer agli script frontend di Olobuild. Non blocca il rendering della pagina.', 'olobuild' ); ?></span>
                     </div>
                     <label class="olo-toggle">
-                        <input type="checkbox" name="<?php echo $n; ?>[defer_js]" value="1" <?php checked( $opt['defer_js'] ); ?> />
+                        <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[defer_js]" value="1" <?php checked( $opt['defer_js'] ); ?> />
                         <span class="olo-toggle-slider"></span>
                     </label>
                 </div>
@@ -393,7 +396,7 @@ class Olo_Performance_Settings {
                         <span class="olo-field-hint"><?php esc_html_e( 'Salva il CSS generato dai template come file statici invece di iniettarlo inline. Migliora il caching del browser.', 'olobuild' ); ?></span>
                     </div>
                     <label class="olo-toggle">
-                        <input type="checkbox" name="<?php echo $n; ?>[css_cache_files]" value="1" <?php checked( $opt['css_cache_files'] ); ?> />
+                        <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[css_cache_files]" value="1" <?php checked( $opt['css_cache_files'] ); ?> />
                         <span class="olo-toggle-slider"></span>
                     </label>
                 </div>
@@ -403,7 +406,7 @@ class Olo_Performance_Settings {
                         <span class="olo-field-hint"><?php esc_html_e( 'Rimuove commenti, spazi e newline dal CSS generato.', 'olobuild' ); ?></span>
                     </div>
                     <label class="olo-toggle">
-                        <input type="checkbox" name="<?php echo $n; ?>[minify_css]" value="1" <?php checked( $opt['minify_css'] ); ?> />
+                        <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[minify_css]" value="1" <?php checked( $opt['minify_css'] ); ?> />
                         <span class="olo-toggle-slider"></span>
                     </label>
                 </div>
@@ -450,7 +453,7 @@ class Olo_Performance_Settings {
 
         <script>
         (function(){
-            var nonce = '<?php echo wp_create_nonce( 'olo_perf_action' ); ?>';
+            var nonce = '<?php echo esc_js( wp_create_nonce( 'olo_perf_action' ) ); ?>';
             document.getElementById('olo-flush-css-cache').addEventListener('click', function(){
                 if(!confirm('<?php echo esc_js( __( 'Svuotare la cache CSS? I file verranno rigenerati automaticamente.', 'olobuild' ) ); ?>'))return;
                 this.disabled = true;
@@ -495,7 +498,7 @@ class Olo_Performance_Settings {
                         <span class="olo-field-hint"><?php esc_html_e( 'Aggiunge dns-prefetch e preconnect per Google Fonts, YouTube, Vimeo e altri domini esterni.', 'olobuild' ); ?></span>
                     </div>
                     <label class="olo-toggle">
-                        <input type="checkbox" name="<?php echo $n; ?>[resource_hints]" value="1" <?php checked( $opt['resource_hints'] ); ?> />
+                        <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[resource_hints]" value="1" <?php checked( $opt['resource_hints'] ); ?> />
                         <span class="olo-toggle-slider"></span>
                     </label>
                 </div>
@@ -505,7 +508,7 @@ class Olo_Performance_Settings {
                         <span class="olo-field-hint"><?php esc_html_e( 'Precarica i font custom usati come body/heading per evitare FOUT (Flash of Unstyled Text).', 'olobuild' ); ?></span>
                     </div>
                     <label class="olo-toggle">
-                        <input type="checkbox" name="<?php echo $n; ?>[font_preload]" value="1" <?php checked( $opt['font_preload'] ); ?> />
+                        <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[font_preload]" value="1" <?php checked( $opt['font_preload'] ); ?> />
                         <span class="olo-toggle-slider"></span>
                     </label>
                 </div>
@@ -515,7 +518,7 @@ class Olo_Performance_Settings {
                         <span class="olo-field-hint"><?php esc_html_e( 'Mostra un\'anteprima statica dei video YouTube/Vimeo. L\'iframe si carica solo al click. Risparmia ~500KB per video.', 'olobuild' ); ?></span>
                     </div>
                     <label class="olo-toggle">
-                        <input type="checkbox" name="<?php echo $n; ?>[video_facade]" value="1" <?php checked( $opt['video_facade'] ); ?> />
+                        <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[video_facade]" value="1" <?php checked( $opt['video_facade'] ); ?> />
                         <span class="olo-toggle-slider"></span>
                     </label>
                 </div>
@@ -525,7 +528,7 @@ class Olo_Performance_Settings {
                         <span class="olo-field-hint"><?php esc_html_e( 'Aggiunge fetchpriority="high" alla prima immagine della pagina e rimuove lazy loading dagli elementi above-fold.', 'olobuild' ); ?></span>
                     </div>
                     <label class="olo-toggle">
-                        <input type="checkbox" name="<?php echo $n; ?>[fetchpriority]" value="1" <?php checked( $opt['fetchpriority'] ); ?> />
+                        <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[fetchpriority]" value="1" <?php checked( $opt['fetchpriority'] ); ?> />
                         <span class="olo-toggle-slider"></span>
                     </label>
                 </div>
@@ -535,7 +538,7 @@ class Olo_Performance_Settings {
                         <span class="olo-field-hint"><?php esc_html_e( 'Aggiunge loading="lazy" alle immagini below-the-fold. Riduce il peso iniziale della pagina.', 'olobuild' ); ?></span>
                     </div>
                     <label class="olo-toggle">
-                        <input type="checkbox" name="<?php echo $n; ?>[lazy_images]" value="1" <?php checked( $opt['lazy_images'] ); ?> />
+                        <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[lazy_images]" value="1" <?php checked( $opt['lazy_images'] ); ?> />
                         <span class="olo-toggle-slider"></span>
                     </label>
                 </div>
@@ -556,13 +559,13 @@ class Olo_Performance_Settings {
             <div class="olo-card-body">
                 <div class="olo-perf-textarea-row">
                     <label class="olo-perf-textarea-label"><?php esc_html_e( 'DNS Prefetch', 'olobuild' ); ?></label>
-                    <textarea name="<?php echo $n; ?>[dns_prefetch_domains]" rows="3" class="olo-field-input wide"
+                    <textarea name="<?php echo esc_attr( $n ); ?>[dns_prefetch_domains]" rows="3" class="olo-field-input wide"
                               placeholder="//cdn.example.com&#10;//api.example.com"><?php echo esc_textarea( $opt['dns_prefetch_domains'] ); ?></textarea>
                     <span class="olo-field-hint"><?php esc_html_e( 'Risolve il DNS in anticipo. Utile per CDN e servizi esterni.', 'olobuild' ); ?></span>
                 </div>
                 <div class="olo-perf-textarea-row">
                     <label class="olo-perf-textarea-label"><?php esc_html_e( 'Preconnect', 'olobuild' ); ?></label>
-                    <textarea name="<?php echo $n; ?>[preconnect_domains]" rows="3" class="olo-field-input wide"
+                    <textarea name="<?php echo esc_attr( $n ); ?>[preconnect_domains]" rows="3" class="olo-field-input wide"
                               placeholder="https://cdn.example.com&#10;https://api.example.com"><?php echo esc_textarea( $opt['preconnect_domains'] ); ?></textarea>
                     <span class="olo-field-hint"><?php esc_html_e( 'Apre connessione completa (DNS + TCP + TLS). Più aggressivo del dns-prefetch, usare solo per risorse critiche.', 'olobuild' ); ?></span>
                 </div>
@@ -595,7 +598,7 @@ class Olo_Performance_Settings {
                         <span class="olo-field-hint"><?php esc_html_e( 'Rimuove jquery-migrate.js (~10KB). Necessario solo per compatibilità con plugin molto vecchi.', 'olobuild' ); ?></span>
                     </div>
                     <label class="olo-toggle">
-                        <input type="checkbox" name="<?php echo $n; ?>[remove_jquery_migrate]" value="1" <?php checked( $opt['remove_jquery_migrate'] ); ?> />
+                        <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[remove_jquery_migrate]" value="1" <?php checked( $opt['remove_jquery_migrate'] ); ?> />
                         <span class="olo-toggle-slider"></span>
                     </label>
                 </div>
@@ -605,7 +608,7 @@ class Olo_Performance_Settings {
                         <span class="olo-field-hint"><?php esc_html_e( 'Rimuove wp-emoji-release.min.js e relativi stili inline. I browser moderni supportano emoji nativamente.', 'olobuild' ); ?></span>
                     </div>
                     <label class="olo-toggle">
-                        <input type="checkbox" name="<?php echo $n; ?>[remove_emoji_scripts]" value="1" <?php checked( $opt['remove_emoji_scripts'] ); ?> />
+                        <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[remove_emoji_scripts]" value="1" <?php checked( $opt['remove_emoji_scripts'] ); ?> />
                         <span class="olo-toggle-slider"></span>
                     </label>
                 </div>
@@ -615,7 +618,7 @@ class Olo_Performance_Settings {
                         <span class="olo-field-hint"><?php esc_html_e( 'Rimuove wp-block-library-css (~30KB). Attiva solo se non usi blocchi Gutenberg nel frontend.', 'olobuild' ); ?></span>
                     </div>
                     <label class="olo-toggle">
-                        <input type="checkbox" name="<?php echo $n; ?>[remove_block_css]" value="1" <?php checked( $opt['remove_block_css'] ); ?> />
+                        <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[remove_block_css]" value="1" <?php checked( $opt['remove_block_css'] ); ?> />
                         <span class="olo-toggle-slider"></span>
                     </label>
                 </div>
@@ -625,7 +628,7 @@ class Olo_Performance_Settings {
                         <span class="olo-field-hint"><?php esc_html_e( 'Rimuove classic-theme-styles-css. Inutile se non usi un tema classico.', 'olobuild' ); ?></span>
                     </div>
                     <label class="olo-toggle">
-                        <input type="checkbox" name="<?php echo $n; ?>[remove_classic_theme]" value="1" <?php checked( $opt['remove_classic_theme'] ); ?> />
+                        <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[remove_classic_theme]" value="1" <?php checked( $opt['remove_classic_theme'] ); ?> />
                         <span class="olo-toggle-slider"></span>
                     </label>
                 </div>

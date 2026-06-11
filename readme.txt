@@ -4,7 +4,7 @@ Tags: page-builder, drag-and-drop, builder, grid, blocks
 Requires at least: 5.9
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.4.103
+Stable tag: 1.4.172
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,6 +103,11 @@ Yes. Enter them in Olobuild settings, or define them as constants in wp-config.p
 (`OLO_UNSPLASH_API_KEY`, `OLO_PEXELS_API_KEY`, `OLO_PIXABAY_API_KEY`).
 
 == Changelog ==
+
+= 1.4.172 =
+* Security/compliance: output-escaping hardening campaign across all PHP renderers (246 files). User-supplied values are escaped or whitelisted at the point of output (esc_html/esc_attr/esc_url/int casts); internally-built CSS/JS blocks are documented with specific phpcs annotations after per-variable upstream-sanitization review.
+* Security: closed raw-value CSS injection vectors in nav, subnav, textmask, blendtext, floatingpanel, headline, button and the Woo gallery slider (values now pass through the color/slug whitelists; valid values render byte-identical).
+* Security: analytics tracking IDs (GA4/GTM/Meta Pixel/Clarity) are now restricted to a strict alphanumeric charset before being printed in the tag snippets.
 
 = 1.4.103 =
 * Set "Requires at least" to WordPress 5.9 (str_contains / str_starts_with / str_ends_with are provided by core since 5.9).

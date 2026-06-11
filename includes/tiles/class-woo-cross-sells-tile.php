@@ -130,17 +130,18 @@ class Olo_Woo_Cross_Sells_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/absint clamps/fixed maps/generated uid). ?>
         <style>
             .<?php echo $uid; ?>-heading {
-                font-size: <?php echo $heading_sz; ?>px;
+                font-size: <?php echo (int) $heading_sz; ?>px;
                 font-weight: 700;
                 color: <?php echo $heading_col; ?>;
                 margin: 0 0 20px;
             }
             .<?php echo $uid; ?> {
                 display: grid;
-                grid-template-columns: repeat(<?php echo $cols; ?>, 1fr);
-                gap: <?php echo $gap; ?>px;
+                grid-template-columns: repeat(<?php echo (int) $cols; ?>, 1fr);
+                gap: <?php echo (int) $gap; ?>px;
             }
             .<?php echo $uid; ?> .olo-cs-card {
                 background: var(--olo-color-background, #FFFFFF);
@@ -202,16 +203,17 @@ class Olo_Woo_Cross_Sells_Tile extends Olo_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-cs-btn:hover { opacity: 0.9; }
             @media (max-width: 960px) {
-                .<?php echo $uid; ?> { grid-template-columns: repeat(<?php echo $cols_t; ?>, 1fr); }
+                .<?php echo $uid; ?> { grid-template-columns: repeat(<?php echo (int) $cols_t; ?>, 1fr); }
             }
             @media (max-width: 640px) {
-                .<?php echo $uid; ?> { grid-template-columns: repeat(<?php echo $cols_m; ?>, 1fr); }
+                .<?php echo $uid; ?> { grid-template-columns: repeat(<?php echo (int) $cols_m; ?>, 1fr); }
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <?php if ( $heading_text !== '' ) : ?>
         <?php list( $cs_cls, $cs_data ) = $this->tfx_attrs( $s, 'heading', $heading_text ); ?>
-        <h3 class="<?php echo esc_attr( $uid ); ?>-heading<?php echo $cs_cls; ?>"<?php echo $cs_data; ?>><?php echo esc_html( $heading_text ); ?></h3>
+        <h3 class="<?php echo esc_attr( $uid ); ?>-heading<?php echo $cs_cls; ?>"<?php echo $cs_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built by Olo_Text_Effects (sanitize_html_class/esc_attr applied internally) ?>><?php echo esc_html( $heading_text ); ?></h3>
         <?php endif; ?>
 
         <div class="<?php echo esc_attr( $uid ); ?>">
@@ -237,7 +239,7 @@ class Olo_Woo_Cross_Sells_Tile extends Olo_Tile_Base {
                 <div class="olo-cs-card-img">
                     <?php if ( $thumb_id ) : ?>
                     <a href="<?php echo esc_url( $permalink ); ?>">
-                        <?php echo wp_get_attachment_image( $thumb_id, 'woocommerce_thumbnail' ); ?>
+                        <?php echo wp_get_attachment_image( $thumb_id, 'woocommerce_thumbnail' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() returns escaped HTML built by WordPress core ?>
                     </a>
                     <?php else : ?>
                     <a href="<?php echo esc_url( $permalink ); ?>" style="display:block;background:var(--olo-color-muted, #F3F4F6);<?php if ( ! $auto_h ) : ?>position:absolute;inset:0;<?php else : ?>padding:40px 0;<?php endif; ?>display:flex;align-items:center;justify-content:center;">
@@ -269,13 +271,15 @@ class Olo_Woo_Cross_Sells_Tile extends Olo_Tile_Base {
                         <?php
                         $full  = floor( (float) $avg_rating );
                         $empty = 5 - $full;
+                        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined as literals above, no dynamic data
                         for ( $i = 0; $i < $full; $i++ ) { echo $star_full; }
                         for ( $i = 0; $i < $empty; $i++ ) { echo $star_empty; }
+                        // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
                         ?>
                     </div>
                     <?php endif; ?>
                     <?php if ( ! empty( $s['show_price'] ) ) : ?>
-                    <div class="olo-cs-card-price"><?php echo $price_html; ?></div>
+                    <div class="olo-cs-card-price"><?php echo $price_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WooCommerce price HTML from WC_Product::get_price_html(), escaped by WooCommerce core ?></div>
                     <?php endif; ?>
                     <?php if ( ! empty( $s['show_add_to_cart'] ) ) : ?>
                     <?php
@@ -296,7 +300,7 @@ class Olo_Woo_Cross_Sells_Tile extends Olo_Tile_Base {
         </div>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from sanitized effect settings
         $this->tfx_print_script();
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -304,8 +308,8 @@ class Olo_Woo_Cross_Sells_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized values (intval/safe color whitelist)
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized values
         }
         return ob_get_clean();
     }

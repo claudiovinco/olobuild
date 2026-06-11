@@ -67,7 +67,7 @@ class Olo_Row_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-row<?php echo esc_attr( $stack_class ); ?>" style="display: flex; gap: <?php echo $gap; ?>px; align-items: <?php echo esc_attr( $align_map[ $valign ] ); ?>;">
+        <div class="olo-row<?php echo esc_attr( $stack_class ); ?>" style="display: flex; gap: <?php echo (int) $gap; ?>px; align-items: <?php echo esc_attr( $align_map[ $valign ] ); ?>;">
             <?php foreach ( $widths as $i => $width ) :
                 $col = $columns_data[ $i ] ?? [ 'id' => '', 'tiles' => [] ];
                 $col_tiles = is_array( $col['tiles'] ?? null ) ? $col['tiles'] : [];
@@ -80,11 +80,11 @@ class Olo_Row_Tile extends Olo_Tile_Base {
                     if ( ! $tile_instance ) continue;
 
                     $child_settings = $child_tile['settings'] ?? [];
-                    echo $tile_instance->render( $child_settings );
+                    echo $tile_instance->render( $child_settings ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tile HTML assembled by the child tile's own render(); each tile escapes its output
                 }
 
                 if ( empty( $col_tiles ) ) {
-                    echo '<div style="padding: 20px; text-align: center; color: var(--olo-color-text-soft, #6b7280); font-size: 0.875em;">Column ' . ( $i + 1 ) . '</div>';
+                    echo '<div style="padding: 20px; text-align: center; color: var(--olo-color-text-soft, #6b7280); font-size: 0.875em;">Column ' . (int) ( $i + 1 ) . '</div>';
                 }
                 ?>
             </div>

@@ -69,6 +69,7 @@ class Olo_Availability_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist (or fixed var() fallback literals), fixed font-stack literals, $nd from count(), alignment from fixed-literal ternaries; $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?>{ --av-accent:<?php echo $accent; ?>; --av-on:<?php echo $on; ?>; font-family:<?php echo $sans; ?>; <?php if ( $center ) echo 'text-align:center;'; ?> }
             .<?php echo $uid; ?> .oav-eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--av-accent);display:block;margin-bottom:10px;}
@@ -90,6 +91,7 @@ class Olo_Availability_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .oav-tier__n{font-family:<?php echo $serif; ?>;font-size:22px;color:var(--olo-color-text,#111827);}
             .<?php echo $uid; ?> .oav-tier__x{font-size:13.5px;line-height:1.5;opacity:.8;margin-top:2px;max-width:340px;}
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-availability <?php echo esc_attr( $uid ); ?>" data-availability data-lookup="<?php echo esc_attr( $lookup ); ?>">
             <?php if ( $s['eyebrow'] !== '' ) : ?><span class="oav-eyebrow"><?php echo esc_html( $s['eyebrow'] ); ?></span><?php endif; ?>
             <?php if ( $s['heading'] !== '' ) : ?><h2 class="oav-h"><?php echo esc_html( $s['heading'] ); ?></h2><?php endif; ?>
@@ -119,7 +121,7 @@ class Olo_Availability_Tile extends Olo_Tile_Base {
         </div>
         <script>
         (function(){
-            var root=document.querySelector('.<?php echo $uid; ?>[data-availability]'); if(!root){return;}
+            var root=document.querySelector('.<?php echo esc_js( $uid ); ?>[data-availability]'); if(!root){return;}
             var lookup=root.getAttribute('data-lookup')||'0';
             var cells=[].slice.call(root.querySelectorAll('[data-av-cell]'));
             var countEl=root.querySelector('[data-av-count]');

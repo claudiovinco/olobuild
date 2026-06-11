@@ -162,6 +162,7 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
         $accent_col  = $this->safe_color_css( $s['title_accent_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from sanitized values: colors via safe_color_css()/inline esc_attr(), integers via absint()/Olo_Tile_Utils::radius_int(), paddings via Olo_Tile_Utils::spacing_css(), enums via fixed literal maps/ternaries; $uid is internally generated.
         ?>
         <style>
         .<?php echo $uid; ?>{display:flex;justify-content:<?php echo $align_css; ?>}
@@ -196,6 +197,7 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
         <?php endif; ?>
         @media(max-width:768px){.<?php echo $uid; ?> .olo-nl-form{flex-direction:column}.<?php echo $uid; ?> .olo-nl-form input[type="text"],.<?php echo $uid; ?> .olo-nl-form input[type="email"]{flex:none;width:100%}.<?php echo $uid; ?> .olo-nl-btn{width:100%}}
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <div class="<?php echo esc_attr( $uid ); ?> olo-nl-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
           <div class="olo-nl-box">
@@ -213,16 +215,16 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
               <span class="olo-nl-eyebrow"><?php echo esc_html( $s['eyebrow'] ); ?></span>
             <?php endif; ?>
             <?php if ( ! empty( $s['title'] ) ) : ?>
-              <h3 class="olo-nl-title<?php echo $nt_cls; ?>"<?php echo $nt_data; ?>><?php echo wp_kses( $s['title'], [ 'em' => [], 'strong' => [], 'br' => [], 'span' => [] ] ); ?></h3>
+              <h3 class="olo-nl-title<?php echo $nt_cls; ?>"<?php echo $nt_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); title filtered via wp_kses() inline ?>><?php echo wp_kses( $s['title'], [ 'em' => [], 'strong' => [], 'br' => [], 'span' => [] ] ); ?></h3>
             <?php endif; ?>
             <?php if ( ! empty( $s['subtitle'] ) ) : ?>
-              <p class="olo-nl-sub<?php echo $ns_cls; ?>"<?php echo $ns_data; ?>><?php echo esc_html( $s['subtitle'] ); ?></p>
+              <p class="olo-nl-sub<?php echo $ns_cls; ?>"<?php echo $ns_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); subtitle escaped inline ?>><?php echo esc_html( $s['subtitle'] ); ?></p>
             <?php endif; ?>
 
-            <div class="olo-nl-msg olo-nl-ok" id="<?php echo $uid; ?>-ok"></div>
-            <div class="olo-nl-msg olo-nl-err" id="<?php echo $uid; ?>-err"></div>
+            <div class="olo-nl-msg olo-nl-ok" id="<?php echo esc_attr( $uid ); ?>-ok"></div>
+            <div class="olo-nl-msg olo-nl-err" id="<?php echo esc_attr( $uid ); ?>-err"></div>
 
-            <form class="olo-nl-form" id="<?php echo $uid; ?>-form" novalidate>
+            <form class="olo-nl-form" id="<?php echo esc_attr( $uid ); ?>-form" novalidate>
               <?php if ( ! empty( $s['honeypot'] ) ) : ?>
                 <div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
                   <input type="text" name="olo_website_url" tabindex="-1" autocomplete="off" />
@@ -245,9 +247,9 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
             <?php if ( ! empty( $s['privacy_text'] ) ) : ?>
               <div class="olo-nl-privacy">
                 <?php if ( ! empty( $s['privacy_required'] ) ) : ?>
-                  <input type="checkbox" id="<?php echo $uid; ?>-priv" required style="margin-top:2px;flex-shrink:0" />
+                  <input type="checkbox" id="<?php echo esc_attr( $uid ); ?>-priv" required style="margin-top:2px;flex-shrink:0" />
                 <?php endif; ?>
-                <label <?php if ( ! empty( $s['privacy_required'] ) ) echo 'for="' . $uid . '-priv"'; ?>>
+                <label <?php if ( ! empty( $s['privacy_required'] ) ) echo 'for="' . esc_attr( $uid ) . '-priv"'; ?>>
                   <?php echo wp_kses_post( $s['privacy_text'] ); ?>
                 </label>
               </div>
@@ -257,12 +259,12 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
 
         <script>
         (function(){
-          var uid='<?php echo $uid; ?>';
+          var uid='<?php echo esc_js( $uid ); ?>';
           var form=document.getElementById(uid+'-form');
           if(!form)return;
           var okEl=document.getElementById(uid+'-ok');
           var errEl=document.getElementById(uid+'-err');
-          var lockId='<?php echo $uid; ?>-lock';
+          var lockId='<?php echo esc_js( $uid ); ?>-lock';
           var contentLock=<?php echo ! empty( $s['content_lock'] ) ? 'true' : 'false'; ?>;
           var lockKey='olo_nl_unlocked_'+uid.replace('olo-nl-','');
 
@@ -344,7 +346,7 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
         <?php
 
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from fixed effect definitions
         $this->tfx_print_script();
         $html = ob_get_clean();
 
@@ -363,8 +365,8 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base border helpers from sanitized border settings
         }
         return $html;
     }

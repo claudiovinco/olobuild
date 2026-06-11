@@ -78,36 +78,36 @@ class Olo_Overlay_Tile extends Olo_Tile_Base {
         }
 
         ob_start();
-        echo $link_open;
+        echo $link_open; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- anchor markup assembled above from fixed literals with esc_url()/esc_attr()'d values
         ?>
-        <div id="<?php echo esc_attr( $id ); ?>" class="olo-overlay uk-inline uk-transition-toggle" style="display:block;width:100%;box-sizing:border-box;border-radius:<?php echo $radius_css; ?>;height:<?php echo $h; ?>px;overflow:hidden;cursor:pointer;">
+        <div id="<?php echo esc_attr( $id ); ?>" class="olo-overlay uk-inline uk-transition-toggle" style="display:block;width:100%;box-sizing:border-box;border-radius:<?php echo esc_attr( $radius_css ); ?>;height:<?php echo (int) $h; ?>px;overflow:hidden;cursor:pointer;">
             <?php if ( ! empty( $s['image_url'] ) ) : ?>
-                <?php echo Olo_Tile_Utils::img_srcset( absint( $s['image_url_id'] ?? 0 ), $s['image_url'], $s['title'] ?? '', '', 'full', 'uk-cover' ); ?>
+                <?php echo Olo_Tile_Utils::img_srcset( absint( $s['image_url_id'] ?? 0 ), $s['image_url'], $s['title'] ?? '', '', 'full', 'uk-cover' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <img> markup built by Olo_Tile_Utils::img_srcset() with esc_url()/esc_attr() internally ?>
             <?php else : ?>
                 <div style="background:#1F2937;" uk-cover></div>
             <?php endif; ?>
             <?php $ov_bg = $this->safe_color_css( $s['overlay_color'] ); $ov_fg = $this->safe_color_css( $s['text_color'] ); ?>
-            <div class="uk-overlay uk-overlay-primary uk-position-cover <?php echo esc_attr( $uk_effect ); ?>" style="<?php if ( $ov_bg ) echo 'background:' . $ov_bg . ';'; ?>opacity:<?php echo $opa; ?>;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;">
-                <div style="<?php if ( $ov_fg ) echo 'color:' . $ov_fg . ';'; ?>">
+            <div class="uk-overlay uk-overlay-primary uk-position-cover <?php echo esc_attr( $uk_effect ); ?>" style="<?php if ( $ov_bg ) echo 'background:' . $ov_bg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist; opacity is absint()/100 ?>opacity:<?php echo (float) $opa; ?>;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;">
+                <div style="<?php if ( $ov_fg ) echo 'color:' . $ov_fg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist ?>">
                     <?php
                     list( $ovt_cls, $ovt_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $s['title'] ?? '' ) );
                     list( $ovd_cls, $ovd_data ) = $this->tfx_attrs( $s, 'description', wp_strip_all_tags( $s['description'] ?? '' ) );
                     ?>
                     <?php if ( ! empty( $s['title'] ) ) : ?>
-                        <div class="olo-overlay-title<?php echo $ovt_cls; ?>" style="font-size:1.5em;font-weight:700;margin-bottom:8px;"<?php echo $ovt_data; ?>><?php echo esc_html( wp_strip_all_tags( $s['title'] ) ); ?></div>
+                        <div class="olo-overlay-title<?php echo $ovt_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); title is esc_html()'d ?>" style="font-size:1.5em;font-weight:700;margin-bottom:8px;"<?php echo $ovt_data; ?>><?php echo esc_html( wp_strip_all_tags( $s['title'] ) ); ?></div>
                     <?php endif; ?>
                     <?php if ( ! empty( $s['description'] ) ) : ?>
-                        <div class="olo-overlay-desc<?php echo $ovd_cls; ?>" style="font-size:0.9em;opacity:0.9;line-height:1.5;"<?php echo $ovd_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $s['description'] ) ) ); ?></div>
+                        <div class="olo-overlay-desc<?php echo $ovd_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); description is esc_html()'d (nl2br only adds <br /> tags) ?>" style="font-size:0.9em;opacity:0.9;line-height:1.5;"<?php echo $ovd_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $s['description'] ) ) ); ?></div>
                     <?php endif; ?>
                 </div>
             </div>
         </div>
         <?php
-        echo $link_close;
+        echo $link_close; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal '</a>' or empty string
         ?>
         <?php
         $tfx_css = $this->tfx_css( $s, '#' . $id );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
 
         // Border system
@@ -116,8 +116,8 @@ class Olo_Overlay_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( "#{$id}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo "#{$id}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo "#{$id}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $id is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
 
         return ob_get_clean();

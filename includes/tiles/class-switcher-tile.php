@@ -225,6 +225,7 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
         }
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, intval()/max() clamps for numerics, preg_match() whitelist for font weight, fixed-literal shadow strings, build_border_radius_css()/build_wow_effects_css() helpers, and the internally generated $uid.
         ?>
         <style>
             /* ═══ Switcher V3.23.0 — preset: <?php echo esc_html( $preset_id ); ?> ═══ */
@@ -383,18 +384,19 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
             ?>
         </style>
         <?php
+        // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 
         if ( $vertical ) :
             ?>
             <div class="olo-switcher olo-switcher--vert <?php echo esc_attr( $uid ); ?>">
                 <ul class="uk-tab-left olo-sw-nav" uk-tab="connect: .<?php echo esc_attr( $uid ); ?>-content; <?php echo esc_attr( $switcher_attr ); ?>">
                     <?php foreach ( $items as $i => $item ) : ?>
-                    <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><?php list( $swt_cls, $swt_data ) = $this->tfx_attrs( $s, "title", wp_strip_all_tags( $item["title"] ) ); ?><a href="#" class="<?php echo trim( $swt_cls ); ?>"<?php echo $swt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item["title"] ) ); ?></a></li>
+                    <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><?php list( $swt_cls, $swt_data ) = $this->tfx_attrs( $s, "title", wp_strip_all_tags( $item["title"] ) ); ?><a href="#" class="<?php echo trim( $swt_cls ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); title is esc_html()'d ?>"<?php echo $swt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item["title"] ) ); ?></a></li>
                     <?php endforeach; ?>
                 </ul>
                 <ul class="uk-switcher olo-switcher-content <?php echo esc_attr( $uid ); ?>-content">
                     <?php foreach ( $items as $i => $item ) : ?>
-                    <?php list( $swc_cls, $swc_data ) = $this->tfx_attrs( $s, "content", wp_strip_all_tags( $item["content"] ) ); $widget_html = $this->render_widget_template( $item['widget_template_id'] ?? 0 ); $active_cls = $i === 0 ? ' uk-active' : ''; ?><li class="<?php echo trim( $swc_cls . $active_cls ); ?>"<?php echo $swc_data; ?>><?php if ( $widget_html ) echo '<div class="olo-item-widget">' . $widget_html . '</div>'; echo nl2br( esc_html( wp_strip_all_tags( $item["content"] ) ) ); ?></li>
+                    <?php list( $swc_cls, $swc_data ) = $this->tfx_attrs( $s, "content", wp_strip_all_tags( $item["content"] ) ); $widget_html = $this->render_widget_template( $item['widget_template_id'] ?? 0 ); $active_cls = $i === 0 ? ' uk-active' : ''; ?><li class="<?php echo trim( $swc_cls . $active_cls ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); widget HTML from render_widget_template() (escapes its own output); content is esc_html()'d (nl2br only adds <br /> tags) ?>"<?php echo $swc_data; ?>><?php if ( $widget_html ) echo '<div class="olo-item-widget">' . $widget_html . '</div>'; echo nl2br( esc_html( wp_strip_all_tags( $item["content"] ) ) ); ?></li>
                     <?php endforeach; ?>
                 </ul>
             </div>
@@ -405,12 +407,12 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
             <div class="olo-switcher <?php echo esc_attr( $uid ); ?>">
                 <ul class="uk-tab olo-sw-nav" uk-tab="connect: .<?php echo esc_attr( $uid ); ?>-content; <?php echo esc_attr( $switcher_attr ); ?>">
                     <?php foreach ( $items as $i => $item ) : ?>
-                    <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><?php list( $swt_cls, $swt_data ) = $this->tfx_attrs( $s, "title", wp_strip_all_tags( $item["title"] ) ); ?><a href="#" class="<?php echo trim( $swt_cls ); ?>"<?php echo $swt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item["title"] ) ); ?></a></li>
+                    <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><?php list( $swt_cls, $swt_data ) = $this->tfx_attrs( $s, "title", wp_strip_all_tags( $item["title"] ) ); ?><a href="#" class="<?php echo trim( $swt_cls ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); title is esc_html()'d ?>"<?php echo $swt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item["title"] ) ); ?></a></li>
                     <?php endforeach; ?>
                 </ul>
                 <ul class="uk-switcher olo-switcher-content <?php echo esc_attr( $uid ); ?>-content">
                     <?php foreach ( $items as $i => $item ) : ?>
-                    <?php list( $swc_cls, $swc_data ) = $this->tfx_attrs( $s, "content", wp_strip_all_tags( $item["content"] ) ); $widget_html = $this->render_widget_template( $item['widget_template_id'] ?? 0 ); $active_cls = $i === 0 ? ' uk-active' : ''; ?><li class="<?php echo trim( $swc_cls . $active_cls ); ?>"<?php echo $swc_data; ?>><?php if ( $widget_html ) echo '<div class="olo-item-widget">' . $widget_html . '</div>'; echo nl2br( esc_html( wp_strip_all_tags( $item["content"] ) ) ); ?></li>
+                    <?php list( $swc_cls, $swc_data ) = $this->tfx_attrs( $s, "content", wp_strip_all_tags( $item["content"] ) ); $widget_html = $this->render_widget_template( $item['widget_template_id'] ?? 0 ); $active_cls = $i === 0 ? ' uk-active' : ''; ?><li class="<?php echo trim( $swc_cls . $active_cls ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); widget HTML from render_widget_template() (escapes its own output); content is esc_html()'d (nl2br only adds <br /> tags) ?>"<?php echo $swc_data; ?>><?php if ( $widget_html ) echo '<div class="olo-item-widget">' . $widget_html . '</div>'; echo nl2br( esc_html( wp_strip_all_tags( $item["content"] ) ) ); ?></li>
                     <?php endforeach; ?>
                 </ul>
             </div>
@@ -418,7 +420,7 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
         endif;
 
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
 
         // Border system (wrapper)
@@ -427,8 +429,8 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

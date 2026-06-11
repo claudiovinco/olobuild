@@ -121,6 +121,7 @@ class Olo_SmearHero_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist, min-height via intval() with min()/max() clamp, padding integer-forced or a fixed clamp() literal, fixed font-stack literals, background/radius/shadow/border via the Olo_CSS_Builder/Olo_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;min-height:<?php echo $mh; ?>vh;display:flex;align-items:center;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;<?php echo $bg_block; ?><?php echo $radius_css; ?><?php echo $kit_decl; ?>}
             .<?php echo $uid; ?>::before{content:"";position:absolute;inset:0;z-index:1;background:radial-gradient(80% 90% at 70% 20%,<?php echo $glow; ?>,transparent 60%);pointer-events:none;}
@@ -135,6 +136,7 @@ class Olo_SmearHero_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> a:focus-visible,.<?php echo $uid; ?> button:focus-visible{outline:2px solid <?php echo $accent; ?>;outline-offset:3px;}
             <?php echo $border_hover_css; ?><?php echo $border_effect_css; ?>
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <section class="olo-smearhero <?php echo esc_attr( $uid ); ?>">
             <?php if ( $smear ) : ?><div class="sh-smear" data-sh-zone aria-hidden="true"></div><?php endif; ?>
             <div class="sh-in">
@@ -151,7 +153,7 @@ class Olo_SmearHero_Tile extends Olo_Tile_Base {
             if(!root){return;}
             var zone=root.querySelector('[data-sh-zone]');
             if(!zone){return;}
-            var cols=<?php echo $cols_json; ?>;
+            var cols=<?php echo $cols_json; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JSON in <script> built by wp_json_encode() from safe_color_css()-whitelisted colours ?>;
             var fine=window.matchMedia('(pointer:fine)').matches;
             var motion=!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             if(!fine){return;}

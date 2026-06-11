@@ -100,21 +100,22 @@ class Olo_WorkList_Tile extends Olo_Tile_Base {
                 $tag      = $link ? 'a' : 'div';
                 $attrs    = $link ? ' href="' . esc_url( $link ) . '"' : '';
             ?>
-                <<?php echo $tag . $attrs; ?> class="olo-worklist__row" style="<?php echo esc_attr( $row_base ); ?>">
-                    <span class="olo-worklist__n" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo $number_size; ?>px;color:<?php echo esc_attr( $num_c ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.number'; ?>"><?php echo esc_html( $number ); ?></span>
-                    <span class="olo-worklist__t" style="font-family:<?php echo esc_attr( $tfam ); ?>;font-weight:<?php echo esc_attr( $title_wt ); ?>;font-size:<?php echo $title_size; ?>px;line-height:1;letter-spacing:-0.03em;color:<?php echo esc_attr( $title_c ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.title'; ?>"><?php echo esc_html( $title ); ?></span>
+                <<?php echo $tag . $attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tag is a fixed 'a'/'div' literal; $attrs assembled above from a fixed literal + esc_url()'d link ?> class="olo-worklist__row" style="<?php echo esc_attr( $row_base ); ?>">
+                    <span class="olo-worklist__n" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $number_size; ?>px;color:<?php echo esc_attr( $num_c ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.number'; ?>"><?php echo esc_html( $number ); ?></span>
+                    <span class="olo-worklist__t" style="font-family:<?php echo esc_attr( $tfam ); ?>;font-weight:<?php echo esc_attr( $title_wt ); ?>;font-size:<?php echo (int) $title_size; ?>px;line-height:1;letter-spacing:-0.03em;color:<?php echo esc_attr( $title_c ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.title'; ?>"><?php echo esc_html( $title ); ?></span>
                     <?php if ( $show_cat ) : ?>
-                        <span class="olo-worklist__cat" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo $cat_size; ?>px;text-transform:uppercase;letter-spacing:0.02em;color:<?php echo esc_attr( $cat_c ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.category'; ?>"><?php echo esc_html( $category ); ?></span>
+                        <span class="olo-worklist__cat" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $cat_size; ?>px;text-transform:uppercase;letter-spacing:0.02em;color:<?php echo esc_attr( $cat_c ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.category'; ?>"><?php echo esc_html( $category ); ?></span>
                     <?php endif; ?>
                     <?php if ( $show_year ) : ?>
-                        <span class="olo-worklist__yr" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo $year_size; ?>px;color:<?php echo esc_attr( $year_c ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.year'; ?>"><?php echo esc_html( $year ); ?></span>
+                        <span class="olo-worklist__yr" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $year_size; ?>px;color:<?php echo esc_attr( $year_c ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.year'; ?>"><?php echo esc_html( $year ); ?></span>
                     <?php endif; ?>
                     <?php if ( $show_arrow ) : ?>
                         <svg class="olo-worklist__arrow" viewBox="0 0 24 24" fill="none" stroke="<?php echo esc_attr( $arrow_c ); ?>" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
                     <?php endif; ?>
-                </<?php echo $tag; ?>>
+                </<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'a'/'div' literal from the ternary above ?>>
             <?php endforeach; ?>
         </div>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colours via the safe_color_css() whitelist, indent via absint() with min()/max() clamps, cursor a fixed-literal ternary; $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?> .olo-worklist__row { cursor: <?php echo $items && ! empty( $items[0]['link_url'] ) ? 'pointer' : 'default'; ?>; transition: padding .25s ease, background .25s ease; color: inherit; text-decoration: none; }
             .<?php echo $uid; ?> .olo-worklist__row:hover { padding-left: <?php echo $indent; ?>px; padding-right: <?php echo $indent; ?>px; background: <?php echo $hover_bg; ?>; }
@@ -128,6 +129,7 @@ class Olo_WorkList_Tile extends Olo_Tile_Base {
                 .<?php echo $uid; ?> .olo-worklist__cat { display: none; }
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php
         return ob_get_clean();
     }

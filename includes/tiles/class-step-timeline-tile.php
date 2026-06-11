@@ -161,8 +161,8 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
                 // Timeline: linea con (n+1) pallini (1 iniziale, 1 dopo ogni step)
                 $tl_dots = $n_items + 1;
             ?>
-                <div class="olo-stl__timeline" style="position:relative;height:<?php echo $tl_dotsz; ?>px;margin-bottom:<?php echo $tl_mb; ?>px">
-                    <div style="position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:<?php echo $tl_h; ?>px;background:<?php echo esc_attr( $tl_line ); ?>;border-radius:<?php echo $tl_h; ?>px"></div>
+                <div class="olo-stl__timeline" style="position:relative;height:<?php echo (int) $tl_dotsz; ?>px;margin-bottom:<?php echo (int) $tl_mb; ?>px">
+                    <div style="position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:<?php echo (int) $tl_h; ?>px;background:<?php echo esc_attr( $tl_line ); ?>;border-radius:<?php echo (int) $tl_h; ?>px"></div>
                     <?php for ( $d = 0; $d < $tl_dots; $d++ ) :
                         $pct = $tl_dots > 1 ? ( $d / ( $tl_dots - 1 ) ) * 100 : 50;
                         // Ultimo pallino: usa il colore tag dell'ultimo item se "completato" (verde)
@@ -171,12 +171,12 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
                             $dot_c = $this->safe_color_css( $items[ $n_items - 1 ]['tag_dot_color'] ) ?: $tl_dot;
                         }
                     ?>
-                        <span style="position:absolute;left:<?php echo $pct; ?>%;top:50%;transform:translate(-50%,-50%);width:<?php echo $tl_dotsz; ?>px;height:<?php echo $tl_dotsz; ?>px;border-radius:50%;background:<?php echo esc_attr( $dot_c ); ?>;box-shadow:0 0 0 4px #fff,0 0 0 5px color-mix(in srgb, <?php echo esc_attr( $dot_c ); ?> 20%, transparent)"></span>
+                        <span style="position:absolute;left:<?php echo (float) $pct; ?>%;top:50%;transform:translate(-50%,-50%);width:<?php echo (int) $tl_dotsz; ?>px;height:<?php echo (int) $tl_dotsz; ?>px;border-radius:50%;background:<?php echo esc_attr( $dot_c ); ?>;box-shadow:0 0 0 4px #fff,0 0 0 5px color-mix(in srgb, <?php echo esc_attr( $dot_c ); ?> 20%, transparent)"></span>
                     <?php endfor; ?>
                 </div>
             <?php endif; ?>
 
-            <div class="olo-stl__grid" style="display:grid;grid-template-columns:repeat(<?php echo $cols; ?>,1fr);gap:<?php echo $gap; ?>px;align-items:<?php echo esc_attr( $items_alig ); ?>;position:relative">
+            <div class="olo-stl__grid" style="display:grid;grid-template-columns:repeat(<?php echo (int) $cols; ?>,1fr);gap:<?php echo (int) $gap; ?>px;align-items:<?php echo esc_attr( $items_alig ); ?>;position:relative">
                 <?php foreach ( $items as $idx => $it ) :
                     $counter      = $it['counter'] ?? '';
                     $tag_text     = $it['tag_text'] ?? '';
@@ -205,18 +205,18 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
                         <!-- Counter + tag (riga numero step) -->
                         <div style="display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap">
                             <?php if ( $counter !== '' ) : ?>
-                                <span class="olo-stl__counter" style="font-family:<?php echo esc_attr( $counter_family ); ?>;font-size:<?php echo $counter_size; ?>px;line-height:.9;color:<?php echo esc_attr( $counter_clr ); ?>;font-style:<?php echo $counter_italic; ?>;font-weight:<?php echo esc_attr( $counter_w ); ?>;letter-spacing:-0.02em" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.counter'; ?>"><?php echo esc_html( $counter ); ?></span>
+                                <span class="olo-stl__counter" style="font-family:<?php echo esc_attr( $counter_family ); ?>;font-size:<?php echo (int) $counter_size; ?>px;line-height:.9;color:<?php echo esc_attr( $counter_clr ); ?>;font-style:<?php echo esc_attr( $counter_italic ); ?>;font-weight:<?php echo esc_attr( $counter_w ); ?>;letter-spacing:-0.02em" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.counter'; ?>"><?php echo esc_html( $counter ); ?></span>
                             <?php endif; ?>
                             <?php if ( $tag_text !== '' ) : ?>
                                 <div style="display:inline-flex;align-items:center;gap:8px;padding-bottom:14px">
                                     <span style="width:8px;height:8px;border-radius:50%;background:<?php echo esc_attr( $tag_dot_clr ); ?>"></span>
-                                    <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo $tag_size; ?>px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $tag_color ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.tag_text'; ?>"><?php echo esc_html( $tag_text ); ?></span>
+                                    <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $tag_size; ?>px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $tag_color ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.tag_text'; ?>"><?php echo esc_html( $tag_text ); ?></span>
                                 </div>
                             <?php endif; ?>
                         </div>
 
                         <!-- Mockup card -->
-                        <div class="olo-stl__mockup" style="background:<?php echo esc_attr( $m_bg ); ?>;<?php if ( $media_radius ) echo 'border-radius:' . esc_attr( $media_radius ) . ';'; ?>aspect-ratio:<?php echo esc_attr( $media_aspect ); ?>;overflow:hidden;<?php if ( $media_shadow ) echo 'box-shadow:' . esc_attr( $media_shadow ) . ';'; ?>display:flex;flex-direction:column;transition:transform .3s ease<?php if ( $media_radius_h ) echo ',border-radius ' . $media_rdur . 'ms ease'; ?>">
+                        <div class="olo-stl__mockup" style="background:<?php echo esc_attr( $m_bg ); ?>;<?php if ( $media_radius ) echo 'border-radius:' . esc_attr( $media_radius ) . ';'; ?>aspect-ratio:<?php echo esc_attr( $media_aspect ); ?>;overflow:hidden;<?php if ( $media_shadow ) echo 'box-shadow:' . esc_attr( $media_shadow ) . ';'; ?>display:flex;flex-direction:column;transition:transform .3s ease<?php if ( $media_radius_h ) echo ',border-radius ' . (int) $media_rdur . 'ms ease'; ?>">
                             <?php if ( ! empty( $s['show_media_label'] ) && $m_label !== '' ) : ?>
                                 <div style="padding:10px 14px;background:rgba(0,0,0,0.06);font-family:<?php echo esc_attr( $mono ); ?>;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:<?php echo $m_bg === '#0f172a' ? 'var(--olo-color-text-faint, #9ca3af)' : 'var(--olo-color-text-soft, #6b7280)'; ?>;display:flex;align-items:center;gap:6px">
                                     <span style="display:inline-flex;gap:4px">
@@ -245,32 +245,32 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
 
                         <!-- Pre-title -->
                         <?php if ( $pre_title !== '' ) : ?>
-                            <div style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo $pre_title_size; ?>px;letter-spacing:0.12em;text-transform:uppercase;color:<?php echo esc_attr( $pre_title_clr ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.pre_title'; ?>"><?php echo esc_html( $pre_title ); ?></div>
+                            <div style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $pre_title_size; ?>px;letter-spacing:0.12em;text-transform:uppercase;color:<?php echo esc_attr( $pre_title_clr ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.pre_title'; ?>"><?php echo esc_html( $pre_title ); ?></div>
                         <?php endif; ?>
 
                         <!-- Title (base + accent + after) -->
                         <?php if ( $title !== '' || $t_accent !== '' || $t_after !== '' ) : ?>
-                            <h3 style="font-family:<?php echo esc_attr( $title_family ); ?>;font-size:<?php echo $title_size; ?>px;font-weight:<?php echo esc_attr( $title_w ); ?>;line-height:1.15;letter-spacing:-0.01em;color:<?php echo esc_attr( $title_clr ); ?>;margin:0">
+                            <h3 style="font-family:<?php echo esc_attr( $title_family ); ?>;font-size:<?php echo (int) $title_size; ?>px;font-weight:<?php echo esc_attr( $title_w ); ?>;line-height:1.15;letter-spacing:-0.01em;color:<?php echo esc_attr( $title_clr ); ?>;margin:0">
                                 <?php if ( $title !== '' ) : ?><span data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.title'; ?>"><?php echo esc_html( $title ); ?></span><?php endif; ?><?php if ( $t_accent !== '' ) : ?> <span style="color:<?php echo esc_attr( $title_accent_c ); ?>;<?php if ( $t_acc_it ) echo 'font-style:italic;'; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.title_accent'; ?>"><?php echo esc_html( $t_accent ); ?></span><?php endif; ?><?php if ( $t_after !== '' ) : ?> <span style="<?php if ( $t_aft_it ) echo 'font-style:italic;'; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.title_after'; ?>"><?php echo esc_html( $t_after ); ?></span><?php endif; ?>
                             </h3>
                         <?php endif; ?>
 
                         <!-- Description -->
                         <?php if ( $desc !== '' ) : ?>
-                            <div style="font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo $desc_size; ?>px;line-height:1.55;color:<?php echo esc_attr( $desc_clr ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.description'; ?>" data-olo-richtext><?php echo $desc; ?></div>
+                            <div style="font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo (int) $desc_size; ?>px;line-height:1.55;color:<?php echo esc_attr( $desc_clr ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.description'; ?>" data-olo-richtext><?php echo $desc; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via safe_richtext_content() (wp_kses_post) or esc_html()+nl2br() above ?></div>
                         <?php endif; ?>
 
                         <!-- Footer metric -->
                         <?php if ( $f_val !== '' || $f_lbl !== '' ) : ?>
                             <div style="display:inline-flex;align-items:center;gap:10px;margin-top:12px;padding-top:14px;border-top:1px solid rgba(15,23,42,0.08)">
                                 <?php if ( $f_icon ) : ?>
-                                    <span style="color:<?php echo esc_attr( $fv_clr ); ?>;display:inline-flex;align-items:center"><?php echo $this->render_icon_html( $f_icon, 0.9 ); ?></span>
+                                    <span style="color:<?php echo esc_attr( $fv_clr ); ?>;display:inline-flex;align-items:center"><?php echo $this->render_icon_html( $f_icon, 0.9 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon HTML built by Olo_Tile_Base::render_icon_html() (escapes/sanitizes internally) ?></span>
                                 <?php endif; ?>
                                 <?php if ( $f_val !== '' ) : ?>
-                                    <span style="font-family:<?php echo esc_attr( $title_family ); ?>;font-size:<?php echo $fv_size; ?>px;font-weight:600;color:<?php echo esc_attr( $fv_clr ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.footer_value'; ?>"><?php echo esc_html( $f_val ); ?></span>
+                                    <span style="font-family:<?php echo esc_attr( $title_family ); ?>;font-size:<?php echo (int) $fv_size; ?>px;font-weight:600;color:<?php echo esc_attr( $fv_clr ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.footer_value'; ?>"><?php echo esc_html( $f_val ); ?></span>
                                 <?php endif; ?>
                                 <?php if ( $f_lbl !== '' ) : ?>
-                                    <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo $fl_size; ?>px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $fl_clr ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.footer_label'; ?>"><?php echo esc_html( $f_lbl ); ?></span>
+                                    <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $fl_size; ?>px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $fl_clr ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.footer_label'; ?>"><?php echo esc_html( $f_lbl ); ?></span>
                                 <?php endif; ?>
                             </div>
                         <?php endif; ?>
@@ -284,6 +284,7 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
             </div>
         </div>
 
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from sanitized values: $media_radius_h via build_border_radius_css() (integer-forced); $uid is internally generated. ?>
         <style>
             <?php if ( $media_radius_h ) : ?>
             .<?php echo $uid; ?> .olo-stl__item:hover .olo-stl__mockup { border-radius: <?php echo $media_radius_h; ?> !important; }
@@ -294,6 +295,7 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
                 .<?php echo $uid; ?> .olo-stl__counter { font-size: 64px !important; }
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php
 
         return ob_get_clean();

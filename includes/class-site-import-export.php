@@ -518,7 +518,7 @@ class Olo_Site_Import_Export {
         <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Import / Export', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy">
             <?php
-            echo Olo_Builder::cockpit_page_head( [
+            echo Olo_Builder::cockpit_page_head( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally; count is int-cast.
                 'title' => __( 'Import / Export', 'olobuild' ),
                 'sub'   => sprintf(
                     /* translators: %d: total templates */

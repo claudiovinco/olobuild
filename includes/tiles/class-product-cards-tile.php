@@ -166,10 +166,10 @@ class Olo_ProductCards_Tile extends Olo_Tile_Base {
                 $cta_text    = $it['cta_text'] ?? '';
                 $cta_url     = $it['cta_url'] ?? '#';
             ?>
-                <div class="olo-pcards__card" style="<?php echo esc_attr( $card_bg_css ); ?>;color:<?php echo esc_attr( $card_color ); ?>;<?php if ( $card_radius ) echo 'border-radius:' . esc_attr( $card_radius ) . ';'; ?><?php if ( $card_shadow ) echo 'box-shadow:' . esc_attr( $card_shadow ) . ';'; ?>overflow:hidden;display:flex;flex-direction:column;transition:transform .3s ease,box-shadow .3s ease<?php if ( $card_radius_h ) echo ',border-radius ' . $card_rdur . 'ms ease'; ?>">
+                <div class="olo-pcards__card" style="<?php echo esc_attr( $card_bg_css ); ?>;color:<?php echo esc_attr( $card_color ); ?>;<?php if ( $card_radius ) echo 'border-radius:' . esc_attr( $card_radius ) . ';'; ?><?php if ( $card_shadow ) echo 'box-shadow:' . esc_attr( $card_shadow ) . ';'; ?>overflow:hidden;display:flex;flex-direction:column;transition:transform .3s ease,box-shadow .3s ease<?php if ( $card_radius_h ) echo ',border-radius ' . (int) $card_rdur . 'ms ease'; ?>">
 
                     <!-- TOP HALF: gradient + letter + screenshot label -->
-                    <div class="olo-pcards__top" style="<?php echo esc_attr( $top_bg_css ); ?>;aspect-ratio:<?php echo esc_attr( $top_aspect ); ?>;padding:<?php echo $top_padding; ?>px;position:relative;display:flex;align-items:center;justify-content:<?php echo $letter_align === 'left' ? 'flex-start' : ( $letter_align === 'right' ? 'flex-end' : 'center' ); ?>">
+                    <div class="olo-pcards__top" style="<?php echo esc_attr( $top_bg_css ); ?>;aspect-ratio:<?php echo esc_attr( $top_aspect ); ?>;padding:<?php echo (int) $top_padding; ?>px;position:relative;display:flex;align-items:center;justify-content:<?php echo $letter_align === 'left' ? 'flex-start' : ( $letter_align === 'right' ? 'flex-end' : 'center' ); ?>">
                         <?php
                         $ov_op = intval( $it['top_bg']['overlay_opacity'] ?? 0 );
                         if ( ( $it['top_bg']['type'] ?? 'none' ) !== 'none' && $ov_op > 0 ) :
@@ -178,22 +178,22 @@ class Olo_ProductCards_Tile extends Olo_Tile_Base {
                             <div class="olo-pcards__overlay" style="position:absolute;inset:0;background-color:<?php echo esc_attr( $ov_clr ); ?>;opacity:<?php echo esc_attr( min( 100, $ov_op ) / 100 ); ?>;pointer-events:none;z-index:1" aria-hidden="true"></div>
                         <?php endif; ?>
                         <?php if ( $logo !== '' ) : ?>
-                            <img class="olo-pcards__logo" src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( $brand_lbl ?: $title ); ?>" style="position:relative;z-index:2;max-height:<?php echo $logo_height; ?>px;max-width:78%;width:auto;height:auto;object-fit:contain;display:block" />
+                            <img class="olo-pcards__logo" src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( $brand_lbl ?: $title ); ?>" style="position:relative;z-index:2;max-height:<?php echo (int) $logo_height; ?>px;max-width:78%;width:auto;height:auto;object-fit:contain;display:block" />
                         <?php elseif ( $letter !== '' ) : ?>
-                            <span class="olo-pcards__letter" style="position:relative;z-index:2;font-family:<?php echo esc_attr( $letter_family ); ?>;font-size:<?php echo $letter_size; ?>px;font-style:<?php echo esc_attr( $letter_italic ); ?>;color:<?php echo esc_attr( $letter_clr ); ?>;line-height:1;font-weight:500" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.letter'; ?>"><?php echo esc_html( $letter ); ?></span>
+                            <span class="olo-pcards__letter" style="position:relative;z-index:2;font-family:<?php echo esc_attr( $letter_family ); ?>;font-size:<?php echo (int) $letter_size; ?>px;font-style:<?php echo esc_attr( $letter_italic ); ?>;color:<?php echo esc_attr( $letter_clr ); ?>;line-height:1;font-weight:500" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.letter'; ?>"><?php echo esc_html( $letter ); ?></span>
                         <?php endif; ?>
 
                         <?php if ( ! empty( $s['show_screenshot_label'] ) && $screen_lbl ) : ?>
-                            <div class="olo-pcards__screen-label" style="position:absolute;z-index:2;left:<?php echo $top_padding; ?>px;right:<?php echo $top_padding; ?>px;bottom:<?php echo $top_padding; ?>px;border:1px dashed color-mix(in srgb, <?php echo esc_attr( $sl_color ); ?> 40%, transparent);border-radius:6px;padding:8px 12px;text-align:center;font-family:<?php echo esc_attr( $mono ); ?>;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:<?php echo esc_attr( $sl_color ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.screenshot_label'; ?>"><?php echo esc_html( $screen_lbl ); ?></div>
+                            <div class="olo-pcards__screen-label" style="position:absolute;z-index:2;left:<?php echo (int) $top_padding; ?>px;right:<?php echo (int) $top_padding; ?>px;bottom:<?php echo (int) $top_padding; ?>px;border:1px dashed color-mix(in srgb, <?php echo esc_attr( $sl_color ); ?> 40%, transparent);border-radius:6px;padding:8px 12px;text-align:center;font-family:<?php echo esc_attr( $mono ); ?>;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:<?php echo esc_attr( $sl_color ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.screenshot_label'; ?>"><?php echo esc_html( $screen_lbl ); ?></div>
                         <?php endif; ?>
                     </div>
 
                     <!-- BOTTOM HALF: brand + badge + title + desc + cta -->
-                    <div class="olo-pcards__bottom" style="padding:<?php echo $card_padding; ?>px;flex:1;display:flex;flex-direction:column;gap:14px">
+                    <div class="olo-pcards__bottom" style="padding:<?php echo (int) $card_padding; ?>px;flex:1;display:flex;flex-direction:column;gap:14px">
                         <?php if ( $brand_lbl !== '' || ( $show_badge && $badge_txt !== '' ) ) : ?>
                             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
                                 <?php if ( $brand_lbl !== '' ) : ?>
-                                    <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo $brand_size; ?>px;letter-spacing:<?php echo $brand_ls; ?>em;text-transform:uppercase;color:<?php echo esc_attr( $brand_clr ); ?>;font-weight:600" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.brand_label'; ?>"><?php echo esc_html( $brand_lbl ); ?></span>
+                                    <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $brand_size; ?>px;letter-spacing:<?php echo (float) $brand_ls; ?>em;text-transform:uppercase;color:<?php echo esc_attr( $brand_clr ); ?>;font-weight:600" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.brand_label'; ?>"><?php echo esc_html( $brand_lbl ); ?></span>
                                 <?php endif; ?>
                                 <?php if ( $show_badge && $badge_txt !== '' ) : ?>
                                     <span style="display:inline-flex;align-items:center;padding:3px 10px;background:<?php echo esc_attr( $badge_bg ); ?>;color:<?php echo esc_attr( $badge_clr ); ?>;font-family:<?php echo esc_attr( $mono ); ?>;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;border-radius:4px;font-weight:600" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.badge_text'; ?>"><?php echo esc_html( $badge_txt ); ?></span>
@@ -202,23 +202,24 @@ class Olo_ProductCards_Tile extends Olo_Tile_Base {
                         <?php endif; ?>
 
                         <?php if ( $title !== '' || $title_acc !== '' ) : ?>
-                            <h3 style="font-family:<?php echo esc_attr( $title_family ); ?>;font-size:<?php echo $title_size; ?>px;font-weight:<?php echo esc_attr( $title_w ); ?>;color:<?php echo esc_attr( $card_color ); ?>;margin:0;line-height:1.1;letter-spacing:-0.01em">
+                            <h3 style="font-family:<?php echo esc_attr( $title_family ); ?>;font-size:<?php echo (int) $title_size; ?>px;font-weight:<?php echo esc_attr( $title_w ); ?>;color:<?php echo esc_attr( $card_color ); ?>;margin:0;line-height:1.1;letter-spacing:-0.01em">
                                 <?php if ( $title !== '' ) : ?><span data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.title'; ?>"><?php echo esc_html( $title ); ?></span><?php endif; ?><?php if ( $title_acc !== '' ) : ?><span style="<?php if ( $acc_italic ) echo 'font-style:italic;'; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.title_accent'; ?>"><?php echo esc_html( $title_acc ); ?></span><?php endif; ?>
                             </h3>
                         <?php endif; ?>
 
                         <?php if ( $desc !== '' ) : ?>
-                            <div style="font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo $desc_size; ?>px;line-height:1.55;color:<?php echo esc_attr( $card_color ); ?>;flex:1" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.description'; ?>" data-olo-richtext><?php echo $desc; ?></div>
+                            <div style="font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo (int) $desc_size; ?>px;line-height:1.55;color:<?php echo esc_attr( $card_color ); ?>;flex:1" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.description'; ?>" data-olo-richtext><?php echo $desc; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via safe_richtext_content() (wp_kses_post) or esc_html()+nl2br() above ?></div>
                         <?php endif; ?>
 
                         <?php if ( $cta_text !== '' ) : ?>
-                            <a class="olo-pcards__cta" href="<?php echo esc_url( $cta_url ?: '#' ); ?>" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo $cta_size; ?>px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $brand_clr ); ?>;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-top:auto" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.cta_text'; ?>"><?php echo esc_html( $cta_text ); ?><?php if ( ! empty( $s['cta_arrow'] ) ) echo ' →'; ?></a>
+                            <a class="olo-pcards__cta" href="<?php echo esc_url( $cta_url ?: '#' ); ?>" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $cta_size; ?>px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $brand_clr ); ?>;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-top:auto" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.cta_text'; ?>"><?php echo esc_html( $cta_text ); ?><?php if ( ! empty( $s['cta_arrow'] ) ) echo ' →'; ?></a>
                         <?php endif; ?>
                     </div>
                 </div>
             <?php endforeach; ?>
         </div>
 
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from sanitized values: $hover_effect via in_array() whitelist (fixed-literal rules), $card_radius_h via build_border_radius_css() (integer-forced), $cols via absint()+min() clamps; $uid is internally generated. ?>
         <style>
             <?php switch ( $hover_effect ) :
                 case 'lift' : ?>
@@ -239,6 +240,7 @@ class Olo_ProductCards_Tile extends Olo_Tile_Base {
             @media (max-width: 1100px) { .<?php echo $uid; ?> { grid-template-columns: repeat(<?php echo min( $cols, 3 ); ?>, 1fr) !important; } }
             @media (max-width: 700px)  { .<?php echo $uid; ?> { grid-template-columns: 1fr !important; } }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php
 
         return ob_get_clean();

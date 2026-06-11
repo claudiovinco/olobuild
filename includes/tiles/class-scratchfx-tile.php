@@ -153,10 +153,11 @@ class Olo_Scratchfx_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval/whitelists/fixed maps/generated uid). ?>
         <style>
             .<?php echo $uid; ?> {
                 width: 100%;
-                max-width: <?php echo $max_width; ?>px;
+                max-width: <?php echo (int) $max_width; ?>px;
                 margin: <?php echo $margin_x; ?>;
                 text-align: <?php echo $align; ?>;
             }
@@ -281,24 +282,25 @@ class Olo_Scratchfx_Tile extends Olo_Tile_Base {
                 .<?php echo $uid; ?> .olo-scratch-hint { display: none !important; }
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <div class="<?php echo esc_attr( $uid ); ?>">
             <div class="olo-scratch-stage">
                 <?php if ( $image ) : ?>
-                    <img class="olo-scratch-img" src="<?php echo $image; ?>" alt="<?php echo esc_attr( $title ); ?>" loading="lazy" />
+                    <img class="olo-scratch-img" src="<?php echo $image; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_url() above ?>" alt="<?php echo esc_attr( $title ); ?>" loading="lazy" />
                 <?php endif; ?>
                 <div class="olo-scratch-under">
-                    <?php if ( $eyebrow ) : ?><p class="olo-scratch-eyebrow"><?php echo $eyebrow; ?></p><?php endif; ?>
-                    <?php if ( $title ) : ?><p class="olo-scratch-title"><?php echo $title; ?></p><?php endif; ?>
-                    <?php if ( $text ) : ?><p class="olo-scratch-desc"><?php echo $text; ?></p><?php endif; ?>
+                    <?php if ( $eyebrow ) : ?><p class="olo-scratch-eyebrow"><?php echo $eyebrow; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() above ?></p><?php endif; ?>
+                    <?php if ( $title ) : ?><p class="olo-scratch-title"><?php echo $title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() above ?></p><?php endif; ?>
+                    <?php if ( $text ) : ?><p class="olo-scratch-desc"><?php echo $text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() above ?></p><?php endif; ?>
                 </div>
                 <canvas class="<?php echo esc_attr( $cv ); ?>" aria-hidden="true"></canvas>
                 <?php if ( $hint ) : ?>
-                    <div class="olo-scratch-hint" data-olo-hint><?php echo $hint; ?></div>
+                    <div class="olo-scratch-hint" data-olo-hint><?php echo $hint; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() above ?></div>
                 <?php endif; ?>
             </div>
             <?php if ( $show_btn ) : ?>
-                <button type="button" class="olo-scratch-reveal" data-olo-reveal aria-label="<?php echo esc_attr( $btn_lbl ); ?>"><?php echo $btn_lbl; ?></button>
+                <button type="button" class="olo-scratch-reveal" data-olo-reveal aria-label="<?php echo esc_attr( $btn_lbl ); ?>"><?php echo $btn_lbl; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() above ?></button>
             <?php endif; ?>
         </div>
 
@@ -338,6 +340,7 @@ class Olo_Scratchfx_Tile extends Olo_Tile_Base {
                 }
                 return c;
             }
+            <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JS config: every value is passed through json_encode() (escapes quotes and slashes, so it cannot break out of the script context); sources are sanitized above (whitelist/safe_color_css/intval/esc_url); RESET is a fixed literal ternary. ?>
             var COVER_TYPE = <?php echo json_encode( $cover_type ); ?>;
             var COVER_C1   = resolveVarColor( <?php echo json_encode( $cover_c1 ); ?> );
             var COVER_C2   = resolveVarColor( <?php echo json_encode( $cover_c2 ); ?> );
@@ -348,6 +351,7 @@ class Olo_Scratchfx_Tile extends Olo_Tile_Base {
             var BRUSH      = <?php echo json_encode( $brush ); ?>;
             var THRESHOLD  = <?php echo json_encode( $threshold ); ?>;   // 0 = no auto-reveal
             var RESET      = <?php echo $reset ? 'true' : 'false'; ?>;
+            <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
             var dpr = Math.min( window.devicePixelRatio || 1, 2 ); // dpr cap
             var W = 0, H = 0;                 // dimensioni backing store (px * dpr)
@@ -557,8 +561,8 @@ class Olo_Scratchfx_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid} .olo-scratch-stage", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid} .olo-scratch-stage{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid} .olo-scratch-stage{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized values (intval/safe color whitelist)
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized values
         }
         return ob_get_clean();
     }

@@ -141,7 +141,7 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
         }
 
         if ( ! empty( $s['shadow'] ) && $s['shadow'] !== 'false' ) {
-            $sc = $s['shadow_color'] ?: 'rgba(0,0,0,0.15)';
+            $sc = $this->safe_color_css( $s['shadow_color'] ) ?: 'rgba(0,0,0,0.15)';
             $sb = intval( $s['shadow_blur'] );
             $sy = intval( $s['shadow_y'] );
             $pos_css .= "box-shadow:0 {$sy}px {$sb}px {$sc};";
@@ -186,11 +186,11 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
             $icon_svg = $this->get_trigger_icon( $s['trigger_icon'], $t_color );
             ob_start();
             ?>
-            <button class="<?php echo $uid; ?>-trigger <?php echo trim( $resp_class ); ?>"
-                    style="<?php echo $t_pos_css; ?>width:<?php echo $t_size; ?>px;height:<?php echo $t_size; ?>px;background:<?php echo $t_bg; ?>;color:<?php echo $t_color; ?>;border:none;border-radius:<?php echo $t_radius; ?>%;cursor:pointer;display:flex;align-items:center;justify-content:center;<?php echo $t_shadow; ?>"
-                    data-olo-fp-trigger="<?php echo $uid; ?>"
+            <button class="<?php echo esc_attr( $uid ); ?>-trigger <?php echo esc_attr( trim( $resp_class ) ); ?>"
+                    style="<?php echo $t_pos_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attribute assembled above from whitelisted position/placement literals, intval()'d offsets and safe_color_css() colours; sizes are int-cast, $t_shadow is a fixed literal ?>width:<?php echo (int) $t_size; ?>px;height:<?php echo (int) $t_size; ?>px;background:<?php echo $t_bg; ?>;color:<?php echo $t_color; ?>;border:none;border-radius:<?php echo (int) $t_radius; ?>%;cursor:pointer;display:flex;align-items:center;justify-content:center;<?php echo $t_shadow; ?>"
+                    data-olo-fp-trigger="<?php echo esc_attr( $uid ); ?>"
                     aria-label="<?php echo esc_attr( olo_t( 'Apri pannello' ) ); ?>">
-                <?php echo $icon_svg; ?>
+                <?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed SVG markup from the hardcoded icon map in get_trigger_icon() ?>
             </button>
             <?php
             $trigger_html = ob_get_clean();
@@ -199,7 +199,8 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
         // Everything inside a single wrapper div that gets moved to body
         $wrapper_style = ! empty( $s['_builder_mode'] ) ? 'scroll-margin-top:140px;' : 'display:none;';
         ?>
-        <div class="olo-fp-wrapper" data-olo-fp-wrapper="<?php echo $uid; ?>" style="<?php echo $wrapper_style; ?>">
+        <div class="olo-fp-wrapper" data-olo-fp-wrapper="<?php echo esc_attr( $uid ); ?>" style="<?php echo esc_attr( $wrapper_style ); ?>">
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from the internally generated $uid, the int-cast animation duration and fixed transform literals. ?>
         <style>
         .olo-fp-hide-desktop { display: none !important; }
         @media (max-width: 1024px) {
@@ -211,7 +212,7 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
             .olo-fp-hide-mobile { display: none !important; }
         }
         .<?php echo $uid; ?>-panel {
-            transition: opacity <?php echo $dur; ?>ms ease, transform <?php echo $dur; ?>ms ease;
+            transition: opacity <?php echo (int) $dur; ?>ms ease, transform <?php echo (int) $dur; ?>ms ease;
         }
         .<?php echo $uid; ?>-panel.olo-fp-hidden {
             pointer-events: none;
@@ -225,10 +226,11 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
             ?>
         }
         </style>
-        <?php echo $trigger_html; ?>
-        <div class="olo-floatingpanel <?php echo $uid; ?>-panel <?php echo trim( $resp_class ); ?><?php if ( $is_trigger ) echo ' olo-fp-hidden'; ?>"
-             style="<?php echo $pos_css; ?>"
-             data-olo-fp-id="<?php echo $uid; ?>">
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+        <?php echo $trigger_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- trigger button markup assembled above from esc_attr()'d/int-cast/safe_color_css() values and the fixed internal icon map ?>
+        <div class="olo-floatingpanel <?php echo esc_attr( $uid ); ?>-panel <?php echo esc_attr( trim( $resp_class ) ); ?><?php if ( $is_trigger ) echo ' olo-fp-hidden'; ?>"
+             style="<?php echo $pos_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attribute assembled above from whitelisted position/placement/flex literals, intval()'d numbers, esc_attr()'d custom offsets, radius_int()/spacing_css() helpers and safe_color_css() colours ?>"
+             data-olo-fp-id="<?php echo esc_attr( $uid ); ?>">
 
             <?php
             $show_close = ( ! empty( $s['show_close'] ) && $s['show_close'] !== 'false' );
@@ -238,10 +240,10 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
                 $cs = intval( $s['close_size'] );
             ?>
             <button class="olo-fp-close"
-                    style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;padding:4px;line-height:0;color:<?php echo $cc; ?>;z-index:2;"
-                    data-olo-fp-close="<?php echo $uid; ?>"
+                    style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;padding:4px;line-height:0;color:<?php echo $cc; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() whitelist above ?>;z-index:2;"
+                    data-olo-fp-close="<?php echo esc_attr( $uid ); ?>"
                     aria-label="<?php echo esc_attr( olo_t( 'Chiudi' ) ); ?>">
-                <svg width="<?php echo $cs; ?>" height="<?php echo $cs; ?>" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <svg width="<?php echo (int) $cs; ?>" height="<?php echo (int) $cs; ?>" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
             <?php endif; ?>
 
@@ -277,15 +279,15 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
 
         <script>
         (function(){
-            var wrapper = document.querySelector('[data-olo-fp-wrapper="<?php echo $uid; ?>"]');
+            var wrapper = document.querySelector('[data-olo-fp-wrapper="<?php echo esc_js( $uid ); ?>"]');
             if (!wrapper) return;
 
             /* Move the entire wrapper (style + trigger + panel) to body and make visible */
             document.body.appendChild(wrapper);
             wrapper.style.display = "contents";
 
-            var panel = wrapper.querySelector('[data-olo-fp-id="<?php echo $uid; ?>"]');
-            var trigger = wrapper.querySelector('[data-olo-fp-trigger="<?php echo $uid; ?>"]');
+            var panel = wrapper.querySelector('[data-olo-fp-id="<?php echo esc_js( $uid ); ?>"]');
+            var trigger = wrapper.querySelector('[data-olo-fp-trigger="<?php echo esc_js( $uid ); ?>"]');
 
             function showPanel() {
                 panel.classList.remove("olo-fp-hidden");
@@ -317,7 +319,7 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
             <?php endif; ?>
 
             // Close button (works in both 'always' and 'button' trigger modes)
-            var closeBtn = panel.querySelector('[data-olo-fp-close="<?php echo $uid; ?>"]');
+            var closeBtn = panel.querySelector('[data-olo-fp-close="<?php echo esc_js( $uid ); ?>"]');
             if (closeBtn) {
                 closeBtn.addEventListener("click", function(e) {
                     e.preventDefault();
@@ -335,8 +337,8 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}-panel", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}-panel{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}-panel{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized border settings
         }
         return ob_get_clean();
     }

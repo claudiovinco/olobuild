@@ -94,6 +94,7 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist (with var() token fallbacks), striped color esc_attr()'d inline, integers via absint(); $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?> {
                 margin: 0;
@@ -101,7 +102,7 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
                 list-style: none;
             }
             .<?php echo $uid; ?> .mdl-item {
-                padding: <?php echo $spacing; ?>px 16px;
+                padding: <?php echo (int) $spacing; ?>px 16px;
                 <?php if ( $show_sep ) : ?>
                 border-bottom: 1px solid <?php echo $brd_clr; ?>;
                 <?php endif; ?>
@@ -160,26 +161,27 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
                 color: <?php echo $icon_clr; ?>;
             }
             .<?php echo $uid; ?> .mdl-term {
-                font-size: <?php echo $term_fs; ?>px;
-                font-weight: <?php echo $term_fw; ?>;
+                font-size: <?php echo (int) $term_fs; ?>px;
+                font-weight: <?php echo (int) $term_fw; ?>;
                 <?php if ( $term_clr ) : ?>color: <?php echo $term_clr; ?>;<?php endif; ?>
                 line-height: 1.4;
                 margin: 0;
             }
             .<?php echo $uid; ?> .mdl-def {
-                font-size: <?php echo $def_fs; ?>px;
+                font-size: <?php echo (int) $def_fs; ?>px;
                 <?php if ( $def_clr ) : ?>color: <?php echo $def_clr; ?>;<?php endif; ?>
                 line-height: 1.6;
                 margin: 0;
                 <?php if ( $layout === 'stacked' ) : ?>margin-top: 4px;<?php endif; ?>
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <?php
         $dl_ta = $s['text_align'] ?? '';
         $dl_ta_css = in_array( $dl_ta, [ 'left', 'center', 'right', 'justify' ], true ) ? 'text-align:' . $dl_ta . ';' : '';
         ?>
-        <div class="olo-desclist <?php echo esc_attr( $uid ); ?><?php echo $show_icon ? ' mdl-has-icon' : ''; ?> olo-dl-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="<?php echo $dl_ta_css; ?>">
+        <div class="olo-desclist <?php echo esc_attr( $uid ); ?><?php echo $show_icon ? ' mdl-has-icon' : ''; ?> olo-dl-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="<?php echo $dl_ta_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed text-align declaration from the in_array() whitelist above ?>">
             <?php foreach ( $items as $item ) :
                 $icon = $item['icon'] ?? '';
                 $has_icon = $show_icon && ! empty( $icon );
@@ -193,47 +195,47 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
                 list( $term_cls, $term_data ) = $this->tfx_attrs( $s, 'term', $term_plain );
                 list( $def_cls,  $def_data  ) = $this->tfx_attrs( $s, 'definition', $def_plain );
             ?>
-            <?php echo $item_tag; ?>
+            <?php echo $item_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- opening markup built above from fixed literals with the link escaped via esc_url() ?>
                 <?php if ( $layout === 'stacked' ) : ?>
                     <div class="mdl-row">
                         <?php if ( $has_icon ) : ?>
                             <span class="mdl-icon-wrap">
-                                <?php echo $this->render_icon( $icon, $icon_size ); ?>
+                                <?php echo $this->render_icon( $icon, $icon_size ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup built by render_icon() with esc_attr()/esc_html()/absint() internally ?>
                             </span>
                         <?php endif; ?>
                         <div class="mdl-text">
-                            <dt class="mdl-term<?php echo $term_cls; ?>"<?php echo $term_data; ?>><?php echo esc_html( $term_plain ); ?></dt>
-                            <dd class="mdl-def<?php echo $def_cls; ?>"<?php echo $def_data; ?>><?php echo nl2br( esc_html( $def_plain ) ); ?></dd>
+                            <dt class="mdl-term<?php echo $term_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); term escaped inline ?>"<?php echo $term_data; ?>><?php echo esc_html( $term_plain ); ?></dt>
+                            <dd class="mdl-def<?php echo $def_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); definition esc_html()'d (nl2br only adds <br /> tags) ?>"<?php echo $def_data; ?>><?php echo nl2br( esc_html( $def_plain ) ); ?></dd>
                         </div>
                     </div>
                 <?php elseif ( $layout === 'inline' ) : ?>
                     <div class="mdl-row">
                         <?php if ( $has_icon ) : ?>
                             <span class="mdl-icon-wrap">
-                                <?php echo $this->render_icon( $icon, $icon_size ); ?>
+                                <?php echo $this->render_icon( $icon, $icon_size ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup built by render_icon() with esc_attr()/esc_html()/absint() internally ?>
                             </span>
                         <?php endif; ?>
-                        <dt class="mdl-term<?php echo $term_cls; ?>"<?php echo $term_data; ?>><?php echo esc_html( $term_plain ); ?></dt>
-                        <dd class="mdl-def<?php echo $def_cls; ?>"<?php echo $def_data; ?>><?php echo nl2br( esc_html( $def_plain ) ); ?></dd>
+                        <dt class="mdl-term<?php echo $term_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); term escaped inline ?>"<?php echo $term_data; ?>><?php echo esc_html( $term_plain ); ?></dt>
+                        <dd class="mdl-def<?php echo $def_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); definition esc_html()'d (nl2br only adds <br /> tags) ?>"<?php echo $def_data; ?>><?php echo nl2br( esc_html( $def_plain ) ); ?></dd>
                     </div>
                 <?php elseif ( $layout === 'grid' ) : ?>
                     <div class="mdl-row">
                         <?php if ( $has_icon ) : ?>
                             <span class="mdl-icon-wrap">
-                                <?php echo $this->render_icon( $icon, $icon_size ); ?>
+                                <?php echo $this->render_icon( $icon, $icon_size ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup built by render_icon() with esc_attr()/esc_html()/absint() internally ?>
                             </span>
                         <?php endif; ?>
-                        <dt class="mdl-term<?php echo $term_cls; ?>"<?php echo $term_data; ?>><?php echo esc_html( $term_plain ); ?></dt>
-                        <dd class="mdl-def<?php echo $def_cls; ?>"<?php echo $def_data; ?>><?php echo nl2br( esc_html( $def_plain ) ); ?></dd>
+                        <dt class="mdl-term<?php echo $term_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); term escaped inline ?>"<?php echo $term_data; ?>><?php echo esc_html( $term_plain ); ?></dt>
+                        <dd class="mdl-def<?php echo $def_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); definition esc_html()'d (nl2br only adds <br /> tags) ?>"<?php echo $def_data; ?>><?php echo nl2br( esc_html( $def_plain ) ); ?></dd>
                     </div>
                 <?php endif; ?>
-            <?php echo $item_close; ?>
+            <?php echo $item_close; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed '</a>'/'</div>' literal from the ternary above ?>
             <?php endforeach; ?>
         </div>
         <?php
         // Text effects: CSS scoped + runtime script (una sola volta per request)
         $tfx_css = $this->tfx_css( $s, '.olo-desclist' );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -241,8 +243,8 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base border helpers from sanitized border settings
         }
         return ob_get_clean();
     }

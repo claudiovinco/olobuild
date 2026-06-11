@@ -165,10 +165,11 @@ class Olo_ProductHero_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() for every colour, color_to_rgb() digit triplets, intval()-clamped grid size, Olo_Tile_Utils::spacing_css()/build_border_radius_css() int-built values, internal Olo_CSS_Builder::get_bg_inline_css()/build_shadow_decl() helpers, fixed font-stack literals, internal wp_rand() uid. ?>
         <style>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;text-align:center;padding:clamp(56px,8vw,104px) 0 0;background:<?php echo $bg; ?>;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;<?php echo $kit_bg_css . $kit_shadow_css; ?>}
             .<?php echo $uid; ?> .oph-glow{position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:760px;height:560px;border-radius:50%;filter:blur(90px);pointer-events:none;background:radial-gradient(circle, rgba(<?php echo $glowRgb; ?>,.34) 0%, rgba(<?php echo $glowRgb; ?>,0) 70%);}
-            .<?php echo $uid; ?> .oph-grid{position:absolute;inset:0;pointer-events:none;opacity:.5;background-image:linear-gradient(<?php echo $gridC; ?> 1px, transparent 1px), linear-gradient(90deg, <?php echo $gridC; ?> 1px, transparent 1px);background-size:<?php echo $gsize; ?>px <?php echo $gsize; ?>px;-webkit-mask:radial-gradient(70% 60% at 50% 30%, #000, transparent 75%);mask:radial-gradient(70% 60% at 50% 30%, #000, transparent 75%);}
+            .<?php echo $uid; ?> .oph-grid{position:absolute;inset:0;pointer-events:none;opacity:.5;background-image:linear-gradient(<?php echo $gridC; ?> 1px, transparent 1px), linear-gradient(90deg, <?php echo $gridC; ?> 1px, transparent 1px);background-size:<?php echo (int) $gsize; ?>px <?php echo (int) $gsize; ?>px;-webkit-mask:radial-gradient(70% 60% at 50% 30%, #000, transparent 75%);mask:radial-gradient(70% 60% at 50% 30%, #000, transparent 75%);}
             .<?php echo $uid; ?> .oph-in{position:relative;z-index:2;max-width:820px;margin:0 auto;padding:<?php echo $in_pad; ?>;}
             .<?php echo $uid; ?> .oph-pill{display:inline-flex;align-items:center;gap:9px;padding:6px 14px;border-radius:999px;background:<?php echo $pillBg; ?>;border:1px solid <?php echo $line; ?>;font-size:13px;color:<?php echo $pillC; ?>;margin-bottom:26px;<?php echo $pillMono ? 'font-family:' . $mono . ';font-size:12px;' : ''; ?>}
             .<?php echo $uid; ?> .oph-pill b{color:<?php echo $accent; ?>;font-weight:600;}
@@ -207,6 +208,7 @@ class Olo_ProductHero_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .oph-col span{font-family:<?php echo $mono; ?>;font-size:9.5px;color:<?php echo $sub; ?>;text-align:center;}
             @media(max-width:680px){.<?php echo $uid; ?> .oph-body{grid-template-columns:1fr 1fr;}}
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <section class="olo-producthero <?php echo esc_attr( $uid ); ?>">
             <?php if ( $glowOn ) : ?><span class="oph-glow"></span><?php endif; ?>
             <?php if ( $gridOn ) : ?><span class="oph-grid"></span><?php endif; ?>
@@ -234,7 +236,7 @@ class Olo_ProductHero_Tile extends Olo_Tile_Base {
                                 $kt = esc_html( $k['delta'] ?? '' );
                                 $kd = ! empty( $k['down'] ) ? ' oph-dn' : '';
                             ?>
-                            <div class="oph-kpi"><div class="oph-k"><?php echo $kl; ?></div><div class="oph-v"><?php echo $kv; ?></div><div class="oph-t<?php echo $kd; ?>"><?php echo $kt; ?></div></div>
+                            <div class="oph-kpi"><div class="oph-k"><?php echo $kl; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $kl/$kv/$kt are esc_html()'d at assignment above; $kd is a fixed class literal. ?></div><div class="oph-v"><?php echo $kv; ?></div><div class="oph-t<?php echo $kd; ?>"><?php echo $kt; ?></div></div>
                             <?php endforeach; ?>
                             <div class="oph-chart">
                                 <div class="oph-chhead"><b><?php echo esc_html( $s['chart_title'] ); ?></b><span><?php echo esc_html( $s['chart_meta'] ); ?></span></div>
@@ -244,7 +246,7 @@ class Olo_ProductHero_Tile extends Olo_Tile_Base {
                                         $bl  = esc_html( $b['label'] ?? '' );
                                         $b2  = ! empty( $b['alt'] ) ? ' class="oph-b2"' : '';
                                     ?>
-                                    <div class="oph-col"><i<?php echo $b2; ?> style="height:<?php echo $bh; ?>%"></i><span><?php echo $bl; ?></span></div>
+                                    <div class="oph-col"><i<?php echo $b2; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $b2 is a fixed class-attribute literal from the ternary above; $bl is esc_html()'d at assignment above. ?> style="height:<?php echo (int) $bh; ?>%"></i><span><?php echo $bl; ?></span></div>
                                     <?php endforeach; ?>
                                 </div>
                             </div>
@@ -261,9 +263,9 @@ class Olo_ProductHero_Tile extends Olo_Tile_Base {
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
             if ( $border_css ) {
-                echo ".{$uid}{{$border_css}}";
+                echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- border CSS from base-class build_border_css() (intval'd widths, safe_color_css()'d colours), internal wp_rand() uid.
             }
-            echo $border_hover_css . $border_effect_css . '</style>';
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- border CSS from base-class build_border_hover_css()/build_border_effect_css() helpers (intval'd values, safe_color_css()'d colours).
         }
         return ob_get_clean();
     }

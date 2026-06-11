@@ -88,6 +88,7 @@ class Olo_Woo_Wishlist_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+<?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist (with fixed var() fallbacks) for every colour, absint()/max()/min() clamps for integers, fixed literal branches for $card_extra; $uid is internally generated. Column 0 + closing tag so this line emits zero bytes. ?>
         <style>
             .<?php echo $uid; ?>-btn {
                 display: inline-flex;
@@ -143,15 +144,15 @@ class Olo_Woo_Wishlist_Tile extends Olo_Tile_Base {
             }
             .<?php echo $uid; ?>-grid {
                 display: grid;
-                grid-template-columns: repeat(<?php echo $cols; ?>, 1fr);
-                gap: <?php echo $gap; ?>px;
+                grid-template-columns: repeat(<?php echo (int) $cols; ?>, 1fr);
+                gap: <?php echo (int) $gap; ?>px;
                 margin-top: 20px;
             }
             @media (max-width: 960px) {
-                .<?php echo $uid; ?>-grid { grid-template-columns: repeat(<?php echo $cols_t; ?>, 1fr); }
+                .<?php echo $uid; ?>-grid { grid-template-columns: repeat(<?php echo (int) $cols_t; ?>, 1fr); }
             }
             @media (max-width: 640px) {
-                .<?php echo $uid; ?>-grid { grid-template-columns: repeat(<?php echo $cols_m; ?>, 1fr); }
+                .<?php echo $uid; ?>-grid { grid-template-columns: repeat(<?php echo (int) $cols_m; ?>, 1fr); }
             }
             .<?php echo $uid; ?>-card {
                 background: var(--olo-color-background, #fff);
@@ -224,12 +225,13 @@ class Olo_Woo_Wishlist_Tile extends Olo_Tile_Base {
                 font-size: 14px;
             }
         </style>
+<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped -- column 0 + closing tag so this line emits zero bytes ?>
 
         <div class="<?php echo esc_attr( $uid ); ?>-wrap">
             <!-- Wishlist Toggle Button -->
             <button class="<?php echo esc_attr( $uid ); ?>-btn" data-olo-wl-toggle title="<?php echo esc_attr( olo_t( 'Wishlist' ) ); ?>">
-                <span class="olo-wl-heart-outline"><?php echo $heart_outline; ?></span>
-                <span class="olo-wl-heart-filled"><?php echo $heart_filled; ?></span>
+                <span class="olo-wl-heart-outline"><?php echo $heart_outline; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup built above from a clamped absint() size and a safe_color_css()-validated color ?></span>
+                <span class="olo-wl-heart-filled"><?php echo $heart_filled; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup built above from a clamped absint() size and a safe_color_css()-validated color ?></span>
                 <?php if ( ! empty( $s['show_count'] ) ) : ?>
                 <span class="<?php echo esc_attr( $uid ); ?>-badge" data-olo-wl-count>0</span>
                 <?php endif; ?>
@@ -240,14 +242,14 @@ class Olo_Woo_Wishlist_Tile extends Olo_Tile_Base {
             <div class="<?php echo esc_attr( $uid ); ?>-grid" data-olo-wl-grid style="display:none"></div>
             <div class="<?php echo esc_attr( $uid ); ?>-empty" data-olo-wl-empty style="display:none">
                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--olo-color-border, #D1D5DB)" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-                <div style="margin-top:12px"><?php echo $empty_text; ?></div>
+                <div style="margin-top:12px"><?php echo $empty_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></div>
             </div>
             <?php endif; ?>
         </div>
 
         <script>
         (function(){
-            var wrap = document.querySelector('.<?php echo $uid; ?>-wrap');
+            var wrap = document.querySelector('.<?php echo esc_js( $uid ); ?>-wrap');
             if(!wrap){return}
 
             var COOKIE_NAME = 'olo_woo_wishlist';
@@ -339,14 +341,14 @@ class Olo_Woo_Wishlist_Tile extends Olo_Tile_Base {
                     }
                     var html = '';
                     products.forEach(function(p){
-                        html += '<div class="<?php echo $uid; ?>-card" data-wl-pid="' + p.id + '">';
+                        html += '<div class="<?php echo esc_js( $uid ); ?>-card" data-wl-pid="' + p.id + '">';
                         if(p.image){ html += '<a href="' + p.url + '"><img src="' + p.image + '" alt="' + p.title + '" /></a>'; }
-                        html += '<div class="<?php echo $uid; ?>-card-body">';
-                        html += '<div class="<?php echo $uid; ?>-card-title"><a href="' + p.url + '">' + p.title + '</a></div>';
-                        html += '<div class="<?php echo $uid; ?>-card-price">' + p.price_html + '</div>';
-                        html += '<div class="<?php echo $uid; ?>-card-actions">';
-                        html += '<a href="' + p.add_to_cart_url + '" class="<?php echo $uid; ?>-card-atc">' + atcText + '</a>';
-                        html += '<button class="<?php echo $uid; ?>-card-remove" data-wl-remove="' + p.id + '">' + removeText + '</button>';
+                        html += '<div class="<?php echo esc_js( $uid ); ?>-card-body">';
+                        html += '<div class="<?php echo esc_js( $uid ); ?>-card-title"><a href="' + p.url + '">' + p.title + '</a></div>';
+                        html += '<div class="<?php echo esc_js( $uid ); ?>-card-price">' + p.price_html + '</div>';
+                        html += '<div class="<?php echo esc_js( $uid ); ?>-card-actions">';
+                        html += '<a href="' + p.add_to_cart_url + '" class="<?php echo esc_js( $uid ); ?>-card-atc">' + atcText + '</a>';
+                        html += '<button class="<?php echo esc_js( $uid ); ?>-card-remove" data-wl-remove="' + p.id + '">' + removeText + '</button>';
                         html += '</div></div></div>';
                     });
                     gridEl.innerHTML = html;
@@ -387,8 +389,8 @@ class Olo_Woo_Wishlist_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized border settings
         }
         return ob_get_clean();
     }

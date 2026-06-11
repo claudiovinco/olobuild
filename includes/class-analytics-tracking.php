@@ -172,11 +172,11 @@ class Olo_Analytics_Tracking {
         <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Analytics & Tracking', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy olo-analytics-page">
             <?php
-            echo Olo_Builder::cockpit_page_head( [
+            echo Olo_Builder::cockpit_page_head( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally.
                 'title' => __( 'Analytics & Tracking', 'olobuild' ),
                 'sub'   => $sub,
             ] );
-            echo Olo_Builder::cockpit_subnav( $subnav, $tab );
+            echo Olo_Builder::cockpit_subnav( $subnav, $tab ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_subnav(), which escapes via esc_url()/esc_html() internally.
             ?>
 
             <form method="post" action="options.php" class="olo-analytics-form" style="margin-top:16px">
@@ -194,7 +194,7 @@ class Olo_Analytics_Tracking {
 
                 <div class="olo-actions" style="margin-top:24px">
                     <?php
-                    echo Olo_Builder::cockpit_button( [
+                    echo Olo_Builder::cockpit_button( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_button(), which escapes all parts internally.
                         'label'   => __( 'Salva impostazioni', 'olobuild' ),
                         'variant' => 'pri',
                         'type'    => 'submit',
@@ -284,10 +284,10 @@ class Olo_Analytics_Tracking {
         foreach ( $providers as $p ) : ?>
         <div class="olo-card">
             <div class="olo-card-head">
-                <div class="olo-card-icon <?php echo esc_attr( $p['color'] ); ?>"><?php echo $p['svg']; ?></div>
+                <div class="olo-card-icon <?php echo esc_attr( $p['color'] ); ?>"><?php echo $p['svg']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from the hardcoded $providers map above. ?></div>
                 <div style="flex:1">
                     <h3><?php echo esc_html( $p['label'] ); ?></h3>
-                    <p><?php echo $p['desc']; ?></p>
+                    <p><?php echo $p['desc']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- translated description from the hardcoded $providers map above; contains HTML entities (&rarr;) that esc_html() would double-encode. ?></p>
                 </div>
                 <?php if ( ! empty( $opts[ $p['key'] ] ) ) : ?>
                     <span class="olo-badge green"><?php esc_html_e( 'Attivo', 'olobuild' ); ?></span>
@@ -302,7 +302,7 @@ class Olo_Analytics_Tracking {
                         <span class="olo-field-hint"><?php echo esc_html( $p['placeholder'] ); ?></span>
                     </div>
                     <div class="olo-field-input-wrap">
-                        <input type="text" name="<?php echo $n; ?>[<?php echo esc_attr( $p['key'] ); ?>]"
+                        <input type="text" name="<?php echo esc_attr( $n ); ?>[<?php echo esc_attr( $p['key'] ); ?>]"
                                value="<?php echo esc_attr( $opts[ $p['key'] ] ); ?>"
                                placeholder="<?php echo esc_attr( $p['placeholder'] ); ?>"
                                class="olo-field-input" />
@@ -346,7 +346,7 @@ class Olo_Analytics_Tracking {
                     </div>
                     <div class="olo-field-input-wrap">
                         <label class="olo-toggle">
-                            <input type="checkbox" name="<?php echo $n; ?>[<?php echo esc_attr( $ev['key'] ); ?>]" value="1" <?php checked( $opts[ $ev['key'] ] ); ?> />
+                            <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[<?php echo esc_attr( $ev['key'] ); ?>]" value="1" <?php checked( $opts[ $ev['key'] ] ); ?> />
                             <span class="olo-toggle-slider"></span>
                         </label>
                     </div>
@@ -372,7 +372,7 @@ class Olo_Analytics_Tracking {
                         <span class="olo-field-hint"><?php esc_html_e( 'Percentuali di scroll a cui inviare un evento (separate da virgola).', 'olobuild' ); ?></span>
                     </div>
                     <div class="olo-field-input-wrap">
-                        <input type="text" name="<?php echo $n; ?>[scroll_milestones]" value="<?php echo esc_attr( $opts['scroll_milestones'] ); ?>" class="olo-field-input" placeholder="25,50,75,100" />
+                        <input type="text" name="<?php echo esc_attr( $n ); ?>[scroll_milestones]" value="<?php echo esc_attr( $opts['scroll_milestones'] ); ?>" class="olo-field-input" placeholder="25,50,75,100" />
                     </div>
                 </div>
                 <div class="olo-field-row">
@@ -381,7 +381,7 @@ class Olo_Analytics_Tracking {
                         <span class="olo-field-hint"><?php esc_html_e( 'Estensioni file da tracciare come download (separate da virgola).', 'olobuild' ); ?></span>
                     </div>
                     <div class="olo-field-input-wrap">
-                        <input type="text" name="<?php echo $n; ?>[download_extensions]" value="<?php echo esc_attr( $opts['download_extensions'] ); ?>" class="olo-field-input" placeholder="pdf,zip,doc" />
+                        <input type="text" name="<?php echo esc_attr( $n ); ?>[download_extensions]" value="<?php echo esc_attr( $opts['download_extensions'] ); ?>" class="olo-field-input" placeholder="pdf,zip,doc" />
                     </div>
                 </div>
             </div>
@@ -435,7 +435,7 @@ class Olo_Analytics_Tracking {
                     </div>
                     <div class="olo-field-input-wrap">
                         <label class="olo-toggle">
-                            <input type="checkbox" name="<?php echo $n; ?>[<?php echo esc_attr( $s['key'] ); ?>]" value="1" <?php checked( $opts[ $s['key'] ] ); ?> />
+                            <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[<?php echo esc_attr( $s['key'] ); ?>]" value="1" <?php checked( $opts[ $s['key'] ] ); ?> />
                             <span class="olo-toggle-slider"></span>
                         </label>
                     </div>
@@ -468,7 +468,7 @@ class Olo_Analytics_Tracking {
                         <span class="olo-field-hint"><?php esc_html_e( 'Inseriti prima della chiusura di </head>. Utile per snippet di tracking non supportati nativamente.', 'olobuild' ); ?></span>
                     </div>
                     <div class="olo-field-input-wrap" style="width:100%">
-                        <textarea name="<?php echo $n; ?>[head_scripts]" rows="6" class="olo-field-input wide olo-field-code" placeholder="&lt;script&gt;...&lt;/script&gt;"><?php echo esc_textarea( $opts['head_scripts'] ); ?></textarea>
+                        <textarea name="<?php echo esc_attr( $n ); ?>[head_scripts]" rows="6" class="olo-field-input wide olo-field-code" placeholder="&lt;script&gt;...&lt;/script&gt;"><?php echo esc_textarea( $opts['head_scripts'] ); ?></textarea>
                     </div>
                 </div>
                 <div class="olo-field-row olo-field-row-stack">
@@ -477,7 +477,7 @@ class Olo_Analytics_Tracking {
                         <span class="olo-field-hint"><?php esc_html_e( 'Inseriti prima della chiusura di </body>.', 'olobuild' ); ?></span>
                     </div>
                     <div class="olo-field-input-wrap" style="width:100%">
-                        <textarea name="<?php echo $n; ?>[body_scripts]" rows="6" class="olo-field-input wide olo-field-code" placeholder="&lt;script&gt;...&lt;/script&gt;"><?php echo esc_textarea( $opts['body_scripts'] ); ?></textarea>
+                        <textarea name="<?php echo esc_attr( $n ); ?>[body_scripts]" rows="6" class="olo-field-input wide olo-field-code" placeholder="&lt;script&gt;...&lt;/script&gt;"><?php echo esc_textarea( $opts['body_scripts'] ); ?></textarea>
                     </div>
                 </div>
             </div>
@@ -565,11 +565,14 @@ class Olo_Analytics_Tracking {
 
         $opts = self::get_options();
 
-        $ga_id  = $opts['ga_id'];
-        $fb_id  = $opts['fb_pixel_id'];
-        $gtm_id = $opts['gtm_id'];
-        $clar   = $opts['clarity_id'];
-        $hj_id  = $opts['hotjar_id'];
+        // Hardening: the IDs are printed inside <script> snippets below, so restrict them
+        // upstream to the strict charset real GA4/GTM/Pixel/Clarity/Hotjar IDs use.
+        // No-op for every valid ID (e.g. G-XXXXXXXXXX, GTM-XXXXXXX, numeric pixel ids).
+        $ga_id  = preg_replace( '/[^A-Za-z0-9_-]/', '', (string) $opts['ga_id'] );
+        $fb_id  = preg_replace( '/[^A-Za-z0-9_-]/', '', (string) $opts['fb_pixel_id'] );
+        $gtm_id = preg_replace( '/[^A-Za-z0-9_-]/', '', (string) $opts['gtm_id'] );
+        $clar   = preg_replace( '/[^A-Za-z0-9_-]/', '', (string) $opts['clarity_id'] );
+        $hj_id  = $opts['hotjar_id']; // intval()'d at output below.
 
         $analytics_type = self::get_script_type( 'analytics' );
         $marketing_type = self::get_script_type( 'marketing' );
@@ -578,6 +581,7 @@ class Olo_Analytics_Tracking {
         $ga_cat  = $analytics_type === 'text/plain' ? ' data-cookiecategory="analytics"' : '';
         $mkt_cat = $marketing_type === 'text/plain' ? ' data-cookiecategory="marketing"' : '';
 
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed provider snippet templates below: the only dynamic values are tracking IDs hard-restricted to [A-Za-z0-9_-] above (and additionally esc_attr()/esc_js()/intval()'d), plus fixed type/data-cookiecategory literals.
         // Google Analytics 4
         if ( ! empty( $ga_id ) ) {
             $ga_esc = esc_attr( $ga_id );
@@ -647,10 +651,11 @@ class Olo_Analytics_Tracking {
             echo "a.appendChild(r)})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=6');" . "\n";
             echo '</script>' . "\n";
         }
+        // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 
         // Custom head scripts
         if ( ! empty( $opts['head_scripts'] ) ) {
-            echo $opts['head_scripts'] . "\n";
+            echo $opts['head_scripts'] . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- intentionally raw output: admin-saved custom tracking snippet (script tags must not be escaped).
         }
     }
 
@@ -685,7 +690,7 @@ class Olo_Analytics_Tracking {
         if ( ! $has_provider ) {
             // Custom body scripts only
             if ( ! empty( $opts['body_scripts'] ) ) {
-                echo $opts['body_scripts'] . "\n";
+                echo $opts['body_scripts'] . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- intentionally raw output: admin-saved custom tracking snippet (script tags must not be escaped).
             }
             return;
         }
@@ -695,7 +700,7 @@ class Olo_Analytics_Tracking {
 
         if ( ! $has_events ) {
             if ( ! empty( $opts['body_scripts'] ) ) {
-                echo $opts['body_scripts'] . "\n";
+                echo $opts['body_scripts'] . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- intentionally raw output: admin-saved custom tracking snippet (script tags must not be escaped).
             }
             return;
         }
@@ -707,7 +712,7 @@ class Olo_Analytics_Tracking {
         $sc_attr     = $script_type === 'text/plain' ? ' data-cookiecategory="analytics"' : '';
 
         ?>
-<script type="<?php echo $script_type; ?>"<?php echo $sc_attr; ?>>
+<script type="<?php echo $script_type; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $script_type and $sc_attr are fixed internal literals set above. ?>"<?php echo $sc_attr; ?>>
 (function(){
     "use strict";
 
@@ -761,7 +766,7 @@ class Olo_Analytics_Tracking {
 
 <?php if ( $opts['track_scroll'] ) : ?>
     var scrollMilestones = {};
-    var milestoneValues = <?php echo wp_json_encode( $milestones ); ?>;
+    var milestoneValues = <?php echo wp_json_encode( $milestones ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JSON in <script> built by wp_json_encode() from intval()'d milestones. ?>;
 
     function checkScrollDepth() {
         var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -800,7 +805,7 @@ class Olo_Analytics_Tracking {
 <?php endif; ?>
 
 <?php if ( $opts['track_downloads'] ) : ?>
-    var dlExts = <?php echo wp_json_encode( $extensions ); ?>;
+    var dlExts = <?php echo wp_json_encode( $extensions ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JSON in <script> built by wp_json_encode(). ?>;
     document.addEventListener("click", function(e) {
         var a = e.target.closest("a[href]");
         if (!a) return;
@@ -846,7 +851,7 @@ class Olo_Analytics_Tracking {
 
         // Custom body scripts
         if ( ! empty( $opts['body_scripts'] ) ) {
-            echo $opts['body_scripts'] . "\n";
+            echo $opts['body_scripts'] . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- intentionally raw output: admin-saved custom tracking snippet (script tags must not be escaped).
         }
     }
 }

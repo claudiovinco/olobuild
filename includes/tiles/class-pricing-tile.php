@@ -170,6 +170,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
         $price_monthly = esc_html( $s['price'] );
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval/whitelists/Olo_Tile_Utils helpers; $uid is internal).
         ?>
         <style>
             .<?php echo $uid; ?> {
@@ -187,7 +188,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
                 border: 1.5px solid <?php echo $accent; ?>;
                 box-shadow: 0 0 0 1px <?php echo $accent; ?>, 0 24px 60px -30px <?php echo $accent; ?>;
                 <?php elseif ( $tile_bw > 0 ) : ?>
-                border: <?php echo $tile_bw; ?>px solid <?php echo $tile_bc; ?>;
+                border: <?php echo (int) $tile_bw; ?>px solid <?php echo $tile_bc; ?>;
                 <?php endif; ?>
             }
             .<?php echo $uid; ?> .olo-price-inner { display: flex; flex-direction: column; height: 100%; }
@@ -219,7 +220,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
             /* Badge */
             <?php if ( $popular ) : ?>
             .<?php echo $uid; ?> .olo-price-badge {
-                position: relative; display: inline-block; margin-top: <?php echo $badge_top; ?>px; margin-bottom: 18px;
+                position: relative; display: inline-block; margin-top: <?php echo (int) $badge_top; ?>px; margin-bottom: 18px;
                 font-size: 0.75em; font-weight: 600; text-transform: uppercase; white-space: nowrap; z-index: 5;
                 color: <?php echo $badge_fg; ?>;
                 border-radius: <?php echo $badge_r; ?>;
@@ -246,10 +247,10 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
                 border-radius: 16px; padding: 16px 24px;
                 <?php endif; ?>
                 <?php if ( $shape_bw > 0 ) : ?>
-                border: <?php echo $shape_bw; ?>px solid <?php echo $shape_bc; ?>;
+                border: <?php echo (int) $shape_bw; ?>px solid <?php echo $shape_bc; ?>;
                 <?php endif; ?>
                 <?php if ( $shape_glow ) : ?>
-                box-shadow: inset 0 0 <?php echo $shape_gi; ?>px <?php echo 'color-mix(in srgb, ' . $shape_gc . ' 40%, transparent)'; ?>, inset 0 0 <?php echo $shape_gi * 2; ?>px <?php echo 'color-mix(in srgb, ' . $shape_gc . ' 20%, transparent)'; ?>;
+                box-shadow: inset 0 0 <?php echo (int) $shape_gi; ?>px <?php echo 'color-mix(in srgb, ' . $shape_gc . ' 40%, transparent)'; ?>, inset 0 0 <?php echo (int) $shape_gi * 2; ?>px <?php echo 'color-mix(in srgb, ' . $shape_gc . ' 20%, transparent)'; ?>;
                 <?php endif; ?>
             }
             <?php endif; ?>
@@ -262,7 +263,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
                 border-bottom: 1px solid rgba(255,255,255,.1);
                 <?php endif; ?>
             }
-            .<?php echo $uid; ?> .olo-price-check { margin-right: 8px; color: <?php echo $accent; ?>; font-size: <?php echo $check_size; ?>px; }
+            .<?php echo $uid; ?> .olo-price-check { margin-right: 8px; color: <?php echo $accent; ?>; font-size: <?php echo (int) $check_size; ?>px; }
 
             /* Sale badge */
             <?php if ( $has_sale ) : ?>
@@ -285,13 +286,13 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
 
             /* CTA */
             .<?php echo $uid; ?> .olo-price-cta {
-                display: block; box-sizing: border-box; width: <?php echo $cta_w; ?>%; margin: 0 auto;
+                display: block; box-sizing: border-box; width: <?php echo (int) $cta_w; ?>%; margin: 0 auto;
                 padding: 12px 24px; text-decoration: none !important;
                 font-weight: 600; font-size: 1em; text-align: center;
                 background: <?php echo $cta_bg; ?>; color: <?php echo $cta_fg; ?> !important;
                 border-radius: <?php echo $cta_r; ?>;
                 <?php if ( $cta_bw > 0 ) : ?>
-                border: <?php echo $cta_bw; ?>px solid <?php echo $cta_bc; ?>;
+                border: <?php echo (int) $cta_bw; ?>px solid <?php echo $cta_bc; ?>;
                 <?php else : ?>
                 border: none;
                 <?php endif; ?>
@@ -365,6 +366,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
             }
             <?php endif; ?>
         </style>
+<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-pricing <?php echo esc_attr( $uid ); ?> olo-pricing-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
             <?php if ( $bg_type === 'image' && ! empty( $s['bg_image'] ) ) : ?>
                 <div class="olo-price-bg"></div>
@@ -378,7 +380,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
 
             <div class="olo-price-inner">
                 <?php if ( $has_sale ) : ?>
-                    <div class="olo-price-sale-badge"><?php echo $sale_badge_text; ?></div>
+                    <div class="olo-price-sale-badge"><?php echo $sale_badge_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></div>
                 <?php endif; ?>
                 <?php if ( $popular ) : ?>
                     <div class="olo-price-badge"><?php echo esc_html( $s['badge_text'] ?: 'Popolare' ); ?></div>
@@ -386,13 +388,13 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
 
                 <?php if ( $enable_toggle ) : ?>
                 <div class="olo-price-toggle-wrap">
-                    <span class="olo-price-toggle-label olo-active" data-olo-toggle-l1><?php echo $toggle_label1; ?></span>
+                    <span class="olo-price-toggle-label olo-active" data-olo-toggle-l1><?php echo $toggle_label1; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></span>
                     <button type="button" class="olo-price-toggle" data-olo-price-toggle aria-label="<?php echo esc_attr( $toggle_label1 . ' / ' . $toggle_label2 ); ?>"></button>
-                    <span class="olo-price-toggle-label" data-olo-toggle-l2><?php echo $toggle_label2; ?></span>
+                    <span class="olo-price-toggle-label" data-olo-toggle-l2><?php echo $toggle_label2; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></span>
                 </div>
                 <?php endif; ?>
 
-                <h3 style="font-size:1.25em;font-weight:600;margin:8px 0 16px;color:<?php echo $fg; ?>"><?php echo $plan_name; ?></h3>
+                <h3 style="font-size:1.25em;font-weight:600;margin:8px 0 16px;color:<?php echo $fg; ?>"><?php echo $plan_name; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- color validated by safe_color_css(); name escaped with esc_html() above ?></h3>
 
                 <div style="margin-bottom:24px">
                     <?php
@@ -414,43 +416,43 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
                     ?>
                     <?php if ( $shape !== 'none' ) : ?>
                         <div class="olo-price-shape">
-                            <?php echo $original_price_html; ?>
+                            <?php echo $original_price_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above exclusively from esc_html() values ?>
                             <?php if ( $cur_pos === 'before' ) : ?>
-                                <span style="font-size:<?php echo $cur_size; ?>px;opacity:.8;margin-right:2px"><?php echo $currency; ?></span>
+                                <span style="font-size:<?php echo (int) $cur_size; ?>px;opacity:.8;margin-right:2px"><?php echo $currency; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></span>
                             <?php endif; ?>
-                            <span class="olo-pricing-amount" style="font-size:3em;font-weight:700;line-height:1"<?php echo $toggle_attrs; ?>><?php echo $display_price; ?></span>
+                            <span class="olo-pricing-amount" style="font-size:3em;font-weight:700;line-height:1"<?php echo $toggle_attrs; ?>><?php echo $display_price; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built with esc_attr(), price escaped with esc_html() above ?></span>
                             <?php if ( $cur_pos === 'after' ) : ?>
-                                <span style="font-size:<?php echo $cur_size; ?>px;opacity:.8;margin-left:2px"><?php echo $currency; ?></span>
+                                <span style="font-size:<?php echo (int) $cur_size; ?>px;opacity:.8;margin-left:2px"><?php echo $currency; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></span>
                             <?php endif; ?>
                         </div>
-                        <div style="font-size:.875em;opacity:.7;margin-top:8px"><?php echo $period; ?></div>
+                        <div style="font-size:.875em;opacity:.7;margin-top:8px"><?php echo $period; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></div>
                     <?php else : ?>
-                        <?php echo $original_price_html; ?>
+                        <?php echo $original_price_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above exclusively from esc_html() values ?>
                         <?php if ( $cur_pos === 'before' ) : ?>
-                            <span style="font-size:<?php echo $cur_size; ?>px;opacity:.8;margin-right:2px"><?php echo $currency; ?></span>
+                            <span style="font-size:<?php echo (int) $cur_size; ?>px;opacity:.8;margin-right:2px"><?php echo $currency; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></span>
                         <?php endif; ?>
-                        <span class="olo-pricing-amount" style="font-size:3em;font-weight:700;line-height:1"<?php echo $toggle_attrs; ?>><?php echo $display_price; ?></span>
+                        <span class="olo-pricing-amount" style="font-size:3em;font-weight:700;line-height:1"<?php echo $toggle_attrs; ?>><?php echo $display_price; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built with esc_attr(), price escaped with esc_html() above ?></span>
                         <?php if ( $cur_pos === 'after' ) : ?>
-                            <span style="font-size:<?php echo $cur_size; ?>px;opacity:.8;margin-left:2px"><?php echo $currency; ?></span>
+                            <span style="font-size:<?php echo (int) $cur_size; ?>px;opacity:.8;margin-left:2px"><?php echo $currency; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></span>
                         <?php endif; ?>
-                        <span style="font-size:.875em;opacity:.7"><?php echo $period; ?></span>
+                        <span style="font-size:.875em;opacity:.7"><?php echo $period; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></span>
                     <?php endif; ?>
                 </div>
 
                 <?php if ( ! empty( $features ) ) : ?>
                     <ul class="olo-price-features">
                         <?php foreach ( $features as $f ) : ?>
-                            <li><?php if ( $check ) : ?><span class="olo-price-check"><?php echo $check; ?></span><?php endif; ?><?php echo esc_html( $f ); ?></li>
+                            <li><?php if ( $check ) : ?><span class="olo-price-check"><?php echo $check; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed HTML entity from internal whitelist map ?></span><?php endif; ?><?php echo esc_html( $f ); ?></li>
                         <?php endforeach; ?>
                     </ul>
                 <?php endif; ?>
 
                 <a href="<?php echo esc_url( $s['cta_url'] ); ?>" class="olo-price-cta"
                    <?php if ( $s['cta_target'] === '_blank' ) echo 'target="_blank" rel="noopener"'; ?>>
-                    <?php echo $cta_text; ?>
+                    <?php echo $cta_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?>
                 </a>
                 <?php if ( ! empty( $additional_info ) ) : ?>
-                    <div class="olo-price-addinfo"><?php echo $additional_info; ?></div>
+                    <div class="olo-price-addinfo"><?php echo $additional_info; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></div>
                 <?php endif; ?>
 
                 <?php
@@ -467,9 +469,9 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
                     if ( $cd_bg )    $cd_style .= 'background:' . $cd_bg . ';';
                     if ( $cd_color ) $cd_style .= 'color:' . $cd_color . ';';
                 ?>
-                <div class="olo-pricing-countdown <?php echo $uid; ?>-cd" style="text-align:center;padding:10px 12px;font-size:13px;margin-top:10px;border-radius:6px;<?php echo $cd_style; ?>">
-                    <div class="olo-cd-label" style="font-size:11px;opacity:0.8;margin-bottom:4px"><?php echo $cd_label; ?></div>
-                    <div class="olo-cd-timer" style="font-weight:700;font-variant-numeric:tabular-nums;font-size:16px" data-olo-countdown="<?php echo esc_attr( $cd_date ); ?>" data-expired="<?php echo $cd_expired_text; ?>" data-hide="<?php echo $cd_hide ? '1' : '0'; ?>">
+                <div class="olo-pricing-countdown <?php echo $uid; ?>-cd" style="text-align:center;padding:10px 12px;font-size:13px;margin-top:10px;border-radius:6px;<?php echo $cd_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $uid is internal; style built above from sanitize_hex_color() values only ?>">
+                    <div class="olo-cd-label" style="font-size:11px;opacity:0.8;margin-bottom:4px"><?php echo $cd_label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></div>
+                    <div class="olo-cd-timer" style="font-weight:700;font-variant-numeric:tabular-nums;font-size:16px" data-olo-countdown="<?php echo esc_attr( $cd_date ); ?>" data-expired="<?php echo $cd_expired_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() (ENT_QUOTES) at assignment above ?>" data-hide="<?php echo $cd_hide ? '1' : '0'; ?>">
                         --g --h --m --s
                     </div>
                 </div>
@@ -479,7 +481,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
         <?php if ( $enable_toggle ) : ?>
         <script>
         (function(){
-            var wrap = document.querySelector('.<?php echo $uid; ?>');
+            var wrap = document.querySelector('.<?php echo esc_js( $uid ); ?>');
             if(!wrap) return;
             var btn = wrap.querySelector('[data-olo-price-toggle]');
             if(!btn) return;
@@ -518,7 +520,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
         <?php if ( $cd_enabled && $cd_date !== '' ) : ?>
         <script>
         (function(){
-            var el = document.querySelector('.<?php echo $uid; ?>-cd [data-olo-countdown]');
+            var el = document.querySelector('.<?php echo esc_js( $uid ); ?>-cd [data-olo-countdown]');
             if(!el) return;
             var target = new Date(el.getAttribute('data-olo-countdown')).getTime();
             var expired = el.getAttribute('data-expired');
@@ -557,8 +559,8 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized border settings
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized border settings
         }
         return ob_get_clean();
     }

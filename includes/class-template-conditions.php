@@ -316,7 +316,7 @@ class Olo_Template_Conditions {
 
     public function render_admin_page() {
         if ( ! current_user_can( 'edit_others_posts' ) ) {
-            wp_die( __( 'Accesso negato.', 'olobuild' ) );
+            wp_die( esc_html__( 'Accesso negato.', 'olobuild' ) );
         }
 
         $assignments = get_option( 'olo_template_conditions', [] );

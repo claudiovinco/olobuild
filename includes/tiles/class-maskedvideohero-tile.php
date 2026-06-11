@@ -79,6 +79,7 @@ class Olo_MaskedVideoHero_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, hex_rgb() preg_match-validated rgb triplet, intval()/round() clamped numbers, esc_url()/esc_attr() for image URL and label, fixed literal ternaries (mask/uppercase/font stacks); $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;min-height:<?php echo $mh; ?>vh;display:flex;align-items:center;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;}
             .<?php echo $uid; ?> .mvh-bg{position:absolute;inset:0;z-index:0;overflow:hidden;background:<?php echo $bgc; ?>;-webkit-mask:<?php echo $mask; ?>;mask:<?php echo $mask; ?>;}
@@ -105,6 +106,7 @@ class Olo_MaskedVideoHero_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .mvh-btn:focus-visible{outline:2px solid <?php echo $accent; ?>;outline-offset:3px;}
             @media(max-width:680px){.<?php echo $uid; ?> .mvh-row{flex-direction:column;align-items:flex-start;}}
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <section class="olo-maskedvideohero <?php echo esc_attr( $uid ); ?>">
             <div class="mvh-bg">
                 <div class="mvh-media"></div>

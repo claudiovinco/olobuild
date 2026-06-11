@@ -83,7 +83,8 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
         $uid = 'olo-woo-gs-' . wp_rand( 10000, 99999 );
 
         // Settings
-        $main_h      = sanitize_text_field( $s['main_height'] );
+        // CSS-safe height: strip characters that could break out of the declaration/<style> block.
+        $main_h      = preg_replace( '/[;{}<>]/', '', sanitize_text_field( $s['main_height'] ) );
         $thumb_size  = max( 40, min( 120, absint( $s['thumbnail_size'] ) ) );
         $thumb_gap   = max( 2, min( 20, absint( $s['thumbnail_gap'] ) ) );
         $radius      = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
@@ -104,7 +105,7 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
         $tb        = $this->safe_color_css( $s['thumbnail_border'] ) ?: 'var(--olo-color-border, #e5e7eb)';
         $tab       = $this->safe_color_css( $s['thumbnail_active_border'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $arrow_c   = $this->safe_color_css( $s['arrow_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $arrow_bg  = $s['arrow_bg'] ?: 'rgba(255,255,255,0.9)';
+        $arrow_bg  = $this->safe_color_css( $s['arrow_bg'] ) ?: 'rgba(255,255,255,0.9)';
         $badge_bg  = $this->safe_color_css( $s['badge_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
 
         // Build image data for template and JS
@@ -131,6 +132,7 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
         $total = count( $images );
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, absint()/intval() with min/max clamps for numerics, the breakout-char-stripped $main_h, Olo_Tile_Utils radius helpers, and the internally generated $uid.
         ?>
         <style>
             .<?php echo $uid; ?> {
@@ -337,6 +339,7 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
                 }
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <div class="<?php echo esc_attr( $uid ); ?>">
             <div class="<?php echo esc_attr( $uid ); ?>-wrap">
@@ -345,7 +348,7 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
                 <?php if ( $show_thumbs ) { if ( $is_left ) { if ( $total > 1 ) { ?>
                 <div class="<?php echo esc_attr( $uid ); ?>-thumbs">
                     <?php foreach ( $images as $i => $img ) : ?>
-                    <div class="<?php echo esc_attr( $uid ); ?>-thumb<?php echo $i === 0 ? ' is-active' : ''; ?>" data-olo-gs-thumb="<?php echo $i; ?>">
+                    <div class="<?php echo esc_attr( $uid ); ?>-thumb<?php echo $i === 0 ? ' is-active' : ''; ?>" data-olo-gs-thumb="<?php echo (int) $i; ?>">
                         <img src="<?php echo esc_url( $img['thumb'] ); ?>" alt="<?php echo esc_attr( $img['alt'] ); ?>" loading="lazy" />
                     </div>
                     <?php endforeach; ?>
@@ -375,10 +378,10 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
                     ?>
                     <?php if ( $show_arrows ) { if ( $total > 1 ) { ?>
                     <button class="<?php echo esc_attr( $uid ); ?>-arrow <?php echo esc_attr( $uid ); ?>-prev" data-olo-gs-prev>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="<?php echo $arrow_c; ?>" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="<?php echo esc_attr( $arrow_c ); ?>" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
                     </button>
                     <button class="<?php echo esc_attr( $uid ); ?>-arrow <?php echo esc_attr( $uid ); ?>-next" data-olo-gs-next>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="<?php echo $arrow_c; ?>" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="<?php echo esc_attr( $arrow_c ); ?>" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
                     </button>
                     <?php } } ?>
                 </div>
@@ -387,7 +390,7 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
                 <?php if ( $show_thumbs ) { if ( ! $is_left ) { if ( $total > 1 ) { ?>
                 <div class="<?php echo esc_attr( $uid ); ?>-thumbs">
                     <?php foreach ( $images as $i => $img ) : ?>
-                    <div class="<?php echo esc_attr( $uid ); ?>-thumb<?php echo $i === 0 ? ' is-active' : ''; ?>" data-olo-gs-thumb="<?php echo $i; ?>">
+                    <div class="<?php echo esc_attr( $uid ); ?>-thumb<?php echo $i === 0 ? ' is-active' : ''; ?>" data-olo-gs-thumb="<?php echo (int) $i; ?>">
                         <img src="<?php echo esc_url( $img['thumb'] ); ?>" alt="<?php echo esc_attr( $img['alt'] ); ?>" loading="lazy" />
                     </div>
                     <?php endforeach; ?>
@@ -415,6 +418,7 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
         </div>
         <?php endif; ?>
 
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JS below only echoes the internally generated $uid, wp_json_encode()'d image data and 'true'/'false' literals from fixed ternaries. ?>
         <script>
         (function(){
             var root = document.querySelector('.<?php echo $uid; ?>');
@@ -578,14 +582,15 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
         })();
         </script>
         <?php
+        // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
         $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

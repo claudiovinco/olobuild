@@ -154,16 +154,17 @@ class Olo_ProductGrid_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+<?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist (with fixed var() fallbacks) for every colour, intval()/max()/min() clamps for numbers, preg_replace() charset filter for $asp, resolve_font_family() whitelist for fonts, fixed font-stack literals, Olo_Tile_Base/Olo_CSS_Builder helpers for the kit declarations; $uid is internally generated. Column 0 + closing tag so this line emits zero bytes. ?>
         <style>
             .<?php echo $uid; ?>{font-family:<?php echo $sans; ?>;<?php echo $kit_pos . $kit_decl; ?>}
-            .<?php echo $uid; ?> .opg-grid{display:grid;grid-template-columns:repeat(<?php echo $cols; ?>,1fr);gap:<?php echo $gap; ?>;}
+            .<?php echo $uid; ?> .opg-grid{display:grid;grid-template-columns:repeat(<?php echo (int) $cols; ?>,1fr);gap:<?php echo $gap; ?>;}
             .<?php echo $uid; ?> .opg-filters{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;}
             .<?php echo $uid; ?> .opg-filter{font-family:<?php echo $sans; ?>;font-weight:500;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:<?php echo $f_txt; ?>;border:1px solid <?php echo $f_bd; ?>;padding:10px 20px;cursor:pointer;background:transparent;transition:all .2s;}
             .<?php echo $uid; ?> .opg-filter.on,.<?php echo $uid; ?> .opg-filter:hover{background:<?php echo $f_abg; ?>;color:<?php echo $f_acol; ?>;border-color:<?php echo $f_abg; ?>;}
             .<?php echo $uid; ?> .opg-filter:focus-visible{outline:2px solid <?php echo $f_abg; ?>;outline-offset:2px;}
             .<?php echo $uid; ?> .opg-card{display:flex;flex-direction:column;<?php if ( $has_card ) : ?>background:<?php echo $card_bg ?: 'transparent'; ?>;<?php if ( $card_bd ) : ?>border:1px solid <?php echo $card_bd; ?>;<?php endif; ?>border-radius:<?php echo $card_rad ?: '0px'; ?>;overflow:hidden;<?php endif; ?>}
             .<?php echo $uid; ?> .opg-mw{position:relative;overflow:hidden;margin-bottom:<?php echo $mw_mb; ?>;display:block;}
-            .<?php echo $uid; ?> .opg-body{display:flex;flex-direction:column;flex:1;<?php if ( $has_card && $card_pad > 0 ) : ?>padding:<?php echo $card_pad; ?>px;<?php endif; ?>}
+            .<?php echo $uid; ?> .opg-body{display:flex;flex-direction:column;flex:1;<?php if ( $has_card && $card_pad > 0 ) : ?>padding:<?php echo (int) $card_pad; ?>px;<?php endif; ?>}
             .<?php echo $uid; ?> .opg-notes{font-size:13.5px;color:<?php echo $notes_col; ?>;margin:2px 0 14px;line-height:1.5;<?php if ( $notes_mono ) : ?>font-family:<?php echo $mono; ?>;<?php endif; ?>}
             .<?php echo $uid; ?> .opg-roast{display:flex;align-items:center;gap:8px;margin:0 0 18px;}
             .<?php echo $uid; ?> .opg-roast__lbl{font-family:<?php echo $mono; ?>;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:<?php echo $notes_col; ?>;}
@@ -171,7 +172,7 @@ class Olo_ProductGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .opg-roast__dots i{width:8px;height:8px;border-radius:50%;background:<?php echo $roast_off; ?>;display:inline-block;}
             .<?php echo $uid; ?> .opg-roast__dots i.on{background:<?php echo $roast_on; ?>;}
             .<?php echo $uid; ?> .opg-shades{display:flex;gap:6px;margin:8px 0 14px;}
-            .<?php echo $uid; ?> .opg-shades i{width:<?php echo $shsize; ?>px;height:<?php echo $shsize; ?>px;border-radius:50%;box-shadow:inset 0 0 0 1.5px <?php echo $shbd; ?>;display:inline-block;flex:none;}
+            .<?php echo $uid; ?> .opg-shades i{width:<?php echo (int) $shsize; ?>px;height:<?php echo (int) $shsize; ?>px;border-radius:50%;box-shadow:inset 0 0 0 1.5px <?php echo $shbd; ?>;display:inline-block;flex:none;}
             .<?php echo $uid; ?> .opg-cardfoot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;}
             .<?php echo $uid; ?> .opg-addbtn{font-family:<?php echo $sans; ?>;font-weight:700;font-size:12px;color:<?php echo $add_col; ?>;background:<?php echo $add_bg; ?>;border:0;border-radius:999px;padding:9px 15px;cursor:pointer;transition:opacity .2s;}
             .<?php echo $uid; ?> .opg-addbtn:hover{opacity:.85;}
@@ -182,7 +183,7 @@ class Olo_ProductGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .opg-add{position:absolute;left:14px;right:14px;bottom:14px;background:<?php echo $qabg; ?>;color:<?php echo $qacol; ?>;font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase;text-align:center;padding:12px;opacity:0;transform:translateY(8px);transition:all .35s;cursor:pointer;}
             .<?php echo $uid; ?> .opg-card:hover .opg-add{opacity:1;transform:none;}
             .<?php echo $uid; ?> .opg-cat{font-weight:500;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:<?php echo $catcol; ?>;}
-            .<?php echo $uid; ?> .opg-t{font-family:<?php echo $title_font; ?>;font-weight:400;font-size:<?php echo $tsize; ?>px;margin:7px 0 6px;color:<?php echo $tcol; ?>;line-height:1.15;}
+            .<?php echo $uid; ?> .opg-t{font-family:<?php echo $title_font; ?>;font-weight:400;font-size:<?php echo (int) $tsize; ?>px;margin:7px 0 6px;color:<?php echo $tcol; ?>;line-height:1.15;}
             .<?php echo $uid; ?> .opg-t a{color:inherit;text-decoration:none;}
             .<?php echo $uid; ?> .opg-price{font-size:14px;letter-spacing:.06em;color:<?php echo $pcol; ?>;}
             .<?php echo $uid; ?> .opg-foot{text-align:center;margin-top:48px;}
@@ -191,6 +192,7 @@ class Olo_ProductGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .opg-mw:focus-visible{outline:2px solid <?php echo $pcol; ?>;outline-offset:3px;}
             @media(max-width:900px){.<?php echo $uid; ?> .opg-grid{grid-template-columns:1fr 1fr;}}
         </style>
+<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped -- column 0 + closing tag so this line emits zero bytes ?>
         <div class="olo-productgrid <?php echo esc_attr( $uid ); ?>">
             <?php if ( $show_filters ) : ?>
             <div class="opg-filters">
@@ -212,8 +214,8 @@ class Olo_ProductGrid_Tile extends Olo_Tile_Base {
             ?>
                 <div class="opg-card" data-cat="<?php echo esc_attr( $it['category'] ?? '' ); ?>" data-tags="<?php echo esc_attr( $it['filter_tags'] ?? '' ); ?>">
                     <a class="opg-mw" href="<?php echo esc_url( $href ); ?>">
-                        <span class="opg-media"<?php echo $msty; ?>></span>
-                        <?php if ( $mb['has'] && $mb['markup'] !== '' ) { echo $mb['markup']; } ?>
+                        <span class="opg-media"<?php echo $msty; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $msty built above with esc_attr()/esc_url() around the media value ?>></span>
+                        <?php if ( $mb['has'] && $mb['markup'] !== '' ) { echo $mb['markup']; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- media markup generated by the Olo_CSS_Builder::get_bg_html_markup() helper (bg_media_parts) ?>
                         <?php if ( ! $mb['has'] && $img === '' && ! empty( $it['media_label'] ) ) : ?><span class="opg-lbl"><?php echo esc_html( $it['media_label'] ); ?></span><?php endif; ?>
                         <?php if ( ! empty( $it['tag'] ) ) : ?><span class="opg-tag"><?php echo esc_html( $it['tag'] ); ?></span><?php endif; ?>
                         <?php if ( $qa_show && $qa !== '' ) : ?><span class="opg-add"><?php echo esc_html( $qa ); ?></span><?php endif; ?>
@@ -257,7 +259,7 @@ class Olo_ProductGrid_Tile extends Olo_Tile_Base {
         $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_hover_css || $border_effect_css ) {
-            echo '<style>' . $border_hover_css . $border_effect_css . '</style>';
+            echo '<style>' . $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized border settings; $uid is internally generated
         }
         return ob_get_clean();
     }

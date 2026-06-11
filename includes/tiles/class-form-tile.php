@@ -126,7 +126,10 @@ class Olo_Form_Tile extends Olo_Tile_Base {
         $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['input_radius_hover'] ?? null );
         $label_color = $this->safe_color_css( $s['label_color'] ) ?: 'var(--olo-color-text, #374151)';
         $label_size  = absint( $s['label_size'] ) ?: 14;
-        $label_weight= $s['label_weight'] ?: '500';
+        $label_weight= (string) ( $s['label_weight'] ?: '500' );
+        if ( ! preg_match( '/^[a-z0-9]+$/i', $label_weight ) ) {
+            $label_weight = '500'; // Only numeric weights / CSS keywords are valid here.
+        }
         $label_tt    = in_array( $s['label_transform'] ?? '', [ 'none', 'uppercase', 'lowercase', 'capitalize' ], true ) ? $s['label_transform'] : '';
         $label_ls    = floatval( $s['label_letter_spacing'] ?? 0 );
         // Font-family: stack web-safe (con virgola/apici) usato as-is, nome singolo quotato con fallback.
@@ -294,6 +297,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
         }
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, absint()/floatval() for sizes, in_array() whitelists for enums, charset-filtered font stacks, build_border_radius_css()/radius_force_css() helpers.
         ?>
         <style>
             .<?php echo $uid; ?> .olo-f-label{color:<?php echo $label_color; ?>;font-size:<?php echo $label_size; ?>px;font-weight:<?php echo $label_weight; ?>;margin-bottom:6px;display:block<?php if ( $label_tt && $label_tt !== 'none' ) : ?>;text-transform:<?php echo $label_tt; ?><?php endif; ?><?php if ( $label_ls != 0 ) : ?>;letter-spacing:<?php echo $label_ls; ?>px<?php endif; ?><?php if ( $label_ff ) : ?>;font-family:<?php echo $label_ff; ?><?php endif; ?>}
@@ -372,6 +376,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-f-file-remove{color:var(--olo-color-danger, #EF4444);cursor:pointer;font-size:18px;line-height:1;border:none;background:none;padding:0 4px}
             .<?php echo $uid; ?> .olo-f-file-remove:hover{opacity:0.7}
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <div class="olo-form <?php echo esc_attr( $uid ); ?> olo-fm-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>"<?php if ( $container_style ) : ?> style="<?php echo esc_attr( $container_style ); ?>"<?php endif; ?>>
             <?php
@@ -395,15 +400,15 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                 // ── Multi-step progress indicator ──
                 if ( $is_multistep ) :
                     if ( $step_style === 'progress' ) : ?>
-                        <div class="olo-f-progress-bar" data-olo-steps="<?php echo $step_count; ?>">
-                            <div class="olo-f-progress-fill" style="width:<?php echo round( 100 / $step_count, 2 ); ?>%"></div>
+                        <div class="olo-f-progress-bar" data-olo-steps="<?php echo (int) $step_count; ?>">
+                            <div class="olo-f-progress-fill" style="width:<?php echo (float) round( 100 / $step_count, 2 ); ?>%"></div>
                         </div>
                     <?php elseif ( $step_style === 'numbers' ) : ?>
-                        <div class="olo-f-steps-indicator" data-olo-steps="<?php echo $step_count; ?>">
+                        <div class="olo-f-steps-indicator" data-olo-steps="<?php echo (int) $step_count; ?>">
                             <?php for ( $si = 0; $si < $step_count; $si++ ) : ?>
                                 <?php if ( $si > 0 ) : ?><div class="olo-f-step-line"></div><?php endif; ?>
                                 <div class="olo-f-step-item<?php echo $si === 0 ? ' active' : ''; ?>">
-                                    <div class="olo-f-step-num<?php echo $si === 0 ? ' active' : ''; ?>"><?php echo ( $si + 1 ); ?></div>
+                                    <div class="olo-f-step-num<?php echo $si === 0 ? ' active' : ''; ?>"><?php echo (int) ( $si + 1 ); ?></div>
                                     <?php if ( ! empty( $step_labels_arr[ $si ] ) ) : ?>
                                         <span class="olo-f-step-label"><?php echo esc_html( $step_labels_arr[ $si ] ); ?></span>
                                     <?php endif; ?>
@@ -411,7 +416,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                             <?php endfor; ?>
                         </div>
                     <?php else : /* dots */ ?>
-                        <div class="olo-f-steps-indicator" data-olo-steps="<?php echo $step_count; ?>">
+                        <div class="olo-f-steps-indicator" data-olo-steps="<?php echo (int) $step_count; ?>">
                             <?php for ( $si = 0; $si < $step_count; $si++ ) : ?>
                                 <?php if ( $si > 0 ) : ?><div class="olo-f-step-line"></div><?php endif; ?>
                                 <div class="olo-f-step-item<?php echo $si === 0 ? ' active' : ''; ?>">
@@ -430,10 +435,10 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                 // ── Render steps ──
                 foreach ( $steps as $step_idx => $step_fields ) :
                     if ( $is_multistep ) : ?>
-                        <div class="olo-f-step-page<?php echo $step_idx === 0 ? ' active' : ''; ?>" data-step="<?php echo $step_idx; ?>">
+                        <div class="olo-f-step-page<?php echo $step_idx === 0 ? ' active' : ''; ?>" data-step="<?php echo (int) $step_idx; ?>">
                     <?php endif; ?>
 
-                    <div class="uk-grid-small" uk-grid style="row-gap:<?php echo $gap; ?>px">
+                    <div class="uk-grid-small" uk-grid style="row-gap:<?php echo (int) $gap; ?>px">
                         <?php foreach ( $step_fields as $i => $field ) :
                             $ftype       = $field['field_type'] ?? 'text';
                             $flabel      = $field['label'] ?? '';
@@ -472,7 +477,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
 
                             $cond_class = $cond_hidden ? ' olo-f-cond-hidden' : '';
                         ?>
-                        <div class="<?php echo esc_attr( $width_class . $cond_class ); ?>"<?php echo $cond_attrs; ?> data-field-name="<?php echo esc_attr( $fname ); ?>">
+                        <div class="<?php echo esc_attr( $width_class . $cond_class ); ?>"<?php echo $cond_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- data-cond-* attribute string built above with esc_attr() around each value ?> data-field-name="<?php echo esc_attr( $fname ); ?>">
                             <?php if ( in_array( $ftype, [ 'text', 'email', 'tel', 'url', 'number', 'date', 'time', 'datetime' ], true ) ) :
                                 $html_type = ( $ftype === 'datetime' ) ? 'datetime-local' : $ftype;
                                 $extra_attrs = '';
@@ -488,13 +493,13 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                         <?php if ( $ficon ) : ?>
                                         <div class="uk-inline uk-width-1-1">
                                             <span class="uk-form-icon" uk-icon="icon: <?php echo esc_attr( $ficon ); ?>"></span>
-                                            <input type="<?php echo esc_attr( $html_type ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder=" "<?php echo $req_attr; ?><?php echo $extra_attrs; ?> />
+                                            <input type="<?php echo esc_attr( $html_type ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder=" "<?php echo $req_attr; ?><?php echo $extra_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- required/size-class are fixed internal strings; extra_attrs holds hardcoded pattern/title attributes only ?> />
                                             <?php if ( $flabel ) : ?>
                                                 <label class="olo-f-float-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
                                             <?php endif; ?>
                                         </div>
                                         <?php else : ?>
-                                        <input type="<?php echo esc_attr( $html_type ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder=" "<?php echo $req_attr; ?><?php echo $extra_attrs; ?> />
+                                        <input type="<?php echo esc_attr( $html_type ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder=" "<?php echo $req_attr; ?><?php echo $extra_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- required/size-class are fixed internal strings; extra_attrs holds hardcoded pattern/title attributes only ?> />
                                         <?php if ( $flabel ) : ?>
                                             <label class="olo-f-float-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
                                         <?php endif; ?>
@@ -507,17 +512,17 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                     <?php if ( $ficon ) : ?>
                                     <div class="uk-inline uk-width-1-1">
                                         <span class="uk-form-icon" uk-icon="icon: <?php echo esc_attr( $ficon ); ?>"></span>
-                                        <input type="<?php echo esc_attr( $html_type ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( $fplaceholder ); ?>"<?php echo $req_attr; ?><?php echo $extra_attrs; ?> />
+                                        <input type="<?php echo esc_attr( $html_type ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( $fplaceholder ); ?>"<?php echo $req_attr; ?><?php echo $extra_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- required/size-class are fixed internal strings; extra_attrs holds hardcoded pattern/title attributes only ?> />
                                     </div>
                                     <?php else : ?>
-                                    <input type="<?php echo esc_attr( $html_type ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( $fplaceholder ); ?>"<?php echo $req_attr; ?><?php echo $extra_attrs; ?> />
+                                    <input type="<?php echo esc_attr( $html_type ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( $fplaceholder ); ?>"<?php echo $req_attr; ?><?php echo $extra_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- required/size-class are fixed internal strings; extra_attrs holds hardcoded pattern/title attributes only ?> />
                                     <?php endif; ?>
                                 <?php endif; ?>
 
                             <?php elseif ( $ftype === 'textarea' ) : ?>
                                 <?php if ( $is_floating ) : ?>
                                     <div class="olo-f-float">
-                                        <textarea name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-textarea<?php echo $size_class; ?>" rows="4" placeholder=" "<?php echo $req_attr; ?>></textarea>
+                                        <textarea name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-textarea<?php echo esc_attr( $size_class ); ?>" rows="4" placeholder=" "<?php echo esc_attr( $req_attr ); ?>></textarea>
                                         <?php if ( $flabel ) : ?>
                                             <label class="olo-f-float-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
                                         <?php endif; ?>
@@ -526,7 +531,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                     <?php if ( $flabel ) : ?>
                                         <label class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
                                     <?php endif; ?>
-                                    <textarea name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-textarea<?php echo $size_class; ?>" rows="4" placeholder="<?php echo esc_attr( $fplaceholder ); ?>"<?php echo $req_attr; ?>></textarea>
+                                    <textarea name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-textarea<?php echo esc_attr( $size_class ); ?>" rows="4" placeholder="<?php echo esc_attr( $fplaceholder ); ?>"<?php echo esc_attr( $req_attr ); ?>></textarea>
                                 <?php endif; ?>
 
                             <?php elseif ( $ftype === 'select' ) : ?>
@@ -536,7 +541,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                 <?php if ( $ficon ) : ?>
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" uk-icon="icon: <?php echo esc_attr( $ficon ); ?>"></span>
-                                    <select name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-select<?php echo $size_class; ?>"<?php echo $req_attr; ?>>
+                                    <select name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-select<?php echo esc_attr( $size_class ); ?>"<?php echo esc_attr( $req_attr ); ?>>
                                         <option value=""><?php echo esc_html( $fplaceholder ?: 'Seleziona...' ); ?></option>
                                         <?php foreach ( $this->parse_options( $foptions ) as $opt ) : ?>
                                             <option value="<?php echo esc_attr( $opt ); ?>"><?php echo esc_html( $opt ); ?></option>
@@ -544,7 +549,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                     </select>
                                 </div>
                                 <?php else : ?>
-                                <select name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-select<?php echo $size_class; ?>"<?php echo $req_attr; ?>>
+                                <select name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-select<?php echo esc_attr( $size_class ); ?>"<?php echo esc_attr( $req_attr ); ?>>
                                     <option value=""><?php echo esc_html( $fplaceholder ?: 'Seleziona...' ); ?></option>
                                     <?php foreach ( $this->parse_options( $foptions ) as $opt ) : ?>
                                         <option value="<?php echo esc_attr( $opt ); ?>"><?php echo esc_html( $opt ); ?></option>
@@ -559,7 +564,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                 <div class="uk-margin-small-top">
                                     <?php foreach ( $this->parse_options( $foptions ) as $opt ) : ?>
                                         <label class="olo-f-option" style="margin-bottom:6px">
-                                            <input type="radio" class="uk-radio" name="fields[<?php echo esc_attr( $fname ); ?>]" value="<?php echo esc_attr( $opt ); ?>"<?php echo $req_attr; ?> />
+                                            <input type="radio" class="uk-radio" name="fields[<?php echo esc_attr( $fname ); ?>]" value="<?php echo esc_attr( $opt ); ?>"<?php echo esc_attr( $req_attr ); ?> />
                                             <?php echo esc_html( $opt ); ?>
                                         </label>
                                     <?php endforeach; ?>
@@ -591,14 +596,14 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                     $f_input_id = 'olo-file-' . esc_attr( $fname ) . '-' . wp_rand( 1000, 9999 );
                                     $f_input_name = ( $f_max_files > 1 ) ? esc_attr( $fname ) . '[]' : esc_attr( $fname );
                                 ?>
-                                <div class="olo-f-file-wrap" data-max-size="<?php echo $f_max_size; ?>" data-max-files="<?php echo $f_max_files; ?>" data-allowed="<?php echo $f_allowed; ?>">
-                                    <input type="file" id="<?php echo $f_input_id; ?>" name="<?php echo $f_input_name; ?>" class="olo-f-file-input" accept="<?php echo $f_allowed; ?>"<?php echo $f_multiple; ?><?php echo $req_attr; ?> style="position:absolute;left:-9999px;opacity:0;" />
-                                    <label for="<?php echo $f_input_id; ?>" class="olo-f-file-btn" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:<?php echo $input_bg; ?>;color:<?php echo $input_color; ?>;border:<?php echo $bw; ?>px solid <?php echo $input_bc; ?>;border-radius:<?php echo $radius; ?>;cursor:pointer;font-size:14px;transition:border-color 0.2s ease;">
+                                <div class="olo-f-file-wrap" data-max-size="<?php echo (int) $f_max_size; ?>" data-max-files="<?php echo (int) $f_max_files; ?>" data-allowed="<?php echo $f_allowed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_attr() at assignment above ?>">
+                                    <input type="file" id="<?php echo $f_input_id; ?>" name="<?php echo $f_input_name; ?>" class="olo-f-file-input" accept="<?php echo $f_allowed; ?>"<?php echo $f_multiple; ?><?php echo $req_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id/name/accept escaped via esc_attr() at assignment above; multiple/required are fixed internal strings ?> style="position:absolute;left:-9999px;opacity:0;" />
+                                    <label for="<?php echo $f_input_id; ?>" class="olo-f-file-btn" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:<?php echo $input_bg; ?>;color:<?php echo $input_color; ?>;border:<?php echo $bw; ?>px solid <?php echo $input_bc; ?>;border-radius:<?php echo $radius; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id esc_attr()-escaped at assignment; style values sanitized above via safe_color_css()/absint()/build_border_radius_css() ?>;cursor:pointer;font-size:14px;transition:border-color 0.2s ease;">
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                                        <?php echo $f_btn_text; ?>
+                                        <?php echo $f_btn_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() at assignment above ?>
                                     </label>
-                                    <span class="olo-f-file-info" style="display:inline-block;margin-left:12px;font-size:13px;color:<?php echo $label_color; ?>;opacity:0.7;"><?php echo esc_html( olo_t( 'Nessun file selezionato' ) ); ?></span>
-                                    <div class="olo-f-file-list" style="margin-top:8px;font-size:13px;color:<?php echo $label_color; ?>;"></div>
+                                    <span class="olo-f-file-info" style="display:inline-block;margin-left:12px;font-size:13px;color:<?php echo $label_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via safe_color_css() whitelist above ?>;opacity:0.7;"><?php echo esc_html( olo_t( 'Nessun file selezionato' ) ); ?></span>
+                                    <div class="olo-f-file-list" style="margin-top:8px;font-size:13px;color:<?php echo $label_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via safe_color_css() whitelist above ?>;"></div>
                                     <div class="olo-f-file-error" style="color:var(--olo-color-danger, #EF4444);font-size:12px;margin-top:4px;display:none;"></div>
                                     <input type="hidden" name="fields[<?php echo esc_attr( $fname ); ?>]" value="" class="olo-f-file-meta" />
                                 </div>
@@ -615,8 +620,8 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                     $range_id   = 'olo-range-' . esc_attr( $fname ) . '-' . wp_rand( 1000, 9999 );
                                 ?>
                                 <div class="olo-f-range-wrap" style="display:flex;align-items:center;gap:12px">
-                                    <input type="range" id="<?php echo $range_id; ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-range" min="<?php echo $range_min; ?>" max="<?php echo $range_max; ?>" step="<?php echo $range_step; ?>" value="<?php echo $range_def; ?>" style="flex:1" oninput="this.nextElementSibling.textContent=this.value" />
-                                    <span style="min-width:40px;text-align:center;font-size:14px;color:<?php echo $label_color; ?>"><?php echo $range_def; ?></span>
+                                    <input type="range" id="<?php echo $range_id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id composed of literal prefix, esc_attr()-escaped name and wp_rand() ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-range" min="<?php echo (int) $range_min; ?>" max="<?php echo (int) $range_max; ?>" step="<?php echo (int) $range_step; ?>" value="<?php echo (int) $range_def; ?>" style="flex:1" oninput="this.nextElementSibling.textContent=this.value" />
+                                    <span style="min-width:40px;text-align:center;font-size:14px;color:<?php echo $label_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via safe_color_css() whitelist above ?>"><?php echo (int) $range_def; ?></span>
                                 </div>
 
                             <?php elseif ( $ftype === 'star_rating' ) : ?>
@@ -627,11 +632,11 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                     $max_stars = intval( $field['star_count'] ?? 5 );
                                     $star_id = 'olo-star-' . esc_attr( $fname ) . '-' . wp_rand( 1000, 9999 );
                                 ?>
-                                <div class="olo-f-star-wrap" id="<?php echo $star_id; ?>" style="display:flex;gap:4px;cursor:pointer">
+                                <div class="olo-f-star-wrap" id="<?php echo $star_id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id composed of literal prefix, esc_attr()-escaped name and wp_rand() ?>" style="display:flex;gap:4px;cursor:pointer">
                                     <?php for ( $si = 1; $si <= $max_stars; $si++ ) : ?>
-                                        <span class="olo-f-star" data-val="<?php echo $si; ?>" style="font-size:28px;color:#9CA3AF;transition:color .15s" role="button" tabindex="0" aria-label="<?php echo $si; ?> stelle">&#9733;</span>
+                                        <span class="olo-f-star" data-val="<?php echo (int) $si; ?>" style="font-size:28px;color:#9CA3AF;transition:color .15s" role="button" tabindex="0" aria-label="<?php echo (int) $si; ?> stelle">&#9733;</span>
                                     <?php endfor; ?>
-                                    <input type="hidden" name="fields[<?php echo esc_attr( $fname ); ?>]" value=""<?php echo $req_attr; ?> />
+                                    <input type="hidden" name="fields[<?php echo esc_attr( $fname ); ?>]" value=""<?php echo esc_attr( $req_attr ); ?> />
                                 </div>
                                 <script>
                                 (function(){
@@ -669,7 +674,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                     <?php if ( $ficon ) : ?>
                                         <span class="uk-form-icon" uk-icon="icon: <?php echo esc_attr( $ficon ); ?>"></span>
                                     <?php endif; ?>
-                                    <input type="password" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( $fplaceholder ); ?>"<?php echo $req_attr; ?> autocomplete="new-password" />
+                                    <input type="password" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo esc_attr( $size_class ); ?>" placeholder="<?php echo esc_attr( $fplaceholder ); ?>"<?php echo esc_attr( $req_attr ); ?> autocomplete="new-password" />
                                     <a class="uk-form-icon uk-form-icon-flip" style="cursor:pointer" onclick="var i=this.previousElementSibling;i.type=i.type==='password'?'text':'password'" uk-icon="icon: eye"></a>
                                 </div>
 
@@ -680,14 +685,14 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                 <?php $pc_id = 'olo-pwc-' . esc_attr( $fname ) . '-' . wp_rand( 1000, 9999 ); ?>
                                 <div style="display:flex;flex-direction:column;gap:8px">
                                     <div class="uk-inline uk-width-1-1">
-                                        <input type="password" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( $fplaceholder ?: 'Password' ); ?>"<?php echo $req_attr; ?> autocomplete="new-password" data-pwc-main="<?php echo $pc_id; ?>" />
+                                        <input type="password" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( $fplaceholder ?: 'Password' ); ?>"<?php echo $req_attr; ?> autocomplete="new-password" data-pwc-main="<?php echo $pc_id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id composed of literal prefix, esc_attr()-escaped name and wp_rand(); required/size-class are fixed internal strings ?>" />
                                         <a class="uk-form-icon uk-form-icon-flip" style="cursor:pointer" onclick="var i=this.previousElementSibling;i.type=i.type==='password'?'text':'password'" uk-icon="icon: eye"></a>
                                     </div>
                                     <div class="uk-inline uk-width-1-1">
-                                        <input type="password" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( olo_t( 'Conferma password' ) ); ?>" autocomplete="new-password" data-pwc-confirm="<?php echo $pc_id; ?>" />
+                                        <input type="password" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( olo_t( 'Conferma password' ) ); ?>" autocomplete="new-password" data-pwc-confirm="<?php echo $pc_id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id composed of literal prefix, esc_attr()-escaped name and wp_rand(); size-class is a fixed internal string ?>" />
                                         <a class="uk-form-icon uk-form-icon-flip" style="cursor:pointer" onclick="var i=this.previousElementSibling;i.type=i.type==='password'?'text':'password'" uk-icon="icon: eye"></a>
                                     </div>
-                                    <div class="olo-f-pwc-error" data-pwc-error="<?php echo $pc_id; ?>" style="color:var(--olo-color-danger, #EF4444);font-size:12px;display:none">Le password non corrispondono</div>
+                                    <div class="olo-f-pwc-error" data-pwc-error="<?php echo $pc_id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id composed of literal prefix, esc_attr()-escaped name and wp_rand() ?>" style="color:var(--olo-color-danger, #EF4444);font-size:12px;display:none">Le password non corrispondono</div>
                                 </div>
 
                             <?php elseif ( $ftype === 'color' ) : ?>
@@ -695,8 +700,8 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                     <label class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
                                 <?php endif; ?>
                                 <div style="display:flex;align-items:center;gap:10px">
-                                    <input type="color" name="fields[<?php echo esc_attr( $fname ); ?>]" value="<?php echo esc_attr( $fplaceholder ?: '#e1474f' ); ?>" style="width:48px;height:40px;padding:2px;border:<?php echo $bw; ?>px solid <?php echo $input_bc; ?>;border-radius:<?php echo $radius; ?>;background:<?php echo $input_bg; ?>;cursor:pointer" oninput="this.nextElementSibling.textContent=this.value" />
-                                    <span style="font-size:14px;color:<?php echo $label_color; ?>;font-family:monospace"><?php echo esc_html( $fplaceholder ?: '#e1474f' ); ?></span>
+                                    <input type="color" name="fields[<?php echo esc_attr( $fname ); ?>]" value="<?php echo esc_attr( $fplaceholder ?: '#e1474f' ); ?>" style="width:48px;height:40px;padding:2px;border:<?php echo $bw; ?>px solid <?php echo $input_bc; ?>;border-radius:<?php echo $radius; ?>;background:<?php echo $input_bg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style values sanitized above via absint()/safe_color_css()/build_border_radius_css() ?>;cursor:pointer" oninput="this.nextElementSibling.textContent=this.value" />
+                                    <span style="font-size:14px;color:<?php echo $label_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via safe_color_css() whitelist above ?>;font-family:monospace"><?php echo esc_html( $fplaceholder ?: '#e1474f' ); ?></span>
                                 </div>
 
                             <?php elseif ( $ftype === 'calculation' ) :
@@ -708,8 +713,8 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                 <?php if ( $flabel ) : ?>
                                     <label class="olo-f-label"><?php echo esc_html( $flabel ); ?></label>
                                 <?php endif; ?>
-                                <div class="olo-f-calc-display" data-calc-formula="<?php echo esc_attr( $calc_formula ); ?>" data-calc-decimals="<?php echo $calc_decimals; ?>" data-calc-prefix="<?php echo esc_attr( $calc_prefix ); ?>" data-calc-suffix="<?php echo esc_attr( $calc_suffix ); ?>" style="font-size:20px;font-weight:600;padding:10px 16px;background:<?php echo $input_bg; ?>;color:<?php echo $input_color; ?>;border:<?php echo $bw; ?>px solid <?php echo $input_bc; ?>;border-radius:<?php echo $radius; ?>">
-                                    <?php echo $calc_prefix; ?><span class="olo-f-calc-value">0</span><?php echo $calc_suffix; ?>
+                                <div class="olo-f-calc-display" data-calc-formula="<?php echo esc_attr( $calc_formula ); ?>" data-calc-decimals="<?php echo (int) $calc_decimals; ?>" data-calc-prefix="<?php echo esc_attr( $calc_prefix ); ?>" data-calc-suffix="<?php echo esc_attr( $calc_suffix ); ?>" style="font-size:20px;font-weight:600;padding:10px 16px;background:<?php echo $input_bg; ?>;color:<?php echo $input_color; ?>;border:<?php echo $bw; ?>px solid <?php echo $input_bc; ?>;border-radius:<?php echo $radius; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style values sanitized above via safe_color_css()/absint()/build_border_radius_css() ?>">
+                                    <?php echo $calc_prefix; ?><span class="olo-f-calc-value">0</span><?php echo $calc_suffix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- both escaped via esc_html() at assignment above ?>
                                 </div>
                                 <input type="hidden" name="fields[<?php echo esc_attr( $fname ); ?>]" class="olo-f-calc-hidden" value="0" />
 
@@ -1337,8 +1342,8 @@ class Olo_Form_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() (integer-forced widths) for the internally generated uid
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() shared helpers
         }
         return ob_get_clean();
     }

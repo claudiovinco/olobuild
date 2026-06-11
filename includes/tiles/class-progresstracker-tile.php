@@ -69,6 +69,7 @@ class Olo_Progresstracker_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist colours (with var() token fallbacks), intval()-derived sizes, the in_array() whitelisted connector style and the internally generated $uid. ?>
         <style>
             /* === Container === */
             .<?php echo $uid; ?> {
@@ -98,8 +99,8 @@ class Olo_Progresstracker_Tile extends Olo_Tile_Base {
             }
 
             .<?php echo $uid; ?> .olo-pt-circle {
-                width: <?php echo $c_size; ?>px;
-                height: <?php echo $c_size; ?>px;
+                width: <?php echo (int) $c_size; ?>px;
+                height: <?php echo (int) $c_size; ?>px;
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
@@ -112,19 +113,19 @@ class Olo_Progresstracker_Tile extends Olo_Tile_Base {
                 transition: all 0.3s ease;
             }
             .<?php echo $uid; ?> .olo-pt-circle svg {
-                width: <?php echo $icon_size; ?>px;
-                height: <?php echo $icon_size; ?>px;
+                width: <?php echo (int) $icon_size; ?>px;
+                height: <?php echo (int) $icon_size; ?>px;
             }
 
             .<?php echo $uid; ?> .olo-pt-title {
                 color: <?php echo $text_clr; ?>;
-                font-size: <?php echo $f_size; ?>px;
+                font-size: <?php echo (int) $f_size; ?>px;
                 font-weight: 600;
                 line-height: 1.3;
             }
             .<?php echo $uid; ?> .olo-pt-desc {
                 color: <?php echo $text_clr; ?>;
-                font-size: <?php echo max( 11, $f_size - 2 ); ?>px;
+                font-size: <?php echo (int) max( 11, $f_size - 2 ); ?>px;
                 opacity: 0.7;
                 margin-top: 2px;
                 line-height: 1.4;
@@ -217,6 +218,7 @@ class Olo_Progresstracker_Tile extends Olo_Tile_Base {
             }
             <?php endif; ?>
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-progresstracker <?php echo esc_attr( $uid ); ?> olo-pt-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
         <?php if ( $layout === 'horizontal' ) : ?>
             <div class="olo-pt-h-wrap">
@@ -230,15 +232,15 @@ class Olo_Progresstracker_Tile extends Olo_Tile_Base {
                         <div class="olo-pt-h-conn"></div>
                         <?php endif; ?>
 
-                        <div class="<?php echo $circle_cl; ?>">
+                        <div class="<?php echo esc_attr( $circle_cl ); ?>">
                             <?php if ( $status === 'completed' ) : ?>
                                 <svg viewBox="0 0 24 24" fill="none">
                                     <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             <?php elseif ( $show_nums ) : ?>
-                                <?php echo $i + 1; ?>
+                                <?php echo (int) ( $i + 1 ); ?>
                             <?php elseif ( ! empty( $item['icon'] ) ) : ?>
-                                <span uk-icon="icon: <?php echo esc_attr( $item['icon'] ); ?>; ratio: <?php echo round( $icon_size / 20, 2 ); ?>"></span>
+                                <span uk-icon="icon: <?php echo esc_attr( $item['icon'] ); ?>; ratio: <?php echo (float) round( $icon_size / 20, 2 ); ?>"></span>
                             <?php endif; ?>
                         </div>
 
@@ -247,10 +249,10 @@ class Olo_Progresstracker_Tile extends Olo_Tile_Base {
                         <?php endif; ?>
                     </div>
                     <div class="olo-pt-h-label">
-                        <?php list( $ptt_cls, $ptt_data ) = $this->tfx_attrs( $s, "title", $item["title"] ); ?><div class="olo-pt-title<?php echo $ptt_cls; ?>"<?php echo $ptt_data; ?>><?php echo esc_html( $item["title"] ); ?></div>
+                        <?php list( $ptt_cls, $ptt_data ) = $this->tfx_attrs( $s, "title", $item["title"] ); ?><div class="olo-pt-title<?php echo $ptt_cls; ?>"<?php echo $ptt_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx class/data attrs built by Olo_Text_Effects with sanitize_html_class()/esc_attr()'d values ?>><?php echo esc_html( $item["title"] ); ?></div>
                         <?php if ( $show_desc ) : ?>
                             <?php if ( ! empty( $item['description'] ) ) : ?>
-                            <?php list( $ptd_cls, $ptd_data ) = $this->tfx_attrs( $s, "description", $item["description"] ); ?><div class="olo-pt-desc<?php echo $ptd_cls; ?>"<?php echo $ptd_data; ?>><?php echo esc_html( $item["description"] ); ?></div>
+                            <?php list( $ptd_cls, $ptd_data ) = $this->tfx_attrs( $s, "description", $item["description"] ); ?><div class="olo-pt-desc<?php echo $ptd_cls; ?>"<?php echo $ptd_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx class/data attrs built by Olo_Text_Effects with sanitize_html_class()/esc_attr()'d values ?>><?php echo esc_html( $item["description"] ); ?></div>
                             <?php endif; ?>
                         <?php endif; ?>
                     </div>
@@ -264,15 +266,15 @@ class Olo_Progresstracker_Tile extends Olo_Tile_Base {
             ?>
             <div class="olo-pt-v-step">
                 <div class="olo-pt-v-circle-col">
-                    <div class="<?php echo $circle_cl; ?>">
+                    <div class="<?php echo esc_attr( $circle_cl ); ?>">
                         <?php if ( $status === 'completed' ) : ?>
                             <svg viewBox="0 0 24 24" fill="none">
                                 <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         <?php elseif ( $show_nums ) : ?>
-                            <?php echo $i + 1; ?>
+                            <?php echo (int) ( $i + 1 ); ?>
                         <?php elseif ( ! empty( $item['icon'] ) ) : ?>
-                            <span uk-icon="icon: <?php echo esc_attr( $item['icon'] ); ?>; ratio: <?php echo round( $icon_size / 20, 2 ); ?>"></span>
+                            <span uk-icon="icon: <?php echo esc_attr( $item['icon'] ); ?>; ratio: <?php echo (float) round( $icon_size / 20, 2 ); ?>"></span>
                         <?php endif; ?>
                     </div>
                     <?php if ( $i < $count - 1 ) : ?>
@@ -280,10 +282,10 @@ class Olo_Progresstracker_Tile extends Olo_Tile_Base {
                     <?php endif; ?>
                 </div>
                 <div class="olo-pt-v-content">
-                    <?php list( $ptt_cls, $ptt_data ) = $this->tfx_attrs( $s, "title", $item["title"] ); ?><div class="olo-pt-title<?php echo $ptt_cls; ?>"<?php echo $ptt_data; ?>><?php echo esc_html( $item["title"] ); ?></div>
+                    <?php list( $ptt_cls, $ptt_data ) = $this->tfx_attrs( $s, "title", $item["title"] ); ?><div class="olo-pt-title<?php echo $ptt_cls; ?>"<?php echo $ptt_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx class/data attrs built by Olo_Text_Effects with sanitize_html_class()/esc_attr()'d values ?>><?php echo esc_html( $item["title"] ); ?></div>
                     <?php if ( $show_desc ) : ?>
                         <?php if ( ! empty( $item['description'] ) ) : ?>
-                        <?php list( $ptd_cls, $ptd_data ) = $this->tfx_attrs( $s, "description", $item["description"] ); ?><div class="olo-pt-desc<?php echo $ptd_cls; ?>"<?php echo $ptd_data; ?>><?php echo esc_html( $item["description"] ); ?></div>
+                        <?php list( $ptd_cls, $ptd_data ) = $this->tfx_attrs( $s, "description", $item["description"] ); ?><div class="olo-pt-desc<?php echo $ptd_cls; ?>"<?php echo $ptd_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx class/data attrs built by Olo_Text_Effects with sanitize_html_class()/esc_attr()'d values ?>><?php echo esc_html( $item["description"] ); ?></div>
                         <?php endif; ?>
                     <?php endif; ?>
                 </div>
@@ -293,7 +295,7 @@ class Olo_Progresstracker_Tile extends Olo_Tile_Base {
         </div>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- scoped CSS generated by the Olo_Text_Effects::css() helper (sanitized colours, intval()'d timings, fixed keyframes)
         $this->tfx_print_script();
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -301,8 +303,8 @@ class Olo_Progresstracker_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() (integer-forced widths) for the internally generated uid
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() shared helpers
         }
         return ob_get_clean();
     }

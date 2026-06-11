@@ -86,12 +86,13 @@ class Olo_StatStrip_Tile extends Olo_Tile_Base {
                     $label = $it['label'] ?? '';
                 ?>
                     <div class="olo-statstrip__cell" style="<?php echo esc_attr( $cell_style ); ?>">
-                        <div class="olo-statstrip__value" style="font-family:<?php echo esc_attr( $vfam ); ?>;font-weight:<?php echo esc_attr( $v_wt ); ?>;font-size:<?php echo $v_size; ?>px;line-height:1;letter-spacing:-0.02em;color:<?php echo esc_attr( $v_color ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.value'; ?>"><?php echo esc_html( $value ); ?></div>
-                        <div class="olo-statstrip__label" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo $l_size; ?>px;color:<?php echo esc_attr( $l_color ); ?>;line-height:1.4;<?php echo $upper ? 'text-transform:uppercase;letter-spacing:0.06em;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.label'; ?>"><?php echo esc_html( $label ); ?></div>
+                        <div class="olo-statstrip__value" style="font-family:<?php echo esc_attr( $vfam ); ?>;font-weight:<?php echo esc_attr( $v_wt ); ?>;font-size:<?php echo (int) $v_size; ?>px;line-height:1;letter-spacing:-0.02em;color:<?php echo esc_attr( $v_color ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.value'; ?>"><?php echo esc_html( $value ); ?></div>
+                        <div class="olo-statstrip__label" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $l_size; ?>px;color:<?php echo esc_attr( $l_color ); ?>;line-height:1.4;<?php echo $upper ? 'text-transform:uppercase;letter-spacing:0.06em;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.label'; ?>"><?php echo esc_html( $label ); ?></div>
                     </div>
                 <?php endforeach; ?>
             </div>
         </div>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for $line and the internally generated 'olo-statstrip-' . wp_rand() $uid. ?>
         <style>
             <?php if ( $dividers ) : ?>
             .<?php echo $uid; ?> .olo-statstrip__cell:not(:first-child) { border-left: 1px solid <?php echo $line; ?>; }
@@ -105,6 +106,7 @@ class Olo_StatStrip_Tile extends Olo_Tile_Base {
                 <?php if ( $dividers ) : ?>.<?php echo $uid; ?> .olo-statstrip__cell { border-left: 0 !important; }<?php endif; ?>
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php
         return ob_get_clean();
     }

@@ -114,6 +114,7 @@ class Olo_Woo_Product_Filter_Tile extends Olo_Tile_Base {
         $reset_text = esc_html( $s['reset_text'] ?: olo_t( 'Resetta' ) );
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist colors, Olo_Tile_Utils radius helpers (absint-based) and the internally generated $uid.
         ?>
         <style>
             .<?php echo $uid; ?> {
@@ -277,7 +278,7 @@ class Olo_Woo_Product_Filter_Tile extends Olo_Tile_Base {
                 flex: 1;
                 padding: 10px 16px;
                 border: none;
-                border-radius: <?php echo max( 4, $radius_raw - 2 ); ?>px;
+                border-radius: <?php echo (int) max( 4, $radius_raw - 2 ); ?>px;
                 font-size: 13px;
                 font-weight: 600;
                 cursor: pointer;
@@ -296,6 +297,7 @@ class Olo_Woo_Product_Filter_Tile extends Olo_Tile_Base {
                 color: <?php echo $text_color; ?>;
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="<?php echo esc_attr( $uid ); ?>">
 
             <?php if ( ! empty( $s['show_active'] ) ) : ?>
@@ -315,12 +317,12 @@ class Olo_Woo_Product_Filter_Tile extends Olo_Tile_Base {
                 </div>
                 <div class="olo-pf-body<?php echo $collapsed ? ' is-collapsed' : ''; ?>" style="max-height:200px">
                     <div class="olo-pf-price-row">
-                        <span><?php echo $currency; ?><span data-olo-pf-min-label><?php echo intval( $price_min ); ?></span></span>
-                        <input type="range" class="olo-pf-price-min" min="<?php echo $price_min; ?>" max="<?php echo $price_max; ?>" step="<?php echo $price_step; ?>" value="<?php echo $price_min; ?>" />
+                        <span><?php echo $currency; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- currency symbol from get_woocommerce_currency_symbol() or the static &euro; entity; esc_html() would double-encode the entity ?><span data-olo-pf-min-label><?php echo intval( $price_min ); ?></span></span>
+                        <input type="range" class="olo-pf-price-min" min="<?php echo (float) $price_min; ?>" max="<?php echo (float) $price_max; ?>" step="<?php echo (int) $price_step; ?>" value="<?php echo (float) $price_min; ?>" />
                     </div>
                     <div class="olo-pf-price-row">
-                        <span><?php echo $currency; ?><span data-olo-pf-max-label><?php echo intval( $price_max ); ?></span></span>
-                        <input type="range" class="olo-pf-price-max" min="<?php echo $price_min; ?>" max="<?php echo $price_max; ?>" step="<?php echo $price_step; ?>" value="<?php echo $price_max; ?>" />
+                        <span><?php echo $currency; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- currency symbol from get_woocommerce_currency_symbol() or the static &euro; entity; esc_html() would double-encode the entity ?><span data-olo-pf-max-label><?php echo intval( $price_max ); ?></span></span>
+                        <input type="range" class="olo-pf-price-max" min="<?php echo (float) $price_min; ?>" max="<?php echo (float) $price_max; ?>" step="<?php echo (int) $price_step; ?>" value="<?php echo (float) $price_max; ?>" />
                     </div>
                 </div>
             </div>
@@ -387,14 +389,14 @@ class Olo_Woo_Product_Filter_Tile extends Olo_Tile_Base {
             <?php endif; ?>
 
             <div class="olo-pf-actions">
-                <button type="button" class="olo-pf-btn olo-pf-btn-primary" data-olo-pf-apply><?php echo $btn_text; ?></button>
-                <button type="button" class="olo-pf-btn olo-pf-btn-secondary" data-olo-pf-reset><?php echo $reset_text; ?></button>
+                <button type="button" class="olo-pf-btn olo-pf-btn-primary" data-olo-pf-apply><?php echo $btn_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() at assignment above ?></button>
+                <button type="button" class="olo-pf-btn olo-pf-btn-secondary" data-olo-pf-reset><?php echo $reset_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() at assignment above ?></button>
             </div>
         </div>
 
         <script>
         (function(){
-            var root = document.querySelector('.<?php echo $uid; ?>');
+            var root = document.querySelector('.<?php echo esc_js( $uid ); ?>');
             if(!root){return}
 
             /* --- Collapsible sections --- */
@@ -544,8 +546,8 @@ class Olo_Woo_Product_Filter_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by build_border_hover_css()/build_border_effect_css() base-class helpers
         }
         return ob_get_clean();
     }

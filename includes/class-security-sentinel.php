@@ -889,7 +889,7 @@ class Olo_Security_Sentinel {
         $url = esc_url( admin_url( 'admin.php?page=' . self::PAGE_SLUG ) );
         echo '<div class="notice notice-error"><p><strong>OLOsecurity:</strong> '
             . esc_html__( 'rilevati elementi sospetti (codice, file, configurazione o possibili webshell).', 'olobuild' )
-            . ' <a href="' . $url . '">' . esc_html__( 'Apri il report', 'olobuild' ) . '</a></p></div>';
+            . ' <a href="' . $url . '">' . esc_html__( 'Apri il report', 'olobuild' ) . '</a></p></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $url escaped via esc_url() at assignment above
     }
 
     // ──────────────────────────────────────────────────────────────────────
@@ -1191,7 +1191,7 @@ class Olo_Security_Sentinel {
             <tbody>
             <?php foreach ( $rows as $f ) : ?>
                 <tr>
-                    <td><?php echo self::sev_badge( $f['severity'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- output controllato ?></td>
+                    <td><?php echo self::sev_badge( $f['severity'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- badge HTML built by sev_badge(), which escapes via esc_attr()/esc_html() internally ?></td>
                     <?php if ( $with_snippet ) : ?><td><?php echo esc_html( $f['slot'] ?? '' ); ?></td><?php endif; ?>
                     <td>
                         <?php echo esc_html( $f['label'] ?? '' ); ?>

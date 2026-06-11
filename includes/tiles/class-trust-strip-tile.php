@@ -101,9 +101,9 @@ class Olo_TrustStrip_Tile extends Olo_Tile_Base {
                 ?>
                     <span class="olo-tstrip__pill" style="display:inline-flex;align-items:center;gap:11px;padding:10px 16px;border-radius:100px;background:<?php echo esc_attr( $pill_bg ); ?>;border:1px solid <?php echo esc_attr( $pill_bd ); ?>;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);white-space:nowrap">
                         <?php if ( $logo !== '' ) : ?>
-                            <img src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( wp_strip_all_tags( $text ) ); ?>" style="height:<?php echo $logo_h; ?>px;width:auto;display:block;flex-shrink:0" />
+                            <img src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( wp_strip_all_tags( $text ) ); ?>" style="height:<?php echo (int) $logo_h; ?>px;width:auto;display:block;flex-shrink:0" />
                         <?php elseif ( $icon !== '' ) : ?>
-                            <span style="display:inline-flex;align-items:center;color:<?php echo esc_attr( $this->safe_color_css( $it['icon_color'] ?? '' ) ?: $pill_txt ); ?>"><?php echo $this->render_icon_html( $icon, 0.9 ); ?></span>
+                            <span style="display:inline-flex;align-items:center;color:<?php echo esc_attr( $this->safe_color_css( $it['icon_color'] ?? '' ) ?: $pill_txt ); ?>"><?php echo $this->render_icon_html( $icon, 0.9 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup built by render_icon_html() (esc_attr()'d UIkit attrs / sanitized SVG library) ?></span>
                         <?php endif; ?>
                         <?php if ( $text !== '' ) : ?>
                             <span class="olo-tstrip__pill-txt" style="color:<?php echo esc_attr( $pill_txt ); ?>;<?php echo ( $logo !== '' || $icon !== '' ) ? 'border-left:1px solid ' . esc_attr( $pill_bd ) . ';padding-left:11px;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.text'; ?>" data-olo-richtext><?php echo wp_kses_post( $text ); ?></span>
@@ -131,7 +131,7 @@ class Olo_TrustStrip_Tile extends Olo_Tile_Base {
                 <span class="olo-tstrip__item" style="display:inline-flex;align-items:center;gap:8px">
                     <?php if ( $icon ) : ?>
                         <span style="color:<?php echo esc_attr( $icon_color ); ?>;display:inline-flex;align-items:center">
-                            <?php echo $this->render_icon_html( $icon, 0.9 ); ?>
+                            <?php echo $this->render_icon_html( $icon, 0.9 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup built by render_icon_html() (esc_attr()'d UIkit attrs / sanitized SVG library) ?>
                         </span>
                     <?php endif; ?>
                     <?php if ( $text ) : ?>

@@ -471,16 +471,19 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
 
         // Generate keyframes CSS if Ken Burns is enabled
         if ( $kb_on ) {
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from fixed transform templates filled with number_format() floats (get_kb_variants), the internally generated $uid and the keyframes_reset() helper.
             echo '<style>';
             for ( $v = 0; $v < count( $kb_vars ); $v++ ) {
                 echo "@keyframes {$uid}-kb{$v}{from{transform:{$kb_vars[$v][0]}}to{transform:{$kb_vars[$v][1]}}}";
             }
             echo "@media(prefers-reduced-motion:reduce){{$this->keyframes_reset($uid, count($kb_vars))}}";
             echo '</style>';
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
         }
 
         // Reveal CSS (per-instance with uid for stagger delays)
         if ( $rv_on ) {
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from number_format() durations/delays computed on intval()-clamped settings, loop integers and the internally generated $uid.
             echo '<style>';
             $dur_s = number_format( $rv_duration / 1000, 2 );
             echo ".olo-shattered[data-si-uid=\"{$uid}\"]>div{opacity:0;transform:translateY(24px) scale(.92);transition:opacity {$dur_s}s ease,transform {$dur_s}s ease}";
@@ -491,6 +494,7 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
             }
             echo "@media(prefers-reduced-motion:reduce){.olo-shattered[data-si-uid=\"{$uid}\"]>div{transition:none!important;opacity:1!important;transform:none!important}}";
             echo '</style>';
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
         }
 
         // Shared inline script (output once per page)
@@ -520,9 +524,9 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
         ] ) . $extra_style;
 
         if ( $radius_hover_css !== '' ) {
-            echo '<style>.' . $sh_uid . ':hover{border-radius:' . $radius_hover_css . ' !important}</style>';
+            echo '<style>.' . $sh_uid . ':hover{border-radius:' . $radius_hover_css . ' !important}</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $radius_hover_css built by Olo_Tile_Utils::radius_force_css() from absint() values; $sh_uid is internally generated
         }
-        echo '<div class="olo-shattered ' . $sh_uid . '" style="' . $container_style . '"' . $data_attrs . '>';
+        echo '<div class="olo-shattered ' . $sh_uid . '" style="' . $container_style . '"' . $data_attrs . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_style built by build_style() (esc_attr per value); $data_attrs built above from esc_attr( $uid ) and a clamped intval(); $sh_uid is internally generated
 
         // Render each fragment: outer = static mask, inner = animated image
         $container_h = intval( $s['height'] ) ?: 400;
@@ -576,8 +580,8 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
 
             $img_style = $this->build_style( $img_style_parts );
 
-            echo '<div style="' . $mask_style . '"' . $frag_data . '>';
-            echo '<div style="' . $img_style . '"></div>';
+            echo '<div style="' . $mask_style . '"' . $frag_data . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $mask_style built by build_style() (esc_attr per value); $frag_data built above from round() floats only
+            echo '<div style="' . $img_style . '"></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $img_style built by build_style() (esc_attr per value) from esc_url()'d image, clamped numbers and the internal $uid
 
             // Overlay per frammento
             if ( $ov_on ) {
@@ -588,7 +592,7 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
                     'opacity'        => $ov_opacity,
                     'pointer-events' => 'none',
                 ] );
-                echo '<div style="' . $ov_style . '"></div>';
+                echo '<div style="' . $ov_style . '"></div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $ov_style built by build_style() (esc_attr per value) from a safe_color_css() color and a clamped opacity
             }
 
             echo '</div>';
@@ -602,8 +606,8 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized border settings
         }
         return ob_get_clean();
     }

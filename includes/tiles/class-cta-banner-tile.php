@@ -136,36 +136,37 @@ class Olo_CtaBanner_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-ctab <?php echo esc_attr( $uid ); ?>" style="<?php echo esc_attr( $bg_css ); ?>;<?php if ( $banner_radius ) echo 'border-radius:' . esc_attr( $banner_radius ) . ';'; ?>padding:<?php echo $banner_padding; ?>px;color:<?php echo esc_attr( $text_c ); ?>;display:grid;grid-template-columns:<?php echo esc_attr( $grid_cols ); ?>;gap:<?php echo $gap; ?>px;align-items:<?php echo esc_attr( $valign === 'start' ? 'flex-start' : ( $valign === 'end' ? 'flex-end' : 'center' ) ); ?>;<?php echo ( $layout === 'stack' ) ? 'text-align:center;justify-items:center;' : ''; ?>transition:<?php echo $banner_radius_h ? 'border-radius ' . $banner_rdur . 'ms ease' : 'none'; ?>">
+        <div class="olo-ctab <?php echo esc_attr( $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- unescaped fragments on this line are fixed-literal ternaries plus the absint()/intval() clamped padding, gap and duration; everything else is esc_attr()'d ?>" style="<?php echo esc_attr( $bg_css ); ?>;<?php if ( $banner_radius ) echo 'border-radius:' . esc_attr( $banner_radius ) . ';'; ?>padding:<?php echo (int) $banner_padding; ?>px;color:<?php echo esc_attr( $text_c ); ?>;display:grid;grid-template-columns:<?php echo esc_attr( $grid_cols ); ?>;gap:<?php echo (int) $gap; ?>px;align-items:<?php echo esc_attr( $valign === 'start' ? 'flex-start' : ( $valign === 'end' ? 'flex-end' : 'center' ) ); ?>;<?php echo ( $layout === 'stack' ) ? 'text-align:center;justify-items:center;' : ''; ?>transition:<?php echo $banner_radius_h ? 'border-radius ' . (int) $banner_rdur . 'ms ease' : 'none'; ?>">
 
             <!-- Headline -->
             <?php if ( ! empty( $s['headline'] ) || ! empty( $s['headline_accent'] ) ) : ?>
-                <h2 style="font-family:<?php echo esc_attr( $h_family ); ?>;font-size:<?php echo $h_size; ?>px;font-weight:<?php echo esc_attr( $h_weight ); ?>;line-height:1.15;letter-spacing:-0.01em;color:<?php echo esc_attr( $text_c ); ?>;margin:0">
+                <h2 style="font-family:<?php echo esc_attr( $h_family ); ?>;font-size:<?php echo (int) $h_size; ?>px;font-weight:<?php echo esc_attr( $h_weight ); ?>;line-height:1.15;letter-spacing:-0.01em;color:<?php echo esc_attr( $text_c ); ?>;margin:0">
                     <?php if ( ! empty( $s['headline'] ) ) : ?><span data-olo-editable="headline"><?php echo esc_html( $s['headline'] ); ?></span><?php endif; ?><?php if ( ! empty( $s['headline_accent'] ) ) : ?> <span style="color:<?php echo esc_attr( $accent_c ); ?>;<?php if ( $h_accent_italic ) echo 'font-style:italic;'; ?>" data-olo-editable="headline_accent"><?php echo esc_html( $s['headline_accent'] ); ?></span><?php endif; ?>
                 </h2>
             <?php endif; ?>
 
             <!-- Subtitle (solo se split-3 o stack) -->
             <?php if ( $layout !== 'split-2' && ! empty( $sub_html ) ) : ?>
-                <div style="font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo $sub_size; ?>px;line-height:1.5;color:<?php echo esc_attr( $sub_c ); ?>" data-olo-editable="subtitle" data-olo-richtext><?php echo $sub_html; ?></div>
+                <div style="font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo (int) $sub_size; ?>px;line-height:1.5;color:<?php echo esc_attr( $sub_c ); ?>" data-olo-editable="subtitle" data-olo-richtext><?php echo $sub_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized above via safe_richtext_content() (wp_kses_post) for rich text, or esc_html()+nl2br() for plain text ?></div>
             <?php elseif ( $layout === 'split-2' && ! empty( $sub_html ) ) : ?>
                 <!-- In split-2 il subtitle va dentro alla cella headline -->
-                <div style="font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo $sub_size; ?>px;line-height:1.5;color:<?php echo esc_attr( $sub_c ); ?>;grid-column:1;margin-top:8px" data-olo-editable="subtitle" data-olo-richtext><?php echo $sub_html; ?></div>
+                <div style="font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo (int) $sub_size; ?>px;line-height:1.5;color:<?php echo esc_attr( $sub_c ); ?>;grid-column:1;margin-top:8px" data-olo-editable="subtitle" data-olo-richtext><?php echo $sub_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized above via safe_richtext_content() (wp_kses_post) for rich text, or esc_html()+nl2br() for plain text ?></div>
             <?php endif; ?>
 
             <!-- CTA(s) -->
             <?php if ( ! empty( $s['cta_text'] ) || ! empty( $s['cta2_text'] ) ) : ?>
-                <div class="olo-ctab__ctas" style="display:inline-flex;gap:12px;flex-wrap:wrap;align-items:center;<?php echo ( $layout === 'stack' ) ? 'justify-content:center;' : ''; ?>">
+                <div class="olo-ctab__ctas" style="display:inline-flex;gap:12px;flex-wrap:wrap;align-items:center;<?php echo ( $layout === 'stack' ) ? 'justify-content:center;' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- both ternary branches are fixed literals ?>">
                     <?php if ( ! empty( $s['cta_text'] ) ) : ?>
-                        <a href="<?php echo esc_url( $s['cta_url'] ?: '#' ); ?>"<?php echo $cta_tgt; ?> class="olo-ctab__cta" data-olo-editable="cta_text" style="display:inline-flex;align-items:center;justify-content:center;padding:<?php echo $cta_py; ?>px <?php echo $cta_px; ?>px;background:<?php echo esc_attr( $cta_bg ); ?>;color:<?php echo esc_attr( $cta_c ); ?>;<?php if ( $cta_radius ) echo 'border-radius:' . esc_attr( $cta_radius ) . ';'; ?>font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo $cta_size; ?>px;font-weight:600;text-decoration:none;white-space:nowrap;transition:transform .2s ease,background .2s,color .2s<?php if ( $cta_radius_h ) echo ',border-radius ' . $cta_rdur . 'ms ease'; ?>"><?php echo esc_html( $s['cta_text'] ); ?></a>
+                        <a href="<?php echo esc_url( $s['cta_url'] ?: '#' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- unescaped fragments on this line are the fixed-literal $cta_tgt (' target="_blank" rel="noopener"' or '') and absint()/intval() clamped paddings/size/duration; everything else is esc_url()/esc_attr()/esc_html()'d ?>"<?php echo $cta_tgt; ?> class="olo-ctab__cta" data-olo-editable="cta_text" style="display:inline-flex;align-items:center;justify-content:center;padding:<?php echo (int) $cta_py; ?>px <?php echo (int) $cta_px; ?>px;background:<?php echo esc_attr( $cta_bg ); ?>;color:<?php echo esc_attr( $cta_c ); ?>;<?php if ( $cta_radius ) echo 'border-radius:' . esc_attr( $cta_radius ) . ';'; ?>font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo (int) $cta_size; ?>px;font-weight:600;text-decoration:none;white-space:nowrap;transition:transform .2s ease,background .2s,color .2s<?php if ( $cta_radius_h ) echo ',border-radius ' . (int) $cta_rdur . 'ms ease'; ?>"><?php echo esc_html( $s['cta_text'] ); ?></a>
                     <?php endif; ?>
                     <?php if ( ! empty( $s['cta2_text'] ) ) : ?>
-                        <a href="<?php echo esc_url( $s['cta2_url'] ?: '#' ); ?>"<?php echo $cta2_tgt; ?> class="olo-ctab__cta2" data-olo-editable="cta2_text" style="display:inline-flex;align-items:center;justify-content:center;padding:<?php echo $cta_py; ?>px <?php echo $cta_px; ?>px;background:<?php echo esc_attr( $cta2_bg ); ?>;color:<?php echo esc_attr( $cta2_c ); ?>;<?php if ( $cta2_bord ) echo 'border:1px solid ' . esc_attr( $cta2_bord ) . ';'; ?><?php if ( $cta_radius ) echo 'border-radius:' . esc_attr( $cta_radius ) . ';'; ?>font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo $cta_size; ?>px;font-weight:600;text-decoration:none;white-space:nowrap;transition:transform .2s ease,background .2s,color .2s,border-color .2s"><?php echo esc_html( $s['cta2_text'] ); ?></a>
+                        <a href="<?php echo esc_url( $s['cta2_url'] ?: '#' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- unescaped fragments on this line are the fixed-literal $cta2_tgt (' target="_blank" rel="noopener"' or '') and absint() clamped paddings/size; everything else is esc_url()/esc_attr()/esc_html()'d ?>"<?php echo $cta2_tgt; ?> class="olo-ctab__cta2" data-olo-editable="cta2_text" style="display:inline-flex;align-items:center;justify-content:center;padding:<?php echo (int) $cta_py; ?>px <?php echo (int) $cta_px; ?>px;background:<?php echo esc_attr( $cta2_bg ); ?>;color:<?php echo esc_attr( $cta2_c ); ?>;<?php if ( $cta2_bord ) echo 'border:1px solid ' . esc_attr( $cta2_bord ) . ';'; ?><?php if ( $cta_radius ) echo 'border-radius:' . esc_attr( $cta_radius ) . ';'; ?>font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo (int) $cta_size; ?>px;font-weight:600;text-decoration:none;white-space:nowrap;transition:transform .2s ease,background .2s,color .2s,border-color .2s"><?php echo esc_html( $s['cta2_text'] ); ?></a>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
         </div>
 
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from the internally generated $uid, safe_color_css()-validated hover colours and build_border_radius_css() (intval-based) radii. ?>
         <style>
             <?php
             $cta_bg_h  = $this->safe_color_css( $s['cta_bg_hover'] ?? '' );
@@ -182,6 +183,7 @@ class Olo_CtaBanner_Tile extends Olo_Tile_Base {
                 .<?php echo $uid; ?> { grid-template-columns: 1fr !important; text-align: center; justify-items: center; gap: 20px !important; }
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php
 
         return ob_get_clean();

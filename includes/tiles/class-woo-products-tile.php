@@ -179,11 +179,12 @@ class Olo_Woo_Products_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/absint/fixed maps/generated uid). ?>
         <style>
             .<?php echo $uid; ?> {
                 display: grid;
-                grid-template-columns: repeat(<?php echo $cols; ?>, 1fr);
-                gap: <?php echo $gap; ?>px;
+                grid-template-columns: repeat(<?php echo (int) $cols; ?>, 1fr);
+                gap: <?php echo (int) $gap; ?>px;
             }
             .<?php echo $uid; ?> .olo-woo-card {
                 background: var(--olo-color-background, #FFFFFF);
@@ -294,15 +295,16 @@ class Olo_Woo_Products_Tile extends Olo_Tile_Base {
             }
             @media (max-width: 960px) {
                 .<?php echo $uid; ?> {
-                    grid-template-columns: repeat(<?php echo $cols_tablet; ?>, 1fr);
+                    grid-template-columns: repeat(<?php echo (int) $cols_tablet; ?>, 1fr);
                 }
             }
             @media (max-width: 640px) {
                 .<?php echo $uid; ?> {
-                    grid-template-columns: repeat(<?php echo $cols_mobile; ?>, 1fr);
+                    grid-template-columns: repeat(<?php echo (int) $cols_mobile; ?>, 1fr);
                 }
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="<?php echo esc_attr( $uid ); ?>">
         <?php
         while ( $products->have_posts() ) :
@@ -327,7 +329,7 @@ class Olo_Woo_Products_Tile extends Olo_Tile_Base {
                 <div class="olo-woo-card-img">
                     <?php if ( $thumb_id ) : ?>
                     <a href="<?php echo esc_url( $permalink ); ?>">
-                        <?php echo wp_get_attachment_image( $thumb_id, 'woocommerce_thumbnail' ); ?>
+                        <?php echo wp_get_attachment_image( $thumb_id, 'woocommerce_thumbnail' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() returns escaped HTML built by WordPress core ?>
                     </a>
                     <?php else : ?>
                     <a href="<?php echo esc_url( $permalink ); ?>" style="display:block;background:var(--olo-color-muted, #F3F4F6);<?php if ( ! $auto_h ) : ?>position:absolute;inset:0;<?php else : ?>padding:40px 0;<?php endif; ?>display:flex;align-items:center;justify-content:center;">
@@ -363,14 +365,16 @@ class Olo_Woo_Products_Tile extends Olo_Tile_Base {
                         $star_svg_full  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="var(--olo-color-warning, #F59E0B)" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
                         $star_svg_half  = '<svg width="14" height="14" viewBox="0 0 24 24" stroke="none"><defs><linearGradient id="h"><stop offset="50%" stop-color="var(--olo-color-warning, #F59E0B)"/><stop offset="50%" stop-color="var(--olo-color-border, #E5E7EB)"/></linearGradient></defs><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#h)"/></svg>';
                         $star_svg_empty = '<svg width="14" height="14" viewBox="0 0 24 24" fill="var(--olo-color-border, #E5E7EB)" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+                        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined as literals above, no dynamic data
                         for ( $i = 0; $i < $full; $i++ ) { echo $star_svg_full; }
                         for ( $i = 0; $i < $half; $i++ ) { echo $star_svg_half; }
                         for ( $i = 0; $i < $empty; $i++ ) { echo $star_svg_empty; }
+                        // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
                         ?>
                     </div>
                     <?php endif; ?>
                     <?php if ( ! empty( $s['show_price'] ) ) : ?>
-                    <div class="olo-woo-card-price"><?php echo $price_html; ?></div>
+                    <div class="olo-woo-card-price"><?php echo $price_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WooCommerce price HTML from WC_Product::get_price_html(), escaped by WooCommerce core ?></div>
                     <?php endif; ?>
                     <?php if ( ! empty( $s['show_add_to_cart'] ) ) : ?>
                     <?php
@@ -400,7 +404,7 @@ class Olo_Woo_Products_Tile extends Olo_Tile_Base {
         if ( ! empty( $s['pagination'] ) ) {
             $big = 999999999;
             echo '<div style="text-align:center;margin-top:20px;">';
-            echo paginate_links( [
+            echo paginate_links( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- paginate_links() returns escaped pagination HTML built by WordPress core
                 'base'    => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
                 'format'  => '?paged=%#%',
                 'current' => max( 1, get_query_var( 'paged' ) ),
@@ -416,8 +420,8 @@ class Olo_Woo_Products_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized values (intval/safe color whitelist)
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized values
         }
         return ob_get_clean();
     }

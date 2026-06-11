@@ -51,6 +51,7 @@ class Olo_Mixer_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, fixed font-stack literals, fixed-literal ternaries and the internally generated $uid. ?>
         <style>
             .<?php echo $uid; ?>{ --mx-accent:<?php echo $accent; ?>; font-family:<?php echo $sans; ?>; <?php if ( $center ) echo 'text-align:center;'; ?> }
             .<?php echo $uid; ?> .omx-eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mx-accent);display:block;margin-bottom:10px;}
@@ -67,6 +68,7 @@ class Olo_Mixer_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .omx-preview{width:100%;height:150px;border-radius:14px;border:1px solid <?php echo $cardbd; ?>;background:transparent;transition:background .35s;}
             .<?php echo $uid; ?> .omx-out{margin-top:14px;font-family:<?php echo $serif; ?>;font-size:18px;color:var(--olo-color-text,#111827);min-height:1.4em;}
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-mixer <?php echo esc_attr( $uid ); ?>" data-mixer data-max="<?php echo esc_attr( $max ); ?>" data-empty="<?php echo esc_attr( $empty ); ?>">
             <?php if ( $s['eyebrow'] !== '' ) : ?><span class="omx-eyebrow"><?php echo esc_html( $s['eyebrow'] ); ?></span><?php endif; ?>
             <?php if ( $s['heading'] !== '' ) : ?><h2 class="omx-h"><?php echo esc_html( $s['heading'] ); ?></h2><?php endif; ?>
@@ -87,7 +89,7 @@ class Olo_Mixer_Tile extends Olo_Tile_Base {
         </div>
         <script>
         (function(){
-            var root=document.querySelector('.<?php echo $uid; ?>[data-mixer]'); if(!root){return;}
+            var root=document.querySelector('.<?php echo esc_js( $uid ); ?>[data-mixer]'); if(!root){return;}
             var max=parseInt(root.getAttribute('data-max'))||3;
             var empty=root.getAttribute('data-empty')||'';
             var sw=[].slice.call(root.querySelectorAll('[data-mx]'));

@@ -198,7 +198,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
         $all_css = $timeline_css . $responsive_css;
         // Icon SVG: custom properties per fill/stroke + evita doppia ombra con drop-shadow
         $all_css .= '.mps-icon-wrap svg polygon,.mps-icon-wrap svg path,.mps-icon-wrap svg circle,.mps-icon-wrap svg rect,.mps-icon-wrap svg ellipse,.mps-icon-wrap svg polyline,.mps-icon-wrap svg line{fill:var(--icon-fill,currentColor);stroke:var(--icon-stroke,currentColor);stroke-width:var(--icon-stroke-width,inherit);stroke-dasharray:var(--icon-stroke-dash,none)}';
-        echo '<style>' . $all_css . '</style>';
+        echo '<style>' . $all_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS assembled internally: timeline keyframes from floatval()/absint() values and regex-cleaned layer ids, responsive rules from absint()/floatval() clamps and esc_attr()'d ids, plus a fixed icon-CSS literal
 
         // Collect and load Google Fonts used by layers
         $google_fonts = [];
@@ -244,7 +244,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
         $scroll_fixed = ! empty( $s['scrollTimeline'] );
         $scroll_dist  = absint( $s['scrollTimelineDistance'] ?? 2000 );
         if ( $scroll_fixed ) {
-            echo '<div class="mps-scroll-fixed-wrapper" style="height:' . ( $height + $scroll_dist ) . 'px;" data-scroll-distance="' . $scroll_dist . '">';
+            echo '<div class="mps-scroll-fixed-wrapper" style="height:' . (int) ( $height + $scroll_dist ) . 'px;" data-scroll-distance="' . (int) $scroll_dist . '">';
         }
         ?>
         <div
@@ -253,7 +253,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
             data-transition="<?php echo esc_attr( $transition ); ?>"
             data-proslider="<?php echo esc_attr( wp_json_encode( $config ) ); ?>"
             data-design-width="1200"
-            data-design-height="<?php echo $height; ?>"
+            data-design-height="<?php echo (int) $height; ?>"
             data-height-mode="<?php echo esc_attr( $h_obj['mode'] ); ?>"
             data-height-value="<?php echo esc_attr( $h_obj['value'] ); ?>"
             <?php
@@ -273,7 +273,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
             style="<?php echo esc_attr( $container_style ); ?>"
         >
             <?php if ( ! empty( $global_bg ) && ( $global_bg['type'] ?? 'color' ) !== 'color' || ! empty( $global_bg['color'] ) ) : ?>
-                <div class="olo-proslider-global-bg"><?php echo $this->render_bg( $global_bg ); ?></div>
+                <div class="olo-proslider-global-bg"><?php echo $this->render_bg( $global_bg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- background HTML built by render_bg() with esc_url()/esc_attr()/safe_color_css()/absint() internally ?></div>
             <?php endif; ?>
             <?php
             // Global layers (back position — behind slides)
@@ -283,13 +283,13 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
             if ( $back_layers ) :
             ?>
                 <div class="olo-proslider-global-layers mps-global-back mps-layers-wrap" style="position:absolute;top:0;left:0;z-index:0;pointer-events:none;">
-                    <?php foreach ( $back_layers as $gl ) : echo $this->render_layer( $gl ); endforeach; ?>
+                    <?php foreach ( $back_layers as $gl ) : echo $this->render_layer( $gl ); endforeach; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- layer HTML built by render_layer() with esc_attr()/esc_url()/safe_color_css()/absint()/floatval() internally ?>
                 </div>
             <?php endif; ?>
 
             <div class="olo-proslider-track">
                 <?php foreach ( $slides as $si => $slide ) : ?>
-                    <?php echo $this->render_slide( $slide, $si ); ?>
+                    <?php echo $this->render_slide( $slide, $si ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- slide HTML built by render_slide()/render_layer() with esc_attr()/esc_url()/safe_color_css()/absint()/floatval() internally ?>
                 <?php endforeach; ?>
             </div>
 
@@ -298,23 +298,23 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
             if ( $front_layers ) :
             ?>
                 <div class="olo-proslider-global-layers mps-global-front mps-layers-wrap" style="position:absolute;top:0;left:0;z-index:5;pointer-events:none;">
-                    <?php foreach ( $front_layers as $gl ) : echo $this->render_layer( $gl ); endforeach; ?>
+                    <?php foreach ( $front_layers as $gl ) : echo $this->render_layer( $gl ); endforeach; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- layer HTML built by render_layer() with esc_attr()/esc_url()/safe_color_css()/absint()/floatval() internally ?>
                 </div>
             <?php endif; ?>
 
             <?php
             $arrow_style = isset( $s['arrowStyle'] ) && in_array( $s['arrowStyle'], [ 'minimal', 'rounded', 'boxed', 'outline' ], true ) ? $s['arrowStyle'] : 'minimal';
             if ( $s['showArrows'] && count( $slides ) > 1 ) : ?>
-                <button class="olo-proslider-arrow olo-proslider-prev mps-arrow-<?php echo $arrow_style; ?>" aria-label="<?php echo esc_attr( olo_t( 'Previous' ) ); ?>"><?php echo esc_html( olo_t( '&lsaquo;' ) ); ?></button>
-                <button class="olo-proslider-arrow olo-proslider-next mps-arrow-<?php echo $arrow_style; ?>" aria-label="<?php echo esc_attr( olo_t( 'Next' ) ); ?>"><?php echo esc_html( olo_t( '&rsaquo;' ) ); ?></button>
+                <button class="olo-proslider-arrow olo-proslider-prev mps-arrow-<?php echo esc_attr( $arrow_style ); ?>" aria-label="<?php echo esc_attr( olo_t( 'Previous' ) ); ?>"><?php echo esc_html( olo_t( '&lsaquo;' ) ); ?></button>
+                <button class="olo-proslider-arrow olo-proslider-next mps-arrow-<?php echo esc_attr( $arrow_style ); ?>" aria-label="<?php echo esc_attr( olo_t( 'Next' ) ); ?>"><?php echo esc_html( olo_t( '&rsaquo;' ) ); ?></button>
             <?php endif; ?>
 
             <?php
             $dot_style = isset( $s['dotStyle'] ) && in_array( $s['dotStyle'], [ 'circles', 'bars', 'numbers', 'dash' ], true ) ? $s['dotStyle'] : 'circles';
             if ( $s['showDots'] && count( $slides ) > 1 ) : ?>
-                <div class="olo-proslider-dots mps-dots-<?php echo $dot_style; ?>">
+                <div class="olo-proslider-dots mps-dots-<?php echo esc_attr( $dot_style ); ?>">
                     <?php for ( $d = 0; $d < count( $slides ); $d++ ) : ?>
-                        <button class="olo-proslider-dot<?php echo $d === 0 ? ' mps-dot-active' : ''; ?>" data-slide="<?php echo $d; ?>" aria-label="Slide <?php echo $d + 1; ?>"><?php echo $dot_style === 'numbers' ? ( $d + 1 ) : ''; ?></button>
+                        <button class="olo-proslider-dot<?php echo $d === 0 ? ' mps-dot-active' : ''; ?>" data-slide="<?php echo (int) $d; ?>" aria-label="Slide <?php echo (int) ( $d + 1 ); ?>"><?php echo $dot_style === 'numbers' ? (int) ( $d + 1 ) : ''; ?></button>
                     <?php endfor; ?>
                 </div>
             <?php endif; ?>
@@ -324,8 +324,8 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
                 $pb_height = absint( $s['progressBarHeight'] ?? 3 );
                 if ( $pb_height < 1 ) { $pb_height = 3; }
             ?>
-                <div class="olo-proslider-progressbar" style="height:<?php echo $pb_height; ?>px;">
-                    <div class="olo-proslider-progressbar-fill" style="background:<?php echo $pb_color; ?>;"></div>
+                <div class="olo-proslider-progressbar" style="height:<?php echo (int) $pb_height; ?>px;">
+                    <div class="olo-proslider-progressbar-fill" style="background:<?php echo $pb_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- validated by the safe_color_css() whitelist above (may legitimately contain var()/rgba() notation) ?>;"></div>
                 </div>
             <?php endif; ?>
         </div>
@@ -347,11 +347,11 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
                     $timg = esc_url( $tbg['image'] );
                 }
                 $tact = $ti === 0 ? ' mps-thumb-active' : '';
-                echo '<button class="olo-proslider-thumb' . $tact . '" data-slide="' . $ti . '">';
+                echo '<button class="olo-proslider-thumb' . $tact . '" data-slide="' . (int) $ti . '">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tact is a fixed ' mps-thumb-active'/'' literal from the ternary above; slide index cast to int
                 if ( $timg ) {
-                    echo '<img src="' . $timg . '" alt="Slide ' . ( $ti + 1 ) . '" loading="lazy" draggable="false" />';
+                    echo '<img src="' . $timg . '" alt="Slide ' . (int) ( $ti + 1 ) . '" loading="lazy" draggable="false" />'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $timg escaped via esc_url() at assignment above
                 } else {
-                    echo '<span>' . ( $ti + 1 ) . '</span>';
+                    echo '<span>' . (int) ( $ti + 1 ) . '</span>';
                 }
                 echo '</button>';
             }
@@ -366,7 +366,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
             foreach ( $slides as $ti => $tslide ) {
                 $tlabel = ! empty( $tslide['tabLabel'] ) ? esc_html( $tslide['tabLabel'] ) : 'Slide ' . ( $ti + 1 );
                 $tact   = $ti === 0 ? ' mps-tab-active' : '';
-                echo '<button class="olo-proslider-tab' . $tact . '" data-slide="' . $ti . '">' . $tlabel . '</button>';
+                echo '<button class="olo-proslider-tab' . $tact . '" data-slide="' . (int) $ti . '">' . $tlabel . '</button>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tact is a fixed literal from the ternary above; $tlabel is esc_html()'d or a 'Slide N' literal with integer index
             }
             echo '</div>';
         }
@@ -393,21 +393,21 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-proslider-slide<?php echo $active_class; ?>"
+        <div class="olo-proslider-slide<?php echo $active_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed ' mps-active'/'' literal from the ternary above ?>"
              data-slide-index="<?php echo (int) $index; ?>"
-             <?php echo $persist_for > 0 ? 'data-persist-for="' . $persist_for . '"' : ''; ?>
-             <?php echo $slide_duration > 0 ? 'data-duration="' . $slide_duration . '"' : ''; ?>
+             <?php echo $persist_for > 0 ? 'data-persist-for="' . (int) $persist_for . '"' : ''; ?>
+             <?php echo $slide_duration > 0 ? 'data-duration="' . (int) $slide_duration . '"' : ''; ?>
         >
             <!-- Background -->
             <div class="olo-proslider-bg">
-                <?php echo $this->render_bg( $bg ); ?>
+                <?php echo $this->render_bg( $bg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- background HTML built by render_bg() with esc_url()/esc_attr()/safe_color_css()/absint() internally ?>
                 <?php
                 $bg_type    = $bg['type'] ?? 'color';
                 $ov_color   = $this->safe_color_css( $bg['overlay'] ?? '#000000' );
                 $ov_opacity = isset( $bg['overlayOpacity'] ) ? floatval( $bg['overlayOpacity'] ) : 0.3;
                 if ( $bg_type !== 'transparent' && $ov_opacity > 0 && $ov_color ) :
                 ?>
-                    <div class="olo-proslider-overlay" style="background:<?php echo $ov_color; ?>;opacity:<?php echo $ov_opacity; ?>"></div>
+                    <div class="olo-proslider-overlay" style="background:<?php echo $ov_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by the safe_color_css() whitelist above; opacity is floatval()'d ?>;opacity:<?php echo (float) $ov_opacity; ?>"></div>
                 <?php endif; ?>
             </div>
 
@@ -426,13 +426,13 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
             ?>
             <div class="mps-layers-wrap">
                 <?php foreach ( $normal_layers as $layer ) : ?>
-                    <?php echo $this->render_layer( $layer ); ?>
+                    <?php echo $this->render_layer( $layer ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- layer HTML built by render_layer() with esc_attr()/esc_url()/safe_color_css()/absint()/floatval() internally ?>
                 <?php endforeach; ?>
             </div>
             <?php
             // Blend-mode layers fuori dal wrapper scalato (transform crea stacking context isolato)
             foreach ( $blend_layers as $layer ) :
-                echo $this->render_layer( $layer, true );
+                echo $this->render_layer( $layer, true ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- layer HTML built by render_layer() with esc_attr()/esc_url()/safe_color_css()/absint()/floatval() internally
             endforeach;
             ?>
         </div>
@@ -788,7 +788,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
 
         ob_start();
         if ( $hover_css ) {
-            echo '<style>' . $hover_css . '</style>';
+            echo '<style>' . $hover_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- hover CSS built above exclusively from floatval()/absint() values, safe_color_css() colours, in_array()-whitelisted easing, esc_attr()'d cursor and the regex-cleaned layer id
         }
         ?>
         <?php
@@ -797,8 +797,8 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
         $custom_css_inline = sanitize_text_field( $layer['customCSS'] ?? '' );
         if ( $custom_css_inline ) { $style .= $custom_css_inline; }
         ?>
-        <div class="olo-proslider-layer<?php echo esc_attr( $layer_class . $sfx_class . ( $custom_class ? ' ' . $custom_class : '' ) . ( $outside_wrap ? ' mps-blend-layer' : '' ) ); ?>"<?php echo $custom_id ? ' id="' . esc_attr( $custom_id ) . '"' : ''; ?> style="<?php echo esc_attr( $style ); ?>"<?php echo $anim_attrs . $action_attr . $parallax_attr; ?><?php echo $sfx_class ? ' data-sfx-effect="' . esc_attr( $layer['sfx']['effect'] ?? 'blockRight' ) . '"' : ''; ?>>
-            <?php echo $this->render_layer_content( $layer, $type ); ?>
+        <div class="olo-proslider-layer<?php echo esc_attr( $layer_class . $sfx_class . ( $custom_class ? ' ' . $custom_class : '' ) . ( $outside_wrap ? ' mps-blend-layer' : '' ) ); ?>"<?php echo $custom_id ? ' id="' . esc_attr( $custom_id ) . '"' : ''; ?> style="<?php echo esc_attr( $style ); ?>"<?php echo $anim_attrs . $action_attr . $parallax_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute strings built above with esc_attr()/absint() around every dynamic value ?><?php echo $sfx_class ? ' data-sfx-effect="' . esc_attr( $layer['sfx']['effect'] ?? 'blockRight' ) . '"' : ''; ?>>
+            <?php echo $this->render_layer_content( $layer, $type ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- content HTML built by render_layer_content() with esc_attr()/esc_url()/esc_html()/safe_richtext_content() internally ?>
         </div>
         <?php
                 // Border system
@@ -807,8 +807,8 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() (integer-forced widths) for the internally generated uid
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by the Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() shared helpers
         }
         return ob_get_clean();
     }

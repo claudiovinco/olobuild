@@ -152,17 +152,18 @@ class Olo_GlowHero_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval/floatval/whitelist ternaries/fixed font stacks); escaping would corrupt valid CSS quotes. ?>
         <style>
-            .<?php echo $uid; ?>{position:relative;overflow:hidden;min-height:<?php echo $mh; ?>vh;display:flex;flex-direction:column;justify-content:center;background:<?php echo $bg; ?>;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;padding:<?php echo $pad_decl; ?>;<?php echo $kit_extra; ?>}
-            .<?php echo $uid; ?> .glw-glow{position:absolute;top:<?php echo $gy; ?>%;left:<?php echo $gx; ?>%;transform:translate(-50%,-30%);width:<?php echo $gw; ?>px;height:<?php echo $gh; ?>px;border-radius:50%;filter:blur(<?php echo $gblur; ?>px);pointer-events:none;background:radial-gradient(circle, <?php echo $glow; ?>, transparent 70%);z-index:0;}
-            .<?php echo $uid; ?> .glw-in{position:relative;z-index:2;width:100%;max-width:<?php echo $mw; ?>px;margin:0 auto;padding:0 28px;display:flex;flex-direction:column;align-items:<?php echo $alignI; ?>;text-align:<?php echo $txtAl; ?>;}
+            .<?php echo $uid; ?>{position:relative;overflow:hidden;min-height:<?php echo (int) $mh; ?>vh;display:flex;flex-direction:column;justify-content:center;background:<?php echo $bg; ?>;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;padding:<?php echo $pad_decl; ?>;<?php echo $kit_extra; ?>}
+            .<?php echo $uid; ?> .glw-glow{position:absolute;top:<?php echo (int) $gy; ?>%;left:<?php echo (int) $gx; ?>%;transform:translate(-50%,-30%);width:<?php echo (int) $gw; ?>px;height:<?php echo (int) $gh; ?>px;border-radius:50%;filter:blur(<?php echo (int) $gblur; ?>px);pointer-events:none;background:radial-gradient(circle, <?php echo $glow; ?>, transparent 70%);z-index:0;}
+            .<?php echo $uid; ?> .glw-in{position:relative;z-index:2;width:100%;max-width:<?php echo (int) $mw; ?>px;margin:0 auto;padding:0 28px;display:flex;flex-direction:column;align-items:<?php echo $alignI; ?>;text-align:<?php echo $txtAl; ?>;}
             .<?php echo $uid; ?> .glw-eyebrow{display:flex;gap:26px;flex-wrap:wrap;justify-content:<?php echo $alignI; ?>;margin-bottom:34px;color:<?php echo $eyc; ?>;font-size:13px;letter-spacing:.04em;}
             .<?php echo $uid; ?> .glw-eyebrow span{display:inline-flex;align-items:center;gap:<?php echo $dots ? '9px' : '0'; ?>;}
             <?php if ( $dots ) : ?>.<?php echo $uid; ?> .glw-eyebrow span::before{content:"";width:6px;height:6px;border-radius:50%;background:<?php echo $accent; ?>;}<?php endif; ?>
-            .<?php echo $uid; ?> .glw-h{font-family:<?php echo $disp; ?>;font-weight:800;font-size:clamp(<?php echo $hmin; ?>px,<?php echo $hvw; ?>vw,<?php echo $hmax; ?>px);line-height:<?php echo $hlh; ?>;letter-spacing:-.02em;text-transform:<?php echo $up; ?>;color:<?php echo $txt; ?>;margin:0;}
+            .<?php echo $uid; ?> .glw-h{font-family:<?php echo $disp; ?>;font-weight:800;font-size:clamp(<?php echo (int) $hmin; ?>px,<?php echo (float) $hvw; ?>vw,<?php echo (int) $hmax; ?>px);line-height:<?php echo (float) $hlh; ?>;letter-spacing:-.02em;text-transform:<?php echo $up; ?>;color:<?php echo $txt; ?>;margin:0;}
             .<?php echo $uid; ?> .glw-h .ln{display:block;}
             .<?php echo $uid; ?> .glw-h .acc{color:<?php echo $accent; ?>;}
-            .<?php echo $uid; ?> .glw-h .out{-webkit-text-stroke:<?php echo $strk; ?>px <?php echo $txt; ?>;color:transparent;}
+            .<?php echo $uid; ?> .glw-h .out{-webkit-text-stroke:<?php echo (float) $strk; ?>px <?php echo $txt; ?>;color:transparent;}
             .<?php echo $uid; ?> .glw-h .grd{background:linear-gradient(110deg, <?php echo $accent; ?>, <?php echo $acc2; ?>);-webkit-background-clip:text;background-clip:text;color:transparent;}
             .<?php echo $uid; ?> .glw-bottom{display:flex;<?php echo $split ? 'justify-content:space-between;' : 'flex-direction:column;gap:24px;'; ?>align-items:<?php echo $split ? 'flex-end' : $alignI; ?>;gap:30px;margin-top:42px;flex-wrap:wrap;width:100%;}
             .<?php echo $uid; ?> .glw-sub{max-width:440px;font-size:17px;line-height:1.6;color:<?php echo $sub; ?>;margin:0;}
@@ -179,6 +180,7 @@ class Olo_GlowHero_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .glw-scroll .ln{width:46px;height:1px;background:<?php echo $sub; ?>;}
             @media(max-width:680px){.<?php echo $uid; ?> .glw-bottom{flex-direction:column;align-items:<?php echo $alignI; ?>;}}
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <section class="olo-glowhero <?php echo esc_attr( $uid ); ?>">
             <span class="glw-glow"></span>
             <div class="glw-in">
@@ -217,11 +219,13 @@ class Olo_GlowHero_Tile extends Olo_Tile_Base {
         $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- border CSS generated by Olo_Tile_Base::build_border_*() helpers (intval sizes, fixed templates); $uid is an internal generated class name.
             echo '<style>';
             if ( $border_css ) {
                 echo ".{$uid}{{$border_css}}";
             }
             echo $border_hover_css . $border_effect_css . '</style>';
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
         }
         return ob_get_clean();
     }

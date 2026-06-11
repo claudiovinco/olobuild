@@ -195,8 +195,9 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() for every colour, absint()/intval()/floatval() for sizes, preg_match/in_array whitelists for weight and enums, fixed shadow map, build_border_radius_css()/build_wow_effects_css() internal helpers, internal wp_rand() uid. ?>
         <style>
-            .<?php echo $uid; ?> .mos-og-img { transition: transform 0.5s ease, filter 0.5s ease; width: 100%; height: <?php echo $height; ?>px; object-fit: cover; }
+            .<?php echo $uid; ?> .mos-og-img { transition: transform 0.5s ease, filter 0.5s ease; width: 100%; height: <?php echo (int) $height; ?>px; object-fit: cover; }
             .<?php echo $uid; ?> > div > div > .uk-panel,
             .<?php echo $uid; ?> > div > div > a {
                 <?php if ( $item_radius_css ) : ?>border-radius: <?php echo $item_radius_css; ?>;<?php endif; ?>
@@ -232,13 +233,13 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .uk-overlay h4 {
                 color: <?php echo $title_clr; ?>;
                 font-weight: <?php echo $title_w; ?>;
-                letter-spacing: <?php echo $title_ls; ?>em;
+                letter-spacing: <?php echo (float) $title_ls; ?>em;
                 <?php if ( $title_upper ) : ?>text-transform: uppercase;<?php endif; ?>
                 margin: 0;
             }
             .<?php echo $uid; ?> .uk-overlay p {
                 color: <?php echo $subtitle_clr; ?>;
-                font-size: <?php echo $subtitle_sz; ?>px;
+                font-size: <?php echo (int) $subtitle_sz; ?>px;
                 margin: 6px 0 0;
             }
 
@@ -265,7 +266,7 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
                 $mgap   = $gap_px[ $gap ] ?? 30;
                 $mrow_m = max( 140, (int) round( $height * 0.9 ) );
             ?>
-            .<?php echo $uid; ?>.olo-og--masonry > div { display:grid !important; grid-template-columns:repeat(<?php echo $columns; ?>,1fr); grid-auto-rows:<?php echo $height; ?>px; grid-auto-flow:dense; gap:<?php echo $mgap; ?>px; margin:0 !important; }
+            .<?php echo $uid; ?>.olo-og--masonry > div { display:grid !important; grid-template-columns:repeat(<?php echo (int) $columns; ?>,1fr); grid-auto-rows:<?php echo (int) $height; ?>px; grid-auto-flow:dense; gap:<?php echo (int) $mgap; ?>px; margin:0 !important; }
             .<?php echo $uid; ?>.olo-og--masonry > div > div { width:auto !important; padding:0 !important; margin:0 !important; }
             .<?php echo $uid; ?>.olo-og--masonry > div > div.olo-og-tall { grid-row:span 2; }
             .<?php echo $uid; ?>.olo-og--masonry > div > div.olo-og-wide { grid-column:span 2; }
@@ -273,11 +274,12 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?>.olo-og--masonry > div > div > a { height:100%; display:block; }
             .<?php echo $uid; ?>.olo-og--masonry .mos-og-img { height:100% !important; }
             .<?php echo $uid; ?>.olo-og--masonry .olo-og-ph { height:100% !important; }
-            @media(max-width:640px){ .<?php echo $uid; ?>.olo-og--masonry > div { grid-template-columns:repeat(<?php echo $cols_mob; ?>,1fr) !important; grid-auto-rows:<?php echo $mrow_m; ?>px; } .<?php echo $uid; ?>.olo-og--masonry > div > div.olo-og-tall, .<?php echo $uid; ?>.olo-og--masonry > div > div.olo-og-wide { grid-row:auto; grid-column:auto; } }
+            @media(max-width:640px){ .<?php echo $uid; ?>.olo-og--masonry > div { grid-template-columns:repeat(<?php echo (int) $cols_mob; ?>,1fr) !important; grid-auto-rows:<?php echo (int) $mrow_m; ?>px; } .<?php echo $uid; ?>.olo-og--masonry > div > div.olo-og-tall, .<?php echo $uid; ?>.olo-og--masonry > div > div.olo-og-wide { grid-row:auto; grid-column:auto; } }
             <?php endif; ?>
         </style>
-        <div class="<?php echo $wrap_class; ?>">
-            <div class="uk-child-width-1-<?php echo $cols_mob; ?> uk-child-width-1-<?php echo $columns; ?>@m <?php echo $gap_class; ?>" <?php echo $grid_attr; ?>>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+        <div class="<?php echo $wrap_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- class list built above from esc_attr()'d preset id, fixed literals and internal wp_rand() uid. ?>">
+            <div class="uk-child-width-1-<?php echo (int) $cols_mob; ?> uk-child-width-1-<?php echo (int) $columns; ?>@m <?php echo $gap_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $gap_class built above from fixed literals + esc_attr(); $grid_attr is a fixed uk-grid literal. ?>" <?php echo $grid_attr; ?>>
                 <?php foreach ( $items as $item ) :
                     $has_link    = ! empty( $item['link'] );
                     $link_url    = $has_link ? esc_url( $item['link'] ) : '';
@@ -289,17 +291,17 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
                     $cell_cls = $masonry ? trim( ( ! empty( $item['tall'] ) ? 'olo-og-tall ' : '' ) . ( ! empty( $item['wide'] ) ? 'olo-og-wide' : '' ) ) : '';
                 ?>
                     <div<?php echo $cell_cls ? ' class="' . esc_attr( $cell_cls ) . '"' : ''; ?>>
-                        <<?php echo $wrapper_tag; ?> <?php echo $wrapper_attr; ?>>
+                        <<?php echo $wrapper_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $wrapper_tag is 'a'|'div' from the fixed ternary above; $wrapper_attr built above from esc_url()'d link + fixed class/style literals. ?> <?php echo $wrapper_attr; ?>>
                             <?php if ( ! empty( $item['image'] ) ) : ?>
                                 <?php
                                 $og_img = Olo_Tile_Utils::img_srcset( absint( $item['image_id'] ?? 0 ), $item['image'], $item['title'] ?? '', $img_class );
-                                echo $this->render_hover_wrap( $og_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' );
+                                echo $this->render_hover_wrap( $og_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <img> HTML from Olo_Tile_Utils::img_srcset() and hover wrapper from render_hover_wrap(), both escape internally (esc_url/esc_attr).
                                 ?>
                             <?php else : ?>
-                                <div class="olo-og-ph" style="height:<?php echo $height; ?>px;background:#1F2937;width:100%;"></div>
+                                <div class="olo-og-ph" style="height:<?php echo (int) $height; ?>px;background:#1F2937;width:100%;"></div>
                             <?php endif; ?>
                             <?php if ( ! empty( $item['ribbon'] ) ) : ?>
-                                <span class="mos-og-ribbon mos-og-ribbon--<?php echo $ribbon_position; ?>"><?php echo esc_html( $item['ribbon'] ); ?></span>
+                                <span class="mos-og-ribbon mos-og-ribbon--<?php echo $ribbon_position; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_attr()'d at assignment above. ?>"><?php echo esc_html( $item['ribbon'] ); ?></span>
                             <?php endif; ?>
                             <?php
                             list( $ogt_cls, $ogt_data ) = $this->tfx_attrs( $s, 'title', $item['title'] ?? '' );
@@ -310,23 +312,23 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
                             $item_t_style = $item_t_clr ? ' style="color:' . esc_attr( $item_t_clr ) . ' !important;"' : '';
                             $item_s_style = $item_s_clr ? ' style="color:' . esc_attr( $item_s_clr ) . ' !important;"' : '';
                             ?>
-                            <div class="uk-<?php echo esc_attr( $style ); ?> uk-position-<?php echo $position; ?> uk-panel<?php echo $text_class . $pad_class . $overlay_class; ?>">
-                                <<?php echo $title_tag; ?> class="uk-margin-remove<?php echo $ogt_cls; ?>"<?php echo $ogt_data; ?><?php echo $item_t_style; ?>><?php echo esc_html( $item['title'] ?? '' ); ?></<?php echo $title_tag; ?>>
+                            <div class="uk-<?php echo esc_attr( $style ); ?> uk-position-<?php echo $position; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $position esc_attr()'d at assignment; $text_class/$pad_class/$overlay_class are fixed UIkit class literals (esc_attr()'d parts). ?> uk-panel<?php echo $text_class . $pad_class . $overlay_class; ?>">
+                                <<?php echo $title_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $title_tag whitelisted via in_array() above; tfx_attrs() returns internally-built class/data fragments; $item_t_style built with esc_attr() above. ?> class="uk-margin-remove<?php echo $ogt_cls; ?>"<?php echo $ogt_data; ?><?php echo $item_t_style; ?>><?php echo esc_html( $item['title'] ?? '' ); ?></<?php echo $title_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- whitelisted via in_array() above. ?>>
                                 <?php if ( ! empty( $item['subtitle'] ) ) : ?>
-                                    <p class="uk-margin-small-top<?php echo $ogs_cls; ?>"<?php echo $ogs_data; ?><?php echo $item_s_style; ?>><?php echo esc_html( $item['subtitle'] ); ?></p>
+                                    <p class="uk-margin-small-top<?php echo $ogs_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() returns internally-built class/data fragments; $item_s_style built with esc_attr() above. ?>"<?php echo $ogs_data; ?><?php echo $item_s_style; ?>><?php echo esc_html( $item['subtitle'] ); ?></p>
                                 <?php endif; ?>
                                 <?php if ( $show_cta && ! empty( $cta_text ) ) : ?>
                                     <span class="<?php echo esc_attr( $cta_class ); ?>"><?php echo esc_html( $cta_text ); ?><?php if ( $cta_style === 'arrow' ) : ?> <span class="olo-og-cta__arrow" aria-hidden="true">&rarr;</span><?php endif; ?></span>
                                 <?php endif; ?>
                             </div>
-                        </<?php echo $wrapper_tag; ?>>
+                        </<?php echo $wrapper_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- 'a'|'div' from the fixed ternary above. ?>>
                     </div>
                 <?php endforeach; ?>
             </div>
         </div>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- text-effect CSS built by Olo_Text_Effects::css() from whitelisted/sanitized settings.
         $this->tfx_print_script();
 
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -334,8 +336,8 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- border CSS from base-class build_border_css() (intval'd widths, safe_color_css()'d colours), internal wp_rand() uid.
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- border CSS from base-class build_border_hover_css()/build_border_effect_css() helpers (intval'd values, safe_color_css()'d colours).
         }
         return ob_get_clean();
     }

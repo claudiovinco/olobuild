@@ -68,6 +68,7 @@ class Olo_Builder_Tile extends Olo_Tile_Base {
 
         ob_start();
         if ( $layout === 'split' ) : ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css() for every colour, fixed font-stack literals, internal wp_rand() uid). ?>
         <style>
             .<?php echo $uid; ?>{font-family:<?php echo $sans; ?>;}
             .<?php echo $uid; ?> .obds-eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:<?php echo $accent; ?>;display:block;margin-bottom:10px;}
@@ -93,6 +94,7 @@ class Olo_Builder_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .obds-step [data-bd-c]{min-width:18px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums;color:<?php echo $inm; ?>;}
             @media(max-width:680px){.<?php echo $uid; ?> .obds-grid{grid-template-columns:1fr;}}
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-builder <?php echo esc_attr( $uid ); ?>" data-builder data-cap="<?php echo esc_attr( $cap ); ?>" data-currency="<?php echo esc_attr( $cur ); ?>">
             <div class="obds-head">
                 <div>
@@ -123,6 +125,7 @@ class Olo_Builder_Tile extends Olo_Tile_Base {
             </div>
         </div>
         <?php else : ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css() for every colour, fixed font-stack/alignment literals, internal wp_rand() uid). ?>
         <style>
             .<?php echo $uid; ?>{ --bd-accent:<?php echo $accent; ?>; --bd-on:<?php echo $on; ?>; font-family:<?php echo $sans; ?>; <?php if ( $center ) echo 'text-align:center;'; ?> }
             .<?php echo $uid; ?> .obd-eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--bd-accent);display:block;margin-bottom:10px;}
@@ -148,6 +151,7 @@ class Olo_Builder_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .obd-cta{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14.5px;color:var(--bd-on);background:var(--bd-accent);padding:13px 26px;border-radius:999px;text-decoration:none;transition:transform .18s;}
             .<?php echo $uid; ?> .obd-cta:hover{transform:translateY(-1px);}
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-builder <?php echo esc_attr( $uid ); ?>" data-builder data-cap="<?php echo esc_attr( $cap ); ?>" data-currency="<?php echo esc_attr( $cur ); ?>">
             <?php if ( $s['eyebrow'] !== '' ) : ?><span class="obd-eyebrow"><?php echo esc_html( $s['eyebrow'] ); ?></span><?php endif; ?>
             <?php if ( $s['heading'] !== '' ) : ?><h2 class="obd-h"><?php echo esc_html( $s['heading'] ); ?></h2><?php endif; ?>
@@ -184,7 +188,7 @@ class Olo_Builder_Tile extends Olo_Tile_Base {
         <?php endif; ?>
         <script>
         (function(){
-            var root=document.querySelector('.<?php echo $uid; ?>[data-builder]'); if(!root){return;}
+            var root=document.querySelector('.<?php echo $uid; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- internal 'obd-' . wp_rand() identifier. ?>[data-builder]'); if(!root){return;}
             var cap=parseInt(root.getAttribute('data-cap'))||0;
             var cur=root.getAttribute('data-currency')||'';
             var fmt=new Intl.NumberFormat('en-US',{maximumFractionDigits:0});

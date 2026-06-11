@@ -112,7 +112,7 @@ class Olo_SectionHeader_Tile extends Olo_Tile_Base {
                 $headlines = is_array( $s['headline_lines'] ) ? $s['headline_lines'] : [];
                 if ( $headlines ) :
                 ?>
-                    <h2 class="olo-sechead__headline" style="font-family:<?php echo esc_attr( $hfam ); ?>;font-size:<?php echo $hsize; ?>px;line-height:<?php echo $hlh; ?>;font-weight:<?php echo esc_attr( $hweight ); ?>;letter-spacing:-0.02em;text-align:<?php echo esc_attr( $halign ); ?>;margin:0">
+                    <h2 class="olo-sechead__headline" style="font-family:<?php echo esc_attr( $hfam ); ?>;font-size:<?php echo (int) $hsize; ?>px;line-height:<?php echo (float) $hlh; ?>;font-weight:<?php echo esc_attr( $hweight ); ?>;letter-spacing:-0.02em;text-align:<?php echo esc_attr( $halign ); ?>;margin:0">
                         <?php $first = true; foreach ( $headlines as $idx => $line ) :
                             $ltext = $line['text'] ?? '';
                             if ( $ltext === '' ) continue;
@@ -121,7 +121,7 @@ class Olo_SectionHeader_Tile extends Olo_Tile_Base {
                             if ( $inline && ! $first ) echo ' ';
                             $first = false;
                         ?>
-                            <span style="display:<?php echo $inline ? 'inline' : 'block'; ?>;color:<?php echo esc_attr( $lcolor ); ?>;<?php echo $litalic; ?>" data-olo-editable="<?php echo 'headline_lines.' . intval( $idx ) . '.text'; ?>"><?php echo esc_html( $ltext ); ?></span>
+                            <span style="display:<?php echo $inline ? 'inline' : 'block'; ?>;color:<?php echo esc_attr( $lcolor ); ?>;<?php echo esc_attr( $litalic ); ?>" data-olo-editable="<?php echo 'headline_lines.' . intval( $idx ) . '.text'; ?>"><?php echo esc_html( $ltext ); ?></span>
                         <?php endforeach; ?>
                     </h2>
                 <?php endif; ?>
@@ -134,7 +134,7 @@ class Olo_SectionHeader_Tile extends Olo_Tile_Base {
                     $sub_mx     = ( $layout === 'center' ) ? 'margin-left:auto;margin-right:auto;' : '';
                     $sub_mt     = max( 8, min( 80, $gap ) );
                 ?>
-                    <p class="olo-sechead__sub" style="font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo $sub_size; ?>px;line-height:1.6;color:<?php echo esc_attr( $sub_clr ); ?>;<?php echo $sub_italic; ?>max-width:62ch;<?php echo $sub_mx; ?>margin-top:<?php echo $sub_mt; ?>px;text-align:<?php echo esc_attr( $sub_align ); ?>" data-olo-editable="tagline_text"><?php echo esc_html( $s['tagline_text'] ); ?></p>
+                    <p class="olo-sechead__sub" style="font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo (int) $sub_size; ?>px;line-height:1.6;color:<?php echo esc_attr( $sub_clr ); ?>;<?php echo esc_attr( $sub_italic ); ?>max-width:62ch;<?php echo esc_attr( $sub_mx ); ?>margin-top:<?php echo (int) $sub_mt; ?>px;text-align:<?php echo esc_attr( $sub_align ); ?>" data-olo-editable="tagline_text"><?php echo esc_html( $s['tagline_text'] ); ?></p>
                 <?php endif; ?>
             </div>
 
@@ -147,10 +147,10 @@ class Olo_SectionHeader_Tile extends Olo_Tile_Base {
             ?>
                 <div class="olo-sechead__right" style="text-align:right">
                     <?php if ( ! empty( $s['tagline_text'] ) ) : ?>
-                        <div class="olo-sechead__tag" style="font-family:<?php echo esc_attr( $hfam ); ?>;font-size:<?php echo $tag_size; ?>px;color:<?php echo esc_attr( $tag_clr ); ?>;<?php echo $tag_italic; ?>line-height:1.3;margin-bottom:10px" data-olo-editable="tagline_text"><?php echo esc_html( $s['tagline_text'] ); ?></div>
+                        <div class="olo-sechead__tag" style="font-family:<?php echo esc_attr( $hfam ); ?>;font-size:<?php echo (int) $tag_size; ?>px;color:<?php echo esc_attr( $tag_clr ); ?>;<?php echo esc_attr( $tag_italic ); ?>line-height:1.3;margin-bottom:10px" data-olo-editable="tagline_text"><?php echo esc_html( $s['tagline_text'] ); ?></div>
                     <?php endif; ?>
                     <?php if ( ! empty( $s['tagline_caption'] ) ) : ?>
-                        <div class="olo-sechead__cap" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo $cap_size; ?>px;letter-spacing:0.1em;text-transform:uppercase;color:<?php echo esc_attr( $cap_clr ); ?>" data-olo-editable="tagline_caption"><?php echo esc_html( $s['tagline_caption'] ); ?></div>
+                        <div class="olo-sechead__cap" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $cap_size; ?>px;letter-spacing:0.1em;text-transform:uppercase;color:<?php echo esc_attr( $cap_clr ); ?>" data-olo-editable="tagline_caption"><?php echo esc_html( $s['tagline_caption'] ); ?></div>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>

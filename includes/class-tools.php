@@ -80,11 +80,11 @@ class Olo_Tools {
         <main class="olo-cockpit-main olo-cockpit-legacy olo-tools-page">
 
             <?php
-            echo Olo_Builder::cockpit_page_head( [
+            echo Olo_Builder::cockpit_page_head( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally.
                 'title' => __( 'Strumenti', 'olobuild' ),
                 'sub'   => __( 'Cache, manutenzione, sostituzione URL e rollback. Utilizzare con cura.', 'olobuild' ),
             ] );
-            echo Olo_Builder::cockpit_subnav( $subnav_items, $tab );
+            echo Olo_Builder::cockpit_subnav( $subnav_items, $tab ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_subnav(), which escapes via esc_url()/esc_html() internally.
             ?>
 
             <div id="olo-tools-msg" style="margin-top:16px"></div>
@@ -113,7 +113,7 @@ class Olo_Tools {
         <?php Olo_Builder::cockpit_shell_close(); ?>
 
         <script>
-        var oloToolsNonce = '<?php echo wp_create_nonce( 'olo_tools_nonce' ); ?>';
+        var oloToolsNonce = '<?php echo esc_js( wp_create_nonce( 'olo_tools_nonce' ) ); ?>';
 
         function oloToolsMsg( text, type ) {
             var el = document.getElementById('olo-tools-msg');
@@ -738,8 +738,8 @@ class Olo_Tools {
 
         <script>
         (function() {
-            var restUrl = '<?php echo $rest_url; ?>';
-            var restNonce = '<?php echo $nonce; ?>';
+            var restUrl = '<?php echo $rest_url; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $rest_url is esc_url()'d above ?>';
+            var restNonce = '<?php echo esc_js( $nonce ); ?>';
 
             // Export
             document.getElementById('olo-tw-export-btn').addEventListener('click', function() {
@@ -1044,12 +1044,12 @@ class Olo_Tools {
             $template = $db->get_template( $template_id );
 
             if ( $template ) {
-                echo '<!DOCTYPE html><html ' . get_language_attributes() . '><head>';
+                echo '<!DOCTYPE html><html ' . get_language_attributes() . '><head>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- core get_language_attributes() returns pre-escaped attributes
                 echo '<meta charset="' . esc_attr( get_bloginfo( 'charset' ) ) . '">';
                 echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
                 wp_head();
                 echo '</head><body class="olo-maintenance-page">';
-                echo do_shortcode( '[olo_template id="' . intval( $template_id ) . '"]' );
+                echo do_shortcode( '[olo_template id="' . intval( $template_id ) . '"]' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- [olo_template] shortcode output (Olo_Frontend_Renderer); each tile escapes its own output at build time
                 wp_footer();
                 echo '</body></html>';
                 exit;

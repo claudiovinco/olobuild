@@ -51,6 +51,7 @@ class Olo_Hotspots_Tile extends Olo_Tile_Base {
         if ( empty( $items ) ) return '';
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist, $ar via in_array() whitelist, font stacks and the $center branch are fixed literals; $uid is internally generated.
         ?>
         <style>
             .<?php echo $uid; ?>{ font-family:<?php echo $sans; ?>; <?php if ( $center ) echo 'text-align:center;'; ?> }
@@ -70,6 +71,7 @@ class Olo_Hotspots_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .osp-tip__t{font-family:<?php echo $serif; ?>;font-size:16px;margin:4px 0 0;color:var(--olo-color-text,#111827);}
             .<?php echo $uid; ?> .osp-tip__x{font-size:13px;line-height:1.5;opacity:.75;margin:6px 0 0;}
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-hotspots <?php echo esc_attr( $uid ); ?>" data-hotspots>
             <?php if ( $s['eyebrow'] !== '' ) : ?><span class="osp-eyebrow"><?php echo esc_html( $s['eyebrow'] ); ?></span><?php endif; ?>
             <?php if ( $s['heading'] !== '' ) : ?><h2 class="osp-h"><?php echo esc_html( $s['heading'] ); ?></h2><?php endif; ?>
@@ -92,7 +94,7 @@ class Olo_Hotspots_Tile extends Olo_Tile_Base {
         </div>
         <script>
         (function(){
-            var root=document.querySelector('.<?php echo $uid; ?>[data-hotspots]'); if(!root){return;}
+            var root=document.querySelector('.<?php echo esc_js( $uid ); ?>[data-hotspots]'); if(!root){return;}
             var marks=[].slice.call(root.querySelectorAll('[data-hs]'));
             function close(){ marks.forEach(function(m){ m.classList.remove('on'); }); }
             marks.forEach(function(m){

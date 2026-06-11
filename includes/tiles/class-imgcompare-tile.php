@@ -85,6 +85,7 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, intval()/max()/min()/round() clamps for every size and percentage, in_array() whitelists for orientation/object-fit, Olo_Tile_Utils radius/shadow helpers, fixed ternary literals and the internally generated $uid. ?>
         <style>
             .<?php echo $uid; ?> {
                 position: relative;
@@ -240,17 +241,18 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-ic <?php echo esc_attr( $uid ); ?> olo-ic-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" data-orientation="<?php echo esc_attr( $orientation ); ?>">
             <div class="olo-ic-after">
                 <?php if ( $after_url ) : ?>
-                    <img src="<?php echo $after_url; ?>" alt="<?php echo esc_attr( $after_lbl ); ?>" draggable="false" loading="lazy" />
+                    <img src="<?php echo $after_url; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_url() at assignment above ?>" alt="<?php echo esc_attr( $after_lbl ); ?>" draggable="false" loading="lazy" />
                 <?php else : ?>
                     <div style="width:100%;height:100%;background:var(--olo-color-text, #374151);display:flex;align-items:center;justify-content:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">Dopo</div>
                 <?php endif; ?>
             </div>
             <div class="olo-ic-before">
                 <?php if ( $before_url ) : ?>
-                    <img src="<?php echo $before_url; ?>" alt="<?php echo esc_attr( $before_lbl ); ?>" draggable="false" loading="lazy" />
+                    <img src="<?php echo $before_url; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_url() at assignment above ?>" alt="<?php echo esc_attr( $before_lbl ); ?>" draggable="false" loading="lazy" />
                 <?php else : ?>
                     <div style="width:100%;height:100%;background:#1F2937;display:flex;align-items:center;justify-content:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">Prima</div>
                 <?php endif; ?>
@@ -264,13 +266,14 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
             </div>
             <?php if ( $show_labels && $before_lbl ) : ?>
-                <span class="olo-ic-label olo-ic-label-before"><?php echo $before_lbl; ?></span>
+                <span class="olo-ic-label olo-ic-label-before"><?php echo $before_lbl; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() at assignment above ?></span>
             <?php endif; ?>
             <?php if ( $show_labels && $after_lbl ) : ?>
-                <span class="olo-ic-label olo-ic-label-after"><?php echo $after_lbl; ?></span>
+                <span class="olo-ic-label olo-ic-label-after"><?php echo $after_lbl; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() at assignment above ?></span>
             <?php endif; ?>
-            <input type="range" min="0" max="100" value="<?php echo $start; ?>" class="olo-ic-range" aria-label="<?php echo esc_attr( olo_t( 'Confronto immagini' ) ); ?>" />
+            <input type="range" min="0" max="100" value="<?php echo (int) $start; ?>" class="olo-ic-range" aria-label="<?php echo esc_attr( olo_t( 'Confronto immagini' ) ); ?>" />
         </div>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JS below only interpolates the internally generated $uid and intval()/max()/min()-clamped integers. ?>
         <script>
         (function(){
             document.querySelectorAll('.<?php echo $uid; ?>').forEach(function(el){
@@ -405,6 +408,7 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
             });
         })();
         </script>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -412,8 +416,8 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() (integer-forced widths) for the internally generated uid
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by the Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() shared helpers
         }
         return ob_get_clean();
     }

@@ -224,6 +224,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
         $is_vertical   = ( $nav_position === 'side-left' || $nav_position === 'side-right' );
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css(), intval()/floatval()/max() numerics, preg_match()/in_array() whitelists, build_border_radius_css()/spacing_css()/build_wow_effects_css() helpers) and the internally generated $uid.
         ?>
         <style>
             /* ═══ SwitcherPanel V3.24.0 — preset: <?php echo esc_html( $preset_id ); ?> ═══ */
@@ -255,7 +256,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-sp-hero {
                 position: relative;
                 overflow: hidden;
-                height: <?php echo $hero_height; ?>px;
+                height: <?php echo (int) $hero_height; ?>px;
                 <?php if ( $hero_rad_css ) : ?>border-radius: <?php echo $hero_rad_css; ?>;<?php endif; ?>
                 background: #e5e7eb;
             }
@@ -304,38 +305,38 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
 
             .<?php echo $uid; ?> .olo-sp-nav {
                 margin: 0;
-                padding: <?php echo $nav_cont_pad; ?>px;
+                padding: <?php echo (int) $nav_cont_pad; ?>px;
                 list-style: none;
                 display: flex;
-                gap: <?php echo $nav_gap; ?>px;
+                gap: <?php echo (int) $nav_gap; ?>px;
                 <?php if ( $is_vertical ) : ?>flex-direction: column;<?php endif; ?>
                 <?php if ( $nav_cont_bg ) : ?>background: <?php echo $nav_cont_bg; ?>;<?php endif; ?>
                 <?php if ( $nav_cont_rad_css ) : ?>border-radius: <?php echo $nav_cont_rad_css; ?>;<?php endif; ?>
                 <?php echo $shadow_css; ?>
             }
-            .<?php echo $uid; ?> .olo-sp-nav > li { margin: 0; padding: 0; <?php if ( $ind_underline && ! $is_vertical ) : ?>margin-bottom: -<?php echo $ind_thickness; ?>px;<?php endif; ?> }
+            .<?php echo $uid; ?> .olo-sp-nav > li { margin: 0; padding: 0; <?php if ( $ind_underline && ! $is_vertical ) : ?>margin-bottom: -<?php echo (int) $ind_thickness; ?>px;<?php endif; ?> }
 
             .<?php echo $uid; ?> .olo-sp-nav__btn {
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                padding: <?php echo $nav_pad_y; ?>px <?php echo $nav_pad_x; ?>px;
-                font-size: <?php echo $nav_fs; ?>px;
+                padding: <?php echo (int) $nav_pad_y; ?>px <?php echo (int) $nav_pad_x; ?>px;
+                font-size: <?php echo (int) $nav_fs; ?>px;
                 font-weight: <?php echo $nav_fw; ?>;
                 <?php if ( $nav_uppercase ) : ?>text-transform: uppercase;<?php endif; ?>
-                letter-spacing: <?php echo $nav_ls; ?>em;
+                letter-spacing: <?php echo (float) $nav_ls; ?>em;
                 color: <?php echo $nav_inactive; ?>;
                 text-decoration: none;
                 cursor: pointer;
                 background: transparent;
                 border: 0;
                 border-radius: <?php echo $nav_rad_css; ?>;
-                transition: all <?php echo $duration; ?>ms ease;
+                transition: all <?php echo (int) $duration; ?>ms ease;
                 white-space: nowrap;
                 <?php if ( $is_vertical ) : ?>justify-content: flex-start; width: 100%;<?php endif; ?>
-                <?php if ( $ind_underline && ! $is_vertical ) : ?>border-bottom: <?php echo $ind_thickness; ?>px solid transparent; border-radius: 0; padding-bottom: <?php echo max( 0, $nav_pad_y - $ind_thickness ); ?>px;<?php endif; ?>
-                <?php if ( $ind_overline && ! $is_vertical ) : ?>border-top: <?php echo $ind_thickness; ?>px solid transparent; border-radius: 0; padding-top: <?php echo max( 0, $nav_pad_y - $ind_thickness ); ?>px;<?php endif; ?>
-                <?php if ( $ind_leftbar && $is_vertical ) : ?>border-left: <?php echo $ind_thickness; ?>px solid transparent; padding-left: <?php echo max( 0, $nav_pad_x - $ind_thickness ); ?>px; border-radius: 0 6px 6px 0;<?php endif; ?>
+                <?php if ( $ind_underline && ! $is_vertical ) : ?>border-bottom: <?php echo (int) $ind_thickness; ?>px solid transparent; border-radius: 0; padding-bottom: <?php echo max( 0, $nav_pad_y - $ind_thickness ); ?>px;<?php endif; ?>
+                <?php if ( $ind_overline && ! $is_vertical ) : ?>border-top: <?php echo (int) $ind_thickness; ?>px solid transparent; border-radius: 0; padding-top: <?php echo max( 0, $nav_pad_y - $ind_thickness ); ?>px;<?php endif; ?>
+                <?php if ( $ind_leftbar && $is_vertical ) : ?>border-left: <?php echo (int) $ind_thickness; ?>px solid transparent; padding-left: <?php echo max( 0, $nav_pad_x - $ind_thickness ); ?>px; border-radius: 0 6px 6px 0;<?php endif; ?>
             }
             <?php if ( $nav_hover_bg && $nav_hover_bg !== 'transparent' ) : ?>
             .<?php echo $uid; ?> .olo-sp-nav__btn:not(.is-active):hover {
@@ -364,7 +365,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-sp-panel {
                 display: flex;
-                gap: <?php echo $panel_gap; ?>px;
+                gap: <?php echo (int) $panel_gap; ?>px;
                 padding: <?php echo $padding; ?>;
                 background: <?php echo $panel_bg; ?>;
                 color: <?php echo $panel_text_clr; ?>;
@@ -384,21 +385,21 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
                 justify-content: center;
             }
             .<?php echo $uid; ?> .olo-sp-panel__title {
-                font-size: <?php echo $panel_title_size; ?>px;
+                font-size: <?php echo (int) $panel_title_size; ?>px;
                 font-weight: <?php echo $panel_title_weight; ?>;
                 line-height: 1.2;
                 color: <?php echo $panel_title_clr; ?>;
                 margin: 0 0 12px;
             }
             .<?php echo $uid; ?> .olo-sp-panel__text {
-                font-size: <?php echo $panel_text_size; ?>px;
+                font-size: <?php echo (int) $panel_text_size; ?>px;
                 line-height: 1.65;
                 margin: 0 0 20px;
                 color: <?php echo $panel_text_clr; ?>;
             }
             .<?php echo $uid; ?> .olo-sp-panel__media {
-                flex: 0 0 <?php echo $panel_img_w; ?>%;
-                max-width: <?php echo $panel_img_w; ?>%;
+                flex: 0 0 <?php echo (int) $panel_img_w; ?>%;
+                max-width: <?php echo (int) $panel_img_w; ?>%;
                 <?php if ( $panel_img_rad_css ) : ?>border-radius: <?php echo $panel_img_rad_css; ?>; overflow: hidden;<?php endif; ?>
             }
             @media (max-width: 767px) {
@@ -426,7 +427,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
                 color: <?php echo $panel_title_clr; ?>;
                 background: transparent;
                 text-decoration: none;
-                transition: all <?php echo $duration; ?>ms ease;
+                transition: all <?php echo (int) $duration; ?>ms ease;
                 width: fit-content;
                 cursor: pointer;
             }
@@ -447,10 +448,11 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
             // v1.0.73 — refactor profondo: get_preset_extra_css svuotato, ora i preset audaci
             // settano i field standard tramite TILE_PRESETS.switcherpanel + helper wow_*.
             echo $this->build_wow_effects_css( $s, '.' . $uid, '.olo-switcherpanel-title' );
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
             ?>
         </style>
 
-        <div class="<?php echo esc_attr( $wrap_class ); ?> <?php echo $uid; ?>">
+        <div class="<?php echo esc_attr( $wrap_class ); ?> <?php echo esc_attr( $uid ); ?>">
             <?php if ( $nav_position === 'overlay' ) : ?>
                 <div class="olo-sp-hero">
                     <?php if ( ! empty( $hero_image ) ) : ?>
@@ -510,10 +512,10 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
                             $widget_html = $this->render_widget_template( $item['widget_template_id'] ?? 0 );
                             ?>
                             <?php if ( $widget_html ) : ?>
-                                <div class="olo-item-widget"><?php echo $widget_html; ?></div>
+                                <div class="olo-item-widget"><?php echo $widget_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML produced by render_widget_template() (internal template renderer, escapes its own output) ?></div>
                             <?php endif; ?>
-                            <<?php echo $title_tag; ?> class="olo-sp-panel__title<?php echo $spt_cls; ?>"<?php echo $spt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></<?php echo $title_tag; ?>>
-                            <div class="olo-sp-panel__text<?php echo $spx_cls; ?>"<?php echo $spx_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $item['text'] ) ) ); ?></div>
+                            <<?php echo $title_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $title_tag whitelisted via in_array() above; tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr) ?> class="olo-sp-panel__title<?php echo $spt_cls; ?>"<?php echo $spt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></<?php echo $title_tag; ?>>
+                            <div class="olo-sp-panel__text<?php echo $spx_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr) ?>"<?php echo $spx_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $item['text'] ) ) ); ?></div>
                             <?php if ( ! empty( $item['button_text'] ) ) : ?>
                                 <a href="<?php echo esc_url( $item['button_url'] ); ?>" class="<?php echo esc_attr( $btn_class ); ?>">
                                     <?php echo esc_html( $item['button_text'] ); ?>
@@ -527,7 +529,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
                         <div class="olo-sp-panel__media">
                             <?php
                             $sp_img = '<img src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( wp_strip_all_tags( $item['title'] ) ) . '" class="olo-sp-panel__img" loading="lazy">';
-                            echo $this->render_hover_wrap( $sp_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' );
+                            echo $this->render_hover_wrap( $sp_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $sp_img built with esc_url()/esc_attr() above; render_hover_wrap() escapes hover media URLs internally
                             ?>
                         </div>
                         <?php endif; ?>
@@ -550,7 +552,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
         </div>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
 
         // Border system (wrapper)
@@ -559,8 +561,8 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

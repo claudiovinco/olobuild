@@ -147,7 +147,7 @@ class Olo_Maintenance_Mode {
 </head>
 <body <?php body_class( 'olo-maintenance-page' ); ?>>
     <?php
-    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- template HTML rendered by Olo_Frontend_Renderer::render_shortcode(); each tile escapes its own output at build time
     echo $inner_html;
     ?>
     <?php wp_footer(); ?>
@@ -258,7 +258,7 @@ class Olo_Maintenance_Mode {
 <body>
     <div class="olo-maint-container">
         <?php if ( $logo_url ) : ?>
-            <img class="olo-maint-logo" src="<?php echo $logo_url; ?>" alt="<?php echo $site_name; ?>" />
+            <img class="olo-maint-logo" src="<?php echo $logo_url; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $logo_url esc_url()'d and $site_name esc_html()'d at assignment above ?>" alt="<?php echo $site_name; ?>" />
         <?php else : ?>
             <svg class="olo-maint-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <?php if ( $mode === 'coming_soon' ) : ?>

@@ -340,11 +340,11 @@ class Olo_Seo_Redirects {
         <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Redirect & 404', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy">
             <?php
-            echo Olo_Builder::cockpit_page_head( [
+            echo Olo_Builder::cockpit_page_head( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally; counts are int-cast.
                 'title' => __( 'Redirect & 404', 'olobuild' ),
                 'sub'   => $sub_text,
             ] );
-            echo Olo_Builder::cockpit_subnav( $subnav, $active_tab );
+            echo Olo_Builder::cockpit_subnav( $subnav, $active_tab ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_subnav(), which escapes via esc_url()/esc_html() internally.
             ?>
 
             <div style="margin-top:16px">
@@ -428,7 +428,7 @@ class Olo_Seo_Redirects {
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/><polyline points="9 21 3 21 3 15"/></svg>
                 </div>
                 <div>
-                    <h3>Redirect attivi (<?php echo count( $redirects ); ?>)</h3>
+                    <h3>Redirect attivi (<?php echo (int) count( $redirects ); ?>)</h3>
                     <p>Tutti i redirect configurati, ordinati per data di creazione</p>
                 </div>
             </div>
@@ -462,7 +462,7 @@ class Olo_Seo_Redirects {
                                 <tr id="olo-redir-row-<?php echo intval( $r->id ); ?>">
                                     <td><code class="olo-seo-url-code"><?php echo esc_html( $r->from_url ); ?></code></td>
                                     <td><code class="olo-seo-url-code"><?php echo esc_html( $r->to_url ); ?></code></td>
-                                    <td><span class="olo-badge <?php echo $badge_class; ?>"><?php echo $type_val; ?></span></td>
+                                    <td><span class="olo-badge <?php echo esc_attr( $badge_class ); ?>"><?php echo (int) $type_val; ?></span></td>
                                     <td><?php echo intval( $r->hits ); ?></td>
                                     <td class="olo-seo-date"><?php echo esc_html( wp_date( 'd/m/Y', strtotime( $r->created_at ) ) ); ?></td>
                                     <td><button type="button" class="olo-btn-danger olo-btn-sm" onclick="oloDeleteRedirect(<?php echo intval( $r->id ); ?>)">Elimina</button></td>
@@ -484,7 +484,7 @@ class Olo_Seo_Redirects {
 
             var fd = new FormData();
             fd.append('action', 'olo_seo_save_redirect');
-            fd.append('_wpnonce', '<?php echo wp_create_nonce( 'olo_seo_redirect' ); ?>');
+            fd.append('_wpnonce', '<?php echo esc_js( wp_create_nonce( 'olo_seo_redirect' ) ); ?>');
             fd.append('from_url', from);
             fd.append('to_url', to);
             fd.append('type', type);
@@ -501,7 +501,7 @@ class Olo_Seo_Redirects {
             if (!confirm('Eliminare questo redirect?')) return;
             var fd = new FormData();
             fd.append('action', 'olo_seo_delete_redirect');
-            fd.append('_wpnonce', '<?php echo wp_create_nonce( 'olo_seo_redirect' ); ?>');
+            fd.append('_wpnonce', '<?php echo esc_js( wp_create_nonce( 'olo_seo_redirect' ) ); ?>');
             fd.append('id', id);
 
             fetch(ajaxurl, { method: 'POST', body: fd })
@@ -564,7 +564,7 @@ class Olo_Seo_Redirects {
                             ?>
                                 <tr id="olo-404-row-<?php echo intval( $e->id ); ?>">
                                     <td><code class="olo-seo-url-code"><?php echo esc_html( $e->url ); ?></code></td>
-                                    <td><span class="olo-badge <?php echo $hit_badge; ?>"><?php echo $hits; ?></span></td>
+                                    <td><span class="olo-badge <?php echo esc_attr( $hit_badge ); ?>"><?php echo (int) $hits; ?></span></td>
                                     <td class="olo-seo-date"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $e->last_hit ) ) ); ?></td>
                                     <td class="olo-seo-referrer" title="<?php echo esc_attr( $e->referer ); ?>"><?php echo esc_html( $e->referer ?: '—' ); ?></td>
                                     <td class="olo-seo-actions-cell">
@@ -621,7 +621,7 @@ class Olo_Seo_Redirects {
 
             var fd = new FormData();
             fd.append('action', 'olo_seo_404_to_redirect');
-            fd.append('_wpnonce', '<?php echo wp_create_nonce( 'olo_seo_redirect' ); ?>');
+            fd.append('_wpnonce', '<?php echo esc_js( wp_create_nonce( 'olo_seo_redirect' ) ); ?>');
             fd.append('id', id);
             fd.append('to_url', to);
 
@@ -640,7 +640,7 @@ class Olo_Seo_Redirects {
         function oloDelete404(id) {
             var fd = new FormData();
             fd.append('action', 'olo_seo_delete_404');
-            fd.append('_wpnonce', '<?php echo wp_create_nonce( 'olo_seo_redirect' ); ?>');
+            fd.append('_wpnonce', '<?php echo esc_js( wp_create_nonce( 'olo_seo_redirect' ) ); ?>');
             fd.append('id', id);
 
             fetch(ajaxurl, { method: 'POST', body: fd })
@@ -656,7 +656,7 @@ class Olo_Seo_Redirects {
             if (!confirm('Svuotare tutto il log 404?')) return;
             var fd = new FormData();
             fd.append('action', 'olo_seo_clear_404_log');
-            fd.append('_wpnonce', '<?php echo wp_create_nonce( 'olo_seo_redirect' ); ?>');
+            fd.append('_wpnonce', '<?php echo esc_js( wp_create_nonce( 'olo_seo_redirect' ) ); ?>');
 
             fetch(ajaxurl, { method: 'POST', body: fd })
                 .then(function(r){ return r.json(); })

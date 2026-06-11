@@ -191,7 +191,7 @@ class Olo_Location_Single {
                         $lang_names[] = $lang_labels[ $l ];
                     }
                 }
-                echo implode( ' &middot; ', $lang_names );
+                echo implode( ' &middot; ', $lang_names ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- values come exclusively from the hardcoded $lang_labels map above
                 ?>
             </div>
             <?php endif; ?>

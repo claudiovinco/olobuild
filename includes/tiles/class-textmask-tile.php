@@ -86,11 +86,11 @@ class Olo_Textmask_Tile extends Olo_Tile_Base {
             $py = intval( $s['padding_y'] ?? 0 );
             $px = intval( $s['padding_x'] ?? 0 );
         }
-        $bg_color   = $s['bg_color'] ?: '#000000';
+        $bg_color   = $this->safe_color_css( $s['bg_color'] ) ?: '#000000';
         $va         = $s['vertical_align'] ?: 'center';
         $mode       = $s['mask_mode'] ?: 'text_reveals_video';
         $blend      = esc_attr( $s['blend_mode'] ) ?: 'normal';
-        $text_fill  = $s['text_fill'] ?: '#ffffff';
+        $text_fill  = $this->safe_color_css( $s['text_fill'] ) ?: '#ffffff';
         $vid_url    = esc_url( $s['video_url'] );
         $vid_poster = $s['video_poster'] ? esc_url( $s['video_poster'] ) : '';
         $vid_opacity = intval( $s['video_opacity'] ) ?: 100;
@@ -106,7 +106,7 @@ class Olo_Textmask_Tile extends Olo_Tile_Base {
         $do_blur     = ! empty( $s['scroll_blur'] );
         $bl_from     = intval( $s['scroll_blur_from'] );
         $bl_to       = intval( $s['scroll_blur_to'] );
-        $ov_color   = $s['overlay_color'] ?: '';
+        $ov_color   = $this->safe_color_css( $s['overlay_color'] );
         $ov_opacity = intval( $s['overlay_opacity'] );
 
         // Vertical align mapping
@@ -162,14 +162,14 @@ class Olo_Textmask_Tile extends Olo_Tile_Base {
         }
 
         ob_start();
-        echo '<style>' . $css . '</style>';
+        echo '<style>' . $css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- scoped CSS built above from intval()/floatval() numerics, esc_attr()'d typography values, safe_color_css() whitelisted colors, fixed literal maps and the internally generated $uid
         ?>
         <div id="<?php echo esc_attr( $uid ); ?>">
             <?php if ( $vid_url ) : ?>
-            <video class="olo-tm-vid"<?php echo $vid_poster ? ' poster="' . $vid_poster . '"' : ''; ?> muted autoplay loop playsinline><?php
+            <video class="olo-tm-vid"<?php echo $vid_poster ? ' poster="' . $vid_poster . '"' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute built with esc_url()'d poster above, or empty string ?> muted autoplay loop playsinline><?php
                 $ext = pathinfo( wp_parse_url( $vid_url, PHP_URL_PATH ) ?: '', PATHINFO_EXTENSION );
                 $mime = $ext === 'webm' ? 'video/webm' : 'video/mp4';
-                ?><source src="<?php echo $vid_url; ?>" type="<?php echo $mime; ?>"></video>
+                ?><source src="<?php echo $vid_url; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url()'d above ?>" type="<?php echo esc_attr( $mime ); ?>"></video>
             <?php endif; ?>
 
             <?php if ( $ov_color && $ov_opacity > 0 ) : ?>
@@ -178,7 +178,7 @@ class Olo_Textmask_Tile extends Olo_Tile_Base {
 
             <?php list( $tm_cls, $tm_data ) = $this->tfx_attrs( $s, 'text', wp_strip_all_tags( $s['text'] ?? '' ) ); ?>
             <div class="olo-tm-mask">
-                <div class="olo-tm-text<?php echo $tm_cls; ?>"<?php echo $tm_data; ?>><?php echo $text; ?></div>
+                <div class="olo-tm-text<?php echo $tm_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally; text esc_html()'d above (nl2br only adds <br /> tags) ?>"<?php echo $tm_data; ?>><?php echo $text; ?></div>
             </div>
         </div>
         <?php
@@ -194,21 +194,21 @@ class Olo_Textmask_Tile extends Olo_Tile_Base {
             var txt = el.querySelector('.olo-tm-text');
             if(!txt) return;
 
-            var rangeStart = <?php echo $scroll_start; ?> / 100;
-            var rangeEnd   = <?php echo $scroll_end; ?> / 100;
+            var rangeStart = <?php echo (int) $scroll_start; ?> / 100;
+            var rangeEnd   = <?php echo (int) $scroll_end; ?> / 100;
             if(rangeEnd <= rangeStart){ rangeEnd = rangeStart + 0.01; }
 
             var doScale   = <?php echo $do_scale ? 'true' : 'false'; ?>;
-            var sFrom     = <?php echo $sc_from; ?> / 100;
-            var sTo       = <?php echo $sc_to; ?> / 100;
+            var sFrom     = <?php echo (int) $sc_from; ?> / 100;
+            var sTo       = <?php echo (int) $sc_to; ?> / 100;
 
             var doOpacity = <?php echo $do_opacity ? 'true' : 'false'; ?>;
-            var oFrom     = <?php echo $op_from; ?> / 100;
-            var oTo       = <?php echo $op_to; ?> / 100;
+            var oFrom     = <?php echo (int) $op_from; ?> / 100;
+            var oTo       = <?php echo (int) $op_to; ?> / 100;
 
             var doBlur    = <?php echo $do_blur ? 'true' : 'false'; ?>;
-            var bFrom     = <?php echo $bl_from; ?>;
-            var bTo       = <?php echo $bl_to; ?>;
+            var bFrom     = <?php echo (int) $bl_from; ?>;
+            var bTo       = <?php echo (int) $bl_to; ?>;
 
             function lerp(a,b,t){ return a + (b - a) * t; }
             function clamp(v){ if(v < 0) return 0; if(v > 1) return 1; return v; }
@@ -254,7 +254,7 @@ class Olo_Textmask_Tile extends Olo_Tile_Base {
         endif;
 
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -262,8 +262,8 @@ class Olo_Textmask_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

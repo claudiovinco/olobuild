@@ -223,6 +223,7 @@ class Olo_Presencegrid_Tile extends Olo_Tile_Base {
         $pcount  = count( $palette );
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, intval()/max()/min() clamps for numbers, in_array() whitelists for enums, fixed maps, build_border_radius_css() and the internally generated $uid.
         ?>
         <style>
             .<?php echo $uid; ?> {
@@ -359,6 +360,7 @@ class Olo_Presencegrid_Tile extends Olo_Tile_Base {
                 .<?php echo $uid; ?> .olo-pg-card { transition: none; }
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <div class="olo-pg <?php echo esc_attr( $uid ); ?>"
              data-source="<?php echo esc_attr( $source ); ?>"
@@ -373,8 +375,8 @@ class Olo_Presencegrid_Tile extends Olo_Tile_Base {
             ?>
             <div class="olo-pg-ticker" aria-hidden="true">
                 <div class="olo-pg-ticker-track">
-                    <span class="olo-pg-ticker-seg"><?php echo $ticker_html; ?></span>
-                    <span class="olo-pg-ticker-seg"><?php echo $ticker_html; ?></span>
+                    <span class="olo-pg-ticker-seg"><?php echo $ticker_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></span>
+                    <span class="olo-pg-ticker-seg"><?php echo $ticker_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></span>
                 </div>
             </div>
             <?php endif; ?>
@@ -556,8 +558,8 @@ class Olo_Presencegrid_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid} .olo-pg-card", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) { echo ".{$uid} .olo-pg-card{{$border_css}}"; }
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) { echo ".{$uid} .olo-pg-card{{$border_css}}"; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized border settings
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized border settings
         }
 
         return ob_get_clean();

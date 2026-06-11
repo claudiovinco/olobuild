@@ -173,6 +173,7 @@ class Olo_Newsticker_Tile extends Olo_Tile_Base {
         $is_marquee      = ( $animation === 'marquee' );
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, intval()/absint()/floatval() with min/max clamps for numerics, in_array() whitelists and fixed-literal ternaries for enums, and the internally generated $uid.
         ?>
         <style>
             .<?php echo $uid; ?> {
@@ -479,12 +480,13 @@ class Olo_Newsticker_Tile extends Olo_Tile_Base {
                 transform: scale(1.4);
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <div class="olo-newsticker <?php echo esc_attr( $uid ); ?>" id="<?php echo esc_attr( $uid ); ?>" data-animation="<?php echo esc_attr( $animation ); ?>">
             <?php if ( $show_label ) : ?>
                 <div class="olo-nt-label">
-                    <?php if ( $label_icon ) : ?><span class="olo-nt-label-icon"><?php echo $this->render_icon( $label_icon, 0.85 ); ?></span><?php endif; ?>
-                    <?php echo $label_text; ?>
+                    <?php if ( $label_icon ) : ?><span class="olo-nt-label-icon"><?php echo $this->render_icon( $label_icon, 0.85 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon HTML built by render_icon(), which escapes via esc_attr()/esc_html() internally ?></span><?php endif; ?>
+                    <?php echo $label_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via wp_kses_post() above ?>
                 </div>
             <?php endif; ?>
 
@@ -501,15 +503,15 @@ class Olo_Newsticker_Tile extends Olo_Tile_Base {
                             ?>
                                 <span class="olo-nt-marquee-item">
                                     <?php if ( ! empty( $item['icon'] ) ) : ?>
-                                        <span class="olo-nt-icon"><?php echo $this->render_icon( $item['icon'], 0.9 ); ?></span>
+                                        <span class="olo-nt-icon"><?php echo $this->render_icon( $item['icon'], 0.9 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon HTML built by render_icon(), which escapes via esc_attr()/esc_html() internally ?></span>
                                     <?php endif; ?>
                                     <?php if ( ! empty( $item['badge'] ) ) : ?>
-                                        <span class="olo-nt-badge"<?php echo $bbg ? ' style="background:' . esc_attr( $bbg ) . ';"' : ''; ?>><?php echo $item['badge']; ?></span>
+                                        <span class="olo-nt-badge"<?php echo $bbg ? ' style="background:' . esc_attr( $bbg ) . ';"' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- badge esc_html()'d and $bbg safe_color_css()'d when built above, esc_attr()'d here ?>><?php echo $item['badge']; ?></span>
                                     <?php endif; ?>
                                     <?php list( $nt_cls, $nt_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $item['title'] ) ); ?>
-                                    <span class="olo-nt-title<?php echo $nt_cls; ?>"<?php echo $nt_data; ?>><?php echo $title_html; ?></span>
+                                    <span class="olo-nt-title<?php echo $nt_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); $title_html built above from the wp_kses_post()'d title and esc_url()'d link ?>"<?php echo $nt_data; ?>><?php echo $title_html; ?></span>
                                     <?php if ( ! empty( $item['timestamp'] ) ) : ?>
-                                        <span class="olo-nt-time"><?php echo $item['timestamp']; ?></span>
+                                        <span class="olo-nt-time"><?php echo $item['timestamp']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_html()'d when built above ?></span>
                                     <?php endif; ?>
                                 </span>
                             <?php endforeach; ?>
@@ -524,17 +526,17 @@ class Olo_Newsticker_Tile extends Olo_Tile_Base {
                         }
                         $bbg = $item['badge_bg'] ?: '';
                     ?>
-                    <div class="olo-nt-item <?php echo $active_class; ?>" data-index="<?php echo $i; ?>">
+                    <div class="olo-nt-item <?php echo esc_attr( $active_class ); ?>" data-index="<?php echo (int) $i; ?>">
                         <?php if ( ! empty( $item['icon'] ) ) : ?>
-                            <span class="olo-nt-icon"><?php echo $item['icon']; ?></span>
+                            <span class="olo-nt-icon"><?php echo $item['icon']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitize_text_field()'d (tag-stripped) when built above ?></span>
                         <?php endif; ?>
                         <?php if ( ! empty( $item['badge'] ) ) : ?>
-                            <span class="olo-nt-badge"<?php echo $bbg ? ' style="background:' . esc_attr( $bbg ) . ';"' : ''; ?>><?php echo $item['badge']; ?></span>
+                            <span class="olo-nt-badge"<?php echo $bbg ? ' style="background:' . esc_attr( $bbg ) . ';"' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- badge esc_html()'d and $bbg safe_color_css()'d when built above, esc_attr()'d here ?>><?php echo $item['badge']; ?></span>
                         <?php endif; ?>
                         <?php list( $nt_cls, $nt_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $item['title'] ) ); ?>
-                        <span class="olo-nt-title<?php echo $nt_cls; ?>"<?php echo $nt_data; ?>><?php echo $title_html; ?></span>
+                        <span class="olo-nt-title<?php echo $nt_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); $title_html built above from the wp_kses_post()'d title and esc_url()'d link ?>"<?php echo $nt_data; ?>><?php echo $title_html; ?></span>
                         <?php if ( ! empty( $item['timestamp'] ) ) : ?>
-                            <span class="olo-nt-time"><?php echo $item['timestamp']; ?></span>
+                            <span class="olo-nt-time"><?php echo $item['timestamp']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_html()'d when built above ?></span>
                         <?php endif; ?>
                     </div>
                     <?php endforeach; ?>
@@ -542,7 +544,7 @@ class Olo_Newsticker_Tile extends Olo_Tile_Base {
             </div>
 
             <?php if ( $show_counter && ! $is_marquee ) : ?>
-                <div class="olo-nt-counter"><span class="olo-nt-counter-current">1</span>/<?php echo $count; ?></div>
+                <div class="olo-nt-counter"><span class="olo-nt-counter-current">1</span>/<?php echo (int) $count; ?></div>
             <?php endif; ?>
 
             <?php if ( $show_controls && ! $is_marquee ) : ?>
@@ -555,7 +557,7 @@ class Olo_Newsticker_Tile extends Olo_Tile_Base {
             <?php if ( $show_indicators && ! $is_marquee ) : ?>
                 <div class="olo-nt-indicators">
                     <?php for ( $j = 0; $j < $count; $j++ ) : ?>
-                        <button type="button" class="olo-nt-dot <?php echo $j === 0 ? 'olo-nt-dot-active' : ''; ?>" data-target="<?php echo $j; ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Notizia %d', 'olobuild' ), $j + 1 ) ); ?>"></button>
+                        <button type="button" class="olo-nt-dot <?php echo $j === 0 ? 'olo-nt-dot-active' : ''; ?>" data-target="<?php echo (int) $j; ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Notizia %d', 'olobuild' ), $j + 1 ) ); ?>"></button>
                     <?php endfor; ?>
                 </div>
             <?php endif; ?>
@@ -564,7 +566,7 @@ class Olo_Newsticker_Tile extends Olo_Tile_Base {
         <?php if ( ! $is_marquee ) : ?>
         <script>
         (function(){
-            var el = document.getElementById('<?php echo $uid; ?>');
+            var el = document.getElementById('<?php echo $uid; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- internally generated unique id (wp_unique_id) ?>');
             if (!el) { return; }
             var items = el.querySelectorAll('.olo-nt-item');
             var total = items.length;
@@ -575,7 +577,7 @@ class Olo_Newsticker_Tile extends Olo_Tile_Base {
             var loop      = <?php echo $loop ? 'true' : 'false'; ?>;
             var random    = <?php echo $random ? 'true' : 'false'; ?>;
             var stopClick = <?php echo $stop_click ? 'true' : 'false'; ?>;
-            var speed     = <?php echo $speed; ?>;
+            var speed     = <?php echo (int) $speed; ?>;
             var current   = 0;
             var timer     = null;
             var paused    = false;
@@ -694,7 +696,7 @@ class Olo_Newsticker_Tile extends Olo_Tile_Base {
 
         <?php
         $tfx_css = $this->tfx_css( $s, '#' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
 
         // Border system
@@ -713,8 +715,8 @@ class Olo_Newsticker_Tile extends Olo_Tile_Base {
             $base_decls = '';
             if ( $border_css ) $base_decls .= $border_css;
             if ( $radius_css ) $base_decls .= "border-radius:{$radius_css};";
-            if ( $base_decls ) echo ".{$uid}{{$base_decls}}";
-            echo $border_hover_css . $border_effect_css . $radius_hover_css . '</style>';
+            if ( $base_decls ) echo ".{$uid}{{$base_decls}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS from build_border_css()/build_border_radius_css() (sanitized internally); $uid is internally generated
+            echo $border_hover_css . $border_effect_css . $radius_hover_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base border/hover helpers from sanitized settings
         }
         return ob_get_clean();
     }

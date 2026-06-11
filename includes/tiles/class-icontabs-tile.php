@@ -108,6 +108,7 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist (with var() token fallbacks), radius via Olo_Tile_Utils::radius_int() with max() clamp, extra CSS via the internal get_preset_extra_css()/build_wow_effects_css() helpers; $uid is internally generated. ?>
         <style>
             .<?php echo esc_attr( $uid ); ?> { display:flex; flex-direction:column; align-items:center; gap:20px; }
             .<?php echo esc_attr( $uid ); ?> .oit-pill { display:inline-flex; align-items:center; gap:6px; padding:6px; background: <?php echo $pill_bg; ?>; border-radius:999px; }
@@ -138,6 +139,7 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
             echo $this->build_wow_effects_css( $s, '.' . esc_attr( $uid ), '.uk-tab > * > a' );
             ?>
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <div class="olo-icontabs olo-it--preset-<?php echo esc_attr( $preset_id ); ?> <?php echo esc_attr( $uid ); ?>" data-olo-icontabs>
             <div class="oit-pill" role="tablist">
@@ -146,7 +148,7 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
                     $label    = $item['label'] ?? '';
                     $active   = ( $i === $default ) ? ' is-active' : '';
                 ?>
-                <button type="button" class="oit-tab<?php echo $active; ?>" data-idx="<?php echo $i; ?>" role="tab" aria-selected="<?php echo $i === $default ? 'true' : 'false'; ?>" title="<?php echo esc_attr( $label ); ?>">
+                <button type="button" class="oit-tab<?php echo $active; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed ' is-active'/'' and 'true'/'false' literals from ternaries; index cast to int ?>" data-idx="<?php echo (int) $i; ?>" role="tab" aria-selected="<?php echo $i === $default ? 'true' : 'false'; ?>" title="<?php echo esc_attr( $label ); ?>">
                     <?php if ( $icon_raw ) : ?>
                         <?php if ( preg_match( '/^[a-z][a-z0-9-]*$/', $icon_raw ) ) : ?>
                             <span uk-icon="icon: <?php echo esc_attr( $icon_raw ); ?>; ratio: 1.2"></span>
@@ -162,11 +164,11 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
             <?php foreach ( $items as $i => $item ) :
                 $active = ( $i === $default ) ? ' is-active' : '';
             ?>
-            <div class="oit-panel<?php echo $active; ?>" data-panel="<?php echo $i; ?>" role="tabpanel">
+            <div class="oit-panel<?php echo $active; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed ' is-active'/'' literal from the ternary above; index cast to int ?>" data-panel="<?php echo (int) $i; ?>" role="tabpanel">
                 <div class="oit-card">
                     <?php $widget_html = $this->render_widget_template( $item['widget_template_id'] ?? 0 ); ?>
                     <?php if ( $widget_html ) : ?>
-                        <div class="olo-item-widget"><?php echo $widget_html; ?></div>
+                        <div class="olo-item-widget"><?php echo $widget_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- widget HTML rendered by Olo_Tile_Base::render_widget_template() through the frontend renderer (each tile escapes its own output) ?></div>
                     <?php endif; ?>
                     <?php
                     list( $itl_cls, $itl_data ) = $this->tfx_attrs( $s, 'label', $item['label'] ?? '' );
@@ -175,14 +177,14 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
                     list( $itc_cls, $itc_data ) = $this->tfx_attrs( $s, 'content', wp_strip_all_tags( $item['content'] ?? '' ) );
                     ?>
                     <?php if ( ! empty( $item['heading'] ) ) : ?>
-                        <div class="oit-heading<?php echo $ith_cls; ?>"<?php echo $ith_data; ?>><?php echo esc_html( $item['heading'] ); ?></div>
+                        <div class="oit-heading<?php echo $ith_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); heading escaped inline ?>"<?php echo $ith_data; ?>><?php echo esc_html( $item['heading'] ); ?></div>
                     <?php endif; ?>
                     <?php if ( ! empty( $item['title'] ) ) : ?>
-                        <h3 class="oit-title<?php echo $itt_cls; ?>"<?php echo $itt_data; ?>><?php echo esc_html( $item['title'] ); ?></h3>
+                        <h3 class="oit-title<?php echo $itt_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); title escaped inline ?>"<?php echo $itt_data; ?>><?php echo esc_html( $item['title'] ); ?></h3>
                     <?php endif; ?>
                     <?php if ( ! empty( $item['content'] ) ) : ?>
-                        <p class="oit-content<?php echo $itc_cls; ?>"<?php echo $itc_data; ?>>
-                            <?php echo $this->safe_richtext_content( $item['content'] ); ?>
+                        <p class="oit-content<?php echo $itc_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr) ?>"<?php echo $itc_data; ?>>
+                            <?php echo $this->safe_richtext_content( $item['content'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via wp_kses_post() inside safe_richtext_content() ?>
                             <?php if ( ! empty( $item['link_text'] ) ) : ?>
                                 <a class="oit-link" href="<?php echo esc_url( $item['link_url'] ?? '#' ); ?>"><?php echo esc_html( $item['link_text'] ); ?></a>
                             <?php endif; ?>
@@ -220,7 +222,7 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
         </script>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
                 // Border system — wrapper tile
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -234,10 +236,10 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
 
         if ( $border_css || $border_hover_css || $border_effect_css || $card_border_css || $card_border_hover_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css;
-            if ( $card_border_css ) echo "{$card_border_sel}{{$card_border_css}}";
-            echo $card_border_hover_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base border helpers from sanitized border settings
+            if ( $card_border_css ) echo "{$card_border_sel}{{$card_border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized card border settings; selector from internal uid
+            echo $card_border_hover_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css() from sanitized card border settings
         }
         return ob_get_clean();
     }

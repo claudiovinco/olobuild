@@ -94,27 +94,27 @@ class Olo_Pagetitlebar_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-page-title-bar" style="<?php echo $bg_style; ?>position:relative;min-height:<?php echo $min_h; ?>px;display:flex;align-items:center;text-align:<?php echo $align; ?>;<?php if ( $border_b ) echo "border-bottom:1px solid {$border_c};"; ?>"<?php if ( ! empty( $s['bg_parallax'] ) && $bg_img ) echo ' uk-parallax="bgy: -100"'; ?>>
+        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-page-title-bar" style="<?php echo $bg_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $bg_style assembled above from safe_color_css() colours, esc_url() image and esc_attr() size/position; $border_c via safe_color_css() or fixed var() fallback ?>position:relative;min-height:<?php echo (int) $min_h; ?>px;display:flex;align-items:center;text-align:<?php echo esc_attr( $align ); ?>;<?php if ( $border_b ) echo "border-bottom:1px solid {$border_c};"; ?>"<?php if ( ! empty( $s['bg_parallax'] ) && $bg_img ) echo ' uk-parallax="bgy: -100"'; ?>>
 
             <?php if ( $bg_img && $overlay > 0 ) : ?>
-            <div style="position:absolute;inset:0;background:<?php echo $overlay_c; ?>;opacity:<?php echo round( $overlay / 100, 2 ); ?>;pointer-events:none" aria-hidden="true"></div>
+            <div style="position:absolute;inset:0;background:<?php echo $overlay_c; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() or fixed '#000000' fallback; opacity is round() of an intval()-clamped 0-100 value ?>;opacity:<?php echo (float) round( $overlay / 100, 2 ); ?>;pointer-events:none" aria-hidden="true"></div>
             <?php endif; ?>
 
-            <div style="position:relative;z-index:1;width:100%;max-width:<?php echo $max_w; ?>px;margin:0 auto;padding:<?php echo $pad_y; ?>px <?php echo is_array( $_tp ) ? intval( $_tp['right'] ?? 20 ) : 20; ?>px <?php echo is_array( $_tp ) ? intval( $_tp['bottom'] ?? $pad_y ) : $pad_y; ?>px <?php echo is_array( $_tp ) ? intval( $_tp['left'] ?? 20 ) : 20; ?>px">
-                <<?php echo $tag; ?> style="color:<?php echo $title_c; ?>;font-size:<?php echo $title_size; ?>px;font-weight:<?php echo $title_w; ?>;margin:0;line-height:1.2">
+            <div style="position:relative;z-index:1;width:100%;max-width:<?php echo (int) $max_w; ?>px;margin:0 auto;padding:<?php echo (int) $pad_y; ?>px <?php echo (int) ( is_array( $_tp ) ? intval( $_tp['right'] ?? 20 ) : 20 ); ?>px <?php echo (int) ( is_array( $_tp ) ? intval( $_tp['bottom'] ?? $pad_y ) : $pad_y ); ?>px <?php echo (int) ( is_array( $_tp ) ? intval( $_tp['left'] ?? 20 ) : 20 ); ?>px">
+                <<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tag whitelisted via in_array() above; colour via safe_color_css() or fixed var() fallback; size intval()-clamped; weight sanitize_text_field()'d or fixed '700' ?> style="color:<?php echo $title_c; ?>;font-size:<?php echo (int) $title_size; ?>px;font-weight:<?php echo $title_w; ?>;margin:0;line-height:1.2">
                     <?php echo esc_html( $title ); ?>
-                </<?php echo $tag; ?>>
+                </<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tag whitelisted via in_array() above ?>>
 
                 <?php if ( ! empty( $s['subtitle'] ) ) : ?>
                 <?php list( $pts_cls, $pts_data ) = $this->tfx_attrs( $s, 'subtitle', $s['subtitle'] ); ?>
-                <p class="olo-ptb-sub<?php echo $pts_cls; ?>" style="color:<?php echo $sub_c; ?>;font-size:<?php echo $sub_size; ?>px;margin:10px 0 0;opacity:.85"<?php echo $pts_data; ?>>
+                <p class="olo-ptb-sub<?php echo $pts_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); colour via safe_color_css() or fixed var() fallback; size intval()-clamped ?>" style="color:<?php echo $sub_c; ?>;font-size:<?php echo (int) $sub_size; ?>px;margin:10px 0 0;opacity:.85"<?php echo $pts_data; ?>>
                     <?php echo esc_html( $s['subtitle'] ); ?>
                 </p>
                 <?php endif; ?>
 
                 <?php if ( ! empty( $s['show_breadcrumbs'] ) ) : ?>
-                <nav class="olo-ptb-breadcrumbs" aria-label="<?php echo esc_attr( olo_t( 'Breadcrumb' ) ); ?>" style="margin-top:16px;font-size:13px;color:<?php echo $bc_color; ?>">
-                    <?php echo $this->render_breadcrumbs( $bc_sep, $bc_color ); ?>
+                <nav class="olo-ptb-breadcrumbs" aria-label="<?php echo esc_attr( olo_t( 'Breadcrumb' ) ); ?>" style="margin-top:16px;font-size:13px;color:<?php echo $bc_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() or fixed var() fallback ?>">
+                    <?php echo $this->render_breadcrumbs( $bc_sep, $bc_color ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- breadcrumb HTML built internally with esc_url()/esc_html(); separator esc_html()'d and colour safe_color_css()'d above ?>
                 </nav>
                 <?php endif; ?>
             </div>
@@ -129,7 +129,7 @@ class Olo_Pagetitlebar_Tile extends Olo_Tile_Base {
         </style>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -137,8 +137,8 @@ class Olo_Pagetitlebar_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

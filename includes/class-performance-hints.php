@@ -128,7 +128,7 @@ class Olo_Performance_Hints {
             if ( $d ) $hints[] = '<link rel="preconnect" href="' . esc_url( $d ) . '" crossorigin />';
         }
 
-        echo implode( "\n", $hints ) . "\n";
+        echo implode( "\n", $hints ) . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <link> hint tags built above from fixed literals plus esc_attr()/esc_url()'d user domains
     }
 
     /* ─────────────────────────────────────────────

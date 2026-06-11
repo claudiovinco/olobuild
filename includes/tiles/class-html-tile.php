@@ -47,7 +47,7 @@ class Olo_Html_Tile extends Olo_Tile_Base {
             $html = apply_filters( 'olo_html_tile_output', $s['html_content'], $s );
             ?>
             <div class="olo-html uk-panel">
-                <?php echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — by design ?>
+                <?php echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- raw HTML by design: html_content is stored unfiltered only for users with the unfiltered_html capability, everyone else is forced through wp_kses_post() on save (Olo_Rest_Api::sanitize_unfiltered_tile_fields); opt-in re-sanitization via the olo_html_tile_output filter. ?>
             </div>
             <?php
         }

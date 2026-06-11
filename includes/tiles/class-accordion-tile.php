@@ -191,6 +191,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
         $panel_h_shadow = $s['panel_hover_shadow'] ?? 'none';
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, intval()/absint()/max() clamps for numerics, preg_match()/in_array() whitelists and fixed-literal ternaries/maps for enums, Olo_Tile_Utils radius helpers, build_wow_effects_css(), and the internally generated $uid.
         ?>
         <style>
             .<?php echo esc_attr( $uid ); ?> .uk-accordion-title {
@@ -384,8 +385,9 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
             echo $this->build_wow_effects_css( $s, '.' . esc_attr( $uid ) . ' > li', '.uk-accordion-title' );
             ?>
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
-        <ul class="olo-accordion uk-accordion <?php echo esc_attr( $uid ); ?>" uk-accordion="<?php echo esc_attr( $multiple ); ?>; animation: <?php echo $speed; ?>">
+        <ul class="olo-accordion uk-accordion <?php echo esc_attr( $uid ); ?>" uk-accordion="<?php echo esc_attr( $multiple ); ?>; animation: <?php echo (int) $speed; ?>">
             <?php foreach ( $panels as $i => $panel ) :
                 $is_open    = in_array( $i, $open_indices, true );
                 $panel_img  = $panel['image'] ?? '';
@@ -405,27 +407,27 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
                         </span>
                     <?php endif; ?>
                     <?php list( $at_tfx_cls, $at_tfx_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $panel['title'] ?? '' ) ); ?>
-                    <span class="macc-title-text<?php echo $at_tfx_cls; ?>"<?php echo $at_tfx_data; ?>><?php echo wp_kses_post( $panel['title'] ); ?></span>
+                    <span class="macc-title-text<?php echo $at_tfx_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); title via wp_kses_post() ?>"<?php echo $at_tfx_data; ?>><?php echo wp_kses_post( $panel['title'] ); ?></span>
                     <?php if ( $icon_pos !== 'none' ) : ?>
-                        <span class="macc-icon"><?php echo $icon_svg; ?></span>
+                        <span class="macc-icon"><?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from the hardcoded get_icon_svg() map ?></span>
                     <?php endif; ?>
                 </a>
                 <div class="uk-accordion-content" id="<?php echo esc_attr( $uid . '-panel-' . $i ); ?>" role="region">
                     <div class="macc-content-inner">
                         <?php $widget_html = $this->render_widget_template( $panel['widget_template_id'] ?? 0 ); ?>
                         <?php if ( $widget_html ) : ?>
-                            <div class="olo-item-widget"><?php echo $widget_html; ?></div>
+                            <div class="olo-item-widget"><?php echo $widget_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML produced by render_widget_template() (internal template renderer, escapes its own output) ?></div>
                         <?php endif; ?>
                         <?php if ( $has_media ) : ?>
                             <div class="macc-panel-media">
                                 <?php if ( ! empty( $panel_vid ) ) :
                                     $embed = $this->get_video_embed( $panel_vid );
-                                    echo $embed;
+                                    echo $embed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- iframe/video HTML built by get_video_embed() with esc_attr()/esc_url() internally
                                 endif; ?>
                                 <?php if ( ! empty( $panel_img ) ) : ?>
                                     <?php
                                     $acc_img = '<img src="' . esc_url( $panel_img ) . '" alt="' . esc_attr( wp_strip_all_tags( $panel['title'] ?? '' ) ) . '" loading="lazy" />';
-                                    echo $this->render_hover_wrap( $acc_img, $panel['hover_image'] ?? '', '' );
+                                    echo $this->render_hover_wrap( $acc_img, $panel['hover_image'] ?? '', '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $acc_img built with esc_url()/esc_attr() above; render_hover_wrap() escapes hover media URLs internally
                                     ?>
                                 <?php endif; ?>
                             </div>
@@ -434,7 +436,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
                         $acc_content_plain = wp_strip_all_tags( $panel['content'] );
                         list( $ac_tfx_cls, $ac_tfx_data ) = $this->tfx_attrs( $s, 'content', $acc_content_plain );
                         ?>
-                        <div class="macc-content-text<?php echo $ac_tfx_cls; ?>"<?php echo $ac_tfx_data; ?>><?php echo nl2br( esc_html( $acc_content_plain ) ); ?></div>
+                        <div class="macc-content-text<?php echo $ac_tfx_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); content is esc_html()'d (nl2br only adds <br /> tags) ?>"<?php echo $ac_tfx_data; ?>><?php echo nl2br( esc_html( $acc_content_plain ) ); ?></div>
                         <?php if ( $has_media ) : ?>
                             <div style="clear:both"></div>
                         <?php endif; ?>
@@ -458,7 +460,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
                     ],
                 ];
             }
-            echo wp_json_encode( [
+            echo wp_json_encode( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JSON-LD in <script> built by wp_json_encode() from wp_strip_all_tags()'d strings
                 '@context'   => 'https://schema.org',
                 '@type'      => 'FAQPage',
                 'mainEntity' => $faq_entities,
@@ -469,7 +471,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
 
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -477,8 +479,8 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

@@ -72,6 +72,7 @@ class Olo_Timezone_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, min()/max()/count() integer column count, fixed font-stack and alignment literals; $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?>{ --tz-accent:<?php echo $accent; ?>; font-family:<?php echo $sans; ?>; <?php if ( $center ) echo 'text-align:center;'; ?> }
             .<?php echo $uid; ?> .otz-eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--tz-accent);display:block;margin-bottom:10px;}
@@ -94,6 +95,7 @@ class Olo_Timezone_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .otz-city[data-state="o"] .otz-dot{background:<?php echo $ok; ?>;}
             .<?php echo $uid; ?> .otz-city[data-state="s"] .otz-dot{background:<?php echo $sleep; ?>;}
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-timezone <?php echo esc_attr( $uid ); ?>" data-timezone data-baseoff="<?php echo esc_attr( $base_off ); ?>" data-states="<?php echo esc_attr( $states ); ?>">
             <?php if ( $s['eyebrow'] !== '' ) : ?><span class="otz-eyebrow"><?php echo esc_html( $s['eyebrow'] ); ?></span><?php endif; ?>
             <?php if ( $s['heading'] !== '' ) : ?><h2 class="otz-h"><?php echo esc_html( $s['heading'] ); ?></h2><?php endif; ?>
@@ -115,7 +117,7 @@ class Olo_Timezone_Tile extends Olo_Tile_Base {
         </div>
         <script>
         (function(){
-            var root=document.querySelector('.<?php echo $uid; ?>[data-timezone]'); if(!root){return;}
+            var root=document.querySelector('.<?php echo esc_js( $uid ); ?>[data-timezone]'); if(!root){return;}
             var baseOff=parseFloat(root.getAttribute('data-baseoff'))||0;
             var states=root.getAttribute('data-states')||'';
             var input=root.querySelector('[data-tz-input]');

@@ -285,12 +285,12 @@ class Olo_Form_Submissions {
         <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Invii Form', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-submissions-page">
             <?php
-            echo Olo_Builder::cockpit_page_head( [
+            echo Olo_Builder::cockpit_page_head( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- internal cockpit helper: escapes title (esc_html), sub (wp_kses_post) and pre-escaped actions internally
                 'title'   => __( 'Invii Form', 'olobuild' ),
                 'sub'     => $sub,
                 'actions' => $actions,
             ] );
-            echo Olo_Builder::cockpit_toolbar( [
+            echo Olo_Builder::cockpit_toolbar( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- internal cockpit helper: escapes all chip/search parts internally (esc_attr/esc_html/esc_url)
                 'chips'              => $chips,
                 'active_chip'        => 'all',
                 'search'             => true,

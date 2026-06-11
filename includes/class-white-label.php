@@ -180,7 +180,7 @@ class Olo_White_Label {
         <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'White Label', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy">
             <?php
-            echo Olo_Builder::cockpit_page_head( [
+            echo Olo_Builder::cockpit_page_head( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally.
                 'title' => __( 'White Label', 'olobuild' ),
                 'sub'   => $custom_brand
                     ? __( 'Branding personalizzato attivo. Nasconde il marchio Olobuild dai tuoi clienti.', 'olobuild' )
@@ -275,10 +275,10 @@ class Olo_White_Label {
 
             <script>
             var wlI18n = {
-                saving:       <?php echo wp_json_encode( __( 'Salvataggio...', 'olobuild' ) ); ?>,
-                saved:        <?php echo wp_json_encode( __( 'Impostazioni salvate con successo', 'olobuild' ) ); ?>,
-                saveError:    <?php echo wp_json_encode( __( 'Errore nel salvataggio', 'olobuild' ) ); ?>,
-                saveSettings: <?php echo wp_json_encode( __( 'Salva impostazioni', 'olobuild' ) ); ?>
+                saving:       <?php echo wp_json_encode( __( 'Salvataggio...', 'olobuild' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JSON in <script> built by wp_json_encode(). ?>,
+                saved:        <?php echo wp_json_encode( __( 'Impostazioni salvate con successo', 'olobuild' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JSON in <script> built by wp_json_encode(). ?>,
+                saveError:    <?php echo wp_json_encode( __( 'Errore nel salvataggio', 'olobuild' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JSON in <script> built by wp_json_encode(). ?>,
+                saveSettings: <?php echo wp_json_encode( __( 'Salva impostazioni', 'olobuild' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JSON in <script> built by wp_json_encode(). ?>
             };
             document.getElementById('wl-save').addEventListener('click', function() {
                 var btn = this;

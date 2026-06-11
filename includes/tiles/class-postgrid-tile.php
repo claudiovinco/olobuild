@@ -355,8 +355,9 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/absint/floatval clamps/internal uid/helper builders). ?>
         <style>
-            .<?php echo $uid; ?> .olo-pg-img { transition: transform 0.5s ease, filter 0.5s ease, border-radius 400ms cubic-bezier(.4,0,.2,1); width: 100%; height: <?php echo $image_height; ?>px; object-fit: cover; display: block; border-radius: <?php echo $image_radius; ?>; }
+            .<?php echo $uid; ?> .olo-pg-img { transition: transform 0.5s ease, filter 0.5s ease, border-radius 400ms cubic-bezier(.4,0,.2,1); width: 100%; height: <?php echo (int) $image_height; ?>px; object-fit: cover; display: block; border-radius: <?php echo $image_radius; ?>; }
             .<?php echo $uid; ?> .olo-card-minimal__img { border-radius: <?php echo $image_radius; ?>; transition: border-radius 400ms cubic-bezier(.4,0,.2,1); }
             .<?php echo $uid; ?> .uk-card-media-top { border-radius: <?php echo $image_radius; ?>; overflow: hidden; transition: border-radius 400ms cubic-bezier(.4,0,.2,1); }
             .<?php echo $uid; ?> .uk-card { border-radius: <?php echo $card_radius; ?>; overflow: hidden; transition: border-radius 400ms cubic-bezier(.4,0,.2,1); }
@@ -379,10 +380,10 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             /* Stile testo */
             .<?php echo $uid; ?> .uk-card-body { padding: <?php echo $body_padding; ?>; }
             .<?php echo $uid; ?> .olo-card-minimal__body { padding: <?php echo $body_padding; ?>; }
-            .<?php echo $uid; ?> .uk-card-title { font-size: <?php echo $title_size; ?>em; }
-            .<?php echo $uid; ?> .olo-card-minimal__title { font-size: <?php echo $title_size; ?>em; }
-            .<?php echo $uid; ?> .olo-postgrid-excerpt { font-size: <?php echo $excerpt_size; ?>em; }
-            .<?php echo $uid; ?> .olo-card-minimal__text { font-size: <?php echo $excerpt_size; ?>em; }
+            .<?php echo $uid; ?> .uk-card-title { font-size: <?php echo (float) $title_size; ?>em; }
+            .<?php echo $uid; ?> .olo-card-minimal__title { font-size: <?php echo (float) $title_size; ?>em; }
+            .<?php echo $uid; ?> .olo-postgrid-excerpt { font-size: <?php echo (float) $excerpt_size; ?>em; }
+            .<?php echo $uid; ?> .olo-card-minimal__text { font-size: <?php echo (float) $excerpt_size; ?>em; }
             <?php if ( $title_color ) : ?>
             .<?php echo $uid; ?> .uk-card-title, .<?php echo $uid; ?> .uk-card-title a { color: <?php echo $this->safe_color_css( $title_color ); ?> !important; }
             .<?php echo $uid; ?> .olo-card-minimal__title, .<?php echo $uid; ?> .olo-card-minimal__title a { color: <?php echo $this->safe_color_css( $title_color ); ?> !important; }
@@ -414,12 +415,12 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             /* Ken Burns */
             @keyframes olo-kb-<?php echo $uid; ?> {
                 0% { transform: scale(1); }
-                50% { transform: scale(<?php echo $kenburns_scale; ?>); }
+                50% { transform: scale(<?php echo (float) $kenburns_scale; ?>); }
                 100% { transform: scale(1); }
             }
-            .<?php echo $uid; ?> .olo-pg-kenburns { animation: olo-kb-<?php echo $uid; ?> <?php echo $kenburns_speed; ?>s ease-in-out infinite; }
-            .<?php echo $uid; ?> .olo-postgrid-item:nth-child(2n) .olo-pg-kenburns { animation-delay: -<?php echo round( $kenburns_speed / 3, 1 ); ?>s; }
-            .<?php echo $uid; ?> .olo-postgrid-item:nth-child(3n) .olo-pg-kenburns { animation-delay: -<?php echo round( $kenburns_speed * 2 / 3, 1 ); ?>s; }
+            .<?php echo $uid; ?> .olo-pg-kenburns { animation: olo-kb-<?php echo $uid; ?> <?php echo (int) $kenburns_speed; ?>s ease-in-out infinite; }
+            .<?php echo $uid; ?> .olo-postgrid-item:nth-child(2n) .olo-pg-kenburns { animation-delay: -<?php echo (float) round( $kenburns_speed / 3, 1 ); ?>s; }
+            .<?php echo $uid; ?> .olo-postgrid-item:nth-child(3n) .olo-pg-kenburns { animation-delay: -<?php echo (float) round( $kenburns_speed * 2 / 3, 1 ); ?>s; }
             <?php endif; ?>
             <?php if ( $overlay_on ) : ?>
             /* Overlay gradient */
@@ -442,7 +443,8 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .uk-card-primary .uk-button-primary { background: rgba(255,255,255,0.2); border-color: #fff; }
             <?php endif; ?>
         </style>
-        <div class="olo-postgrid <?php echo $uid; ?> olo-pg-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" id="<?php echo esc_attr( $uid ); ?>"
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+        <div class="olo-postgrid <?php echo esc_attr( $uid ); ?> olo-pg-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" id="<?php echo esc_attr( $uid ); ?>"
              data-postgrid-config="<?php echo esc_attr( wp_json_encode( $config ) ); ?>">
 
             <?php if ( ! empty( $terms ) || $sort_enabled ) : ?>
@@ -457,7 +459,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             </div>
             <?php endif; ?>
 
-            <div class="olo-postgrid-grid uk-child-width-1-<?php echo $cols_mob; ?> uk-child-width-1-<?php echo $columns; ?>@m <?php echo esc_attr( $gap_class ); ?>" uk-grid<?php if ( ! empty( $s['masonry'] ) ) echo '="masonry: true"'; ?> <?php if ( ! empty( $s['match_height'] ) ) echo 'uk-height-match'; ?>>
+            <div class="olo-postgrid-grid uk-child-width-1-<?php echo (int) $cols_mob; ?> uk-child-width-1-<?php echo (int) $columns; ?>@m <?php echo esc_attr( $gap_class ); ?>" uk-grid<?php if ( ! empty( $s['masonry'] ) ) echo '="masonry: true"'; ?> <?php if ( ! empty( $s['match_height'] ) ) echo 'uk-height-match'; ?>>
                 <?php foreach ( $posts as $item ) : ?>
                 <div class="olo-postgrid-item"
                      <?php if ( ! empty( $item['terms'] ) ) : ?>data-terms="<?php echo esc_attr( implode( ',', $item['terms'] ) ); ?>"<?php endif; ?>
@@ -473,13 +475,13 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                             <?php endif; ?>
                             <?php
                             $pg_min_img = Olo_Tile_Utils::img_srcset( $item['image_id'] ?? 0, $item['image'], $item['title'], 'olo-card-minimal__img ' . $img_class );
-                            echo $this->render_hover_wrap( $pg_min_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' );
+                            echo $this->render_hover_wrap( $pg_min_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Tile_Utils::img_srcset()/render_hover_wrap(), which escape all attributes via esc_url()/esc_attr() internally.
                             ?>
                             <?php if ( $s['link_style'] === 'card' ) : ?>
                                 </a>
                             <?php endif; ?>
                             <?php if ( $overlay_on ) : ?>
-                                <?php echo $this->render_overlay_gradient( $overlay_color, $overlay_opacity, $overlay_direction, $overlay_height ); ?>
+                                <?php echo $this->render_overlay_gradient( $overlay_color, $overlay_opacity, $overlay_direction, $overlay_height ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by render_overlay_gradient() from hexdec()/round() numbers and fixed whitelist maps only. ?>
                             <?php endif; ?>
                             <?php if ( ! empty( $s['show_category'] ) && ! empty( $item['term_names'] ) ) : ?>
                                 <span class="olo-postgrid-badge olo-postgrid-badge--<?php echo esc_attr( $s['category_badge_position'] ?? 'top-left' ); ?>"><?php echo esc_html( $item['term_names'][0] ); ?></span>
@@ -495,7 +497,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                                     $rib_inline = ' style="background:' . $this->safe_color_css( $rib_dyn_bg ) . '"';
                                 }
                                 ?>
-                                <span class="olo-pg-ribbon olo-pg-ribbon--<?php echo esc_attr( $ribbon_position ); ?>"<?php echo $rib_inline; ?>><?php echo esc_html( $item['ribbon'] ); ?></span>
+                                <span class="olo-pg-ribbon olo-pg-ribbon--<?php echo esc_attr( $ribbon_position ); ?>"<?php echo $rib_inline; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attribute built above with safe_color_css() only. ?>><?php echo esc_html( $item['ribbon'] ); ?></span>
                             <?php endif; ?>
                         </div>
                         <?php endif; ?>
@@ -519,8 +521,8 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                         <p class="olo-card-minimal__text"><?php echo wp_kses_post( $item['excerpt'] ); ?></p>
                         <?php endif; ?>
 
-                        <?php if ( ! empty( $s['show_service_stats'] ) ) echo $this->render_service_stats( $item ); ?>
-                        <?php if ( ! empty( $s['show_service_club'] ) )  echo $this->render_service_club( $item ); ?>
+                        <?php if ( ! empty( $s['show_service_stats'] ) ) echo $this->render_service_stats( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by render_service_stats(): static SVG + esc_html()'d meta values. ?>
+                        <?php if ( ! empty( $s['show_service_club'] ) )  echo $this->render_service_club( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by render_service_club(): esc_html()'d meta values only. ?>
 
                         <?php if ( ! empty( $s['show_price'] ) && isset( $item['price'] ) ) : ?>
                         <div class="olo-postgrid-price">
@@ -544,13 +546,13 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                             <?php endif; ?>
                             <?php
                             $pg_img = Olo_Tile_Utils::img_srcset( $item['image_id'] ?? 0, $item['image'], $item['title'], $img_class );
-                            echo $this->render_hover_wrap( $pg_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' );
+                            echo $this->render_hover_wrap( $pg_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Tile_Utils::img_srcset()/render_hover_wrap(), which escape all attributes via esc_url()/esc_attr() internally.
                             ?>
                             <?php if ( $s['link_style'] === 'card' ) : ?>
                                 </a>
                             <?php endif; ?>
                             <?php if ( $overlay_on ) : ?>
-                                <?php echo $this->render_overlay_gradient( $overlay_color, $overlay_opacity, $overlay_direction, $overlay_height ); ?>
+                                <?php echo $this->render_overlay_gradient( $overlay_color, $overlay_opacity, $overlay_direction, $overlay_height ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by render_overlay_gradient() from hexdec()/round() numbers and fixed whitelist maps only. ?>
                             <?php endif; ?>
                             <?php if ( ! empty( $s['show_category'] ) && ! empty( $item['term_names'] ) ) : ?>
                                 <span class="olo-postgrid-badge olo-postgrid-badge--<?php echo esc_attr( $s['category_badge_position'] ?? 'top-left' ); ?>"><?php echo esc_html( $item['term_names'][0] ); ?></span>
@@ -566,7 +568,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                                     $rib_inline = ' style="background:' . $this->safe_color_css( $rib_dyn_bg ) . '"';
                                 }
                                 ?>
-                                <span class="olo-pg-ribbon olo-pg-ribbon--<?php echo esc_attr( $ribbon_position ); ?>"<?php echo $rib_inline; ?>><?php echo esc_html( $item['ribbon'] ); ?></span>
+                                <span class="olo-pg-ribbon olo-pg-ribbon--<?php echo esc_attr( $ribbon_position ); ?>"<?php echo $rib_inline; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attribute built above with safe_color_css() only. ?>><?php echo esc_html( $item['ribbon'] ); ?></span>
                             <?php endif; ?>
                         </div>
                         <?php endif; ?>
@@ -590,8 +592,8 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                             <p class="olo-postgrid-excerpt"><?php echo wp_kses_post( $item['excerpt'] ); ?></p>
                             <?php endif; ?>
 
-                            <?php if ( ! empty( $s['show_service_stats'] ) ) echo $this->render_service_stats( $item ); ?>
-                            <?php if ( ! empty( $s['show_service_club'] ) )  echo $this->render_service_club( $item ); ?>
+                            <?php if ( ! empty( $s['show_service_stats'] ) ) echo $this->render_service_stats( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by render_service_stats(): static SVG + esc_html()'d meta values. ?>
+                            <?php if ( ! empty( $s['show_service_club'] ) )  echo $this->render_service_club( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by render_service_club(): esc_html()'d meta values only. ?>
 
                             <?php if ( ! empty( $s['show_price'] ) && isset( $item['price'] ) ) : ?>
                             <div class="olo-postgrid-price">
@@ -620,8 +622,8 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                 ?>
                 <?php if ( $has_more ) : ?>
                 <div class="olo-pg-sentinel" data-olo-pg-sentinel
-                     data-total-pages="<?php echo $total_pages; ?>"
-                     data-items-per-page="<?php echo $items_per_page; ?>"
+                     data-total-pages="<?php echo (int) $total_pages; ?>"
+                     data-items-per-page="<?php echo (int) $items_per_page; ?>"
                      data-grid-id="<?php echo esc_attr( $uid ); ?>"
                      style="display:flex;justify-content:center;padding:20px 0;">
                     <div class="olo-pg-spinner" style="width:32px;height:32px;border:3px solid rgba(150,150,150,0.2);border-top-color:#888;border-radius:50%;animation:olo-pg-spin 0.8s linear infinite;display:none;"></div>
@@ -636,7 +638,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                     var grid = document.querySelector('#<?php echo esc_attr( $uid ); ?> .olo-postgrid-grid');
                     if(!grid) return;
                     var allItems = grid.querySelectorAll('.olo-postgrid-item');
-                    var perPage = <?php echo $items_per_page; ?>;
+                    var perPage = <?php echo (int) $items_per_page; ?>;
                     var totalItems = allItems.length;
                     var shown = perPage;
                     var spinner = sentinel.querySelector('.olo-pg-spinner');
@@ -705,8 +707,8 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by build_border_css() (intval sizes, validated color) on internal uid.
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by build_border_hover_css()/build_border_effect_css() base-class helpers (intval/whitelist).
         }
         return ob_get_clean();
     }
@@ -753,7 +755,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
     private function render_filters( $terms, $style, $grid_id, $align = 'left' ) {
         $fa_cls = $align === 'center' ? ' olo-filter-center' : ( $align === 'right' ? ' olo-filter-right' : '' );
         ?>
-        <div class="olo-postgrid-filters<?php echo $fa_cls; ?>" data-postgrid-target="<?php echo esc_attr( $grid_id ); ?>">
+        <div class="olo-postgrid-filters<?php echo esc_attr( $fa_cls ); ?>" data-postgrid-target="<?php echo esc_attr( $grid_id ); ?>">
             <?php if ( $style === 'dropdown' ) : ?>
                 <select class="olo-postgrid-filter-select uk-select" data-postgrid-filter-select>
                     <option value=""><?php esc_html_e( 'Tutti', 'olobuild' ); ?></option>

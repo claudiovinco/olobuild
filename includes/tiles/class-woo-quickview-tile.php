@@ -59,6 +59,7 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() with token fallbacks for colours, absint()+max/min clamps for sizes, in_array() whitelist for the button style, internal wp_rand() uid. ?>
         <style>
             .<?php echo $uid; ?>-overlay {
                 display: none;
@@ -76,7 +77,7 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?>-modal {
                 background: var(--olo-color-background, #FFFFFF);
                 border-radius: 12px;
-                max-width: <?php echo $modal_w; ?>px;
+                max-width: <?php echo (int) $modal_w; ?>px;
                 width: 100%;
                 max-height: 90vh;
                 overflow-y: auto;
@@ -124,7 +125,7 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
             }
             .<?php echo $uid; ?>-grid {
                 display: grid;
-                grid-template-columns: <?php echo $img_w; ?>% 1fr;
+                grid-template-columns: <?php echo (int) $img_w; ?>% 1fr;
                 gap: 30px;
             }
             @media (max-width: 640px) {
@@ -270,6 +271,7 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
                 white-space: nowrap;
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <!-- Quick View Modal Shell -->
         <div class="<?php echo esc_attr( $uid ); ?>-overlay" data-olo-qv-overlay>
@@ -289,7 +291,7 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
 
         <script>
         (function(){
-            var overlay = document.querySelector('.<?php echo $uid; ?>-overlay');
+            var overlay = document.querySelector('.<?php echo $uid; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- internal 'olo-woo-qv-' . wp_rand() identifier. ?>-overlay');
             if(!overlay){return}
             var loading = overlay.querySelector('[data-olo-qv-loading]');
             var content = overlay.querySelector('[data-olo-qv-content]');
@@ -386,8 +388,8 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- border CSS from base-class build_border_css() (intval'd widths, safe_color_css()'d colours), internal wp_rand() uid.
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- border CSS from base-class build_border_hover_css()/build_border_effect_css() helpers (intval'd values, safe_color_css()'d colours).
         }
         return ob_get_clean();
     }
@@ -443,7 +445,7 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
             </div>
             <div>
                 <h3 style="font-size:22px;font-weight:700;margin:0 0 10px"><?php echo esc_html( $product->get_name() ); ?></h3>
-                <div style="font-size:20px;font-weight:600;margin-bottom:12px"><?php echo $product->get_price_html(); ?></div>
+                <div style="font-size:20px;font-weight:600;margin-bottom:12px"><?php echo $product->get_price_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- price HTML generated and escaped by WooCommerce (WC_Product::get_price_html()). ?></div>
                 <?php if ( $product->get_average_rating() > 0 ) : ?>
                 <div style="display:flex;align-items:center;gap:2px;margin-bottom:12px">
                     <?php for ( $i = 1; $i <= 5; $i++ ) : ?>
@@ -458,7 +460,7 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
                 <?php if ( $product->is_purchasable() ) : ?>
                     <?php if ( $product->is_in_stock() ) : ?>
                     <div style="display:flex;gap:10px;align-items:center;margin-top:16px">
-                        <input type="number" class="olo-qv-qty" value="1" min="1" max="<?php echo $product->get_stock_quantity() ?: 99; ?>" style="width:60px;height:40px;text-align:center;border:1px solid var(--olo-color-border, #E5E7EB);border-radius:6px;font-size:14px" />
+                        <input type="number" class="olo-qv-qty" value="1" min="1" max="<?php echo (int) ( $product->get_stock_quantity() ?: 99 ); ?>" style="width:60px;height:40px;text-align:center;border:1px solid var(--olo-color-border, #E5E7EB);border-radius:6px;font-size:14px" />
                         <button data-olo-qv-atc-btn style="padding:10px 24px;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:14px;background:var(--olo-color-primary,#e1474f);color:var(--olo-color-primary-contrast, #FFFFFF)"><?php echo esc_html( olo_t( 'Aggiungi al carrello' ) ); ?></button>
                     </div>
                     <?php else : ?>
@@ -472,7 +474,7 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
                     <?php
                     $cats = wc_get_product_category_list( $pid );
                     if ( $cats ) : ?>
-                    <div><?php echo esc_html( olo_t( 'Categorie' ) ); ?>: <?php echo $cats; ?></div>
+                    <div><?php echo esc_html( olo_t( 'Categorie' ) ); ?>: <?php echo $cats; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- category links HTML built and escaped by WooCommerce core (wc_get_product_category_list()). ?></div>
                     <?php endif; ?>
                 </div>
                 <a href="<?php echo esc_url( get_permalink( $pid ) ); ?>" style="display:inline-block;margin-top:16px;font-size:13px;color:var(--olo-color-primary,#e1474f);text-decoration:none"><?php echo esc_html( olo_t( 'Vedi dettagli completi' ) ); ?> &rarr;</a>

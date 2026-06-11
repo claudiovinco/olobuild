@@ -138,6 +138,7 @@ class Olo_RelatedPosts_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: absint() clamps for columns/gap, safe_color_css() for the card background, Olo_Tile_Utils radius helpers and the internally generated $uid. ?>
         <style>
             .<?php echo $uid; ?> { display: grid; grid-template-columns: repeat(<?php echo $columns; ?>, 1fr); gap: <?php echo $gap; ?>px; }
             @media (max-width: 640px) { .<?php echo $uid; ?> { grid-template-columns: 1fr; } }
@@ -152,7 +153,8 @@ class Olo_RelatedPosts_Tile extends Olo_Tile_Base {
             <?php endif; ?>
             .<?php echo $uid; ?> .olo-rp-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
         </style>
-        <div class="olo-relatedposts <?php echo $uid; ?> olo-rp-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+        <div class="olo-relatedposts <?php echo esc_attr( $uid ); ?> olo-rp-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
             <?php while ( $query->have_posts() ) : $query->the_post(); ?>
             <a href="<?php the_permalink(); ?>" class="olo-rp-card">
                 <?php if ( ! empty( $s['show_image'] ) ) : ?>
@@ -163,27 +165,27 @@ class Olo_RelatedPosts_Tile extends Olo_Tile_Base {
                 </div>
                 <?php endif; ?>
 
-                <div style="padding: <?php echo $card_padding; ?>;">
+                <div style="padding: <?php echo $card_padding; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- spacing built by Olo_Tile_Utils::spacing_css() from intval()'d values ?>;">
                     <?php if ( ! empty( $s['show_category'] ) ) :
                         $post_cats = get_the_category();
                         if ( $post_cats ) :
                     ?>
-                        <span style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;opacity:0.7;color:<?php echo $text_color; ?>;"><?php echo esc_html( $post_cats[0]->name ); ?></span>
+                        <span style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;opacity:0.7;color:<?php echo $text_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- safe_color_css() whitelisted color or fixed var() fallback ?>;"><?php echo esc_html( $post_cats[0]->name ); ?></span>
                     <?php endif; endif; ?>
 
-                    <<?php echo $title_tag; ?> style="margin:4px 0 0;font-weight:600;line-height:1.3;font-size:<?php echo $title_size; ?>;color:<?php echo $title_color; ?>;">
+                    <<?php echo tag_escape( $title_tag ); ?> style="margin:4px 0 0;font-weight:600;line-height:1.3;font-size:<?php echo $title_size; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal ternary ('1.1em'/'1em'); color via safe_color_css() or fixed var() fallback ?>;color:<?php echo $title_color; ?>;">
                         <?php the_title(); ?>
-                    </<?php echo $title_tag; ?>>
+                    </<?php echo tag_escape( $title_tag ); ?>>
 
                     <?php if ( ! empty( $s['show_date'] ) ) : ?>
-                    <div style="margin-top:6px;font-size:0.85em;color:<?php echo $date_color; ?>;">
+                    <div style="margin-top:6px;font-size:0.85em;color:<?php echo $date_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- safe_color_css() whitelisted color or fixed var() fallback ?>;">
                         <?php echo get_the_date(); ?>
                     </div>
                     <?php endif; ?>
 
                     <?php if ( ! empty( $s['show_excerpt'] ) ) : ?>
-                    <p style="margin:8px 0 0;font-size:0.9em;line-height:1.5;color:<?php echo $text_color; ?>;">
-                        <?php echo wp_trim_words( get_the_excerpt(), $excerpt_len, '&hellip;' ); ?>
+                    <p style="margin:8px 0 0;font-size:0.9em;line-height:1.5;color:<?php echo $text_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- safe_color_css() whitelisted color or fixed var() fallback ?>;">
+                        <?php echo wp_trim_words( get_the_excerpt(), $excerpt_len, '&hellip;' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_trim_words() strips all tags internally and appends the literal &hellip; entity ?>
                     </p>
                     <?php endif; ?>
                 </div>
@@ -198,8 +200,8 @@ class Olo_RelatedPosts_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

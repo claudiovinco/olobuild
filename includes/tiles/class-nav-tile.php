@@ -74,14 +74,14 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
         }
         $rel_attr = $rel_parts ? ' rel="' . esc_attr( implode( ' ', $rel_parts ) ) . '"' : '';
 
-        // Colors with fallbacks
-        $link_color  = $s['link_color'] ?: 'var(--olo-color-text-muted, #9CA3AF)';
-        $hover_color = $s['link_hover_color'] ?: 'var(--olo-color-border, #E5E7EB)';
-        $active_color = $s['active_color'] ?: 'var(--olo-color-primary, #e1474f)';
-        $icon_color  = $s['icon_color'] ?: '';
-        $hover_bg    = $s['hover_bg'] ?: '';
-        $active_bg   = $s['active_bg'] ?: '';
-        $sep_color   = $s['separator_color'] ?: 'var(--olo-color-text, #374151)';
+        // Colors with fallbacks (safe_color_css validates; empty/invalid falls back as before)
+        $link_color  = $this->safe_color_css( $s['link_color'] ) ?: 'var(--olo-color-text-muted, #9CA3AF)';
+        $hover_color = $this->safe_color_css( $s['link_hover_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
+        $active_color = $this->safe_color_css( $s['active_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $icon_color  = $this->safe_color_css( $s['icon_color'] ) ?: '';
+        $hover_bg    = $this->safe_color_css( $s['hover_bg'] ) ?: '';
+        $active_bg   = $this->safe_color_css( $s['active_bg'] ) ?: '';
+        $sep_color   = $this->safe_color_css( $s['separator_color'] ) ?: 'var(--olo-color-text, #374151)';
 
         // Dimensions
         $px     = intval( $s['padding_x'] );
@@ -196,10 +196,10 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
         $tag = $is_horizontal ? 'div' : 'ul';
 
         ob_start();
-        echo '<style>' . $css . '</style>';
+        echo '<style>' . $css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS assembled above exclusively from safe_color_css() colours, intval()/floatval() numerics, esc_attr()'d enums, fixed-literal maps and the internally generated $uid
         ?>
         <nav role="navigation" aria-label="<?php echo esc_attr__( 'Navigation', 'olobuild' ); ?>">
-        <<?php echo $tag; ?> id="<?php echo esc_attr( $uid ); ?>">
+        <<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'div'/'ul' literal from the ternary above ?> id="<?php echo esc_attr( $uid ); ?>">
             <?php foreach ( $items as $idx => $item ) :
                 $url   = ! empty( $item['url'] ) ? $item['url'] : '#';
                 $label = ! empty( $item['label'] ) ? $item['label'] : '';
@@ -212,7 +212,7 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
 
                 // Separator
                 if ( $idx > 0 && $show_sep ) {
-                    echo $is_horizontal
+                    echo $is_horizontal // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- both ternary branches are fixed HTML literals
                         ? '<span class="olo-nav-sep" aria-hidden="true"></span>'
                         : '<li class="olo-nav-sep" aria-hidden="true"></li>';
                 }
@@ -222,17 +222,17 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
                     echo '<li>';
                 }
             ?>
-                <a class="olo-nav-item<?php echo $active_class; ?>" href="<?php echo esc_url( $url ); ?>"<?php echo $target . $rel_attr; ?>>
+                <a class="olo-nav-item<?php echo $active_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $active_class/$target are fixed literals (' uk-active', ' target="_blank"' or ''); $rel_attr is esc_attr()'d above; href is esc_url()'d ?>" href="<?php echo esc_url( $url ); ?>"<?php echo $target . $rel_attr; ?>>
                     <?php if ( $s['active_style'] === 'dot' && $is_active ) : ?>
                     <span style="width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0"></span>
                     <?php endif; ?>
                     <?php if ( $icon && $s['icon_position'] !== 'right' ) : ?>
-                    <span class="olo-nav-icon" uk-icon="icon: <?php echo esc_attr( $icon ); ?>; width: <?php echo $icon_s; ?>; height: <?php echo $icon_s; ?>"></span>
+                    <span class="olo-nav-icon" uk-icon="icon: <?php echo esc_attr( $icon ); ?>; width: <?php echo (int) $icon_s; ?>; height: <?php echo (int) $icon_s; ?>"></span>
                     <?php endif; ?>
                     <?php list( $nv_cls, $nv_data ) = $this->tfx_attrs( $s, 'title', $label ); ?>
-                    <span class="olo-nav-text<?php echo $nv_cls; ?>"<?php echo $nv_data; ?>><?php echo esc_html( $label ); ?></span>
+                    <span class="olo-nav-text<?php echo $nv_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); label esc_html()'d ?>"<?php echo $nv_data; ?>><?php echo esc_html( $label ); ?></span>
                     <?php if ( $icon && $s['icon_position'] === 'right' ) : ?>
-                    <span class="olo-nav-icon" uk-icon="icon: <?php echo esc_attr( $icon ); ?>; width: <?php echo $icon_s; ?>; height: <?php echo $icon_s; ?>"></span>
+                    <span class="olo-nav-icon" uk-icon="icon: <?php echo esc_attr( $icon ); ?>; width: <?php echo (int) $icon_s; ?>; height: <?php echo (int) $icon_s; ?>"></span>
                     <?php endif; ?>
                 </a>
             <?php
@@ -240,11 +240,11 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
                     echo '</li>';
                 }
             endforeach; ?>
-        </<?php echo $tag; ?>>
+        </<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'div'/'ul' literal from the ternary above ?>>
         </nav>
         <?php
         $tfx_css = $this->tfx_css( $s, '#' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -252,8 +252,8 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

@@ -70,6 +70,7 @@ class Olo_Schedule_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist (with fixed var() fallbacks), column count via count(), alignment a fixed literal, fixed font-stack literals; $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?>{ font-family:<?php echo $sans; ?>; <?php if ( $center ) echo 'text-align:center;'; ?> }
             .<?php echo $uid; ?> .osc-eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:<?php echo $accent; ?>;display:block;margin-bottom:10px;}
@@ -81,6 +82,7 @@ class Olo_Schedule_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .osc-cell.on{background:<?php echo $accent; ?>;color:<?php echo $on; ?>;font-weight:600;}
             .<?php echo $uid; ?> .osc-cell.empty{opacity:.4;}
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-schedule <?php echo esc_attr( $uid ); ?>">
             <?php if ( $s['eyebrow'] !== '' ) : ?><span class="osc-eyebrow"><?php echo esc_html( $s['eyebrow'] ); ?></span><?php endif; ?>
             <?php if ( $s['heading'] !== '' ) : ?><h2 class="osc-h"><?php echo esc_html( $s['heading'] ); ?></h2><?php endif; ?>
@@ -95,7 +97,7 @@ class Olo_Schedule_Tile extends Olo_Tile_Base {
                         $c = $cells[ $i ] ?? [ 'text' => '', 'on' => false ];
                         $cls = 'osc-cell' . ( $c['on'] ? ' on' : '' ) . ( $c['text'] === '' ? ' empty' : '' );
                     ?>
-                        <div class="<?php echo $cls; ?>"><?php echo $c['text'] === '' ? '·' : esc_html( $c['text'] ); ?></div>
+                        <div class="<?php echo esc_attr( $cls ); ?>"><?php echo $c['text'] === '' ? '·' : esc_html( $c['text'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed middot literal or esc_html()'d cell text from the ternary ?></div>
                     <?php endfor; ?>
                 <?php endforeach; ?>
             </div>

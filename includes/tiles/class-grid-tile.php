@@ -103,7 +103,7 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
 
         ob_start();
 
-        echo '<style>' . $scoped_css . '</style>';
+        echo '<style>' . $scoped_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS assembled in build_scoped_css() exclusively from absint/intval-clamped numbers, esc_attr()'d colours, shared radius/spacing helpers and fixed literal maps
         ?>
         <div class="olo-grid <?php echo esc_attr( $uid ); ?>"<?php if ( $show_filter && $has_tags ) : ?> uk-filter="target: .js-filter; animation: fade"<?php endif; ?>>
 
@@ -114,22 +114,22 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
                 $all_label = ! empty( $s['filter_all_label'] ) ? esc_html( $s['filter_all_label'] ) : 'All';
             ?>
                 <?php if ( $filter_style === 'minimal' ) : ?>
-                <div class="olo-filter-minimal<?php echo $fa_cls; ?>">
-                    <button class="olo-filter-minimal__btn" uk-filter-control><?php echo $all_label; ?></button>
+                <div class="olo-filter-minimal<?php echo esc_attr( $fa_cls ); ?>">
+                    <button class="olo-filter-minimal__btn" uk-filter-control><?php echo $all_label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- pre-escaped via esc_html() at assignment above (or fixed 'All' literal) ?></button>
                     <?php foreach ( $tags as $tag ) : ?>
                     <button class="olo-filter-minimal__btn" uk-filter-control=".tag-<?php echo esc_attr( $tag ); ?>"><?php echo esc_html( ucfirst( str_replace( '-', ' ', $tag ) ) ); ?></button>
                     <?php endforeach; ?>
                 </div>
                 <?php elseif ( $filter_style === 'buttons' ) : ?>
-                <div class="olo-filter-buttons<?php echo $fa_cls; ?>">
-                    <button class="olo-filter-btn" uk-filter-control><?php echo $all_label; ?></button>
+                <div class="olo-filter-buttons<?php echo esc_attr( $fa_cls ); ?>">
+                    <button class="olo-filter-btn" uk-filter-control><?php echo $all_label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- pre-escaped via esc_html() at assignment above (or fixed 'All' literal) ?></button>
                     <?php foreach ( $tags as $tag ) : ?>
                     <button class="olo-filter-btn" uk-filter-control=".tag-<?php echo esc_attr( $tag ); ?>"><?php echo esc_html( ucfirst( str_replace( '-', ' ', $tag ) ) ); ?></button>
                     <?php endforeach; ?>
                 </div>
                 <?php else : ?>
-                <ul class="uk-subnav uk-subnav-pill<?php echo $fa_cls; ?>">
-                    <li class="uk-active" uk-filter-control><a href="#"><?php echo $all_label; ?></a></li>
+                <ul class="uk-subnav uk-subnav-pill<?php echo esc_attr( $fa_cls ); ?>">
+                    <li class="uk-active" uk-filter-control><a href="#"><?php echo $all_label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- pre-escaped via esc_html() at assignment above (or fixed 'All' literal) ?></a></li>
                     <?php foreach ( $tags as $tag ) : ?>
                     <li uk-filter-control=".tag-<?php echo esc_attr( $tag ); ?>"><a href="#"><?php echo esc_html( ucfirst( str_replace( '-', ' ', $tag ) ) ); ?></a></li>
                     <?php endforeach; ?>
@@ -167,12 +167,12 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
                     $card_style = $s['card_style'] ?? 'default';
                 ?>
                 <div<?php if ( $tag_class_str ) : ?> class="<?php echo esc_attr( $tag_class_str ); ?>"<?php endif; ?>>
-                    <<?php echo $link_tag; ?> class="olo-grid-card olo-grid-card--<?php echo esc_attr( $card_style ); ?><?php echo $card_hover !== 'none' ? ' olo-grid-hover--' . esc_attr( $card_hover ) : ''; ?>"<?php echo $link_attrs; ?>>
+                    <<?php echo $link_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed a/div tag from ternary; $link_attrs is built above from esc_url() and fixed literals ?> class="olo-grid-card olo-grid-card--<?php echo esc_attr( $card_style ); ?><?php echo $card_hover !== 'none' ? ' olo-grid-hover--' . esc_attr( $card_hover ) : ''; ?>"<?php echo $link_attrs; ?>>
                         <?php
                         // Badge
                         if ( ! empty( $item['badge'] ) ) {
                             $bc = ! empty( $item['badge_color'] ) ? esc_attr( $item['badge_color'] ) : 'var(--olo-color-primary, #e1474f)';
-                            echo '<span class="olo-grid-badge" style="background:' . $bc . ';">' . esc_html( $item['badge'] ) . '</span>';
+                            echo '<span class="olo-grid-badge" style="background:' . $bc . ';">' . esc_html( $item['badge'] ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $bc is esc_attr()'d above or the fixed var(--olo-color-primary) literal
                         }
 
                         // Image
@@ -184,7 +184,7 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
                                 $img_cls .= ' olo-grid-imganim--' . esc_attr( $img_anim );
                             }
                             $img_html = '<img class="' . esc_attr( $img_cls ) . '" src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( $item['title'] ) . '" loading="lazy">';
-                            echo $this->render_hover_wrap( $img_html, $item['hover_image'] ?? '', $item['hover_video'] ?? '' );
+                            echo $this->render_hover_wrap( $img_html, $item['hover_image'] ?? '', $item['hover_video'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup built by Olo_Tile_Base::render_hover_wrap() from the esc_attr()/esc_url()'d $img_html above; hover URLs are escaped inside the helper
 
                             // Overlay text on image
                             if ( ! empty( $s['overlay_text'] ) ) {
@@ -192,9 +192,9 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
                                 echo '<div class="olo-grid-overlay olo-grid-overlay--' . esc_attr( $ov_pos ) . '">';
                                 list( $gt_cls, $gt_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $item['title'] ) );
                                 list( $gc_cls, $gc_data ) = $this->tfx_attrs( $s, 'content', wp_strip_all_tags( $item['content'] ?? '' ) );
-                                echo '<h3 class="olo-grid-title' . $gt_cls . '"' . $gt_data . '>' . esc_html( wp_strip_all_tags( $item['title'] ) ) . '</h3>';
+                                echo '<h3 class="olo-grid-title' . $gt_cls . '"' . $gt_data . '>' . esc_html( wp_strip_all_tags( $item['title'] ) ) . '</h3>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- text-effect class/attrs built by tfx_attrs() via sanitize_html_class()/esc_attr(); title is esc_html()'d
                                 if ( ! empty( $item['content'] ) ) {
-                                    echo '<p class="olo-grid-text' . $gc_cls . '"' . $gc_data . '>' . nl2br( esc_html( wp_strip_all_tags( $item['content'] ) ) ) . '</p>';
+                                    echo '<p class="olo-grid-text' . $gc_cls . '"' . $gc_data . '>' . nl2br( esc_html( wp_strip_all_tags( $item['content'] ) ) ) . '</p>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- text-effect class/attrs built by tfx_attrs() via sanitize_html_class()/esc_attr(); content is esc_html()'d
                                 }
                                 echo '</div>';
                             }
@@ -215,7 +215,7 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
                             echo '</div>';
                         }
                         ?>
-                    </<?php echo $link_tag; ?>>
+                    </<?php echo $link_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'a'/'div' literal from the ternary above ?>>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -223,7 +223,7 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
         </div>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted colours and intval()'d delays
         $this->tfx_print_script();
         return ob_get_clean();
     }

@@ -145,6 +145,7 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist (with var() token fallbacks), integers via absint() with min()/max() clamps, enums via in_array() whitelists, padding/radius via Olo_Tile_Utils helpers; $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?> {
                 background: <?php echo $bg_col; ?>;
@@ -155,13 +156,13 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
                 if ( $bw > 0 ) :
                     $bc = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
                 ?>
-                border: <?php echo $bw; ?>px solid <?php echo $bc; ?>;
+                border: <?php echo (int) $bw; ?>px solid <?php echo $bc; ?>;
                 <?php endif; ?>
             }
             <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-ab-layout {
                 display: flex;
-                gap: <?php echo $gap; ?>px;
+                gap: <?php echo (int) $gap; ?>px;
                 <?php if ( $layout === 'vertical' ) : ?>
                 flex-direction: column;
                 align-items: center;
@@ -175,9 +176,9 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
                 flex-shrink: 0;
             }
             .<?php echo $uid; ?> .olo-ab-avatar img {
-                width: <?php echo $av_size; ?>px;
-                height: <?php echo $av_size; ?>px;
-                border-radius: <?php echo $av_radius; ?>%;
+                width: <?php echo (int) $av_size; ?>px;
+                height: <?php echo (int) $av_size; ?>px;
+                border-radius: <?php echo (int) $av_radius; ?>%;
                 object-fit: cover;
                 display: block;
                 <?php
@@ -185,7 +186,7 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
                 if ( $abw > 0 ) :
                     $abc = $this->safe_color_css( $s['avatar_border_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
                 ?>
-                border: <?php echo $abw; ?>px solid <?php echo $abc; ?>;
+                border: <?php echo (int) $abw; ?>px solid <?php echo $abc; ?>;
                 <?php endif; ?>
             }
             .<?php echo $uid; ?> .olo-ab-info {
@@ -195,19 +196,19 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-ab-name {
                 margin: 0 0 4px 0;
                 padding: 0;
-                font-size: <?php echo $name_size; ?>px;
+                font-size: <?php echo (int) $name_size; ?>px;
                 font-weight: <?php echo $name_wt; ?>;
                 color: <?php echo $name_col; ?>;
                 line-height: 1.3;
             }
             .<?php echo $uid; ?> .olo-ab-role {
-                font-size: <?php echo $role_size; ?>px;
+                font-size: <?php echo (int) $role_size; ?>px;
                 color: <?php echo $role_col; ?>;
                 font-weight: 500;
                 margin-bottom: 8px;
             }
             .<?php echo $uid; ?> .olo-ab-bio {
-                font-size: <?php echo $bio_size; ?>px;
+                font-size: <?php echo (int) $bio_size; ?>px;
                 color: <?php echo $bio_col; ?>;
                 line-height: 1.55;
                 margin: 8px 0;
@@ -232,6 +233,7 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
                 box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-authorbox <?php echo esc_attr( $uid ); ?>">
             <div class="olo-ab-layout">
                 <?php if ( $show_avatar ) : ?>
@@ -242,7 +244,7 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
 
                 <div class="olo-ab-info">
                     <?php if ( $show_name ) : ?>
-                    <<?php echo $name_tag; ?> class="olo-ab-name"><?php echo esc_html( $author_name ); ?></<?php echo $name_tag; ?>>
+                    <<?php echo $name_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed h3/h4/h5/div tag from the in_array() whitelist above; name escaped inline ?> class="olo-ab-name"><?php echo esc_html( $author_name ); ?></<?php echo $name_tag; ?>>
                     <?php endif; ?>
 
                     <?php if ( $show_role && $role_label ) : ?>
@@ -272,8 +274,8 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base border helpers from sanitized border settings
         }
         return ob_get_clean();
     }

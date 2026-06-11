@@ -87,62 +87,62 @@ class Olo_Countercircle_Tile extends Olo_Tile_Base {
         ?>
         <div id="<?php echo esc_attr( $uid ); ?>" class="olo-countercircle olo-cc-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;gap:8px;">
             <?php if ( $title_pos === 'above' ) : ?>
-            <div style="font-size:<?php echo $title_font_size; ?>px;font-weight:600;color:<?php echo $title_color; ?>;"><?php echo $title; ?></div>
+            <div style="font-size:<?php echo (int) $title_font_size; ?>px;font-weight:600;color:<?php echo $title_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- color sanitized via safe_color_css() above; $title escaped via esc_html() at assignment ?>;"><?php echo $title; ?></div>
             <?php endif; ?>
 
-            <svg width="<?php echo $size; ?>" height="<?php echo $size; ?>" viewBox="0 0 <?php echo $size; ?> <?php echo $size; ?>">
+            <svg width="<?php echo (int) $size; ?>" height="<?php echo (int) $size; ?>" viewBox="0 0 <?php echo (int) $size; ?> <?php echo (int) $size; ?>">
                 <!-- Track -->
                 <circle
-                    cx="<?php echo $center; ?>" cy="<?php echo $center; ?>" r="<?php echo $radius; ?>"
+                    cx="<?php echo (float) $center; ?>" cy="<?php echo (float) $center; ?>" r="<?php echo (float) $radius; ?>"
                     fill="none"
-                    stroke="<?php echo $track_color; ?>"
-                    stroke-width="<?php echo $stroke_w; ?>"
+                    stroke="<?php echo $track_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- color sanitized via safe_color_css() above ?>"
+                    stroke-width="<?php echo (int) $stroke_w; ?>"
                 />
                 <!-- Progress -->
                 <circle
                     class="olo-cc-progress"
-                    cx="<?php echo $center; ?>" cy="<?php echo $center; ?>" r="<?php echo $radius; ?>"
+                    cx="<?php echo (float) $center; ?>" cy="<?php echo (float) $center; ?>" r="<?php echo (float) $radius; ?>"
                     fill="none"
-                    stroke="<?php echo $stroke_color; ?>"
-                    stroke-width="<?php echo $stroke_w; ?>"
-                    stroke-dasharray="<?php echo $circumference; ?>"
-                    stroke-dashoffset="<?php echo $circumference; ?>"
+                    stroke="<?php echo $stroke_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- color sanitized via safe_color_css() above ?>"
+                    stroke-width="<?php echo (int) $stroke_w; ?>"
+                    stroke-dasharray="<?php echo (float) $circumference; ?>"
+                    stroke-dashoffset="<?php echo (float) $circumference; ?>"
                     stroke-linecap="round"
-                    transform="rotate(-90 <?php echo $center; ?> <?php echo $center; ?>)"
-                    data-target-offset="<?php echo $dash_offset; ?>"
-                    style="transition:stroke-dashoffset <?php echo $duration; ?>ms ease;"
+                    transform="rotate(-90 <?php echo (float) $center; ?> <?php echo (float) $center; ?>)"
+                    data-target-offset="<?php echo (float) $dash_offset; ?>"
+                    style="transition:stroke-dashoffset <?php echo (int) $duration; ?>ms ease;"
                 />
                 <!-- Value text -->
                 <text
-                    x="<?php echo $center; ?>"
-                    y="<?php echo ( $title_pos === 'inside' ) ? $center - $font_size * 0.35 : $center; ?>"
+                    x="<?php echo (float) $center; ?>"
+                    y="<?php echo (float) ( ( $title_pos === 'inside' ) ? $center - $font_size * 0.35 : $center ); ?>"
                     text-anchor="middle"
                     dominant-baseline="central"
-                    fill="<?php echo $text_color; ?>"
-                    font-size="<?php echo $font_size; ?>px"
+                    fill="<?php echo $text_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- color sanitized via safe_color_css() above ?>"
+                    font-size="<?php echo (int) $font_size; ?>px"
                     font-weight="700"
                     class="olo-cc-value"
-                    data-olo-cc-target="<?php echo $display_val; ?>"
+                    data-olo-cc-target="<?php echo (int) $display_val; ?>"
                     data-olo-cc-prefix="<?php echo esc_attr( $s['prefix'] ); ?>"
                     data-olo-cc-suffix="<?php echo esc_attr( $s['suffix'] ); ?>"
-                ><?php echo $prefix; ?>0<?php echo $suffix; ?></text>
+                ><?php echo $prefix; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $prefix/$suffix escaped via esc_html() at assignment above ?>0<?php echo $suffix; ?></text>
                 <?php if ( $title_pos === 'inside' ) : ?>
                 <!-- Title inside circle -->
                 <text
-                    x="<?php echo $center; ?>"
-                    y="<?php echo $center + $font_size * 0.65; ?>"
+                    x="<?php echo (float) $center; ?>"
+                    y="<?php echo (float) ( $center + $font_size * 0.65 ); ?>"
                     text-anchor="middle"
                     dominant-baseline="central"
-                    fill="<?php echo $title_color; ?>"
-                    font-size="<?php echo $title_font_size; ?>px"
+                    fill="<?php echo $title_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- color sanitized via safe_color_css() above ?>"
+                    font-size="<?php echo (int) $title_font_size; ?>px"
                     font-weight="500"
-                ><?php echo $title; ?></text>
+                ><?php echo $title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() at assignment above ?></text>
                 <?php endif; ?>
             </svg>
 
             <?php if ( $title_pos === 'below' ) : ?>
             <?php list( $t_tfx_cls, $t_tfx_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $title ) ); ?>
-            <div class="olo-cc-title<?php echo $t_tfx_cls; ?>" style="font-size:<?php echo $title_font_size; ?>px;font-weight:600;color:<?php echo $title_color; ?>;"<?php echo $t_tfx_data; ?>><?php echo $title; ?></div>
+            <div class="olo-cc-title<?php echo $t_tfx_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx attrs escaped internally by Olo_Text_Effects; color via safe_color_css(); $title escaped via esc_html() at assignment ?>" style="font-size:<?php echo (int) $title_font_size; ?>px;font-weight:600;color:<?php echo $title_color; ?>;"<?php echo $t_tfx_data; ?>><?php echo $title; ?></div>
             <?php endif; ?>
         </div>
 
@@ -157,7 +157,7 @@ class Olo_Countercircle_Tile extends Olo_Tile_Base {
             var targetVal = parseInt(valueEl.getAttribute('data-olo-cc-target')) || 0;
             var pfx = valueEl.getAttribute('data-olo-cc-prefix') || '';
             var sfx = valueEl.getAttribute('data-olo-cc-suffix') || '';
-            var dur = <?php echo $duration; ?>;
+            var dur = <?php echo (int) $duration; ?>;
             var animated = false;
 
             function animateCircle(){
@@ -204,16 +204,18 @@ class Olo_Countercircle_Tile extends Olo_Tile_Base {
         </script>
         <?php
         $tfx_css = $this->tfx_css( $s, '#' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated internally by Olo_Text_Effects::css() from sanitized settings.
         $this->tfx_print_script();
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
         $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- border CSS generated by Olo_Tile_Base::build_border_*() helpers (intval sizes, fixed templates); $uid is an internal generated class name.
             echo '<style>';
             if ( $border_css ) echo ".{$uid}{{$border_css}}";
             echo $border_hover_css . $border_effect_css . '</style>';
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
         }
         return ob_get_clean();
     }

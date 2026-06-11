@@ -86,19 +86,20 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
         $hl_border   = $this->safe_color_css( $s['highlighted_bg'] ) ? $this->safe_color_css( $s['highlighted_bg'] ) : 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 20%, transparent)';
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval/whitelists/Olo_Tile_Utils helpers; $uid is internal).
         ?>
         <style>
             .<?php echo $uid; ?> {
                 display: flex;
                 flex-direction: column;
-                gap: <?php echo $gap; ?>px;
+                gap: <?php echo (int) $gap; ?>px;
             }
             .<?php echo $uid; ?> .olo-pl-card {
                 display: flex;
                 align-items: center;
                 gap: 14px;
                 padding: <?php echo $padding; ?>;
-                border-radius: <?php echo $card_radius; ?>px;
+                border-radius: <?php echo (int) $card_radius; ?>px;
                 background: <?php echo $card_bg; ?>;
                 border: 1px solid <?php echo $card_border; ?>;
                 transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
@@ -123,8 +124,8 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
             <?php endif; ?>
             <?php if ( $show_image ) : ?>
             .<?php echo $uid; ?> .olo-pl-img {
-                width: <?php echo $img_size; ?>px;
-                height: <?php echo $img_size; ?>px;
+                width: <?php echo (int) $img_size; ?>px;
+                height: <?php echo (int) $img_size; ?>px;
                 border-radius: <?php echo $img_radius; ?>;
                 overflow: hidden;
                 flex-shrink: 0;
@@ -169,14 +170,14 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
                 font-size: 9px;
                 font-weight: 700;
                 padding: 3px 7px;
-                border-radius: <?php echo $badge_br; ?>px;
+                border-radius: <?php echo (int) $badge_br; ?>px;
                 text-transform: uppercase;
                 margin-left: 8px;
                 vertical-align: middle;
                 line-height: 1;
                 letter-spacing: 0.04em;
                 <?php if ( $badge_bw > 0 ) : ?>
-                border: <?php echo $badge_bw; ?>px <?php echo $badge_bs; ?> <?php echo $badge_bc; ?>;
+                border: <?php echo (int) $badge_bw; ?>px <?php echo $badge_bs; ?> <?php echo $badge_bc; ?>;
                 <?php endif; ?>
             }
             .<?php echo $uid; ?> .olo-pl-price {
@@ -214,12 +215,13 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
                 }
             }
         </style>
+<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-pricelist <?php echo esc_attr( $uid ); ?>">
             <?php foreach ( $items as $item ) :
                 $highlighted = filter_var( $item['highlighted'], FILTER_VALIDATE_BOOLEAN );
                 $hl_class    = $highlighted ? ' olo-pl-card--hl' : '';
             ?>
-            <div class="olo-pl-card<?php echo $hl_class; ?>">
+            <div class="olo-pl-card<?php echo $hl_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed class literal from boolean ternary above ?>">
                 <?php if ( $show_image ) : ?>
                 <div class="olo-pl-img">
                     <?php if ( ! empty( $item['image_url'] ) ) : ?>
@@ -231,7 +233,7 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
                 <div class="olo-pl-body">
                     <div class="olo-pl-top">
                         <div class="olo-pl-info">
-                            <?php list( $plt_cls, $plt_data ) = $this->tfx_attrs( $s, "title", $item["title"] ); ?><span class="olo-pl-title<?php echo $plt_cls; ?>"<?php echo $plt_data; ?>><?php echo esc_html( $item["title"] ); ?></span>
+                            <?php list( $plt_cls, $plt_data ) = $this->tfx_attrs( $s, "title", $item["title"] ); ?><span class="olo-pl-title<?php echo $plt_cls; ?>"<?php echo $plt_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- class/data attrs generated and escaped by Olo_Text_Effects helpers ?>><?php echo esc_html( $item["title"] ); ?></span>
                             <?php if ( ! empty( $item['badge'] ) ) : ?>
                                 <span class="olo-pl-badge"><?php echo esc_html( $item['badge'] ); ?></span>
                             <?php endif; ?>
@@ -241,7 +243,7 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
                         <?php endif; ?>
                     </div>
                     <?php if ( ! empty( $item['description'] ) ) : ?>
-                    <?php list( $pld_cls, $pld_data ) = $this->tfx_attrs( $s, "description", $item["description"] ); ?><div class="olo-pl-desc<?php echo $pld_cls; ?>"<?php echo $pld_data; ?>><?php echo esc_html( $item["description"] ); ?></div>
+                    <?php list( $pld_cls, $pld_data ) = $this->tfx_attrs( $s, "description", $item["description"] ); ?><div class="olo-pl-desc<?php echo $pld_cls; ?>"<?php echo $pld_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- class/data attrs generated and escaped by Olo_Text_Effects helpers ?>><?php echo esc_html( $item["description"] ); ?></div>
                     <?php endif; ?>
                     <?php if ( $price_pos === 'below' ) : ?>
                     <div class="olo-pl-price olo-pl-price--below"><?php echo esc_html( $item['price'] ); ?></div>
@@ -256,7 +258,7 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
         </div>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from fixed effect definitions
         $this->tfx_print_script();
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -264,8 +266,8 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized border settings
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized border settings
         }
         return ob_get_clean();
     }

@@ -76,6 +76,7 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/absint/intval/Olo_Tile_Utils spacing-radius helpers/esc_url/Olo_Tile_Base build_border_* helpers); $uid is an internal generated class name. ?>
         <style>
             .<?php echo $uid; ?> {
                 position: relative; overflow: hidden; text-align: center;
@@ -86,7 +87,7 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
                 background: <?php echo $bg_color; ?>;
                 <?php endif; ?>
                 <?php if ( $tile_bw > 0 ) : ?>
-                border: <?php echo $tile_bw; ?>px solid <?php echo $tile_bc; ?>;
+                border: <?php echo (int) $tile_bw; ?>px solid <?php echo $tile_bc; ?>;
                 <?php endif; ?>
             }
             <?php if ( $tile_r_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $tile_r_hover_css; ?> !important}<?php endif; ?>
@@ -111,19 +112,19 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
             <?php endif; ?>
             .<?php echo $uid; ?> .olo-cnt-inner { position: relative; z-index: 2; }
             .<?php echo $uid; ?> .olo-cnt-icon {
-                font-size: <?php echo $icon_sz; ?>px; line-height: 1.2; margin-bottom: 8px;
+                font-size: <?php echo (int) $icon_sz; ?>px; line-height: 1.2; margin-bottom: 8px;
             }
             .<?php echo $uid; ?> .olo-cnt-number {
-                font-size: <?php echo $num_fs; ?>px;
-                font-weight: <?php echo $num_fw; ?>;
+                font-size: <?php echo (int) $num_fs; ?>px;
+                font-weight: <?php echo (int) $num_fw; ?>;
                 line-height: 1.1;
                 letter-spacing: -0.02em;
                 font-variant-numeric: tabular-nums;
             }
             .<?php echo $uid; ?> .olo-cnt-suffix { color: <?php echo $this->safe_color_css( $s['number_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)'; ?>; }
             .<?php echo $uid; ?> .olo-cnt-label {
-                font-size: <?php echo $lbl_fs; ?>px;
-                font-weight: <?php echo $lbl_fw; ?>;
+                font-size: <?php echo (int) $lbl_fs; ?>px;
+                font-weight: <?php echo (int) $lbl_fw; ?>;
                 margin-top: 8px;
                 <?php if ( $lbl_clr ) : ?>
                 color: <?php echo $lbl_clr; ?>;
@@ -137,6 +138,7 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
         <?php echo $border_hover_css; ?>
         <?php echo $border_effect_css; ?>
         </style><?php endif; ?>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-counter <?php echo esc_attr( $uid ); ?> olo-cnt-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
             <?php if ( $bg_type === 'image' && ! empty( $s['bg_image'] ) ) : ?>
                 <div class="olo-cnt-bg"></div>
@@ -152,7 +154,7 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
                 <?php if ( ! empty( $s['icon_emoji'] ) ) : ?>
                     <div class="olo-cnt-icon">
                         <?php if ( preg_match( '/^[a-z][a-z0-9-]*$/', $s['icon_emoji'] ) ) : ?>
-                            <span style="color:inherit;" uk-icon="icon: <?php echo esc_attr( $s['icon_emoji'] ); ?>; ratio: <?php echo round( $icon_sz / 20, 1 ); ?>"></span>
+                            <span style="color:inherit;" uk-icon="icon: <?php echo esc_attr( $s['icon_emoji'] ); ?>; ratio: <?php echo (float) round( $icon_sz / 20, 1 ); ?>"></span>
                         <?php else : ?>
                             <?php echo esc_html( $s['icon_emoji'] ); ?>
                         <?php endif; ?>
@@ -163,13 +165,13 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
                 </div>
                 <?php if ( ! empty( $s['label'] ) ) : ?>
                     <?php list( $l_tfx_cls, $l_tfx_data ) = $this->tfx_attrs( $s, 'label', wp_strip_all_tags( $s['label'] ) ); ?>
-                    <div class="olo-cnt-label<?php echo $l_tfx_cls; ?>"<?php echo $l_tfx_data; ?>><?php echo $label; ?></div>
+                    <div class="olo-cnt-label<?php echo $l_tfx_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx attrs escaped internally by Olo_Text_Effects; $label escaped via esc_html() at assignment above ?>"<?php echo $l_tfx_data; ?>><?php echo $label; ?></div>
                 <?php endif; ?>
             </div>
         </div>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated internally by Olo_Text_Effects::css() from sanitized settings.
         $this->tfx_print_script();
         return ob_get_clean();
     }

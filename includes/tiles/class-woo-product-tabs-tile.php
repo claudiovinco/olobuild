@@ -83,6 +83,7 @@ class Olo_Woo_Product_Tabs_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+<?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from safe_color_css()-validated colors with fixed var() fallbacks, gated by an in_array() whitelist on $tab_style; $uid is internally generated. Column 0 + closing tag so this line emits zero bytes. ?>
         <style>
             .<?php echo $uid; ?> .olo-tabs-nav {
                 display: flex;
@@ -187,6 +188,7 @@ class Olo_Woo_Product_Tabs_Tile extends Olo_Tile_Base {
                 width: 30%;
             }
         </style>
+<?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped -- column 0 + closing tag so this line emits zero bytes ?>
         <div class="<?php echo esc_attr( $uid ); ?>">
             <div class="olo-tabs-nav" role="tablist">
             <?php
@@ -194,10 +196,10 @@ class Olo_Woo_Product_Tabs_Tile extends Olo_Tile_Base {
             foreach ( $tabs as $key => $tab ) :
                 $active_cls = $first ? ' active' : '';
             ?>
-                <button class="olo-tab-btn<?php echo $active_cls; ?>"
+                <button class="olo-tab-btn<?php echo esc_attr( $active_cls ); ?>"
                         role="tab"
                         data-tab="<?php echo esc_attr( $key ); ?>"
-                        onclick="(function(el){var w=el.closest('.<?php echo $uid; ?>');w.querySelectorAll('.olo-tab-btn').forEach(function(b){b.classList.remove('active')});w.querySelectorAll('.olo-tab-panel').forEach(function(p){p.classList.remove('active')});el.classList.add('active');var t=w.querySelector('[data-panel=&quot;'+el.getAttribute('data-tab')+'&quot;]');if(t){t.classList.add('active')}})(this)">
+                        onclick="(function(el){var w=el.closest('.<?php echo esc_attr( $uid ); ?>');w.querySelectorAll('.olo-tab-btn').forEach(function(b){b.classList.remove('active')});w.querySelectorAll('.olo-tab-panel').forEach(function(p){p.classList.remove('active')});el.classList.add('active');var t=w.querySelector('[data-panel=&quot;'+el.getAttribute('data-tab')+'&quot;]');if(t){t.classList.add('active')}})(this)">
                     <?php echo esc_html( $tab['title'] ); ?>
                 </button>
             <?php
@@ -210,7 +212,7 @@ class Olo_Woo_Product_Tabs_Tile extends Olo_Tile_Base {
             foreach ( $tabs as $key => $tab ) :
                 $active_cls = $first ? ' active' : '';
             ?>
-            <div class="olo-tab-panel<?php echo $active_cls; ?>"
+            <div class="olo-tab-panel<?php echo esc_attr( $active_cls ); ?>"
                  data-panel="<?php echo esc_attr( $key ); ?>"
                  role="tabpanel">
                 <?php
@@ -231,8 +233,8 @@ class Olo_Woo_Product_Tabs_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized border settings
         }
         return ob_get_clean();
     }

@@ -238,6 +238,7 @@ class Olo_Setup_Wizard {
             </div>
 
             <script src="<?php echo esc_url( OLO_URL . 'assets/js/theme-picker.js' ); ?>?v=<?php echo esc_attr( OLO_VERSION ); ?>"></script>
+            <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JS below only outputs wp_json_encode()'d JSON strings, a wp_create_nonce() token, esc_url()'d admin URLs and a fixed integer literal from a ternary. ?>
             <script>
             var oloWizardThemes = <?php echo wp_json_encode( array_map( function ( $t ) { unset( $t['dir'] ); return $t; }, $themes ) ); ?>;
             var nonce = '<?php echo wp_create_nonce( 'olo_setup' ); ?>';
@@ -410,6 +411,7 @@ class Olo_Setup_Wizard {
             // Init first step
             setStep(<?php echo $theme_active ? 2 : 1; ?>);
             </script>
+            <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         </body>
         </html>
         <?php

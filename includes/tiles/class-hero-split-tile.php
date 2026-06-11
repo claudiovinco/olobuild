@@ -228,14 +228,14 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
                         $hweight = preg_match( '/^\d+$/', (string) $s['headline_font_weight'] ) ? $s['headline_font_weight'] : '700';
                         $halign  = in_array( $s['headline_align'] ?? 'left', [ 'left', 'center', 'right', 'justify' ], true ) ? $s['headline_align'] : 'left';
                     ?>
-                        <h1 class="olo-hsplit__headline" style="font-family:<?php echo esc_attr( $headline_family ); ?>;font-size:<?php echo $hsize; ?>px;line-height:<?php echo $hlh; ?>;font-weight:<?php echo esc_attr( $hweight ); ?>;letter-spacing:-0.02em;text-align:<?php echo esc_attr( $halign ); ?>;margin:0 0 28px">
+                        <h1 class="olo-hsplit__headline" style="font-family:<?php echo esc_attr( $headline_family ); ?>;font-size:<?php echo (int) $hsize; ?>px;line-height:<?php echo (float) $hlh; ?>;font-weight:<?php echo esc_attr( $hweight ); ?>;letter-spacing:-0.02em;text-align:<?php echo esc_attr( $halign ); ?>;margin:0 0 28px">
                             <?php foreach ( $headlines as $idx => $line ) :
                                 $line_text = $line['text'] ?? '';
                                 if ( $line_text === '' ) continue;
                                 $color  = $this->safe_color_css( $line['color'] ?? '' ) ?: '#0f172a';
                                 $italic = ! empty( $line['italic'] ) ? 'font-style:italic;' : '';
                             ?>
-                                <span style="display:block;color:<?php echo esc_attr( $color ); ?>;<?php echo $italic; ?>" data-olo-editable="<?php echo 'headline_lines.' . intval( $idx ) . '.text'; ?>"><?php echo esc_html( $line_text ); ?></span>
+                                <span style="display:block;color:<?php echo esc_attr( $color ); ?>;<?php echo esc_attr( $italic ); ?>" data-olo-editable="<?php echo 'headline_lines.' . intval( $idx ) . '.text'; ?>"><?php echo esc_html( $line_text ); ?></span>
                             <?php endforeach; ?>
                         </h1>
                     <?php endif; ?>
@@ -252,7 +252,7 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
                         $subhead_raw  = $s['subhead'] ?? '';
                         $subhead_html = preg_match( '/<[a-z!\/][^>]*>/i', $subhead_raw ) ? $this->safe_richtext_content( $subhead_raw ) : nl2br( esc_html( $subhead_raw ) );
                         ?>
-                        <p class="olo-hsplit__subhead" style="font-family:<?php echo esc_attr( $headline_family ); ?>;font-size:<?php echo $sub_size; ?>px;line-height:1.5;color:<?php echo esc_attr( $sub_color ); ?>;text-align:<?php echo esc_attr( $sub_align ); ?>;<?php echo $sub_italic . $sub_mw_css; ?>margin:0 0 40px" data-olo-editable="subhead" data-olo-richtext><?php echo $subhead_html; ?></p>
+                        <p class="olo-hsplit__subhead" style="font-family:<?php echo esc_attr( $headline_family ); ?>;font-size:<?php echo (int) $sub_size; ?>px;line-height:1.5;color:<?php echo esc_attr( $sub_color ); ?>;text-align:<?php echo esc_attr( $sub_align ); ?>;<?php echo esc_attr( $sub_italic . $sub_mw_css ); ?>margin:0 0 40px" data-olo-editable="subhead" data-olo-richtext><?php echo $subhead_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized above via safe_richtext_content() (wp_kses_post) or nl2br(esc_html()) ?></p>
                     <?php endif; ?>
 
                     <?php if ( ! empty( $s['cta1_text'] ) || ! empty( $s['cta2_text'] ) ) : ?>
@@ -262,7 +262,7 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
                                 $c1_clr = $this->safe_color_css( $s['cta1_color'] ) ?: '#ffffff';
                                 $c1_tgt = $s['cta1_target'] === '_blank' ? ' target="_blank" rel="noopener"' : '';
                             ?>
-                                <a href="<?php echo esc_url( $s['cta1_url'] ?: '#' ); ?>"<?php echo $c1_tgt; ?> class="olo-hsplit__cta olo-hsplit__cta--primary" data-olo-editable="cta1_text" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 28px;background:<?php echo esc_attr( $c1_bg ); ?>;color:<?php echo esc_attr( $c1_clr ); ?>;<?php if ( $cta1_radius ) echo 'border-radius:' . esc_attr( $cta1_radius ) . ';'; ?>font-family:<?php echo esc_attr( $sans_stack ); ?>;font-size:<?php echo $cta1_size; ?>px;font-weight:500;text-decoration:none;border:1px solid <?php echo esc_attr( $c1_bg ); ?>;transition:transform .2s ease,box-shadow .2s ease,background .2s,color .2s,border-color .2s<?php if ( $cta1_radius_h ) echo ',border-radius ' . $cta1_rdur . 'ms ease'; ?>"><?php echo esc_html( $s['cta1_text'] ); ?></a>
+                                <a href="<?php echo esc_url( $s['cta1_url'] ?: '#' ); ?>"<?php echo $c1_tgt; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $c1_tgt is a fixed literal attribute string; remaining parts on this line are esc_url/esc_attr/esc_html or absint/intval-sanitized numbers ?> class="olo-hsplit__cta olo-hsplit__cta--primary" data-olo-editable="cta1_text" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 28px;background:<?php echo esc_attr( $c1_bg ); ?>;color:<?php echo esc_attr( $c1_clr ); ?>;<?php if ( $cta1_radius ) echo 'border-radius:' . esc_attr( $cta1_radius ) . ';'; ?>font-family:<?php echo esc_attr( $sans_stack ); ?>;font-size:<?php echo (int) $cta1_size; ?>px;font-weight:500;text-decoration:none;border:1px solid <?php echo esc_attr( $c1_bg ); ?>;transition:transform .2s ease,box-shadow .2s ease,background .2s,color .2s,border-color .2s<?php if ( $cta1_radius_h ) echo ',border-radius ' . (int) $cta1_rdur . 'ms ease'; ?>"><?php echo esc_html( $s['cta1_text'] ); ?></a>
                             <?php endif; ?>
                             <?php if ( ! empty( $s['cta2_text'] ) ) :
                                 $c2_bg    = $s['cta2_bg'] === 'transparent' ? 'transparent' : ( $this->safe_color_css( $s['cta2_bg'] ) ?: 'transparent' );
@@ -270,7 +270,7 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
                                 $c2_bord  = $this->safe_color_css( $s['cta2_border'] ) ?: '#0f172a';
                                 $c2_tgt   = $s['cta2_target'] === '_blank' ? ' target="_blank" rel="noopener"' : '';
                             ?>
-                                <a href="<?php echo esc_url( $s['cta2_url'] ?: '#' ); ?>"<?php echo $c2_tgt; ?> class="olo-hsplit__cta olo-hsplit__cta--outline" data-olo-editable="cta2_text" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 28px;background:<?php echo esc_attr( $c2_bg ); ?>;color:<?php echo esc_attr( $c2_clr ); ?>;border:1px solid <?php echo esc_attr( $c2_bord ); ?>;<?php if ( $cta2_radius ) echo 'border-radius:' . esc_attr( $cta2_radius ) . ';'; ?>font-family:<?php echo esc_attr( $sans_stack ); ?>;font-size:<?php echo $cta2_size; ?>px;font-weight:500;text-decoration:none;transition:transform .2s ease,box-shadow .2s ease,background .2s,color .2s,border-color .2s<?php if ( $cta2_radius_h ) echo ',border-radius ' . $cta2_rdur . 'ms ease'; ?>"><?php echo esc_html( $s['cta2_text'] ); ?></a>
+                                <a href="<?php echo esc_url( $s['cta2_url'] ?: '#' ); ?>"<?php echo $c2_tgt; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $c2_tgt is a fixed literal attribute string; remaining parts on this line are esc_url/esc_attr/esc_html or absint/intval-sanitized numbers ?> class="olo-hsplit__cta olo-hsplit__cta--outline" data-olo-editable="cta2_text" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 28px;background:<?php echo esc_attr( $c2_bg ); ?>;color:<?php echo esc_attr( $c2_clr ); ?>;border:1px solid <?php echo esc_attr( $c2_bord ); ?>;<?php if ( $cta2_radius ) echo 'border-radius:' . esc_attr( $cta2_radius ) . ';'; ?>font-family:<?php echo esc_attr( $sans_stack ); ?>;font-size:<?php echo (int) $cta2_size; ?>px;font-weight:500;text-decoration:none;transition:transform .2s ease,box-shadow .2s ease,background .2s,color .2s,border-color .2s<?php if ( $cta2_radius_h ) echo ',border-radius ' . (int) $cta2_rdur . 'ms ease'; ?>"><?php echo esc_html( $s['cta2_text'] ); ?></a>
                             <?php endif; ?>
                         </div>
                     <?php endif; ?>
@@ -286,7 +286,7 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
                                 $lbl       = $st['label'] ?? '';
                             ?>
                                 <div class="olo-hsplit__stat">
-                                    <div style="font-family:<?php echo esc_attr( $headline_family ); ?>;font-size:36px;line-height:1;font-weight:600;color:<?php echo esc_attr( $val_color ); ?>;margin-bottom:10px;<?php echo $val === 'Gratis' ? 'font-style:italic;' : ''; ?>" data-olo-editable="<?php echo 'stats.' . intval( $sidx ) . '.value'; ?>"><?php echo esc_html( $val ); ?></div>
+                                    <div style="font-family:<?php echo esc_attr( $headline_family ); ?>;font-size:36px;line-height:1;font-weight:600;color:<?php echo esc_attr( $val_color ); ?>;margin-bottom:10px;<?php echo $val === 'Gratis' ? 'font-style:italic;' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- both ternary branches are fixed literals ?>" data-olo-editable="<?php echo 'stats.' . intval( $sidx ) . '.value'; ?>"><?php echo esc_html( $val ); ?></div>
                                     <div style="font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--olo-color-text-soft, #6b7280);line-height:1.4" data-olo-editable="<?php echo 'stats.' . intval( $sidx ) . '.label'; ?>"><?php echo esc_html( $lbl ); ?></div>
                                 </div>
                             <?php endforeach; ?>
@@ -301,7 +301,7 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
                     $sc_badge_col = $this->safe_color_css( $s['showcase_badge_color'] ?? '' ) ?: '#0f172a';
                     $items        = is_array( $s['showcase_items'] ) ? array_slice( $s['showcase_items'], 0, 4 ) : [];
                 ?>
-                    <div class="olo-hsplit__right" style="<?php echo esc_attr( $showcase_bg_css ); ?>;<?php if ( $sc_radius ) echo 'border-radius:' . esc_attr( $sc_radius ) . ';'; ?>padding:<?php echo $sc_padding; ?>px;position:relative;min-height:480px;display:flex;flex-direction:column<?php if ( $sc_radius_h ) echo ';transition:border-radius ' . $sc_rdur . 'ms ease'; ?>">
+                    <div class="olo-hsplit__right" style="<?php echo esc_attr( $showcase_bg_css ); ?>;<?php if ( $sc_radius ) echo 'border-radius:' . esc_attr( $sc_radius ) . ';'; ?>padding:<?php echo (int) $sc_padding; ?>px;position:relative;min-height:480px;display:flex;flex-direction:column<?php if ( $sc_radius_h ) echo ';transition:border-radius ' . (int) $sc_rdur . 'ms ease'; ?>">
                         <?php if ( ! empty( $s['showcase_badge_text'] ) ) : ?>
                             <div class="olo-hsplit__badge" style="display:inline-flex;align-items:center;gap:8px;background:<?php echo esc_attr( $sc_badge_bg ); ?>;padding:6px 14px;border-radius:999px;font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $sc_badge_col ); ?>;align-self:flex-start;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
                                 <span style="width:8px;height:8px;border-radius:50%;background:<?php echo esc_attr( $sc_badge_dot ); ?>"></span>
@@ -326,9 +326,9 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
                                     }
                                     $shadow_css = $card_shadow ? 'box-shadow:' . $card_shadow . ';' : '';
                                 ?>
-                                    <div class="olo-hsplit__card olo-hsplit__card--<?php echo $idx; ?>" style="<?php echo esc_attr( $card_bg_css ); ?>;<?php if ( $card_radius ) echo 'border-radius:' . esc_attr( $card_radius ) . ';'; ?>padding:24px;display:flex;flex-direction:column;justify-content:space-between;min-height:180px;<?php echo $shadow_css; ?>transition:border-radius <?php echo $card_rdur; ?>ms cubic-bezier(.4,0,.2,1),transform .3s ease,box-shadow .3s ease">
+                                    <div class="olo-hsplit__card olo-hsplit__card--<?php echo (int) $idx; ?>" style="<?php echo esc_attr( $card_bg_css ); ?>;<?php if ( $card_radius ) echo 'border-radius:' . esc_attr( $card_radius ) . ';'; ?>padding:24px;display:flex;flex-direction:column;justify-content:space-between;min-height:180px;<?php echo esc_attr( $shadow_css ); ?>transition:border-radius <?php echo (int) $card_rdur; ?>ms cubic-bezier(.4,0,.2,1),transform .3s ease,box-shadow .3s ease">
                                         <div style="font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:11px;color:var(--olo-color-text-faint, #9ca3af);letter-spacing:0.05em" data-olo-editable="<?php echo 'showcase_items.' . intval( $idx ) . '.number'; ?>"><?php echo esc_html( $num ); ?></div>
-                                        <div style="font-family:<?php echo esc_attr( $headline_family ); ?>;font-size:36px;font-weight:500;color:<?php echo esc_attr( $txt_clr ); ?>;text-align:center;<?php echo $italic; ?>" data-olo-editable="<?php echo 'showcase_items.' . intval( $idx ) . '.text'; ?>"><?php echo esc_html( $txt ); ?></div>
+                                        <div style="font-family:<?php echo esc_attr( $headline_family ); ?>;font-size:36px;font-weight:500;color:<?php echo esc_attr( $txt_clr ); ?>;text-align:center;<?php echo esc_attr( $italic ); ?>" data-olo-editable="<?php echo 'showcase_items.' . intval( $idx ) . '.text'; ?>"><?php echo esc_html( $txt ); ?></div>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
@@ -346,6 +346,7 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
             </div>
         </div>
 
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from sanitized values (safe_color_css colors, build_border_radius_css/intval radii, whitelisted hover effect); $uid is an internal generated class name. ?>
         <style>
             <?php
             // CTA hover (bilaterale withHover)
@@ -380,6 +381,7 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
                 .<?php echo $uid; ?> .olo-hsplit__headline { font-size: clamp(48px, 12vw, 80px) !important; }
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php
 
         return ob_get_clean();

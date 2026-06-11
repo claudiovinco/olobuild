@@ -36,7 +36,7 @@ class Olo_Menuanchor_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div id="<?php echo esc_attr( $anchor_id ); ?>" class="olo-menuanchor" data-offset="<?php echo $offset; ?>" style="height:0; overflow:hidden;"></div>
+        <div id="<?php echo esc_attr( $anchor_id ); ?>" class="olo-menuanchor" data-offset="<?php echo (int) $offset; ?>" style="height:0; overflow:hidden;"></div>
         <?php
 
         // Smooth scroll script — only once per page

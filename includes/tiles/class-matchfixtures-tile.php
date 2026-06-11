@@ -110,6 +110,7 @@ class Olo_MatchFixtures_Tile extends Olo_Tile_Base {
         $pin    = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>';
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist (incl. the color-mix() badge derived from $accent), integers via intval()+min()/max() clamps, card padding/radius integer-forced, font stacks are fixed literals, KIT declarations via Olo_CSS_Builder::get_bg_inline_css()/build_shadow_decl()/build_border_css(); $uid is internally generated.
         ?>
         <style>
             .<?php echo $uid; ?>{display:grid;grid-template-columns:repeat(<?php echo $cols; ?>,1fr);gap:<?php echo $gap; ?>;font-family:<?php echo $sans; ?>;<?php echo $kit_pos; ?><?php echo $kit_extra; ?>}
@@ -132,6 +133,7 @@ class Olo_MatchFixtures_Tile extends Olo_Tile_Base {
             @media(max-width:960px){.<?php echo $uid; ?>{grid-template-columns:repeat(2,1fr);}}
             @media(max-width:620px){.<?php echo $uid; ?>{grid-template-columns:1fr;}}
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-matchfixtures <?php echo esc_attr( $uid ); ?>">
             <?php foreach ( $items as $it ) :
                 $score = trim( (string) ( $it['score'] ?? '' ) );
@@ -141,21 +143,21 @@ class Olo_MatchFixtures_Tile extends Olo_Tile_Base {
                 <article class="omf-fix">
                     <div class="omf-top">
                         <div class="omf-when"><b><?php echo esc_html( $it['day'] ?? '' ); ?></b><span><?php echo esc_html( $it['time_place'] ?? '' ); ?></span></div>
-                        <div class="omf-league"><span class="omf-badge"><?php echo $shield; ?></span><span><?php echo esc_html( $it['league'] ?? '' ); ?><?php if ( ! empty( $it['matchday'] ) ) : ?><br><?php echo esc_html( $it['matchday'] ); ?><?php endif; ?></span></div>
+                        <div class="omf-league"><span class="omf-badge"><?php echo $shield; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static hardcoded SVG markup defined above ?></span><span><?php echo esc_html( $it['league'] ?? '' ); ?><?php if ( ! empty( $it['matchday'] ) ) : ?><br><?php echo esc_html( $it['matchday'] ); ?><?php endif; ?></span></div>
                     </div>
                     <div class="omf-teams">
-                        <div class="omf-side"><span class="omf-crest" style="background:<?php echo $hbg; ?>"><?php echo esc_html( $it['home_crest'] ?? '' ); ?></span><span class="omf-nm"><?php echo esc_html( $it['home_name'] ?? '' ); ?></span></div>
+                        <div class="omf-side"><span class="omf-crest" style="background:<?php echo $hbg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- validated via the safe_color_css() whitelist above ?>"><?php echo esc_html( $it['home_crest'] ?? '' ); ?></span><span class="omf-nm"><?php echo esc_html( $it['home_name'] ?? '' ); ?></span></div>
                         <div class="omf-score<?php echo $score === '' ? ' omf-vs' : ''; ?>"><?php echo $score === '' ? 'vs' : esc_html( $score ); ?></div>
-                        <div class="omf-side"><span class="omf-crest" style="background:<?php echo $abg; ?>"><?php echo esc_html( $it['away_crest'] ?? '' ); ?></span><span class="omf-nm"><?php echo esc_html( $it['away_name'] ?? '' ); ?></span></div>
+                        <div class="omf-side"><span class="omf-crest" style="background:<?php echo $abg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- validated via the safe_color_css() whitelist above ?>"><?php echo esc_html( $it['away_crest'] ?? '' ); ?></span><span class="omf-nm"><?php echo esc_html( $it['away_name'] ?? '' ); ?></span></div>
                     </div>
-                    <?php if ( ! empty( $it['venue'] ) ) : ?><div class="omf-venue"><?php echo $pin; ?><?php echo esc_html( $it['venue'] ); ?></div><?php endif; ?>
+                    <?php if ( ! empty( $it['venue'] ) ) : ?><div class="omf-venue"><?php echo $pin; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static hardcoded SVG markup defined above ?><?php echo esc_html( $it['venue'] ); ?></div><?php endif; ?>
                 </article>
             <?php endforeach; ?>
         </div>
         <?php
         // ── KIT standard: hover bordo + effetti bordo (no-op coi default) ──
         if ( $border_hover_css || $border_effect_css ) {
-            echo '<style>' . $border_hover_css . $border_effect_css . '</style>';
+            echo '<style>' . $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() shared helpers
         }
         return ob_get_clean();
     }

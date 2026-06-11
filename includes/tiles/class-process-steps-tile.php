@@ -86,7 +86,7 @@ class Olo_Process_Steps_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-psteps <?php echo esc_attr( $uid ); ?>" style="display:grid;grid-template-columns:repeat(<?php echo $cols; ?>,1fr);gap:<?php echo $gap; ?>px">
+        <div class="olo-psteps <?php echo esc_attr( $uid ); ?>" style="display:grid;grid-template-columns:repeat(<?php echo (int) $cols; ?>,1fr);gap:<?php echo (int) $gap; ?>px">
             <?php foreach ( $items as $i => $it ) :
                 $num = $auto ? sprintf( '%02d', $i + 1 ) : ( $it['number'] ?? sprintf( '%02d', $i + 1 ) );
                 $cardstyle  = 'display:flex;flex-direction:column;gap:' . $igap . 'px;text-align:' . $align . ';align-items:' . $align_items . ';';
@@ -97,23 +97,25 @@ class Olo_Process_Steps_Tile extends Olo_Tile_Base {
             ?>
             <div class="olo-psteps__item" style="<?php echo esc_attr( $cardstyle ); ?>">
                 <?php if ( $circle ) : ?>
-                    <span style="width:<?php echo $csize; ?>px;height:<?php echo $csize; ?>px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-family:<?php echo esc_attr( $nfont ); ?>;font-weight:<?php echo esc_attr( $nweight ); ?>;font-size:<?php echo round( $nsize * 0.6 ); ?>px;line-height:1;color:<?php echo esc_attr( $ncolor ); ?>;<?php echo $nstyle === 'circle' ? 'background:' . esc_attr( $nbg ?: 'rgba(127,127,127,.12)' ) . ';' : 'border:1px solid ' . esc_attr( $nbg ?: $ncolor ) . ';'; ?>" data-olo-editable="items.<?php echo intval( $i ); ?>.number"><?php echo esc_html( $num ); ?></span>
+                    <span style="width:<?php echo (int) $csize; ?>px;height:<?php echo (int) $csize; ?>px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-family:<?php echo esc_attr( $nfont ); ?>;font-weight:<?php echo esc_attr( $nweight ); ?>;font-size:<?php echo (int) round( $nsize * 0.6 ); ?>px;line-height:1;color:<?php echo esc_attr( $ncolor ); ?>;<?php echo $nstyle === 'circle' ? 'background:' . esc_attr( $nbg ?: 'rgba(127,127,127,.12)' ) . ';' : 'border:1px solid ' . esc_attr( $nbg ?: $ncolor ) . ';'; ?>" data-olo-editable="items.<?php echo intval( $i ); ?>.number"><?php echo esc_html( $num ); ?></span>
                 <?php else : ?>
-                    <span style="font-family:<?php echo esc_attr( $nfont ); ?>;font-weight:<?php echo esc_attr( $nweight ); ?>;font-size:<?php echo $nsize; ?>px;line-height:1;color:<?php echo esc_attr( $ncolor ); ?>;display:block" data-olo-editable="items.<?php echo intval( $i ); ?>.number"><?php echo esc_html( $num ); ?></span>
+                    <span style="font-family:<?php echo esc_attr( $nfont ); ?>;font-weight:<?php echo esc_attr( $nweight ); ?>;font-size:<?php echo (int) $nsize; ?>px;line-height:1;color:<?php echo esc_attr( $ncolor ); ?>;display:block" data-olo-editable="items.<?php echo intval( $i ); ?>.number"><?php echo esc_html( $num ); ?></span>
                 <?php endif; ?>
                 <?php if ( ! empty( $it['title'] ) ) : ?>
-                    <h3 style="font-family:<?php echo esc_attr( $tfont ); ?>;font-weight:<?php echo esc_attr( $tweight ); ?>;font-size:<?php echo $tsize; ?>px;line-height:1.2;color:<?php echo esc_attr( $tcolor ); ?>;margin:0" data-olo-editable="items.<?php echo intval( $i ); ?>.title"><?php echo esc_html( $it['title'] ); ?></h3>
+                    <h3 style="font-family:<?php echo esc_attr( $tfont ); ?>;font-weight:<?php echo esc_attr( $tweight ); ?>;font-size:<?php echo (int) $tsize; ?>px;line-height:1.2;color:<?php echo esc_attr( $tcolor ); ?>;margin:0" data-olo-editable="items.<?php echo intval( $i ); ?>.title"><?php echo esc_html( $it['title'] ); ?></h3>
                 <?php endif; ?>
                 <?php if ( ! empty( $it['description'] ) ) : ?>
-                    <p style="font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo $dsize; ?>px;line-height:1.6;color:<?php echo esc_attr( $dcolor ); ?>;margin:0" data-olo-editable="items.<?php echo intval( $i ); ?>.description"><?php echo esc_html( $it['description'] ); ?></p>
+                    <p style="font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo (int) $dsize; ?>px;line-height:1.6;color:<?php echo esc_attr( $dcolor ); ?>;margin:0" data-olo-editable="items.<?php echo intval( $i ); ?>.description"><?php echo esc_html( $it['description'] ); ?></p>
                 <?php endif; ?>
             </div>
             <?php endforeach; ?>
         </div>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below only interpolates the internally generated 'olo-psteps-' . wp_rand() $uid. ?>
         <style>
             @media (max-width:860px){ .<?php echo $uid; ?>{grid-template-columns:repeat(2,1fr) !important} }
             @media (max-width:480px){ .<?php echo $uid; ?>{grid-template-columns:1fr !important} }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php
         return ob_get_clean();
     }

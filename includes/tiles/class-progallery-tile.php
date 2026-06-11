@@ -331,6 +331,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         ob_start();
 
         // ─── STYLE ───
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: absint/intval/floatval with min/max clamps, number_format(), the safe_color_css() whitelist, esc_attr()'d strings, fixed string maps/ternaries and a generated unique id.
         echo '<style>';
 
         // Hover radius (applies to all layouts — items always have border-radius:$radius)
@@ -881,6 +882,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         echo ".{$uid} .olo-pg-no-poster{width:100%;height:100%;background:#1F2937;display:flex;align-items:center;justify-content:center}";
 
         echo '</style>';
+        // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 
         // ─── Shared JS (once per page) ───
         $needs_tilt3d   = ( $hover === 'tilt3d' );
@@ -958,17 +960,18 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
 
         // ─── Duotone SVG filter ───
         if ( $filter === 'duotone' ) {
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG filter markup built only from number_format() floats and a generated unique id.
             echo '<svg style="position:absolute;width:0;height:0;overflow:hidden"><filter id="duo-' . $uid . '" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0" in="SourceGraphic" result="gray"/><feComponentTransfer in="gray" result="duotone"><feFuncR type="table" tableValues="' . $dr . ' ' . $lr . '"/><feFuncG type="table" tableValues="' . $dg . ' ' . $lg . '"/><feFuncB type="table" tableValues="' . $db . ' ' . $lb . '"/></feComponentTransfer><feBlend in="duotone" in2="SourceGraphic" mode="multiply" result="blended"/><feComposite in="blended" in2="SourceGraphic" operator="arithmetic" k1="0" k2="' . $duo_k2 . '" k3="' . $duo_k3 . '" k4="0"/></filter></svg>';
         }
 
         // Coverflow wrapper (outside lightbox container)
         if ( $is_coverflow ) {
-            echo '<div class="' . $container_class . '-wrap" tabindex="0">';
+            echo '<div class="' . $container_class . '-wrap" tabindex="0">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class is sanitized via esc_attr()/sanitize_key() above.
         }
 
         // ─── Strip arrows wrapper ───
         if ( $strip_arrows ) {
-            echo '<div class="' . $uid . '-sa-wrap" style="position:relative">';
+            echo '<div class="' . esc_attr( $uid ) . '-sa-wrap" style="position:relative">';
         }
 
         // ─── Strip Marquee / Split: rendering speciale con duplicazione ───
@@ -1051,7 +1054,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
 
                 if ( $is_dup ) {
                     $dup_data = $lightbox ? ' data-href="' . esc_url( $lb_href ) . '"' : '';
-                    echo '<div class="olo-pg-item olo-pg-dup' . ( $is_vid ? ' olo-pg-video' : '' ) . '" aria-hidden="true"' . $dup_data . $video_attrs . $inline_style . '>';
+                    echo '<div class="olo-pg-item olo-pg-dup' . ( $is_vid ? ' olo-pg-video' : '' ) . '" aria-hidden="true"' . $dup_data . $video_attrs . $inline_style . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributes are esc_url()-escaped or numeric-built above.
                     // Duplicati marquee: sempre poster per video
                     if ( $is_vid ) {
                         if ( $poster ) {
@@ -1061,13 +1064,13 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
                         }
                         echo '<div class="olo-pg-play"></div>';
                     } else {
-                        echo Olo_Tile_Utils::img_srcset( $att_id, $url, esc_attr( $alt ) );
+                        echo Olo_Tile_Utils::img_srcset( $att_id, $url, esc_attr( $alt ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- img_srcset() returns an <img> tag escaped internally (esc_url/esc_attr/intval).
                     }
                     echo '</div>';
                 } else {
                     $tag  = $lightbox ? 'a' : 'div';
                     $href = $lightbox ? ' href="' . esc_url( $lb_href ) . '"' : '';
-                    echo '<' . $tag . ' class="olo-pg-item' . ( $is_vid ? ' olo-pg-video' : '' ) . '"' . $href . $caption_attr . $thumb_attr . $video_attrs . $inline_style . '>';
+                    echo '<' . $tag . ' class="olo-pg-item' . ( $is_vid ? ' olo-pg-video' : '' ) . '"' . $href . $caption_attr . $thumb_attr . $video_attrs . $inline_style . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tag is a fixed literal ('a'/'div'); attributes are esc_url()/esc_attr()-escaped or numeric-built above.
                     // Strip marquee/split: video sempre in poster mode
                     if ( $is_vid ) {
                         if ( $poster ) {
@@ -1077,21 +1080,21 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
                         }
                         echo '<div class="olo-pg-play"></div>';
                     } else {
-                        echo Olo_Tile_Utils::img_srcset( $att_id, $url, esc_attr( $alt ) );
+                        echo Olo_Tile_Utils::img_srcset( $att_id, $url, esc_attr( $alt ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- img_srcset() returns an <img> tag escaped internally (esc_url/esc_attr/intval).
                     }
                     if ( ! empty( $caption ) ) {
                         if ( $hcaption !== 'none' ) {
                             echo '<div class="olo-pg-cap">' . esc_html( $caption ) . '</div>';
                         }
                     }
-                    echo '</' . $tag . '>';
+                    echo '</' . esc_html( $tag ) . '>';
                 }
             };
 
             if ( $layout === 'strip_marquee' ) {
                 // Marquee: container → track → items + duplicati
-                echo '<div class="' . $container_class . '"' . $lb_attr . $data_attrs . '>';
-                echo '<div class="' . $container_class . '-track">';
+                echo '<div class="' . $container_class . '"' . $lb_attr . $data_attrs . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class/$lb_attr are esc_attr()-built above; $data_attrs holds numeric clamped values only.
+                echo '<div class="' . $container_class . '-track">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class is sanitized via esc_attr()/sanitize_key() above.
                 foreach ( $visible_imgs as $k => $img ) {
                     $render_strip_item( $img, $k, false );
                 }
@@ -1128,16 +1131,16 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
                     else                 { $row2[] = [ 'img' => $img, 'idx' => $k ]; }
                 }
 
-                echo '<div class="' . $container_class . '"' . $lb_attr . $data_attrs . '>';
+                echo '<div class="' . $container_class . '"' . $lb_attr . $data_attrs . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class/$lb_attr are esc_attr()-built above; $data_attrs holds numeric clamped values only.
                 // Row 1 (scorre a sinistra)
-                echo '<div class="' . $container_class . '-row">';
-                echo '<div class="' . $container_class . '-track">';
+                echo '<div class="' . $container_class . '-row">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class is sanitized via esc_attr()/sanitize_key() above.
+                echo '<div class="' . $container_class . '-track">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class is sanitized via esc_attr()/sanitize_key() above.
                 foreach ( $row1 as $item ) { $render_strip_item( $item['img'], $item['idx'], false ); }
                 foreach ( $row1 as $item ) { $render_strip_item( $item['img'], $item['idx'], true ); }
                 echo '</div></div>';
                 // Row 2 (scorre a destra — reverse)
-                echo '<div class="' . $container_class . '-row">';
-                echo '<div class="' . $container_class . '-track ' . $container_class . '-track-rev">';
+                echo '<div class="' . $container_class . '-row">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class is sanitized via esc_attr()/sanitize_key() above.
+                echo '<div class="' . $container_class . '-track ' . $container_class . '-track-rev">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class is sanitized via esc_attr()/sanitize_key() above.
                 foreach ( $row2 as $item ) { $render_strip_item( $item['img'], $item['idx'], false ); }
                 foreach ( $row2 as $item ) { $render_strip_item( $item['img'], $item['idx'], true ); }
                 echo '</div></div>';
@@ -1164,7 +1167,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
 
             // Strip arrows (auto strip)
             if ( $strip_arrows ) {
-                echo $this->strip_arrows_html( $uid, $sa_style, $sa_size, $sa_color, $sa_bg );
+                echo $this->strip_arrows_html( $uid, $sa_style, $sa_size, $sa_color, $sa_bg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- helper builds its HTML/CSS from clamped ints, safe_color_css() colors, a whitelisted style enum and esc_attr()'d labels.
                 echo '</div>'; // sa-wrap
             }
 
@@ -1191,7 +1194,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
             return ob_get_clean();
         }
 
-        echo '<div class="' . $container_class . '"' . $lb_attr . $data_attrs . $hex_inline . '>';
+        echo '<div class="' . $container_class . '"' . $lb_attr . $data_attrs . $hex_inline . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class/$lb_attr are esc_attr()-built above; $data_attrs/$hex_inline hold numeric clamped values only.
 
         // ─── Render items ───
         $i = 0;
@@ -1711,26 +1714,26 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
             if ( $is_visible ) {
                 $combined_style = trim( $inline_style . ( $puzzle_clip ? ';' . $puzzle_clip : '' ) );
                 $style_attr = $combined_style ? ' style="' . esc_attr( $combined_style ) . '"' : '';
-                echo '<' . $tag . ' class="' . $item_class . '"' . $href . $caption_attr . $thumb_attr . $video_attrs . $plx_item_data . $style_attr . '>';
+                echo '<' . $tag . ' class="' . $item_class . '"' . $href . $caption_attr . $thumb_attr . $video_attrs . $plx_item_data . $style_attr . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tag/$item_class are fixed literals; attributes are esc_url()/esc_attr()-escaped or numeric-built above.
 
                 if ( $is_vid ) {
                     if ( $use_autoplay ) {
                         $mime = $this->get_video_mime( $url );
                         $poster_attr = $poster ? ' poster="' . esc_url( $poster ) . '"' : '';
-                        echo '<video muted autoplay loop playsinline' . $poster_attr . '><source src="' . esc_url( $url ) . '" type="' . esc_attr( $mime ) . '"></video>';
+                        echo '<video muted autoplay loop playsinline' . $poster_attr . '><source src="' . esc_url( $url ) . '" type="' . esc_attr( $mime ) . '"></video>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $poster_attr is esc_url()-built above; the rest is escaped inline.
                     } elseif ( $use_embed_autoplay ) {
                         $embed_auto_url = $this->get_gallery_embed_url( $embed, true );
                         echo '<iframe src="' . esc_url( $embed_auto_url ) . '" style="position:absolute;inset:0;width:100%;height:100%;border:none" allow="autoplay;encrypted-media" allowfullscreen loading="lazy"></iframe>';
                     } else {
                         if ( $poster ) {
-                            echo Olo_Tile_Utils::img_srcset( $poster_id, $poster, esc_attr( $alt ) );
+                            echo Olo_Tile_Utils::img_srcset( $poster_id, $poster, esc_attr( $alt ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- img_srcset() returns an <img> tag escaped internally (esc_url/esc_attr/intval).
                         } else {
                             echo '<div class="olo-pg-no-poster"></div>';
                         }
                         echo '<div class="olo-pg-play"></div>';
                     }
                 } else {
-                    echo Olo_Tile_Utils::img_srcset( $att_id, $url, esc_attr( $alt ) );
+                    echo Olo_Tile_Utils::img_srcset( $att_id, $url, esc_attr( $alt ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- img_srcset() returns an <img> tag escaped internally (esc_url/esc_attr/intval).
                 }
 
                 // Hover caption
@@ -1740,18 +1743,18 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
 
                 // +N overlay
                 if ( $is_last_vis ) {
-                    echo '<div class="olo-pg-more">+' . $extra . '</div>';
+                    echo '<div class="olo-pg-more">+' . (int) $extra . '</div>';
                 }
 
-                echo '</' . $tag . '>';
+                echo '</' . esc_html( $tag ) . '>';
             } else {
                 // Hidden items for lightbox
                 if ( $lightbox ) {
                     if ( $is_vid ) {
                         $vid_src = $is_emb ? $this->get_gallery_embed_url( $embed ) : $url;
-                        echo '<a class="olo-pg-hidden" href="' . esc_url( $vid_src ) . '"' . $caption_attr . $thumb_attr . ' data-type="video" data-video-src="' . esc_url( $vid_src ) . '" data-poster="' . esc_url( $poster ) . '"></a>';
+                        echo '<a class="olo-pg-hidden" href="' . esc_url( $vid_src ) . '"' . $caption_attr . $thumb_attr . ' data-type="video" data-video-src="' . esc_url( $vid_src ) . '" data-poster="' . esc_url( $poster ) . '"></a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $caption_attr/$thumb_attr are esc_attr()/esc_url()-built above; the rest is escaped inline.
                     } else {
-                        echo '<a class="olo-pg-hidden" href="' . esc_url( $url ) . '"' . $caption_attr . $thumb_attr . '></a>';
+                        echo '<a class="olo-pg-hidden" href="' . esc_url( $url ) . '"' . $caption_attr . $thumb_attr . '></a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $caption_attr/$thumb_attr are esc_attr()/esc_url()-built above.
                     }
                 }
             }
@@ -1761,6 +1764,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
 
         // Coverflow: frecce + indicatore + chiusura wrapper
         if ( $is_coverflow ) {
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class is sanitized via esc_attr()/sanitize_key() above; button labels are escaped inline.
             echo '<button class="' . $container_class . '-prev" aria-label="' . esc_attr( olo_t( 'Precedente' ) ) . '">&#8249;</button>';
             echo '<button class="' . $container_class . '-next" aria-label="' . esc_attr( olo_t( 'Successivo' ) ) . '">&#8250;</button>';
             if ( $film_dots !== 'none' ) {
@@ -1770,12 +1774,13 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
                     echo '<div class="' . $container_class . '-dots"></div>';
                 }
             }
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
             echo '</div>'; // close -wrap
         }
 
         // Strip arrows (drag strip)
         if ( $strip_arrows ) {
-            echo $this->strip_arrows_html( $uid, $sa_style, $sa_size, $sa_color, $sa_bg );
+            echo $this->strip_arrows_html( $uid, $sa_style, $sa_size, $sa_color, $sa_bg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- helper builds its HTML/CSS from clamped ints, safe_color_css() colors, a whitelisted style enum and esc_attr()'d labels.
             echo '</div>'; // sa-wrap
         }
 
@@ -1785,8 +1790,8 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by the shared Olo_Tile_Base::build_border_css() helper (sizes int-cast); $uid is a generated unique id.
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by the shared Olo_Tile_Base border helpers (build_border_hover_css/build_border_effect_css, sizes int-cast) on a generated uid selector.
         }
         return ob_get_clean();
     }

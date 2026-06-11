@@ -68,9 +68,9 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
         $duration    = max( 100, intval( $s['duration'] ) );
 
         // Button styles
-        $bg          = $s['btn_bg'] ?: 'transparent';
+        $bg          = $this->safe_color_css( $s['btn_bg'] ) ?: 'transparent';
         $color       = $this->safe_color_css( $s['btn_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
-        $hover_bg    = $s['btn_hover_bg'] ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 10%, transparent)';
+        $hover_bg    = $this->safe_color_css( $s['btn_hover_bg'] ) ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 10%, transparent)';
         $bw          = max( 0, intval( $s['btn_border_width'] ) );
         $bc          = $this->safe_color_css( $s['btn_border_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $radius      = Olo_Tile_Utils::border_radius( $s['btn_border_radius'] ?? 0 );
@@ -84,6 +84,7 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist (with token fallbacks), integers via intval() with max() clamps, enums via in_array() whitelists and fixed ternaries, radius via Olo_Tile_Utils helpers, target id via sanitize_html_class() + esc_attr(); $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?>-wrap {
                 text-align: <?php echo $align; ?>;
@@ -95,11 +96,11 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
                 gap: 8px;
                 background: <?php echo $bg; ?>;
                 color: <?php echo $color; ?>;
-                font-size: <?php echo $fsize; ?>px;
+                font-size: <?php echo (int) $fsize; ?>px;
                 font-weight: <?php echo $fweight; ?>;
                 line-height: 1.2;
-                padding: <?php echo $py; ?>px <?php echo $px; ?>px;
-                <?php if ( $bw > 0 ) : ?>border: <?php echo $bw; ?>px solid <?php echo $bc; ?>;<?php endif; ?>
+                padding: <?php echo (int) $py; ?>px <?php echo (int) $px; ?>px;
+                <?php if ( $bw > 0 ) : ?>border: <?php echo (int) $bw; ?>px solid <?php echo $bc; ?>;<?php endif; ?>
                 <?php if ( $radius && $radius !== '0px' ) : ?>border-radius: <?php echo $radius; ?>;<?php endif; ?>
                 cursor: pointer;
                 transition: background 0.2s, transform 0.15s;
@@ -149,7 +150,7 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
 
             /* Target section transitions (after JS adds .olo-tb-ready) */
             #<?php echo esc_attr( $target_id ); ?>.olo-tb-ready {
-                transition: max-height <?php echo $duration; ?>ms ease, opacity <?php echo $duration; ?>ms ease, transform <?php echo $duration; ?>ms ease, padding <?php echo $duration; ?>ms ease, margin <?php echo $duration; ?>ms ease;
+                transition: max-height <?php echo (int) $duration; ?>ms ease, opacity <?php echo (int) $duration; ?>ms ease, transform <?php echo (int) $duration; ?>ms ease, padding <?php echo (int) $duration; ?>ms ease, margin <?php echo (int) $duration; ?>ms ease;
                 overflow: hidden;
             }
             #<?php echo esc_attr( $target_id ); ?>.olo-tb-ready.olo-tb-hidden {
@@ -169,6 +170,7 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
                 pointer-events: auto;
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="<?php echo esc_attr( $uid ); ?>-wrap">
             <button
                 type="button"
@@ -181,19 +183,19 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
                 data-open="<?php echo $is_open ? '1' : '0'; ?>"
             >
                 <?php if ( $icon_pos === 'left' ) : ?>
-                    <span class="olo-tb-icon olo-tb-icon-show" style="<?php echo $is_open ? 'display:none' : ''; ?>"><?php echo $icon_show; ?></span>
-                    <span class="olo-tb-icon olo-tb-icon-hide" style="<?php echo $is_open ? '' : 'display:none'; ?>"><?php echo $icon_hide; ?></span>
+                    <span class="olo-tb-icon olo-tb-icon-show" style="<?php echo $is_open ? 'display:none' : ''; ?>"><?php echo $icon_show; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded get_svg_icon() map ?></span>
+                    <span class="olo-tb-icon olo-tb-icon-hide" style="<?php echo $is_open ? '' : 'display:none'; ?>"><?php echo $icon_hide; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded get_svg_icon() map ?></span>
                 <?php endif; ?>
-                <span class="olo-tb-label"><?php echo $is_open ? $text_hide : $text_show; ?></span>
+                <span class="olo-tb-label"><?php echo $is_open ? $text_hide : $text_show; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- both branches escaped via esc_html() at assignment above ?></span>
                 <?php if ( $icon_pos === 'right' ) : ?>
-                    <span class="olo-tb-icon olo-tb-icon-show" style="<?php echo $is_open ? 'display:none' : ''; ?>"><?php echo $icon_show; ?></span>
-                    <span class="olo-tb-icon olo-tb-icon-hide" style="<?php echo $is_open ? '' : 'display:none'; ?>"><?php echo $icon_hide; ?></span>
+                    <span class="olo-tb-icon olo-tb-icon-show" style="<?php echo $is_open ? 'display:none' : ''; ?>"><?php echo $icon_show; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded get_svg_icon() map ?></span>
+                    <span class="olo-tb-icon olo-tb-icon-hide" style="<?php echo $is_open ? '' : 'display:none'; ?>"><?php echo $icon_hide; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded get_svg_icon() map ?></span>
                 <?php endif; ?>
             </button>
         </div>
         <script>
         document.addEventListener('DOMContentLoaded', function(){
-          document.querySelectorAll('.<?php echo $uid; ?>').forEach(function(btn){
+          document.querySelectorAll('.<?php echo $uid; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- internal 'olo-tb-' . wp_rand() identifier ?>').forEach(function(btn){
             var target = document.getElementById(btn.dataset.target);
             if (!target) return;
             var textShow = btn.dataset.textShow;
@@ -250,8 +252,8 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( $btn_sel, $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo "{$btn_sel}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo "{$btn_sel}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized border settings; selector from internal uid
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base border helpers from sanitized border settings
         }
         return ob_get_clean();
     }

@@ -75,7 +75,7 @@ class Olo_Breadcrumbs_Tile extends Olo_Tile_Base {
         ?>
         <nav class="olo-breadcrumbs olo-bc-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" aria-label="<?php echo esc_attr( olo_t( 'Breadcrumb' ) ); ?>">
             <ul class="uk-breadcrumb">
-                <?php echo implode( "\n", $items ); ?>
+                <?php echo implode( "\n", $items ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- each list item is assembled above exclusively from esc_url()/esc_html()/esc_html__() output and literal markup. ?>
             </ul>
         </nav>
         <style>

@@ -350,37 +350,39 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <?php if ( $input_radius_hover_css !== '' || $results_radius_hover_css !== '' ) : ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: esc_attr()'d element id and Olo_Tile_Utils::radius_force_css() absint-built radii. ?>
         <style>
             #<?php echo esc_attr( $element_id ); ?> .olo-ls-input{transition:border-radius 400ms cubic-bezier(.4,0,.2,1),border-color 0.2s}
             #<?php echo esc_attr( $element_id ); ?> .olo-ls-results{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}
             <?php if ( $input_radius_hover_css !== '' ) : ?>#<?php echo esc_attr( $element_id ); ?> .olo-ls-input:hover{border-radius:<?php echo $input_radius_hover_css; ?> !important}<?php endif; ?>
             <?php if ( $results_radius_hover_css !== '' ) : ?>#<?php echo esc_attr( $element_id ); ?> .olo-ls-results:hover{border-radius:<?php echo $results_radius_hover_css; ?> !important}<?php endif; ?>
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php endif; ?>
         <div id="<?php echo esc_attr( $element_id ); ?>"
              class="olo-livesearch olo-livesearch--<?php echo esc_attr( $mode ); ?> olo-ls-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>"
              data-livesearch="<?php echo esc_attr( $config_b64 ); ?>"
-             style="<?php echo $css_vars; ?>">
+             style="<?php echo $css_vars; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built by Olo_Tile_Base::build_style() which esc_attr()s every value ?>">
 
             <?php if ( $mode === 'modal' ) : ?>
                 <!-- Trigger: solo icona -->
                 <button class="olo-ls-trigger" type="button" aria-label="<?php esc_attr_e( 'Apri ricerca', 'olobuild' ); ?>">
-                    <?php echo $icon_svg; ?>
+                    <?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above ?>
                 </button>
 
                 <!-- Overlay modale (verr&agrave; spostato in <body> dal JS) -->
-                <div class="olo-ls-overlay" style="<?php echo $css_vars; ?>">
+                <div class="olo-ls-overlay" style="<?php echo $css_vars; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built by Olo_Tile_Base::build_style() which esc_attr()s every value ?>">
                     <div class="olo-ls-backdrop"></div>
                     <div class="olo-ls-modal">
                         <div class="olo-ls-field">
-                            <span class="olo-ls-field-icon"><?php echo $icon_svg; ?></span>
+                            <span class="olo-ls-field-icon"><?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above ?></span>
                             <input type="search"
                                    class="olo-ls-input"
                                    placeholder="<?php echo esc_attr( $s['placeholder'] ?: 'Cerca...' ); ?>"
                                    autocomplete="off"
                                    aria-label="<?php esc_attr_e( 'Cerca', 'olobuild' ); ?>">
                             <button class="olo-ls-clear" type="button" aria-label="<?php esc_attr_e( 'Cancella', 'olobuild' ); ?>" hidden>
-                                <?php echo $clear_svg; ?>
+                                <?php echo $clear_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above ?>
                             </button>
                         </div>
 
@@ -402,19 +404,19 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
                 <div class="olo-ls-input-wrap">
                     <?php if ( $mode === 'compact' ) : ?>
                         <button class="olo-ls-trigger" type="button" aria-label="<?php esc_attr_e( 'Apri ricerca', 'olobuild' ); ?>">
-                            <?php echo $icon_svg; ?>
+                            <?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above ?>
                         </button>
                     <?php endif; ?>
 
-                    <div class="olo-ls-field<?php echo $mode === 'compact' ? ' olo-ls-field--hidden' : ''; ?>">
-                        <span class="olo-ls-field-icon"><?php echo $icon_svg; ?></span>
+                    <div class="olo-ls-field<?php echo esc_attr( $mode === 'compact' ? ' olo-ls-field--hidden' : '' ); ?>">
+                        <span class="olo-ls-field-icon"><?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above ?></span>
                         <input type="search"
                                class="olo-ls-input"
                                placeholder="<?php echo esc_attr( $s['placeholder'] ?: 'Cerca...' ); ?>"
                                autocomplete="off"
                                aria-label="<?php esc_attr_e( 'Cerca', 'olobuild' ); ?>">
                         <button class="olo-ls-clear" type="button" aria-label="<?php esc_attr_e( 'Cancella', 'olobuild' ); ?>" hidden>
-                            <?php echo $clear_svg; ?>
+                            <?php echo $clear_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above ?>
                         </button>
                     </div>
                 </div>
@@ -435,8 +437,8 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$element_id}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$element_id}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$element_id}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $element_id is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

@@ -31,7 +31,7 @@ class Olo_Media_Search {
         <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Ricerca Media', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy olo-ms-wrap">
             <?php
-            echo Olo_Builder::cockpit_page_head( [
+            echo Olo_Builder::cockpit_page_head( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally.
                 'title' => __( 'Ricerca Media', 'olobuild' ),
                 'sub'   => sprintf(
                     /* translators: 1: active providers, 2: total providers */
@@ -302,10 +302,12 @@ class Olo_Media_Search {
 
         <script>
         (function(){
+            <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JSON in <script> built by wp_json_encode() from esc_url_raw()'d URLs, the REST nonce, and boolean flags. ?>
             const REST = <?php echo wp_json_encode( $rest_url ); ?>;
             const REST_VTOUR = <?php echo wp_json_encode( $rest_url_vtour ); ?>;
             const NONCE = <?php echo wp_json_encode( $nonce ); ?>;
             const KEYS = <?php echo wp_json_encode( $keys ); ?>;
+            <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
             const PROVIDERS = {
                 photo: [

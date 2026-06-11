@@ -62,13 +62,13 @@ class Olo_Woo_Rating_Tile extends Olo_Tile_Base {
         echo '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">';
         echo '<div style="display:flex;gap:2px;align-items:center">';
         for ( $i = 0; $i < $full_stars; $i++ ) {
-            echo '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="' . $fill . '" stroke="none"><path d="' . $star_path . '"/></svg>';
+            echo '<svg width="' . (int) $size . '" height="' . (int) $size . '" viewBox="0 0 24 24" fill="' . $fill . '" stroke="none"><path d="' . $star_path . '"/></svg>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $fill safe_color_css()'d above; $star_path is a static literal
         }
         if ( $half_star ) {
-            echo '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" stroke="none"><defs><linearGradient id="olo-half-' . $size . '"><stop offset="50%" stop-color="' . $fill . '"/><stop offset="50%" stop-color="' . $empty . '"/></linearGradient></defs><path d="' . $star_path . '" fill="url(#olo-half-' . $size . ')"/></svg>';
+            echo '<svg width="' . (int) $size . '" height="' . (int) $size . '" viewBox="0 0 24 24" stroke="none"><defs><linearGradient id="olo-half-' . (int) $size . '"><stop offset="50%" stop-color="' . $fill . '"/><stop offset="50%" stop-color="' . $empty . '"/></linearGradient></defs><path d="' . $star_path . '" fill="url(#olo-half-' . (int) $size . ')"/></svg>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $fill/$empty safe_color_css()'d above; $star_path is a static literal
         }
         for ( $i = 0; $i < $empty_stars; $i++ ) {
-            echo '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="' . $empty . '" stroke="none"><path d="' . $star_path . '"/></svg>';
+            echo '<svg width="' . (int) $size . '" height="' . (int) $size . '" viewBox="0 0 24 24" fill="' . $empty . '" stroke="none"><path d="' . $star_path . '"/></svg>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $empty safe_color_css()'d above; $star_path is a static literal
         }
         echo '</div>';
 
@@ -80,7 +80,7 @@ class Olo_Woo_Rating_Tile extends Olo_Tile_Base {
             $meta_parts[] = '(' . $count . ' ' . esc_html( olo_t( 'recensioni' ) ) . ')';
         }
         if ( ! empty( $meta_parts ) ) {
-            echo '<span style="color:' . $txt . ';font-size:' . $t_size . 'px">' . implode( ' ', $meta_parts ) . '</span>';
+            echo '<span style="color:' . $txt . ';font-size:' . (int) $t_size . 'px">' . implode( ' ', $meta_parts ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $txt safe_color_css()'d above; $meta_parts built from number_format(), (int) count and esc_html()'d label
         }
         echo '</div>';
 

@@ -102,12 +102,14 @@ class Olo_LookbookMixer_Tile extends Olo_Tile_Base {
                 <a href="<?php echo esc_url( $s['cta_url'] ?: '#' ); ?>" style="display:inline-flex;align-items:center;justify-content:center;padding:14px 26px;border-radius:999px;background:<?php echo esc_attr( $acc ); ?>;color:<?php echo esc_attr( $accink ); ?>;font-family:<?php echo esc_attr( $body ); ?>;font-weight:600;font-size:14px;text-decoration:none;"><?php echo esc_html( $s['cta_text'] ); ?></a>
             </div>
         </div>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css colors); $uid is an internal generated class name. ?>
         <style>
             @media (max-width: 860px) { .<?php echo $uid; ?> { grid-template-columns: 1fr !important; gap: 28px !important; } }
             .<?php echo $uid; ?> .olo-lbmix__nav button:hover { background: <?php echo $acc; ?>; color: <?php echo $accink; ?>; }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <script>(function(){
-            var root = document.querySelector('.<?php echo $uid; ?>');
+            var root = document.querySelector('.<?php echo esc_js( $uid ); ?>');
             if (!root) { return; }
             var cur = root.getAttribute('data-currency') || '';
             var totalEl = root.querySelector('[data-total]');

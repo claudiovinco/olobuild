@@ -98,7 +98,7 @@ class Olo_WorkGrid_Tile extends Olo_Tile_Base {
                 $desc_raw = $it['description'] ?? '';
                 $desc     = preg_match( '/<[a-z!\/][^>]*>/i', $desc_raw ) ? $this->safe_richtext_content( $desc_raw ) : nl2br( esc_html( $desc_raw ) );
             ?>
-                <<?php echo $tag . $attrs; ?> class="olo-workgrid__item">
+                <<?php echo $tag . $attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tag is a fixed 'a'/'div' literal; $attrs is empty or a href built with esc_url() above ?> class="olo-workgrid__item">
                     <div class="olo-workgrid__media" style="aspect-ratio:<?php echo esc_attr( $ar ); ?>;overflow:hidden;margin-bottom:16px;background:<?php echo esc_attr( $media_bg ); ?>;">
                         <?php if ( $image ) : ?>
                             <img src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( $title ); ?>" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" />
@@ -112,18 +112,19 @@ class Olo_WorkGrid_Tile extends Olo_Tile_Base {
                     </div>
                     <div class="olo-workgrid__b" style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;">
                         <?php if ( $title !== '' ) : ?>
-                            <h3 style="font-family:<?php echo esc_attr( $tfam ); ?>;font-weight:<?php echo esc_attr( $title_wt ); ?>;font-size:<?php echo $title_size; ?>px;letter-spacing:-0.02em;color:<?php echo esc_attr( $title_c ); ?>;margin:0;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.title'; ?>"><?php echo esc_html( $title ); ?></h3>
+                            <h3 style="font-family:<?php echo esc_attr( $tfam ); ?>;font-weight:<?php echo esc_attr( $title_wt ); ?>;font-size:<?php echo (int) $title_size; ?>px;letter-spacing:-0.02em;color:<?php echo esc_attr( $title_c ); ?>;margin:0;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.title'; ?>"><?php echo esc_html( $title ); ?></h3>
                         <?php endif; ?>
                         <?php if ( $meta !== '' ) : ?>
-                            <span style="flex:none;font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo $meta_size; ?>px;letter-spacing:.02em;text-transform:uppercase;color:<?php echo esc_attr( $meta_c ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.meta'; ?>"><?php echo esc_html( $meta ); ?></span>
+                            <span style="flex:none;font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $meta_size; ?>px;letter-spacing:.02em;text-transform:uppercase;color:<?php echo esc_attr( $meta_c ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.meta'; ?>"><?php echo esc_html( $meta ); ?></span>
                         <?php endif; ?>
                     </div>
                     <?php if ( $show_desc && $desc ) : ?>
-                        <p style="font-size:<?php echo $desc_size; ?>px;line-height:1.5;color:<?php echo esc_attr( $desc_c ); ?>;margin:6px 0 0;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.description'; ?>" data-olo-richtext><?php echo $desc; ?></p>
+                        <p style="font-size:<?php echo (int) $desc_size; ?>px;line-height:1.5;color:<?php echo esc_attr( $desc_c ); ?>;margin:6px 0 0;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.description'; ?>" data-olo-richtext><?php echo $desc; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized above via safe_richtext_content() (wp_kses_post) for rich text, or esc_html()+nl2br() for plain text ?></p>
                     <?php endif; ?>
-                </<?php echo $tag; ?>>
+                </<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'a'/'div' literal from the ternary above ?>>
             <?php endforeach; ?>
         </div>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from the internally generated $uid and the safe_color_css()-validated $title_c. ?>
         <style>
             .<?php echo $uid; ?> .olo-workgrid__item { display: block; color: inherit; text-decoration: none; }
             .<?php echo $uid; ?> .olo-workgrid__media img, .<?php echo $uid; ?> .olo-workgrid__media .olo-workgrid__ph { transition: transform .6s cubic-bezier(.2,.7,.3,1); }
@@ -135,6 +136,7 @@ class Olo_WorkGrid_Tile extends Olo_Tile_Base {
                 .<?php echo $uid; ?> { grid-template-columns: 1fr !important; }
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php
         return ob_get_clean();
     }

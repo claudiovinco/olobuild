@@ -395,7 +395,7 @@ class Olo_Seo_Head {
 
         foreach ( $schemas as $schema ) {
             if ( ! empty( $schema ) ) {
-                echo '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT ) . '</script>' . "\n";
+                echo '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON-LD payload safely encoded via wp_json_encode() inside a fixed <script type="application/ld+json"> wrapper
             }
         }
 
@@ -408,7 +408,7 @@ class Olo_Seo_Head {
                 $clean = preg_replace( '#</?script[^>]*>#i', '', $clean );
                 $decoded = json_decode( $clean, true );
                 if ( is_array( $decoded ) ) {
-                    echo '<script type="application/ld+json">' . wp_json_encode( $decoded, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT ) . '</script>' . "\n";
+                    echo '<script type="application/ld+json">' . wp_json_encode( $decoded, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- user JSON-LD is json_decode()-validated then re-encoded via wp_json_encode() (script tags stripped above), inside a fixed <script type="application/ld+json"> wrapper
                 }
             }
         }

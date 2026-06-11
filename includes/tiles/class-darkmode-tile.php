@@ -66,6 +66,7 @@ class Olo_Darkmode_Tile extends Olo_Tile_Base {
         $thumb_d    = $track_h - 6;
         $travel     = $track_w - $thumb_d - 6;
 
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist colors, intval()/max()/round() integer dimensions and the internally generated $uid.
         ?>
         <style>
             .<?php echo $uid; ?> { display: flex; align-items: center; justify-content: center; }
@@ -74,13 +75,13 @@ class Olo_Darkmode_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-dm-track {
                 display: inline-flex;
                 align-items: center;
-                width: <?php echo $track_w; ?>px;
-                height: <?php echo $track_h; ?>px;
-                border-radius: <?php echo $track_h; ?>px;
+                width: <?php echo (int) $track_w; ?>px;
+                height: <?php echo (int) $track_h; ?>px;
+                border-radius: <?php echo (int) $track_h; ?>px;
                 background: <?php echo $color; ?>;
                 padding: 3px;
                 cursor: pointer;
-                transition: background <?php echo $duration; ?>ms ease;
+                transition: background <?php echo (int) $duration; ?>ms ease;
                 border: none;
                 outline: none;
                 position: relative;
@@ -92,21 +93,21 @@ class Olo_Darkmode_Tile extends Olo_Tile_Base {
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                width: <?php echo $thumb_d; ?>px;
-                height: <?php echo $thumb_d; ?>px;
+                width: <?php echo (int) $thumb_d; ?>px;
+                height: <?php echo (int) $thumb_d; ?>px;
                 border-radius: 50%;
                 background: #fff;
                 transform: translateX(0);
-                transition: transform <?php echo $duration; ?>ms ease;
+                transition: transform <?php echo (int) $duration; ?>ms ease;
                 color: <?php echo $color; ?>;
             }
             html.olo-dark-mode .<?php echo $uid; ?> .olo-dm-thumb {
-                transform: translateX(<?php echo $travel; ?>px);
+                transform: translateX(<?php echo (int) $travel; ?>px);
                 color: <?php echo $active; ?>;
             }
             .<?php echo $uid; ?> .olo-dm-thumb .olo-dm-icon-sun,
             .<?php echo $uid; ?> .olo-dm-thumb .olo-dm-icon-moon {
-                transition: opacity <?php echo $duration; ?>ms ease, transform <?php echo $duration; ?>ms ease;
+                transition: opacity <?php echo (int) $duration; ?>ms ease, transform <?php echo (int) $duration; ?>ms ease;
                 position: absolute;
             }
             .<?php echo $uid; ?> .olo-dm-thumb .olo-dm-icon-sun {
@@ -137,7 +138,7 @@ class Olo_Darkmode_Tile extends Olo_Tile_Base {
                 align-items: center;
                 justify-content: center;
                 color: <?php echo $color; ?>;
-                transition: color <?php echo $duration; ?>ms ease, transform <?php echo $duration; ?>ms ease;
+                transition: color <?php echo (int) $duration; ?>ms ease, transform <?php echo (int) $duration; ?>ms ease;
             }
             html.olo-dark-mode .<?php echo $uid; ?> .olo-dm-icon-btn {
                 color: <?php echo $active; ?>;
@@ -147,7 +148,7 @@ class Olo_Darkmode_Tile extends Olo_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-dm-icon-btn .olo-dm-icon-sun,
             .<?php echo $uid; ?> .olo-dm-icon-btn .olo-dm-icon-moon {
-                transition: opacity <?php echo $duration; ?>ms ease, transform <?php echo $duration; ?>ms ease;
+                transition: opacity <?php echo (int) $duration; ?>ms ease, transform <?php echo (int) $duration; ?>ms ease;
                 position: absolute;
             }
             .<?php echo $uid; ?> .olo-dm-icon-btn .olo-dm-icon-sun {
@@ -175,7 +176,7 @@ class Olo_Darkmode_Tile extends Olo_Tile_Base {
                 font-size: 14px;
                 font-weight: 600;
                 cursor: pointer;
-                transition: all <?php echo $duration; ?>ms ease;
+                transition: all <?php echo (int) $duration; ?>ms ease;
                 font-family: inherit;
             }
             html.olo-dark-mode .<?php echo $uid; ?> .olo-dm-button {
@@ -193,7 +194,7 @@ class Olo_Darkmode_Tile extends Olo_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-dm-button .olo-dm-icon-sun,
             .<?php echo $uid; ?> .olo-dm-button .olo-dm-icon-moon {
-                transition: opacity <?php echo $duration; ?>ms ease, transform <?php echo $duration; ?>ms ease;
+                transition: opacity <?php echo (int) $duration; ?>ms ease, transform <?php echo (int) $duration; ?>ms ease;
                 margin-right: 8px;
                 flex-shrink: 0;
             }
@@ -222,6 +223,7 @@ class Olo_Darkmode_Tile extends Olo_Tile_Base {
                 display: inline;
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <div class="olo-darkmode <?php echo esc_attr( $uid ); ?>"
              data-olo-darkmode="1"
@@ -232,21 +234,21 @@ class Olo_Darkmode_Tile extends Olo_Tile_Base {
             <?php if ( $style === 'toggle' ) : ?>
                 <button type="button" class="olo-dm-track" aria-label="<?php echo esc_attr( olo_t( 'Toggle dark mode' ) ); ?>">
                     <span class="olo-dm-thumb" style="position:relative;">
-                        <span class="olo-dm-icon-sun"><?php echo $sun_sm; ?></span>
-                        <span class="olo-dm-icon-moon"><?php echo $moon_sm; ?></span>
+                        <span class="olo-dm-icon-sun"><?php echo $sun_sm; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup built above from hardcoded paths and intval'd sizes only ?></span>
+                        <span class="olo-dm-icon-moon"><?php echo $moon_sm; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup built above from hardcoded paths and intval'd sizes only ?></span>
                     </span>
                 </button>
 
             <?php elseif ( $style === 'icon' ) : ?>
                 <button type="button" class="olo-dm-icon-btn" aria-label="<?php echo esc_attr( olo_t( 'Toggle dark mode' ) ); ?>" style="position:relative;">
-                    <span class="olo-dm-icon-sun"><?php echo $sun_svg; ?></span>
-                    <span class="olo-dm-icon-moon"><?php echo $moon_svg; ?></span>
+                    <span class="olo-dm-icon-sun"><?php echo $sun_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup built above from hardcoded paths and intval'd sizes only ?></span>
+                    <span class="olo-dm-icon-moon"><?php echo $moon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup built above from hardcoded paths and intval'd sizes only ?></span>
                 </button>
 
             <?php else : ?>
                 <button type="button" class="olo-dm-button" aria-label="<?php echo esc_attr( olo_t( 'Toggle dark mode' ) ); ?>">
-                    <span class="olo-dm-icon-sun"><?php echo $sun_svg; ?></span>
-                    <span class="olo-dm-icon-moon"><?php echo $moon_svg; ?></span>
+                    <span class="olo-dm-icon-sun"><?php echo $sun_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup built above from hardcoded paths and intval'd sizes only ?></span>
+                    <span class="olo-dm-icon-moon"><?php echo $moon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup built above from hardcoded paths and intval'd sizes only ?></span>
                     <span class="olo-dm-text-light"><?php echo esc_html( $s['button_text_light'] ); ?></span>
                     <span class="olo-dm-text-dark"><?php echo esc_html( $s['button_text_dark'] ); ?></span>
                 </button>
@@ -255,7 +257,7 @@ class Olo_Darkmode_Tile extends Olo_Tile_Base {
 
         <script>
         (function(){
-            var wrap = document.querySelector('.<?php echo $uid; ?>');
+            var wrap = document.querySelector('.<?php echo esc_js( $uid ); ?>');
             if (!wrap) return;
             var btn = wrap.querySelector('button');
             if (!btn) return;
@@ -309,7 +311,7 @@ class Olo_Darkmode_Tile extends Olo_Tile_Base {
                 } else if (stored === 'light') {
                     html.classList.remove('olo-dark-mode');
                 } else {
-                    if (<?php echo $respect_js; ?>) {
+                    if (<?php echo $respect_js; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'true'/'false' literal from boolean ternary above ?>) {
                         if (window.matchMedia) {
                             if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
                                 html.classList.add('olo-dark-mode');
@@ -320,7 +322,7 @@ class Olo_Darkmode_Tile extends Olo_Tile_Base {
             })();
             </script>
             <style>
-                html { transition: background-color <?php echo $dur; ?>ms ease, color <?php echo $dur; ?>ms ease; }
+                html { transition: background-color <?php echo (int) $dur; ?>ms ease, color <?php echo (int) $dur; ?>ms ease; }
             </style>
             <?php
         }, 1 );

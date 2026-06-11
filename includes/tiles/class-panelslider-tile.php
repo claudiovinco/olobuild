@@ -157,11 +157,11 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <style><?php echo $css; ?></style>
-        <div class="<?php echo $wrap_classes; ?>" uk-slider="autoplay: <?php echo $autoplay; ?>; autoplay-interval: <?php echo $interval; ?>; finite: <?php echo $autoplay === 'true' ? 'false' : 'true'; ?>">
+        <style><?php echo $css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- scoped CSS built by build_scoped_css()/build_wow_effects_css() from absint()/intval()/floatval() numerics, safe_color_css()/esc_attr()'d colors and in_array()/preg_match() whitelisted enums ?></style>
+        <div class="<?php echo $wrap_classes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- classes assembled above from literal prefixes + esc_attr()'d tokens; $autoplay is a fixed 'true'/'false' literal ?>" uk-slider="autoplay: <?php echo $autoplay; ?>; autoplay-interval: <?php echo (int) $interval; ?>; finite: <?php echo $autoplay === 'true' ? 'false' : 'true'; ?>">
             <div class="uk-position-relative">
                 <div class="uk-slider-container uk-slider-container-offset">
-                    <ul class="uk-slider-items uk-child-width-1-<?php echo $columns; ?>@m uk-grid <?php echo esc_attr( $gap_class . $equal_class ); ?>">
+                    <ul class="uk-slider-items uk-child-width-1-<?php echo (int) $columns; ?>@m uk-grid <?php echo esc_attr( $gap_class . $equal_class ); ?>">
                         <?php foreach ( $panels as $i => $panel ) :
                             $has_link   = ! empty( $panel['link'] );
                             $link_open  = '';
@@ -174,11 +174,11 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
                             $card_classes = 'olo-ps-card olo-ps-card--' . esc_attr( $img_position );
                         ?>
                             <li>
-                                <?php echo $link_open; ?>
-                                <div class="<?php echo $card_classes; ?>">
+                                <?php echo $link_open; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- anchor built above from fixed literals + esc_url()'d href ?>
+                                <div class="<?php echo $card_classes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- literal prefix + esc_attr()'d position token, assembled above ?>">
                                     <?php $widget_html = $this->render_widget_template( $panel['widget_template_id'] ?? 0 ); ?>
                                     <?php if ( $widget_html ) : ?>
-                                        <div class="olo-item-widget"><?php echo $widget_html; ?></div>
+                                        <div class="olo-item-widget"><?php echo $widget_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML produced by render_widget_template() (internal template renderer, escapes its own output) ?></div>
                                     <?php endif; ?>
                                     <?php
                                     list( $pst_cls, $pst_data ) = $this->tfx_attrs( $s, 'title', $panel['title'] ?? '' );
@@ -205,6 +205,7 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
                                         $media_html = '<div class="olo-ps-media">' . $img_with_hover . '</div>';
                                     }
 
+                                    // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- $media_html/$body_html are assembled above from esc_url()/esc_attr()/esc_html()/safe_richtext_content() parts; tfx_attrs() fragments and render_hover_wrap() escape internally.
                                     if ( $img_position === 'bg' ) {
                                         // Image is the background, body is overlaid
                                         echo $media_html;
@@ -221,16 +222,17 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
                                         echo $media_html;
                                         echo $body_html;
                                     }
+                                    // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
                                     ?>
                                 </div>
-                                <?php echo $link_close; ?>
+                                <?php echo $link_close; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal '</a>' or empty string, set above ?>
                             </li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
 
                 <?php if ( $show_arrows ) :
-                    echo $this->render_arrows( $arrow_style );
+                    echo $this->render_arrows( $arrow_style ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup built by render_arrows() from fixed SVG literals and esc_attr__()'d labels
                 endif; ?>
             </div>
 
@@ -240,7 +242,7 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
         </div>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
 
         // Border system
@@ -249,8 +251,8 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

@@ -171,18 +171,18 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <?php if ( $radius_hover_css !== '' ) : ?>
-        <style>.<?php echo esc_attr( $uid ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo esc_attr( $uid ); ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}</style>
+        <style>.<?php echo esc_attr( $uid ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo esc_attr( $uid ); ?>:hover{border-radius:<?php echo esc_attr( $radius_hover_css ); ?> !important}</style>
         <?php endif; ?>
-        <div class="olo-map olo-map-dynamic <?php echo esc_attr( $uid ); ?>" style="position:relative; border-radius: <?php echo $radius; ?>; overflow: hidden;">
+        <div class="olo-map olo-map-dynamic <?php echo esc_attr( $uid ); ?>" style="position:relative; border-radius: <?php echo esc_attr( $radius ); ?>; overflow: hidden;">
             <iframe
                 src="<?php echo esc_url( $src ); ?>"
-                style="width: 100%; height: <?php echo $height; ?>px; border: 0;"
+                style="width: 100%; height: <?php echo (int) $height; ?>px; border: 0;"
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
                 title="<?php echo esc_attr( $title ); ?>"
             ></iframe>
             <?php if ( $fs_enabled ) : ?>
-                <?php echo $this->build_fullscreen_btn( $uid ); ?>
+                <?php echo $this->build_fullscreen_btn( $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static button markup built by build_fullscreen_btn() with esc_attr()'d attributes only ?>
                 <style>
                 .<?php echo esc_attr( $uid ); ?> .olo-map-fs-btn {
                     position: absolute; top: 10px; right: 10px; z-index: 1000;
@@ -281,7 +281,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $marker_type  = sanitize_key( $s['marker_type'] ?? 'pin' );
         $marker_image = esc_url( $s['marker_image'] ?? '' );
         $marker_size  = absint( $s['marker_size'] ?? 36 ) ?: 36;
-        $tile_url     = esc_js( $this->get_tile_layer_url( $s['tile_layer'] ?? 'standard' ) );
+        $tile_url     = $this->get_tile_layer_url( $s['tile_layer'] ?? 'standard' ); // fixed whitelist URL, esc_js()'d at output.
 
         // If user didn't override marker_type but set marker_shape, adopt it
         $shape_override = sanitize_key( $s['marker_shape'] ?? 'pin' );
@@ -302,12 +302,12 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         ?>
 
         <?php if ( $radius_hover_css !== '' ) : ?>
-        <style>#<?php echo esc_attr( $map_id ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $map_id ); ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}</style>
+        <style>#<?php echo esc_attr( $map_id ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $map_id ); ?>:hover{border-radius:<?php echo esc_attr( $radius_hover_css ); ?> !important}</style>
         <?php endif; ?>
         <div class="olo-map-wrap <?php echo esc_attr( $uid ); ?>" style="position:relative;">
-        <div id="<?php echo esc_attr( $map_id ); ?>" class="olo-map" style="height:<?php echo $height; ?>px; border-radius:<?php echo $radius; ?>; overflow:hidden;"></div>
+        <div id="<?php echo esc_attr( $map_id ); ?>" class="olo-map" style="height:<?php echo (int) $height; ?>px; border-radius:<?php echo esc_attr( $radius ); ?>; overflow:hidden;"></div>
         <?php if ( $fs_enabled ) : ?>
-            <?php echo $this->build_fullscreen_btn( $map_id ); ?>
+            <?php echo $this->build_fullscreen_btn( $map_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static button markup built by build_fullscreen_btn() with esc_attr()'d attributes only ?>
             <style>
             .<?php echo esc_attr( $uid ); ?> .olo-map-fs-btn {
                 position: absolute; top: 10px; right: 10px; z-index: 1000;
@@ -364,11 +364,11 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                 }
 
                 var map = L.map('<?php echo esc_js( $map_id ); ?>', {
-                    scrollWheelZoom: <?php echo $scroll_zoom_js; ?>,
-                    dragging: <?php echo $dragging_js; ?>
-                }).setView([<?php echo $lat; ?>, <?php echo $lng; ?>], <?php echo $zoom; ?>);
+                    scrollWheelZoom: <?php echo $scroll_zoom_js; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'true'/'false' literal from boolean ternary above ?>,
+                    dragging: <?php echo $dragging_js; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'true'/'false' literal from boolean ternary above ?>
+                }).setView([<?php echo (float) $lat; ?>, <?php echo (float) $lng; ?>], <?php echo (int) $zoom; ?>);
 
-                L.tileLayer('<?php echo $tile_url; ?>', {
+                L.tileLayer('<?php echo esc_js( $tile_url ); ?>', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                     maxZoom: 19
                 }).addTo(map);
@@ -377,10 +377,10 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                 var markerIcon;
                 <?php if ( $marker_type === 'image' && $marker_image ) : ?>
                 markerIcon = L.icon({
-                    iconUrl: '<?php echo $marker_image; ?>',
-                    iconSize: [<?php echo $marker_size; ?>, <?php echo $marker_size; ?>],
-                    iconAnchor: [<?php echo $marker_size / 2; ?>, <?php echo $marker_size; ?>],
-                    popupAnchor: [0, -<?php echo $marker_size; ?>],
+                    iconUrl: '<?php echo $marker_image; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_url() at assignment above ?>',
+                    iconSize: [<?php echo (int) $marker_size; ?>, <?php echo (int) $marker_size; ?>],
+                    iconAnchor: [<?php echo (float) ( $marker_size / 2 ); ?>, <?php echo (int) $marker_size; ?>],
+                    popupAnchor: [0, -<?php echo (int) $marker_size; ?>],
                     className: 'olo-osm-marker-img'
                 });
                 <?php else :
@@ -403,17 +403,17 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                     $anchor_y = $is_tall ? $icon_h : round( $icon_h / 2 );
                 ?>
                 markerIcon = L.divIcon({
-                    html: '<?php echo $svg; ?>',
-                    iconSize: [<?php echo $ms; ?>, <?php echo $icon_h; ?>],
-                    iconAnchor: [<?php echo round( $ms / 2 ); ?>, <?php echo $anchor_y; ?>],
-                    popupAnchor: [0, -<?php echo $anchor_y; ?>],
+                    html: '<?php echo $svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG markup assembled above exclusively from absint() sizes and the esc_attr()'d marker color ?>',
+                    iconSize: [<?php echo (int) $ms; ?>, <?php echo (int) $icon_h; ?>],
+                    iconAnchor: [<?php echo (int) round( $ms / 2 ); ?>, <?php echo (int) $anchor_y; ?>],
+                    popupAnchor: [0, -<?php echo (int) $anchor_y; ?>],
                     className: 'olo-osm-marker'
                 });
                 <?php endif; ?>
 
-                var marker = L.marker([<?php echo $lat; ?>, <?php echo $lng; ?>], { icon: markerIcon }).addTo(map);
+                var marker = L.marker([<?php echo (float) $lat; ?>, <?php echo (float) $lng; ?>], { icon: markerIcon }).addTo(map);
                     <?php if ( ! empty( $popup_text ) ) : ?>
-                marker.bindPopup('<?php echo $popup_text; ?>');
+                marker.bindPopup('<?php echo $popup_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_js( wp_strip_all_tags() ) at assignment above ?>');
                     <?php endif; ?>
                 <?php endif; ?>
             }
@@ -523,7 +523,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <style>
-        <?php echo $this->build_plm_css( $uid, $map_pos, $map_w, $height, $f_cols, $grid_cols, $card_r, $card_mh, $color, $btn_bg, $btn_color, $filter_pos, $filter_w ); ?>
+        <?php echo $this->build_plm_css( $uid, $map_pos, $map_w, $height, $f_cols, $grid_cols, $card_r, $card_mh, $color, $btn_bg, $btn_color, $filter_pos, $filter_w ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by build_plm_css() exclusively from absint/clamped ints, safe_hex() colors and whitelisted enums ?>
         </style>
 
         <div class="olo-tile olo-tile--plm <?php echo esc_attr( $uid ); ?>" role="region" aria-label="<?php echo esc_attr( olo_t( 'Mappa luoghi' ) ); ?>">
@@ -612,10 +612,10 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         </div>
 
         <?php if ( $emit_schema && ! empty( $locations ) ) : ?>
-            <script type="application/ld+json"><?php echo wp_json_encode( $this->build_multi_schema( $locations, 'Place' ), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ); ?></script>
+            <script type="application/ld+json"><?php echo wp_json_encode( $this->build_multi_schema( $locations, 'Place' ), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON-LD payload produced by wp_json_encode(); HTML-escaping would corrupt the JSON ?></script>
         <?php endif; ?>
 
-        <?php echo $this->build_plm_js( $js_data ); ?>
+        <?php echo $this->build_plm_js( $js_data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self-contained script tag built by build_plm_js(); data is passed through wp_json_encode() and the script body is base64-wrapped ?>
         <?php
         return ob_get_clean();
     }
@@ -803,7 +803,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
     private function render_filters( $terms, $style, $map_id, $align = 'left' ) {
         $align_cls = $align === 'center' ? ' olo-filter-center' : ( $align === 'right' ? ' olo-filter-right' : '' );
         ?>
-        <div class="olo-map-filters<?php echo $align_cls; ?>" data-map-target="<?php echo esc_attr( $map_id ); ?>">
+        <div class="olo-map-filters<?php echo esc_attr( $align_cls ); ?>" data-map-target="<?php echo esc_attr( $map_id ); ?>">
             <?php if ( $style === 'dropdown' ) : ?>
                 <select class="olo-map-filter-select uk-select" data-filter-select>
                     <option value=""><?php esc_html_e( 'Tutti', 'olobuild' ); ?></option>
@@ -829,7 +829,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                 <?php foreach ( $terms as $term ) : ?>
                     <button class="olo-map-filter-pill" data-filter="<?php echo esc_attr( $term['slug'] ); ?>">
                         <?php if ( ! empty( $term['color'] ) ) : ?>
-                            <span class="olo-map-filter-dot" style="background:<?php echo $this->safe_color_css( $term['color'] ); ?>"></span>
+                            <span class="olo-map-filter-dot" style="background:<?php echo $this->safe_color_css( $term['color'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- color validated by the safe_color_css() whitelist; may legitimately contain var() fallbacks with quotes, esc_attr() would corrupt the CSS ?>"></span>
                         <?php endif; ?>
                         <?php echo esc_html( $term['name'] ); ?>
                     </button>
@@ -943,7 +943,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <style>
-        <?php echo $this->build_plm_css( $uid, $map_pos, $map_w, $height, $f_cols, $grid_cols, $card_r, $card_mh, $color, $btn_bg, $btn_color, $filter_pos, $filter_w ); ?>
+        <?php echo $this->build_plm_css( $uid, $map_pos, $map_w, $height, $f_cols, $grid_cols, $card_r, $card_mh, $color, $btn_bg, $btn_color, $filter_pos, $filter_w ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by build_plm_css() exclusively from absint/clamped ints, safe_hex() colors and whitelisted enums ?>
         </style>
 
         <div class="olo-tile olo-tile--plm <?php echo esc_attr( $uid ); ?>" role="region" aria-label="<?php echo esc_attr( olo_t( 'Mappa servizi' ) ); ?>">
@@ -1022,10 +1022,10 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         </div>
 
         <?php if ( $emit_schema && ! empty( $locations ) ) : ?>
-            <script type="application/ld+json"><?php echo wp_json_encode( $this->build_multi_schema( $locations, $schema_item_type ), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ); ?></script>
+            <script type="application/ld+json"><?php echo wp_json_encode( $this->build_multi_schema( $locations, $schema_item_type ), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON-LD payload produced by wp_json_encode(); HTML-escaping would corrupt the JSON ?></script>
         <?php endif; ?>
 
-        <?php echo $this->build_plm_js( $js_data ); ?>
+        <?php echo $this->build_plm_js( $js_data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self-contained script tag built by build_plm_js(); data is passed through wp_json_encode() and the script body is base64-wrapped ?>
         <?php
         return ob_get_clean();
     }
@@ -1286,7 +1286,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         <div class="olo-map-filters-bar olo-map-filters-bar--compact" data-map-target="<?php echo esc_attr( $map_id ); ?>">
             <?php $this->render_compact_filters( $s, $locations, $map_id ); ?>
             <div class="olo-map-svc-filter-counter" data-map-target="<?php echo esc_attr( $map_id ); ?>">
-                <span data-svc-count><?php echo count( $locations ); ?></span> / <?php echo count( $locations ); ?> risultati
+                <span data-svc-count><?php echo (int) count( $locations ); ?></span> / <?php echo (int) count( $locations ); ?> risultati
             </div>
         </div>
         <?php else : ?>
@@ -1312,7 +1312,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             }
             ?>
             <div class="olo-map-svc-filter-counter" data-map-target="<?php echo esc_attr( $map_id ); ?>">
-                <span data-svc-count><?php echo count( $locations ); ?></span> / <?php echo count( $locations ); ?> risultati
+                <span data-svc-count><?php echo (int) count( $locations ); ?></span> / <?php echo (int) count( $locations ); ?> risultati
             </div>
         </div>
         <?php
@@ -1553,7 +1553,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                 <button class="olo-map-filter-pill olo-map-filter-active" data-svc-filter=""><?php echo esc_html( olo_t( 'Tutti' ) ); ?></button>
                 <?php foreach ( $labels as $item ) : ?>
                     <button class="olo-map-filter-pill" data-svc-filter="<?php echo esc_attr( $item['range'] ); ?>">
-                        <?php echo $item['label']; ?>
+                        <?php echo $item['label']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- label built above from intval()'d numbers and the static &euro; entity; esc_html() would double-encode the entity ?>
                     </button>
                 <?php endforeach; ?>
             </div>
@@ -1630,7 +1630,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                     $icon  = $amenity_icons[ $slug ] ?? '';
                 ?>
                     <button class="olo-map-filter-pill olo-map-filter-pill--amenity" data-svc-filter="<?php echo esc_attr( $slug ); ?>">
-                        <?php if ( $icon ) : ?><span class="olo-map-amenity-icon"><?php echo $icon; ?></span><?php endif; ?>
+                        <?php if ( $icon ) : ?><span class="olo-map-amenity-icon"><?php echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed HTML entity from the hardcoded $amenity_icons map above; esc_html() would double-encode it ?></span><?php endif; ?>
                         <?php echo esc_html( $label ); ?>
                     </button>
                 <?php endforeach; ?>
@@ -1889,15 +1889,16 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         }
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS template below is built exclusively from values sanitized by the callers: $sel/$grid_template from internally generated uid + whitelisted enums and normalize_dim() percentages, colors from safe_hex(), ints from absint()/clamps.
         ?>
-        <?php echo $sel; ?> { display: grid; <?php echo $grid_template; ?> width: 100%; max-width: 100%; height: <?php echo $height; ?>px; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, sans-serif; box-sizing: border-box; }
+        <?php echo $sel; ?> { display: grid; <?php echo $grid_template; ?> width: 100%; max-width: 100%; height: <?php echo (int) $height; ?>px; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, sans-serif; box-sizing: border-box; }
         <?php echo $sel; ?> .plm-map-panel { position: relative; grid-area: M; min-height: 0; min-width: 0; }
         <?php echo $sel; ?> .plm-map { width: 100%; height: 100%; z-index: 1; }
         <?php echo $sel; ?> .plm-fullscreen-btn { position: absolute; top: 10px; right: 10px; z-index: 1000; width: 34px; height: 34px; background: #fff; border: 2px solid rgba(0,0,0,0.2); border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; color: #374151; }
         <?php echo $sel; ?> .plm-fullscreen-btn:hover { background: #f4f4f4; }
         <?php echo $sel; ?> .plm-results-panel { grid-area: R; display: flex; flex-direction: column; overflow: hidden; background: #FAFBFC; min-height: 0; min-width: 0; }
         <?php echo $sel; ?> .plm-filters { padding: 16px 20px; background: #fff; border-bottom: 1px solid #E5E7EB; flex-shrink: 0; min-width: 0; box-sizing: border-box; }
-        <?php echo $sel; ?> .plm-filters-grid { display: grid; grid-template-columns: repeat(<?php echo $f_cols; ?>, 1fr); gap: 10px; }
+        <?php echo $sel; ?> .plm-filters-grid { display: grid; grid-template-columns: repeat(<?php echo (int) $f_cols; ?>, 1fr); gap: 10px; }
         <?php echo $sel; ?> .plm-filter-group { display: flex; flex-direction: column; gap: 3px; }
         <?php echo $sel; ?> .plm-filter-group--full { grid-column: 1 / -1; }
         <?php echo $sel; ?> .plm-filter-label { font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.04em; }
@@ -1926,13 +1927,13 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         <?php echo $sel; ?> .plm-view-btn:last-child { border-radius: 0 4px 4px 0; }
         <?php echo $sel; ?> .plm-view-btn.is-active { background: <?php echo $color; ?>; border-color: <?php echo $color; ?>; color: #fff; }
         <?php echo $sel; ?> .plm-results-list { flex: 1; overflow-y: auto; padding: 12px 16px; min-height: 0; }
-        <?php echo $sel; ?> .plm-card { display: grid; grid-template-columns: 38% 1fr; border: 1px solid #E5E7EB; border-radius: <?php echo $card_r; ?>px; overflow: hidden;<?php if ( $card_mh > 0 ) echo ' max-height: ' . $card_mh . 'px;'; ?> background: #fff; margin-bottom: 10px; transition: box-shadow 0.2s, transform 0.15s; cursor: pointer; text-decoration: none; color: inherit; }
+        <?php echo $sel; ?> .plm-card { display: grid; grid-template-columns: 38% 1fr; border: 1px solid #E5E7EB; border-radius: <?php echo (int) $card_r; ?>px; overflow: hidden;<?php if ( $card_mh > 0 ) echo ' max-height: ' . (int) $card_mh . 'px;'; ?> background: #fff; margin-bottom: 10px; transition: box-shadow 0.2s, transform 0.15s; cursor: pointer; text-decoration: none; color: inherit; }
         <?php echo $sel; ?> .plm-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-1px); }
         <?php echo $sel; ?> .plm-card.is-highlighted { box-shadow: 0 0 0 2px <?php echo $color; ?>, 0 4px 12px rgba(0,0,0,0.1); }
-        <?php echo $sel; ?> .plm-results-list.plm-grid-view { display: grid; grid-template-columns: repeat(<?php echo $g_cols; ?>, 1fr); gap: 10px; padding: 12px 16px; align-content: start; }
+        <?php echo $sel; ?> .plm-results-list.plm-grid-view { display: grid; grid-template-columns: repeat(<?php echo (int) $g_cols; ?>, 1fr); gap: 10px; padding: 12px 16px; align-content: start; }
         <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card { display: flex; flex-direction: column; margin-bottom: 0; position: relative; min-height: 220px; }
         <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card-img { position: absolute; inset: 0; height: 100%; }
-        <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card-body { position: relative; z-index: 2; margin-top: auto; background: linear-gradient(0deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 70%, transparent 100%); padding: 40px 12px 10px; border-radius: 0 0 <?php echo $card_r; ?>px <?php echo $card_r; ?>px; }
+        <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card-body { position: relative; z-index: 2; margin-top: auto; background: linear-gradient(0deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 70%, transparent 100%); padding: 40px 12px 10px; border-radius: 0 0 <?php echo (int) $card_r; ?>px <?php echo (int) $card_r; ?>px; }
         <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card-title,
         <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card-sub,
         <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card-price { color: #fff; }
@@ -1988,6 +1989,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             <?php echo $sel; ?> .plm-card-img { height: 160px; }
         }
         <?php
+        // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
         return ob_get_clean();
     }
 
@@ -2001,7 +2003,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         ?>
         <script>
         (function(){
-            var D = <?php echo $json; ?>;
+            var D = <?php echo $json; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline-script JSON payload produced by wp_json_encode() above; HTML-escaping would corrupt the JS ?>;
             function ready(fn) {
                 if (document.readyState !== 'loading') return fn();
                 document.addEventListener('DOMContentLoaded', fn);
@@ -2504,6 +2506,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $c = $this->safe_hex( $color, '#e1474f' );
         $uid_sel = '.' . $uid;
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS template below is built exclusively from the internally generated $uid selector, the safe_hex()-validated color and absint() ints; build_cluster_css() uses the same sanitized inputs.
         ?>
         <?php echo $uid_sel; ?> { position: relative; }
         <?php echo $uid_sel; ?> .olo-map-fs-btn {
@@ -2667,6 +2670,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             <?php echo $uid_sel; ?> .olo-map-card { grid-template-columns: 1fr; }
         }
         <?php
+        // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
         return ob_get_clean();
     }
 
@@ -2682,7 +2686,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         ?>
         <script>
         (function(){
-            var CFG = <?php echo $cfg_json; ?>;
+            var CFG = <?php echo $cfg_json; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline-script JSON payload produced by wp_json_encode() above; HTML-escaping would corrupt the JS ?>;
             var UID = CFG.uid, MAP_ID = CFG.mapId;
             var PER_PAGE = parseInt(CFG.perPage, 10) || 0; // 0 = all
             var CAN_SEARCH = !!CFG.searchEnabled;
@@ -3026,8 +3030,8 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by the base-class build_border_css() helper from sanitized settings
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by the base-class build_border_hover_css()/build_border_effect_css() helpers from sanitized settings
         }
         return ob_get_clean();
     }

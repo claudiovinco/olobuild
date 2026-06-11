@@ -66,6 +66,7 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colours via the safe_color_css() whitelist, integers via absint(), radius via build_border_radius_css()/Olo_Tile_Utils::radius_force_css() (integer px), hover effect from fixed-literal branches; $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?> .olo-popover-drop {
                 background: <?php echo $popup_bg; ?>;
@@ -123,11 +124,12 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-popover-drop:hover .olo-popover-drop__media::after { opacity: 0.45; }
             <?php endif; ?>
         </style>
-        <div class="olo-popover uk-inline <?php echo $uid; ?>" style="width:100%;">
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+        <div class="olo-popover uk-inline <?php echo esc_attr( $uid ); ?>" style="width:100%;">
             <?php if ( ! empty( $s['image'] ) ) : ?>
-                <?php echo Olo_Tile_Utils::img_srcset( absint( $s['image_id'] ?? 0 ), $s['image'], $s['image_alt'] ?? '', '', 'full', 'style="' . esc_attr( $img_style ) . '"' ); ?>
+                <?php echo Olo_Tile_Utils::img_srcset( absint( $s['image_id'] ?? 0 ), $s['image'], $s['image_alt'] ?? '', '', 'full', 'style="' . esc_attr( $img_style ) . '"' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <img> markup built by Olo_Tile_Utils::img_srcset() with esc_url()/esc_attr() internally ?>
             <?php else : ?>
-                <div style="width:100%;<?php echo $image_height > 0 ? 'height:' . $image_height . 'px;' : 'padding-bottom:56.25%;'; ?>background:var(--olo-color-text, #1F2937);"></div>
+                <div style="width:100%;<?php echo esc_attr( $image_height > 0 ? 'height:' . $image_height . 'px;' : 'padding-bottom:56.25%;' ); ?>background:var(--olo-color-text, #1F2937);"></div>
             <?php endif; ?>
 
             <?php foreach ( $markers as $i => $marker ) :
@@ -135,7 +137,7 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
                 $y = floatval( $marker['y'] ?? 50 );
                 $marker_img = $marker['image'] ?? '';
             ?>
-                <a class="uk-position-absolute olo-popover-marker" href="#" style="left:<?php echo esc_attr( $x ); ?>%;top:<?php echo esc_attr( $y ); ?>%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:<?php echo $color; ?>;display:block;box-shadow:0 0 0 3px rgba(255,255,255,0.4);" aria-label="<?php echo esc_attr( $marker['title'] ?? '' ); ?>"></a>
+                <a class="uk-position-absolute olo-popover-marker" href="#" style="left:<?php echo esc_attr( $x ); ?>%;top:<?php echo esc_attr( $y ); ?>%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:<?php echo $color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- safe_color_css()-whitelisted colour; may legitimately be a var() value with fallback that esc_attr() could alter ?>;display:block;box-shadow:0 0 0 3px rgba(255,255,255,0.4);" aria-label="<?php echo esc_attr( $marker['title'] ?? '' ); ?>"></a>
                 <div uk-drop="mode: click; pos: top-center">
                     <div class="olo-popover-drop">
                         <?php if ( ! empty( $marker_img ) ) : ?>
@@ -149,10 +151,10 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
                         ?>
                         <div class="olo-popover-drop__body">
                             <?php if ( ! empty( $marker['title'] ) ) : ?>
-                                <h4 class="uk-margin-small-bottom<?php echo $pvt_cls; ?>"<?php echo $pvt_data; ?>><?php echo esc_html( $marker['title'] ); ?></h4>
+                                <h4 class="uk-margin-small-bottom<?php echo $pvt_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr) ?>"<?php echo $pvt_data; ?>><?php echo esc_html( $marker['title'] ); ?></h4>
                             <?php endif; ?>
                             <?php if ( ! empty( $marker['content'] ) ) : ?>
-                                <p class="uk-margin-remove<?php echo $pvc_cls; ?>"<?php echo $pvc_data; ?>><?php echo $this->safe_richtext_content( $marker['content'] ); ?></p>
+                                <p class="uk-margin-remove<?php echo $pvc_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); content sanitized via safe_richtext_content() (wp_kses_post) ?>"<?php echo $pvc_data; ?>><?php echo $this->safe_richtext_content( $marker['content'] ); ?></p>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -161,7 +163,7 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
         </div>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -169,8 +171,8 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

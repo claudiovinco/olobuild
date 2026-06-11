@@ -67,6 +67,7 @@ class Olo_AnnouncementBar_Tile extends Olo_Tile_Base {
         if ( $accent !== '' ) { $inner .= '<b>' . esc_html( $accent ) . '</b>'; }
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: background via Olo_CSS_Builder::get_bg_inline_css() or the safe_color_css() whitelist, colours via safe_color_css(), $fs/$bb via intval() clamps, $fw/$tt/$align via in_array() whitelists, $ls via preg_replace() character whitelist, padding integer-forced, font stack fixed literal; $uid is internally generated.
         ?>
         <style>
             .<?php echo $uid; ?>{<?php echo $bg; ?>;color:<?php echo $tcol; ?>;text-align:<?php echo $align; ?>;font-family:<?php echo $sans; ?>;font-size:<?php echo $fs; ?>px;font-weight:<?php echo $fw; ?>;letter-spacing:<?php echo $ls; ?>;text-transform:<?php echo $tt; ?>;padding:<?php echo $pad; ?>;<?php if ( $bb > 0 ) : ?>border-bottom:<?php echo $bb; ?>px solid <?php echo $bc; ?>;<?php endif; ?>position:relative;line-height:1.4;}
@@ -76,8 +77,9 @@ class Olo_AnnouncementBar_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .oab-close:hover{opacity:1;}
             .<?php echo $uid; ?> .oab-close:focus-visible{outline:2px solid <?php echo $acol; ?>;outline-offset:2px;}
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-annbar <?php echo esc_attr( $uid ); ?>">
-            <?php if ( $link !== '' ) : ?><a class="oab-link" href="<?php echo esc_url( $link ); ?>"><?php echo $inner; ?></a><?php else : ?><span><?php echo $inner; ?></span><?php endif; ?>
+            <?php if ( $link !== '' ) : ?><a class="oab-link" href="<?php echo esc_url( $link ); ?>"><?php echo $inner; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above from esc_html()'d text/accent plus a literal <b> wrapper ?></a><?php else : ?><span><?php echo $inner; ?></span><?php endif; ?>
             <?php if ( $dismiss ) : ?><button class="oab-close" type="button" aria-label="<?php echo esc_attr( __( 'Close', 'olobuild' ) ); ?>">&times;</button><?php endif; ?>
         </div>
         <?php if ( $dismiss ) :

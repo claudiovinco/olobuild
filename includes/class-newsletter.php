@@ -376,7 +376,7 @@ class Olo_Newsletter {
                 <?php if ( $pages > 1 ) : ?>
                     <div class="tablenav olo-nl-pagination"><div class="tablenav-pages">
                         <?php
-                        echo paginate_links( [
+                        echo paginate_links( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- paginate_links() returns core-generated pagination HTML with escaped URLs.
                             'base'    => add_query_arg( 'paged', '%#%' ),
                             'format'  => '',
                             'current' => $paged,

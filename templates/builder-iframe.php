@@ -45,7 +45,7 @@ if ( file_exists( $vtour_path . 'assets/vendor/psv/psv-bundle.css' ) ) :
 <?php
 // Style system CSS
 if ( class_exists( 'Olo_Style_System' ) ) {
-    echo '<style id="olo-style-system">' . Olo_Style_System::instance()->generate_css() . '</style>';
+    echo '<style id="olo-style-system">' . Olo_Style_System::instance()->generate_css() . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated internally by Olo_Style_System from sanitized style options; escaping would corrupt valid CSS.
 }
 ?>
 <style>
@@ -81,7 +81,7 @@ body[data-olo-pagebg], html[data-olo-pagebg], body[data-olo-pagebg] #olo-iframe-
 </head>
 <body>
 <div id="olo-iframe-root">
-    <?php echo Olo_Builder::get_iframe_empty_html(); ?>
+    <?php echo Olo_Builder::get_iframe_empty_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static markup built internally with esc_html__() labels ?>
 </div>
 <!-- Core JS -->
 <script src="<?php echo esc_url( OLO_URL . 'assets/vendor/uikit/js/uikit.min.js' ); ?>"></script>

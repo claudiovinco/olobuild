@@ -28,14 +28,14 @@ $footer_id = (int) get_option( 'olo_active_footer', 0 );
 // ── Olobuild Header ──
 if ( $header_id ) {
     $header_int = new Olo_Header_Integration();
-    echo $header_int->render_header( $header_id );
+    echo $header_int->render_header( $header_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- header markup built by the plugin's own tile renderer; tile output is escaped at the source.
 }
 ?>
 
 <main class="olo-404-content" role="main">
 <?php
 if ( $tpl_id ) {
-    echo do_shortcode( '[olo_template id="' . (int) $tpl_id . '"]' );
+    echo do_shortcode( '[olo_template id="' . (int) $tpl_id . '"]' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- renders the plugin's own [olo_template] shortcode (id hard-cast to int); template markup is escaped at the source by each tile renderer.
 }
 ?>
 </main>
@@ -44,7 +44,7 @@ if ( $tpl_id ) {
 // ── Olobuild Footer ──
 if ( $footer_id ) {
     $footer_int = new Olo_Footer_Integration();
-    echo $footer_int->render_footer( $footer_id );
+    echo $footer_int->render_footer( $footer_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- footer markup built by the plugin's own tile renderer; tile output is escaped at the source.
 }
 ?>
 

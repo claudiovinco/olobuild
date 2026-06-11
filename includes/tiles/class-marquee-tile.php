@@ -149,6 +149,7 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist, background declaration via Olo_CSS_Builder::get_bg_inline_css() (escapes internally) or the safe_color_css() fallback, integers via intval() with max()/min() clamps, enums via in_array() whitelists and fixed ternaries, font-family via resolve_font_family(); $uid is internally generated. ?>
         <style>
             @keyframes <?php echo $uid; ?>-scroll {
                 0% { transform: translateX(0); }
@@ -159,7 +160,7 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
                 display: flex;
                 align-items: center;
                 <?php echo $bg; ?>;
-                height: <?php echo $height; ?>px;
+                height: <?php echo (int) $height; ?>px;
                 overflow: hidden;
                 width: 100%;
                 <?php if ( $full_width ) : ?>
@@ -177,8 +178,8 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
                 left: auto;
                 margin-left: 0;
                 position: static;
-                <?php if ( $bt > 0 ) : ?>border-top: <?php echo $bt; ?>px solid <?php echo $bc; ?>;<?php endif; ?>
-                <?php if ( $bb > 0 ) : ?>border-bottom: <?php echo $bb; ?>px solid <?php echo $bc; ?>;<?php endif; ?>
+                <?php if ( $bt > 0 ) : ?>border-top: <?php echo (int) $bt; ?>px solid <?php echo $bc; ?>;<?php endif; ?>
+                <?php if ( $bb > 0 ) : ?>border-bottom: <?php echo (int) $bb; ?>px solid <?php echo $bc; ?>;<?php endif; ?>
             }
 
             .<?php echo $uid; ?> .olo-mq-track {
@@ -186,8 +187,8 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
                 align-items: center;
                 height: 100%;
                 width: max-content;
-                gap: <?php echo $gap; ?>px;
-                animation: <?php echo $uid; ?>-scroll <?php echo $speed; ?>s linear infinite;
+                gap: <?php echo (int) $gap; ?>px;
+                animation: <?php echo $uid; ?>-scroll <?php echo (int) $speed; ?>s linear infinite;
                 <?php if ( $direction === 'right' ) : ?>
                 animation-direction: reverse;
                 <?php endif; ?>
@@ -206,9 +207,9 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
             <?php if ( $is_text ) : ?>
             .<?php echo $uid; ?> .olo-mq-text {
                 color: <?php echo $text_color; ?>;
-                font-size: <?php echo $font_size; ?>px;
+                font-size: <?php echo (int) $font_size; ?>px;
                 font-weight: <?php echo $font_weight; ?>;
-                letter-spacing: <?php echo $ls; ?>px;
+                letter-spacing: <?php echo (int) $ls; ?>px;
                 text-transform: <?php echo $tt; ?>;
                 <?php if ( $font_family ) : ?>font-family: <?php echo $font_family; ?>;<?php endif; ?>
                 font-style: <?php echo $fstyle; ?>;
@@ -223,7 +224,7 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-mq-sep {
                 color: <?php echo $sepcol; ?>;
-                font-size: <?php echo $sepsize; ?>px;
+                font-size: <?php echo (int) $sepsize; ?>px;
                 font-weight: <?php echo $font_weight; ?>;
                 line-height: 1;
                 opacity: <?php echo $sep_op; ?>;
@@ -232,7 +233,7 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
             }
             <?php else : ?>
             .<?php echo $uid; ?> .olo-mq-img {
-                height: <?php echo $img_height; ?>px;
+                height: <?php echo (int) $img_height; ?>px;
                 width: auto;
                 flex-shrink: 0;
                 object-fit: contain;
@@ -241,9 +242,10 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
             }
             <?php endif; ?>
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-mq <?php echo esc_attr( $uid ); ?>">
             <div class="olo-mq-track">
-                <?php echo $inner_html; ?>
+                <?php echo $inner_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built above with esc_html() for text/separator and esc_url()/esc_attr() for images; placeholder is fixed markup ?>
             </div>
         </div>
 
@@ -265,11 +267,11 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
             // Il JS prende il controllo: spegne l'animazione CSS e guida transform via rAF
             track.style.animation = 'none';
 
-            var BASE  = <?php echo json_encode( $vs_base ); ?>;
-            var BOOST = <?php echo json_encode( $vs_boost ); ?>;
-            var MAXSK = <?php echo json_encode( $vs_max ); ?>;
-            var DAMP  = <?php echo json_encode( $vs_damp ); ?>;
-            var DIR   = <?php echo json_encode( $dir_sign ); ?>;
+            var BASE  = <?php echo json_encode( $vs_base ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- float clamped via floatval()+min()/max() above, JSON-encoded ?>;
+            var BOOST = <?php echo json_encode( $vs_boost ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- float clamped via floatval()+min()/max() above, JSON-encoded ?>;
+            var MAXSK = <?php echo json_encode( $vs_max ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- integer clamped via intval()+min()/max() above, JSON-encoded ?>;
+            var DAMP  = <?php echo json_encode( $vs_damp ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- float clamped via floatval()+min()/max() above, JSON-encoded ?>;
+            var DIR   = <?php echo json_encode( $dir_sign ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 1/-1 literal from the ternary above, JSON-encoded ?>;
 
             var x = 0, vel = 0, lastY = window.scrollY || window.pageYOffset || 0;
             var paused = false, running = false, rafId = null;
@@ -326,8 +328,8 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base border helpers from sanitized border settings
         }
         return ob_get_clean();
     }

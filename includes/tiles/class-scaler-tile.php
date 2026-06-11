@@ -61,6 +61,7 @@ class Olo_Scaler_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, fixed font-stack and alignment literals; $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?>{ --sl-accent:<?php echo $accent; ?>; font-family:<?php echo $sans; ?>; <?php if ( $center ) echo 'text-align:center;'; ?> }
             .<?php echo $uid; ?> .osl-eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--sl-accent);display:block;margin-bottom:10px;}
@@ -80,6 +81,7 @@ class Olo_Scaler_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .osl-tot{display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin-top:16px;padding-top:14px;border-top:2px solid <?php echo $line; ?>;}
             .<?php echo $uid; ?> .osl-tot b{font-family:<?php echo $serif; ?>;font-size:24px;color:var(--sl-accent);}
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-scaler <?php echo esc_attr( $uid ); ?>" data-scaler data-mode="<?php echo esc_attr( $mode ); ?>" data-base="<?php echo esc_attr( $base ); ?>">
             <?php if ( $s['eyebrow'] !== '' ) : ?><span class="osl-eyebrow"><?php echo esc_html( $s['eyebrow'] ); ?></span><?php endif; ?>
             <?php if ( $s['heading'] !== '' ) : ?><h2 class="osl-h"><?php echo esc_html( $s['heading'] ); ?></h2><?php endif; ?>
@@ -108,7 +110,7 @@ class Olo_Scaler_Tile extends Olo_Tile_Base {
         </div>
         <script>
         (function(){
-            var root=document.querySelector('.<?php echo $uid; ?>[data-scaler]'); if(!root){return;}
+            var root=document.querySelector('.<?php echo esc_js( $uid ); ?>[data-scaler]'); if(!root){return;}
             var mode=root.getAttribute('data-mode')||'scale';
             var base=parseFloat(root.getAttribute('data-base'))||1;
             var input=root.querySelector('[data-sc-input]');

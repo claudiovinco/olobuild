@@ -87,16 +87,17 @@ class Olo_HoursStrip_Tile extends Olo_Tile_Base {
                 ?>
                     <div class="olo-hoursstrip__cell" style="<?php echo esc_attr( $cell_style ); ?>">
                         <?php if ( $day !== '' ) : ?>
-                            <div class="olo-hoursstrip__day" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo $d_size; ?>px;text-transform:uppercase;letter-spacing:0.06em;color:<?php echo esc_attr( $d_color ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.day'; ?>"><?php echo esc_html( $day ); ?></div>
+                            <div class="olo-hoursstrip__day" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $d_size; ?>px;text-transform:uppercase;letter-spacing:0.06em;color:<?php echo esc_attr( $d_color ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.day'; ?>"><?php echo esc_html( $day ); ?></div>
                         <?php endif; ?>
-                        <div class="olo-hoursstrip__time" style="font-family:<?php echo esc_attr( $tfam ); ?>;font-weight:<?php echo esc_attr( $t_wt ); ?>;font-size:<?php echo $t_size; ?>px;line-height:1.05;letter-spacing:-0.01em;color:<?php echo esc_attr( $t_color ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.time'; ?>"><?php echo esc_html( $time ); ?></div>
+                        <div class="olo-hoursstrip__time" style="font-family:<?php echo esc_attr( $tfam ); ?>;font-weight:<?php echo esc_attr( $t_wt ); ?>;font-size:<?php echo (int) $t_size; ?>px;line-height:1.05;letter-spacing:-0.01em;color:<?php echo esc_attr( $t_color ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.time'; ?>"><?php echo esc_html( $time ); ?></div>
                         <?php if ( $note !== '' ) : ?>
-                            <div class="olo-hoursstrip__note" style="font-size:<?php echo $n_size; ?>px;line-height:1.4;color:<?php echo esc_attr( $n_color ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.note'; ?>"><?php echo esc_html( $note ); ?></div>
+                            <div class="olo-hoursstrip__note" style="font-size:<?php echo (int) $n_size; ?>px;line-height:1.4;color:<?php echo esc_attr( $n_color ); ?>;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.note'; ?>"><?php echo esc_html( $note ); ?></div>
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             </div>
         </div>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from the internally generated $uid and the safe_color_css() whitelisted divider colour. ?>
         <style>
             <?php if ( $dividers ) : ?>
             .<?php echo $uid; ?> .olo-hoursstrip__cell:not(:first-child) { border-left: 1px solid <?php echo $line; ?>; }
@@ -110,6 +111,7 @@ class Olo_HoursStrip_Tile extends Olo_Tile_Base {
                 <?php if ( $dividers ) : ?>.<?php echo $uid; ?> .olo-hoursstrip__cell { border-left: 0 !important; }<?php endif; ?>
             }
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php
         return ob_get_clean();
     }

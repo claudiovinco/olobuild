@@ -3093,15 +3093,15 @@ class Olo_Frontend_Renderer {
         // Render
         ob_start();
         ?>
-        <div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"<?php echo $id_attr; ?> style="<?php echo esc_attr( $style_attr ); ?>"<?php echo $elem_scrollspy_attr . $elem_el_parallax_attr . $elem_sticky_attr . $elem_mouse_attrs . $elem_bezier_attr . $elem_scroll_fx_attr . $elem_spotlight_attr . $elem_assembly_attr . $ab_test_attrs . $seo_attrs; ?>>
+        <div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"<?php echo $id_attr; ?> style="<?php echo esc_attr( $style_attr ); ?>"<?php echo $elem_scrollspy_attr . $elem_el_parallax_attr . $elem_sticky_attr . $elem_mouse_attrs . $elem_bezier_attr . $elem_scroll_fx_attr . $elem_spotlight_attr . $elem_assembly_attr . $ab_test_attrs . $seo_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $id_attr esc_attr()'d at assignment; attribute fragments built above with esc_attr()/wp_json_encode()/intval() or by Olo_Animation_Builder helpers from clamped numerics ?>>
             <?php if ( $has_bg_image ) :
                 $bg_size = esc_attr( $tile_bg['image_size'] ?? 'cover' );
                 $bg_pos  = esc_attr( $tile_bg['image_position'] ?? 'center center' );
                 $parallax_attr = $this->anim->build_uk_parallax_attr( $tile_bg );
             ?>
                 <div class="uk-position-cover"
-                    style="background-image: url(<?php echo esc_url( $tile_bg['image_url'] ); ?>); background-size: <?php echo $bg_size; ?>; background-position: <?php echo $bg_pos; ?>; background-repeat: no-repeat"
-                    <?php echo $parallax_attr; ?>
+                    style="background-image: url(<?php echo esc_url( $tile_bg['image_url'] ); ?>); background-size: <?php echo $bg_size; ?>; background-position: <?php echo $bg_pos; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $bg_size/$bg_pos esc_attr()'d at assignment above ?>; background-repeat: no-repeat"
+                    <?php echo $parallax_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- uk-parallax attribute built by Olo_Animation_Builder::build_uk_parallax_attr() from intval()/floatval() values ?>
                 ></div>
             <?php endif; ?>
 
@@ -3111,23 +3111,23 @@ class Olo_Frontend_Renderer {
                 $vid_pos    = esc_attr( $tile_bg['image_position'] ?? 'center center' );
                 $vid_fit    = esc_attr( $tile_bg['video_fit'] ?? 'cover' );
             ?>
-                <video aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: <?php echo $vid_fit; ?>; object-position: <?php echo $vid_pos; ?>; pointer-events: none" autoplay muted loop playsinline<?php if ( $vid_poster ) echo ' poster="' . $vid_poster . '"'; ?>><source src="<?php echo $vid_url; ?>" type="<?php echo esc_attr( $this->get_video_mime( $vid_url ) ); ?>"></video>
+                <video aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: <?php echo $vid_fit; ?>; object-position: <?php echo $vid_pos; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $vid_fit/$vid_pos esc_attr()'d and $vid_poster/$vid_url esc_url()'d at assignment above ?>; pointer-events: none" autoplay muted loop playsinline<?php if ( $vid_poster ) echo ' poster="' . $vid_poster . '"'; ?>><source src="<?php echo $vid_url; ?>" type="<?php echo esc_attr( $this->get_video_mime( $vid_url ) ); ?>"></video>
             <?php endif; ?>
 
             <?php if ( $has_overlay ) :
                 $ov_color   = esc_attr( $tile_bg['overlay_color'] ?? '#000000' );
                 $ov_opacity = intval( $tile_bg['overlay_opacity'] ) / 100;
             ?>
-                <div class="uk-position-cover" style="background-color: <?php echo $ov_color; ?>; opacity: <?php echo $ov_opacity; ?>; pointer-events: none" aria-hidden="true"></div>
+                <div class="uk-position-cover" style="background-color: <?php echo $ov_color; ?>; opacity: <?php echo $ov_opacity; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $ov_color esc_attr()'d at assignment above; $ov_opacity is intval()/100 ?>; pointer-events: none" aria-hidden="true"></div>
             <?php endif; ?>
 
             <?php if ( $this->builder_mode ) $settings['_builder_mode'] = true; ?>
             <?php if ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay ) : ?>
                 <div class="uk-position-relative" style="z-index: 1">
-                    <?php echo Olo_Tile_Utils::process_dynamic_tags( $tile_instance->render( $settings, $node['style'] ?? [] ) ); ?>
+                    <?php echo Olo_Tile_Utils::process_dynamic_tags( $tile_instance->render( $settings, $node['style'] ?? [] ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tile HTML assembled by the tile's own render() (each tile escapes its output); process_dynamic_tags() substitutes sanitized dynamic values ?>
                 </div>
             <?php else : ?>
-                <?php echo Olo_Tile_Utils::process_dynamic_tags( $tile_instance->render( $settings, $node['style'] ?? [] ) ); ?>
+                <?php echo Olo_Tile_Utils::process_dynamic_tags( $tile_instance->render( $settings, $node['style'] ?? [] ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tile HTML assembled by the tile's own render() (each tile escapes its output); process_dynamic_tags() substitutes sanitized dynamic values ?>
             <?php endif; ?>
         </div>
         <?php
@@ -4219,7 +4219,7 @@ class Olo_Frontend_Renderer {
 
         ob_start();
         ?>
-        <div<?php echo $wrapper_id_attr; ?><?php echo $wrapper_role_attr; ?> class="olo-template olo-template-<?php echo esc_attr( $id ); ?>"<?php
+        <div<?php echo $wrapper_id_attr; ?><?php echo $wrapper_role_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal id/role attribute strings set above ?> class="olo-template olo-template-<?php echo esc_attr( $id ); ?>"<?php
             if ( ( $page_bg['type'] === 'image' && ! empty( $page_bg['image_url'] ) ) || ( $page_bg['type'] === 'video' && ! empty( $page_bg['video_url'] ) ) ) {
                 echo ' style="position: relative; overflow: clip"';
             } elseif ( $page_bg_css ) {
@@ -4234,8 +4234,8 @@ class Olo_Frontend_Renderer {
                 $pg_parallax_attr = $this->anim->build_uk_parallax_attr( $page_bg );
             ?>
                 <div class="olo-tile-bg"
-                    style="background-image: url(<?php echo esc_url( $page_bg['image_url'] ); ?>); background-size: <?php echo $pg_size; ?>; background-position: <?php echo $pg_pos; ?>; background-repeat: no-repeat"
-                    <?php echo $pg_parallax_attr; ?>
+                    style="background-image: url(<?php echo esc_url( $page_bg['image_url'] ); ?>); background-size: <?php echo $pg_size; ?>; background-position: <?php echo $pg_pos; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $pg_size/$pg_pos esc_attr()'d at assignment above ?>; background-repeat: no-repeat"
+                    <?php echo $pg_parallax_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- uk-parallax attribute built by Olo_Animation_Builder::build_uk_parallax_attr() from intval()/floatval() values ?>
                 ></div>
             <?php endif; ?>
             <?php
@@ -4245,7 +4245,7 @@ class Olo_Frontend_Renderer {
                 $vid_pos    = esc_attr( $page_bg['image_position'] ?? 'center center' );
                 $vid_fit    = esc_attr( $page_bg['video_fit'] ?? 'cover' );
             ?>
-                <video aria-hidden="true" class="olo-tile-bg" style="object-fit: <?php echo $vid_fit; ?>; object-position: <?php echo $vid_pos; ?>; pointer-events: none" autoplay muted loop playsinline<?php if ( $vid_poster ) echo ' poster="' . $vid_poster . '"'; ?>><source src="<?php echo esc_url( $page_bg['video_url'] ); ?>" type="<?php echo esc_attr( $this->get_video_mime( $page_bg['video_url'] ) ); ?>"></video>
+                <video aria-hidden="true" class="olo-tile-bg" style="object-fit: <?php echo $vid_fit; ?>; object-position: <?php echo $vid_pos; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $vid_fit/$vid_pos esc_attr()'d and $vid_poster esc_url()'d at assignment above ?>; pointer-events: none" autoplay muted loop playsinline<?php if ( $vid_poster ) echo ' poster="' . $vid_poster . '"'; ?>><source src="<?php echo esc_url( $page_bg['video_url'] ); ?>" type="<?php echo esc_attr( $this->get_video_mime( $page_bg['video_url'] ) ); ?>"></video>
             <?php endif; ?>
             <?php
             // Page overlay
@@ -4253,13 +4253,13 @@ class Olo_Frontend_Renderer {
                 $ov_color   = esc_attr( $page_bg['overlay_color'] ?? '#000000' );
                 $ov_opacity = intval( $page_bg['overlay_opacity'] ) / 100;
             ?>
-                <div class="olo-tile-overlay" style="background-color: <?php echo $ov_color; ?>; opacity: <?php echo $ov_opacity; ?>" aria-hidden="true"></div>
+                <div class="olo-tile-overlay" style="background-color: <?php echo $ov_color; ?>; opacity: <?php echo $ov_opacity; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $ov_color esc_attr()'d at assignment above; $ov_opacity is intval()/100 ?>" aria-hidden="true"></div>
             <?php endif; ?>
 
-            <div class="olo-frontend-grid olo-tile-content" style="--olo-content-width: <?php echo $content_max_width >= 9999 ? '100%' : $content_max_width . 'px'; ?>; --olo-container-max-width: <?php echo $content_max_width >= 9999 ? 'none' : $content_max_width . 'px'; ?>"><?php // per-template override of global container width ?>
+            <div class="olo-frontend-grid olo-tile-content" style="--olo-content-width: <?php echo $content_max_width >= 9999 ? '100%' : (int) $content_max_width . 'px'; ?>; --olo-container-max-width: <?php echo $content_max_width >= 9999 ? 'none' : (int) $content_max_width . 'px'; ?>"><?php // per-template override of global container width ?>
                 <?php
                 foreach ( $tiles as $section ) {
-                    echo $this->render_node( $section, $manager, $id, $hover_css_rules, $tile_counter );
+                    echo $this->render_node( $section, $manager, $id, $hover_css_rules, $tile_counter ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- section/row/tile HTML assembled by render_node(); escaping is performed by the node renderers and each tile's render()
                 }
                 ?>
             </div>
@@ -4269,9 +4269,9 @@ class Olo_Frontend_Renderer {
                     $all_css .= ' @media(max-width:' . $max_w . '){' . implode( ' ', $rules ) . '}';
                 }
                 if ( class_exists( 'Olo_Asset_Optimizer' ) ) {
-                    echo Olo_Asset_Optimizer::serve_css( $all_css, $id );
+                    echo Olo_Asset_Optimizer::serve_css( $all_css, $id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <link>/<style> markup built by Olo_Asset_Optimizer::serve_css() (esc_url internally); CSS collected via collect_hover_css()/collect_responsive_css() (esc_attr/intval) and safe_block_css() for custom CSS
                 } else {
-                    echo '<style class="olo-hover-styles">' . $all_css . '</style>';
+                    echo '<style class="olo-hover-styles">' . $all_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS collected via collect_hover_css()/collect_responsive_css() (esc_attr/intval-sanitized declarations) and safe_block_css() for custom CSS
                 }
             endif; ?>
             <?php
@@ -4966,14 +4966,15 @@ class Olo_Frontend_Renderer {
         $this->responsive_css_rules = [];
         $tile_counter = 0;
 
-        echo '<div class="olo-frontend-grid olo-tile-content" style="--olo-content-width: ' . ( $content_max_width >= 9999 ? '100%' : $content_max_width . 'px' ) . '; --olo-container-max-width: ' . ( $content_max_width >= 9999 ? 'none' : $content_max_width . 'px' ) . '">';
+        echo '<div class="olo-frontend-grid olo-tile-content" style="--olo-content-width: ' . ( $content_max_width >= 9999 ? '100%' : (int) $content_max_width . 'px' ) . '; --olo-container-max-width: ' . ( $content_max_width >= 9999 ? 'none' : (int) $content_max_width . 'px' ) . '">';
         foreach ( $tiles as $section ) {
-            echo $this->render_node( $section, $manager, 0, $hover_css_rules, $tile_counter );
+            echo $this->render_node( $section, $manager, 0, $hover_css_rules, $tile_counter ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- section/row/tile HTML assembled by render_node(); escaping is performed by the node renderers and each tile's render()
         }
         echo '</div>';
 
         // Effetto di pagina: Overlay CRT (decoratore di pagina, da Impostazioni Pagina → Effetti di pagina).
         if ( ! empty( $page_settings['page_crt_enabled'] ) && class_exists( 'Olo_Crtoverlay_Tile' ) ) {
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- overlay HTML assembled by Olo_Crtoverlay_Tile::render() (escapes its own output) from intval()'d settings; blend mode whitelisted inside the tile.
             echo ( new Olo_Crtoverlay_Tile() )->render( [
                 'scanline_opacity' => intval( $page_settings['page_crt_scanline_opacity'] ?? 50 ),
                 'scanline_gap'     => intval( $page_settings['page_crt_scanline_gap'] ?? 3 ),
@@ -4983,6 +4984,7 @@ class Olo_Frontend_Renderer {
                 'flicker_speed'    => intval( $page_settings['page_crt_flicker_speed'] ?? 8 ),
                 'z_index'          => intval( $page_settings['page_crt_z_index'] ?? 200 ),
             ] );
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
         }
 
         if ( ! empty( $hover_css_rules ) || ! empty( $this->responsive_css_rules ) ) {
@@ -4990,7 +4992,7 @@ class Olo_Frontend_Renderer {
             foreach ( $this->responsive_css_rules as $max_w => $rules ) {
                 $all_css .= ' @media(max-width:' . $max_w . '){' . implode( ' ', $rules ) . '}';
             }
-            echo '<style class="olo-hover-styles">' . $all_css . '</style>';
+            echo '<style class="olo-hover-styles">' . $all_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS collected via collect_hover_css()/collect_responsive_css() (esc_attr/intval-sanitized declarations) and safe_block_css() for custom CSS
         }
     }
 

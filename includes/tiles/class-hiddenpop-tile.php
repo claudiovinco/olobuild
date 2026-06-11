@@ -200,18 +200,19 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist colours, intval()-clamped sizes, Olo_Tile_Utils border_radius()/radius_force_css()/shadow() helpers (integer px / fixed map) and the esc_attr()'d generated $uid. ?>
         <style>
             #<?php echo esc_attr( $uid ); ?>-modal {
                 z-index: 999999 !important;
-                background: rgba(0,0,0,<?php echo $overlay_a; ?>) !important;
-                <?php if ( $blur > 0 ) : ?>backdrop-filter: blur(<?php echo $blur; ?>px); -webkit-backdrop-filter: blur(<?php echo $blur; ?>px);<?php endif; ?>
+                background: rgba(0,0,0,<?php echo (float) $overlay_a; ?>) !important;
+                <?php if ( $blur > 0 ) : ?>backdrop-filter: blur(<?php echo (int) $blur; ?>px); -webkit-backdrop-filter: blur(<?php echo (int) $blur; ?>px);<?php endif; ?>
             }
             #<?php echo esc_attr( $uid ); ?>-modal .uk-modal-dialog {
-                max-width: <?php echo $max_w; ?>px;
+                max-width: <?php echo (int) $max_w; ?>px;
                 background: <?php echo $bg_color; ?>;
                 <?php if ( $radius && $radius !== '0px' ) : ?>border-radius: <?php echo $radius; ?>; overflow: hidden;<?php endif; ?>
                 <?php if ( $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
-                <?php if ( $border_w > 0 ) : ?>border: <?php echo $border_w; ?>px solid <?php echo $border_c; ?>;<?php endif; ?>
+                <?php if ( $border_w > 0 ) : ?>border: <?php echo (int) $border_w; ?>px solid <?php echo $border_c; ?>;<?php endif; ?>
             }
             <?php if ( $radius_hover_css !== '' ) : ?>#<?php echo esc_attr( $uid ); ?>-modal .uk-modal-dialog{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?>-modal .uk-modal-dialog:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             <?php if ( $animation === 'slide-up' ) : ?>
@@ -231,7 +232,7 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
             @keyframes oloHpFade { from { opacity:0; } to { opacity:1; } }
             <?php endif; ?>
             #<?php echo esc_attr( $uid ); ?>-modal .olo-hp-title {
-                font-size: <?php echo $title_size; ?>px;
+                font-size: <?php echo (int) $title_size; ?>px;
                 font-weight: 700;
                 color: <?php echo $title_color; ?>;
                 margin: 0 0 8px;
@@ -273,6 +274,7 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
             }
             <?php endif; ?>
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <div class="olo-hiddenpop" id="<?php echo esc_attr( $uid ); ?>">
             <!-- Invisible scroll marker (must be visible to IntersectionObserver) -->
@@ -280,7 +282,7 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
         </div>
 
         <!-- Modal -->
-        <div id="<?php echo esc_attr( $uid ); ?>-modal" <?php echo $modal_attr; ?>>
+        <div id="<?php echo esc_attr( $uid ); ?>-modal" <?php echo $modal_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute composed only of the fixed internal literals 'uk-modal' and 'bg-close: false' ?>>
             <div class="uk-modal-dialog uk-margin-auto-vertical">
                 <?php if ( ! empty( $s['modal_close_button'] ) ) : ?>
                     <button class="uk-modal-close-default" type="button" uk-close></button>
@@ -288,7 +290,7 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
 
                 <?php if ( $s['mode'] === 'template' && ! empty( $s['template_id'] ) ) : ?>
                     <div class="uk-modal-body" uk-overflow-auto>
-                        <?php echo $this->render_template_content( (int) $s['template_id'] ); ?>
+                        <?php echo $this->render_template_content( (int) $s['template_id'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- template HTML rendered by Olo_Frontend_Renderer; each tile escapes its own output at build time ?>
                     </div>
                 <?php else : ?>
                     <?php
@@ -322,7 +324,7 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
 
                         <?php if ( $cta_text ) : ?>
                             <div class="olo-hp-cta">
-                                <a href="<?php echo $cta_url; ?>" target="<?php echo esc_attr( $cta_target ); ?>"
+                                <a href="<?php echo $cta_url; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_url() at assignment above ?>" target="<?php echo esc_attr( $cta_target ); ?>"
                                    class="<?php echo esc_attr( $cta_cls ); ?>"
                                    <?php if ( $cta_target === '_blank' ) echo 'rel="noopener"'; ?>
                                 ><?php echo esc_html( $cta_text ); ?></a>
@@ -500,7 +502,7 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
                 if (modalEl.dataset.oloHpKeySeq) { return; }   // una sola init per istanza
                 modalEl.dataset.oloHpKeySeq = '1';
 
-                var SEQ = <?php echo wp_json_encode( $key_seq_arr ); ?>;
+                var SEQ = <?php echo wp_json_encode( $key_seq_arr ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JSON in <script> generated by wp_json_encode() ?>;
                 if (!SEQ || !SEQ.length) { return; }
                 var pos = 0;
 
@@ -538,7 +540,7 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
                 function party(){
                     var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
                     if (rm && rm.matches) { return; }
-                    var COLORS = <?php echo wp_json_encode( $confetti_colors ); ?>;
+                    var COLORS = <?php echo wp_json_encode( $confetti_colors ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JSON in <script> generated by wp_json_encode() from safe_color_css()'d colours ?>;
                     if (!COLORS || !COLORS.length) { return; }
                     var layer = document.getElementById('<?php echo esc_js( $uid ); ?>-confetti');
                     if (!layer) {
@@ -575,8 +577,8 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".hp-trigger-{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".hp-trigger-{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".hp-trigger-{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() (integer-forced widths) for the internally generated uid
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() shared helpers
         }
 
         return ob_get_clean();

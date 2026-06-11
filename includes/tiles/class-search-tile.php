@@ -135,6 +135,7 @@ class Olo_Search_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colours via the safe_color_css() whitelist (with fixed var() fallbacks), button radius via the absint-built Olo_Tile_Utils::radius_force_css(); $uid is internally generated. ?>
         <style>
         .<?php echo $uid; ?> input::placeholder { color: <?php echo $ph_c; ?>; }
         .<?php echo $uid; ?> input:focus { outline: none; }
@@ -155,16 +156,17 @@ class Olo_Search_Tile extends Olo_Tile_Base {
         }
         <?php if ( $btn_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> button[type=submit]{transition:border-radius 400ms cubic-bezier(.4,0,.2,1) !important}.<?php echo $uid; ?> button[type=submit]:hover{border-radius:<?php echo $btn_radius_hover_css; ?> !important}<?php endif; ?>
         </style>
-        <div class="olo-search <?php echo $uid; ?> olo-srch-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>"<?php if ( $wrapper_css ) echo ' style="' . esc_attr( $wrapper_css ) . '"'; ?>>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+        <div class="olo-search <?php echo esc_attr( $uid ); ?> olo-srch-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>"<?php if ( $wrapper_css ) echo ' style="' . esc_attr( $wrapper_css ) . '"'; ?>>
             <form class="olo-srch-form" style="<?php echo esc_attr( $form_css ); ?>" action="<?php echo esc_url( home_url( '/' ) ); ?>" method="get" role="search">
                 <?php if ( $show_icon && $icon_pos === 'left' ) : ?>
-                <span style="display:flex;align-items:center;flex-shrink:0;padding-left:<?php echo $style === 'hero' ? '20px' : '14px'; ?>"><?php echo $icon_svg; ?></span>
+                <span style="display:flex;align-items:center;flex-shrink:0;padding-left:<?php echo $style === 'hero' ? '20px' : '14px'; ?>"><?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed px literal from the ternary; SVG assembled above from static markup with esc_attr()'d stroke colour ?></span>
                 <?php endif; ?>
 
-                <input type="search" name="s" placeholder="<?php echo $placeholder; ?>" aria-label="<?php echo $placeholder; ?>" style="flex:1;min-width:0;background:transparent;border:none;outline:none;color:<?php echo $text_c; ?>;font-size:<?php echo $sz['fs']; ?>;padding:<?php echo $sz['pad']; ?>;width:100%;"<?php if ( $anim_ph && ! empty( $ph_words ) ) echo ' data-olo-anim-ph="' . esc_attr( wp_json_encode( array_values( $ph_words ) ) ) . '"'; ?> />
+                <input type="search" name="s" placeholder="<?php echo $placeholder; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- placeholder/aria-label escaped via esc_attr() at assignment above; colour via the safe_color_css() whitelist; font-size/padding from the fixed size map; data attr esc_attr()'d inline ?>" aria-label="<?php echo $placeholder; ?>" style="flex:1;min-width:0;background:transparent;border:none;outline:none;color:<?php echo $text_c; ?>;font-size:<?php echo $sz['fs']; ?>;padding:<?php echo $sz['pad']; ?>;width:100%;"<?php if ( $anim_ph && ! empty( $ph_words ) ) echo ' data-olo-anim-ph="' . esc_attr( wp_json_encode( array_values( $ph_words ) ) ) . '"'; ?> />
 
                 <?php if ( $show_icon && $icon_pos === 'right' && ! $show_btn ) : ?>
-                <span style="display:flex;align-items:center;flex-shrink:0;padding-right:<?php echo $style === 'hero' ? '20px' : '14px'; ?>"><?php echo $icon_svg; ?></span>
+                <span style="display:flex;align-items:center;flex-shrink:0;padding-right:<?php echo $style === 'hero' ? '20px' : '14px'; ?>"><?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed px literal from the ternary; SVG assembled above from static markup with esc_attr()'d stroke colour ?></span>
                 <?php endif; ?>
 
                 <?php if ( $show_btn ) :
@@ -181,7 +183,7 @@ class Olo_Search_Tile extends Olo_Tile_Base {
                     <?php if ( $btn_style === 'icon-only' ) : ?>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                     <?php else : ?>
-                    <?php echo $btn_text; ?>
+                    <?php echo $btn_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() at assignment above ?>
                     <?php endif; ?>
                 </button>
                 <?php endif; ?>
@@ -190,7 +192,7 @@ class Olo_Search_Tile extends Olo_Tile_Base {
         <?php if ( $anim_ph && ! empty( $ph_words ) ) : ?>
         <script>
         (function(){
-            var inp = document.querySelector('.<?php echo $uid; ?> input[data-olo-anim-ph]');
+            var inp = document.querySelector('.<?php echo esc_js( $uid ); ?> input[data-olo-anim-ph]');
             if(!inp) return;
             var words = JSON.parse(inp.getAttribute('data-olo-anim-ph'));
             if(!words.length) return;
@@ -209,8 +211,8 @@ class Olo_Search_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

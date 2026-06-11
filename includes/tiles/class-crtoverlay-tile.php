@@ -98,6 +98,7 @@ class Olo_Crtoverlay_Tile extends Olo_Tile_Base {
         $zidx_vig = max( 1, $zidx - 1 ); // la vignetta sta appena sotto le scanline
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: opacities/sizes/z-index via intval() with min()/max() clamps and round(), scanline color via the safe_color_css() whitelist, vignette color rebuilt as rgba() from color_to_rgb() digits and a clamped alpha, blend mode from an in_array() whitelist; $uid is internally generated.
         ?>
         <style>
             /* Scanline retro — repeating-linear-gradient scoped sull'istanza <?php echo esc_html( $uid ); ?> */
@@ -144,6 +145,7 @@ class Olo_Crtoverlay_Tile extends Olo_Tile_Base {
             }
             <?php endif; ?>
         </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-crtoverlay <?php echo esc_attr( $uid ); ?>-vig" aria-hidden="true" role="presentation"></div>
         <div class="olo-crtoverlay <?php echo esc_attr( $uid ); ?>-scan" aria-hidden="true" role="presentation"></div>
         <?php

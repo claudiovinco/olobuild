@@ -47,7 +47,7 @@ class Olo_Scrollprogress_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <div id="<?php echo esc_attr( $uid ); ?>" class="olo-scrollprogress"
-             style="position:fixed;<?php echo $pos; ?>:0;left:0;width:100%;height:<?php echo $height; ?>px;background:<?php echo esc_attr( $bar_bg ); ?>;z-index:<?php echo $zidx; ?>;pointer-events:none;">
+             style="position:fixed;<?php echo esc_attr( $pos ); ?>:0;left:0;width:100%;height:<?php echo (int) $height; ?>px;background:<?php echo esc_attr( $bar_bg ); ?>;z-index:<?php echo (int) $zidx; ?>;pointer-events:none;">
             <div id="<?php echo esc_attr( $uid ); ?>-bar"
                  style="width:0%;height:100%;background:<?php echo esc_attr( $bar_color ); ?>;transition:width 0.1s linear;"></div>
             <?php if ( $show_pct ) : ?>

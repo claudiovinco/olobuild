@@ -67,7 +67,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         $done = true;
         $path = OLO_PATH . 'assets/css/timeline-super.css';
         if ( file_exists( $path ) ) {
-            echo '<style id="olo-tlsuper-css">' . file_get_contents( $path ) . '</style>'; // phpcs:ignore
+            echo '<style id="olo-tlsuper-css">' . file_get_contents( $path ) . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped,WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- static stylesheet bundled with the plugin, read from a fixed OLO_PATH location
         }
     }
 
@@ -259,8 +259,8 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid} .it-card", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) { echo ".{$uid} .it-card{{$border_css}}"; }
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) { echo ".{$uid} .it-card{{$border_css}}"; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized border settings
         }
 
         return ob_get_clean();
@@ -287,11 +287,11 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         foreach ( $items as $i => $item ) {
             $cat   = $mono ? 'primary' : $this->cat_class( $item['category'] );
             $style = ( ! $mono && ! empty( $item['icon_color'] ) ) ? ' style="--cat:' . esc_attr( $this->safe_color_css( $item['icon_color'] ) ) . '"' : '';
-            echo '<div class="it cat-' . esc_attr( $cat ) . '"' . $style . '>';
-            echo '<span class="it-node">' . $this->node_inner( $item, $i, $node, $mono ) . '</span>';
+            echo '<div class="it cat-' . esc_attr( $cat ) . '"' . $style . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $style built above from a literal CSS prefix plus an esc_attr( safe_color_css() ) value
+            echo '<span class="it-node">' . $this->node_inner( $item, $i, $node, $mono ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- node markup from node_inner(): render_icon_html() helper output plus sprintf('%02d')/esc_html() label
             echo '<div class="it-date"><span class="yr">' . esc_html( $item['date'] ) . '</span><span class="ph">' . esc_html( $item['tag'] ) . '</span><span class="st" data-st>&mdash;</span></div>';
             echo '<div class="it-card">';
-            echo $this->media_html( $item );
+            echo $this->media_html( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- media markup built by media_html() exclusively from esc_url()/esc_attr()/esc_html() values
             echo '<div class="it-body">';
             if ( $item['tag'] !== '' )         { echo '<span class="it-tag">' . esc_html( $item['tag'] ) . '</span>'; }
             if ( $item['title'] !== '' )       { echo '<h4>' . esc_html( $item['title'] ) . '</h4>'; }
@@ -366,6 +366,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         }
         echo '</div>';
 
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from safe_color_css()-validated colors with fixed var() fallbacks, fixed font-stack literals and the internally generated $uid.
         echo '<style>'
            . ".{$uid} .olo-tl-sched{max-width:760px;margin:0 auto;position:relative;}"
            . ".{$uid} .olo-tl-sched::before{content:\"\";position:absolute;left:90px;top:8px;bottom:8px;width:1px;background:{$rail};}"
@@ -378,6 +379,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
            . ".{$uid} .olo-tl-slot__c p{font-size:14px;color:{$text};margin:0;line-height:1.6;}"
            . "@media(max-width:600px){.{$uid} .olo-tl-sched::before{left:0;}.{$uid} .olo-tl-slot{grid-template-columns:1fr;gap:6px;}.{$uid} .olo-tl-slot__t{text-align:left;}.{$uid} .olo-tl-slot__c{padding-left:24px;}.{$uid} .olo-tl-slot__c::before{left:-24px;}}"
            . '</style>';
+        // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
     }
 
     /* ───────── ORIZZONTALE ───────── */
@@ -393,8 +395,8 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
             $cat = $mono ? 'primary' : $this->cat_class( $item['category'] );
             $style = ' style="width:' . $cw . 'px"';
             $style2 = ( ! $mono && ! empty( $item['icon_color'] ) ) ? ';--cat:' . esc_attr( $this->safe_color_css( $item['icon_color'] ) ) : '';
-            echo '<div class="hit cat-' . esc_attr( $cat ) . '" style="width:' . $cw . 'px' . $style2 . '">';
-            echo '<span class="hit-node">' . $this->render_icon_html( $item['icon'] ?: 'star', 0.8 ) . '</span>';
+            echo '<div class="hit cat-' . esc_attr( $cat ) . '" style="width:' . (int) $cw . 'px' . $style2 . '">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $style2 built above from a literal CSS prefix plus an esc_attr( safe_color_css() ) value
+            echo '<span class="hit-node">' . $this->render_icon_html( $item['icon'] ?: 'star', 0.8 ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup generated by the render_icon_html() helper (sanitized SVG / esc_attr()'d uk-icon attrs)
             echo '<span class="hit-date">' . esc_html( $item['date'] ) . '</span>';
             echo '<div class="hit-card">';
             if ( $item['tag'] !== '' )   { echo '<span class="t">' . esc_html( $item['tag'] ) . '</span>'; }

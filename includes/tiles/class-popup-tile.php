@@ -276,12 +276,13 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
         $data_attrs .= $display_attrs;
 
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval/floatval/whitelists/Olo_Tile_Utils helpers).
         ?>
         <style>
             /* Overlay darkness + blur */
             #<?php echo esc_attr( $uid ); ?> {
-                background: rgba(0, 0, 0, <?php echo $overlay_alpha; ?>) !important;
-                <?php if ( $popup_overlay_blur > 0 ) : ?>backdrop-filter: blur(<?php echo $popup_overlay_blur; ?>px); -webkit-backdrop-filter: blur(<?php echo $popup_overlay_blur; ?>px);<?php endif; ?>
+                background: rgba(0, 0, 0, <?php echo (float) $overlay_alpha; ?>) !important;
+                <?php if ( $popup_overlay_blur > 0 ) : ?>backdrop-filter: blur(<?php echo (int) $popup_overlay_blur; ?>px); -webkit-backdrop-filter: blur(<?php echo (int) $popup_overlay_blur; ?>px);<?php endif; ?>
             }
             /* a11y: anello di focus visibile da tastiera su trigger + chiudi */
             .olo-popup-<?php echo esc_attr( $uid ); ?> > button:focus-visible,
@@ -301,7 +302,7 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
             #<?php echo esc_attr( $uid ); ?> .uk-modal-dialog {
                 <?php if ( $radius && $radius !== '0px' ) : ?>border-radius: <?php echo $radius; ?>; overflow: hidden;<?php endif; ?>
                 <?php if ( $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
-                <?php if ( $border_w > 0 ) : ?>border: <?php echo $border_w; ?>px <?php echo $border_style; ?> <?php echo $border_c; ?>;<?php endif; ?>
+                <?php if ( $border_w > 0 ) : ?>border: <?php echo (int) $border_w; ?>px <?php echo $border_style; ?> <?php echo $border_c; ?>;<?php endif; ?>
             }
             <?php if ( $radius_hover_css !== '' ) : ?>#<?php echo esc_attr( $uid ); ?> .uk-modal-dialog{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?> .uk-modal-dialog:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             /* Animation keyframes */
@@ -333,7 +334,7 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
                 display: flex;
                 flex-direction: column;
                 <?php if ( $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
-                <?php if ( $border_w > 0 ) : ?>border: <?php echo $border_w; ?>px <?php echo $border_style; ?> <?php echo $border_c; ?>;<?php endif; ?>
+                <?php if ( $border_w > 0 ) : ?>border: <?php echo (int) $border_w; ?>px <?php echo $border_style; ?> <?php echo $border_c; ?>;<?php endif; ?>
             }
             #<?php echo esc_attr( $uid ); ?> .olo-popup-fullbody {
                 flex: 1;
@@ -359,21 +360,21 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
                 background: <?php echo $modal_bg; ?>;
                 color: <?php echo $modal_text; ?>;
                 <?php if ( $font_family_css !== 'inherit' ) : ?>font-family: <?php echo $font_family_css; ?>;<?php endif; ?>
-                <?php if ( $backdrop_blur > 0 || $backdrop_saturate > 100 ) : ?>backdrop-filter: blur(<?php echo $backdrop_blur; ?>px) saturate(<?php echo $backdrop_saturate; ?>%); -webkit-backdrop-filter: blur(<?php echo $backdrop_blur; ?>px) saturate(<?php echo $backdrop_saturate; ?>%);<?php endif; ?>
+                <?php if ( $backdrop_blur > 0 || $backdrop_saturate > 100 ) : ?>backdrop-filter: blur(<?php echo (int) $backdrop_blur; ?>px) saturate(<?php echo (int) $backdrop_saturate; ?>%); -webkit-backdrop-filter: blur(<?php echo (int) $backdrop_blur; ?>px) saturate(<?php echo (int) $backdrop_saturate; ?>%);<?php endif; ?>
                 <?php if ( abs( $modal_rotation ) > 0.01 || $modal_perspective > 0 || abs( $modal_tilt_x ) > 0.01 ) : ?>
                     transform:
-                        <?php if ( $modal_perspective > 0 ) : ?>perspective(<?php echo $modal_perspective; ?>px) <?php endif; ?>
-                        <?php if ( abs( $modal_tilt_x ) > 0.01 ) : ?>rotateX(<?php echo $modal_tilt_x; ?>deg) <?php endif; ?>
-                        <?php if ( abs( $modal_rotation ) > 0.01 ) : ?>rotate(<?php echo $modal_rotation; ?>deg)<?php endif; ?>
+                        <?php if ( $modal_perspective > 0 ) : ?>perspective(<?php echo (int) $modal_perspective; ?>px) <?php endif; ?>
+                        <?php if ( abs( $modal_tilt_x ) > 0.01 ) : ?>rotateX(<?php echo (float) $modal_tilt_x; ?>deg) <?php endif; ?>
+                        <?php if ( abs( $modal_rotation ) > 0.01 ) : ?>rotate(<?php echo (float) $modal_rotation; ?>deg)<?php endif; ?>
                     ;
                 <?php endif; ?>
             }
             #<?php echo esc_attr( $uid ); ?> .uk-modal-title {
                 color: <?php echo $modal_t_clr; ?>;
-                font-size: <?php echo $modal_t_size; ?>px;
+                font-size: <?php echo (int) $modal_t_size; ?>px;
                 font-weight: <?php echo $modal_t_w; ?>;
                 <?php if ( $modal_t_up ) : ?>text-transform: uppercase;<?php endif; ?>
-                letter-spacing: <?php echo $modal_t_ls; ?>em;
+                letter-spacing: <?php echo (float) $modal_t_ls; ?>em;
                 <?php if ( $font_family_css !== 'inherit' ) : ?>font-family: inherit;<?php endif; ?>
                 <?php if ( $title_glow ) : $glow_c = $this->safe_color_css( $s['effect_color'] ?? '' ) ?: $modal_t_clr; $glow_rgb = $this->color_to_rgb( $glow_c ); ?>
                 text-shadow: 0 0 8px rgba(<?php echo $glow_rgb; ?>,0.6);
@@ -383,7 +384,7 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
                 border-radius: <?php echo $btn_radius_css; ?>;
                 font-weight: <?php echo $btn_weight; ?>;
                 <?php if ( $btn_upper ) : ?>text-transform: uppercase;<?php endif; ?>
-                letter-spacing: <?php echo $btn_ls; ?>em;
+                letter-spacing: <?php echo (float) $btn_ls; ?>em;
                 transition: all 0.25s ease;
             }
 
@@ -401,7 +402,7 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
                 50%      { box-shadow: 0 0 24px rgba(<?php echo $rgb; ?>,0.85), inset 0 0 24px rgba(<?php echo $rgb; ?>,0.30); }
             }
             #<?php echo esc_attr( $uid ); ?> .uk-modal-dialog {
-                animation: olo-pop-glow-<?php echo esc_attr( $uid ); ?> <?php echo $pulse_ms; ?>ms ease-in-out infinite;
+                animation: olo-pop-glow-<?php echo esc_attr( $uid ); ?> <?php echo (int) $pulse_ms; ?>ms ease-in-out infinite;
             }
             <?php endif; ?>
 
@@ -426,42 +427,43 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
             #<?php echo esc_attr( $uid ); ?> .uk-modal-title::after  {
                 content: ' \2588';
                 margin-left: 2px;
-                animation: olo-pop-cursor-<?php echo esc_attr( $uid ); ?> <?php echo $blink_ms; ?>ms steps(1) infinite;
+                animation: olo-pop-cursor-<?php echo esc_attr( $uid ); ?> <?php echo (int) $blink_ms; ?>ms steps(1) infinite;
             }
             <?php endif; ?>
         </style>
         <?php
+        // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 
         // Full-screen modal uses special structure
         if ( $s['modal_size'] === 'full' ) :
         ?>
-        <div class="olo-popup olo-pop--preset-<?php echo esc_attr( $preset_id ); ?> olo-popup-<?php echo esc_attr( $uid ); ?>"<?php echo $data_attrs; ?>>
+        <div class="olo-popup olo-pop--preset-<?php echo esc_attr( $preset_id ); ?> olo-popup-<?php echo esc_attr( $uid ); ?>"<?php echo $data_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built above exclusively from esc_attr()/intval() values ?>>
             <?php if ( ! $is_auto_trigger ) : ?>
             <button class="<?php echo esc_attr( $btn_class ); ?>" type="button" uk-toggle="target: #<?php echo esc_attr( $uid ); ?>">
-                <?php echo $icon_html; ?><?php echo $btn_text; ?>
+                <?php echo $icon_html; ?><?php echo $btn_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon built with esc_attr() and text escaped with esc_html() above ?>
             </button>
             <?php endif; ?>
 
-            <div id="<?php echo esc_attr( $uid ); ?>" class="uk-modal-full olo-pop--preset-<?php echo esc_attr( $preset_id ); ?>" <?php echo $modal_attr; ?>>
+            <div id="<?php echo esc_attr( $uid ); ?>" class="uk-modal-full olo-pop--preset-<?php echo esc_attr( $preset_id ); ?>" <?php echo $modal_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- uk-modal options composed of fixed literals only ?>>
                 <div class="uk-modal-dialog">
                     <?php if ( ! empty( $s['modal_close_button'] ) ) : ?>
                         <button class="uk-modal-close-full uk-close-large" type="button" uk-close style="z-index:10;"></button>
                     <?php endif; ?>
                     <div class="olo-popup-fullbody">
-                        <?php echo $this->render_modal_content( $s ); ?>
+                        <?php echo $this->render_modal_content( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML generated by render_modal_content(); dynamic values escaped within (esc_html/esc_url) or rendered by the internal template renderer ?>
                     </div>
                 </div>
             </div>
         </div>
         <?php else : ?>
-        <div class="olo-popup olo-pop--preset-<?php echo esc_attr( $preset_id ); ?> olo-popup-<?php echo esc_attr( $uid ); ?>"<?php echo $data_attrs; ?>>
+        <div class="olo-popup olo-pop--preset-<?php echo esc_attr( $preset_id ); ?> olo-popup-<?php echo esc_attr( $uid ); ?>"<?php echo $data_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built above exclusively from esc_attr()/intval() values ?>>
             <?php if ( ! $is_auto_trigger ) : ?>
             <button class="<?php echo esc_attr( $btn_class ); ?>" type="button" uk-toggle="target: #<?php echo esc_attr( $uid ); ?>">
-                <?php echo $icon_html; ?><?php echo $btn_text; ?>
+                <?php echo $icon_html; ?><?php echo $btn_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon built with esc_attr() and text escaped with esc_html() above ?>
             </button>
             <?php endif; ?>
 
-            <div id="<?php echo esc_attr( $uid ); ?>" class="olo-pop--preset-<?php echo esc_attr( $preset_id ); ?>" <?php echo $modal_attr; ?>>
+            <div id="<?php echo esc_attr( $uid ); ?>" class="olo-pop--preset-<?php echo esc_attr( $preset_id ); ?>" <?php echo $modal_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- uk-modal options composed of fixed literals only ?>>
                 <div class="<?php echo esc_attr( $dialog_class ); ?>">
                     <?php if ( ! empty( $s['modal_close_button'] ) ) : ?>
                         <button class="uk-modal-close-default" type="button" uk-close></button>
@@ -474,7 +476,7 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
                     <?php endif; ?>
 
                     <div class="uk-modal-body" uk-overflow-auto>
-                        <?php echo $this->render_modal_content( $s ); ?>
+                        <?php echo $this->render_modal_content( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML generated by render_modal_content(); dynamic values escaped within (esc_html/esc_url) or rendered by the internal template renderer ?>
                     </div>
                 </div>
             </div>
@@ -650,7 +652,7 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
         </script>
         <?php
         $tfx_css = $this->tfx_css( $s, '.olo-popup-' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from fixed effect definitions
         $this->tfx_print_script();
 
                 // Border system
@@ -659,8 +661,8 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized border settings
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized border settings
         }
         return ob_get_clean();
     }

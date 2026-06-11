@@ -97,16 +97,16 @@ class Olo_Global_Popups {
 
             ?>
             <style>
-                #<?php echo esc_attr( $uid ); ?> { background: rgba(0,0,0,<?php echo $overlay_alpha; ?>) !important; <?php if ( $overlay_blur > 0 ) : ?>backdrop-filter:blur(<?php echo $overlay_blur; ?>px);-webkit-backdrop-filter:blur(<?php echo $overlay_blur; ?>px);<?php endif; ?> }
-                #<?php echo esc_attr( $uid ); ?> .uk-modal-dialog { max-width:<?php echo $max_width; ?>px; <?php if ( $radius > 0 ) : ?>border-radius:<?php echo $radius; ?>px;overflow:hidden;<?php endif; ?> box-shadow:0 20px 60px rgba(0,0,0,.2); }
+                #<?php echo esc_attr( $uid ); ?> { background: rgba(0,0,0,<?php echo (float) $overlay_alpha; ?>) !important; <?php if ( $overlay_blur > 0 ) : ?>backdrop-filter:blur(<?php echo (int) $overlay_blur; ?>px);-webkit-backdrop-filter:blur(<?php echo (int) $overlay_blur; ?>px);<?php endif; ?> }
+                #<?php echo esc_attr( $uid ); ?> .uk-modal-dialog { max-width:<?php echo (int) $max_width; ?>px; <?php if ( $radius > 0 ) : ?>border-radius:<?php echo (int) $radius; ?>px;overflow:hidden;<?php endif; ?> box-shadow:0 20px 60px rgba(0,0,0,.2); }
                 #<?php echo esc_attr( $uid ); ?> .olo-template { width:100%;left:0;transform:none; }
                 #<?php echo esc_attr( $uid ); ?> .olo-frontend-grid { --olo-container-max-width:none; }
             </style>
-            <div id="<?php echo esc_attr( $uid ); ?>" <?php echo $modal_attr; ?>>
+            <div id="<?php echo esc_attr( $uid ); ?>" <?php echo $modal_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute composed only of the fixed internal literals 'uk-modal' and 'bg-close: false' ?>>
                 <div class="uk-modal-dialog uk-margin-auto-vertical">
                     <button class="uk-modal-close-default" type="button" uk-close></button>
                     <div class="uk-modal-body" uk-overflow-auto style="max-height:80vh">
-                        <?php echo $content; ?>
+                        <?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- popup body is the rendered [olo_template] shortcode output (Olo_Frontend_Renderer); each tile escapes its own output at build time ?>
                     </div>
                 </div>
             </div>
@@ -142,7 +142,7 @@ class Olo_Global_Popups {
                 }
 
                 <?php if ( $trigger === 'page_load' ) : ?>
-                if(canShow()){setTimeout(openPopup,<?php echo max( 300, $delay * 1000 ); ?>)}
+                if(canShow()){setTimeout(openPopup,<?php echo (int) max( 300, $delay * 1000 ); ?>)}
                 <?php elseif ( $trigger === 'scroll_percent' ) : ?>
                 var sp=<?php echo intval( $scroll_percent ); ?>;
                 function chkScr(){var dh=document.documentElement.scrollHeight-window.innerHeight;if(dh<=0)return;if((window.scrollY/dh)*100>=sp){openPopup();window.removeEventListener('scroll',chkScr)}}
@@ -151,7 +151,7 @@ class Olo_Global_Popups {
                 function exitI(e){if(e.clientY<=0){openPopup();document.documentElement.removeEventListener('mouseleave',exitI)}}
                 if(canShow()){if(window.matchMedia('(pointer:fine)').matches){document.documentElement.addEventListener('mouseleave',exitI)}}
                 <?php elseif ( $trigger === 'timer' ) : ?>
-                if(canShow()){setTimeout(openPopup,<?php echo max( 300, $delay * 1000 ); ?>)}
+                if(canShow()){setTimeout(openPopup,<?php echo (int) max( 300, $delay * 1000 ); ?>)}
                 <?php elseif ( $trigger === 'inactivity' ) : ?>
                 var inD=<?php echo intval( $popup['inactivity_delay'] ?? 30 ); ?>;var inT=null;
                 function rstI(){if(triggered)return;if(inT)clearTimeout(inT);inT=setTimeout(function(){openPopup();clnI()},inD*1000)}
@@ -426,7 +426,7 @@ class Olo_Global_Popups {
         <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Popup Globali', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy">
             <?php
-            echo Olo_Builder::cockpit_page_head( [
+            echo Olo_Builder::cockpit_page_head( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally; counts are int-cast.
                 'title' => __( 'Popup Globali', 'olobuild' ),
                 'sub'   => sprintf(
                     /* translators: 1: total popups, 2: active popups */
@@ -447,6 +447,7 @@ class Olo_Global_Popups {
 
             <div id="olo-gpop-msg"></div>
 
+            <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline admin JS below: every dynamic value is emitted via wp_json_encode() or esc_js(). ?>
             <script>
             (function(){
                 var popups = <?php echo wp_json_encode( $popups ); ?>;
@@ -652,6 +653,7 @@ class Olo_Global_Popups {
                 render();
             })();
             </script>
+            <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         </main>
         <?php Olo_Builder::cockpit_shell_close(); ?>
         <?php
