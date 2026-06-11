@@ -26,12 +26,11 @@ class Olo_Setup_Wizard {
         add_action( 'wp_ajax_olo_setup_skip', [ $this, 'ajax_skip' ] );
         add_action( 'wp_ajax_olo_setup_blank_starter', [ $this, 'ajax_blank_starter' ] );
 
-        // Consume activation transient silently
-        add_action( 'admin_init', function() {
-            if ( get_transient( 'olo_activating' ) ) {
-                delete_transient( 'olo_activating' );
-            }
-        } );
+        // First-run: redirect una-tantum al wizard dopo l'attivazione (pattern WooCommerce).
+        // Niente rischio loop: il transient viene cancellato PRIMA del redirect, quindi
+        // qualunque richiesta successiva non rientra qui. Il notice resta come fallback
+        // per i casi in cui il redirect viene saltato (bulk activate, AJAX, multisite).
+        add_action( 'admin_init', [ $this, 'maybe_first_run_redirect' ], 2 );
     }
 
     /**
@@ -42,6 +41,22 @@ class Olo_Setup_Wizard {
         if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'olo-setup' ) return;
         if ( ! current_user_can( 'manage_options' ) ) return;
         $this->render_wizard(); // prints a full HTML document and exits
+    }
+
+    /**
+     * One-time redirect to the wizard right after plugin activation.
+     */
+    public function maybe_first_run_redirect() {
+        if ( ! get_transient( 'olo_activating' ) ) return;
+        delete_transient( 'olo_activating' ); // prima del redirect: mai due volte, mai loop
+
+        if ( wp_doing_ajax() || wp_doing_cron() || is_network_admin() ) return;
+        if ( isset( $_GET['activate-multi'] ) ) return; // attivazione bulk: solo notice
+        if ( ! current_user_can( 'manage_options' ) ) return;
+        if ( get_option( 'olo_setup_complete' ) ) return;
+
+        wp_safe_redirect( admin_url( 'admin.php?page=olo-setup' ) );
+        exit;
     }
 
     /**
