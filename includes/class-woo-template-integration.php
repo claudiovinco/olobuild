@@ -120,6 +120,31 @@ class Olo_Woo_Template_Integration {
             }
         }
 
+        // Cart / Checkout / My Account — anche template_include, non solo the_content:
+        // nei block theme WooCommerce serve le sue pagine coi PROPRI block template
+        // (page-cart/page-checkout con la "checkout-header" minimal del core Woo),
+        // che mostrerebbero un header estraneo al tema OLObuild. Il wrapper PHP
+        // bypassa i block template e rende il template OLO con header/footer OLO,
+        // come gia' avviene per il prodotto singolo.
+        if ( function_exists( 'is_cart' ) && is_cart() ) {
+            $tpl = (int) get_option( 'olo_woo_tpl_cart', 0 );
+            if ( $tpl > 0 ) {
+                return $this->get_olo_wrapper_template( $tpl );
+            }
+        }
+        if ( function_exists( 'is_checkout' ) && is_checkout() && ! is_order_received_page() ) {
+            $tpl = (int) get_option( 'olo_woo_tpl_checkout', 0 );
+            if ( $tpl > 0 ) {
+                return $this->get_olo_wrapper_template( $tpl );
+            }
+        }
+        if ( function_exists( 'is_account_page' ) && is_account_page() ) {
+            $tpl = (int) get_option( 'olo_woo_tpl_myaccount', 0 );
+            if ( $tpl > 0 ) {
+                return $this->get_olo_wrapper_template( $tpl );
+            }
+        }
+
         return $template;
     }
 

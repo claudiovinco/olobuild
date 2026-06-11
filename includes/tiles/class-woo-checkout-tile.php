@@ -115,16 +115,20 @@ class Olo_Woo_Checkout_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .woocommerce-message,
             .<?php echo $uid; ?> .woocommerce-error,
             .<?php echo $uid; ?> .woocommerce-NoticeGroup .woocommerce-error {
-                background: <?php echo $notice_bg; ?>;
-                color: <?php echo $notice_text; ?>;
-                border: 1px solid <?php echo $border_color; ?>;
-                border-left: 3px solid <?php echo $accent_color; ?>;
+                /* !important: i temi (block theme, Woo core) stilano .woocommerce-info con selettori propri */
+                background: <?php echo $notice_bg; ?> !important;
+                color: <?php echo $notice_text; ?> !important;
+                border: 1px solid <?php echo $border_color; ?> !important;
+                border-left: 3px solid <?php echo $accent_color; ?> !important;
                 border-radius: <?php echo $border_radius; ?>;
                 padding: 14px 18px 14px 44px;
                 margin: 0 0 28px;
                 list-style: none;
                 position: relative;
             }
+            .<?php echo $uid; ?> .woocommerce-info::before,
+            .<?php echo $uid; ?> .woocommerce-message::before,
+            .<?php echo $uid; ?> .woocommerce-error::before { background: transparent !important; }
             .<?php echo $uid; ?> .woocommerce-info::before,
             .<?php echo $uid; ?> .woocommerce-message::before,
             .<?php echo $uid; ?> .woocommerce-error::before { color: <?php echo $accent_color; ?>; left: 16px; top: 14px; position: absolute; }
