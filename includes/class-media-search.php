@@ -720,13 +720,6 @@ class Olo_Media_Search {
             const $ = s => document.querySelector(s);
             const $$ = s => document.querySelectorAll(s);
 
-            // Init
-            renderProviders();
-            renderQuick($('#olo-ms-quick'), true);
-            renderFilters();
-            renderEmpty();
-            bindEvents();
-
             function bindEvents() {
                 $$('.olo-ms-tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
                 $('#olo-ms-search-btn').addEventListener('click', () => doSearch());
@@ -1493,6 +1486,12 @@ class Olo_Media_Search {
                 d.textContent = str == null ? '' : String(str);
                 return d.innerHTML;
             }
+
+            // Init — DOPO tutte le dichiarazioni (const filterState & co. non sono hoisted)
+            renderProviders();
+            renderQuick($('#olo-ms-quick'), true);
+            renderEmpty();
+            bindEvents();
         })();
         </script>
         <?php
