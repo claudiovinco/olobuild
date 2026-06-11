@@ -23,9 +23,9 @@
  * ── WIRING (lo fa il coordinatore, NON questo file) ───────────────────────────────────
  *   require_once OLO_PATH . 'includes/class-magnetic-cursor.php';
  *   Olo_Magnetic_Cursor::init();
- * Le impostazioni vanno esposte nel pannello "Configurazione" (tab tema/header) leggendo
- * Olo_Magnetic_Cursor::get_settings() e salvando in `olo_magnetic_cursor` via
- * Olo_Magnetic_Cursor::sanitize(). Il banner frontend funziona già senza UI: appena
+ * NESSUNA UI admin: la pagina nativa in Impostazioni è stata rimossa (scelta utente
+ * 2026-06-11). La feature resta dormiente: si attiva solo scrivendo l'option
+ * `olo_magnetic_cursor` (REST `cursor` o wp-cli) con `enabled => true`; appena
  * `enabled` è true, il runtime viene emesso nel footer.
  *
  * @package Olobuild
@@ -52,13 +52,6 @@ class Olo_Magnetic_Cursor {
             return;
         }
         $done = true;
-
-        // Pagina impostazioni admin nativa (WP Settings API): registrata SEMPRE — anche se
-        // disabilitato — così la si può attivare dall'admin senza dipendere dalla Vue app.
-        if ( is_admin() ) {
-            add_action( 'admin_menu', [ __CLASS__, 'admin_menu' ] );
-            add_action( 'admin_init', [ __CLASS__, 'admin_register' ] );
-        }
 
         $opts = self::get_settings();
         if ( empty( $opts['enabled'] ) ) {
@@ -201,6 +194,7 @@ class Olo_Magnetic_Cursor {
         // - (hover:none),(pointer:coarse): nascondi cursore custom, NON forzare cursor:none.
         // - prefers-reduced-motion: nessuna animazione di transizione sull'anello.
         ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS/JS below is built exclusively from values sanitized above: sizes via (int)/(float) casts on clamped settings, every color esc_attr()'d inline, blend mode from the BLEND_MODES whitelist, runtime config via wp_json_encode(); $uid is internally generated.
         ?>
 <style id="<?php echo esc_attr( $uid ); ?>-css">
 .<?php echo $uid; ?>-ring,
@@ -343,69 +337,9 @@ html.<?php echo $uid; ?>-on [role="button"]{cursor:none;}
 })();
 </script>
         <?php
+        // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
         // Output raw: CSS/JS generati interamente da valori sanitizzati sopra.
-        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline asset, valori già sanitizzati/escaped a monte
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- buffered inline CSS/JS asset; every dynamic value is sanitized or escaped above (whitelists, clamped numerics, esc_attr, wp_json_encode)
         echo ob_get_clean();
-    }
-
-    /* ═══════════════════════════════════════════════════
-     * ADMIN UI — WP Settings API nativa (non tocca la Vue app del builder)
-     * ═══════════════════════════════════════════════════ */
-
-    public static function admin_menu() {
-        add_options_page(
-            __( 'Cursore magnetico', 'olobuild' ),
-            __( 'OLO Cursore magnetico', 'olobuild' ),
-            'manage_options',
-            'olo-magnetic-cursor',
-            [ __CLASS__, 'render_settings_page' ]
-        );
-    }
-
-    public static function admin_register() {
-        register_setting( 'olo_magnetic_cursor_group', self::OPT, [ __CLASS__, 'sanitize' ] );
-    }
-
-    public static function render_settings_page() {
-        if ( ! current_user_can( 'manage_options' ) ) {
-            return;
-        }
-        $o   = self::get_settings();
-        $opt = esc_attr( self::OPT );
-        ?>
-        <div class="wrap">
-            <h1><?php esc_html_e( 'Cursore magnetico (MagneticCursor)', 'olobuild' ); ?></h1>
-            <p style="max-width:640px">
-                <?php esc_html_e( 'Cursore custom al neon (anello + dot) con "pull" magnetico sugli elementi interattivi. Si disattiva automaticamente su touch / (pointer:coarse) e con prefers-reduced-motion; non nasconde mai il focus da tastiera.', 'olobuild' ); ?>
-            </p>
-            <form method="post" action="options.php">
-                <?php settings_fields( 'olo_magnetic_cursor_group' ); ?>
-                <table class="form-table" role="presentation">
-                    <tr><th scope="row"><?php esc_html_e( 'Attivo', 'olobuild' ); ?></th>
-                        <td><label><input type="checkbox" name="<?php echo $opt; ?>[enabled]" value="1" <?php checked( ! empty( $o['enabled'] ) ); ?>> <?php esc_html_e( 'Abilita il cursore magnetico sul frontend', 'olobuild' ); ?></label></td></tr>
-                    <tr><th scope="row"><?php esc_html_e( 'Dimensione anello (px)', 'olobuild' ); ?></th>
-                        <td><input type="number" min="8" max="200" name="<?php echo $opt; ?>[ring_size]" value="<?php echo esc_attr( $o['ring_size'] ); ?>"></td></tr>
-                    <tr><th scope="row"><?php esc_html_e( 'Spessore anello (px)', 'olobuild' ); ?></th>
-                        <td><input type="number" step="0.5" min="0" max="12" name="<?php echo $opt; ?>[ring_width]" value="<?php echo esc_attr( $o['ring_width'] ); ?>"></td></tr>
-                    <tr><th scope="row"><?php esc_html_e( 'Colore anello', 'olobuild' ); ?></th>
-                        <td><input type="text" name="<?php echo $opt; ?>[ring_color]" value="<?php echo esc_attr( $o['ring_color'] ); ?>" class="regular-text" placeholder="#22D3EE"></td></tr>
-                    <tr><th scope="row"><?php esc_html_e( 'Colore dot', 'olobuild' ); ?></th>
-                        <td><input type="text" name="<?php echo $opt; ?>[dot_color]" value="<?php echo esc_attr( $o['dot_color'] ); ?>" class="regular-text" placeholder="#B6FF3D"></td></tr>
-                    <tr><th scope="row"><?php esc_html_e( 'Blend mode anello', 'olobuild' ); ?></th>
-                        <td><select name="<?php echo $opt; ?>[blend_mode]"><?php foreach ( self::BLEND_MODES as $bm ) { echo '<option value="' . esc_attr( $bm ) . '" ' . selected( $o['blend_mode'], $bm, false ) . '>' . esc_html( $bm ) . '</option>'; } ?></select></td></tr>
-                    <tr><th scope="row"><?php esc_html_e( 'Selettore magnetico', 'olobuild' ); ?></th>
-                        <td><input type="text" name="<?php echo $opt; ?>[magnetic_selector]" value="<?php echo esc_attr( $o['magnetic_selector'] ); ?>" class="regular-text" placeholder="button, a.btn">
-                            <p class="description"><?php esc_html_e( 'CSS selector degli elementi "tirati" verso il cursore.', 'olobuild' ); ?></p></td></tr>
-                    <tr><th scope="row"><?php esc_html_e( 'Forza pull (0–1)', 'olobuild' ); ?></th>
-                        <td><input type="number" step="0.05" min="0" max="1" name="<?php echo $opt; ?>[pull_strength]" value="<?php echo esc_attr( $o['pull_strength'] ); ?>"></td></tr>
-                    <tr><th scope="row"><?php esc_html_e( 'Inseguimento (0–1)', 'olobuild' ); ?></th>
-                        <td><input type="number" step="0.02" min="0.02" max="1" name="<?php echo $opt; ?>[follow_easing]" value="<?php echo esc_attr( $o['follow_easing'] ); ?>"></td></tr>
-                    <tr><th scope="row"><?php esc_html_e( 'Nascondi cursore di sistema', 'olobuild' ); ?></th>
-                        <td><label><input type="checkbox" name="<?php echo $opt; ?>[hide_system]" value="1" <?php checked( ! empty( $o['hide_system'] ) ); ?>> <?php esc_html_e( 'cursor:none mentre il cursore custom è attivo (mai su touch)', 'olobuild' ); ?></label></td></tr>
-                </table>
-                <?php submit_button(); ?>
-            </form>
-        </div>
-        <?php
     }
 }
