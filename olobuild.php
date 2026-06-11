@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Page builder professionale olonico con sistema a griglia (tile drag & drop).
- * Version:     1.4.187
+ * Version:     1.4.188
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuild
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '1.4.187' );
+define( 'OLO_VERSION', '1.4.188' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
 
@@ -318,7 +318,13 @@ add_filter( 'wp_check_filetype_and_ext', function( $data, $file, $filename, $mim
  */
 function olo_t( $text ) {
     $map = olo_get_translations_map();
-    return $map[ $text ] ?? $text;
+    if ( isset( $map[ $text ] ) ) {
+        return $map[ $text ];
+    }
+    // Fallback gettext: con locale non-italiano le stringhe sorgente (IT)
+    // escono dai .mo bundled — es. sito con lingua default EN via OLOlang,
+    // dove la mappa DB è vuota per la lingua default.
+    return __( $text, 'olobuild' ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- runtime catalog lookup by design (olo_t wraps source strings)
 }
 
 /**

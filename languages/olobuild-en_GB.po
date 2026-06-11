@@ -16360,3 +16360,5 @@ msgstr "View the site →"
 
 msgid "Salta configurazione"
 msgstr "Skip configuration"
+msgid "recensioni"
+msgstr "reviews"
