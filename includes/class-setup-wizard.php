@@ -307,6 +307,16 @@ class Olo_Setup_Wizard {
             </div>
 
             <script src="<?php echo esc_url( OLO_URL . 'assets/js/theme-picker.js' ); ?>?v=<?php echo esc_attr( OLO_VERSION ); ?>"></script>
+            <?php // Pipeline thumbnail (render REST → html2canvas → upload): genera le anteprime card subito dopo l'import del tema ?>
+            <script>
+            window.oloThumbConfig = {
+                restUrl:   '<?php echo esc_url_raw( rest_url( 'olo/v1/' ) ); ?>',
+                nonce:     '<?php echo esc_js( wp_create_nonce( 'wp_rest' ) ); ?>',
+                vendorUrl: '<?php echo esc_url( OLO_URL . 'assets/vendor/html2canvas.min.js' ); ?>',
+                debug:     false
+            };
+            </script>
+            <script src="<?php echo esc_url( OLO_URL . 'assets/js/olo-thumb-capture.js' ); ?>?v=<?php echo esc_attr( OLO_VERSION ); ?>"></script>
             <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JS below only outputs wp_json_encode()'d JSON strings, a wp_create_nonce() token, esc_url()'d admin URLs and a fixed integer literal from a ternary. ?>
             <script>
             var oloWizardThemes = <?php echo wp_json_encode( array_map( function ( $t ) { unset( $t['dir'] ); return $t; }, $themes ) ); ?>;
@@ -454,6 +464,11 @@ class Olo_Setup_Wizard {
                     if (data.success) {
                         var d = data.data;
                         status.innerHTML = '<span class="check">✓</span> ' + oloSetupI18n.templatesCreated.replace('%d', d.templates);
+                        // Anteprime card in background (continua mentre l'utente è sullo step finale;
+                        // le eventuali rimanenti le completa l'auto-heal della dashboard template).
+                        if (window.oloGenerateMissingThumbs && d.template_ids && d.template_ids.length) {
+                            window.oloGenerateMissingThumbs(d.template_ids);
+                        }
                         setTimeout(function() { nextStep(3); }, 1000);
                     } else {
                         status.textContent = '⚠ ' + (data.data || oloSetupI18n.error);
@@ -544,9 +559,10 @@ class Olo_Setup_Wizard {
         update_option( 'olo_setup_complete', true );
 
         wp_send_json_success( [
-            'templates' => count( $result['templates'] ?? [] ),
-            'activated' => $result['activated'] ?? [],
-            'menu'      => $result['menu'] ?? null,
+            'templates'    => count( $result['templates'] ?? [] ),
+            'template_ids' => array_values( array_filter( array_column( $result['templates'] ?? [], 'id' ) ) ),
+            'activated'    => $result['activated'] ?? [],
+            'menu'         => $result['menu'] ?? null,
         ] );
     }
 

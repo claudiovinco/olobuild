@@ -474,12 +474,36 @@ async function fetchTemplates() {
     const data = await res.json();
     templates.value = data.items || [];
     byType.value = data.byType || {};
+    healMissingThumbs();
   } catch (err) {
     console.error('fetchTemplates:', err);
     templates.value = [];
   } finally {
     loading.value = false;
   }
+}
+
+/* ─── Thumbnail auto-heal ───────────────────────────────────────────── */
+/* I template creati senza passare dal builder (import tema, import file,
+   API) non hanno thumbnail: genera in background quelle mancanti via
+   olo-thumb-capture.js (render REST → cattura). Cap per visita per non
+   tenere la coda occupata troppo a lungo su siti con molti template. */
+const THUMB_HEAL_CAP = 30;
+let thumbHealStarted = false;
+function healMissingThumbs() {
+  if (thumbHealStarted || typeof window.oloGenerateMissingThumbs !== 'function') return;
+  const ids = templates.value.filter(t_ => !t_.thumbnail).map(t_ => t_.id).slice(0, THUMB_HEAL_CAP);
+  if (!ids.length) return;
+  thumbHealStarted = true;
+  window.oloGenerateMissingThumbs(ids);
+}
+
+/* Card live update: l'upload di ogni thumbnail emette questo evento */
+function onThumbUpdated(e) {
+  const { templateId, url } = e.detail || {};
+  if (!templateId || !url) return;
+  const tpl = templates.value.find(t_ => t_.id === templateId);
+  if (tpl) tpl.thumbnail = url;
 }
 
 /* ─── Actions ───────────────────────────────────────────────────────── */
@@ -688,9 +712,11 @@ function miniThumbStyle(tpl) {
 onMounted(() => {
   fetchTemplates();
   document.addEventListener('click', handleClickOutside);
+  window.addEventListener('olobuild:thumbnail-updated', onThumbUpdated);
 });
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside);
+  window.removeEventListener('olobuild:thumbnail-updated', onThumbUpdated);
 });
 
 /* ─── Preview shape sub-component ──────────────────────────────────── */

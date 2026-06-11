@@ -157,7 +157,21 @@
         }
         log('canvas captured', canvas.width, '×', canvas.height);
 
-        // Crop 16:9 dall'alto (above-the-fold)
+        const blob = await cropToBlob(canvas);
+        if (!blob) { warn('toBlob failed'); return; }
+        log('blob ready', blob.size, 'bytes');
+
+        try {
+            await uploadThumb(templateId, blob);
+        } catch (e) {
+            warn('upload failed: ' + e.message);
+        }
+    }
+
+    /**
+     * Crop 16:9 dall'alto (above-the-fold) → JPEG blob 640×360.
+     */
+    function cropToBlob(canvas) {
         const out = document.createElement('canvas');
         out.width = OUT.w; out.height = OUT.h;
         const ctx = out.getContext('2d');
@@ -178,30 +192,148 @@
         }
         ctx.drawImage(canvas, sx, sy, sw, sh, 0, 0, OUT.w, OUT.h);
 
-        const blob = await new Promise(res => out.toBlob(res, 'image/jpeg', QUALITY));
-        if (!blob) { warn('toBlob failed'); return; }
-        log('blob ready', blob.size, 'bytes');
+        return new Promise(res => out.toBlob(res, 'image/jpeg', QUALITY));
+    }
 
+    /**
+     * Upload del blob come thumbnail del template + evento di notifica
+     * (la dashboard template lo ascolta per aggiornare la card live).
+     */
+    async function uploadThumb(templateId, blob) {
         const fd = new FormData();
         fd.append('file', blob, 'thumb.jpg');
 
+        const res = await fetch(cfg.restUrl + 'templates/' + templateId + '/thumbnail', {
+            method: 'POST',
+            headers: { 'X-WP-Nonce': cfg.nonce },
+            credentials: 'same-origin',
+            body: fd,
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const json = await res.json();
+        log('saved:', json.thumbnail_url);
+        window.dispatchEvent(new CustomEvent('olobuild:thumbnail-updated', {
+            detail: { templateId: templateId, url: json.thumbnail_url }
+        }));
+        return json.thumbnail_url;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       Generazione SENZA builder (template importati da tema/file):
+       GET /templates/{id}/render → HTML reale del frontend renderer →
+       iframe di staging fuori viewport → html2canvas → upload.
+       ═══════════════════════════════════════════════════════════════ */
+
+    /** Attende font e immagini del documento di staging (best effort). */
+    function waitAssets(doc, timeoutMs) {
+        const jobs = [];
+        try { if (doc.fonts && doc.fonts.ready) jobs.push(doc.fonts.ready); } catch (e) { /* no-op */ }
+        Array.prototype.forEach.call(doc.images || [], function (img) {
+            if (img.complete) return;
+            jobs.push(new Promise(function (res) { img.onload = img.onerror = res; }));
+        });
+        return Promise.race([
+            Promise.all(jobs),
+            new Promise(function (res) { setTimeout(res, timeoutMs); }),
+        ]);
+    }
+
+    /**
+     * Genera la thumbnail di UN template renderizzandolo in un iframe
+     * di staging (stesso wrapper .olo-template del frontend reale).
+     * Ritorna l'URL della thumbnail, o null se il template è vuoto.
+     */
+    async function generateFromRender(templateId) {
+        const res = await fetch(cfg.restUrl + 'templates/' + templateId + '/render', {
+            headers: { 'X-WP-Nonce': cfg.nonce },
+            credentials: 'same-origin',
+        });
+        if (!res.ok) throw new Error('render HTTP ' + res.status);
+        const data = await res.json();
+        if (!data || !data.html) { log('template', templateId, 'senza contenuto, skip'); return null; }
+
+        const h2c = await loadHtml2Canvas();
+
+        const iframe = document.createElement('iframe');
+        iframe.setAttribute('aria-hidden', 'true');
+        iframe.style.cssText = 'position:fixed;left:-99999px;top:0;width:' + VIEWPORT.w + 'px;height:' + Math.round(VIEWPORT.h * 1.5) + 'px;border:0;pointer-events:none;';
+        const links = (data.css || []).map(function (u) {
+            return '<link rel="stylesheet" href="' + u.replace(/"/g, '&quot;') + '">';
+        }).join('');
+        iframe.srcdoc = '<!doctype html><html><head><meta charset="utf-8">' + links +
+            '<style>' + (data.inline_css || '') + '</style>' +
+            '<style>html,body{margin:0;padding:0;background:#fff;width:' + VIEWPORT.w + 'px;overflow:hidden}</style>' +
+            '</head><body><div class="olo-template">' + data.html + '</div></body></html>';
+        document.body.appendChild(iframe);
+
         try {
-            const res = await fetch(cfg.restUrl + 'templates/' + templateId + '/thumbnail', {
-                method: 'POST',
-                headers: { 'X-WP-Nonce': cfg.nonce },
-                credentials: 'same-origin',
-                body: fd,
+            await new Promise(function (resolve) {
+                const t = setTimeout(resolve, 12000);
+                iframe.onload = function () { clearTimeout(t); resolve(); };
             });
-            if (!res.ok) throw new Error('HTTP ' + res.status);
-            const json = await res.json();
-            if (window.console) console.log('[olo-thumb] saved:', json.thumbnail_url);
-            window.dispatchEvent(new CustomEvent('olobuild:thumbnail-updated', {
-                detail: { templateId: templateId, url: json.thumbnail_url }
-            }));
-        } catch (e) {
-            warn('upload failed: ' + e.message);
+            const doc = iframe.contentDocument;
+            if (!doc || !doc.body) throw new Error('staging iframe non accessibile');
+
+            await waitAssets(doc, 8000);
+
+            const W = VIEWPORT.w;
+            const fullH = Math.max(doc.body.scrollHeight, 200);
+            const captureH = Math.min(fullH, Math.round(W * (VIEWPORT.h / VIEWPORT.w) * 1.5));
+            log('staging capture', templateId, W, '×', captureH, '(full', fullH, ')');
+
+            const canvas = await h2c(doc.body, {
+                width: W,
+                height: captureH,
+                windowWidth: W,
+                windowHeight: captureH,
+                scale: 1,
+                useCORS: true,
+                allowTaint: false,
+                backgroundColor: '#ffffff',
+                logging: DEBUG,
+                imageTimeout: 15000,
+            });
+
+            const blob = await cropToBlob(canvas);
+            if (!blob) throw new Error('toBlob failed');
+            return await uploadThumb(templateId, blob);
+        } finally {
+            iframe.remove();
         }
     }
+
+    /**
+     * Coda pubblica: genera in sequenza le thumbnail per una lista di
+     * template ID (import tema, import file, auto-heal dashboard).
+     * opts.onProgress(i, total, id) opzionale. Ritorna { done, failed }.
+     */
+    let queueRunning = false;
+    window.oloGenerateMissingThumbs = async function (templateIds, opts) {
+        opts = opts || {};
+        const ids = (templateIds || []).map(Number).filter(Boolean);
+        if (queueRunning) { warn('coda thumbnail già in corso, skip'); return { done: 0, failed: 0, skipped: true }; }
+        if (!ids.length) return { done: 0, failed: 0 };
+        queueRunning = true;
+        let done = 0, failed = 0;
+        try {
+            for (let i = 0; i < ids.length; i++) {
+                if (typeof opts.onProgress === 'function') {
+                    try { opts.onProgress(i + 1, ids.length, ids[i]); } catch (e) { /* no-op */ }
+                }
+                try {
+                    const url = await generateFromRender(ids[i]);
+                    if (url) done++;
+                } catch (e) {
+                    failed++;
+                    warn('generazione thumb fallita per #' + ids[i] + ': ' + e.message);
+                }
+            }
+        } finally {
+            queueRunning = false;
+        }
+        log('coda completata:', done, 'ok,', failed, 'fallite');
+        return { done: done, failed: failed };
+    };
 
     /* Debounce: evita capture multiple ravvicinate */
     let pending = null;

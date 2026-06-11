@@ -34,7 +34,20 @@ async function importTheme(theme) {
     if (result.templates) {
       picker && picker.close();
       showToast(`✅ Tema importato! ${result.templates.length} template creati.`);
-      setTimeout(() => window.location.reload(), 1500);
+      // Genera subito le anteprime delle card (render REST → cattura), poi ricarica
+      const ids = result.templates.map(t => t.id).filter(Boolean);
+      if (ids.length && typeof window.oloGenerateMissingThumbs === 'function') {
+        const progress = document.createElement('div');
+        progress.style.cssText = 'position:fixed;bottom:72px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:8px;font-size:14px;font-weight:500;z-index:9999999;box-shadow:0 4px 20px rgba(0,0,0,0.3);font-family:system-ui,-apple-system,sans-serif;background:#1E3A8A;color:#EFF6FF';
+        document.body.appendChild(progress);
+        try {
+          await window.oloGenerateMissingThumbs(ids, {
+            onProgress: (i, total) => { progress.textContent = `🖼 Generazione anteprime… ${i}/${total}`; },
+          });
+        } catch (e) { console.warn('thumb generation failed:', e); }
+        progress.remove();
+      }
+      window.location.reload();
     } else {
       picker && picker.setBusy(false);
       showToast('❌ Errore nell\'importazione', true);
