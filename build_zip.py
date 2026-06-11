@@ -2,16 +2,20 @@
 Build installable ZIP for a WordPress plugin.
 Creates a ZIP with Linux-style forward-slash paths, safe for WordPress install.
 
-Usage: python build_zip.py [plugin_name]
+Usage: python build_zip.py [plugin_name] [--root=PATH]
 If plugin_name is omitted, defaults to 'olobuild'.
+--root overrides the source folder (e.g. a clean staging export of git HEAD)
+while keeping plugin_name as the ZIP root folder and output name.
 """
 import os
 import sys
 import zipfile
 from pathlib import Path
 
-PLUGIN = sys.argv[1] if len(sys.argv) > 1 else "olobuild"
-PROJECT_ROOT = Path(f"D:/TECNICA/{PLUGIN}")
+_positional = [a for a in sys.argv[1:] if not a.startswith("--")]
+_root_args = [a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--root=")]
+PLUGIN = _positional[0] if _positional else "olobuild"
+PROJECT_ROOT = Path(_root_args[0]) if _root_args else Path(f"D:/TECNICA/{PLUGIN}")
 OUTPUT_DIR = Path("D:/TECNICA/olobuild/dist")
 
 # Read version from main PHP file
