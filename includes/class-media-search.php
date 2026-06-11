@@ -31,7 +31,8 @@ class Olo_Media_Search {
         <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Ricerca Media', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy olo-ms-wrap">
             <?php
-            echo Olo_Builder::cockpit_page_head( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally.
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally.
+            echo Olo_Builder::cockpit_page_head( [
                 'title' => __( 'Ricerca Media', 'olobuild' ),
                 'sub'   => sprintf(
                     /* translators: 1: active providers, 2: total providers */
@@ -40,6 +41,7 @@ class Olo_Media_Search {
                     (int) $providers_total
                 ),
             ] );
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
             ?>
 
             <!-- Tabs -->

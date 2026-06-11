@@ -245,12 +245,14 @@ class Olo_Cookie_Consent {
         <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Cookie Consent', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy olo-ck-page">
             <?php
-            echo Olo_Builder::cockpit_page_head( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally.
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally.
+            echo Olo_Builder::cockpit_page_head( [
                 'title' => __( 'Cookie Consent', 'olobuild' ),
                 'sub'   => $banner_active
                     ? __( 'Banner attivo · GDPR-compliant · log consensi tracciato.', 'olobuild' )
                     : __( 'Banner disattivato. Configura testi, aspetto e categorie cookie per attivarlo.', 'olobuild' ),
             ] );
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
             echo Olo_Builder::cockpit_subnav( $subnav, $tab ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_subnav(), which escapes via esc_url()/esc_html() internally.
             ?>
 
@@ -271,12 +273,16 @@ class Olo_Cookie_Consent {
                 ?>
 
                 <div class="olo-actions" style="margin-top:24px">
-                    <?php echo Olo_Builder::cockpit_button( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_button(), which escapes all parts internally.
+                    <?php
+                    // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_button(), which escapes all parts internally.
+                    echo Olo_Builder::cockpit_button( [
                         'label'   => __( 'Salva impostazioni', 'olobuild' ),
                         'variant' => 'pri',
                         'type'    => 'submit',
                         'icon'    => '<path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>',
-                    ] ); ?>
+                    ] );
+                    // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+                    ?>
                 </div>
             </form>
             <?php else : ?>

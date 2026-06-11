@@ -151,7 +151,7 @@ class Olo_Performance_Settings {
         <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Performance', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy olo-perf-page">
             <?php
-            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- cockpit_page_head() escapes internally (esc_html title, wp_kses_post sub).
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- cockpit_page_head() escapes internally (esc_html title, wp_kses_post sub).
             echo Olo_Builder::cockpit_page_head( [
                 'title' => __( 'Performance', 'olobuild' ),
                 'sub'   => sprintf(
@@ -161,6 +161,7 @@ class Olo_Performance_Settings {
                     '<b>' . esc_html( $cache_size ) . '</b>'
                 ),
             ] );
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
             echo Olo_Builder::cockpit_subnav( $subnav, $tab ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- cockpit_subnav() escapes internally (esc_url/esc_html/int cast).
             ?>
 
@@ -186,13 +187,15 @@ class Olo_Performance_Settings {
 
                 <div class="olo-actions" style="margin-top: 24px;">
                     <?php
-                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- cockpit_button() escapes internally (sanitize_html_class/esc_attr/esc_html); icon is a fixed SVG path literal.
+                    // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- cockpit_button() escapes internally (sanitize_html_class/esc_attr/esc_html); icon is a fixed SVG path literal.
                     echo Olo_Builder::cockpit_button( [
                         'label'   => __( 'Salva impostazioni', 'olobuild' ),
                         'variant' => 'pri',
                         'type'    => 'submit',
                         'icon'    => '<path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>',
-                    ] ); ?>
+                    ] );
+                    // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+                    ?>
                 </div>
             </form>
         </main>

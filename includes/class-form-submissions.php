@@ -285,18 +285,20 @@ class Olo_Form_Submissions {
         <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Invii Form', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-submissions-page">
             <?php
-            echo Olo_Builder::cockpit_page_head( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- internal cockpit helper: escapes title (esc_html), sub (wp_kses_post) and pre-escaped actions internally
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- internal cockpit helpers: cockpit_page_head() escapes title (esc_html), sub (wp_kses_post) and pre-escaped actions internally; cockpit_toolbar() escapes all chip/search parts internally (esc_attr/esc_html/esc_url).
+            echo Olo_Builder::cockpit_page_head( [
                 'title'   => __( 'Invii Form', 'olobuild' ),
                 'sub'     => $sub,
                 'actions' => $actions,
             ] );
-            echo Olo_Builder::cockpit_toolbar( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- internal cockpit helper: escapes all chip/search parts internally (esc_attr/esc_html/esc_url)
+            echo Olo_Builder::cockpit_toolbar( [
                 'chips'              => $chips,
                 'active_chip'        => 'all',
                 'search'             => true,
                 'search_id'          => 'olo-sub-search',
                 'search_placeholder' => __( 'Cerca per nome, email, contenuto…', 'olobuild' ),
             ] );
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
             ?>
 
             <div class="olo-sub-list" data-olo-submissions>

@@ -80,10 +80,12 @@ class Olo_Tools {
         <main class="olo-cockpit-main olo-cockpit-legacy olo-tools-page">
 
             <?php
-            echo Olo_Builder::cockpit_page_head( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally.
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally.
+            echo Olo_Builder::cockpit_page_head( [
                 'title' => __( 'Strumenti', 'olobuild' ),
                 'sub'   => __( 'Cache, manutenzione, sostituzione URL e rollback. Utilizzare con cura.', 'olobuild' ),
             ] );
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
             echo Olo_Builder::cockpit_subnav( $subnav_items, $tab ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_subnav(), which escapes via esc_url()/esc_html() internally.
             ?>
 

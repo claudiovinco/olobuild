@@ -232,7 +232,7 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
         <?php if ( $dots && $total > $show ) : ?>
         <div class="<?php echo esc_attr( $uid ); ?>-dots" id="<?php echo esc_attr( $uid ); ?>-dots">
             <?php for ( $d = 0; $d < $dot_count; $d++ ) : ?>
-            <button class="olo-car-dot<?php echo $d === 0 ? ' active' : ''; ?>" data-index="<?php echo $d; ?>" aria-label="<?php echo esc_attr( olo_t( 'Vai a gruppo' ) . ' ' . ( $d + 1 ) ); ?>"></button>
+            <button class="olo-car-dot<?php echo $d === 0 ? ' active' : ''; ?>" data-index="<?php echo (int) $d; ?>" aria-label="<?php echo esc_attr( olo_t( 'Vai a gruppo' ) . ' ' . ( $d + 1 ) ); ?>"></button>
             <?php endfor; ?>
         </div>
         <?php endif; ?>

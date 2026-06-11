@@ -518,7 +518,8 @@ class Olo_Site_Import_Export {
         <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Import / Export', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy">
             <?php
-            echo Olo_Builder::cockpit_page_head( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally; count is int-cast.
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally; count is int-cast.
+            echo Olo_Builder::cockpit_page_head( [
                 'title' => __( 'Import / Export', 'olobuild' ),
                 'sub'   => sprintf(
                     /* translators: %d: total templates */
@@ -526,6 +527,7 @@ class Olo_Site_Import_Export {
                     (int) $tpl_count
                 ),
             ] );
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
             ?>
 
             <div id="olo-ie-msg" style="margin-top:16px"></div>

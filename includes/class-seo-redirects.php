@@ -340,10 +340,12 @@ class Olo_Seo_Redirects {
         <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Redirect & 404', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy">
             <?php
-            echo Olo_Builder::cockpit_page_head( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally; counts are int-cast.
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally; counts are int-cast.
+            echo Olo_Builder::cockpit_page_head( [
                 'title' => __( 'Redirect & 404', 'olobuild' ),
                 'sub'   => $sub_text,
             ] );
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
             echo Olo_Builder::cockpit_subnav( $subnav, $active_tab ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_subnav(), which escapes via esc_url()/esc_html() internally.
             ?>
 

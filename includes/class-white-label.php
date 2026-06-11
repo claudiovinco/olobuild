@@ -180,12 +180,14 @@ class Olo_White_Label {
         <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'White Label', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy">
             <?php
-            echo Olo_Builder::cockpit_page_head( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally.
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally.
+            echo Olo_Builder::cockpit_page_head( [
                 'title' => __( 'White Label', 'olobuild' ),
                 'sub'   => $custom_brand
                     ? __( 'Branding personalizzato attivo. Nasconde il marchio Olobuild dai tuoi clienti.', 'olobuild' )
                     : __( 'Personalizza nome plugin, logo, autore e link per nascondere il brand Olobuild.', 'olobuild' ),
             ] );
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
             ?>
 
             <div id="wl-msg-box" style="margin-top:16px"></div>

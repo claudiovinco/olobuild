@@ -426,7 +426,8 @@ class Olo_Global_Popups {
         <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Popup Globali', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy">
             <?php
-            echo Olo_Builder::cockpit_page_head( [ // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally; counts are int-cast.
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally; counts are int-cast.
+            echo Olo_Builder::cockpit_page_head( [
                 'title' => __( 'Popup Globali', 'olobuild' ),
                 'sub'   => sprintf(
                     /* translators: 1: total popups, 2: active popups */
@@ -435,6 +436,7 @@ class Olo_Global_Popups {
                     '<b>' . (int) $active_count . '</b>'
                 ),
             ] );
+            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
             ?>
 
             <div class="olo-card" style="margin-top:16px;margin-bottom:24px">
