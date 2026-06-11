@@ -2,7 +2,7 @@
   <div class="cfg-page-head">
     <div>
       <h1>{{ t('Template WooCommerce') }}</h1>
-      <p>{{ t('Assegna template Olobuild alle pagine standard di WooCommerce: singolo prodotto, archivio, carrello, checkout, account.') }}</p>
+      <p>{{ t('Assegna template Olobuild alle pagine standard di WooCommerce: singolo prodotto, archivio, categorie, carrello, checkout, account.') }}</p>
     </div>
     <div class="head-actions">
       <span v-if="!wooActive" class="cfg-pill warn"><span class="dot"></span> {{ t('WooCommerce non rilevato') }}</span>
@@ -41,16 +41,18 @@ const showToast = inject('showToast', () => {});
 const setDirty  = inject('setDirty',  () => {});
 
 const pageTypes = [
-  { key: 'product_single',  optionKey: 'olo_woo_tpl_product_single',  label: 'Singolo prodotto',     hint: 'Pagina del singolo prodotto (is_product).' },
-  { key: 'product_archive', optionKey: 'olo_woo_tpl_product_archive', label: 'Archivio prodotti',    hint: 'Shop, archivi categoria/tag prodotto.' },
-  { key: 'cart',            optionKey: 'olo_woo_tpl_cart',            label: 'Carrello',             hint: 'Pagina /cart.' },
-  { key: 'checkout',        optionKey: 'olo_woo_tpl_checkout',        label: 'Checkout',             hint: 'Pagina /checkout.' },
-  { key: 'myaccount',       optionKey: 'olo_woo_tpl_myaccount',       label: 'My Account',           hint: 'Area cliente loggato.' },
+  { key: 'product_single',   optionKey: 'olo_woo_tpl_product_single',   label: 'Singolo prodotto',   hint: 'Pagina del singolo prodotto (is_product).' },
+  { key: 'product_archive',  optionKey: 'olo_woo_tpl_product_archive',  label: 'Archivio prodotti',  hint: 'Pagina Shop (is_shop).' },
+  { key: 'product_category', optionKey: 'olo_woo_tpl_product_category', label: 'Categoria prodotto', hint: 'Archivi categoria/tag prodotto. Nella griglia usa la categoria "current". Se vuoto: vale Archivio prodotti.' },
+  { key: 'cart',             optionKey: 'olo_woo_tpl_cart',             label: 'Carrello',           hint: 'Pagina /cart.' },
+  { key: 'checkout',         optionKey: 'olo_woo_tpl_checkout',         label: 'Checkout',           hint: 'Pagina /checkout.' },
+  { key: 'myaccount',        optionKey: 'olo_woo_tpl_myaccount',        label: 'My Account',         hint: 'Area cliente loggato.' },
 ];
 
 const form = ref({
   olo_woo_tpl_product_single: 0,
   olo_woo_tpl_product_archive: 0,
+  olo_woo_tpl_product_category: 0,
   olo_woo_tpl_cart: 0,
   olo_woo_tpl_checkout: 0,
   olo_woo_tpl_myaccount: 0,
@@ -81,7 +83,9 @@ async function loadSettings() {
     const res = await fetch(`${window.oloData.restUrl}woo-templates`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) {
       const data = await res.json();
-      Object.assign(form.value, data || {});
+      for (const k of Object.keys(form.value)) {
+        if (data && data[k] !== undefined) form.value[k] = parseInt(data[k]) || 0;
+      }
       if (typeof data?.woo_active === 'boolean') wooActive.value = data.woo_active;
     }
   } catch (e) { /* defaults */ }

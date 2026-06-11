@@ -166,12 +166,15 @@ class Olo_Woo_Template_Integration {
     }
 
     public function get_woo_templates() {
-        $data = [];
+        $data = [ 'woo_active' => class_exists( 'WooCommerce' ) ];
         foreach ( $this->page_types as $key => $info ) {
+            $tpl_id = (int) get_option( "olo_woo_tpl_{$key}", 0 );
+            // Formato annidato (storico) + chiave flat con l'option key (usata dalla tab cfg)
             $data[ $key ] = [
                 'label'       => $info['label'],
-                'template_id' => (int) get_option( "olo_woo_tpl_{$key}", 0 ),
+                'template_id' => $tpl_id,
             ];
+            $data[ "olo_woo_tpl_{$key}" ] = $tpl_id;
         }
         return rest_ensure_response( $data );
     }
@@ -179,8 +182,15 @@ class Olo_Woo_Template_Integration {
     public function save_woo_templates( $request ) {
         $body = $request->get_json_params();
         foreach ( $this->page_types as $key => $info ) {
-            if ( isset( $body[ $key ] ) ) {
-                $tpl_id = absint( $body[ $key ] );
+            // Accetta sia la chiave breve (storico) sia l'option key flat (tab cfg)
+            $val = null;
+            if ( isset( $body[ "olo_woo_tpl_{$key}" ] ) ) {
+                $val = $body[ "olo_woo_tpl_{$key}" ];
+            } elseif ( isset( $body[ $key ] ) ) {
+                $val = $body[ $key ];
+            }
+            if ( null !== $val ) {
+                $tpl_id = absint( $val );
                 if ( $tpl_id > 0 ) {
                     update_option( "olo_woo_tpl_{$key}", $tpl_id, false );
                 } else {
