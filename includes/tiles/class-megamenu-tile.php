@@ -19,6 +19,8 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         'logo_image'         => '',
         'logo_text'          => '',
         'logo_dot'           => false,
+        'logo_dot_color'     => '',
+        'logo_dot_position'  => 'before',
         'logo_text_color'    => '',
         'logo_text_size'     => '19',
         'logo_crest'         => '',
@@ -149,7 +151,19 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         'extra_link_4_blank' => false,
         'extra_link_1_button' => false,
         'extra_link_2_button' => false,
+        // Voce = carrello WooCommerce: URL automatico + conteggio articoli "(n)" live
+        'extra_link_1_cart'  => false,
+        'extra_link_2_cart'  => false,
+        'extra_link_3_cart'  => false,
+        'extra_link_4_cart'  => false,
         'extra_links_right'  => false,
+        // Timecode & progresso scroll ("sala di regia") — default off = barra invariata.
+        'show_timecode'      => false,
+        'timecode_duration'  => 90,
+        'timecode_color'     => '',
+        'scroll_progress'    => false,
+        'progress_color'     => '',
+        'progress_height'    => 2,
         // Social Icons
         // Predefiniti '#' SOLO sui principali (FB/IG/X/LinkedIn) come punto di partenza;
         // gli altri vuoti (nessuna icona finché non si inserisce l'URL).
@@ -265,6 +279,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         $this->render_css( $s, $uid );
         $this->render_html( $tree, $children, $grandchildren, $s, $uid );
         $this->render_js( $s, $uid );
+        $this->render_scroll_fx_js( $s, $uid );
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
         $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
@@ -633,6 +648,43 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-tel-li { display: flex; align-items: center; }
         .<?php echo $uid; ?> .olo-mm-tel { font-weight: 700; font-size: 14px; letter-spacing: .02em; white-space: nowrap; }
         .<?php echo $uid; ?> .olo-mm-tel-li::after { display: none !important; }
+        <?php if ( ! empty( $s['show_timecode'] ) ) :
+            // Timecode "sala di regia": mono 12px tabular-nums, visibile solo >=880px.
+            $tc_col = $this->safe_color_css( $s['timecode_color'] ?? '' ) ?: 'var(--olo-color-primary, #C6F24E)';
+        ?>
+        .<?php echo $uid; ?> .olo-mm-tc-li { display: none; align-items: center; }
+        .<?php echo $uid; ?> .olo-mm-tc-li::after { display: none !important; }
+        .<?php echo $uid; ?> .olo-mm-tc {
+            font-family: var(--olo-font-family-mono, 'Space Mono', ui-monospace, monospace);
+            font-size: 12px;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+            color: <?php echo $tc_col; ?>;
+        }
+        @media (min-width: 880px) {
+            .<?php echo $uid; ?> .olo-mm-tc-li { display: flex; }
+        }
+        <?php endif; ?>
+        <?php if ( ! empty( $s['scroll_progress'] ) ) :
+            // Hairline di progresso scroll sul bordo inferiore della barra (var --olo-mm-p dal JS).
+            $pg_col = $this->safe_color_css( $s['progress_color'] ?? '' ) ?: 'var(--olo-color-primary, #C6F24E)';
+            $pg_raw = $s['progress_height'] ?? 2;
+            $pg_h   = ( $pg_raw === '' || $pg_raw === null ) ? 2 : max( 1, min( 8, absint( $pg_raw ) ) );
+        ?>
+        .<?php echo $uid; ?> .olo-mm-bar { position: relative; }
+        .<?php echo $uid; ?> .olo-mm-bar::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            height: <?php echo $pg_h; ?>px;
+            width: calc(var(--olo-mm-p, 0) * 100%);
+            background: <?php echo $pg_col; ?>;
+            pointer-events: none;
+        }
+        <?php endif; ?>
         <?php $logo_min_h = intval( $s['logo_min_height'] ?? 0 ); ?>
         .<?php echo $uid; ?> .olo-mm-logo img {
             <?php if ( $logo_min_h > 0 ) : ?>
@@ -2001,22 +2053,74 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         }
     }
 
+    /* ─── Logo wordmark (dot before | dot inline sul ".") ─── */
+
+    /**
+     * HTML del logo testuale: pallino prima del testo (comportamento storico)
+     * oppure dot "inline" = la prima occorrenza del carattere '.' dentro logo_text
+     * avvolta in uno span colorato (es. 'clod.eu' → clod<span>.</span>eu).
+     * Escaping: le parti di testo passano da esc_html, nessun HTML utente.
+     *
+     * @param array  $s            Settings.
+     * @param string $logo_text    Testo del logo (raw).
+     * @param int    $logo_txt_sz  Dimensione font già clampata.
+     * @param string $color_style  Stringa stile extra già escapata (es. ';color:#fff') o ''.
+     * @return string HTML sicuro.
+     */
+    private function logo_wordmark_html( $s, $logo_text, $logo_txt_sz, $color_style = '' ) {
+        $logo_dot = ! empty( $s['logo_dot'] );
+        $dot_pos  = ( ( $s['logo_dot_position'] ?? 'before' ) === 'inline' ) ? 'inline' : 'before';
+        $dot_col  = $this->safe_color_css( $s['logo_dot_color'] ?? '' );
+
+        $html = '';
+        if ( $logo_dot && $dot_pos === 'before' ) {
+            // Retro-compat: senza colore custom il pallino resta currentColor (CSS base).
+            $html .= '<span class="olo-mm-logo-dot"' . ( $dot_col ? ' style="background:' . esc_attr( $dot_col ) . '"' : '' ) . '></span>';
+        }
+
+        $text_html = esc_html( $logo_text );
+        if ( $logo_dot && $dot_pos === 'inline' ) {
+            $dot_at = strpos( $logo_text, '.' );
+            if ( $dot_at !== false ) {
+                $inline_col = $dot_col ?: 'var(--olo-color-primary, #C6F24E)';
+                $text_html  = esc_html( substr( $logo_text, 0, $dot_at ) )
+                    . '<span class="olo-mm-logo-dot-inline" style="color:' . esc_attr( $inline_col ) . '">.</span>'
+                    . esc_html( substr( $logo_text, $dot_at + 1 ) );
+            }
+        }
+
+        $html .= '<span class="olo-mm-logo-text" style="font-size:' . (int) $logo_txt_sz . 'px' . $color_style . '">' . $text_html . '</span>';
+        return $html;
+    }
+
     /* ─── Extra Links ─── */
 
     private function render_extra_links( $s, $context = 'desktop' ) {
+        // Timecode di scroll "sala di regia" — nella zona destra, PRIMA degli extra link.
+        if ( $context !== 'mobile' && ! empty( $s['show_timecode'] ) ) {
+            echo '<li role="none" class="olo-mm-tc-li"><span class="olo-mm-tc">TC 00:00:00:00</span></li>';
+        }
         for ( $i = 1; $i <= 4; $i++ ) {
             $label = trim( $s["extra_link_{$i}_label"] ?? '' );
             $url   = trim( $s["extra_link_{$i}_url"] ?? '' );
+            // Voce carrello WooCommerce: URL automatico + conteggio "(n)" aggiornato via cart fragments
+            $cart_html = '';
+            if ( ! empty( $s["extra_link_{$i}_cart"] ) && function_exists( 'wc_get_cart_url' ) ) {
+                if ( $label === '' ) { $label = olo_t( 'Carrello' ); }
+                $url       = wc_get_cart_url();
+                $cart_n    = ( function_exists( 'WC' ) && WC()->cart ) ? WC()->cart->get_cart_contents_count() : 0;
+                $cart_html = ' <span class="olo-mm-cart-count">(' . (int) $cart_n . ')</span>';
+            }
             if ( $label === '' || $url === '' ) continue;
             $blank = ! empty( $s["extra_link_{$i}_blank"] );
             $tgt   = $blank ? ' target="_blank" rel="noopener noreferrer"' : '';
             $is_btn = ! empty( $s["extra_link_{$i}_button"] );
             if ( $context === 'mobile' ) : ?>
-                <li><a href="<?php echo esc_url( $url ); ?>"<?php echo $is_btn ? ' class="olo-mm-btn olo-mm-mob-btn"' : ''; ?><?php echo $tgt; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tgt is a fixed literal attribute string set above; URL/label escaped inline ?>><?php echo esc_html( $label ); ?></a></li>
+                <li><a href="<?php echo esc_url( $url ); ?>"<?php echo $is_btn ? ' class="olo-mm-btn olo-mm-mob-btn"' : ''; ?><?php echo $tgt; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tgt is a fixed literal attribute string set above; URL/label escaped inline ?>><?php echo esc_html( $label ) . $cart_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $cart_html built above from a fixed literal + (int) cart count ?></a></li>
             <?php elseif ( $is_btn ) : ?>
-                <li role="none"><a class="olo-mm-btn" href="<?php echo esc_url( $url ); ?>"<?php echo $tgt; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tgt is a fixed literal attribute string set above; URL/label escaped inline ?>><?php echo esc_html( $label ); ?></a></li>
+                <li role="none"><a class="olo-mm-btn" href="<?php echo esc_url( $url ); ?>"<?php echo $tgt; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tgt is a fixed literal attribute string set above; URL/label escaped inline ?>><?php echo esc_html( $label ) . $cart_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $cart_html built above from a fixed literal + (int) cart count ?></a></li>
             <?php else : ?>
-                <li role="none"><a href="<?php echo esc_url( $url ); ?>" data-text="<?php echo esc_attr( $label ); ?>"<?php echo $tgt; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tgt is a fixed literal attribute string set above; URL/label escaped inline ?>><?php echo esc_html( $label ); ?></a></li>
+                <li role="none"><a href="<?php echo esc_url( $url ); ?>" data-text="<?php echo esc_attr( $label ); ?>"<?php echo $tgt; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tgt is a fixed literal attribute string set above; URL/label escaped inline ?>><?php echo esc_html( $label ) . $cart_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $cart_html built above from a fixed literal + (int) cart count ?></a></li>
             <?php endif;
         }
         $phone = trim( (string) ( $s['nav_phone'] ?? '' ) );
@@ -2203,7 +2307,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 <?php // Mobile logo (shown only on mobile via CSS) ?>
                 <?php if ( $mob_bar_logo ) : ?>
                 <a class="olo-mm-mobile-logo" href="<?php echo $logo_link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url()-escaped at assignment above ?>">
-                    <?php if ( $mob_logo ?: $logo_img ) : ?><img src="<?php echo $mob_logo ?: $logo_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- both URLs esc_url()-escaped at assignment above; size absint-clamped, color esc_attr()-escaped inline ?>" alt="<?php echo esc_attr( olo_t( 'Logo' ) ); ?>"><?php elseif ( $logo_text !== '' ) : ?><?php if ( $logo_dot ) : ?><span class="olo-mm-logo-dot"></span><?php endif; ?><span class="olo-mm-logo-text" style="font-size:<?php echo $logo_txt_sz; ?>px<?php echo $logo_txt_c ? ';color:' . esc_attr( $logo_txt_c ) : ''; ?>"><?php echo esc_html( $logo_text ); ?></span><?php endif; ?>
+                    <?php if ( $mob_logo ?: $logo_img ) : ?><img src="<?php echo $mob_logo ?: $logo_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- both URLs esc_url()-escaped at assignment above; size absint-clamped, color esc_attr()-escaped inline ?>" alt="<?php echo esc_attr( olo_t( 'Logo' ) ); ?>"><?php elseif ( $logo_text !== '' ) : ?><?php echo $this->logo_wordmark_html( $s, $logo_text, $logo_txt_sz, $logo_txt_c ? ';color:' . esc_attr( $logo_txt_c ) : '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by logo_wordmark_html() with esc_html/esc_attr/safe_color_css ?><?php endif; ?>
                 </a>
                 <?php endif; ?>
 
@@ -2237,7 +2341,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 </a>
                 <?php elseif ( $logo_text !== '' ) : ?>
                 <a class="olo-mm-logo olo-mm-logo--text" href="<?php echo $logo_link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url()-escaped at assignment above; color esc_attr()-escaped inline ?>"<?php echo $logo_txt_c ? ' style="color:' . esc_attr( $logo_txt_c ) . '"' : ''; ?>>
-                    <?php if ( $logo_crest !== '' ) : ?><span class="olo-mm-crest" style="background:<?php echo $crest_bg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- crest colors validated by safe_color_css() whitelist above; size absint-clamped; texts esc_html()-escaped inline ?>;color:<?php echo $crest_col; ?>"><?php echo esc_html( $logo_crest ); ?></span><?php endif; ?><?php if ( $logo_dot ) : ?><span class="olo-mm-logo-dot"></span><?php endif; ?><span class="olo-mm-logo-text" style="font-size:<?php echo $logo_txt_sz; ?>px"><?php echo esc_html( $logo_text ); ?></span>
+                    <?php if ( $logo_crest !== '' ) : ?><span class="olo-mm-crest" style="background:<?php echo $crest_bg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- crest colors validated by safe_color_css() whitelist above; size absint-clamped; texts esc_html()-escaped inline ?>;color:<?php echo $crest_col; ?>"><?php echo esc_html( $logo_crest ); ?></span><?php endif; ?><?php echo $this->logo_wordmark_html( $s, $logo_text, $logo_txt_sz ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by logo_wordmark_html() with esc_html/esc_attr/safe_color_css ?>
                 </a>
                 <?php endif; ?>
 
@@ -2443,7 +2547,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                     <?php if ( $logo_img ) : ?>
                     <a class="olo-mm-fs-logo" href="<?php echo $logo_link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- both URLs esc_url()-escaped at assignment above ?>"><img src="<?php echo $logo_img; ?>" alt="<?php echo esc_attr( olo_t( 'Logo' ) ); ?>" loading="lazy" /></a>
                     <?php elseif ( $logo_text !== '' ) : ?>
-                    <a class="olo-mm-fs-logo olo-mm-logo--text" href="<?php echo $logo_link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- URL esc_url()-escaped at assignment above; size absint-clamped; color esc_attr()-escaped inline ?>"<?php echo $logo_txt_c ? ' style="color:' . esc_attr( $logo_txt_c ) . '"' : ''; ?>><?php if ( $logo_dot ) : ?><span class="olo-mm-logo-dot"></span><?php endif; ?><span class="olo-mm-logo-text" style="font-size:<?php echo $logo_txt_sz; ?>px"><?php echo esc_html( $logo_text ); ?></span></a>
+                    <a class="olo-mm-fs-logo olo-mm-logo--text" href="<?php echo $logo_link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- URL esc_url()-escaped at assignment above; size absint-clamped; color esc_attr()-escaped inline ?>"<?php echo $logo_txt_c ? ' style="color:' . esc_attr( $logo_txt_c ) . '"' : ''; ?>><?php echo $this->logo_wordmark_html( $s, $logo_text, $logo_txt_sz ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by logo_wordmark_html() with esc_html/esc_attr/safe_color_css ?></a>
                     <?php else : ?><div></div><?php endif; ?>
                     <button class="olo-mm-fs-close" type="button" aria-label="<?php echo esc_attr( olo_t( 'Chiudi' ) ); ?>" onclick="this.closest('.olo-megamenu').classList.remove('olo-mm-mob-active');this.closest('.olo-megamenu').querySelector('.olo-mm-hamburger').classList.remove('olo-mm-ham-open');document.body.style.overflow=''">
                         <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -2643,6 +2747,50 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
     }
 
     /* ─── JavaScript ─── */
+
+    /* ─── Timecode + hairline di progresso (scroll, rAF per-istanza) ─── */
+
+    private function render_scroll_fx_js( $s, $uid ) {
+        $has_tc = ! empty( $s['show_timecode'] );
+        $has_pg = ! empty( $s['scroll_progress'] );
+        if ( ! $has_tc && ! $has_pg ) {
+            return;
+        }
+        // Il type 'number' preserva '' → default 90.
+        $dur_raw = $s['timecode_duration'] ?? 90;
+        $dur     = ( $dur_raw === '' || $dur_raw === null ) ? 90 : max( 1, min( 3600, absint( $dur_raw ) ) );
+        // NB: niente `&&` negli script inline (WP lo encoda) → if separati/annidati.
+        ?>
+        <script>(function(){
+            var root = document.querySelector('.<?php echo esc_js( $uid ); ?>');
+            if (!root) { return; }
+            var tcs = root.querySelectorAll('.olo-mm-tc');
+            var dur = <?php echo (int) $dur; ?>;
+            var fps = 25;
+            var tick = false;
+            function pad2(n) { return (n < 10 ? '0' : '') + n; }
+            function upd() {
+                tick = false;
+                var max = document.documentElement.scrollHeight - window.innerHeight;
+                var p = 0;
+                if (max > 0) { p = Math.max(0, Math.min(1, (window.scrollY || 0) / max)); }
+                root.style.setProperty('--olo-mm-p', p.toFixed(4));
+                if (tcs.length) {
+                    var fr = Math.round(p * dur * fps);
+                    var sec = Math.floor(fr / fps);
+                    var f = fr % fps;
+                    var txt = 'TC 00:' + pad2(Math.floor(sec / 60)) + ':' + pad2(sec % 60) + ':' + pad2(f);
+                    tcs.forEach(function (el) { el.textContent = txt; });
+                }
+            }
+            window.addEventListener('scroll', function () {
+                if (!tick) { tick = true; requestAnimationFrame(upd); }
+            }, { passive: true });
+            window.addEventListener('resize', upd);
+            upd();
+        })();</script>
+        <?php
+    }
 
     private function render_js( $s, $uid ) {
         $mode       = esc_js( $s['header_mode'] ?? 'overlay' );
@@ -3366,4 +3514,15 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         }
         return false;
     }
+}
+
+// Aggiorna il conteggio "(n)" delle voci-carrello del megamenu quando WooCommerce
+// aggiunge al carrello via ajax (cart fragments) — nessun reload necessario.
+if ( ! function_exists( 'olo_megamenu_cart_fragment' ) ) {
+    function olo_megamenu_cart_fragment( $fragments ) {
+        $count = ( function_exists( 'WC' ) && WC()->cart ) ? WC()->cart->get_cart_contents_count() : 0;
+        $fragments['.olo-mm-cart-count'] = '<span class="olo-mm-cart-count">(' . (int) $count . ')</span>';
+        return $fragments;
+    }
+    add_filter( 'woocommerce_add_to_cart_fragments', 'olo_megamenu_cart_fragment' );
 }
