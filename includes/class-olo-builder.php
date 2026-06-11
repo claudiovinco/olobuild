@@ -1285,7 +1285,7 @@ class Olo_Builder {
                 'sub'       => sprintf(
                     /* translators: 1: human time diff, 2: status word */
                     __( 'Hai modificato questa pagina %1$s. La pagina è %2$s.', 'olobuild' ),
-                    '<b>' . human_time_diff( strtotime( $p->post_modified_gmt ), time() ) . ' ' . __( 'fa', 'olobuild' ) . '</b>',
+                    '<b>' . Olo_Rest_Api::human_time_ago( $p->post_modified_gmt, $p->post_modified ) . '</b>',
                     $p->post_status === 'publish' ? __( 'pubblicata', 'olobuild' ) : __( 'in bozza', 'olobuild' )
                 ),
                 'edit'      => $edit_url,

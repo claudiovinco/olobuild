@@ -3403,7 +3403,7 @@ class Olo_Rest_Api {
                 'id'         => 'p' . $p->ID,
                 'title'      => $p->post_title ?: __( '(senza titolo)', 'olobuild' ),
                 'type'       => $p->post_type === 'post' ? __( 'Articolo', 'olobuild' ) : __( 'Pagina', 'olobuild' ),
-                'time'       => human_time_diff( strtotime( $p->post_modified_gmt ), time() ) . ' ' . __( 'fa', 'olobuild' ),
+                'time'       => self::human_time_ago( $p->post_modified_gmt, $p->post_modified ),
                 'time_iso'   => $p->post_modified_gmt,
                 'thumb'      => $thumb_url,
                 'thumb_grad' => self::get_color_gradient_for( $p->ID ),
@@ -3429,7 +3429,7 @@ class Olo_Rest_Api {
                     'id'         => 't' . $t['id'],
                     'title'      => $t['title'] ?: __( '(senza titolo)', 'olobuild' ),
                     'type'       => __( 'Template', 'olobuild' ) . ' · ' . $type_label,
-                    'time'       => human_time_diff( strtotime( $t['updated_at'] ), time() ) . ' ' . __( 'fa', 'olobuild' ),
+                    'time'       => self::human_time_ago( $t['updated_at'] ),
                     'time_iso'   => $t['updated_at'],
                     'thumb'      => $t['thumbnail'] ?: '',
                     'thumb_grad' => self::get_color_gradient_for( (int) $t['id'] + 1000 ),
@@ -3446,6 +3446,26 @@ class Olo_Rest_Api {
         $items = array_slice( $items, 0, $limit );
 
         return rest_ensure_response( $items );
+    }
+
+    /**
+     * "X fa" robusto: le bozze WP possono avere datetime zero ('0000-00-00 00:00:00'),
+     * che strtotime interpreta come anno 0 → "2028 anni fa". Qui: timestamp invalido,
+     * negativo o futuro → fallback sulla seconda data, poi su "poco fa".
+     *
+     * @param string $mysql_gmt    Datetime MySQL preferito (GMT).
+     * @param string $fallback_gmt Datetime di riserva (es. post_modified locale).
+     * @return string
+     */
+    public static function human_time_ago( $mysql_gmt, $fallback_gmt = '' ) {
+        $ts = $mysql_gmt ? strtotime( $mysql_gmt ) : false;
+        if ( ! $ts || $ts <= 0 ) {
+            $ts = $fallback_gmt ? strtotime( $fallback_gmt ) : false;
+        }
+        if ( ! $ts || $ts <= 0 || $ts > time() + MINUTE_IN_SECONDS ) {
+            return __( 'poco fa', 'olobuild' );
+        }
+        return human_time_diff( $ts, time() ) . ' ' . __( 'fa', 'olobuild' );
     }
 
     /**
@@ -3783,7 +3803,7 @@ class Olo_Rest_Api {
             'preview'      => mb_strimwidth( wp_strip_all_tags( (string) $preview ), 0, 140, '…' ),
             'fields_count' => count( $fields ),
             'submitted_at' => $row['submitted_at'],
-            'time_diff'    => human_time_diff( strtotime( $row['submitted_at'] ), time() ) . ' ' . __( 'fa', 'olobuild' ),
+            'time_diff'    => self::human_time_ago( $row['submitted_at'] ),
             'ip_address'   => $row['ip_address'],
             'read_status'  => (int) $row['read_status'],
         ];
