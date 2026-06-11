@@ -3408,7 +3408,10 @@ class Olo_Rest_Api {
                 'thumb'      => $thumb_url,
                 'thumb_grad' => self::get_color_gradient_for( $p->ID ),
                 'status'     => $p->post_status === 'publish' ? 'live' : 'draft',
-                'href'       => admin_url( 'post.php?post=' . $p->ID . '&action=edit' ),
+                // Pagina con template Olobuild → apri il builder; altrimenti editor WP.
+                'href'       => ( $tpl_id && class_exists( 'Olo_Page_Integration' ) )
+                    ? Olo_Page_Integration::get_builder_url( $p->ID )
+                    : admin_url( 'post.php?post=' . $p->ID . '&action=edit' ),
             ];
         }
 
