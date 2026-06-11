@@ -2748,18 +2748,19 @@ class Olo_Builder {
             'permission_callback' => function () { return current_user_can( 'manage_options' ); },
         ] );
 
-        // WooCommerce templates — 5 option singole
+        // WooCommerce templates — 6 option singole
         register_rest_route( $ns, '/woo-templates', [
             [
                 'methods'             => 'GET',
                 'callback'            => function () {
                     return rest_ensure_response( [
-                        'olo_woo_tpl_product_single'  => (int) get_option( 'olo_woo_tpl_product_single', 0 ),
-                        'olo_woo_tpl_product_archive' => (int) get_option( 'olo_woo_tpl_product_archive', 0 ),
-                        'olo_woo_tpl_cart'            => (int) get_option( 'olo_woo_tpl_cart', 0 ),
-                        'olo_woo_tpl_checkout'        => (int) get_option( 'olo_woo_tpl_checkout', 0 ),
-                        'olo_woo_tpl_myaccount'       => (int) get_option( 'olo_woo_tpl_myaccount', 0 ),
-                        'woo_active'                  => class_exists( 'WooCommerce' ),
+                        'olo_woo_tpl_product_single'   => (int) get_option( 'olo_woo_tpl_product_single', 0 ),
+                        'olo_woo_tpl_product_archive'  => (int) get_option( 'olo_woo_tpl_product_archive', 0 ),
+                        'olo_woo_tpl_product_category' => (int) get_option( 'olo_woo_tpl_product_category', 0 ),
+                        'olo_woo_tpl_cart'             => (int) get_option( 'olo_woo_tpl_cart', 0 ),
+                        'olo_woo_tpl_checkout'         => (int) get_option( 'olo_woo_tpl_checkout', 0 ),
+                        'olo_woo_tpl_myaccount'        => (int) get_option( 'olo_woo_tpl_myaccount', 0 ),
+                        'woo_active'                   => class_exists( 'WooCommerce' ),
                     ] );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
@@ -2768,7 +2769,7 @@ class Olo_Builder {
                 'methods'             => 'POST',
                 'callback'            => function ( $req ) {
                     $p = $req->get_json_params();
-                    $allowed = [ 'olo_woo_tpl_product_single', 'olo_woo_tpl_product_archive', 'olo_woo_tpl_cart', 'olo_woo_tpl_checkout', 'olo_woo_tpl_myaccount' ];
+                    $allowed = [ 'olo_woo_tpl_product_single', 'olo_woo_tpl_product_archive', 'olo_woo_tpl_product_category', 'olo_woo_tpl_cart', 'olo_woo_tpl_checkout', 'olo_woo_tpl_myaccount' ];
                     foreach ( $allowed as $k ) {
                         if ( isset( $p[ $k ] ) ) update_option( $k, (int) $p[ $k ] );
                     }

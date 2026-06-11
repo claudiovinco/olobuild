@@ -73,7 +73,8 @@ async function loadTemplates() {
     const res = await fetch(`${window.oloData.restUrl}templates?per_page=200`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
     if (res.ok) {
       const data = await res.json();
-      templates.value = (data?.templates || data || []).map(t => ({ id: t.id || t.ID, title: t.title || t.post_title || '(no title)' }));
+      const list = data?.items || data?.templates || (Array.isArray(data) ? data : []);
+      templates.value = list.map(t => ({ id: t.id || t.ID, title: t.title || t.post_title || '(no title)' }));
     }
   } catch (e) { /* keep empty */ }
 }
