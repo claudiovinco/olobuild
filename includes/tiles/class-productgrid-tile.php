@@ -91,6 +91,20 @@ class Olo_ProductGrid_Tile extends Olo_Tile_Base {
         }
 
         $cat = trim( (string) ( $s['woo_category'] ?? '' ) );
+        if ( 'current' === $cat ) {
+            // Categoria corrente: per i template assegnati agli archivi categoria/tag prodotto.
+            $qo = get_queried_object();
+            if ( $qo instanceof WP_Term && in_array( $qo->taxonomy, [ 'product_cat', 'product_tag' ], true ) ) {
+                if ( 'product_tag' === $qo->taxonomy ) {
+                    $args['tag'] = [ $qo->slug ];
+                    $cat = '';
+                } else {
+                    $cat = $qo->slug;
+                }
+            } else {
+                $cat = ''; // fuori contesto archivio (es. anteprima builder): tutti i prodotti
+            }
+        }
         if ( $cat !== '' ) {
             // Slug (anche CSV); i nomi vengono convertiti in slug se esiste il termine.
             $slugs = [];

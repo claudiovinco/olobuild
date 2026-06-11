@@ -33,11 +33,12 @@ class Olo_Woo_Template_Integration {
      * WooCommerce page types that can have Olobuild templates.
      */
     private $page_types = [
-        'product_single'  => [ 'label' => 'Singolo Prodotto',   'condition' => 'is_product' ],
-        'product_archive' => [ 'label' => 'Archivio Prodotti',  'condition' => 'is_shop' ],
-        'cart'            => [ 'label' => 'Carrello',           'condition' => 'is_cart' ],
-        'checkout'        => [ 'label' => 'Checkout',           'condition' => 'is_checkout' ],
-        'myaccount'       => [ 'label' => 'My Account',         'condition' => 'is_account_page' ],
+        'product_single'   => [ 'label' => 'Singolo Prodotto',   'condition' => 'is_product' ],
+        'product_archive'  => [ 'label' => 'Archivio Prodotti',  'condition' => 'is_shop' ],
+        'product_category' => [ 'label' => 'Categoria Prodotto', 'condition' => 'is_product_category' ],
+        'cart'             => [ 'label' => 'Carrello',           'condition' => 'is_cart' ],
+        'checkout'         => [ 'label' => 'Checkout',           'condition' => 'is_checkout' ],
+        'myaccount'        => [ 'label' => 'My Account',         'condition' => 'is_account_page' ],
     ];
 
     public function init() {
@@ -108,9 +109,12 @@ class Olo_Woo_Template_Integration {
             }
         }
 
-        // Product category / tag archives
+        // Product category / tag archives — option dedicata, fallback storico sull'archivio
         if ( is_product_category() || is_product_tag() ) {
-            $tpl = (int) get_option( 'olo_woo_tpl_product_archive', 0 );
+            $tpl = (int) get_option( 'olo_woo_tpl_product_category', 0 );
+            if ( ! $tpl ) {
+                $tpl = (int) get_option( 'olo_woo_tpl_product_archive', 0 );
+            }
             if ( $tpl > 0 ) {
                 return $this->get_olo_wrapper_template( $tpl );
             }
