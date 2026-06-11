@@ -333,9 +333,11 @@ async function purgeAll() {
   try {
     const body = new FormData();
     body.append('action', 'olo_perf_purge_critical');
-    body.append('_nonce', window.oloData.nonce);
-    await fetch(window.oloData.ajaxUrl, { method: 'POST', body, credentials: 'same-origin' });
-    showToast(t('Cache svuotata'), 'success');
+    body.append('_nonce', window.oloData.perfNonce);
+    const res = await fetch(window.oloData.ajaxUrl, { method: 'POST', body, credentials: 'same-origin' });
+    const d = res.ok ? await res.json() : null;
+    if (!d || !d.success) throw new Error(d && d.data ? d.data : 'ajax');
+    showToast(d.data.message || t('Cache svuotata'), 'success');
     await loadStats();
   } catch (e) { showToast(t('Errore svuotamento cache'), 'error'); }
   finally { purging.value = false; }
@@ -345,10 +347,12 @@ async function regenerateCache() {
   try {
     const body = new FormData();
     body.append('action', 'olo_perf_regenerate_critical');
-    body.append('_nonce', window.oloData.nonce);
-    await fetch(window.oloData.ajaxUrl, { method: 'POST', body, credentials: 'same-origin' });
-    showToast(t('Rigenerazione avviata'), 'success');
-    setTimeout(loadStats, 1500);
+    body.append('_nonce', window.oloData.perfNonce);
+    const res = await fetch(window.oloData.ajaxUrl, { method: 'POST', body, credentials: 'same-origin' });
+    const d = res.ok ? await res.json() : null;
+    if (!d || !d.success) throw new Error(d && d.data ? d.data : 'ajax');
+    showToast(d.data.message || t('Rigenerazione completata'), 'success');
+    await loadStats();
   } catch (e) { showToast(t('Errore rigenerazione'), 'error'); }
 }
 

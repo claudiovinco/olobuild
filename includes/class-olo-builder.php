@@ -620,6 +620,7 @@ class Olo_Builder {
             wp_localize_script( 'olo-admin-settings-js', 'oloData', [
                 'restUrl'           => esc_url_raw( rest_url( 'olo/v1' ) . '/' ),
                 'nonce'             => wp_create_nonce( 'wp_rest' ),
+                'perfNonce'         => wp_create_nonce( 'olo_perf_action' ),
                 'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
                 'adminUrl'          => admin_url(),
                 'siteUrl'           => home_url( '/' ),
@@ -2296,9 +2297,14 @@ class Olo_Builder {
                 'methods'             => 'POST',
                 'callback'            => function ( $req ) {
                     $existing = get_option( 'olo_performance', [] );
+                    if ( ! is_array( $existing ) ) $existing = [];
                     $payload  = $req->get_json_params();
                     if ( ! is_array( $payload ) ) $payload = [];
-                    update_option( 'olo_performance', array_merge( $existing, $payload ) );
+                    $merged = array_merge( $existing, $payload );
+                    update_option( 'olo_performance', $merged );
+                    // Olo_Critical_CSS::init() si attiva sulla legacy option: va tenuta in sync
+                    // (la vecchia pagina lo faceva nel sanitize di register_setting).
+                    update_option( 'olo_critical_css_enabled', ! empty( $merged['critical_css_enabled'] ) ? '1' : '' );
                     update_option( 'olo_settings_last_saved', time() );
                     return rest_ensure_response( [ 'ok' => true ] );
                 },
