@@ -349,12 +349,13 @@ const categoryColors = {
   booking: '#EAB308',
   'olo-space': '#14B8A6',
   atmosphere: '#38BDF8',
+  woocommerce: '#7F54B3',
 };
 
 // Ordine fisso delle categorie nella sidebar
 const categoryOrder = [
   'essential', 'layout', 'text', 'media', 'marketing',
-  'interactive', 'atmosphere', 'navigation', 'dynamic', 'booking', 'olo-space',
+  'interactive', 'atmosphere', 'navigation', 'dynamic', 'woocommerce', 'booking', 'olo-space',
 ];
 
 const categoryLabels = {
@@ -369,6 +370,7 @@ const categoryLabels = {
   booking: 'Olo Booking',
   'olo-space': 'Olo Space',
   atmosphere: 'Atmosfera',
+  woocommerce: 'WooCommerce',
 };
 
 function categoryLabel(category) {
@@ -401,6 +403,7 @@ const catIcons = {
   'booking':    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14l3 3 5-5"/></svg>',
   'olo-space':  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>',
   'atmosphere': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.4 4.1L17.5 8.5 13.4 9.9 12 14l-1.4-4.1L6.5 8.5l4.1-1.4z"/><path d="M5 14l.8 2.2L8 17l-2.2.8L5 20l-.8-2.2L2 17l2.2-.8z"/><path d="M18.5 13l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6z"/></svg>',
+  'woocommerce': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>',
 };
 
 function catIcon(category) {
