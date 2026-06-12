@@ -211,20 +211,30 @@ class Olo_Form_Handler {
 
         // 4. Rate limiting
         if ( ! empty( $config['rate_limit'] ) ) {
-            $ip       = $this->get_client_ip();
-            $key      = 'olo_form_rl_' . md5( $ip );
-            $max      = absint( $config['rate_limit_max'] ?? 5 );
-            $window   = absint( $config['rate_limit_window'] ?? 60 ) * MINUTE_IN_SECONDS;
-            $count    = (int) get_transient( $key );
+            $ip     = $this->get_client_ip();
+            $max    = absint( $config['rate_limit_max'] ?? 5 );
+            $window = absint( $config['rate_limit_window'] ?? 60 ) * MINUTE_IN_SECONDS;
 
-            if ( $count >= $max ) {
-                return new WP_REST_Response( [
-                    'success' => false,
-                    'data'    => [ 'message' => 'Troppe richieste. Riprova tra qualche minuto.' ],
-                ], 429 );
+            // Doppia chiave: l'IP dichiarato (X-Forwarded-For) è spoofabile — da solo
+            // bastava ruotare l'header per azzerare il contatore. REMOTE_ADDR non lo è:
+            // backstop più largo (10x) che non penalizza utenti dietro proxy/CDN condivisi.
+            $limits = [ 'olo_form_rl_' . md5( $ip ) => $max ];
+            $remote = sanitize_text_field( $_SERVER['REMOTE_ADDR'] ?? '' );
+            if ( $remote && $remote !== $ip ) {
+                $limits[ 'olo_form_rl_r_' . md5( $remote ) ] = $max * 10;
             }
 
-            set_transient( $key, $count + 1, $window );
+            foreach ( $limits as $key => $limit ) {
+                if ( (int) get_transient( $key ) >= $limit ) {
+                    return new WP_REST_Response( [
+                        'success' => false,
+                        'data'    => [ 'message' => 'Troppe richieste. Riprova tra qualche minuto.' ],
+                    ], 429 );
+                }
+            }
+            foreach ( $limits as $key => $limit ) {
+                set_transient( $key, (int) get_transient( $key ) + 1, $window );
+            }
         }
 
         // 4b. reCAPTCHA v3 verification
@@ -916,7 +926,8 @@ class Olo_Form_Handler {
             }
             $row_data[] = $dr['ip_address'];
             $row_data[] = $dr['created_at'];
-            fputcsv( $out, $row_data, ';' );
+            // olo_csv_safe: i campi arrivano dal form pubblico → anti CSV formula injection.
+            fputcsv( $out, array_map( 'olo_csv_safe', $row_data ), ';' );
         }
 
         fclose( $out );

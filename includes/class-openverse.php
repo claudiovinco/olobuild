@@ -142,6 +142,11 @@ class Olo_Openverse {
         if ( empty( $regular_url ) ) {
             return new WP_Error( 'missing_url', 'URL immagine mancante', [ 'status' => 400 ] );
         }
+        // Anti-SSRF: Openverse aggrega CDN diversi → niente allowlist host,
+        // ma schema http/https + blocco IP privati/loopback via wp_http_validate_url.
+        if ( ! olo_validate_remote_media_url( $regular_url ) ) {
+            return new WP_Error( 'invalid_url', 'URL non consentito.', [ 'status' => 400 ] );
+        }
 
         // Hotlink mode: skip sideload
         $behavior = olo_stockmedia_behavior();

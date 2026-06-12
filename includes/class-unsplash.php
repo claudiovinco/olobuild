@@ -130,6 +130,14 @@ class Olo_Unsplash {
         if ( empty( $regular_url ) ) {
             return new WP_Error( 'missing_url', 'URL immagine mancante', [ 'status' => 400 ] );
         }
+        // Anti-SSRF: gli URL arrivano dal client — accetta solo host Unsplash.
+        if ( ! olo_validate_remote_media_url( $regular_url, [ 'unsplash.com' ] ) ) {
+            return new WP_Error( 'invalid_url', 'URL non consentito.', [ 'status' => 400 ] );
+        }
+        // Il ping di tracking spedisce l'Authorization header (Client-ID): mai verso host arbitrari.
+        if ( $download_location && ! olo_validate_remote_media_url( $download_location, [ 'unsplash.com' ] ) ) {
+            $download_location = '';
+        }
 
         // 1. Tracking download (richiesto da Unsplash guidelines)
         if ( $download_location ) {

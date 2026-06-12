@@ -697,7 +697,7 @@ class Olo_Rest_Api {
         register_rest_route( $this->namespace, '/submissions', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'submissions_list' ],
-            'permission_callback' => [ $this, 'check_dashboard_permission' ],
+            'permission_callback' => [ $this, 'check_submissions_permission' ],
             'args'                => [
                 'status'    => [ 'default' => 'all', 'sanitize_callback' => 'sanitize_key' ],
                 'form_name' => [ 'default' => '',    'sanitize_callback' => 'sanitize_text_field' ],
@@ -709,29 +709,29 @@ class Olo_Rest_Api {
         register_rest_route( $this->namespace, '/submissions/stats', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'submissions_stats' ],
-            'permission_callback' => [ $this, 'check_dashboard_permission' ],
+            'permission_callback' => [ $this, 'check_submissions_permission' ],
         ] );
         register_rest_route( $this->namespace, '/submissions/(?P<id>\d+)', [
             [
                 'methods'             => 'GET',
                 'callback'            => [ $this, 'submissions_get' ],
-                'permission_callback' => [ $this, 'check_dashboard_permission' ],
+                'permission_callback' => [ $this, 'check_submissions_permission' ],
             ],
             [
                 'methods'             => 'DELETE',
                 'callback'            => [ $this, 'submissions_delete' ],
-                'permission_callback' => [ $this, 'check_dashboard_permission' ],
+                'permission_callback' => [ $this, 'check_submissions_permission' ],
             ],
         ] );
         register_rest_route( $this->namespace, '/submissions/(?P<id>\d+)/read', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'submissions_toggle_read' ],
-            'permission_callback' => [ $this, 'check_dashboard_permission' ],
+            'permission_callback' => [ $this, 'check_submissions_permission' ],
         ] );
         register_rest_route( $this->namespace, '/submissions/bulk', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'submissions_bulk' ],
-            'permission_callback' => [ $this, 'check_dashboard_permission' ],
+            'permission_callback' => [ $this, 'check_submissions_permission' ],
         ] );
 
         // ── Page SEO (per-post meta box, esposto al builder Vue) ───────────
@@ -883,6 +883,26 @@ class Olo_Rest_Api {
      */
     public function check_dashboard_permission( $request = null ) {
         if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'edit_pages' ) ) {
+            return false;
+        }
+        if ( $request && in_array( $request->get_method(), [ 'POST', 'PUT', 'DELETE' ], true ) ) {
+            $nonce = $request->get_header( 'x-wp-nonce' );
+            if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+                return new WP_Error( 'rest_forbidden', 'Nonce non valido.', [ 'status' => 403 ] );
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Permessi submissions: contengono PII (nome, email, IP) quindi di default
+     * solo manage_options, coerente con /submissions/export. Per riaprire la
+     * dashboard submissions agli Editor:
+     * add_filter( 'olo_submissions_capability', function () { return 'edit_pages'; } );
+     */
+    public function check_submissions_permission( $request = null ) {
+        $cap = apply_filters( 'olo_submissions_capability', 'manage_options' );
+        if ( ! current_user_can( $cap ) ) {
             return false;
         }
         if ( $request && in_array( $request->get_method(), [ 'POST', 'PUT', 'DELETE' ], true ) ) {
@@ -1699,6 +1719,9 @@ class Olo_Rest_Api {
         if ( ! is_array( $import_content ) ) {
             return new WP_Error( 'invalid_content', 'Il campo content deve essere un array.', [ 'status' => 400 ] );
         }
+        // Stesso gate kses di create/update_template: senza, l'import permetteva
+        // a chi NON ha unfiltered_html di far entrare html_content/shortcode raw.
+        $import_content = $this->sanitize_unfiltered_tile_fields( $import_content );
         $import_settings = $body['settings'] ?? [];
         if ( ! is_array( $import_settings ) && ! is_object( $import_settings ) ) {
             return new WP_Error( 'invalid_settings', 'Il campo settings deve essere un oggetto.', [ 'status' => 400 ] );
@@ -1798,6 +1821,7 @@ class Olo_Rest_Api {
         foreach ( $templates as $tpl ) {
             if ( ! is_array( $tpl ) ) continue;
             $content  = ( isset( $tpl['content'] ) && is_array( $tpl['content'] ) ) ? $tpl['content'] : [];
+            $content  = $this->sanitize_unfiltered_tile_fields( $content ); // gate kses anche sui bundle
             $settings = $tpl['settings'] ?? [];
             if ( is_object( $settings ) ) $settings = (array) $settings;
             $new_id = $db->create_template( [
@@ -1939,8 +1963,15 @@ class Olo_Rest_Api {
         $table = $wpdb->prefix . 'olo_global_widgets';
         $name = sanitize_text_field( $request->get_param( 'name' ) ?? 'Widget globale' );
         $tile_data = $request->get_param( 'tile_data' );
+        // I widget globali finiscono nel render frontend: stesso gate kses dei template.
+        if ( is_string( $tile_data ) ) {
+            $decoded = json_decode( $tile_data, true );
+            if ( is_array( $decoded ) ) {
+                $tile_data = $decoded;
+            }
+        }
         if ( ! is_string( $tile_data ) ) {
-            $tile_data = wp_json_encode( $tile_data );
+            $tile_data = wp_json_encode( $this->sanitize_unfiltered_tile_fields( $tile_data ) );
         }
         $wpdb->insert( $table, [
             'name'       => $name,
@@ -1964,7 +1995,13 @@ class Olo_Rest_Api {
         }
         if ( $request->get_param( 'tile_data' ) !== null ) {
             $td = $request->get_param( 'tile_data' );
-            $data['tile_data'] = is_string( $td ) ? $td : wp_json_encode( $td );
+            if ( is_string( $td ) ) {
+                $decoded = json_decode( $td, true );
+                if ( is_array( $decoded ) ) {
+                    $td = $decoded;
+                }
+            }
+            $data['tile_data'] = is_string( $td ) ? $td : wp_json_encode( $this->sanitize_unfiltered_tile_fields( $td ) );
             $formats[] = '%s';
         }
         if ( empty( $data ) ) {

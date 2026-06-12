@@ -259,7 +259,8 @@ class Olo_Newsletter {
         fwrite( $out, "\xEF\xBB\xBF" ); // BOM per Excel
         fputcsv( $out, [ 'Email', 'Nome', 'Origine', 'Stato', 'IP', 'Data' ], ';' );
         foreach ( (array) $rows as $r ) {
-            fputcsv( $out, [ $r['email'], $r['name'], $r['source'], $r['status'], $r['ip_address'], $r['created_at'] ], ';' );
+            // olo_csv_safe: email/name/source arrivano dal form pubblico → anti CSV formula injection.
+            fputcsv( $out, array_map( 'olo_csv_safe', [ $r['email'], $r['name'], $r['source'], $r['status'], $r['ip_address'], $r['created_at'] ] ), ';' );
         }
         fclose( $out );
         exit;

@@ -1164,7 +1164,8 @@ class Olo_Cookie_Consent {
         fputcsv( $out, [ 'ID', 'Consent ID', 'IP Hash', 'Categories', 'Action Type', 'Banner Version', 'User Agent', 'Date' ] );
 
         foreach ( $rows as $row ) {
-            fputcsv( $out, [
+            // olo_csv_safe: user_agent/categories arrivano dal client → anti CSV formula injection.
+            fputcsv( $out, array_map( 'olo_csv_safe', [
                 $row['id'],
                 $row['consent_id'],
                 $row['ip_hash'],
@@ -1173,7 +1174,7 @@ class Olo_Cookie_Consent {
                 $row['banner_version'] ?? 1,
                 $row['user_agent'],
                 $row['created_at'],
-            ] );
+            ] ) );
         }
 
         fclose( $out );

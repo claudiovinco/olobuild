@@ -160,6 +160,10 @@ class Olo_Pixabay {
         if ( empty( $regular_url ) ) {
             return new WP_Error( 'missing_url', 'URL immagine mancante', [ 'status' => 400 ] );
         }
+        // Anti-SSRF: l'URL arriva dal client — accetta solo host Pixabay.
+        if ( ! olo_validate_remote_media_url( $regular_url, [ 'pixabay.com' ] ) ) {
+            return new WP_Error( 'invalid_url', 'URL non consentito.', [ 'status' => 400 ] );
+        }
 
         // Hotlink mode: skip sideload
         $behavior = olo_stockmedia_behavior();
@@ -329,10 +333,14 @@ class Olo_Pixabay {
         $alt          = sanitize_text_field( $params['alt'] ?? '' );
         $photographer = sanitize_text_field( $params['photographer'] ?? '' );
         $video_id     = sanitize_text_field( $params['photo_id'] ?? $params['video_id'] ?? '' );
-        $thumb_url    = $params['thumb_url'] ?? '';
+        $thumb_url    = esc_url_raw( $params['thumb_url'] ?? '' );
 
         if ( empty( $video_url ) ) {
             return new WP_Error( 'missing_url', 'URL video mancante', [ 'status' => 400 ] );
+        }
+        // Anti-SSRF: l'URL arriva dal client — accetta solo host Pixabay.
+        if ( ! olo_validate_remote_media_url( $video_url, [ 'pixabay.com' ] ) ) {
+            return new WP_Error( 'invalid_url', 'URL non consentito.', [ 'status' => 400 ] );
         }
 
         require_once ABSPATH . 'wp-admin/includes/file.php';

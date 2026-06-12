@@ -92,7 +92,7 @@ class Olo_AI_Assistant {
             [
                 'methods'             => 'PUT',
                 'callback'            => [ __CLASS__, 'save_settings' ],
-                'permission_callback' => [ __CLASS__, 'check_permission' ],
+                'permission_callback' => [ __CLASS__, 'check_settings_permission' ],
             ],
         ] );
     }
@@ -102,6 +102,15 @@ class Olo_AI_Assistant {
      */
     public static function check_permission() {
         return current_user_can( 'edit_pages' );
+    }
+
+    /**
+     * Scrittura impostazioni AI (chiavi API): solo admin, allineata agli altri
+     * endpoint chiavi (manage_options). Un Editor poteva sovrascrivere/cancellare
+     * le chiavi del sito. La lettura resta a edit_pages: le chiavi sono mascherate.
+     */
+    public static function check_settings_permission() {
+        return current_user_can( 'manage_options' );
     }
 
     // ──────────────────────────────────────────────────

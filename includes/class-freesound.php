@@ -127,8 +127,9 @@ class Olo_Freesound {
             return new WP_Error( 'no_url', 'URL preview non fornito.', [ 'status' => 400 ] );
         }
 
-        // Validate URL is from Freesound CDN
-        if ( ! str_contains( $preview_url, 'freesound.org' ) ) {
+        // Anti-SSRF: solo host Freesound (match sul dominio, non substring —
+        // "freesound.org" dentro il path di un URL ostile passava il vecchio check).
+        if ( ! olo_validate_remote_media_url( $preview_url, [ 'freesound.org' ] ) ) {
             return new WP_Error( 'invalid_url', 'URL non valido.', [ 'status' => 400 ] );
         }
 

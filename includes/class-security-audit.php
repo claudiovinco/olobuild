@@ -239,7 +239,9 @@ class Olo_Security_Audit {
         fwrite( $out, "\xEF\xBB\xBF" );
         fputcsv( $out, [ 'ID', 'Data', 'Tipo', 'Gravità', 'User ID', 'Utente', 'IP', 'Messaggio' ], ';' );
         foreach ( $rows as $r ) {
-            fputcsv( $out, [ $r['id'], $r['created_at'], $r['event_type'], $r['severity'], $r['user_id'], $r['user_login'], $r['ip'], $r['message'] ], ';' );
+            // olo_csv_safe: user_login/message contengono input esterno (es. username
+            // dei login falliti) → anti CSV formula injection all'apertura in Excel.
+            fputcsv( $out, array_map( 'olo_csv_safe', [ $r['id'], $r['created_at'], $r['event_type'], $r['severity'], $r['user_id'], $r['user_login'], $r['ip'], $r['message'] ] ), ';' );
         }
         fclose( $out );
         exit;
