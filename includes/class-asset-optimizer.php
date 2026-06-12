@@ -151,8 +151,11 @@ class Olo_Asset_Optimizer {
             }
             $min = self::minify_css( $css );
             // Sanity check: il minify non deve alterare la struttura del CSS.
-            if ( substr_count( $min, '{' ) !== substr_count( $css, '{' )
-                || substr_count( $min, '}' ) !== substr_count( $css, '}' ) ) {
+            // Confronto con l'originale GIÀ privato dei commenti: i commenti possono
+            // legittimamente contenere graffe che il minify rimuove.
+            $no_comments = preg_replace( '!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css );
+            if ( substr_count( $min, '{' ) !== substr_count( $no_comments, '{' )
+                || substr_count( $min, '}' ) !== substr_count( $no_comments, '}' ) ) {
                 return false;
             }
             // Rimuovi copie minificate di versioni precedenti dello stesso file.
