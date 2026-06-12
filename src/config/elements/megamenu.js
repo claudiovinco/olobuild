@@ -12,6 +12,12 @@ const MEGAMENU_TEMPLATE_OPTIONS = [
   ...MEGAMENU_TEMPLATES.map(tpl => ({ value: tpl.id, label: `${tpl.family} · ${tpl.name}` })),
 ];
 
+// Visibilità sezione "CTA — Aspetto": i controlli btn_* stilano .olo-mm-btn,
+// usata sia dalle voci CTA (button_mode) sia dai link extra in modalità
+// bottone (extra_link_N_button). Mostrali se almeno uno dei due è attivo.
+const showBtnAspect = (s) =>
+  (s.button_mode ?? 'link') !== 'none' || !!s.extra_link_1_button || !!s.extra_link_2_button;
+
 /**
  * Tile Mega Menu — split CONTENUTO/STILE (regola universale Olobuild).
  *   fields[]      → menu WP, logo asset, panel templates, mega mode, social URLs, extra links,
@@ -171,6 +177,7 @@ export default {
     mobile_logo_height: '36',
     mobile_bar_logo: true,
     mobile_search: true,
+    mobile_search_overlay: false,
 
     extra_link_1_label: '',
     extra_link_1_url: '',
@@ -365,6 +372,9 @@ export default {
     { key: 'mobile_bar_logo', label: t('Logo nella barra mobile'), type: 'toggle' },
     { key: 'mobile_logo', label: t('Logo pannello mobile'), type: 'image' },
     { key: 'mobile_search', label: t('Icona ricerca mobile'), type: 'toggle' },
+    { key: 'mobile_search_overlay', label: t('Ricerca mobile a tutta pagina'), type: 'toggle',
+      condition: { field: 'mobile_search', value: true },
+      description: t('La lente apre l\'overlay a schermo intero invece del pannello sotto la barra.') },
 
     { type: 'separator', label: t('Header') },
     { key: 'header_mode', label: t('Modalità header'), type: 'select', options: [
@@ -512,7 +522,7 @@ export default {
         color:      'btn_color',
         colorHover: 'btn_hover_bg',
       },
-      condition: { field: 'button_mode', operator: '!=', value: 'none' },
+      show: showBtnAspect,
     },
     { type: 'typography', label: t('Testo mobile'),
       presetKey: 'typography_preset',
@@ -670,22 +680,25 @@ export default {
     { key: 'link_spacing', label: t('Gap verticale link (px)'), type: 'range', min: 4, max: 16, step: 1 },
 
     { type: 'separator', label: t('CTA — Aspetto') },
+    // I controlli btn_* stilano .olo-mm-btn, usata sia dalle voci CTA sia dai
+    // link extra in modalità bottone: visibili se almeno uno dei due è attivo
+    // (la vecchia condition su button_mode li nascondeva con solo link extra).
     { key: 'btn_bg', label: t('Sfondo pulsante'), type: 'color',
-      condition: { field: 'button_mode', operator: '!=', value: 'none' } },
+      show: showBtnAspect },
     withHover({ key: 'btn_radius', label: t('Arrotondamento pulsante (px)'), type: 'border-radius',
-      condition: { field: 'button_mode', operator: '!=', value: 'none' } }),
+      show: showBtnAspect }),
     { key: 'btn_padding_v', label: t('Padding verticale pulsante (px)'), type: 'spacing', max: 30,
-      condition: { field: 'button_mode', operator: '!=', value: 'none' } },
+      show: showBtnAspect },
     { key: 'btn_padding_h', label: t('Padding orizzontale pulsante (px)'), type: 'spacing', max: 60,
-      condition: { field: 'button_mode', operator: '!=', value: 'none' } },
+      show: showBtnAspect },
     { key: 'btn_margin_left', label: t('Margine sinistro pulsante (px)'), type: 'spacing', max: 40,
-      condition: { field: 'button_mode', operator: '!=', value: 'none' } },
+      show: showBtnAspect },
     { key: 'btn_margin_right', label: t('Margine destro pulsante (px)'), type: 'spacing', max: 40,
-      condition: { field: 'button_mode', operator: '!=', value: 'none' } },
+      show: showBtnAspect },
     { key: 'btn_border_width', label: t('Bordo pulsante (px)'), type: 'range', min: 0, max: 5, step: 1,
-      condition: { field: 'button_mode', operator: '!=', value: 'none' } },
+      show: showBtnAspect },
     { key: 'btn_border_color', label: t('Colore bordo pulsante'), type: 'color',
-      condition: { field: 'button_mode', operator: '!=', value: 'none' } },
+      show: showBtnAspect },
 
     { type: 'separator', label: t('Ricerca — Aspetto') },
     { key: 'search_icon_style', label: t('Stile icona ricerca'), type: 'select', options: [

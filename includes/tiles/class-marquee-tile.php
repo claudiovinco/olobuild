@@ -120,13 +120,23 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
         // Build the inner content HTML (will be duplicated for seamless loop)
         $inner_html = '';
         if ( $is_text ) {
-            $text = esc_html( wp_strip_all_tags( $s['text_items'] ) );
-            $sep  = esc_html( $s['separator'] );
-            // Repeat text+separator enough times for a wide strip
-            for ( $i = 0; $i < 10; $i++ ) {
-                $inner_html .= '<span class="olo-mq-text">' . $text . '</span>';
-                if ( $sep ) {
-                    $inner_html .= '<span class="olo-mq-sep">' . $sep . '</span>';
+            // Voci multiple: text_items può contenere più voci separate da newline o "|"
+            // (ognuna riceve il separator colorabile dopo di sé — blueprint Clod Evoluzione).
+            // Stringa semplice senza delimitatori = 1 voce: comportamento storico invariato.
+            $items = preg_split( '/\r\n|\r|\n|\|/', (string) $s['text_items'] );
+            $items = array_values( array_filter( array_map( 'trim', $items ), 'strlen' ) );
+            if ( empty( $items ) ) {
+                $items = [ '' ];
+            }
+            $sep = esc_html( $s['separator'] );
+            // Repeat items+separator enough times for a wide strip
+            $reps = max( 2, (int) ceil( 10 / count( $items ) ) );
+            for ( $i = 0; $i < $reps; $i++ ) {
+                foreach ( $items as $item_text ) {
+                    $inner_html .= '<span class="olo-mq-text">' . esc_html( wp_strip_all_tags( $item_text ) ) . '</span>';
+                    if ( $sep ) {
+                        $inner_html .= '<span class="olo-mq-sep">' . $sep . '</span>';
+                    }
                 }
             }
         } else {

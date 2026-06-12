@@ -54,6 +54,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
+import { resolveFontFamily } from '@/composables/oloTileDefaults';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
 
 const props = defineProps({
@@ -69,6 +70,7 @@ const defaults = {
   icon_size: '16',
   font_size: '14',
   font_weight: '400',
+  font_family: '',
   text_transform: 'none',
   letter_spacing: '0',
   link_color: '',
@@ -217,7 +219,11 @@ function iconStyle(i) {
 }
 
 function labelStyle() {
-  return { flex: s.value.alignment === 'stretch' ? '1' : 'none' };
+  const st = { flex: s.value.alignment === 'stretch' ? '1' : 'none' };
+  // Famiglia font dei titoli dei link ('' = font del body, invariato) — parità PHP resolve_font_family.
+  const ff = resolveFontFamily(s.value.font_family, {});
+  if (ff && ff !== 'inherit') st.fontFamily = ff;
+  return st;
 }
 
 const items = computed(() => {

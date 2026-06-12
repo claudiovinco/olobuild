@@ -16,7 +16,7 @@
         <path d="M3 4.5L6 7.5L9 4.5" />
       </svg>
     </button>
-    <div v-show="open" :class="['mb-pt-3 mb-pb-1 mb-space-y-3', macro ? 'olo-collapse-body--macro' : '']">
+    <div v-show="open || forceOpen" :class="['mb-pt-3 mb-pb-1 mb-space-y-3', macro ? 'olo-collapse-body--macro' : '']">
       <slot />
     </div>
   </div>
@@ -30,6 +30,9 @@ const props = defineProps({
   defaultOpen: { type: Boolean, default: false },
   // macro: true = accordion principale (top-level); false (default) = sub-accordion
   macro: { type: Boolean, default: false },
+  // forceOpen: tiene il body visibile a prescindere dallo stato del toggle
+  // (usato durante la ricerca impostazioni per mostrare i match nelle sezioni chiuse)
+  forceOpen: { type: Boolean, default: false },
 });
 
 const open = ref(props.defaultOpen);

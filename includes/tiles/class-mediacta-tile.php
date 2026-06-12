@@ -13,10 +13,10 @@ class Olo_MediaCTA_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-megaphone';
     protected $category = 'marketing';
     protected $defaults = [
-        'eyebrow' => 'Membership', 'eyebrow_color' => '',
+        'eyebrow' => 'Membership', 'eyebrow_color' => '', 'eyebrow_mono' => false,
         'headline' => 'Become a member of our', 'accent_text' => 'club', 'accent' => '', 'uppercase' => true, 'headline_color' => '#ffffff',
         'subhead' => '', 'subhead_color' => 'rgba(255,255,255,0.78)',
-        'cta1_text' => 'Go to membership', 'cta1_url' => '#', 'cta2_text' => '', 'cta2_url' => '',
+        'cta_style' => 'button', 'cta1_text' => 'Go to membership', 'cta1_url' => '#', 'cta2_text' => '', 'cta2_url' => '',
         'bg_image' => '', 'media_bg' => [ 'type' => 'none' ], 'media_label' => 'membership — supporters in the stands · background video',
         'overlay_color' => '#0a2a1e', 'overlay_top' => 0.78, 'overlay_bottom' => 0.9, 'overlay_type' => 'linear',
         'accent_on' => '#0a2a1e', 'accent_italic' => false, 'btn_bg' => '', 'btn_color' => '', 'headline_size' => '',
@@ -74,9 +74,15 @@ class Olo_MediaCTA_Tile extends Olo_Tile_Base {
         $txt    = $this->safe_color_css( $s['text_color'] ?? '' ) ?: '#ffffff';
         $eyec   = $this->safe_color_css( $s['eyebrow_color'] ?? '' ) ?: $accent;
         $subc   = $this->safe_color_css( $s['subhead_color'] ?? '' ) ?: 'rgba(255,255,255,0.78)';
-        $orgb   = $this->hex_rgb( $s['overlay_color'] ?? '#0a2a1e' );
+        // Colore overlay: hex → rgba() classico (invariato); var()/token del tema o altri
+        // formati → stop via color-mix (hex_rgb capirebbe solo l'hex e ricadrebbe sul
+        // verde di fabbrica — era l'"alone verde" con overlay_color = var(--olo-color-*)).
+        $ocol   = $this->safe_color_css( $s['overlay_color'] ?? '' ) ?: '#0a2a1e';
+        $orgb   = preg_match( '/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', $ocol ) ? $this->hex_rgb( $ocol ) : '';
         $otop   = is_numeric( $s['overlay_top'] ) ? max( 0, min( 1, floatval( $s['overlay_top'] ) ) ) : 0.78;
         $obot   = is_numeric( $s['overlay_bottom'] ) ? max( 0, min( 1, floatval( $s['overlay_bottom'] ) ) ) : 0.9;
+        $ostop_top = $orgb !== '' ? 'rgba(' . $orgb . ',' . $otop . ')' : 'color-mix(in srgb, ' . $ocol . ' ' . round( $otop * 100 ) . '%, transparent)';
+        $ostop_bot = $orgb !== '' ? 'rgba(' . $orgb . ',' . $obot . ')' : 'color-mix(in srgb, ' . $ocol . ' ' . round( $obot * 100 ) . '%, transparent)';
         $up     = ! empty( $s['uppercase'] ) ? 'uppercase' : 'none';
         $center = ( ( $s['align'] ?? 'center' ) === 'center' );
         $pad    = max( 60, min( 240, intval( $s['pad_y'] ) ) );
@@ -86,6 +92,14 @@ class Olo_MediaCTA_Tile extends Olo_Tile_Base {
         $hsize  = intval( $s['headline_size'] ?? 0 );
         $h_fs   = $hsize > 0 ? "clamp(34px,6vw,{$hsize}px)" : 'clamp(40px,7.2vw,104px)';
         $otype  = ( ( $s['overlay_type'] ?? 'linear' ) === 'radial' ) ? 'radial' : 'linear';
+        // CTA primaria: pulsante (default, invariato) o link display stile blueprint (.cta__mail).
+        $maillink = ( ( $s['cta_style'] ?? 'button' ) === 'maillink' );
+        // Occhiello: etichetta tecnica mono (blueprint .eyebrow) o bold sans (default, invariato).
+        $eye_mono = ! empty( $s['eyebrow_mono'] );
+        $mono     = "var(--olo-font-family-mono, 'Space Mono', ui-monospace, monospace)";
+        $eye_typo = $eye_mono
+            ? "font-family:{$mono};font-weight:400;font-size:12.5px;"
+            : 'font-weight:700;font-size:12px;';
 
         // ── SPAZIATURA (additivo, no-op coi default) ──
         // Padding verticale del root: responsive di default, override fisso se pad_custom.
@@ -130,9 +144,9 @@ class Olo_MediaCTA_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?>{position:relative;overflow:hidden;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;text-align:<?php echo $center ? 'center' : 'left'; ?>;<?php echo $root_pad; ?><?php echo $kit_decl; ?>}
             .<?php echo $uid; ?> .omc-media{position:absolute;inset:0;z-index:0;<?php echo ( $mb['has'] && $mb['css'] !== '' ) ? $mb['css'] : ( 'background:' . ( $this->safe_color_css( $s['overlay_color'] ?? '' ) ?: '#0a2a1e' ) . ';background-image:' . $mediabg . ';background-size:cover;background-position:center;' ); ?>}
             .<?php echo $uid; ?> .omc-medialabel{position:absolute;left:18px;bottom:14px;z-index:1;font-size:11px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;color:rgba(255,255,255,.4);}
-            .<?php echo $uid; ?> .omc-grad{position:absolute;inset:0;z-index:1;background:<?php echo $otype === 'radial' ? 'radial-gradient(120% 100% at 50% 100%, rgba(' . $orgb . ',' . $obot . '), rgba(' . $orgb . ',' . $otop . '))' : 'linear-gradient(180deg, rgba(' . $orgb . ',' . $otop . '), rgba(' . $orgb . ',' . $obot . '))'; ?>;}
+            .<?php echo $uid; ?> .omc-grad{position:absolute;inset:0;z-index:1;background:<?php echo $otype === 'radial' ? 'radial-gradient(120% 100% at 50% 100%, ' . $ostop_bot . ', ' . $ostop_top . ')' : 'linear-gradient(180deg, ' . $ostop_top . ', ' . $ostop_bot . ')'; ?>;}
             .<?php echo $uid; ?> .omc-in{position:relative;z-index:2;max-width:1240px;margin:0 auto;padding:<?php echo $in_pad; ?>;}
-            .<?php echo $uid; ?> .omc-eyebrow{font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:<?php echo $eyec; ?>;display:block;margin-bottom:18px;}
+            .<?php echo $uid; ?> .omc-eyebrow{<?php echo $eye_typo; ?>letter-spacing:.18em;text-transform:uppercase;color:<?php echo $eyec; ?>;display:block;margin-bottom:18px;}
             .<?php echo $uid; ?> .omc-h{font-family:<?php echo $disp; ?>;font-weight:900;font-size:<?php echo $h_fs; ?>;line-height:.88;letter-spacing:-.01em;text-transform:<?php echo $up; ?>;margin:0;color:<?php echo $txt; ?>;}
             .<?php echo $uid; ?> .omc-h .acc{color:<?php echo $accent; ?>;<?php echo $acc_it; ?>}
             .<?php echo $uid; ?> .omc-sub{font-size:17px;line-height:1.6;color:<?php echo $subc; ?>;margin:18px auto 0;max-width:560px;<?php echo $center ? '' : 'margin-left:0;'; ?>}
@@ -144,6 +158,10 @@ class Olo_MediaCTA_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .omc-btn--solid:hover{filter:brightness(1.06);}
             .<?php echo $uid; ?> .omc-btn--ghost{background:rgba(255,255,255,.08);color:<?php echo $txt; ?>;border:1.5px solid rgba(255,255,255,.26);}
             .<?php echo $uid; ?> .omc-btn:focus-visible{outline:2px solid <?php echo $accent; ?>;outline-offset:3px;}
+            .<?php echo $uid; ?> .omc-mail{display:inline-flex;align-items:center;gap:12px;font-family:<?php echo $disp; ?>;font-weight:700;font-size:clamp(22px,3vw,34px);text-transform:none;color:<?php echo $txt; ?>;text-decoration:none;border-bottom:2px solid <?php echo $accent; ?>;padding-bottom:5px;transition:gap .2s;}
+            .<?php echo $uid; ?> .omc-mail:hover{gap:18px;}
+            .<?php echo $uid; ?> .omc-mail svg{width:26px;height:26px;color:<?php echo $accent; ?>;}
+            .<?php echo $uid; ?> .omc-mail:focus-visible{outline:2px solid <?php echo $accent; ?>;outline-offset:3px;}
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <section class="olo-mediacta <?php echo esc_attr( $uid ); ?>">
@@ -151,11 +169,17 @@ class Olo_MediaCTA_Tile extends Olo_Tile_Base {
             <div class="omc-grad"></div>
             <div class="omc-in">
                 <?php if ( ! empty( $s['eyebrow'] ) ) : ?><span class="omc-eyebrow"><?php echo esc_html( $s['eyebrow'] ); ?></span><?php endif; ?>
-                <?php if ( ! empty( $s['headline'] ) ) : ?><h2 class="omc-h"><?php echo esc_html( $s['headline'] ); ?><?php if ( ! empty( $s['accent_text'] ) ) : ?> <span class="acc"><?php echo esc_html( $s['accent_text'] ); ?></span><?php endif; ?></h2><?php endif; ?>
+                <?php if ( ! empty( $s['headline'] ) ) : ?><h2 class="omc-h" data-olo-wave><?php echo esc_html( $s['headline'] ); ?><?php if ( ! empty( $s['accent_text'] ) ) : ?> <span class="acc"><?php echo esc_html( $s['accent_text'] ); ?></span><?php endif; ?></h2><?php endif; ?>
                 <?php if ( ! empty( $s['subhead'] ) ) : ?><p class="omc-sub"><?php echo esc_html( $s['subhead'] ); ?></p><?php endif; ?>
                 <?php if ( ! empty( $s['cta1_text'] ) || ! empty( $s['cta2_text'] ) ) : ?>
                 <div class="omc-cta">
-                    <?php if ( ! empty( $s['cta1_text'] ) ) : ?><a class="omc-btn omc-btn--solid" href="<?php echo esc_url( $s['cta1_url'] ?: '#' ); ?>"><?php echo esc_html( $s['cta1_text'] ); ?><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><?php endif; ?>
+                    <?php if ( ! empty( $s['cta1_text'] ) ) : ?>
+                        <?php if ( $maillink ) : ?>
+                    <a class="omc-mail" data-olo-cta href="<?php echo esc_url( $s['cta1_url'] ?: '#' ); ?>"><?php echo esc_html( $s['cta1_text'] ); ?><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                        <?php else : ?>
+                    <a class="omc-btn omc-btn--solid" data-olo-cta href="<?php echo esc_url( $s['cta1_url'] ?: '#' ); ?>"><?php echo esc_html( $s['cta1_text'] ); ?><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                        <?php endif; ?>
+                    <?php endif; ?>
                     <?php if ( ! empty( $s['cta2_text'] ) ) : ?><a class="omc-btn omc-btn--ghost" href="<?php echo esc_url( $s['cta2_url'] ?: '#' ); ?>"><?php echo esc_html( $s['cta2_text'] ); ?></a><?php endif; ?>
                 </div>
                 <?php endif; ?>

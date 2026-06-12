@@ -4,10 +4,11 @@
     <div class="omc-grad" :style="gradStyle"></div>
     <div class="omc-in" :style="inStyle">
       <span v-if="s.eyebrow" :style="eyebrowStyle">{{ s.eyebrow }}</span>
-      <h2 v-if="s.headline" :style="hStyle">{{ s.headline }}<span v-if="s.accent_text" :style="{ color: accent, fontStyle: s.accent_italic ? 'italic' : 'normal' }"> {{ s.accent_text }}</span></h2>
+      <h2 v-if="s.headline" data-olo-wave :style="hStyle">{{ s.headline }}<span v-if="s.accent_text" :style="{ color: accent, fontStyle: s.accent_italic ? 'italic' : 'normal' }"> {{ s.accent_text }}</span></h2>
       <p v-if="s.subhead" :style="subStyle">{{ s.subhead }}</p>
       <div v-if="s.cta1_text || s.cta2_text" :style="ctaWrap">
-        <a v-if="s.cta1_text" class="omc-btn" :style="solidStyle" :href="s.cta1_url || '#'">{{ s.cta1_text }}
+        <a v-if="s.cta1_text && isMaillink" class="omc-mail-prev" data-olo-cta :style="mailStyle" :href="s.cta1_url || '#'">{{ s.cta1_text }}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" :style="{ width: '26px', height: '26px', color: accent }"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a v-else-if="s.cta1_text" class="omc-btn" data-olo-cta :style="solidStyle" :href="s.cta1_url || '#'">{{ s.cta1_text }}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
         <a v-if="s.cta2_text" class="omc-btn" :style="ghostStyle" :href="s.cta2_url || '#'">{{ s.cta2_text }}</a>
@@ -25,8 +26,8 @@ import { borderDefault, borderHoverDefault, borderEffectDefaults } from '@/confi
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
 const defaults = {
-  eyebrow: 'Membership', eyebrow_color: '', headline: 'Become a member of our', accent_text: 'club', uppercase: true, headline_color: '#ffffff',
-  subhead: '', subhead_color: 'rgba(255,255,255,0.78)', cta1_text: 'Go to membership', cta1_url: '#', cta2_text: '', cta2_url: '',
+  eyebrow: 'Membership', eyebrow_color: '', eyebrow_mono: false, headline: 'Become a member of our', accent_text: 'club', uppercase: true, headline_color: '#ffffff',
+  subhead: '', subhead_color: 'rgba(255,255,255,0.78)', cta_style: 'button', cta1_text: 'Go to membership', cta1_url: '#', cta2_text: '', cta2_url: '',
   bg_image: '', media_label: 'membership — supporters in the stands · background video',
   overlay_color: '#0a2a1e', overlay_top: 0.78, overlay_bottom: 0.9, overlay_type: 'linear', accent: '', accent_on: '#0a2a1e', accent_italic: false, btn_bg: '', btn_color: '', headline_size: '', text_color: '#ffffff', align: 'center', pad_y: 160,
 
@@ -139,14 +140,29 @@ const mediaStyle = computed(() => {
 });
 const mediaLabelStyle = { position: 'absolute', left: '18px', bottom: '14px', zIndex: 1, fontSize: '11px', letterSpacing: '.04em', textTransform: 'uppercase', fontWeight: 600, color: 'rgba(255,255,255,.4)' };
 const gradStyle = computed(() => {
-  const rgb = hexRgb(s.value.overlay_color || '#0a2a1e');
+  // Hex → rgba() classico (invariato); var()/token del tema → stop via color-mix
+  // (hexRgb capirebbe solo l'hex e ricadrebbe sul verde di fabbrica). Parità PHP.
+  const ocol = s.value.overlay_color || '#0a2a1e';
+  const isHex = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(ocol);
+  const stop = (alpha) => {
+    if (isHex) return `rgba(${hexRgb(ocol)},${alpha})`;
+    return `color-mix(in srgb, ${ocol} ${Math.round((parseFloat(alpha) || 0) * 100)}%, transparent)`;
+  };
   const bg = s.value.overlay_type === 'radial'
-    ? `radial-gradient(120% 100% at 50% 100%, rgba(${rgb},${s.value.overlay_bottom}), rgba(${rgb},${s.value.overlay_top}))`
-    : `linear-gradient(180deg, rgba(${rgb},${s.value.overlay_top}), rgba(${rgb},${s.value.overlay_bottom}))`;
+    ? `radial-gradient(120% 100% at 50% 100%, ${stop(s.value.overlay_bottom)}, ${stop(s.value.overlay_top)})`
+    : `linear-gradient(180deg, ${stop(s.value.overlay_top)}, ${stop(s.value.overlay_bottom)})`;
   return { position: 'absolute', inset: 0, zIndex: 1, background: bg };
 });
 const inStyle = computed(() => ({ position: 'relative', zIndex: 2, maxWidth: '1240px', margin: '0 auto', padding: padCss(s.value.content_padding, { top: 0, right: 28, bottom: 0, left: 28 }) }));
-const eyebrowStyle = computed(() => ({ fontWeight: 700, fontSize: '12px', letterSpacing: '.18em', textTransform: 'uppercase', color: s.value.eyebrow_color || accent.value, display: 'block', marginBottom: '18px' }));
+const MONO = "var(--olo-font-family-mono, 'Space Mono', ui-monospace, monospace)";
+const isMaillink = computed(() => s.value.cta_style === 'maillink');
+const eyebrowStyle = computed(() => {
+  // Etichetta tecnica mono (blueprint .eyebrow) o bold sans (default, invariato) — parità PHP $eye_typo.
+  const typo = s.value.eyebrow_mono
+    ? { fontFamily: MONO, fontWeight: 400, fontSize: '12.5px' }
+    : { fontWeight: 700, fontSize: '12px' };
+  return { ...typo, letterSpacing: '.18em', textTransform: 'uppercase', color: s.value.eyebrow_color || accent.value, display: 'block', marginBottom: '18px' };
+});
 const hStyle = computed(() => {
   const n = parseInt(s.value.headline_size, 10);
   const fs = n > 0 ? `clamp(34px,6vw,${n}px)` : 'clamp(40px,7.2vw,104px)';
@@ -157,4 +173,13 @@ const ctaWrap = computed(() => ({ display: 'flex', gap: '12px', flexWrap: 'wrap'
 const btnRadius = computed(() => radiusCss(s.value.btn_radius) || '999px');
 const solidStyle = computed(() => ({ display: 'inline-flex', alignItems: 'center', gap: '9px', padding: '17px 30px', borderRadius: btnRadius.value, fontWeight: 700, fontSize: '15px', textDecoration: 'none', background: btnBg.value, color: btnColor.value, border: 0 }));
 const ghostStyle = computed(() => ({ display: 'inline-flex', alignItems: 'center', gap: '9px', padding: '17px 30px', borderRadius: btnRadius.value, fontWeight: 700, fontSize: '15px', textDecoration: 'none', background: 'rgba(255,255,255,.08)', color: txt.value, border: '1.5px solid rgba(255,255,255,.26)' }));
+// CTA "link display" (blueprint .cta__mail): niente sfondo, bordo basso accento, freccia 26px.
+// Il gap base/hover vive nella classe scoped .omc-mail-prev (gap 12px → 18px, transition .2s).
+const mailStyle = computed(() => ({ display: 'inline-flex', alignItems: 'center', fontFamily: DISP, fontWeight: 700, fontSize: 'clamp(22px,3vw,34px)', textTransform: 'none', color: txt.value, textDecoration: 'none', borderBottom: `2px solid ${accent.value}`, paddingBottom: '5px' }));
 </script>
+
+<style scoped>
+/* Gap del link display: base + hover (l'inline style non può esprimere :hover). */
+.omc-mail-prev { gap: 12px; transition: gap .2s; }
+.omc-mail-prev:hover { gap: 18px; }
+</style>

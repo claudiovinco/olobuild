@@ -17,6 +17,8 @@ export default {
     bg: { type: 'none' },
     preset: 'custom',
     heading: t('Nuovo Titolo'),
+    accent_text: '',
+    accent_color: '',
     subtitle: '',
     tag: 'h2',
     heading_font: 'inherit',
@@ -50,6 +52,10 @@ export default {
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'heading', label: t('Titolo'), type: 'textarea' },
+    { key: 'accent_text', label: t('Testo accento'), type: 'text',
+      description: t('Se compare nel titolo, la prima occorrenza viene colorata (es. il "." di clod.eu).') },
+    { key: 'accent_color', label: t('Colore accento'), type: 'color',
+      description: t('Vuoto = primario del tema.') },
     { key: 'subtitle', label: t('Sottotitolo'), type: 'textarea' },
   ],
 

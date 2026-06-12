@@ -12,6 +12,8 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
     protected $category = 'essential';
     protected $defaults = [
         'heading'           => 'Titolo sezione',
+        'accent_text'       => '',
+        'accent_color'      => '',
         'subtitle'          => '',
         'tag'               => 'h2',
         'alignment'         => 'center',
@@ -154,9 +156,24 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
         // Convert <br> / <br/> / <br /> to \n before stripping
         $raw = preg_replace( '/<br\s*\/?>/i', "\n", $raw );
         $raw = trim( wp_strip_all_tags( $raw ) );
-        $heading_text = str_contains( $raw, "\n" )
-            ? nl2br( esc_html( $raw ) )
-            : esc_html( $raw );
+        $has_nl = str_contains( $raw, "\n" );
+        // Testo accento: la PRIMA occorrenza di accent_text nel titolo viene avvolta in uno
+        // <span> colorato (es. heading 'clod.eu' + accent_text '.' → clod<span>.</span>eu).
+        // Split sulla prima occorrenza, esc_html delle singole parti — MAI kses sull'insieme.
+        $acc_txt = trim( (string) ( $s['accent_text'] ?? '' ) );
+        $acc_pos = $acc_txt !== '' ? strpos( $raw, $acc_txt ) : false;
+        if ( $acc_pos !== false ) {
+            $acc_clr = $this->safe_color_css( $s['accent_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
+            $before  = substr( $raw, 0, $acc_pos );
+            $after   = substr( $raw, $acc_pos + strlen( $acc_txt ) );
+            $before  = $has_nl ? nl2br( esc_html( $before ) ) : esc_html( $before );
+            $after   = $has_nl ? nl2br( esc_html( $after ) ) : esc_html( $after );
+            $heading_text = $before . '<span style="color:' . $acc_clr . ';">' . esc_html( $acc_txt ) . '</span>' . $after;
+        } else {
+            $heading_text = $has_nl
+                ? nl2br( esc_html( $raw ) )
+                : esc_html( $raw );
+        }
         $heading_extra = $has_gradient ? ' olo-hl-grad' : '';
 
         // Decoration color fallback (token-first sul primario brand)
@@ -195,13 +212,13 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
         <?php endif; ?>
         <div class="olo-headline <?php echo esc_attr( $uid ); ?> <?php echo $align_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- literal prefix + esc_attr()'d alignment, assembled above ?>" style="display:block;width:100%;">
             <?php if ( $s['decoration'] === 'line' ) : ?>
-                <<?php echo tag_escape( $tag ); ?> class="<?php echo esc_attr( $heading_class ); ?> uk-heading-line<?php echo $heading_extra; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal class ternary; tfx_attrs() fragments escaped internally; $heading_style built above from sanitized values (safe_color_css/absint/esc_attr/whitelisted font stack) ?><?php echo $h_tfx_cls; ?>" style="<?php echo $heading_style; ?>"<?php echo $h_tfx_data; ?>>
-                    <span><?php echo $heading_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_html()'d above (nl2br only adds <br /> tags) ?></span>
+                <<?php echo tag_escape( $tag ); ?> class="<?php echo esc_attr( $heading_class ); ?> uk-heading-line<?php echo $heading_extra; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal class ternary; tfx_attrs() fragments escaped internally; $heading_style built above from sanitized values (safe_color_css/absint/esc_attr/whitelisted font stack) ?><?php echo $h_tfx_cls; ?>" style="<?php echo $heading_style; ?>"<?php echo $h_tfx_data; ?> data-olo-wave>
+                    <span><?php echo $heading_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- parts esc_html()'d above (nl2br only adds <br /> tags; accent span color via safe_color_css() whitelist) ?></span>
                 </<?php echo tag_escape( $tag ); ?>>
 
             <?php elseif ( $s['decoration'] === 'divider' ) : ?>
-                <<?php echo tag_escape( $tag ); ?> class="<?php echo esc_attr( $heading_class ); ?> uk-heading-divider<?php echo $heading_extra; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal class ternary; tfx_attrs() fragments escaped internally; $heading_style built above from sanitized values (safe_color_css/absint/esc_attr/whitelisted font stack) ?><?php echo $h_tfx_cls; ?>" style="<?php echo $heading_style; ?>"<?php echo $h_tfx_data; ?>>
-                    <?php echo $heading_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_html()'d above (nl2br only adds <br /> tags) ?>
+                <<?php echo tag_escape( $tag ); ?> class="<?php echo esc_attr( $heading_class ); ?> uk-heading-divider<?php echo $heading_extra; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal class ternary; tfx_attrs() fragments escaped internally; $heading_style built above from sanitized values (safe_color_css/absint/esc_attr/whitelisted font stack) ?><?php echo $h_tfx_cls; ?>" style="<?php echo $heading_style; ?>"<?php echo $h_tfx_data; ?> data-olo-wave>
+                    <?php echo $heading_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- parts esc_html()'d above (nl2br only adds <br /> tags; accent span color via safe_color_css() whitelist) ?>
                 </<?php echo tag_escape( $tag ); ?>>
 
             <?php else : ?>
@@ -224,8 +241,8 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
                     <?php endfor; ?>
                     </div>
                 <?php endif; ?>
-                <<?php echo tag_escape( $tag ); ?> class="<?php echo esc_attr( $heading_class ); ?><?php echo $heading_extra; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal class ternary; tfx_attrs() fragments escaped internally; $heading_style built above from sanitized values (safe_color_css/absint/esc_attr/whitelisted font stack) ?><?php echo $h_tfx_cls; ?>" style="<?php echo $heading_style; ?>"<?php echo $h_tfx_data; ?>>
-                    <?php echo $heading_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_html()'d above (nl2br only adds <br /> tags) ?>
+                <<?php echo tag_escape( $tag ); ?> class="<?php echo esc_attr( $heading_class ); ?><?php echo $heading_extra; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal class ternary; tfx_attrs() fragments escaped internally; $heading_style built above from sanitized values (safe_color_css/absint/esc_attr/whitelisted font stack) ?><?php echo $h_tfx_cls; ?>" style="<?php echo $heading_style; ?>"<?php echo $h_tfx_data; ?> data-olo-wave>
+                    <?php echo $heading_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- parts esc_html()'d above (nl2br only adds <br /> tags; accent span color via safe_color_css() whitelist) ?>
                 </<?php echo tag_escape( $tag ); ?>>
             <?php endif; ?>
 

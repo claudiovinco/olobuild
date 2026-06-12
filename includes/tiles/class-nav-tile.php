@@ -20,6 +20,7 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
         'icon_size'        => '16',
         'font_size'        => '14',
         'font_weight'      => '400',
+        'font_family'      => '',
         'text_transform'   => 'none',
         'letter_spacing'   => '0',
         'link_color'       => '',
@@ -94,6 +95,8 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
         $tt     = esc_attr( $s['text_transform'] );
         $ls     = floatval( $s['letter_spacing'] );
         $icon_s = intval( $s['icon_size'] );
+        // Famiglia font dei titoli dei link ('' = font del body, invariato). Legacy map vuota.
+        $ff     = $this->resolve_font_family( $s['font_family'] ?? '', [] );
 
         // Unique ID for scoped CSS
         $uid = 'olo-nav-' . wp_unique_id();
@@ -116,6 +119,11 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
 
         // a11y tastiera: anello di focus visibile sulle voci di menu
         $css .= "#{$uid} .olo-nav-item:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}";
+
+        // Famiglia font sui titoli dei link (solo se scelta esplicita → default invariato)
+        if ( $ff !== '' && $ff !== 'inherit' ) {
+            $css .= "#{$uid} .olo-nav-text{font-family:{$ff}}";
+        }
 
         // Stretch
         if ( $s['alignment'] === 'stretch' && ! $is_horizontal ) {

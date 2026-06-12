@@ -31,6 +31,7 @@ export default {
     icon_size: '16',
     font_size: '14',
     font_weight: '400',
+    font_family: '',
     text_transform: 'none',
     letter_spacing: '0',
     link_color: '',
@@ -147,8 +148,10 @@ export default {
         color:         'link_color',
         colorHover:    'link_hover_color',
       },
-      sizeMin: 11, sizeMax: 24, sizeStep: 1,
+      sizeMin: 11, sizeMax: 40, sizeStep: 1,
     },
+    { key: 'font_family', label: t('Famiglia font'), type: 'font-family',
+      description: t('Vuoto = font del body.') },
 
     { type: 'separator', label: t('Stile icone') },
     { key: 'icon_position', label: t('Posizione icona'), type: 'select', options: [

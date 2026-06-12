@@ -192,6 +192,8 @@ export const TILE_DEFAULTS = {
   },
   headline: {
     heading: 'Nuovo Titolo',
+    accent_text: '',
+    accent_color: '',             // '' ⇒ TOKENS.primary
     subtitle: '',
     tag: 'h2',
     alignment: 'center',

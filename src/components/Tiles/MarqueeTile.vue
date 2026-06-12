@@ -3,9 +3,11 @@
     <div class="olo-mq-track" :style="trackStyle">
       <!-- Text mode -->
       <template v-if="s.content_type !== 'images'">
-        <template v-for="i in 10" :key="'t'+i">
-          <span class="olo-mq-text" :style="textStyle" data-olo-editable="text_items">{{ s.text_items || 'Testo scorrevole' }}</span>
-          <span v-if="s.separator" class="olo-mq-sep" :style="sepStyle">{{ s.separator }}</span>
+        <template v-for="i in textReps" :key="'t'+i">
+          <template v-for="(item, j) in textItems" :key="'t'+i+'-'+j">
+            <span class="olo-mq-text" :style="textStyle" data-olo-editable="text_items">{{ item }}</span>
+            <span v-if="s.separator" class="olo-mq-sep" :style="sepStyle">{{ s.separator }}</span>
+          </template>
         </template>
       </template>
       <!-- Image mode -->
@@ -69,6 +71,15 @@ const imgList = computed(() => {
   if (!imgs || !Array.isArray(imgs)) return [];
   return imgs.map(img => (typeof img === 'object' && img !== null) ? (img.url || '') : img).filter(Boolean);
 });
+
+// Voci multiple: text_items splittato su newline o "|" (come il render PHP);
+// stringa semplice = 1 voce, comportamento storico invariato.
+const textItems = computed(() => {
+  const raw = String(s.value.text_items || 'Testo scorrevole');
+  const parts = raw.split(/\r\n|\r|\n|\|/).map(p => p.trim()).filter(Boolean);
+  return parts.length ? parts : ['Testo scorrevole'];
+});
+const textReps = computed(() => Math.max(2, Math.ceil(10 / textItems.value.length)));
 
 const containerStyle = computed(() => {
   const st = {

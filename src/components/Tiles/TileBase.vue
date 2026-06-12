@@ -105,6 +105,11 @@ import ProSliderTile from './ProSliderTile.vue';
 import PopupTile from './PopupTile.vue';
 import MegaMenuTile from './MegaMenuTile.vue';
 import InnerColumnsTile from './InnerColumnsTile.vue';
+import StudioHeroTile from './StudioHeroTile.vue';
+import FilmReelTile from './FilmReelTile.vue';
+import ScrubTextTile from './ScrubTextTile.vue';
+import ThemeDemosTile from './ThemeDemosTile.vue';
+import EvoNotesTile from './EvoNotesTile.vue';
 import IconTabsTile from './IconTabsTile.vue';
 import TimelineTile from './TimelineTile.vue';
 import FlipCardTile from './FlipCardTile.vue';
@@ -572,6 +577,13 @@ const tileComponents = {
   appointmentgrid: AppointmentGridTile,
   restaurantopeninghours: RestaurantOpeningHoursTile,
   restaurantbookingform: RestaurantBookingFormTile,
+
+  // Clod — Evoluzione (studio editorial)
+  studiohero: StudioHeroTile,
+  filmreel: FilmReelTile,
+  scrubtext: ScrubTextTile,
+  themedemos: ThemeDemosTile,
+  evonotes: EvoNotesTile,
 };
 
 const tileComponent = computed(() => {

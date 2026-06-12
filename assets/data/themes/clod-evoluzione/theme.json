@@ -1,0 +1,64 @@
+{
+  "id": "clod-evoluzione",
+  "name": "Clod — Evoluzione",
+  "author": "Olobuild",
+  "version": "1.0.0",
+  "tags": ["studio", "creative", "media", "portfolio", "dark"],
+  "category": "Creative",
+  "zone": "Sala di regia",
+  "description": "Clod — Evoluzione: studio creativo-tecnico in stile sala di regia. Display industriale, inchiostro caldo e lime segnale, reel orizzontale dei lavori, infografica animata del sistema e layer di motivazioni Prima → Ora.",
+  "menu": {
+    "name": "Clod Menu",
+    "items": [
+      { "title": "Home", "url": "#top" },
+      { "title": "Servizi", "url": "#servizi" },
+      { "title": "Lavori", "url": "#lavori" },
+      { "title": "R&S", "url": "#rs" },
+      { "title": "Parliamone", "url": "#contatto" }
+    ]
+  },
+  "templates": {
+    "header":   { "file": "header.json",   "type": "header", "title": "Clod — Header" },
+    "footer":   { "file": "footer.json",   "type": "footer", "title": "Clod — Footer" },
+    "homepage": { "file": "homepage.json", "type": "page",   "title": "Clod — Homepage" }
+  },
+  "activate": { "header": "header", "footer": "footer" },
+  "pages": {
+    "home": { "title": "Home", "template": "homepage", "set_as_homepage": true }
+  },
+  "cursor_hud": {
+    "enabled": true,
+    "show_coords": true,
+    "show_label": true,
+    "coords_color": "#E94955"
+  },
+  "styles": {
+    "colors": {
+      "primary": "#E94955",
+      "primary_contrast": "#0b0c0f",
+      "secondary": "#ECEAE3",
+      "secondary_contrast": "#0b0c0f",
+      "muted": "#161922",
+      "muted_contrast": "#a0a298",
+      "text": "#ECEAE3",
+      "text_muted": "#a0a298",
+      "background": "#0b0c0f",
+      "border": "rgba(236,234,227,.10)",
+      "link": "#E94955"
+    },
+    "typography": {
+      "font_family": "\"Hanken Grotesk\", -apple-system, sans-serif",
+      "font_family_heading": "\"Big Shoulders Display\", sans-serif",
+      "font_family_mono": "\"Space Mono\", monospace",
+      "font_size_base": "16px",
+      "line_height": "1.55",
+      "font_weight_heading": "800",
+      "heading_line_height": "0.92",
+      "heading_letter_spacing": "-0.01em",
+      "heading_text_transform": "uppercase"
+    },
+    "google_fonts": ["Big Shoulders Display", "Hanken Grotesk", "Space Mono"],
+    "google_fonts_weights": "300;400;500;600;700;800;900",
+    "spacing": {}
+  }
+}

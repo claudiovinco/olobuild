@@ -15,12 +15,14 @@ export default {
   defaults: {
     eyebrow: 'Membership',
     eyebrow_color: '',
+    eyebrow_mono: false,
     headline: 'Become a member of our',
     accent_text: 'club',
     uppercase: true,
     headline_color: '#ffffff',
     subhead: '',
     subhead_color: 'rgba(255,255,255,0.78)',
+    cta_style: 'button',
     cta1_text: 'Go to membership',
     cta1_url: '#',
     cta2_text: '',
@@ -64,6 +66,8 @@ export default {
 
   fields: [
     { key: 'eyebrow', label: t('Occhiello'), type: 'text' },
+    { key: 'eyebrow_mono', label: t('Occhiello in font mono'), type: 'toggle',
+      description: t('Stile etichetta tecnica: mono 12.5px, maiuscolo, colore accento.') },
     { key: 'headline', label: t('Titolo'), type: 'text' },
     { key: 'accent_text', label: t('Parola accento'), type: 'text' },
     { key: 'accent_italic', label: t('Accento corsivo'), type: 'toggle' },
@@ -71,6 +75,10 @@ export default {
     { key: 'subhead', label: t('Sottotitolo (opzionale)'), type: 'textarea' },
 
     { type: 'separator', label: t('CTA') },
+    { key: 'cta_style', label: t('Stile CTA primaria'), type: 'select', options: [
+      { value: 'button', label: t('Pulsante') },
+      { value: 'maillink', label: t('Link display') },
+    ]},
     { key: 'cta1_text', label: t('CTA 1 — testo'), type: 'text' },
     { key: 'cta1_url', label: t('CTA 1 — link'), type: 'link' },
     { key: 'cta2_text', label: t('CTA 2 — testo (opzionale)'), type: 'text' },

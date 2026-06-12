@@ -27,8 +27,8 @@
           :style="logoWrapStyle"
         >
           <span v-if="s.logo_crest" class="olo-mm-crest" :style="crestStyle">{{ s.logo_crest }}</span>
-          <span v-if="s.logo_dot" class="olo-mm-logo-dot" :style="logoDotStyle"></span>
-          <span class="olo-mm-logo-text" :style="logoTextStyle">{{ s.logo_text }}</span>
+          <span v-if="s.logo_dot && dotPosition === 'before'" class="olo-mm-logo-dot" :style="logoDotStyle"></span>
+          <span class="olo-mm-logo-text" :style="logoTextStyle"><template v-if="dotInlineParts">{{ dotInlineParts.before }}<span class="olo-mm-logo-dot-inline" :style="{ color: dotInlineColor }">.</span>{{ dotInlineParts.after }}</template><template v-else>{{ s.logo_text }}</template></span>
         </div>
 
         <!-- Nav Left (split) -->
@@ -91,6 +91,9 @@
           </li>
         </ul>
 
+        <!-- Timecode di scroll "sala di regia" (statico nel canvas, avanza nel frontend) -->
+        <span v-if="s.show_timecode" class="olo-mm-tc" :style="tcStyle">TC 00:00:00:00</span>
+
         <!-- Social bar (desktop) -->
         <div v-if="hasSocialIcons && (s.social_position === 'bar-right' || s.social_position === 'both')"
           class="olo-mm-social-bar" :style="socialBarStyle">
@@ -103,6 +106,9 @@
         <div v-if="s.logo_image && s.logo_position === 'right'" class="olo-mm-logo-wrap" :style="{ order: 99 }">
           <img :src="s.logo_image" :alt="t('Logo')" :style="logoImgStyle" />
         </div>
+
+        <!-- Hairline di progresso scroll (larghezza demo nel canvas, segue lo scroll nel frontend) -->
+        <span v-if="s.scroll_progress" class="olo-mm-progress" :style="progressStyle" aria-hidden="true"></span>
       </nav>
 
       <!-- Mega Panel -->
@@ -155,6 +161,7 @@
         <button class="olo-mm-hamburger-btn olo-mm-hamburger-btn--mobile" :style="mobileHamburgerBtnStyle" @click="mobileMenuOpen = !mobileMenuOpen">
           <component :is="hamburgerSvgComponent" />
         </button>
+        <span v-if="s.scroll_progress" class="olo-mm-progress" :style="progressStyle" aria-hidden="true"></span>
       </nav>
 
       <!-- Mobile menu (togglable in builder) -->
@@ -270,7 +277,9 @@ const defaults = {
   font_size: '15', font_weight: 'normal', text_transform: 'none',
   letter_spacing: '0', item_gap: '15',
   bar_padding: '16', bar_gap: '20', logo_margin_right: '0',
-  logo_image: '', logo_text: '', logo_dot: false, logo_text_color: '', logo_text_size: '19', logo_crest: '', logo_crest_bg: '', logo_crest_color: '', nav_phone: '', nav_phone_url: '', nav_phone_color: '', logo_width: '140', logo_position: 'left',
+  logo_image: '', logo_text: '', logo_dot: false, logo_dot_color: '', logo_dot_position: 'before', logo_text_color: '', logo_text_size: '19', logo_crest: '', logo_crest_bg: '', logo_crest_color: '', nav_phone: '', nav_phone_url: '', nav_phone_color: '', logo_width: '140', logo_position: 'left',
+  show_timecode: false, timecode_duration: 90, timecode_color: '',
+  scroll_progress: false, progress_color: '', progress_height: 2,
   hover_effect: 'none', hover_effect_color: '', hover_effect_height: '2',
   mega_mode: 'auto', panel_width: 'container', panel_columns: '4',
   panel_bg: '#ffffff', panel_shadow: 'md', panel_radius: '8',
@@ -634,7 +643,35 @@ const logoTextStyle = computed(() => ({
 }));
 const logoDotStyle = computed(() => ({
   width: '9px', height: '9px', borderRadius: '50%', flex: 'none',
-  background: s.value.logo_text_color || s.value.text_color || 'currentColor',
+  background: s.value.logo_dot_color || s.value.logo_text_color || s.value.text_color || 'currentColor',
+}));
+
+// ── Dot "inline": la prima occorrenza di '.' nel wordmark colorata (clod<span>.</span>eu) ──
+const dotPosition = computed(() => (s.value.logo_dot_position === 'inline' ? 'inline' : 'before'));
+const dotInlineParts = computed(() => {
+  if (!s.value.logo_dot) return null;
+  if (dotPosition.value !== 'inline') return null;
+  const txt = String(s.value.logo_text || '');
+  const i = txt.indexOf('.');
+  if (i === -1) return null;
+  return { before: txt.slice(0, i), after: txt.slice(i + 1) };
+});
+const dotInlineColor = computed(() => s.value.logo_dot_color || 'var(--olo-color-primary, #C6F24E)');
+
+// ── Timecode "sala di regia" + hairline di progresso scroll ──
+const tcStyle = computed(() => ({
+  fontFamily: "var(--olo-font-family-mono, 'Space Mono', ui-monospace, monospace)",
+  fontSize: '12px', letterSpacing: '.06em', textTransform: 'uppercase',
+  fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap', flexShrink: 0, order: 88,
+  color: s.value.timecode_color || 'var(--olo-color-primary, #C6F24E)',
+}));
+const progressStyle = computed(() => ({
+  position: 'absolute', left: 0, bottom: '-1px',
+  height: (parseInt(s.value.progress_height) || 2) + 'px',
+  // Nel canvas il progresso è statico: larghezza demo per mostrare colore/spessore/posizione.
+  width: '38%',
+  background: s.value.progress_color || 'var(--olo-color-primary, #C6F24E)',
+  pointerEvents: 'none',
 }));
 const crestStyle = computed(() => ({
   display: 'inline-grid', placeItems: 'center', width: '34px', height: '38px', flex: 'none',

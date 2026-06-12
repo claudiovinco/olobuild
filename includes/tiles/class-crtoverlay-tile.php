@@ -151,4 +151,73 @@ class Olo_Crtoverlay_Tile extends Olo_Tile_Base {
         <?php
         return ob_get_clean();
     }
+
+    /**
+     * Grana pellicola — secondo effetto di pagina della famiglia (blueprint
+     * "Clod — Evoluzione v2", evo-fx.css [1] .fx-grain): layer fixed full-viewport
+     * con noise SVG fractalNoise in mix-blend-mode overlay, animato a scatti
+     * (steps) come una pellicola. Statico con prefers-reduced-motion.
+     *
+     * Statico e parametrico come render(): chiamato dal renderer per i page
+     * settings `page_grain_*`, non entra nel flusso tile.
+     *
+     * @param array $settings { opacity (0-100), size (px), z_index, animate (bool) }
+     * @return string HTML
+     */
+    public static function render_grain( $settings = [] ) {
+        $s = wp_parse_args( $settings, [
+            'opacity' => 7,
+            'size'    => 240,
+            'z_index' => 95,
+            'animate' => true,
+            // Su touch/coarse la grana è OFF di default: layer fixed full-viewport con
+            // mix-blend-mode (+ animazione) = composite costoso → scroll a scatti su mobile.
+            'mobile'  => false,
+        ] );
+
+        $op      = round( max( 0, min( 100, intval( $s['opacity'] ) ) ) / 100, 3 );
+        $size    = max( 60, min( 800, intval( $s['size'] ) ) );
+        $zidx    = max( 1, min( 9999, intval( $s['z_index'] ) ) );
+        $animate = ! empty( $s['animate'] );
+        $mobile  = ! empty( $s['mobile'] );
+        $uid     = 'olo-grain-' . wp_rand( 10000, 99999 );
+
+        // Noise come data-URI SVG (fractalNoise): nessun asset esterno, nessuna richiesta.
+        $noise = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
+
+        ob_start();
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS: tutti i valori dinamici sono intval() clampati / round(); il data-URI è una costante interna; $uid interno.
+        ?>
+        <style>
+            .<?php echo $uid; ?> {
+                position: fixed;
+                inset: -60px;
+                z-index: <?php echo $zidx; ?>;
+                pointer-events: none;
+                opacity: <?php echo $op; ?>;
+                mix-blend-mode: overlay;
+                background-image: <?php echo $noise; ?>;
+                background-size: <?php echo $size; ?>px <?php echo $size; ?>px;
+            }
+            <?php if ( $animate ) : ?>
+            @media (prefers-reduced-motion: no-preference) {
+                .<?php echo $uid; ?> { animation: <?php echo $uid; ?>-anim .5s steps(3) infinite; }
+            }
+            @keyframes <?php echo $uid; ?>-anim {
+                0%, 100% { transform: translate(0, 0); }
+                33%      { transform: translate(-28px, 20px); }
+                66%      { transform: translate(24px, -24px); }
+            }
+            <?php endif; ?>
+            <?php if ( ! $mobile ) : ?>
+            @media (hover: none), (pointer: coarse) {
+                .<?php echo $uid; ?> { display: none; }
+            }
+            <?php endif; ?>
+        </style>
+        <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+        <div class="olo-pagegrain <?php echo esc_attr( $uid ); ?>" aria-hidden="true" role="presentation"></div>
+        <?php
+        return ob_get_clean();
+    }
 }

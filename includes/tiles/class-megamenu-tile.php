@@ -135,6 +135,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         'mobile_logo_height' => '36',
         'mobile_bar_logo'    => true,
         'mobile_search'      => true,
+        'mobile_search_overlay' => false,
         // Social Icons
         // Extra links
         'extra_link_1_label' => '',
@@ -826,6 +827,15 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         }
         .<?php echo $uid; ?> .olo-mm-search-result:hover { background: rgba(0,0,0,.04); color: <?php echo $ac ?: 'var(--olo-color-primary, #e1474f)'; ?>; }
         .<?php echo $uid; ?> .olo-mm-search-empty { padding: 16px 18px; color: var(--olo-color-text-faint, #9ca3af); font-size: 14px; }
+        /* Gli stili form globali (.olo-template input:focus) aggiungono il ring
+           --olo-form-focus-shadow: l'input dell'overlay è "nudo" per design. */
+        .<?php echo $uid; ?> .olo-mm-search-input:focus { border: none; box-shadow: none; outline: none; }
+        @media (max-width: 640px) {
+            .<?php echo $uid; ?> .olo-mm-search-overlay { padding: 9vh 24px 16px; }
+            .<?php echo $uid; ?> .olo-mm-search-form { padding: 13px 16px; }
+            .<?php echo $uid; ?> .olo-mm-search-input { font-size: 16px; }
+            .<?php echo $uid; ?> .olo-mm-search-kbd { display: none; }
+        }
         @keyframes olo-mm-so-fade { from { opacity: 0; } to { opacity: 1; } }
         @keyframes olo-mm-so-pop { from { opacity: 0; transform: translateY(-10px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
@@ -1623,7 +1633,9 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
             display: none; align-items: center; order: -1; margin-right: auto;
         }
         .<?php echo $uid; ?> .olo-mm-mobile-logo img {
-            max-height: <?php echo $mob_logo_h; ?>px; width: auto; display: block;
+            /* height esplicita, non solo max-height: gli SVG senza width/height
+               intrinseci (solo viewBox) collasserebbero a 0 con il solo max-height. */
+            height: <?php echo $mob_logo_h; ?>px; max-height: <?php echo $mob_logo_h; ?>px; width: auto; display: block;
         }
         .<?php echo $uid; ?> .olo-mm-mobile-search {
             display: none; align-items: center; padding: 8px; cursor: pointer;
@@ -2637,8 +2649,13 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
             <?php endif; ?>
 
             <?php // === E1: Overlay ricerca / command palette === ?>
-            <?php if ( ! empty( $s['search_icon'] ) && in_array( ( $s['search_style'] ?? 'expand' ), [ 'overlay', 'command' ], true ) ) :
-                $is_cmd = ( $s['search_style'] === 'command' );
+            <?php
+            // L'overlay serve anche alla lente mobile quando "Ricerca mobile a
+            // tutta pagina" è attiva, indipendentemente dallo stile desktop.
+            $mob_search_overlay = ! empty( $s['mobile_search'] ) && ! empty( $s['mobile_search_overlay'] );
+            ?>
+            <?php if ( ( ! empty( $s['search_icon'] ) && in_array( ( $s['search_style'] ?? 'expand' ), [ 'overlay', 'command' ], true ) ) || $mob_search_overlay ) :
+                $is_cmd = ( ( $s['search_style'] ?? 'expand' ) === 'command' ) && ! empty( $s['search_icon'] );
             ?>
             <div class="olo-mm-search-overlay<?php echo $is_cmd ? ' olo-mm-search-overlay--cmd' : ''; ?>" role="dialog" aria-modal="true" aria-label="<?php echo esc_attr( olo_t( 'Cerca' ) ); ?>" hidden>
                 <div class="olo-mm-search-overlay-backdrop" data-olo-search-close></div>
@@ -3140,7 +3157,12 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                     soOverlay.setAttribute("hidden", "");
                     document.body.style.overflow = "";
                 };
-                if (searchBtn) {
+                /* La lente DESKTOP apre l'overlay solo se lo stile desktop è
+                   overlay/command: con "expand" l'overlay può esistere solo per
+                   la ricerca mobile a tutta pagina e il click desktop deve
+                   continuare a espandere inline. */
+                var soDesktop = searchBtn ? searchBtn.getAttribute("data-olo-search-style") !== "expand" : false;
+                if (searchBtn && soDesktop) {
                     searchBtn.addEventListener("click", function(e){ e.preventDefault(); soOpen(); });
                 }
                 soOverlay.querySelectorAll("[data-olo-search-close]").forEach(function(el){
@@ -3148,7 +3170,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 });
                 document.addEventListener("keydown", function(e){
                     var openKey = false;
-                    if (e.key === "/") openKey = true;
+                    if (e.key === "/" && soDesktop) openKey = true;
                     if (soIsCmd) {
                         if (e.metaKey || e.ctrlKey) {
                             if (e.key === "k" || e.key === "K") openKey = true;
@@ -3205,8 +3227,17 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
 
             /* ── Mobile search toggle (bar) ── */
             var mobSearchBtn = root.querySelector(".olo-mm-mobile-search");
+            var mobSearchOverlay = <?php echo ( ! empty( $s['mobile_search'] ) && ! empty( $s['mobile_search_overlay'] ) ) ? 'true' : 'false'; ?>;
             if (mobSearchBtn) {
                 mobSearchBtn.addEventListener("click", function() {
+                    /* "Ricerca mobile a tutta pagina": riusa l'overlay E1.
+                       soOpen è una var hoisted di questo scope, definita solo
+                       quando l'overlay è presente nel markup. */
+                    if (mobSearchOverlay && typeof soOpen === "function") {
+                        closeMobile();
+                        soOpen();
+                        return;
+                    }
                     var wasOpen = root.classList.contains("olo-mm-search-active");
                     if (wasOpen) {
                         root.classList.remove("olo-mm-search-active");

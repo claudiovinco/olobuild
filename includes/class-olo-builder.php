@@ -3154,6 +3154,13 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-darkmode-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-lightbox-tile.php';
 
+        // Clod — Evoluzione (studio editorial)
+        require_once OLO_PATH . 'includes/tiles/class-studiohero-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-filmreel-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-scrubtext-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-themedemos-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-evonotes-tile.php';
+
         // WooCommerce tiles (solo se WooCommerce attivo)
         if ( class_exists( 'WooCommerce' ) ) {
             require_once OLO_PATH . 'includes/tiles/class-woo-products-tile.php';
@@ -3204,6 +3211,8 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-buildermock-tile.php';
         require_once OLO_PATH . 'includes/class-magnetic-cursor.php';
         Olo_Magnetic_Cursor::init();
+        require_once OLO_PATH . 'includes/class-cursor-hud.php';
+        Olo_Cursor_Hud::init();
 
         $manager = Olo_Tile_Manager::instance();
         $manager->register_tile( new Olo_Section_Tile() );
@@ -3382,6 +3391,13 @@ class Olo_Builder {
         $manager->register_tile( new Olo_Readingtime_Tile() );
         $manager->register_tile( new Olo_Darkmode_Tile() );
         $manager->register_tile( new Olo_Lightbox_Tile() );
+
+        // Clod — Evoluzione (studio editorial)
+        $manager->register_tile( new Olo_StudioHero_Tile() );
+        $manager->register_tile( new Olo_FilmReel_Tile() );
+        $manager->register_tile( new Olo_ScrubText_Tile() );
+        $manager->register_tile( new Olo_ThemeDemos_Tile() );
+        $manager->register_tile( new Olo_EvoNotes_Tile() );
 
         // WooCommerce tiles (solo se WooCommerce attivo)
         if ( class_exists( 'WooCommerce' ) ) {

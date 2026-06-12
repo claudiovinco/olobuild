@@ -1178,7 +1178,9 @@ function updateParallaxData(newData) {
 }
 
 /* griglia 2 colonne (colori affiancati) */
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+/* Coppie di FieldColor (pattern, CRT): impilate a tutta larghezza — affiancate a
+   metà pannello l'hex rgba era troncato e lo slider Alfa quasi invisibile/inusabile. */
+.grid2 { display: grid; grid-template-columns: 1fr; gap: 10px; }
 .cell { display: flex; flex-direction: column; gap: 6px; }
 
 /* Aurora: palette dinamica + valbox senza unità (N° luci) */

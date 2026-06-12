@@ -1,15 +1,16 @@
 <template>
   <div class="mb-space-y-3">
     <!-- Tile-specific style sections (es. tipografia hero, colori CTA) — letti/scritti su tile.settings -->
-    <template v-for="(section, sIdx) in tileStyleSections" :key="'tilesty-' + sIdx">
+    <template v-for="section in tileStyleSections" :key="'tilesty-' + section.idx">
       <CollapseSection
         v-if="section.label && sectionHasVisibleFields(section)"
-        :id="'v2i-sec-tilesty-' + sIdx"
+        :id="'v2i-sec-tilesty-' + section.idx"
         :title="t(section.label)"
-        :defaultOpen="sIdx <= 1"
+        :defaultOpen="section.idx <= 1"
+        :forceOpen="searchActive"
       >
         <div class="mb-space-y-3">
-          <template v-for="(field, fIdx) in section.fields" :key="field.key || ('tsf-' + sIdx + '-' + fIdx)">
+          <template v-for="(field, fIdx) in section.fields" :key="field.key || ('tsf-' + section.idx + '-' + fIdx)">
             <InspectorField
               v-if="isFieldVisible(field, tileSettings)"
               :field="field"
@@ -42,15 +43,16 @@
     </template>
 
     <!-- Wrapper style sections (universali — letti/scritti su tile.style) -->
-    <template v-for="(section, sIdx) in groupedSections" :key="'sec-' + sIdx">
+    <template v-for="section in groupedSections" :key="'sec-' + section.idx">
       <CollapseSection
         v-if="section.label"
-        :id="'v2i-sec-stile-' + sIdx"
+        :id="'v2i-sec-stile-' + section.idx"
         :title="t(section.label)"
-        :defaultOpen="sIdx <= 1"
+        :defaultOpen="section.idx <= 1"
+        :forceOpen="searchActive"
       >
         <div class="mb-space-y-3">
-          <template v-for="(field, fIdx) in section.fields" :key="field.key || ('f-' + sIdx + '-' + fIdx)">
+          <template v-for="(field, fIdx) in section.fields" :key="field.key || ('f-' + section.idx + '-' + fIdx)">
             <StyleLayoutStack
               v-if="field.type === 'layout-stack'"
               :tileStyle="tileStyle"
@@ -95,8 +97,10 @@
               @update:hoverValue="emitHover($event)"
               @update:responsiveValue="emitResponsive($event)"
             />
-            <!-- Multi-key types: text-shadow, backdrop-filter, border-legacy -->
-            <div v-else>
+            <!-- Multi-key types: text-shadow, backdrop-filter, border-legacy.
+                 v-else-if (non v-else): un field normale nascosto da condition
+                 non deve cadere qui e renderizzare una label orfana. -->
+            <div v-else-if="isFieldVisible(field, tileStyle)">
               <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t(field.label) }}</label>
               <component
                 :is="multiKeyComponent(field.type)"
@@ -158,7 +162,7 @@
               @update:hoverValue="emitHover($event)"
               @update:responsiveValue="emitResponsive($event)"
             />
-            <div v-else>
+            <div v-else-if="isFieldVisible(field, tileStyle)">
               <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t(field.label) }}</label>
               <component
                 :is="multiKeyComponent(field.type)"
@@ -188,6 +192,7 @@ import FieldTextShadow from './fields/FieldTextShadow.vue';
 import FieldBackdropFilter from './fields/FieldBackdropFilter.vue';
 import FieldBorderLegacy from './fields/FieldBorderLegacy.vue';
 import { t } from '@/i18n';
+import { normalizeSearchQuery, fieldMatchesSearch, sectionLabelMatchesSearch } from '@/utils/inspectorSearch.js';
 
 // Mapping multi-key: oggetto-UI → chiavi piatte salvate su tile.style
 // Chiavi PHP-renderer-compatible: NON cambia il formato salvato, solo la UI consolidata.
@@ -219,8 +224,14 @@ const props = defineProps({
   // Tipo della tile (section/row/column/element type) — usato da styleFieldsBase per
   // nascondere i field wrapper duplicati su tile strutturali.
   tileType:     { type: String, default: '' },
+  // Query del campo "Cerca impostazione..." dell'inspector — filtra i field
+  // del tab Stile con la stessa logica label/key del tab Contenuto.
+  searchQuery:  { type: String, default: '' },
 });
 const emit = defineEmits(['update']);
+
+const searchQ      = computed(() => normalizeSearchQuery(props.searchQuery));
+const searchActive = computed(() => !!searchQ.value);
 
 function groupBySeparator(fields) {
   const sections = [];
@@ -234,7 +245,22 @@ function groupBySeparator(fields) {
     }
   }
   if (current.fields.length > 0) sections.push(current);
-  return sections;
+  // idx = indice ORIGINALE della sezione: gli id v2i-sec-* devono restare stabili
+  // anche quando il filtro di ricerca rimuove sezioni (rail + scroll-spy + restore).
+  return sections.map((s, i) => ({ ...s, idx: i }));
+}
+
+// Filtro ricerca: una sezione resta visibile per intero se la sua label matcha,
+// altrimenti restano solo i field che matchano; sezioni senza match spariscono.
+function filterSectionsBySearch(sections) {
+  if (!searchQ.value) return sections;
+  const out = [];
+  for (const s of sections) {
+    if (sectionLabelMatchesSearch(s.label, searchQ.value)) { out.push(s); continue; }
+    const fields = s.fields.filter((f) => fieldMatchesSearch(f, searchQ.value));
+    if (fields.length > 0) out.push({ ...s, fields });
+  }
+  return out;
 }
 
 // Valuta la `condition` dichiarata sul field (es. `text_effect_phrases` visibile
@@ -275,7 +301,7 @@ function sectionHasVisibleFields(section) {
   return (section.fields || []).some(f => isFieldVisible(f, props.tileSettings));
 }
 
-const groupedSections   = computed(() => groupBySeparator(styleFieldsBase(props.tileType)));
+const groupedSections   = computed(() => filterSectionsBySearch(groupBySeparator(styleFieldsBase(props.tileType))));
 const tileStyleSections = computed(() => {
   // Nel tab Stile gli "Effetti bordo" del WRAPPER (groupedSections → borderEffectFields)
   // sono già presenti. Rimuoviamo l'eventuale sezione effetti dai field-stile del tile
@@ -287,7 +313,7 @@ const tileStyleSections = computed(() => {
     if (typeof f.key === 'string' && f.key.startsWith('border_effect')) return false;
     return true;
   });
-  return groupBySeparator(fields);
+  return filterSectionsBySearch(groupBySeparator(fields));
 });
 
 function emitMain(key, value) {

@@ -241,6 +241,15 @@ class Olo_Theme_Importer {
             $content = json_decode( $json_str, true );
             if ( ! $content ) continue;
 
+            // Formato file: lista di nodi (classico) OPPURE oggetto {settings, content}
+            // (esteso: porta anche i page settings del template, es. effetti di pagina
+            // page_grain_* / page_crt_* — tema "Clod — Evoluzione").
+            $tpl_settings = [];
+            if ( isset( $content['content'] ) && is_array( $content['content'] ) && ! isset( $content[0] ) ) {
+                $tpl_settings = ( isset( $content['settings'] ) && is_array( $content['settings'] ) ) ? $content['settings'] : [];
+                $content      = $content['content'];
+            }
+
             // Regenerate all IDs
             self::regenerate_ids( $content );
 
@@ -248,10 +257,11 @@ class Olo_Theme_Importer {
             $title = $tpl_meta['title'] ?? ucfirst( $key );
 
             $new_id = $db->create_template( [
-                'title'   => $title,
-                'type'    => $type,
-                'content' => $content,
-                'status'  => 'published',
+                'title'    => $title,
+                'type'     => $type,
+                'content'  => $content,
+                'settings' => $tpl_settings,
+                'status'   => 'published',
             ] );
 
             if ( $new_id ) {
@@ -294,6 +304,17 @@ class Olo_Theme_Importer {
             }
             update_option( 'olo_magnetic_cursor', Olo_Magnetic_Cursor::sanitize( $theme_json['cursor'] ) );
             $results['cursor'] = true;
+        }
+
+        // ── Step 5c: Global feature — HUD mirino (Olo_Cursor_Hud) ──
+        // Crosshair + coordinate + label sezione corrente (tema "sala di regia").
+        // Se la chiave 'cursor_hud' manca, l'HUD resta com'è (nessuna regressione).
+        if ( ! empty( $theme_json['cursor_hud'] ) && is_array( $theme_json['cursor_hud'] ) ) {
+            if ( ! class_exists( 'Olo_Cursor_Hud' ) ) {
+                require_once OLO_PATH . 'includes/class-cursor-hud.php';
+            }
+            update_option( 'olo_cursor_hud', Olo_Cursor_Hud::sanitize( $theme_json['cursor_hud'] ) );
+            $results['cursor_hud'] = true;
         }
 
         // ── Step 6: Create pages and assign templates ──

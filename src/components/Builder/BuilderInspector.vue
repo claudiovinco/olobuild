@@ -156,7 +156,11 @@
             :tabindex="activeTab === tab ? 0 : -1"
             :class="{ 'on': activeTab === tab }"
           >
-            {{ t(tab) }}
+            {{ t(tab) }}<span
+              v-if="searchActive && activeTab !== tab && searchTabCounts[tab]"
+              class="v2i-tab-count"
+              :title="t('Risultati della ricerca in questo tab')"
+            >{{ searchTabCounts[tab] }}</span>
           </button>
         </div>
       </div>
@@ -165,6 +169,17 @@
       <!-- ─── BODY: panel + rail ───────────────────────────────── -->
       <div class="v2i-body">
         <div ref="contentRef" class="v2i-content" :class="{ 'is-hover-mode': builderStore.editingHover }">
+
+        <!-- Ricerca cross-tab: nessun match nel tab corrente ma match altrove → link diretti -->
+        <div v-if="searchCrossTabHints.length" class="v2i-search-crosshint">
+          <span>{{ t('Nessun risultato in questo tab.') }}</span>
+          <button
+            v-for="h in searchCrossTabHints"
+            :key="h.tab"
+            type="button"
+            @click="onTabChange(h.tab)"
+          >{{ t(h.tab) }} ({{ h.count }})</button>
+        </div>
 
         <!-- ============ Content tab (data-driven) ============ -->
         <div v-if="activeTab === 'Contenuto'" class="mb-space-y-3" role="tabpanel" id="inspector-panel-Contenuto" :aria-labelledby="'inspector-tab-Contenuto'">
@@ -245,9 +260,10 @@
                 :id="contentSectionId(sIdx)"
                 :title="t(section.label)"
                 :defaultOpen="sIdx <= 1"
+                :forceOpen="searchActive"
               >
                 <template v-for="(field, fIdx) in section.fields" :key="field.key || ('f-' + sIdx + '-' + fIdx)">
-                  <template v-if="isFieldVisible(field)">
+                  <template v-if="isFieldVisible(field, section.label)">
                     <div v-if="field.type === 'content-items'">
                       <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t(field.label) }}</label>
                       <ContentItemsEditor
@@ -317,6 +333,7 @@
             :tileFields="elementDef?.styleFields || []"
             :tileSettings="selectedTile.settings || {}"
             :tileType="selectedTile.type"
+            :searchQuery="settingsSearch"
             @update="onStyleUpdate"
           />
         </div>
@@ -1067,6 +1084,55 @@
                   : magStatus === 'saved' ? t('✓ Salvato sul sito')
                   : t('Si salva da solo a ogni modifica — non serve il tasto Salva del template.') }}
               </p>
+
+              <!-- HUD mirino — impostazione GLOBALE del sito (option olo_cursor_hud,
+                   Olo_Cursor_Hud): crosshair full-viewport + coordinate px + label
+                   sezione. Stessa famiglia del cursore magnetico. -->
+              <div class="mb-border-t mb-border-gray-700 mb-pt-3 mb-mt-1"></div>
+              <div class="mb-flex mb-items-center mb-justify-between">
+                <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                  <input type="checkbox" :checked="hudCursor?.enabled === true" :disabled="!hudLoaded" @change="updateHud('enabled', $event.target.checked)" class="mb-accent-primary-500" />
+                  <span class="mb-text-xs mb-text-gray-300">{{ t('HUD mirino (linee + coordinate)') }}</span>
+                </label>
+                <span class="mb-text-[9px] mb-uppercase mb-tracking-wide mb-text-gray-500 mb-bg-gray-800 mb-rounded mb-px-1.5 mb-py-0.5">{{ t('Globale sito') }}</span>
+              </div>
+              <p class="mb-text-[10px] mb-text-gray-500 mb-leading-snug">{{ t('Due linee a tutto schermo seguono il puntatore, con coordinate in pixel e nome della sezione corrente. Vale per tutte le pagine; si disattiva su touch e con riduzione del movimento.') }}</p>
+              <template v-if="hudLoaded && hudCursor?.enabled">
+                <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                  <input type="checkbox" :checked="hudCursor.show_coords === true" @change="updateHud('show_coords', $event.target.checked)" class="mb-accent-primary-500" />
+                  <span class="mb-text-xs mb-text-gray-300">{{ t('Mostra coordinate (X · Y)') }}</span>
+                </label>
+                <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                  <input type="checkbox" :checked="hudCursor.show_label === true" @change="updateHud('show_label', $event.target.checked)" class="mb-accent-primary-500" />
+                  <span class="mb-text-xs mb-text-gray-300">{{ t('Mostra nome sezione') }}</span>
+                </label>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Colore linee') }}</label>
+                  <FieldColor :modelValue="hudCursor.line_color" @update:modelValue="updateHud('line_color', $event)" />
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Colore coordinate') }}</label>
+                  <FieldColor :modelValue="hudCursor.coords_color" @update:modelValue="updateHud('coords_color', $event)" />
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Colore nome sezione') }}</label>
+                  <FieldColor :modelValue="hudCursor.label_color" @update:modelValue="updateHud('label_color', $event)" />
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Dimensione testo') }}: {{ hudCursor.font_size }}px</label>
+                  <input type="range" min="7" max="24" step="1" :value="hudCursor.font_size" @input="updateHud('font_size', parseInt($event.target.value))" class="mb-w-full mb-accent-primary-500" />
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Distanza tag dal puntatore') }}: {{ hudCursor.tag_offset }}px</label>
+                  <input type="range" min="0" max="80" step="2" :value="hudCursor.tag_offset" @input="updateHud('tag_offset', parseInt($event.target.value))" class="mb-w-full mb-accent-primary-500" />
+                </div>
+              </template>
+              <p v-if="hudLoaded" class="mb-text-[10px]" :class="hudStatus === 'error' ? 'mb-text-red-400' : hudStatus === 'saved' ? 'mb-text-green-500' : 'mb-text-gray-500'">
+                {{ hudStatus === 'saving' ? t('Salvataggio…')
+                  : hudStatus === 'error' ? t('Errore di salvataggio — riprova')
+                  : hudStatus === 'saved' ? t('✓ Salvato sul sito')
+                  : t('Si salva da solo a ogni modifica — non serve il tasto Salva del template.') }}
+              </p>
             </div>
           </CollapseSection>
 
@@ -1315,8 +1381,10 @@ import ContentItemsEditor from './ContentItemsEditor.vue';
 import InspectorField from './InspectorField.vue';
 import StyleFieldsRenderer from './StyleFieldsRenderer.vue';
 import { styleFieldsBase } from '@/config/elements/_styleFieldsBase.js';
+import { normalizeSearchQuery, fieldMatchesSearch, sectionLabelMatchesSearch, countSearchMatches } from '@/utils/inspectorSearch.js';
 import FieldSpacing from './fields/FieldSpacing.vue';
 import FieldSelect from './fields/FieldSelect.vue';
+import FieldColor from './fields/FieldColor.vue';
 import CollapseSection from './CollapseSection.vue';
 import FieldBoxShadow from './fields/FieldBoxShadow.vue';
 import FieldTransform from './fields/FieldTransform.vue';
@@ -1566,6 +1634,54 @@ async function saveMagneticCursor() {
   magStatusTimer = setTimeout(() => { magStatus.value = ''; }, 2000);
 }
 
+// ── HUD mirino (impostazione GLOBALE, option olo_cursor_hud) ──
+// Stesso pattern del cursore magnetico: GET al mount, PUT debounced a ogni
+// modifica, merge lato server (si può inviare anche solo `enabled`).
+const hudCursor = ref(null);
+const hudLoaded = ref(false);
+const hudStatus = ref('');
+let hudSaveTimer = null;
+let hudStatusTimer = null;
+
+const HUD_ENDPOINT = `${(window.oloData?.restUrl || '').replace(/\/$/, '')}/cursor-hud`;
+
+async function loadCursorHud() {
+  try {
+    const res = await fetch(HUD_ENDPOINT, {
+      headers: { 'X-WP-Nonce': window.oloData.nonce },
+    });
+    if (res.ok) {
+      hudCursor.value = await res.json();
+      hudLoaded.value = true;
+    }
+  } catch (e) { /* pannello resta disabilitato */ }
+}
+
+function updateHud(key, value) {
+  if (!hudCursor.value) return;
+  hudCursor.value[key] = value;
+  clearTimeout(hudSaveTimer);
+  hudSaveTimer = setTimeout(saveCursorHud, 600);
+}
+
+async function saveCursorHud() {
+  hudStatus.value = 'saving';
+  try {
+    const res = await fetch(HUD_ENDPOINT, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+      body: JSON.stringify(hudCursor.value),
+    });
+    if (!res.ok) throw new Error();
+    hudCursor.value = await res.json();
+    hudStatus.value = 'saved';
+  } catch (e) {
+    hudStatus.value = 'error';
+  }
+  clearTimeout(hudStatusTimer);
+  hudStatusTimer = setTimeout(() => { hudStatus.value = ''; }, 2000);
+}
+
 const INFINITE_ANIMATION_OPTIONS = [
   { value: 'none', label: 'Nessuna' },
   { value: 'float', label: 'Galleggiamento' },
@@ -1627,6 +1743,8 @@ const activeTab = ref(
     : 'Contenuto'
 );
 const settingsSearch = ref('');
+const searchQ = computed(() => normalizeSearchQuery(settingsSearch.value));
+const searchActive = computed(() => !!searchQ.value);
 const showOnlyModified = ref(false);
 
 // V2 Inspector: rail icone con sezioni del tab corrente
@@ -1720,6 +1838,56 @@ const _advRailFixed = [
   { id: 'v2i-sec-adv-dev',        label: 'Sviluppatore',    icon: _railIcons.flask },
 ];
 
+// ── Ricerca cross-tab ──
+// Il tab Avanzate è markup statico (non data-driven): filtrare i suoi campi
+// field-by-field richiederebbe di instrumentare ~50 blocchi hard-coded, fuori
+// scope. Compromesso: indice statico delle label per il SOLO conteggio nel
+// badge del tab — la ricerca segnala che il setting esiste lì, il tab poi
+// mostra tutto. Tenere allineato se si aggiungono campi al tab Avanzate.
+const ADV_SEARCH_LABELS = [
+  'HTML ID', 'Classi CSS', 'CSS personalizzato',
+  'Visibilità', 'Visibilità condizionale', 'Mostra solo a', 'Mostra da data',
+  'Nascondi dopo data', 'Mostra solo su queste strutture',
+  'A/B Testing', 'Nome test', 'Obiettivo conversione', 'Selettore CSS obiettivo',
+  'Aria Label', 'Role', 'Link Rel', 'Link Title', 'Caricamento immagine',
+  'Fetch Priority', 'Schema.org', 'Data Attributes',
+  'Animazione di ingresso', 'Animazione allo scroll', 'Parallax allo scroll',
+  'Percorso Bezier allo scroll', 'Scroll fisso (sticky)', 'Effetti mouse',
+  'Animazione continua', 'Maschera forma', 'Tipo maschera', 'Clip-path CSS',
+  'Ritardo stagger (ms)', 'Durata (ms)', 'Ritardo iniziale (ms)', 'Intensità (×)',
+  'Curva di animazione', 'Ritardo (ms)', 'Stagger figli (ms)',
+  'Posizione', 'Distanza dal bordo (px)', 'Inversione (blend)', 'Colore luce',
+  'Direzione', 'Note editor', 'JavaScript personalizzato',
+  'Posizionamento', 'Modalità', 'Nascondi al raggiungimento di',
+];
+
+// Conteggio match per tab — alimenta i badge sui tab non attivi e l'hint
+// "Nessun risultato in questo tab".
+const searchTabCounts = computed(() => {
+  const q = searchQ.value;
+  if (!q) return {};
+  const styleFields = [
+    ...styleFieldsBase(selectedTile.value?.type),
+    ...(elementDef.value?.styleFields || []),
+  ];
+  return {
+    Contenuto: countSearchMatches(elementFields.value, q),
+    Stile:     countSearchMatches(styleFields, q),
+    Avanzate:  ADV_SEARCH_LABELS.filter(l => sectionLabelMatchesSearch(l, q)).length,
+  };
+});
+
+// Hint mostrato quando il tab corrente non ha match ma altri sì. Escluso il
+// tab Avanzate attivo: lì i campi non vengono filtrati, "nessun risultato"
+// sarebbe contraddetto dal pannello pieno.
+const searchCrossTabHints = computed(() => {
+  if (!searchActive.value || activeTab.value === 'Avanzate') return [];
+  if ((searchTabCounts.value[activeTab.value] || 0) > 0) return [];
+  return tabs
+    .filter(tab => tab !== activeTab.value && (searchTabCounts.value[tab] || 0) > 0)
+    .map(tab => ({ tab, count: searchTabCounts.value[tab] }));
+});
+
 function onTabChange(tab) {
   activeTab.value = tab;
   try { localStorage.setItem(ACTIVE_TAB_KEY, tab); } catch (_) {}
@@ -1791,6 +1959,7 @@ function setupScrollSpy() {
 
 onMounted(() => nextTick(setupScrollSpy));
 onMounted(loadMagneticCursor);
+onMounted(loadCursorHud);
 onUnmounted(() => {
   if (_scrollSpyObserver) {
     _scrollSpyObserver.disconnect();
@@ -2267,7 +2436,7 @@ function ensureContentItems(tile, field) {
   return init;
 }
 
-function isFieldVisible(field) {
+function isFieldVisible(field, sectionLabel = null) {
   const settings = selectedTile.value?.settings || {};
   if (field.condition && !evaluateCondition(field.condition, settings)) return false;
   if (typeof field.show === 'function' && !field.show(settings)) return false;
@@ -2277,10 +2446,11 @@ function isFieldVisible(field) {
     const def = (elementDef.value?.defaults || {})[field.key];
     if (isFieldDefault(cur, def)) return false;
   }
-  // Search filter
-  const q = settingsSearch.value.trim().toLowerCase();
-  if (q && field.label) {
-    return field.label.toLowerCase().includes(q) || (field.key || '').toLowerCase().includes(q);
+  // Search filter (helper condiviso col tab Stile): se la label della sezione
+  // matcha, tutta la sezione resta visibile.
+  if (searchQ.value) {
+    if (sectionLabelMatchesSearch(sectionLabel, searchQ.value)) return true;
+    return fieldMatchesSearch(field, searchQ.value);
   }
   return true;
 }
@@ -2325,7 +2495,7 @@ const groupedSections = computed(() => {
  * Check if a section has at least one visible field.
  */
 function sectionHasVisibleFields(section) {
-  return section.fields.some(f => isFieldVisible(f));
+  return section.fields.some(f => isFieldVisible(f, section.label));
 }
 
 const tileStyle = computed(() => selectedTile.value?.style || {});
@@ -6238,6 +6408,55 @@ function updateDynamicItemMap(itemMap) {
   background: var(--olo-color-primary, #e8622a);
   color: #fff;
   box-shadow: 0 1px 3px rgba(232, 98, 42, 0.3);
+}
+
+/* Badge conteggio match ricerca sui tab non attivi */
+.v2i-tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  margin-left: 5px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  background: var(--olo-color-primary, #e1474f);
+  color: #fff;
+  vertical-align: middle;
+}
+
+/* Hint cross-tab: nessun match nel tab corrente, match altrove */
+.v2i-search-crosshint {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  margin-bottom: 12px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #64748b;
+}
+.v2i-search-crosshint button {
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.v2i-search-crosshint button:hover {
+  border-color: var(--olo-color-primary, #e1474f);
+  color: var(--olo-color-primary, #e1474f);
 }
 
 /* BODY: content + rail */

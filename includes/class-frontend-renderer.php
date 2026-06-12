@@ -1186,6 +1186,11 @@ class Olo_Frontend_Renderer {
             'bookingpicker', 'calendar', 'loginform', 'scrollprogress',
             'popup', 'megamenu', 'navmenu', 'togglebtn',
             'blendtext', 'textmask', 'shatteredimage', 'svganimator',
+            // filmreel (scroll_mode pin): riserva l'altezza della corsa al load — col
+            // placeholder lazy da 50px un salto da scrollbar atterra oltre la sezione
+            // prima che esista e il pin non aggancia. evonotes: layer globale che si
+            // ancora alle sezioni della pagina, deve nascere al load.
+            'filmreel', 'evonotes',
         ];
         if ( in_array( $type, $no_lazy, true ) ) {
             return $html;
@@ -4231,11 +4236,32 @@ class Olo_Frontend_Renderer {
             if ( $page_bg['type'] === 'image' && ! empty( $page_bg['image_url'] ) ) :
                 $pg_size = esc_attr( $page_bg['image_size'] ?? 'cover' );
                 $pg_pos  = esc_attr( $page_bg['image_position'] ?? 'center center' );
-                $pg_parallax_attr = $this->anim->build_uk_parallax_attr( $page_bg );
+                // Parallax sfondo pagina: NIENTE uk-parallax qui. Il layer è alto
+                // quanto l'intera pagina, quindi UIkit ne diluirebbe il progresso su
+                // tutto lo scroll (movimento impercettibile). Lo script dedicato
+                // olo-pagebg-parallax.js completa l'animazione sulla prima schermata.
+                $pg_par = $page_bg['parallax'] ?? null;
+                $pg_par_json = '';
+                if ( ! empty( $pg_par ) ) {
+                    if ( ! is_array( $pg_par ) ) {
+                        // Legacy boolean flat format → converti in stops.
+                        $legacy_bgy = intval( $page_bg['parallax_bgy'] ?? -200 );
+                        $legacy_bgx = intval( $page_bg['parallax_bgx'] ?? 0 );
+                        $pg_par = [ 'nomobile' => ! empty( $page_bg['parallax_nomobile'] ) ];
+                        if ( $legacy_bgy !== 0 ) {
+                            $pg_par['bgy'] = [ [ 'value' => $legacy_bgy, 'position' => 0 ], [ 'value' => 0, 'position' => 100 ] ];
+                        }
+                        if ( $legacy_bgx !== 0 ) {
+                            $pg_par['bgx'] = [ [ 'value' => $legacy_bgx, 'position' => 0 ], [ 'value' => 0, 'position' => 100 ] ];
+                        }
+                    }
+                    $pg_par_json = wp_json_encode( $pg_par );
+                    wp_enqueue_script( 'olo-pagebg-parallax-js', OLO_URL . 'assets/js/olo-pagebg-parallax.js', [], OLO_VERSION, true );
+                }
             ?>
                 <div class="olo-tile-bg"
                     style="background-image: url(<?php echo esc_url( $page_bg['image_url'] ); ?>); background-size: <?php echo $pg_size; ?>; background-position: <?php echo $pg_pos; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $pg_size/$pg_pos esc_attr()'d at assignment above ?>; background-repeat: no-repeat"
-                    <?php echo $pg_parallax_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- uk-parallax attribute built by Olo_Animation_Builder::build_uk_parallax_attr() from intval()/floatval() values ?>
+                    <?php if ( $pg_par_json ) : ?> data-olo-pagebg-parallax="<?php echo esc_attr( $pg_par_json ); ?>"<?php endif; ?>
                 ></div>
             <?php endif; ?>
             <?php
@@ -4263,6 +4289,11 @@ class Olo_Frontend_Renderer {
                 }
                 ?>
             </div>
+            <?php
+            // Effetti di pagina (CRT / grana): prima venivano emessi solo nella preview
+            // builder (render_tiles_array) — ora anche sul frontend reale.
+            echo $this->render_page_effects( $page_settings ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup assembled by render_page_effects() from sanitized settings
+            ?>
             <?php if ( ! empty( $hover_css_rules ) || ! empty( $this->responsive_css_rules ) ) :
                 $all_css = implode( ' ', $hover_css_rules );
                 foreach ( $this->responsive_css_rules as $max_w => $rules ) {
@@ -4461,67 +4492,88 @@ class Olo_Frontend_Renderer {
             (function(){
               var lazys = document.querySelectorAll('[data-olo-lazy]');
               if(!lazys.length) return;
+              function hydrate(target){
+                // ":scope > template" matcha SOLO il template figlio DIRETTO.
+                // Senza :scope, il querySelector pescherebbe template di
+                // data-olo-lazy ANNIDATI (es. widget dentro switcher), inserendo
+                // il loro content nel data-olo-lazy padre sbagliato.
+                var tpl = target.querySelector(':scope > template');
+                if(!tpl) return;
+                var ph = target.querySelector('.olo-lazy-ph');
+                if(ph) ph.remove();
+                var frag = document.importNode(tpl.content, true);
+                var scripts = frag.querySelectorAll('script');
+                var pending = [];
+                scripts.forEach(function(s){ pending.push(s); });
+                pending.forEach(function(s){ s.parentNode.removeChild(s); });
+                target.appendChild(frag);
+                tpl.remove();
+                // Riosserva i data-olo-lazy ANNIDATI appena introdotti.
+                // L'observer iniziale non li conosceva (erano dentro <template>),
+                // quindi senza questo step restano svuoti per sempre.
+                target.querySelectorAll('[data-olo-lazy]').forEach(function(nested){
+                  if (!nested.dataset.oloLazyObserved) {
+                    nested.dataset.oloLazyObserved = '1';
+                    obs.observe(nested);
+                  }
+                });
+                // Re-init UIkit components sui nuovi elementi (es. switcher, tab, slider...)
+                // — UIkit usa MutationObserver ma a volte salta gli inserimenti via importNode/template.
+                // Stesso pattern del builder iframe-bridge.js::reinitUIkit().
+                if (window.UIkit && typeof window.UIkit.update === 'function') {
+                  try {
+                    var ukNames = ['slider','slideshow','lightbox','grid','scrollspy','accordion','tab','switcher','countdown','filter','parallax','sticky','navbar','drop','dropdown'];
+                    ukNames.forEach(function(name){
+                      target.querySelectorAll('[uk-' + name + '],[data-uk-' + name + ']').forEach(function(el){
+                        try { if (UIkit[name]) UIkit[name](el); } catch(_){}
+                      });
+                    });
+                    UIkit.update(target);
+                  } catch(_){}
+                }
+                (function runScripts(list, parent){
+                  if(!list.length) return;
+                  var old = list.shift();
+                  var ns = document.createElement('script');
+                  Array.from(old.attributes).forEach(function(a){ ns.setAttribute(a.name, a.value); });
+                  if(old.src){
+                    ns.onload = ns.onerror = function(){ runScripts(list, parent); };
+                    parent.appendChild(ns);
+                  } else {
+                    ns.textContent = old.textContent;
+                    parent.appendChild(ns);
+                    runScripts(list, parent);
+                  }
+                })(pending, target);
+              }
               var obs = new IntersectionObserver(function(entries){
                 entries.forEach(function(e){
                   if(e.isIntersecting){
-                    // ":scope > template" matcha SOLO il template figlio DIRETTO.
-                    // Senza :scope, il querySelector pescherebbe template di
-                    // data-olo-lazy ANNIDATI (es. widget dentro switcher), inserendo
-                    // il loro content nel data-olo-lazy padre sbagliato.
-                    var tpl = e.target.querySelector(':scope > template');
-                    if(tpl){
-                      var ph = e.target.querySelector('.olo-lazy-ph');
-                      if(ph) ph.remove();
-                      var frag = document.importNode(tpl.content, true);
-                      var scripts = frag.querySelectorAll('script');
-                      var pending = [];
-                      scripts.forEach(function(s){ pending.push(s); });
-                      pending.forEach(function(s){ s.parentNode.removeChild(s); });
-                      e.target.appendChild(frag);
-                      tpl.remove();
-                      // Riosserva i data-olo-lazy ANNIDATI appena introdotti.
-                      // L'observer iniziale non li conosceva (erano dentro <template>),
-                      // quindi senza questo step restano svuoti per sempre.
-                      e.target.querySelectorAll('[data-olo-lazy]').forEach(function(nested){
-                        if (!nested.dataset.oloLazyObserved) {
-                          nested.dataset.oloLazyObserved = '1';
-                          obs.observe(nested);
-                        }
-                      });
-                      // Re-init UIkit components sui nuovi elementi (es. switcher, tab, slider...)
-                      // — UIkit usa MutationObserver ma a volte salta gli inserimenti via importNode/template.
-                      // Stesso pattern del builder iframe-bridge.js::reinitUIkit().
-                      if (window.UIkit && typeof window.UIkit.update === 'function') {
-                        try {
-                          var ukNames = ['slider','slideshow','lightbox','grid','scrollspy','accordion','tab','switcher','countdown','filter','parallax','sticky','navbar','drop','dropdown'];
-                          ukNames.forEach(function(name){
-                            e.target.querySelectorAll('[uk-' + name + '],[data-uk-' + name + ']').forEach(function(el){
-                              try { if (UIkit[name]) UIkit[name](el); } catch(_){}
-                            });
-                          });
-                          UIkit.update(e.target);
-                        } catch(_){}
-                      }
-                      (function runScripts(list, parent){
-                        if(!list.length) return;
-                        var old = list.shift();
-                        var ns = document.createElement('script');
-                        Array.from(old.attributes).forEach(function(a){ ns.setAttribute(a.name, a.value); });
-                        if(old.src){
-                          ns.onload = ns.onerror = function(){ runScripts(list, parent); };
-                          parent.appendChild(ns);
-                        } else {
-                          ns.textContent = old.textContent;
-                          parent.appendChild(ns);
-                          runScripts(list, parent);
-                        }
-                      })(pending, e.target);
-                    }
+                    hydrate(e.target);
                     obs.unobserve(e.target);
                   }
                 });
               }, {rootMargin: '200px'});
               lazys.forEach(function(el){ obs.observe(el); });
+              /* Salti lunghi (trascinamento scrollbar, anchor): i blocchi lazy rimasti
+                 SOPRA il viewport non intersecano mai l'observer → resterebbero
+                 collassati a 50px, spostando tutto il layout sotto (atterraggi
+                 sbagliati, sticky/pin che non agganciano). Allo scroll, idrata
+                 subito tutto ciò che è già stato superato. */
+              var jtk = false;
+              window.addEventListener('scroll', function(){
+                if(jtk) return; jtk = true;
+                requestAnimationFrame(function(){
+                  jtk = false;
+                  document.querySelectorAll('[data-olo-lazy]').forEach(function(el){
+                    if(!el.querySelector(':scope > template')) return;
+                    if(el.getBoundingClientRect().bottom < 0){
+                      hydrate(el);
+                      obs.unobserve(el);
+                    }
+                  });
+                });
+              }, {passive: true});
             })();
             </script>
             <script>
@@ -4944,6 +4996,48 @@ class Olo_Frontend_Renderer {
      * Render an array of tiles (used for builder preview of header/footer).
      * Outputs HTML directly (use with ob_start/ob_get_clean).
      */
+    /**
+     * Effetti di pagina (Impostazioni Pagina → Effetti di pagina): decoratori
+     * full-viewport renderizzati DOPO il grid. Unico punto di verità, chiamato
+     * sia dal render frontend del template sia da render_tiles_array (preview).
+     *
+     *   - page_crt_*   → Overlay CRT (scanline + vignetta), Olo_Crtoverlay_Tile::render()
+     *   - page_grain_* → Grana pellicola, Olo_Crtoverlay_Tile::render_grain()
+     *
+     * @param array $page_settings
+     * @return string HTML ('' se nessun effetto attivo)
+     */
+    private function render_page_effects( $page_settings ) {
+        if ( ! is_array( $page_settings ) || ! class_exists( 'Olo_Crtoverlay_Tile' ) ) {
+            return '';
+        }
+        $out = '';
+
+        if ( ! empty( $page_settings['page_crt_enabled'] ) ) {
+            $out .= ( new Olo_Crtoverlay_Tile() )->render( [
+                'scanline_opacity' => intval( $page_settings['page_crt_scanline_opacity'] ?? 50 ),
+                'scanline_gap'     => intval( $page_settings['page_crt_scanline_gap'] ?? 3 ),
+                'vignette'         => intval( $page_settings['page_crt_vignette'] ?? 55 ),
+                'blend_mode'       => $page_settings['page_crt_blend_mode'] ?? 'overlay',
+                'flicker'          => ! empty( $page_settings['page_crt_flicker'] ),
+                'flicker_speed'    => intval( $page_settings['page_crt_flicker_speed'] ?? 8 ),
+                'z_index'          => intval( $page_settings['page_crt_z_index'] ?? 200 ),
+            ] );
+        }
+
+        if ( ! empty( $page_settings['page_grain_enabled'] ) ) {
+            $out .= Olo_Crtoverlay_Tile::render_grain( [
+                'opacity' => intval( $page_settings['page_grain_opacity'] ?? 7 ),
+                'size'    => intval( $page_settings['page_grain_size'] ?? 240 ),
+                'z_index' => intval( $page_settings['page_grain_z_index'] ?? 95 ),
+                'animate' => array_key_exists( 'page_grain_animate', $page_settings ) ? ! empty( $page_settings['page_grain_animate'] ) : true,
+                'mobile'  => ! empty( $page_settings['page_grain_mobile'] ),
+            ] );
+        }
+
+        return $out;
+    }
+
     public function render_tiles_array( $tiles, $page_settings = [] ) {
         if ( empty( $tiles ) || ! is_array( $tiles ) ) {
             return;
@@ -4972,20 +5066,8 @@ class Olo_Frontend_Renderer {
         }
         echo '</div>';
 
-        // Effetto di pagina: Overlay CRT (decoratore di pagina, da Impostazioni Pagina → Effetti di pagina).
-        if ( ! empty( $page_settings['page_crt_enabled'] ) && class_exists( 'Olo_Crtoverlay_Tile' ) ) {
-            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- overlay HTML assembled by Olo_Crtoverlay_Tile::render() (escapes its own output) from intval()'d settings; blend mode whitelisted inside the tile.
-            echo ( new Olo_Crtoverlay_Tile() )->render( [
-                'scanline_opacity' => intval( $page_settings['page_crt_scanline_opacity'] ?? 50 ),
-                'scanline_gap'     => intval( $page_settings['page_crt_scanline_gap'] ?? 3 ),
-                'vignette'         => intval( $page_settings['page_crt_vignette'] ?? 55 ),
-                'blend_mode'       => $page_settings['page_crt_blend_mode'] ?? 'overlay',
-                'flicker'          => ! empty( $page_settings['page_crt_flicker'] ),
-                'flicker_speed'    => intval( $page_settings['page_crt_flicker_speed'] ?? 8 ),
-                'z_index'          => intval( $page_settings['page_crt_z_index'] ?? 200 ),
-            ] );
-            // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
-        }
+        // Effetti di pagina (Impostazioni Pagina → Effetti di pagina).
+        echo $this->render_page_effects( $page_settings ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup assembled by render_page_effects() from sanitized settings
 
         if ( ! empty( $hover_css_rules ) || ! empty( $this->responsive_css_rules ) ) {
             $all_css = implode( ' ', $hover_css_rules );

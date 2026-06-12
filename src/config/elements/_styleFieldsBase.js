@@ -35,19 +35,21 @@ export function styleFieldsBase(tileType) {
     // campi dimensionali (responsive) lo seguono. Chiavi salvate INVARIATE: full_width,
     // tile_width[_bp], tile_max_width[_bp], tile_min_height[_bp], overflow. Le tile strutturali
     // (section/row/column) sono gestite dentro il componente (solo altezza minima + overflow).
+    // searchTerms: i pannelli compatti non hanno label/key propria — senza questi
+    // alias la ricerca impostazioni ("Cerca impostazione...") non li troverebbe mai.
     { type: 'separator', label: t('Layout') },
-    { type: 'layout-stack' },
+    { type: 'layout-stack', searchTerms: ['layout', 'larghezza', 'width', 'altezza', 'height', 'overflow', 'dimensioni', 'larghezza piena', 'full width', 'minima', 'massima'] },
 
     // ─── SPAZI & BORDI (pannello unico compatto: margine/padding/raggio) ───
     // Sostituisce le sezioni separate "Spaziatura" e "Border radius" con un solo
     // pannello impilato (design handoff boxcontrol). Stesse chiavi salvate:
     // margin_*/padding_* (per-breakpoint) e border_radius (+ style.hover.border_radius).
     { type: 'separator', label: t('Spazi & Bordi') },
-    { type: 'box-stack' },
+    { type: 'box-stack', searchTerms: ['margine', 'margin', 'padding', 'spaziatura', 'spacing', 'raggio', 'radius', 'bordo', 'border', 'angoli', 'arrotonda'] },
 
     // ─── SFONDO ─────────────────────────────────────────────────
     { type: 'separator', label: t('Sfondo') },
-    { key: 'bg', label: t('Sfondo'), type: 'background', showParallax: true },
+    { key: 'bg', label: t('Sfondo'), type: 'background', showParallax: true, searchTerms: ['background', 'sfondo', 'colore', 'immagine', 'gradiente', 'video', 'parallax'] },
 
     // ─── EFFETTI BORDO ──────────────────────────────────────────
     // Il CONTROLLO bordo (style.border / border_<bp> per-device / border_hover) ora vive
@@ -64,7 +66,7 @@ export function styleFieldsBase(tileType) {
     // (collect_hover_css): shadow/shadow_custom, opacity, transform (oggetto; hover su chiavi
     // piatte transform_*), text_shadow_*, backdrop_*, mask (non hoverable).
     { type: 'separator', label: t('Effetti') },
-    { type: 'effects-stack' },
+    { type: 'effects-stack', searchTerms: ['ombra', 'shadow', 'opacità', 'opacity', 'trasformazione', 'transform', 'scala', 'scale', 'rotazione', 'rotate', 'filtro', 'filter', 'backdrop', 'blur', 'glassmorphism', 'maschera', 'mask', 'effetti'] },
 
     // ─── BLEND MODE WRAPPER ─────────────────────────────────────
     // mix-blend-mode sul wrapper del tile/contenitore: utile per nav/heading che

@@ -1,0 +1,105 @@
+[
+ {
+  "id": "ce-fse",
+  "type": "section",
+  "settings": { "style": "default", "width": "default", "padding": "large" },
+  "style": { "bg": { "type": "solid", "color": "#0b0c0f" } },
+  "advanced": {},
+  "children": [
+   { "id": "ce-fro1", "type": "row", "settings": { "layout": "50-25-25", "gap": 30, "vertical_align": "top" }, "style": {}, "advanced": {}, "children": [
+    { "id": "ce-fco1", "type": "column", "settings": { "width": "1-2", "width_medium": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ce-fbrand", "type": "headline", "settings": {
+        "heading": "clod.eu",
+        "accent_text": ".",
+        "accent_color": "#E94955",
+        "tag": "h3",
+        "heading_font": "heading",
+        "heading_font_size": 46,
+        "heading_color": "#ECEAE3",
+        "subtitle": ""
+       }, "style": {}, "advanced": {}, "children": [] },
+     { "id": "ce-fdesc", "type": "text-block", "settings": {
+        "content": "<p>R&S · divisione idee — project media manager.<br/>Strategia, media e identità per le aziende che vogliono farsi vedere.</p>",
+        "text_color": "#a0a298",
+        "font_size": 14
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]},
+    { "id": "ce-fco2", "type": "column", "settings": { "width": "1-4", "width_medium": "1-2" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ce-fh4a", "type": "headline", "settings": {
+        "heading": "STUDIO",
+        "tag": "h4",
+        "heading_font": "mono",
+        "heading_font_size": 11,
+        "heading_color": "#6a6c64",
+        "subtitle": ""
+       }, "style": {}, "advanced": {}, "children": [] },
+     { "id": "ce-fnava", "type": "nav", "settings": {
+        "items": [
+          { "id": "ce-fn-1", "title": "Servizi", "content": "/#servizi", "tag": "" },
+          { "id": "ce-fn-2", "title": "Lavori", "content": "/#lavori", "tag": "" },
+          { "id": "ce-fn-3", "title": "R&S · OLObuild", "content": "/#rs", "tag": "" },
+          { "id": "ce-fn-4", "title": "info@clod.eu", "content": "mailto:info@clod.eu", "tag": "" }
+        ],
+        "direction": "vertical",
+        "show_icons": false,
+        "font_size": "14",
+        "link_color": "#a0a298",
+        "link_hover_color": "#E94955"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]},
+    { "id": "ce-fco3", "type": "column", "settings": { "width": "1-4", "width_medium": "1-2" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ce-fh4b", "type": "headline", "settings": {
+        "heading": "SEDE",
+        "tag": "h4",
+        "heading_font": "mono",
+        "heading_font_size": 11,
+        "heading_color": "#6a6c64",
+        "subtitle": ""
+       }, "style": {}, "advanced": {}, "children": [] },
+     { "id": "ce-fnavb", "type": "nav", "settings": {
+        "items": [
+          { "id": "ce-fs-1", "title": "38122 Trento — Italia", "content": "", "tag": "" },
+          { "id": "ce-fs-2", "title": "P.I. IT02621900220", "content": "", "tag": "" },
+          { "id": "ce-fs-3", "title": "LinkedIn ↗", "content": "https://www.linkedin.com/in/vincoclaudio", "tag": "" },
+          { "id": "ce-fs-4", "title": "Privacy & Cookie", "content": "/privacy-policy/", "tag": "" }
+        ],
+        "direction": "vertical",
+        "show_icons": false,
+        "font_size": "14",
+        "link_color": "#a0a298",
+        "link_hover_color": "#E94955"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]},
+   { "id": "ce-fro2", "type": "row", "settings": { "layout": "100", "gap": 0, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
+    { "id": "ce-fcod", "type": "column", "settings": { "width": "1-1", "width_medium": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ce-fdiv", "type": "divider", "settings": {
+        "style": "solid",
+        "width": 100,
+        "thickness": 1,
+        "color": "rgba(236,234,227,.10)",
+        "alignment": "center",
+        "spacing": 22
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]},
+   { "id": "ce-fro3", "type": "row", "settings": { "layout": "50-50", "gap": 14, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
+    { "id": "ce-fcob1", "type": "column", "settings": { "width": "1-2", "width_medium": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ce-fbot1", "type": "text-block", "settings": {
+        "content": "<p>© 2026 clod.eu — tutti i diritti riservati</p>",
+        "text_color": "#6a6c64",
+        "font_size": 12
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]},
+    { "id": "ce-fcob2", "type": "column", "settings": { "width": "1-2", "width_medium": "1-1" }, "style": {}, "advanced": {}, "children": [
+     { "id": "ce-fbot2", "type": "text-block", "settings": {
+        "content": "<p>Questo sito è un OLOtheme · costruito con OLObuild</p>",
+        "text_color": "#6a6c64",
+        "font_size": "12",
+        "text_align": "right"
+       }, "style": {}, "advanced": {}, "children": [] }
+    ]}
+   ]}
+  ]
+ }
+]

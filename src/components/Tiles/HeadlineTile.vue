@@ -3,15 +3,15 @@
     <!-- Line decoration -->
     <div v-if="s.decoration === 'line'" class="mb-flex mb-items-center mb-gap-4 mb-mb-1" :style="{ justifyContent: alignJustify }">
       <span v-if="effectiveAlignment !== 'left'" class="mb-flex-1" style="height:1px;" :style="{ background: decoColor }"></span>
-      <component :is="s.tag" v-if="isMultiline" class="mb-m-0 mb-leading-tight" :style="headingStyle" data-olo-editable="heading" v-html="headingText"></component>
-      <component :is="s.tag" v-else class="mb-m-0 mb-leading-tight mb-whitespace-nowrap" :style="headingStyle" data-olo-editable="heading">{{ headingText }}</component>
+      <component :is="s.tag" v-if="headingHtml" class="mb-m-0 mb-leading-tight" :style="headingStyle" data-olo-editable="heading" data-olo-wave v-html="headingHtml"></component>
+      <component :is="s.tag" v-else class="mb-m-0 mb-leading-tight mb-whitespace-nowrap" :style="headingStyle" data-olo-editable="heading" data-olo-wave>{{ headingText }}</component>
       <span v-if="effectiveAlignment !== 'right'" class="mb-flex-1" style="height:1px;" :style="{ background: decoColor }"></span>
     </div>
 
     <!-- Divider decoration -->
     <template v-else-if="s.decoration === 'divider'">
-      <component :is="s.tag" v-if="isMultiline" class="mb-m-0 mb-leading-tight mb-pb-3 mb-mb-1" style="border-bottom:1px solid;" :style="{ ...headingStyle, borderColor: decoColor }" data-olo-editable="heading" v-html="headingText"></component>
-      <component :is="s.tag" v-else class="mb-m-0 mb-leading-tight mb-pb-3 mb-mb-1" style="border-bottom:1px solid;" :style="{ ...headingStyle, borderColor: decoColor }" data-olo-editable="heading">{{ headingText }}</component>
+      <component :is="s.tag" v-if="headingHtml" class="mb-m-0 mb-leading-tight mb-pb-3 mb-mb-1" style="border-bottom:1px solid;" :style="{ ...headingStyle, borderColor: decoColor }" data-olo-editable="heading" data-olo-wave v-html="headingHtml"></component>
+      <component :is="s.tag" v-else class="mb-m-0 mb-leading-tight mb-pb-3 mb-mb-1" style="border-bottom:1px solid;" :style="{ ...headingStyle, borderColor: decoColor }" data-olo-editable="heading" data-olo-wave>{{ headingText }}</component>
     </template>
 
     <!-- Other decorations (dot, star, none) -->
@@ -22,8 +22,8 @@
       <div v-if="s.decoration === 'star'" class="mb-mb-2" :style="{ display: 'flex', justifyContent: alignJustify, gap: (s.decoration_spacing || 6) + 'px', fontSize: '1.5em', color: decoColor }">
         <span v-for="n in decoCount" :key="n">&#x2605;</span>
       </div>
-      <component :is="s.tag" v-if="isMultiline" class="mb-m-0 mb-leading-tight" :style="headingStyle" data-olo-editable="heading" v-html="headingText"></component>
-      <component :is="s.tag" v-else class="mb-m-0 mb-leading-tight" :style="headingStyle" data-olo-editable="heading">{{ headingText }}</component>
+      <component :is="s.tag" v-if="headingHtml" class="mb-m-0 mb-leading-tight" :style="headingStyle" data-olo-editable="heading" data-olo-wave v-html="headingHtml"></component>
+      <component :is="s.tag" v-else class="mb-m-0 mb-leading-tight" :style="headingStyle" data-olo-editable="heading" data-olo-wave>{{ headingText }}</component>
     </template>
 
     <!-- Subtitle -->
@@ -49,17 +49,45 @@ const s = computed(() => ({ ...buildDefaults('headline'), ...props.settings }));
 const sizeMap = { sm: '1.25em', md: '1.75em', lg: '2.25em', xl: '3em' };
 
 // Strip any legacy HTML tags from heading, support multiline via \n or <br>
-const headingText = computed(() => {
+const headingPlain = computed(() => {
   let text = (s.value.heading || '');
   // Convert <br> to \n before stripping other tags
   text = text.replace(/<br\s*\/?>/gi, '\n');
-  text = text.replace(/<[^>]*>/g, '').trim();
+  return text.replace(/<[^>]*>/g, '').trim();
+});
+const headingText = computed(() => {
+  const text = headingPlain.value;
   return text.includes('\n') ? text.replace(/\n/g, '<br>') : text;
 });
 const isMultiline = computed(() => {
   const text = (s.value.heading || '');
   return text.includes('\n') || /<br\s*\/?>/i.test(text);
 });
+
+// Testo accento — gemello del PHP: la PRIMA occorrenza di accent_text nel titolo viene
+// avvolta in uno <span> colorato. Split sulla prima occorrenza + escape delle singole
+// parti (mai v-html di stringhe non escapate); colore via safe token-first.
+const escHtml = (t) => t
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#039;');
+const accentColor = computed(() => resolveColor(s.value.accent_color, TOKENS.primary));
+const accentHtml = computed(() => {
+  const acc = String(s.value.accent_text || '').trim();
+  if (!acc) return '';
+  const plain = headingPlain.value;
+  const pos = plain.indexOf(acc);
+  if (pos === -1) return '';
+  const hasNl = plain.includes('\n');
+  const part = (t) => { const e = escHtml(t); return hasNl ? e.replace(/\n/g, '<br>') : e; };
+  return part(plain.slice(0, pos))
+    + '<span style="color:' + accentColor.value + ';">' + escHtml(acc) + '</span>'
+    + part(plain.slice(pos + acc.length));
+});
+// HTML del titolo quando serve v-html: accento (parti escapate) oppure multiriga (<br>).
+const headingHtml = computed(() => accentHtml.value || (isMultiline.value ? headingText.value : ''));
 
 // Responsive alignment
 const effectiveAlignment = computed(() => rv(props.settings, 'alignment', s.value.alignment, builderStore.viewMode));

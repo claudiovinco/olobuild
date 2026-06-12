@@ -82,6 +82,31 @@
           <span class="mb-text-xs mb-text-gray-300">{{ t('Sfarfallio animato') }}</span>
         </label>
       </template>
+
+      <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+        <input type="checkbox" :checked="pageSettings.page_grain_enabled === true" @change="builderStore.updatePageSetting('page_grain_enabled', $event.target.checked)" class="mb-accent-primary-500" />
+        <span class="mb-text-xs mb-text-gray-300">{{ t('Grana pellicola') }}</span>
+      </label>
+      <p class="mb-text-[10px] mb-text-gray-500 mb-leading-snug">{{ t('Rumore organico a tutta pagina, animato a scatti come una pellicola. Statico con riduzione del movimento.') }}</p>
+      <template v-if="pageSettings.page_grain_enabled">
+        <div>
+          <label class="mb-block mb-text-xs mb-text-gray-400 mb-mb-1">{{ t('Intensità grana') }}: {{ pageSettings.page_grain_opacity ?? 7 }}%</label>
+          <input type="range" min="1" max="30" step="1" :value="pageSettings.page_grain_opacity ?? 7" @input="builderStore.updatePageSetting('page_grain_opacity', parseInt($event.target.value))" class="mb-w-full mb-accent-primary-500" />
+        </div>
+        <div>
+          <label class="mb-block mb-text-xs mb-text-gray-400 mb-mb-1">{{ t('Dimensione pattern (px)') }}: {{ pageSettings.page_grain_size ?? 240 }}</label>
+          <input type="range" min="80" max="480" step="20" :value="pageSettings.page_grain_size ?? 240" @input="builderStore.updatePageSetting('page_grain_size', parseInt($event.target.value))" class="mb-w-full mb-accent-primary-500" />
+        </div>
+        <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+          <input type="checkbox" :checked="(pageSettings.page_grain_animate ?? true) === true" @change="builderStore.updatePageSetting('page_grain_animate', $event.target.checked)" class="mb-accent-primary-500" />
+          <span class="mb-text-xs mb-text-gray-300">{{ t('Animazione a scatti') }}</span>
+        </label>
+        <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+          <input type="checkbox" :checked="pageSettings.page_grain_mobile === true" @change="builderStore.updatePageSetting('page_grain_mobile', $event.target.checked)" class="mb-accent-primary-500" />
+          <span class="mb-text-xs mb-text-gray-300">{{ t('Mostra anche su touch/mobile') }}</span>
+        </label>
+        <p class="mb-text-[10px] mb-text-gray-500 mb-leading-snug">{{ t('Di default la grana è disattivata sui dispositivi touch: il layer in blend a tutto schermo può rendere lo scorrimento meno fluido.') }}</p>
+      </template>
     </div>
 
     <!-- Separator -->

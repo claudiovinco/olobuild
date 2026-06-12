@@ -230,6 +230,20 @@ class Olo_Rest_Api {
             ],
         ] );
 
+        // HUD mirino globale (option olo_cursor_hud → Olo_Cursor_Hud)
+        register_rest_route( $this->namespace, '/cursor-hud', [
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'get_cursor_hud' ],
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+            [
+                'methods'             => 'PUT',
+                'callback'            => [ $this, 'save_cursor_hud' ],
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
         // Header activation
         register_rest_route( $this->namespace, '/header/activate', [
             [
@@ -2113,6 +2127,30 @@ class Olo_Rest_Api {
         $merged = array_merge( Olo_Magnetic_Cursor::get_settings(), $b );
         $clean  = Olo_Magnetic_Cursor::sanitize( $merged );
         update_option( Olo_Magnetic_Cursor::OPT, $clean, false );
+        return rest_ensure_response( $clean );
+    }
+
+    // === HUD mirino globale (crosshair + coordinate) ===
+
+    public function get_cursor_hud() {
+        if ( ! class_exists( 'Olo_Cursor_Hud' ) ) {
+            require_once OLO_PATH . 'includes/class-cursor-hud.php';
+        }
+        return rest_ensure_response( Olo_Cursor_Hud::get_settings() );
+    }
+
+    public function save_cursor_hud( $request ) {
+        if ( ! class_exists( 'Olo_Cursor_Hud' ) ) {
+            require_once OLO_PATH . 'includes/class-cursor-hud.php';
+        }
+        $b = $request->get_json_params();
+        if ( ! is_array( $b ) ) {
+            return new WP_Error( 'invalid_data', __( 'Dati non validi.', 'olobuild' ), [ 'status' => 400 ] );
+        }
+        // Merge sull'esistente: il pannello può inviare anche solo `enabled`.
+        $merged = array_merge( Olo_Cursor_Hud::get_settings(), $b );
+        $clean  = Olo_Cursor_Hud::sanitize( $merged );
+        update_option( Olo_Cursor_Hud::OPT, $clean, false );
         return rest_ensure_response( $clean );
     }
 

@@ -957,7 +957,15 @@ class Olo_Style_System {
             return '';
         }
         if ( class_exists( 'Olo_Font_Host' ) ) {
-            return Olo_Font_Host::get_font_face_css( $fonts );
+            // I temi possono richiedere pesi extra (es. Big Shoulders 800/900) via
+            // olo_styles.google_fonts_weights, formato css2 "300;400;...;900".
+            $weights = '300;400;500;600;700';
+            $styles  = get_option( 'olo_styles', [] );
+            if ( is_array( $styles ) && ! empty( $styles['google_fonts_weights'] )
+                && preg_match( '/^[0-9;]+$/', (string) $styles['google_fonts_weights'] ) ) {
+                $weights = (string) $styles['google_fonts_weights'];
+            }
+            return Olo_Font_Host::get_font_face_css( $fonts, $weights );
         }
         return '';
     }
