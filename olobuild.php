@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Page builder professionale olonico con sistema a griglia (tile drag & drop).
- * Version:     1.4.226
+ * Version:     1.4.227
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuild
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '1.4.226' );
+define( 'OLO_VERSION', '1.4.227' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
 
@@ -455,30 +455,9 @@ require_once OLO_PATH . 'includes/class-maintenance-mode.php';
 require_once OLO_PATH . 'includes/class-analytics-tracking.php';
 require_once OLO_PATH . 'includes/class-diagnostics.php';
 Olo_Diagnostics::init();
-// OLOsecurity — moduli di sicurezza (bundled). Se è attivo il plugin OLOsecurity
-// STANDALONE, ha lui la precedenza: qui non si dichiara nulla (le classi condividono
-// i nomi, due copie caricate = fatal). Il doppio check copre sia il caricamento
-// alfabetico (olobuild prima di olosecurity → serve guardare active_plugins) sia i
-// plugin network-attivati (caricati prima → serve class_exists).
-$olosec_standalone = in_array( 'olosecurity/olosecurity.php', (array) get_option( 'active_plugins', [] ), true );
-if ( ! $olosec_standalone && ! class_exists( 'Olo_Security_Sentinel' ) ) {
-    define( 'OLOSEC_VERSION', OLO_VERSION );
-    define( 'OLOSEC_PATH', OLO_PATH );
-    define( 'OLOSEC_URL', OLO_URL );
-    require_once OLO_PATH . 'includes/class-security-audit.php';
-    require_once OLO_PATH . 'includes/class-security-config-monitor.php';
-    require_once OLO_PATH . 'includes/class-security-components.php';
-    require_once OLO_PATH . 'includes/class-security-login.php';
-    require_once OLO_PATH . 'includes/class-security-hardening.php';
-    require_once OLO_PATH . 'includes/class-security-twofactor.php';
-    require_once OLO_PATH . 'includes/class-security-sentinel.php';
-    Olo_Security_Audit::maybe_install();
-    Olo_Security_Audit::init();
-    Olo_Security_Login::init();
-    Olo_Security_Hardening::init();
-    Olo_Security_TwoFactor::init();
-    Olo_Security_Sentinel::init();
-}
+// OLOsecurity è un plugin INDIPENDENTE (repo claudiovinco/olosecurity) dalla
+// v1.4.227: OLObuild non bundla più i moduli di sicurezza. Se installato, si
+// aggancia da solo al menu di OLObuild.
 require_once OLO_PATH . 'includes/class-critical-css.php';
 require_once OLO_PATH . 'includes/class-ab-testing.php';
 require_once OLO_PATH . 'includes/class-cookie-consent.php';
