@@ -539,12 +539,14 @@ class Olo_Site_Import_Export {
         $out = [];
         foreach ( $pages as $p ) {
             $out[] = [
-                'title'       => $p->post_title,
-                'slug'        => $p->post_name,
-                'status'      => $p->post_status,
-                'content'     => $p->post_content,
-                'template_id' => intval( get_post_meta( $p->ID, '_olo_template_id', true ) ),
-                'is_front'    => ( $p->ID === $front_id ),
+                'title'          => $p->post_title,
+                'slug'           => $p->post_name,
+                'status'         => $p->post_status,
+                'content'        => $p->post_content,
+                'template_id'    => intval( get_post_meta( $p->ID, '_olo_template_id', true ) ),
+                'is_front'       => ( $p->ID === $front_id ),
+                'comment_status' => $p->comment_status,
+                'ping_status'    => $p->ping_status,
             ];
         }
         return $out;
@@ -569,26 +571,36 @@ class Olo_Site_Import_Export {
             $slug     = sanitize_title( $pg['slug'] ?? '' );
             $existing = $slug ? get_page_by_path( $slug, OBJECT, 'page' ) : null;
 
+            // Stato commenti/ping dal pacchetto (default: chiusi — le pagine
+            // template non sono pensate per i commenti; una pagina riusata con
+            // commenti aperti mostrerebbe il box commenti sotto il template).
+            $comment_status = ( ( $pg['comment_status'] ?? 'closed' ) === 'open' ) ? 'open' : 'closed';
+            $ping_status    = ( ( $pg['ping_status'] ?? 'closed' ) === 'open' ) ? 'open' : 'closed';
+
             if ( $existing ) {
                 // Pagina riusata = MIGRATA: titolo e contenuto arrivano dal
                 // pacchetto, altrimenti il vecchio post_content resta in pagina
                 // e viene renderizzato DOPO il template (auto_render_template
                 // fa prepend, non replace) — "contenuto fantasma" prima del footer.
                 wp_update_post( [
-                    'ID'           => $existing->ID,
-                    'post_title'   => sanitize_text_field( $pg['title'] ?? $existing->post_title ),
-                    'post_content' => wp_kses_post( $pg['content'] ?? '' ),
+                    'ID'             => $existing->ID,
+                    'post_title'     => sanitize_text_field( $pg['title'] ?? $existing->post_title ),
+                    'post_content'   => wp_kses_post( $pg['content'] ?? '' ),
+                    'comment_status' => $comment_status,
+                    'ping_status'    => $ping_status,
                 ] );
                 update_post_meta( $existing->ID, '_olo_template_id', $tpl_new );
                 $page_id = $existing->ID;
             } else {
                 $status  = in_array( $pg['status'] ?? 'publish', [ 'publish', 'draft', 'private' ], true ) ? $pg['status'] : 'publish';
                 $page_id = wp_insert_post( [
-                    'post_type'    => 'page',
-                    'post_title'   => sanitize_text_field( $pg['title'] ?? 'Pagina importata' ),
-                    'post_name'    => $slug,
-                    'post_status'  => $status,
-                    'post_content' => wp_kses_post( $pg['content'] ?? '' ),
+                    'post_type'      => 'page',
+                    'post_title'     => sanitize_text_field( $pg['title'] ?? 'Pagina importata' ),
+                    'post_name'      => $slug,
+                    'post_status'    => $status,
+                    'post_content'   => wp_kses_post( $pg['content'] ?? '' ),
+                    'comment_status' => $comment_status,
+                    'ping_status'    => $ping_status,
                 ] );
                 if ( ! $page_id || is_wp_error( $page_id ) ) {
                     continue;
