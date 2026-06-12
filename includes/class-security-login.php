@@ -4,13 +4,15 @@
  *
  *  - Rate-limit dei tentativi di login per IP con lockout temporaneo (anti brute-force).
  *  - Blocklist IP permanente: gli IP/CIDR elencati ricevono 403 su tutto il sito.
+ *  - Escalation automatica: un IP recidivo (più lockout nella finestra di 24 ore)
+ *    viene promosso da solo nella blocklist permanente.
  *  - Stop alla user-enumeration: blocca ?author=N agli anonimi e l'endpoint REST
  *    /wp/v2/users a chi non può elencare gli utenti.
  *
  * I tentativi falliti e i lockout finiscono nel registro attività (Olo_Security_Audit).
  *
  * Impostazioni (option olo_sec_login):
- *   enabled, max_attempts, lockout_min, block_user_enum
+ *   enabled, max_attempts, lockout_min, block_user_enum, auto_block, auto_block_strikes
  * Blocklist (option olo_sec_blocklist, autoload on): array di IP o reti CIDR.
  */
 
@@ -26,10 +28,12 @@ class Olo_Security_Login {
 
     public static function defaults() {
         return [
-            'enabled'         => 1,
-            'max_attempts'    => 5,
-            'lockout_min'     => 15,
-            'block_user_enum' => 1,
+            'enabled'            => 1,
+            'max_attempts'       => 5,
+            'lockout_min'        => 15,
+            'block_user_enum'    => 1,
+            'auto_block'         => 1,
+            'auto_block_strikes' => 2,
         ];
     }
 
@@ -165,7 +169,9 @@ class Olo_Security_Login {
     // ── Brute-force ────────────────────────────────────────────────────────
     //
     // Stato in un'unica option (olo_sec_login_state) gestita via API WordPress:
-    //   [ 'fails' => [ iphash => ['count'=>n,'exp'=>ts] ], 'locks' => [ iphash => exp_ts ] ]
+    //   [ 'fails'   => [ iphash => ['count'=>n,'exp'=>ts] ],
+    //     'locks'   => [ iphash => exp_ts ],
+    //     'strikes' => [ iphash => ['count'=>n,'exp'=>ts] ] ]  ← lockout distinti (recidiva)
     // Più robusto dei transient per-IP: get/update/delete_option invalidano la cache
     // correttamente (anche con object cache esterni) ed è enumerabile per lo sblocco.
 
@@ -188,6 +194,13 @@ class Olo_Security_Login {
             foreach ( $state['locks'] as $k => $exp ) {
                 if ( $exp < $now ) {
                     unset( $state['locks'][ $k ] );
+                }
+            }
+        }
+        if ( ! empty( $state['strikes'] ) ) {
+            foreach ( $state['strikes'] as $k => $v ) {
+                if ( ( $v['exp'] ?? 0 ) < $now ) {
+                    unset( $state['strikes'][ $k ] );
                 }
             }
         }
@@ -229,6 +242,10 @@ class Olo_Security_Login {
         $state['fails'][ $ip ] = [ 'count' => $count, 'exp' => $now + $window ];
 
         if ( $count >= $max ) {
+            // Durante un lockout i tentativi continuano ad arrivare qui (il filtro
+            // authenticate li respinge ma wp_login_failed scatta lo stesso): il lock
+            // si estende, ma conta come recidiva solo un lockout NUOVO.
+            $is_new_lockout        = empty( $state['locks'][ $ip ] ) || $state['locks'][ $ip ] <= $now;
             $state['locks'][ $ip ] = $now + $window;
             if ( class_exists( 'Olo_Security_Audit' ) ) {
                 Olo_Security_Audit::log(
@@ -238,14 +255,66 @@ class Olo_Security_Login {
                     [ 'user_id' => 0, 'user_login' => (string) $username ]
                 );
             }
+            if ( $is_new_lockout ) {
+                self::register_strike( $state, $ip, $s );
+            }
         }
         update_option( self::STATE, $state, false );
+    }
+
+    /**
+     * Registra un lockout come "recidiva" per l'IP corrente e, raggiunta la soglia,
+     * lo promuove nella blocklist permanente. Le recidive scadono 24 ore dopo
+     * l'ultimo lockout (finestra scorrevole). Niente anti-autoblocco qui: chi fa
+     * scattare più lockout È l'IP da bloccare; lo sblocco resta possibile dalla
+     * textarea Blocklist IP (da altro IP) o via wp-cli.
+     */
+    private static function register_strike( &$state, $iphash, $settings ) {
+        if ( empty( $settings['auto_block'] ) ) {
+            return;
+        }
+        $count = (int) ( $state['strikes'][ $iphash ]['count'] ?? 0 ) + 1;
+        $state['strikes'][ $iphash ] = [ 'count' => $count, 'exp' => time() + DAY_IN_SECONDS ];
+
+        if ( $count < max( 1, (int) $settings['auto_block_strikes'] ) ) {
+            return;
+        }
+
+        // Lo stato è indicizzato per hash, ma l'escalation avviene durante una
+        // richiesta dell'IP colpevole: l'IP in chiaro è quello della richiesta.
+        $real_ip = Olo_Security_Audit::client_ip();
+        if ( ! filter_var( $real_ip, FILTER_VALIDATE_IP ) || $real_ip === '0.0.0.0' || md5( $real_ip ) !== $iphash ) {
+            return;
+        }
+
+        unset( $state['strikes'][ $iphash ], $state['fails'][ $iphash ], $state['locks'][ $iphash ] );
+
+        $list = self::get_blocklist();
+        foreach ( $list as $entry ) {
+            if ( self::ip_matches( $real_ip, $entry ) ) {
+                return; // già coperto da una voce esistente
+            }
+        }
+        $list[] = $real_ip;
+        update_option( self::BLOCKLIST, $list, true );
+
+        Olo_Security_Audit::log(
+            'blocklist',
+            sprintf(
+                /* translators: 1: IP address, 2: number of lockouts */
+                __( 'IP %1$s aggiunto automaticamente alla blocklist permanente dopo %2$d lockout in 24 ore.', 'olobuild' ),
+                $real_ip,
+                $count
+            ),
+            'high',
+            [ 'user_id' => 0 ]
+        );
     }
 
     public static function on_success( $user_login, $user = null ) {
         $state = self::get_state();
         $ip    = self::iphash();
-        unset( $state['fails'][ $ip ], $state['locks'][ $ip ] );
+        unset( $state['fails'][ $ip ], $state['locks'][ $ip ], $state['strikes'][ $ip ] );
         update_option( self::STATE, $state, false );
     }
 
@@ -284,10 +353,12 @@ class Olo_Security_Login {
 
     public static function save_settings( $post ) {
         $s = [
-            'enabled'         => empty( $post['olo_login_enabled'] ) ? 0 : 1,
-            'max_attempts'    => max( 1, min( 50, (int) ( $post['olo_login_max'] ?? 5 ) ) ),
-            'lockout_min'     => max( 1, min( 1440, (int) ( $post['olo_login_lockout'] ?? 15 ) ) ),
-            'block_user_enum' => empty( $post['olo_login_enum'] ) ? 0 : 1,
+            'enabled'            => empty( $post['olo_login_enabled'] ) ? 0 : 1,
+            'max_attempts'       => max( 1, min( 50, (int) ( $post['olo_login_max'] ?? 5 ) ) ),
+            'lockout_min'        => max( 1, min( 1440, (int) ( $post['olo_login_lockout'] ?? 15 ) ) ),
+            'block_user_enum'    => empty( $post['olo_login_enum'] ) ? 0 : 1,
+            'auto_block'         => empty( $post['olo_login_autoblock'] ) ? 0 : 1,
+            'auto_block_strikes' => max( 1, min( 20, (int) ( $post['olo_login_autoblock_strikes'] ?? 2 ) ) ),
         ];
         update_option( self::OPT, $s, false );
 
@@ -377,6 +448,22 @@ class Olo_Security_Login {
             <tr>
                 <th scope="row"><?php esc_html_e( 'Durata blocco (minuti)', 'olobuild' ); ?></th>
                 <td><input type="number" min="1" max="1440" name="olo_login_lockout" value="<?php echo esc_attr( $s['lockout_min'] ); ?>" class="small-text"></td>
+            </tr>
+            <tr>
+                <th scope="row"><?php esc_html_e( 'Blocklist automatica', 'olobuild' ); ?></th>
+                <td>
+                    <label>
+                        <input type="checkbox" name="olo_login_autoblock" value="1" <?php checked( ! empty( $s['auto_block'] ) ); ?>>
+                        <?php esc_html_e( 'Sposta nella Blocklist IP permanente gli IP recidivi', 'olobuild' ); ?>
+                    </label>
+                    <p>
+                        <label>
+                            <?php esc_html_e( 'Dopo quanti lockout (nell\'arco di 24 ore):', 'olobuild' ); ?>
+                            <input type="number" min="1" max="20" name="olo_login_autoblock_strikes" value="<?php echo esc_attr( $s['auto_block_strikes'] ); ?>" class="small-text">
+                        </label>
+                    </p>
+                    <p class="description"><?php esc_html_e( 'Un IP che fa scattare più volte il blocco temporaneo viene aggiunto da solo alla Blocklist IP qui sotto (403 permanente su tutto il sito) e registrato nel registro attività. Le voci aggiunte automaticamente compaiono nella textarea e si rimuovono come le altre.', 'olobuild' ); ?></p>
+                </td>
             </tr>
             <tr>
                 <th scope="row"><?php esc_html_e( 'Stop user-enumeration', 'olobuild' ); ?></th>
