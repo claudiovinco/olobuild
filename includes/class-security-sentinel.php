@@ -1044,8 +1044,9 @@ class Olo_Security_Sentinel {
                 return __( 'Report CSP svuotati.', 'olobuild' );
 
             case 'save_settings':
+                $login_warn = '';
                 if ( class_exists( 'Olo_Security_Login' ) ) {
-                    Olo_Security_Login::save_settings( $_POST );
+                    $login_warn = (string) Olo_Security_Login::save_settings( $_POST );
                 }
                 if ( class_exists( 'Olo_Security_Hardening' ) ) {
                     Olo_Security_Hardening::save_settings( $_POST );
@@ -1055,7 +1056,7 @@ class Olo_Security_Sentinel {
                     'enabled' => empty( $_POST['olo_sec_webhook_enabled'] ) ? 0 : 1,
                     'url'     => esc_url_raw( wp_unslash( $_POST['olo_sec_webhook_url'] ?? '' ) ),
                 ], false );
-                return __( 'Impostazioni salvate.', 'olobuild' );
+                return trim( __( 'Impostazioni salvate.', 'olobuild' ) . ' ' . $login_warn );
         }
         return '';
     }
