@@ -362,7 +362,31 @@ class Olo_Security_Login {
         ];
         update_option( self::OPT, $s, false );
 
-        return self::save_blocklist( (string) wp_unslash( $post['olo_blocklist'] ?? '' ) );
+        return trim(
+            self::save_blocklist( (string) wp_unslash( $post['olo_blocklist'] ?? '' ) )
+            . ' ' .
+            self::save_trusted_proxies( (string) wp_unslash( $post['olo_trusted_proxies'] ?? '' ) )
+        );
+    }
+
+    /** Salva i proxy fidati extra (una voce per riga, IP o CIDR). Ritorna un eventuale avviso. */
+    private static function save_trusted_proxies( $raw ) {
+        $valid   = [];
+        $invalid = [];
+        foreach ( preg_split( '/[\r\n,]+/', $raw ) as $line ) {
+            $entry = trim( sanitize_text_field( $line ) );
+            if ( $entry === '' || in_array( $entry, $valid, true ) ) {
+                continue;
+            }
+            if ( self::valid_blocklist_entry( $entry ) ) {
+                $valid[] = $entry;
+            } else {
+                $invalid[] = $entry;
+            }
+        }
+        // Autoload on: letta da client_ip() a ogni richiesta.
+        update_option( Olo_Security_Audit::OPT_PROXIES, $valid, true );
+        return $invalid ? sprintf( __( 'Proxy non validi ignorati: %s.', 'olobuild' ), implode( ', ', $invalid ) ) : '';
     }
 
     /**
@@ -479,6 +503,20 @@ class Olo_Security_Login {
                 <td>
                     <textarea name="olo_blocklist" rows="4" class="large-text code" placeholder="203.0.113.7&#10;198.51.100.0/24"><?php echo esc_textarea( implode( "\n", self::get_blocklist() ) ); ?></textarea>
                     <p class="description"><?php esc_html_e( 'Blocco permanente: questi IP ricevono 403 su tutto il sito. Una voce per riga: IP singolo o rete CIDR (es. 198.51.100.0/24). Il tuo IP attuale non può essere aggiunto. Sblocco di emergenza via wp-cli: wp option delete olo_sec_blocklist', 'olobuild' ); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><?php esc_html_e( 'Proxy fidati', 'olobuild' ); ?></th>
+                <td>
+                    <?php
+                    $proxies = get_option( Olo_Security_Audit::OPT_PROXIES, [] );
+                    $proxies = is_array( $proxies ) ? $proxies : [];
+                    ?>
+                    <textarea name="olo_trusted_proxies" rows="2" class="large-text code" placeholder="203.0.113.10&#10;198.51.100.0/24"><?php echo esc_textarea( implode( "\n", $proxies ) ); ?></textarea>
+                    <p class="description">
+                        <?php esc_html_e( 'Gli header proxy (X-Forwarded-For, CF-Connecting-IP) vengono creduti solo se la connessione arriva da Cloudflare, da una rete locale o da queste voci: così nessuno può fingersi un altro IP per evadere i blocchi. Aggiungi qui solo eventuali reverse proxy/CDN diversi da Cloudflare.', 'olobuild' ); ?>
+                        <?php echo esc_html( sprintf( __( 'IP rilevato per questa richiesta: %s', 'olobuild' ), Olo_Security_Audit::client_ip() ) ); ?>
+                    </p>
                 </td>
             </tr>
         </table>

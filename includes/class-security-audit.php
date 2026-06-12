@@ -249,17 +249,123 @@ class Olo_Security_Audit {
 
     // ── Helper ───────────────────────────────────────────────────────────
 
-    /** IP client, controllando con prudenza l'header proxy. Condiviso con gli altri moduli. */
+    /** Option: IP/CIDR extra da trattare come proxy fidati (textarea nelle impostazioni). */
+    const OPT_PROXIES = 'olo_sec_trusted_proxies';
+
+    /**
+     * Range pubblicati da Cloudflare (www.cloudflare.com/ips): se la connessione
+     * arriva da qui, CF-Connecting-IP e X-Forwarded-For sono parola del proxy.
+     */
+    private static $cf_ranges = [
+        '173.245.48.0/20', '103.21.244.0/22', '103.22.200.0/22', '103.31.4.0/22',
+        '141.101.64.0/18', '108.162.192.0/18', '190.93.240.0/20', '188.114.96.0/20',
+        '197.234.240.0/22', '198.41.128.0/17', '162.158.0.0/15', '104.16.0.0/13',
+        '104.24.0.0/14', '172.64.0.0/13', '131.0.72.0/22',
+        '2400:cb00::/32', '2606:4700::/32', '2803:f800::/32', '2405:b500::/32',
+        '2405:8100::/32', '2a06:98c0::/29', '2c0f:f248::/32',
+    ];
+
+    /** Reti private/loopback: un REMOTE_ADDR di qui è un reverse proxy locale, non un visitatore. */
+    private static $local_ranges = [
+        '127.0.0.0/8', '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16',
+        '169.254.0.0/16', '::1/128', 'fc00::/7', 'fe80::/10',
+    ];
+
+    /**
+     * IP del client. Gli header proxy (X-Forwarded-For, CF-Connecting-IP,
+     * X-Real-IP) sono CREDUTI solo se la connessione arriva da un proxy fidato
+     * (Cloudflare, rete locale, o le voci configurate): in connessione diretta
+     * il client li scrive lui, e fidarsene permetteva di evadere il lockout
+     * anti brute-force ruotando un X-Forwarded-For inventato.
+     */
     public static function client_ip() {
-        if ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
-            $ips = explode( ',', sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) );
-            $ip  = trim( $ips[0] );
-            if ( filter_var( $ip, FILTER_VALIDATE_IP ) ) {
-                return $ip;
+        $remote = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+        if ( ! filter_var( $remote, FILTER_VALIDATE_IP ) ) {
+            return '0.0.0.0';
+        }
+        if ( ! self::is_trusted_proxy( $remote ) ) {
+            return $remote; // connessione diretta: l'unico IP affidabile è quello del socket
+        }
+
+        // Dietro Cloudflare l'header garantito è CF-Connecting-IP.
+        if ( self::ip_in_ranges( $remote, self::$cf_ranges ) && ! empty( $_SERVER['HTTP_CF_CONNECTING_IP'] ) ) {
+            $cf = trim( sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_CONNECTING_IP'] ) ) );
+            if ( filter_var( $cf, FILTER_VALIDATE_IP ) ) {
+                return $cf;
             }
         }
-        $remote = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
-        return filter_var( $remote, FILTER_VALIDATE_IP ) ? $remote : '0.0.0.0';
+
+        // X-Forwarded-For: il proxy APPENDE a destra. Si scorre da destra saltando
+        // i proxy fidati: il primo IP non-fidato è il client reale; ciò che il
+        // client ha eventualmente premesso a sinistra resta ignorato.
+        if ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+            $parts = array_reverse( explode( ',', sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) ) );
+            foreach ( $parts as $p ) {
+                $p = trim( $p );
+                if ( ! filter_var( $p, FILTER_VALIDATE_IP ) ) {
+                    continue;
+                }
+                if ( ! self::is_trusted_proxy( $p ) ) {
+                    return $p;
+                }
+            }
+        }
+
+        if ( ! empty( $_SERVER['HTTP_X_REAL_IP'] ) ) {
+            $rp = trim( sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_REAL_IP'] ) ) );
+            if ( filter_var( $rp, FILTER_VALIDATE_IP ) ) {
+                return $rp;
+            }
+        }
+        return $remote;
+    }
+
+    /** True se l'IP è un proxy di cui credere gli header. */
+    public static function is_trusted_proxy( $ip ) {
+        if ( self::ip_in_ranges( $ip, self::$local_ranges ) || self::ip_in_ranges( $ip, self::$cf_ranges ) ) {
+            return true;
+        }
+        $extra = get_option( self::OPT_PROXIES, [] );
+        return is_array( $extra ) && $extra && self::ip_in_ranges( $ip, $extra );
+    }
+
+    private static function ip_in_ranges( $ip, $ranges ) {
+        foreach ( (array) $ranges as $entry ) {
+            if ( self::cidr_match( $ip, (string) $entry ) ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** IP esatto oppure rete CIDR (IPv4/IPv6). Stessa semantica della blocklist. */
+    private static function cidr_match( $ip, $entry ) {
+        $ipb = @inet_pton( $ip );
+        if ( $ipb === false ) {
+            return false;
+        }
+        if ( strpos( $entry, '/' ) === false ) {
+            $eb = @inet_pton( trim( $entry ) );
+            return $eb !== false && $eb === $ipb;
+        }
+        list( $net, $bits ) = array_pad( explode( '/', $entry, 2 ), 2, '' );
+        $netb = @inet_pton( trim( $net ) );
+        $bits = (int) $bits;
+        if ( $netb === false || strlen( $netb ) !== strlen( $ipb ) || $bits < 1 || $bits > strlen( $netb ) * 8 ) {
+            return false;
+        }
+        $bytes = intdiv( $bits, 8 );
+        $rem   = $bits % 8;
+        if ( $bytes > 0 && substr( $ipb, 0, $bytes ) !== substr( $netb, 0, $bytes ) ) {
+            return false;
+        }
+        if ( $rem > 0 ) {
+            $mask = ( 0xFF << ( 8 - $rem ) ) & 0xFF;
+            if ( ( ord( $ipb[ $bytes ] ) & $mask ) !== ( ord( $netb[ $bytes ] ) & $mask ) ) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static function short( $v ) {

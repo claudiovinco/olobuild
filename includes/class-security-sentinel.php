@@ -109,7 +109,7 @@ class Olo_Security_Sentinel {
 
         $status['content']   = $content;
         $status['last_scan'] = time();
-        $status['level']     = self::level_from( array_merge( $content, $status['files'] ?? [], $status['config'] ?? [], $status['components'] ?? [] ) );
+        $status['level']     = self::level_from( array_merge( $content, $status['files'] ?? [], $status['core'] ?? [], $status['config'] ?? [], $status['components'] ?? [] ) );
         update_option( self::OPT_STATUS, $status, false );
 
         self::maybe_alert( $content, $prev_content );
@@ -123,11 +123,13 @@ class Olo_Security_Sentinel {
             isset( $prev['content'] ) && is_array( $prev['content'] ) ? $prev['content'] : [],
             isset( $prev['files'] ) && is_array( $prev['files'] ) ? $prev['files'] : [],
             isset( $prev['config'] ) && is_array( $prev['config'] ) ? $prev['config'] : [],
-            isset( $prev['components'] ) && is_array( $prev['components'] ) ? $prev['components'] : []
+            isset( $prev['components'] ) && is_array( $prev['components'] ) ? $prev['components'] : [],
+            isset( $prev['core'] ) && is_array( $prev['core'] ) ? $prev['core'] : []
         );
 
         $content    = self::scan_content();
         $files      = self::scan_files();
+        $core       = self::scan_core();
         $config     = class_exists( 'Olo_Security_Config_Monitor' ) ? Olo_Security_Config_Monitor::scan() : [];
         $components = class_exists( 'Olo_Security_Components' ) ? Olo_Security_Components::scan() : [];
 
@@ -135,9 +137,10 @@ class Olo_Security_Sentinel {
             'last_scan'  => time(),
             'content'    => $content,
             'files'      => $files,
+            'core'       => $core,
             'config'     => $config,
             'components' => $components,
-            'level'      => self::level_from( array_merge( $content, $files, $config, $components ) ),
+            'level'      => self::level_from( array_merge( $content, $files, $core, $config, $components ) ),
         ];
         update_option( self::OPT_STATUS, $status, false );
 
@@ -146,8 +149,8 @@ class Olo_Security_Sentinel {
             Olo_Security_Audit::cleanup( 90 );
         }
 
-        // Alert su nuovi finding ad alta severità (contenuti, file, configurazione, componenti).
-        self::maybe_alert( array_merge( $content, $files, $config, $components ), $prev_all );
+        // Alert su nuovi finding ad alta severità (contenuti, file, core, configurazione, componenti).
+        self::maybe_alert( array_merge( $content, $files, $core, $config, $components ), $prev_all );
         return $status;
     }
 
@@ -157,6 +160,9 @@ class Olo_Security_Sentinel {
 
     /** @return array Lista di finding: ['slot','severity','label','snippet']. */
     public static function scan_content() {
+        if ( ! defined( 'OLO_VERSION' ) ) {
+            return []; // il codice personalizzato è una feature di OLObuild: senza, niente da scansionare
+        }
         $findings = [];
         $slots = [
             'head'   => __( 'Codice personalizzato — Head', 'olobuild' ),
@@ -259,7 +265,7 @@ class Olo_Security_Sentinel {
         $hashes = self::hash_baseline_files();
         $theme  = wp_get_theme();
         update_option( self::OPT_BASE, [
-            'version'       => defined( 'OLO_VERSION' ) ? OLO_VERSION : '0',
+            'version'       => defined( 'OLOSEC_VERSION' ) ? OLOSEC_VERSION : '0',
             'theme_version' => $theme ? ( $theme->get_stylesheet() . '@' . $theme->get( 'Version' ) ) : '',
             'created'       => time(),
             'hashes'        => $hashes,
@@ -277,7 +283,7 @@ class Olo_Security_Sentinel {
     public static function scan_files() {
         $findings = [];
         $baseline = get_option( self::OPT_BASE, [] );
-        $cur_ver  = defined( 'OLO_VERSION' ) ? OLO_VERSION : '0';
+        $cur_ver  = defined( 'OLOSEC_VERSION' ) ? OLOSEC_VERSION : '0';
         $theme    = wp_get_theme();
         $cur_tv   = $theme ? ( $theme->get_stylesheet() . '@' . $theme->get( 'Version' ) ) : '';
 
@@ -356,7 +362,7 @@ class Olo_Security_Sentinel {
         $hashes = [];
 
         // File del plugin.
-        $root = defined( 'OLO_PATH' ) ? OLO_PATH : plugin_dir_path( __FILE__ ) . '../';
+        $root = defined( 'OLOSEC_PATH' ) ? OLOSEC_PATH : plugin_dir_path( __FILE__ ) . '../';
         self::hash_tree( $root, '', $hashes );
 
         // wp-config.php.
@@ -416,7 +422,7 @@ class Olo_Security_Sentinel {
         if ( strpos( $rel, '[theme:' ) === 0 && preg_match( '/^\[theme:([^\]]+)\]\s(.+)$/', $rel, $m ) ) {
             return wp_normalize_path( trailingslashit( get_theme_root() ) . $m[1] . '/' . $m[2] );
         }
-        $root = defined( 'OLO_PATH' ) ? OLO_PATH : plugin_dir_path( __FILE__ ) . '../';
+        $root = defined( 'OLOSEC_PATH' ) ? OLOSEC_PATH : plugin_dir_path( __FILE__ ) . '../';
         return wp_normalize_path( $root ) . $rel;
     }
 
@@ -660,6 +666,108 @@ class Olo_Security_Sentinel {
         return false;
     }
 
+    // ──────────────────────────────────────────────────────────────────────
+    //  Integrità del core WordPress (checksum ufficiali api.wordpress.org)
+    // ──────────────────────────────────────────────────────────────────────
+
+    /** Finding massimi della scansione core prima di troncare l'elenco. */
+    const CORE_FINDINGS_CAP = 40;
+
+    /**
+     * Confronta i file del core con i checksum md5 ufficiali di wordpress.org
+     * per la versione/locale installata: nessuna baseline da mantenere, la
+     * fonte di verità è l'API (cache 12 ore). Copre wp-admin/, wp-includes/
+     * e i .php/.js di root; wp-content/ è territorio di baseline plugin,
+     * monitor componenti e scanner uploads. Segnala anche i .php ESTRANEI
+     * dentro wp-admin/wp-includes (il posto preferito dei dropper).
+     *
+     * @return array Finding ['severity','label','path'].
+     */
+    public static function scan_core() {
+        $sums = self::core_checksums();
+        if ( ! $sums ) {
+            return []; // API non raggiungibile: meglio nessun controllo che un falso allarme
+        }
+
+        // Rimuoverli è hardening legittimo, non un'infezione.
+        $removable = [ 'xmlrpc.php', 'wp-config-sample.php' ];
+
+        $out = [];
+        foreach ( $sums as $rel => $md5 ) {
+            if ( strpos( $rel, 'wp-content/' ) === 0 ) {
+                continue;
+            }
+            $ext = strtolower( pathinfo( $rel, PATHINFO_EXTENSION ) );
+            if ( $ext !== 'php' && $ext !== 'js' ) {
+                continue; // html/txt variano col locale, il resto è inerte
+            }
+            $abs = ABSPATH . $rel;
+            if ( ! file_exists( $abs ) ) {
+                if ( ! in_array( $rel, $removable, true ) ) {
+                    $out[] = [ 'severity' => 'medium', 'label' => __( 'File del core mancante', 'olobuild' ), 'path' => $rel ];
+                }
+            } elseif ( md5_file( $abs ) !== $md5 ) {
+                $out[] = [ 'severity' => 'high', 'label' => __( 'File del core modificato (checksum ufficiale non corrispondente)', 'olobuild' ), 'path' => $rel ];
+            }
+            if ( count( $out ) >= self::CORE_FINDINGS_CAP ) {
+                $out[] = [ 'severity' => 'high', 'label' => __( 'Elenco troncato: il core presenta molte differenze, probabile compromissione o versione non corrispondente.', 'olobuild' ), 'path' => '—' ];
+                return $out;
+            }
+        }
+
+        foreach ( [ 'wp-admin', 'wp-includes' ] as $dir ) {
+            $root = ABSPATH . $dir;
+            if ( ! is_dir( $root ) ) {
+                continue;
+            }
+            try {
+                $it = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $root, FilesystemIterator::SKIP_DOTS ) );
+            } catch ( Exception $e ) {
+                continue;
+            }
+            foreach ( $it as $f ) {
+                if ( ! $f->isFile() || strtolower( $f->getExtension() ) !== 'php' ) {
+                    continue;
+                }
+                $rel = ltrim( str_replace( wp_normalize_path( ABSPATH ), '', wp_normalize_path( $f->getPathname() ) ), '/' );
+                if ( ! isset( $sums[ $rel ] ) ) {
+                    $out[] = [ 'severity' => 'high', 'label' => __( 'File PHP estraneo al core (possibile dropper)', 'olobuild' ), 'path' => $rel ];
+                    if ( count( $out ) >= self::CORE_FINDINGS_CAP ) {
+                        $out[] = [ 'severity' => 'high', 'label' => __( 'Elenco troncato: altri file estranei non mostrati.', 'olobuild' ), 'path' => '—' ];
+                        return $out;
+                    }
+                }
+            }
+        }
+        return $out;
+    }
+
+    /** Checksum ufficiali per versione+locale correnti, con fallback en_US. Cache 12 ore. */
+    private static function core_checksums() {
+        global $wp_version;
+        $locale = get_locale();
+        $key    = 'olo_core_sums_' . md5( $wp_version . '|' . $locale );
+        $cached = get_transient( $key );
+        if ( is_array( $cached ) && $cached ) {
+            return $cached;
+        }
+        foreach ( array_unique( [ $locale, 'en_US' ] ) as $loc ) {
+            $r = wp_remote_get(
+                'https://api.wordpress.org/core/checksums/1.0/?' . http_build_query( [ 'version' => $wp_version, 'locale' => $loc ] ),
+                [ 'timeout' => 10 ]
+            );
+            if ( is_wp_error( $r ) ) {
+                continue;
+            }
+            $j = json_decode( (string) wp_remote_retrieve_body( $r ), true );
+            if ( ! empty( $j['checksums'] ) && is_array( $j['checksums'] ) ) {
+                set_transient( $key, $j['checksums'], 12 * HOUR_IN_SECONDS );
+                return $j['checksums'];
+            }
+        }
+        return [];
+    }
+
     public static function quarantine_file( $abs ) {
         if ( ! self::is_within_quarantine_roots( $abs ) ) {
             return false;
@@ -897,13 +1005,27 @@ class Olo_Security_Sentinel {
     // ──────────────────────────────────────────────────────────────────────
 
     public static function register_page() {
-        add_submenu_page(
-            'olobuild',
+        if ( defined( 'OLO_VERSION' ) ) {
+            // Con OLObuild attivo la pagina vive nel suo menu, come sempre.
+            add_submenu_page(
+                'olobuild',
+                __( 'OLOsecurity', 'olobuild' ),
+                __( 'OLOsecurity', 'olobuild' ),
+                'manage_options',
+                self::PAGE_SLUG,
+                [ __CLASS__, 'render_page' ]
+            );
+            return;
+        }
+        // Standalone: menu top-level proprio.
+        add_menu_page(
             __( 'OLOsecurity', 'olobuild' ),
             __( 'OLOsecurity', 'olobuild' ),
             'manage_options',
             self::PAGE_SLUG,
-            [ __CLASS__, 'render_page' ]
+            [ __CLASS__, 'render_page' ],
+            'dashicons-shield',
+            81
         );
     }
 
@@ -1069,6 +1191,7 @@ class Olo_Security_Sentinel {
         $files      = isset( $status['files'] ) && is_array( $status['files'] ) ? $status['files'] : [];
         $config     = isset( $status['config'] ) && is_array( $status['config'] ) ? $status['config'] : [];
         $components = isset( $status['components'] ) && is_array( $status['components'] ) ? $status['components'] : [];
+        $core       = isset( $status['core'] ) && is_array( $status['core'] ) ? $status['core'] : [];
         $baseline = get_option( self::OPT_BASE, [] );
         $has_backup = (bool) get_option( 'olo_sec_customcode_backup', false );
         $quarantined = self::list_quarantined();
@@ -1079,6 +1202,7 @@ class Olo_Security_Sentinel {
             <button type="submit" class="button button-primary"><?php esc_html_e( 'Scansiona ora', 'olobuild' ); ?></button>
         </form>
 
+        <?php if ( defined( 'OLO_VERSION' ) ) : // sezione legata al custom code di OLObuild ?>
         <h3><?php esc_html_e( 'Codice personalizzato', 'olobuild' ); ?></h3>
         <?php if ( empty( $content ) ) : ?>
             <p style="color:#46b450">✓ <?php esc_html_e( 'Nessun pattern sospetto nel codice head/body/footer.', 'olobuild' ); ?></p>
@@ -1097,6 +1221,7 @@ class Olo_Security_Sentinel {
                 <button type="submit" class="button-link"><?php esc_html_e( 'Ripristina il codice personalizzato dal backup', 'olobuild' ); ?></button>
             </form>
         <?php endif; ?>
+        <?php endif; // fine sezione custom code (solo con OLObuild) ?>
 
         <h3 style="margin-top:26px"><?php esc_html_e( 'Configurazione & utenti', 'olobuild' ); ?></h3>
         <?php if ( empty( $config ) ) : ?>
@@ -1131,6 +1256,14 @@ class Olo_Security_Sentinel {
                 <input type="hidden" name="olo_sentinel_action" value="rebaseline">
                 <button type="submit" class="button" onclick="return confirm('<?php echo esc_js( __( 'Rigenera la baseline solo se le modifiche ai file sono legittime. Continuare?', 'olobuild' ) ); ?>');"><?php esc_html_e( 'Rigenera baseline (modifiche legittime)', 'olobuild' ); ?></button>
             </form>
+        <?php endif; ?>
+
+        <h3 style="margin-top:26px"><?php esc_html_e( 'Core WordPress', 'olobuild' ); ?></h3>
+        <?php if ( empty( $core ) ) : ?>
+            <p style="color:#46b450">✓ <?php esc_html_e( 'I file del core corrispondono ai checksum ufficiali di wordpress.org.', 'olobuild' ); ?></p>
+        <?php else : ?>
+            <?php self::render_findings_table( $core, false ); ?>
+            <p class="description" style="max-width:760px"><?php esc_html_e( 'I checksum arrivano da api.wordpress.org per la tua versione: un file "modificato" qui non è mai normale. Reinstalla il core (Bacheca → Aggiornamenti → Reinstalla, o wp core download --force) dopo aver indagato.', 'olobuild' ); ?></p>
         <?php endif; ?>
 
         <h3 style="margin-top:26px"><?php esc_html_e( 'Plugin & temi (integrità)', 'olobuild' ); ?></h3>

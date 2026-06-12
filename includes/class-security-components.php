@@ -49,7 +49,8 @@ class Olo_Security_Components {
         }
         $processed     = 0;
         $global_capped = false;
-        $olo_dir       = defined( 'OLO_PATH' ) ? basename( untrailingslashit( OLO_PATH ) ) : 'olobuild';
+        // Il plugin che ospita OLOsecurity è già coperto file-per-file dal Sentinel.
+        $olo_dir       = defined( 'OLOSEC_PATH' ) ? basename( untrailingslashit( OLOSEC_PATH ) ) : 'olobuild';
 
         $plugins = [];
         foreach ( get_plugins() as $file => $data ) {

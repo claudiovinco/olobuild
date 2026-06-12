@@ -674,7 +674,7 @@ class Olo_Security_TwoFactor {
         }
         $pending = self::user_conf( get_current_user_id() )['pending'] ?? null;
         if ( is_array( $pending ) && ( $pending['method'] ?? '' ) === 'totp' && ( $pending['exp'] ?? 0 ) > time() ) {
-            wp_enqueue_script( 'olo-qrcode', OLO_URL . 'assets/vendor/qrcode/qrcode.min.js', [], OLO_VERSION, true );
+            wp_enqueue_script( 'olo-qrcode', OLOSEC_URL . 'assets/vendor/qrcode/qrcode.min.js', [], OLOSEC_VERSION, true );
             wp_add_inline_script( 'olo-qrcode', 'var el=document.getElementById("olo-2fa-qr");if(el&&window.QRCode){new QRCode(el,{text:el.getAttribute("data-uri"),width:180,height:180,correctLevel:QRCode.CorrectLevel.M});}' );
         }
     }
