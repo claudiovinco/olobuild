@@ -88,7 +88,11 @@ class Olo_Security_TwoFactor {
         add_filter( 'login_message', [ __CLASS__, 'login_expired_message' ] );
         add_filter( 'authenticate', [ __CLASS__, 'block_xmlrpc' ], 99 );
 
-        // Profilo utente (setup self-service) + azioni.
+        // Pagina di setup self-service + sezioni nel profilo.
+        // ⚠️ Il setup vive in una pagina DEDICATA: la pagina profilo è un unico
+        // <form>, e un form annidato viene scartato dal browser (il submit
+        // finirebbe nel form del profilo con il nonce sbagliato → "link scaduto").
+        add_action( 'admin_menu', [ __CLASS__, 'register_page' ] );
         add_action( 'show_user_profile', [ __CLASS__, 'render_profile' ] );
         add_action( 'edit_user_profile', [ __CLASS__, 'render_profile_admin' ] );
         add_action( 'admin_post_olo_2fa_setup',   [ __CLASS__, 'handle_setup' ] );
@@ -626,10 +630,10 @@ class Olo_Security_TwoFactor {
             return;
         }
         global $pagenow;
-        if ( in_array( $pagenow, [ 'profile.php', 'admin-post.php' ], true ) ) {
+        if ( $pagenow === 'admin-post.php' || ( $_GET['page'] ?? '' ) === 'olo-2fa' ) {
             return;
         }
-        wp_safe_redirect( admin_url( 'profile.php?olo2fa_required=1#olo-2fa' ) );
+        wp_safe_redirect( add_query_arg( 'olo2fa_required', 1, self::page_url() ) );
         exit;
     }
 
@@ -642,10 +646,30 @@ class Olo_Security_TwoFactor {
             . '</p></div>';
     }
 
-    // ── Profilo utente (setup self-service) ──────────────────────────────────
+    // ── Pagina di setup + sezioni profilo ────────────────────────────────────
+
+    public static function register_page() {
+        add_submenu_page(
+            self::page_parent(),
+            __( 'Verifica in due passaggi', 'olobuild' ),
+            __( 'Verifica in due passaggi', 'olobuild' ),
+            'read',
+            'olo-2fa',
+            [ __CLASS__, 'render_page' ]
+        );
+    }
+
+    /** Per chi non gestisce gli utenti il menu Utenti non esiste: il genitore è il Profilo. */
+    private static function page_parent() {
+        return current_user_can( 'list_users' ) ? 'users.php' : 'profile.php';
+    }
+
+    public static function page_url() {
+        return admin_url( self::page_parent() . '?page=olo-2fa' );
+    }
 
     public static function enqueue_profile_assets( $hook ) {
-        if ( $hook !== 'profile.php' ) {
+        if ( ! in_array( $hook, [ 'users_page_olo-2fa', 'profile_page_olo-2fa' ], true ) ) {
             return;
         }
         $pending = self::user_conf( get_current_user_id() )['pending'] ?? null;
@@ -655,10 +679,41 @@ class Olo_Security_TwoFactor {
         }
     }
 
+    /** Sezione nel profilo: solo stato + link alla pagina di setup (un form qui verrebbe annidato). */
     public static function render_profile( $user ) {
         if ( $user->ID !== get_current_user_id() ) {
             return;
         }
+        $active = self::is_user_configured( $user->ID );
+        $conf   = self::user_conf( $user->ID );
+        ?>
+        <h2 id="olo-2fa"><?php esc_html_e( 'Verifica in due passaggi (OLOsecurity)', 'olobuild' ); ?></h2>
+        <table class="form-table" role="presentation"><tr>
+            <th><?php esc_html_e( 'Stato', 'olobuild' ); ?></th>
+            <td>
+                <p style="margin-top:4px">
+                <?php
+                if ( $active ) {
+                    echo '✔ <strong>' . esc_html__( 'Attiva', 'olobuild' ) . '</strong> — ';
+                    echo ( ( $conf['method'] ?? '' ) === 'totp' )
+                        ? esc_html__( 'app di autenticazione (TOTP)', 'olobuild' )
+                        : esc_html__( 'codice via email', 'olobuild' );
+                } else {
+                    esc_html_e( 'Non attiva: la tua password da sola basta per entrare.', 'olobuild' );
+                }
+                ?>
+                </p>
+                <a class="button" href="<?php echo esc_url( self::page_url() ); ?>">
+                    <?php $active ? esc_html_e( 'Gestisci', 'olobuild' ) : esc_html_e( 'Configura la verifica in due passaggi', 'olobuild' ); ?>
+                </a>
+            </td>
+        </tr></table>
+        <?php
+    }
+
+    /** Pagina dedicata Utenti → Verifica in due passaggi (setup self-service). */
+    public static function render_page() {
+        $user    = wp_get_current_user();
         $conf    = self::user_conf( $user->ID );
         $pending = isset( $conf['pending'] ) && is_array( $conf['pending'] ) && ( $conf['pending']['exp'] ?? 0 ) > time() ? $conf['pending'] : null;
         $active  = self::is_user_configured( $user->ID );
@@ -670,7 +725,8 @@ class Olo_Security_TwoFactor {
             delete_transient( 'olo_2fa_codes_' . $user->ID );
         }
         ?>
-        <h2 id="olo-2fa"><?php esc_html_e( 'Verifica in due passaggi (OLOsecurity)', 'olobuild' ); ?></h2>
+        <div class="wrap">
+        <h1><?php esc_html_e( 'Verifica in due passaggi (OLOsecurity)', 'olobuild' ); ?></h1>
         <?php if ( $msg === 'wrong' ) : ?>
             <div class="notice notice-error inline"><p><?php esc_html_e( 'Codice non valido: riprova.', 'olobuild' ); ?></p></div>
         <?php elseif ( $msg === 'disabled' ) : ?>
@@ -764,6 +820,7 @@ class Olo_Security_TwoFactor {
             </tr>
         <?php endif; ?>
         </table>
+        </div>
         <?php
     }
 
@@ -778,14 +835,15 @@ class Olo_Security_TwoFactor {
         <table class="form-table" role="presentation"><tr>
             <th><?php esc_html_e( 'Stato', 'olobuild' ); ?></th>
             <td>
-                <?php if ( $active ) : ?>
+                <?php if ( $active ) :
+                    // Link con nonce, NON un form: qui siamo dentro il form di modifica utente.
+                    $reset_url = wp_nonce_url(
+                        add_query_arg( [ 'action' => 'olo_2fa_reset', 'olo_2fa_user' => $user->ID ], admin_url( 'admin-post.php' ) ),
+                        'olo_2fa'
+                    );
+                    ?>
                     <p style="margin-top:4px">✔ <?php esc_html_e( 'Attiva per questo utente.', 'olobuild' ); ?></p>
-                    <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-                        <?php wp_nonce_field( 'olo_2fa' ); ?>
-                        <input type="hidden" name="action" value="olo_2fa_reset">
-                        <input type="hidden" name="olo_2fa_user" value="<?php echo esc_attr( $user->ID ); ?>">
-                        <button type="submit" class="button"><?php esc_html_e( 'Azzera la 2FA di questo utente (telefono perso)', 'olobuild' ); ?></button>
-                    </form>
+                    <a class="button" href="<?php echo esc_url( $reset_url ); ?>"><?php esc_html_e( 'Azzera la 2FA di questo utente (telefono perso)', 'olobuild' ); ?></a>
                 <?php else : ?>
                     <p style="margin-top:4px"><?php esc_html_e( 'Non attiva. L\'utente può configurarla dal proprio profilo.', 'olobuild' ); ?></p>
                 <?php endif; ?>
@@ -797,11 +855,11 @@ class Olo_Security_TwoFactor {
     // ── Azioni admin-post ────────────────────────────────────────────────────
 
     private static function back_to_profile( $msg = '' ) {
-        $url = admin_url( 'profile.php' );
+        $url = self::page_url();
         if ( $msg ) {
             $url = add_query_arg( 'olo2fa_msg', $msg, $url );
         }
-        wp_safe_redirect( $url . '#olo-2fa' );
+        wp_safe_redirect( $url );
         exit;
     }
 
@@ -912,7 +970,7 @@ class Olo_Security_TwoFactor {
     /** Azzeramento da parte di un admin per un altro utente (telefono perso). */
     public static function handle_reset() {
         self::check_action_prereqs();
-        $target = (int) ( $_POST['olo_2fa_user'] ?? 0 );
+        $target = (int) ( $_REQUEST['olo_2fa_user'] ?? 0 ); // arriva via link GET con nonce
         if ( ! current_user_can( 'manage_options' ) || ! current_user_can( 'edit_user', $target ) || $target === get_current_user_id() ) {
             wp_die( esc_html__( 'Permessi insufficienti.', 'olobuild' ), 403 );
         }
