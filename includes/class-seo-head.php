@@ -1083,6 +1083,12 @@ class Olo_Seo_Head {
     public function cleanup_head() {
         $adv = $this->opt( 'olo_seo_advanced' );
 
+        // oEmbed discovery: quando LinkedIn trova il link json+oembed lo PREFERISCE
+        // ai tag Open Graph → anteprima "Rich media" senza immagine ("No image found")
+        // anche con og:image perfetta. Visto che gli OG li emettiamo noi, il discovery
+        // va sempre rimosso. (Non tocca il rendering degli embed DENTRO il sito.)
+        remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
+
         if ( ! empty( $adv['remove_shortlink'] ) ) {
             remove_action( 'wp_head', 'wp_shortlink_wp_head', 10 );
             remove_action( 'template_redirect', 'wp_shortlink_header', 11 );
