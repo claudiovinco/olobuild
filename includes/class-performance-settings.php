@@ -29,6 +29,73 @@ class Olo_Performance_Settings {
         add_action( 'wp_ajax_olo_perf_regenerate_critical', [ $this, 'ajax_regenerate_critical' ] );
         add_action( 'wp_ajax_olo_perf_purge_critical', [ $this, 'ajax_purge_critical' ] );
         add_action( 'wp_ajax_olo_perf_flush_css_cache', [ $this, 'ajax_flush_css_cache' ] );
+
+        // Sync regole cache browser in .htaccess quando l'opzione cambia
+        // (sia dal form options.php sia dal POST REST /performance).
+        add_action( 'update_option_' . self::OPT, [ __CLASS__, 'on_option_update' ], 10, 2 );
+        add_action( 'add_option_' . self::OPT, [ __CLASS__, 'on_option_add' ], 10, 2 );
+    }
+
+    /** update_option_olo_performance → sync .htaccess se il flag è cambiato. */
+    public static function on_option_update( $old_value, $value ) {
+        $was = is_array( $old_value ) && ! empty( $old_value['browser_cache_headers'] );
+        $now = is_array( $value ) && ! empty( $value['browser_cache_headers'] );
+        if ( $was !== $now ) {
+            self::sync_htaccess_rules( $now );
+        }
+    }
+
+    /** add_option_olo_performance → sync .htaccess se il flag nasce attivo. */
+    public static function on_option_add( $option, $value ) {
+        if ( is_array( $value ) && ! empty( $value['browser_cache_headers'] ) ) {
+            self::sync_htaccess_rules( true );
+        }
+    }
+
+    /**
+     * Scrive (o rimuove) il blocco marker "Olobuild Performance" in .htaccess:
+     * Expires/Cache-Control per immagini, video, font (6 mesi) e CSS/JS (1 mese).
+     * No-op silenzioso su server non-Apache/LiteSpeed o .htaccess non scrivibile.
+     *
+     * @param bool $enabled Scrive le regole se true, le rimuove se false.
+     * @return bool Successo dell'operazione.
+     */
+    public static function sync_htaccess_rules( $enabled ) {
+        if ( ! function_exists( 'insert_with_markers' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/misc.php';
+        }
+        if ( ! function_exists( 'get_home_path' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+        }
+
+        $htaccess = get_home_path() . '.htaccess';
+        if ( file_exists( $htaccess ) ? ! is_writable( $htaccess ) : ! is_writable( dirname( $htaccess ) ) ) {
+            return false;
+        }
+
+        $lines = [];
+        if ( $enabled ) {
+            $media_types = [
+                'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/avif',
+                'image/svg+xml', 'image/x-icon', 'video/mp4', 'video/webm',
+                'audio/mpeg', 'font/woff2', 'font/woff', 'font/ttf',
+            ];
+            $lines[] = '<IfModule mod_expires.c>';
+            $lines[] = 'ExpiresActive On';
+            foreach ( $media_types as $type ) {
+                $lines[] = 'ExpiresByType ' . $type . ' "access plus 6 months"';
+            }
+            $lines[] = 'ExpiresByType text/css "access plus 1 month"';
+            $lines[] = 'ExpiresByType application/javascript "access plus 1 month"';
+            $lines[] = '</IfModule>';
+            $lines[] = '<IfModule mod_headers.c>';
+            $lines[] = '<FilesMatch "\.(jpe?g|png|gif|webp|avif|svg|ico|mp4|webm|mp3|woff2?|ttf)$">';
+            $lines[] = 'Header set Cache-Control "public, max-age=15552000"';
+            $lines[] = '</FilesMatch>';
+            $lines[] = '</IfModule>';
+        }
+
+        return (bool) insert_with_markers( $htaccess, 'Olobuild Performance', $lines );
     }
 
     /**
@@ -50,6 +117,9 @@ class Olo_Performance_Settings {
             'video_facade'          => true,
             'fetchpriority'         => true,
             'lazy_images'           => true,
+            'lazy_videos'           => true,
+            // Browser cache (.htaccess) — opt-in: scrive regole Expires/Cache-Control
+            'browser_cache_headers' => false,
             // Head cleanup
             'remove_jquery_migrate' => false,
             'remove_emoji_scripts'  => false,
@@ -97,7 +167,8 @@ class Olo_Performance_Settings {
         $bools = [
             'critical_css_enabled', 'defer_js', 'css_cache_files', 'minify_css',
             'resource_hints', 'font_preload', 'video_facade', 'fetchpriority',
-            'lazy_images', 'remove_jquery_migrate', 'remove_emoji_scripts',
+            'lazy_images', 'lazy_videos', 'browser_cache_headers',
+            'remove_jquery_migrate', 'remove_emoji_scripts',
             'remove_block_css', 'remove_classic_theme',
         ];
         foreach ( $bools as $key ) {

@@ -44,7 +44,7 @@
         </div>
         <div class="usage-card">
           <div class="usage-label">{{ t('Flag attivi') }}</div>
-          <div class="usage-value">{{ activeFlags }}<span class="of-total">/11</span></div>
+          <div class="usage-value">{{ activeFlags }}<span class="of-total">/{{ FLAG_KEYS.length }}</span></div>
           <div class="usage-trend">{{ t('configurati') }}</div>
         </div>
         <div class="usage-card">
@@ -122,12 +122,19 @@
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.css_cache_files }" @click="set('css_cache_files', !form.css_cache_files)" role="switch"></button></div>
       </div>
-      <div class="cfg-row no-divider">
+      <div class="cfg-row">
         <div class="label-col">
           <label>{{ t('Minifica CSS') }}</label>
-          <div class="hint">{{ t('Rimuove commenti, spazi e newline dal CSS generato.') }}</div>
+          <div class="hint">{{ t('Rimuove commenti, spazi e newline dal CSS generato dai template e dal CSS frontend del plugin.') }}</div>
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.minify_css }" @click="set('minify_css', !form.minify_css)" role="switch"></button></div>
+      </div>
+      <div class="cfg-row no-divider">
+        <div class="label-col">
+          <label>{{ t('Cache browser per i media (.htaccess)') }}</label>
+          <div class="hint">{{ t('Scrive header Expires/Cache-Control per immagini, video e font (6 mesi) e CSS/JS (1 mese). Solo server Apache/LiteSpeed.') }}</div>
+        </div>
+        <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.browser_cache_headers }" @click="set('browser_cache_headers', !form.browser_cache_headers)" role="switch"></button></div>
       </div>
     </div>
   </div>
@@ -164,6 +171,13 @@
           <div class="hint">{{ t('Mostra una preview statica, l\'iframe carica solo al click. ~500 KB risparmiati per video.') }}</div>
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.video_facade }" @click="set('video_facade', !form.video_facade)" role="switch"></button></div>
+      </div>
+      <div class="cfg-row">
+        <div class="label-col">
+          <label>{{ t('Lazy load video self-hosted') }}</label>
+          <div class="hint">{{ t('I video autoplay (sfondi, filmreel, decorativi) si scaricano e partono solo quando entrano nel viewport. Risparmia decine di MB su pagine ricche di video.') }}</div>
+        </div>
+        <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.lazy_videos }" @click="set('lazy_videos', !form.lazy_videos)" role="switch"></button></div>
       </div>
       <div class="cfg-row">
         <div class="label-col">
@@ -288,6 +302,8 @@ const form = ref({
   video_facade: true,
   fetchpriority: true,
   lazy_images: true,
+  lazy_videos: true,
+  browser_cache_headers: false,
   // Head cleanup
   remove_jquery_migrate: false,
   remove_emoji_scripts: false,
@@ -310,7 +326,8 @@ const stats = ref({
 const FLAG_KEYS = [
   'critical_css_enabled', 'defer_js', 'css_cache_files', 'minify_css',
   'resource_hints', 'font_preload', 'video_facade', 'fetchpriority',
-  'lazy_images', 'remove_jquery_migrate', 'remove_emoji_scripts',
+  'lazy_images', 'lazy_videos', 'browser_cache_headers',
+  'remove_jquery_migrate', 'remove_emoji_scripts',
 ];
 const activeFlags = computed(() => FLAG_KEYS.filter(k => !!form.value[k]).length);
 

@@ -15,6 +15,9 @@ class Olo_Performance_Hints {
     /** @var bool Has hero image been marked with fetchpriority */
     private $hero_marked = false;
 
+    /** @var int Number of <video> tags converted to lazy by the output buffer */
+    private $lazy_video_count = 0;
+
     /** @var array Fonts that need preloading */
     private $preload_fonts = [];
 
@@ -52,6 +55,12 @@ class Olo_Performance_Hints {
         // Lazy loading: filter to add/remove loading="lazy" on below-fold images.
         if ( ! empty( $opt['lazy_images'] ) ) {
             add_filter( 'olo_image_attributes', [ $this, 'add_lazy_loading' ], 9, 2 );
+        }
+
+        // Lazy load dei <video> self-hosted: buffer dell'output frontend che converte
+        // i video decorativi (autoplay+muted) in preload="none" + IntersectionObserver.
+        if ( ! empty( $opt['lazy_videos'] ) ) {
+            add_action( 'template_redirect', [ $this, 'start_lazy_video_buffer' ], 1 );
         }
 
         // CSS static file output filter — sempre attivo, gating interno via css_cache_files in cache_css()
@@ -271,6 +280,99 @@ class Olo_Performance_Hints {
         </script>
         <?php
         return ob_get_clean();
+    }
+
+    /* ─────────────────────────────────────────────
+     * Lazy <video> self-hosted (output buffer)
+     * ───────────────────────────────────────────── */
+
+    /**
+     * Start the output buffer that converts decorative autoplay videos to lazy.
+     * Hooked on template_redirect (frontend only).
+     */
+    public function start_lazy_video_buffer() {
+        if ( is_feed() || is_robots() || is_embed() || is_customize_preview() ) {
+            return;
+        }
+        ob_start( [ $this, 'lazy_videos_html' ] );
+    }
+
+    /**
+     * Convert decorative <video autoplay muted> tags to lazy-loading:
+     * strip autoplay, force preload="none", mark with data-olo-lazy.
+     * The olo-lazy-video.js runtime (injected before </body> only when needed)
+     * plays/pauses them via IntersectionObserver.
+     *
+     * Skipped: videos with controls (user-initiated), inside <script>/<noscript>,
+     * inside SVG foreignObject (xmlns attribute — no JS reachable in some contexts),
+     * or explicitly marked data-olo-eager.
+     *
+     * @param string $html Full page HTML.
+     * @return string
+     */
+    public function lazy_videos_html( $html ) {
+        if ( ! is_string( $html ) || stripos( $html, '<video' ) === false ) {
+            return $html;
+        }
+
+        // Non toccare i tag dentro <script>/<noscript> (stringhe JS, fallback no-js).
+        $parts = preg_split( '/(<script\b.*?<\/script>|<noscript\b.*?<\/noscript>)/is', $html, -1, PREG_SPLIT_DELIM_CAPTURE );
+        if ( false === $parts ) {
+            return $html;
+        }
+
+        $this->lazy_video_count = 0;
+        foreach ( $parts as $i => $part ) {
+            if ( $i % 2 === 1 || stripos( $part, '<video' ) === false ) {
+                continue;
+            }
+            $parts[ $i ] = preg_replace_callback(
+                '/<video\b[^>]*>/i',
+                [ $this, 'lazy_video_tag' ],
+                $part
+            );
+        }
+        $html = implode( '', $parts );
+
+        if ( $this->lazy_video_count > 0 ) {
+            $script = '<script src="' . esc_url( OLO_URL . 'assets/js/olo-lazy-video.js' ) . '?ver=' . rawurlencode( OLO_VERSION ) . '" defer></script>';
+            $pos    = strripos( $html, '</body>' );
+            $html   = ( false !== $pos ) ? substr_replace( $html, $script, $pos, 0 ) : $html . $script;
+        }
+
+        return $html;
+    }
+
+    /**
+     * Transform a single <video ...> opening tag (preg_replace_callback).
+     *
+     * @param array $m Regex match.
+     * @return string
+     */
+    public function lazy_video_tag( $m ) {
+        $tag = $m[0];
+
+        // Solo video decorativi: autoplay + muted, senza controls.
+        if ( ! preg_match( '/\sautoplay\b/i', $tag )
+            || ! preg_match( '/\smuted\b/i', $tag )
+            || preg_match( '/\scontrols\b/i', $tag ) ) {
+            return $tag;
+        }
+        // Opt-out esplicito, già processato, o dentro SVG foreignObject.
+        if ( preg_match( '/\sdata-olo-(eager|lazy)\b/i', $tag ) || false !== stripos( $tag, 'xmlns=' ) ) {
+            return $tag;
+        }
+
+        $this->lazy_video_count++;
+
+        $tag = preg_replace( '/\sautoplay\b(=("[^"]*"|\'[^\']*\'))?/i', '', $tag, 1 );
+        if ( preg_match( '/\spreload=/i', $tag ) ) {
+            $tag = preg_replace( '/\spreload=("[^"]*"|\'[^\']*\'|[^\s>]+)/i', ' preload="none"', $tag, 1 );
+        } else {
+            $tag = preg_replace( '/^<video\b/i', '<video preload="none"', $tag, 1 );
+        }
+
+        return preg_replace( '/^<video\b/i', '<video data-olo-lazy data-olo-autoplay', $tag, 1 );
     }
 
     /* ─────────────────────────────────────────────

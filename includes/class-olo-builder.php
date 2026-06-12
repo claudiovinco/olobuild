@@ -2317,7 +2317,10 @@ class Olo_Builder {
             [
                 'methods'             => 'GET',
                 'callback'            => function () {
-                    $opt = get_option( 'olo_performance', [] );
+                    // get_option() della classe = defaults-aware (i flag attivi di default contano)
+                    $opt = class_exists( 'Olo_Performance_Settings' )
+                        ? Olo_Performance_Settings::get_option()
+                        : get_option( 'olo_performance', [] );
                     if ( ! is_array( $opt ) ) $opt = [];
 
                     // Critical CSS pages cached
@@ -2353,7 +2356,8 @@ class Olo_Builder {
                     $flag_keys = [
                         'critical_css_enabled', 'defer_js', 'minify_css', 'css_cache_files',
                         'resource_hints', 'font_preload', 'video_facade', 'fetchpriority',
-                        'lazy_images', 'remove_jquery_migrate', 'remove_emoji_scripts',
+                        'lazy_images', 'lazy_videos', 'browser_cache_headers',
+                        'remove_jquery_migrate', 'remove_emoji_scripts',
                     ];
                     $on = 0;
                     foreach ( $flag_keys as $k ) if ( ! empty( $opt[ $k ] ) ) $on++;
