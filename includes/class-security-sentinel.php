@@ -1051,6 +1051,9 @@ class Olo_Security_Sentinel {
                 if ( class_exists( 'Olo_Security_Hardening' ) ) {
                     Olo_Security_Hardening::save_settings( $_POST );
                 }
+                if ( class_exists( 'Olo_Security_TwoFactor' ) ) {
+                    Olo_Security_TwoFactor::save_settings( $_POST );
+                }
                 update_option( self::OPT_EMAIL, empty( $_POST['olo_sentinel_email'] ) ? '0' : '1', false );
                 update_option( 'olo_sec_webhook', [
                     'enabled' => empty( $_POST['olo_sec_webhook_enabled'] ) ? 0 : 1,
@@ -1297,6 +1300,13 @@ class Olo_Security_Sentinel {
             <?php
             if ( class_exists( 'Olo_Security_Login' ) ) {
                 Olo_Security_Login::render_settings_fields();
+            }
+            ?>
+
+            <h3 style="margin-top:18px"><?php esc_html_e( 'Verifica in due passaggi (2FA)', 'olobuild' ); ?></h3>
+            <?php
+            if ( class_exists( 'Olo_Security_TwoFactor' ) ) {
+                Olo_Security_TwoFactor::render_settings_fields();
             }
             ?>
 

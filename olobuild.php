@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Page builder professionale olonico con sistema a griglia (tile drag & drop).
- * Version:     1.4.222
+ * Version:     1.4.224
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuild
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '1.4.222' );
+define( 'OLO_VERSION', '1.4.224' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
 
@@ -46,6 +46,49 @@ function olo_stockmedia_behavior() {
         [ 'preferred' => 'unsplash', 'download_local' => true, 'optimize_on_download' => false ]
     );
     return $cached;
+}
+
+/**
+ * Valida un URL remoto fornito dal client prima di un download server-side
+ * (endpoint stock-media). Anti-SSRF: solo http/https, wp_http_validate_url()
+ * (blocca loopback, IP privati e porte non standard) e, se indicata, allowlist
+ * di domini del provider (host esatto o sottodominio).
+ *
+ * @param string $url           URL richiesto dal client.
+ * @param array  $allowed_hosts Domini consentiti (es. [ 'pixabay.com' ]); vuoto = solo check generici.
+ * @return bool
+ */
+function olo_validate_remote_media_url( $url, $allowed_hosts = [] ) {
+    if ( ! is_string( $url ) || '' === $url ) {
+        return false;
+    }
+    $url = esc_url_raw( $url, [ 'http', 'https' ] );
+    if ( ! $url || ! wp_http_validate_url( $url ) ) {
+        return false;
+    }
+    if ( $allowed_hosts ) {
+        $host = strtolower( (string) wp_parse_url( $url, PHP_URL_HOST ) );
+        foreach ( $allowed_hosts as $allowed ) {
+            $allowed = strtolower( $allowed );
+            if ( $host === $allowed || str_ends_with( $host, '.' . $allowed ) ) {
+                return true;
+            }
+        }
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Neutralizza la CSV formula injection negli export: un valore che inizia con
+ * = + - @ (o tab/CR) verrebbe eseguito come formula aprendo il CSV in
+ * Excel/LibreOffice. Prefisso apostrofo = testo letterale per i fogli di calcolo.
+ */
+function olo_csv_safe( $value ) {
+    if ( is_string( $value ) && $value !== '' && strpbrk( $value[0], "=+-@\t\r" ) !== false ) {
+        return "'" . $value;
+    }
+    return $value;
 }
 
 /**
@@ -418,11 +461,13 @@ require_once OLO_PATH . 'includes/class-security-config-monitor.php';
 require_once OLO_PATH . 'includes/class-security-components.php';
 require_once OLO_PATH . 'includes/class-security-login.php';
 require_once OLO_PATH . 'includes/class-security-hardening.php';
+require_once OLO_PATH . 'includes/class-security-twofactor.php';
 require_once OLO_PATH . 'includes/class-security-sentinel.php';
 Olo_Security_Audit::maybe_install();
 Olo_Security_Audit::init();
 Olo_Security_Login::init();
 Olo_Security_Hardening::init();
+Olo_Security_TwoFactor::init();
 Olo_Security_Sentinel::init();
 require_once OLO_PATH . 'includes/class-critical-css.php';
 require_once OLO_PATH . 'includes/class-ab-testing.php';
