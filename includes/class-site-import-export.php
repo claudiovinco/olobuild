@@ -570,6 +570,15 @@ class Olo_Site_Import_Export {
             $existing = $slug ? get_page_by_path( $slug, OBJECT, 'page' ) : null;
 
             if ( $existing ) {
+                // Pagina riusata = MIGRATA: titolo e contenuto arrivano dal
+                // pacchetto, altrimenti il vecchio post_content resta in pagina
+                // e viene renderizzato DOPO il template (auto_render_template
+                // fa prepend, non replace) — "contenuto fantasma" prima del footer.
+                wp_update_post( [
+                    'ID'           => $existing->ID,
+                    'post_title'   => sanitize_text_field( $pg['title'] ?? $existing->post_title ),
+                    'post_content' => wp_kses_post( $pg['content'] ?? '' ),
+                ] );
                 update_post_meta( $existing->ID, '_olo_template_id', $tpl_new );
                 $page_id = $existing->ID;
             } else {
