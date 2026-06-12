@@ -1,6 +1,6 @@
 /**
  * Olobuild — lazy autoplay video.
- * I <video data-olo-lazy> arrivano dal server con preload="none" e senza autoplay:
+ * I <video data-olo-lazyvid> arrivano dal server con preload="none" e senza autoplay:
  * vengono scaricati e avviati solo quando entrano (o stanno per entrare) nel viewport,
  * e messi in pausa quando ne escono. Risparmia decine di MB su pagine con molti video.
  */
@@ -8,7 +8,7 @@
     'use strict';
 
     function init() {
-        var vids = document.querySelectorAll('video[data-olo-lazy]');
+        var vids = document.querySelectorAll('video[data-olo-lazyvid]');
         if (!vids.length) {
             return;
         }

@@ -306,7 +306,9 @@ class Olo_Performance_Hints {
 
     /**
      * Convert decorative <video autoplay muted> tags to lazy-loading:
-     * strip autoplay, force preload="none", mark with data-olo-lazy.
+     * strip autoplay, force preload="none", mark with data-olo-lazyvid.
+     * NB: il marcatore NON è data-olo-lazy — quell'attributo appartiene al
+     * lazy-render delle tile (template.olo-lazy-content nel renderer).
      * The olo-lazy-video.js runtime (injected before </body> only when needed)
      * plays/pauses them via IntersectionObserver.
      *
@@ -371,7 +373,7 @@ class Olo_Performance_Hints {
             return $tag;
         }
         // Opt-out esplicito, già processato, o dentro SVG foreignObject.
-        if ( preg_match( '/\sdata-olo-(eager|lazy)\b/i', $tag ) || false !== stripos( $tag, 'xmlns=' ) ) {
+        if ( preg_match( '/\sdata-olo-(eager|lazyvid)\b/i', $tag ) || false !== stripos( $tag, 'xmlns=' ) ) {
             return $tag;
         }
 
@@ -384,7 +386,7 @@ class Olo_Performance_Hints {
             $tag = preg_replace( '/^<video\b/i', '<video preload="none"', $tag, 1 );
         }
 
-        return preg_replace( '/^<video\b/i', '<video data-olo-lazy data-olo-autoplay', $tag, 1 );
+        return preg_replace( '/^<video\b/i', '<video data-olo-lazyvid data-olo-autoplay', $tag, 1 );
     }
 
     /* ─────────────────────────────────────────────
