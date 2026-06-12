@@ -114,7 +114,11 @@ class Olo_Site_Import_Export {
         ];
 
         if ( $include_media ) {
-            $media_urls = $this->collect_media_urls( $data );
+            // Content E page settings (lo sfondo pagina vive in settings).
+            $media_urls = array_unique( array_merge(
+                $this->collect_media_urls( $data ),
+                $this->collect_media_urls( $export['styles'] )
+            ) );
             $export['media'] = $this->package_media( $media_urls );
         }
 
@@ -161,11 +165,37 @@ class Olo_Site_Import_Export {
             'active_footer' => get_option( 'olo_active_footer', '' ),
         ];
 
-        // Collect media from all templates
+        // ── Export COMPLETO: menu WP, pagine collegate, opzioni globali ──
+        // Menu referenziati dai template (megamenu/nav: settings.menu_id).
+        $menu_ids = [];
+        foreach ( $exported as $tpl ) {
+            $menu_ids = array_merge( $menu_ids, $this->collect_menu_ids( $tpl['data'] ) );
+        }
+        $site_export['menus'] = $this->export_menus( array_unique( $menu_ids ) );
+
+        // Pagine WP che usano un template olobuild (+ front page).
+        $site_export['pages']         = $this->export_olo_pages();
+        $site_export['show_on_front'] = get_option( 'show_on_front', 'posts' );
+
+        // Opzioni globali della famiglia olobuild (HUD, cursore, colori extra…).
+        $site_export['options'] = [
+            'cursor_hud'        => get_option( 'olo_cursor_hud', [] ),
+            'magnetic_cursor'   => get_option( 'olo_magnetic_cursor', [] ),
+            'global_colors'     => get_option( 'olo_global_colors', [] ),
+            'global_typography' => get_option( 'olo_global_typography', [] ),
+            'custom_fonts'      => get_option( 'olo_custom_fonts', [] ),
+        ];
+
+        // Collect media from all templates — content E page settings (lo sfondo
+        // pagina vive in settings/styles, non nel content).
         if ( $include_media ) {
             $all_urls = [];
             foreach ( $exported as $tpl ) {
-                $all_urls = array_merge( $all_urls, $this->collect_media_urls( $tpl['data'] ) );
+                $all_urls = array_merge(
+                    $all_urls,
+                    $this->collect_media_urls( $tpl['data'] ),
+                    $this->collect_media_urls( $tpl['styles'] )
+                );
             }
             $all_urls = array_unique( $all_urls );
             $site_export['media'] = $this->package_media( $all_urls );
@@ -242,6 +272,13 @@ class Olo_Site_Import_Export {
             $url_map = $this->import_media( $json['media'] );
         }
 
+        // Menu WP PRIMA dei template: serve la mappa old→new per rimappare
+        // i settings.menu_id (megamenu/nav) dentro i template.
+        $menu_map = [];
+        if ( ! empty( $json['menus'] ) && is_array( $json['menus'] ) ) {
+            $menu_map = $this->import_menus( $json['menus'] );
+        }
+
         $db = new Olo_Database();
         $imported = [];
         $id_map = []; // old_id => new_id
@@ -251,20 +288,28 @@ class Olo_Site_Import_Export {
             if ( empty( $tpl_data ) ) {
                 continue;
             }
+            $styles = $tpl['styles'] ?? [];
 
-            // Remap media URLs
+            // Remap media URLs — anche nei page settings (sfondo pagina ecc.)
             if ( ! empty( $url_map ) ) {
                 $tpl_data = $this->remap_urls( $tpl_data, $url_map );
+                $styles   = $this->remap_urls( $styles, $url_map );
             }
 
             // Also remap source site URL to current site
             if ( ! empty( $json['site_url'] ) ) {
-                $tpl_data = $this->remap_urls( $tpl_data, [ $json['site_url'] => home_url() ] );
+                $site_map = [ $json['site_url'] => home_url() ];
+                $tpl_data = $this->remap_urls( $tpl_data, $site_map );
+                $styles   = $this->remap_urls( $styles, $site_map );
             }
 
-            $name    = sanitize_text_field( $tpl['name'] ?? 'Template importato' );
-            $type    = sanitize_text_field( $tpl['type'] ?? 'page' );
-            $styles  = $tpl['styles'] ?? [];
+            // Remap menu_id sui menu ricreati
+            if ( ! empty( $menu_map ) ) {
+                $tpl_data = $this->remap_menu_ids( $tpl_data, $menu_map );
+            }
+
+            $name = sanitize_text_field( $tpl['name'] ?? 'Template importato' );
+            $type = sanitize_text_field( $tpl['type'] ?? 'page' );
 
             $new_id = $db->create_template( [
                 'title'    => $name,
@@ -289,16 +334,30 @@ class Olo_Site_Import_Export {
         // stored XSS via bundle malevolo. `olo_styles` viene poi interpolato in
         // <style> da Olo_Style_System::generate_css() (es. var(--olo-color-X)),
         // quindi un valore tipo "</style><script>..." persisterebbe su ogni pagina.
+        // L'import sito è una MIGRAZIONE esplicita: gli stili del pacchetto
+        // sostituiscono quelli del sito di destinazione (prima venivano applicati
+        // solo a sito "vergine" → i colori non arrivavano mai).
         if ( ! empty( $json['global_styles'] ) && is_array( $json['global_styles'] ) ) {
-            $existing = get_option( 'olo_styles', [] );
-            if ( empty( $existing ) ) {
-                $sanitized_styles = class_exists( 'Olo_Style_System' )
-                    ? ( new Olo_Style_System() )->sanitize_styles( $json['global_styles'] )
-                    : [];
-                if ( ! empty( $sanitized_styles ) ) {
-                    update_option( 'olo_styles', $sanitized_styles );
-                }
+            // ⚠️ Olo_Style_System è un singleton (costruttore privato): usare
+            // instance(), mai `new` (fatal — il vecchio ramo non girava mai e
+            // il bug era rimasto invisibile).
+            $sanitized_styles = class_exists( 'Olo_Style_System' )
+                ? Olo_Style_System::instance()->sanitize_styles( $json['global_styles'] )
+                : [];
+            if ( ! empty( $sanitized_styles ) ) {
+                update_option( 'olo_styles', $sanitized_styles );
             }
+        }
+
+        // Opzioni globali della famiglia olobuild (HUD, cursore, colori extra…)
+        if ( ! empty( $json['options'] ) && is_array( $json['options'] ) ) {
+            $this->import_global_options( $json['options'] );
+        }
+
+        // Pagine WP collegate ai template (+ front page)
+        $pages_imported = 0;
+        if ( ! empty( $json['pages'] ) && is_array( $json['pages'] ) ) {
+            $pages_imported = $this->import_olo_pages( $json['pages'], $id_map, $json['show_on_front'] ?? '' );
         }
 
         // Remap header/footer IDs
@@ -319,7 +378,276 @@ class Olo_Site_Import_Export {
             'success'         => true,
             'templates'       => $imported,
             'media_imported'  => count( $url_map ),
+            'menus_imported'  => count( $menu_map ),
+            'pages_imported'  => $pages_imported,
         ] );
+    }
+
+    /* ─────────────────────────────────────────────
+     * Menu WP (export/import)
+     * ───────────────────────────────────────────── */
+
+    /**
+     * Raccoglie ricorsivamente gli ID menu referenziati nei template
+     * (settings.menu_id di megamenu/nav).
+     */
+    private function collect_menu_ids( $data ) {
+        $ids = [];
+        if ( ! is_array( $data ) ) {
+            return $ids;
+        }
+        foreach ( $data as $key => $value ) {
+            if ( $key === 'menu_id' && is_numeric( $value ) && intval( $value ) > 0 ) {
+                $ids[] = intval( $value );
+            } elseif ( is_array( $value ) ) {
+                $ids = array_merge( $ids, $this->collect_menu_ids( $value ) );
+            }
+        }
+        return $ids;
+    }
+
+    /**
+     * Esporta i menu come voci portabili (custom link). Gli URL interni
+     * diventano relativi, così sul sito di destinazione puntano al nuovo dominio.
+     */
+    private function export_menus( $menu_ids ) {
+        $menus = [];
+        $home  = untrailingslashit( home_url() );
+
+        foreach ( $menu_ids as $mid ) {
+            $menu = wp_get_nav_menu_object( $mid );
+            if ( ! $menu ) {
+                continue;
+            }
+            $items     = wp_get_nav_menu_items( $mid ) ?: [];
+            $out_items = [];
+            foreach ( $items as $it ) {
+                $url = (string) $it->url;
+                if ( $url !== '' && strpos( $url, $home ) === 0 ) {
+                    $rel = substr( $url, strlen( $home ) );
+                    $url = $rel === '' ? '/' : $rel;
+                }
+                $out_items[] = [
+                    'id'      => intval( $it->ID ),
+                    'parent'  => intval( $it->menu_item_parent ),
+                    'title'   => $it->title,
+                    'url'     => $url,
+                    'target'  => $it->target,
+                    'classes' => implode( ' ', array_filter( (array) $it->classes ) ),
+                    'order'   => intval( $it->menu_order ),
+                ];
+            }
+            $menus[] = [
+                'old_id' => intval( $mid ),
+                'name'   => $menu->name,
+                'items'  => $out_items,
+            ];
+        }
+        return $menus;
+    }
+
+    /**
+     * Ricrea i menu sul sito di destinazione. Ritorna mappa old_id => new_id.
+     * Tutte le voci diventano custom link (gli ID di pagine/categorie del sito
+     * sorgente non esistono qui); la gerarchia è preservata via item map.
+     */
+    private function import_menus( $menus ) {
+        $map = [];
+        foreach ( (array) $menus as $m ) {
+            $name = sanitize_text_field( $m['name'] ?? 'Menu importato' );
+            // Nome già esistente → suffisso (non mischiare voci in un menu del sito)
+            if ( wp_get_nav_menu_object( $name ) ) {
+                $name .= ' (import)';
+                $n = 2;
+                while ( wp_get_nav_menu_object( $name ) ) {
+                    $name = sanitize_text_field( $m['name'] ) . " (import {$n})";
+                    $n++;
+                }
+            }
+            $new_id = wp_create_nav_menu( $name );
+            if ( is_wp_error( $new_id ) ) {
+                continue;
+            }
+
+            $items = (array) ( $m['items'] ?? [] );
+            usort( $items, function ( $a, $b ) {
+                return intval( $a['order'] ?? 0 ) <=> intval( $b['order'] ?? 0 );
+            } );
+
+            $item_map = []; // old item ID => new item ID (per la gerarchia)
+            foreach ( $items as $it ) {
+                $url = (string) ( $it['url'] ?? '' );
+                if ( $url !== '' && $url[0] === '/' ) {
+                    $url = home_url( $url );
+                }
+                $args = [
+                    'menu-item-title'   => sanitize_text_field( $it['title'] ?? '' ),
+                    'menu-item-url'     => $url !== '' ? esc_url_raw( $url ) : '#',
+                    'menu-item-type'    => 'custom',
+                    'menu-item-status'  => 'publish',
+                    'menu-item-target'  => ( ( $it['target'] ?? '' ) === '_blank' ) ? '_blank' : '',
+                    'menu-item-classes' => sanitize_text_field( $it['classes'] ?? '' ),
+                ];
+                $old_parent = intval( $it['parent'] ?? 0 );
+                if ( $old_parent && isset( $item_map[ $old_parent ] ) ) {
+                    $args['menu-item-parent-id'] = $item_map[ $old_parent ];
+                }
+                $new_item = wp_update_nav_menu_item( $new_id, 0, $args );
+                if ( ! is_wp_error( $new_item ) ) {
+                    $item_map[ intval( $it['id'] ?? 0 ) ] = $new_item;
+                }
+            }
+            $map[ intval( $m['old_id'] ?? 0 ) ] = $new_id;
+        }
+        return $map;
+    }
+
+    /**
+     * Rimappa ricorsivamente i settings.menu_id sui menu ricreati.
+     */
+    private function remap_menu_ids( $data, $menu_map ) {
+        if ( ! is_array( $data ) ) {
+            return $data;
+        }
+        foreach ( $data as $key => $value ) {
+            if ( $key === 'menu_id' && is_numeric( $value ) && isset( $menu_map[ intval( $value ) ] ) ) {
+                $data[ $key ] = $menu_map[ intval( $value ) ];
+            } elseif ( is_array( $value ) ) {
+                $data[ $key ] = $this->remap_menu_ids( $value, $menu_map );
+            }
+        }
+        return $data;
+    }
+
+    /* ─────────────────────────────────────────────
+     * Pagine WP collegate ai template (export/import)
+     * ───────────────────────────────────────────── */
+
+    /**
+     * Esporta le pagine WP che usano un template olobuild (_olo_template_id),
+     * marcando la front page.
+     */
+    private function export_olo_pages() {
+        $front_id = intval( get_option( 'page_on_front' ) );
+        $pages    = get_posts( [
+            'post_type'   => 'page',
+            'post_status' => [ 'publish', 'draft', 'private' ],
+            'numberposts' => -1,
+            'meta_key'    => '_olo_template_id',
+        ] );
+
+        $out = [];
+        foreach ( $pages as $p ) {
+            $out[] = [
+                'title'       => $p->post_title,
+                'slug'        => $p->post_name,
+                'status'      => $p->post_status,
+                'content'     => $p->post_content,
+                'template_id' => intval( get_post_meta( $p->ID, '_olo_template_id', true ) ),
+                'is_front'    => ( $p->ID === $front_id ),
+            ];
+        }
+        return $out;
+    }
+
+    /**
+     * Ricrea le pagine collegate ai template importati. Se esiste già una pagina
+     * con lo stesso slug viene riusata (aggiornandone il template). Imposta la
+     * front page se la sorgente la marcava.
+     *
+     * @return int Numero pagine create/collegate.
+     */
+    private function import_olo_pages( $pages, $id_map, $show_on_front = '' ) {
+        $made = 0;
+        foreach ( (array) $pages as $pg ) {
+            $tpl_old = intval( $pg['template_id'] ?? 0 );
+            $tpl_new = $id_map[ $tpl_old ] ?? 0;
+            if ( ! $tpl_new ) {
+                continue;
+            }
+
+            $slug     = sanitize_title( $pg['slug'] ?? '' );
+            $existing = $slug ? get_page_by_path( $slug, OBJECT, 'page' ) : null;
+
+            if ( $existing ) {
+                update_post_meta( $existing->ID, '_olo_template_id', $tpl_new );
+                $page_id = $existing->ID;
+            } else {
+                $status  = in_array( $pg['status'] ?? 'publish', [ 'publish', 'draft', 'private' ], true ) ? $pg['status'] : 'publish';
+                $page_id = wp_insert_post( [
+                    'post_type'    => 'page',
+                    'post_title'   => sanitize_text_field( $pg['title'] ?? 'Pagina importata' ),
+                    'post_name'    => $slug,
+                    'post_status'  => $status,
+                    'post_content' => wp_kses_post( $pg['content'] ?? '' ),
+                ] );
+                if ( ! $page_id || is_wp_error( $page_id ) ) {
+                    continue;
+                }
+                update_post_meta( $page_id, '_olo_template_id', $tpl_new );
+            }
+
+            if ( ! empty( $pg['is_front'] ) && $show_on_front === 'page' ) {
+                update_option( 'show_on_front', 'page' );
+                update_option( 'page_on_front', $page_id );
+            }
+            $made++;
+        }
+        return $made;
+    }
+
+    /* ─────────────────────────────────────────────
+     * Opzioni globali olobuild (import)
+     * ───────────────────────────────────────────── */
+
+    /**
+     * Importa le opzioni globali della famiglia olobuild, ognuna attraverso il
+     * proprio sanitizer (mai fidarsi del JSON del pacchetto).
+     */
+    private function import_global_options( $options ) {
+        $o = (array) $options;
+
+        if ( isset( $o['cursor_hud'] ) && is_array( $o['cursor_hud'] ) ) {
+            if ( ! class_exists( 'Olo_Cursor_Hud' ) ) {
+                require_once OLO_PATH . 'includes/class-cursor-hud.php';
+            }
+            update_option( 'olo_cursor_hud', Olo_Cursor_Hud::sanitize( $o['cursor_hud'] ), false );
+        }
+
+        if ( isset( $o['magnetic_cursor'] ) && is_array( $o['magnetic_cursor'] ) ) {
+            if ( ! class_exists( 'Olo_Magnetic_Cursor' ) ) {
+                require_once OLO_PATH . 'includes/class-magnetic-cursor.php';
+            }
+            update_option( 'olo_magnetic_cursor', Olo_Magnetic_Cursor::sanitize( $o['magnetic_cursor'] ), false );
+        }
+
+        if ( isset( $o['global_colors'] ) && is_array( $o['global_colors'] ) ) {
+            // Stesso schema/sanitizzazione di save_global_colors (REST).
+            $clean = [];
+            foreach ( $o['global_colors'] as $color ) {
+                if ( ! is_array( $color ) || empty( $color['id'] ) ) {
+                    continue;
+                }
+                $entry = [
+                    'id'    => sanitize_key( $color['id'] ),
+                    'label' => sanitize_text_field( $color['label'] ?? '' ),
+                    'value' => sanitize_text_field( $color['value'] ?? '#000000' ),
+                ];
+                if ( ! empty( $color['quick'] ) ) {
+                    $entry['quick'] = true;
+                }
+                $clean[] = $entry;
+            }
+            update_option( 'olo_global_colors', $clean, false );
+        }
+
+        if ( isset( $o['global_typography'] ) && is_array( $o['global_typography'] ) ) {
+            update_option( 'olo_global_typography', map_deep( $o['global_typography'], 'sanitize_text_field' ), false );
+        }
+
+        if ( isset( $o['custom_fonts'] ) && is_array( $o['custom_fonts'] ) ) {
+            update_option( 'olo_custom_fonts', map_deep( $o['custom_fonts'], 'sanitize_text_field' ), false );
+        }
     }
 
     /* ─────────────────────────────────────────────
@@ -573,7 +901,7 @@ class Olo_Site_Import_Export {
 
                         <div class="olo-field-info" style="margin-bottom:12px">
                             <label><?php esc_html_e( 'Esporta tutto il sito', 'olobuild' ); ?></label>
-                            <div class="olo-field-hint"><?php esc_html_e( 'Include tutti i template, header, footer e stili globali', 'olobuild' ); ?></div>
+                            <div class="olo-field-hint"><?php esc_html_e( 'Include template (header/footer compresi), pagine e front page, menu, media, stili e opzioni globali (HUD, cursore, colori)', 'olobuild' ); ?></div>
                         </div>
                         <button class="olo-btn-reset" id="olo-export-site-btn">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
@@ -601,6 +929,7 @@ class Olo_Site_Import_Export {
                             <input type="checkbox" id="olo-import-media" class="olo-checkbox" checked />
                             <label for="olo-import-media"><?php esc_html_e( 'Importa media (scarica e ricarica immagini)', 'olobuild' ); ?></label>
                         </div>
+                        <div class="olo-field-hint" style="margin-top:8px"><?php esc_html_e( 'Un pacchetto "sito completo" ricrea anche pagine, front page e menu, e SOSTITUISCE stili e opzioni globali del sito di destinazione.', 'olobuild' ); ?></div>
                         <div class="olo-actions" style="margin-top:12px">
                             <button class="olo-btn-orange" id="olo-import-btn" disabled>
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
