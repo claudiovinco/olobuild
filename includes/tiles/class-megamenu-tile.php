@@ -2110,7 +2110,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
     private function render_extra_links( $s, $context = 'desktop' ) {
         // Timecode di scroll "sala di regia" — nella zona destra, PRIMA degli extra link.
         if ( $context !== 'mobile' && ! empty( $s['show_timecode'] ) ) {
-            echo '<li role="none" class="olo-mm-tc-li"><span class="olo-mm-tc">TC 00:00:00:00</span></li>';
+            echo '<li class="olo-mm-tc-li"><span class="olo-mm-tc">TC 00:00:00:00</span></li>';
         }
         for ( $i = 1; $i <= 4; $i++ ) {
             $label = trim( $s["extra_link_{$i}_label"] ?? '' );
@@ -2130,9 +2130,9 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
             if ( $context === 'mobile' ) : ?>
                 <li><a href="<?php echo esc_url( $url ); ?>"<?php echo $is_btn ? ' class="olo-mm-btn olo-mm-mob-btn"' : ''; ?><?php echo $tgt; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tgt is a fixed literal attribute string set above; URL/label escaped inline ?>><?php echo esc_html( $label ) . $cart_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $cart_html built above from a fixed literal + (int) cart count ?></a></li>
             <?php elseif ( $is_btn ) : ?>
-                <li role="none"><a class="olo-mm-btn" href="<?php echo esc_url( $url ); ?>"<?php echo $tgt; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tgt is a fixed literal attribute string set above; URL/label escaped inline ?>><?php echo esc_html( $label ) . $cart_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $cart_html built above from a fixed literal + (int) cart count ?></a></li>
+                <li><a class="olo-mm-btn" href="<?php echo esc_url( $url ); ?>"<?php echo $tgt; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tgt is a fixed literal attribute string set above; URL/label escaped inline ?>><?php echo esc_html( $label ) . $cart_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $cart_html built above from a fixed literal + (int) cart count ?></a></li>
             <?php else : ?>
-                <li role="none"><a href="<?php echo esc_url( $url ); ?>" data-text="<?php echo esc_attr( $label ); ?>"<?php echo $tgt; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tgt is a fixed literal attribute string set above; URL/label escaped inline ?>><?php echo esc_html( $label ) . $cart_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $cart_html built above from a fixed literal + (int) cart count ?></a></li>
+                <li><a href="<?php echo esc_url( $url ); ?>" data-text="<?php echo esc_attr( $label ); ?>"<?php echo $tgt; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tgt is a fixed literal attribute string set above; URL/label escaped inline ?>><?php echo esc_html( $label ) . $cart_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $cart_html built above from a fixed literal + (int) cart count ?></a></li>
             <?php endif;
         }
         $phone = trim( (string) ( $s['nav_phone'] ?? '' ) );
@@ -2140,7 +2140,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
             $purl = trim( (string) ( $s['nav_phone_url'] ?? '' ) );
             $pcol = $this->safe_color_css( $s['nav_phone_color'] ?? '' ) ?: 'var(--olo-color-primary)';
             $href = $purl !== '' ? $purl : ( 'tel:' . preg_replace( '/[^0-9+]/', '', $phone ) );
-            $li   = $context === 'mobile' ? '<li>' : '<li role="none" class="olo-mm-tel-li">';
+            $li   = $context === 'mobile' ? '<li>' : '<li class="olo-mm-tel-li">';
             echo $li . '<a class="olo-mm-tel" href="' . esc_url( $href ) . '" style="color:' . esc_attr( $pcol ) . '">' . esc_html( $phone ) . '</a></li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $li is a fixed literal <li> string set above; URL/color/text escaped inline (esc_url/esc_attr/esc_html)
         }
     }
@@ -2364,7 +2364,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                     $left_items  = array_slice( $tree, 0, $split_point );
                     $right_items = array_slice( $tree, $split_point );
                 ?>
-                <ul class="olo-mm-nav olo-mm-nav-left" role="menubar">
+                <ul class="olo-mm-nav olo-mm-nav-left">
                     <?php foreach ( $left_items as $idx => $item ) :
                         $subs       = $children[ $item->ID ] ?? [];
                         $is_current = trailingslashit( $item->url ) === $current_url;
@@ -2376,12 +2376,12 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                         if ( $is_current ) $li_classes[] = 'olo-mm-active';
                         $li_attr = ! empty( $li_classes ) ? ' class="' . esc_attr( implode( ' ', $li_classes ) ) . '"' : '';
                     ?>
-                    <li<?php echo $li_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built with esc_attr() above; aria attrs are fixed literals ?> role="none"<?php echo $has_subs ? ' aria-haspopup="true" aria-expanded="false"' : ''; ?>>
+                    <li<?php echo $li_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built with esc_attr() above ?>>
                         <?php $this->render_nav_item_content( $item, $subs, $grandchildren, $s, $show_desc, $is_button, $is_mega, $has_panel_tpl, $has_subs ); ?>
                     </li>
                     <?php endforeach; ?>
                 </ul>
-                <ul class="olo-mm-nav olo-mm-nav-right" role="menubar">
+                <ul class="olo-mm-nav olo-mm-nav-right">
                     <?php foreach ( $right_items as $idx => $item ) :
                         $real_idx   = $idx + $split_point;
                         $subs       = $children[ $item->ID ] ?? [];
@@ -2394,7 +2394,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                         if ( $is_current ) $li_classes[] = 'olo-mm-active';
                         $li_attr = ! empty( $li_classes ) ? ' class="' . esc_attr( implode( ' ', $li_classes ) ) . '"' : '';
                     ?>
-                    <li<?php echo $li_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built with esc_attr() above; aria attrs are fixed literals ?> role="none"<?php echo $has_subs ? ' aria-haspopup="true" aria-expanded="false"' : ''; ?>>
+                    <li<?php echo $li_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built with esc_attr() above ?>>
                         <?php $this->render_nav_item_content( $item, $subs, $grandchildren, $s, $show_desc, $is_button, $is_mega, $has_panel_tpl, $has_subs ); ?>
                     </li>
                     <?php endforeach; ?>
@@ -2402,7 +2402,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 </ul>
                 <?php endif; ?>
 
-                <ul class="olo-mm-nav" role="menubar"<?php echo $is_split ? ' style="display:none!important"' : ''; ?>>
+                <ul class="olo-mm-nav"<?php echo $is_split ? ' style="display:none!important"' : ''; ?>>
                     <?php foreach ( $tree as $idx => $item ) :
                         $subs       = $children[ $item->ID ] ?? [];
                         $is_current = trailingslashit( $item->url ) === $current_url;
@@ -2415,13 +2415,13 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                         if ( $is_current ) $li_classes[] = 'olo-mm-active';
                         $li_attr = ! empty( $li_classes ) ? ' class="' . esc_attr( implode( ' ', $li_classes ) ) . '"' : '';
                     ?>
-                        <li<?php echo $li_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built with esc_attr() above; aria attrs are fixed literals ?> role="none"<?php echo $has_subs ? ' aria-haspopup="true" aria-expanded="false"' : ''; ?>>
+                        <li<?php echo $li_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built with esc_attr() above ?>>
                             <?php if ( $is_button ) : ?>
                                 <a href="<?php echo esc_url( $item->url ); ?>" class="olo-mm-btn"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?>>
                                     <?php echo esc_html( $item->title ); ?>
                                 </a>
                             <?php else : ?>
-                                <a href="<?php echo esc_url( $item->url ); ?>" data-text="<?php echo esc_attr( $item->title ); ?>"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?>>
+                                <a href="<?php echo esc_url( $item->url ); ?>" data-text="<?php echo esc_attr( $item->title ); ?>"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?><?php echo $has_subs ? ' aria-haspopup="true" aria-expanded="false"' : ''; ?>>
                                     <?php echo esc_html( $item->title ); ?>
                                     <?php $item_badge = $this->get_item_badge( $item ); if ( $item_badge !== '' ) : ?><span class="olo-mm-badge"><?php echo esc_html( $item_badge ); ?></span><?php endif; ?>
                                     <?php if ( $has_subs ) : ?>
@@ -2444,7 +2444,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                     <?php if ( empty( $s['extra_links_right'] ) ) { $this->render_extra_links( $s ); } ?>
                 </ul>
                 <?php if ( ! empty( $s['extra_links_right'] ) ) : ?>
-                <ul class="olo-mm-nav olo-mm-nav-utils" role="menubar"><?php $this->render_extra_links( $s ); ?></ul>
+                <ul class="olo-mm-nav olo-mm-nav-utils"><?php $this->render_extra_links( $s ); ?></ul>
                 <?php endif; ?>
 
                 <?php // Desktop search icon — search_style: expand (inline) | overlay | command ?>
@@ -3010,6 +3010,12 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 }
             }
 
+            /* aria-expanded vive sul link toggle (a[aria-haspopup]), non sul <li> */
+            function mmSetExp(li, val) {
+                var t = li.querySelector("a[aria-haspopup]");
+                if (t) t.setAttribute("aria-expanded", val);
+            }
+
             navItems.forEach(function(li) {
                 var panel = li.querySelector(".olo-mm-panel, .olo-mm-dropdown");
                 if (!panel) return;
@@ -3019,18 +3025,18 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                     navItems.forEach(function(o) {
                         if (o !== li) {
                             o.classList.remove("olo-mm-open");
-                            o.setAttribute("aria-expanded", "false");
+                            mmSetExp(o, "false");
                         }
                     });
                     // Position full-width panels before showing
                     posPanel(li);
                     li.classList.add("olo-mm-open");
-                    li.setAttribute("aria-expanded", "true");
+                    mmSetExp(li, "true");
                 });
                 li.addEventListener("mouseleave", function() {
                     timers._last = setTimeout(function() {
                         li.classList.remove("olo-mm-open");
-                        li.setAttribute("aria-expanded", "false");
+                        mmSetExp(li, "false");
                     }, 200);
                 });
             });
@@ -3040,7 +3046,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 if (e.key === "Escape") {
                     navItems.forEach(function(li) {
                         li.classList.remove("olo-mm-open");
-                        li.setAttribute("aria-expanded", "false");
+                        mmSetExp(li, "false");
                     });
                     closeMobile();
                 }
@@ -3495,7 +3501,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 <?php echo esc_html( $item->title ); ?>
             </a>
         <?php else : ?>
-            <a href="<?php echo esc_url( $item->url ); ?>" data-text="<?php echo esc_attr( $item->title ); ?>"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?>>
+            <a href="<?php echo esc_url( $item->url ); ?>" data-text="<?php echo esc_attr( $item->title ); ?>"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?><?php echo $has_subs ? ' aria-haspopup="true" aria-expanded="false"' : ''; ?>>
                 <?php echo esc_html( $item->title ); ?>
                 <?php $item_badge = $this->get_item_badge( $item ); if ( $item_badge !== '' ) : ?><span class="olo-mm-badge"><?php echo esc_html( $item_badge ); ?></span><?php endif; ?>
                 <?php if ( $has_subs ) : ?>

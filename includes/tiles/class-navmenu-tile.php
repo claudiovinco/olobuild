@@ -565,7 +565,7 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
                     <div id="<?php echo esc_attr( $nav_id ); ?>" class="olo-nav-fullscreen" role="dialog" aria-label="<?php echo esc_attr__( 'Mobile menu', 'olobuild' ); ?>">
                         <button class="uk-close uk-close-large" type="button" uk-close aria-label="<?php echo esc_attr__( 'Close menu', 'olobuild' ); ?>" onclick="this.parentElement.classList.remove('uk-open')"></button>
                         <div>
-                            <ul class="uk-nav uk-nav-default uk-nav-parent-icon" role="menu" uk-nav>
+                            <ul class="uk-nav uk-nav-default uk-nav-parent-icon" uk-nav>
                                 <?php $this->render_mobile_items( $tree, $children, $grandchildren ); ?>
                                 <?php if ( $has_search_ref ) { $this->render_referenced_search( $s['search_tile_id'], $s, true ); } elseif ( $has_search_legacy ) { $this->render_mobile_search( $s ); } ?>
                             </ul>
@@ -589,7 +589,7 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
                     <div id="<?php echo esc_attr( $nav_id ); ?>" uk-offcanvas="overlay: true" role="dialog" aria-label="<?php echo esc_attr__( 'Mobile menu', 'olobuild' ); ?>">
                         <div class="uk-offcanvas-bar">
                             <button class="uk-offcanvas-close" type="button" uk-close aria-label="<?php echo esc_attr__( 'Close menu', 'olobuild' ); ?>"></button>
-                            <ul class="uk-nav uk-nav-default uk-nav-parent-icon" role="menu" uk-nav>
+                            <ul class="uk-nav uk-nav-default uk-nav-parent-icon" uk-nav>
                                 <?php $this->render_mobile_items( $tree, $children, $grandchildren ); ?>
                                 <?php if ( $has_search_ref ) { $this->render_referenced_search( $s['search_tile_id'], $s, true ); } elseif ( $has_search_legacy ) { $this->render_mobile_search( $s ); } ?>
                             </ul>
