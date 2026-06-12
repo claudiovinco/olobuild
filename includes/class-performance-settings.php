@@ -111,6 +111,8 @@ class Olo_Performance_Settings {
             'defer_js'              => true,
             'css_cache_files'       => true,
             'minify_css'            => true,
+            // CSS per-tile: serve solo le porzioni di frontend.css dei tile in pagina
+            'css_per_tile'          => false,
             // Performance Hints
             'resource_hints'        => true,
             'font_preload'          => true,
@@ -166,8 +168,8 @@ class Olo_Performance_Settings {
         // Booleans
         $bools = [
             'critical_css_enabled', 'defer_js', 'css_cache_files', 'minify_css',
-            'resource_hints', 'font_preload', 'video_facade', 'fetchpriority',
-            'lazy_images', 'lazy_videos', 'browser_cache_headers',
+            'css_per_tile', 'resource_hints', 'font_preload', 'video_facade',
+            'fetchpriority', 'lazy_images', 'lazy_videos', 'browser_cache_headers',
             'remove_jquery_migrate', 'remove_emoji_scripts',
             'remove_block_css', 'remove_classic_theme',
         ];

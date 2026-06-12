@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Page builder professionale olonico con sistema a griglia (tile drag & drop).
- * Version:     1.4.215
+ * Version:     1.4.216
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuild
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '1.4.215' );
+define( 'OLO_VERSION', '1.4.216' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
 
@@ -386,6 +386,7 @@ require_once OLO_PATH . 'includes/class-css-builder.php';
 require_once OLO_PATH . 'includes/class-animation-builder.php';
 require_once OLO_PATH . 'includes/class-frontend-renderer.php';
 require_once OLO_PATH . 'includes/class-asset-optimizer.php';
+require_once OLO_PATH . 'includes/class-page-css.php';
 require_once OLO_PATH . 'includes/class-template-library.php';
 require_once OLO_PATH . 'includes/class-page-integration.php';
 require_once OLO_PATH . 'includes/class-header-integration.php';
@@ -711,6 +712,9 @@ add_action( 'plugins_loaded', function () {
 
     // Asset optimizer (defer scripts, CSS minification)
     Olo_Asset_Optimizer::init();
+
+    // CSS per-tile (safety net + invalidazione; lo swap vive in Asset_Optimizer)
+    Olo_Page_CSS::init();
 
     // Maintenance mode / Coming soon
     Olo_Maintenance_Mode::init();

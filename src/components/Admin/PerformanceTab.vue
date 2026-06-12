@@ -129,6 +129,13 @@
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.minify_css }" @click="set('minify_css', !form.minify_css)" role="switch"></button></div>
       </div>
+      <div class="cfg-row">
+        <div class="label-col">
+          <label>{{ t('CSS per-tile') }}</label>
+          <div class="hint">{{ t('Serve solo le porzioni di CSS dei tile presenti in pagina (mappa, gallery, hero, postgrid…) invece dell\'intero foglio. Riduce il CSS inutilizzato; fallback automatico al CSS completo in caso di dubbio.') }}</div>
+        </div>
+        <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.css_per_tile }" @click="set('css_per_tile', !form.css_per_tile)" role="switch"></button></div>
+      </div>
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Cache browser per i media (.htaccess)') }}</label>
@@ -296,6 +303,7 @@ const form = ref({
   defer_js: true,
   css_cache_files: true,
   minify_css: true,
+  css_per_tile: false,
   // Performance Hints
   resource_hints: true,
   font_preload: true,
@@ -325,8 +333,8 @@ const stats = ref({
 
 const FLAG_KEYS = [
   'critical_css_enabled', 'defer_js', 'css_cache_files', 'minify_css',
-  'resource_hints', 'font_preload', 'video_facade', 'fetchpriority',
-  'lazy_images', 'lazy_videos', 'browser_cache_headers',
+  'css_per_tile', 'resource_hints', 'font_preload', 'video_facade',
+  'fetchpriority', 'lazy_images', 'lazy_videos', 'browser_cache_headers',
   'remove_jquery_migrate', 'remove_emoji_scripts',
 ];
 const activeFlags = computed(() => FLAG_KEYS.filter(k => !!form.value[k]).length);

@@ -174,14 +174,32 @@ class Olo_Asset_Optimizer {
     }
 
     /**
-     * style_loader_src filter: swap the static frontend.css with its minified copy.
+     * style_loader_src filter: swap the static frontend.css with the per-page
+     * tile CSS (css_per_tile) or with the minified full copy (minify_css).
      */
     public static function swap_static_css( $src, $handle ) {
         if ( 'olo-frontend-css' !== $handle || is_admin() ) {
             return $src;
         }
-        $url = self::cache_static_css( 'assets/css/frontend.css', 'frontend' );
-        return $url ? $url : $src;
+
+        $opt = class_exists( 'Olo_Performance_Settings' ) ? Olo_Performance_Settings::get_option() : [];
+
+        // CSS per-tile: core + sole famiglie dei tile presenti in pagina
+        if ( ! empty( $opt['css_per_tile'] ) && class_exists( 'Olo_Page_CSS' ) ) {
+            $url = Olo_Page_CSS::page_css_url();
+            if ( $url ) {
+                return $url;
+            }
+        }
+
+        if ( ! empty( $opt['minify_css'] ) ) {
+            $url = self::cache_static_css( 'assets/css/frontend.css', 'frontend' );
+            if ( $url ) {
+                return $url;
+            }
+        }
+
+        return $src;
     }
 
     /**
@@ -277,8 +295,8 @@ class Olo_Asset_Optimizer {
             add_filter( 'script_loader_tag', [ __CLASS__, 'defer_scripts' ], 10, 2 );
         }
 
-        // Servi frontend.css minificato (copia cache invalidata su mtime+versione)
-        if ( ! empty( $opt['minify_css'] ) ) {
+        // Servi frontend.css minificato e/o per-tile (decisione dentro swap_static_css)
+        if ( ! empty( $opt['minify_css'] ) || ! empty( $opt['css_per_tile'] ) ) {
             add_filter( 'style_loader_src', [ __CLASS__, 'swap_static_css' ], 10, 2 );
         }
         // ES module scripts: sempre attivo (modules sono deferred by spec, non c'è scelta)
