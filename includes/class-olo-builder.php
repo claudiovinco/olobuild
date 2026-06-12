@@ -2355,7 +2355,7 @@ class Olo_Builder {
                     // Score derivato dai flag performance attivi
                     $flag_keys = [
                         'critical_css_enabled', 'defer_js', 'minify_css', 'css_cache_files',
-                        'css_per_tile', 'resource_hints', 'font_preload', 'video_facade',
+                        'css_per_tile', 'uikit_subset', 'resource_hints', 'font_preload', 'video_facade',
                         'fetchpriority', 'lazy_images', 'lazy_videos', 'browser_cache_headers',
                         'remove_jquery_migrate', 'remove_emoji_scripts',
                     ];

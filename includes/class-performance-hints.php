@@ -18,6 +18,10 @@ class Olo_Performance_Hints {
     /** @var int Number of <video> tags converted to lazy by the output buffer */
     private $lazy_video_count = 0;
 
+    /** @var bool Feature attive nel buffer di output */
+    private $buffer_lazy_videos  = false;
+    private $buffer_uikit_subset = false;
+
     /** @var array Fonts that need preloading */
     private $preload_fonts = [];
 
@@ -57,9 +61,12 @@ class Olo_Performance_Hints {
             add_filter( 'olo_image_attributes', [ $this, 'add_lazy_loading' ], 9, 2 );
         }
 
-        // Lazy load dei <video> self-hosted: buffer dell'output frontend che converte
-        // i video decorativi (autoplay+muted) in preload="none" + IntersectionObserver.
-        if ( ! empty( $opt['lazy_videos'] ) ) {
+        // Buffer dell'output frontend, condiviso da due feature:
+        // - lazy_videos: <video autoplay muted> → preload="none" + IntersectionObserver
+        // - uikit_subset: apprendimento famiglie uk-* usate + auto-guarigione
+        $this->buffer_lazy_videos  = ! empty( $opt['lazy_videos'] );
+        $this->buffer_uikit_subset = ! empty( $opt['uikit_subset'] ) && class_exists( 'Olo_Uikit_Subset' );
+        if ( $this->buffer_lazy_videos || $this->buffer_uikit_subset ) {
             add_action( 'template_redirect', [ $this, 'start_lazy_video_buffer' ], 1 );
         }
 
@@ -311,7 +318,12 @@ class Olo_Performance_Hints {
      * @return string
      */
     public function lazy_videos_html( $html ) {
-        if ( ! is_string( $html ) || stripos( $html, '<video' ) === false ) {
+        // UIkit subset: apprendi le famiglie usate / inietta fallback se servono
+        if ( $this->buffer_uikit_subset && is_string( $html ) ) {
+            $html = Olo_Uikit_Subset::learn_and_heal( $html );
+        }
+
+        if ( ! $this->buffer_lazy_videos || ! is_string( $html ) || stripos( $html, '<video' ) === false ) {
             return $html;
         }
 

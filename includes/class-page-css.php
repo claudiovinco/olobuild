@@ -51,6 +51,9 @@ class Olo_Page_CSS {
     /** @var bool Fallback full CSS già accodato. */
     private static $fallback_done = false;
 
+    /** @var int Wrapper @media duplicati emessi dal parser (per la validazione graffe). */
+    private static $extra_wrappers = 0;
+
     public static function init() {
         // Safety net: template renderizzati a runtime (shortcode nel body, nested)
         add_action( 'olo_template_rendered', [ __CLASS__, 'ensure_template' ], 10, 1 );
@@ -248,15 +251,17 @@ class Olo_Page_CSS {
             return false;
         }
 
+        self::$extra_wrappers = 0;
         $buckets = self::parse_buckets( $stripped );
         if ( false === $buckets ) {
             return false;
         }
 
         // Validazione: la somma dei bucket deve coprire tutte le regole originali.
+        // Un @media con regole di N famiglie emette N wrapper → N-1 coppie extra.
         $total = implode( '', $buckets );
-        if ( substr_count( $total, '{' ) !== substr_count( $stripped, '{' )
-            || substr_count( $total, '}' ) !== substr_count( $stripped, '}' ) ) {
+        if ( substr_count( $total, '{' ) !== substr_count( $stripped, '{' ) + self::$extra_wrappers
+            || substr_count( $total, '}' ) !== substr_count( $stripped, '}' ) + self::$extra_wrappers ) {
             return false;
         }
 
@@ -322,10 +327,15 @@ class Olo_Page_CSS {
                 if ( false === $inner ) {
                     return false;
                 }
+                $emitted = 0;
                 foreach ( $inner as $key => $chunk ) {
                     if ( '' !== trim( $chunk ) ) {
                         $buckets[ $key ] .= $head . '{' . $chunk . '}' . "\n";
+                        $emitted++;
                     }
+                }
+                if ( $emitted > 1 ) {
+                    self::$extra_wrappers += $emitted - 1;
                 }
             } else {
                 $bucket = self::classify( $head );

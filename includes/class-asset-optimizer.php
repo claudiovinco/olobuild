@@ -178,11 +178,22 @@ class Olo_Asset_Optimizer {
      * tile CSS (css_per_tile) or with the minified full copy (minify_css).
      */
     public static function swap_static_css( $src, $handle ) {
-        if ( 'olo-frontend-css' !== $handle || is_admin() ) {
+        if ( is_admin() || ! in_array( $handle, [ 'olo-frontend-css', 'uikit-css' ], true ) ) {
             return $src;
         }
 
         $opt = class_exists( 'Olo_Performance_Settings' ) ? Olo_Performance_Settings::get_option() : [];
+
+        // UIkit: subset auto-appreso dei soli componenti usati dal sito
+        if ( 'uikit-css' === $handle ) {
+            if ( ! empty( $opt['uikit_subset'] ) && class_exists( 'Olo_Uikit_Subset' ) ) {
+                $url = Olo_Uikit_Subset::subset_url();
+                if ( $url ) {
+                    return $url;
+                }
+            }
+            return $src;
+        }
 
         // CSS per-tile: core + sole famiglie dei tile presenti in pagina
         if ( ! empty( $opt['css_per_tile'] ) && class_exists( 'Olo_Page_CSS' ) ) {
@@ -295,8 +306,8 @@ class Olo_Asset_Optimizer {
             add_filter( 'script_loader_tag', [ __CLASS__, 'defer_scripts' ], 10, 2 );
         }
 
-        // Servi frontend.css minificato e/o per-tile (decisione dentro swap_static_css)
-        if ( ! empty( $opt['minify_css'] ) || ! empty( $opt['css_per_tile'] ) ) {
+        // Servi frontend.css minificato/per-tile e uikit subset (decisione dentro swap_static_css)
+        if ( ! empty( $opt['minify_css'] ) || ! empty( $opt['css_per_tile'] ) || ! empty( $opt['uikit_subset'] ) ) {
             add_filter( 'style_loader_src', [ __CLASS__, 'swap_static_css' ], 10, 2 );
         }
         // ES module scripts: sempre attivo (modules sono deferred by spec, non c'è scelta)

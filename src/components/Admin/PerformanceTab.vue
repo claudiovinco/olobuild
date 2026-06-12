@@ -136,6 +136,13 @@
         </div>
         <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.css_per_tile }" @click="set('css_per_tile', !form.css_per_tile)" role="switch"></button></div>
       </div>
+      <div class="cfg-row">
+        <div class="label-col">
+          <label>{{ t('UIkit subset') }}</label>
+          <div class="hint">{{ t('Serve solo i componenti UIkit usati dal sito, appresi automaticamente dalle pagine. Prima visita col CSS completo, poi subset; si ri-apprende al salvataggio dei template.') }}</div>
+        </div>
+        <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.uikit_subset }" @click="set('uikit_subset', !form.uikit_subset)" role="switch"></button></div>
+      </div>
       <div class="cfg-row no-divider">
         <div class="label-col">
           <label>{{ t('Cache browser per i media (.htaccess)') }}</label>
@@ -304,6 +311,7 @@ const form = ref({
   css_cache_files: true,
   minify_css: true,
   css_per_tile: false,
+  uikit_subset: false,
   // Performance Hints
   resource_hints: true,
   font_preload: true,
@@ -333,7 +341,7 @@ const stats = ref({
 
 const FLAG_KEYS = [
   'critical_css_enabled', 'defer_js', 'css_cache_files', 'minify_css',
-  'css_per_tile', 'resource_hints', 'font_preload', 'video_facade',
+  'css_per_tile', 'uikit_subset', 'resource_hints', 'font_preload', 'video_facade',
   'fetchpriority', 'lazy_images', 'lazy_videos', 'browser_cache_headers',
   'remove_jquery_migrate', 'remove_emoji_scripts',
 ];
