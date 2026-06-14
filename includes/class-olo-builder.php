@@ -620,6 +620,7 @@ class Olo_Builder {
             wp_localize_script( 'olo-admin-settings-js', 'oloData', [
                 'restUrl'           => esc_url_raw( rest_url( 'olo/v1' ) . '/' ),
                 'nonce'             => wp_create_nonce( 'wp_rest' ),
+                'importsDisabled'   => olo_imports_disabled(),
                 'perfNonce'         => wp_create_nonce( 'olo_perf_action' ),
                 'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
                 'adminUrl'          => admin_url(),
@@ -745,6 +746,7 @@ class Olo_Builder {
         wp_localize_script( 'olobuilder-js', 'oloData', [
             'restUrl'        => esc_url_raw( rest_url( 'olo/v1' ) ),
             'nonce'          => wp_create_nonce( 'wp_rest' ),
+            'importsDisabled' => olo_imports_disabled(),
             'userId'         => get_current_user_id(),
             'userName'       => wp_get_current_user()->display_name,
             'version'        => OLO_VERSION,

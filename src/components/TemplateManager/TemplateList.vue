@@ -15,11 +15,11 @@
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         {{ selectMode ? t('Annulla') : t('Seleziona') }}
       </button>
-      <button class="btn-sec" @click="triggerImport" :title="t('Importa un template o un tema da JSON')">
+      <button v-if="!importsDisabled" class="btn-sec" @click="triggerImport" :title="t('Importa un template o un tema da JSON')">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M7 9l5-5 5 5M5 20h14"/></svg>
         {{ t('Importa') }}
       </button>
-      <input ref="importFileRef" type="file" accept=".json" style="display:none" @change="handleImportFile" />
+      <input v-if="!importsDisabled" ref="importFileRef" type="file" accept=".json" style="display:none" @change="handleImportFile" />
       <div class="split" ref="dropdownRef">
         <button class="btn-pri main" @click.stop="showNewMenu = !showNewMenu">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -294,6 +294,7 @@ const renamingId = ref(null);
 const renameDraft = ref('');
 const renameInputRef = ref(null);
 const importFileRef = ref(null);
+const importsDisabled = !!(window.oloData && window.oloData.importsDisabled);
 const toastMsg = ref('');
 
 /* ─── Selezione multipla + export "tema" (bundle di template) ──────── */

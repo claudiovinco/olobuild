@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Page builder professionale olonico con sistema a griglia (tile drag & drop).
- * Version:     1.4.227
+ * Version:     1.4.228
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuild
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '1.4.227' );
+define( 'OLO_VERSION', '1.4.228' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
 
@@ -89,6 +89,28 @@ function olo_csv_safe( $value ) {
         return "'" . $value;
     }
     return $value;
+}
+
+/**
+ * Import di temi/siti/template disabilitato? Pensato per gli ambienti sandbox
+ * condivisi (es. try.olotheme.com) dove più utenti provano lo stesso sito: un
+ * import riscriverebbe opzioni GLOBALI (olo_active_header/footer/404, olo_styles,
+ * page_on_front) rompendo la sandbox per tutti.
+ *
+ * Si attiva con `define( 'OLO_DISABLE_IMPORTS', true );` in wp-config.php — per-sito
+ * e non disattivabile dalla UI da un utente trial. Inerte ovunque non sia definita.
+ */
+function olo_imports_disabled() {
+    return defined( 'OLO_DISABLE_IMPORTS' ) && OLO_DISABLE_IMPORTS;
+}
+
+/** WP_Error 403 standard per gli endpoint REST di import quando disabilitati. */
+function olo_imports_disabled_error() {
+    return new WP_Error(
+        'olo_imports_disabled',
+        __( 'L\'importazione di temi e template è disabilitata su questo sito.', 'olobuild' ),
+        [ 'status' => 403 ]
+    );
 }
 
 /**

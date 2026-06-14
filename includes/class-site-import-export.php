@@ -209,6 +209,7 @@ class Olo_Site_Import_Export {
      * ───────────────────────────────────────────── */
 
     public function import_template( $request ) {
+        if ( olo_imports_disabled() ) return olo_imports_disabled_error();
         $json = $request->get_json_params();
         if ( empty( $json['format'] ) || $json['format'] !== 'olobuild-template' ) {
             return new WP_Error( 'invalid', 'Formato non valido. Richiesto olobuild-template.', [ 'status' => 400 ] );
@@ -261,6 +262,7 @@ class Olo_Site_Import_Export {
      * ───────────────────────────────────────────── */
 
     public function import_site( $request ) {
+        if ( olo_imports_disabled() ) return olo_imports_disabled_error();
         $json = $request->get_json_params();
         if ( empty( $json['format'] ) || $json['format'] !== 'olobuild-site' ) {
             return new WP_Error( 'invalid', 'Formato non valido. Richiesto olobuild-site.', [ 'status' => 400 ] );

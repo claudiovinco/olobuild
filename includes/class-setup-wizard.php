@@ -542,6 +542,9 @@ class Olo_Setup_Wizard {
         if ( ! current_user_can( 'manage_options' ) ) {
             wp_send_json_error( __( 'Permessi insufficienti.', 'olobuild' ) );
         }
+        if ( olo_imports_disabled() ) {
+            wp_send_json_error( __( 'L\'importazione di temi è disabilitata su questo sito.', 'olobuild' ) );
+        }
 
         $theme_id = sanitize_text_field( $_POST['theme_id'] ?? '' );
         if ( empty( $theme_id ) ) {

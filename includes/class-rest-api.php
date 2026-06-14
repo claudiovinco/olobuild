@@ -1708,6 +1708,7 @@ class Olo_Rest_Api {
     }
 
     public function import_template( $request ) {
+        if ( olo_imports_disabled() ) return olo_imports_disabled_error();
         $body = $request->get_json_params();
 
         if ( empty( $body['olo_export'] ) || $body['olo_export'] !== 'template' ) {
@@ -1806,6 +1807,7 @@ class Olo_Rest_Api {
      * restano nel cockpit, pronti per essere assegnati o usati via shortcode).
      */
     public function import_bundle( $request ) {
+        if ( olo_imports_disabled() ) return olo_imports_disabled_error();
         $body = $request->get_json_params();
         if ( empty( $body['olo_export'] ) || $body['olo_export'] !== 'theme-bundle' ) {
             return new WP_Error( 'invalid_file', 'File non valido: non è un tema Olobuild (theme-bundle).', [ 'status' => 400 ] );
@@ -2313,6 +2315,7 @@ class Olo_Rest_Api {
     }
 
     public function import_theme( $request ) {
+        if ( olo_imports_disabled() ) return olo_imports_disabled_error();
         require_once OLO_PATH . 'includes/class-theme-importer.php';
         $result = Olo_Theme_Importer::import_theme( $request['theme_id'] );
         if ( is_wp_error( $result ) ) return $result;
