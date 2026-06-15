@@ -54,7 +54,7 @@ class Olo_Performance_Settings {
 
     /**
      * Scrive (o rimuove) il blocco marker "Olobuild Performance" in .htaccess:
-     * Expires/Cache-Control per immagini, video, font (6 mesi) e CSS/JS (1 mese).
+     * Expires/Cache-Control per immagini, video, font (6 mesi) e CSS/JS (1 anno, versionati con ?ver=).
      * No-op silenzioso su server non-Apache/LiteSpeed o .htaccess non scrivibile.
      *
      * @param bool $enabled Scrive le regole se true, le rimuove se false.
@@ -85,12 +85,19 @@ class Olo_Performance_Settings {
             foreach ( $media_types as $type ) {
                 $lines[] = 'ExpiresByType ' . $type . ' "access plus 6 months"';
             }
-            $lines[] = 'ExpiresByType text/css "access plus 1 month"';
-            $lines[] = 'ExpiresByType application/javascript "access plus 1 month"';
+            // CSS/JS versionati con ?ver= → cache-busting automatico, safe a 1 anno.
+            // text/javascript è il MIME che i server moderni usano per i .js (non application/javascript):
+            // senza questa riga i JS ricadevano sul default host (~7 giorni nel report GTmetrix).
+            $lines[] = 'ExpiresByType text/css "access plus 1 year"';
+            $lines[] = 'ExpiresByType text/javascript "access plus 1 year"';
+            $lines[] = 'ExpiresByType application/javascript "access plus 1 year"';
             $lines[] = '</IfModule>';
             $lines[] = '<IfModule mod_headers.c>';
             $lines[] = '<FilesMatch "\.(jpe?g|png|gif|webp|avif|svg|ico|mp4|webm|mp3|woff2?|ttf)$">';
             $lines[] = 'Header set Cache-Control "public, max-age=15552000"';
+            $lines[] = '</FilesMatch>';
+            $lines[] = '<FilesMatch "\.(css|js)$">';
+            $lines[] = 'Header set Cache-Control "public, max-age=31536000"';
             $lines[] = '</FilesMatch>';
             $lines[] = '</IfModule>';
         }
