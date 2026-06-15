@@ -110,6 +110,13 @@
     <div class="cfg-card-body tight">
       <div class="cfg-row">
         <div class="label-col">
+          <label>{{ t('Full-page cache') }}</label>
+          <div class="hint">{{ t('Salva l\'HTML generato e lo serve prima di WordPress: abbatte il tempo di risposta (TTFB). Esclude automaticamente utenti loggati, carrello/checkout WooCommerce e richieste POST. Installa il drop-in advanced-cache.php e attiva WP_CACHE; si svuota a ogni modifica di contenuto.') }}</div>
+        </div>
+        <div class="control-col"><button class="cfg-switch" :class="{ 'is-on': form.full_page_cache }" @click="set('full_page_cache', !form.full_page_cache)" role="switch"></button></div>
+      </div>
+      <div class="cfg-row">
+        <div class="label-col">
           <label>{{ t('Defer JavaScript') }}</label>
           <div class="hint">{{ t('Aggiunge defer agli script frontend di Olobuild. Non blocca il rendering della pagina.') }}</div>
         </div>
@@ -307,6 +314,7 @@ const form = ref({
   critical_css_ttl: 7,
   critical_css_sections: 2,
   // Asset Optimizer
+  full_page_cache: false,
   defer_js: true,
   css_cache_files: true,
   minify_css: true,
@@ -340,7 +348,7 @@ const stats = ref({
 });
 
 const FLAG_KEYS = [
-  'critical_css_enabled', 'defer_js', 'css_cache_files', 'minify_css',
+  'critical_css_enabled', 'full_page_cache', 'defer_js', 'css_cache_files', 'minify_css',
   'css_per_tile', 'uikit_subset', 'resource_hints', 'font_preload', 'video_facade',
   'fetchpriority', 'lazy_images', 'lazy_videos', 'browser_cache_headers',
   'remove_jquery_migrate', 'remove_emoji_scripts',

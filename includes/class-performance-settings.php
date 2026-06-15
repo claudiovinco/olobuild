@@ -452,48 +452,6 @@ class Olo_Performance_Settings {
     private function render_tab_assets( $opt, $cache_info ) {
         $n = self::OPT;
         ?>
-        <!-- Full-page cache card -->
-        <div class="olo-card">
-            <div class="olo-card-head">
-                <div class="olo-card-icon black">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                </div>
-                <div>
-                    <h3><?php esc_html_e( 'Full-page cache', 'olobuild' ); ?></h3>
-                    <p><?php esc_html_e( 'Salva l\'HTML generato e lo serve prima di WordPress: abbatte il tempo di risposta (TTFB). Esclude automaticamente utenti loggati, carrello/checkout WooCommerce, richieste POST e pagine con sessione.', 'olobuild' ); ?></p>
-                </div>
-            </div>
-            <div class="olo-card-body">
-                <div class="olo-field-row">
-                    <div class="olo-field-info">
-                        <label><?php esc_html_e( 'Abilita full-page cache', 'olobuild' ); ?></label>
-                        <span class="olo-field-hint"><?php esc_html_e( 'Installa il drop-in advanced-cache.php e attiva WP_CACHE. La cache si svuota a ogni modifica di contenuto.', 'olobuild' ); ?></span>
-                    </div>
-                    <label class="olo-toggle">
-                        <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[full_page_cache]" value="1" <?php checked( $opt['full_page_cache'] ); ?> />
-                        <span class="olo-toggle-slider"></span>
-                    </label>
-                </div>
-                <div class="olo-field-row">
-                    <div class="olo-field-info">
-                        <label><?php esc_html_e( 'Durata cache', 'olobuild' ); ?></label>
-                        <span class="olo-field-hint"><?php esc_html_e( 'Dopo questo tempo la pagina viene rigenerata (oltre all\'invalidazione automatica a ogni modifica).', 'olobuild' ); ?></span>
-                    </div>
-                    <div class="olo-perf-number-wrap">
-                        <input type="number" name="<?php echo esc_attr( $n ); ?>[full_page_ttl]" value="<?php echo esc_attr( $opt['full_page_ttl'] ); ?>"
-                               min="1" max="720" class="olo-field-input olo-perf-number" />
-                        <span class="olo-perf-number-unit"><?php esc_html_e( 'ore', 'olobuild' ); ?></span>
-                    </div>
-                </div>
-                <div class="olo-perf-textarea-row">
-                    <label class="olo-perf-textarea-label"><?php esc_html_e( 'URL da escludere', 'olobuild' ); ?></label>
-                    <textarea name="<?php echo esc_attr( $n ); ?>[full_page_exclude]" rows="3" class="olo-field-input wide"
-                              placeholder="/contatti&#10;/promo-landing"><?php echo esc_textarea( $opt['full_page_exclude'] ); ?></textarea>
-                    <span class="olo-field-hint"><?php esc_html_e( 'Una sottostringa di URL per riga: le pagine che la contengono non verranno mai cachate.', 'olobuild' ); ?></span>
-                </div>
-            </div>
-        </div>
-
         <!-- Settings card -->
         <div class="olo-card">
             <div class="olo-card-head">
