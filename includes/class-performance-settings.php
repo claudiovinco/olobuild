@@ -111,6 +111,10 @@ class Olo_Performance_Settings {
             'defer_js'              => true,
             'css_cache_files'       => true,
             'minify_css'            => true,
+            // Full-page cache (drop-in advanced-cache.php)
+            'full_page_cache'       => false,
+            'full_page_ttl'         => 8,    // ore
+            'full_page_exclude'     => '',   // sottostringhe di URL da escludere, una per riga
             // CSS per-tile: serve solo le porzioni di frontend.css dei tile in pagina
             'css_per_tile'          => false,
             // UIkit subset: solo i componenti uk-* usati dal sito (auto-appreso)
@@ -171,7 +175,7 @@ class Olo_Performance_Settings {
         $bools = [
             'critical_css_enabled', 'defer_js', 'css_cache_files', 'minify_css',
             'css_per_tile', 'uikit_subset', 'resource_hints', 'font_preload', 'video_facade',
-            'fetchpriority', 'lazy_images', 'lazy_videos', 'browser_cache_headers',
+            'fetchpriority', 'lazy_images', 'lazy_videos', 'browser_cache_headers', 'full_page_cache',
             'remove_jquery_migrate', 'remove_emoji_scripts',
             'remove_block_css', 'remove_classic_theme',
         ];
@@ -182,10 +186,12 @@ class Olo_Performance_Settings {
         // Integers
         $clean['critical_css_ttl']      = max( 1, min( 30, intval( $input['critical_css_ttl'] ?? 7 ) ) );
         $clean['critical_css_sections'] = max( 1, min( 5, intval( $input['critical_css_sections'] ?? 2 ) ) );
+        $clean['full_page_ttl']         = max( 1, min( 720, intval( $input['full_page_ttl'] ?? 8 ) ) );
 
         // Textarea (domini)
         $clean['dns_prefetch_domains'] = sanitize_textarea_field( $input['dns_prefetch_domains'] ?? '' );
         $clean['preconnect_domains']   = sanitize_textarea_field( $input['preconnect_domains'] ?? '' );
+        $clean['full_page_exclude']    = sanitize_textarea_field( $input['full_page_exclude'] ?? '' );
 
         // Sync legacy option for Critical CSS
         update_option( 'olo_critical_css_enabled', $clean['critical_css_enabled'] ? '1' : '' );
@@ -446,6 +452,48 @@ class Olo_Performance_Settings {
     private function render_tab_assets( $opt, $cache_info ) {
         $n = self::OPT;
         ?>
+        <!-- Full-page cache card -->
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon black">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                </div>
+                <div>
+                    <h3><?php esc_html_e( 'Full-page cache', 'olobuild' ); ?></h3>
+                    <p><?php esc_html_e( 'Salva l\'HTML generato e lo serve prima di WordPress: abbatte il tempo di risposta (TTFB). Esclude automaticamente utenti loggati, carrello/checkout WooCommerce, richieste POST e pagine con sessione.', 'olobuild' ); ?></p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Abilita full-page cache', 'olobuild' ); ?></label>
+                        <span class="olo-field-hint"><?php esc_html_e( 'Installa il drop-in advanced-cache.php e attiva WP_CACHE. La cache si svuota a ogni modifica di contenuto.', 'olobuild' ); ?></span>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo esc_attr( $n ); ?>[full_page_cache]" value="1" <?php checked( $opt['full_page_cache'] ); ?> />
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Durata cache', 'olobuild' ); ?></label>
+                        <span class="olo-field-hint"><?php esc_html_e( 'Dopo questo tempo la pagina viene rigenerata (oltre all\'invalidazione automatica a ogni modifica).', 'olobuild' ); ?></span>
+                    </div>
+                    <div class="olo-perf-number-wrap">
+                        <input type="number" name="<?php echo esc_attr( $n ); ?>[full_page_ttl]" value="<?php echo esc_attr( $opt['full_page_ttl'] ); ?>"
+                               min="1" max="720" class="olo-field-input olo-perf-number" />
+                        <span class="olo-perf-number-unit"><?php esc_html_e( 'ore', 'olobuild' ); ?></span>
+                    </div>
+                </div>
+                <div class="olo-perf-textarea-row">
+                    <label class="olo-perf-textarea-label"><?php esc_html_e( 'URL da escludere', 'olobuild' ); ?></label>
+                    <textarea name="<?php echo esc_attr( $n ); ?>[full_page_exclude]" rows="3" class="olo-field-input wide"
+                              placeholder="/contatti&#10;/promo-landing"><?php echo esc_textarea( $opt['full_page_exclude'] ); ?></textarea>
+                    <span class="olo-field-hint"><?php esc_html_e( 'Una sottostringa di URL per riga: le pagine che la contengono non verranno mai cachate.', 'olobuild' ); ?></span>
+                </div>
+            </div>
+        </div>
+
         <!-- Settings card -->
         <div class="olo-card">
             <div class="olo-card-head">

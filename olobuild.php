@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Page builder professionale olonico con sistema a griglia (tile drag & drop).
- * Version:     1.4.228
+ * Version:     1.4.229
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuild
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '1.4.228' );
+define( 'OLO_VERSION', '1.4.229' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
 
@@ -494,6 +494,8 @@ require_once OLO_PATH . 'includes/class-template-conditions.php';
 require_once OLO_PATH . 'includes/class-accessibility.php';
 require_once OLO_PATH . 'includes/class-performance-hints.php';
 require_once OLO_PATH . 'includes/class-performance-settings.php';
+require_once OLO_PATH . 'includes/cache/class-full-page-cache.php';
+Olo_FullPage_Cache::init();
 require_once OLO_PATH . 'includes/class-white-label.php';
 require_once OLO_PATH . 'includes/class-site-import-export.php';
 require_once OLO_PATH . 'includes/class-tools.php';
@@ -597,6 +599,11 @@ register_activation_hook( __FILE__, function () {
     if ( ! get_option( 'olo_setup_complete' ) ) {
         set_transient( 'olo_activating', true, 60 );
     }
+
+    // Full-page cache: se il toggle è già attivo, reinstalla il drop-in (utile dopo un update).
+    if ( class_exists( 'Olo_FullPage_Cache' ) ) {
+        Olo_FullPage_Cache::on_plugin_activate();
+    }
 } );
 
 // Deactivation hook
@@ -604,6 +611,11 @@ register_deactivation_hook( __FILE__, function () {
     delete_transient( 'olo_builder_activated' );
     wp_clear_scheduled_hook( 'olo_weekly_cleanup' );
     wp_clear_scheduled_hook( 'olo_sentinel_scan' );
+    // Full-page cache: rimuovi il drop-in e il WP_CACHE nostri (e svuota), per non
+    // lasciare un advanced-cache.php orfano quando OLObuild è disattivato.
+    if ( class_exists( 'Olo_FullPage_Cache' ) ) {
+        Olo_FullPage_Cache::on_plugin_deactivate();
+    }
 } );
 
 // Weekly cron for orphaned revision cleanup
