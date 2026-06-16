@@ -214,30 +214,85 @@ class Olo_Style_System {
         $merged    = array_replace( $existing, $sanitized );
         update_option( 'olo_styles', $merged, false );
 
-        // Allinea i global color dei ruoli core (primary/secondary/...) al valore appena salvato.
-        // In generate_css i olo_global_colors[id core] sono emessi DOPO olo_styles.colors e
-        // VINCONO nel CSS: senza questo sync server-side un cambio dal pannello non si vedrebbe
-        // sul frontend. Robusto: vale per ogni flusso di salvataggio (UI, API), indipendente
-        // dalla cache del bundle JS.
+        // Allinea i global color dei ruoli core al valore appena salvato (vedi sync_global_palette).
         if ( isset( $sanitized['colors'] ) && is_array( $sanitized['colors'] ) ) {
-            $gc = get_option( 'olo_global_colors', [] );
-            if ( is_array( $gc ) && $gc ) {
-                $changed = false;
-                foreach ( $gc as &$g ) {
-                    $id = isset( $g['id'] ) ? $g['id'] : '';
-                    if ( $id && isset( $sanitized['colors'][ $id ] ) && ( ! isset( $g['value'] ) || $g['value'] !== $sanitized['colors'][ $id ] ) ) {
-                        $g['value'] = $sanitized['colors'][ $id ];
-                        $changed    = true;
-                    }
-                }
-                unset( $g );
-                if ( $changed ) {
-                    update_option( 'olo_global_colors', $gc, false );
-                }
-            }
+            $this->sync_global_palette( $sanitized['colors'] );
         }
 
         return $merged;
+    }
+
+    /**
+     * Allinea olo_global_colors ai colori del tema/palette (ruoli core).
+     *
+     * In generate_css i olo_global_colors[id core] sono emessi DOPO olo_styles.colors e VINCONO
+     * nel CSS: se restano placeholder (es. import tema che scrive solo olo_styles) SOVRASCRIVONO
+     * la palette del cliente. Questo li tiene allineati, qualunque sia il flusso (UI, API, import).
+     * accent/accent-2 (senza equivalente diretto in colors) seguono primary/secondary. Idempotente.
+     *
+     * @param array $colors  blocco olo_styles['colors'] (primary/secondary/...).
+     */
+    public function sync_global_palette( $colors ) {
+        if ( ! is_array( $colors ) || empty( $colors ) ) {
+            return;
+        }
+        $fallbacks = [
+            'accent'   => $colors['accent']   ?? ( $colors['primary']   ?? null ),
+            'accent-2' => $colors['accent-2'] ?? ( $colors['secondary'] ?? null ),
+            'accent_2' => $colors['accent_2'] ?? ( $colors['secondary'] ?? null ),
+        ];
+        $gc = get_option( 'olo_global_colors', [] );
+        if ( ! is_array( $gc ) || ! $gc ) {
+            return;
+        }
+        $changed = false;
+        foreach ( $gc as &$g ) {
+            $id = isset( $g['id'] ) ? $g['id'] : '';
+            if ( '' === $id ) {
+                continue;
+            }
+            $val = $colors[ $id ] ?? ( $fallbacks[ $id ] ?? null );
+            if ( null !== $val && ( ! isset( $g['value'] ) || $g['value'] !== $val ) ) {
+                $g['value'] = $val;
+                $changed    = true;
+            }
+        }
+        unset( $g );
+        if ( $changed ) {
+            update_option( 'olo_global_colors', $gc, false );
+        }
+    }
+
+    /**
+     * Allinea i ruoli BRAND della palette in modalità scura (olo_styles['dark_colors']) ai
+     * colori del tema. I default generici (indaco/slate) farebbero rendere il primario, gli
+     * accenti e i link in indaco quando html.olo-dark-mode è attivo, ignorando il tema. Tocca
+     * SOLO i ruoli brand: i neutri dark (background/text/border) restano (dark mode resta scuro).
+     * Pensato per l'IMPORT/applicazione di un tema, non per ogni salvataggio fine. Idempotente.
+     *
+     * @param array $colors  blocco olo_styles['colors'].
+     */
+    public function sync_dark_palette( $colors ) {
+        if ( ! is_array( $colors ) || empty( $colors ) ) {
+            return;
+        }
+        $st = get_option( 'olo_styles', [] );
+        if ( ! is_array( $st ) ) {
+            return;
+        }
+        $dc    = ( isset( $st['dark_colors'] ) && is_array( $st['dark_colors'] ) ) ? $st['dark_colors'] : [];
+        $brand = [ 'primary', 'primary_contrast', 'secondary', 'secondary_contrast', 'link' ];
+        $changed = false;
+        foreach ( $brand as $k ) {
+            if ( isset( $colors[ $k ] ) && ( ! isset( $dc[ $k ] ) || $dc[ $k ] !== $colors[ $k ] ) ) {
+                $dc[ $k ]  = $colors[ $k ];
+                $changed   = true;
+            }
+        }
+        if ( $changed ) {
+            $st['dark_colors'] = $dc;
+            update_option( 'olo_styles', $st, false );
+        }
     }
 
     /**

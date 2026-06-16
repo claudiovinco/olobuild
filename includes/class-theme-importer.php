@@ -293,6 +293,18 @@ class Olo_Theme_Importer {
             $merged = wp_parse_args( $theme_json['styles'], is_array( $current ) ? $current : [] );
             update_option( 'olo_styles', $merged );
             $results['styles'] = true;
+
+            // Allinea le palette derivate ai colori del tema: senza questo i
+            // olo_global_colors[core] (che VINCONO in generate_css) e i dark_colors restano
+            // placeholder e SOVRASCRIVONO il tema (primario verde/indaco invece del brand).
+            if ( ! empty( $merged['colors'] ) && is_array( $merged['colors'] ) && class_exists( 'Olo_Style_System' ) ) {
+                $ss = Olo_Style_System::instance();
+                $ss->sync_global_palette( $merged['colors'] );
+                // Allinea i ruoli brand del dark SOLO se il tema non porta una propria palette dark.
+                if ( empty( $theme_json['styles']['dark_colors'] ) ) {
+                    $ss->sync_dark_palette( $merged['colors'] );
+                }
+            }
         }
 
         // ── Step 5b: Global feature — cursore custom (Olo_Magnetic_Cursor) ──
