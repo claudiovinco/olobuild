@@ -89,11 +89,18 @@ function parseValue(v){
   if (pct) return { snap:false, x:clamp(+pct[1]), y:clamp(+pct[2]) };
   const a = ANCHORS.find(a => a.key === v);
   if (a) return { snap:true, x:a.x, y:a.y };
-  // tolleranza: keyword singola
+  // tolleranza: keyword singola o coppia in ENTRAMBI gli ordini (object-position
+  // 'left top' = orizz-vert; background-position 'top center' = vert-orizz → accettati entrambi).
   const parts = v.split(/\s+/);
-  if (parts.length === 1 && parts[0] === 'center') return { snap:true, x:50, y:50 };
-  if (parts.length === 2 && (parts[0] in KW_X) && (parts[1] in KW_Y))
-    return { snap:true, x:KW_X[parts[0]], y:KW_Y[parts[1]] };
+  if (parts.length === 1) {
+    if (parts[0] === 'center') return { snap:true, x:50, y:50 };
+    if (parts[0] in KW_X) return { snap:true, x:KW_X[parts[0]], y:50 };
+    if (parts[0] in KW_Y) return { snap:true, x:50, y:KW_Y[parts[0]] };
+  }
+  if (parts.length === 2) {
+    if ((parts[0] in KW_X) && (parts[1] in KW_Y)) return { snap:true, x:KW_X[parts[0]], y:KW_Y[parts[1]] };
+    if ((parts[0] in KW_Y) && (parts[1] in KW_X)) return { snap:true, x:KW_X[parts[1]], y:KW_Y[parts[0]] };
+  }
   return { snap:true, x:50, y:50 };
 }
 

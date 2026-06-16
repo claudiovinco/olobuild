@@ -82,11 +82,16 @@
             <FieldSelect ui="dropdown" :model-value="bg.image_size || 'cover'" :options="SIZE_OPTS" @update:model-value="updateField('image_size', $event)" />
           </div>
         </div>
-        <div class="row">
-          <span class="rowlab">{{ t('Posizione') }}</span>
-          <div class="selwrap">
-            <FieldSelect ui="dropdown" :model-value="bg.image_position || 'center center'" :options="POSITION_OPTS" @update:model-value="updateField('image_position', $event)" />
-          </div>
+        <div class="field field--sep olo-bgpos">
+          <button type="button" class="olo-reveal-btn" :class="{ 'is-open': revealPos }" :aria-expanded="revealPos ? 'true' : 'false'" @click="revealPos = !revealPos">
+            <svg class="olo-reveal-chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            <span>{{ t('Posizione') }} — {{ t('punto focale') }}</span>
+            <span v-if="!revealPos && (bg.image_position || 'center center') !== 'center center'" class="olo-reveal-dot"></span>
+          </button>
+          <FieldObjectPosition v-if="revealPos" class="olo-reveal-body"
+            :modelValue="bg.image_position || 'center center'"
+            :image-src="bgPosImage" :object-fit="bgPreviewFit" frame-ratio="auto"
+            @update:modelValue="updateField('image_position', $event)" />
         </div>
 
         <div v-if="showParallax" class="field field--sep">
@@ -118,11 +123,16 @@
             <FieldSelect ui="dropdown" :model-value="bg.video_fit || 'cover'" :options="VIDEO_FIT_OPTS" @update:model-value="updateField('video_fit', $event)" />
           </div>
         </div>
-        <div class="row">
-          <span class="rowlab">{{ t('Posizione') }}</span>
-          <div class="selwrap">
-            <FieldSelect ui="dropdown" :model-value="bg.image_position || 'center center'" :options="POSITION_OPTS" @update:model-value="updateField('image_position', $event)" />
-          </div>
+        <div class="field field--sep olo-bgpos">
+          <button type="button" class="olo-reveal-btn" :class="{ 'is-open': revealPos }" :aria-expanded="revealPos ? 'true' : 'false'" @click="revealPos = !revealPos">
+            <svg class="olo-reveal-chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            <span>{{ t('Posizione') }} — {{ t('punto focale') }}</span>
+            <span v-if="!revealPos && (bg.image_position || 'center center') !== 'center center'" class="olo-reveal-dot"></span>
+          </button>
+          <FieldObjectPosition v-if="revealPos" class="olo-reveal-body"
+            :modelValue="bg.image_position || 'center center'"
+            :image-src="bgPosImage" :object-fit="bgPreviewFit" frame-ratio="auto"
+            @update:modelValue="updateField('image_position', $event)" />
         </div>
         <div class="row">
           <span class="rowlab">{{ t('Altezza') }}</span>
@@ -191,11 +201,16 @@
             <FieldSelect ui="dropdown" :model-value="bg.image_size || 'cover'" :options="SIZE_OPTS" @update:model-value="updateField('image_size', $event)" />
           </div>
         </div>
-        <div class="row">
-          <span class="rowlab">{{ t('Posizione') }}</span>
-          <div class="selwrap">
-            <FieldSelect ui="dropdown" :model-value="bg.image_position || 'center center'" :options="POSITION_BASE_OPTS" @update:model-value="updateField('image_position', $event)" />
-          </div>
+        <div class="field field--sep olo-bgpos">
+          <button type="button" class="olo-reveal-btn" :class="{ 'is-open': revealPos }" :aria-expanded="revealPos ? 'true' : 'false'" @click="revealPos = !revealPos">
+            <svg class="olo-reveal-chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            <span>{{ t('Posizione') }} — {{ t('punto focale') }}</span>
+            <span v-if="!revealPos && (bg.image_position || 'center center') !== 'center center'" class="olo-reveal-dot"></span>
+          </button>
+          <FieldObjectPosition v-if="revealPos" class="olo-reveal-body"
+            :modelValue="bg.image_position || 'center center'"
+            :image-src="bgPosImage" :object-fit="bgPreviewFit" frame-ratio="auto"
+            @update:modelValue="updateField('image_position', $event)" />
         </div>
         <div class="tgl-row">
           <button type="button" class="tgl" :class="{ on: bg.gallery_lazyload !== false }" :aria-pressed="bg.gallery_lazyload !== false" @click="updateField('gallery_lazyload', !(bg.gallery_lazyload !== false))"><b></b></button>
@@ -457,6 +472,7 @@ import ParallaxEditor from './ParallaxEditor.vue';
 import FieldGradient from './fields/FieldGradient.vue';
 import FieldColor from './fields/FieldColor.vue';
 import FieldSelect from './fields/FieldSelect.vue';
+import FieldObjectPosition from './fields/FieldObjectPosition.vue';
 
 // Opzioni dei FieldSelect (label RAW: t() la applica FieldSelect internamente).
 // meshPresets / glowPresets / crtModels sono già array { value, label } e si
@@ -783,6 +799,24 @@ function fillStyle(value, min, max) {
 
 // Sovrapposizione: disclosure locale (occhio). Aperta se esiste già un overlay.
 const showOverlay = ref(((props.modelValue || {}).overlay_opacity ?? 0) > 0);
+
+// Punto focale sfondo (object-position == background-position). Disclosure locale:
+// aperto se la posizione salvata è già personalizzata (≠ 'center center').
+const revealPos = ref((((props.modelValue || {}).image_position) || 'center center') !== 'center center');
+// Mappa la "Dimensione"/"Adattamento" dello sfondo su un object-fit per l'anteprima del pad.
+const bgPreviewFit = computed(() => {
+  const b = bg.value;
+  if (b.type === 'video') return b.video_fit || 'cover';
+  const s = b.image_size || 'cover';
+  return s === 'contain' ? 'contain' : (s === 'auto' ? 'none' : 'cover');
+});
+// Immagine rappresentativa per l'anteprima del pad, secondo il tipo di sfondo.
+const bgPosImage = computed(() => {
+  const b = bg.value;
+  if (b.type === 'video') return b.video_poster || '';
+  if (b.type === 'gallery') return (b.gallery_images && b.gallery_images[0] && b.gallery_images[0].url) || '';
+  return b.image_url || '';
+});
 
 function pickBgImage() {
   openSingleImage(({ url }) => {
@@ -1329,4 +1363,20 @@ function updateParallaxData(newData) {
   display: grid;
   place-items: center;
 }
+
+/* Punto focale sfondo — pulsante disclosure (accento = arancio chrome --ui). */
+.olo-bgpos { display: flex; flex-direction: column; gap: 0; }
+.olo-reveal-btn {
+  display: flex; align-items: center; gap: 6px; width: 100%;
+  padding: 7px 9px; border: 1px dashed var(--line); border-radius: 8px;
+  background: #fff; color: var(--ink); font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+.olo-reveal-btn:hover { border-color: var(--ui); color: var(--ui); }
+.olo-reveal-btn.is-open { border-style: solid; }
+.olo-reveal-btn:focus-visible { outline: 2px solid var(--ui); outline-offset: 1px; }
+.olo-reveal-chev { flex: none; transition: transform .15s; }
+.olo-reveal-btn.is-open .olo-reveal-chev { transform: rotate(90deg); }
+.olo-reveal-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ui); margin-left: auto; }
+.olo-reveal-body { margin-top: 8px; }
 </style>
