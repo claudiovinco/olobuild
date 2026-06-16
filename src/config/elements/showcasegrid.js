@@ -22,6 +22,7 @@ export default {
     columns: 3,
     gap: 18,
     aspect: '3/3.5',
+    object_position: 'center center',
     radius: 20,
     media_bg: '#0f3a2a',
     veil_color: '#0a2a1e',
@@ -81,6 +82,9 @@ export default {
       { value: '3/4', label: '3:4' },
     ]},
     { key: 'gap', label: t('Spazio tra card (px)'), type: 'range', min: 8, max: 32, step: 2 },
+    // Punto focale GLOBALE applicato a TUTTE le card (object-position). Default 'center center' → no-op.
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+      contextKeys: { ratio: 'aspect' } },
 
     { type: 'separator', label: t('Raggio') },
     { key: 'radius', label: t('Raggio (px)'), type: 'range', min: 0, max: 40, step: 1 },

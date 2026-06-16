@@ -20,6 +20,7 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
         'image_ratio'         => '21/9',
         'image_height'        => '400',
         'image_fit'           => 'cover',
+        'object_position'     => 'center center',
         'height'              => '400',
         'overlay_position'    => 'bottom',
         'overlay_horizontal'  => 'left',
@@ -111,6 +112,8 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
         $gap      = in_array( $s['gap'] ?? 'default', [ 'collapse', 'small', 'default', 'medium', 'large' ], true ) ? $s['gap'] : 'default';
         $img_ratio  = $s['image_ratio'] ?? 'auto';
         $img_fit    = in_array( $s['image_fit'] ?? 'cover', [ 'cover', 'contain', 'fill' ], true ) ? $s['image_fit'] : 'cover';
+        $obj_pos    = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
         $height   = absint( $s['image_height'] ?? $s['height'] ?? 400 ) ?: 400;
         $position = esc_attr( $s['overlay_position'] ?: 'bottom' );
         $style    = in_array( $s['overlay_style'], [ 'overlay-primary', 'overlay-default' ], true ) ? $s['overlay_style'] : 'overlay-primary';
@@ -190,7 +193,7 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
         } else {
             $frame_css = 'height:' . $height . 'px;';
         }
-        $img_size_css = 'width:100%;height:100%;object-fit:' . esc_attr( $img_fit ) . ';display:block;';
+        $img_size_css = 'width:100%;height:100%;object-fit:' . esc_attr( $img_fit ) . ';object-position:' . esc_attr( $obj_pos ) . ';display:block;';
 
         // CTA classes per style
         $cta_class_map = [

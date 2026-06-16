@@ -13,6 +13,7 @@
           v-if="s.front_image"
           class="olo-fc-bg"
           :src="s.front_image"
+          :style="frontImgStyle"
           alt=""
         />
         <div
@@ -41,6 +42,7 @@
           v-if="s.back_image"
           class="olo-fc-bg"
           :src="s.back_image"
+          :style="backImgStyle"
           alt=""
         />
         <div
@@ -87,6 +89,8 @@ const s = computed(() => ({
   front_description: 'Descrizione della card visibile.',
   front_bg: '',
   front_overlay: 'rgba(0,0,0,0.3)',
+  front_image_fit: 'cover',
+  front_image_position: 'center center',
   front_text_color: '',
   front_text_align: 'center',
   front_valign: 'center',
@@ -100,6 +104,8 @@ const s = computed(() => ({
   back_description: 'Contenuto retro con dettagli.',
   back_bg: '',
   back_overlay: '',
+  back_image_fit: 'cover',
+  back_image_position: 'center center',
   back_text_color: '',
   back_text_align: 'center',
   back_valign: 'center',
@@ -248,6 +254,16 @@ const backIconStyle = computed(() => {
   if (s.value.back_icon_color) st.color = s.value.back_icon_color;
   return st;
 });
+
+const frontImgStyle = computed(() => ({
+  objectFit: s.value.front_image_fit || 'cover',
+  objectPosition: s.value.front_image_position || 'center center',
+}));
+
+const backImgStyle = computed(() => ({
+  objectFit: s.value.back_image_fit || 'cover',
+  objectPosition: s.value.back_image_position || 'center center',
+}));
 
 const titleStyle = computed(() => ({
   fontSize: (parseInt(s.value.title_size) || 22) + 'px',

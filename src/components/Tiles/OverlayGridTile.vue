@@ -8,11 +8,29 @@
         :class="cellClass(item)"
         :style="masonry ? null : { height: itemHeight + 'px' }"
       >
-        <!-- Image layer (receives hover effects) -->
+        <!-- Image layer (receives hover effects) — card_type='image' (default) -->
         <div
+          v-if="cardType(item) === 'image'"
           :class="['mog-bg', hoverImageClass]"
           :style="bgStyle(item)"
         ></div>
+
+        <!-- Card piena (text/icon/graphic): niente placeholder grigio -->
+        <div
+          v-else
+          class="mog-card"
+          :class="'mog-card--' + cardType(item)"
+          :style="{ background: item.card_bg || '#0E1B2E' }"
+        >
+          <span
+            v-if="cardType(item) === 'icon' && item.icon"
+            class="mog-card__icon"
+            :style="item.icon_color ? { color: item.icon_color } : null"
+          ><span :uk-icon="'icon: ' + item.icon + '; ratio: 1.6'"></span></span>
+          <span v-else-if="cardType(item) === 'graphic'" class="mog-card__graphic" aria-hidden="true">
+            <span v-for="n in 12" :key="n"></span>
+          </span>
+        </div>
 
         <!-- Ribbon -->
         <span
@@ -24,9 +42,10 @@
         >{{ item.ribbon }}</span>
 
         <!-- Overlay -->
-        <div class="mog-overlay" :class="[...overlayClasses, hoverOverlayClass]" :style="overlayPadStyle">
+        <div class="mog-overlay" :class="[...overlayClasses, hoverOverlayClass, { 'mog-overlay--bare': cardType(item) !== 'image' }]" :style="overlayPadStyle">
           <component :is="titleTag" class="mb-font-bold mb-text-white mb-m-0" :style="titleFontStyle" :data-olo-editable="'items.' + i + '.title'">{{ item.title }}</component>
           <div v-if="item.subtitle" class="mb-text-xs mb-text-gray-200 mb-mt-1" :data-olo-editable="'items.' + i + '.subtitle'">{{ item.subtitle }}</div>
+          <div v-if="cardType(item) !== 'image' && item.body" class="mog-card__body mb-mt-1" :data-olo-editable="'items.' + i + '.body'">{{ item.body }}</div>
           <div v-if="item.link" class="mb-text-[10px] mb-text-blue-300 mb-mt-1 mb-opacity-70">&#128279;</div>
         </div>
       </div>
@@ -92,9 +111,15 @@ function cellClass(item) {
   return [item.tall ? 'mog-tall' : '', item.wide ? 'mog-wide' : ''];
 }
 
+// Tipo card (additivo): default 'image' → resa invariata.
+function cardType(item) {
+  const t = item && item.card_type;
+  return ['image', 'text', 'icon', 'graphic'].includes(t) ? t : 'image';
+}
+
 function bgStyle(item) {
   if (item.image) {
-    return { backgroundImage: `url(${item.image})`, backgroundSize: 'cover', backgroundPosition: 'center' };
+    return { backgroundImage: `url(${item.image})`, backgroundSize: 'cover', backgroundPosition: (s.value.object_position || 'center center') };
   }
   return { background: '#374151' };
 }
@@ -168,6 +193,33 @@ const hoverOverlayClass = computed(() => {
   inset: 0;
   transition: transform 0.5s ease, filter 0.5s ease;
 }
+
+/* Card non-immagine (text/icon/graphic) — niente placeholder grigio */
+.mog-card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-sizing: border-box;
+}
+.mog-card__icon { display: inline-flex; align-items: center; justify-content: center; color: #b9fbe7; }
+.mog-card__icon :deep(svg) { width: 28px; height: 28px; }
+.mog-card__graphic {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  width: 88px;
+}
+.mog-card__graphic > span { display: block; aspect-ratio: 1 / 1; border-radius: 3px; background: #b9fbe7; }
+.mog-card__graphic > span:nth-child(3n + 2) { background: #9df5d6; }
+.mog-card__graphic > span:nth-child(4n + 1) { opacity: 0.55; }
+.mog-card__body { font-size: 11px; line-height: 1.5; color: rgba(255, 255, 255, 0.85); }
+
+/* Overlay "bare": testo direttamente sulla card_bg, nessun fondo scuro */
+.mog-overlay--bare { background: transparent !important; }
 
 /* Overlay text layer */
 .mog-overlay {

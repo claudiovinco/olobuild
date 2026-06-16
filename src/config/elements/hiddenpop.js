@@ -19,6 +19,7 @@ export default {
     subtitle: '',
     image: '',
     image_position: 'top',
+    object_position: 'center center',
     cta_text: '',
     cta_url: '#',
     cta_style: 'primary',
@@ -89,6 +90,12 @@ export default {
       { value: 'left', label: t('Sinistra') },
       { value: 'right', label: t('Destra') },
     ], condition: { field: 'mode', op: 'eq', value: 'simple' } },
+    // Punto focale immagine — attivo solo con immagine laterale (left/right),
+    // dove il PHP ritaglia con object-fit:cover. In top/bottom l'immagine è a
+    // height:auto (non ritagliata) e il valore resta ininfluente.
+    { key: 'object_position', label: t('Punto focale immagine'), type: 'object-position', reveal: true,
+      contextKeys: { src: 'image' },
+      condition: { field: 'image_position', value: ['left', 'right'] } },
     { key: 'template_id', label: t('Template'), type: 'select', optionsSource: 'templates',
       condition: { field: 'mode', op: 'eq', value: 'template' } },
 

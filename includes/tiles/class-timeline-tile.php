@@ -191,12 +191,13 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
     }
 
     /** Blocco media della card (immagine/video o placeholder a strisce). */
-    private function media_html( $item ) {
+    private function media_html( $item, $obj_pos = 'center center' ) {
+        $pos_style = ' style="object-position:' . esc_attr( $obj_pos ) . ';"';
         $html = '<div class="it-media"><span class="bar"></span>';
         if ( ! empty( $item['video'] ) ) {
-            $html .= $this->get_video_embed( $item['video'] );
+            $html .= $this->get_video_embed( $item['video'], $obj_pos );
         } elseif ( ! empty( $item['image'] ) ) {
-            $html .= '<img src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( wp_strip_all_tags( $item['title'] ) ) . '" loading="lazy" />';
+            $html .= '<img src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( wp_strip_all_tags( $item['title'] ) ) . '" loading="lazy"' . $pos_style . ' />';
         } else {
             $html .= '<span class="ph">' . esc_html( $item['tag'] ?: $item['title'] ) . '</span>';
         }
@@ -204,15 +205,16 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         return $html;
     }
 
-    private function get_video_embed( $url ) {
+    private function get_video_embed( $url, $obj_pos = 'center center' ) {
         $url = trim( $url );
+        $pos_style = ' style="object-position:' . esc_attr( $obj_pos ) . ';"';
         if ( preg_match( '/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $url, $m ) ) {
-            return '<iframe src="https://www.youtube-nocookie.com/embed/' . esc_attr( $m[1] ) . '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>';
+            return '<iframe src="https://www.youtube-nocookie.com/embed/' . esc_attr( $m[1] ) . '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"' . $pos_style . '></iframe>';
         }
         if ( preg_match( '/vimeo\.com\/(\d+)/', $url, $m ) ) {
-            return '<iframe src="https://player.vimeo.com/video/' . esc_attr( $m[1] ) . '?dnt=1" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>';
+            return '<iframe src="https://player.vimeo.com/video/' . esc_attr( $m[1] ) . '?dnt=1" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"' . $pos_style . '></iframe>';
         }
-        return '<video controls preload="metadata"><source src="' . esc_url( $url ) . '" type="video/mp4"></video>';
+        return '<video controls preload="metadata"' . $pos_style . '><source src="' . esc_url( $url ) . '" type="video/mp4"></video>';
     }
 
     public function render( $settings ) {
@@ -226,6 +228,10 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         $theme  = in_array( $s['tl_theme'], [ 'paper', 'night', 'neon', 'blue' ], true ) ? $s['tl_theme'] : 'paper';
         $mono   = ( $s['tl_color'] === 'mono' );
         $uid    = 'olo-tl-' . wp_rand( 10000, 99999 );
+
+        // Punto focale globale (object-position) applicato a OGNI immagine/video della timeline.
+        $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
 
         ob_start();
         $this->print_shared_css();
@@ -244,11 +250,11 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         if ( $layout === 'horizontal' ) {
             $this->render_horizontal( $items, $s, $mono );
         } elseif ( $layout === 'navigator' ) {
-            $this->render_navigator( $items, $s );
+            $this->render_navigator( $items, $s, $obj_pos );
         } elseif ( $layout === 'schedule' ) {
             $this->render_schedule( $items, $s, $uid );
         } else {
-            $this->render_vertical( $items, $s, $layout, $mono );
+            $this->render_vertical( $items, $s, $layout, $mono, $obj_pos );
         }
 
         echo '</div>';
@@ -267,7 +273,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
     }
 
     /* ───────── VERTICALE (alt · one) ───────── */
-    private function render_vertical( $items, $s, $layout, $mono ) {
+    private function render_vertical( $items, $s, $layout, $mono, $obj_pos = 'center center' ) {
         $cls = 'super js';
         $cls .= ( $s['tl_line'] === 'solid' ) ? ' line-solid' : ' line-scroll';
         $cls .= ' ing-' . sanitize_html_class( $s['tl_reveal'] );
@@ -291,7 +297,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
             echo '<span class="it-node">' . $this->node_inner( $item, $i, $node, $mono ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- node markup from node_inner(): render_icon_html() helper output plus sprintf('%02d')/esc_html() label
             echo '<div class="it-date"><span class="yr">' . esc_html( $item['date'] ) . '</span><span class="ph">' . esc_html( $item['tag'] ) . '</span><span class="st" data-st>&mdash;</span></div>';
             echo '<div class="it-card">';
-            echo $this->media_html( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- media markup built by media_html() exclusively from esc_url()/esc_attr()/esc_html() values
+            echo $this->media_html( $item, $obj_pos ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- media markup built by media_html() exclusively from esc_url()/esc_attr()/esc_html() values
             echo '<div class="it-body">';
             if ( $item['tag'] !== '' )         { echo '<span class="it-tag">' . esc_html( $item['tag'] ) . '</span>'; }
             if ( $item['title'] !== '' )       { echo '<h4>' . esc_html( $item['title'] ) . '</h4>'; }
@@ -418,7 +424,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
     }
 
     /* ───────── NAVIGATORE (asse date + post singolo) ───────── */
-    private function render_navigator( $items, $s ) {
+    private function render_navigator( $items, $s, $obj_pos = 'center center' ) {
         echo '<div class="navd">';
         echo '<div class="nv-nav">';
         echo '<button class="nv-arrow nv-prev" type="button" aria-label="Precedente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>';
@@ -436,7 +442,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         echo '<button class="nv-arrow nv-next" type="button" aria-label="Successivo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>';
         echo '</div>';
         echo '<div class="nv-stage"><div class="nv-post">';
-        echo '<div class="nv-media"><img alt="" /><span class="nyr nv-yr"></span><span class="nph nv-ph"></span></div>';
+        echo '<div class="nv-media"><img alt="" style="object-position:' . esc_attr( $obj_pos ) . ';" /><span class="nyr nv-yr"></span><span class="nph nv-ph"></span></div>';
         echo '<div class="nv-body"><div class="m"><span class="tg nv-tag"></span><span class="dt nv-date"></span></div>';
         echo '<h2 class="nv-title"></h2><p class="nv-text"></p></div>';
         echo '</div></div>';

@@ -2,7 +2,7 @@
   <div>
     <!-- POSTER OVERLAY (when poster_image is set and not yet playing) -->
     <div v-if="s.poster_image && !playing" class="olo-video-poster mb-rounded-lg mb-overflow-hidden" @click="playing = true" style="cursor:pointer;position:relative;">
-      <img :src="s.poster_image" :style="s.display_mode === 'cover' ? { width: '100%', height: (parseInt(s.cover_height) || 500) + 'px', objectFit: 'cover', display: 'block' } : { width: '100%', display: 'block' }" />
+      <img :src="s.poster_image" :style="s.display_mode === 'cover' ? { width: '100%', height: (parseInt(s.cover_height) || 500) + 'px', objectFit: 'cover', objectPosition: (s.object_position || 'center center'), display: 'block' } : { width: '100%', objectPosition: (s.object_position || 'center center'), display: 'block' }" />
       <div v-if="s.show_play_icon !== false" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
         <svg :width="playSize" :height="playSize" viewBox="0 0 80 80">
           <circle cx="40" cy="40" r="38" fill="rgba(0,0,0,0.5)" stroke-width="2" :stroke="s.play_icon_color || '#fff'"/>
@@ -21,7 +21,7 @@
         v-if="s.source_type === 'file' && s.file_url"
         :src="s.file_url"
         class="mb-absolute mb-inset-0 mb-w-full mb-h-full"
-        style="object-fit:cover"
+        :style="{ objectFit: 'cover', objectPosition: (s.object_position || 'center center') }"
         muted autoplay loop
       ></video>
       <iframe
@@ -111,6 +111,7 @@ const defaults = {
   file_url: '',
   display_mode: '16:9',
   cover_height: '500',
+  object_position: 'center center',
   autoplay: false,
   muted: false,
   loop: false,

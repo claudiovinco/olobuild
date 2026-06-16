@@ -20,6 +20,7 @@ export default {
     file_url: '',
     display_mode: '16:9',
     cover_height: '500',
+    object_position: 'center center',
     border_radius: 0,
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
@@ -104,6 +105,8 @@ export default {
       { value: 'cover', label: t('Cover (altezza fissa)') },
     ]},
     { key: 'cover_height', label: t('Altezza (px)'), type: 'range', min: 100, max: 1200, step: 10 },
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+      contextKeys: { src: 'poster_image', ratio: 'display_mode', fit: 'cover' } },
     withHover({ key: 'border_radius', label: t('Raggio bordi (px)'), type: 'border-radius' }),
 
     ...textEffectsFields([

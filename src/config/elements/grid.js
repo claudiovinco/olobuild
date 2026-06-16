@@ -38,6 +38,7 @@ export default {
     image_ratio: 'auto',
     image_height: '',
     image_fit: 'cover',
+    object_position: 'center center',
     image_zoom: false,
     card_radius: '8',
     tile_padding: { top: 16, right: 16, bottom: 16, left: 16 },
@@ -106,6 +107,9 @@ export default {
       { value: 'contain', label: t('Contieni') },
       { value: 'fill', label: t('Riempi') },
     ]},
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+      contextKeys: { fit: 'image_fit', ratio: 'image_ratio', ratioCustom: '' },
+      description: t('Punto focale globale: applicato a tutte le immagini della griglia.') },
     { key: 'image_zoom', label: t('Zoom immagine al hover'), type: 'toggle' },
     { key: 'image_animation', label: t('Animazione continua immagine'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },

@@ -36,6 +36,7 @@ export default {
     image_ratio: '4/3',
     image_height: '',
     image_fit: 'cover',
+    object_position: 'center center',
     image_zoom: true,
     show_arrows: true,
     arrow_style: 'circle',
@@ -266,6 +267,9 @@ export default {
     { type: 'separator', label: t('Immagine — stile') },
     { key: 'card_image_radius', label: t('Arrotondamento immagine (px)'), type: 'border-radius',
       description: t('0 = eredita dal raggio card') },
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+      contextKeys: { fit: 'image_fit', ratio: 'image_ratio' },
+      description: t('Punto focale comune a tutte le immagini delle card.') },
 
     // ────────── Caption overlay (per overlay-caption preset) ──────────
     { type: 'separator', label: t('Caption overlay (testo su foto)'),

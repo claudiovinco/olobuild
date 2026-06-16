@@ -46,9 +46,11 @@ export default {
     show_counter_label:  true,
     show_arrow:          true,
     show_footer:         false,
+    show_link_text:      false,
     show_divider:        false,
     show_media:          false,
     media_aspect_ratio:  '4/3',
+    object_position:               'center center',
     media_radius:                  { ...R18 },
     media_radius_hover:            { ...R18 },
     media_radius_hover_duration:   400,
@@ -70,7 +72,7 @@ export default {
     { type: 'separator', label: t('Card items') },
     { key: 'items', label: t('Cards'), type: 'content-items',
       itemLabel: t('Card'),
-      defaults: { counter: '00', counter_label: 'Label', title: 'Titolo', title_accent: '', title_accent_italic: false, description: 'Descrizione…', icon: '', footer_dot_color: '#10b981', footer_text: '', link_url: '', media_image: '', media_label: 'SCREENSHOT' },
+      defaults: { counter: '00', counter_label: 'Label', title: 'Titolo', title_accent: '', title_accent_italic: false, description: 'Descrizione…', icon: '', footer_dot_color: '#10b981', footer_text: '', link_url: '', link_text: '', media_image: '', media_label: 'SCREENSHOT' },
       itemFields: [
         { type: 'separator', label: t('Media') },
         { key: 'media_image',         label: t('Immagine media'),          type: 'image' },
@@ -88,6 +90,7 @@ export default {
         { key: 'footer_text',         label: t('Footer testo'),            type: 'text' },
         { key: 'footer_dot_color',    label: t('Footer pallino'),          type: 'color' },
         { key: 'link_url',            label: t('Link (opzionale)'),        type: 'link' },
+        { key: 'link_text',           label: t('Testo CTA (es. Learn more)'), type: 'text' },
       ],
     },
 
@@ -98,6 +101,7 @@ export default {
     { key: 'show_counter_label', label: t('Mostra counter label'),                type: 'toggle' },
     { key: 'show_arrow',         label: t('Mostra freccia in alto a destra'),    type: 'toggle' },
     { key: 'show_footer',        label: t('Mostra footer (pallino + tag)'),      type: 'toggle' },
+    { key: 'show_link_text',     label: t('Mostra CTA testuale (Learn more →)'), type: 'toggle' },
     { key: 'show_divider',       label: t('Mostra separatore sotto descrizione'), type: 'toggle' },
   ],
 
@@ -129,6 +133,7 @@ export default {
       { value: '1/1',  label: t('1 / 1 (quadrato)') },
       { value: '21/9', label: t('21 / 9 (ultra-wide)') },
     ], condition: { field: 'show_media', op: '=', value: true } },
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true, contextKeys: { ratio: 'media_aspect_ratio' }, condition: { field: 'show_media', op: '=', value: true } },
     withHover({ key: 'media_radius', label: t('Border radius media'), type: 'border-radius' }, { hoverKey: 'media_radius_hover', hoverDurationKey: 'media_radius_hover_duration' }),
 
     { type: 'separator', label: t('Tipografia titolo') },

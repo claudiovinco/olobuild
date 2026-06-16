@@ -18,6 +18,7 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
         ],
         'image_alt'          => '',
         'image_height'       => '0',
+        'object_position'    => 'center center',
         'marker_color'       => '',
         'popup_bg'           => '#ffffff',
         'popup_color'        => '#333333',
@@ -53,10 +54,15 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
         $hover_effect     = $s['popup_hover_effect'] ?? 'none';
         $hover_color      = $this->safe_color_css( $s['popup_hover_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
 
+        $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) {
+            $obj_pos = 'center center';
+        }
+
         $uid = 'olo-pop-' . wp_rand( 10000, 99999 );
 
         // Image style
-        $img_style = 'width:100%;display:block;';
+        $img_style = 'width:100%;display:block;object-position:' . esc_attr( $obj_pos ) . ';';
         if ( $image_height > 0 ) {
             $img_style .= 'height:' . $image_height . 'px;object-fit:cover;';
         }

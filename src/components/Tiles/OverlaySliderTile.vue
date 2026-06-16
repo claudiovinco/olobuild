@@ -144,11 +144,13 @@ const hoverOverlayClass = computed(() => {
 
 function slideStyle(slide) {
   const fit = objectFit.value;
-  const bg = slide.image ? `url(${slide.image}) center/${fit === 'cover' ? 'cover' : (fit === 'contain' ? 'contain' : '100% 100%')} no-repeat` : '#374151';
+  const pos = s.value.object_position || 'center center';
+  const bg = slide.image ? `url(${slide.image}) ${pos}/${fit === 'cover' ? 'cover' : (fit === 'contain' ? 'contain' : '100% 100%')} no-repeat` : '#374151';
   const style = {
     minWidth: '100%',
     position: 'relative',
     background: bg,
+    backgroundPosition: pos,
   };
   if (useRatio.value) {
     style.aspectRatio = (s.value.image_ratio || '16/9').replace('/', ' / ');

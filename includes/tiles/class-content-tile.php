@@ -24,6 +24,7 @@ class Olo_Content_Tile extends Olo_Tile_Base {
         'image_width'        => '40',
         'image_height'       => 'auto',
         'image_fit'          => 'cover',
+        'object_position'    => 'center center',
         'image_radius'       => '0',
         'image_border_width' => '0',
         'image_border_color' => '',
@@ -112,6 +113,8 @@ class Olo_Content_Tile extends Olo_Tile_Base {
         $image_width  = max( 20, min( 80, absint( $s['image_width'] ) ) );
         $image_height = $s['image_height'];
         $image_fit    = in_array( $s['image_fit'], [ 'cover', 'contain', 'fill' ], true ) ? $s['image_fit'] : 'cover';
+        $obj_pos      = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
         $image_radius = Olo_Tile_Utils::border_radius( $s['image_radius'] ?? 0 );
         $image_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['image_radius_hover'] ?? null );
         $border_width = absint( $s['image_border_width'] );
@@ -149,7 +152,7 @@ class Olo_Content_Tile extends Olo_Tile_Base {
         ];
 
         ob_start();
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist, integers via absint() with min()/max() clamps, line-height via floatval(), radius via Olo_Tile_Utils::border_radius()/radius_force_css(), position/fit/align from in_array() whitelists and the fixed $dir_map/$size_px_map/$bp_map maps, height numeric-checked or esc_attr()'d; $uid is internally generated.
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist, integers via absint() with min()/max() clamps, line-height via floatval(), radius via Olo_Tile_Utils::border_radius()/radius_force_css(), position/fit/align from in_array() whitelists and the fixed $dir_map/$size_px_map/$bp_map maps, height numeric-checked or esc_attr()'d, object-position esc_attr()'d; $uid is internally generated.
         ?>
         <style>
             .<?php echo $uid; ?> .olo-ct-layout {
@@ -176,6 +179,7 @@ class Olo_Content_Tile extends Olo_Tile_Base {
                 display: block;
                 height: <?php echo $height_css; ?>;
                 object-fit: <?php echo $image_fit; ?>;
+                object-position: <?php echo esc_attr( $obj_pos ); ?>;
                 border-radius: <?php echo $image_radius; ?>;
                 <?php if ( $border_width > 0 ) : ?>
                 border: <?php echo $border_width; ?>px solid <?php echo $border_color; ?>;

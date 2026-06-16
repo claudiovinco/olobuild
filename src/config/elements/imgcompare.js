@@ -30,6 +30,7 @@ export default {
     height: '400',
     border_radius: '8',
     object_fit: 'cover',
+    object_position: 'center center',
     card_border_width: '0',
     card_border_color: '',
     card_shadow: 'none',
@@ -98,6 +99,8 @@ export default {
       { value: 'cover', label: t('Riempi (cover)') },
       { value: 'contain', label: t('Contieni') },
     ]},
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position',
+      contextKeys: { src: 'before_image', fit: 'object_fit', height: 'height' } },
     { key: 'card_border_width', label: t('Bordo (px)'), type: 'range', min: 0, max: 6 },
     { key: 'card_border_color', label: t('Colore bordo'), type: 'color' },
     { key: 'card_shadow', label: t('Ombra'), type: 'select', options: [

@@ -24,7 +24,7 @@ const defaults = {
     { image: '', media_label: "Women's squad", kicker: '1 squad', title: 'Women', link: '#' },
     { image: '', media_label: 'Youth squad', kicker: '4 squads · U14–U21', title: 'Youth', link: '#' },
   ],
-  columns: 3, gap: 18, aspect: '3/3.5', radius: 20, media_bg: '#0f3a2a', veil_color: '#0a2a1e',
+  columns: 3, gap: 18, aspect: '3/3.5', object_position: 'center center', radius: 20, media_bg: '#0f3a2a', veil_color: '#0a2a1e',
   kicker_color: '', title_color: '#ffffff', arrow_bg: 'rgba(255,255,255,0.14)', arrow_color: '#ffffff',
   arrow_hover_bg: '', arrow_hover_color: '#0a2a1e',
   show_arrow: true, title_size: 34, title_weight: '900', title_uppercase: true, kicker_size: 12,
@@ -152,8 +152,9 @@ function cardStyle(it) {
   return base;
 }
 const itemHasBg = (it) => !!(it && it.media_bg && it.media_bg.type && it.media_bg.type !== 'none');
+const objPos = computed(() => s.value.object_position || 'center center');
 function mediaStyle(it) {
-  const st = { position: 'absolute', inset: 0, zIndex: 0, backgroundSize: 'cover', backgroundPosition: 'center', transition: 'transform .5s ease' };
+  const st = { position: 'absolute', inset: 0, zIndex: 0, backgroundSize: 'cover', backgroundPosition: objPos.value, transition: 'transform .5s ease' };
   if (itemHasBg(it)) return { ...st, ...buildBgStyle(it.media_bg) };
   const img = it && it.image ? it.image : '';
   st.background = mbg.value;

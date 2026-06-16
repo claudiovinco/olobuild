@@ -49,6 +49,10 @@ class Olo_FilmReel_Tile extends Olo_Tile_Base {
         'bg_color'       => '',
         'border_color'   => '',
 
+        // Punto focale globale (object-position) di immagini/video nei fotogrammi.
+        // Stringa CSS: 'center center' (= resa attuale) oppure es. '34% 23%'.
+        'media_object_position' => 'center center',
+
         // Spaziatura (gated): padding verticale di base clamp(42px,6vw,78px) 0.
         // Override attivo SOLO se pad_custom=true → no-op coi default.
         'pad_custom'     => false,
@@ -93,6 +97,10 @@ class Olo_FilmReel_Tile extends Olo_Tile_Base {
         $sans = "var(--olo-font-family, 'Hanken Grotesk',sans-serif)";
         $mono = "var(--olo-font-family-mono, 'Space Mono',ui-monospace,monospace)";
         $pad  = 'clamp(20px,5vw,72px)';
+
+        // Punto focale globale (object-position) — '' → 'center center' (= resa attuale).
+        $obj_pos = trim( (string) ( $s['media_object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
 
         $rec  = ! empty( $s['rec_overlay'] );
         $skew = ! empty( $s['velocity_skew'] );
@@ -163,7 +171,7 @@ class Olo_FilmReel_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .ofr-item.tall{height:clamp(360px,62vh,610px);align-self:flex-start;}
             .<?php echo $uid; ?> .ofr-item.short{height:clamp(260px,46vh,460px);align-self:center;}
             .<?php echo $uid; ?> .ofr-item:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, <?php echo $accent; ?> 30%, transparent);}
-            .<?php echo $uid; ?> .ofr-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+            .<?php echo $uid; ?> .ofr-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:<?php echo esc_attr( $obj_pos ); ?>;background-position:<?php echo esc_attr( $obj_pos ); ?>;display:block;}
             .<?php echo $uid; ?> .ofr-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(236,234,227,.05);}
             .<?php echo $uid; ?> .ofr-ph span{font-family:<?php echo $mono; ?>;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:<?php echo $muted; ?>;text-align:center;padding:0 18px;}
             .<?php echo $uid; ?> .ofr-meta{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;padding:14px 15px;background:linear-gradient(transparent,rgba(8,9,12,.82));pointer-events:none;z-index:5;}

@@ -37,6 +37,7 @@ class Olo_Portfolio_Tile extends Olo_Tile_Base {
         'overlay_color'       => '#000000',
         'overlay_opacity'     => 80,
         'image_ratio'         => '4:3',
+        'object_position'     => 'center center',
         'border_radius'       => 8,
         'animation'           => 'fade',
         'font_family'         => 'inherit',
@@ -327,6 +328,10 @@ class Olo_Portfolio_Tile extends Olo_Tile_Base {
         $ratio_map = [ '1:1'=>'100%', '4:3'=>'75%', '16:9'=>'56.25%', '3:2'=>'66.67%', '3:4'=>'133.33%', 'auto'=>'0' ];
         $ratio = $s['image_ratio'];
         $ratio_css = isset( $ratio_map[ $ratio ] ) ? $ratio_map[ $ratio ] : '75%';
+
+        // Punto focale (object-position) globale a livello tile, applicato a ogni immagine.
+        $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
 
         // Carousel speed
         $car_speed   = max( 10, min( 120, absint( $s['carousel_speed'] ) ) );
@@ -627,7 +632,7 @@ class Olo_Portfolio_Tile extends Olo_Tile_Base {
                     <div class="olo-pf-preview">
                         <?php foreach ( $items as $i => $item ) : ?>
                             <?php if ( ! empty( $item['image'] ) ) : ?>
-                            <img src="<?php echo esc_url( $item['image'] ); ?>" alt="" data-i="<?php echo (int) $i; ?>" class="<?php echo $i === 0 ? 'is-active' : ''; ?>" />
+                            <img src="<?php echo esc_url( $item['image'] ); ?>" alt="" data-i="<?php echo (int) $i; ?>" class="<?php echo $i === 0 ? 'is-active' : ''; ?>" style="object-position:<?php echo esc_attr( $obj_pos ); ?>;" />
                             <?php endif; ?>
                         <?php endforeach; ?>
                     </div>
@@ -780,9 +785,13 @@ class Olo_Portfolio_Tile extends Olo_Tile_Base {
             echo '<span class="olo-pf-index">' . esc_html( str_pad( $i + 1, 2, '0', STR_PAD_LEFT ) ) . '/' . esc_html( str_pad( $total_items, 2, '0', STR_PAD_LEFT ) ) . '</span>';
         }
 
+        // Punto focale globale (object-position), applicato a ogni immagine.
+        $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
+
         echo '<div class="olo-pf-img-wrap">';
         if ( ! empty( $item['image'] ) ) {
-            echo '<img src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( $item['title'] ) . '" loading="lazy" />';
+            echo '<img src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( $item['title'] ) . '" loading="lazy" style="object-position:' . esc_attr( $obj_pos ) . ';" />';
         } else {
             echo '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#1F2937;min-height:120px;"><span style="font-size:32px;opacity:0.3;">&#x1F5BC;</span></div>';
         }

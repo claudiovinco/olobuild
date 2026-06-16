@@ -62,6 +62,7 @@ const s = computed(() => ({
   height: '400',
   border_radius: '8',
   object_fit: 'cover',
+  object_position: 'center center',
   card_border_width: '0',
   card_border_color: 'var(--olo-color-border, #E5E7EB)',
   card_shadow: 'none',
@@ -105,6 +106,7 @@ const imgStyle = computed(() => ({
   width: '100%',
   height: '100%',
   objectFit: s.value.object_fit || 'cover',
+  objectPosition: s.value.object_position || 'center center',
   pointerEvents: 'none',
 }));
 

@@ -12,6 +12,7 @@ class Olo_Overlay_Tile extends Olo_Tile_Base {
     protected $category = 'media';
     protected $defaults = [
         'image_url'       => '',
+        'object_position' => 'center center',
         'title'           => 'Titolo del progetto',
         'description'     => 'Una breve descrizione del progetto.',
         'link_url'        => '',
@@ -60,6 +61,10 @@ class Olo_Overlay_Tile extends Olo_Tile_Base {
             $radius_css = absint( $rad_raw ) . 'px';
         }
         $opa    = absint( $s['overlay_opacity'] ) / 100;
+        $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) {
+            $obj_pos = 'center center';
+        }
         $effect = in_array( $s['hover_effect'], [ 'fade', 'slide-up', 'zoom' ], true ) ? $s['hover_effect'] : 'fade';
 
         $effect_map = [
@@ -82,7 +87,8 @@ class Olo_Overlay_Tile extends Olo_Tile_Base {
         ?>
         <div id="<?php echo esc_attr( $id ); ?>" class="olo-overlay uk-inline uk-transition-toggle" style="display:block;width:100%;box-sizing:border-box;border-radius:<?php echo esc_attr( $radius_css ); ?>;height:<?php echo (int) $h; ?>px;overflow:hidden;cursor:pointer;">
             <?php if ( ! empty( $s['image_url'] ) ) : ?>
-                <?php echo Olo_Tile_Utils::img_srcset( absint( $s['image_url_id'] ?? 0 ), $s['image_url'], $s['title'] ?? '', '', 'full', 'uk-cover' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <img> markup built by Olo_Tile_Utils::img_srcset() with esc_url()/esc_attr() internally ?>
+                <?php $img_extra = 'uk-cover style="object-position:' . esc_attr( $obj_pos ) . ';"'; ?>
+                <?php echo Olo_Tile_Utils::img_srcset( absint( $s['image_url_id'] ?? 0 ), $s['image_url'], $s['title'] ?? '', '', 'full', $img_extra ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <img> markup built by Olo_Tile_Utils::img_srcset() with esc_url()/esc_attr() internally; $img_extra contains uk-cover + esc_attr()'d object-position ?>
             <?php else : ?>
                 <div style="background:#1F2937;" uk-cover></div>
             <?php endif; ?>

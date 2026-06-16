@@ -21,7 +21,7 @@
             <svg ref="svgEl" class="sth-map-svg" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
           </div>
           <div v-else class="sth-imgbox" data-olo-tilt-child>
-            <img v-if="s.media_image" :src="s.media_image" :alt="s.media_label" />
+            <img v-if="s.media_image" :src="s.media_image" :alt="s.media_label" :style="{ objectPosition: s.media_object_position || 'center center' }" />
             <span v-else-if="s.media_label" class="sth-ph">{{ s.media_label }}</span>
           </div>
           <span v-if="s.cap_text" ref="capEl" class="sth-cap">{{ s.cap_text }}</span>
@@ -70,6 +70,7 @@ const defaults = {
   accent_color: '',
   media_mode: 'olomap',
   media_image: '',
+  media_object_position: 'center center',
   media_label: 'Visual studio — still',
   cap_text: 'OLObuild · sistema',
   map_label: 'Mappa del sistema',

@@ -5,7 +5,7 @@
       v-if="s.image"
       :src="s.image"
       alt=""
-      style="width:100%;height:100%;object-fit:cover;display:block;"
+      :style="imageStyle"
     />
     <div
       v-else
@@ -45,6 +45,7 @@ const props = defineProps({
 const defaults = {
   image: '',
   image_height: '400',
+  object_position: 'center center',
   markers: [],
   marker_color: '',
   marker_size: '24',
@@ -57,6 +58,14 @@ const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const markers = computed(() => Array.isArray(s.value.markers) ? s.value.markers : []);
 const markerSize = computed(() => Math.max(16, Math.min(40, parseInt(s.value.marker_size) || 24)));
+
+const imageStyle = computed(() => ({
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  objectPosition: s.value.object_position || 'center center',
+  display: 'block',
+}));
 
 const containerStyle = computed(() => ({
   position: 'relative',

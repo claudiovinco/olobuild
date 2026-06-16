@@ -25,7 +25,7 @@
       <!-- Masonry -->
       <div v-else-if="layout === 'masonry'" :style="masonryStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="masonryItemStyle(i)">
-          <img :src="imgUrl(img)" :alt="imgAlt(img)" style="width:100%;display:block;object-fit:cover" :style="{ borderRadius: radius + 'px' }" />
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" style="width:100%;display:block;object-fit:cover" :style="{ borderRadius: radius + 'px', objectPosition: objPos }" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
           <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
         </div>
@@ -168,7 +168,7 @@
       <!-- Honeycomb -->
       <div v-else-if="layout === 'honeycomb'" :style="honeycombStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="honeycombItemStyle">
-          <img :src="imgUrl(img)" :alt="imgAlt(img)" style="width:100%;height:100%;object-fit:cover" />
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" style="width:100%;height:100%;object-fit:cover" :style="{ objectPosition: objPos }" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
         </div>
       </div>
@@ -176,7 +176,7 @@
       <!-- Hex Grid (tessellating) -->
       <div v-else-if="layout === 'hexgrid'" :style="hexGridContainerStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="hexGridItemStyle(i)">
-          <img :src="imgUrl(img)" :alt="imgAlt(img)" style="width:100%;height:100%;object-fit:cover" />
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" style="width:100%;height:100%;object-fit:cover" :style="{ objectPosition: objPos }" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
           <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
         </div>
@@ -231,7 +231,7 @@ const props = defineProps({
 
 const defaults = {
   images: [], layout: 'grid', layout_family: 'classic', puzzle_style: 'classic',
-  columns: '3', gap: '8', img_height: '250px', object_fit: 'cover', thumb_radius: '8',
+  columns: '3', gap: '8', img_height: '250px', object_fit: 'cover', object_position: 'center center', thumb_radius: '8',
   rows: '0', mobile_columns: '2', expand_ratio: '4', expand_shrink: '0.5', expand_speed: '500',
   parallax_height: '1500', parallax_intensity: '50',
   drift_height: '1200', drift_intensity: '60', drift_rotation: '12',
@@ -264,6 +264,8 @@ const gap = computed(() => parseInt(s.value.gap) || 8);
 const radius = computed(() => (v => isNaN(v) ? 8 : v)(parseInt(s.value.thumb_radius)));
 const imgHeight = computed(() => s.value.img_height || '250px');
 const objectFit = computed(() => s.value.object_fit || 'cover');
+// Punto focale GLOBALE applicato a OGNI immagine ('' → 'center center' = resa attuale).
+const objPos = computed(() => s.value.object_position || 'center center');
 
 const images = computed(() => {
   const imgs = s.value.images;
@@ -307,6 +309,7 @@ const imgStyle = computed(() => ({
   width: '100%',
   height: '100%',
   objectFit: objectFit.value,
+  objectPosition: objPos.value,
   display: 'block',
   borderRadius: radius.value + 'px',
 }));
@@ -315,6 +318,7 @@ const imgStyle = computed(() => ({
 const imgStyleAuto = computed(() => ({
   width: '100%',
   height: 'auto',
+  objectPosition: objPos.value,
   display: 'block',
   borderRadius: radius.value + 'px',
 }));
@@ -919,6 +923,7 @@ const puzzleImgStyle = computed(() => ({
   width: '100%',
   height: '100%',
   objectFit: 'cover',
+  objectPosition: objPos.value,
 }));
 
 function puzzleEdges(i) {
@@ -1256,6 +1261,7 @@ const expandImgStyle = computed(() => ({
   width: '100%',
   height: '100%',
   objectFit: 'cover',
+  objectPosition: objPos.value,
   display: 'block',
   borderRadius: radius.value + 'px',
 }));

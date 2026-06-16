@@ -31,6 +31,7 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
         'caption_color'    => '#FFFFFF',
         'caption_bg'       => 'rgba(0,0,0,0.6)',
         'object_fit'       => 'cover',
+        'object_position'  => 'center center',
         'mobile_slides'           => '1',
         'border'                  => [],
         'border_hover'            => [],
@@ -69,6 +70,10 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
         $dots       = filter_var( $s['show_dots'], FILTER_VALIDATE_BOOLEAN );
         $captions   = filter_var( $s['show_caption'] ?? false, FILTER_VALIDATE_BOOLEAN );
         $obj_fit    = in_array( $s['object_fit'], [ 'cover', 'contain' ], true ) ? $s['object_fit'] : 'cover';
+        $obj_pos    = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' || ! preg_match( '/^[a-z0-9 %.\-]+$/i', $obj_pos ) ) {
+            $obj_pos = 'center center';
+        }
 
         $arrow_col  = $this->safe_color_css( $s['arrow_color'] ) ?: '#FFFFFF';
         $arrow_bg   = $this->safe_color_css( $s['arrow_bg'] ) ?: 'rgba(0,0,0,0.5)';
@@ -83,7 +88,7 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
         $dot_count = (int) ceil( $total / $show );
 
         ob_start();
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist, integers via absint() with min()/max() clamps, radius via Olo_Tile_Utils border_radius()/radius_force_css(), object-fit via in_array() whitelist; $uid is internally generated.
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist, integers via absint() with min()/max() clamps, radius via Olo_Tile_Utils border_radius()/radius_force_css(), object-fit via in_array() whitelist, object-position via strict regex whitelist + esc_attr(); $uid is internally generated.
         ?>
         <style>
             .<?php echo $uid; ?> {
@@ -112,6 +117,7 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
                 width: 100%;
                 display: block;
                 object-fit: <?php echo $obj_fit; ?>;
+                object-position: <?php echo esc_attr( $obj_pos ); ?>;
                 border-radius: <?php echo $radius; ?>;
                 <?php if ( $height_mode === 'fixed' ) : ?>
                 height: <?php echo $fixed_h; ?>px;

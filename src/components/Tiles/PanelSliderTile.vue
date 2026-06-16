@@ -211,6 +211,7 @@ const imgStyle = computed(() => ({
   width: '100%',
   height: '100%',
   objectFit: s.value.image_fit || 'cover',
+  objectPosition: s.value.object_position || 'center center',
   display: 'block',
   borderRadius: radiusToCss(s.value.card_image_radius, { fallback: '0px', zero: '0px' }),
 }));

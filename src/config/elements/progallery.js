@@ -31,6 +31,7 @@ export default {
     gap: '8',
     img_height: '250px',
     object_fit: 'cover',
+    object_position: 'center center',
     thumb_radius: '8',
     rows: '0',
     mobile_columns: '2',
@@ -262,6 +263,10 @@ export default {
       { value: 'cover', label: t('Riempi') },
       { value: 'contain', label: t('Contieni') },
     ]},
+    // Punto focale GLOBALE applicato a TUTTE le immagini della galleria (object-position).
+    // URL per-item → niente src nei contextKeys (anteprima focal point usa solo fit).
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+      contextKeys: { fit: 'object_fit' } },
     withHover({ key: 'thumb_radius', label: t('Raggio bordi (px)'), type: 'border-radius' }),
 
     // ─── Espandi ───

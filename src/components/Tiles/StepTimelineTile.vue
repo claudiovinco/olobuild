@@ -34,7 +34,7 @@
             <span style="margin-left:8px">{{ it.media_label }}</span>
           </div>
           <div style="flex:1;padding:14px;display:flex;align-items:center;justify-content:center;overflow:hidden">
-            <img v-if="it.media_type === 'image' && it.media_image" :src="it.media_image" :style="{ width: '100%', height: '100%', objectFit: 'cover' }" />
+            <img v-if="it.media_type === 'image' && it.media_image" :src="it.media_image" :style="{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: (s.media_object_position || 'center center') }" />
             <pre v-else-if="it.media_type === 'terminal' && it.media_content" :style="terminalStyle(it)">{{ it.media_content }}</pre>
             <div v-else style="width:100%;display:flex;flex-direction:column;gap:8px;opacity:.7">
               <span :style="{ height: '8px', background: 'color-mix(in srgb, ' + resolveColor(it.media_color, TOKENS.primary) + ' 20%, transparent)', borderRadius: '4px' }"></span>
@@ -83,6 +83,7 @@ const defaults = {
   counter_size: 96, counter_color: '', counter_italic: true, counter_weight: '500',
   tag_size: 12, tag_color: '',
   media_aspect_ratio: '5/4',
+  media_object_position: 'center center',
   media_radius: R(14),
   media_shadow: 'sm',
   show_media_label: true,

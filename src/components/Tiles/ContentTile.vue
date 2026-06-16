@@ -57,6 +57,7 @@ const s = computed(() => ({
   image_width: '40',
   image_height: 'auto',
   image_fit: 'cover',
+  object_position: 'center center',
   image_radius: '0',
   image_border_width: '0',
   image_border_color: '',
@@ -158,6 +159,7 @@ const imgStyle = computed(() => {
   const h = s.value.image_height;
   const style = {
     objectFit: s.value.image_fit || 'cover',
+    objectPosition: s.value.object_position || 'center center',
   };
   if (h && h !== 'auto') {
     style.height = /^\d+$/.test(h) ? h + 'px' : h;

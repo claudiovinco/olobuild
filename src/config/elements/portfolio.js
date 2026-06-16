@@ -34,6 +34,7 @@ export default {
     columns: '3',
     gap: '20',
     image_ratio: '4:3',
+    object_position: 'center center',
     // Filtri
     filter_bar: true,
     filter_style: 'buttons',
@@ -258,6 +259,8 @@ export default {
     { type: 'separator', label: t('Layout — aspetto') },
     { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 60, step: 2 },
     withHover({ key: 'border_radius', label: t('Raggio bordi card (px)'), type: 'border-radius' }),
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+      contextKeys: { ratio: 'image_ratio' } },
 
     { type: 'separator', label: t('Carousel — aspetto') },
     { key: 'carousel_speed', label: t('Velocità (s per loop)'), type: 'range', min: 10, max: 120, step: 5,

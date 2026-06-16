@@ -53,6 +53,7 @@ class Olo_StudioHero_Tile extends Olo_Tile_Base {
         'accent_color'       => '',
         'media_mode'         => 'olomap',
         'media_image'        => '',
+        'media_object_position' => 'center center',
         'media_label'        => 'Visual studio — still',
         'cap_text'           => 'OLObuild · sistema',
         'map_label'          => 'Mappa del sistema',
@@ -127,6 +128,8 @@ class Olo_StudioHero_Tile extends Olo_Tile_Base {
         // ── Flag ──
         $has_media = ( $s['media_mode'] !== 'none' );
         $map_on    = ( $s['media_mode'] === 'olomap' );
+        $obj_pos   = trim( (string) ( $s['media_object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
         $letters   = ! empty( $s['letters_entrance'] );
         $fill_on   = ! empty( $s['line2_scroll_fill'] ) && (string) $s['title_line2'] !== '';
         $parallax  = ! empty( $s['parallax_internal'] );
@@ -343,7 +346,7 @@ class Olo_StudioHero_Tile extends Olo_Tile_Base {
                         <?php else : ?>
                         <div class="sth-imgbox" data-olo-tilt-child>
                             <?php if ( (string) $s['media_image'] !== '' ) : ?>
-                            <img src="<?php echo esc_url( $s['media_image'] ); ?>" alt="<?php echo esc_attr( $s['media_label'] ); ?>" />
+                            <img src="<?php echo esc_url( $s['media_image'] ); ?>" alt="<?php echo esc_attr( $s['media_label'] ); ?>" style="object-position:<?php echo esc_attr( $obj_pos ); ?>;" />
                             <?php elseif ( (string) $s['media_label'] !== '' ) : ?>
                             <span class="sth-ph"><?php echo esc_html( $s['media_label'] ); ?></span>
                             <?php endif; ?>

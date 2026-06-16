@@ -82,6 +82,7 @@ const defaults = {
   image_ratio: 'auto',
   image_height: '',
   image_fit: 'cover',
+  object_position: 'center center',
   image_zoom: false,
   media_padding: { top: 0, right: 0, bottom: 0, left: 0 },
   text_align: 'left',
@@ -254,6 +255,7 @@ const mediaInnerStyle = computed(() => ({
   width: '100%',
   height: '100%',
   objectFit: s.value.image_fit || 'cover',
+  objectPosition: s.value.object_position || 'center center',
   display: 'block',
   transition: 'transform 0.5s cubic-bezier(.4,0,.2,1)',
 }));

@@ -8,7 +8,7 @@
       class="olo-workgrid__item"
     >
       <div class="olo-workgrid__media" :style="{ aspectRatio: it.tall ? tallAspect : aspect, overflow: 'hidden', marginBottom: '16px', background: mediaBg }">
-        <img v-if="it.image" :src="it.image" :alt="it.title" class="olo-workgrid__img" />
+        <img v-if="it.image" :src="it.image" :alt="it.title" class="olo-workgrid__img" :style="{ objectPosition: objPos }" />
         <div v-else class="olo-workgrid__ph" :style="phStyle">
           <span v-if="it.media_label" class="olo-workgrid__lbl" :style="labelStyle">{{ it.media_label }}</span>
         </div>
@@ -36,7 +36,7 @@ const defaults = {
     { image: '', media_label: 'Cobalt — product UI', title: 'Cobalt', meta: "'24 — Product", description: 'Brand and interface for a developer tool that hates noise.', link_url: '', tall: false },
   ],
   columns: 2, items_gap: 32,
-  media_aspect: '4/3', media_tall_aspect: '4/5', media_bg: '#ebe7dc', media_label_color: '#18181a', hover_zoom: true,
+  media_aspect: '4/3', media_tall_aspect: '4/5', media_bg: '#ebe7dc', media_label_color: '#18181a', hover_zoom: true, object_position: 'center center',
   title_font_family: 'heading', title_color: '#18181a', title_size: 22, title_weight: '500',
   meta_color: '#8d8a82', meta_size: 12,
   show_desc: true, desc_color: '#8d8a82', desc_size: 15, mono_font_family: '',
@@ -52,6 +52,7 @@ const uid = 'olo-wg-' + Math.abs(JSON.stringify(s.value.columns) ? 1 : 0); // cl
 const aspect = computed(() => s.value.media_aspect || '4/3');
 const tallAspect = computed(() => s.value.media_tall_aspect || '4/5');
 const mediaBg = computed(() => s.value.media_bg || '#ebe7dc');
+const objPos = computed(() => s.value.object_position || 'center center');
 const mono = computed(() => {
   const fam = resolveFontFamily(s.value.mono_font_family);
   if (!fam) return MONO_FB;

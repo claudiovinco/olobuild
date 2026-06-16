@@ -17,6 +17,7 @@ export default {
     preset: 'custom',
     image: '',
     image_height: '400',
+    object_position: 'center center',
     markers: [
       { id: 'hs-1', pos_x: '30', pos_y: '40', title: t('Punto di interesse'), description: t('Descrizione del primo hotspot.'), icon: 'pin', tooltip_position: 'top' },
       { id: 'hs-2', pos_x: '65', pos_y: '55', title: t('Secondo punto'), description: t('Descrizione del secondo hotspot.'), icon: 'pin', tooltip_position: 'bottom' },
@@ -79,6 +80,7 @@ export default {
     { type: 'separator', label: t('Immagine') },
     withHover({ key: 'border_radius', label: t('Border Radius immagine'), type: 'border-radius' }),
     { key: 'image_height', label: t('Altezza immagine (px)'), type: 'range', min: 200, max: 800, step: 10 },
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', contextKeys: { src: 'image', height: 'image_height' } },
 
     ...textEffectsFields([
       { value: 'title', label: t('Solo Titolo') },

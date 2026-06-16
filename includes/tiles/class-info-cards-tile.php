@@ -28,9 +28,9 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
         'items_gap' => 0,
 
         'items' => [
-            [ 'counter' => '01', 'counter_label' => 'Carta',         'title' => 'Zero',    'title_accent' => '',   'title_accent_italic' => true,  'description' => 'Niente <strong>carta di credito</strong> per scaricare e provare. Niente trial scaduto, niente sblocchi nascosti.', 'icon' => '', 'footer_dot_color' => '#10b981', 'footer_text' => '', 'link_url' => '', 'media_image' => '', 'media_label' => 'SCREENSHOT · 01' ],
-            [ 'counter' => '02', 'counter_label' => 'Registrazione', 'title' => 'Niente',  'title_accent' => '',   'title_accent_italic' => true,  'description' => 'Nessuna <strong>registrazione obbligatoria</strong>. Scarichi, installi, lavori. L\'account lo crei solo se vuoi.', 'icon' => '', 'footer_dot_color' => '#10b981', 'footer_text' => '', 'link_url' => '', 'media_image' => '', 'media_label' => 'SCREENSHOT · 02' ],
-            [ 'counter' => '03', 'counter_label' => 'Pro',           'title' => '30',      'title_accent' => 'gg', 'title_accent_italic' => false, 'description' => '<strong>Soddisfatti o rimborsati</strong> su OLObuild Pro. 30 giorni pieni, nessuna domanda, zero ostacoli.', 'icon' => '', 'footer_dot_color' => '#10b981', 'footer_text' => '', 'link_url' => '', 'media_image' => '', 'media_label' => 'SCREENSHOT · 03' ],
+            [ 'counter' => '01', 'counter_label' => 'Carta',         'title' => 'Zero',    'title_accent' => '',   'title_accent_italic' => true,  'description' => 'Niente <strong>carta di credito</strong> per scaricare e provare. Niente trial scaduto, niente sblocchi nascosti.', 'icon' => '', 'footer_dot_color' => '#10b981', 'footer_text' => '', 'link_url' => '', 'link_text' => '', 'media_image' => '', 'media_label' => 'SCREENSHOT · 01' ],
+            [ 'counter' => '02', 'counter_label' => 'Registrazione', 'title' => 'Niente',  'title_accent' => '',   'title_accent_italic' => true,  'description' => 'Nessuna <strong>registrazione obbligatoria</strong>. Scarichi, installi, lavori. L\'account lo crei solo se vuoi.', 'icon' => '', 'footer_dot_color' => '#10b981', 'footer_text' => '', 'link_url' => '', 'link_text' => '', 'media_image' => '', 'media_label' => 'SCREENSHOT · 02' ],
+            [ 'counter' => '03', 'counter_label' => 'Pro',           'title' => '30',      'title_accent' => 'gg', 'title_accent_italic' => false, 'description' => '<strong>Soddisfatti o rimborsati</strong> su OLObuild Pro. 30 giorni pieni, nessuna domanda, zero ostacoli.', 'icon' => '', 'footer_dot_color' => '#10b981', 'footer_text' => '', 'link_url' => '', 'link_text' => '', 'media_image' => '', 'media_label' => 'SCREENSHOT · 03' ],
         ],
 
         'card_bg'           => [ 'type' => 'solid', 'color' => '#0f172a' ],
@@ -53,9 +53,11 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
         'show_counter_label' => true,
         'show_arrow'         => true,
         'show_footer'        => false,
+        'show_link_text'     => false,
         'show_divider'       => false,
         'show_media'                  => false,
         'media_aspect_ratio'          => '4/3',
+        'object_position'             => 'center center',
         'media_radius'                => [ 'tl' => 18, 'tr' => 18, 'br' => 18, 'bl' => 18, 'linked' => true ],
         'media_radius_hover'          => [ 'tl' => 18, 'tr' => 18, 'br' => 18, 'bl' => 18, 'linked' => true ],
         'media_radius_hover_duration' => 400,
@@ -111,6 +113,8 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
         $media_rdur     = max( 50, intval( $s['media_radius_hover_duration'] ?? 400 ) );
         $aspect_allow  = [ '16/9', '4/3', '3/2', '1/1', '21/9' ];
         $media_aspect  = in_array( $s['media_aspect_ratio'] ?? '4/3', $aspect_allow, true ) ? $s['media_aspect_ratio'] : '4/3';
+        $obj_pos       = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
 
         $title_size  = max( 18, min( 160, absint( $s['title_size'] ) ) );
         $title_weight = preg_match( '/^\d+$/', (string) $s['title_weight'] ) ? $s['title_weight'] : '500';
@@ -171,6 +175,7 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
                     $foot_dot       = $this->safe_color_css( $it['footer_dot_color'] ?? '' ) ?: '#10b981';
                     $foot_text      = $it['footer_text'] ?? '';
                     $link_url       = $it['link_url'] ?? '';
+                    $link_text      = $it['link_text'] ?? '';
                     $is_link        = ! empty( $link_url );
                     $tag            = $is_link ? 'a' : 'div';
                     $tag_attrs      = $is_link ? ' href="' . esc_url( $link_url ) . '" style="text-decoration:none;color:inherit;"' : '';
@@ -185,7 +190,7 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
                         ?>
                             <div class="olo-icards__media" style="<?php echo esc_attr( $media_inner_style ); ?>">
                                 <?php if ( $media_img ) : ?>
-                                    <img src="<?php echo esc_url( $media_img ); ?>" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block" />
+                                    <img src="<?php echo esc_url( $media_img ); ?>" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:<?php echo esc_attr( $obj_pos ); ?>;display:block" />
                                 <?php elseif ( $media_lbl ) : ?>
                                     <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:11px;letter-spacing:0.12em;color:<?php echo esc_attr( $card_color ); ?>;opacity:.45;text-transform:uppercase" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.media_label'; ?>"><?php echo esc_html( $media_lbl ); ?></span>
                                 <?php endif; ?>
@@ -242,6 +247,13 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
                                 <span data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.footer_text'; ?>"><?php echo esc_html( $foot_text ); ?></span>
                             </div>
                         <?php endif; ?>
+
+                        <!-- CTA TESTUALE (Learn more →) -->
+                        <?php if ( ! empty( $s['show_link_text'] ) && $link_text !== '' ) : ?>
+                            <span class="olo-icards__cta" style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;font-family:<?php echo esc_attr( $sans ); ?>;font-size:14px;font-weight:600;letter-spacing:0.01em;color:<?php echo esc_attr( $accent_color ); ?>">
+                                <span data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.link_text'; ?>"><?php echo esc_html( $link_text ); ?></span><span class="olo-icards__cta-arrow" aria-hidden="true" style="display:inline-block;transition:transform .3s ease">→</span>
+                            </span>
+                        <?php endif; ?>
                     </<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'a'/'div' literal from the ternary above ?>>
                 <?php endforeach; ?>
             </div>
@@ -261,6 +273,7 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
             <?php if ( $media_radius_h ) : ?>
             .<?php echo $uid; ?> .olo-icards__card:hover .olo-icards__media { border-radius: <?php echo $media_radius_h; ?> !important; }
             <?php endif; ?>
+            .<?php echo $uid; ?> .olo-icards__card:hover .olo-icards__cta-arrow { transform: translateX(5px); }
             <?php switch ( $hover_effect ) :
                 case 'lift' : ?>
                     .<?php echo $uid; ?> .olo-icards__card:hover { transform: translateY(-6px); box-shadow: 0 14px 36px rgba(0,0,0,0.15); }

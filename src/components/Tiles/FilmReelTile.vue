@@ -85,6 +85,9 @@ const defaults = {
   bg_color: '',
   border_color: '',
 
+  // Punto focale globale (object-position) di immagini/video nei fotogrammi.
+  media_object_position: 'center center',
+
   // Spaziatura (gated): padding verticale di base clamp(42px,6vw,78px) 0.
   // Override attivo SOLO se pad_custom=true → no-op coi default.
   pad_custom: false,
@@ -124,6 +127,11 @@ const line = computed(() => resolveColor(s.value.border_color, 'var(--olo-color-
 const line2 = computed(() => resolveColor(s.value.border_color, 'rgba(236,234,227,.20)'));
 const prog = computed(() => resolveColor(s.value.progress_color, accent.value));
 const skmax = computed(() => Math.max(0, Math.min(20, parseFloat(s.value.skew_max !== '' ? s.value.skew_max : 7) || 0)));
+// Punto focale globale (object-position) — '' → 'center center' (= resa attuale).
+const objPos = computed(() => {
+  const v = String(s.value.media_object_position ?? '').trim();
+  return v !== '' ? v : 'center center';
+});
 
 function sizeClass(it) {
   const sz = it.size || 'normal';
@@ -178,7 +186,7 @@ const cssText = computed(() => {
   css += `${u} .ofr-item.tall{height:clamp(360px,62vh,610px);align-self:flex-start;}`;
   css += `${u} .ofr-item.short{height:clamp(260px,46vh,460px);align-self:center;}`;
   css += `${u} .ofr-item:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, ${accent.value} 30%, transparent);}`;
-  css += `${u} .ofr-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}`;
+  css += `${u} .ofr-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:${objPos.value};background-position:${objPos.value};display:block;}`;
   css += `${u} .ofr-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(236,234,227,.05);}`;
   css += `${u} .ofr-ph span{font-family:${MONO};font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:${MUTED};text-align:center;padding:0 18px;}`;
   css += `${u} .ofr-meta{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;padding:14px 15px;background:linear-gradient(transparent,rgba(8,9,12,.82));pointer-events:none;z-index:5;}`;

@@ -53,6 +53,7 @@ class Olo_Scrollscrub_Tile extends Olo_Tile_Base {
         'item_min_height'    => 460,
         'round'              => 14,
         'item_padding'       => 0,
+        'object_position'    => 'center center',
         'item_bg_default'    => '',
         'text_color_default' => '',
         'progress_color'     => '',
@@ -136,6 +137,11 @@ class Olo_Scrollscrub_Tile extends Olo_Tile_Base {
         $round    = $this->build_border_radius_css( $s['round'] ?? 0 ) ?: '0px';
         $pad      = max( 0,   min( 80,  intval( $s['item_padding'] ) ) );
         $overlay  = $pad === 0; // 0 = immagine a tutto bordo, testo sovrapposto in basso
+
+        // Punto focale GLOBALE (object-position) applicato a ogni <img> del nastro.
+        // Default 'center center' = comportamento storico identico.
+        $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
 
         $bg_def   = $this->safe_color_css( $s['item_bg_default'] )    ?: 'var(--olo-color-surface, #ffffff)';
         $txt_def  = $this->safe_color_css( $s['text_color_default'] ) ?: 'var(--olo-color-text, #1f2937)';
@@ -254,6 +260,7 @@ class Olo_Scrollscrub_Tile extends Olo_Tile_Base {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
+                object-position: <?php echo esc_attr( $obj_pos ); ?>;
                 display: block;
             }
             .<?php echo $uid; ?> .olo-scrub__media .ph {

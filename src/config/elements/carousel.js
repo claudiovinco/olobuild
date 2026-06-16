@@ -44,6 +44,7 @@ export default {
     caption_color: '',
     caption_bg: '',
     object_fit: 'cover',
+    object_position: 'center center',
     mobile_slides: '1',
     ...textEffectsDefaults,
     text_effect_target: 'caption',
@@ -121,6 +122,8 @@ export default {
       { value: 'cover', label: t('Riempi') },
       { value: 'contain', label: t('Contieni') },
     ]},
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+      contextKeys: { fit: 'object_fit' } },
     withHover({ key: 'border_radius', label: t('Raggio bordi (px)'), type: 'border-radius' }),
     { key: 'mobile_slides', label: t('Slide mobile'), type: 'range', min: 1, max: 3, step: 1 },
 

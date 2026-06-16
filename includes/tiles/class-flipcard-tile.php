@@ -22,7 +22,8 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         'front_description'=> 'Descrizione della card visibile.',
         'front_bg'         => '',
         'front_overlay'    => '',
-        'front_image_fit'     => 'cover',
+        'front_image_fit'      => 'cover',
+        'front_image_position' => 'center center',
         'front_image_padding' => '0',
         'front_image_radius'  => '0',
         'front_text_color' => '',
@@ -39,7 +40,8 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         'back_description' => 'Contenuto retro con dettagli.',
         'back_bg'          => '',
         'back_overlay'     => '',
-        'back_image_fit'      => 'cover',
+        'back_image_fit'       => 'cover',
+        'back_image_position'  => 'center center',
         'back_image_padding'  => '0',
         'back_image_radius'   => '0',
         'back_text_color'  => '',
@@ -361,9 +363,14 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
             $img_pad = intval( $s[ $prefix . 'image_padding' ] ?? 0 );
             $img_rad = intval( $s[ $prefix . 'image_radius' ] ?? 0 );
             $img_fit = in_array( $s[ $prefix . 'image_fit' ] ?? 'cover', [ 'cover', 'contain', 'fill' ] ) ? $s[ $prefix . 'image_fit' ] : 'cover';
+            $img_pos = trim( (string) ( $s[ $prefix . 'image_position' ] ?? 'center center' ) );
+            if ( $img_pos === '' ) {
+                $img_pos = 'center center';
+            }
             $img_obj_fit = "object-fit:{$img_fit};";
+            $img_obj_fit .= 'object-position:' . esc_attr( $img_pos ) . ';';
             if ( $img_fit === 'contain' ) {
-                $img_obj_fit .= 'object-position:center;background:inherit;';
+                $img_obj_fit .= 'background:inherit;';
             }
             if ( $img_pad > 0 || $img_rad > 0 ) {
                 $wrap_style = 'position:absolute;z-index:0;overflow:hidden;';

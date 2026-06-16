@@ -56,6 +56,7 @@ export default {
     item_min_height: 460,       // px (desktop)
     round: 14,
     item_padding: 0,            // px (0 = immagine a tutto bordo)
+    object_position: 'center center', // punto focale GLOBALE applicato a ogni immagine del nastro
     item_bg_default: '',        // vuoto → token di superficie
     text_color_default: '',     // vuoto → token testo
     progress_color: '',         // vuoto → accent
@@ -128,6 +129,9 @@ export default {
     { key: 'round', label: t('Raggio angoli (px)'), type: 'border-radius' },
     { key: 'item_padding', label: t('Padding interno (px)'), type: 'range', min: 0, max: 64, step: 2,
       description: t('0 = immagine a tutto bordo con testo sovrapposto in basso.') },
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+      contextKeys: { fit: '' },
+      description: t('Punto focale applicato a tutte le immagini del nastro (object-position).') },
 
     { type: 'separator', label: t('Colori predefiniti') },
     { key: 'item_bg_default', label: t('Sfondo elemento (default)'), type: 'color',

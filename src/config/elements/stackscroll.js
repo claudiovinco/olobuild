@@ -40,10 +40,12 @@ export default {
     round: 20,
     card_padding: 48,
     media_position: 'right',   // immagine a destra / sinistra del testo
+    object_position: 'center center', // punto focale globale immagine card (object-position)
     card_bg_default: '',       // vuoto → token di superficie
     text_color_default: '',    // vuoto → token testo
     num_color_default: '',     // colore numero progressivo (vuoto → accent)
     show_number: true,
+    title_display: false,      // titolo display (heading-font + clamp 40..60) — no-op di default
 
     shadow: 'custom',
     shadow_h: '0',
@@ -60,18 +62,20 @@ export default {
 
     // ── Card (repeater) ──
     cards: [
-      { title: 'Primo gesto', accent: '', text: 'Descrivi il primo passaggio del tuo processo. Scrivi una frase chiara e concreta.', media: '', media_label: 'Immagine', color: '', text_color: '' },
-      { title: 'Secondo gesto', accent: '', text: 'Il secondo passaggio. Le card si fermano una dopo l\'altra mentre scorri la pagina.', media: '', media_label: 'Immagine', color: '', text_color: '' },
-      { title: 'Terzo gesto', accent: '', text: 'Il terzo passaggio. Ogni card sale sopra la precedente creando la pila.', media: '', media_label: 'Immagine', color: '', text_color: '' },
-      { title: 'Quarto gesto', accent: '', text: 'L\'ultimo passaggio resta in cima. Aggiungi, rimuovi o riordina le card a piacere.', media: '', media_label: 'Immagine', color: '', text_color: '' },
+      { eyebrow: '', title: 'Primo gesto', accent: '', text: 'Descrivi il primo passaggio del tuo processo. Scrivi una frase chiara e concreta.', media: '', media_label: 'Immagine', color: '', text_color: '' },
+      { eyebrow: '', title: 'Secondo gesto', accent: '', text: 'Il secondo passaggio. Le card si fermano una dopo l\'altra mentre scorri la pagina.', media: '', media_label: 'Immagine', color: '', text_color: '' },
+      { eyebrow: '', title: 'Terzo gesto', accent: '', text: 'Il terzo passaggio. Ogni card sale sopra la precedente creando la pila.', media: '', media_label: 'Immagine', color: '', text_color: '' },
+      { eyebrow: '', title: 'Quarto gesto', accent: '', text: 'L\'ultimo passaggio resta in cima. Aggiungi, rimuovi o riordina le card a piacere.', media: '', media_label: 'Immagine', color: '', text_color: '' },
     ],
   },
 
   fields: [
     { key: 'cards', label: t('Card'), type: 'content-items',
       itemLabel: t('Card'),
-      defaults: { title: 'Nuova card', accent: '', text: 'Testo della card…', media: '', media_label: 'Immagine', color: '', text_color: '' },
+      defaults: { eyebrow: '', title: 'Nuova card', accent: '', text: 'Testo della card…', media: '', media_label: 'Immagine', color: '', text_color: '' },
       itemFields: [
+        { key: 'eyebrow',     label: t('Sopra-titolo (mono maiuscolo)'), type: 'text',
+          description: t('Etichetta breve sopra il titolo, resa in maiuscolo con font mono. Distinta dal numero e dall\'accento.') },
         { key: 'title',       label: t('Titolo'),                type: 'text' },
         { key: 'accent',      label: t('Suffisso titolo (accento)'), type: 'text' },
         { key: 'text',        label: t('Testo'),                 type: 'editor', mode: 'block' },
@@ -104,12 +108,18 @@ export default {
       { value: 'left',  label: t('A sinistra del testo') },
       { value: 'none',  label: t('Nessuna immagine (solo testo)') },
     ]},
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+      contextKeys: { fit: 'cover' },
+      condition: { field: 'media_position', op: 'neq', value: 'none' },
+      description: t('Punto focale globale di tutte le immagini delle card.') },
 
     { type: 'separator', label: t('Colori predefiniti') },
     { key: 'card_bg_default', label: t('Sfondo card (default)'), type: 'color',
       description: t('Usato per le card senza colore proprio. Vuoto → superficie del tema.') },
     { key: 'text_color_default', label: t('Testo card (default)'), type: 'color' },
     { key: 'show_number', label: t('Mostra numero progressivo'), type: 'toggle' },
+    { key: 'title_display', label: t('Titolo display (font heading + grande)'), type: 'toggle',
+      description: t('Usa il font heading e una dimensione display (fino a 60px). Off = resa classica.') },
     { key: 'num_color_default', label: t('Colore numero'), type: 'color',
       condition: { field: 'show_number', op: 'eq', value: true } },
 

@@ -50,6 +50,7 @@ const defaults = {
   cta1_text: 'Play album', cta1_url: '#listen',
   cta2_text: 'See tour dates', cta2_url: '#tour',
   cover_image: '', cover_label: 'album cover — Nightglass, neon on black',
+  object_position: 'center center',
   player_track: 'Glasshouse', player_meta: 'Kova · Nightglass', show_player: true,
   bg_color: '#0c0c10', panel_color: '#16161d',
   accent: '#27e0a3', accent_2: '#ff5d9e', accent_on: '#060608',
@@ -202,7 +203,7 @@ const solidStyle = computed(() => ({ display: 'inline-flex', alignItems: 'center
 const ghostStyle = computed(() => ({ display: 'inline-flex', alignItems: 'center', gap: '9px', padding: '16px 30px', borderRadius: '999px', fontFamily: SANS, fontWeight: 700, fontSize: '15px', textDecoration: 'none', background: 'rgba(255,255,255,.05)', color: txt.value, border: '1px solid rgba(255,255,255,.18)' }));
 
 const coverStyle = computed(() => {
-  const st = { position: 'relative', aspectRatio: '1 / 1', borderRadius: coverRadius.value, overflow: 'hidden', border: '1px solid rgba(255,255,255,.09)', boxShadow: `0 30px 80px -30px ${rgbaFrom(accent.value, 0.4)}`, background: panel.value, backgroundSize: 'cover', backgroundPosition: 'center' };
+  const st = { position: 'relative', aspectRatio: '1 / 1', borderRadius: coverRadius.value, overflow: 'hidden', border: '1px solid rgba(255,255,255,.09)', boxShadow: `0 30px 80px -30px ${rgbaFrom(accent.value, 0.4)}`, background: panel.value, backgroundSize: 'cover', backgroundPosition: (s.value.object_position || 'center center') };
   st.backgroundImage = s.value.cover_image ? `url(${s.value.cover_image})` : 'repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 16px, transparent 16px 32px)';
   return st;
 });

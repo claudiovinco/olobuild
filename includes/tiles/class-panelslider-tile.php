@@ -327,6 +327,11 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
         $img_ratio  = $s['image_ratio'] ?? '4/3';
         $img_height = absint( $s['image_height'] ?? 0 );
         $img_fit    = in_array( $s['image_fit'] ?? 'cover', [ 'cover', 'contain', 'fill' ], true ) ? $s['image_fit'] : 'cover';
+        // Punto focale comune a tutte le immagini delle card; default = comportamento attuale.
+        $obj_pos    = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) {
+            $obj_pos = 'center center';
+        }
         // Dual-format: numero legacy O oggetto {tl,tr,br,bl}; '' se zero/vuoto.
         $img_radius_css = $this->build_border_radius_css( $s['card_image_radius'] ?? 0 );
 
@@ -339,7 +344,7 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
         if ( $img_radius_css !== '' ) {
             $css .= $sel . ' .olo-ps-media,' . $sel . ' .olo-ps-img{border-radius:' . $img_radius_css . ';}';
         }
-        $css .= $sel . ' .olo-ps-img{width:100%;height:100%;object-fit:' . esc_attr( $img_fit ) . ';display:block;transition:transform 0.5s cubic-bezier(.4,0,.2,1);}';
+        $css .= $sel . ' .olo-ps-img{width:100%;height:100%;object-fit:' . esc_attr( $img_fit ) . ';object-position:' . esc_attr( $obj_pos ) . ';display:block;transition:transform 0.5s cubic-bezier(.4,0,.2,1);}';
 
         if ( ! empty( $s['image_zoom'] ) ) {
             $css .= $sel . ' .olo-ps-card:hover .olo-ps-img{transform:scale(1.06);}';

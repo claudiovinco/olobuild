@@ -44,6 +44,10 @@ export default {
     bg_color: '',
     border_color: '',
 
+    // Punto focale globale delle immagini/video nei fotogrammi (object-position).
+    // Stringa CSS: 'center center' (= comportamento attuale) o es. '34% 23%'.
+    media_object_position: 'center center',
+
     // Spaziatura (gated): padding verticale di base clamp(42px,6vw,78px) 0.
     // Override attivo SOLO se pad_custom=true → no-op coi default.
     pad_custom: false,
@@ -119,6 +123,11 @@ export default {
     { key: 'border_color', label: t('Colore linee'), type: 'color' },
     { key: 'progress_color', label: t('Colore barra progresso'), type: 'color',
       condition: { field: 'progress_bar', op: 'eq', value: true } },
+
+    { type: 'separator', label: t('Media') },
+    { key: 'media_object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+      description: t('Punto focale delle immagini/video nei fotogrammi (uguale per tutti).'),
+      contextKeys: { frameRatio: 'auto' } },
 
     { type: 'separator', label: t('Spaziatura') },
     { key: 'pad_custom', label: t('Padding personalizzato'), type: 'toggle',

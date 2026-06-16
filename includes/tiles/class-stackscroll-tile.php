@@ -41,6 +41,7 @@ class Olo_Stackscroll_Tile extends Olo_Tile_Base {
         'round'              => 20,
         'card_padding'       => 48,
         'media_position'     => 'right',
+        'object_position'    => 'center center',
         'card_bg_default'    => '',
         'text_color_default' => '',
         'num_color_default'  => '',
@@ -116,10 +117,19 @@ class Olo_Stackscroll_Tile extends Olo_Tile_Base {
         $media_pos = in_array( $s['media_position'], [ 'left', 'right', 'none' ], true ) ? $s['media_position'] : 'right';
         $has_media = $media_pos !== 'none';
 
+        // Punto focale globale immagine card (object-position). Default 'center center' = resa attuale.
+        $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
+
         $bg_def   = $this->safe_color_css( $s['card_bg_default'] )    ?: 'var(--olo-color-surface, #ffffff)';
         $txt_def  = $this->safe_color_css( $s['text_color_default'] ) ?: 'var(--olo-color-text, #1f2937)';
         $num_def  = $this->safe_color_css( $s['num_color_default'] )  ?: 'var(--olo-color-primary, #e1474f)';
         $show_num = ! empty( $s['show_number'] );
+        // Titolo display (additivo, no-op di default): heading-font + clamp grande.
+        // Default false → resa IDENTICA ai temi esistenti (font ereditato, clamp 28..48).
+        $title_display = ! empty( $s['title_display'] );
+        $title_font_css = $title_display ? 'font-family: var(--olo-font-family-heading, var(--olo-font-family, inherit));' : '';
+        $title_size_css = $title_display ? 'clamp(40px, 4.4vw, 60px)' : 'clamp(28px, 3.4vw, 48px)';
 
         $shadow_css = $this->stack_shadow_css( $s );
 
@@ -179,8 +189,19 @@ class Olo_Stackscroll_Tile extends Olo_Tile_Base {
                 margin-bottom: 14px;
                 color: <?php echo $num_def; ?>;
             }
+            .<?php echo $uid; ?> .scard__eyebrow {
+                font-family: var(--olo-font-family-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+                font-size: 14px;
+                letter-spacing: 0.02em;
+                text-transform: uppercase;
+                font-weight: 600;
+                opacity: 0.85;
+                margin-bottom: 10px;
+            }
             .<?php echo $uid; ?> .scard__title {
-                font-size: clamp(28px, 3.4vw, 48px);
+                <?php echo $title_font_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed CSS literal toggled by $title_display ?>
+                color: inherit;
+                font-size: <?php echo $title_size_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed clamp() literal toggled by $title_display ?>;
                 line-height: 1.02;
                 font-weight: 700;
                 margin: 0 0 14px;
@@ -213,6 +234,7 @@ class Olo_Stackscroll_Tile extends Olo_Tile_Base {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
+                object-position: <?php echo esc_attr( $obj_pos ); ?>;
                 display: block;
             }
             .<?php echo $uid; ?> .scard__media .ph {
@@ -282,6 +304,7 @@ class Olo_Stackscroll_Tile extends Olo_Tile_Base {
                     </div>
                 <?php else : ?>
                     <?php foreach ( $cards as $i => $card ) :
+                        $eyebrow    = isset( $card['eyebrow'] ) ? (string) $card['eyebrow'] : '';
                         $title      = isset( $card['title'] ) ? (string) $card['title'] : '';
                         $accent     = isset( $card['accent'] ) ? (string) $card['accent'] : '';
                         $text_raw   = isset( $card['text'] ) ? (string) $card['text'] : '';
@@ -320,6 +343,9 @@ class Olo_Stackscroll_Tile extends Olo_Tile_Base {
                             <div class="scard__txt">
                                 <?php if ( $show_num ) : ?>
                                     <div class="scard__num"><?php echo esc_html( $num ); ?></div>
+                                <?php endif; ?>
+                                <?php if ( $eyebrow !== '' ) : ?>
+                                    <div class="scard__eyebrow" data-olo-editable="cards.<?php echo intval( $i ); ?>.eyebrow"><?php echo esc_html( $eyebrow ); ?></div>
                                 <?php endif; ?>
                                 <?php if ( $title !== '' || $accent !== '' ) : ?>
                                     <h3 class="scard__title">

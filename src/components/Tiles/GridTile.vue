@@ -107,6 +107,7 @@ const defaults = {
   image_ratio: 'auto',
   image_height: '',
   image_fit: 'cover',
+  object_position: 'center center',
   image_zoom: false,
   card_radius: '8',
   card_padding: '16',
@@ -283,6 +284,7 @@ const imageStyle = computed(() => ({
   width: '100%',
   height: '100%',
   objectFit: s.value.image_fit || 'cover',
+  objectPosition: s.value.object_position || 'center center',
   display: 'block',
   transition: 'transform 0.5s cubic-bezier(.4,0,.2,1)',
 }));

@@ -22,6 +22,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         'gap'                 => 8,
         'img_height'          => '250px',
         'object_fit'          => 'cover',
+        'object_position'     => 'center center',
         'thumb_radius'        => 8,
         'rows'                => 0,
         'mobile_columns'      => 2,
@@ -151,6 +152,11 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         $radius_css_hover_css = Olo_Tile_Utils::radius_force_css( $s['thumb_radius_hover'] ?? null );
         $img_height   = esc_attr( $s['img_height'] ?: '250px' );
         $object_fit   = esc_attr( $s['object_fit'] ?: 'cover' );
+        // Punto focale GLOBALE (object-position) applicato a TUTTE le immagini/video.
+        // '' o assente → 'center center' = resa identica a prima.
+        $obj_pos      = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
+        $obj_pos      = esc_attr( $obj_pos );
         $rows         = absint( $s['rows'] );
         $mob_cols     = max( 1, min( 4, absint( $s['mobile_columns'] ) ) );
         $exp_ratio    = max( 2.0, min( 6.0, floatval( $s['expand_ratio'] ) ) );
@@ -333,6 +339,11 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         // ─── STYLE ───
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: absint/intval/floatval with min/max clamps, number_format(), the safe_color_css() whitelist, esc_attr()'d strings, fixed string maps/ternaries and a generated unique id.
         echo '<style>';
+
+        // Punto focale GLOBALE: object-position su TUTTE le immagini/video di ogni layout.
+        // Nessuna regola esistente imposta object-position → questa aggiunge solo la proprietà
+        // (default 'center center' = resa attuale invariata).
+        echo ".{$uid} .olo-pg-item img,.{$uid} .olo-pg-item video{object-position:{$obj_pos}}";
 
         // Hover radius (applies to all layouts — items always have border-radius:$radius)
         if ( $radius_hover_css !== '' ) {

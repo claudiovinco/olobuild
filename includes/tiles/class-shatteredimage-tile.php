@@ -433,7 +433,11 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
             $polygons = $presets[ $preset_key ] ?? $presets['shards'];
         }
         $height     = esc_attr( $s['height'] ?: '400px' );
-        $position   = esc_attr( $s['image_position'] ?: 'center center' );
+        $obj_pos    = trim( (string) ( $s['image_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) {
+            $obj_pos = 'center center';
+        }
+        $position   = esc_attr( $obj_pos );
         $gap_color  = $this->safe_color_css( $s['gap_color'] ) ?: 'transparent';
         $radius     = Olo_Tile_Utils::border_radius( $s['border_radius_outer'] ?? 0 );
         $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_outer_hover'] ?? null );

@@ -29,6 +29,9 @@ class Olo_Lightbox_Tile extends Olo_Tile_Base {
         $caption = ! empty( $settings['show_caption'] );
         $anim    = $settings['animation'] ?? 'fade';
 
+        $obj_pos = trim( (string) ( $settings['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
+
         $ratio_map = [ '1:1' => '100%', '4:3' => '75%', '16:9' => '56.25%', 'auto' => '' ];
         $padding = $ratio_map[ $ratio ] ?? '100%';
 
@@ -61,7 +64,7 @@ class Olo_Lightbox_Tile extends Olo_Tile_Base {
                 $html .= '<div style="padding-bottom:' . $padding . ';position:relative">';
                 if ( $url || $src ) {
                     $html .= '<img src="' . $src . '" alt="' . $title . '" loading="lazy" decoding="async"'
-                           . ' style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />';
+                           . ' style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:' . esc_attr( $obj_pos ) . '" />';
                 } else {
                     // Placeholder SVG inline (icona immagine grigia su sfondo neutro)
                     $html .= '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#9CA3AF">'
@@ -72,7 +75,7 @@ class Olo_Lightbox_Tile extends Olo_Tile_Base {
             } else {
                 if ( $url || $src ) {
                     $html .= '<img src="' . $src . '" alt="' . $title . '" loading="lazy" decoding="async"'
-                           . ' style="width:100%;display:block" />';
+                           . ' style="width:100%;display:block;object-position:' . esc_attr( $obj_pos ) . '" />';
                 } else {
                     $html .= '<div style="aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;color:#9CA3AF">'
                            . '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>'

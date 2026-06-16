@@ -21,6 +21,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
         'gap'                 => 8,
         'img_height'          => '200px',
         'object_fit'          => 'cover',
+        'object_position'     => 'center center',
         'thumb_radius'        => 8,
         'lightbox_animation'  => 'slide',
         'show_caption'        => false,
@@ -90,6 +91,9 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
 
         $img_height  = esc_attr( $s['img_height'] ?: '200px' );
         $object_fit  = esc_attr( $s['object_fit'] ?: 'cover' );
+        $obj_pos     = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
+        $obj_pos     = esc_attr( $obj_pos );
         $lb_anim     = esc_attr( $s['lightbox_animation'] ?? 'slide' );
         $show_caption = ! empty( $s['show_caption'] );
 
@@ -126,6 +130,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                 width: 100%;
                 height: auto;
                 object-fit: <?php echo $object_fit; ?>;
+                object-position: <?php echo $obj_pos; ?>;
                 display: block;
                 transition: transform 0.5s cubic-bezier(.25,.46,.45,.94), filter 0.5s ease;
                 will-change: transform;
@@ -150,6 +155,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
+                object-position: <?php echo $obj_pos; ?>;
                 display: block;
                 transition: transform 0.5s cubic-bezier(.25,.46,.45,.94), filter 0.5s ease;
                 will-change: transform;
@@ -172,6 +178,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                 width: 100%;
                 height: 100%;
                 object-fit: <?php echo $object_fit; ?>;
+                object-position: <?php echo $obj_pos; ?>;
                 display: block;
                 transition: transform 0.5s cubic-bezier(.25,.46,.45,.94), filter 0.5s ease;
                 will-change: transform;

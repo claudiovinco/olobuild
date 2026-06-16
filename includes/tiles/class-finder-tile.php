@@ -90,6 +90,11 @@ class Olo_Finder_Tile extends Olo_Tile_Base {
         $chipbg = $this->safe_color_css( $s['chip_bg'] ?? '' ) ?: 'transparent';
         $media_bg = $this->safe_color_css( $s['media_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #1e1e1e)';
         $center = ( ( $s['align'] ?? 'center' ) === 'center' );
+        // Punto focale globale (object-position) — applicato a OGNI immagine card (ramo image).
+        // Default 'center center' = comportamento storico (background-position:center). I temi
+        // esistenti rendono identici. Il ramo media_bg conserva la sua background-position.
+        $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
         $serif  = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
         $sans   = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
         $preset = sanitize_key( $s['preset'] ?? 'custom' );
@@ -190,9 +195,13 @@ class Olo_Finder_Tile extends Olo_Tile_Base {
                 $f_mb     = $this->bg_media_parts( $it['media_bg'] ?? null, $uid . '-i' . $i );
                 $f_media  = ( $f_img !== '' || $f_mlabel !== '' || $f_mb['has'] );
                 if ( $f_mb['has'] ) {
+                    // ramo media_bg: conserva la sua background-position propria (no focal globale).
                     $f_mstyle = $f_mb['css'] !== '' ? ' style="' . esc_attr( $f_mb['css'] ) . '"' : '';
                 } else {
-                    $f_mstyle = $f_img !== '' ? ' style="background-image:url(' . esc_url( $f_img ) . ')"' : '';
+                    // ramo image: applica il punto focale globale (object_position → background-position).
+                    $f_mstyle = $f_img !== ''
+                        ? ' style="background-image:url(' . esc_url( $f_img ) . ');background-position:' . esc_attr( $obj_pos ) . '"'
+                        : ' style="background-position:' . esc_attr( $obj_pos ) . '"';
                 }
             ?>
                 <div class="ofn-res<?php echo $f_media ? ' ofn-res--media' : ''; ?><?php echo $i === $def_idx ? ' show' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ternaries output fixed literal strings only ?>" data-fn-res="<?php echo intval( $i ); ?>" role="tabpanel">

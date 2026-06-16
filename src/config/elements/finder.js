@@ -42,6 +42,7 @@ export default {
     card_bg: '',
     card_border: '',
     media_bg: '',
+    object_position: 'center center',
     align: 'center',
     // ─── nuove (default = aspetto storico) ───
     default_index: '0',
@@ -141,6 +142,9 @@ export default {
     { key: 'card_border', label: t('Colore bordo card (semplice)'), type: 'color',
       description: t('Bordo 1px rapido. Per bordi avanzati (spessore, lati, effetti) usa la sezione Bordo.') },
     { key: 'media_bg', label: t('Sfondo media (card con immagine)'), type: 'color' },
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+      contextKeys: { ratio: '190/240', fit: 'cover' },
+      description: t('Punto focale globale dell’immagine in tutte le card risultato.') },
     { key: 'card_max_width', label: t('Larghezza max card (px)'), type: 'range', min: 480, max: 1000, step: 10 },
     { key: 'card_radius', label: t('Raggio card'), type: 'border-radius' },
     { key: 'card_padding', label: t('Padding card (px)'), type: 'spacing', max: 80 },

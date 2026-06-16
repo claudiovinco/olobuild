@@ -26,6 +26,7 @@ export default {
     gap: '8',
     img_height: '200px',
     object_fit: 'cover',
+    object_position: 'center center',
     thumb_radius: '8',
     lightbox_animation: 'slide',
     show_caption: false,
@@ -98,6 +99,8 @@ export default {
       { value: 'contain', label: t('Contieni') },
       { value: 'fill', label: t('Riempi (deforma)') },
     ]},
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+      contextKeys: { fit: 'object_fit', ratio: '' } },
     withHover({ key: 'thumb_radius', label: t('Raggio bordi (px)'), type: 'border-radius' }),
     { key: 'mobile_columns', label: t('Colonne mobile'), type: 'range', min: 1, max: 4, step: 1 },
 

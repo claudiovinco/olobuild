@@ -54,6 +54,7 @@ const defaults = {
   description_color: '',
   image_size: '60',
   image_border_radius: '8',
+  image_object_position: 'center center',
   show_image: true,
   price_position: 'right',
   highlighted_bg: '',
@@ -137,6 +138,7 @@ const imgInner = computed(() => ({
   width: '100%',
   height: '100%',
   objectFit: 'cover',
+  objectPosition: s.value.image_object_position || 'center center',
   display: 'block',
 }));
 

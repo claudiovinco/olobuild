@@ -22,6 +22,7 @@ export default {
     hero_image: 'https://images.unsplash.com/photo-1723465308831-29da05e011f3?w=1600&q=75&auto=format&fit=crop',
     hero_height: 400,
     image_position: 'right',
+    image_bleed: false,
     nav_style: 'minimal',
     animation: 'fade',
     animation_duration: 300,
@@ -53,6 +54,7 @@ export default {
     hero_overlay_color: 'rgba(0,0,0,0.35)',
     hero_overlay_gradient: true,
     hero_radius: 0,
+    hero_object_position: 'center center',
     panel_bg: '#ffffff',
     panel_text_color: '#1e293b',
     panel_title_color: '#0f172a',
@@ -109,6 +111,8 @@ export default {
       { value: 'right', label: t('Destra') },
       { value: 'left',  label: t('Sinistra') },
     ]},
+    { key: 'image_bleed', label: t('Immagine a filo bordo (full-bleed)'), type: 'toggle',
+      description: t('L\'immagine raggiunge il bordo esterno del viewport (lato della posizione immagine).') },
 
     { type: 'separator', label: t('Animazione') },
     { key: 'animation', label: t('Animazione'), type: 'select', options: [
@@ -165,6 +169,8 @@ export default {
 
     { type: 'separator', label: t('Hero — Aspetto') },
     { key: 'hero_radius', label: t('Arrotondamento hero (px)'), type: 'border-radius' },
+    { key: 'hero_object_position', label: t('Posizione contenuto'), type: 'object-position',
+      contextKeys: { src: 'hero_image', height: 'hero_height' } },
     { key: 'hero_overlay_color', label: t('Overlay colore'), type: 'color',
       condition: { field: 'nav_position', op: 'eq', value: 'overlay' } },
     { key: 'hero_overlay_gradient', label: t('Overlay gradiente (alto→basso)'), type: 'toggle',

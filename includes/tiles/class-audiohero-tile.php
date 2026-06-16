@@ -26,6 +26,7 @@ class Olo_AudioHero_Tile extends Olo_Tile_Base {
         'cta2_url'        => '#tour',
         'cover_image'     => '',
         'cover_label'     => 'album cover — Nightglass, neon on black',
+        'object_position' => 'center center',
         'player_track'    => 'Glasshouse',
         'player_meta'     => 'Kova · Nightglass',
         'show_player'     => true,
@@ -98,9 +99,13 @@ class Olo_AudioHero_Tile extends Olo_Tile_Base {
         $disp    = "var(--olo-font-family-heading, 'Unbounded',-apple-system,sans-serif)";
         $sans    = "var(--olo-font-family, 'Figtree',-apple-system,sans-serif)";
 
+        // Punto focale cover (object-position keyword/% valida come background-position).
+        $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
+
         // Cover: immagine se presente, altrimenti placeholder a strisce diagonali.
         $cover_bg = $img !== ''
-            ? 'background-image:url(' . esc_url( $img ) . ');background-size:cover;background-position:center;'
+            ? 'background-image:url(' . esc_url( $img ) . ');background-size:cover;background-position:' . esc_attr( $obj_pos ) . ';'
             : 'background-image:repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 16px, transparent 16px 32px);';
 
         // Waveform: 12 barre con altezze fisse (statiche, decorative).

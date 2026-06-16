@@ -10,7 +10,7 @@
         :style="cardStyle"
       >
         <div v-if="s.show_media" class="olo-icards__media" :style="mediaStyle">
-          <img v-if="it.media_image" :src="it.media_image" alt="" :style="{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }" />
+          <img v-if="it.media_image" :src="it.media_image" alt="" :style="{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: (s.object_position || 'center center'), display: 'block' }" />
           <span v-else-if="it.media_label" :style="mediaLabelStyle">{{ it.media_label }}</span>
         </div>
         <div v-if="s.show_icon || s.show_counter || s.show_arrow" class="olo-icards__top">
@@ -38,6 +38,10 @@
           <span class="olo-icards__dot" :style="{ background: it.footer_dot_color || '#10b981' }"></span>
           <span>{{ it.footer_text }}</span>
         </div>
+
+        <span v-if="s.show_link_text && it.link_text" class="olo-icards__cta" :style="ctaStyle">
+          <span>{{ it.link_text }}</span><span class="olo-icards__cta-arrow" aria-hidden="true">→</span>
+        </span>
       </component>
     </div>
   </div>
@@ -62,9 +66,9 @@ const defaults = {
   columns:           3,
   items_gap:         0,
   items: [
-    { counter: '01', counter_label: 'Carta',         title: 'Zero',    title_accent: '',   title_accent_italic: true, description: 'Niente <strong>carta di credito</strong> per scaricare e provare. Niente trial scaduto, niente sblocchi nascosti.', icon: '', footer_dot_color: '#10b981', footer_text: '', link_url: '' },
-    { counter: '02', counter_label: 'Registrazione', title: 'Niente',  title_accent: '',   title_accent_italic: true, description: 'Nessuna <strong>registrazione obbligatoria</strong>.', icon: '', footer_dot_color: '#10b981', footer_text: '', link_url: '' },
-    { counter: '03', counter_label: 'Pro',           title: '30',      title_accent: 'gg', title_accent_italic: false, description: '<strong>Soddisfatti o rimborsati</strong> su OLObuild Pro.', icon: '', footer_dot_color: '#10b981', footer_text: '', link_url: '' },
+    { counter: '01', counter_label: 'Carta',         title: 'Zero',    title_accent: '',   title_accent_italic: true, description: 'Niente <strong>carta di credito</strong> per scaricare e provare. Niente trial scaduto, niente sblocchi nascosti.', icon: '', footer_dot_color: '#10b981', footer_text: '', link_url: '', link_text: '' },
+    { counter: '02', counter_label: 'Registrazione', title: 'Niente',  title_accent: '',   title_accent_italic: true, description: 'Nessuna <strong>registrazione obbligatoria</strong>.', icon: '', footer_dot_color: '#10b981', footer_text: '', link_url: '', link_text: '' },
+    { counter: '03', counter_label: 'Pro',           title: '30',      title_accent: 'gg', title_accent_italic: false, description: '<strong>Soddisfatti o rimborsati</strong> su OLObuild Pro.', icon: '', footer_dot_color: '#10b981', footer_text: '', link_url: '', link_text: '' },
   ],
   card_bg:           { type: 'solid', color: '#0f172a' },
   card_color:        '#e5e7eb',
@@ -73,8 +77,8 @@ const defaults = {
   card_padding:      40,
   card_border:       '',
   show_icon: false, show_counter: true, show_counter_label: true,
-  show_arrow: true, show_footer: false, show_divider: false,
-  show_media: false, media_aspect_ratio: '4/3', media_radius: R(18),
+  show_arrow: true, show_footer: false, show_link_text: false, show_divider: false,
+  show_media: false, media_aspect_ratio: '4/3', object_position: 'center center', media_radius: R(18),
   title_font_family: 'serif',
   title_size: 72, title_weight: '500', title_italic: true,
   counter_size: 11, description_size: 15, footer_size: 10,
@@ -226,6 +230,18 @@ const footerStyle = computed(() => ({
   opacity: 0.7,
 }));
 
+const ctaStyle = computed(() => ({
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '8px',
+  marginTop: '24px',
+  fontFamily: SANS,
+  fontSize: '14px',
+  fontWeight: 600,
+  letterSpacing: '0.01em',
+  color: accentColor.value,
+}));
+
 function resolveIcon(name) {
   if (!name) return '';
   return iconsSvg[name] || '';
@@ -248,6 +264,8 @@ function resolveIcon(name) {
 }
 .olo-icards__divider { height: 1px; margin: 24px 0 18px; }
 .olo-icards__dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.olo-icards__cta-arrow { display: inline-block; transition: transform .3s ease; }
+.olo-icards__card:hover .olo-icards__cta-arrow { transform: translateX(5px); }
 
 /* Hover effects */
 .olo-icards-hover-lift .olo-icards__card:hover { transform: translateY(-6px); box-shadow: 0 14px 36px rgba(0,0,0,0.15); }

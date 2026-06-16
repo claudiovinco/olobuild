@@ -32,7 +32,8 @@ class Olo_Scratchfx_Tile extends Olo_Tile_Base {
     protected $category = 'interactive';
     protected $defaults = [
         // Contenuto sotto la copertura
-        'image'         => '',
+        'image'           => '',
+        'object_position' => 'center center',
         'prize_eyebrow' => 'Edizione limitata',
         'prize_title'   => 'Gusto a sorpresa',
         'prize_text'    => 'Gratta via la pellicola per scoprire la sorpresa.',
@@ -90,6 +91,10 @@ class Olo_Scratchfx_Tile extends Olo_Tile_Base {
 
         // ── Contenuto premio ──
         $image    = esc_url( $s['image'] );
+        $obj_pos  = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) {
+            $obj_pos = 'center center';
+        }
         $eyebrow  = esc_html( wp_strip_all_tags( $s['prize_eyebrow'] ) );
         $title    = esc_html( wp_strip_all_tags( $s['prize_title'] ) );
         $text     = esc_html( wp_strip_all_tags( $s['prize_text'] ) );
@@ -193,6 +198,7 @@ class Olo_Scratchfx_Tile extends Olo_Tile_Base {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
+                object-position: <?php echo esc_attr( $obj_pos ); ?>;
                 display: block;
             }
             <?php endif; ?>

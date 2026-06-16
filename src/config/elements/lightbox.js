@@ -24,6 +24,7 @@ export default {
     gap: '15',
     thumb_ratio: '1:1',
     thumb_radius: '8',
+    object_position: 'center center',
     overlay_style: 'dark',
     show_caption: true,
     animation: 'fade',
@@ -91,6 +92,8 @@ export default {
       { value: 'auto', label: t('Auto') },
     ] },
     withHover({ key: 'thumb_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+      contextKeys: { ratio: 'thumb_ratio' } },
 
     { type: 'separator', label: t('Lightbox — Aspetto') },
     { key: 'overlay_style', label: t('Stile overlay'), type: 'select', options: [

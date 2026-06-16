@@ -103,6 +103,7 @@ const defaults = {
   caption_color: '#FFFFFF',
   caption_bg: 'rgba(0,0,0,0.6)',
   object_fit: 'cover',
+  object_position: 'center center',
   mobile_slides: '1',
 };
 
@@ -189,6 +190,7 @@ const imgStyle = computed(() => {
     width: '100%',
     display: 'block',
     objectFit: s.value.object_fit || 'cover',
+    objectPosition: s.value.object_position || 'center center',
     borderRadius: radiusCss.value,
   };
   if (s.value.slide_height === 'fixed') {

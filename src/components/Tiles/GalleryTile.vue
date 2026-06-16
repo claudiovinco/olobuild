@@ -104,7 +104,7 @@ const props = defineProps({
 
 const defaults = {
   layout: 'grid', filter_bar: false, random_order: false,
-  columns: '3', rows: '0', gap: '8', img_height: '200px', object_fit: 'cover', thumb_radius: '8',
+  columns: '3', rows: '0', gap: '8', img_height: '200px', object_fit: 'cover', object_position: 'center center', thumb_radius: '8',
   fx_hover_zoom: true, fx_hover_zoom_scale: '1.08',
   fx_hover_tilt: false,
   fx_kenburns: false, fx_kenburns_speed: '20', fx_kenburns_scale: '1.15',
@@ -176,6 +176,7 @@ const imgInnerStyle = computed(() => {
   const st = {
     width: '100%', height: '100%',
     objectFit: s.value.object_fit || 'cover',
+    objectPosition: s.value.object_position || 'center center',
     display: 'block',
     transition: 'transform 0.4s ease',
   };

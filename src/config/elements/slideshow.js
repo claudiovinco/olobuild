@@ -25,6 +25,7 @@ export default {
     show_arrows: true,
     show_dots: true,
     slide_height: '400',
+    object_position: 'center center',
     overlay_color: '#000000',
     text_color: '',
     transition: 'slide',
@@ -97,6 +98,11 @@ export default {
       { value: 'fade', label: t('Fade') },
     ]},
     { key: 'slide_height', label: t('Altezza slide (px)'), type: 'range', min: 200, max: 800, step: 25 },
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+      // Punto focale GLOBALE applicato a tutte le slide. L'immagine è per-item (slides[].image)
+      // → niente src tile-level: il pad resta neutro ma il valore (keyword o '%') si applica
+      // comunque a ogni slide. fit cover (slide a tutta altezza), nessun aspect ratio.
+      contextKeys: {} },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
     { key: 'text_color', label: t('Colore testo'), type: 'color' },
 

@@ -32,6 +32,7 @@ export default {
     description_color: '',
     image_size: '60',
     image_border_radius: '8',
+    image_object_position: 'center center',
     show_image: true,
     price_position: 'right',
     highlighted_bg: '',
@@ -167,6 +168,12 @@ export default {
       condition: { field: 'show_image', value: true } },
     withHover({ key: 'image_border_radius', label: t('Arrotondamento immagine (px)'), type: 'border-radius',
       condition: { field: 'show_image', value: true } }),
+    // Punto focale GLOBALE: le immagini sono per-item ma il frame è un quadrato 1:1 fisso
+    // (dimensione unica image_size). Nessuna chiave tile-level per src/fit/ratio → contextKeys
+    // vuoto: il pad resta neutro (cover) senza far trapelare l'immagine di una singola voce.
+    { key: 'image_object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+      contextKeys: {},
+      condition: { field: 'show_image', value: true } },
 
     // ── Spaziatura ──
     { type: 'separator', label: t('Spaziatura') },

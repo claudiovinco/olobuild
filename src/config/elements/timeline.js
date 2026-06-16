@@ -53,7 +53,7 @@ export default {
     tl_rail_color: '', tl_rail_w: 0, tl_fill_from: '', tl_fill_to: '',
     tl_node_size: 0, tl_node_border: 0,
     tl_card_bg: '', tl_card_radius: 0, tl_card_maxw: 0, tl_card_pad: 0,
-    tl_media_ratio: 'auto', tl_media_h: 0, tl_media_fit: 'cover', tl_media_radius: 0, tl_media_bar: true,
+    tl_media_ratio: 'auto', tl_media_h: 0, tl_media_fit: 'cover', object_position: 'center center', tl_media_radius: 0, tl_media_bar: true,
     tl_title_size: 0, tl_title_weight: '', tl_title_color: '', tl_title_family: '',
     tl_text_size: 0, tl_text_color: '', tl_text_lh: 0, tl_text_align: 'left', tl_text_family: '',
     tl_yr_size: 0, tl_yr_color: '', tl_yr_family: '',
@@ -220,6 +220,11 @@ export default {
       { value: 'cover',   label: t('Riempi (cover)') },
       { value: 'contain', label: t('Contieni (contain)') },
     ]},
+    // Punto focale globale: applicato a OGNI immagine/video della timeline. L'immagine è
+    // per-item (items[].image) → niente `src` nei contextKeys (il pad degrada a neutro);
+    // fit/ratio sono chiavi tile-level reali.
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+      contextKeys: { fit: 'tl_media_fit', ratio: 'tl_media_ratio' } },
     { key: 'tl_media_radius', label: t('Arrotondamento immagine (px · 0 = auto)'), type: 'border-radius' },
     { key: 'tl_media_bar', label: t('Barra colore sopra immagine'), type: 'toggle' },
 

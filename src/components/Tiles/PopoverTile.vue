@@ -60,6 +60,7 @@ const props = defineProps({
 const defaults = {
   image: '',
   image_height: '0',
+  object_position: 'center center',
   marker_color: '',          // '' ⇒ primary (era #e1474f off-brand)
   popup_bg: '#ffffff',
   popup_color: '#333333',
@@ -87,7 +88,13 @@ const markers = computed(() => {
 const imgHeight = computed(() => parseInt(s.value.image_height) || 0);
 
 const imgStyle = computed(() => {
-  const st = { background: `url(${s.value.image}) center/cover no-repeat`, width: '100%' };
+  const st = {
+    backgroundImage: `url(${s.value.image})`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: s.value.object_position || 'center center',
+    width: '100%',
+  };
   if (imgHeight.value > 0) {
     st.height = Math.min(imgHeight.value, 300) + 'px';
   } else {

@@ -79,6 +79,11 @@ class Olo_WorkGrid_Tile extends Olo_Tile_Base {
         $hover_zoom = ! empty( $s['hover_zoom'] );
         $show_desc  = ! empty( $s['show_desc'] );
 
+        $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) {
+            $obj_pos = 'center center';
+        }
+
         $items = is_array( $s['items'] ) ? $s['items'] : [];
         $grid_style = 'display:grid;grid-template-columns:repeat(' . $cols . ',minmax(0,1fr));gap:' . $gap . 'px;';
 
@@ -101,7 +106,7 @@ class Olo_WorkGrid_Tile extends Olo_Tile_Base {
                 <<?php echo $tag . $attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tag is a fixed 'a'/'div' literal; $attrs is empty or a href built with esc_url() above ?> class="olo-workgrid__item">
                     <div class="olo-workgrid__media" style="aspect-ratio:<?php echo esc_attr( $ar ); ?>;overflow:hidden;margin-bottom:16px;background:<?php echo esc_attr( $media_bg ); ?>;">
                         <?php if ( $image ) : ?>
-                            <img src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( $title ); ?>" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" />
+                            <img src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( $title ); ?>" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:<?php echo esc_attr( $obj_pos ); ?>;display:block;" />
                         <?php else : ?>
                             <div class="olo-workgrid__ph" style="width:100%;height:100%;position:relative;background-image:repeating-linear-gradient(135deg,<?php echo esc_attr( $stripe ); ?> 0 15px,transparent 15px 30px);">
                                 <?php if ( $m_label ) : ?>

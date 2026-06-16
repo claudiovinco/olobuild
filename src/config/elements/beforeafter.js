@@ -23,6 +23,7 @@ export default {
     gap: 24,
     media_bg: '',
     media_aspect: '1/1',
+    object_position: 'center center',
     accent: '',
     before_label_color: '#ffffff',
     after_label_color: '#ffffff',
@@ -82,6 +83,9 @@ export default {
       { value: '4/3', label: '4:3' },
       { value: '3/2', label: '3:2' },
     ]},
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+      contextKeys: { ratio: 'media_aspect', fit: 'cover' },
+      description: t('Punto focale globale di tutte le immagini (prima + dopo).') },
     { key: 'radius', label: t('Raggio bordo (px)'), type: 'border-radius' },
     { key: 'gap', label: t('Spazio tra card (px)'), type: 'range', min: 8, max: 48, step: 2 },
 

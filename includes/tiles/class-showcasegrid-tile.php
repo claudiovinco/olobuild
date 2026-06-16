@@ -19,6 +19,7 @@ class Olo_ShowcaseGrid_Tile extends Olo_Tile_Base {
         'columns'           => 3,
         'gap'               => 18,
         'aspect'            => '3/3.5',
+        'object_position'   => 'center center',
         'radius'            => 20,
         'media_bg'          => '#0f3a2a',
         'veil_color'        => '#0a2a1e',
@@ -69,6 +70,9 @@ class Olo_ShowcaseGrid_Tile extends Olo_Tile_Base {
         $cols   = max( 1, min( 4, intval( $s['columns'] ) ) );
         $gap    = intval( $s['gap'] ) . 'px';
         $asp    = preg_replace( '/[^0-9.\/]/', '', $s['aspect'] ?: '3/3.5' ) ?: '3/3.5';
+        // Punto focale GLOBALE (object-position) applicato a TUTTE le card. Default 'center center' → no-op.
+        $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
         $rad    = intval( $s['radius'] ) . 'px';
 
         // Raggio card a 4 angoli: OVERRIDE solo se valorizzato (default {0,0,0,0} → usa $rad legacy → no-op).
@@ -137,7 +141,7 @@ class Olo_ShowcaseGrid_Tile extends Olo_Tile_Base {
         <style>
             .<?php echo $uid; ?>{display:grid;grid-template-columns:<?php echo $grid_tpl; ?>;gap:<?php echo $gap; ?>;<?php echo $grid_align; ?>font-family:<?php echo $sans; ?>;<?php echo $kit_pos . $kit_decl; ?>}
             .<?php echo $uid; ?> .ocg-card{position:relative;border-radius:<?php echo $card_rad; ?>;overflow:hidden;aspect-ratio:<?php echo $asp; ?>;display:flex;flex-direction:column;justify-content:flex-end;padding:<?php echo $card_pad; ?>;color:#fff;text-decoration:none;background:<?php echo $mbg; ?>;}
-            .<?php echo $uid; ?> .ocg-media{position:absolute;inset:0;z-index:0;background:<?php echo $mbg; ?>;background-size:cover;background-position:center;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px);}
+            .<?php echo $uid; ?> .ocg-media{position:absolute;inset:0;z-index:0;background:<?php echo $mbg; ?>;background-size:cover;background-position:<?php echo esc_attr( $obj_pos ); ?>;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px);}
             .<?php echo $uid; ?> .ocg-medialabel{position:absolute;left:14px;bottom:12px;font-size:11px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;color:rgba(255,255,255,.4);z-index:1;}
             .<?php echo $uid; ?> .ocg-veil{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg, rgba(<?php echo $veilrgb; ?>,.05) 30%, rgba(<?php echo $veilrgb; ?>,.9) 100%);}
             .<?php echo $uid; ?> .ocg-k{position:relative;z-index:2;font-weight:700;font-size:<?php echo (int) $kicker_size; ?>px;letter-spacing:.12em;text-transform:uppercase;color:<?php echo $kick; ?>;}

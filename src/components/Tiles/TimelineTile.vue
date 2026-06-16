@@ -26,7 +26,7 @@
         <div class="it-card">
           <div class="it-media">
             <span class="bar"></span>
-            <img v-if="item.image" :src="item.image" :alt="item.title" />
+            <img v-if="item.image" :src="item.image" :alt="item.title" :style="{ objectPosition: objectPos }" />
             <span v-else class="ph">{{ item.tag || item.title }}</span>
           </div>
           <div class="it-body">
@@ -113,7 +113,7 @@
       <div class="nv-stage">
         <div class="nv-post">
           <div class="nv-media">
-            <img v-if="cur.image" :src="cur.image" :alt="cur.title" />
+            <img v-if="cur.image" :src="cur.image" :alt="cur.title" :style="{ objectPosition: objectPos }" />
             <span class="nyr">{{ cur.date }}</span>
             <span class="nph">{{ t('archivio') }} · {{ cur.date }}</span>
           </div>
@@ -197,6 +197,8 @@ const layout = computed(() => ['alt', 'one', 'schedule', 'horizontal', 'navigato
 const theme = computed(() => ['paper', 'night', 'neon', 'blue'].includes(s.value.tl_theme) ? s.value.tl_theme : 'paper');
 const mono = computed(() => s.value.tl_color === 'mono');
 const isScroll = computed(() => s.value.tl_line !== 'solid');
+// Punto focale globale (object-position) applicato a OGNI immagine della timeline.
+const objectPos = computed(() => s.value.object_position || 'center center');
 
 const rootClass = computed(() => [
   theme.value !== 'paper' ? 't-' + theme.value : '',

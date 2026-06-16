@@ -40,6 +40,7 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
         'tag_color' => '',
 
         'media_aspect_ratio'         => '5/4',
+        'media_object_position'      => 'center center',
         'media_radius'               => [ 'tl' => 14, 'tr' => 14, 'br' => 14, 'bl' => 14, 'linked' => true ],
         'media_radius_hover'         => [ 'tl' => 14, 'tr' => 14, 'br' => 14, 'bl' => 14, 'linked' => true ],
         'media_radius_hover_duration' => 400,
@@ -118,6 +119,9 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
 
         $aspect_allow = [ '16/9', '5/4', '4/3', '1/1', '3/2' ];
         $media_aspect = in_array( $s['media_aspect_ratio'] ?? '5/4', $aspect_allow, true ) ? $s['media_aspect_ratio'] : '5/4';
+
+        $obj_pos = trim( (string) ( $s['media_object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
 
         $media_radius   = $this->build_border_radius_css( $s['media_radius'] ?? [] );
         $media_radius_h = $this->_radius_hover_diff( $s['media_radius'] ?? [], $s['media_radius_hover'] ?? [] );
@@ -229,7 +233,7 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
                             <?php endif; ?>
                             <div style="flex:1;padding:14px;display:flex;align-items:center;justify-content:center;overflow:hidden">
                                 <?php if ( $m_type === 'image' && $m_image ) : ?>
-                                    <img src="<?php echo esc_url( $m_image ); ?>" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover" />
+                                    <img src="<?php echo esc_url( $m_image ); ?>" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:<?php echo esc_attr( $obj_pos ); ?>" />
                                 <?php elseif ( $m_type === 'terminal' && $m_content ) : ?>
                                     <pre style="margin:0;width:100%;font-family:<?php echo esc_attr( $mono ); ?>;font-size:11px;line-height:1.6;color:<?php echo esc_attr( $m_color ); ?>;white-space:pre-wrap"><?php echo esc_html( $m_content ); ?></pre>
                                 <?php else : ?>

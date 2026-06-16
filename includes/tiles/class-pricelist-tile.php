@@ -23,6 +23,7 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
         'description_color'    => '',
         'image_size'           => '60',
         'image_border_radius'  => '8',
+        'image_object_position' => 'center center',
         'show_image'           => true,
         'price_position'       => 'right',
         'highlighted_bg'       => '',
@@ -68,6 +69,8 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
         $img_size    = intval( $s['image_size'] ) ?: 60;
         $img_radius  = Olo_Tile_Utils::border_radius( $s['image_border_radius'] ?? 0 );
         $img_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['image_border_radius_hover'] ?? null );
+        $obj_pos     = trim( (string) ( $s['image_object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
         $show_image  = filter_var( $s['show_image'], FILTER_VALIDATE_BOOLEAN );
         $price_pos   = $s['price_position'] ?: 'right';
         $hl_bg       = $this->safe_color_css( $s['highlighted_bg'] ) ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 6%, transparent)';
@@ -136,6 +139,7 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
+                object-position: <?php echo esc_attr( $obj_pos ); ?>;
                 display: block;
             }
             <?php endif; ?>

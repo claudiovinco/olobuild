@@ -28,6 +28,7 @@ const props = defineProps({
 
 const defaults = {
   image_url: '',
+  object_position: 'center center',
   title: '',
   description: '',
   overlay_color: '#000000',
@@ -50,11 +51,13 @@ const containerStyle = computed(() => ({
 }));
 
 const imgStyle = computed(() => {
-  const bg = s.value.image_url ? `url(${s.value.image_url}) center/cover no-repeat` : '#374151';
+  const pos = s.value.object_position || 'center center';
+  const bg = s.value.image_url ? `url(${s.value.image_url}) ${pos}/cover no-repeat` : '#374151';
   return {
     position: 'absolute',
     inset: '0',
     background: bg,
+    backgroundPosition: pos,
     transition: 'transform 0.4s ease',
     transform: hovered.value && s.value.hover_effect === 'zoom' ? 'scale(1.1)' : 'scale(1)',
   };

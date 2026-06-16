@@ -88,6 +88,7 @@ const defaults = {
   overlay_color: '#000000',
   overlay_opacity: '80',
   image_ratio: '4:3',
+  object_position: 'center center',
   border_radius: '8',
   font_family: 'inherit',
   font_weight: '500',
@@ -269,6 +270,7 @@ const imgStyle = computed(() => ({
   width: '100%',
   height: '100%',
   objectFit: 'cover',
+  objectPosition: s.value.object_position || 'center center',
   display: 'block',
 }));
 

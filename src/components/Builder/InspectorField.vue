@@ -65,7 +65,7 @@
           </div>
         </div>
       </template>
-      <label v-else-if="field.type !== 'typography' && field.type !== 'content-popup'" class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">
+      <label v-else-if="field.type !== 'typography' && field.type !== 'content-popup' && !field.reveal" class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">
         {{ t(field.label) }}
       </label>
 
@@ -124,15 +124,32 @@
 
       <!-- Punto focale grafico (object-position): riceve immagine + frame del fratello
            dallo stesso settings per disegnare il ritaglio reale. Senza contesto degrada
-           elegante. Emette la STESSA stringa CSS (keyword o '%') → nessuna migrazione dati. -->
-      <FieldObjectPosition
-        v-else-if="field.type === 'object-position'"
-        :modelValue="effectiveValue"
-        :image-src="objectPositionContext.imageSrc"
-        :frame-ratio="objectPositionContext.frameRatio"
-        :object-fit="objectPositionContext.objectFit"
-        @update:modelValue="onFieldUpdate($event)"
-      />
+           elegante. Emette la STESSA stringa CSS (keyword o '%') → nessuna migrazione dati.
+           Con field.reveal il pad (alto ~270px) resta nascosto dietro un pulsante e si apre
+           on-demand: utile dove la tile è già densa o ha immagini multiple (punto focale globale). -->
+      <template v-else-if="field.type === 'object-position'">
+        <button
+          v-if="field.reveal"
+          type="button"
+          class="olo-reveal-btn"
+          :class="{ 'is-open': revealOpen }"
+          :aria-expanded="revealOpen ? 'true' : 'false'"
+          @click="revealOpen = !revealOpen"
+        >
+          <svg class="olo-reveal-chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <span>{{ revealOpen ? t('Nascondi punto focale') : (t(field.label) + ' — ' + t('punto focale')) }}</span>
+          <span v-if="!revealOpen && hasNonDefaultValue" class="olo-reveal-dot" :title="t('Posizione personalizzata')"></span>
+        </button>
+        <FieldObjectPosition
+          v-if="!field.reveal || revealOpen"
+          :class="{ 'olo-reveal-body': field.reveal }"
+          :modelValue="effectiveValue"
+          :image-src="objectPositionContext.imageSrc"
+          :frame-ratio="objectPositionContext.frameRatio"
+          :object-fit="objectPositionContext.objectFit"
+          @update:modelValue="onFieldUpdate($event)"
+        />
+      </template>
 
       <FieldEditor
         v-else-if="field.type === 'editor'"
@@ -490,6 +507,13 @@ const builderStore = useBuilderStore();
 const respOpen = ref(false);
 const respBp = ref('desktop');
 
+// Disclosure per field.reveal (es. object-position pesante): parte chiuso, ma si apre
+// già se il campo ha un valore personalizzato (≠ default) per non nascondere il lavoro fatto.
+const revealOpen = ref(
+  !!props.field.reveal &&
+  props.modelValue != null && props.modelValue !== '' && props.modelValue !== 'center center'
+);
+
 // Sincronizza il breakpoint del campo con il viewMode della toolbar
 watch(() => builderStore.viewMode, (mode) => {
   if (mode === 'desktop' || mode === 'widescreen') {
@@ -765,16 +789,47 @@ const mediaAccept = computed(() => {
 // FRATELLO nello stesso settings, così il pad disegna il ritaglio reale e calcola l'asse
 // bloccato. Chiavi standard del tile Immagine, sovrascrivibili via field.contextKeys.
 // Senza tileSettings/immagine il controllo resta usabile (pad neutro).
+// contextKeys: ogni voce può essere il NOME di una chiave di settings (risolta su
+// tileSettings) OPPURE un valore LETTERALE costante (utile dove l'aspetto/fit è fisso
+// e non esiste una chiave, es. una cover sempre 1:1 → ratio:'1/1', fit:'cover'/'(cover)').
+const OP_FITS = ['cover', 'contain', 'fill', 'none', 'scale-down'];
+function literalFit(k) {
+  if (!k) return null;
+  const c = String(k).replace(/[()]/g, '').trim();
+  return OP_FITS.includes(c) ? c : null;
+}
+function literalRatio(k) {
+  if (!k) return null;
+  if (k === 'auto') return 'auto';
+  if (/^\d+(?:\.\d+)?\s*[/:]\s*\d+(?:\.\d+)?$/.test(k)) return k; // '16/9', '4:3'
+  if (/^\d+(?:\.\d+)?$/.test(k)) return k;                        // '1.5'
+  return null;
+}
 const objectPositionContext = computed(() => {
   const s = props.tileSettings || {};
-  const ck = props.field.contextKeys || {};
-  const ar = s[ck.ratio || 'aspect_ratio'];
+  const ck = props.field.contextKeys;
+  // Senza contextKeys → fallback alle chiavi del tile Immagine.
+  const srcKey   = ck ? ck.src         : 'image_url';
+  const fitKey   = ck ? ck.fit         : 'object_fit';
+  const ratioKey = ck ? ck.ratio       : 'aspect_ratio';
+  const rcKey    = ck ? ck.ratioCustom : 'aspect_ratio_custom';
+
+  // fit: chiave settings, altrimenti valore letterale, altrimenti 'cover'.
+  let objectFit = 'cover';
+  if (fitKey && s[fitKey]) objectFit = s[fitKey];
+  else { const lf = literalFit(fitKey); if (lf) objectFit = lf; }
+
+  // ratio: chiave settings, altrimenti valore letterale ('16/9','1/1','auto').
+  let ar;
+  if (ratioKey && (ratioKey in s)) ar = s[ratioKey];
+  else ar = literalRatio(ratioKey);
   const frameRatio = ar === 'custom'
-    ? (s[ck.ratioCustom || 'aspect_ratio_custom'] || 'auto')
+    ? (rcKey && s[rcKey] ? s[rcKey] : 'auto')
     : (ar || 'auto');
+
   return {
-    imageSrc: s[ck.src || 'image_url'] || s.hover_image || '',
-    objectFit: s[ck.fit || 'object_fit'] || 'cover',
+    imageSrc: (srcKey && s[srcKey]) ? s[srcKey] : (ck ? '' : (s.hover_image || '')),
+    objectFit,
     frameRatio,
   };
 });
@@ -792,6 +847,14 @@ const fieldDefaultValue = computed(() => {
   const defaults = reg?.defaults;
   if (!defaults) return null;
   return Object.prototype.hasOwnProperty.call(defaults, props.field.key) ? defaults[props.field.key] : null;
+});
+
+// Valore "personalizzato" (≠ default) — usato dal pallino sul pulsante reveal.
+const hasNonDefaultValue = computed(() => {
+  const v = effectiveValue.value;
+  if (v == null || v === '') return false;
+  const def = fieldDefaultValue.value;
+  return def == null ? (v !== 'center center') : JSON.stringify(v) !== JSON.stringify(def);
 });
 
 const fieldProps = computed(() => {
@@ -922,4 +985,20 @@ function onDynamicUpdate(dynamicUpdate, isRemove) {
 .olo-hover-seg button.on { background: #fff; color: #1f2937; box-shadow: 0 1px 2px rgba(16, 24, 40, 0.12); }
 .olo-hover-seg button:focus-visible { outline: 2px solid var(--olo-ui-accent); outline-offset: 1px; }
 .olo-hover-seg-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--olo-ui-accent); }
+
+/* Disclosure "Mostra/Nascondi punto focale" (field.reveal). Accento = arancio chrome. */
+.olo-reveal-btn {
+  --olo-ui-accent: #e8622a;
+  display: flex; align-items: center; gap: 6px; width: 100%;
+  padding: 7px 9px; border: 1px dashed #cdd2d9; border-radius: 8px;
+  background: #fff; color: #374151; font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: border-color .15s, color .15s;
+}
+.olo-reveal-btn:hover { border-color: var(--olo-ui-accent); color: var(--olo-ui-accent); }
+.olo-reveal-btn.is-open { border-style: solid; }
+.olo-reveal-btn:focus-visible { outline: 2px solid var(--olo-ui-accent); outline-offset: 1px; }
+.olo-reveal-chev { flex: none; transition: transform .15s; }
+.olo-reveal-btn.is-open .olo-reveal-chev { transform: rotate(90deg); }
+.olo-reveal-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--olo-ui-accent); margin-left: auto; }
+.olo-reveal-body { margin-top: 8px; }
 </style>

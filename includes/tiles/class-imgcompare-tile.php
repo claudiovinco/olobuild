@@ -26,6 +26,7 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
         'height'            => '400',
         'border_radius'     => '8',
         'object_fit'        => 'cover',
+        'object_position'   => 'center center',
         'card_border_width' => '0',
         'card_border_color' => '',
         'card_shadow'       => 'none',
@@ -59,6 +60,8 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
         $radius      = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $fit         = in_array( $s['object_fit'], [ 'cover', 'contain' ] ) ? $s['object_fit'] : 'cover';
+        $obj_pos     = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
         $handle_c    = $this->safe_color_css( $s['handle_color'] ) ?: '#FFFFFF';
         $handle_sz   = intval( $s['handle_size'] ) ?: 40;
         $handle_bw   = intval( $s['handle_border'] ) ?: 3;
@@ -106,6 +109,7 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
                 width: 100%;
                 height: 100%;
                 object-fit: <?php echo $fit; ?>;
+                object-position: <?php echo esc_attr( $obj_pos ); ?>;
                 pointer-events: none;
                 -webkit-user-drag: none;
             }

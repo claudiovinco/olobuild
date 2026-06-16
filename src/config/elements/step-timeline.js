@@ -103,6 +103,7 @@ export default {
 
     // Media card
     media_aspect_ratio:           '5/4',
+    media_object_position:        'center center',
     media_radius:                 { ...R(14) },
     media_radius_hover:           { ...R(14) },
     media_radius_hover_duration:  400,
@@ -229,6 +230,7 @@ export default {
       { value: 'lg',   label: t('Forte') },
     ]},
     withHover({ key: 'media_radius', label: t('Border radius mockup'), type: 'border-radius' }, { hoverKey: 'media_radius_hover', hoverDurationKey: 'media_radius_hover_duration' }),
+    { key: 'media_object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true, contextKeys: { ratio: 'media_aspect_ratio' } },
 
     { type: 'separator', label: t('Pre-title') },
     { key: 'pre_title_size',  label: t('Dimensione (px)'), type: 'range', min: 9, max: 16, step: 1 },

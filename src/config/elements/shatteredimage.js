@@ -75,13 +75,15 @@ export default {
       { value: 'circles_scattered', label: t('Cerchi sparsi (9)') },
     ]},
     { key: 'height', label: t('Altezza'), type: 'unit', units: ['px', 'vh'], min: 0 },
-    { key: 'image_position', label: t('Posizione immagine'), type: 'select', options: [
-      { value: 'center center', label: t('Centro') },
-      { value: 'top center', label: t('Alto') },
-      { value: 'bottom center', label: t('Basso') },
-      { value: 'left center', label: t('Sinistra') },
-      { value: 'right center', label: t('Destra') },
-    ]},
+    { key: 'image_position', label: t('Posizione immagine'), type: 'object-position',
+      contextKeys: { src: 'image_url', fit: null, ratio: null, ratioCustom: null },
+      options: [
+        { value: 'center center', label: t('Centro') },
+        { value: 'top center', label: t('Alto') },
+        { value: 'bottom center', label: t('Basso') },
+        { value: 'left center', label: t('Sinistra') },
+        { value: 'right center', label: t('Destra') },
+      ]},
 
     { type: 'separator', label: t('Zoom frammenti') },
     { key: 'zoom_variation', label: t('Zoom variato per frammento'), type: 'toggle' },

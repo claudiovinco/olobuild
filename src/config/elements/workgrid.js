@@ -27,6 +27,7 @@ export default {
     media_bg:          '#ebe7dc',
     media_label_color: '#18181a',
     hover_zoom:        true,
+    object_position:   'center center',
 
     title_font_family: 'heading',
     title_color: '#18181a',
@@ -86,6 +87,7 @@ export default {
     { key: 'media_bg',          label: t('Sfondo placeholder'),  type: 'color' },
     { key: 'media_label_color', label: t('Colore label/strisce'), type: 'color' },
     { key: 'hover_zoom',        label: t('Zoom immagine al hover'), type: 'toggle' },
+    { key: 'object_position',   label: t('Posizione contenuto'), type: 'object-position', reveal: true, contextKeys: { ratio: 'media_aspect' } },
 
     { type: 'separator', label: t('Titolo') },
     { key: 'title_font_family', label: t('Famiglia titolo'), type: 'font-family' },

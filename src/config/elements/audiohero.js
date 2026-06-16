@@ -22,6 +22,7 @@ export default {
     cta1_text: 'Play album', cta1_url: '#listen',
     cta2_text: 'See tour dates', cta2_url: '#tour',
     cover_image: '', cover_label: 'album cover — Nightglass, neon on black',
+    object_position: 'center center',
     player_track: 'Glasshouse', player_meta: 'Kova · Nightglass', show_player: true,
     bg_color: '#0c0c10', panel_color: '#16161d',
     accent: '#27e0a3', accent_2: '#ff5d9e', accent_on: '#060608',
@@ -58,6 +59,8 @@ export default {
 
     { type: 'separator', label: t('Cover & player') },
     { key: 'cover_image', label: t('Cover album (vuoto = placeholder)'), type: 'image' },
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position',
+      contextKeys: { src: 'cover_image', ratio: '1/1', fit: 'cover' } },
     { key: 'cover_label', label: t('Etichetta placeholder cover'), type: 'text' },
     { key: 'show_player', label: t('Mostra mini-player'), type: 'toggle' },
     { key: 'player_track', label: t('Player — traccia'), type: 'text' },

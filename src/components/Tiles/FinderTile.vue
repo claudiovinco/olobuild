@@ -48,7 +48,7 @@ const defaults = {
     { option: 'Opzione B', title: 'Risultato B', text: 'Descrizione del risultato.', meta: '', cta_text: '', cta_url: '#', icon: '' },
     { option: 'Opzione C', title: 'Risultato C', text: 'Descrizione del risultato.', meta: '', cta_text: '', cta_url: '#', icon: '' },
   ],
-  zone_accent: '', zone_on: '#ffffff', card_bg: '', card_border: '', media_bg: '', align: 'center',
+  zone_accent: '', zone_on: '#ffffff', card_bg: '', card_border: '', media_bg: '', object_position: 'center center', align: 'center',
   default_index: '0', chip_bg: '', chip_radius: '999',
   card_radius: '16', card_padding: { top: 34, right: 38, bottom: 34, left: 38 },
   card_max_width: '680', tile_padding: { top: 0, right: 0, bottom: 0, left: 0 }, shadow: 'none',
@@ -70,13 +70,15 @@ const center = computed(() => s.value.align === 'center');
 const itemHasBg = (it) => !!(it && it.media_bg && it.media_bg.type && it.media_bg.type !== 'none');
 const hasMedia = (it) => !!(it && ((it.image && String(it.image).trim()) || it.media_label || itemHasBg(it)));
 const mediaBg = computed(() => resolveColor(s.value.media_bg, 'var(--olo-color-surface-alt, #1e1e1e)'));
+const objPos = computed(() => (s.value.object_position || 'center center'));
 function mediaStyle(it) {
+  // media_bg (sfondo/media completo) ha la sua background-position propria → non tocchiamo.
   if (itemHasBg(it)) return { backgroundSize: 'cover', backgroundPosition: 'center', ...buildBgStyle(it.media_bg) };
   const img = it && it.image ? String(it.image).trim() : '';
   return {
     background: mediaBg.value,
     backgroundImage: img ? `url(${img})` : 'repeating-linear-gradient(135deg, rgba(255,255,255,.06) 0 16px, transparent 16px 32px)',
-    backgroundSize: 'cover', backgroundPosition: 'center',
+    backgroundSize: 'cover', backgroundPosition: objPos.value,
   };
 }
 const kickerStyle = computed(() => ({ display: 'block', fontSize: '10.5px', fontWeight: 700, letterSpacing: '.18em', textTransform: 'uppercase', color: accent.value, marginBottom: '6px' }));

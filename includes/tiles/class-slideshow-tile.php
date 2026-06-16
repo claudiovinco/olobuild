@@ -20,6 +20,7 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
         'show_arrows'    => true,
         'show_dots'      => true,
         'slide_height'   => '400',
+        'object_position' => 'center center',
         'overlay_color'  => '#000000',
         'text_color'     => '#FFFFFF',
         'transition'     => 'slide',
@@ -85,6 +86,13 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
         $speed = absint( $s['autoplay_speed'] );
         $transition = in_array( $s['transition'], [ 'slide', 'fade', 'scale' ], true ) ? $s['transition'] : 'slide';
 
+        // Punto focale globale applicato a OGNI slide (default 'center center' = comportamento storico).
+        $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) {
+            $obj_pos = 'center center';
+        }
+        $img_pos_attr = 'uk-cover style="object-position:' . esc_attr( $obj_pos ) . ';"';
+
         ob_start();
         ?>
         <div id="<?php echo esc_attr( $id ); ?>" class="olo-slideshow olo-ss-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" uk-slideshow="autoplay: <?php echo esc_attr( $s['autoplay'] ? 'true' : 'false' ); ?>; autoplay-interval: <?php echo (int) $speed; ?>; animation: <?php echo esc_attr( $transition ); ?>" style="height:<?php echo (int) $h; ?>px;">
@@ -92,7 +100,7 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
                 <?php foreach ( $slides as $slide ) : ?>
                     <div>
                         <?php if ( ! empty( $slide['image'] ) ) : ?>
-                            <?php echo Olo_Tile_Utils::img_srcset( absint( $slide['image_id'] ?? 0 ), $slide['image'], $slide['title'] ?? '', '', 'full', 'uk-cover' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <img> markup built by Olo_Tile_Utils::img_srcset() with esc_url()/esc_attr() internally ?>
+                            <?php echo Olo_Tile_Utils::img_srcset( absint( $slide['image_id'] ?? 0 ), $slide['image'], $slide['title'] ?? '', '', 'full', $img_pos_attr ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <img> markup built by Olo_Tile_Utils::img_srcset() with esc_url()/esc_attr() internally; $img_pos_attr style value is esc_attr()'d above ?>
                         <?php else : ?>
                             <div style="position:absolute;inset:0;background:#1F2937;" uk-cover></div>
                         <?php endif; ?>

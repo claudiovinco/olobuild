@@ -15,7 +15,7 @@
             v-if="item.thumb || item.url"
             :src="item.thumb || item.url"
             :alt="item.title || ''"
-            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"
+            :style="imgCoverStyle"
           />
           <div v-else :style="placeholderStyle">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -29,7 +29,7 @@
           v-else-if="item.thumb || item.url"
           :src="item.thumb || item.url"
           :alt="item.title || ''"
-          style="width:100%;display:block"
+          :style="imgAutoStyle"
         />
         <div v-else :style="placeholderStyle">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -74,6 +74,7 @@ const defaults = {
   gap: '15',
   thumb_ratio: '1:1',
   thumb_radius: 8,
+  object_position: 'center center',
   show_caption: true,
   items: [],
 };
@@ -86,6 +87,23 @@ const ratioMap = { '1:1': '100%', '4:3': '75%', '16:9': '56.25%', 'auto': '0' };
 const ratioPercent = computed(() => ratioMap[s.value.thumb_ratio] || '100%');
 
 const radiusCss = computed(() => radiusToCss(s.value.thumb_radius, { fallback: '8px' }));
+
+const objectPosition = computed(() => s.value.object_position || 'center center');
+
+const imgCoverStyle = computed(() => ({
+  position: 'absolute',
+  inset: '0',
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  objectPosition: objectPosition.value,
+}));
+
+const imgAutoStyle = computed(() => ({
+  width: '100%',
+  display: 'block',
+  objectPosition: objectPosition.value,
+}));
 
 const gridStyle = computed(() => ({
   display: 'grid',

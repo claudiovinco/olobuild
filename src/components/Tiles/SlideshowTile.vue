@@ -53,6 +53,7 @@ const defaults = {
   show_arrows: true,
   show_dots: true,
   slide_height: '400',
+  object_position: 'center center',
   overlay_color: '#000000',
   overlay_opacity: '45',
   text_color: '#FFFFFF',
@@ -79,7 +80,9 @@ const trackStyle = computed(() => ({
 }));
 
 function slideStyle(slide) {
-  const bg = slide.image ? `url(${slide.image}) center/cover no-repeat` : 'var(--olo-color-muted, #F3F4F6)';
+  // Punto focale globale applicato a OGNI slide (default 'center center' = comportamento storico).
+  const pos = s.value.object_position || 'center center';
+  const bg = slide.image ? `url(${slide.image}) ${pos}/cover no-repeat` : 'var(--olo-color-muted, #F3F4F6)';
   const opacity = s.value.transition === 'fade'
     ? (slides.value.indexOf(slide) === current.value ? 1 : 0)
     : 1;
@@ -88,6 +91,7 @@ function slideStyle(slide) {
     height: '100%',
     position: 'relative',
     background: bg,
+    backgroundPosition: pos,
   };
   if (s.value.transition === 'fade') {
     base.position = 'absolute';

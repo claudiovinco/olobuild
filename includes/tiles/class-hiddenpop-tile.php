@@ -16,6 +16,7 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
         'subtitle'            => '',
         'image'               => '',
         'image_position'      => 'top',
+        'object_position'     => 'center center',
         'cta_text'            => '',
         'cta_url'             => '#',
         'cta_style'           => 'primary',
@@ -298,6 +299,11 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
                     $position = $s['image_position'] ?? 'top';
                     $has_img  = ! empty( $image );
                     $is_side  = $has_img && ( $position === 'left' || $position === 'right' );
+                    // Punto focale (object-position): default invariato = comportamento attuale.
+                    // Applicato SOLO alle immagini laterali (object-fit:cover); con top/bottom
+                    // l'immagine è height:auto e il valore resta ininfluente.
+                    $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+                    if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
                     ?>
 
                     <?php if ( $has_img && $position === 'top' ) : ?>
@@ -307,7 +313,7 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
                     <?php if ( $is_side ) : ?>
                     <div uk-grid class="uk-child-width-1-2@s uk-grid-collapse">
                         <?php if ( $position === 'left' ) : ?>
-                        <div><img src="<?php echo esc_url( $image ); ?>" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>
+                        <div><img src="<?php echo esc_url( $image ); ?>" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:<?php echo esc_attr( $obj_pos ); ?>;display:block;" /></div>
                         <?php endif; ?>
                         <div class="uk-padding">
                     <?php else : ?>
@@ -334,7 +340,7 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
                     <?php if ( $is_side ) : ?>
                         </div>
                         <?php if ( $position === 'right' ) : ?>
-                        <div><img src="<?php echo esc_url( $image ); ?>" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>
+                        <div><img src="<?php echo esc_url( $image ); ?>" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:<?php echo esc_attr( $obj_pos ); ?>;display:block;" /></div>
                         <?php endif; ?>
                     </div>
                     <?php else : ?>

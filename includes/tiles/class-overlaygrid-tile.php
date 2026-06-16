@@ -105,6 +105,8 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
         $columns   = absint( $s['columns'] ) ?: 3;
         $cols_mob  = absint( $s['columns_mobile'] ) ?: 1;
         $height    = absint( $s['height'] ) ?: 300;
+        $obj_pos   = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
         $masonry   = ( ( $s['layout_mode'] ?? 'uniform' ) === 'masonry' );
         $position  = esc_attr( $s['overlay_position'] ?: 'bottom' );
         $style     = in_array( $s['overlay_style'], [ 'overlay-primary', 'overlay-default' ], true ) ? $s['overlay_style'] : 'overlay-primary';
@@ -197,7 +199,7 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() for every colour, absint()/intval()/floatval() for sizes, preg_match/in_array whitelists for weight and enums, fixed shadow map, build_border_radius_css()/build_wow_effects_css() internal helpers, internal wp_rand() uid. ?>
         <style>
-            .<?php echo $uid; ?> .mos-og-img { transition: transform 0.5s ease, filter 0.5s ease; width: 100%; height: <?php echo (int) $height; ?>px; object-fit: cover; }
+            .<?php echo $uid; ?> .mos-og-img { transition: transform 0.5s ease, filter 0.5s ease; width: 100%; height: <?php echo (int) $height; ?>px; object-fit: cover; object-position: <?php echo esc_attr( $obj_pos ); ?>; }
             .<?php echo $uid; ?> > div > div > .uk-panel,
             .<?php echo $uid; ?> > div > div > a {
                 <?php if ( $item_radius_css ) : ?>border-radius: <?php echo $item_radius_css; ?>;<?php endif; ?>
@@ -251,6 +253,30 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> a:hover .olo-og-cta--arrow .olo-og-cta__arrow { transform: translateX(4px); }
             .<?php echo $uid; ?> .olo-og-cta--pill { background: var(--olo-color-primary, #e1474f); color: #fff; border-radius: 999px; padding: 8px 18px; }
 
+            /* Card non-immagine (text/icon/graphic) — niente placeholder grigio */
+            .<?php echo $uid; ?> .olo-og-card { display:flex; flex-direction:column; align-items:flex-start; padding:24px; border:1px solid rgba(255,255,255,0.12); box-sizing:border-box; }
+            /* Overlay "bare" (card non-immagine): nessun fondo scuro, eredita i colori titolo/sottotitolo */
+            .<?php echo $uid; ?> .olo-og-overlay--bare { background:transparent; color: <?php echo $title_clr; ?>; }
+            .<?php echo $uid; ?> .olo-og-overlay--bare h1,
+            .<?php echo $uid; ?> .olo-og-overlay--bare h2,
+            .<?php echo $uid; ?> .olo-og-overlay--bare h3,
+            .<?php echo $uid; ?> .olo-og-overlay--bare h4 {
+                color: <?php echo $title_clr; ?>;
+                font-weight: <?php echo $title_w; ?>;
+                letter-spacing: <?php echo (float) $title_ls; ?>em;
+                <?php if ( $title_upper ) : ?>text-transform: uppercase;<?php endif; ?>
+                margin: 0;
+            }
+            .<?php echo $uid; ?> .olo-og-overlay--bare p { color: <?php echo $subtitle_clr; ?>; font-size: <?php echo (int) $subtitle_sz; ?>px; margin: 6px 0 0; }
+            .<?php echo $uid; ?> .olo-og-card__icon { display:inline-flex; align-items:center; justify-content:center; color:#B9FBE7; }
+            .<?php echo $uid; ?> .olo-og-card__icon svg { width:32px; height:32px; }
+            .<?php echo $uid; ?> .olo-og-card__icon [uk-icon], .<?php echo $uid; ?> .olo-og-card__icon .olo-lucide-icon { color:inherit; }
+            .<?php echo $uid; ?> .olo-og-card__graphic { display:grid; grid-template-columns:repeat(4, 1fr); gap:6px; width:120px; }
+            .<?php echo $uid; ?> .olo-og-card__graphic > span { display:block; aspect-ratio:1/1; border-radius:3px; background:#B9FBE7; }
+            .<?php echo $uid; ?> .olo-og-card__graphic > span:nth-child(3n+2) { background:#9DF5D6; }
+            .<?php echo $uid; ?> .olo-og-card__graphic > span:nth-child(4n+1) { opacity:0.55; }
+            .<?php echo $uid; ?> .olo-og-card__body { color: <?php echo $subtitle_clr; ?>; font-size: <?php echo (int) $subtitle_sz; ?>px; line-height:1.5; margin:6px 0 0; }
+
             /* Ribbon */
             .<?php echo $uid; ?> .mos-og-ribbon { position: absolute; z-index: 2; font-size: 11px; font-weight: 700; padding: 4px 12px; text-transform: uppercase; letter-spacing: 0.5px; background: <?php echo $ribbon_bg; ?>; color: <?php echo $ribbon_color; ?>; }
             .<?php echo $uid; ?> .mos-og-ribbon--top-right { top: 0; right: 14px; border-radius: 0 0 4px 4px; }
@@ -274,6 +300,7 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?>.olo-og--masonry > div > div > a { height:100%; display:block; }
             .<?php echo $uid; ?>.olo-og--masonry .mos-og-img { height:100% !important; }
             .<?php echo $uid; ?>.olo-og--masonry .olo-og-ph { height:100% !important; }
+            .<?php echo $uid; ?>.olo-og--masonry .olo-og-card { height:100% !important; }
             @media(max-width:640px){ .<?php echo $uid; ?>.olo-og--masonry > div { grid-template-columns:repeat(<?php echo (int) $cols_mob; ?>,1fr) !important; grid-auto-rows:<?php echo (int) $mrow_m; ?>px; } .<?php echo $uid; ?>.olo-og--masonry > div > div.olo-og-tall, .<?php echo $uid; ?>.olo-og--masonry > div > div.olo-og-wide { grid-row:auto; grid-column:auto; } }
             <?php endif; ?>
         </style>
@@ -292,13 +319,38 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
                 ?>
                     <div<?php echo $cell_cls ? ' class="' . esc_attr( $cell_cls ) . '"' : ''; ?>>
                         <<?php echo $wrapper_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $wrapper_tag is 'a'|'div' from the fixed ternary above; $wrapper_attr built above from esc_url()'d link + fixed class/style literals. ?> <?php echo $wrapper_attr; ?>>
-                            <?php if ( ! empty( $item['image'] ) ) : ?>
-                                <?php
-                                $og_img = Olo_Tile_Utils::img_srcset( absint( $item['image_id'] ?? 0 ), $item['image'], $item['title'] ?? '', $img_class );
-                                echo $this->render_hover_wrap( $og_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <img> HTML from Olo_Tile_Utils::img_srcset() and hover wrapper from render_hover_wrap(), both escape internally (esc_url/esc_attr).
-                                ?>
-                            <?php else : ?>
-                                <div class="olo-og-ph" style="height:<?php echo (int) $height; ?>px;background:#1F2937;width:100%;"></div>
+                            <?php
+                            // Tipo card (additivo): 'image' (default) resta IDENTICO; le altre
+                            // rendono una card piena con sfondo/icona/grafica (no placeholder grigio).
+                            $card_type = in_array( $item['card_type'] ?? 'image', [ 'image', 'text', 'icon', 'graphic' ], true ) ? ( $item['card_type'] ?? 'image' ) : 'image';
+                            ?>
+                            <?php if ( $card_type === 'image' ) : ?>
+                                <?php if ( ! empty( $item['image'] ) ) : ?>
+                                    <?php
+                                    $og_img = Olo_Tile_Utils::img_srcset( absint( $item['image_id'] ?? 0 ), $item['image'], $item['title'] ?? '', $img_class );
+                                    echo $this->render_hover_wrap( $og_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <img> HTML from Olo_Tile_Utils::img_srcset() and hover wrapper from render_hover_wrap(), both escape internally (esc_url/esc_attr).
+                                    ?>
+                                <?php else : ?>
+                                    <div class="olo-og-ph" style="height:<?php echo (int) $height; ?>px;background:#1F2937;width:100%;"></div>
+                                <?php endif; ?>
+                            <?php else :
+                                // Card piena (text/icon/graphic): sfondo card + contenuto in alto.
+                                $card_bg_css = $this->safe_color_css( $item['card_bg'] ?? '' ) ?: '#0E1B2E';
+                            ?>
+                                <div class="olo-og-card olo-og-card--<?php echo esc_attr( $card_type ); ?>" style="height:<?php echo (int) $height; ?>px;background:<?php echo esc_attr( $card_bg_css ); ?>;width:100%;">
+                                    <?php if ( $card_type === 'icon' && ! empty( $item['icon'] ) ) :
+                                        $icon_clr = $this->safe_color_css( $item['icon_color'] ?? '' );
+                                        $icon_attr = $icon_clr ? 'style="color:' . esc_attr( $icon_clr ) . ';"' : '';
+                                    ?>
+                                        <span class="olo-og-card__icon" <?php echo $icon_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline color from safe_color_css() + esc_attr() above. ?>><?php echo $this->render_icon_html( $item['icon'], 1.6 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon_html() escapes/sanitizes icon markup internally. ?></span>
+                                    <?php elseif ( $card_type === 'graphic' ) : ?>
+                                        <span class="olo-og-card__graphic" aria-hidden="true">
+                                            <span></span><span></span><span></span><span></span>
+                                            <span></span><span></span><span></span><span></span>
+                                            <span></span><span></span><span></span><span></span>
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
                             <?php endif; ?>
                             <?php if ( ! empty( $item['ribbon'] ) ) : ?>
                                 <span class="mos-og-ribbon mos-og-ribbon--<?php echo $ribbon_position; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_attr()'d at assignment above. ?>"><?php echo esc_html( $item['ribbon'] ); ?></span>
@@ -312,10 +364,18 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
                             $item_t_style = $item_t_clr ? ' style="color:' . esc_attr( $item_t_clr ) . ' !important;"' : '';
                             $item_s_style = $item_s_clr ? ' style="color:' . esc_attr( $item_s_clr ) . ' !important;"' : '';
                             ?>
-                            <div class="uk-<?php echo esc_attr( $style ); ?> uk-position-<?php echo $position; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $position esc_attr()'d at assignment; $text_class/$pad_class/$overlay_class are fixed UIkit class literals (esc_attr()'d parts). ?> uk-panel<?php echo $text_class . $pad_class . $overlay_class; ?>">
+                            <?php
+                            // Card non-immagine: niente overlay scuro/gradiente (il testo vive
+                            // direttamente sulla card_bg). Card immagine: overlay invariato.
+                            $ov_bg_class = ( $card_type === 'image' ) ? 'uk-' . esc_attr( $style ) : 'olo-og-overlay--bare';
+                            ?>
+                            <div class="<?php echo $ov_bg_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- 'uk-overlay-primary'|'uk-overlay-default' (esc_attr) for image cards, fixed literal otherwise. ?> uk-position-<?php echo $position; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $position esc_attr()'d at assignment; $text_class/$pad_class/$overlay_class are fixed UIkit class literals (esc_attr()'d parts). ?> uk-panel<?php echo $text_class . $pad_class . $overlay_class; ?>">
                                 <<?php echo $title_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $title_tag whitelisted via in_array() above; tfx_attrs() returns internally-built class/data fragments; $item_t_style built with esc_attr() above. ?> class="uk-margin-remove<?php echo $ogt_cls; ?>"<?php echo $ogt_data; ?><?php echo $item_t_style; ?>><?php echo esc_html( $item['title'] ?? '' ); ?></<?php echo $title_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- whitelisted via in_array() above. ?>>
                                 <?php if ( ! empty( $item['subtitle'] ) ) : ?>
                                     <p class="uk-margin-small-top<?php echo $ogs_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() returns internally-built class/data fragments; $item_s_style built with esc_attr() above. ?>"<?php echo $ogs_data; ?><?php echo $item_s_style; ?>><?php echo esc_html( $item['subtitle'] ); ?></p>
+                                <?php endif; ?>
+                                <?php if ( $card_type !== 'image' && ! empty( $item['body'] ) ) : ?>
+                                    <p class="olo-og-card__body"><?php echo esc_html( $item['body'] ); ?></p>
                                 <?php endif; ?>
                                 <?php if ( $show_cta && ! empty( $cta_text ) ) : ?>
                                     <span class="<?php echo esc_attr( $cta_class ); ?>"><?php echo esc_html( $cta_text ); ?><?php if ( $cta_style === 'arrow' ) : ?> <span class="olo-og-cta__arrow" aria-hidden="true">&rarr;</span><?php endif; ?></span>

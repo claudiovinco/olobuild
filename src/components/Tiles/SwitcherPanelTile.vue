@@ -2,7 +2,7 @@
   <div class="olo-sp-preview" :class="['olo-sp--' + (s.nav_position || 'overlay'), 'olo-sp--preset-' + (s.preset || 'editorial-overlay'), { 'olo-sp--img-left': s.image_position === 'left' }]" :style="wrapStyle">
     <!-- Hero with overlay (overlay mode) -->
     <div v-if="(s.nav_position || 'overlay') === 'overlay'" class="sp-hero" :style="heroStyle">
-      <img v-if="s.hero_image" :src="s.hero_image" alt="" class="sp-hero__img" />
+      <img v-if="s.hero_image" :src="s.hero_image" alt="" class="sp-hero__img" :style="heroImgStyle" />
       <div v-else class="sp-hero__placeholder">{{ t('Hero') }}</div>
       <div v-if="heroOverlayShown" class="sp-hero__overlay" :style="heroOverlayStyle"></div>
       <div class="sp-nav-wrap sp-nav-wrap--overlay">
@@ -42,7 +42,7 @@
 
     <!-- Hero (non-overlay mode) -->
     <div v-if="hasHero && (s.nav_position === 'top' || s.nav_position === 'bottom' || s.nav_position === 'side-left' || s.nav_position === 'side-right')" class="sp-hero sp-hero--standalone" :style="heroStyle">
-      <img v-if="s.hero_image" :src="s.hero_image" alt="" class="sp-hero__img" />
+      <img v-if="s.hero_image" :src="s.hero_image" alt="" class="sp-hero__img" :style="heroImgStyle" />
       <div v-else class="sp-hero__placeholder">{{ t('Hero') }}</div>
     </div>
 
@@ -123,6 +123,10 @@ const heroStyle = computed(() => {
     borderRadius: radiusToCss(s.value.hero_radius, { fallback: '0px' }),
   };
 });
+
+const heroImgStyle = computed(() => ({
+  objectPosition: s.value.hero_object_position || 'center center',
+}));
 
 const wrapStyle = computed(() => {
   const np = s.value.nav_position || 'overlay';

@@ -26,6 +26,7 @@ export default {
     ],
     image_alt: '',
     image_height: '0',
+    object_position: 'center center',
     marker_color: '',
     popup_bg: '',
     popup_color: '',
@@ -89,6 +90,7 @@ export default {
 
     { type: 'separator', label: t('Dimensioni immagine') },
     { key: 'image_height', label: t('Altezza immagine (px, 0 = auto)'), type: 'range', min: 0, max: 700, step: 10 },
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', contextKeys: { src: 'image' } },
 
     { type: 'separator', label: t('Marcatori e popup') },
     { key: 'marker_color', label: t('Colore marcatore'), type: 'color' },

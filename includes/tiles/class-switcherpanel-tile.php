@@ -22,6 +22,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
         'hero_overlay_color'    => 'rgba(0,0,0,0.35)',
         'hero_overlay_gradient' => true,
         'image_position'  => 'right',
+        'image_bleed'     => false, // immagine a filo del bordo (full-bleed verso l'esterno)
         'animation'       => 'fade',
         'animation_duration' => 300,
         'tile_padding'    => [ 'top' => 40, 'right' => 40, 'bottom' => 40, 'left' => 40 ],
@@ -139,7 +140,13 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
         $hero_height  = max( 100, intval( $s['hero_height'] ?? 400 ) );
         // Dual-format: Number legacy E oggetto {tl,tr,br,bl} (build_border_radius_css ritorna '' se zero/vuoto).
         $hero_rad_css = $this->build_border_radius_css( $s['hero_radius'] ?? 0 );
+        // Punto focale dell'immagine hero (object-position). Default 'center center' = resa attuale invariata.
+        $obj_pos      = trim( (string) ( $s['hero_object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) {
+            $obj_pos = 'center center';
+        }
         $img_position = ( $s['image_position'] ?? 'right' ) === 'left' ? 'left' : 'right';
+        $img_bleed    = ! empty( $s['image_bleed'] );
         $nav_position = $s['nav_position'] ?? 'overlay';
         $animation    = $s['animation'] ?? 'fade';
         $duration     = max( 80, intval( $s['animation_duration'] ?? 300 ) );
@@ -198,6 +205,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
         // Wrapper layout class
         $wrap_class = 'olo-switcherpanel olo-sp--' . esc_attr( $nav_position );
         if ( $img_position === 'left' ) $wrap_class .= ' olo-sp--img-left';
+        if ( $img_bleed ) $wrap_class .= ' olo-sp--bleed';
         $wrap_class .= ' olo-sp--preset-' . esc_attr( $preset_id );
 
         // Button class
@@ -412,6 +420,26 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
                 display: block;
                 <?php if ( $panel_img_rad_css ) : ?>border-radius: <?php echo $panel_img_rad_css; ?>;<?php endif; ?>
             }
+            <?php if ( $img_bleed ) : ?>
+            /* Full-bleed: l'immagine raggiunge il bordo esterno del viewport (lato right/left). */
+            .<?php echo $uid; ?>.olo-sp--bleed .olo-sp-panel { overflow: visible; }
+            .<?php echo $uid; ?>.olo-sp--bleed .olo-sp-panel__media {
+                flex: 0 0 auto;
+                width: calc(<?php echo (int) $panel_img_w; ?>% + 50vw - 50%);
+                max-width: none;
+                overflow: hidden;
+                <?php if ( $img_position === 'left' ) : ?>
+                margin-left: calc(50% - 50vw);
+                border-radius: 0 <?php echo $panel_img_rad_css ?: '0'; ?> <?php echo $panel_img_rad_css ?: '0'; ?> 0;
+                <?php else : ?>
+                margin-right: calc(50% - 50vw);
+                border-radius: <?php echo $panel_img_rad_css ?: '0'; ?> 0 0 <?php echo $panel_img_rad_css ?: '0'; ?>;
+                <?php endif; ?>
+            }
+            @media (max-width: 767px) {
+                .<?php echo $uid; ?>.olo-sp--bleed .olo-sp-panel__media { width: 100%; margin: 0; border-radius: <?php echo $panel_img_rad_css ?: '0'; ?>; }
+            }
+            <?php endif; ?>
 
             /* Buttons */
             .<?php echo $uid; ?> .olo-sp-panel__btn {
@@ -456,7 +484,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
             <?php if ( $nav_position === 'overlay' ) : ?>
                 <div class="olo-sp-hero">
                     <?php if ( ! empty( $hero_image ) ) : ?>
-                        <img src="<?php echo esc_url( $hero_image ); ?>" alt="<?php echo esc_attr( $s['hero_alt'] ?? '' ); ?>" class="olo-sp-hero__img" loading="lazy">
+                        <img src="<?php echo esc_url( $hero_image ); ?>" alt="<?php echo esc_attr( $s['hero_alt'] ?? '' ); ?>" class="olo-sp-hero__img" loading="lazy" style="object-position: <?php echo esc_attr( $obj_pos ); ?>;">
                     <?php else : ?>
                         <div class="olo-sp-hero__placeholder"></div>
                     <?php endif; ?>
@@ -482,7 +510,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
                     </ul>
                 </div>
                 <?php if ( ! empty( $hero_image ) ) : ?>
-                <div class="olo-sp-hero"><img src="<?php echo esc_url( $hero_image ); ?>" alt="" class="olo-sp-hero__img" loading="lazy"></div>
+                <div class="olo-sp-hero"><img src="<?php echo esc_url( $hero_image ); ?>" alt="" class="olo-sp-hero__img" loading="lazy" style="object-position: <?php echo esc_attr( $obj_pos ); ?>;"></div>
                 <?php endif; ?>
             <?php elseif ( $nav_position === 'side-left' || $nav_position === 'side-right' ) : ?>
                 <ul class="olo-sp-nav" uk-switcher="<?php echo esc_attr( $switcher_attr ); ?>">
@@ -493,11 +521,11 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
                     <?php endforeach; ?>
                 </ul>
                 <?php if ( ! empty( $hero_image ) ) : ?>
-                <div class="olo-sp-hero"><img src="<?php echo esc_url( $hero_image ); ?>" alt="" class="olo-sp-hero__img" loading="lazy"></div>
+                <div class="olo-sp-hero"><img src="<?php echo esc_url( $hero_image ); ?>" alt="" class="olo-sp-hero__img" loading="lazy" style="object-position: <?php echo esc_attr( $obj_pos ); ?>;"></div>
                 <?php endif; ?>
             <?php else : /* bottom */ ?>
                 <?php if ( ! empty( $hero_image ) ) : ?>
-                <div class="olo-sp-hero"><img src="<?php echo esc_url( $hero_image ); ?>" alt="" class="olo-sp-hero__img" loading="lazy"></div>
+                <div class="olo-sp-hero"><img src="<?php echo esc_url( $hero_image ); ?>" alt="" class="olo-sp-hero__img" loading="lazy" style="object-position: <?php echo esc_attr( $obj_pos ); ?>;"></div>
                 <?php endif; ?>
             <?php endif; ?>
 

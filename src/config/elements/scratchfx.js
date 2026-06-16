@@ -25,6 +25,7 @@ export default {
   defaults: {
     // ── Contenuto sotto la copertura ──
     image: '',
+    object_position: 'center center',
     prize_eyebrow: t('Edizione limitata'),
     prize_title: t('Gusto a sorpresa'),
     prize_text: t('Gratta via la pellicola per scoprire la sorpresa.'),
@@ -71,6 +72,9 @@ export default {
     { type: 'separator', label: t('Contenuto sotto la copertura') },
     { key: 'image', label: t('Immagine premio'), type: 'image',
       description: t('Mostrata sotto la pellicola da grattare. Opzionale: puoi usare solo testo.') },
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position',
+      contextKeys: { src: 'image', ratio: 'aspect' },
+      condition: { field: 'image', op: 'neq', value: '' } },
     { key: 'prize_eyebrow', label: t('Sopra-titolo'), type: 'text' },
     { key: 'prize_title', label: t('Titolo premio'), type: 'text' },
     { key: 'prize_text', label: t('Descrizione'), type: 'textarea' },

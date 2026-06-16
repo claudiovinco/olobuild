@@ -30,7 +30,7 @@ const defaults = {
     { before_image: '', after_image: '', before_label: 'Before', after_label: 'After', title: 'Priya · 6 months', text: 'Built real strength postpartum, pain-free and back to running.' },
     { before_image: '', after_image: '', before_label: 'Before', after_label: 'After', title: 'Sam · 1 year', text: 'From couch to first powerlifting meet — and stayed for the community.' },
   ],
-  columns: 3, gap: 24, media_bg: '', media_aspect: '1/1', accent: '',
+  columns: 3, gap: 24, media_bg: '', media_aspect: '1/1', object_position: 'center center', accent: '',
   before_label_color: '#ffffff', after_label_color: '#ffffff', title_color: '', text_color: '', card_bg: '', radius: 12,
   // Spaziatura / Forma — additivi e no-op coi default (parità PHP)
   cap_padding: { top: 16, right: 4, bottom: 4, left: 4 },
@@ -147,7 +147,7 @@ const rootStyle = computed(() => ({ fontFamily: SANS, display: 'grid', gridTempl
 const cardStyle = computed(() => ({ background: s.value.card_bg || 'transparent', borderRadius: cardRadiusCss.value || rad.value, overflow: 'hidden' }));
 const pairStyle = computed(() => ({ position: 'relative', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px' }));
 function mediaStyle(img) {
-  const st = { position: 'relative', aspectRatio: asp.value, background: mbg.value, backgroundSize: 'cover', backgroundPosition: 'center' };
+  const st = { position: 'relative', aspectRatio: asp.value, background: mbg.value, backgroundSize: 'cover', backgroundPosition: (s.value.object_position || 'center center') };
   if (img) st.backgroundImage = 'url(' + img + ')';
   return st;
 }

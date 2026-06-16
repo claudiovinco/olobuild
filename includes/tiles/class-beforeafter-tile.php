@@ -22,6 +22,7 @@ class Olo_BeforeAfter_Tile extends Olo_Tile_Base {
         'gap'                => 24,
         'media_bg'           => '',
         'media_aspect'       => '1/1',
+        'object_position'    => 'center center',
         'accent'             => '',
         'before_label_color' => '#ffffff',
         'after_label_color'  => '#ffffff',
@@ -58,6 +59,8 @@ class Olo_BeforeAfter_Tile extends Olo_Tile_Base {
         $gap    = intval( $s['gap'] ) . 'px';
         $mbg    = $this->safe_color_css( $s['media_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #eceff3)';
         $asp    = preg_replace( '/[^0-9\/]/', '', $s['media_aspect'] ?: '1/1' ) ?: '1/1';
+        $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
         $accent = $this->safe_color_css( $s['accent'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $blc    = $this->safe_color_css( $s['before_label_color'] ?? '' ) ?: '#ffffff';
         $alc    = $this->safe_color_css( $s['after_label_color'] ?? '' ) ?: '#ffffff';
@@ -151,7 +154,7 @@ class Olo_BeforeAfter_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?>{font-family:<?php echo $sans; ?>;display:grid;grid-template-columns:repeat(<?php echo $cols; ?>,1fr);gap:<?php echo $gap; ?>;<?php echo $kit_decl; ?>}
             .<?php echo $uid; ?> .oba-card{background:<?php echo $cbg; ?>;border-radius:<?php echo $card_rad_css; ?>;overflow:hidden;}
             .<?php echo $uid; ?> .oba-pair{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:2px;}
-            .<?php echo $uid; ?> .oba-media{position:relative;aspect-ratio:<?php echo $asp; ?>;background:<?php echo $mbg; ?>;background-size:cover;background-position:center;}
+            .<?php echo $uid; ?> .oba-media{position:relative;aspect-ratio:<?php echo $asp; ?>;background:<?php echo $mbg; ?>;background-size:cover;background-position:<?php echo esc_attr( $obj_pos ); ?>;}
             .<?php echo $uid; ?> .oba-lab{position:absolute;top:10px;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:<?php echo $lab_rad_css; ?>;}
             .<?php echo $uid; ?> .oba-lab--b{left:10px;background:rgba(0,0,0,.55);color:<?php echo $blc; ?>;}
             .<?php echo $uid; ?> .oba-lab--a{right:10px;background:<?php echo $accent; ?>;color:<?php echo $alc; ?>;}

@@ -37,6 +37,7 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
         'image_ratio'    => 'auto',
         'image_height'   => '',
         'image_fit'      => 'cover',
+        'object_position' => 'center center',
         'image_zoom'     => false,
         'media_padding'  => [ 'top' => 0, 'right' => 0, 'bottom' => 0, 'left' => 0 ],
         'text_align'     => 'left',
@@ -267,6 +268,13 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
             $img_height = absint( $s['image_height'] ?? 0 );
             $img_fit    = in_array( $s['image_fit'] ?? 'cover', [ 'cover', 'contain', 'fill' ], true ) ? $s['image_fit'] : 'cover';
 
+            // Punto focale (object-position). Sanitizza: keyword whitelist oppure coppia di valori
+            // numerici con unità (%, px, em, rem) o keyword. Fallback sicuro a 'center center'.
+            $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+            if ( $obj_pos === '' || ! preg_match( '/^(left|right|top|bottom|center|-?\d+(?:\.\d+)?(?:%|px|em|rem)?)(?:\s+(left|right|top|bottom|center|-?\d+(?:\.\d+)?(?:%|px|em|rem)?))?$/', $obj_pos ) ) {
+                $obj_pos = 'center center';
+            }
+
             $css .= $sel . ' .olo-panel-media{position:relative;overflow:hidden;display:block;box-sizing:border-box;}';
 
             if ( $media_radius ) {
@@ -287,11 +295,11 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
             }
 
             // Image / video sizing
-            $css .= $sel . ' .olo-panel-img,' . $sel . ' .olo-panel-video{width:100%;height:100%;object-fit:' . esc_attr( $img_fit ) . ';display:block;transition:transform 0.5s cubic-bezier(.4,0,.2,1);}';
+            $css .= $sel . ' .olo-panel-img,' . $sel . ' .olo-panel-video{width:100%;height:100%;object-fit:' . esc_attr( $img_fit ) . ';object-position:' . esc_attr( $obj_pos ) . ';display:block;transition:transform 0.5s cubic-bezier(.4,0,.2,1);}';
 
             // Hover wrap inside media: ensure full-fill
             $css .= $sel . ' .olo-panel-media .olo-hover-wrap{width:100%;height:100%;display:block;}';
-            $css .= $sel . ' .olo-panel-media .olo-hover-wrap img,' . $sel . ' .olo-panel-media .olo-hover-wrap video{width:100%;height:100%;object-fit:' . esc_attr( $img_fit ) . ';display:block;}';
+            $css .= $sel . ' .olo-panel-media .olo-hover-wrap img,' . $sel . ' .olo-panel-media .olo-hover-wrap video{width:100%;height:100%;object-fit:' . esc_attr( $img_fit ) . ';object-position:' . esc_attr( $obj_pos ) . ';display:block;}';
 
             // Image zoom on hover
             if ( ! empty( $s['image_zoom'] ) ) {

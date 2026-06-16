@@ -31,6 +31,7 @@ export default {
     image_ratio: '21/9',
     image_height: '400',
     image_fit: 'cover',
+    object_position: 'center center',
     height: '400',
     overlay_position: 'bottom',
     overlay_horizontal: 'left',
@@ -118,6 +119,8 @@ export default {
       { value: 'contain', label: t('Contieni (visibile interamente)') },
       { value: 'fill', label: t('Riempi (deforma)') },
     ]},
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+      contextKeys: { fit: 'image_fit', ratio: 'image_ratio' } },
 
     { type: 'separator', label: t('Overlay') },
     { key: 'overlay_position', label: t('Posizione verticale'), type: 'select', options: [

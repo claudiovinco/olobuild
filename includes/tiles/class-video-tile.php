@@ -16,6 +16,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
         'file_url'        => '',
         'display_mode'    => '16:9',
         'cover_height'    => '500',
+        'object_position' => 'center center',
         'facade'          => true,
         'autoplay'        => false,
         'muted'           => false,
@@ -181,6 +182,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
         $embed_url    = $this->get_embed_url( $s );
         $padding      = $this->get_aspect_padding( $s['display_mode'] );
         $facade_on    = ! empty( $s['facade'] );
+        $obj_pos      = $this->get_object_position( $s );
 
         // Video Facade: use poster_image if set, otherwise auto-detect YouTube/Vimeo thumbnail
         $poster_url = '';
@@ -205,7 +207,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                     $uid        = 'olo-vp-' . wp_unique_id();
                     ?>
                     <div id="<?php echo esc_attr( $uid ); ?>" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer;" onclick="(function(el){var p=el.parentNode;el.remove();var f=document.createElement('iframe');f.src='<?php echo esc_url( $embed_url . ( str_contains( $embed_url, '?' ) ? '&' : '?' ) . 'autoplay=1' ); ?>';f.style='position:absolute;top:0;left:0;width:100%;height:100%';f.frameBorder='0';f.allow='accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';f.allowFullscreen=true;p.appendChild(f)})(this)">
-                        <img src="<?php echo esc_url( $poster_url ); ?>" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" />
+                        <img src="<?php echo esc_url( $poster_url ); ?>" alt="" style="width:100%;height:100%;object-fit:cover;object-position:<?php echo esc_attr( $obj_pos ); ?>;display:block;" loading="lazy" />
                         <?php if ( $show_icon ) : ?>
                         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
                             <svg width="<?php echo (int) $icon_size; ?>" height="<?php echo (int) $icon_size; ?>" viewBox="0 0 80 80">
@@ -245,6 +247,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
     private function render_native( $s ) {
         $src     = $this->get_file_src( $s );
         $padding = $this->get_aspect_padding( $s['display_mode'] );
+        $obj_pos = $this->get_object_position( $s );
         // Builder mode: niente autoplay (evita re-download a ogni patch del tile,
         // che con video grandi freezza visibilmente l'editing) e preload=metadata
         // (Chrome scarica solo i pochi KB iniziali, non l'intero file).
@@ -259,7 +262,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
             <div style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; <?php echo $this->_vbr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built internally from build_border_radius_css() integer radii, Olo_Tile_Utils::shadow_value() and fixed literals ?> background: #1F2937;">
                 <?php if ( $src ) : ?>
                     <video
-                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: <?php echo esc_attr( $obj_pos ); ?>;"
                         preload="<?php echo esc_attr( $preload ); ?>"
                         <?php echo $autoplay ? 'autoplay' : ''; ?>
                         <?php echo $muted ? 'muted' : ''; ?>
@@ -288,9 +291,10 @@ class Olo_Video_Tile extends Olo_Tile_Base {
     // =========================================================================
 
     private function render_cover( $s, $is_file ) {
-        $height = absint( $s['cover_height'] ) ?: 500;
-        $src    = $is_file ? $this->get_file_src( $s ) : '';
-        $embed  = ! $is_file ? $this->get_embed_url( $s ) : '';
+        $height  = absint( $s['cover_height'] ) ?: 500;
+        $src     = $is_file ? $this->get_file_src( $s ) : '';
+        $embed   = ! $is_file ? $this->get_embed_url( $s ) : '';
+        $obj_pos = $this->get_object_position( $s );
 
         $ov_opacity  = absint( $s['overlay_opacity'] );
         $ov_color    = $this->safe_color_css( $s['overlay_color'] );
@@ -318,7 +322,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
             <?php if ( $src ) : ?>
                 <video
                     class="uk-position-cover"
-                    style="object-fit: cover; width: 100%; height: 100%;"
+                    style="object-fit: cover; object-position: <?php echo esc_attr( $obj_pos ); ?>; width: 100%; height: 100%;"
                     preload="<?php echo esc_attr( $preload ); ?>"
                     <?php echo $autoplay ? 'autoplay' : ''; ?>
                     <?php echo $muted ? 'muted' : ''; ?>
@@ -333,7 +337,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                 <?php if ( $has_poster ) : ?>
                     <?php $uid = 'olo-vp-' . wp_unique_id(); ?>
                     <div id="<?php echo esc_attr( $uid ); ?>" style="position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer;z-index:3;" onclick="(function(el){var p=el.parentNode;el.remove();var f=document.createElement('iframe');f.src='<?php echo esc_url( $embed . ( str_contains( $embed, '?' ) ? '&' : '?' ) . 'autoplay=1' ); ?>';f.style='position:absolute;top:50%;left:50%;width:200%;height:200%;transform:translate(-50%,-50%);pointer-events:none';f.frameBorder='0';f.allow='accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';f.allowFullscreen=true;p.appendChild(f)})(this)">
-                        <img src="<?php echo esc_url( $poster_url ); ?>" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" />
+                        <img src="<?php echo esc_url( $poster_url ); ?>" alt="" style="width:100%;height:100%;object-fit:cover;object-position:<?php echo esc_attr( $obj_pos ); ?>;display:block;" loading="lazy" />
                         <?php if ( $show_icon ) : ?>
                         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
                             <svg width="<?php echo (int) $icon_size; ?>" height="<?php echo (int) $icon_size; ?>" viewBox="0 0 80 80">
@@ -454,6 +458,18 @@ class Olo_Video_Tile extends Olo_Tile_Base {
     private function get_aspect_padding( $mode ) {
         $map = [ '16:9' => '56.25%', '4:3' => '75%', '1:1' => '100%' ];
         return $map[ $mode ] ?? '56.25%';
+    }
+
+    /**
+     * Punto focale (object-position) salvato come stringa CSS dal field 'object-position'.
+     * Default 'center center' = comportamento storico (nessuna regressione sui template esistenti).
+     */
+    private function get_object_position( $s ) {
+        $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) {
+            $obj_pos = 'center center';
+        }
+        return $obj_pos;
     }
 
     private function render_caption( $s ) {

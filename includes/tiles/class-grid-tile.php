@@ -28,6 +28,7 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
         'image_ratio'        => 'auto',
         'image_height'       => '',
         'image_fit'          => 'cover',
+        'object_position'    => 'center center',
         'image_zoom'         => false,
         'card_radius'        => '8',
         'card_padding'       => '16',
@@ -331,6 +332,10 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
         $img_ratio  = $s['image_ratio'] ?? 'auto';
         $img_height = absint( $s['image_height'] ?? 0 );
         $img_fit    = $s['image_fit'] ?? 'cover';
+        $obj_pos    = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        if ( $obj_pos === '' ) {
+            $obj_pos = 'center center';
+        }
 
         $css .= $sel . ' .olo-grid-media{position:relative;overflow:hidden;border-radius:' . $radius . 'px ' . $radius . 'px 0 0;}';
         if ( $img_ratio && $img_ratio !== 'auto' ) {
@@ -338,7 +343,7 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
         } elseif ( $img_height > 0 ) {
             $css .= $sel . ' .olo-grid-media{height:' . $img_height . 'px;}';
         }
-        $css .= $sel . ' .olo-grid-img{width:100%;height:100%;object-fit:' . esc_attr( $img_fit ) . ';display:block;transition:transform 0.5s cubic-bezier(.4,0,.2,1);}';
+        $css .= $sel . ' .olo-grid-img{width:100%;height:100%;object-fit:' . esc_attr( $img_fit ) . ';object-position:' . esc_attr( $obj_pos ) . ';display:block;transition:transform 0.5s cubic-bezier(.4,0,.2,1);}';
 
         // Image zoom on hover
         if ( ! empty( $s['image_zoom'] ) ) {
