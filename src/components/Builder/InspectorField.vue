@@ -122,6 +122,18 @@
         @update:modelValue="onFieldUpdate($event)"
       />
 
+      <!-- Punto focale grafico (object-position): riceve immagine + frame del fratello
+           dallo stesso settings per disegnare il ritaglio reale. Senza contesto degrada
+           elegante. Emette la STESSA stringa CSS (keyword o '%') → nessuna migrazione dati. -->
+      <FieldObjectPosition
+        v-else-if="field.type === 'object-position'"
+        :modelValue="effectiveValue"
+        :image-src="objectPositionContext.imageSrc"
+        :frame-ratio="objectPositionContext.frameRatio"
+        :object-fit="objectPositionContext.objectFit"
+        @update:modelValue="onFieldUpdate($event)"
+      />
+
       <FieldEditor
         v-else-if="field.type === 'editor'"
         :modelValue="effectiveValue"
@@ -419,6 +431,7 @@ import FieldRange from './fields/FieldRange.vue';
 import FieldSpacing from './fields/FieldSpacing.vue';
 import FieldBox from './fields/FieldBox.vue';
 import FieldBorder from './fields/FieldBorder.vue';
+import FieldObjectPosition from './fields/FieldObjectPosition.vue';
 import FieldImage from './fields/FieldImage.vue';
 import FieldMedia from './fields/FieldMedia.vue';
 import FieldLink from './fields/FieldLink.vue';
@@ -702,6 +715,7 @@ const fieldComponent = computed(() => {
     case 'range': return FieldRange;
     case 'border-radius': return FieldBox;
     case 'border': return FieldBorder;
+    case 'object-position': return FieldObjectPosition;
     case 'editor': return FieldEditor;
     case 'image': return FieldImage;
     case 'link': return FieldLink;
@@ -747,6 +761,24 @@ const mediaAccept = computed(() => {
   return 'all';
 });
 
+// Contesto per il field 'object-position' (FieldObjectPosition): immagine + frame del
+// FRATELLO nello stesso settings, così il pad disegna il ritaglio reale e calcola l'asse
+// bloccato. Chiavi standard del tile Immagine, sovrascrivibili via field.contextKeys.
+// Senza tileSettings/immagine il controllo resta usabile (pad neutro).
+const objectPositionContext = computed(() => {
+  const s = props.tileSettings || {};
+  const ck = props.field.contextKeys || {};
+  const ar = s[ck.ratio || 'aspect_ratio'];
+  const frameRatio = ar === 'custom'
+    ? (s[ck.ratioCustom || 'aspect_ratio_custom'] || 'auto')
+    : (ar || 'auto');
+  return {
+    imageSrc: s[ck.src || 'image_url'] || s.hover_image || '',
+    objectFit: s[ck.fit || 'object_fit'] || 'cover',
+    frameRatio,
+  };
+});
+
 // Resolve the default value for this field by looking up the registered tile defaults.
 // Used by FieldRange (and similar) for the "double-click to reset" feature.
 const fieldDefaultValue = computed(() => {
@@ -768,6 +800,7 @@ const fieldProps = computed(() => {
     case 'select': return { ...base, options: resolvedOptions.value, ui: props.field.ui || 'auto' };
     case 'range': return { ...base, min: props.field.min || 0, max: props.field.max || 100, step: props.field.step || 1, defaultValue: fieldDefaultValue.value };
     case 'spacing': return { ...base, min: props.field.min ?? 0, max: props.field.max ?? 200, defaultValue: fieldDefaultValue.value };
+    case 'object-position': return { ...base, imageSrc: objectPositionContext.value.imageSrc, frameRatio: objectPositionContext.value.frameRatio, objectFit: objectPositionContext.value.objectFit };
     case 'media': return { ...base, accept: mediaAccept.value };
     case 'editor': return { ...base, mode: props.field.mode || 'inline' };
     case 'icon-select': return { ...base, options: props.field.options || [] };

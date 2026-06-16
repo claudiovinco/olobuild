@@ -145,7 +145,11 @@ export default {
       { value: 'none',       label: t('Originale') },
       { value: 'scale-down', label: t('Riduci se necessario') },
     ]},
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'select', options: [
+    // Punto focale grafico (FieldObjectPosition): sostituisce il select a 9 voci.
+    // Emette la STESSA stringa CSS object-position (keyword in "Aggancia", '% %' in
+    // "Libero") → chiave e formato salvati INVARIATI, nessuna migrazione. Le `options`
+    // restano come fallback documentale/legacy.
+    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', options: [
       { value: 'left top',      label: t('↖ Alto sinistra') },
       { value: 'center top',    label: t('↑ Alto centro') },
       { value: 'right top',     label: t('↗ Alto destra') },
