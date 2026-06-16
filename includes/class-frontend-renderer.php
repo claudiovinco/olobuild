@@ -4656,9 +4656,16 @@ class Olo_Frontend_Renderer {
                 var nn = parseInt(hx, 16); if(isNaN(nn)) nn = 16777215;
                 var rgb = (nn>>16&255) + ',' + (nn>>8&255) + ',' + (nn&255);
                 var C = function(a){ return 'rgba(' + rgb + ',' + a + ')'; };
-                var span = 100 - inner;
-                var st = function(f){ return (inner + span * f).toFixed(1) + '%'; };
-                var grad = 'radial-gradient(circle, ' + C(1) + ' 0%, ' + C(1) + ' ' + inner + '%, ' + C(.82) + ' ' + st(.25) + ', ' + C(.5) + ' ' + st(.5) + ', ' + C(.22) + ' ' + st(.75) + ', ' + C(.07) + ' ' + st(.9) + ', ' + C(0) + ' 100%)';
+                var core = inner / 100;
+                var exp = 2.0 + (soft / 100) * 1.8;
+                var stops = C(1) + ' 0%';
+                for(var i = 1; i <= 10; i++){
+                  var p = i / 10;
+                  var a = p <= core ? 1 : Math.pow(1 - (p - core) / (1 - core), exp);
+                  if(a < 0.004) a = 0;
+                  stops += ', ' + C(+a.toFixed(3)) + ' ' + (p * 100).toFixed(1) + '%';
+                }
+                var grad = 'radial-gradient(circle, ' + stops + ')';
                 var disc = null, tx = 0, ty = 0, cx = 0, cy = 0, running = false, inside = false;
                 function build(){          // creazione lazy: solo al primo hover con mouse/pen
                   if(disc) return;

@@ -99,9 +99,19 @@ function setupSpotlight() {
   let nn = parseInt(hx, 16); if (isNaN(nn)) nn = 16777215;
   const rgb = (nn>>16&255) + ',' + (nn>>8&255) + ',' + (nn&255);
   const C = (a) => 'rgba(' + rgb + ',' + a + ')';
-  const span = 100 - inner;
-  const st = (f) => (inner + span * f).toFixed(1) + '%';
-  const grad = 'radial-gradient(circle, ' + C(1) + ' 0%, ' + C(1) + ' ' + inner + '%, ' + C(.82) + ' ' + st(.25) + ', ' + C(.5) + ' ' + st(.5) + ', ' + C(.22) + ' ' + st(.75) + ', ' + C(.07) + ' ' + st(.9) + ', ' + C(0) + ' 100%)';
+  // Falloff "gaussiano": il nucleo a piena alfa = inner% si riduce con la morbidezza, poi
+  // una coda ease-out (esponente che cresce con la morbidezza) arriva a ~0 BEN PRIMA del bordo
+  // del disco → nessun salto/anello percepibile a morbidezza 100. 10 stop = curva fluida.
+  const core = inner / 100;
+  const exp = 2.0 + (soft / 100) * 1.8;
+  let stops = C(1) + ' 0%';
+  for (let i = 1; i <= 10; i++) {
+    const p = i / 10;
+    let a = p <= core ? 1 : Math.pow(1 - (p - core) / (1 - core), exp);
+    if (a < 0.004) a = 0;
+    stops += ', ' + C(+a.toFixed(3)) + ' ' + (p * 100).toFixed(1) + '%';
+  }
+  const grad = 'radial-gradient(circle, ' + stops + ')';
   let disc = null, tx = 0, ty = 0, cx = 0, cy = 0, running = false, inside = false;
   function build() {
     if (disc) return;
