@@ -10,17 +10,17 @@
   <div v-else class="mb-flex mb-flex-col mb-h-screen mb-bg-gray-900 mb-text-gray-100 mb-overflow-hidden">
     <!-- Skip link per accessibilità -->
     <a href="#olo-canvas" class="mb-sr-only focus:mb-not-sr-only focus:mb-fixed focus:mb-top-2 focus:mb-left-2 focus:mb-z-50 focus:mb-bg-gray-800 focus:mb-text-white focus:mb-px-4 focus:mb-py-2 focus:mb-rounded">
-      Salta al contenuto
+      {{ t('Salta al contenuto') }}
     </a>
     <BuilderToolbar @back="goToList" @open-revisions="onOpenRevisions" @open-finder="openFinder" @open-ai="aiAssistantRef?.open()" @open-library="templateLibraryRef?.open()" @open-themes="themeSelectorRef?.open()" />
     <div class="mb-flex mb-flex-1 mb-overflow-hidden">
-      <BuilderSidebar v-if="!builderStore.previewMode && !sidebarCollapsed" :style="{ width: sidebarWidth + 'px', flexShrink: 0 }" role="complementary" aria-label="Pannello elementi" @save-as-template="section => templateLibraryRef?.openSaveDialog(section)" />
+      <BuilderSidebar v-if="!builderStore.previewMode && !sidebarCollapsed" :style="{ width: sidebarWidth + 'px', flexShrink: 0 }" role="complementary" :aria-label="t('Pannello elementi')" @save-as-template="section => templateLibraryRef?.openSaveDialog(section)" />
       <!-- Resize handle + collapse toggle -->
       <div v-if="!builderStore.previewMode" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,0.5);border-right:1px solid rgba(0,0,0,0.06)">
         <button @click="toggleSidebar" @mousedown.stop
           style="width:16px;height:24px;background:none;border:none;color:#aaa;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;margin:4px 0 0"
-          :title="sidebarCollapsed ? 'Espandi sidebar' : 'Comprimi sidebar'"
-          :aria-label="sidebarCollapsed ? 'Espandi sidebar' : 'Comprimi sidebar'"
+          :title="sidebarCollapsed ? t('Espandi sidebar') : t('Comprimi sidebar')"
+          :aria-label="sidebarCollapsed ? t('Espandi sidebar') : t('Comprimi sidebar')"
         >
           <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
             <path :d="sidebarCollapsed ? 'M1 0l6 4-6 4z' : 'M7 0l-6 4 6 4z'"/>
@@ -28,13 +28,13 @@
         </button>
         <div v-if="!sidebarCollapsed" @mousedown.prevent="startResize($event)" style="flex:1;width:16px;cursor:col-resize"></div>
       </div>
-      <BuilderCanvas id="olo-canvas" role="main" aria-label="Area di lavoro" />
+      <BuilderCanvas id="olo-canvas" role="main" :aria-label="t('Area di lavoro')" />
       <!-- Inspector resize handle + collapse toggle -->
       <div v-if="!builderStore.previewMode" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,0.5);border-left:1px solid rgba(0,0,0,0.06)">
         <button @click="toggleInspector" @mousedown.stop
           style="width:16px;height:24px;background:none;border:none;color:#aaa;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;margin:4px 0 0"
-          :title="inspectorCollapsed ? 'Espandi pannello' : 'Comprimi pannello'"
-          :aria-label="inspectorCollapsed ? 'Espandi pannello' : 'Comprimi pannello'"
+          :title="inspectorCollapsed ? t('Espandi pannello') : t('Comprimi pannello')"
+          :aria-label="inspectorCollapsed ? t('Espandi pannello') : t('Comprimi pannello')"
         >
           <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
             <path :d="inspectorCollapsed ? 'M7 0l-6 4 6 4z' : 'M1 0l6 4-6 4z'"/>
@@ -42,7 +42,7 @@
         </button>
         <div v-if="!inspectorCollapsed" @mousedown.prevent="startInspectorResize($event)" style="flex:1;width:16px;cursor:col-resize"></div>
       </div>
-      <BuilderInspector v-if="!builderStore.previewMode && !inspectorCollapsed" :style="{ width: inspectorWidth + 'px', flexShrink: 0 }" role="complementary" aria-label="Proprietà" />
+      <BuilderInspector v-if="!builderStore.previewMode && !inspectorCollapsed" :style="{ width: inspectorWidth + 'px', flexShrink: 0 }" role="complementary" :aria-label="t('Proprietà')" />
     </div>
     <!-- Finder / Ricerca rapida (Ctrl+K) -->
     <BuilderFinder ref="builderFinderRef" />
@@ -120,9 +120,10 @@ function onBeforeUnload(e) {
   }
 }
 watch([() => builderStore.isDirty, () => builderStore.headerDirty, () => builderStore.footerDirty], () => {
-  const base = builderStore.currentTemplate?.title || 'Olobuild';
+  const brand = (window.oloData && window.oloData.brandName) || 'Olobuild';
+  const base = builderStore.currentTemplate?.title || brand;
   const anyDirty = builderStore.isDirty || builderStore.headerDirty || builderStore.footerDirty;
-  document.title = anyDirty ? '\u2022 ' + base + ' — Olobuild' : base + ' — Olobuild';
+  document.title = anyDirty ? '\u2022 ' + base + ' — ' + brand : base + ' — ' + brand;
 });
 
 const currentView = ref('list'); // 'list' | 'builder'

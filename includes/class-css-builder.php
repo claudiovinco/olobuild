@@ -560,9 +560,31 @@ class Olo_CSS_Builder {
         $final_opacity = $rgba['a'];
         $c = "rgba({$r},{$g},{$b},{$final_opacity})";
 
+        // Colore-token non parsabile (var(--olo-color-*), color-mix(), nome colore):
+        // normalize_pattern_color ripiega su NERO. Per i pattern a gradiente usiamo
+        // invece il token reale con l'opacità applicata via color-mix (così il colore
+        // scelto si vede davvero). I pattern SVG restano su hex (data-URI non eredita le var).
+        if ( '' !== $color && ! preg_match( '/^#|^rgba?\(/i', $color ) ) {
+            $c = $final_opacity >= 1
+                ? $color
+                : 'color-mix(in srgb,' . $color . ' ' . round( $final_opacity * 100 ) . '%,transparent)';
+        }
+
         $bg_image = '';
         $bg_size  = "{$size}px {$size}px";
         $bg_pos   = '';
+        // Pattern SVG con colore-token: si rende come MASCHERA (vedi default case).
+        $is_token = ( '' !== $color && ! preg_match( '/^#|^rgba?\(/i', $color ) );
+        $use_mask = false;
+        $mask_uri = '';
+
+        // Pattern a RIGHE (repeating-linear-gradient): background-size 'auto', non sz×sz.
+        // Un tile sz×sz spezza le diagonali a 45° (righe tagliate al bordo del tile);
+        // 'auto' mantiene la diagonale continua, la spaziatura resta sz (periodo del
+        // gradiente). Allineato a getPatternCSS() lato JS. Dots/forme tengono sz×sz.
+        if ( in_array( $type, array( 'horizontal-lines', 'vertical-lines', 'diagonal-lines', 'diagonal-lines-reverse', 'crosshatch', 'diagonal-crosshatch' ), true ) ) {
+            $bg_size = 'auto';
+        }
 
         switch ( $type ) {
             case 'horizontal-lines':
@@ -601,7 +623,9 @@ class Olo_CSS_Builder {
                 $bg_pos = "0 0,{$half}px {$half}px";
                 break;
             case 'graph-paper':
-                $bg_image = "linear-gradient({$c} {$lw}px,transparent {$lw}px),linear-gradient(90deg,{$c} {$lw}px,transparent {$lw}px)";
+                // Griglia rotabile: repeating-linear-gradient + rot, background-size auto.
+                $bg_image = "repeating-linear-gradient({$a0}deg,{$c} 0px,{$c} {$lw}px,transparent {$lw}px,transparent {$size}px),repeating-linear-gradient({$a90}deg,{$c} 0px,{$c} {$lw}px,transparent {$lw}px,transparent {$size}px)";
+                $bg_size = 'auto';
                 break;
             case 'carbon-fiber':
                 $half = $size / 2;
@@ -625,14 +649,33 @@ class Olo_CSS_Builder {
                 $bg_size = "{$size}px {$size}px,{$size}px {$size}px,{$sub}px {$sub}px,{$sub}px {$sub}px";
                 break;
             default:
-                // SVG-based patterns: generate SVG data URI for complex shapes
-                $svg = $this->build_pattern_svg( $type, $color, $opacity, $size );
+                // SVG-based patterns: generate SVG data URI for complex shapes.
+                // Con colore-token: SVG NERO (sagoma) + maschera; il colore-token (var)
+                // verrà dipinto col background-color (color-mix), risolto dal browser.
+                $svg = $this->build_pattern_svg( $type, $is_token ? '#000000' : $color, $is_token ? 1 : $opacity, $size );
                 if ( $svg ) {
-                    $bg_image = 'url("data:image/svg+xml,' . rawurlencode( $svg ) . '")';
+                    $data_uri = 'url("data:image/svg+xml,' . rawurlencode( $svg ) . '")';
+                    if ( $is_token ) {
+                        $use_mask = true;
+                        $mask_uri = $data_uri;
+                    } else {
+                        $bg_image = $data_uri;
+                    }
                 } else {
                     $bg_image = "radial-gradient(circle,{$c} 1px,transparent 1px)";
                 }
                 break;
+        }
+
+        // Ramo MASK (pattern SVG con colore-token): la forma dall'SVG nero, il colore vero
+        // (token via color-mix in $c) da background-color. Prefisso -webkit- per Safari.
+        if ( $use_mask ) {
+            $mp = $bg_pos ? $bg_pos : '0 0';
+            return "background-color:{$c}"
+                . ";-webkit-mask-image:{$mask_uri};mask-image:{$mask_uri}"
+                . ";-webkit-mask-size:{$bg_size};mask-size:{$bg_size}"
+                . ";-webkit-mask-repeat:repeat;mask-repeat:repeat"
+                . ";-webkit-mask-position:{$mp};mask-position:{$mp}";
         }
 
         $css = "background-color:{$bg_clr};background-image:{$bg_image};background-size:{$bg_size}";

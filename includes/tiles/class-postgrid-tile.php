@@ -33,6 +33,8 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         'image_height'    => '200',
         'image_radius'    => '0',
         'card_radius'     => '4',
+        'corner_cut'      => false,
+        'corner_size'     => 32,
         'show_image'      => true,
         'show_category'             => true,
         'category_badge_position'   => 'top-left',
@@ -303,6 +305,10 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         $card_radius  = $this->build_border_radius_css( $s["card_radius"] ?? 4 );
         $card_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['card_radius_hover'] ?? null );
 
+        // Folded / cut bottom-right corner ("piega"). Default OFF = card invariata.
+        $corner_cut  = ! empty( $s['corner_cut'] );
+        $corner_size = max( 12, min( 64, absint( $s['corner_size'] ?? 32 ) ) );
+
         // Sort config for JS
         $sort_enabled      = ! empty( $s['show_sort'] );
         $pagination_on     = ! empty( $s['pagination'] );
@@ -362,6 +368,11 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .uk-card-media-top { border-radius: <?php echo $image_radius; ?>; overflow: hidden; transition: border-radius 400ms cubic-bezier(.4,0,.2,1); }
             .<?php echo $uid; ?> .uk-card { border-radius: <?php echo $card_radius; ?>; overflow: hidden; transition: border-radius 400ms cubic-bezier(.4,0,.2,1); }
             .<?php echo $uid; ?> .olo-card-minimal { border-radius: <?php echo $card_radius; ?>; overflow: hidden; transition: border-radius 400ms cubic-bezier(.4,0,.2,1); }
+            <?php if ( $corner_cut ) : ?>
+            /* Angolo basso-destro tagliato a "piega" (folded corner / notch) */
+            .<?php echo $uid; ?> .uk-card,
+            .<?php echo $uid; ?> .olo-card-minimal { clip-path: polygon(0 0, 100% 0, 100% calc(100% - <?php echo (int) $corner_size; ?>px), calc(100% - <?php echo (int) $corner_size; ?>px) 100%, 0 100%); }
+            <?php endif; ?>
             <?php if ( $image_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .uk-card:hover .olo-pg-img,.<?php echo $uid; ?> .olo-card-minimal:hover .olo-card-minimal__img,.<?php echo $uid; ?> .uk-card:hover .uk-card-media-top{border-radius:<?php echo $image_radius_hover_css; ?> !important}<?php endif; ?>
             <?php if ( $card_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .uk-card:hover,.<?php echo $uid; ?> .olo-card-minimal:hover{border-radius:<?php echo $card_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-zoom, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-zoom { transform: scale(1.08); }
@@ -757,7 +768,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         ?>
         <div class="olo-postgrid-filters<?php echo esc_attr( $fa_cls ); ?>" data-postgrid-target="<?php echo esc_attr( $grid_id ); ?>">
             <?php if ( $style === 'dropdown' ) : ?>
-                <select class="olo-postgrid-filter-select uk-select" data-postgrid-filter-select>
+                <select class="olo-postgrid-filter-select uk-select" data-postgrid-filter-select aria-label="<?php esc_attr_e( 'Filtra per categoria', 'olobuild' ); ?>">
                     <option value=""><?php esc_html_e( 'Tutti', 'olobuild' ); ?></option>
                     <?php foreach ( $terms as $term ) : ?>
                         <option value="<?php echo esc_attr( $term['slug'] ); ?>">
@@ -766,20 +777,20 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                     <?php endforeach; ?>
                 </select>
             <?php elseif ( $style === 'minimal' ) : ?>
-                <button class="olo-postgrid-pill olo-postgrid-pill--minimal olo-postgrid-pill-active" data-filter="">
+                <button class="olo-postgrid-pill olo-postgrid-pill--minimal olo-postgrid-pill-active" data-filter="" aria-pressed="true">
                     <?php esc_html_e( 'Tutti', 'olobuild' ); ?>
                 </button>
                 <?php foreach ( $terms as $term ) : ?>
-                    <button class="olo-postgrid-pill olo-postgrid-pill--minimal" data-filter="<?php echo esc_attr( $term['slug'] ); ?>">
+                    <button class="olo-postgrid-pill olo-postgrid-pill--minimal" data-filter="<?php echo esc_attr( $term['slug'] ); ?>" aria-pressed="false">
                         <?php echo esc_html( $term['name'] ); ?>
                     </button>
                 <?php endforeach; ?>
             <?php else : ?>
-                <button class="olo-postgrid-pill olo-postgrid-pill-active" data-filter="">
+                <button class="olo-postgrid-pill olo-postgrid-pill-active" data-filter="" aria-pressed="true">
                     <?php esc_html_e( 'Tutti', 'olobuild' ); ?>
                 </button>
                 <?php foreach ( $terms as $term ) : ?>
-                    <button class="olo-postgrid-pill" data-filter="<?php echo esc_attr( $term['slug'] ); ?>">
+                    <button class="olo-postgrid-pill" data-filter="<?php echo esc_attr( $term['slug'] ); ?>" aria-pressed="false">
                         <?php echo esc_html( $term['name'] ); ?>
                     </button>
                 <?php endforeach; ?>
@@ -818,7 +829,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             'title' => [ 'title-asc' => 'A → Z', 'title-desc' => 'Z → A' ],
         ];
         ?>
-        <select class="olo-postgrid-sort uk-select" data-postgrid-sort>
+        <select class="olo-postgrid-sort uk-select" data-postgrid-sort aria-label="<?php esc_attr_e( 'Ordina', 'olobuild' ); ?>">
             <option value="default"><?php esc_html_e( 'Ordina per…', 'olobuild' ); ?></option>
             <?php foreach ( $available as $group ) :
                 if ( isset( $all_options[ $group ] ) ) :

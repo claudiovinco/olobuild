@@ -256,9 +256,11 @@ class Olo_Accessibility {
             return new WP_Error( 'not_found', 'Template non trovato', [ 'status' => 404 ] );
         }
 
-        $data = json_decode( $template->data, true );
-        if ( ! is_array( $data ) ) {
-            return rest_ensure_response( [ 'issues' => [], 'pairs' => [] ] );
+        // get_template() ritorna un ARRAY con 'content' GIÀ decodificato (l'albero tile).
+        // (Il vecchio codice leggeva $template->data: campo+accesso errati → 0 coppie sempre.)
+        $data = is_array( $template['content'] ?? null ) ? $template['content'] : [];
+        if ( empty( $data ) ) {
+            return rest_ensure_response( [ 'issues' => [], 'pairs' => 0, 'score' => 100 ] );
         }
 
         $pairs  = [];
@@ -267,6 +269,9 @@ class Olo_Accessibility {
         $issues = [];
         foreach ( $pairs as $pair ) {
             $ratio = $this->calculate_contrast_ratio( $pair['fg'], $pair['bg'] );
+            if ( null === $ratio ) {
+                continue; // coppia non valutabile: non la conteggiamo (prima era assunta OK con 21)
+            }
             $pair['ratio'] = round( $ratio, 2 );
 
             $is_large = ( $pair['size'] ?? 16 ) >= 18 || ( ( $pair['size'] ?? 16 ) >= 14 && ( $pair['weight'] ?? 400 ) >= 700 );
@@ -294,6 +299,9 @@ class Olo_Accessibility {
             }
         }
 
+        // Immagini senza testo alternativo (WCAG 1.1.1)
+        $this->collect_alt_issues( $data, $issues );
+
         $score = empty( $issues ) ? 100 : max( 0, 100 - count( $issues ) * 10 );
 
         return rest_ensure_response( [
@@ -304,6 +312,54 @@ class Olo_Accessibility {
     }
 
     /**
+     * Raccoglie le immagini con testo alternativo mancante (1.1.1).
+     * Cammina lo stesso albero di collect_color_pairs cercando le coppie
+     * immagine+alt note. Segnala come WARNING (l'utente decide se decorativa).
+     */
+    private function collect_alt_issues( $nodes, &$issues ) {
+        if ( ! is_array( $nodes ) ) {
+            return;
+        }
+        // Chiavi di immagine-CONTENUTO (NON gli sfondi decorativi bg_*) e chiavi alt note.
+        $img_keys = [ 'image_url', 'image', 'src' ];
+        $alt_keys = [ 'alt_text', 'alt', 'image_alt' ];
+        foreach ( $nodes as $node ) {
+            if ( ! is_array( $node ) ) {
+                continue;
+            }
+            $settings = $node['settings'] ?? [];
+
+            $has_image = false;
+            foreach ( $img_keys as $ik ) {
+                $v = $settings[ $ik ] ?? '';
+                if ( is_string( $v ) && $v !== '' ) { $has_image = true; break; }
+            }
+            if ( $has_image ) {
+                $has_alt = false;
+                foreach ( $alt_keys as $ak ) {
+                    $a = $settings[ $ak ] ?? '';
+                    if ( is_string( $a ) && trim( $a ) !== '' ) { $has_alt = true; break; }
+                }
+                if ( ! $has_alt ) {
+                    $issues[] = [
+                        'type'    => 'warning',
+                        'kind'    => 'alt',
+                        'message' => sprintf(
+                            /* translators: %s = tipo di tile */
+                            __( 'Immagine senza testo alternativo nella tile "%s" (se decorativa, ignora; altrimenti aggiungi un alt descrittivo).', 'olobuild' ),
+                            $node['type'] ?? ''
+                        ),
+                        'id'      => $node['id'] ?? '',
+                    ];
+                }
+            }
+            if ( ! empty( $node['children'] ) ) {
+                $this->collect_alt_issues( $node['children'], $issues );
+            }
+        }
+    }
+
+    /**
      * Single color pair contrast ratio check.
      */
     public function get_contrast_ratio( $request ) {
@@ -311,13 +367,23 @@ class Olo_Accessibility {
         $bg    = $request['bg'];
         $ratio = $this->calculate_contrast_ratio( $fg, $bg );
 
+        if ( null === $ratio ) {
+            // Colore non risolvibile: segnalalo come non valutabile invece di fingere OK.
+            return rest_ensure_response( [
+                'fg'        => $fg,
+                'bg'        => $bg,
+                'evaluable' => false,
+            ] );
+        }
+
         return rest_ensure_response( [
-            'fg'     => $fg,
-            'bg'     => $bg,
-            'ratio'  => round( $ratio, 2 ),
-            'aa'     => $ratio >= 4.5,
+            'fg'       => $fg,
+            'bg'       => $bg,
+            'ratio'    => round( $ratio, 2 ),
+            'evaluable' => true,
+            'aa'       => $ratio >= 4.5,
             'aa_large' => $ratio >= 3.0,
-            'aaa'    => $ratio >= 7.0,
+            'aaa'      => $ratio >= 7.0,
         ] );
     }
 
@@ -439,12 +505,41 @@ class Olo_Accessibility {
      * Calculate WCAG contrast ratio between two colors.
      * Returns ratio as float (e.g. 4.5 for 4.5:1).
      */
+    /**
+     * Risolve un token colore var(--olo-color-X) nel suo valore esadecimale corrente,
+     * leggendo olo_global_colors (vince, come in generate_css) poi olo_styles['colors'].
+     * Lascia invariati i valori già esadecimali/rgb.
+     */
+    private function resolve_color_token( $color ) {
+        $c = trim( (string) $color );
+        if ( ! preg_match( '/var\(\s*--olo-color-([a-z0-9_-]+)\s*(?:,\s*([^)]+))?\)/i', $c, $m ) ) {
+            return $c;
+        }
+        $id       = sanitize_key( $m[1] );
+        $fallback = isset( $m[2] ) ? trim( $m[2] ) : '';
+
+        $gc = get_option( 'olo_global_colors', [] );
+        if ( is_array( $gc ) ) {
+            foreach ( $gc as $g ) {
+                if ( isset( $g['id'], $g['value'] ) && $g['id'] === $id && $g['value'] !== '' ) {
+                    return $g['value'];
+                }
+            }
+        }
+        $styles = get_option( 'olo_styles', [] );
+        if ( ! empty( $styles['colors'][ $id ] ) ) {
+            return $styles['colors'][ $id ];
+        }
+        return $fallback; // può essere un hex o un altro var: il chiamante ritenta hex_to_rgb
+    }
+
     private function calculate_contrast_ratio( $fg, $bg ) {
-        $fg_rgb = $this->hex_to_rgb( $fg );
-        $bg_rgb = $this->hex_to_rgb( $bg );
+        // Risolve prima i token (var(--olo-color-*)) → altrimenti il checker era cieco ai colori del cliente.
+        $fg_rgb = $this->hex_to_rgb( $this->resolve_color_token( $fg ) );
+        $bg_rgb = $this->hex_to_rgb( $this->resolve_color_token( $bg ) );
 
         if ( ! $fg_rgb || ! $bg_rgb ) {
-            return 21; // Can't parse, assume OK
+            return null; // Non risolvibile (token non mappato, gradiente, ecc.): NON valutabile (prima: 21 = falso OK).
         }
 
         $l1 = $this->relative_luminance( $fg_rgb );

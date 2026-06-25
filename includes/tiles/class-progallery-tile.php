@@ -1734,7 +1734,8 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
                         echo '<video muted autoplay loop playsinline' . $poster_attr . '><source src="' . esc_url( $url ) . '" type="' . esc_attr( $mime ) . '"></video>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $poster_attr is esc_url()-built above; the rest is escaped inline.
                     } elseif ( $use_embed_autoplay ) {
                         $embed_auto_url = $this->get_gallery_embed_url( $embed, true );
-                        echo '<iframe src="' . esc_url( $embed_auto_url ) . '" style="position:absolute;inset:0;width:100%;height:100%;border:none" allow="autoplay;encrypted-media" allowfullscreen loading="lazy"></iframe>';
+                        $iframe_title = $caption !== '' ? $caption : ( $alt !== '' ? $alt : olo_t( 'Anteprima video' ) );
+                        echo '<iframe src="' . esc_url( $embed_auto_url ) . '" title="' . esc_attr( $iframe_title ) . '" style="position:absolute;inset:0;width:100%;height:100%;border:none" allow="autoplay;encrypted-media" allowfullscreen loading="lazy"></iframe>';
                     } else {
                         if ( $poster ) {
                             echo Olo_Tile_Utils::img_srcset( $poster_id, $poster, esc_attr( $alt ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- img_srcset() returns an <img> tag escaped internally (esc_url/esc_attr/intval).
@@ -1780,7 +1781,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
             echo '<button class="' . $container_class . '-next" aria-label="' . esc_attr( olo_t( 'Successivo' ) ) . '">&#8250;</button>';
             if ( $film_dots !== 'none' ) {
                 if ( $film_dots === 'progress' ) {
-                    echo '<div class="' . $container_class . '-dots"><div class="pg-prog-track"><div class="pg-prog-fill"></div></div></div>';
+                    echo '<div class="' . $container_class . '-dots"><div class="pg-prog-track" tabindex="0" role="slider" aria-label="' . esc_attr( olo_t( 'Avanzamento galleria' ) ) . '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="pg-prog-fill"></div></div></div>';
                 } else {
                     echo '<div class="' . $container_class . '-dots"></div>';
                 }
@@ -2033,12 +2034,12 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         echo 'items.forEach(function(it,idx){var d=Math.abs(it.offsetLeft+it.offsetWidth/2-ctr);if(d<minD){minD=d;closest=idx}});';
         // dots / lines: toggle active class
         echo 'if(dotStyle==="dots"||dotStyle==="lines"){';
-        echo 'dotEl.querySelectorAll("span").forEach(function(sp,idx){sp.classList.toggle("active",idx===closest)});';
+        echo 'dotEl.querySelectorAll("button,span").forEach(function(sp,idx){var on=idx===closest;sp.classList.toggle("active",on);if(on){sp.setAttribute("aria-current","true")}else{sp.removeAttribute("aria-current")}});';
         echo '}';
         // progress: update fill width
         echo 'if(dotStyle==="progress"){';
         echo 'var fill=dotEl.querySelector(".pg-prog-fill");';
-        echo 'if(fill){var pct=items.length>1?(closest/(items.length-1))*100:100;fill.style.width=pct+"%"}';
+        echo 'if(fill){var pct=items.length>1?(closest/(items.length-1))*100:100;fill.style.width=pct+"%";var trk=dotEl.querySelector(".pg-prog-track");if(trk){trk.setAttribute("aria-valuenow",Math.round(pct))}}';
         echo '}';
         // fraction: update text
         echo 'if(dotStyle==="fraction"){';
@@ -2064,8 +2065,12 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         echo 'if(dotC){';
         // dots / lines: create span per item
         echo 'if(dotStyle==="dots"||dotStyle==="lines"){';
+        echo 'var dotLbl=' . wp_json_encode( olo_t( 'Vai alla foto' ) ) . ';';
         echo 'for(var di=0;di<items.length;di++){';
-        echo 'var sp=document.createElement("span");';
+        echo 'var sp=document.createElement("button");';
+        echo 'sp.type="button";';
+        echo 'sp.setAttribute("aria-label",dotLbl+" "+(di+1));';
+        echo 'if(di===0){sp.setAttribute("aria-current","true")}';
         // Pallini più piccoli se tante foto
         echo 'if(dotStyle==="dots"){if(items.length>20){sp.style.width="9px";sp.style.height="9px"}}';
         // Lines più strette se tante foto
@@ -2080,6 +2085,15 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         echo 'if(track){track.addEventListener("click",function(e){';
         echo 'var r=track.getBoundingClientRect();var pct=(e.clientX-r.left)/r.width;var idx=Math.round(pct*(items.length-1));';
         echo 'if(idx>=0){if(idx<items.length){el.scrollTo({left:items[idx].offsetLeft-el.clientWidth/2+items[idx].offsetWidth/2,behavior:"smooth"})}}';
+        echo '});';
+        echo 'track.addEventListener("keydown",function(e){';
+        echo 'var cur=parseInt(track.getAttribute("aria-valuenow"))||0;var ci=Math.round(cur/100*(items.length-1));var ni=ci;';
+        echo 'if(e.key==="ArrowLeft"||e.key==="ArrowDown"){e.preventDefault();ni=Math.max(0,ci-1)}';
+        echo 'else if(e.key==="ArrowRight"||e.key==="ArrowUp"){e.preventDefault();ni=Math.min(items.length-1,ci+1)}';
+        echo 'else if(e.key==="Home"){e.preventDefault();ni=0}';
+        echo 'else if(e.key==="End"){e.preventDefault();ni=items.length-1}';
+        echo 'else{return}';
+        echo 'el.scrollTo({left:items[ni].offsetLeft-el.clientWidth/2+items[ni].offsetWidth/2,behavior:"smooth"});';
         echo '})}';
         echo '}';
         // fraction: init text

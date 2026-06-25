@@ -2,29 +2,21 @@
   <div class="olo-nf">
     <label class="olo-nf-lab">{{ t(field.label) }}</label>
 
-    <!-- Range: slider arancio chrome + valbox con unità (coerente con StyleEffectsStack) -->
+    <!-- Range: NumberScrubber con slider inline (coerente con StyleEffectsStack) -->
     <div v-if="field.type === 'range'" class="olo-nf-sliderrow">
-      <input
-        type="range"
-        class="olo-nf-slider"
-        :value="num"
+      <NumberScrubber
+        class="olo-nf-ns"
+        :modelValue="num"
         :min="field.min ?? 0"
         :max="field.max ?? 100"
         :step="field.step ?? 1"
-        :aria-label="t(field.label)"
-        @input="onUpdate(Number($event.target.value))"
+        :defaultValue="field.default ?? (field.min ?? 0)"
+        emitAs="number"
+        :unit="field.unit || ''"
+        :sliderOnFocus="false"
+        :ariaLabel="t(field.label)"
+        @update:modelValue="onUpdate($event)"
       />
-      <span class="olo-nf-val">
-        <input
-          type="text"
-          inputmode="numeric"
-          class="olo-nf-valinput"
-          :value="num"
-          :aria-label="t(field.label)"
-          @change="onUpdateClamped($event.target.value)"
-        />
-        <i v-if="field.unit">{{ field.unit }}</i>
-      </span>
     </div>
 
     <!-- Select (FieldSelect dropdown custom; t() sulle label lo applica lui) -->
@@ -51,6 +43,7 @@
 import { computed } from 'vue';
 import { t } from '@/i18n';
 import FieldSelect from '../fields/FieldSelect.vue';
+import NumberScrubber from '../fields/NumberScrubber.vue';
 
 /**
  * StyleNestedField — gestisce field con chiave "path" annidata via "."
@@ -96,15 +89,6 @@ function onUpdate(val) {
     emit('update', { type: 'nested', path: props.field.key, value: val });
   }
 }
-
-// Scrittura dalla valbox: parse → clamp ai limiti dello slider → set (digitare = trascinare).
-function onUpdateClamped(raw) {
-  let n = parseInt(raw, 10);
-  if (isNaN(n)) n = props.field.default ?? 0;
-  const lo = props.field.min ?? 0;
-  const hi = props.field.max ?? 100;
-  onUpdate(Math.min(hi, Math.max(lo, n)));
-}
 </script>
 
 <style scoped>
@@ -121,67 +105,9 @@ function onUpdateClamped(raw) {
   margin-bottom: 6px;
 }
 
-/* slider + valbox (stesso linguaggio di StyleEffectsStack) */
+/* slider + valbox (NumberScrubber, stesso linguaggio di StyleEffectsStack) */
 .olo-nf-sliderrow { display: flex; align-items: center; gap: 12px; }
-.olo-nf-slider {
-  flex: 1;
-  min-width: 40px;
-  -webkit-appearance: none;
-  appearance: none;
-  height: 5px;
-  border-radius: 99px;
-  background: #eef0f3;
-  outline: none;
-  cursor: pointer;
-}
-.olo-nf-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 16px; height: 16px;
-  border-radius: 50%;
-  background: #fff;
-  border: 2px solid var(--olo-ui-accent);
-  cursor: pointer;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
-}
-.olo-nf-slider::-moz-range-thumb {
-  width: 16px; height: 16px;
-  border-radius: 50%;
-  background: #fff;
-  border: 2px solid var(--olo-ui-accent);
-  cursor: pointer;
-}
-.olo-nf-slider:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-ui-accent) 25%, transparent); }
-.olo-nf-val {
-  flex: 0 0 auto;
-  width: 70px;
-  display: inline-flex;
-  align-items: center;
-  height: 32px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  background: #fff;
-  overflow: hidden;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-.olo-nf-val:focus-within {
-  border-color: var(--olo-ui-accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-ui-accent) 18%, transparent);
-}
-.olo-nf-valinput {
-  flex: 1;
-  min-width: 0;
-  width: 100%;
-  border: none;
-  outline: none;
-  background: transparent;
-  padding: 0 2px 0 8px;
-  font: 500 13px 'SF Mono', Monaco, monospace;
-  color: #1f2937;
-  text-align: center;
-}
-.olo-nf-valinput::-webkit-outer-spin-button,
-.olo-nf-valinput::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.olo-nf-val i { font-style: normal; font-size: 11px; color: #9ca3af; padding-right: 8px; flex-shrink: 0; }
+.olo-nf-ns { flex: 1; min-width: 0; }
 
 /* text fallback */
 .olo-nf-text {

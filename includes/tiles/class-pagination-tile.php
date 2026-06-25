@@ -138,7 +138,7 @@ class Olo_Pagination_Tile extends Olo_Tile_Base {
             if ( $show_numbers ) {
                 for ( $i = 1; $i <= $numpages; $i++ ) {
                     if ( $i === $page ) {
-                        echo '<span class="olo-pagination-current">' . (int) $i . '</span>';
+                        echo '<span class="olo-pagination-current" aria-current="page">' . (int) $i . '</span>';
                     } else {
                         echo '<a class="olo-pagination-link" href="' . esc_url( $this->get_pagenum_link_singular( $i ) ) . '">' . (int) $i . '</a>';
                     }

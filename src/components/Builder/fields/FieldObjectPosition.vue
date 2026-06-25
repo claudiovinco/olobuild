@@ -46,14 +46,18 @@
     </div>
 
     <div class="olo-op-row">
-      <span class="olo-op-f" :class="{ dim: snap || lockX }">
-        <i class="k">X</i><input type="number" min="0" max="100" :value="Math.round(x)" :disabled="snap || lockX"
-          :aria-label="t('Posizione orizzontale (%)')" @input="onInput('x', $event.target.value)"/><i class="u">%</i>
-      </span>
-      <span class="olo-op-f" :class="{ dim: snap || lockY }">
-        <i class="k">Y</i><input type="number" min="0" max="100" :value="Math.round(y)" :disabled="snap || lockY"
-          :aria-label="t('Posizione verticale (%)')" @input="onInput('y', $event.target.value)"/><i class="u">%</i>
-      </span>
+      <div class="olo-op-axis" :class="{ dim: snap || lockX }">
+        <span class="olo-op-axlbl">X</span>
+        <NumberScrubber class="olo-op-ns" :modelValue="Math.round(x)" :min="0" :max="100" :step="1"
+          :defaultValue="50" emitAs="number" unit="%" :disabled="snap || lockX"
+          :ariaLabel="t('Posizione orizzontale (%)')" @update:modelValue="onInput('x', $event)" />
+      </div>
+      <div class="olo-op-axis" :class="{ dim: snap || lockY }">
+        <span class="olo-op-axlbl">Y</span>
+        <NumberScrubber class="olo-op-ns" :modelValue="Math.round(y)" :min="0" :max="100" :step="1"
+          :defaultValue="50" emitAs="number" unit="%" :disabled="snap || lockY"
+          :ariaLabel="t('Posizione verticale (%)')" @update:modelValue="onInput('y', $event)" />
+      </div>
       <button type="button" class="olo-op-reset" :title="t('Centra (50/50)')" :aria-label="t('Centra')" @click="center">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
       </button>
@@ -64,6 +68,7 @@
 <script setup>
 import { t } from '@/i18n';
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import NumberScrubber from './NumberScrubber.vue';
 
 const props = defineProps({
   modelValue: { type: String, default: 'center center' },
@@ -289,6 +294,12 @@ onBeforeUnmount(() => {
 .olo-op-seg button:focus-visible { outline: 2px solid var(--olo-ui-accent, #e8622a); outline-offset: 2px; }
 
 .olo-op-row { display: flex; gap: 7px; margin-top: 9px; align-items: center; }
+/* Assi X/Y: etichetta + NumberScrubber (pill compatta + slider a comparsa + rotellina) */
+.olo-op-axis { flex: 1; display: flex; align-items: center; gap: 7px; min-width: 0; }
+.olo-op-axlbl { font: 700 9px ui-monospace, monospace; color: #94a3b8; flex: none; }
+.olo-op-axis.dim .olo-op-axlbl { opacity: .4; }
+.olo-op-axis .olo-op-ns { flex: 1; min-width: 0; }
+.olo-op-axis .olo-op-ns :deep(.olo-ns-box) { width: 100%; }
 .olo-op-f { flex: 1; display: flex; align-items: center; border: 1px solid #e5e7eb; border-radius: 7px; overflow: hidden; background: #fff; height: 30px; }
 .olo-op-f .k { font: 700 9px ui-monospace, monospace; color: #94a3b8; padding: 0 0 0 9px; font-style: normal; }
 .olo-op-f input { flex: 1; width: 100%; min-width: 0; border: 0; outline: none; background: transparent; font: 500 12px ui-monospace, monospace; color: #1f2937; text-align: center; padding: 0; }

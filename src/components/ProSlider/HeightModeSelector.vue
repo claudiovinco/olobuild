@@ -17,11 +17,11 @@
 
     <!-- Inherited badge + reset for non-desktop -->
     <div v-if="activeBp !== 'desktop' && !currentHeight" class="mb-text-[10px] mb-text-gray-500 mb-italic">
-      Ereditato dal livello superiore ({{ resolvedLabel }})
+      {{ t('Ereditato dal livello superiore') }} ({{ resolvedLabel }})
     </div>
     <div v-if="activeBp !== 'desktop' && currentHeight" class="mb-flex mb-items-center mb-gap-2">
-      <span class="mb-text-[10px] mb-text-yellow-400">Override per {{ activeBp }}</span>
-      <button @click="clearBreakpoint" class="mb-text-[10px] mb-text-yellow-500 hover:mb-text-yellow-300">&times; Reset</button>
+      <span class="mb-text-[10px] mb-text-yellow-400">{{ t('Override per') }} {{ activeBp }}</span>
+      <button @click="clearBreakpoint" class="mb-text-[10px] mb-text-yellow-500 hover:mb-text-yellow-300">&times; {{ t('Reset') }}</button>
     </div>
 
     <!-- Preset buttons: viewport -->
@@ -52,37 +52,43 @@
 
     <!-- Custom px -->
     <div>
-      <span class="mb-text-[10px] mb-text-gray-500 mb-block mb-mb-1">Personalizzato</span>
+      <span class="mb-text-[10px] mb-text-gray-500 mb-block mb-mb-1">{{ t('Personalizzato') }}</span>
       <div class="mb-flex mb-items-center mb-gap-2">
         <button
           @click="setHeight({ mode: 'px', value: effectiveHeight.value || 600 })"
           :class="presetClass('px', null)"
         >px</button>
         <template v-if="effectiveHeight.mode === 'px'">
-          <input
-            type="range"
-            :value="effectiveHeight.value"
-            @input="setHeight({ mode: 'px', value: parseInt($event.target.value) })"
-            min="200" max="1200" step="10"
+          <NumberScrubber
+            theme="dark"
             class="mb-flex-1"
-          />
-          <input
-            type="number"
-            :value="effectiveHeight.value"
-            @input="setHeight({ mode: 'px', value: parseInt($event.target.value) || 600 })"
-            min="200" max="1200" step="10"
-            class="mb-w-16 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-1 mb-py-0.5 mb-text-[11px] mb-text-gray-900 mb-text-center"
+            :modelValue="effectiveHeight.value"
+            :min="200"
+            :max="1200"
+            :step="10"
+            :defaultValue="600"
+            emitAs="number"
+            unit="px"
+            :sliderOnFocus="false"
+            ariaLabel="Altezza personalizzata (px)"
+            @update:modelValue="setHeight({ mode: 'px', value: $event || 600 })"
           />
         </template>
         <template v-else-if="effectiveHeight.mode === 'vh'">
-          <input
-            type="range"
-            :value="effectiveHeight.value"
-            @input="setHeight({ mode: 'vh', value: parseInt($event.target.value) })"
-            min="25" max="100" step="5"
+          <NumberScrubber
+            theme="dark"
             class="mb-flex-1"
+            :modelValue="effectiveHeight.value"
+            :min="25"
+            :max="100"
+            :step="5"
+            :defaultValue="100"
+            emitAs="number"
+            unit="vh"
+            :sliderOnFocus="false"
+            ariaLabel="Altezza viewport (vh)"
+            @update:modelValue="setHeight({ mode: 'vh', value: $event })"
           />
-          <span class="mb-text-[11px] mb-text-gray-400">{{ effectiveHeight.value }}vh</span>
         </template>
         <template v-else-if="effectiveHeight.mode === 'ratio'">
           <span class="mb-text-[11px] mb-text-gray-400">{{ effectiveHeight.value }}</span>
@@ -94,7 +100,9 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { t } from '@/i18n';
 import { normalizeHeight } from '@/config/elements/proslider.js';
+import NumberScrubber from '../Builder/fields/NumberScrubber.vue';
 
 const props = defineProps({
   settings: { type: Object, required: true },

@@ -13,6 +13,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
     protected $defaults = [
         'preset' => 'custom',
         'quote'           => 'Un prodotto fantastico!',
+        'logo'            => '',
         'author_name'     => 'Mario Rossi',
         'author_role'     => 'CEO',
         'avatar'          => '',
@@ -147,6 +148,14 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
                 ?>
             }
             <?php if ( $tile_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-test-card{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-test-card:hover{border-radius:<?php echo $tile_radius_hover_css; ?> !important}<?php endif; ?>
+            .<?php echo $uid; ?> .olo-test-logo {
+                height: 40px;
+                width: auto;
+                max-width: 160px;
+                object-fit: contain;
+                display: block;
+                margin-bottom: 16px;
+            }
             .<?php echo $uid; ?> .olo-test-stars {
                 margin-bottom: 12px;
                 display: flex;
@@ -258,7 +267,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
         ?>
         <div class="olo-testimonial <?php echo esc_attr( $uid ); ?> olo-test-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
             <div class="olo-test-ed" style="text-align:center;max-width:840px;margin:0 auto;">
-                <?php if ( $rating > 0 ) : ?><div class="olo-test-ed__stars" style="color:<?php echo esc_attr( $star_color ); ?>;letter-spacing:.2em;font-size:18px;margin-bottom:18px;line-height:1;"><?php echo esc_html( $stars ); ?></div><?php endif; ?>
+                <?php if ( $rating > 0 ) : ?><div class="olo-test-ed__stars" role="img" aria-label="<?php echo esc_attr( sprintf( 'Valutazione: %d su 5', $rating ) ); ?>" style="color:<?php echo esc_attr( $star_color ); ?>;letter-spacing:.2em;font-size:18px;margin-bottom:18px;line-height:1;"><span aria-hidden="true"><?php echo esc_html( $stars ); ?></span></div><?php endif; ?>
                 <q class="olo-test-ed__q" style="display:block;font-family:<?php echo $qfam; ?>;font-size:<?php echo $qsize_css; ?>;line-height:1.28;color:<?php echo esc_attr( $fg ); ?>;quotes:none;margin:0;<?php echo $qupper ? 'text-transform:uppercase;' : ''; ?>"><?php echo $quote; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $quote filtered via wp_kses() above; font-family from resolve_font_family() whitelist (may contain quotes, esc_attr would break the CSS); size from intval()/fixed clamp() ?></q>
                 <?php if ( $name !== '' || $role !== '' ) : ?>
                 <div class="olo-test-ed__by" style="margin-top:22px;font-weight:700;font-size:12px;letter-spacing:.1em;color:<?php echo esc_attr( $authclr ); ?>;<?php echo $upper ? 'text-transform:uppercase;' : ''; ?>"><?php echo $name; ?><?php if ( $name !== '' && $role !== '' ) echo ' · '; ?><?php echo $role; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $name and $role escaped via esc_html( wp_strip_all_tags() ) at assignment above ?></div>
@@ -330,13 +339,13 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
             <?php if ( $show_arrows || $show_dots ) : ?>
             <div class="olo-test-slider-nav">
                 <?php if ( $show_arrows ) : ?>
-                <a href="#" uk-slidenav-previous uk-slider-item="previous"></a>
+                <a href="#" uk-slidenav-previous uk-slider-item="previous" role="button" aria-label="Testimonianza precedente"></a>
                 <?php endif; ?>
                 <?php if ( $show_dots ) : ?>
                 <ul class="uk-dotnav uk-slider-nav"></ul>
                 <?php endif; ?>
                 <?php if ( $show_arrows ) : ?>
-                <a href="#" uk-slidenav-next uk-slider-item="next"></a>
+                <a href="#" uk-slidenav-next uk-slider-item="next" role="button" aria-label="Testimonianza successiva"></a>
                 <?php endif; ?>
             </div>
             <?php endif; ?>
@@ -388,6 +397,10 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
 
     private function render_card_inner( $s, $rating, $star_svg, $quote, $author_name, $author_role, $is_bottom, $position ) {
         ob_start();
+        // Logo cliente opzionale, in alto nella card (no-op se vuoto). Distinto dall'avatar ritratto.
+        if ( ! empty( $s['logo'] ) ) {
+            echo '<img class="olo-test-logo" src="' . esc_url( $s['logo'] ) . '" alt="' . esc_attr( wp_strip_all_tags( $s['author_name'] ?? '' ) ) . '" loading="lazy" />';
+        }
         if ( ! $is_bottom ) : ?>
             <div class="olo-test-layout">
                 <div class="olo-test-author">
@@ -411,7 +424,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
     private function render_quote( $rating, $star_svg, $quote, $s = [] ) {
         $out = '';
         if ( $rating > 0 ) {
-            $out .= '<div class="olo-test-stars">' . str_repeat( $star_svg, $rating ) . '</div>';
+            $out .= '<div class="olo-test-stars" role="img" aria-label="' . esc_attr( sprintf( 'Valutazione: %d su 5', $rating ) ) . '">' . str_repeat( $star_svg, $rating ) . '</div>';
         }
         list( $tq_cls, $tq_data ) = $this->tfx_attrs( $s, 'quote', wp_strip_all_tags( $quote ) );
         $out .= '<blockquote class="' . trim( $tq_cls ) . '"' . $tq_data . '>' . $quote . '</blockquote>';
@@ -424,7 +437,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
             $out .= '<img src="' . esc_url( $s['avatar'] ) . '" alt="' . esc_attr( wp_strip_all_tags( $s['author_name'] ?? '' ) ) . '" loading="lazy" />';
         }
         $out .= '<div>';
-        $out .= '<div class="olo-test-author-name">' . $author_name . '</div>';
+        $out .= '<div class="olo-test-author-name"><cite style="font-style:inherit;">' . $author_name . '</cite></div>';
         if ( ! empty( $author_role ) ) {
             $out .= '<div class="olo-test-author-role">' . $author_role . '</div>';
         }

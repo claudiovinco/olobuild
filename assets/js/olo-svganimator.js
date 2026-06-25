@@ -223,6 +223,18 @@ function initContainer(wrap) {
     setTimeout(function() { animateAll(); }, 50);
   };
 
+  // prefers-reduced-motion: niente animazione di disegno. Mostra l'SVG nel suo stato
+  // finale (interamente disegnato + fill visibile), senza reset iniziale ne' trigger.
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    ordered.forEach(function(item) {
+      var el = item.el;
+      el.style.strokeDashoffset = '0';
+      el.style.opacity = '1';
+      el.style.fillOpacity = '1';
+    });
+    return;
+  }
+
   // Initial reset
   resetAll();
 

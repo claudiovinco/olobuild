@@ -181,12 +181,12 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
         $dl_ta = $s['text_align'] ?? '';
         $dl_ta_css = in_array( $dl_ta, [ 'left', 'center', 'right', 'justify' ], true ) ? 'text-align:' . $dl_ta . ';' : '';
         ?>
-        <div class="olo-desclist <?php echo esc_attr( $uid ); ?><?php echo $show_icon ? ' mdl-has-icon' : ''; ?> olo-dl-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="<?php echo $dl_ta_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed text-align declaration from the in_array() whitelist above ?>">
+        <dl class="olo-desclist <?php echo esc_attr( $uid ); ?><?php echo $show_icon ? ' mdl-has-icon' : ''; ?> olo-dl-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="<?php echo $dl_ta_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed text-align declaration from the in_array() whitelist above ?>">
             <?php foreach ( $items as $item ) :
                 $icon = $item['icon'] ?? '';
                 $has_icon = $show_icon && ! empty( $icon );
                 $has_link = ! empty( $item['link'] );
-                $item_tag  = $has_link ? '<a href="' . esc_url( $item['link'] ) . '" class="mdl-item" style="text-decoration:none;color:inherit;display:block;">' : '<div class="mdl-item">';
+                $item_tag  = $has_link ? '<a href="' . esc_url( $item['link'] ) . '" class="mdl-item" role="group" style="text-decoration:none;color:inherit;display:block;">' : '<div class="mdl-item" role="group">';
                 $item_close = $has_link ? '</a>' : '</div>';
             ?>
             <?php
@@ -231,7 +231,7 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
             <?php echo $item_close; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed '</a>'/'</div>' literal from the ternary above ?>
             <?php endforeach; ?>
-        </div>
+        </dl>
         <?php
         // Text effects: CSS scoped + runtime script (una sola volta per request)
         $tfx_css = $this->tfx_css( $s, '.olo-desclist' );

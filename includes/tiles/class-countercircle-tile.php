@@ -83,6 +83,11 @@ class Olo_Countercircle_Tile extends Olo_Tile_Base {
 
         $uid = 'olo-cc-' . wp_rand( 10000, 99999 );
 
+        $percent     = (int) round( $ratio * 100 );
+        $svg_label   = $s['title'] !== ''
+            ? sprintf( '%s: %d%%', $s['title'], $percent )
+            : sprintf( /* translators: %d: completion percentage */ olo_t( 'Avanzamento: %d%%' ), $percent );
+
         ob_start();
         ?>
         <div id="<?php echo esc_attr( $uid ); ?>" class="olo-countercircle olo-cc-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;gap:8px;">
@@ -90,9 +95,10 @@ class Olo_Countercircle_Tile extends Olo_Tile_Base {
             <div style="font-size:<?php echo (int) $title_font_size; ?>px;font-weight:600;color:<?php echo $title_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- color sanitized via safe_color_css() above; $title escaped via esc_html() at assignment ?>;"><?php echo $title; ?></div>
             <?php endif; ?>
 
-            <svg width="<?php echo (int) $size; ?>" height="<?php echo (int) $size; ?>" viewBox="0 0 <?php echo (int) $size; ?> <?php echo (int) $size; ?>">
+            <svg role="img" aria-label="<?php echo esc_attr( $svg_label ); ?>" width="<?php echo (int) $size; ?>" height="<?php echo (int) $size; ?>" viewBox="0 0 <?php echo (int) $size; ?> <?php echo (int) $size; ?>">
                 <!-- Track -->
                 <circle
+                    aria-hidden="true"
                     cx="<?php echo (float) $center; ?>" cy="<?php echo (float) $center; ?>" r="<?php echo (float) $radius; ?>"
                     fill="none"
                     stroke="<?php echo $track_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- color sanitized via safe_color_css() above ?>"
@@ -100,6 +106,7 @@ class Olo_Countercircle_Tile extends Olo_Tile_Base {
                 />
                 <!-- Progress -->
                 <circle
+                    aria-hidden="true"
                     class="olo-cc-progress"
                     cx="<?php echo (float) $center; ?>" cy="<?php echo (float) $center; ?>" r="<?php echo (float) $radius; ?>"
                     fill="none"

@@ -36,6 +36,8 @@ import MediaCtaTile from './MediaCtaTile.vue';
 import ImageHeroTile from './ImageHeroTile.vue';
 import GlowHeroTile from './GlowHeroTile.vue';
 import ProductHeroTile from './ProductHeroTile.vue';
+import NorthVideoHeroTile from './NorthVideoHeroTile.vue';
+import NorthQuoteSliderTile from './NorthQuoteSliderTile.vue';
 import FeaturedStoryTile from './FeaturedStoryTile.vue';
 import GlowGalleryTile from './GlowGalleryTile.vue';
 import ChatHeroTile from './ChatHeroTile.vue';
@@ -328,6 +330,8 @@ const tileComponents = {
   imagehero: ImageHeroTile,
   glowhero: GlowHeroTile,
   producthero: ProductHeroTile,
+  northvideohero: NorthVideoHeroTile,
+  northquoteslider: NorthQuoteSliderTile,
   featuredstory: FeaturedStoryTile,
   glowgallery: GlowGalleryTile,
   chathero: ChatHeroTile,

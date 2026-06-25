@@ -172,16 +172,29 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
                 margin-top: 12px;
             }
             .<?php echo $uid; ?>-dots .olo-car-dot {
+                width: 24px;
+                height: 24px;
+                min-width: 24px;
+                min-height: 24px;
+                border-radius: 50%;
+                border: none;
+                background: transparent;
+                cursor: pointer;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .<?php echo $uid; ?>-dots .olo-car-dot::before {
+                content: "";
+                display: block;
                 width: 10px;
                 height: 10px;
                 border-radius: 50%;
-                border: none;
                 background: <?php echo $dot_inact; ?>;
-                cursor: pointer;
-                padding: 0;
                 transition: background 0.2s;
             }
-            .<?php echo $uid; ?>-dots .olo-car-dot.active {
+            .<?php echo $uid; ?>-dots .olo-car-dot.active::before {
                 background: <?php echo $dot_col; ?>;
             }
             <?php endif; ?>
@@ -238,7 +251,7 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
         <?php if ( $dots && $total > $show ) : ?>
         <div class="<?php echo esc_attr( $uid ); ?>-dots" id="<?php echo esc_attr( $uid ); ?>-dots">
             <?php for ( $d = 0; $d < $dot_count; $d++ ) : ?>
-            <button class="olo-car-dot<?php echo $d === 0 ? ' active' : ''; ?>" data-index="<?php echo (int) $d; ?>" aria-label="<?php echo esc_attr( olo_t( 'Vai a gruppo' ) . ' ' . ( $d + 1 ) ); ?>"></button>
+            <button class="olo-car-dot<?php echo $d === 0 ? ' active' : ''; ?>" data-index="<?php echo (int) $d; ?>"<?php echo $d === 0 ? ' aria-current="true"' : ''; ?> aria-label="<?php echo esc_attr( olo_t( 'Vai a gruppo' ) . ' ' . ( $d + 1 ) ); ?>"></button>
             <?php endfor; ?>
         </div>
         <?php endif; ?>
@@ -290,8 +303,10 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
                 for(var i = 0; i < dots.length; i++){
                     if(i === dotIdx){
                         dots[i].classList.add('active');
+                        dots[i].setAttribute('aria-current', 'true');
                     } else {
                         dots[i].classList.remove('active');
+                        dots[i].removeAttribute('aria-current');
                     }
                 }
             }
@@ -335,6 +350,14 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
             if(pauseOnHover){
                 root.addEventListener('mouseenter', function(){ stopAuto(); });
                 root.addEventListener('mouseleave', function(){ startAuto(); });
+            }
+
+            /* Pause autoplay while any control inside the carousel has keyboard focus (a11y) */
+            if(autoplay){
+                root.addEventListener('focusin', function(){ stopAuto(); });
+                root.addEventListener('focusout', function(e){
+                    if(!root.contains(e.relatedTarget)){ startAuto(); }
+                });
             }
 
             /* Touch / swipe support */

@@ -18,13 +18,13 @@
             <svg v-if="idx === 1 && s.v_expand_subs" class="olo-navmenu-vert-chev" width="10" height="10" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
           </div>
         </div>
-        <div class="olo-navmenu-label">{{ selectedMenu.name }} — verticale</div>
+        <div class="olo-navmenu-label">{{ selectedMenu.name }} — {{ t('verticale') }}</div>
       </template>
 
       <!-- Horizontal mode -->
       <template v-else>
         <div class="olo-navmenu-bar" :class="alignmentClass" :style="barStyle">
-          <span v-if="hasSearch && s.search_position === 'before'" class="olo-navmenu-item olo-navmenu-item--search" :style="{ color: s.text_color || 'var(--olo-color-text-soft, #6b7280)' }" title="Ricerca">
+          <span v-if="hasSearch && s.search_position === 'before'" class="olo-navmenu-item olo-navmenu-item--search" :style="{ color: s.text_color || 'var(--olo-color-text-soft, #6b7280)' }" :title="t('Ricerca')">
             <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="17" y2="17"/></svg>
           </span>
           <template v-for="(item, idx) in previewItems" :key="idx">
@@ -40,7 +40,7 @@
               <span v-if="item.isMega" class="olo-navmenu-mega-arrow">&#9660;</span>
             </span>
           </template>
-          <span v-if="hasSearch && s.search_position !== 'before'" class="olo-navmenu-item olo-navmenu-item--search" :style="{ color: s.text_color || 'var(--olo-color-text-soft, #6b7280)' }" title="Ricerca">
+          <span v-if="hasSearch && s.search_position !== 'before'" class="olo-navmenu-item olo-navmenu-item--search" :style="{ color: s.text_color || 'var(--olo-color-text-soft, #6b7280)' }" :title="t('Ricerca')">
             <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="17" y2="17"/></svg>
           </span>
         </div>
@@ -49,9 +49,9 @@
     </template>
     <div v-else>
       <div class="olo-navmenu-bar" :class="alignmentClass" :style="barStyle">
-        <span v-for="label in ['Home', 'Chi siamo', 'Servizi', 'Contatti']" :key="label" class="olo-navmenu-item" :style="itemStyle">{{ label }}</span>
+        <span v-for="label in [t('Home'), t('Chi siamo'), t('Servizi'), t('Contatti')]" :key="label" class="olo-navmenu-item" :style="itemStyle">{{ label }}</span>
       </div>
-      <div class="olo-navmenu-empty">Seleziona un menu nell'Inspector</div>
+      <div class="olo-navmenu-empty">{{ t("Seleziona un menu nell'Inspector") }}</div>
     </div>
   </div>
 </template>

@@ -526,13 +526,14 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
                             <?php if ( $is_button ) : ?>
                                 <?php $this->render_button_link( $item, $s ); ?>
                             <?php else : ?>
-                                <a href="<?php echo esc_url( $item->url ); ?>"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?>>
+                                <?php $has_dropdown = ! empty( $subs ); $drop_id = $nav_id . '-drop-' . $idx; ?>
+                                <a href="<?php echo esc_url( $item->url ); ?>"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?><?php echo $is_current ? ' aria-current="page"' : ''; ?><?php echo $has_dropdown ? ' aria-haspopup="true" aria-expanded="false" aria-controls="' . esc_attr( $drop_id ) . '"' : ''; ?>>
                                     <?php echo esc_html( $item->title ); ?>
                                 </a>
                                 <?php if ( $is_mega && ! empty( $subs ) ) : ?>
-                                    <?php $this->render_mega_dropdown( $subs, $grandchildren, $s ); ?>
+                                    <?php $this->render_mega_dropdown( $subs, $grandchildren, $s, $drop_id ); ?>
                                 <?php elseif ( ! empty( $subs ) ) : ?>
-                                    <div uk-drop="mode: hover; delay-show: 0; delay-hide: 200; pos: bottom-left; offset: 0; animation: uk-animation-slide-top-small; duration: 150">
+                                    <div id="<?php echo esc_attr( $drop_id ); ?>" uk-drop="mode: hover; delay-show: 0; delay-hide: 200; pos: bottom-left; offset: 0; animation: uk-animation-slide-top-small; duration: 150">
                                         <div class="uk-card uk-card-body uk-card-default uk-card-small olo-nav-dropdown">
                                             <ul class="uk-nav uk-nav-default">
                                                 <?php foreach ( $subs as $sub ) : ?>
@@ -607,6 +608,18 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
             <?php endif; ?>
         </div>
+        <script>
+        (function(){
+            var nav = document.querySelector('.olo-navmenu--<?php echo esc_js( $nav_id ); ?>');
+            if (!nav || !window.UIkit) return;
+            nav.querySelectorAll('[aria-haspopup="true"][aria-controls]').forEach(function(trigger){
+                var drop = document.getElementById(trigger.getAttribute('aria-controls'));
+                if (!drop) return;
+                UIkit.util.on(drop, 'show', function(){ trigger.setAttribute('aria-expanded', 'true'); });
+                UIkit.util.on(drop, 'hide', function(){ trigger.setAttribute('aria-expanded', 'false'); });
+            });
+        })();
+        </script>
         <?php
     }
 
@@ -671,7 +684,7 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
     /**
      * Render mega menu dropdown with multi-column layout.
      */
-    private function render_mega_dropdown( $subs, $grandchildren, $s ) {
+    private function render_mega_dropdown( $subs, $grandchildren, $s, $drop_id = '' ) {
         $columns = absint( $s['mega_columns'] ?? 3 );
         if ( $columns < 2 ) $columns = 2;
         if ( $columns > 4 ) $columns = 4;
@@ -685,7 +698,7 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
             }
         }
         ?>
-        <div class="olo-mega-drop" uk-drop="mode: hover; delay-show: 0; delay-hide: 200; pos: bottom-left; offset: 0; animation: uk-animation-slide-top-small; duration: 150">
+        <div class="olo-mega-drop"<?php echo $drop_id ? ' id="' . esc_attr( $drop_id ) . '"' : ''; ?> uk-drop="mode: hover; delay-show: 0; delay-hide: 200; pos: bottom-left; offset: 0; animation: uk-animation-slide-top-small; duration: 150">
             <div class="uk-card uk-card-body uk-card-default olo-mega-panel">
                 <?php if ( $has_grandchildren ) : ?>
                     <?php // Subs become column headers, grandchildren become items ?>
@@ -984,13 +997,17 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
                     if ( ! empty( $subs ) ) $li_cls .= ' olo-vnav-item--parent';
                 ?>
                     <li class="<?php echo esc_attr( $li_cls ); ?>">
-                        <a href="<?php echo esc_url( $item->url ); ?>" class="olo-vnav-link"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?>>
+                        <a href="<?php echo esc_url( $item->url ); ?>" class="olo-vnav-link"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?><?php echo $is_current ? ' aria-current="page"' : ''; ?>>
                             <?php if ( $show_icons ) : ?>
                                 <span class="olo-vnav-icon"><?php echo $this->get_vnav_icon( $icon_style, $icon_size ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup generated by get_vnav_icon() with an intval()'d size ?></span>
                             <?php endif; ?>
                             <span class="olo-vnav-label"><?php echo esc_html( $item->title ); ?></span>
                             <?php if ( ! empty( $subs ) ) : ?>
-                                <svg class="olo-vnav-chev" width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
+                                <?php if ( $expand_subs ) : ?>
+                                <button type="button" class="olo-vnav-chev" aria-expanded="false" aria-label="<?php echo esc_attr__( 'Toggle submenu', 'olobuild' ); ?>"><svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg></button>
+                                <?php else : ?>
+                                <svg class="olo-vnav-chev" width="12" height="12" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
+                                <?php endif; ?>
                             <?php endif; ?>
                         </a>
                         <?php if ( ! empty( $subs ) ) : ?>
@@ -1002,7 +1019,7 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
                                     if ( $sub_current ) $sub_cls .= ' olo-vnav-item--active';
                                 ?>
                                     <li class="<?php echo esc_attr( $sub_cls ); ?>">
-                                        <a href="<?php echo esc_url( $sub->url ); ?>" class="olo-vnav-link"<?php echo $sub->target ? ' target="' . esc_attr( $sub->target ) . '"' : ''; ?>>
+                                        <a href="<?php echo esc_url( $sub->url ); ?>" class="olo-vnav-link"<?php echo $sub->target ? ' target="' . esc_attr( $sub->target ) . '"' : ''; ?><?php echo $sub_current ? ' aria-current="page"' : ''; ?>>
                                             <?php if ( $show_icons ) : ?>
                                                 <span class="olo-vnav-icon"><?php echo $this->get_vnav_icon( $icon_style, max( 12, $icon_size - 4 ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup generated by get_vnav_icon() with an intval()'d size ?></span>
                                             <?php endif; ?>
@@ -1044,6 +1061,9 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
                         var open = sub.style.display !== 'none';
                         sub.style.display = open ? 'none' : '';
                         chev.style.transform = open ? 'rotate(-90deg)' : '';
+                        if (chev.hasAttribute('aria-expanded')) {
+                            chev.setAttribute('aria-expanded', open ? 'false' : 'true');
+                        }
                     }
                 });
             });
@@ -1075,12 +1095,15 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
         $align_class = '';
         if ( $alignment === 'center' ) $align_class = ' uk-flex-center';
         if ( $alignment === 'right' )  $align_class = ' uk-flex-right';
+        $current_url = trailingslashit( home_url( add_query_arg( [], false ) ) );
         ?>
         <nav class="olo-navmenu olo-navmenu--<?php echo esc_attr( $nav_id ); ?>" role="navigation" aria-label="<?php echo esc_attr__( 'Sub navigation', 'olobuild' ); ?>">
             <ul class="uk-subnav<?php echo esc_attr( $align_class ); ?>">
-                <?php foreach ( $tree as $item ) : ?>
-                    <li>
-                        <a href="<?php echo esc_url( $item->url ); ?>"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?>>
+                <?php foreach ( $tree as $item ) :
+                    $is_current = trailingslashit( $item->url ) === $current_url;
+                ?>
+                    <li<?php echo $is_current ? ' class="uk-active"' : ''; ?>>
+                        <a href="<?php echo esc_url( $item->url ); ?>"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?><?php echo $is_current ? ' aria-current="page"' : ''; ?>>
                             <?php echo esc_html( $item->title ); ?>
                         </a>
                     </li>

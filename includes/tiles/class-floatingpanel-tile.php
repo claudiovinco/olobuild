@@ -189,6 +189,9 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
             <button class="<?php echo esc_attr( $uid ); ?>-trigger <?php echo esc_attr( trim( $resp_class ) ); ?>"
                     style="<?php echo $t_pos_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attribute assembled above from whitelisted position/placement literals, intval()'d offsets and safe_color_css() colours; sizes are int-cast, $t_shadow is a fixed literal ?>width:<?php echo (int) $t_size; ?>px;height:<?php echo (int) $t_size; ?>px;background:<?php echo $t_bg; ?>;color:<?php echo $t_color; ?>;border:none;border-radius:<?php echo (int) $t_radius; ?>%;cursor:pointer;display:flex;align-items:center;justify-content:center;<?php echo $t_shadow; ?>"
                     data-olo-fp-trigger="<?php echo esc_attr( $uid ); ?>"
+                    aria-haspopup="dialog"
+                    aria-controls="<?php echo esc_attr( $uid ); ?>-panel"
+                    aria-expanded="false"
                     aria-label="<?php echo esc_attr( olo_t( 'Apri pannello' ) ); ?>">
                 <?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed SVG markup from the hardcoded icon map in get_trigger_icon() ?>
             </button>
@@ -229,6 +232,11 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php echo $trigger_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- trigger button markup assembled above from esc_attr()'d/int-cast/safe_color_css() values and the fixed internal icon map ?>
         <div class="olo-floatingpanel <?php echo esc_attr( $uid ); ?>-panel <?php echo esc_attr( trim( $resp_class ) ); ?><?php if ( $is_trigger ) echo ' olo-fp-hidden'; ?>"
+             id="<?php echo esc_attr( $uid ); ?>-panel"
+             role="dialog"
+             aria-modal="<?php echo $is_trigger ? 'true' : 'false'; ?>"
+             aria-label="<?php echo esc_attr( olo_t( 'Pannello flottante' ) ); ?>"
+             tabindex="-1"
              style="<?php echo $pos_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attribute assembled above from whitelisted position/placement/flex literals, intval()'d numbers, esc_attr()'d custom offsets, radius_int()/spacing_css() helpers and safe_color_css() colours ?>"
              data-olo-fp-id="<?php echo esc_attr( $uid ); ?>">
 
@@ -291,12 +299,34 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
 
             function showPanel() {
                 panel.classList.remove("olo-fp-hidden");
-                if (trigger) trigger.style.display = "none";
+                if (trigger) {
+                    trigger.style.display = "none";
+                    trigger.setAttribute("aria-expanded", "true");
+                }
+                /* Move focus into the dialog for keyboard/AT users */
+                var focusTarget = panel.querySelector('[data-olo-fp-close], a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])') || panel;
+                if (focusTarget && typeof focusTarget.focus === "function") {
+                    try { focusTarget.focus(); } catch (e) {}
+                }
             }
             function hidePanel() {
                 panel.classList.add("olo-fp-hidden");
-                if (trigger) trigger.style.display = "flex";
+                if (trigger) {
+                    trigger.style.display = "flex";
+                    trigger.setAttribute("aria-expanded", "false");
+                    /* Return focus to the trigger that opened the panel */
+                    if (typeof trigger.focus === "function") {
+                        try { trigger.focus(); } catch (e) {}
+                    }
+                }
             }
+
+            /* Close on Escape key */
+            document.addEventListener("keydown", function(e) {
+                if (e.key !== "Escape" && e.keyCode !== 27) return;
+                if (panel.classList.contains("olo-fp-hidden")) return;
+                hidePanel();
+            });
 
             <?php if ( $is_trigger ) : ?>
             if (trigger) {

@@ -185,14 +185,14 @@
         <div v-if="activeTab === 'Contenuto'" class="mb-space-y-3" role="tabpanel" id="inspector-panel-Contenuto" :aria-labelledby="'inspector-tab-Contenuto'">
           <!-- Custom editor: ProSlider -->
           <div v-if="elementDef?.customEditor === 'proslider'" class="mb-space-y-3">
-            <p class="mb-text-xs mb-text-gray-400">Configura slide, livelli e animazioni nell'editor visuale.</p>
+            <p class="mb-text-xs mb-text-gray-400">{{ t("Configura slide, livelli e animazioni nell'editor visuale.") }}</p>
             <button
               @click="showProSliderEditor = true"
               class="mb-w-full mb-py-2.5 mb-bg-primary-600 mb-text-white mb-text-sm mb-font-semibold mb-rounded-lg hover:mb-bg-primary-500 mb-transition-colors"
             >
-              Apri editor slider
+              {{ t('Apri editor slider') }}
             </button>
-            <p class="mb-text-[10px] mb-text-gray-400">{{ (selectedTile.settings?.slides || []).length }} slide configurate</p>
+            <p class="mb-text-[10px] mb-text-gray-400">{{ (selectedTile.settings?.slides || []).length }} {{ t('slide configurate') }}</p>
 
             <!-- Height mode selector -->
             <HeightModeSelector
@@ -341,7 +341,7 @@
         <!-- ============ Advanced tab ============ -->
         <div v-else class="mb-space-y-4" role="tabpanel" id="inspector-panel-Avanzate" :aria-labelledby="'inspector-tab-Avanzate'">
           <!-- ===== MACRO: Identificatori ===== -->
-          <CollapseSection id="v2i-sec-adv-id" title="Identificatori" :defaultOpen="true" :macro="true">
+          <CollapseSection id="v2i-sec-adv-id" :title="t('Identificatori')" :defaultOpen="true" :macro="true">
             <div class="mb-space-y-3">
           <!-- HTML ID -->
           <div>
@@ -357,7 +357,7 @@
 
           <!-- CSS Classes -->
           <div>
-            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-1">Classi CSS</label>
+            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-1">{{ t('Classi CSS') }}</label>
             <input
               type="text"
               :value="tileAdvanced.css_classes || ''"
@@ -369,7 +369,7 @@
 
           <!-- Custom CSS -->
           <div>
-            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-1">CSS personalizzato</label>
+            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-1">{{ t('CSS personalizzato') }}</label>
             <textarea
               :value="tileAdvanced.custom_css || ''"
               @input="updateAdvanced('custom_css', $event.target.value)"
@@ -377,19 +377,19 @@
               placeholder="color: red;&#10;transform: rotate(2deg);"
               class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-900 mb-font-mono mb-resize-y"
             />
-            <p class="mb-text-[10px] mb-text-gray-400 mb-mt-1">Proprietà CSS applicate direttamente al wrapper della tile</p>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-mt-1">{{ t('Proprietà CSS applicate direttamente al wrapper della tile') }}</p>
           </div>
             </div>
           </CollapseSection>
 
           <!-- ===== MACRO: Visibilità & Condizioni ===== -->
-          <CollapseSection id="v2i-sec-adv-visibility" title="Visibilità & Condizioni" :macro="true">
+          <CollapseSection id="v2i-sec-adv-visibility" :title="t('Visibilità & Condizioni')" :macro="true">
             <div class="mb-space-y-3">
           <!-- Visibility -->
           <div>
-            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Visibilità</label>
+            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">{{ t('Visibilità') }}</label>
             <div class="mb-flex mb-items-center mb-gap-2">
-            <label v-for="vp in viewports" :key="vp.key" class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer" :title="(tileAdvanced['visible_' + vp.key] !== false ? 'Visibile su ' : 'Nascosto su ') + vp.label">
+            <label v-for="vp in viewports" :key="vp.key" class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer" :title="(tileAdvanced['visible_' + vp.key] !== false ? t('Visibile su ') : t('Nascosto su ')) + vp.label">
               <input
                 type="checkbox"
                 :checked="tileAdvanced['visible_' + vp.key] !== false"
@@ -410,10 +410,10 @@
           </div>
 
           <!-- Conditional Visibility -->
-          <CollapseSection title="Visibilità condizionale">
+          <CollapseSection :title="t('Visibilità condizionale')">
             <div class="mb-space-y-3">
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Mostra solo a</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Mostra solo a') }}</label>
                 <FieldSelect
                   ui="dropdown"
                   :model-value="tileAdvanced.cond_user_role || ''"
@@ -422,7 +422,7 @@
                 />
               </div>
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Mostra da data</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Mostra da data') }}</label>
                 <input
                   type="datetime-local"
                   :value="tileAdvanced.cond_show_from || ''"
@@ -431,7 +431,7 @@
                 />
               </div>
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Nascondi dopo data</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Nascondi dopo data') }}</label>
                 <input
                   type="datetime-local"
                   :value="tileAdvanced.cond_show_until || ''"
@@ -440,7 +440,7 @@
                 />
               </div>
               <div v-if="singlePostItems.length > 0">
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Mostra solo su queste strutture</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Mostra solo su queste strutture') }}</label>
                 <div class="mb-max-h-40 mb-overflow-y-auto mb-border mb-border-gray-300 mb-rounded-md mb-bg-white mb-p-1.5 mb-space-y-0.5">
                   <label
                     v-for="item in singlePostItems"
@@ -460,9 +460,9 @@
                   v-if="(tileAdvanced.cond_post_ids || []).length > 0"
                   @click="updateAdvanced('cond_post_ids', [])"
                   class="mb-mt-1 mb-text-[10px] mb-text-red-400 hover:mb-text-red-300 mb-cursor-pointer"
-                >Rimuovi filtro strutture</button>
+                >{{ t('Rimuovi filtro strutture') }}</button>
               </div>
-              <p class="mb-text-[10px] mb-text-gray-500">Condizioni verificate server-side al momento del rendering.</p>
+              <p class="mb-text-[10px] mb-text-gray-500">{{ t('Condizioni verificate server-side al momento del rendering.') }}</p>
             </div>
           </CollapseSection>
 
@@ -470,22 +470,22 @@
           <CollapseSection title="A/B Testing">
             <div class="mb-space-y-3">
               <!-- Loading -->
-              <div v-if="abLoading" class="mb-text-xs mb-text-gray-400 mb-text-center mb-py-2">Caricamento...</div>
+              <div v-if="abLoading" class="mb-text-xs mb-text-gray-400 mb-text-center mb-py-2">{{ t('Caricamento...') }}</div>
 
               <!-- No test: create button -->
               <template v-else-if="!abTest">
                 <button
                   @click="createAbTest"
                   class="mb-w-full mb-bg-primary-600 mb-text-white mb-text-xs mb-font-medium mb-py-2 mb-px-3 mb-rounded-md hover:mb-bg-primary-700 mb-transition-colors"
-                >Crea test A/B</button>
-                <p class="mb-text-[10px] mb-text-gray-500">Confronta due varianti di questa tile per scoprire quale converte meglio.</p>
+                >{{ t('Crea test A/B') }}</button>
+                <p class="mb-text-[10px] mb-text-gray-500">{{ t('Confronta due varianti di questa tile per scoprire quale converte meglio.') }}</p>
               </template>
 
               <!-- Test exists -->
               <template v-else>
                 <!-- Name -->
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Nome test</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Nome test') }}</label>
                   <input
                     type="text"
                     :value="abTest.name"
@@ -504,13 +504,13 @@
                       abTest.status === 'stopped' ? 'mb-bg-red-100 mb-text-red-700' :
                       'mb-bg-gray-100 mb-text-gray-600'
                     ]"
-                  >{{ abTest.status === 'running' ? 'Attivo' : abTest.status === 'stopped' ? 'Fermato' : 'Bozza' }}</span>
+                  >{{ abTest.status === 'running' ? t('Attivo') : abTest.status === 'stopped' ? t('Fermato') : t('Bozza') }}</span>
                 </div>
 
                 <!-- Variant B overrides (only in draft) -->
                 <template v-if="abTest.status === 'draft'">
                   <div>
-                    <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Variante B — proprietà da modificare</label>
+                    <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Variante B — proprietà da modificare') }}</label>
                     <div v-for="(val, key) in abVariantB" :key="key" class="mb-flex mb-items-center mb-gap-1 mb-mb-2">
                       <span class="mb-text-[10px] mb-text-gray-300 mb-w-20 mb-truncate" :title="key">{{ abFieldLabel(key) }}</span>
                       <input
@@ -531,7 +531,7 @@
 
                   <!-- Goal type -->
                   <div>
-                    <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Obiettivo conversione</label>
+                    <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Obiettivo conversione') }}</label>
                     <FieldSelect
                       ui="dropdown"
                       :model-value="abTest.goal_type || 'click'"
@@ -542,7 +542,7 @@
 
                   <!-- Goal selector (optional) -->
                   <div>
-                    <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Selettore CSS obiettivo (opzionale)</label>
+                    <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Selettore CSS obiettivo (opzionale)') }}</label>
                     <input
                       type="text"
                       :value="abTest.goal_selector || ''"
@@ -558,21 +558,21 @@
                   <div v-if="abStats" class="mb-space-y-2">
                     <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                       <div class="mb-bg-gray-50 mb-rounded-lg mb-p-2 mb-text-center">
-                        <div class="mb-text-[10px] mb-text-gray-500 mb-uppercase mb-font-bold">Variante A</div>
+                        <div class="mb-text-[10px] mb-text-gray-500 mb-uppercase mb-font-bold">{{ t('Variante A') }}</div>
                         <div class="mb-text-lg mb-font-bold mb-text-gray-800">{{ abStats.variant_a?.conversion_rate || 0 }}%</div>
-                        <div class="mb-text-[10px] mb-text-gray-400">{{ abStats.variant_a?.views || 0 }} visite · {{ abStats.variant_a?.conversions || 0 }} conv.</div>
+                        <div class="mb-text-[10px] mb-text-gray-400">{{ abStats.variant_a?.views || 0 }} {{ t('visite') }} · {{ abStats.variant_a?.conversions || 0 }} {{ t('conv.') }}</div>
                       </div>
                       <div class="mb-bg-gray-50 mb-rounded-lg mb-p-2 mb-text-center">
-                        <div class="mb-text-[10px] mb-text-gray-500 mb-uppercase mb-font-bold">Variante B</div>
+                        <div class="mb-text-[10px] mb-text-gray-500 mb-uppercase mb-font-bold">{{ t('Variante B') }}</div>
                         <div class="mb-text-lg mb-font-bold mb-text-gray-800">{{ abStats.variant_b?.conversion_rate || 0 }}%</div>
-                        <div class="mb-text-[10px] mb-text-gray-400">{{ abStats.variant_b?.views || 0 }} visite · {{ abStats.variant_b?.conversions || 0 }} conv.</div>
+                        <div class="mb-text-[10px] mb-text-gray-400">{{ abStats.variant_b?.views || 0 }} {{ t('visite') }} · {{ abStats.variant_b?.conversions || 0 }} {{ t('conv.') }}</div>
                       </div>
                     </div>
                     <div v-if="abStats.significant" class="mb-text-[10px] mb-font-bold mb-text-center mb-py-1 mb-rounded mb-bg-green-50 mb-text-green-700">
-                      Significativo (p={{ abStats.p_value }}) — Vincitore: {{ abStats.winner === 'a' ? 'A (originale)' : 'B (variante)' }}
+                      {{ t('Significativo') }} (p={{ abStats.p_value }}) — {{ t('Vincitore:') }} {{ abStats.winner === 'a' ? t('A (originale)') : t('B (variante)') }}
                     </div>
                     <div v-else class="mb-text-[10px] mb-text-center mb-text-gray-400">
-                      Non ancora significativo{{ abStats.p_value ? ' (p=' + abStats.p_value + ')' : '' }} — servono più dati
+                      {{ t('Non ancora significativo') }}{{ abStats.p_value ? ' (p=' + abStats.p_value + ')' : '' }} — {{ t('servono più dati') }}
                     </div>
                   </div>
                 </template>
@@ -584,16 +584,16 @@
                     @click="startAbTest"
                     :disabled="Object.keys(abVariantB).length === 0"
                     class="mb-flex-1 mb-bg-green-600 mb-text-white mb-text-xs mb-font-medium mb-py-1.5 mb-px-2 mb-rounded-md hover:mb-bg-green-700 disabled:mb-opacity-40 mb-transition-colors"
-                  >Avvia test</button>
+                  >{{ t('Avvia test') }}</button>
                   <button
                     v-if="abTest.status === 'running'"
                     @click="stopAbTest"
                     class="mb-flex-1 mb-bg-yellow-600 mb-text-white mb-text-xs mb-font-medium mb-py-1.5 mb-px-2 mb-rounded-md hover:mb-bg-yellow-700 mb-transition-colors"
-                  >Ferma test</button>
+                  >{{ t('Ferma test') }}</button>
                   <button
                     @click="deleteAbTest"
                     class="mb-bg-red-600 mb-text-white mb-text-xs mb-font-medium mb-py-1.5 mb-px-2 mb-rounded-md hover:mb-bg-red-700 mb-transition-colors"
-                  >Elimina</button>
+                  >{{ t('Elimina') }}</button>
                 </div>
               </template>
             </div>
@@ -602,7 +602,7 @@
             </div>
           </CollapseSection>
 
-          <CollapseSection id="v2i-sec-adv-seo" title="SEO & Accessibilità" :macro="true">
+          <CollapseSection id="v2i-sec-adv-seo" :title="t('SEO & Accessibilità')" :macro="true">
             <div class="mb-space-y-3">
               <!-- ARIA Label -->
               <div>
@@ -653,7 +653,7 @@
               </div>
               <!-- Image Loading Strategy -->
               <div v-if="tileHasImage">
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Caricamento immagine</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Caricamento immagine') }}</label>
                 <FieldSelect
                   ui="dropdown"
                   :model-value="tileAdvanced.img_loading || 'lazy'"
@@ -691,19 +691,19 @@
                   placeholder="key=value, key2=value2"
                   class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
                 />
-                <p class="mb-text-[10px] mb-text-gray-500 mb-mt-1">Aggiunge data-key="value" al wrapper</p>
+                <p class="mb-text-[10px] mb-text-gray-500 mb-mt-1">{{ t('Aggiunge data-key="value" al wrapper') }}</p>
               </div>
             </div>
           </CollapseSection>
 
           <!-- ===== MACRO: Effetti & Animazioni ===== -->
-          <CollapseSection id="v2i-sec-adv-effects" title="Effetti & Animazioni" :macro="true">
+          <CollapseSection id="v2i-sec-adv-effects" :title="t('Effetti & Animazioni')" :macro="true">
             <div class="mb-space-y-3">
           <!-- Entrance Animation (olo-entrance-*) -->
-          <CollapseSection title="Animazione di ingresso">
+          <CollapseSection :title="t('Animazione di ingresso')">
             <div class="mb-space-y-3">
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Animazione</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Animazione') }}</label>
                 <FieldSelect
                   ui="dropdown"
                   :model-value="selectedTile?.settings?.entrance_animation || 'none'"
@@ -728,12 +728,12 @@
                         ]"
                       ></span>
                     </button>
-                    <span class="mb-text-xs mb-text-gray-300">Stagger figli</span>
+                    <span class="mb-text-xs mb-text-gray-300">{{ t('Stagger figli') }}</span>
                   </label>
-                  <p class="mb-text-[10px] mb-text-gray-500 mb-mt-0.5">Anima i figli uno dopo l'altro con ritardo incrementale</p>
+                  <p class="mb-text-[10px] mb-text-gray-500 mb-mt-0.5">{{ t("Anima i figli uno dopo l'altro con ritardo incrementale") }}</p>
                 </div>
                 <div v-if="selectedTile?.settings?.entrance_stagger">
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Ritardo stagger (ms)</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Ritardo stagger (ms)') }}</label>
                   <div class="mb-flex mb-items-center mb-gap-2">
                     <input
                       type="range"
@@ -747,7 +747,7 @@
                 </div>
                 <!-- Durata animazione -->
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Durata (ms)</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Durata (ms)') }}</label>
                   <div class="mb-flex mb-items-center mb-gap-2">
                     <input
                       type="range"
@@ -761,7 +761,7 @@
                 </div>
                 <!-- Ritardo iniziale -->
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Ritardo iniziale (ms)</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Ritardo iniziale (ms)') }}</label>
                   <div class="mb-flex mb-items-center mb-gap-2">
                     <input
                       type="range"
@@ -775,7 +775,7 @@
                 </div>
                 <!-- Intensità (moltiplicatore distanza/scala) -->
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Intensità (×)</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Intensità (×)') }}</label>
                   <div class="mb-flex mb-items-center mb-gap-2">
                     <input
                       type="range"
@@ -786,11 +786,11 @@
                     />
                     <span class="mb-text-xs mb-text-gray-400 mb-w-12 mb-text-right">{{ Number(selectedTile?.settings?.entrance_intensity || 1).toFixed(1) }}×</span>
                   </div>
-                  <p class="mb-text-[10px] mb-text-gray-500 mb-mt-0.5">Scala distanze e dimensioni dell'animazione (1× = default)</p>
+                  <p class="mb-text-[10px] mb-text-gray-500 mb-mt-0.5">{{ t("Scala distanze e dimensioni dell'animazione (1× = default)") }}</p>
                 </div>
                 <!-- Easing -->
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Curva di animazione</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Curva di animazione') }}</label>
                   <FieldSelect
                     ui="dropdown"
                     :model-value="selectedTile?.settings?.entrance_easing || 'auto'"
@@ -803,10 +803,10 @@
           </CollapseSection>
 
           <!-- Scrollspy -->
-          <CollapseSection title="Animazione allo scroll">
+          <CollapseSection :title="t('Animazione allo scroll')">
             <div class="mb-space-y-3">
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Animazione</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Animazione') }}</label>
                 <FieldSelect
                   ui="dropdown"
                   :model-value="tileAdvanced.scrollspy_animation || ''"
@@ -816,7 +816,7 @@
               </div>
               <template v-if="tileAdvanced.scrollspy_animation">
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Ritardo (ms)</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Ritardo (ms)') }}</label>
                   <div class="mb-flex mb-items-center mb-gap-2">
                     <input
                       type="range"
@@ -844,11 +844,11 @@
                         ]"
                       ></span>
                     </button>
-                    <span class="mb-text-xs mb-text-gray-300">Ripeti ad ogni scroll</span>
+                    <span class="mb-text-xs mb-text-gray-300">{{ t('Ripeti ad ogni scroll') }}</span>
                   </label>
                 </div>
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Stagger figli (ms)</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Stagger figli (ms)') }}</label>
                   <div class="mb-flex mb-items-center mb-gap-2">
                     <input
                       type="range"
@@ -859,16 +859,16 @@
                     />
                     <span class="mb-text-xs mb-text-gray-400 mb-w-14 mb-text-right">{{ tileAdvanced.scrollspy_stagger || 0 }}ms</span>
                   </div>
-                  <p class="mb-text-[10px] mb-text-gray-500 mb-mt-0.5">Anima i figli diretti in sequenza</p>
+                  <p class="mb-text-[10px] mb-text-gray-500 mb-mt-0.5">{{ t('Anima i figli diretti in sequenza') }}</p>
                 </div>
               </template>
             </div>
           </CollapseSection>
 
           <!-- Element Parallax -->
-          <CollapseSection title="Parallax allo scroll">
+          <CollapseSection :title="t('Parallax allo scroll')">
             <template #header-right>
-              <span class="mb-text-[10px] mb-mr-2" :class="hasElementParallax ? 'mb-text-primary-400' : 'mb-text-gray-500'">{{ hasElementParallax ? 'ATTIVO' : 'OFF' }}</span>
+              <span class="mb-text-[10px] mb-mr-2" :class="hasElementParallax ? 'mb-text-primary-400' : 'mb-text-gray-500'">{{ hasElementParallax ? t('ATTIVO') : 'OFF' }}</span>
               <button
                 @click.stop="toggleParallax"
                 :class="['mb-relative mb-w-10 mb-h-5 mb-rounded-full mb-transition-colors mb-shrink-0', hasElementParallax ? 'mb-bg-primary-600' : 'mb-bg-gray-600']"
@@ -883,9 +883,9 @@
           </CollapseSection>
 
           <!-- Bezier Path -->
-          <CollapseSection title="Percorso Bezier allo scroll" :headerRight="true">
+          <CollapseSection :title="t('Percorso Bezier allo scroll')" :headerRight="true">
             <template #header-right>
-              <span class="mb-text-[10px] mb-mr-2" :class="tileAdvanced.bezier_path ? 'mb-text-primary-400' : 'mb-text-gray-500'">{{ tileAdvanced.bezier_path ? 'ATTIVO' : 'OFF' }}</span>
+              <span class="mb-text-[10px] mb-mr-2" :class="tileAdvanced.bezier_path ? 'mb-text-primary-400' : 'mb-text-gray-500'">{{ tileAdvanced.bezier_path ? t('ATTIVO') : 'OFF' }}</span>
               <button
                 @click.stop="toggleBezier"
                 :class="['mb-relative mb-w-10 mb-h-5 mb-rounded-full mb-transition-colors mb-shrink-0', tileAdvanced.bezier_path ? 'mb-bg-primary-600' : 'mb-bg-gray-600']"
@@ -900,17 +900,15 @@
           </CollapseSection>
 
           <!-- Sticky — scroll fisso (uk-sticky JS) -->
-          <CollapseSection title="Scroll fisso (sticky)">
+          <CollapseSection :title="t('Scroll fisso (sticky)')">
             <div class="mb-space-y-3">
               <p class="mb-text-[11px] mb-text-gray-400 mb-italic mb-leading-relaxed">
-                Mantiene questo elemento fermo mentre il resto della pagina scorre.
-                Utile per immagini, sommari, CTA persistenti. Funziona solo se la sezione
-                genitrice è più alta dell'elemento.
+                {{ t("Mantiene questo elemento fermo mentre il resto della pagina scorre. Utile per immagini, sommari, CTA persistenti. Funziona solo se la sezione genitrice è più alta dell'elemento.") }}
               </p>
 
               <!-- Toggle attivazione -->
               <label class="mb-flex mb-items-center mb-justify-between mb-cursor-pointer mb-py-1">
-                <span class="mb-text-xs mb-text-gray-300 mb-font-medium">Attiva scroll fisso</span>
+                <span class="mb-text-xs mb-text-gray-300 mb-font-medium">{{ t('Attiva scroll fisso') }}</span>
                 <button
                   type="button"
                   @click="updateAdvanced('sticky', !tileAdvanced.sticky)"
@@ -925,7 +923,7 @@
               <template v-if="tileAdvanced.sticky">
                 <!-- Posizione -->
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Posizione</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Posizione') }}</label>
                   <FieldSelect
                     ui="dropdown"
                     :model-value="tileAdvanced.sticky_position || 'top'"
@@ -937,7 +935,7 @@
                 <!-- Offset -->
                 <div>
                   <div class="mb-flex mb-items-center mb-justify-between mb-mb-1">
-                    <label class="mb-text-xs mb-font-medium mb-text-gray-400">Distanza dal bordo (px)</label>
+                    <label class="mb-text-xs mb-font-medium mb-text-gray-400">{{ t('Distanza dal bordo (px)') }}</label>
                     <span class="mb-text-xs mb-text-gray-300 mb-tabular-nums">{{ tileAdvanced.sticky_offset || 0 }}</span>
                   </div>
                   <input
@@ -950,7 +948,7 @@
 
                 <!-- Mobile -->
                 <label class="mb-flex mb-items-center mb-justify-between mb-cursor-pointer mb-py-1">
-                  <span class="mb-text-xs mb-text-gray-300">Attivo anche su mobile</span>
+                  <span class="mb-text-xs mb-text-gray-300">{{ t('Attivo anche su mobile') }}</span>
                   <button
                     type="button"
                     @click="updateAdvanced('sticky_on_mobile', tileAdvanced.sticky_on_mobile === false ? true : false)"
@@ -966,15 +964,15 @@
           </CollapseSection>
 
           <!-- Mouse Tracking Effects -->
-          <CollapseSection title="Effetti mouse">
+          <CollapseSection :title="t('Effetti mouse')">
             <div class="mb-space-y-3">
               <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                 <input type="checkbox" :checked="tileAdvanced.mouse_tilt === true" @change="updateAdvanced('mouse_tilt', $event.target.checked)" class="mb-accent-primary-500" />
-                <span class="mb-text-xs mb-text-gray-300">Tilt 3D al hover</span>
+                <span class="mb-text-xs mb-text-gray-300">{{ t('Tilt 3D al hover') }}</span>
               </label>
               <template v-if="tileAdvanced.mouse_tilt">
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Intensità: {{ tileAdvanced.mouse_tilt_intensity || 15 }}</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Intensità:') }} {{ tileAdvanced.mouse_tilt_intensity || 15 }}</label>
                   <input type="range" min="5" max="30" step="1" :value="tileAdvanced.mouse_tilt_intensity || 15" @input="updateAdvanced('mouse_tilt_intensity', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
                 </div>
                 <div>
@@ -985,11 +983,11 @@
               </template>
               <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                 <input type="checkbox" :checked="tileAdvanced.mouse_track === true" @change="updateAdvanced('mouse_track', $event.target.checked)" class="mb-accent-primary-500" />
-                <span class="mb-text-xs mb-text-gray-300">Segui cursore</span>
+                <span class="mb-text-xs mb-text-gray-300">{{ t('Segui cursore') }}</span>
               </label>
               <template v-if="tileAdvanced.mouse_track">
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Velocità: {{ tileAdvanced.mouse_track_speed || 3 }}</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Velocità:') }} {{ tileAdvanced.mouse_track_speed || 3 }}</label>
                   <input type="range" min="1" max="10" step="1" :value="tileAdvanced.mouse_track_speed || 3" @input="updateAdvanced('mouse_track_speed', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
                 </div>
               </template>
@@ -997,28 +995,28 @@
               <div class="mb-border-t mb-border-gray-700 mb-pt-3 mb-mt-1"></div>
               <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                 <input type="checkbox" :checked="tileAdvanced.cursor_spotlight === true" @change="updateAdvanced('cursor_spotlight', $event.target.checked)" class="mb-accent-primary-500" />
-                <span class="mb-text-xs mb-text-gray-300">Spotlight cursore (torcia)</span>
+                <span class="mb-text-xs mb-text-gray-300">{{ t('Spotlight cursore (torcia)') }}</span>
               </label>
-              <p class="mb-text-[10px] mb-text-gray-500 mb-leading-snug">Un disco-torcia segue il cursore e inverte i colori, confinato a questo elemento. Si disattiva su touch e con riduzione del movimento.</p>
+              <p class="mb-text-[10px] mb-text-gray-500 mb-leading-snug">{{ t('Un disco-torcia segue il cursore e inverte i colori, confinato a questo elemento. Si disattiva su touch e con riduzione del movimento.') }}</p>
               <template v-if="tileAdvanced.cursor_spotlight">
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Inversione (blend)</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Inversione (blend)') }}</label>
                   <FieldSelect ui="dropdown" :model-value="tileAdvanced.cursor_spotlight_blend || 'difference'" :options="SPOTLIGHT_BLEND_OPTIONS" @update:model-value="updateAdvanced('cursor_spotlight_blend', $event)" />
                 </div>
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Colore luce</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Colore luce') }}</label>
                   <input type="color" :value="tileAdvanced.cursor_spotlight_color || '#ffffff'" @input="updateAdvanced('cursor_spotlight_color', $event.target.value)" class="mb-w-full mb-h-8 mb-rounded mb-cursor-pointer" />
                 </div>
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Dimensione disco: {{ tileAdvanced.cursor_spotlight_size || 300 }}px</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Dimensione disco:') }} {{ tileAdvanced.cursor_spotlight_size || 300 }}px</label>
                   <input type="range" min="80" max="600" step="10" :value="tileAdvanced.cursor_spotlight_size || 300" @input="updateAdvanced('cursor_spotlight_size', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
                 </div>
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Morbidezza bordo: {{ tileAdvanced.cursor_spotlight_softness ?? 40 }}%</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Morbidezza bordo:') }} {{ tileAdvanced.cursor_spotlight_softness ?? 40 }}%</label>
                   <input type="range" min="0" max="100" step="5" :value="tileAdvanced.cursor_spotlight_softness ?? 40" @input="updateAdvanced('cursor_spotlight_softness', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
                 </div>
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Inseguimento: {{ tileAdvanced.cursor_spotlight_easing || 22 }}</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Inseguimento:') }} {{ tileAdvanced.cursor_spotlight_easing || 22 }}</label>
                   <input type="range" min="5" max="100" step="1" :value="tileAdvanced.cursor_spotlight_easing || 22" @input="updateAdvanced('cursor_spotlight_easing', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
                 </div>
               </template>
@@ -1137,27 +1135,27 @@
           </CollapseSection>
 
           <!-- Infinite (Looping) Animations -->
-          <CollapseSection title="Animazione continua">
+          <CollapseSection :title="t('Animazione continua')">
             <div class="mb-space-y-3">
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Animazione</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Animazione') }}</label>
                 <FieldSelect ui="dropdown" :model-value="tileAdvanced.infinite_animation || 'none'" :options="INFINITE_ANIMATION_OPTIONS" @update:model-value="updateAdvanced('infinite_animation', $event)" />
               </div>
               <template v-if="(tileAdvanced.infinite_animation || 'none') !== 'none'">
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Velocità: {{ tileAdvanced.infinite_speed || 3 }}s</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Velocità:') }} {{ tileAdvanced.infinite_speed || 3 }}s</label>
                   <input type="range" min="1" max="10" step="0.5" :value="tileAdvanced.infinite_speed || 3" @input="updateAdvanced('infinite_speed', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
                 </div>
                 <div v-if="['float','float-rot','bounce'].includes(tileAdvanced.infinite_animation)">
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Ampiezza: {{ tileAdvanced.infinite_amplitude || (tileAdvanced.infinite_animation === 'bounce' ? 15 : 12) }}px</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Ampiezza:') }} {{ tileAdvanced.infinite_amplitude || (tileAdvanced.infinite_animation === 'bounce' ? 15 : 12) }}px</label>
                   <input type="range" min="2" max="60" step="1" :value="tileAdvanced.infinite_amplitude || (tileAdvanced.infinite_animation === 'bounce' ? 15 : 12)" @input="updateAdvanced('infinite_amplitude', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
                 </div>
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Ritardo: {{ tileAdvanced.infinite_delay || 0 }}ms</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Ritardo:') }} {{ tileAdvanced.infinite_delay || 0 }}ms</label>
                   <input type="range" min="0" max="3000" step="100" :value="tileAdvanced.infinite_delay || 0" @input="updateAdvanced('infinite_delay', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
                 </div>
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Direzione</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Direzione') }}</label>
                   <FieldSelect ui="dropdown" :model-value="tileAdvanced.infinite_direction || 'normal'" :options="INFINITE_DIRECTION_OPTIONS" @update:model-value="updateAdvanced('infinite_direction', $event)" />
                 </div>
               </template>
@@ -1165,10 +1163,10 @@
           </CollapseSection>
 
           <!-- CSS Mask / Clip-path -->
-          <CollapseSection title="Maschera forma">
+          <CollapseSection :title="t('Maschera forma')">
             <div class="mb-space-y-3">
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Tipo maschera</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Tipo maschera') }}</label>
                 <FieldSelect ui="dropdown" :model-value="tileAdvanced.mask_type || 'none'" :options="MASK_TYPE_OPTIONS" @update:model-value="updateAdvanced('mask_type', $event)" />
               </div>
               <template v-if="tileAdvanced.mask_type === 'custom'">
@@ -1190,10 +1188,10 @@
           </CollapseSection>
 
           <!-- ===== MACRO: Sviluppatore ===== -->
-          <CollapseSection id="v2i-sec-adv-dev" title="Sviluppatore" :macro="true">
+          <CollapseSection id="v2i-sec-adv-dev" :title="t('Sviluppatore')" :macro="true">
             <div class="mb-space-y-3">
           <!-- Note editor (solo builder, non renderizzate nel frontend) -->
-          <CollapseSection title="Note editor">
+          <CollapseSection :title="t('Note editor')">
             <textarea
               :value="tileAdvanced.editor_note || ''"
               @input="updateAdvanced('editor_note', $event.target.value)"
@@ -1201,11 +1199,11 @@
               :placeholder="t('Note visibili solo nel builder...')"
               class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-900 mb-resize-none"
             ></textarea>
-            <p class="mb-text-[9px] mb-text-gray-500 mb-mt-1">Queste note sono visibili solo nel builder e non vengono pubblicate.</p>
+            <p class="mb-text-[9px] mb-text-gray-500 mb-mt-1">{{ t('Queste note sono visibili solo nel builder e non vengono pubblicate.') }}</p>
           </CollapseSection>
 
           <!-- Custom JavaScript -->
-          <CollapseSection title="JavaScript personalizzato">
+          <CollapseSection :title="t('JavaScript personalizzato')">
             <textarea
               :value="tileAdvanced.custom_js || ''"
               @input="updateAdvanced('custom_js', $event.target.value)"
@@ -1214,13 +1212,13 @@
               class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-900 mb-font-mono mb-resize-y"
               spellcheck="false"
             ></textarea>
-            <p class="mb-text-[9px] mb-text-gray-500 mb-mt-1">JS eseguito nel frontend. La variabile <code style="background:#E5E7EB;padding:1px 4px;border-radius:3px">el</code> contiene l'elemento DOM.</p>
+            <p class="mb-text-[9px] mb-text-gray-500 mb-mt-1">{{ t('JS eseguito nel frontend. La variabile') }} <code style="background:#E5E7EB;padding:1px 4px;border-radius:3px">el</code> {{ t("contiene l'elemento DOM.") }}</p>
           </CollapseSection>
 
             </div>
           </CollapseSection>
 
-          <CollapseSection id="v2i-sec-adv-position" title="Posizionamento" :macro="true">
+          <CollapseSection id="v2i-sec-adv-position" :title="t('Posizionamento')" :macro="true">
             <div class="mb-space-y-3">
               <div>
                 <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Larghezza elemento') }}</label>
@@ -1228,7 +1226,7 @@
                 <p class="mb-text-[10px] mb-text-gray-500 mb-leading-snug mb-mt-1">{{ t('Adattata: la tile è larga quanto il suo contenuto; più tile adattate consecutive si affiancano sulla stessa riga (es. pulsanti vicini).') }}</p>
               </div>
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Modalità</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Modalità') }}</label>
                 <FieldSelect
                   ui="dropdown"
                   :model-value="tileAdvanced.position_mode || 'static'"
@@ -1297,7 +1295,7 @@
                 </div>
                 <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                   <div>
-                    <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Larghezza <span v-if="positionBp !== 'desktop'" class="mb-text-amber-400">{{ positionBpLabel }}</span></label>
+                    <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Larghezza') }} <span v-if="positionBp !== 'desktop'" class="mb-text-amber-400">{{ positionBpLabel }}</span></label>
                     <input
                       type="text"
                       :value="tileAdvanced[positionKey('position_width')] ?? ''"
@@ -1318,10 +1316,10 @@
                   </div>
                 </div>
                 <p class="mb-text-[9px] mb-text-gray-500 mb-leading-relaxed">
-                  Valori: px (es. 100px), % (es. 50%), vh/vw. Assoluto è relativo alla sezione, Fisso alla finestra.
+                  {{ t('Valori: px (es. 100px), % (es. 50%), vh/vw. Assoluto è relativo alla sezione, Fisso alla finestra.') }}
                 </p>
                 <div v-if="tileAdvanced.position_mode === 'fixed'">
-                  <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Nascondi al raggiungimento di</label>
+                  <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Nascondi al raggiungimento di') }}</label>
                   <input
                     type="text"
                     :value="tileAdvanced.position_hide_at ?? ''"
@@ -1329,7 +1327,7 @@
                     :placeholder="t('HTML ID della sezione (es. fine-nav)')"
                     class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-0.5 mb-text-[11px] mb-text-gray-900"
                   />
-                  <p class="mb-text-[9px] mb-text-gray-500 mb-mt-0.5">L'elemento scompare quando lo scroll raggiunge la sezione con questo ID.</p>
+                  <p class="mb-text-[9px] mb-text-gray-500 mb-mt-0.5">{{ t("L'elemento scompare quando lo scroll raggiunge la sezione con questo ID.") }}</p>
                 </div>
               </template>
             </div>

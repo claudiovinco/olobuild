@@ -361,13 +361,20 @@ class Olo_Form_Handler {
                         continue;
                     }
 
+                    // Hard-block di estensioni eseguibili o renderizzabili nel browser
+                    // (SVG/HTML/XML/JS -> stored XSS) ANCHE se inserite nell'allowlist admin.
+                    $blocked_ext = [ '.svg', '.svgz', '.html', '.htm', '.xhtml', '.xml', '.js', '.mjs', '.php', '.php3', '.php4', '.php5', '.php7', '.phtml', '.phar', '.htaccess' ];
+                    if ( in_array( $ext, $blocked_ext, true ) ) {
+                        continue;
+                    }
+
                     // Validate MIME type matches extension
                     $mime_check = wp_check_filetype( $single_file['name'] );
                     if ( ! $mime_check['type'] ) {
                         continue;
                     }
                     // Block dangerous file types regardless of extension
-                    $dangerous_mimes = [ 'application/x-httpd-php', 'application/x-php', 'text/x-php', 'application/x-executable', 'application/x-msdownload' ];
+                    $dangerous_mimes = [ 'application/x-httpd-php', 'application/x-php', 'text/x-php', 'application/x-executable', 'application/x-msdownload', 'image/svg+xml', 'text/html', 'application/xhtml+xml', 'application/xml', 'text/xml' ];
                     $real_mime = '';
                     if ( function_exists( 'finfo_open' ) ) {
                         $finfo     = finfo_open( FILEINFO_MIME_TYPE );

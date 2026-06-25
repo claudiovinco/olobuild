@@ -69,9 +69,9 @@ class Olo_Social_Tile extends Olo_Tile_Base {
         $paths = self::icon_paths();
         $d = $paths[ $platform ] ?? '';
         if ( ! $d ) {
-            return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="M10.59 13.41c.41.39.41 1.03 0 1.42-.39.39-1.03.39-1.42 0a5.003 5.003 0 0 1 0-7.07l3.54-3.54a5.003 5.003 0 0 1 7.07 0 5.003 5.003 0 0 1 0 7.07l-1.49 1.49c.01-.82-.12-1.64-.4-2.42l.47-.48a2.982 2.982 0 0 0 0-4.24 2.982 2.982 0 0 0-4.24 0l-3.53 3.53a2.982 2.982 0 0 0 0 4.24zm2.82-4.24c.39-.39 1.03-.39 1.42 0a5.003 5.003 0 0 1 0 7.07l-3.54 3.54a5.003 5.003 0 0 1-7.07 0 5.003 5.003 0 0 1 0-7.07l1.49-1.49c-.01.82.12 1.64.4 2.42l-.47.48a2.982 2.982 0 0 0 0 4.24 2.982 2.982 0 0 0 4.24 0l3.53-3.53a2.982 2.982 0 0 0 0-4.24z"/></svg>';
+            return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" focusable="false"><path d="M10.59 13.41c.41.39.41 1.03 0 1.42-.39.39-1.03.39-1.42 0a5.003 5.003 0 0 1 0-7.07l3.54-3.54a5.003 5.003 0 0 1 7.07 0 5.003 5.003 0 0 1 0 7.07l-1.49 1.49c.01-.82-.12-1.64-.4-2.42l.47-.48a2.982 2.982 0 0 0 0-4.24 2.982 2.982 0 0 0-4.24 0l-3.53 3.53a2.982 2.982 0 0 0 0 4.24zm2.82-4.24c.39-.39 1.03-.39 1.42 0a5.003 5.003 0 0 1 0 7.07l-3.54 3.54a5.003 5.003 0 0 1-7.07 0 5.003 5.003 0 0 1 0-7.07l1.49-1.49c-.01.82.12 1.64.4 2.42l-.47.48a2.982 2.982 0 0 0 0 4.24 2.982 2.982 0 0 0 4.24 0l3.53-3.53a2.982 2.982 0 0 0 0-4.24z"/></svg>';
         }
-        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em"><path d="' . $d . '"/></svg>';
+        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" focusable="false"><path d="' . $d . '"/></svg>';
     }
 
     public function render( $settings ) {
@@ -148,7 +148,7 @@ class Olo_Social_Tile extends Olo_Tile_Base {
                 }
             ?>
                 <div style="display:flex;flex-direction:column;align-items:center;<?php echo $show_labels ? 'gap:4px;' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'gap:4px;'/'' literal from the ternary ?>">
-                    <a href="<?php echo esc_url( $link['url'] ); ?>" target="_blank" rel="noopener noreferrer" class="olo-social-link" style="<?php echo $link_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style assembled above via sprintf() from %d-forced sizes and safe_color_css()-whitelisted colours (may be var() tokens, not esc_attr-safe inside style attr) ?>" title="<?php echo esc_attr( ucfirst( $link['platform'] ) ); ?>">
+                    <a href="<?php echo esc_url( $link['url'] ); ?>" target="_blank" rel="noopener noreferrer" class="olo-social-link" style="<?php echo $link_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style assembled above via sprintf() from %d-forced sizes and safe_color_css()-whitelisted colours (may be var() tokens, not esc_attr-safe inside style attr) ?>" title="<?php echo esc_attr( ucfirst( $link['platform'] ) ); ?>" aria-label="<?php echo esc_attr( ucfirst( $link['platform'] ) ); ?>">
                         <?php echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from the hardcoded icon_paths() map ?>
                     </a>
                     <?php if ( $show_labels ) : ?>

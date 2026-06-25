@@ -10,6 +10,9 @@ export const useBuilderStore = defineStore('builder', {
   state: () => ({
     currentTemplate: null,
     selectedTileId: null,
+    // Multi-selezione (MVP, additiva): set di id selezionati via ctrl/cmd-click.
+    // selectedTileId resta la selezione "primaria" (guida l'inspector).
+    selectedTileIds: [],
     isDirty: false,
     isSaving: false,
     viewMode: 'desktop', // desktop | widescreen | tablet_landscape | tablet | mobile_landscape | mobile
@@ -239,12 +242,31 @@ export const useBuilderStore = defineStore('builder', {
 
     selectTile(tileId) {
       this.selectedTileId = tileId;
+      this.selectedTileIds = tileId ? [tileId] : [];
+      this.pageSettingsOpen = false;
+      this.stylePanelOpen = false;
+    },
+
+    // Ctrl/Cmd-click: aggiunge/toglie una tile dal set, mantenendo l'ultima come primaria.
+    toggleTileSelection(tileId) {
+      if (!tileId) return;
+      const i = this.selectedTileIds.indexOf(tileId);
+      if (i === -1) {
+        this.selectedTileIds.push(tileId);
+        this.selectedTileId = tileId;
+      } else {
+        this.selectedTileIds.splice(i, 1);
+        this.selectedTileId = this.selectedTileIds.length
+          ? this.selectedTileIds[this.selectedTileIds.length - 1]
+          : null;
+      }
       this.pageSettingsOpen = false;
       this.stylePanelOpen = false;
     },
 
     deselectTile() {
       this.selectedTileId = null;
+      this.selectedTileIds = [];
     },
 
     startInlineEdit(tileId, field) {
@@ -275,6 +297,7 @@ export const useBuilderStore = defineStore('builder', {
       this.pageSettingsOpen = !this.pageSettingsOpen;
       if (this.pageSettingsOpen) {
         this.selectedTileId = null;
+        this.selectedTileIds = [];
         this.stylePanelOpen = false;
       }
     },
@@ -283,6 +306,7 @@ export const useBuilderStore = defineStore('builder', {
       this.stylePanelOpen = !this.stylePanelOpen;
       if (this.stylePanelOpen) {
         this.selectedTileId = null;
+        this.selectedTileIds = [];
         this.pageSettingsOpen = false;
       }
     },

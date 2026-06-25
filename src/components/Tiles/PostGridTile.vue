@@ -216,6 +216,11 @@ const cardStyle = computed(() => {
     style.background = props.settings.card_primary_bg || 'var(--olo-color-primary, #e1474f)';
     style.borderColor = props.settings.card_primary_bg || 'var(--olo-color-primary, #e1474f)';
   }
+  // Folded / cut bottom-right corner ("piega"). Default OFF = card invariata.
+  if (props.settings.corner_cut) {
+    const cs = Math.max(12, Math.min(64, parseInt(props.settings.corner_size) || 32));
+    style.clipPath = `polygon(0 0, 100% 0, 100% calc(100% - ${cs}px), calc(100% - ${cs}px) 100%, 0 100%)`;
+  }
   return style;
 });
 

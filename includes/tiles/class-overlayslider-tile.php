@@ -342,12 +342,12 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
                 </div>
 
                 <?php if ( ! empty( $s['show_arrows'] ) && $count > $columns ) : ?>
-                    <a class="uk-position-center-left-out" href uk-slidenav-previous uk-slider-item="previous"></a>
-                    <a class="uk-position-center-right-out" href uk-slidenav-next uk-slider-item="next"></a>
+                    <a class="uk-position-center-left-out" href uk-slidenav-previous uk-slider-item="previous" role="button" aria-label="<?php esc_attr_e( 'Slide precedente', 'olobuilder' ); ?>"></a>
+                    <a class="uk-position-center-right-out" href uk-slidenav-next uk-slider-item="next" role="button" aria-label="<?php esc_attr_e( 'Slide successiva', 'olobuilder' ); ?>"></a>
                 <?php endif; ?>
 
                 <?php if ( ! empty( $s['show_dots'] ) && $count > $columns ) : ?>
-                    <ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin"></ul>
+                    <ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin" role="tablist" aria-label="<?php esc_attr_e( 'Navigazione slide', 'olobuilder' ); ?>"></ul>
                 <?php endif; ?>
             </div>
         </div>

@@ -10,15 +10,18 @@
       @input="$emit('update:modelValue', $event.target.value)"
     />
     <template v-else>
-      <input
-        type="number"
-        :value="numPart"
-        :min="min"
-        :max="max"
-        :step="step ?? 'any'"
+      <NumberScrubber
+        class="fu-num fu-ns"
+        :model-value="numPart"
+        :min="min ?? null"
+        :max="max ?? null"
+        :step="step ?? 1"
+        :default-value="min ?? null"
+        emit-as="string"
+        :unit="unitPart"
         :placeholder="placeholder"
-        class="fu-num"
-        @input="onNum($event.target.value)"
+        :aria-label="placeholder || 'Valore'"
+        @update:model-value="onNum($event)"
       />
       <FieldSelect
         ui="dropdown"
@@ -35,6 +38,7 @@
 <script setup>
 import { computed } from 'vue';
 import FieldSelect from './FieldSelect.vue';
+import NumberScrubber from './NumberScrubber.vue';
 
 /**
  * FieldUnit — dimensione CSS con unità ('200px', '0.2em', '50%', '120ms').
@@ -115,5 +119,19 @@ function onUnit(u) {
 .fu-num:focus-visible {
   outline: 2px solid var(--olo-ui-accent, #e8622a);
   outline-offset: -1px;
+}
+/* NumberScrubber al posto dell'input numero: deve riempire il flex row come prima.
+   La valbox (compatta) si allarga a tutta la cella; lo slider in popover resta on-focus. */
+.fu-ns {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.fu-ns :deep(.olo-ns-box) {
+  width: 100%;
+  flex-shrink: 1;
+}
+.fu-ns :deep(.olo-ns-num) {
+  width: 100%;
+  text-align: left;
 }
 </style>

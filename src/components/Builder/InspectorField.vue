@@ -22,6 +22,108 @@
       </p>
 
       <template v-else>
+      <!-- Layout INLINE compatto: per i campi numerici a dominio noto (range/number)
+           la label sta a sinistra e il controllo compatto a destra, così un numero
+           1–100 non occupa più una riga intera. Lo slider compare nel popover al
+           focus (NumberScrubber). Escluso per hoverable o field.layout==='block'. -->
+      <div v-if="renderInline" :class="inlineFill ? 'olo-field-inline-fill' : 'olo-field-inline'">
+        <label class="olo-fi-label" :title="t(field.label)">
+          <span class="olo-fi-text">{{ t(field.label) }}</span>
+          <span
+            v-if="field.responsive && respBp !== 'desktop'"
+            class="mb-text-[9px] mb-bg-primary-700 mb-text-primary-200 mb-px-1.5 mb-py-0.5 mb-rounded mb-font-medium mb-ml-1"
+            :title="t('Stai modificando questo breakpoint — cambia dispositivo dalla barra in alto')"
+          >{{ t(respBreakpoints.find(b => b.key === respBp)?.label) }}</span>
+        </label>
+        <div class="olo-fi-control">
+          <!-- compatti (controllo a destra) -->
+          <FieldRange
+            v-if="field.type === 'range'"
+            compact
+            :modelValue="effectiveValue"
+            :min="field.min || 0"
+            :max="field.max || 100"
+            :step="field.step || 1"
+            :defaultValue="fieldDefaultValue"
+            :placeholder="field.responsive && respBp !== 'desktop' ? t('Eredita') : ''"
+            @update:modelValue="onFieldUpdate($event)"
+          />
+          <FieldToggle
+            v-else-if="field.type === 'toggle'"
+            :modelValue="effectiveValue"
+            @update:modelValue="onFieldUpdate($event)"
+          />
+          <NumberScrubber
+            v-else-if="field.type === 'number'"
+            :modelValue="effectiveValue"
+            :min="field.min ?? null"
+            :max="field.max ?? null"
+            :step="field.step ?? 1"
+            :defaultValue="fieldDefaultValue"
+            :placeholder="field.responsive && respBp !== 'desktop' ? t('Eredita') : (field.placeholder || '')"
+            emitAs="string"
+            @update:modelValue="onFieldUpdate($event)"
+          />
+          <!-- fill (il controllo riempie la parte destra) -->
+          <FieldSelect
+            v-else-if="field.type === 'select'"
+            :modelValue="effectiveValue"
+            :options="resolvedOptions"
+            :ui="field.ui || 'auto'"
+            @update:modelValue="onFieldUpdate($event)"
+          />
+          <FieldColor
+            v-else-if="field.type === 'color'"
+            :modelValue="effectiveValue"
+            @update:modelValue="onFieldUpdate($event)"
+          />
+          <FieldLink
+            v-else-if="field.type === 'link'"
+            :modelValue="effectiveValue"
+            :placeholder="field.placeholder || ''"
+            :types="field.linkTypes || ''"
+            @update:modelValue="onFieldUpdate($event)"
+          />
+          <FieldFontFamily
+            v-else-if="field.type === 'font-family'"
+            :modelValue="effectiveValue"
+            @update:modelValue="onFieldUpdate($event)"
+          />
+          <FieldUnit
+            v-else-if="field.type === 'unit'"
+            :modelValue="effectiveValue"
+            :units="field.units"
+            :min="field.min"
+            :max="field.max"
+            :step="field.step"
+            :placeholder="field.placeholder || ''"
+            @update:modelValue="onFieldUpdate($event)"
+          />
+          <FieldDatetime
+            v-else-if="field.type === 'datetime'"
+            :modelValue="effectiveValue"
+            @update:modelValue="onFieldUpdate($event)"
+          />
+          <FieldDate
+            v-else-if="field.type === 'date'"
+            :modelValue="effectiveValue"
+            @update:modelValue="onFieldUpdate($event)"
+          />
+          <FieldTime
+            v-else-if="field.type === 'time'"
+            :modelValue="effectiveValue"
+            @update:modelValue="onFieldUpdate($event)"
+          />
+          <FieldText
+            v-else
+            :modelValue="effectiveValue"
+            @update:modelValue="onFieldUpdate($event)"
+            @confirm="$emit('confirm', $event)"
+          />
+        </div>
+      </div>
+
+      <template v-else>
       <!-- Label + occhio hover + badge breakpoint. Lo switch device NON è qui:
            il dispositivo si cambia dalla barra in alto (builderStore.viewMode) e
            questo campo segue automaticamente quel breakpoint. Niente duplicati. -->
@@ -367,20 +469,21 @@
         <div v-if="geocodeResult" class="mb-text-[10px] mb-text-green-400 mb-truncate" :title="geocodeResult">{{ geocodeResult }}</div>
       </div>
 
-      <!-- number: input numerico nativo (spinner, min/max, tastiera numerica).
-           Emette $event.target.value RAW (stringa, '' se vuoto): stesso formato
-           del fallback FieldText che usava prima — i renderer che distinguono
-           '' (es. "Auto") e quelli che fanno parseInt restano identici. -->
-      <input
+      <!-- number (caso non-inline: hoverable o layout='block'): NumberScrubber.
+           Emette $event RAW come STRINGA (emitAs='string', '' se vuoto): stesso
+           formato di prima — i renderer che distinguono '' (es. "Auto") e quelli
+           che fanno parseInt restano identici. Slider inline solo se min/max noti. -->
+      <NumberScrubber
         v-else-if="field.type === 'number'"
-        type="number"
-        :value="effectiveValue"
-        :min="field.min"
-        :max="field.max"
-        :step="field.step ?? 'any'"
-        :placeholder="field.placeholder || ''"
-        class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
-        @input="onFieldUpdate($event.target.value)"
+        :modelValue="effectiveValue"
+        :min="field.min ?? null"
+        :max="field.max ?? null"
+        :step="field.step ?? 1"
+        :defaultValue="fieldDefaultValue"
+        :placeholder="field.responsive && respBp !== 'desktop' ? t('Eredita') : (field.placeholder || '')"
+        emitAs="string"
+        :sliderOnFocus="false"
+        @update:modelValue="onFieldUpdate($event)"
       />
 
       <!-- unit: dimensione CSS con unità ('200px', '0.2em', '50%'). Salva la
@@ -432,6 +535,7 @@
         >{{ t('Azzera') }}</button>
       </div>
       </template>
+      </template>
     </template>
   </div>
 </template>
@@ -445,6 +549,7 @@ import FieldSelect from './fields/FieldSelect.vue';
 import FieldToggle from './fields/FieldToggle.vue';
 import FieldColor from './fields/FieldColor.vue';
 import FieldRange from './fields/FieldRange.vue';
+import NumberScrubber from './fields/NumberScrubber.vue';
 import FieldSpacing from './fields/FieldSpacing.vue';
 import FieldBox from './fields/FieldBox.vue';
 import FieldBorder from './fields/FieldBorder.vue';
@@ -535,6 +640,27 @@ const respValue = computed(() => {
     return props.tileSettings[respKey.value];
   }
   return '';
+});
+
+// Layout INLINE compatto (label a sx, controllo a dx) per i numerici a dominio noto.
+// Opt-out con field.layout==='block'; escluso per hoverable (la UI hover ha bisogno
+// della riga intera). Opt-in generico futuro con field.layout==='inline'.
+// Layout "controllo a destra del titolo" (densità).
+//  • compatti  → controllo piccolo allineato a destra (toggle/numero/range)
+//  • fill      → il controllo riempie la parte destra (select/colore/testo/link/…)
+// Restano IMPILATI a tutta larghezza: textarea, editor, media, immagine, galleria e
+// tutti i compositi (background, gradient, transform, shadow, border, spacing, …),
+// che hanno bisogno di tutta la riga.
+const INLINE_COMPACT = ['range', 'number', 'toggle', 'unit'];
+const INLINE_FILL = ['select', 'color', 'text', 'link', 'font-family', 'date', 'time', 'datetime'];
+const inlineFill = computed(() => INLINE_FILL.includes(props.field.type));
+const renderInline = computed(() => {
+  const f = props.field;
+  if (f.layout === 'block') return false;
+  if (f.hoverable) return false;
+  if (f.aiGenerate === 'alt') return false; // testo + bottone AI accanto → resta block
+  if (f.type === 'geocode') return false;    // testo + bottone ricerca → resta block
+  return INLINE_COMPACT.includes(f.type) || INLINE_FILL.includes(f.type);
 });
 
 function onFieldUpdate(value) {
@@ -947,6 +1073,48 @@ function onDynamicUpdate(dynamicUpdate, isRemove) {
 </script>
 
 <style scoped>
+/* Layout "controllo a destra del titolo".
+   • .olo-field-inline      → compatto: label a sx, controllo piccolo a dx
+   • .olo-field-inline-fill → il controllo riempie la parte destra (select/testo/…)
+   In entrambi la label tronca con ellissi (tooltip = label intera). */
+.olo-field-inline,
+.olo-field-inline-fill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 30px;
+}
+.olo-field-inline { justify-content: space-between; }
+.olo-field-inline > .olo-fi-label { flex: 1 1 auto; min-width: 0; }
+.olo-field-inline > .olo-fi-control { flex: 0 0 auto; }
+.olo-field-inline-fill > .olo-fi-label { flex: 0 1 auto; min-width: 0; max-width: 46%; }
+.olo-field-inline-fill > .olo-fi-control { flex: 1 1 0; min-width: 0; }
+.olo-fi-label {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: #9ca3af;
+  cursor: default;
+}
+.olo-fi-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Campo `unit` reso compatto a destra del titolo (pill numero + unità, come i range):
+   il numero ha larghezza fissa così non collassa nella colonna auto. */
+.olo-field-inline > .olo-fi-control :deep(.fu-num) {
+  flex: 0 0 48px;
+  width: 48px;
+  text-align: center;
+}
+.olo-field-inline > .olo-fi-control :deep(.fu-raw) {
+  flex: 0 0 110px;
+  width: 110px;
+}
+
 :deep(.olo-field-code) textarea,
 .olo-field-code :deep(textarea) {
   font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;

@@ -71,7 +71,7 @@ class Olo_Hotspot_Tile extends Olo_Tile_Base {
             $obj_pos = 'center center';
         }
 
-        $pin_svg = '<svg width="' . $marker_size . '" height="' . $marker_size . '" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>';
+        $pin_svg = '<svg width="' . $marker_size . '" height="' . $marker_size . '" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>';
 
         ob_start();
         ?>
@@ -213,23 +213,35 @@ class Olo_Hotspot_Tile extends Olo_Tile_Base {
                 $desc    = wp_kses_post( $marker['description'] ?? '' );
                 $m_icon  = sanitize_text_field( $marker['icon'] ?? 'pin' );
                 $tt_pos  = in_array( $marker['tooltip_position'] ?? 'top', [ 'top', 'bottom', 'left', 'right' ], true ) ? $marker['tooltip_position'] : 'top';
+                $tt_id   = $uid . '-tip-' . (int) $idx;
+                $m_label = trim( wp_strip_all_tags( $title ) );
+                if ( $m_label === '' ) {
+                    /* translators: %d: marker number */
+                    $m_label = sprintf( __( 'Hotspot %d', 'olobuilder' ), (int) $idx + 1 );
+                }
             ?>
             <div class="olo-hs-marker"
                  style="left:<?php echo (float) $pos_x; ?>%;top:<?php echo (float) $pos_y; ?>%;"
-                 data-idx="<?php echo (int) $idx; ?>">
-                <?php if ( $pulse ) : ?><span class="olo-hs-ring"></span><?php endif; ?>
+                 data-idx="<?php echo (int) $idx; ?>"
+                 role="button"
+                 tabindex="0"
+                 aria-label="<?php echo esc_attr( $m_label ); ?>"
+                 aria-haspopup="true"
+                 aria-expanded="false"
+                 aria-controls="<?php echo esc_attr( $tt_id ); ?>">
+                <?php if ( $pulse ) : ?><span class="olo-hs-ring" aria-hidden="true"></span><?php endif; ?>
                 <?php
                 if ( $m_icon === 'pin' || $m_icon === '' ) {
                     echo $pin_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup built above from a hardcoded path and the intval()-clamped marker size
                 } else {
-                    echo '<span style="font-size:' . (int) $marker_size . 'px;">' . esc_html( $m_icon ) . '</span>';
+                    echo '<span aria-hidden="true" style="font-size:' . (int) $marker_size . 'px;">' . esc_html( $m_icon ) . '</span>';
                 }
                 ?>
                 <?php
                 list( $hst_cls, $hst_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $title ) );
                 list( $hsd_cls, $hsd_data ) = $this->tfx_attrs( $s, 'description', wp_strip_all_tags( $desc ) );
                 ?>
-                <div class="olo-hs-tooltip" data-pos="<?php echo esc_attr( $tt_pos ); ?>">
+                <div class="olo-hs-tooltip" id="<?php echo esc_attr( $tt_id ); ?>" role="tooltip" data-pos="<?php echo esc_attr( $tt_pos ); ?>">
                     <?php if ( $title ) : ?>
                         <div class="olo-hs-tooltip-title<?php echo $hst_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); title sanitized via wp_kses_post() above ?>"<?php echo $hst_data; ?>><?php echo $title; ?></div>
                     <?php endif; ?>
@@ -245,23 +257,36 @@ class Olo_Hotspot_Tile extends Olo_Tile_Base {
         (function(){
             var container = document.getElementById('<?php echo esc_js( $uid ); ?>');
             if(!container){return}
+            function closeAll(){
+                container.querySelectorAll('.olo-hs-tooltip').forEach(function(t){ t.classList.remove('is-visible'); });
+                container.querySelectorAll('.olo-hs-marker').forEach(function(m){ m.setAttribute('aria-expanded','false'); });
+            }
+            function toggleMarker(marker){
+                var tooltip = marker.querySelector('.olo-hs-tooltip');
+                if(!tooltip){return}
+                var isVisible = tooltip.classList.contains('is-visible');
+                closeAll();
+                if(!isVisible){
+                    tooltip.classList.add('is-visible');
+                    marker.setAttribute('aria-expanded','true');
+                }
+            }
             container.addEventListener('click', function(e){
                 var marker = e.target.closest('.olo-hs-marker');
                 if(!marker){
                     /* Click outside marker: close all tooltips */
-                    var allTips = container.querySelectorAll('.olo-hs-tooltip');
-                    allTips.forEach(function(t){ t.classList.remove('is-visible'); });
+                    closeAll();
                     return;
                 }
-                var tooltip = marker.querySelector('.olo-hs-tooltip');
-                if(!tooltip){return}
-                var isVisible = tooltip.classList.contains('is-visible');
-                /* Close all tooltips first */
-                var allTips = container.querySelectorAll('.olo-hs-tooltip');
-                allTips.forEach(function(t){ t.classList.remove('is-visible'); });
-                /* Toggle clicked tooltip */
-                if(!isVisible){
-                    tooltip.classList.add('is-visible');
+                toggleMarker(marker);
+            });
+            container.addEventListener('keydown', function(e){
+                var marker = e.target.closest('.olo-hs-marker');
+                if(marker && (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar')){
+                    e.preventDefault();
+                    toggleMarker(marker);
+                } else if(e.key === 'Escape'){
+                    closeAll();
                 }
             });
         })();

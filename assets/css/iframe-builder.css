@@ -40,8 +40,12 @@ body.olo-preview-mode,
 [data-olo-tile-id].olo-builder-selected {
   outline-color: var(--olo-ui-accent, #e8622a);
   outline-offset: -2px;
-  z-index: 1;
+  z-index: 2;
   position: relative;
+  /* Bordo accentato + leggera tinta: rende OGNI tile selezionata (anche le
+     secondarie della multi-selezione, che non hanno la toolbar) chiaramente visibile. */
+  box-shadow: inset 0 0 0 2px var(--olo-ui-accent, #e8622a),
+              inset 0 0 0 9999px rgba(232, 98, 42, 0.06);
 }
 
 /* Preview mode: no outlines */

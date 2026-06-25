@@ -56,6 +56,9 @@ export default {
     show_controls: false,
     show_indicators: false,
     show_counter: false,
+    logo_height: 32,
+    logo_grayscale: false,
+    logo_opacity: 100,
     item_hover_effect: 'none',
     ...textEffectsDefaults,
     text_effect_target: 'title',
@@ -73,12 +76,13 @@ export default {
       itemFields: [
         { key: 'title', label: t('Titolo'), type: 'text' },
         { key: 'url', label: t('URL (opzionale)'), type: 'link', placeholder: t('https://...') },
+        { key: 'logo', label: t('Logo (opzionale)'), type: 'image', description: t('Se valorizzato sostituisce il testo con il logo (loghi clienti)') },
         { key: 'badge', label: t('Badge (opzionale)'), type: 'text', placeholder: t('es. Novità') },
         { key: 'badge_bg', label: t('Colore badge (override)'), type: 'color' },
         { key: 'icon', label: t('Icona (opzionale)'), type: 'icon' },
         { key: 'timestamp', label: t('Timestamp (opzionale)'), type: 'text', placeholder: t('es. 2h fa') },
       ],
-      newItemDefaults: { title: t('Nuova notizia'), url: '', badge: '', badge_bg: '', icon: '', timestamp: '' },
+      newItemDefaults: { title: t('Nuova notizia'), url: '', logo: '', badge: '', badge_bg: '', icon: '', timestamp: '' },
       itemLabel: 'Notizia',
     },
 
@@ -203,6 +207,14 @@ export default {
       condition: { field: 'animation_type', value: 'marquee' } },
     { key: 'marquee_gap', label: t('Spazio tra notizie (px)'), type: 'range', min: 0, max: 200, step: 5,
       condition: { field: 'animation_type', value: 'marquee' } },
+
+    { type: 'separator', label: t('Loghi') },
+    { key: 'logo_height', label: t('Altezza logo (px)'), type: 'range', min: 16, max: 60, step: 2,
+      description: t('Altezza normalizzata dei loghi (larghezza automatica)') },
+    { key: 'logo_grayscale', label: t('Loghi in scala di grigi'), type: 'toggle',
+      description: t('Look uniforme: monocromatici e schiariti, a colori in hover') },
+    { key: 'logo_opacity', label: t('Opacità loghi (%)'), type: 'range', min: 0, max: 100, step: 5,
+      condition: { field: 'logo_grayscale', value: true } },
 
     { type: 'separator', label: t('Hover notizia') },
     { key: 'item_hover_effect', label: t('Effetto hover notizia'), type: 'select', options: [

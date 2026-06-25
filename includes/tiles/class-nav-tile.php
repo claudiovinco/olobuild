@@ -217,6 +217,7 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
                 $item_path = rtrim( wp_parse_url( $url, PHP_URL_PATH ) ?: '', '/' );
                 $is_active = ( $current_path !== '' && $item_path !== '' && $current_path === $item_path );
                 $active_class = $is_active ? ' uk-active' : '';
+                $aria_current = $is_active ? ' aria-current="page"' : '';
 
                 // Separator
                 if ( $idx > 0 && $show_sep ) {
@@ -230,7 +231,7 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
                     echo '<li>';
                 }
             ?>
-                <a class="olo-nav-item<?php echo $active_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $active_class/$target are fixed literals (' uk-active', ' target="_blank"' or ''); $rel_attr is esc_attr()'d above; href is esc_url()'d ?>" href="<?php echo esc_url( $url ); ?>"<?php echo $target . $rel_attr; ?>>
+                <a class="olo-nav-item<?php echo $active_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $active_class/$target/$aria_current are fixed literals (' uk-active', ' aria-current="page"', ' target="_blank"' or ''); $rel_attr is esc_attr()'d above; href is esc_url()'d ?>" href="<?php echo esc_url( $url ); ?>"<?php echo $aria_current . $target . $rel_attr; ?>>
                     <?php if ( $s['active_style'] === 'dot' && $is_active ) : ?>
                     <span style="width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0"></span>
                     <?php endif; ?>

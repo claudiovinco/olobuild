@@ -244,7 +244,17 @@ class Olo_Tile_Utils {
      */
     public static function safe_color( $color ) {
         $c = trim( (string) $color );
-        return $c !== '' ? esc_attr( $c ) : '';
+        if ( $c === '' ) {
+            return '';
+        }
+        // Difesa-in-profondita per il contesto CSS: un valore colore legittimo
+        // (hex / rgb() / hsl() / var() / color-mix() / nome / currentColor / transparent)
+        // non contiene MAI caratteri di breakout CSS. Se presenti, scarta il valore:
+        // esc_attr da solo non protegge dentro un blocco <style> ( ; { } @ ecc.).
+        if ( preg_match( '#[;{}<>@\\\\"\']|/\*|\*/|[\x00-\x1f]#', $c ) ) {
+            return '';
+        }
+        return esc_attr( $c );
     }
 
     /**

@@ -54,7 +54,7 @@
 
           <!-- Expanded editor -->
           <div v-if="expandedId === element.id" class="cie-body">
-            <div v-for="field in itemFields" :key="field.key || 'sep-' + field.label" v-show="isFieldVisible(field, element)" class="cie-field">
+            <div v-for="field in itemFields" :key="field.key || 'sep-' + field.label" v-show="isFieldVisible(field, element)" class="cie-field" :class="{ 'cie-field--inline': field.type === 'number' || field.type === 'range' }">
               <label v-if="field.type !== 'separator'" class="cie-label">{{ field.label }}</label>
 
               <!-- separator (intestazione di sezione, nessun input) -->
@@ -75,7 +75,7 @@
                   <button @click="updateField(index, field.key, ''); updateField(index, field.key + '_id', 0)" class="cie-image-remove">{{ t('&times;') }}</button>
                 </div>
                 <button @click="pickImage(index, field.key)" class="cie-image-btn">
-                  {{ element[field.key] ? 'Cambia immagine' : 'Seleziona immagine' }}
+                  {{ element[field.key] ? t('Cambia immagine') : t('Seleziona immagine') }}
                 </button>
               </div>
 
@@ -105,29 +105,28 @@
               />
 
               <!-- range -->
-              <div v-else-if="field.type === 'range'" class="cie-range-wrap">
-                <input
-                  type="range"
-                  :value="element[field.key] ?? field.min ?? 0"
-                  @input="updateField(index, field.key, parseFloat($event.target.value))"
-                  :min="field.min ?? 0"
-                  :max="field.max ?? 100"
-                  :step="field.step ?? 1"
-                  class="cie-range"
-                />
-                <span class="cie-range-val">{{ element[field.key] ?? field.min ?? 0 }}</span>
-              </div>
+              <NumberScrubber
+                v-else-if="field.type === 'range'"
+                :modelValue="element[field.key] ?? field.min ?? 0"
+                :min="field.min ?? 0"
+                :max="field.max ?? 100"
+                :step="field.step ?? 1"
+                :defaultValue="field.min ?? 0"
+                emitAs="number"
+                :ariaLabel="field.label"
+                @update:modelValue="updateField(index, field.key, $event)"
+              />
 
               <!-- number -->
-              <input
+              <NumberScrubber
                 v-else-if="field.type === 'number'"
-                type="number"
-                :value="element[field.key] ?? 0"
-                @input="updateField(index, field.key, parseFloat($event.target.value))"
-                :min="field.min"
-                :max="field.max"
-                :step="field.step"
-                class="cie-input"
+                :modelValue="element[field.key] ?? 0"
+                :min="field.min ?? null"
+                :max="field.max ?? null"
+                :step="field.step ?? 1"
+                emitAs="number"
+                :ariaLabel="field.label"
+                @update:modelValue="updateField(index, field.key, $event)"
               />
 
               <!-- color -->
@@ -222,7 +221,7 @@
       </template>
     </draggable>
 
-    <button v-if="!isDynamicQueryActive" type="button" class="cie-add" @click="addItem">&#65291; Aggiungi {{ itemLabel }}</button>
+    <button v-if="!isDynamicQueryActive" type="button" class="cie-add" @click="addItem">{{ t('&#65291; Aggiungi') }} {{ itemLabel }}</button>
 
     <!-- Icon picker modal -->
     <IconPicker
@@ -236,11 +235,11 @@
       <div v-if="placerOpen" class="cie-placer-overlay" @click.self="closePlacer">
         <div class="cie-placer-modal">
           <div class="cie-placer-header">
-            <span class="cie-placer-title">Posiziona hotspot — Pagina {{ placerPage }}</span>
+            <span class="cie-placer-title">{{ t('Posiziona hotspot — Pagina') }} {{ placerPage }}</span>
             <div class="cie-placer-nav">
-              <button type="button" :disabled="placerPage <= 1" @click="placerGoPage(placerPage - 1)">&laquo; Prec</button>
+              <button type="button" :disabled="placerPage <= 1" @click="placerGoPage(placerPage - 1)">&laquo; {{ t('Prec') }}</button>
               <span>{{ placerPage }} / {{ placerTotalPages }}</span>
-              <button type="button" :disabled="placerPage >= placerTotalPages" @click="placerGoPage(placerPage + 1)">Succ &raquo;</button>
+              <button type="button" :disabled="placerPage >= placerTotalPages" @click="placerGoPage(placerPage + 1)">{{ t('Succ') }} &raquo;</button>
             </div>
             <button type="button" class="cie-placer-close" @click="closePlacer">&times;</button>
           </div>
@@ -272,7 +271,7 @@
             <span class="cie-placer-coords">
               X: {{ placerItem?.x?.toFixed(1) ?? '—' }}% &nbsp; Y: {{ placerItem?.y?.toFixed(1) ?? '—' }}%
             </span>
-            <span class="cie-placer-hint">Clicca sulla pagina per riposizionare</span>
+            <span class="cie-placer-hint">{{ t('Clicca sulla pagina per riposizionare') }}</span>
           </div>
         </div>
       </div>
@@ -286,6 +285,7 @@ import { ref, computed, watch } from 'vue';
 import draggable from 'vuedraggable';
 import RichTextEditor from './RichTextEditor.vue';
 import FieldColor from './fields/FieldColor.vue';
+import NumberScrubber from './fields/NumberScrubber.vue';
 import FieldFontFamily from './fields/FieldFontFamily.vue';
 import FieldSelect from './fields/FieldSelect.vue';
 import FieldLink from './fields/FieldLink.vue';
@@ -386,14 +386,14 @@ function stripHtml(html) {
 function getItemLabel(element) {
   if (!labelField.value) return props.itemLabel;
   const val = element[labelField.value];
-  if (!val) return 'Senza titolo';
+  if (!val) return t('Senza titolo');
   // Per campi select: mostra la label dell'opzione, non il value
   const fieldDef = props.itemFields.find(f => f.key === labelField.value);
   if (fieldDef && fieldDef.type === 'select' && fieldDef.options) {
     const opt = fieldDef.options.find(o => o.value === val);
     if (opt) return opt.label;
   }
-  return stripHtml(String(val)) || 'Senza titolo';
+  return stripHtml(String(val)) || t('Senza titolo');
 }
 
 function emitUpdate() {
@@ -419,11 +419,11 @@ function pickImage(index, fieldKey) {
 function mediaButtonLabel(value, field) {
   const type = detectMediaType(field.key, field);
   const labels = {
-    image: { pick: 'Seleziona immagine', change: 'Cambia immagine' },
-    video: { pick: 'Seleziona video',    change: 'Cambia video' },
-    audio: { pick: 'Seleziona audio',    change: 'Cambia audio' },
-    'application/pdf': { pick: 'Seleziona PDF', change: 'Cambia PDF' },
-    all:   { pick: 'Seleziona media',    change: 'Cambia media' },
+    image: { pick: t('Seleziona immagine'), change: t('Cambia immagine') },
+    video: { pick: t('Seleziona video'),    change: t('Cambia video') },
+    audio: { pick: t('Seleziona audio'),    change: t('Cambia audio') },
+    'application/pdf': { pick: t('Seleziona PDF'), change: t('Cambia PDF') },
+    all:   { pick: t('Seleziona media'),    change: t('Cambia media') },
   };
   const l = labels[type] || labels.all;
   return value ? l.change : l.pick;
@@ -450,15 +450,15 @@ function pickMedia(index, fieldKey, forceType) {
   const fieldDef = props.itemFields.find(f => f.key === fieldKey);
   const type = forceType || detectMediaType(fieldKey, fieldDef);
   const titles = {
-    image: 'Seleziona immagine',
-    video: 'Seleziona video',
-    audio: 'Seleziona audio',
-    'application/pdf': 'Seleziona PDF',
-    all: 'Seleziona media',
+    image: t('Seleziona immagine'),
+    video: t('Seleziona video'),
+    audio: t('Seleziona audio'),
+    'application/pdf': t('Seleziona PDF'),
+    all: t('Seleziona media'),
   };
   const frameOpts = {
     title: titles[type] || titles.all,
-    button: { text: 'Usa questo media' },
+    button: { text: t('Usa questo media') },
     multiple: false,
   };
   if (type !== 'all') frameOpts.library = { type };
@@ -777,6 +777,23 @@ function removeItem(index) {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+/* number/range: etichetta a sinistra, controllo compatto a destra (usa lo spazio
+   orizzontale invece di sprecare una riga intera per un numero). */
+.cie-field--inline {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 30px;
+}
+.cie-field--inline .cie-label {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cie-label {

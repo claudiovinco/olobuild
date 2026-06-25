@@ -86,7 +86,7 @@
 
           <!-- Project Google Fonts (if any) -->
           <template v-if="projectFonts.length && filteredProjectFonts.length">
-            <div class="ff-group-label">Font del progetto</div>
+            <div class="ff-group-label">{{ t('Font del progetto') }}</div>
             <div
               v-for="font in filteredProjectFonts"
               :key="'p-' + font"
@@ -129,7 +129,7 @@
           </template>
 
           <div v-if="!filteredCustomFonts.length && !filteredWebSafe.length && !filteredGoogle.length && !filteredProjectFonts.length" class="ff-empty">
-            Nessun risultato
+            {{ t('Nessun risultato') }}
           </div>
         </div>
       </div>
@@ -313,14 +313,14 @@ const displayLabel = computed(() => {
   // Ruoli del tema (formato nuovo var(...)) — prefix-match così anche i var
   // con fallback inline (es. legacy "var(--olo-font-family-heading, 'Libre…')")
   // mostrano la label del ruolo invece della stringa CSS grezza.
-  if (v.startsWith('var(--olo-font-family-heading')) return t('Titoli') + ' (tema)';
-  if (v.startsWith('var(--olo-font-family-mono')) return t('Mono') + ' (tema)';
-  if (v.startsWith('var(--olo-font-family')) return t('Testo') + ' (tema)';
+  if (v.startsWith('var(--olo-font-family-heading')) return t('Titoli') + ' ' + t('(tema)');
+  if (v.startsWith('var(--olo-font-family-mono')) return t('Mono') + ' ' + t('(tema)');
+  if (v.startsWith('var(--olo-font-family')) return t('Testo') + ' ' + t('(tema)');
   const role = THEME_ROLES.find(r => r.value === v);
-  if (role) return role.label + ' (tema)';
+  if (role) return role.label + ' ' + t('(tema)');
   // Set tipografici globali
   const set = typoSets.value.find(s => s.value === v);
-  if (set) return set.label + ' (set)';
+  if (set) return set.label + ' ' + t('(set)');
   // Valori legacy delle vecchie select per-tile
   if (LEGACY_LABELS[v]) return LEGACY_LABELS[v];
   // Try to match web-safe label

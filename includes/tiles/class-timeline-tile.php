@@ -430,7 +430,10 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         echo '<button class="nv-arrow nv-prev" type="button" aria-label="Precedente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>';
         echo '<div class="nv-viewport"><div class="nv-track"><span class="nv-base"></span><span class="nv-fill"></span>';
         foreach ( $items as $i => $item ) {
-            echo '<div class="nv-step"'
+            $nv_name = trim( $item['title'] . ' ' . $item['date'] );
+            if ( $nv_name === '' ) { $nv_name = sprintf( olo_t( 'Tappa %d', 'olobuilder' ), $i + 1 ); }
+            echo '<div class="nv-step" role="button" tabindex="0"'
+                . ' aria-label="' . esc_attr( $nv_name ) . '"'
                 . ' data-yr="' . esc_attr( $item['date'] ) . '"'
                 . ' data-tag="' . esc_attr( $item['tag'] ) . '"'
                 . ' data-title="' . esc_attr( $item['title'] ) . '"'
@@ -486,7 +489,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
             var pb=root.querySelector('.nv-prev'), nb=root.querySelector('.nv-next');
             if(pb){ pb.addEventListener('click', function(){ go(idx-1); }); }
             if(nb){ nb.addEventListener('click', function(){ go(idx+1); }); }
-            for(var i=0;i<n;i++){ (function(k){ steps[k].addEventListener('click', function(){ go(k); }); })(i); }
+            for(var i=0;i<n;i++){ (function(k){ steps[k].addEventListener('click', function(){ go(k); }); steps[k].addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '||e.key==='Spacebar'){ e.preventDefault(); go(k); } }); })(i); }
             window.addEventListener('resize', layout);
             render(); layout();
         })();</script>

@@ -8,27 +8,34 @@
     </div>
 
     <!-- Layout: left -->
-    <div v-else-if="s.author_position === 'left'" class="mb-flex mb-gap-5 mb-items-start">
-      <div class="mb-shrink-0">
-        <AuthorBlock :s="s" :avatarStyle="avatarStyle" />
-      </div>
-      <div class="mb-flex-1 mb-min-w-0">
-        <QuoteBlock :s="s" :rating="rating" :lineStyle="lineStyle" />
+    <div v-else-if="s.author_position === 'left'">
+      <img v-if="s.logo" class="olo-test-logo" :src="s.logo" alt="" :style="logoStyle" />
+      <div class="mb-flex mb-gap-5 mb-items-start">
+        <div class="mb-shrink-0">
+          <AuthorBlock :s="s" :avatarStyle="avatarStyle" />
+        </div>
+        <div class="mb-flex-1 mb-min-w-0">
+          <QuoteBlock :s="s" :rating="rating" :lineStyle="lineStyle" />
+        </div>
       </div>
     </div>
 
     <!-- Layout: right -->
-    <div v-else-if="s.author_position === 'right'" class="mb-flex mb-gap-5 mb-items-start">
-      <div class="mb-flex-1 mb-min-w-0">
-        <QuoteBlock :s="s" :rating="rating" :lineStyle="lineStyle" />
-      </div>
-      <div class="mb-shrink-0">
-        <AuthorBlock :s="s" :avatarStyle="avatarStyle" />
+    <div v-else-if="s.author_position === 'right'">
+      <img v-if="s.logo" class="olo-test-logo" :src="s.logo" alt="" :style="logoStyle" />
+      <div class="mb-flex mb-gap-5 mb-items-start">
+        <div class="mb-flex-1 mb-min-w-0">
+          <QuoteBlock :s="s" :rating="rating" :lineStyle="lineStyle" />
+        </div>
+        <div class="mb-shrink-0">
+          <AuthorBlock :s="s" :avatarStyle="avatarStyle" />
+        </div>
       </div>
     </div>
 
     <!-- Layout: bottom-left / bottom-center / bottom-right -->
     <div v-else>
+      <img v-if="s.logo" class="olo-test-logo" :src="s.logo" alt="" :style="logoStyle" />
       <QuoteBlock :s="s" :rating="rating" :lineStyle="lineStyle" />
       <div class="mb-mt-5" :style="bottomAlignStyle">
         <AuthorBlock :s="s" :avatarStyle="avatarStyle" horizontal />
@@ -48,6 +55,7 @@ const props = defineProps({
 // Default colore = '' ⇒ risolti token-first a runtime (allineato a config testimonial.js)
 const s = computed(() => ({
   quote: 'Un prodotto fantastico!',
+  logo: '',
   author_name: 'Mario Rossi',
   author_role: 'CEO',
   avatar: '',
@@ -142,6 +150,16 @@ const lineStyle = computed(() => {
     paddingLeft: '16px',
   };
 });
+
+// Logo cliente in alto nella card (parità col PHP .olo-test-logo). No-op se s.logo vuoto.
+const logoStyle = {
+  height: '40px',
+  width: 'auto',
+  maxWidth: '160px',
+  objectFit: 'contain',
+  display: 'block',
+  marginBottom: '16px',
+};
 
 const bottomAlignStyle = computed(() => {
   const pos = s.value.author_position || 'bottom-left';

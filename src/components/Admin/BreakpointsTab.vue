@@ -64,7 +64,7 @@
         <span></span>
       </div>
       <div v-for="(b, i) in breakpoints" :key="b.id" class="bp-row" :class="{ 'is-active': b.is_default }">
-        <div class="bp-handle" title="Trascina">⋮⋮</div>
+        <div class="bp-handle" :title="t('Trascina')">⋮⋮</div>
         <div class="bp-icon">{{ b.icon }}</div>
         <div class="bp-name">{{ b.name }}</div>
         <div class="cfg-input mono">

@@ -143,7 +143,7 @@ class Olo_Header_Integration {
         $inline_css .= '</style>';
 
         $mode_class = ( $header_mode === 'classic' ) ? 'olo-header-classic' : 'olo-header-overlay';
-        return '<header class="olo-site-header alignfull ' . $mode_class . '">' . $inline_css . $inner_html . '</header>';
+        return '<header class="olo-site-header alignfull ' . $mode_class . '" role="banner">' . $inline_css . $inner_html . '</header>';
     }
 
     /**

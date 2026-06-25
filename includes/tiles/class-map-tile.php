@@ -1225,7 +1225,11 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             // Amenities (stored as serialized array)
             $raw_amenities = get_post_meta( $post->ID, '_olo_service_amenities', true );
             if ( $raw_amenities ) {
-                $amenities = maybe_unserialize( $raw_amenities );
+                // Anti object-injection: niente istanziazione di classi da dati serializzati
+                // potenzialmente non fidati nel post-meta.
+                $amenities = is_serialized( $raw_amenities )
+                    ? unserialize( $raw_amenities, [ 'allowed_classes' => false ] )
+                    : $raw_amenities;
                 if ( is_array( $amenities ) && ! empty( $amenities ) ) {
                     $location['amenities'] = array_values( $amenities );
                     // Amenity labels for popup display

@@ -11,7 +11,7 @@
       <button
         @click="$emit('toggle-play')"
         class="mb-w-6 mb-h-6 mb-flex mb-items-center mb-justify-center mb-bg-gray-700 mb-rounded hover:mb-bg-gray-600 mb-text-gray-300 mb-transition-colors"
-        :title="isPlaying ? 'Pausa' : 'Riproduci'"
+        :title="isPlaying ? t('Pausa') : t('Riproduci')"
       >
         <svg v-if="!isPlaying" viewBox="0 0 16 16" class="mb-w-3 mb-h-3" fill="currentColor"><polygon points="4,2 14,8 4,14"/></svg>
         <svg v-else viewBox="0 0 16 16" class="mb-w-3 mb-h-3" fill="currentColor"><rect x="3" y="2" width="3.5" height="12"/><rect x="9.5" y="2" width="3.5" height="12"/></svg>
@@ -22,7 +22,7 @@
         @click="seekPrevKf"
         :disabled="!prevKfTime && prevKfTime !== 0"
         class="mb-w-6 mb-h-6 mb-flex mb-items-center mb-justify-center mb-bg-gray-700 mb-rounded hover:mb-bg-gray-600 mb-text-gray-300 mb-transition-colors disabled:mb-opacity-30 disabled:mb-cursor-default"
-        title="Keyframe precedente"
+        :title="t('Keyframe precedente')"
       >
         <svg viewBox="0 0 16 16" class="mb-w-3 mb-h-3" fill="currentColor"><rect x="2" y="3" width="2.5" height="10"/><polygon points="14,3 6,8 14,13"/></svg>
       </button>
@@ -32,7 +32,7 @@
         @click="seekNextKf"
         :disabled="!nextKfTime && nextKfTime !== 0"
         class="mb-w-6 mb-h-6 mb-flex mb-items-center mb-justify-center mb-bg-gray-700 mb-rounded hover:mb-bg-gray-600 mb-text-gray-300 mb-transition-colors disabled:mb-opacity-30 disabled:mb-cursor-default"
-        title="Keyframe successivo"
+        :title="t('Keyframe successivo')"
       >
         <svg viewBox="0 0 16 16" class="mb-w-3 mb-h-3" fill="currentColor"><polygon points="2,3 10,8 2,13"/><rect x="11.5" y="3" width="2.5" height="10"/></svg>
       </button>
@@ -45,25 +45,34 @@
       <!-- Selected layer controls (duration, delay, loop) -->
       <template v-if="activeTimeline">
         <label class="mb-flex mb-items-center mb-gap-1">
-          <span class="mb-text-[10px] mb-text-gray-500">Durata</span>
-          <input
-            type="number"
-            :value="activeTimeline.duration"
-            @change="$emit('update-timeline-prop', 'duration', clampDuration(+$event.target.value))"
-            class="mb-w-16 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-1.5 mb-py-0.5 mb-text-[10px] mb-text-gray-300 mb-text-center"
-            min="500" max="30000" step="100"
+          <span class="mb-text-[10px] mb-text-gray-500">{{ t('Durata') }}</span>
+          <NumberScrubber
+            theme="dark"
+            :modelValue="activeTimeline.duration"
+            :min="500"
+            :max="30000"
+            :step="100"
+            :defaultValue="3000"
+            emitAs="number"
+            unit="ms"
+            :ariaLabel="t('Durata')"
+            @update:modelValue="$emit('update-timeline-prop', 'duration', clampDuration($event))"
           />
-          <span class="mb-text-[10px] mb-text-gray-500">ms</span>
         </label>
 
         <label class="mb-flex mb-items-center mb-gap-1">
           <span class="mb-text-[10px] mb-text-gray-500">Delay</span>
-          <input
-            type="number"
-            :value="activeTimeline.delay || 0"
-            @change="$emit('update-timeline-prop', 'delay', Math.max(0, +$event.target.value))"
-            class="mb-w-14 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-1.5 mb-py-0.5 mb-text-[10px] mb-text-gray-300 mb-text-center"
-            min="0" max="10000" step="100"
+          <NumberScrubber
+            theme="dark"
+            :modelValue="activeTimeline.delay || 0"
+            :min="0"
+            :max="10000"
+            :step="100"
+            :defaultValue="0"
+            emitAs="number"
+            unit="ms"
+            ariaLabel="Delay"
+            @update:modelValue="$emit('update-timeline-prop', 'delay', Math.max(0, $event))"
           />
         </label>
 
@@ -77,7 +86,7 @@
           <span class="mb-text-[10px] mb-text-gray-400">Loop</span>
         </label>
 
-        <label class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer" title="Layer OUT aspetta la fine della slide (WAIT)">
+        <label class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer" :title="t('Layer OUT aspetta la fine della slide (WAIT)')">
           <input
             type="checkbox"
             :checked="activeTimeline.endWithSlide !== false"
@@ -90,10 +99,10 @@
         <button
           @click="addKeyframeAtPlayhead"
           class="mb-ml-auto mb-px-2 mb-py-0.5 mb-bg-gray-700 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-600 mb-transition-colors"
-          title="Aggiungi keyframe al tempo corrente"
+          :title="t('Aggiungi keyframe al tempo corrente')"
         >+ Keyframe</button>
       </template>
-      <span v-else class="mb-text-[10px] mb-text-gray-500 mb-italic">Seleziona un layer con timeline</span>
+      <span v-else class="mb-text-[10px] mb-text-gray-500 mb-italic">{{ t('Seleziona un layer con timeline') }}</span>
 
       <!-- Timeline zoom controls -->
       <div class="mb-ml-auto mb-flex mb-items-center mb-gap-1 mb-pl-3 mb-border-l mb-border-gray-600">
@@ -101,20 +110,20 @@
           @click="timelineZoom = Math.max(1, +(timelineZoom - 0.5).toFixed(1))"
           :disabled="timelineZoom <= 1"
           class="mb-w-5 mb-h-5 mb-flex mb-items-center mb-justify-center mb-bg-gray-700 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-600 mb-transition-colors disabled:mb-opacity-30"
-          title="Riduci zoom timeline"
+          :title="t('Riduci zoom timeline')"
         >−</button>
         <span class="mb-text-[10px] mb-text-gray-400 mb-font-mono mb-w-8 mb-text-center">{{ Math.round(timelineZoom * 100) }}%</span>
         <button
           @click="timelineZoom = Math.min(10, +(timelineZoom + 0.5).toFixed(1))"
           :disabled="timelineZoom >= 10"
           class="mb-w-5 mb-h-5 mb-flex mb-items-center mb-justify-center mb-bg-gray-700 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-600 mb-transition-colors disabled:mb-opacity-30"
-          title="Aumenta zoom timeline"
+          :title="t('Aumenta zoom timeline')"
         >+</button>
         <button
           v-if="timelineZoom !== 1"
           @click="timelineZoom = 1"
           class="mb-w-5 mb-h-5 mb-flex mb-items-center mb-justify-center mb-bg-gray-700 mb-rounded mb-text-[10px] mb-text-gray-400 hover:mb-bg-gray-600 mb-transition-colors"
-          title="Reset zoom"
+          :title="t('Reset zoom')"
         >⟲</button>
       </div>
 
@@ -122,27 +131,31 @@
       <div class="mb-flex mb-items-center mb-gap-2 mb-pl-3 mb-border-l mb-border-gray-600">
         <label class="mb-flex mb-items-center mb-gap-1">
           <span class="mb-text-[10px] mb-text-gray-500">Slide</span>
-          <input
-            type="number"
-            :value="effectiveSlideDuration / 1000"
-            @change="onSlideDurationChange(+$event.target.value)"
-            class="mb-w-14 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-1.5 mb-py-0.5 mb-text-[10px] mb-text-gray-300 mb-text-center"
-            min="0.5" max="120" step="0.5"
+          <NumberScrubber
+            theme="dark"
+            :modelValue="effectiveSlideDuration / 1000"
+            :min="0.5"
+            :max="120"
+            :step="0.5"
+            :defaultValue="5"
+            emitAs="number"
+            unit="s"
+            ariaLabel="Slide"
+            @update:modelValue="onSlideDurationChange($event)"
           />
-          <span class="mb-text-[10px] mb-text-gray-500">s</span>
         </label>
         <button
           v-if="maxDuration > effectiveSlideDuration"
           @click="emit('update-slide-duration', maxDuration)"
           class="mb-px-1.5 mb-py-0.5 mb-bg-yellow-600/30 mb-border mb-border-yellow-600/50 mb-rounded mb-text-[10px] mb-text-yellow-300 hover:mb-bg-yellow-600/50 mb-transition-colors"
-          :title="'La timeline (' + (maxDuration/1000).toFixed(1) + 's) è più lunga della slide (' + (effectiveSlideDuration/1000).toFixed(1) + 's). Clicca per sincronizzare.'"
+          :title="t('La timeline (') + (maxDuration/1000).toFixed(1) + t('s) è più lunga della slide (') + (effectiveSlideDuration/1000).toFixed(1) + t('s). Clicca per sincronizzare.')"
         >⚠ Sync</button>
         <button
           v-if="timelineTracks.length > 1"
           @click="emit('set-all-durations', maxDuration)"
           class="mb-px-1.5 mb-py-0.5 mb-bg-gray-700 mb-rounded mb-text-[10px] mb-text-gray-400 hover:mb-bg-gray-600 mb-transition-colors"
-          title="Imposta tutte le durate layer alla durata massima"
-        >= Tutti</button>
+          :title="t('Imposta tutte le durate layer alla durata massima')"
+        >= {{ t('Tutti') }}</button>
       </div>
     </div>
 
@@ -247,7 +260,7 @@
                 background: track.color,
                 opacity: 0.15,
               }"
-              title="WAIT — layer resta visibile fino a fine slide"
+              :title="t('WAIT — layer resta visibile fino a fine slide')"
             ></div>
 
             <!-- Tloop range indicator -->
@@ -306,12 +319,12 @@
       <button
         @click="duplicateKeyframe(ctxMenu.kf, ctxMenu.track); ctxMenu = null"
         class="mb-block mb-w-full mb-text-left mb-px-3 mb-py-1 mb-text-xs mb-text-gray-300 hover:mb-bg-gray-700"
-      >Duplica keyframe</button>
+      >{{ t('Duplica keyframe') }}</button>
       <button
         v-if="canDeleteKf(ctxMenu.track)"
         @click="$emit('select-layer', ctxMenu.track.layer.id); $emit('remove-keyframe', ctxMenu.kf.id); ctxMenu = null"
         class="mb-block mb-w-full mb-text-left mb-px-3 mb-py-1 mb-text-xs mb-text-red-400 hover:mb-bg-gray-700"
-      >Elimina keyframe</button>
+      >{{ t('Elimina keyframe') }}</button>
     </div>
   </div>
 </template>
@@ -319,6 +332,8 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { formatTime, interpolateAtTime, defaultKeyframe } from './timelineUtils.js';
+import { t } from '@/i18n';
+import NumberScrubber from '../Builder/fields/NumberScrubber.vue';
 
 const props = defineProps({
   layers: { type: Array, default: () => [] },

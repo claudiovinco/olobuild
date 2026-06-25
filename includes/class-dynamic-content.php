@@ -777,6 +777,10 @@ class Olo_Dynamic_Content {
         }
 
         $query = new WP_Query( $args );
+        // Prime la cache delle featured image dell'intero set: evita l'N+1 (una query
+        // attachment per post) quando build_items_from_query risolve 'featured_image'.
+        // Stesso pattern di postgrid/relatedposts/rest-api.
+        update_post_thumbnail_cache( $query );
         return $query->posts;
     }
 

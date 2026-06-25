@@ -94,6 +94,13 @@ class Olo_Animatedheading_Tile extends Olo_Tile_Base {
             if(!el) return;
             var words = JSON.parse(el.getAttribute('data-words'));
             if(!words.length) return;
+            // WCAG 2.2.2 / 2.3.3: rispetta prefers-reduced-motion.
+            // Se l'utente preferisce ridurre il movimento, mostra staticamente
+            // la prima parola senza avviare alcuna animazione/intervallo.
+            if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+                el.textContent = words[0];
+                return;
+            }
             var idx = 0;
             var anim = '<?php echo esc_js($anim); ?>';
             var speed = <?php echo (int) $speed; ?>;

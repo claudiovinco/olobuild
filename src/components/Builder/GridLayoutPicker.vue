@@ -51,7 +51,7 @@
         <div v-if="activeTab === 'all' || activeTab === 'columns'" class="glp-category">
           <div class="glp-cat-label">
             <span class="glp-cat-badge glp-cat-badge--flex">Flex</span>
-            Colonne Flex (classico)
+            {{ t('Colonne Flex (classico)') }}
           </div>
           <div class="glp-grid">
             <button
@@ -94,15 +94,15 @@ const selectedId = ref(props.currentMode === 'grid' ? props.currentLayout : '');
 const selectedFlex = ref(props.currentMode !== 'grid' ? props.currentLayout : '');
 
 const tabs = [
-  { key: 'all', label: 'Tutti' },
-  { key: 'columns', label: 'Colonne' },
+  { key: 'all', label: t('Tutti') },
+  { key: 'columns', label: t('Colonne') },
   { key: 'multirow', label: 'Multi-Row' },
   { key: 'masonry', label: 'Masonry' },
   { key: 'sidebar', label: 'Sidebar' },
 ];
 
 const categories = [
-  { key: 'columns', label: 'Colonne', templates: columns },
+  { key: 'columns', label: t('Colonne'), templates: columns },
   { key: 'multirow', label: 'Multi-Row', templates: multirow },
   { key: 'masonry', label: 'Masonry', templates: masonry },
   { key: 'sidebar', label: 'Sidebar', templates: sidebar },

@@ -243,15 +243,24 @@ class Olo_Template_Conditions {
             [
                 'methods'             => 'GET',
                 'callback'            => [ $this, 'get_conditions' ],
+                // Impostazione SITE-WIDE (override globale di header/footer/template): solo admin.
                 'permission_callback' => function () {
-                    return current_user_can( 'edit_posts' );
+                    return current_user_can( 'manage_options' );
                 },
             ],
             [
                 'methods'             => 'POST',
                 'callback'            => [ $this, 'save_conditions' ],
-                'permission_callback' => function () {
-                    return current_user_can( 'edit_posts' );
+                // Scrittura globale: manage_options + nonce wp_rest (anti-CSRF), coerente con check_permission().
+                'permission_callback' => function ( $request ) {
+                    if ( ! current_user_can( 'manage_options' ) ) {
+                        return false;
+                    }
+                    $nonce = $request->get_header( 'x-wp-nonce' );
+                    if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+                        return new WP_Error( 'rest_forbidden', 'Nonce non valido.', [ 'status' => 403 ] );
+                    }
+                    return true;
                 },
             ],
         ] );
@@ -265,6 +274,11 @@ class Olo_Template_Conditions {
         $data = $request->get_json_params();
         if ( ! is_array( $data ) ) {
             return new WP_Error( 'invalid', 'Dati non validi', [ 'status' => 400 ] );
+        }
+        // Il client (TemplateConditionsTab.vue) invia { rules: [...] }; accetta anche
+        // l'array nudo per retrocompatibilita'. Senza questo unwrap il salvataggio UI non persisteva.
+        if ( isset( $data['rules'] ) && is_array( $data['rules'] ) ) {
+            $data = $data['rules'];
         }
 
         $clean = [];

@@ -23,9 +23,9 @@
 
     <!-- Cell toolbar -->
     <div class="olo-cell-toolbar">
-      <button title="Sposta" class="move">&#x2630;</button>
-      <button title="Duplica" @click.stop="duplicate">&#x2398;</button>
-      <button title="Elimina" class="delete" @click.stop="remove">&#x2715;</button>
+      <button :title="t('Sposta')" class="move">&#x2630;</button>
+      <button :title="t('Duplica')" @click.stop="duplicate">&#x2398;</button>
+      <button :title="t('Elimina')" class="delete" @click.stop="remove">&#x2715;</button>
     </div>
 
     <!-- Full-width indicator -->
@@ -54,6 +54,7 @@
 
 <script setup>
 import { computed, ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { t } from '@/i18n';
 import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
 import TileBase from '@/components/Tiles/TileBase.vue';
@@ -216,7 +217,7 @@ watch(() => {
   return [a.mouse_tilt, s.mouse_tilt, a.mouse_tilt_intensity, s.mouse_tilt_intensity, a.mouse_tilt_target, s.mouse_tilt_target, a.mouse_track, s.mouse_track, a.mouse_track_speed, s.mouse_track_speed].join('|');
 }, setupMouseFx);
 
-const isSelected = computed(() => builderStore.selectedTileId === props.tile.id);
+const isSelected = computed(() => builderStore.selectedTileId === props.tile.id || builderStore.selectedTileIds.includes(props.tile.id));
 
 // Responsive visibility: check if tile is hidden in current viewMode
 const isHiddenInViewport = computed(() => {
@@ -588,8 +589,13 @@ const hoverCssTag = computed(() => {
   return `${sel} { transition: ${transVal}; } ${sel}:hover { ${hoverDecls.join('; ')}; }`;
 });
 
-function selectTile() {
-  if (builderStore.selectedTileId === props.tile.id) return;
+function selectTile(e) {
+  // Ctrl/Cmd-click: aggiunge/toglie dalla multi-selezione (azioni bulk: Canc, Ctrl+D).
+  if (e && (e.ctrlKey || e.metaKey)) {
+    builderStore.toggleTileSelection(props.tile.id);
+    return;
+  }
+  if (builderStore.selectedTileId === props.tile.id && builderStore.selectedTileIds.length <= 1) return;
   builderStore.selectTile(props.tile.id);
 }
 

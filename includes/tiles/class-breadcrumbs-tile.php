@@ -55,16 +55,16 @@ class Olo_Breadcrumbs_Tile extends Olo_Tile_Base {
 
             // Current page
             if ( $show_curr ) {
-                $items[] = '<li><span>' . esc_html( get_the_title( $post->ID ) ) . '</span></li>';
+                $items[] = '<li><span aria-current="page">' . esc_html( get_the_title( $post->ID ) ) . '</span></li>';
             }
         } elseif ( is_category() ) {
-            $items[] = '<li><span>' . esc_html( single_cat_title( '', false ) ) . '</span></li>';
+            $items[] = '<li><span aria-current="page">' . esc_html( single_cat_title( '', false ) ) . '</span></li>';
         } elseif ( is_tag() ) {
-            $items[] = '<li><span>' . esc_html( single_tag_title( '', false ) ) . '</span></li>';
+            $items[] = '<li><span aria-current="page">' . esc_html( single_tag_title( '', false ) ) . '</span></li>';
         } elseif ( is_search() ) {
-            $items[] = '<li><span>' . esc_html__( 'Risultati ricerca', 'olobuild' ) . '</span></li>';
+            $items[] = '<li><span aria-current="page">' . esc_html__( 'Risultati ricerca', 'olobuild' ) . '</span></li>';
         } elseif ( is_404() ) {
-            $items[] = '<li><span>' . esc_html__( 'Pagina non trovata', 'olobuild' ) . '</span></li>';
+            $items[] = '<li><span aria-current="page">' . esc_html__( 'Pagina non trovata', 'olobuild' ) . '</span></li>';
         }
 
         if ( empty( $items ) ) {

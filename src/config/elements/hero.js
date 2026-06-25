@@ -164,7 +164,7 @@ export default {
 
     // ── Layout interno ──
     { type: 'separator', label: t('Layout interno') },
-    { key: 'min_height',         label: t('Altezza minima (es. 500px, 80vh)'), type: 'text' },
+    { key: 'min_height',         label: t('Altezza minima'), type: 'unit', units: ['px', 'vh', '%'], placeholder: 'auto' },
     { key: 'content_max_width',  label: t('Larghezza max contenuto (px)'), type: 'range', min: 200, max: 1200, step: 50 },
     { key: 'vertical_align',     label: t('Posizione verticale del blocco'), type: 'select', options: [
       { value: 'top',    label: t('In alto') },

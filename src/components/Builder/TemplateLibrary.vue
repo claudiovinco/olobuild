@@ -48,7 +48,7 @@
                 @update:modelValue="activeCategory = $event"
               />
             </div>
-            <span style="color:#6B7280;font-size:10px">{{ filteredTemplates.length }} risultati</span>
+            <span style="color:#6B7280;font-size:10px">{{ filteredTemplates.length }} {{ t('risultati') }}</span>
           </div>
 
           <!-- Templates grid -->
@@ -120,7 +120,7 @@
 
           <!-- Footer -->
           <div class="mb-px-5 mb-py-2 mb-border-t mb-border-gray-700 mb-bg-gray-900/50 mb-flex mb-items-center mb-justify-between">
-            <span class="mb-text-[10px] mb-text-gray-500">{{ filteredTemplates.length }} / {{ templates.length }} template</span>
+            <span class="mb-text-[10px] mb-text-gray-500">{{ filteredTemplates.length }} / {{ templates.length }} {{ t('template') }}</span>
             <button @click="close" class="mb-text-xs mb-text-gray-400 hover:mb-text-gray-200 mb-transition-colors">{{ t('Chiudi') }}</button>
           </div>
         </div>
@@ -183,8 +183,8 @@
             <!-- Preview info -->
             <div v-if="saveSection" style="padding:8px 10px;background:#111827;border-radius:6px;margin-bottom:16px">
               <span style="color:#6B7280;font-size:10px">{{ t('Sezione:') }} </span>
-              <span style="color:#D1D5DB;font-size:11px">{{ saveSection.settings?._label || 'Sezione' }}</span>
-              <span style="color:#6B7280;font-size:10px;margin-left:8px">{{ countElements(saveSection) }} elementi</span>
+              <span style="color:#D1D5DB;font-size:11px">{{ saveSection.settings?._label || t('Sezione') }}</span>
+              <span style="color:#6B7280;font-size:10px;margin-left:8px">{{ countElements(saveSection) }} {{ t('elementi') }}</span>
             </div>
           </div>
           <!-- Footer -->
@@ -198,7 +198,7 @@
               :disabled="!saveName.trim() || saving"
               style="padding:7px 16px;border-radius:6px;border:none;background:#e8622a;color:#fff;font-size:12px;font-weight:500;cursor:pointer;transition:opacity 0.15s"
               :style="{ opacity: (!saveName.trim() || saving) ? '0.5' : '1' }"
-            >{{ saving ? 'Salvataggio...' : 'Salva template' }}</button>
+            >{{ saving ? t('Salvataggio...') : t('Salva template') }}</button>
           </div>
         </div>
       </div>
@@ -226,7 +226,7 @@
                 <div style="color:#9CA3AF;font-size:11px">{{ t('Questa azione non può essere annullata') }}</div>
               </div>
             </div>
-            <p style="color:#D1D5DB;font-size:12px;margin:0 0 4px">Vuoi eliminare il template <strong style="color:#FCD34D">{{ deleteTarget?.name }}</strong>?</p>
+            <p style="color:#D1D5DB;font-size:12px;margin:0 0 4px">{{ t('Vuoi eliminare il template') }} <strong style="color:#FCD34D">{{ deleteTarget?.name }}</strong>?</p>
           </div>
           <div style="padding:12px 20px;border-top:1px solid #374151;display:flex;justify-content:flex-end;gap:8px">
             <button
@@ -238,7 +238,7 @@
               :disabled="deleting"
               style="padding:7px 16px;border-radius:6px;border:none;background:#EF4444;color:#fff;font-size:12px;font-weight:500;cursor:pointer;transition:opacity 0.15s"
               :style="{ opacity: deleting ? '0.5' : '1' }"
-            >{{ deleting ? 'Eliminazione...' : 'Elimina' }}</button>
+            >{{ deleting ? t('Eliminazione...') : t('Elimina') }}</button>
           </div>
         </div>
       </div>
@@ -253,7 +253,7 @@
             <span style="color:#E5E7EB;font-size:14px;font-weight:600">{{ t('Inserisci pagina completa') }}</span>
           </div>
           <p style="color:#9CA3AF;font-size:12px;line-height:1.5;margin:0 0 16px">
-            Il canvas contiene già del contenuto. Come vuoi procedere con il template <strong style="color:#E5E7EB">{{ pendingPageTpl?.name }}</strong>?
+            {{ t('Il canvas contiene già del contenuto. Come vuoi procedere con il template') }} <strong style="color:#E5E7EB">{{ pendingPageTpl?.name }}</strong>?
           </p>
           <div style="display:flex;gap:8px">
             <button @click="confirmPageInsert('replace')" style="flex:1;padding:8px 12px;background:#e8622a;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:background 0.15s" @mouseenter="$event.target.style.background='#c44d1d'" @mouseleave="$event.target.style.background='#e8622a'">

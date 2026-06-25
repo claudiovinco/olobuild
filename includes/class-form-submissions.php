@@ -179,7 +179,7 @@ class Olo_Form_Submissions {
 
         // Header row
         $header = array_merge( [ 'ID', 'Form' ], array_map( 'ucfirst', $all_keys ), [ 'IP', 'Data', 'Stato' ] );
-        fputcsv( $out, $header, ';' );
+        fputcsv( $out, array_map( 'olo_csv_safe', $header ), ';' );
 
         // Data rows
         foreach ( $decoded_rows as $dr ) {
@@ -194,7 +194,8 @@ class Olo_Form_Submissions {
             $row_data[] = $dr['ip_address'];
             $row_data[] = $dr['submitted_at'];
             $row_data[] = $dr['read_status'] ? 'Letto' : 'Non letto';
-            fputcsv( $out, $row_data, ';' );
+            // Anti CSV-injection: prefissa i valori che iniziano con =,+,-,@ (formula Excel/Sheets).
+            fputcsv( $out, array_map( 'olo_csv_safe', $row_data ), ';' );
         }
 
         fclose( $out );

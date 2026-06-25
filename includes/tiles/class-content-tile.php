@@ -341,6 +341,18 @@ class Olo_Content_Tile extends Olo_Tile_Base {
                 $extra_css .= '@keyframes olo-tfx-wave{0%,40%,100%{transform:translateY(0)}20%{transform:translateY(-30%)}}';
                 $extra_css .= $sel . ' .olo-tfx--wave .olo-tfx-char{display:inline-block;animation:olo-tfx-wave 2s ease-in-out infinite;animation-delay:calc(var(--i,0) * 80ms + ' . $delay . 'ms);}';
             }
+
+            // A11y (WCAG 2.2.2 Pause/Stop/Hide + 2.3.3): kill the infinite, auto-running
+            // text effects when the user asks for reduced motion. Scoped to this tile ($sel).
+            if ( in_array( $effect, [ 'gradient-anim', 'glitch', 'wave' ], true ) ) {
+                $extra_css .= '@media (prefers-reduced-motion: reduce){'
+                    . $sel . ' .olo-tfx--gradient-anim,'
+                    . $sel . ' .olo-tfx--glitch,'
+                    . $sel . ' .olo-tfx--glitch::before,'
+                    . $sel . ' .olo-tfx--glitch::after,'
+                    . $sel . ' .olo-tfx--wave .olo-tfx-char{animation:none!important;}'
+                    . '}';
+            }
         }
         ?>
 

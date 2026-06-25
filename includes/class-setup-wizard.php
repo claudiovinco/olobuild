@@ -89,7 +89,8 @@ class Olo_Setup_Wizard {
 
         $wizard_url  = admin_url( 'admin.php?page=olo-setup' );
         $dismiss_url = wp_nonce_url( add_query_arg( 'olo_welcome_dismiss', '1' ), 'olo_welcome_dismiss' );
-        $logo_url    = OLO_URL . 'assets/img/olobuild-logo-200-white.png';
+        $logo_url    = apply_filters( 'olo_brand_logo_url', OLO_URL . 'assets/img/olobuild-logo-200-white.png' );
+        $brand       = apply_filters( 'olo_brand_name', 'Olobuild' );
         ?>
         <style>
             .olo-welcome{position:relative;overflow:hidden;margin:20px 20px 20px 2px;padding:0;border:0;border-radius:14px;
@@ -115,9 +116,9 @@ class Olo_Setup_Wizard {
         </style>
         <div class="notice olo-welcome">
             <div class="olo-welcome__inner">
-                <img class="olo-welcome__logo" src="<?php echo esc_url( $logo_url ); ?>" alt="Olobuild">
+                <img class="olo-welcome__logo" src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( $brand ); ?>">
                 <div class="olo-welcome__text">
-                    <h2><?php esc_html_e( 'Ti diamo il benvenuto in Olobuild!', 'olobuild' ); ?></h2>
+                    <h2><?php echo esc_html( sprintf( /* translators: %s = nome del brand */ __( 'Ti diamo il benvenuto in %s!', 'olobuild' ), $brand ) ); ?></h2>
                     <p><?php esc_html_e( 'Il tuo page builder è installato e pronto. Ti accompagniamo nei primi passi: in un paio di minuti il sito prende già forma.', 'olobuild' ); ?></p>
                     <p class="olo-welcome__steps">
                         <b>1</b> <?php esc_html_e( 'Scegli un tema', 'olobuild' ); ?> &nbsp;·&nbsp;

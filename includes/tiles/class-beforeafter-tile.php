@@ -170,11 +170,16 @@ class Olo_BeforeAfter_Tile extends Olo_Tile_Base {
                 $aimg = isset( $it['after_image'] ) ? trim( $it['after_image'] ) : '';
                 $bsty = $bimg !== '' ? ' style="background-image:url(' . esc_url( $bimg ) . ')"' : '';
                 $asty = $aimg !== '' ? ' style="background-image:url(' . esc_url( $aimg ) . ')"' : '';
+                $it_title = ! empty( $it['title'] ) ? trim( $it['title'] ) : '';
+                $b_lab    = ! empty( $it['before_label'] ) ? trim( $it['before_label'] ) : olo_t( 'Prima', 'olobuilder' );
+                $a_lab    = ! empty( $it['after_label'] ) ? trim( $it['after_label'] ) : olo_t( 'Dopo', 'olobuilder' );
+                $b_aria   = $it_title !== '' ? $b_lab . ' – ' . $it_title : $b_lab;
+                $a_aria   = $it_title !== '' ? $a_lab . ' – ' . $it_title : $a_lab;
             ?>
                 <div class="oba-card">
                     <div class="oba-pair">
-                        <div class="oba-media"<?php echo $bsty; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attribute assembled above from fixed literals + esc_url()'d image ?>><?php if ( ! empty( $it['before_label'] ) ) : ?><span class="oba-lab oba-lab--b"><?php echo esc_html( $it['before_label'] ); ?></span><?php endif; ?></div>
-                        <div class="oba-media"<?php echo $asty; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attribute assembled above from fixed literals + esc_url()'d image ?>><?php if ( ! empty( $it['after_label'] ) ) : ?><span class="oba-lab oba-lab--a"><?php echo esc_html( $it['after_label'] ); ?></span><?php endif; ?></div>
+                        <div class="oba-media" role="img" aria-label="<?php echo esc_attr( $b_aria ); ?>"<?php echo $bsty; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attribute assembled above from fixed literals + esc_url()'d image ?>><?php if ( ! empty( $it['before_label'] ) ) : ?><span class="oba-lab oba-lab--b" aria-hidden="true"><?php echo esc_html( $it['before_label'] ); ?></span><?php endif; ?></div>
+                        <div class="oba-media" role="img" aria-label="<?php echo esc_attr( $a_aria ); ?>"<?php echo $asty; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attribute assembled above from fixed literals + esc_url()'d image ?>><?php if ( ! empty( $it['after_label'] ) ) : ?><span class="oba-lab oba-lab--a" aria-hidden="true"><?php echo esc_html( $it['after_label'] ); ?></span><?php endif; ?></div>
                     </div>
                     <?php if ( ! empty( $it['title'] ) || ! empty( $it['text'] ) ) : ?>
                         <div class="oba-cap">

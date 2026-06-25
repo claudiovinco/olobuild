@@ -49,7 +49,7 @@ class Olo_Totop_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <div class="olo-totop <?php echo esc_attr( $uid ); ?> <?php echo esc_attr( $align_class ); ?>">
-            <a href="#" uk-totop<?php echo $scroll_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed internal string (' uk-scroll' or '') set by a boolean toggle above ?>></a>
+            <a href="#" uk-totop<?php echo $scroll_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed internal string (' uk-scroll' or '') set by a boolean toggle above ?> aria-label="<?php esc_attr_e( 'Torna su', 'olobuilder' ); ?>"></a>
         </div>
         <?php
                 // Border system

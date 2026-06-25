@@ -26,15 +26,14 @@
       </div>
 
       <!-- Posts per page -->
-      <div class="dqp-field">
-        <label class="dqp-label">{{ t('Numero di elementi') }}</label>
-        <input
-          type="number"
-          :value="localQuery.posts_per_page"
-          @input="updateQuery('posts_per_page', parseInt($event.target.value) || 6)"
-          class="dqp-input"
-          min="1"
-          max="50"
+      <div class="dqp-field" style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+        <label class="dqp-label" style="margin:0;">{{ t('Numero di elementi') }}</label>
+        <NumberScrubber
+          :modelValue="localQuery.posts_per_page"
+          :min="1" :max="50" :step="1" :defaultValue="6"
+          emitAs="number"
+          :ariaLabel="t('Numero di elementi')"
+          @update:modelValue="updateQuery('posts_per_page', $event || 6)"
         />
       </div>
 
@@ -95,6 +94,7 @@ import { t } from '@/i18n';
 import { ref, computed, watch, onMounted } from 'vue';
 import { useDynamicContent } from '@/composables/useDynamicContent';
 import FieldSelect from './fields/FieldSelect.vue';
+import NumberScrubber from './fields/NumberScrubber.vue';
 
 const props = defineProps({
   query: { type: Object, default: () => ({}) },

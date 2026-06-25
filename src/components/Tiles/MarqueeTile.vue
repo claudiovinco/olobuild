@@ -23,7 +23,7 @@
               class="olo-mq-img"
             />
           </template>
-          <span v-else :style="{ ...textStyle, opacity: 0.5 }">Aggiungi immagini...</span>
+          <span v-else :style="{ ...textStyle, opacity: 0.5 }">{{ t('Aggiungi immagini...') }}</span>
         </template>
       </template>
     </div>
@@ -32,6 +32,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 import { resolveFontFamily } from '@/composables/oloTileDefaults';
 
 const props = defineProps({

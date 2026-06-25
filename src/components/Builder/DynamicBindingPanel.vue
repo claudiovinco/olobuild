@@ -38,7 +38,7 @@
 
     <!-- Preview -->
     <div v-if="previewValue !== null" class="dbp-preview">
-      <label class="dbp-label">Anteprima</label>
+      <label class="dbp-label">{{ t('Anteprima') }}</label>
       <div class="dbp-preview-value">
         <img v-if="previewIsImage" :src="previewValue" alt="" class="dbp-preview-img" />
         <span v-else>{{ previewDisplayValue }}</span>
@@ -52,13 +52,13 @@
         class="dbp-btn dbp-btn--apply"
         :disabled="!selectedSource || !selectedField"
         @click="applyBinding"
-      >Applica collegamento</button>
+      >{{ t('Applica collegamento') }}</button>
       <button
         v-if="binding"
         type="button"
         class="dbp-btn dbp-btn--remove"
         @click="$emit('select', null)"
-      >Rimuovi</button>
+      >{{ t('Rimuovi') }}</button>
     </div>
   </div>
 </template>

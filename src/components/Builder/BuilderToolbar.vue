@@ -129,6 +129,15 @@
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M8 12h.001M12 12h.001M16 12h.001M7 16h10"/></svg>
       </button>
+      <!-- Controllo accessibilità (contrasto) -->
+      <button
+        @click="openA11y()"
+        class="mb-px-2 mb-py-1.5 mb-rounded-md mb-transition-colors mb-text-gray-400 hover:mb-text-gray-200 hover:mb-bg-gray-700 mb-text-xs mb-font-bold"
+        :title="t('Controllo accessibilità (contrasto colore)')"
+        :aria-label="t('Controllo accessibilità')"
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="7.6" r="1.1" fill="currentColor" stroke="none"/><path d="M8.5 10h7M12 10v4.5M12 14.5 9.8 18M12 14.5 14.2 18"/></svg>
+      </button>
       <Teleport to="body">
       <div
         v-if="showShortcuts"
@@ -199,6 +208,43 @@
               </div>
             </div>
             <div class="mb-flex mb-items-center mb-justify-between">
+              <span class="mb-text-gray-300 mb-text-sm">{{ t('Duplica tile') }}</span>
+              <div class="mb-flex mb-gap-1">
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Ctrl</kbd>
+                <span class="mb-text-gray-500 mb-text-xs">+</span>
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">D</kbd>
+              </div>
+            </div>
+            <div class="mb-flex mb-items-center mb-justify-between">
+              <span class="mb-text-gray-300 mb-text-sm">{{ t('Selezione multipla') }}</span>
+              <div class="mb-flex mb-gap-1">
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Ctrl</kbd>
+                <span class="mb-text-gray-500 mb-text-xs">+</span>
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Click</kbd>
+              </div>
+            </div>
+            <div class="mb-flex mb-items-center mb-justify-between">
+              <span class="mb-text-gray-300 mb-text-sm">{{ t('Sposta su / giù') }}</span>
+              <div class="mb-flex mb-gap-1">
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Alt</kbd>
+                <span class="mb-text-gray-500 mb-text-xs">+</span>
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">↑</kbd>
+                <span class="mb-text-gray-500 mb-text-xs">/</span>
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">↓</kbd>
+              </div>
+            </div>
+            <div class="mb-flex mb-items-center mb-justify-between">
+              <span class="mb-text-gray-300 mb-text-sm">{{ t('Sposta tra contenitori (albero Struttura)') }}</span>
+              <div class="mb-flex mb-gap-1">
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">M</kbd>
+                <span class="mb-text-gray-500 mb-text-xs">→</span>
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">↑</kbd>
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">↓</kbd>
+                <span class="mb-text-gray-500 mb-text-xs">→</span>
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">↵</kbd>
+              </div>
+            </div>
+            <div class="mb-flex mb-items-center mb-justify-between">
               <span class="mb-text-gray-300 mb-text-sm">{{ t('Copia stile') }}</span>
               <div class="mb-flex mb-gap-1">
                 <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Ctrl</kbd>
@@ -239,6 +285,45 @@
           </div>
           <div class="mb-mt-4 mb-pt-3 mb-border-t mb-border-gray-700">
             <p class="mb-text-gray-500 mb-text-xs mb-m-0">Su Mac usa <kbd class="mb-bg-gray-700 mb-text-gray-400 mb-px-1.5 mb-py-0.5 mb-rounded mb-text-[10px] mb-font-mono mb-border mb-border-gray-600">Cmd</kbd> al posto di Ctrl</p>
+          </div>
+        </div>
+      </div>
+      </Teleport>
+      <Teleport to="body">
+      <div
+        v-if="showA11y"
+        class="mb-fixed mb-inset-0 mb-z-[99999] mb-flex mb-items-center mb-justify-center"
+        @click.self="showA11y = false"
+        style="background:rgba(0,0,0,0.6)"
+      >
+        <div class="mb-bg-gray-800 mb-border mb-border-gray-600 mb-rounded-xl mb-p-6 mb-shadow-2xl mb-w-[460px] mb-max-h-[80vh] mb-overflow-auto" @click.stop>
+          <div class="mb-flex mb-items-center mb-justify-between mb-mb-4">
+            <h3 class="mb-text-white mb-text-base mb-font-semibold mb-m-0">{{ t('Accessibilità — contrasto & alt') }}</h3>
+            <button @click="showA11y = false" class="mb-text-gray-400 hover:mb-text-white mb-transition-colors" :aria-label="t('Chiudi')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <div v-if="a11yLoading" class="mb-text-gray-400 mb-text-sm mb-py-4 mb-text-center">{{ t('Analisi in corso…') }}</div>
+          <template v-else>
+            <div v-if="a11yScore !== null" class="mb-text-gray-300 mb-text-sm mb-mb-3">
+              {{ t('Punteggio') }}:
+              <span :class="a11yScore >= 90 ? 'mb-text-green-400' : (a11yScore >= 60 ? 'mb-text-yellow-400' : 'mb-text-red-400')" class="mb-font-bold">{{ a11yScore }}/100</span>
+            </div>
+            <div v-if="a11yIssues.length === 0" class="mb-text-green-400 mb-text-sm mb-py-3">✓ {{ t('Nessun problema di contrasto o alt rilevato.') }}</div>
+            <ul v-else class="mb-space-y-2 mb-list-none mb-p-0 mb-m-0">
+              <li v-for="(iss, i) in a11yIssues" :key="i" class="mb-bg-gray-700/50 mb-rounded-lg mb-p-3 mb-border-l-2" :class="iss.type === 'error' ? 'mb-border-red-500' : 'mb-border-yellow-500'">
+                <div class="mb-text-gray-200 mb-text-sm">{{ iss.message }}</div>
+                <div v-if="iss.ratio" class="mb-flex mb-items-center mb-gap-2 mb-mt-1.5 mb-text-xs mb-text-gray-400">
+                  <span class="mb-inline-block mb-w-4 mb-h-4 mb-rounded mb-border mb-border-gray-500" :style="{ background: iss.bg }"></span>
+                  <span class="mb-inline-block mb-w-4 mb-h-4 mb-rounded mb-border mb-border-gray-500" :style="{ background: iss.fg }"></span>
+                  <span>{{ iss.ratio }}:1 ({{ t('min') }} {{ iss.threshold }}:1)</span>
+                </div>
+                <div v-else-if="iss.kind === 'alt'" class="mb-mt-1 mb-text-xs mb-text-gray-500">{{ t('Manca alt — WCAG 1.1.1') }}</div>
+              </li>
+            </ul>
+          </template>
+          <div class="mb-mt-4 mb-pt-3 mb-border-t mb-border-gray-700">
+            <p class="mb-text-gray-500 mb-text-xs mb-m-0">{{ t('Contrasto testo/sfondo secondo WCAG 2.2 AA (4.5:1 normale, 3:1 grande). I token colore sono risolti al valore reale.') }}</p>
           </div>
         </div>
       </div>
@@ -361,7 +446,7 @@
         :title="t('Mostra gabbia di costruzione (bordi celle, righe, sezioni)')"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-        Gabbia
+        {{ t('Gabbia') }}
       </button>
       <button
         v-if="realPreviewUrl"
@@ -370,7 +455,7 @@
         :title="t('Apri la pagina reale in un nuovo tab')"
       >
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-        Reale
+        {{ t('Reale') }}
       </button>
       <button
         v-if="builderStore.currentTemplate?.id"
@@ -416,7 +501,7 @@
             : 'mb-border-yellow-500 mb-text-yellow-400 hover:mb-bg-yellow-600/20'
         ]"
       >
-        {{ isPublished ? 'Pubblicato' : 'Pubblica' }}
+        {{ isPublished ? t('Pubblicato') : t('Pubblica') }}
       </button>
       <!-- Activate header button -->
       <button
@@ -429,7 +514,7 @@
             : 'mb-border-purple-500/50 mb-text-purple-400 hover:mb-bg-purple-600/20'
         ]"
       >
-        {{ isActiveHeader ? 'Disattiva' : 'Attiva' }}
+        {{ isActiveHeader ? t('Disattiva') : t('Attiva') }}
       </button>
       <!-- Activate footer button -->
       <button
@@ -442,7 +527,7 @@
             : 'mb-border-teal-500/50 mb-text-teal-400 hover:mb-bg-teal-600/20'
         ]"
       >
-        {{ isActiveFooter ? 'Disattiva' : 'Attiva' }}
+        {{ isActiveFooter ? t('Disattiva') : t('Attiva') }}
       </button>
       <!-- Activate single button -->
       <button
@@ -455,7 +540,7 @@
             : 'mb-border-amber-500/50 mb-text-amber-400 hover:mb-bg-amber-600/20'
         ]"
       >
-        {{ isActiveSingle ? 'Disattiva' : 'Attiva' }}
+        {{ isActiveSingle ? t('Disattiva') : t('Attiva') }}
       </button>
     </div>
   </div>
@@ -521,6 +606,31 @@ const visibleViewports = computed(() => {
 
 // Shortcuts panel
 const showShortcuts = ref(false);
+
+// Pannello accessibilità: controllo contrasto colore del template (endpoint /contrast-check,
+// che ora risolve i token var(--olo-color-*) al valore reale). Cabla il checker prima orfano.
+const showA11y = ref(false);
+const a11yLoading = ref(false);
+const a11yIssues = ref([]);
+const a11yScore = ref(null);
+async function openA11y() {
+  showA11y.value = true;
+  const id = builderStore.currentTemplate?.id;
+  if (!id) { a11yIssues.value = []; a11yScore.value = null; return; }
+  a11yLoading.value = true;
+  try {
+    const olo = window.oloData || {};
+    const res = await fetch(`${olo.restUrl}/contrast-check/${id}`, { headers: { 'X-WP-Nonce': olo.nonce } });
+    const data = await res.json();
+    a11yIssues.value = Array.isArray(data.issues) ? data.issues : [];
+    a11yScore.value = typeof data.score === 'number' ? data.score : null;
+  } catch (e) {
+    a11yIssues.value = [];
+    a11yScore.value = null;
+  } finally {
+    a11yLoading.value = false;
+  }
+}
 const shortcutsModalRef = ref(null);
 const shortcutsTrap = useFocusTrap(shortcutsModalRef, { onEscape: () => { showShortcuts.value = false; } });
 watch(showShortcuts, (v) => {
@@ -550,13 +660,15 @@ function onGlobalKeydown(e) {
     return;
   }
 
-  // Delete / Backspace → elimina tile selezionato
+  // Delete / Backspace → elimina la/le tile selezionate (multi-selezione inclusa)
   if ((e.key === 'Delete' || e.key === 'Backspace') && !isEditing) {
-    const id = builderStore.selectedTileId;
-    if (id) {
+    const ids = builderStore.selectedTileIds.length
+      ? [...builderStore.selectedTileIds]
+      : (builderStore.selectedTileId ? [builderStore.selectedTileId] : []);
+    if (ids.length) {
       e.preventDefault();
-      tilesStore.removeTile(id);
-      builderStore.selectedTileId = null;
+      ids.forEach(id => tilesStore.removeTile(id));
+      builderStore.deselectTile();
       builderStore.isDirty = true;
     }
   }
@@ -586,6 +698,17 @@ function onGlobalKeydown(e) {
       e.preventDefault();
       const id = builderStore.selectedTileId;
       tilesStore.pasteAfterTile(id);
+      builderStore.isDirty = true;
+    }
+  }
+  // Ctrl+D → Duplica la/le tile selezionate (multi-selezione inclusa)
+  if ((e.ctrlKey || e.metaKey) && (e.key === 'd' || e.code === 'KeyD') && !e.altKey && !e.shiftKey && !isEditing) {
+    const ids = builderStore.selectedTileIds.length
+      ? [...builderStore.selectedTileIds]
+      : (builderStore.selectedTileId ? [builderStore.selectedTileId] : []);
+    if (ids.length) {
+      e.preventDefault();
+      ids.forEach(id => tilesStore.duplicateTile(id));
       builderStore.isDirty = true;
     }
   }

@@ -328,15 +328,24 @@ class Olo_Global_Popups {
             [
                 'methods'             => 'GET',
                 'callback'            => [ $this, 'get_popups' ],
+                // Popup iniettati su TUTTO il frontend: impostazione globale, solo admin.
                 'permission_callback' => function () {
-                    return current_user_can( 'edit_posts' );
+                    return current_user_can( 'manage_options' );
                 },
             ],
             [
                 'methods'             => 'POST',
                 'callback'            => [ $this, 'save_popups' ],
-                'permission_callback' => function () {
-                    return current_user_can( 'edit_posts' );
+                // Scrittura globale: manage_options + nonce wp_rest (anti-CSRF).
+                'permission_callback' => function ( $request ) {
+                    if ( ! current_user_can( 'manage_options' ) ) {
+                        return false;
+                    }
+                    $nonce = $request->get_header( 'x-wp-nonce' );
+                    if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+                        return new WP_Error( 'rest_forbidden', 'Nonce non valido.', [ 'status' => 403 ] );
+                    }
+                    return true;
                 },
             ],
         ] );
@@ -350,6 +359,11 @@ class Olo_Global_Popups {
         $popups = $request->get_json_params();
         if ( ! is_array( $popups ) ) {
             return new WP_Error( 'invalid', __( 'Dati non validi', 'olobuild' ), [ 'status' => 400 ] );
+        }
+        // Il client (PopupsTab.vue) invia { popups: [...] }; accetta anche l'array nudo.
+        // Senza questo unwrap il salvataggio dei popup dalla UI non persisteva.
+        if ( isset( $popups['popups'] ) && is_array( $popups['popups'] ) ) {
+            $popups = $popups['popups'];
         }
 
         // Sanitize each popup

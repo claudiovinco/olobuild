@@ -148,7 +148,7 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
                     $label    = $item['label'] ?? '';
                     $active   = ( $i === $default ) ? ' is-active' : '';
                 ?>
-                <button type="button" class="oit-tab<?php echo $active; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed ' is-active'/'' and 'true'/'false' literals from ternaries; index cast to int ?>" data-idx="<?php echo (int) $i; ?>" role="tab" aria-selected="<?php echo $i === $default ? 'true' : 'false'; ?>" title="<?php echo esc_attr( $label ); ?>">
+                <button type="button" id="<?php echo esc_attr( $uid . '-tab-' . (int) $i ); ?>" class="oit-tab<?php echo $active; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed ' is-active'/'' and 'true'/'false' literals from ternaries; index cast to int ?>" data-idx="<?php echo (int) $i; ?>" role="tab" aria-selected="<?php echo $i === $default ? 'true' : 'false'; ?>" aria-controls="<?php echo esc_attr( $uid . '-panel-' . (int) $i ); ?>" title="<?php echo esc_attr( $label ); ?>" aria-label="<?php echo esc_attr( $label ); ?>">
                     <?php if ( $icon_raw ) : ?>
                         <?php if ( preg_match( '/^[a-z][a-z0-9-]*$/', $icon_raw ) ) : ?>
                             <span uk-icon="icon: <?php echo esc_attr( $icon_raw ); ?>; ratio: 1.2"></span>
@@ -164,7 +164,7 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
             <?php foreach ( $items as $i => $item ) :
                 $active = ( $i === $default ) ? ' is-active' : '';
             ?>
-            <div class="oit-panel<?php echo $active; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed ' is-active'/'' literal from the ternary above; index cast to int ?>" data-panel="<?php echo (int) $i; ?>" role="tabpanel">
+            <div id="<?php echo esc_attr( $uid . '-panel-' . (int) $i ); ?>" class="oit-panel<?php echo $active; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed ' is-active'/'' literal from the ternary above; index cast to int ?>" data-panel="<?php echo (int) $i; ?>" role="tabpanel" aria-labelledby="<?php echo esc_attr( $uid . '-tab-' . (int) $i ); ?>">
                 <div class="oit-card">
                     <?php $widget_html = $this->render_widget_template( $item['widget_template_id'] ?? 0 ); ?>
                     <?php if ( $widget_html ) : ?>

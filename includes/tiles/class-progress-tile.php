@@ -161,10 +161,10 @@ class Olo_Progress_Tile extends Olo_Tile_Base {
                 $font_size = round( $circle_size * 0.2 );
             ?>
             <div style="text-align:center;">
-                <svg width="<?php echo (int) $circle_size; ?>" height="<?php echo (int) $circle_size; ?>" viewBox="0 0 <?php echo (int) $circle_size; ?> <?php echo (int) $circle_size; ?>">
-                    <circle cx="<?php echo (float) $cx; ?>" cy="<?php echo (float) $cx; ?>" r="<?php echo (float) $radius; ?>" fill="none"
+                <svg role="img" aria-label="<?php echo esc_attr( trim( $bar['label'] . ': ' . (int) $val . '%' ) ); ?>" width="<?php echo (int) $circle_size; ?>" height="<?php echo (int) $circle_size; ?>" viewBox="0 0 <?php echo (int) $circle_size; ?> <?php echo (int) $circle_size; ?>">
+                    <circle aria-hidden="true" cx="<?php echo (float) $cx; ?>" cy="<?php echo (float) $cx; ?>" r="<?php echo (float) $radius; ?>" fill="none"
                         stroke="<?php echo esc_attr( $prog_bg ? $prog_bg : 'var(--olo-color-secondary, #1F2937)' ); ?>" stroke-width="<?php echo (int) $circle_width; ?>" />
-                    <circle cx="<?php echo (float) $cx; ?>" cy="<?php echo (float) $cx; ?>" r="<?php echo (float) $radius; ?>" fill="none"
+                    <circle aria-hidden="true" cx="<?php echo (float) $cx; ?>" cy="<?php echo (float) $cx; ?>" r="<?php echo (float) $radius; ?>" fill="none"
                         stroke="<?php echo esc_attr( $prog_bar ? $prog_bar : 'var(--olo-color-primary, #e1474f)' ); ?>" stroke-width="<?php echo (int) $circle_width; ?>"
                         stroke-dasharray="<?php echo (float) $circumference; ?>" stroke-dashoffset="<?php echo (float) $offset; ?>"
                         stroke-linecap="round" transform="rotate(-90 <?php echo (float) $cx; ?> <?php echo (float) $cx; ?>)"
@@ -211,7 +211,7 @@ class Olo_Progress_Tile extends Olo_Tile_Base {
                         }
                         $bar_height = max( 10, intval( $s['height'] ) );
                     ?>
-                    <div style="position:relative;<?php if ( $prog_bg ) echo 'background:' . $prog_bg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- safe_color_css() colour, absint/intval-built radius and (int) height only ?><?php if ( $has_radius ) echo 'border-radius:' . $radius_css . ';'; ?>height:<?php echo (int) $bar_height; ?>px;overflow:hidden;">
+                    <div role="progressbar" aria-valuenow="<?php echo (int) $val; ?>" aria-valuemin="0" aria-valuemax="100" aria-label="<?php echo esc_attr( $bar['label'] ); ?>" style="position:relative;<?php if ( $prog_bg ) echo 'background:' . $prog_bg . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- safe_color_css() colour, absint/intval-built radius and (int) height only ?><?php if ( $has_radius ) echo 'border-radius:' . $radius_css . ';'; ?>height:<?php echo (int) $bar_height; ?>px;overflow:hidden;">
                         <div style="height:100%;width:<?php echo (int) $val; ?>%;<?php if ( $prog_bar ) echo 'background:' . $prog_bar . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- safe_color_css() colour and absint/intval-built radius only ?><?php if ( $has_radius ) echo 'border-radius:' . $radius_css . ';'; ?>transition:width 1s ease;"></div>
                         <?php
                             $show_inner = ( $inner_text !== '' ) || ! empty( $s['show_percentage'] );

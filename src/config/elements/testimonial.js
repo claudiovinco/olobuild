@@ -17,6 +17,7 @@ export default {
     preset: 'custom',
     ...filterDefaults,
     quote: t('Un prodotto fantastico!'),
+    logo: '',
     author_name: t('Mario Rossi'),
     author_role: t('CEO'),
     avatar: '',
@@ -62,6 +63,7 @@ export default {
 
   fields: [
     { key: 'quote', label: t('Citazione'), type: 'textarea' },
+    { key: 'logo', label: t('Logo cliente (in alto nella card)'), type: 'image' },
     { key: 'author_name', label: t('Nome autore'), type: 'text' },
     { key: 'author_role', label: t('Ruolo autore'), type: 'text' },
     { key: 'avatar', label: t('Avatar'), type: 'image' },
@@ -97,6 +99,7 @@ export default {
       condition: { field: 'layout', operator: '!=', value: 'single' },
       itemFields: [
         { key: 'quote', label: t('Citazione'), type: 'textarea' },
+        { key: 'logo', label: t('Logo cliente (in alto nella card)'), type: 'image' },
         { key: 'author_name', label: t('Nome autore'), type: 'text' },
         { key: 'author_role', label: t('Ruolo'), type: 'text' },
         { key: 'avatar', label: t('Avatar'), type: 'image' },
@@ -109,7 +112,7 @@ export default {
           { value: '5', label: t('5 stelle') },
         ]},
       ],
-      newItemDefaults: { quote: t('Un ottimo servizio!'), author_name: t('Nome'), author_role: '', avatar: '', rating: '5' },
+      newItemDefaults: { quote: t('Un ottimo servizio!'), logo: '', author_name: t('Nome'), author_role: '', avatar: '', rating: '5' },
       itemLabel: t('Testimonianza'),
     },
 

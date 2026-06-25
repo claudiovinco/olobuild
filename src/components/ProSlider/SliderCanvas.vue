@@ -59,7 +59,7 @@
         @pointerdown.stop="startDrag($event, layer)"
         @dblclick.stop="onDblClick(layer)"
       >
-        <span v-if="layer.initiallyHidden" class="mps-canvas-hidden-badge" title="Questo layer parte nascosto. Sarà mostrato solo se un altro layer con azione 'Toggle visibilità' lo prende come target.">nascosto all'avvio</span>
+        <span v-if="layer.initiallyHidden" class="mps-canvas-hidden-badge" :title="t(&quot;Questo layer parte nascosto. Sarà mostrato solo se un altro layer con azione 'Toggle visibilità' lo prende come target.&quot;)">{{ t("nascosto all'avvio") }}</span>
         <!-- Text -->
         <component
           v-if="layer.type === 'text'"
@@ -85,7 +85,7 @@
           v-else-if="layer.type === 'button'"
           :style="buttonStyle(layer)"
           class="mb-inline-block mb-cursor-move"
-        >{{ layer.content || 'Pulsante' }}</span>
+        >{{ layer.content || t('Pulsante') }}</span>
 
         <!-- Icon -->
         <span
@@ -124,7 +124,7 @@
           v-else-if="layer.type === 'video' && !layer.videoSrc"
           class="mb-w-full mb-h-full mb-flex mb-items-center mb-justify-center mb-bg-gray-700 mb-rounded"
         >
-          <span class="mb-text-xs mb-text-gray-400">Video</span>
+          <span class="mb-text-xs mb-text-gray-400">{{ t('Video') }}</span>
         </div>
 
         <!-- Resize handles (selected only) -->
@@ -147,6 +147,7 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import iconsSvg from './uikitIconsSvg.js';
 import { interpolateAtTime } from './timelineUtils.js';
 import { useStylesStore } from '@/stores/styles';
+import { t } from '@/i18n';
 
 const props = defineProps({
   slide: { type: Object, required: true },

@@ -98,10 +98,46 @@ class Olo_AI_Assistant {
     }
 
     /**
-     * Permessi: solo utenti che possono edit_pages
+     * Permessi: solo utenti che possono edit_pages.
+     * Inoltre applica un rate-limit per-utente: gli endpoint AI chiamano provider
+     * a pagamento, quindi un account compromesso non deve poter generare costi
+     * illimitati. log_usage() e' solo contabilita' a posteriori, non un freno.
      */
-    public static function check_permission() {
-        return current_user_can( 'edit_pages' );
+    public static function check_permission( $request = null ) {
+        if ( ! current_user_can( 'edit_pages' ) ) {
+            return false;
+        }
+        // Default volutamente ampio (200/10min): gli endpoint di testo costano pochissimo e
+        // una sessione di editing intensa ne genera molti; serve solo a fermare l'abuso runaway.
+        // Il vero costo (generazione immagini) ha un cap dedicato e piu' stretto in generate_image().
+        return self::rate_limit_guard(
+            'all',
+            apply_filters( 'olo_ai_rate_limit', 200 ),
+            apply_filters( 'olo_ai_rate_window', 600 )
+        );
+    }
+
+    /**
+     * Rate-limit per-utente anti-abuso/costi (finestra fissa via transient: il contatore
+     * parte dalla prima richiesta e si azzera dopo $window secondi).
+     * Ritorna true oppure un WP_Error 429 (Too Many Requests). Con limit <= 0 e' disattivato.
+     */
+    private static function rate_limit_guard( $bucket, $limit, $window ) {
+        $limit = (int) $limit;
+        if ( $limit <= 0 ) {
+            return true;
+        }
+        $key   = 'olo_ai_rl_' . $bucket . '_' . get_current_user_id();
+        $count = (int) get_transient( $key );
+        if ( $count >= $limit ) {
+            return new WP_Error(
+                'olo_ai_rate_limited',
+                __( 'Hai raggiunto il limite di richieste AI. Riprova tra qualche minuto.', 'olobuild' ),
+                [ 'status' => 429 ]
+            );
+        }
+        set_transient( $key, $count + 1, (int) $window );
+        return true;
     }
 
     /**
@@ -223,6 +259,16 @@ class Olo_AI_Assistant {
     // ──────────────────────────────────────────────────
 
     public static function generate_image( $request ) {
+        // Cap dedicato: la generazione immagini (DALL-E) e' l'endpoint a costo unitario piu' alto.
+        $img_guard = self::rate_limit_guard(
+            'img',
+            apply_filters( 'olo_ai_image_rate_limit', 10 ),
+            apply_filters( 'olo_ai_image_rate_window', 3600 )
+        );
+        if ( is_wp_error( $img_guard ) ) {
+            return $img_guard;
+        }
+
         $prompt = sanitize_textarea_field( $request->get_param( 'prompt' ) );
         $size   = sanitize_text_field( $request->get_param( 'size' ) ?: '1024x1024' );
         $style  = sanitize_text_field( $request->get_param( 'style' ) ?: 'vivid' );

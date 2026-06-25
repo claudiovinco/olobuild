@@ -83,29 +83,53 @@ ob_start();
         $list_text_clr = $this->safe_color_css( $s['text_color'] );
         $list_ta_val  = $s['text_align'] ?? '';
         $list_ta_css  = in_array( $list_ta_val, [ 'left', 'center', 'right', 'justify' ], true ) ? 'text-align:' . $list_ta_val . ';flex:1;' : '';
+        // Semantically ordered list: when every visible item uses the numbered marker,
+        // expose the order programmatically with <ol> instead of <ul>.
+        $is_ordered = ! empty( $items );
+        foreach ( $items as $item ) {
+            $item_icon = ! empty( $item['icon'] ) ? $item['icon'] : $default_icon;
+            if ( $item_icon !== 'number' ) {
+                $is_ordered = false;
+                break;
+            }
+        }
+        $list_el = $is_ordered ? 'ol' : 'ul';
         ?>
-        <ul class="olo-list <?php echo esc_attr( $uid ); ?> uk-list olo-ls-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="padding: <?php echo $pad; ?>;<?php echo $shadow_css; ?><?php if ( $list_text_clr ) echo 'color:' . $list_text_clr . ';'; ?>"><?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $pad is integer px values from Olo_Tile_Utils::spacing_css(), $shadow_css is built from a fixed map or intval()'d offsets with esc_attr()'d color, $list_text_clr passed the safe_color_css() whitelist; kept on same line to avoid whitespace ?>
+        <<?php echo $list_el; ?> class="olo-list <?php echo esc_attr( $uid ); ?> uk-list olo-ls-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="padding: <?php echo $pad; ?>;<?php echo $shadow_css; ?><?php if ( $list_text_clr ) echo 'color:' . $list_text_clr . ';'; ?>"><?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $list_el is a fixed 'ol'/'ul' literal, $pad is integer px values from Olo_Tile_Utils::spacing_css(), $shadow_css is built from a fixed map or intval()'d offsets with esc_attr()'d color, $list_text_clr passed the safe_color_css() whitelist; kept on same line to avoid whitespace ?>
             <?php foreach ( $items as $i => $item ) :
                 $icon = ! empty( $item['icon'] ) ? $item['icon'] : $default_icon;
             ?>
                 <?php
                     $has_link = ! empty( $item['link'] );
-                    $li_tag = $has_link
-                        ? '<a href="' . esc_url( $item['link'] ) . '" style="display:flex;align-items:flex-start;gap:' . $igap . 'px;text-decoration:none;color:inherit;' . ( $i > 0 ? 'margin-top:' . $spacing . 'px;' : '' ) . '">'
-                        : '<li style="display:flex;align-items:flex-start;gap:' . $igap . 'px;' . ( $i > 0 ? 'margin-top:' . $spacing . 'px;' : '' ) . '">';
-                    $li_close = $has_link ? '</a>' : '</li>';
+                    // Always keep a real <li> container; when the item links, the <a>
+                    // lives INSIDE the <li> so the list markup stays valid for AT.
+                    $li_margin = $i > 0 ? 'margin-top:' . $spacing . 'px;' : '';
+                    $inner_open = $has_link
+                        ? '<a href="' . esc_url( $item['link'] ) . '" style="display:flex;align-items:flex-start;gap:' . $igap . 'px;text-decoration:none;color:inherit;">'
+                        : '';
+                    $inner_close = $has_link ? '</a>' : '';
+                    // Item-level CSS: linked items put flex/gap on the inner <a>, so the
+                    // <li> only carries the vertical rhythm; non-linked items keep flex on <li>.
+                    $li_style = $has_link
+                        ? $li_margin
+                        : 'display:flex;align-items:flex-start;gap:' . $igap . 'px;' . $li_margin;
                 ?>
-                <?php echo $li_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- opening tag assembled above from fixed markup, esc_url()'d link and absint()'d gap/spacing ?>
+                <li style="<?php echo $li_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- assembled from absint()'d gap/spacing and fixed CSS literals ?>"><?php echo $inner_open; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- opening <a> assembled above from fixed markup, esc_url()'d link and absint()'d gap ?>
                     <?php if ( $icon === 'number' ) : ?>
-                        <span style="flex-shrink:0;font-weight:700;line-height:normal;font-size:<?php echo (int) $isize; ?>px;min-width:<?php echo (int) $isize; ?>px;text-align:center;color:<?php echo esc_attr( $this->safe_color_css( $s['icon_color'] ) ?: 'var(--olo-color-success, #15803d)' ); ?>;"><?php echo (int) ( $i + 1 ); ?>.</span>
+                        <?php if ( ! $is_ordered ) : ?>
+                        <span aria-hidden="true" style="flex-shrink:0;font-weight:700;line-height:normal;font-size:<?php echo (int) $isize; ?>px;min-width:<?php echo (int) $isize; ?>px;text-align:center;color:<?php echo esc_attr( $this->safe_color_css( $s['icon_color'] ) ?: 'var(--olo-color-success, #15803d)' ); ?>;"><?php echo (int) ( $i + 1 ); ?>.</span>
+                        <?php endif; ?>
                     <?php else : ?>
-                        <span style="flex-shrink:0;display:flex;align-items:center;line-height:1;"><?php echo $this->get_icon_svg( $icon, $s['icon_color'], $isize ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from the hardcoded get_icon_svg() map with safe_color_css()'d color and intval()'d size ?></span>
+                        <span aria-hidden="true" style="flex-shrink:0;display:flex;align-items:center;line-height:1;"><?php echo $this->get_icon_svg( $icon, $s['icon_color'], $isize ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from the hardcoded get_icon_svg() map with safe_color_css()'d color and intval()'d size ?></span>
+                        <?php if ( $icon === 'x' ) : ?>
+                        <span class="olo-list-sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;"><?php echo esc_html( olo_t( 'Non incluso' ) ); ?></span>
+                        <?php endif; ?>
                     <?php endif; ?>
                     <?php list( $li_cls, $li_data ) = $this->tfx_attrs( $s, 'text', $item['text'] ); ?>
                     <span class="olo-list-text<?php echo $li_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally (sanitize_html_class/esc_attr); $list_ta_css from an in_array() whitelist ?>" style="line-height:1.5;<?php echo $list_ta_css; ?>"<?php echo $li_data; ?>><?php echo esc_html( $item['text'] ); ?></span>
-                <?php echo $li_close; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed '</a>'/'</li>' literal from the ternary above ?>
+                <?php echo $inner_close; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed '</a>' literal from the ternary above ?></li>
             <?php endforeach; ?>
-        </ul>
+        </<?php echo $list_el; ?>>
         <?php
         $tfx_css = $this->tfx_css( $s, '.olo-list' );
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings

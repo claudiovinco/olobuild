@@ -47,8 +47,16 @@
             :class="['olo-hsplit__card', 'olo-hsplit__card--' + i]"
             :style="cardStyle(it)"
           >
-            <div class="olo-hsplit__card-num">{{ it.number }}</div>
-            <div class="olo-hsplit__card-txt" :style="{ color: it.text_color || '#0f172a', fontFamily: headlineFamily, fontStyle: it.italic ? 'italic' : 'normal' }">{{ it.text }}</div>
+            <video
+              v-if="it.bg && it.bg.type === 'video' && it.bg.video_url"
+              class="olo-hsplit__card-media"
+              :style="{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: it.bg.video_fit || 'cover', objectPosition: it.bg.image_position || 'center center', zIndex: 0, pointerEvents: 'none' }"
+              :src="it.bg.video_url"
+              :poster="it.bg.video_poster || undefined"
+              muted autoplay loop playsinline
+            ></video>
+            <div class="olo-hsplit__card-num" :style="{ position: 'relative', zIndex: 1 }">{{ it.number }}</div>
+            <div class="olo-hsplit__card-txt" :style="{ color: it.text_color || '#0f172a', fontFamily: headlineFamily, fontStyle: it.italic ? 'italic' : 'normal', position: 'relative', zIndex: 1 }">{{ it.text }}</div>
           </div>
         </div>
 
@@ -65,6 +73,7 @@
 <script setup>
 import { computed } from 'vue';
 import { SHADOW as SHADOW_SCALE, resolveFontFamily } from '@/composables/oloTileDefaults';
+import { buildBgStyle } from '@/composables/useBackgroundStyle';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -226,24 +235,13 @@ const statsStyle = computed(() => ({
   gridTemplateColumns: `repeat(${stats.value.length || 3}, 1fr)`,
 }));
 
-// Background helper for showcase wrap + each card
-function bgToCss(bg) {
-  if (!bg || bg.type === 'none') return '';
-  if (bg.type === 'solid') return `background:${bg.color || '#ffffff'};`;
-  if (bg.type === 'gradient') {
-    const angle = bg.gradient_angle ?? 135;
-    const from  = bg.gradient_from  || '#f0e9dc';
-    const to    = bg.gradient_to    || '#ffffff';
-    return `background:linear-gradient(${angle}deg, ${from}, ${to});`;
-  }
-  if (bg.type === 'image' && bg.image_url) {
-    return `background-image:url(${bg.image_url});background-size:${bg.image_size || 'cover'};background-position:${bg.image_position || 'center'};background-repeat:${bg.image_repeat || 'no-repeat'};`;
-  }
-  // pattern/video/gallery: anteprima minimale tramite color fallback
-  if (bg.color) return `background:${bg.color};`;
-  return '';
-}
-
+// Background di showcase wrap + card via renderer condiviso `buildBgStyle`:
+// solid/gradient/image/pattern/glow/mesh/crt/gallery rendono IDENTICI a
+// section/colonna/frontend (prima un helper locale gestiva solo solid/gradient/
+// image → i generativi sparivano nel canvas pur funzionando nel PHP). Il VIDEO
+// non è esprimibile come background CSS: buildBgStyle ne ritorna solo il poster/
+// fallback, mentre il <video> vero è nel template. Per ospitarlo e clipparlo al
+// border-radius la card riceve position:relative + overflow:hidden.
 const rightStyle = computed(() => {
   const out = {
     borderRadius: radiusToCss(s.value.showcase_radius),
@@ -252,14 +250,16 @@ const rightStyle = computed(() => {
     display: 'flex',
     flexDirection: 'column',
   };
-  const css = bgToCss(s.value.showcase_bg);
-  if (css) Object.assign(out, parseCssString(css));
+  const bg = buildBgStyle(s.value.showcase_bg);
+  if (bg && Object.keys(bg).length) Object.assign(out, bg);
   else out.background = '#f0e9dc';
   return out;
 });
 
 function cardStyle(it) {
   const out = {
+    position: 'relative',
+    overflow: 'hidden',
     borderRadius: radiusToCss(s.value.showcase_card_radius),
     padding: '24px',
     display: 'flex',
@@ -269,24 +269,9 @@ function cardStyle(it) {
     boxShadow: SHADOW[s.value.showcase_card_shadow || 'sm'] || SHADOW.sm,
     transition: 'border-radius .4s cubic-bezier(.4,0,.2,1), transform .3s ease, box-shadow .3s ease',
   };
-  const css = bgToCss(it.bg);
-  if (css) Object.assign(out, parseCssString(css));
+  const bg = buildBgStyle(it && it.bg);
+  if (bg && Object.keys(bg).length) Object.assign(out, bg);
   else out.background = '#ffffff';
-  return out;
-}
-
-// CSS string → style object (minimal parser per le sole proprietà che usiamo)
-function parseCssString(str) {
-  const out = {};
-  str.split(';').forEach(decl => {
-    const idx = decl.indexOf(':');
-    if (idx < 0) return;
-    const prop = decl.slice(0, idx).trim();
-    const val  = decl.slice(idx + 1).trim();
-    if (!prop) return;
-    const camel = prop.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-    out[camel] = val;
-  });
   return out;
 }
 </script>

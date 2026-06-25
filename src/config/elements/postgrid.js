@@ -39,6 +39,8 @@ export default {
     image_height: '200',
     image_radius: '0',
     card_radius: '4',
+    corner_cut: false,
+    corner_size: 32,
     show_image: true,
     show_category: true,
     category_badge_position: 'top-left',
@@ -293,6 +295,9 @@ export default {
     withHover({ key: 'image_radius', label: t('Raggio bordo immagine (px)'), type: 'border-radius',
       condition: { field: 'show_image', value: true } }),
     withHover({ key: 'card_radius', label: t('Raggio bordo card (px)'), type: 'border-radius' }),
+    { key: 'corner_cut', label: t('Angolo basso-destro tagliato (piega)'), type: 'toggle' },
+    { key: 'corner_size', label: t('Dimensione taglio (px)'), type: 'range', min: 12, max: 64, step: 2,
+      condition: { field: 'corner_cut', value: true } },
     { key: 'category_badge_position', label: t('Posizione badge categoria'), type: 'select',
       condition: { field: 'show_category', value: true },
       options: [

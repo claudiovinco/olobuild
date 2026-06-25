@@ -42,6 +42,9 @@ class Olo_White_Label {
 
         // Filter builder brand name
         add_filter( 'olo_brand_name', [ $this, 'get_brand_name' ] );
+
+        // Filter builder/wizard brand logo
+        add_filter( 'olo_brand_logo_url', [ $this, 'get_logo_url' ] );
     }
 
     /* ─────────────────────────────────────────────
@@ -102,20 +105,30 @@ class Olo_White_Label {
         return ! empty( $settings['plugin_name'] ) ? $settings['plugin_name'] : $default;
     }
 
+    public function get_logo_url( $default ) {
+        $settings = $this->get_settings();
+        return ! empty( $settings['plugin_logo_url'] ) ? $settings['plugin_logo_url'] : $default;
+    }
+
     /* ─────────────────────────────────────────────
      * Settings
      * ───────────────────────────────────────────── */
 
     public function get_settings() {
-        return get_option( 'olo_white_label', [
+        $defaults = [
             'enabled'            => false,
             'plugin_name'        => '',
             'plugin_description' => '',
+            'plugin_logo_url'    => '',
             'author_name'        => '',
             'author_url'         => '',
             'hide_for_non_admins' => false,
             'hide_credits'       => false,
-        ] );
+        ];
+        // Merge coi default: opzioni salvate prima di nuove chiavi (es. plugin_logo_url)
+        // non devono generare undefined-key notice.
+        $saved = get_option( 'olo_white_label', [] );
+        return wp_parse_args( is_array( $saved ) ? $saved : [], $defaults );
     }
 
     /* ─────────────────────────────────────────────
@@ -153,6 +166,7 @@ class Olo_White_Label {
             'enabled'             => ! empty( $data['enabled'] ),
             'plugin_name'         => sanitize_text_field( $data['plugin_name'] ?? '' ),
             'plugin_description'  => sanitize_text_field( $data['plugin_description'] ?? '' ),
+            'plugin_logo_url'     => esc_url_raw( $data['plugin_logo_url'] ?? '' ),
             'author_name'         => sanitize_text_field( $data['author_name'] ?? '' ),
             'author_url'          => esc_url_raw( $data['author_url'] ?? '' ),
             'hide_for_non_admins' => ! empty( $data['hide_for_non_admins'] ),
@@ -231,6 +245,15 @@ class Olo_White_Label {
                     </div>
                     <div class="olo-field-row">
                         <div class="olo-field-info">
+                            <label><?php esc_html_e( 'URL logo', 'olobuild' ); ?></label>
+                            <div class="olo-field-hint"><?php esc_html_e( 'Logo personalizzato per la barra del builder e il wizard (lascia vuoto per usare il default).', 'olobuild' ); ?></div>
+                        </div>
+                        <div class="olo-field-input-wrap">
+                            <input type="url" id="wl_logo" value="<?php echo esc_attr( $s['plugin_logo_url'] ); ?>" class="olo-field-input" placeholder="https://…/logo.png" />
+                        </div>
+                    </div>
+                    <div class="olo-field-row">
+                        <div class="olo-field-info">
                             <label><?php esc_html_e( 'Nome autore', 'olobuild' ); ?></label>
                         </div>
                         <div class="olo-field-input-wrap">
@@ -290,6 +313,7 @@ class Olo_White_Label {
                     enabled: document.getElementById('wl_enabled').checked,
                     plugin_name: document.getElementById('wl_name').value,
                     plugin_description: document.getElementById('wl_desc').value,
+                    plugin_logo_url: document.getElementById('wl_logo').value,
                     author_name: document.getElementById('wl_author').value,
                     author_url: document.getElementById('wl_url').value,
                     hide_for_non_admins: document.getElementById('wl_hide').checked,

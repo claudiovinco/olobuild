@@ -3,9 +3,9 @@
     <div class="mb-p-2 mb-border-b mb-border-gray-700 mb-text-xs mb-font-semibold mb-text-gray-300 mb-flex mb-items-center mb-justify-between">
       <span>Slides ({{ slides.length }})</span>
       <div class="mb-flex mb-items-center mb-gap-1">
-        <button @click="doExport" class="mb-text-gray-400 hover:mb-text-primary-300" title="Esporta slides">&#8595;</button>
-        <button @click="triggerImport" class="mb-text-gray-400 hover:mb-text-primary-300" title="Importa slides">&#8593;</button>
-        <button @click="$emit('add')" class="mb-text-primary-400 hover:mb-text-primary-300" title="Aggiungi slide">+</button>
+        <button @click="doExport" class="mb-text-gray-400 hover:mb-text-primary-300" :title="t('Esporta slides')">&#8595;</button>
+        <button @click="triggerImport" class="mb-text-gray-400 hover:mb-text-primary-300" :title="t('Importa slides')">&#8593;</button>
+        <button @click="$emit('add')" class="mb-text-primary-400 hover:mb-text-primary-300" :title="t('Aggiungi slide')">+</button>
       </div>
       <input ref="importInput" type="file" accept=".json" class="mb-hidden" @change="handleImport" />
     </div>
@@ -22,12 +22,12 @@
         <!-- Thumbnail -->
         <div class="mb-h-20 mb-bg-gray-800" :style="thumbStyle(slide)">
           <span class="mb-absolute mb-top-1 mb-left-1 mb-text-[10px] mb-bg-black/60 mb-text-white mb-px-1.5 mb-rounded">{{ idx + 1 }}</span>
-          <span v-if="slide.persistFor > 0" class="mb-absolute mb-bottom-1 mb-left-1 mb-text-[9px] mb-bg-primary-600/80 mb-text-white mb-px-1 mb-rounded" :title="'Persiste per ' + slide.persistFor + ' slide'">P{{ slide.persistFor }}</span>
+          <span v-if="slide.persistFor > 0" class="mb-absolute mb-bottom-1 mb-left-1 mb-text-[9px] mb-bg-primary-600/80 mb-text-white mb-px-1 mb-rounded" :title="t('Persiste per') + ' ' + slide.persistFor + ' ' + t('slide')">P{{ slide.persistFor }}</span>
         </div>
         <!-- Actions -->
         <div class="mb-absolute mb-top-1 mb-right-1 mb-flex mb-gap-1 mb-opacity-0 group-hover:mb-opacity-100 mb-transition-opacity">
-          <button @click.stop="$emit('duplicate', idx)" class="mb-text-[10px] mb-bg-black/60 mb-text-white mb-px-1 mb-rounded" title="Duplica">D</button>
-          <button @click.stop="$emit('remove', idx)" class="mb-text-[10px] mb-bg-red-600/80 mb-text-white mb-px-1 mb-rounded" title="Elimina">&times;</button>
+          <button @click.stop="$emit('duplicate', idx)" class="mb-text-[10px] mb-bg-black/60 mb-text-white mb-px-1 mb-rounded" :title="t('Duplica')">D</button>
+          <button @click.stop="$emit('remove', idx)" class="mb-text-[10px] mb-bg-red-600/80 mb-text-white mb-px-1 mb-rounded" :title="t('Elimina')">&times;</button>
         </div>
       </div>
     </div>
@@ -36,6 +36,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   slides: { type: Array, required: true },
@@ -77,14 +78,14 @@ async function handleImport(e) {
     const json = JSON.parse(text);
 
     if (json.olo_export !== 'proslider' || !Array.isArray(json.slides)) {
-      alert('File non valido: non è un export ProSlider.');
+      alert(t('File non valido: non è un export ProSlider.'));
       return;
     }
 
     emit('import-slides', json);
   } catch (err) {
     console.error('ProSlider import error:', err);
-    alert('Errore durante l\'importazione: ' + err.message);
+    alert(t("Errore durante l'importazione:") + ' ' + err.message);
   }
 }
 

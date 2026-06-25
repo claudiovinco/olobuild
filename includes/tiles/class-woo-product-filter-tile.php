@@ -140,6 +140,13 @@ class Olo_Woo_Product_Filter_Tile extends Olo_Tile_Base {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
+                width: 100%;
+                background: none;
+                border: none;
+                text-align: left;
+                font-family: inherit;
+                line-height: inherit;
+                appearance: none;
                 cursor: pointer;
                 margin: 0 0 12px;
                 padding: 0;
@@ -215,6 +222,9 @@ class Olo_Woo_Product_Filter_Tile extends Olo_Tile_Base {
                 position: relative;
                 width: 40px;
                 height: 22px;
+                padding: 0;
+                border: none;
+                appearance: none;
                 background: var(--olo-color-border, #E5E7EB);
                 border-radius: 11px;
                 cursor: pointer;
@@ -311,18 +321,18 @@ class Olo_Woo_Product_Filter_Tile extends Olo_Tile_Base {
             <?php /* --- PRICE RANGE --- */ ?>
             <?php if ( ! empty( $s['show_price'] ) ) : ?>
             <div class="olo-pf-section">
-                <div class="olo-pf-heading<?php echo $collapsed ? ' is-collapsed' : ''; ?>" data-olo-pf-toggle>
+                <button type="button" class="olo-pf-heading<?php echo $collapsed ? ' is-collapsed' : ''; ?>" data-olo-pf-toggle aria-expanded="<?php echo $collapsed ? 'false' : 'true'; ?>" aria-controls="<?php echo esc_attr( $uid ); ?>-body-price">
                     <span><?php echo esc_html( olo_t( 'Prezzo' ) ); ?></span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-                <div class="olo-pf-body<?php echo $collapsed ? ' is-collapsed' : ''; ?>" style="max-height:200px">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="olo-pf-body<?php echo $collapsed ? ' is-collapsed' : ''; ?>" id="<?php echo esc_attr( $uid ); ?>-body-price" style="max-height:200px">
                     <div class="olo-pf-price-row">
                         <span><?php echo $currency; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- currency symbol from get_woocommerce_currency_symbol() or the static &euro; entity; esc_html() would double-encode the entity ?><span data-olo-pf-min-label><?php echo intval( $price_min ); ?></span></span>
-                        <input type="range" class="olo-pf-price-min" min="<?php echo (float) $price_min; ?>" max="<?php echo (float) $price_max; ?>" step="<?php echo (int) $price_step; ?>" value="<?php echo (float) $price_min; ?>" />
+                        <input type="range" class="olo-pf-price-min" aria-label="<?php echo esc_attr( olo_t( 'Prezzo minimo' ) ); ?>" min="<?php echo (float) $price_min; ?>" max="<?php echo (float) $price_max; ?>" step="<?php echo (int) $price_step; ?>" value="<?php echo (float) $price_min; ?>" />
                     </div>
                     <div class="olo-pf-price-row">
                         <span><?php echo $currency; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- currency symbol from get_woocommerce_currency_symbol() or the static &euro; entity; esc_html() would double-encode the entity ?><span data-olo-pf-max-label><?php echo intval( $price_max ); ?></span></span>
-                        <input type="range" class="olo-pf-price-max" min="<?php echo (float) $price_min; ?>" max="<?php echo (float) $price_max; ?>" step="<?php echo (int) $price_step; ?>" value="<?php echo (float) $price_max; ?>" />
+                        <input type="range" class="olo-pf-price-max" aria-label="<?php echo esc_attr( olo_t( 'Prezzo massimo' ) ); ?>" min="<?php echo (float) $price_min; ?>" max="<?php echo (float) $price_max; ?>" step="<?php echo (int) $price_step; ?>" value="<?php echo (float) $price_max; ?>" />
                     </div>
                 </div>
             </div>
@@ -332,11 +342,11 @@ class Olo_Woo_Product_Filter_Tile extends Olo_Tile_Base {
             <?php if ( ! empty( $s['show_categories'] ) ) : ?>
             <?php if ( ! empty( $categories ) ) : ?>
             <div class="olo-pf-section">
-                <div class="olo-pf-heading<?php echo $collapsed ? ' is-collapsed' : ''; ?>" data-olo-pf-toggle>
+                <button type="button" class="olo-pf-heading<?php echo $collapsed ? ' is-collapsed' : ''; ?>" data-olo-pf-toggle aria-expanded="<?php echo $collapsed ? 'false' : 'true'; ?>" aria-controls="<?php echo esc_attr( $uid ); ?>-body-categories">
                     <span><?php echo esc_html( olo_t( 'Categorie' ) ); ?></span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-                <div class="olo-pf-body<?php echo $collapsed ? ' is-collapsed' : ''; ?>" style="max-height:400px">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="olo-pf-body<?php echo $collapsed ? ' is-collapsed' : ''; ?>" id="<?php echo esc_attr( $uid ); ?>-body-categories" style="max-height:400px">
                     <div class="olo-pf-check-list">
                         <?php foreach ( $categories as $cat ) : ?>
                         <label class="olo-pf-check-item">
@@ -353,12 +363,13 @@ class Olo_Woo_Product_Filter_Tile extends Olo_Tile_Base {
 
             <?php /* --- ATTRIBUTES --- */ ?>
             <?php foreach ( $attribute_sections as $attr ) : ?>
+            <?php $attr_body_id = $uid . '-body-attr-' . sanitize_html_class( $attr['taxonomy'] ); ?>
             <div class="olo-pf-section">
-                <div class="olo-pf-heading<?php echo $collapsed ? ' is-collapsed' : ''; ?>" data-olo-pf-toggle>
+                <button type="button" class="olo-pf-heading<?php echo $collapsed ? ' is-collapsed' : ''; ?>" data-olo-pf-toggle aria-expanded="<?php echo $collapsed ? 'false' : 'true'; ?>" aria-controls="<?php echo esc_attr( $attr_body_id ); ?>">
                     <span><?php echo esc_html( $attr['label'] ); ?></span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-                <div class="olo-pf-body<?php echo $collapsed ? ' is-collapsed' : ''; ?>" style="max-height:400px">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="olo-pf-body<?php echo $collapsed ? ' is-collapsed' : ''; ?>" id="<?php echo esc_attr( $attr_body_id ); ?>" style="max-height:400px">
                     <div class="olo-pf-check-list">
                         <?php foreach ( $attr['terms'] as $term ) : ?>
                         <label class="olo-pf-check-item">
@@ -375,14 +386,14 @@ class Olo_Woo_Product_Filter_Tile extends Olo_Tile_Base {
             <?php /* --- IN-STOCK TOGGLE --- */ ?>
             <?php if ( ! empty( $s['show_stock'] ) ) : ?>
             <div class="olo-pf-section">
-                <div class="olo-pf-heading<?php echo $collapsed ? ' is-collapsed' : ''; ?>" data-olo-pf-toggle>
+                <button type="button" class="olo-pf-heading<?php echo $collapsed ? ' is-collapsed' : ''; ?>" data-olo-pf-toggle aria-expanded="<?php echo $collapsed ? 'false' : 'true'; ?>" aria-controls="<?php echo esc_attr( $uid ); ?>-body-stock">
                     <span><?php echo esc_html( olo_t( 'Disponibilità' ) ); ?></span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-                <div class="olo-pf-body<?php echo $collapsed ? ' is-collapsed' : ''; ?>" style="max-height:200px">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="olo-pf-body<?php echo $collapsed ? ' is-collapsed' : ''; ?>" id="<?php echo esc_attr( $uid ); ?>-body-stock" style="max-height:200px">
                     <div class="olo-pf-toggle-wrap">
                         <span><?php echo esc_html( olo_t( 'Solo prodotti disponibili' ) ); ?></span>
-                        <div class="olo-pf-toggle" data-olo-pf-stock-toggle></div>
+                        <button type="button" class="olo-pf-toggle" data-olo-pf-stock-toggle role="switch" aria-checked="false" aria-label="<?php echo esc_attr( olo_t( 'Solo prodotti disponibili' ) ); ?>"></button>
                     </div>
                 </div>
             </div>
@@ -409,9 +420,11 @@ class Olo_Woo_Product_Filter_Tile extends Olo_Tile_Base {
                     if(isCol){
                         h.classList.remove('is-collapsed');
                         body.classList.remove('is-collapsed');
+                        h.setAttribute('aria-expanded', 'true');
                     } else {
                         h.classList.add('is-collapsed');
                         body.classList.add('is-collapsed');
+                        h.setAttribute('aria-expanded', 'false');
                     }
                 });
             });
@@ -434,8 +447,10 @@ class Olo_Woo_Product_Filter_Tile extends Olo_Tile_Base {
                 stockToggle.addEventListener('click', function(){
                     if(stockToggle.classList.contains('is-active')){
                         stockToggle.classList.remove('is-active');
+                        stockToggle.setAttribute('aria-checked', 'false');
                     } else {
                         stockToggle.classList.add('is-active');
+                        stockToggle.setAttribute('aria-checked', 'true');
                     }
                 });
             }
@@ -470,7 +485,7 @@ class Olo_Woo_Product_Filter_Tile extends Olo_Tile_Base {
                         });
                     }
                     if(sp.get('in_stock')){
-                        if(stockToggle){ stockToggle.classList.add('is-active'); }
+                        if(stockToggle){ stockToggle.classList.add('is-active'); stockToggle.setAttribute('aria-checked', 'true'); }
                     }
                     if(pMin){ if(sp.get('min_price')){ pMin.value = sp.get('min_price'); if(pMinLabel){pMinLabel.textContent=pMin.value} } }
                     if(pMax){ if(sp.get('max_price')){ pMax.value = sp.get('max_price'); if(pMaxLabel){pMaxLabel.textContent=pMax.value} } }

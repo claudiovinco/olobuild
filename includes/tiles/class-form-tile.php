@@ -449,6 +449,8 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                             $foptions    = $field['options'] ?? '';
                             $ficon       = sanitize_text_field( $field['icon'] ?? '' );
                             $req_attr    = $frequired ? ' required' : '';
+                            // ID univoco del campo per associare <label for> all'input (a11y / EAA).
+                            $field_id    = esc_attr( $uid . '-' . $fname );
 
                             // Conditional logic data attributes
                             $cond_attrs  = '';
@@ -493,55 +495,55 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                         <?php if ( $ficon ) : ?>
                                         <div class="uk-inline uk-width-1-1">
                                             <span class="uk-form-icon" uk-icon="icon: <?php echo esc_attr( $ficon ); ?>"></span>
-                                            <input type="<?php echo esc_attr( $html_type ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder=" "<?php echo $req_attr; ?><?php echo $extra_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- required/size-class are fixed internal strings; extra_attrs holds hardcoded pattern/title attributes only ?> />
+                                            <input type="<?php echo esc_attr( $html_type ); ?>" id="<?php echo $field_id; ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder=" "<?php echo $req_attr; ?><?php echo $extra_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- required/size-class are fixed internal strings; extra_attrs holds hardcoded pattern/title attributes only ?> />
                                             <?php if ( $flabel ) : ?>
-                                                <label class="olo-f-float-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
+                                                <label for="<?php echo $field_id; ?>" class="olo-f-float-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
                                             <?php endif; ?>
                                         </div>
                                         <?php else : ?>
-                                        <input type="<?php echo esc_attr( $html_type ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder=" "<?php echo $req_attr; ?><?php echo $extra_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- required/size-class are fixed internal strings; extra_attrs holds hardcoded pattern/title attributes only ?> />
+                                        <input type="<?php echo esc_attr( $html_type ); ?>" id="<?php echo $field_id; ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder=" "<?php echo $req_attr; ?><?php echo $extra_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- required/size-class are fixed internal strings; extra_attrs holds hardcoded pattern/title attributes only ?> />
                                         <?php if ( $flabel ) : ?>
-                                            <label class="olo-f-float-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
+                                            <label for="<?php echo $field_id; ?>" class="olo-f-float-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
                                         <?php endif; ?>
                                         <?php endif; ?>
                                     </div>
                                 <?php else : ?>
                                     <?php if ( $flabel ) : ?>
-                                        <label class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
+                                        <label for="<?php echo $field_id; ?>" class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
                                     <?php endif; ?>
                                     <?php if ( $ficon ) : ?>
                                     <div class="uk-inline uk-width-1-1">
                                         <span class="uk-form-icon" uk-icon="icon: <?php echo esc_attr( $ficon ); ?>"></span>
-                                        <input type="<?php echo esc_attr( $html_type ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( $fplaceholder ); ?>"<?php echo $req_attr; ?><?php echo $extra_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- required/size-class are fixed internal strings; extra_attrs holds hardcoded pattern/title attributes only ?> />
+                                        <input type="<?php echo esc_attr( $html_type ); ?>" id="<?php echo $field_id; ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( $fplaceholder ); ?>"<?php echo $req_attr; ?><?php echo $extra_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- required/size-class are fixed internal strings; extra_attrs holds hardcoded pattern/title attributes only ?> />
                                     </div>
                                     <?php else : ?>
-                                    <input type="<?php echo esc_attr( $html_type ); ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( $fplaceholder ); ?>"<?php echo $req_attr; ?><?php echo $extra_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- required/size-class are fixed internal strings; extra_attrs holds hardcoded pattern/title attributes only ?> />
+                                    <input type="<?php echo esc_attr( $html_type ); ?>" id="<?php echo $field_id; ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( $fplaceholder ); ?>"<?php echo $req_attr; ?><?php echo $extra_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- required/size-class are fixed internal strings; extra_attrs holds hardcoded pattern/title attributes only ?> />
                                     <?php endif; ?>
                                 <?php endif; ?>
 
                             <?php elseif ( $ftype === 'textarea' ) : ?>
                                 <?php if ( $is_floating ) : ?>
                                     <div class="olo-f-float">
-                                        <textarea name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-textarea<?php echo esc_attr( $size_class ); ?>" rows="4" placeholder=" "<?php echo esc_attr( $req_attr ); ?>></textarea>
+                                        <textarea id="<?php echo $field_id; ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-textarea<?php echo esc_attr( $size_class ); ?>" rows="4" placeholder=" "<?php echo esc_attr( $req_attr ); ?>></textarea>
                                         <?php if ( $flabel ) : ?>
-                                            <label class="olo-f-float-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
+                                            <label for="<?php echo $field_id; ?>" class="olo-f-float-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
                                         <?php endif; ?>
                                     </div>
                                 <?php else : ?>
                                     <?php if ( $flabel ) : ?>
-                                        <label class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
+                                        <label for="<?php echo $field_id; ?>" class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
                                     <?php endif; ?>
-                                    <textarea name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-textarea<?php echo esc_attr( $size_class ); ?>" rows="4" placeholder="<?php echo esc_attr( $fplaceholder ); ?>"<?php echo esc_attr( $req_attr ); ?>></textarea>
+                                    <textarea id="<?php echo $field_id; ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-textarea<?php echo esc_attr( $size_class ); ?>" rows="4" placeholder="<?php echo esc_attr( $fplaceholder ); ?>"<?php echo esc_attr( $req_attr ); ?>></textarea>
                                 <?php endif; ?>
 
                             <?php elseif ( $ftype === 'select' ) : ?>
                                 <?php if ( $flabel ) : ?>
-                                    <label class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
+                                    <label for="<?php echo $field_id; ?>" class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
                                 <?php endif; ?>
                                 <?php if ( $ficon ) : ?>
                                 <div class="uk-inline uk-width-1-1">
                                     <span class="uk-form-icon" uk-icon="icon: <?php echo esc_attr( $ficon ); ?>"></span>
-                                    <select name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-select<?php echo esc_attr( $size_class ); ?>"<?php echo esc_attr( $req_attr ); ?>>
+                                    <select id="<?php echo $field_id; ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-select<?php echo esc_attr( $size_class ); ?>"<?php echo esc_attr( $req_attr ); ?>>
                                         <option value=""><?php echo esc_html( $fplaceholder ?: 'Seleziona...' ); ?></option>
                                         <?php foreach ( $this->parse_options( $foptions ) as $opt ) : ?>
                                             <option value="<?php echo esc_attr( $opt ); ?>"><?php echo esc_html( $opt ); ?></option>
@@ -549,7 +551,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                     </select>
                                 </div>
                                 <?php else : ?>
-                                <select name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-select<?php echo esc_attr( $size_class ); ?>"<?php echo esc_attr( $req_attr ); ?>>
+                                <select id="<?php echo $field_id; ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-select<?php echo esc_attr( $size_class ); ?>"<?php echo esc_attr( $req_attr ); ?>>
                                     <option value=""><?php echo esc_html( $fplaceholder ?: 'Seleziona...' ); ?></option>
                                     <?php foreach ( $this->parse_options( $foptions ) as $opt ) : ?>
                                         <option value="<?php echo esc_attr( $opt ); ?>"><?php echo esc_html( $opt ); ?></option>
@@ -558,8 +560,9 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                 <?php endif; ?>
 
                             <?php elseif ( $ftype === 'radio' ) : ?>
+                                <fieldset class="olo-f-fieldset" style="border:0;padding:0;margin:0;min-width:0">
                                 <?php if ( $flabel ) : ?>
-                                    <label class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
+                                    <legend class="olo-f-label" style="padding:0"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></legend>
                                 <?php endif; ?>
                                 <div class="uk-margin-small-top">
                                     <?php foreach ( $this->parse_options( $foptions ) as $opt ) : ?>
@@ -569,10 +572,12 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                         </label>
                                     <?php endforeach; ?>
                                 </div>
+                                </fieldset>
 
                             <?php elseif ( $ftype === 'checkbox' ) : ?>
+                                <fieldset class="olo-f-fieldset" style="border:0;padding:0;margin:0;min-width:0">
                                 <?php if ( $flabel ) : ?>
-                                    <label class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
+                                    <legend class="olo-f-label" style="padding:0"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></legend>
                                 <?php endif; ?>
                                 <div class="uk-margin-small-top"<?php if ( $frequired ) : ?> data-olo-check-required<?php endif; ?>>
                                     <?php foreach ( $this->parse_options( $foptions ) as $opt ) : ?>
@@ -582,6 +587,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                         </label>
                                     <?php endforeach; ?>
                                 </div>
+                                </fieldset>
 
                             <?php elseif ( $ftype === 'file' ) : ?>
                                 <?php if ( $flabel ) : ?>
@@ -668,24 +674,24 @@ class Olo_Form_Tile extends Olo_Tile_Base {
 
                             <?php elseif ( $ftype === 'password' ) : ?>
                                 <?php if ( $flabel ) : ?>
-                                    <label class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
+                                    <label for="<?php echo $field_id; ?>" class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
                                 <?php endif; ?>
                                 <div class="uk-inline uk-width-1-1" style="position:relative">
                                     <?php if ( $ficon ) : ?>
                                         <span class="uk-form-icon" uk-icon="icon: <?php echo esc_attr( $ficon ); ?>"></span>
                                     <?php endif; ?>
-                                    <input type="password" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo esc_attr( $size_class ); ?>" placeholder="<?php echo esc_attr( $fplaceholder ); ?>"<?php echo esc_attr( $req_attr ); ?> autocomplete="new-password" />
+                                    <input type="password" id="<?php echo $field_id; ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo esc_attr( $size_class ); ?>" placeholder="<?php echo esc_attr( $fplaceholder ); ?>"<?php echo esc_attr( $req_attr ); ?> autocomplete="new-password" />
                                     <a class="uk-form-icon uk-form-icon-flip" style="cursor:pointer" onclick="var i=this.previousElementSibling;i.type=i.type==='password'?'text':'password'" uk-icon="icon: eye"></a>
                                 </div>
 
                             <?php elseif ( $ftype === 'password_confirm' ) : ?>
                                 <?php if ( $flabel ) : ?>
-                                    <label class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
+                                    <label for="<?php echo $field_id; ?>" class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
                                 <?php endif; ?>
                                 <?php $pc_id = 'olo-pwc-' . esc_attr( $fname ) . '-' . wp_rand( 1000, 9999 ); ?>
                                 <div style="display:flex;flex-direction:column;gap:8px">
                                     <div class="uk-inline uk-width-1-1">
-                                        <input type="password" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( $fplaceholder ?: 'Password' ); ?>"<?php echo $req_attr; ?> autocomplete="new-password" data-pwc-main="<?php echo $pc_id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id composed of literal prefix, esc_attr()-escaped name and wp_rand(); required/size-class are fixed internal strings ?>" />
+                                        <input type="password" id="<?php echo $field_id; ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( $fplaceholder ?: 'Password' ); ?>"<?php echo $req_attr; ?> autocomplete="new-password" data-pwc-main="<?php echo $pc_id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id composed of literal prefix, esc_attr()-escaped name and wp_rand(); required/size-class are fixed internal strings ?>" />
                                         <a class="uk-form-icon uk-form-icon-flip" style="cursor:pointer" onclick="var i=this.previousElementSibling;i.type=i.type==='password'?'text':'password'" uk-icon="icon: eye"></a>
                                     </div>
                                     <div class="uk-inline uk-width-1-1">
@@ -697,10 +703,10 @@ class Olo_Form_Tile extends Olo_Tile_Base {
 
                             <?php elseif ( $ftype === 'color' ) : ?>
                                 <?php if ( $flabel ) : ?>
-                                    <label class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
+                                    <label for="<?php echo $field_id; ?>" class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
                                 <?php endif; ?>
                                 <div style="display:flex;align-items:center;gap:10px">
-                                    <input type="color" name="fields[<?php echo esc_attr( $fname ); ?>]" value="<?php echo esc_attr( $fplaceholder ?: '#e1474f' ); ?>" style="width:48px;height:40px;padding:2px;border:<?php echo $bw; ?>px solid <?php echo $input_bc; ?>;border-radius:<?php echo $radius; ?>;background:<?php echo $input_bg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style values sanitized above via absint()/safe_color_css()/build_border_radius_css() ?>;cursor:pointer" oninput="this.nextElementSibling.textContent=this.value" />
+                                    <input type="color" id="<?php echo $field_id; ?>" name="fields[<?php echo esc_attr( $fname ); ?>]" value="<?php echo esc_attr( $fplaceholder ?: '#e1474f' ); ?>" style="width:48px;height:40px;padding:2px;border:<?php echo $bw; ?>px solid <?php echo $input_bc; ?>;border-radius:<?php echo $radius; ?>;background:<?php echo $input_bg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style values sanitized above via absint()/safe_color_css()/build_border_radius_css() ?>;cursor:pointer" oninput="this.nextElementSibling.textContent=this.value" />
                                     <span style="font-size:14px;color:<?php echo $label_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via safe_color_css() whitelist above ?>;font-family:monospace"><?php echo esc_html( $fplaceholder ?: '#e1474f' ); ?></span>
                                 </div>
 
@@ -763,8 +769,8 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                     </button>
                 </div>
 
-                <div class="olo-f-msg olo-f-msg--success" data-anim="<?php echo esc_attr( $succ_anim ); ?>"></div>
-                <div class="olo-f-msg olo-f-msg--error" data-anim="<?php echo esc_attr( $err_anim ); ?>"></div>
+                <div class="olo-f-msg olo-f-msg--success" role="status" aria-live="polite" data-anim="<?php echo esc_attr( $succ_anim ); ?>"></div>
+                <div class="olo-f-msg olo-f-msg--error" role="alert" aria-live="assertive" data-anim="<?php echo esc_attr( $err_anim ); ?>"></div>
             </form>
         </div>
 

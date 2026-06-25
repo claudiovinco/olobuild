@@ -166,7 +166,18 @@ class Olo_Openverse {
         require_once ABSPATH . 'wp-admin/includes/media.php';
         require_once ABSPATH . 'wp-admin/includes/image.php';
 
+        // Anti-SSRF rafforzato: Openverse aggrega CDN eterogenei (niente allowlist host),
+        // quindi forziamo reject_unsafe_urls solo per questa richiesta. Cosi' WP_Http rivalida
+        // OGNI hop di redirect contro wp_http_validate_url (blocca il DNS-rebinding verso IP
+        // interni 127.0.0.1/169.254.169.254/10.x ecc.), cosa che download_url() di base non fa.
+        $olo_safe_http = function ( $args ) {
+            $args['reject_unsafe_urls'] = true;
+            $args['redirection']        = 3;
+            return $args;
+        };
+        add_filter( 'http_request_args', $olo_safe_http, 999 );
         $tmp_file = download_url( $regular_url, 30 );
+        remove_filter( 'http_request_args', $olo_safe_http, 999 );
         if ( is_wp_error( $tmp_file ) ) {
             return new WP_Error( 'download_failed', $tmp_file->get_error_message(), [ 'status' => 502 ] );
         }

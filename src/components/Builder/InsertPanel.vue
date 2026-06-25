@@ -51,18 +51,23 @@
 
           <!-- Content -->
           <div class="ip-body">
-            <!-- Tab: New Module -->
-            <div v-if="activeTab === 'module'" class="ip-grid">
-              <button
-                v-for="el in filteredModules"
-                :key="el.type"
-                class="ip-module-card"
-                @click="insertModule(el.type)"
-                :title="t(el.name)"
-              >
-                <span class="ip-module-icon" v-html="moduleIcon(el.type)"></span>
-                <span class="ip-module-name">{{ t(el.name) }}</span>
-              </button>
+            <!-- Tab: New Module — raggruppato per categoria (coerente con la Sidebar) -->
+            <div v-if="activeTab === 'module'" class="ip-modules">
+              <template v-for="cat in filteredModuleCategories" :key="cat.key">
+                <div class="ip-cat-header">{{ cat.label }}</div>
+                <div class="ip-grid">
+                  <button
+                    v-for="el in cat.modules"
+                    :key="el.type"
+                    class="ip-module-card"
+                    @click="insertModule(el.type)"
+                    :title="t(el.name)"
+                  >
+                    <span class="ip-module-icon" v-html="moduleIcon(el.type)"></span>
+                    <span class="ip-module-name">{{ t(el.name) }}</span>
+                  </button>
+                </div>
+              </template>
               <div v-if="filteredModules.length === 0" class="ip-empty">
                 {{ t('Nessun modulo trovato') }}
               </div>
@@ -183,6 +188,37 @@ const filteredModules = computed(() => {
   });
 });
 
+// Raggruppamento per categoria (stesso ordine/etichette della BuilderSidebar).
+const moduleCategoryOrder = [
+  'essential', 'layout', 'text', 'media', 'marketing',
+  'interactive', 'atmosphere', 'navigation', 'dynamic', 'woocommerce', 'booking', 'olo-space',
+];
+const moduleCategoryLabels = {
+  essential: 'Essenziale', layout: 'Layout', text: 'Testo', media: 'Media',
+  marketing: 'Marketing', interactive: 'Interattivo', navigation: 'Navigazione',
+  dynamic: 'Dinamico', booking: 'Olo Booking', 'olo-space': 'Olo Space',
+  atmosphere: 'Atmosfera', woocommerce: 'WooCommerce',
+};
+const filteredModuleCategories = computed(() => {
+  const groups = {};
+  for (const el of filteredModules.value) {
+    const cat = el.category || 'other';
+    (groups[cat] = groups[cat] || []).push(el);
+  }
+  const ordered = [];
+  for (const key of moduleCategoryOrder) {
+    if (groups[key] && groups[key].length) {
+      ordered.push({ key, label: t(moduleCategoryLabels[key] || key), modules: groups[key] });
+      delete groups[key];
+    }
+  }
+  // Eventuali categorie non previste, in coda (etichetta = chiave).
+  for (const key of Object.keys(groups)) {
+    ordered.push({ key, label: t(moduleCategoryLabels[key] || key), modules: groups[key] });
+  }
+  return ordered;
+});
+
 // Row layouts
 const rowLayouts = [
   { key: '100', label: 'Full Width', cols: [1] },
@@ -250,7 +286,7 @@ function moduleIcon(type) {
     audio: '<svg width="24" height="24"'+V+S+'><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>',
     // ── Layout ──
     map: '<svg width="24" height="24"'+V+S+'><path d="M12 21S5 14 5 8.5a7 7 0 0114 0C19 14 12 21 12 21z"/><circle cx="12" cy="8.5" r="2.5"/></svg>',
-    osmmap: '<svg width="24" height="24"'+V+S+'><path d="M12 21S5 14 5 8.5a7 7 0 0114 0C19 14 12 21 12 21z"/><circle cx="12" cy="8.5" r="2.5"/></svg>',
+    osmmap: '<svg width="24" height="24"'+V+S+'><path d="M12 21s-6.5-5.8-6.5-11A6.5 6.5 0 0112 3.5 6.5 6.5 0 0118.5 10c0 5.2-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>',
     divider: '<svg width="24" height="24"'+V+S+'><line x1="3" y1="12" x2="21" y2="12"/></svg>',
     spacer: '<svg width="24" height="24"'+V+S+' stroke-dasharray="3 2"><path d="M5 4h14M5 20h14M12 7v10"/></svg>',
     grid: '<svg width="24" height="24"'+V+S+'><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="12" y1="3" x2="12" y2="21"/></svg>',
@@ -277,7 +313,7 @@ function moduleIcon(type) {
     hotspot: '<svg width="24" height="24"'+V+S+'><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="10" cy="10" r="2.5"/><circle cx="16" cy="14" r="2.5"/><circle cx="10" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="14" r="1" fill="currentColor" stroke="none"/></svg>',
     popover: '<svg width="24" height="24"'+V+S+'><rect x="4" y="3" width="16" height="10" rx="2"/><path d="M10 13l2 3 2-3"/></svg>',
     togglebtn: '<svg width="24" height="24"'+V+S+'><rect x="3" y="8" width="18" height="8" rx="4"/><circle cx="15" cy="12" r="3" fill="currentColor"/></svg>',
-    starrating: '<svg width="24" height="24"'+V+S+'><path d="M6 11l.9 1.8 2 .3-1.4 1.4.3 2L6 15.3l-1.8 1.2.3-2-1.4-1.4 2-.3z" fill="currentColor"/><path d="M12 11l.9 1.8 2 .3-1.4 1.4.3 2L12 15.3l-1.8 1.2.3-2-1.4-1.4 2-.3z" fill="currentColor"/><path d="M18 11l.9 1.8 2 .3-1.4 1.4.3 2L18 15.3l-1.8 1.2.3-2-1.4-1.4 2-.3z"/></svg>',
+    starrating: '<svg width="24" height="24"'+V+S+'><polygon points="6.5 3.4 7.7 6 10.5 6.3 8.4 8.1 9 10.9 6.5 9.4 4 10.9 4.6 8.1 2.5 6.3 5.3 6"/><path d="M13 6.5h7M13 10h5"/></svg>',
     // ── Navigation ──
     navmenu: '<svg width="24" height="24"'+V+S+' stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>',
     megamenu: '<svg width="24" height="24"'+V+S+'><line x1="3" y1="4" x2="21" y2="4" stroke-width="2"/><rect x="2" y="8" width="20" height="12" rx="1.5"/><line x1="9" y1="8" x2="9" y2="20"/><line x1="16" y1="8" x2="16" y2="20"/></svg>',
@@ -299,7 +335,7 @@ function moduleIcon(type) {
     postmeta: '<svg width="24" height="24"'+V+S+'><path d="M4 7h4M12 7h4M4 12h8M4 17h6"/><circle cx="10" cy="7" r="1.5"/><circle cx="18" cy="7" r="1.5"/></svg>',
     readingtime: '<svg width="24" height="24"'+V+S+'><circle cx="12" cy="12" r="9"/><path d="M12 7v5l2.5 2.5"/><rect x="3" y="18" width="6" height="2" rx="1"/></svg>',
     viewscounter: '<svg width="24" height="24"'+V+S+'><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>',
-    sharebuttons: '<svg width="24" height="24"'+V+S+'><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><line x1="8" y1="11" x2="16" y2="7"/><line x1="8" y1="13" x2="16" y2="17"/></svg>',
+    sharebuttons: '<svg width="24" height="24"'+V+S+'><circle cx="6" cy="12" r="2.6"/><circle cx="17" cy="6" r="2.6"/><circle cx="17" cy="18" r="2.6"/><path d="M8.3 10.8l6.4-3.6M8.3 13.2l6.4 3.6"/><path d="M20 4l1.5-1.5M21.5 2.5h-2M21.5 2.5v2"/></svg>',
     wpcomments: '<svg width="24" height="24"'+V+S+'><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>',
     tagcloud: '<svg width="24" height="24"'+V+S+'><rect x="2" y="4" width="7" height="5" rx="2"/><rect x="11" y="4" width="5" height="5" rx="2"/><rect x="18" y="4" width="4" height="5" rx="2"/><rect x="2" y="11" width="5" height="5" rx="2"/><rect x="9" y="11" width="8" height="5" rx="2"/><rect x="2" y="18" width="9" height="4" rx="2"/></svg>',
     // ── Marketing ──
@@ -429,6 +465,77 @@ function moduleIcon(type) {
     'ac-cta':                   '<svg width="24" height="24"'+V+S+'><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M5 10h6M5 13h4"/><rect x="14" y="10" width="6" height="4" rx="1.2"/></svg>',
     'ac-certifications':        '<svg width="24" height="24"'+V+S+'><circle cx="12" cy="9" r="6"/><path d="M9 14l-3 7 6-3 6 3-3-7"/><circle cx="12" cy="9" r="3" stroke-opacity=".4"/></svg>',
     'ac-contact-form':          '<svg width="24" height="24"'+V+S+'><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/><path d="M8 14h3M8 17h5"/></svg>',
+    // ── Icone tile (design handoff): 62 tile che ricadevano sul placeholder ──
+    announcementbar: '<svg width="24" height="24"'+V+S+'><rect x="2" y="4" width="20" height="6" rx="1.5"/><path d="M6 7h9"/><path d="M3 14h18M3 18h12"/></svg>',
+    audiohero: '<svg width="24" height="24"'+V+S+'><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M6 14v-3M9 15v-5M12 16.5v-9M15 15v-5M18 14v-3"/></svg>',
+    buildermock: '<svg width="24" height="24"'+V+S+'><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M2 7h20M8 7v14"/><rect x="3.8" y="9.4" width="2.6" height="2.2" rx=".4"/><path d="M10 11h8M10 14h6M10 17h7"/></svg>',
+    chathero: '<svg width="24" height="24"'+V+S+'><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M6 8h12M6 10.5h7"/><path d="M6 14h10v4l-3-2H6z"/></svg>',
+    featuredstory: '<svg width="24" height="24"'+V+S+'><rect x="2" y="4" width="20" height="16" rx="2"/><rect x="4" y="7" width="7" height="10" rx="1"/><path d="M14 8h5M14 11h5M14 14h3"/></svg>',
+    glowgallery: '<svg width="24" height="24"'+V+S+'><circle cx="12" cy="7" r="3.5" opacity=".4"/><path d="M7 5h10"/><rect x="3" y="13" width="5" height="8" rx="1"/><rect x="9.5" y="13" width="5" height="8" rx="1"/><rect x="16" y="13" width="5" height="8" rx="1"/></svg>',
+    glowhero: '<svg width="24" height="24"'+V+S+'><circle cx="12" cy="9" r="6" opacity=".35"/><path d="M5 15h14M8 19h8"/></svg>',
+    imagehero: '<svg width="24" height="24"'+V+S+'><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="7" cy="8" r="1.6"/><path d="M3 16l5-4 4 3 4-4 5 5"/><path d="M6 19h9"/></svg>',
+    introsplit: '<svg width="24" height="24"'+V+S+'><path d="M3 5h8M3 9h8M3 13h5"/><path d="M3 18h3M9 18h2"/><rect x="14" y="5" width="7" height="9" rx="1"/><circle cx="18" cy="17.5" r="3"/></svg>',
+    maskedvideohero: '<svg width="24" height="24"'+V+S+'><path d="M2 3h20v11c0 5-5 5-10 5S2 19 2 14z"/><polygon points="10 8 15 11 10 14" fill="currentColor" stroke-width="0"/></svg>',
+    masthead: '<svg width="24" height="24"'+V+S+'><rect x="2" y="4" width="20" height="4" rx="1"/><path d="M2 11h20M2 14h13M2 17h20M2 20h9"/></svg>',
+    mediacta: '<svg width="24" height="24"'+V+S+'><rect x="2" y="3" width="20" height="13" rx="2"/><polygon points="10 7 15 9.5 10 12" fill="currentColor" stroke-width="0"/><rect x="6" y="19" width="12" height="3" rx="1.5"/></svg>',
+    newsletter: '<svg width="24" height="24"'+V+S+'><rect x="2" y="4" width="20" height="10" rx="2"/><path d="M2 6l10 5 10-5"/><rect x="4" y="17" width="10" height="3.5" rx="1.5"/><rect x="16" y="17" width="4" height="3.5" rx="1"/></svg>',
+    photocover: '<svg width="24" height="24"'+V+S+'><rect x="2" y="2" width="20" height="20" rx="1.5"/><rect x="5" y="5" width="14" height="14"/><path d="M7 16h7"/></svg>',
+    producthero: '<svg width="24" height="24"'+V+S+'><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/><circle cx="5" cy="6.5" r=".7" fill="currentColor" stroke-width="0"/><circle cx="7.5" cy="6.5" r=".7" fill="currentColor" stroke-width="0"/><path d="M8 14h8M10 17h4"/></svg>',
+    searchhero: '<svg width="24" height="24"'+V+S+'><path d="M4 5h16"/><rect x="3" y="9" width="13" height="4.5" rx="2.25"/><circle cx="19" cy="11.25" r="2.6"/><path d="M5 18h4M11 18h5M18 18h2"/></svg>',
+    smearhero: '<svg width="24" height="24"'+V+S+'><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M5 12c3-5 6 3 9-1s4-2 5-2"/><path d="M7 17h9"/></svg>',
+    availability: '<svg width="24" height="24"'+V+S+'><rect x="4" y="4" width="4" height="4" rx="1"/><rect x="10" y="4" width="4" height="4" rx="1" fill="currentColor" opacity=".22" stroke-width="0"/><rect x="16" y="4" width="4" height="4" rx="1"/><rect x="4" y="10" width="4" height="4" rx="1" fill="currentColor" opacity=".22" stroke-width="0"/><rect x="10" y="10" width="4" height="4" rx="1"/><rect x="16" y="10" width="4" height="4" rx="1"/><path d="M5 19h14"/></svg>',
+    builder: '<svg width="24" height="24"'+V+S+'><path d="M4 7h7M15 7h5M17.5 4.5v5"/><path d="M4 12h7M15 12h5"/><path d="M4 17h16"/></svg>',
+    finder: '<svg width="24" height="24"'+V+S+'><rect x="3" y="4" width="5" height="3" rx="1.5"/><rect x="10" y="4" width="5" height="3" rx="1.5"/><rect x="17" y="4" width="4" height="3" rx="1.5"/><rect x="5" y="11" width="14" height="9" rx="2"/></svg>',
+    hiddenpop: '<svg width="24" height="24"'+V+S+'><rect x="4" y="6" width="16" height="12" rx="2" stroke-dasharray="3 2.5"/><circle cx="12" cy="12" r="2.2"/></svg>',
+    hotspots: '<svg width="24" height="24"'+V+S+'><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9" r="1.4" fill="currentColor" stroke-width="0"/><circle cx="15" cy="14" r="1.4" fill="currentColor" stroke-width="0"/><circle cx="15" cy="14" r="4"/></svg>',
+    icontabs: '<svg width="24" height="24"'+V+S+'><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><circle cx="7" cy="6" r="1.2"/><circle cx="12" cy="6" r="1.2"/><circle cx="17" cy="6" r="1.2"/></svg>',
+    mixer: '<svg width="24" height="24"'+V+S+'><circle cx="9" cy="10" r="5"/><circle cx="15" cy="10" r="5"/><path d="M6 19h12"/></svg>',
+    physicsbin: '<svg width="24" height="24"'+V+S+'><path d="M4 5v13a2 2 0 002 2h12a2 2 0 002-2V5"/><circle cx="9" cy="15" r="2.6"/><rect x="13" y="12.5" width="5" height="5" rx="1" transform="rotate(18 15.5 15)"/></svg>',
+    projector: '<svg width="24" height="24"'+V+S+'><path d="M3 8h18"/><circle cx="9" cy="8" r="2.4"/><path d="M5 14h14M5 18h8"/></svg>',
+    revealbox: '<svg width="24" height="24"'+V+S+'><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 13h18" stroke-dasharray="3 2"/><path d="M9 9l3-3 3 3"/></svg>',
+    scaler: '<svg width="24" height="24"'+V+S+'><rect x="3" y="3" width="7" height="5" rx="1"/><path d="M14 5.5h7M5 13h16M5 17h12M5 21h8"/></svg>',
+    scratchfx: '<svg width="24" height="24"'+V+S+'><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M6 13c2-3 4 2 6-1s3-2 4-3"/><path d="M14 6l4 4"/></svg>',
+    timezone: '<svg width="24" height="24"'+V+S+'><circle cx="6" cy="7" r="3"/><path d="M6 5.5V7l1.2 .8"/><path d="M12 6h9M12 11h9M12 16h9"/><circle cx="9" cy="11" r="1.3" fill="currentColor" stroke-width="0"/><circle cx="16" cy="16" r="1.3" fill="currentColor" stroke-width="0"/></svg>',
+    tripfinder: '<svg width="24" height="24"'+V+S+'><rect x="2" y="8" width="20" height="8" rx="2"/><path d="M8 8v8M14 8v8"/><path d="M16 12h4"/></svg>',
+    presencegrid: '<svg width="24" height="24"'+V+S+'><rect x="3" y="4" width="7" height="7" rx="1.5"/><rect x="14" y="4" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="6" rx="1.5"/><rect x="14" y="14" width="7" height="6" rx="1.5"/><circle cx="9.5" cy="5.5" r="1.3" fill="currentColor" stroke-width="0"/></svg>',
+    matchfixtures: '<svg width="24" height="24"'+V+S+'><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/><path d="M11.5 12h1M12 10.5v3"/></svg>',
+    asciiviz: '<svg width="24" height="24"'+V+S+'><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M6 9h2.5M11 9h3.5M17 9h1.5M6 13h4M12.5 13h2M6 17h6.5"/></svg>',
+    beforeafter: '<svg width="24" height="24"'+V+S+'><rect x="3" y="5" width="8" height="11" rx="1"/><rect x="13" y="5" width="8" height="11" rx="1"/><path d="M4 19h6M14 19h6"/></svg>',
+    categoryrail: '<svg width="24" height="24"'+V+S+'><rect x="2" y="5" width="7" height="13" rx="1.5"/><rect x="11" y="5" width="7" height="13" rx="1.5"/><rect x="20" y="5" width="3" height="13" rx="1.5"/><path d="M8 21h8"/></svg>',
+    productgrid: '<svg width="24" height="24"'+V+S+'><rect x="3" y="3" width="8" height="11" rx="1"/><rect x="13" y="3" width="8" height="11" rx="1"/><path d="M3 16.5h6M13 16.5h6M3 19.5h4M13 19.5h4"/></svg>',
+    showcasegrid: '<svg width="24" height="24"'+V+S+'><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="17" cy="7" r="2.6"/><path d="M16 8l2-2M16.4 6h1.6v1.6"/><path d="M6 17h8"/></svg>',
+    svganimator: '<svg width="24" height="24"'+V+S+'><path d="M3 12h4l2.5-6 3 12 2.5-6H21"/><circle cx="3" cy="12" r="1.4" fill="currentColor" stroke-width="0"/><circle cx="21" cy="12" r="1.4" fill="currentColor" stroke-width="0"/></svg>',
+    viewer360: '<svg width="24" height="24"'+V+S+'><circle cx="12" cy="12" r="9"/><path d="M3 12c0-2.2 4-4 9-4s9 1.8 9 4-4 4-9 4-9-1.8-9-4z"/><path d="M13 3.6l2.4 1.5-2.4 1.6"/></svg>',
+    'cta-banner': '<svg width="24" height="24"'+V+S+'><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M5 10h6M5 13h4"/><rect x="14" y="10" width="5.5" height="4" rx="1"/></svg>',
+    'hero-split': '<svg width="24" height="24"'+V+S+'><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M12 4v16"/><path d="M4 9h5M4 12h5"/></svg>',
+    hoursstrip: '<svg width="24" height="24"'+V+S+'><circle cx="5" cy="12" r="2.6"/><path d="M5 10.5V12l1.1 .7"/><path d="M10 9h11M10 13h8M10 17h10"/></svg>',
+    hoverlist: '<svg width="24" height="24"'+V+S+'><circle cx="5" cy="7" r="2" fill="currentColor" stroke-width="0"/><path d="M9 7h12"/><circle cx="5" cy="12.5" r="2"/><path d="M9 12.5h9"/><circle cx="5" cy="18" r="2"/><path d="M9 18h11"/></svg>',
+    'info-cards': '<svg width="24" height="24"'+V+S+'><rect x="3" y="4" width="8" height="8" rx="1.5"/><rect x="13" y="4" width="8" height="8" rx="1.5"/><path d="M5 15h6M15 15h4M5 18h4M15 18h5"/></svg>',
+    lookbookmixer: '<svg width="24" height="24"'+V+S+'><rect x="3" y="5" width="5" height="12" rx="1"/><rect x="10" y="5" width="5" height="12" rx="1"/><rect x="17" y="5" width="4" height="12" rx="1"/><path d="M5.5 3.6l-1 1.4h2zM6 20h12"/></svg>',
+    'process-steps': '<svg width="24" height="24"'+V+S+'><circle cx="6" cy="9" r="3"/><circle cx="18" cy="9" r="3"/><path d="M9 9h6"/><path d="M3 16h6M15 16h6"/></svg>',
+    'product-cards': '<svg width="24" height="24"'+V+S+'><rect x="3" y="3" width="8" height="18" rx="1.5"/><rect x="13" y="3" width="8" height="18" rx="1.5"/><path d="M3 13h8M13 13h8"/><path d="M5 16h3M15 16h3"/></svg>',
+    schedule: '<svg width="24" height="24"'+V+S+'><rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="M3 8h18M9 4v16M15 4v16"/><rect x="9.5" y="8.6" width="5" height="3" rx=".5" fill="currentColor" opacity=".22" stroke-width="0"/></svg>',
+    scrollscrub: '<svg width="24" height="24"'+V+S+'><rect x="2" y="6" width="5.5" height="9" rx="1"/><rect x="9.25" y="6" width="5.5" height="9" rx="1"/><rect x="16.5" y="6" width="5.5" height="9" rx="1"/><path d="M4 19h13M15 17l2 2-2 2"/></svg>',
+    'section-header': '<svg width="24" height="24"'+V+S+'><path d="M3 5h6"/><path d="M3 9.5h15M3 13h10"/><path d="M16 19h5"/></svg>',
+    stackscroll: '<svg width="24" height="24"'+V+S+'><rect x="8" y="3" width="13" height="6" rx="1.5"/><rect x="6" y="8.5" width="13" height="6" rx="1.5"/><rect x="4" y="14" width="13" height="6" rx="1.5"/></svg>',
+    statstrip: '<svg width="24" height="24"'+V+S+'><path d="M3 8h6" stroke-width="2.2"/><path d="M3 12h4"/><path d="M11 4v16"/><path d="M15 8h6" stroke-width="2.2"/><path d="M15 12h4"/></svg>',
+    'step-timeline': '<svg width="24" height="24"'+V+S+'><path d="M3 10h18" stroke-dasharray="3 2"/><circle cx="6" cy="10" r="2.2"/><circle cx="12" cy="10" r="2.2"/><circle cx="18" cy="10" r="2.2"/><path d="M4 16h4M10 16h4M16 16h4"/></svg>',
+    'trust-strip': '<svg width="24" height="24"'+V+S+'><circle cx="6" cy="12" r="3"/><path d="M4.8 12l1 1 1.4-1.7"/><path d="M11 12h2"/><circle cx="18" cy="12" r="3"/><path d="M16.8 12l1 1 1.4-1.7"/></svg>',
+    workgrid: '<svg width="24" height="24"'+V+S+'><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><circle cx="16.5" cy="16.5" r="2.5"/><path d="M18.3 18.3l1.7 1.7"/></svg>',
+    worklist: '<svg width="24" height="24"'+V+S+'><path d="M3 6h2M8 6h13M3 12h2M8 12h11M3 18h2M8 18h12"/></svg>',
+    goo: '<svg width="24" height="24"'+V+S+'><circle cx="9" cy="10" r="4.5"/><circle cx="15" cy="13.5" r="3.5"/><circle cx="14" cy="8" r="2"/></svg>',
+    particlefx: '<svg width="24" height="24"'+V+S+'><circle cx="6" cy="7" r="1.1" fill="currentColor" stroke-width="0"/><circle cx="12" cy="5" r="1.1" fill="currentColor" stroke-width="0"/><circle cx="18" cy="8" r="1.1" fill="currentColor" stroke-width="0"/><circle cx="8" cy="13" r="1.1" fill="currentColor" stroke-width="0"/><circle cx="15" cy="12" r="1.1" fill="currentColor" stroke-width="0"/><circle cx="11" cy="18" r="1.1" fill="currentColor" stroke-width="0"/><circle cx="19" cy="17" r="1.1" fill="currentColor" stroke-width="0"/></svg>',
+    badge: '<svg width="24" height="24"'+V+S+'><rect x="3" y="8" width="13" height="8" rx="4"/><circle cx="19.5" cy="12" r="2.2"/></svg>',
+    variablespecimen: '<svg width="24" height="24"'+V+S+'><path d="M4 19l5-13 5 13M6 14h6"/><path d="M16 11h5M18.5 9.5v3"/></svg>',
+    leaderboard: '<svg width="24" height="24"'+V+S+'><rect x="3" y="6" width="13" height="3" rx="1.5"/><rect x="3" y="11" width="10" height="3" rx="1.5"/><rect x="3" y="16" width="7" height="3" rx="1.5"/><polygon points="20 5 20.7 6.5 22.3 6.7 21.1 7.8 21.4 9.4 20 8.6 18.6 9.4 18.9 7.8 17.7 6.7 19.3 6.5" fill="currentColor" stroke-width="0"/></svg>',
+    // ── Tile fuori dal pacchetto handoff (North dormienti + clod-evoluzione) ──
+    northvideohero: '<svg width="24" height="24"'+V+S+'><rect x="2" y="3" width="20" height="18" rx="2"/><polygon points="10 8 16 12 10 16" fill="currentColor" stroke-width="0"/><path d="M5 6l3 0-1 2H4z"/></svg>',
+    northquoteslider: '<svg width="24" height="24"'+V+S+'><path d="M5 6h4v4c0 2-1.5 3-3.5 3.5"/><path d="M13 6h4v4c0 2-1.5 3-3.5 3.5"/><path d="M4 19h13M15 17l2 2-2 2"/></svg>',
+    studiohero: '<svg width="24" height="24"'+V+S+'><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="12" cy="10" r="3.5"/><path d="M12 3v3M6 15h12"/></svg>',
+    filmreel: '<svg width="24" height="24"'+V+S+'><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M3 15h18"/><path d="M7 5v14M17 5v14"/></svg>',
+    scrubtext: '<svg width="24" height="24"'+V+S+'><path d="M5 6h14M12 6v9"/><path d="M4 20h16M15 18l2 2-2 2"/></svg>',
+    themedemos: '<svg width="24" height="24"'+V+S+'><rect x="3" y="4" width="8" height="7" rx="1"/><rect x="13" y="4" width="8" height="7" rx="1"/><path d="M3 6.5h8M13 6.5h8"/><rect x="3" y="14" width="18" height="6" rx="1"/><path d="M3 16.5h18"/></svg>',
+    evonotes: '<svg width="24" height="24"'+V+S+'><path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M14 3v6h6"/><path d="M8 13h7M8 17h5"/></svg>',
   };
   var svg = icons[type] || '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="12" cy="12" r="3"/></svg>';
   _iconCache[type] = svg;
@@ -665,6 +772,24 @@ defineExpose({ open, close });
   flex: 1;
   overflow-y: auto;
   padding: 4px 20px 20px;
+}
+
+/* Module list grouped by category */
+.ip-modules {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ip-cat-header {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: #9ca3af;
+  margin: 8px 0 -2px;
+}
+.ip-modules > .ip-cat-header:first-child {
+  margin-top: 0;
 }
 
 /* Module grid */

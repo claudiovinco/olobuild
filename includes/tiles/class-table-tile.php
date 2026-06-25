@@ -109,7 +109,7 @@ class Olo_Table_Tile extends Olo_Tile_Base {
                         <?php foreach ( $header as $ci => $cell ) :
                             $align = isset( $col_aligns[ $ci ] ) ? $col_aligns[ $ci ] : 'left';
                         ?>
-                            <th style="text-align:<?php echo esc_attr( $align ); ?>;padding:<?php echo esc_attr( $pad ); ?>"><?php echo esc_html( $cell ); ?></th>
+                            <th scope="col" style="text-align:<?php echo esc_attr( $align ); ?>;padding:<?php echo esc_attr( $pad ); ?>"><?php echo esc_html( $cell ); ?></th>
                         <?php endforeach; ?>
                     </tr>
                 </thead>
@@ -132,8 +132,11 @@ class Olo_Table_Tile extends Olo_Tile_Base {
                                 if ( $responsive === 'stack' && $header && isset( $header[ $ci ] ) ) {
                                     $data_label = ' data-label="' . esc_attr( $header[ $ci ] ) . '"';
                                 }
+                                $is_row_header = ( $first_bold && $ci === 0 );
+                                $cell_tag      = $is_row_header ? 'th' : 'td';
+                                $scope_attr    = $is_row_header ? ' scope="row"' : '';
                             ?>
-                                <td<?php echo $bold . $data_label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute strings assembled above from fixed literals with esc_attr()'d values ?>><?php echo esc_html( $cell ); ?></td>
+                                <<?php echo $cell_tag; ?><?php echo $scope_attr . $bold . $data_label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $cell_tag/$scope_attr fixed literals; remaining attribute strings assembled above from fixed literals with esc_attr()'d values ?>><?php echo esc_html( $cell ); ?></<?php echo $cell_tag; ?>>
                             <?php endforeach; ?>
                         </tr>
                     <?php endforeach; ?>

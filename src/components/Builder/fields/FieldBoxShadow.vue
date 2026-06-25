@@ -1,32 +1,28 @@
 <template>
   <div class="olo-shadowfield">
     <div class="olo-sh-row">
-      <span class="olo-sh-rl">{{ t('Offset') }}</span>
-      <input class="olo-sh-slider" type="range" min="-50" max="50" :value="val.h"
-             :aria-label="t('Offset orizzontale ombra (px)')" @input="update('h', $event.target.value)"/>
-      <span class="olo-sh-val"><input type="number" min="-100" max="100" :value="val.h"
-             :aria-label="t('Offset orizzontale ombra (px)')" @input="update('h', $event.target.value)"/><i>H</i></span>
+      <span class="olo-sh-rl">{{ t('Offset X') }}</span>
+      <NumberScrubber class="olo-sh-ctrl" :modelValue="val.h" :min="-50" :max="50" :step="1"
+        :defaultValue="0" emitAs="number" unit="px" :sliderOnFocus="false"
+        :ariaLabel="t('Offset orizzontale ombra (px)')" @update:modelValue="update('h', $event)" />
     </div>
     <div class="olo-sh-row">
-      <span class="olo-sh-rl"></span>
-      <input class="olo-sh-slider" type="range" min="-50" max="50" :value="val.v"
-             :aria-label="t('Offset verticale ombra (px)')" @input="update('v', $event.target.value)"/>
-      <span class="olo-sh-val"><input type="number" min="-100" max="100" :value="val.v"
-             :aria-label="t('Offset verticale ombra (px)')" @input="update('v', $event.target.value)"/><i>V</i></span>
+      <span class="olo-sh-rl">{{ t('Offset Y') }}</span>
+      <NumberScrubber class="olo-sh-ctrl" :modelValue="val.v" :min="-50" :max="50" :step="1"
+        :defaultValue="4" emitAs="number" unit="px" :sliderOnFocus="false"
+        :ariaLabel="t('Offset verticale ombra (px)')" @update:modelValue="update('v', $event)" />
     </div>
     <div class="olo-sh-row">
-      <span class="olo-sh-rl">{{ t('Sfoc.') }}</span>
-      <input class="olo-sh-slider" type="range" min="0" max="100" :value="val.blur"
-             :aria-label="t('Sfocatura ombra (px)')" @input="update('blur', $event.target.value)"/>
-      <span class="olo-sh-val"><input type="number" min="0" max="200" :value="val.blur"
-             :aria-label="t('Sfocatura ombra (px)')" @input="update('blur', $event.target.value)"/><i>px</i></span>
+      <span class="olo-sh-rl">{{ t('Sfocatura') }}</span>
+      <NumberScrubber class="olo-sh-ctrl" :modelValue="val.blur" :min="0" :max="100" :step="1"
+        :defaultValue="10" emitAs="number" unit="px" :sliderOnFocus="false"
+        :ariaLabel="t('Sfocatura ombra (px)')" @update:modelValue="update('blur', $event)" />
     </div>
     <div class="olo-sh-row">
-      <span class="olo-sh-rl">{{ t('Estens.') }}</span>
-      <input class="olo-sh-slider" type="range" min="-30" max="50" :value="val.spread"
-             :aria-label="t('Diffusione ombra (px)')" @input="update('spread', $event.target.value)"/>
-      <span class="olo-sh-val"><input type="number" min="-100" max="100" :value="val.spread"
-             :aria-label="t('Diffusione ombra (px)')" @input="update('spread', $event.target.value)"/><i>px</i></span>
+      <span class="olo-sh-rl">{{ t('Estensione') }}</span>
+      <NumberScrubber class="olo-sh-ctrl" :modelValue="val.spread" :min="-30" :max="50" :step="1"
+        :defaultValue="0" emitAs="number" unit="px" :sliderOnFocus="false"
+        :ariaLabel="t('Diffusione ombra (px)')" @update:modelValue="update('spread', $event)" />
     </div>
     <div class="olo-sh-row olo-sh-row--col">
       <span class="olo-sh-rl">{{ t('Colore') }}</span>
@@ -49,6 +45,7 @@
 import { t } from '@/i18n';
 import { computed } from 'vue';
 import FieldColor from './FieldColor.vue';
+import NumberScrubber from './NumberScrubber.vue';
 
 const props = defineProps({
   modelValue: { type: Object, default: () => ({ h: 0, v: 4, blur: 10, spread: 0, color: 'rgba(0,0,0,0.15)', inset: false }) },
@@ -71,7 +68,12 @@ const previewText = computed(() => {
 
 function update(key, value) {
   const numKeys = ['h', 'v', 'blur', 'spread'];
-  const newVal = { ...val.value, [key]: numKeys.includes(key) ? (parseInt(value) || 0) : value };
+  let v = value;
+  if (numKeys.includes(key)) {
+    v = parseInt(value) || 0;
+    if (key === 'blur') v = Math.max(0, v); // sfocatura non negativa (coerente con FieldTextShadow)
+  }
+  const newVal = { ...val.value, [key]: v };
   emit('update:modelValue', newVal);
 }
 </script>
@@ -81,15 +83,9 @@ function update(key, value) {
 .olo-sh-row { display: flex; align-items: center; gap: 10px; }
 .olo-sh-row--last { margin-bottom: 0; }
 .olo-sh-row--col { align-items: flex-start; }
-.olo-sh-rl { width: 54px; flex-shrink: 0; font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #94a3b8; padding-top: 9px; }
-.olo-sh-row:not(.olo-sh-row--col) .olo-sh-rl { padding-top: 0; }
-.olo-sh-slider { flex: 1; accent-color: var(--olo-ui-accent, #e8622a); height: 5px; cursor: pointer; }
-.olo-sh-slider:focus-visible { outline: 2px solid var(--olo-ui-accent, #e8622a); outline-offset: 4px; }
-.olo-sh-val { display: flex; align-items: center; border: 1px solid #e5e7eb; border-radius: 9px; overflow: hidden; background: #fff; height: 34px; width: 72px; flex-shrink: 0; }
-.olo-sh-val input { width: 100%; min-width: 0; border: 0; outline: none; text-align: center; font: 500 13px ui-monospace, monospace; color: #1f2937; background: transparent; -moz-appearance: textfield; }
-.olo-sh-val input::-webkit-outer-spin-button, .olo-sh-val input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.olo-sh-val:focus-within { border-color: var(--olo-ui-accent, #e8622a); box-shadow: 0 0 0 3px rgba(232,98,42,.18); }
-.olo-sh-val i { font-style: normal; font-size: 11px; color: #94a3b8; font-weight: 600; padding: 0 8px; border-left: 1px solid #eef0f3; align-self: stretch; display: flex; align-items: center; background: #f6f7f9; }
+.olo-sh-rl { width: 64px; flex-shrink: 0; font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #94a3b8; }
+.olo-sh-row--col .olo-sh-rl { padding-top: 9px; }
+.olo-sh-ctrl { flex: 1; min-width: 0; }
 .olo-sh-color { flex: 1; min-width: 0; }
 .olo-sh-switch { width: 34px; height: 19px; border: 0; border-radius: 99px; background: #cbd5e1; position: relative; cursor: pointer; transition: background .15s; flex-shrink: 0; }
 .olo-sh-switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 15px; height: 15px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.2); transition: left .15s; }

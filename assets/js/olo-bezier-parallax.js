@@ -65,9 +65,17 @@ var elements = [];
 var ticking = false;
 
 export function init() {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var existing = new Map();
   elements.forEach(function (e) { existing.set(e.el, e); });
   elements = [];
+
+  // prefers-reduced-motion: nessun parallax scroll-linked. Azzera eventuali transform
+  // residui e lascia gli elementi nella posizione autorale (statica).
+  if (reduce) {
+    existing.forEach(function (e) { if (e.el && e.el.style) e.el.style.transform = ''; });
+    return;
+  }
 
   var nodes = document.querySelectorAll('[data-olo-bezier-parallax]');
   nodes.forEach(function (el) {

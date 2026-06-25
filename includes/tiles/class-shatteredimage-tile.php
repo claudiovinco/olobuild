@@ -413,6 +413,13 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
             return '<div class="olo-shattered"><p style="text-align:center;color:var(--olo-color-text-muted, #9CA3AF);padding:40px 0">Seleziona un\'immagine</p></div>';
         }
 
+        // A11y (WCAG 1.1.1): the image is rendered as background-image of fragments,
+        // so the container needs role="img" + aria-label when the image is informative.
+        $alt_text  = isset( $s['alt'] ) ? trim( (string) $s['alt'] ) : '';
+        $a11y_attrs = $alt_text !== ''
+            ? ' role="img" aria-label="' . esc_attr( $alt_text ) . '"'
+            : '';
+
         $preset_key   = $s['preset'] ?: 'shards';
         $gap          = max( 0, min( 16, intval( $s['gap'] ) ) );
         $zoom_on      = ! empty( $s['zoom_variation'] );
@@ -530,7 +537,7 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
         if ( $radius_hover_css !== '' ) {
             echo '<style>.' . $sh_uid . ':hover{border-radius:' . $radius_hover_css . ' !important}</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $radius_hover_css built by Olo_Tile_Utils::radius_force_css() from absint() values; $sh_uid is internally generated
         }
-        echo '<div class="olo-shattered ' . $sh_uid . '" style="' . $container_style . '"' . $data_attrs . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_style built by build_style() (esc_attr per value); $data_attrs built above from esc_attr( $uid ) and a clamped intval(); $sh_uid is internally generated
+        echo '<div class="olo-shattered ' . $sh_uid . '" style="' . $container_style . '"' . $data_attrs . $a11y_attrs . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_style built by build_style() (esc_attr per value); $data_attrs built above from esc_attr( $uid ) and a clamped intval(); $a11y_attrs is esc_attr()'d aria-label; $sh_uid is internally generated
 
         // Render each fragment: outer = static mask, inner = animated image
         $container_h = intval( $s['height'] ) ?: 400;

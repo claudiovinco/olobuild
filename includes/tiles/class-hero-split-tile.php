@@ -319,16 +319,34 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
 
                                     // Card bg via Olo_CSS_Builder (background creativo unificato)
                                     $card_bg_css = '';
+                                    $card_media  = ''; // <video>/<gallery>: tipi non esprimibili come background CSS
                                     $card_bg_obj = $it['bg'] ?? [ 'type' => 'solid', 'color' => '#ffffff' ];
                                     if ( is_array( $card_bg_obj ) && ( $card_bg_obj['type'] ?? 'none' ) !== 'none' && class_exists( 'Olo_CSS_Builder' ) ) {
-                                        $cssb = new Olo_CSS_Builder();
+                                        $cssb        = new Olo_CSS_Builder();
                                         $card_bg_css = $cssb->get_bg_inline_css( $card_bg_obj );
+                                        $cb_type     = $card_bg_obj['type'] ?? '';
+                                        if ( $cb_type === 'video' && ! empty( $card_bg_obj['video_url'] ) ) {
+                                            // <video> reale: un background CSS non riproduce video. Chiavi del
+                                            // picker BackgroundControls: video_url/video_poster/video_fit/image_position.
+                                            $cv_url    = esc_url( $card_bg_obj['video_url'] );
+                                            $cv_poster = ! empty( $card_bg_obj['video_poster'] ) ? ' poster="' . esc_url( $card_bg_obj['video_poster'] ) . '"' : '';
+                                            $cv_fit    = esc_attr( $card_bg_obj['video_fit'] ?? 'cover' );
+                                            $cv_pos    = esc_attr( $card_bg_obj['image_position'] ?? 'center center' );
+                                            $card_media = '<video class="olo-hsplit__card-media" src="' . $cv_url . '"' . $cv_poster
+                                                . ' autoplay muted loop playsinline preload="metadata"'
+                                                . ' style="position:absolute;inset:0;width:100%;height:100%;object-fit:' . $cv_fit
+                                                . ';object-position:' . $cv_pos . ';z-index:0;pointer-events:none"></video>';
+                                        } elseif ( $cb_type === 'gallery' && ! empty( $card_bg_obj['gallery_images'] ) ) {
+                                            $card_media = $cssb->get_bg_html_markup( $card_bg_obj, $uid . '-c' . (int) $idx );
+                                        }
                                     }
                                     $shadow_css = $card_shadow ? 'box-shadow:' . $card_shadow . ';' : '';
                                 ?>
-                                    <div class="olo-hsplit__card olo-hsplit__card--<?php echo (int) $idx; ?>" style="<?php echo esc_attr( $card_bg_css ); ?>;<?php if ( $card_radius ) echo 'border-radius:' . esc_attr( $card_radius ) . ';'; ?>padding:24px;display:flex;flex-direction:column;justify-content:space-between;min-height:180px;<?php echo esc_attr( $shadow_css ); ?>transition:border-radius <?php echo (int) $card_rdur; ?>ms cubic-bezier(.4,0,.2,1),transform .3s ease,box-shadow .3s ease">
-                                        <div style="font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:11px;color:var(--olo-color-text-faint, #9ca3af);letter-spacing:0.05em" data-olo-editable="<?php echo 'showcase_items.' . intval( $idx ) . '.number'; ?>"><?php echo esc_html( $num ); ?></div>
-                                        <div style="font-family:<?php echo esc_attr( $headline_family ); ?>;font-size:36px;font-weight:500;color:<?php echo esc_attr( $txt_clr ); ?>;text-align:center;<?php echo esc_attr( $italic ); ?>" data-olo-editable="<?php echo 'showcase_items.' . intval( $idx ) . '.text'; ?>"><?php echo esc_html( $txt ); ?></div>
+                                    <div class="olo-hsplit__card olo-hsplit__card--<?php echo (int) $idx; ?>" style="<?php echo esc_attr( $card_bg_css ); ?>;position:relative;overflow:hidden;<?php if ( $card_radius ) echo 'border-radius:' . esc_attr( $card_radius ) . ';'; ?>padding:24px;display:flex;flex-direction:column;justify-content:space-between;min-height:180px;<?php echo esc_attr( $shadow_css ); ?>transition:border-radius <?php echo (int) $card_rdur; ?>ms cubic-bezier(.4,0,.2,1),transform .3s ease,box-shadow .3s ease"><?php
+                                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup <video>/gallery generato sopra con esc_url/esc_attr
+                                        echo $card_media; ?>
+                                        <div style="position:relative;z-index:1;font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:11px;color:var(--olo-color-text-faint, #9ca3af);letter-spacing:0.05em" data-olo-editable="<?php echo 'showcase_items.' . intval( $idx ) . '.number'; ?>"><?php echo esc_html( $num ); ?></div>
+                                        <div style="position:relative;z-index:1;font-family:<?php echo esc_attr( $headline_family ); ?>;font-size:36px;font-weight:500;color:<?php echo esc_attr( $txt_clr ); ?>;text-align:center;<?php echo esc_attr( $italic ); ?>" data-olo-editable="<?php echo 'showcase_items.' . intval( $idx ) . '.text'; ?>"><?php echo esc_html( $txt ); ?></div>
                                     </div>
                                 <?php endforeach; ?>
                             </div>

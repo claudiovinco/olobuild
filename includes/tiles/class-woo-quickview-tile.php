@@ -275,9 +275,9 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
 
         <!-- Quick View Modal Shell -->
         <div class="<?php echo esc_attr( $uid ); ?>-overlay" data-olo-qv-overlay>
-            <div class="<?php echo esc_attr( $uid ); ?>-modal">
-                <button class="<?php echo esc_attr( $uid ); ?>-close" data-olo-qv-close>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <div class="<?php echo esc_attr( $uid ); ?>-modal" role="dialog" aria-modal="true" aria-label="<?php echo esc_attr( olo_t( 'Vista rapida prodotto' ) ); ?>" tabindex="-1" data-olo-qv-dialog>
+                <button class="<?php echo esc_attr( $uid ); ?>-close" data-olo-qv-close aria-label="<?php echo esc_attr( olo_t( 'Chiudi' ) ); ?>">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
                 <div class="<?php echo esc_attr( $uid ); ?>-body">
                     <div class="<?php echo esc_attr( $uid ); ?>-loading" data-olo-qv-loading>
@@ -296,29 +296,56 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
             var loading = overlay.querySelector('[data-olo-qv-loading]');
             var content = overlay.querySelector('[data-olo-qv-content]');
             var closeBtn = overlay.querySelector('[data-olo-qv-close]');
+            var dialog = overlay.querySelector('[data-olo-qv-dialog]');
+            var lastTrigger = null;
             var restBase = '<?php echo esc_js( rest_url( 'olo/v1/woo-quickview/' ) ); ?>';
+
+            /* Focusable elements inside the dialog (for focus trap) */
+            function qvFocusables(){
+                return Array.prototype.slice.call(
+                    overlay.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')
+                ).filter(function(el){ return el.offsetParent !== null; });
+            }
 
             /* Close modal */
             function closeModal(){
                 overlay.classList.remove('is-open');
                 document.body.style.overflow = '';
+                if(lastTrigger && typeof lastTrigger.focus === 'function'){ lastTrigger.focus(); }
+                lastTrigger = null;
             }
             if(closeBtn){ closeBtn.addEventListener('click', closeModal); }
             overlay.addEventListener('click', function(e){
                 if(e.target === overlay){ closeModal(); }
             });
             document.addEventListener('keydown', function(e){
+                if(!overlay.classList.contains('is-open')){ return; }
                 if(e.key === 'Escape'){
-                    if(overlay.classList.contains('is-open')){ closeModal(); }
+                    closeModal();
+                    return;
+                }
+                if(e.key === 'Tab'){
+                    var f = qvFocusables();
+                    if(!f.length){ e.preventDefault(); if(dialog){ dialog.focus(); } return; }
+                    var first = f[0];
+                    var last = f[f.length - 1];
+                    var active = document.activeElement;
+                    if(e.shiftKey){
+                        if(active === first || !overlay.contains(active)){ e.preventDefault(); last.focus(); }
+                    } else {
+                        if(active === last || !overlay.contains(active)){ e.preventDefault(); first.focus(); }
+                    }
                 }
             });
 
             /* Open modal */
-            function openQuickView(pid){
+            function openQuickView(pid, trigger){
+                lastTrigger = trigger || document.activeElement;
                 loading.style.display = 'block';
                 content.style.display = 'none';
                 overlay.classList.add('is-open');
                 document.body.style.overflow = 'hidden';
+                if(closeBtn){ closeBtn.focus(); } else if(dialog){ dialog.focus(); }
 
                 fetch(restBase + pid)
                 .then(function(r){ return r.json(); })
@@ -327,6 +354,13 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
                         content.innerHTML = data.html;
                         loading.style.display = 'none';
                         content.style.display = 'block';
+
+                        /* Wire dialog accessible name to the product title */
+                        var titleEl = content.querySelector('[data-olo-qv-title]');
+                        if(titleEl && dialog){
+                            if(!titleEl.id){ titleEl.id = 'olo-qv-title-' + pid; }
+                            dialog.setAttribute('aria-labelledby', titleEl.id);
+                        }
 
                         /* Thumbnail click handler */
                         var thumbs = content.querySelectorAll('[data-olo-qv-thumb-src]');
@@ -368,10 +402,11 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
                 var btn = document.createElement('button');
                 btn.className = 'olo-qv-trigger';
                 btn.textContent = '<?php echo esc_js( $s['button_text'] ?: olo_t( 'Vista rapida' ) ); ?>';
+                btn.setAttribute('aria-haspopup', 'dialog');
                 btn.addEventListener('click', function(e){
                     e.preventDefault();
                     e.stopPropagation();
-                    openQuickView(pid);
+                    openQuickView(pid, btn);
                 });
 
                 imgWrap.style.position = 'relative';
@@ -438,13 +473,15 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
                         $large_url = wp_get_attachment_image_url( $gid, 'large' );
                         if ( ! $thumb_url ) { continue; }
                     ?>
-                    <img class="olo-qv-thumb" src="<?php echo esc_url( $thumb_url ); ?>" data-olo-qv-thumb-src="<?php echo esc_url( $large_url ); ?>" style="width:56px;height:56px;object-fit:cover;border-radius:4px;cursor:pointer;border:2px solid transparent" />
+                    <button type="button" class="olo-qv-thumb" data-olo-qv-thumb-src="<?php echo esc_url( $large_url ); ?>" aria-label="<?php echo esc_attr( sprintf( olo_t( 'Mostra immagine: %s' ), $product->get_name() ) ); ?>" style="padding:0;border:2px solid transparent;border-radius:4px;cursor:pointer;background:none;line-height:0">
+                        <img src="<?php echo esc_url( $thumb_url ); ?>" alt="" style="width:56px;height:56px;object-fit:cover;border-radius:2px;display:block" />
+                    </button>
                     <?php endforeach; ?>
                 </div>
                 <?php endif; ?>
             </div>
             <div>
-                <h3 style="font-size:22px;font-weight:700;margin:0 0 10px"><?php echo esc_html( $product->get_name() ); ?></h3>
+                <h3 data-olo-qv-title style="font-size:22px;font-weight:700;margin:0 0 10px"><?php echo esc_html( $product->get_name() ); ?></h3>
                 <div style="font-size:20px;font-weight:600;margin-bottom:12px"><?php echo $product->get_price_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- price HTML generated and escaped by WooCommerce (WC_Product::get_price_html()). ?></div>
                 <?php if ( $product->get_average_rating() > 0 ) : ?>
                 <div style="display:flex;align-items:center;gap:2px;margin-bottom:12px">

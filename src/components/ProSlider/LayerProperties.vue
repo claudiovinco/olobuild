@@ -3,7 +3,7 @@
     <template v-if="layer">
       <!-- Header -->
       <div class="mb-p-2 mb-border-b mb-border-gray-700 mb-text-xs mb-font-semibold mb-text-gray-300">
-        Livello {{ layer.type.charAt(0).toUpperCase() + layer.type.slice(1) }}
+        {{ t('Livello') }} {{ layer.type.charAt(0).toUpperCase() + layer.type.slice(1) }}
       </div>
 
       <!-- Tabs -->
@@ -26,48 +26,48 @@
           <!-- Text -->
           <template v-if="layer.type === 'text'">
             <div>
-              <label class="mps-label">Testo</label>
+              <label class="mps-label">{{ t('Testo') }}</label>
               <textarea :value="layer.content" @input="up('content', $event.target.value)" rows="3"
                 class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900 mb-resize-y"></textarea>
             </div>
             <div>
-              <label class="mps-label">Tag</label>
+              <label class="mps-label">{{ t('Tag') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.tag" :options="OPTS_TAG" @update:model-value="up('tag', $event)" />
             </div>
           </template>
           <!-- Image -->
           <template v-if="layer.type === 'image'">
             <div>
-              <label class="mps-label">URL Immagine</label>
+              <label class="mps-label">{{ t('URL Immagine') }}</label>
               <div class="mb-flex mb-gap-1">
                 <input :value="layer.imageSrc" @input="up('imageSrc', $event.target.value)" class="mps-input mb-flex-1" placeholder="https://..." />
-                <button @click="pickImage" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-xs mb-text-gray-300 hover:mb-bg-gray-500">Sfoglia</button>
+                <button @click="pickImage" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-xs mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
               </div>
             </div>
           </template>
           <!-- Button -->
           <template v-if="layer.type === 'button'">
             <div>
-              <label class="mps-label">Etichetta</label>
+              <label class="mps-label">{{ t('Etichetta') }}</label>
               <input :value="layer.content" @input="up('content', $event.target.value)" class="mps-input" />
             </div>
             <div>
-              <label class="mps-label">URL</label>
+              <label class="mps-label">{{ t('URL') }}</label>
               <input :value="layer.buttonUrl" @input="up('buttonUrl', $event.target.value)" class="mps-input" placeholder="https://..." />
             </div>
             <div>
-              <label class="mps-label">Destinazione</label>
+              <label class="mps-label">{{ t('Destinazione') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.buttonTarget" :options="OPTS_LINK_TARGET" @update:model-value="up('buttonTarget', $event)" />
             </div>
           </template>
           <!-- Icon -->
           <template v-if="layer.type === 'icon'">
             <div>
-              <label class="mps-label">Nome icona</label>
+              <label class="mps-label">{{ t('Nome icona') }}</label>
               <div class="mb-flex mb-gap-1 mb-items-center">
                 <span v-if="layer.iconName && iconsSvg[layer.iconName]" class="mps-icon-preview" v-html="iconsSvg[layer.iconName]"></span>
                 <input :value="layer.iconName" @input="up('iconName', $event.target.value)" class="mps-input mb-flex-1" placeholder="star" />
-                <button @click="showIconPicker = true" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-xs mb-text-gray-300 hover:mb-bg-gray-500">Sfoglia</button>
+                <button @click="showIconPicker = true" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-xs mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
               </div>
             </div>
             <IconPicker
@@ -79,10 +79,10 @@
           <!-- Video -->
           <template v-if="layer.type === 'video'">
             <div>
-              <label class="mps-label">URL Video</label>
+              <label class="mps-label">{{ t('URL Video') }}</label>
               <div class="mb-flex mb-gap-1">
                 <input :value="layer.videoSrc" @input="up('videoSrc', $event.target.value)" class="mps-input mb-flex-1" placeholder="mp4 o YouTube URL" />
-                <button @click="pickVideo" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-xs mb-text-gray-300 hover:mb-bg-gray-500">Sfoglia</button>
+                <button @click="pickVideo" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-xs mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
               </div>
             </div>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
@@ -91,7 +91,7 @@
             </label>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="layer.videoMuted" @change="up('videoMuted', $event.target.checked)" class="mb-rounded" />
-              <span class="mb-text-[11px] mb-text-gray-400">Muto</span>
+              <span class="mb-text-[11px] mb-text-gray-400">{{ t('Muto') }}</span>
             </label>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="layer.videoLoop" @change="up('videoLoop', $event.target.checked)" class="mb-rounded" />
@@ -101,10 +101,10 @@
           <!-- Audio -->
           <template v-if="layer.type === 'audio'">
             <div>
-              <label class="mps-label">URL Audio</label>
+              <label class="mps-label">{{ t('URL Audio') }}</label>
               <div class="mb-flex mb-gap-1">
                 <input :value="layer.audioSrc" @input="up('audioSrc', $event.target.value)" class="mps-input mb-flex-1" placeholder="mp3 o url audio" />
-                <button @click="pickAudio" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-xs mb-text-gray-300 hover:mb-bg-gray-500">Sfoglia</button>
+                <button @click="pickAudio" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-xs mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
               </div>
             </div>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
@@ -122,30 +122,30 @@
           <div>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="layer.initiallyHidden === true" @change="up('initiallyHidden', $event.target.checked)" class="mb-rounded" />
-              <span class="mps-label mb-mb-0">Nascosto all'avvio (mostrabile via toggle)</span>
+              <span class="mps-label mb-mb-0">{{ t("Nascosto all'avvio (mostrabile via toggle)") }}</span>
             </label>
           </div>
 
           <!-- Layer Action (tutti i tipi) -->
           <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Azione Click</p>
+          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Azione Click') }}</p>
           <div>
-            <label class="mps-label">Tipo azione</label>
+            <label class="mps-label">{{ t('Tipo azione') }}</label>
             <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.action?.type || 'none'" :options="OPTS_ACTION_TYPE" @update:model-value="setAction('type', $event)" />
           </div>
           <template v-if="layer.action?.type === 'goToSlide'">
             <div>
-              <label class="mps-label">Indice slide (da 0)</label>
-              <input type="number" :value="layer.action.target || 0" @input="setAction('target', parseInt($event.target.value))" min="0" class="mps-input mb-w-full" />
+              <label class="mps-label">{{ t('Indice slide (da 0)') }}</label>
+              <NumberScrubber theme="dark" :modelValue="layer.action.target || 0" :min="0" :max="null" :step="1" :defaultValue="0" emitAs="number" :ariaLabel="t('Indice slide (da 0)')" @update:modelValue="setAction('target', $event)" />
             </div>
           </template>
           <template v-if="layer.action?.type === 'openUrl'">
             <div>
-              <label class="mps-label">URL</label>
+              <label class="mps-label">{{ t('URL') }}</label>
               <input :value="layer.action.url || ''" @input="setAction('url', $event.target.value)" class="mps-input mb-w-full" placeholder="https://..." />
             </div>
             <div>
-              <label class="mps-label">Destinazione</label>
+              <label class="mps-label">{{ t('Destinazione') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.action.urlTarget || '_self'" :options="OPTS_LINK_TARGET" @update:model-value="setAction('urlTarget', $event)" />
             </div>
           </template>
@@ -159,7 +159,7 @@
                 :options="targetLayerOptions"
                 @update:model-value="setAction('target', $event)"
               />
-              <p v-else class="mb-text-[10px] mb-text-gray-500 mb-italic">Nessun altro layer in questa slide</p>
+              <p v-else class="mb-text-[10px] mb-text-gray-500 mb-italic">{{ t('Nessun altro layer in questa slide') }}</p>
               <p v-if="layer.action.target" class="mb-text-[9px] mb-text-gray-500 mb-mt-1 mb-font-mono">id: {{ layer.action.target }}</p>
             </div>
           </template>
@@ -168,10 +168,7 @@
           <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
           <div>
             <label class="mps-label">Parallax depth</label>
-            <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="layer.parallaxDepth || 0" @input="up('parallaxDepth', parseInt($event.target.value))" min="0" max="10" class="mb-flex-1" />
-              <span class="mps-val">{{ layer.parallaxDepth || 0 }}</span>
-            </div>
+            <NumberScrubber theme="dark" :modelValue="layer.parallaxDepth || 0" :min="0" :max="10" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" ariaLabel="Parallax depth" @update:modelValue="up('parallaxDepth', $event)" />
           </div>
         </template>
 
@@ -180,59 +177,55 @@
           <!-- Breakpoint indicator -->
           <div v-if="activeBreakpoint !== 'desktop'" class="mb-bg-yellow-900/30 mb-border mb-border-yellow-700/50 mb-rounded mb-p-2 mb-mb-2">
             <div class="mb-flex mb-items-center mb-justify-between">
-              <span class="mb-text-[10px] mb-text-yellow-400">Override per {{ activeBreakpoint }} — valori non impostati ereditano dal livello superiore</span>
+              <span class="mb-text-[10px] mb-text-yellow-400">{{ t('Override per') }} {{ activeBreakpoint }} {{ t('— valori non impostati ereditano dal livello superiore') }}</span>
               <button
                 v-if="hasAnyOverride"
                 @click="clearAllOverrides"
                 class="mb-text-[10px] mb-text-yellow-500 hover:mb-text-yellow-300 mb-whitespace-nowrap mb-ml-2"
-              >Reset tutti</button>
+              >{{ t('Reset tutti') }}</button>
             </div>
           </div>
           <!-- Visibility toggle per breakpoint -->
           <div v-if="activeBreakpoint !== 'desktop'" class="mb-mb-2">
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="rv('visible') !== false" @change="up('visible', $event.target.checked)" class="mb-rounded" />
-              <span class="mps-label mb-mb-0">Visibile su {{ activeBreakpoint }}</span>
+              <span class="mps-label mb-mb-0">{{ t('Visibile su') }} {{ activeBreakpoint }}</span>
             </label>
           </div>
           <div>
             <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('x') }">X (%)</label>
             <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="rv('x')" @input="up('x', Math.round(parseFloat($event.target.value) * 10) / 10)" min="0" max="100" step="0.5" class="mb-flex-1" />
-              <span class="mps-val">{{ fmt(rv('x')) }}</span>
+              <NumberScrubber class="mb-flex-1" theme="dark" :modelValue="rv('x')" :min="0" :max="100" :step="0.5" emitAs="number" :sliderOnFocus="false" unit="%" ariaLabel="X (%)" @update:modelValue="up('x', Math.round($event * 10) / 10)" />
               <button v-if="isOverridden('x')" @click="clearOverride('x')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
             </div>
           </div>
           <div>
             <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('y') }">Y (%)</label>
             <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="rv('y')" @input="up('y', Math.round(parseFloat($event.target.value) * 10) / 10)" min="0" max="100" step="0.5" class="mb-flex-1" />
-              <span class="mps-val">{{ fmt(rv('y')) }}</span>
+              <NumberScrubber class="mb-flex-1" theme="dark" :modelValue="rv('y')" :min="0" :max="100" :step="0.5" emitAs="number" :sliderOnFocus="false" unit="%" ariaLabel="Y (%)" @update:modelValue="up('y', Math.round($event * 10) / 10)" />
               <button v-if="isOverridden('y')" @click="clearOverride('y')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
             </div>
           </div>
           <div>
-            <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('width') }">Larghezza (%)</label>
+            <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('width') }">{{ t('Larghezza (%)') }}</label>
             <div class="mb-flex mb-items-center mb-gap-2">
               <label class="mb-flex mb-items-center mb-gap-1 mb-text-[10px] mb-text-gray-400">
                 <input type="checkbox" :checked="rv('width') === 'auto'" @change="up('width', $event.target.checked ? 'auto' : 50)" class="mb-rounded" /> Auto
               </label>
               <template v-if="rv('width') !== 'auto'">
-                <input type="range" :value="rv('width')" @input="up('width', Math.round(parseFloat($event.target.value) * 10) / 10)" min="5" max="100" step="0.5" class="mb-flex-1" />
-                <span class="mps-val">{{ fmt(rv('width')) }}</span>
+                <NumberScrubber class="mb-flex-1" theme="dark" :modelValue="rv('width')" :min="5" :max="100" :step="0.5" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Larghezza (%)')" @update:modelValue="up('width', Math.round($event * 10) / 10)" />
               </template>
               <button v-if="isOverridden('width')" @click="clearOverride('width')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
             </div>
           </div>
           <div>
-            <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('height') }">Altezza (%)</label>
+            <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('height') }">{{ t('Altezza (%)') }}</label>
             <div class="mb-flex mb-items-center mb-gap-2">
               <label class="mb-flex mb-items-center mb-gap-1 mb-text-[10px] mb-text-gray-400">
                 <input type="checkbox" :checked="rv('height') === 'auto'" @change="up('height', $event.target.checked ? 'auto' : 30)" class="mb-rounded" /> Auto
               </label>
               <template v-if="rv('height') !== 'auto'">
-                <input type="range" :value="rv('height')" @input="up('height', Math.round(parseFloat($event.target.value) * 10) / 10)" min="5" max="100" step="0.5" class="mb-flex-1" />
-                <span class="mps-val">{{ fmt(rv('height')) }}</span>
+                <NumberScrubber class="mb-flex-1" theme="dark" :modelValue="rv('height')" :min="5" :max="100" :step="0.5" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Altezza (%)')" @update:modelValue="up('height', Math.round($event * 10) / 10)" />
               </template>
               <button v-if="isOverridden('height')" @click="clearOverride('height')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
             </div>
@@ -240,8 +233,7 @@
           <div v-if="layer.type === 'text' || layer.type === 'button' || layer.type === 'icon'">
             <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('fontSize') }">Font size (px)</label>
             <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="rv('fontSize')" @input="up('fontSize', parseInt($event.target.value))" min="8" max="200" class="mb-flex-1" />
-              <span class="mps-val">{{ rv('fontSize') }}</span>
+              <NumberScrubber class="mb-flex-1" theme="dark" :modelValue="rv('fontSize')" :min="8" :max="200" :step="1" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Font size (px)" @update:modelValue="up('fontSize', $event)" />
               <button v-if="isOverridden('fontSize')" @click="clearOverride('fontSize')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
             </div>
           </div>
@@ -252,32 +244,29 @@
 
           <!-- ── Tipografia (text/button) ── -->
           <template v-if="layer.type === 'text' || layer.type === 'button'">
-            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Tipografia</p>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Tipografia') }}</p>
             <div>
-              <label class="mps-label">Font</label>
+              <label class="mps-label">{{ t('Font') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.fontFamily || ''" :options="fontGroupOpts" @update:model-value="up('fontFamily', $event)" />
             </div>
             <div>
-              <label class="mps-label">Dimensione font (px)</label>
-              <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.fontSize" @input="up('fontSize', parseFloat($event.target.value))" min="8" max="200" step="1" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.fontSize }}</span>
-              </div>
+              <label class="mps-label">{{ t('Dimensione font (px)') }}</label>
+              <NumberScrubber theme="dark" :modelValue="layer.fontSize" :min="8" :max="200" :step="1" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Dimensione font (px)')" @update:modelValue="up('fontSize', $event)" />
             </div>
             <div>
-              <label class="mps-label">Peso font</label>
+              <label class="mps-label">{{ t('Peso font') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.fontWeight" :options="OPTS_FONT_WEIGHT" @update:model-value="up('fontWeight', $event)" />
             </div>
             <div>
-              <label class="mps-label">Stile font</label>
+              <label class="mps-label">{{ t('Stile font') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.fontStyle || 'normal'" :options="OPTS_FONT_STYLE" @update:model-value="up('fontStyle', $event)" />
             </div>
             <div>
-              <label class="mps-label">Colore</label>
+              <label class="mps-label">{{ t('Colore') }}</label>
               <FieldColor :modelValue="layer.color || '#ffffff'" @update:modelValue="up('color', $event)" />
             </div>
             <div>
-              <label class="mps-label">Allineamento testo</label>
+              <label class="mps-label">{{ t('Allineamento testo') }}</label>
               <div class="mb-flex mb-gap-1">
                 <button v-for="a in ['left','center','right']" :key="a"
                   @click="up('textAlign', a)"
@@ -287,166 +276,130 @@
             </div>
             <div>
               <label class="mps-label">Line-height</label>
-              <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.lineHeight ?? 1.2" @input="up('lineHeight', parseFloat($event.target.value))" min="0.8" max="3" step="0.1" class="mb-flex-1" />
-                <span class="mps-val">{{ (layer.lineHeight ?? 1.2).toFixed(1) }}</span>
-              </div>
+              <NumberScrubber theme="dark" :modelValue="layer.lineHeight ?? 1.2" :min="0.8" :max="3" :step="0.1" :defaultValue="1.2" emitAs="number" :sliderOnFocus="false" ariaLabel="Line-height" @update:modelValue="up('lineHeight', $event)" />
             </div>
             <div>
               <label class="mps-label">Letter-spacing (px)</label>
-              <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.letterSpacing ?? 0" @input="up('letterSpacing', parseFloat($event.target.value))" min="-5" max="20" step="0.5" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.letterSpacing ?? 0 }}</span>
-              </div>
+              <NumberScrubber theme="dark" :modelValue="layer.letterSpacing ?? 0" :min="-5" :max="20" :step="0.5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Letter-spacing (px)" @update:modelValue="up('letterSpacing', $event)" />
             </div>
             <div>
-              <label class="mps-label">Trasformazione</label>
+              <label class="mps-label">{{ t('Trasformazione') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.textTransform || 'none'" :options="OPTS_TEXT_TRANSFORM" @update:model-value="up('textTransform', $event)" />
             </div>
             <div>
-              <label class="mps-label">Decorazione</label>
+              <label class="mps-label">{{ t('Decorazione') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.textDecoration || 'none'" :options="OPTS_TEXT_DECORATION" @update:model-value="up('textDecoration', $event)" />
             </div>
             <!-- Text Stroke -->
             <div>
               <label class="mps-label">Text stroke (px)</label>
-              <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.textStrokeWidth ?? 0" @input="up('textStrokeWidth', parseFloat($event.target.value))" min="0" max="10" step="0.5" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.textStrokeWidth ?? 0 }}</span>
-              </div>
+              <NumberScrubber theme="dark" :modelValue="layer.textStrokeWidth ?? 0" :min="0" :max="10" :step="0.5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Text stroke (px)" @update:modelValue="up('textStrokeWidth', $event)" />
             </div>
             <template v-if="(layer.textStrokeWidth ?? 0) > 0">
               <div>
-                <label class="mps-label">Colore stroke</label>
+                <label class="mps-label">{{ t('Colore stroke') }}</label>
                 <FieldColor :modelValue="layer.textStrokeColor || '#000000'" @update:modelValue="up('textStrokeColor', $event)" />
               </div>
             </template>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="layer.selectableText" @change="up('selectableText', $event.target.checked)" class="mb-rounded" />
-              <span class="mb-text-[11px] mb-text-gray-400">Testo selezionabile</span>
+              <span class="mb-text-[11px] mb-text-gray-400">{{ t('Testo selezionabile') }}</span>
             </label>
           </template>
 
           <!-- ── Dimensione font (icon) ── -->
           <template v-if="layer.type === 'icon'">
             <div>
-              <label class="mps-label">Dimensione icona (px)</label>
-              <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.fontSize" @input="up('fontSize', parseFloat($event.target.value))" min="8" max="200" step="1" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.fontSize }}</span>
-              </div>
+              <label class="mps-label">{{ t('Dimensione icona (px)') }}</label>
+              <NumberScrubber theme="dark" :modelValue="layer.fontSize" :min="8" :max="200" :step="1" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Dimensione icona (px)')" @update:modelValue="up('fontSize', $event)" />
             </div>
             <div>
-              <label class="mps-label">Colore fill</label>
+              <label class="mps-label">{{ t('Colore fill') }}</label>
               <FieldColor :modelValue="layer.color || '#ffffff'" @update:modelValue="up('color', $event)" />
             </div>
             <div>
-              <label class="mps-label">Colore fill (override)</label>
+              <label class="mps-label">{{ t('Colore fill (override)') }}</label>
               <FieldColor :modelValue="layer.iconFillColor || ''" @update:modelValue="up('iconFillColor', $event)" />
             </div>
             <div>
-              <label class="mps-label">Colore stroke</label>
+              <label class="mps-label">{{ t('Colore stroke') }}</label>
               <FieldColor :modelValue="layer.iconStrokeColor || ''" @update:modelValue="up('iconStrokeColor', $event)" />
             </div>
             <div>
               <label class="mps-label">Stroke width (px)</label>
-              <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.iconStrokeWidth ?? 0" @input="up('iconStrokeWidth', parseFloat($event.target.value))" min="0" max="10" step="0.5" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.iconStrokeWidth ?? 0 }}</span>
-              </div>
+              <NumberScrubber theme="dark" :modelValue="layer.iconStrokeWidth ?? 0" :min="0" :max="10" :step="0.5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Stroke width (px)" @update:modelValue="up('iconStrokeWidth', $event)" />
             </div>
             <div>
               <label class="mps-label">Stroke dash</label>
-              <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.iconStrokeDash ?? 0" @input="up('iconStrokeDash', parseFloat($event.target.value))" min="0" max="50" step="1" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.iconStrokeDash ?? 0 }}</span>
-              </div>
+              <NumberScrubber theme="dark" :modelValue="layer.iconStrokeDash ?? 0" :min="0" :max="50" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" ariaLabel="Stroke dash" @update:modelValue="up('iconStrokeDash', $event)" />
             </div>
           </template>
 
           <!-- ── Sfondo e raggio ── -->
           <template v-if="layer.type !== 'image' && layer.type !== 'video'">
             <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Sfondo</p>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Sfondo') }}</p>
           </template>
 
           <!-- Shape gradient toggle -->
           <template v-if="layer.type === 'shape'">
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="!!layer.shapeGradient" @change="toggleShapeGradient($event.target.checked)" class="mb-rounded" />
-              <span class="mb-text-[11px] mb-text-gray-400">Gradiente</span>
+              <span class="mb-text-[11px] mb-text-gray-400">{{ t('Gradiente') }}</span>
             </label>
             <template v-if="layer.shapeGradient">
               <div>
-                <label class="mps-label">Colore da</label>
+                <label class="mps-label">{{ t('Colore da') }}</label>
                 <FieldColor :modelValue="layer.shapeGradient.from || '#3b82f6'" @update:modelValue="upShapeGrad('from', $event)" />
               </div>
               <div>
-                <label class="mps-label">Colore a</label>
+                <label class="mps-label">{{ t('Colore a') }}</label>
                 <FieldColor :modelValue="layer.shapeGradient.to || '#8b5cf6'" @update:modelValue="upShapeGrad('to', $event)" />
               </div>
               <div>
-                <label class="mps-label">Angolo</label>
-                <div class="mb-flex mb-items-center mb-gap-2">
-                  <input type="range" :value="layer.shapeGradient.angle ?? 180" @input="upShapeGrad('angle', parseInt($event.target.value))" min="0" max="360" step="15" class="mb-flex-1" />
-                  <span class="mps-val">{{ layer.shapeGradient.angle ?? 180 }}°</span>
-                </div>
+                <label class="mps-label">{{ t('Angolo') }}</label>
+                <NumberScrubber theme="dark" :modelValue="layer.shapeGradient.angle ?? 180" :min="0" :max="360" :step="15" :defaultValue="180" emitAs="number" :sliderOnFocus="false" unit="°" :ariaLabel="t('Angolo')" @update:modelValue="upShapeGrad('angle', $event)" />
               </div>
             </template>
             <template v-else>
               <div>
-                <label class="mps-label">Sfondo</label>
+                <label class="mps-label">{{ t('Sfondo') }}</label>
                 <FieldColor :modelValue="layer.bgColor || '#3b82f6'" @update:modelValue="up('bgColor', $event)" />
               </div>
             </template>
           </template>
           <template v-else-if="layer.type !== 'image' && layer.type !== 'video'">
             <div>
-              <label class="mps-label">Sfondo</label>
+              <label class="mps-label">{{ t('Sfondo') }}</label>
               <FieldColor :modelValue="layer.bgColor || '#000000'" @update:modelValue="up('bgColor', $event)" />
             </div>
           </template>
 
           <div>
             <div class="mb-flex mb-items-center mb-justify-between">
-              <label class="mps-label mb-mb-0">Raggio bordo (px)</label>
-              <button @click="up('borderRadiusLinked', !layer.borderRadiusLinked)" :class="['mb-text-[10px] mb-px-1.5 mb-rounded', layer.borderRadiusLinked !== false ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400']" title="Lega/slega angoli">&#x1F517;</button>
+              <label class="mps-label mb-mb-0">{{ t('Raggio bordo (px)') }}</label>
+              <button @click="up('borderRadiusLinked', !layer.borderRadiusLinked)" :class="['mb-text-[10px] mb-px-1.5 mb-rounded', layer.borderRadiusLinked !== false ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400']" :title="t('Lega/slega angoli')">&#x1F517;</button>
             </div>
             <template v-if="layer.borderRadiusLinked !== false">
-              <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.borderRadius" @input="up('borderRadius', parseFloat($event.target.value))" min="0" max="200" step="1" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.borderRadius }}</span>
-              </div>
+              <NumberScrubber theme="dark" :modelValue="layer.borderRadius" :min="0" :max="200" :step="1" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Raggio bordo (px)')" @update:modelValue="up('borderRadius', $event)" />
             </template>
             <template v-else>
               <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                 <div>
                   <label class="mps-label">TL</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.borderRadiusTL ?? 0" @input="up('borderRadiusTL', parseFloat($event.target.value))" min="0" max="200" step="1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.borderRadiusTL ?? 0 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer.borderRadiusTL ?? 0" :min="0" :max="200" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" ariaLabel="Border radius TL" @update:modelValue="up('borderRadiusTL', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">TR</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.borderRadiusTR ?? 0" @input="up('borderRadiusTR', parseFloat($event.target.value))" min="0" max="200" step="1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.borderRadiusTR ?? 0 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer.borderRadiusTR ?? 0" :min="0" :max="200" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" ariaLabel="Border radius TR" @update:modelValue="up('borderRadiusTR', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">BL</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.borderRadiusBL ?? 0" @input="up('borderRadiusBL', parseFloat($event.target.value))" min="0" max="200" step="1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.borderRadiusBL ?? 0 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer.borderRadiusBL ?? 0" :min="0" :max="200" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" ariaLabel="Border radius BL" @update:modelValue="up('borderRadiusBL', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">BR</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.borderRadiusBR ?? 0" @input="up('borderRadiusBR', parseFloat($event.target.value))" min="0" max="200" step="1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.borderRadiusBR ?? 0 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer.borderRadiusBR ?? 0" :min="0" :max="200" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" ariaLabel="Border radius BR" @update:modelValue="up('borderRadiusBR', $event)" />
                 </div>
               </div>
             </template>
@@ -454,37 +407,31 @@
 
           <!-- ── Bordo ── -->
           <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Bordo</p>
+          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Bordo') }}</p>
           <div>
             <div class="mb-flex mb-items-center mb-justify-between">
-              <label class="mps-label mb-mb-0">Larghezza (px)</label>
-              <button @click="up('borderWidthLinked', !layer.borderWidthLinked)" :class="['mb-text-[10px] mb-px-1.5 mb-rounded', layer.borderWidthLinked !== false ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400']" title="Lega/slega lati">&#x1F517;</button>
+              <label class="mps-label mb-mb-0">{{ t('Larghezza (px)') }}</label>
+              <button @click="up('borderWidthLinked', !layer.borderWidthLinked)" :class="['mb-text-[10px] mb-px-1.5 mb-rounded', layer.borderWidthLinked !== false ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400']" :title="t('Lega/slega lati')">&#x1F517;</button>
             </div>
             <template v-if="layer.borderWidthLinked !== false">
-              <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.borderWidth ?? 0" @input="up('borderWidth', parseFloat($event.target.value))" min="0" max="20" step="1" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.borderWidth ?? 0 }}</span>
-              </div>
+              <NumberScrubber theme="dark" :modelValue="layer.borderWidth ?? 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Larghezza (px)')" @update:modelValue="up('borderWidth', $event)" />
             </template>
             <template v-else>
               <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                 <div v-for="side in ['Top','Right','Bottom','Left']" :key="side">
                   <label class="mps-label">{{ side }}</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer['borderWidth' + side] ?? 0" @input="up('borderWidth' + side, parseFloat($event.target.value))" min="0" max="20" step="1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer['borderWidth' + side] ?? 0 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer['borderWidth' + side] ?? 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="'Border width ' + side" @update:modelValue="up('borderWidth' + side, $event)" />
                 </div>
               </div>
             </template>
           </div>
           <template v-if="(layer.borderWidth ?? 0) > 0 || (layer.borderWidthLinked === false && ((layer.borderWidthTop ?? 0) > 0 || (layer.borderWidthRight ?? 0) > 0 || (layer.borderWidthBottom ?? 0) > 0 || (layer.borderWidthLeft ?? 0) > 0))">
             <div>
-              <label class="mps-label">Stile</label>
+              <label class="mps-label">{{ t('Stile') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.borderStyle || 'solid'" :options="OPTS_BORDER_STYLE" @update:model-value="up('borderStyle', $event)" />
             </div>
             <div>
-              <label class="mps-label">Colore</label>
+              <label class="mps-label">{{ t('Colore') }}</label>
               <FieldColor :modelValue="layer.borderColor || '#ffffff'" @update:modelValue="up('borderColor', $event)" />
             </div>
           </template>
@@ -492,26 +439,20 @@
           <!-- ── Spaziatura ── -->
           <template v-if="layer.type !== 'image' && layer.type !== 'video'">
             <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Spaziatura</p>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Spaziatura') }}</p>
             <div>
               <div class="mb-flex mb-items-center mb-justify-between">
                 <label class="mps-label mb-mb-0">Padding (px)</label>
-                <button @click="up('paddingLinked', !layer.paddingLinked)" :class="['mb-text-[10px] mb-px-1.5 mb-rounded', layer.paddingLinked !== false ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400']" title="Lega/slega lati">&#x1F517;</button>
+                <button @click="up('paddingLinked', !layer.paddingLinked)" :class="['mb-text-[10px] mb-px-1.5 mb-rounded', layer.paddingLinked !== false ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400']" :title="t('Lega/slega lati')">&#x1F517;</button>
               </div>
               <template v-if="layer.paddingLinked !== false">
-                <div class="mb-flex mb-items-center mb-gap-2">
-                  <input type="range" :value="layer.padding" @input="up('padding', parseFloat($event.target.value))" min="0" max="80" step="1" class="mb-flex-1" />
-                  <span class="mps-val">{{ layer.padding }}</span>
-                </div>
+                <NumberScrubber theme="dark" :modelValue="layer.padding" :min="0" :max="80" :step="1" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Padding (px)" @update:modelValue="up('padding', $event)" />
               </template>
               <template v-else>
                 <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                   <div v-for="side in ['Top','Right','Bottom','Left']" :key="side">
                     <label class="mps-label">{{ side }}</label>
-                    <div class="mb-flex mb-items-center mb-gap-1">
-                      <input type="range" :value="layer['padding' + side] ?? 0" @input="up('padding' + side, parseFloat($event.target.value))" min="0" max="80" step="1" class="mb-flex-1" />
-                      <span class="mps-val">{{ layer['padding' + side] ?? 0 }}</span>
-                    </div>
+                    <NumberScrubber theme="dark" :modelValue="layer['padding' + side] ?? 0" :min="0" :max="80" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="'Padding ' + side" @update:modelValue="up('padding' + side, $event)" />
                   </div>
                 </div>
               </template>
@@ -521,13 +462,13 @@
           <!-- ── Immagine (solo image) ── -->
           <template v-if="layer.type === 'image'">
             <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Immagine</p>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Immagine') }}</p>
             <div>
-              <label class="mps-label">Adattamento</label>
+              <label class="mps-label">{{ t('Adattamento') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.objectFit || 'cover'" :options="OPTS_OBJECT_FIT" @update:model-value="up('objectFit', $event)" />
             </div>
             <div>
-              <label class="mps-label">Posizione</label>
+              <label class="mps-label">{{ t('Posizione') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.objectPosition || 'center'" :options="OPTS_OBJECT_POSITION" @update:model-value="up('objectPosition', $event)" />
             </div>
           </template>
@@ -535,62 +476,38 @@
           <!-- ── Filtri CSS (image/video) ── -->
           <template v-if="layer.type === 'image' || layer.type === 'video'">
             <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Filtri</p>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Filtri') }}</p>
             <div>
-              <label class="mps-label">Luminosita (%)</label>
-              <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.filterBrightness ?? 100" @input="up('filterBrightness', parseFloat($event.target.value))" min="0" max="200" step="5" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.filterBrightness ?? 100 }}</span>
-              </div>
+              <label class="mps-label">{{ t('Luminosita (%)') }}</label>
+              <NumberScrubber theme="dark" :modelValue="layer.filterBrightness ?? 100" :min="0" :max="200" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Luminosita (%)')" @update:modelValue="up('filterBrightness', $event)" />
             </div>
             <div>
-              <label class="mps-label">Contrasto (%)</label>
-              <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.filterContrast ?? 100" @input="up('filterContrast', parseFloat($event.target.value))" min="0" max="200" step="5" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.filterContrast ?? 100 }}</span>
-              </div>
+              <label class="mps-label">{{ t('Contrasto (%)') }}</label>
+              <NumberScrubber theme="dark" :modelValue="layer.filterContrast ?? 100" :min="0" :max="200" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Contrasto (%)')" @update:modelValue="up('filterContrast', $event)" />
             </div>
             <div>
-              <label class="mps-label">Saturazione (%)</label>
-              <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.filterSaturate ?? 100" @input="up('filterSaturate', parseFloat($event.target.value))" min="0" max="200" step="5" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.filterSaturate ?? 100 }}</span>
-              </div>
+              <label class="mps-label">{{ t('Saturazione (%)') }}</label>
+              <NumberScrubber theme="dark" :modelValue="layer.filterSaturate ?? 100" :min="0" :max="200" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Saturazione (%)')" @update:modelValue="up('filterSaturate', $event)" />
             </div>
             <div>
-              <label class="mps-label">Scala di grigi (%)</label>
-              <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.filterGrayscale ?? 0" @input="up('filterGrayscale', parseFloat($event.target.value))" min="0" max="100" step="5" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.filterGrayscale ?? 0 }}</span>
-              </div>
+              <label class="mps-label">{{ t('Scala di grigi (%)') }}</label>
+              <NumberScrubber theme="dark" :modelValue="layer.filterGrayscale ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Scala di grigi (%)')" @update:modelValue="up('filterGrayscale', $event)" />
             </div>
             <div>
-              <label class="mps-label">Rotazione tinta</label>
-              <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.filterHueRotate ?? 0" @input="up('filterHueRotate', parseFloat($event.target.value))" min="0" max="360" step="5" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.filterHueRotate ?? 0 }}°</span>
-              </div>
+              <label class="mps-label">{{ t('Rotazione tinta') }}</label>
+              <NumberScrubber theme="dark" :modelValue="layer.filterHueRotate ?? 0" :min="0" :max="360" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="°" :ariaLabel="t('Rotazione tinta')" @update:modelValue="up('filterHueRotate', $event)" />
             </div>
             <div>
-              <label class="mps-label">Sfocatura (px)</label>
-              <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.filterBlur ?? 0" @input="up('filterBlur', parseFloat($event.target.value))" min="0" max="20" step="0.5" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.filterBlur ?? 0 }}</span>
-              </div>
+              <label class="mps-label">{{ t('Sfocatura (px)') }}</label>
+              <NumberScrubber theme="dark" :modelValue="layer.filterBlur ?? 0" :min="0" :max="20" :step="0.5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Sfocatura (px)')" @update:modelValue="up('filterBlur', $event)" />
             </div>
             <div>
-              <label class="mps-label">Seppia (%)</label>
-              <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.filterSepia ?? 0" @input="up('filterSepia', parseFloat($event.target.value))" min="0" max="100" step="5" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.filterSepia ?? 0 }}</span>
-              </div>
+              <label class="mps-label">{{ t('Seppia (%)') }}</label>
+              <NumberScrubber theme="dark" :modelValue="layer.filterSepia ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Seppia (%)')" @update:modelValue="up('filterSepia', $event)" />
             </div>
             <div>
-              <label class="mps-label">Inverti (%)</label>
-              <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.filterInvert ?? 0" @input="up('filterInvert', parseFloat($event.target.value))" min="0" max="100" step="5" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.filterInvert ?? 0 }}</span>
-              </div>
+              <label class="mps-label">{{ t('Inverti (%)') }}</label>
+              <NumberScrubber theme="dark" :modelValue="layer.filterInvert ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Inverti (%)')" @update:modelValue="up('filterInvert', $event)" />
             </div>
           </template>
 
@@ -599,29 +516,20 @@
           <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Backdrop Filter</p>
           <div>
             <label class="mps-label">Backdrop blur (px)</label>
-            <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="layer.backdropBlur ?? 0" @input="up('backdropBlur', parseFloat($event.target.value))" min="0" max="20" step="1" class="mb-flex-1" />
-              <span class="mps-val">{{ layer.backdropBlur ?? 0 }}</span>
-            </div>
+            <NumberScrubber theme="dark" :modelValue="layer.backdropBlur ?? 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Backdrop blur (px)" @update:modelValue="up('backdropBlur', $event)" />
           </div>
           <div>
-            <label class="mps-label">Backdrop luminosita (%)</label>
-            <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="layer.backdropBrightness ?? 100" @input="up('backdropBrightness', parseFloat($event.target.value))" min="0" max="200" step="5" class="mb-flex-1" />
-              <span class="mps-val">{{ layer.backdropBrightness ?? 100 }}</span>
-            </div>
+            <label class="mps-label">{{ t('Backdrop luminosita (%)') }}</label>
+            <NumberScrubber theme="dark" :modelValue="layer.backdropBrightness ?? 100" :min="0" :max="200" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Backdrop luminosita (%)')" @update:modelValue="up('backdropBrightness', $event)" />
           </div>
           <div>
-            <label class="mps-label">Backdrop scala grigi (%)</label>
-            <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="layer.backdropGrayscale ?? 0" @input="up('backdropGrayscale', parseFloat($event.target.value))" min="0" max="100" step="5" class="mb-flex-1" />
-              <span class="mps-val">{{ layer.backdropGrayscale ?? 0 }}</span>
-            </div>
+            <label class="mps-label">{{ t('Backdrop scala grigi (%)') }}</label>
+            <NumberScrubber theme="dark" :modelValue="layer.backdropGrayscale ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Backdrop scala grigi (%)')" @update:modelValue="up('backdropGrayscale', $event)" />
           </div>
 
           <!-- ── Ombre ── -->
           <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Ombre</p>
+          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Ombre') }}</p>
 
           <!-- Box shadow (tutti) -->
           <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
@@ -632,35 +540,23 @@
             <div class="mb-grid mb-grid-cols-2 mb-gap-2">
               <div>
                 <label class="mps-label">X</label>
-                <div class="mb-flex mb-items-center mb-gap-1">
-                  <input type="range" :value="layer.boxShadow.x ?? 0" @input="upBoxShadow('x', parseInt($event.target.value))" min="-30" max="30" step="1" class="mb-flex-1" />
-                  <span class="mps-val">{{ layer.boxShadow.x ?? 0 }}</span>
-                </div>
+                <NumberScrubber theme="dark" :modelValue="layer.boxShadow.x ?? 0" :min="-30" :max="30" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" ariaLabel="Box shadow X" @update:modelValue="upBoxShadow('x', $event)" />
               </div>
               <div>
                 <label class="mps-label">Y</label>
-                <div class="mb-flex mb-items-center mb-gap-1">
-                  <input type="range" :value="layer.boxShadow.y ?? 4" @input="upBoxShadow('y', parseInt($event.target.value))" min="-30" max="30" step="1" class="mb-flex-1" />
-                  <span class="mps-val">{{ layer.boxShadow.y ?? 4 }}</span>
-                </div>
+                <NumberScrubber theme="dark" :modelValue="layer.boxShadow.y ?? 4" :min="-30" :max="30" :step="1" :defaultValue="4" emitAs="number" :sliderOnFocus="false" ariaLabel="Box shadow Y" @update:modelValue="upBoxShadow('y', $event)" />
               </div>
               <div>
                 <label class="mps-label">Blur</label>
-                <div class="mb-flex mb-items-center mb-gap-1">
-                  <input type="range" :value="layer.boxShadow.blur ?? 10" @input="upBoxShadow('blur', parseInt($event.target.value))" min="0" max="60" step="1" class="mb-flex-1" />
-                  <span class="mps-val">{{ layer.boxShadow.blur ?? 10 }}</span>
-                </div>
+                <NumberScrubber theme="dark" :modelValue="layer.boxShadow.blur ?? 10" :min="0" :max="60" :step="1" :defaultValue="10" emitAs="number" :sliderOnFocus="false" ariaLabel="Box shadow blur" @update:modelValue="upBoxShadow('blur', $event)" />
               </div>
               <div>
                 <label class="mps-label">Spread</label>
-                <div class="mb-flex mb-items-center mb-gap-1">
-                  <input type="range" :value="layer.boxShadow.spread ?? 0" @input="upBoxShadow('spread', parseInt($event.target.value))" min="-20" max="20" step="1" class="mb-flex-1" />
-                  <span class="mps-val">{{ layer.boxShadow.spread ?? 0 }}</span>
-                </div>
+                <NumberScrubber theme="dark" :modelValue="layer.boxShadow.spread ?? 0" :min="-20" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" ariaLabel="Box shadow spread" @update:modelValue="upBoxShadow('spread', $event)" />
               </div>
             </div>
             <div>
-              <label class="mps-label">Colore ombra</label>
+              <label class="mps-label">{{ t('Colore ombra') }}</label>
               <FieldColor :modelValue="layer.boxShadow.color || 'rgba(0,0,0,0.3)'" @update:modelValue="upBoxShadow('color', $event)" />
             </div>
           </template>
@@ -675,28 +571,19 @@
               <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                 <div>
                   <label class="mps-label">X</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.textShadow.x ?? 2" @input="upTextShadow('x', parseInt($event.target.value))" min="-20" max="20" step="1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.textShadow.x ?? 2 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer.textShadow.x ?? 2" :min="-20" :max="20" :step="1" :defaultValue="2" emitAs="number" :sliderOnFocus="false" ariaLabel="Text shadow X" @update:modelValue="upTextShadow('x', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">Y</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.textShadow.y ?? 2" @input="upTextShadow('y', parseInt($event.target.value))" min="-20" max="20" step="1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.textShadow.y ?? 2 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer.textShadow.y ?? 2" :min="-20" :max="20" :step="1" :defaultValue="2" emitAs="number" :sliderOnFocus="false" ariaLabel="Text shadow Y" @update:modelValue="upTextShadow('y', $event)" />
                 </div>
               </div>
               <div>
                 <label class="mps-label">Blur</label>
-                <div class="mb-flex mb-items-center mb-gap-2">
-                  <input type="range" :value="layer.textShadow.blur ?? 4" @input="upTextShadow('blur', parseInt($event.target.value))" min="0" max="30" step="1" class="mb-flex-1" />
-                  <span class="mps-val">{{ layer.textShadow.blur ?? 4 }}</span>
-                </div>
+                <NumberScrubber theme="dark" :modelValue="layer.textShadow.blur ?? 4" :min="0" :max="30" :step="1" :defaultValue="4" emitAs="number" :sliderOnFocus="false" ariaLabel="Text shadow blur" @update:modelValue="upTextShadow('blur', $event)" />
               </div>
               <div>
-                <label class="mps-label">Colore ombra</label>
+                <label class="mps-label">{{ t('Colore ombra') }}</label>
                 <FieldColor :modelValue="layer.textShadow.color || '#000000'" @update:modelValue="upTextShadow('color', $event)" />
               </div>
             </template>
@@ -704,13 +591,10 @@
 
           <!-- ── Effetti ── -->
           <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Effetti</p>
+          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Effetti') }}</p>
           <div>
-            <label class="mps-label">Opacita (%)</label>
-            <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="layer.opacity ?? 100" @input="up('opacity', parseFloat($event.target.value))" min="0" max="100" step="5" class="mb-flex-1" />
-              <span class="mps-val">{{ layer.opacity ?? 100 }}</span>
-            </div>
+            <label class="mps-label">{{ t('Opacita (%)') }}</label>
+            <NumberScrubber theme="dark" :modelValue="layer.opacity ?? 100" :min="0" :max="100" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Opacita (%)')" @update:modelValue="up('opacity', $event)" />
           </div>
           <div>
             <label class="mps-label">Blend Mode</label>
@@ -723,30 +607,27 @@
           <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">SFX Block Reveal</p>
           <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
             <input type="checkbox" :checked="!!layer.sfx" @change="toggleSfx($event.target.checked)" class="mb-rounded" />
-            <span class="mb-text-[11px] mb-text-gray-400">Attivo</span>
+            <span class="mb-text-[11px] mb-text-gray-400">{{ t('Attivo') }}</span>
           </label>
           <template v-if="layer.sfx">
             <div>
-              <label class="mps-label">Effetto</label>
+              <label class="mps-label">{{ t('Effetto') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.sfx.effect || 'blockRight'" :options="OPTS_SFX_EFFECT" @update:model-value="upSfx('effect', $event)" />
             </div>
             <div>
-              <label class="mps-label">Colore blocco</label>
+              <label class="mps-label">{{ t('Colore blocco') }}</label>
               <FieldColor :modelValue="layer.sfx.color || '#ffffff'" @update:modelValue="upSfx('color', $event)" />
             </div>
             <div>
-              <label class="mps-label">Durata (ms)</label>
-              <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.sfx.duration || 800" @input="upSfx('duration', parseInt($event.target.value))" min="200" max="2000" step="50" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.sfx.duration || 800 }}</span>
-              </div>
+              <label class="mps-label">{{ t('Durata (ms)') }}</label>
+              <NumberScrubber theme="dark" :modelValue="layer.sfx.duration || 800" :min="200" :max="2000" :step="50" :defaultValue="800" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata (ms)')" @update:modelValue="upSfx('duration', $event)" />
             </div>
           </template>
           </template>
 
           <!-- ── Cursore ── -->
           <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Cursore</p>
+          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Cursore') }}</p>
           <div>
             <label class="mps-label">Mouse cursor</label>
             <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.cursor || 'auto'" :options="OPTS_CURSOR" @update:model-value="up('cursor', $event)" />
@@ -754,17 +635,17 @@
 
           <!-- ── Attributi personalizzati ── -->
           <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Attributi</p>
+          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Attributi') }}</p>
           <div>
-            <label class="mps-label">ID personalizzato</label>
+            <label class="mps-label">{{ t('ID personalizzato') }}</label>
             <input :value="layer.customId || ''" @input="up('customId', $event.target.value)" class="mps-input" placeholder="es. hero-title" />
           </div>
           <div>
-            <label class="mps-label">Classi CSS</label>
+            <label class="mps-label">{{ t('Classi CSS') }}</label>
             <input :value="layer.customClass || ''" @input="up('customClass', $event.target.value)" class="mps-input" placeholder="es. my-class another-class" />
           </div>
           <div>
-            <label class="mps-label">CSS personalizzato</label>
+            <label class="mps-label">{{ t('CSS personalizzato') }}</label>
             <textarea :value="layer.customCSS || ''" @input="up('customCSS', $event.target.value)" rows="3"
               class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-[10px] mb-text-gray-900 mb-resize-y mb-font-mono" placeholder="color: red; transform: rotate(5deg);"></textarea>
           </div>
@@ -778,7 +659,7 @@
               @click="setAnimMode('simple')"
               :class="['mb-flex-1 mb-py-1 mb-rounded mb-text-[10px] mb-font-medium mb-transition-colors',
                 !hasTimeline ? 'mb-bg-primary-600 mb-text-white' : 'mb-text-gray-400 hover:mb-text-gray-300']"
-            >Semplice</button>
+            >{{ t('Semplice') }}</button>
             <button
               @click="setAnimMode('timeline')"
               :class="['mb-flex-1 mb-py-1 mb-rounded mb-text-[10px] mb-font-medium mb-transition-colors',
@@ -788,120 +669,95 @@
 
           <!-- Modo SEMPLICE -->
           <template v-if="!hasTimeline">
-            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Entrata</p>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Entrata') }}</p>
             <div>
-              <label class="mps-label">Animazione entrata</label>
+              <label class="mps-label">{{ t('Animazione entrata') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animIn" :options="animationsInGroups" @update:model-value="up('animIn', $event)" />
             </div>
             <div>
-              <label class="mps-label">Durata (ms)</label>
+              <label class="mps-label">{{ t('Durata (ms)') }}</label>
               <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.animInDuration" @input="up('animInDuration', parseFloat($event.target.value))" min="100" max="3000" step="50" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.animInDuration }}</span>
+                <NumberScrubber theme="dark" :modelValue="layer.animInDuration" :min="100" :max="3000" :step="50" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata (ms)')" @update:modelValue="up('animInDuration', $event)" />
               </div>
             </div>
             <div>
-              <label class="mps-label">Ritardo (ms)</label>
+              <label class="mps-label">{{ t('Ritardo (ms)') }}</label>
               <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.animInDelay" @input="up('animInDelay', parseFloat($event.target.value))" min="0" max="3000" step="50" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.animInDelay }}</span>
+                <NumberScrubber theme="dark" :modelValue="layer.animInDelay" :min="0" :max="3000" :step="50" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Ritardo (ms)')" @update:modelValue="up('animInDelay', $event)" />
               </div>
             </div>
 
             <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Uscita</p>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Uscita') }}</p>
             <div>
-              <label class="mps-label">Animazione uscita</label>
+              <label class="mps-label">{{ t('Animazione uscita') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animOut" :options="animationsOutGroups" @update:model-value="up('animOut', $event)" />
             </div>
             <div>
-              <label class="mps-label">Durata (ms)</label>
+              <label class="mps-label">{{ t('Durata (ms)') }}</label>
               <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.animOutDuration" @input="up('animOutDuration', parseFloat($event.target.value))" min="100" max="3000" step="50" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.animOutDuration }}</span>
+                <NumberScrubber theme="dark" :modelValue="layer.animOutDuration" :min="100" :max="3000" :step="50" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata (ms)')" @update:modelValue="up('animOutDuration', $event)" />
               </div>
             </div>
             <div>
-              <label class="mps-label">Ritardo (ms)</label>
+              <label class="mps-label">{{ t('Ritardo (ms)') }}</label>
               <div class="mb-flex mb-items-center mb-gap-2">
-                <input type="range" :value="layer.animOutDelay" @input="up('animOutDelay', parseFloat($event.target.value))" min="0" max="3000" step="50" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.animOutDelay }}</span>
+                <NumberScrubber theme="dark" :modelValue="layer.animOutDelay" :min="0" :max="3000" :step="50" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Ritardo (ms)')" @update:modelValue="up('animOutDelay', $event)" />
               </div>
             </div>
             <div>
-              <label class="mps-label">Curva di easing</label>
+              <label class="mps-label">{{ t('Curva di easing') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animEasing" :options="OPTS_EASING" @update:model-value="up('animEasing', $event)" />
             </div>
 
             <!-- Character Animation (solo per text) -->
             <template v-if="layer.type === 'text'">
               <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-              <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Animazione Testo</p>
+              <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Animazione Testo') }}</p>
               <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                 <input type="checkbox" :checked="!!layer.charAnim" @change="toggleCharAnim($event.target.checked)" class="mb-rounded" />
-                <span class="mb-text-[11px] mb-text-gray-400">Anima caratteri/parole</span>
+                <span class="mb-text-[11px] mb-text-gray-400">{{ t('Anima caratteri/parole') }}</span>
               </label>
               <template v-if="layer.charAnim">
                 <div>
-                  <label class="mps-label">Dividi per</label>
+                  <label class="mps-label">{{ t('Dividi per') }}</label>
                   <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.charAnim.split || 'chars'" :options="OPTS_CHAR_SPLIT" @update:model-value="upCharAnim('split', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Direzione</label>
+                  <label class="mps-label">{{ t('Direzione') }}</label>
                   <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.charAnim.direction || 'forward'" :options="OPTS_CHAR_DIRECTION" @update:model-value="upCharAnim('direction', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">Stagger (ms)</label>
-                  <div class="mb-flex mb-items-center mb-gap-2">
-                    <input type="range" :value="layer.charAnim.stagger || 30" @input="upCharAnim('stagger', parseFloat($event.target.value))" min="5" max="200" step="5" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.charAnim.stagger || 30 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer.charAnim.stagger || 30" :min="5" :max="200" :step="5" :defaultValue="30" emitAs="number" :sliderOnFocus="false" unit="ms" ariaLabel="Stagger (ms)" @update:modelValue="upCharAnim('stagger', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">Offset X (px)</label>
-                  <div class="mb-flex mb-items-center mb-gap-2">
-                    <input type="range" :value="layer.charAnim.offsetX || 0" @input="upCharAnim('offsetX', parseFloat($event.target.value))" min="-100" max="100" step="5" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.charAnim.offsetX || 0 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer.charAnim.offsetX || 0" :min="-100" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Offset X (px)" @update:modelValue="upCharAnim('offsetX', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">Offset Y (px)</label>
-                  <div class="mb-flex mb-items-center mb-gap-2">
-                    <input type="range" :value="layer.charAnim.offsetY || 0" @input="upCharAnim('offsetY', parseFloat($event.target.value))" min="-100" max="100" step="5" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.charAnim.offsetY || 0 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer.charAnim.offsetY || 0" :min="-100" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Offset Y (px)" @update:modelValue="upCharAnim('offsetY', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Rotazione (deg)</label>
-                  <div class="mb-flex mb-items-center mb-gap-2">
-                    <input type="range" :value="layer.charAnim.rotation || 0" @input="upCharAnim('rotation', parseFloat($event.target.value))" min="-180" max="180" step="5" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.charAnim.rotation || 0 }}</span>
-                  </div>
+                  <label class="mps-label">{{ t('Rotazione (deg)') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.charAnim.rotation || 0" :min="-180" :max="180" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="°" :ariaLabel="t('Rotazione (deg)')" @update:modelValue="upCharAnim('rotation', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Scala iniziale</label>
-                  <div class="mb-flex mb-items-center mb-gap-2">
-                    <input type="range" :value="layer.charAnim.scale ?? 1" @input="upCharAnim('scale', parseFloat($event.target.value))" min="0" max="3" step="0.1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.charAnim.scale ?? 1 }}</span>
-                  </div>
+                  <label class="mps-label">{{ t('Scala iniziale') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.charAnim.scale ?? 1" :min="0" :max="3" :step="0.1" :defaultValue="1" emitAs="number" :sliderOnFocus="false" :ariaLabel="t('Scala iniziale')" @update:modelValue="upCharAnim('scale', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Opacità iniziale (%)</label>
-                  <div class="mb-flex mb-items-center mb-gap-2">
-                    <input type="range" :value="layer.charAnim.opacity ?? 0" @input="upCharAnim('opacity', parseFloat($event.target.value))" min="0" max="100" step="5" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.charAnim.opacity ?? 0 }}</span>
-                  </div>
+                  <label class="mps-label">{{ t('Opacità iniziale (%)') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.charAnim.opacity ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Opacità iniziale (%)')" @update:modelValue="upCharAnim('opacity', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Blur iniziale (px)</label>
-                  <div class="mb-flex mb-items-center mb-gap-2">
-                    <input type="range" :value="layer.charAnim.blur || 0" @input="upCharAnim('blur', parseFloat($event.target.value))" min="0" max="20" step="1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.charAnim.blur || 0 }}</span>
-                  </div>
+                  <label class="mps-label">{{ t('Blur iniziale (px)') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.charAnim.blur || 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" :ariaLabel="t('Blur iniziale (px)')" @update:modelValue="upCharAnim('blur', $event)" />
                 </div>
                 <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                   <input type="checkbox" :checked="layer.charAnim.yoyo" @change="upCharAnim('yoyo', $event.target.checked)" class="mb-rounded" />
-                  <span class="mb-text-[11px] mb-text-gray-400">Yoyo (andata e ritorno)</span>
+                  <span class="mb-text-[11px] mb-text-gray-400">{{ t('Yoyo (andata e ritorno)') }}</span>
                 </label>
               </template>
             </template>
@@ -910,16 +766,13 @@
             <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
             <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Loop</p>
             <div>
-              <label class="mps-label">Animazione continua</label>
+              <label class="mps-label">{{ t('Animazione continua') }}</label>
               <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.animLoop || 'none'" :options="loopAnimGroups" @update:model-value="up('animLoop', $event)" />
             </div>
             <template v-if="layer.animLoop && layer.animLoop !== 'none'">
               <div>
-                <label class="mps-label">Durata loop (ms)</label>
-                <div class="mb-flex mb-items-center mb-gap-2">
-                  <input type="range" :value="layer.animLoopDuration || 3000" @input="up('animLoopDuration', parseFloat($event.target.value))" min="500" max="10000" step="100" class="mb-flex-1" />
-                  <span class="mps-val">{{ layer.animLoopDuration || 3000 }}</span>
-                </div>
+                <label class="mps-label">{{ t('Durata loop (ms)') }}</label>
+                <NumberScrubber theme="dark" :modelValue="layer.animLoopDuration || 3000" :min="500" :max="10000" :step="100" :defaultValue="3000" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata loop (ms)')" @update:modelValue="up('animLoopDuration', $event)" />
               </div>
               <div>
                 <label class="mps-label">Easing loop</label>
@@ -932,139 +785,97 @@
             <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Hover</p>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="!!layer.hover" @change="toggleHover($event.target.checked)" class="mb-rounded" />
-              <span class="mb-text-[11px] mb-text-gray-400">Effetto hover attivo</span>
+              <span class="mb-text-[11px] mb-text-gray-400">{{ t('Effetto hover attivo') }}</span>
             </label>
             <template v-if="layer.hover">
               <!-- Transform -->
               <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-1">Transform</p>
               <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                 <div>
-                  <label class="mps-label">Scala</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.hover.scale ?? 1" @input="upHover('scale', parseFloat($event.target.value))" min="0.5" max="2" step="0.05" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.hover.scale ?? 1 }}</span>
-                  </div>
+                  <label class="mps-label">{{ t('Scala') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.scale ?? 1" :min="0.5" :max="2" :step="0.05" :defaultValue="1" emitAs="number" :sliderOnFocus="false" :ariaLabel="t('Scala')" @update:modelValue="upHover('scale', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Rotazione Z</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.hover.rotation ?? 0" @input="upHover('rotation', parseFloat($event.target.value))" min="-45" max="45" step="1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.hover.rotation ?? 0 }}</span>
-                  </div>
+                  <label class="mps-label">{{ t('Rotazione Z') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.rotation ?? 0" :min="-45" :max="45" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="°" :ariaLabel="t('Rotazione Z')" @update:modelValue="upHover('rotation', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Rotazione X</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.hover.rotateX ?? 0" @input="upHover('rotateX', parseFloat($event.target.value))" min="-90" max="90" step="5" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.hover.rotateX ?? 0 }}</span>
-                  </div>
+                  <label class="mps-label">{{ t('Rotazione X') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.rotateX ?? 0" :min="-90" :max="90" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="°" :ariaLabel="t('Rotazione X')" @update:modelValue="upHover('rotateX', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Rotazione Y</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.hover.rotateY ?? 0" @input="upHover('rotateY', parseFloat($event.target.value))" min="-90" max="90" step="5" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.hover.rotateY ?? 0 }}</span>
-                  </div>
+                  <label class="mps-label">{{ t('Rotazione Y') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.rotateY ?? 0" :min="-90" :max="90" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="°" :ariaLabel="t('Rotazione Y')" @update:modelValue="upHover('rotateY', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">Skew X</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.hover.skewX ?? 0" @input="upHover('skewX', parseFloat($event.target.value))" min="-30" max="30" step="1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.hover.skewX ?? 0 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.skewX ?? 0" :min="-30" :max="30" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="°" ariaLabel="Skew X" @update:modelValue="upHover('skewX', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">Skew Y</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.hover.skewY ?? 0" @input="upHover('skewY', parseFloat($event.target.value))" min="-30" max="30" step="1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.hover.skewY ?? 0 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.skewY ?? 0" :min="-30" :max="30" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="°" ariaLabel="Skew Y" @update:modelValue="upHover('skewY', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">Offset X (%)</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.hover.x ?? 0" @input="upHover('x', parseFloat($event.target.value))" min="-20" max="20" step="1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.hover.x ?? 0 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.x ?? 0" :min="-20" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" ariaLabel="Hover offset X (%)" @update:modelValue="upHover('x', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">Offset Y (%)</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.hover.y ?? 0" @input="upHover('y', parseFloat($event.target.value))" min="-20" max="20" step="1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.hover.y ?? 0 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.y ?? 0" :min="-20" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" ariaLabel="Hover offset Y (%)" @update:modelValue="upHover('y', $event)" />
                 </div>
               </div>
               <!-- Aspetto -->
-              <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">Aspetto</p>
+              <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">{{ t('Aspetto') }}</p>
               <div>
-                <label class="mps-label">Opacita (%)</label>
-                <div class="mb-flex mb-items-center mb-gap-2">
-                  <input type="range" :value="layer.hover.opacity ?? 100" @input="upHover('opacity', parseFloat($event.target.value))" min="0" max="100" step="5" class="mb-flex-1" />
-                  <span class="mps-val">{{ layer.hover.opacity ?? 100 }}</span>
-                </div>
+                <label class="mps-label">{{ t('Opacita (%)') }}</label>
+                <NumberScrubber theme="dark" :modelValue="layer.hover.opacity ?? 100" :min="0" :max="100" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Opacita (%)')" @update:modelValue="upHover('opacity', $event)" />
               </div>
               <template v-if="layer.type === 'text' || layer.type === 'button'">
                 <div>
-                  <label class="mps-label">Colore testo hover</label>
+                  <label class="mps-label">{{ t('Colore testo hover') }}</label>
                   <FieldColor :modelValue="layer.hover.color || ''" @update:modelValue="upHover('color', $event)" />
                 </div>
               </template>
               <div>
-                <label class="mps-label">Sfondo hover</label>
+                <label class="mps-label">{{ t('Sfondo hover') }}</label>
                 <FieldColor :modelValue="layer.hover.bgColor || ''" @update:modelValue="upHover('bgColor', $event)" />
               </div>
               <div>
-                <label class="mps-label">Bordo hover</label>
+                <label class="mps-label">{{ t('Bordo hover') }}</label>
                 <FieldColor :modelValue="layer.hover.borderColor || ''" @update:modelValue="upHover('borderColor', $event)" />
               </div>
               <div>
                 <label class="mps-label">Border radius hover</label>
-                <div class="mb-flex mb-items-center mb-gap-2">
-                  <input type="range" :value="layer.hover.borderRadius ?? ''" @input="upHover('borderRadius', $event.target.value ? parseFloat($event.target.value) : '')" min="0" max="200" step="1" class="mb-flex-1" />
-                  <span class="mps-val">{{ layer.hover.borderRadius ?? '-' }}</span>
-                </div>
+                <NumberScrubber theme="dark" :modelValue="layer.hover.borderRadius ?? ''" :min="0" :max="200" :step="1" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Border radius hover" @update:modelValue="upHover('borderRadius', $event)" />
               </div>
               <!-- Filtri hover -->
-              <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">Filtri hover</p>
+              <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">{{ t('Filtri hover') }}</p>
               <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                 <div>
                   <label class="mps-label">Blur (px)</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.hover.blur ?? 0" @input="upHover('blur', parseFloat($event.target.value))" min="0" max="20" step="1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.hover.blur ?? 0 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.blur ?? 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="px" ariaLabel="Hover blur (px)" @update:modelValue="upHover('blur', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Luminosita (%)</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.hover.brightness ?? 100" @input="upHover('brightness', parseFloat($event.target.value))" min="0" max="200" step="5" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.hover.brightness ?? 100 }}</span>
-                  </div>
+                  <label class="mps-label">{{ t('Luminosita (%)') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.brightness ?? 100" :min="0" :max="200" :step="5" :defaultValue="100" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Luminosita (%)')" @update:modelValue="upHover('brightness', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Scala grigi (%)</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.hover.grayscale ?? 0" @input="upHover('grayscale', parseFloat($event.target.value))" min="0" max="100" step="5" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.hover.grayscale ?? 0 }}</span>
-                  </div>
+                  <label class="mps-label">{{ t('Scala grigi (%)') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.hover.grayscale ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Scala grigi (%)')" @update:modelValue="upHover('grayscale', $event)" />
                 </div>
               </div>
               <!-- Transizione -->
-              <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">Transizione</p>
+              <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">{{ t('Transizione') }}</p>
               <div>
-                <label class="mps-label">Durata (ms)</label>
-                <div class="mb-flex mb-items-center mb-gap-2">
-                  <input type="range" :value="layer.hover.duration ?? 300" @input="upHover('duration', parseFloat($event.target.value))" min="100" max="1000" step="50" class="mb-flex-1" />
-                  <span class="mps-val">{{ layer.hover.duration ?? 300 }}</span>
-                </div>
+                <label class="mps-label">{{ t('Durata (ms)') }}</label>
+                <NumberScrubber theme="dark" :modelValue="layer.hover.duration ?? 300" :min="100" :max="1000" :step="50" :defaultValue="300" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata (ms)')" @update:modelValue="upHover('duration', $event)" />
               </div>
               <div>
                 <label class="mps-label">Easing</label>
                 <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.hover.easing || 'ease'" :options="OPTS_EASING" @update:model-value="upHover('easing', $event)" />
               </div>
               <div>
-                <label class="mps-label">Cursore hover</label>
+                <label class="mps-label">{{ t('Cursore hover') }}</label>
                 <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.hover.cursor || ''" :options="OPTS_HOVER_CURSOR" @update:model-value="upHover('cursor', $event)" />
               </div>
             </template>
@@ -1074,7 +885,7 @@
             <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Mask (Clip-Path)</p>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="!!layer.mask" @change="toggleMask($event.target.checked)" class="mb-rounded" />
-              <span class="mb-text-[11px] mb-text-gray-400">Maschera attiva</span>
+              <span class="mb-text-[11px] mb-text-gray-400">{{ t('Maschera attiva') }}</span>
             </label>
             <template v-if="layer.mask">
               <div>
@@ -1084,31 +895,19 @@
               <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                 <div>
                   <label class="mps-label">Top (%)</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.mask.top ?? 0" @input="upMask('top', parseFloat($event.target.value))" min="0" max="100" step="1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.mask.top ?? 0 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer.mask.top ?? 0" :min="0" :max="100" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" ariaLabel="Mask top (%)" @update:modelValue="upMask('top', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">Right (%)</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.mask.right ?? 0" @input="upMask('right', parseFloat($event.target.value))" min="0" max="100" step="1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.mask.right ?? 0 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer.mask.right ?? 0" :min="0" :max="100" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" ariaLabel="Mask right (%)" @update:modelValue="upMask('right', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">Bottom (%)</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.mask.bottom ?? 0" @input="upMask('bottom', parseFloat($event.target.value))" min="0" max="100" step="1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.mask.bottom ?? 0 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer.mask.bottom ?? 0" :min="0" :max="100" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" ariaLabel="Mask bottom (%)" @update:modelValue="upMask('bottom', $event)" />
                 </div>
                 <div>
                   <label class="mps-label">Left (%)</label>
-                  <div class="mb-flex mb-items-center mb-gap-1">
-                    <input type="range" :value="layer.mask.left ?? 0" @input="upMask('left', parseFloat($event.target.value))" min="0" max="100" step="1" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.mask.left ?? 0 }}</span>
-                  </div>
+                  <NumberScrubber theme="dark" :modelValue="layer.mask.left ?? 0" :min="0" :max="100" :step="1" :defaultValue="0" emitAs="number" :sliderOnFocus="false" unit="%" ariaLabel="Mask left (%)" @update:modelValue="upMask('left', $event)" />
                 </div>
               </div>
             </template>
@@ -1119,26 +918,20 @@
               <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Ken Burns</p>
               <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                 <input type="checkbox" :checked="!!layer.kenBurns" @change="toggleKenBurns($event.target.checked)" class="mb-rounded" />
-                <span class="mb-text-[11px] mb-text-gray-400">Attivo</span>
+                <span class="mb-text-[11px] mb-text-gray-400">{{ t('Attivo') }}</span>
               </label>
               <template v-if="layer.kenBurns">
                 <div>
-                  <label class="mps-label">Tipo</label>
+                  <label class="mps-label">{{ t('Tipo') }}</label>
                   <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.kenBurns.type || 'zoomIn'" :options="OPTS_KENBURNS_TYPE" @update:model-value="upKenBurns('type', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Intensita (%)</label>
-                  <div class="mb-flex mb-items-center mb-gap-2">
-                    <input type="range" :value="layer.kenBurns.intensity ?? 20" @input="upKenBurns('intensity', parseFloat($event.target.value))" min="5" max="50" step="5" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.kenBurns.intensity ?? 20 }}</span>
-                  </div>
+                  <label class="mps-label">{{ t('Intensita (%)') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.kenBurns.intensity ?? 20" :min="5" :max="50" :step="5" :defaultValue="20" emitAs="number" :sliderOnFocus="false" unit="%" :ariaLabel="t('Intensita (%)')" @update:modelValue="upKenBurns('intensity', $event)" />
                 </div>
                 <div>
-                  <label class="mps-label">Durata (ms)</label>
-                  <div class="mb-flex mb-items-center mb-gap-2">
-                    <input type="range" :value="layer.kenBurns.duration ?? 5000" @input="upKenBurns('duration', parseFloat($event.target.value))" min="1000" max="20000" step="500" class="mb-flex-1" />
-                    <span class="mps-val">{{ layer.kenBurns.duration ?? 5000 }}</span>
-                  </div>
+                  <label class="mps-label">{{ t('Durata (ms)') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.kenBurns.duration ?? 5000" :min="1000" :max="20000" :step="500" :defaultValue="5000" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata (ms)')" @update:modelValue="upKenBurns('duration', $event)" />
                 </div>
               </template>
             </template>
@@ -1148,11 +941,11 @@
             <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Motion Path</p>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="!!layer.motionPath" @change="toggleMotionPath($event.target.checked)" class="mb-rounded" />
-              <span class="mb-text-[11px] mb-text-gray-400">Anima lungo percorso</span>
+              <span class="mb-text-[11px] mb-text-gray-400">{{ t('Anima lungo percorso') }}</span>
             </label>
             <template v-if="layer.motionPath">
               <div>
-                <label class="mps-label">Preset percorso</label>
+                <label class="mps-label">{{ t('Preset percorso') }}</label>
                 <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.motionPath.preset || 'circle'" :options="OPTS_MOTION_PRESET" @update:model-value="applyMotionPreset($event)" />
               </div>
               <template v-if="layer.motionPath.preset === 'custom'">
@@ -1163,15 +956,12 @@
                 </div>
               </template>
               <div>
-                <label class="mps-label">Durata (ms)</label>
-                <div class="mb-flex mb-items-center mb-gap-2">
-                  <input type="range" :value="layer.motionPath.duration ?? 3000" @input="upMotionPath('duration', parseFloat($event.target.value))" min="500" max="20000" step="500" class="mb-flex-1" />
-                  <span class="mps-val">{{ layer.motionPath.duration ?? 3000 }}</span>
-                </div>
+                <label class="mps-label">{{ t('Durata (ms)') }}</label>
+                <NumberScrubber theme="dark" :modelValue="layer.motionPath.duration ?? 3000" :min="500" :max="20000" :step="500" :defaultValue="3000" emitAs="number" :sliderOnFocus="false" unit="ms" :ariaLabel="t('Durata (ms)')" @update:modelValue="upMotionPath('duration', $event)" />
               </div>
               <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                 <input type="checkbox" :checked="layer.motionPath.autoRotate" @change="upMotionPath('autoRotate', $event.target.checked)" class="mb-rounded" />
-                <span class="mb-text-[11px] mb-text-gray-400">Ruota lungo il percorso</span>
+                <span class="mb-text-[11px] mb-text-gray-400">{{ t('Ruota lungo il percorso') }}</span>
               </label>
               <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
                 <input type="checkbox" :checked="layer.motionPath.loop !== false" @change="upMotionPath('loop', $event.target.checked)" class="mb-rounded" />
@@ -1188,19 +978,16 @@
             <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Parallax Layer</p>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <input type="checkbox" :checked="!!layer.parallax" @change="toggleParallax($event.target.checked)" class="mb-rounded" />
-              <span class="mb-text-[11px] mb-text-gray-400">Parallax attivo</span>
+              <span class="mb-text-[11px] mb-text-gray-400">{{ t('Parallax attivo') }}</span>
             </label>
             <template v-if="layer.parallax">
               <div>
-                <label class="mps-label">Tipo</label>
+                <label class="mps-label">{{ t('Tipo') }}</label>
                 <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="layer.parallax.type || 'mouse'" :options="OPTS_PARALLAX_TYPE" @update:model-value="upParallax('type', $event)" />
               </div>
               <div>
-                <label class="mps-label">Profondita (1-20)</label>
-                <div class="mb-flex mb-items-center mb-gap-2">
-                  <input type="range" :value="layer.parallax.depth ?? 5" @input="upParallax('depth', parseFloat($event.target.value))" min="1" max="20" step="1" class="mb-flex-1" />
-                  <span class="mps-val">{{ layer.parallax.depth ?? 5 }}</span>
-                </div>
+                <label class="mps-label">{{ t('Profondita (1-20)') }}</label>
+                <NumberScrubber theme="dark" :modelValue="layer.parallax.depth ?? 5" :min="1" :max="20" :step="1" :defaultValue="5" emitAs="number" :sliderOnFocus="false" :ariaLabel="t('Profondita (1-20)')" @update:modelValue="upParallax('depth', $event)" />
               </div>
               <template v-if="layer.parallax.type === 'mouse' || layer.parallax.type === 'both'">
                 <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
@@ -1210,11 +997,8 @@
               </template>
               <template v-if="layer.parallax.type === 'scroll' || layer.parallax.type === 'both'">
                 <div>
-                  <label class="mps-label">Velocita scroll</label>
-                  <div class="mb-flex mb-items-center mb-gap-2">
-                    <input type="range" :value="layer.parallax.scrollSpeed ?? 0.5" @input="upParallax('scrollSpeed', parseFloat($event.target.value))" min="0.1" max="2" step="0.1" class="mb-flex-1" />
-                    <span class="mps-val">{{ (layer.parallax.scrollSpeed ?? 0.5).toFixed(1) }}</span>
-                  </div>
+                  <label class="mps-label">{{ t('Velocita scroll') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="layer.parallax.scrollSpeed ?? 0.5" :min="0.1" :max="2" :step="0.1" :defaultValue="0.5" emitAs="number" :sliderOnFocus="false" :ariaLabel="t('Velocita scroll')" @update:modelValue="upParallax('scrollSpeed', $event)" />
                 </div>
               </template>
             </template>
@@ -1223,7 +1007,7 @@
           <!-- Modo TIMELINE -->
           <template v-else>
             <p class="mb-text-[10px] mb-text-gray-500 mb-italic mb-mb-2">
-              Usa la timeline sotto il canvas per aggiungere e spostare i keyframe.
+              {{ t('Usa la timeline sotto il canvas per aggiungere e spostare i keyframe.') }}
             </p>
             <KeyframeProperties
               :keyframe="selectedKeyframe"
@@ -1239,7 +1023,7 @@
 
     <!-- No selection -->
     <div v-else class="mb-p-4 mb-text-xs mb-text-gray-500 mb-text-center mb-mt-8">
-      Seleziona un livello per modificarne le proprietà
+      {{ t('Seleziona un livello per modificarne le proprietà') }}
     </div>
   </div>
 </template>
@@ -1250,8 +1034,10 @@ import IconPicker from './IconPicker.vue';
 import iconsSvg from './uikitIconsSvg.js';
 import FieldColor from '@/components/Builder/fields/FieldColor.vue';
 import FieldSelect from '../Builder/fields/FieldSelect.vue';
+import NumberScrubber from '../Builder/fields/NumberScrubber.vue';
 import KeyframeProperties from './KeyframeProperties.vue';
 import { defaultTimeline } from './timelineUtils.js';
+import { t } from '@/i18n';
 
 const props = defineProps({
   layer: { type: Object, default: null },

@@ -15,13 +15,14 @@
         </div>
       </div>
     </div>
-    <button type="button" class="olo-pfeat-arrow" :style="arrowStyle('-16px', null)" aria-label="Precedente">&#8249;</button>
-    <button type="button" class="olo-pfeat-arrow" :style="arrowStyle(null, '-16px')" aria-label="Successivo">&#8250;</button>
+    <button type="button" class="olo-pfeat-arrow" :style="arrowStyle('-16px', null)" :aria-label="t('Precedente')">&#8249;</button>
+    <button type="button" class="olo-pfeat-arrow" :style="arrowStyle(null, '-16px')" :aria-label="t('Successivo')">&#8250;</button>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { card_radius: 12, card_width: 300, gap: 20, accent_color: '' };
 const s = computed(() => ({ ...defaults, ...props.settings }));

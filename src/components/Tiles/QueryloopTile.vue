@@ -6,7 +6,7 @@
       <span class="ql-info">{{ settings.post_type || 'post' }} &middot; {{ layout }} &middot; {{ settings.columns || 3 }} col</span>
     </div>
 
-    <input v-if="settings.enable_search" type="text" class="ql-search" :placeholder="settings.search_placeholder || 'Cerca…'" readonly />
+    <input v-if="settings.enable_search" type="text" class="ql-search" :placeholder="settings.search_placeholder || t('Cerca…')" readonly />
 
     <div v-if="settings.enable_sort_ui" class="ql-sort-wrap">
       <label>{{ t('Ordina:') }}
@@ -39,7 +39,7 @@
             <span v-if="settings.show_comment_count" class="ql-cc"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> {{ item.cc }}</span>
           </div>
           <div v-if="settings.show_excerpt !== false" class="ql-excerpt" :style="{ color: settings.text_color || undefined }">{{ item.excerpt }}</div>
-          <div v-if="settings.show_read_more !== false" class="ql-readmore" :style="{ color: settings.link_color || settings.accent_color || 'var(--olo-color-primary, #e1474f)' }" data-olo-editable="read_more_text">{{ settings.read_more_text || 'Leggi tutto' }} &rarr;</div>
+          <div v-if="settings.show_read_more !== false" class="ql-readmore" :style="{ color: settings.link_color || settings.accent_color || 'var(--olo-color-primary, #e1474f)' }" data-olo-editable="read_more_text">{{ settings.read_more_text || t('Leggi tutto') }} &rarr;</div>
         </div>
       </div>
     </div>

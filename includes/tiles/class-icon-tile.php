@@ -22,6 +22,7 @@ class Olo_Icon_Tile extends Olo_Tile_Base {
         'rotation'        => '0',
         'link_url'        => '',
         'link_target'     => '_self',
+        'link_label'      => '',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -53,6 +54,14 @@ class Olo_Icon_Tile extends Olo_Tile_Base {
         $ratio     = $size > 0 ? round( $size / 20, 2 ) : 2;
         $color     = ! empty( $s['color'] ) ? $this->safe_color_css( $s['color'] ) : '';
         $target    = $s['link_target'] === '_blank' ? ' target="_blank" rel="noopener"' : '';
+
+        // Nome accessibile per il link icona-only (4.1.2): usa l'etichetta
+        // esplicita se fornita, altrimenti ricade sul nome icona.
+        $link_label = trim( (string) ( $s['link_label'] ?? '' ) );
+        if ( '' === $link_label ) {
+            $link_label = (string) ( $s['icon'] ?? '' );
+        }
+        $aria_attr = '' !== $link_label ? ' aria-label="' . esc_attr( $link_label ) . '"' : '';
 
         /* --- wrapper styling --- */
         $view   = $s['view'] ?? 'default';
@@ -120,7 +129,7 @@ class Olo_Icon_Tile extends Olo_Tile_Base {
         <div class="olo-icon uk-text-center <?php echo esc_attr( $uid ); ?>">
             <span class="olo-icon-wrap" style="<?php echo $wrapper_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS assembled above from safe_color_css() whitelisted colours, intval()'d rotation, Olo_Tile_Utils::spacing_css() integer padding and fixed shape literals ?>">
             <?php if ( ! empty( $s['link_url'] ) ) : ?>
-                <a href="<?php echo esc_url( $s['link_url'] ); ?>"<?php echo $target; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed ' target="_blank" rel="noopener"' literal from the ternary above ?>>
+                <a href="<?php echo esc_url( $s['link_url'] ); ?>"<?php echo $target; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed ' target="_blank" rel="noopener"' literal from the ternary above ?><?php echo $aria_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- aria-label assembled above with esc_attr() on the accessible name ?>>
                     <?php echo $this->render_icon_html( $icon_name, floatval( $ratio ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup built by Olo_Tile_Base::render_icon_html() with esc_attr()/sanitized SVG internally ?>
                 </a>
             <?php else : ?>

@@ -26,8 +26,8 @@
             </template>
           </svg>
         </button>
-        <button v-if="ci === 0" class="olo-te-mini-btn olo-te-add-col" title="Aggiungi colonna" @click.stop="addCol">+</button>
-        <button v-if="colCount > 1 && ci === colCount - 1" class="olo-te-mini-btn olo-te-del-col" title="Rimuovi ultima colonna" @click.stop="removeCol">−</button>
+        <button v-if="ci === 0" class="olo-te-mini-btn olo-te-add-col" :title="t('Aggiungi colonna')" @click.stop="addCol">+</button>
+        <button v-if="colCount > 1 && ci === colCount - 1" class="olo-te-mini-btn olo-te-del-col" :title="t('Rimuovi ultima colonna')" @click.stop="removeCol">−</button>
       </div>
     </div>
 
@@ -82,8 +82,8 @@
 
     <!-- Toolbar righe -->
     <div class="olo-te-row-bar">
-      <button class="olo-te-mini-btn olo-te-add-row" title="Aggiungi riga" @click.stop="addRow">+ Riga</button>
-      <button v-if="tableData.length > 1" class="olo-te-mini-btn olo-te-del-row" title="Rimuovi ultima riga" @click.stop="removeRow">− Riga</button>
+      <button class="olo-te-mini-btn olo-te-add-row" :title="t('Aggiungi riga')" @click.stop="addRow">+ {{ t('Riga') }}</button>
+      <button v-if="tableData.length > 1" class="olo-te-mini-btn olo-te-del-row" :title="t('Rimuovi ultima riga')" @click.stop="removeRow">− {{ t('Riga') }}</button>
     </div>
   </div>
 </template>
@@ -91,6 +91,7 @@
 <script setup>
 import { computed, ref, nextTick } from 'vue';
 import { useTilesStore } from '@/stores/tiles';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -217,8 +218,8 @@ function getAlign(ci) {
 }
 
 function alignLabel(ci) {
-  const map = { left: 'Sinistra', center: 'Centro', right: 'Destra' };
-  return map[getAlign(ci)] || 'Sinistra';
+  const map = { left: t('Sinistra'), center: t('Centro'), right: t('Destra') };
+  return map[getAlign(ci)] || t('Sinistra');
 }
 
 function cycleAlign(ci) {

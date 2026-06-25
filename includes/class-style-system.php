@@ -559,6 +559,14 @@ class Olo_Style_System {
      * Generate CSS with custom properties and UIkit overrides.
      */
     public function generate_css() {
+        // Memoizzazione per-request: nello stesso page-load il CSS globale viene richiesto
+        // piu' volte (renderer + footer + search-results integration). Il ricalcolo e'
+        // costoso (font import, risoluzione colori, override UIkit) -> lo si fa una volta sola.
+        static $memo = null;
+        if ( $memo !== null ) {
+            return $memo;
+        }
+
         $s = $this->get_styles();
         $c = $s['colors'];
         $t = $s['typography'];
@@ -998,7 +1006,8 @@ class Olo_Style_System {
             $css .= ".olo-template::after { content: \"\"; position: fixed; inset: 0; z-index: 9999; pointer-events: none; mix-blend-mode: overlay; opacity: {$g_op}; background-image: url(\"{$noise}\"); background-size: {$g_scale}px {$g_scale}px; }\n";
         }
 
-        return $css;
+        $memo = $css;
+        return $memo;
     }
 
     /**

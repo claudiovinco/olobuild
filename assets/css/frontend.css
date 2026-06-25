@@ -255,7 +255,14 @@ body:has(.olo-template) .wp-site-blocks {
   left: 15px;
   right: 15px;
   pointer-events: none;
-  z-index: 0;
+  /* z-index NEGATIVO obbligatorio: il contenuto della sezione (righe/tile) è
+     in-flow NON posizionato → nell'ordine di pittura CSS un layer posizionato
+     con z-index >= 0 verrebbe dipinto SOPRA i blocchi non posizionati, coprendo
+     le tile (es. hero-split su sezione con bg video/immagine in scope "container").
+     Con -1 lo sfondo resta sempre DIETRO le tile; il `.uk-container` ha
+     `z-index:1` quindi il layer negativo resta confinato dentro la sezione e non
+     scende dietro lo sfondo/colore della sezione stessa. */
+  z-index: -1;
 }
 .olo-bg-in-container > * { pointer-events: auto; }
 @media (min-width: 640px) {

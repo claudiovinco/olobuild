@@ -54,7 +54,7 @@
           >
             <!-- Header -->
             <div class="mb-flex mb-items-center mb-justify-between mb-px-5 mb-py-3 mb-border-b mb-border-gray-700">
-              <h3 class="mb-text-white mb-text-sm mb-font-semibold mb-m-0">Libreria Lottie Animations<span v-if="totalCount" class="mb-text-gray-500 mb-font-normal mb-ml-2">({{ totalCount.toLocaleString() }})</span></h3>
+              <h3 class="mb-text-white mb-text-sm mb-font-semibold mb-m-0">{{ t('Libreria Lottie Animations') }}<span v-if="totalCount" class="mb-text-gray-500 mb-font-normal mb-ml-2">({{ totalCount.toLocaleString() }})</span></h3>
               <button @click="showBrowser = false" class="mb-text-gray-400 hover:mb-text-white">{{ t('&times;') }}</button>
             </div>
 
@@ -73,7 +73,7 @@
                   :disabled="searching"
                   class="mb-px-4 mb-py-2 mb-bg-purple-600 mb-text-white mb-text-sm mb-rounded-lg hover:mb-bg-purple-500 disabled:mb-opacity-50 mb-transition-colors"
                 >
-                  {{ searching ? '...' : 'Cerca' }}
+                  {{ searching ? '...' : t('Cerca') }}
                 </button>
               </div>
               <!-- Quick categories -->
@@ -210,8 +210,8 @@ function pickFromMedia() {
     return;
   }
   const frame = wp.media({
-    title: 'Seleziona file Lottie (.json)',
-    button: { text: 'Usa questa animazione' },
+    title: t('Seleziona file Lottie (.json)'),
+    button: { text: t('Usa questa animazione') },
     multiple: false,
     library: { type: 'application/json' },
   });
@@ -285,7 +285,7 @@ async function fetchAnimations(append = false) {
     const data = await res.json();
 
     if (!res.ok) {
-      throw new Error(data.message || 'Errore nella ricerca');
+      throw new Error(data.message || t('Errore nella ricerca'));
     }
 
     if (append) {

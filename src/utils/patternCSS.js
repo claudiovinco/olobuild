@@ -48,28 +48,38 @@ export const patternList = [
 ];
 
 /**
- * Converte hex (#rrggbb) + opacity (0-1) in rgba().
+ * Converte un colore + opacity (0-1) in un colore CSS con l'opacità applicata.
+ * Supporta hex (#rgb/#rrggbb), rgb()/rgba(), E i token CSS non parsabili come
+ * var(--olo-color-*) / color-mix() / nomi colore: per questi NON si può calcolare
+ * rgba, quindi si applica l'opacità con color-mix() (così i pattern con colore-token
+ * mostrano il colore giusto invece di cadere su nero).
  */
 function colorToRgba(input, opacity) {
   const s = (input || '#000000').trim();
-  // Already rgba/rgb — extract components and apply opacity
+  const op = (opacity == null) ? 1 : opacity;
+  // rgb()/rgba()
   const rgbaMatch = s.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+))?\s*\)/);
   if (rgbaMatch) {
     const r = parseInt(rgbaMatch[1]) || 0;
     const g = parseInt(rgbaMatch[2]) || 0;
     const b = parseInt(rgbaMatch[3]) || 0;
     const a = rgbaMatch[4] != null ? parseFloat(rgbaMatch[4]) : 1;
-    return `rgba(${r}, ${g}, ${b}, ${a * opacity})`;
+    return `rgba(${r}, ${g}, ${b}, ${a * op})`;
   }
-  // Hex
-  const h = s.replace('#', '');
-  let r, g, b;
-  if (h.length === 3) {
-    r = parseInt(h[0] + h[0], 16); g = parseInt(h[1] + h[1], 16); b = parseInt(h[2] + h[2], 16);
-  } else {
-    r = parseInt(h.substring(0, 2), 16); g = parseInt(h.substring(2, 4), 16); b = parseInt(h.substring(4, 6), 16);
+  // Hex valido (#rgb o #rrggbb)
+  const hex = s.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+  if (hex) {
+    const h = hex[1];
+    let r, g, b;
+    if (h.length === 3) {
+      r = parseInt(h[0] + h[0], 16); g = parseInt(h[1] + h[1], 16); b = parseInt(h[2] + h[2], 16);
+    } else {
+      r = parseInt(h.substring(0, 2), 16); g = parseInt(h.substring(2, 4), 16); b = parseInt(h.substring(4, 6), 16);
+    }
+    return `rgba(${r}, ${g}, ${b}, ${op})`;
   }
-  return `rgba(${isNaN(r) ? 0 : r}, ${isNaN(g) ? 0 : g}, ${isNaN(b) ? 0 : b}, ${opacity})`;
+  // var(--olo-color-*), color-mix(), nomi colore: applica l'opacità con color-mix.
+  return op >= 1 ? s : `color-mix(in srgb, ${s} ${Math.round(op * 100)}%, transparent)`;
 }
 
 /**
@@ -100,8 +110,25 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
   // Rotazione (gradienti direzionali): bake nell'angolo. 0 = nessuna variazione.
   const rot = parseInt(rotation) || 0;
 
+  // Colore-token (var(--olo-color-*) / color-mix / nome colore): NON è embeddabile in un
+  // SVG data-URI (documento isolato → non eredita le custom properties) → uscirebbe nero.
+  // Per i pattern SVG generiamo allora una SAGOMA nera e dipingiamo col token vero usando
+  // mask-image + background-color (con color-mix per l'opacità). Per hex/rgba: nessun
+  // cambio (colore dentro l'SVG come prima, resa storica identica).
+  const isToken = !/^(#|rgba?\()/i.test(String(color || '').trim());
+  const svgFill = isToken ? '#000000' : (color || '#000000');
+  const svgFillOp = isToken ? 1 : opacity;
+
   let backgroundImage = '';
   let backgroundSize = `${sz}px ${sz}px`;
+
+  // Pattern a RIGHE (repeating-linear-gradient): NON vanno tilati con background-size
+  // sz×sz. Il gradiente si ripete già da sé; un tile sz×sz è ok per assi-allineati
+  // (orizzontali/verticali) ma SPEZZA le diagonali a 45° (le righe vengono tagliate
+  // al bordo del tile → aspetto "strano"). Con `auto` la diagonale resta continua e
+  // la spaziatura resta `sz` (è il periodo del gradiente). Dots/forme tengono sz×sz.
+  const LINE_PATTERNS = ['horizontal-lines', 'vertical-lines', 'diagonal-lines', 'diagonal-lines-reverse', 'crosshatch', 'diagonal-crosshatch'];
+  if (LINE_PATTERNS.includes(type)) backgroundSize = 'auto';
 
   switch (type) {
     // ── Lines ──
@@ -164,7 +191,7 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
     }
 
     case 'triangles': {
-      const svgInner = `<polygon points="${sz / 2},${sz * 0.1} ${sz * 0.1},${sz * 0.9} ${sz * 0.9},${sz * 0.9}" fill="${color}" fill-opacity="${opacity}" />`;
+      const svgInner = `<polygon points="${sz / 2},${sz * 0.1} ${sz * 0.1},${sz * 0.9} ${sz * 0.9},${sz * 0.9}" fill="${svgFill}" fill-opacity="${svgFillOp}" />`;
       backgroundImage = svgDataUri(svgInner, sz, sz);
       break;
     }
@@ -174,7 +201,7 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
       const cy = sz / 2;
       const dx = sz * 0.35;
       const dy = sz * 0.45;
-      const svgInner = `<polygon points="${cx},${cy - dy} ${cx + dx},${cy} ${cx},${cy + dy} ${cx - dx},${cy}" fill="${color}" fill-opacity="${opacity}" />`;
+      const svgInner = `<polygon points="${cx},${cy - dy} ${cx + dx},${cy} ${cx},${cy + dy} ${cx - dx},${cy}" fill="${svgFill}" fill-opacity="${svgFillOp}" />`;
       backgroundImage = svgDataUri(svgInner, sz, sz);
       break;
     }
@@ -186,7 +213,7 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
         [w * 0.25, 0], [w * 0.75, 0], [w, h * 0.5],
         [w * 0.75, h], [w * 0.25, h], [0, h * 0.5],
       ].map(p => p.join(',')).join(' ');
-      const svgInner = `<polygon points="${points}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="1" />`;
+      const svgInner = `<polygon points="${points}" fill="none" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="1" />`;
       backgroundImage = svgDataUri(svgInner, w, h);
       backgroundSize = `${w}px ${h}px`;
       break;
@@ -195,7 +222,7 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
     case 'zigzag': {
       const h = sz;
       const w = sz;
-      const svgInner = `<polyline points="0,${h} ${w / 4},0 ${w / 2},${h} ${w * 3 / 4},0 ${w},${h}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="1.5" />`;
+      const svgInner = `<polyline points="0,${h} ${w / 4},0 ${w / 2},${h} ${w * 3 / 4},0 ${w},${h}" fill="none" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="1.5" />`;
       backgroundImage = svgDataUri(svgInner, w, h);
       backgroundSize = `${w}px ${h}px`;
       break;
@@ -204,7 +231,7 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
     case 'chevrons': {
       const w = sz;
       const h = sz;
-      const svgInner = `<polyline points="0,${h * 0.75} ${w / 2},${h * 0.25} ${w},${h * 0.75}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="1.5" />`;
+      const svgInner = `<polyline points="0,${h * 0.75} ${w / 2},${h * 0.25} ${w},${h * 0.75}" fill="none" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="1.5" />`;
       backgroundImage = svgDataUri(svgInner, w, h);
       backgroundSize = `${w}px ${h}px`;
       break;
@@ -213,7 +240,7 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
     case 'herringbone': {
       const w = sz;
       const h = sz;
-      const svgInner = `<path d="M0,${h / 2} L${w / 2},0 L${w},${h / 2} M0,${h} L${w / 2},${h / 2} L${w},${h}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="1" />`;
+      const svgInner = `<path d="M0,${h / 2} L${w / 2},0 L${w},${h / 2} M0,${h} L${w / 2},${h / 2} L${w},${h}" fill="none" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="1" />`;
       backgroundImage = svgDataUri(svgInner, w, h);
       backgroundSize = `${w}px ${h}px`;
       break;
@@ -223,7 +250,7 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
     case 'waves': {
       const w = sz * 2;
       const h = sz;
-      const svgInner = `<path d="M0,${h / 2} Q${w / 4},0 ${w / 2},${h / 2} Q${w * 3 / 4},${h} ${w},${h / 2}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="1.5" />`;
+      const svgInner = `<path d="M0,${h / 2} Q${w / 4},0 ${w / 2},${h / 2} Q${w * 3 / 4},${h} ${w},${h / 2}" fill="none" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="1.5" />`;
       backgroundImage = svgDataUri(svgInner, w, h);
       backgroundSize = `${w}px ${h}px`;
       break;
@@ -232,7 +259,7 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
     case 'wavy-lines': {
       const w = sz * 2;
       const h = sz;
-      const svgInner = `<path d="M0,${h * 0.3} Q${w / 4},0 ${w / 2},${h * 0.3} Q${w * 3 / 4},${h * 0.6} ${w},${h * 0.3}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="1" /><path d="M0,${h * 0.7} Q${w / 4},${h * 0.4} ${w / 2},${h * 0.7} Q${w * 3 / 4},${h} ${w},${h * 0.7}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="1" />`;
+      const svgInner = `<path d="M0,${h * 0.3} Q${w / 4},0 ${w / 2},${h * 0.3} Q${w * 3 / 4},${h * 0.6} ${w},${h * 0.3}" fill="none" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="1" /><path d="M0,${h * 0.7} Q${w / 4},${h * 0.4} ${w / 2},${h * 0.7} Q${w * 3 / 4},${h} ${w},${h * 0.7}" fill="none" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="1" />`;
       backgroundImage = svgDataUri(svgInner, w, h);
       backgroundSize = `${w}px ${h}px`;
       break;
@@ -241,7 +268,7 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
     case 'scales': {
       const w = sz;
       const h = sz;
-      const svgInner = `<path d="M0,${h} A${w / 2},${h / 2} 0 0,1 ${w / 2},${h / 2} A${w / 2},${h / 2} 0 0,1 ${w},${h}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="1" /><path d="M${-w / 2},${h / 2} A${w / 2},${h / 2} 0 0,1 0,0" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="1" /><path d="M${w},0 A${w / 2},${h / 2} 0 0,1 ${w * 1.5},${h / 2}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="1" />`;
+      const svgInner = `<path d="M0,${h} A${w / 2},${h / 2} 0 0,1 ${w / 2},${h / 2} A${w / 2},${h / 2} 0 0,1 ${w},${h}" fill="none" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="1" /><path d="M${-w / 2},${h / 2} A${w / 2},${h / 2} 0 0,1 0,0" fill="none" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="1" /><path d="M${w},0 A${w / 2},${h / 2} 0 0,1 ${w * 1.5},${h / 2}" fill="none" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="1" />`;
       backgroundImage = svgDataUri(svgInner, w, h);
       backgroundSize = `${w}px ${h}px`;
       break;
@@ -249,14 +276,14 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
 
     case 'circles': {
       const r = sz * 0.35;
-      const svgInner = `<circle cx="${sz / 2}" cy="${sz / 2}" r="${r}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="1" />`;
+      const svgInner = `<circle cx="${sz / 2}" cy="${sz / 2}" r="${r}" fill="none" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="1" />`;
       backgroundImage = svgDataUri(svgInner, sz, sz);
       backgroundSize = `${sz}px ${sz}px`;
       break;
     }
 
     case 'concentric-circles': {
-      const svgInner = `<circle cx="${sz / 2}" cy="${sz / 2}" r="${sz * 0.4}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="1" /><circle cx="${sz / 2}" cy="${sz / 2}" r="${sz * 0.2}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="1" />`;
+      const svgInner = `<circle cx="${sz / 2}" cy="${sz / 2}" r="${sz * 0.4}" fill="none" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="1" /><circle cx="${sz / 2}" cy="${sz / 2}" r="${sz * 0.2}" fill="none" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="1" />`;
       backgroundImage = svgDataUri(svgInner, sz, sz);
       backgroundSize = `${sz}px ${sz}px`;
       break;
@@ -276,8 +303,10 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
     }
 
     case 'graph-paper': {
-      backgroundImage = `linear-gradient(${c} ${lw}px, transparent ${lw}px), linear-gradient(90deg, ${c} ${lw}px, transparent ${lw}px)`;
-      backgroundSize = `${sz}px ${sz}px`;
+      // Griglia = 2 set di righe perpendicolari. repeating-linear-gradient + rot
+      // (così la rotazione funziona) e background-size:auto (continuità a ogni angolo).
+      backgroundImage = `repeating-linear-gradient(${0 + rot}deg, ${c} 0px, ${c} ${lw}px, transparent ${lw}px, transparent ${sz}px), repeating-linear-gradient(${90 + rot}deg, ${c} 0px, ${c} ${lw}px, transparent ${lw}px, transparent ${sz}px)`;
+      backgroundSize = 'auto';
       break;
     }
 
@@ -302,7 +331,7 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
         for (let y = 0; y < sz; y += step) {
           const o = (Math.sin(x * 12.9898 + y * 78.233) * 43758.5453) % 1;
           const a = Math.abs(o) * opacity;
-          rects += `<rect x="${x}" y="${y}" width="${step}" height="${step}" fill="${color}" fill-opacity="${a.toFixed(2)}" />`;
+          rects += `<rect x="${x}" y="${y}" width="${step}" height="${step}" fill="${svgFill}" fill-opacity="${a.toFixed(2)}" />`;
         }
       }
       backgroundImage = svgDataUri(rects, sz, sz);
@@ -315,7 +344,7 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
       const h = sz;
       const halfW = w / 2;
       const halfH = h / 2;
-      const svgInner = `<rect x="0" y="0" width="${w}" height="${h}" fill="none" /><line x1="0" y1="${halfH}" x2="${w}" y2="${halfH}" stroke="${color}" stroke-opacity="${opacity}" stroke-width="1" /><line x1="0" y1="0" x2="0" y2="${h}" stroke="${color}" stroke-opacity="${opacity}" stroke-width="1" /><line x1="${halfW}" y1="${halfH}" x2="${halfW}" y2="${h}" stroke="${color}" stroke-opacity="${opacity}" stroke-width="1" /><line x1="${w}" y1="0" x2="${w}" y2="${halfH}" stroke="${color}" stroke-opacity="${opacity}" stroke-width="1" />`;
+      const svgInner = `<rect x="0" y="0" width="${w}" height="${h}" fill="none" /><line x1="0" y1="${halfH}" x2="${w}" y2="${halfH}" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="1" /><line x1="0" y1="0" x2="0" y2="${h}" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="1" /><line x1="${halfW}" y1="${halfH}" x2="${halfW}" y2="${h}" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="1" /><line x1="${w}" y1="0" x2="${w}" y2="${halfH}" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="1" />`;
       backgroundImage = svgDataUri(svgInner, w, h);
       backgroundSize = `${w}px ${h}px`;
       break;
@@ -324,7 +353,7 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
     case 'wood-grain': {
       const w = sz * 3;
       const h = sz;
-      const svgInner = `<path d="M0,${h * 0.2} Q${w * 0.25},${h * 0.15} ${w * 0.5},${h * 0.22} Q${w * 0.75},${h * 0.28} ${w},${h * 0.2}" fill="none" stroke="${color}" stroke-opacity="${opacity * 0.6}" stroke-width="0.5" /><path d="M0,${h * 0.45} Q${w * 0.3},${h * 0.38} ${w * 0.5},${h * 0.46} Q${w * 0.7},${h * 0.52} ${w},${h * 0.44}" fill="none" stroke="${color}" stroke-opacity="${opacity * 0.8}" stroke-width="0.7" /><path d="M0,${h * 0.7} Q${w * 0.2},${h * 0.65} ${w * 0.5},${h * 0.72} Q${w * 0.8},${h * 0.78} ${w},${h * 0.7}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="0.5" /><path d="M0,${h * 0.9} Q${w * 0.35},${h * 0.86} ${w * 0.5},${h * 0.91} Q${w * 0.65},${h * 0.96} ${w},${h * 0.9}" fill="none" stroke="${color}" stroke-opacity="${opacity * 0.5}" stroke-width="0.4" />`;
+      const svgInner = `<path d="M0,${h * 0.2} Q${w * 0.25},${h * 0.15} ${w * 0.5},${h * 0.22} Q${w * 0.75},${h * 0.28} ${w},${h * 0.2}" fill="none" stroke="${svgFill}" stroke-opacity="${opacity * 0.6}" stroke-width="0.5" /><path d="M0,${h * 0.45} Q${w * 0.3},${h * 0.38} ${w * 0.5},${h * 0.46} Q${w * 0.7},${h * 0.52} ${w},${h * 0.44}" fill="none" stroke="${svgFill}" stroke-opacity="${opacity * 0.8}" stroke-width="0.7" /><path d="M0,${h * 0.7} Q${w * 0.2},${h * 0.65} ${w * 0.5},${h * 0.72} Q${w * 0.8},${h * 0.78} ${w},${h * 0.7}" fill="none" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="0.5" /><path d="M0,${h * 0.9} Q${w * 0.35},${h * 0.86} ${w * 0.5},${h * 0.91} Q${w * 0.65},${h * 0.96} ${w},${h * 0.9}" fill="none" stroke="${svgFill}" stroke-opacity="${opacity * 0.5}" stroke-width="0.4" />`;
       backgroundImage = svgDataUri(svgInner, w, h);
       backgroundSize = `${w}px ${h}px`;
       break;
@@ -356,7 +385,7 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
         points += `${cx + outerR * Math.cos(outerAngle)},${cy + outerR * Math.sin(outerAngle)} `;
         points += `${cx + innerR * Math.cos(innerAngle)},${cy + innerR * Math.sin(innerAngle)} `;
       }
-      const svgInner = `<polygon points="${points.trim()}" fill="${color}" fill-opacity="${opacity}" />`;
+      const svgInner = `<polygon points="${points.trim()}" fill="${svgFill}" fill-opacity="${svgFillOp}" />`;
       backgroundImage = svgDataUri(svgInner, sz, sz);
       backgroundSize = `${sz}px ${sz}px`;
       break;
@@ -368,7 +397,7 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
       const arm = sz * 0.3;
       const mid = sz / 2;
       const t = Math.max(1, sz * 0.08);
-      const svgInner = `<line x1="${mid}" y1="${mid - arm}" x2="${mid}" y2="${mid + arm}" stroke="${color}" stroke-opacity="${opacity}" stroke-width="${t}" /><line x1="${mid - arm}" y1="${mid}" x2="${mid + arm}" y2="${mid}" stroke="${color}" stroke-opacity="${opacity}" stroke-width="${t}" />`;
+      const svgInner = `<line x1="${mid}" y1="${mid - arm}" x2="${mid}" y2="${mid + arm}" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="${t}" /><line x1="${mid - arm}" y1="${mid}" x2="${mid + arm}" y2="${mid}" stroke="${svgFill}" stroke-opacity="${svgFillOp}" stroke-width="${t}" />`;
       backgroundImage = svgDataUri(svgInner, w, h);
       backgroundSize = `${w}px ${h}px`;
       break;
@@ -380,7 +409,7 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
       const arm = sz * 0.25;
       const mid = sz / 2;
       const t = Math.max(2, sz * 0.12);
-      const svgInner = `<rect x="${mid - t / 2}" y="${mid - arm}" width="${t}" height="${arm * 2}" rx="0.5" fill="${color}" fill-opacity="${opacity}" /><rect x="${mid - arm}" y="${mid - t / 2}" width="${arm * 2}" height="${t}" rx="0.5" fill="${color}" fill-opacity="${opacity}" />`;
+      const svgInner = `<rect x="${mid - t / 2}" y="${mid - arm}" width="${t}" height="${arm * 2}" rx="0.5" fill="${svgFill}" fill-opacity="${svgFillOp}" /><rect x="${mid - arm}" y="${mid - t / 2}" width="${arm * 2}" height="${t}" rx="0.5" fill="${svgFill}" fill-opacity="${svgFillOp}" />`;
       backgroundImage = svgDataUri(svgInner, w, h);
       backgroundSize = `${w}px ${h}px`;
       break;
@@ -390,7 +419,7 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
       const w = sz;
       const h = sz;
       const scale = sz / 24;
-      const svgInner = `<g transform="translate(${w / 2 - 12 * scale}, ${h / 2 - 10 * scale}) scale(${scale})"><path d="M12,21.35 L10.55,20.03 C5.4,15.36 2,12.28 2,8.5 C2,5.42 4.42,3 7.5,3 C9.24,3 10.91,3.81 12,5.09 C13.09,3.81 14.76,3 16.5,3 C19.58,3 22,5.42 22,8.5 C22,12.28 18.6,15.36 13.45,20.04 L12,21.35Z" fill="${color}" fill-opacity="${opacity}" /></g>`;
+      const svgInner = `<g transform="translate(${w / 2 - 12 * scale}, ${h / 2 - 10 * scale}) scale(${scale})"><path d="M12,21.35 L10.55,20.03 C5.4,15.36 2,12.28 2,8.5 C2,5.42 4.42,3 7.5,3 C9.24,3 10.91,3.81 12,5.09 C13.09,3.81 14.76,3 16.5,3 C19.58,3 22,5.42 22,8.5 C22,12.28 18.6,15.36 13.45,20.04 L12,21.35Z" fill="${svgFill}" fill-opacity="${svgFillOp}" /></g>`;
       backgroundImage = svgDataUri(svgInner, w, h);
       backgroundSize = `${w}px ${h}px`;
       break;
@@ -401,6 +430,24 @@ export function getPatternCSS(type, color, bgColor, size, opacity, thickness, ro
       backgroundImage = `radial-gradient(circle, ${c} 1px, transparent 1px)`;
       backgroundSize = `${sz}px ${sz}px`;
       break;
+  }
+
+  // Pattern SVG con colore-token: l'SVG è una sagoma NERA → usalo come MASCHERA e
+  // dipingi con il token (via color-mix per l'opacità) su background-color. Così il
+  // browser risolve var(--olo-color-*) nel contesto dell'elemento (palette + dark-mode).
+  if (isToken && /^url\("data:image\/svg/i.test(String(backgroundImage))) {
+    return {
+      backgroundColor: c,
+      backgroundImage: 'none',
+      maskImage: backgroundImage,
+      WebkitMaskImage: backgroundImage,
+      maskSize: backgroundSize,
+      WebkitMaskSize: backgroundSize,
+      maskRepeat: 'repeat',
+      WebkitMaskRepeat: 'repeat',
+      maskPosition: '0 0',
+      WebkitMaskPosition: '0 0',
+    };
   }
 
   return {

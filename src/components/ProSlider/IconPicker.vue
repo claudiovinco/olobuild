@@ -3,19 +3,19 @@
     <div class="mps-iconpicker-backdrop" @click.self="$emit('close')">
       <div class="mps-iconpicker">
         <div class="mps-iconpicker-header">
-          <span class="mps-iconpicker-title">Seleziona icona ({{ filtered.length }}<span v-if="!search.trim() && totalCount() > filtered.length" class="mps-iconpicker-total"> / {{ totalCount() }}</span>)</span>
+          <span class="mps-iconpicker-title">{{ t('Seleziona icona') }} ({{ filtered.length }}<span v-if="!search.trim() && totalCount() > filtered.length" class="mps-iconpicker-total"> / {{ totalCount() }}</span>)</span>
           <button @click="$emit('close')" class="mps-iconpicker-close">&times;</button>
         </div>
         <!-- Tabs -->
         <div class="mps-iconpicker-tabs">
-          <button :class="['mps-tab', tab === 'builtin' && 'mps-tab--active']" @click="tab = 'builtin'">Libreria</button>
-          <button :class="['mps-tab', tab === 'custom' && 'mps-tab--active']" @click="tab = 'custom'; loadCustomIcons()">Le mie icone</button>
+          <button :class="['mps-tab', tab === 'builtin' && 'mps-tab--active']" @click="tab = 'builtin'">{{ t('Libreria') }}</button>
+          <button :class="['mps-tab', tab === 'custom' && 'mps-tab--active']" @click="tab = 'custom'; loadCustomIcons()">{{ t('Le mie icone') }}</button>
         </div>
         <div class="mps-iconpicker-search">
           <input
             v-model="search"
             class="mps-iconpicker-input"
-            placeholder="Cerca icona..."
+            :placeholder="t('Cerca icona...')"
             ref="searchInput"
           />
         </div>
@@ -23,10 +23,10 @@
         <div v-if="tab === 'custom'" class="mps-iconpicker-upload">
           <label class="mps-upload-btn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Carica SVG
+            {{ t('Carica SVG') }}
             <input type="file" accept=".svg" multiple @change="uploadIcons" style="display:none" />
           </label>
-          <span v-if="uploading" class="mps-upload-status">Caricamento...</span>
+          <span v-if="uploading" class="mps-upload-status">{{ t('Caricamento...') }}</span>
         </div>
         <div class="mps-iconpicker-grid" ref="gridEl" @scroll.passive="onScroll">
           <button
@@ -40,7 +40,7 @@
             <span class="mps-iconpicker-name">{{ name }}</span>
           </button>
           <div v-if="!filtered.length" class="mps-iconpicker-empty">
-            {{ tab === 'custom' ? 'Nessuna icona custom. Carica file SVG.' : 'Nessuna icona trovata' }}
+            {{ tab === 'custom' ? t('Nessuna icona custom. Carica file SVG.') : t('Nessuna icona trovata') }}
           </div>
           <!-- Caricamento progressivo allo scroll (sentinel informativo) -->
           <div v-if="hasMore" class="mps-iconpicker-loading">+{{ totalCount() - filtered.length }}</div>
@@ -53,6 +53,7 @@
 <script setup>
 import { ref, computed, onMounted, nextTick } from 'vue';
 import iconsSvg from './iconsLibrary.js';
+import { t } from '@/i18n';
 
 defineEmits(['select', 'close']);
 

@@ -230,7 +230,7 @@ const anyKey = computed(() => !!(form.value.anthropic_key || form.value.openai_k
 const systemPromptPlaceholder = t('Es. Sei l’assistente di scrittura per un hotel boutique sul lago di Como. Tono caldo, professionale.');
 
 const usageStats = ref([
-  { l: 'Chiamate',       v: '—', t: 'Connetti AI per vedere statistiche' },
+  { l: 'Chiamate',       v: '—', t: t('Connetti AI per vedere statistiche') },
   { l: 'Token usati',    v: '—', t: '—' },
   { l: 'Spesa stimata',  v: '€ —', t: '—' },
   { l: 'Latenza media',  v: '—', t: '—' },

@@ -323,7 +323,10 @@ export function useIframeBridge(iframeRef) {
         break;
 
       case 'olo:tile-click':
-        if (d.tileId) builderStore.selectTile(d.tileId);
+        if (d.tileId) {
+          if (d.additive) builderStore.toggleTileSelection(d.tileId);
+          else builderStore.selectTile(d.tileId);
+        }
         break;
 
       case 'olo:canvas-click':
@@ -482,9 +485,12 @@ export function useIframeBridge(iframeRef) {
 
   // ── Watchers ──
 
-  watch(() => builderStore.selectedTileId, (newId) => {
-    if (newId) {
-      postToIframe('olo:select', { tileId: newId });
+  // Sincronizza l'INTERO set di selezione verso l'iframe (multi-selezione ctrl-click).
+  // selectedTileIds cambia insieme a selectedTileId, quindi questo copre anche il singolo.
+  watch(() => builderStore.selectedTileIds.join('|'), () => {
+    const ids = builderStore.selectedTileIds.slice();
+    if (ids.length) {
+      postToIframe('olo:select-set', { ids });
     } else {
       postToIframe('olo:deselect');
     }

@@ -127,89 +127,82 @@
           <button v-if="i > 0 && i < keyframes.length - 1" @click.stop="removeKf(i)" class="bp-kf-del" :title="t('Rimuovi')">&times;</button>
         </div>
       </div>
-      <button @click="addKf" class="bp-add-btn">+ Aggiungi punto</button>
+      <button @click="addKf" class="bp-add-btn">{{ t('+ Aggiungi punto') }}</button>
     </div>
 
     <!-- Selected keyframe detail -->
     <div v-if="selectedKf != null && keyframes[selectedKf]" class="bp-detail-v2">
-      <div class="bp-detail-title">Keyframe {{ selectedKf + 1 }} — {{ keyframes[selectedKf].pos }}% dello scroll</div>
+      <div class="bp-detail-title">{{ t('Keyframe') }} {{ selectedKf + 1 }} — {{ keyframes[selectedKf].pos }}% {{ t('dello scroll') }}</div>
 
       <!-- Posizione scroll -->
       <div class="bp-prop-row">
-        <label class="bp-prop-label">📍 Posizione scroll</label>
+        <label class="bp-prop-label">📍 {{ t('Posizione scroll') }}</label>
         <div class="bp-prop-input">
-          <input type="range" :value="keyframes[selectedKf].pos" @input="updateKf(selectedKf, 'pos', +$event.target.value)" min="0" max="100" step="1" class="bp-range" />
-          <span class="bp-val">{{ keyframes[selectedKf].pos }}%</span>
+          <NumberScrubber theme="dark" class="bp-scrubber" :modelValue="keyframes[selectedKf].pos" :min="0" :max="100" :step="1" :defaultValue="0" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Posizione scroll')" @update:modelValue="updateKf(selectedKf, 'pos', $event)" />
         </div>
       </div>
 
       <!-- Asse X -->
       <div class="bp-prop-row">
-        <label class="bp-prop-label">↔ Asse X</label>
+        <label class="bp-prop-label">↔ {{ t('Asse X') }}</label>
         <div class="bp-prop-input">
-          <input type="range" :value="keyframes[selectedKf].x" @input="updateKf(selectedKf, 'x', +$event.target.value)" :min="-rangeX" :max="rangeX" step="5" class="bp-range" />
-          <span class="bp-val">{{ keyframes[selectedKf].x }}px</span>
+          <NumberScrubber theme="dark" class="bp-scrubber" :modelValue="keyframes[selectedKf].x" :min="-rangeX" :max="rangeX" :step="5" :defaultValue="0" emitAs="number" unit="px" :sliderOnFocus="false" :ariaLabel="t('Asse X')" @update:modelValue="updateKf(selectedKf, 'x', $event)" />
         </div>
       </div>
 
       <!-- Asse Y -->
       <div class="bp-prop-row">
-        <label class="bp-prop-label">↕ Asse Y</label>
+        <label class="bp-prop-label">↕ {{ t('Asse Y') }}</label>
         <div class="bp-prop-input">
-          <input type="range" :value="keyframes[selectedKf].y" @input="updateKf(selectedKf, 'y', +$event.target.value)" :min="-rangeY" :max="rangeY" step="5" class="bp-range" />
-          <span class="bp-val">{{ keyframes[selectedKf].y }}px</span>
+          <NumberScrubber theme="dark" class="bp-scrubber" :modelValue="keyframes[selectedKf].y" :min="-rangeY" :max="rangeY" :step="5" :defaultValue="0" emitAs="number" unit="px" :sliderOnFocus="false" :ariaLabel="t('Asse Y')" @update:modelValue="updateKf(selectedKf, 'y', $event)" />
         </div>
       </div>
 
       <!-- Scala -->
       <div class="bp-prop-row">
-        <label class="bp-prop-label">🔍 Scala</label>
+        <label class="bp-prop-label">🔍 {{ t('Scala') }}</label>
         <div class="bp-prop-input">
-          <input type="range" :value="(keyframes[selectedKf].scale ?? 1) * 100" @input="updateKf(selectedKf, 'scale', +$event.target.value / 100)" min="10" max="300" step="5" class="bp-range" />
-          <span class="bp-val">{{ Math.round((keyframes[selectedKf].scale ?? 1) * 100) }}%</span>
+          <NumberScrubber theme="dark" class="bp-scrubber" :modelValue="(keyframes[selectedKf].scale ?? 1) * 100" :min="10" :max="300" :step="5" :defaultValue="100" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Scala')" @update:modelValue="updateKf(selectedKf, 'scale', $event / 100)" />
         </div>
       </div>
 
       <!-- Rotazione -->
       <div class="bp-prop-row">
-        <label class="bp-prop-label">🔄 Rotazione</label>
+        <label class="bp-prop-label">🔄 {{ t('Rotazione') }}</label>
         <div class="bp-prop-input">
-          <input type="range" :value="keyframes[selectedKf].rotate ?? 0" @input="updateKf(selectedKf, 'rotate', +$event.target.value)" min="-360" max="360" step="5" class="bp-range" />
-          <span class="bp-val">{{ keyframes[selectedKf].rotate ?? 0 }}°</span>
+          <NumberScrubber theme="dark" class="bp-scrubber" :modelValue="keyframes[selectedKf].rotate ?? 0" :min="-360" :max="360" :step="5" :defaultValue="0" emitAs="number" unit="°" :sliderOnFocus="false" :ariaLabel="t('Rotazione')" @update:modelValue="updateKf(selectedKf, 'rotate', $event)" />
         </div>
       </div>
 
       <!-- Opacità -->
       <div class="bp-prop-row">
-        <label class="bp-prop-label">👁 Opacità</label>
+        <label class="bp-prop-label">👁 {{ t('Opacità') }}</label>
         <div class="bp-prop-input">
-          <input type="range" :value="(keyframes[selectedKf].opacity ?? 1) * 100" @input="updateKf(selectedKf, 'opacity', +$event.target.value / 100)" min="0" max="100" step="5" class="bp-range" />
-          <span class="bp-val">{{ Math.round((keyframes[selectedKf].opacity ?? 1) * 100) }}%</span>
+          <NumberScrubber theme="dark" class="bp-scrubber" :modelValue="(keyframes[selectedKf].opacity ?? 1) * 100" :min="0" :max="100" :step="5" :defaultValue="100" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Opacità')" @update:modelValue="updateKf(selectedKf, 'opacity', $event / 100)" />
         </div>
       </div>
 
       <!-- Blur -->
       <div class="bp-prop-row">
-        <label class="bp-prop-label">💨 Sfocatura</label>
+        <label class="bp-prop-label">💨 {{ t('Sfocatura') }}</label>
         <div class="bp-prop-input">
-          <input type="range" :value="keyframes[selectedKf].blur ?? 0" @input="updateKf(selectedKf, 'blur', +$event.target.value)" min="0" max="20" step="1" class="bp-range" />
-          <span class="bp-val">{{ keyframes[selectedKf].blur ?? 0 }}px</span>
+          <NumberScrubber theme="dark" class="bp-scrubber" :modelValue="keyframes[selectedKf].blur ?? 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" unit="px" :sliderOnFocus="false" :ariaLabel="t('Sfocatura')" @update:modelValue="updateKf(selectedKf, 'blur', $event)" />
         </div>
       </div>
     </div>
 
     <!-- Target & z-index -->
     <div class="bp-detail-v2">
-      <div class="bp-detail-title">Applica a</div>
+      <div class="bp-detail-title">{{ t('Applica a') }}</div>
       <div class="bp-range-btns" style="margin-bottom: 8px">
-        <button @click="setBezierTarget('element')" class="bp-range-opt" :class="{ 'bp-range-opt-active': bezierTarget === 'element' }">Elemento</button>
-        <button @click="setBezierTarget('background')" class="bp-range-opt" :class="{ 'bp-range-opt-active': bezierTarget === 'background' }">Sfondo</button>
+        <button @click="setBezierTarget('element')" class="bp-range-opt" :class="{ 'bp-range-opt-active': bezierTarget === 'element' }">{{ t('Elemento') }}</button>
+        <button @click="setBezierTarget('background')" class="bp-range-opt" :class="{ 'bp-range-opt-active': bezierTarget === 'background' }">{{ t('Sfondo') }}</button>
       </div>
-      <p v-if="bezierTarget === 'background'" class="bp-range-desc">Il percorso anima l'immagine di sfondo della sezione/riga — l'elemento resta fermo</p>
+      <p v-if="bezierTarget === 'background'" class="bp-range-desc">{{ t("Il percorso anima l'immagine di sfondo della sezione/riga — l'elemento resta fermo") }}</p>
       <div class="bp-zindex-row">
         <div class="bp-zindex-field">
-          <span class="bp-prop-label">Z-index</span>
-          <input type="number" :value="zIndex" @change="setZIndex(+$event.target.value)" min="-1" max="9999" step="1" class="bp-num-input" placeholder="auto" />
+          <span class="bp-prop-label">{{ t('Z-index') }}</span>
+          <NumberScrubber theme="dark" :modelValue="zIndex" :min="-1" :max="9999" :step="1" :defaultValue="10" emitAs="number" :ariaLabel="t('Z-index')" @update:modelValue="setZIndex($event)" />
         </div>
         <label class="bp-mobile-check">
           <input type="checkbox" :checked="mobileEnabled" @change="onMobileToggle" class="bp-mobile-cb" />
@@ -220,7 +213,7 @@
 
     <!-- Scroll range options -->
     <div class="bp-detail-v2">
-      <div class="bp-detail-title">Intervallo scroll</div>
+      <div class="bp-detail-title">{{ t('Intervallo scroll') }}</div>
       <div class="bp-range-btns">
         <button v-for="opt in scrollRangeOptions" :key="opt.value"
           @click="setScrollRange(opt.value)"
@@ -230,17 +223,15 @@
       <p class="bp-range-desc">{{ scrollRangeDesc }}</p>
       <template v-if="scrollRange === 'custom'">
         <div class="bp-prop-row">
-          <label class="bp-prop-label">Inizio pagina</label>
+          <label class="bp-prop-label">{{ t('Inizio pagina') }}</label>
           <div class="bp-prop-input">
-            <input type="range" :value="scrollStart" @input="setScrollOpt('scrollStart', +$event.target.value)" min="0" max="100" step="1" class="bp-range" />
-            <span class="bp-val">{{ scrollStart }}%</span>
+            <NumberScrubber theme="dark" class="bp-scrubber" :modelValue="scrollStart" :min="0" :max="100" :step="1" :defaultValue="0" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Inizio pagina')" @update:modelValue="setScrollOpt('scrollStart', $event)" />
           </div>
         </div>
         <div class="bp-prop-row">
-          <label class="bp-prop-label">Fine pagina</label>
+          <label class="bp-prop-label">{{ t('Fine pagina') }}</label>
           <div class="bp-prop-input">
-            <input type="range" :value="scrollEnd" @input="setScrollOpt('scrollEnd', +$event.target.value)" min="0" max="100" step="1" class="bp-range" />
-            <span class="bp-val">{{ scrollEnd }}%</span>
+            <NumberScrubber theme="dark" class="bp-scrubber" :modelValue="scrollEnd" :min="0" :max="100" :step="1" :defaultValue="100" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Fine pagina')" @update:modelValue="setScrollOpt('scrollEnd', $event)" />
           </div>
         </div>
       </template>
@@ -251,6 +242,7 @@
 <script setup>
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '@/i18n';
+import NumberScrubber from './fields/NumberScrubber.vue';
 
 const props = defineProps({
   modelValue: { type: Object, default: () => ({}) },
@@ -356,14 +348,14 @@ const scrollEnd = ref(100);
 
 const scrollRangeOptions = [
   { value: 'viewport', label: 'Viewport' },
-  { value: 'page', label: 'Intera pagina' },
-  { value: 'custom', label: 'Personalizzato' },
+  { value: 'page', label: t('Intera pagina') },
+  { value: 'custom', label: t('Personalizzato') },
 ];
 
 const scrollRangeDesc = computed(() => {
-  if (scrollRange.value === 'page') return 'Animazione da inizio a fine pagina — ideale per elementi che seguono lo scroll';
-  if (scrollRange.value === 'custom') return 'Definisci inizio e fine come % dello scroll totale della pagina';
-  return 'Animazione mentre il tile attraversa il viewport (comportamento standard)';
+  if (scrollRange.value === 'page') return t('Animazione da inizio a fine pagina — ideale per elementi che seguono lo scroll');
+  if (scrollRange.value === 'custom') return t('Definisci inizio e fine come % dello scroll totale della pagina');
+  return t('Animazione mentre il tile attraversa il viewport (comportamento standard)');
 });
 
 function setScrollRange(val) {
@@ -566,80 +558,80 @@ function presetPath(kf) {
 
 const presets = [
   // --- Movimenti lineari ---
-  { label: 'Lineare su', keyframes: [
+  { label: t('Lineare su'), keyframes: [
     { pos: 0, x: 0, y: 0, scale: 1, rotate: 0, opacity: 1, cpOutX: 0, cpOutY: -33 },
     { pos: 100, x: 0, y: -100, scale: 1, rotate: 0, opacity: 1, cpInX: 0, cpInY: -66 },
   ]},
-  { label: 'Lineare giù', keyframes: [
+  { label: t('Lineare giù'), keyframes: [
     { pos: 0, x: 0, y: 0, scale: 1, rotate: 0, opacity: 1, cpOutX: 0, cpOutY: 33 },
     { pos: 100, x: 0, y: 100, scale: 1, rotate: 0, opacity: 1, cpInX: 0, cpInY: 66 },
   ]},
-  { label: 'Da sinistra', keyframes: [
+  { label: t('Da sinistra'), keyframes: [
     { pos: 0, x: -150, y: 0, scale: 1, rotate: 0, opacity: 1, cpOutX: -100, cpOutY: 0 },
     { pos: 100, x: 0, y: 0, scale: 1, rotate: 0, opacity: 1, cpInX: -50, cpInY: 0 },
   ]},
-  { label: 'Da destra', keyframes: [
+  { label: t('Da destra'), keyframes: [
     { pos: 0, x: 150, y: 0, scale: 1, rotate: 0, opacity: 1, cpOutX: 100, cpOutY: 0 },
     { pos: 100, x: 0, y: 0, scale: 1, rotate: 0, opacity: 1, cpInX: 50, cpInY: 0 },
   ]},
-  { label: 'Diagonale ↗', keyframes: [
+  { label: t('Diagonale ↗'), keyframes: [
     { pos: 0, x: -120, y: 80, scale: 1, rotate: 0, opacity: 1, cpOutX: -40, cpOutY: 27 },
     { pos: 100, x: 120, y: -80, scale: 1, rotate: 0, opacity: 1, cpInX: 40, cpInY: -27 },
   ]},
   // --- Curve ---
-  { label: 'Curva S', keyframes: [
+  { label: t('Curva S'), keyframes: [
     { pos: 0, x: -100, y: 100, scale: 1, rotate: 0, opacity: 1, cpOutX: 100, cpOutY: 100 },
     { pos: 100, x: 100, y: -100, scale: 1, rotate: 0, opacity: 1, cpInX: -100, cpInY: -100 },
   ]},
-  { label: 'Arco su', keyframes: [
+  { label: t('Arco su'), keyframes: [
     { pos: 0, x: -120, y: 0, scale: 1, rotate: 0, opacity: 1, cpOutX: -120, cpOutY: -120 },
     { pos: 100, x: 120, y: 0, scale: 1, rotate: 0, opacity: 1, cpInX: 120, cpInY: -120 },
   ]},
-  { label: 'Arco giù', keyframes: [
+  { label: t('Arco giù'), keyframes: [
     { pos: 0, x: -120, y: 0, scale: 1, rotate: 0, opacity: 1, cpOutX: -120, cpOutY: 120 },
     { pos: 100, x: 120, y: 0, scale: 1, rotate: 0, opacity: 1, cpInX: 120, cpInY: 120 },
   ]},
-  { label: 'Parabola', keyframes: [
+  { label: t('Parabola'), keyframes: [
     { pos: 0, x: -100, y: 80, scale: 1, rotate: 0, opacity: 1, cpOutX: -50, cpOutY: -80 },
     { pos: 100, x: 100, y: 80, scale: 1, rotate: 0, opacity: 1, cpInX: 50, cpInY: -80 },
   ]},
   // --- Oscillanti ---
-  { label: 'Altalena', keyframes: [
+  { label: t('Altalena'), keyframes: [
     { pos: 0, x: -80, y: 0, scale: 1, rotate: -15, opacity: 1, cpOutX: -80, cpOutY: -60 },
     { pos: 50, x: 80, y: 0, scale: 1, rotate: 15, opacity: 1, cpInX: 80, cpInY: -60, cpOutX: 80, cpOutY: 60 },
     { pos: 100, x: -80, y: 0, scale: 1, rotate: -15, opacity: 1, cpInX: -80, cpInY: 60 },
   ]},
-  { label: 'Zigzag', keyframes: [
+  { label: t('Zigzag'), keyframes: [
     { pos: 0, x: -80, y: 80, scale: 1, rotate: 0, opacity: 1, cpOutX: -80, cpOutY: 80 },
     { pos: 33, x: 80, y: 20, scale: 1, rotate: 0, opacity: 1, cpInX: 80, cpInY: 20, cpOutX: 80, cpOutY: 20 },
     { pos: 66, x: -80, y: -40, scale: 1, rotate: 0, opacity: 1, cpInX: -80, cpInY: -40, cpOutX: -80, cpOutY: -40 },
     { pos: 100, x: 80, y: -80, scale: 1, rotate: 0, opacity: 1, cpInX: 80, cpInY: -80 },
   ]},
-  { label: 'Onda', keyframes: [
+  { label: t('Onda'), keyframes: [
     { pos: 0, x: -100, y: 0, scale: 1, rotate: 0, opacity: 1, cpOutX: -50, cpOutY: -80 },
     { pos: 50, x: 0, y: 0, scale: 1, rotate: 0, opacity: 1, cpInX: -50, cpInY: 80, cpOutX: 50, cpOutY: 80 },
     { pos: 100, x: 100, y: 0, scale: 1, rotate: 0, opacity: 1, cpInX: 50, cpInY: -80 },
   ]},
-  { label: 'Serpentina', keyframes: [
+  { label: t('Serpentina'), keyframes: [
     { pos: 0, x: -60, y: 80, scale: 1, rotate: 0, opacity: 1, cpOutX: 60, cpOutY: 80 },
     { pos: 33, x: 60, y: 30, scale: 1, rotate: 0, opacity: 1, cpInX: -60, cpInY: 30, cpOutX: -60, cpOutY: 30 },
     { pos: 66, x: -60, y: -30, scale: 1, rotate: 0, opacity: 1, cpInX: 60, cpInY: -30, cpOutX: 60, cpOutY: -30 },
     { pos: 100, x: 60, y: -80, scale: 1, rotate: 0, opacity: 1, cpInX: -60, cpInY: -80 },
   ]},
   // --- Circolari ---
-  { label: 'Cerchio', keyframes: [
+  { label: t('Cerchio'), keyframes: [
     { pos: 0, x: 0, y: -80, scale: 1, rotate: 0, opacity: 1, cpOutX: 60, cpOutY: -80 },
     { pos: 25, x: 80, y: 0, scale: 1, rotate: 0, opacity: 1, cpInX: 80, cpInY: -60, cpOutX: 80, cpOutY: 60 },
     { pos: 50, x: 0, y: 80, scale: 1, rotate: 0, opacity: 1, cpInX: 60, cpInY: 80, cpOutX: -60, cpOutY: 80 },
     { pos: 75, x: -80, y: 0, scale: 1, rotate: 0, opacity: 1, cpInX: -80, cpInY: 60, cpOutX: -80, cpOutY: -60 },
     { pos: 100, x: 0, y: -80, scale: 1, rotate: 0, opacity: 1, cpInX: -60, cpInY: -80 },
   ]},
-  { label: 'Semicerchio', keyframes: [
+  { label: t('Semicerchio'), keyframes: [
     { pos: 0, x: -80, y: 0, scale: 1, rotate: 0, opacity: 1, cpOutX: -80, cpOutY: -70 },
     { pos: 50, x: 0, y: -80, scale: 1, rotate: 0, opacity: 1, cpInX: -40, cpInY: -80, cpOutX: 40, cpOutY: -80 },
     { pos: 100, x: 80, y: 0, scale: 1, rotate: 0, opacity: 1, cpInX: 80, cpInY: -70 },
   ]},
-  { label: 'Otto', keyframes: [
+  { label: t('Otto'), keyframes: [
     { pos: 0, x: 0, y: 0, scale: 1, rotate: 0, opacity: 1, cpOutX: 70, cpOutY: -70 },
     { pos: 25, x: 60, y: -50, scale: 1, rotate: 0, opacity: 1, cpInX: 60, cpInY: -70, cpOutX: 60, cpOutY: -20 },
     { pos: 50, x: 0, y: 0, scale: 1, rotate: 0, opacity: 1, cpInX: 30, cpInY: 0, cpOutX: -70, cpOutY: 70 },
@@ -655,43 +647,43 @@ const presets = [
     { pos: 0, x: 0, y: 0, scale: 1, rotate: 0, opacity: 1, cpOutX: 0, cpOutY: 0 },
     { pos: 100, x: 0, y: 0, scale: 0.3, rotate: 0, opacity: 0, cpInX: 0, cpInY: 0 },
   ]},
-  { label: 'Spirale', keyframes: [
+  { label: t('Spirale'), keyframes: [
     { pos: 0, x: -80, y: 80, scale: 0.5, rotate: -180, opacity: 0.3, cpOutX: 80, cpOutY: 80 },
     { pos: 50, x: 80, y: 0, scale: 0.8, rotate: 0, opacity: 0.7, cpInX: 80, cpInY: 40, cpOutX: 80, cpOutY: -40 },
     { pos: 100, x: 0, y: -60, scale: 1, rotate: 0, opacity: 1, cpInX: -80, cpInY: -60 },
   ]},
-  { label: 'Rotazione', keyframes: [
+  { label: t('Rotazione'), keyframes: [
     { pos: 0, x: 0, y: 0, scale: 1, rotate: 0, opacity: 1, cpOutX: 0, cpOutY: 0 },
     { pos: 100, x: 0, y: 0, scale: 1, rotate: 360, opacity: 1, cpInX: 0, cpInY: 0 },
   ]},
-  { label: 'Caduta foglia', keyframes: [
+  { label: t('Caduta foglia'), keyframes: [
     { pos: 0, x: 60, y: -80, scale: 0.8, rotate: -30, opacity: 1, cpOutX: -40, cpOutY: -60 },
     { pos: 35, x: -50, y: -20, scale: 0.9, rotate: 20, opacity: 1, cpInX: -80, cpInY: -40, cpOutX: 40, cpOutY: 0 },
     { pos: 70, x: 40, y: 40, scale: 0.95, rotate: -10, opacity: 0.9, cpInX: 80, cpInY: 20, cpOutX: -30, cpOutY: 60 },
     { pos: 100, x: -20, y: 80, scale: 1, rotate: 5, opacity: 0.7, cpInX: -60, cpInY: 80 },
   ]},
-  { label: 'Fiocco neve', keyframes: [
+  { label: t('Fiocco neve'), keyframes: [
     { pos: 0, x: 30, y: -80, scale: 0.7, rotate: 0, opacity: 0.8, cpOutX: -40, cpOutY: -60 },
     { pos: 25, x: -40, y: -30, scale: 0.8, rotate: 45, opacity: 0.9, cpInX: -60, cpInY: -40, cpOutX: 30, cpOutY: -20 },
     { pos: 50, x: 50, y: 10, scale: 0.85, rotate: -30, opacity: 0.85, cpInX: 60, cpInY: 0, cpOutX: -20, cpOutY: 30 },
     { pos: 75, x: -30, y: 50, scale: 0.9, rotate: 60, opacity: 0.8, cpInX: -50, cpInY: 40, cpOutX: 20, cpOutY: 60 },
     { pos: 100, x: 10, y: 80, scale: 1, rotate: 0, opacity: 0.6, cpInX: 30, cpInY: 80 },
   ]},
-  { label: 'Rimbalzo', keyframes: [
+  { label: t('Rimbalzo'), keyframes: [
     { pos: 0, x: -80, y: -60, scale: 1, rotate: 0, opacity: 1, cpOutX: -40, cpOutY: 80 },
     { pos: 30, x: 0, y: 60, scale: 1, rotate: 0, opacity: 1, cpInX: -20, cpInY: 60, cpOutX: 20, cpOutY: 60 },
     { pos: 55, x: 50, y: -20, scale: 1, rotate: 0, opacity: 1, cpInX: 30, cpInY: -40, cpOutX: 60, cpOutY: 40 },
     { pos: 75, x: 70, y: 60, scale: 1, rotate: 0, opacity: 1, cpInX: 65, cpInY: 60, cpOutX: 75, cpOutY: 60 },
     { pos: 100, x: 80, y: 0, scale: 1, rotate: 0, opacity: 1, cpInX: 80, cpInY: -20 },
   ]},
-  { label: 'Pendolo', keyframes: [
+  { label: t('Pendolo'), keyframes: [
     { pos: 0, x: -80, y: -60, scale: 1, rotate: -25, opacity: 1, cpOutX: -80, cpOutY: 40 },
     { pos: 25, x: 0, y: 0, scale: 1, rotate: 0, opacity: 1, cpInX: -40, cpInY: 0, cpOutX: 40, cpOutY: 0 },
     { pos: 50, x: 80, y: -60, scale: 1, rotate: 25, opacity: 1, cpInX: 80, cpInY: 40, cpOutX: 80, cpOutY: 40 },
     { pos: 75, x: 0, y: 0, scale: 1, rotate: 0, opacity: 1, cpInX: 40, cpInY: 0, cpOutX: -40, cpOutY: 0 },
     { pos: 100, x: -80, y: -60, scale: 1, rotate: -25, opacity: 1, cpInX: -80, cpInY: 40 },
   ]},
-  { label: 'Fluttuante', keyframes: [
+  { label: t('Fluttuante'), keyframes: [
     { pos: 0, x: 0, y: 30, scale: 1, rotate: 0, opacity: 1, cpOutX: 40, cpOutY: 30 },
     { pos: 25, x: 30, y: -20, scale: 1.05, rotate: 3, opacity: 1, cpInX: 30, cpInY: 10, cpOutX: 30, cpOutY: -40 },
     { pos: 50, x: 0, y: -40, scale: 1, rotate: 0, opacity: 1, cpInX: 20, cpInY: -40, cpOutX: -20, cpOutY: -40 },
@@ -935,6 +927,7 @@ onBeforeUnmount(() => {
 .bp-prop-label { display: block; font-size: 10px; color: #999; margin-bottom: 2px; }
 .bp-prop-input { display: flex; align-items: center; gap: 8px; }
 .bp-range { flex: 1; height: 4px; accent-color: var(--olo-ui-accent, #e8622a); cursor: pointer; }
+.bp-scrubber { flex: 1; min-width: 0; }
 .bp-val { font-size: 10px; color: #aaa; min-width: 42px; text-align: right; font-variant-numeric: tabular-nums; }
 
 /* Preview animation */

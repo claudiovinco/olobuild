@@ -3,53 +3,64 @@
     <!-- Global background (collapsible) -->
     <div v-if="showGlobalBg" class="mb-mb-2 mb-pb-2 mb-border-b mb-border-gray-700">
       <div class="mb-flex mb-items-center mb-justify-between mb-mb-2">
-        <span class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Sfondo globale</span>
+        <span class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Sfondo globale') }}</span>
         <button @click="showGlobalBg = false" class="mb-text-gray-500 mb-text-xs">&times;</button>
       </div>
       <div class="mb-flex mb-gap-3 mb-flex-wrap mb-items-end">
         <div class="mb-w-32">
-          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Tipo</label>
+          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Tipo') }}</label>
           <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="globalBg.type" :options="OPTS_BG_TYPE" @update:model-value="updateGlobalBg('type', $event)" />
         </div>
         <div v-if="globalBg.type === 'color'" class="mb-w-48">
-          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Colore</label>
+          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Colore') }}</label>
           <FieldColor :modelValue="globalBg.color" @update:modelValue="updateGlobalBg('color', $event)" />
         </div>
         <div v-if="globalBg.type === 'image'" class="mb-flex mb-gap-2 mb-items-end">
           <div>
-            <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Immagine</label>
+            <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Immagine') }}</label>
             <div class="mb-flex mb-gap-1">
               <input :value="globalBg.image" @input="updateGlobalBg('image', $event.target.value)" class="mps-num-input mb-w-48" placeholder="URL" />
-              <button @click="pickGlobalBgImage" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-500">Sfoglia</button>
+              <button @click="pickGlobalBgImage" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
             </div>
           </div>
         </div>
         <div v-if="globalBg.type === 'video'">
-          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">URL Video</label>
+          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('URL Video') }}</label>
           <div class="mb-flex mb-gap-1">
-            <input :value="globalBg.video" @input="updateGlobalBg('video', $event.target.value)" class="mps-num-input mb-w-52" placeholder="mp4 o URL YouTube" />
-            <button @click="pickGlobalBgVideo" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-500">Sfoglia</button>
+            <input :value="globalBg.video" @input="updateGlobalBg('video', $event.target.value)" class="mps-num-input mb-w-52" :placeholder="t('mp4 o URL YouTube')" />
+            <button @click="pickGlobalBgVideo" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
           </div>
         </div>
         <template v-if="globalBg.type === 'gradient'">
           <div class="mb-w-48">
-            <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Da</label>
+            <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Da') }}</label>
             <FieldColor :modelValue="globalBg.gradientFrom" @update:modelValue="updateGlobalBg('gradientFrom', $event)" />
           </div>
           <div class="mb-w-48">
-            <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">A</label>
+            <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('A') }}</label>
             <FieldColor :modelValue="globalBg.gradientTo" @update:modelValue="updateGlobalBg('gradientTo', $event)" />
           </div>
           <div>
-            <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Angolo</label>
-            <input type="number" :value="globalBg.gradientAngle" @input="updateGlobalBg('gradientAngle', parseInt($event.target.value))" min="0" max="360" class="mps-num-input mb-w-14" />
+            <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Angolo') }}</label>
+            <NumberScrubber
+              theme="dark"
+              :modelValue="globalBg.gradientAngle"
+              :min="0"
+              :max="360"
+              :step="1"
+              :defaultValue="180"
+              emitAs="number"
+              unit="°"
+              :ariaLabel="t('Angolo')"
+              @update:modelValue="updateGlobalBg('gradientAngle', $event)"
+            />
           </div>
         </template>
       </div>
     </div>
     <div v-else>
       <button @click="showGlobalBg = true" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-gray-300">
-        Sfondo globale &darr;
+        {{ t('Sfondo globale') }} &darr;
       </button>
     </div>
   </div>
@@ -57,8 +68,10 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { t } from '@/i18n';
 import FieldColor from '../Builder/fields/FieldColor.vue';
 import FieldSelect from '../Builder/fields/FieldSelect.vue';
+import NumberScrubber from '../Builder/fields/NumberScrubber.vue';
 
 // Option array per FieldSelect (stessi value dei vecchi <option>: dati salvati invariati)
 const OPTS_BG_TYPE = [

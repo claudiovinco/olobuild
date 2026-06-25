@@ -136,14 +136,12 @@
         </div>
         <div class="row">
           <span class="rowlab">{{ t('Altezza') }}</span>
-          <input type="range" class="uirange" :style="fillStyle(bg.cover_height || 0, 0, 1200)" :value="bg.cover_height || 0" :aria-label="t('Altezza cover')" min="0" max="1200" step="10" @input="commitInt('cover_height', $event.target.value, 0)" />
-          <div class="valbox"><input type="number" :value="bg.cover_height || 0" min="0" max="1200" step="10" @input="commitInt('cover_height', $event.target.value, 0)" @wheel="handleNumberWheel" /><span class="u">px</span></div>
+          <NumberScrubber class="ns-grow" :modelValue="bg.cover_height || 0" :min="0" :max="1200" :step="10" :defaultValue="0" emitAs="number" unit="px" :sliderOnFocus="false" :ariaLabel="t('Altezza cover')" @update:modelValue="commitInt('cover_height', $event, 0)" />
         </div>
         <p class="hint">{{ t('0 = auto (altezza contenuto)') }}</p>
         <div class="row">
           <span class="rowlab">{{ t('Scala') }}</span>
-          <input type="range" class="uirange" :style="fillStyle(bg.video_scale || 100, 100, 300)" :value="bg.video_scale || 100" :aria-label="t('Scala video')" min="100" max="300" step="10" @input="commitInt('video_scale', $event.target.value, 100)" />
-          <div class="valbox"><input type="number" :value="bg.video_scale || 100" min="100" max="300" step="10" @input="commitInt('video_scale', $event.target.value, 100)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+          <NumberScrubber class="ns-grow" :modelValue="bg.video_scale || 100" :min="100" :max="300" :step="10" :defaultValue="100" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Scala video')" @update:modelValue="commitInt('video_scale', $event, 100)" />
         </div>
 
         <!-- Parallasse SOLO sfondo (video): scala/opacità/sfocatura allo scroll, contenuto fermo -->
@@ -182,7 +180,7 @@
         <div class="row">
           <span class="rowlab">{{ t('Durata') }}</span>
           <span class="spacer"></span>
-          <div class="valbox valbox--wide"><input type="number" :value="bg.gallery_duration || 5000" min="1000" max="30000" step="500" @input="commitInt('gallery_duration', $event.target.value, 5000)" @wheel="handleNumberWheel" /><span class="u">ms</span></div>
+          <NumberScrubber :modelValue="bg.gallery_duration || 5000" :min="1000" :max="30000" :step="500" :defaultValue="5000" emitAs="number" unit="ms" :ariaLabel="t('Durata')" @update:modelValue="commitInt('gallery_duration', $event, 5000)" />
         </div>
         <div class="row">
           <span class="rowlab">{{ t('Transizione') }}</span>
@@ -193,7 +191,7 @@
         <div class="row">
           <span class="rowlab">{{ t('Durata trans.') }}</span>
           <span class="spacer"></span>
-          <div class="valbox valbox--wide"><input type="number" :value="bg.gallery_transition_ms || 500" min="100" max="3000" step="100" @input="commitInt('gallery_transition_ms', $event.target.value, 500)" @wheel="handleNumberWheel" /><span class="u">ms</span></div>
+          <NumberScrubber :modelValue="bg.gallery_transition_ms || 500" :min="100" :max="3000" :step="100" :defaultValue="500" emitAs="number" unit="ms" :ariaLabel="t('Durata transizione')" @update:modelValue="commitInt('gallery_transition_ms', $event, 500)" />
         </div>
         <div class="row">
           <span class="rowlab">{{ t('Dimensione') }}</span>
@@ -262,20 +260,17 @@
         <!-- N° luci -->
         <div class="row">
           <span class="rowlab">{{ t('N° luci') }}</span>
-          <input type="range" class="uirange" :style="fillStyle(meshCount, 1, 6)" :value="meshCount" :aria-label="t('Numero luci')" min="1" max="6" step="1" @input="commitInt('mesh_count', $event.target.value, meshColors.length)" />
-          <div class="valbox nounit"><input type="number" :value="meshCount" min="1" max="6" step="1" @input="commitInt('mesh_count', $event.target.value, meshColors.length)" @wheel="handleNumberWheel" /></div>
+          <NumberScrubber class="ns-grow" :modelValue="meshCount" :min="1" :max="6" :step="1" :defaultValue="meshColors.length" emitAs="number" :sliderOnFocus="false" :ariaLabel="t('Numero luci')" @update:modelValue="commitInt('mesh_count', $event, meshColors.length)" />
         </div>
         <!-- Morbidezza -->
         <div class="row">
           <span class="rowlab">{{ t('Morbidezza') }}</span>
-          <input type="range" class="uirange" :style="fillStyle(bg.mesh_softness ?? 70, 0, 100)" :value="bg.mesh_softness ?? 70" :aria-label="t('Morbidezza')" min="0" max="100" step="2" @input="commitInt('mesh_softness', $event.target.value, 70)" />
-          <div class="valbox"><input type="number" :value="bg.mesh_softness ?? 70" min="0" max="100" step="2" @input="commitInt('mesh_softness', $event.target.value, 70)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+          <NumberScrubber class="ns-grow" :modelValue="bg.mesh_softness ?? 70" :min="0" :max="100" :step="2" :defaultValue="70" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Morbidezza')" @update:modelValue="commitInt('mesh_softness', $event, 70)" />
         </div>
         <!-- Intensità -->
         <div class="row">
           <span class="rowlab">{{ t('Intensità') }}</span>
-          <input type="range" class="uirange" :style="fillStyle(bg.mesh_intensity ?? 100, 0, 100)" :value="bg.mesh_intensity ?? 100" :aria-label="t('Intensità')" min="0" max="100" step="2" @input="commitInt('mesh_intensity', $event.target.value, 100)" />
-          <div class="valbox"><input type="number" :value="bg.mesh_intensity ?? 100" min="0" max="100" step="2" @input="commitInt('mesh_intensity', $event.target.value, 100)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+          <NumberScrubber class="ns-grow" :modelValue="bg.mesh_intensity ?? 100" :min="0" :max="100" :step="2" :defaultValue="100" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Intensità')" @update:modelValue="commitInt('mesh_intensity', $event, 100)" />
         </div>
         <!-- Animazione + velocità -->
         <div class="row tgl-inline">
@@ -283,7 +278,7 @@
             <button type="button" class="tgl" :class="{ on: !!bg.mesh_animate }" :aria-pressed="!!bg.mesh_animate" @click="updateField('mesh_animate', !bg.mesh_animate)"><b></b></button>
             <span class="tl">{{ t('Animazione') }}</span>
           </div>
-          <div v-if="bg.mesh_animate" class="valbox"><input type="number" :value="bg.mesh_speed || 18" min="4" max="60" step="1" @input="commitInt('mesh_speed', $event.target.value, 18)" @wheel="handleNumberWheel" /><span class="u">s</span></div>
+          <NumberScrubber v-if="bg.mesh_animate" :modelValue="bg.mesh_speed || 18" :min="4" :max="60" :step="1" :defaultValue="18" emitAs="number" unit="s" :ariaLabel="t('Velocità animazione')" @update:modelValue="commitInt('mesh_speed', $event, 18)" />
         </div>
       </div>
 
@@ -302,23 +297,19 @@
         </div>
         <div class="row">
           <span class="rowlab">{{ t('Dimensione') }}</span>
-          <input type="range" class="uirange" :style="fillStyle(bg.pattern_size || 20, 8, 100)" :value="bg.pattern_size || 20" :aria-label="t('Dimensione')" min="8" max="100" step="1" @input="commitInt('pattern_size', $event.target.value, 20)" />
-          <div class="valbox"><input type="number" :value="bg.pattern_size || 20" min="8" max="100" step="1" @input="commitInt('pattern_size', $event.target.value, 20)" @wheel="handleNumberWheel" /><span class="u">px</span></div>
+          <NumberScrubber class="ns-grow" :modelValue="bg.pattern_size || 20" :min="8" :max="100" :step="1" :defaultValue="20" emitAs="number" unit="px" :sliderOnFocus="false" :ariaLabel="t('Dimensione')" @update:modelValue="commitInt('pattern_size', $event, 20)" />
         </div>
         <div class="row">
           <span class="rowlab">{{ t('Spessore') }}</span>
-          <input type="range" class="uirange" :style="fillStyle(bg.pattern_thickness ?? 1, 1, 12)" :value="bg.pattern_thickness ?? 1" :aria-label="t('Spessore')" min="1" max="12" step="1" @input="commitInt('pattern_thickness', $event.target.value, 1)" />
-          <div class="valbox"><input type="number" :value="bg.pattern_thickness ?? 1" min="1" max="12" step="1" @input="commitInt('pattern_thickness', $event.target.value, 1)" @wheel="handleNumberWheel" /><span class="u">px</span></div>
+          <NumberScrubber class="ns-grow" :modelValue="bg.pattern_thickness ?? 1" :min="1" :max="12" :step="1" :defaultValue="1" emitAs="number" unit="px" :sliderOnFocus="false" :ariaLabel="t('Spessore')" @update:modelValue="commitInt('pattern_thickness', $event, 1)" />
         </div>
         <div class="row">
           <span class="rowlab">{{ t('Rotazione') }}</span>
-          <input type="range" class="uirange" :style="fillStyle(bg.pattern_rotation ?? 0, 0, 180)" :value="bg.pattern_rotation ?? 0" :aria-label="t('Rotazione')" min="0" max="180" step="5" @input="commitInt('pattern_rotation', $event.target.value, 0)" />
-          <div class="valbox"><input type="number" :value="bg.pattern_rotation ?? 0" min="0" max="180" step="5" @input="commitInt('pattern_rotation', $event.target.value, 0)" @wheel="handleNumberWheel" /><span class="u">&deg;</span></div>
+          <NumberScrubber class="ns-grow" :modelValue="bg.pattern_rotation ?? 0" :min="0" :max="180" :step="5" :defaultValue="0" emitAs="number" unit="°" :sliderOnFocus="false" :ariaLabel="t('Rotazione')" @update:modelValue="commitInt('pattern_rotation', $event, 0)" />
         </div>
         <div class="row">
           <span class="rowlab">{{ t('Opacità') }}</span>
-          <input type="range" class="uirange" :style="fillStyle(bg.pattern_opacity ?? 50, 5, 100)" :value="bg.pattern_opacity ?? 50" :aria-label="t('Opacità')" min="5" max="100" step="5" @input="commitInt('pattern_opacity', $event.target.value, 50)" />
-          <div class="valbox"><input type="number" :value="bg.pattern_opacity ?? 50" min="5" max="100" step="5" @input="commitInt('pattern_opacity', $event.target.value, 50)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+          <NumberScrubber class="ns-grow" :modelValue="bg.pattern_opacity ?? 50" :min="5" :max="100" :step="5" :defaultValue="50" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Opacità')" @update:modelValue="commitInt('pattern_opacity', $event, 50)" />
         </div>
       </div>
 
@@ -345,13 +336,11 @@
         </div>
         <div class="row">
           <span class="rowlab">{{ t('Intensità') }}</span>
-          <input type="range" class="uirange" :style="fillStyle(bg.glow_intensity ?? 62, 10, 100)" :value="bg.glow_intensity ?? 62" :aria-label="t('Intensità')" min="10" max="100" step="2" @input="commitInt('glow_intensity', $event.target.value, 62)" />
-          <div class="valbox"><input type="number" :value="bg.glow_intensity ?? 62" min="10" max="100" step="2" @input="commitInt('glow_intensity', $event.target.value, 62)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+          <NumberScrubber class="ns-grow" :modelValue="bg.glow_intensity ?? 62" :min="10" :max="100" :step="2" :defaultValue="62" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Intensità')" @update:modelValue="commitInt('glow_intensity', $event, 62)" />
         </div>
         <div class="row">
           <span class="rowlab">{{ t('Ampiezza') }}</span>
-          <input type="range" class="uirange" :style="fillStyle(bg.glow_size ?? 78, 30, 120)" :value="bg.glow_size ?? 78" :aria-label="t('Ampiezza')" min="30" max="120" step="2" @input="commitInt('glow_size', $event.target.value, 78)" />
-          <div class="valbox"><input type="number" :value="bg.glow_size ?? 78" min="30" max="120" step="2" @input="commitInt('glow_size', $event.target.value, 78)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+          <NumberScrubber class="ns-grow" :modelValue="bg.glow_size ?? 78" :min="30" :max="120" :step="2" :defaultValue="78" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Ampiezza')" @update:modelValue="commitInt('glow_size', $event, 78)" />
         </div>
         <div class="tgl-row">
           <button type="button" class="tgl" :class="{ on: bg.glow_grain !== false }" :aria-pressed="bg.glow_grain !== false" @click="updateField('glow_grain', !(bg.glow_grain !== false))"><b></b></button>
@@ -366,13 +355,11 @@
         </div>
         <div v-if="(bg.glow_anim || 'none') !== 'none' && bg.glow_anim !== 'scroll'" class="row">
           <span class="rowlab">{{ t('Velocità') }}</span>
-          <input type="range" class="uirange" :style="fillStyle(bg.glow_anim_speed ?? 6, 1, 10)" :value="bg.glow_anim_speed ?? 6" :aria-label="t('Velocità')" min="1" max="10" step="1" @input="commitInt('glow_anim_speed', $event.target.value, 6)" />
-          <div class="valbox"><input type="number" :value="bg.glow_anim_speed ?? 6" min="1" max="10" step="1" @input="commitInt('glow_anim_speed', $event.target.value, 6)" @wheel="handleNumberWheel" /></div>
+          <NumberScrubber class="ns-grow" :modelValue="bg.glow_anim_speed ?? 6" :min="1" :max="10" :step="1" :defaultValue="6" emitAs="number" :sliderOnFocus="false" :ariaLabel="t('Velocità')" @update:modelValue="commitInt('glow_anim_speed', $event, 6)" />
         </div>
         <div v-if="['pulse','vivo'].includes(bg.glow_anim)" class="row">
           <span class="rowlab">{{ t('Respiro') }}</span>
-          <input type="range" class="uirange" :style="fillStyle(bg.glow_anim_intensity ?? 46, 0, 100)" :value="bg.glow_anim_intensity ?? 46" :aria-label="t('Intensità respiro')" min="0" max="100" step="2" @input="commitInt('glow_anim_intensity', $event.target.value, 46)" />
-          <div class="valbox"><input type="number" :value="bg.glow_anim_intensity ?? 46" min="0" max="100" step="2" @input="commitInt('glow_anim_intensity', $event.target.value, 46)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+          <NumberScrubber class="ns-grow" :modelValue="bg.glow_anim_intensity ?? 46" :min="0" :max="100" :step="2" :defaultValue="46" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Intensità respiro')" @update:modelValue="commitInt('glow_anim_intensity', $event, 46)" />
         </div>
       </div>
 
@@ -398,26 +385,22 @@
         <!-- Scanline -->
         <div class="row">
           <span class="rowlab">{{ t('Scanline') }}</span>
-          <input type="range" class="uirange" :style="fillStyle(bg.crt_scanline_opacity ?? 50, 0, 100)" :value="bg.crt_scanline_opacity ?? 50" :aria-label="t('Intensità scanline')" min="0" max="100" step="5" @input="commitInt('crt_scanline_opacity', $event.target.value, 50)" />
-          <div class="valbox"><input type="number" :value="bg.crt_scanline_opacity ?? 50" min="0" max="100" step="5" @input="commitInt('crt_scanline_opacity', $event.target.value, 50)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+          <NumberScrubber class="ns-grow" :modelValue="bg.crt_scanline_opacity ?? 50" :min="0" :max="100" :step="5" :defaultValue="50" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Intensità scanline')" @update:modelValue="commitInt('crt_scanline_opacity', $event, 50)" />
         </div>
         <!-- Passo -->
         <div class="row">
           <span class="rowlab">{{ t('Passo') }}</span>
-          <input type="range" class="uirange" :style="fillStyle(bg.crt_scanline_gap ?? 3, 2, 12)" :value="bg.crt_scanline_gap ?? 3" :aria-label="t('Passo scanline')" min="2" max="12" step="1" @input="commitInt('crt_scanline_gap', $event.target.value, 3)" />
-          <div class="valbox"><input type="number" :value="bg.crt_scanline_gap ?? 3" min="2" max="12" step="1" @input="commitInt('crt_scanline_gap', $event.target.value, 3)" @wheel="handleNumberWheel" /><span class="u">px</span></div>
+          <NumberScrubber class="ns-grow" :modelValue="bg.crt_scanline_gap ?? 3" :min="2" :max="12" :step="1" :defaultValue="3" emitAs="number" unit="px" :sliderOnFocus="false" :ariaLabel="t('Passo scanline')" @update:modelValue="commitInt('crt_scanline_gap', $event, 3)" />
         </div>
         <!-- Curvatura -->
         <div class="row">
           <span class="rowlab">{{ t('Curvatura') }}</span>
-          <input type="range" class="uirange" :style="fillStyle(bg.crt_curvature ?? 0, 0, 100)" :value="bg.crt_curvature ?? 0" :aria-label="t('Curvatura')" min="0" max="100" step="5" @input="commitInt('crt_curvature', $event.target.value, 0)" />
-          <div class="valbox"><input type="number" :value="bg.crt_curvature ?? 0" min="0" max="100" step="5" @input="commitInt('crt_curvature', $event.target.value, 0)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+          <NumberScrubber class="ns-grow" :modelValue="bg.crt_curvature ?? 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Curvatura')" @update:modelValue="commitInt('crt_curvature', $event, 0)" />
         </div>
         <!-- Vignetta -->
         <div class="row">
           <span class="rowlab">{{ t('Vignetta') }}</span>
-          <input type="range" class="uirange" :style="fillStyle(bg.crt_vignette ?? 55, 0, 100)" :value="bg.crt_vignette ?? 55" :aria-label="t('Vignetta')" min="0" max="100" step="5" @input="commitInt('crt_vignette', $event.target.value, 55)" />
-          <div class="valbox"><input type="number" :value="bg.crt_vignette ?? 55" min="0" max="100" step="5" @input="commitInt('crt_vignette', $event.target.value, 55)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+          <NumberScrubber class="ns-grow" :modelValue="bg.crt_vignette ?? 55" :min="0" :max="100" :step="5" :defaultValue="55" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Vignetta')" @update:modelValue="commitInt('crt_vignette', $event, 55)" />
         </div>
         <!-- Flicker + velocità -->
         <div class="row tgl-inline">
@@ -425,7 +408,7 @@
             <button type="button" class="tgl" :class="{ on: !!bg.crt_flicker }" :aria-pressed="!!bg.crt_flicker" @click="updateField('crt_flicker', !bg.crt_flicker)"><b></b></button>
             <span class="tl">{{ t('Flicker') }}</span>
           </div>
-          <div v-if="bg.crt_flicker" class="valbox"><input type="number" :value="bg.crt_flicker_speed ?? 6" min="2" max="12" step="1" @input="commitInt('crt_flicker_speed', $event.target.value, 6)" @wheel="handleNumberWheel" /><span class="u">s</span></div>
+          <NumberScrubber v-if="bg.crt_flicker" :modelValue="bg.crt_flicker_speed ?? 6" :min="2" :max="12" :step="1" :defaultValue="6" emitAs="number" unit="s" :ariaLabel="t('Velocità flicker')" @update:modelValue="commitInt('crt_flicker_speed', $event, 6)" />
         </div>
       </div>
 
@@ -451,8 +434,7 @@
         </div>
         <div class="row">
           <span class="rowlab">{{ t('Opacità') }}</span>
-          <input type="range" class="uirange" :style="fillStyle(bg.overlay_opacity || 0, 0, 100)" :value="bg.overlay_opacity || 0" :aria-label="t('Opacità sovrapposizione')" min="0" max="100" step="5" @input="commitInt('overlay_opacity', $event.target.value, 0)" />
-          <div class="valbox"><input type="number" :value="bg.overlay_opacity || 0" min="0" max="100" step="5" @input="commitInt('overlay_opacity', $event.target.value, 0)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+          <NumberScrubber class="ns-grow" :modelValue="bg.overlay_opacity || 0" :min="0" :max="100" :step="5" :defaultValue="0" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Opacità sovrapposizione')" @update:modelValue="commitInt('overlay_opacity', $event, 0)" />
         </div>
       </div>
     </template>
@@ -473,6 +455,7 @@ import FieldGradient from './fields/FieldGradient.vue';
 import FieldColor from './fields/FieldColor.vue';
 import FieldSelect from './fields/FieldSelect.vue';
 import FieldObjectPosition from './fields/FieldObjectPosition.vue';
+import NumberScrubber from './fields/NumberScrubber.vue';
 
 // Opzioni dei FieldSelect (label RAW: t() la applica FieldSelect internamente).
 // meshPresets / glowPresets / crtModels sono già array { value, label } e si
@@ -1129,6 +1112,11 @@ function updateParallaxData(newData) {
   flex-shrink: 0;
 }
 .spacer { flex: 1; }
+
+/* NumberScrubber inline (slider + valbox): occupa la riga come il vecchio
+   .uirange + .valbox. Le NumberScrubber compatte (senza .ns-grow) mantengono la
+   larghezza naturale della valbox e non si allargano. */
+.row > .ns-grow { flex: 1; min-width: 0; }
 
 /* contenitore dei FieldSelect nelle row */
 .selwrap { flex: 1; position: relative; min-width: 0; }

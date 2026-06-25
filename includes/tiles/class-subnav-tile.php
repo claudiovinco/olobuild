@@ -147,7 +147,7 @@ class Olo_Subnav_Tile extends Olo_Tile_Base {
         ob_start();
         echo '<style>' . $css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS built exclusively from values sanitized above: safe_color_css()'d colors, intval()'d sizes, esc_attr()'d font props, whitelist-mapped alignment, Olo_Tile_Utils radius helpers; $uid is internally generated
         ?>
-        <nav role="navigation">
+        <nav aria-label="<?php echo esc_attr( olo_t( 'Sotto-navigazione', 'olobuilder' ) ); ?>">
         <ul id="<?php echo esc_attr( $uid ); ?>">
             <?php foreach ( $items as $idx => $item ) :
                 $url   = $item['url'] ?: '#';
@@ -157,12 +157,13 @@ class Olo_Subnav_Tile extends Olo_Tile_Base {
                 $item_path = rtrim( wp_parse_url( $url, PHP_URL_PATH ) ?: '', '/' );
                 $is_active = $highlight && $current_url !== '' && $item_path !== '' && $current_url === $item_path;
                 $cls = $is_active ? ' class="olo-sn-active"' : '';
+                $aria_current = $is_active ? ' aria-current="page"' : '';
 
                 if ( $idx > 0 && $divider ) {
                     echo '<li class="olo-sn-div" aria-hidden="true"></li>';
                 }
             ?>
-            <li><a<?php echo $cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $cls is the fixed internal literal ' class="olo-sn-active"' or '' ?> href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $label ); ?></a></li>
+            <li><a<?php echo $cls . $aria_current; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $cls and $aria_current are fixed internal literals (' class="olo-sn-active"' / ' aria-current="page"' or '') ?> href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $label ); ?></a></li>
             <?php endforeach; ?>
         </ul>
         </nav>

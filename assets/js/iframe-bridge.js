@@ -13,7 +13,8 @@
   document.addEventListener('drag',      function(e) { e.preventDefault(); }, true);
 
   var root = document.getElementById('olo-iframe-root');
-  var selectedId = null;
+  var selectedId = null;       // selezione primaria (guida la toolbar/inspector)
+  var selectedIds = [];        // multi-selezione (ctrl-click)
   var hoveredEl = null;
   var previewMode = false;
 
@@ -211,24 +212,29 @@
 
   // ── Selection ──
 
-  function selectTile(tileId) {
-    // Deselect previous
-    if (selectedId) {
-      var prev = findTileEl(selectedId);
-      if (prev) prev.classList.remove('olo-builder-selected');
+  // Applica un set di selezione: evidenzia TUTTE le tile del set, toolbar sulla
+  // primaria (l'ultima). Sostituisce la vecchia selezione singola.
+  function applySelectionSet(ids) {
+    ids = Array.isArray(ids) ? ids.filter(Boolean) : [];
+    var prevSel = root ? root.querySelectorAll('.olo-builder-selected') : [];
+    for (var i = 0; i < prevSel.length; i++) prevSel[i].classList.remove('olo-builder-selected');
+    selectedIds = ids.slice();
+    selectedId = ids.length ? ids[ids.length - 1] : null;
+    for (var j = 0; j < ids.length; j++) {
+      var sel = findTileEl(ids[j]);
+      if (sel) sel.classList.add('olo-builder-selected');
     }
-    selectedId = tileId;
-    if (tileId) {
-      var el = findTileEl(tileId);
-      if (el) {
-        el.classList.add('olo-builder-selected');
-        // Mostra immediatamente la toolbar sulla tile selezionata, senza
-        // dover attendere un mouseover (fixing: toolbar appariva solo on hover).
-        showHoverToolbar(el, tileId);
-      }
+    if (selectedId) {
+      var pe = findTileEl(selectedId);
+      if (pe) showHoverToolbar(pe, selectedId);
     } else {
       hideHoverToolbar();
     }
+  }
+
+  // Selezione singola (retro-compatibile): rimpiazza l'intero set con una tile.
+  function selectTile(tileId) {
+    applySelectionSet(tileId ? [tileId] : []);
   }
 
   // ── Hover ──
@@ -319,8 +325,16 @@
     }
     var tileId = findTileId(e.target);
     if (tileId) {
-      selectTile(tileId);
-      post('olo:tile-click', { tileId: tileId });
+      var additive = !!(e.ctrlKey || e.metaKey);
+      if (additive) {
+        // Toggle locale ottimistico; il parent riconcilia con olo:select-set.
+        var pos = selectedIds.indexOf(tileId);
+        if (pos === -1) applySelectionSet(selectedIds.concat([tileId]));
+        else applySelectionSet(selectedIds.filter(function (x) { return x !== tileId; }));
+      } else {
+        selectTile(tileId);
+      }
+      post('olo:tile-click', { tileId: tileId, additive: additive });
     } else if (!isInteractive) {
       selectTile(null);
       post('olo:canvas-click');
@@ -1178,9 +1192,9 @@
           injectAddButtons();
           // initSectionDrag() rimosso v3.55.24 — drag custom basato su pointer events
           // (vedi onEdgeMouseDown / startTileDrag) gestisce già il reorder.
-          if (selectedId) {
-            var el = findTileEl(selectedId);
-            if (el) el.classList.add('olo-builder-selected');
+          for (var si = 0; si < selectedIds.length; si++) {
+            var selEl = findTileEl(selectedIds[si]);
+            if (selEl) selEl.classList.add('olo-builder-selected');
           }
           // Riapplica force-hover se era attivo prima del re-render
           if (forceHoverState.enabled && forceHoverState.tileId) {
@@ -1206,7 +1220,7 @@
               executeInlineScripts(newEl);
               reinitUIkit();
               reinitTileScripts();
-              if (d.tileId === selectedId) {
+              if (selectedIds.indexOf(d.tileId) !== -1) {
                 newEl.classList.add('olo-builder-selected');
               }
 
@@ -1265,6 +1279,10 @@
 
       case 'olo:select':
         selectTile(d.tileId || null);
+        break;
+
+      case 'olo:select-set':
+        applySelectionSet(d.ids || []);
         break;
 
       case 'olo:deselect':
@@ -1466,8 +1484,9 @@
     // Skip if editing text
     var tag = e.target.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return;
-    // Forward Delete, Backspace, Ctrl+C/V/Z/S, Ctrl+Alt+C/V, Alt+frecce (nudge)
-    if (e.key === 'Delete' || e.key === 'Backspace' || (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'z' || e.key === 's' || e.code === 'KeyC' || e.code === 'KeyV')) || (e.altKey && !e.ctrlKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown'))) {
+    // Forward Delete, Backspace, Ctrl+C/V/Z/S/D, Ctrl+Alt+C/V, Alt+frecce (nudge).
+    // Ctrl+D incluso anche per fare preventDefault (altrimenti Chrome apre "Aggiungi preferito").
+    if (e.key === 'Delete' || e.key === 'Backspace' || (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'z' || e.key === 's' || e.key === 'd' || e.code === 'KeyC' || e.code === 'KeyV' || e.code === 'KeyD')) || (e.altKey && !e.ctrlKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown'))) {
       e.preventDefault();
       parent.postMessage({ type: 'olo:keydown', key: e.key, code: e.code, ctrlKey: e.ctrlKey, shiftKey: e.shiftKey, altKey: e.altKey, metaKey: e.metaKey }, '*');
     }

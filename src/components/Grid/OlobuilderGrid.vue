@@ -7,7 +7,7 @@
           <!-- Quick insert "+" before first section -->
           <div v-if="sectionIdx === 0" class="olo-quick-insert" @click.stop="onCleanInsert(0)">
             <div class="olo-quick-insert__line"></div>
-            <button class="olo-quick-insert__btn" title="Inserisci sezione o modulo">+</button>
+            <button class="olo-quick-insert__btn" :title="t('Inserisci sezione o modulo')">+</button>
             <div class="olo-quick-insert__line"></div>
           </div>
           <div
@@ -58,16 +58,16 @@
 
           <!-- Section bar -->
           <div class="olo-section-bar" @click.stop="selectTile(section.id)" @contextmenu.prevent="onTileContextMenu($event, section.id)">
-            <span class="olo-section-grip" title="Trascina per riordinare la sezione">&#x2630;</span>
-            <span class="olo-bar-type">Sezione</span>
+            <span class="olo-section-grip" :title="t('Trascina per riordinare la sezione')">&#x2630;</span>
+            <span class="olo-bar-type">{{ t('Sezione') }}</span>
             <span v-if="section.settings?.style && section.settings.style !== 'default'" class="olo-bar-badge">{{ section.settings.style }}</span>
             <span v-if="hasBgImage(section)" class="olo-bar-badge olo-bar-badge--bg">BG</span>
             <span v-if="hasVideo(section)" class="olo-bar-badge olo-bar-badge--bg">VID</span>
             <span v-if="hasParallax(section)" class="olo-bar-badge olo-bar-badge--parallax">&#x21C5;</span>
             <span v-if="section.settings?.sticky_effect && section.settings.sticky_effect !== 'none'" class="olo-bar-badge olo-bar-badge--sticky">{{ section.settings.sticky_effect.toUpperCase() }}</span>
             <span class="olo-bar-spacer"></span>
-            <button class="olo-bar-btn" title="Duplica" @click.stop="duplicateItem(section.id)">&#x2398;</button>
-            <button class="olo-bar-btn olo-bar-btn--delete" title="Elimina" @click.stop="removeItem(section.id)">&#x2715;</button>
+            <button class="olo-bar-btn" :title="t('Duplica')" @click.stop="duplicateItem(section.id)">&#x2398;</button>
+            <button class="olo-bar-btn olo-bar-btn--delete" :title="t('Elimina')" @click.stop="removeItem(section.id)">&#x2715;</button>
           </div>
 
           <!-- Section body: rows -->
@@ -104,16 +104,16 @@
 
                   <!-- Row bar -->
                   <div class="olo-row-bar" @click.stop="selectTile(row.id)" @contextmenu.prevent="onTileContextMenu($event, row.id)">
-                    <span class="olo-row-grip" title="Trascina per riordinare la riga">&#x2630;</span>
-                    <span class="olo-bar-type">Riga</span>
+                    <span class="olo-row-grip" :title="t('Trascina per riordinare la riga')">&#x2630;</span>
+                    <span class="olo-bar-type">{{ t('Riga') }}</span>
                     <span class="olo-bar-badge">{{ row.settings?.layout === 'custom' ? (row.settings?.custom_widths || '%') : (row.settings?.layout || '50-50') }}</span>
                     <span v-if="hasBgImage(row)" class="olo-bar-badge olo-bar-badge--bg">BG</span>
                     <span v-if="hasVideo(row)" class="olo-bar-badge olo-bar-badge--bg">VID</span>
                     <span v-if="hasParallax(row)" class="olo-bar-badge olo-bar-badge--parallax">&#x21C5;</span>
-                    <span v-if="row.settings?.loop_enabled" class="olo-bar-badge olo-bar-badge--loop" title="Loop attivo">&#x21BB; Loop</span>
+                    <span v-if="row.settings?.loop_enabled" class="olo-bar-badge olo-bar-badge--loop" :title="t('Loop attivo')">&#x21BB; Loop</span>
                     <span class="olo-bar-spacer"></span>
-                    <button class="olo-bar-btn" title="Duplica" @click.stop="duplicateItem(row.id)">&#x2398;</button>
-                    <button class="olo-bar-btn olo-bar-btn--delete" title="Elimina" @click.stop="removeItem(row.id)">&#x2715;</button>
+                    <button class="olo-bar-btn" :title="t('Duplica')" @click.stop="duplicateItem(row.id)">&#x2398;</button>
+                    <button class="olo-bar-btn olo-bar-btn--delete" :title="t('Elimina')" @click.stop="removeItem(row.id)">&#x2715;</button>
                   </div>
 
                   <!-- CSS Grid layout mode -->
@@ -149,7 +149,7 @@
                                   </div>
                                   <div v-if="!tile.children || tile.children.length === 0" class="olo-fp-empty" @click.stop="openFinder(tile.id)">
                                     <span class="olo-column-plus">+</span>
-                                    <span>Trascina qui un elemento o clicca per aprire il finder</span>
+                                    <span>{{ t('Trascina qui un elemento o clicca per aprire il finder') }}</span>
                                   </div>
                                 </div>
                               </template>
@@ -159,7 +159,7 @@
                       </div>
                       <div v-if="!col.children || col.children.length === 0" class="olo-column-empty" @click.stop="openFinder(col.id)" style="cursor:pointer">
                         <span class="olo-column-plus">+</span>
-                        <span>Rilascia qui</span>
+                        <span>{{ t('Rilascia qui') }}</span>
                       </div>
                     </div>
                   </div>
@@ -177,7 +177,7 @@
                         v-if="colIdx > 0"
                         class="olo-col-resize-handle"
                         @mousedown.stop.prevent="startColResize($event, row, colIdx)"
-                        title="Trascina per ridimensionare"
+                        :title="t('Trascina per ridimensionare')"
                       >
                         <span class="olo-col-resize-grip"></span>
                       </div>
@@ -208,7 +208,7 @@
                                     </div>
                                     <div v-if="!tile.children || tile.children.length === 0" class="olo-fp-empty" @click.stop="openFinder(tile.id)">
                                       <span class="olo-column-plus">+</span>
-                                      <span>Trascina qui un elemento o clicca per aprire il finder</span>
+                                      <span>{{ t('Trascina qui un elemento o clicca per aprire il finder') }}</span>
                                     </div>
                                   </div>
                                 </template>
@@ -220,7 +220,7 @@
                         <!-- Empty column placeholder -->
                         <div v-if="!col.children || col.children.length === 0" class="olo-column-empty" @click.stop="openFinder(col.id)" style="cursor:pointer">
                           <span class="olo-column-plus">+</span>
-                          <span>Rilascia qui</span>
+                          <span>{{ t('Rilascia qui') }}</span>
                         </div>
                       </div>
                     </template>
@@ -246,7 +246,7 @@
                     <button
                       @click.stop="addColumnAfter(row, (row.children || []).length - 1)"
                       class="olo-preset-btn olo-preset-btn--add"
-                      title="Aggiungi colonna"
+                      :title="t('Aggiungi colonna')"
                     >
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
                       Col
@@ -261,7 +261,7 @@
                       v-model="customInputValue"
                       class="olo-custom-input"
                       type="text"
-                      placeholder="es: 20,30,50"
+                      :placeholder="t('es: 20,30,50')"
                       @keydown.enter="confirmCustomInput(row)"
                       @blur="confirmCustomInput(row)"
                       @focus="customInputValue = customInputValue || (row.settings?.custom_widths || '')"
@@ -279,7 +279,7 @@
               @click.stop="addRowToSection(section)"
             >
               <div class="olo-quick-insert__line"></div>
-              <button class="olo-quick-insert__btn olo-quick-insert__btn--row" title="Aggiungi riga">+</button>
+              <button class="olo-quick-insert__btn olo-quick-insert__btn--row" :title="t('Aggiungi riga')">+</button>
               <div class="olo-quick-insert__line"></div>
             </div>
           </div>
@@ -287,7 +287,7 @@
           <!-- Quick insert "+" after section -->
           <div class="olo-quick-insert" @click.stop="onCleanInsert(sectionIdx + 1)">
             <div class="olo-quick-insert__line"></div>
-            <button class="olo-quick-insert__btn" title="Inserisci sezione o modulo">+</button>
+            <button class="olo-quick-insert__btn" :title="t('Inserisci sezione o modulo')">+</button>
             <div class="olo-quick-insert__line"></div>
           </div>
         </div>
@@ -303,7 +303,7 @@
       style="cursor:pointer"
     >
       <div style="font-size: 32px; margin-bottom: 8px;">&#x1F4D0;</div>
-      <div>Trascina o clicca per aggiungere una tile</div>
+      <div>{{ t('Trascina o clicca per aggiungere una tile') }}</div>
     </div>
 
     <!-- Bottom drop zone (when canvas has content) -->
@@ -314,7 +314,7 @@
       @click.stop="openFinder()"
       style="cursor:pointer"
     >
-      <span>+ Rilascia qui o clicca per aggiungere</span>
+      <span>+ {{ t('Rilascia qui o clicca per aggiungere') }}</span>
     </div>
 
     <!-- Context menu -->
@@ -352,6 +352,7 @@ import ShapedividerTile from '@/components/Tiles/ShapedividerTile.vue';
 import ContextMenu from '@/components/Builder/ContextMenu.vue';
 import GridLayoutPicker from '@/components/Builder/GridLayoutPicker.vue';
 import { TEMPLATES_MAP } from '@/config/gridTemplates.js';
+import { t } from '@/i18n';
 
 const props = defineProps({
   zone: { type: String, default: '' }, // 'header' | 'body' | 'footer' | '' (legacy)

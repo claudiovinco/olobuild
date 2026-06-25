@@ -283,21 +283,31 @@ function toggleLink() {
   display: flex;
   align-items: center;
   gap: 2px;
+  box-sizing: border-box;
   border: 1px solid #d1d5db;
   border-radius: 8px;
   background: #fff;
   height: 30px;
   padding: 0 2px 0 6px;
+  line-height: 1;
 }
+/* Allineato a NumberScrubber (.olo-ns-box): stesso bordo, stesso peso del numero,
+   input che riempie l'altezza e resta centrato senza sporgere sul bordo. */
 .olo-bf-num {
   width: 40px;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
   border: none;
   outline: none;
   background: transparent;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
+  line-height: 1;
   color: #1f2937;
   text-align: center;
+  font-variant-numeric: tabular-nums;
   -moz-appearance: textfield;
 }
 .olo-bf-num:disabled {
@@ -378,9 +388,11 @@ function toggleLink() {
   outline: none;
   background: transparent;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
+  line-height: 1;
   color: #1f2937;
   text-align: center;
+  font-variant-numeric: tabular-nums;
   -moz-appearance: textfield;
 }
 .olo-bf-mini::-webkit-inner-spin-button,

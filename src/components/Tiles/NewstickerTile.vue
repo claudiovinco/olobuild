@@ -15,25 +15,35 @@
       <!-- Marquee -->
       <div v-if="animationType === 'marquee'" class="olo-newsticker-marquee" :style="marqueeStyle">
         <span v-for="(item, idx) in marqueeItems" :key="'mq-'+idx" class="olo-newsticker-marquee-item" :style="itemTypoStyle">
-          <span v-if="item.icon" class="olo-newsticker-icon">
-            <span v-if="iconSvg(item.icon)" class="olo-nt-svg" v-html="iconSvg(item.icon)"></span>
-            <template v-else>{{ item.icon }}</template>
-          </span>
-          <span v-if="item.badge" class="olo-newsticker-badge" :style="badgeStyleFor(item)">{{ item.badge }}</span>
-          <span class="olo-newsticker-title">{{ item.title || 'Notizia...' }}</span>
-          <span v-if="item.timestamp" class="olo-newsticker-time">{{ item.timestamp }}</span>
+          <template v-if="item.logo">
+            <img class="olo-newsticker-logo" :src="item.logo" :alt="item.title || ''" :style="logoStyle" loading="lazy" decoding="async">
+          </template>
+          <template v-else>
+            <span v-if="item.icon" class="olo-newsticker-icon">
+              <span v-if="iconSvg(item.icon)" class="olo-nt-svg" v-html="iconSvg(item.icon)"></span>
+              <template v-else>{{ item.icon }}</template>
+            </span>
+            <span v-if="item.badge" class="olo-newsticker-badge" :style="badgeStyleFor(item)">{{ item.badge }}</span>
+            <span class="olo-newsticker-title">{{ item.title || 'Notizia...' }}</span>
+            <span v-if="item.timestamp" class="olo-newsticker-time">{{ item.timestamp }}</span>
+          </template>
         </span>
       </div>
 
       <!-- Single item (slide/fade) -->
       <div v-else-if="currentItem" class="olo-newsticker-item" :key="currentIndex" :style="itemStyle">
-        <span v-if="currentItem.icon" class="olo-newsticker-icon">
-          <span v-if="iconSvg(currentItem.icon)" class="olo-nt-svg" v-html="iconSvg(currentItem.icon)"></span>
-          <template v-else>{{ currentItem.icon }}</template>
-        </span>
-        <span v-if="currentItem.badge" class="olo-newsticker-badge" :style="badgeStyleFor(currentItem)" :data-olo-editable="`items.${currentIndex}.badge`">{{ currentItem.badge }}</span>
-        <span class="olo-newsticker-title" :data-olo-editable="`items.${currentIndex}.title`">{{ currentItem.title || 'Notizia...' }}</span>
-        <span v-if="currentItem.timestamp" class="olo-newsticker-time" :data-olo-editable="`items.${currentIndex}.timestamp`">{{ currentItem.timestamp }}</span>
+        <template v-if="currentItem.logo">
+          <img class="olo-newsticker-logo" :src="currentItem.logo" :alt="currentItem.title || ''" :style="logoStyle" loading="lazy" decoding="async">
+        </template>
+        <template v-else>
+          <span v-if="currentItem.icon" class="olo-newsticker-icon">
+            <span v-if="iconSvg(currentItem.icon)" class="olo-nt-svg" v-html="iconSvg(currentItem.icon)"></span>
+            <template v-else>{{ currentItem.icon }}</template>
+          </span>
+          <span v-if="currentItem.badge" class="olo-newsticker-badge" :style="badgeStyleFor(currentItem)" :data-olo-editable="`items.${currentIndex}.badge`">{{ currentItem.badge }}</span>
+          <span class="olo-newsticker-title" :data-olo-editable="`items.${currentIndex}.title`">{{ currentItem.title || 'Notizia...' }}</span>
+          <span v-if="currentItem.timestamp" class="olo-newsticker-time" :data-olo-editable="`items.${currentIndex}.timestamp`">{{ currentItem.timestamp }}</span>
+        </template>
       </div>
       <div v-else class="olo-newsticker-item" :style="itemStyle">
         <span class="olo-newsticker-title" style="opacity:0.5">{{ t('Aggiungi notizie...') }}</span>
@@ -118,6 +128,9 @@ const defaults = {
   show_controls: false,
   show_indicators: false,
   show_counter: false,
+  logo_height: 32,
+  logo_grayscale: false,
+  logo_opacity: 100,
   item_hover_effect: 'none',
   border_radius: { tl: 0, tr: 0, br: 0, bl: 0 },
 };
@@ -327,6 +340,24 @@ function badgeStyleFor(item) {
     letterSpacing: 0,
   };
 }
+
+const logoStyle = computed(() => {
+  const h = Math.max(16, Math.min(60, parseInt(s.value.logo_height) || 32));
+  const base = {
+    height: h + 'px',
+    width: 'auto',
+    display: 'block',
+    flexShrink: 0,
+    objectFit: 'contain',
+  };
+  if (s.value.logo_grayscale) {
+    const op = Math.max(0, Math.min(100, parseInt(s.value.logo_opacity) ?? 100)) / 100;
+    base.filter = 'grayscale(1)';
+    base.opacity = op;
+    base.transition = 'filter 250ms ease, opacity 250ms ease';
+  }
+  return base;
+});
 </script>
 
 <style scoped>
@@ -405,6 +436,12 @@ function badgeStyleFor(item) {
 }
 .olo-newsticker-dot-active { transform: scale(1.4); }
 
+.olo-newsticker-logo { vertical-align: middle; }
+.olo-newsticker-marquee-item:hover .olo-newsticker-logo,
+.olo-newsticker-item:hover .olo-newsticker-logo {
+  filter: grayscale(0) !important;
+  opacity: 1 !important;
+}
 .olo-newsticker-icon { font-size: 16px; line-height: 1; flex-shrink: 0; display: inline-flex; align-items: center; }
 .olo-newsticker-time { font-size: 11px; opacity: 0.65; margin-left: auto; padding-left: 12px; flex-shrink: 0; }
 .olo-newsticker-label-icon { font-size: 14px; line-height: 1; display: inline-flex; align-items: center; }

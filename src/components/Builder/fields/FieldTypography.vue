@@ -139,17 +139,16 @@
               >{{ bpShort(bpFor.size) }}</button>
             </div>
             <div class="typo-range-row">
-              <input
-                type="range" :min="sizeMin" :max="sizeMax" :step="sizeStep"
-                :value="numberOr(readResp(keys.size, bpFor.size), 0)"
-                @input="writeResp(keys.size, bpFor.size, Number($event.target.value))"
-                class="typo-range"
-              />
-              <input
-                type="number" :min="sizeMin" :max="sizeMax" :step="sizeStep"
-                :value="numberOr(readResp(keys.size, bpFor.size), '')"
-                @input="writeResp(keys.size, bpFor.size, Number($event.target.value))"
-                class="typo-number"
+              <NumberScrubber
+                class="typo-scrubber"
+                :modelValue="numberOr(readResp(keys.size, bpFor.size), '')"
+                :min="sizeMin" :max="sizeMax" :step="sizeStep"
+                :defaultValue="sizeMin"
+                emitAs="number"
+                unit="px"
+                :sliderOnFocus="false"
+                :ariaLabel="t('Dimensione (px)')"
+                @update:modelValue="writeResp(keys.size, bpFor.size, $event)"
               />
             </div>
           </div>
@@ -192,17 +191,15 @@
               >{{ bpShort(bpFor.lineHeight) }}</button>
             </div>
             <div class="typo-range-row">
-              <input
-                type="range" min="0.8" max="3" step="0.05"
-                :value="numberOr(readResp(keys.lineHeight, bpFor.lineHeight), 1.4)"
-                @input="writeResp(keys.lineHeight, bpFor.lineHeight, Number($event.target.value))"
-                class="typo-range"
-              />
-              <input
-                type="number" min="0.8" max="3" step="0.05"
-                :value="numberOr(readResp(keys.lineHeight, bpFor.lineHeight), '')"
-                @input="writeResp(keys.lineHeight, bpFor.lineHeight, Number($event.target.value))"
-                class="typo-number"
+              <NumberScrubber
+                class="typo-scrubber"
+                :modelValue="numberOr(readResp(keys.lineHeight, bpFor.lineHeight), '')"
+                :min="0.8" :max="3" :step="0.05"
+                :defaultValue="1.4"
+                emitAs="number"
+                :sliderOnFocus="false"
+                :ariaLabel="t('Interlinea')"
+                @update:modelValue="writeResp(keys.lineHeight, bpFor.lineHeight, $event)"
               />
             </div>
           </div>
@@ -221,17 +218,16 @@
               >{{ bpShort(bpFor.letterSpacing) }}</button>
             </div>
             <div class="typo-range-row">
-              <input
-                type="range" :min="lsRange.min" :max="lsRange.max" :step="lsRange.step"
-                :value="numberOr(readResp(keys.letterSpacing, bpFor.letterSpacing), 0)"
-                @input="writeResp(keys.letterSpacing, bpFor.letterSpacing, Number($event.target.value))"
-                class="typo-range"
-              />
-              <input
-                type="number" :min="lsRange.min" :max="lsRange.max" :step="lsRange.step"
-                :value="numberOr(readResp(keys.letterSpacing, bpFor.letterSpacing), '')"
-                @input="writeResp(keys.letterSpacing, bpFor.letterSpacing, Number($event.target.value))"
-                class="typo-number"
+              <NumberScrubber
+                class="typo-scrubber"
+                :modelValue="numberOr(readResp(keys.letterSpacing, bpFor.letterSpacing), '')"
+                :min="lsRange.min" :max="lsRange.max" :step="lsRange.step"
+                :defaultValue="0"
+                emitAs="number"
+                :unit="letterSpacingUnit"
+                :sliderOnFocus="false"
+                :ariaLabel="lsRange.label"
+                @update:modelValue="writeResp(keys.letterSpacing, bpFor.letterSpacing, $event)"
               />
             </div>
           </div>
@@ -240,17 +236,16 @@
           <div v-if="keys.wordSpacing" class="typo-row">
             <label class="typo-label">{{ t('Spaziatura parole (px)') }}</label>
             <div class="typo-range-row">
-              <input
-                type="range" min="-5" max="40" step="0.5"
-                :value="numberOr(values[keys.wordSpacing], 0)"
-                @input="emitKey(keys.wordSpacing, Number($event.target.value))"
-                class="typo-range"
-              />
-              <input
-                type="number" min="-5" max="40" step="0.5"
-                :value="numberOr(values[keys.wordSpacing], '')"
-                @input="emitKey(keys.wordSpacing, Number($event.target.value))"
-                class="typo-number"
+              <NumberScrubber
+                class="typo-scrubber"
+                :modelValue="numberOr(values[keys.wordSpacing], '')"
+                :min="-5" :max="40" :step="0.5"
+                :defaultValue="0"
+                emitAs="number"
+                unit="px"
+                :sliderOnFocus="false"
+                :ariaLabel="t('Spaziatura parole (px)')"
+                @update:modelValue="emitKey(keys.wordSpacing, $event)"
               />
             </div>
           </div>
@@ -291,6 +286,7 @@ import { useStylesStore } from '@/stores/styles';
 import FieldFontFamily from './FieldFontFamily.vue';
 import FieldColor from './FieldColor.vue';
 import FieldSelect from './FieldSelect.vue';
+import NumberScrubber from './NumberScrubber.vue';
 
 // Opzioni dei select del popover. Label RAW: FieldSelect applica t() internamente.
 // I value (incluse le stringhe CSS dell'ombra) restano IDENTICI al vecchio select.
@@ -666,6 +662,9 @@ watch(presetOpen, (val) => {
   text-align: right;
 }
 .typo-number:focus { outline: none; border-color: var(--olo-ui-accent, #e8622a); }
+
+/* NumberScrubber riempie la riga (sostituisce slider flex:1 + valbox) */
+.typo-scrubber { flex: 1; min-width: 0; }
 
 .typo-preset-list {
   display: flex;

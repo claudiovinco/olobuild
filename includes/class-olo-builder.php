@@ -690,6 +690,31 @@ class Olo_Builder {
             true
         );
 
+        // Il bundle del builder e' un ES module (code-splitting Vite: l'entry importa i
+        // chunk vendor/tiptap/icons via import relativi → richiede type="module"). oloData
+        // resta disponibile: wp_localize_script stampa uno <script> classico PRIMA, eseguito
+        // durante il parse, mentre il modulo e' deferito. Filtro idempotente sul solo handle.
+        add_filter( 'script_loader_tag', function ( $tag, $handle ) {
+            if ( 'olobuilder-js' !== $handle ) {
+                return $tag;
+            }
+            // WP concatena nel $tag anche gli inline before/after dell'handle: il
+            // type="module" va messo SOLO sul tag con src= (il bundle vero), non sugli
+            // inline (altrimenti builder.js resta classico e l'import ESM esplode).
+            return preg_replace_callback(
+                '#<script\b([^>]*\bsrc=[^>]*)>#i',
+                function ( $m ) {
+                    $attrs = $m[1];
+                    if ( preg_match( '/\stype=([\'"]).*?\1/', $attrs ) ) {
+                        $attrs = preg_replace( '/\stype=([\'"]).*?\1/', ' type="module"', $attrs, 1 );
+                        return '<script' . $attrs . '>';
+                    }
+                    return '<script type="module"' . $attrs . '>';
+                },
+                $tag
+            );
+        }, 10, 2 );
+
         // Auto-thumbnail capture: listener su `olobuild:saved` → html2canvas → upload
         wp_enqueue_script(
             'olo-thumb-capture',
@@ -701,7 +726,7 @@ class Olo_Builder {
         wp_localize_script( 'olo-thumb-capture', 'oloThumbConfig', [
             'restUrl'   => esc_url_raw( rest_url( 'olo/v1/' ) ),
             'nonce'     => wp_create_nonce( 'wp_rest' ),
-            'vendorUrl' => OLO_URL . 'assets/vendor/html2canvas.min.js',
+            'vendorUrl' => OLO_URL . 'assets/vendor/html2canvas.min.js?v=' . OLO_VERSION,
             'debug'     => defined( 'WP_DEBUG' ) && WP_DEBUG,
         ] );
 
@@ -751,6 +776,7 @@ class Olo_Builder {
             'userName'       => wp_get_current_user()->display_name,
             'version'        => OLO_VERSION,
             'pluginUrl'      => OLO_URL,
+            'brandName'      => apply_filters( 'olo_brand_name', 'Olobuild' ),
             'templateId'     => absint( $_GET['template_id'] ?? 0 ),
             'postId'         => $post_id,
             'postPermalink'  => $post_id ? get_permalink( $post_id ) : '',
@@ -913,7 +939,7 @@ class Olo_Builder {
      */
     public static function page_shell_open( $page_title = '', $extra_class = '' ) {
         $logo_url  = OLO_URL . 'assets/img/olobuild-logo-200-v2.png';
-        $white_url = OLO_URL . 'assets/img/olobuild-logo-200-white.png';
+        $white_url = apply_filters( 'olo_brand_logo_url', OLO_URL . 'assets/img/olobuild-logo-200-white.png' );
         $cls = 'olo-admin-wrap' . ( $extra_class ? ' ' . esc_attr( $extra_class ) : '' );
         $current   = sanitize_key( $_GET['page'] ?? '' );
         ?>
@@ -922,7 +948,7 @@ class Olo_Builder {
             <div class="olo-shell-topbar">
                 <div class="olo-shell-topbar-brand">
                     <a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuild' ) ); ?>">
-                        <img src="<?php echo esc_url( $white_url ); ?>" alt="Olobuild" />
+                        <img src="<?php echo esc_url( $white_url ); ?>" alt="<?php echo esc_attr( apply_filters( 'olo_brand_name', 'Olobuild' ) ); ?>" />
                     </a>
                     <span class="olo-shell-topbar-label">website builder</span>
                 </div>
@@ -2921,9 +2947,20 @@ class Olo_Builder {
             'olo_freesound_api_key', 'olo_recaptcha_site_key', 'olo_recaptcha_secret_key',
             'olo_mailchimp_api_key',
         ];
-        $data = [];
+        // La recaptcha_site_key e' pubblica (renderizzata nell'HTML): resta in chiaro.
+        // Tutto il resto e' segreto e viene mascherato: solo gli ultimi 4 caratteri
+        // lasciano il server, coerente con Olo_AI_Assistant::get_settings().
+        $public = [ 'olo_recaptcha_site_key' ];
+        $data   = [];
         foreach ( $keys as $k ) {
-            $data[ $k ] = get_option( $k, '' );
+            $val = (string) get_option( $k, '' );
+            if ( $val !== '' && ! in_array( $k, $public, true ) ) {
+                // Mostra gli ultimi 4 char solo se la chiave e' abbastanza lunga, altrimenti maschera tutto.
+                $val = strlen( $val ) > 4
+                    ? str_repeat( '*', strlen( $val ) - 4 ) . substr( $val, -4 )
+                    : str_repeat( '*', strlen( $val ) );
+            }
+            $data[ $k ] = $val;
         }
         return rest_ensure_response( $data );
     }
@@ -2937,7 +2974,12 @@ class Olo_Builder {
         $body = $request->get_json_params();
         foreach ( $allowed as $k ) {
             if ( isset( $body[ $k ] ) ) {
-                update_option( $k, sanitize_text_field( $body[ $k ] ) );
+                $val = (string) $body[ $k ];
+                // Placeholder mascherato (contiene '*') = valore non modificato: non sovrascrivere il segreto reale.
+                if ( strpos( $val, '*' ) !== false ) {
+                    continue;
+                }
+                update_option( $k, sanitize_text_field( $val ) );
             }
         }
         return rest_ensure_response( [ 'success' => true ] );
@@ -3028,6 +3070,8 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-imagehero-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-glowhero-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-producthero-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-northvideohero-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-northquoteslider-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-featuredstory-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-glowgallery-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-chathero-tile.php';
@@ -3266,6 +3310,8 @@ class Olo_Builder {
         $manager->register_tile( new Olo_ImageHero_Tile() );
         $manager->register_tile( new Olo_GlowHero_Tile() );
         $manager->register_tile( new Olo_ProductHero_Tile() );
+        $manager->register_tile( new Olo_NorthVideoHero_Tile() );
+        $manager->register_tile( new Olo_NorthQuoteSlider_Tile() );
         $manager->register_tile( new Olo_FeaturedStory_Tile() );
         $manager->register_tile( new Olo_GlowGallery_Tile() );
         $manager->register_tile( new Olo_ChatHero_Tile() );

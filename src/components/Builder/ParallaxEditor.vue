@@ -29,25 +29,25 @@
           :key="idx"
           class="mb-flex mb-items-center mb-gap-1"
         >
-          <input
-            type="number"
-            :value="stop.value"
-            @change="updateStopValue(prop.key, idx, $event, prop)"
-            @wheel="handleNumberWheel"
-            :min="prop.min" :max="prop.max" :step="prop.step"
-            class="mb-w-24 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-1.5 mb-py-0.5 mb-text-[11px] mb-text-gray-900"
+          <NumberScrubber
+            :modelValue="stop.value"
+            :min="prop.min ?? null" :max="prop.max ?? null" :step="prop.step || 1"
+            :defaultValue="prop.min ?? 0"
+            emitAs="number"
+            :unit="prop.unit || ''"
+            :ariaLabel="t('Valore stop')"
+            @update:modelValue="updateStopValue(prop.key, idx, $event)"
           />
-          <span v-if="prop.unit" class="mb-text-[9px] mb-text-gray-500">{{ prop.unit }}</span>
           <span class="mb-text-[9px] mb-text-gray-500">@</span>
-          <input
-            type="number"
-            :value="stop.position"
-            @change="updateStopPosition(prop.key, idx, $event)"
-            @wheel="handleNumberWheel"
-            min="0" max="100" step="1"
-            class="mb-w-20 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-1.5 mb-py-0.5 mb-text-[11px] mb-text-gray-900 mb-text-center"
+          <NumberScrubber
+            :modelValue="stop.position"
+            :min="0" :max="100" :step="1"
+            :defaultValue="0"
+            emitAs="number"
+            unit="%"
+            :ariaLabel="t('Posizione stop')"
+            @update:modelValue="updateStopPosition(prop.key, idx, $event)"
           />
-          <span class="mb-text-[9px] mb-text-gray-500">%</span>
           <button
             v-if="idx > 0 && idx < getStops(prop.key).length - 1"
             @click="removeStop(prop.key, idx)"
@@ -91,12 +91,15 @@
         <div>
           <label class="mb-block mb-text-[9px] mb-text-gray-500 mb-mb-0.5">{{ t('Easing') }}</label>
           <div class="mb-flex mb-items-center mb-gap-2">
-            <input
-              type="range"
-              :value="data.easing ?? ''"
-              @input="updateOption('easing', $event.target.value === '' ? null : parseFloat($event.target.value))"
-              min="0" max="2" step="0.1"
-              class="mb-flex-1"
+            <NumberScrubber
+              class="mb-flex-1 mb-min-w-0"
+              :modelValue="data.easing ?? 0"
+              :min="0" :max="2" :step="0.1"
+              :defaultValue="0"
+              emitAs="number"
+              :sliderOnFocus="false"
+              :ariaLabel="t('Easing')"
+              @update:modelValue="updateOption('easing', $event)"
             />
             <span class="mb-text-[10px] mb-text-gray-400 mb-w-6 mb-text-right">{{ data.easing != null ? data.easing : '-' }}</span>
           </div>
@@ -128,8 +131,8 @@
 
 <script setup>
 import { t } from '@/i18n';
-import { handleNumberWheel } from '@/utils/numberInputWheel';
 import { computed } from 'vue';
+import NumberScrubber from './fields/NumberScrubber.vue';
 
 const props = defineProps({
   modelValue: { type: Object, default: () => ({}) },
@@ -177,16 +180,17 @@ function clearStops(key) {
   emitUpdate({ [key]: [] });
 }
 
-function updateStopValue(key, idx, event, prop) {
-  const raw = event.target.value;
-  const val = raw === '' ? 0 : parseFloat(raw);
+function updateStopValue(key, idx, num) {
+  // num è già un Number (NumberScrubber emitAs='number'); parseFloat è innocuo.
+  const val = parseFloat(num) || 0;
   const stops = [...getStops(key)];
   stops[idx] = { ...stops[idx], value: parseFloat(val.toFixed(4)) };
   emitUpdate({ [key]: stops });
 }
 
-function updateStopPosition(key, idx, event) {
-  const pos = Math.max(0, Math.min(100, parseInt(event.target.value) || 0));
+function updateStopPosition(key, idx, num) {
+  // num è già un Number (NumberScrubber emitAs='number'); parseInt è innocuo.
+  const pos = Math.max(0, Math.min(100, parseInt(num) || 0));
   const stops = [...getStops(key)];
   stops[idx] = { ...stops[idx], position: pos };
   // Sort all stops by position

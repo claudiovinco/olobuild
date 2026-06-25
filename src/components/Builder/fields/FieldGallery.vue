@@ -118,7 +118,7 @@
         class="mb-px-3 mb-py-1.5 mb-rounded-md mb-text-xs mb-text-white mb-transition-colors"
         style="background: var(--olo-ui-accent, #e8622a);"
       >
-        Aggiungi
+        {{ t('Aggiungi') }}
       </button>
     </div>
 
@@ -131,7 +131,7 @@
             v-model="stockQuery"
             @keydown.enter="searchStock(1)"
             type="text"
-            :placeholder="`Cerca su ${activeSvc.label}...`"
+            :placeholder="`${t('Cerca su')} ${activeSvc.label}...`"
             class="mb-flex-1 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200 mb-placeholder-gray-500"
           />
           <button
@@ -140,7 +140,7 @@
             class="mb-px-3 mb-py-1 mb-rounded-md mb-text-xs mb-text-white mb-transition-colors"
             style="background: var(--olo-ui-accent, #e8622a);"
           >
-            Cerca
+            {{ t('Cerca') }}
           </button>
         </div>
         <!-- Toggle foto / video -->
@@ -149,7 +149,7 @@
             @click="toggleMediaType('photo')"
             class="mb-flex-1 mb-py-0.5 mb-rounded mb-text-[10px] mb-transition-colors"
             :class="stockMediaType === 'photo' ? 'mb-bg-gray-500 mb-text-white' : 'mb-text-gray-400 hover:mb-text-gray-200'"
-          >Foto</button>
+          >{{ t('Foto') }}</button>
           <button
             @click="toggleMediaType('video')"
             class="mb-flex-1 mb-py-0.5 mb-rounded mb-text-[10px] mb-transition-colors"
@@ -212,18 +212,18 @@
             @click="searchStock(stockPage + 1)"
             class="mb-w-full mb-py-1.5 mb-text-xs mb-text-gray-400 hover:mb-text-gray-200 mb-transition-colors"
           >
-            Carica altre...
+            {{ t('Carica altre...') }}
           </button>
         </div>
 
         <div class="mb-text-[9px] mb-text-gray-500 mb-mt-1 mb-text-center">
-          {{ stockTotal }} risultati su {{ activeSvc.label }}
+          {{ stockTotal }} {{ t('risultati su') }} {{ activeSvc.label }}
         </div>
       </div>
 
       <!-- Nessun risultato -->
       <div v-else-if="stockSearched" class="mb-py-4 mb-text-center mb-text-xs mb-text-gray-500">
-        Nessun risultato
+        {{ t('Nessun risultato') }}
       </div>
     </div>
   </div>

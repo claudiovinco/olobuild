@@ -23,7 +23,7 @@
 
       <!-- Text -->
       <div :style="textColStyle">
-        <component :is="s.heading_tag || 'h2'" class="mb-font-bold" :style="headingStyle" data-olo-editable="heading">{{ s.heading || 'Titolo Sezione' }}</component>
+        <component :is="s.heading_tag || 'h2'" class="mb-font-bold" :style="headingStyle" data-olo-editable="heading">{{ s.heading || t('Titolo Sezione') }}</component>
         <div class="mb-leading-relaxed" :style="textStyle" data-olo-editable="text" data-olo-richtext data-olo-multiline v-html="textHtml"></div>
         <div v-if="s.link_url" class="mb-mt-2 mb-text-sm mb-truncate" style="color: var(--olo-color-primary, #e1474f);">{{ s.link_url }}</div>
       </div>
@@ -36,6 +36,7 @@ import { computed } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import { rv } from '@/composables/useResponsiveValue';
 import { SHADOW } from '@/composables/oloTileDefaults';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

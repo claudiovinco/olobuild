@@ -4,7 +4,7 @@
     <!-- State toggle (builder only) -->
     <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
       <button type="button" @click="showLoggedIn = !showLoggedIn" style="font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid var(--olo-color-border, #E5E7EB);background:transparent;color:var(--olo-color-text-muted, #9CA3AF);cursor:pointer;">
-        {{ showLoggedIn ? 'Mostra form' : 'Mostra logged-in' }}
+        {{ showLoggedIn ? t('Mostra form') : t('Mostra logged-in') }}
       </button>
     </div>
 
@@ -14,7 +14,7 @@
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </div>
       <div style="font-weight:700;font-size:17px;" :style="{ color: s.text_color || 'var(--olo-color-text, #374151)' }">
-        <span data-olo-editable="logged_in_message">{{ s.logged_in_message || 'Bentornato!' }}</span>
+        <span data-olo-editable="logged_in_message">{{ s.logged_in_message || t('Bentornato!') }}</span>
       </div>
       <div style="font-size:14px;opacity:0.6;margin-top:4px;" :style="{ color: s.text_color || 'var(--olo-color-text-muted, #9CA3AF)' }">{{ t('Mario Rossi') }}</div>
       <a href="#" style="font-size:13px;margin-top:16px;display:inline-block;text-decoration:none;font-weight:500;" :style="{ color: linkColor }">{{ t('Esci') }}</a>
@@ -36,7 +36,7 @@
       <!-- Header -->
       <div style="text-align:center;margin-bottom:24px;">
         <div style="font-size:22px;font-weight:700;line-height:1.3;" :style="{ color: s.text_color || 'var(--olo-color-text, #1F2937)' }">
-          <span :data-olo-editable="showLogin ? 'login_title' : 'register_title'">{{ showLogin ? (s.login_title || 'Bentornato') : (s.register_title || 'Crea un account') }}</span>
+          <span :data-olo-editable="showLogin ? 'login_title' : 'register_title'">{{ showLogin ? (s.login_title || t('Bentornato')) : (s.register_title || t('Crea un account')) }}</span>
         </div>
         <div v-if="currentSubtitle" style="font-size:14px;margin-top:6px;opacity:0.6;" :style="{ color: s.text_color || 'var(--olo-color-text-muted, #9CA3AF)' }">
           <span :data-olo-editable="showLogin ? 'login_subtitle' : 'register_subtitle'">{{ currentSubtitle }}</span>
@@ -61,7 +61,7 @@
         </div>
         <div style="display:flex;align-items:center;gap:12px;margin-top:20px;">
           <div :style="dividerLineStyle"></div>
-          <span style="font-size:12px;white-space:nowrap;opacity:0.5;" :style="{ color: s.text_color || 'var(--olo-color-text-muted, #9CA3AF)' }">{{ s.social_divider_text || 'oppure' }}</span>
+          <span style="font-size:12px;white-space:nowrap;opacity:0.5;" :style="{ color: s.text_color || 'var(--olo-color-text-muted, #9CA3AF)' }">{{ s.social_divider_text || t('oppure') }}</span>
           <div :style="dividerLineStyle"></div>
         </div>
       </div>
@@ -101,10 +101,10 @@
           <span v-else></span>
           <a v-if="s.show_lost_password" href="#" style="font-size:13px;text-decoration:none;font-weight:500;" :style="{ color: linkColor }">{{ t('Password dimenticata?') }}</a>
         </div>
-        <button type="button" :style="submitStyle">{{ s.login_button_text || 'Accedi' }}</button>
+        <button type="button" :style="submitStyle">{{ s.login_button_text || t('Accedi') }}</button>
         <!-- Switch link -->
         <div v-if="s.mode === 'both'" style="text-align:center;margin-top:16px;font-size:13px;" :style="{ color: s.text_color || 'var(--olo-color-text-muted, #9CA3AF)' }">
-          Non hai un account? <a href="#" @click.prevent="activeTab = 'register'" style="text-decoration:none;font-weight:600;" :style="{ color: linkColor }">{{ t('Registrati') }}</a>
+          {{ t('Non hai un account?') }} <a href="#" @click.prevent="activeTab = 'register'" style="text-decoration:none;font-weight:600;" :style="{ color: linkColor }">{{ t('Registrati') }}</a>
         </div>
       </form>
 
@@ -114,7 +114,7 @@
           <template v-for="(rf, ri) in regFields" :key="rf.id || ri">
             <!-- ── Username (built-in) ── -->
             <div v-if="rf.field_type === 'username'" :style="fieldWidthStyle(rf)">
-              <label :style="labelStyle">{{ rf.label || 'Nome utente' }}{{ rf.required ? ' *' : '' }}</label>
+              <label :style="labelStyle">{{ rf.label || t('Nome utente') }}{{ rf.required ? ' *' : '' }}</label>
               <div :style="inputWrapStyle">
                 <span v-if="s.show_input_icons" :style="inputIconStyle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
                 <input type="text" :placeholder="rf.placeholder || ''" :style="inputFieldStyle" disabled />
@@ -130,7 +130,7 @@
             </div>
             <!-- ── Password (built-in) ── -->
             <div v-else-if="rf.field_type === 'user_password'" :style="fieldWidthStyle(rf)" style="margin-bottom:0 !important;">
-              <label :style="labelStyle">{{ rf.label || 'Password' }}{{ rf.required ? ' *' : '' }}</label>
+              <label :style="labelStyle">{{ rf.label || t('Password') }}{{ rf.required ? ' *' : '' }}</label>
               <div :style="inputWrapStyle">
                 <span v-if="s.show_input_icons" :style="inputIconStyle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
                 <input :type="showPwRegister ? 'text' : 'password'" :placeholder="rf.placeholder || ''" :style="inputFieldStyle" disabled />
@@ -156,7 +156,7 @@
             </div>
             <!-- ── Confirm password (built-in) ── -->
             <div v-else-if="rf.field_type === 'confirm_password'" :style="fieldWidthStyle(rf)">
-              <label :style="labelStyle">{{ rf.label || 'Conferma password' }}{{ rf.required ? ' *' : '' }}</label>
+              <label :style="labelStyle">{{ rf.label || t('Conferma password') }}{{ rf.required ? ' *' : '' }}</label>
               <div :style="inputWrapStyle">
                 <span v-if="s.show_input_icons" :style="inputIconStyle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
                 <input type="password" :placeholder="rf.placeholder || ''" :style="inputFieldStyle" disabled />
@@ -164,21 +164,21 @@
             </div>
             <!-- ── Text/Email/Tel/Number/Date/URL ── -->
             <div v-else-if="['text','email','tel','number','date','url'].includes(rf.field_type || 'text')" :style="fieldWidthStyle(rf)">
-              <label :style="labelStyle">{{ rf.label || 'Campo' }}{{ rf.required ? ' *' : '' }}</label>
+              <label :style="labelStyle">{{ rf.label || t('Campo') }}{{ rf.required ? ' *' : '' }}</label>
               <div :style="inputWrapStyle">
                 <input :type="rf.field_type || 'text'" :placeholder="rf.placeholder || ''" :style="inputFieldStyle" disabled />
               </div>
             </div>
             <!-- ── Textarea ── -->
             <div v-else-if="rf.field_type === 'textarea'" :style="fieldWidthStyle(rf)">
-              <label :style="labelStyle">{{ rf.label || 'Campo' }}{{ rf.required ? ' *' : '' }}</label>
+              <label :style="labelStyle">{{ rf.label || t('Campo') }}{{ rf.required ? ' *' : '' }}</label>
               <textarea :placeholder="rf.placeholder || ''" :style="{ ...textareaStyle }" disabled></textarea>
             </div>
             <!-- ── Select ── -->
             <div v-else-if="rf.field_type === 'select'" :style="fieldWidthStyle(rf)">
-              <label :style="labelStyle">{{ rf.label || 'Campo' }}{{ rf.required ? ' *' : '' }}</label>
+              <label :style="labelStyle">{{ rf.label || t('Campo') }}{{ rf.required ? ' *' : '' }}</label>
               <select :style="selectStyle" disabled>
-                <option value="">{{ rf.placeholder || 'Seleziona...' }}</option>
+                <option value="">{{ rf.placeholder || t('Seleziona...') }}</option>
                 <option v-for="(opt, oi) in parseOpts(rf.options)" :key="oi">{{ opt }}</option>
               </select>
             </div>
@@ -191,7 +191,7 @@
             </div>
             <!-- ── Radio ── -->
             <div v-else-if="rf.field_type === 'radio'" :style="fieldWidthStyle(rf)">
-              <label :style="labelStyle">{{ rf.label || 'Campo' }}{{ rf.required ? ' *' : '' }}</label>
+              <label :style="labelStyle">{{ rf.label || t('Campo') }}{{ rf.required ? ' *' : '' }}</label>
               <div style="display:flex;flex-direction:column;gap:6px;">
                 <label v-for="(opt, oi) in parseOpts(rf.options)" :key="oi" style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;" :style="{ color: s.text_color || 'var(--olo-color-text, #374151)' }">
                   <input type="radio" :name="'rf-' + ri" disabled :style="{ accentColor: submitBg }" />
@@ -207,13 +207,13 @@
           <input type="checkbox" disabled :style="{ accentColor: submitBg, marginTop: '2px' }" />
           <span>
             <template v-if="s.terms_url">
-              <a :href="s.terms_url" target="_blank" style="text-decoration:underline;" :style="{ color: linkColor }">{{ s.terms_text || 'Accetto i Termini e le Condizioni' }}</a>
+              <a :href="s.terms_url" target="_blank" style="text-decoration:underline;" :style="{ color: linkColor }">{{ s.terms_text || t('Accetto i Termini e le Condizioni') }}</a>
             </template>
-            <template v-else>{{ s.terms_text || 'Accetto i Termini e le Condizioni' }}</template>
+            <template v-else>{{ s.terms_text || t('Accetto i Termini e le Condizioni') }}</template>
           </span>
         </label>
 
-        <button type="button" :style="submitStyle" style="margin-top:16px;">{{ s.register_button_text || 'Registrati' }}</button>
+        <button type="button" :style="submitStyle" style="margin-top:16px;">{{ s.register_button_text || t('Registrati') }}</button>
         <!-- Switch link -->
         <div v-if="s.mode === 'both'" style="text-align:center;margin-top:16px;font-size:13px;" :style="{ color: s.text_color || 'var(--olo-color-text-muted, #9CA3AF)' }">
           {{ t('Hai già un account?') }} <a href="#" @click.prevent="activeTab = 'login'" style="text-decoration:none;font-weight:600;" :style="{ color: linkColor }">{{ t('Accedi') }}</a>

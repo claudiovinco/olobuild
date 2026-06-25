@@ -33,16 +33,27 @@ class Olobuild_Role_Manager {
      * @return bool Whether the user can edit.
      */
     public function check_permission( $can_edit ) {
-        $roles = get_option( 'olo_builder_roles', [ 'administrator' ] );
-        $user  = wp_get_current_user();
+        // Se l'amministratore non ha MAI configurato i ruoli del builder, non restringere:
+        // si mantiene il comportamento storico (chi possiede edit_pages puo' editare). Cosi'
+        // l'attivazione di questo enforcement non blocca utenti che oggi hanno gia' accesso.
+        $roles = get_option( 'olo_builder_roles', null );
+        if ( ! is_array( $roles ) || empty( $roles ) ) {
+            return $can_edit;
+        }
 
+        $user = wp_get_current_user();
         if ( ! $user->ID ) {
             return false;
         }
 
-        foreach ( $roles as $role ) {
-            if ( in_array( $role, (array) $user->roles, true ) ) {
-                return true;
+        // Gli amministratori non vengono mai esclusi.
+        if ( user_can( $user, 'manage_options' ) ) {
+            return $can_edit;
+        }
+
+        foreach ( (array) $user->roles as $role ) {
+            if ( in_array( $role, (array) $roles, true ) ) {
+                return $can_edit;
             }
         }
 
@@ -262,7 +273,7 @@ class Olobuild_Role_Manager {
         $allowed         = $this->get_allowed_roles();
         $content_only    = $this->get_content_only_roles();
         $design_only     = get_option( 'olo_design_only_roles', [] );
-        $allowed_count = is_array( $allowed_roles ) ? count( $allowed_roles ) : 0;
+        $allowed_count = is_array( $allowed ) ? count( $allowed ) : 0;
         $design_only_count = is_array( $design_only ) ? count( $design_only ) : 0;
         ?>
         <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Permessi Utente', 'olobuild' ) . '</b>' ); ?>

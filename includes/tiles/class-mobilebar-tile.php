@@ -550,7 +550,7 @@ class Olo_Mobilebar_Tile extends Olo_Tile_Base {
             if ( ! empty( $subs ) ) {
                 echo '<div class="olo-mb-item">';
                 echo '<a href="' . esc_url( $item->url ) . '">' . esc_html( $item->title ) . '</a>';
-                echo '<button class="olo-mb-chevron" type="button" aria-label="Espandi">' . $chevron_svg . '</button>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $chevron_svg is static SVG markup defined above in render_html()
+                echo '<button class="olo-mb-chevron" type="button" aria-expanded="false" aria-label="Espandi">' . $chevron_svg . '</button>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $chevron_svg is static SVG markup defined above in render_html()
                 echo '</div>';
 
                 // Sub-menu
@@ -567,7 +567,7 @@ class Olo_Mobilebar_Tile extends Olo_Tile_Base {
                     if ( ! empty( $sub_subs ) ) {
                         echo '<div class="olo-mb-item">';
                         echo '<a href="' . esc_url( $sub->url ) . '">' . esc_html( $sub->title ) . '</a>';
-                        echo '<button class="olo-mb-chevron" type="button" aria-label="Espandi">' . $chevron_svg . '</button>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $chevron_svg is static SVG markup defined above in render_html()
+                        echo '<button class="olo-mb-chevron" type="button" aria-expanded="false" aria-label="Espandi">' . $chevron_svg . '</button>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $chevron_svg is static SVG markup defined above in render_html()
                         echo '</div>';
                         echo '<ul class="olo-mb-sub">';
                         foreach ( $sub_subs as $ss ) {
@@ -650,7 +650,8 @@ class Olo_Mobilebar_Tile extends Olo_Tile_Base {
                     e.stopPropagation();
                     var li = btn.closest("li");
                     if (li) {
-                        li.classList.toggle("olo-mb-sub-open");
+                        var isOpen = li.classList.toggle("olo-mb-sub-open");
+                        btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
                     }
                 });
             });

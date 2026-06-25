@@ -244,6 +244,19 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
                 height: <?php echo $handle_sz; ?>px;
                 <?php endif; ?>
             }
+
+            /* Focus indicator (2.4.7): l'handle e il range sono invisibili al focus
+               perche il range ha opacity:0; usiamo :focus-visible/:focus-within per
+               mostrare un anello di focus visibile sull'handle quando lo slider e
+               raggiunto da tastiera. */
+            .<?php echo $uid; ?> .olo-ic-range:focus-visible {
+                outline: none;
+            }
+            .<?php echo $uid; ?>:focus-within .olo-ic-handle {
+                outline: 3px solid var(--olo-color-primary, #e1474f);
+                outline-offset: 3px;
+                box-shadow: 0 0 0 3px rgba(255,255,255,0.85);
+            }
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-ic <?php echo esc_attr( $uid ); ?> olo-ic-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" data-orientation="<?php echo esc_attr( $orientation ); ?>">

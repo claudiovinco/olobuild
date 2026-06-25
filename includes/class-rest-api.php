@@ -919,6 +919,13 @@ class Olo_Rest_Api {
             return false;
         }
 
+        // Enforcement lato server delle restrizioni per ruolo (Configurazione → Permessi & Ruoli).
+        // Il filtro di default ritorna true: restringe SOLO se l'admin ha configurato i ruoli builder,
+        // quindi non blocca chi oggi accede via edit_pages su installazioni non configurate.
+        if ( ! apply_filters( 'olo_can_edit_builder', true ) ) {
+            return new WP_Error( 'rest_forbidden', __( 'Il tuo ruolo non ha accesso al builder.', 'olobuild' ), array( 'status' => 403 ) );
+        }
+
         // Verify WP REST nonce for write operations
         if ( $request && in_array( $request->get_method(), [ 'POST', 'PUT', 'DELETE' ], true ) ) {
             $nonce = $request->get_header( 'x-wp-nonce' );
@@ -1966,15 +1973,16 @@ class Olo_Rest_Api {
         $name = sanitize_text_field( $request->get_param( 'name' ) ?? 'Widget globale' );
         $tile_data = $request->get_param( 'tile_data' );
         // I widget globali finiscono nel render frontend: stesso gate kses dei template.
+        // Deve essere un albero di tile (array): una stringa JSON che NON decodifica in
+        // array verrebbe altrimenti salvata RAW, bypassando wp_kses_post (stored XSS).
         if ( is_string( $tile_data ) ) {
-            $decoded = json_decode( $tile_data, true );
-            if ( is_array( $decoded ) ) {
-                $tile_data = $decoded;
-            }
+            $decoded   = json_decode( $tile_data, true );
+            $tile_data = is_array( $decoded ) ? $decoded : null;
         }
-        if ( ! is_string( $tile_data ) ) {
-            $tile_data = wp_json_encode( $this->sanitize_unfiltered_tile_fields( $tile_data ) );
+        if ( ! is_array( $tile_data ) ) {
+            return new WP_REST_Response( [ 'message' => 'tile_data non valido.' ], 400 );
         }
+        $tile_data = wp_json_encode( $this->sanitize_unfiltered_tile_fields( $tile_data ) );
         $wpdb->insert( $table, [
             'name'       => $name,
             'tile_data'  => $tile_data,
@@ -1999,11 +2007,12 @@ class Olo_Rest_Api {
             $td = $request->get_param( 'tile_data' );
             if ( is_string( $td ) ) {
                 $decoded = json_decode( $td, true );
-                if ( is_array( $decoded ) ) {
-                    $td = $decoded;
-                }
+                $td      = is_array( $decoded ) ? $decoded : null;
             }
-            $data['tile_data'] = is_string( $td ) ? $td : wp_json_encode( $this->sanitize_unfiltered_tile_fields( $td ) );
+            if ( ! is_array( $td ) ) {
+                return new WP_REST_Response( [ 'message' => 'tile_data non valido.' ], 400 );
+            }
+            $data['tile_data'] = wp_json_encode( $this->sanitize_unfiltered_tile_fields( $td ) );
             $formats[] = '%s';
         }
         if ( empty( $data ) ) {
@@ -3340,10 +3349,18 @@ class Olo_Rest_Api {
         $old_url = $template['thumbnail'] ?? '';
         $db->update_template( $template_id, [ 'thumbnail' => $url ] );
 
-        // Cleanup: rimuovi vecchia thumb solo se è nel nostro dir (no media library)
+        // Cleanup: rimuovi vecchia thumb solo se è nel nostro dir (no media library).
+        // Hardening anti path-traversal: il path risolto (realpath) DEVE stare dentro
+        // olobuild-thumbs/, così un campo `thumbnail` manipolato non puo' cancellare
+        // file arbitrari fuori dalla cartella.
         if ( $old_url && strpos( $old_url, '/olobuild-thumbs/' ) !== false ) {
-            $old_path = str_replace( $uploads['baseurl'], $uploads['basedir'], $old_url );
-            if ( file_exists( $old_path ) ) @unlink( $old_path );
+            $old_path   = str_replace( $uploads['baseurl'], $uploads['basedir'], $old_url );
+            $thumbs_dir = realpath( trailingslashit( $uploads['basedir'] ) . 'olobuild-thumbs' );
+            $real       = realpath( $old_path );
+            if ( $thumbs_dir && $real && is_file( $real )
+                && strpos( $real, $thumbs_dir . DIRECTORY_SEPARATOR ) === 0 ) {
+                @unlink( $real );
+            }
         }
 
         // Invalida cache KPI/recent (così la dashboard mostra subito il nuovo thumb)

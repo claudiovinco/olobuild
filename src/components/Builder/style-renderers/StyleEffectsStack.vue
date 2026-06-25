@@ -41,13 +41,9 @@
       <span class="olo-es-gtitle">{{ t('Opacità') }}<span v-if="bp !== 'desktop'" class="olo-es-gbp">{{ bpLabel }}</span></span>
       <div class="olo-es-sliderrow">
         <span class="olo-es-lab">{{ t('Opacità') }}</span>
-        <input type="range" class="olo-es-slider" min="0" max="100" step="1"
-          :value="num(sv('opacity', 100), 100)" @input="setv('opacity', parseInt($event.target.value))" :aria-label="t('Opacità')" />
-        <span class="olo-es-val">
-          <input type="text" inputmode="numeric" class="olo-es-valinput"
-            :value="num(sv('opacity', 100), 100)" @change="setvClamped('opacity', $event.target.value, 0, 100, 100)" :aria-label="t('Opacità')" />
-          <i>%</i>
-        </span>
+        <NumberScrubber class="olo-es-ns" :modelValue="num(sv('opacity', 100), 100)" :min="0" :max="100" :step="1"
+          :defaultValue="100" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Opacità')"
+          @update:modelValue="setvC('opacity', $event, 0, 100, 100)" />
       </div>
     </div>
 
@@ -56,58 +52,42 @@
       <span class="olo-es-gtitle">{{ t('Trasformazione') }}<span v-if="bp !== 'desktop'" class="olo-es-gbp">{{ bpLabel }}</span></span>
       <div class="olo-es-sliderrow">
         <span class="olo-es-lab">{{ t('Rotaz.') }}</span>
-        <input type="range" class="olo-es-slider" min="-180" max="180" step="1"
-          :value="tget('rotate', 0)" @input="tset('rotate', parseInt($event.target.value))" :aria-label="t('Rotazione')" />
-        <span class="olo-es-val">
-          <input type="text" inputmode="numeric" class="olo-es-valinput"
-            :value="tget('rotate', 0)" @change="tsetClamped('rotate', $event.target.value, -180, 180, 0)" :aria-label="t('Rotazione')" />
-          <i>°</i>
-        </span>
+        <NumberScrubber class="olo-es-ns" :modelValue="tget('rotate', 0)" :min="-180" :max="180" :step="1"
+          :defaultValue="0" emitAs="number" unit="°" :sliderOnFocus="false" :ariaLabel="t('Rotazione')"
+          @update:modelValue="tsetC('rotate', $event, -180, 180, 0)" />
       </div>
       <div class="olo-es-sliderrow">
         <span class="olo-es-lab">{{ t('Scala') }}</span>
-        <input type="range" class="olo-es-slider" min="10" max="300" step="5"
-          :value="Math.round(tget('scale', 1) * 100)" @input="tset('scale', parseInt($event.target.value) / 100)" :aria-label="t('Scala')" />
-        <span class="olo-es-val">
-          <input type="text" inputmode="numeric" class="olo-es-valinput"
-            :value="Math.round(tget('scale', 1) * 100)" @change="setScalePct($event.target.value)" :aria-label="t('Scala')" />
-          <i>%</i>
-        </span>
+        <NumberScrubber class="olo-es-ns" :modelValue="Math.round(tget('scale', 1) * 100)" :min="10" :max="300" :step="5"
+          :defaultValue="100" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Scala')"
+          @update:modelValue="setScaleN($event)" />
       </div>
       <div class="olo-es-duo">
         <div class="olo-es-field">
           <span class="olo-es-lab">{{ t('Sposta X') }}</span>
-          <div class="olo-es-numwrap">
-            <input type="text" inputmode="numeric" class="olo-es-num" :value="tget('translateX', 0)"
-              @input="tset('translateX', int($event.target.value))" :aria-label="t('Sposta X')" />
-            <span class="olo-es-unit">px</span>
-          </div>
+          <NumberScrubber class="olo-es-ns" :modelValue="tget('translateX', 0)" :min="-500" :max="500" :step="1"
+            :defaultValue="0" emitAs="number" unit="px" :ariaLabel="t('Sposta X')"
+            @update:modelValue="tset('translateX', $event)" />
         </div>
         <div class="olo-es-field">
           <span class="olo-es-lab">{{ t('Sposta Y') }}</span>
-          <div class="olo-es-numwrap">
-            <input type="text" inputmode="numeric" class="olo-es-num" :value="tget('translateY', 0)"
-              @input="tset('translateY', int($event.target.value))" :aria-label="t('Sposta Y')" />
-            <span class="olo-es-unit">px</span>
-          </div>
+          <NumberScrubber class="olo-es-ns" :modelValue="tget('translateY', 0)" :min="-500" :max="500" :step="1"
+            :defaultValue="0" emitAs="number" unit="px" :ariaLabel="t('Sposta Y')"
+            @update:modelValue="tset('translateY', $event)" />
         </div>
       </div>
       <div class="olo-es-duo">
         <div class="olo-es-field">
           <span class="olo-es-lab">{{ t('Skew X') }}</span>
-          <div class="olo-es-numwrap">
-            <input type="text" inputmode="numeric" class="olo-es-num" :value="tget('skewX', 0)"
-              @input="tset('skewX', int($event.target.value))" :aria-label="t('Skew X')" />
-            <span class="olo-es-unit">°</span>
-          </div>
+          <NumberScrubber class="olo-es-ns" :modelValue="tget('skewX', 0)" :min="-45" :max="45" :step="1"
+            :defaultValue="0" emitAs="number" unit="°" :ariaLabel="t('Skew X')"
+            @update:modelValue="tset('skewX', $event)" />
         </div>
         <div class="olo-es-field">
           <span class="olo-es-lab">{{ t('Skew Y') }}</span>
-          <div class="olo-es-numwrap">
-            <input type="text" inputmode="numeric" class="olo-es-num" :value="tget('skewY', 0)"
-              @input="tset('skewY', int($event.target.value))" :aria-label="t('Skew Y')" />
-            <span class="olo-es-unit">°</span>
-          </div>
+          <NumberScrubber class="olo-es-ns" :modelValue="tget('skewY', 0)" :min="-45" :max="45" :step="1"
+            :defaultValue="0" emitAs="number" unit="°" :ariaLabel="t('Skew Y')"
+            @update:modelValue="tset('skewY', $event)" />
         </div>
       </div>
       <div v-if="!isHover && bp === 'desktop'" class="olo-es-row">
@@ -128,24 +108,21 @@
       <div class="olo-es-trio">
         <div class="olo-es-field">
           <span class="olo-es-lab">{{ t('Oriz.') }}</span>
-          <div class="olo-es-numwrap">
-            <input type="text" inputmode="numeric" class="olo-es-num" :value="tsGet('h')" @input="setv('text_shadow_h', int($event.target.value))" :aria-label="t('Orizzontale')" />
-            <span class="olo-es-unit">px</span>
-          </div>
+          <NumberScrubber class="olo-es-ns" :modelValue="tsGet('h')" :min="-50" :max="50" :step="1"
+            :defaultValue="0" emitAs="number" unit="px" :ariaLabel="t('Orizzontale')"
+            @update:modelValue="setv('text_shadow_h', $event)" />
         </div>
         <div class="olo-es-field">
           <span class="olo-es-lab">{{ t('Vert.') }}</span>
-          <div class="olo-es-numwrap">
-            <input type="text" inputmode="numeric" class="olo-es-num" :value="tsGet('v')" @input="setv('text_shadow_v', int($event.target.value))" :aria-label="t('Verticale')" />
-            <span class="olo-es-unit">px</span>
-          </div>
+          <NumberScrubber class="olo-es-ns" :modelValue="tsGet('v')" :min="-50" :max="50" :step="1"
+            :defaultValue="0" emitAs="number" unit="px" :ariaLabel="t('Verticale')"
+            @update:modelValue="setv('text_shadow_v', $event)" />
         </div>
         <div class="olo-es-field">
           <span class="olo-es-lab">{{ t('Sfoc.') }}</span>
-          <div class="olo-es-numwrap">
-            <input type="text" inputmode="numeric" class="olo-es-num" :value="tsGet('blur')" @input="setv('text_shadow_blur', Math.max(0, int($event.target.value)))" :aria-label="t('Sfocatura')" />
-            <span class="olo-es-unit">px</span>
-          </div>
+          <NumberScrubber class="olo-es-ns" :modelValue="tsGet('blur')" :min="0" :max="50" :step="1"
+            :defaultValue="0" emitAs="number" unit="px" :ariaLabel="t('Sfocatura')"
+            @update:modelValue="setv('text_shadow_blur', Math.max(0, $event))" />
         </div>
       </div>
       <FieldColor :modelValue="String(sv('text_shadow_color', '') || '#000000')" @update:modelValue="setv('text_shadow_color', $event)" />
@@ -156,33 +133,21 @@
       <span class="olo-es-gtitle">{{ t('Filtro sfondo · glassmorphism') }}<span v-if="bp !== 'desktop'" class="olo-es-gbp">{{ bpLabel }}</span></span>
       <div class="olo-es-sliderrow">
         <span class="olo-es-lab">{{ t('Sfoc.') }}</span>
-        <input type="range" class="olo-es-slider" min="0" max="30" step="1"
-          :value="num(sv('backdrop_blur', 0), 0)" @input="setv('backdrop_blur', parseInt($event.target.value))" :aria-label="t('Sfocatura sfondo')" />
-        <span class="olo-es-val">
-          <input type="text" inputmode="numeric" class="olo-es-valinput"
-            :value="num(sv('backdrop_blur', 0), 0)" @change="setvClamped('backdrop_blur', $event.target.value, 0, 30, 0)" :aria-label="t('Sfocatura sfondo')" />
-          <i>px</i>
-        </span>
+        <NumberScrubber class="olo-es-ns" :modelValue="num(sv('backdrop_blur', 0), 0)" :min="0" :max="30" :step="1"
+          :defaultValue="0" emitAs="number" unit="px" :sliderOnFocus="false" :ariaLabel="t('Sfocatura sfondo')"
+          @update:modelValue="setvC('backdrop_blur', $event, 0, 30, 0)" />
       </div>
       <div class="olo-es-sliderrow">
         <span class="olo-es-lab">{{ t('Lumin.') }}</span>
-        <input type="range" class="olo-es-slider" min="0" max="200" step="5"
-          :value="num(sv('backdrop_brightness', 100), 100)" @input="setv('backdrop_brightness', parseInt($event.target.value))" :aria-label="t('Luminosità')" />
-        <span class="olo-es-val">
-          <input type="text" inputmode="numeric" class="olo-es-valinput"
-            :value="num(sv('backdrop_brightness', 100), 100)" @change="setvClamped('backdrop_brightness', $event.target.value, 0, 200, 100)" :aria-label="t('Luminosità')" />
-          <i>%</i>
-        </span>
+        <NumberScrubber class="olo-es-ns" :modelValue="num(sv('backdrop_brightness', 100), 100)" :min="0" :max="200" :step="5"
+          :defaultValue="100" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Luminosità')"
+          @update:modelValue="setvC('backdrop_brightness', $event, 0, 200, 100)" />
       </div>
       <div class="olo-es-sliderrow">
         <span class="olo-es-lab">{{ t('Satur.') }}</span>
-        <input type="range" class="olo-es-slider" min="0" max="200" step="5"
-          :value="num(sv('backdrop_saturate', 100), 100)" @input="setv('backdrop_saturate', parseInt($event.target.value))" :aria-label="t('Saturazione')" />
-        <span class="olo-es-val">
-          <input type="text" inputmode="numeric" class="olo-es-valinput"
-            :value="num(sv('backdrop_saturate', 100), 100)" @change="setvClamped('backdrop_saturate', $event.target.value, 0, 200, 100)" :aria-label="t('Saturazione')" />
-          <i>%</i>
-        </span>
+        <NumberScrubber class="olo-es-ns" :modelValue="num(sv('backdrop_saturate', 100), 100)" :min="0" :max="200" :step="5"
+          :defaultValue="100" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Saturazione')"
+          @update:modelValue="setvC('backdrop_saturate', $event, 0, 200, 100)" />
       </div>
     </div>
 
@@ -213,6 +178,7 @@ import { ref, computed, watch } from 'vue';
 import FieldColor from '../fields/FieldColor.vue';
 import FieldBoxShadow from '../fields/FieldBoxShadow.vue';
 import FieldSelect from '../fields/FieldSelect.vue';
+import NumberScrubber from '../fields/NumberScrubber.vue';
 
 // Label RAW: FieldSelect applica t() internamente. Value INVARIATI.
 const ORIGIN_OPTIONS = [
@@ -287,6 +253,11 @@ function setScalePct(raw) {
   if (isNaN(n)) n = 100;
   tset('scale', clamp(n, 10, 300) / 100);
 }
+
+// Bridge per NumberScrubber (emette NUMERO): clamp ai limiti storici + set.
+function setvC(key, n, lo, hi, def) { setv(key, clamp(isFinite(n) ? n : def, lo, hi)); }
+function tsetC(prop, n, lo, hi, def) { tset(prop, clamp(isFinite(n) ? n : def, lo, hi)); }
+function setScaleN(n) { tset('scale', clamp(isFinite(n) ? n : 100, 10, 300) / 100); }
 
 // ── lettura/scrittura per stato (Normale = style.<key>; Hover = style.hover.<key>) ──
 function sv(key, def) {
@@ -569,6 +540,14 @@ const previewStyle = computed(() => {
   font-weight: 600;
   color: #9ca3af;
 }
+
+/* NumberScrubber compatto nelle colonne effetti (Sposta/Skew/Ombra testo):
+   riempie la cella, slider nel popover al focus + rotellina. */
+.olo-es-field .olo-es-ns { width: 100%; }
+.olo-es-field .olo-es-ns :deep(.olo-ns-box) { width: 100%; justify-content: center; }
+/* NumberScrubber nelle righe slider (Opacità/Rotaz/Scala/Filtro): occupa lo spazio
+   come faceva lo slider+valbox, con slider inline + numero + rotellina. */
+.olo-es-sliderrow .olo-es-ns { flex: 1; min-width: 0; }
 
 /* select (FieldSelect dropdown custom) */
 .olo-es-row .olo-es-selwrap { flex: 1; min-width: 0; }

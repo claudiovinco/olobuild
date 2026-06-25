@@ -523,7 +523,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
                             <?php if ( $show_icons ) : ?><span class="olo-lf-icon"><?php echo $icon_lock; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above in this method ?></span><?php endif; ?>
                             <input type="password" id="<?php echo esc_attr( $uid ); ?>-pass" name="pwd" class="olo-lf-input" placeholder="<?php echo esc_attr( olo_t( 'La tua password' ) ); ?>" required autocomplete="current-password" />
                             <?php if ( $show_pw_toggle ) : ?>
-                            <button type="button" class="olo-lf-pw-toggle" data-olo-pw-toggle>
+                            <button type="button" class="olo-lf-pw-toggle" data-olo-pw-toggle aria-label="<?php echo esc_attr( olo_t( 'Mostra/nascondi password' ) ); ?>" aria-pressed="false" aria-controls="<?php echo esc_attr( $uid ); ?>-pass">
                                 <span class="olo-eye-on"><?php echo $icon_eye; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above in this method ?></span>
                                 <span class="olo-eye-off"><?php echo $icon_eye_off; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above in this method ?></span>
                             </button>
@@ -628,7 +628,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
                             <?php if ( $show_icons ) : ?><span class="olo-lf-icon"><?php echo $icon_lock; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above in this method ?></span><?php endif; ?>
                             <input type="password" id="<?php echo esc_attr( $uid ); ?>-reg-pass" name="user_pass" class="olo-lf-input olo-lf-pw-input" placeholder="<?php echo esc_attr( $rf_ph ); ?>"<?php echo esc_attr( $req_attr ); ?> autocomplete="new-password" minlength="<?php echo esc_attr( $pw_min_length ); ?>" />
                             <?php if ( $show_pw_toggle ) : ?>
-                            <button type="button" class="olo-lf-pw-toggle" data-olo-pw-toggle>
+                            <button type="button" class="olo-lf-pw-toggle" data-olo-pw-toggle aria-label="<?php echo esc_attr( olo_t( 'Mostra/nascondi password' ) ); ?>" aria-pressed="false" aria-controls="<?php echo esc_attr( $uid ); ?>-reg-pass">
                                 <span class="olo-eye-on"><?php echo $icon_eye; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above in this method ?></span>
                                 <span class="olo-eye-off"><?php echo $icon_eye_off; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above in this method ?></span>
                             </button>
@@ -678,25 +678,28 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
 
                     <?php elseif ( in_array( $rf_type, [ 'text', 'email', 'tel', 'number', 'date', 'url' ], true ) ) : ?>
                     <?php $cf_name = $rf_meta ?: 'olo_cf_' . sanitize_key( $rf_label ); ?>
+                    <?php $cf_id = $uid . '-' . sanitize_html_class( $cf_name ); ?>
                     <div class="<?php echo esc_attr( $rf_width ); ?>">
-                        <label class="olo-lf-label"><?php echo esc_html( $rf_label . $req_star ); ?></label>
+                        <label class="olo-lf-label" for="<?php echo esc_attr( $cf_id ); ?>"><?php echo esc_html( $rf_label . $req_star ); ?></label>
                         <div class="olo-lf-input-wrap">
-                            <input type="<?php echo esc_attr( $rf_type ); ?>" name="olo_custom[<?php echo esc_attr( $cf_name ); ?>]" class="olo-lf-input" placeholder="<?php echo esc_attr( $rf_ph ); ?>"<?php echo esc_attr( $req_attr ); ?> />
+                            <input type="<?php echo esc_attr( $rf_type ); ?>" id="<?php echo esc_attr( $cf_id ); ?>" name="olo_custom[<?php echo esc_attr( $cf_name ); ?>]" class="olo-lf-input" placeholder="<?php echo esc_attr( $rf_ph ); ?>"<?php echo esc_attr( $req_attr ); ?> />
                         </div>
                     </div>
 
                     <?php elseif ( $rf_type === 'textarea' ) : ?>
                     <?php $cf_name = $rf_meta ?: 'olo_cf_' . sanitize_key( $rf_label ); ?>
+                    <?php $cf_id = $uid . '-' . sanitize_html_class( $cf_name ); ?>
                     <div class="<?php echo esc_attr( $rf_width ); ?>">
-                        <label class="olo-lf-label"><?php echo esc_html( $rf_label . $req_star ); ?></label>
-                        <textarea name="olo_custom[<?php echo esc_attr( $cf_name ); ?>]" class="olo-lf-input-standalone" placeholder="<?php echo esc_attr( $rf_ph ); ?>"<?php echo esc_attr( $req_attr ); ?>></textarea>
+                        <label class="olo-lf-label" for="<?php echo esc_attr( $cf_id ); ?>"><?php echo esc_html( $rf_label . $req_star ); ?></label>
+                        <textarea id="<?php echo esc_attr( $cf_id ); ?>" name="olo_custom[<?php echo esc_attr( $cf_name ); ?>]" class="olo-lf-input-standalone" placeholder="<?php echo esc_attr( $rf_ph ); ?>"<?php echo esc_attr( $req_attr ); ?>></textarea>
                     </div>
 
                     <?php elseif ( $rf_type === 'select' ) : ?>
                     <?php $cf_name = $rf_meta ?: 'olo_cf_' . sanitize_key( $rf_label ); ?>
+                    <?php $cf_id = $uid . '-' . sanitize_html_class( $cf_name ); ?>
                     <div class="<?php echo esc_attr( $rf_width ); ?>">
-                        <label class="olo-lf-label"><?php echo esc_html( $rf_label . $req_star ); ?></label>
-                        <select name="olo_custom[<?php echo esc_attr( $cf_name ); ?>]" class="olo-lf-input-standalone"<?php echo esc_attr( $req_attr ); ?>>
+                        <label class="olo-lf-label" for="<?php echo esc_attr( $cf_id ); ?>"><?php echo esc_html( $rf_label . $req_star ); ?></label>
+                        <select id="<?php echo esc_attr( $cf_id ); ?>" name="olo_custom[<?php echo esc_attr( $cf_name ); ?>]" class="olo-lf-input-standalone"<?php echo esc_attr( $req_attr ); ?>>
                             <option value=""><?php echo esc_html( $rf_ph ?: 'Seleziona...' ); ?></option>
                             <?php foreach ( $rf_opts as $opt ) : ?>
                             <option value="<?php echo esc_attr( $opt ); ?>"><?php echo esc_html( $opt ); ?></option>
@@ -715,15 +718,15 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
 
                     <?php elseif ( $rf_type === 'radio' ) : ?>
                     <?php $cf_name = $rf_meta ?: 'olo_cf_' . sanitize_key( $rf_label ); ?>
-                    <div class="<?php echo esc_attr( $rf_width ); ?>">
-                        <label class="olo-lf-label"><?php echo esc_html( $rf_label . $req_star ); ?></label>
+                    <fieldset class="<?php echo esc_attr( $rf_width ); ?>" style="border:0;margin:0;padding:0;">
+                        <legend class="olo-lf-label" style="padding:0;"><?php echo esc_html( $rf_label . $req_star ); ?></legend>
                         <?php foreach ( $rf_opts as $opt ) : ?>
                         <label class="olo-lf-option">
                             <input type="radio" name="olo_custom[<?php echo esc_attr( $cf_name ); ?>]" value="<?php echo esc_attr( $opt ); ?>"<?php echo esc_attr( $req_attr ); ?> />
                             <span><?php echo esc_html( $opt ); ?></span>
                         </label>
                         <?php endforeach; ?>
-                    </div>
+                    </fieldset>
                     <?php endif; ?>
 
                     <?php endforeach; ?>
@@ -806,9 +809,11 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
                     if (inp.type === 'password') {
                         inp.type = 'text';
                         this.classList.add('olo-showing');
+                        this.setAttribute('aria-pressed', 'true');
                     } else {
                         inp.type = 'password';
                         this.classList.remove('olo-showing');
+                        this.setAttribute('aria-pressed', 'false');
                     }
                 });
             });

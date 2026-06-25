@@ -3,13 +3,13 @@
     <div class="mps-modal-overlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;background:#111827;display:flex;flex-direction:column;outline:none;" @keydown="onKeydown" tabindex="-1" ref="modalEl">
       <!-- Header bar -->
       <div class="mb-flex mb-items-center mb-justify-between mb-bg-gray-800 mb-border-b mb-border-gray-700 mb-px-4 mb-py-2 mb-shrink-0">
-        <h2 class="mb-text-sm mb-font-bold mb-text-gray-200">Editor ProSlider</h2>
+        <h2 class="mb-text-sm mb-font-bold mb-text-gray-200">{{ t('Editor ProSlider') }}</h2>
         <div class="mb-flex mb-items-center mb-gap-2">
           <button @click="save" class="mb-px-4 mb-py-1.5 mb-bg-primary-600 mb-text-white mb-text-xs mb-font-semibold mb-rounded hover:mb-bg-primary-500 mb-transition-colors">
-            Salva e chiudi
+            {{ t('Salva e chiudi') }}
           </button>
           <button @click="cancel" class="mb-px-3 mb-py-1.5 mb-bg-gray-700 mb-text-gray-300 mb-text-xs mb-rounded hover:mb-bg-gray-600 mb-transition-colors">
-            Annulla
+            {{ t('Annulla') }}
           </button>
         </div>
       </div>
@@ -32,12 +32,12 @@
           <!-- Global Layers section -->
           <div class="mb-border-t mb-border-gray-700 mb-px-2 mb-py-2 mb-bg-gray-800">
             <div class="mb-flex mb-items-center mb-justify-between mb-mb-1">
-              <span class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Layer Globali</span>
+              <span class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Layer Globali') }}</span>
               <div class="mb-flex mb-gap-1">
-                <button @click="addGlobalLayer('text')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" title="Testo">T</button>
-                <button @click="addGlobalLayer('button')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" title="Bottone">B</button>
-                <button @click="addGlobalLayer('image')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" title="Immagine">I</button>
-                <button @click="addGlobalLayer('icon')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" title="Icona">Ic</button>
+                <button @click="addGlobalLayer('text')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" :title="t('Testo')">T</button>
+                <button @click="addGlobalLayer('button')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" :title="t('Bottone')">B</button>
+                <button @click="addGlobalLayer('image')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" :title="t('Immagine')">I</button>
+                <button @click="addGlobalLayer('icon')" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-white mb-px-1" :title="t('Icona')">Ic</button>
               </div>
             </div>
             <div v-if="data.globalLayers && data.globalLayers.length" class="mb-space-y-0.5">
@@ -46,11 +46,11 @@
                 :class="['mb-flex mb-items-center mb-justify-between mb-px-2 mb-py-1 mb-rounded mb-text-[10px] mb-cursor-pointer mb-transition-colors',
                   selectedLayerId === gl.id && editingGlobal ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-300 hover:mb-bg-gray-600']"
               >
-                <span class="mb-truncate mb-flex-1">{{ gl.type === 'text' ? (gl.content || 'Testo').substring(0, 16) : gl.type }} <span class="mb-text-gray-500">({{ gl.globalPosition === 'back' ? 'dietro' : 'davanti' }})</span></span>
+                <span class="mb-truncate mb-flex-1">{{ gl.type === 'text' ? (gl.content || t('Testo')).substring(0, 16) : gl.type }} <span class="mb-text-gray-500">({{ gl.globalPosition === 'back' ? t('dietro') : t('davanti') }})</span></span>
                 <button @click.stop="removeGlobalLayer(gl.id)" class="mb-text-gray-400 hover:mb-text-red-400 mb-ml-1">&times;</button>
               </div>
             </div>
-            <div v-else class="mb-text-[9px] mb-text-gray-500 mb-italic">Nessun layer globale</div>
+            <div v-else class="mb-text-[9px] mb-text-gray-500 mb-italic">{{ t('Nessun layer globale') }}</div>
           </div>
         </div>
 
@@ -62,31 +62,31 @@
           <!-- Slide bg controls (collapsible) -->
           <div v-if="showSlideBg" class="mb-bg-gray-850 mb-border-b mb-border-gray-700 mb-p-3">
             <div class="mb-flex mb-items-center mb-justify-between mb-mb-2">
-              <span class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Sfondo Slide</span>
+              <span class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">{{ t('Sfondo Slide') }}</span>
               <button @click="showSlideBg = false" class="mb-text-gray-500 mb-text-xs">&times;</button>
             </div>
             <div class="mb-flex mb-gap-3 mb-flex-wrap mb-items-end">
               <!-- Type -->
               <div class="mb-w-32">
-                <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Tipo</label>
+                <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Tipo') }}</label>
                 <FieldSelect ui="dropdown" size="compact" theme="dark" :model-value="currentBg.type" :options="OPTS_BG_TYPE" @update:model-value="updateBg('type', $event)" />
               </div>
               <!-- Transparent note -->
               <div v-if="currentBg.type === 'transparent'" class="mb-flex mb-items-center mb-gap-1">
-                <span class="mb-text-[10px] mb-text-gray-400 mb-italic">Sarà visibile lo sfondo globale</span>
+                <span class="mb-text-[10px] mb-text-gray-400 mb-italic">{{ t('Sarà visibile lo sfondo globale') }}</span>
               </div>
               <!-- Color -->
               <div v-if="currentBg.type === 'color'">
-                <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Colore</label>
+                <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Colore') }}</label>
                 <FieldColor :modelValue="currentBg.color || '#ffffff'" @update:modelValue="updateBg('color', $event)" />
               </div>
               <!-- Image -->
               <div v-if="currentBg.type === 'image'" class="mb-flex mb-gap-2 mb-items-end">
                 <div>
-                  <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Immagine</label>
+                  <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Immagine') }}</label>
                   <div class="mb-flex mb-gap-1">
                     <input :value="currentBg.image" @input="updateBg('image', $event.target.value)" class="mps-inp mb-w-48" placeholder="URL" />
-                    <button @click="pickSlideBg" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-[10px] mb-text-gray-300">Sfoglia</button>
+                    <button @click="pickSlideBg" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-[10px] mb-text-gray-300">{{ t('Sfoglia') }}</button>
                   </div>
                 </div>
                 <label class="mb-flex mb-items-center mb-gap-1">
@@ -99,56 +99,54 @@
                   </div>
                   <div class="mb-flex mb-items-center mb-gap-1">
                     <label class="mb-text-[10px] mb-text-gray-400">Pan X%</label>
-                    <input type="number" :value="currentBg.kenBurnsPanX || 0" @input="updateBg('kenBurnsPanX', parseFloat($event.target.value) || 0)" min="-50" max="50" step="5" class="mps-inp mb-w-12" />
+                    <NumberScrubber theme="dark" :modelValue="currentBg.kenBurnsPanX || 0" :min="-50" :max="50" :step="5" :defaultValue="0" emitAs="number" unit="%" :ariaLabel="'Pan X%'" @update:modelValue="updateBg('kenBurnsPanX', $event)" />
                   </div>
                   <div class="mb-flex mb-items-center mb-gap-1">
                     <label class="mb-text-[10px] mb-text-gray-400">Pan Y%</label>
-                    <input type="number" :value="currentBg.kenBurnsPanY || 0" @input="updateBg('kenBurnsPanY', parseFloat($event.target.value) || 0)" min="-50" max="50" step="5" class="mps-inp mb-w-12" />
+                    <NumberScrubber theme="dark" :modelValue="currentBg.kenBurnsPanY || 0" :min="-50" :max="50" :step="5" :defaultValue="0" emitAs="number" unit="%" :ariaLabel="'Pan Y%'" @update:modelValue="updateBg('kenBurnsPanY', $event)" />
                   </div>
                   <div class="mb-flex mb-items-center mb-gap-1">
-                    <label class="mb-text-[10px] mb-text-gray-400">Blur inizio</label>
-                    <input type="number" :value="currentBg.kenBurnsBlurStart || 0" @input="updateBg('kenBurnsBlurStart', parseFloat($event.target.value) || 0)" min="0" max="20" step="1" class="mps-inp mb-w-12" />
+                    <label class="mb-text-[10px] mb-text-gray-400">{{ t('Blur inizio') }}</label>
+                    <NumberScrubber theme="dark" :modelValue="currentBg.kenBurnsBlurStart || 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" unit="px" :ariaLabel="t('Blur inizio')" @update:modelValue="updateBg('kenBurnsBlurStart', $event)" />
                   </div>
                   <div class="mb-flex mb-items-center mb-gap-1">
-                    <label class="mb-text-[10px] mb-text-gray-400">Blur fine</label>
-                    <input type="number" :value="currentBg.kenBurnsBlurEnd || 0" @input="updateBg('kenBurnsBlurEnd', parseFloat($event.target.value) || 0)" min="0" max="20" step="1" class="mps-inp mb-w-12" />
+                    <label class="mb-text-[10px] mb-text-gray-400">{{ t('Blur fine') }}</label>
+                    <NumberScrubber theme="dark" :modelValue="currentBg.kenBurnsBlurEnd || 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" unit="px" :ariaLabel="t('Blur fine')" @update:modelValue="updateBg('kenBurnsBlurEnd', $event)" />
                   </div>
                 </template>
               </div>
               <!-- Video -->
               <div v-if="currentBg.type === 'video'">
-                <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">URL Video</label>
+                <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('URL Video') }}</label>
                 <div class="mb-flex mb-gap-1">
-                  <input :value="currentBg.video" @input="updateBg('video', $event.target.value)" class="mps-inp mb-w-52" placeholder="mp4 o URL YouTube" />
-                  <button @click="pickSlideVideo" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-500">Sfoglia</button>
+                  <input :value="currentBg.video" @input="updateBg('video', $event.target.value)" class="mps-inp mb-w-52" :placeholder="t('mp4 o URL YouTube')" />
+                  <button @click="pickSlideVideo" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-500">{{ t('Sfoglia') }}</button>
                 </div>
               </div>
               <!-- Gradient -->
               <template v-if="currentBg.type === 'gradient'">
                 <div>
-                  <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Da</label>
+                  <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Da') }}</label>
                   <FieldColor :modelValue="currentBg.gradientFrom || '#ffffff'" @update:modelValue="updateBg('gradientFrom', $event)" />
                 </div>
                 <div>
-                  <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">A</label>
+                  <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('A') }}</label>
                   <FieldColor :modelValue="currentBg.gradientTo || '#000000'" @update:modelValue="updateBg('gradientTo', $event)" />
                 </div>
                 <div>
-                  <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Angolo</label>
-                  <input type="number" :value="currentBg.gradientAngle" @input="updateBg('gradientAngle', parseInt($event.target.value))" min="0" max="360" class="mps-inp mb-w-14" />
+                  <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Angolo') }}</label>
+                  <NumberScrubber theme="dark" :modelValue="currentBg.gradientAngle" :min="0" :max="360" :step="1" :defaultValue="0" emitAs="number" unit="°" :ariaLabel="t('Angolo')" @update:modelValue="updateBg('gradientAngle', $event)" />
                 </div>
               </template>
               <!-- Slide duration (seconds, 0 = use global) -->
               <div class="mb-flex mb-items-center mb-gap-1">
-                <label class="mb-text-[10px] mb-text-gray-400">Durata</label>
-                <input type="number" :value="(activeSlide?.duration || 0) / 1000" @input="activeSlide.duration = Math.round((parseFloat($event.target.value) || 0) * 1000)" min="0" max="120" step="0.5" class="mps-sel mb-w-14 mb-text-center" :placeholder="(data.autoplaySpeed / 1000) + ''" />
-                <span class="mb-text-[10px] mb-text-gray-400">sec</span>
+                <label class="mb-text-[10px] mb-text-gray-400">{{ t('Durata') }}</label>
+                <NumberScrubber theme="dark" :modelValue="(activeSlide?.duration || 0) / 1000" :min="0" :max="120" :step="0.5" :defaultValue="0" emitAs="number" unit="sec" :ariaLabel="t('Durata')" @update:modelValue="activeSlide.duration = Math.round(($event || 0) * 1000)" />
               </div>
               <!-- Persist for N slides -->
               <div class="mb-flex mb-items-center mb-gap-1">
-                <label class="mb-text-[10px] mb-text-gray-400">Persisti per</label>
-                <input type="number" :value="activeSlide?.persistFor || 0" @input="activeSlide.persistFor = parseInt($event.target.value) || 0" min="0" max="20" class="mps-sel mb-w-12 mb-text-center" />
-                <span class="mb-text-[10px] mb-text-gray-400">slide</span>
+                <label class="mb-text-[10px] mb-text-gray-400">{{ t('Persisti per') }}</label>
+                <NumberScrubber theme="dark" :modelValue="activeSlide?.persistFor || 0" :min="0" :max="20" :step="1" :defaultValue="0" emitAs="number" unit="slide" :ariaLabel="t('Persisti per')" @update:modelValue="activeSlide.persistFor = $event || 0" />
               </div>
               <!-- Tab label (per navigazione tab) -->
               <div class="mb-flex mb-items-center mb-gap-1">
@@ -157,18 +155,17 @@
               </div>
               <!-- Overlay -->
               <div v-if="currentBg.type !== 'transparent'">
-                <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Sovrapposizione</label>
+                <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ t('Sovrapposizione') }}</label>
                 <FieldColor :modelValue="currentBg.overlay || '#000000'" @update:modelValue="updateBg('overlay', $event)" />
                 <div class="mb-flex mb-gap-1 mb-items-center mb-mt-1">
-                  <input type="range" :value="(currentBg.overlayOpacity ?? 0.3) * 100" @input="updateBg('overlayOpacity', parseInt($event.target.value) / 100)" min="0" max="100" step="5" class="mb-flex-1" />
-                  <span class="mb-text-[10px] mb-text-gray-400">{{ Math.round((currentBg.overlayOpacity ?? 0.3) * 100) }}%</span>
+                  <NumberScrubber theme="dark" class="mb-flex-1" :modelValue="Math.round((currentBg.overlayOpacity ?? 0.3) * 100)" :min="0" :max="100" :step="5" :defaultValue="30" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Sovrapposizione')" @update:modelValue="updateBg('overlayOpacity', $event / 100)" />
                 </div>
               </div>
             </div>
           </div>
           <div v-else class="mb-border-b mb-border-gray-700 mb-px-3 mb-py-1">
             <button @click="showSlideBg = true" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-gray-300">
-              Mostra sfondo slide &darr;
+              {{ t('Mostra sfondo slide') }} &darr;
             </button>
           </div>
 
@@ -285,6 +282,8 @@ import SliderSettings from './SliderSettings.vue';
 import KeyframeTimeline from './KeyframeTimeline.vue';
 import FieldColor from '@/components/Builder/fields/FieldColor.vue';
 import FieldSelect from '../Builder/fields/FieldSelect.vue';
+import NumberScrubber from '../Builder/fields/NumberScrubber.vue';
+import { t } from '@/i18n';
 
 // Option arrays per FieldSelect (stessi value dei vecchi <option>: dati salvati invariati)
 const OPTS_BG_TYPE = [

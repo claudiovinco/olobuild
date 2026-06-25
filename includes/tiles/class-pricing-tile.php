@@ -389,7 +389,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
                 <?php if ( $enable_toggle ) : ?>
                 <div class="olo-price-toggle-wrap">
                     <span class="olo-price-toggle-label olo-active" data-olo-toggle-l1><?php echo $toggle_label1; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></span>
-                    <button type="button" class="olo-price-toggle" data-olo-price-toggle aria-label="<?php echo esc_attr( $toggle_label1 . ' / ' . $toggle_label2 ); ?>"></button>
+                    <button type="button" class="olo-price-toggle" data-olo-price-toggle aria-pressed="false" aria-label="<?php echo esc_attr( $toggle_label1 . ' / ' . $toggle_label2 ); ?>"></button>
                     <span class="olo-price-toggle-label" data-olo-toggle-l2><?php echo $toggle_label2; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped with esc_html() at assignment above ?></span>
                 </div>
                 <?php endif; ?>
@@ -492,6 +492,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
                 var isYearly = wrap.classList.contains('olo-pricing-yearly');
                 if(isYearly){
                     wrap.classList.remove('olo-pricing-yearly');
+                    btn.setAttribute('aria-pressed', 'false');
                     if(l1){ l1.classList.add('olo-active'); }
                     if(l2){ l2.classList.remove('olo-active'); }
                     for(var i=0;i<amounts.length;i++){
@@ -503,6 +504,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
                     }
                 } else {
                     wrap.classList.add('olo-pricing-yearly');
+                    btn.setAttribute('aria-pressed', 'true');
                     if(l1){ l1.classList.remove('olo-active'); }
                     if(l2){ l2.classList.add('olo-active'); }
                     for(var j=0;j<amounts.length;j++){

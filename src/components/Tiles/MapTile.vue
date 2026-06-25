@@ -44,10 +44,10 @@
             transition: 'background 0.2s',
           }"
           @click.stop="toggleEdit"
-          :title="editMode ? 'Esci dalla modalità posizionamento' : 'Clicca o trascina il marker sulla mappa'"
+          :title="editMode ? t('Esci dalla modalità posizionamento') : t('Clicca o trascina il marker sulla mappa')"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-          {{ editMode ? 'Fine' : 'Posiziona' }}
+          {{ editMode ? t('Fine') : t('Posiziona') }}
         </button>
 
         <!-- Layer label overlay -->
@@ -74,12 +74,12 @@
       :style="{ height: (settings.height || 400) + 'px' }"
     >
       <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      <span class="mb-text-sm mb-font-semibold mb-text-gray-300">Mappa Servizio Dinamico</span>
+      <span class="mb-text-sm mb-font-semibold mb-text-gray-300">{{ t('Mappa Servizio Dinamico') }}</span>
       <div class="mb-text-xs mb-text-center mb-text-gray-500">
-        <div>Legge GPS dal servizio corrente</div>
+        <div>{{ t('Legge GPS dal servizio corrente') }}</div>
         <div>Zoom: <span class="mb-text-gray-300">{{ settings.zoom || 13 }}</span></div>
       </div>
-      <span class="mb-text-[10px] mb-text-gray-600 mb-mt-1">Mappa renderizzata nel frontend con lat/lng dal post meta</span>
+      <span class="mb-text-[10px] mb-text-gray-600 mb-mt-1">{{ t('Mappa renderizzata nel frontend con lat/lng dal post meta') }}</span>
     </div>
 
     <!-- Services mode: informative placeholder -->
@@ -89,23 +89,23 @@
       :style="{ height: (settings.height || 400) + 'px' }"
     >
       <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m3 20 5.5-9 4 6 3-4.5L21 20H3z"/><circle cx="8" cy="6" r="2"/></svg>
-      <span class="mb-text-sm mb-font-semibold mb-text-gray-300">Mappa Servizi (Olo Booking)</span>
+      <span class="mb-text-sm mb-font-semibold mb-text-gray-300">{{ t('Mappa Servizi (Olo Booking)') }}</span>
       <div class="mb-text-xs mb-text-center mb-space-y-1 mb-text-gray-500">
-        <div>Modalit&agrave;: <span class="mb-text-gray-300">{{ settings.svc_booking_mode || 'tutti' }}</span></div>
+        <div>{{ t('Modalit\u00e0') }}: <span class="mb-text-gray-300">{{ settings.svc_booking_mode || 'tutti' }}</span></div>
         <div>
-          Filtri:
+          {{ t('Filtri') }}:
           <span class="mb-text-gray-300">
             {{ [
-              settings.svc_show_altitude_filter !== false ? 'Altitudine' : '',
-              settings.svc_show_locality_filter !== false ? 'Localit\u00e0' : '',
-              settings.svc_show_guests_filter !== false ? 'Ospiti' : '',
-              settings.svc_show_price_filter !== false ? 'Prezzo' : '',
-              settings.svc_show_bedrooms_filter !== false ? 'Camere' : '',
+              settings.svc_show_altitude_filter !== false ? t('Altitudine') : '',
+              settings.svc_show_locality_filter !== false ? t('Localit\u00e0') : '',
+              settings.svc_show_guests_filter !== false ? t('Ospiti') : '',
+              settings.svc_show_price_filter !== false ? t('Prezzo') : '',
+              settings.svc_show_bedrooms_filter !== false ? t('Camere') : '',
               settings.svc_show_amenities_filter !== false ? 'Amenities' : '',
-            ].filter(Boolean).join(', ') || 'Nessuno' }}
+            ].filter(Boolean).join(', ') || t('Nessuno') }}
           </span>
         </div>
-        <div>Cluster: <span class="mb-text-gray-300">{{ settings.svc_cluster !== false ? 'S&igrave;' : 'No' }}</span> &middot; Stile: <span class="mb-text-gray-300">{{ settings.svc_tile_layer || 'positron' }}</span></div>
+        <div>Cluster: <span class="mb-text-gray-300">{{ settings.svc_cluster !== false ? t('S\u00ec') : 'No' }}</span> &middot; {{ t('Stile') }}: <span class="mb-text-gray-300">{{ settings.svc_tile_layer || 'positron' }}</span></div>
       </div>
       <span class="mb-text-[10px] mb-text-gray-600 mb-mt-1">{{ t('Mappa interattiva con marker servizi e filtri combinati') }}</span>
     </div>
@@ -123,8 +123,8 @@
         <div>ACF Field: <span class="mb-text-gray-300">{{ settings.loc_osm_field || 'location_map' }}</span></div>
         <div v-if="settings.loc_taxonomy">Taxonomy: <span class="mb-text-gray-300">{{ settings.loc_taxonomy }}</span></div>
         <div>
-          Cluster: <span class="mb-text-gray-300">{{ settings.loc_cluster !== false ? 'S\u00EC' : 'No' }}</span>
-          &middot; Filtri: <span class="mb-text-gray-300">{{ settings.loc_show_filters ? 'S\u00EC' : 'No' }}</span>
+          Cluster: <span class="mb-text-gray-300">{{ settings.loc_cluster !== false ? t('S\u00EC') : 'No' }}</span>
+          &middot; {{ t('Filtri') }}: <span class="mb-text-gray-300">{{ settings.loc_show_filters ? t('S\u00EC') : 'No' }}</span>
         </div>
       </div>
       <span class="mb-text-[10px] mb-text-gray-600 mb-mt-1">{{ t('Mappa interattiva renderizzata nel frontend') }}</span>

@@ -598,9 +598,9 @@ const tileIcons = {
   'pricing':      '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="18" h="18" rx="2"/><path d="M12 7v2M12 15v2M9 11h6M8 14h8"/></svg>',
   'team':         '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>',
   'social':       '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>',
-  'sharebuttons': '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>',
+  'sharebuttons': '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="6" cy="12" r="2.6"/><circle cx="17" cy="6" r="2.6"/><circle cx="17" cy="18" r="2.6"/><path d="M8.3 10.8l6.4-3.6M8.3 13.2l6.4 3.6"/><path d="M20 4l1.5-1.5M21.5 2.5h-2M21.5 2.5v2"/></svg>',
   'progress':     '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="10" w="20" h="4" rx="2"/><rect x="2" y="10" w="12" h="4" rx="2" fill="currentColor" opacity="0.3"/></svg>',
-  'starrating':   '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  'starrating':   '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><polygon points="6.5 3.4 7.7 6 10.5 6.3 8.4 8.1 9 10.9 6.5 9.4 4 10.9 4.6 8.1 2.5 6.3 5.3 6"/><path d="M13 6.5h7M13 10h5"/></svg>',
   'flipcard':     '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="4" w="20" h="16" rx="2"/><path d="M12 4v16" stroke-dasharray="3 2"/><path d="M17 10l2 2-2 2"/></svg>',
   'iconbox':      '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="18" h="18" rx="2"/><circle cx="12" cy="9" r="3"/><path d="M8 17h8"/></svg>',
   'instagram':    '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="2" w="20" h="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/></svg>',
@@ -656,7 +656,7 @@ const tileIcons = {
   'postmeta':     '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
   'wpcomments':   '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>',
   'viewscounter': '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
-  'osmmap':       '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+  'osmmap':       '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M12 21s-6.5-5.8-6.5-11A6.5 6.5 0 0112 3.5 6.5 6.5 0 0118.5 10c0 5.2-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>',
   'pricelist':    '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 6h10M18 6h2M4 12h6M14 12h8M4 18h12M20 18h2"/></svg>',
   'progresstracker':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="5" cy="12" r="3"/><circle cx="12" cy="12" r="3"/><circle cx="19" cy="12" r="3" stroke-dasharray="3 2"/><path d="M8 12h1M15 12h1"/></svg>',
   'countercircle':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6"/></svg>',
@@ -741,7 +741,7 @@ const tileIcons = {
   'woo_order_tracking':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="5" w="18" h="14" rx="2"/><path d="M3 10h18"/><path d="M7 15h3M14 15h3"/></svg>',
 
   // ── Real Estate tiles ──
-  'propertygrid':       '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="2" w="9" h="9" rx="1"/><rect x="13" y="2" w="9" h="9" rx="1"/><rect x="2" y="13" w="9" h="9" rx="1"/><rect x="13" y="13" w="9" h="9" rx="1"/></svg>',
+  'propertygrid':       '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="8" h="8" rx="1"/><rect x="13" y="3" w="8" h="8" rx="1"/><path d="M4.5 7l2.5-2 2.5 2M14.5 7l2.5-2 2.5 2"/><rect x="3" y="14" w="18" h="6" rx="1"/><path d="M6 17h4M13 17h5"/></svg>',
   'propertysearch':     '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="10" cy="10" r="7"/><path d="M21 21l-4.35-4.35"/><path d="M7 8l3 2 3-4"/></svg>',
   'propertymap':        '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><circle cx="12" cy="11" r="2"/></svg>',
   'propertymapsearch':  '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="1" y="3" w="10" h="18" rx="1"/><path d="M14 6h7M14 10h7M14 14h5"/><circle cx="6" cy="10" r="2"/></svg>',
@@ -788,6 +788,79 @@ const tileIcons = {
   'ac-cta':                   '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="6" w="20" h="12" rx="2"/><path d="M5 10h6M5 13h4"/><rect x="14" y="10" w="6" h="4" rx="1.2"/></svg>',
   'ac-certifications':        '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="12" cy="9" r="6"/><path d="M9 14l-3 7 6-3 6 3-3-7"/><circle cx="12" cy="9" r="3" stroke-opacity=".4"/></svg>',
   'ac-contact-form':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="4" w="20" h="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/><path d="M8 14h3M8 17h5"/></svg>',
+
+  // ── Icone tile (design handoff): 62 tile che ricadevano sul placeholder ──
+  'announcementbar':     '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="4" w="20" h="6" rx="1.5"/><path d="M6 7h9"/><path d="M3 14h18M3 18h12"/></svg>',
+  'audiohero':           '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="3" w="20" h="18" rx="2"/><path d="M6 14v-3M9 15v-5M12 16.5v-9M15 15v-5M18 14v-3"/></svg>',
+  'buildermock':         '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="3" w="20" h="18" rx="2"/><path d="M2 7h20M8 7v14"/><rect x="3.8" y="9.4" w="2.6" h="2.2" rx=".4"/><path d="M10 11h8M10 14h6M10 17h7"/></svg>',
+  'chathero':            '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="3" w="20" h="18" rx="2"/><path d="M6 8h12M6 10.5h7"/><path d="M6 14h10v4l-3-2H6z"/></svg>',
+  'featuredstory':       '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="4" w="20" h="16" rx="2"/><rect x="4" y="7" w="7" h="10" rx="1"/><path d="M14 8h5M14 11h5M14 14h3"/></svg>',
+  'glowgallery':         '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="12" cy="7" r="3.5" opacity=".4"/><path d="M7 5h10"/><rect x="3" y="13" w="5" h="8" rx="1"/><rect x="9.5" y="13" w="5" h="8" rx="1"/><rect x="16" y="13" w="5" h="8" rx="1"/></svg>',
+  'glowhero':            '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="12" cy="9" r="6" opacity=".35"/><path d="M5 15h14M8 19h8"/></svg>',
+  'imagehero':           '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="3" w="20" h="18" rx="2"/><circle cx="7" cy="8" r="1.6"/><path d="M3 16l5-4 4 3 4-4 5 5"/><path d="M6 19h9"/></svg>',
+  'introsplit':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M3 5h8M3 9h8M3 13h5"/><path d="M3 18h3M9 18h2"/><rect x="14" y="5" w="7" h="9" rx="1"/><circle cx="18" cy="17.5" r="3"/></svg>',
+  'maskedvideohero':     '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M2 3h20v11c0 5-5 5-10 5S2 19 2 14z"/><polygon points="10 8 15 11 10 14" f="currentColor" sw="0"/></svg>',
+  'masthead':            '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="4" w="20" h="4" rx="1"/><path d="M2 11h20M2 14h13M2 17h20M2 20h9"/></svg>',
+  'mediacta':            '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="3" w="20" h="13" rx="2"/><polygon points="10 7 15 9.5 10 12" f="currentColor" sw="0"/><rect x="6" y="19" w="12" h="3" rx="1.5"/></svg>',
+  'newsletter':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="4" w="20" h="10" rx="2"/><path d="M2 6l10 5 10-5"/><rect x="4" y="17" w="10" h="3.5" rx="1.5"/><rect x="16" y="17" w="4" h="3.5" rx="1"/></svg>',
+  'photocover':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="2" w="20" h="20" rx="1.5"/><rect x="5" y="5" w="14" h="14"/><path d="M7 16h7"/></svg>',
+  'producthero':         '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="4" w="20" h="16" rx="2"/><path d="M2 9h20"/><circle cx="5" cy="6.5" r=".7" f="currentColor" sw="0"/><circle cx="7.5" cy="6.5" r=".7" f="currentColor" sw="0"/><path d="M8 14h8M10 17h4"/></svg>',
+  'searchhero':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 5h16"/><rect x="3" y="9" w="13" h="4.5" rx="2.25"/><circle cx="19" cy="11.25" r="2.6"/><path d="M5 18h4M11 18h5M18 18h2"/></svg>',
+  'smearhero':           '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="3" w="20" h="18" rx="2"/><path d="M5 12c3-5 6 3 9-1s4-2 5-2"/><path d="M7 17h9"/></svg>',
+  'availability':        '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="4" y="4" w="4" h="4" rx="1"/><rect x="10" y="4" w="4" h="4" rx="1" f="currentColor" opacity=".22" sw="0"/><rect x="16" y="4" w="4" h="4" rx="1"/><rect x="4" y="10" w="4" h="4" rx="1" f="currentColor" opacity=".22" sw="0"/><rect x="10" y="10" w="4" h="4" rx="1"/><rect x="16" y="10" w="4" h="4" rx="1"/><path d="M5 19h14"/></svg>',
+  'builder':             '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 7h7M15 7h5M17.5 4.5v5"/><path d="M4 12h7M15 12h5"/><path d="M4 17h16"/></svg>',
+  'finder':              '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="4" w="5" h="3" rx="1.5"/><rect x="10" y="4" w="5" h="3" rx="1.5"/><rect x="17" y="4" w="4" h="3" rx="1.5"/><rect x="5" y="11" w="14" h="9" rx="2"/></svg>',
+  'hiddenpop':           '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="4" y="6" w="16" h="12" rx="2" stroke-dasharray="3 2.5"/><circle cx="12" cy="12" r="2.2"/></svg>',
+  'hotspots':            '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="18" h="18" rx="2"/><circle cx="8.5" cy="9" r="1.4" f="currentColor" sw="0"/><circle cx="15" cy="14" r="1.4" f="currentColor" sw="0"/><circle cx="15" cy="14" r="4"/></svg>',
+  'icontabs':            '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="18" h="18" rx="2"/><path d="M3 9h18"/><circle cx="7" cy="6" r="1.2"/><circle cx="12" cy="6" r="1.2"/><circle cx="17" cy="6" r="1.2"/></svg>',
+  'mixer':               '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="9" cy="10" r="5"/><circle cx="15" cy="10" r="5"/><path d="M6 19h12"/></svg>',
+  'physicsbin':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 5v13a2 2 0 002 2h12a2 2 0 002-2V5"/><circle cx="9" cy="15" r="2.6"/><rect x="13" y="12.5" w="5" h="5" rx="1" transform="rotate(18 15.5 15)"/></svg>',
+  'projector':           '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M3 8h18"/><circle cx="9" cy="8" r="2.4"/><path d="M5 14h14M5 18h8"/></svg>',
+  'revealbox':           '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="18" h="18" rx="2"/><path d="M3 13h18" stroke-dasharray="3 2"/><path d="M9 9l3-3 3 3"/></svg>',
+  'scaler':              '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="7" h="5" rx="1"/><path d="M14 5.5h7M5 13h16M5 17h12M5 21h8"/></svg>',
+  'scratchfx':           '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="18" h="18" rx="2"/><path d="M6 13c2-3 4 2 6-1s3-2 4-3"/><path d="M14 6l4 4"/></svg>',
+  'timezone':            '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="6" cy="7" r="3"/><path d="M6 5.5V7l1.2 .8"/><path d="M12 6h9M12 11h9M12 16h9"/><circle cx="9" cy="11" r="1.3" f="currentColor" sw="0"/><circle cx="16" cy="16" r="1.3" f="currentColor" sw="0"/></svg>',
+  'tripfinder':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="8" w="20" h="8" rx="2"/><path d="M8 8v8M14 8v8"/><path d="M16 12h4"/></svg>',
+  'presencegrid':        '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="4" w="7" h="7" rx="1.5"/><rect x="14" y="4" w="7" h="7" rx="1.5"/><rect x="3" y="14" w="7" h="6" rx="1.5"/><rect x="14" y="14" w="7" h="6" rx="1.5"/><circle cx="9.5" cy="5.5" r="1.3" f="currentColor" sw="0"/></svg>',
+  'matchfixtures':       '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/><path d="M11.5 12h1M12 10.5v3"/></svg>',
+  'asciiviz':            '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="4" w="18" h="16" rx="2"/><path d="M6 9h2.5M11 9h3.5M17 9h1.5M6 13h4M12.5 13h2M6 17h6.5"/></svg>',
+  'beforeafter':         '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="5" w="8" h="11" rx="1"/><rect x="13" y="5" w="8" h="11" rx="1"/><path d="M4 19h6M14 19h6"/></svg>',
+  'categoryrail':        '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="5" w="7" h="13" rx="1.5"/><rect x="11" y="5" w="7" h="13" rx="1.5"/><rect x="20" y="5" w="3" h="13" rx="1.5"/><path d="M8 21h8"/></svg>',
+  'productgrid':         '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="8" h="11" rx="1"/><rect x="13" y="3" w="8" h="11" rx="1"/><path d="M3 16.5h6M13 16.5h6M3 19.5h4M13 19.5h4"/></svg>',
+  'showcasegrid':        '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="18" h="18" rx="2"/><circle cx="17" cy="7" r="2.6"/><path d="M16 8l2-2M16.4 6h1.6v1.6"/><path d="M6 17h8"/></svg>',
+  'svganimator':         '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M3 12h4l2.5-6 3 12 2.5-6H21"/><circle cx="3" cy="12" r="1.4" f="currentColor" sw="0"/><circle cx="21" cy="12" r="1.4" f="currentColor" sw="0"/></svg>',
+  'viewer360':           '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="12" cy="12" r="9"/><path d="M3 12c0-2.2 4-4 9-4s9 1.8 9 4-4 4-9 4-9-1.8-9-4z"/><path d="M13 3.6l2.4 1.5-2.4 1.6"/></svg>',
+  'cta-banner':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="6" w="20" h="12" rx="2"/><path d="M5 10h6M5 13h4"/><rect x="14" y="10" w="5.5" h="4" rx="1"/></svg>',
+  'hero-split':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="4" w="20" h="16" rx="2"/><path d="M12 4v16"/><path d="M4 9h5M4 12h5"/></svg>',
+  'hoursstrip':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="5" cy="12" r="2.6"/><path d="M5 10.5V12l1.1 .7"/><path d="M10 9h11M10 13h8M10 17h10"/></svg>',
+  'hoverlist':           '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="5" cy="7" r="2" f="currentColor" sw="0"/><path d="M9 7h12"/><circle cx="5" cy="12.5" r="2"/><path d="M9 12.5h9"/><circle cx="5" cy="18" r="2"/><path d="M9 18h11"/></svg>',
+  'info-cards':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="4" w="8" h="8" rx="1.5"/><rect x="13" y="4" w="8" h="8" rx="1.5"/><path d="M5 15h6M15 15h4M5 18h4M15 18h5"/></svg>',
+  'lookbookmixer':       '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="5" w="5" h="12" rx="1"/><rect x="10" y="5" w="5" h="12" rx="1"/><rect x="17" y="5" w="4" h="12" rx="1"/><path d="M5.5 3.6l-1 1.4h2zM6 20h12"/></svg>',
+  'process-steps':       '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="6" cy="9" r="3"/><circle cx="18" cy="9" r="3"/><path d="M9 9h6"/><path d="M3 16h6M15 16h6"/></svg>',
+  'product-cards':       '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="8" h="18" rx="1.5"/><rect x="13" y="3" w="8" h="18" rx="1.5"/><path d="M3 13h8M13 13h8"/><path d="M5 16h3M15 16h3"/></svg>',
+  'schedule':            '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="4" w="18" h="16" rx="1.5"/><path d="M3 8h18M9 4v16M15 4v16"/><rect x="9.5" y="8.6" w="5" h="3" rx=".5" f="currentColor" opacity=".22" sw="0"/></svg>',
+  'scrollscrub':         '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="6" w="5.5" h="9" rx="1"/><rect x="9.25" y="6" w="5.5" h="9" rx="1"/><rect x="16.5" y="6" w="5.5" h="9" rx="1"/><path d="M4 19h13M15 17l2 2-2 2"/></svg>',
+  'section-header':      '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M3 5h6"/><path d="M3 9.5h15M3 13h10"/><path d="M16 19h5"/></svg>',
+  'stackscroll':         '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="8" y="3" w="13" h="6" rx="1.5"/><rect x="6" y="8.5" w="13" h="6" rx="1.5"/><rect x="4" y="14" w="13" h="6" rx="1.5"/></svg>',
+  'statstrip':           '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M3 8h6" sw="2.2"/><path d="M3 12h4"/><path d="M11 4v16"/><path d="M15 8h6" sw="2.2"/><path d="M15 12h4"/></svg>',
+  'step-timeline':       '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M3 10h18" stroke-dasharray="3 2"/><circle cx="6" cy="10" r="2.2"/><circle cx="12" cy="10" r="2.2"/><circle cx="18" cy="10" r="2.2"/><path d="M4 16h4M10 16h4M16 16h4"/></svg>',
+  'trust-strip':         '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="6" cy="12" r="3"/><path d="M4.8 12l1 1 1.4-1.7"/><path d="M11 12h2"/><circle cx="18" cy="12" r="3"/><path d="M16.8 12l1 1 1.4-1.7"/></svg>',
+  'workgrid':            '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="8" h="8" rx="1"/><rect x="13" y="3" w="8" h="8" rx="1"/><rect x="3" y="13" w="8" h="8" rx="1"/><circle cx="16.5" cy="16.5" r="2.5"/><path d="M18.3 18.3l1.7 1.7"/></svg>',
+  'worklist':            '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M3 6h2M8 6h13M3 12h2M8 12h11M3 18h2M8 18h12"/></svg>',
+  'goo':                 '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="9" cy="10" r="4.5"/><circle cx="15" cy="13.5" r="3.5"/><circle cx="14" cy="8" r="2"/></svg>',
+  'particlefx':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="6" cy="7" r="1.1" f="currentColor" sw="0"/><circle cx="12" cy="5" r="1.1" f="currentColor" sw="0"/><circle cx="18" cy="8" r="1.1" f="currentColor" sw="0"/><circle cx="8" cy="13" r="1.1" f="currentColor" sw="0"/><circle cx="15" cy="12" r="1.1" f="currentColor" sw="0"/><circle cx="11" cy="18" r="1.1" f="currentColor" sw="0"/><circle cx="19" cy="17" r="1.1" f="currentColor" sw="0"/></svg>',
+  'badge':               '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="8" w="13" h="8" rx="4"/><circle cx="19.5" cy="12" r="2.2"/></svg>',
+  'variablespecimen':    '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 19l5-13 5 13M6 14h6"/><path d="M16 11h5M18.5 9.5v3"/></svg>',
+  'leaderboard':         '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="6" w="13" h="3" rx="1.5"/><rect x="3" y="11" w="10" h="3" rx="1.5"/><rect x="3" y="16" w="7" h="3" rx="1.5"/><polygon points="20 5 20.7 6.5 22.3 6.7 21.1 7.8 21.4 9.4 20 8.6 18.6 9.4 18.9 7.8 17.7 6.7 19.3 6.5" f="currentColor" sw="0"/></svg>',
+
+  // ── Tile fuori dal pacchetto handoff (North dormienti + clod-evoluzione) ──
+  'northvideohero':      '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="3" w="20" h="18" rx="2"/><polygon points="10 8 16 12 10 16" f="currentColor" sw="0"/><path d="M5 6l3 0-1 2H4z"/></svg>',
+  'northquoteslider':    '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M5 6h4v4c0 2-1.5 3-3.5 3.5"/><path d="M13 6h4v4c0 2-1.5 3-3.5 3.5"/><path d="M4 19h13M15 17l2 2-2 2"/></svg>',
+  'studiohero':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="3" w="20" h="18" rx="2"/><circle cx="12" cy="10" r="3.5"/><path d="M12 3v3M6 15h12"/></svg>',
+  'filmreel':            '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="5" w="18" h="14" rx="2"/><path d="M3 9h18M3 15h18"/><path d="M7 5v14M17 5v14"/></svg>',
+  'scrubtext':           '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M5 6h14M12 6v9"/><path d="M4 20h16M15 18l2 2-2 2"/></svg>',
+  'themedemos':          '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="4" w="8" h="7" rx="1"/><rect x="13" y="4" w="8" h="7" rx="1"/><path d="M3 6.5h8M13 6.5h8"/><rect x="3" y="14" w="18" h="6" rx="1"/><path d="M3 16.5h18"/></svg>',
+  'evonotes':            '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M14 3v6h6"/><path d="M8 13h7M8 17h5"/></svg>',
 };
 
 function tileIcon(type) {
@@ -1295,8 +1368,8 @@ async function deleteGlobal(globalId, name) {
   align-items: center;
   justify-content: center;
   gap: 9px;
-  padding: 12px 8px;
-  min-height: 92px;
+  padding: 14px 8px;
+  min-height: 104px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   background: #fff;
@@ -1331,16 +1404,16 @@ async function deleteGlobal(globalId, name) {
   color: #fff;
 }
 .olo-sb-card .ic {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
   background: #f1f5f9;
   color: #475569;
   display: grid;
   place-items: center;
   transition: background-color 0.15s, color 0.15s, box-shadow 0.15s;
 }
-.olo-sb-card .ic :deep(svg) { width: 16px; height: 16px; }
+.olo-sb-card .ic :deep(svg) { width: 24px; height: 24px; }
 .olo-sb-card:hover .ic {
   background: #fff;
   color: var(--olo-ui-accent);

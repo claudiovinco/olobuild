@@ -181,6 +181,8 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
                 data-animation="<?php echo esc_attr( $animation ); ?>"
                 data-duration="<?php echo esc_attr( $duration ); ?>"
                 data-open="<?php echo $is_open ? '1' : '0'; ?>"
+                aria-controls="<?php echo esc_attr( $target_id ); ?>"
+                aria-expanded="<?php echo $is_open ? 'true' : 'false'; ?>"
             >
                 <?php if ( $icon_pos === 'left' ) : ?>
                     <span class="olo-tb-icon olo-tb-icon-show" style="<?php echo $is_open ? 'display:none' : ''; ?>"><?php echo $icon_show; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded get_svg_icon() map ?></span>
@@ -220,6 +222,7 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
               if (label) label.textContent = isOpen ? textHide : textShow;
               if (iconShow) iconShow.style.display = isOpen ? 'none' : '';
               if (iconHide) iconHide.style.display = isOpen ? '' : 'none';
+              btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
             }
 
             btn.addEventListener('click', function() {

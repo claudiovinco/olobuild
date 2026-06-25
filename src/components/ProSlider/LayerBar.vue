@@ -2,7 +2,7 @@
   <div class="mb-bg-gray-900 mb-border-t mb-border-gray-700">
     <!-- Add layer buttons -->
     <div class="mb-flex mb-items-center mb-gap-2 mb-px-3 mb-py-2 mb-border-b mb-border-gray-800">
-      <span class="mb-text-[10px] mb-text-gray-500 mb-font-semibold mb-uppercase mb-mr-1">Aggiungi:</span>
+      <span class="mb-text-[10px] mb-text-gray-500 mb-font-semibold mb-uppercase mb-mr-1">{{ t('Aggiungi:') }}</span>
       <button
         v-for="lt in layerTypes"
         :key="lt.type"
@@ -15,7 +15,7 @@
 
     <!-- Layer list (reversed: top of stack = left) -->
     <div class="mb-flex mb-items-center mb-gap-1 mb-px-3 mb-py-2 mb-overflow-x-auto">
-      <span v-if="!layers.length" class="mb-text-[10px] mb-text-gray-500 mb-italic">Nessun livello in questa slide</span>
+      <span v-if="!layers.length" class="mb-text-[10px] mb-text-gray-500 mb-italic">{{ t('Nessun livello in questa slide') }}</span>
       <div
         v-for="(layer, idx) in reversedLayers"
         :key="layer.id"
@@ -29,14 +29,14 @@
       >
         <span class="mb-opacity-60">{{ typeIcon(layer.type) }}</span>
         <span class="mb-max-w-24 mb-truncate">{{ layerLabel(layer) }}</span>
-        <span v-if="hasResponsiveOverride(layer)" class="mb-w-1.5 mb-h-1.5 mb-rounded-full mb-bg-yellow-400 mb-shrink-0" title="Override responsive"></span>
+        <span v-if="hasResponsiveOverride(layer)" class="mb-w-1.5 mb-h-1.5 mb-rounded-full mb-bg-yellow-400 mb-shrink-0" :title="t('Override responsive')"></span>
 
         <!-- Move up (toward front / higher z-index) -->
         <button
           @click.stop="$emit('move-up', layer.id)"
           :disabled="idx === 0"
           :class="['mps-move-btn', idx === 0 ? 'mps-move-disabled' : '']"
-          title="Porta avanti"
+          :title="t('Porta avanti')"
         >&#9650;</button>
 
         <!-- Move down (toward back / lower z-index) -->
@@ -44,14 +44,14 @@
           @click.stop="$emit('move-down', layer.id)"
           :disabled="idx === reversedLayers.length - 1"
           :class="['mps-move-btn', idx === reversedLayers.length - 1 ? 'mps-move-disabled' : '']"
-          title="Manda indietro"
+          :title="t('Manda indietro')"
         >&#9660;</button>
 
         <!-- Visibility toggle -->
         <button
           @click.stop="$emit('toggle-visibility', layer.id)"
           :class="['mps-bar-btn mps-eye-btn', hiddenIds.has(layer.id) ? 'mps-eye-hidden' : '']"
-          :title="hiddenIds.has(layer.id) ? 'Mostra' : 'Nascondi'"
+          :title="hiddenIds.has(layer.id) ? t('Mostra') : t('Nascondi')"
         >
           <svg v-if="!hiddenIds.has(layer.id)" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>
@@ -62,7 +62,7 @@
         </button>
 
         <!-- Delete -->
-        <button @click.stop="$emit('remove', layer.id)" class="mps-bar-btn hover:mb-text-red-400" title="Elimina">&times;</button>
+        <button @click.stop="$emit('remove', layer.id)" class="mps-bar-btn hover:mb-text-red-400" :title="t('Elimina')">&times;</button>
       </div>
     </div>
   </div>
@@ -70,6 +70,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   layers: { type: Array, default: () => [] },

@@ -304,8 +304,8 @@ class Olo_ProductGrid_Tile extends Olo_Tile_Base {
         <div class="olo-productgrid <?php echo esc_attr( $uid ); ?>">
             <?php if ( $show_filters ) : ?>
             <div class="opg-filters">
-                <button class="opg-filter on" type="button" data-opg-filter=""><?php echo esc_html( $f_all ); ?></button>
-                <?php foreach ( $chips as $c ) : ?><button class="opg-filter" type="button" data-opg-filter="<?php echo esc_attr( $c ); ?>"><?php echo esc_html( $c ); ?></button><?php endforeach; ?>
+                <button class="opg-filter on" type="button" aria-pressed="true" data-opg-filter=""><?php echo esc_html( $f_all ); ?></button>
+                <?php foreach ( $chips as $c ) : ?><button class="opg-filter" type="button" aria-pressed="false" data-opg-filter="<?php echo esc_attr( $c ); ?>"><?php echo esc_html( $c ); ?></button><?php endforeach; ?>
             </div>
             <?php endif; ?>
             <div class="opg-grid">
@@ -340,7 +340,7 @@ class Olo_ProductGrid_Tile extends Olo_Tile_Base {
                             <div class="opg-shades"><?php foreach ( $shts as $sc ) : $scc = $this->safe_color_css( $sc ); if ( $scc ) : ?><i style="background:<?php echo esc_attr( $scc ); ?>"></i><?php endif; endforeach; ?></div>
                         <?php endif; ?>
                         <?php $roast_n = intval( $it['roast'] ?? 0 ); if ( $roast_n > 0 ) : ?>
-                            <div class="opg-roast"><span class="opg-roast__lbl"><?php echo esc_html( $roast_lbl ); ?></span><span class="opg-roast__dots"><?php for ( $ri = 1; $ri <= 5; $ri++ ) : ?><i class="<?php echo $ri <= $roast_n ? 'on' : ''; ?>"></i><?php endfor; ?></span></div>
+                            <div class="opg-roast"><span class="opg-roast__lbl"><?php echo esc_html( $roast_lbl ); ?></span><span class="opg-roast__dots" role="img" aria-label="<?php echo esc_attr( sprintf( /* translators: 1: roast label, 2: roast level, 3: max level */ __( '%1$s %2$d di %3$d', 'olobuild' ), $roast_lbl, $roast_n, 5 ) ); ?>"><?php for ( $ri = 1; $ri <= 5; $ri++ ) : ?><i class="<?php echo $ri <= $roast_n ? 'on' : ''; ?>" aria-hidden="true"></i><?php endfor; ?></span></div>
                         <?php endif; ?>
                         <?php if ( $add_on ) : ?>
                             <div class="opg-cardfoot">
@@ -360,7 +360,7 @@ class Olo_ProductGrid_Tile extends Olo_Tile_Base {
         </div>
         <?php if ( $show_filters ) : ?>
         <script>
-        (function(){var r=document.querySelector('.<?php echo esc_js( $uid ); ?>');if(!r){return;}var fs=r.querySelectorAll('[data-opg-filter]');var cs=r.querySelectorAll('.opg-card');for(var i=0;i<fs.length;i++){(function(b){b.addEventListener('click',function(){var c=b.getAttribute('data-opg-filter');for(var j=0;j<fs.length;j++){fs[j].classList.remove('on');}b.classList.add('on');for(var k=0;k<cs.length;k++){var cc=cs[k].getAttribute('data-cat')||'';var tg=cs[k].getAttribute('data-tags')||'';var inT=false;if(tg){var ar=tg.split(',');for(var t=0;t<ar.length;t++){if(ar[t].trim()===c){inT=true;break;}}}if(c===''||cc===c||inT){cs[k].style.display='';}else{cs[k].style.display='none';}}});})(fs[i]);}})();
+        (function(){var r=document.querySelector('.<?php echo esc_js( $uid ); ?>');if(!r){return;}var fs=r.querySelectorAll('[data-opg-filter]');var cs=r.querySelectorAll('.opg-card');for(var i=0;i<fs.length;i++){(function(b){b.addEventListener('click',function(){var c=b.getAttribute('data-opg-filter');for(var j=0;j<fs.length;j++){fs[j].classList.remove('on');fs[j].setAttribute('aria-pressed','false');}b.classList.add('on');b.setAttribute('aria-pressed','true');for(var k=0;k<cs.length;k++){var cc=cs[k].getAttribute('data-cat')||'';var tg=cs[k].getAttribute('data-tags')||'';var inT=false;if(tg){var ar=tg.split(',');for(var t=0;t<ar.length;t++){if(ar[t].trim()===c){inT=true;break;}}}if(c===''||cc===c||inT){cs[k].style.display='';}else{cs[k].style.display='none';}}});})(fs[i]);}})();
         </script>
         <?php endif; ?>
         <?php

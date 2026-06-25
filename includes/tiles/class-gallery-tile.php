@@ -379,9 +379,18 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                     ? ' data-caption="' . esc_attr( $caption ) . '"'
                     : ( $extra > 0 ? ' data-caption="' . $i . '/' . $total . '"' : '' );
                 $cat_attr = $cat_slug ? ' data-category="' . esc_attr( $cat_slug ) . '"' : '';
+                // A11y: quando l'<img> non ha alt, il link-lightbox resta senza nome accessibile.
+                // Forniamo un nome al link tramite la caption o un indice "Apri immagine N".
+                $link_label = '';
+                if ( '' === trim( (string) $alt ) ) {
+                    $link_label = ( ! empty( $caption ) )
+                        ? $caption
+                        : sprintf( olo_t( 'Apri immagine %d' ), $i );
+                }
+                $aria_label_attr = $link_label ? ' aria-label="' . esc_attr( $link_label ) . '"' : '';
             ?>
                 <?php if ( $is_visible ) : ?>
-                <a class="olo-gal-item" href="<?php echo esc_url( $url ); ?>"<?php echo $caption_attr . $cat_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute strings assembled above from esc_attr()'d values and integer counters only ?>>
+                <a class="olo-gal-item" href="<?php echo esc_url( $url ); ?>"<?php echo $caption_attr . $cat_attr . $aria_label_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute strings assembled above from esc_attr()'d values and integer counters only ?>>
                     <?php echo Olo_Tile_Utils::img_srcset( $att_id, $url, $alt ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- img_srcset() returns an <img> tag escaped internally (esc_url/esc_attr/intval). ?>
                     <?php if ( ! empty( $s['fx_tint'] ) ) : ?><div class="olo-gal-tint"></div><?php endif; ?>
                     <?php if ( ! empty( $s['fx_grain'] ) ) : ?><div class="olo-gal-grain"></div><?php endif; ?>
@@ -390,7 +399,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                     <?php endif; ?>
                 </a>
                 <?php else : ?>
-                <a class="olo-gal-hidden" href="<?php echo esc_url( $url ); ?>"<?php echo $caption_attr . $cat_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute strings assembled above from esc_attr()'d values and integer counters only ?>></a>
+                <a class="olo-gal-hidden" href="<?php echo esc_url( $url ); ?>" aria-hidden="true" tabindex="-1"<?php echo $caption_attr . $cat_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute strings assembled above from esc_attr()'d values and integer counters only ?>></a>
                 <?php endif; ?>
             <?php endforeach; ?>
         </div>

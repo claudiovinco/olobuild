@@ -2507,7 +2507,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                     ?>
                         <li<?php echo $has_sub ? ' class="olo-mm-mob-parent"' : ''; ?>>
                             <?php if ( $has_sub ) : ?>
-                                <button class="olo-mm-mob-toggle" type="button">
+                                <button class="olo-mm-mob-toggle" type="button" aria-expanded="false">
                                     <?php echo esc_html( $item->title ); ?>
                                     <span class="olo-mm-mob-chevron"><?php echo $toggle_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from get_toggle_svg() (hardcoded strings + intval size) ?></span>
                                 </button>
@@ -2591,7 +2591,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                                 <?php if ( $has_sub ) : ?>
                                 <div class="olo-mm-dp-item">
                                     <a href="<?php echo esc_url( $item->url ); ?>"><?php echo esc_html( $item->title ); ?></a>
-                                    <button class="olo-mm-dp-chevron" type="button" aria-label="<?php echo esc_attr( olo_t( 'Espandi' ) ); ?>"><?php echo $toggle_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from get_toggle_svg() (hardcoded strings + intval size) ?></button>
+                                    <button class="olo-mm-dp-chevron" type="button" aria-label="<?php echo esc_attr( olo_t( 'Espandi' ) ); ?>" aria-expanded="false"><?php echo $toggle_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from get_toggle_svg() (hardcoded strings + intval size) ?></button>
                                 </div>
                                 <ul class="olo-mm-dp-sub">
                                     <?php foreach ( $subs as $sub ) :
@@ -2606,7 +2606,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                                             <?php if ( ! empty($gc) ) : ?>
                                             <div class="olo-mm-dp-item">
                                                 <a href="<?php echo esc_url( $sub->url ); ?>"><?php echo esc_html( $sub->title ); ?></a>
-                                                <button class="olo-mm-dp-chevron" type="button"><?php echo $toggle_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from get_toggle_svg() (hardcoded strings + intval size) ?></button>
+                                                <button class="olo-mm-dp-chevron" type="button" aria-label="<?php echo esc_attr( olo_t( 'Espandi sottomenu' ) ); ?>" aria-expanded="false"><?php echo $toggle_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from get_toggle_svg() (hardcoded strings + intval size) ?></button>
                                             </div>
                                             <ul class="olo-mm-dp-sub">
                                                 <?php foreach ( $gc as $gci ) : ?>
@@ -3101,7 +3101,8 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
             /* ── Accordion Mobile (offcanvas) ── */
             root.querySelectorAll(".olo-mm-mob-toggle").forEach(function(btn) {
                 btn.addEventListener("click", function() {
-                    btn.parentElement.classList.toggle("olo-mm-mob-open");
+                    var open = btn.parentElement.classList.toggle("olo-mm-mob-open");
+                    btn.setAttribute("aria-expanded", open ? "true" : "false");
                 });
             });
 
@@ -3111,7 +3112,10 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                     e.preventDefault();
                     e.stopPropagation();
                     var li = btn.closest("li");
-                    if (li) li.classList.toggle("olo-mm-dp-sub-open");
+                    if (li) {
+                        var open = li.classList.toggle("olo-mm-dp-sub-open");
+                        btn.setAttribute("aria-expanded", open ? "true" : "false");
+                    }
                 });
             });
 
@@ -3121,7 +3125,9 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 if (li) {
                     link.addEventListener("click", function(e) {
                         e.preventDefault();
-                        li.classList.toggle("olo-mm-dp-sub-open");
+                        var open = li.classList.toggle("olo-mm-dp-sub-open");
+                        var chev = li.querySelector(".olo-mm-dp-chevron");
+                        if (chev) chev.setAttribute("aria-expanded", open ? "true" : "false");
                     });
                 }
             });
