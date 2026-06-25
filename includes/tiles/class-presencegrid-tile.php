@@ -104,11 +104,11 @@ class Olo_Presencegrid_Tile extends Olo_Tile_Base {
      */
     private function avatar_palette() {
         return [
-            'var(--olo-color-primary, #8B5CF6)',
-            'var(--olo-color-secondary, #22D3EE)',
-            'var(--olo-color-accent, #B6FF3D)',
-            'var(--olo-color-danger, #FF4D9D)',
-            'var(--olo-color-info, #6366F1)',
+            'var(--olo-color-primary, #e1474f)',
+            'var(--olo-color-secondary, #16263d)',
+            'var(--olo-color-accent, #f4a23b)',
+            'var(--olo-color-danger, #b42318)',
+            'var(--olo-color-info, #2563eb)',
         ];
     }
 

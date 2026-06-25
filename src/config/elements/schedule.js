@@ -22,7 +22,7 @@ export default {
       { time: '18:30', cells: '!Reformer | Breath | !Reformer | Mat | Open' },
     ],
     zone_accent: '',
-    zone_on: '#ffffff',
+    zone_on: 'var(--olo-color-surface, #ffffff)',
     cell_bg: '',
     card_border: '',
     head_color: '',

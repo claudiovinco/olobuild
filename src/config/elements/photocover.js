@@ -31,10 +31,10 @@ export default {
     overlay_top: 0.3,
     overlay_bottom: 0.85,
     frame_padding: 28,
-    media_bg: '#1a1a1a',
+    media_bg: 'var(--olo-color-dark, #16263d)',
     kicker_color: '',
-    headline_color: '#ffffff',
-    meta_color: '#e8e8e8',
+    headline_color: 'var(--olo-color-light, #f8f9fa)',
+    meta_color: 'var(--olo-color-light, #f8f9fa)',
 
     // SPAZIATURA — override gated del padding del contenuto (.pc-in).
     // Il padding di default è responsivo (clamp(...,5vw,...)) e NON va sostituito:

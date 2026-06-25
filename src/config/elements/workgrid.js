@@ -24,21 +24,21 @@ export default {
 
     media_aspect:      '4/3',
     media_tall_aspect: '4/5',
-    media_bg:          '#ebe7dc',
-    media_label_color: '#18181a',
+    media_bg:          'var(--olo-color-surface-alt, #f6f7f9)',
+    media_label_color: 'var(--olo-color-text, #1f2937)',
     hover_zoom:        true,
     object_position:   'center center',
 
     title_font_family: 'heading',
-    title_color: '#18181a',
+    title_color: 'var(--olo-color-text, #1f2937)',
     title_size:  22,
     title_weight: '500',
 
-    meta_color: '#8d8a82',
+    meta_color: 'var(--olo-color-text-soft, #6b7280)',
     meta_size:  12,
 
     show_desc:  true,
-    desc_color: '#8d8a82',
+    desc_color: 'var(--olo-color-text-soft, #6b7280)',
     desc_size:  15,
 
     mono_font_family: '',

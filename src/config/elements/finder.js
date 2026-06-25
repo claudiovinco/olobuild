@@ -38,7 +38,7 @@ export default {
       { option: 'Opzione C', title: 'Risultato C', text: 'Descrizione del risultato consigliato.', meta: '', cta_text: '', cta_url: '#', icon: '' },
     ],
     zone_accent: '',
-    zone_on: '#ffffff',
+    zone_on: 'var(--olo-color-surface, #ffffff)',
     card_bg: '',
     card_border: '',
     media_bg: '',

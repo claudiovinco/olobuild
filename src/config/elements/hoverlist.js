@@ -34,11 +34,11 @@ export default {
     number_hover_color: '',
 
     name_font_family: 'heading',
-    name_color: '#f6e9ec',
+    name_color: 'var(--olo-color-light, #f8f9fa)',
     name_size: 22,
     name_uppercase: false,
 
-    sub_color: '#9c7e8c',
+    sub_color: 'var(--olo-color-text-soft, #6b7280)',
     sub_size: 12,
     sub_uppercase: true,
 
@@ -47,7 +47,7 @@ export default {
 
     row_padding_y: 20,
     hover_indent: 20,
-    hover_bg: '#4d2f40',
+    hover_bg: 'var(--olo-color-dark, #16263d)',
     line_color: 'rgba(246,233,236,.13)',
 
     peek: true,

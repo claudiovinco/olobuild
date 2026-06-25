@@ -81,7 +81,7 @@ export default {
     fx_tint_blend: 'multiply',
     // Overlay
     overlay_gradient: false,
-    overlay_color: '#000000',
+    overlay_color: 'var(--olo-color-dark, #16263d)',
     overlay_opacity: '50',
     overlay_direction: 'bottom',
     overlay_height: '50',

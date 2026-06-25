@@ -28,8 +28,8 @@ export default {
       { image: '', caption: 'couple, golden hour' },
     ],
     strip_offset: 28, strip_radius: 200,
-    bg_color: '#241430', accent: '', accent_on: '#170c1f',
-    text_color: '#f3e9ef', sub_color: '#c8b3c6', eyebrow_color: '#e0afca', media_bg: '#33203f',
+    bg_color: 'var(--olo-color-dark, #16263d)', accent: '', accent_on: 'var(--olo-color-dark, #16263d)',
+    text_color: 'var(--olo-color-light, #f8f9fa)', sub_color: 'var(--olo-color-text-faint, #94a3b8)', eyebrow_color: 'var(--olo-color-accent, #f4a23b)', media_bg: 'var(--olo-color-dark, #16263d)',
     glow_color: 'rgba(224,175,202,0.22)', glow_w: 760, glow_h: 520, glow_blur: 120, glow_y: -160,
     h_size_min: 48, h_size_vw: 8, h_size_max: 108, max_width: 880,
 

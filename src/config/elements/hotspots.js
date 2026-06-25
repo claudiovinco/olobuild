@@ -23,7 +23,7 @@ export default {
       { x: 44, y: 74, title: 'Punto 3', text: 'Descrizione del punto.', meta: '' },
     ],
     zone_accent: '',
-    zone_on: '#ffffff',
+    zone_on: 'var(--olo-color-surface, #ffffff)',
     panel_bg: '',
     card_bg: '',
     card_border: '',

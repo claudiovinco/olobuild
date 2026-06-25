@@ -23,7 +23,7 @@ export default {
     description: t('Descrizione.'),
     link_url: '',
     link_target: '_self',
-    overlay_color: '#000000',
+    overlay_color: 'var(--olo-color-dark, #16263d)',
     text_color: '',
     hover_effect: 'fade',
     overlay_opacity: '70',

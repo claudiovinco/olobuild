@@ -19,7 +19,7 @@ export default {
     width: '300',
     height: '300',
     overlay: true,
-    overlay_color: '#000000',
+    overlay_color: 'var(--olo-color-dark, #16263d)',
     overlay_opacity: '50',
     close_button: true,
     close_color: '',

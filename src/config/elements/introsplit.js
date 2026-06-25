@@ -37,7 +37,7 @@ export default {
     cta2_url: '#',
     cta2_style: 'outline',
     cta_bg: '',
-    cta_color: '#ffffff',
+    cta_color: 'var(--olo-color-light, #f8f9fa)',
     media_image: '',
     media_bg: { type: 'none' },
     media_label: 'club portrait — squad on the pitch',

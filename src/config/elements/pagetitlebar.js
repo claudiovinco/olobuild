@@ -34,7 +34,7 @@ export default {
     bg_color: '',
     bg_image: '',
     bg_overlay: '60',
-    bg_overlay_color: '#000000',
+    bg_overlay_color: 'var(--olo-color-dark, #16263d)',
     bg_size: 'cover',
     bg_position: 'center center',
     bg_parallax: false,

@@ -27,7 +27,7 @@ export default {
     ],
     zone_accent: '',
     work_color: '',
-    ok_color: '#e0a23a',
+    ok_color: 'var(--olo-color-accent, #f4a23b)',
     sleep_color: '',
     card_bg: '',
     card_border: '',

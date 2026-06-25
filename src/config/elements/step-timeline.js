@@ -20,12 +20,12 @@ export default {
       {
         counter: '01',
         tag_text: 'PRONTO IN 30"',
-        tag_dot_color: '#b3261e',
+        tag_dot_color: 'var(--olo-color-primary, #e1474f)',
         media_label: 'TERMINAL · INSTALL',
         media_type: 'terminal',
         media_content: '# installazione\n$ wp plugin install olobuild --activate\n✓ Plugin installato\n✓ 187 tile registrati\n# pronto\n$',
         media_image: '',
-        media_bg: '#0f172a',
+        media_bg: 'var(--olo-color-text, #1f2937)',
         media_color: '#10b981',
         pre_title: 'INSTALLA',
         title: 'Scarichi',
@@ -41,13 +41,13 @@ export default {
       {
         counter: '02',
         tag_text: 'DRAG & DROP',
-        tag_dot_color: '#b3261e',
+        tag_dot_color: 'var(--olo-color-primary, #e1474f)',
         media_label: 'OLOBUILD · EDITOR LIVE',
         media_type: 'placeholder',
         media_content: '',
         media_image: '',
         media_bg: '#f5efe7',
-        media_color: '#b3261e',
+        media_color: 'var(--olo-color-primary, #e1474f)',
         pre_title: 'COSTRUISCI',
         title: 'Trascini i tile, scegli i colori,',
         title_accent: 'doppio click',
@@ -84,8 +84,8 @@ export default {
 
     // Timeline
     show_timeline:           true,
-    timeline_line_color:     '#fde8e8',
-    timeline_dot_color:      '#b3261e',
+    timeline_line_color:     'var(--olo-color-light, #f8f9fa)',
+    timeline_dot_color:      'var(--olo-color-primary, #e1474f)',
     timeline_dot_size:       14,
     timeline_height:         3,
     timeline_margin_bottom:  50,
@@ -93,13 +93,13 @@ export default {
     // Counter
     counter_font_family: 'serif',
     counter_size:        96,
-    counter_color:       '#b3261e',
+    counter_color:       'var(--olo-color-primary, #e1474f)',
     counter_italic:      true,
     counter_weight:      '500',
 
     // Tag
     tag_size:        12,
-    tag_color:       '#374151',
+    tag_color:       'var(--olo-color-text, #1f2937)',
 
     // Media card
     media_aspect_ratio:           '5/4',
@@ -112,28 +112,28 @@ export default {
 
     // Pre-title
     pre_title_size:  12,
-    pre_title_color: '#9ca3af',
+    pre_title_color: 'var(--olo-color-text-faint, #94a3b8)',
 
     // Title
     title_font_family: 'serif',
     title_size:        30,
     title_weight:      '500',
-    title_color:       '#0f172a',
-    title_accent_color: '#b3261e',
+    title_color:       'var(--olo-color-text, #1f2937)',
+    title_accent_color: 'var(--olo-color-primary, #e1474f)',
 
     // Description
     description_size: 14,
-    description_color: '#6b7280',
+    description_color: 'var(--olo-color-text-soft, #6b7280)',
 
     // Footer metric
     footer_icon:        'clock',
     footer_value_size:  18,
     footer_label_size:  11,
-    footer_value_color: '#0f172a',
-    footer_label_color: '#9ca3af',
+    footer_value_color: 'var(--olo-color-text, #1f2937)',
+    footer_label_color: 'var(--olo-color-text-faint, #94a3b8)',
 
     // Separator arrow (dashed)
-    separator_color:  '#b3261e',
+    separator_color:  'var(--olo-color-primary, #e1474f)',
     show_separator:   true,
 
     // Layout

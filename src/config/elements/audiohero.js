@@ -24,9 +24,9 @@ export default {
     cover_image: '', cover_label: 'album cover — Nightglass, neon on black',
     object_position: 'center center',
     player_track: 'Glasshouse', player_meta: 'Kova · Nightglass', show_player: true,
-    bg_color: '#0c0c10', panel_color: '#16161d',
-    accent: '#27e0a3', accent_2: '#ff5d9e', accent_on: '#060608',
-    text_color: '#ffffff', sub_color: '#b6b6c2', meta_color: '#74747f',
+    bg_color: 'var(--olo-color-dark, #16263d)', panel_color: 'var(--olo-color-dark, #16263d)',
+    accent: 'var(--olo-color-accent, #f4a23b)', accent_2: 'var(--olo-color-primary, #e1474f)', accent_on: 'var(--olo-color-dark, #16263d)',
+    text_color: 'var(--olo-color-light, #f8f9fa)', sub_color: 'var(--olo-color-text-faint, #94a3b8)', meta_color: 'var(--olo-color-text-soft, #6b7280)',
     split_ratio: '1.1fr .9fr',
 
     // Spaziatura (override gated del padding interno responsivo) — default no-op.

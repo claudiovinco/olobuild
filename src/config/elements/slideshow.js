@@ -26,7 +26,7 @@ export default {
     show_dots: true,
     slide_height: '400',
     object_position: 'center center',
-    overlay_color: '#000000',
+    overlay_color: 'var(--olo-color-dark, #16263d)',
     text_color: '',
     transition: 'slide',
     shadow: 'none',

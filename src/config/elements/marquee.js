@@ -30,7 +30,7 @@ export default {
     vskew_scroll_boost: 0.6,
     vskew_max_skew: 14,
     vskew_damping: 0.86,
-    bg_color: '#1F2937',
+    bg_color: 'var(--olo-color-dark, #16263d)',
     text_color: '',
     font_size: '16',
     font_weight: '500',

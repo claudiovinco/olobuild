@@ -52,7 +52,7 @@ export default {
     slide_radius: 0,
     overlay_color: 'rgba(0,0,0,0.45)',
     overlay_gradient: true,
-    title_color: '#ffffff',
+    title_color: 'var(--olo-color-light, #f8f9fa)',
     title_weight: '700',
     title_letter_spacing: 0,
     title_uppercase: false,

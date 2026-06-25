@@ -32,7 +32,7 @@ export default {
     kenburns_duration: 20,
     kenburns_intensity: 1.25,
     overlay: false,
-    overlay_color: '#000000',
+    overlay_color: 'var(--olo-color-dark, #16263d)',
     overlay_opacity: 30,
     border_radius_outer: 0,
     shadow: 'none',

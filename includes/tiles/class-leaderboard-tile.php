@@ -110,14 +110,14 @@ class Olo_Leaderboard_Tile extends Olo_Tile_Base {
         $row_bg      = $this->safe_color_css( $s['row_bg'] ?? '' ) ?: 'var(--olo-color-surface-2, #1A1233)';
         $text_color  = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-text, #EDEAFB)';
         $role_color  = $this->safe_color_css( $s['role_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #948CC4)';
-        $pos_color   = $this->safe_color_css( $s['position_color'] ?? '' ) ?: 'var(--olo-color-text-faint, #5E568C)';
-        $badge_bg    = $this->safe_color_css( $s['badge_bg'] ?? '' ) ?: 'var(--olo-color-primary-soft, rgba(99,102,241,0.2))';
-        $badge_color = $this->safe_color_css( $s['badge_color'] ?? '' ) ?: 'var(--olo-color-primary, #6366F1)';
+        $pos_color   = $this->safe_color_css( $s['position_color'] ?? '' ) ?: 'var(--olo-color-text-faint, #94a3b8)';
+        $badge_bg    = $this->safe_color_css( $s['badge_bg'] ?? '' ) ?: 'var(--olo-color-primary-soft, rgba(225,71,79,0.2))';
+        $badge_color = $this->safe_color_css( $s['badge_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
         $track_color = $this->safe_color_css( $s['bar_track_color'] ?? '' ) ?: 'var(--olo-color-border, rgba(237,234,251,0.08))';
-        $hl_color    = $this->safe_color_css( $s['highlight_color'] ?? '' ) ?: 'var(--olo-color-primary, #6366F1)';
+        $hl_color    = $this->safe_color_css( $s['highlight_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
 
-        $grad_from   = $this->safe_color_css( $s['bar_gradient_from'] ?? '' ) ?: 'var(--olo-color-primary, #6366F1)';
-        $grad_to     = $this->safe_color_css( $s['bar_gradient_to'] ?? '' ) ?: 'var(--olo-color-secondary, #22D3EE)';
+        $grad_from   = $this->safe_color_css( $s['bar_gradient_from'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
+        $grad_to     = $this->safe_color_css( $s['bar_gradient_to'] ?? '' ) ?: 'var(--olo-color-secondary, #16263d)';
         $grad_angle  = max( 0, min( 360, intval( $s['bar_gradient_angle'] ?? 90 ) ) );
         $bar_grad    = "linear-gradient({$grad_angle}deg,{$grad_from},{$grad_to})";
 

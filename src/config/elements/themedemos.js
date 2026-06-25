@@ -18,7 +18,7 @@ export default {
 
   defaults: {
     items: [
-      { name: 'Forge', category: 'Software & Tech', zone_label: 'Contrast', bg: '#121212', ink: '#f4f4f4', accent: '#ff6a2b', font_label: 'Big Shoulders Display', light: false, link: '' },
+      { name: 'Forge', category: 'Software & Tech', zone_label: 'Contrast', bg: 'var(--olo-color-dark, #16263d)', ink: '#f4f4f4', accent: '#ff6a2b', font_label: 'Big Shoulders Display', light: false, link: '' },
       { name: 'Prisma', category: 'Creative', zone_label: 'Palette', bg: '#160a24', ink: '#f1e9f7', accent: '#c14bff', font_label: 'Big Shoulders Display', light: false, link: '' },
       { name: 'Saffron', category: 'Food & Drink', zone_label: 'Floor plan', bg: '#f6efe2', ink: '#241a16', accent: '#c75d3a', font_label: 'Big Shoulders Display', light: true, link: '' },
       { name: 'Soundwave', category: 'Artist', zone_label: 'Sequencer', bg: '#0c0c10', ink: '#ffffff', accent: '#27e0a3', font_label: 'Big Shoulders Display', light: false, link: '' },

@@ -21,13 +21,13 @@ export default {
   defaults: {
     eyebrow_show: true,
     eyebrow_text: 'PROVALO SUBITO',
-    eyebrow_color: '#b3261e',
-    eyebrow_dot_color: '#b3261e',
+    eyebrow_color: 'var(--olo-color-primary, #e1474f)',
+    eyebrow_dot_color: 'var(--olo-color-primary, #e1474f)',
     eyebrow_separator: '— ',
 
     headline_lines: [
-      { text: 'Nessun rischio,', color: '#0f172a', italic: false },
-      { text: 'solo prodotto.',  color: '#b3261e', italic: true  },
+      { text: 'Nessun rischio,', color: 'var(--olo-color-dark, #16263d)', italic: false },
+      { text: 'solo prodotto.',  color: 'var(--olo-color-primary, #e1474f)', italic: true  },
     ],
     headline_font_family: 'serif',
     headline_font_size:   96,
@@ -38,7 +38,7 @@ export default {
     tagline_show: true,
     tagline_text: 'Try before you trust',
     tagline_text_italic: true,
-    tagline_text_color: '#0f172a',
+    tagline_text_color: 'var(--olo-color-dark, #16263d)',
     tagline_text_size: 22,
     tagline_caption: 'TRE GARANZIE · CINQUE PROMESSE',
     tagline_caption_color: '',

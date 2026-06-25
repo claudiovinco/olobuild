@@ -25,10 +25,10 @@ export default {
     typography_preset: '',
     chart_type: 'bar',
     items: [
-      { id: 'c-1', label: t('Gen'), value: '65', color: '#e1474f' },
-      { id: 'c-2', label: 'Feb', value: '45', color: '#16263d' },
-      { id: 'c-3', label: t('Mar'), value: '80', color: '#f4a23b' },
-      { id: 'c-4', label: t('Apr'), value: '55', color: '#15803d' },
+      { id: 'c-1', label: t('Gen'), value: '65', color: 'var(--olo-color-primary, #e1474f)' },
+      { id: 'c-2', label: 'Feb', value: '45', color: 'var(--olo-color-dark, #16263d)' },
+      { id: 'c-3', label: t('Mar'), value: '80', color: 'var(--olo-color-accent, #f4a23b)' },
+      { id: 'c-4', label: t('Apr'), value: '55', color: 'var(--olo-color-success, #15803d)' },
     ],
     chart_height: '400',
 
@@ -59,8 +59,8 @@ export default {
 
     // Tooltip
     tooltip_enabled: true,
-    tooltip_bg: '#000000',
-    tooltip_text_color: '#ffffff',
+    tooltip_bg: 'var(--olo-color-dark, #16263d)',
+    tooltip_text_color: 'var(--olo-color-light, #f8f9fa)',
     tooltip_border_color: '',
     tooltip_border_width: '0',
     tooltip_corner_radius: '6',

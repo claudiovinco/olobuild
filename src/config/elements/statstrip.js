@@ -23,15 +23,15 @@ export default {
     band_padding_y: 40,
 
     show_dividers: true,
-    divider_color: '#d7d1c2',
+    divider_color: 'var(--olo-color-border, #e5e7eb)',
     band_border: true,
 
     value_font_family: 'heading',
-    value_color: '#18181a',
+    value_color: 'var(--olo-color-text, #1f2937)',
     value_size: 48,
     value_weight: '600',
 
-    label_color: '#8d8a82',
+    label_color: 'var(--olo-color-text-soft, #6b7280)',
     label_size: 13,
     label_uppercase: false,
 

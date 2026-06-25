@@ -86,7 +86,7 @@ class Olo_Table_Tile extends Olo_Tile_Base {
             $css .= ".{$uid} th,.{$uid} td{border-bottom:1px solid {$border_color}}";
         }
         if ( $hover ) {
-            $css .= ".{$uid} tbody tr:hover{background:rgba(99,102,241,0.06)}";
+            $css .= ".{$uid} tbody tr:hover{background:rgba(225,71,79,0.06)}";
         }
         if ( $responsive === 'stack' ) {
             $css .= "@media(max-width:767px){";

@@ -83,7 +83,7 @@ export default {
     bg_color: '',
     hover_bg: '',
     accent_color: '',
-    overlay_color: '#000000',
+    overlay_color: 'var(--olo-color-dark, #16263d)',
     overlay_opacity: 60,
     container_padding: { top: 0, right: 0, bottom: 0, left: 0 },
     container_radius: { tl: 0, tr: 0, br: 0, bl: 0 },

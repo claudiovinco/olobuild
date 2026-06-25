@@ -20,11 +20,11 @@ export default {
       { id: 'it-3', icon: 'lock',     label: t('Tutela'), heading: 'HeyConad Tutela',  title: t('Assicurazioni pensate per te'),        content: 'Protezione per casa, persona e animali.',             link_text: 'Scopri i prodotti',       link_url: '#' },
     ],
     preset: 'pill-default',
-    pill_bg: '#F5F2EB',
+    pill_bg: 'var(--olo-color-surface, #ffffff)',
     active_bg: '',            // '' ⇒ primary (era #e1474f off-brand)
     active_color: '',         // '' ⇒ on-primary
     inactive_color: '',       // '' ⇒ text
-    card_bg: '#F9D7D7',
+    card_bg: 'var(--olo-color-surface-alt, #f6f7f9)',
     card_radius: '16',
     card_border: { ...borderDefault },
     card_border_hover: { ...borderHoverDefault },

@@ -21,18 +21,18 @@ export default {
     band_padding_y: 36,
 
     show_dividers: true,
-    divider_color: '#d7d1c2',
+    divider_color: 'var(--olo-color-border, #e5e7eb)',
     band_border: true,
 
-    day_color: '#8d8a82',
+    day_color: 'var(--olo-color-text-soft, #6b7280)',
     day_size: 12,
 
     time_font_family: 'heading',
-    time_color: '#18181a',
+    time_color: 'var(--olo-color-text, #1f2937)',
     time_size: 30,
     time_weight: '500',
 
-    note_color: '#8d8a82',
+    note_color: 'var(--olo-color-text-soft, #6b7280)',
     note_size: 13,
 
     mono_font_family: '',

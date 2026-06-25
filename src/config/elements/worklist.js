@@ -19,29 +19,29 @@ export default {
       { number: '04', title: 'Cobalt',        category: 'Identity · product', year: '2024', link_url: '' },
     ],
 
-    divider_color: '#d7d1c2',
+    divider_color: 'var(--olo-color-border, #e5e7eb)',
     row_padding_y: 26,
-    row_hover_bg:  '#e8e3d7',
+    row_hover_bg:  'var(--olo-color-surface-alt, #f6f7f9)',
     hover_indent:  24,
 
-    number_color: '#8d8a82',
+    number_color: 'var(--olo-color-text-soft, #6b7280)',
     number_size:  13,
 
     title_font_family: 'heading',
-    title_color:  '#18181a',
+    title_color:  'var(--olo-color-text, #1f2937)',
     title_size:   40,
     title_weight: '500',
 
     show_category:  true,
-    category_color: '#8d8a82',
+    category_color: 'var(--olo-color-text-soft, #6b7280)',
     category_size:  12,
 
     show_year:  true,
-    year_color: '#18181a',
+    year_color: 'var(--olo-color-text, #1f2937)',
     year_size:  13,
 
     show_arrow:  true,
-    arrow_color: '#18181a',
+    arrow_color: 'var(--olo-color-text, #1f2937)',
 
     mono_font_family: '',
   },

@@ -27,7 +27,7 @@ export default {
     template_id: 0,
     // Modale
     modal_max_width: 560,
-    modal_bg_color: '#ffffff',
+    modal_bg_color: 'var(--olo-color-light, #f8f9fa)',
     modal_shadow: 'lg',
     modal_radius: '16',
     modal_border_width: '0',
@@ -38,9 +38,9 @@ export default {
     popup_overlay_blur: 0,
     popup_animation: 'slide-up',
     // Stile testo
-    title_color: '#111827',
+    title_color: 'var(--olo-color-text, #1f2937)',
     title_size: '24',
-    text_color: '#4b5563',
+    text_color: 'var(--olo-color-text, #1f2937)',
     // Trigger
     trigger_threshold: 50,
     trigger_direction: 'down',

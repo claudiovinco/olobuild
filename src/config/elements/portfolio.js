@@ -75,7 +75,7 @@ export default {
     text_color: '',
     bg_color: '',
     accent_color: '',
-    overlay_color: '#000000',
+    overlay_color: 'var(--olo-color-dark, #16263d)',
     overlay_opacity: '80',
     border_radius: '8',
     // Container

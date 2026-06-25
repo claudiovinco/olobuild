@@ -28,20 +28,20 @@ export default {
     cta2_url:        '#',
     cta2_target:     '_self',
     cta2_bg:         'transparent',
-    cta2_color:      '#ffffff',
+    cta2_color:      'var(--olo-color-light, #f8f9fa)',
     cta2_border:     'rgba(255,255,255,.28)',
 
     // Stile globale
-    bg:              { type: 'solid', color: '#0f172a' },
-    text_color:      '#ffffff',
+    bg:              { type: 'solid', color: 'var(--olo-color-dark, #16263d)' },
+    text_color:      'var(--olo-color-light, #f8f9fa)',
     accent_color:    'var(--olo-color-primary, #e1474f)',
-    subtitle_color:  '#9ca3af',
+    subtitle_color:  'var(--olo-color-text-faint, #94a3b8)',
 
     // CTA pill
     cta_bg:                  'var(--olo-color-primary, #e1474f)',
     cta_bg_hover:            '',
-    cta_color:               '#ffffff',
-    cta_color_hover:         '#ffffff',
+    cta_color:               'var(--olo-color-light, #f8f9fa)',
+    cta_color_hover:         'var(--olo-color-light, #f8f9fa)',
     cta_radius:              { ...R(999) },
     cta_radius_hover:        { ...R(999) },
     cta_radius_hover_duration: 300,

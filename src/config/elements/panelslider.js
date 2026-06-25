@@ -56,7 +56,7 @@ export default {
     preset: 'card-modern',
 
     // Card layout
-    card_bg: '#ffffff',
+    card_bg: 'var(--olo-color-surface, #ffffff)',
     card_border_color: 'transparent',
     card_border_width: 0,
     card_border_style: 'solid',

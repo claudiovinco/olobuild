@@ -34,8 +34,8 @@ export default {
     pill_bg: 'rgba(255,255,255,0.05)',
     pill_border: 'rgba(255,255,255,0.12)',
     pill_text_color: '',
-    badge_bg: '#D8FF4A',
-    badge_color: '#1B2A4E',
+    badge_bg: 'var(--olo-color-surface-alt, #f6f7f9)',
+    badge_color: 'var(--olo-color-dark, #16263d)',
   },
 
   // ═══ CONTENUTO ════════════════════════════════════════════════
