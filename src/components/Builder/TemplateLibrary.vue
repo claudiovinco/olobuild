@@ -73,7 +73,7 @@
               >
                 <!-- Thumbnail image (for page templates with thumbnail) -->
                 <div v-if="tpl.thumbnail" style="position:relative;overflow:hidden;border-bottom:1px solid #4B5563" @mouseenter="$event.currentTarget.querySelector('.olo-tpl-hover').style.opacity='1'" @mouseleave="$event.currentTarget.querySelector('.olo-tpl-hover').style.opacity='0'">
-                  <img :src="oloData.pluginUrl + tpl.thumbnail" :alt="tpl.name" style="display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover" loading="lazy" @error="$event.target.style.display='none'" />
+                  <img :src="oloData.pluginUrl + tpl.thumbnail" :alt="tpl.name" style="display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top center;background:#0f1623" loading="lazy" @error="$event.target.style.display='none'" />
                   <div class="olo-tpl-hover" style="position:absolute;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;padding:12px;opacity:0;transition:opacity 0.15s">
                     <span style="color:#D1D5DB;font-size:11px;text-align:center;line-height:1.5">{{ tpl.preview_description }}</span>
                   </div>

@@ -1,12 +1,13 @@
 {
  "version": "2.0.0",
- "_generated": "2026-06-25 — set curato moderno token-based (84 blocchi)",
+ "_generated": "2026-06-25 — set curato moderno token-based (84 blocchi) + miniature reali",
  "templates": [
   {
    "id": "hero-centered",
    "name": "Hero — Classico centrato",
    "category": "hero",
    "preview_description": "Hero centrato e arioso con titolo H1 grande e parola-accento, sottotitolo e due CTA (pulsante pieno primario + pulsante outline).",
+   "thumbnail": "assets/img/block-thumbs/hero-centered.jpg",
    "content": [
     {
      "id": "hero-centered-sec",
@@ -140,6 +141,7 @@
    "name": "Hero — Split con media",
    "category": "hero",
    "preview_description": "Hero editoriale con pannello testo a sinistra (occhiello, titolo con parola-accento, lead, statistiche e due CTA) e media a destra con badge d'angolo.",
+   "thumbnail": "assets/img/block-thumbs/hero-split-media.jpg",
    "content": [
     {
      "id": "hero-split-media-sec",
@@ -235,6 +237,7 @@
    "name": "Hero — Video mascherato",
    "category": "hero",
    "preview_description": "Hero cinematografico full-bleed con video di sfondo mascherato ad arco, watermark gigante, titolo grande con parola-accento e due CTA.",
+   "thumbnail": "assets/img/block-thumbs/hero-masked-video.jpg",
    "content": [
     {
      "id": "hero-masked-video-sec",
@@ -309,6 +312,7 @@
    "name": "Hero — Glow gradiente",
    "category": "hero",
    "preview_description": "Hero scuro full-screen con bagliore gradiente dietro un titolo editoriale gigante multi-riga, eyebrow, sottotitolo e due CTA.",
+   "thumbnail": "assets/img/block-thumbs/hero-glow.jpg",
    "content": [
     {
      "id": "hero-glow-sec",
@@ -397,6 +401,7 @@
    "name": "Hero — Immagine overlay",
    "category": "hero",
    "preview_description": "Hero full-bleed con immagine di sfondo, velo scuro a gradiente e blocco testo sovrapposto: eyebrow, titolo con parola-accento, sottotitolo e due pulsanti CTA.",
+   "thumbnail": "assets/img/block-thumbs/hero-image-overlay.jpg",
    "content": [
     {
      "id": "hero-image-overlay-sec",
@@ -485,6 +490,7 @@
    "name": "Hero — Prodotto/SaaS",
    "category": "hero",
    "preview_description": "Hero centrato per software/SaaS: pill novità, titolo con riga-accento a gradiente, sottotitolo e due CTA, con sotto un mockup prodotto in cornice browser che mostra KPI e grafico a barre.",
+   "thumbnail": "assets/img/block-thumbs/hero-product-saas.jpg",
    "content": [
     {
      "id": "hero-product-saas-sec",
@@ -625,6 +631,7 @@
    "name": "Hero — Editoriale",
    "category": "hero",
    "preview_description": "Hero in stile testata di giornale: riga edizione, nameplate serif gigante con azioni, e blocco di apertura con kicker, titolo, standfirst e firma.",
+   "thumbnail": "assets/img/block-thumbs/hero-editorial.jpg",
    "content": [
     {
      "id": "hero-editorial-sec",
@@ -694,6 +701,7 @@
    "name": "Hero — Copertina foto",
    "category": "hero",
    "preview_description": "Hero editoriale a piena pagina con grande foto di copertina, occhiello mono, titolo gigante in basso a sinistra e riga di voci meta/byline.",
+   "thumbnail": "assets/img/block-thumbs/hero-photo-cover.jpg",
    "content": [
     {
      "id": "hero-photo-cover-sec",
@@ -772,6 +780,7 @@
    "name": "Funzioni — 3 colonne icona",
    "category": "features",
    "preview_description": "Titolo di sezione centrato seguito da tre card con icona, titolo e descrizione che illustrano le funzioni principali.",
+   "thumbnail": "assets/img/block-thumbs/features-3-iconbox.jpg",
    "content": [
     {
      "id": "features-3-iconbox-sec",
@@ -900,6 +909,7 @@
    "name": "Funzioni — Griglia 4",
    "category": "features",
    "preview_description": "Titolo introduttivo con parola-accento seguito da una griglia di quattro funzioni numerate, ciascuna con icona, titolo e descrizione.",
+   "thumbnail": "assets/img/block-thumbs/features-4-grid.jpg",
    "content": [
     {
      "id": "features-4-grid-sec",
@@ -1049,6 +1059,7 @@
    "name": "Funzioni — Zigzag testo+media",
    "category": "features",
    "preview_description": "Sezione showcase a schede commutabili: una nav su immagine hero che alterna pannelli con titolo, testo, pulsante e immagine.",
+   "thumbnail": "assets/img/block-thumbs/features-zigzag.jpg",
    "content": [
     {
      "id": "features-zigzag-sec",
@@ -1136,6 +1147,7 @@
    "name": "Funzioni — Schede a icone",
    "category": "features",
    "preview_description": "Sezione funzioni con titolo introduttivo e una barra di tab a icone che rivela schede di contenuto diverse (occhiello, titolo, testo e link).",
+   "thumbnail": "assets/img/block-thumbs/features-tabs.jpg",
    "content": [
     {
      "id": "features-tabs-sec",
@@ -1280,6 +1292,7 @@
    "name": "Funzioni — Bento grid",
    "category": "features",
    "preview_description": "Griglia bento moderna con celle di dimensioni diverse: grandi card linkate con kicker, titolo e freccia animata, ideale per presentare le funzioni principali.",
+   "thumbnail": "assets/img/block-thumbs/features-bento.jpg",
    "content": [
     {
      "id": "features-bento-sec",
@@ -1382,6 +1395,7 @@
    "name": "Funzioni — Processo a step",
    "category": "features",
    "preview_description": "Sezione processo con titolo introduttivo e quattro step numerati, ognuno con titolo e descrizione, per spiegare un flusso lineare in modo chiaro.",
+   "thumbnail": "assets/img/block-thumbs/features-process.jpg",
    "content": [
     {
      "id": "features-process-sec",
@@ -1497,6 +1511,7 @@
    "name": "Funzioni — Highlight singolo",
    "category": "features",
    "preview_description": "Una funzione di punta presentata in stile editoriale: grande copertina affiancata da occhiello, titolo serif, sommario, firma e doppia CTA.",
+   "thumbnail": "assets/img/block-thumbs/features-highlight.jpg",
    "content": [
     {
      "id": "features-highlight-sec",
@@ -1566,6 +1581,7 @@
    "name": "Funzioni — 3 colonne scuro",
    "category": "features",
    "preview_description": "Sezione funzioni su superficie scura con titolo introduttivo e tre card editoriali numerate con accenti colorati.",
+   "thumbnail": "assets/img/block-thumbs/features-dark-glow.jpg",
    "content": [
     {
      "id": "features-dark-glow-sec",
@@ -1704,6 +1720,7 @@
    "name": "Servizi — Griglia lavori",
    "category": "services",
    "preview_description": "Sezione servizi con titolo introduttivo e griglia a due colonne di card (immagine, titolo, categoria e descrizione) per presentare lavori o aree di intervento.",
+   "thumbnail": "assets/img/block-thumbs/services-grid.jpg",
    "content": [
     {
      "id": "services-grid-sec",
@@ -1847,6 +1864,7 @@
    "name": "Servizi — Card icona",
    "category": "services",
    "preview_description": "Sezione servizi con titolo introduttivo e tre card a icona, ciascuna con descrizione e link 'Scopri'.",
+   "thumbnail": "assets/img/block-thumbs/services-icon.jpg",
    "content": [
     {
      "id": "services-icon-sec",
@@ -1985,6 +2003,7 @@
    "name": "Servizi — Come lavoriamo",
    "category": "services",
    "preview_description": "Sezione che presenta il processo di servizio in quattro passi numerati, con titolo introduttivo e sottotitolo.",
+   "thumbnail": "assets/img/block-thumbs/services-steps.jpg",
    "content": [
     {
      "id": "services-steps-sec",
@@ -2094,6 +2113,7 @@
    "name": "Servizi — Elenco lavori",
    "category": "services",
    "preview_description": "Indice editoriale dei servizi a righe numerate: numero, titolo grande, categoria e anno, con freccia che appare al passaggio del mouse.",
+   "thumbnail": "assets/img/block-thumbs/services-list.jpg",
    "content": [
     {
      "id": "services-list-sec",
@@ -2200,6 +2220,7 @@
    "name": "Prezzi — 3 piani",
    "category": "pricing",
    "preview_description": "Sezione prezzi con titolo introduttivo e tre piani affiancati (Base, Pro, Business), dove il piano centrale è evidenziato con badge Popolare.",
+   "thumbnail": "assets/img/block-thumbs/pricing-3-tier.jpg",
    "content": [
     {
      "id": "pricing-3-tier-sec",
@@ -2358,6 +2379,7 @@
    "name": "Prezzi — 2 piani",
    "category": "pricing",
    "preview_description": "Sezione prezzi con titolo introduttivo e due piani affiancati (Mensile e Annuale), ciascuno con elenco feature e pulsante d'azione.",
+   "thumbnail": "assets/img/block-thumbs/pricing-2-tier.jpg",
    "content": [
     {
      "id": "pricing-2-tier-sec",
@@ -2489,6 +2511,7 @@
    "name": "Prezzi — Piano in evidenza",
    "category": "pricing",
    "preview_description": "Sezione prezzi con titolo introduttivo e tre piani affiancati (Base, Pro, Business), con il piano centrale evidenziato da un badge 'Consigliato'.",
+   "thumbnail": "assets/img/block-thumbs/pricing-popular.jpg",
    "content": [
     {
      "id": "pricing-popular-sec",
@@ -2645,6 +2668,7 @@
    "name": "Prezzi — Confronto",
    "category": "pricing",
    "preview_description": "Sezione di confronto prezzi con titolo introduttivo e tre card piano (Base, Pro, Business) che mettono a confronto prezzi e funzionalità.",
+   "thumbnail": "assets/img/block-thumbs/pricing-compare.jpg",
    "content": [
     {
      "id": "pricing-compare-sec",
@@ -2797,6 +2821,7 @@
    "name": "Testimonianze — Griglia 3",
    "category": "testimonials",
    "preview_description": "Sezione testimonianze con titolo introduttivo e tre recensioni affiancate, ciascuna con citazione, valutazione a stelle, autore e ruolo.",
+   "thumbnail": "assets/img/block-thumbs/testimonials-3-grid.jpg",
    "content": [
     {
      "id": "testimonials-3-grid-sec",
@@ -2942,6 +2967,7 @@
    "name": "Testimonianza — Editoriale",
    "category": "testimonials",
    "preview_description": "Una singola testimonianza in stile editoriale: citazione grande con accento sul testo e autore inline sotto la firma.",
+   "thumbnail": "assets/img/block-thumbs/testimonial-editorial.jpg",
    "content": [
     {
      "id": "testimonial-editorial-sec",
@@ -3002,6 +3028,7 @@
    "name": "Testimonianze — Slider",
    "category": "testimonials",
    "preview_description": "Slider di testimonianze enterprise su sfondo scuro: citazione con autore e logo testuale a sinistra, card grafica con linee topografiche animate a destra.",
+   "thumbnail": "assets/img/block-thumbs/testimonials-slider.jpg",
    "content": [
     {
      "id": "testimonials-slider-sec",
@@ -3089,6 +3116,7 @@
    "name": "Testimonianza — Citazione grande",
    "category": "testimonials",
    "preview_description": "Sezione con una grande citazione tipografica centrata e il nome dell'autore, ideale come pull-quote editoriale.",
+   "thumbnail": "assets/img/block-thumbs/testimonial-bigquote.jpg",
    "content": [
     {
      "id": "testimonial-bigquote-sec",
@@ -3146,6 +3174,7 @@
    "name": "Testimonianze — Citazioni+loghi",
    "category": "testimonials",
    "preview_description": "Tre testimonianze clienti con citazione, autore e stelle, seguite da una banda scorrevole con i nomi dei clienti.",
+   "thumbnail": "assets/img/block-thumbs/testimonials-logos.jpg",
    "content": [
     {
      "id": "testimonials-logos-sec",
@@ -3328,6 +3357,7 @@
    "name": "Team — Griglia 4",
    "category": "team",
    "preview_description": "Sezione team con titolo introduttivo e una griglia di quattro membri: foto, nome, ruolo e link al profilo.",
+   "thumbnail": "assets/img/block-thumbs/team-4-grid.jpg",
    "content": [
     {
      "id": "team-4-grid-sec",
@@ -3551,6 +3581,7 @@
    "name": "Team — Griglia 3",
    "category": "team",
    "preview_description": "Sezione team con titolo introduttivo e griglia di tre membri, ciascuno con foto, nome, ruolo e bio breve.",
+   "thumbnail": "assets/img/block-thumbs/team-3-grid.jpg",
    "content": [
     {
      "id": "team-3-grid-sec",
@@ -3750,6 +3781,7 @@
    "name": "Team — Autore",
    "category": "team",
    "preview_description": "Box autore dinamico a piena larghezza con avatar, nome, biografia, conteggio articoli e link al sito, pensato per il fondo degli articoli del blog.",
+   "thumbnail": "assets/img/block-thumbs/team-author.jpg",
    "content": [
     {
      "id": "team-author-sec",
@@ -3823,6 +3855,7 @@
    "name": "Team — Leadership",
    "category": "team",
    "preview_description": "Sezione leadership con titolo introduttivo e due schede leader affiancate, ciascuna con nome, ruolo e biografia estesa.",
+   "thumbnail": "assets/img/block-thumbs/team-leadership.jpg",
    "content": [
     {
      "id": "team-leadership-sec",
@@ -3968,6 +4001,7 @@
    "name": "Portfolio — Masonry",
    "category": "portfolio",
    "preview_description": "Sezione portfolio con titolo introduttivo e griglia masonry di progetti: card con immagine, overlay testuale al passaggio del mouse e celle di diversa altezza/larghezza.",
+   "thumbnail": "assets/img/block-thumbs/portfolio-masonry.jpg",
    "content": [
     {
      "id": "portfolio-masonry-sec",
@@ -4146,6 +4180,7 @@
    "name": "Portfolio — Griglia",
    "category": "portfolio",
    "preview_description": "Sezione portfolio con titolo introduttivo e griglia di progetti filtrabile per categoria, con caption e ribbon sugli elementi in evidenza.",
+   "thumbnail": "assets/img/block-thumbs/portfolio-grid.jpg",
    "content": [
     {
      "id": "portfolio-grid-sec",
@@ -4315,6 +4350,7 @@
    "name": "Portfolio — Showcase scuro",
    "category": "portfolio",
    "preview_description": "Showcase bento su sfondo scuro con grandi card-immagine linkate: kicker, titolo maiuscolo e freccia animata in alto a destra.",
+   "thumbnail": "assets/img/block-thumbs/portfolio-showcase.jpg",
    "content": [
     {
      "id": "portfolio-showcase-sec",
@@ -4409,6 +4445,7 @@
    "name": "Portfolio — Elenco lavori",
    "category": "portfolio",
    "preview_description": "Indice editoriale di progetti a righe numerate con titolo grande, categoria, anno e freccia all'hover.",
+   "thumbnail": "assets/img/block-thumbs/portfolio-worklist.jpg",
    "content": [
     {
      "id": "portfolio-worklist-sec",
@@ -4645,6 +4682,7 @@
    "name": "Galleria — Lookbook",
    "category": "gallery",
    "preview_description": "Lookbook mixer interattivo per comporre la propria routine skincare: slot scorribili per ogni step con nome, prezzo e pastiglia colore, e card riepilogo con totale live e CTA.",
+   "thumbnail": "assets/img/block-thumbs/gallery-lookbook.jpg",
    "content": [
     {
      "id": "gallery-lookbook-sec",
@@ -5270,6 +5308,7 @@
    "name": "Shop — Griglia prodotti",
    "category": "ecommerce",
    "preview_description": "Sezione shop con titolo introduttivo e griglia di quattro prodotti con categoria, prezzo, tag d'angolo e barra 'Aggiungi' in hover.",
+   "thumbnail": "assets/img/block-thumbs/shop-product-grid.jpg",
    "content": [
     {
      "id": "shop-product-grid-sec",
@@ -5409,6 +5448,7 @@
    "name": "Shop — Card prodotto",
    "category": "ecommerce",
    "preview_description": "Vetrina shop con titolo introduttivo e una griglia di tre card prodotto, ciascuna con immagine, prezzo, badge e pulsante d'acquisto.",
+   "thumbnail": "assets/img/block-thumbs/shop-product-cards.jpg",
    "content": [
     {
      "id": "shop-product-cards-sec",
@@ -5567,6 +5607,7 @@
    "name": "Shop — Prodotti in evidenza",
    "category": "ecommerce",
    "preview_description": "Sezione shop con titolo introduttivo e griglia a 4 colonne di prodotti in evidenza, con categoria, nome, prezzo e barra Aggiungi in hover.",
+   "thumbnail": "assets/img/block-thumbs/shop-featured.jpg",
    "content": [
     {
      "id": "shop-featured-sec",
@@ -5709,6 +5750,7 @@
    "name": "Shop — Categorie",
    "category": "ecommerce",
    "preview_description": "Sezione shop con titolo introduttivo e griglia di categorie con immagine, etichetta e link finale alla collezione.",
+   "thumbnail": "assets/img/block-thumbs/shop-category-rail.jpg",
    "content": [
     {
      "id": "shop-category-rail-sec",
@@ -5854,6 +5896,7 @@
    "name": "CTA — Centrata",
    "category": "cta",
    "preview_description": "Banda call-to-action a tutta larghezza su sfondo brand, con titolo accentato, sottotitolo e pulsante d'azione.",
+   "thumbnail": "assets/img/block-thumbs/cta-centered.jpg",
    "content": [
     {
      "id": "cta-centered-sec",
@@ -5919,6 +5962,7 @@
    "name": "CTA — Sfondo scuro",
    "category": "cta",
    "preview_description": "Banner call-to-action a tutta larghezza su sfondo scuro, con titolo in accento, sottotitolo e doppio pulsante.",
+   "thumbnail": "assets/img/block-thumbs/cta-dark.jpg",
    "content": [
     {
      "id": "cta-dark-sec",
@@ -5983,6 +6027,7 @@
    "name": "CTA — Split con media",
    "category": "cta",
    "preview_description": "Call-to-action full-bleed con media di sfondo e velo gradiente, occhiello, titolo gigante con parola-accento, sottotitolo e pulsante.",
+   "thumbnail": "assets/img/block-thumbs/cta-split-media.jpg",
    "content": [
     {
      "id": "cta-split-media-sec",
@@ -6069,6 +6114,7 @@
    "name": "CTA — Newsletter",
    "category": "cta",
    "preview_description": "Box centrato di iscrizione alla newsletter con sopratitolo, titolo, sottotitolo, campo email e pulsante, su sfondo chiaro alternativo.",
+   "thumbnail": "assets/img/block-thumbs/cta-newsletter.jpg",
    "content": [
     {
      "id": "cta-newsletter-sec",
@@ -6133,6 +6179,7 @@
    "name": "CTA — Barra annuncio",
    "category": "cta",
    "preview_description": "Barra annuncio full-width con testo centrato e parte evidenziata in accento, link sull'intera barra e chiusura opzionale.",
+   "thumbnail": "assets/img/block-thumbs/cta-announcement.jpg",
    "content": [
     {
      "id": "cta-announcement-sec",
@@ -6206,6 +6253,7 @@
    "name": "CTA — Gradiente glow",
    "category": "cta",
    "preview_description": "Banner call-to-action a tutta larghezza su sfondo scuro con titolo dall'accento corsivo, sottotitolo e due pulsanti.",
+   "thumbnail": "assets/img/block-thumbs/cta-gradient.jpg",
    "content": [
     {
      "id": "cta-gradient-sec",
@@ -6274,6 +6322,7 @@
    "name": "Statistiche — Strip",
    "category": "stats",
    "preview_description": "Banda di statistiche su sfondo scuro con quattro numeri chiave aziendali e relative etichette, separati da divisori verticali.",
+   "thumbnail": "assets/img/block-thumbs/stats-strip.jpg",
    "content": [
     {
      "id": "stats-strip-sec",
@@ -6360,6 +6409,7 @@
    "name": "Statistiche — Contatori",
    "category": "stats",
    "preview_description": "Sezione statistiche con titolo introduttivo e quattro contatori animati con suffisso (clienti, progetti, anni, soddisfazione).",
+   "thumbnail": "assets/img/block-thumbs/stats-counters.jpg",
    "content": [
     {
      "id": "stats-counters-sec",
@@ -6595,6 +6645,7 @@
    "name": "Statistiche — Cerchi",
    "category": "stats",
    "preview_description": "Sezione statistiche con titolo introduttivo e tre anelli di progresso circolari che mostrano percentuali chiave dell'attività.",
+   "thumbnail": "assets/img/block-thumbs/stats-circles.jpg",
    "content": [
     {
      "id": "stats-circles-sec",
@@ -6767,6 +6818,7 @@
    "name": "FAQ — Accordion",
    "category": "faq",
    "preview_description": "Sezione di domande frequenti con titolo introduttivo e accordion a pannelli espandibili.",
+   "thumbnail": "assets/img/block-thumbs/faq-accordion.jpg",
    "content": [
     {
      "id": "faq-accordion-sec",
@@ -6890,6 +6942,7 @@
    "name": "FAQ — 2 colonne",
    "category": "faq",
    "preview_description": "Sezione FAQ a due colonne: a sinistra un titolo introduttivo con sottotitolo, a destra un accordion con le domande frequenti espandibili.",
+   "thumbnail": "assets/img/block-thumbs/faq-2col.jpg",
    "content": [
     {
      "id": "faq-2col-sec",
@@ -7220,6 +7273,7 @@
    "name": "Contatti — Form semplice",
    "category": "contact",
    "preview_description": "Form contatti centrato su sfondo chiaro, con titolo introduttivo, parola-accento e campi essenziali (nome, email, oggetto, messaggio) più consenso privacy.",
+   "thumbnail": "assets/img/block-thumbs/contact-form-simple.jpg",
    "content": [
     {
      "id": "contact-form-simple-sec",
@@ -7369,6 +7423,7 @@
    "name": "Contatti — Info + Orari",
    "category": "contact",
    "preview_description": "Sezione contatti con tre card editoriali (indirizzo, telefono, email) seguite da una banda con gli orari di apertura settimanali.",
+   "thumbnail": "assets/img/block-thumbs/contact-info-hours.jpg",
    "content": [
     {
      "id": "contact-info-hours-sec",
@@ -7529,6 +7584,7 @@
    "name": "Contatti — Card",
    "category": "contact",
    "preview_description": "Sezione contatti con titolo introduttivo e tre card: vieni a trovarci, chiamaci e scrivici.",
+   "thumbnail": "assets/img/block-thumbs/contact-cards.jpg",
    "content": [
     {
      "id": "contact-cards-sec",
@@ -7660,6 +7716,7 @@
    "name": "Chi siamo — Intro split",
    "category": "about",
    "preview_description": "Sezione 'Chi siamo' con pannello testo editoriale (occhiello, titolo con parola-accento, lead, tre statistiche e due CTA) accanto a un media con badge d'angolo.",
+   "thumbnail": "assets/img/block-thumbs/about-intro-split.jpg",
    "content": [
     {
      "id": "about-intro-split-sec",
@@ -7743,6 +7800,7 @@
    "name": "Chi siamo — Storia + numeri",
    "category": "about",
    "preview_description": "Sezione Chi siamo con titolo, paragrafo che racconta la storia dell'azienda e una strip di quattro statistiche chiave.",
+   "thumbnail": "assets/img/block-thumbs/about-story-stats.jpg",
    "content": [
     {
      "id": "about-story-stats-sec",
@@ -7896,6 +7954,7 @@
    "name": "Chi siamo — Missione",
    "category": "about",
    "preview_description": "Blocco missione/valori in stile editoriale: grande copertina affiancata a una colonna con occhiello, titolo serif, sommario, firma e doppia call to action.",
+   "thumbnail": "assets/img/block-thumbs/about-mission.jpg",
    "content": [
     {
      "id": "about-mission-sec",
@@ -7975,6 +8034,7 @@
    "name": "Timeline — Verticale",
    "category": "timeline",
    "preview_description": "Sezione con titolo introduttivo e una timeline verticale alternata che racconta le tappe storiche su un asse centrale, con nodi a icona e card colorate per categoria.",
+   "thumbnail": "assets/img/block-thumbs/timeline-vertical.jpg",
    "content": [
     {
      "id": "timeline-vertical-sec",
@@ -8136,6 +8196,7 @@
    "name": "Timeline — Step",
    "category": "timeline",
    "preview_description": "Percorso a step orizzontali: una headline introduttiva sopra una timeline editoriale a tre passi, ciascuno con tag, media affiancato, titolo composito, descrizione e metrica finale.",
+   "thumbnail": "assets/img/block-thumbs/timeline-steps.jpg",
    "content": [
     {
      "id": "timeline-steps-sec",
@@ -8422,6 +8483,7 @@
    "name": "Loghi — Trust strip",
    "category": "logos",
    "preview_description": "Riga di garanzie con icone e testo intervallate da separatori, ideale sotto un hero o nel footer per rassicurare i visitatori.",
+   "thumbnail": "assets/img/block-thumbs/logos-trust-strip.jpg",
    "content": [
     {
      "id": "logos-trust-strip-sec",
@@ -8511,6 +8573,7 @@
    "name": "Video — In evidenza",
    "category": "video",
    "preview_description": "Sezione con video player in evidenza a sinistra e testo descrittivo con titolo a destra, su due colonne.",
+   "thumbnail": "assets/img/block-thumbs/video-feature.jpg",
    "content": [
     {
      "id": "video-feature-sec",
@@ -8749,6 +8812,7 @@
    "name": "Newsletter — Centrata",
    "category": "newsletter",
    "preview_description": "Sezione di iscrizione alla newsletter centrata su fondo brand, con sopratitolo, titolo, sottotitolo e campo email con pulsante.",
+   "thumbnail": "assets/img/block-thumbs/newsletter-centered.jpg",
    "content": [
     {
      "id": "newsletter-centered-sec",
@@ -8820,6 +8884,7 @@
    "name": "Newsletter — Split media",
    "category": "newsletter",
    "preview_description": "Sezione newsletter con form di iscrizione affiancato a un'immagine: titolo, sottotitolo, campo email e pulsante a sinistra, anteprima visiva a destra.",
+   "thumbnail": "assets/img/block-thumbs/newsletter-split.jpg",
    "content": [
     {
      "id": "newsletter-split-sec",
@@ -8913,6 +8978,7 @@
    "name": "Footer — 4 colonne",
    "category": "footer",
    "preview_description": "Footer su sfondo scuro a 4 colonne: logo con claim, due colonne di link di navigazione, icone social e riga di copyright.",
+   "thumbnail": "assets/img/block-thumbs/footer-4col.jpg",
    "content": [
     {
      "id": "footer-4col-sec",
@@ -8987,13 +9053,12 @@
          "children": [
           {
            "id": "footer-4col-menu1",
-           "type": "navmenu",
+           "type": "text-block",
            "settings": {
-            "menu_id": 0,
-            "style": "vertical",
-            "alignment": "left",
+            "content": "<p style=\"color:var(--olo-color-light);font-weight:600;margin:0 0 10px;\">Prodotto</p><a href=\"#\" style=\"color:var(--olo-color-light);opacity:.72;text-decoration:none;display:block;padding:5px 0;\">Funzioni</a><a href=\"#\" style=\"color:var(--olo-color-light);opacity:.72;text-decoration:none;display:block;padding:5px 0;\">Prezzi</a><a href=\"#\" style=\"color:var(--olo-color-light);opacity:.72;text-decoration:none;display:block;padding:5px 0;\">Integrazioni</a><a href=\"#\" style=\"color:var(--olo-color-light);opacity:.72;text-decoration:none;display:block;padding:5px 0;\">Novità</a>",
             "text_color": "var(--olo-color-light)",
-            "hover_color": "var(--olo-color-primary)"
+            "text_align": "left",
+            "columns": 1
            },
            "style": {},
            "advanced": {},
@@ -9012,13 +9077,12 @@
          "children": [
           {
            "id": "footer-4col-menu2",
-           "type": "navmenu",
+           "type": "text-block",
            "settings": {
-            "menu_id": 0,
-            "style": "vertical",
-            "alignment": "left",
+            "content": "<p style=\"color:var(--olo-color-light);font-weight:600;margin:0 0 10px;\">Azienda</p><a href=\"#\" style=\"color:var(--olo-color-light);opacity:.72;text-decoration:none;display:block;padding:5px 0;\">Chi siamo</a><a href=\"#\" style=\"color:var(--olo-color-light);opacity:.72;text-decoration:none;display:block;padding:5px 0;\">Blog</a><a href=\"#\" style=\"color:var(--olo-color-light);opacity:.72;text-decoration:none;display:block;padding:5px 0;\">Lavora con noi</a><a href=\"#\" style=\"color:var(--olo-color-light);opacity:.72;text-decoration:none;display:block;padding:5px 0;\">Contatti</a>",
             "text_color": "var(--olo-color-light)",
-            "hover_color": "var(--olo-color-primary)"
+            "text_align": "left",
+            "columns": 1
            },
            "style": {},
            "advanced": {},
@@ -9118,6 +9182,7 @@
    "name": "Footer — Minimale",
    "category": "footer",
    "preview_description": "Footer compatto su sfondo scuro con logo centrato, riga di icone social e copyright.",
+   "thumbnail": "assets/img/block-thumbs/footer-minimal.jpg",
    "content": [
     {
      "id": "footer-minimal-sec",
@@ -9273,6 +9338,7 @@
    "name": "Footer — Con CTA",
    "category": "footer",
    "preview_description": "Footer su sfondo scuro con banda call-to-action in evidenza, menu di navigazione e riga di icone social.",
+   "thumbnail": "assets/img/block-thumbs/footer-cta.jpg",
    "content": [
     {
      "id": "footer-cta-sec",
@@ -9350,13 +9416,12 @@
          "children": [
           {
            "id": "footer-cta-navmenu",
-           "type": "navmenu",
+           "type": "text-block",
            "settings": {
-            "menu_id": 0,
-            "style": "navbar",
-            "alignment": "center",
+            "content": "<p style=\"color:var(--olo-color-light);font-weight:600;margin:0 0 10px;\">Prodotto</p><a href=\"#\" style=\"color:var(--olo-color-light);opacity:.72;text-decoration:none;display:block;padding:5px 0;\">Funzioni</a><a href=\"#\" style=\"color:var(--olo-color-light);opacity:.72;text-decoration:none;display:block;padding:5px 0;\">Prezzi</a><a href=\"#\" style=\"color:var(--olo-color-light);opacity:.72;text-decoration:none;display:block;padding:5px 0;\">Integrazioni</a><a href=\"#\" style=\"color:var(--olo-color-light);opacity:.72;text-decoration:none;display:block;padding:5px 0;\">Novità</a>",
             "text_color": "var(--olo-color-light)",
-            "hover_color": "var(--olo-color-primary)"
+            "text_align": "left",
+            "columns": 1
            },
            "style": {},
            "advanced": {},
@@ -9433,6 +9498,7 @@
    "name": "404 — Centrata",
    "category": "404",
    "preview_description": "Pagina 404 centrata con titolo grande, messaggio di errore e pulsante per tornare alla home.",
+   "thumbnail": "assets/img/block-thumbs/notfound-centered.jpg",
    "content": [
     {
      "id": "notfound-centered-sec",
@@ -9512,6 +9578,7 @@
    "name": "404 — Con ricerca",
    "category": "404",
    "preview_description": "Pagina 404 centrata con titolo, sottotitolo, barra di ricerca e pulsante per tornare alla home.",
+   "thumbnail": "assets/img/block-thumbs/notfound-search.jpg",
    "content": [
     {
      "id": "notfound-search-sec",
@@ -9608,6 +9675,7 @@
    "name": "Coming soon — Countdown",
    "category": "coming-soon",
    "preview_description": "Pagina 'in arrivo' su sfondo scuro con titolo, conto alla rovescia verso l'apertura e form di iscrizione alla newsletter.",
+   "thumbnail": "assets/img/block-thumbs/coming-soon-countdown.jpg",
    "content": [
     {
      "id": "coming-soon-countdown-sec",
@@ -9723,6 +9791,7 @@
    "name": "Coming soon — Minimale",
    "category": "coming-soon",
    "preview_description": "Sezione \"Coming soon\" minimale su sfondo brand: messaggio breve di lancio imminente e conto alla rovescia verso la data di apertura.",
+   "thumbnail": "assets/img/block-thumbs/coming-soon-minimal.jpg",
    "content": [
     {
      "id": "coming-soon-minimal-sec",
@@ -9822,6 +9891,7 @@
    "name": "Loghi — Griglia",
    "category": "logos",
    "preview_description": "Sezione 'loghi clienti' con titolo introduttivo e una griglia di sei loghi disposti su più colonne.",
+   "thumbnail": "assets/img/block-thumbs/logos-grid.jpg",
    "content": [
     {
      "id": "logos-grid-sec",
@@ -10051,6 +10121,7 @@
    "name": "Statistiche — Banda singola",
    "category": "stats",
    "preview_description": "Una banda a tutta larghezza con una singola statistica imponente: numero animato di grandi dimensioni, icona, suffisso accento ed etichetta su sfondo brand.",
+   "thumbnail": "assets/img/block-thumbs/stats-banner.jpg",
    "content": [
     {
      "id": "stats-banner-sec",
@@ -10126,6 +10197,7 @@
    "name": "CTA — Con badge fiducia",
    "category": "cta",
    "preview_description": "Banner call-to-action con titolo accentato e doppio pulsante, seguito da una riga di badge di fiducia (licenza, accessibilità, hosting, export, assistenza).",
+   "thumbnail": "assets/img/block-thumbs/cta-trust.jpg",
    "content": [
     {
      "id": "cta-trust-sec",
