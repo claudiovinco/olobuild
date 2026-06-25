@@ -970,16 +970,18 @@ async function toggleActivateSingle() {
 const realPreviewUrl = computed(() => {
   // Priority 1: permalink passato da PHP (aperto da una pagina specifica via ?post_id=)
   if (oloData.postPermalink) return oloData.postPermalink;
-  // Priority 2: permalink REALE del post collegato al template, risolto lato PHP
-  // tramite get_permalink() che gestisce post/page/CPT correttamente.
-  if (oloData.linkedPostPermalink) return oloData.linkedPostPermalink;
-  // Priority 3: fallback `?p=ID` (funziona solo per post_type='post' — page/CPT 404).
-  // Manteniamo per back-compat con template salvati prima della v3.55.42.
-  const settingsPostId = builderStore.currentTemplate?.settings?.post_id;
-  if (settingsPostId && parseInt(settingsPostId) > 0) {
-    const home = (oloData.siteInfo?.home_url || '').replace(/\/+$/, '');
-    if (home) return `${home}/?p=${settingsPostId}`;
+  // Priority 2: permalink REALE risolto dal resolver robusto lato REST (primo post
+  // PUBBLICATO collegato al template via meta `_olo_template_id`), con get_permalink()
+  // corretto per page/CPT/post. Arriva nel template via REST → NON dipende dai parametri
+  // dell'URL del builder, a differenza di oloData.linkedPostPermalink.
+  // Evita il 404 quando settings.post_id punta a un draft stantio (es. dopo import tema).
+  if (builderStore.currentTemplate?.linked_post_permalink) {
+    return builderStore.currentTemplate.linked_post_permalink;
   }
+  // Priority 3: permalink risolto lato PHP al caricamento pagina (richiede template_id in URL).
+  if (oloData.linkedPostPermalink) return oloData.linkedPostPermalink;
+  // Nessun fallback `?p=ID`: dava 404 sulle page/CPT. Se non c'è un post collegato
+  // risolvibile, il pulsante resta nascosto invece di offrire un link rotto.
   return '';
 });
 

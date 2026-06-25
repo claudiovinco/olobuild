@@ -1012,6 +1012,21 @@ class Olo_Rest_Api {
             $linked = $this->resolve_template_linked_post( (int) $template['id'], $template );
             if ( $linked ) {
                 $template['linked_post_id'] = $linked;
+                // Permalink "reale" robusto per il pulsante "Reale" del builder.
+                // get_permalink() gestisce correttamente page/CPT/post — a differenza del
+                // vecchio fallback JS `?p=ID`, che dava 404 sulle page (usano `?page_id=ID`).
+                // Per i contenuti non pubblicati (draft/pending/future/private) usa il preview
+                // link, così l'editor loggato può comunque aprirli senza 404.
+                $linked_status = get_post_status( $linked );
+                if ( $linked_status && ! in_array( $linked_status, [ 'trash', 'auto-draft' ], true ) ) {
+                    $permalink = ( $linked_status === 'publish' )
+                        ? get_permalink( $linked )
+                        : get_preview_post_link( $linked );
+                    if ( $permalink ) {
+                        $template['linked_post_permalink'] = $permalink;
+                        $template['linked_post_status']    = $linked_status;
+                    }
+                }
             }
         }
         if ( isset( $template['settings'] ) && is_array( $template['settings'] ) && empty( $template['settings'] ) ) {
@@ -2441,15 +2456,25 @@ class Olo_Rest_Api {
                 return ( $t['category'] ?? '' ) === $category;
             } ) );
         }
-        // Strip heavy content for listing (send only metadata)
+        // Metadati per la lista. Per i BLOCCHI-sezione includiamo anche il `content`
+        // così il modale può disegnare l'anteprima SVG strutturale reale (con colori
+        // token e superfici), invece del segnaposto generico. Le PAGINE intere (pesanti)
+        // restano solo-metadati e usano il thumbnail quando presente.
         $list = array_map( function( $t ) {
-            return [
+            $row = [
                 'id'                  => $t['id'] ?? '',
                 'name'                => $t['name'] ?? '',
                 'category'            => $t['category'] ?? '',
                 'preview_description' => $t['preview_description'] ?? '',
                 'is_user'             => ! empty( $t['is_user'] ),
             ];
+            if ( ! empty( $t['thumbnail'] ) ) {
+                $row['thumbnail'] = $t['thumbnail'];
+            }
+            if ( ( $t['category'] ?? '' ) !== 'page' && isset( $t['content'] ) ) {
+                $row['content'] = $t['content'];
+            }
+            return $row;
         }, $templates );
         return rest_ensure_response( $list );
     }

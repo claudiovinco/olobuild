@@ -66,10 +66,10 @@
                 v-for="tpl in filteredTemplates"
                 :key="tpl.id"
                 class="olo-tpl-card"
-                style="background:#374151;border-radius:8px;border:1px solid #4B5563;cursor:pointer;overflow:hidden;transition:border-color 0.15s, box-shadow 0.15s"
+                style="background:#1f2937;border-radius:12px;border:1px solid #374151;cursor:pointer;overflow:hidden;transition:border-color .18s ease, box-shadow .18s ease, transform .18s ease"
                 @click="onCardClick(tpl)"
-                @mouseenter="$event.currentTarget.style.borderColor='#e8622a';$event.currentTarget.style.boxShadow='0 4px 12px rgba(232,98,42,0.15)'"
-                @mouseleave="$event.currentTarget.style.borderColor='#4B5563';$event.currentTarget.style.boxShadow='none'"
+                @mouseenter="$event.currentTarget.style.borderColor='var(--olo-ui-accent)';$event.currentTarget.style.boxShadow='0 12px 28px -10px rgba(0,0,0,.5)';$event.currentTarget.style.transform='translateY(-3px)'"
+                @mouseleave="$event.currentTarget.style.borderColor='#374151';$event.currentTarget.style.boxShadow='none';$event.currentTarget.style.transform='none'"
               >
                 <!-- Thumbnail image (for page templates with thumbnail) -->
                 <div v-if="tpl.thumbnail" style="position:relative;overflow:hidden;border-bottom:1px solid #4B5563" @mouseenter="$event.currentTarget.querySelector('.olo-tpl-hover').style.opacity='1'" @mouseleave="$event.currentTarget.querySelector('.olo-tpl-hover').style.opacity='0'">
@@ -141,7 +141,7 @@
         >
           <!-- Header -->
           <div style="padding:16px 20px;border-bottom:1px solid #374151;display:flex;align-items:center;gap:8px">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e8622a" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--olo-ui-accent)" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
             <span style="color:#F3F4F6;font-size:14px;font-weight:600">{{ t('Salva come template') }}</span>
           </div>
           <!-- Body -->
@@ -154,7 +154,7 @@
                 type="text"
                 :placeholder="t('es. Hero con video e CTA')"
                 style="width:100%;background:#374151;border:1px solid #4B5563;border-radius:6px;color:#E5E7EB;padding:8px 12px;font-size:13px;outline:none;box-sizing:border-box"
-                @focus="$event.target.style.borderColor='#e8622a'"
+                @focus="$event.target.style.borderColor='var(--olo-ui-accent)'"
                 @blur="$event.target.style.borderColor='#4B5563'"
                 @keydown.enter="doSave"
               />
@@ -176,7 +176,7 @@
                 type="text"
                 :placeholder="t('Breve descrizione del template')"
                 style="width:100%;background:#374151;border:1px solid #4B5563;border-radius:6px;color:#E5E7EB;padding:8px 12px;font-size:13px;outline:none;box-sizing:border-box"
-                @focus="$event.target.style.borderColor='#e8622a'"
+                @focus="$event.target.style.borderColor='var(--olo-ui-accent)'"
                 @blur="$event.target.style.borderColor='#4B5563'"
               />
             </div>
@@ -196,7 +196,7 @@
             <button
               @click="doSave"
               :disabled="!saveName.trim() || saving"
-              style="padding:7px 16px;border-radius:6px;border:none;background:#e8622a;color:#fff;font-size:12px;font-weight:500;cursor:pointer;transition:opacity 0.15s"
+              style="padding:7px 16px;border-radius:6px;border:none;background:var(--olo-ui-accent);color:#fff;font-size:12px;font-weight:500;cursor:pointer;transition:opacity 0.15s"
               :style="{ opacity: (!saveName.trim() || saving) ? '0.5' : '1' }"
             >{{ saving ? t('Salvataggio...') : t('Salva template') }}</button>
           </div>
@@ -256,7 +256,7 @@
             {{ t('Il canvas contiene già del contenuto. Come vuoi procedere con il template') }} <strong style="color:#E5E7EB">{{ pendingPageTpl?.name }}</strong>?
           </p>
           <div style="display:flex;gap:8px">
-            <button @click="confirmPageInsert('replace')" style="flex:1;padding:8px 12px;background:#e8622a;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:background 0.15s" @mouseenter="$event.target.style.background='#c44d1d'" @mouseleave="$event.target.style.background='#e8622a'">
+            <button @click="confirmPageInsert('replace')" style="flex:1;padding:8px 12px;background:var(--olo-ui-accent);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:filter 0.15s" @mouseenter="$event.target.style.filter='brightness(0.9)'" @mouseleave="$event.target.style.filter='none'">
               {{ t('Sostituisci tutto') }}
             </button>
             <button @click="confirmPageInsert('append')" style="flex:1;padding:8px 12px;background:#374151;color:#E5E7EB;border:1px solid #4B5563;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:background 0.15s" @mouseenter="$event.target.style.background='#4B5563'" @mouseleave="$event.target.style.background='#374151'">
@@ -308,7 +308,7 @@ const deleting = ref(false);
 
 const categoryDefs = [
   { key: 'all',           label: 'Tutti',          color: '#9CA3AF' },
-  { key: 'hero',          label: 'Hero',           color: '#6366F1' },
+  { key: 'hero',          label: 'Hero',           color: '#e1474f' },
   { key: 'features',      label: 'Features',       color: '#10B981' },
   { key: 'services',      label: 'Servizi',        color: '#14B8A6' },
   { key: 'pricing',       label: 'Prezzi',         color: '#F59E0B' },
@@ -424,7 +424,18 @@ function getCategoryLabel(cat) {
 
 function getPreviewBg(tpl) {
   const sec = tpl.content?.[0];
-  return sec?.style?.bg_color || '#F9FAFB';
+  const bg = sec?.style?.bg_color;
+  if (!bg) return '#F9FAFB';
+  // I blocchi moderni usano token tema; il documento del builder può non averli
+  // definiti → mappa i token su un fallback hex così l'anteprima mostra la tinta giusta.
+  const map = {
+    'var(--olo-color-dark)': '#16263d',
+    'var(--olo-color-primary)': '#e1474f',
+    'var(--olo-color-secondary)': '#16263d',
+    'var(--olo-color-light)': '#f8f9fa',
+    'var(--olo-color-accent)': '#f4a23b',
+  };
+  return map[bg] || bg;
 }
 
 // Width fraction map for column widths
@@ -470,10 +481,12 @@ function getSvgElements(tpl) {
 
   const sec = tpl.content?.[0];
   const bgColor = sec?.style?.bg_color || '#F9FAFB';
-  const isDark = bgColor && /^#[0-3][0-9a-fA-F]{5}$/.test(bgColor);
+  // Riconosci superfici scure sia da hex scuri sia dai token tema (dark/primary/secondary).
+  const isDark = !!bgColor && (/^#[0-3][0-9a-fA-F]{5}$/.test(bgColor) || /--olo-color-(dark|primary|secondary)/.test(bgColor));
   const elColor = isDark ? '#ffffff' : '#374151';
   const elColorLight = isDark ? '#ffffff' : '#9CA3AF';
-  const accentHex = '#e8622a';
+  // Accento delle anteprime = primario brand del sito (token, con fallback rosso brand).
+  const accentHex = 'var(--olo-color-primary, #e1474f)';
 
   if (!sec?.children?.length) {
     els.push({ shape: 'rect', x: W*0.2, y: 30, w: W*0.6, h: 8, fill: elColor, opacity: 0.35, rx: 2 });
@@ -482,20 +495,26 @@ function getSvgElements(tpl) {
     return els;
   }
 
-  const row = sec.children[0];
-  const cols = row?.children || [];
-  const numCols = cols.length || 1;
-  const totalW = W - PAD * 2;
-  const colGap = numCols > 1 ? 8 : 0;
-  const availW = totalW - colGap * (numCols - 1);
-
-  let colX = PAD;
-  for (let ci = 0; ci < numCols; ci++) {
-    const col = cols[ci];
-    const fraction = widthFraction[col?.settings?.width] || (1 / numCols);
-    const colW = availW * fraction;
-    const children = col?.children || [];
-    let y = 12;
+  // Impila TUTTE le righe della sezione (i blocchi hanno spesso headline + contenuto
+  // in righe separate), non solo la prima.
+  const rowsAll = (sec.children || []).filter(n => n && n.type === 'row');
+  const rowsToDraw = rowsAll.length ? rowsAll : (sec.children || []).slice(0, 1);
+  let yCursor = 12;
+  for (const drow of rowsToDraw) {
+    if (yCursor > H - 12) break;
+    const cols = drow?.children || [];
+    const numCols = cols.length || 1;
+    const totalW = W - PAD * 2;
+    const colGap = numCols > 1 ? 8 : 0;
+    const availW = totalW - colGap * (numCols - 1);
+    let colX = PAD;
+    let rowMaxY = yCursor;
+    for (let ci = 0; ci < numCols; ci++) {
+      const col = cols[ci];
+      const fraction = widthFraction[col?.settings?.width] || (1 / numCols);
+      const colW = availW * fraction;
+      const children = col?.children || [];
+      let y = yCursor;
 
     for (const child of children.slice(0, 6)) {
       if (y > H - 10) break;
@@ -624,13 +643,72 @@ function getSvgElements(tpl) {
           els.push({ shape: 'circle', cx: cx + di * 6, cy: y + 34, r: 2, fill: accentHex, opacity: di === 0 ? 0.6 : 0.2 });
         }
         y += 40;
+      } else if (['info-cards','showcasegrid','productgrid','product-cards','postgrid','queryloop','portfolio','overlaygrid','workgrid','glowgallery','progallery','lookbookmixer','icontabs'].includes(t)) {
+        const gw = colW * 0.94, gx = cx - gw/2, cw2 = (gw - 12) / 3;
+        for (let r = 0; r < 2; r++) for (let c = 0; c < 3; c++) {
+          els.push({ shape: 'rect', x: gx + c*(cw2+6), y: y + r*20, w: cw2, h: 17, fill: elColor, opacity: 0.08, rx: 3 });
+          els.push({ shape: 'circle', cx: gx + c*(cw2+6) + 7, cy: y + r*20 + 6, r: 2.5, fill: accentHex, opacity: 0.55 });
+        }
+        y += 44;
+      } else if (t === 'statstrip' || t === 'countercircle') {
+        for (let s = 0; s < 4; s++) {
+          const bx = colX + (colW/4)*s + colW/8;
+          els.push({ shape: 'rect', x: bx - 12, y, w: 24, h: 9, fill: accentHex, opacity: 0.55, rx: 2 });
+          els.push({ shape: 'rect', x: bx - 16, y: y + 13, w: 32, h: 3, fill: elColor, opacity: 0.25, rx: 1 });
+        }
+        y += 22;
+      } else if (['cta-banner','newsletter','mediacta','announcementbar','trust-strip'].includes(t)) {
+        els.push({ shape: 'rect', x: cx - colW*0.32, y, w: colW*0.64, h: 6, fill: elColor, opacity: 0.4, rx: 2 });
+        y += 12;
+        if (t === 'newsletter') {
+          els.push({ shape: 'rect', x: cx - colW*0.34, y, w: colW*0.46, h: 11, fill: elColor, opacity: 0.08, rx: 4 });
+          els.push({ shape: 'rect', x: cx + colW*0.14, y, w: colW*0.2, h: 11, fill: accentHex, opacity: 0.8, rx: 4 });
+        } else {
+          els.push({ shape: 'rect', x: cx - 22, y, w: 44, h: 11, fill: accentHex, opacity: 0.8, rx: 4 });
+        }
+        y += 16;
+      } else if (['introsplit','featuredstory','switcherpanel'].includes(t)) {
+        els.push({ shape: 'rect', x: colX, y, w: colW*0.46, h: 34, fill: elColor, opacity: 0.09, rx: 3 });
+        els.push({ shape: 'circle', cx: colX + colW*0.23, cy: y + 17, r: 5, fill: elColorLight, opacity: 0.2 });
+        const tx = colX + colW*0.52;
+        els.push({ shape: 'rect', x: tx, y: y+2, w: colW*0.4, h: 6, fill: elColor, opacity: 0.4, rx: 2 });
+        els.push({ shape: 'rect', x: tx, y: y+12, w: colW*0.36, h: 3, fill: elColor, opacity: 0.2, rx: 1 });
+        els.push({ shape: 'rect', x: tx, y: y+22, w: 36, h: 9, fill: accentHex, opacity: 0.75, rx: 3 });
+        y += 40;
+      } else if (['glowhero','imagehero','maskedvideohero','producthero','photocover','masthead','hero','searchhero'].includes(t)) {
+        els.push({ shape: 'rect', x: cx - colW*0.36, y, w: colW*0.72, h: 7, fill: elColor, opacity: 0.45, rx: 2 });
+        y += 11;
+        els.push({ shape: 'rect', x: cx - colW*0.26, y, w: colW*0.52, h: 4, fill: elColorLight, opacity: 0.3, rx: 1 });
+        y += 9;
+        els.push({ shape: 'rect', x: cx - 26, y, w: 52, h: 11, fill: accentHex, opacity: 0.8, rx: 4 });
+        y += 17;
+      } else if (t === 'process-steps' || t === 'step-timeline') {
+        for (let s = 0; s < 4; s++) {
+          const bx = colX + (colW/4)*s + colW/8;
+          els.push({ shape: 'circle', cx: bx, cy: y + 6, r: 6, fill: accentHex, opacity: 0.5 });
+          if (s < 3) els.push({ shape: 'line', x1: bx + 7, y1: y + 6, x2: bx + colW/4 - 7, y2: y + 6, stroke: elColorLight, sw: 1, opacity: 0.3 });
+          els.push({ shape: 'rect', x: bx - 14, y: y + 16, w: 28, h: 3, fill: elColor, opacity: 0.22, rx: 1 });
+        }
+        y += 26;
+      } else if (t === 'marquee') {
+        for (let s = 0; s < 5; s++) els.push({ shape: 'rect', x: colX + s*(colW/5) + 6, y, w: colW/5 - 12, h: 10, fill: elColor, opacity: 0.12, rx: 2 });
+        y += 16;
+      } else if (['worklist','workgrid'].includes(t)) {
+        for (let s = 0; s < 3; s++) els.push({ shape: 'rect', x: colX, y: y + s*11, w: colW*0.9, h: 8, fill: elColor, opacity: 0.07, rx: 2 });
+        y += 36;
+      } else if (['navmenu','subnav','search','sitelogo','authorbox'].includes(t)) {
+        els.push({ shape: 'rect', x: colX, y, w: colW*0.5, h: 4, fill: elColor, opacity: 0.25, rx: 1 });
+        y += 9;
       } else {
         const gw2 = colW * 0.6;
         els.push({ shape: 'rect', x: cx - gw2/2, y, w: gw2, h: 6, fill: elColor, opacity: 0.12, rx: 2 });
         y += 10;
       }
     }
-    colX += colW + colGap;
+      if (y > rowMaxY) rowMaxY = y;
+      colX += colW + colGap;
+    }
+    yCursor = rowMaxY + 6;
   }
   return els;
 }
