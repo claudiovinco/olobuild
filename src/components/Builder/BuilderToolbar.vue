@@ -234,6 +234,23 @@
               </div>
             </div>
             <div class="mb-flex mb-items-center mb-justify-between">
+              <span class="mb-text-gray-300 mb-text-sm">{{ t('Naviga albero / seleziona (Struttura)') }}</span>
+              <div class="mb-flex mb-gap-1">
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">↑</kbd>
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">↓</kbd>
+                <span class="mb-text-gray-500 mb-text-xs">/</span>
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">↵</kbd>
+              </div>
+            </div>
+            <div class="mb-flex mb-items-center mb-justify-between">
+              <span class="mb-text-gray-300 mb-text-sm">{{ t('Espandi / comprimi nodo') }}</span>
+              <div class="mb-flex mb-gap-1">
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">←</kbd>
+                <span class="mb-text-gray-500 mb-text-xs">/</span>
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">→</kbd>
+              </div>
+            </div>
+            <div class="mb-flex mb-items-center mb-justify-between">
               <span class="mb-text-gray-300 mb-text-sm">{{ t('Sposta tra contenitori (albero Struttura)') }}</span>
               <div class="mb-flex mb-gap-1">
                 <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">M</kbd>
