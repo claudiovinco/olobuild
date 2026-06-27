@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>OLObuild — Analisi sistemica delle Tile</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="stylesheet" href="tokens.css"/>
+<link rel="stylesheet" href="brand.css"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{
+    --red:#e1474f; --red-soft:#fef2f3; --red-line:#fde2e4;
+    --navy:#0f172a; --ink:#1f2937; --mute:#5e6a7a; --faint:#94a3b8;
+    --bg:#f6f1e8; --card:#fffdf8; --line:#e6dfd1; --line-soft:#efe9dd;
+    --good:#15803d; --good-bg:#ecfdf3; --bad:#b42318; --bad-bg:#fef3f2; --warn:#b45309; --warn-bg:#fffaeb;
+    --sans:"Work Sans",-apple-system,sans-serif; --disp:"Instrument Serif",Georgia,serif; --mono:"JetBrains Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:var(--sans);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:920px;margin:0 auto;padding:64px 32px 96px;}
+
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:14px;}
+  h1.title{font-family:var(--disp);font-weight:400;font-size:clamp(44px,6vw,76px);line-height:.98;letter-spacing:-.02em;color:var(--navy);margin:0 0 18px;}
+  h1.title em{font-style:italic;color:var(--red);}
+  .lead{font-size:18px;line-height:1.55;color:var(--mute);max-width:64ch;margin:0 0 14px;text-wrap:pretty;}
+  .lead b{color:var(--navy);font-weight:600;}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;}
+  .chip{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 13px;color:var(--mute);}
+  .chip b{color:var(--navy);}
+
+  .rule{height:1px;background:repeating-linear-gradient(90deg,var(--line) 0 7px,transparent 7px 14px);margin:48px 0;}
+
+  h2.sec{font-family:var(--disp);font-weight:400;font-size:34px;letter-spacing:-.015em;color:var(--navy);margin:0 0 8px;}
+  h2.sec em{font-style:italic;color:var(--red);}
+  .sec-sub{font-size:14px;color:var(--mute);margin:0 0 24px;}
+
+  .anatomy{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .acard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;}
+  .acard h3{font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--red);margin:0 0 10px;}
+  .acard p{font-size:13.5px;color:var(--mute);margin:0 0 8px;}
+  .acard p:last-child{margin-bottom:0;}
+  .acard code{font-family:var(--mono);font-size:12px;background:#f3ede2;padding:1px 5px;border-radius:4px;color:var(--navy);}
+
+  .issue{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px;margin-bottom:16px;position:relative;overflow:hidden;}
+  .issue::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--red);}
+  .issue-head{display:flex;align-items:baseline;gap:14px;margin-bottom:12px;}
+  .issue-n{font-family:var(--disp);font-style:italic;font-size:34px;line-height:1;color:var(--red);flex-shrink:0;}
+  .issue-t{font-size:19px;font-weight:600;color:var(--navy);letter-spacing:-.01em;}
+  .issue-tags{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;}
+  .tag{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:5px;white-space:nowrap;}
+  .tag.render{background:#eef4ff;color:#2563eb;} .tag.editor{background:#f3e8ff;color:#7e22ce;}
+  .tag.a11y{background:var(--warn-bg);color:var(--warn);} .tag.brand{background:var(--red-soft);color:var(--red);}
+  .issue p{font-size:14px;color:var(--ink);margin:0 0 14px;}
+  .issue p .hl{background:#fff6d6;padding:0 3px;border-radius:3px;}
+
+  .ba{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .ba-col{border-radius:10px;overflow:hidden;border:1px solid var(--line-soft);}
+  .ba-lab{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:7px 12px;display:flex;align-items:center;gap:7px;}
+  .ba-bad .ba-lab{background:var(--bad-bg);color:var(--bad);}
+  .ba-good .ba-lab{background:var(--good-bg);color:var(--good);}
+  .ba pre{margin:0;padding:13px 14px;background:var(--navy);color:#e6edf3;font-family:var(--mono);font-size:11.5px;line-height:1.65;overflow-x:auto;white-space:pre-wrap;word-break:break-word;}
+  .ba pre .c{color:#8b98a9;} .ba pre .r{color:#ff9aa0;} .ba pre .g{color:#9be8a8;} .ba pre .k{color:#c4a6ff;}
+
+  .fix{font-size:13.5px;color:var(--good);background:var(--good-bg);border:1px solid #c7ecd2;border-radius:9px;padding:11px 14px;margin-top:14px;display:flex;gap:9px;align-items:flex-start;}
+  .fix b{color:#0f5e2e;} .fix .arr{font-weight:700;flex-shrink:0;}
+
+  table.recs{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:13.5px;}
+  table.recs th{text-align:left;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);padding:13px 16px;background:#f3ede2;}
+  table.recs td{padding:13px 16px;border-top:1px solid var(--line-soft);color:var(--ink);vertical-align:top;}
+  table.recs td b{color:var(--navy);}
+  .eff{font-family:var(--mono);font-size:12px;font-weight:600;}
+  .imp{letter-spacing:1px;}
+  .closing{background:var(--navy);color:#fff;border-radius:18px;padding:30px 32px;margin-top:40px;}
+  .closing h3{font-family:var(--disp);font-weight:400;font-size:26px;margin:0 0 10px;}
+  .closing p{font-size:14px;color:rgba(255,255,255,.72);margin:0 0 8px;line-height:1.6;}
+  .closing code{font-family:var(--mono);font-size:12px;background:rgba(255,255,255,.1);padding:1px 6px;border-radius:4px;color:#fff;}
+  @media(max-width:720px){.anatomy,.ba{grid-template-columns:1fr;}.issue-tags{margin-left:0;width:100%;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">OLObuild · Design audit</div>
+  <h1 class="title">Analisi sistemica<br/>delle <em>Tile</em></h1>
+  <p class="lead">Lettura del sistema di <b>240 componenti tile</b> e dei relativi config di editing. Non un redesign 1:1, ma i <b>pattern trasversali</b> che si ripetono ovunque — coerenza di brand, default, architettura, accessibilità — con le correzioni da standardizzare una volta sola.</p>
+  <div class="meta-row">
+    <span class="chip"><b>240</b> tile</span>
+    <span class="chip">campione letto: <b>Button · Alert · Hero · Divider</b></span>
+    <span class="chip">+ <b>button.js</b>, <b>_styleFieldsBase.js</b></span>
+    <span class="chip">8 problemi sistemici</span>
+  </div>
+
+  <div class="rule"></div>
+
+  <h2 class="sec">Anatomia <em>attuale</em></h2>
+  <p class="sec-sub">Come è fatta e come si modifica una tile, oggi.</p>
+  <div class="anatomy">
+    <div class="acard">
+      <h3>Lato render — *Tile.vue</h3>
+      <p>Riceve <code>settings</code>, calcola gli stili in <code>computed</code>, renderizza con un mix di utility <code>mb-*</code> + grossi oggetti <code>:style</code> inline.</p>
+      <p>I default sono dichiarati <b>dentro</b> il componente.</p>
+    </div>
+    <div class="acard">
+      <h3>Lato editor — config/elements</h3>
+      <p>Ogni tipo definisce <code>defaults</code>, <code>fields[]</code> (contenuto) e <code>styleFields[]</code> (stile) su una base condivisa <code>styleFieldsBase()</code>.</p>
+      <p>Lo split <b>Contenuto / Stile / Avanzate</b> è una buona regola universale già presente.</p>
+    </div>
+    <div class="acard">
+      <h3>Da preservare ✓</h3>
+      <p>Split semantico, field dichiarativi, helper <code>withHover()</code> e <code>responsive</code>, integrazione <code>FieldBox</code>/<code>box-stack</code>, preset stilistici.</p>
+    </div>
+    <div class="acard">
+      <h3>Da sistemare</h3>
+      <p>Default off-brand e duplicati, parsing ripetuto, due linguaggi di stile, emoji, gap di accessibilità, sistemi di editing paralleli (bg/bordo).</p>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <h2 class="sec">Gli 8 problemi <em>sistemici</em></h2>
+  <p class="sec-sub">In ordine di impatto. Ognuno si risolve una volta e vale per tutte le tile.</p>
+
+  <!-- 1 -->
+  <div class="issue">
+    <div class="issue-head"><span class="issue-n">01</span><span class="issue-t">Default off-brand, non centrati sui token</span>
+      <span class="issue-tags"><span class="tag brand">brand</span><span class="tag render">render</span></span></div>
+    <p>Il token <code style="font-family:var(--mono);font-size:12px">--olo-color-primary</code> esiste, ma i fallback non lo usano in modo coerente: <span class="hl">Hero</span> è token-first, <span class="hl">Button</span> hardcoda l'indaco. Le tile appena inserite sembrano indaco, non del brand.</p>
+    <div class="ba">
+      <div class="ba-col ba-bad"><div class="ba-lab">✗ ButtonTile.vue</div><pre><span class="c">// fallback hardcoded</span>
+bg_color: <span class="r">'#6366F1'</span>,
+backgroundColor: s.bg_color || <span class="r">'#6366F1'</span></pre></div>
+      <div class="ba-col ba-good"><div class="ba-lab">✓ token-first</div><pre>backgroundColor: resolveColor(
+  s.bg_color, <span class="g">TOKENS.primary</span>
+) <span class="c">// var(--olo-color-primary,#e1474f)</span></pre></div>
+    </div>
+    <div class="fix"><span class="arr">→</span><div><b>resolveColor(userVal, TOKEN)</b> token-first ovunque. Vedi <code>oloTileDefaults.js</code>.</div></div>
+  </div>
+
+  <!-- 2 -->
+  <div class="issue">
+    <div class="issue-head"><span class="issue-n">02</span><span class="issue-t">Default non "belli appena inseriti"</span>
+      <span class="issue-tags"><span class="tag brand">estetica</span></span></div>
+    <p>I default sono validi ma generici: <code>radius 6</code>, padding arbitrari per tile, <code>shadow:'none'</code>. Inserire una tile dovrebbe dare subito qualcosa di <b>curato</b> — è una richiesta esplicita.</p>
+    <div class="ba">
+      <div class="ba-col ba-bad"><div class="ba-lab">✗ generico</div><pre>border_radius: <span class="r">'6'</span>,
+shadow: <span class="r">'none'</span>,
+tile_padding:{top:<span class="r">14</span>,right:<span class="r">32</span>…}</pre></div>
+      <div class="ba-col ba-good"><div class="ba-lab">✓ curato su scala</div><pre>border_radius: <span class="g">RADIUS.md</span>, <span class="c">// 10</span>
+shadow: <span class="g">'sm'</span>, <span class="c">// micro-ombra</span>
+tile_padding: SPACE-based</pre></div>
+    </div>
+    <div class="fix"><span class="arr">→</span><div><b>TILE_DEFAULTS</b> curati su scala condivisa <code>SPACE</code>/<code>RADIUS</code>, colore brand, contrasto leggibile.</div></div>
+  </div>
+
+  <!-- 3 -->
+  <div class="issue">
+    <div class="issue-head"><span class="issue-n">03</span><span class="issue-t">Default duplicati in due posti — e divergenti</span>
+      <span class="issue-tags"><span class="tag editor">editor</span><span class="tag render">render</span></span></div>
+    <p>Stessa proprietà dichiarata sia nel config sia nel componente, con valori <span class="hl">che non concordano</span>: fonte di verità ambigua, bug latenti.</p>
+    <div class="ba">
+      <div class="ba-col ba-bad"><div class="ba-lab">✗ due fonti</div><pre><span class="c">// button.js</span>
+bg_color: <span class="r">''</span>
+<span class="c">// ButtonTile.vue</span>
+bg_color: <span class="r">'#6366F1'</span></pre></div>
+      <div class="ba-col ba-good"><div class="ba-lab">✓ fonte unica</div><pre><span class="c">// entrambi leggono</span>
+buildDefaults(<span class="g">'button'</span>)</pre></div>
+    </div>
+    <div class="fix"><span class="arr">→</span><div><b>Unica fonte</b> dei default (<code>buildDefaults(type)</code>); il Tile non li ridichiara.</div></div>
+  </div>
+
+  <!-- 4 -->
+  <div class="issue">
+    <div class="issue-head"><span class="issue-n">04</span><span class="issue-t">Parsing box-model ripetuto in ogni tile</span>
+      <span class="issue-tags"><span class="tag render">render · DRY</span></span></div>
+    <p><code>border_radius</code> numero|oggetto e <code>tile_padding</code> oggetto|legacy <code>padding_x/y</code> vengono ri-parsati a mano in Button, Hero (<code>radiusCss</code>), StyleBoxStack… È il gemello lato render di ciò che <b>FieldBox ha già unificato lato input</b>.</p>
+    <div class="ba">
+      <div class="ba-col ba-bad"><div class="ba-lab">✗ copiato N volte</div><pre>if(typeof rad===<span class="r">'object'</span>){
+  borderRadius=`${rad.tl}px …`
+}else borderRadius=`${rad||6}px`</pre></div>
+      <div class="ba-col ba-good"><div class="ba-lab">✓ composable</div><pre>const {radiusCss,paddingCss}
+  = <span class="k">useBoxModel</span>(s)</pre></div>
+    </div>
+    <div class="fix"><span class="arr">→</span><div><b>useBoxModel(settings)</b> + <code>toRadiusCss</code>/<code>toSpacingCss</code>. Vedi <code>useBoxModel.js</code>.</div></div>
+  </div>
+
+  <!-- 5 -->
+  <div class="issue">
+    <div class="issue-head"><span class="issue-n">05</span><span class="issue-t">Due linguaggi di stile mescolati</span>
+      <span class="issue-tags"><span class="tag render">render</span></span></div>
+    <p>Utility <code>mb-*</code> + <code>:style</code> inline giganti + perfino <code>style="…"</code> statici nello stesso template (es. Hero). Difficile da temizzare e tenere coerente.</p>
+    <div class="fix"><span class="arr">→</span><div>Convergere su un layer (utility, o CSS scoped con var dei token) ed estrarre gli oggetti stile ripetuti in composable.</div></div>
+  </div>
+
+  <!-- 6 -->
+  <div class="issue">
+    <div class="issue-head"><span class="issue-n">06</span><span class="issue-t">Icone emoji come default</span>
+      <span class="issue-tags"><span class="tag brand">brand</span><span class="tag a11y">a11y</span></span></div>
+    <p>Alert usa <code>ℹ️ ✅ ⚠️ ❌</code>; Divider accetta emoji libere. Resa incoerente tra OS, non accessibile, "cheap" — mentre esiste già il set <code>iconsSvg</code>.</p>
+    <div class="fix"><span class="arr">→</span><div>Default su icone SVG del set (<code>icon:'info'</code>…); emoji solo come scelta esplicita dell'utente.</div></div>
+  </div>
+
+  <!-- 7 -->
+  <div class="issue">
+    <div class="issue-head"><span class="issue-n">07</span><span class="issue-t">Accessibilità del render</span>
+      <span class="issue-tags"><span class="tag a11y">a11y</span><span class="tag render">render</span></span></div>
+    <p>Button e le CTA di Hero sono <code>&lt;span&gt;</code> con <code>cursor:pointer</code> — niente focus da tastiera, niente ruolo/semantica, l'URL non è un vero link. Il dismiss dell'Alert non ha label. Nessun controllo di contrasto sui colori custom.</p>
+    <div class="ba">
+      <div class="ba-col ba-bad"><div class="ba-lab">✗ non semantico</div><pre><span class="r">&lt;span</span> style=<span class="g">"cursor:pointer"</span><span class="r">&gt;</span>
+  {{ text }}
+<span class="r">&lt;/span&gt;</span></pre></div>
+      <div class="ba-col ba-good"><div class="ba-lab">✓ semantico + a11y</div><pre><span class="k">&lt;a</span> :href=<span class="g">"url"</span>
+   role=<span class="g">"button"</span>
+   :aria-label=<span class="g">"text"</span><span class="k">&gt;</span></pre></div>
+    </div>
+    <div class="fix"><span class="arr">→</span><div>Elementi semantici nel front-end, <code>aria-label</code> sui controlli icona, avviso contrasto AA nell'editor quando i colori falliscono.</div></div>
+  </div>
+
+  <!-- 8 -->
+  <div class="issue">
+    <div class="issue-head"><span class="issue-n">08</span><span class="issue-t">Editor: concetti duplicati e tab lunghi</span>
+      <span class="issue-tags"><span class="tag editor">editor · UX</span></span></div>
+    <p>Button espone <span class="hl">sia <code>bg_color</code> sia <code>bg</code></span>, <span class="hl">sia bordo legacy sia oggetto <code>border</code></span>: due sistemi paralleli, l'utente non sa quale vince. L'hover è sparso su tanti <code>hover_*</code> e l'ombra custom apre <b>7 campi condizionali</b> inline.</p>
+    <div class="fix"><span class="arr">→</span><div>Un solo sistema per concetto (preferire gli oggetti <code>bg</code>/<code>border</code>/shadow-block), deprecare i gemelli legacy dietro un layer di migrazione; raccogliere l'hover in un unico modello come fa già <code>StyleBoxStack</code> col toggle Normale/Hover.</div></div>
+  </div>
+
+  <div class="rule"></div>
+
+  <h2 class="sec">Raccomandazioni <em>prioritarie</em></h2>
+  <p class="sec-sub">Da affrontare in quest'ordine; le prime tre si rinforzano a vicenda.</p>
+  <table class="recs">
+    <thead><tr><th>Azione</th><th>Effort</th><th>Impatto</th></tr></thead>
+    <tbody>
+      <tr><td><b>resolveColor()</b> token-first + <b>TILE_DEFAULTS</b> curati</td><td class="eff">M</td><td class="imp">⭐⭐⭐</td></tr>
+      <tr><td><b>Unica fonte</b> dei default (buildDefaults)</td><td class="eff">M</td><td class="imp">⭐⭐⭐</td></tr>
+      <tr><td><b>useBoxModel()</b> lato render</td><td class="eff">S</td><td class="imp">⭐⭐</td></tr>
+      <tr><td>Default <b>icone SVG</b> (no emoji)</td><td class="eff">S</td><td class="imp">⭐⭐</td></tr>
+      <tr><td>Render <b>semantico + a11y</b> (&lt;a&gt;/&lt;button&gt;, aria, contrasto)</td><td class="eff">M</td><td class="imp">⭐⭐</td></tr>
+      <tr><td>Deprecare i <b>gemelli legacy</b> bg/bordo nell'editor</td><td class="eff">L</td><td class="imp">⭐⭐</td></tr>
+      <tr><td>Convergere il <b>linguaggio di stile</b></td><td class="eff">L</td><td class="imp">⭐</td></tr>
+    </tbody>
+  </table>
+
+  <div class="closing">
+    <h3>Punto di partenza consigliato</h3>
+    <p>Applicare <b>1 + 2 + 3 insieme</b> su una tile pilota — <code>Button</code> — senza cambiare le chiavi salvate. Validare il diff, poi propagare per categoria.</p>
+    <p>I composabili di riferimento (<code>useBoxModel.js</code>, <code>oloTileDefaults.js</code>) e il prompt per Claude Code sono nel pacchetto di handoff <code>design_handoff_olobuild_tiles/</code>.</p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Fjordline — Small-group expeditions to the far north</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="Fjordline runs small-group adventure expeditions across the Nordic north — fjords, ice and aurora, led by local guides. Find your trip."/>
+<link rel="stylesheet" href="olothemes/fjordline.css"/>
+</head>
+<body data-screen-label="Fjordline — Home" data-fx>
+
+<!-- ═══ NAVMENU (OLObuild · Navigation → Navmenu) ═══ -->
+<header class="fj-nav" data-olo-tile="Navmenu">
+  <div class="fj-wrap fj-nav__in">
+    <a class="logo" href="#top"><span class="mk"></span>Fjordline</a>
+    <nav class="fj-nav__links">
+      <a href="#trips">Expeditions</a>
+      <a href="OLOtheme - Fjordline - Expedition.html">Itineraries</a>
+      <a href="#why">Why Fjordline</a>
+      <a href="#">Journal</a>
+    </nav>
+    <div class="fj-nav__cta">
+      <a href="#" class="sign">+47 55 02 10</a>
+      <a href="#trips" class="btn btn--ice">Find a trip</a>
+    </div>
+    <button class="burger" data-burger aria-label="Open menu"><span></span></button>
+  </div>
+</header>
+<div class="mobile" data-mobile>
+  <button data-close aria-label="Close">&times;</button>
+  <a href="#trips">Expeditions</a>
+  <a href="OLOtheme - Fjordline - Expedition.html">Itineraries</a>
+  <a href="#why">Why Fjordline</a>
+  <a href="#">Journal</a>
+</div>
+
+<main id="top">
+
+<!-- ═══ HERO + TRIP FINDER (OLObuild · NEW tile → TripFinder) ═══ -->
+<section class="fj-hero" data-olo-tile="MaskedVideoHero" data-olo-note="NEW tile candidate: MaskedVideoHero — full-bleed landscape behind headline + bottom gradient.">
+  <div class="fj-hero__media"><div class="media" data-label="hero — fjord at blue hour, kayak, sheer cliffs"></div></div>
+  <div class="fj-hero__in">
+    <div class="fj-wrap"><div class="fj-hero__c">
+      <span class="eyebrow" data-reveal>Small-group expeditions · max 12</span>
+      <h1 data-reveal="80">Go where the<br/>map turns <span class="serif-em">quiet.</span></h1>
+      <p data-reveal="160">Fjords, ice fields and aurora — on foot, by kayak and under canvas, led by guides who grew up here.</p>
+    </div></div>
+  </div>
+</section>
+
+<section class="fj-wrap" data-olo-tile="TripFinder" data-olo-note="NEW tile candidate: TripFinder — overlapping search bar (destination / month / activity + submit) that floats over the hero. Props: fields, options.">
+  <form class="fj-finder" data-reveal="200" onsubmit="return false">
+    <div class="fj-finder__f"><label>Destination</label><select><option>Anywhere north</option><option>Norway · Lofoten</option><option>Iceland</option><option>Greenland</option><option>Svalbard</option></select></div>
+    <div class="fj-finder__f"><label>When</label><select><option>Any month</option><option>Mar — aurora season</option><option>Jun — midnight sun</option><option>Sep — autumn light</option></select></div>
+    <div class="fj-finder__f"><label>Activity</label><select><option>Any</option><option>Hiking &amp; trekking</option><option>Sea kayaking</option><option>Ski touring</option><option>Wildlife</option></select></div>
+    <button class="btn btn--ice">Search expeditions</button>
+  </form>
+</section>
+
+<!-- ═══ STAT STRIP (OLObuild · NEW tile → StatStrip) ═══ -->
+<section class="fj-stats" data-olo-tile="StatStrip" data-olo-note="NEW tile candidate: StatStrip.">
+  <div class="fj-wrap fj-stats__in">
+    <div data-reveal><b><span data-count="42">0</span></b><span>Expeditions</span></div>
+    <div data-reveal="80"><b><span data-count="12">0</span></b><span>Max group size</span></div>
+    <div data-reveal="160"><b><span data-count="6">0</span></b><span>Nordic countries</span></div>
+    <div data-reveal="240"><b><span data-count="18">0</span></b><span>Years guiding</span></div>
+  </div>
+</section>
+
+<!-- ═══ FEATURED EXPEDITIONS (OLObuild · NEW tile → DestinationCard) ═══ -->
+<section class="fj-sec" id="trips" data-olo-tile="DestinationCard" data-olo-note="NEW tile candidate: DestinationCard — image card with location, title, duration/difficulty meta and from-price overlay.">
+  <div class="fj-wrap">
+    <div class="sec-head left" data-reveal>
+      <span class="eyebrow">Featured journeys</span>
+      <h2>Trips for people who'd rather <span class="serif-em">walk than watch</span></h2>
+    </div>
+    <div class="fj-dests">
+      <article class="fj-dest" data-reveal>
+        <div class="media" data-label="Lofoten — jagged peaks over the sea"></div>
+        <div class="fj-dest__b">
+          <div class="fj-dest__tags"><span>8 days</span><span>Moderate</span></div>
+          <div class="fj-dest__loc">Norway · Lofoten</div>
+          <h3>The Lofoten Traverse</h3>
+          <div class="fj-dest__meta"><span>Hiking · kayak</span><span class="pr">€2,150<small>/pp</small></span></div>
+        </div>
+      </article>
+      <article class="fj-dest" data-reveal="100">
+        <div class="media" data-label="Iceland — glacier &amp; black sand"></div>
+        <div class="fj-dest__b">
+          <div class="fj-dest__tags"><span>6 days</span><span>Easy</span></div>
+          <div class="fj-dest__loc">Iceland · Highlands</div>
+          <h3>Fire &amp; Ice Crossing</h3>
+          <div class="fj-dest__meta"><span>Trek · hot springs</span><span class="pr">€1,890<small>/pp</small></span></div>
+        </div>
+      </article>
+      <article class="fj-dest" data-reveal="200">
+        <div class="media" data-label="Greenland — icebergs, small boat"></div>
+        <div class="fj-dest__b">
+          <div class="fj-dest__tags"><span>10 days</span><span>Challenging</span></div>
+          <div class="fj-dest__loc">East Greenland</div>
+          <h3>Scoresby Sound by Sea</h3>
+          <div class="fj-dest__meta"><span>Expedition cruise</span><span class="pr">€4,300<small>/pp</small></span></div>
+        </div>
+      </article>
+    </div>
+    <div style="text-align:center; margin-top:44px" data-reveal><a href="OLOtheme - Fjordline - Expedition.html" class="btn btn--ghost">Browse all 42 expeditions
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+  </div>
+</section>
+
+<!-- ═══ WHY FJORDLINE (OLObuild · Marketing → FeatureSplit) ═══ -->
+<section class="fj-sec panel" id="why" data-olo-tile="FeatureSplit">
+  <div class="fj-wrap fj-feat" data-reveal>
+    <div>
+      <span class="eyebrow">Why Fjordline</span>
+      <h2>Small groups, <span class="serif-em">local guides,</span> no crowds</h2>
+      <p>We cap every departure at twelve and never run the same trail as the tour buses. Our guides are born-and-raised locals who read the weather and know where the light falls.</p>
+      <ul class="fj-feat__list">
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Maximum 12 travellers per departure</li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Carbon-offset travel, low-impact camps</li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Flexible weather days built into every trip</li>
+      </ul>
+      <a href="#" class="btn btn--ghost">Our approach</a>
+    </div>
+    <div class="fj-feat__media"><div class="media" data-label="guide pointing across a valley to the group"></div></div>
+  </div>
+</section>
+
+<!-- ═══ BUDGET PROJECTOR (OLObuild · NEW tile → Projector) ═══ -->
+<section class="fj-sec" id="budget" data-olo-tile="Projector" data-olo-note="NEW tile candidate: Projector — interactive zone. Range slider drives a live computed readout; rate=0 makes it linear (units × per-unit multiplier). Props: rate, years/multiplier, currency, input[min,max], out, contrib.">
+  <div class="fj-wrap fj-proj" data-reveal data-project data-rate="0" data-years="295" data-currency="" style="--fx-zone-accent:#8fc7e0;--fx-zone-on:#0e1c2c;--fx-zone-line:rgba(238,244,248,.16);--fx-zone-bg:rgba(143,199,224,.1);--fx-zone-thumb:#0e1c2c">
+    <div class="fj-proj__l">
+      <span class="eyebrow">Plan your budget</span>
+      <h2>What should I <span class="serif-em">budget?</span></h2>
+      <p>Drag to the length of trip you have in mind. We'll show a rough all-in figure so there are no surprises before you ever email us.</p>
+      <div class="fj-proj__lbl">Nights away · <b><span data-project-contrib>8</span> nights</b></div>
+      <input type="range" data-project-input min="3" max="14" step="1" value="8" aria-label="Nights away"/>
+      <div class="fj-proj__marks"><span>3 nights</span><span>14 nights</span></div>
+    </div>
+    <div class="fj-proj__r">
+      <div class="fj-proj__cap">Indicative all-in · per person</div>
+      <div class="fj-proj__out">€<span data-project-out>2,360</span></div>
+      <div class="fj-proj__note">Guiding, lodging, meals and local transfers included — flights aren't. Your real quote depends on season, route and group size.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIAL (OLObuild · Marketing → Testimonial) ═══ -->
+<section class="fj-sec fj-testi" data-olo-tile="Testimonial">
+  <div class="fj-wrap fj-testi__in" data-reveal>
+    <q>“Twelve strangers on day one, friends by day eight. The guiding was <span class="serif-em">flawless</span> — and we saw the aurora three nights running.”</q>
+    <div class="fj-testi__by">Priya &amp; Tom · The Lofoten Traverse, March</div>
+  </div>
+</section>
+
+<!-- ═══ EXPEDITION FINDER (OLObuild · NEW tile → Finder) ═══ -->
+<section class="fj-sec" id="finder" data-olo-tile="Finder" data-olo-note="NEW tile candidate: Finder — interactive zone. One-tap recommender; option chips switch the visible result card. Props: options[key,label], results[key,content].">
+  <div class="fj-wrap" data-reveal style="--fx-zone-accent:#8fc7e0;--fx-zone-on:#0e1c2c;--fx-zone-line:rgba(238,244,248,.18);--fx-zone-bg:rgba(143,199,224,.1);--fx-zone-thumb:#0e1c2c">
+    <div class="sec-head" style="text-align:center;margin:0 auto 36px"><span class="eyebrow">Plan your north</span><h2>Which kind of <em>north?</em></h2></div>
+    <div data-finder class="fj-find">
+      <div class="fxf-opts">
+        <button data-finder-opt="quiet">Quiet &amp; remote</button>
+        <button data-finder-opt="active">Big adventure</button>
+        <button data-finder-opt="lights">Northern lights</button>
+        <button data-finder-opt="family">With the family</button>
+      </div>
+      <div data-finder-res="quiet" class="fj-find__card"><div class="media" data-label="lone cabin on a still fjord"></div><div class="fj-find__b"><span class="k">We'd send you to</span><h3>The Silent Fjords</h3><p>A cabin at the water's edge, a wood-fired sauna and a rowboat. Days measured in tides, not hours.</p><span class="px">7 nights · from €1,980</span></div></div>
+      <div data-finder-res="active" class="fj-find__card"><div class="media" data-label="hikers on a ridge above cloud"></div><div class="fj-find__b"><span class="k">We'd send you to</span><h3>The High Traverse</h3><p>Guided ridge hikes, a glacier crossing and kayaking the inlets. Earn every view, sleep like the dead.</p><span class="px">9 nights · from €2,640</span></div></div>
+      <div data-finder-res="lights" class="fj-find__card"><div class="media" data-label="aurora over snow"></div><div class="fj-find__b"><span class="k">We'd send you to</span><h3>Chasing the Aurora</h3><p>North of the circle in winter — dog-sled by day, aurora-watch by night from a glass-roofed lodge.</p><span class="px">6 nights · from €2,310</span></div></div>
+      <div data-finder-res="family" class="fj-find__card"><div class="media" data-label="family on a harbour boat"></div><div class="fj-find__b"><span class="k">We'd send you to</span><h3>The Coastal Hop</h3><p>Gentle island-hopping by ferry, fishing-village harbours and short walks everyone can manage — even the small ones.</p><span class="px">8 nights · from €1,740</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA (OLObuild · Marketing → CallToAction) ═══ -->
+<section class="fj-sec fj-cta" data-olo-tile="CallToAction">
+  <div class="fj-wrap"><div class="fj-cta__box" data-reveal>
+    <div class="media" data-label="aurora over a still fjord"></div>
+    <div class="in">
+      <h2>The north is <span class="serif-em">waiting</span></h2>
+      <p>Departures fill months ahead — secure a place with a deposit, balance due 60 days out.</p>
+      <div class="fj-cta__cta">
+        <a href="#trips" class="btn btn--ice btn--lg">Find your expedition</a>
+        <a href="#" class="btn btn--snow btn--lg">Request the brochure</a>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+</main>
+
+<!-- ═══ FOOTER (OLObuild · Navigation → Footer) ═══ -->
+<footer class="fj-foot" data-olo-tile="Footer">
+  <div class="fj-wrap">
+    <div class="fj-foot__top">
+      <div class="fj-foot__brand">
+        <a class="logo" href="#top"><span class="mk"></span>Fjordline</a>
+        <p>Small-group adventure expeditions across the Nordic north, led by local guides.</p>
+      </div>
+      <div><h4>Travel</h4><ul><li><a href="#trips">Expeditions</a></li><li><a href="OLOtheme - Fjordline - Expedition.html">Itineraries</a></li><li><a href="#">Private trips</a></li><li><a href="#">Gift vouchers</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="#why">Why Fjordline</a></li><li><a href="#">Our guides</a></li><li><a href="#">Sustainability</a></li><li><a href="#">Journal</a></li></ul></div>
+      <div><h4>Plan</h4><ul><li><a href="#">How to book</a></li><li><a href="#">Kit lists</a></li><li><a href="#">Travel insurance</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="fj-foot__bot"><span>© 2026 Fjordline — an OLOtheme demo.</span><span>Built with OLObuild</span></div>
+  </div>
+</footer>
+
+<script src="olothemes/fx.js"></script>
+<script src="olothemes/theme.js"></script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>OLObuild — Redesign inserter Elementi</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{
+    --red:#e1474f;--navy:#16263d;--ink:#1f2937;--mute:#6b7280;--faint:#94a3b8;
+    --surface-alt:#f6f7f9;--border:#e5e7eb;--bg:#f6f1e8;--line:#e6dfd1;
+    --ui:#e8622a;--ui-soft:#fdeee2;--ui-bar:#2b3340;
+    --sans:"Work Sans",-apple-system,sans-serif;--disp:"Instrument Serif",Georgia,serif;--mono:"JetBrains Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1080px;margin:0 auto;padding:52px 32px 90px;}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+  h1{font-family:var(--disp);font-weight:400;font-size:clamp(40px,5.5vw,62px);line-height:1;letter-spacing:-.02em;color:var(--navy);margin:0 0 14px;}
+  h1 em{font-style:italic;color:var(--red);}
+  .lead{font-size:16px;color:var(--mute);max-width:76ch;margin:0 0 8px;line-height:1.55;}
+  .lead b{color:var(--navy);font-weight:600;} .lead code{font-family:var(--mono);font-size:14px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:5px;padding:1px 5px;}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;margin-top:34px;}
+  .col-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .badge{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:999px;}
+  .today .badge{background:#fde2e4;color:#b42318;} .new .badge{background:#dcfce7;color:#15803d;}
+  .col-head h2{font-size:15px;font-weight:700;color:var(--navy);margin:0;}
+  .col-head .n{font-size:12px;color:var(--faint);margin-left:auto;font-family:var(--mono);}
+
+  /* panel chrome */
+  .panel{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+  .tabs{display:flex;border-bottom:1px solid #eef0f3;}
+  .tabs .tab{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:13px;font-size:13px;font-weight:600;color:var(--faint);position:relative;cursor:pointer;}
+  .tabs .tab svg{width:15px;height:15px;}
+  .tabs .tab.on{color:var(--navy);} .tabs .tab.on::after{content:"";position:absolute;left:14px;right:14px;bottom:-1px;height:2.5px;border-radius:2px;background:var(--ui);}
+
+  .body{display:flex;height:560px;}
+  /* rail */
+  .rail{width:78px;flex-shrink:0;border-right:1px solid #eef0f3;background:#fcfcfd;padding:8px 6px;display:flex;flex-direction:column;gap:2px;overflow:hidden;}
+  .cat{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 2px 8px;border-radius:9px;cursor:grab;}
+  .cat .ico{position:relative;color:var(--mute);display:grid;place-items:center;}
+  .cat .ico svg{width:19px;height:19px;display:block;}
+  .cat .lb{font-size:10px;font-weight:600;color:var(--mute);line-height:1.15;text-align:center;}
+  .cat .ct{position:absolute;top:5px;right:9px;font:600 9px var(--mono);color:var(--faint);}
+  .grid-main{flex:1;min-width:0;display:flex;flex-direction:column;}
+
+  /* ── OGGI rail ── */
+  .o-rail .cat.on{background:#f1f0fb;}
+  .o-rail .cat.on .lb{color:var(--navy);font-weight:700;}
+  .o-rail .cat .ct{background:#fdeee2;color:#b45a2b;border-radius:999px;padding:0 4px;min-width:14px;text-align:center;}
+  .o-trunc{max-width:64px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+  /* ── COERENTE rail ── */
+  .c-rail{width:88px;}
+  .c-rail .cat.on{background:#fff;box-shadow:inset 0 0 0 1px #f0e3da;}
+  .c-rail .cat.on::before{content:"";position:absolute;left:-6px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--ui);}
+  .c-rail .cat.on .ico{color:var(--ui);}
+  .c-rail .cat.on .lb{color:var(--navy);font-weight:700;}
+  .c-rail .cat .lb{max-width:74px;}
+  .c-rail .cat .ct{color:var(--faint);font-weight:500;}
+  .c-rail .cat:hover:not(.on){background:#f4f5f7;}
+
+  /* head row */
+  .gh{display:flex;align-items:center;gap:10px;padding:12px 14px 10px;}
+  .o-dot{width:9px;height:9px;border-radius:50%;background:#8b5cf6;}
+  .o-cnt{margin-left:auto;font-size:12px;color:var(--mute);background:var(--surface-alt);border:1px solid #eef0f3;border-radius:999px;padding:2px 10px;font-family:var(--mono);}
+  .c-title{font-size:13px;font-weight:700;color:var(--navy);} .c-title b{color:var(--ui);}
+  .c-sub{margin-left:auto;font-size:11px;color:var(--faint);}
+
+  /* search */
+  .search{margin:0 14px 12px;display:flex;align-items:center;gap:9px;height:42px;border:1px solid var(--border);border-radius:10px;padding:0 13px;background:#fff;color:var(--faint);}
+  .c-search:focus-within{border-color:var(--ui);box-shadow:0 0 0 3px rgba(232,98,42,.1);}
+  .search svg{width:16px;height:16px;flex-shrink:0;} .search span{font-size:13px;}
+
+  /* tile grid */
+  .tiles{flex:1;overflow-y:auto;padding:12px 14px 14px;display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start;}
+  .tiles::-webkit-scrollbar{width:8px;} .tiles::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:99px;}
+
+  /* OGGI tile — ragged heights */
+  .o-tile{border:1px solid var(--border);border-radius:10px;padding:14px;background:#fff;}
+  .o-tile .ti{width:34px;height:34px;border-radius:8px;background:var(--surface-alt);display:grid;place-items:center;color:var(--mute);margin-bottom:14px;}
+  .o-tile .ti svg{width:18px;height:18px;} .o-tile .tl{font-size:13px;color:var(--ink);line-height:1.25;}
+
+  /* COERENTE tile — uniform, drag-ready */
+  .c-tile{position:relative;border:1px solid var(--border);border-radius:11px;padding:13px 10px 12px;background:#fff;display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center;cursor:grab;transition:border-color .12s,box-shadow .12s,transform .12s;height:96px;justify-content:center;}
+  .c-tile .ti{width:38px;height:38px;border-radius:9px;background:var(--surface-alt);display:grid;place-items:center;color:var(--navy);flex-shrink:0;transition:background .12s,color .12s;}
+  .c-tile .ti svg{width:19px;height:19px;}
+  .c-tile .tl{font-size:12px;font-weight:500;color:var(--ink);line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .c-tile:hover{border-color:var(--ui);box-shadow:0 4px 14px -4px rgba(232,98,42,.28);transform:translateY(-1px);}
+  .c-tile:hover .ti{background:var(--ui-soft);color:var(--ui);}
+  .c-tile.drag{border-color:var(--ui);box-shadow:0 8px 20px -5px rgba(232,98,42,.4);transform:translateY(-2px);}
+  .c-tile.drag .ti{background:var(--ui);color:#fff;}
+
+  .why{margin-top:34px;background:#fffdf8;border:1px solid var(--line);border-radius:14px;padding:24px 26px;}
+  .why h3{font-family:var(--disp);font-weight:400;font-size:24px;color:var(--navy);margin:0 0 16px;}
+  .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px 22px;}
+  .why-item{font-size:13px;line-height:1.5;color:var(--mute);} .why-item b{color:var(--navy);display:block;font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;margin-bottom:4px;}
+  .why-item .nw{font-family:var(--mono);font-size:11px;color:#15803d;}
+  @media(max-width:880px){.cols,.why-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">OLObuild · field redesign</div>
+  <h1>Inserter <em>Elementi</em></h1>
+  <p class="lead">Il pannello di inserimento delle tile. Oggi le <b>etichette categoria sono troncate</b> (<code>Essenzi…</code>, <code>Marketi…</code>), l'header ha un <b>pallino viola</b> e un <b>20</b> ambigui, le tile hanno <b>altezze irregolari</b> e nessuna affordance di trascinamento. A destra: <b>etichette intere</b>, barretta arancio sulla categoria attiva, header parlante, <b>tile a griglia uniforme</b> con stato grab/hover, conteggi neutri.</p>
+
+  <div class="cols">
+
+    <!-- ════ OGGI ════ -->
+    <div>
+      <div class="col-head today"><span class="badge">Oggi</span><h2>Pannello Elementi</h2><span class="n">label troncate · righe irregolari</span></div>
+      <div class="panel">
+        <div class="tabs">
+          <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Elementi</div>
+          <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>Struttura</div>
+        </div>
+        <div class="body">
+          <div class="rail o-rail">
+            <div class="cat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="ct">8</span></span><span class="lb">Recenti</span></div>
+            <div class="cat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span class="ct">9</span></span><span class="lb o-trunc">Essenzi…</span></div>
+            <div class="cat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg><span class="ct">14</span></span><span class="lb">Layout</span></div>
+            <div class="cat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5h16v2M9 19h6M12 5v14"/></svg><span class="ct">10</span></span><span class="lb">Testo</span></div>
+            <div class="cat on"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 17-5-5L5 20"/></svg><span class="ct">20</span></span><span class="lb">Media</span></div>
+            <div class="cat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg><span class="ct">19</span></span><span class="lb o-trunc">Marketi…</span></div>
+            <div class="cat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 2.4 7.4H22l-6 4.6 2.3 7.4L12 17l-6.3 4.4L8 14 2 9.4h7.6z"/></svg><span class="ct">17</span></span><span class="lb o-trunc">Interatti…</span></div>
+            <div class="cat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg><span class="ct">15</span></span><span class="lb o-trunc">Navigaz…</span></div>
+            <div class="cat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg><span class="ct">13</span></span><span class="lb">Dinamico</span></div>
+          </div>
+          <div class="grid-main">
+            <div class="gh"><span class="o-dot"></span><span class="o-cnt">20</span></div>
+            <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg><span>Cerca in Media…</span></div>
+            <div class="tiles">
+              <div class="o-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div><div class="tl">Galleria</div></div>
+              <div class="o-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="tl">Mappa Pro</div></div>
+              <div class="o-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m8 12 4-3 4 3"/></svg></div><div class="tl">Slideshow</div></div>
+              <div class="o-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8" cy="8" r="1"/><circle cx="16" cy="8" r="1"/><circle cx="8" cy="16" r="1"/><circle cx="16" cy="16" r="1"/><circle cx="12" cy="12" r="1"/></svg></div><div class="tl">Overlay</div></div>
+              <div class="o-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 17-5-5L5 20"/></svg></div><div class="tl">Pro Slider</div></div>
+              <div class="o-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="8" height="16" rx="1"/><rect x="13" y="4" width="8" height="16" rx="1"/></svg></div><div class="tl">Confronto Immagini</div></div>
+              <div class="o-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div><div class="tl">Nastro Scorrevole</div></div>
+              <div class="o-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m3 14 5-4 4 3 3-2 6 4"/></svg></div><div class="tl">Shattered Image</div></div>
+              <div class="o-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="13" y="11" width="8" height="10" rx="1"/><rect x="3" y="14" width="8" height="7" rx="1"/></svg></div><div class="tl">Pro Gallery</div></div>
+              <div class="o-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/></svg></div><div class="tl">PDF Viewer</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ COERENTE ════ -->
+    <div>
+      <div class="col-head new"><span class="badge">Coerente</span><h2>Inserter pulito</h2><span class="n">label intere · griglia uniforme</span></div>
+      <div class="panel">
+        <div class="tabs">
+          <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Elementi</div>
+          <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>Struttura</div>
+        </div>
+        <div class="body">
+          <div class="rail c-rail">
+            <div class="cat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="lb">Recenti</span></div>
+            <div class="cat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span class="lb">Essenziali</span></div>
+            <div class="cat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></span><span class="lb">Layout</span></div>
+            <div class="cat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5h16v2M9 19h6M12 5v14"/></svg></span><span class="lb">Testo</span></div>
+            <div class="cat on"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 17-5-5L5 20"/></svg></span><span class="lb">Media</span></div>
+            <div class="cat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span><span class="lb">Marketing</span></div>
+            <div class="cat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 2.4 7.4H22l-6 4.6 2.3 7.4L12 17l-6.3 4.4L8 14 2 9.4h7.6z"/></svg></span><span class="lb">Interattivi</span></div>
+            <div class="cat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></span><span class="lb">Navigazione</span></div>
+            <div class="cat"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg></span><span class="lb">Dinamico</span></div>
+          </div>
+          <div class="grid-main">
+            <div class="gh"><span class="c-title">Media <b>· 20</b></span><span class="c-sub">trascina nel canvas</span></div>
+            <div class="search c-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg><span>Cerca in Media…</span></div>
+            <div class="tiles">
+              <div class="c-tile drag"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div><div class="tl">Galleria</div></div>
+              <div class="c-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="tl">Mappa Pro</div></div>
+              <div class="c-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m8 12 4-3 4 3"/></svg></div><div class="tl">Slideshow</div></div>
+              <div class="c-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8" cy="8" r="1"/><circle cx="16" cy="8" r="1"/><circle cx="8" cy="16" r="1"/><circle cx="16" cy="16" r="1"/><circle cx="12" cy="12" r="1"/></svg></div><div class="tl">Overlay</div></div>
+              <div class="c-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 17-5-5L5 20"/></svg></div><div class="tl">Pro Slider</div></div>
+              <div class="c-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="8" height="16" rx="1"/><rect x="13" y="4" width="8" height="16" rx="1"/></svg></div><div class="tl">Confronto Immagini</div></div>
+              <div class="c-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div><div class="tl">Nastro Scorrevole</div></div>
+              <div class="c-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m3 14 5-4 4 3 3-2 6 4"/></svg></div><div class="tl">Shattered Image</div></div>
+              <div class="c-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="13" y="11" width="8" height="10" rx="1"/><rect x="3" y="14" width="8" height="7" rx="1"/></svg></div><div class="tl">Pro Gallery</div></div>
+              <div class="c-tile"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/></svg></div><div class="tl">PDF Viewer</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="why">
+    <h3>Cosa cambia</h3>
+    <div class="why-grid">
+      <div class="why-item"><b>Etichette intere</b> Rail un filo più largo e label a 2 righe: <span class="nw">Essenziali · Marketing · Interattivi · Navigazione</span>, mai i puntini.</div>
+      <div class="why-item"><b>Accento unico</b> La categoria attiva ha una <span class="nw">barretta arancio</span> a sinistra e icona arancio — stesso linguaggio della sottolineatura tab. Via il pallino.</div>
+      <div class="why-item"><b>Header parlante</b> <span class="nw">Media · 20</span> + "trascina nel canvas". Niente dot viola anonimo né numero che galleggia.</div>
+      <div class="why-item"><b>Griglia uniforme</b> Tile ad <span class="nw">altezza fissa</span> con icona e label centrate su 2 righe: niente più righe a denti di sega.</div>
+      <div class="why-item"><b>Rail più pulito</b> Via i conteggi dalle icone verticali: si <span class="nw">sovrapponevano</span> alle etichette. Il numero resta solo nell'header (<span class="nw">Media · 20</span>).</div>
+      <div class="why-item"><b>Drag affordance</b> Cursore grab, hover con bordo+ombra arancio e <span class="nw">stato in trascinamento</span> (vedi "Galleria").</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

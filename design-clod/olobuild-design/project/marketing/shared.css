@@ -1,0 +1,202 @@
+/* ────────────────────────────────────────────────────────────────
+   OLObuild — Marketing primitives
+   Shared CSS for landing page + ad campaign:
+   • brand glow/lighting
+   • glass-y product mockup chrome
+   • editorial type scales
+   • bento card + showcase utilities
+   ──────────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --mk-navy:        #0b0d12;
+  --mk-navy-soft:   #14171f;
+  --mk-navy-ink:    #1c2030;
+  --mk-cream:       #f7f3ee;
+  --mk-cream-soft:  #fcfaf6;
+  --mk-line:        rgba(255,255,255,.08);
+  --mk-line-light:  #e9e3da;
+  --mk-text-dim:    rgba(255,255,255,.6);
+  --mk-text-faint:  rgba(255,255,255,.42);
+
+  --mk-glow-r:      225, 71, 79;   /* brand red RGB */
+  --mk-display:     "Instrument Serif", "Playfair Display", Georgia, serif;
+  --mk-sans:        "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ───── Editorial type scale ───── */
+.mk-display {
+  font-family: var(--mk-display);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 0.96;
+  text-wrap: balance;
+}
+.mk-eyebrow {
+  font-family: var(--mk-sans);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.mk-italic { font-style: italic; }
+
+/* ───── Brand glow halos ───── */
+.mk-glow-red,
+.mk-glow-red-strong,
+.mk-glow-red-soft {
+  position: absolute; pointer-events: none;
+  border-radius: 50%; filter: blur(60px);
+  background: radial-gradient(circle, rgba(var(--mk-glow-r), .55) 0%, rgba(var(--mk-glow-r), 0) 70%);
+}
+.mk-glow-red-soft { background: radial-gradient(circle, rgba(var(--mk-glow-r), .22) 0%, rgba(var(--mk-glow-r), 0) 70%); }
+.mk-glow-red-strong { background: radial-gradient(circle, rgba(var(--mk-glow-r), .85) 0%, rgba(var(--mk-glow-r), 0) 60%); filter: blur(90px); }
+
+/* Subtle grain to make the dark surfaces feel real */
+.mk-grain {
+  position: absolute; inset: 0; pointer-events: none;
+  opacity: .35; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.2 -.4'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/></svg>");
+}
+
+/* ───── Product mockup chrome ───── */
+.mk-mock {
+  position: relative;
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.06),
+    0 50px 100px -20px rgba(0,0,0,.55),
+    0 30px 60px -30px rgba(var(--mk-glow-r), .35);
+  transform-style: preserve-3d;
+}
+.mk-mock.lift-shadow {
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.05),
+    0 80px 140px -30px rgba(0,0,0,.7),
+    0 40px 80px -40px rgba(var(--mk-glow-r), .55);
+}
+/* Glassy top reflection on the mockup */
+.mk-mock::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,0) 14%);
+  pointer-events: none;
+}
+
+.mk-tilt {
+  transform: perspective(2400px) rotateY(-14deg) rotateX(6deg);
+  transform-origin: center center;
+}
+.mk-tilt-soft {
+  transform: perspective(2400px) rotateY(-7deg) rotateX(3deg);
+}
+.mk-tilt-r {
+  transform: perspective(2400px) rotateY(14deg) rotateX(6deg);
+}
+.mk-tilt-flat {
+  transform: perspective(2400px) rotateX(8deg);
+}
+
+/* ───── Reusable badge / chip ───── */
+.mk-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 12px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  font: 600 12px/1 var(--mk-sans);
+  color: rgba(255,255,255,.85);
+  backdrop-filter: blur(8px);
+}
+.mk-chip-light {
+  background: rgba(0,0,0,.04);
+  border: 1px solid rgba(0,0,0,.06);
+  color: #28201d;
+}
+.mk-chip .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgb(var(--mk-glow-r));
+  box-shadow: 0 0 8px rgba(var(--mk-glow-r), .8);
+}
+
+/* ───── CTA buttons ───── */
+.mk-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font: 600 14px/1 var(--mk-sans);
+  cursor: pointer;
+  border: 0;
+  transition: transform .15s;
+}
+.mk-btn:hover { transform: translateY(-1px); }
+.mk-btn-primary {
+  background: rgb(var(--mk-glow-r));
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(var(--mk-glow-r), .35);
+}
+.mk-btn-ghost-light {
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(8px);
+}
+.mk-btn-ghost-dark {
+  background: transparent;
+  color: var(--mk-navy);
+  border: 1px solid rgba(0,0,0,.12);
+}
+.mk-btn-big {
+  padding: 16px 28px;
+  font-size: 15px;
+}
+
+/* ───── Bento card primitives ───── */
+.mk-bento {
+  position: relative;
+  border-radius: 22px;
+  padding: 28px;
+  overflow: hidden;
+  background: var(--mk-navy-soft);
+  border: 1px solid var(--mk-line);
+  color: #fff;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.mk-bento-cream {
+  background: var(--mk-cream-soft);
+  border: 1px solid var(--mk-line-light);
+  color: var(--mk-navy);
+}
+.mk-bento h3 {
+  font-family: var(--mk-display);
+  font-size: 30px;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin: 0;
+  text-wrap: balance;
+}
+.mk-bento p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--mk-text-dim);
+}
+.mk-bento-cream p { color: #6b5b54; }
+
+/* ───── Stat ───── */
+.mk-stat {
+  font-family: var(--mk-display);
+  font-size: clamp(56px, 7vw, 96px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+.mk-stat-cap {
+  font: 500 12px/1.4 var(--mk-sans);
+  color: var(--mk-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 8px;
+}

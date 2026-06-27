@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  
+  <circle cx="130" cy="175" r="120" fill="#4a8c2a"></circle>
+  <circle cx="130" cy="175" r="55" fill="#fff"></circle>
+  <circle cx="382" cy="175" r="120" fill="#4a8c2a"></circle>
+  <circle cx="382" cy="175" r="55" fill="#fff"></circle>
+  
+  <path d="M236 55 h40 v240 h-40z" fill="#4a8c2a"></path>
+  
+  <text x="256" y="440" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="bold" font-size="145" fill="#555" font-style="italic">tutor</text>
+</svg>

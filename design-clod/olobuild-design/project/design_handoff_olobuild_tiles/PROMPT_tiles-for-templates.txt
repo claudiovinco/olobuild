@@ -1,0 +1,54 @@
+PROMPT PER CLAUDE CODE — Tile coerenti + comporre gli ultimi 50 template
+Repo: claudiovinco/olobuild · branch main · Vue 3 + Pinia + PHP · pacchetto regole: regoletiles1/
+
+── CONTESTO (verificato sugli audit del repo) ──────────────────────────────────
+Il set tile è COMPLETO: AUDIT-TILE-DUPLICATES.md → 0 duplicati critici, nessuna tile da creare.
+91 tile FREE, tutte ≥80% compliant, 32 al 100% (AUDIT-TILE-COMPLIANCE.md). Quindi "tile mancanti"
+= nessuna; il lavoro è RIFINITURA/COERENZA: portare a 100% le ~59 tile sotto il 100% (gap
+ricorrente D2, poi D1/F3), così che i 50 template finali si compongano su una base "una sola famiglia".
+
+── FILE GUIDA (tutti in regoletiles1/, nello zip allegato) ──────────────────────
+  • SPEC_tiles-for-templates.md   → IL PIANO COMPLETO (leggi questo per primo): fasi A/B, worklist, DoD.
+  • START_HERE.md                 → protocollo operativo (enumerare tile, tracker, DoD, guardrail).
+  • DESIGN_LANGUAGE.md            → 10 regole + CHROME vs CONTENUTO.
+  • TILE_AUDIT_CHECKLIST.md       → checklist 10 punti + 8 categorie (lavora a batch per categoria).
+  • TOKEN_MAPPING.md              → come nascono i --olo-color-* (non inventarne).
+  • prototype/                    → oloTileDefaults.js, useBoxModel.js, tokens-brand.css,
+                                    FieldBorder.vue, FieldBoxShadow.vue (+ SPEC_fieldboxshadow.md).
+  • REFERENCE_*.html              → resa visiva attesa (card, data, interactive, border, shadow).
+
+── SORGENTI DI VERITÀ IN-REPO (incrocia sempre) ────────────────────────────────
+  • AUDIT-TILE-COMPLIANCE.md → matrice per-tile (quali criteri ✗).
+  • TILE_PROGRESS.md         → tracker ufficiale: leggilo e AGGIORNALO man mano.
+  • Legenda criteri A/B/D/F  → vault "OLOtheme-Vault → Standard tile moderno". D2 è il gap più diffuso:
+                               capisci cosa misura e chiudilo in modo sistematico su tutte le tile.
+
+── COSA FARE ───────────────────────────────────────────────────────────────────
+FASE 0. Implementa prima FieldBoxShadow (vedi regoletiles1/SPEC_fieldboxshadow.md): la "lingua
+        d'ombra" condivisa serve a tutte le tile.
+FASE A. Porta a 100% le ~59 tile sotto il 100% (elenco in SPEC_tiles-for-templates.md §1),
+        a BATCH PER CATEGORIA, un PR per batch, diff verificabile. Priorità alle tile ad alta
+        presenza nei template (hero, grid, button, iconbox, counter, content, panel, accordion,
+        pricing, timeline, gallery/list), poi il resto. Per ogni tile applica la DoD:
+          - colori solo via token/resolveColor (primario rosso brand; via i 4 primari storici dal CONTENUTO)
+          - box-model via useBoxModel; SPACE(8pt)+RADIUS unico+scala shadow; default da fonte unica
+          - icone SVG (mai emoji); focus-visible; target ≥44px; stato vuoto curato; bella appena inserita
+          - render Vue (canvas) == PHP (frontend); CHIAVI SALVATE INVARIATE
+        (Opzionale, non obbligatorio: assorbire iconlist in list con flag show_icons + alias;
+         rinominare nav → linklist. Solo se non rompi template legacy.)
+FASE B. Solo dopo che le tile della categoria sono a 100%, componi i 50 template (vedi
+        SPEC_tiles-for-templates.md §2): sistema di sezioni riusato, token-first end-to-end,
+        SPACE/RADIUS/shadow dalle scale, responsive via device switch, render Vue==PHP. Se in repo
+        esiste già l'elenco/roadmap dei 50 template (TILE_PROGRESS.md o doc), LEGGILO e non re-inventarlo;
+        altrimenti usa gli archetipi suggeriti nello SPEC.
+
+── GUARDRAIL ────────────────────────────────────────────────────────────────────
+  • Chiavi salvate INVARIATE (i template legacy devono rendere identici).
+  • CHROME (#e8622a, inspector) ≠ CONTENUTO (token cliente).
+  • Mai toccare WordPress in produzione. Dopo modifiche JS/CSS: build
+    `node node_modules/vite/bin/vite.js build` + bump OLO_VERSION. Aggiorna TILE_PROGRESS.md.
+
+── DEFINITION OF DONE (macro) ───────────────────────────────────────────────────
+  • Tutte le ~59 tile portate a 100% coerenza (audit verde), senza regressioni dati.
+  • TILE_PROGRESS.md aggiornato; build ok; OLO_VERSION bumpata.
+  • I 50 template composti sul set coerente, responsive verificato, frontend PHP == canvas Vue.

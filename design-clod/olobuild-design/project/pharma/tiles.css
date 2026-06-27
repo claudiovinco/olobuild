@@ -1,0 +1,295 @@
+/* ═══════════════════════════════════════════════════════════════════
+   FARMACIE COMUNALI BORGOVERDE — Tile & section styles
+   Each block maps to an OLObuild tile (see data-olo-tile in markup).
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ───────────────────────────────────────────────────────────────────
+   NAVMENU (light, sticky)
+   ─────────────────────────────────────────────────────────────────── */
+.nav {
+  position: sticky; top: 0; z-index: 100; height: var(--fc-nav-h);
+  display: flex; align-items: center;
+  background: rgba(251,250,246,.9);
+  backdrop-filter: saturate(160%) blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .3s var(--fc-ease), box-shadow .3s var(--fc-ease), height .3s var(--fc-ease);
+}
+.nav.is-stuck { border-color: var(--fc-border); box-shadow: 0 8px 28px rgba(30,60,45,.06); }
+.nav__inner { width: 100%; max-width: var(--fc-maxw); margin-inline: auto; padding-inline: var(--fc-gut); display: flex; align-items: center; gap: 28px; }
+.nav__logo { display: flex; align-items: center; gap: 13px; }
+.nav__logo .mark { width: 44px; height: 44px; border-radius: 13px; background: var(--fc-primary); position: relative; flex: none; box-shadow: 0 6px 16px rgba(27,158,111,.28); }
+.nav__logo .mark::before { content: ""; position: absolute; inset: 0; background: #fff;
+  -webkit-mask: var(--cr) center/19px no-repeat; mask: var(--cr) center/19px no-repeat;
+  --cr: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 3h6v6h6v6h-6v6H9v-6H3V9h6z'/%3E%3C/svg%3E"); }
+.nav__logo .txt { display: flex; flex-direction: column; line-height: 1.05; }
+.nav__logo .txt b { font-family: var(--fc-font-display); font-weight: 700; font-size: 21px; letter-spacing: -.01em; color: var(--fc-text); }
+.nav__logo .txt span { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--fc-primary-strong); }
+
+.nav__links { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.nav__links a { padding: 10px 16px; border-radius: var(--fc-r-full); font-size: 16px; font-weight: 600; color: var(--fc-text-soft); transition: color .2s, background .2s; white-space: nowrap; }
+.nav__links a:hover { color: var(--fc-text); background: var(--fc-bg-soft); }
+.nav__links a.is-active { color: var(--fc-primary-strong); background: var(--fc-primary-soft); }
+.nav__cta { display: flex; align-items: center; gap: 10px; margin-left: 10px; }
+.nav__burger { display: none; margin-left: auto; width: 48px; height: 48px; border: 1px solid var(--fc-border-strong); border-radius: 12px; background: var(--fc-surface); color: var(--fc-text); align-items: center; justify-content: center; }
+.nav__burger span, .nav__burger span::before, .nav__burger span::after { content: ""; display: block; width: 20px; height: 2.5px; border-radius: 2px; background: currentColor; position: relative; }
+.nav__burger span::before { position: absolute; top: -7px; } .nav__burger span::after { position: absolute; top: 7px; }
+
+.mobile-menu { position: fixed; inset: 0; z-index: 200; background: var(--fc-bg); display: flex; flex-direction: column; padding: 20px var(--fc-gut); transform: translateY(-100%); transition: transform .4s var(--fc-ease); }
+.mobile-menu.is-open { transform: none; }
+.mobile-menu__top { display: flex; align-items: center; justify-content: space-between; height: var(--fc-nav-h); }
+.mobile-menu__close { width: 48px; height: 48px; border: 1px solid var(--fc-border-strong); border-radius: 12px; background: var(--fc-surface); color: var(--fc-text); font-size: 24px; }
+.mobile-menu nav { display: flex; flex-direction: column; gap: 2px; margin-top: 20px; }
+.mobile-menu nav a { font-family: var(--fc-font-display); font-size: 30px; font-weight: 600; padding: 14px 0; border-bottom: 1px solid var(--fc-border); color: var(--fc-text); }
+.mobile-menu .fc-btn { margin-top: 28px; }
+
+/* ───────────────────────────────────────────────────────────────────
+   ALERT — "farmacia di turno" (OLObuild · Feedback → Alert)
+   ─────────────────────────────────────────────────────────────────── */
+.turno-bar { background: var(--fc-ink); color: var(--fc-on-dark); }
+.turno-bar__inner { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding-block: 12px; font-size: 15.5px; }
+.turno-bar .badge { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; color: #fff; background: var(--fc-accent); padding: 5px 13px; border-radius: var(--fc-r-full); font-size: 13px; letter-spacing: .03em; text-transform: uppercase; }
+.turno-bar b { color: #fff; font-weight: 700; }
+.turno-bar .turno-bar__link { margin-left: auto; color: var(--fc-on-dark); font-weight: 700; display: inline-flex; align-items: center; gap: 7px; }
+.turno-bar .turno-bar__link:hover { color: #fff; }
+.turno-bar .pulse { width: 9px; height: 9px; border-radius: 50%; background: #7be0b3; box-shadow: 0 0 0 0 rgba(123,224,179,.6); animation: pulse 2s infinite; }
+@keyframes pulse { 0%{ box-shadow: 0 0 0 0 rgba(123,224,179,.55);} 70%{ box-shadow: 0 0 0 9px rgba(123,224,179,0);} 100%{ box-shadow: 0 0 0 0 rgba(123,224,179,0);} }
+
+/* ───────────────────────────────────────────────────────────────────
+   HERO (light)  (OLObuild · Marketing → Hero)
+   ─────────────────────────────────────────────────────────────────── */
+.hero { position: relative; padding-top: clamp(40px, 6vw, 72px); padding-bottom: clamp(56px, 7vw, 96px); overflow: hidden; isolation: isolate; }
+.hero::before { content: ""; position: absolute; inset: 0; z-index: -2; background: linear-gradient(180deg, var(--fc-bg-green), var(--fc-bg) 70%); }
+.hero::after { content: ""; position: absolute; top: -160px; right: -120px; width: 540px; height: 540px; z-index: -1; border-radius: 50%; background: radial-gradient(circle, rgba(27,158,111,.12), transparent 65%); }
+.hero__inner { max-width: var(--fc-maxw); margin-inline: auto; padding-inline: var(--fc-gut); display: grid; grid-template-columns: 1.02fr .98fr; gap: clamp(36px, 5vw, 68px); align-items: center; }
+.hero__copy { max-width: 600px; }
+.hero h1 { font-size: clamp(40px, 5.6vw, 70px); font-weight: 600; line-height: 1.04; letter-spacing: -.015em; }
+.hero h1 em { font-style: italic; color: var(--fc-primary-strong); }
+.hero__sub { margin-top: 24px; font-size: clamp(19px, 2vw, 22px); line-height: 1.6; color: var(--fc-text-soft); max-width: 50ch; }
+.hero__cta { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 14px; }
+.hero__trust { margin-top: 30px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; color: var(--fc-text-muted); font-size: 15px; }
+.hero__trust .stars { color: var(--fc-accent); letter-spacing: 2px; }
+.hero__visual { position: relative; }
+.hero__visual .olo-media { aspect-ratio: 4/5; border-radius: var(--fc-r-lg); box-shadow: var(--fc-sh-lg); }
+.hero__card { position: absolute; left: -28px; bottom: 36px; display: flex; align-items: center; gap: 13px; background: var(--fc-surface); border: 1px solid var(--fc-border); border-radius: var(--fc-r); padding: 14px 18px; box-shadow: var(--fc-sh-md); max-width: 250px; }
+.hero__card .ic { width: 44px; height: 44px; border-radius: 12px; background: var(--fc-primary-soft); color: var(--fc-primary-strong); display: grid; place-items: center; flex: none; }
+.hero__card b { display: block; font-size: 16px; color: var(--fc-text); font-weight: 700; }
+.hero__card span { font-size: 13.5px; color: var(--fc-text-muted); }
+@media (max-width: 560px){ .hero__card { left: 8px; } }
+
+/* ───────────────────────────────────────────────────────────────────
+   QUICK SERVICES strip (OLObuild · Essential → IconBox row)
+   ─────────────────────────────────────────────────────────────────── */
+.quick { margin-top: clamp(36px,5vw,56px); }
+.quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.quick-card { display: flex; flex-direction: column; gap: 12px; padding: 24px; background: var(--fc-surface); border: 1px solid var(--fc-border); border-radius: var(--fc-r); transition: transform .25s var(--fc-ease), box-shadow .25s var(--fc-ease), border-color .25s; }
+.quick-card:hover { transform: translateY(-4px); box-shadow: var(--fc-sh-md); border-color: var(--fc-primary); }
+.quick-card .ic { width: 50px; height: 50px; border-radius: 14px; background: var(--fc-primary-soft); color: var(--fc-primary-strong); display: grid; place-items: center; }
+.quick-card h3 { font-family: var(--fc-font-sans); font-size: 18px; font-weight: 800; letter-spacing: -.01em; }
+.quick-card p { font-size: 14.5px; color: var(--fc-text-muted); }
+.quick-card .fc-link { font-size: 15px; margin-top: auto; }
+
+/* ───────────────────────────────────────────────────────────────────
+   ICONBOX grid (services categories)
+   ─────────────────────────────────────────────────────────────────── */
+.feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.iconbox { background: var(--fc-surface); border: 1px solid var(--fc-border); border-radius: var(--fc-r); padding: 32px; transition: transform .3s var(--fc-ease), box-shadow .3s var(--fc-ease); }
+.iconbox:hover { transform: translateY(-4px); box-shadow: var(--fc-sh-md); }
+.iconbox__ic { width: 56px; height: 56px; border-radius: 15px; display: grid; place-items: center; margin-bottom: 20px; color: var(--fc-primary-strong); background: var(--fc-primary-soft); }
+.iconbox.accent .iconbox__ic { color: var(--fc-accent-strong); background: var(--fc-accent-soft); }
+.iconbox h3 { font-size: 23px; margin-bottom: 9px; }
+.iconbox p { color: var(--fc-text-muted); font-size: 16px; line-height: 1.6; }
+.iconbox ul { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 9px; }
+.iconbox ul li { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; color: var(--fc-text-soft); }
+.iconbox ul .ck { flex: none; width: 22px; height: 22px; border-radius: 7px; background: var(--fc-primary-soft); color: var(--fc-primary-strong); display: grid; place-items: center; margin-top: 1px; }
+
+/* ───────────────────────────────────────────────────────────────────
+   FEATURE SPLIT (OLObuild · Layout → Row + Image + Content)
+   ─────────────────────────────────────────────────────────────────── */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 5vw, 76px); align-items: center; }
+.split + .split { margin-top: clamp(56px, 8vw, 104px); }
+.split.is-rev .split__media { order: 2; }
+.split__media .olo-media { aspect-ratio: 5/4; box-shadow: var(--fc-sh-md); }
+.split__copy h2 { font-size: clamp(28px, 3.4vw, 42px); margin-bottom: 18px; }
+.split__copy p { color: var(--fc-text-soft); font-size: 17.5px; }
+.split__list { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 14px; }
+.split__list li { display: flex; gap: 13px; align-items: flex-start; font-size: 16.5px; color: var(--fc-text-soft); }
+.split__list .ck { flex: none; width: 26px; height: 26px; border-radius: 8px; background: var(--fc-primary-soft); color: var(--fc-primary-strong); display: grid; place-items: center; margin-top: 1px; }
+.split__copy .fc-btn { margin-top: 28px; }
+
+/* ───────────────────────────────────────────────────────────────────
+   COUNTER band (OLObuild · Marketing → Counter)
+   ─────────────────────────────────────────────────────────────────── */
+.stats { background: var(--fc-primary); color: #fff; }
+.stats__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+.stat { text-align: center; }
+.stat__num { font-family: var(--fc-font-display); font-weight: 600; font-size: clamp(40px, 5.5vw, 60px); line-height: 1; letter-spacing: -.02em; color: #fff; }
+.stat .suf { color: #bdf0d8; }
+.stat__lbl { margin-top: 12px; font-size: 16px; color: #d4f0e3; }
+
+/* ───────────────────────────────────────────────────────────────────
+   NEWSTICKER — avvisi (OLObuild · Creative → NewsTicker)
+   ─────────────────────────────────────────────────────────────────── */
+.ticker { display: flex; align-items: stretch; background: var(--fc-surface); border: 1px solid var(--fc-border); border-radius: var(--fc-r-full); overflow: hidden; box-shadow: var(--fc-sh-sm); }
+.ticker__label { display: flex; align-items: center; gap: 9px; background: var(--fc-accent); color: #fff; font-weight: 800; font-size: 14px; letter-spacing: .04em; text-transform: uppercase; padding: 14px 22px; white-space: nowrap; flex: none; }
+.ticker__view { overflow: hidden; flex: 1; -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 4%, #000 92%, transparent); }
+.ticker__track { display: flex; gap: 48px; width: max-content; align-items: center; padding-left: 24px; animation: ticker 34s linear infinite; }
+.ticker:hover .ticker__track { animation-play-state: paused; }
+.ticker__item { display: flex; align-items: center; gap: 11px; font-size: 15.5px; color: var(--fc-text-soft); white-space: nowrap; padding-block: 13px; }
+.ticker__item .d { width: 7px; height: 7px; border-radius: 50%; background: var(--fc-primary); flex: none; }
+.ticker__item time { font-weight: 800; color: var(--fc-primary-strong); }
+@keyframes ticker { to { transform: translateX(-50%); } }
+
+/* ───────────────────────────────────────────────────────────────────
+   MARQUEE — convenzioni (OLObuild · Creative → Marquee)
+   ─────────────────────────────────────────────────────────────────── */
+.marquee-wrap { padding-block: 8px; }
+.marquee-lead { text-align: center; font-size: 14px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--fc-text-faint); margin-bottom: 24px; }
+.marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+.marquee__track { display: flex; gap: 60px; width: max-content; animation: marquee 36s linear infinite; align-items: center; }
+.marquee:hover .marquee__track { animation-play-state: paused; }
+.marquee__item { font-family: var(--fc-font-display); font-weight: 600; font-size: 23px; color: var(--fc-text-faint); white-space: nowrap; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ───────────────────────────────────────────────────────────────────
+   TESTIMONIAL (OLObuild · Marketing → Testimonial)
+   ─────────────────────────────────────────────────────────────────── */
+.testi { background: var(--fc-bg-green); }
+.testi__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.testi__card { background: var(--fc-surface); border: 1px solid var(--fc-border); border-radius: var(--fc-r); padding: 30px; display: flex; flex-direction: column; }
+.testi__stars { color: var(--fc-accent); letter-spacing: 2px; font-size: 17px; margin-bottom: 14px; }
+.testi__quote { font-family: var(--fc-font-display); font-size: 20px; line-height: 1.4; color: var(--fc-text); letter-spacing: -.01em; }
+.testi__author { display: flex; align-items: center; gap: 13px; margin-top: 22px; }
+.testi__avatar { width: 48px; height: 48px; border-radius: 50%; background: repeating-linear-gradient(135deg,#dfe7e0 0 7px,#e9efe8 7px 14px); border: 1px solid var(--fc-border); flex: none; }
+.testi__author b { display: block; font-weight: 800; font-size: 15.5px; }
+.testi__author span { font-size: 13.5px; color: var(--fc-text-muted); }
+
+/* ───────────────────────────────────────────────────────────────────
+   CTA banner (OLObuild · Marketing → CtaBanner)
+   ─────────────────────────────────────────────────────────────────── */
+.cta { background: var(--fc-ink); color: #fff; border-radius: var(--fc-r-xl); padding: clamp(40px, 6vw, 72px); position: relative; overflow: hidden; isolation: isolate; }
+.cta::before { content:""; position:absolute; top:-120px; right:-80px; width:420px; height:420px; border-radius:50%; background: radial-gradient(circle, rgba(27,158,111,.4), transparent 65%); z-index:-1; }
+.cta__inner { display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+.cta h2 { color: #fff; font-size: clamp(28px, 3.8vw, 46px); max-width: 18ch; }
+.cta p { color: rgba(255,255,255,.82); margin-top: 14px; font-size: 18px; max-width: 48ch; }
+.cta__actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.cta .fc-btn--accent { background: #fff; color: var(--fc-primary-strong); }
+.cta .fc-btn--accent:hover { background: #f3fbf7; }
+
+/* ───────────────────────────────────────────────────────────────────
+   FOOTER (OLObuild · Footer system)
+   ─────────────────────────────────────────────────────────────────── */
+.footer { background: var(--fc-ink); color: var(--fc-on-dark-mut); padding-top: clamp(52px, 7vw, 84px); }
+.footer__top { display: grid; grid-template-columns: 1.6fr repeat(3, 1fr); gap: 40px; padding-bottom: 44px; }
+.footer__brand .nav__logo .txt b { color: #fff; }
+.footer__brand p { max-width: 36ch; font-size: 15.5px; line-height: 1.6; margin-top: 16px; }
+.footer__brand .fc-chip { margin-top: 18px; color: var(--fc-on-dark-mut); background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.12); }
+.footer__col h4 { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--fc-on-dark-mut); font-weight: 800; margin-bottom: 16px; font-family: var(--fc-font-sans); }
+.footer__col a { display: block; padding: 6px 0; font-size: 15.5px; color: var(--fc-on-dark); opacity: .85; transition: opacity .2s, color .2s; }
+.footer__col a:hover { opacity: 1; color: #7be0b3; }
+.footer__bottom { border-top: 1px solid rgba(255,255,255,.1); padding-block: 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13.5px; }
+
+/* ───────────────────────────────────────────────────────────────────
+   PAGE TITLE (OLObuild · Dynamic → Page title + Breadcrumbs)
+   ─────────────────────────────────────────────────────────────────── */
+.pagehead { background: linear-gradient(180deg, var(--fc-bg-green), var(--fc-bg)); padding-top: clamp(40px, 6vw, 64px); padding-bottom: clamp(40px, 6vw, 64px); }
+.pagehead__crumbs { font-size: 14.5px; font-weight: 600; color: var(--fc-text-muted); display: flex; gap: 9px; align-items: center; margin-bottom: 18px; }
+.pagehead__crumbs a { color: var(--fc-primary-strong); }
+.pagehead h1 { font-size: clamp(38px, 5.2vw, 62px); font-weight: 600; letter-spacing: -.015em; max-width: 20ch; }
+.pagehead p { margin-top: 16px; color: var(--fc-text-soft); font-size: clamp(18px, 2vw, 21px); max-width: 60ch; }
+
+/* ───────────────────────────────────────────────────────────────────
+   LOCATION cards — le farmacie (OLObuild · Dynamic → PostGrid)
+   ─────────────────────────────────────────────────────────────────── */
+.loc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+.loc { display: grid; grid-template-columns: 150px 1fr; background: var(--fc-surface); border: 1px solid var(--fc-border); border-radius: var(--fc-r); overflow: hidden; transition: box-shadow .3s var(--fc-ease), transform .3s var(--fc-ease); }
+.loc:hover { box-shadow: var(--fc-sh-md); transform: translateY(-3px); }
+.loc__media .olo-media { width: 100%; height: 100%; border: none; border-radius: 0; }
+.loc__body { padding: 22px 24px; position: relative; }
+.loc__badge { position: absolute; top: 18px; right: 18px; font-size: 12px; font-weight: 800; letter-spacing: .03em; text-transform: uppercase; padding: 4px 11px; border-radius: var(--fc-r-full); }
+.loc__badge.open { color: var(--fc-primary-strong); background: var(--fc-primary-soft); }
+.loc__badge.turno { color: #fff; background: var(--fc-accent); }
+.loc h3 { font-size: 22px; margin-bottom: 6px; }
+.loc__addr { font-size: 15px; color: var(--fc-text-muted); }
+.loc__rows { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 8px; }
+.loc__rows li { display: flex; gap: 10px; font-size: 14.5px; color: var(--fc-text-soft); align-items: baseline; }
+.loc__rows .k { font-weight: 800; color: var(--fc-text); min-width: 64px; }
+@media (max-width: 560px){ .loc { grid-template-columns: 1fr; } .loc__media { aspect-ratio: 16/9; } }
+
+/* ───────────────────────────────────────────────────────────────────
+   EVENTLIST — turni di guardia (OLObuild · Dynamic → EventList)
+   ─────────────────────────────────────────────────────────────────── */
+.turni { background: var(--fc-surface); border: 1px solid var(--fc-border); border-radius: var(--fc-r); overflow: hidden; box-shadow: var(--fc-sh); }
+.turni__row { display: grid; grid-template-columns: 130px 1fr auto; gap: 18px; align-items: center; padding: 18px 24px; border-bottom: 1px solid var(--fc-border); }
+.turni__row:last-child { border-bottom: none; }
+.turni__row.today { background: var(--fc-primary-soft); }
+.turni__date { font-weight: 800; color: var(--fc-text); }
+.turni__date span { display: block; font-size: 13px; font-weight: 600; color: var(--fc-text-muted); text-transform: capitalize; }
+.turni__name { font-size: 17px; font-weight: 700; color: var(--fc-text); }
+.turni__name small { display: block; font-weight: 500; font-size: 14px; color: var(--fc-text-muted); }
+.turni__tag { font-size: 12.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; padding: 5px 12px; border-radius: var(--fc-r-full); color: var(--fc-primary-strong); background: var(--fc-primary-soft); white-space: nowrap; }
+.turni__row.today .turni__tag { color: #fff; background: var(--fc-accent); }
+
+/* ───────────────────────────────────────────────────────────────────
+   ACCORDION / FAQ (OLObuild · Interactive → Accordion)
+   ─────────────────────────────────────────────────────────────────── */
+.accordion { max-width: 840px; margin-inline: auto; }
+.acc-item { border: 1px solid var(--fc-border); border-radius: var(--fc-r); background: var(--fc-surface); margin-bottom: 14px; overflow: hidden; transition: box-shadow .25s; }
+.acc-item.is-open { box-shadow: var(--fc-sh); }
+.acc-q { width: 100%; text-align: left; background: none; border: none; padding: 22px 26px; display: flex; align-items: center; justify-content: space-between; gap: 20px; font-family: var(--fc-font-display); font-weight: 600; font-size: clamp(18px, 2.2vw, 22px); color: var(--fc-text); }
+.acc-q .pm { flex: none; width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--fc-border-strong); display: grid; place-items: center; transition: background .25s, border-color .25s, color .25s; position: relative; color: var(--fc-primary-strong); }
+.acc-q .pm::before, .acc-q .pm::after { content:""; position:absolute; background: currentColor; border-radius: 2px; }
+.acc-q .pm::before { width: 14px; height: 2.5px; } .acc-q .pm::after { width: 2.5px; height: 14px; transition: transform .25s var(--fc-ease); }
+.acc-item.is-open .pm { background: var(--fc-primary); border-color: var(--fc-primary); color: #fff; }
+.acc-item.is-open .pm::after { transform: rotate(90deg) scaleX(0); }
+.acc-a { overflow: hidden; max-height: 0; transition: max-height .35s var(--fc-ease); }
+.acc-a__inner { padding: 0 26px 24px; color: var(--fc-text-soft); font-size: 16.5px; line-height: 1.65; }
+
+/* ───────────────────────────────────────────────────────────────────
+   FORM (OLObuild · Forms → Form builder)
+   ─────────────────────────────────────────────────────────────────── */
+.contact-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(36px, 5vw, 68px); align-items: start; }
+.form { background: var(--fc-surface); border: 1px solid var(--fc-border); border-radius: var(--fc-r-lg); padding: clamp(26px, 4vw, 42px); box-shadow: var(--fc-sh); }
+.form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.field { margin-bottom: 20px; }
+.field label { display: block; font-size: 14.5px; font-weight: 700; color: var(--fc-text-soft); margin-bottom: 8px; }
+.field label .req { color: var(--fc-accent-strong); }
+.field input, .field select, .field textarea { width: 100%; font-family: inherit; font-size: 16.5px; color: var(--fc-text); padding: 14px 16px; border: 1.5px solid var(--fc-border-strong); border-radius: var(--fc-r-sm); background: var(--fc-bg); transition: border-color .2s, box-shadow .2s; }
+.field textarea { min-height: 130px; resize: vertical; }
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--fc-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--fc-primary) 20%, transparent); }
+.field input::placeholder, .field textarea::placeholder { color: var(--fc-text-faint); }
+.form__consent { display: flex; gap: 12px; align-items: flex-start; font-size: 14.5px; color: var(--fc-text-muted); margin: 4px 0 22px; }
+.form__consent input { margin-top: 3px; width: 20px; height: 20px; accent-color: var(--fc-primary); flex: none; }
+.form .fc-btn { width: 100%; }
+
+.contact-aside { display: grid; gap: 18px; }
+.info-card { background: var(--fc-surface); border: 1px solid var(--fc-border); border-radius: var(--fc-r); padding: 24px; }
+.info-card h4 { font-family: var(--fc-font-sans); font-size: 17px; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; gap: 11px; }
+.info-card h4 .ic { width: 38px; height: 38px; border-radius: 11px; background: var(--fc-primary-soft); color: var(--fc-primary-strong); display: grid; place-items: center; flex: none; }
+.info-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 11px; }
+.info-list li { font-size: 15.5px; color: var(--fc-text-soft); display: flex; gap: 12px; }
+.info-list .k { font-weight: 700; color: var(--fc-text); min-width: 70px; }
+.map .olo-media { aspect-ratio: 16/10; }
+
+/* ───────────────────────────────────────────────────────────────────
+   RESPONSIVE
+   ─────────────────────────────────────────────────────────────────── */
+@media (max-width: 980px) {
+  .nav__links, .nav__cta .fc-btn--ghost { display: none; }
+  .nav__burger { display: inline-flex; }
+  .hero__inner { grid-template-columns: 1fr; }
+  .hero__visual { max-width: 460px; }
+  .quick-grid { grid-template-columns: 1fr 1fr; }
+  .feature-grid, .testi__grid, .loc-grid { grid-template-columns: 1fr; }
+  .stats__grid { grid-template-columns: 1fr 1fr; gap: 36px 28px; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .split, .split.is-rev .split__media { grid-template-columns: 1fr; order: 0; }
+  .split__media { order: -1; }
+}
+@media (max-width: 720px) {
+  .quick-grid { grid-template-columns: 1fr; }
+  .form__row { grid-template-columns: 1fr; }
+  .cta__inner { flex-direction: column; align-items: flex-start; }
+  .turni__row { grid-template-columns: 1fr auto; }
+  .turni__date { grid-column: 1 / -1; }
+  .turno-bar__inner .turno-bar__link { margin-left: 0; width: 100%; }
+}

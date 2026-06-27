@@ -1,0 +1,24 @@
+/* OLObuild brand override — red primary (logo color) replacing Olo Tutor green.
+   Import AFTER tokens.css to win the cascade. */
+:root {
+  --ot-primary:        #e1474f;   /* logo red */
+  --ot-primary-bright: #ec5a62;
+  --ot-primary-hover:  #c8323a;
+  --ot-primary-dark:   #b8323a;
+  --ot-primary-darker: #7a1d23;
+  --ot-primary-light:  #f07a80;
+
+  --ot-primary-50:  #fef2f3;
+  --ot-primary-100: #fde2e4;
+  --ot-primary-200: #fac4c8;
+  --ot-primary-300: #f5959c;
+  --ot-primary-400: #ec5a62;
+  --ot-primary-500: #e1474f;
+  --ot-primary-600: #c8323a;
+  --ot-primary-700: #a52830;
+  --ot-primary-800: #871f26;
+  --ot-primary-900: #5a141a;
+  --ot-primary-950: #2e0a0d;
+
+  --ot-border-focus: #e1474f;
+}

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <title>OLObuild — Campagna pubblicitaria</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link rel="stylesheet" href="tokens.css"/>
+  <link rel="stylesheet" href="brand.css"/>
+  <link rel="stylesheet" href="marketing/shared.css"/>
+  <link rel="stylesheet" href="marketing/ads.css"/>
+  <style>
+    body { background: #f3f4f6; margin: 0; }
+    .design-canvas { font-family: var(--mk-sans); }
+    .ds-intro {
+      position: fixed; left: 16px; top: 16px; z-index: 50;
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      padding: 14px 16px;
+      max-width: 380px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    }
+    .ds-intro h1 { margin: 0 0 4px; font-size: 14px; font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 8px; }
+    .ds-intro h1 .pill { font-size: 10px; font-weight: 600; background: #fef2f3; color: #b8323a; padding: 2px 8px; border-radius: 99px; text-transform: uppercase; letter-spacing: .04em; }
+    .ds-intro p { margin: 0; font-size: 12px; line-height: 1.55; color: #64748b; }
+    .ds-intro p b { color: #1e293b; }
+  </style>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="ds-intro">
+    <h1>OLObuild · Campagna pubblicitaria <span class="pill">6 formati</span></h1>
+    <p>Set coordinato: 2 banner orizzontali, 2 post quadrati, 2 story verticali. <b>Apri ogni artboard a tutto schermo</b> con il pulsante in alto a destra — gli ad mantengono le dimensioni reali (1200×628, 1080², 1080×1920) e sono pronti per l'export.</p>
+  </div>
+
+  <div id="root" data-screen-label="Ad campaign"></div>
+
+  <script type="text/babel" src="marketing/design-canvas.jsx"></script>
+  <script type="text/babel" src="marketing/mockup.jsx"></script>
+  <script type="text/babel" src="marketing/ads.jsx"></script>
+  <script type="text/babel">
+    ReactDOM.createRoot(document.getElementById("root")).render(<AdSet/>);
+  </script>
+</body>
+</html>

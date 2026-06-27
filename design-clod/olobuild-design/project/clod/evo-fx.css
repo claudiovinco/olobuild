@@ -1,0 +1,77 @@
+/* ════════════════════════════════════════════════════════════════
+   CLOD · EVOLUZIONE v2 — layer "FOLLE" · sala di regia spinta
+   Ogni blocco è autonomo e mappabile a una tile OLObuild o a uno
+   script di tema:
+   [1] grana pellicola (chrome tema)   [2] HUD mirino (chrome tema)
+   [3] timecode nav (tile Nav)          [4] lettere hero (tile Hero)
+   [5] scrub manifesto (tile Testo)     [6] monitor servizi (tile Lista)
+   [7] wobble strip/reel (opzione tile) [8] CTA onda+magnete (tile CTA)
+   Tutto rispetta prefers-reduced-motion e pointer:fine.
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── [1] grana pellicola ── */
+.fx-grain{position:fixed;inset:-60px;z-index:95;pointer-events:none;opacity:.07;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:240px 240px;}
+@media(prefers-reduced-motion:no-preference){
+  .fx-grain{animation:fxGrain .5s steps(3) infinite;}
+}
+@keyframes fxGrain{0%,100%{transform:translate(0,0);}33%{transform:translate(-28px,20px);}66%{transform:translate(24px,-24px);}}
+
+/* ── [2] HUD mirino · coordinate + sezione corrente ── */
+.fx-hud{position:fixed;inset:0;z-index:75;pointer-events:none;opacity:0;transition:opacity .35s;}
+.fx-hud.on{opacity:1;}
+.fx-hud .h,.fx-hud .v{position:absolute;background:rgba(236,234,227,.09);}
+.fx-hud .h{left:0;right:0;height:1px;top:var(--my,50vh);}
+.fx-hud .v{top:0;bottom:0;width:1px;left:var(--mx,50vw);}
+.fx-hud .tag{position:absolute;left:var(--mx,50vw);top:var(--my,50vh);transform:translate(16px,16px);
+  display:flex;flex-direction:column;gap:3px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;}
+.fx-hud .tag b{color:var(--signal);font-weight:700;font-variant-numeric:tabular-nums;}
+.fx-hud .tag em{font-style:normal;color:var(--bone-dim);}
+@media(pointer:coarse){.fx-hud{display:none;}}
+
+/* ── [3] timecode di scroll + hairline di progresso nella nav ── */
+.nav::after{content:"";position:absolute;left:0;bottom:-1px;height:2px;
+  width:calc(var(--p,0)*100%);background:var(--signal);}
+.nav__right .nav__tc{display:none;color:var(--signal);font-variant-numeric:tabular-nums;}
+@media(min-width:880px){.nav__right .nav__tc{display:inline;}}
+
+/* ── [4] hero · lettere VISUAL in entrata, una a una ── */
+.hero__h .fx-lt{display:inline-block;}
+@media(prefers-reduced-motion:no-preference){
+  .hero__h .fx-lt{animation:fxLt .8s cubic-bezier(.16,.8,.26,1) both;animation-delay:calc(var(--i)*55ms);}
+}
+@keyframes fxLt{from{opacity:0;transform:translateY(.32em) rotate(3deg);filter:blur(7px);}to{opacity:1;transform:none;filter:none;}}
+
+/* ── [5] manifesto · si "accende" parola per parola allo scroll ── */
+[data-fx-scrub] .fx-w{opacity:.13;transition:opacity .3s ease;}
+[data-fx-scrub] .fx-w.on{opacity:1;}
+
+/* ── [6] servizi · monitor di anteprima che segue il cursore ── */
+.fx-mon{position:fixed;left:0;top:0;z-index:72;width:200px;pointer-events:none;opacity:0;
+  transform:translate(-50%,-112%) scale(.92);transition:opacity .16s ease,transform .16s ease;}
+.fx-mon.on{opacity:1;transform:translate(-50%,-112%) scale(1);}
+.fx-mon .scr{position:relative;height:118px;border:1px solid var(--line-2);
+  background:repeating-linear-gradient(-45deg,rgba(236,234,227,.05) 0 9px,transparent 9px 18px),var(--ink-3);}
+.fx-mon .scr i{position:absolute;width:13px;height:13px;border:2px solid var(--signal);}
+.fx-mon .scr i:nth-child(1){left:8px;top:8px;border-right:0;border-bottom:0;}
+.fx-mon .scr i:nth-child(2){right:8px;top:8px;border-left:0;border-bottom:0;}
+.fx-mon .scr i:nth-child(3){left:8px;bottom:8px;border-right:0;border-top:0;}
+.fx-mon .scr i:nth-child(4){right:8px;bottom:8px;border-left:0;border-top:0;}
+.fx-mon .scr .rec{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.14em;color:var(--signal);}
+.fx-mon .lab{display:flex;justify-content:space-between;gap:8px;background:var(--ink-2);
+  border:1px solid var(--line);border-top:0;padding:7px 10px;font-family:var(--mono);
+  font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--bone);}
+.fx-mon .lab b{color:var(--signal);}
+@media(pointer:coarse){.fx-mon{display:none;}}
+
+/* ── [7] strip & reel · wobble da velocità (transform via JS) ── */
+.strip{will-change:transform;}
+.reel__item{will-change:transform;}
+
+/* ── [8] CTA · onda di lettere + mail magnetica ── */
+.cta h2 .fx-ct{display:inline-block;transition:transform .22s cubic-bezier(.2,.7,.3,1),color .22s;}
+.cta h2 .fx-ct.up{color:var(--signal);}
+.cta__mail{will-change:transform;transition:gap .2s,transform .2s;}

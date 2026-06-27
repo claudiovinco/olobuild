@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '1.4.297' );
+define( 'OLO_VERSION', '1.4.298' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
 

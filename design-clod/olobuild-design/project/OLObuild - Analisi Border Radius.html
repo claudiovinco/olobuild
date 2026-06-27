@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <title>OLObuild — Analisi controllo Border Radius</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link rel="stylesheet" href="radius/radius.css"/>
+  <style>
+    html, body { margin: 0; padding: 0; background: #f0eee9; font-family: "Work Sans", -apple-system, BlinkMacSystemFont, sans-serif; }
+    .ds-intro {
+      position: fixed; left: 16px; top: 16px; z-index: 50;
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(10px);
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      padding: 14px 16px;
+      max-width: 400px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+      font-family: "Work Sans", sans-serif;
+    }
+    .ds-intro h1 { margin: 0 0 6px; font-size: 14px; font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 8px; }
+    .ds-intro h1 .pill { font-size: 10px; font-weight: 600; background: #eff4ff; color: #2563eb; padding: 2px 8px; border-radius: 99px; text-transform: uppercase; letter-spacing: .04em; }
+    .ds-intro p { margin: 0; font-size: 12px; line-height: 1.55; color: #64748b; }
+    .ds-intro p b { color: #1e293b; }
+
+    .rad-cell { padding: 8px; box-sizing: border-box; }
+    .rad-pair {
+      display: flex; gap: 28px; align-items: flex-start;
+      padding: 8px;
+    }
+  </style>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="ds-intro">
+    <h1>Border Radius · analisi & redesign <span class="pill">interattivo</span></h1>
+    <p>Confronto tra il controllo <b>attuale</b> (ricreato dallo screenshot) e una proposta <b>compatta</b>. Il controllo redesign è interattivo: trascina lo slider, separa gli angoli, cambia Normale/Hover.</p>
+  </div>
+
+  <div id="root"></div>
+
+  <script type="text/babel" src="marketing/design-canvas.jsx"></script>
+  <script type="text/babel" src="radius/radius.jsx"></script>
+  <script type="text/babel" src="radius/box-control.jsx"></script>
+  <script type="text/babel">
+    function App() {
+      return (
+        <DesignCanvas>
+          <DCSection
+            id="confronto"
+            title="Confronto · attuale vs proposta"
+            subtitle="Stessa funzione, ingombro verticale molto diverso">
+            <DCArtboard id="current" label="Attuale — ricreato dallo screenshot" width={380} height={620}>
+              <div className="rad rad-cell"><CurrentControl/></div>
+            </DCArtboard>
+            <DCArtboard id="current-notes" label="Diagnosi" width={372} height={520}>
+              <div className="rad-cell"><CurrentNotes/></div>
+            </DCArtboard>
+            <DCArtboard id="compact" label="Proposta — compatto & interattivo" width={380} height={420}>
+              <div className="rad rad-cell"><CompactControl/></div>
+            </DCArtboard>
+            <DCArtboard id="compact-notes" label="Perché funziona" width={372} height={640}>
+              <div className="rad-cell"><CompactNotes/></div>
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection
+            id="stati"
+            title="Gli stati del controllo compatto"
+            subtitle="Come si trasforma a seconda di cosa serve">
+            <DCArtboard id="states" label="Stati chiave" width={344} height={620}>
+              <div className="rad-cell"><StatesGallery/></div>
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection
+            id="esteso"
+            title="Pattern esteso · margini, padding, bordi"
+            subtitle="Lo stesso controllo per ogni proprietà '4 lati / 4 angoli', con selettore unità. Tutti interattivi.">
+            <DCArtboard id="margin" label="Margine — 4 lati · px % em rem vw vh · breakpoint" width={380} height={360}>
+              <div className="rad-cell"><MarginDemo/></div>
+            </DCArtboard>
+            <DCArtboard id="padding" label="Padding — 4 lati · breakpoint" width={380} height={360}>
+              <div className="rad-cell"><PaddingDemo/></div>
+            </DCArtboard>
+            <DCArtboard id="radius2" label="Raggio — 4 angoli · Hover · breakpoint" width={380} height={490}>
+              <div className="rad-cell"><BorderRadiusDemo/></div>
+            </DCArtboard>
+            <DCArtboard id="bwidth" label="Spessore bordo — 4 lati · Hover · breakpoint" width={380} height={490}>
+              <div className="rad-cell"><BorderWidthDemo/></div>
+            </DCArtboard>
+            <DCArtboard id="extend-notes" label="Pattern unificato" width={372} height={560}>
+              <div className="rad-cell"><ExtendNotes/></div>
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection
+            id="pannello"
+            title="Risparmio cumulativo · un pannello intero"
+            subtitle="4 proprietà impilate in un solo frame 'Spazi & Bordi'">
+            <DCArtboard id="stacked" label="Spazi & Bordi — pannello intero con breakpoint" width={376} height={860}>
+              <div className="rad-cell"><StackedPanel/></div>
+            </DCArtboard>
+          </DCSection>
+        </DesignCanvas>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+  </script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>NOVA — Creative studio. We make brands move.</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="NOVA is an independent creative studio crafting brand identities, motion and digital experiences."/>
+<link rel="stylesheet" href="studio/brand.css"/>
+<link rel="stylesheet" href="studio/fx.css"/>
+</head>
+<body data-screen-label="NOVA — Home">
+
+<!-- ═══ NAVMENU (OLObuild · Navigation) ═══ -->
+<header class="nav" data-olo-tile="Navmenu">
+  <div class="nav__inner">
+    <a class="nav__logo" href="#top">
+      <svg class="star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0l2.5 9.5L24 12l-9.5 2.5L12 24l-2.5-9.5L0 12l9.5-2.5z"/></svg>
+      NOVA
+    </a>
+    <nav class="nav__links">
+      <a href="#work">Work</a>
+      <a href="#studio">Studio</a>
+      <a href="#services">Services</a>
+    </nav>
+    <a class="nav__cta" href="#contact">Let’s talk</a>
+    <button class="nav__burger" aria-label="Menu"><span></span></button>
+  </div>
+</header>
+<div class="mobile-menu">
+  <button class="mobile-menu__close" aria-label="Close">&times;</button>
+  <a href="#work">Work</a>
+  <a href="#studio">Studio</a>
+  <a href="#services">Services</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<main id="top">
+
+<!-- ═══ HERO — multi-layer parallax (OLObuild · Hero + Parallax) ═══
+     data-olo-note: gradient-mesh backdrop → candidate NEW tile "MeshBackdrop" -->
+<section class="hero" data-olo-tile="Hero" data-olo-note="mesh-backdrop = new tile">
+  <div class="hero__mesh" data-parallax="0.10" data-mouse="1.0" data-olo-note="MeshBackdrop"></div>
+  <div class="hero__blob" data-parallax="0.20" data-mouse="1.6"></div>
+  <div class="hero__veil"></div>
+  <div class="hero__ghost" data-parallax="0.05" data-mouse="0.5">NOVA</div>
+  <div class="hero__inner">
+    <div class="hero__eyebrow" data-reveal>
+      <span>✦ Creative studio</span><span>Est. 2014</span><span>Milan / Remote</span>
+    </div>
+    <h1>
+      <span class="row" data-reveal="80"><span>We make</span></span>
+      <span class="row" data-reveal="160"><span>brands</span></span>
+      <span class="row" data-reveal="240"><span class="scramble" data-words="MOVE,SHINE,SPEAK,SELL,GLOW">MOVE</span></span>
+    </h1>
+    <div class="hero__bottom">
+      <p class="hero__sub" data-reveal="320">NOVA is an independent studio crafting brand identities, motion and digital experiences that refuse to sit still.</p>
+      <div class="scroll-cue" data-reveal="400"><span class="ln"></span>Scroll to explore</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MARQUEE (OLObuild · Creative → Marquee) ═══ -->
+<div class="mqx" data-olo-tile="Marquee">
+  <div class="mqx__track">
+    <span class="mqx__item">Branding<span class="star">✦</span><span class="o">Motion</span><span class="star">✦</span>Web<span class="star">✦</span><span class="o">3D / CGI</span><span class="star">✦</span>Art Direction<span class="star">✦</span></span>
+    <span class="mqx__item">Branding<span class="star">✦</span><span class="o">Motion</span><span class="star">✦</span>Web<span class="star">✦</span><span class="o">3D / CGI</span><span class="star">✦</span>Art Direction<span class="star">✦</span></span>
+  </div>
+</div>
+
+<!-- ═══ BLENDTEXT manifesto (OLObuild · Text → BlendText) ═══ -->
+<section class="blend" id="studio" data-olo-tile="BlendText">
+  <div class="blend__media"><div class="olo-media" data-parallax="0.06"><span class="olo-media__tag">studio reel — abstract motion still, full-bleed</span></div></div>
+  <div class="st-wrap">
+    <h2 class="blend__big">Design<br/>in motion</h2>
+    <p class="blend__sub">We believe a brand isn’t a logo frozen on a page — it’s a system that breathes, reacts and moves. Every project we ship is built to live on screens, not just in a guidelines PDF.</p>
+  </div>
+</section>
+
+<!-- ═══ WORK — ProGallery + Mouse-Tilt 3D (OLObuild · Interactive) ═══ -->
+<section class="st-section st-wrap" id="work" data-olo-tile="ProGallery">
+  <div class="work__head">
+    <h2 data-reveal>Selected<br/>work</h2>
+    <a class="st-btn st-btn--ghost" href="#contact" data-reveal="120">All projects
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+    </a>
+  </div>
+  <div class="work-grid">
+    <article class="proj proj--a" data-reveal>
+      <div class="proj__media" data-tilt>
+        <span class="proj__tag">Branding</span>
+        <div class="olo-media"><span class="olo-media__tag">Helios — brand identity system</span></div>
+      </div>
+      <div class="proj__cap"><h3>Helios</h3><span class="yr">2025</span></div>
+      <p class="proj__cat">Identity · Naming · Guidelines</p>
+    </article>
+    <article class="proj proj--b" data-reveal="100">
+      <div class="proj__media" data-tilt>
+        <span class="proj__tag">Motion</span>
+        <div class="olo-media"><span class="olo-media__tag">Pulse — title sequence still</span></div>
+      </div>
+      <div class="proj__cap"><h3>Pulse</h3><span class="yr">2025</span></div>
+      <p class="proj__cat">Title design · Motion system</p>
+    </article>
+    <article class="proj proj--c" data-reveal>
+      <div class="proj__media" data-tilt>
+        <span class="proj__tag">Web</span>
+        <div class="olo-media"><span class="olo-media__tag">Atlas — site art direction</span></div>
+      </div>
+      <div class="proj__cap"><h3>Atlas</h3><span class="yr">2024</span></div>
+      <p class="proj__cat">Art direction · Web build</p>
+    </article>
+    <article class="proj proj--d" data-reveal="100">
+      <div class="proj__media" data-tilt>
+        <span class="proj__tag">3D / CGI</span>
+        <div class="olo-media"><span class="olo-media__tag">Forma — 3D product render</span></div>
+      </div>
+      <div class="proj__cap"><h3>Forma</h3><span class="yr">2024</span></div>
+      <p class="proj__cat">CGI · Product films</p>
+    </article>
+  </div>
+</section>
+
+<!-- ═══ IMGCOMPARE before/after (OLObuild · Interactive → ImgCompare) ═══ -->
+<section class="st-section st-wrap" data-olo-tile="ImgCompare">
+  <div class="compare__head" data-reveal>
+    <p class="st-eyebrow muted" style="justify-content:center">Rebrand case · Helios</p>
+    <h2>From brief to brand</h2>
+  </div>
+  <div class="cmp" data-reveal="100" style="--cmp:50%">
+    <div class="cmp__layer cmp__before"><div class="olo-media"><span class="olo-media__tag">BEFORE — dated logo, greyscale</span></div><span class="cmp__lbl l">Before</span></div>
+    <div class="cmp__layer cmp__after"><div class="olo-media" style="background:repeating-linear-gradient(135deg,#241a2e 0 16px,#1d1526 16px 32px)"><span class="olo-media__tag">AFTER — NOVA rebrand, full system</span></div><span class="cmp__lbl r">After</span></div>
+    <div class="cmp__handle"><span class="cmp__grip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7 4 12l5 5M15 7l5 5-5 5"/></svg></span></div>
+  </div>
+</section>
+
+<!-- ═══ PROCESS — sticky pinned (data-olo-note: scroll-pin = NEW tile) ═══ -->
+<section class="st-section st-wrap" data-olo-tile="Section" data-olo-note="scroll-pin sticky = new tile 'PinStack'">
+  <div class="process">
+    <div class="process__head" data-reveal>
+      <p class="st-eyebrow">The method</p>
+      <h2>How we<br/>work</h2>
+      <p class="st-lede">Four phases, zero surprises. We move fast but we never skip the thinking.</p>
+    </div>
+    <div class="process__steps">
+      <div class="step" data-reveal><div class="step__n">01 — Discover</div><h3>Listen &amp; dig</h3><p>Workshops, audits and a lot of questions. We map where the brand is and where it needs to go.</p></div>
+      <div class="step" data-reveal="80"><div class="step__n">02 — Concept</div><h3>Find the idea</h3><p>One sharp territory beats ten safe ones. We pressure-test a single bold direction.</p></div>
+      <div class="step" data-reveal="160"><div class="step__n">03 — Craft</div><h3>Design &amp; move</h3><p>Identity, motion system and components — designed together so everything moves as one.</p></div>
+      <div class="step" data-reveal="240"><div class="step__n">04 — Launch</div><h3>Ship &amp; support</h3><p>Guidelines, files and a launch toolkit. We stay on call for the first run.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COUNTERS (OLObuild · Marketing → Counter) ═══ -->
+<section class="st-section st-wrap" style="padding-block:clamp(40px,6vw,80px)" data-olo-tile="Counter">
+  <div class="counters">
+    <div data-reveal><div class="count__n"><span data-count="180">0</span><span class="suf">+</span></div><div class="count__l">Projects shipped</div></div>
+    <div data-reveal="80"><div class="count__n"><span data-count="24">0</span></div><div class="count__l">Awards &amp; mentions</div></div>
+    <div data-reveal="160"><div class="count__n"><span data-count="60">0</span></div><div class="count__l">Clients worldwide</div></div>
+    <div data-reveal="240"><div class="count__n"><span data-count="11">0</span></div><div class="count__l">Years in motion</div></div>
+  </div>
+</section>
+
+<!-- ═══ SERVICES — editorial hover list (OLObuild · Text → DescList) ═══ -->
+<section class="st-section st-wrap" id="services" data-olo-tile="DescList">
+  <div class="work__head"><h2 data-reveal>What we do</h2></div>
+  <div class="srv-list">
+    <div class="srv-row" data-reveal><span class="srv-row__n">01</span><span class="srv-row__t">Brand Identity</span><span class="srv-row__tags">Naming · Logo · Systems</span></div>
+    <div class="srv-row" data-reveal="60"><span class="srv-row__n">02</span><span class="srv-row__t">Motion Design</span><span class="srv-row__tags">Titles · Loops · Reels</span></div>
+    <div class="srv-row" data-reveal="120"><span class="srv-row__n">03</span><span class="srv-row__t">Web &amp; Interactive</span><span class="srv-row__tags">Sites · Prototypes · Dev</span></div>
+    <div class="srv-row" data-reveal="180"><span class="srv-row__n">04</span><span class="srv-row__t">Art Direction</span><span class="srv-row__tags">Campaigns · Shoots</span></div>
+    <div class="srv-row" data-reveal="240"><span class="srv-row__n">05</span><span class="srv-row__t">3D &amp; CGI</span><span class="srv-row__tags">Product · Worlds · Film</span></div>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══ FOOTER — big CTA (OLObuild · Marketing → CtaBanner + Footer) ═══ -->
+<footer class="foot st-wrap" id="contact" data-olo-tile="CtaBanner">
+  <div class="foot__cta">
+    <p class="st-eyebrow" data-reveal>Got a project in motion?</p>
+    <div class="foot__big" data-reveal="80"><a href="mailto:hello@novastudio.cc">Let’s<br/>talk</a></div>
+    <a class="st-btn st-btn--accent foot__mail" href="mailto:hello@novastudio.cc" data-reveal="160">hello@novastudio.cc
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+  <div class="foot__bottom">
+    <span>© 2026 NOVA Studio — Built with OLObuild</span>
+    <div class="foot__social"><a href="#contact">Instagram</a><a href="#contact">Behance</a><a href="#contact">LinkedIn</a></div>
+    <span>Milan / Remote · 45.46°N, 9.19°E</span>
+  </div>
+</footer>
+
+<script src="studio/app.js"></script>
+</body>
+</html>

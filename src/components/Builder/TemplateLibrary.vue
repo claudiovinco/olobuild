@@ -27,7 +27,7 @@
                   v-model="searchQuery"
                   type="text"
                   :placeholder="t('Cerca template...')"
-                  class="mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-text-xs mb-text-gray-200 mb-pl-8 mb-pr-3 mb-py-1.5 mb-w-48 focus:mb-outline-none focus:mb-border-primary-500 mb-placeholder-gray-500"
+                  class="olo-tpl-search mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-text-xs mb-text-gray-200 mb-pl-8 mb-pr-3 mb-py-1.5 mb-w-48 focus:mb-outline-none focus:mb-border-primary-500 mb-placeholder-gray-500"
                 />
               </div>
               <button @click="close" class="mb-text-gray-400 hover:mb-text-white mb-transition-colors" :aria-label="t('Chiudi')">
@@ -923,5 +923,11 @@ defineExpose({ open, close, visible, openSaveDialog });
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+/* Campo ricerca: garantisce lo spazio a sinistra per l'icona-lente anche se
+   forms.css di WordPress azzera il padding dell'input. SOLO padding, nessun
+   colore del builder toccato. */
+.olo-tpl-search {
+  padding-left: 2rem !important;
 }
 </style>

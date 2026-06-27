@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>OLObuild — Importa tema</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Geologica:wght@500;700;800&family=Anybody:wght@700;800&family=Unbounded:wght@600;800&family=Rozha+One&family=DM+Serif+Display&family=Zilla+Slab:wght@600;700&family=Big+Shoulders+Display:wght@700;800&family=Hanken+Grotesk:wght@600;800&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=EB+Garamond:wght@600&family=Vollkorn:wght@600;700&family=Instrument+Serif&family=Inter:wght@400;500;600;700&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --bg:#0a0f1a; --modal:#0e1626; --modal-2:#0b1320; --panel:#121d31; --panel-2:#16223a;
+    --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.14);
+    --txt:#e7ecf4; --mute:#9aa7bd; --faint:#64718a;
+    --accent:#e8622a; --accent-d:#d4541f; --accent-soft:rgba(232,98,42,.14);
+    --sans:"Inter",-apple-system,sans-serif;
+  }
+  body{background:
+      radial-gradient(120% 80% at 80% -10%, rgba(232,98,42,.06), transparent 60%),
+      var(--bg);
+    font-family:var(--sans); color:var(--txt); -webkit-font-smoothing:antialiased; min-height:100vh; padding:30px 18px;}
+  /* faint builder canvas behind, to feel like a modal */
+  body::before{content:"";position:fixed;inset:0;background:
+      linear-gradient(transparent 0 39px, rgba(255,255,255,.02) 39px 40px),
+      linear-gradient(90deg, transparent 0 39px, rgba(255,255,255,.02) 39px 40px);
+    background-size:40px 40px; opacity:.5; z-index:0; pointer-events:none;}
+
+  .modal{position:relative; z-index:1; max-width:1180px; margin:0 auto; background:var(--modal);
+    border:1px solid var(--line-2); border-radius:18px; overflow:hidden;
+    box-shadow:0 40px 120px -30px rgba(0,0,0,.7), 0 0 0 1px rgba(0,0,0,.4);}
+
+  /* header */
+  .hd{display:flex; align-items:center; gap:16px; padding:22px 26px; border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg, rgba(255,255,255,.025), transparent);}
+  .hd__mark{width:42px;height:42px;border-radius:11px;flex:none;display:grid;place-items:center;
+    background:linear-gradient(140deg,#1b2942,#101a2e); border:1px solid var(--line-2); position:relative;}
+  .hd__mark::before{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(232,98,42,.25);}
+  .hd__mark svg{width:22px;height:22px;color:var(--accent);}
+  .hd__t h1{font-size:19px;font-weight:700;letter-spacing:-.01em;line-height:1.1;}
+  .hd__t p{font-size:13px;color:var(--mute);margin-top:3px;}
+  .hd__x{margin-left:auto;width:36px;height:36px;border-radius:9px;border:1px solid var(--line);background:transparent;
+    color:var(--mute);cursor:pointer;display:grid;place-items:center;transition:all .15s;}
+  .hd__x:hover{background:var(--panel);color:var(--txt);border-color:var(--line-2);}
+  .hd__x svg{width:17px;height:17px;}
+
+  /* body: colonna filtri a sinistra + contenuto a destra */
+  .body{display:flex;align-items:stretch;}
+  .side{width:216px;flex:none;border-right:1px solid var(--line);background:var(--modal-2);
+    padding:16px 14px;display:flex;flex-direction:column;gap:16px;overflow-y:auto;}
+  .search{display:flex;align-items:center;gap:9px;background:var(--modal);border:1px solid var(--line);border-radius:10px;
+    padding:0 12px;height:38px;}
+  .search svg{width:15px;height:15px;color:var(--faint);flex:none;}
+  .search input{background:transparent;border:0;outline:none;color:var(--txt);font-size:13.5px;font-family:inherit;width:100%;}
+  .search input::placeholder{color:var(--faint);}
+  .side__lab{font-size:10px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--faint);padding:0 10px 7px;}
+  .cats{display:flex;flex-direction:column;gap:2px;}
+  .catbtn{position:relative;display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:transparent;
+    border:0;border-radius:9px;padding:9px 11px;cursor:pointer;color:var(--mute);font:600 13px var(--sans);
+    transition:background .14s,color .14s;}
+  .catbtn:hover{background:var(--panel);color:var(--txt);}
+  .catbtn.on{background:var(--accent-soft);color:#fff;box-shadow:inset 3px 0 0 var(--accent);}
+  .catbtn span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .catbtn .n{margin-left:auto;flex:none;font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums;
+    background:var(--modal);border:1px solid var(--line);border-radius:999px;min-width:22px;text-align:center;padding:1px 6px;}
+  .catbtn.on .n{color:#fff;background:var(--accent);border-color:var(--accent);}
+  .main{flex:1;min-width:0;display:flex;flex-direction:column;}
+  .main__top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;border-bottom:1px solid var(--line);}
+  .main__top h2{font-size:14px;font-weight:600;color:var(--txt);}
+  .count{font-size:12.5px;color:var(--faint);white-space:nowrap;font-variant-numeric:tabular-nums;}
+
+  /* grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(244px,1fr));grid-auto-rows:max-content;
+    gap:18px;padding:22px;overflow-y:auto;overflow-x:hidden;max-height:64vh;}
+  .grid::-webkit-scrollbar{width:9px;} .grid::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:5px;}
+  @media(max-width:720px){
+    .body{flex-direction:column;}
+    .side{width:auto;border-right:0;border-bottom:1px solid var(--line);}
+    .cats{flex-direction:row;flex-wrap:wrap;}
+    .catbtn{width:auto;} .catbtn.on{box-shadow:none;}
+    .grid{max-height:none;}
+  }
+
+  .card{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    overflow:hidden;transition:transform .18s cubic-bezier(.2,.7,.3,1), border-color .18s, box-shadow .18s;}
+  .card:hover{transform:translateY(-3px);border-color:var(--line-2);box-shadow:0 22px 48px -28px rgba(0,0,0,.8);}
+  .card.hide{display:none;}
+
+  /* mini preview — a tiny faithful "site" thumbnail */
+  .pv{position:relative;height:172px;flex:none;overflow:hidden;border-bottom:1px solid var(--line);
+    background:var(--c-bg); display:flex;flex-direction:column; padding:13px 14px 0;}
+  .pv__bar{display:flex;align-items:center;gap:6px;margin-bottom:auto;}
+  .pv__logo{width:13px;height:13px;border-radius:4px;background:var(--c-acc);}
+  .pv__nav{display:flex;gap:6px;margin-left:4px;}
+  .pv__nav i{width:18px;height:4px;border-radius:2px;background:var(--c-ink);opacity:.32;}
+  .pv__nav i:first-child{opacity:.6;background:var(--c-acc);}
+  .pv__h{font-family:var(--c-font);font-size:23px;line-height:.98;color:var(--c-ink);letter-spacing:-.01em;
+    max-width:84%;}
+  .pv__h em{font-style:normal;color:var(--c-acc);}
+  .pv__row{display:flex;align-items:center;gap:8px;margin:9px 0 11px;}
+  .pv__btn{height:15px;border-radius:8px;background:var(--c-acc);width:54px;}
+  .pv__line{flex:1;height:5px;border-radius:3px;background:var(--c-ink);opacity:.16;}
+  .pv__sw{position:absolute;right:12px;bottom:11px;display:flex;gap:5px;}
+  .pv__sw i{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);}
+  .pv__zone{position:absolute;left:12px;bottom:11px;display:inline-flex;align-items:center;gap:6px;
+    background:rgba(8,10,16,.52);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
+    border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:4px 9px 4px 8px;
+    font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff;}
+  .pv__zone .d{width:6px;height:6px;border-radius:50%;background:var(--c-acc);}
+  .pv.light .pv__zone{background:rgba(255,255,255,.62);border-color:rgba(0,0,0,.1);color:#1a1a1a;}
+
+  /* card body */
+  .cb{padding:16px 17px 17px;display:flex;flex-direction:column;flex:1;}
+  .cb__cat{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--c-acc);margin-bottom:6px;}
+  .cb__name{font-size:18px;font-weight:700;letter-spacing:-.01em;color:#fff;}
+  .cb__desc{font-size:12.8px;line-height:1.55;color:var(--mute);margin:9px 0 13px;
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+  .cb__tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+  .cb__tags span{font-size:11px;font-weight:500;color:var(--mute);background:var(--modal-2);border:1px solid var(--line);
+    border-radius:6px;padding:3px 9px;}
+  .cb__foot{display:flex;align-items:center;gap:12px;margin-top:auto;}
+  .cb__ver{font-size:11.5px;color:var(--faint);font-variant-numeric:tabular-nums;}
+  .cb__btn{margin-left:auto;display:inline-flex;align-items:center;gap:7px;background:var(--accent);color:#fff;border:0;
+    border-radius:9px;padding:10px 16px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;
+    transition:background .15s, transform .12s;}
+  .cb__btn:hover{background:var(--accent-d);transform:translateY(-1px);}
+  .cb__btn svg{width:14px;height:14px;}
+
+  .empty{grid-column:1/-1;text-align:center;color:var(--faint);font-size:14px;padding:50px 0;display:none;}
+  .empty.show{display:block;}
+</style>
+</head>
+<body>
+<div class="modal" data-screen-label="Import temi">
+  <div class="hd">
+    <span class="hd__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1-.24-.27-.39-.62-.39-1 0-.83.67-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.42-4.03-8-9-8z"/><circle cx="7.5" cy="11.5" r="1.2" fill="currentColor"/><circle cx="12" cy="8" r="1.2" fill="currentColor"/><circle cx="16.5" cy="11.5" r="1.2" fill="currentColor"/></svg></span>
+    <div class="hd__t">
+      <h1>Temi Olobuild</h1>
+      <p>Scegli un tema: configura colori, font e sezioni del sito in un click.</p>
+    </div>
+    <button class="hd__x" aria-label="Chiudi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  </div>
+
+  <div class="body">
+    <aside class="side">
+      <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Cerca un tema…" data-search/></label>
+      <div>
+        <div class="side__lab">Categorie</div>
+        <div class="cats" data-cats></div>
+      </div>
+    </aside>
+    <div class="main">
+      <div class="main__top"><h2 data-title>Tutti i temi</h2><span class="count" data-count></span></div>
+      <div class="grid" data-grid>
+        <div class="empty" data-empty>Nessun tema per questi filtri.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const THEMES = [
+  { name:'Capital Row', cat:'Consulting & Finance', font:'"Source Serif 4",serif', bg:'#10162c', ink:'#eef1fb', acc:'#7b6cf6', pal:['#7b6cf6','#a99cff','#1c2748','#eef1fb'], zone:'Projector', tags:['consulting','finance','venture','vc'], desc:'Early-stage venture & growth fund. Indigo profondo + violet, Source Serif 4, zona Projector (montante IRR).' },
+  { name:'Sterling', cat:'Consulting & Finance', font:'"EB Garamond",serif', bg:'#0f1a14', ink:'#f0ead8', acc:'#c8a24a', pal:['#c8a24a','#e3c878','#16271d','#f0ead8'], zone:'Projector', tags:['wealth','finance','professional'], desc:'Private wealth management. Scuro verde + oro, EB Garamond, zona Projector. Riproduzione fedele dell\u2019OLOtheme.' },
+  { name:'Forge', cat:'Software & Tech', font:'"Geologica",sans-serif', bg:'#121212', ink:'#f4f4f4', acc:'#ff6a2b', pal:['#ff6a2b','#b6e85a','#1c1c1c','#f4f4f4'], zone:'Contrast', tags:['devtools','ci','platform'], desc:'Developer tools / build platform. Nero + arancio, Geologica + mono, zona ContrastChecker (WCAG).' },
+  { name:'Prisma', cat:'Creative', font:'"Anybody",sans-serif', bg:'#160a24', ink:'#f1e9f7', acc:'#c14bff', pal:['#c14bff','#4be0ff','#241338','#f1e9f7'], zone:'Palette', tags:['agency','branding','digital'], desc:'Brand & digital agency. Ink + magenta, Anybody, zone Mixer + PaletteHarmony (genera palette).' },
+  { name:'Soundwave', cat:'Artist', font:'"Unbounded",sans-serif', bg:'#0c0c10', ink:'#ffffff', acc:'#27e0a3', pal:['#27e0a3','#ff5d9e','#16161d','#ffffff'], zone:'Sequencer', tags:['music','producer','artist'], desc:'Musician & producer. Dark + mint neon, Unbounded, zona StepSequencer (drum machine Web Audio).' },
+  { name:'Bloom', cat:'Beauty & Fashion', font:'"Rozha One",serif', bg:'#3a2230', ink:'#f6e9ec', acc:'#e7a0b4', pal:['#e7a0b4','#e3b778','#4d2f40','#f6e9ec'], zone:'Routine', tags:['cosmetics','colour','e-com'], desc:'Cosmetics & colour. Prugna + rosa, Rozha One, zona LookbookMixer (componi la tua routine).' },
+  { name:'Saffron', cat:'Food & Drink', light:true, font:'"DM Serif Display",serif', bg:'#f6efe2', ink:'#241a16', acc:'#c75d3a', pal:['#c75d3a','#e0a23a','#efe6d4','#241a16'], zone:'Floor plan', tags:['restaurant','dining'], desc:'Ristorante. Crema + zafferano/terracotta, DM Serif Display, zone Finder + FloorPlanPicker (scegli il tavolo).' },
+  { name:'Tavola', cat:'Food & Drink', light:true, font:'"Zilla Slab",serif', bg:'#f4e9dc', ink:'#2a1512', acc:'#d6552f', pal:['#d6552f','#6c6a3d','#ecdfcd','#2a1512'], zone:'Recipe', tags:['trattoria','italian'], desc:'Trattoria di famiglia. Crema + terracotta, Zilla Slab, zone Builder + RecipeScaler (la ricetta in scala).' },
+  { name:'Cadence', cat:'Health & Fitness', font:'"Big Shoulders Display",sans-serif', bg:'#1a1d24', ink:'#ffffff', acc:'#ff6b54', pal:['#ff6b54','#5ec8d8','#252932','#ffffff'], zone:'Availability', tags:['coach','training'], desc:'Personal trainer & coach. Carbone + corallo, Big Shoulders, zone Finder + AvailabilityHeat (la tua settimana).' },
+  { name:'Mercato', cat:'E-commerce', light:true, font:'"Hanken Grotesk",sans-serif', bg:'#f5f2ec', ink:'#141414', acc:'#e1474f', pal:['#e1474f','#1f1f1f','#ebe6dd','#141414'], zone:'360\u00b0', tags:['shop','marketplace'], desc:'Concept store. Carta + rosso brand, Hanken Grotesk, zone Builder + SpinViewer (gira il prodotto a 360\u00b0).' },
+  { name:'Mono', cat:'Creative', light:true, font:'"DM Sans",sans-serif', bg:'#f2efe8', ink:'#18181a', acc:'#18181a', pal:['#18181a','#8a8780','#e3ddcf','#18181a'], zone:'Type tester', tags:['portfolio','swiss','minimal'], desc:'Designer indipendente. Monocromo svizzero, DM Sans variabile, zona TypeTester (specimen editabile).' },
+  { name:'Voyage', cat:'Travel', font:'"Vollkorn",serif', bg:'#0c1320', ink:'#eef2f7', acc:'#ff8c69', pal:['#ff8c69','#8fb0c8','#16202f','#eef2f7'], zone:'Route', tags:['journal','editorial'], desc:'Travel journal. Navy editoriale + corallo, Vollkorn, zona RouteScrubber (segui la rotta tappa per tappa).' },
+  { name:'Fjordline', cat:'Travel', font:'"Instrument Serif",serif', bg:'#0e1c2c', ink:'#eef4f8', acc:'#8fc7e0', pal:['#8fc7e0','#e9b04a','#16293a','#eef4f8'], zone:'Projector', tags:['expedition','small-group'], desc:'Spedizioni in piccoli gruppi. Teal profondo + ghiaccio, Instrument Serif, zone Finder + Projector (budget).' },
+  { name:'Relay OS', cat:'Software & Tech', font:'"Geologica",sans-serif', bg:'#080b0f', ink:'#e6edf3', acc:'#3fb950', pal:['#3fb950','#d9a441','#161b22','#e6edf3'], zone:'Time zones', tags:['automation','ops'], desc:'Piattaforma di automazione. GitHub-dark + verde, mono, zone Finder + TimezonePlanner (orari multi-citt\u00e0).' },
+  { name:'Honeycomb', cat:'Food & Drink', light:true, font:'"DM Serif Display",serif', bg:'#fbf5e7', ink:'#3a2a14', acc:'#e09a18', pal:['#e09a18','#9a6b1f','#f1e6cd','#3a2a14'], zone:"Baker's %", tags:['bakery','artisan'], desc:'Panificio artigianale. Toni miele caldi, zone Builder + BakersCalc (idratazione in percentuale del fornaio).' },
+  { name:'Maison', cat:'Home & Living', font:'"Vollkorn",serif', bg:'#211a14', ink:'#f1e9df', acc:'#a9794f', pal:['#a9794f','#c8b89e','#33291f','#f1e9df'], zone:'Finder', tags:['interiors','studio'], desc:'Studio d\u2019interni. Legno caldo + crema, serif elegante, zona Finder (trova la stanza giusta).' },
+  { name:'Linea', cat:'Beauty & Fashion', font:'"Anybody",sans-serif', bg:'#171515', ink:'#f3efe9', acc:'#b89b74', pal:['#b89b74','#d8c7ab','#241f1f','#f3efe9'], zone:'Finder', tags:['fashion','editorial'], desc:'Moda editoriale. Nero caldo + sabbia, sans contemporaneo, zona Finder (curated edit).' },
+  { name:'Circuit', cat:'Software & Tech', font:'"Hanken Grotesk",sans-serif', bg:'#0c1018', ink:'#e8eef6', acc:'#1e87f0', pal:['#1e87f0','#5ed0c0','#141b27','#e8eef6'], zone:'Builder', tags:['saas','b2b'], desc:'SaaS B2B. Blu tech su scuro, Hanken Grotesk, zona Builder (componi il tuo piano).' },
+];
+
+const CATS = ['Tutti', ...Array.from(new Set(THEMES.map(t=>t.cat)))];
+const grid = document.querySelector('[data-grid]');
+const empty = document.querySelector('[data-empty]');
+const catsEl = document.querySelector('[data-cats]');
+const countEl = document.querySelector('[data-count]');
+const titleEl = document.querySelector('[data-title]');
+const searchEl = document.querySelector('[data-search]');
+let activeCat = 'Tutti', q = '';
+const catBtns = {};
+
+CATS.forEach((c,i)=>{
+  const b=document.createElement('button'); b.className='catbtn'+(i===0?' on':'');
+  b.innerHTML = `<span>${c==='Tutti'?'Tutti i temi':c}</span><span class="n"></span>`;
+  b.onclick=()=>{ activeCat=c; Object.values(catBtns).forEach(x=>x.classList.remove('on')); b.classList.add('on'); render(); };
+  catsEl.appendChild(b); catBtns[c]=b;
+});
+
+function card(t){
+  const el=document.createElement('article'); el.className='card';
+  el.style.setProperty('--c-bg',t.bg); el.style.setProperty('--c-ink',t.ink);
+  el.style.setProperty('--c-acc',t.acc); el.style.setProperty('--c-font',t.font);
+  const sw=t.pal.map(c=>`<i style="background:${c}"></i>`).join('');
+  el.innerHTML=`
+    <div class="pv${t.light?' light':''}">
+      <div class="pv__bar"><span class="pv__logo"></span><span class="pv__nav"><i></i><i></i><i></i></span></div>
+      <div class="pv__h">${t.name} <em>studio</em></div>
+      <div class="pv__row"><span class="pv__btn"></span><span class="pv__line"></span></div>
+      ${t.zone?`<span class="pv__zone"><span class="d"></span>${t.zone}</span>`:''}
+      <span class="pv__sw">${sw}</span>
+    </div>
+    <div class="cb">
+      <div class="cb__cat">${t.cat}</div>
+      <div class="cb__name">${t.name}</div>
+      <p class="cb__desc">${t.desc}</p>
+      <div class="cb__tags">${t.tags.map(x=>`<span>${x}</span>`).join('')}</div>
+      <div class="cb__foot">
+        <span class="cb__ver">v1.0.0</span>
+        <button class="cb__btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>Importa tema</button>
+      </div>
+    </div>`;
+  return el;
+}
+
+function render(){
+  grid.querySelectorAll('.card').forEach(c=>c.remove());
+  const bySearch = THEMES.filter(t=> !q || (t.name+' '+t.cat+' '+t.tags.join(' ')+' '+t.desc).toLowerCase().includes(q));
+  CATS.forEach(c=>{
+    const n = c==='Tutti' ? bySearch.length : bySearch.filter(t=>t.cat===c).length;
+    catBtns[c].querySelector('.n').textContent = n;
+  });
+  const list = bySearch.filter(t=> activeCat==='Tutti' || t.cat===activeCat);
+  list.forEach(t=>grid.appendChild(card(t)));
+  empty.classList.toggle('show', list.length===0);
+  titleEl.textContent = activeCat==='Tutti' ? 'Tutti i temi' : activeCat;
+  countEl.textContent = list.length+' '+(list.length===1?'tema':'temi');
+}
+searchEl.addEventListener('input',e=>{ q=e.target.value.trim().toLowerCase(); render(); });
+render();
+</script>
+</body>
+</html>

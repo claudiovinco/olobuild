@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>OLObuild — Tile Timeline (ricca)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{
+    --red:#e1474f;--red-soft:#fef2f3;--amber:#f4a23b;--navy:#16263d;--ink:#1f2937;--mute:#6b7280;--faint:#94a3b8;
+    --surface-alt:#f6f7f9;--border:#e5e7eb;--line:#e6dfd1;--bg:#f6f1e8;--card:#ffffff;
+    --ui:#e8622a;--ui-bar:#2b3340;
+    --sans:"Work Sans",-apple-system,sans-serif;--disp:"Instrument Serif",Georgia,serif;--mono:"JetBrains Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1000px;margin:0 auto;padding:52px 32px 120px;}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+  h1{font-family:var(--disp);font-weight:400;font-size:clamp(40px,5.5vw,60px);line-height:1;letter-spacing:-.02em;color:var(--navy);margin:0 0 14px;}
+  h1 em{font-style:italic;color:var(--red);}
+  .lead{font-size:16px;color:var(--mute);max-width:74ch;margin:0 0 6px;line-height:1.55;}
+  .lead b{color:var(--navy);font-weight:600;}
+
+  /* toolbar */
+  .toolbar{display:flex;flex-wrap:wrap;gap:18px 26px;align-items:flex-end;margin:30px 0 18px;padding:16px 20px;background:#fff;border:1px solid var(--line);border-radius:13px;}
+  .ctrl{display:flex;flex-direction:column;gap:7px;}
+  .ctrl .cl{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);}
+  .seg{display:inline-flex;background:var(--ui-bar);border-radius:9px;padding:3px;gap:2px;}
+  .seg button{appearance:none;border:0;background:transparent;font:600 12px var(--sans);color:rgba(255,255,255,.82);padding:6px 12px;border-radius:6px;cursor:pointer;line-height:1;transition:color .12s;}
+  .seg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(16,24,40,.22);}
+
+  /* canvas */
+  .canvas{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:clamp(34px,5vw,60px) clamp(26px,5vw,64px);box-shadow:0 24px 60px -34px rgba(22,38,61,.28);}
+  .canvas-head{margin-bottom:38px;}
+  .canvas-head .ek{font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--red);margin-bottom:10px;}
+  .canvas-head h2{font-family:var(--disp);font-weight:400;font-size:clamp(30px,4vw,42px);line-height:1.02;letter-spacing:-.01em;color:var(--navy);margin:0;}
+
+  /* ── timeline tile ── */
+  .tl{position:relative;max-width:680px;}
+  .tl-track{position:absolute;left:90px;top:8px;bottom:14px;width:2px;border-radius:2px;background:var(--border);}
+  .tl-prog{position:absolute;left:90px;top:8px;width:2px;border-radius:2px;height:0;background:var(--red);box-shadow:0 0 10px rgba(225,71,79,.5);}
+  .tl.line-solid .tl-track{background:var(--red);}
+  .tl.line-grad  .tl-track{background:linear-gradient(180deg,var(--red),var(--amber));}
+  .tl.line-prog  .tl-track{background:var(--border);}
+  .tl:not(.line-prog) .tl-prog{display:none;}
+
+  .ev{display:grid;grid-template-columns:76px 1fr;gap:38px;position:relative;padding-bottom:38px;}
+  .ev:last-child{padding-bottom:4px;}
+  .ev-year{font-family:var(--disp);font-weight:400;font-size:30px;line-height:1;color:var(--red);text-align:right;padding-top:1px;}
+  .ev-node{position:absolute;left:77px;top:-3px;width:28px;height:28px;border-radius:50%;background:#fff;border:2px solid var(--red);color:var(--red);display:grid;place-items:center;z-index:2;transition:transform .2s cubic-bezier(.2,.8,.2,1),border-color .25s,background .25s,color .25s;}
+  .ev-node .num{font:700 11px var(--mono);}
+  .ev-node .ic{display:none;}.ev-node .ic svg{width:14px;height:14px;display:block;}
+  .ev-node .pip{width:9px;height:9px;border-radius:50%;background:var(--red);display:none;}
+  /* node modes */
+  .tl.nodes-dot .ev-node{width:18px;height:18px;left:82px;top:2px;}
+  .tl.nodes-dot .ev-node .num,.tl.nodes-dot .ev-node .ic{display:none;}
+  .tl.nodes-dot .ev-node .pip{display:block;}
+  .tl.nodes-icon .ev-node .num{display:none;}
+  .tl.nodes-icon .ev-node .ic{display:grid;place-items:center;}
+  /* progress fill colouring */
+  .tl.line-prog .ev-node{border-color:var(--border);color:var(--faint);background:#fff;}
+  .tl.line-prog .ev-node .pip{background:var(--faint);}
+  .tl.line-prog .ev.reached .ev-node{border-color:var(--red);color:var(--red);background:#fff;}
+  .tl.line-prog .ev.reached .ev-node .pip{background:var(--red);}
+  .tl.line-prog .ev.active .ev-node{background:var(--red);color:#fff;border-color:var(--red);}
+  .tl.line-prog .ev.active .ev-node .pip{background:#fff;}
+
+  .ev-card{background:#fff;border:1px solid #eef0f3;border-radius:13px;padding:16px 18px;transition:transform .2s,box-shadow .2s,border-color .2s;}
+  .ev:hover .ev-card{transform:translateY(-3px);box-shadow:0 16px 32px -16px rgba(22,38,61,.26);border-color:color-mix(in srgb,var(--red) 32%,#eef0f3);}
+  .ev:hover .ev-node{transform:scale(1.14);}
+  .ev-top{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+  .ev-top h4{font-size:18px;font-weight:600;color:var(--navy);margin:0;letter-spacing:-.01em;}
+  .ev-tag{margin-left:auto;font:500 10px var(--mono);color:var(--mute);background:var(--surface-alt);border:1px solid #eef0f3;border-radius:99px;padding:3px 8px;flex:none;}
+  .ev-yk{display:none;font-family:var(--disp);font-size:19px;color:var(--red);margin-bottom:3px;line-height:1;}
+  .ev-card p{margin:0;font-size:14.5px;line-height:1.5;color:var(--mute);}
+
+  /* ── entrance (visible end-state is the base; hide only pre-reveal, animate IN) ── */
+  @media(prefers-reduced-motion:no-preference){
+    .tl.js.in-slide .ev:not(.in){opacity:0;transform:translateY(24px);}
+    .tl.js.in-slide .ev.in{animation:tlIn .6s cubic-bezier(.2,.7,.2,1) calc(var(--i) * 60ms) backwards;}
+    .tl.js.in-pop .ev:not(.in) .ev-card{opacity:0;transform:translateY(10px);}
+    .tl.js.in-pop .ev.in .ev-card{animation:tlInUp .5s ease calc(var(--i) * 60ms + 60ms) backwards;}
+    .tl.js.in-pop .ev:not(.in) .ev-node{transform:scale(0);}
+    .tl.js.in-pop .ev.in .ev-node{animation:tlPop .55s cubic-bezier(.2,1.5,.4,1) calc(var(--i) * 60ms) backwards;}
+    /* active pulse */
+    .ev.active .ev-node::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:2px solid var(--red);opacity:.55;animation:tlPulse 1.9s ease-out infinite;}
+  }
+  @keyframes tlIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+  @keyframes tlInUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @keyframes tlPop{from{transform:scale(0)}to{transform:scale(1)}}
+  @keyframes tlPulse{0%{transform:scale(.8);opacity:.6}70%{transform:scale(1.5);opacity:0}100%{opacity:0}}
+
+  /* ── alternato ── */
+  .tl.alt{max-width:760px;margin-inline:auto;}
+  .tl.alt .tl-track,.tl.alt .tl-prog{left:50%;margin-left:-1px;}
+  .tl.alt .ev{grid-template-columns:1fr 1fr;gap:0;}
+  .tl.alt .ev-year{display:none;}
+  .tl.alt .ev-node{left:50%;margin-left:-14px;}
+  .tl.alt.nodes-dot .ev-node{margin-left:-9px;}
+  .tl.alt .ev-yk{display:block;}
+  .tl.alt .ev:nth-child(odd) .ev-card{grid-column:1;margin-right:46px;text-align:right;}
+  .tl.alt .ev:nth-child(odd) .ev-top{flex-direction:row-reverse;}
+  .tl.alt .ev:nth-child(odd) .ev-top h4{margin-left:0;}
+  .tl.alt .ev:nth-child(odd) .ev-tag{margin-left:0;margin-right:auto;}
+  .tl.alt .ev:nth-child(even) .ev-card{grid-column:2;margin-left:46px;}
+
+  .legend{margin-top:30px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px 26px;}
+  .legend .li{font-size:13px;line-height:1.5;color:var(--mute);}
+  .legend .li b{color:var(--navy);font-weight:600;}
+  .legend .li code{font-family:var(--mono);font-size:11.5px;color:#15803d;}
+  .note{margin-top:24px;font-size:13px;color:var(--faint);line-height:1.5;}
+  .note code{font-family:var(--mono);font-size:12px;color:var(--mute);}
+  @media(max-width:720px){.legend{grid-template-columns:1fr;}.tl.alt .ev{grid-template-columns:1fr;}.tl.alt .ev-card{grid-column:1!important;margin:0 0 0 46px!important;text-align:left!important;}.tl.alt .tl-track,.tl.alt .tl-prog{left:14px;margin-left:0;}.tl.alt .ev-node{left:1px;margin-left:0;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">OLObuild · tile · Dynamic → EventList</div>
+  <h1>Tile <em>Timeline</em></h1>
+  <p class="lead">La timeline di oggi è una lista statica: anno, puntino, riga grigia. Qui diventa una tile <b>viva</b> — linea che si disegna mentre scorri, nodi che si accendono, ingresso a cascata, hover con sollevamento. <b>Prova gli effetti dalla barra</b>: ognuno è un'opzione della tile (chiavi additive, nessun rename).</p>
+
+  <div class="toolbar">
+    <div class="ctrl"><span class="cl">Nodo</span><div class="seg" data-group="node"><button data-v="num" class="on">Numero</button><button data-v="dot">Punto</button><button data-v="icon">Icona</button></div></div>
+    <div class="ctrl"><span class="cl">Linea</span><div class="seg" data-group="line"><button data-v="prog" class="on">Scroll</button><button data-v="solid">Piena</button><button data-v="grad">Gradiente</button></div></div>
+    <div class="ctrl"><span class="cl">Ingresso</span><div class="seg" data-group="in"><button data-v="slide" class="on">Slide</button><button data-v="pop">Pop</button><button data-v="off">Off</button></div></div>
+    <div class="ctrl"><span class="cl">Layout</span><div class="seg" data-group="layout"><button data-v="std" class="on">Standard</button><button data-v="alt">Alternato</button></div></div>
+  </div>
+
+  <div class="canvas">
+    <div class="canvas-head">
+      <p class="ek">Il percorso</p>
+      <h2>Da una riga di codice<br/>a un linguaggio.</h2>
+    </div>
+
+    <div class="tl nodes-num line-prog in-slide" id="tl">
+      <span class="tl-track"></span>
+      <span class="tl-prog" id="prog"></span>
+
+      <div class="ev" style="--i:0">
+        <span class="ev-year">2019</span>
+        <span class="ev-node"><span class="num">01</span><span class="pip"></span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg></span></span>
+        <div class="ev-card">
+          <span class="ev-yk">2019</span>
+          <div class="ev-top"><h4>Prima riga di codice</h4><span class="ev-tag">v0.1</span></div>
+          <p>Nasce il prototipo del builder: drag-and-drop nativo dentro WordPress, senza shortcode.</p>
+        </div>
+      </div>
+
+      <div class="ev" style="--i:1">
+        <span class="ev-year">2021</span>
+        <span class="ev-node"><span class="num">02</span><span class="pip"></span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg></span></span>
+        <div class="ev-card">
+          <span class="ev-yk">2021</span>
+          <div class="ev-top"><h4>Libreria tile v1</h4><span class="ev-tag">v1.0</span></div>
+          <p>40 tile native e il sistema di colori globali. Pubblicati i primi mille siti reali.</p>
+        </div>
+      </div>
+
+      <div class="ev" style="--i:2">
+        <span class="ev-year">2023</span>
+        <span class="ev-node"><span class="num">03</span><span class="pip"></span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.1 5.5L20 9l-4.5 3.8L17 19l-5-3-5 3 1.5-6.2L4 9l5.9-.5z"/></svg></span></span>
+        <div class="ev-card">
+          <span class="ev-yk">2023</span>
+          <div class="ev-top"><h4>Effetti &amp; animazioni</h4><span class="ev-tag">v2.5</span></div>
+          <p>Aurora, bagliori e transizioni native. La libreria supera le 150 tile riusabili.</p>
+        </div>
+      </div>
+
+      <div class="ev" style="--i:3">
+        <span class="ev-year">2026</span>
+        <span class="ev-node"><span class="num">04</span><span class="pip"></span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+        <div class="ev-card">
+          <span class="ev-yk">2026</span>
+          <div class="ev-top"><h4>240 tile, un linguaggio</h4><span class="ev-tag">v4.0</span></div>
+          <p>Sistema "bello &amp; coerente" esteso a tutte le tile e ai controlli dell'inspector.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="li"><b>Linea che si disegna</b> — in modalità <code>scroll</code> il tratto si riempie e i nodi si accendono via via che li raggiungi; il nodo di testa pulsa.</div>
+    <div class="li"><b>Ingresso a cascata</b> — gli eventi entrano in sequenza (<code>slide</code> o <code>pop</code>) quando la tile compare; rispetta <code>reduced-motion</code>.</div>
+    <div class="li"><b>Hover vivo</b> — la card si solleva con ombra e il nodo cresce: feedback su ogni tappa.</div>
+    <div class="li"><b>Nodi flessibili</b> — numero, punto o icona; stessa griglia, stesso colore-token (Primario).</div>
+  </div>
+  <p class="note">Mappa sulle opzioni tile EventList (chiavi additive, nessun rename): <code>tl_node</code> (num·dot·icon) · <code>tl_line</code> (prog·solid·grad) · <code>tl_reveal</code> (slide·pop·off) · <code>tl_layout</code> (std·alt) · <code>tl_pulse</code>. Colori dai ruoli globali del cliente.</p>
+</div>
+
+<script>
+(function(){
+  var tl = document.getElementById('tl');
+  var prog = document.getElementById('prog');
+  var evs = Array.prototype.slice.call(tl.querySelectorAll('.ev'));
+  tl.classList.add('js');
+
+  // toolbar
+  document.querySelectorAll('.seg').forEach(function(seg){
+    var group = seg.getAttribute('data-group');
+    seg.addEventListener('click', function(e){
+      var b = e.target.closest('button'); if(!b) return;
+      seg.querySelectorAll('button').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');
+      var v = b.getAttribute('data-v');
+      if(group==='node'){ setClass('nodes-', {num:'nodes-num',dot:'nodes-dot',icon:'nodes-icon'}[v]); }
+      if(group==='line'){ setClass('line-', {prog:'line-prog',solid:'line-solid',grad:'line-grad'}[v]); update(); }
+      if(group==='in'){ setClass('in-', {slide:'in-slide',pop:'in-pop',off:'in-off'}[v]); replay(); }
+      if(group==='layout'){ tl.classList.toggle('alt', v==='alt'); requestAnimationFrame(update); }
+    });
+  });
+  function setClass(prefix, cls){
+    tl.className.split(' ').forEach(function(c){ if(c.indexOf(prefix)===0) tl.classList.remove(c); });
+    tl.classList.add(cls);
+  }
+
+  // entrance reveal (IO + scroll fallback)
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); } });
+  }, {threshold:.2});
+  evs.forEach(function(ev){ io.observe(ev); });
+  function revealInView(){
+    evs.forEach(function(ev){
+      var r = ev.getBoundingClientRect();
+      if(r.top < innerHeight*0.88 && r.bottom > 0) ev.classList.add('in');
+    });
+  }
+  function replay(){
+    evs.forEach(function(ev){ ev.classList.remove('in'); });
+    void tl.offsetWidth;
+    revealInView();
+  }
+
+  // scroll-linked progress line + node lighting
+  function update(){
+    revealInView();
+    if(!tl.classList.contains('line-prog')){
+      evs.forEach(function(ev){ ev.classList.remove('reached','active'); });
+      return;
+    }
+    var r = tl.getBoundingClientRect();
+    var play = innerHeight*0.55;                 // playhead Y
+    var fill = Math.max(0, Math.min(r.height, play - r.top));
+    var topOff = 8;
+    prog.style.height = Math.max(0, fill - topOff) + 'px';
+    var lastReached = -1;
+    evs.forEach(function(ev, i){
+      var nr = ev.querySelector('.ev-node').getBoundingClientRect();
+      var center = (nr.top + nr.height/2) - r.top;
+      var on = center <= fill;
+      ev.classList.toggle('reached', on);
+      ev.classList.remove('active');
+      if(on) lastReached = i;
+    });
+    if(lastReached>=0) evs[lastReached].classList.add('active');
+  }
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+</body>
+</html>

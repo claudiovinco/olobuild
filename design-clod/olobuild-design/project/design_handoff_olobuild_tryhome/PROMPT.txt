@@ -1,0 +1,19 @@
+Leggi START_HERE.md e segui il protocollo. Stiamo lavorando sul repo claudiovinco/olobuild (branch main, stack Vue 3 + Pinia + PHP).
+
+Obiettivo: rendere NATIVI in OLObuild i tre effetti della landing "Try", come capacità riusabili (non CSS incollato in una pagina):
+
+1) Nuovo TIPO DI SFONDO "Bagliori" (glow) — aloni radiali morbidi + grana, colore dal primario globale del cliente. Implementalo come gemello del tipo "pattern": porta prototype/glowCSS.js in src/utils/glowCSS.js, aggiungi il tipo in BackgroundControls.vue (types, defaultBg, blocco controllo, preview), il ramo in useBackgroundStyle.js (buildBgStyle + bgInlineStyle) e la copia PHP in class-frontend-renderer.php (build_glow_css). Deve valere per sfondo di PAGINA e di SEZIONE.
+
+2) Feature di tile "Stato live": toggle sulla tile Badge/Etichetta che mostra un pallino verde (o primario) con onda che pulsa. Pseudo-elemento ::after + @keyframes olo-pulse registrato una sola volta (frontend + canvas). Rispetta prefers-reduced-motion.
+
+3) Nuova ANIMAZIONE LOOP "Galleggiamento" accanto alle 36 d'ingresso: @keyframes olo-float, parametri durata/ampiezza, chiave nuova anim_loop separata da anim_in. La sovrapposizione tile-su-immagine è già possibile (posizione assoluta in Avanzate) — vai solo documentata.
+
+Dettagli, codice e punti d'inserimento esatti in EFFECTS_SPEC.md. Riferimento visivo del risultato atteso: REFERENCE_effects.html.
+
+Vincoli NON negoziabili:
+- Chiavi salvate solo ADDITIVE: non rinominare/rimuovere type, overlay_*, pattern_*, anim_in. I template esistenti devono restare identici.
+- Colori dai ruoli globali (var(--olo-color-primary), seed #e1474f). Zero hex hardcoded nei componenti, zero emoji.
+- Non toccare l'arancio #e8622a del chrome dell'inspector: questi effetti sono CONTENUTO di pagina.
+- Tieni allineate le 3 rese dello sfondo (preview Vue, canvas, PHP).
+
+Procedi nell'ordine 1 → 2 → 3 e spunta la Definition of Done in START_HERE.md.

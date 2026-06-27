@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>The Dispatch — Independent news &amp; reporting</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="The Dispatch — independent reporting on politics, culture, business and the world."/>
+<link rel="stylesheet" href="olothemes/dispatch.css"/>
+</head>
+<body data-screen-label="Dispatch — Home">
+
+<!-- ═══ TICKER (OLObuild · NEW tile → TickerBar) ═══ -->
+<div class="dp-ticker" data-olo-tile="TickerBar" data-olo-note="NEW tile candidate: TickerBar">
+  <div class="dp-wrap dp-ticker__in">
+    <span class="dp-ticker__lab">Breaking</span>
+    <div class="dp-ticker__track" data-marquee>
+      <span>Central bank holds rates for a third straight meeting</span>
+      <span>City council approves the riverside transit plan</span>
+      <span>National side names squad ahead of the qualifier</span>
+      <span>Markets edge higher as energy prices cool</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MASTHEAD (OLObuild · Navigation → Masthead) ═══ -->
+<header class="dp-mast" data-olo-tile="Masthead">
+  <div class="dp-wrap dp-mast__top">
+    <span class="dp-mast__date">Friday, 6 March 2026 · Milan</span>
+    <a class="dp-logo" href="#top">The Dispatch</a>
+    <div class="dp-mast__act"><a href="#" class="byline">Sign in</a><a href="#newsletter" class="btn btn--red">Subscribe</a></div>
+  </div>
+</header>
+<nav class="dp-nav" data-olo-tile="Navmenu">
+  <div class="dp-wrap dp-nav__in">
+    <a href="#" class="on">Home</a><a href="#latest">Politics</a><a href="#culture">Culture</a><a href="#">Business</a><a href="#">World</a><a href="#">Sport</a><a href="#">Opinion</a>
+  </div>
+</nav>
+
+<main id="top">
+
+<!-- ═══ FEATURED STORY (OLObuild · NEW tile → FeaturedStory) ═══
+     data-olo-note: split lead story (large media + kicker + deck + byline) beside a ranked
+     "most read" sidebar list. Not in current tile set → candidate NEW tile "FeaturedStory". -->
+<section class="dp-wrap dp-feat" data-olo-tile="FeaturedStory" data-olo-note="NEW tile candidate: FeaturedStory">
+  <article class="dp-lead" data-reveal>
+    <div class="media" data-label="lead story photo — full width"></div>
+    <span class="kicker">Politics · Analysis</span>
+    <h2>Inside the budget deal that almost didn't happen</h2>
+    <p>For seventy-two hours the talks looked dead. Then a late-night compromise on housing rewrote the maths — and the coalition with it. We reconstruct the week.</p>
+    <div class="byline">By Elena Marchetti · 12 min read</div>
+  </article>
+  <aside class="dp-side" data-reveal="120">
+    <div class="dp-side__h">Most read</div>
+    <a class="dp-si" href="#"><span class="n">1</span><span><span class="kicker">Business</span><h3>The quiet boom in small-town manufacturing</h3></span></a>
+    <a class="dp-si" href="#"><span class="n">2</span><span><span class="kicker">Culture</span><h3>How a forgotten film became this year's obsession</h3></span></a>
+    <a class="dp-si" href="#"><span class="n">3</span><span><span class="kicker">World</span><h3>The border town learning to live with the river</h3></span></a>
+    <a class="dp-si" href="#"><span class="n">4</span><span><span class="kicker">Sport</span><h3>A coach, a comeback, and one impossible season</h3></span></a>
+  </aside>
+</section>
+
+<!-- ═══ LATEST — article grid (OLObuild · NEW tile → ArticleGrid) ═══ -->
+<section class="dp-sec" id="latest" data-olo-tile="ArticleGrid" data-olo-note="NEW tile candidate: ArticleGrid">
+  <div class="dp-wrap">
+    <div class="sec-head"><h2>Latest</h2><span class="rule"></span><a href="#" class="more">All stories →</a></div>
+    <div class="art-grid">
+      <article class="art" data-reveal><a href="OLOtheme - Dispatch - Article.html"><div class="media" data-label="photo"></div></a><span class="kicker">Politics</span><h3>What the new housing bill actually changes</h3><p>A clause-by-clause read of the plan landing next week.</p><div class="byline">Tomas Rein · 6 min</div></article>
+      <article class="art" data-reveal="70"><a href="OLOtheme - Dispatch - Article.html"><div class="media" data-label="photo"></div></a><span class="kicker">Business</span><h3>Why the energy market just blinked</h3><p>Prices cooled overnight. The reasons are messier than they look.</p><div class="byline">Priya Anand · 5 min</div></article>
+      <article class="art" data-reveal="140"><a href="OLOtheme - Dispatch - Article.html"><div class="media" data-label="photo"></div></a><span class="kicker">Science</span><h3>The lab quietly rewriting battery chemistry</h3><p>Inside a small team with an outsized claim.</p><div class="byline">Marco Villa · 9 min</div></article>
+      <article class="art" data-reveal="210"><a href="OLOtheme - Dispatch - Article.html"><div class="media" data-label="photo"></div></a><span class="kicker">World</span><h3>A city votes to slow itself down</h3><p>The 15-minute idea gets its biggest test yet.</p><div class="byline">Sofia Klein · 7 min</div></article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CULTURE band (dark) (OLObuild · Dynamic → PostList) ═══ -->
+<section class="dp-sec dp-band" id="culture" data-olo-tile="PostList">
+  <div class="dp-wrap">
+    <div class="sec-head"><h2>Culture</h2><span class="rule"></span><a href="#" class="more">More culture →</a></div>
+    <div class="dp-band-grid">
+      <article class="dp-band-lead art" data-reveal><a href="OLOtheme - Dispatch - Article.html"><div class="media" data-label="culture lead photo"></div></a><span class="kicker">Film</span><h3>The slow cinema revival nobody predicted</h3><p>Three-hour films are selling out. We asked why audiences suddenly want to sit still.</p><div class="byline">By Lina Okonkwo · 10 min read</div></article>
+      <div class="dp-band-list" data-reveal="120">
+        <a class="dp-bi" href="OLOtheme - Dispatch - Article.html"><div class="media" data-label="photo"></div><span><span class="kicker">Books</span><h3>The debut novel everyone's arguing about</h3></span></a>
+        <a class="dp-bi" href="OLOtheme - Dispatch - Article.html"><div class="media" data-label="photo"></div><span><span class="kicker">Music</span><h3>How a 30-second clip rebuilt a career</h3></span></a>
+        <a class="dp-bi" href="OLOtheme - Dispatch - Article.html"><div class="media" data-label="photo"></div><span><span class="kicker">Art</span><h3>The exhibition that sold out before opening</h3></span></a>
+        <a class="dp-bi" href="OLOtheme - Dispatch - Article.html"><div class="media" data-label="photo"></div><span><span class="kicker">Food</span><h3>The neighbourhood that became a destination</h3></span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ OPINION (OLObuild · Marketing → PullQuote) ═══ -->
+<section class="dp-op" data-olo-tile="PullQuote">
+  <div class="dp-wrap dp-op__in" data-reveal>
+    <span class="kicker" style="display:block; margin-bottom:16px">Opinion</span>
+    <q>“A free press isn't a business model. It's the thing the business model is supposed to protect.”</q>
+    <div class="dp-op__by">Editorial Board</div>
+  </div>
+</section>
+
+<!-- ═══ BUSINESS grid (OLObuild · NEW tile → ArticleGrid) ═══ -->
+<section class="dp-sec" data-olo-tile="ArticleGrid">
+  <div class="dp-wrap">
+    <div class="sec-head sec-head--red"><h2>Business</h2><span class="rule"></span><a href="#" class="more">More business →</a></div>
+    <div class="art-grid">
+      <article class="art" data-reveal><a href="OLOtheme - Dispatch - Article.html"><div class="media" data-label="photo"></div></a><span class="kicker">Markets</span><h3>The index fund that broke its own rules</h3><p>A passive giant made an active bet. It paid off.</p><div class="byline">R. Castellano · 8 min</div></article>
+      <article class="art" data-reveal="70"><a href="OLOtheme - Dispatch - Article.html"><div class="media" data-label="photo"></div></a><span class="kicker">Tech</span><h3>Inside the startup betting against the cloud</h3><p>On-prem is back, and investors are listening.</p><div class="byline">J. Okada · 6 min</div></article>
+      <article class="art" data-reveal="140"><a href="OLOtheme - Dispatch - Article.html"><div class="media" data-label="photo"></div></a><span class="kicker">Labour</span><h3>The four-day week, two years on</h3><p>The firms that kept it — and the ones that quietly didn't.</p><div class="byline">M. Iqbal · 11 min</div></article>
+      <article class="art" data-reveal="210"><a href="OLOtheme - Dispatch - Article.html"><div class="media" data-label="photo"></div></a><span class="kicker">Trade</span><h3>A small port's very big year</h3><p>How a rerouted shipping lane changed a town.</p><div class="byline">D. Moreau · 7 min</div></article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NEWSLETTER (OLObuild · Marketing → Newsletter) ═══ -->
+<section class="dp-news" id="newsletter" data-olo-tile="Newsletter">
+  <div class="dp-wrap" data-reveal>
+    <h2>The Dispatch, every morning</h2>
+    <p>One email. The five stories that matter, explained — before your first coffee.</p>
+    <form class="dp-news__form" onsubmit="return false"><input type="email" placeholder="Your email address" aria-label="Email"/><button class="btn btn--ink" type="submit">Subscribe free</button></form>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══ FOOTER (OLObuild · Navigation → Footer) ═══ -->
+<footer class="dp-foot" data-olo-tile="Footer">
+  <div class="dp-wrap">
+    <div class="dp-foot__top">
+      <div class="dp-foot__brand"><a class="dp-logo" href="#top">The Dispatch</a><p>Independent reporting since 1998. Member-funded, ad-light, beholden to no one.</p></div>
+      <div><h4>Sections</h4><ul><li><a href="#latest">Politics</a></li><li><a href="#culture">Culture</a></li><li><a href="#">Business</a></li><li><a href="#">World</a></li></ul></div>
+      <div><h4>The paper</h4><ul><li><a href="#">About us</a></li><li><a href="#">Masthead</a></li><li><a href="#">Ethics</a></li><li><a href="#">Careers</a></li></ul></div>
+      <div><h4>Subscribe</h4><ul><li><a href="#newsletter">Newsletters</a></li><li><a href="#">Membership</a></li><li><a href="#">Gift a sub</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="dp-foot__bot"><span>© 2026 The Dispatch — an OLOtheme demo.</span><span>Built with OLObuild</span></div>
+  </div>
+</footer>
+
+<script src="olothemes/theme.js"></script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>Farmacie Comunali Borgoverde — Contatti e prenotazioni</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="Prenota un servizio, richiedi la consegna a domicilio o contatta le farmacie comunali di Borgoverde. Numero verde gratuito."/>
+<link rel="stylesheet" href="pharma/brand.css"/>
+<link rel="stylesheet" href="pharma/tiles.css"/>
+</head>
+<body data-screen-label="Contatti">
+
+<div class="turno-bar" data-olo-tile="Alert">
+  <div class="fc-wrap turno-bar__inner">
+    <span class="badge"><span class="pulse"></span>Di turno oggi</span>
+    <span><b>Farmacia Comunale Centro</b> — Via Roma 14 · aperta fino alle <b>22:00</b></span>
+    <a class="turno-bar__link" href="Farmacie Comunali - Le Farmacie.html">Tutti i turni
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</div>
+
+<header class="nav" data-olo-tile="Navmenu">
+  <div class="nav__inner">
+    <a class="nav__logo" href="Farmacie Comunali - Home.html"><span class="mark"></span><span class="txt"><b>Farmacie Comunali</b><span>Borgoverde</span></span></a>
+    <nav class="nav__links">
+      <a href="Farmacie Comunali - Home.html">Home</a>
+      <a href="Farmacie Comunali - Servizi.html">Servizi</a>
+      <a href="Farmacie Comunali - Le Farmacie.html">Le Farmacie</a>
+      <a href="Farmacie Comunali - Contatti.html" class="is-active">Contatti</a>
+    </nav>
+    <div class="nav__cta">
+      <a href="Farmacie Comunali - Le Farmacie.html" class="fc-btn fc-btn--ghost">Le farmacie</a>
+      <a href="Farmacie Comunali - Contatti.html" class="fc-btn fc-btn--primary">Prenota un servizio</a>
+    </div>
+    <button class="nav__burger" aria-label="Apri menu"><span></span></button>
+  </div>
+</header>
+<div class="mobile-menu">
+  <div class="mobile-menu__top">
+    <span class="nav__logo"><span class="mark"></span><span class="txt"><b>Farmacie Comunali</b><span>Borgoverde</span></span></span>
+    <button class="mobile-menu__close" aria-label="Chiudi menu">&times;</button>
+  </div>
+  <nav>
+    <a href="Farmacie Comunali - Home.html">Home</a>
+    <a href="Farmacie Comunali - Servizi.html">Servizi</a>
+    <a href="Farmacie Comunali - Le Farmacie.html">Le Farmacie</a>
+    <a href="Farmacie Comunali - Contatti.html">Contatti</a>
+  </nav>
+  <a href="Farmacie Comunali - Contatti.html" class="fc-btn fc-btn--primary fc-btn--lg">Prenota un servizio</a>
+</div>
+
+<main>
+
+<!-- ═══ PAGE TITLE ═══ -->
+<section class="pagehead" data-olo-tile="PageTitle">
+  <div class="fc-wrap">
+    <nav class="pagehead__crumbs"><a href="Farmacie Comunali - Home.html">Home</a><span>›</span><span>Contatti</span></nav>
+    <h1>Prenota un servizio o scrivici</h1>
+    <p>Compila il modulo per prenotare un’autoanalisi, richiedere la consegna a domicilio o avere informazioni. Ti rispondiamo in giornata.</p>
+  </div>
+</section>
+
+<!-- ═══ FORM + INFO (OLObuild · Forms → Form builder + IconList) ═══ -->
+<section class="fc-section" data-olo-tile="Form">
+  <div class="fc-wrap">
+    <div class="contact-grid">
+      <form class="form" data-reveal onsubmit="return false">
+        <div class="form__row">
+          <div class="field"><label>Nome <span class="req">*</span></label><input type="text" placeholder="Maria" required/></div>
+          <div class="field"><label>Cognome <span class="req">*</span></label><input type="text" placeholder="Rossi" required/></div>
+        </div>
+        <div class="form__row">
+          <div class="field"><label>Telefono <span class="req">*</span></label><input type="tel" placeholder="3xx ..." required/></div>
+          <div class="field"><label>Email</label><input type="email" placeholder="maria.rossi@email.it"/></div>
+        </div>
+        <div class="form__row">
+          <div class="field"><label>Servizio richiesto</label>
+            <select>
+              <option>Prenotazione CUP (visita/esame)</option>
+              <option>Autoanalisi (glicemia, colesterolo…)</option>
+              <option>Holter pressorio / ECG</option>
+              <option>Consegna a domicilio</option>
+              <option>Noleggio elettromedicale</option>
+              <option>Altra informazione</option>
+            </select>
+          </div>
+          <div class="field"><label>Farmacia preferita</label>
+            <select>
+              <option>Sede Centro — Via Roma 14</option>
+              <option>Sede Parco — Viale dei Tigli 8</option>
+              <option>Sede Stazione — Piazza Stazione 3</option>
+              <option>Sede Collina — Via Belvedere 22</option>
+              <option>Sede Mercato — Via del Mercato 5</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label>Messaggio</label><textarea placeholder="Descrivi la tua richiesta: ad esempio il tipo di esame da prenotare o i farmaci da consegnare…"></textarea></div>
+        <label class="form__consent"><input type="checkbox"/><span>Acconsento al trattamento dei miei dati per essere ricontattato, secondo l’informativa sulla privacy.</span></label>
+        <button class="fc-btn fc-btn--primary fc-btn--lg" type="submit">Invia la richiesta
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </form>
+
+      <aside class="contact-aside" data-reveal="120">
+        <div class="info-card" style="background:var(--fc-primary-soft);border-color:transparent">
+          <h4><span class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5c0 9 6 15 15 15v-3.5l-4-1.5-2 2a12 12 0 0 1-5-5l2-2L8.5 5z"/></svg></span>Numero verde gratuito</h4>
+          <ul class="info-list">
+            <li><span class="k">Telefono</span><span><b>800 12 34 56</b> · attivo 8:30 – 20:00</span></li>
+            <li><span class="k">Urgenze</span><span>Farmacia di turno sempre attiva</span></li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h4><span class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M4 7l8 6 8-6"/></svg></span>Scrivici</h4>
+          <ul class="info-list">
+            <li><span class="k">Email</span><span>info@farmaciecomunali.bv.it</span></li>
+            <li><span class="k">PEC</span><span>farmaciecomunali@pec.bv.it</span></li>
+            <li><span class="k">Domicilio</span><span>domicilio@farmaciecomunali.bv.it</span></li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h4><span class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg></span>Sede amministrativa</h4>
+          <ul class="info-list">
+            <li><span class="k">Indirizzo</span><span>Via Roma 14, 20010 Borgoverde (MI)</span></li>
+            <li><span class="k">Uffici</span><span>Lun–Ven 9:00 – 16:00</span></li>
+          </ul>
+        </div>
+        <div class="info-card map" style="padding:0;overflow:hidden">
+          <div class="olo-media"><span class="olo-media__tag">mappa — sede amministrativa, Via Roma 14</span></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ (OLObuild · Interactive → Accordion) ═══ -->
+<section class="fc-section fc-section--tight" style="background:var(--fc-bg-green)" data-olo-tile="Accordion">
+  <div class="fc-wrap">
+    <div class="fc-section-head is-center" data-reveal>
+      <p class="fc-eyebrow">Prima di scrivere</p>
+      <h2>Risposte rapide</h2>
+    </div>
+    <div class="accordion" data-reveal>
+      <div class="acc-item is-open">
+        <button class="acc-q">In quanto tempo rispondete alle richieste? <span class="pm"></span></button>
+        <div class="acc-a"><div class="acc-a__inner">Le richieste inviate dal modulo o via email ricevono risposta in giornata, negli orari di apertura degli uffici. Per le urgenze chiama il numero verde o rivolgiti alla farmacia di turno.</div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-q">Posso prenotare la consegna a domicilio da qui? <span class="pm"></span></button>
+        <div class="acc-a"><div class="acc-a__inner">Sì: seleziona “Consegna a domicilio” nel modulo e indica i farmaci o i prodotti. Per over 70 e persone con disabilità residenti il servizio è gratuito.</div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-q">Cosa devo portare per la prenotazione CUP? <span class="pm"></span></button>
+        <div class="acc-a"><div class="acc-a__inner">La tessera sanitaria e la ricetta del medico (anche nel formato del promemoria elettronico). Puoi prenotare anche per un familiare portando i suoi documenti.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer" data-olo-tile="Footer">
+  <div class="fc-wrap">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <span class="nav__logo"><span class="mark"></span><span class="txt"><b>Farmacie Comunali</b><span>Borgoverde</span></span></span>
+        <p>Cinque farmacie pubbliche al servizio dei cittadini di Borgoverde. La salute, vicino a casa.</p>
+        <span class="fc-chip"><span class="dot"></span>Azienda Speciale del Comune di Borgoverde</span>
+      </div>
+      <div class="footer__col"><h4>Servizi</h4><a href="Farmacie Comunali - Servizi.html">Prenotazioni CUP</a><a href="Farmacie Comunali - Servizi.html">Autoanalisi</a><a href="Farmacie Comunali - Servizi.html">Consegna a domicilio</a><a href="Farmacie Comunali - Servizi.html">Noleggio elettromedicali</a></div>
+      <div class="footer__col"><h4>Le farmacie</h4><a href="Farmacie Comunali - Le Farmacie.html">Sede Centro</a><a href="Farmacie Comunali - Le Farmacie.html">Sede Parco</a><a href="Farmacie Comunali - Le Farmacie.html">Sede Stazione</a><a href="Farmacie Comunali - Le Farmacie.html">Turni di guardia</a></div>
+      <div class="footer__col"><h4>Contatti</h4><a href="Farmacie Comunali - Contatti.html">Prenota un servizio</a><a href="Farmacie Comunali - Contatti.html">Numero verde 800 12 34 56</a><a href="Farmacie Comunali - Contatti.html">info@farmaciecomunali.bv.it</a></div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 Farmacie Comunali Borgoverde — P.IVA 01234567890 · Realizzato con OLObuild</span>
+      <span>Privacy · Note legali · Trasparenza</span>
+    </div>
+  </div>
+</footer>
+
+<script src="pharma/site.js"></script>
+</body>
+</html>

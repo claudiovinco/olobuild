@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <title>OLObuild — Pagina default post-install</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link rel="stylesheet" href="tokens.css"/>
+  <link rel="stylesheet" href="brand.css"/>
+  <link rel="stylesheet" href="home/post-install.css"/>
+  <style>
+    html, body { margin: 0; padding: 0; background: #f0eee9; font-family: "Work Sans", -apple-system, BlinkMacSystemFont, sans-serif; }
+    .ds-intro {
+      position: fixed; left: 16px; top: 16px; z-index: 50;
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(10px);
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      padding: 14px 16px;
+      max-width: 380px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+      font-family: "Work Sans", sans-serif;
+    }
+    .ds-intro h1 { margin: 0 0 6px; font-size: 14px; font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 8px; }
+    .ds-intro h1 .pill { font-size: 10px; font-weight: 600; background: #fef2f3; color: #b8323a; padding: 2px 8px; border-radius: 99px; text-transform: uppercase; letter-spacing: .04em; }
+    .ds-intro p { margin: 0 0 6px; font-size: 12px; line-height: 1.55; color: #64748b; }
+    .ds-intro p b { color: #1e293b; }
+    .ds-intro ul { margin: 6px 0 0; padding-left: 18px; font-size: 12px; color: #475569; }
+    .ds-intro ul li { margin-bottom: 2px; }
+
+    /* Artboard inner — locks the page to its canvas width and lets it scroll if needed */
+    .pi-frame {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+    .pi-frame > .pi-page { flex: 1; }
+  </style>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="ds-intro">
+    <h1>OLObuild · Pagina default <span class="pill">2 varianti</span></h1>
+    <p>Versione ridisegnata della pagina generata al termine dell'installazione del plugin. Apri ogni variante a tutto schermo dal pulsante in alto a destra dell'artboard.</p>
+    <ul>
+      <li>3 azioni: <b>Personalizza home</b>, <b>Modifica Header</b>, <b>Modifica Footer</b></li>
+      <li>Suggerimenti contestuali che spariranno al primo salvataggio</li>
+      <li>Toolbar editor della sezione visibile come nel render reale</li>
+    </ul>
+  </div>
+
+  <div id="root"></div>
+
+  <script type="text/babel" src="marketing/design-canvas.jsx"></script>
+  <script type="text/babel" src="home/post-install.jsx"></script>
+  <script type="text/babel">
+    function App() {
+      return (
+        <DesignCanvas>
+          <DCSection
+            id="post-install"
+            title="Pagina default post-installazione"
+            subtitle="Cosa vede l'utente dopo aver attivato il plugin — prima di personalizzare nulla">
+            <DCArtboard id="variant-a" label="A · Suggerimenti per iniziare" width={1280} height={1800}>
+              <div className="pi-frame"><PostInstallA/></div>
+            </DCArtboard>
+            <DCArtboard id="variant-b" label="B · Checklist + segnaposto contenuti" width={1280} height={1640}>
+              <div className="pi-frame"><PostInstallB/></div>
+            </DCArtboard>
+          </DCSection>
+        </DesignCanvas>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+  </script>
+</body>
+</html>

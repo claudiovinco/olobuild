@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>OLObuild — Redesign pannello Sfondo</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{
+    --red:#e1474f;--red-soft:#fef2f3;--navy:#16263d;--ink:#1f2937;--mute:#6b7280;--faint:#94a3b8;
+    --surface-alt:#f6f7f9;--border:#e5e7eb;--bg:#f6f1e8;--line:#e6dfd1;
+    --ui:#e8622a;--ui-soft:#fdeee2;--ui-bar:#2b3340;
+    --sans:"Work Sans",-apple-system,sans-serif;--disp:"Instrument Serif",Georgia,serif;--mono:"JetBrains Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1040px;margin:0 auto;padding:52px 32px 90px;}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+  h1{font-family:var(--disp);font-weight:400;font-size:clamp(40px,5.5vw,62px);line-height:1;letter-spacing:-.02em;color:var(--navy);margin:0 0 14px;}
+  h1 em{font-style:italic;color:var(--red);}
+  .lead{font-size:16px;color:var(--mute);max-width:76ch;margin:0 0 8px;line-height:1.55;}
+  .lead b{color:var(--navy);font-weight:600;} .lead code{font-family:var(--mono);font-size:14px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:5px;padding:1px 5px;}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;margin-top:34px;}
+  .col-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .badge{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:999px;}
+  .today .badge{background:#fde2e4;color:#b42318;} .new .badge{background:#dcfce7;color:#15803d;}
+  .col-head h2{font-size:15px;font-weight:700;color:var(--navy);margin:0;}
+  .col-head .n{font-size:12px;color:var(--faint);margin-left:auto;font-family:var(--mono);}
+
+  /* panel chrome */
+  .panel{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;max-width:384px;margin-inline:auto;}
+  .panel-h{display:flex;align-items:center;justify-content:center;position:relative;padding:13px;background:#fcfcfd;border-bottom:1px solid #eef0f3;}
+  .panel-h .t{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);}
+  .panel-h .chev{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--faint);display:grid;place-items:center;}
+  .panel-h .chev svg{width:16px;height:16px;}
+  .panel-b{padding:16px;}
+
+  .measure{font-family:var(--mono);font-size:10px;color:#b42318;margin:4px 0 0;line-height:1.4;}
+
+  /* ───────── OGGI ───────── */
+  .o-lab{font-size:13px;color:#9ca3af;margin:0 0 3px;}
+  .o-sub{font-size:15px;color:var(--ink);font-weight:600;margin:0 0 9px;}
+  .o-typebar{display:flex;align-items:stretch;background:#f3f4f6;border:1px solid #e9eaed;border-radius:9px;padding:5px;gap:0;}
+  .o-chip{flex:1;min-width:0;font-size:11px;color:#9ca3af;text-align:center;display:flex;align-items:center;justify-content:center;padding:4px 3px;line-height:1.05;position:relative;}
+  .o-chip + .o-chip::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:1px;background:#e3e5e8;}
+  .o-chip.on{flex:0 0 auto;background:var(--ui);color:#fff;border-radius:7px;font-weight:700;padding:9px 13px;font-size:12px;}
+  .o-chip.on::before,.o-chip.on + .o-chip::before{display:none;}
+
+  .o-divider{height:1px;background:#eef0f3;margin:16px 0;}
+  .o-secl{font-size:13px;color:#9ca3af;margin:0 0 5px;}
+  .o-input{width:100%;height:42px;border:1px solid #e5e7eb;border-radius:6px;background:#fff;display:flex;align-items:center;padding:0 12px;font-size:14px;color:#374151;}
+  .o-prev{height:60px;border-radius:6px;border:1px solid #e5e7eb;margin:8px 0;}
+  .o-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;}
+  .o-color{display:flex;align-items:center;gap:9px;height:42px;border:1px solid #e5e7eb;border-radius:6px;padding:0 10px;}
+  .o-color .sw{width:22px;height:22px;border-radius:5px;flex:none;border:1px solid rgba(0,0,0,.08);}
+  .o-color .hx{font-family:var(--mono);font-size:12px;color:#374151;}
+  .o-rng{display:flex;align-items:center;gap:10px;margin:10px 0;}
+  .o-rng .rl{font-size:13px;color:#9ca3af;flex:1;}
+  .os{flex:1;height:6px;border-radius:99px;background:#e5e7eb;position:relative;max-width:140px;}
+  .os .f{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:#41699e;}
+  .os .k{position:absolute;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:#41699e;}
+  .o-tgl{display:flex;align-items:center;gap:9px;margin-top:12px;}
+  .o-tgl .sw{width:38px;height:20px;border-radius:99px;background:var(--ui);position:relative;flex:none;}
+  .o-tgl .sw::after{content:"";position:absolute;top:2px;left:20px;width:16px;height:16px;border-radius:50%;background:#fff;}
+  .o-tgl span{font-size:13px;color:#374151;}
+
+  /* ───────── COERENTE ───────── */
+  .subhead{display:flex;align-items:center;justify-content:space-between;margin:0 0 11px;padding-top:15px;border-top:1px solid #f0f1f4;}
+  .subhead.first{padding-top:0;border-top:0;}
+  .subhead .t2{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--navy);}
+  .subhead .t2 .q{color:var(--ui);}
+  .eyeb{width:28px;height:26px;border:1px solid var(--border);background:#fff;border-radius:7px;color:#9ca3af;display:grid;place-items:center;cursor:pointer;flex-shrink:0;}
+  .eyeb.on{color:var(--navy);background:var(--surface-alt);} .eyeb svg{width:15px;height:15px;}
+
+  /* swatch grid */
+  .bgtypes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .cat{grid-column:1/-1;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:10px 0 1px;display:flex;align-items:center;gap:9px;}
+  .cat::after{content:"";flex:1;height:1px;background:#f0f1f4;}
+  .cat.first{margin-top:0;}
+  .bt{appearance:none;border:1px solid var(--border);background:#fff;border-radius:10px;padding:5px;cursor:pointer;display:flex;flex-direction:column;gap:5px;position:relative;transition:border-color .12s,box-shadow .12s;}
+  .bt:hover{border-color:#d7dbe0;}
+  .bt.on{border-color:var(--ui);box-shadow:0 0 0 2px var(--ui-soft);}
+  .bt .sw-prev{height:40px;border-radius:6px;border:1px solid rgba(15,23,42,.07);overflow:hidden;position:relative;display:grid;place-items:center;}
+  .bt .bl{font-size:10px;font-weight:600;color:var(--mute);text-align:center;line-height:1.05;letter-spacing:.01em;}
+  .bt.on .bl{color:var(--navy);font-weight:700;}
+  .bt .ck{position:absolute;top:-7px;right:-7px;width:18px;height:18px;border-radius:50%;background:var(--ui);color:#fff;display:grid;place-items:center;box-shadow:0 1px 4px rgba(0,0,0,.28);}
+  .bt .ck svg{width:11px;height:11px;}
+
+  /* type mini-previews */
+  .p-none{background:repeating-linear-gradient(45deg,#eef0f3 0 5px,#f9fafb 5px 10px);}
+  .p-none::after{content:"";position:absolute;width:140%;height:1.5px;background:#cdd2d9;transform:rotate(-30deg);}
+  .p-solid{background:var(--red);}
+  .p-grad{background:linear-gradient(118deg,#e1474f 0%,#f4a23b 100%);}
+  .p-aurora{background:radial-gradient(62% 78% at 20% 26%,rgba(225,71,79,.85),transparent 76%),radial-gradient(60% 72% at 84% 22%,rgba(99,102,241,.8),transparent 76%),radial-gradient(68% 82% at 60% 94%,rgba(244,162,59,.85),transparent 80%),#16263d;}
+  .p-glow{background:radial-gradient(120% 150% at 50% 132%,#e1474f 0%,rgba(225,71,79,.28) 30%,transparent 60%),#0b0d12;}
+  .p-pattern{background:radial-gradient(#e1474f 1.5px,transparent 1.7px) 0 0/9px 9px,#fff;}
+  .p-crt{background:repeating-linear-gradient(0deg,#06140f 0 2px,rgba(56,209,127,.32) 2px 3px),#06140f;}
+  .p-img{background:repeating-linear-gradient(45deg,#e7ebf0 0 8px,#dde3ea 8px 16px);}
+  .p-img .ico,.p-video .ico,.p-gallery .ico{position:relative;z-index:1;display:grid;place-items:center;}
+  .p-img .ico svg{width:18px;height:18px;color:#9aa6b4;}
+  .p-video{background:#16263d;}
+  .p-video .play{width:0;height:0;border-style:solid;border-width:7px 0 7px 12px;border-color:transparent transparent transparent #fff;margin-left:2px;opacity:.92;}
+  .p-gallery{background:#eef1f5;}
+  .p-gallery .stack{position:relative;width:30px;height:24px;}
+  .p-gallery .stack i{position:absolute;width:20px;height:16px;border-radius:3px;border:1px solid #fff;}
+  .p-gallery .stack i:nth-child(1){left:0;top:5px;background:#f4a23b;transform:rotate(-8deg);}
+  .p-gallery .stack i:nth-child(2){left:5px;top:2px;background:#6366f1;transform:rotate(4deg);}
+  .p-gallery .stack i:nth-child(3){left:9px;top:6px;background:var(--red);transform:rotate(-2deg);}
+
+  /* controls */
+  .row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .row:last-child{margin-bottom:0;}
+  .rowlab{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);width:62px;flex-shrink:0;}
+  .slider{flex:1;height:34px;display:flex;align-items:center;}
+  .slider .tr{width:100%;height:5px;border-radius:99px;background:var(--surface-alt);border:1px solid #eef0f3;position:relative;}
+  .slider .fi{position:absolute;left:0;top:0;bottom:0;background:var(--ui);border-radius:99px;}
+  .slider .kn{position:absolute;top:50%;transform:translate(-50%,-50%);width:15px;height:15px;border-radius:50%;background:#fff;border:2px solid var(--ui);box-shadow:0 1px 4px rgba(0,0,0,.18);}
+  .valbox{display:flex;align-items:center;border:1px solid var(--border);border-radius:9px;overflow:hidden;background:#fff;height:34px;width:74px;flex-shrink:0;}
+  .valbox input{width:100%;min-width:0;border:0;outline:none;text-align:center;font:500 13px var(--mono);color:var(--ink);background:transparent;}
+  .valbox .u{font-size:11px;color:var(--faint);font-weight:600;padding:0 8px;border-left:1px solid #eef0f3;align-self:stretch;display:flex;align-items:center;background:var(--surface-alt);}
+  .selc{flex:1;height:34px;border:1px solid var(--border);border-radius:9px;background:#fff;font-size:13px;color:var(--ink);padding:0 8px 0 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;}
+  .selc .v{display:flex;align-items:center;gap:8px;}
+  .selc .ch{width:14px;height:14px;color:var(--faint);flex-shrink:0;}
+
+  .pv-bg{height:74px;border-radius:10px;border:1px solid #eef0f3;position:relative;overflow:hidden;margin:11px 0;background:radial-gradient(125% 150% at 50% 130%,#e1474f 0%,rgba(225,71,79,.26) 30%,transparent 62%),#0b0d12;}
+  .pv-bg .gr{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.5) .5px,transparent .6px);background-size:3px 3px;opacity:.10;mix-blend-mode:overlay;}
+  .pv-bg .tag{position:absolute;left:9px;bottom:7px;font:600 9px var(--sans);letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.62);z-index:2;white-space:nowrap;}
+  .pv-aurora{background:#0f1b2d;}
+  .pv-aurora .ab{position:absolute;border-radius:50%;filter:blur(15px);opacity:.85;}
+  .pv-aurora .ab.a1{width:84px;height:60px;left:5%;top:6%;background:#e1474f;}
+  .pv-aurora .ab.a2{width:92px;height:64px;right:3%;top:-6px;background:#6366f1;}
+  .pv-aurora .ab.a3{width:104px;height:74px;left:36%;bottom:-22px;background:#f4a23b;}
+  .pv-aurora .ab.a4{width:74px;height:54px;left:12%;bottom:-14px;background:#38bdf8;opacity:.6;}
+  @media(prefers-reduced-motion:no-preference){
+    .pv-aurora .ab{animation:aurDrift 9s ease-in-out infinite alternate;}
+    .pv-aurora .ab.a2{animation-duration:11s;} .pv-aurora .ab.a3{animation-duration:13s;} .pv-aurora .ab.a4{animation-duration:10s;}
+  }
+  @keyframes aurDrift{from{transform:translate(0,0);}to{transform:translate(12px,-9px);}}
+  .aurocolors{display:flex;align-items:center;gap:6px;height:34px;}
+  .auroswatch{width:26px;height:26px;border-radius:7px;border:1px solid rgba(0,0,0,.1);position:relative;cursor:pointer;flex:none;}
+  .auroswatch .tk{position:absolute;right:-3px;bottom:-3px;width:13px;height:13px;border-radius:50%;background:#fff;border:1px solid var(--border);display:grid;place-items:center;color:var(--ui);}
+  .auroswatch .tk svg{width:8px;height:8px;}
+  .auroadd{width:26px;height:26px;border-radius:7px;border:1px dashed #cdd2d9;background:#fff;color:var(--faint);display:grid;place-items:center;cursor:pointer;flex:none;}
+  .auroadd svg{width:13px;height:13px;}
+  .valbox.nounit{width:54px;} .valbox.nounit input{text-align:center;}
+
+  /* extra types (CRT · Pattern) */
+  .pv-crt{background:#06140f;}
+  .pv-crt .lines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(56,209,127,.26) 2px 3px);}
+  .pv-crt .vig{position:absolute;inset:0;background:radial-gradient(115% 130% at 50% 50%,transparent 50%,rgba(0,0,0,.62) 100%);}
+  .pv-crt .bar{position:absolute;left:0;right:0;top:-14px;height:14px;background:linear-gradient(rgba(56,209,127,0),rgba(56,209,127,.2),rgba(56,209,127,0));}
+  @media(prefers-reduced-motion:no-preference){.pv-crt .bar{animation:crtScan 3.4s linear infinite;}}
+  @keyframes crtScan{from{top:-14px;}to{top:100%;}}
+  .pv-pattern{background:radial-gradient(#e1474f 2px,transparent 2.4px) 0 0/14px 14px,#fff;}
+  .tag.dark{color:rgba(15,23,42,.5)!important;}
+  .more{margin-top:42px;}
+  .more-head{margin-bottom:6px;}
+  .more-t{font-family:var(--disp);font-weight:400;font-size:30px;color:var(--navy);margin:0 0 8px;letter-spacing:-.01em;}
+  .more-t em{font-style:italic;color:var(--red);}
+  .more-sub{font-size:14px;color:var(--mute);max-width:74ch;margin:0;line-height:1.55;}
+  .more-sub code{font-family:var(--mono);font-size:13px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:5px;padding:1px 5px;}
+  .more-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;margin-top:22px;}
+  .more-grid .panel{max-width:none;}
+  .seltype{display:flex;align-items:center;gap:10px;}
+  .seltype .mini{width:42px;height:30px;border-radius:7px;overflow:hidden;border:1px solid rgba(15,23,42,.1);position:relative;flex:none;}
+  .seltype .mini i{position:absolute;inset:0;}
+  .seltype .nm{font-size:12px;font-weight:700;color:var(--navy);line-height:1.2;}
+  .seltype .nm small{display:block;font:600 9px/1.5 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);}
+  @media(max-width:860px){.more-grid{grid-template-columns:1fr;}}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+  .cell .cl{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-bottom:4px;display:block;}
+  .ccol{display:flex;align-items:center;gap:7px;border:1px solid var(--border);border-radius:9px;height:34px;padding:0 8px;background:#fff;}
+  .ccol .sw{width:18px;height:18px;border-radius:5px;flex:none;border:1px solid rgba(0,0,0,.08);}
+  .ccol .tx{font:500 11px var(--mono);color:var(--ink);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .ccol .tx.tok{font-family:var(--sans);font-weight:600;font-size:12px;}
+  .ccol .gl{color:var(--ui);display:grid;place-items:center;flex:none;}.ccol .gl svg{width:14px;height:14px;}
+
+  .tgl-row{display:flex;align-items:center;gap:10px;margin-top:2px;}
+  .tgl{position:relative;width:38px;height:20px;border-radius:99px;background:#d7dbe0;border:0;cursor:pointer;flex:none;transition:background .15s;}
+  .tgl.on{background:var(--ui);}
+  .tgl b{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .15s;}
+  .tgl.on b{left:20px;}
+  .tgl-row .tl{font-size:12px;color:var(--ink);}
+
+  /* why */
+  .why{margin-top:34px;background:#fffdf8;border:1px solid var(--line);border-radius:14px;padding:24px 26px;}
+  .why h3{font-family:var(--disp);font-weight:400;font-size:24px;color:var(--navy);margin:0 0 16px;}
+  .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px 22px;}
+  .why-item{font-size:13px;line-height:1.5;color:var(--mute);} .why-item b{color:var(--navy);display:block;font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;margin-bottom:4px;}
+  .why-item .nw{font-family:var(--mono);font-size:11px;color:#15803d;}
+  @media(max-width:860px){.cols,.why-grid{grid-template-columns:1fr;}}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">OLObuild · panel redesign</div>
+  <h1>Pannello <em>Sfondo</em></h1>
+  <p class="lead">Il selettore <b>Tipo di sfondo</b> stipa <b>10 tipi</b> in un'unica riga di testo: etichette che vanno a capo (<code>Tinta unita</code>, <code>CRT (scanline)</code>), nessuna anteprima, impossibile distinguerli a colpo d'occhio. A destra diventa una <b>griglia di swatch con mini-anteprima reale</b>, raggruppata in <b>Colore · Generativi · Media</b>; sotto, i controlli del tipo scelto seguono il sistema (uno slider arancio, valbox con unità) e la <b>Sovrapposizione</b> diventa una sotto-sezione con occhio. <b>Chiavi salvate invariate</b> (<code>type</code>, <code>glow_*</code>, <code>overlay_*</code>…).</p>
+
+  <div class="cols">
+
+    <!-- ════ OGGI ════ -->
+    <div>
+      <div class="col-head today"><span class="badge">Oggi</span><h2>Riga unica · 10 tipi</h2><span class="n">testo · va a capo</span></div>
+
+      <div class="panel">
+        <div class="panel-h"><span class="t">Sfondo</span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></span></div>
+        <div class="panel-b">
+          <p class="o-lab">Sfondo</p>
+          <p class="o-sub">Tipo di sfondo</p>
+          <div class="o-typebar">
+            <span class="o-chip on">Nessuno</span>
+            <span class="o-chip">Tinta unita</span>
+            <span class="o-chip">Gradiente</span>
+            <span class="o-chip">Aurora</span>
+            <span class="o-chip">Bagliori</span>
+            <span class="o-chip">Pattern</span>
+            <span class="o-chip">Immagine</span>
+            <span class="o-chip">Video</span>
+            <span class="o-chip">Galleria</span>
+            <span class="o-chip">CRT (scanline)</span>
+          </div>
+          <p class="measure">10 chip in ~340px · testo che va a capo · 0 anteprime · nessuna gerarchia</p>
+
+          <div class="o-divider"></div>
+
+          <p class="o-secl">Quando scegli un tipo (es. <b>Aurora</b>) i controlli si impilano qui sotto, stile ad-hoc:</p>
+          <div class="o-prev p-aurora" style="position:relative;margin-top:10px;"></div>
+          <div class="o-grid">
+            <div><p class="o-secl">Colore 1</p><div class="o-color"><span class="sw" style="background:#e1474f;"></span><span class="hx">primary</span></div></div>
+            <div><p class="o-secl">Colore 2</p><div class="o-color"><span class="sw" style="background:#6366f1;"></span><span class="hx">#6366F1</span></div></div>
+          </div>
+          <div class="o-rng"><span class="rl">Intensità (70%)</span><div class="os"><div class="f" style="width:70%"></div><div class="k" style="left:70%"></div></div></div>
+          <p class="measure">solo 2 colori + intensità · niente n° luci, morbidezza o animazione · slider blu, no unità</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ COERENTE ════ -->
+    <div>
+      <div class="col-head new"><span class="badge">Coerente</span><h2>Griglia + anteprime</h2><span class="n">3 gruppi · per-tipo pulito</span></div>
+
+      <div class="panel">
+        <div class="panel-h"><span class="t">Sfondo</span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></span></div>
+        <div class="panel-b">
+
+          <div class="subhead first"><span class="t2">Tipo di sfondo</span></div>
+          <div class="bgtypes">
+            <div class="cat first">Colore</div>
+            <button class="bt"><span class="sw-prev p-none"></span><span class="bl">Nessuno</span></button>
+            <button class="bt"><span class="sw-prev p-solid"></span><span class="bl">Tinta unita</span></button>
+            <button class="bt"><span class="sw-prev p-grad"></span><span class="bl">Gradiente</span></button>
+
+            <div class="cat">Generativi</div>
+            <button class="bt on"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span class="sw-prev p-aurora"></span><span class="bl">Aurora</span></button>
+            <button class="bt"><span class="sw-prev p-glow"></span><span class="bl">Bagliori</span></button>
+            <button class="bt"><span class="sw-prev p-pattern"></span><span class="bl">Pattern</span></button>
+            <button class="bt"><span class="sw-prev p-crt"></span><span class="bl">CRT<br/>scanline</span></button>
+
+            <div class="cat">Media</div>
+            <button class="bt"><span class="sw-prev p-img"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg></span></span><span class="bl">Immagine</span></button>
+            <button class="bt"><span class="sw-prev p-video"><span class="ico"><span class="play"></span></span></span><span class="bl">Video</span></button>
+            <button class="bt"><span class="sw-prev p-gallery"><span class="ico"><span class="stack"><i></i><i></i><i></i></span></span></span><span class="bl">Galleria</span></button>
+          </div>
+
+          <div class="subhead"><span class="t2">Impostazioni · <span class="q">Aurora</span></span></div>
+          <div class="row" style="margin-bottom:0;">
+            <span class="rowlab">Disposiz.</span>
+            <div class="selc"><span class="v">Boreale</span><svg class="ch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></div>
+          </div>
+          <div class="pv-bg pv-aurora"><span class="ab a1"></span><span class="ab a2"></span><span class="ab a3"></span><span class="ab a4"></span><span class="tag">anteprima live</span></div>
+          <div class="grid2">
+            <div class="cell"><span class="cl">Colori</span><div class="aurocolors">
+              <span class="auroswatch" style="background:#e1474f;"><span class="tk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20z"/></svg></span></span>
+              <span class="auroswatch" style="background:#f4a23b;"></span>
+              <span class="auroswatch" style="background:#6366f1;"></span>
+              <button class="auroadd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+            </div></div>
+            <div class="cell"><span class="cl">Colore base</span><div class="ccol"><span class="sw" style="background:#0f1b2d;"></span><span class="tx">#0F1B2D</span></div></div>
+          </div>
+          <div class="row">
+            <span class="rowlab">N° luci</span>
+            <div class="slider"><div class="tr"><div class="fi" style="width:50%"></div><div class="kn" style="left:50%"></div></div></div>
+            <div class="valbox nounit"><input value="4" readonly/></div>
+          </div>
+          <div class="row">
+            <span class="rowlab">Morbidezza</span>
+            <div class="slider"><div class="tr"><div class="fi" style="width:72%"></div><div class="kn" style="left:72%"></div></div></div>
+            <div class="valbox"><input value="72" readonly/><span class="u">%</span></div>
+          </div>
+          <div class="row">
+            <span class="rowlab">Intensità</span>
+            <div class="slider"><div class="tr"><div class="fi" style="width:66%"></div><div class="kn" style="left:66%"></div></div></div>
+            <div class="valbox"><input value="66" readonly/><span class="u">%</span></div>
+          </div>
+          <div class="tgl-row" style="justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:10px;"><button class="tgl on"><b></b></button><span class="tl">Animazione</span></div>
+            <div class="valbox" style="width:72px;"><input value="8" readonly/><span class="u">s</span></div>
+          </div>
+
+          <div class="subhead"><span class="t2">Sovrapposizione</span><span class="eyeb on" title="Mostra/nascondi overlay" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span></div>
+          <div class="grid2" style="margin-bottom:0;">
+            <div class="cell"><span class="cl">Colore</span><div class="ccol"><span class="sw" style="background:#16263d;"></span><span class="tx">#16263D</span></div></div>
+            <div class="cell"><span class="cl">Opacità</span><div class="valbox" style="width:100%;"><input value="0" readonly/><span class="u">%</span></div></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="more">
+    <div class="more-head">
+      <h2 class="more-t">Stessi controlli, <em>altri tipi</em></h2>
+      <p class="more-sub">Ogni tipo apre il suo set sotto la griglia, con la stessa grammatica: <b>uno slider arancio</b>, valbox con unità, toggle e <b>anteprima live</b>. Stesso contratto dati — chiavi additive per tipo (<code>crt_*</code>, <code>pattern_*</code>), nessun rename.</p>
+    </div>
+    <div class="more-grid">
+
+      <!-- CRT -->
+      <div class="panel">
+        <div class="panel-h"><span class="t">Sfondo</span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></span></div>
+        <div class="panel-b">
+          <div class="seltype"><span class="mini"><i class="p-crt"></i></span><span class="nm">CRT (scanline)<small>Tipo selezionato · famiglia Generativi</small></span></div>
+          <div class="subhead" style="margin-top:13px;"><span class="t2">Impostazioni · <span class="q">CRT</span></span></div>
+          <div class="row" style="margin-bottom:0;">
+            <span class="rowlab">Modello</span>
+            <div class="selc"><span class="v">Scanline classica</span><svg class="ch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></div>
+          </div>
+          <div class="pv-bg pv-crt"><span class="lines"></span><span class="vig"></span><span class="bar"></span><span class="tag">anteprima live</span></div>
+          <div class="grid2">
+            <div class="cell"><span class="cl">Colore linee</span><div class="ccol"><span class="sw" style="background:#22c55e;"></span><span class="tx tok">Success</span><span class="gl" title="Colore globale"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20z"/></svg></span></div></div>
+            <div class="cell"><span class="cl">Colore base</span><div class="ccol"><span class="sw" style="background:#06140f;"></span><span class="tx">#06140F</span></div></div>
+          </div>
+          <div class="row">
+            <span class="rowlab">Passo linee</span>
+            <div class="slider"><div class="tr"><div class="fi" style="width:24%"></div><div class="kn" style="left:24%"></div></div></div>
+            <div class="valbox"><input value="3" readonly/><span class="u">px</span></div>
+          </div>
+          <div class="row">
+            <span class="rowlab">Curvatura</span>
+            <div class="slider"><div class="tr"><div class="fi" style="width:18%"></div><div class="kn" style="left:18%"></div></div></div>
+            <div class="valbox"><input value="18" readonly/><span class="u">%</span></div>
+          </div>
+          <div class="row">
+            <span class="rowlab">Vignetta</span>
+            <div class="slider"><div class="tr"><div class="fi" style="width:30%"></div><div class="kn" style="left:30%"></div></div></div>
+            <div class="valbox"><input value="30" readonly/><span class="u">%</span></div>
+          </div>
+          <div class="tgl-row" style="justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:10px;"><button class="tgl on"><b></b></button><span class="tl">Flicker</span></div>
+            <div class="valbox" style="width:72px;"><input value="6" readonly/><span class="u">s</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pattern -->
+      <div class="panel">
+        <div class="panel-h"><span class="t">Sfondo</span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></span></div>
+        <div class="panel-b">
+          <div class="seltype"><span class="mini"><i class="p-pattern"></i></span><span class="nm">Pattern<small>Tipo selezionato · famiglia Generativi</small></span></div>
+          <div class="subhead" style="margin-top:13px;"><span class="t2">Impostazioni · <span class="q">Pattern</span></span></div>
+          <div class="row" style="margin-bottom:0;">
+            <span class="rowlab">Motivo</span>
+            <div class="selc"><span class="v">Punti</span><svg class="ch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></div>
+          </div>
+          <div class="pv-bg pv-pattern"><span class="tag dark">anteprima live</span></div>
+          <div class="grid2">
+            <div class="cell"><span class="cl">Colore</span><div class="ccol"><span class="sw" style="background:#e1474f;"></span><span class="tx tok">Primario</span><span class="gl" title="Colore globale"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20z"/></svg></span></div></div>
+            <div class="cell"><span class="cl">Sfondo</span><div class="ccol"><span class="sw" style="background:#ffffff;"></span><span class="tx">#FFFFFF</span></div></div>
+          </div>
+          <div class="row">
+            <span class="rowlab">Dimensione</span>
+            <div class="slider"><div class="tr"><div class="fi" style="width:40%"></div><div class="kn" style="left:40%"></div></div></div>
+            <div class="valbox"><input value="14" readonly/><span class="u">px</span></div>
+          </div>
+          <div class="row">
+            <span class="rowlab">Spessore</span>
+            <div class="slider"><div class="tr"><div class="fi" style="width:20%"></div><div class="kn" style="left:20%"></div></div></div>
+            <div class="valbox"><input value="2" readonly/><span class="u">px</span></div>
+          </div>
+          <div class="row">
+            <span class="rowlab">Rotazione</span>
+            <div class="slider"><div class="tr"><div class="fi" style="width:0%"></div><div class="kn" style="left:0%"></div></div></div>
+            <div class="valbox"><input value="0" readonly/><span class="u">°</span></div>
+          </div>
+          <div class="row" style="margin-bottom:0;">
+            <span class="rowlab">Opacità</span>
+            <div class="slider"><div class="tr"><div class="fi" style="width:85%"></div><div class="kn" style="left:85%"></div></div></div>
+            <div class="valbox"><input value="85" readonly/><span class="u">%</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="why">
+    <h3>Cosa cambia</h3>
+    <div class="why-grid">
+      <div class="why-item"><b>Griglia, non riga</b> I 10 tipi passano da una <span class="nw">riga di testo</span> a una griglia 3 colonne: niente più etichette che vanno a capo.</div>
+      <div class="why-item"><b>Anteprima reale</b> Ogni swatch mostra il <span class="nw">render vero</span> del tipo — gradiente, aurora, bagliori, scanline — riconoscibile a colpo d'occhio.</div>
+      <div class="why-item"><b>Tre gruppi</b> <span class="nw">Colore · Generativi · Media</span> con hairline: l'occhio trova subito la famiglia giusta invece di scorrere 10 voci.</div>
+      <div class="why-item"><b>Più controlli, dove servono</b> Aurora guadagna <span class="nw">n° luci, morbidezza e animazione</span>; tutti con un solo slider arancio + valbox con unità.</div>
+      <div class="why-item"><b>Overlay separato</b> La <span class="nw">Sovrapposizione</span> diventa una sotto-sezione con occhio, non più mescolata ai controlli del tipo.</div>
+      <div class="why-item"><b>Contratto invariato</b> Solo presentazione: <span class="nw">type, glow_*, overlay_*</span> e tutte le chiavi salvate restano identiche.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

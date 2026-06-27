@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>OLObuild — Mega Menu deep-dive</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+  :root{
+    --red:#e1474f;--red-soft:#fef2f3;--navy:#16263d;--ink:#1f2937;--mute:#6b7280;--faint:#94a3b8;
+    --surface-alt:#f6f7f9;--border:#e5e7eb;--bg:#f6f1e8;--line:#e6dfd1;--paper:#fffdf8;
+    --amber:#f4a23b;--orange:#e8622a;--green:#15803d;--green-soft:#dcfce7;
+    --sans:"Work Sans",-apple-system,sans-serif;--disp:"Instrument Serif",Georgia,serif;--mono:"JetBrains Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1180px;margin:0 auto;padding:54px 32px 100px;}
+
+  /* ── Masthead ── */
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+  h1{font-family:var(--disp);font-weight:400;font-size:clamp(42px,6vw,70px);line-height:.98;letter-spacing:-.02em;color:var(--navy);margin:0 0 16px;}
+  h1 em{font-style:italic;color:var(--red);}
+  .lead{font-size:16px;color:var(--mute);max-width:76ch;margin:0 0 8px;line-height:1.58;}
+  .lead b{color:var(--navy);font-weight:600;}
+  code{font-family:var(--mono);font-size:.86em;background:#fff;border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:#b42318;}
+
+  /* ── Stat strip ── */
+  .stats{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:34px 0 8px;}
+  .stat{background:var(--paper);padding:18px 16px;}
+  .stat .v{font-family:var(--disp);font-size:34px;line-height:1;color:var(--navy);}
+  .stat .v em{font-style:normal;color:var(--red);}
+  .stat .k{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--faint);margin-top:8px;}
+
+  /* ── Section scaffold ── */
+  section{margin-top:56px;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--navy);padding-bottom:12px;margin-bottom:26px;}
+  .sec-num{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--red);}
+  .sec-head h2{font-family:var(--disp);font-weight:400;font-size:32px;color:var(--navy);margin:0;letter-spacing:-.01em;}
+  .sec-head p{font-size:13px;color:var(--mute);margin:0 0 0 auto;max-width:42ch;text-align:right;line-height:1.45;}
+
+  /* ── Generic mega-menu component (faithful to MegaMenuTile.vue) ── */
+  .mm{--mm-text:#374151;--mm-active:var(--red);--mm-nav-bg:#fff;--mm-panel-bg:#fff;--mm-radius:8px;
+      font-family:var(--sans);border-radius:8px;overflow:visible;position:relative;}
+  .mm-topbar{display:flex;align-items:center;gap:16px;height:38px;padding:0 22px;font-size:12.5px;}
+  .mm-topbar .tick{display:flex;align-items:center;gap:10px;overflow:hidden;}
+  .mm-topbar .tick b{font-weight:700;letter-spacing:.04em;}
+  .mm-topbar .right{margin-left:auto;display:flex;align-items:center;gap:14px;}
+  .mm-topbar .cta{font-weight:600;padding:4px 12px;border-radius:5px;font-size:12px;}
+  .mm-bar{display:flex;align-items:center;gap:20px;min-height:64px;padding:0 22px;background:var(--mm-nav-bg);position:relative;z-index:2;}
+  .mm-logo{font-family:var(--disp);font-size:22px;font-weight:700;letter-spacing:-.01em;flex-shrink:0;white-space:nowrap;}
+  .mm-logo .t2{color:var(--mm-active);}
+  .mm-nav{display:flex;align-items:center;list-style:none;margin:0;padding:0;flex:1;gap:var(--mm-gap,18px);}
+  .mm-nav.center{justify-content:center;} .mm-nav.right{justify-content:flex-end;}
+  .mm-item{position:relative;display:flex;align-items:center;}
+  .mm-link{display:inline-flex;align-items:center;gap:5px;color:var(--mm-text);font-size:15px;font-weight:500;text-decoration:none;white-space:nowrap;padding:8px 0;cursor:default;letter-spacing:var(--mm-ls,0);text-transform:var(--mm-tt,none);}
+  .mm-link.on{color:var(--mm-active);}
+  .mm-chev{width:9px;height:9px;opacity:.4;}
+  .mm-item.on .mm-chev{transform:rotate(180deg);}
+  .mm-uline{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--mm-active);}
+  .mm-tools{margin-left:auto;display:flex;align-items:center;gap:14px;}
+  .mm-ico{display:flex;align-items:center;color:var(--mm-text);opacity:.85;}
+  .mm-social{display:flex;gap:8px;}
+  .mm-social svg{width:17px;height:17px;}
+  .mm-cta{display:inline-flex;align-items:center;padding:9px 20px;border-radius:6px;background:var(--mm-active);color:#fff;font-size:14px;font-weight:600;text-decoration:none;white-space:nowrap;}
+  .mm-burger{display:none;}
+
+  /* mega panel */
+  .mm-panel{position:absolute;left:0;right:0;top:100%;z-index:3;background:var(--mm-panel-bg);border-radius:0 0 var(--mm-radius) var(--mm-radius);box-shadow:0 14px 40px rgba(0,0,0,.13);padding:30px 32px;overflow:hidden;}
+  .mm-accent{position:absolute;top:0;left:0;right:0;height:3px;background:var(--mm-active);}
+  .mm-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;}
+  .mm-col h4{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--navy);margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.07);}
+  .mm-col a{display:block;color:var(--mm-text);font-size:13.5px;text-decoration:none;padding:6px 0;line-height:1.4;}
+  .mm-col a:hover{color:var(--mm-active);}
+  .mm-promo{border-radius:10px;padding:18px;display:flex;flex-direction:column;justify-content:flex-end;min-height:140px;background:linear-gradient(150deg,var(--navy),#24405f);color:#fff;}
+  .mm-promo .k{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.7;}
+  .mm-promo .h{font-family:var(--disp);font-size:21px;margin:6px 0 0;line-height:1.05;}
+
+  /* annotated hero */
+  .hero-stage{position:relative;background:#efe9dd;border:1px solid var(--line);border-radius:18px;padding:64px 40px 150px;margin-top:14px;}
+  .hero-stage .mm{box-shadow:0 8px 30px rgba(22,38,61,.10);}
+  .pin{position:absolute;z-index:9;font-size:10.5px;font-weight:700;font-family:var(--mono);background:#fff;border:1px dashed #e0a0a4;color:#b42318;border-radius:6px;padding:3px 8px;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,.08);}
+  .pin::before{content:"";position:absolute;width:7px;height:7px;background:#fff;border-left:1px dashed #e0a0a4;border-bottom:1px dashed #e0a0a4;}
+  .pin.tl::before{left:14px;bottom:-4px;transform:rotate(-45deg);}
+  .pin.bl::before{left:14px;top:-4px;transform:rotate(135deg);}
+  .pin.tr::before{right:14px;bottom:-4px;transform:rotate(-135deg);}
+
+  /* ── Finding banner ── */
+  .finding{margin-top:30px;background:var(--navy);color:#fff;border-radius:16px;padding:30px 34px;display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center;}
+  .finding .tag{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);}
+  .finding h3{font-family:var(--disp);font-weight:400;font-size:27px;margin:8px 0 0;line-height:1.1;}
+  .finding p{font-size:14px;line-height:1.6;color:#cdd6e2;margin:14px 0 0;max-width:62ch;}
+  .finding p b{color:#fff;}
+  .finding .ico{width:80px;height:80px;border-radius:16px;background:rgba(244,162,59,.14);display:flex;align-items:center;justify-content:center;color:var(--amber);}
+
+  /* ── Preset gallery ── */
+  .gallery{display:flex;flex-direction:column;gap:30px;}
+  .preset{background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;}
+  .preset-head{display:flex;align-items:center;gap:12px;padding:16px 22px;border-bottom:1px solid var(--line);}
+  .preset-head .name{font-family:var(--disp);font-size:22px;color:var(--navy);white-space:nowrap;flex-shrink:0;}
+  .preset-head .id{font-family:var(--mono);font-size:11px;color:var(--faint);background:var(--surface-alt);border:1px solid var(--border);padding:3px 8px;border-radius:5px;}
+  .preset-head .use{margin-left:auto;font-size:12px;color:var(--mute);font-style:italic;}
+  .preset-stage{padding:26px;}
+  .preset-stage.dark{background:#0e1726;}
+  .recipe{display:flex;flex-wrap:wrap;gap:6px;padding:14px 22px 18px;background:var(--surface-alt);border-top:1px solid var(--line);}
+  .chip{font-family:var(--mono);font-size:11px;background:#fff;border:1px solid var(--border);border-radius:5px;padding:3px 8px;color:#475569;}
+  .chip b{color:#b42318;font-weight:600;}
+
+  /* ── Preset variant skins ── */
+  .mm.minimal{--mm-text:#3a3a3a;--mm-active:var(--red);}
+  .mm.minimal .mm-bar{background:transparent;}
+  .mm.minimal .mm-link{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.16em;}
+  .mm.minimal .mm-logo{font-family:var(--sans);font-weight:800;font-size:17px;letter-spacing:.12em;text-transform:uppercase;}
+  .mm.minimal .mm-uline{height:1px;left:50%;right:auto;width:60%;transform:translateX(-50%);}
+  .mm.minimal .mm-cta{background:transparent;color:var(--navy);border:1.5px solid var(--navy);border-radius:0;font-weight:600;}
+
+  .mm.magazine{--mm-text:#1a1a1a;--mm-active:var(--red);}
+  .mm.magazine .mm-bar{background:#fff;border-bottom:3px solid var(--navy);min-height:70px;}
+  .mm.magazine .mm-link{font-weight:700;text-transform:uppercase;font-size:14px;letter-spacing:.02em;}
+  .mm.magazine .mm-logo{font-family:var(--disp);font-size:30px;font-weight:700;color:var(--navy);}
+  .mm.magazine .mm-uline{height:3px;}
+  .mm.magazine .mm-cta{border-radius:0;background:var(--navy);}
+
+  .mm.glass{--mm-text:#fff;--mm-active:#fff;}
+  .mm.glass .mm-bar{background:rgba(255,255,255,.12);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.22);border-radius:12px;}
+  .mm.glass .mm-logo{color:#fff;} .mm.glass .mm-logo .t2{color:#fff;opacity:.7;}
+  .mm.glass .mm-cta{background:#fff;color:var(--navy);}
+  .mm.glass .mm-uline{background:#fff;}
+  .glass-bg{background:linear-gradient(120deg,#1a2e1a,#2d5a3d 60%,#1e3a2e);position:relative;border-radius:12px;padding:22px;}
+  .glass-bg::after{content:"product / hero photo";position:absolute;right:18px;bottom:12px;font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.35);}
+
+  .mm.neon{--mm-text:#c9d4e0;--mm-active:#4ade80;}
+  .mm.neon .mm-bar{background:#0b1220;border:1px solid #1c2940;border-radius:8px;min-height:62px;}
+  .mm.neon .mm-logo{font-family:var(--mono);font-weight:600;font-size:18px;color:#fff;}
+  .mm.neon .mm-logo .t2{color:#4ade80;text-shadow:0 0 12px rgba(74,222,128,.7);}
+  .mm.neon .mm-link{font-family:var(--mono);font-size:13.5px;font-weight:500;}
+  .mm.neon .mm-link.on{text-shadow:0 0 10px rgba(74,222,128,.6);}
+  .mm.neon .mm-uline{background:#4ade80;box-shadow:0 0 10px rgba(74,222,128,.8);}
+  .mm.neon .mm-cta{background:#4ade80;color:#06210f;box-shadow:0 0 18px rgba(74,222,128,.45);}
+
+  .mm.brutal{--mm-text:#000;--mm-active:#000;}
+  .mm.brutal .mm-bar{background:#fff;border:2.5px solid #000;border-radius:0;min-height:66px;box-shadow:6px 6px 0 #000;}
+  .mm.brutal .mm-logo{font-family:var(--mono);font-weight:600;font-size:19px;color:#000;text-transform:uppercase;letter-spacing:-.02em;}
+  .mm.brutal .mm-logo .t2{color:#000;background:var(--red);color:#fff;padding:0 4px;}
+  .mm.brutal .mm-link{font-family:var(--mono);font-size:13.5px;font-weight:600;text-transform:uppercase;}
+  .mm.brutal .mm-item.on .mm-link{outline:2px solid #000;outline-offset:3px;}
+  .mm.brutal .mm-uline{display:none;}
+  .mm.brutal .mm-cta{background:#000;color:#fff;border-radius:0;border:2.5px solid #000;}
+
+  .mm.cinema{--mm-text:#e8e8ea;--mm-active:var(--amber);}
+  .mm.cinema .mm-bar{background:#12121a;border-radius:8px;min-height:66px;}
+  .mm.cinema .mm-logo{color:#fff;letter-spacing:.04em;} .mm.cinema .mm-logo .t2{color:var(--amber);}
+  .mm.cinema .mm-link{letter-spacing:.05em;}
+  .mm.cinema .mm-uline{background:var(--amber);}
+  .mm.cinema .mm-cta{background:var(--amber);color:#1a1206;}
+
+  /* ── Recipe table ── */
+  table.rt{width:100%;border-collapse:collapse;font-size:13px;background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+  table.rt th{background:var(--navy);color:#fff;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;text-align:left;padding:11px 14px;}
+  table.rt td{padding:10px 14px;border-top:1px solid var(--line);vertical-align:top;line-height:1.4;}
+  table.rt tr:nth-child(even) td{background:#fbf7ef;}
+  table.rt .nm{font-weight:600;color:var(--navy);}
+  table.rt .id{font-family:var(--mono);font-size:11px;color:var(--mute);}
+  table.rt code{font-size:11px;padding:1px 4px;}
+
+  /* ── Implementation cards ── */
+  .impl{display:flex;flex-direction:column;gap:18px;}
+  .icard{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px 24px;display:grid;grid-template-columns:46px 1fr;gap:18px;}
+  .icard .n{width:46px;height:46px;border-radius:11px;background:var(--red-soft);color:var(--red);font-family:var(--disp);font-size:24px;display:flex;align-items:center;justify-content:center;}
+  .icard.fix .n{background:#fff4ec;color:var(--orange);}
+  .icard h4{font-size:16px;font-weight:700;color:var(--navy);margin:0 0 6px;}
+  .icard .sev{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:4px;margin-left:8px;vertical-align:middle;}
+  .sev.high{background:#fee2e2;color:#b42318;} .sev.med{background:#fef3c7;color:#b45309;} .sev.low{background:#e0e7ff;color:#3730a3;}
+  .icard p{font-size:13.5px;color:var(--mute);line-height:1.58;margin:0 0 10px;}
+  .icard p b{color:var(--navy);}
+  pre{margin:8px 0 0;background:#0e1726;border-radius:9px;padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:11.5px;line-height:1.6;color:#d6deea;}
+  pre .c{color:#6b8299;} pre .k{color:#f4a23b;} pre .s{color:#8fcb78;} pre .p{color:#ff9d8a;}
+
+  .why{margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:6px 24px;}
+  .why details{border-bottom:1px solid var(--line);}
+  .why details:last-child{border-bottom:0;}
+  .why summary{font-size:14px;font-weight:600;color:var(--navy);padding:15px 0;cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;}
+  .why summary::-webkit-details-marker{display:none;}
+  .why summary .pl{color:var(--red);font-family:var(--mono);transition:transform .2s;}
+  .why details[open] summary .pl{transform:rotate(45deg);}
+  .why .ans{font-size:13.5px;color:var(--mute);line-height:1.6;padding:0 0 16px 26px;max-width:80ch;}
+
+  .foot{margin-top:64px;border-top:1px solid var(--line);padding-top:22px;display:flex;align-items:center;gap:14px;font-size:12px;color:var(--faint);}
+  .foot .dot{width:7px;height:7px;border-radius:50%;background:var(--red);}
+
+  @media(max-width:880px){
+    .stats{grid-template-columns:repeat(3,1fr);}
+    .mm-tools .mm-social{display:none;}
+    .sec-head{flex-direction:column;align-items:flex-start;gap:6px;} .sec-head p{text-align:left;margin-left:0;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ════════ MASTHEAD ════════ -->
+  <div class="eyebrow">OLObuild · tile deep-dive</div>
+  <h1>Mega <em>Menu</em></h1>
+  <p class="lead">È la tile <b>più ambiziosa del builder</b>: un intero header globale in un solo elemento — top bar, navbar, logo a 5 posizioni, mega-pannello multi-colonna, ricerca, social, CTA, sticky e un menu mobile completo. Ho letto <code>megamenu.js</code> e <code>MegaMenuTile.vue</code> riga per riga. Qui sotto: l'anatomia, le <b>variazioni rese vive</b>, e le <b>implementazioni che ritengo necessarie</b> — a partire da una scoperta concreta nel codice.</p>
+
+  <div class="stats">
+    <div class="stat"><div class="v">~<em>130</em></div><div class="k">campi totali</div></div>
+    <div class="stat"><div class="v"><em>12</em></div><div class="k">preset stilistici</div></div>
+    <div class="stat"><div class="v"><em>14</em></div><div class="k">effetti hover voce</div></div>
+    <div class="stat"><div class="v"><em>10</em></div><div class="k">stili hamburger</div></div>
+    <div class="stat"><div class="v"><em>8</em></div><div class="k">animazioni pannello</div></div>
+    <div class="stat"><div class="v"><em>3</em></div><div class="k">modalità mobile</div></div>
+  </div>
+
+  <!-- ════════ 01 · ANATOMIA ════════ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2>Anatomia</h2><p>Un header completo: ogni zona è governata da decine di chiavi salvate. Voce "Servizi" aperta sul mega-pannello.</p></div>
+
+    <div class="hero-stage">
+      <!-- pins -->
+      <div class="pin tl" style="left:40px;top:24px;">top bar · ticker + CTA + social</div>
+      <div class="pin tl" style="left:40px;top:118px;">logo · 5 posizioni (qui: left)</div>
+      <div class="pin tr" style="right:40px;top:88px;">tools · search · social · CTA</div>
+      <div class="pin bl" style="left:220px;top:175px;">voce mega · chevron + active color</div>
+      <div class="pin bl" style="left:40px;bottom:34px;">mega-pannello · colonne da menu WP + promo</div>
+
+      <div class="mm" style="--mm-tt:none;--mm-gap:20px;">
+        <div class="mm-topbar" style="background:var(--navy);color:#9fb0c4;border-bottom:1px solid rgba(255,255,255,.07);">
+          <div class="tick"><b style="color:var(--amber)">AVVISI:</b><span>Spedizione gratuita sopra 49&euro; · Assistenza attiva fino alle 20</span></div>
+          <div class="right">
+            <span style="color:#fff">Chiama 0461 123 456</span>
+            <span class="mm-social" style="color:#cdd6e2"></span>
+            <span class="cta" style="background:var(--red);color:#fff">Prenota ora</span>
+          </div>
+        </div>
+        <nav class="mm-bar">
+          <div class="mm-logo" style="color:var(--navy)">Olo<span class="t2">build</span></div>
+          <ul class="mm-nav">
+            <li class="mm-item"><a class="mm-link">Home</a></li>
+            <li class="mm-item on"><a class="mm-link on">Servizi<svg class="mm-chev" viewBox="0 0 12 12" fill="currentColor"><path d="M2 4l4 4 4-4z"/></svg></a><span class="mm-uline"></span></li>
+            <li class="mm-item"><a class="mm-link">Soluzioni<svg class="mm-chev" viewBox="0 0 12 12" fill="currentColor"><path d="M2 4l4 4 4-4z"/></svg></a></li>
+            <li class="mm-item"><a class="mm-link">Chi siamo</a></li>
+            <li class="mm-item"><a class="mm-link">Contatti</a></li>
+          </ul>
+          <div class="mm-tools">
+            <span class="mm-ico"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="17" y2="17"/></svg></span>
+            <span class="mm-social" data-social="fb,ig,in"></span>
+            <a class="mm-cta">Area clienti</a>
+          </div>
+        </nav>
+        <div class="mm-panel">
+          <div class="mm-accent"></div>
+          <div class="mm-grid">
+            <div class="mm-col"><h4>Consulenza</h4><a>Audit del sito</a><a>Strategia digitale</a><a>Formazione team</a><a>Supporto continuativo</a></div>
+            <div class="mm-col"><h4>Sviluppo</h4><a>Siti WordPress</a><a>E-commerce</a><a>Integrazioni API</a><a>Manutenzione</a></div>
+            <div class="mm-col"><h4>Design</h4><a>Brand identity</a><a>UI/UX</a><a>Sistema di design</a></div>
+            <div class="mm-promo"><span class="k">In evidenza</span><div class="h">Demo gratuita del builder</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KEY FINDING -->
+    <div class="finding">
+      <div class="ico"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 9v4M12 17h.01" stroke-linecap="round"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div>
+      <div>
+        <div class="tag">Scoperta nel codice · da risolvere</div>
+        <h3>I 12 preset sono dichiarati ma non resi.</h3>
+        <p><code>megamenu.js</code> espone un campo <code>preset</code> con 12 stili (Modern Clean … Tilt Bar), ma <code>MegaMenuTile.vue</code> <b>non legge mai <code>s.preset</code></b>: cambiare preset non sposta un pixel. Sotto trasformo i preset in <b>ricette di token</b> — un valore che imposta in blocco nav/typo/hover/CTA — e ne rendo 6 dal vivo. È la singola implementazione che dà più valore alla tile.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ 02 · VARIAZIONI ════════ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>Variazioni — preset resi vivi</h2><p>Sei ricette, una per personalità. Ognuna è solo un bundle di chiavi già esistenti: nessuna chiave nuova, nessun salvataggio rotto.</p></div>
+
+    <div class="gallery">
+
+      <!-- Modern Clean -->
+      <div class="preset">
+        <div class="preset-head"><span class="name">Modern Clean</span><span class="id">modern-clean</span><span class="use">default consigliato · corporate, servizi, SaaS</span></div>
+        <div class="preset-stage">
+          <div class="mm" style="--mm-gap:22px;box-shadow:0 6px 22px rgba(22,38,61,.08);">
+            <nav class="mm-bar" style="border:1px solid #eef0f2;border-radius:10px;">
+              <div class="mm-logo" style="color:var(--navy)">Olo<span class="t2">build</span></div>
+              <ul class="mm-nav center">
+                <li class="mm-item"><a class="mm-link">Home</a></li>
+                <li class="mm-item on"><a class="mm-link on">Servizi<svg class="mm-chev" viewBox="0 0 12 12" fill="currentColor"><path d="M2 4l4 4 4-4z"/></svg></a><span class="mm-uline"></span></li>
+                <li class="mm-item"><a class="mm-link">Soluzioni<svg class="mm-chev" viewBox="0 0 12 12" fill="currentColor"><path d="M2 4l4 4 4-4z"/></svg></a></li>
+                <li class="mm-item"><a class="mm-link">Contatti</a></li>
+              </ul>
+              <div class="mm-tools"><span class="mm-ico"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="17" y2="17"/></svg></span><a class="mm-cta">Inizia ora</a></div>
+            </nav>
+          </div>
+        </div>
+        <div class="recipe">
+          <span class="chip">nav_bg <b>#fff</b></span><span class="chip">layout <b>center</b></span><span class="chip">hover_effect <b>underline</b></span><span class="chip">active_color <b>primary</b></span><span class="chip">btn_radius <b>6</b></span><span class="chip">panel_shadow <b>md</b></span><span class="chip">panel_open <b>fade</b></span>
+        </div>
+      </div>
+
+      <!-- Minimal Line -->
+      <div class="preset">
+        <div class="preset-head"><span class="name">Minimal Line</span><span class="id">minimal-line</span><span class="use">studi, portfolio, brand di lusso</span></div>
+        <div class="preset-stage" style="background:#faf7f1;">
+          <div class="mm minimal" style="--mm-gap:30px;">
+            <nav class="mm-bar">
+              <div class="mm-logo">STUDIO·OLO</div>
+              <ul class="mm-nav center">
+                <li class="mm-item"><a class="mm-link">Lavori</a></li>
+                <li class="mm-item on"><a class="mm-link on">Studio</a><span class="mm-uline"></span></li>
+                <li class="mm-item"><a class="mm-link">Servizi</a></li>
+                <li class="mm-item"><a class="mm-link">Diario</a></li>
+              </ul>
+              <div class="mm-tools"><a class="mm-cta">Contatti</a></div>
+            </nav>
+          </div>
+        </div>
+        <div class="recipe">
+          <span class="chip">nav_bg <b>trasparente</b></span><span class="chip">text_transform <b>uppercase</b></span><span class="chip">letter_spacing <b>.16em</b></span><span class="chip">font_weight <b>600</b></span><span class="chip">hover_effect <b>underline-grow</b></span><span class="chip">btn <b>ghost · radius 0</b></span>
+        </div>
+      </div>
+
+      <!-- Magazine Bold -->
+      <div class="preset">
+        <div class="preset-head"><span class="name">Magazine Bold</span><span class="id">magazine-bold</span><span class="use">editoriale, news, blog · con top bar ticker</span></div>
+        <div class="preset-stage" style="padding:0;">
+          <div class="mm magazine" style="--mm-gap:22px;">
+            <div class="mm-topbar" style="background:var(--red);color:#fff;">
+              <div class="tick"><b>IN PRIMO PIANO:</b><span>Il builder che cambia WordPress · Nuovi 12 template</span></div>
+              <div class="right"><span class="mm-social" data-social="fb,x,in" style="color:#fff;opacity:.9"></span></div>
+            </div>
+            <nav class="mm-bar">
+              <div class="mm-logo">Il Costruttore</div>
+              <ul class="mm-nav">
+                <li class="mm-item on"><a class="mm-link on">Attualità<svg class="mm-chev" viewBox="0 0 12 12" fill="currentColor"><path d="M2 4l4 4 4-4z"/></svg></a><span class="mm-uline"></span></li>
+                <li class="mm-item"><a class="mm-link">Guide</a></li>
+                <li class="mm-item"><a class="mm-link">Recensioni</a></li>
+                <li class="mm-item"><a class="mm-link">Video</a></li>
+              </ul>
+              <div class="mm-tools"><span class="mm-ico"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="17" y2="17"/></svg></span><a class="mm-cta">Abbonati</a></div>
+            </nav>
+          </div>
+        </div>
+        <div class="recipe">
+          <span class="chip">topbar_enabled <b>true</b></span><span class="chip">topbar_left <b>ticker</b></span><span class="chip">font_weight <b>700</b></span><span class="chip">text_transform <b>uppercase</b></span><span class="chip">nav border-bottom <b>3px navy</b></span><span class="chip">btn_radius <b>0</b></span>
+        </div>
+      </div>
+
+      <!-- Glass Bar -->
+      <div class="preset">
+        <div class="preset-head"><span class="name">Glass Bar</span><span class="id">glass-bar</span><span class="use">header overlay su hero foto · hotel, eventi, food</span></div>
+        <div class="preset-stage" style="padding:22px;">
+          <div class="glass-bg">
+            <div class="mm glass" style="--mm-gap:22px;">
+              <nav class="mm-bar">
+                <div class="mm-logo">Olo<span class="t2">Resort</span></div>
+                <ul class="mm-nav center">
+                  <li class="mm-item"><a class="mm-link">Camere</a></li>
+                  <li class="mm-item on"><a class="mm-link on">Esperienze<svg class="mm-chev" viewBox="0 0 12 12" fill="currentColor"><path d="M2 4l4 4 4-4z"/></svg></a><span class="mm-uline"></span></li>
+                  <li class="mm-item"><a class="mm-link">Ristorante</a></li>
+                  <li class="mm-item"><a class="mm-link">Contatti</a></li>
+                </ul>
+                <div class="mm-tools"><a class="mm-cta">Prenota</a></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+        <div class="recipe">
+          <span class="chip">header_mode <b>overlay</b></span><span class="chip">nav_bg <b>rgba blur</b></span><span class="chip">text_color <b>#fff</b></span><span class="chip">sticky <b>true</b></span><span class="chip">sticky_bg <b>solido on-scroll</b></span><span class="chip">btn <b>bianco</b></span>
+        </div>
+      </div>
+
+      <!-- Neon Strip -->
+      <div class="preset">
+        <div class="preset-head"><span class="name">Neon Strip</span><span class="id">neon-strip</span><span class="use">gaming, tech, web3 · dark mode</span></div>
+        <div class="preset-stage dark">
+          <div class="mm neon" style="--mm-gap:24px;">
+            <nav class="mm-bar">
+              <div class="mm-logo">olo<span class="t2">_build</span></div>
+              <ul class="mm-nav">
+                <li class="mm-item"><a class="mm-link">Prodotto</a></li>
+                <li class="mm-item on"><a class="mm-link on">Docs<svg class="mm-chev" viewBox="0 0 12 12" fill="currentColor"><path d="M2 4l4 4 4-4z"/></svg></a><span class="mm-uline"></span></li>
+                <li class="mm-item"><a class="mm-link">Prezzi</a></li>
+                <li class="mm-item"><a class="mm-link">Community</a></li>
+              </ul>
+              <div class="mm-tools"><span class="mm-ico" style="color:#4ade80"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="17" y2="17"/></svg></span><a class="mm-cta">Lancia app</a></div>
+            </nav>
+          </div>
+        </div>
+        <div class="recipe">
+          <span class="chip">nav_bg <b>#0b1220</b></span><span class="chip">text_color <b>#c9d4e0</b></span><span class="chip">active_color <b>neon</b></span><span class="chip">hover_effect <b>glitch</b></span><span class="chip">panel_open <b>blur</b></span><span class="chip">btn <b>glow</b></span>
+        </div>
+      </div>
+
+      <!-- Brutalist Block -->
+      <div class="preset">
+        <div class="preset-head"><span class="name">Brutalist Block</span><span class="id">brutalist-block</span><span class="use">agenzie creative, drop, statement brand</span></div>
+        <div class="preset-stage" style="background:#efe9dd;">
+          <div class="mm brutal" style="--mm-gap:22px;">
+            <nav class="mm-bar">
+              <div class="mm-logo">OLO<span class="t2">BUILD</span></div>
+              <ul class="mm-nav">
+                <li class="mm-item"><a class="mm-link">Work</a></li>
+                <li class="mm-item on"><a class="mm-link on">Studio</a></li>
+                <li class="mm-item"><a class="mm-link">Drop</a></li>
+                <li class="mm-item"><a class="mm-link">Index</a></li>
+              </ul>
+              <div class="mm-tools"><a class="mm-cta">Say hi →</a></div>
+            </nav>
+          </div>
+        </div>
+        <div class="recipe">
+          <span class="chip">nav border <b>2.5px #000</b></span><span class="chip">box-shadow <b>6px 6px 0 #000</b></span><span class="chip">hover_effect <b>framed</b></span><span class="chip">font <b>mono</b></span><span class="chip">radius <b>0 ovunque</b></span><span class="chip">btn <b>nero</b></span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════ 03 · TABELLA RICETTE ════════ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>Le 12 ricette, in chiaro</h2><p>Mappa completa preset → chiavi. È esattamente ciò che il preset dovrebbe scrivere quando viene scelto.</p></div>
+    <table class="rt">
+      <thead><tr><th style="width:18%">Preset</th><th style="width:30%">Navbar &amp; tipografia</th><th style="width:28%">Hover · CTA · pannello</th><th>Carattere</th></tr></thead>
+      <tbody>
+        <tr><td><span class="nm">Modern Clean</span><br><span class="id">modern-clean</span></td><td>bg <code>#fff</code> · testo navy · peso 500 · center</td><td>hover <code>underline</code> · CTA radius 6 · panel <code>fade</code> ombra md</td><td>Pulito, versatile, sicuro</td></tr>
+        <tr><td><span class="nm">Minimal Line</span><br><span class="id">minimal-line</span></td><td>bg trasparente · UPPERCASE · spacing .16em · peso 600</td><td>hover <code>underline-grow</code> · CTA ghost radius 0 · panel <code>fade</code></td><td>Sussurrato, editoriale</td></tr>
+        <tr><td><span class="nm">Magazine Bold</span><br><span class="id">magazine-bold</span></td><td>top bar ticker · peso 700 · UPPERCASE · bordo navy 3px</td><td>hover <code>double-line</code> · CTA radius 0 · panel <code>slide-down</code></td><td>Urlato, da edicola</td></tr>
+        <tr><td><span class="nm">Cinema Bar</span><br><span class="id">cinema-bar</span></td><td>bg <code>#12121a</code> scuro · testo chiaro · accento ambra</td><td>hover <code>highlight</code> · CTA ambra · panel <code>scale-center</code></td><td>Premium, notturno</td></tr>
+        <tr><td><span class="nm">Compact Bar</span><br><span class="id">compact-bar</span></td><td>altezza 48 · font 14 · gap 12 · bar_padding ridotto</td><td>hover <code>background</code> · CTA piccola · panel auto</td><td>Denso, app-like</td></tr>
+        <tr><td><span class="nm">Glass Bar</span><br><span class="id">glass-bar</span></td><td>overlay · bg rgba+blur · testo bianco · sticky solido</td><td>hover <code>underline</code> · CTA bianca · panel <code>fade</code></td><td>Etereo, su foto</td></tr>
+        <tr><td><span class="nm">Neon Strip</span><br><span class="id">neon-strip</span></td><td>bg <code>#0b1220</code> · mono · accento neon glow</td><td>hover <code>glitch</code> · CTA glow · panel <code>blur</code></td><td>Tech, gaming</td></tr>
+        <tr><td><span class="nm">Brutalist Block</span><br><span class="id">brutalist-block</span></td><td>bordo 2.5px #000 · shadow 6px hard · mono · radius 0</td><td>hover <code>framed</code> · CTA nera · panel netto</td><td>Grezzo, statement</td></tr>
+        <tr><td><span class="nm">Gradient Bar</span><br><span class="id">gradient-bar</span></td><td>nav_bg gradiente · testo bianco · peso 600</td><td>hover <code>fill-up</code> · CTA vetro · panel <code>scale</code></td><td>Vivace, startup</td></tr>
+        <tr><td><span class="nm">Sticker Tape</span><br><span class="id">sticker-tape</span></td><td>bg acceso · voci a pillola · peso 700</td><td>hover <code>background</code> pill · CTA pill · panel arrotondato</td><td>Giocoso, pop</td></tr>
+        <tr><td><span class="nm">Retro Terminal</span><br><span class="id">retro-terminal</span></td><td>bg quasi nero · mono verde · spacing largo</td><td>hover <code>bracket</code> [voce] · CTA bordo · panel <code>reveal</code></td><td>Nostalgico, dev</td></tr>
+        <tr><td><span class="nm">Tilt Bar</span><br><span class="id">tilt-bar</span></td><td>barra con micro-rotazione · peso 700 · UPPERCASE</td><td>hover <code>flip</code> 3D · CTA inclinata · panel <code>flip</code></td><td>Dinamico, sportivo</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ════════ 04 · IMPLEMENTAZIONI ════════ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">04</span><h2>Implementazioni necessarie</h2><p>Sei interventi sul codice, dal più importante. Tutti rispettano il vincolo: <b>chiavi salvate invariate</b>.</p></div>
+
+    <div class="impl">
+
+      <div class="icard">
+        <div class="n">1</div>
+        <div>
+          <h4>Cablare i preset come ricette<span class="sev high">alta priorità</span></h4>
+          <p><code>MegaMenuTile.vue</code> non legge <code>s.preset</code>: le 12 voci non fanno nulla. Definire una mappa <code>PRESETS</code> (preset → bundle di chiavi già esistenti) e applicarla al cambio. I valori restano <b>override-abili</b> dal cliente — il preset è solo un punto di partenza, non un lucchetto.</p>
+          <pre><span class="c">// config/megamenuPresets.js — nessuna chiave nuova, solo valori</span>
+<span class="k">export const</span> PRESETS = {
+  <span class="p">'minimal-line'</span>: {
+    nav_bg:<span class="s">''</span>, text_transform:<span class="s">'uppercase'</span>, letter_spacing:<span class="s">'2'</span>,
+    font_weight:<span class="s">'600'</span>, hover_effect:<span class="s">'underline-grow'</span>,
+    button_mode:<span class="s">'last'</span>, btn_bg:<span class="s">'transparent'</span>, btn_radius:{tl:0,tr:0,br:0,bl:0},
+  },
+  <span class="p">'neon-strip'</span>: {
+    nav_bg:<span class="s">'#0b1220'</span>, text_color:<span class="s">'var(--olo-color-text-invert)'</span>,
+    active_color:<span class="s">'var(--olo-color-accent)'</span>, hover_effect:<span class="s">'glitch'</span>,
+    panel_open_animation:<span class="s">'blur'</span>, panel_bg:<span class="s">'#0e1726'</span>,
+  },
+  <span class="c">/* …altri 10 */</span>
+};
+<span class="c">// nello store, al cambio preset:</span>
+<span class="k">function</span> applyPreset(id){ Object.assign(settings, PRESETS[id] || {}); }</pre>
+        </div>
+      </div>
+
+      <div class="icard fix">
+        <div class="n">2</div>
+        <div>
+          <h4>Allineare <code>mega_mode</code>: config ↔ componente<span class="sev high">bug</span></h4>
+          <p>La config offre <code>auto</code> e <code>css-class</code>. Ma il componente controlla <code>megaMode === 'auto'</code> e <code>=== 'all'</code> (valore <b>inesistente</b>), e <b>non gestisce mai <code>css-class</code></b>: scegliendo "Solo classe mega-menu" nessuna voce diventa mega. Il contratto va riallineato.</p>
+          <pre><span class="c">// previewItems() — gestire i due valori REALI della config</span>
+<span class="k">if</span> (!isButton && megaMode === <span class="p">'auto'</span> && hasGC) isMega = <span class="k">true</span>;
+<span class="k">if</span> (!isButton && megaMode === <span class="p">'css-class'</span>
+    && (item.classes||[]).includes(<span class="s">'mega-menu'</span>)) isMega = <span class="k">true</span>;</pre>
+        </div>
+      </div>
+
+      <div class="icard fix">
+        <div class="n">3</div>
+        <div>
+          <h4>Default hardcoded → token<span class="sev med">coerenza</span></h4>
+          <p>Regola 1 del design language: niente hex grezzi. Oggi i default di top bar e mobile sono fissi: <code>topbar_bg:'#1F2937'</code>, <code>topbar_text_color:'#9CA3AF'</code>, <code>mobile_bg:'#1e1e2e'</code>, <code>topbar_right_cta_color:'#FFFFFF'</code>. Vanno legati ai ruoli cliente (dark/light/text) con fallback via <code>resolveColor</code>, così la top bar segue il brand come il resto.</p>
+        </div>
+      </div>
+
+      <div class="icard">
+        <div class="n">4</div>
+        <div>
+          <h4>IA dell'inspector per 130 campi<span class="sev med">UX</span></h4>
+          <p>È la tile con più chiavi del builder. Senza gerarchia, l'utente si perde. Proposta: <b>preset in cima</b> (riduce il bisogno di toccare il resto), poi gruppi collassabili in ordine di frequenza — <i>Brand &amp; voci → Navbar → Mega-pannello → Top bar → Mobile → Avanzate</i> — e <b>badge "modificato"</b> sui gruppi dove il cliente ha sovrascritto il preset. Stesso pattern dello <code>StyleBoxStack</code> già consegnato.</p>
+        </div>
+      </div>
+
+      <div class="icard">
+        <div class="n">5</div>
+        <div>
+          <h4>Colonna "promo / immagine" nel pannello<span class="sev low">feature</span></h4>
+          <p>Oggi il mega-pannello rende solo colonne di link (heading + voci). I mega-menu moderni chiudono con una <b>card in evidenza</b> — immagine, articolo, CTA (vedi l'anatomia in alto). Aggiungere un tipo-colonna <code>promo</code> nel <code>megapanel-map</code>: immagine + titolo + link, con placeholder elegante quando vuota (regola 8).</p>
+        </div>
+      </div>
+
+      <div class="icard">
+        <div class="n">6</div>
+        <div>
+          <h4>Rendere la ricerca <code>expand</code><span class="sev low">rifinitura</span></h4>
+          <p>Esiste <code>search_style:'expand'</code> nei default ma l'anteprima mostra sempre la sola icona statica. Rendere almeno i due stati chiave — icona → campo che si espande inline, e overlay a tutta barra — così l'utente vede cosa sceglie senza pubblicare.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════ FAQ ════════ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">05</span><h2>Note di metodo</h2></div>
+    <div class="why">
+      <details open><summary><span class="pl">+</span>Perché ricette di token e non CSS per-preset?</summary><div class="ans">Un preset che scrive token resta <b>trasparente e modificabile</b>: il cliente sceglie "Neon Strip", poi cambia solo il colore CTA e tutto il resto regge. Un blocco di CSS dedicato sarebbe opaco, non sovrascrivibile dall'inspector e violerebbe il principio "token-first". Le ricette riusano chiavi che esistono già — zero migrazioni, zero salvataggi rotti.</div></details>
+      <details><summary><span class="pl">+</span>Chrome del builder o contenuto della tile?</summary><div class="ans">Tutto ciò che vedi qui è <b>contenuto</b>: usa i token del cliente (primario = rosso brand, override liberi). L'arancio <code>#e8622a</code> dell'inspector — slider, switch device, toggle — resta fisso: è l'identità del prodotto OLObuild e non va toccato.</div></details>
+      <details><summary><span class="pl">+</span>Le variazioni sono fedeli al componente reale?</summary><div class="ans">Sì: stessa struttura DOM di <code>MegaMenuTile.vue</code> (bar → nav-item → chevron → uline → tools → panel), stesso set social, stessa logica voce-attiva. Cambiano solo i valori delle chiavi — esattamente ciò che farebbe il preset una volta cablato.</div></details>
+    </div>
+  </section>
+
+  <div class="foot"><span class="dot"></span><span>OLObuild · Mega Menu deep-dive — <code>megamenu.js</code> + <code>MegaMenuTile.vue</code> @ main · 6 variazioni rese, 6 implementazioni proposte</span></div>
+
+</div>
+<script>
+  // Inject social SVGs (faithful set from MegaMenuTile.vue) into any .mm-social
+  const SOC = {
+    fb:'<path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>',
+    ig:'<path fill-rule="evenodd" d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm0 2a3 3 0 00-3 3v10a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H7zm5 3.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9zm0 2a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM17.6 6a1.1 1.1 0 110 2.2 1.1 1.1 0 010-2.2z"/>',
+    in:'<path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>',
+    x:'<path d="M4 4l6.5 8L4 20h2l5.5-6.8L16 20h4l-6.8-8.4L20 4h-2l-5.2 6.4L8 4z"/>',
+    yt:'<path d="M22.5 6.4a2.8 2.8 0 00-1.9-2C18.9 4 12 4 12 4s-6.9 0-8.6.4a2.8 2.8 0 00-1.9 2A29 29 0 001 12a29 29 0 00.5 5.6 2.8 2.8 0 001.9 2C5.1 20 12 20 12 20s6.9 0 8.6-.4a2.8 2.8 0 001.9-2 29 29 0 00.5-5.6 29 29 0 00-.5-5.6z"/><polygon points="9.75 15 15.5 12 9.75 8.5" fill="#fff"/>',
+  };
+  document.querySelectorAll('.mm-social').forEach(el=>{
+    const list=(el.dataset.social||'fb,ig,x').split(',');
+    el.innerHTML=list.map(n=>`<svg viewBox="0 0 24 24" fill="currentColor">${SOC[n.trim()]||''}</svg>`).join('');
+  });
+</script>
+</body>
+</html>

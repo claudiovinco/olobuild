@@ -1,0 +1,32 @@
+Leggi i file di questo handoff (stessa cartella di questo prompt):
+- README.md      → regole comuni (contratto dati invariato, CHROME vs contenuto, responsive a
+                   livello pagina, selettore Normale/Hover, niente campi vuoti) + ordine consigliato
+- LAYOUT.md      → spec scheda Layout      (+ reference/REFERENCE_layout.html)
+- EFFETTI.md     → spec sezione Effetti    (+ reference/REFERENCE_effetti.html)
+- INSERTER.md    → spec inserter Elementi  (+ reference/REFERENCE_inserter.html)
+
+Obiettivo: portare i pannelli Layout, Effetti e l'inserter Elementi in linea con FieldBox /
+FieldBorder già in produzione. Cambia SOLO la UI, non il formato salvato.
+
+Vincoli NON negoziabili (validi per tutti):
+1. Contratto dati IDENTICO. Le chiavi salvate restano quelle di oggi — nessun rename, nessuna
+   chiave nuova, nessuna migrazione. I template esistenti devono continuare a funzionare. Le
+   etichette nei mockup sono solo testo UI (t()), non chiavi.
+2. CHROME del builder = accento arancio fisso #e8622a (+ navy #16263d): slider, knob, toggle,
+   selettore Normale/Hover, focus campi, barretta categoria attiva. Il COLORE del contenuto
+   (bordo, ombra-testo…) usa i token cliente var(--olo-color-*), default token `primary`. Usa
+   un unico --olo-ui-accent a livello pannello; NON introdurre nomi --olo-color-* che
+   GlobalColorsPanel non genera.
+3. Responsive NON nel pannello: lo switch device vive a livello pagina/toolbar. Il salvataggio
+   per-breakpoint resta nel wrapper esistente (ResponsiveFieldWrap, chiavi _<bp>), non nel field.
+4. Stato hover col nuovo selettore segmentato (pillola navy, segmento attivo bianco). È chrome
+   di InspectorField; scrive sulle chiavi hover già presenti, non le duplica.
+5. Niente campi vuoti: ogni input ha un segnaposto sensato (auto / 0 / Nessuna / Ease) e ogni
+   dimensione ha la sua unità in valbox (px % em rem vw vh ° ms).
+
+Procedi UN PANNELLO ALLA VOLTA, nell'ordine di README.md (Layout → Effetti → Inserter), e a
+piccoli passi: prima <template> + <style> lasciando <script>/modello invariato → valida il diff
+sul canvas → poi i collegamenti (valbox/select riusabili). Mai un big-bang sui tre insieme.
+Mantieni i pattern, lo state, l'i18n e la libreria UI esistenti del repo.
+
+Nota: il controllo Bordo NON è qui — ha il suo handoff in design_handoff_olobuild_bordercontrol/.

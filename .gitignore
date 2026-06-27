@@ -29,3 +29,8 @@ tmp_deploy/
 /_*.php
 /_*.txt
 build/
+
+# Scratch/dump di lavoro (audit, render, design search) — non codice del plugin
+/tmp_*.json
+/tmp_blocks/
+/tmp_design_*/

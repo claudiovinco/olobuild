@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Wander — Small-group expeditions to wild places</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="Wander runs small-group expeditions to the world's wild places — expert guides, low impact, real distance from the crowds."/>
+<link rel="stylesheet" href="olothemes/wander.css"/>
+</head>
+<body data-screen-label="Wander — Home">
+
+<!-- ═══ NAVMENU (OLObuild · Navigation → Navmenu) ═══ -->
+<header class="wd-nav" data-olo-tile="Navmenu">
+  <div class="wd-wrap wd-nav__in">
+    <a class="logo" href="#top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 18 5-12 5 8 3-5 5 9z"/></svg>Wander</a>
+    <nav class="wd-nav__links">
+      <a href="OLOtheme - Wander - Destination.html">Destinations</a>
+      <a href="#trips">Trip types</a>
+      <a href="#why">Why Wander</a>
+      <a href="#">Journal</a>
+    </nav>
+    <div class="wd-nav__cta">
+      <a href="#destinations" class="btn btn--ghost-d">Browse trips</a>
+      <a href="#cta" class="btn btn--sand">Plan my trip</a>
+    </div>
+    <button class="burger" data-burger aria-label="Open menu"><span></span></button>
+  </div>
+</header>
+<div class="mobile" data-mobile>
+  <button data-close aria-label="Close">&times;</button>
+  <a href="OLOtheme - Wander - Destination.html">Destinations</a>
+  <a href="#trips">Trip types</a>
+  <a href="#why">Why Wander</a>
+  <a href="#cta" style="color:var(--sand)">Plan my trip</a>
+</div>
+
+<main id="top">
+
+<!-- ═══ HERO + TRIP FINDER (OLObuild · Marketing → Hero · NEW tile → TripFinder) ═══ -->
+<section class="wd-hero" data-olo-tile="Hero">
+  <div class="wd-hero__img"><div class="media" data-label="hero — mountain valley at golden hour, full-bleed"></div></div>
+  <div class="wd-hero__grad"></div>
+  <div class="wd-wrap wd-hero__in">
+    <span class="eyebrow" data-reveal>Small groups · big places · since 2009</span>
+    <h1 data-reveal="80">The world is wide. Go further.</h1>
+    <p class="wd-hero__sub" data-reveal="180">Expert-led expeditions to the places worth the effort — twelve travellers, zero crowds, a footprint we keep light.</p>
+    <div class="wd-finder" data-olo-tile="TripFinder" data-olo-note="NEW tile candidate: TripFinder" data-reveal="260">
+      <div class="wd-finder__f"><label>Where</label><span class="v">Anywhere wild</span></div>
+      <div class="wd-finder__f"><label>When</label><span class="v">Flexible</span></div>
+      <div class="wd-finder__f"><label>Trip type</label><span class="v">All</span></div>
+      <button class="btn btn--coral btn--lg">Find a trip
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FEATURED DESTINATIONS (OLObuild · NEW tile → DestinationCard) ═══
+     data-olo-note: destination card — full-bleed image, top tag + favourite, place name,
+     duration + price footer. Not in current tile set → candidate NEW tile "DestinationCard". -->
+<section class="wd-sec" id="destinations" data-olo-tile="DestinationCard" data-olo-note="NEW tile candidate: DestinationCard">
+  <div class="wd-wrap">
+    <div class="head-row" data-reveal>
+      <div class="sec-head"><span class="eyebrow">Where to next</span><h2>Featured expeditions</h2></div>
+      <a href="OLOtheme - Wander - Destination.html" class="link-more">All destinations <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+    <div class="dest-grid">
+      <a class="dest" href="OLOtheme - Wander - Destination.html" data-reveal><div class="media" data-label="patagonia"></div><div class="dest__veil"></div><div class="dest__top"><span class="dest__tag">Trekking</span><span class="dest__fav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 5.5-7 10-7 10Z"/></svg></span></div><div class="dest__place">Patagonia</div><div class="dest__meta"><span>11 days · Chile &amp; Argentina</span><span class="price">€3,200</span></div></a>
+      <a class="dest" href="OLOtheme - Wander - Destination.html" data-reveal="100"><div class="media" data-label="iceland"></div><div class="dest__veil"></div><div class="dest__top"><span class="dest__tag">Expedition</span><span class="dest__fav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 5.5-7 10-7 10Z"/></svg></span></div><div class="dest__place">Iceland Highlands</div><div class="dest__meta"><span>8 days · Self-drive + guide</span><span class="price">€2,450</span></div></a>
+      <a class="dest" href="OLOtheme - Wander - Destination.html" data-reveal="200"><div class="media" data-label="namibia"></div><div class="dest__veil"></div><div class="dest__top"><span class="dest__tag">Safari</span><span class="dest__fav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 5.5-7 10-7 10Z"/></svg></span></div><div class="dest__place">Namib Desert</div><div class="dest__meta"><span>9 days · Namibia</span><span class="price">€3,750</span></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WHY split (OLObuild · Marketing → SplitText) ═══ -->
+<section class="wd-sec wd-wrap" id="why" data-olo-tile="SplitText">
+  <div class="wd-exp">
+    <div class="wd-exp__media media media--light" data-label="guide with small group on a ridge" data-reveal></div>
+    <div data-reveal="120">
+      <span class="eyebrow">Why Wander</span>
+      <h2>Travel that's worth the distance</h2>
+      <p>We keep groups to twelve, hire guides who actually live where they lead, and route around the crowds — not into them.</p>
+      <ul class="wd-exp__list">
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="3"/><circle cx="16" cy="9" r="2.4"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M15 20c0-2 2-3.5 4-3.5"/></svg></span><span><b>Groups of twelve</b><span>Small enough to move differently.</span></span></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M5 9l7-7 7 7"/></svg></span><span><b>Local expert guides</b><span>People who know the place by heart.</span></span></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3C9 8 6 10.5 6 14a6 6 0 0 0 12 0c0-3.5-3-6-6-11Z"/></svg></span><span><b>Light footprint</b><span>Carbon-offset, leave-no-trace, always.</span></span></li>
+      </ul>
+      <a href="#cta" class="btn btn--teal">Plan your trip</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TRIP TYPES (OLObuild · Dynamic → CardGrid) ═══ -->
+<section class="wd-sec" id="trips" style="background:var(--paper); border-block:1px solid var(--line)" data-olo-tile="CardGrid">
+  <div class="wd-wrap">
+    <div class="sec-head center" data-reveal><span class="eyebrow">Find your pace</span><h2>Trips for every kind of traveller</h2></div>
+    <div class="type-grid">
+      <a class="ttype" href="OLOtheme - Wander - Destination.html" data-reveal><div class="media" data-label="trekking"></div><div class="ttype__veil"></div><b>Trekking</b></a>
+      <a class="ttype" href="OLOtheme - Wander - Destination.html" data-reveal="80"><div class="media" data-label="safari"></div><div class="ttype__veil"></div><b>Wildlife &amp; safari</b></a>
+      <a class="ttype" href="OLOtheme - Wander - Destination.html" data-reveal="160"><div class="media" data-label="sailing"></div><div class="ttype__veil"></div><b>Sailing</b></a>
+      <a class="ttype" href="OLOtheme - Wander - Destination.html" data-reveal="240"><div class="media" data-label="culture"></div><div class="ttype__veil"></div><b>Culture &amp; food</b></a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STATS (OLObuild · Marketing → Counter) ═══ -->
+<section class="wd-stats" data-olo-tile="Counter">
+  <div class="wd-wrap wd-stats__in">
+    <div data-reveal><b><span data-count="60">0</span></b><span>Countries</span></div>
+    <div data-reveal="80"><b><span data-count="14000">0</span>+</b><span>Travellers guided</span></div>
+    <div data-reveal="160"><b><span data-count="12">0</span></b><span>Max group size</span></div>
+    <div data-reveal="240"><b><span data-count="4.9" data-dec="1">0</span></b><span>Avg. rating</span></div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIAL (OLObuild · Marketing → Testimonial) ═══ -->
+<section class="wd-sec wd-testi" data-olo-tile="Testimonial">
+  <div class="wd-wrap wd-testi__in" data-reveal>
+    <div class="stars">★★★★★</div>
+    <q>Eleven days in Patagonia and not one moment felt packaged. We went where the weather let us, and our guide made every detour the best part.</q>
+    <div class="wd-testi__by">Hannah &amp; Theo · Patagonia expedition</div>
+  </div>
+</section>
+
+<!-- ═══ CTA (OLObuild · Marketing → CallToAction) ═══ -->
+<section class="wd-cta" id="cta" data-olo-tile="CallToAction">
+  <div class="media" data-label="campsite under the stars · background"></div>
+  <div class="wd-cta__grad"></div>
+  <div class="wd-wrap wd-cta__in" data-reveal>
+    <span class="eyebrow">Let's plan it</span>
+    <h2>Where will you wander?</h2>
+    <p>Tell us roughly where and when. We'll send back two routes you can actually picture yourself on — no obligation.</p>
+    <a href="#" class="btn btn--sand btn--lg">Plan my trip
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══ FOOTER (OLObuild · Navigation → Footer) ═══ -->
+<footer class="wd-foot" data-olo-tile="Footer">
+  <div class="wd-wrap">
+    <div class="wd-foot__top">
+      <div class="wd-foot__brand">
+        <a class="logo" href="#top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 18 5-12 5 8 3-5 5 9z"/></svg>Wander</a>
+        <p>Small-group expeditions to the world's wild places. Expert-led, low impact, far from the crowds.</p>
+      </div>
+      <div><h4>Travel</h4><ul><li><a href="OLOtheme - Wander - Destination.html">Destinations</a></li><li><a href="#trips">Trip types</a></li><li><a href="#">Group trips</a></li><li><a href="#">Private trips</a></li></ul></div>
+      <div><h4>Wander</h4><ul><li><a href="#why">Why us</a></li><li><a href="#">Our guides</a></li><li><a href="#">Sustainability</a></li><li><a href="#">Journal</a></li></ul></div>
+      <div><h4>Help</h4><ul><li><a href="#">Booking &amp; payments</a></li><li><a href="#">Travel insurance</a></li><li><a href="#">FAQ</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="wd-foot__bot"><span>© 2026 Wander — an OLOtheme demo.</span><span>Built with OLObuild</span></div>
+  </div>
+</footer>
+
+<script src="olothemes/theme.js"></script>
+</body>
+</html>

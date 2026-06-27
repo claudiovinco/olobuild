@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>OLObuild — Default tile: oggi vs curati</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700;800&display=swap');
+  :root{
+    --red:#e1474f; --navy:#0f172a; --ink:#1f2937; --mute:#5e6a7a; --faint:#94a3b8;
+    --bg:#efe9dd; --line:#e6dfd1;
+    --sans:"Work Sans",-apple-system,sans-serif; --disp:"Instrument Serif",Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1180px;margin:0 auto;padding:48px 32px 80px;}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+  h1{font-family:var(--disp);font-weight:400;font-size:clamp(38px,5vw,60px);line-height:1;letter-spacing:-.02em;color:var(--navy);margin:0 0 14px;}
+  h1 em{font-style:italic;color:var(--red);}
+  .lead{font-size:16px;color:var(--mute);max-width:70ch;margin:0 0 36px;line-height:1.55;}
+  .lead b{color:var(--navy);font-weight:600;}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;}
+  .col-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .col-head .badge{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:999px;}
+  .col-head.today .badge{background:#fde2e4;color:#b42318;}
+  .col-head.new .badge{background:#dcfce7;color:#15803d;}
+  .col-head h2{font-size:16px;font-weight:700;color:var(--navy);margin:0;}
+  .col-head .note{font-size:12px;color:var(--faint);margin-left:auto;}
+
+  /* page frame mock */
+  .page{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 8px 30px -12px rgba(15,23,42,.14);}
+  .page-bar{height:34px;background:#f3ede2;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:6px;padding:0 12px;}
+  .page-bar i{width:9px;height:9px;border-radius:50%;background:#d4ccbd;display:block;}
+  .page-bar .u{margin-left:10px;font-size:11px;color:var(--faint);font-family:var(--sans);}
+  .page-body{padding:26px 26px 30px;display:flex;flex-direction:column;gap:22px;background:#fff;}
+
+  .tile-wrap{position:relative;}
+  .tile-tag{position:absolute;left:-10px;top:-10px;font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);background:#fff;border:1px solid var(--line);border-radius:5px;padding:2px 6px;z-index:3;}
+
+  /* ── faithful tile render ── */
+  /* Button */
+  .t-btnrow{display:flex;justify-content:center;}
+  .t-btn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-family:var(--sans);}
+  /* Alert */
+  .t-alert{padding:16px 20px;display:flex;gap:12px;align-items:flex-start;min-height:60px;}
+  .t-alert .ic{flex-shrink:0;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;}
+  .t-alert .ic svg{width:20px;height:20px;}
+  .t-alert .ttl{font-weight:600;margin-bottom:2px;font-size:14px;}
+  .t-alert .msg{font-size:13px;line-height:1.5;opacity:.9;}
+  /* Divider */
+  .t-div{display:flex;justify-content:center;padding:8px 0;}
+  .t-div .line{display:block;width:100%;}
+  /* Hero */
+  .t-hero{min-height:200px;border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;padding:40px 24px;color:#fff;position:relative;}
+  .t-hero .h-title{font-weight:700;margin:0 0 10px;line-height:1.15;}
+  .t-hero .h-sub{margin:0 0 20px;opacity:.9;font-size:15px;}
+  .t-hero .h-cta{display:inline-flex;gap:10px;justify-content:center;}
+  .t-hero .h-btn{display:inline-block;font-weight:600;font-size:14px;cursor:pointer;}
+
+  .legend{margin-top:40px;background:#fffdf8;border:1px solid var(--line);border-radius:14px;padding:22px 24px;}
+  .legend h3{font-family:var(--disp);font-weight:400;font-size:22px;color:var(--navy);margin:0 0 16px;}
+  .legend-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  .legend-grid h4{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);margin:0 0 10px;}
+  .sw{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px;color:var(--ink);}
+  .sw .chip{width:22px;height:22px;border-radius:6px;border:1px solid rgba(0,0,0,.08);flex-shrink:0;}
+  .sw code{font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--mute);margin-left:auto;}
+  .scaleline{display:flex;align-items:flex-end;gap:8px;}
+  .scaleline .b{background:var(--red);border-radius:4px 4px 0 0;width:26px;}
+  .scaleline .lab{font-size:10px;color:var(--faint);text-align:center;font-family:"JetBrains Mono",monospace;}
+  @media(max-width:860px){.cols,.legend-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">OLObuild · default audit</div>
+  <h1>Tile <em>appena inserite</em></h1>
+  <p class="lead">Stesso identico render, due set di default. A sinistra <b>com'è oggi</b> (indaco hardcoded, emoji, raggi e ombre generici). A destra <b>con i default curati</b> token-first dal pacchetto <b>oloTileDefaults</b>: colore del brand, icone SVG, scala di raggi/spaziature coerente, micro-ombre. L'obiettivo: che ogni tile sia <b>già piacevole all'inserimento</b>, senza ritocchi.</p>
+
+  <div class="cols">
+    <!-- ───────── OGGI ───────── -->
+    <div>
+      <div class="col-head today"><span class="badge">Oggi</span><h2>Default attuali</h2><span class="note">indaco · emoji · piatto</span></div>
+      <div class="page">
+        <div class="page-bar"><i></i><i></i><i></i><span class="u">sito.it</span></div>
+        <div class="page-body">
+
+          <!-- Hero -->
+          <div class="tile-wrap"><span class="tile-tag">Hero</span>
+            <div class="t-hero" style="background:#1e293b;">
+              <div>
+                <div class="h-title" style="font-size:32px;color:#fff;">Benvenuto nel nostro sito</div>
+                <div class="h-sub" style="color:#fff;">Scopri qualcosa di straordinario</div>
+                <div class="h-cta">
+                  <span class="h-btn" style="background:#FFFFFF;color:#6366F1;border-radius:6px;padding:12px 32px;">Inizia ora</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Button -->
+          <div class="tile-wrap"><span class="tile-tag">Button</span>
+            <div class="t-btnrow">
+              <span class="t-btn" style="background:#6366F1;color:#fff;border-radius:6px;padding:14px 32px;font-size:16px;font-weight:600;">Clicca qui</span>
+            </div>
+          </div>
+
+          <!-- Alert -->
+          <div class="tile-wrap"><span class="tile-tag">Alert</span>
+            <div class="t-alert" style="background:#DBEAFE;border-left:4px solid #3B82F6;border-radius:8px;">
+              <span class="ic">ℹ️</span>
+              <div>
+                <div class="ttl" style="color:#374151;">Attenzione!</div>
+                <div class="msg" style="color:#374151;">Questo è un avviso informativo.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="tile-wrap"><span class="tile-tag">Divider</span>
+            <div class="t-div"><span class="line" style="border-top:1px solid #d1d5db;"></span></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ───────── CURATI ───────── -->
+    <div>
+      <div class="col-head new"><span class="badge">Curati</span><h2>Default token-first</h2><span class="note">brand · SVG · scala</span></div>
+      <div class="page">
+        <div class="page-bar"><i></i><i></i><i></i><span class="u">sito.it</span></div>
+        <div class="page-body">
+
+          <!-- Hero -->
+          <div class="tile-wrap"><span class="tile-tag">Hero</span>
+            <div class="t-hero" style="background:linear-gradient(135deg,#1f2937,#0f172a);">
+              <div>
+                <div class="h-title" style="font-size:34px;color:#fff;letter-spacing:-.01em;">Benvenuto nel nostro sito</div>
+                <div class="h-sub" style="color:rgba(255,255,255,.82);">Scopri qualcosa di straordinario</div>
+                <div class="h-cta">
+                  <span class="h-btn" style="background:#e1474f;color:#fff;border-radius:10px;padding:13px 30px;box-shadow:0 6px 16px -6px rgba(225,71,79,.6);">Inizia ora</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Button -->
+          <div class="tile-wrap"><span class="tile-tag">Button</span>
+            <div class="t-btnrow">
+              <span class="t-btn" style="background:#e1474f;color:#fff;border-radius:10px;padding:12px 24px;font-size:16px;font-weight:600;box-shadow:0 1px 2px rgba(15,23,42,.12),0 4px 12px -4px rgba(225,71,79,.5);">Clicca qui</span>
+            </div>
+          </div>
+
+          <!-- Alert -->
+          <div class="tile-wrap"><span class="tile-tag">Alert</span>
+            <div class="t-alert" style="background:#eef4ff;border-left:4px solid #2563eb;border-radius:10px;">
+              <span class="ic" style="color:#2563eb;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg></span>
+              <div>
+                <div class="ttl" style="color:#1f2937;">Attenzione!</div>
+                <div class="msg" style="color:#5e6a7a;">Questo è un avviso informativo.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="tile-wrap"><span class="tile-tag">Divider</span>
+            <div class="t-div"><span class="line" style="border-top:1px solid #e5e7eb;"></span></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- legend -->
+  <div class="legend">
+    <h3>I default curati, in breve</h3>
+    <div class="legend-grid">
+      <div>
+        <h4>Colori — token-first</h4>
+        <div class="sw"><span class="chip" style="background:#e1474f;"></span> Primary (brand) <code>--olo-color-primary</code></div>
+        <div class="sw"><span class="chip" style="background:#eef4ff;"></span> Info soft <code>--olo-color-info-soft</code></div>
+        <div class="sw"><span class="chip" style="background:#ecfdf3;"></span> Success soft <code>--olo-color-success-soft</code></div>
+        <div class="sw"><span class="chip" style="background:#1f2937;"></span> Text <code>--olo-color-text</code></div>
+        <p style="font-size:12.5px;color:var(--mute);margin:12px 0 0;line-height:1.5;">Mai più <code style="font-family:'JetBrains Mono',monospace;font-size:11px">#6366F1</code> hardcoded: se l'utente non sceglie, vince il token del brand.</p>
+      </div>
+      <div>
+        <h4>Scala raggi & spaziature</h4>
+        <div class="scaleline">
+          <div><div class="b" style="height:18px;"></div><div class="lab">sm·6</div></div>
+          <div><div class="b" style="height:28px;"></div><div class="lab">md·10</div></div>
+          <div><div class="b" style="height:40px;"></div><div class="lab">lg·14</div></div>
+          <div><div class="b" style="height:14px;"></div><div class="lab">8</div></div>
+          <div><div class="b" style="height:22px;"></div><div class="lab">12</div></div>
+          <div><div class="b" style="height:34px;"></div><div class="lab">16</div></div>
+          <div><div class="b" style="height:48px;"></div><div class="lab">24</div></div>
+        </div>
+        <p style="font-size:12.5px;color:var(--mute);margin:16px 0 0;line-height:1.5;">Raggi <code style="font-family:'JetBrains Mono',monospace;font-size:11px">RADIUS</code> e spaziature <code style="font-family:'JetBrains Mono',monospace;font-size:11px">SPACE</code> (8pt) condivisi: ogni tile pesca dalla stessa scala invece di numeri arbitrari. Più micro-ombre eleganti al posto di <code style="font-family:'JetBrains Mono',monospace;font-size:11px">shadow:'none'</code>.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

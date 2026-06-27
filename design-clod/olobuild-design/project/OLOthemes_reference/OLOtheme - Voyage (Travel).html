@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Voyage — A travel journal</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="Voyage is a travel journal — slow, photo-led dispatches from the road. Essays, guides and the places worth the detour."/>
+<link rel="stylesheet" href="olothemes/voyage.css"/>
+</head>
+<body data-screen-label="Voyage — Home" data-fx>
+
+<header class="vy-nav" data-olo-tile="Navmenu">
+  <div class="vy-wrap vy-nav__in">
+    <a class="logo" href="#top"><span class="mk"></span>Voyage</a>
+    <nav class="vy-nav__links">
+      <a href="OLOtheme - Voyage - Story.html">Dispatches</a>
+      <a href="#destinations">Destinations</a>
+      <a href="#columns">Columns</a>
+      <a href="#guides">Guides</a>
+    </nav>
+    <div class="vy-nav__cta">
+      <a href="#subscribe" class="btn btn--coral" data-magnetic>Subscribe</a>
+      <button class="fx-menu-trigger" data-menu-toggle="#vyMenu" aria-label="Open menu">Menu<span class="bars"><i></i><i></i></span></button>
+    </div>
+  </div>
+</header>
+<nav class="fx-menu" id="vyMenu" data-menu aria-label="Menu">
+  <button class="fx-menu__x" data-menu-close aria-label="Close">&times;</button>
+  <div class="fx-menu__links">
+    <a href="OLOtheme - Voyage - Story.html"><span class="n">01</span>Dispatches</a>
+    <a href="#destinations"><span class="n">02</span>Destinations</a>
+    <a href="#columns"><span class="n">03</span>Columns</a>
+    <a href="#guides"><span class="n">04</span>Guides</a>
+  </div>
+  <div class="fx-menu__foot"><span>A travel journal · since 2017</span><a href="#subscribe">Subscribe &rarr;</a></div>
+</nav>
+
+<main id="top">
+<!-- featured story -->
+<section class="vy-lead" data-olo-tile="FeaturedStory" data-olo-note="NEW tile candidate: FeaturedStory.">
+  <div class="vy-wrap vy-lead__in">
+    <div class="vy-lead__media" data-reveal><a href="OLOtheme - Voyage - Story.html"><div class="media" data-label="cover — empty mountain road at dawn, warm light"></div></a></div>
+    <div data-reveal="120">
+      <span class="kicker">The Long Way · Patagonia</span>
+      <h1><a href="OLOtheme - Voyage - Story.html">The road that goes nowhere, slowly</a></h1>
+      <p class="stand">Forty hours of gravel, three flat tyres and one unrepeatable silence. What we found at the end of the Carretera Austral — and what we found out about ourselves.</p>
+      <div class="byline">Words &amp; pictures · Mara Quinn · 16 min</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SIGNATURE: drag-scroll dispatches rail (OLObuild · NEW tile → StoryRail) ═══ -->
+<section class="vy-sec" data-olo-tile="StoryRail" data-olo-note="NEW tile candidate: StoryRail — drag-scroll row of story cards (data-hscroll).">
+  <div class="vy-wrap"><div class="vy-rule" data-reveal><h2>Latest dispatches</h2><span class="more">← drag · all stories →</span></div></div>
+  <div class="vy-wrap"><div class="vy-rail" data-hscroll data-reveal="60">
+    <article class="vy-card"><a href="OLOtheme - Voyage - Story.html"><div class="vy-card__media"><div class="media" data-label="night train"></div></a><span class="kicker">Essay · Rail</span><h3>Sleeping across a continent</h3><p>In praise of the night train, and arriving rumpled.</p><div class="meta">A. Demir · 9 min</div></article>
+    <article class="vy-card"><a href="OLOtheme - Voyage - Story.html"><div class="vy-card__media"><div class="media" data-label="market food"></div></a><span class="kicker">Guide · Food</span><h3>Eat where the drivers eat</h3><p>A field guide to the roadside, from Oaxaca to Hanoi.</p><div class="meta">J. Okoro · 7 min</div></article>
+    <article class="vy-card"><a href="OLOtheme - Voyage - Story.html"><div class="vy-card__media"><div class="media" data-label="island ferry"></div></a><span class="kicker">Dispatch · Islands</span><h3>The last ferry of the season</h3><p>What a Greek island becomes when the boats stop.</p><div class="meta">L. Haddad · 11 min</div></article>
+    <article class="vy-card"><a href="OLOtheme - Voyage - Story.html"><div class="vy-card__media"><div class="media" data-label="desert sky"></div></a><span class="kicker">Essay · Desert</span><h3>A week with no signal</h3><p>What the silence of the Sahara does to a restless mind.</p><div class="meta">R. Bianchi · 13 min</div></article>
+  </div></div>
+</section>
+
+<!-- ═══ ROUTE SCRUBBER (OLObuild · NEW tile → RouteScrubber) ═══ -->
+<section class="vy-sec" id="route" data-olo-tile="RouteScrubber" data-olo-note="NEW tile candidate: RouteScrubber — interactive zone. Drag a handle (or tap a stop) along a journey; the matching panel cross-fades in. Props: stops[label,sub], panels[media,kicker,title,stand,body].">
+  <div class="vy-wrap">
+    <div class="vy-rule" data-reveal><h2>Follow the route</h2><span class="more">Carretera Austral · 1,240 km south</span></div>
+    <div class="vy-scrub" data-reveal="60" data-scrub style="--fx-zone-accent:#ff8c69;--fx-zone-line:rgba(238,242,247,.18);--fx-zone-thumb:#0c1320">
+      <div class="vy-scrub__stage">
+        <div class="vy-scrub__panel" data-scrub-panel><div class="media" data-label="gravel road north of Villa O'Higgins, dawn"></div><div class="vy-scrub__b"><span class="kicker">Day 1 · Km 0</span><h3>Villa O'Higgins</h3><p class="stand">The road begins exactly where the next one gives up.</p><p>End of the line, southbound. A single pump, a hand-painted sign, and 1,240 kilometres of gravel waiting to the north. We aired down the tyres and didn't speak for an hour.</p></div></div>
+        <div class="vy-scrub__panel" data-scrub-panel><div class="media" data-label="stilt houses over water, Caleta Tortel"></div><div class="vy-scrub__b"><span class="kicker">Day 3 · Km 228</span><h3>Caleta Tortel</h3><p class="stand">A village with no streets — only cypress boardwalks.</p><p>You leave the truck at the top and walk in. Every house on stilts, every path made of planks, the whole place smelling of woodsmoke and wet timber.</p></div></div>
+        <div class="vy-scrub__panel" data-scrub-panel><div class="media" data-label="marble caves, glacial blue water"></div><div class="vy-scrub__b"><span class="kicker">Day 6 · Km 612</span><h3>Río Tranquilo</h3><p class="stand">Water so blue it looks edited.</p><p>We rowed out at first light to the marble caves — caverns the lake has been polishing for six thousand years. The guide cut the motor and let us just listen to it drip.</p></div></div>
+        <div class="vy-scrub__panel" data-scrub-panel><div class="media" data-label="jagged spires of Cerro Castillo"></div><div class="vy-scrub__b"><span class="kicker">Day 9 · Km 920</span><h3>Cerro Castillo</h3><p class="stand">The castle that gives the range its name.</p><p>A full day on foot to the lagoon beneath the spires. Wind that knocks you sideways, then ten minutes of total stillness that made the whole trip worth it.</p></div></div>
+        <div class="vy-scrub__panel" data-scrub-panel><div class="media" data-label="small frontier town, Coyhaique at dusk"></div><div class="vy-scrub__b"><span class="kicker">Day 11 · Km 1,240</span><h3>Coyhaique</h3><p class="stand">Tarmac again — and a strange reluctance to reach it.</p><p>Pavement, a proper coffee, phone signal. The road's over. We sat in the plaza too long, already plotting the way we'd come back and do it slower.</p></div></div>
+      </div>
+      <div class="vy-scrub__track">
+        <input class="fx-range" type="range" data-scrub-input min="0" max="4" step="1" value="0" aria-label="Route stop"/>
+        <div class="vy-scrub__stops">
+          <button class="vy-scrub__dot" data-scrub-go="0"><span>O'Higgins</span><small>Km 0</small></button>
+          <button class="vy-scrub__dot" data-scrub-go="1"><span>Tortel</span><small>Km 228</small></button>
+          <button class="vy-scrub__dot" data-scrub-go="2"><span>Río Tranquilo</span><small>Km 612</small></button>
+          <button class="vy-scrub__dot" data-scrub-go="3"><span>Cerro Castillo</span><small>Km 920</small></button>
+          <button class="vy-scrub__dot" data-scrub-go="4"><span>Coyhaique</span><small>Km 1,240</small></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="vy-sec panel" id="destinations" data-olo-tile="ArticleGrid" data-olo-note="NEW tile candidate: ArticleGrid.">
+  <div class="vy-wrap">
+    <div class="vy-rule" data-reveal><h2>By destination</h2><span class="more">Atlas →</span></div>
+    <div class="vy-dests">
+      <a class="vy-dest" href="OLOtheme - Voyage - Story.html" data-reveal><div class="vy-dest__media"><div class="media" data-label="Lisbon"></div></div><h3>Portugal, slowly</h3><p>Eight stories from the road between Porto and the south.</p></a>
+      <a class="vy-dest" href="OLOtheme - Voyage - Story.html" data-reveal="100"><div class="vy-dest__media"><div class="media" data-label="Japan rail"></div></div><h3>Japan by rail</h3><p>Beyond the bullet train — the slow lines that locals love.</p></a>
+      <a class="vy-dest" href="OLOtheme - Voyage - Story.html" data-reveal="200"><div class="vy-dest__media"><div class="media" data-label="Morocco"></div></div><h3>The Atlas &amp; beyond</h3><p>Mountains, medinas and the long way to the dunes.</p></a>
+    </div>
+  </div>
+</section>
+
+<section class="vy-sec" id="columns" data-olo-tile="HoverList" data-olo-note="NEW tile candidate: HoverList.">
+  <div class="vy-wrap vy-cols">
+    <div data-reveal>
+      <div class="vy-rule"><h2>Columns</h2></div>
+      <div class="vy-dests" style="grid-template-columns:1fr 1fr">
+        <a class="vy-dest" href="OLOtheme - Voyage - Story.html"><div class="vy-dest__media"><div class="media" data-label="packing"></div></div><h3>The carry-on</h3><p>One bag, every trip. A column on travelling light.</p></a>
+        <a class="vy-dest" href="OLOtheme - Voyage - Story.html"><div class="vy-dest__media"><div class="media" data-label="phrasebook"></div></div><h3>Lost in translation</h3><p>The joy of getting the words almost right.</p></a>
+      </div>
+    </div>
+    <div data-reveal="120">
+      <div class="vy-rule"><h2>Most read</h2></div>
+      <div class="vy-most">
+        <div class="vy-most__i"><div class="vy-most__n">1</div><div class="vy-most__c"><span class="kicker">Rail</span><h4>The 1,000-mile breakfast</h4><div class="meta">6 min</div></div></div>
+        <div class="vy-most__i"><div class="vy-most__n">2</div><div class="vy-most__c"><span class="kicker">Cities</span><h4>How to be a regular for a week</h4><div class="meta">8 min</div></div></div>
+        <div class="vy-most__i"><div class="vy-most__n">3</div><div class="vy-most__c"><span class="kicker">Gear</span><h4>The only five things you need</h4><div class="meta">5 min</div></div></div>
+        <div class="vy-most__i"><div class="vy-most__n">4</div><div class="vy-most__c"><span class="kicker">Essay</span><h4>On coming home</h4><div class="meta">10 min</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="vy-sec" id="subscribe" data-olo-tile="Newsletter">
+  <div class="vy-wrap"><div class="vy-news" data-reveal>
+    <h2>Dispatches, every Sunday</h2>
+    <p>One long read and three short ones from the road — free, no noise, unsubscribe whenever.</p>
+    <form class="vy-news__form" onsubmit="return false"><input type="email" placeholder="you@example.com"/><button class="btn" data-magnetic>Subscribe</button></form>
+  </div></div>
+</section>
+</main>
+
+<footer class="vy-foot" data-olo-tile="Footer">
+  <div class="vy-wrap">
+    <div class="vy-foot__top">
+      <div class="vy-foot__brand"><a class="logo" href="#top"><span class="mk"></span>Voyage</a><p>A travel journal. Slow, photo-led dispatches from the road since 2017.</p></div>
+      <div><h4>Read</h4><ul><li><a href="OLOtheme - Voyage - Story.html">Dispatches</a></li><li><a href="#destinations">Destinations</a></li><li><a href="#columns">Columns</a></li><li><a href="#guides">Guides</a></li></ul></div>
+      <div><h4>Journal</h4><ul><li><a href="#">About</a></li><li><a href="#">Contributors</a></li><li><a href="#">Submissions</a></li></ul></div>
+      <div><h4>Subscribe</h4><ul><li><a href="#subscribe">Newsletter</a></li><li><a href="#">Print annual</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="vy-foot__bot"><span>© 2026 Voyage — an OLOtheme demo.</span><span>Built with OLObuild</span></div>
+  </div>
+</footer>
+
+<script src="olothemes/fx.js"></script>
+<script src="olothemes/theme.js"></script>
+</body>
+</html>

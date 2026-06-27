@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 760" font-family="Inter, Arial, sans-serif">
+  <rect width="1000" height="760" fill="#0a2e22"/>
+  <!-- agent node -->
+  <rect x="180" y="140" width="430" height="86" rx="16" fill="#0c3527" stroke="#3fae6a" stroke-width="1.5"/>
+  <rect x="206" y="160" width="46" height="46" rx="11" fill="#3fae6a"/><rect x="218" y="174" width="22" height="16" rx="3" fill="none" stroke="#06281a" stroke-width="2.2"/><circle cx="226" cy="182" r="2" fill="#06281a"/><circle cx="234" cy="182" r="2" fill="#06281a"/>
+  <text x="270" y="178" font-size="20" font-weight="600" fill="#eaf5ef">Quarterly Financial Summaries</text>
+  <text x="270" y="202" font-size="13" letter-spacing=".1em" fill="#7fae95">MY AGENT</text>
+  <!-- flow connectors -->
+  <line x1="395" y1="226" x2="395" y2="296" stroke="rgba(90,208,138,.4)" stroke-dasharray="3 5"/>
+  <circle cx="395" cy="226" r="9" fill="#0a2e22" stroke="#5ad08a" stroke-width="2"/>
+  <circle cx="395" cy="312" r="14" fill="#0a2e22" stroke="#5ad08a" stroke-width="2.5"/><circle cx="395" cy="312" r="4" fill="#5ad08a"/>
+  <line x1="395" y1="326" x2="395" y2="392" stroke="rgba(90,208,138,.4)" stroke-dasharray="3 5"/>
+  <!-- node 2 -->
+  <rect x="230" y="392" width="330" height="70" rx="14" fill="#0c3527" stroke="rgba(255,255,255,.12)"/>
+  <rect x="252" y="410" width="34" height="34" rx="8" fill="#173d2e"/><path d="M262 427 h14 M269 420 v14" stroke="#5ad08a" stroke-width="2"/>
+  <text x="302" y="424" font-size="16" font-weight="600" fill="#eaf5ef">Generate report</text>
+  <text x="302" y="445" font-size="13" fill="#7fae95">Document Mode</text>
+  <!-- branch -->
+  <line x1="395" y1="462" x2="395" y2="510" stroke="rgba(90,208,138,.4)" stroke-dasharray="3 5"/>
+  <path d="M270 560 h250" stroke="rgba(90,208,138,.3)"/>
+  <line x1="300" y1="510" x2="300" y2="560" stroke="rgba(90,208,138,.4)" stroke-dasharray="3 5"/><line x1="490" y1="510" x2="490" y2="560" stroke="rgba(90,208,138,.4)" stroke-dasharray="3 5"/>
+  <rect x="232" y="560" width="136" height="58" rx="12" fill="#0c3527" stroke="rgba(255,255,255,.12)"/><text x="300" y="595" text-anchor="middle" font-size="14" fill="#bcd6c9">Email summary</text>
+  <rect x="422" y="560" width="136" height="58" rx="12" fill="#0c3527" stroke="rgba(255,255,255,.12)"/><text x="490" y="595" text-anchor="middle" font-size="14" fill="#bcd6c9">Save to Drive</text>
+</svg>

@@ -1,0 +1,32 @@
+Leggi i file di questo handoff (sono nella stessa cartella di questo prompt):
+- README.md                     → spec completa, vincoli, mappatura
+- prototype/FieldBorder.vue      → bozza Vue del redesign (contratto dati invariato)
+- REFERENCE_redesign.html        → riferimento visivo, confronto Oggi → Coerente
+
+Ridisegna il controllo Bordo `src/components/Builder/fields/FieldBorder.vue` portandolo in
+linea con `src/components/Builder/fields/FieldBox.vue` (già in produzione): un solo blocco
+compatto con le righe Spessore / Stile / Colore / (Effetto opzionale) + peek, al posto
+dell'attuale croce 2×2 e del pannello "Effetti bordo" separato.
+
+Vincoli NON negoziabili:
+- Il contratto dati salvato resta IDENTICO: l'oggetto { top, right, bottom, left, linked,
+  style, color }. Nessuna chiave nuova, nessun rename. I template esistenti devono continuare
+  a funzionare senza migrazione.
+- Lo SPESSORE deve riusare <FieldBox mode="sides" :units="['px']" :slider-max="50"
+  preview="none"> via un proxy computed (scalare quando collegato, oggetto {top,right,bottom,
+  left} quando separato), come nella bozza — non reimplementare slider/link/mini-input.
+- Hover e breakpoint NON vanno nel field: restano gestiti da InspectorField (occhio
+  Normale/Hover, chiave hover esistente es. border_hover) e ResponsiveFieldWrap (chiave
+  suffissata border_<bp>), esattamente come per FieldBox. Lo switch device / toggle hover nel
+  mockup sono solo contesto.
+- Colore "token-first": default token `primary`, risolto in var(--olo-color-* ) per swatch e
+  peek; il valore SALVATO resta una stringa come oggi. NON introdurre nomi --olo-color-* che
+  GlobalColorsPanel non genera.
+- Accento dei controlli = CHROME del builder (arancio #e8622a), NON il primario tile. Vedi
+  §"Accento" del README: usa un unico --olo-ui-accent a livello pannello; se decidiamo di
+  migrare anche FieldBox all'accento fisso, fallo nello stesso passaggio per coerenza visiva.
+
+Procedi a piccoli passi: prima solo <template> + <style> di FieldBorder.vue lasciando il
+modello invariato, così validiamo il diff sul canvas; poi il collegamento a FieldBox per lo
+spessore; infine valuta il fold-in dell'Effetto (solo se la tile espone già la sua chiave).
+Mantieni i pattern, lo state e la libreria UI esistenti del repo.

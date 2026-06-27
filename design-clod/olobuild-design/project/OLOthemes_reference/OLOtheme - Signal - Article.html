@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Signal — The cache that lied to us for three months</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="A debugging story about stale reads, false confidence, and the one-line config that quietly broke production."/>
+<link rel="stylesheet" href="olothemes/signal.css"/>
+</head>
+<body data-screen-label="Signal — Article" data-fx>
+
+<div class="sg-ticker" data-olo-tile="TickerBar">
+  <div class="sg-ticker__t" data-marquee>
+    <span>A love letter to the CLI</span><span>Why your tests are slow</span><span>The case against microservices</span><span>What we got wrong about caching</span>
+  </div>
+</div>
+
+<header class="sg-nav" data-olo-tile="Navmenu">
+  <div class="sg-wrap sg-nav__in">
+    <a class="logo" href="OLOtheme - Signal (Media & News).html"><span class="mk"></span>Signal</a>
+    <nav class="sg-nav__links">
+      <a href="OLOtheme - Signal - Article.html" class="on">Articles</a>
+      <a href="OLOtheme - Signal (Media & News).html#topics">Topics</a>
+      <a href="OLOtheme - Signal (Media & News).html#latest">Latest</a>
+      <a href="OLOtheme - Signal (Media & News).html#subscribe">Subscribe</a>
+    </nav>
+    <div class="sg-nav__cta">
+      <a href="OLOtheme - Signal (Media & News).html#subscribe" class="btn btn--lime" data-magnetic>Subscribe</a>
+      <button class="fx-menu-trigger" data-menu-toggle="#sgMenu" aria-label="Open menu">Menu<span class="bars"><i></i><i></i></span></button>
+    </div>
+  </div>
+</header>
+<nav class="fx-menu" id="sgMenu" data-menu aria-label="Menu">
+  <button class="fx-menu__x" data-menu-close aria-label="Close">&times;</button>
+  <div class="fx-menu__links">
+    <a href="OLOtheme - Signal - Article.html"><span class="n">01</span>Articles</a>
+    <a href="OLOtheme - Signal (Media & News).html#topics"><span class="n">02</span>Topics</a>
+    <a href="OLOtheme - Signal (Media & News).html#latest"><span class="n">03</span>Latest</a>
+    <a href="OLOtheme - Signal (Media & News).html#subscribe"><span class="n">04</span>Subscribe</a>
+  </div>
+  <div class="fx-menu__foot"><span>// signal over noise · since 2018</span><a href="OLOtheme - Signal (Media & News).html#subscribe">Subscribe &rarr;</a></div>
+</nav>
+
+<main>
+<article class="sg-article" data-olo-tile="PostContent">
+  <div class="sg-wrap sg-wrap--narrow sg-article__head" data-reveal>
+    <span class="kicker">// systems · debugging</span>
+    <h1>The cache that lied to us for three months</h1>
+    <div class="sg-article__byline">by Devin Cho · 14 min read · updated 2 days ago</div>
+  </div>
+
+  <div class="sg-wrap sg-wrap--narrow" style="padding-top:clamp(24px,3vw,36px)">
+    <div class="media" data-label="cover diagram — read path with a stale node" style="aspect-ratio:16/8;border-radius:10px" data-reveal></div>
+  </div>
+
+  <div class="sg-wrap sg-wrap--narrow sg-body" style="padding-top:clamp(28px,4vw,44px)" data-reveal>
+    <p>It started, as these things do, with a graph that looked too good. Our p99 read latency had dropped off a cliff in March and stayed there. We congratulated ourselves on the new caching layer and moved on. We should not have moved on.</p>
+    <h3>The symptom</h3>
+    <p>Three months later, support started seeing reports of users seeing <code>old</code> data — profile changes that "didn't save", settings that reverted. Intermittent, unreproducible, maddening. The writes were succeeding. The reads were just… wrong.</p>
+    <p>The cache wasn't slow. It was <em>confident</em>. And it was confidently serving stale values because of a single line:</p>
+    <pre class="sg-code"><span class="c">// cache.ts — the line that cost us a quarter</span>
+<span class="k">const</span> ttl = process.env.CACHE_TTL ?? <span class="s">86400</span>;  <span class="c">// seconds</span>
+<span class="c">// CACHE_TTL was unset in prod → 24h TTL, never invalidated on write</span></pre>
+    <h3>The fix, and the lesson</h3>
+    <p>The fix was trivial: invalidate on write, and fail loudly when a config the system depends on is missing. The lesson was not. A metric that only ever looks good is not a metric — it's a blind spot with a dashboard.</p>
+    <p>We now treat "suspiciously good" the same way we treat "suspiciously bad": as something to investigate before we trust it.</p>
+  </div>
+</article>
+
+<section class="sg-sec panel" data-olo-tile="ArticleGrid">
+  <div class="sg-wrap">
+    <div class="sg-rule" data-reveal><h2>keep reading</h2><a class="link-u" href="#">all posts →</a></div>
+    <div class="sg-posts" data-reveal="60">
+      <a class="sg-post" href="OLOtheme - Signal - Article.html"><div class="sg-post__media"><div class="media" data-label="terminal"></div></div><span class="kicker">// tooling</span><h3>A love letter to the CLI</h3><div class="meta">9 min · R. Mensah</div></a>
+      <a class="sg-post" href="OLOtheme - Signal - Article.html"><div class="sg-post__media"><div class="media" data-label="tests"></div></div><span class="kicker">// testing</span><h3>Why your tests are slow</h3><div class="meta">7 min · L. Adeyemi</div></a>
+      <a class="sg-post" href="OLOtheme - Signal - Article.html"><div class="sg-post__media"><div class="media" data-label="graph"></div></div><span class="kicker">// architecture</span><h3>The case against microservices</h3><div class="meta">12 min · D. Cho</div></a>
+    </div>
+  </div>
+</section>
+
+<section class="sg-sec" data-olo-tile="Newsletter">
+  <div class="sg-wrap"><div class="sg-news" data-reveal>
+    <h2>One good read, <span class="l">every Tuesday</span></h2>
+    <p>No hot takes, no churn — just one carefully edited essay on building software.</p>
+    <form class="sg-news__form" onsubmit="return false"><input type="email" placeholder="you@company.dev"/><button class="btn btn--lime" data-magnetic>Subscribe</button></form>
+  </div></div>
+</section>
+</main>
+
+<footer class="sg-foot" data-olo-tile="Footer">
+  <div class="sg-wrap">
+    <div class="sg-foot__top">
+      <div class="sg-foot__brand"><a class="logo" href="OLOtheme - Signal (Media & News).html"><span class="mk"></span>Signal</a><p>A tech &amp; ideas blog. Essays on software, systems and the people who build them.</p></div>
+      <div><h4>Read</h4><ul><li><a href="OLOtheme - Signal - Article.html">Articles</a></li><li><a href="OLOtheme - Signal (Media & News).html#topics">Topics</a></li><li><a href="#">Archive</a></li></ul></div>
+      <div><h4>Signal</h4><ul><li><a href="#">About</a></li><li><a href="#">Write for us</a></li><li><a href="#">RSS</a></li></ul></div>
+      <div><h4>Subscribe</h4><ul><li><a href="OLOtheme - Signal (Media & News).html#subscribe">Newsletter</a></li><li><a href="#">Podcast</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="sg-foot__bot"><span>© 2026 Signal — an OLOtheme demo.</span><span>Built with OLObuild</span></div>
+  </div>
+</footer>
+
+<script src="olothemes/fx.js"></script>
+<script src="olothemes/theme.js"></script>
+</body>
+</html>

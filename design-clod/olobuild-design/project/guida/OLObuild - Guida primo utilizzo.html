@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OLObuild — Guida al primo utilizzo / First-use guide</title>
+<link rel="stylesheet" href="guida.css"/>
+</head>
+<body>
+<div class="stack">
+
+  <!-- ════════════════════ PAGE 1 — COVER ════════════════════ -->
+  <section class="page cover" data-screen-label="Cover">
+    <div class="cover-glow"></div>
+    <div class="cover-top">
+      <span class="wordmark" aria-label="OLObuild">
+        <span class="wm-mark"><span class="ring"></span><span class="bar"></span><span class="ring"></span></span>
+        <span class="wm-txt">build</span>
+      </span>
+      <span class="cover-ver">Quick-start · v1</span>
+    </div>
+    <div class="cover-main">
+      <span class="cover-eyebrow">Guida al primo utilizzo</span>
+      <h1>Crea la tua prima<br/>pagina in 6 passi
+        <span class="en">Build your first page in 6 steps</span>
+      </h1>
+      <p class="lede">
+        OLObuild è il page builder che monti come un gioco di costruzioni: sezioni, tile e i colori del tuo brand. Niente codice.
+        <span class="en">OLObuild is the page builder you assemble like building blocks: sections, tiles and your brand colors. No code.</span>
+      </p>
+    </div>
+    <div class="cover-bottom">
+      <div class="cover-steps">
+        <span class="cs"><b>1</b> Attiva</span>
+        <span class="cs"><b>2</b> Colori</span>
+        <span class="cs"><b>3</b> Sezione &amp; tile</span>
+        <span class="cs"><b>4</b> Modifica</span>
+        <span class="cs"><b>5</b> Responsive</span>
+        <span class="cs"><b>6</b> Pubblica</span>
+      </div>
+      <div class="cover-mark">
+        Guida per chi inizia<br/>For first-time users
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════ PAGE 2 — INTRO / PANORAMICA ════════════════════ -->
+  <section class="page" data-screen-label="Panoramica">
+    <div class="run-head">
+      <span class="rh-brand"><img src="img/olobuild-horizontal.png" alt="OLObuild"/> Guida al primo utilizzo</span>
+      <span class="rh-step">Panoramica · Overview</span>
+    </div>
+    <div class="page-body">
+      <p class="eyebrow">Prima di iniziare · Before you start</p>
+      <h2 class="h-lead">Come è fatto OLObuild
+        <span class="en">How OLObuild is organised</span>
+      </h2>
+      <p class="lede-2" style="margin-top:10px;">
+        Tre aree, sempre le stesse. A sinistra le tile da inserire, al centro la tua pagina, a destra il pannello per regolare ciò che hai selezionato.
+        <em>Three areas, always the same: tiles on the left, your page in the center, the settings panel on the right.</em>
+      </p>
+
+      <div class="intro-grid">
+        <!-- diagramma builder -->
+        <div class="orient">
+          <div class="orient-h">
+            <div class="t">L'area di lavoro <span class="en">/ The workspace</span></div>
+          </div>
+          <div class="builder-diagram">
+            <div class="bd-pane bd-rail">
+              <span class="bd-num">1</span>
+              <span class="bd-cap">Tile</span>
+              <div class="bd-icn-row">
+                <div class="bd-icn"></div><div class="bd-icn"></div>
+                <div class="bd-icn"></div><div class="bd-icn"></div>
+                <div class="bd-icn"></div><div class="bd-icn"></div>
+              </div>
+            </div>
+            <div class="bd-pane bd-canvas">
+              <span class="bd-num">2</span>
+              <span class="bd-cap">La tua pagina</span>
+              <div class="bd-block acc"></div>
+              <div class="bd-block"></div>
+            </div>
+            <div class="bd-pane bd-insp">
+              <span class="bd-num">3</span>
+              <span class="bd-cap">Impostazioni</span>
+              <div class="bd-ctrl o"></div>
+              <div class="bd-ctrl"></div>
+              <div class="bd-ctrl"></div>
+              <div class="bd-ctrl o" style="width:45%;"></div>
+            </div>
+          </div>
+          <div class="orient-legend">
+            <div class="lg"><span class="lg-num">1</span><span><b>Libreria tile</b>Gli elementi da trascinare nella pagina. <em>Drag tiles onto the page.</em></span></div>
+            <div class="lg"><span class="lg-num">2</span><span><b>Tela</b>L'anteprima live della pagina. <em>Live preview of your page.</em></span></div>
+            <div class="lg"><span class="lg-num">3</span><span><b>Inspector</b>Regola l'elemento selezionato. <em>Tune the selected element.</em></span></div>
+          </div>
+        </div>
+
+        <!-- mappa dei 6 passi -->
+        <div>
+          <div class="orient-h" style="margin-bottom:1mm;">
+            <div class="t">I 6 passi di questa guida <span class="en">/ The 6 steps ahead</span></div>
+          </div>
+          <div class="steps-map">
+            <div class="smap"><span class="smap-n">1</span><span class="smap-t">Attiva il plugin<span class="en">Activate the plugin</span></span></div>
+            <div class="smap"><span class="smap-n">2</span><span class="smap-t">Imposta i colori del brand<span class="en">Set your brand colors</span></span></div>
+            <div class="smap"><span class="smap-n">3</span><span class="smap-t">Aggiungi sezione e tile<span class="en">Add a section &amp; tiles</span></span></div>
+            <div class="smap"><span class="smap-n">4</span><span class="smap-t">Modifica una tile<span class="en">Edit a tile</span></span></div>
+            <div class="smap"><span class="smap-n">5</span><span class="smap-t">Controlla il responsive<span class="en">Check responsive</span></span></div>
+            <div class="smap"><span class="smap-n">6</span><span class="smap-t">Salva e pubblica<span class="en">Save &amp; publish</span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="run-foot"><span>OLObuild · Guida al primo utilizzo</span><span>Panoramica<span class="dot"></span>02</span></div>
+  </section>
+
+  <!-- ════════════════════ PAGE 3 — STEP 1 ════════════════════ -->
+  <section class="page" data-screen-label="Step 1 — Attivazione">
+    <div class="run-head">
+      <span class="rh-brand"><img src="img/olobuild-horizontal.png" alt="OLObuild"/> Guida al primo utilizzo</span>
+      <span class="rh-step">Passo 1 di 6 · Step 1 of 6</span>
+    </div>
+    <div class="page-body">
+      <div class="step-head">
+        <div class="step-num">1</div>
+        <div class="step-titles">
+          <div class="it">Attiva il plugin</div>
+          <div class="en">Activate the plugin</div>
+        </div>
+      </div>
+
+      <div class="bi">
+        <div class="bi-col it">
+          <span class="flag">ITALIANO</span>
+          <p>Dopo aver installato OLObuild, attivalo da WordPress. Al primo avvio prepara una pagina iniziale e mostra la <b>schermata di benvenuto</b>.</p>
+          <ol>
+            <li>In WordPress apri <b>Plugin → Installati</b>.</li>
+            <li>Trova <b>OLObuild</b> e premi <b>Attiva</b>.</li>
+            <li>Dalla schermata di benvenuto premi <b>Crea la prima pagina</b>.</li>
+          </ol>
+        </div>
+        <div class="bi-col en">
+          <span class="flag">ENGLISH</span>
+          <p>Once OLObuild is installed, activate it from WordPress. On first launch it sets up a starter page and opens the <b>welcome screen</b>.</p>
+          <ol>
+            <li>In WordPress open <b>Plugins → Installed</b>.</li>
+            <li>Find <b>OLObuild</b> and click <b>Activate</b>.</li>
+            <li>From the welcome screen click <b>Create your first page</b>.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="shot">
+        <div class="shot-cap"><span class="dotpair"><i style="background:#f56;"></i><i style="background:#fb5;"></i><i style="background:#5c6;"></i></span><span class="label">Schermata di benvenuto <span class="en">/ Welcome screen</span></span></div>
+        <div class="shot-stage">
+          <div class="pi">
+            <span class="pi-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> OLObuild attivato</span>
+            <h4>Benvenuto! Iniziamo</h4>
+            <p>La tua pagina iniziale è pronta. Scegli da dove partire.</p>
+            <div class="pi-actions">
+              <div class="pi-act"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></span><span class="tx"><b>Personalizza la home</b><span>Customise the home page</span></span></div>
+              <div class="pi-act"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="6" rx="1.5"/><path d="M3 14h12M3 18h8"/></svg></span><span class="tx"><b>Modifica l'header</b><span>Edit the header</span></span></div>
+              <div class="pi-act"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="14" width="18" height="6" rx="1.5"/><path d="M3 10h12M3 6h8"/></svg></span><span class="tx"><b>Modifica il footer</b><span>Edit the footer</span></span></div>
+            </div>
+            <div style="margin-top:14px;"><span class="ui-btn red" style="width:100%; justify-content:center;">Crea la prima pagina</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="tip-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2Z"/></svg></div>
+        <div class="tip-body">
+          <div class="t">Suggerimento · Tip</div>
+          <div class="it">Non serve scrivere codice: i suggerimenti spariscono da soli al primo salvataggio.</div>
+          <div class="en">No coding required — the welcome hints disappear after your first save.</div>
+        </div>
+      </div>
+    </div>
+    <div class="run-foot"><span>OLObuild · Guida al primo utilizzo</span><span>Attivazione<span class="dot"></span>03</span></div>
+  </section>
+
+  <!-- ════════════════════ PAGE 4 — STEP 2 ════════════════════ -->
+  <section class="page" data-screen-label="Step 2 — Colori brand">
+    <div class="run-head">
+      <span class="rh-brand"><img src="img/olobuild-horizontal.png" alt="OLObuild"/> Guida al primo utilizzo</span>
+      <span class="rh-step">Passo 2 di 6 · Step 2 of 6</span>
+    </div>
+    <div class="page-body">
+      <div class="step-head">
+        <div class="step-num">2</div>
+        <div class="step-titles">
+          <div class="it">Imposta i colori del brand</div>
+          <div class="en">Set your brand colors</div>
+        </div>
+      </div>
+
+      <div class="bi">
+        <div class="bi-col it">
+          <span class="flag">ITALIANO</span>
+          <p>I colori si impostano <b>una volta sola</b> e valgono per tutte le tile. Definisci i 6 ruoli e ogni elemento li userà in automatico.</p>
+          <ol>
+            <li>Apri <b>Colori globali</b> dalla barra in alto.</li>
+            <li>Imposta il <b>Primario</b> col colore principale del tuo brand.</li>
+            <li>Regola <b>Secondario, Accento, Scuro, Chiaro, Testo</b>.</li>
+          </ol>
+        </div>
+        <div class="bi-col en">
+          <span class="flag">ENGLISH</span>
+          <p>Set your colors <b>once</b> and they apply to every tile. Define the 6 roles and each element uses them automatically.</p>
+          <ol>
+            <li>Open <b>Global colors</b> from the top bar.</li>
+            <li>Set <b>Primary</b> to your main brand color.</li>
+            <li>Adjust <b>Secondary, Accent, Dark, Light, Text</b>.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="shot">
+        <div class="shot-cap"><span class="dotpair"><i style="background:#f56;"></i><i style="background:#fb5;"></i><i style="background:#5c6;"></i></span><span class="label">Colori globali <span class="en">/ Global colors</span></span></div>
+        <div class="shot-stage">
+          <div class="gcp">
+            <div class="gcp-h"><span class="t">Colori globali</span><span class="gear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3.5 14H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7l-.1-.1A2 2 0 1 1 7.3 4.1l.1.1A1.6 1.6 0 0 0 10 3.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 20.5 10H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg></span></div>
+            <div class="gcp-row"><span class="gcp-sw" style="background:#e1474f;"></span><span class="gcp-meta"><span class="role">Primario</span><span class="en">Primary</span></span><span class="gcp-hex">#e1474f</span></div>
+            <div class="gcp-row"><span class="gcp-sw" style="background:#16263d;"></span><span class="gcp-meta"><span class="role">Secondario</span><span class="en">Secondary</span></span><span class="gcp-hex">#16263d</span></div>
+            <div class="gcp-row"><span class="gcp-sw" style="background:#f4a23b;"></span><span class="gcp-meta"><span class="role">Accento</span><span class="en">Accent</span></span><span class="gcp-hex">#f4a23b</span></div>
+            <div class="gcp-row"><span class="gcp-sw" style="background:#1f2937;"></span><span class="gcp-meta"><span class="role">Scuro</span><span class="en">Dark</span></span><span class="gcp-hex">#1f2937</span></div>
+            <div class="gcp-row"><span class="gcp-sw" style="background:#f5f5f4;"></span><span class="gcp-meta"><span class="role">Chiaro</span><span class="en">Light</span></span><span class="gcp-hex">#f5f5f4</span></div>
+            <div class="gcp-row"><span class="gcp-sw" style="background:#20303f;"></span><span class="gcp-meta"><span class="role">Testo</span><span class="en">Text</span></span><span class="gcp-hex">#20303f</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="tip-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2Z"/></svg></div>
+        <div class="tip-body">
+          <div class="t">Suggerimento · Tip</div>
+          <div class="it">Cambi un colore qui e <b>tutte</b> le tile si aggiornano: niente ritocchi uno per uno.</div>
+          <div class="en">Change a color here and <b>every</b> tile updates — no element-by-element editing.</div>
+        </div>
+      </div>
+    </div>
+    <div class="run-foot"><span>OLObuild · Guida al primo utilizzo</span><span>Colori del brand<span class="dot"></span>04</span></div>
+  </section>
+
+  <!-- ════════════════════ PAGE 5 — STEP 3 ════════════════════ -->
+  <section class="page" data-screen-label="Step 3 — Sezione e tile">
+    <div class="run-head">
+      <span class="rh-brand"><img src="img/olobuild-horizontal.png" alt="OLObuild"/> Guida al primo utilizzo</span>
+      <span class="rh-step">Passo 3 di 6 · Step 3 of 6</span>
+    </div>
+    <div class="page-body">
+      <div class="step-head">
+        <div class="step-num">3</div>
+        <div class="step-titles">
+          <div class="it">Aggiungi una sezione e le prime tile</div>
+          <div class="en">Add a section and your first tiles</div>
+        </div>
+      </div>
+
+      <div class="bi">
+        <div class="bi-col it">
+          <span class="flag">ITALIANO</span>
+          <p>Una pagina è fatta di <b>sezioni</b>; dentro le sezioni inserisci le <b>tile</b>: titoli, immagini, bottoni, gallerie e molto altro.</p>
+          <ol>
+            <li>Premi <b>+ Aggiungi sezione</b>.</li>
+            <li>Apri la <b>libreria tile</b> e scegli una categoria.</li>
+            <li><b>Trascina</b> una tile nella sezione.</li>
+          </ol>
+        </div>
+        <div class="bi-col en">
+          <span class="flag">ENGLISH</span>
+          <p>A page is made of <b>sections</b>; inside them you drop <b>tiles</b>: headings, images, buttons, galleries and much more.</p>
+          <ol>
+            <li>Click <b>+ Add section</b>.</li>
+            <li>Open the <b>tile library</b> and pick a category.</li>
+            <li><b>Drag</b> a tile into the section.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="shot">
+        <div class="shot-cap"><span class="dotpair"><i style="background:#f56;"></i><i style="background:#fb5;"></i><i style="background:#5c6;"></i></span><span class="label">Libreria tile <span class="en">/ Tile library</span></span></div>
+        <div class="shot-stage">
+          <div class="lib">
+            <div class="lib-tabs">
+              <span class="lib-tab on">Base</span>
+              <span class="lib-tab">Media</span>
+              <span class="lib-tab">Layout</span>
+              <span class="lib-tab">Dati</span>
+              <span class="lib-tab">Interattive</span>
+            </div>
+            <div class="lib-grid">
+              <div class="lib-tile"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h10M4 17h7"/></svg></span><span class="nm">Titolo</span></div>
+              <div class="lib-tile"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 6h14M5 10h14M5 14h9M5 18h9"/></svg></span><span class="nm">Testo</span></div>
+              <div class="lib-tile drag"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m4 18 5-4 4 3 3-2 4 3"/></svg></span><span class="nm">Immagine</span></div>
+              <div class="lib-tile"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="8" rx="4"/></svg></span><span class="nm">Bottone</span></div>
+              <div class="lib-drop">Rilascia qui · Drop here</div>
+              <div class="lib-tile"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.2"/><path d="M5 20a7 7 0 0 1 14 0" stroke-linecap="round"/></svg></span><span class="nm">Autore</span></div>
+              <div class="lib-tile"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18"/></svg></span><span class="nm">Card</span></div>
+              <div class="lib-tile"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 3v18M5 5h10l-2 3 2 3H5"/></svg></span><span class="nm">CTA</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="tip-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2Z"/></svg></div>
+        <div class="tip-body">
+          <div class="t">Suggerimento · Tip</div>
+          <div class="it">Le tile arrivano già impaginate e con i <b>tuoi colori</b>: una tile appena inserita sembra già progettata.</div>
+          <div class="en">Tiles arrive pre-styled in <b>your colors</b> — a freshly dropped tile already looks designed.</div>
+        </div>
+      </div>
+    </div>
+    <div class="run-foot"><span>OLObuild · Guida al primo utilizzo</span><span>Sezione &amp; tile<span class="dot"></span>05</span></div>
+  </section>
+
+  <!-- ════════════════════ PAGE 6 — STEP 4 ════════════════════ -->
+  <section class="page" data-screen-label="Step 4 — Modifica tile">
+    <div class="run-head">
+      <span class="rh-brand"><img src="img/olobuild-horizontal.png" alt="OLObuild"/> Guida al primo utilizzo</span>
+      <span class="rh-step">Passo 4 di 6 · Step 4 of 6</span>
+    </div>
+    <div class="page-body">
+      <div class="step-head">
+        <div class="step-num">4</div>
+        <div class="step-titles">
+          <div class="it">Modifica una tile nell'inspector</div>
+          <div class="en">Edit a tile in the inspector</div>
+        </div>
+      </div>
+
+      <div class="bi">
+        <div class="bi-col it">
+          <span class="flag">ITALIANO</span>
+          <p>Seleziona una tile e usa il pannello a destra. In <b>Spazi &amp; Bordi</b> regoli margini, padding, raggio degli angoli e bordo.</p>
+          <ol>
+            <li>Clicca una tile per <b>selezionarla</b>.</li>
+            <li>Apri il pannello <b>Spazi &amp; Bordi</b>.</li>
+            <li>Trascina gli <b>slider</b> o scrivi i valori.</li>
+          </ol>
+        </div>
+        <div class="bi-col en">
+          <span class="flag">ENGLISH</span>
+          <p>Select a tile and use the right-hand panel. In <b>Spacing &amp; Borders</b> you set margins, padding, corner radius and border.</p>
+          <ol>
+            <li>Click a tile to <b>select</b> it.</li>
+            <li>Open the <b>Spacing &amp; Borders</b> panel.</li>
+            <li>Drag the <b>sliders</b> or type values.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="shot">
+        <div class="shot-cap"><span class="dotpair"><i style="background:#f56;"></i><i style="background:#fb5;"></i><i style="background:#5c6;"></i></span><span class="label">Spazi &amp; Bordi <span class="en">/ Spacing &amp; Borders</span></span></div>
+        <div class="shot-stage">
+          <div class="insp" style="max-width:330px; margin:0 auto;">
+            <div class="insp-h">
+              <span class="t">Spazi &amp; Bordi</span>
+              <span class="devsw">
+                <button class="on" aria-label="Desktop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/></svg></button>
+                <button aria-label="Tablet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="3" width="12" height="18" rx="2"/></svg></button>
+                <button aria-label="Telefono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="3" width="8" height="18" rx="2"/></svg></button>
+              </span>
+            </div>
+            <div class="insp-body">
+              <div class="fld">
+                <div class="fld-lab"><span class="nm">Margine</span><span class="link-tog"><span class="sw"></span> collegato</span></div>
+                <div class="boxmodel">
+                  <div class="bm-cell linked"><div class="in">24</div><div class="cap">alto</div></div>
+                  <div class="bm-cell linked"><div class="in">24</div><div class="cap">dx</div></div>
+                  <div class="bm-cell linked"><div class="in">24</div><div class="cap">basso</div></div>
+                  <div class="bm-cell linked"><div class="in">24</div><div class="cap">sx</div></div>
+                </div>
+              </div>
+              <div class="fld">
+                <div class="fld-lab"><span class="nm">Padding</span><span class="val">32 px</span></div>
+                <div class="slider"><div class="fill" style="width:54%;"></div><div class="knob" style="left:54%;"></div></div>
+              </div>
+              <div class="fld">
+                <div class="fld-lab"><span class="nm">Raggio angoli</span><span class="val">10 px</span></div>
+                <div class="slider"><div class="fill" style="width:28%;"></div><div class="knob" style="left:28%;"></div></div>
+              </div>
+              <div class="fld">
+                <div class="fld-lab"><span class="nm">Bordo</span><span class="val">1 px</span></div>
+                <div class="slider"><div class="fill" style="width:12%;"></div><div class="knob" style="left:12%;"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip warn">
+        <div class="tip-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2Z"/></svg></div>
+        <div class="tip-body">
+          <div class="t">Da ricordare · Good to know</div>
+          <div class="it">I valori valgono per il <b>device selezionato</b> in alto: l'arancio segnala i campi attivi.</div>
+          <div class="en">Values apply to the <b>device selected</b> at the top — orange marks the active fields.</div>
+        </div>
+      </div>
+    </div>
+    <div class="run-foot"><span>OLObuild · Guida al primo utilizzo</span><span>Modifica tile<span class="dot"></span>06</span></div>
+  </section>
+
+  <!-- ════════════════════ PAGE 7 — STEP 5 ════════════════════ -->
+  <section class="page" data-screen-label="Step 5 — Responsive">
+    <div class="run-head">
+      <span class="rh-brand"><img src="img/olobuild-horizontal.png" alt="OLObuild"/> Guida al primo utilizzo</span>
+      <span class="rh-step">Passo 5 di 6 · Step 5 of 6</span>
+    </div>
+    <div class="page-body">
+      <div class="step-head">
+        <div class="step-num">5</div>
+        <div class="step-titles">
+          <div class="it">Controlla il responsive</div>
+          <div class="en">Check how it looks on every device</div>
+        </div>
+      </div>
+
+      <div class="bi">
+        <div class="bi-col it">
+          <span class="flag">ITALIANO</span>
+          <p>OLObuild mostra la pagina su <b>desktop, tablet e telefono</b>. Cambia formato con l'interruttore in alto e verifica che tutto stia bene.</p>
+          <ol>
+            <li>Usa lo <b>switch device</b> in alto.</li>
+            <li>Controlla la pagina in ogni formato.</li>
+            <li>Aggiusta gli spazi <b>solo dove serve</b>.</li>
+          </ol>
+        </div>
+        <div class="bi-col en">
+          <span class="flag">ENGLISH</span>
+          <p>OLObuild previews your page on <b>desktop, tablet and phone</b>. Switch device at the top and make sure everything fits.</p>
+          <ol>
+            <li>Use the <b>device switch</b> at the top.</li>
+            <li>Review the page in every size.</li>
+            <li>Tweak spacing <b>only where needed</b>.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="shot">
+        <div class="shot-cap"><span class="dotpair"><i style="background:#f56;"></i><i style="background:#fb5;"></i><i style="background:#5c6;"></i></span><span class="label">Anteprima responsive <span class="en">/ Responsive preview</span></span></div>
+        <div class="shot-stage">
+          <div class="devtrio">
+            <div>
+              <div class="dev dev-desktop"><div class="scr"><div class="ln h"></div><div class="ln img"></div><div class="cols"><div></div><div></div></div></div></div>
+              <div class="dev-lab">Desktop</div>
+            </div>
+            <div>
+              <div class="dev dev-tablet on"><div class="scr"><div class="ln h"></div><div class="ln img"></div><div class="ln"></div><div class="ln"></div></div></div>
+              <div class="dev-lab on">Tablet</div>
+            </div>
+            <div>
+              <div class="dev dev-phone"><div class="scr"><div class="ln h"></div><div class="ln img"></div><div class="ln"></div></div></div>
+              <div class="dev-lab">Telefono · Phone</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="tip-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2Z"/></svg></div>
+        <div class="tip-body">
+          <div class="t">Suggerimento · Tip</div>
+          <div class="it">Le modifiche fatte su un device <b>non rovinano</b> gli altri: ogni formato ha i suoi valori.</div>
+          <div class="en">Edits made on one device <b>don't break</b> the others — each size keeps its own values.</div>
+        </div>
+      </div>
+    </div>
+    <div class="run-foot"><span>OLObuild · Guida al primo utilizzo</span><span>Responsive<span class="dot"></span>07</span></div>
+  </section>
+
+  <!-- ════════════════════ PAGE 8 — STEP 6 ════════════════════ -->
+  <section class="page" data-screen-label="Step 6 — Pubblica">
+    <div class="run-head">
+      <span class="rh-brand"><img src="img/olobuild-horizontal.png" alt="OLObuild"/> Guida al primo utilizzo</span>
+      <span class="rh-step">Passo 6 di 6 · Step 6 of 6</span>
+    </div>
+    <div class="page-body">
+      <div class="step-head">
+        <div class="step-num">6</div>
+        <div class="step-titles">
+          <div class="it">Salva e pubblica</div>
+          <div class="en">Save and publish</div>
+        </div>
+      </div>
+
+      <div class="bi">
+        <div class="bi-col it">
+          <span class="flag">ITALIANO</span>
+          <p>Quando sei soddisfatto, <b>pubblica</b>: la pagina va online sul tuo sito. Le modifiche si salvano automaticamente mentre lavori.</p>
+          <ol>
+            <li>Controlla l'indicatore <b>Salvato</b> in alto.</li>
+            <li>Premi <b>Pubblica</b>.</li>
+            <li>Apri la pagina pubblicata dal link.</li>
+          </ol>
+        </div>
+        <div class="bi-col en">
+          <span class="flag">ENGLISH</span>
+          <p>When you're happy, <b>publish</b>: the page goes live on your site. Your work is saved automatically as you go.</p>
+          <ol>
+            <li>Check the <b>Saved</b> indicator at the top.</li>
+            <li>Click <b>Publish</b>.</li>
+            <li>Open the live page from the link.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="shot">
+        <div class="shot-cap"><span class="dotpair"><i style="background:#f56;"></i><i style="background:#fb5;"></i><i style="background:#5c6;"></i></span><span class="label">Barra in alto + esito <span class="en">/ Top bar &amp; result</span></span></div>
+        <div class="shot-stage" style="display:flex; flex-direction:column; gap:14px;">
+          <div class="topbar">
+            <div class="left">
+              <img src="img/olobuild-horizontal.png" alt="OLObuild"/>
+              <span class="crumb">Pagine · <b>Home</b></span>
+            </div>
+            <div class="ui-row">
+              <span class="saved"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Salvato · Saved</span>
+              <span class="ui-btn red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12 19 5l-3 7 3 7z"/></svg> Pubblica</span>
+            </div>
+          </div>
+          <div class="pub-ok">
+            <div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+            <div class="t">Pagina pubblicata! · Page is live</div>
+            <span class="u">iltuosito.it/home</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="tip-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2Z"/></svg></div>
+        <div class="tip-body">
+          <div class="t">Suggerimento · Tip</div>
+          <div class="it">Puoi tornare a modificare e <b>ripubblicare</b> quante volte vuoi: nessuna modifica è definitiva.</div>
+          <div class="en">You can keep editing and <b>re-publishing</b> as many times as you like — nothing is final.</div>
+        </div>
+      </div>
+    </div>
+    <div class="run-foot"><span>OLObuild · Guida al primo utilizzo</span><span>Pubblica<span class="dot"></span>08</span></div>
+  </section>
+
+  <!-- ════════════════════ PAGE 9 — CHIUSURA ════════════════════ -->
+  <section class="page" data-screen-label="Chiusura">
+    <div class="run-head">
+      <span class="rh-brand"><img src="img/olobuild-horizontal.png" alt="OLObuild"/> Guida al primo utilizzo</span>
+      <span class="rh-step">Fatto! · All done</span>
+    </div>
+    <div class="page-body">
+      <p class="eyebrow">Hai finito · You made it</p>
+      <h2 class="h-lead">La tua prima pagina è online
+        <span class="en">Your first page is live</span>
+      </h2>
+      <p class="lede-2" style="margin-top:10px;">
+        Hai imparato il giro completo: attivare, dare i colori al brand, costruire con sezioni e tile, rifinire e pubblicare. Da qui in poi è solo pratica.
+        <em>You've done the full loop: activate, brand your colors, build with sections &amp; tiles, refine and publish. From here it's just practice.</em>
+      </p>
+
+      <div class="recap">
+        <div class="recap-card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20a8 8 0 1 0-8-8"/><path d="m4 12-2 2 2 2"/><path d="M12 7v5l3 2"/></svg></div>
+          <h4>Continua a esplorare<span class="en">Keep exploring</span></h4>
+          <p>Prova le altre categorie di tile: Media, Layout, Dati e Interattive. Ogni tile segue i tuoi colori globali.</p>
+        </div>
+        <div class="recap-card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg></div>
+          <h4>Serve aiuto?<span class="en">Need help?</span></h4>
+          <p>Il pulsante <b>?</b> in alto a destra apre l'aiuto contestuale in ogni schermata del builder.</p>
+        </div>
+      </div>
+
+      <div class="checklist">
+        <div class="checklist-h">
+          <div class="t">Checklist del primo utilizzo</div>
+          <div class="en">First-use checklist</div>
+        </div>
+        <div class="checklist-row"><span class="chk-box"></span><span class="chk-tx"><b>Plugin attivato</b> · <span>Plugin activated</span></span></div>
+        <div class="checklist-row"><span class="chk-box"></span><span class="chk-tx"><b>Colori del brand impostati</b> · <span>Brand colors set</span></span></div>
+        <div class="checklist-row"><span class="chk-box"></span><span class="chk-tx"><b>Prima sezione con tile</b> · <span>First section with tiles</span></span></div>
+        <div class="checklist-row"><span class="chk-box"></span><span class="chk-tx"><b>Spazi e bordi rifiniti</b> · <span>Spacing &amp; borders refined</span></span></div>
+        <div class="checklist-row"><span class="chk-box"></span><span class="chk-tx"><b>Controllo su tablet e telefono</b> · <span>Checked on tablet &amp; phone</span></span></div>
+        <div class="checklist-row"><span class="chk-box"></span><span class="chk-tx"><b>Pagina pubblicata</b> · <span>Page published</span></span></div>
+      </div>
+    </div>
+    <div class="run-foot"><span>OLObuild · Guida al primo utilizzo</span><span>Grazie · Thank you<span class="dot"></span>09</span></div>
+  </section>
+
+</div>
+</body>
+</html>

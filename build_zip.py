@@ -37,11 +37,14 @@ EXCLUDE_DIRS = {
     # cartelle di lavoro che NON devono finire nel plugin distribuito
     "regoletiles1", "audit_results", "handoff-tile-speciali",
     "iotfarm-demo", "bordo",
+    # scratch: contiene solo un residuo build/olosecurity/ (vecchia copia con
+    # header "Plugin Name:" → farebbe abortire il safety-check secondo-header)
+    "build",
 }
 # Qualsiasi cartella che inizia con questi prefissi viene esclusa.
 # "tmp_" → tmp_try_build/tmp_try_ref/ecc.; "_" → _legacy/_backup; più le cartelle di lavoro note.
 EXCLUDE_DIR_PREFIXES = (
-    "design_handoff_", "languages._backup_",
+    "design_handoff_", "design-", "languages._backup_",
     "tmp_", "_", "handoff", "regoletiles", "audit_", "iotfarm",
     "NOVA", "OLObuild design",
 )

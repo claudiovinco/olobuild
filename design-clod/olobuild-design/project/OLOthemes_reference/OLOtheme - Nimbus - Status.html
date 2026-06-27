@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Nimbus — System status</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="Live status of the Nimbus edge platform — service uptime, regional health and incident history."/>
+<link rel="stylesheet" href="olothemes/nimbus.css"/>
+</head>
+<body data-screen-label="Nimbus — Status">
+
+<header class="nb-nav" data-olo-tile="Navmenu">
+  <div class="nb-wrap nb-nav__in">
+    <a class="logo" href="OLOtheme - Nimbus (Software & Tech).html"><span class="mk"></span>Nimbus</a>
+    <nav class="nb-nav__links">
+      <a href="OLOtheme - Nimbus (Software & Tech).html#platform">Platform</a>
+      <a href="OLOtheme - Nimbus (Software & Tech).html#regions">Regions</a>
+      <a href="OLOtheme - Nimbus - Status.html" class="on">Status</a>
+      <a href="OLOtheme - Nimbus (Software & Tech).html#pricing">Pricing</a>
+    </nav>
+    <div class="nb-nav__cta">
+      <a href="#" class="sign">Docs</a>
+      <a href="OLOtheme - Nimbus (Software & Tech).html#pricing" class="btn btn--blue">Deploy free</a>
+    </div>
+    <button class="burger" data-burger aria-label="Open menu"><span></span></button>
+  </div>
+</header>
+<div class="mobile" data-mobile>
+  <button data-close aria-label="Close">&times;</button>
+  <a href="OLOtheme - Nimbus (Software & Tech).html#platform">Platform</a>
+  <a href="OLOtheme - Nimbus (Software & Tech).html#regions">Regions</a>
+  <a href="OLOtheme - Nimbus - Status.html">Status</a>
+  <a href="OLOtheme - Nimbus (Software & Tech).html#pricing">Pricing</a>
+</div>
+
+<!-- ═══ PAGE HEADER (OLObuild · Navigation → PageHeader) ═══ -->
+<section class="nb-ph" data-olo-tile="PageHeader">
+  <span class="glow"></span>
+  <div class="nb-wrap nb-ph__in">
+    <span class="eyebrow" data-reveal>// status.nimbus.dev</span>
+    <h1 data-reveal="60">System status</h1>
+    <p data-reveal="120">Real-time health across every Nimbus service and region. Subscribe to get notified the moment anything changes.</p>
+  </div>
+</section>
+
+<main>
+<!-- ═══ STATUS BOARD (OLObuild · NEW tile → StatusBoard) ═══ -->
+<section class="nb-sec" style="padding-top:clamp(30px,4vw,48px)" data-olo-tile="StatusBoard" data-olo-note="NEW tile candidate: StatusBoard — operational banner + per-service uptime bars + region health grid + incident log. Props: services[], 90-day history, regions[].">
+  <div class="nb-wrap">
+    <div class="nb-status-banner" data-reveal>
+      <span class="dot"></span>
+      <b>All systems operational</b>
+      <span>Updated 30s ago · last 90 days</span>
+    </div>
+
+    <!-- services -->
+    <div class="nb-svc" data-reveal="40">
+      <div class="nb-svc__top"><span class="nm">Edge compute</span><span class="pct">99.99% uptime</span></div>
+      <div class="nb-uptime"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="nb-svc__scale"><span>90 days ago</span><span>today</span></div>
+    </div>
+    <div class="nb-svc" data-reveal="80">
+      <div class="nb-svc__top"><span class="nm">Anycast network</span><span class="pct">100.00% uptime</span></div>
+      <div class="nb-uptime"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="nb-svc__scale"><span>90 days ago</span><span>today</span></div>
+    </div>
+    <div class="nb-svc" data-reveal="120">
+      <div class="nb-svc__top"><span class="nm">Edge data (KV + SQL)</span><span class="pct" style="color:var(--amber)">99.94% uptime</span></div>
+      <div class="nb-uptime"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="dn"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="dn"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="nb-svc__scale"><span>90 days ago</span><span>today</span></div>
+    </div>
+    <div class="nb-svc" data-reveal="160">
+      <div class="nb-svc__top"><span class="nm">Dashboard &amp; API</span><span class="pct">99.98% uptime</span></div>
+      <div class="nb-uptime"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="out"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="nb-svc__scale"><span>90 days ago</span><span>today</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ REGION HEALTH (OLObuild · NEW tile → StatusBoard) ═══ -->
+<section class="nb-sec" style="padding-top:0" data-olo-tile="StatusBoard">
+  <div class="nb-wrap">
+    <div class="sec-head" style="text-align:left;margin:0 0 24px" data-reveal><h2 style="font-size:clamp(22px,3vw,30px)">Regional health</h2></div>
+    <div class="nb-regions" data-reveal="60">
+      <div class="nb-region"><div class="nb-region__top"><span class="dot"></span><span class="nm">us-west</span></div><div class="lat">38ms · operational</div></div>
+      <div class="nb-region"><div class="nb-region__top"><span class="dot"></span><span class="nm">us-east</span></div><div class="lat">31ms · operational</div></div>
+      <div class="nb-region"><div class="nb-region__top"><span class="dot"></span><span class="nm">london</span></div><div class="lat">26ms · operational</div></div>
+      <div class="nb-region"><div class="nb-region__top"><span class="dot"></span><span class="nm">frankfurt</span></div><div class="lat">29ms · operational</div></div>
+      <div class="nb-region"><div class="nb-region__top"><span class="dot amber"></span><span class="nm">singapore</span></div><div class="lat">61ms · elevated latency</div></div>
+      <div class="nb-region"><div class="nb-region__top"><span class="dot"></span><span class="nm">tokyo</span></div><div class="lat">44ms · operational</div></div>
+      <div class="nb-region"><div class="nb-region__top"><span class="dot"></span><span class="nm">sao-paulo</span></div><div class="lat">52ms · operational</div></div>
+      <div class="nb-region"><div class="nb-region__top"><span class="dot"></span><span class="nm">sydney</span></div><div class="lat">58ms · operational</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ INCIDENT HISTORY (OLObuild · Blog → PostList) ═══ -->
+<section class="nb-sec panel" data-olo-tile="PostList">
+  <div class="nb-wrap">
+    <div class="sec-head" style="text-align:left;margin:0 0 12px" data-reveal><span class="eyebrow">// incident history</span><h2 style="font-size:clamp(24px,3.4vw,36px);margin-top:12px">Past 30 days</h2></div>
+    <div class="nb-incidents" data-reveal="60">
+      <div class="nb-inc">
+        <div class="nb-inc__date">14 May</div>
+        <div class="nb-inc__c"><h4><span class="tag minor">Minor</span>Elevated latency in singapore</h4><p>A peering partner degraded for 18 minutes. Traffic auto-rerouted to tokyo; no requests dropped. Resolved 09:42 UTC.</p></div>
+      </div>
+      <div class="nb-inc">
+        <div class="nb-inc__date">2 May</div>
+        <div class="nb-inc__c"><h4><span class="tag minor">Minor</span>Edge data write delays</h4><p>Replication lag in eu-central reached 4s for some KV namespaces. Reads unaffected. Resolved in 26 minutes.</p></div>
+      </div>
+      <div class="nb-inc">
+        <div class="nb-inc__date">21 Apr</div>
+        <div class="nb-inc__c"><h4><span class="tag resolved">Resolved</span>Dashboard sign-in errors</h4><p>An auth deploy caused intermittent 500s on the dashboard for 7 minutes. The API and your apps were never affected. Rolled back automatically.</p></div>
+      </div>
+      <div class="nb-inc">
+        <div class="nb-inc__date">9 Apr</div>
+        <div class="nb-inc__c"><h4><span class="tag resolved">Resolved</span>Scheduled network maintenance</h4><p>Planned anycast routing upgrade across all regions. Completed with zero downtime as designed.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA (OLObuild · Marketing → CallToAction) ═══ -->
+<section class="nb-sec nb-cta" data-olo-tile="CallToAction">
+  <div class="nb-wrap"><div class="nb-cta__box" data-reveal>
+    <span class="glow"></span>
+    <h2>Never miss an update</h2>
+    <p>Subscribe to status changes by email, webhook or RSS — and build on infrastructure that tells you the truth.</p>
+    <div class="nb-cta__cta">
+      <a href="#" class="btn btn--blue btn--lg">Subscribe to status</a>
+      <a href="OLOtheme - Nimbus (Software & Tech).html" class="btn btn--ghost btn--lg">Back to Nimbus</a>
+    </div>
+  </div></div>
+</section>
+</main>
+
+<footer class="nb-foot" data-olo-tile="Footer">
+  <div class="nb-wrap">
+    <div class="nb-foot__top">
+      <div class="nb-foot__brand">
+        <a class="logo" href="OLOtheme - Nimbus (Software & Tech).html"><span class="mk"></span>Nimbus</a>
+        <p>Cloud infrastructure for the edge. Deploy once, run everywhere, pay per request.</p>
+      </div>
+      <div><h4>Product</h4><ul><li><a href="OLOtheme - Nimbus (Software & Tech).html#platform">Platform</a></li><li><a href="OLOtheme - Nimbus (Software & Tech).html#regions">Regions</a></li><li><a href="OLOtheme - Nimbus (Software & Tech).html#pricing">Pricing</a></li></ul></div>
+      <div><h4>Developers</h4><ul><li><a href="#">Docs</a></li><li><a href="#">CLI</a></li><li><a href="#">API</a></li><li><a href="OLOtheme - Nimbus - Status.html">Status</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Security</a></li><li><a href="#">Careers</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="nb-foot__bot"><span>© 2026 Nimbus — an OLOtheme demo.</span><span>Built with OLObuild</span></div>
+  </div>
+</footer>
+
+<script src="olothemes/theme.js"></script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Brewline — Coffee, roasted to order</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="Brewline is a specialty coffee roastery — single-origin beans roasted to order and shipped within 24 hours. Find your roast or subscribe."/>
+<link rel="stylesheet" href="olothemes/brewline.css"/>
+</head>
+<body data-screen-label="Brewline — Home" data-fx>
+
+<!-- ═══ NAVMENU (OLObuild · Navigation → Navmenu) ═══ -->
+<header class="br-nav" data-olo-tile="Navmenu">
+  <div class="br-wrap br-nav__in">
+    <a class="logo" href="#top"><span class="mk"></span>Brewline</a>
+    <nav class="br-nav__links">
+      <a href="OLOtheme - Brewline - Shop.html">Shop</a>
+      <a href="#subscribe">Subscribe</a>
+      <a href="#brew">Brew guides</a>
+      <a href="#story">Our roastery</a>
+    </nav>
+    <div class="br-nav__cta">
+      <span class="br-cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg><span class="n">2</span></span>
+      <a href="OLOtheme - Brewline - Shop.html" class="btn btn--caramel">Shop beans</a>
+    </div>
+    <button class="burger" data-burger aria-label="Open menu"><span></span></button>
+  </div>
+</header>
+<div class="mobile" data-mobile>
+  <button data-close aria-label="Close">&times;</button>
+  <a href="OLOtheme - Brewline - Shop.html">Shop</a>
+  <a href="#subscribe">Subscribe</a>
+  <a href="#brew">Brew guides</a>
+  <a href="#story">Our roastery</a>
+</div>
+
+<main id="top">
+
+<!-- ═══ HERO (OLObuild · Marketing → Hero) ═══ -->
+<section class="br-hero" data-olo-tile="Hero">
+  <span class="br-hero__bg"></span>
+  <div class="br-wrap br-hero__in">
+    <div>
+      <span class="br-hero__tag" data-reveal>Roasted to order · shipped in 24h</span>
+      <h1 data-reveal="80">Coffee with<br/>a <em>provenance,</em><br/>not a label.</h1>
+      <p data-reveal="160">We buy whole-lot, roast in small batches the morning your order lands, and tell you exactly who grew it. No blends hiding behind a brand.</p>
+      <div class="br-hero__cta" data-reveal="240">
+        <a href="OLOtheme - Brewline - Shop.html" class="btn btn--caramel btn--lg">Find your roast</a>
+        <a href="#subscribe" class="btn btn--ghost btn--lg">Start a subscription</a>
+      </div>
+    </div>
+    <div class="br-hero__art" data-reveal="120">
+      <div class="media" data-label="hero — coffee bag &amp; loose beans on warm linen"></div>
+      <div class="br-hero__chip">
+        <div><div class="nm">Yirgacheffe G1</div><div class="mt">Ethiopia · washed</div></div>
+        <div class="pr">€19</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TICKER (OLObuild · NEW tile → TickerBar) ═══ -->
+<section class="br-ticker" data-olo-tile="TickerBar" data-olo-note="NEW tile candidate: TickerBar — marquee of selling points / origins.">
+  <div class="br-ticker__t" data-marquee>
+    <span>Single origin</span><span>Roasted to order</span><span>Direct trade</span><span>Free shipping over €40</span><span>Compostable bags</span><span>Roasted in Trieste</span>
+  </div>
+</section>
+
+<!-- ═══ FEATURED PRODUCTS (OLObuild · NEW tile → ProductGrid) ═══ -->
+<section class="br-sec" id="shop" data-olo-tile="ProductGrid" data-olo-note="NEW tile candidate: ProductGrid — product cards with origin, tasting notes, roast meter, price &amp; add-to-cart. Props: filters, badge, roast level.">
+  <div class="br-wrap">
+    <div class="sec-head left" data-reveal>
+      <span class="eyebrow">// this month's lots</span>
+      <h2>Fresh on the roaster</h2>
+    </div>
+    <div class="br-shop-head" data-reveal="60">
+      <div class="br-filters">
+        <button class="br-filter on">All</button>
+        <button class="br-filter">Filter</button>
+        <button class="br-filter">Espresso</button>
+        <button class="br-filter">Decaf</button>
+      </div>
+      <a href="OLOtheme - Brewline - Shop.html" class="btn btn--ghost">View all 24 →</a>
+    </div>
+    <div class="br-prods">
+      <article class="br-prod" data-reveal>
+        <div class="br-prod__media"><div class="media" data-label="bag — Yirgacheffe"></div><span class="br-prod__badge">New lot</span></div>
+        <div class="br-prod__b">
+          <div class="br-prod__origin">Ethiopia · Yirgacheffe</div>
+          <h3>Idido Washed</h3>
+          <p class="br-prod__notes">Jasmine · bergamot · stone fruit</p>
+          <div class="br-roast"><span class="br-roast__lbl">Roast</span><div class="br-roast__dots"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div></div>
+          <div class="br-prod__foot"><span class="br-prod__price">€19</span><button class="br-prod__add">Add</button></div>
+        </div>
+      </article>
+      <article class="br-prod" data-reveal="80">
+        <div class="br-prod__media"><div class="media" data-label="bag — Huila"></div></div>
+        <div class="br-prod__b">
+          <div class="br-prod__origin">Colombia · Huila</div>
+          <h3>La Esperanza</h3>
+          <p class="br-prod__notes">Red apple · caramel · cocoa</p>
+          <div class="br-roast"><span class="br-roast__lbl">Roast</span><div class="br-roast__dots"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div></div>
+          <div class="br-prod__foot"><span class="br-prod__price">€17</span><button class="br-prod__add">Add</button></div>
+        </div>
+      </article>
+      <article class="br-prod" data-reveal="160">
+        <div class="br-prod__media"><div class="media" data-label="bag — Sumatra"></div><span class="br-prod__badge">Espresso</span></div>
+        <div class="br-prod__b">
+          <div class="br-prod__origin">Indonesia · Sumatra</div>
+          <h3>Lintong Dark</h3>
+          <p class="br-prod__notes">Dark chocolate · cedar · molasses</p>
+          <div class="br-roast"><span class="br-roast__lbl">Roast</span><div class="br-roast__dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div></div>
+          <div class="br-prod__foot"><span class="br-prod__price">€18</span><button class="br-prod__add">Add</button></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STAT STRIP (OLObuild · NEW tile → StatStrip) ═══ -->
+<section class="br-stats" data-olo-tile="StatStrip" data-olo-note="NEW tile candidate: StatStrip — counter band.">
+  <div class="br-wrap br-stats__in">
+    <div data-reveal><b><span data-count="24">0</span><span class="u">h</span></b><span>Roast to dispatch</span></div>
+    <div data-reveal="80"><b><span data-count="18">0</span></b><span>Origins this year</span></div>
+    <div data-reveal="160"><b><span data-count="7">0</span></b><span>Direct-trade farms</span></div>
+    <div data-reveal="240"><b><span data-count="11000">0</span><span class="u">+</span></b><span>Bags shipped</span></div>
+  </div>
+</section>
+
+<!-- ═══ SUBSCRIPTION (OLObuild · Marketing → FeatureSplit) ═══ -->
+<section class="br-sec panel" id="subscribe" data-olo-tile="FeatureSplit">
+  <div class="br-wrap br-sub" data-reveal>
+    <div class="br-sub__media"><div class="media" data-label="subscription box — two bags, kraft card"></div></div>
+    <div>
+      <span class="eyebrow">// the standing order</span>
+      <h2>A new origin on your shelf, every fortnight</h2>
+      <p>Tell us how you brew and how much you drink. We pick the lot, roast it the day it ships, and you can skip, swap or pause whenever.</p>
+      <ul class="br-sub__list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Roaster's choice or pick your own</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>10% off every bag, free shipping</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Skip, swap or cancel anytime</li>
+      </ul>
+      <a href="#" class="btn btn--caramel">Build my subscription — from €15/mo</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BREW GUIDE (OLObuild · NEW tile → ProcessSteps) ═══ -->
+<section class="br-sec" id="brew" data-olo-tile="ProcessSteps" data-olo-note="NEW tile candidate: ProcessSteps — numbered how-to steps.">
+  <div class="br-wrap">
+    <div class="sec-head" data-reveal>
+      <span class="eyebrow">// brew it right</span>
+      <h2>Pour-over in four moves</h2>
+      <p>The ratio that works for most of our washed coffees. Adjust to taste — then write it on the bag.</p>
+    </div>
+    <div class="br-steps" data-reveal="80">
+      <div class="br-step"><div class="br-step__n">1</div><h3>Weigh</h3><p>18g coffee, medium grind. 300g water at 94°C.</p></div>
+      <div class="br-step"><div class="br-step__n">2</div><h3>Bloom</h3><p>Pour 50g, wait 40 seconds for the gas to escape.</p></div>
+      <div class="br-step"><div class="br-step__n">3</div><h3>Pour</h3><p>Top up in slow circles to 300g over two minutes.</p></div>
+      <div class="br-step"><div class="br-step__n">4</div><h3>Enjoy</h3><p>Drawdown by 3:00. Swirl, rest, taste, adjust.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STORY (OLObuild · Marketing → FeatureSplit) ═══ -->
+<section class="br-sec panel" id="story" data-olo-tile="FeatureSplit">
+  <div class="br-wrap br-sub" data-reveal>
+    <div>
+      <span class="eyebrow">// our roastery</span>
+      <h2>A drum roaster, a harbour, and a lot of notebooks</h2>
+      <p>Brewline started in a Trieste workshop with one second-hand roaster and a stubborn idea: that you should know your coffee's farm by name.</p>
+      <p>We still roast every batch by ear and log every curve. When a lot's gone, it's gone — that's the point of buying it fresh.</p>
+      <a href="#" class="btn btn--ghost">Read our sourcing promise</a>
+    </div>
+    <div class="br-sub__media"><div class="media" data-label="roastery — drum roaster, sacks, harbour light"></div></div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIAL (OLObuild · Marketing → Testimonial) ═══ -->
+<section class="br-sec br-testi" data-olo-tile="Testimonial">
+  <div class="br-wrap br-testi__in" data-reveal>
+    <q>“The first subscription that <em>actually changed how I drink coffee.</em> Every fortnight there's something I'd never have ordered, and it's always good.”</q>
+    <div class="br-testi__by">Sara L. · subscriber, 14 months</div>
+  </div>
+</section>
+
+<!-- ═══ BUILD YOUR BOX (OLObuild · NEW tile → Builder) ═══ -->
+<section class="br-sec" id="box" data-olo-tile="Builder" data-olo-note="NEW tile candidate: Builder — interactive zone. +/- steppers with a live running total &amp; bag count. Props: items[name,price,note], currency.">
+  <div class="br-wrap br-box" data-reveal data-builder data-currency="€" style="--fx-zone-accent:#c98a4b;--fx-zone-on:#170f0a;--fx-zone-line:rgba(234,217,194,.18);--fx-zone-bg:rgba(201,138,75,.08)">
+    <div class="br-box__head">
+      <div><span class="eyebrow">Subscription</span><h2>Build your <em>box</em></h2><p>Pick the bags you want roasted fresh each fortnight. Mix origins freely — your box totals up as you go.</p></div>
+      <div class="br-box__tally"><div class="br-box__count"><b data-bld-items>0</b> <span>bags</span></div><div class="br-box__total" data-bld-total>€0</div></div>
+    </div>
+    <div class="br-box__grid">
+      <div class="br-box__item" data-bld-item data-n="0" data-price="14"><div class="br-box__meta"><h3>Aurora — Ethiopia</h3><span class="no">Floral · jasmine, bergamot</span></div><div class="br-box__r"><span class="pr">€14</span><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div></div>
+      <div class="br-box__item" data-bld-item data-n="0" data-price="13"><div class="br-box__meta"><h3>Tide — Colombia</h3><span class="no">Balanced · cocoa, red apple</span></div><div class="br-box__r"><span class="pr">€13</span><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div></div>
+      <div class="br-box__item" data-bld-item data-n="0" data-price="15"><div class="br-box__meta"><h3>Ember — Sumatra</h3><span class="no">Deep · cedar, dark sugar</span></div><div class="br-box__r"><span class="pr">€15</span><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div></div>
+      <div class="br-box__item" data-bld-item data-n="0" data-price="13"><div class="br-box__meta"><h3>House — Daily Blend</h3><span class="no">Easy · caramel, toasted nut</span></div><div class="br-box__r"><span class="pr">€13</span><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div></div>
+      <div class="br-box__item" data-bld-item data-n="0" data-price="16"><div class="br-box__meta"><h3>Reserve — Gesha</h3><span class="no">Rare · stone fruit, tea-like</span></div><div class="br-box__r"><span class="pr">€16</span><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div></div>
+      <div class="br-box__item" data-bld-item data-n="0" data-price="12"><div class="br-box__meta"><h3>Decaf — Brazil</h3><span class="no">Smooth · hazelnut, cocoa</span></div><div class="br-box__r"><span class="pr">€12</span><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA (OLObuild · Marketing → CallToAction) ═══ -->
+<section class="br-sec br-cta" data-olo-tile="CallToAction">
+  <div class="br-wrap"><div class="br-cta__box" data-reveal>
+    <span class="glow"></span>
+    <h2>Taste the difference fresh makes</h2>
+    <p>Order today, we roast tomorrow, you brew by the weekend. Free shipping over €40.</p>
+    <div class="br-cta__cta">
+      <a href="OLOtheme - Brewline - Shop.html" class="btn btn--caramel btn--lg">Shop the beans</a>
+      <a href="#subscribe" class="btn btn--ghost btn--lg">Subscribe &amp; save</a>
+    </div>
+  </div></div>
+</section>
+
+</main>
+
+<!-- ═══ FOOTER (OLObuild · Navigation → Footer) ═══ -->
+<footer class="br-foot" data-olo-tile="Footer">
+  <div class="br-wrap">
+    <div class="br-foot__top">
+      <div class="br-foot__brand">
+        <a class="logo" href="#top"><span class="mk"></span>Brewline</a>
+        <p>Specialty coffee, roasted to order in Trieste and shipped within 24 hours.</p>
+      </div>
+      <div><h4>Shop</h4><ul><li><a href="OLOtheme - Brewline - Shop.html">All coffee</a></li><li><a href="#">Espresso</a></li><li><a href="#">Decaf</a></li><li><a href="#">Equipment</a></li></ul></div>
+      <div><h4>Learn</h4><ul><li><a href="#brew">Brew guides</a></li><li><a href="#story">Our roastery</a></li><li><a href="#">Sourcing</a></li><li><a href="#">Journal</a></li></ul></div>
+      <div><h4>Help</h4><ul><li><a href="#subscribe">Subscriptions</a></li><li><a href="#">Shipping &amp; returns</a></li><li><a href="#">Wholesale</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="br-foot__bot"><span>© 2026 Brewline — an OLOtheme demo.</span><span>Built with OLObuild</span></div>
+  </div>
+</footer>
+
+<script src="olothemes/fx.js"></script>
+<script src="olothemes/theme.js"></script>
+</body>
+</html>

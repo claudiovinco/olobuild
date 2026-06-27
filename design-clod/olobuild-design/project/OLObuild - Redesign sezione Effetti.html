@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>OLObuild — Redesign sezione Effetti</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{
+    --red:#e1474f;--red-soft:#fef2f3;--navy:#16263d;--ink:#1f2937;--mute:#6b7280;--faint:#94a3b8;
+    --surface-alt:#f6f7f9;--border:#e5e7eb;--bg:#f6f1e8;--line:#e6dfd1;
+    --ui:#e8622a;--ui-soft:#fdeee2;--ui-bar:#2b3340;
+    --sans:"Work Sans",-apple-system,sans-serif;--disp:"Instrument Serif",Georgia,serif;--mono:"JetBrains Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1040px;margin:0 auto;padding:52px 32px 90px;}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+  h1{font-family:var(--disp);font-weight:400;font-size:clamp(40px,5.5vw,62px);line-height:1;letter-spacing:-.02em;color:var(--navy);margin:0 0 14px;}
+  h1 em{font-style:italic;color:var(--red);}
+  .lead{font-size:16px;color:var(--mute);max-width:74ch;margin:0 0 8px;line-height:1.55;}
+  .lead b{color:var(--navy);font-weight:600;} .lead code{font-family:var(--mono);font-size:14px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:5px;padding:1px 5px;}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;margin-top:34px;}
+  .col-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .badge{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:999px;}
+  .today .badge{background:#fde2e4;color:#b42318;} .new .badge{background:#dcfce7;color:#15803d;}
+  .col-head h2{font-size:15px;font-weight:700;color:var(--navy);margin:0;}
+  .col-head .n{font-size:12px;color:var(--faint);margin-left:auto;font-family:var(--mono);}
+
+  /* panel chrome */
+  .panel{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+  .panel+.panel{margin-top:14px;}
+  .panel-h{display:flex;align-items:center;justify-content:center;position:relative;padding:13px;background:#fcfcfd;border-bottom:1px solid #eef0f3;}
+  .panel-h .t{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);}
+  .panel-h .chev{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--faint);display:grid;place-items:center;}
+  .panel-h .chev svg{width:16px;height:16px;}
+  .panel-b{padding:16px;}
+
+  /* ── OGGI ── */
+  .o-sec{font-size:15px;color:#4b5563;font-weight:400;display:flex;align-items:center;justify-content:space-between;margin:18px 0 8px;}
+  .o-sec:first-child{margin-top:0;} .o-sec .eye{color:#9ca3af;}.o-sec .eye svg{width:18px;height:18px;display:block;}
+  .o-sub{font-size:13px;color:#9ca3af;margin:0 0 5px;}
+  .o-input{width:100%;height:46px;border:1px solid #e5e7eb;border-radius:6px;background:#fff;display:flex;align-items:center;padding:0 14px;font-size:15px;color:#374151;}
+  .o-input.empty{color:transparent;}
+  .o-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .o-row .ol{font-size:13px;color:#9ca3af;width:64px;flex-shrink:0;}
+  .o-row .ov{font-size:14px;color:#374151;width:42px;text-align:right;flex-shrink:0;}
+  .o-row .ou{font-size:13px;color:#9ca3af;width:28px;text-align:right;flex-shrink:0;}
+  .os{flex:1;height:6px;border-radius:99px;background:#e5e7eb;position:relative;}
+  .os .f{position:absolute;left:0;top:0;bottom:0;border-radius:99px;}
+  .os .k{position:absolute;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;}
+  .os.dark{background:#1f2937;} .os.dark .k{background:var(--ui);left:50%;}
+  .os.blue .f{background:#41699e;} .os.blue .k{background:#41699e;}
+  .o-vbox{width:96px;height:40px;border:1px solid #e5e7eb;border-radius:6px;background:#fff;flex-shrink:0;}
+  .o-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;align-items:center;}
+  .o-grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:8px;}
+  .o-xy{display:flex;align-items:center;gap:8px;} .o-xy .k{font-size:14px;color:#6b7280;width:40px;}
+  .o-color{display:flex;align-items:center;gap:10px;}
+  .o-sw{width:30px;height:30px;border-radius:5px;background:#111;border:1px solid #d1d5db;}
+  .o-hex{font-family:var(--mono);font-size:14px;color:#374151;flex:1;}
+  .o-globe{color:var(--ui);}.o-globe svg{width:20px;height:20px;}
+  .o-alphasq{width:24px;height:24px;background:#111;border-radius:4px;flex-shrink:0;}
+  .measure{font-family:var(--mono);font-size:10px;color:#b42318;margin-top:4px;}
+
+  /* ── COERENTE ── */
+  .ctx{display:flex;align-items:center;gap:8px;margin-bottom:13px;} .ctx .sp{flex:1;}
+  .dev{display:inline-flex;gap:2px;background:var(--ui-bar);border:1px solid var(--ui-bar);border-radius:8px;padding:3px;}
+  .dev button{width:26px;height:24px;border:0;background:transparent;border-radius:6px;color:rgba(255,255,255,.55);display:grid;place-items:center;cursor:pointer;}
+  .dev button.on{background:var(--ui);color:#fff;box-shadow:0 1px 2px rgba(0,0,0,.18);} .dev svg{width:14px;height:14px;}
+  .eyeb{width:28px;height:26px;border:1px solid var(--border);background:#fff;border-radius:7px;color:#9ca3af;display:grid;place-items:center;cursor:pointer;flex-shrink:0;}
+  .eyeb.on{color:var(--ink);background:var(--surface-alt);} .eyeb svg{width:15px;height:15px;}
+  .seg{display:inline-flex;background:var(--ui-bar);border-radius:10px;padding:3px;gap:2px;}
+  .seg button{appearance:none;border:0;background:transparent;font:700 13px var(--sans);color:rgba(255,255,255,.92);padding:6px 15px;border-radius:7px;cursor:pointer;line-height:1;}
+  .seg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(16,24,40,.22);}
+
+  .subhead{display:flex;align-items:center;justify-content:space-between;margin:0 0 11px;padding-top:15px;border-top:1px solid #f0f1f4;}
+  .subhead.first{padding-top:0;border-top:0;}
+  .subhead .t2{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--navy);}
+
+  .row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .row:last-child{margin-bottom:0;}
+  .rowlab{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);width:50px;flex-shrink:0;}
+  .slider{flex:1;height:34px;display:flex;align-items:center;}
+  .slider .tr{width:100%;height:5px;border-radius:99px;background:var(--surface-alt);border:1px solid #eef0f3;position:relative;}
+  .slider .fi{position:absolute;left:0;top:0;bottom:0;background:var(--ui);border-radius:99px;}
+  .slider .kn{position:absolute;top:50%;transform:translate(-50%,-50%);width:15px;height:15px;border-radius:50%;background:#fff;border:2px solid var(--ui);box-shadow:0 1px 4px rgba(0,0,0,.18);}
+  .valbox{display:flex;align-items:center;border:1px solid var(--border);border-radius:9px;overflow:hidden;background:#fff;height:34px;width:78px;flex-shrink:0;}
+  .valbox input{width:100%;min-width:0;border:0;outline:none;text-align:center;font:500 13px var(--mono);color:var(--ink);background:transparent;}
+  .valbox input::placeholder{color:var(--faint);}
+  .valbox .u{font-size:11px;color:var(--faint);font-weight:600;padding:0 8px;border-left:1px solid #eef0f3;align-self:stretch;display:flex;align-items:center;background:var(--surface-alt);}
+  .selc{flex:1;height:34px;border:1px solid var(--border);border-radius:9px;background:#fff;font-size:13px;color:var(--ink);padding:0 8px 0 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;transition:border-color .12s;}
+  .selc:hover{border-color:#d7dbe0;} .selc .v{display:flex;align-items:center;gap:8px;}
+  .selc .v .ic{color:var(--mute);display:grid;place-items:center;}.selc .v .ic svg{width:15px;height:15px;display:block;}
+  .selc .ch{width:14px;height:14px;color:var(--faint);flex-shrink:0;}
+  .selc.ph .v{color:var(--faint);}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;}
+  .cell .cl{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-bottom:4px;display:block;}
+  .cell .valbox{width:100%;}
+
+  .sc-color{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+  .sc-color .sw{width:34px;height:34px;border-radius:9px;border:1px solid var(--border);background:#111;flex-shrink:0;}
+  .sc-color .cv{flex:1;min-width:0;display:flex;align-items:center;border:1px solid var(--border);border-radius:9px;height:34px;background:#fff;}
+  .sc-color .cv input{flex:1;min-width:0;border:0;outline:none;background:transparent;font:500 12px var(--mono);color:var(--ink);padding:0 10px;}
+  .sc-color .tok{width:34px;height:34px;border:1px solid var(--border);border-radius:9px;display:grid;place-items:center;color:var(--ui);flex-shrink:0;background:#fff;cursor:pointer;}
+  .sc-color .tok svg{width:15px;height:15px;}
+
+  .pv{margin-top:15px;border:1px solid #eef0f3;border-radius:10px;background:var(--surface-alt);padding:14px;display:flex;align-items:center;justify-content:center;height:84px;}
+  .pv .card{width:130px;height:54px;border-radius:10px;background:#fff;border:1px solid #eef0f3;box-shadow:0 8px 20px -6px rgba(22,38,61,.22);display:grid;place-items:center;transform:rotate(-3deg);}
+  .pv .card span{font:600 11px var(--sans);color:var(--mute);}
+
+  .why{margin-top:34px;background:#fffdf8;border:1px solid var(--line);border-radius:14px;padding:24px 26px;}
+  .why h3{font-family:var(--disp);font-weight:400;font-size:24px;color:var(--navy);margin:0 0 16px;}
+  .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px 22px;}
+  .why-item{font-size:13px;line-height:1.5;color:var(--mute);} .why-item b{color:var(--navy);display:block;font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;margin-bottom:4px;}
+  .why-item .nw{font-family:var(--mono);font-size:11px;color:#15803d;}
+  @media(max-width:860px){.cols,.why-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">OLObuild · field redesign</div>
+  <h1>Sezione <em>Effetti</em></h1>
+  <p class="lead">Il pannello più affollato del builder. Oggi convivono <b>slider rossi e blu</b>, valori a volte in box a volte inline, unità mancanti, campi vuoti e <b>due "occhi" sparsi</b>. A destra tutto torna al sistema: <b>uno slider arancio</b>, <b>valbox con unità ovunque</b> (<code>°</code> <code>%</code> <code>px</code> <code>ms</code>), segnaposto e default sensati, sotto-sezioni con occhio allineato e stato <b>Normale/Hover</b> col nuovo selettore. Il blocco <b>Transizione hover</b> resta un pannello a sé.</p>
+
+  <div class="cols">
+
+    <!-- ════ OGGI ════ -->
+    <div>
+      <div class="col-head today"><span class="badge">Oggi</span><h2>Effetti + Transizione</h2><span class="n">slider misti · no unità</span></div>
+
+      <div class="panel">
+        <div class="panel-h"><span class="t">Effetti</span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></span></div>
+        <div class="panel-b">
+          <div class="o-sec"><span>Ombra</span><span class="eye"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span></div>
+          <div class="o-input">Nessuna</div>
+
+          <div class="o-sec"><span>Opacità</span><span class="eye"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span></div>
+          <div class="o-row"><div class="os dark"><div class="k" style="left:50%;"></div></div><div class="o-vbox"></div></div>
+          <div class="measure">slider nero · knob arancio · box vuoto, niente %</div>
+
+          <div class="o-sec"><span>Trasformazione</span><span class="eye"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span></div>
+          <div class="o-row"><span class="ol">Rotazione</span><div class="os blue"><div class="f" style="width:50%"></div><div class="k" style="left:50%"></div></div><span class="ov">0°</span></div>
+          <div class="o-row"><span class="ol">Scala</span><div class="os blue"><div class="f" style="width:38%"></div><div class="k" style="left:38%"></div></div><span class="ov">100%</span></div>
+          <div class="o-grid" style="margin-top:6px;">
+            <div class="o-xy"><span class="k">X</span><div class="o-input">0</div></div>
+            <div class="o-xy"><span class="k">Y</span><div class="o-input">0</div></div>
+          </div>
+          <div class="o-grid">
+            <div class="o-xy"><span class="k">SkewX</span><div class="o-input">0</div></div>
+            <div class="o-xy"><span class="k">SkewY</span><div class="o-input">0</div></div>
+          </div>
+          <div class="o-xy" style="margin-bottom:8px;"><span class="k">Origine</span><div class="o-input">Centro</div></div>
+
+          <div class="o-sec"><span>Ombra testo</span></div>
+          <div class="o-grid3">
+            <div><div class="o-sub">H</div><div class="o-input empty"></div></div>
+            <div><div class="o-sub">V</div><div class="o-input empty"></div></div>
+            <div><div class="o-sub">Blur</div><div class="o-input empty"></div></div>
+          </div>
+          <div class="o-sub">Colore</div>
+          <div class="o-color" style="margin-bottom:8px;"><div class="o-sw"></div><span class="o-hex">#000000</span><span class="o-globe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20z"/></svg></span></div>
+          <div class="o-row"><span class="ol">Alfa</span><div class="os blue"><div class="f" style="width:96%"></div><div class="k" style="left:96%"></div></div><span class="ov">100%</span><span class="o-alphasq"></span></div>
+
+          <div class="o-sec"><span>Filtro sfondo (glassmorphism)</span></div>
+          <div class="o-row"><span class="ol">Blur</span><div class="os blue"><div class="f" style="width:42%"></div><div class="k" style="left:42%"></div></div><span class="ou">px</span></div>
+          <div class="o-row"><span class="ol">Luminosità</span><div class="os blue"><div class="f" style="width:48%"></div><div class="k" style="left:48%"></div></div><span class="ou">%</span></div>
+          <div class="o-row"><span class="ol">Saturazione</span><div class="os blue"><div class="f" style="width:46%"></div><div class="k" style="left:46%"></div></div><span class="ou">%</span></div>
+
+          <div class="o-sec"><span>Maschera</span></div>
+          <div class="o-input empty"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-h"><span class="t">Transizione hover (globale)</span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></span></div>
+        <div class="panel-b">
+          <div class="o-sub">Durata (ms)</div>
+          <div class="o-row"><div class="os blue"><div class="f" style="width:20%"></div><div class="k" style="left:20%"></div></div><span class="ov">300</span></div>
+          <div class="o-sub" style="margin-top:6px;">Easing</div>
+          <div class="o-input empty"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ COERENTE ════ -->
+    <div>
+      <div class="col-head new"><span class="badge">Coerente</span><h2>come FieldBox</h2><span class="n">1 slider · unità · stati</span></div>
+
+      <div class="panel">
+        <div class="panel-h"><span class="t">Effetti</span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></span></div>
+        <div class="panel-b">
+          <div class="ctx">
+            <span class="sp"></span>
+            <span class="seg"><button class="on">Normale</button><button>Hover</button></span>
+          </div>
+
+          <!-- Ombra -->
+          <div class="subhead first"><span class="t2">Ombra</span><span class="eyeb on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span></div>
+          <div class="row" style="margin-bottom:0;">
+            <span class="rowlab">Preset</span>
+            <div class="selc ph"><span class="v">Nessuna</span><svg class="ch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></div>
+          </div>
+
+          <!-- Opacità -->
+          <div class="subhead"><span class="t2">Opacità</span></div>
+          <div class="row" style="margin-bottom:0;">
+            <span class="rowlab">Opacità</span>
+            <div class="slider"><div class="tr"><div class="fi" style="width:100%"></div><div class="kn" style="left:100%"></div></div></div>
+            <div class="valbox"><input value="100" readonly/><span class="u">%</span></div>
+          </div>
+
+          <!-- Trasformazione -->
+          <div class="subhead"><span class="t2">Trasformazione</span><span class="eyeb on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span></div>
+          <div class="row">
+            <span class="rowlab">Rotaz.</span>
+            <div class="slider"><div class="tr"><div class="fi" style="width:50%"></div><div class="kn" style="left:50%"></div></div></div>
+            <div class="valbox"><input value="0" readonly/><span class="u">°</span></div>
+          </div>
+          <div class="row">
+            <span class="rowlab">Scala</span>
+            <div class="slider"><div class="tr"><div class="fi" style="width:50%"></div><div class="kn" style="left:50%"></div></div></div>
+            <div class="valbox"><input value="100" readonly/><span class="u">%</span></div>
+          </div>
+          <div class="grid2">
+            <div class="cell"><span class="cl">Sposta X</span><div class="valbox"><input value="" placeholder="0" readonly/><span class="u">px</span></div></div>
+            <div class="cell"><span class="cl">Sposta Y</span><div class="valbox"><input value="" placeholder="0" readonly/><span class="u">px</span></div></div>
+          </div>
+          <div class="grid2">
+            <div class="cell"><span class="cl">Skew X</span><div class="valbox"><input value="" placeholder="0" readonly/><span class="u">°</span></div></div>
+            <div class="cell"><span class="cl">Skew Y</span><div class="valbox"><input value="" placeholder="0" readonly/><span class="u">°</span></div></div>
+          </div>
+          <div class="row" style="margin-bottom:0;">
+            <span class="rowlab">Origine</span>
+            <div class="selc"><span class="v">Centro</span><svg class="ch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></div>
+          </div>
+
+          <!-- Ombra testo -->
+          <div class="subhead"><span class="t2">Ombra testo</span><span class="eyeb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span></div>
+          <div class="grid3">
+            <div class="cell"><span class="cl">Oriz.</span><div class="valbox"><input value="" placeholder="0" readonly/><span class="u">px</span></div></div>
+            <div class="cell"><span class="cl">Vert.</span><div class="valbox"><input value="" placeholder="0" readonly/><span class="u">px</span></div></div>
+            <div class="cell"><span class="cl">Sfoc.</span><div class="valbox"><input value="" placeholder="0" readonly/><span class="u">px</span></div></div>
+          </div>
+          <div class="sc-color">
+            <div class="sw"></div>
+            <div class="cv"><input value="#000000" readonly/></div>
+            <div class="tok" title="Usa colore globale"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20z"/></svg></div>
+          </div>
+          <div class="row" style="margin-bottom:0;">
+            <span class="rowlab">Alfa</span>
+            <div class="slider"><div class="tr"><div class="fi" style="width:100%"></div><div class="kn" style="left:100%"></div></div></div>
+            <div class="valbox"><input value="100" readonly/><span class="u">%</span></div>
+          </div>
+
+          <!-- Filtro sfondo -->
+          <div class="subhead"><span class="t2">Filtro sfondo · glassmorphism</span><span class="eyeb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span></div>
+          <div class="row">
+            <span class="rowlab">Sfoc.</span>
+            <div class="slider"><div class="tr"><div class="fi" style="width:0%"></div><div class="kn" style="left:0%"></div></div></div>
+            <div class="valbox"><input value="0" readonly/><span class="u">px</span></div>
+          </div>
+          <div class="row">
+            <span class="rowlab">Lumin.</span>
+            <div class="slider"><div class="tr"><div class="fi" style="width:50%"></div><div class="kn" style="left:50%"></div></div></div>
+            <div class="valbox"><input value="100" readonly/><span class="u">%</span></div>
+          </div>
+          <div class="row" style="margin-bottom:0;">
+            <span class="rowlab">Satur.</span>
+            <div class="slider"><div class="tr"><div class="fi" style="width:50%"></div><div class="kn" style="left:50%"></div></div></div>
+            <div class="valbox"><input value="100" readonly/><span class="u">%</span></div>
+          </div>
+
+          <!-- Maschera -->
+          <div class="subhead"><span class="t2">Maschera</span></div>
+          <div class="row" style="margin-bottom:0;">
+            <span class="rowlab">Forma</span>
+            <div class="selc ph"><span class="v">Nessuna</span><svg class="ch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></div>
+          </div>
+
+          <div class="pv"><div class="card"><span>anteprima effetti</span></div></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-h"><span class="t">Transizione hover (globale)</span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></span></div>
+        <div class="panel-b">
+          <div class="row">
+            <span class="rowlab">Durata</span>
+            <div class="slider"><div class="tr"><div class="fi" style="width:20%"></div><div class="kn" style="left:20%"></div></div></div>
+            <div class="valbox"><input value="300" readonly/><span class="u">ms</span></div>
+          </div>
+          <div class="row" style="margin-bottom:0;">
+            <span class="rowlab">Easing</span>
+            <div class="selc"><span class="v">Ease</span><svg class="ch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="why">
+    <h3>Cosa cambia</h3>
+    <div class="why-grid">
+      <div class="why-item"><b>Uno slider solo</b> Tutti gli slider diventano <span class="nw">arancio chrome</span>: via il mix rosso (opacità) + blu (trasformazione/filtro).</div>
+      <div class="why-item"><b>Unità ovunque</b> Ogni valore ha la sua valbox con suffisso <span class="nw">° % px ms</span> — niente più numeri nudi o box vuoti.</div>
+      <div class="why-item"><b>Segnaposto</b> X/Y, Skew, Ombra testo, Maschera, Easing mostrano <span class="nw">0 / Nessuna / Ease</span>, mai il vuoto.</div>
+      <div class="why-item"><b>Occhio coerente</b> Un solo stile di toggle visibilità, allineato a destra di ogni sotto-sezione attivabile.</div>
+      <div class="why-item"><b>Stato Normale/Hover</b> Toggle con il <span class="nw">nuovo selettore</span> segmentato, come tutte le altre proprietà.</div>
+      <div class="why-item"><b>Gerarchia chiara</b> Sotto-sezioni separate da hairline; la <span class="nw">Transizione hover</span> resta pannello globale a parte.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

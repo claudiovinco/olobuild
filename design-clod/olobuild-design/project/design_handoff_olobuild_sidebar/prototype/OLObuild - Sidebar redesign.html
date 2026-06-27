@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <title>OLObuild — Sidebar redesign · 4 varianti</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="tokens.css"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="variants/styles.css"/>
+  <link rel="stylesheet" href="variants/struttura-styles.css"/>
+  <style>
+    /* Canvas-level overrides */
+    body { background: #f3f4f6; }
+    .design-canvas { font-family: var(--ot-font-sans); }
+
+    /* Intro card shown above the canvas */
+    .ds-intro {
+      position: fixed; left: 16px; top: 16px; z-index: 50;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--ot-border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      max-width: 360px;
+      box-shadow: var(--ot-shadow);
+      pointer-events: auto;
+    }
+    .ds-intro h1 { margin: 0 0 4px; font-size: 14px; font-weight: 700; color: var(--ot-text); display: flex; align-items: center; gap: 8px; }
+    .ds-intro h1 .pill { font-size: 10px; font-weight: 600; background: var(--ot-primary-50); color: var(--ot-primary-dark); padding: 2px 8px; border-radius: 99px; text-transform: uppercase; letter-spacing: .04em; }
+    .ds-intro p { margin: 0; font-size: 12px; line-height: 1.5; color: var(--ot-text-muted); }
+    .ds-intro p b { color: var(--ot-text); }
+  </style>
+</head>
+<body>
+  <div class="ds-intro">
+    <h1>OLObuild · Colonna elementi <span class="pill">4 direzioni</span></h1>
+    <p>Quattro reinterpretazioni della stessa lista. Trascina un elemento sul canvas per provarne il <b>drag-feel</b>; la categoria attiva e il tema cambiano da artboard ad artboard. Apri un artboard a tutto schermo dal pulsante in alto a destra.</p>
+  </div>
+
+  <div id="root"></div>
+
+  <!-- React + Babel -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <!-- Data + design canvas + shared shell + variants -->
+  <script src="data.js"></script>
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <script type="text/babel" src="icons.jsx"></script>
+  <script type="text/babel" src="shell.jsx"></script>
+  <script type="text/babel" src="variants/v1.jsx"></script>
+  <script type="text/babel" src="variants/v2-struttura.jsx"></script>
+  <script type="text/babel" src="variants/v2.jsx"></script>
+  <script type="text/babel" src="variants/v3.jsx"></script>
+  <script type="text/babel" src="variants/v4.jsx"></script>
+
+  <script type="text/babel" data-presets="react">
+    function App() {
+      return (
+        <DesignCanvas initialZoom={0.7}>
+          <DCSection id="redesign" title="OLObuild — Colonna elementi · esplorazioni" subtitle="Da una lista densa di ~97 elementi a 4 modi diversi di organizzarli. Drag-feel attivo: trascina sul canvas centrale.">
+            <DCArtboard id="v1" label="01 · On-brand denso" width={1280} height={780} background="#f3f4f6">
+              <BuilderShell sidebarWidth={320} theme="light" label="Variante 1 · Dense Compact">
+                <Variant1/>
+              </BuilderShell>
+            </DCArtboard>
+            <DCArtboard id="v2" label="02 · Libreria a tab verticali" width={1280} height={780} background="#f3f4f6">
+              <BuilderShell sidebarWidth={368} theme="light" label="Variante 2 · Vertical Library">
+                <Variant2/>
+              </BuilderShell>
+            </DCArtboard>
+            <DCArtboard id="v2s" label="02b · Struttura — stesso linguaggio del 02" width={1280} height={780} background="#f3f4f6">
+              <BuilderShell sidebarWidth={368} theme="light" label="Variante 2 · Struttura">
+                <Variant2 defaultTab="struttura"/>
+              </BuilderShell>
+            </DCArtboard>
+            <DCArtboard id="v3" label="03 · Smart library + anteprima live" width={1280} height={780} background="#f3f4f6">
+              <BuilderShell sidebarWidth={320} theme="light" label="Variante 3 · Smart + Preview">
+                <Variant3/>
+              </BuilderShell>
+            </DCArtboard>
+            <DCArtboard id="v4" label="04 · Audace · dark futurista" width={1280} height={780} background="#0a0f1c">
+              <BuilderShell sidebarWidth={340} theme="dark" label="Variante 4 · Dark Glass">
+                <Variant4/>
+              </BuilderShell>
+            </DCArtboard>
+          </DCSection>
+        </DesignCanvas>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+  </script>
+</body>
+</html>

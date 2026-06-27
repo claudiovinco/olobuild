@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" font-family="Inter, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <style>
+      .t{fill:#e7f2ec} .m{fill:#8fae9f} .lbl{fill:#bcd6c9} .grn{fill:#5ad08a}
+      .panel{fill:#0e2a20;stroke:rgba(255,255,255,.08)} .bub{fill:#13362a}
+      .chip{fill:#10271d;stroke:rgba(255,255,255,.12)} .b{font-weight:600}
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#0a2118"/>
+  <!-- left icon rail -->
+  <rect x="0" y="0" width="64" height="900" fill="#0c2419"/>
+  <g fill="none" stroke="#6f9082" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M24 70 l8 -7 8 7 v12 h-16 z"/>
+    <rect x="24" y="120" width="16" height="16" rx="2"/>
+    <circle cx="32" cy="178" r="8"/><path d="M32 178 l7 -4 M32 178 l-7 4"/>
+    <path d="M24 228 h16 v12 h-16 z M24 228 l3 -5 h6 l3 5"/>
+    <circle cx="32" cy="288" r="7"/><path d="M37 293 l5 5"/>
+    <rect x="24" y="338" width="16" height="16" rx="2"/>
+  </g>
+  <rect x="20" y="828" width="24" height="24" rx="6" fill="#3fae6a"/>
+  <text x="32" y="845" text-anchor="middle" font-size="13" font-weight="700" fill="#06281a">N</text>
+
+  <!-- LEFT PANEL: chat -->
+  <text x="92" y="74" font-size="19" class="t b">Job Description Creation Agent</text>
+  <circle cx="566" cy="68" r="11" fill="none" stroke="#6f9082" stroke-width="2"/><circle cx="566" cy="68" r="3" fill="#6f9082"/>
+  <!-- user bubble -->
+  <rect x="92" y="104" width="478" height="86" rx="12" class="bub"/>
+  <text font-size="14.5" class="lbl"><tspan x="112" y="134">Sarah reached out requesting a new role for her</tspan><tspan x="112" y="156">team. Can you review the requirements for me</tspan><tspan x="112" y="178">and draft a JD?</tspan></text>
+  <!-- assistant -->
+  <rect x="92" y="212" width="30" height="30" rx="7" fill="#3fae6a"/><text x="107" y="232" text-anchor="middle" font-size="14" font-weight="700" fill="#06281a">H</text>
+  <text font-size="14.5" class="lbl"><tspan x="136" y="226">First, I'll search for emails from Sarah to find</tspan><tspan x="136" y="248">the role requirements. Then, using this</tspan><tspan x="136" y="270">information and the company's template, I'll</tspan><tspan x="136" y="292">begin drafting the job description. I will use</tspan><tspan x="136" y="314">Document Mode for this step.</tspan></text>
+  <!-- chips -->
+  <rect x="136" y="338" width="200" height="38" rx="9" class="chip"/><rect x="150" y="351" width="13" height="11" rx="2" fill="none" stroke="#7fae95" stroke-width="1.6"/><text x="176" y="361" font-size="13.5" class="m">Using Gmail</text>
+  <rect x="136" y="386" width="240" height="38" rx="9" class="chip"/><rect x="150" y="399" width="11" height="13" rx="1.5" fill="none" stroke="#7fae95" stroke-width="1.6"/><text x="174" y="409" font-size="13.5" class="m">Using Document Mode</text>
+  <!-- version complete -->
+  <line x1="92" y1="470" x2="240" y2="470" stroke="rgba(90,208,138,.3)"/><text x="331" y="475" text-anchor="middle" font-size="13" class="grn">Version 1 complete</text><line x1="422" y1="470" x2="570" y2="470" stroke="rgba(90,208,138,.3)"/>
+  <!-- input -->
+  <rect x="92" y="506" width="478" height="104" rx="14" fill="#0c2419" stroke="rgba(255,255,255,.12)"/>
+  <text x="116" y="548" font-size="15" class="m">Would you like any changes?</text>
+  <g stroke="#7fae95" stroke-width="1.8" fill="none"><path d="M118 584 a7 7 0 1 0 .1 0 M118 580 v8"/><path d="M150 580 h16 M150 585 h16 M150 590 h10"/></g>
+  <text x="174" y="590" font-size="13" class="m">Tools</text>
+  <rect x="520" y="566" width="34" height="32" rx="8" fill="#3fae6a"/><path d="M531 588 l6 -8 6 8" stroke="#06281a" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- vertical divider -->
+  <line x1="606" y1="40" x2="606" y2="860" stroke="rgba(255,255,255,.07)"/>
+
+  <!-- RIGHT PANEL: document -->
+  <text x="650" y="74" font-size="20" class="t b">Account Executive - Technology</text>
+  <rect x="1300" y="52" width="100" height="34" rx="8" fill="#2f6f4c"/><text x="1350" y="74" text-anchor="middle" font-size="13.5" fill="#dff5e9">Version 1 ▾</text>
+  <rect x="1414" y="52" width="118" height="34" rx="8" fill="none" stroke="rgba(255,255,255,.18)"/><text x="1473" y="74" text-anchor="middle" font-size="13.5" class="lbl">⤓ Export ▾</text>
+
+  <text font-size="15" x="650" y="132"><tspan class="t b">Job title:</tspan><tspan class="lbl" dx="6">Account Executive - Technology</tspan></text>
+  <text font-size="15" x="650" y="160"><tspan class="t b">Location:</tspan><tspan class="lbl" dx="6">Remote (USA)</tspan></text>
+  <text font-size="15" x="650" y="188"><tspan class="t b">Company:</tspan><tspan class="lbl" dx="6">ACME Corp</tspan></text>
+
+  <text x="650" y="240" font-size="15.5" class="t b">Job description:</text>
+  <text font-size="14.5" class="lbl"><tspan x="650" y="266">ACME Corp is seeking a highly motivated and experienced Account Executive to join our</tspan><tspan x="650" y="288">dynamic team. The Account Executive will play a pivotal role in driving the success of our</tspan><tspan x="650" y="310">technology partnerships and engagements.</tspan></text>
+
+  <text x="650" y="358" font-size="15.5" class="t b">Key responsibilities:</text>
+  <g font-size="14.5" class="lbl" fill="#bcd6c9">
+    <circle cx="658" cy="384" r="2.5" fill="#7fae95"/><text x="676" y="389">Develop and maintain strong relationships with key clients through regular communication,</text>
+    <text x="676" y="411">personalized solutions, and proactive support to ensure long-term partnerships.</text>
+    <circle cx="658" cy="438" r="2.5" fill="#7fae95"/><text x="676" y="443">Identify new business opportunities by conducting market research, attending industry</text>
+    <text x="676" y="465">events, and leveraging existing networks to generate qualified leads.</text>
+    <circle cx="658" cy="492" r="2.5" fill="#7fae95"/><text x="676" y="497">Prepare and present tailored solutions to clients, addressing their specific needs and</text>
+    <text x="676" y="519">challenges while demonstrating the value of Acme Corp's products and services.</text>
+    <circle cx="658" cy="546" r="2.5" fill="#7fae95"/><text x="676" y="551">Collaborate with internal teams, including marketing, product development, and customer</text>
+    <text x="676" y="573">support, to ensure seamless delivery of products and services that meet client expectations.</text>
+  </g>
+</svg>

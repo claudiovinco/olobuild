@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>OLObuild — Redesign controllo Bordo</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{
+    --red:#e1474f;--red-soft:#fef2f3;--navy:#16263d;--ink:#1f2937;--mute:#6b7280;--faint:#94a3b8;
+    --surface-alt:#f6f7f9;--border:#e5e7eb;--bg:#f6f1e8;--line:#e6dfd1;
+    --ui:#e8622a;--ui-soft:#fdeee2;--ui-bar:#2b3340;
+    --sans:"Work Sans",-apple-system,sans-serif;--disp:"Instrument Serif",Georgia,serif;--mono:"JetBrains Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1040px;margin:0 auto;padding:52px 32px 90px;}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+  h1{font-family:var(--disp);font-weight:400;font-size:clamp(40px,5.5vw,62px);line-height:1;letter-spacing:-.02em;color:var(--navy);margin:0 0 14px;}
+  h1 em{font-style:italic;color:var(--red);}
+  .lead{font-size:16px;color:var(--mute);max-width:72ch;margin:0 0 8px;line-height:1.55;}
+  .lead b{color:var(--navy);font-weight:600;}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;margin-top:34px;}
+  .col-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .badge{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:999px;}
+  .today .badge{background:#fde2e4;color:#b42318;} .new .badge{background:#dcfce7;color:#15803d;}
+  .col-head h2{font-size:15px;font-weight:700;color:var(--navy);margin:0;}
+  .col-head .n{font-size:12px;color:var(--faint);margin-left:auto;font-family:var(--mono);}
+
+  /* panel chrome like the real inspector */
+  .panel{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+  .panel-h{display:flex;align-items:center;justify-content:center;position:relative;padding:13px;background:#fcfcfd;border-bottom:1px solid #eef0f3;}
+  .panel-h .t{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);}
+  .panel-b{padding:16px;}
+  .field-lab{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+  .field-lab .l{font-size:14px;color:var(--mute);} .field-lab .eye{color:#9ca3af;}
+  .seclabel{font-size:9px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;color:#9ca3af;margin-bottom:4px;}
+
+  /* ── OGGI (faithful) ── */
+  .o-hdr{display:flex;align-items:flex-end;gap:10px;margin-bottom:14px;}
+  .o-sel{height:30px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:12px;color:#374151;background:#fff;padding:0 8px;}
+  .o-colrow{flex:1;display:flex;align-items:center;border:1.5px solid #e5e7eb;border-radius:6px;height:30px;overflow:hidden;}
+  .o-sw{width:30px;height:100%;background:#f3f4f6;border-right:1px solid #e5e7eb;display:flex;align-items:center;justify-content:center;color:#9ca3af;font-size:13px;}
+  .o-coltext{flex:1;font-family:var(--mono);font-size:11px;color:#9ca3af;padding:0 8px;}
+  .o-cross{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;}
+  .o-num{width:54px;height:28px;background:#f0f4f8;border:1.5px solid #d1d9e6;border-radius:5px;text-align:center;font-size:11px;color:#374151;display:flex;align-items:center;justify-content:center;}
+  .o-mid{display:flex;align-items:center;gap:6px;}
+  .o-seg-h{width:64px;height:3px;background:#e5e7eb;border-radius:2px;}
+  .o-seg-v{width:3px;height:46px;background:#e5e7eb;border-radius:2px;}
+  .o-prev{width:64px;height:46px;background:rgba(96,165,250,.04);display:flex;align-items:center;justify-content:center;}
+  .o-link{width:28px;height:28px;border-radius:7px;border:1.5px solid #60a5fa;background:#eff6ff;color:#3b82f6;display:flex;align-items:center;justify-content:center;}
+  .o-eff{margin-top:14px;}
+  .o-eff .es{width:100%;height:34px;border:1.5px solid #e5e7eb;border-radius:6px;background:#fff;color:#374151;font-size:13px;padding:0 10px;display:flex;align-items:center;}
+  .measure{font-family:var(--mono);font-size:10px;color:#b42318;text-align:center;margin-top:8px;}
+
+  /* ── COERENTE ── */
+  .seg{display:inline-flex;background:var(--ui-bar);border-radius:10px;padding:3px;gap:2px;}
+  .seg button{appearance:none;border:0;background:transparent;font:700 13px var(--sans);color:rgba(255,255,255,.92);padding:6px 15px;border-radius:7px;cursor:pointer;line-height:1;}
+  .seg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(16,24,40,.22);}
+  .ctx{display:flex;align-items:center;gap:8px;margin-bottom:14px;} .ctx .sp{flex:1;}
+  .dev{display:inline-flex;gap:2px;background:var(--ui-bar);border:1px solid var(--ui-bar);border-radius:8px;padding:3px;}
+  .dev button{width:26px;height:24px;border:0;background:transparent;border-radius:6px;color:rgba(255,255,255,.55);display:grid;place-items:center;cursor:pointer;}
+  .dev button.on{background:var(--ui);color:#fff;box-shadow:0 1px 2px rgba(0,0,0,.18);} .dev svg{width:14px;height:14px;}
+  .eyeb{width:30px;height:28px;border:1px solid var(--border);background:#fff;border-radius:8px;color:var(--mute);display:grid;place-items:center;cursor:pointer;}
+  .eyeb.on{color:var(--ink);background:var(--surface-alt);} .eyeb svg{width:15px;height:15px;}
+
+  .row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .rowlab{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);width:54px;flex-shrink:0;}
+  .linkb{width:34px;height:34px;border:1px solid var(--border);background:#fff;border-radius:9px;display:grid;place-items:center;color:var(--ui);flex-shrink:0;}
+  .linkb.lk{background:var(--ui-soft);border-color:#f3c5a3;}
+  .slider{flex:1;height:34px;display:flex;align-items:center;}
+  .slider .tr{width:100%;height:5px;border-radius:99px;background:var(--surface-alt);border:1px solid #eef0f3;position:relative;}
+  .slider .fi{position:absolute;left:0;top:0;bottom:0;width:14%;background:var(--ui);border-radius:99px;}
+  .slider .kn{position:absolute;left:14%;top:50%;transform:translate(-50%,-50%);width:15px;height:15px;border-radius:50%;background:#fff;border:2px solid var(--ui);box-shadow:0 1px 4px rgba(0,0,0,.18);}
+  .valbox{display:flex;align-items:center;border:1px solid var(--border);border-radius:9px;overflow:hidden;background:#fff;height:34px;}
+  .valbox input{width:40px;border:0;outline:none;text-align:center;font:500 13px var(--mono);color:var(--ink);background:transparent;}
+  .valbox .u{font-size:11px;color:var(--faint);font-weight:600;padding:0 8px;border-left:1px solid #eef0f3;align-self:stretch;display:flex;align-items:center;background:var(--surface-alt);}
+  .sc-color{display:flex;align-items:center;gap:8px;}
+  .sc-color .sw{width:34px;height:34px;border-radius:9px;border:1px solid var(--border);background:var(--red);flex-shrink:0;}
+  .sc-color .cv{flex:1;display:flex;align-items:center;border:1px solid var(--border);border-radius:9px;height:34px;background:#fff;}
+  .sc-color .cv input{flex:1;border:0;outline:none;background:transparent;font:500 12px var(--mono);color:var(--ink);padding:0 10px;}
+  .selc{flex:1;height:34px;border:1px solid var(--border);border-radius:9px;background:#fff;font-size:13px;color:var(--ink);padding:0 10px;display:flex;align-items:center;justify-content:space-between;}
+  .selc svg{width:14px;height:14px;color:var(--faint);}
+  .pv{margin-top:14px;height:62px;border-radius:10px;background:repeating-conic-gradient(#f0f1f4 0 25%,#fff 0 50%) 50%/14px 14px;display:grid;place-items:center;}
+  .selc:focus,.valbox:focus-within{border-color:var(--ui);}
+  .pv .chip{width:90px;height:40px;border-radius:8px;border:3px solid var(--red);background:#fff;}
+
+  .why{margin-top:34px;background:#fffdf8;border:1px solid var(--line);border-radius:14px;padding:24px 26px;}
+  .why h3{font-family:var(--disp);font-weight:400;font-size:24px;color:var(--navy);margin:0 0 16px;}
+  .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px 22px;}
+  .why-item{font-size:13px;line-height:1.5;color:var(--mute);} .why-item b{color:var(--navy);display:block;font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;margin-bottom:4px;}
+  .why-item .nw{font-family:var(--mono);font-size:11px;color:#15803d;}
+  @media(max-width:820px){.cols,.why-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">OLObuild · field redesign</div>
+  <h1>Controllo <em>Bordo</em></h1>
+  <p class="lead">Lo stesso trattamento dato a <b>margini, padding e raggio</b>, ora per il bordo. Oggi: header stile+colore, <b>croce spaziale a 4 lati</b> con link al centro, e <b>"Effetti bordo" in una sezione separata</b>. A destra: la riga compatta <b>collega + slider + valore</b> per lo spessore (4 lati on-demand), stile e colore in linea, effetto ripiegato, più <b>stato Normale/Hover e anteprima</b> — esattamente come FieldBox.</p>
+
+  <div class="cols">
+    <!-- OGGI -->
+    <div>
+      <div class="col-head today"><span class="badge">Oggi</span><h2>FieldBorder</h2><span class="n">~430px · 2 sezioni</span></div>
+      <div class="panel">
+        <div class="panel-h"><span class="t">Bordo</span></div>
+        <div class="panel-b">
+          <div class="field-lab"><span class="l">Bordo</span><span class="eye"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span></div>
+          <div class="o-hdr">
+            <div><div class="seclabel">Stile</div><div class="o-sel" style="display:flex;align-items:center;">Solido</div></div>
+            <div style="flex:1"><div class="seclabel">Colore</div><div class="o-colrow"><div class="o-sw">—</div><span class="o-coltext">vuoto</span></div></div>
+          </div>
+          <div class="o-cross">
+            <div class="o-num">0</div>
+            <div class="o-mid">
+              <div class="o-num">0</div>
+              <div class="o-seg-v"></div>
+              <div class="o-prev"><div class="o-link"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div></div>
+              <div class="o-seg-v"></div>
+              <div class="o-num">0</div>
+            </div>
+            <div class="o-num">0</div>
+          </div>
+          <div class="measure">spessore: croce 2×2 + preview</div>
+        </div>
+      </div>
+      <div class="panel" style="margin-top:14px;">
+        <div class="panel-h"><span class="t">Effetti bordo</span></div>
+        <div class="panel-b">
+          <div class="seclabel" style="margin-bottom:6px;">Effetto</div>
+          <div class="o-eff"><div class="es" style="border:0;padding:0;">Nessuno</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COERENTE -->
+    <div>
+      <div class="col-head new"><span class="badge">Coerente</span><h2>come FieldBox</h2><span class="n">~210px · 1 blocco</span></div>
+      <div class="panel">
+        <div class="panel-h"><span class="t">Bordo</span></div>
+        <div class="panel-b">
+          <div class="ctx">
+            <span class="sp"></span>
+            <span class="seg"><button class="on">Normale</button><button>Hover</button></span>
+            <span class="eyeb on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span>
+          </div>
+
+          <div class="row">
+            <span class="rowlab">Spess.</span>
+            <button class="linkb lk" title="Collega lati"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1.5-1.5"/></svg></button>
+            <div class="slider"><div class="tr"><div class="fi"></div><div class="kn"></div></div></div>
+            <div class="valbox"><input value="3" readonly/><span class="u">px</span></div>
+          </div>
+
+          <div class="row">
+            <span class="rowlab">Stile</span>
+            <div class="selc">Solido <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></div>
+          </div>
+
+          <div class="row">
+            <span class="rowlab">Colore</span>
+            <div class="sc-color" style="flex:1;">
+              <div class="sw"></div>
+              <div class="cv"><input value="primary" readonly/></div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-bottom:0;">
+            <span class="rowlab">Effetto</span>
+            <div class="selc">Nessuno <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></div>
+          </div>
+
+          <div class="pv"><div class="chip"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="why">
+    <h3>Cosa cambia</h3>
+    <div class="why-grid">
+      <div class="why-item"><b>Spessore</b> Riga <span class="nw">collega + slider + valore</span> (4 lati on-demand), identica a margini/padding. Niente croce 2×2.</div>
+      <div class="why-item"><b>Una sezione sola</b> "Effetti bordo" rientra nel blocco come <span class="nw">riga compatta</span>, non più pannello separato.</div>
+      <div class="why-item"><b>Stato</b> Selettore <span class="nw">Normale/Hover</span> nuovo, inline accanto all'occhio. Il responsive resta a livello di pagina.</div>
+      <div class="why-item"><b>Colore token-first</b> Default <span class="nw">primary</span> via resolveColor, non "vuoto"/grigio.</div>
+      <div class="why-item"><b>Anteprima</b> Peek che mostra il bordo reale; stessa "occhio" delle altre proprietà.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

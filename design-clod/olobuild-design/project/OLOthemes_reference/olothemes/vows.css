@@ -1,0 +1,82 @@
+/* ════════════════════════════════════════════════════════════════
+   OLOtheme · VOWS — Wedding (wedding planner)
+   Elegant planner. SIGNATURE: live countdown to the day (data-countdown).
+   (hero · live countdown · services · real weddings · testimonial · enquiry).
+   FX: cursor, creative menu, magnetic, countdown. NEW tiles: Countdown,
+   ProductGallery, RSVPForm. Type: Frank Ruhl Libre + Mulish. Taupe + gold.
+   ════════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Mulish:wght@300;400;500;600;700&display=swap');
+:root{
+  --bg:#2a2620; --bg-2:#312c25; --panel:#383228; --panel-2:#433c30; --ink:#1b1813;
+  --gold:#cbab6a; --gold-l:#d9bd82; --sage:#9aa088; --cream:#f3ecdf; --txt:#bcb09b; --txt-dim:#8a7f6c;
+  --line:rgba(243,236,223,.13); --line-2:rgba(203,171,106,.42);
+  --disp:"Frank Ruhl Libre",Georgia,serif; --sans:"Mulish",-apple-system,sans-serif;
+  --fx-menu-bg:#1b1813; --fx-menu-fg:#f3ecdf; --fx-menu-accent:#cbab6a; --fx-menu-font:"Frank Ruhl Libre",Georgia,serif; --fx-menu-glow:rgba(203,171,106,.16);
+}
+*{box-sizing:border-box;} html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:var(--sans);font-size:16px;line-height:1.7;font-weight:300;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;} img{display:block;max-width:100%;}
+h1,h2,h3,h4{font-family:var(--disp);font-weight:500;margin:0;line-height:1.12;color:var(--cream);letter-spacing:0;}
+.vw-wrap{max-width:1160px;margin:0 auto;padding:0 30px;}
+.eyebrow{font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);}
+.media{position:relative;overflow:hidden;background:var(--panel);background-image:repeating-linear-gradient(135deg,rgba(243,236,223,.05) 0 16px,transparent 16px 32px);}
+.media::after{content:attr(data-label);position:absolute;left:14px;bottom:12px;right:14px;font-family:var(--sans);font-weight:500;font-size:10px;letter-spacing:.12em;color:rgba(243,236,223,.4);text-transform:uppercase;}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 30px;border-radius:999px;font-family:var(--sans);font-weight:600;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border:0;transition:all .25s;}
+.btn--gold{background:var(--gold);color:var(--ink);} .btn--gold:hover{background:var(--gold-l);}
+.btn--cream{background:var(--cream);color:var(--ink);}
+.btn--out{background:transparent;color:var(--cream);border:1px solid var(--line-2);} .btn--out:hover{border-color:var(--gold);color:var(--gold);}
+.link-u{font-family:var(--sans);font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--cream);border-bottom:1px solid var(--gold);padding-bottom:3px;} .link-u:hover{color:var(--gold);}
+html.reveal-on [data-reveal]{opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.7,.3,1),transform .9s cubic-bezier(.2,.7,.3,1);}
+html.reveal-on [data-reveal].in{opacity:1;transform:none;}
+@media (prefers-reduced-motion:reduce){html.reveal-on [data-reveal]{opacity:1;transform:none;transition:none;}}
+.vw-nav{position:sticky;top:0;z-index:60;background:rgba(42,38,32,.86);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);}
+.vw-nav__in{display:flex;align-items:center;gap:32px;height:76px;}
+.logo{display:flex;align-items:center;gap:11px;color:var(--cream);font-family:var(--disp);font-size:26px;letter-spacing:.02em;}
+.logo .mk{width:22px;height:22px;border:1px solid var(--gold);border-radius:50%;position:relative;} .logo .mk::after{content:"";position:absolute;inset:5px;border-radius:50%;border:1px solid var(--gold);}
+.vw-nav__links{display:flex;gap:28px;margin-left:6px;}
+.vw-nav__links a{color:var(--txt);font-weight:500;font-size:13px;letter-spacing:.04em;transition:color .15s;} .vw-nav__links a:hover,.vw-nav__links a.on{color:var(--gold);}
+.vw-nav__cta{margin-left:auto;display:flex;align-items:center;gap:14px;}
+@media(max-width:880px){.vw-nav__links{display:none;}}
+.vw-hero{position:relative;overflow:hidden;}
+.vw-hero__media{position:relative;} .vw-hero__media .media{aspect-ratio:21/10;min-height:560px;}
+.vw-hero__media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(27,24,19,.5),rgba(27,24,19,.25) 45%,rgba(42,38,32,.95));}
+.vw-hero__in{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;text-align:center;}
+.vw-hero__c{max-width:720px;margin:0 auto;} .vw-hero .eyebrow{display:block;margin-bottom:20px;}
+.vw-hero h1{font-size:clamp(46px,8vw,98px);line-height:1.04;color:#fff;} .vw-hero h1 em{font-style:italic;color:var(--gold);}
+.vw-hero p{font-size:18px;color:var(--cream);max-width:460px;margin:24px auto 32px;font-weight:300;}
+.vw-hero__cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+/* countdown */
+.vw-count{text-align:center;} .vw-count .eyebrow{display:block;margin-bottom:14px;}
+.vw-count h2{font-size:clamp(28px,4.2vw,48px);} .vw-count h2 em{font-style:italic;color:var(--gold);}
+.vw-count__when{font-family:var(--sans);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--txt-dim);margin:8px 0 36px;}
+.vw-count__row{display:flex;gap:clamp(14px,4vw,40px);justify-content:center;}
+.vw-count__u b{font-family:var(--disp);font-weight:500;font-size:clamp(44px,7vw,84px);color:var(--gold);display:block;line-height:1;}
+.vw-count__u span{font-family:var(--sans);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--txt-dim);display:block;margin-top:10px;}
+.vw-sec{padding:clamp(60px,9vw,116px) 0;} .vw-sec.panel{background:var(--bg-2);}
+.sec-head{max-width:640px;margin:0 auto 52px;text-align:center;} .sec-head .eyebrow{display:block;margin-bottom:18px;} .sec-head h2{font-size:clamp(34px,5vw,62px);} .sec-head h2 em{font-style:italic;color:var(--gold);}
+.sec-head p{margin:18px 0 0;color:var(--txt-dim);font-size:16px;}
+.vw-svcs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;} @media(max-width:860px){.vw-svcs{grid-template-columns:1fr;}}
+.vw-svc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:32px;text-align:center;transition:transform .3s,border-color .2s;} .vw-svc:hover{transform:translateY(-4px);border-color:var(--line-2);}
+.vw-svc .rn{font-family:var(--disp);font-style:italic;font-size:20px;color:var(--gold);} .vw-svc h3{font-size:25px;margin:8px 0 10px;} .vw-svc p{font-size:14.5px;color:var(--txt-dim);margin:0 0 16px;} .vw-svc .pr{font-family:var(--disp);font-size:18px;color:var(--cream);}
+.vw-gal{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:200px;gap:12px;} @media(max-width:760px){.vw-gal{grid-template-columns:1fr 1fr;}}
+.vw-gal__c{position:relative;overflow:hidden;border-radius:10px;} .vw-gal__c .media{position:absolute;inset:0;transition:transform .6s;} .vw-gal__c:hover .media{transform:scale(1.06);}
+.vw-gal__c.tall{grid-row:span 2;} .vw-gal__c.wide{grid-column:span 2;}
+.vw-testi{text-align:center;} .vw-testi__in{max-width:860px;margin:0 auto;}
+.vw-testi .mk{font-family:var(--disp);font-size:60px;color:var(--gold);line-height:.4;display:block;margin-bottom:14px;}
+.vw-testi q{font-family:var(--disp);font-style:italic;font-size:clamp(24px,3.4vw,40px);line-height:1.3;color:var(--cream);display:block;}
+.vw-testi__by{margin-top:24px;font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);}
+.vw-enq{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;} @media(max-width:860px){.vw-enq{grid-template-columns:1fr;gap:34px;}}
+.vw-enq h2{font-size:clamp(32px,4.6vw,56px);} .vw-enq h2 em{font-style:italic;color:var(--gold);} .vw-enq p{color:var(--txt-dim);margin:16px 0 0;}
+.vw-enq__form{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:32px;}
+.vw-field{margin-bottom:18px;} .vw-field label{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--txt-dim);margin-bottom:8px;}
+.vw-field input,.vw-field select{width:100%;background:var(--bg);border:1px solid var(--line-2);border-radius:8px;padding:13px 15px;font-family:var(--sans);font-size:15px;color:var(--cream);} .vw-field input:focus,.vw-field select:focus{outline:none;border-color:var(--gold);}
+.vw-enq__row{display:grid;grid-template-columns:1fr 1fr;gap:14px;} .vw-enq__form .btn{width:100%;justify-content:center;margin-top:6px;}
+.vw-ph{position:relative;overflow:hidden;text-align:center;padding:clamp(64px,9vw,120px) 0 clamp(36px,5vw,56px);border-bottom:1px solid var(--line);}
+.vw-ph h1{font-size:clamp(44px,7vw,92px);} .vw-ph h1 em{font-style:italic;color:var(--gold);} .vw-ph .eyebrow{display:block;margin-bottom:18px;}
+.vw-ph p{color:var(--txt-dim);font-size:16px;margin:18px auto 0;max-width:520px;}
+.vw-foot{border-top:1px solid var(--line);padding:60px 0 30px;background:var(--bg-2);}
+.vw-foot__top{display:grid;grid-template-columns:1.8fr 1fr 1fr 1.2fr;gap:32px;padding-bottom:42px;border-bottom:1px solid var(--line);} @media(max-width:780px){.vw-foot__top{grid-template-columns:1fr 1fr;}}
+.vw-foot .logo{margin-bottom:14px;} .vw-foot__brand p{font-size:14px;color:var(--txt-dim);max-width:260px;}
+.vw-foot h4{color:var(--cream);font-family:var(--sans);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.14em;margin-bottom:16px;}
+.vw-foot ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;} .vw-foot a{color:var(--txt-dim);} .vw-foot a:hover{color:var(--gold);}
+.vw-foot__bot{display:flex;justify-content:space-between;padding-top:24px;font-size:12px;letter-spacing:.04em;color:var(--txt-dim);flex-wrap:wrap;gap:10px;}

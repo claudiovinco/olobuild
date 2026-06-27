@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Signal — Tech &amp; ideas, signal over noise</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="Signal is a tech &amp; ideas blog — essays and deep dives on software, systems and the people who build them. Signal over noise."/>
+<link rel="stylesheet" href="olothemes/signal.css"/>
+</head>
+<body data-screen-label="Signal — Home" data-fx>
+
+<div class="sg-ticker" data-olo-tile="TickerBar" data-olo-note="NEW tile candidate: TickerBar — latest-headlines marquee (data-marquee).">
+  <div class="sg-ticker__t" data-marquee>
+    <span>The case against microservices (again)</span><span>What we got wrong about caching</span><span>A love letter to the CLI</span><span>Why your tests are slow</span>
+  </div>
+</div>
+
+<header class="sg-nav" data-olo-tile="Navmenu">
+  <div class="sg-wrap sg-nav__in">
+    <a class="logo" href="#top"><span class="mk"></span>Signal</a>
+    <nav class="sg-nav__links">
+      <a href="OLOtheme - Signal - Article.html">Articles</a>
+      <a href="#topics">Topics</a>
+      <a href="#latest">Latest</a>
+      <a href="#subscribe">Subscribe</a>
+    </nav>
+    <div class="sg-nav__cta">
+      <a href="#subscribe" class="btn btn--lime" data-magnetic>Subscribe</a>
+      <button class="fx-menu-trigger" data-menu-toggle="#sgMenu" aria-label="Open menu">Menu<span class="bars"><i></i><i></i></span></button>
+    </div>
+  </div>
+</header>
+<nav class="fx-menu" id="sgMenu" data-menu aria-label="Menu">
+  <button class="fx-menu__x" data-menu-close aria-label="Close">&times;</button>
+  <div class="fx-menu__links">
+    <a href="OLOtheme - Signal - Article.html"><span class="n">01</span>Articles</a>
+    <a href="#topics"><span class="n">02</span>Topics</a>
+    <a href="#latest"><span class="n">03</span>Latest</a>
+    <a href="#subscribe"><span class="n">04</span>Subscribe</a>
+  </div>
+  <div class="fx-menu__foot"><span>// signal over noise · since 2018</span><a href="#subscribe">Subscribe &rarr;</a></div>
+</nav>
+
+<main id="top">
+<section class="sg-feat" data-olo-tile="FeaturedStory" data-olo-note="NEW tile candidate: FeaturedStory.">
+  <div class="sg-wrap sg-feat__in">
+    <div data-reveal>
+      <span class="kicker">// featured · systems</span>
+      <h1><a href="OLOtheme - Signal - Article.html">The cache that lied to us for three months</a></h1>
+      <p>A debugging story about stale reads, false confidence, and the one-line config that quietly broke production — plus what we changed so it can't happen again.</p>
+      <div class="meta">by Devin Cho · 14 min read · 2 days ago</div>
+      <div style="margin-top:22px"><a href="OLOtheme - Signal - Article.html" class="btn btn--lime" data-magnetic>Read the post</a></div>
+    </div>
+    <div class="sg-feat__media" data-reveal="120"><div class="media" data-label="diagram — cache invalidation flow"></div></div>
+  </div>
+</section>
+
+<section class="sg-sec" id="latest" data-olo-tile="PostList" data-olo-note="NEW tile candidate: PostList — post cards with topic, read time.">
+  <div class="sg-wrap">
+    <div class="sg-rule" data-reveal><h2>latest</h2><a class="link-u" href="#">all posts →</a></div>
+    <div class="sg-posts">
+      <a class="sg-post" href="OLOtheme - Signal - Article.html" data-reveal><div class="sg-post__media"><div class="media" data-label="terminal"></div></div><span class="kicker">// tooling</span><h3>A love letter to the CLI</h3><p>Why the command line keeps outliving the GUIs built to replace it.</p><div class="meta">9 min · R. Mensah</div></a>
+      <a class="sg-post" href="OLOtheme - Signal - Article.html" data-reveal="80"><div class="sg-post__media"><div class="media" data-label="graph"></div></div><span class="kicker">// architecture</span><h3>The case against microservices</h3><p>Again. But this time with the bill attached.</p><div class="meta">12 min · D. Cho</div></a>
+      <a class="sg-post" href="OLOtheme - Signal - Article.html" data-reveal="160"><div class="sg-post__media"><div class="media" data-label="tests"></div></div><span class="kicker">// testing</span><h3>Why your tests are slow</h3><p>Five culprits, ranked by how much they're costing your team.</p><div class="meta">7 min · L. Adeyemi</div></a>
+    </div>
+  </div>
+</section>
+
+<section class="sg-sec panel" id="topics" data-olo-tile="CategoryTiles" data-olo-note="NEW tile candidate: CategoryTiles — topic chips.">
+  <div class="sg-wrap">
+    <div class="sg-rule" data-reveal><h2>topics</h2></div>
+    <div class="sg-topics" data-reveal="60">
+      <a class="sg-topic" href="#">architecture</a><a class="sg-topic" href="#">performance</a><a class="sg-topic" href="#">tooling</a><a class="sg-topic" href="#">databases</a><a class="sg-topic" href="#">frontend</a><a class="sg-topic" href="#">careers</a><a class="sg-topic" href="#">AI</a><a class="sg-topic" href="#">culture</a><a class="sg-topic" href="#">security</a>
+    </div>
+  </div>
+</section>
+
+<section class="sg-sec" id="subscribe" data-olo-tile="Newsletter">
+  <div class="sg-wrap"><div class="sg-news" data-reveal>
+    <h2>One good read, <span class="l">every Tuesday</span></h2>
+    <p>No hot takes, no churn — just one carefully edited essay on building software. 24,000 engineers subscribe.</p>
+    <form class="sg-news__form" onsubmit="return false"><input type="email" placeholder="you@company.dev"/><button class="btn btn--lime" data-magnetic>Subscribe</button></form>
+  </div></div>
+</section>
+</main>
+
+<footer class="sg-foot" data-olo-tile="Footer">
+  <div class="sg-wrap">
+    <div class="sg-foot__top">
+      <div class="sg-foot__brand"><a class="logo" href="#top"><span class="mk"></span>Signal</a><p>A tech &amp; ideas blog. Essays on software, systems and the people who build them.</p></div>
+      <div><h4>Read</h4><ul><li><a href="OLOtheme - Signal - Article.html">Articles</a></li><li><a href="#topics">Topics</a></li><li><a href="#">Archive</a></li></ul></div>
+      <div><h4>Signal</h4><ul><li><a href="#">About</a></li><li><a href="#">Write for us</a></li><li><a href="#">RSS</a></li></ul></div>
+      <div><h4>Subscribe</h4><ul><li><a href="#subscribe">Newsletter</a></li><li><a href="#">Podcast</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="sg-foot__bot"><span>© 2026 Signal — an OLOtheme demo.</span><span>Built with OLObuild</span></div>
+  </div>
+</footer>
+
+<script src="olothemes/fx.js"></script>
+<script src="olothemes/theme.js"></script>
+</body>
+</html>

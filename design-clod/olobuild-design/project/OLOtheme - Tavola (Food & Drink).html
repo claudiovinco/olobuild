@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Tavola — Cucina di famiglia</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="Tavola is a family trattoria — handmade pasta, a short seasonal menu and a table that's always set for one more. Book your seat."/>
+<link rel="stylesheet" href="olothemes/tavola.css"/>
+</head>
+<body data-screen-label="Tavola — Home" data-fx>
+
+<!-- ═══ ANNOUNCEMENT BAR (OLObuild · NEW tile → AnnouncementBar) ═══ -->
+<div class="tv-ann" data-olo-tile="AnnouncementBar" data-olo-note="NEW tile candidate: AnnouncementBar — dismissible top strip for a single promo line.">
+  <span>Open for Sunday lunch from 12:30 · <b>Fresh pasta made daily</b> · Walk-ins welcome at the bar</span>
+</div>
+
+<!-- ═══ NAVMENU (OLObuild · Navigation → Navmenu) ═══ -->
+<header class="tv-nav" data-olo-tile="Navmenu">
+  <div class="tv-wrap tv-nav__in">
+    <a class="logo" href="#top"><span class="mk"></span>Tavola</a>
+    <nav class="tv-nav__links">
+      <a href="OLOtheme - Tavola - Menu.html">Menu</a>
+      <a href="#story">Our story</a>
+      <a href="#gallery">The kitchen</a>
+      <a href="#reserve">Reservations</a>
+    </nav>
+    <div class="tv-nav__cta">
+      <span class="ph">015 88 240</span>
+      <a href="#reserve" class="btn btn--terra">Book a table</a>
+    </div>
+    <button class="burger" data-burger aria-label="Open menu"><span></span></button>
+  </div>
+</header>
+<div class="mobile" data-mobile>
+  <button data-close aria-label="Close">&times;</button>
+  <a href="OLOtheme - Tavola - Menu.html">Menu</a>
+  <a href="#story">Our story</a>
+  <a href="#gallery">The kitchen</a>
+  <a href="#reserve">Reservations</a>
+</div>
+
+<main id="top">
+
+<!-- ═══ HERO (OLObuild · Marketing → Hero) ═══ -->
+<section class="tv-hero" data-olo-tile="Hero">
+  <div class="tv-wrap tv-hero__in">
+    <div>
+      <span class="tv-hero__sig" data-reveal>Cucina di famiglia, dal 1987</span>
+      <h1 data-reveal="80">A table that's<br/>always set for<br/>one more.</h1>
+      <p data-reveal="160">Handmade pasta, a menu that changes with the market, and the kind of long lunch you don't want to end. Three generations, one small kitchen.</p>
+      <div class="tv-hero__cta" data-reveal="240">
+        <a href="#reserve" class="btn btn--terra btn--lg">Reserve a table</a>
+        <a href="OLOtheme - Tavola - Menu.html" class="btn btn--ghost btn--lg">See the menu</a>
+      </div>
+    </div>
+    <div class="tv-hero__art" data-reveal="120">
+      <div class="media" data-label="hero — tagliatelle being plated, hands &amp; flour"></div>
+      <div class="tv-hero__badge"><b>38</b><span>years at<br/>the stove</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HOURS STRIP (OLObuild · NEW tile → HoursStrip) ═══ -->
+<section class="tv-hours" data-olo-tile="HoursStrip" data-olo-note="NEW tile candidate: HoursStrip — divided opening-hours band with day/time/note per cell.">
+  <div class="tv-wrap tv-hours__in">
+    <div class="tv-hour"><div class="d">Tue – Thu</div><div class="t">12:30 – 22:00</div><div class="n">Lunch &amp; dinner</div></div>
+    <div class="tv-hour"><div class="d">Fri – Sat</div><div class="t">12:30 – 23:30</div><div class="n">Late kitchen</div></div>
+    <div class="tv-hour"><div class="d">Sunday</div><div class="t">12:30 – 16:00</div><div class="n">Family lunch only</div></div>
+    <div class="tv-hour"><div class="d">Monday</div><div class="t">Chiuso</div><div class="n">Resting the ovens</div></div>
+  </div>
+</section>
+
+<!-- ═══ MENU PREVIEW (OLObuild · NEW tile → MenuList) ═══ -->
+<section class="tv-sec" data-olo-tile="MenuList" data-olo-note="NEW tile candidate: MenuList — two-column dish list with dotted leaders, diet tags and prices.">
+  <div class="tv-wrap">
+    <div class="sec-head center" data-reveal>
+      <span class="eyebrow">From the kitchen</span>
+      <h2>This week's table</h2>
+      <p>A short menu, cooked properly. Everything's made in-house — ask us about today's specials on the board.</p>
+    </div>
+    <div class="tv-menu" data-reveal="80">
+      <div class="tv-menu__col">
+        <h3>Antipasti</h3>
+        <div class="tv-dish"><div class="tv-dish__top"><span class="tv-dish__name">Burrata &amp; pesche</span><span class="tv-dish__lead"></span><span class="tv-dish__price">€12</span></div><p class="tv-dish__desc">Creamy burrata, grilled peaches, basil, toasted almonds.</p></div>
+        <div class="tv-dish"><div class="tv-dish__top"><span class="tv-dish__name">Vitello tonnato</span><span class="tv-dish__lead"></span><span class="tv-dish__price">€14</span></div><p class="tv-dish__desc">Thin-sliced veal, caper &amp; tuna cream, the way nonna made it.</p></div>
+        <div class="tv-dish"><div class="tv-dish__top"><span class="tv-dish__name">Verdure del banco <span class="v">Veg</span></span><span class="tv-dish__lead"></span><span class="tv-dish__price">€10</span></div><p class="tv-dish__desc">Whatever the market gave us this morning, char-grilled.</p></div>
+      </div>
+      <div class="tv-menu__col">
+        <h3>Primi · Pasta fresca</h3>
+        <div class="tv-dish"><div class="tv-dish__top"><span class="tv-dish__name">Tagliatelle al ragù</span><span class="tv-dish__lead"></span><span class="tv-dish__price">€16</span></div><p class="tv-dish__desc">Eight-hour beef &amp; pork ragù, hand-cut ribbons.</p></div>
+        <div class="tv-dish"><div class="tv-dish__top"><span class="tv-dish__name">Cacio e pepe</span><span class="tv-dish__lead"></span><span class="tv-dish__price">€14</span></div><p class="tv-dish__desc">Tonnarelli, pecorino, a lot of black pepper. That's it.</p></div>
+        <div class="tv-dish"><div class="tv-dish__top"><span class="tv-dish__name">Ravioli di zucca <span class="v">Veg</span></span><span class="tv-dish__lead"></span><span class="tv-dish__price">€15</span></div><p class="tv-dish__desc">Pumpkin &amp; amaretti, brown butter, crisp sage.</p></div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:44px" data-reveal="120"><a href="OLOtheme - Tavola - Menu.html" class="btn btn--espr">Full menu &amp; wine list
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+  </div>
+</section>
+
+<!-- ═══ GALLERY (OLObuild · NEW tile → ProductGallery) ═══ -->
+<section class="tv-sec paper" id="gallery" data-olo-tile="ProductGallery" data-olo-note="NEW tile candidate: ProductGallery — masonry-ish image grid with tall/wide spans and zoom-on-hover.">
+  <div class="tv-wrap">
+    <div class="sec-head" data-reveal>
+      <span class="eyebrow">In the kitchen</span>
+      <h2>Made by hand,<br/>every morning</h2>
+    </div>
+    <div class="tv-gal" data-reveal="80">
+      <div class="tv-gal__c tall"><div class="media" data-label="rolling pasta"></div></div>
+      <div class="tv-gal__c"><div class="media" data-label="ragù pot"></div></div>
+      <div class="tv-gal__c"><div class="media" data-label="market veg"></div></div>
+      <div class="tv-gal__c wide"><div class="media" data-label="the dining room"></div></div>
+      <div class="tv-gal__c"><div class="media" data-label="espresso"></div></div>
+      <div class="tv-gal__c"><div class="media" data-label="dessert trolley"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ RECIPE SCALER (OLObuild · NEW tile → RecipeScaler) ═══ -->
+<section class="tv-sec paper" id="recipe" data-olo-tile="RecipeScaler" data-olo-note="NEW tile candidate: RecipeScaler — interactive zone. A servings stepper rescales every ingredient quantity live; data-frac ingredients format with kitchen fractions (¼ ½ ⅓ ⅔ ¾), others round (g/ml). Props: base servings, ingredients[name,qty,unit,frac].">
+  <div class="tv-wrap tv-rc" data-reveal data-recipe data-base="4" data-min="2" data-max="12">
+    <div class="tv-rc__l">
+      <span class="eyebrow">From our kitchen</span>
+      <h2>Nonna's <em>ragù</em>, to scale</h2>
+      <p>The sauce we've simmered since 1962. Set how many you're feeding and the quantities follow.</p>
+      <div class="tv-rc__stepper">
+        <button data-rc-dec aria-label="Fewer covers">−</button>
+        <span class="val"><b data-rc-count>4</b> covers</span>
+        <button data-rc-inc aria-label="More covers">+</button>
+      </div>
+    </div>
+    <div class="tv-rc__list">
+      <div class="tv-rc__ing" data-rc-ing data-qty="500" data-unit="g"><span class="nm">Beef &amp; pork mince</span><span class="amt" data-rc-out></span></div>
+      <div class="tv-rc__ing" data-rc-ing data-qty="200" data-unit="g"><span class="nm">Soffritto, finely diced</span><span class="amt" data-rc-out></span></div>
+      <div class="tv-rc__ing" data-rc-ing data-qty="400" data-unit="g"><span class="nm">San Marzano tomatoes</span><span class="amt" data-rc-out></span></div>
+      <div class="tv-rc__ing" data-rc-ing data-qty="150" data-unit="ml"><span class="nm">Whole milk</span><span class="amt" data-rc-out></span></div>
+      <div class="tv-rc__ing" data-rc-ing data-qty="120" data-unit="ml"><span class="nm">Red wine</span><span class="amt" data-rc-out></span></div>
+      <div class="tv-rc__ing" data-rc-ing data-frac data-qty="3" data-unit="tbsp"><span class="nm">Olive oil</span><span class="amt" data-rc-out></span></div>
+      <div class="tv-rc__ing" data-rc-ing data-frac data-qty="1" data-unit="tsp"><span class="nm">Sea salt</span><span class="amt" data-rc-out></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STORY (OLObuild · Marketing → FeatureSplit) ═══ -->
+<section class="tv-sec" id="story" data-olo-tile="FeatureSplit">
+  <div class="tv-wrap tv-story" data-reveal>
+    <div class="tv-story__media">
+      <div class="media" data-label="the family at the pass"></div>
+      <span class="tag">Since 1987</span>
+    </div>
+    <div>
+      <span class="eyebrow">Our story</span>
+      <h2>One small kitchen,<br/>three generations</h2>
+      <p>Nonna Lucia opened Tavola with eight tables and one rule: cook for people the way you'd cook for family. Her ragù still simmers on the same stove.</p>
+      <p>Today her grandchildren run the pass — same recipes, same market at dawn, the same long Sunday lunches that go on until the coffee's cold.</p>
+      <span class="sig">— La famiglia Bertolini</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIAL (OLObuild · Marketing → Testimonial) ═══ -->
+<section class="tv-sec tv-testi" data-olo-tile="Testimonial">
+  <div class="tv-wrap tv-testi__in" data-reveal>
+    <div class="stars">★★★★★</div>
+    <q>“The kind of place you leave already planning your next visit. The tagliatelle is worth the trip on its own — and they treat you like you've been coming for years.”</q>
+    <div class="tv-testi__by">Marco D. · Local guide, 240 reviews</div>
+  </div>
+</section>
+
+<!-- ═══ COMPOSE YOUR TABLE (OLObuild · NEW tile → Builder) ═══ -->
+<section class="tv-sec" id="compose" data-olo-tile="Builder" data-olo-note="NEW tile candidate: Builder — interactive zone. +/- steppers across courses with a live running total &amp; cover count. Props: items[name,price,course], currency.">
+  <div class="tv-wrap tv-comp" data-reveal data-builder data-currency="€" style="--fx-zone-accent:#d6552f;--fx-zone-on:#fff;--fx-zone-line:#c9b49a;--fx-zone-bg:rgba(214,85,47,.08)">
+    <div class="tv-comp__head">
+      <div><span class="eyebrow">Plan your evening</span><h2>Compose your <em>table</em></h2><p>Pick a few plates to share — antipasti to dolci. We'll total it up so there are no surprises but the good ones.</p></div>
+      <div class="tv-comp__tally"><div class="tv-comp__count"><b data-bld-items>0</b> <span>plates</span></div><div class="tv-comp__total" data-bld-total>€0</div></div>
+    </div>
+    <div class="tv-comp__grid">
+      <div class="tv-comp__item" data-bld-item data-n="0" data-price="9"><div class="tv-comp__meta"><span class="cs">Antipasti</span><h3>Burrata &amp; peach</h3></div><div class="tv-comp__r"><span class="pr">€9</span><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div></div>
+      <div class="tv-comp__item" data-bld-item data-n="0" data-price="11"><div class="tv-comp__meta"><span class="cs">Antipasti</span><h3>Fritto misto</h3></div><div class="tv-comp__r"><span class="pr">€11</span><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div></div>
+      <div class="tv-comp__item" data-bld-item data-n="0" data-price="14"><div class="tv-comp__meta"><span class="cs">Primi</span><h3>Cacio e pepe</h3></div><div class="tv-comp__r"><span class="pr">€14</span><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div></div>
+      <div class="tv-comp__item" data-bld-item data-n="0" data-price="16"><div class="tv-comp__meta"><span class="cs">Primi</span><h3>Wild boar ragù</h3></div><div class="tv-comp__r"><span class="pr">€16</span><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div></div>
+      <div class="tv-comp__item" data-bld-item data-n="0" data-price="24"><div class="tv-comp__meta"><span class="cs">Secondi</span><h3>Bistecca, shared</h3></div><div class="tv-comp__r"><span class="pr">€24</span><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div></div>
+      <div class="tv-comp__item" data-bld-item data-n="0" data-price="8"><div class="tv-comp__meta"><span class="cs">Dolci</span><h3>Tiramisù</h3></div><div class="tv-comp__r"><span class="pr">€8</span><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ RESERVATIONS (OLObuild · NEW tile → RSVPForm) ═══ -->
+<section class="tv-sec paper" id="reserve" data-olo-tile="RSVPForm" data-olo-note="NEW tile candidate: RSVPForm — booking form (date / time / covers / contact) paired with a copy panel.">
+  <div class="tv-wrap tv-resv">
+    <div data-reveal>
+      <span class="eyebrow">Reservations</span>
+      <h2>Book your<br/>seat at Tavola</h2>
+      <p>We hold a few tables for walk-ins, but weekends fill fast. Larger groups and private lunches — just give us a call.</p>
+      <p style="margin-top:18px"><b style="color:var(--espr)">015 88 240</b> · ciao@tavola.kitchen</p>
+    </div>
+    <form class="tv-resv__form" data-reveal="100" onsubmit="return false">
+      <div class="tv-resv__row">
+        <div class="tv-field"><label>Date</label><input type="date" value="2026-06-13"/></div>
+        <div class="tv-field"><label>Time</label><select><option>12:30</option><option>13:00</option><option selected>20:00</option><option>20:30</option><option>21:00</option></select></div>
+      </div>
+      <div class="tv-resv__row">
+        <div class="tv-field"><label>Covers</label><select><option>2 people</option><option selected>4 people</option><option>6 people</option><option>8+ (call us)</option></select></div>
+        <div class="tv-field"><label>Name</label><input type="text" placeholder="Your name"/></div>
+      </div>
+      <div class="tv-field"><label>Phone</label><input type="tel" placeholder="So we can confirm"/></div>
+      <button class="btn btn--terra btn--lg">Request a table</button>
+    </form>
+  </div>
+</section>
+
+<!-- ═══ CTA (OLObuild · Marketing → CallToAction) ═══ -->
+<section class="tv-cta" data-olo-tile="CallToAction">
+  <div class="tv-wrap tv-cta__in" data-reveal>
+    <h2>Come hungry.<br/>Stay late.</h2>
+    <p>There's always a seat, a glass of something local, and a plate of pasta with your name on it.</p>
+    <a href="#reserve" class="btn btn--cream btn--lg">Book a table</a>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══ FOOTER (OLObuild · Navigation → Footer) ═══ -->
+<footer class="tv-foot" data-olo-tile="Footer">
+  <div class="tv-wrap">
+    <div class="tv-foot__top">
+      <div class="tv-foot__brand">
+        <a class="logo" href="#top"><span class="mk"></span>Tavola</a>
+        <p>Family trattoria. Handmade pasta, a short seasonal menu, and a long table.</p>
+      </div>
+      <div><h4>Eat</h4><ul><li><a href="OLOtheme - Tavola - Menu.html">Menu</a></li><li><a href="#">Wine list</a></li><li><a href="#">Specials</a></li><li><a href="#reserve">Reservations</a></li></ul></div>
+      <div><h4>About</h4><ul><li><a href="#story">Our story</a></li><li><a href="#">Private events</a></li><li><a href="#">Work with us</a></li></ul></div>
+      <div><h4>Find us</h4><ul><li>9 Via del Forno</li><li>Tue–Sun · from 12:30</li><li>015 88 240</li><li>ciao@tavola.kitchen</li></ul></div>
+    </div>
+    <div class="tv-foot__bot"><span>© 2026 Tavola — an OLOtheme demo.</span><span>Built with OLObuild</span></div>
+  </div>
+</footer>
+
+<script src="olothemes/fx.js"></script>
+<script src="olothemes/theme.js"></script>
+</body>
+</html>

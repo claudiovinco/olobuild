@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>Farmacie Comunali Borgoverde — Le Farmacie e gli orari</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="Le cinque farmacie comunali di Borgoverde: indirizzi, orari di apertura, servizi disponibili e turni di guardia."/>
+<link rel="stylesheet" href="pharma/brand.css"/>
+<link rel="stylesheet" href="pharma/tiles.css"/>
+</head>
+<body data-screen-label="Le Farmacie">
+
+<div class="turno-bar" data-olo-tile="Alert">
+  <div class="fc-wrap turno-bar__inner">
+    <span class="badge"><span class="pulse"></span>Di turno oggi</span>
+    <span><b>Farmacia Comunale Centro</b> — Via Roma 14 · aperta fino alle <b>22:00</b></span>
+    <a class="turno-bar__link" href="#turni">Tutti i turni
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</div>
+
+<header class="nav" data-olo-tile="Navmenu">
+  <div class="nav__inner">
+    <a class="nav__logo" href="Farmacie Comunali - Home.html"><span class="mark"></span><span class="txt"><b>Farmacie Comunali</b><span>Borgoverde</span></span></a>
+    <nav class="nav__links">
+      <a href="Farmacie Comunali - Home.html">Home</a>
+      <a href="Farmacie Comunali - Servizi.html">Servizi</a>
+      <a href="Farmacie Comunali - Le Farmacie.html" class="is-active">Le Farmacie</a>
+      <a href="Farmacie Comunali - Contatti.html">Contatti</a>
+    </nav>
+    <div class="nav__cta">
+      <a href="Farmacie Comunali - Le Farmacie.html" class="fc-btn fc-btn--ghost">Le farmacie</a>
+      <a href="Farmacie Comunali - Contatti.html" class="fc-btn fc-btn--primary">Prenota un servizio</a>
+    </div>
+    <button class="nav__burger" aria-label="Apri menu"><span></span></button>
+  </div>
+</header>
+<div class="mobile-menu">
+  <div class="mobile-menu__top">
+    <span class="nav__logo"><span class="mark"></span><span class="txt"><b>Farmacie Comunali</b><span>Borgoverde</span></span></span>
+    <button class="mobile-menu__close" aria-label="Chiudi menu">&times;</button>
+  </div>
+  <nav>
+    <a href="Farmacie Comunali - Home.html">Home</a>
+    <a href="Farmacie Comunali - Servizi.html">Servizi</a>
+    <a href="Farmacie Comunali - Le Farmacie.html">Le Farmacie</a>
+    <a href="Farmacie Comunali - Contatti.html">Contatti</a>
+  </nav>
+  <a href="Farmacie Comunali - Contatti.html" class="fc-btn fc-btn--primary fc-btn--lg">Prenota un servizio</a>
+</div>
+
+<main>
+
+<!-- ═══ PAGE TITLE ═══ -->
+<section class="pagehead" data-olo-tile="PageTitle">
+  <div class="fc-wrap">
+    <nav class="pagehead__crumbs"><a href="Farmacie Comunali - Home.html">Home</a><span>›</span><span>Le Farmacie</span></nav>
+    <h1>Cinque farmacie, un solo territorio</h1>
+    <p>Siamo un’azienda speciale del Comune di Borgoverde: cinque presìdi distribuiti nei quartieri, con orari ampi e un turno di guardia sempre attivo.</p>
+  </div>
+</section>
+
+<!-- ═══ LOCATION cards (OLObuild · Dynamic → PostGrid) ═══ -->
+<section class="fc-section" data-olo-tile="PostGrid">
+  <div class="fc-wrap">
+    <div class="loc-grid">
+      <article class="loc" data-reveal>
+        <div class="loc__media"><div class="olo-media"><span class="olo-media__tag">facciata Farmacia Centro</span></div></div>
+        <div class="loc__body">
+          <span class="loc__badge turno">Di turno</span>
+          <h3>Sede Centro</h3>
+          <p class="loc__addr">Via Roma 14 · Quartiere Centro</p>
+          <ul class="loc__rows">
+            <li><span class="k">Lun–Sab</span><span>8:30 – 22:00</span></li>
+            <li><span class="k">Domenica</span><span>9:00 – 13:00</span></li>
+            <li><span class="k">Servizi</span><span>CUP · Autoanalisi · Holter · ECG</span></li>
+          </ul>
+        </div>
+      </article>
+      <article class="loc" data-reveal="80">
+        <div class="loc__media"><div class="olo-media"><span class="olo-media__tag">facciata Farmacia Parco</span></div></div>
+        <div class="loc__body">
+          <span class="loc__badge open">Aperta ora</span>
+          <h3>Sede Parco</h3>
+          <p class="loc__addr">Viale dei Tigli 8 · Quartiere Parco</p>
+          <ul class="loc__rows">
+            <li><span class="k">Lun–Ven</span><span>8:30 – 19:30</span></li>
+            <li><span class="k">Sabato</span><span>8:30 – 13:00</span></li>
+            <li><span class="k">Servizi</span><span>CUP · Autoanalisi · Mamma &amp; bambino</span></li>
+          </ul>
+        </div>
+      </article>
+      <article class="loc" data-reveal>
+        <div class="loc__media"><div class="olo-media"><span class="olo-media__tag">facciata Farmacia Stazione</span></div></div>
+        <div class="loc__body">
+          <span class="loc__badge open">Aperta ora</span>
+          <h3>Sede Stazione</h3>
+          <p class="loc__addr">Piazza Stazione 3 · Quartiere Stazione</p>
+          <ul class="loc__rows">
+            <li><span class="k">Lun–Sab</span><span>7:30 – 20:00</span></li>
+            <li><span class="k">Domenica</span><span>Chiusa</span></li>
+            <li><span class="k">Servizi</span><span>CUP · Autoanalisi · Noleggio ausili</span></li>
+          </ul>
+        </div>
+      </article>
+      <article class="loc" data-reveal="80">
+        <div class="loc__media"><div class="olo-media"><span class="olo-media__tag">facciata Farmacia Collina</span></div></div>
+        <div class="loc__body">
+          <span class="loc__badge open">Aperta ora</span>
+          <h3>Sede Collina</h3>
+          <p class="loc__addr">Via Belvedere 22 · Quartiere Collina</p>
+          <ul class="loc__rows">
+            <li><span class="k">Lun–Ven</span><span>8:30 – 13:00 · 15:30 – 19:30</span></li>
+            <li><span class="k">Sabato</span><span>8:30 – 12:30</span></li>
+            <li><span class="k">Servizi</span><span>CUP · Veterinaria · Dermocosmesi</span></li>
+          </ul>
+        </div>
+      </article>
+      <article class="loc" data-reveal>
+        <div class="loc__media"><div class="olo-media"><span class="olo-media__tag">facciata Farmacia Mercato</span></div></div>
+        <div class="loc__body">
+          <span class="loc__badge open">Aperta ora</span>
+          <h3>Sede Mercato</h3>
+          <p class="loc__addr">Via del Mercato 5 · Quartiere Mercato</p>
+          <ul class="loc__rows">
+            <li><span class="k">Lun–Sab</span><span>8:00 – 20:00</span></li>
+            <li><span class="k">Domenica</span><span>9:00 – 13:00</span></li>
+            <li><span class="k">Servizi</span><span>CUP · Autoanalisi · Consegna a domicilio</span></li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TURNI di guardia (OLObuild · Dynamic → EventList) ═══ -->
+<section class="fc-section fc-section--tight" id="turni" style="background:var(--fc-bg-green)" data-olo-tile="EventList">
+  <div class="fc-wrap">
+    <div class="fc-section-head" data-reveal>
+      <p class="fc-eyebrow">Turni di guardia</p>
+      <h2>La farmacia aperta, giorno per giorno</h2>
+      <p class="fc-lede">Fuori dagli orari ordinari è sempre attiva una farmacia di turno per le urgenze. Ecco i prossimi giorni.</p>
+    </div>
+    <div class="turni" data-reveal>
+      <div class="turni__row today">
+        <div class="turni__date">Oggi<span>lun 30 mag</span></div>
+        <div class="turni__name">Sede Centro <small>Via Roma 14 · Quartiere Centro</small></div>
+        <span class="turni__tag">Aperta fino alle 22:00</span>
+      </div>
+      <div class="turni__row">
+        <div class="turni__date">31<span>mar</span></div>
+        <div class="turni__name">Sede Mercato <small>Via del Mercato 5 · Quartiere Mercato</small></div>
+        <span class="turni__tag">Notturno 20:00 – 8:30</span>
+      </div>
+      <div class="turni__row">
+        <div class="turni__date">01<span>mer</span></div>
+        <div class="turni__name">Sede Stazione <small>Piazza Stazione 3 · Quartiere Stazione</small></div>
+        <span class="turni__tag">Notturno 20:00 – 8:30</span>
+      </div>
+      <div class="turni__row">
+        <div class="turni__date">02<span>gio</span></div>
+        <div class="turni__name">Sede Centro <small>Via Roma 14 · Festivo · Quartiere Centro</small></div>
+        <span class="turni__tag">Festivo 9:00 – 22:00</span>
+      </div>
+      <div class="turni__row">
+        <div class="turni__date">03<span>ven</span></div>
+        <div class="turni__name">Sede Parco <small>Viale dei Tigli 8 · Quartiere Parco</small></div>
+        <span class="turni__tag">Notturno 20:00 – 8:30</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MAP (OLObuild · Media → Map embed) ═══ -->
+<section class="fc-section fc-section--tight" data-olo-tile="Map">
+  <div class="fc-wrap">
+    <div class="fc-section-head is-center" data-reveal>
+      <p class="fc-eyebrow">Dove siamo</p>
+      <h2>Le nostre sedi sulla mappa</h2>
+    </div>
+    <div class="map" data-reveal><div class="olo-media"><span class="olo-media__tag">mappa interattiva — 5 farmacie comunali di Borgoverde</span></div></div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section class="fc-section fc-section--tight" data-olo-tile="CtaBanner">
+  <div class="fc-wrap">
+    <div class="cta" data-reveal>
+      <div class="cta__inner">
+        <div>
+          <h2>Non sai quale farmacia è di turno?</h2>
+          <p>Chiama il numero verde gratuito: ti indichiamo la sede aperta più vicina a te, a qualsiasi ora.</p>
+        </div>
+        <div class="cta__actions">
+          <a href="Farmacie Comunali - Contatti.html" class="fc-btn fc-btn--accent fc-btn--lg">Numero verde 800 12 34 56</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer" data-olo-tile="Footer">
+  <div class="fc-wrap">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <span class="nav__logo"><span class="mark"></span><span class="txt"><b>Farmacie Comunali</b><span>Borgoverde</span></span></span>
+        <p>Cinque farmacie pubbliche al servizio dei cittadini di Borgoverde. La salute, vicino a casa.</p>
+        <span class="fc-chip"><span class="dot"></span>Azienda Speciale del Comune di Borgoverde</span>
+      </div>
+      <div class="footer__col"><h4>Servizi</h4><a href="Farmacie Comunali - Servizi.html">Prenotazioni CUP</a><a href="Farmacie Comunali - Servizi.html">Autoanalisi</a><a href="Farmacie Comunali - Servizi.html">Consegna a domicilio</a><a href="Farmacie Comunali - Servizi.html">Noleggio elettromedicali</a></div>
+      <div class="footer__col"><h4>Le farmacie</h4><a href="Farmacie Comunali - Le Farmacie.html">Sede Centro</a><a href="Farmacie Comunali - Le Farmacie.html">Sede Parco</a><a href="Farmacie Comunali - Le Farmacie.html">Sede Stazione</a><a href="Farmacie Comunali - Le Farmacie.html">Turni di guardia</a></div>
+      <div class="footer__col"><h4>Contatti</h4><a href="Farmacie Comunali - Contatti.html">Prenota un servizio</a><a href="Farmacie Comunali - Contatti.html">Numero verde 800 12 34 56</a><a href="Farmacie Comunali - Contatti.html">info@farmaciecomunali.bv.it</a></div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 Farmacie Comunali Borgoverde — P.IVA 01234567890 · Realizzato con OLObuild</span>
+      <span>Privacy · Note legali · Trasparenza</span>
+    </div>
+  </div>
+</footer>
+
+<script src="pharma/site.js"></script>
+</body>
+</html>

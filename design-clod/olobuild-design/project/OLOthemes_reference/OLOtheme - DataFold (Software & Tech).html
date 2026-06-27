@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>DataFold — Every metric, one source of truth</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="DataFold turns your scattered data into one live analytics workspace — model it once, query in plain SQL, and ship dashboards your whole team trusts."/>
+<link rel="stylesheet" href="olothemes/datafold.css"/>
+</head>
+<body data-screen-label="DataFold — Home">
+
+<!-- ═══ NAVMENU (OLObuild · Navigation → Navmenu) ═══ -->
+<header class="df-nav" data-olo-tile="Navmenu">
+  <div class="df-wrap df-nav__in">
+    <a class="logo" href="#top"><span class="mk"></span>DataFold</a>
+    <nav class="df-nav__links">
+      <a href="#platform">Platform</a>
+      <a href="#sources">Data sources</a>
+      <a href="OLOtheme - DataFold - Customers.html">Customers</a>
+      <a href="#pricing">Pricing</a>
+    </nav>
+    <div class="df-nav__cta">
+      <a href="#" class="sign">Sign in</a>
+      <a href="#pricing" class="btn btn--teal">Start free</a>
+    </div>
+    <button class="burger" data-burger aria-label="Open menu"><span></span></button>
+  </div>
+</header>
+<div class="mobile" data-mobile>
+  <button data-close aria-label="Close">&times;</button>
+  <a href="#platform">Platform</a>
+  <a href="#sources">Data sources</a>
+  <a href="OLOtheme - DataFold - Customers.html">Customers</a>
+  <a href="#pricing">Pricing</a>
+</div>
+
+<main id="top">
+
+<!-- ═══ HERO + DASHBOARD MOCK (OLObuild · Marketing → Hero) ═══ -->
+<section class="df-hero" data-olo-tile="Hero">
+  <span class="df-hero__glow"></span>
+  <span class="df-hero__grid"></span>
+  <div class="df-wrap df-hero__in">
+    <span class="pill-tag" data-reveal>v4 · now with real-time models</span>
+    <h1 data-reveal="80">Every metric,<br/><span class="grad">one source of truth.</span></h1>
+    <p class="df-hero__sub" data-reveal="160">DataFold pulls your scattered data into one live workspace — model it once, query in plain SQL, and ship dashboards the whole team actually trusts.</p>
+    <div class="df-hero__cta" data-reveal="240">
+      <a href="#pricing" class="btn btn--teal btn--lg">Start free</a>
+      <a href="#platform" class="btn btn--ghost btn--lg">See the platform
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </div>
+  <div class="df-wrap"><div class="df-dash" data-reveal="200">
+    <div class="df-dash__frame">
+      <div class="df-dash__bar"><i></i><i></i><i></i><span class="u">app.datafold.io / workspace / revenue</span></div>
+      <div class="df-dash__body">
+        <div class="df-kpi"><div class="k">Net revenue</div><div class="v">$4.82M</div><div class="t">▲ 18.4% MoM</div></div>
+        <div class="df-kpi"><div class="k">Active accounts</div><div class="v">12,408</div><div class="t">▲ 6.1% MoM</div></div>
+        <div class="df-kpi"><div class="k">Churn</div><div class="v">1.9%</div><div class="t dn">▼ 0.3 pts</div></div>
+        <div class="df-dash__chart">
+          <div class="ch-head"><b>Revenue by week</b><span>last 12 weeks · live</span></div>
+          <div class="df-bars">
+            <div class="col"><i style="height:38%"></i><span>w1</span></div>
+            <div class="col"><i style="height:46%"></i><span>w2</span></div>
+            <div class="col"><i style="height:41%"></i><span>w3</span></div>
+            <div class="col"><i style="height:54%"></i><span>w4</span></div>
+            <div class="col"><i style="height:60%"></i><span>w5</span></div>
+            <div class="col"><i style="height:52%"></i><span>w6</span></div>
+            <div class="col"><i style="height:68%"></i><span>w7</span></div>
+            <div class="col"><i style="height:74%"></i><span>w8</span></div>
+            <div class="col"><i class="b2" style="height:66%"></i><span>w9</span></div>
+            <div class="col"><i style="height:82%"></i><span>w10</span></div>
+            <div class="col"><i style="height:90%"></i><span>w11</span></div>
+            <div class="col"><i class="b2" style="height:100%"></i><span>w12</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ═══ LOGO CLOUD (OLObuild · NEW tile → LogoCloud) ═══ -->
+<section class="df-logos" data-olo-tile="LogoCloud" data-olo-note="NEW tile candidate: LogoCloud — muted customer logo row with caption.">
+  <div class="df-wrap">
+    <p>Powering analytics at data-driven teams</p>
+    <div class="df-logos__row"><span class="df-logo"></span><span class="df-logo"></span><span class="df-logo"></span><span class="df-logo"></span><span class="df-logo"></span><span class="df-logo"></span></div>
+  </div>
+</section>
+
+<!-- ═══ STAT STRIP (OLObuild · NEW tile → StatStrip) ═══ -->
+<section class="df-stats" data-olo-tile="StatStrip" data-olo-note="NEW tile candidate: StatStrip — live counter band.">
+  <div class="df-wrap df-stats__in">
+    <div data-reveal><b><span data-count="14">0</span><span class="u">B+</span></b><span>Rows queried daily</span></div>
+    <div data-reveal="80"><b><span data-count="220">0</span><span class="u">ms</span></b><span>Median query time</span></div>
+    <div data-reveal="160"><b><span data-count="180">0</span><span class="u">+</span></b><span>Native connectors</span></div>
+    <div data-reveal="240"><b><span data-count="99.98" data-dec="2">0</span><span class="u">%</span></b><span>Pipeline uptime</span></div>
+  </div>
+</section>
+
+<!-- ═══ METRIC CHART TILE (OLObuild · NEW tile → MetricChart) ═══ -->
+<section class="df-sec" id="platform" data-olo-tile="MetricChart" data-olo-note="NEW tile candidate: MetricChart — dashboard-style cards (KPI + bar/donut/progress) rendered from CSS, no image. Props: chart type, series, accent.">
+  <div class="df-wrap">
+    <div class="sec-head" data-reveal>
+      <span class="eyebrow">// the workspace</span>
+      <h2>Dashboards that read like the truth</h2>
+      <p>Build a metric once and reuse it everywhere. Every chart is live, drillable, and tied back to the model — no more six versions of "revenue".</p>
+    </div>
+    <div class="df-metrics">
+      <div class="df-card tall" data-reveal>
+        <div class="df-card__head">
+          <div><div class="t">Monthly recurring revenue</div><div class="v">$4.82M</div></div>
+          <span class="pill">▲ 18.4%</span>
+        </div>
+        <div class="df-bars" style="height:180px">
+          <div class="col"><i style="height:34%"></i><span>Jan</span></div>
+          <div class="col"><i style="height:42%"></i><span>Feb</span></div>
+          <div class="col"><i style="height:48%"></i><span>Mar</span></div>
+          <div class="col"><i style="height:44%"></i><span>Apr</span></div>
+          <div class="col"><i style="height:58%"></i><span>May</span></div>
+          <div class="col"><i style="height:64%"></i><span>Jun</span></div>
+          <div class="col"><i style="height:72%"></i><span>Jul</span></div>
+          <div class="col"><i style="height:80%"></i><span>Aug</span></div>
+          <div class="col"><i class="b2" style="height:92%"></i><span>Sep</span></div>
+          <div class="col"><i class="b2" style="height:100%"></i><span>Oct</span></div>
+        </div>
+      </div>
+      <div class="df-card" data-reveal="100">
+        <div class="df-card__head"><div><div class="t">Revenue by plan</div></div></div>
+        <div class="df-donut">
+          <div class="df-donut__ring"></div>
+          <div class="df-donut__leg">
+            <div><span class="sw" style="background:var(--teal)"></span>Team · 62%</div>
+            <div><span class="sw" style="background:var(--lime)"></span>Business · 19%</div>
+            <div><span class="sw" style="background:var(--amber)"></span>Enterprise · 11%</div>
+            <div><span class="sw" style="background:rgba(255,255,255,.18)"></span>Starter · 8%</div>
+          </div>
+        </div>
+      </div>
+      <div class="df-card" data-reveal="180">
+        <div class="df-mini">
+          <div class="m"><div class="k">Activation</div><div class="vv">74%</div><div class="bar"><i style="width:74%"></i></div></div>
+          <div class="m"><div class="k">Retention 90d</div><div class="vv">91%</div><div class="bar"><i style="width:91%"></i></div></div>
+          <div class="m"><div class="k">NPS</div><div class="vv">+58</div><div class="bar"><i style="width:79%"></i></div></div>
+          <div class="m"><div class="k">Expansion</div><div class="vv">118%</div><div class="bar"><i style="width:100%"></i></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FEATURE SPLIT — query (OLObuild · Marketing → FeatureSplit) ═══ -->
+<section class="df-sec" style="padding-top:0" data-olo-tile="FeatureSplit">
+  <div class="df-wrap df-feat" data-reveal>
+    <div>
+      <span class="eyebrow">// modelling</span>
+      <h2>Model once, in plain SQL</h2>
+      <p>Define your metrics as version-controlled models. DataFold compiles them into fast, governed queries — so everyone's numbers come from the same place.</p>
+      <ul class="df-feat__list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Git-backed semantic layer</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Column-level lineage</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Tests that block bad data shipping</li>
+      </ul>
+      <a href="#" class="btn btn--ghost">Read the docs</a>
+    </div>
+    <div class="df-feat__media">
+      <div class="bar"><i></i><i></i><i></i></div>
+      <div class="pad"><pre class="df-code"><span class="cm">-- models/revenue.sql</span>
+<span class="kw">metric</span> net_revenue <span class="kw">as</span> (
+  <span class="kw">select</span> date_trunc(<span class="nm">'week'</span>, paid_at) <span class="kw">as</span> wk,
+         <span class="fn">sum</span>(amount) - <span class="fn">sum</span>(refunds)
+  <span class="kw">from</span> {{ ref(<span class="nm">'payments'</span>) }}
+  <span class="kw">group by</span> 1
+)
+<span class="cm">-- ✓ tested · ✓ governed · ✓ live</span></pre></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FEATURE SPLIT — alerts (flip) ═══ -->
+<section class="df-sec" style="padding-top:0" data-olo-tile="FeatureSplit">
+  <div class="df-wrap df-feat flip" data-reveal>
+    <div class="df-feat__media">
+      <div class="bar"><i></i><i></i><i></i></div>
+      <div class="pad"><div class="media" data-label="anomaly alert — Slack card, metric spiked 3.2σ" style="aspect-ratio:16/10; border-radius:10px"></div></div>
+    </div>
+    <div>
+      <span class="eyebrow">// monitoring</span>
+      <h2>It tells you before they ask</h2>
+      <p>DataFold watches every metric for anomalies and routes the alert to the right channel — with the context to act, not just a red number.</p>
+      <ul class="df-feat__list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>ML anomaly detection on any metric</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Slack, email &amp; webhook routing</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Root-cause drill-downs in one click</li>
+      </ul>
+      <a href="#" class="btn btn--ghost">See monitoring</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DATA SOURCES (OLObuild · NEW tile → IntegrationGrid) ═══ -->
+<section class="df-sec" id="sources" style="padding-top:0" data-olo-tile="IntegrationGrid" data-olo-note="NEW tile candidate: IntegrationGrid — labelled connector tiles.">
+  <div class="df-wrap">
+    <div class="sec-head" data-reveal><span class="eyebrow">// data sources</span><h2>Connect everything, sync both ways</h2><p>180+ native connectors. Point DataFold at your warehouse and it does the rest.</p></div>
+    <div class="df-intg" data-reveal>
+      <div class="df-intg__c"><span class="d"></span><span>Warehouse</span></div>
+      <div class="df-intg__c"><span class="d"></span><span>Postgres</span></div>
+      <div class="df-intg__c"><span class="d"></span><span>Events</span></div>
+      <div class="df-intg__c"><span class="d"></span><span>Billing</span></div>
+      <div class="df-intg__c"><span class="d"></span><span>CRM</span></div>
+      <div class="df-intg__c"><span class="d"></span><span>Ads</span></div>
+      <div class="df-intg__c"><span class="d"></span><span>Object store</span></div>
+      <div class="df-intg__c"><span class="d"></span><span>Sheets</span></div>
+      <div class="df-intg__c"><span class="d"></span><span>Support</span></div>
+      <div class="df-intg__c"><span class="d"></span><span>Product</span></div>
+      <div class="df-intg__c"><span class="d"></span><span>Queue</span></div>
+      <div class="df-intg__c"><span class="d"></span><span>+170</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRICING (OLObuild · Marketing → Pricing) ═══ -->
+<section class="df-sec" id="pricing" style="padding-top:0" data-olo-tile="Pricing">
+  <div class="df-wrap">
+    <div class="sec-head" data-reveal><span class="eyebrow">// pricing</span><h2>Pay for seats, not for rows</h2></div>
+    <div class="df-price-grid">
+      <div class="df-price" data-reveal>
+        <div class="df-price__n">Starter</div><div class="df-price__p">$0<small>/mo</small></div><p class="df-price__d">For analysts kicking the tyres.</p>
+        <ul class="df-price__list"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>1 workspace</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>5 data sources</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Community support</li></ul>
+        <a href="#" class="btn btn--ghost">Get started</a>
+      </div>
+      <div class="df-price feat" data-reveal="100">
+        <span class="df-price__tag">Most popular</span><div class="df-price__n">Team</div><div class="df-price__p">$32<small>/user/mo</small></div><p class="df-price__d">For teams running on real numbers.</p>
+        <ul class="df-price__list"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Unlimited dashboards</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>All 180+ connectors</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Anomaly monitoring</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Semantic layer</li></ul>
+        <a href="#" class="btn btn--teal">Start 14-day trial</a>
+      </div>
+      <div class="df-price" data-reveal="200">
+        <div class="df-price__n">Enterprise</div><div class="df-price__p">Custom</div><p class="df-price__d">For scale, security &amp; governance.</p>
+        <ul class="df-price__list"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>SSO, SCIM &amp; audit log</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Row-level security</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Dedicated support</li></ul>
+        <a href="#" class="btn btn--ghost">Talk to sales</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIAL (OLObuild · Marketing → Testimonial) ═══ -->
+<section class="df-sec df-testi" data-olo-tile="Testimonial">
+  <div class="df-wrap df-testi__in" data-reveal>
+    <q>“We deleted four spreadsheets and a BI tool the week we switched. Now <em>one number means one thing</em> — and the whole company finally agrees on it.”</q>
+    <div class="df-testi__by">Priya Nair · Head of Data, Northbeam</div>
+  </div>
+</section>
+
+<!-- ═══ CTA (OLObuild · Marketing → CallToAction) ═══ -->
+<section class="df-sec df-cta" data-olo-tile="CallToAction">
+  <div class="df-wrap"><div class="df-cta__box" data-reveal>
+    <span class="glow"></span>
+    <h2>Put your data to work</h2>
+    <p>Connect a warehouse and ship your first trusted dashboard this afternoon. Free to start, no card.</p>
+    <div class="df-cta__cta">
+      <a href="#pricing" class="btn btn--teal btn--lg">Start free</a>
+      <a href="OLOtheme - DataFold - Customers.html" class="btn btn--ghost btn--lg">See customer stories</a>
+    </div>
+  </div></div>
+</section>
+
+</main>
+
+<!-- ═══ FOOTER (OLObuild · Navigation → Footer) ═══ -->
+<footer class="df-foot" data-olo-tile="Footer">
+  <div class="df-wrap">
+    <div class="df-foot__top">
+      <div class="df-foot__brand">
+        <a class="logo" href="#top"><span class="mk"></span>DataFold</a>
+        <p>One live workspace for every metric. Model once, query anywhere, trust the number.</p>
+      </div>
+      <div><h4>Product</h4><ul><li><a href="#platform">Platform</a></li><li><a href="#sources">Data sources</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#">Changelog</a></li></ul></div>
+      <div><h4>Developers</h4><ul><li><a href="#">Docs</a></li><li><a href="#">SQL reference</a></li><li><a href="#">API</a></li><li><a href="#">Status</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="OLOtheme - DataFold - Customers.html">Customers</a></li><li><a href="#">About</a></li><li><a href="#">Careers</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="df-foot__bot"><span>© 2026 DataFold — an OLOtheme demo.</span><span>Built with OLObuild</span></div>
+  </div>
+</footer>
+
+<script src="olothemes/theme.js"></script>
+</body>
+</html>

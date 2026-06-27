@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 760" font-family="Inter, Arial, sans-serif">
+  <rect width="1000" height="760" fill="#0a2e22"/>
+  <!-- Finance Agent header -->
+  <rect x="120" y="120" width="64" height="64" rx="14" fill="#3fae6a"/>
+  <path d="M140 168 v-26 h6 v26 M152 168 v-18 h6 v18 M164 168 v-30 h6 v30" stroke="#06281a" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <text x="208" y="165" font-size="34" font-weight="600" fill="#eaf5ef">Finance Agent</text>
+  <!-- connectors READY -->
+  <g font-size="15" font-weight="600" letter-spacing=".05em">
+    <rect x="120" y="232" width="150" height="52" rx="11" fill="#10271d" stroke="rgba(255,255,255,.12)"/>
+    <rect x="138" y="250" width="16" height="13" rx="2" fill="none" stroke="#9cc4b2" stroke-width="1.6"/><circle cx="186" cy="258" r="4" fill="#5ad08a"/><text x="200" y="263" fill="#9cc4b2">READY</text>
+    <rect x="286" y="232" width="150" height="52" rx="11" fill="#10271d" stroke="rgba(255,255,255,.12)"/>
+    <path d="M304 250 l8 14 l-8 0 z M312 250 l8 14 h-16" fill="none" stroke="#5aa9e0" stroke-width="2"/><circle cx="352" cy="258" r="4" fill="#5ad08a"/><text x="366" y="263" fill="#9cc4b2">READY</text>
+    <rect x="452" y="232" width="150" height="52" rx="11" fill="#10271d" stroke="rgba(255,255,255,.12)"/>
+    <path d="M470 262 a10 7 0 0 1 2 -13 a8 8 0 0 1 15 2 a7 6 0 0 1 -2 11 z" fill="none" stroke="#7fb6dd" stroke-width="1.8"/><circle cx="518" cy="258" r="4" fill="#5ad08a"/><text x="532" y="263" fill="#9cc4b2">READY</text>
+  </g>
+  <!-- input -->
+  <rect x="120" y="420" width="600" height="120" rx="16" fill="#0c3527" stroke="#3fae6a" stroke-width="1.5"/>
+  <text x="150" y="490" font-size="26" fill="#cfe8dd">Summarize our quarterly</text>
+  <rect x="640" y="448" width="56" height="56" rx="12" fill="#3fae6a"/>
+  <path d="M660 484 l8 -10 8 10 M668 474 v22" stroke="#06281a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,1754 @@
+[
+  {
+    "file": "accordion.js",
+    "type": "accordion",
+    "name": "Fisarmonica",
+    "icon": "dashicons-list-view",
+    "category": "interactive",
+    "comment": "Tile Accordion — split CONTENUTO/STILE. fields[] → pannelli (title+icon+content+image+video), toggle_mode, default_open, faq_schema styleFields[] → preset, bg, typo, effetti preset, icona aspetto, animazione, media layout, header/content style, separatore, hov"
+  },
+  {
+    "file": "alert.js",
+    "type": "alert",
+    "name": "Avviso",
+    "icon": "dashicons-warning",
+    "category": "text",
+    "comment": "Tile Alert — split CONTENUTO/STILE. fields[] → tipo, title, message, show_icon, custom_icon, dismissible styleFields[] → preset, bg, typo, text-effects, allineamento, colori custom, shadow, border"
+  },
+  {
+    "file": "animatedheading.js",
+    "type": "animatedheading",
+    "name": "Titolo animato",
+    "icon": "dashicons-editor-textcolor",
+    "category": "text",
+    "comment": "Tile AnimatedHeading — split CONTENUTO/STILE. fields[] → before_text, animated_words, after_text, tag, animation, typing_speed, pause_time, highlight_style styleFields[] → preset, typo, alignment, colori, font_size+weight, highlight_color, shadow, border"
+  },
+  {
+    "file": "announcementbar.js",
+    "type": "announcementbar",
+    "name": "Barra Annuncio",
+    "icon": "dashicons-megaphone",
+    "category": "marketing",
+    "comment": "Announcement Bar — striscia annuncio full-width in cima al sito (sopra la nav). Testo centrato + parte evidenziata (accento), link opzionale, chiudibile opzionale (con memoria localStorage). Estratta dal blueprint OLOthemes Atelier Noir (.an-ann). Va tipicamen"
+  },
+  {
+    "file": "asciiviz.js",
+    "type": "asciiviz",
+    "name": "Visualizer ASCII",
+    "icon": "dashicons-format-audio",
+    "category": "media",
+    "comment": "Tile ASCIIViz — visualizer audio in caratteri ASCII (famiglia C, bucket C). Riferimento visivo/runtime: handoff-tile-speciali/temi/67-tema-radio-notturna.html. Una griglia di caratteri monospaziati (<pre> aggiornato via textContent → resta TESTO selezionabile/"
+  },
+  {
+    "file": "audio.js",
+    "type": "audio",
+    "name": "Audio",
+    "icon": "dashicons-format-audio",
+    "category": "media",
+    "comment": "Tile Audio — split CONTENUTO/STILE (regola universale Olobuild). fields[] → sorgente (file/url), file/URL, info traccia (titolo/artista/cover), opzioni playback styleFields[] → typo preset, player style, accent/bg/text color, radius, text-effects, ombra, bordo"
+  },
+  {
+    "file": "audiohero.js",
+    "type": "audiohero",
+    "name": "Hero — Audio (Soundwave)",
+    "icon": "dashicons-format-audio",
+    "category": "marketing",
+    "comment": "Hero — Audio (Soundwave) : hero da musicista/band con SOUNDWAVE animato (equalizer bars in puro CSS) come meccanica firma. Layout 2 colonne: sinistra tag+eq, H1 display gigante, sottotitolo, 2 CTA (play / tour); destra cover art quadrata + mini-player inline ("
+  },
+  {
+    "file": "authorbox.js",
+    "type": "authorbox",
+    "name": "Author Box",
+    "icon": "dashicons-admin-users",
+    "category": "dynamic",
+    "comment": "Tile AuthorBox — split CONTENUTO/STILE. fields[] → visibilità (avatar/nome/bio/ruolo/post_count/website), tag nome, layout, alignment, gap styleFields[] → preset, bg, typo, text-effects, avatar (size/radius/border), tipografia, colori, padding, radius, border"
+  },
+  {
+    "file": "availability.js",
+    "type": "availability",
+    "name": "Availability (griglia → verdetto)",
+    "icon": "dashicons-calendar",
+    "category": "interactive",
+    "comment": "Availability — zona interattiva: griglia toggle (fasce × giorni) → conteggio → verdetto a soglie (es. track Reset/Build/Peak). Estratto dai demo OLOthemes (AvailabilityHeat). Render Vue == PHP (AvailabilityTile.vue). Lookup conteggio→tier precomputato lato PHP"
+  },
+  {
+    "file": "badge.js",
+    "type": "badge",
+    "name": "Badge / Etichetta",
+    "icon": "dashicons-tag",
+    "category": "text",
+    "comment": "Tile Badge / Etichetta — pill compatta con testo + icona opzionale. Feature dedicata \"Stato live\": pallino con onda che pulsa (verde o primario), pensato per indicatori \"Online / In diretta / Novità\" (vedi Try home). fields[] → testo, icona, posizione icona, S"
+  },
+  {
+    "file": "beforeafter.js",
+    "type": "beforeafter",
+    "name": "Before / After (prova)",
+    "icon": "dashicons-images-alt2",
+    "category": "media",
+    "comment": "Before / After — griglia di card \"prova\" (risultati): coppia di media affiancati con etichette Prima/Dopo + didascalia (titolo + testo). Estratta dai blueprint OLOthemes (BeforeAfter: cadence \"The proof\"). Per il confronto a slider singolo usare invece la tile"
+  },
+  {
+    "file": "blendtext.js",
+    "type": "blendtext",
+    "name": "Blend Text",
+    "icon": "dashicons-editor-textcolor",
+    "category": "creative",
+    "comment": "Tile BlendText — split CONTENUTO/STILE. fields[] → text, tag HTML styleFields[] → preset, bg, typo, blend mode, text color, text-effects, tipografia (size/weight/family/transform/spacing/line-h/align), padding, border"
+  },
+  {
+    "file": "breadcrumbs.js",
+    "type": "breadcrumbs",
+    "name": "Breadcrumbs",
+    "icon": "dashicons-arrow-right-alt2",
+    "category": "navigation",
+    "comment": "Tile Breadcrumbs — split CONTENUTO/STILE (regola universale Olobuild). fields[] → separatore, etichetta home, visibilità (Home, pagina corrente) styleFields[] → preset, sfondo, typography preset, ombra, bordo AVANZATE → meta tecnico"
+  },
+  {
+    "file": "builder.js",
+    "type": "builder",
+    "name": "Builder (stepper + totale)",
+    "icon": "dashicons-cart",
+    "category": "interactive",
+    "comment": "Builder — zona interattiva \"componi e somma\": righe con stepper +/− e totale live. Estratto dai demo OLOthemes (setupBuilder in fx.js). Token-first: `zone_accent`. Render Vue == PHP (BuilderTile.vue). Opzionale `cap` = max quantità totale."
+  },
+  {
+    "file": "buildermock.js",
+    "type": "buildermock",
+    "name": "Mockup Builder",
+    "icon": "dashicons-laptop",
+    "category": "marketing",
+    "comment": "Tile Mockup Builder — illustrazione animata dell'editor OLObuild (browser bar + rail categorie + griglia tile + canvas + inspector) con una \"tile fantasma\" che viene trascinata sul canvas in loop (effetto wow, solo CSS). Pensato per landing \"prova il builder\" "
+  },
+  {
+    "file": "button.js",
+    "type": "button",
+    "name": "Pulsante",
+    "icon": "dashicons-button",
+    "category": "essential",
+    "comment": "Tile Button — split CONTENUTO/STILE (regola universale Olobuild). fields[] → testo, icona, URL, target, allineamento (semantica) styleFields[] → preset, colori, tipografia, padding, bordo, ombra, hover AVANZATE → meta tecnico"
+  },
+  {
+    "file": "carousel.js",
+    "type": "carousel",
+    "name": "Carosello immagini",
+    "icon": "dashicons-format-image",
+    "category": "media",
+    "comment": "Tile Carousel — split CONTENUTO/STILE (regola universale Olobuild). fields[] → slide items (image+alt+link+caption), autoplay+speed, loop, pause_on_hover, show_caption, controls (arrows/dots) styleFields[] → preset, bg, typo, text-effects, layout (slides_to_sh"
+  },
+  {
+    "file": "categoryrail.js",
+    "type": "categoryrail",
+    "name": "Category Rail (scroll)",
+    "icon": "dashicons-grid-view",
+    "category": "media",
+    "comment": "Category Rail — rail orizzontale drag-scroll di tessere categoria/prodotto (immagine + overlay + titolo + sottotitolo, link). Estratta dai blueprint OLOthemes (CategoryRail/ProductRail con data-hscroll: carrello, terra, field&co). Render Vue == PHP (CategoryRa"
+  },
+  {
+    "file": "chart.js",
+    "type": "chart",
+    "name": "Grafico",
+    "icon": "dashicons-chart-area",
+    "category": "interactive",
+    "comment": "Tile Chart — split CONTENUTO/STILE (regola universale Olobuild). fields[] → tipo grafico, dati (items), orientamento, stacked, dataset_label, toggle show_* (legend/title/subtitle/tooltip), testi titolo/sottotitolo, posizione/allineamento legenda, comportamento"
+  },
+  {
+    "file": "chathero.js",
+    "type": "chathero",
+    "name": "Hero — Chat (Glow + Conversation Cards)",
+    "icon": "dashicons-format-chat",
+    "category": "marketing",
+    "comment": "Hero — Chat (Glow + Conversation Cards) : hero SaaS centrato su fondo scuro con GLOW radiale sfocato dietro un eyebrow PILL, un H1 multi-riga (parola/coda finale a gradiente accento), sub e fino a 2 CTA — seguito SOTTO da una finestra \"workspace\" stile chat co"
+  },
+  {
+    "file": "code.js",
+    "type": "code",
+    "name": "Codice",
+    "icon": "dashicons-editor-code",
+    "category": "text",
+    "comment": "Tile Code — split CONTENUTO/STILE. fields[] → codice, linguaggio, show_line_numbers, show_copy_button, wrap_lines styleFields[] → tema, font size, max height, shadow, border"
+  },
+  {
+    "file": "column.js",
+    "type": "column",
+    "name": "Colonna",
+    "icon": "dashicons-editor-insertmore",
+    "category": "structure",
+    "comment": "Tile Column — container puro: nessun contenuto editabile. fields[] → comportamento sticky (sticky è funzionale, non puro aspetto) styleFields[] → sfondo, larghezza responsive, flex AVANZATE → meta tecnico"
+  },
+  {
+    "file": "content.js",
+    "type": "content",
+    "name": "Contenuto",
+    "icon": "dashicons-text-page",
+    "category": "essential",
+    "comment": "Tile Content — split CONTENUTO/STILE (regola universale Olobuild). fields[] → testi (heading, text), tag titolo, immagine + posizione, sorgente hover, URL link, target, target effetti testo (heading/text/both), comportamento loop effetto, frasi typewriter styl"
+  },
+  {
+    "file": "countdown.js",
+    "type": "countdown",
+    "name": "Conto alla rovescia",
+    "icon": "dashicons-clock",
+    "category": "marketing",
+    "comment": "Tile Countdown — split CONTENUTO/STILE. fields[] → style/type, evergreen settings, target_date, expire_action+message+redirect, display_mode, unità da mostrare, etichette, separator, expired_message styleFields[] → preset, bg, typo, tipografia (numeri/etichett"
+  },
+  {
+    "file": "counter.js",
+    "type": "counter",
+    "name": "Contatore",
+    "icon": "dashicons-performance",
+    "category": "marketing",
+    "comment": "Tile Counter — split CONTENUTO/STILE. fields[] → number, label, prefix, suffix, icon, sfondo (image/video) styleFields[] → preset, bg, typo, text-effects, icon size, tipografia, colori, overlay, padding, radius, shadow, border"
+  },
+  {
+    "file": "countercircle.js",
+    "type": "countercircle",
+    "name": "Counter Circle",
+    "icon": "dashicons-marker",
+    "category": "content",
+    "comment": "Tile CounterCircle — split CONTENUTO/STILE. fields[] → value, max_value, prefix, suffix, title, title_position styleFields[] → preset, bg, typo, text-effects, size, stroke width, colori, animation duration, border"
+  },
+  {
+    "file": "cta-banner.js",
+    "type": "cta-banner",
+    "name": "CTA Banner",
+    "icon": "dashicons-megaphone",
+    "category": "layout",
+    "comment": "CTA Banner — banner CTA editoriale a 3 colonne (headline | sottotitolo | bottone). Standard Olobuild: i18n, separazione contenuto/stile, border-radius standard + hover, sfondo creativo unificato, color picker con globe."
+  },
+  {
+    "file": "darkmode.js",
+    "type": "darkmode",
+    "name": "Dark Mode Toggle",
+    "icon": "dashicons-admin-appearance",
+    "category": "interactive",
+    "comment": "Tile Dark Mode Toggle — split CONTENUTO/STILE (regola universale Olobuild). fields[] → stile UI (toggle/icon/button), icone scelte, testi pulsante, comportamento (salva preferenza, rispetta sistema) styleFields[] → dimensione icona, colori toggle, durata trans"
+  },
+  {
+    "file": "desclist.js",
+    "type": "desclist",
+    "name": "Lista descrittiva",
+    "icon": "dashicons-editor-justify",
+    "category": "text",
+    "comment": "Tile DescList — split CONTENUTO/STILE. fields[] → items (term+definition+link+icon), layout (stacked/inline/grid), show_icon styleFields[] → preset, bg, typo, text-effects, icona aspetto, tipografia, allineamento, colori, separator/striped, shadow, border"
+  },
+  {
+    "file": "divider.js",
+    "type": "divider",
+    "name": "Divisore",
+    "icon": "dashicons-minus",
+    "category": "essential",
+    "comment": "Tile Divider — split CONTENUTO/STILE (regola universale Olobuild). fields[] → testo/emoji centrale styleFields[] → stile linea, larghezza, spessore, colori, allineamento, spaziatura, bordo AVANZATE → meta tecnico"
+  },
+  {
+    "file": "facebookpage.js",
+    "type": "facebookpage",
+    "name": "Facebook Page",
+    "icon": "dashicons-facebook",
+    "category": "marketing",
+    "comment": "Tile Facebook Page — split CONTENUTO/STILE (regola universale Olobuild). fields[] → URL pagina, tab, toggle di visibilità (cover/facepile/header), lingua SDK, adapt_container styleFields[] → preset, typography_preset, dimensioni (width/height), allineamento, b"
+  },
+  {
+    "file": "featuredstory.js",
+    "type": "featuredstory",
+    "name": "Hero — Featured Story",
+    "icon": "dashicons-media-document",
+    "category": "marketing",
+    "comment": "Hero — Featured Story : hero editoriale \"lead\" a 2 colonne — grande immagine di copertina su un lato + colonna editoriale sull'altro (kicker + headline serif + standfirst/deck + byline/meta, CTA opzionali). Parametrizzata per riprodurre i blueprint OLOthemes \""
+  },
+  {
+    "file": "finder.js",
+    "type": "finder",
+    "name": "Finder (chip → risultato)",
+    "icon": "dashicons-search",
+    "category": "interactive",
+    "comment": "Finder — zona interattiva \"one-tap recommender\": chip opzione → result card. Estratto dai demo OLOthemes (setupFinder in fx.js, zona `data-finder`, presente in 18 temi). Token-first: un solo colore `zone_accent`. Modello dati: UN array `items[]` (ogni riga = c"
+  },
+  {
+    "file": "flipcard.js",
+    "type": "flipcard",
+    "name": "FlipCard",
+    "icon": "dashicons-image-flip-horizontal",
+    "category": "marketing",
+    "comment": "Tile FlipCard — split CONTENUTO/STILE. fields[] → fronte (image/video/icon/title/description), retro (image/video/icon/title/description/cta), animazione flip styleFields[] → preset, bg, typo, text-effects, fronte aspetto (icon size/color, bg, overlay, fit/pad"
+  },
+  {
+    "file": "floatingpanel.js",
+    "type": "floatingpanel",
+    "name": "Pannello flottante",
+    "icon": "dashicons-move",
+    "category": "interactive",
+    "comment": "Tile FloatingPanel — split CONTENUTO/STILE (regola universale Olobuild). fields[] → posizionamento, dimensioni, layout figli, trigger/visibilità, chiusura, animazione, responsive styleFields[] → aspetto pannello (sfondo, padding, radius, ombra, bordo) e stile "
+  },
+  {
+    "file": "form.js",
+    "type": "form",
+    "name": "Form Contatti",
+    "icon": "dashicons-email-alt",
+    "category": "marketing",
+    "comment": "Tile Form — split CONTENUTO/STILE. fields[] → campi del form, impostazioni invio (email_to/cc/from/subject/messaggi/redirect/anim), auto-reply, pulsante invio (text+icon+pos+align+fullwidth), multi-step toggle+style+labels, conditions toggle, file upload, arch"
+  },
+  {
+    "file": "fragment.js",
+    "type": "fragment",
+    "name": "Frammento",
+    "icon": "dashicons-screenoptions",
+    "category": "layout",
+    "comment": "Tile Fragment — split CONTENUTO/STILE (regola universale Olobuild). fields[] → placeholder (la tile non ha contenuto né stile, solo meta tecnico) styleFields[] → vuoto (nessuna proprietà visiva) AVANZATE → ID HTML, classi CSS"
+  },
+  {
+    "file": "gallery.js",
+    "type": "gallery",
+    "name": "Galleria",
+    "icon": "dashicons-format-gallery",
+    "category": "media",
+    "comment": "Tile Gallery — split CONTENUTO/STILE (regola universale Olobuild). fields[] → immagini, filter_bar, random_order, show_caption (visibilità didascalie) styleFields[] → preset, bg, typo, layout, griglia, gap, height, fit, radius, mobile_cols, fx kenburns/hover/v"
+  },
+  {
+    "file": "glowgallery.js",
+    "type": "glowgallery",
+    "name": "Hero — Glow Gallery",
+    "icon": "dashicons-buddicons-activity",
+    "category": "marketing",
+    "comment": "Hero — Glow Gallery : hero EVENTI centrato su fondo scuro, con GLOW radiale rosa sfocato dietro lo stack di testo (eyebrow, H1 serif con parola corsiva accento, sub, fino a 2 CTA) e, SOTTO, una STRISCIA di tessere media verticali (3 di default, ratio 3/4) con "
+  },
+  {
+    "file": "glowhero.js",
+    "type": "glowhero",
+    "name": "Hero — Glow Statement",
+    "icon": "dashicons-superhero",
+    "category": "marketing",
+    "comment": "Hero — Glow Statement : hero centrato a tutto schermo su fondo scuro con GLOW radiale sfocato dietro un titolo editoriale gigante multi-riga. Ogni riga puo' essere normale, accento-colore, OUTLINE (text-stroke, fill trasparente) o accento a gradiente. Eyebrow "
+  },
+  {
+    "file": "goo.js",
+    "type": "goo",
+    "name": "Sfondo Goo / Aurora",
+    "icon": "dashicons-art",
+    "category": "atmosphere",
+    "comment": "Tile Goo / Aurora — sfondo \"metaball\" decorativo per Section. Bucket C, famiglia A (effetti guidati dal cursore). Scheda §4 GooBackground (tema 61) + variante Aurora (temi 45/48 e tile-mancanti §2). Due modalità su un solo tile: - goo → N blob di colore dentro"
+  },
+  {
+    "file": "grid.js",
+    "type": "grid",
+    "name": "Griglia",
+    "icon": "dashicons-grid-view",
+    "category": "layout",
+    "comment": "Tile Grid — split CONTENUTO/STILE (regola universale Olobuild). fields[] → items (content-items), colonne, gap, equal_height, image_ratio, image_fit, image_zoom, image_animation (behavior), toggle overlay_text, posizione overlay, toggle show_filter, etichetta "
+  },
+  {
+    "file": "headline.js",
+    "type": "headline",
+    "name": "Titolo",
+    "icon": "dashicons-heading",
+    "category": "essential",
+    "comment": "Tile Headline — split CONTENUTO/STILE (regola universale Olobuild). fields[] → solo dati testuali (heading, subtitle, tag HTML) styleFields[] → tutto l'aspetto (preset, colori, tipografia, decorazione, effetti, ombra, bordo) AVANZATE → meta tecnico (id/class/c"
+  },
+  {
+    "file": "hero-split.js",
+    "type": "hero-split",
+    "name": "Hero Split",
+    "icon": "dashicons-columns",
+    "category": "layout",
+    "comment": "Hero Split — layout editoriale bicolonna. Standard Olobuild applicati (docs/TILE-PERFETTA.md): - tab CONTENUTO contiene solo testi e dati editabili (no colori, no grafica) - tab STILE contiene tutti gli aspetti visivi (color, size, radius, layout) - tutte le o"
+  },
+  {
+    "file": "hero.js",
+    "type": "hero",
+    "name": "Hero",
+    "icon": "dashicons-cover-image",
+    "category": "layout",
+    "comment": "Tile Hero — applica la regola universale Olobuild: tab CONTENUTO → fields[] solo dati testuali (titolo, testi CTA, URL, tag HTML) tab STILE → styleFields[] tutto l'aspetto (colori, tipografia, layout, effetti, CTA stile) + styleFieldsBase (sfondo, padding/marg"
+  },
+  {
+    "file": "hiddenpop.js",
+    "type": "hiddenpop",
+    "name": "Popup Nascosto",
+    "icon": "dashicons-flag",
+    "category": "interactive",
+    "comment": "Tile HiddenPop — split CONTENUTO/STILE (regola universale Olobuild). fields[] → modalità, testi, immagine, CTA, trigger, frequenza, display rules styleFields[] → aspetto modale (sfondo, colori, ombra, radius, overlay, animazione, padding, bordo) AVANZATE → met"
+  },
+  {
+    "file": "hotspot.js",
+    "type": "hotspot",
+    "name": "Hotspot",
+    "icon": "dashicons-location-alt",
+    "category": "interactive",
+    "comment": "Tile Hotspot — split CONTENUTO/STILE. fields[] → immagine, markers (pos_x+pos_y+title+description+icon+tooltip_position) styleFields[] → preset, bg, typo, image height + radius, text-effects, marker color/size/pulse, tooltip colori/width, border"
+  },
+  {
+    "file": "hotspots.js",
+    "type": "hotspots",
+    "name": "Hotspots (marker interattivi)",
+    "icon": "dashicons-location",
+    "category": "interactive",
+    "comment": "Hotspots — pannello con marker posizionati (x%,y%): click → scheda info. Estratto dai demo OLOthemes (data-hotspot). Image-free: pannello astratto. Render Vue == PHP (HotspotsTile.vue). Runtime inline scoped, senza '&&'."
+  },
+  {
+    "file": "hoursstrip.js",
+    "type": "hoursstrip",
+    "name": "Hours Strip",
+    "icon": "dashicons-clock",
+    "category": "layout",
+    "comment": "Hours Strip — banda orari di apertura (giorno · orario · nota) con divisori. Token-first: orario dal font heading del tema, giorno/nota in monospace."
+  },
+  {
+    "file": "hoverlist.js",
+    "type": "hoverlist",
+    "name": "Hover List",
+    "icon": "dashicons-art",
+    "category": "layout",
+    "comment": "Hover List — lista a righe con pastiglia colore (swatch), nome e sotto-etichetta, con indentazione al passaggio del mouse e un'anteprima flottante (peek) che segue il cursore. Pensata per shade finder / liste curate. Token-first."
+  },
+  {
+    "file": "html.js",
+    "type": "html",
+    "name": "HTML / Codice",
+    "icon": "dashicons-editor-code",
+    "category": "text",
+    "comment": "Tile HTML — split CONTENUTO/STILE (regola universale Olobuild). fields[] → codice HTML, opzione sandbox styleFields[] → ombra AVANZATE → meta tecnico"
+  },
+  {
+    "file": "icon.js",
+    "type": "icon",
+    "name": "Icona",
+    "icon": "dashicons-star-filled",
+    "category": "essential",
+    "comment": "Tile Icon — split CONTENUTO/STILE (regola universale Olobuild). fields[] → icona, link styleFields[] → dimensione, colori, sfondo, forma, padding, hover-anim, rotazione, ombra, bordo AVANZATE → meta tecnico"
+  },
+  {
+    "file": "iconbox.js",
+    "type": "iconbox",
+    "name": "Icon Box",
+    "icon": "dashicons-star-filled",
+    "category": "content",
+    "comment": "Tile IconBox — split CONTENUTO/STILE. fields[] → icona, title, description, link (URL+testo) styleFields[] → preset, bg, typo, text-effects, icona aspetto, tipografia titolo, spaziature, colori, sfondo interno box, padding, radius, shadow, border"
+  },
+  {
+    "file": "iconlist.js",
+    "type": "iconlist",
+    "name": "Lista icone",
+    "icon": "dashicons-list-view",
+    "category": "text",
+    "comment": "Tile IconList — split CONTENUTO/STILE. fields[] → items (icon+text+link+color), layout (vertical/horizontal), divider toggle styleFields[] → preset, bg, typo, text-effects, icona aspetto (color/size/shape/bg), testo aspetto, gap, divider color, shadow, border"
+  },
+  {
+    "file": "icontabs.js",
+    "type": "icontabs",
+    "name": "Tab a Icone",
+    "icon": "dashicons-menu-alt",
+    "category": "interactive",
+    "comment": "Tile IconTabs — split CONTENUTO/STILE. fields[] → schede (icon+label+heading+title+content+link), default_index styleFields[] → preset, bg, typo, effetti, text-effects, pill/card colori, bordo card, border"
+  },
+  {
+    "file": "image.js",
+    "type": "image",
+    "name": "Immagine",
+    "icon": "dashicons-format-image",
+    "category": "essential",
+    "comment": "Tile Image — split CONTENUTO/STILE (regola universale Olobuild). fields[] → asset (url, hover_image/video), alt, didascalia, link styleFields[] → preset, dimensioni, fit/position, allineamento, filtri, hover-anim, lightbox, ombra, bordo AVANZATE → meta tecnico"
+  },
+  {
+    "file": "imagehero.js",
+    "type": "imagehero",
+    "name": "Hero — Image Overlay",
+    "icon": "dashicons-format-image",
+    "category": "marketing",
+    "comment": "Hero — Image Overlay : hero full-bleed con immagine di sfondo, velo a gradiente scuro (verticale + opzionale laterale) e blocco testo sovrapposto (eyebrow+dot, titolo con parola-accento, sottotitolo, fino a 2 CTA, riga meta/data opzionale, hint di scroll). Una"
+  },
+  {
+    "file": "imgcompare.js",
+    "type": "imgcompare",
+    "name": "Confronto Immagini",
+    "icon": "dashicons-image-flip-horizontal",
+    "category": "media",
+    "comment": "Tile Image Compare — split CONTENUTO/STILE (regola universale Olobuild). fields[] → 2 immagini before/after, etichette + show_labels, posizione iniziale, orientamento, autoplay+timing styleFields[] → preset, typo, slider aspect (colore/dimensione maniglia/spes"
+  },
+  {
+    "file": "info-cards.js",
+    "type": "info-cards",
+    "name": "Info Cards",
+    "icon": "dashicons-grid-view",
+    "category": "layout",
+    "comment": "Info Cards — griglia parametrica di card riusabile. CONTENUTO: solo testi, dati item-level (incluso media per item). STILE: colori, dimensioni, sfondi globali, hover, layout griglia."
+  },
+  {
+    "file": "inner-columns.js",
+    "type": "inner-columns",
+    "name": "Colonne interne",
+    "icon": "dashicons-table-col-after",
+    "category": "layout",
+    "comment": "Tile Inner-columns — container puro: layout strutturale come unico \"dato\". fields[] → layout (n. sotto-colonne) — definizione strutturale styleFields[] → gap, allineamento, stacking, flex AVANZATE → meta tecnico"
+  },
+  {
+    "file": "instagram.js",
+    "type": "instagram",
+    "name": "Instagram",
+    "icon": "dashicons-instagram",
+    "category": "marketing",
+    "comment": "Tile Instagram — split CONTENUTO/STILE (regola universale Olobuild). fields[] → URL, tipo embed, toggle didascalia styleFields[] → preset, typography_preset, larghezza, colore sfondo, border-radius, allineamento, bordo defaults → identico (nessuna modifica)"
+  },
+  {
+    "file": "introsplit.js",
+    "type": "introsplit",
+    "name": "Intro Split (testo + stats + media badge)",
+    "icon": "dashicons-align-pull-left",
+    "category": "marketing",
+    "comment": "Intro Split — feature split editoriale: testo (eyebrow + titolo gigante con parola-accento + lead + N statistiche inline + CTA) accanto a un media (slot/strisce) con badge d'angolo (numero + label). Estratta dal blueprint OLOthemes (.vd-intro / SplitText + Cou"
+  },
+  {
+    "file": "killnextprev.js",
+    "type": "killnextprev",
+    "name": "Kill Next/Prev",
+    "icon": "dashicons-hidden",
+    "category": "navigation",
+    "comment": "Tile KillNextPrev — split CONTENUTO/STILE (regola universale Olobuild). fields[] → placeholder (tile utility senza opzioni) styleFields[] → vuoto (nessuna proprietà visiva) AVANZATE → meta tecnico (id/class/condizioni)"
+  },
+  {
+    "file": "langswitcher.js",
+    "type": "langswitcher",
+    "name": "Selettore lingua",
+    "icon": "dashicons-translation",
+    "category": "navigation",
+    "comment": "Tile Lang Switcher — split CONTENUTO/STILE (regola universale Olobuild). fields[] → stile contenutistico (bandiere/codici/nomi), layout (inline/dropdown/tabs/floating), posizione fluttuante, bordo tabs, formato etichetta, toggle visibilità (show_label, show_dr"
+  },
+  {
+    "file": "leaderboard.js",
+    "type": "leaderboard",
+    "name": "Classifica (barre XP)",
+    "icon": "dashicons-awards",
+    "category": "marketing",
+    "comment": "Tile Leaderboard — classifica con barre XP animate (famiglia E · bucket C). Reference visiva: handoff-tile-speciali/temi/60-tema-community-gamer.html (#board). fields[] → source (manual/query), rows[] (nome|ruolo|valore|max), animateOnView, highlightTop, mostr"
+  },
+  {
+    "file": "lightbox.js",
+    "type": "lightbox",
+    "name": "Lightbox",
+    "icon": "dashicons-format-gallery",
+    "category": "media",
+    "comment": "Tile Lightbox — split CONTENUTO/STILE (regola universale Olobuild). fields[] → items (title+type+url+thumb+caption), show_caption (visibilità) styleFields[] → preset, bg, typo, text-effects, layout (cols/gap/ratio/radius), overlay style, animation, shadow, bor"
+  },
+  {
+    "file": "linkinbio.js",
+    "type": "linkinbio",
+    "name": "Link in Bio",
+    "icon": "dashicons-smartphone",
+    "category": "marketing",
+    "comment": "Tile Link in Bio — split CONTENUTO/STILE (regola universale Olobuild). fields[] → items (link), dati profilo (immagine, nome, bio), toggle show_social_icons styleFields[] → preset, bg, typography_preset, textEffectsFields, layout (max_width, gap, text_align), "
+  },
+  {
+    "file": "list.js",
+    "type": "list",
+    "name": "Lista",
+    "icon": "dashicons-editor-ul",
+    "category": "text",
+    "comment": "Tile List — split CONTENUTO/STILE. fields[] → items (text+link+icon), icon_default styleFields[] → preset, bg, typo, text-effects, colore icona/testo, allineamento, spaziature, padding, shadow, border"
+  },
+  {
+    "file": "livesearch.js",
+    "type": "livesearch",
+    "name": "Ricerca Live",
+    "icon": "dashicons-search",
+    "category": "navigation",
+    "comment": "Tile LiveSearch — split CONTENUTO/STILE. fields[] → placeholder + animato + parole, modalità (espansa/compatta/modal/inline), modal width/backdrop, debounce/min_chars, risultati (max/columns/show_all/text/thumb/excerpt/title_only/no_results), filtri (post_type"
+  },
+  {
+    "file": "loginform.js",
+    "type": "loginform",
+    "name": "Login / Registrazione",
+    "icon": "dashicons-lock",
+    "category": "marketing",
+    "comment": "Tile LoginForm — split CONTENUTO/STILE. fields[] → mode, redirect, remember/lost/avatar toggles, titoli/testi pulsanti, funzionalità visive (icone/toggle password/strength/regole), tab_style, termini, social login (URLs+toggles), campi registrazione styleField"
+  },
+  {
+    "file": "lookbookmixer.js",
+    "type": "lookbookmixer",
+    "name": "Lookbook Mixer",
+    "icon": "dashicons-randomize",
+    "category": "layout",
+    "comment": "Lookbook Mixer — zona interattiva \"componi la tua routine\": più slot, ognuno con prev/next che scorre le opzioni (nome · prezzo · colore); una card somma il totale live. Le voci sono piatte con un campo \"step\" (gruppo): il render le raggruppa per step."
+  },
+  {
+    "file": "lottie.js",
+    "type": "lottie",
+    "name": "Lottie Animation",
+    "icon": "dashicons-format-video",
+    "category": "media",
+    "comment": "Tile Lottie — split CONTENUTO/STILE (regola universale Olobuild). fields[] → file Lottie (.json), loop, trigger, hover action styleFields[] → preset, typo preset, dimensioni, speed, allineamento, ombra, bordo AVANZATE → meta tecnico"
+  },
+  {
+    "file": "map.js",
+    "type": "map",
+    "name": "Mappa Pro",
+    "icon": "dashicons-location",
+    "category": "media",
+    "comment": "Tile Map (Pro) — split CONTENUTO/STILE (regola universale Olobuild). fields[] → mode/sorgente dati (single/dynamic/locations/services), coordinate/indirizzo, marker toggle/tipo/popup, toggle filtri/popup, sorgente dati CPT, ranges filtri, toggle interazione (f"
+  },
+  {
+    "file": "marquee.js",
+    "type": "marquee",
+    "name": "Nastro Scorrevole",
+    "icon": "dashicons-slides",
+    "category": "media",
+    "comment": "Tile Marquee — split CONTENUTO/STILE. fields[] → content_type (text/images), text_items, separator, images, image_height, movimento (speed/direction/pause_hover/gap) styleFields[] → preset, bg, typo, colori (bg/text), tipografia (size/weight/spacing/transform)"
+  },
+  {
+    "file": "maskedvideohero.js",
+    "type": "maskedvideohero",
+    "name": "Hero — Masked Video",
+    "icon": "dashicons-format-video",
+    "category": "marketing",
+    "comment": "Hero — Masked Video : hero full-bleed con pannello mascherato (bordo inferiore ad arco via radial-mask), media/video di sfondo (slot, placeholder a strisce se vuoto), watermark ghost gigante, pill con dot, H1 gigante uppercase con parola-accento, riga sub + 2 "
+  },
+  {
+    "file": "masthead.js",
+    "type": "masthead",
+    "name": "Hero — Masthead (Dispatch)",
+    "icon": "dashicons-text-page",
+    "category": "marketing",
+    "comment": "Hero — Masthead (Dispatch) : testata di giornale stampato. Riga edizione/data · nameplate serif gigante centrato · azioni a destra, tra righe sottili (hairline rules). Sotto, lead-story: kicker, titolo serif (riga normale + riga corsiva), standfirst, firma. Me"
+  },
+  {
+    "file": "matchfixtures.js",
+    "type": "matchfixtures",
+    "name": "Match Fixtures",
+    "icon": "dashicons-calendar-alt",
+    "category": "content",
+    "comment": "Match Fixtures — rail di partite (sport): data/ora+luogo, badge lega + giornata, due crest squadra (monogramma colorato), punteggio o \"vs\", riga squadra/venue. Estratta dal blueprint OLOthemes \"MatchFixtures\" (verdano). Render Vue == PHP. Statica (nessun JS). "
+  },
+  {
+    "file": "mediacta.js",
+    "type": "mediacta",
+    "name": "Media CTA (sfondo full-bleed)",
+    "icon": "dashicons-megaphone",
+    "category": "marketing",
+    "comment": "Media CTA — call-to-action full-bleed con media/video di sfondo (slot, strisce se vuoto) + velo gradiente + contenuto centrato (eyebrow + titolo gigante con accento + sub + CTA). Estratta dal blueprint OLOthemes (.vd-cta membership). Render Vue == PHP. Nessun "
+  },
+  {
+    "file": "megamenu.js",
+    "type": "megamenu",
+    "name": "Mega Menu",
+    "icon": "dashicons-menu-alt3",
+    "category": "navigation",
+    "comment": "Tile Mega Menu — split CONTENUTO/STILE (regola universale Olobuild). fields[] → menu WP, logo asset, panel templates, mega mode, social URLs, extra links, topbar contenuti + CTA, search tile, visibilità componenti, header mode styleFields[] → preset, bg, typo,"
+  },
+  {
+    "file": "menuanchor.js",
+    "type": "menuanchor",
+    "name": "Ancora Menu",
+    "icon": "dashicons-admin-links",
+    "category": "navigation",
+    "comment": "Tile Menu Anchor — split CONTENUTO/STILE (regola universale Olobuild). fields[] → ID ancora, etichetta builder styleFields[] → offset (px), text-effects, typography preset AVANZATE → meta tecnico"
+  },
+  {
+    "file": "mixer.js",
+    "type": "mixer",
+    "name": "Mixer (blend colore)",
+    "icon": "dashicons-art",
+    "category": "interactive",
+    "comment": "Mixer — zona interattiva \"fondi swatch → preview\": seleziona fino a `max` campioni colore e vedi la media RGB. Estratto dai demo OLOthemes (setupMixer in fx.js). Render Vue == PHP (MixerTile.vue). Blend = media RGB (no color-mix, robusto)."
+  },
+  {
+    "file": "mobilebar.js",
+    "type": "mobilebar",
+    "name": "Mobile Bar",
+    "icon": "dashicons-smartphone",
+    "category": "navigation",
+    "comment": "Tile MobileBar — split CONTENUTO/STILE (regola universale Olobuild). fields[] → sorgenti dati (logo image, logo link, menu WP), toggle visibilità (ricerca, separatori), placeholder ricerca, breakpoint styleFields[] → aspetto barra/hamburger/pannello (sfondo, c"
+  },
+  {
+    "file": "nav.js",
+    "type": "nav",
+    "name": "Nav",
+    "icon": "dashicons-menu",
+    "category": "navigation",
+    "comment": "Tile Nav — split CONTENUTO/STILE (regola universale Olobuild). fields[] → items (label+url+icona), visibilità icone, target link, nofollow styleFields[] → preset, bg, typo, direzione, allineamento, stile, indicatore attivo, hover, colori, separatori, padding, "
+  },
+  {
+    "file": "navmenu.js",
+    "type": "navmenu",
+    "name": "Menu Nav",
+    "icon": "dashicons-menu",
+    "category": "navigation",
+    "comment": "Tile NavMenu — split CONTENUTO/STILE (regola universale Olobuild). fields[] → menu WP, stile struttura (navbar/vertical/subnav), search tile, mega menu sorgente, button voci, mobile toggle/breakpoint styleFields[] → preset, bg, typo preset, allineamento, stile"
+  },
+  {
+    "file": "newsletter.js",
+    "type": "newsletter",
+    "name": "Newsletter",
+    "icon": "dashicons-email-alt",
+    "category": "marketing",
+    "comment": "Tile Newsletter — split CONTENUTO/STILE. fields[] → title, subtitle, icon (type+name+image), form (layout/show_name/placeholders/button/privacy), successo (message/animation/redirect), content lock, integrazione email provider, anti-spam styleFields[] → preset"
+  },
+  {
+    "file": "newsticker.js",
+    "type": "newsticker",
+    "name": "News Ticker",
+    "icon": "dashicons-megaphone",
+    "category": "dynamic",
+    "comment": "Tile NewsTicker — split CONTENUTO/STILE. fields[] → items (title+url+badge+icon+timestamp), direction, etichetta (show+text+icon+position), comportamento (autoscroll/loop/random/stop_click/pause_hover), animazione tipo + marquee, controlli UI (frecce/indicator"
+  },
+  {
+    "file": "offcanvas.js",
+    "type": "offcanvas",
+    "name": "Off-Canvas",
+    "icon": "dashicons-slides",
+    "category": "interactive",
+    "comment": "Tile OffCanvas — split CONTENUTO/STILE. fields[] → trigger (visibility/testo/icona/selector esterno), posizione, transition, overlay toggle, close button toggle styleFields[] → dimensioni pannello, colori pannello/overlay/close, ombra, bordo"
+  },
+  {
+    "file": "olo_room_availability.js",
+    "type": "olo_room_availability",
+    "name": "Sala - Disponibilità",
+    "icon": "dashicons-calendar-alt",
+    "category": "olo-space",
+    "comment": "Tile Room Availability — split CONTENUTO/STILE (regola universale Olobuild). fields[] → titolo, toggle legenda/navigazione, mesi navigabili styleFields[] → sfondo, tipografia, stile card, raggio celle (con hover), colori stato, bordo"
+  },
+  {
+    "file": "olo_room_calendar.js",
+    "type": "olo_room_calendar",
+    "name": "Sala - Calendario",
+    "icon": "dashicons-calendar-alt",
+    "category": "olo-space",
+    "comment": "Tile Room Calendar — split CONTENUTO/STILE (regola universale Olobuild). fields[] → titolo, vista iniziale, toggle viste/conteggio, orari visibili styleFields[] → sfondo, tipografia, altezza, stile barra, colori sfondo giorni, bordo"
+  },
+  {
+    "file": "olo_room_contacts.js",
+    "type": "olo_room_contacts",
+    "name": "Sala - Contatti",
+    "icon": "dashicons-phone",
+    "category": "olo-space",
+    "comment": "Tile Room Contacts — split CONTENUTO/STILE (regola universale Olobuild). fields[] → titolo sezione styleFields[] → sfondo, tipografia, effetti testo, stile (card/flat), bordo"
+  },
+  {
+    "file": "olo_room_description.js",
+    "type": "olo_room_description",
+    "name": "Sala - Descrizione",
+    "icon": "dashicons-editor-paragraph",
+    "category": "olo-space",
+    "comment": "Tile Room Description — split CONTENUTO/STILE (regola universale Olobuild). fields[] → placeholder (tile a contenuto dinamico, descrizione dal CPT sala) styleFields[] → sfondo, tipografia, bordo"
+  },
+  {
+    "file": "olo_room_gallery.js",
+    "type": "olo_room_gallery",
+    "name": "Sala - Galleria",
+    "icon": "dashicons-format-gallery",
+    "category": "olo-space",
+    "comment": "Tile Room Gallery — split CONTENUTO/STILE (regola universale Olobuild). fields[] → comportamento (lightbox/autoplay/kenburns/transition), controlli (frecce/dots/counter) styleFields[] → sfondo, tipografia, layout (colonne/altezze), bordo"
+  },
+  {
+    "file": "olo_room_grid.js",
+    "type": "olo_room_grid",
+    "name": "Sale - Mappa e Lista",
+    "icon": "dashicons-building",
+    "category": "olo-space",
+    "comment": "Tile Room Grid — split CONTENUTO/STILE (regola universale Olobuild). fields[] → filtri attivi, configurazione mappa (layout/zoom/auto-fit), paginazione, toggle contenuto card (image/gallery/video/excerpt/equipment/price) styleFields[] → sfondo tile, tipografia"
+  },
+  {
+    "file": "olo_room_hero.js",
+    "type": "olo_room_hero",
+    "name": "Sala - Hero",
+    "icon": "dashicons-format-image",
+    "category": "olo-space",
+    "comment": "Tile Room Hero — split CONTENUTO/STILE (regola universale Olobuild). fields[] → toggle badge/indirizzo, testo CTA, toggle overlay styleFields[] → sfondo, tipografia, altezza, opacità overlay, bordo"
+  },
+  {
+    "file": "olo_room_info.js",
+    "type": "olo_room_info",
+    "name": "Sala - Informazioni",
+    "icon": "dashicons-info-outline",
+    "category": "olo-space",
+    "comment": "Tile Room Info — split CONTENUTO/STILE (regola universale Olobuild). fields[] → placeholder (tile a contenuto dinamico, info dal CPT sala) styleFields[] → sfondo, tipografia, stile (card/flat), bordo"
+  },
+  {
+    "file": "olo_room_pricing.js",
+    "type": "olo_room_pricing",
+    "name": "Sala - Tariffa",
+    "icon": "dashicons-money-alt",
+    "category": "olo-space",
+    "comment": "Tile Room Pricing — split CONTENUTO/STILE (regola universale Olobuild). fields[] → placeholder (tile a contenuto dinamico, dati tariffa dal CPT) styleFields[] → sfondo, tipografia, stile (card/flat), bordo"
+  },
+  {
+    "file": "olo_room_related.js",
+    "type": "olo_room_related",
+    "name": "Sale simili",
+    "icon": "dashicons-grid-view",
+    "category": "olo-space",
+    "comment": "Tile Room Related — split CONTENUTO/STILE (regola universale Olobuild). fields[] → criterio selezione, numero, layout, autoplay/marquee behavior, titolo, toggle elementi card (image/type/district/capacity/price/link), testo pulsante styleFields[] → sfondo, tip"
+  },
+  {
+    "file": "osmmap.js",
+    "type": "osmmap",
+    "name": "Mappa",
+    "icon": "dashicons-location-alt",
+    "category": "content",
+    "comment": "Tile OSM Map — split CONTENUTO/STILE (regola universale Olobuild). fields[] → indirizzo/coordinate, marker (toggle/tipo/popup/immagine), interazione (zoom/dragging) styleFields[] → preset, typography_preset, dimensioni, border-radius, tile_layer, colore/dim ma"
+  },
+  {
+    "file": "overlay.js",
+    "type": "overlay",
+    "name": "Overlay",
+    "icon": "dashicons-format-image",
+    "category": "media",
+    "comment": "Tile Overlay — split CONTENUTO/STILE (regola universale Olobuild). fields[] → immagine, titolo, descrizione, URL link + target, effetto hover (comportamento) styleFields[] → preset, sfondo, tipografia, border-radius, colore overlay/testo, opacità overlay, alte"
+  },
+  {
+    "file": "overlaygrid.js",
+    "type": "overlaygrid",
+    "name": "Overlay Grid",
+    "icon": "dashicons-grid-view",
+    "category": "interactive",
+    "comment": "Tile Overlay Grid — split CONTENUTO/STILE (regola universale Olobuild). fields[] → items (content-items), colonne (desktop/mobile), posizione overlay, altezza, dimensione titolo, visibilità CTA + testo CTA, posizione ribbon, hover_effect/hover_overlay (comport"
+  },
+  {
+    "file": "overlayslider.js",
+    "type": "overlayslider",
+    "name": "Overlay Slider",
+    "icon": "dashicons-format-gallery",
+    "category": "interactive",
+    "comment": "Tile Overlay Slider — split CONTENUTO/STILE (regola universale Olobuild). fields[] → slides (content-items), colonne (responsive), proporzione/altezza/adattamento immagine, posizione overlay, dimensione titolo, hover_effect/hover_overlay (comportamento), visib"
+  },
+  {
+    "file": "pagetitlebar.js",
+    "type": "pagetitlebar",
+    "name": "Page Title Bar",
+    "icon": "dashicons-format-aside",
+    "category": "structure",
+    "comment": "Tile Page Title Bar — split CONTENUTO/STILE (regola universale Olobuild). fields[] → title_tag (HTML), subtitle (testo), toggle show_breadcrumbs, breadcrumb_separator, asset sfondo (bg_image), toggle bg_parallax, toggle border_bottom styleFields[] → preset, bg"
+  },
+  {
+    "file": "pagination.js",
+    "type": "pagination",
+    "name": "Paginazione",
+    "icon": "dashicons-ellipsis",
+    "category": "navigation",
+    "comment": "Tile Pagination — split CONTENUTO/STILE. fields[] → modalità (numerata/prev-next/both), show_first_last, prev/next text styleFields[] → preset, bg, typo, alignment, gap/padding/font/radius/border, colori (testo/sfondo/bordo/attivo), border"
+  },
+  {
+    "file": "panel.js",
+    "type": "panel",
+    "name": "Pannello",
+    "icon": "dashicons-id-alt",
+    "category": "interactive",
+    "comment": "Tile Panel — split CONTENUTO/STILE (regola universale Olobuild). fields[] → titolo, meta, contenuto, media (image/video), link styleFields[] → preset, effect tweaks, text-effects, dimensioni media, tipografia, padding card, radius, shadow, border, bg AVANZATE "
+  },
+  {
+    "file": "panelslider.js",
+    "type": "panelslider",
+    "name": "Panel Slider",
+    "icon": "dashicons-slides",
+    "category": "interactive",
+    "comment": "Tile Panel Slider — split CONTENUTO/STILE (regola universale Olobuild). fields[] → panels (content-items), colonne (responsive), posizione immagine (top/bottom/bg/side), proporzione/altezza/fit immagine, hover behaviors (lift/scale/image_zoom), visibilità frec"
+  },
+  {
+    "file": "particlefx.js",
+    "type": "particlefx",
+    "name": "Particelle (ParticleFX)",
+    "icon": "dashicons-art",
+    "category": "atmosphere",
+    "comment": "Tile ParticleFX — sistema di particelle a tema (preset), canvas a tutta sezione dietro al contenuto. Bucket C, famiglia C (canvas/generativo). Reference visivi (snippet runtime portati nel render PHP): - petals → 36-tema-wedding.html (petali che cadono, drift "
+  },
+  {
+    "file": "paymentbuttons.js",
+    "type": "paymentbuttons",
+    "name": "Pulsanti Pagamento",
+    "icon": "dashicons-money-alt",
+    "category": "marketing",
+    "comment": "Tile PaymentButtons — split CONTENUTO/STILE (regola universale Olobuild). fields[] → provider, importo, valuta, descrizione, testo pulsante, URL success/cancel, chiavi Stripe/PayPal (sorgente dati esterna) styleFields[] → sfondo creativo, typography preset, al"
+  },
+  {
+    "file": "pdfpro.js",
+    "type": "pdfpro",
+    "name": "PDF Pro",
+    "icon": "dashicons-media-document",
+    "category": "media",
+    "comment": "Tile PDF Pro — split CONTENUTO/STILE (regola universale Olobuild). fields[] → pdf_url (sorgente), mode (visualizzazione), start_page, initial_zoom, theme, toggle controlli toolbar (show_toolbar + show_*), toggle barra inferiore (show_bottombar + show_bottombar"
+  },
+  {
+    "file": "pdfviewer.js",
+    "type": "pdfviewer",
+    "name": "PDF Viewer",
+    "icon": "dashicons-media-document",
+    "category": "media",
+    "comment": "Tile PDF Viewer — split CONTENUTO/STILE (regola universale Olobuild). fields[] → pdf_url (sorgente), mode (visualizzazione), start_page, initial_zoom, theme, toggle controlli toolbar (show_toolbar + show_*), toggle barra inferiore (show_bottombar + show_bottom"
+  },
+  {
+    "file": "photocover.js",
+    "type": "photocover",
+    "name": "Hero — Photo Cover",
+    "icon": "dashicons-format-image",
+    "category": "marketing",
+    "comment": "Hero — Photo Cover (Frame) : hero editoriale full-bleed con grande foto di copertina incorniciata e overlay tipografico (kicker mono + titolo gigante uppercase + riga meta/ byline mono) ancorato in basso a sinistra. Signature: la cornice fotografica precisa + "
+  },
+  {
+    "file": "physicsbin.js",
+    "type": "physicsbin",
+    "name": "Cesto Fisico",
+    "icon": "dashicons-games",
+    "category": "interactive",
+    "comment": "Tile PhysicsBin — giocattoli trascinabili con gravità, rimbalzo e collisioni. (famiglia C, bucket C · rif. handoff-tile-speciali/temi/69-tema-toy-store.html \"tiny physics bin\") fields[] → items[] (forma/colore/raggio/glifo/immagine), gravity, restitution, fric"
+  },
+  {
+    "file": "popover.js",
+    "type": "popover",
+    "name": "Popover",
+    "icon": "dashicons-location-alt",
+    "category": "interactive",
+    "comment": "Tile Popover — split CONTENUTO/STILE (regola universale Olobuild). fields[] → image (asset), markers (items con coordinate, titolo, contenuto, immagine popup), image_alt styleFields[] → preset, bg, typography_preset, textEffectsFields, image_height, colori mar"
+  },
+  {
+    "file": "popup.js",
+    "type": "popup",
+    "name": "Popup",
+    "icon": "dashicons-external",
+    "category": "interactive",
+    "comment": "Tile Popup — split CONTENUTO/STILE. fields[] → mode (simple/template), pulsante (text+icon+fullwidth), contenuto (title/content/image/template_id), trigger avanzati, regole display styleFields[] → preset, bg, typo, effetti preset, text-effects, pulsante stile "
+  },
+  {
+    "file": "portfolio.js",
+    "type": "portfolio",
+    "name": "Portfolio",
+    "icon": "dashicons-portfolio",
+    "category": "dynamic",
+    "comment": "Tile Portfolio — split CONTENUTO/STILE (regola universale Olobuild). fields[] → sorgente dati (manual/posts/custom_taxonomy), post_type/taxonomy/posts_per_page, items array (manual), modalità layout, colonne, proporzione immagine, hover_effect/animation (compo"
+  },
+  {
+    "file": "postgrid.js",
+    "type": "postgrid",
+    "name": "Griglia articoli",
+    "icon": "dashicons-grid-view",
+    "category": "dynamic",
+    "comment": "Tile PostGrid — split CONTENUTO/STILE. fields[] → query (post_type/posts_per_page/orderby/order/meta_key/meta filter), filtri (taxonomy, show_filters, show_sort, sort_options), contenuto card (show_image/category/excerpt/meta/price), link, paginazione, ribbon,"
+  },
+  {
+    "file": "postmeta.js",
+    "type": "postmeta",
+    "name": "Post Meta",
+    "icon": "dashicons-media-text",
+    "category": "dynamic",
+    "comment": "Tile PostMeta — split CONTENUTO/STILE. fields[] → visibilità (date/author/categories/tags/comments/reading_time), format data, layout, separator, item_gap, icone, link autore/category styleFields[] → preset, bg, typo, effetti preset, tipografia (font/weight/tr"
+  },
+  {
+    "file": "postnavigation.js",
+    "type": "postnavigation",
+    "name": "Navigazione articolo",
+    "icon": "dashicons-arrow-left-alt",
+    "category": "navigation",
+    "comment": "Tile PostNavigation — split CONTENUTO/STILE. fields[] → show_thumbnail, show_label, prev_label, next_label, show_title, title_length, stesso termine tassonomia styleFields[] → preset, bg, typo, layout, gap, thumb size, padding, radius, colori, shadow, border"
+  },
+  {
+    "file": "presencegrid.js",
+    "type": "presencegrid",
+    "name": "Griglia Presenze",
+    "icon": "dashicons-groups",
+    "category": "dynamic",
+    "comment": "Tile PresenceGrid — griglia membri con stato online live (famiglia E · bucket C). Riferimento: handoff-tile-speciali/temi/60-tema-community-gamer.html (#wall). fields[] → source (manual/query/endpoint), members[] (repeater: name+avatar+role+online), pollInterv"
+  },
+  {
+    "file": "pricelist.js",
+    "type": "pricelist",
+    "name": "Lista prezzi",
+    "icon": "dashicons-list-view",
+    "category": "content",
+    "comment": "Tile PriceList — split CONTENUTO/STILE (regola universale Olobuild). fields[] → items (content-items), toggle mostra immagine, posizione prezzo (layout) styleFields[] → preset, sfondo creativo, typography preset, effetti testo, card (sfondo/bordo/radius/hover)"
+  },
+  {
+    "file": "pricing.js",
+    "type": "pricing",
+    "name": "Listino prezzi",
+    "icon": "dashicons-money-alt",
+    "category": "marketing",
+    "comment": "Tile Pricing — split CONTENUTO/STILE. fields[] → plan info (name, price, currency_position, period), toggle prezzo, sale_price + badge, features, cta (text+url+target+info), badge popolare, countdown, sfondo (image/video) styleFields[] → preset, bg, typo, text"
+  },
+  {
+    "file": "process-steps.js",
+    "type": "process-steps",
+    "name": "Process Steps",
+    "icon": "dashicons-editor-ol",
+    "category": "layout",
+    "comment": "Process Steps — passi numerati borderless (numero + titolo + testo, N colonne). CONTENUTO: items. STILE: numero/titolo/desc + opzionale card."
+  },
+  {
+    "file": "product-cards.js",
+    "type": "product-cards",
+    "name": "Product Cards",
+    "icon": "dashicons-portfolio",
+    "category": "layout",
+    "comment": "Product Cards — griglia di card prodotto stile editoriale. Pattern: metà alta gradient + lettera-monogramma grande + label outline, metà bassa con brand colored + badge pill opzionale + titolo serif con suffisso italic + descrizione + CTA testuale. Allineato a"
+  },
+  {
+    "file": "productgrid.js",
+    "type": "productgrid",
+    "name": "Griglia Prodotti",
+    "icon": "dashicons-products",
+    "category": "media",
+    "comment": "Product Grid — griglia prodotti moda/shop MINIMALE: media (immagine o placeholder a strisce) + tag d'angolo + barra \"Quick add\" in hover, sotto categoria + titolo + prezzo. Card SENZA sfondo/bordo/padding (contenitore trasparente). Link finale opzionale (\"View"
+  },
+  {
+    "file": "producthero.js",
+    "type": "producthero",
+    "name": "Hero — Product (SaaS)",
+    "icon": "dashicons-desktop",
+    "category": "marketing",
+    "comment": "Hero — Product (SaaS) : hero centrato tech/SaaS. Eyebrow PILL + headline centrata con parola-accento (gradiente) + subhead + 2 CTA, su RADIAL GLOW + griglia faint mascherata. Sotto, mockup PRODUCT in cornice browser (barra con 3 pallini + URL opzionale): media"
+  },
+  {
+    "file": "progallery.js",
+    "type": "progallery",
+    "name": "Pro Gallery",
+    "icon": "dashicons-images-alt2",
+    "category": "media",
+    "comment": "Tile Pro Gallery — split CONTENUTO/STILE (regola universale Olobuild). fields[] → media items (gallery), preview video, layout schema/family, colonne/righe responsive, autoplay, lightbox toggles/animation, visibilità frecce/dots/caption styleFields[] → preset,"
+  },
+  {
+    "file": "progress.js",
+    "type": "progress",
+    "name": "Barra progresso",
+    "icon": "dashicons-chart-bar",
+    "category": "marketing",
+    "comment": "Tile Progress — split CONTENUTO/STILE. fields[] → bars (etichetta|valore), show_percentage, inner_text, layout, animation toggles styleFields[] → preset, bg, typo, colori, dimensioni (altezza/cerchio), animation duration, shadow, border"
+  },
+  {
+    "file": "progresstracker.js",
+    "type": "progresstracker",
+    "name": "Progress tracker",
+    "icon": "dashicons-editor-ol",
+    "category": "content",
+    "comment": "Tile ProgressTracker — split CONTENUTO/STILE. fields[] → items (title+description+icon+status), layout, show_numbers, show_description styleFields[] → preset, bg, typo, text-effects, circle size, font size, gap, connector stile/colore, colori (completato/attiv"
+  },
+  {
+    "file": "projector.js",
+    "type": "projector",
+    "name": "Projector (slider → valore)",
+    "icon": "dashicons-chart-line",
+    "category": "interactive",
+    "comment": "Tile Projector — \"zona interattiva\": uno slider guida un valore calcolato live (budget, costo, ore, montante composto). Estratta dai demo OLOthemes (setupProjector in fx.js). Token-first: un solo controllo colore `zone_accent` (gli altri derivati). Formula: fv"
+  },
+  {
+    "file": "proslider.js",
+    "type": "none",
+    "name": "Pro Slider",
+    "icon": "dashicons-slides",
+    "category": "media",
+    "comment": "Tile Pro Slider — split CONTENUTO/STILE (regola universale Olobuild). NOTA: il contenuto principale (slide/livelli) è gestito da un editor modale dedicato (`customEditor: 'proslider'`); qui sotto split delle sole opzioni globali. fields[] → modalità sizing, ri"
+  },
+  {
+    "file": "queryloop.js",
+    "type": "queryloop",
+    "name": "Query Loop",
+    "icon": "dashicons-database",
+    "category": "dynamic",
+    "comment": "Tile QueryLoop — split CONTENUTO/STILE. fields[] → query (post_type/cpt/posts_per_page/orderby/order/taxonomy/terms/relations/offset/exclude/include/author/sticky), filtri data/meta/search, layout, image ratio, loop_template_id, contenuto card (show_image/titl"
+  },
+  {
+    "file": "quotation.js",
+    "type": "quotation",
+    "name": "Citazione",
+    "icon": "dashicons-format-quote",
+    "category": "text",
+    "comment": "Tile Quotation — split CONTENUTO/STILE. fields[] → content, author styleFields[] → preset, bg, typo, style/alignment, text-effects, shadow, border"
+  },
+  {
+    "file": "readingtime.js",
+    "type": "readingtime",
+    "name": "",
+    "icon": "dashicons-clock",
+    "category": "dynamic",
+    "comment": "Tile ReadingTime — split CONTENUTO/STILE. fields[] → calcolo (words_per_minute/format/prefix/suffix), icona (show + icon) styleFields[] → bg, typo preset, tipografia (color/size/weight/align), icona color, shadow, border"
+  },
+  {
+    "file": "relatedposts.js",
+    "type": "relatedposts",
+    "name": "Articoli Correlati",
+    "icon": "dashicons-screenoptions",
+    "category": "dynamic",
+    "comment": "Tile RelatedPosts — split CONTENUTO/STILE. fields[] → query (source/count/orderby), contenuto card (show_image/date/excerpt/category/title_tag), fallback text styleFields[] → preset, bg, typo, layout (columns/gap/image_ratio), colori, padding, radius, hover ef"
+  },
+  {
+    "file": "revealbox.js",
+    "type": "revealbox",
+    "name": "Reveal Box",
+    "icon": "dashicons-arrow-up-alt",
+    "category": "interactive",
+    "comment": "Tile RevealBox — split CONTENUTO/STILE. fields[] → effetto reveal (type+perspective), sfondo globale (image_url+size+position), zona visibile (image/video URL+top_content+top_icon), zona rivelata (image/video+bottom_content+bottom_icon+cta), reveal_amount per "
+  },
+  {
+    "file": "row.js",
+    "type": "row",
+    "name": "Riga / Colonne",
+    "icon": "dashicons-columns",
+    "category": "layout",
+    "comment": "Tile Row — split CONTENUTO/STILE (regola universale Olobuild). fields[] → layout strutturale (n. colonne) + Loop post (sorgente dati semantica) styleFields[] → sfondo, gap, allineamento, stacking, flex/grid controls AVANZATE → meta tecnico"
+  },
+  {
+    "file": "scaler.js",
+    "type": "scaler",
+    "name": "Scaler (porzioni/peso → quantità)",
+    "icon": "dashicons-calculator",
+    "category": "interactive",
+    "comment": "Scaler — zona interattiva: un input base (porzioni o peso) scala live una lista di quantità. mode 'scale' = qty × (val/base); mode 'percent' = val × (qty/100) (baker's %). Estratto dai demo OLOthemes (RecipeScaler/BakersCalc). Token-first. Render Vue == PHP (S"
+  },
+  {
+    "file": "schedule.js",
+    "type": "schedule",
+    "name": "Schedule (timetable)",
+    "icon": "dashicons-calendar-alt",
+    "category": "layout",
+    "comment": "Schedule — timetable settimanale (colonne giorni × righe fasce orarie). Statico (nessun runtime). Celle evidenziabili con prefisso \"!\" o oggetto {text,on}. Render Vue == PHP (ScheduleTile.vue)."
+  },
+  {
+    "file": "scratchfx.js",
+    "type": "scratchfx",
+    "name": "Gratta e Scopri",
+    "icon": "dashicons-image-filter",
+    "category": "interactive",
+    "comment": "Tile ScratchFX — \"gratta e scopri\" (famiglia C, bucket C). Reference visivo: handoff-tile-speciali/temi/44-tema-tattoo.html + 45-tema-gelateria.html fields[] → contenuto SOTTO la copertura (immagine + testo premio + sottotitolo), suggerimento (hint) e label de"
+  },
+  {
+    "file": "scrollprogress.js",
+    "type": "scrollprogress",
+    "name": "Barra Scroll",
+    "icon": "dashicons-ellipsis",
+    "category": "interactive",
+    "comment": "Tile ScrollProgress — split CONTENUTO/STILE (regola universale Olobuild). fields[] → posizione (top/bottom), toggle mostra percentuale styleFields[] → colori barra/sfondo/percentuale, altezza barra, z-index AVANZATE → meta tecnico (id/class/condizioni)"
+  },
+  {
+    "file": "scrollscrub.js",
+    "type": "scrollscrub",
+    "name": "Scorrimento orizzontale (ScrollScrub)",
+    "icon": "dashicons-leftright",
+    "category": "layout",
+    "comment": "Tile ScrollScrub — pin verticale → scorrimento orizzontale. Effetto \"Section · ScrollScrub\" (rif. handoff-tile-speciali/temi/62-tema-libreria-indie.html blocco \"pinned horizontal shelf\"; anche 35-tema-immobiliare.html \"HorizontalScroll · portfolio\"). Bucket C "
+  },
+  {
+    "file": "search.js",
+    "type": "search",
+    "name": "Ricerca",
+    "icon": "dashicons-search",
+    "category": "navigation",
+    "comment": "Tile Search — split CONTENUTO/STILE (regola universale Olobuild). fields[] → placeholder, placeholder animato + parole, icona/pulsante visibilità + testo pulsante styleFields[] → preset, bg, typo, layout, posizione icona, stile pulsante, colori, bordi, effetti"
+  },
+  {
+    "file": "searchhero.js",
+    "type": "searchhero",
+    "name": "Hero — Search (Carrello)",
+    "icon": "dashicons-search",
+    "category": "marketing",
+    "comment": "Hero — Search (Carrello) : hero e-commerce centrato con glow radiale superiore, eyebrow coral, H1 gigante con parola-accento, sub, BARRA DI RICERCA (input + button) come meccanica-firma e riga di chip-categoria. Estratta pixel-perfect dal blueprint OLOthemes \""
+  },
+  {
+    "file": "section-header.js",
+    "type": "section-header",
+    "name": "Section Header",
+    "icon": "dashicons-heading",
+    "category": "layout",
+    "comment": "Section Header — eyebrow + headline editoriale multi-riga + tagline destra. CONTENUTO: solo testi e dati editabili. STILE: tipografia, colori, layout."
+  },
+  {
+    "file": "section.js",
+    "type": "section",
+    "name": "Sezione",
+    "icon": "dashicons-align-center",
+    "category": "structure",
+    "comment": "Tile Section — container puro: nessun contenuto editabile. fields[] → placeholder informativo (la section è solo un wrapper di struttura) styleFields[] → sfondo, larghezza, padding, sticky, scroll-snap, flex/grid AVANZATE → meta tecnico"
+  },
+  {
+    "file": "shapedivider.js",
+    "type": "shapedivider",
+    "name": "Shape Divider",
+    "icon": "dashicons-editor-contract",
+    "category": "layout",
+    "comment": "Tile ShapeDivider — split CONTENUTO/STILE (regola universale Olobuild). fields[] → forma, posizione (top/bottom), flip orizzontale/verticale styleFields[] → colore, altezza, larghezza, z-index, altezze responsive, bordo AVANZATE → meta tecnico (id/class/condiz"
+  },
+  {
+    "file": "sharebuttons.js",
+    "type": "sharebuttons",
+    "name": "Condivisione",
+    "icon": "dashicons-share-alt",
+    "category": "marketing",
+    "comment": "Tile ShareButtons — split CONTENUTO/STILE. fields[] → buttons (platform + custom_label) styleFields[] → preset, bg, typo, stile (icon-only/text/etc.), size, gap, alignment, colore icona+hover, sfondo, border"
+  },
+  {
+    "file": "shatteredimage.js",
+    "type": "shatteredimage",
+    "name": "Shattered Image",
+    "icon": "dashicons-shield",
+    "category": "media",
+    "comment": "Tile ShatteredImage — split CONTENUTO/STILE. fields[] → immagine, preset maschera, height, image_position, zoom variation, kenburns toggle/style/duration/intensity, scroll effects, overlay styleFields[] → gap (mascherata), gap_color, border_radius esterno, sha"
+  },
+  {
+    "file": "shortcode.js",
+    "type": "shortcode",
+    "name": "Shortcode",
+    "icon": "dashicons-shortcode",
+    "category": "dynamic",
+    "comment": "Tile Shortcode — split CONTENUTO/STILE. fields[] → shortcode_text, parse_shortcodes styleFields[] → shadow"
+  },
+  {
+    "file": "showcasegrid.js",
+    "type": "showcasegrid",
+    "name": "Showcase Grid (card + freccia)",
+    "icon": "dashicons-grid-view",
+    "category": "media",
+    "comment": "Showcase Grid — griglia di card-immagine grandi e linkate: media (slot/strisce) + velo, kicker + titolo grande in basso, freccia circolare in alto a destra che si ANIMA all'hover (cerchio → accento, freccia che ruota). Estratta dal blueprint OLOthemes \"CardGri"
+  },
+  {
+    "file": "sitelogo.js",
+    "type": "sitelogo",
+    "name": "Logo sito",
+    "icon": "dashicons-admin-home",
+    "category": "navigation",
+    "comment": "Tile Site Logo — split CONTENUTO/STILE (regola universale Olobuild). fields[] → asset (logo image, dark, retina, svg), origine, link, motto toggle styleFields[] → preset, bg, typo preset, dimensioni, allineamento, effetti hover, bordo AVANZATE → meta tecnico"
+  },
+  {
+    "file": "sitemap.js",
+    "type": "sitemap",
+    "name": "Sitemap HTML",
+    "icon": "dashicons-networking",
+    "category": "dynamic",
+    "comment": "Tile Sitemap HTML — split CONTENUTO/STILE (regola universale Olobuild). fields[] → contenuto (show_pages/posts/categories/tags/authors/archives/cpt, cpt_names, exclude_ids, page_tree, limit_per_section, order_by), layout_mode, columns, title_tag, list_style, i"
+  },
+  {
+    "file": "slideshow.js",
+    "type": "slideshow",
+    "name": "Slideshow",
+    "icon": "dashicons-slides",
+    "category": "media",
+    "comment": "Tile Slideshow — split CONTENUTO/STILE (regola universale Olobuild). fields[] → slide items (image+title+subtitle+link), autoplay+speed, controls (arrows/dots), transition styleFields[] → preset, bg, typo, text-effects, altezza, overlay color, colore testo, sh"
+  },
+  {
+    "file": "smearhero.js",
+    "type": "smearhero",
+    "name": "Hero — Smear (Canvas)",
+    "icon": "dashicons-art",
+    "category": "marketing",
+    "comment": "Hero — Smear (Canvas) : hero da galleria d'artista. Sfondo caldo scuro con glow radiale ambra, eyebrow uppercase a tracking largo, H1 gigante serif (Gilda Display) con parola-accento in corsivo, paragrafo cream, hint in basso. Meccanica firma: il \"paint smear\""
+  },
+  {
+    "file": "social.js",
+    "type": "social",
+    "name": "Link social",
+    "icon": "dashicons-share",
+    "category": "marketing",
+    "comment": "Tile Social — split CONTENUTO/STILE (regola universale Olobuild). fields[] → links (piattaforme + URL), toggle show_labels, toggle use_brand_colors styleFields[] → preset, bg, typography_preset, layout (size, gap, alignment), stile (filled/outline/minimal), ic"
+  },
+  {
+    "file": "soundcloud.js",
+    "type": "soundcloud",
+    "name": "SoundCloud",
+    "icon": "dashicons-format-audio",
+    "category": "media",
+    "comment": "Tile SoundCloud — split CONTENUTO/STILE (regola universale Olobuild). fields[] → URL, toggle visual/autoplay, toggle visibilità (artwork/user) styleFields[] → preset, altezza, colore accento, allineamento, border-radius, bordo defaults → identico (nessuna modi"
+  },
+  {
+    "file": "spacer.js",
+    "type": "separator",
+    "name": "Spaziatore",
+    "icon": "dashicons-arrows-alt",
+    "category": "essential",
+    "comment": "Tile Spacer — split CONTENUTO/STILE (regola universale Olobuild). fields[] → SVG personalizzato (unico vero \"dato\" inseribile) styleFields[] → altezza, forme decorative top/bottom, sfondo, layout, divisore AVANZATE → meta tecnico"
+  },
+  {
+    "file": "stackscroll.js",
+    "type": "stackscroll",
+    "name": "Card impilate (StackScroll)",
+    "icon": "dashicons-index-card",
+    "category": "layout",
+    "comment": "Tile StackScroll — sezione con card `position:sticky` che si impilano. Effetto \"Section · StackScroll\" (rif. handoff-tile-speciali/temi/64-tema-pastificio.html, blocco sticky stacking). Bucket C / famiglia B. Ogni card si ferma a `topOffset + i*topStep` px dal"
+  },
+  {
+    "file": "starrating.js",
+    "type": "starrating",
+    "name": "Valutazione",
+    "icon": "dashicons-star-filled",
+    "category": "marketing",
+    "comment": "Tile StarRating — split CONTENUTO/STILE. fields[] → rating, max_stars, title, subtitle styleFields[] → preset, bg, typo, star size/color/empty/style, title color/subtitle color, alignment, text-effects, shadow, border"
+  },
+  {
+    "file": "statstrip.js",
+    "type": "statstrip",
+    "name": "Stat Strip",
+    "icon": "dashicons-chart-bar",
+    "category": "layout",
+    "comment": "Stat Strip — banda orizzontale di statistiche/metriche (valore grande + etichetta), con divisori tra le celle. Token-first: valore dal font heading del tema, etichetta in mono. I valori sono testo libero (es. \"500+\", \"92%\", \"40M\", \"14x\")."
+  },
+  {
+    "file": "step-timeline.js",
+    "type": "step-timeline",
+    "name": "Step Timeline",
+    "icon": "dashicons-clock",
+    "category": "layout",
+    "comment": "Step Timeline — timeline orizzontale con N step. Ogni step: numero grande, tag pallino+testo, mockup placeholder/immagine, pre-title, titolo con accent italic, descrizione, footer con metric. Connessi da timeline orizzontale tratteggiata con pallini."
+  },
+  {
+    "file": "subnav.js",
+    "type": "subnav",
+    "name": "Subnav",
+    "icon": "dashicons-ellipsis",
+    "category": "navigation",
+    "comment": "Tile Subnav — split CONTENUTO/STILE (regola universale Olobuild). fields[] → source (manuale/wp_menu), items (manuali), menu_id/menu_depth/parent_item (WP), toggle highlight_current, toggle divider, active_style (indicatore attivo) styleFields[] → preset, bg, "
+  },
+  {
+    "file": "svganimator.js",
+    "type": "svganimator",
+    "name": "SVG Animator",
+    "icon": "dashicons-art",
+    "category": "media",
+    "comment": "Tile SVG Animator — split CONTENUTO/STILE (regola universale Olobuild). fields[] → source_type, svg_url, svg_code, anim_type, anim_sequence, trigger, comportamento (reverse, erase_on_leave, loop, replay_button + label), alignment (allineamento layout) styleFie"
+  },
+  {
+    "file": "switcher.js",
+    "type": "switcher",
+    "name": "Switcher",
+    "icon": "dashicons-welcome-widgets-menus",
+    "category": "interactive",
+    "comment": "Tile Switcher — split CONTENUTO/STILE. fields[] → items (title+content), vertical, animation+duration styleFields[] → preset, bg, typo, effetti, nav_style legacy, tab typo & spacing, container, colori tab, indicator, contenuto pannello, text-effects, shadow, b"
+  },
+  {
+    "file": "switcherpanel.js",
+    "type": "switcherpanel",
+    "name": "Switcher Panel",
+    "icon": "dashicons-images-alt",
+    "category": "interactive",
+    "comment": "Tile SwitcherPanel — split CONTENUTO/STILE. fields[] → items pannelli (nav_label+title+text+button+image), hero image + height, layout (nav_position/image_position), animation styleFields[] → preset, bg, typo, effetti, text-effects, hero overlay & radius, nav "
+  },
+  {
+    "file": "table.js",
+    "type": "table",
+    "name": "Tabella",
+    "icon": "dashicons-editor-table",
+    "category": "text",
+    "comment": "Tile Table — split CONTENUTO/STILE. fields[] → struttura (has_header/striped/bordered/hover/compact/first_col_bold/responsive_mode) styleFields[] → preset, bg, typo, colori, shadow, border"
+  },
+  {
+    "file": "tagcloud.js",
+    "type": "tagcloud",
+    "name": "Tag Cloud",
+    "icon": "dashicons-tag",
+    "category": "dynamic",
+    "comment": "Tile Tag Cloud — split CONTENUTO/STILE (regola universale Olobuild). fields[] → taxonomy, custom_taxonomy, max_tags, orderby, order, show_count, layout, columns (griglia), link_underline styleFields[] → bg, typography_preset, preset, textEffectsFields, gap (sp"
+  },
+  {
+    "file": "team.js",
+    "type": "team",
+    "name": "Membro del team",
+    "icon": "dashicons-businessperson",
+    "category": "marketing",
+    "comment": "Tile Team — split CONTENUTO/STILE. fields[] → photo + hover_image/video, nome, ruolo, bio, link (text+url) styleFields[] → preset, bg, typo, text-effects, foto aspetto, contenitore info, tipografia, tile aspect, filtri"
+  },
+  {
+    "file": "templateembed.js",
+    "type": "templateembed",
+    "name": "Includi template",
+    "icon": "dashicons-layout",
+    "category": "layout",
+    "comment": "Tile TemplateEmbed — split CONTENUTO/STILE (regola universale Olobuild). fields[] → sorgente dati (template_id) styleFields[] → ombra AVANZATE → meta tecnico (id/class/condizioni)"
+  },
+  {
+    "file": "testimonial.js",
+    "type": "testimonial",
+    "name": "Testimonianza",
+    "icon": "dashicons-format-quote",
+    "category": "marketing",
+    "comment": "Tile Testimonial — split CONTENUTO/STILE. fields[] → quote, author, role, avatar, rating, items multiple, layout (single/carousel/grid) + autoplay/dots/arrows styleFields[] → preset, bg, typo, text-effects, colori, linea decorativa, posizione testimone, avatar"
+  },
+  {
+    "file": "text-block.js",
+    "type": "text-block",
+    "name": "Testo",
+    "icon": "dashicons-editor-paragraph",
+    "category": "essential",
+    "comment": "Tile Text-block — split CONTENUTO/STILE (regola universale Olobuild). fields[] → contenuto rich text styleFields[] → preset, tipografia, layout, padding, bordo, effetti AVANZATE → meta tecnico"
+  },
+  {
+    "file": "textmask.js",
+    "type": "textmask",
+    "name": "Text Mask Video",
+    "icon": "dashicons-editor-textcolor",
+    "category": "creative",
+    "comment": "Tile TextMask — split CONTENUTO/STILE. fields[] → testo (text+multiline), video URL+poster+opacity, maschera (mask_mode/blend_mode), animazione scroll (toggles + valori) styleFields[] → preset, bg, typo, text-effects, tipografia (size/weight/family/transform/s"
+  },
+  {
+    "file": "textpath.js",
+    "type": "textpath",
+    "name": "Testo su Tracciato",
+    "icon": "dashicons-editor-textcolor",
+    "category": "text",
+    "comment": "Tile TextPath — split CONTENUTO/STILE. fields[] → text, path_preset, custom_path, animation, animation_speed styleFields[] → preset, bg, typo, text-effects, tipografia (size/color/spacing), border"
+  },
+  {
+    "file": "timeline.js",
+    "type": "timeline",
+    "name": "Timeline",
+    "icon": "dashicons-backup",
+    "category": "interactive",
+    "comment": "Tile Timeline \"SUPER\" — redesign (handoff \"OLObuild - Tile Timeline SUPER\"). Riscrittura del vecchio EventList in una timeline ricca e combinabile su 10 dimensioni: Layout · Ingresso · Tema · Card · Filo · Nodo · Colore · Media · Densità · Stato. Stesse sorgen"
+  },
+  {
+    "file": "timezone.js",
+    "type": "timezone",
+    "name": "Timezone (fusi orari)",
+    "icon": "dashicons-clock",
+    "category": "interactive",
+    "comment": "Timezone — zona interattiva: slider ora (città base) → orari locali delle città con stato lavoro/limite/notte (pallino colorato). Estratto dai demo OLOthemes. Render Vue == PHP (TimezoneTile.vue). Stati precomputati lato PHP → JS senza '<'/'>'."
+  },
+  {
+    "file": "toc.js",
+    "type": "toc",
+    "name": "Indice contenuti",
+    "icon": "dashicons-list-view",
+    "category": "navigation",
+    "comment": "Tile TOC (Indice contenuti) — split CONTENUTO/STILE (regola universale Olobuild). fields[] → title (testo), max_depth (sorgente dati: quali heading includere), list_style (struttura), comportamento (sticky, highlight_active, smooth_scroll) styleFields[] → pres"
+  },
+  {
+    "file": "togglebtn.js",
+    "type": "togglebtn",
+    "name": "Pulsante Toggle",
+    "icon": "dashicons-hidden",
+    "category": "interactive",
+    "comment": "Tile ToggleBtn — split CONTENUTO/STILE. fields[] → testi show/hide, icone, target_id, initial_state, animation, duration styleFields[] → preset, bg, typo, icona posizione, stile pulsante (colori/bordo/padding/font/align), border"
+  },
+  {
+    "file": "totop.js",
+    "type": "totop",
+    "name": "Torna su",
+    "icon": "dashicons-arrow-up-alt",
+    "category": "navigation",
+    "comment": "Tile ToTop — split CONTENUTO/STILE (regola universale Olobuild). fields[] → allineamento (posizione), comportamento scroll fluido styleFields[] → stile pulsante (default/primary), ombra, bordo AVANZATE → meta tecnico (id/class/condizioni)"
+  },
+  {
+    "file": "tripfinder.js",
+    "type": "tripfinder",
+    "name": "Trip Finder (barra ricerca)",
+    "icon": "dashicons-search",
+    "category": "interactive",
+    "comment": "Trip Finder — barra di ricerca/prenotazione compatta: N campi (label + select) + bottone. Estratta dai blueprint OLOthemes (TripFinder/BookingBar: fjordline, wander, pasaje). Token-first (`accent`). Render Vue == PHP (TripFinderTile.vue)."
+  },
+  {
+    "file": "trust-strip.js",
+    "type": "trust-strip",
+    "name": "Trust Strip",
+    "icon": "dashicons-yes-alt",
+    "category": "layout",
+    "comment": "Trust Strip — riga editoriale di \"garanzie\" intervallate da separatori. CONTENUTO: solo testi e icone (item-level). STILE: colori, dimensioni, allineamento, separator visivo."
+  },
+  {
+    "file": "twitterfeed.js",
+    "type": "twitterfeed",
+    "name": "X Timeline",
+    "icon": "dashicons-twitter",
+    "category": "marketing",
+    "comment": "Tile X (Twitter) Timeline — split CONTENUTO/STILE (regola universale Olobuild). fields[] → URL, tipo embed, chrome, limite tweet, lingua styleFields[] → preset, typography_preset, tema, dimensioni, allineamento, border-radius, bordo defaults → identico (nessun"
+  },
+  {
+    "file": "variablespecimen.js",
+    "type": "variablespecimen",
+    "name": "Specimen Variabile",
+    "icon": "dashicons-editor-textcolor",
+    "category": "text",
+    "comment": "Tile Variable Specimen — playground per font variabili (rif. 66-tema-type-foundry.html). fields[] → fontFamily, sampleText, axes[] (repeater: tag/min/max/default), interaction (drag/sliders/both), autoAnimate, autoSpeed, dragHint styleFields[] → tipografia gig"
+  },
+  {
+    "file": "video.js",
+    "type": "video",
+    "name": "Video",
+    "icon": "dashicons-video-alt3",
+    "category": "essential",
+    "comment": "Tile Video — split CONTENUTO/STILE (regola universale Olobuild). fields[] → sorgente (YouTube/Vimeo/file), URL, poster, didascalia, overlay testo, opzioni privacy/playback (autoplay/mute/loop/controls/start/end/facade) styleFields[] → preset, typo, display_mod"
+  },
+  {
+    "file": "videoplaylist.js",
+    "type": "videoplaylist",
+    "name": "Video Playlist",
+    "icon": "dashicons-playlist-video",
+    "category": "media",
+    "comment": "Tile Video Playlist — split CONTENUTO/STILE (regola universale Olobuild). fields[] → array videos (content-items), toggle show_duration, autoplay_next styleFields[] → preset, bg, typography_preset, textEffects, layout, dimensioni, colori, bordo defaults → iden"
+  },
+  {
+    "file": "viewer360.js",
+    "type": "viewer360",
+    "name": "Viewer 360°",
+    "icon": "dashicons-admin-site-alt3",
+    "category": "media",
+    "comment": "Tile Viewer360 — split CONTENUTO/STILE (regola universale Olobuild). fields[] → source_type, image_url, video_url, navigazione (autorotate, mouse_drag, touch_drag, scroll_zoom, gyroscope), toggle controlli (show_controls, show_fullscreen, show_zoom, show_compa"
+  },
+  {
+    "file": "viewscounter.js",
+    "type": "viewscounter",
+    "name": "Contatore Visite",
+    "icon": "dashicons-visibility",
+    "category": "dynamic",
+    "comment": "Tile ViewsCounter — split CONTENUTO/STILE. fields[] → show_icon, icon_position, label, show_label, number_format, layout styleFields[] → preset, bg, typo, text-effects, icon size, tipografia, colori, border"
+  },
+  {
+    "file": "woo_addtocart.js",
+    "type": "woo_addtocart",
+    "name": "Aggiungi al Carrello",
+    "icon": "dashicons-cart",
+    "category": "woocommerce",
+    "comment": "Tile WooCommerce Aggiungi al Carrello — split CONTENUTO/STILE (regola universale Olobuild). fields[] → testo pulsante, toggle visibilita (icona/quantita), stile quantita, icona styleFields[] → preset, sfondo, tipografia, stile/dimensione, border-radius, colori"
+  },
+  {
+    "file": "woo_breadcrumbs.js",
+    "type": "woo_breadcrumbs",
+    "name": "Breadcrumbs WooCommerce",
+    "icon": "dashicons-admin-links",
+    "category": "woocommerce",
+    "comment": "Tile WooCommerce Breadcrumbs — split CONTENUTO/STILE (regola universale Olobuild). fields[] → carattere separatore, allineamento styleFields[] → preset, sfondo, tipografia, dimensione font, colori testo/link, bordo AVANZATE → meta tecnico (id/class/condizioni)"
+  },
+  {
+    "file": "woo_cart.js",
+    "type": "woo_cart",
+    "name": "Carrello",
+    "icon": "dashicons-cart",
+    "category": "woocommerce",
+    "comment": "Tile WooCommerce Carrello — split CONTENUTO/STILE (regola universale Olobuild). fields[] → toggle visibilita elementi (miniatura, coupon, totali) styleFields[] → preset, sfondo, tipografia, colori, bordo AVANZATE → meta tecnico (id/class/condizioni)"
+  },
+  {
+    "file": "woo_categories.js",
+    "type": "woo_categories",
+    "name": "Categorie Prodotti",
+    "icon": "dashicons-category",
+    "category": "woocommerce",
+    "comment": "Tile WooCommerce Categorie — split CONTENUTO/STILE (regola universale Olobuild). fields[] → query (orderby, parent_only, hide_empty), toggle visibilita (image/count/description), tag titolo (HTML semantico) styleFields[] → preset, sfondo, tipografia, columns/g"
+  },
+  {
+    "file": "woo_checkout.js",
+    "type": "woo_checkout",
+    "name": "Checkout",
+    "icon": "dashicons-clipboard",
+    "category": "woocommerce",
+    "comment": "Tile WooCommerce Checkout — split CONTENUTO/STILE (regola universale Olobuild). fields[] → layout, stile form, toggle visibilita note ordine styleFields[] → preset, sfondo, tipografia, colori, bordo AVANZATE → meta tecnico (id/class/condizioni)"
+  },
+  {
+    "file": "woo_checkout_multistep.js",
+    "type": "woo_checkout_multistep",
+    "name": "Checkout Multi-step WC",
+    "icon": "dashicons-cart",
+    "category": "woocommerce",
+    "comment": "Tile Woo Checkout Multi-step — split CONTENUTO/STILE (regola universale Olobuild). fields[] → etichette step, stile step, toggle riepilogo ordine styleFields[] → preset, sfondo, tipografia, colori, raggio card, bordo"
+  },
+  {
+    "file": "woo_comparison.js",
+    "type": "woo_comparison",
+    "name": "WC Confronto Prodotti",
+    "icon": "dashicons-columns",
+    "category": "woocommerce",
+    "comment": "Tile WC Confronto Prodotti — split CONTENUTO/STILE (regola universale Olobuild). fields[] → numero massimo prodotti, toggle di visibilita righe styleFields[] → preset, sfondo, tipografia, colori intestazione, bordo AVANZATE → meta tecnico (id/class/condizioni)"
+  },
+  {
+    "file": "woo_cross_sells.js",
+    "type": "woo_cross_sells",
+    "name": "WC Cross-Sell",
+    "icon": "dashicons-randomize",
+    "category": "woocommerce",
+    "comment": "Tile WC Cross-Sell — split CONTENUTO/STILE (regola universale Olobuild). fields[] → titolo intestazione, tag heading, limit query, colonne responsive, toggle visibilita styleFields[] → preset, sfondo, tipografia, text effects, layout grafico, ratio immagine, c"
+  },
+  {
+    "file": "woo_minicart.js",
+    "type": "woo_minicart",
+    "name": "Mini Carrello",
+    "icon": "dashicons-cart",
+    "category": "woocommerce",
+    "comment": "Tile WooCommerce Mini Carrello — split CONTENUTO/STILE (regola universale Olobuild). fields[] → comportamento + toggle visibilita (style/icona, count/total/dropdown) styleFields[] → preset, sfondo, tipografia, dimensioni, colori, bordo AVANZATE → meta tecnico "
+  },
+  {
+    "file": "woo_myaccount.js",
+    "type": "woo_myaccount",
+    "name": "WC My Account",
+    "icon": "dashicons-admin-users",
+    "category": "woocommerce",
+    "comment": "Tile WooCommerce My Account — split CONTENUTO/STILE (regola universale Olobuild). fields[] → layout dashboard (default/sidebar/tabs) styleFields[] → preset, sfondo, tipografia, dimensione avatar, border-radius, colori sidebar/contenuto, bordo AVANZATE → meta t"
+  },
+  {
+    "file": "woo_notices.js",
+    "type": "woo_notices",
+    "name": "Notifiche WooCommerce",
+    "icon": "dashicons-info",
+    "category": "woocommerce",
+    "comment": "Tile Woo Notices — split CONTENUTO/STILE (regola universale Olobuild). fields[] → toggle visibilità (successo/errore/info) styleFields[] → preset, sfondo, tipografia, raggio, dimensione testo, bordo"
+  },
+  {
+    "file": "woo_order_tracking.js",
+    "type": "woo_order_tracking",
+    "name": "Tracciamento Ordine",
+    "icon": "dashicons-search",
+    "category": "woocommerce",
+    "comment": "Tile Woo Order Tracking — split CONTENUTO/STILE (regola universale Olobuild). fields[] → titolo, tag titolo, stile form styleFields[] → preset, sfondo, tipografia, effetti testo, colori, bordo"
+  },
+  {
+    "file": "woo_price.js",
+    "type": "woo_price",
+    "name": "Prezzo Prodotto",
+    "icon": "dashicons-tag",
+    "category": "woocommerce",
+    "comment": "Tile WC Prezzo Prodotto — split CONTENUTO/STILE (regola universale Olobuild). fields[] → toggle regular/sale/suffisso, testi prefisso/suffisso styleFields[] → preset, sfondo, tipografia, dimensione, peso, allineamento, colori, bordo AVANZATE → meta tecnico (id"
+  },
+  {
+    "file": "woo_product_bundle.js",
+    "type": "woo_product_bundle",
+    "name": "WC Bundle Prodotti",
+    "icon": "dashicons-archive",
+    "category": "woocommerce",
+    "comment": "Tile Woo Product Bundle — split CONTENUTO/STILE (regola universale Olobuild). fields[] → ID prodotti, titolo bundle, tag, sconto, toggle elementi visibili, testo pulsante styleFields[] → preset, sfondo, tipografia, layout, colonne, stile card, colori, ombra, b"
+  },
+  {
+    "file": "woo_product_description.js",
+    "type": "woo_product_description",
+    "name": "Descrizione Prodotto",
+    "icon": "dashicons-text-page",
+    "category": "woocommerce",
+    "comment": "Tile WC Descrizione Prodotto — split CONTENUTO/STILE (regola universale Olobuild). fields[] → tipo contenuto (full/short), max righe (clamp comportamentale) styleFields[] → preset, sfondo, tipografia, dimensione, line-height, allineamento, colore, bordo AVANZA"
+  },
+  {
+    "file": "woo_product_filter.js",
+    "type": "woo_product_filter",
+    "name": "WC Filtro Prodotti",
+    "icon": "dashicons-filter",
+    "category": "woocommerce",
+    "comment": "Tile Woo Product Filter — split CONTENUTO/STILE (regola universale Olobuild). fields[] → toggle filtri visibili, range prezzo, toggle pulsante e testo styleFields[] → preset, sfondo, tipografia, stile filtro, colori, ombra, bordo"
+  },
+  {
+    "file": "woo_product_gallery_slider.js",
+    "type": "woo_product_gallery_slider",
+    "name": "WC Gallery Slider",
+    "icon": "dashicons-images-alt2",
+    "category": "woocommerce",
+    "comment": "Tile WC Gallery Slider — split CONTENUTO/STILE (regola universale Olobuild). fields[] → toggle thumbnails/zoom/lightbox, posizione thumb, autoplay/loop behavior, frecce/dots (comportamento navigazione), tipo transizione styleFields[] → preset, sfondo, tipograf"
+  },
+  {
+    "file": "woo_product_image.js",
+    "type": "woo_product_image",
+    "name": "Immagine Prodotto",
+    "icon": "dashicons-format-image",
+    "category": "woocommerce",
+    "comment": "Tile WC Immagine Prodotto — split CONTENUTO/STILE (regola universale Olobuild). fields[] → toggle galleria/lightbox/zoom, posizione galleria styleFields[] → preset, sfondo, tipografia, proporzione, raggio bordi, dimensioni miniature, bordo AVANZATE → meta tecn"
+  },
+  {
+    "file": "woo_product_meta.js",
+    "type": "woo_product_meta",
+    "name": "Meta Prodotto",
+    "icon": "dashicons-info-outline",
+    "category": "woocommerce",
+    "comment": "Tile WC Meta Prodotto — split CONTENUTO/STILE (regola universale Olobuild). fields[] → toggle SKU/categorie/tag, separatore inline styleFields[] → preset, sfondo, tipografia, layout, dimensione, peso etichetta, colori, bordo AVANZATE → meta tecnico (id/class/c"
+  },
+  {
+    "file": "woo_product_navigation.js",
+    "type": "woo_product_navigation",
+    "name": "Navigazione Prodotti",
+    "icon": "dashicons-leftright",
+    "category": "woocommerce",
+    "comment": "Tile Woo Product Navigation — split CONTENUTO/STILE (regola universale Olobuild). fields[] → toggle thumbnail/etichetta, testi etichette, stile separatore styleFields[] → preset, sfondo, tipografia, colori (con hover), bordo"
+  },
+  {
+    "file": "woo_product_stock.js",
+    "type": "woo_product_stock",
+    "name": "Stock Prodotto",
+    "icon": "dashicons-archive",
+    "category": "woocommerce",
+    "comment": "Tile WC Stock Prodotto — split CONTENUTO/STILE (regola universale Olobuild). fields[] → toggle quantità/icona, soglia scorte basse (configurazione comportamentale) styleFields[] → preset, sfondo, tipografia, dimensione, peso, allineamento, dimensione icona, co"
+  },
+  {
+    "file": "woo_product_tabs.js",
+    "type": "woo_product_tabs",
+    "name": "Tab Prodotto",
+    "icon": "dashicons-index-card",
+    "category": "woocommerce",
+    "comment": "Tile WC Tab Prodotto — split CONTENUTO/STILE (regola universale Olobuild). fields[] → toggle tab visibili (descrizione, info aggiuntive, recensioni) styleFields[] → preset, sfondo, tipografia, stile tab, colori, bordo AVANZATE → meta tecnico (id/class/condizio"
+  },
+  {
+    "file": "woo_product_title.js",
+    "type": "woo_product_title",
+    "name": "Titolo Prodotto",
+    "icon": "dashicons-heading",
+    "category": "woocommerce",
+    "comment": "Tile WC Titolo Prodotto — split CONTENUTO/STILE (regola universale Olobuild). fields[] → tag HTML, link al prodotto styleFields[] → preset, sfondo, tipografia, dimensione, peso, allineamento, colori, bordo AVANZATE → meta tecnico (id/class/condizioni)"
+  },
+  {
+    "file": "woo_products.js",
+    "type": "woo_products",
+    "name": "Prodotti WC",
+    "icon": "dashicons-products",
+    "category": "woocommerce",
+    "comment": "Tile WooCommerce Prodotti — split CONTENUTO/STILE (regola universale Olobuild). fields[] → query (posts_per_page, orderby/order, category/tag, on_sale, featured), toggle visibilita (image/title/price/rating/cart/badge/compare/pagination), layout grid/carousel "
+  },
+  {
+    "file": "woo_quickview.js",
+    "type": "woo_quickview",
+    "name": "WC Quick View",
+    "icon": "dashicons-visibility",
+    "category": "woocommerce",
+    "comment": "Tile WC Quick View — split CONTENUTO/STILE (regola universale Olobuild). fields[] → testo pulsante, toggle di visibilita, dimensione modale styleFields[] → preset, sfondo, tipografia, stile pulsante, colori, ombra, bordo AVANZATE → meta tecnico (id/class/condi"
+  },
+  {
+    "file": "woo_rating.js",
+    "type": "woo_rating",
+    "name": "Valutazione Prodotto",
+    "icon": "dashicons-star-filled",
+    "category": "woocommerce",
+    "comment": "Tile WC Valutazione Prodotto — split CONTENUTO/STILE (regola universale Olobuild). fields[] → toggle conteggio/media (sorgente dati WooCommerce) styleFields[] → preset, sfondo, tipografia, dimensioni stelle/testo, colori, bordo AVANZATE → meta tecnico (id/clas"
+  },
+  {
+    "file": "woo_recently_viewed.js",
+    "type": "woo_recently_viewed",
+    "name": "WC Visti di Recente",
+    "icon": "dashicons-clock",
+    "category": "woocommerce",
+    "comment": "Tile WC Visti di Recente — split CONTENUTO/STILE (regola universale Olobuild). fields[] → titolo intestazione, tag heading, limit query, colonne responsive, toggle visibilita, testo lista vuota styleFields[] → preset, sfondo, tipografia, text effects, gap, rat"
+  },
+  {
+    "file": "woo_related.js",
+    "type": "woo_related",
+    "name": "Prodotti Correlati",
+    "icon": "dashicons-networking",
+    "category": "woocommerce",
+    "comment": "Tile WC Prodotti Correlati — split CONTENUTO/STILE (regola universale Olobuild). fields[] → titolo intestazione, query (numero prodotti), colonne responsive, toggle visibilita styleFields[] → preset, sfondo, tipografia, gap, stile card, colori, bordo AVANZATE "
+  },
+  {
+    "file": "woo_sale_badge.js",
+    "type": "woo_sale_badge",
+    "name": "Badge Offerta",
+    "icon": "dashicons-awards",
+    "category": "woocommerce",
+    "comment": "Tile Woo Sale Badge — split CONTENUTO/STILE (regola universale Olobuild). fields[] → testo badge, testo custom, forma, posizione styleFields[] → preset, sfondo, tipografia, dimensioni, peso, colori, bordo"
+  },
+  {
+    "file": "woo_upsells.js",
+    "type": "woo_upsells",
+    "name": "Prodotti Suggeriti",
+    "icon": "dashicons-star-filled",
+    "category": "woocommerce",
+    "comment": "Tile WC Prodotti Suggeriti (upsell) — split CONTENUTO/STILE (regola universale Olobuild). fields[] → titolo sezione, colonne responsive, toggle visibilita styleFields[] → preset, sfondo, tipografia, gap, stile card, colori, bordo AVANZATE → meta tecnico (id/cl"
+  },
+  {
+    "file": "woo_wishlist.js",
+    "type": "woo_wishlist",
+    "name": "WC Wishlist",
+    "icon": "dashicons-heart",
+    "category": "woocommerce",
+    "comment": "Tile WC Wishlist — split CONTENUTO/STILE (regola universale Olobuild). fields[] → icona, stile trigger, toggle visibilita, testo vuoto, colonne responsive styleFields[] → preset, sfondo, tipografia, stile card, gap, colori, ombra, bordo AVANZATE → meta tecnico"
+  },
+  {
+    "file": "workgrid.js",
+    "type": "workgrid",
+    "name": "Work Grid",
+    "icon": "dashicons-screenoptions",
+    "category": "layout",
+    "comment": "Work Grid — griglia di lavori/progetti con immagine (placeholder a strisce se vuota), titolo + meta e descrizione, con zoom dell'immagine al passaggio del mouse. Token-first: titolo dal font heading del tema; meta in monospace."
+  },
+  {
+    "file": "worklist.js",
+    "type": "worklist",
+    "name": "Work List",
+    "icon": "dashicons-menu-alt",
+    "category": "layout",
+    "comment": "Work List — indice di progetti/voci a righe (numero · titolo · categoria · anno · freccia) con indentazione e shift al passaggio del mouse. Stile editoriale \"hover-list\". Token-first: font e colori dai settings; il display eredita il font del tema."
+  },
+  {
+    "file": "wpcomments.js",
+    "type": "wpcomments",
+    "name": "Commenti",
+    "icon": "dashicons-admin-comments",
+    "category": "dynamic",
+    "comment": "Tile WpComments — split CONTENUTO/STILE (regola universale Olobuild). fields[] → toggle visibilità (titolo, avatar, data, reply link, form), testo titolo, tag titolo, commenti per pagina, ordine styleFields[] → preset, sfondo creativo, typography preset, dimen"
+  }
+]

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>OLObuild — Redesign categoria Interattive</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{
+    --red:#e1474f;--red-soft:#fef2f3;--navy:#16263d;--ink:#1f2937;--mute:#6b7280;--faint:#94a3b8;
+    --surface-alt:#f6f7f9;--border:#e5e7eb;--bg:#f6f1e8;--line:#e6dfd1;
+    --sans:"Work Sans",-apple-system,sans-serif;--disp:"Instrument Serif",Georgia,serif;--mono:"JetBrains Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1140px;margin:0 auto;padding:52px 32px 90px;}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+  h1{font-family:var(--disp);font-weight:400;font-size:clamp(40px,5.5vw,64px);line-height:1;letter-spacing:-.02em;color:var(--navy);margin:0 0 14px;}
+  h1 em{font-style:italic;color:var(--red);}
+  .lead{font-size:16px;color:var(--mute);max-width:74ch;margin:0 0 8px;line-height:1.55;}
+  .lead b{color:var(--navy);font-weight:600;}
+  .cat{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 13px;color:var(--mute);margin-top:18px;}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;margin-top:36px;}
+  .col-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+  .badge{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:999px;}
+  .today .badge{background:#fde2e4;color:#b42318;} .new .badge{background:#dcfce7;color:#15803d;}
+  .col-head h2{font-size:15px;font-weight:700;color:var(--navy);margin:0;}
+  .col-head .n{font-size:12px;color:var(--faint);margin-left:auto;}
+
+  .stage{background:#efe9dd;border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:20px;}
+  .stage.coh{background:#f3ede2;}
+  .tlabel{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:-2px 0 -10px 2px;}
+  .pin{position:absolute;z-index:4;font-size:10px;font-weight:700;background:#fff;border:1px dashed #e0a0a4;color:#b42318;border-radius:6px;padding:2px 7px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.06);right:8px;top:-6px;}
+  .repflag{font-size:9px;font-weight:700;letter-spacing:.04em;color:var(--faint);border:1px solid var(--line);border-radius:4px;padding:1px 5px;margin-left:6px;text-transform:uppercase;vertical-align:middle;}
+
+  /* ── Accordion (faithful card-soft) ── */
+  .acc{display:flex;flex-direction:column;gap:12px;}
+  .acc .panel{border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 1px 2px rgba(16,24,40,.05);}
+  .acc .panel.open{border-color:#e8622a;box-shadow:0 1px 2px rgba(232,98,42,.05),0 4px 12px rgba(232,98,42,.08);}
+  .acc .hd{display:flex;align-items:center;gap:10px;padding:16px 20px;font-size:15px;font-weight:600;color:#1e293b;cursor:pointer;}
+  .acc .panel.open .hd{background:#fdf2ec;}
+  .acc .ic{color:#e8622a;flex-shrink:0;}
+  .acc .bd{padding:4px 20px 18px;font-size:14px;color:#475569;line-height:1.6;}
+
+  /* coherent accordion */
+  .acc.coh .panel{border-radius:10px;}
+  .acc.coh .panel.open{border-color:var(--red);box-shadow:0 1px 2px rgba(225,71,79,.06),0 4px 12px -2px rgba(225,71,79,.14);}
+  .acc.coh .panel.open .hd{background:var(--red-soft);}
+  .acc.coh .ic{color:var(--red);}
+  .acc.coh .hd:focus-visible{outline:none;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--red) 45%,#fff);}
+
+  /* ── Tabs ── */
+  .tabs .bar{display:flex;gap:4px;border-bottom:2px solid #eee;}
+  .tabs .tab{padding:10px 16px;font-size:14px;font-weight:600;color:#6b7280;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;}
+  .tabs.o .tab.on{color:#1e87f0;border-bottom-color:#1e87f0;}
+  .tabs.coh .tab.on{color:var(--red);border-bottom-color:var(--red);}
+  .tabs .body{padding:16px 2px;font-size:14px;color:var(--mute);line-height:1.55;}
+
+  /* ── Form field ── */
+  .ff{display:flex;flex-direction:column;gap:6px;}
+  .ff label{font-size:13px;font-weight:600;color:var(--ink);}
+  .ff .inp{border:1px solid #d1d5db;background:#fff;font-size:14px;color:var(--ink);padding:10px 12px;outline:none;}
+  .ff.o .inp{border-radius:6px;}
+  .ff.o .inp.foc{border-color:#6366F1;box-shadow:0 0 0 3px rgba(99,102,241,.25);}
+  .ff.coh .inp{border-radius:10px;}
+  .ff.coh .inp.foc{border-color:var(--red);box-shadow:0 0 0 3px var(--red-soft);}
+  .ff .row2{display:flex;align-items:center;gap:10px;margin-top:4px;}
+  .sw{width:38px;height:22px;border-radius:999px;position:relative;flex-shrink:0;}
+  .sw::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 2px rgba(0,0,0,.2);}
+  .sw.o{background:#6366F1;} .sw.coh{background:var(--red);} .sw.on::after{transform:translateX(16px);}
+  .ff .row2 span{font-size:13px;color:var(--mute);}
+  .btn{align-self:flex-start;margin-top:6px;border:0;border-radius:10px;padding:11px 22px;font:600 14px var(--sans);color:#fff;cursor:pointer;}
+  .btn.o{background:#1e87f0;border-radius:6px;} .btn.coh{background:var(--red);box-shadow:0 1px 2px rgba(15,23,42,.12),0 4px 12px -4px rgba(225,71,79,.5);}
+
+  .why{margin-top:34px;background:#fffdf8;border:1px solid var(--line);border-radius:14px;padding:24px 26px;}
+  .why h3{font-family:var(--disp);font-weight:400;font-size:24px;color:var(--navy);margin:0 0 16px;}
+  .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px 22px;}
+  .why-item{font-size:13px;line-height:1.5;color:var(--mute);}
+  .why-item b{color:var(--navy);display:block;font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;margin-bottom:4px;}
+  .why-item .od{font-family:var(--mono);font-size:11px;color:#b42318;}.why-item .nw{font-family:var(--mono);font-size:11px;color:#15803d;}
+  @media(max-width:840px){.cols{grid-template-columns:1fr;}.why-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">OLObuild · tile redesign</div>
+  <h1>Categoria <em>Interattive</em></h1>
+  <p class="lead">Accordion (fedele al codice), Tabs e Form. L'Accordion è già ben fatto — preset, hover, header accessibile — <b>ma usa un accento tutto suo</b> <code style="font-family:var(--mono)">#e8622a</code>, diverso ancora da indaco/blu. Tabs e campi usano altri accenti e raggi. A destra: stesso <b>accento del brand</b>, stesso raggio, e soprattutto <b>focus-visible coerente</b> su ogni elemento interattivo (a11y).</p>
+  <span class="cat">Accordion fedele · Tabs e Form rappresentativi</span>
+
+  <div class="cols">
+    <!-- OGGI -->
+    <div>
+      <div class="col-head today"><span class="badge">Oggi</span><h2>Accenti & stati sparsi</h2><span class="n">#e8622a / #1e87f0 / #6366F1</span></div>
+      <div class="stage">
+
+        <div class="tlabel">Accordion</div>
+        <div style="position:relative"><span class="pin">accento #e8622a</span>
+          <div class="acc">
+            <div class="panel open">
+              <div class="hd"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span style="flex:1">Quali servizi offrite?</span></div>
+              <div class="bd">Contenuto del pannello aperto con la risposta alla domanda.</div>
+            </div>
+            <div class="panel">
+              <div class="hd"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span style="flex:1">Come funziona la prenotazione?</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tlabel">Tabs <span class="repflag">rappresentativo</span></div>
+        <div style="position:relative"><span class="pin">attivo blu #1e87f0</span>
+          <div class="tabs o">
+            <div class="bar"><div class="tab on">Descrizione</div><div class="tab">Dettagli</div><div class="tab">Recensioni</div></div>
+            <div class="body">Contenuto della tab attiva.</div>
+          </div>
+        </div>
+
+        <div class="tlabel">Form <span class="repflag">rappresentativo</span></div>
+        <div style="position:relative"><span class="pin">focus indaco · raggio 6</span>
+          <div class="ff o">
+            <label>Email</label>
+            <input class="inp foc" value="mario@esempio.it"/>
+            <div class="row2"><span class="sw o on"></span><span>Iscrivimi alla newsletter</span></div>
+            <button class="btn o">Invia</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- COERENTE -->
+    <div>
+      <div class="col-head new"><span class="badge">Coerente</span><h2>Un accento, focus ovunque</h2><span class="n">brand + a11y</span></div>
+      <div class="stage coh">
+
+        <div class="tlabel">Accordion</div>
+        <div class="acc coh">
+          <div class="panel open">
+            <div class="hd" tabindex="0"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span style="flex:1">Quali servizi offrite?</span></div>
+            <div class="bd">Contenuto del pannello aperto con la risposta alla domanda.</div>
+          </div>
+          <div class="panel">
+            <div class="hd" tabindex="0"><span class="ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span style="flex:1">Come funziona la prenotazione?</span></div>
+          </div>
+        </div>
+
+        <div class="tlabel">Tabs</div>
+        <div class="tabs coh">
+          <div class="bar"><div class="tab on">Descrizione</div><div class="tab">Dettagli</div><div class="tab">Recensioni</div></div>
+          <div class="body">Contenuto della tab attiva.</div>
+        </div>
+
+        <div class="tlabel">Form</div>
+        <div class="ff coh">
+          <label>Email</label>
+          <input class="inp foc" value="mario@esempio.it"/>
+          <div class="row2"><span class="sw coh on"></span><span>Iscrivimi alla newsletter</span></div>
+          <button class="btn coh">Invia</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="why">
+    <h3>Cosa è stato unificato</h3>
+    <div class="why-grid">
+      <div class="why-item"><b>Accento</b> Unico <span class="nw">brand</span> via token. Prima: <span class="od">#e8622a / #1e87f0 / #6366F1</span> — tre interattive, tre rossi/blu diversi.</div>
+      <div class="why-item"><b>Focus-visible</b> Anello coerente <span class="nw">primary 45%</span> su header, tab e input. Prima: assente o solo su alcuni.</div>
+      <div class="why-item"><b>Raggio</b> Stesso <span class="nw">RADIUS.md = 10</span> per pannelli, input, bottoni. Prima: <span class="od">12 / 6 / 6</span> misti.</div>
+      <div class="why-item"><b>Stato attivo</b> Stessa logica: tint <span class="nw">red-soft</span> + bordo accento (accordion aperto, tab attiva).</div>
+      <div class="why-item"><b>Switch/controlli</b> Stesso accento e dimensioni; hit-area ≥ 44px.</div>
+      <div class="why-item"><b>Già buono → mantenuto</b> Preset, hover-lift e header con <span class="nw">role/aria/tastiera</span> dell'Accordion restano: si cambia solo il colore, non la struttura.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

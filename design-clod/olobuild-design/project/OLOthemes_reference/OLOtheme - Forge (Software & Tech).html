@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Forge — Build, test, ship. Faster.</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="Forge is the build &amp; CI platform for developers — instant caches, parallel pipelines and a command palette for everything. Ship faster."/>
+<link rel="stylesheet" href="olothemes/forge.css"/>
+</head>
+<body data-screen-label="Forge — Home" data-fx>
+
+<header class="fg-nav" data-olo-tile="Navmenu">
+  <div class="fg-wrap fg-nav__in">
+    <a class="logo" href="#top"><span class="mk"></span>Forge</a>
+    <nav class="fg-nav__links">
+      <a href="#features">Features</a>
+      <a href="#integrations">Integrations</a>
+      <a href="OLOtheme - Forge - Changelog.html">Changelog</a>
+      <a href="#pricing">Pricing</a>
+    </nav>
+    <div class="fg-nav__cta">
+      <a href="#" class="sign">Docs</a>
+      <a href="#pricing" class="btn btn--orange" data-magnetic>Start building</a>
+      <button class="fx-menu-trigger" data-menu-toggle="#fgMenu" aria-label="Open menu">Menu<span class="bars"><i></i><i></i></span></button>
+    </div>
+  </div>
+</header>
+<nav class="fx-menu" id="fgMenu" data-menu aria-label="Menu">
+  <button class="fx-menu__x" data-menu-close aria-label="Close">&times;</button>
+  <div class="fx-menu__links">
+    <a href="#features"><span class="n">01</span>Features</a>
+    <a href="#integrations"><span class="n">02</span>Integrations</a>
+    <a href="OLOtheme - Forge - Changelog.html"><span class="n">03</span>Changelog</a>
+    <a href="#pricing"><span class="n">04</span>Pricing</a>
+  </div>
+  <div class="fx-menu__foot"><span>forge build --everywhere</span><a href="#pricing">Start free &rarr;</a></div>
+</nav>
+
+<main id="top">
+
+<section class="fg-hero" data-olo-tile="Hero">
+  <span class="fg-hero__glow"></span><span class="fg-hero__grid"></span>
+  <div class="fg-wrap fg-hero__in">
+    <div>
+      <span class="pill" data-reveal>forge 2.0 · now with remote caching</span>
+      <h1 data-reveal="80">Build, test, ship.<br/><span class="o">Absurdly fast.</span></h1>
+      <p class="fg-hero__sub" data-reveal="160">Forge caches everything, parallelises your pipeline across machines, and puts every action one keystroke away. Green builds in seconds, not coffee breaks.</p>
+      <div class="fg-hero__cta" data-reveal="240">
+        <a href="#pricing" class="btn btn--orange btn--lg" data-magnetic>Start building free</a>
+        <a href="#features" class="btn btn--ghost btn--lg" data-magnetic>See how it works</a>
+      </div>
+    </div>
+    <div data-reveal="200">
+      <div class="fg-term">
+        <div class="fg-term__bar"><i></i><i></i><i></i><span class="t">forge run ci</span></div>
+        <div class="fg-term__body"><span class="pr">$</span> <span class="w">forge run ci</span>
+<span class="cm"># restoring cache…</span> <span class="ok">hit</span> <span class="nm">(2.1s)</span>
+<span class="ok">✓</span> lint        <span class="nm">1.4s</span>
+<span class="ok">✓</span> test <span class="cm">×128</span>  <span class="nm">9.7s</span> <span class="cm">(parallel)</span>
+<span class="ok">✓</span> build       <span class="nm">6.2s</span>
+<span class="ok">✓</span> deploy prod <span class="nm">4.8s</span>
+<span class="cm"># total</span> <span class="nm">24.2s</span> <span class="ok">✓ green</span>
+<span class="pr">$</span> <span class="cur"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="fg-logos" data-olo-tile="LogoCloud" data-olo-note="NEW tile candidate: LogoCloud.">
+  <div class="fg-wrap"><p>Trusted on the critical path at fast-moving teams</p>
+    <div class="fg-logos__row"><span class="fg-logo"></span><span class="fg-logo"></span><span class="fg-logo"></span><span class="fg-logo"></span><span class="fg-logo"></span><span class="fg-logo"></span></div>
+  </div>
+</section>
+
+<section class="fg-stats" data-olo-tile="StatStrip" data-olo-note="NEW tile candidate: StatStrip.">
+  <div class="fg-wrap fg-stats__in">
+    <div data-reveal><b><span data-count="14">0</span><span class="u">×</span></b><span>Faster cold builds</span></div>
+    <div data-reveal="80"><b><span data-count="92">0</span><span class="u">%</span></b><span>Cache hit rate</span></div>
+    <div data-reveal="160"><b><span data-count="500">0</span><span class="u">+</span></b><span>Parallel runners</span></div>
+    <div data-reveal="240"><b><span data-count="40">0</span><span class="u">M</span></b><span>Builds / month</span></div>
+  </div>
+</section>
+
+<section class="fg-sec" id="features" data-olo-tile="FeatureSplit">
+  <div class="fg-wrap fg-feat" data-reveal>
+    <div>
+      <span class="eyebrow">// remote cache</span>
+      <h2>Never build the <span class="o">same thing twice</span></h2>
+      <p>Forge fingerprints every task and shares results across your whole team and CI. Change one file, rebuild one file — everything else is a cache hit.</p>
+      <ul class="fg-feat__list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Content-addressed, deterministic</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Shared between local &amp; CI</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Works with any language</li>
+      </ul>
+      <a href="#" class="btn btn--ghost" data-magnetic>Read the docs</a>
+    </div>
+    <div class="fg-feat__media"><div class="bar"><i></i><i></i><i></i></div><div class="pad"><div class="media" data-label="dependency graph — cached vs rebuilt nodes" style="aspect-ratio:16/10;border-radius:8px"></div></div></div>
+  </div>
+</section>
+
+<section class="fg-sec panel" data-olo-tile="CommandPalette" data-olo-note="NEW tile candidate: CommandPalette — spotlight-lit zone with a fake ⌘K command bar; cursor lights the panel.">
+  <div class="fg-wrap">
+    <div class="fg-cmd fx-spot" data-spotlight data-reveal>
+      <div class="fg-cmd__inner">
+        <span class="eyebrow">// everything, one keystroke away</span>
+        <h2 style="margin-top:14px">The <span class="o">command palette</span> for your whole stack</h2>
+        <p>Run tasks, jump to logs, roll back a deploy or open a PR — without leaving the keyboard. Move your cursor here.</p>
+        <div class="fg-cmd__bar"><span style="color:var(--orange)">⌘</span><span>forge deploy production<span class="cur"></span></span><span class="k">⌘K</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="fg-sec" id="integrations" data-olo-tile="IntegrationGrid" data-olo-note="NEW tile candidate: IntegrationGrid.">
+  <div class="fg-wrap">
+    <div class="sec-head" data-reveal><span class="eyebrow">// integrations</span><h2>Plugs into your <span class="o">toolchain</span></h2><p>Forge runs alongside what you already use — no rip-and-replace.</p></div>
+    <div class="fg-intg" data-reveal>
+      <div class="fg-intg__c"><span class="d"></span><span>GitHub</span></div><div class="fg-intg__c"><span class="d"></span><span>GitLab</span></div><div class="fg-intg__c"><span class="d"></span><span>Docker</span></div><div class="fg-intg__c"><span class="d"></span><span>npm</span></div><div class="fg-intg__c"><span class="d"></span><span>Cargo</span></div><div class="fg-intg__c"><span class="d"></span><span>Go</span></div>
+      <div class="fg-intg__c"><span class="d"></span><span>Bazel</span></div><div class="fg-intg__c"><span class="d"></span><span>Slack</span></div><div class="fg-intg__c"><span class="d"></span><span>AWS</span></div><div class="fg-intg__c"><span class="d"></span><span>Vercel</span></div><div class="fg-intg__c"><span class="d"></span><span>Sentry</span></div><div class="fg-intg__c"><span class="d"></span><span>+50</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTRAST CHECKER (OLObuild · NEW tile → ContrastChecker) ═══ -->
+<section class="fg-sec" id="contrast" data-olo-tile="ContrastChecker" data-olo-note="NEW tile candidate: ContrastChecker — interactive zone. Pick a text and background colour; computes the WCAG contrast ratio (relative luminance) live and flips AA / AAA / AA-Large badges pass/fail. Props: fg[hex], bg[hex], sample text.">
+  <div class="fg-wrap">
+    <div class="sec-head" data-reveal><span class="eyebrow">// accessibility</span><h2>Ship <span class="o">accessible</span> colour</h2><p>Pair any text and background and read the WCAG contrast ratio instantly — with AA, AAA and large-text verdicts as you go.</p></div>
+    <div class="fg-ct" data-reveal data-contrast>
+      <div class="fg-ct__controls">
+        <div class="fg-ct__group"><span class="lab">// text colour</span><div class="fg-ct__sw">
+          <button data-ct-fg="#ffffff" style="background:#ffffff" aria-label="White text"></button>
+          <button data-ct-fg="#0a0a0a" style="background:#0a0a0a" aria-label="Near-black text"></button>
+          <button data-ct-fg="#ff6a2b" style="background:#ff6a2b" aria-label="Orange text"></button>
+          <button data-ct-fg="#b6e85a" style="background:#b6e85a" aria-label="Lime text"></button>
+          <button data-ct-fg="#a8a8a8" style="background:#a8a8a8" aria-label="Grey text"></button>
+        </div></div>
+        <div class="fg-ct__group"><span class="lab">// background</span><div class="fg-ct__sw">
+          <button data-ct-bg="#121212" style="background:#121212" aria-label="Near-black background"></button>
+          <button data-ct-bg="#ffffff" style="background:#ffffff" aria-label="White background"></button>
+          <button data-ct-bg="#1c1c1c" style="background:#1c1c1c" aria-label="Panel background"></button>
+          <button data-ct-bg="#ff6a2b" style="background:#ff6a2b" aria-label="Orange background"></button>
+          <button data-ct-bg="#b6e85a" style="background:#b6e85a" aria-label="Lime background"></button>
+        </div></div>
+        <div class="fg-ct__readout">
+          <div class="fg-ct__ratio"><b data-ct-ratio>21.00:1</b><small>WCAG contrast ratio</small></div>
+          <div class="fg-ct__badges">
+            <div class="fg-ct__badge" data-ct-badge="aa"><b>AA</b><span data-ct-state>Pass</span></div>
+            <div class="fg-ct__badge" data-ct-badge="aaa"><b>AAA</b><span data-ct-state>Pass</span></div>
+            <div class="fg-ct__badge" data-ct-badge="aa-lg"><b>AA Large</b><span data-ct-state>Pass</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="fg-ct__preview" data-ct-preview><div class="big">The quick brown fox</div><div class="small">jumps over 13 lazy dogs — 0123456789</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="fg-sec panel" id="pricing" data-olo-tile="Pricing">
+  <div class="fg-wrap">
+    <div class="sec-head" data-reveal><span class="eyebrow">// pricing</span><h2>Free to start, <span class="o">scales with CI</span></h2></div>
+    <div class="fg-price-grid">
+      <div class="fg-price" data-reveal>
+        <div class="fg-price__n">Open Source</div><div class="fg-price__p">$0</div><p class="fg-price__d">Free forever for public repos.</p>
+        <ul class="fg-price__list"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Unlimited cache</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Community runners</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Community support</li></ul>
+        <a href="#" class="btn btn--ghost" data-magnetic>Get started</a>
+      </div>
+      <div class="fg-price feat" data-reveal="100">
+        <span class="fg-price__tag">Most popular</span><div class="fg-price__n">Team</div><div class="fg-price__p">$39<small>/dev/mo</small></div><p class="fg-price__d">For teams shipping every day.</p>
+        <ul class="fg-price__list"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>500 parallel runners</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Remote cache, private</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Insights &amp; flaky-test detection</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Priority support</li></ul>
+        <a href="#" class="btn btn--orange" data-magnetic>Start 14-day trial</a>
+      </div>
+      <div class="fg-price" data-reveal="200">
+        <div class="fg-price__n">Enterprise</div><div class="fg-price__p">Custom</div><p class="fg-price__d">Self-host, SSO &amp; SLAs.</p>
+        <ul class="fg-price__list"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Self-hosted runners</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>SSO, SAML &amp; audit</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Dedicated support</li></ul>
+        <a href="#" class="btn btn--ghost" data-magnetic>Talk to sales</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="fg-sec fg-cta" data-olo-tile="CallToAction">
+  <div class="fg-wrap"><div class="fg-cta__box" data-reveal>
+    <span class="glow"></span>
+    <h2>Your next build is <span class="o">already cached</span></h2>
+    <p>Install the CLI, point it at your repo, and watch your pipeline collapse from minutes to seconds.</p>
+    <div class="fg-cta__cta"><a href="#pricing" class="btn btn--orange btn--lg" data-magnetic>Start building free</a><a href="OLOtheme - Forge - Changelog.html" class="btn btn--ghost btn--lg" data-magnetic>See what's new</a></div>
+  </div></div>
+</section>
+
+</main>
+
+<footer class="fg-foot" data-olo-tile="Footer">
+  <div class="fg-wrap">
+    <div class="fg-foot__top">
+      <div class="fg-foot__brand"><a class="logo" href="#top"><span class="mk"></span>Forge</a><p>The build &amp; CI platform for developers. Cache everything, ship faster.</p></div>
+      <div><h4>Product</h4><ul><li><a href="#features">Features</a></li><li><a href="#integrations">Integrations</a></li><li><a href="#pricing">Pricing</a></li><li><a href="OLOtheme - Forge - Changelog.html">Changelog</a></li></ul></div>
+      <div><h4>Developers</h4><ul><li><a href="#">Docs</a></li><li><a href="#">CLI reference</a></li><li><a href="#">API</a></li><li><a href="#">Status</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Blog</a></li><li><a href="#">Careers</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="fg-foot__bot"><span>© 2026 Forge — an OLOtheme demo.</span><span>Built with OLObuild</span></div>
+  </div>
+</footer>
+
+<script src="olothemes/fx.js"></script>
+<script src="olothemes/theme.js"></script>
+</body>
+</html>

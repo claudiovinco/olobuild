@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Carrello — The marketplace for makers</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="Carrello is an online marketplace for independent makers — thousands of shops, one cart. Discover, support small, and check out once."/>
+<link rel="stylesheet" href="olothemes/carrello.css"/>
+</head>
+<body data-screen-label="Carrello — Home" data-fx>
+
+<header class="ca-nav" data-olo-tile="Navmenu">
+  <div class="ca-wrap ca-nav__in">
+    <a class="logo" href="#top"><span class="mk"></span>Carrello</a>
+    <nav class="ca-nav__links">
+      <a href="OLOtheme - Carrello - Deals.html">Deals</a>
+      <a href="#categories">Categories</a>
+      <a href="#trending">Trending</a>
+      <a href="#vendors">Sell</a>
+    </nav>
+    <div class="ca-nav__cta">
+      <a href="#" class="ca-cart">Cart · 3</a>
+      <a href="#vendors" class="btn btn--coral" data-magnetic>Open a shop</a>
+      <button class="fx-menu-trigger" data-menu-toggle="#caMenu" aria-label="Open menu">Menu<span class="bars"><i></i><i></i></span></button>
+    </div>
+  </div>
+</header>
+<nav class="fx-menu" id="caMenu" data-menu aria-label="Menu">
+  <button class="fx-menu__x" data-menu-close aria-label="Close">&times;</button>
+  <div class="fx-menu__links">
+    <a href="OLOtheme - Carrello - Deals.html"><span class="n">01</span>Deals</a>
+    <a href="#categories"><span class="n">02</span>Categories</a>
+    <a href="#trending"><span class="n">03</span>Trending</a>
+    <a href="#vendors"><span class="n">04</span>Sell on Carrello</a>
+  </div>
+  <div class="fx-menu__foot"><span>Thousands of shops · one cart</span><a href="#vendors">Open a shop &rarr;</a></div>
+</nav>
+
+<main id="top">
+<!-- ═══ SIGNATURE: search hero (OLObuild · NEW tile → SearchHero) ═══ -->
+<section class="ca-hero" data-olo-tile="SearchHero" data-olo-note="NEW tile candidate: SearchHero — headline + live search bar + quick category chips.">
+  <span class="ca-hero__glow"></span>
+  <div class="ca-wrap ca-hero__in">
+    <span class="eyebrow" data-reveal>Marketplace for independent makers</span>
+    <h1 data-reveal="80">Everything good,<br/>from <span class="c">small shops.</span></h1>
+    <p data-reveal="160">Thousands of independent sellers, one cart, one checkout. Find the thing — and support the person who made it.</p>
+    <div class="ca-search" data-reveal="200"><input type="search" placeholder="Search 90,000+ handmade things…"/><button class="btn btn--coral" data-magnetic>Search</button></div>
+    <div class="ca-chips" data-reveal="240"><span class="ca-chip">Ceramics</span><span class="ca-chip">Prints</span><span class="ca-chip">Jewellery</span><span class="ca-chip">Homeware</span><span class="ca-chip">Vintage</span><span class="ca-chip">Gifts</span></div>
+  </div>
+</section>
+
+<!-- ═══ SIGNATURE: drag category rail (OLObuild · NEW tile → CategoryRail) ═══ -->
+<section class="ca-sec" id="categories" data-olo-tile="CategoryRail" data-olo-note="NEW tile candidate: CategoryRail — drag-scroll category cards (data-hscroll).">
+  <div class="ca-wrap"><div class="sec-head" data-reveal><h2>Shop by <span class="c">category</span></h2><span class="more">← drag →</span></div></div>
+  <div class="ca-wrap"><div class="ca-rail" data-hscroll data-reveal="60">
+    <a class="ca-catc" href="OLOtheme - Carrello - Deals.html"><div class="media" data-label="ceramics"></div><b>Ceramics</b></a>
+    <a class="ca-catc" href="OLOtheme - Carrello - Deals.html"><div class="media" data-label="prints"></div><b>Art &amp; prints</b></a>
+    <a class="ca-catc" href="OLOtheme - Carrello - Deals.html"><div class="media" data-label="jewellery"></div><b>Jewellery</b></a>
+    <a class="ca-catc" href="OLOtheme - Carrello - Deals.html"><div class="media" data-label="homeware"></div><b>Homeware</b></a>
+    <a class="ca-catc" href="OLOtheme - Carrello - Deals.html"><div class="media" data-label="vintage"></div><b>Vintage</b></a>
+    <a class="ca-catc" href="OLOtheme - Carrello - Deals.html"><div class="media" data-label="stationery"></div><b>Stationery</b></a>
+  </div></div>
+</section>
+
+<!-- ═══ SIGNATURE: flash-sale countdown (OLObuild · NEW tile → Countdown) ═══ -->
+<section class="ca-sec" data-olo-tile="Countdown" data-olo-note="NEW tile candidate: Countdown — live flash-sale timer (data-countdown).">
+  <div class="ca-wrap">
+    <div class="ca-deal" data-reveal data-countdown="2026-06-30T23:59:59">
+      <div><span style="font-family:var(--sans);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.85)">Maker's Week</span><h2>Up to 40% off, this week only</h2><p>Hand-picked deals across thousands of shops.</p></div>
+      <div class="ca-deal__cd">
+        <div class="ca-deal__u"><b data-cd="days">—</b><span>Days</span></div>
+        <div class="ca-deal__u"><b data-cd="hours">—</b><span>Hrs</span></div>
+        <div class="ca-deal__u"><b data-cd="mins">—</b><span>Min</span></div>
+        <div class="ca-deal__u"><b data-cd="secs">—</b><span>Sec</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ GIFT FINDER (OLObuild · NEW tile → Finder) ═══ -->
+<section class="ca-sec" id="gifts" data-olo-tile="Finder" data-olo-note="NEW tile candidate: Finder — interactive zone. One-tap recommender; option chips switch the visible result card. Props: options[key,label], results[key,content].">
+  <div class="ca-wrap" data-reveal style="--fx-zone-accent:#ff5a5f;--fx-zone-on:#fff;--fx-zone-line:rgba(255,255,255,.16);--fx-zone-bg:rgba(255,90,95,.1);--fx-zone-thumb:#fff">
+    <div class="ca-find-head"><span class="eyebrow">Gift mode</span><h2>Who are you <span class="c">shopping for?</span></h2></div>
+    <div data-finder class="ca-find">
+      <div class="fxf-opts">
+        <button data-finder-opt="partner">A partner</button>
+        <button data-finder-opt="friend">A close friend</button>
+        <button data-finder-opt="home">A new home</button>
+        <button data-finder-opt="self">Treat yourself</button>
+      </div>
+      <div data-finder-res="partner" class="ca-find__card"><div class="media" data-label="jewellery &amp; ceramics flatlay"></div><div class="ca-find__b"><span class="k">Curated collection</span><h3>The Thoughtful Edit</h3><p>Pieces made to last and to mean something — hand-thrown, hand-set, hand-finished by makers who sign their work.</p><div class="ca-find__tags"><span>Jewellery</span><span>Ceramics</span><span>Leather</span></div><a href="OLOtheme - Carrello - Deals.html" class="shop">Shop the edit · from €24 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
+      <div data-finder-res="friend" class="ca-find__card"><div class="media" data-label="prints &amp; candles"></div><div class="ca-find__b"><span class="k">Curated collection</span><h3>Small Joys</h3><p>The little luxuries that always land — a riso print, a good candle, the notebook they'll actually use. All under forty euro.</p><div class="ca-find__tags"><span>Prints</span><span>Candles</span><span>Stationery</span></div><a href="OLOtheme - Carrello - Deals.html" class="shop">Shop the edit · from €12 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
+      <div data-finder-res="home" class="ca-find__card"><div class="media" data-label="homeware &amp; linen textiles"></div><div class="ca-find__b"><span class="k">Curated collection</span><h3>The Housewarming</h3><p>Everything that makes a new place feel lived-in fast — linen for the table, wool for the sofa, something warm for the kitchen.</p><div class="ca-find__tags"><span>Homeware</span><span>Textiles</span><span>Kitchen</span></div><a href="OLOtheme - Carrello - Deals.html" class="shop">Shop the edit · from €18 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
+      <div data-finder-res="self" class="ca-find__card"><div class="media" data-label="vintage &amp; art finds"></div><div class="ca-find__b"><span class="k">Curated collection</span><h3>Just Because</h3><p>The treat you'd never quite buy at full price — a vintage find, a small original, the self-care thing you keep almost adding to cart.</p><div class="ca-find__tags"><span>Vintage</span><span>Art</span><span>Self-care</span></div><a href="OLOtheme - Carrello - Deals.html" class="shop">Shop the edit · from €15 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="ca-sec" id="trending" data-olo-tile="ProductGrid" data-olo-note="NEW tile candidate: ProductGrid — marketplace product cards (store, rating, discount, fav).">
+  <div class="ca-wrap">
+    <div class="sec-head" data-reveal><h2>Trending <span class="c">now</span></h2><a class="more" href="OLOtheme - Carrello - Deals.html">See all</a></div>
+    <div class="ca-prods">
+      <article class="ca-prod" data-reveal><div class="ca-prod__media"><div class="media" data-label="ceramic mug"></div><span class="ca-prod__off">-25%</span><span class="ca-prod__fav">♡</span></div><div class="ca-prod__b"><div class="ca-prod__store">Kiln Studio</div><h3>Speckled Tea Mug</h3><div class="ca-prod__rate">★ 4.9 (212)</div><div class="ca-prod__foot"><span class="ca-prod__pr">€24<small>€32</small></span><button class="ca-prod__add">Add</button></div></div></article>
+      <article class="ca-prod" data-reveal="80"><div class="ca-prod__media"><div class="media" data-label="risograph print"></div><span class="ca-prod__fav">♡</span></div><div class="ca-prod__b"><div class="ca-prod__store">Press Yan</div><h3>Riso Print, A2</h3><div class="ca-prod__rate">★ 5.0 (88)</div><div class="ca-prod__foot"><span class="ca-prod__pr">€34</span><button class="ca-prod__add">Add</button></div></div></article>
+      <article class="ca-prod" data-reveal="160"><div class="ca-prod__media"><div class="media" data-label="brass earrings"></div><span class="ca-prod__off">-15%</span><span class="ca-prod__fav">♡</span></div><div class="ca-prod__b"><div class="ca-prod__store">Mara Made</div><h3>Brass Arc Earrings</h3><div class="ca-prod__rate">★ 4.8 (340)</div><div class="ca-prod__foot"><span class="ca-prod__pr">€42<small>€49</small></span><button class="ca-prod__add">Add</button></div></div></article>
+      <article class="ca-prod" data-reveal="240"><div class="ca-prod__media"><div class="media" data-label="linen napkins"></div><span class="ca-prod__fav">♡</span></div><div class="ca-prod__b"><div class="ca-prod__store">Flax &amp; Co</div><h3>Linen Napkins, 4</h3><div class="ca-prod__rate">★ 4.9 (156)</div><div class="ca-prod__foot"><span class="ca-prod__pr">€38</span><button class="ca-prod__add">Add</button></div></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="ca-sec panel" id="vendors" data-olo-tile="CardGrid">
+  <div class="ca-wrap">
+    <div class="sec-head" data-reveal><h2>Shops to <span class="c">follow</span></h2></div>
+    <div class="ca-vendors">
+      <div class="ca-vendor" data-reveal><span class="av"></span><div><b>Kiln Studio</b><span>Ceramics · 2.1k sales</span></div></div>
+      <div class="ca-vendor" data-reveal="80"><span class="av"></span><div><b>Press Yan</b><span>Prints · 4.6k sales</span></div></div>
+      <div class="ca-vendor" data-reveal="160"><span class="av"></span><div><b>Mara Made</b><span>Jewellery · 8.9k sales</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="ca-sec" id="cart" data-olo-tile="Builder" data-olo-note="NEW tile candidate: Builder — interactive zone. +/- steppers with a live running total and item count. Props: items[name,price,image], currency, cap.">
+  <div class="ca-wrap ca-cart" data-reveal data-builder data-currency="€" style="--fx-zone-accent:#ff5a5f;--fx-zone-on:#fff;--fx-zone-line:rgba(255,255,255,.16);--fx-zone-bg:rgba(255,255,255,.06)">
+    <div class="ca-cart__head">
+      <div><span class="eyebrow">Try the cart</span><h2>Build a <span class="c">basket</span></h2><p>Tap to add a few finds from makers on Carrello — the total ticks up live, like the real thing.</p></div>
+      <div class="ca-cart__tally"><div class="ca-cart__items"><b data-bld-items>0</b> <span>items</span></div><div class="ca-cart__total" data-bld-total>€0</div></div>
+    </div>
+    <div class="ca-cart__items-grid">
+      <div class="ca-cart__item" data-bld-item data-n="0" data-price="32"><div class="media" data-label="ceramic mug"></div><div class="ca-cart__meta"><h3>Hand-thrown Mug</h3><span>€32 · Clayfolk</span></div><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div>
+      <div class="ca-cart__item" data-bld-item data-n="0" data-price="58"><div class="media" data-label="linen tote"></div><div class="ca-cart__meta"><h3>Linen Tote</h3><span>€58 · Norra Goods</span></div><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div>
+      <div class="ca-cart__item" data-bld-item data-n="0" data-price="24"><div class="media" data-label="beeswax candle"></div><div class="ca-cart__meta"><h3>Beeswax Candle</h3><span>€24 · Hearth&Co</span></div><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div>
+      <div class="ca-cart__item" data-bld-item data-n="0" data-price="45"><div class="media" data-label="enamel pin set"></div><div class="ca-cart__meta"><h3>Notebook Set</h3><span>€45 · Paper Lab</span></div><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div>
+      <div class="ca-cart__item" data-bld-item data-n="0" data-price="76"><div class="media" data-label="wool throw"></div><div class="ca-cart__meta"><h3>Wool Throw</h3><span>€76 · Loom&Field</span></div><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div>
+      <div class="ca-cart__item" data-bld-item data-n="0" data-price="19"><div class="media" data-label="seed kit"></div><div class="ca-cart__meta"><h3>Herb Seed Kit</h3><span>€19 · Sprout</span></div><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="ca-sec ca-cta" data-olo-tile="CallToAction">
+  <div class="ca-wrap"><div class="ca-cta__box" data-reveal>
+    <h2>Make something? <span class="c">Sell it here.</span></h2>
+    <p>Open a shop in minutes, reach millions of buyers, and only pay when you sell.</p>
+    <div class="ca-cta__cta"><a href="#" class="btn btn--coral btn--lg" data-magnetic>Open a shop</a><a href="OLOtheme - Carrello - Deals.html" class="btn btn--ghost btn--lg" data-magnetic>Browse deals</a></div>
+  </div></div>
+</section>
+</main>
+
+<footer class="ca-foot" data-olo-tile="Footer">
+  <div class="ca-wrap">
+    <div class="ca-foot__top">
+      <div class="ca-foot__brand"><a class="logo" href="#top"><span class="mk"></span>Carrello</a><p>The marketplace for independent makers. Thousands of shops, one cart.</p></div>
+      <div><h4>Shop</h4><ul><li><a href="#categories">Categories</a></li><li><a href="OLOtheme - Carrello - Deals.html">Deals</a></li><li><a href="#trending">Trending</a></li><li><a href="#">Gift cards</a></li></ul></div>
+      <div><h4>Sell</h4><ul><li><a href="#vendors">Open a shop</a></li><li><a href="#">Seller fees</a></li><li><a href="#">Seller handbook</a></li></ul></div>
+      <div><h4>Help</h4><ul><li><a href="#">Orders &amp; shipping</a></li><li><a href="#">Returns</a></li><li><a href="#">Contact</a></li></ul></div>
+    </div>
+    <div class="ca-foot__bot"><span>© 2026 Carrello — an OLOtheme demo.</span><span>Built with OLObuild</span></div>
+  </div>
+</footer>
+
+<script src="olothemes/fx.js"></script>
+<script src="olothemes/theme.js"></script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>OLObuild — Timeline navigatore date</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{
+    --red:#e1474f;--amber:#f4a23b;--navy:#16263d;--ink:#1f2937;--mute:#6b7280;--faint:#94a3b8;
+    --surface-alt:#f6f7f9;--border:#e5e7eb;--line:#e6dfd1;--bg:#f6f1e8;--card:#fff;
+    --sans:"Work Sans",-apple-system,sans-serif;--disp:"Instrument Serif",Georgia,serif;--mono:"JetBrains Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1000px;margin:0 auto;padding:52px 32px 110px;}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+  h1{font-family:var(--disp);font-weight:400;font-size:clamp(42px,5.6vw,62px);line-height:.98;letter-spacing:-.02em;color:var(--navy);margin:0 0 14px;}
+  h1 em{font-style:italic;color:var(--red);}
+  .lead{font-size:16px;color:var(--mute);max-width:74ch;margin:0 0 6px;line-height:1.55;}
+  .lead b{color:var(--navy);font-weight:600;}
+
+  .canvas{margin-top:30px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:clamp(30px,4vw,50px) clamp(24px,4vw,48px) clamp(34px,4vw,52px);box-shadow:0 26px 64px -36px rgba(22,38,61,.3);}
+
+  /* ── date navigator ── */
+  .nav{display:flex;align-items:center;gap:14px;}
+  .arrow{width:50px;height:50px;flex:none;border-radius:50%;border:2px solid var(--border);background:#fff;color:var(--navy);display:grid;place-items:center;cursor:pointer;transition:background .15s,border-color .15s,color .15s,transform .1s;}
+  .arrow:hover{border-color:var(--red);color:var(--red);}
+  .arrow:active{transform:scale(.94);}
+  .arrow:disabled{opacity:.32;cursor:not-allowed;border-color:var(--border);color:var(--navy);}
+  .arrow svg{width:20px;height:20px;}
+
+  .viewport{position:relative;flex:1;overflow:hidden;height:78px;}
+  .viewport::before,.viewport::after{content:"";position:absolute;top:0;bottom:0;width:42px;z-index:3;pointer-events:none;}
+  .viewport::before{left:0;background:linear-gradient(90deg,#fff,transparent);}
+  .viewport::after{right:0;background:linear-gradient(270deg,#fff,transparent);}
+  .track{position:absolute;left:0;top:0;height:100%;display:flex;transition:transform .45s cubic-bezier(.4,0,.2,1);}
+  .track .base{position:absolute;left:0;right:0;bottom:23px;height:2px;background:var(--border);}
+  .track .fill{position:absolute;left:0;bottom:23px;height:2px;background:var(--red);width:0;transition:width .45s cubic-bezier(.4,0,.2,1);}
+  .step{position:relative;width:150px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;cursor:pointer;padding-bottom:16px;}
+  .step .lbl{font:600 13.5px var(--sans);color:var(--faint);white-space:nowrap;transition:color .2s,font-weight .2s;margin-bottom:auto;padding-top:8px;}
+  .step .dot{position:absolute;bottom:16px;width:15px;height:15px;border-radius:50%;background:#fff;border:2px solid var(--border);transition:transform .2s,border-color .2s,background .2s;z-index:2;}
+  .step.done .dot{border-color:var(--red);}
+  .step.sel .dot{background:var(--red);border-color:var(--red);transform:scale(1.45);box-shadow:0 0 0 5px color-mix(in srgb,var(--red) 16%,transparent);}
+  .step.sel .lbl{color:var(--navy);font-weight:700;}
+  .step:hover .lbl{color:var(--navy);}
+  .step:hover .dot{border-color:var(--red);}
+
+  /* ── single post panel ── */
+  .stage{margin-top:30px;min-height:300px;}
+  .post{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(26px,3.5vw,46px);align-items:center;transition:opacity .28s ease,transform .28s ease;}
+  .post.out{opacity:0;transform:translateY(10px);}
+  .post-media{aspect-ratio:4/3;border-radius:14px;overflow:hidden;position:relative;background:repeating-linear-gradient(135deg,#eef1f5 0 14px,#e6eaef 14px 28px);box-shadow:0 18px 40px -24px rgba(22,38,61,.4);}
+  .post-media .ph{position:absolute;left:12px;bottom:10px;font:500 11px var(--mono);color:#9aa6b4;}
+  .post-media .yr{position:absolute;right:14px;top:12px;font-family:var(--disp);font-size:30px;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.4);}
+  .post-body .meta{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .post-body .tag{font:700 10px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--red);background:color-mix(in srgb,var(--red) 12%,#fff);border:1px solid color-mix(in srgb,var(--red) 26%,#fff);border-radius:99px;padding:4px 11px;}
+  .post-body .date{font:500 12.5px var(--mono);color:var(--faint);}
+  .post-body h2{font-family:var(--disp);font-weight:400;font-size:clamp(28px,3.4vw,40px);line-height:1.04;letter-spacing:-.01em;color:var(--navy);margin:0 0 14px;}
+  .post-body p{font-size:15.5px;line-height:1.6;color:var(--mute);margin:0 0 20px;}
+  .post-body .more{display:inline-flex;align-items:center;gap:7px;font:600 14px var(--sans);color:var(--red);text-decoration:none;}
+  .post-body .more svg{width:16px;height:16px;transition:transform .18s;}
+  .post-body .more:hover svg{transform:translateX(3px);}
+  .counter{margin-top:8px;text-align:center;font:500 12px var(--mono);color:var(--faint);}
+  .counter b{color:var(--navy);}
+
+  .note{margin:30px auto 0;max-width:880px;font-size:13px;color:var(--faint);line-height:1.55;}
+  .note code{font-family:var(--mono);font-size:12px;color:var(--mute);}
+  @media(max-width:720px){.post{grid-template-columns:1fr;}.step{width:118px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">OLObuild · tile · Dynamic → EventList</div>
+  <h1>Timeline <em>navigatore date</em></h1>
+  <p class="lead">L'altra famiglia di timeline: <b>scorrono solo gli anni</b>, non i post. L'asse delle date è un navigatore orizzontale — frecce, click sulle tappe, tastiera — e sotto cambia <b>un solo post alla volta</b>, con dissolvenza. Ideale quando ogni tappa ha contenuto ricco (foto, testo, link) e vuoi una storia a una schermata.</p>
+
+  <div class="canvas">
+    <div class="nav">
+      <button class="arrow" id="prev" aria-label="Precedente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+      <div class="viewport"><div class="track" id="track">
+        <span class="base"></span><span class="fill" id="fill"></span>
+      </div></div>
+      <button class="arrow" id="next" aria-label="Successivo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div>
+
+    <div class="stage"><div class="post" id="post">
+      <div class="post-media"><span class="yr" id="m-yr"></span><span class="ph" id="m-ph"></span></div>
+      <div class="post-body">
+        <div class="meta"><span class="tag" id="b-tag"></span><span class="date" id="b-date"></span></div>
+        <h2 id="b-title"></h2>
+        <p id="b-text"></p>
+        <a class="more" href="#" id="b-more">Leggi il capitolo<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div></div>
+    <div class="counter" id="counter"></div>
+  </div>
+
+  <p class="note">Variante "date-navigator": <code>tl_mode = navigator</code>. Gli eventi restano gli stessi della EventList — cambia solo la resa: asse navigabile + pannello singolo. Chiavi additive, nessun rename. Colore accento dal primario globale; lo slot media usa l'immagine in evidenza del post.</p>
+</div>
+
+<script>
+(function(){
+  var DATA = [
+    {date:"Feb 2019", yr:"2019", tag:"Fondazione", title:"Prima riga di codice", text:"Il prototipo del builder: drag-and-drop nativo dentro WordPress, senza shortcode né scorciatoie. Da qui parte tutto.", ph:"screenshot · primo build"},
+    {date:"Nov 2020", yr:"2020", tag:"Editor", title:"Editor visuale completo", text:"Canvas live, inspector laterale e anteprima fedele. La modifica diventa diretta: vedi quello che pubblichi.", ph:"video · editor live"},
+    {date:"Giu 2021", yr:"2021", tag:"Prodotto", title:"Libreria tile v1", text:"Quaranta tile native e il sistema di colori globali. In pochi mesi superiamo i primi mille siti pubblicati.", ph:"griglia · libreria tile"},
+    {date:"Mar 2022", yr:"2022", tag:"Sistema", title:"Colori globali e token", text:"Un set di ruoli colore (primario, secondario, accento) che ogni tile eredita. Cambi un token, cambia il sito.", ph:"palette · token"},
+    {date:"Set 2023", yr:"2023", tag:"Effetti", title:"Aurora & bagliori", text:"Sfondi generativi, glow rossastri e pattern, resi identici in editor e frontend. La libreria supera le 150 tile.", ph:"render · aurora"},
+    {date:"Mag 2024", yr:"2024", tag:"Motion", title:"Animazioni native", text:"Ingressi, hover e loop come capacità riusabili delle tile — non CSS incollato. Reduced-motion rispettato ovunque.", ph:"timeline · motion"},
+    {date:"Gen 2025", yr:"2025", tag:"Design", title:"Linguaggio coerente", text:"Inspector e tile allineati a un'unica grammatica: stessi controlli, stesse unità, stesso ritmo visivo.", ph:"poster · design system"},
+    {date:"Giu 2026", yr:"2026", tag:"Traguardo", title:"240 tile, un solo standard", text:"Ogni categoria curata, ogni controllo coerente. La libreria completa, pronta per i prossimi mille progetti.", ph:"mockup · 240 tile"}
+  ];
+
+  var track = document.getElementById('track');
+  var fill = document.getElementById('fill');
+  var post = document.getElementById('post');
+  var STEP = 150, idx = 0, steps = [];
+
+  DATA.forEach(function(d,i){
+    var s = document.createElement('div');
+    s.className = 'step';
+    s.innerHTML = '<span class="lbl">'+d.date+'</span><span class="dot"></span>';
+    s.addEventListener('click', function(){ go(i); });
+    track.appendChild(s);
+    steps.push(s);
+  });
+
+  function layout(){
+    var vpW = track.parentElement.clientWidth;
+    var trackW = DATA.length * STEP;
+    var desired = vpW/2 - (idx*STEP + STEP/2);
+    var min = Math.min(0, vpW - trackW);
+    var tx = Math.max(min, Math.min(0, desired));
+    track.style.transform = 'translateX('+tx+'px)';
+    fill.style.width = (idx*STEP + STEP/2) + 'px';
+    steps.forEach(function(s,i){
+      s.classList.toggle('done', i <= idx);
+      s.classList.toggle('sel', i === idx);
+    });
+    document.getElementById('prev').disabled = idx===0;
+    document.getElementById('next').disabled = idx===DATA.length-1;
+  }
+
+  function render(){
+    var d = DATA[idx];
+    document.getElementById('m-yr').textContent = d.yr;
+    document.getElementById('m-ph').textContent = d.ph;
+    document.getElementById('b-tag').textContent = d.tag;
+    document.getElementById('b-date').textContent = d.date;
+    document.getElementById('b-title').textContent = d.title;
+    document.getElementById('b-text').textContent = d.text;
+    document.getElementById('counter').innerHTML = '<b>'+(idx+1)+'</b> / '+DATA.length;
+  }
+
+  function go(i){
+    i = Math.max(0, Math.min(DATA.length-1, i));
+    if(i===idx){ layout(); return; }
+    idx = i;
+    layout();
+    post.classList.add('out');
+    setTimeout(function(){ render(); post.classList.remove('out'); }, 200);
+  }
+
+  document.getElementById('prev').addEventListener('click', function(){ go(idx-1); });
+  document.getElementById('next').addEventListener('click', function(){ go(idx+1); });
+  window.addEventListener('keydown', function(e){
+    if(e.key==='ArrowLeft'){ go(idx-1); } else if(e.key==='ArrowRight'){ go(idx+1); }
+  });
+  window.addEventListener('resize', layout);
+
+  render(); layout();
+})();
+</script>
+</body>
+</html>

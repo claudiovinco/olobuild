@@ -1,0 +1,9 @@
+Leggi D:\TECNICA\olobuild\regoletiles1\START_HERE.md e segui il protocollo per intero.
+
+Fai prima il setup delle fondamenta (§1), poi enumera TUTTE le tile in
+src/components/Tiles/*.vue e crea il tracker TILE_PROGRESS.md (§2). Lavora per categoria
+applicando la checklist a OGNI tile (§3) e aggiornando il tracker. Il lavoro è finito solo
+quando la Definition of Done (§4) è interamente verde. Rispetta i guardrail (§5): chiavi
+salvate invariate, nessun colore hardcoded, nessun nome di variabile inventato.
+
+Mostrami il diff del primo batch (Button + tile essenziali) prima di proseguire con le altre categorie.

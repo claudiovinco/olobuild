@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>OLObuild — Riferimento effetti Try home</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700&display=swap"/>
+<style>
+  :root{
+    --olo-color-primary:#e1474f;   /* seed cliente — i bagliori useranno QUESTO token */
+    --ink:#0b0d12; --panel:#14171f; --line:rgba(255,255,255,.1);
+    --dim:rgba(255,255,255,.62); --faint:rgba(255,255,255,.4);
+    --sans:"Work Sans",system-ui,sans-serif; --serif:"Instrument Serif",Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:#fff;font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1100px;margin:0 auto;padding:56px 28px 96px}
+  .top{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:48px}
+  .kick{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--olo-color-primary);font-weight:600}
+  h1{font-family:var(--serif);font-weight:400;font-size:46px;line-height:1;letter-spacing:-.02em;margin:14px 0 10px}
+  .sub{color:var(--dim);font-size:15px;max-width:62ch;line-height:1.6;margin:0}
+  h2{font-family:var(--serif);font-weight:400;font-size:30px;letter-spacing:-.015em;margin:0 0 6px}
+  .lead{color:var(--dim);font-size:14px;line-height:1.6;margin:0 0 22px;max-width:64ch}
+  section{margin-top:64px}
+  .tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.04em;padding:4px 9px;border-radius:99px;
+       background:rgba(225,71,79,.12);color:#f5959c;border:1px solid rgba(225,71,79,.25);margin-bottom:14px}
+  .where{font-size:12.5px;color:var(--faint);margin:0 0 22px;line-height:1.6}
+  .where code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:rgba(255,255,255,.06);
+       padding:2px 6px;border-radius:5px;color:#cbd5e1}
+
+  /* Glow grid */
+  .glow-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:760px){.glow-grid{grid-template-columns:1fr 1fr}}
+  .glow-card{border-radius:16px;overflow:hidden;border:1px solid var(--line);min-height:180px;
+       position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:16px}
+  .glow-card .nm{font-family:var(--serif);font-size:20px;position:relative;z-index:2}
+  .glow-card .ds{font-size:11px;color:var(--dim);position:relative;z-index:2;margin-top:2px;
+       font-family:ui-monospace,monospace}
+
+  /* Live dot */
+  .badges{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  .olo-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border-radius:99px;
+       font-size:13px;font-weight:600;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#fff}
+  .olo-badge.light{background:#fff;color:#1e293b;border-color:#e6e8ec}
+  .olo-badge.solid{background:var(--olo-color-primary);color:#fff;border-color:transparent}
+  /* ── the effect ── */
+  .olo-live-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;position:relative;flex:none}
+  .olo-live-dot::after{content:"";position:absolute;inset:-4px;border-radius:50%;
+       border:1px solid currentColor;color:#22c55e;opacity:.6;animation:olo-pulse 1.8s ease-out infinite}
+  .olo-live-dot.brand{background:var(--olo-color-primary)}
+  .olo-live-dot.brand::after{color:var(--olo-color-primary)}
+  @keyframes olo-pulse{0%{transform:scale(.6);opacity:.7}100%{transform:scale(2);opacity:0}}
+
+  /* Floating overlay */
+  .stage{position:relative;border-radius:18px;border:1px solid var(--line);background:var(--panel);
+       padding:34px;display:flex;justify-content:center;overflow:hidden}
+  .shot{width:min(560px,100%);aspect-ratio:16/10;border-radius:12px;border:1px solid var(--line);
+       background:repeating-linear-gradient(135deg,#1b1f29 0 14px,#191d26 14px 28px);
+       display:grid;place-items:center;color:var(--faint);font-family:ui-monospace,monospace;font-size:12px}
+  .float-tile{position:absolute;left:50%;top:42%;width:104px;padding:12px;border-radius:12px;background:#fff;
+       box-shadow:0 18px 40px rgba(0,0,0,.45),0 0 0 1px rgba(225,71,79,.4);
+       transform:rotate(-4deg);animation:olo-float 4.5s ease-in-out infinite;z-index:3}
+  .float-tile .ic{width:32px;height:32px;border-radius:8px;background:rgba(225,71,79,.1);
+       display:grid;place-items:center;color:var(--olo-color-primary);font-weight:700;font-family:var(--serif)}
+  .float-tile .lbl{font-size:12px;font-weight:600;color:#1e293b;margin-top:8px}
+  .float-tile .cur{position:absolute;right:-12px;bottom:-14px;font-size:18px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
+  @keyframes olo-float{0%,100%{transform:rotate(-4deg) translateY(0)}50%{transform:rotate(-4deg) translateY(-12px)}}
+
+  .note{margin-top:18px;font-size:12.5px;color:var(--faint);line-height:1.6;border-left:2px solid rgba(225,71,79,.4);padding-left:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="kick">OLObuild · Handoff Try home</div>
+    <h1>Tre effetti, resi nativi.</h1>
+    <p class="sub">Riferimento visivo del risultato atteso. Gli stessi effetti della landing “Try”, riscritti come capacità di OLObuild: un <b>tipo di sfondo</b>, una <b>feature di tile</b>, una <b>animazione loop</b>. Il colore segue il primario globale del cliente (<code style="font-family:ui-monospace,monospace">--olo-color-primary</code>): cambia il primario qui sotto e tutto si adatta.</p>
+  </div>
+
+  <!-- 1 — GLOW BACKGROUND -->
+  <section>
+    <span class="tag">1 · Tipo di sfondo “Bagliori”</span>
+    <h2>Sfondi con bagliori rossastri</h2>
+    <p class="lead">Aloni radiali morbidi + grana film. Nuovo valore <code>type:'glow'</code> in <code>BackgroundControls</code>, reso da <code>getGlowCSS()</code>. Vale per sfondo di <b>pagina</b> e di <b>sezione</b>. Niente <code>filter:blur</code>: la morbidezza è nei gradient.</p>
+    <p class="where">Anteprime generate live da <code>prototype/glowCSS.js</code> · preset diversi, stesso token colore.</p>
+    <div class="glow-grid" id="glowGrid"></div>
+  </section>
+
+  <!-- 2 — LIVE DOT -->
+  <section>
+    <span class="tag">2 · Feature di tile</span>
+    <h2>Pallino “live” che pulsa</h2>
+    <p class="lead">Toggle <b>“Stato live”</b> sulla tile Badge/Etichetta: aggiunge un pallino con onda che pulsa. Pseudo-elemento <code>::after</code> animato + <code>@keyframes olo-pulse</code> registrato una volta sola.</p>
+    <p class="where">Colore onda: <code>verde</code> per “online/live”, oppure <code>primario</code> via toggle.</p>
+    <div class="badges">
+      <span class="olo-badge"><span class="olo-live-dot"></span> Sandbox dal vivo</span>
+      <span class="olo-badge light"><span class="olo-live-dot"></span> Online</span>
+      <span class="olo-badge solid"><span class="olo-live-dot" style="background:#fff"></span> In diretta</span>
+      <span class="olo-badge"><span class="olo-live-dot brand"></span> Novità</span>
+    </div>
+  </section>
+
+  <!-- 3 — FLOATING OVERLAY -->
+  <section>
+    <span class="tag">3 · Animazione loop + posizione</span>
+    <h2>Tile che galleggia sopra un’altra</h2>
+    <p class="lead">Due ingredienti già nel builder, combinati: <b>posizione assoluta</b> (Avanzate) per sovrapporre una tile a un’immagine, + nuova <b>animazione loop “Galleggiamento”</b> (<code>@keyframes olo-float</code>) accanto alle 36 d’ingresso.</p>
+    <p class="where">Sul frontend reale: tile <b>Immagine</b> (screenshot builder) + tile <b>Badge/Icona</b> in overlay con animazione loop.</p>
+    <div class="stage">
+      <div class="shot">screenshot del builder</div>
+      <div class="float-tile">
+        <div class="ic">T</div>
+        <div class="lbl">Titolo</div>
+        <div class="cur">▸</div>
+      </div>
+    </div>
+    <p class="note">Il cursore e l’etichetta “Titolo” sono decorazioni della stessa tile in overlay. L’animazione loop è riusabile su qualsiasi tile — non è un componente speciale.</p>
+  </section>
+</div>
+
+<script type="module">
+  import { getGlowCSS, glowPresets } from './prototype/glowCSS.js';
+  const grid = document.getElementById('glowGrid');
+  const presets = ['spread','top-left','aurora','top','corners','center'];
+  const labelOf = Object.fromEntries(glowPresets.map(p => [p.value, p.label]));
+  for (const preset of presets) {
+    const css = getGlowCSS({ glow_preset: preset, glow_intensity: 78, glow_size: 85 });
+    const card = document.createElement('div');
+    card.className = 'glow-card';
+    Object.assign(card.style, {
+      backgroundColor: css.backgroundColor,
+      backgroundImage: css.backgroundImage,
+      backgroundRepeat: css.backgroundRepeat,
+      backgroundSize: css.backgroundSize,
+    });
+    card.innerHTML = `<div class="nm">${labelOf[preset]||preset}</div><div class="ds">glow_preset:'${preset}'</div>`;
+    grid.appendChild(card);
+  }
+</script>
+</body>
+</html>

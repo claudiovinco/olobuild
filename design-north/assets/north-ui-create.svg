@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 760" font-family="Inter, Arial, sans-serif">
+  <rect width="1000" height="760" fill="#0a2e22"/>
+  <!-- document header -->
+  <rect x="110" y="110" width="40" height="48" rx="6" fill="#173d2e" stroke="#3fae6a" stroke-width="1.5"/><path d="M120 124 h20 M120 134 h20 M120 144 h12" stroke="#5ad08a" stroke-width="2"/>
+  <text x="172" y="135" font-size="26" font-weight="600" fill="#eaf5ef">Financial Summary for Q4</text>
+  <text x="172" y="160" font-size="14" letter-spacing=".1em" fill="#5ad08a">CREATED NOW</text>
+  <!-- body card -->
+  <rect x="110" y="190" width="780" height="300" rx="14" fill="#0c3527" stroke="rgba(255,255,255,.1)"/>
+  <text font-size="17" fill="#cfe8dd"><tspan x="140" y="232">…healthy gross margin of 40%, indicating efficient cost</tspan><tspan x="140" y="258">management.</tspan></text>
+  <text font-size="17" fill="#cfe8dd"><tspan x="140" y="300"><tspan font-weight="700" fill="#eaf5ef">Profitability:</tspan> Net income grew by 20% compared to the same</tspan><tspan x="140" y="326">quarter last year, surpassing market expectations. This was</tspan><tspan x="140" y="352">attributed to increased operational efficiency and a favorable tax</tspan><tspan x="140" y="378">environment.</tspan></text>
+  <text x="140" y="430" font-size="17" fill="#cfe8dd">Here's a breakdown of gross sales per region:</text>
+  <!-- agent chip -->
+  <rect x="110" y="540" width="430" height="120" rx="14" fill="#0c3527" stroke="rgba(255,255,255,.12)"/>
+  <rect x="134" y="566" width="52" height="52" rx="12" fill="#3fae6a"/><rect x="148" y="582" width="24" height="18" rx="3" fill="none" stroke="#06281a" stroke-width="2.4"/><circle cx="156" cy="591" r="2" fill="#06281a"/><circle cx="164" cy="591" r="2" fill="#06281a"/>
+  <text x="206" y="588" font-size="20" font-weight="600" fill="#eaf5ef">Quarterly Financial Summaries</text>
+  <text x="206" y="610" font-size="13" letter-spacing=".1em" fill="#7fae95">MY AGENT</text>
+  <text x="134" y="648" font-size="13" letter-spacing=".08em" fill="#9cc4b2">▦ CONFIGURE</text><text x="290" y="648" font-size="13" letter-spacing=".08em" fill="#7fae95">⚙ ADVANCED</text>
+</svg>

@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>OLObuild — Token colore del brand</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{
+    --olo-color-primary-50:#fef2f3;--olo-color-primary-100:#fde2e4;--olo-color-primary-200:#fac4c8;
+    --olo-color-primary-300:#f5959c;--olo-color-primary-400:#ec5a62;--olo-color-primary-500:#e1474f;
+    --olo-color-primary-600:#c8323a;--olo-color-primary-700:#a52830;--olo-color-primary-800:#871f26;
+    --olo-color-primary-900:#5a141a;--olo-color-primary-950:#2e0a0d;
+    --olo-color-primary:#e1474f;--olo-color-primary-hover:#c8323a;--olo-color-on-primary:#fff;
+    --olo-color-text:#1f2937;--olo-color-text-soft:#6b7280;--olo-color-text-faint:#94a3b8;
+    --olo-color-surface:#fff;--olo-color-surface-alt:#f6f7f9;--olo-color-border:#e5e7eb;
+    --olo-color-info:#2563eb;--olo-color-info-soft:#eef4ff;--olo-color-success:#15803d;--olo-color-success-soft:#ecfdf3;
+    --olo-color-warning:#b45309;--olo-color-warning-soft:#fffaeb;--olo-color-error:#b42318;--olo-color-error-soft:#fef3f2;
+    --bg:#f6f1e8;--navy:#0f172a;--ink:#1f2937;--mute:#5e6a7a;--faint:#94a3b8;--line:#e6dfd1;
+    --sans:"Work Sans",-apple-system,sans-serif;--disp:"Instrument Serif",Georgia,serif;--mono:"JetBrains Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1080px;margin:0 auto;padding:56px 32px 90px;}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--olo-color-primary);margin-bottom:12px;}
+  h1{font-family:var(--disp);font-weight:400;font-size:clamp(40px,5.5vw,68px);line-height:1;letter-spacing:-.02em;color:var(--navy);margin:0 0 14px;}
+  h1 em{font-style:italic;color:var(--olo-color-primary);}
+  .lead{font-size:16px;color:var(--mute);max-width:66ch;margin:0 0 12px;line-height:1.55;}
+  .lead b{color:var(--navy);font-weight:600;}
+  .rule{height:1px;background:repeating-linear-gradient(90deg,var(--line) 0 7px,transparent 7px 14px);margin:42px 0;}
+  h2{font-family:var(--disp);font-weight:400;font-size:30px;letter-spacing:-.015em;color:var(--navy);margin:0 0 4px;}
+  .sub{font-size:13.5px;color:var(--mute);margin:0 0 22px;}
+
+  /* primary scale */
+  .scale{display:grid;grid-template-columns:repeat(11,1fr);border-radius:12px;overflow:hidden;border:1px solid var(--line);}
+  .scale .s{height:96px;display:flex;flex-direction:column;justify-content:flex-end;padding:8px 7px;}
+  .scale .s .n{font-family:var(--mono);font-size:10px;font-weight:600;}
+  .scale .s .h{font-family:var(--mono);font-size:9px;opacity:.8;margin-top:1px;}
+  .scale .s.ring{outline:3px solid var(--navy);outline-offset:-3px;}
+
+  /* token cards */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .tk{background:#fffdf8;border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+  .tk .sw{height:64px;}
+  .tk .meta{padding:11px 13px;}
+  .tk .role{font-size:13px;font-weight:600;color:var(--navy);}
+  .tk .var{font-family:var(--mono);font-size:10.5px;color:var(--mute);margin-top:3px;word-break:break-all;}
+  .tk .hex{font-family:var(--mono);font-size:10.5px;color:var(--faint);margin-top:1px;}
+
+  .sem{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+  .semrow{display:flex;align-items:stretch;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fffdf8;}
+  .semrow .soft{flex:1;display:flex;align-items:center;gap:10px;padding:14px 16px;}
+  .semrow .soft .dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+  .semrow .soft .lab{font-size:13px;font-weight:600;}
+  .semrow .codes{flex-shrink:0;padding:14px 14px;border-left:1px solid var(--line);font-family:var(--mono);font-size:10px;color:var(--mute);display:flex;flex-direction:column;justify-content:center;gap:3px;background:#fff;}
+
+  /* applied preview */
+  .applied{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .pcard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;}
+  .pcard h4{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);margin:0 0 16px;}
+  .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--olo-color-primary);color:var(--olo-color-on-primary);border-radius:10px;padding:12px 24px;font-weight:600;font-size:15px;box-shadow:0 1px 2px rgba(15,23,42,.12),0 4px 12px -4px rgba(225,71,79,.5);cursor:pointer;}
+  .alert{display:flex;gap:11px;align-items:flex-start;padding:14px 16px;border-radius:10px;margin-bottom:10px;}
+  .alert:last-child{margin-bottom:0;}
+  .alert .ic{flex-shrink:0;width:18px;height:18px;}
+  .alert .ic svg{width:18px;height:18px;}
+  .alert .ttl{font-size:13px;font-weight:600;color:var(--olo-color-text);}
+  .alert .msg{font-size:12px;color:var(--olo-color-text-soft);margin-top:1px;}
+
+  .cssblock{background:var(--navy);border-radius:14px;padding:20px 22px;margin-top:14px;overflow-x:auto;}
+  .cssblock pre{margin:0;font-family:var(--mono);font-size:11.5px;line-height:1.6;color:#e6edf3;white-space:pre;}
+  .cssblock .c{color:#8b98a9;}.cssblock .p{color:#c4a6ff;}.cssblock .v{color:#9be8a8;}
+  @media(max-width:820px){.grid{grid-template-columns:repeat(2,1fr);}.sem,.applied{grid-template-columns:1fr;}.scale{grid-template-columns:repeat(6,1fr);}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">OLObuild · design tokens</div>
+  <h1>Token colore <em>del brand</em></h1>
+  <p class="lead">I valori definitivi che alimentano i default delle tile. Quando l'utente non sceglie un colore, <b>resolveColor()</b> usa questi token — mai più hex hardcoded. Sovrascrivibili dal Global Colors Panel del sito.</p>
+
+  <div style="display:flex;gap:12px;align-items:flex-start;background:#ecfdf3;border:1px solid #a7f3c4;border-left:4px solid #15803d;border-radius:12px;padding:16px 18px;margin-top:8px;font-size:13.5px;line-height:1.55;color:#0f5e2e;">
+    <span style="font-size:16px;line-height:1.2;flex-shrink:0;">✓</span>
+    <div>
+      <b style="color:#0b4a24;">Il rosso brand è il primario seed di default.</b> Un sito nuovo nasce con primario <code style="font-family:var(--mono);font-size:12px;background:#fff;padding:1px 5px;border-radius:4px;">#e1474f</code>. Resta un <b>fallback</b>: il cliente può ridefinire il primario dal Global Colors Panel e le tile seguiranno la sua scelta (primario verde → tile verdi). I semantici (info/success/warning/error) restano fissi per leggibilità. Ruoli reali e meccanismo in <code style="font-family:var(--mono);font-size:12px;background:#fff;padding:1px 5px;border-radius:4px;">TOKEN_MAPPING.md</code>.
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <h2>Primario</h2>
+  <p class="sub">Scala completa del rosso brand. Il <b>500</b> è <code style="font-family:var(--mono)">--olo-color-primary</code>; hover = 600.</p>
+  <div class="scale">
+    <div class="s" style="background:#fef2f3;color:#5a141a"><span class="n">50</span><span class="h">fef2f3</span></div>
+    <div class="s" style="background:#fde2e4;color:#5a141a"><span class="n">100</span><span class="h">fde2e4</span></div>
+    <div class="s" style="background:#fac4c8;color:#5a141a"><span class="n">200</span><span class="h">fac4c8</span></div>
+    <div class="s" style="background:#f5959c;color:#5a141a"><span class="n">300</span><span class="h">f5959c</span></div>
+    <div class="s" style="background:#ec5a62;color:#fff"><span class="n">400</span><span class="h">ec5a62</span></div>
+    <div class="s ring" style="background:#e1474f;color:#fff"><span class="n">500</span><span class="h">e1474f</span></div>
+    <div class="s" style="background:#c8323a;color:#fff"><span class="n">600</span><span class="h">c8323a</span></div>
+    <div class="s" style="background:#a52830;color:#fff"><span class="n">700</span><span class="h">a52830</span></div>
+    <div class="s" style="background:#871f26;color:#fff"><span class="n">800</span><span class="h">871f26</span></div>
+    <div class="s" style="background:#5a141a;color:#fff"><span class="n">900</span><span class="h">5a141a</span></div>
+    <div class="s" style="background:#2e0a0d;color:#fff"><span class="n">950</span><span class="h">2e0a0d</span></div>
+  </div>
+
+  <div class="rule"></div>
+
+  <h2>Neutri</h2>
+  <p class="sub">Testo, superfici e bordi. Grigi cool, coerenti con la UI del builder.</p>
+  <div class="grid">
+    <div class="tk"><div class="sw" style="background:#1f2937"></div><div class="meta"><div class="role">Text</div><div class="var">--olo-color-text</div><div class="hex">#1f2937</div></div></div>
+    <div class="tk"><div class="sw" style="background:#6b7280"></div><div class="meta"><div class="role">Text soft</div><div class="var">--olo-color-text-soft</div><div class="hex">#6b7280</div></div></div>
+    <div class="tk"><div class="sw" style="background:#94a3b8"></div><div class="meta"><div class="role">Text faint</div><div class="var">--olo-color-text-faint</div><div class="hex">#94a3b8</div></div></div>
+    <div class="tk"><div class="sw" style="background:#ffffff;border-bottom:1px solid var(--line)"></div><div class="meta"><div class="role">Surface</div><div class="var">--olo-color-surface</div><div class="hex">#ffffff</div></div></div>
+    <div class="tk"><div class="sw" style="background:#f6f7f9"></div><div class="meta"><div class="role">Surface alt</div><div class="var">--olo-color-surface-alt</div><div class="hex">#f6f7f9</div></div></div>
+    <div class="tk"><div class="sw" style="background:#e5e7eb"></div><div class="meta"><div class="role">Border</div><div class="var">--olo-color-border</div><div class="hex">#e5e7eb</div></div></div>
+  </div>
+
+  <div class="rule"></div>
+
+  <h2>Semantici</h2>
+  <p class="sub">Coppia <b>foreground + soft</b> per stati (Alert, badge, validazione). L'errore è volutamente distinto dal rosso brand.</p>
+  <div class="sem">
+    <div class="semrow"><div class="soft" style="background:#eef4ff"><span class="dot" style="background:#2563eb"></span><span class="lab" style="color:#2563eb">Info</span></div><div class="codes"><span>fg #2563eb</span><span>soft #eef4ff</span></div></div>
+    <div class="semrow"><div class="soft" style="background:#ecfdf3"><span class="dot" style="background:#15803d"></span><span class="lab" style="color:#15803d">Success</span></div><div class="codes"><span>fg #15803d</span><span>soft #ecfdf3</span></div></div>
+    <div class="semrow"><div class="soft" style="background:#fffaeb"><span class="dot" style="background:#b45309"></span><span class="lab" style="color:#b45309">Warning</span></div><div class="codes"><span>fg #b45309</span><span>soft #fffaeb</span></div></div>
+    <div class="semrow"><div class="soft" style="background:#fef3f2"><span class="dot" style="background:#b42318"></span><span class="lab" style="color:#b42318">Error</span></div><div class="codes"><span>fg #b42318</span><span>soft #fef3f2</span></div></div>
+  </div>
+
+  <div class="rule"></div>
+
+  <h2>Token <em>applicati</em></h2>
+  <p class="sub">Gli stessi token sulle tile reali — è così che appaiono i default.</p>
+  <div class="applied">
+    <div class="pcard">
+      <h4>Button primario</h4>
+      <span class="btn-primary">Clicca qui</span>
+      <p style="font-size:12px;color:var(--mute);margin:18px 0 0;line-height:1.5;">Sfondo <code style="font-family:var(--mono);font-size:11px">primary</code>, testo <code style="font-family:var(--mono);font-size:11px">on-primary</code>, micro-ombra brand.</p>
+    </div>
+    <div class="pcard">
+      <h4>Alert · 4 stati semantici</h4>
+      <div class="alert" style="background:var(--olo-color-info-soft);border-left:4px solid var(--olo-color-info)">
+        <span class="ic" style="color:var(--olo-color-info)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg></span>
+        <div><div class="ttl">Info</div><div class="msg">Avviso informativo.</div></div>
+      </div>
+      <div class="alert" style="background:var(--olo-color-success-soft);border-left:4px solid var(--olo-color-success)">
+        <span class="ic" style="color:var(--olo-color-success)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>
+        <div><div class="ttl">Success</div><div class="msg">Operazione riuscita.</div></div>
+      </div>
+      <div class="alert" style="background:var(--olo-color-warning-soft);border-left:4px solid var(--olo-color-warning)">
+        <span class="ic" style="color:var(--olo-color-warning)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/></svg></span>
+        <div><div class="ttl">Warning</div><div class="msg">Attenzione richiesta.</div></div>
+      </div>
+      <div class="alert" style="background:var(--olo-color-error-soft);border-left:4px solid var(--olo-color-error)">
+        <span class="ic" style="color:var(--olo-color-error)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg></span>
+        <div><div class="ttl">Error</div><div class="msg">Qualcosa è andato storto.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cssblock"><pre><span class="c">/* drop-in: tokens-brand.css */</span>
+<span class="p">:root</span> {
+  <span class="p">--olo-color-primary</span>: <span class="v">#e1474f</span>;
+  <span class="p">--olo-color-primary-hover</span>: <span class="v">#c8323a</span>;
+  <span class="p">--olo-color-on-primary</span>: <span class="v">#ffffff</span>;
+  <span class="p">--olo-color-text</span>: <span class="v">#1f2937</span>;        <span class="p">--olo-color-text-soft</span>: <span class="v">#6b7280</span>;
+  <span class="p">--olo-color-surface</span>: <span class="v">#ffffff</span>;     <span class="p">--olo-color-surface-alt</span>: <span class="v">#f6f7f9</span>;
+  <span class="p">--olo-color-border</span>: <span class="v">#e5e7eb</span>;
+  <span class="p">--olo-color-info</span>: <span class="v">#2563eb</span>;       <span class="p">--olo-color-info-soft</span>: <span class="v">#eef4ff</span>;
+  <span class="p">--olo-color-success</span>: <span class="v">#15803d</span>;    <span class="p">--olo-color-success-soft</span>: <span class="v">#ecfdf3</span>;
+  <span class="p">--olo-color-warning</span>: <span class="v">#b45309</span>;    <span class="p">--olo-color-warning-soft</span>: <span class="v">#fffaeb</span>;
+  <span class="p">--olo-color-error</span>: <span class="v">#b42318</span>;      <span class="p">--olo-color-error-soft</span>: <span class="v">#fef3f2</span>;
+}</pre></div>
+
+</div>
+</body>
+</html>

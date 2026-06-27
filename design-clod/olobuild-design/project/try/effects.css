@@ -1,0 +1,226 @@
+/* ───────────────────────────────────────────────────────────────
+   OLObuild Try v2 — wow effects (goo background + showcase)
+   Builds on marketing/shared.css + try/try.css
+   ─────────────────────────────────────────────────────────────── */
+
+/* ── Goo / Aurora living background ────────────────────────────── */
+.goo-host { position: absolute; inset: 0; overflow: hidden; }
+.goo-layer { position: absolute; inset: 0; }
+.goo-blob {
+  position: absolute; left: 0; top: 0; border-radius: 50%;
+  will-change: transform; pointer-events: none;
+}
+.goo-grain {
+  position: absolute; inset: 0; pointer-events: none; opacity: .5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+/* ── Showcase grid ─────────────────────────────────────────────── */
+.wow-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+@media (max-width: 980px) { .wow-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .wow-grid { grid-template-columns: 1fr; } }
+.wow-card {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  min-height: 230px;
+  border: 1px solid var(--mk-line);
+  background: var(--mk-navy-soft);
+  display: flex;
+  transition: transform .18s var(--mk-ease, ease);
+}
+.wow-card.span-2 { grid-column: span 2; }
+@media (max-width: 560px) { .wow-card.span-2 { grid-column: span 1; } }
+.wow-body {
+  position: relative; z-index: 2;
+  padding: 22px;
+  display: flex; flex-direction: column; gap: 9px;
+  align-self: flex-end;
+}
+.wow-card h3 {
+  font-family: var(--mk-display); font-weight: 400;
+  font-size: 27px; line-height: 1.04; letter-spacing: -.015em; margin: 0;
+}
+.wow-card p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--mk-text-dim); }
+.wow-card p code {
+  font: 600 11.5px/1 ui-monospace, Menlo, monospace;
+  background: rgba(255,255,255,.08); padding: 2px 5px; border-radius: 4px; color: #fff;
+}
+.wow-tag {
+  align-self: flex-start;
+  font: 600 10.5px/1 var(--mk-sans); letter-spacing: .07em; text-transform: uppercase;
+  padding: 5px 9px; border-radius: 99px;
+  background: rgba(var(--mk-glow-r),.14); color: rgb(var(--mk-glow-r));
+  border: 1px solid rgba(var(--mk-glow-r),.25);
+}
+.wow-tag.light { background: rgba(255,255,255,.14); color: #fff; border-color: rgba(255,255,255,.3); }
+.wow-tag.neon  { background: rgba(124,108,255,.16); color: #b9b0ff; border-color: rgba(124,108,255,.4); }
+.wow-tag.term  { background: rgba(34,197,94,.14); color: #66e08a; border-color: rgba(34,197,94,.35); }
+.wow-tag.dark  { background: #15171d; color: #fff; border-color: rgba(255,255,255,.18); }
+
+/* goo card */
+.wow-goo { background: #0e1017; }
+.wow-goo-bg { position: absolute; inset: 0; z-index: 0; }
+.wow-goo .wow-body { background: linear-gradient(to top, rgba(10,11,16,.85), transparent); padding-top: 60px; }
+
+/* liquid glass */
+.wow-liquid { background: #1a1426; }
+.wow-liquid-orbs { position: absolute; inset: 0; z-index: 0; }
+.wow-liquid-orbs span {
+  position: absolute; border-radius: 50%; filter: blur(8px);
+}
+.wow-liquid-orbs span:first-child {
+  width: 180px; height: 180px; left: -30px; top: -20px;
+  background: radial-gradient(circle, #ff5436, transparent 70%);
+  animation: wowOrbA 9s ease-in-out infinite;
+}
+.wow-liquid-orbs span:last-child {
+  width: 200px; height: 200px; right: -40px; bottom: -40px;
+  background: radial-gradient(circle, #7c6cff, transparent 70%);
+  animation: wowOrbB 11s ease-in-out infinite;
+}
+@keyframes wowOrbA { 0%,100%{transform:translate(0,0)} 50%{transform:translate(40px,30px)} }
+@keyframes wowOrbB { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,-24px)} }
+.wow-glass {
+  position: relative; z-index: 2; margin: auto 14px 14px; padding: 18px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.08);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(255,255,255,.22);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 10px 30px rgba(0,0,0,.3);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.wow-glass h3 { font-family: var(--mk-display); font-weight: 400; font-size: 24px; margin: 0; }
+.wow-glass p { font-size: 12.5px; color: rgba(255,255,255,.7); margin: 0; }
+
+/* neon cyber */
+.wow-neon { background: #0a0a14; border-color: rgba(124,108,255,.35); }
+.wow-neon::after {
+  content: ""; position: absolute; inset: 0; border-radius: 18px; pointer-events: none;
+  border: 1.5px solid #7c6cff;
+  box-shadow: 0 0 12px #7c6cff, inset 0 0 12px rgba(124,108,255,.5);
+  animation: wowNeon 2.4s ease-in-out infinite;
+}
+@keyframes wowNeon { 0%,100%{opacity:.45} 50%{opacity:1} }
+.neon-title {
+  color: #d9d2ff;
+  text-shadow: 0 0 8px #7c6cff, 0 0 22px rgba(124,108,255,.7);
+  letter-spacing: .02em;
+}
+
+/* glitch */
+.wow-glitch { background: #120d12; }
+.glitch { position: relative; color: #fff; }
+.glitch::before, .glitch::after {
+  content: attr(data-txt); position: absolute; left: 0; top: 0; width: 100%;
+  clip-path: inset(0 0 0 0);
+}
+.glitch::before { color: #ff3b6b; animation: glitchA 2.6s steps(2,end) infinite; }
+.glitch::after  { color: #2ad8ff; animation: glitchB 2.6s steps(2,end) infinite; }
+@keyframes glitchA {
+  0%,100%{transform:translate(0,0);clip-path:inset(0 0 70% 0)} 20%{transform:translate(-2px,1px)}
+  40%{clip-path:inset(40% 0 20% 0);transform:translate(2px,-1px)} 60%{transform:translate(-1px,0)}
+}
+@keyframes glitchB {
+  0%,100%{transform:translate(0,0);clip-path:inset(60% 0 10% 0)} 25%{transform:translate(2px,-1px)}
+  50%{clip-path:inset(10% 0 60% 0);transform:translate(-2px,1px)} 75%{transform:translate(1px,0)}
+}
+
+/* retro terminal */
+.wow-term { background: #04140a; border-color: rgba(34,197,94,.3); }
+.wow-scan {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: .5;
+  background: repeating-linear-gradient(to bottom, rgba(34,197,94,.08) 0 1px, transparent 1px 3px);
+}
+.term-pre {
+  font: 500 13px/1.5 ui-monospace, Menlo, monospace; color: #66e08a; margin: 0;
+  text-shadow: 0 0 6px rgba(34,197,94,.6); white-space: pre-wrap;
+}
+.term-cur { animation: termBlink 1s steps(1) infinite; }
+@keyframes termBlink { 50% { opacity: 0; } }
+.term-note { color: rgba(102,224,138,.6) !important; font-family: ui-monospace, monospace; font-size: 11px !important; }
+
+/* 3d tilt */
+.wow-tilt { background: linear-gradient(135deg, #1c1f2b, #14161e); transition: transform .1s ease-out; transform-style: preserve-3d; }
+.wow-tilt h3 { color: #fff; }
+
+/* sticker */
+.wow-sticker {
+  background: #ffd23f; border: 3px solid #fff; transform: rotate(-3deg);
+  box-shadow: 0 14px 30px rgba(0,0,0,.35); transition: transform .12s ease-out;
+}
+.wow-sticker .wow-body { color: #1a1205; }
+.wow-sticker h3 { color: #1a1205; }
+.wow-sticker p { color: rgba(26,18,5,.7); }
+.wow-sticker .wow-tag.dark { background: #1a1205; color: #ffd23f; border-color: #1a1205; }
+
+/* text fx combo */
+.wow-fx { background: var(--mk-navy-soft); align-items: center; min-height: 250px; }
+.wow-fx .wow-body { align-self: center; gap: 14px; justify-content: center; }
+.fx-line {
+  font-size: clamp(22px, 3vw, 34px) !important; line-height: 1.15 !important; margin: 0 !important;
+  white-space: nowrap;
+}
+.fx-scramble {
+  font-family: var(--mk-display); font-style: italic; color: rgb(var(--mk-glow-r));
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.fx-sub { font-size: 15.5px !important; color: var(--mk-text-dim); margin: 0 !important; white-space: nowrap; }
+.fx-type { color: #fff; font-weight: 600; }
+.tw-caret { animation: termBlink 1s steps(1) infinite; color: rgb(var(--mk-glow-r)); }
+
+/* ── v2 hero (Goo background) ──────────────────────────────────── */
+.tr-hero.v2 { padding-top: 96px; }
+.tr-hero-goo { position: absolute; inset: 0; z-index: 0; }
+.tr-hero.v2 .tr-hero-inner { z-index: 3; }
+.tr-hero.v2 .tr-hero-inner::before {
+  /* readability scrim behind the text column */
+  content: ""; position: absolute; inset: -60px -10% -60px -50%; z-index: -1;
+  background: linear-gradient(100deg, rgba(11,13,18,.96) 0%, rgba(11,13,18,.9) 32%, rgba(11,13,18,.55) 52%, transparent 70%);
+  pointer-events: none;
+}
+.hero-scramble {
+  font-family: var(--mk-display); font-style: italic; color: rgb(var(--mk-glow-r));
+  font-variant-numeric: tabular-nums;
+}
+/* legibility over moving blobs */
+.tr-hero.v2 h1 { text-shadow: 0 2px 24px rgba(11,13,18,.85), 0 1px 3px rgba(11,13,18,.6); }
+.tr-hero.v2 .lead { text-shadow: 0 1px 12px rgba(11,13,18,.9); }
+.tr-hero.v2 .mk-chip { backdrop-filter: blur(4px); }
+
+/* ── ASCII ticker (asciiviz nod) ───────────────────────────────── */
+.ascii-bar {
+  font: 500 14px/1 ui-monospace, Menlo, monospace;
+  letter-spacing: 2px; color: rgb(var(--mk-glow-r));
+  text-shadow: 0 0 8px rgba(var(--mk-glow-r),.6);
+  white-space: pre; user-select: none;
+}
+.ascii-strip {
+  display: flex; justify-content: center; margin-bottom: 26px;
+  opacity: .8; overflow: hidden;
+}
+
+/* ── v2 CTA animated glow (mirrors glow_anim 'vivo') ───────────── */
+.tr-cta.v2 { background: var(--mk-navy); }
+.tr-cta-glow {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 8%, rgba(var(--mk-glow-r),.4) 0%, rgba(var(--mk-glow-r),.18) 22%, transparent 58%),
+    radial-gradient(circle at 78% 70%, rgba(124,108,255,.22) 0%, transparent 50%);
+  background-size: 150% 150%, 140% 140%;
+  background-position: center, center;
+  animation: ctaGlowBreathe 8s ease-in-out infinite, ctaGlowOrbit 13s ease-in-out infinite;
+}
+@keyframes ctaGlowBreathe { 0%,100%{background-size:130% 130%, 130% 130%} 50%{background-size:185% 185%, 170% 170%} }
+@keyframes ctaGlowOrbit  { 0%,100%{background-position:50% 8%, 78% 70%} 50%{background-position:46% 14%, 70% 60%} }
+
+@media (prefers-reduced-motion: reduce) {
+  .wow-neon::after, .glitch::before, .glitch::after, .term-cur, .tw-caret,
+  .wow-liquid-orbs span, .tr-cta-glow { animation: none !important; }
+}

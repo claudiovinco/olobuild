@@ -1,0 +1,150 @@
+/* OLObuild redesign — shared builder shell */
+@import url('./tokens.css');
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: var(--ot-font-sans);
+  color: var(--ot-text);
+  background: var(--ot-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ─── Shared builder chrome ─────────────────────────────────────── */
+.bui-frame {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: var(--bui-sidebar-w, 320px) 1fr 280px;
+  grid-template-rows: 48px 1fr;
+  background: var(--ot-bg);
+  font-size: 13px;
+  position: relative;
+  overflow: hidden;
+}
+.bui-topbar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 10px;
+  border-bottom: 1px solid var(--ot-border);
+  background: #fff;
+  z-index: 5;
+}
+.bui-topbar .logo { font-weight: 700; font-size: 14px; color: var(--ot-primary); letter-spacing: -.02em; display: flex; align-items: center; gap: 6px; }
+.bui-topbar .logo b { color: var(--ot-text); font-weight: 700; }
+.bui-topbar .logo-img { height: 22px; width: auto; display: block; }
+.bui-frame.theme-dark .bui-topbar .logo-img { filter: brightness(0) invert(1) drop-shadow(0 0 0 #fff); }
+/* Dark theme: keep red logo brand intact, only invert grey "build" via overlay isn't possible —
+   instead show a slightly brighter version */
+.bui-frame.theme-dark .bui-topbar .logo-img { filter: brightness(1.1) contrast(1.05); }
+.bui-topbar .crumb { color: var(--ot-text-muted); font-size: 12px; }
+.bui-topbar .crumb b { color: var(--ot-text); font-weight: 500; }
+.bui-topbar .spacer { flex: 1; }
+.bui-topbar button {
+  height: 30px; padding: 0 12px; border-radius: 7px;
+  border: 1px solid var(--ot-border); background: #fff;
+  font: inherit; font-size: 12px; color: var(--ot-text);
+  display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+}
+.bui-topbar button.primary { background: var(--ot-primary); border-color: var(--ot-primary); color: #fff; }
+.bui-topbar button.ghost { border-color: transparent; }
+.bui-topbar .device-pills { display: flex; gap: 2px; padding: 2px; background: var(--ot-bg-muted); border-radius: 8px; }
+.bui-topbar .device-pills button { border: 0; height: 26px; padding: 0 8px; background: transparent; border-radius: 6px; }
+.bui-topbar .device-pills button.active { background: #fff; box-shadow: var(--ot-shadow-xs); color: var(--ot-text); }
+
+.bui-canvas {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(74,140,42,.04), transparent 40%),
+    var(--ot-bg-muted);
+  padding: 20px;
+}
+.bui-page {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: var(--ot-shadow-sm);
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--ot-border);
+}
+.bui-page .hero {
+  height: 180px;
+  background: linear-gradient(135deg, #1e3a12 0%, #4a8c2a 100%);
+  display: flex; align-items: center; padding: 28px;
+  color: #fff;
+}
+.bui-page .hero h1 { font-size: 24px; margin: 0 0 6px; font-weight: 700; }
+.bui-page .hero p { margin: 0; opacity: .8; font-size: 13px; }
+.bui-page .row {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px; padding: 20px;
+}
+.bui-page .row .card {
+  border: 1px dashed var(--ot-border-strong);
+  border-radius: 8px; padding: 18px; min-height: 100px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.bui-page .row .card .ph-h { height: 8px; width: 60%; background: var(--ot-bg-muted); border-radius: 4px; }
+.bui-page .row .card .ph-l { height: 6px; background: var(--ot-bg-muted); border-radius: 3px; }
+.bui-page .drop-hint {
+  position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%);
+  padding: 8px 14px; background: rgba(74,140,42,.08); color: var(--ot-primary-dark);
+  border: 1px dashed var(--ot-primary); border-radius: 999px; font-size: 11px; font-weight: 500;
+  display: none;
+}
+.bui-page.drag-over .drop-hint { display: inline-flex; }
+.bui-page.drag-over { box-shadow: 0 0 0 3px rgba(74,140,42,.25), var(--ot-shadow-sm); }
+
+.bui-right {
+  border-left: 1px solid var(--ot-border);
+  background: #fff;
+  padding: 14px;
+  font-size: 12px;
+  overflow: auto;
+}
+.bui-right h4 { margin: 0 0 12px; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--ot-text-muted); font-weight: 600; }
+.bui-right .field { margin-bottom: 10px; }
+.bui-right .field label { display: block; font-size: 11px; color: var(--ot-text-muted); margin-bottom: 4px; }
+.bui-right .field input, .bui-right .field select {
+  width: 100%; height: 28px; padding: 0 8px;
+  border: 1px solid var(--ot-border); border-radius: 6px; font: inherit; font-size: 12px;
+  background: #fff;
+}
+.bui-right .swatches { display: flex; gap: 6px; }
+.bui-right .swatches span { width: 22px; height: 22px; border-radius: 6px; border: 1px solid rgba(0,0,0,.06); cursor: pointer; }
+
+/* ─── Element drag preview (shared) ─── */
+.elx-ghost {
+  position: fixed; pointer-events: none; z-index: 9999;
+  background: #fff; border: 1px solid var(--ot-primary);
+  box-shadow: 0 12px 32px rgba(74,140,42,.25);
+  border-radius: 10px; padding: 8px 12px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 500; color: var(--ot-text);
+  transform: translate(-50%, -50%);
+}
+
+/* ─── Tabs in shell top (Elementi/Struttura) ─── */
+.bui-side-tabs {
+  display: flex; height: 38px;
+  border-bottom: 1px solid var(--ot-border);
+  background: #fff;
+}
+.bui-side-tabs button {
+  flex: 1; border: 0; background: transparent; cursor: pointer;
+  font: inherit; font-size: 12px; font-weight: 500;
+  color: var(--ot-text-muted); display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  border-bottom: 2px solid transparent;
+}
+.bui-side-tabs button.active { color: var(--ot-text); border-bottom-color: var(--ot-primary); }
+
+/* common scrollbar */
+.scrolly { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,.18) transparent; }
+.scrolly::-webkit-scrollbar { width: 8px; height: 8px; }
+.scrolly::-webkit-scrollbar-thumb { background: rgba(0,0,0,.18); border-radius: 99px; border: 2px solid transparent; background-clip: padding-box; }
+.scrolly::-webkit-scrollbar-track { background: transparent; }

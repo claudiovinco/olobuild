@@ -1,0 +1,217 @@
+/* ═══════════════════════════════════════════════════════════════════
+   FARMACIE COMUNALI BORGOVERDE — Brand tokens
+   Fictional network of municipal (public) pharmacies. Demo site composed
+   of OLObuild tiles; tiles follow the client's global colors.
+   Identity: institutional but warm & accessible (elderly + families).
+   ═══════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Mulish:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* ── Client global colors (OLObuild roles) ───────────────────── */
+  --fc-primary:        #1b9e6f;   /* pharmacy green — primary role     */
+  --fc-primary-strong: #16855d;   /* text-on-white legible green       */
+  --fc-primary-hover:  #137551;
+  --fc-primary-soft:   #e6f5ee;
+  --fc-primary-tint:   #eef7f2;
+
+  --fc-accent:         #e8674e;   /* warm coral — accent / human touch */
+  --fc-accent-strong:  #cf5238;
+  --fc-accent-soft:    #fdeae5;
+
+  /* dark / light / text roles */
+  --fc-ink:        #102a22;   /* deep green ink — footer shell          */
+  --fc-ink-2:      #173a2f;
+
+  --fc-text:        #23302b;  /* warm dark green-gray                   */
+  --fc-text-soft:   #46544e;
+  --fc-text-muted:  #6b7d76;
+  --fc-text-faint:  #9aa8a2;
+  --fc-on-dark:     #eaf3ee;
+  --fc-on-dark-mut: #a9c2b6;
+  --fc-on-primary:  #ffffff;
+
+  /* ── Neutrals (warm cream) ───────────────────────────────────── */
+  --fc-bg:        #fbfaf6;   /* warm off-white page                    */
+  --fc-bg-soft:   #f4f2ea;   /* warm sand                              */
+  --fc-bg-green:  #eef6f1;   /* faint green section                    */
+  --fc-surface:   #ffffff;
+  --fc-border:    #e7e3d8;
+  --fc-border-strong: #d6d1c3;
+
+  /* ── Semantic ────────────────────────────────────────────────── */
+  --fc-info:      #2f7dbd;
+  --fc-info-soft: #e3f0fa;
+  --fc-warning:   #d98a1f;
+  --fc-warning-soft: #fbf0d9;
+  --fc-success:   #1b9e6f;
+  --fc-success-soft: #e6f5ee;
+  --fc-danger:    #cf4d3e;
+  --fc-danger-soft: #fbe6e2;
+
+  /* ── Type ────────────────────────────────────────────────────── */
+  --fc-font-display: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --fc-font-sans:    'Mulish', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* ── Radii (friendly, rounded) ───────────────────────────────── */
+  --fc-r-xs:   8px;
+  --fc-r-sm:   12px;
+  --fc-r:      18px;
+  --fc-r-lg:   26px;
+  --fc-r-xl:   34px;
+  --fc-r-full: 999px;
+
+  /* ── Shadow (warm, soft) ─────────────────────────────────────── */
+  --fc-sh-sm: 0 1px 2px rgba(40,55,48,.06), 0 1px 1px rgba(40,55,48,.04);
+  --fc-sh:    0 4px 18px rgba(30,60,45,.07), 0 1px 3px rgba(30,60,45,.05);
+  --fc-sh-md: 0 14px 36px rgba(30,60,45,.10), 0 3px 8px rgba(30,60,45,.06);
+  --fc-sh-lg: 0 30px 70px rgba(30,60,45,.16), 0 8px 20px rgba(30,60,45,.08);
+
+  /* ── Layout ──────────────────────────────────────────────────── */
+  --fc-maxw: 1200px;
+  --fc-gut:  clamp(20px, 5vw, 64px);
+  --fc-nav-h: 80px;
+
+  /* ── Motion ──────────────────────────────────────────────────── */
+  --fc-ease: cubic-bezier(.22,.61,.36,1);
+  --fc-ease-spring: cubic-bezier(.34,1.4,.5,1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--fc-font-sans);
+  font-size: 18px;
+  line-height: 1.62;
+  color: var(--fc-text);
+  background: var(--fc-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+
+h1, h2, h3, h4 {
+  font-family: var(--fc-font-display);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--fc-text);
+  margin: 0;
+  text-wrap: balance;
+}
+p { margin: 0; text-wrap: pretty; }
+
+/* ── Utilities ───────────────────────────────────────────────────── */
+.fc-wrap {
+  max-width: var(--fc-maxw);
+  margin-inline: auto;
+  padding-inline: var(--fc-gut);
+}
+
+.fc-eyebrow {
+  font-family: var(--fc-font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fc-primary-strong);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+}
+.fc-eyebrow::before {
+  content: "";
+  width: 16px; height: 16px; flex: none;
+  background: var(--fc-primary);
+  -webkit-mask: var(--cross) center/contain no-repeat;
+  mask: var(--cross) center/contain no-repeat;
+  --cross: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 3h6v6h6v6h-6v6H9v-6H3V9h6z'/%3E%3C/svg%3E");
+}
+.fc-eyebrow.is-light { color: var(--fc-on-dark); }
+.fc-eyebrow.is-light::before { background: var(--fc-on-dark); }
+
+.fc-lede {
+  font-size: clamp(19px, 2vw, 22px);
+  line-height: 1.6;
+  color: var(--fc-text-soft);
+  max-width: 58ch;
+}
+
+/* Section rhythm */
+.fc-section { padding-block: clamp(64px, 8vw, 112px); }
+.fc-section--tight { padding-block: clamp(44px, 6vw, 76px); }
+.fc-section-head { max-width: 740px; margin-bottom: clamp(36px, 5vw, 60px); }
+.fc-section-head h2 { font-size: clamp(32px, 4.4vw, 52px); }
+.fc-section-head .fc-lede { margin-top: 18px; }
+.fc-section-head.is-center { margin-inline: auto; text-align: center; }
+.fc-section-head.is-center .fc-lede { margin-inline: auto; }
+.fc-section-head.is-center .fc-eyebrow { justify-content: center; }
+
+/* Buttons (OLObuild Button tile → token-driven) */
+.fc-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 15px 28px; min-height: 54px;
+  font-family: var(--fc-font-sans);
+  font-size: 17px; font-weight: 700; letter-spacing: -.005em;
+  border: 2px solid transparent; border-radius: var(--fc-r-full);
+  background: var(--fc-primary); color: var(--fc-on-primary);
+  transition: transform .18s var(--fc-ease), box-shadow .25s var(--fc-ease), background .2s var(--fc-ease);
+  white-space: nowrap;
+}
+.fc-btn:hover { transform: translateY(-2px); box-shadow: var(--fc-sh-md); }
+.fc-btn:active { transform: translateY(0); }
+.fc-btn:focus-visible { outline: 3px solid color-mix(in srgb, var(--fc-primary) 50%, transparent); outline-offset: 3px; }
+.fc-btn--primary { background: var(--fc-primary); }
+.fc-btn--primary:hover { background: var(--fc-primary-hover); }
+.fc-btn--accent { background: var(--fc-accent); }
+.fc-btn--accent:hover { background: var(--fc-accent-strong); }
+.fc-btn--ghost { background: transparent; color: var(--fc-primary-strong); border-color: var(--fc-border-strong); }
+.fc-btn--ghost:hover { background: var(--fc-surface); border-color: var(--fc-primary); box-shadow: var(--fc-sh); }
+.fc-btn--on-dark { background: rgba(255,255,255,.1); color: #fff; border-color: rgba(255,255,255,.28); }
+.fc-btn--on-dark:hover { background: rgba(255,255,255,.18); box-shadow: none; }
+.fc-btn--lg { min-height: 60px; padding: 17px 34px; font-size: 18px; }
+
+/* Link with arrow */
+.fc-link { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; color: var(--fc-primary-strong); transition: gap .2s var(--fc-ease); }
+.fc-link:hover { gap: 12px; }
+
+/* Pills / chips */
+.fc-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 15px; font-size: 14px; font-weight: 600;
+  color: var(--fc-text-soft); background: var(--fc-surface);
+  border: 1px solid var(--fc-border); border-radius: var(--fc-r-full);
+}
+.fc-chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--fc-success); box-shadow: 0 0 0 3px var(--fc-success-soft); }
+
+/* Media placeholder (OLObuild Image tile — user drops royalty-free photo) */
+.olo-media {
+  position: relative; border-radius: var(--fc-r); overflow: hidden;
+  background: repeating-linear-gradient(135deg, #eef0e9 0 14px, #e7eae1 14px 28px);
+  border: 1px solid var(--fc-border);
+  display: grid; place-items: center; isolation: isolate;
+}
+.olo-media::after { content: ""; position: absolute; inset: 0; background: radial-gradient(120% 80% at 30% 0%, rgba(27,158,111,.06), transparent 60%); }
+.olo-media__tag {
+  position: relative; font-family: var(--fc-font-sans); font-size: 13px; font-weight: 600;
+  color: var(--fc-text-muted); background: rgba(255,255,255,.82);
+  border: 1px solid var(--fc-border); border-radius: var(--fc-r-full);
+  padding: 8px 15px; backdrop-filter: blur(2px); text-align: center;
+}
+
+/* Reveal-on-scroll */
+[data-reveal] { opacity: 0; transform: translateY(22px); transition: opacity .7s var(--fc-ease), transform .7s var(--fc-ease); }
+[data-reveal].is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+  html { scroll-behavior: auto; }
+}

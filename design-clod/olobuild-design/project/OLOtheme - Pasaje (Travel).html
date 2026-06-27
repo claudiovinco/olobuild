@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Pasaje — A boutique hotel</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="Pasaje is a fourteen-room boutique hotel in an old town passage — sun-warmed rooms, a courtyard kitchen and a rooftop for the evening."/>
+<link rel="stylesheet" href="olothemes/pasaje.css"/>
+</head>
+<body data-screen-label="Pasaje — Home" data-fx>
+
+<header class="pa-nav" data-olo-tile="Navmenu">
+  <div class="pa-wrap pa-nav__in">
+    <a class="logo" href="#top"><span class="mk"></span>Pasaje</a>
+    <nav class="pa-nav__links">
+      <a href="OLOtheme - Pasaje - Rooms.html">Rooms</a>
+      <a href="#stay">The stay</a>
+      <a href="#experiences">Experiences</a>
+      <a href="#gallery">Gallery</a>
+    </nav>
+    <div class="pa-nav__cta">
+      <a href="#book" class="btn btn--terra" data-magnetic>Book a room</a>
+      <button class="fx-menu-trigger" data-menu-toggle="#paMenu" aria-label="Open menu">Menu<span class="bars"><i></i><i></i></span></button>
+    </div>
+  </div>
+</header>
+<nav class="fx-menu" id="paMenu" data-menu aria-label="Menu">
+  <button class="fx-menu__x" data-menu-close aria-label="Close">&times;</button>
+  <div class="fx-menu__links">
+    <a href="OLOtheme - Pasaje - Rooms.html"><span class="n">01</span>Rooms</a>
+    <a href="#stay"><span class="n">02</span>The stay</a>
+    <a href="#experiences"><span class="n">03</span>Experiences</a>
+    <a href="#gallery"><span class="n">04</span>Gallery</a>
+  </div>
+  <div class="fx-menu__foot"><span>14 rooms · old town · est. 2019</span><a href="#book">Book a room &rarr;</a></div>
+</nav>
+
+<main id="top">
+<section class="pa-hero" data-olo-tile="Hero">
+  <div class="pa-hero__media"><div class="media" data-label="hero — sunlit courtyard, terracotta &amp; bougainvillea"></div></div>
+  <div class="pa-hero__in">
+    <div class="pa-wrap pa-hero__c">
+      <span class="eyebrow" data-reveal>Boutique hotel · the old town</span>
+      <h1 data-reveal="80">Stay down<br/>the passage.</h1>
+      <p data-reveal="160">Fourteen sun-warmed rooms around a courtyard kitchen, two minutes from the sea and a world away from the crowd.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SIGNATURE: booking bar (OLObuild · NEW tile → BookingBar) ═══ -->
+<section class="pa-wrap" id="book" data-olo-tile="BookingBar" data-olo-note="NEW tile candidate: BookingBar — floating check-in/out/guests bar overlapping the hero.">
+  <form class="pa-book" data-reveal="200" onsubmit="return false">
+    <div class="pa-book__f"><label>Check in</label><input type="date" value="2026-07-10"/></div>
+    <div class="pa-book__f"><label>Check out</label><input type="date" value="2026-07-14"/></div>
+    <div class="pa-book__f"><label>Guests</label><select><option>2 adults</option><option>1 adult</option><option>2 adults · 1 child</option><option>4 adults</option></select></div>
+    <button class="btn btn--terra pa-book__btn">Check availability</button>
+  </form>
+</section>
+
+<section class="pa-sec" id="stay" data-olo-tile="FeatureSplit">
+  <div class="pa-wrap pa-stay" data-reveal>
+    <div class="pa-stay__media"><div class="media" data-label="a guest room, linen &amp; light"></div></div>
+    <div>
+      <span class="eyebrow">The stay</span>
+      <h2>A small hotel that<br/>feels like a friend's house</h2>
+      <p>Pasaje sits in a restored merchant's house off a quiet passage. Fourteen rooms, no two alike, all lime-washed walls, local linen and shutters that throw stripes of afternoon light.</p>
+      <p>Breakfast is whatever the market gave us, served in the courtyard. The roof is yours at sundown.</p>
+      <span class="sig">— Inés &amp; the Pasaje team</span>
+    </div>
+  </div>
+</section>
+
+<section class="pa-sec panel" data-olo-tile="RoomGrid" data-olo-note="NEW tile candidate: RoomGrid — room cards with type, meta and from-price.">
+  <div class="pa-wrap">
+    <div class="sec-head" data-reveal><span class="eyebrow">Where you'll sleep</span><h2>The rooms</h2></div>
+    <div class="pa-rooms">
+      <div class="pa-room" data-reveal><div class="pa-room__media"><div class="media" data-label="courtyard room"></div></div><div class="pa-room__b"><h3>Courtyard</h3><div class="mt">22 m² · garden view · queen</div><div class="pa-room__foot"><span class="link-u">View room</span><span class="pa-room__pr">€140<small>/night</small></span></div></div></div>
+      <div class="pa-room" data-reveal="100"><div class="pa-room__media"><div class="media" data-label="sea-view room"></div></div><div class="pa-room__b"><h3>Sea View</h3><div class="mt">28 m² · balcony · king</div><div class="pa-room__foot"><span class="link-u">View room</span><span class="pa-room__pr">€190<small>/night</small></span></div></div></div>
+      <div class="pa-room" data-reveal="200"><div class="pa-room__media"><div class="media" data-label="rooftop suite"></div></div><div class="pa-room__b"><h3>Roof Suite</h3><div class="mt">40 m² · terrace · king</div><div class="pa-room__foot"><span class="link-u">View room</span><span class="pa-room__pr">€280<small>/night</small></span></div></div></div>
+    </div>
+    <div style="text-align:center;margin-top:40px" data-reveal="120"><a href="OLOtheme - Pasaje - Rooms.html" class="btn btn--out" data-magnetic>All rooms</a></div>
+  </div>
+</section>
+
+<section class="pa-sec" id="experiences" data-olo-tile="CategoryTiles" data-olo-note="NEW tile candidate: CategoryTiles.">
+  <div class="pa-wrap">
+    <div class="sec-head" data-reveal><span class="eyebrow">While you're here</span><h2>Slow days, good evenings</h2></div>
+    <div class="pa-exp">
+      <div class="pa-expc" data-reveal><div class="media" data-label="courtyard breakfast"></div><b>Courtyard breakfast</b></div>
+      <div class="pa-expc" data-reveal="80"><div class="media" data-label="rooftop bar"></div><b>Rooftop at sunset</b></div>
+      <div class="pa-expc" data-reveal="160"><div class="media" data-label="market walk"></div><b>Market mornings</b></div>
+      <div class="pa-expc" data-reveal="240"><div class="media" data-label="boat trip"></div><b>Boat to the cove</b></div>
+    </div>
+  </div>
+</section>
+
+<section class="pa-sec panel" id="gallery" data-olo-tile="ProductGallery" data-olo-note="NEW tile candidate: ProductGallery.">
+  <div class="pa-wrap">
+    <div class="sec-head" data-reveal><span class="eyebrow">A look around</span><h2>Pasaje, in frames</h2></div>
+    <div class="pa-gal" data-reveal="80">
+      <div class="pa-gal__c tall"><div class="media" data-label="the passage entrance"></div></div>
+      <div class="pa-gal__c"><div class="media" data-label="room detail"></div></div>
+      <div class="pa-gal__c"><div class="media" data-label="courtyard"></div></div>
+      <div class="pa-gal__c wide"><div class="media" data-label="rooftop view"></div></div>
+      <div class="pa-gal__c"><div class="media" data-label="breakfast table"></div></div>
+      <div class="pa-gal__c"><div class="media" data-label="tiled bathroom"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="pa-sec" id="roomfinder" data-olo-tile="Finder" data-olo-note="NEW tile candidate: Finder — interactive zone. One-tap recommender; option chips switch the visible result card. Props: options[key,label], results[key,content].">
+  <div class="pa-wrap" data-reveal style="--fx-zone-accent:#d98a4e;--fx-zone-on:#1b110b;--fx-zone-line:rgba(243,231,214,.2);--fx-zone-bg:rgba(217,138,78,.1);--fx-zone-thumb:#1b110b">
+    <div class="sec-head" style="text-align:center;margin:0 auto 36px"><span class="eyebrow">Which room is you?</span><h2>Find your <em>stay</em></h2></div>
+    <div data-finder class="pa-find">
+      <div class="fxf-opts">
+        <button data-finder-opt="couple">A romantic escape</button>
+        <button data-finder-opt="solo">Solo &amp; slow</button>
+        <button data-finder-opt="family">With the family</button>
+        <button data-finder-opt="view">All about the view</button>
+      </div>
+      <div data-finder-res="couple" class="pa-find__card"><div class="media" data-label="garden suite, candlelight"></div><div class="pa-find__b"><span class="k">We'd give you</span><h3>The Garden Suite</h3><p>A private courtyard, a deep copper tub and breakfast brought to your door. Tell us it's an occasion and we'll do the rest.</p><span class="px">from €280 / night</span></div></div>
+      <div data-finder-res="solo" class="pa-find__card"><div class="media" data-label="reading nook room"></div><div class="pa-find__b"><span class="k">We'd give you</span><h3>The Reading Room</h3><p>A snug corner room with the best armchair in the house, a stack of books and a window onto the old town.</p><span class="px">from €150 / night</span></div></div>
+      <div data-finder-res="family" class="pa-find__card"><div class="media" data-label="connecting family rooms"></div><div class="pa-find__b"><span class="k">We'd give you</span><h3>The Casa Rooms</h3><p>Two connecting rooms off a shared terrace — space for everyone, and a courtyard the kids can't get lost in.</p><span class="px">from €240 / night</span></div></div>
+      <div data-finder-res="view" class="pa-find__card"><div class="media" data-label="rooftop terrace room"></div><div class="pa-find__b"><span class="k">We'd give you</span><h3>The Rooftop</h3><p>Our top-floor room opens straight onto the terrace — rooftops, bells and a sunset you'll talk about for years.</p><span class="px">from €320 / night</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="pa-sec pa-cta" data-olo-tile="CallToAction">
+  <div class="pa-wrap"><div class="pa-cta__box" data-reveal>
+    <div class="media" data-label="rooftop at dusk"></div>
+    <div class="in">
+      <h2>Your room is <em style="font-style:normal;color:var(--terra)">waiting</em></h2>
+      <p>Book direct for the best rate, a late checkout, and a glass of something on the roof when you arrive.</p>
+      <div class="pa-cta__cta"><a href="#book" class="btn btn--terra" data-magnetic>Book a room</a><a href="OLOtheme - Pasaje - Rooms.html" class="btn btn--cream" data-magnetic>See the rooms</a></div>
+    </div>
+  </div></div>
+</section>
+</main>
+
+<footer class="pa-foot" data-olo-tile="Footer">
+  <div class="pa-wrap">
+    <div class="pa-foot__top">
+      <div class="pa-foot__brand"><a class="logo" href="#top"><span class="mk"></span>Pasaje</a><p>A fourteen-room boutique hotel down a quiet passage in the old town.</p></div>
+      <div><h4>Stay</h4><ul><li><a href="OLOtheme - Pasaje - Rooms.html">Rooms</a></li><li><a href="#book">Book</a></li><li><a href="#experiences">Experiences</a></li><li><a href="#">Offers</a></li></ul></div>
+      <div><h4>Hotel</h4><ul><li><a href="#stay">The stay</a></li><li><a href="#gallery">Gallery</a></li><li><a href="#">Dining</a></li></ul></div>
+      <div><h4>Find us</h4><ul><li>Pasaje del Mar 4</li><li>+34 952 00 00</li><li>hola@pasaje.hotel</li></ul></div>
+    </div>
+    <div class="pa-foot__bot"><span>© 2026 Pasaje — an OLOtheme demo.</span><span>Built with OLObuild</span></div>
+  </div>
+</footer>
+
+<script src="olothemes/fx.js"></script>
+<script src="olothemes/theme.js"></script>
+</body>
+</html>

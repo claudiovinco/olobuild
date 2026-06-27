@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <title>OLObuild — Configurazione (redesign)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link rel="stylesheet" href="tokens.css"/>
+  <link rel="stylesheet" href="brand.css"/>
+  <link rel="stylesheet" href="settings/settings.css"/>
+  <style>
+    html, body { margin: 0; padding: 0; background: #f0eee9; font-family: "Work Sans", -apple-system, BlinkMacSystemFont, sans-serif; }
+    .ds-intro {
+      position: fixed; left: 16px; top: 16px; z-index: 50;
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(10px);
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      padding: 14px 16px;
+      max-width: 400px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+      font-family: "Work Sans", sans-serif;
+    }
+    .ds-intro h1 { margin: 0 0 6px; font-size: 14px; font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 8px; }
+    .ds-intro h1 .pill { font-size: 10px; font-weight: 600; background: #fef2f3; color: #b8323a; padding: 2px 8px; border-radius: 99px; text-transform: uppercase; letter-spacing: .04em; }
+    .ds-intro p { margin: 0 0 6px; font-size: 12px; line-height: 1.55; color: #64748b; }
+    .ds-intro p b { color: #1e293b; }
+    .ds-intro ul { margin: 6px 0 0; padding-left: 18px; font-size: 12px; color: #475569; }
+    .ds-intro ul li { margin-bottom: 2px; }
+    .ds-intro .keys { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+    .ds-intro .keys span { font-size: 10px; padding: 2px 7px; border-radius: 4px; background: #f1f5f9; color: #475569; font-weight: 500; }
+
+    /* Artboard frame */
+    .cfg-frame {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #fff;
+      display: block;
+    }
+  </style>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="ds-intro">
+    <h1>OLObuild · Configurazione redesign <span class="pill">2 varianti + IA map</span></h1>
+    <p>Riorganizzazione della pagina <code>?page=olobuilder-settings</code>. Stessa IA in entrambe le varianti, due direzioni visive: <b>Console</b> (sobrio, denso, navy) e <b>Editorial</b> (brand-forward, aerato, cream).</p>
+    <p>Clicca le voci nella sidebar per navigare tra i tab. Le voci "Soon" sono mock per dimostrare la scalabilità.</p>
+    <div class="keys">
+      <span>Stili & Preset</span>
+      <span>Palette colori</span>
+      <span>Tipografia</span>
+      <span>AI Assistant</span>
+      <span>Stock media</span>
+      <span>API & Integrazioni</span>
+      <span>Responsive</span>
+    </div>
+  </div>
+
+  <div id="root"></div>
+
+  <script type="text/babel" src="marketing/design-canvas.jsx"></script>
+  <script type="text/babel" src="settings/settings-shell.jsx"></script>
+  <script type="text/babel" src="settings/settings-tabs.jsx"></script>
+  <script type="text/babel" src="settings/ia-map.jsx"></script>
+  <script type="text/babel">
+    function SettingsApp({ variant }) {
+      const [activeId, setActiveId] = React.useState("presets");
+      const allItems = IA_GROUPS.flatMap(g => g.items);
+      const active = allItems.find(it => it.id === activeId) || allItems[0];
+      return (
+        <div className="cfg-root" data-variant={variant} data-screen-label={"Configurazione · " + variant}>
+          <CfgTopbar tabLabel={active.label} variant={variant}/>
+          <CfgSidebar activeId={activeId} onPick={setActiveId}/>
+          <div className="cfg-content">
+            <CfgTabContent activeId={activeId}/>
+          </div>
+          <CfgSavebar dirty={true}/>
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <DesignCanvas>
+          <DCSection
+            id="ia-map"
+            title="Information Architecture"
+            subtitle="Proposta di riorganizzazione: da 6 tab piatti a 4 gruppi semantici">
+            <DCArtboard id="ia" label="Mappa IA · before / after + migrazioni" width={1480} height={1100}>
+              <IAMap/>
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection
+            id="variants"
+            title="Console — direzione scelta"
+            subtitle="Sobrio, denso, navy. Clicca le voci della sidebar per navigare tra i 7 tab.">
+            <DCArtboard id="console" label="Configurazione · Console" width={1480} height={1080}>
+              <div className="cfg-frame"><SettingsApp variant="console"/></div>
+            </DCArtboard>
+          </DCSection>
+        </DesignCanvas>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+  </script>
+</body>
+</html>

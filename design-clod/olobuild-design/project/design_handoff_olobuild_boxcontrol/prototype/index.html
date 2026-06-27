@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <title>OLObuild — BoxField (componente compatto)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link rel="stylesheet" href="radius.css"/>
+  <style>
+    html, body { margin: 0; padding: 0; background: #eef0f3; font-family: "Work Sans", -apple-system, sans-serif; }
+    .demo-wrap { display: flex; flex-wrap: wrap; gap: 24px; padding: 32px; align-items: flex-start; }
+    .demo-col { display: grid; gap: 24px; }
+    .demo-h { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #6b7280; margin: 0 0 -8px; }
+    .demo-banner { width: 100%; box-sizing: border-box; padding: 14px 18px; background: #fff; border: 1px solid #e5e7eb; border-left: 3px solid #2563eb; border-radius: 10px; font-size: 13px; line-height: 1.55; color: #374151; }
+    .demo-banner b { color: #111827; }
+    .demo-banner code { font-family: "JetBrains Mono", monospace; font-size: 12px; background: #f6f7f9; padding: 1px 5px; border-radius: 4px; }
+  </style>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel" src="box-control.jsx"></script>
+  <script type="text/babel">
+    function Demo() {
+      return (
+        <div className="demo-wrap">
+          <div className="demo-banner">
+            <b>Un solo componente: <code>BoxField</code>.</b> Qui sotto è mostrato in più composizioni dello stesso controllo — non sono varianti da scegliere.
+            A sinistra istanze singole (per validare un caso per volta); al centro la <b>disposizione reale del pannello</b> (controlli impilati + un solo switch device globale).
+          </div>
+          <div className="demo-col">
+            <div className="demo-h">Esempi di singole istanze</div>
+            <MarginDemo/>
+            <BorderRadiusDemo/>
+          </div>
+          <div className="demo-col">
+            <div className="demo-h">★ Composizione reale del pannello</div>
+            <StackedPanel/>
+          </div>
+          <div className="demo-col">
+            <ExtendNotes/>
+          </div>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+  </script>
+</body>
+</html>

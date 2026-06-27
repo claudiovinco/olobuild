@@ -1,0 +1,425 @@
+/* Ricerca Media — page styles (cockpit language, coherent with dashboard redesign) */
+
+/* shell fix: nav tooltips only exist in collapsed app-mode */
+.wp-side a .tip { display: none; }
+
+.ms-content {
+  flex: 1; min-height: 0; overflow-y: auto;
+  padding: 20px 28px 48px;
+  display: flex; flex-direction: column; gap: 16px;
+  background: var(--ot-bg);
+}
+
+/* ── Page head ── */
+.ms-head { display: flex; align-items: flex-end; gap: 16px; }
+.ms-head h1 {
+  margin: 0; font-size: 22px; font-weight: 700; color: var(--ot-text-strong);
+  letter-spacing: -0.01em;
+}
+.ms-head .sub { font-size: 13px; color: var(--ot-text-muted); margin-top: 3px; }
+.ms-head .sub b { color: var(--ot-text); }
+.ms-head .spc { flex: 1; }
+.ms-cfg-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 13px; border-radius: 8px;
+  border: 1px solid var(--ot-border); background: #fff;
+  font: inherit; font-size: 13px; font-weight: 600; color: var(--ot-text-soft);
+  cursor: pointer; transition: var(--ot-transition);
+}
+.ms-cfg-btn:hover { border-color: var(--ot-border-strong); background: var(--ot-bg-muted); }
+
+/* ── Search panel ── */
+.ms-panel {
+  background: var(--ot-card); border: 1px solid var(--ot-border);
+  border-radius: var(--ot-radius-lg); box-shadow: var(--ot-shadow-sm);
+  padding: 16px 18px 14px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+/* type segmented control */
+.ms-tabs {
+  display: inline-flex; gap: 2px; align-self: flex-start;
+  background: var(--ot-bg-muted); border: 1px solid var(--ot-border-light);
+  padding: 3px; border-radius: 10px;
+}
+.ms-tab {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 14px; border: 0; border-radius: 8px;
+  background: transparent; font: inherit; font-size: 13px; font-weight: 600;
+  color: var(--ot-text-muted); cursor: pointer; transition: var(--ot-transition);
+}
+.ms-tab svg { opacity: .75; }
+.ms-tab:hover { color: var(--ot-text); }
+.ms-tab.active {
+  background: #fff; color: var(--ot-text-strong);
+  box-shadow: var(--ot-shadow-sm), 0 0 0 1px var(--ot-border);
+}
+.ms-tab.active svg { color: var(--ot-primary); opacity: 1; }
+
+/* search row */
+.ms-search-row { display: flex; gap: 10px; align-items: stretch; }
+.ms-search-field {
+  flex: 1; display: flex; align-items: center; gap: 10px;
+  background: var(--ot-bg-soft); border: 1px solid var(--ot-border);
+  border-radius: 10px; padding: 0 14px; height: 44px;
+  transition: var(--ot-transition);
+}
+.ms-search-field:focus-within {
+  border-color: var(--ot-border-focus); background: #fff;
+  box-shadow: var(--ot-shadow-focus);
+}
+.ms-search-field svg { color: var(--ot-text-light); flex-shrink: 0; }
+.ms-search-field input {
+  flex: 1; border: 0; outline: 0; background: transparent;
+  font: inherit; font-size: 15px; color: var(--ot-text);
+  min-width: 0;
+}
+.ms-search-field input::placeholder { color: var(--ot-text-faint); }
+.ms-search-field .clr {
+  border: 0; background: transparent; cursor: pointer; color: var(--ot-text-light);
+  font-size: 16px; line-height: 1; padding: 4px; border-radius: 6px;
+}
+.ms-search-field .clr:hover { color: var(--ot-text); background: var(--ot-bg-muted); }
+.ms-search-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 0 22px; border: 0; border-radius: 10px;
+  background: var(--ot-primary); color: #fff;
+  font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+  transition: var(--ot-transition);
+}
+.ms-search-btn:hover { background: var(--ot-primary-hover); }
+.ms-search-btn:active { transform: translateY(1px); }
+
+/* quick queries */
+.ms-quick { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ms-quick .lbl { font-size: 12px; color: var(--ot-text-light); font-weight: 600; }
+.ms-quick button {
+  border: 1px solid var(--ot-border-light); background: var(--ot-bg-soft);
+  border-radius: 99px; padding: 4px 12px;
+  font: inherit; font-size: 12px; font-weight: 500; color: var(--ot-text-muted);
+  cursor: pointer; transition: var(--ot-transition);
+}
+.ms-quick button:hover {
+  border-color: var(--ot-primary-200); background: var(--ot-primary-50);
+  color: var(--ot-primary-dark);
+}
+
+/* provider chips */
+.ms-providers { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.ms-providers .lbl {
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em;
+  color: var(--ot-text-light); margin-right: 2px;
+}
+.ms-provider {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 14px; border-radius: 99px;
+  border: 1px solid var(--ot-border); background: #fff;
+  font: inherit; font-size: 13px; font-weight: 600; color: var(--ot-text-soft);
+  cursor: pointer; transition: var(--ot-transition); position: relative;
+}
+.ms-provider:hover { border-color: var(--ot-border-strong); }
+.ms-provider.active {
+  background: var(--ot-navy); border-color: var(--ot-navy); color: #fff;
+}
+.ms-provider .dot { width: 7px; height: 7px; border-radius: 99px; flex-shrink: 0; }
+.ms-provider .dot.ok { background: var(--ot-success); }
+.ms-provider.active .dot.ok { box-shadow: 0 0 0 3px rgba(34,197,94,.25); }
+.ms-provider.disabled {
+  opacity: .55; cursor: not-allowed; background: var(--ot-bg-softer);
+  color: var(--ot-text-light);
+}
+.ms-provider .dot.no { background: var(--ot-danger); }
+.ms-provider .lock { display: inline-flex; color: var(--ot-text-light); }
+.ms-provider .tip {
+  position: absolute; left: 50%; bottom: calc(100% + 7px); transform: translateX(-50%);
+  background: var(--ot-navy); color: #fff; font-size: 11px; font-weight: 500;
+  padding: 5px 10px; border-radius: 6px; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity .15s; z-index: 20;
+  box-shadow: var(--ot-shadow-md);
+}
+.ms-provider.disabled:hover .tip { opacity: 1; }
+
+/* ── filter row ── */
+.ms-filters {
+  display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  padding-top: 12px; border-top: 1px dashed var(--ot-border-light);
+}
+.ms-filter {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--ot-bg-soft); border: 1px solid var(--ot-border-light);
+  border-radius: 8px; padding: 5px 8px 5px 11px;
+}
+.ms-filter label {
+  font-size: 12px; font-weight: 600; color: var(--ot-text-muted); white-space: nowrap;
+}
+.ms-filter select, .ms-filter input[type="number"] {
+  border: 0; outline: 0; background: transparent;
+  font: inherit; font-size: 13px; font-weight: 600; color: var(--ot-text);
+  cursor: pointer;
+}
+.ms-filter input[type="number"] { width: 64px; cursor: text; }
+.ms-filter input[type="number"]::placeholder { color: var(--ot-text-faint); font-weight: 400; }
+.ms-filters .sep { font-size: 12px; color: var(--ot-text-faint); }
+.ms-filters .reset {
+  border: 0; background: transparent; font: inherit; font-size: 12px; font-weight: 600;
+  color: var(--ot-text-light); cursor: pointer; text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.ms-filters .reset:hover { color: var(--ot-danger); }
+
+/* ── status row ── */
+.ms-status {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: var(--ot-text-muted); min-height: 20px;
+}
+.ms-status b { color: var(--ot-text-strong); }
+.ms-status .via {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
+  color: var(--ot-text-light);
+  background: #fff; border: 1px solid var(--ot-border-light);
+  padding: 3px 9px; border-radius: 99px;
+}
+.ms-status .spc { flex: 1; }
+
+/* ── results: photo masonry ── */
+.ms-masonry { columns: 4 240px; column-gap: 14px; }
+.ms-card {
+  position: relative; border-radius: 12px; overflow: hidden;
+  background: var(--ot-bg-softer); cursor: zoom-in;
+  break-inside: avoid; margin: 0 0 14px;
+  border: 1px solid var(--ot-border-light);
+}
+.ms-card img { width: 100%; height: auto; display: block; }
+.ms-card .veil {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  justify-content: space-between; padding: 10px;
+  background: linear-gradient(rgba(2,6,23,.38), transparent 38%, transparent 60%, rgba(2,6,23,.62));
+  opacity: 0; transition: opacity .18s ease;
+}
+.ms-card:hover .veil { opacity: 1; }
+.ms-card .veil .top { display: flex; justify-content: flex-end; gap: 6px; }
+.ms-card .veil .bottom { display: flex; align-items: flex-end; gap: 8px; }
+.ms-card .who { flex: 1; min-width: 0; }
+.ms-card .who .nm {
+  color: #fff; font-size: 12px; font-weight: 600;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ms-card .who .dim { color: rgba(255,255,255,.75); font-size: 10.5px; font-variant-numeric: tabular-nums; }
+.ms-badge {
+  position: absolute; top: 10px; left: 10px;
+  background: rgba(2,6,23,.55); color: #fff; backdrop-filter: blur(4px);
+  font-size: 10px; font-weight: 700; letter-spacing: .04em;
+  padding: 3px 9px; border-radius: 99px;
+  display: inline-flex; align-items: center; gap: 5px;
+  pointer-events: none;
+}
+.ms-iconbtn {
+  width: 30px; height: 30px; border-radius: 8px; border: 0;
+  background: rgba(255,255,255,.92); color: var(--ot-text);
+  display: grid; place-items: center; cursor: pointer;
+  transition: var(--ot-transition);
+}
+.ms-iconbtn:hover { background: #fff; transform: translateY(-1px); }
+
+/* import button (shared) */
+.ms-import {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 0; border-radius: 8px; padding: 7px 13px;
+  background: var(--ot-primary); color: #fff;
+  font: inherit; font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: var(--ot-transition); white-space: nowrap;
+}
+.ms-import:hover { background: var(--ot-primary-hover); }
+.ms-import.busy { opacity: .75; cursor: wait; }
+.ms-import.done { background: var(--ot-success-dark); cursor: default; }
+.ms-import .spin {
+  width: 12px; height: 12px; border-radius: 99px;
+  border: 2px solid rgba(255,255,255,.4); border-top-color: #fff;
+  animation: msSpin .7s linear infinite;
+}
+@keyframes msSpin { to { transform: rotate(360deg); } }
+
+/* ── video grid ── */
+.ms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+.ms-vcard {
+  position: relative; border-radius: 12px; overflow: hidden; cursor: zoom-in;
+  aspect-ratio: 16/9; background: var(--ot-bg-softer);
+  border: 1px solid var(--ot-border-light);
+}
+.ms-vcard img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ms-vcard .veil {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: rgba(2,6,23,.28); opacity: 0; transition: opacity .18s;
+}
+.ms-vcard:hover .veil { opacity: 1; }
+.ms-vcard .playbtn {
+  width: 46px; height: 46px; border-radius: 99px; border: 0;
+  background: rgba(255,255,255,.95); color: var(--ot-navy);
+  display: grid; place-items: center; cursor: pointer;
+  box-shadow: var(--ot-shadow-lg);
+}
+.ms-vcard .dur {
+  position: absolute; right: 10px; bottom: 10px;
+  background: rgba(2,6,23,.7); color: #fff;
+  font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums;
+  padding: 2px 8px; border-radius: 6px;
+}
+.ms-vcard .who {
+  position: absolute; left: 10px; bottom: 10px;
+  color: #fff; font-size: 11.5px; font-weight: 600;
+  text-shadow: 0 1px 4px rgba(0,0,0,.5);
+  opacity: 0; transition: opacity .18s;
+}
+.ms-vcard:hover .who { opacity: 1; }
+
+/* hdri tags */
+.ms-tagrow { position: absolute; left: 10px; bottom: 10px; display: flex; gap: 4px; flex-wrap: wrap; }
+.ms-tag {
+  background: rgba(2,6,23,.55); color: #fff; backdrop-filter: blur(4px);
+  font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 99px;
+}
+
+/* ── audio list ── */
+.ms-audio-list { display: flex; flex-direction: column; gap: 8px; max-width: 980px; }
+.ms-arow {
+  display: flex; align-items: center; gap: 14px;
+  background: #fff; border: 1px solid var(--ot-border);
+  border-radius: 12px; padding: 10px 14px;
+  transition: var(--ot-transition);
+}
+.ms-arow:hover { border-color: var(--ot-border-strong); box-shadow: var(--ot-shadow-sm); }
+.ms-arow.playing { border-color: var(--ot-primary-300); box-shadow: 0 0 0 3px var(--ot-primary-50); }
+.ms-aplay {
+  width: 40px; height: 40px; border-radius: 99px; border: 0; flex-shrink: 0;
+  background: var(--ot-navy); color: #fff; cursor: pointer;
+  display: grid; place-items: center; transition: var(--ot-transition);
+}
+.ms-aplay:hover { background: var(--ot-navy-hover); }
+.ms-arow.playing .ms-aplay { background: var(--ot-primary); }
+.ms-ainfo { flex: 1; min-width: 0; }
+.ms-ainfo .nm {
+  font-size: 13.5px; font-weight: 600; color: var(--ot-text-strong);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ms-ainfo .meta {
+  display: flex; gap: 10px; font-size: 11.5px; color: var(--ot-text-muted); margin-top: 2px;
+  flex-wrap: wrap;
+}
+.ms-ainfo .meta .lic {
+  font-weight: 700; font-size: 10px; letter-spacing: .04em;
+  color: var(--ot-primary-dark); background: var(--ot-primary-50);
+  padding: 1px 7px; border-radius: 99px; align-self: center;
+}
+.ms-wave {
+  display: flex; align-items: center; gap: 2px; height: 36px;
+  width: 240px; flex-shrink: 0; position: relative; overflow: hidden; border-radius: 6px;
+}
+.ms-wave i {
+  flex: 1; background: var(--ot-slate-300); border-radius: 2px;
+  min-height: 3px; transition: background .2s;
+}
+.ms-arow.playing .ms-wave i.lit { background: var(--ot-primary); }
+.ms-arow .dur {
+  font-size: 12px; font-weight: 600; color: var(--ot-text-muted);
+  font-variant-numeric: tabular-nums; width: 42px; text-align: right; flex-shrink: 0;
+}
+
+/* ── skeletons ── */
+@keyframes msShimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+.ms-skel {
+  border-radius: 12px;
+  background: linear-gradient(100deg, var(--ot-bg-softer) 40%, #fff 50%, var(--ot-bg-softer) 60%);
+  background-size: 200% 100%;
+  animation: msShimmer 1.2s linear infinite;
+  break-inside: avoid; margin-bottom: 14px;
+}
+
+/* ── empty state ── */
+.ms-empty {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 64px 20px; text-align: center; color: var(--ot-text-muted);
+}
+.ms-empty .ico {
+  width: 56px; height: 56px; border-radius: 16px;
+  background: var(--ot-primary-50); color: var(--ot-primary);
+  display: grid; place-items: center;
+}
+.ms-empty h3 { margin: 4px 0 0; font-size: 16px; color: var(--ot-text); }
+.ms-empty p { margin: 0; font-size: 13px; max-width: 420px; }
+
+/* ── GSV panel ── */
+.ms-gsv {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.ms-gsv .note {
+  display: flex; gap: 10px; align-items: flex-start;
+  background: var(--ot-info-50); border: 1px solid var(--ot-info-soft);
+  color: var(--ot-info-dark); border-radius: 10px; padding: 10px 14px;
+  font-size: 13px; line-height: 1.45;
+}
+.ms-gsv-result {
+  display: flex; gap: 18px; align-items: flex-start;
+  background: #fff; border: 1px solid var(--ot-border); border-radius: 12px;
+  padding: 16px; box-shadow: var(--ot-shadow-sm); max-width: 920px;
+}
+.ms-gsv-result img { width: 420px; max-width: 48%; border-radius: 10px; display: block; }
+.ms-gsv-result .meta { flex: 1; font-size: 13px; color: var(--ot-text-muted); }
+.ms-gsv-result .meta p { margin: 3px 0; }
+.ms-gsv-result .meta strong { color: var(--ot-text-strong); }
+.ms-gsv-result .hist { display: flex; gap: 5px; flex-wrap: wrap; margin: 8px 0 14px; }
+.ms-gsv-result .hist button {
+  border: 1px solid var(--ot-border); background: var(--ot-bg-soft);
+  border-radius: 99px; padding: 2px 10px; font: inherit; font-size: 11px; font-weight: 600;
+  color: var(--ot-text-soft); cursor: pointer;
+}
+.ms-gsv-result .hist button.cur { background: var(--ot-navy); color: #fff; border-color: var(--ot-navy); }
+
+/* ── pagination ── */
+.ms-pages { display: flex; gap: 6px; justify-content: center; align-items: center; padding-top: 8px; }
+.ms-pages button {
+  min-width: 34px; height: 34px; padding: 0 10px;
+  border: 1px solid var(--ot-border); background: #fff; border-radius: 9px;
+  font: inherit; font-size: 13px; font-weight: 600; color: var(--ot-text-soft);
+  cursor: pointer; transition: var(--ot-transition);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.ms-pages button:hover:not(:disabled) { border-color: var(--ot-border-strong); color: var(--ot-text-strong); }
+.ms-pages button.cur { background: var(--ot-navy); border-color: var(--ot-navy); color: #fff; }
+.ms-pages button:disabled { opacity: .4; cursor: not-allowed; }
+.ms-pages .ell { color: var(--ot-text-faint); font-size: 13px; padding: 0 2px; }
+
+/* ── modal ── */
+.ms-modal { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; }
+.ms-modal .ovl { position: absolute; inset: 0; background: rgba(2,6,23,.55); backdrop-filter: blur(6px); }
+.ms-modal .box {
+  position: relative; background: #fff; border-radius: 16px;
+  width: min(860px, 92vw); max-height: 88vh; overflow: auto;
+  box-shadow: var(--ot-shadow-xl); padding: 20px;
+  animation: msModalIn .22s var(--ot-ease-out);
+}
+@keyframes msModalIn { from { opacity: 0; transform: translateY(10px) scale(.985); } to { opacity: 1; transform: none; } }
+.ms-modal .x {
+  position: absolute; top: 14px; right: 14px; z-index: 2;
+  width: 32px; height: 32px; border-radius: 99px; border: 0;
+  background: rgba(2,6,23,.45); color: #fff; cursor: pointer;
+  display: grid; place-items: center; backdrop-filter: blur(4px);
+}
+.ms-modal .x:hover { background: rgba(2,6,23,.7); }
+.ms-modal .big { width: 100%; border-radius: 12px; display: block; }
+.ms-modal .row { display: flex; gap: 18px; align-items: flex-start; margin-top: 14px; flex-wrap: wrap; }
+.ms-modal .facts { flex: 1; min-width: 240px; display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; font-size: 13px; }
+.ms-modal .facts dt { color: var(--ot-text-light); font-weight: 600; }
+.ms-modal .facts dd { margin: 0; color: var(--ot-text-strong); font-weight: 500; }
+.ms-modal .acts { display: flex; gap: 8px; align-items: center; }
+.ms-modal .ghost {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 13px; border-radius: 8px;
+  border: 1px solid var(--ot-border); background: #fff;
+  font: inherit; font-size: 12px; font-weight: 600; color: var(--ot-text-soft);
+  cursor: pointer; text-decoration: none;
+}
+.ms-modal .ghost:hover { background: var(--ot-bg-muted); }
+
+@media (max-width: 1100px) { .ms-masonry { columns: 3 220px; } .ms-wave { width: 160px; } }
+@media (max-width: 860px)  { .ms-content { padding: 16px 16px 40px; } .ms-wave { display: none; } }

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Mercato — Concept store for everyday objects</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="Mercato is a concept store for well-made everyday objects — homeware, accessories and small-batch design."/>
+<link rel="stylesheet" href="olothemes/mercato.css"/>
+</head>
+<body data-screen-label="Mercato — Home" data-fx>
+
+<!-- ═══ ANNOUNCEMENT (OLObuild · NEW tile → AnnouncementBar) ═══ -->
+<div class="mc-announce" data-olo-tile="AnnouncementBar">Spring drop is live — <b>free shipping</b> over €60</div>
+
+<!-- ═══ NAVMENU (OLObuild · Navigation → Navmenu) ═══ -->
+<header class="mc-nav" data-olo-tile="Navmenu">
+  <div class="mc-wrap mc-nav__in">
+    <a class="logo" href="#top">MERCATO</a>
+    <nav class="mc-nav__links">
+      <a href="OLOtheme - Mercato - Product.html">Shop</a>
+      <a href="#categories">Collections</a>
+      <a href="#lookbook">Lookbook</a>
+      <a href="#">About</a>
+    </nav>
+    <div class="mc-nav__cta">
+      <div class="mc-nav__ic">
+        <a href="#" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></a>
+        <a href="#" aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg><span class="cart-n">3</span></a>
+      </div>
+      <a href="OLOtheme - Mercato - Product.html" class="btn btn--red">Shop now</a>
+    </div>
+    <button class="burger" data-burger aria-label="Open menu"><span></span></button>
+  </div>
+</header>
+<div class="mobile" data-mobile>
+  <button data-close aria-label="Close">&times;</button>
+  <a href="OLOtheme - Mercato - Product.html">Shop</a>
+  <a href="#categories">Collections</a>
+  <a href="#lookbook">Lookbook</a>
+  <a href="#">About</a>
+</div>
+
+<main id="top">
+
+<!-- ═══ HERO (OLObuild · Marketing → Hero) ═══ -->
+<section class="mc-hero" data-olo-tile="Hero">
+  <div class="mc-hero__in">
+    <div class="mc-hero__copy">
+      <span class="eyebrow" data-reveal>New · Spring collection</span>
+      <h1 data-reveal="80">Objects<br/>worth<br/>keeping.</h1>
+      <p class="mc-hero__sub" data-reveal="180">A concept store for well-made everyday things — homeware, accessories and small-batch design, chosen by hand.</p>
+      <div class="mc-hero__cta" data-reveal="260">
+        <a href="OLOtheme - Mercato - Product.html" class="btn btn--red btn--lg">Shop the drop</a>
+        <a href="#categories" class="btn btn--ghost-d btn--lg">Browse all</a>
+      </div>
+    </div>
+    <div class="mc-hero__img" data-reveal="120"><div class="media" data-label="hero — styled product still life, full-bleed"></div><div class="mc-hero__price"><b>The Stoneware Set</b><span>New in · €74</span></div></div>
+  </div>
+</section>
+
+<!-- ═══ CATEGORY TILES (OLObuild · NEW tile → CategoryTiles) ═══
+     data-olo-note: square image tiles with bottom-gradient label, hover accent.
+     Candidate NEW tile "CategoryTiles" (variants: 2/3/4-up, overlay vs caption). -->
+<section class="mc-sec" id="categories" data-olo-tile="CategoryTiles" data-olo-note="NEW tile candidate: CategoryTiles">
+  <div class="mc-wrap">
+    <div class="head-row" data-reveal><div><span class="eyebrow">Shop by category</span><h2>Collections</h2></div><a href="OLOtheme - Mercato - Product.html" class="link-more">View all</a></div>
+    <div class="cat-grid">
+      <a class="cat" href="OLOtheme - Mercato - Product.html" data-reveal><div class="media" data-label="homeware"></div><div class="cat__veil"></div><b>Homeware</b></a>
+      <a class="cat" href="OLOtheme - Mercato - Product.html" data-reveal="80"><div class="media" data-label="kitchen"></div><div class="cat__veil"></div><b>Kitchen</b></a>
+      <a class="cat" href="OLOtheme - Mercato - Product.html" data-reveal="160"><div class="media" data-label="accessories"></div><div class="cat__veil"></div><b>Accessories</b></a>
+      <a class="cat" href="OLOtheme - Mercato - Product.html" data-reveal="240"><div class="media" data-label="stationery"></div><div class="cat__veil"></div><b>Stationery</b></a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FEATURED PRODUCTS (OLObuild · Dynamic → ProductGrid) ═══ -->
+<section class="mc-sec" style="padding-top:0" data-olo-tile="ProductGrid">
+  <div class="mc-wrap">
+    <div class="head-row" data-reveal><div><span class="eyebrow">Just landed</span><h2>New in</h2></div><a href="OLOtheme - Mercato - Product.html" class="link-more">Shop all new</a></div>
+    <div class="prod-grid">
+      <a class="prod" href="OLOtheme - Mercato - Product.html" data-reveal><div class="prod__media"><div class="media" data-label="product"></div><span class="prod__badge">New</span><div class="prod__add">Quick add · €74</div></div><div class="prod__cat">Homeware</div><div class="prod__n">Stoneware set</div><div class="prod__p">€74</div></a>
+      <a class="prod" href="OLOtheme - Mercato - Product.html" data-reveal="60"><div class="prod__media"><div class="media" data-label="product"></div><div class="prod__add">Quick add · €38</div></div><div class="prod__cat">Kitchen</div><div class="prod__n">Linen apron</div><div class="prod__p">€38</div></a>
+      <a class="prod" href="OLOtheme - Mercato - Product.html" data-reveal="120"><div class="prod__media"><div class="media" data-label="product"></div><div class="prod__add">Quick add · €22</div></div><div class="prod__cat">Accessories</div><div class="prod__n">Canvas tote</div><div class="prod__p">€22</div></a>
+      <a class="prod" href="OLOtheme - Mercato - Product.html" data-reveal="180"><div class="prod__media"><div class="media" data-label="product"></div><span class="prod__badge">Sale</span><div class="prod__add">Quick add · €28</div></div><div class="prod__cat">Stationery</div><div class="prod__n">Notebook trio</div><div class="prod__p">€28 <span class="old">€36</span></div></a>
+      <a class="prod" href="OLOtheme - Mercato - Product.html" data-reveal><div class="prod__media"><div class="media" data-label="product"></div><div class="prod__add">Quick add · €54</div></div><div class="prod__cat">Homeware</div><div class="prod__n">Glass carafe</div><div class="prod__p">€54</div></a>
+      <a class="prod" href="OLOtheme - Mercato - Product.html" data-reveal="60"><div class="prod__media"><div class="media" data-label="product"></div><div class="prod__add">Quick add · €19</div></div><div class="prod__cat">Kitchen</div><div class="prod__n">Beeswax wraps</div><div class="prod__p">€19</div></a>
+      <a class="prod" href="OLOtheme - Mercato - Product.html" data-reveal="120"><div class="prod__media"><div class="media" data-label="product"></div><span class="prod__badge">New</span><div class="prod__add">Quick add · €46</div></div><div class="prod__cat">Accessories</div><div class="prod__n">Wool throw</div><div class="prod__p">€46</div></a>
+      <a class="prod" href="OLOtheme - Mercato - Product.html" data-reveal="180"><div class="prod__media"><div class="media" data-label="product"></div><div class="prod__add">Quick add · €32</div></div><div class="prod__cat">Homeware</div><div class="prod__n">Ceramic planter</div><div class="prod__p">€32</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 360 SPIN VIEWER (OLObuild · NEW tile → SpinViewer) ═══ -->
+<section class="mc-sec mc-spin-sec" id="spin" data-olo-tile="SpinViewer" data-olo-note="NEW tile candidate: SpinViewer — interactive zone. Drag (or arrow-key / step buttons) to rotate a product through N frames; angle + frame readout, orbit dot and progress update live. In production frames[] are sprite images; demo uses a placeholder with a sweeping sheen. Props: frames count, sprite[].">
+  <div class="mc-wrap mc-spin" data-reveal data-spin data-frames="24">
+    <div class="mc-spin__stage" data-spin-stage>
+      <span class="mc-spin__hint">⟲ Drag to spin</span>
+      <span class="mc-spin__floor"></span>
+      <div class="mc-spin__obj" data-spin-obj></div>
+    </div>
+    <div class="mc-spin__r">
+      <span class="eyebrow">Inspect it</span>
+      <h2>See every angle</h2>
+      <p>Spin the bottle to look it over before you buy — drag, swipe, or step through with the arrows.</p>
+      <div class="mc-spin__readrow">
+        <div class="mc-spin__readout"><b data-spin-frame>01 / 24</b><span>Frame</span></div>
+        <div class="mc-spin__readout"><b data-spin-angle>0°</b><span>Rotation</span></div>
+        <div class="mc-spin__ring"><i data-spin-dot></i></div>
+      </div>
+      <div class="mc-spin__track"><i data-spin-prog></i></div>
+      <div class="mc-spin__ctrls">
+        <button class="mc-spin__step" data-spin-prev aria-label="Rotate left">‹</button>
+        <button class="mc-spin__step" data-spin-next aria-label="Rotate right">›</button>
+        <a href="OLOtheme - Mercato - Product.html" class="btn btn--red btn--lg">Add to basket — €28</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ LOOKBOOK (OLObuild · Marketing → SplitText) ═══ -->
+<section class="mc-look" id="lookbook" data-olo-tile="SplitText">
+  <div class="mc-look__media" data-reveal><div class="media" data-label="lookbook — styled interior scene"></div></div>
+  <div class="mc-look__copy" data-reveal="120">
+    <span class="eyebrow">Spring lookbook</span>
+    <h2>Made to be<br/>used daily</h2>
+    <p>We don't do "too nice to touch". Everything in the shop is built for real life — dishwasher-safe, hard-wearing, and better with age.</p>
+    <a href="OLOtheme - Mercato - Product.html" class="btn btn--ghost-d">Shop the look</a>
+  </div>
+</section>
+
+<!-- ═══ PROMISE (OLObuild · Creative → IconRow) ═══ -->
+<section class="mc-promise" data-olo-tile="IconRow">
+  <div class="mc-wrap mc-promise__in">
+    <div class="mc-promise__i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 18l3-8h12l3 8M5 18a2 2 0 0 0 4 0M15 18a2 2 0 0 0 4 0"/></svg><span><b>Free over €60</b><span>Carbon-neutral delivery</span></span></div>
+    <div class="mc-promise__i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></svg><span><b>60-day returns</b><span>No-quibble, no stress</span></span></div>
+    <div class="mc-promise__i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 6v6c0 5 8 8 8 8s8-3 8-8V6Z"/></svg><span><b>Small batch</b><span>Made by people we know</span></span></div>
+    <div class="mc-promise__i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3C9 8 6 10.5 6 14a6 6 0 0 0 12 0c0-3.5-3-6-6-11Z"/></svg><span><b>Plastic-free</b><span>Packed in paper, always</span></span></div>
+  </div>
+</section>
+
+<!-- ═══ BASKET BUILDER (OLObuild · NEW tile → Builder) ═══ -->
+<section class="mc-sec mc-basket-sec" id="basket" data-olo-tile="Builder" data-olo-note="NEW tile candidate: Builder — interactive zone. +/- steppers with a live running total &amp; item count. Props: items[name,price], currency.">
+  <div class="mc-wrap mc-basket" data-reveal data-builder data-currency="€" style="--fx-zone-accent:#e1474f;--fx-zone-on:#fff;--fx-zone-line:#e3ddd1;--fx-zone-bg:rgba(225,71,79,.08);--fx-zone-thumb:#fff">
+    <div class="mc-basket__head">
+      <div><span class="eyebrow">Try it</span><h2>Build a <span class="r">basket</span></h2><p>Add a few bestsellers and watch the total tick up. Free shipping kicks in over €50 — the cart does the maths.</p></div>
+      <div class="mc-basket__tally"><div class="mc-basket__count"><b data-bld-items>0</b> <span>items</span></div><div class="mc-basket__total" data-bld-total>€0</div></div>
+    </div>
+    <div class="mc-basket__grid">
+      <div class="mc-basket__item" data-bld-item data-n="0" data-price="18"><div class="media" data-label="olive oil"></div><div class="mc-basket__meta"><h3>Estate Olive Oil</h3><span>€18 · 500ml</span></div><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div>
+      <div class="mc-basket__item" data-bld-item data-n="0" data-price="12"><div class="media" data-label="sea salt tin"></div><div class="mc-basket__meta"><h3>Flaky Sea Salt</h3><span>€12 · 250g</span></div><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div>
+      <div class="mc-basket__item" data-bld-item data-n="0" data-price="22"><div class="media" data-label="wildflower honey"></div><div class="mc-basket__meta"><h3>Wildflower Honey</h3><span>€22 · 400g</span></div><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div>
+      <div class="mc-basket__item" data-bld-item data-n="0" data-price="9"><div class="media" data-label="stone-ground crackers"></div><div class="mc-basket__meta"><h3>Seeded Crackers</h3><span>€9 · pack</span></div><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div>
+      <div class="mc-basket__item" data-bld-item data-n="0" data-price="26"><div class="media" data-label="coffee beans"></div><div class="mc-basket__meta"><h3>House Roast Beans</h3><span>€26 · 1kg</span></div><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div>
+      <div class="mc-basket__item" data-bld-item data-n="0" data-price="15"><div class="media" data-label="fig preserve"></div><div class="mc-basket__meta"><h3>Fig &amp; Walnut Jam</h3><span>€15 · 320g</span></div><div class="fxb-step"><button data-bld-dec aria-label="remove">−</button><span data-bld-count>0</span><button data-bld-inc aria-label="add">+</button></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NEWSLETTER (OLObuild · Marketing → Newsletter) ═══ -->
+<section class="mc-news" data-olo-tile="Newsletter">
+  <div class="mc-wrap" data-reveal>
+    <h2>Get first <span class="r">dibs</span></h2>
+    <p>New drops sell through fast. Subscribers hear first — and get 10% off to start.</p>
+    <form class="mc-news__form" onsubmit="return false"><input type="email" placeholder="Email address" aria-label="Email"/><button class="btn btn--red" type="submit">Sign up</button></form>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══ FOOTER (OLObuild · Navigation → Footer) ═══ -->
+<footer class="mc-foot" data-olo-tile="Footer">
+  <div class="mc-wrap">
+    <div class="mc-foot__top">
+      <div class="mc-foot__brand"><a class="logo" href="#top">MERCATO</a><p>A concept store for well-made everyday objects. Chosen by hand, made to last.</p></div>
+      <div><h4>Shop</h4><ul><li><a href="OLOtheme - Mercato - Product.html">New in</a></li><li><a href="#categories">Homeware</a></li><li><a href="#categories">Kitchen</a></li><li><a href="#categories">Accessories</a></li></ul></div>
+      <div><h4>About</h4><ul><li><a href="#">Our story</a></li><li><a href="#lookbook">Lookbook</a></li><li><a href="#">Makers</a></li><li><a href="#">Sustainability</a></li></ul></div>
+      <div><h4>Help</h4><ul><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="#">Contact</a></li><li><a href="#">FAQ</a></li></ul></div>
+    </div>
+    <div class="mc-foot__bot"><span>© 2026 Mercato — an OLOtheme demo.</span><span>Built with OLObuild</span></div>
+  </div>
+</footer>
+
+<script src="olothemes/fx.js"></script>
+<script src="olothemes/theme.js"></script>
+</body>
+</html>
