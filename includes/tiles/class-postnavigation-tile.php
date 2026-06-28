@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Postnavigation_Tile extends Olo_Tile_Base {
+class Olobuild_Postnavigation_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'postnavigation';
     protected $name     = 'Navigazione articolo';
@@ -41,23 +41,23 @@ class Olo_Postnavigation_Tile extends Olo_Tile_Base {
 
     public function get_controls() {
         return [
-            [ 'key' => 'show_thumbnail',  'type' => 'toggle', 'label' => olo_t( 'Mostra miniatura' ) ],
-            [ 'key' => 'show_label',      'type' => 'toggle', 'label' => olo_t( 'Mostra etichetta' ) ],
-            [ 'key' => 'prev_label',      'type' => 'text',   'label' => olo_t( 'Etichetta precedente' ) ],
-            [ 'key' => 'next_label',      'type' => 'text',   'label' => olo_t( 'Etichetta successivo' ) ],
-            [ 'key' => 'show_title',      'type' => 'toggle', 'label' => olo_t( 'Mostra titolo' ) ],
-            [ 'key' => 'title_length',    'type' => 'range',  'label' => olo_t( 'Lunghezza titolo' ) ],
-            [ 'key' => 'layout',          'type' => 'select', 'label' => olo_t( 'Layout' ) ],
-            [ 'key' => 'gap',             'type' => 'range',  'label' => olo_t( 'Gap' ) ],
-            [ 'key' => 'thumbnail_size',  'type' => 'range',  'label' => olo_t( 'Dimensione miniatura' ) ],
-            [ 'key' => 'text_color',      'type' => 'color',  'label' => olo_t( 'Colore testo' ) ],
-            [ 'key' => 'link_color',      'type' => 'color',  'label' => olo_t( 'Colore link' ) ],
-            [ 'key' => 'hover_color',     'type' => 'color',  'label' => olo_t( 'Colore hover' ) ],
-            [ 'key' => 'background_color','type' => 'color',  'label' => olo_t( 'Sfondo card' ) ],
-            [ 'key' => 'border_radius',   'type' => 'range',  'label' => olo_t( 'Arrotondamento' ) ],
-            [ 'key' => 'padding',         'type' => 'range',  'label' => olo_t( 'Padding' ) ],
-            [ 'key' => 'same_taxonomy',   'type' => 'toggle', 'label' => olo_t( 'Stesso termine tassonomia' ) ],
-            [ 'key' => 'taxonomy',        'type' => 'text',   'label' => olo_t( 'Tassonomia' ) ],
+            [ 'key' => 'show_thumbnail',  'type' => 'toggle', 'label' => olobuild_t( 'Mostra miniatura' ) ],
+            [ 'key' => 'show_label',      'type' => 'toggle', 'label' => olobuild_t( 'Mostra etichetta' ) ],
+            [ 'key' => 'prev_label',      'type' => 'text',   'label' => olobuild_t( 'Etichetta precedente' ) ],
+            [ 'key' => 'next_label',      'type' => 'text',   'label' => olobuild_t( 'Etichetta successivo' ) ],
+            [ 'key' => 'show_title',      'type' => 'toggle', 'label' => olobuild_t( 'Mostra titolo' ) ],
+            [ 'key' => 'title_length',    'type' => 'range',  'label' => olobuild_t( 'Lunghezza titolo' ) ],
+            [ 'key' => 'layout',          'type' => 'select', 'label' => olobuild_t( 'Layout' ) ],
+            [ 'key' => 'gap',             'type' => 'range',  'label' => olobuild_t( 'Gap' ) ],
+            [ 'key' => 'thumbnail_size',  'type' => 'range',  'label' => olobuild_t( 'Dimensione miniatura' ) ],
+            [ 'key' => 'text_color',      'type' => 'color',  'label' => olobuild_t( 'Colore testo' ) ],
+            [ 'key' => 'link_color',      'type' => 'color',  'label' => olobuild_t( 'Colore link' ) ],
+            [ 'key' => 'hover_color',     'type' => 'color',  'label' => olobuild_t( 'Colore hover' ) ],
+            [ 'key' => 'background_color','type' => 'color',  'label' => olobuild_t( 'Sfondo card' ) ],
+            [ 'key' => 'border_radius',   'type' => 'range',  'label' => olobuild_t( 'Arrotondamento' ) ],
+            [ 'key' => 'padding',         'type' => 'range',  'label' => olobuild_t( 'Padding' ) ],
+            [ 'key' => 'same_taxonomy',   'type' => 'toggle', 'label' => olobuild_t( 'Stesso termine tassonomia' ) ],
+            [ 'key' => 'taxonomy',        'type' => 'text',   'label' => olobuild_t( 'Tassonomia' ) ],
         ];
     }
 
@@ -84,9 +84,9 @@ class Olo_Postnavigation_Tile extends Olo_Tile_Base {
         $layout     = $s['layout'] === 'stacked' ? 'column' : 'row';
         $gap        = intval( $s['gap'] ) ?: 20;
         $thumb_size = intval( $s['thumbnail_size'] ) ?: 60;
-        $padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 16, 16 );
-        $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
-        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
+        $padding = Olobuild_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 16, 16 );
+        $radius     = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
         // TOKEN-FIRST: titolo link = primario brand (era #93C5FD/#60A5FA azzurri off-brand)
         $text_clr   = $this->safe_color_css( $s['text_color'] ) ?: '#F3F4F6';
@@ -96,7 +96,7 @@ class Olo_Postnavigation_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, intval()/max() clamps for gap/thumb size, fixed 'column'/'row' ternary for layout, Olo_Tile_Utils spacing_css()/border_radius()/radius_force_css() (integer px) helpers; $uid is internally generated. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, intval()/max() clamps for gap/thumb size, fixed 'column'/'row' ternary for layout, Olobuild_Tile_Utils spacing_css()/border_radius()/radius_force_css() (integer px) helpers; $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?> {
                 display: flex;
@@ -170,7 +170,7 @@ class Olo_Postnavigation_Tile extends Olo_Tile_Base {
             }
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-        <nav class="olo-postnavigation <?php echo esc_attr( $uid ); ?> olo-pnav-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" aria-label="<?php echo esc_attr( olo_t( 'Navigazione articoli' ) ); ?>">
+        <nav class="olo-postnavigation <?php echo esc_attr( $uid ); ?> olo-pnav-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" aria-label="<?php echo esc_attr( olobuild_t( 'Navigazione articoli' ) ); ?>">
             <?php if ( $prev_post ) :
                 $prev_url   = get_permalink( $prev_post );
                 $prev_title = mb_strimwidth( get_the_title( $prev_post ), 0, $title_len, '...' );
@@ -186,7 +186,7 @@ class Olo_Postnavigation_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
                 <div class="olo-pnav-text">
                     <?php if ( $show_label ) : ?>
-                    <div class="olo-pnav-label">&larr; <?php echo esc_html( $s['prev_label'] ?: olo_t( 'Precedente' ) ); ?></div>
+                    <div class="olo-pnav-label">&larr; <?php echo esc_html( $s['prev_label'] ?: olobuild_t( 'Precedente' ) ); ?></div>
                     <?php endif; ?>
                     <?php if ( $show_title ) : ?>
                     <div class="olo-pnav-title"><?php echo esc_html( $prev_title ); ?></div>
@@ -205,7 +205,7 @@ class Olo_Postnavigation_Tile extends Olo_Tile_Base {
             <a href="<?php echo esc_url( $next_url ); ?>" class="olo-pnav-card olo-pnav-card--next">
                 <div class="olo-pnav-text">
                     <?php if ( $show_label ) : ?>
-                    <div class="olo-pnav-label"><?php echo esc_html( $s['next_label'] ?: olo_t( 'Successivo' ) ); ?> &rarr;</div>
+                    <div class="olo-pnav-label"><?php echo esc_html( $s['next_label'] ?: olobuild_t( 'Successivo' ) ); ?> &rarr;</div>
                     <?php endif; ?>
                     <?php if ( $show_title ) : ?>
                     <div class="olo-pnav-title"><?php echo esc_html( $next_title ); ?></div>
@@ -230,8 +230,8 @@ class Olo_Postnavigation_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized border settings
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized border settings
         }
         return ob_get_clean();
     }

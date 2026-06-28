@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Section_Tile extends Olo_Tile_Base {
+class Olobuild_Section_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'section';
     protected $name     = 'Sezione';

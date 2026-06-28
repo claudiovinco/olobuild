@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Archive_Integration {
+class Olobuild_Archive_Integration {
 
     private static $instance = null;
 
@@ -48,17 +48,17 @@ class Olo_Archive_Integration {
         }
 
         // Verify template exists
-        $db  = new Olo_Database();
+        $db  = new Olobuild_Database();
         $tpl = $db->get_template( $tpl_id );
         if ( ! $tpl || ( $tpl['status'] !== 'published' && $tpl['status'] !== 'draft' ) ) {
             return $template;
         }
 
         // Store template ID for later use
-        $GLOBALS['olo_archive_template_id'] = $tpl_id;
+        $GLOBALS['olobuild_archive_template_id'] = $tpl_id;
 
         // Return our custom template file
-        return OLO_PATH . 'templates/archive-template.php';
+        return OLOBUILD_PATH . 'templates/archive-template.php';
     }
 
     /**
@@ -89,7 +89,7 @@ class Olo_Archive_Integration {
         if ( ! wp_style_is( 'uikit-css', 'enqueued' ) ) {
             wp_enqueue_style(
                 'uikit-css',
-                OLO_URL . 'assets/vendor/uikit/css/uikit.min.css',
+                OLOBUILD_URL . 'assets/vendor/uikit/css/uikit.min.css',
                 [],
                 '3.21.16'
             );
@@ -99,7 +99,7 @@ class Olo_Archive_Integration {
         if ( ! wp_script_is( 'uikit-js', 'enqueued' ) ) {
             wp_enqueue_script(
                 'uikit-js',
-                OLO_URL . 'assets/vendor/uikit/js/uikit.min.js',
+                OLOBUILD_URL . 'assets/vendor/uikit/js/uikit.min.js',
                 [],
                 '3.21.16',
                 true
@@ -110,7 +110,7 @@ class Olo_Archive_Integration {
         if ( ! wp_script_is( 'uikit-icons-js', 'enqueued' ) ) {
             wp_enqueue_script(
                 'uikit-icons-js',
-                OLO_URL . 'assets/vendor/uikit/js/uikit-icons.min.js',
+                OLOBUILD_URL . 'assets/vendor/uikit/js/uikit-icons.min.js',
                 [ 'uikit-js' ],
                 '3.21.16',
                 true
@@ -121,14 +121,14 @@ class Olo_Archive_Integration {
         if ( ! wp_style_is( 'olo-frontend-css', 'enqueued' ) ) {
             wp_enqueue_style(
                 'olo-frontend-css',
-                OLO_URL . 'assets/css/frontend.css',
+                OLOBUILD_URL . 'assets/css/frontend.css',
                 [ 'uikit-css' ],
-                OLO_VERSION
+                OLOBUILD_VERSION
             );
         }
 
         // Style System CSS
-        $style_css = Olo_Style_System::instance()->generate_css();
+        $style_css = Olobuild_Style_System::instance()->generate_css();
         if ( ! empty( $style_css ) ) {
             wp_add_inline_style( 'olo-frontend-css', $style_css );
         }

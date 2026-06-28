@@ -1,7 +1,7 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class Olo_Lightbox_Tile extends Olo_Tile_Base {
+class Olobuild_Lightbox_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'lightbox';
     protected $name     = 'Lightbox';

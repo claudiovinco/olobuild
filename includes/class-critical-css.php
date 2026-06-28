@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Generates and caches above-the-fold CSS for pages with Olobuild templates.
  * Stores in transients with 7-day TTL, invalidated on template save.
  */
-class Olo_Critical_CSS {
+class Olobuild_Critical_CSS {
 
     /**
      * Transient TTL: 7 days.
@@ -59,7 +59,7 @@ class Olo_Critical_CSS {
         }
 
         // Load the template JSON
-        $db       = new Olo_Database();
+        $db       = new Olobuild_Database();
         $template = $db->get_template( $template_id );
         if ( ! $template || empty( $template['content'] ) ) {
             return '';
@@ -375,8 +375,8 @@ class Olo_Critical_CSS {
         $custom_fonts = [];
 
         // Check if custom fonts class exists
-        if ( class_exists( 'Olo_Custom_Fonts' ) ) {
-            $custom_fonts = Olo_Custom_Fonts::get_fonts();
+        if ( class_exists( 'Olobuild_Custom_Fonts' ) ) {
+            $custom_fonts = Olobuild_Custom_Fonts::get_fonts();
         }
 
         foreach ( $fonts as $font_family ) {

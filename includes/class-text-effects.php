@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Text_Effects {
+class Olobuild_Text_Effects {
 
     /**
      * Defaults to merge into a tile's $defaults array.

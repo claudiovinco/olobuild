@@ -1,6 +1,6 @@
 <?php
 /**
- * Olo_Seo_Redirects — Redirect 301/302, Monitor 404, IndexNow.
+ * Olobuild_Seo_Redirects — Redirect 301/302, Monitor 404, IndexNow.
  *
  * DB tables: wp_olo_redirects, wp_olo_404_log
  */
@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Seo_Redirects {
+class Olobuild_Seo_Redirects {
 
     private static $instance = null;
 
@@ -326,8 +326,8 @@ class Olo_Seo_Redirects {
         if ( $hook !== 'olobuild_page_olo-redirects' ) {
             return;
         }
-        wp_enqueue_style( 'olo-admin', OLO_URL . 'assets/css/olo-admin.css', [], OLO_VERSION );
-        wp_enqueue_style( 'olo-seo-admin', OLO_URL . 'assets/css/seo-admin.css', [ 'olo-admin' ], OLO_VERSION );
+        wp_enqueue_style( 'olo-admin', OLOBUILD_URL . 'assets/css/olo-admin.css', [], OLOBUILD_VERSION );
+        wp_enqueue_style( 'olo-seo-admin', OLOBUILD_URL . 'assets/css/seo-admin.css', [ 'olo-admin' ], OLOBUILD_VERSION );
     }
 
     public function render_page() {
@@ -355,16 +355,16 @@ class Olo_Seo_Redirects {
             : sprintf( /* translators: %s: redirects count */ __( '%s redirect attivi · nessun 404 da gestire', 'olobuild' ),
                 '<b>' . (int) $redirect_count . '</b>' );
         ?>
-        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Redirect & 404', 'olobuild' ) . '</b>' ); ?>
+        <?php Olobuild_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Redirect & 404', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy">
             <?php
-            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally; counts are int-cast.
-            echo Olo_Builder::cockpit_page_head( [
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olobuild_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally; counts are int-cast.
+            echo Olobuild_Builder::cockpit_page_head( [
                 'title' => __( 'Redirect & 404', 'olobuild' ),
                 'sub'   => $sub_text,
             ] );
             // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
-            echo Olo_Builder::cockpit_subnav( $subnav, $active_tab ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_subnav(), which escapes via esc_url()/esc_html() internally.
+            echo Olobuild_Builder::cockpit_subnav( $subnav, $active_tab ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olobuild_Builder::cockpit_subnav(), which escapes via esc_url()/esc_html() internally.
             ?>
 
             <div style="margin-top:16px">
@@ -379,7 +379,7 @@ class Olo_Seo_Redirects {
             ?>
             </div>
         </main>
-        <?php Olo_Builder::cockpit_shell_close(); ?>
+        <?php Olobuild_Builder::cockpit_shell_close(); ?>
         <?php
     }
 

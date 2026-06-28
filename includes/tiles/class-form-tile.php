@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Form_Tile extends Olo_Tile_Base {
+class Olobuild_Form_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'form';
     protected $name     = 'Form Contatti';
@@ -123,7 +123,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
         $gap         = absint( $s['gap'] ) ?: 16;
         $bw          = absint( $s['input_border_width'] );
         $radius      = $this->build_border_radius_css( $s["input_radius"] );
-        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['input_radius_hover'] ?? null );
+        $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['input_radius_hover'] ?? null );
         $label_color = $this->safe_color_css( $s['label_color'] ) ?: 'var(--olo-color-text, #374151)';
         $label_size  = absint( $s['label_size'] ) ?: 14;
         $label_weight= (string) ( $s['label_weight'] ?: '500' );
@@ -171,7 +171,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
         $btn_color   = $this->safe_color_css( $s['submit_color'] );
         $btn_hover   = $this->safe_color_css( $s['submit_hover_bg'] );
         $btn_radius  = $this->build_border_radius_css( $s["submit_radius"] );
-        $btn_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['submit_radius_hover'] ?? null );
+        $btn_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['submit_radius_hover'] ?? null );
         $btn_px      = absint( $s['submit_padding_x'] ) ?: 32;
         $btn_py      = absint( $s['submit_padding_y'] ) ?: 14;
         $btn_fs      = absint( $s['submit_font_size'] ) ?: 16;
@@ -383,7 +383,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
             // Token bound to the config: any tampering on email_to / email_subject /
             // auto_reply_message will fail HMAC verification server-side.
             $config_b64 = base64_encode( $form_config );
-            $form_token = Olo_Form_Handler::generate_token( $config_b64 );
+            $form_token = Olobuild_Form_Handler::generate_token( $config_b64 );
             ?>
             <form class="uk-form-stacked" data-olo-form="<?php echo esc_attr( $uid ); ?>" enctype="multipart/form-data">
                 <input type="hidden" name="_olo_form_config" value="<?php echo esc_attr( $config_b64 ); ?>" />
@@ -608,7 +608,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                                         <?php echo $f_btn_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() at assignment above ?>
                                     </label>
-                                    <span class="olo-f-file-info" style="display:inline-block;margin-left:12px;font-size:13px;color:<?php echo $label_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via safe_color_css() whitelist above ?>;opacity:0.7;"><?php echo esc_html( olo_t( 'Nessun file selezionato' ) ); ?></span>
+                                    <span class="olo-f-file-info" style="display:inline-block;margin-left:12px;font-size:13px;color:<?php echo $label_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via safe_color_css() whitelist above ?>;opacity:0.7;"><?php echo esc_html( olobuild_t( 'Nessun file selezionato' ) ); ?></span>
                                     <div class="olo-f-file-list" style="margin-top:8px;font-size:13px;color:<?php echo $label_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized via safe_color_css() whitelist above ?>;"></div>
                                     <div class="olo-f-file-error" style="color:var(--olo-color-danger, #EF4444);font-size:12px;margin-top:4px;display:none;"></div>
                                     <input type="hidden" name="fields[<?php echo esc_attr( $fname ); ?>]" value="" class="olo-f-file-meta" />
@@ -695,7 +695,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                         <a class="uk-form-icon uk-form-icon-flip" style="cursor:pointer" onclick="var i=this.previousElementSibling;i.type=i.type==='password'?'text':'password'" uk-icon="icon: eye"></a>
                                     </div>
                                     <div class="uk-inline uk-width-1-1">
-                                        <input type="password" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( olo_t( 'Conferma password' ) ); ?>" autocomplete="new-password" data-pwc-confirm="<?php echo $pc_id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id composed of literal prefix, esc_attr()-escaped name and wp_rand(); size-class is a fixed internal string ?>" />
+                                        <input type="password" class="uk-input<?php echo $size_class; ?>" placeholder="<?php echo esc_attr( olobuild_t( 'Conferma password' ) ); ?>" autocomplete="new-password" data-pwc-confirm="<?php echo $pc_id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id composed of literal prefix, esc_attr()-escaped name and wp_rand(); size-class is a fixed internal string ?>" />
                                         <a class="uk-form-icon uk-form-icon-flip" style="cursor:pointer" onclick="var i=this.previousElementSibling;i.type=i.type==='password'?'text':'password'" uk-icon="icon: eye"></a>
                                     </div>
                                     <div class="olo-f-pwc-error" data-pwc-error="<?php echo $pc_id; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- id composed of literal prefix, esc_attr()-escaped name and wp_rand() ?>" style="color:var(--olo-color-danger, #EF4444);font-size:12px;display:none">Le password non corrispondono</div>
@@ -738,10 +738,10 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                     <?php if ( $is_multistep ) : ?>
                         <div class="olo-f-step-nav">
                             <?php if ( $step_idx > 0 ) : ?>
-                                <button type="button" class="olo-f-btn olo-f-step-prev"><?php echo esc_html( olo_t( 'Indietro' ) ); ?></button>
+                                <button type="button" class="olo-f-btn olo-f-step-prev"><?php echo esc_html( olobuild_t( 'Indietro' ) ); ?></button>
                             <?php endif; ?>
                             <?php if ( $step_idx < $step_count - 1 ) : ?>
-                                <button type="button" class="olo-f-btn olo-f-step-next"><?php echo esc_html( olo_t( 'Avanti' ) ); ?></button>
+                                <button type="button" class="olo-f-btn olo-f-step-next"><?php echo esc_html( olobuild_t( 'Avanti' ) ); ?></button>
                             <?php endif; ?>
                         </div>
                         </div><?php // close .olo-f-step-page ?>
@@ -1352,8 +1352,8 @@ class Olo_Form_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() (integer-forced widths) for the internally generated uid
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() shared helpers
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_css() (integer-forced widths) for the internally generated uid
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_hover_css()/build_border_effect_css() shared helpers
         }
         return ob_get_clean();
     }

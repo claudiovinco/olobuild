@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Video_Tile extends Olo_Tile_Base {
+class Olobuild_Video_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'video';
     protected $name     = 'Video';
@@ -77,7 +77,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
             $br_value = $s['border_radius'] ?? 0;
         }
         $_br_css = $this->build_border_radius_css( $br_value );
-        $_br_css_hover_css = Olo_Tile_Utils::radius_force_css( $s['style']['hover']['border_radius'] ?? $s['border_radius_hover'] ?? null );
+        $_br_css_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['style']['hover']['border_radius'] ?? $s['border_radius_hover'] ?? null );
         // `transform:translateZ(0)` crea un nuovo stacking context: in Chromium senza
         // questo, <iframe> e a volte <img> con position:absolute dentro un parent con
         // border-radius+overflow:hidden NON vengono clippati — il video resta squadrato
@@ -93,7 +93,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
         // Per-instance uid so hover rules don't leak to other video tiles on the same page
         $this->_v_uid = 'olo-v-' . wp_unique_id();
         // Shadow on the video wrapper
-        $shadow_val = Olo_Tile_Utils::shadow_value( $s, 'shadow' );
+        $shadow_val = Olobuild_Tile_Utils::shadow_value( $s, 'shadow' );
         if ( $shadow_val && $shadow_val !== 'none' ) {
             $this->_vbr .= 'box-shadow:' . $shadow_val . ';';
         }
@@ -198,7 +198,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <div class="olo-video uk-responsive-width <?php echo esc_attr( $this->_v_uid ); ?>">
-            <div style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; <?php echo $this->_vbr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built internally from build_border_radius_css() integer radii, Olo_Tile_Utils::shadow_value() and fixed literals ?>">
+            <div style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; <?php echo $this->_vbr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built internally from build_border_radius_css() integer radii, Olobuild_Tile_Utils::shadow_value() and fixed literals ?>">
                 <?php if ( $has_poster ) : ?>
                     <?php
                     $icon_size  = absint( $s['play_icon_size'] ) ?: 80;
@@ -259,7 +259,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <div class="olo-video uk-responsive-width <?php echo esc_attr( $this->_v_uid ); ?>">
-            <div style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; <?php echo $this->_vbr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built internally from build_border_radius_css() integer radii, Olo_Tile_Utils::shadow_value() and fixed literals ?> background: #1F2937;">
+            <div style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; <?php echo $this->_vbr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built internally from build_border_radius_css() integer radii, Olobuild_Tile_Utils::shadow_value() and fixed literals ?> background: #1F2937;">
                 <?php if ( $src ) : ?>
                     <video
                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: <?php echo esc_attr( $obj_pos ); ?>;"
@@ -318,7 +318,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-video olo-video-cover uk-position-relative uk-overflow-hidden <?php echo esc_attr( $this->_v_uid ); ?>" style="height: <?php echo (int) $height; ?>px; <?php echo $this->_vbr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built internally from build_border_radius_css() integer radii, Olo_Tile_Utils::shadow_value() and fixed literals ?>">
+        <div class="olo-video olo-video-cover uk-position-relative uk-overflow-hidden <?php echo esc_attr( $this->_v_uid ); ?>" style="height: <?php echo (int) $height; ?>px; <?php echo $this->_vbr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built internally from build_border_radius_css() integer radii, Olobuild_Tile_Utils::shadow_value() and fixed literals ?>">
             <?php if ( $src ) : ?>
                 <video
                     class="uk-position-cover"

@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Counter_Tile extends Olo_Tile_Base {
+class Olobuild_Counter_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'counter';
     protected $name     = 'Contatore';
@@ -58,9 +58,9 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
         $lbl_fs   = absint( $s['label_font_size'] ) ?: 14;
         $lbl_fw   = absint( $s['label_font_weight'] ) ?: 400;
         $icon_sz  = absint( $s['icon_size'] ) ?: 40;
-        $pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 32, 32 );
-        $tile_r   = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
-        $tile_r_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
+        $pad = Olobuild_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 32, 32 );
+        $tile_r   = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $tile_r_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $tile_bw  = intval( $s['border_width'] );
         $tile_bc  = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-text, #374151)';
 
@@ -76,7 +76,7 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/absint/intval/Olo_Tile_Utils spacing-radius helpers/esc_url/Olo_Tile_Base build_border_* helpers); $uid is an internal generated class name. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/absint/intval/Olobuild_Tile_Utils spacing-radius helpers/esc_url/Olobuild_Tile_Base build_border_* helpers); $uid is an internal generated class name. ?>
         <style>
             .<?php echo $uid; ?> {
                 position: relative; overflow: hidden; text-align: center;
@@ -165,13 +165,13 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
                 </div>
                 <?php if ( ! empty( $s['label'] ) ) : ?>
                     <?php list( $l_tfx_cls, $l_tfx_data ) = $this->tfx_attrs( $s, 'label', wp_strip_all_tags( $s['label'] ) ); ?>
-                    <div class="olo-cnt-label<?php echo $l_tfx_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx attrs escaped internally by Olo_Text_Effects; $label escaped via esc_html() at assignment above ?>"<?php echo $l_tfx_data; ?>><?php echo $label; ?></div>
+                    <div class="olo-cnt-label<?php echo $l_tfx_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx attrs escaped internally by Olobuild_Text_Effects; $label escaped via esc_html() at assignment above ?>"<?php echo $l_tfx_data; ?>><?php echo $label; ?></div>
                 <?php endif; ?>
             </div>
         </div>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated internally by Olo_Text_Effects::css() from sanitized settings.
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated internally by Olobuild_Text_Effects::css() from sanitized settings.
         $this->tfx_print_script();
         return ob_get_clean();
     }

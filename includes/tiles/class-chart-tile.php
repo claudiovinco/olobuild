@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Chart_Tile extends Olo_Tile_Base {
+class Olobuild_Chart_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'chart';
     protected $name     = 'Grafico';
@@ -178,12 +178,12 @@ class Olo_Chart_Tile extends Olo_Tile_Base {
         $tt_text      = $this->safe_color_css( $s['tooltip_text_color'] ) ?: '#ffffff';
         $tt_bc        = $this->safe_color_css( $s['tooltip_border_color'] ) ?: 'transparent';
         $tt_bw        = max( 0, intval( $s['tooltip_border_width'] ) );
-        $tt_cr        = max( 0, Olo_Tile_Utils::radius_int( $s['tooltip_corner_radius'] ) );
+        $tt_cr        = max( 0, Olobuild_Tile_Utils::radius_int( $s['tooltip_corner_radius'] ) );
         $tt_fs        = max( 8, intval( $s['tooltip_font_size'] ) );
         $tt_pad       = max( 4, intval( $s['tooltip_padding'] ) );
 
         // Bar
-        $bar_radius   = max( 0, Olo_Tile_Utils::radius_int( $s['bar_radius'] ) );
+        $bar_radius   = max( 0, Olobuild_Tile_Utils::radius_int( $s['bar_radius'] ) );
         $bar_pct      = max( 0.1, min( 1, floatval( $s['bar_percentage'] ) ) );
         $cat_pct      = max( 0.1, min( 1, floatval( $s['category_percentage'] ) ) );
 
@@ -211,7 +211,7 @@ class Olo_Chart_Tile extends Olo_Tile_Base {
         // Enqueue Chart.js
         if ( ! self::$chartjs_enqueued ) {
             self::$chartjs_enqueued = true;
-            wp_enqueue_script( 'chartjs', OLO_URL . 'assets/vendor/chartjs/chart.umd.min.js', [], '4.5.0', true );
+            wp_enqueue_script( 'chartjs', OLOBUILD_URL . 'assets/vendor/chartjs/chart.umd.min.js', [], '4.5.0', true );
         }
 
         ob_start();
@@ -421,8 +421,8 @@ class Olo_Chart_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized border settings
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized border settings
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base::build_border_css() from sanitized border settings
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border helpers from sanitized border settings
         }
         return ob_get_clean();
     }

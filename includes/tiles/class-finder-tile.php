@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * (preset 'custom', shadow 'none', card_radius 16, border 0, chip_radius 999…),
  * così i temi esistenti rendono identici.
  */
-class Olo_Finder_Tile extends Olo_Tile_Base {
+class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'finder';
     protected $name     = 'Finder';
@@ -116,7 +116,7 @@ class Olo_Finder_Tile extends Olo_Tile_Base {
         $tp_sum   = intval( $tpd['top'] ?? 0 ) + intval( $tpd['right'] ?? 0 ) + intval( $tpd['bottom'] ?? 0 ) + intval( $tpd['left'] ?? 0 );
         $tile_pad_css = $tp_sum > 0 ? 'padding:' . intval( $tpd['top'] ?? 0 ) . 'px ' . intval( $tpd['right'] ?? 0 ) . 'px ' . intval( $tpd['bottom'] ?? 0 ) . 'px ' . intval( $tpd['left'] ?? 0 ) . 'px;' : '';
 
-        $shadow_val = Olo_Tile_Utils::shadow_value( $s, 'shadow' );
+        $shadow_val = Olobuild_Tile_Utils::shadow_value( $s, 'shadow' );
         $shadow_css = ( $shadow_val && $shadow_val !== 'none' ) ? 'box-shadow:' . $shadow_val . ';' : '';
 
         // tipografia globale (opzionale)
@@ -172,19 +172,19 @@ class Olo_Finder_Tile extends Olo_Tile_Base {
         <?php
         $wow_css = $this->build_wow_effects_css( $s, $card_sel, '.ofn-res__t' );
         if ( $border_hover_css || $border_effect_css || $wow_css ) {
-            echo '<style>' . $border_hover_css . $border_effect_css . $wow_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border/wow helpers from sanitized values (intval/whitelist/safe_color_css)
+            echo '<style>' . $border_hover_css . $border_effect_css . $wow_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border/wow helpers from sanitized values (intval/whitelist/safe_color_css)
         }
         ?>
         <div class="olo-finder olo-finder-preset-<?php echo esc_attr( $preset ); ?> <?php echo esc_attr( $uid ); ?>" data-finder>
             <?php if ( $s['eyebrow'] !== '' ) : ?><span class="ofn-eyebrow" data-olo-editable="eyebrow"><?php echo esc_html( $s['eyebrow'] ); ?></span><?php endif; ?>
-            <?php if ( $s['heading'] !== '' ) : ?><h2 class="ofn-h<?php echo $h_cls; ?>"<?php echo $h_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built by Olo_Text_Effects (sanitize_html_class/esc_attr applied internally) ?> data-olo-editable="heading"><?php echo wp_kses_post( $s['heading'] ); ?></h2><?php endif; ?>
+            <?php if ( $s['heading'] !== '' ) : ?><h2 class="ofn-h<?php echo $h_cls; ?>"<?php echo $h_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built by Olobuild_Text_Effects (sanitize_html_class/esc_attr applied internally) ?> data-olo-editable="heading"><?php echo wp_kses_post( $s['heading'] ); ?></h2><?php endif; ?>
             <?php if ( $s['intro'] !== '' ) : ?><p class="ofn-intro" data-olo-editable="intro"><?php echo esc_html( $s['intro'] ); ?></p><?php endif; ?>
             <div class="ofn-chips" role="tablist">
                 <?php foreach ( $items as $i => $it ) :
                     $icon = '';
                     if ( ! empty( $it['icon'] ) ) { $icon = $this->render_icon_html( $it['icon'], 1 ); }
                 ?>
-                    <button class="ofn-chip<?php echo $i === $def_idx ? ' on' : ''; ?>" type="button" role="tab" aria-selected="<?php echo $i === $def_idx ? 'true' : 'false'; ?>" data-fn-opt="<?php echo intval( $i ); ?>"><?php if ( $icon ) : ?><span class="ofn-ic"><?php echo $icon; ?></span><?php endif; ?><?php echo esc_html( $it['option'] ?? ( 'Opzione ' . ( $i + 1 ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ternaries output fixed literals; icon HTML sanitized by render_icon_html() (olo_sanitize_svg/wp_kses_post) ?></button>
+                    <button class="ofn-chip<?php echo $i === $def_idx ? ' on' : ''; ?>" type="button" role="tab" aria-selected="<?php echo $i === $def_idx ? 'true' : 'false'; ?>" data-fn-opt="<?php echo intval( $i ); ?>"><?php if ( $icon ) : ?><span class="ofn-ic"><?php echo $icon; ?></span><?php endif; ?><?php echo esc_html( $it['option'] ?? ( 'Opzione ' . ( $i + 1 ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ternaries output fixed literals; icon HTML sanitized by render_icon_html() (olobuild_sanitize_svg/wp_kses_post) ?></button>
                 <?php endforeach; ?>
             </div>
             <?php foreach ( $items as $i => $it ) :
@@ -206,10 +206,10 @@ class Olo_Finder_Tile extends Olo_Tile_Base {
             ?>
                 <div class="ofn-res<?php echo $f_media ? ' ofn-res--media' : ''; ?><?php echo $i === $def_idx ? ' show' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ternaries output fixed literal strings only ?>" data-fn-res="<?php echo intval( $i ); ?>" role="tabpanel">
                     <?php if ( $f_media ) : ?>
-                        <div class="ofn-media"<?php echo $f_mstyle; ?>><?php if ( $f_mb['has'] && $f_mb['markup'] !== '' ) { echo $f_mb['markup']; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attr escaped via esc_attr/esc_url above; media markup generated by Olo_CSS_Builder helpers ?><?php if ( ! $f_mb['has'] && $f_img === '' && $f_mlabel !== '' ) : ?><span class="ofn-media__lbl"><?php echo esc_html( $f_mlabel ); ?></span><?php endif; ?></div>
+                        <div class="ofn-media"<?php echo $f_mstyle; ?>><?php if ( $f_mb['has'] && $f_mb['markup'] !== '' ) { echo $f_mb['markup']; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attr escaped via esc_attr/esc_url above; media markup generated by Olobuild_CSS_Builder helpers ?><?php if ( ! $f_mb['has'] && $f_img === '' && $f_mlabel !== '' ) : ?><span class="ofn-media__lbl"><?php echo esc_html( $f_mlabel ); ?></span><?php endif; ?></div>
                         <div class="ofn-res__body">
                             <?php if ( $f_kicker !== '' ) : ?><span class="ofn-kicker"><?php echo esc_html( $f_kicker ); ?></span><?php endif; ?>
-                            <?php if ( ! empty( $it['title'] ) ) : ?><h3 class="ofn-res__t<?php echo $t_cls; ?>"<?php echo $t_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built by Olo_Text_Effects (sanitize_html_class/esc_attr applied internally) ?>><?php echo esc_html( $it['title'] ); ?></h3><?php endif; ?>
+                            <?php if ( ! empty( $it['title'] ) ) : ?><h3 class="ofn-res__t<?php echo $t_cls; ?>"<?php echo $t_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built by Olobuild_Text_Effects (sanitize_html_class/esc_attr applied internally) ?>><?php echo esc_html( $it['title'] ); ?></h3><?php endif; ?>
                             <?php if ( ! empty( $it['text'] ) ) : ?><p class="ofn-res__x"><?php echo esc_html( $it['text'] ); ?></p><?php endif; ?>
                             <?php if ( ! empty( $it['meta'] ) ) : ?><div class="ofn-res__meta"><?php echo esc_html( $it['meta'] ); ?></div><?php endif; ?>
                             <?php if ( ! empty( $it['cta_text'] ) ) : ?><a class="ofn-res__cta" href="<?php echo esc_url( $it['cta_url'] ?: '#' ); ?>"><?php echo esc_html( $it['cta_text'] ); ?></a><?php endif; ?>
@@ -217,7 +217,7 @@ class Olo_Finder_Tile extends Olo_Tile_Base {
                     <?php else : ?>
                         <?php if ( $f_kicker !== '' ) : ?><span class="ofn-kicker"><?php echo esc_html( $f_kicker ); ?></span><?php endif; ?>
                         <?php if ( ! empty( $it['meta'] ) ) : ?><div class="ofn-res__meta"><?php echo esc_html( $it['meta'] ); ?></div><?php endif; ?>
-                        <?php if ( ! empty( $it['title'] ) ) : ?><h3 class="ofn-res__t<?php echo $t_cls; ?>"<?php echo $t_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built by Olo_Text_Effects (sanitize_html_class/esc_attr applied internally) ?>><?php echo esc_html( $it['title'] ); ?></h3><?php endif; ?>
+                        <?php if ( ! empty( $it['title'] ) ) : ?><h3 class="ofn-res__t<?php echo $t_cls; ?>"<?php echo $t_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs built by Olobuild_Text_Effects (sanitize_html_class/esc_attr applied internally) ?>><?php echo esc_html( $it['title'] ); ?></h3><?php endif; ?>
                         <?php if ( ! empty( $it['text'] ) ) : ?><p class="ofn-res__x"><?php echo esc_html( $it['text'] ); ?></p><?php endif; ?>
                         <?php if ( ! empty( $it['cta_text'] ) ) : ?><a class="ofn-res__cta" href="<?php echo esc_url( $it['cta_url'] ?: '#' ); ?>"><?php echo esc_html( $it['cta_text'] ); ?></a><?php endif; ?>
                     <?php endif; ?>
@@ -240,7 +240,7 @@ class Olo_Finder_Tile extends Olo_Tile_Base {
         </script>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from sanitized effect settings
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Text_Effects::css() from sanitized effect settings
         $this->tfx_print_script();
         return ob_get_clean();
     }

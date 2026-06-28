@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * scoped al proprio $uid (nessun `&&`/`||` inline), rispetta prefers-reduced-motion.
  * Render == Vue (ScrubTextTile.vue). Estratta dal blueprint "Clod — Evoluzione v2".
  */
-class Olo_ScrubText_Tile extends Olo_Tile_Base {
+class Olobuild_ScrubText_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'scrubtext';
     protected $name     = 'Manifesto — Scrub testo';
@@ -85,8 +85,8 @@ class Olo_ScrubText_Tile extends Olo_Tile_Base {
         // ── KIT standard OLObuild: sfondo completo + ombra + bordo sul contenitore ──
         $bg_obj  = $s['bg'] ?? null;
         $bg_decl = '';
-        if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && $bg_obj['type'] !== 'none' && class_exists( 'Olo_CSS_Builder' ) ) {
-            $bg_decl = ( new Olo_CSS_Builder() )->get_bg_inline_css( $bg_obj );
+        if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && $bg_obj['type'] !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
+            $bg_decl = ( new Olobuild_CSS_Builder() )->get_bg_inline_css( $bg_obj );
         }
         $shadow_css        = $this->build_shadow_decl( $s );
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -101,7 +101,7 @@ class Olo_ScrubText_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist, sizes via floatval() with positive fallbacks, opacity clamped 0-1, fixed font-stack literals, background/shadow/border via the Olo_CSS_Builder/Olo_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist, sizes via floatval() with positive fallbacks, opacity clamped 0-1, fixed font-stack literals, background/shadow/border via the Olobuild_CSS_Builder/Olobuild_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?>{font-family:<?php echo $sans; ?>;<?php echo $box_decl; ?>}
             .<?php echo $uid; ?> .ost-p{font-family:<?php echo $disp; ?>;font-weight:600;font-size:clamp(<?php echo $smin; ?>px,4.2vw,<?php echo $smax; ?>px);line-height:1.04;letter-spacing:-.01em;text-transform:none;max-width:<?php echo $mch; ?>ch;margin:0;color:<?php echo $txt; ?>;}
@@ -192,7 +192,7 @@ class Olo_ScrubText_Tile extends Olo_Tile_Base {
     /**
      * Restituisce la dichiarazione box-shadow (valore, senza "box-shadow:")
      * dal setting shadow (preset sm/md/lg/xl o custom). '' se none.
-     * Copiato dal pattern standard OLObuild (cfr. Olo_CategoryRail_Tile).
+     * Copiato dal pattern standard OLObuild (cfr. Olobuild_CategoryRail_Tile).
      */
     private function build_shadow_decl( $s ) {
         $preset = $s['shadow'] ?? 'none';

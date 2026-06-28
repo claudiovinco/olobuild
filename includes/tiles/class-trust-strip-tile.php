@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Standard Olobuild: select per ogni enum, color picker globe, sfondo wrapper
  * via sistema base. Riusa render_icon_html (UIkit + Lucide).
  */
-class Olo_TrustStrip_Tile extends Olo_Tile_Base {
+class Olobuild_TrustStrip_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'trust-strip';
     protected $name     = 'Trust Strip';

@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Menuanchor_Tile extends Olo_Tile_Base {
+class Olobuild_Menuanchor_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'menuanchor';
     protected $name     = 'Ancora Menu';

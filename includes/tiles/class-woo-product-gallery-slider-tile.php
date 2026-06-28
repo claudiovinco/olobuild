@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
+class Olobuild_Woo_Product_Gallery_Slider_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'woo_product_gallery_slider';
     protected $name     = 'Gallery Prodotto WC';
@@ -45,7 +45,7 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
             return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
-                 . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
+                 . esc_html( olobuild_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
 
@@ -54,11 +54,12 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
         // Get product
         global $product;
         if ( ! is_a( $product, 'WC_Product' ) ) {
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- global $product di WooCommerce, non un global definito da olobuild
             $product = wc_get_product( get_the_ID() );
         }
         if ( ! $product ) {
             return '<div style="padding:20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">'
-                 . esc_html( olo_t( 'Nessun prodotto disponibile in questo contesto' ) )
+                 . esc_html( olobuild_t( 'Nessun prodotto disponibile in questo contesto' ) )
                  . '</div>';
         }
 
@@ -76,7 +77,7 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
         if ( empty( $image_ids ) ) {
             return '<div style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;background:var(--olo-color-muted, #F3F4F6);border-radius:8px;">'
                  . '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--olo-color-border, #E5E7EB)" stroke-width="1.5" style="margin:0 auto 12px;display:block"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>'
-                 . esc_html( olo_t( 'Nessuna immagine nella gallery del prodotto' ) )
+                 . esc_html( olobuild_t( 'Nessuna immagine nella gallery del prodotto' ) )
                  . '</div>';
         }
 
@@ -87,9 +88,9 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
         $main_h      = preg_replace( '/[;{}<>]/', '', sanitize_text_field( $s['main_height'] ) );
         $thumb_size  = max( 40, min( 120, absint( $s['thumbnail_size'] ) ) );
         $thumb_gap   = max( 2, min( 20, absint( $s['thumbnail_gap'] ) ) );
-        $radius      = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
-        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
-        $radius_raw  = Olo_Tile_Utils::radius_int( $s['border_radius'] ?? 0 );
+        $radius      = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
+        $radius_raw  = Olobuild_Tile_Utils::radius_int( $s['border_radius'] ?? 0 );
         $max_width   = max( 200, min( 1200, absint( $s['max_width'] ) ) );
         $show_thumbs = ! empty( $s['show_thumbnails'] );
         $thumb_pos   = in_array( $s['thumbnail_position'], [ 'bottom', 'left' ], true ) ? $s['thumbnail_position'] : 'bottom';
@@ -132,7 +133,7 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
         $total = count( $images );
 
         ob_start();
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, absint()/intval() with min/max clamps for numerics, the breakout-char-stripped $main_h, Olo_Tile_Utils radius helpers, and the internally generated $uid.
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, absint()/intval() with min/max clamps for numerics, the breakout-char-stripped $main_h, Olobuild_Tile_Utils radius helpers, and the internally generated $uid.
         ?>
         <style>
             .<?php echo $uid; ?> {
@@ -589,8 +590,8 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Shortcode_Tile extends Olo_Tile_Base {
+class Olobuild_Shortcode_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'shortcode';
     protected $name     = 'Shortcode';
@@ -17,8 +17,8 @@ class Olo_Shortcode_Tile extends Olo_Tile_Base {
 
     public function get_controls() {
         return [
-            [ 'key' => 'shortcode_text',   'type' => 'textarea', 'label' => olo_t( 'Shortcode' ) ],
-            [ 'key' => 'parse_shortcodes', 'type' => 'toggle',   'label' => olo_t( 'Esegui shortcode' ) ],
+            [ 'key' => 'shortcode_text',   'type' => 'textarea', 'label' => olobuild_t( 'Shortcode' ) ],
+            [ 'key' => 'parse_shortcodes', 'type' => 'toggle',   'label' => olobuild_t( 'Esegui shortcode' ) ],
         ];
     }
 
@@ -29,7 +29,7 @@ class Olo_Shortcode_Tile extends Olo_Tile_Base {
 
         if ( empty( $shortcode_text ) ) {
             return '<div class="olo-shortcode" style="text-align:center;padding:20px;color:var(--olo-color-text-muted, #9ca3af);">'
-                 . olo_t( 'Inserisci uno shortcode nell\'inspector.' )
+                 . olobuild_t( 'Inserisci uno shortcode nell\'inspector.' )
                  . '</div>';
         }
 
@@ -39,8 +39,8 @@ class Olo_Shortcode_Tile extends Olo_Tile_Base {
         <?php
             if ( ! empty( $s['parse_shortcodes'] ) ) {
                 // Il testo viene sanificato con wp_kses_post al salvataggio per chi
-                // non ha unfiltered_html (Olo_Rest_Api::sanitize_unfiltered_tile_fields).
-                echo do_shortcode( $shortcode_text ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- do_shortcode() output cannot be escaped without breaking shortcode markup; the raw text is sanitized with wp_kses_post() on save for users without unfiltered_html (Olo_Rest_Api::sanitize_unfiltered_tile_fields).
+                // non ha unfiltered_html (Olobuild_Rest_Api::sanitize_unfiltered_tile_fields).
+                echo do_shortcode( $shortcode_text ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- do_shortcode() output cannot be escaped without breaking shortcode markup; the raw text is sanitized with wp_kses_post() on save for users without unfiltered_html (Olobuild_Rest_Api::sanitize_unfiltered_tile_fields).
             } else {
                 // Display as code without execution
                 echo '<pre style="background:var(--olo-color-muted, #f3f4f6);padding:12px;border-radius:6px;overflow-x:auto;"><code>'

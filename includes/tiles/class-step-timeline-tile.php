@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * contenuto/stile, inline editing su tutti i testi, render_icon_html
  * per il footer (UIkit + Lucide).
  */
-class Olo_StepTimeline_Tile extends Olo_Tile_Base {
+class Olobuild_StepTimeline_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'step-timeline';
     protected $name     = 'Step Timeline';
@@ -268,7 +268,7 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
                         <?php if ( $f_val !== '' || $f_lbl !== '' ) : ?>
                             <div style="display:inline-flex;align-items:center;gap:10px;margin-top:12px;padding-top:14px;border-top:1px solid rgba(15,23,42,0.08)">
                                 <?php if ( $f_icon ) : ?>
-                                    <span style="color:<?php echo esc_attr( $fv_clr ); ?>;display:inline-flex;align-items:center"><?php echo $this->render_icon_html( $f_icon, 0.9 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon HTML built by Olo_Tile_Base::render_icon_html() (escapes/sanitizes internally) ?></span>
+                                    <span style="color:<?php echo esc_attr( $fv_clr ); ?>;display:inline-flex;align-items:center"><?php echo $this->render_icon_html( $f_icon, 0.9 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon HTML built by Olobuild_Tile_Base::render_icon_html() (escapes/sanitizes internally) ?></span>
                                 <?php endif; ?>
                                 <?php if ( $f_val !== '' ) : ?>
                                     <span style="font-family:<?php echo esc_attr( $title_family ); ?>;font-size:<?php echo (int) $fv_size; ?>px;font-weight:600;color:<?php echo esc_attr( $fv_clr ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.footer_value'; ?>"><?php echo esc_html( $f_val ); ?></span>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Olo_Openverse — Integrazione Openverse per Olobuild.
+ * Olobuild_Openverse — Integrazione Openverse per Olobuild.
  *
  * Fornisce 2 endpoint REST:
  *   GET  olo/v1/openverse/search   — Cerca immagini CC su Openverse
@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Openverse {
+class Olobuild_Openverse {
 
     const API_BASE = 'https://api.openverse.org/v1';
 
@@ -144,12 +144,12 @@ class Olo_Openverse {
         }
         // Anti-SSRF: Openverse aggrega CDN diversi → niente allowlist host,
         // ma schema http/https + blocco IP privati/loopback via wp_http_validate_url.
-        if ( ! olo_validate_remote_media_url( $regular_url ) ) {
+        if ( ! olobuild_validate_remote_media_url( $regular_url ) ) {
             return new WP_Error( 'invalid_url', 'URL non consentito.', [ 'status' => 400 ] );
         }
 
         // Hotlink mode: skip sideload
-        $behavior = olo_stockmedia_behavior();
+        $behavior = olobuild_stockmedia_behavior();
         if ( empty( $behavior['download_local'] ) ) {
             $caption_hotlink = $attribution ? wp_strip_all_tags( $attribution )
                 : ( $photographer ? $photographer . ' / Openverse' : '' );
@@ -184,7 +184,7 @@ class Olo_Openverse {
 
         // Optimize: WebP conversion se richiesto (solo jpg/png)
         if ( ! empty( $behavior['optimize_on_download'] ) ) {
-            $webp = olo_convert_to_webp( $tmp_file, 82 );
+            $webp = olobuild_convert_to_webp( $tmp_file, 82 );
             if ( $webp && $webp !== $tmp_file ) {
                 wp_delete_file( $tmp_file );
                 $tmp_file = $webp;

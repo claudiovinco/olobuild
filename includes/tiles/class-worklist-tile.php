@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Work List — indice di progetti/voci a righe con hover-list (indent + shift + freccia).
  * Generica e token-first: il titolo eredita il font heading del tema; meta in monospace.
  */
-class Olo_WorkList_Tile extends Olo_Tile_Base {
+class Olobuild_WorkList_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'worklist';
     protected $name     = 'Work List';

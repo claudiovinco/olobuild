@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Frontend_Renderer {
+class Olobuild_Frontend_Renderer {
 
     private $fraction_map = [
         '1-1' => 100, '1-2' => 50, '1-3' => 33.33, '2-3' => 66.66,
@@ -12,7 +12,7 @@ class Olo_Frontend_Renderer {
         '3-5' => 60, '4-5' => 80, '1-6' => 16.66, '5-6' => 83.33,
     ];
 
-    // shadow_map and drop_shadow_map moved to Olo_CSS_Builder
+    // shadow_map and drop_shadow_map moved to Olobuild_CSS_Builder
 
     private $align_map = [
         'stretch' => 'stretch',
@@ -26,10 +26,10 @@ class Olo_Frontend_Renderer {
      */
     public $builder_mode = false;
 
-    /** @var Olo_CSS_Builder */
+    /** @var Olobuild_CSS_Builder */
     private $css;
 
-    /** @var Olo_Animation_Builder */
+    /** @var Olobuild_Animation_Builder */
     private $anim;
 
     /** @var array Breakpoint definitions (popolato da render_for_builder). */
@@ -44,8 +44,8 @@ class Olo_Frontend_Renderer {
     private static $allowed_border_styles = [ 'none', 'solid', 'dashed', 'dotted', 'double', 'groove', 'ridge', 'inset', 'outset' ];
 
     public function __construct() {
-        $this->css  = new Olo_CSS_Builder();
-        $this->anim = new Olo_Animation_Builder();
+        $this->css  = new Olobuild_CSS_Builder();
+        $this->anim = new Olobuild_Animation_Builder();
         if ( ! has_action( 'wp_footer', [ __CLASS__, 'print_sticky_offset_script' ] ) ) {
             add_action( 'wp_footer', [ __CLASS__, 'print_sticky_offset_script' ], 99 );
         }
@@ -442,20 +442,20 @@ class Olo_Frontend_Renderer {
                 // UIkit 3 (CSS + JS + Icons) - only on frontend, NOT in builder admin
                 wp_enqueue_style(
                     'uikit-css',
-                    OLO_URL . 'assets/vendor/uikit/css/uikit.min.css',
+                    OLOBUILD_URL . 'assets/vendor/uikit/css/uikit.min.css',
                     [],
                     '3.21.16'
                 );
                 wp_enqueue_script(
                     'uikit-js',
-                    OLO_URL . 'assets/vendor/uikit/js/uikit.min.js',
+                    OLOBUILD_URL . 'assets/vendor/uikit/js/uikit.min.js',
                     [],
                     '3.21.16',
                     array( 'in_footer' => true, 'strategy' => 'defer' )
                 );
                 wp_enqueue_script(
                     'uikit-icons-js',
-                    OLO_URL . 'assets/vendor/uikit/js/uikit-icons.min.js',
+                    OLOBUILD_URL . 'assets/vendor/uikit/js/uikit-icons.min.js',
                     array( 'uikit-js' ),
                     '3.21.16',
                     array( 'in_footer' => true, 'strategy' => 'defer' )
@@ -465,22 +465,22 @@ class Olo_Frontend_Renderer {
             // Olobuilder custom overrides (loaded after UIkit)
             wp_enqueue_style(
                 'olo-frontend-css',
-                OLO_URL . 'assets/css/frontend.css',
+                OLOBUILD_URL . 'assets/css/frontend.css',
                 $safe_mode ? [] : [ 'uikit-css' ],
-                OLO_VERSION
+                OLOBUILD_VERSION
             );
 
             // Print styles (caricato solo per media print)
             wp_enqueue_style(
                 'olo-print',
-                OLO_URL . 'assets/css/olo-print.css',
+                OLOBUILD_URL . 'assets/css/olo-print.css',
                 array( 'olo-frontend-css' ),
-                OLO_VERSION,
+                OLOBUILD_VERSION,
                 'print'
             );
 
             // Style System CSS (custom properties + UIkit overrides)
-            $style_css = Olo_Style_System::instance()->generate_css();
+            $style_css = Olobuild_Style_System::instance()->generate_css();
             if ( ! empty( $style_css ) ) {
                 wp_add_inline_style( 'olo-frontend-css', $style_css );
             }
@@ -490,7 +490,7 @@ class Olo_Frontend_Renderer {
     /**
      * Get effective background config for a tile.
      */
-    // --- CSS builder and animation builder methods moved to Olo_CSS_Builder and Olo_Animation_Builder ---
+    // --- CSS builder and animation builder methods moved to Olobuild_CSS_Builder and Olobuild_Animation_Builder ---
 
 
     /**
@@ -2570,7 +2570,7 @@ class Olo_Frontend_Renderer {
         }
 
         // Render opening wrapper (panel div with styles, trigger button, close button)
-        $html = Olo_Tile_Utils::process_dynamic_tags( $tile_instance->render( $settings, $node['style'] ?? [] ) );
+        $html = Olobuild_Tile_Utils::process_dynamic_tags( $tile_instance->render( $settings, $node['style'] ?? [] ) );
 
         $children = $node['children'] ?? [];
 
@@ -2686,7 +2686,7 @@ class Olo_Frontend_Renderer {
         // duplicare le classi PHP. Il filter riceve [type, settings] e può
         // restituire la stessa coppia modificata.
         // Esempio in olo-booking:
-        //   add_filter( 'olo_tile_legacy_migrate', function( $tile, $node ) {
+        //   add_filter( 'olobuild_tile_legacy_migrate', function( $tile, $node ) {
         //       if ( $tile['type'] === 'servicegallery' ) {
         //           $tile['type']     = 'ac-gallery';
         //           $tile['settings'] = $remapped;
@@ -2694,7 +2694,7 @@ class Olo_Frontend_Renderer {
         //       return $tile;
         //   }, 10, 2 );
         $migrated = apply_filters(
-            'olo_tile_legacy_migrate',
+            'olobuild_tile_legacy_migrate',
             [ 'type' => $type, 'settings' => $settings ],
             $node
         );
@@ -2728,10 +2728,10 @@ class Olo_Frontend_Renderer {
         // A/B Testing: check if this tile has an active test
         $ab_test_data = null;
         $tile_id = $node['id'] ?? '';
-        if ( class_exists( 'Olo_AB_Testing' ) ) {
+        if ( class_exists( 'Olobuild_AB_Testing' ) ) {
             if ( ! empty( $tile_id ) ) {
                 if ( ! empty( $template_id ) ) {
-                    $ab_test_data = Olo_AB_Testing::get_active_test_for_tile( $tile_id, $template_id );
+                    $ab_test_data = Olobuild_AB_Testing::get_active_test_for_tile( $tile_id, $template_id );
                     if ( $ab_test_data ) {
                         // Override tile settings with the assigned variant settings
                         $variant_settings = $ab_test_data['settings'];
@@ -2746,7 +2746,7 @@ class Olo_Frontend_Renderer {
         // Dynamic content resolution
         $dynamic = $node['dynamic'] ?? [];
         if ( ! empty( $dynamic ) ) {
-            $dc = new Olo_Dynamic_Content();
+            $dc = new Olobuild_Dynamic_Content();
             $post_id = get_the_ID();
 
             // Multi-item query
@@ -2988,7 +2988,7 @@ class Olo_Frontend_Renderer {
             $elem_mouse_attrs .= ' data-olo-track="' . $track_speed . '"';
         }
 
-        // Spotlight cursore — riusabile su section/column/row/element (vedi Olo_Animation_Builder::build_spotlight_attr)
+        // Spotlight cursore — riusabile su section/column/row/element (vedi Olobuild_Animation_Builder::build_spotlight_attr)
         $elem_spotlight_attr = $this->anim->build_spotlight_attr( $advanced );
 
         // Bezier path scroll animation
@@ -3064,7 +3064,7 @@ class Olo_Frontend_Renderer {
         }
 
         // Developer hook: before tile render
-        do_action( 'olo_before_tile_render', $node, $settings, $type );
+        do_action( 'olobuild_before_tile_render', $node, $settings, $type );
 
         // SEO & Accessibility attributes
         $seo_attrs = '';
@@ -3108,7 +3108,7 @@ class Olo_Frontend_Renderer {
         // Render
         ob_start();
         ?>
-        <div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"<?php echo $id_attr; ?> style="<?php echo esc_attr( $style_attr ); ?>"<?php echo $elem_scrollspy_attr . $elem_el_parallax_attr . $elem_sticky_attr . $elem_mouse_attrs . $elem_bezier_attr . $elem_scroll_fx_attr . $elem_spotlight_attr . $elem_assembly_attr . $ab_test_attrs . $seo_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $id_attr esc_attr()'d at assignment; attribute fragments built above with esc_attr()/wp_json_encode()/intval() or by Olo_Animation_Builder helpers from clamped numerics ?>>
+        <div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"<?php echo $id_attr; ?> style="<?php echo esc_attr( $style_attr ); ?>"<?php echo $elem_scrollspy_attr . $elem_el_parallax_attr . $elem_sticky_attr . $elem_mouse_attrs . $elem_bezier_attr . $elem_scroll_fx_attr . $elem_spotlight_attr . $elem_assembly_attr . $ab_test_attrs . $seo_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $id_attr esc_attr()'d at assignment; attribute fragments built above with esc_attr()/wp_json_encode()/intval() or by Olobuild_Animation_Builder helpers from clamped numerics ?>>
             <?php if ( $has_bg_image ) :
                 $bg_size = esc_attr( $tile_bg['image_size'] ?? 'cover' );
                 $bg_pos  = esc_attr( $tile_bg['image_position'] ?? 'center center' );
@@ -3116,7 +3116,7 @@ class Olo_Frontend_Renderer {
             ?>
                 <div class="uk-position-cover"
                     style="background-image: url(<?php echo esc_url( $tile_bg['image_url'] ); ?>); background-size: <?php echo $bg_size; ?>; background-position: <?php echo $bg_pos; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $bg_size/$bg_pos esc_attr()'d at assignment above ?>; background-repeat: no-repeat"
-                    <?php echo $parallax_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- uk-parallax attribute built by Olo_Animation_Builder::build_uk_parallax_attr() from intval()/floatval() values ?>
+                    <?php echo $parallax_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- uk-parallax attribute built by Olobuild_Animation_Builder::build_uk_parallax_attr() from intval()/floatval() values ?>
                 ></div>
             <?php endif; ?>
 
@@ -3139,10 +3139,10 @@ class Olo_Frontend_Renderer {
             <?php if ( $this->builder_mode ) $settings['_builder_mode'] = true; ?>
             <?php if ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay ) : ?>
                 <div class="uk-position-relative" style="z-index: 1">
-                    <?php echo Olo_Tile_Utils::process_dynamic_tags( $tile_instance->render( $settings, $node['style'] ?? [] ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tile HTML assembled by the tile's own render() (each tile escapes its output); process_dynamic_tags() substitutes sanitized dynamic values ?>
+                    <?php echo Olobuild_Tile_Utils::process_dynamic_tags( $tile_instance->render( $settings, $node['style'] ?? [] ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tile HTML assembled by the tile's own render() (each tile escapes its output); process_dynamic_tags() substitutes sanitized dynamic values ?>
                 </div>
             <?php else : ?>
-                <?php echo Olo_Tile_Utils::process_dynamic_tags( $tile_instance->render( $settings, $node['style'] ?? [] ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tile HTML assembled by the tile's own render() (each tile escapes its output); process_dynamic_tags() substitutes sanitized dynamic values ?>
+                <?php echo Olobuild_Tile_Utils::process_dynamic_tags( $tile_instance->render( $settings, $node['style'] ?? [] ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tile HTML assembled by the tile's own render() (each tile escapes its output); process_dynamic_tags() substitutes sanitized dynamic values ?>
             <?php endif; ?>
         </div>
         <?php
@@ -3224,13 +3224,13 @@ class Olo_Frontend_Renderer {
         }
 
         // Developer hook: after tile render
-        do_action( 'olo_after_tile_render', $node, $settings, $type, $html );
+        do_action( 'olobuild_after_tile_render', $node, $settings, $type, $html );
 
         // Accessibility: ARIA enhancements
-        $html = apply_filters( 'olo_tile_output', $html, $type, $settings );
+        $html = apply_filters( 'olobuild_tile_output', $html, $type, $settings );
 
         // Resolve inline dynamic tokens ({post_title}, {current_year}, etc.)
-        $html = Olo_Dynamic_Content::resolve_tokens( $html );
+        $html = Olobuild_Dynamic_Content::resolve_tokens( $html );
         return $html;
     }
 
@@ -3522,7 +3522,7 @@ class Olo_Frontend_Renderer {
     /**
      * Effetti bordo avanzati (neon / neon-pulse / gradiente / gradiente-rotante) per il
      * WRAPPER di un nodo (element/section/row/column). Equivalente lato wrapper di
-     * Olo_Tile_Base::build_border_effect_css: legge style.border (colore base) +
+     * Olobuild_Tile_Base::build_border_effect_css: legge style.border (colore base) +
      * style.border_effect_*. Selettore = #css_id. Stringa CSS senza <style> (o '').
      */
     private function build_wrapper_border_effect_css( $css_id, $style ) {
@@ -3957,7 +3957,7 @@ class Olo_Frontend_Renderer {
             return '<!-- Olobuilder: No template ID provided -->';
         }
 
-        $db       = new Olo_Database();
+        $db       = new Olobuild_Database();
         $template = $db->get_template( $id );
 
         if ( ! $template ) {
@@ -3969,7 +3969,7 @@ class Olo_Frontend_Renderer {
         }
 
         // Fire action after template validation succeeds
-        do_action( 'olo_template_rendered', $id, $template['title'], $template['type'] );
+        do_action( 'olobuild_template_rendered', $id, $template['title'], $template['type'] );
 
         $tiles = $template['content'];
         if ( empty( $tiles ) || ! is_array( $tiles ) ) {
@@ -3980,14 +3980,14 @@ class Olo_Frontend_Renderer {
         $tiles = $this->maybe_migrate_content( $tiles );
 
         // Filtro per traduzioni multilingua (usato da Olo Lang)
-        $tiles = apply_filters( 'olo_template_content', $tiles, $id );
+        $tiles = apply_filters( 'olobuild_template_content', $tiles, $id );
 
         // Index all tiles for cross-tile lookup (e.g., navmenu → search tile)
         self::index_tiles( $tiles );
 
         // Page settings
         $page_settings     = $template['settings'] ?? [];
-        $page_settings     = apply_filters( 'olo_template_settings', $page_settings, $id );
+        $page_settings     = apply_filters( 'olobuild_template_settings', $page_settings, $id );
         $content_max_width = intval( $page_settings['content_max_width'] ?? 1200 );
         $page_bg           = $page_settings['page_bg'] ?? [ 'type' => 'none' ];
 
@@ -4006,9 +4006,9 @@ class Olo_Frontend_Renderer {
         if ( ! $safe_mode ) {
         wp_enqueue_script(
             'olo-utils',
-            OLO_URL . 'assets/js/olo-utils.js',
+            OLOBUILD_URL . 'assets/js/olo-utils.js',
             [],
-            OLO_VERSION,
+            OLOBUILD_VERSION,
             true
         );
 
@@ -4020,9 +4020,9 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $sig['types']['postgrid'] ) ) {
             wp_enqueue_script(
                 'olo-postgrid-js',
-                OLO_URL . 'assets/js/olo-postgrid.js',
+                OLOBUILD_URL . 'assets/js/olo-postgrid.js',
                 [ 'olo-utils' ],
-                OLO_VERSION,
+                OLOBUILD_VERSION,
                 true
             );
         }
@@ -4031,9 +4031,9 @@ class Olo_Frontend_Renderer {
         if ( $sig['has_row_loop_load_more'] ) {
             wp_enqueue_script(
                 'olo-row-loop-js',
-                OLO_URL . 'assets/js/olo-row-loop.js',
+                OLOBUILD_URL . 'assets/js/olo-row-loop.js',
                 [],
-                OLO_VERSION,
+                OLOBUILD_VERSION,
                 true
             );
             wp_add_inline_script(
@@ -4045,7 +4045,7 @@ class Olo_Frontend_Renderer {
 
         // Leaflet map detection (recursive)
         if ( $sig['has_leaflet_map'] ) {
-            $vendor_url = OLO_URL . 'assets/vendor/leaflet/';
+            $vendor_url = OLOBUILD_URL . 'assets/vendor/leaflet/';
 
             wp_enqueue_style( 'leaflet-css', $vendor_url . 'leaflet.css', [], '1.9.4' );
             wp_enqueue_style( 'leaflet-markercluster-css', $vendor_url . 'leaflet.markercluster.css', [ 'leaflet-css' ], '1.5.3' );
@@ -4055,9 +4055,9 @@ class Olo_Frontend_Renderer {
             wp_enqueue_script( 'leaflet-markercluster-js', $vendor_url . 'leaflet.markercluster.js', [ 'leaflet-js' ], '1.5.3', true );
             wp_enqueue_script(
                 'olo-map-js',
-                OLO_URL . 'assets/js/olo-map.js',
+                OLOBUILD_URL . 'assets/js/olo-map.js',
                 [ 'olo-utils', 'leaflet-js', 'leaflet-markercluster-js' ],
-                OLO_VERSION,
+                OLOBUILD_VERSION,
                 true
             );
 
@@ -4067,15 +4067,15 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $sig['types']['proslider'] ) ) {
             wp_enqueue_style(
                 'olo-proslider-css',
-                OLO_URL . 'assets/css/olo-proslider.css',
+                OLOBUILD_URL . 'assets/css/olo-proslider.css',
                 [],
-                OLO_VERSION
+                OLOBUILD_VERSION
             );
             wp_enqueue_script(
                 'olo-proslider-js',
-                OLO_URL . 'assets/js/olo-proslider.js',
+                OLOBUILD_URL . 'assets/js/olo-proslider.js',
                 [],
-                OLO_VERSION,
+                OLOBUILD_VERSION,
                 true
             );
         }
@@ -4084,15 +4084,15 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $sig['types']['livesearch'] ) ) {
             wp_enqueue_style(
                 'olo-livesearch-css',
-                OLO_URL . 'assets/css/olo-livesearch.css',
+                OLOBUILD_URL . 'assets/css/olo-livesearch.css',
                 [],
-                OLO_VERSION
+                OLOBUILD_VERSION
             );
             wp_enqueue_script(
                 'olo-livesearch-js',
-                OLO_URL . 'assets/js/olo-livesearch.js',
+                OLOBUILD_URL . 'assets/js/olo-livesearch.js',
                 [ 'olo-utils' ],
-                OLO_VERSION,
+                OLOBUILD_VERSION,
                 true
             );
         }
@@ -4101,16 +4101,16 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $sig['types']['servicesearch'] ) ) {
             wp_enqueue_script(
                 'olo-servicesearch-js',
-                OLO_URL . 'assets/js/olo-servicesearch.js',
+                OLOBUILD_URL . 'assets/js/olo-servicesearch.js',
                 [],
-                OLO_VERSION,
+                OLOBUILD_VERSION,
                 true
             );
         }
 
         // ServiceResults detection (recursive)
         if ( ! empty( $sig['types']['serviceresults'] ) ) {
-            $vendor_url = OLO_URL . 'assets/vendor/leaflet/';
+            $vendor_url = OLOBUILD_URL . 'assets/vendor/leaflet/';
 
             wp_enqueue_style( 'leaflet-css', $vendor_url . 'leaflet.css', [], '1.9.4' );
             wp_enqueue_style( 'leaflet-markercluster-css', $vendor_url . 'leaflet.markercluster.css', [ 'leaflet-css' ], '1.5.3' );
@@ -4120,9 +4120,9 @@ class Olo_Frontend_Renderer {
             wp_enqueue_script( 'leaflet-markercluster-js', $vendor_url . 'leaflet.markercluster.js', [ 'leaflet-js' ], '1.5.3', true );
             wp_enqueue_script(
                 'olo-serviceresults-js',
-                OLO_URL . 'assets/js/olo-serviceresults.js',
+                OLOBUILD_URL . 'assets/js/olo-serviceresults.js',
                 [ 'olo-utils', 'leaflet-js', 'leaflet-markercluster-js' ],
-                OLO_VERSION,
+                OLOBUILD_VERSION,
                 true
             );
         }
@@ -4131,9 +4131,9 @@ class Olo_Frontend_Renderer {
         if ( $sig['has_progallery_lightbox'] ) {
             wp_enqueue_script(
                 'olo-progallery-lightbox-js',
-                OLO_URL . 'assets/js/olo-progallery-lightbox.js',
+                OLOBUILD_URL . 'assets/js/olo-progallery-lightbox.js',
                 [],
-                OLO_VERSION,
+                OLOBUILD_VERSION,
                 true
             );
         }
@@ -4142,33 +4142,33 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $sig['types']['pdfviewer'] ) ) {
             wp_enqueue_script(
                 'pdfjs',
-                OLO_URL . 'assets/vendor/pdfjs/pdf.min.js',
+                OLOBUILD_URL . 'assets/vendor/pdfjs/pdf.min.js',
                 [],
                 '3.11.174',
                 true
             );
             wp_enqueue_script(
                 'pageflip-js',
-                OLO_URL . 'assets/vendor/pageflip/page-flip.browser.js',
+                OLOBUILD_URL . 'assets/vendor/pageflip/page-flip.browser.js',
                 [],
                 '2.0.7',
                 true
             );
             wp_enqueue_style(
                 'olo-pdfviewer-css',
-                OLO_URL . 'assets/css/olo-pdfviewer.css',
+                OLOBUILD_URL . 'assets/css/olo-pdfviewer.css',
                 [],
-                OLO_VERSION
+                OLOBUILD_VERSION
             );
             wp_enqueue_script(
                 'olo-pdfviewer-js',
-                OLO_URL . 'assets/js/olo-pdfviewer.js',
+                OLOBUILD_URL . 'assets/js/olo-pdfviewer.js',
                 [ 'pdfjs', 'pageflip-js' ],
-                OLO_VERSION,
+                OLOBUILD_VERSION,
                 true
             );
             wp_localize_script( 'olo-pdfviewer-js', 'oloPdfViewerData', [
-                'workerUrl' => OLO_URL . 'assets/vendor/pdfjs/pdf.worker.min.js',
+                'workerUrl' => OLOBUILD_URL . 'assets/vendor/pdfjs/pdf.worker.min.js',
             ] );
         }
 
@@ -4176,48 +4176,48 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $sig['types']['pdfpro'] ) ) {
             wp_enqueue_script(
                 'pdfjs',
-                OLO_URL . 'assets/vendor/pdfjs/pdf.min.js',
+                OLOBUILD_URL . 'assets/vendor/pdfjs/pdf.min.js',
                 [],
                 '3.11.174',
                 true
             );
             wp_enqueue_script(
                 'pageflip-js',
-                OLO_URL . 'assets/vendor/pageflip/page-flip.browser.js',
+                OLOBUILD_URL . 'assets/vendor/pageflip/page-flip.browser.js',
                 [],
                 '2.0.7',
                 true
             );
             wp_enqueue_script(
                 'olo-pdfpro-js',
-                OLO_URL . 'assets/js/olo-pdfpro.js',
+                OLOBUILD_URL . 'assets/js/olo-pdfpro.js',
                 [ 'pdfjs', 'pageflip-js' ],
-                OLO_VERSION,
+                OLOBUILD_VERSION,
                 true
             );
             wp_localize_script( 'olo-pdfpro-js', 'oloPdfProData', [
-                'workerUrl' => OLO_URL . 'assets/vendor/pdfjs/pdf.worker.min.js',
+                'workerUrl' => OLOBUILD_URL . 'assets/vendor/pdfjs/pdf.worker.min.js',
             ] );
         }
 
         // SVG Animator
         if ( ! empty( $sig['types']['svganimator'] ) ) {
-            wp_enqueue_style( 'olo-svganimator-css', OLO_URL . 'assets/css/olo-svganimator.css', [], OLO_VERSION );
-            wp_enqueue_script( 'olo-svganimator-js', OLO_URL . 'assets/js/olo-svganimator.js', [], OLO_VERSION, true );
+            wp_enqueue_style( 'olo-svganimator-css', OLOBUILD_URL . 'assets/css/olo-svganimator.css', [], OLOBUILD_VERSION );
+            wp_enqueue_script( 'olo-svganimator-js', OLOBUILD_URL . 'assets/js/olo-svganimator.js', [], OLOBUILD_VERSION, true );
         }
 
         // Viewer 360
         if ( ! empty( $sig['types']['viewer360'] ) ) {
-            wp_enqueue_script( 'olo-viewer360-js', OLO_URL . 'assets/js/olo-viewer360.js', [], OLO_VERSION, true );
+            wp_enqueue_script( 'olo-viewer360-js', OLOBUILD_URL . 'assets/js/olo-viewer360.js', [], OLOBUILD_VERSION, true );
         }
 
         // Bezier path scroll animation
         if ( $sig['has_bezier'] ) {
-            wp_enqueue_script( 'olo-bezier-parallax-js', OLO_URL . 'assets/js/olo-bezier-parallax.js', [], OLO_VERSION, true );
+            wp_enqueue_script( 'olo-bezier-parallax-js', OLOBUILD_URL . 'assets/js/olo-bezier-parallax.js', [], OLOBUILD_VERSION, true );
         }
         } // end if ( ! $safe_mode ) — skip tile JS enqueue
 
-        $manager = Olo_Tile_Manager::instance();
+        $manager = Olobuild_Tile_Manager::instance();
 
         $page_bg_css = $this->css->get_bg_inline_css( $page_bg );
         $hover_css_rules = [];
@@ -4266,7 +4266,7 @@ class Olo_Frontend_Renderer {
                         }
                     }
                     $pg_par_json = wp_json_encode( $pg_par );
-                    wp_enqueue_script( 'olo-pagebg-parallax-js', OLO_URL . 'assets/js/olo-pagebg-parallax.js', [], OLO_VERSION, true );
+                    wp_enqueue_script( 'olo-pagebg-parallax-js', OLOBUILD_URL . 'assets/js/olo-pagebg-parallax.js', [], OLOBUILD_VERSION, true );
                 }
             ?>
                 <div class="olo-tile-bg"
@@ -4309,8 +4309,8 @@ class Olo_Frontend_Renderer {
                 foreach ( $this->responsive_css_rules as $max_w => $rules ) {
                     $all_css .= ' @media(max-width:' . $max_w . '){' . implode( ' ', $rules ) . '}';
                 }
-                if ( class_exists( 'Olo_Asset_Optimizer' ) ) {
-                    echo Olo_Asset_Optimizer::serve_css( $all_css, $id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <link>/<style> markup built by Olo_Asset_Optimizer::serve_css() (esc_url internally); CSS collected via collect_hover_css()/collect_responsive_css() (esc_attr/intval) and safe_block_css() for custom CSS
+                if ( class_exists( 'Olobuild_Asset_Optimizer' ) ) {
+                    echo Olobuild_Asset_Optimizer::serve_css( $all_css, $id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <link>/<style> markup built by Olobuild_Asset_Optimizer::serve_css() (esc_url internally); CSS collected via collect_hover_css()/collect_responsive_css() (esc_attr/intval) and safe_block_css() for custom CSS
                 } else {
                     echo '<style class="olo-hover-styles">' . $all_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS collected via collect_hover_css()/collect_responsive_css() (esc_attr/intval-sanitized declarations) and safe_block_css() for custom CSS
                 }
@@ -4905,7 +4905,7 @@ class Olo_Frontend_Renderer {
         <?php
 
         // Signal that Olobuild frontend content was rendered (used by a11y scripts)
-        do_action( 'olo_frontend_rendered', $id );
+        do_action( 'olobuild_frontend_rendered', $id );
 
         $html = ob_get_clean();
 
@@ -4990,14 +4990,14 @@ class Olo_Frontend_Renderer {
         $html = ob_get_clean();
 
         $css_urls = [
-            OLO_URL . 'assets/vendor/uikit/css/uikit.min.css',
-            OLO_URL . 'assets/css/frontend.css?v=' . OLO_VERSION,
-            OLO_URL . 'assets/css/olo-proslider.css?v=' . OLO_VERSION,
+            OLOBUILD_URL . 'assets/vendor/uikit/css/uikit.min.css',
+            OLOBUILD_URL . 'assets/css/frontend.css?v=' . OLOBUILD_VERSION,
+            OLOBUILD_URL . 'assets/css/olo-proslider.css?v=' . OLOBUILD_VERSION,
         ];
 
         $inline_css = '';
-        if ( class_exists( 'Olo_Style_System' ) ) {
-            $inline_css = Olo_Style_System::instance()->generate_css();
+        if ( class_exists( 'Olobuild_Style_System' ) ) {
+            $inline_css = Olobuild_Style_System::instance()->generate_css();
         }
 
         $this->builder_mode = false;
@@ -5018,20 +5018,20 @@ class Olo_Frontend_Renderer {
      * full-viewport renderizzati DOPO il grid. Unico punto di verità, chiamato
      * sia dal render frontend del template sia da render_tiles_array (preview).
      *
-     *   - page_crt_*   → Overlay CRT (scanline + vignetta), Olo_Crtoverlay_Tile::render()
-     *   - page_grain_* → Grana pellicola, Olo_Crtoverlay_Tile::render_grain()
+     *   - page_crt_*   → Overlay CRT (scanline + vignetta), Olobuild_Crtoverlay_Tile::render()
+     *   - page_grain_* → Grana pellicola, Olobuild_Crtoverlay_Tile::render_grain()
      *
      * @param array $page_settings
      * @return string HTML ('' se nessun effetto attivo)
      */
     private function render_page_effects( $page_settings ) {
-        if ( ! is_array( $page_settings ) || ! class_exists( 'Olo_Crtoverlay_Tile' ) ) {
+        if ( ! is_array( $page_settings ) || ! class_exists( 'Olobuild_Crtoverlay_Tile' ) ) {
             return '';
         }
         $out = '';
 
         if ( ! empty( $page_settings['page_crt_enabled'] ) ) {
-            $out .= ( new Olo_Crtoverlay_Tile() )->render( [
+            $out .= ( new Olobuild_Crtoverlay_Tile() )->render( [
                 'scanline_opacity' => intval( $page_settings['page_crt_scanline_opacity'] ?? 50 ),
                 'scanline_gap'     => intval( $page_settings['page_crt_scanline_gap'] ?? 3 ),
                 'vignette'         => intval( $page_settings['page_crt_vignette'] ?? 55 ),
@@ -5043,7 +5043,7 @@ class Olo_Frontend_Renderer {
         }
 
         if ( ! empty( $page_settings['page_grain_enabled'] ) ) {
-            $out .= Olo_Crtoverlay_Tile::render_grain( [
+            $out .= Olobuild_Crtoverlay_Tile::render_grain( [
                 'opacity' => intval( $page_settings['page_grain_opacity'] ?? 7 ),
                 'size'    => intval( $page_settings['page_grain_size'] ?? 240 ),
                 'z_index' => intval( $page_settings['page_grain_z_index'] ?? 95 ),
@@ -5072,7 +5072,7 @@ class Olo_Frontend_Renderer {
             'mobile'           => 480,
         ] );
 
-        $manager = Olo_Tile_Manager::instance();
+        $manager = Olobuild_Tile_Manager::instance();
         $hover_css_rules = [];
         $this->responsive_css_rules = [];
         $tile_counter = 0;

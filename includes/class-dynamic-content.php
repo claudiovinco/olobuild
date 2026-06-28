@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Dynamic_Content {
+class Olobuild_Dynamic_Content {
 
     /**
      * Recursion guard to prevent infinite loops when resolving content fields.
@@ -117,7 +117,7 @@ class Olo_Dynamic_Content {
 
             case 'cookie':
                 $key = sanitize_text_field( $field );
-                $allowed_cookies = apply_filters( 'olo_allowed_cookies', [ 'language', 'theme_mode', 'currency', 'olo_consent' ] );
+                $allowed_cookies = apply_filters( 'olobuild_allowed_cookies', [ 'language', 'theme_mode', 'currency', 'olo_consent' ] );
                 if ( ! in_array( $key, $allowed_cookies, true ) ) {
                     $value = '';
                 } else {
@@ -133,7 +133,7 @@ class Olo_Dynamic_Content {
             case 'global_widget':
                 $tpl_id = intval( $field );
                 if ( $tpl_id > 0 ) {
-                    $renderer = new Olo_Frontend_Renderer();
+                    $renderer = new Olobuild_Frontend_Renderer();
                     $value = $renderer->render_shortcode( [ 'id' => $tpl_id ] );
                 } else {
                     $value = '';

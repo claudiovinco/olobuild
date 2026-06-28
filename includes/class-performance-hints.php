@@ -1,6 +1,6 @@
 <?php
 /**
- * Olo_Performance_Hints — Resource hints (preload, preconnect, dns-prefetch),
+ * Olobuild_Performance_Hints — Resource hints (preload, preconnect, dns-prefetch),
  * fetchpriority for hero images, video facade, font preloading, srcset helper.
  */
 
@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Performance_Hints {
+class Olobuild_Performance_Hints {
 
     private static $instance = null;
 
@@ -33,8 +33,8 @@ class Olo_Performance_Hints {
     }
 
     public function init() {
-        $opt = class_exists( 'Olo_Performance_Settings' )
-            ? Olo_Performance_Settings::get_option()
+        $opt = class_exists( 'Olobuild_Performance_Settings' )
+            ? Olobuild_Performance_Settings::get_option()
             : [
                 'resource_hints' => true, 'font_preload' => true, 'fetchpriority' => true,
                 'video_facade' => true, 'lazy_images' => true,
@@ -65,7 +65,7 @@ class Olo_Performance_Hints {
         // - lazy_videos: <video autoplay muted> → preload="none" + IntersectionObserver
         // - uikit_subset: apprendimento famiglie uk-* usate + auto-guarigione
         $this->buffer_lazy_videos  = ! empty( $opt['lazy_videos'] );
-        $this->buffer_uikit_subset = ! empty( $opt['uikit_subset'] ) && class_exists( 'Olo_Uikit_Subset' );
+        $this->buffer_uikit_subset = ! empty( $opt['uikit_subset'] ) && class_exists( 'Olobuild_Uikit_Subset' );
         if ( $this->buffer_lazy_videos || $this->buffer_uikit_subset ) {
             add_action( 'template_redirect', [ $this, 'start_lazy_video_buffer' ], 1 );
         }
@@ -122,7 +122,7 @@ class Olo_Performance_Hints {
         $hints = [];
 
         // Nota: nessun hint verso fonts.googleapis.com / fonts.gstatic.com.
-        // I Google Fonts sono self-hosted (Olo_Font_Host), serviti da /uploads.
+        // I Google Fonts sono self-hosted (Olobuild_Font_Host), serviti da /uploads.
 
         // YouTube/Vimeo preconnect only if video tiles detected
         if ( $this->page_has_video_tile() ) {
@@ -132,7 +132,7 @@ class Olo_Performance_Hints {
         }
 
         // Domini custom configurati dall'utente
-        $opt = class_exists( 'Olo_Performance_Settings' ) ? Olo_Performance_Settings::get_option() : [];
+        $opt = class_exists( 'Olobuild_Performance_Settings' ) ? Olobuild_Performance_Settings::get_option() : [];
         $dns = preg_split( '/\r\n|\r|\n/', (string) ( $opt['dns_prefetch_domains'] ?? '' ) );
         foreach ( $dns as $d ) {
             $d = trim( $d );
@@ -322,7 +322,7 @@ class Olo_Performance_Hints {
     public function lazy_videos_html( $html ) {
         // UIkit subset: apprendi le famiglie usate / inietta fallback se servono
         if ( $this->buffer_uikit_subset && is_string( $html ) ) {
-            $html = Olo_Uikit_Subset::learn_and_heal( $html );
+            $html = Olobuild_Uikit_Subset::learn_and_heal( $html );
         }
 
         if ( ! $this->buffer_lazy_videos || ! is_string( $html ) || stripos( $html, '<video' ) === false ) {
@@ -350,7 +350,7 @@ class Olo_Performance_Hints {
 
         if ( $this->lazy_video_count > 0 ) {
             // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript -- helper lazy-video iniettato da un filtro di output-buffer che gira dopo wp_head/wp_footer; in questa fase l'enqueue non è più possibile
-            $script = '<script src="' . esc_url( OLO_URL . 'assets/js/olo-lazy-video.js' ) . '?ver=' . rawurlencode( OLO_VERSION ) . '" defer></script>';
+            $script = '<script src="' . esc_url( OLOBUILD_URL . 'assets/js/olo-lazy-video.js' ) . '?ver=' . rawurlencode( OLOBUILD_VERSION ) . '" defer></script>';
             $pos    = strripos( $html, '</body>' );
             $html   = ( false !== $pos ) ? substr_replace( $html, $script, $pos, 0 ) : $html . $script;
         }
@@ -406,7 +406,7 @@ class Olo_Performance_Hints {
             return '';
         }
 
-        $url = Olo_Asset_Optimizer::cache_css( $css, $template_id );
+        $url = Olobuild_Asset_Optimizer::cache_css( $css, $template_id );
         return $url ? $url : '';
     }
 

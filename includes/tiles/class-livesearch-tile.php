@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_LiveSearch_Tile extends Olo_Tile_Base {
+class Olobuild_LiveSearch_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'livesearch';
     protected $name     = 'Ricerca Live';
@@ -274,10 +274,10 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
         $height      = max( 32, min( 72, intval( $s['input_height'] ) ) );
         $font_size   = max( 12, min( 24, intval( $s['input_font_size'] ) ) );
         $modal_width = max( 400, min( 800, intval( $s['modal_width'] ?? 560 ) ) );
-        $input_radius = Olo_Tile_Utils::border_radius( $s['input_border_radius'] ?? 8 );
-        $input_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['input_border_radius_hover'] ?? null );
-        $results_radius = Olo_Tile_Utils::border_radius( $s['results_border_radius'] ?? 10 );
-        $results_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['results_border_radius_hover'] ?? null );
+        $input_radius = Olobuild_Tile_Utils::border_radius( $s['input_border_radius'] ?? 8 );
+        $input_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['input_border_radius_hover'] ?? null );
+        $results_radius = Olobuild_Tile_Utils::border_radius( $s['results_border_radius'] ?? 10 );
+        $results_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['results_border_radius_hover'] ?? null );
 
         // Animated placeholder
         $anim_ph = ! empty( $s['animated_placeholder'] );
@@ -334,7 +334,7 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
             '--ls-results-max-h'      => max( 200, min( 800, intval( $s['results_max_height'] ) ) ) . 'px',
             '--ls-thumb-width'        => max( 32, min( 120, intval( $s['thumb_width'] ) ) ) . 'px',
             '--ls-thumb-height'       => max( 32, min( 120, intval( $s['thumb_height'] ) ) ) . 'px',
-            '--ls-thumb-radius'       => Olo_Tile_Utils::border_radius( $s['thumb_radius'] ?? 0 ),
+            '--ls-thumb-radius'       => Olobuild_Tile_Utils::border_radius( $s['thumb_radius'] ?? 0 ),
             '--ls-columns'            => max( 1, min( 4, intval( $s['results_columns'] ?? 1 ) ) ),
         ];
         if ( $mode === 'modal' ) {
@@ -352,7 +352,7 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <?php if ( $input_radius_hover_css !== '' || $results_radius_hover_css !== '' ) : ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: esc_attr()'d element id and Olo_Tile_Utils::radius_force_css() absint-built radii. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: esc_attr()'d element id and Olobuild_Tile_Utils::radius_force_css() absint-built radii. ?>
         <style>
             #<?php echo esc_attr( $element_id ); ?> .olo-ls-input{transition:border-radius 400ms cubic-bezier(.4,0,.2,1),border-color 0.2s}
             #<?php echo esc_attr( $element_id ); ?> .olo-ls-results{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}
@@ -364,7 +364,7 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
         <div id="<?php echo esc_attr( $element_id ); ?>"
              class="olo-livesearch olo-livesearch--<?php echo esc_attr( $mode ); ?> olo-ls-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>"
              data-livesearch="<?php echo esc_attr( $config_b64 ); ?>"
-             style="<?php echo $css_vars; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built by Olo_Tile_Base::build_style() which esc_attr()s every value ?>">
+             style="<?php echo $css_vars; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built by Olobuild_Tile_Base::build_style() which esc_attr()s every value ?>">
 
             <?php if ( $mode === 'modal' ) : ?>
                 <!-- Trigger: solo icona -->
@@ -373,7 +373,7 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
                 </button>
 
                 <!-- Overlay modale (verr&agrave; spostato in <body> dal JS) -->
-                <div class="olo-ls-overlay" style="<?php echo $css_vars; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built by Olo_Tile_Base::build_style() which esc_attr()s every value ?>">
+                <div class="olo-ls-overlay" style="<?php echo $css_vars; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built by Olobuild_Tile_Base::build_style() which esc_attr()s every value ?>">
                     <div class="olo-ls-backdrop"></div>
                     <div class="olo-ls-modal">
                         <div class="olo-ls-field">
@@ -439,8 +439,8 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$element_id}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$element_id}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $element_id is internally generated
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
+            if ( $border_css ) echo ".{$element_id}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_css() from sanitized settings; $element_id is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *   - sistema base si occupa di padding/margin/border-radius/sfondo
  *   - headline_align 4 opzioni (incluso justify)
  */
-class Olo_SectionHeader_Tile extends Olo_Tile_Base {
+class Olobuild_SectionHeader_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'section-header';
     protected $name     = 'Section Header';

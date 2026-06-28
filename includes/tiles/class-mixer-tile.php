@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * Estratto dai demo OLOthemes (setupMixer). Render == Vue (MixerTile.vue).
  * Blend = media RGB (no color-mix). Runtime inline scoped, senza '&&' né '<'/'>'.
  */
-class Olo_Mixer_Tile extends Olo_Tile_Base {
+class Olobuild_Mixer_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'mixer';
     protected $name     = 'Mixer';

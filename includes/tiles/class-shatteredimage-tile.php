@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
+class Olobuild_ShatteredImage_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'shatteredimage';
     protected $name     = 'Shattered Image';
@@ -446,8 +446,8 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
         }
         $position   = esc_attr( $obj_pos );
         $gap_color  = $this->safe_color_css( $s['gap_color'] ) ?: 'transparent';
-        $radius     = Olo_Tile_Utils::border_radius( $s['border_radius_outer'] ?? 0 );
-        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_outer_hover'] ?? null );
+        $radius     = Olobuild_Tile_Utils::border_radius( $s['border_radius_outer'] ?? 0 );
+        $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_outer_hover'] ?? null );
         $bw         = max( 0, min( 10, intval( $s['border_width'] ) ) );
         $bc         = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $kb_on      = ! empty( $s['kenburns'] );
@@ -535,7 +535,7 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
         ] ) . $extra_style;
 
         if ( $radius_hover_css !== '' ) {
-            echo '<style>.' . $sh_uid . ':hover{border-radius:' . $radius_hover_css . ' !important}</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $radius_hover_css built by Olo_Tile_Utils::radius_force_css() from absint() values; $sh_uid is internally generated
+            echo '<style>.' . $sh_uid . ':hover{border-radius:' . $radius_hover_css . ' !important}</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $radius_hover_css built by Olobuild_Tile_Utils::radius_force_css() from absint() values; $sh_uid is internally generated
         }
         echo '<div class="olo-shattered ' . $sh_uid . '" style="' . $container_style . '"' . $data_attrs . $a11y_attrs . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_style built by build_style() (esc_attr per value); $data_attrs built above from esc_attr( $uid ) and a clamped intval(); $a11y_attrs is esc_attr()'d aria-label; $sh_uid is internally generated
 
@@ -617,8 +617,8 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized border settings
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border helpers from sanitized border settings
         }
         return ob_get_clean();
     }

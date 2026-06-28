@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Olo_Debug_Bar {
+class Olobuild_Debug_Bar {
 
 	private static $rendered = [];
 
@@ -16,7 +16,7 @@ class Olo_Debug_Bar {
 			return;
 		}
 
-		add_action( 'olo_template_rendered', [ __CLASS__, 'collect' ], 10, 3 );
+		add_action( 'olobuild_template_rendered', [ __CLASS__, 'collect' ], 10, 3 );
 		add_action( 'admin_bar_menu', [ __CLASS__, 'add_bar_nodes' ], 999 );
 		add_action( 'wp_head', [ __CLASS__, 'head_css' ] );
 	}

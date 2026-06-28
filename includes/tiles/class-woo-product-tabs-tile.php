@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Woo_Product_Tabs_Tile extends Olo_Tile_Base {
+class Olobuild_Woo_Product_Tabs_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'woo_product_tabs';
     protected $name     = 'Tab Prodotto';
@@ -35,7 +35,7 @@ class Olo_Woo_Product_Tabs_Tile extends Olo_Tile_Base {
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
             return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
-                 . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
+                 . esc_html( olobuild_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
 
@@ -43,11 +43,12 @@ class Olo_Woo_Product_Tabs_Tile extends Olo_Tile_Base {
 
         global $product;
         if ( ! is_a( $product, 'WC_Product' ) ) {
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- global $product di WooCommerce, non un global definito da olobuild
             $product = wc_get_product( get_the_ID() );
         }
         if ( ! $product ) {
             return '<div style="padding:20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">'
-                 . esc_html( olo_t( 'Nessun prodotto disponibile in questo contesto' ) )
+                 . esc_html( olobuild_t( 'Nessun prodotto disponibile in questo contesto' ) )
                  . '</div>';
         }
 
@@ -62,6 +63,7 @@ class Olo_Woo_Product_Tabs_Tile extends Olo_Tile_Base {
 
         // Get WooCommerce product tabs
         setup_postdata( $product->get_id() );
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- hook di terze parti (WooCommerce / WordPress core / OLOlang), non un hook di olobuild
         $tabs = apply_filters( 'woocommerce_product_tabs', [] );
 
         // Filter tabs based on settings
@@ -77,7 +79,7 @@ class Olo_Woo_Product_Tabs_Tile extends Olo_Tile_Base {
 
         if ( empty( $tabs ) ) {
             return '<div style="padding:20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">'
-                 . esc_html( olo_t( 'Nessuna tab disponibile per questo prodotto' ) )
+                 . esc_html( olobuild_t( 'Nessuna tab disponibile per questo prodotto' ) )
                  . '</div>';
         }
 
@@ -233,8 +235,8 @@ class Olo_Woo_Product_Tabs_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized border settings
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border helpers from sanitized border settings
         }
         return ob_get_clean();
     }

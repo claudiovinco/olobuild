@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *     né entra nell'albero di accessibilità; il contenuto dietro resta intatto.
  *   - Additivo: chiavi salvate stabili.
  */
-class Olo_Crtoverlay_Tile extends Olo_Tile_Base {
+class Olobuild_Crtoverlay_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'crtoverlay';
     protected $name     = 'Overlay CRT';

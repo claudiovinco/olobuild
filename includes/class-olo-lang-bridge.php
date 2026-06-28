@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Registrazione automatica: l'hook scatta solo se OLOlang è attivo e lancia l'azione,
  * altrimenti nessun side effect.
  */
-class Olo_Lang_Bridge {
+class Olobuild_Lang_Bridge {
 
     public static function init() {
         add_action( 'olo_lang_post_duplicated', [ __CLASS__, 'on_post_duplicated' ], 10, 3 );
@@ -39,11 +39,11 @@ class Olo_Lang_Bridge {
         if ( get_post_meta( $copy_id, '_olo_template_id', true ) ) {
             return;
         }
-        if ( ! class_exists( 'Olo_Database' ) ) {
+        if ( ! class_exists( 'Olobuild_Database' ) ) {
             return;
         }
 
-        $db  = new Olo_Database();
+        $db  = new Olobuild_Database();
         $src = $db->get_template( $src_tpl );
         if ( ! $src ) {
             return;

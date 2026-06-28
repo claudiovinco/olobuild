@@ -7,7 +7,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class Olo_Template_Library {
+class Olobuild_Template_Library {
 
     private static $instance = null;
 
@@ -22,7 +22,7 @@ class Olo_Template_Library {
      * Get all available templates grouped by category.
      */
     public function get_templates() {
-        $file = OLO_PATH . 'assets/data/template-library.json';
+        $file = OLOBUILD_PATH . 'assets/data/template-library.json';
         if ( ! file_exists( $file ) ) {
             return [];
         }
@@ -38,7 +38,7 @@ class Olo_Template_Library {
         }
 
         // Load additional page templates from separate files
-        $pages_dir = OLO_PATH . 'assets/data/page-templates/';
+        $pages_dir = OLOBUILD_PATH . 'assets/data/page-templates/';
         if ( is_dir( $pages_dir ) ) {
             foreach ( glob( $pages_dir . '*.json' ) as $page_file ) {
                 $page_json = file_get_contents( $page_file );

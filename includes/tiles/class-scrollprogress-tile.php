@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Scrollprogress_Tile extends Olo_Tile_Base {
+class Olobuild_Scrollprogress_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'scrollprogress';
     protected $name     = 'Barra Scroll';

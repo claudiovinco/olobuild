@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_OloHeader_Tile extends Olo_Tile_Base {
+class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'oloheader';
     protected $name     = 'Mega Menu / Site Header';
@@ -42,24 +42,24 @@ class Olo_OloHeader_Tile extends Olo_Tile_Base {
     private function render_fonts() {
         if ( self::$fonts_loaded ) { return; }
         self::$fonts_loaded = true;
-        // Font self-hosted via Olo_Font_Host: i woff2 sono scaricati una volta dal server
+        // Font self-hosted via Olobuild_Font_Host: i woff2 sono scaricati una volta dal server
         // e serviti localmente. Nessuna richiesta del visitatore a Google (coerente con la
         // privacy dichiarata dal plugin) e niente <link>/<preconnect> verso il CDN.
-        if ( class_exists( 'Olo_Font_Host' ) ) {
-            $css = Olo_Font_Host::get_font_face_css( [ 'Manrope', 'JetBrains Mono' ], '400;500;600;700;800' );
+        if ( class_exists( 'Olobuild_Font_Host' ) ) {
+            $css = Olobuild_Font_Host::get_font_face_css( [ 'Manrope', 'JetBrains Mono' ], '400;500;600;700;800' );
             if ( $css ) {
-                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- @font-face CSS generato internamente da Olo_Font_Host (URL woff2 locali esc_url'd a monte); l'escape romperebbe il CSS valido
+                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- @font-face CSS generato internamente da Olobuild_Font_Host (URL woff2 locali esc_url'd a monte); l'escape romperebbe il CSS valido
                 echo '<style id="olo-oloheader-fonts">' . $css . '</style>';
             }
         }
     }
 
     /**
-     * Default mirror di src/config/elements/oloheader.js (logo via OLO_URL come
+     * Default mirror di src/config/elements/oloheader.js (logo via OLOBUILD_URL come
      * fallback frontend; le istanze reali salvano i propri valori dal config JS).
      */
     public function get_defaults() {
-        $logo = function ( $f ) { return OLO_URL . 'assets/img/menu/' . $f; };
+        $logo = function ( $f ) { return OLOBUILD_URL . 'assets/img/menu/' . $f; };
         return [
             // Brand
             'brand_logo'        => $logo( 'olotheme-orizz.png' ),
@@ -463,7 +463,7 @@ class Olo_OloHeader_Tile extends Olo_Tile_Base {
     }
 
     private function render_html( $s, $uid ) {
-        $brand_logo = $s['brand_logo'] ?: ( OLO_URL . 'assets/img/menu/olotheme-orizz.png' );
+        $brand_logo = $s['brand_logo'] ?: ( OLOBUILD_URL . 'assets/img/menu/olotheme-orizz.png' );
         $nav_items  = (array) ( $s['nav_items'] ?? [] );
         $columns    = $this->group_products( $s['mega_products'] ?? [] );
         $cur        = strtolower( (string) ( $s['lang_current'] ?? 'it' ) );
@@ -730,6 +730,7 @@ class Olo_OloHeader_Tile extends Olo_Tile_Base {
      */
     private function ololang_languages() {
         // <!-- TODO: agganciare l'API reale di OLOlang quando disponibile. -->
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- hook di terze parti (WooCommerce / WordPress core / OLOlang), non un hook di olobuild
         $langs = apply_filters( 'ololang_active_languages', [] );
         if ( empty( $langs ) || ! is_array( $langs ) ) { return []; }
         $out = [];

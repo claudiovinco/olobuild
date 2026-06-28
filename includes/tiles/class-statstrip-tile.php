@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Stat Strip — banda di statistiche (valore + etichetta) con divisori.
  * Generica e token-first: valore dal font heading del tema, etichetta in monospace.
  */
-class Olo_StatStrip_Tile extends Olo_Tile_Base {
+class Olobuild_StatStrip_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'statstrip';
     protected $name     = 'Stat Strip';

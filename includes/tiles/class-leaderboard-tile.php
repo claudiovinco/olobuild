@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *  - A11y: ogni barra role=progressbar + aria-valuenow/min/max; valori sempre come testo.
  *  - Performance: IO attiva l'animazione una sola volta quando la classifica entra nel viewport.
  */
-class Olo_Leaderboard_Tile extends Olo_Tile_Base {
+class Olobuild_Leaderboard_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'leaderboard';
     protected $name     = 'Classifica (barre XP)';
@@ -354,8 +354,8 @@ class Olo_Leaderboard_Tile extends Olo_Tile_Base {
         $wrap_decls = $border_css . $shadow_css;
         if ( $wrap_decls || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $wrap_decls ) { echo ".{$uid}{{$wrap_decls}}"; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() and collect_shadow_css() from sanitized values (intval/safe color whitelist/fixed presets)
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized values
+            if ( $wrap_decls ) { echo ".{$uid}{{$wrap_decls}}"; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base::build_border_css() and collect_shadow_css() from sanitized values (intval/safe color whitelist/fixed presets)
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border helpers from sanitized values
         }
         return ob_get_clean();
     }

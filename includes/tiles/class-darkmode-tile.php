@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Darkmode_Tile extends Olo_Tile_Base {
+class Olobuild_Darkmode_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'darkmode';
     protected $name     = 'Dark Mode Toggle';
@@ -229,10 +229,10 @@ class Olo_Darkmode_Tile extends Olo_Tile_Base {
              data-olo-darkmode="1"
              data-save="<?php echo $save_pref ? '1' : '0'; ?>"
              role="switch"
-             aria-label="<?php echo esc_attr( olo_t( 'Dark mode toggle' ) ); ?>">
+             aria-label="<?php echo esc_attr( olobuild_t( 'Dark mode toggle' ) ); ?>">
 
             <?php if ( $style === 'toggle' ) : ?>
-                <button type="button" class="olo-dm-track" aria-label="<?php echo esc_attr( olo_t( 'Toggle dark mode' ) ); ?>">
+                <button type="button" class="olo-dm-track" aria-label="<?php echo esc_attr( olobuild_t( 'Toggle dark mode' ) ); ?>">
                     <span class="olo-dm-thumb" style="position:relative;">
                         <span class="olo-dm-icon-sun"><?php echo $sun_sm; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup built above from hardcoded paths and intval'd sizes only ?></span>
                         <span class="olo-dm-icon-moon"><?php echo $moon_sm; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup built above from hardcoded paths and intval'd sizes only ?></span>
@@ -240,13 +240,13 @@ class Olo_Darkmode_Tile extends Olo_Tile_Base {
                 </button>
 
             <?php elseif ( $style === 'icon' ) : ?>
-                <button type="button" class="olo-dm-icon-btn" aria-label="<?php echo esc_attr( olo_t( 'Toggle dark mode' ) ); ?>" style="position:relative;">
+                <button type="button" class="olo-dm-icon-btn" aria-label="<?php echo esc_attr( olobuild_t( 'Toggle dark mode' ) ); ?>" style="position:relative;">
                     <span class="olo-dm-icon-sun"><?php echo $sun_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup built above from hardcoded paths and intval'd sizes only ?></span>
                     <span class="olo-dm-icon-moon"><?php echo $moon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup built above from hardcoded paths and intval'd sizes only ?></span>
                 </button>
 
             <?php else : ?>
-                <button type="button" class="olo-dm-button" aria-label="<?php echo esc_attr( olo_t( 'Toggle dark mode' ) ); ?>">
+                <button type="button" class="olo-dm-button" aria-label="<?php echo esc_attr( olobuild_t( 'Toggle dark mode' ) ); ?>">
                     <span class="olo-dm-icon-sun"><?php echo $sun_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup built above from hardcoded paths and intval'd sizes only ?></span>
                     <span class="olo-dm-icon-moon"><?php echo $moon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup built above from hardcoded paths and intval'd sizes only ?></span>
                     <span class="olo-dm-text-light"><?php echo esc_html( $s['button_text_light'] ); ?></span>

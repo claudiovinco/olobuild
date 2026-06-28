@@ -5,9 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Olo_Newsletter — gestore dedicato delle iscrizioni newsletter.
+ * Olobuild_Newsletter — gestore dedicato delle iscrizioni newsletter.
  *
- * A differenza del form di contatto (Olo_Form_Handler), la newsletter ha
+ * A differenza del form di contatto (Olobuild_Form_Handler), la newsletter ha
  * bisogno di una vera LISTA di iscritti persistente, non di una semplice
  * email all'admin. Questa classe fornisce:
  *
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * La tile `newsletter` invia qui il submit (vedi class-newsletter-tile.php).
  */
-class Olo_Newsletter {
+class Olobuild_Newsletter {
 
     /** Versione schema DB — bump per forzare dbDelta. */
     const DB_VERSION = '1.0.0';
@@ -183,7 +183,7 @@ class Olo_Newsletter {
 
     /** Notifica email all'admin per ogni nuovo iscritto (disattivabile). */
     private static function notify_admin( $email, $name, $source ) {
-        if ( ! apply_filters( 'olo_newsletter_notify_admin', true ) ) {
+        if ( ! apply_filters( 'olobuild_newsletter_notify_admin', true ) ) {
             return;
         }
         $to        = get_option( 'admin_email' );
@@ -274,8 +274,8 @@ class Olo_Newsletter {
         fwrite( $out, "\xEF\xBB\xBF" );
         fputcsv( $out, [ 'Email', 'Nome', 'Origine', 'Stato', 'IP', 'Data' ], ';' );
         foreach ( (array) $rows as $r ) {
-            // olo_csv_safe: email/name/source arrivano dal form pubblico → anti CSV formula injection.
-            fputcsv( $out, array_map( 'olo_csv_safe', [ $r['email'], $r['name'], $r['source'], $r['status'], $r['ip_address'], $r['created_at'] ] ), ';' );
+            // olobuild_csv_safe: email/name/source arrivano dal form pubblico → anti CSV formula injection.
+            fputcsv( $out, array_map( 'olobuild_csv_safe', [ $r['email'], $r['name'], $r['source'], $r['status'], $r['ip_address'], $r['created_at'] ] ), ';' );
         }
         // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- closing the php://output CSV stream
         fclose( $out );

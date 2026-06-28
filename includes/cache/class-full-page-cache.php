@@ -1,6 +1,6 @@
 <?php
 /**
- * Olo_FullPage_Cache — full-page cache di OLObuild.
+ * Olobuild_FullPage_Cache — full-page cache di OLObuild.
  *
  * Orchestra il drop-in advanced-cache.php (che fa il lavoro vero, prima del bootstrap
  * di WordPress): lo installa/rimuove, gestisce il define WP_CACHE in wp-config.php,
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_FullPage_Cache {
+class Olobuild_FullPage_Cache {
 
     /** Opzione condivisa col pannello Performance. */
     const OPT = 'olo_performance';
@@ -56,7 +56,7 @@ class Olo_FullPage_Cache {
 
     private static function cache_dir()     { return WP_CONTENT_DIR . '/cache/olobuild/'; }
     private static function dropin_path()   { return WP_CONTENT_DIR . '/advanced-cache.php'; }
-    private static function dropin_source() { return OLO_PATH . 'includes/cache/advanced-cache.php'; }
+    private static function dropin_source() { return OLOBUILD_PATH . 'includes/cache/advanced-cache.php'; }
     private static function config_path()   { return self::cache_dir() . 'fpc-config.php'; }
 
     /* ── reazione al cambio impostazioni ───────────────────── */
@@ -215,7 +215,7 @@ class Olo_FullPage_Cache {
         }
 
         // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export -- var_export() serializza l'array di config in un file PHP valido (config del drop-in), non è codice di debug
-        $php = "<?php\n// Generato da Olo_FullPage_Cache: non modificare a mano.\nreturn " . var_export( $cfg, true ) . ";\n";
+        $php = "<?php\n// Generato da Olobuild_FullPage_Cache: non modificare a mano.\nreturn " . var_export( $cfg, true ) . ";\n";
 
         return (bool) @file_put_contents( self::config_path(), $php, LOCK_EX );
     }

@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Fragment_Tile extends Olo_Tile_Base {
+class Olobuild_Fragment_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'fragment';
     protected $name     = 'Frammento';
@@ -50,7 +50,7 @@ class Olo_Fragment_Tile extends Olo_Tile_Base {
 
         // Render children if present
         if ( ! empty( $node['children'] ) && is_array( $node['children'] ) ) {
-            $manager = Olo_Tile_Manager::instance();
+            $manager = Olobuild_Tile_Manager::instance();
             foreach ( $node['children'] as $child ) {
                 $child_type = $child['type'] ?? '';
                 $tile_instance = $manager->get_tile( $child_type );

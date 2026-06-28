@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Meridian, Pulse, Cadence, Ledger «how it works», ecc.): griglia a N colonne, numero
  * grande accent, titolo, descrizione. Nessuna card/bordo salvo che richiesti.
  */
-class Olo_Process_Steps_Tile extends Olo_Tile_Base {
+class Olobuild_Process_Steps_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'process-steps';
     protected $name     = 'Process Steps';

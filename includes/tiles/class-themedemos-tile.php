@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * orizzontale, hover lift, nessun JS runtime. Render == Vue (ThemeDemosTile.vue).
  * Estratta dal blueprint "Clod — Evoluzione v2" (.rs__demos).
  */
-class Olo_ThemeDemos_Tile extends Olo_Tile_Base {
+class Olobuild_ThemeDemos_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'themedemos';
     protected $name     = 'Demo temi (mini anteprime)';
@@ -69,8 +69,8 @@ class Olo_ThemeDemos_Tile extends Olo_Tile_Base {
         // ── KIT standard OLObuild: sfondo completo + ombra + bordo sul contenitore ──
         $bg_obj  = $s['bg'] ?? null;
         $bg_decl = '';
-        if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && $bg_obj['type'] !== 'none' && class_exists( 'Olo_CSS_Builder' ) ) {
-            $bg_decl = ( new Olo_CSS_Builder() )->get_bg_inline_css( $bg_obj );
+        if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && $bg_obj['type'] !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
+            $bg_decl = ( new Olobuild_CSS_Builder() )->get_bg_inline_css( $bg_obj );
         }
         $shadow_css        = $this->build_shadow_decl( $s );
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -85,7 +85,7 @@ class Olo_ThemeDemos_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist (or fixed var()/color-mix literals), sizes via intval() with min()/max() clamps, fixed font-stack literals, background/shadow/border via the Olo_CSS_Builder/Olo_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist (or fixed var()/color-mix literals), sizes via intval() with min()/max() clamps, fixed font-stack literals, background/shadow/border via the Olobuild_CSS_Builder/Olobuild_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?>{font-family:<?php echo $sans; ?>;<?php echo $box_decl; ?>}
             .<?php echo $uid; ?> .otd-row{display:flex;gap:<?php echo $gap; ?>px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:14px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;}
@@ -153,7 +153,7 @@ class Olo_ThemeDemos_Tile extends Olo_Tile_Base {
     /**
      * Restituisce la dichiarazione box-shadow (valore, senza "box-shadow:")
      * dal setting shadow (preset sm/md/lg/xl o custom). '' se none.
-     * Copiato dal pattern standard OLObuild (cfr. Olo_CategoryRail_Tile).
+     * Copiato dal pattern standard OLObuild (cfr. Olobuild_CategoryRail_Tile).
      */
     private function build_shadow_decl( $s ) {
         $preset = $s['shadow'] ?? 'none';

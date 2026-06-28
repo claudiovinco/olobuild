@@ -1,15 +1,15 @@
 <?php
 /**
- * Olo_Uikit_Subset — serve un subset di uikit.min.css con i soli componenti
+ * Olobuild_Uikit_Subset — serve un subset di uikit.min.css con i soli componenti
  * usati dal sito, appreso automaticamente dall'HTML renderizzato.
  *
- * Architettura (gemella di Olo_Page_CSS, ma auto-appresa):
+ * Architettura (gemella di Olobuild_Page_CSS, ma auto-appresa):
  * - uikit.min.css viene tokenizzato in blocchi e ogni blocco è classificato
  *   per FAMIGLIA = primo segmento dopo `uk-` dei token di classe nel selettore
  *   (.uk-card-default → card). Classi di stato globali (uk-light, uk-open…)
  *   sono trasparenti per la classificazione; blocchi senza token → core.
  * - L'insieme delle famiglie usate dal sito è una UNION sitewide appresa:
- *   l'output buffer (Olo_Performance_Hints) scansiona ogni pagina servita
+ *   l'output buffer (Olobuild_Performance_Hints) scansiona ogni pagina servita
  *   e fa il merge dei token trovati nell'opzione `olo_uikit_families`.
  *   Union sitewide = stesso file su tutte le pagine = cache browser calda
  *   nella navigazione interna.
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Uikit_Subset {
+class Olobuild_Uikit_Subset {
 
     const OPT = 'olo_uikit_families';
 
@@ -82,7 +82,7 @@ class Olo_Uikit_Subset {
      * (store vuoto = fase di apprendimento, o build fallita).
      */
     public static function subset_url() {
-        $src_path = OLO_PATH . 'assets/vendor/uikit/css/uikit.min.css';
+        $src_path = OLOBUILD_PATH . 'assets/vendor/uikit/css/uikit.min.css';
         if ( ! is_readable( $src_path ) ) {
             return false;
         }
@@ -98,7 +98,7 @@ class Olo_Uikit_Subset {
         $cache_dir  = $upload_dir['basedir'] . '/olobuild-cache/';
         $cache_url  = $upload_dir['baseurl'] . '/olobuild-cache/';
         sort( $families );
-        $hash     = substr( md5( implode( ',', $families ) . '|' . (int) filemtime( $src_path ) . '|' . OLO_VERSION ), 0, 12 );
+        $hash     = substr( md5( implode( ',', $families ) . '|' . (int) filemtime( $src_path ) . '|' . OLOBUILD_VERSION ), 0, 12 );
         $filename = "olo-uikit-{$hash}.css";
         $filepath = $cache_dir . $filename;
 
@@ -163,7 +163,7 @@ class Olo_Uikit_Subset {
             $missing = array_diff( self::expand_families( $needed ), self::$served_families );
             if ( ! empty( $missing ) ) {
                 // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet -- fallback di auto-guarigione iniettato da un filtro di output-buffer (post-render); la fase di enqueue è già passata
-                $tag = '<link rel="stylesheet" href="' . esc_url( OLO_URL . 'assets/vendor/uikit/css/uikit.min.css' ) . '?ver=' . rawurlencode( OLO_VERSION ) . '" media="all" />';
+                $tag = '<link rel="stylesheet" href="' . esc_url( OLOBUILD_URL . 'assets/vendor/uikit/css/uikit.min.css' ) . '?ver=' . rawurlencode( OLOBUILD_VERSION ) . '" media="all" />';
                 $pos = strripos( $html, '</body>' );
                 $html = ( false !== $pos ) ? substr_replace( $html, $tag, $pos, 0 ) : $html . $tag;
             }
@@ -215,7 +215,7 @@ class Olo_Uikit_Subset {
      * CSS subset: core + famiglie richieste. false se la validazione fallisce.
      */
     private static function build_css( $families ) {
-        $css = file_get_contents( OLO_PATH . 'assets/vendor/uikit/css/uikit.min.css' );
+        $css = file_get_contents( OLOBUILD_PATH . 'assets/vendor/uikit/css/uikit.min.css' );
         if ( false === $css ) {
             return false;
         }

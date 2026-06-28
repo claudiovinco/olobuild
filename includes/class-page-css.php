@@ -1,6 +1,6 @@
 <?php
 /**
- * Olo_Page_CSS — CSS per-tile: serve alla pagina solo le porzioni di frontend.css
+ * Olobuild_Page_CSS — CSS per-tile: serve alla pagina solo le porzioni di frontend.css
  * relative ai tile effettivamente presenti, più il core strutturale.
  *
  * Architettura:
@@ -14,7 +14,7 @@
  *   archive/search/404, popup globali) e si serve un file combinato cachato
  *   in olobuild-cache (hash = famiglie + mtime + versione).
  * - Safety net: se a render avvenuto compare un template con famiglie non
- *   incluse (hook olo_template_rendered), viene accodato il frontend.css
+ *   incluse (hook olobuild_template_rendered), viene accodato il frontend.css
  *   completo nel footer (CSS idempotente, caso raro).
  */
 
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Page_CSS {
+class Olobuild_Page_CSS {
 
     /**
      * Famiglie di CSS separabili da frontend.css.
@@ -56,7 +56,7 @@ class Olo_Page_CSS {
 
     public static function init() {
         // Safety net: template renderizzati a runtime (shortcode nel body, nested)
-        add_action( 'olo_template_rendered', [ __CLASS__, 'ensure_template' ], 10, 1 );
+        add_action( 'olobuild_template_rendered', [ __CLASS__, 'ensure_template' ], 10, 1 );
         // Invalidazione file combinati al salvataggio di un template
         add_action( 'olo_template_saved', [ __CLASS__, 'flush_files' ] );
     }
@@ -70,7 +70,7 @@ class Olo_Page_CSS {
      * o false per usare il fallback (frontend.css intero).
      */
     public static function page_css_url() {
-        $src_path = OLO_PATH . 'assets/css/frontend.css';
+        $src_path = OLOBUILD_PATH . 'assets/css/frontend.css';
         if ( ! is_readable( $src_path ) ) {
             return false;
         }
@@ -85,7 +85,7 @@ class Olo_Page_CSS {
         $upload_dir = wp_upload_dir();
         $cache_dir  = $upload_dir['basedir'] . '/olobuild-cache/';
         $cache_url  = $upload_dir['baseurl'] . '/olobuild-cache/';
-        $hash       = substr( md5( implode( ',', $families ) . '|' . (int) filemtime( $src_path ) . '|' . OLO_VERSION ), 0, 12 );
+        $hash       = substr( md5( implode( ',', $families ) . '|' . (int) filemtime( $src_path ) . '|' . OLOBUILD_VERSION ), 0, 12 );
         $filename   = "olo-pagecss-{$hash}.css";
         $filepath   = $cache_dir . $filename;
 
@@ -117,7 +117,7 @@ class Olo_Page_CSS {
      * @return array|null Lista tipi, o null se la raccolta non è affidabile.
      */
     private static function collect_page_types() {
-        if ( ! class_exists( 'Olo_Database' ) ) {
+        if ( ! class_exists( 'Olobuild_Database' ) ) {
             return null;
         }
 
@@ -190,7 +190,7 @@ class Olo_Page_CSS {
         }
 
         // Template raccolti per ID
-        $db = new Olo_Database();
+        $db = new Olobuild_Database();
         foreach ( array_unique( array_filter( $tpl_ids ) ) as $tid ) {
             $tpl = $db->get_template( $tid );
             if ( $tpl && ! empty( $tpl['content'] ) && is_array( $tpl['content'] ) ) {
@@ -241,7 +241,7 @@ class Olo_Page_CSS {
      * @return string|false CSS, o false se la validazione fallisce.
      */
     private static function build_css( $families ) {
-        $css = file_get_contents( OLO_PATH . 'assets/css/frontend.css' );
+        $css = file_get_contents( OLOBUILD_PATH . 'assets/css/frontend.css' );
         if ( false === $css ) {
             return false;
         }
@@ -273,8 +273,8 @@ class Olo_Page_CSS {
             }
         }
 
-        if ( class_exists( 'Olo_Asset_Optimizer' ) ) {
-            $min = Olo_Asset_Optimizer::minify_css( $out );
+        if ( class_exists( 'Olobuild_Asset_Optimizer' ) ) {
+            $min = Olobuild_Asset_Optimizer::minify_css( $out );
             if ( substr_count( $min, '{' ) === substr_count( $out, '{' ) ) {
                 $out = $min;
             }
@@ -382,7 +382,7 @@ class Olo_Page_CSS {
      * ───────────────────────────────────────────── */
 
     /**
-     * olo_template_rendered: se un template non contabilizzato introduce
+     * olobuild_template_rendered: se un template non contabilizzato introduce
      * famiglie non incluse, accoda il frontend.css completo (footer).
      */
     public static function ensure_template( $template_id ) {
@@ -395,7 +395,7 @@ class Olo_Page_CSS {
         }
         self::$accounted_tpls[ $template_id ] = true;
 
-        $db  = new Olo_Database();
+        $db  = new Olobuild_Database();
         $tpl = $db->get_template( $template_id );
         if ( ! $tpl || empty( $tpl['content'] ) || ! is_array( $tpl['content'] ) ) {
             return;
@@ -405,7 +405,7 @@ class Olo_Page_CSS {
         $needed = self::families_for_types( array_keys( $types ) );
         if ( array_diff( $needed, self::$included_families ) ) {
             self::$fallback_done = true;
-            wp_enqueue_style( 'olo-frontend-full', OLO_URL . 'assets/css/frontend.css', [], OLO_VERSION );
+            wp_enqueue_style( 'olo-frontend-full', OLOBUILD_URL . 'assets/css/frontend.css', [], OLOBUILD_VERSION );
         }
     }
 

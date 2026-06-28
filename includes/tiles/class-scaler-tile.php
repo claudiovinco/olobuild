@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * mode 'scale': qty × (val/base). mode 'percent': val × (qty/100) (baker's %).
  * Render == Vue (ScalerTile.vue). Runtime inline scoped, senza '&&' né '<'/'>'.
  */
-class Olo_Scaler_Tile extends Olo_Tile_Base {
+class Olobuild_Scaler_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'scaler';
     protected $name     = 'Scaler';

@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
+class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'overlaygrid';
     protected $name     = 'Overlay Grid';
@@ -327,8 +327,8 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
                             <?php if ( $card_type === 'image' ) : ?>
                                 <?php if ( ! empty( $item['image'] ) ) : ?>
                                     <?php
-                                    $og_img = Olo_Tile_Utils::img_srcset( absint( $item['image_id'] ?? 0 ), $item['image'], $item['title'] ?? '', $img_class );
-                                    echo $this->render_hover_wrap( $og_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <img> HTML from Olo_Tile_Utils::img_srcset() and hover wrapper from render_hover_wrap(), both escape internally (esc_url/esc_attr).
+                                    $og_img = Olobuild_Tile_Utils::img_srcset( absint( $item['image_id'] ?? 0 ), $item['image'], $item['title'] ?? '', $img_class );
+                                    echo $this->render_hover_wrap( $og_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <img> HTML from Olobuild_Tile_Utils::img_srcset() and hover wrapper from render_hover_wrap(), both escape internally (esc_url/esc_attr).
                                     ?>
                                 <?php else : ?>
                                     <div class="olo-og-ph" style="height:<?php echo (int) $height; ?>px;background:#1F2937;width:100%;"></div>
@@ -388,7 +388,7 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
         </div>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- text-effect CSS built by Olo_Text_Effects::css() from whitelisted/sanitized settings.
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- text-effect CSS built by Olobuild_Text_Effects::css() from whitelisted/sanitized settings.
         $this->tfx_print_script();
 
         $border_css        = $this->build_border_css( $s['border'] ?? [] );

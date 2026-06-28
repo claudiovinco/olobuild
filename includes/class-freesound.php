@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Freesound.org API integration for free sound/audio search.
  * API docs: https://freesound.org/docs/api/
  */
-class Olo_Freesound {
+class Olobuild_Freesound {
 
     private $api_base = 'https://freesound.org/apiv2';
 
@@ -129,7 +129,7 @@ class Olo_Freesound {
 
         // Anti-SSRF: solo host Freesound (match sul dominio, non substring —
         // "freesound.org" dentro il path di un URL ostile passava il vecchio check).
-        if ( ! olo_validate_remote_media_url( $preview_url, [ 'freesound.org' ] ) ) {
+        if ( ! olobuild_validate_remote_media_url( $preview_url, [ 'freesound.org' ] ) ) {
             return new WP_Error( 'invalid_url', 'URL non valido.', [ 'status' => 400 ] );
         }
 

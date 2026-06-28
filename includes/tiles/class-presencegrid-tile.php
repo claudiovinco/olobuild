@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Performance: poll/flip girano solo dentro il viewport (IntersectionObserver), fetch debounced.
  * - Origine dati esplicita: manual | query (utenti WP) | endpoint (poll olo/v1). Vuoto → stato demo.
  */
-class Olo_Presencegrid_Tile extends Olo_Tile_Base {
+class Olobuild_Presencegrid_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'presencegrid';
     protected $name     = 'Griglia Presenze';
@@ -558,8 +558,8 @@ class Olo_Presencegrid_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid} .olo-pg-card", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) { echo ".{$uid} .olo-pg-card{{$border_css}}"; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized border settings
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized border settings
+            if ( $border_css ) { echo ".{$uid} .olo-pg-card{{$border_css}}"; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base::build_border_css() from sanitized border settings
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border helpers from sanitized border settings
         }
 
         return ob_get_clean();

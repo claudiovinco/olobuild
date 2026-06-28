@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * uppercase con parola-accento, riga sub+2 CTA. Render == Vue (MaskedVideoHeroTile.vue).
  * Nessun JS. Estratta dal blueprint OLOthemes "MaskedVideoHero".
  */
-class Olo_MaskedVideoHero_Tile extends Olo_Tile_Base {
+class Olobuild_MaskedVideoHero_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'maskedvideohero';
     protected $name     = 'Hero — Masked Video';

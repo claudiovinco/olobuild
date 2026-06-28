@@ -18,9 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '1.4.300' );
-define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
-define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
+define( 'OLOBUILD_VERSION', '1.4.300' );
+define( 'OLOBUILD_PATH', plugin_dir_path( __FILE__ ) );
+define( 'OLOBUILD_URL', plugin_dir_url( __FILE__ ) );
 
 // Polyfill str_contains() and str_starts_with() for PHP < 8.0
 if ( ! function_exists( 'str_contains' ) ) {
@@ -36,13 +36,13 @@ if ( ! function_exists( 'str_starts_with' ) ) {
 
 /**
  * Helper globale per leggere preferenze stockmedia (Configurazione → Stock media → comportamento).
- * Usato dai 4 provider Olo_Unsplash/Pexels/Pixabay/Openverse per decidere download_local + optimize_on_download.
+ * Usato dai 4 provider Olobuild_Unsplash/Pexels/Pixabay/Openverse per decidere download_local + optimize_on_download.
  */
-function olo_stockmedia_behavior() {
+function olobuild_stockmedia_behavior() {
     static $cached = null;
     if ( $cached !== null ) return $cached;
     $cached = wp_parse_args(
-        get_option( 'olo_stockmedia_behavior', [] ) ?: [],
+        get_option( 'olobuild_stockmedia_behavior', [] ) ?: [],
         [ 'preferred' => 'unsplash', 'download_local' => true, 'optimize_on_download' => false ]
     );
     return $cached;
@@ -58,7 +58,7 @@ function olo_stockmedia_behavior() {
  * @param array  $allowed_hosts Domini consentiti (es. [ 'pixabay.com' ]); vuoto = solo check generici.
  * @return bool
  */
-function olo_validate_remote_media_url( $url, $allowed_hosts = [] ) {
+function olobuild_validate_remote_media_url( $url, $allowed_hosts = [] ) {
     if ( ! is_string( $url ) || '' === $url ) {
         return false;
     }
@@ -84,7 +84,7 @@ function olo_validate_remote_media_url( $url, $allowed_hosts = [] ) {
  * = + - @ (o tab/CR) verrebbe eseguito come formula aprendo il CSV in
  * Excel/LibreOffice. Prefisso apostrofo = testo letterale per i fogli di calcolo.
  */
-function olo_csv_safe( $value ) {
+function olobuild_csv_safe( $value ) {
     if ( is_string( $value ) && $value !== '' && strpbrk( $value[0], "=+-@\t\r" ) !== false ) {
         return "'" . $value;
     }
@@ -97,17 +97,17 @@ function olo_csv_safe( $value ) {
  * import riscriverebbe opzioni GLOBALI (olo_active_header/footer/404, olo_styles,
  * page_on_front) rompendo la sandbox per tutti.
  *
- * Si attiva con `define( 'OLO_DISABLE_IMPORTS', true );` in wp-config.php — per-sito
+ * Si attiva con `define( 'OLOBUILD_DISABLE_IMPORTS', true );` in wp-config.php — per-sito
  * e non disattivabile dalla UI da un utente trial. Inerte ovunque non sia definita.
  */
-function olo_imports_disabled() {
-    return defined( 'OLO_DISABLE_IMPORTS' ) && OLO_DISABLE_IMPORTS;
+function olobuild_imports_disabled() {
+    return defined( 'OLOBUILD_DISABLE_IMPORTS' ) && OLOBUILD_DISABLE_IMPORTS;
 }
 
 /** WP_Error 403 standard per gli endpoint REST di import quando disabilitati. */
-function olo_imports_disabled_error() {
+function olobuild_imports_disabled_error() {
     return new WP_Error(
-        'olo_imports_disabled',
+        'olobuild_imports_disabled',
         __( 'L\'importazione di temi e template è disabilitata su questo sito.', 'olobuild' ),
         [ 'status' => 403 ]
     );
@@ -121,7 +121,7 @@ function olo_imports_disabled_error() {
  * @param int    $quality     Qualità 0-100.
  * @return string|false Path del WebP creato (rimpiazza source) oppure false.
  */
-function olo_convert_to_webp( $source_path, $quality = 82 ) {
+function olobuild_convert_to_webp( $source_path, $quality = 82 ) {
     if ( ! file_exists( $source_path ) ) return false;
     $info = @getimagesize( $source_path );
     if ( ! $info || ! in_array( $info[2], [ IMAGETYPE_JPEG, IMAGETYPE_PNG ], true ) ) return false;
@@ -165,9 +165,9 @@ function olo_convert_to_webp( $source_path, $quality = 82 ) {
 add_action( 'init', function() {
     $locale = determine_locale();
     if ( ! str_starts_with( $locale, 'it' ) ) {
-        $mo = OLO_PATH . 'languages/olobuild-' . $locale . '.mo';
+        $mo = OLOBUILD_PATH . 'languages/olobuild-' . $locale . '.mo';
         if ( ! file_exists( $mo ) ) {
-            $mo = OLO_PATH . 'languages/olobuild-en_US.mo';
+            $mo = OLOBUILD_PATH . 'languages/olobuild-en_US.mo';
         }
         if ( file_exists( $mo ) ) {
             load_textdomain( 'olobuild', $mo );
@@ -196,22 +196,22 @@ add_filter( 'upload_mimes', function( $mimes ) {
  * @param string $svg  Raw SVG content.
  * @return string      Sanitized SVG or empty string if invalid.
  */
-function olo_sanitize_svg( $svg ) {
+function olobuild_sanitize_svg( $svg ) {
     if ( empty( $svg ) ) return '';
 
     // Primary: use DOMDocument for proper XML parsing (prevents XXE, handles encodings)
     if ( class_exists( 'DOMDocument' ) ) {
-        return olo_sanitize_svg_dom( $svg );
+        return olobuild_sanitize_svg_dom( $svg );
     }
 
     // Fallback: regex-based sanitization for hosts without DOMDocument
-    return olo_sanitize_svg_regex( $svg );
+    return olobuild_sanitize_svg_regex( $svg );
 }
 
 /**
  * SVG sanitization via DOMDocument — XML-aware, handles encoded entities.
  */
-function olo_sanitize_svg_dom( $svg ) {
+function olobuild_sanitize_svg_dom( $svg ) {
     // XXE prevention: LIBXML_NONET disables network access.
     // libxml_disable_entity_loader() was removed in PHP 8.2 (entities disabled by default).
     libxml_use_internal_errors( true );
@@ -305,7 +305,7 @@ function olo_sanitize_svg_dom( $svg ) {
 /**
  * SVG sanitization fallback via regex (for hosts without DOMDocument).
  */
-function olo_sanitize_svg_regex( $svg ) {
+function olobuild_sanitize_svg_regex( $svg ) {
     // Remove XML declaration and DOCTYPE (prevent XXE)
     $svg = preg_replace( '/<\?xml[^?]*\?>/i', '', $svg );
     $svg = preg_replace( '/<!DOCTYPE[^>]*>/i', '', $svg );
@@ -381,15 +381,15 @@ add_filter( 'wp_check_filetype_and_ext', function( $data, $file, $filename, $mim
  * @param string $text Testo originale (italiano).
  * @return string Testo tradotto o originale.
  */
-function olo_t( $text ) {
-    $map = olo_get_translations_map();
+function olobuild_t( $text ) {
+    $map = olobuild_get_translations_map();
     if ( isset( $map[ $text ] ) ) {
         return $map[ $text ];
     }
     // Fallback gettext: con locale non-italiano le stringhe sorgente (IT)
     // escono dai .mo bundled — es. sito con lingua default EN via OLOlang,
     // dove la mappa DB è vuota per la lingua default.
-    return __( $text, 'olobuild' ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- runtime catalog lookup by design (olo_t wraps source strings)
+    return __( $text, 'olobuild' ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText -- runtime catalog lookup by design (olobuild_t wraps source strings)
 }
 
 /**
@@ -399,7 +399,7 @@ function olo_t( $text ) {
  *
  * @return array<string,string>
  */
-function olo_get_translations_map() {
+function olobuild_get_translations_map() {
     static $map = null;
     if ( $map !== null ) return $map;
 
@@ -428,7 +428,7 @@ function olo_get_translations_map() {
 /**
  * Ritorna il locale corrente (olo-lang > WP locale) in formato xx_XX.
  */
-function olo_current_locale() {
+function olobuild_current_locale() {
     if ( class_exists( 'Olo_Lang_Language' ) ) {
         $code = Olo_Lang_Language::detect_current_lang();
         $known = [
@@ -441,69 +441,69 @@ function olo_current_locale() {
     return get_locale();
 }
 
-require_once OLO_PATH . 'includes/class-database.php';
-require_once OLO_PATH . 'includes/class-tile-manager.php';
-require_once OLO_PATH . 'includes/class-rest-api.php';
-require_once OLO_PATH . 'includes/class-dynamic-content.php';
-require_once OLO_PATH . 'includes/class-style-system.php';
-require_once OLO_PATH . 'includes/class-font-host.php';
-require_once OLO_PATH . 'includes/class-css-builder.php';
-require_once OLO_PATH . 'includes/class-animation-builder.php';
-require_once OLO_PATH . 'includes/class-frontend-renderer.php';
-require_once OLO_PATH . 'includes/class-asset-optimizer.php';
-require_once OLO_PATH . 'includes/class-page-css.php';
-require_once OLO_PATH . 'includes/class-uikit-subset.php';
-require_once OLO_PATH . 'includes/class-template-library.php';
-require_once OLO_PATH . 'includes/class-page-integration.php';
-require_once OLO_PATH . 'includes/class-header-integration.php';
-require_once OLO_PATH . 'includes/class-footer-integration.php';
-require_once OLO_PATH . 'includes/class-single-integration.php';
-require_once OLO_PATH . 'includes/class-archive-integration.php';
-require_once OLO_PATH . 'includes/class-404-integration.php';
-require_once OLO_PATH . 'includes/class-search-results-integration.php';
-require_once OLO_PATH . 'includes/class-location-single.php';
-require_once OLO_PATH . 'includes/class-form-handler.php';
-require_once OLO_PATH . 'includes/class-unsplash.php';
-require_once OLO_PATH . 'includes/class-pexels.php';
-require_once OLO_PATH . 'includes/class-pixabay.php';
-require_once OLO_PATH . 'includes/class-openverse.php';
-require_once OLO_PATH . 'includes/class-freesound.php';
-require_once OLO_PATH . 'includes/class-media-search.php';
-require_once OLO_PATH . 'includes/class-custom-fonts.php';
-require_once OLO_PATH . 'includes/class-custom-code.php';
-require_once OLO_PATH . 'includes/class-form-submissions.php';
-require_once OLO_PATH . 'includes/class-newsletter.php';
-require_once OLO_PATH . 'includes/class-maintenance-mode.php';
-require_once OLO_PATH . 'includes/class-analytics-tracking.php';
-require_once OLO_PATH . 'includes/class-diagnostics.php';
-Olo_Diagnostics::init();
+require_once OLOBUILD_PATH . 'includes/class-database.php';
+require_once OLOBUILD_PATH . 'includes/class-tile-manager.php';
+require_once OLOBUILD_PATH . 'includes/class-rest-api.php';
+require_once OLOBUILD_PATH . 'includes/class-dynamic-content.php';
+require_once OLOBUILD_PATH . 'includes/class-style-system.php';
+require_once OLOBUILD_PATH . 'includes/class-font-host.php';
+require_once OLOBUILD_PATH . 'includes/class-css-builder.php';
+require_once OLOBUILD_PATH . 'includes/class-animation-builder.php';
+require_once OLOBUILD_PATH . 'includes/class-frontend-renderer.php';
+require_once OLOBUILD_PATH . 'includes/class-asset-optimizer.php';
+require_once OLOBUILD_PATH . 'includes/class-page-css.php';
+require_once OLOBUILD_PATH . 'includes/class-uikit-subset.php';
+require_once OLOBUILD_PATH . 'includes/class-template-library.php';
+require_once OLOBUILD_PATH . 'includes/class-page-integration.php';
+require_once OLOBUILD_PATH . 'includes/class-header-integration.php';
+require_once OLOBUILD_PATH . 'includes/class-footer-integration.php';
+require_once OLOBUILD_PATH . 'includes/class-single-integration.php';
+require_once OLOBUILD_PATH . 'includes/class-archive-integration.php';
+require_once OLOBUILD_PATH . 'includes/class-404-integration.php';
+require_once OLOBUILD_PATH . 'includes/class-search-results-integration.php';
+require_once OLOBUILD_PATH . 'includes/class-location-single.php';
+require_once OLOBUILD_PATH . 'includes/class-form-handler.php';
+require_once OLOBUILD_PATH . 'includes/class-unsplash.php';
+require_once OLOBUILD_PATH . 'includes/class-pexels.php';
+require_once OLOBUILD_PATH . 'includes/class-pixabay.php';
+require_once OLOBUILD_PATH . 'includes/class-openverse.php';
+require_once OLOBUILD_PATH . 'includes/class-freesound.php';
+require_once OLOBUILD_PATH . 'includes/class-media-search.php';
+require_once OLOBUILD_PATH . 'includes/class-custom-fonts.php';
+require_once OLOBUILD_PATH . 'includes/class-custom-code.php';
+require_once OLOBUILD_PATH . 'includes/class-form-submissions.php';
+require_once OLOBUILD_PATH . 'includes/class-newsletter.php';
+require_once OLOBUILD_PATH . 'includes/class-maintenance-mode.php';
+require_once OLOBUILD_PATH . 'includes/class-analytics-tracking.php';
+require_once OLOBUILD_PATH . 'includes/class-diagnostics.php';
+Olobuild_Diagnostics::init();
 // OLOsecurity è un plugin INDIPENDENTE (repo claudiovinco/olosecurity) dalla
 // v1.4.227: OLObuild non bundla più i moduli di sicurezza. Se installato, si
 // aggancia da solo al menu di OLObuild.
-require_once OLO_PATH . 'includes/class-critical-css.php';
-require_once OLO_PATH . 'includes/class-ab-testing.php';
-require_once OLO_PATH . 'includes/class-cookie-consent.php';
-require_once OLO_PATH . 'includes/class-role-manager.php';
-require_once OLO_PATH . 'includes/class-site-export.php';
-require_once OLO_PATH . 'includes/class-ai-assistant.php';
-require_once OLO_PATH . 'includes/class-seo-head.php';
-require_once OLO_PATH . 'includes/class-seo-settings.php';
-require_once OLO_PATH . 'includes/class-seo-redirects.php';
-require_once OLO_PATH . 'includes/class-global-popups.php';
-require_once OLO_PATH . 'includes/class-template-conditions.php';
-require_once OLO_PATH . 'includes/class-accessibility.php';
-require_once OLO_PATH . 'includes/class-performance-hints.php';
-require_once OLO_PATH . 'includes/class-performance-settings.php';
-require_once OLO_PATH . 'includes/cache/class-full-page-cache.php';
-Olo_FullPage_Cache::init();
-require_once OLO_PATH . 'includes/class-white-label.php';
-require_once OLO_PATH . 'includes/class-site-import-export.php';
-require_once OLO_PATH . 'includes/class-tools.php';
-require_once OLO_PATH . 'includes/class-olo-lang-bridge.php';
-Olo_Lang_Bridge::init();
-require_once OLO_PATH . 'includes/class-debug-bar.php';
-require_once OLO_PATH . 'includes/class-woo-template-integration.php';
-require_once OLO_PATH . 'includes/class-olo-builder.php';
+require_once OLOBUILD_PATH . 'includes/class-critical-css.php';
+require_once OLOBUILD_PATH . 'includes/class-ab-testing.php';
+require_once OLOBUILD_PATH . 'includes/class-cookie-consent.php';
+require_once OLOBUILD_PATH . 'includes/class-role-manager.php';
+require_once OLOBUILD_PATH . 'includes/class-site-export.php';
+require_once OLOBUILD_PATH . 'includes/class-ai-assistant.php';
+require_once OLOBUILD_PATH . 'includes/class-seo-head.php';
+require_once OLOBUILD_PATH . 'includes/class-seo-settings.php';
+require_once OLOBUILD_PATH . 'includes/class-seo-redirects.php';
+require_once OLOBUILD_PATH . 'includes/class-global-popups.php';
+require_once OLOBUILD_PATH . 'includes/class-template-conditions.php';
+require_once OLOBUILD_PATH . 'includes/class-accessibility.php';
+require_once OLOBUILD_PATH . 'includes/class-performance-hints.php';
+require_once OLOBUILD_PATH . 'includes/class-performance-settings.php';
+require_once OLOBUILD_PATH . 'includes/cache/class-full-page-cache.php';
+Olobuild_FullPage_Cache::init();
+require_once OLOBUILD_PATH . 'includes/class-white-label.php';
+require_once OLOBUILD_PATH . 'includes/class-site-import-export.php';
+require_once OLOBUILD_PATH . 'includes/class-tools.php';
+require_once OLOBUILD_PATH . 'includes/class-olo-lang-bridge.php';
+Olobuild_Lang_Bridge::init();
+require_once OLOBUILD_PATH . 'includes/class-debug-bar.php';
+require_once OLOBUILD_PATH . 'includes/class-woo-template-integration.php';
+require_once OLOBUILD_PATH . 'includes/class-olo-builder.php';
 
 /**
  * Safety net: ensure administrators always have the capabilities needed by Olobuild,
@@ -552,12 +552,12 @@ register_activation_hook( __FILE__, function () {
     }
 
     // Create/update tables AFTER migration so dbDelta doesn't interfere with RENAME
-    $db = new Olo_Database();
+    $db = new Olobuild_Database();
     $db->create_tables();
 
     // Form submissions table
-    Olo_Form_Submissions::create_table();
-    Olo_Newsletter::create_table();
+    Olobuild_Form_Submissions::create_table();
+    Olobuild_Newsletter::create_table();
 
     // Security Sentinel: fotografa lo stato "buono" dei file come baseline integrità.
     if ( class_exists( 'Olo_Security_Sentinel' ) ) {
@@ -608,8 +608,8 @@ register_activation_hook( __FILE__, function () {
     }
 
     // Full-page cache: se il toggle è già attivo, reinstalla il drop-in (utile dopo un update).
-    if ( class_exists( 'Olo_FullPage_Cache' ) ) {
-        Olo_FullPage_Cache::on_plugin_activate();
+    if ( class_exists( 'Olobuild_FullPage_Cache' ) ) {
+        Olobuild_FullPage_Cache::on_plugin_activate();
     }
 } );
 
@@ -620,14 +620,14 @@ register_deactivation_hook( __FILE__, function () {
     wp_clear_scheduled_hook( 'olo_sentinel_scan' );
     // Full-page cache: rimuovi il drop-in e il WP_CACHE nostri (e svuota), per non
     // lasciare un advanced-cache.php orfano quando OLObuild è disattivato.
-    if ( class_exists( 'Olo_FullPage_Cache' ) ) {
-        Olo_FullPage_Cache::on_plugin_deactivate();
+    if ( class_exists( 'Olobuild_FullPage_Cache' ) ) {
+        Olobuild_FullPage_Cache::on_plugin_deactivate();
     }
 } );
 
 // Weekly cron for orphaned revision cleanup
 add_action( 'olo_weekly_cleanup', function() {
-    $db = Olo_Database::instance();
+    $db = Olobuild_Database::instance();
     $db->cleanup_orphaned_revisions();
 } );
 if ( ! wp_next_scheduled( 'olo_weekly_cleanup' ) ) {
@@ -635,8 +635,8 @@ if ( ! wp_next_scheduled( 'olo_weekly_cleanup' ) ) {
 }
 
 // Setup Wizard (first-run experience)
-require_once OLO_PATH . 'includes/class-setup-wizard.php';
-( new Olo_Setup_Wizard() )->init();
+require_once OLOBUILD_PATH . 'includes/class-setup-wizard.php';
+( new Olobuild_Setup_Wizard() )->init();
 
 // Anti-cache header per admin loggati: il browser non deve servire la home/pagine
 // dalla memory cache mentre stai costruendo il sito, altrimenti i cambi a
@@ -651,16 +651,16 @@ add_action( 'send_headers', function() {
     header( 'Vary: Cookie', false );
 }, 1 );
 
-// Google Fonts: self-hosted via Olo_Font_Host (serviti da /uploads), quindi
+// Google Fonts: self-hosted via Olobuild_Font_Host (serviti da /uploads), quindi
 // nessun preconnect verso i domini Google — il visitatore non li contatta.
 
 // Custom Fonts @font-face CSS — only if custom fonts exist
 add_action( 'wp_head', function() {
     $fonts = get_option( 'olo_custom_fonts', [] );
     if ( empty( $fonts ) ) return;
-    $css = Olo_Custom_Fonts::generate_css();
+    $css = Olobuild_Custom_Fonts::generate_css();
     if ( $css ) {
-        echo '<style id="olo-custom-fonts">' . $css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- @font-face CSS generated by Olo_Custom_Fonts::generate_css(), which escapes font names and file URLs internally (esc_attr/esc_url)
+        echo '<style id="olo-custom-fonts">' . $css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- @font-face CSS generated by Olobuild_Custom_Fonts::generate_css(), which escapes font names and file URLs internally (esc_attr/esc_url)
     }
 }, 5 );
 
@@ -673,77 +673,77 @@ add_filter( 'wp_get_attachment_image_attributes', function( $attr ) {
 } );
 
 // Registra tile aggiuntive via hook (non toccare class-olo-builder.php)
-add_action( 'olo_register_external_tiles', function ( $manager ) {
-    require_once OLO_PATH . 'includes/tiles/class-readingtime-tile.php';
-    $manager->register_tile( new Olo_Readingtime_Tile() );
+add_action( 'olobuild_register_external_tiles', function ( $manager ) {
+    require_once OLOBUILD_PATH . 'includes/tiles/class-readingtime-tile.php';
+    $manager->register_tile( new Olobuild_Readingtime_Tile() );
 
-    require_once OLO_PATH . 'includes/tiles/class-darkmode-tile.php';
-    $manager->register_tile( new Olo_Darkmode_Tile() );
+    require_once OLOBUILD_PATH . 'includes/tiles/class-darkmode-tile.php';
+    $manager->register_tile( new Olobuild_Darkmode_Tile() );
 
-    require_once OLO_PATH . 'includes/tiles/class-queryloop-tile.php';
-    $manager->register_tile( new Olo_Queryloop_Tile() );
+    require_once OLOBUILD_PATH . 'includes/tiles/class-queryloop-tile.php';
+    $manager->register_tile( new Olobuild_Queryloop_Tile() );
 
-    require_once OLO_PATH . 'includes/tiles/class-portfolio-tile.php';
-    $manager->register_tile( new Olo_Portfolio_Tile() );
+    require_once OLOBUILD_PATH . 'includes/tiles/class-portfolio-tile.php';
+    $manager->register_tile( new Olobuild_Portfolio_Tile() );
 
-    require_once OLO_PATH . 'includes/tiles/class-pagetitlebar-tile.php';
-    $manager->register_tile( new Olo_Pagetitlebar_Tile() );
+    require_once OLOBUILD_PATH . 'includes/tiles/class-pagetitlebar-tile.php';
+    $manager->register_tile( new Olobuild_Pagetitlebar_Tile() );
 
-    require_once OLO_PATH . 'includes/tiles/class-lightbox-tile.php';
-    $manager->register_tile( new Olo_Lightbox_Tile() );
+    require_once OLOBUILD_PATH . 'includes/tiles/class-lightbox-tile.php';
+    $manager->register_tile( new Olobuild_Lightbox_Tile() );
 
-    require_once OLO_PATH . 'includes/tiles/class-floatingpanel-tile.php';
-    $manager->register_tile( new Olo_Floatingpanel_Tile() );
+    require_once OLOBUILD_PATH . 'includes/tiles/class-floatingpanel-tile.php';
+    $manager->register_tile( new Olobuild_Floatingpanel_Tile() );
 
-    require_once OLO_PATH . 'includes/tiles/class-mobilebar-tile.php';
-    $manager->register_tile( new Olo_Mobilebar_Tile() );
+    require_once OLOBUILD_PATH . 'includes/tiles/class-mobilebar-tile.php';
+    $manager->register_tile( new Olobuild_Mobilebar_Tile() );
 
-    require_once OLO_PATH . 'includes/tiles/class-svganimator-tile.php';
-    $manager->register_tile( new Olo_Svganimator_Tile() );
+    require_once OLOBUILD_PATH . 'includes/tiles/class-svganimator-tile.php';
+    $manager->register_tile( new Olobuild_Svganimator_Tile() );
 
-    require_once OLO_PATH . 'includes/tiles/class-newsletter-tile.php';
-    $manager->register_tile( new Olo_Newsletter_Tile() );
+    require_once OLOBUILD_PATH . 'includes/tiles/class-newsletter-tile.php';
+    $manager->register_tile( new Olobuild_Newsletter_Tile() );
 
-    require_once OLO_PATH . 'includes/tiles/class-viewer360-tile.php';
-    $manager->register_tile( new Olo_Viewer360_Tile() );
+    require_once OLOBUILD_PATH . 'includes/tiles/class-viewer360-tile.php';
+    $manager->register_tile( new Olobuild_Viewer360_Tile() );
 
     // WooCommerce tiles — only load if WooCommerce is active
     if ( class_exists( 'WooCommerce' ) ) {
         $woo_tiles = [
-            'class-woo-products-tile.php'           => 'Olo_Woo_Products_Tile',
-            'class-woo-minicart-tile.php'           => 'Olo_Woo_Minicart_Tile',
-            'class-woo-price-tile.php'              => 'Olo_Woo_Price_Tile',
-            'class-woo-addtocart-tile.php'          => 'Olo_Woo_Addtocart_Tile',
-            'class-woo-categories-tile.php'         => 'Olo_Woo_Categories_Tile',
-            'class-woo-rating-tile.php'             => 'Olo_Woo_Rating_Tile',
-            'class-woo-product-title-tile.php'      => 'Olo_Woo_Product_Title_Tile',
-            'class-woo-product-image-tile.php'      => 'Olo_Woo_Product_Image_Tile',
-            'class-woo-product-description-tile.php'=> 'Olo_Woo_Product_Description_Tile',
-            'class-woo-product-meta-tile.php'       => 'Olo_Woo_Product_Meta_Tile',
-            'class-woo-product-stock-tile.php'      => 'Olo_Woo_Product_Stock_Tile',
-            'class-woo-product-tabs-tile.php'       => 'Olo_Woo_Product_Tabs_Tile',
-            'class-woo-related-tile.php'            => 'Olo_Woo_Related_Tile',
-            'class-woo-upsells-tile.php'            => 'Olo_Woo_Upsells_Tile',
-            'class-woo-cart-tile.php'               => 'Olo_Woo_Cart_Tile',
-            'class-woo-checkout-tile.php'           => 'Olo_Woo_Checkout_Tile',
-            'class-woo-order-tracking-tile.php'     => 'Olo_Woo_Order_Tracking_Tile',
-            'class-woo-breadcrumbs-tile.php'        => 'Olo_Woo_Breadcrumbs_Tile',
-            'class-woo-notices-tile.php'            => 'Olo_Woo_Notices_Tile',
-            'class-woo-product-navigation-tile.php' => 'Olo_Woo_Product_Navigation_Tile',
-            'class-woo-sale-badge-tile.php'         => 'Olo_Woo_Sale_Badge_Tile',
-            'class-woo-product-filter-tile.php'     => 'Olo_Woo_Product_Filter_Tile',
-            'class-woo-quickview-tile.php'          => 'Olo_Woo_Quickview_Tile',
-            'class-woo-checkout-multistep-tile.php'  => 'Olo_Woo_Checkout_Multistep_Tile',
-            'class-woo-myaccount-tile.php'           => 'Olo_Woo_Myaccount_Tile',
-            'class-woo-comparison-tile.php'          => 'Olo_Woo_Comparison_Tile',
-            'class-woo-wishlist-tile.php'             => 'Olo_Woo_Wishlist_Tile',
-            'class-woo-cross-sells-tile.php'          => 'Olo_Woo_Cross_Sells_Tile',
-            'class-woo-recently-viewed-tile.php'      => 'Olo_Woo_Recently_Viewed_Tile',
-            'class-woo-product-bundle-tile.php'       => 'Olo_Woo_Product_Bundle_Tile',
-            'class-woo-product-gallery-slider-tile.php' => 'Olo_Woo_Product_Gallery_Slider_Tile',
+            'class-woo-products-tile.php'           => 'Olobuild_Woo_Products_Tile',
+            'class-woo-minicart-tile.php'           => 'Olobuild_Woo_Minicart_Tile',
+            'class-woo-price-tile.php'              => 'Olobuild_Woo_Price_Tile',
+            'class-woo-addtocart-tile.php'          => 'Olobuild_Woo_Addtocart_Tile',
+            'class-woo-categories-tile.php'         => 'Olobuild_Woo_Categories_Tile',
+            'class-woo-rating-tile.php'             => 'Olobuild_Woo_Rating_Tile',
+            'class-woo-product-title-tile.php'      => 'Olobuild_Woo_Product_Title_Tile',
+            'class-woo-product-image-tile.php'      => 'Olobuild_Woo_Product_Image_Tile',
+            'class-woo-product-description-tile.php'=> 'Olobuild_Woo_Product_Description_Tile',
+            'class-woo-product-meta-tile.php'       => 'Olobuild_Woo_Product_Meta_Tile',
+            'class-woo-product-stock-tile.php'      => 'Olobuild_Woo_Product_Stock_Tile',
+            'class-woo-product-tabs-tile.php'       => 'Olobuild_Woo_Product_Tabs_Tile',
+            'class-woo-related-tile.php'            => 'Olobuild_Woo_Related_Tile',
+            'class-woo-upsells-tile.php'            => 'Olobuild_Woo_Upsells_Tile',
+            'class-woo-cart-tile.php'               => 'Olobuild_Woo_Cart_Tile',
+            'class-woo-checkout-tile.php'           => 'Olobuild_Woo_Checkout_Tile',
+            'class-woo-order-tracking-tile.php'     => 'Olobuild_Woo_Order_Tracking_Tile',
+            'class-woo-breadcrumbs-tile.php'        => 'Olobuild_Woo_Breadcrumbs_Tile',
+            'class-woo-notices-tile.php'            => 'Olobuild_Woo_Notices_Tile',
+            'class-woo-product-navigation-tile.php' => 'Olobuild_Woo_Product_Navigation_Tile',
+            'class-woo-sale-badge-tile.php'         => 'Olobuild_Woo_Sale_Badge_Tile',
+            'class-woo-product-filter-tile.php'     => 'Olobuild_Woo_Product_Filter_Tile',
+            'class-woo-quickview-tile.php'          => 'Olobuild_Woo_Quickview_Tile',
+            'class-woo-checkout-multistep-tile.php'  => 'Olobuild_Woo_Checkout_Multistep_Tile',
+            'class-woo-myaccount-tile.php'           => 'Olobuild_Woo_Myaccount_Tile',
+            'class-woo-comparison-tile.php'          => 'Olobuild_Woo_Comparison_Tile',
+            'class-woo-wishlist-tile.php'             => 'Olobuild_Woo_Wishlist_Tile',
+            'class-woo-cross-sells-tile.php'          => 'Olobuild_Woo_Cross_Sells_Tile',
+            'class-woo-recently-viewed-tile.php'      => 'Olobuild_Woo_Recently_Viewed_Tile',
+            'class-woo-product-bundle-tile.php'       => 'Olobuild_Woo_Product_Bundle_Tile',
+            'class-woo-product-gallery-slider-tile.php' => 'Olobuild_Woo_Product_Gallery_Slider_Tile',
         ];
         foreach ( $woo_tiles as $file => $class ) {
-            $path = OLO_PATH . 'includes/tiles/' . $file;
+            $path = OLOBUILD_PATH . 'includes/tiles/' . $file;
             if ( file_exists( $path ) ) {
                 require_once $path;
                 if ( class_exists( $class ) ) {
@@ -756,104 +756,104 @@ add_action( 'olo_register_external_tiles', function ( $manager ) {
 
 // Initialize plugin
 add_action( 'plugins_loaded', function () {
-    Olo_Builder::instance();
-    Olo_Location_Single::instance();
-    Olo_404_Integration::instance();
+    Olobuild_Builder::instance();
+    Olobuild_Location_Single::instance();
+    Olobuild_404_Integration::instance();
 
     // Form handler (public REST endpoint)
-    $form_handler = new Olo_Form_Handler();
+    $form_handler = new Olobuild_Form_Handler();
     $form_handler->init();
 
     // Form submissions dashboard
-    Olo_Form_Submissions::init();
+    Olobuild_Form_Submissions::init();
 
     // Newsletter (lista iscritti + endpoint REST dedicato)
-    Olo_Newsletter::init();
+    Olobuild_Newsletter::init();
 
     // Login form AJAX handlers
-    if ( class_exists( 'Olo_Loginform_Tile' ) ) {
-        Olo_Loginform_Tile::register_ajax_handlers();
+    if ( class_exists( 'Olobuild_Loginform_Tile' ) ) {
+        Olobuild_Loginform_Tile::register_ajax_handlers();
     }
 
     // Custom code snippets (head/body/footer)
-    Olo_Custom_Code::init();
+    Olobuild_Custom_Code::init();
 
     // Cursore magnetico (feature globale di tema/header — pagina Impostazioni nativa)
-    require_once OLO_PATH . 'includes/class-magnetic-cursor.php';
-    Olo_Magnetic_Cursor::init();
+    require_once OLOBUILD_PATH . 'includes/class-magnetic-cursor.php';
+    Olobuild_Magnetic_Cursor::init();
 
     // HUD mirino (feature globale di tema — crosshair + coordinate + sezione corrente)
-    require_once OLO_PATH . 'includes/class-cursor-hud.php';
-    Olo_Cursor_Hud::init();
+    require_once OLOBUILD_PATH . 'includes/class-cursor-hud.php';
+    Olobuild_Cursor_Hud::init();
 
     // Asset optimizer (defer scripts, CSS minification)
-    Olo_Asset_Optimizer::init();
+    Olobuild_Asset_Optimizer::init();
 
     // CSS per-tile (safety net + invalidazione; lo swap vive in Asset_Optimizer)
-    Olo_Page_CSS::init();
+    Olobuild_Page_CSS::init();
 
     // UIkit subset auto-appreso (apprendimento nel buffer di Performance_Hints)
-    Olo_Uikit_Subset::init();
+    Olobuild_Uikit_Subset::init();
 
     // Maintenance mode / Coming soon
-    Olo_Maintenance_Mode::init();
+    Olobuild_Maintenance_Mode::init();
 
     // Analytics event tracking
-    Olo_Analytics_Tracking::init();
+    Olobuild_Analytics_Tracking::init();
 
     // Critical CSS generation
-    Olo_Critical_CSS::init();
+    Olobuild_Critical_CSS::init();
 
     // A/B Testing framework
-    Olo_AB_Testing::init();
+    Olobuild_AB_Testing::init();
 
     // Cookie consent / GDPR privacy bar
-    Olo_Cookie_Consent::instance()->init();
+    Olobuild_Cookie_Consent::instance()->init();
 
     // Role Manager — builder access control
     Olobuild_Role_Manager::instance()->init();
 
     // SEO Settings — admin page, meta box, colonna SEO
-    Olo_Seo_Settings::instance()->init();
+    Olobuild_Seo_Settings::instance()->init();
 
     // SEO Redirects — redirect 301/302, monitor 404, IndexNow
-    Olo_Seo_Redirects::instance()->init();
+    Olobuild_Seo_Redirects::instance()->init();
 
     // SEO Head — JSON-LD, Open Graph, canonical, robots
-    Olo_Seo_Head::instance()->init();
+    Olobuild_Seo_Head::instance()->init();
 
     // Accessibility — skip-nav, ARIA, focus styles
-    Olo_Accessibility::instance()->init();
+    Olobuild_Accessibility::instance()->init();
 
     // Performance hints — preload, fetchpriority, video facade
-    Olo_Performance_Hints::instance()->init();
+    Olobuild_Performance_Hints::instance()->init();
 
     // Performance Settings — admin page (Critical CSS, Assets, Hints)
-    Olo_Performance_Settings::instance()->init();
+    Olobuild_Performance_Settings::instance()->init();
 
     // Global Popups — display conditions system
-    Olo_Global_Popups::instance()->init();
+    Olobuild_Global_Popups::instance()->init();
 
     // Template Conditions — advanced AND/OR display conditions
-    Olo_Template_Conditions::instance()->init();
+    Olobuild_Template_Conditions::instance()->init();
 
     // White Label — rebrand plugin for clients
-    Olo_White_Label::instance()->init();
+    Olobuild_White_Label::instance()->init();
 
     // WooCommerce comparison REST endpoint
     if ( class_exists( 'WooCommerce' ) ) {
-        add_action( 'rest_api_init', [ 'Olo_Woo_Comparison_Tile', 'register_rest_routes' ] );
+        add_action( 'rest_api_init', [ 'Olobuild_Woo_Comparison_Tile', 'register_rest_routes' ] );
     }
 
     // Import/Export with media
-    Olo_Site_Import_Export::instance()->init();
+    Olobuild_Site_Import_Export::instance()->init();
 
     // Tools page (unified Strumenti)
-    Olo_Tools::instance()->init();
+    Olobuild_Tools::instance()->init();
 
     // Debug bar (template tracking in admin toolbar)
-    Olo_Debug_Bar::init();
+    Olobuild_Debug_Bar::init();
 
     // WooCommerce Theme Builder integration
-    Olo_Woo_Template_Integration::instance()->init();
+    Olobuild_Woo_Template_Integration::instance()->init();
 } );

@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Rest_Api {
+class Olobuild_Rest_Api {
 
     private $namespace = 'olo/v1';
 
@@ -216,7 +216,7 @@ class Olo_Rest_Api {
             ],
         ] );
 
-        // Cursore magnetico globale (option olo_magnetic_cursor → Olo_Magnetic_Cursor)
+        // Cursore magnetico globale (option olo_magnetic_cursor → Olobuild_Magnetic_Cursor)
         register_rest_route( $this->namespace, '/magnetic-cursor', [
             [
                 'methods'             => 'GET',
@@ -230,7 +230,7 @@ class Olo_Rest_Api {
             ],
         ] );
 
-        // HUD mirino globale (option olo_cursor_hud → Olo_Cursor_Hud)
+        // HUD mirino globale (option olo_cursor_hud → Olobuild_Cursor_Hud)
         register_rest_route( $this->namespace, '/cursor-hud', [
             [
                 'methods'             => 'GET',
@@ -898,10 +898,10 @@ class Olo_Rest_Api {
      * Permessi submissions: contengono PII (nome, email, IP) quindi di default
      * solo manage_options, coerente con /submissions/export. Per riaprire la
      * dashboard submissions agli Editor:
-     * add_filter( 'olo_submissions_capability', function () { return 'edit_pages'; } );
+     * add_filter( 'olobuild_submissions_capability', function () { return 'edit_pages'; } );
      */
     public function check_submissions_permission( $request = null ) {
-        $cap = apply_filters( 'olo_submissions_capability', 'manage_options' );
+        $cap = apply_filters( 'olobuild_submissions_capability', 'manage_options' );
         if ( ! current_user_can( $cap ) ) {
             return false;
         }
@@ -922,7 +922,7 @@ class Olo_Rest_Api {
         // Enforcement lato server delle restrizioni per ruolo (Configurazione → Permessi & Ruoli).
         // Il filtro di default ritorna true: restringe SOLO se l'admin ha configurato i ruoli builder,
         // quindi non blocca chi oggi accede via edit_pages su installazioni non configurate.
-        if ( ! apply_filters( 'olo_can_edit_builder', true ) ) {
+        if ( ! apply_filters( 'olobuild_can_edit_builder', true ) ) {
             return new WP_Error( 'rest_forbidden', __( 'Il tuo ruolo non ha accesso al builder.', 'olobuild' ), array( 'status' => 403 ) );
         }
 
@@ -977,7 +977,7 @@ class Olo_Rest_Api {
             return true; // nessun id nella route → check non applicabile
         }
 
-        $db       = new Olo_Database();
+        $db       = new Olobuild_Database();
         $template = $db->get_template( $id );
         if ( ! $template ) {
             // Lasciamo che sia il callback a rispondere 404 dopo il check di ownership;
@@ -1067,7 +1067,7 @@ class Olo_Rest_Api {
     }
 
     public function get_templates( $request ) {
-        $db = new Olo_Database();
+        $db = new Olobuild_Database();
         $result = $db->list_templates( [
             'page'     => $request->get_param( 'page' ),
             'per_page' => $request->get_param( 'per_page' ),
@@ -1129,7 +1129,7 @@ class Olo_Rest_Api {
      */
     public function duplicate_template( $request ) {
         $id = (int) $request['id'];
-        $db = new Olo_Database();
+        $db = new Olobuild_Database();
         $src = $db->get_template( $id );
         if ( ! $src ) {
             return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
@@ -1177,7 +1177,7 @@ class Olo_Rest_Api {
     }
 
     public function create_template( $request ) {
-        $db   = new Olo_Database();
+        $db   = new Olobuild_Database();
         $body = $request->get_json_params();
 
         // Validate content — must be an array (list of sections/rows)
@@ -1225,7 +1225,7 @@ class Olo_Rest_Api {
      */
     private function maybe_auto_create_linked_page( $template_id, $db = null ) {
         if ( ! $db ) {
-            $db = new Olo_Database();
+            $db = new Olobuild_Database();
         }
         $template = $db->get_template( $template_id );
         if ( ! $template ) return;
@@ -1261,7 +1261,7 @@ class Olo_Rest_Api {
     }
 
     public function get_template( $request ) {
-        $db       = new Olo_Database();
+        $db       = new Olobuild_Database();
         $template = $db->get_template( (int) $request['id'] );
 
         if ( ! $template ) {
@@ -1272,7 +1272,7 @@ class Olo_Rest_Api {
     }
 
     public function update_template( $request ) {
-        $db   = new Olo_Database();
+        $db   = new Olobuild_Database();
         $id   = (int) $request['id'];
         $body = $request->get_json_params();
 
@@ -1343,7 +1343,7 @@ class Olo_Rest_Api {
     }
 
     public function delete_template( $request ) {
-        $db = new Olo_Database();
+        $db = new Olobuild_Database();
         $id = (int) $request['id'];
 
         $existing = $db->get_template( $id );
@@ -1378,7 +1378,7 @@ class Olo_Rest_Api {
     }
 
     public function get_tiles() {
-        $manager = Olo_Tile_Manager::instance();
+        $manager = Olobuild_Tile_Manager::instance();
         $tiles   = $manager->get_tiles();
 
         $result = [];
@@ -1397,19 +1397,19 @@ class Olo_Rest_Api {
     }
 
     public function get_dynamic_sources() {
-        $dc = new Olo_Dynamic_Content();
+        $dc = new Olobuild_Dynamic_Content();
         return rest_ensure_response( $dc->get_available_sources() );
     }
 
     /**
      * Prodotti WooCommerce normalizzati per l'anteprima della tile productgrid.
-     * Stessa logica del render frontend (Olo_ProductGrid_Tile::woo_items).
+     * Stessa logica del render frontend (Olobuild_ProductGrid_Tile::woo_items).
      */
     public function get_productgrid_products( $request ) {
-        if ( ! class_exists( 'WooCommerce' ) || ! class_exists( 'Olo_ProductGrid_Tile' ) ) {
+        if ( ! class_exists( 'WooCommerce' ) || ! class_exists( 'Olobuild_ProductGrid_Tile' ) ) {
             return rest_ensure_response( [ 'woo' => false, 'items' => [] ] );
         }
-        $items = Olo_ProductGrid_Tile::woo_items( [
+        $items = Olobuild_ProductGrid_Tile::woo_items( [
             'woo_category'  => sanitize_text_field( (string) $request->get_param( 'category' ) ),
             'woo_limit'     => intval( $request->get_param( 'limit' ) ?: 8 ),
             'woo_orderby'   => sanitize_key( (string) ( $request->get_param( 'orderby' ) ?: 'date' ) ),
@@ -1421,7 +1421,7 @@ class Olo_Rest_Api {
     }
 
     public function get_styles() {
-        $style_system = Olo_Style_System::instance();
+        $style_system = Olobuild_Style_System::instance();
         return rest_ensure_response( [
             'styles' => $style_system->get_styles(),
             'css'    => $style_system->generate_css(),
@@ -1430,7 +1430,7 @@ class Olo_Rest_Api {
 
     public function save_styles( $request ) {
         $body         = $request->get_json_params();
-        $style_system = Olo_Style_System::instance();
+        $style_system = Olobuild_Style_System::instance();
         $saved        = $style_system->save_styles( $body );
 
         return rest_ensure_response( [
@@ -1440,7 +1440,7 @@ class Olo_Rest_Api {
     }
 
     public function reset_styles() {
-        $style_system = Olo_Style_System::instance();
+        $style_system = Olobuild_Style_System::instance();
         $defaults     = $style_system->reset_styles();
 
         return rest_ensure_response( [
@@ -1472,7 +1472,7 @@ class Olo_Rest_Api {
             }
         }
 
-        $dc    = new Olo_Dynamic_Content();
+        $dc    = new Olobuild_Dynamic_Content();
         $value = $dc->resolve_field( $source, $field, $post_id );
 
         return rest_ensure_response( [
@@ -1490,7 +1490,7 @@ class Olo_Rest_Api {
         }
 
         // Verify template exists and is of type header
-        $db  = new Olo_Database();
+        $db  = new Olobuild_Database();
         $tpl = $db->get_template( $id );
         if ( ! $tpl ) {
             return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
@@ -1521,7 +1521,7 @@ class Olo_Rest_Api {
         }
 
         // Verify template exists
-        $db  = new Olo_Database();
+        $db  = new Olobuild_Database();
         $tpl = $db->get_template( $id );
         if ( ! $tpl ) {
             return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
@@ -1552,7 +1552,7 @@ class Olo_Rest_Api {
             return new WP_Error( 'missing_params', 'Template ID and post_type are required.', [ 'status' => 400 ] );
         }
 
-        $db  = new Olo_Database();
+        $db  = new Olobuild_Database();
         $tpl = $db->get_template( $id );
         if ( ! $tpl ) {
             return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
@@ -1602,7 +1602,7 @@ class Olo_Rest_Api {
             return new WP_Error( 'missing_id', 'ID template obbligatorio.', [ 'status' => 400 ] );
         }
 
-        $db  = new Olo_Database();
+        $db  = new Olobuild_Database();
         $tpl = $db->get_template( $id );
         if ( ! $tpl ) {
             return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
@@ -1664,7 +1664,7 @@ class Olo_Rest_Api {
             return new WP_Error( 'missing_id', 'ID template obbligatorio.', [ 'status' => 400 ] );
         }
 
-        $db  = new Olo_Database();
+        $db  = new Olobuild_Database();
         $tpl = $db->get_template( $id );
         if ( ! $tpl ) {
             return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
@@ -1696,7 +1696,7 @@ class Olo_Rest_Api {
             return new WP_Error( 'missing_id', 'ID template obbligatorio.', [ 'status' => 400 ] );
         }
 
-        $db  = new Olo_Database();
+        $db  = new Olobuild_Database();
         $tpl = $db->get_template( $id );
         if ( ! $tpl ) {
             return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
@@ -1719,7 +1719,7 @@ class Olo_Rest_Api {
     }
 
     public function export_template( $request ) {
-        $db       = new Olo_Database();
+        $db       = new Olobuild_Database();
         $template = $db->get_template( (int) $request['id'] );
 
         if ( ! $template ) {
@@ -1730,7 +1730,7 @@ class Olo_Rest_Api {
 
         $export = [
             'olo_export' => 'template',
-            'version'       => OLO_VERSION,
+            'version'       => OLOBUILD_VERSION,
             'title'         => $template['title'],
             'type'          => $template['type'] ?? 'page',
             'content'       => $template['content'] ?? [],
@@ -1744,7 +1744,7 @@ class Olo_Rest_Api {
     }
 
     public function import_template( $request ) {
-        if ( olo_imports_disabled() ) return olo_imports_disabled_error();
+        if ( olobuild_imports_disabled() ) return olobuild_imports_disabled_error();
         $body = $request->get_json_params();
 
         if ( empty( $body['olo_export'] ) || $body['olo_export'] !== 'template' ) {
@@ -1767,7 +1767,7 @@ class Olo_Rest_Api {
             $import_settings = (array) $import_settings;
         }
 
-        $db = new Olo_Database();
+        $db = new Olobuild_Database();
         $id = $db->create_template( [
             'title'    => sanitize_text_field( $body['title'] ?? 'Importato' ),
             'type'     => sanitize_text_field( $body['type'] ?? 'page' ),
@@ -1796,7 +1796,7 @@ class Olo_Rest_Api {
             return new WP_Error( 'no_ids', 'Nessun template selezionato.', [ 'status' => 400 ] );
         }
 
-        $db            = new Olo_Database();
+        $db            = new Olobuild_Database();
         $active_header = (int) get_option( 'olo_active_header', 0 );
         $active_footer = (int) get_option( 'olo_active_footer', 0 );
         $active_404    = (int) get_option( 'olo_active_404', 0 );
@@ -1825,7 +1825,7 @@ class Olo_Rest_Api {
         $name   = sanitize_text_field( $body['name'] ?? 'Tema Olobuild' );
         $bundle = [
             'olo_export'  => 'theme-bundle',
-            'version'     => OLO_VERSION,
+            'version'     => OLOBUILD_VERSION,
             'name'        => $name,
             'description' => sanitize_text_field( $body['description'] ?? '' ),
             'activate'    => $activate,
@@ -1843,7 +1843,7 @@ class Olo_Rest_Api {
      * restano nel cockpit, pronti per essere assegnati o usati via shortcode).
      */
     public function import_bundle( $request ) {
-        if ( olo_imports_disabled() ) return olo_imports_disabled_error();
+        if ( olobuild_imports_disabled() ) return olobuild_imports_disabled_error();
         $body = $request->get_json_params();
         if ( empty( $body['olo_export'] ) || $body['olo_export'] !== 'theme-bundle' ) {
             return new WP_Error( 'invalid_file', 'File non valido: non è un tema Olobuild (theme-bundle).', [ 'status' => 400 ] );
@@ -1853,7 +1853,7 @@ class Olo_Rest_Api {
             return new WP_Error( 'empty', 'Il tema non contiene template.', [ 'status' => 400 ] );
         }
 
-        $db      = new Olo_Database();
+        $db      = new Olobuild_Database();
         $id_map  = [];
         $created = [];
         foreach ( $templates as $tpl ) {
@@ -1892,7 +1892,7 @@ class Olo_Rest_Api {
     // ── Custom Fonts ────────────────────────────────────────
 
     public function get_fonts() {
-        return new WP_REST_Response( Olo_Custom_Fonts::get_fonts(), 200 );
+        return new WP_REST_Response( Olobuild_Custom_Fonts::get_fonts(), 200 );
     }
 
     public function upload_font( $request ) {
@@ -1909,14 +1909,14 @@ class Olo_Rest_Api {
             return new WP_REST_Response( [ 'message' => 'Nessun file caricato.' ], 400 );
         }
 
-        // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- callback REST (permission_callback manage_options, nonce X-WP-Nonce verificato da WP); il file viene validato a valle in Olo_Custom_Fonts::upload_font_file (allowlist estensioni woff2/woff/ttf/otf + limite 5MB + is_uploaded_file su tmp_name + sanitize_file_name sul nome).
-        $url = Olo_Custom_Fonts::upload_font_file( $_FILES['font_file'] );
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- callback REST (permission_callback manage_options, nonce X-WP-Nonce verificato da WP); il file viene validato a valle in Olobuild_Custom_Fonts::upload_font_file (allowlist estensioni woff2/woff/ttf/otf + limite 5MB + is_uploaded_file su tmp_name + sanitize_file_name sul nome).
+        $url = Olobuild_Custom_Fonts::upload_font_file( $_FILES['font_file'] );
         if ( is_wp_error( $url ) ) {
             return new WP_REST_Response( [ 'message' => $url->get_error_message() ], 400 );
         }
 
         // Add or update font in the list
-        $fonts = Olo_Custom_Fonts::get_fonts();
+        $fonts = Olobuild_Custom_Fonts::get_fonts();
         $font_id = sanitize_title( $name );
         $found = false;
         foreach ( $fonts as &$f ) {
@@ -1936,14 +1936,14 @@ class Olo_Rest_Api {
             ];
         }
 
-        Olo_Custom_Fonts::save_fonts( $fonts );
+        Olobuild_Custom_Fonts::save_fonts( $fonts );
         return new WP_REST_Response( [ 'success' => true, 'fonts' => $fonts ], 200 );
     }
 
     public function delete_font( $request ) {
         $id = sanitize_text_field( $request->get_param( 'id' ) );
-        Olo_Custom_Fonts::delete_font( $id );
-        return new WP_REST_Response( [ 'success' => true, 'fonts' => Olo_Custom_Fonts::get_fonts() ], 200 );
+        Olobuild_Custom_Fonts::delete_font( $id );
+        return new WP_REST_Response( [ 'success' => true, 'fonts' => Olobuild_Custom_Fonts::get_fonts() ], 200 );
     }
 
     // === Custom Icons ===
@@ -1965,7 +1965,7 @@ class Olo_Rest_Api {
         }
         $svg_content = file_get_contents( $file['tmp_name'] );
         // Robust SVG sanitization (XSS, XXE, SSRF prevention)
-        $svg_content = olo_sanitize_svg( $svg_content );
+        $svg_content = olobuild_sanitize_svg( $svg_content );
         if ( empty( $svg_content ) ) {
             return new WP_Error( 'invalid_svg', 'Il file SVG non è valido o contiene elementi non sicuri', [ 'status' => 400 ] );
         }
@@ -2153,7 +2153,7 @@ class Olo_Rest_Api {
     // === Stock Media (comportamento + chiavi API provider) ===
 
     public function get_stockmedia_behavior() {
-        return rest_ensure_response( olo_stockmedia_behavior() );
+        return rest_ensure_response( olobuild_stockmedia_behavior() );
     }
 
     public function save_stockmedia_behavior( $request ) {
@@ -2171,7 +2171,7 @@ class Olo_Rest_Api {
             'download_local'       => ! empty( $b['download_local'] ),
             'optimize_on_download' => ! empty( $b['optimize_on_download'] ),
         ];
-        update_option( 'olo_stockmedia_behavior', $s, false );
+        update_option( 'olobuild_stockmedia_behavior', $s, false );
         return rest_ensure_response( $s );
     }
 
@@ -2198,15 +2198,15 @@ class Olo_Rest_Api {
     // === Cursore magnetico globale ===
 
     public function get_magnetic_cursor() {
-        if ( ! class_exists( 'Olo_Magnetic_Cursor' ) ) {
-            require_once OLO_PATH . 'includes/class-magnetic-cursor.php';
+        if ( ! class_exists( 'Olobuild_Magnetic_Cursor' ) ) {
+            require_once OLOBUILD_PATH . 'includes/class-magnetic-cursor.php';
         }
-        return rest_ensure_response( Olo_Magnetic_Cursor::get_settings() );
+        return rest_ensure_response( Olobuild_Magnetic_Cursor::get_settings() );
     }
 
     public function save_magnetic_cursor( $request ) {
-        if ( ! class_exists( 'Olo_Magnetic_Cursor' ) ) {
-            require_once OLO_PATH . 'includes/class-magnetic-cursor.php';
+        if ( ! class_exists( 'Olobuild_Magnetic_Cursor' ) ) {
+            require_once OLOBUILD_PATH . 'includes/class-magnetic-cursor.php';
         }
         $b = $request->get_json_params();
         if ( ! is_array( $b ) ) {
@@ -2214,33 +2214,33 @@ class Olo_Rest_Api {
         }
         // Merge sull'esistente: il pannello può inviare anche solo un sottoinsieme
         // di chiavi (es. il toggle enabled) senza azzerare le altre.
-        $merged = array_merge( Olo_Magnetic_Cursor::get_settings(), $b );
-        $clean  = Olo_Magnetic_Cursor::sanitize( $merged );
-        update_option( Olo_Magnetic_Cursor::OPT, $clean, false );
+        $merged = array_merge( Olobuild_Magnetic_Cursor::get_settings(), $b );
+        $clean  = Olobuild_Magnetic_Cursor::sanitize( $merged );
+        update_option( Olobuild_Magnetic_Cursor::OPT, $clean, false );
         return rest_ensure_response( $clean );
     }
 
     // === HUD mirino globale (crosshair + coordinate) ===
 
     public function get_cursor_hud() {
-        if ( ! class_exists( 'Olo_Cursor_Hud' ) ) {
-            require_once OLO_PATH . 'includes/class-cursor-hud.php';
+        if ( ! class_exists( 'Olobuild_Cursor_Hud' ) ) {
+            require_once OLOBUILD_PATH . 'includes/class-cursor-hud.php';
         }
-        return rest_ensure_response( Olo_Cursor_Hud::get_settings() );
+        return rest_ensure_response( Olobuild_Cursor_Hud::get_settings() );
     }
 
     public function save_cursor_hud( $request ) {
-        if ( ! class_exists( 'Olo_Cursor_Hud' ) ) {
-            require_once OLO_PATH . 'includes/class-cursor-hud.php';
+        if ( ! class_exists( 'Olobuild_Cursor_Hud' ) ) {
+            require_once OLOBUILD_PATH . 'includes/class-cursor-hud.php';
         }
         $b = $request->get_json_params();
         if ( ! is_array( $b ) ) {
             return new WP_Error( 'invalid_data', __( 'Dati non validi.', 'olobuild' ), [ 'status' => 400 ] );
         }
         // Merge sull'esistente: il pannello può inviare anche solo `enabled`.
-        $merged = array_merge( Olo_Cursor_Hud::get_settings(), $b );
-        $clean  = Olo_Cursor_Hud::sanitize( $merged );
-        update_option( Olo_Cursor_Hud::OPT, $clean, false );
+        $merged = array_merge( Olobuild_Cursor_Hud::get_settings(), $b );
+        $clean  = Olobuild_Cursor_Hud::sanitize( $merged );
+        update_option( Olobuild_Cursor_Hud::OPT, $clean, false );
         return rest_ensure_response( $clean );
     }
 
@@ -2334,7 +2334,7 @@ class Olo_Rest_Api {
     // === Revisions ===
 
     public function get_revisions( $request ) {
-        $db  = new Olo_Database();
+        $db  = new Olobuild_Database();
         $id  = (int) $request['id'];
         $tpl = $db->get_template( $id );
 
@@ -2348,7 +2348,7 @@ class Olo_Rest_Api {
     }
 
     public function get_revision( $request ) {
-        $db  = new Olo_Database();
+        $db  = new Olobuild_Database();
         $rev = $db->get_revision( (int) $request['rev_id'] );
 
         if ( ! $rev ) {
@@ -2361,14 +2361,14 @@ class Olo_Rest_Api {
     // === Themes ===
 
     public function get_themes() {
-        require_once OLO_PATH . 'includes/class-theme-importer.php';
-        return rest_ensure_response( Olo_Theme_Importer::get_themes() );
+        require_once OLOBUILD_PATH . 'includes/class-theme-importer.php';
+        return rest_ensure_response( Olobuild_Theme_Importer::get_themes() );
     }
 
     public function import_theme( $request ) {
-        if ( olo_imports_disabled() ) return olo_imports_disabled_error();
-        require_once OLO_PATH . 'includes/class-theme-importer.php';
-        $result = Olo_Theme_Importer::import_theme( $request['theme_id'] );
+        if ( olobuild_imports_disabled() ) return olobuild_imports_disabled_error();
+        require_once OLOBUILD_PATH . 'includes/class-theme-importer.php';
+        $result = Olobuild_Theme_Importer::import_theme( $request['theme_id'] );
         if ( is_wp_error( $result ) ) return $result;
         return rest_ensure_response( $result );
     }
@@ -2475,7 +2475,7 @@ class Olo_Rest_Api {
     // === Template Library ===
 
     public function get_template_library( $request ) {
-        $lib = Olo_Template_Library::instance();
+        $lib = Olobuild_Template_Library::instance();
         $category = sanitize_text_field( $request->get_param( 'category' ) ?? '' );
         $templates = $lib->get_all_templates();
         if ( $category ) {
@@ -2508,7 +2508,7 @@ class Olo_Rest_Api {
 
     public function get_library_template( $request ) {
         $id  = sanitize_text_field( $request['id'] );
-        $lib = Olo_Template_Library::instance();
+        $lib = Olobuild_Template_Library::instance();
         // Check built-in first
         $tpl = $lib->get_template( $id );
         if ( ! $tpl ) {
@@ -2535,14 +2535,14 @@ class Olo_Rest_Api {
         if ( empty( $name ) || empty( $content ) ) {
             return new WP_Error( 'invalid', 'Nome e contenuto richiesti.', [ 'status' => 400 ] );
         }
-        $lib = Olo_Template_Library::instance();
+        $lib = Olobuild_Template_Library::instance();
         $id  = $lib->save_user_template( $name, $category, $content );
         return rest_ensure_response( [ 'id' => $id, 'success' => true ] );
     }
 
     public function delete_user_template( $request ) {
         $id  = sanitize_text_field( $request['id'] );
-        $lib = Olo_Template_Library::instance();
+        $lib = Olobuild_Template_Library::instance();
         $ok  = $lib->delete_user_template( $id );
         if ( ! $ok ) {
             return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
@@ -2553,14 +2553,14 @@ class Olo_Rest_Api {
     // === Built-in Design Presets ===
 
     public function get_builtin_presets() {
-        $style_system = Olo_Style_System::instance();
+        $style_system = Olobuild_Style_System::instance();
         return rest_ensure_response( $style_system->get_presets() );
     }
 
     // === Design Tokens Export ===
 
     public function export_design_tokens() {
-        $style_system = Olo_Style_System::instance();
+        $style_system = Olobuild_Style_System::instance();
         $styles = $style_system->get_styles();
 
         $tokens = [
@@ -2665,11 +2665,11 @@ class Olo_Rest_Api {
             return new WP_Error( 'missing_post_id', 'post_id obbligatorio.', [ 'status' => 400 ] );
         }
 
-        if ( ! class_exists( 'Olo_Critical_CSS' ) ) {
+        if ( ! class_exists( 'Olobuild_Critical_CSS' ) ) {
             return new WP_Error( 'not_available', 'Critical CSS non disponibile.', [ 'status' => 500 ] );
         }
 
-        $css = Olo_Critical_CSS::generate_critical_css( $post_id );
+        $css = Olobuild_Critical_CSS::generate_critical_css( $post_id );
 
         return rest_ensure_response( [
             'post_id' => $post_id,
@@ -2679,42 +2679,42 @@ class Olo_Rest_Api {
     }
 
     public function regenerate_all_critical_css() {
-        if ( ! class_exists( 'Olo_Critical_CSS' ) ) {
+        if ( ! class_exists( 'Olobuild_Critical_CSS' ) ) {
             return new WP_Error( 'not_available', 'Critical CSS non disponibile.', [ 'status' => 500 ] );
         }
 
-        $result = Olo_Critical_CSS::regenerate_all();
+        $result = Olobuild_Critical_CSS::regenerate_all();
 
         return rest_ensure_response( $result );
     }
 
     public function purge_critical_css() {
-        if ( ! class_exists( 'Olo_Critical_CSS' ) ) {
+        if ( ! class_exists( 'Olobuild_Critical_CSS' ) ) {
             return new WP_Error( 'not_available', 'Critical CSS non disponibile.', [ 'status' => 500 ] );
         }
 
-        $purged = Olo_Critical_CSS::purge_all();
+        $purged = Olobuild_Critical_CSS::purge_all();
 
         return rest_ensure_response( [ 'purged' => $purged ] );
     }
 
     public function get_critical_css_status() {
-        if ( ! class_exists( 'Olo_Critical_CSS' ) ) {
+        if ( ! class_exists( 'Olobuild_Critical_CSS' ) ) {
             return rest_ensure_response( [ 'enabled' => false, 'cached_count' => 0 ] );
         }
 
-        return rest_ensure_response( Olo_Critical_CSS::get_status() );
+        return rest_ensure_response( Olobuild_Critical_CSS::get_status() );
     }
 
     /**
      * Export all Olobuild site data as JSON.
      */
     public function site_export() {
-        if ( ! class_exists( 'Olo_Site_Export' ) ) {
-            require_once OLO_PATH . 'includes/class-site-export.php';
+        if ( ! class_exists( 'Olobuild_Site_Export' ) ) {
+            require_once OLOBUILD_PATH . 'includes/class-site-export.php';
         }
 
-        $data = Olo_Site_Export::export_site();
+        $data = Olobuild_Site_Export::export_site();
 
         return rest_ensure_response( $data );
     }
@@ -2723,8 +2723,8 @@ class Olo_Rest_Api {
      * Import Olobuild site data from JSON body.
      */
     public function site_import( $request ) {
-        if ( ! class_exists( 'Olo_Site_Export' ) ) {
-            require_once OLO_PATH . 'includes/class-site-export.php';
+        if ( ! class_exists( 'Olobuild_Site_Export' ) ) {
+            require_once OLOBUILD_PATH . 'includes/class-site-export.php';
         }
 
         $body = $request->get_json_params();
@@ -2732,7 +2732,7 @@ class Olo_Rest_Api {
             return new WP_Error( 'invalid_data', 'Empty or invalid JSON body.', [ 'status' => 400 ] );
         }
 
-        $result = Olo_Site_Export::import_site( $body );
+        $result = Olobuild_Site_Export::import_site( $body );
 
         return rest_ensure_response( $result );
     }
@@ -2818,7 +2818,7 @@ class Olo_Rest_Api {
 
         if ( empty( $tiles ) && empty( $header_tiles ) && empty( $footer_tiles ) ) {
             return rest_ensure_response( [
-                'html'       => Olo_Builder::get_iframe_empty_html(),
+                'html'       => Olobuild_Builder::get_iframe_empty_html(),
                 'css'        => [],
                 'inline_css' => '',
             ] );
@@ -2899,7 +2899,7 @@ class Olo_Rest_Api {
             }
         }
 
-        $renderer = new Olo_Frontend_Renderer();
+        $renderer = new Olobuild_Frontend_Renderer();
         $renderer->builder_mode = true;
 
         $parts = [];
@@ -2908,7 +2908,7 @@ class Olo_Rest_Api {
         $header_bg = $body['header_page_bg'] ?? null;
         $body_bg   = $page_settings['page_bg'] ?? null;
         $footer_bg = $body['footer_page_bg'] ?? null;
-        $css_builder = class_exists( 'Olo_CSS_Builder' ) ? new Olo_CSS_Builder() : null;
+        $css_builder = class_exists( 'Olobuild_CSS_Builder' ) ? new Olobuild_CSS_Builder() : null;
         $bg_inline = function( $bg ) use ( $css_builder ) {
             if ( ! $css_builder ) return '';
             if ( ! is_array( $bg ) || empty( $bg['type'] ) || $bg['type'] === 'none' ) return '';
@@ -2935,7 +2935,7 @@ class Olo_Rest_Api {
         } elseif ( ! empty( $header_tiles ) || ! empty( $footer_tiles ) ) {
             // Body vuoto ma header/footer presenti: inietta empty state centrato
             // così il canvas non resta uno spazio bianco silenzioso tra le due zone.
-            $parts[] = '<main data-olo-zone="body">' . Olo_Builder::get_iframe_empty_html() . '</main>';
+            $parts[] = '<main data-olo-zone="body">' . Olobuild_Builder::get_iframe_empty_html() . '</main>';
         }
 
         // Footer
@@ -2950,21 +2950,21 @@ class Olo_Rest_Api {
         $html = implode( '', $parts );
 
         $css_urls = [
-            OLO_URL . 'assets/vendor/uikit/css/uikit.min.css',
-            OLO_URL . 'assets/css/frontend.css?v=' . OLO_VERSION,
-            OLO_URL . 'assets/css/olo-proslider.css?v=' . OLO_VERSION,
+            OLOBUILD_URL . 'assets/vendor/uikit/css/uikit.min.css',
+            OLOBUILD_URL . 'assets/css/frontend.css?v=' . OLOBUILD_VERSION,
+            OLOBUILD_URL . 'assets/css/olo-proslider.css?v=' . OLOBUILD_VERSION,
         ];
 
         $inline_css = '';
-        if ( class_exists( 'Olo_Style_System' ) ) {
-            $inline_css = Olo_Style_System::instance()->generate_css();
+        if ( class_exists( 'Olobuild_Style_System' ) ) {
+            $inline_css = Olobuild_Style_System::instance()->generate_css();
         }
 
         // Estendi inline_css con il page background della body zone, applicato a html+body
         // dell'iframe builder. Senza questo, il bg vive solo dentro `.olo-template` (che ha
         // max-width limitata) e i bordi laterali dell'iframe restano del colore di default
         // del tema. UX-wise l'utente si aspetta che il bg pagina riempia l'intera area canvas.
-        // !important perché altri inline_css generati da Olo_Style_System potrebbero settare
+        // !important perché altri inline_css generati da Olobuild_Style_System potrebbero settare
         // `body { background: ... }` con specificità simile, e l'ordine di append non basta
         // a garantire il vincitore.
         if ( $css_builder && is_array( $body_bg ) && ! empty( $body_bg['type'] ) && $body_bg['type'] !== 'none' ) {
@@ -3020,7 +3020,7 @@ class Olo_Rest_Api {
             return new WP_Error( 'invalid_params', 'Parametri mancanti.', [ 'status' => 400 ] );
         }
 
-        $db = new Olo_Database();
+        $db = new Olobuild_Database();
         $template = $db->get_template( $template_id );
         if ( ! $template ) {
             return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
@@ -3037,11 +3037,11 @@ class Olo_Rest_Api {
             return new WP_Error( 'loop_disabled', 'Loop non attivo su questa row.', [ 'status' => 400 ] );
         }
 
-        $renderer = new Olo_Frontend_Renderer();
+        $renderer = new Olobuild_Frontend_Renderer();
         $loop_query = $renderer->run_row_loop_query( $s, $page, true );
         $hover_css_rules = [];
         $tile_counter = 0;
-        $manager = class_exists( 'Olo_Tile_Manager' ) ? new Olo_Tile_Manager() : null;
+        $manager = class_exists( 'Olobuild_Tile_Manager' ) ? new Olobuild_Tile_Manager() : null;
 
         $html = $renderer->render_row_loop_children(
             $row_node['children'] ?? [],
@@ -3137,7 +3137,7 @@ class Olo_Rest_Api {
             }
         }
 
-        $renderer = new Olo_Frontend_Renderer();
+        $renderer = new Olobuild_Frontend_Renderer();
         $renderer->builder_mode = true;
 
         $renderer->breakpoints = wp_parse_args( $page_settings['breakpoints'] ?? [], [
@@ -3148,14 +3148,14 @@ class Olo_Rest_Api {
             'mobile'           => 480,
         ] );
 
-        $manager = Olo_Tile_Manager::instance();
+        $manager = Olobuild_Tile_Manager::instance();
         $hover_css = [];
         // counter_hint - 1: prima dell'increment in render_*_node, così che ++$counter
         // produca esattamente l'hint passato dal client (= ID del nodo già nel DOM).
         $counter = max( 0, $counter_hint - 1 );
 
         ob_start();
-        echo $renderer->render_node_public( $tile, $manager, $template_id, $hover_css, $counter ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- builder-preview HTML generated by Olo_Frontend_Renderer::render_node_public(); each tile escapes its own output, captured into the REST response buffer
+        echo $renderer->render_node_public( $tile, $manager, $template_id, $hover_css, $counter ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- builder-preview HTML generated by Olobuild_Frontend_Renderer::render_node_public(); each tile escapes its own output, captured into the REST response buffer
         $html = ob_get_clean();
 
         // Hover CSS + responsive CSS raccolti durante il render del nodo:
@@ -3193,7 +3193,7 @@ class Olo_Rest_Api {
             return new WP_Error( 'invalid_id', 'ID template non valido', [ 'status' => 400 ] );
         }
 
-        $db       = new Olo_Database();
+        $db       = new Olobuild_Database();
         $template = $db->get_template( $id );
         if ( ! $template ) {
             return new WP_Error( 'not_found', 'Template non trovato', [ 'status' => 404 ] );
@@ -3205,22 +3205,22 @@ class Olo_Rest_Api {
         }
 
         // Use the frontend renderer to produce HTML
-        $renderer = new Olo_Frontend_Renderer();
+        $renderer = new Olobuild_Frontend_Renderer();
         ob_start();
         $renderer->render_tiles_array( $tiles, $template['settings'] ?? [] );
         $html = ob_get_clean();
 
         // Collect CSS needed for proper rendering
         $css_urls = [
-            OLO_URL . 'assets/vendor/uikit/css/uikit.min.css',
-            OLO_URL . 'assets/css/frontend.css?v=' . OLO_VERSION,
-            OLO_URL . 'assets/css/olo-livesearch.css?v=' . OLO_VERSION,
+            OLOBUILD_URL . 'assets/vendor/uikit/css/uikit.min.css',
+            OLOBUILD_URL . 'assets/css/frontend.css?v=' . OLOBUILD_VERSION,
+            OLOBUILD_URL . 'assets/css/olo-livesearch.css?v=' . OLOBUILD_VERSION,
         ];
 
         // Style System inline CSS (custom properties, fonts, etc.)
         $inline_css = '';
-        if ( class_exists( 'Olo_Style_System' ) ) {
-            $inline_css = Olo_Style_System::instance()->generate_css();
+        if ( class_exists( 'Olobuild_Style_System' ) ) {
+            $inline_css = Olobuild_Style_System::instance()->generate_css();
         }
 
         return rest_ensure_response( [
@@ -3394,7 +3394,7 @@ class Olo_Rest_Api {
         $url = trailingslashit( $uploads['baseurl'] ) . 'olobuild-thumbs/' . $filename;
 
         // Aggiorna campo `thumbnail` del template + cleanup vecchia thumb
-        $db = new Olo_Database();
+        $db = new Olobuild_Database();
         $template = $db->get_template( $template_id );
         if ( ! $template ) {
             wp_delete_file( $dest );
@@ -3691,7 +3691,7 @@ class Olo_Rest_Api {
         $limit = max( 1, min( 10, (int) $request->get_param( 'limit' ) ) );
 
         // Lettura del CHANGELOG.md se esiste
-        $changelog_file = OLO_PATH . 'CHANGELOG.md';
+        $changelog_file = OLOBUILD_PATH . 'CHANGELOG.md';
         $entries = [];
         if ( file_exists( $changelog_file ) ) {
             $entries = self::parse_changelog_md( $changelog_file, $limit );
@@ -3700,7 +3700,7 @@ class Olo_Rest_Api {
         // Fallback: ultima versione dall'header del plugin
         if ( empty( $entries ) ) {
             $entries = [ [
-                'v'     => 'v' . OLO_VERSION,
+                'v'     => 'v' . OLOBUILD_VERSION,
                 'date'  => date_i18n( 'j M', time() ),
                 'tag'   => 'novità',
                 'items' => [ __( 'Vedi changelog completo nel repository.', 'olobuild' ) ],

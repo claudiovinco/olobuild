@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_ProGallery_Tile extends Olo_Tile_Base {
+class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'progallery';
     protected $name     = 'Pro Gallery';
@@ -145,11 +145,11 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         if ( $layout === 'filmstrip' ) { $layout = 'strip_coverflow'; }
         $cols         = max( 2, min( 6, absint( $s['columns'] ) ) );
         $gap          = max( 0, min( 24, absint( $s['gap'] ) ) );
-        $radius       = Olo_Tile_Utils::border_radius( $s['thumb_radius'] ?? 0 );
-        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['thumb_radius_hover'] ?? null );
-        $radius_raw   = is_array( $s["thumb_radius"] ?? 0 ) ? intval( $s["thumb_radius"]["tl"] ?? 0 ) : Olo_Tile_Utils::radius_int( $s['thumb_radius'] ?? 0 );
+        $radius       = Olobuild_Tile_Utils::border_radius( $s['thumb_radius'] ?? 0 );
+        $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['thumb_radius_hover'] ?? null );
+        $radius_raw   = is_array( $s["thumb_radius"] ?? 0 ) ? intval( $s["thumb_radius"]["tl"] ?? 0 ) : Olobuild_Tile_Utils::radius_int( $s['thumb_radius'] ?? 0 );
         $radius_css   = $this->build_border_radius_css( $s["thumb_radius"] ?? 0 );
-        $radius_css_hover_css = Olo_Tile_Utils::radius_force_css( $s['thumb_radius_hover'] ?? null );
+        $radius_css_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['thumb_radius_hover'] ?? null );
         $img_height   = esc_attr( $s['img_height'] ?: '250px' );
         $object_fit   = esc_attr( $s['object_fit'] ?: 'cover' );
         // Punto focale GLOBALE (object-position) applicato a TUTTE le immagini/video.
@@ -316,7 +316,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         $more_size   = max( 16, min( 48, absint( $s['more_size'] ) ) );
 
         // Shadow / border
-        $shadow = Olo_Tile_Utils::shadow_value( $s, 'shadow' );
+        $shadow = Olobuild_Tile_Utils::shadow_value( $s, 'shadow' );
         $bw     = max( 0, min( 10, absint( $s['border_width'] ) ) );
         $bc     = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
 
@@ -1075,7 +1075,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
                         }
                         echo '<div class="olo-pg-play"></div>';
                     } else {
-                        echo Olo_Tile_Utils::img_srcset( $att_id, $url, esc_attr( $alt ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- img_srcset() returns an <img> tag escaped internally (esc_url/esc_attr/intval).
+                        echo Olobuild_Tile_Utils::img_srcset( $att_id, $url, esc_attr( $alt ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- img_srcset() returns an <img> tag escaped internally (esc_url/esc_attr/intval).
                     }
                     echo '</div>';
                 } else {
@@ -1091,7 +1091,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
                         }
                         echo '<div class="olo-pg-play"></div>';
                     } else {
-                        echo Olo_Tile_Utils::img_srcset( $att_id, $url, esc_attr( $alt ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- img_srcset() returns an <img> tag escaped internally (esc_url/esc_attr/intval).
+                        echo Olobuild_Tile_Utils::img_srcset( $att_id, $url, esc_attr( $alt ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- img_srcset() returns an <img> tag escaped internally (esc_url/esc_attr/intval).
                     }
                     if ( ! empty( $caption ) ) {
                         if ( $hcaption !== 'none' ) {
@@ -1734,18 +1734,18 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
                         echo '<video muted autoplay loop playsinline' . $poster_attr . '><source src="' . esc_url( $url ) . '" type="' . esc_attr( $mime ) . '"></video>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $poster_attr is esc_url()-built above; the rest is escaped inline.
                     } elseif ( $use_embed_autoplay ) {
                         $embed_auto_url = $this->get_gallery_embed_url( $embed, true );
-                        $iframe_title = $caption !== '' ? $caption : ( $alt !== '' ? $alt : olo_t( 'Anteprima video' ) );
+                        $iframe_title = $caption !== '' ? $caption : ( $alt !== '' ? $alt : olobuild_t( 'Anteprima video' ) );
                         echo '<iframe src="' . esc_url( $embed_auto_url ) . '" title="' . esc_attr( $iframe_title ) . '" style="position:absolute;inset:0;width:100%;height:100%;border:none" allow="autoplay;encrypted-media" allowfullscreen loading="lazy"></iframe>';
                     } else {
                         if ( $poster ) {
-                            echo Olo_Tile_Utils::img_srcset( $poster_id, $poster, esc_attr( $alt ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- img_srcset() returns an <img> tag escaped internally (esc_url/esc_attr/intval).
+                            echo Olobuild_Tile_Utils::img_srcset( $poster_id, $poster, esc_attr( $alt ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- img_srcset() returns an <img> tag escaped internally (esc_url/esc_attr/intval).
                         } else {
                             echo '<div class="olo-pg-no-poster"></div>';
                         }
                         echo '<div class="olo-pg-play"></div>';
                     }
                 } else {
-                    echo Olo_Tile_Utils::img_srcset( $att_id, $url, esc_attr( $alt ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- img_srcset() returns an <img> tag escaped internally (esc_url/esc_attr/intval).
+                    echo Olobuild_Tile_Utils::img_srcset( $att_id, $url, esc_attr( $alt ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- img_srcset() returns an <img> tag escaped internally (esc_url/esc_attr/intval).
                 }
 
                 // Hover caption
@@ -1777,11 +1777,11 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         // Coverflow: frecce + indicatore + chiusura wrapper
         if ( $is_coverflow ) {
             // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_class is sanitized via esc_attr()/sanitize_key() above; button labels are escaped inline.
-            echo '<button class="' . $container_class . '-prev" aria-label="' . esc_attr( olo_t( 'Precedente' ) ) . '">&#8249;</button>';
-            echo '<button class="' . $container_class . '-next" aria-label="' . esc_attr( olo_t( 'Successivo' ) ) . '">&#8250;</button>';
+            echo '<button class="' . $container_class . '-prev" aria-label="' . esc_attr( olobuild_t( 'Precedente' ) ) . '">&#8249;</button>';
+            echo '<button class="' . $container_class . '-next" aria-label="' . esc_attr( olobuild_t( 'Successivo' ) ) . '">&#8250;</button>';
             if ( $film_dots !== 'none' ) {
                 if ( $film_dots === 'progress' ) {
-                    echo '<div class="' . $container_class . '-dots"><div class="pg-prog-track" tabindex="0" role="slider" aria-label="' . esc_attr( olo_t( 'Avanzamento galleria' ) ) . '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="pg-prog-fill"></div></div></div>';
+                    echo '<div class="' . $container_class . '-dots"><div class="pg-prog-track" tabindex="0" role="slider" aria-label="' . esc_attr( olobuild_t( 'Avanzamento galleria' ) ) . '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="pg-prog-fill"></div></div></div>';
                 } else {
                     echo '<div class="' . $container_class . '-dots"></div>';
                 }
@@ -1802,8 +1802,8 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by the shared Olo_Tile_Base::build_border_css() helper (sizes int-cast); $uid is a generated unique id.
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by the shared Olo_Tile_Base border helpers (build_border_hover_css/build_border_effect_css, sizes int-cast) on a generated uid selector.
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by the shared Olobuild_Tile_Base::build_border_css() helper (sizes int-cast); $uid is a generated unique id.
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by the shared Olobuild_Tile_Base border helpers (build_border_hover_css/build_border_effect_css, sizes int-cast) on a generated uid selector.
         }
         return ob_get_clean();
     }
@@ -1908,8 +1908,8 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         $html .= ".{$uid}-sa-next{right:8px}";
         $html .= "@media(max-width:640px){.{$uid}-sa-btn{width:" . max( 28, $btn_w - 8 ) . "px;height:" . max( 28, $btn_h - 8 ) . "px}.{$uid}-sa-prev{left:4px}.{$uid}-sa-next{right:4px}}";
         $html .= '</style>';
-        $html .= '<button class="' . $uid . '-sa-btn ' . $uid . '-sa-prev" aria-label="' . esc_attr( olo_t( 'Precedente' ) ) . '" data-sa-dir="-1"><svg viewBox="' . $icon_vb . '">' . $svg_left . '</svg></button>';
-        $html .= '<button class="' . $uid . '-sa-btn ' . $uid . '-sa-next" aria-label="' . esc_attr( olo_t( 'Successivo' ) ) . '" data-sa-dir="1"><svg viewBox="' . $icon_vb . '">' . $svg_right . '</svg></button>';
+        $html .= '<button class="' . $uid . '-sa-btn ' . $uid . '-sa-prev" aria-label="' . esc_attr( olobuild_t( 'Precedente' ) ) . '" data-sa-dir="-1"><svg viewBox="' . $icon_vb . '">' . $svg_left . '</svg></button>';
+        $html .= '<button class="' . $uid . '-sa-btn ' . $uid . '-sa-next" aria-label="' . esc_attr( olobuild_t( 'Successivo' ) ) . '" data-sa-dir="1"><svg viewBox="' . $icon_vb . '">' . $svg_right . '</svg></button>';
         return $html;
     }
 
@@ -2065,7 +2065,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         echo 'if(dotC){';
         // dots / lines: create span per item
         echo 'if(dotStyle==="dots"||dotStyle==="lines"){';
-        echo 'var dotLbl=' . wp_json_encode( olo_t( 'Vai alla foto' ) ) . ';';
+        echo 'var dotLbl=' . wp_json_encode( olobuild_t( 'Vai alla foto' ) ) . ';';
         echo 'for(var di=0;di<items.length;di++){';
         echo 'var sp=document.createElement("button");';
         echo 'sp.type="button";';

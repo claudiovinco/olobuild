@@ -1,7 +1,7 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class Olo_Custom_Fonts {
+class Olobuild_Custom_Fonts {
 
     private static $option_key = 'olo_custom_fonts';
 

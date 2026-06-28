@@ -1,8 +1,8 @@
 <?php
 /**
- * Olo_Seo_Head — JSON-LD schema markup, Open Graph, Twitter Cards, canonical URL, robots meta.
+ * Olobuild_Seo_Head — JSON-LD schema markup, Open Graph, Twitter Cards, canonical URL, robots meta.
  *
- * Reads settings from Olo_Seo_Settings options. Outputs structured data
+ * Reads settings from Olobuild_Seo_Settings options. Outputs structured data
  * and social meta tags in wp_head for all pages.
  */
 
@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Seo_Head {
+class Olobuild_Seo_Head {
 
     private static $instance = null;
 
@@ -48,8 +48,8 @@ class Olo_Seo_Head {
     /* ─── Helper to read settings ─── */
 
     private function opt( $option_key, $field = null, $default = '' ) {
-        if ( class_exists( 'Olo_Seo_Settings' ) ) {
-            return Olo_Seo_Settings::get( $option_key, $field, $default );
+        if ( class_exists( 'Olobuild_Seo_Settings' ) ) {
+            return Olobuild_Seo_Settings::get( $option_key, $field, $default );
         }
         $opts = get_option( $option_key, [] );
         if ( ! is_array( $opts ) ) return $default;
@@ -1138,7 +1138,7 @@ class Olo_Seo_Head {
 
     public function check_heading_structure( $request ) {
         $template_id = intval( $request['id'] );
-        $db          = new Olo_Database();
+        $db          = new Olobuild_Database();
         $template    = $db->get_template( $template_id );
 
         if ( ! $template ) {
@@ -1324,7 +1324,7 @@ class Olo_Seo_Head {
 
         $sitemap_opts = $this->opt( 'olo_seo_sitemap' );
         $max_urls     = intval( $sitemap_opts['max_urls'] ?? 1000 );
-        $db           = new Olo_Database();
+        $db           = new Olobuild_Database();
         $templates    = $db->get_templates();
         $urls         = [];
 

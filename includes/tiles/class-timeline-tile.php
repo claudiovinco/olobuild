@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * stampato una sola volta per pagina. Runtime JS scoped per istanza (no &&/|| —
  * vincolo wptexturize). Migrazione delle vecchie chiavi (layout/marker_type/…).
  */
-class Olo_Timeline_Tile extends Olo_Tile_Base {
+class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'timeline';
     protected $name     = 'Timeline';
@@ -65,9 +65,9 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         static $done = false;
         if ( $done ) { return; }
         $done = true;
-        $path = OLO_PATH . 'assets/css/timeline-super.css';
+        $path = OLOBUILD_PATH . 'assets/css/timeline-super.css';
         if ( file_exists( $path ) ) {
-            echo '<style id="olo-tlsuper-css">' . file_get_contents( $path ) . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped,WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- static stylesheet bundled with the plugin, read from a fixed OLO_PATH location
+            echo '<style id="olo-tlsuper-css">' . file_get_contents( $path ) . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped,WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- static stylesheet bundled with the plugin, read from a fixed OLOBUILD_PATH location
         }
     }
 
@@ -265,8 +265,8 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid} .it-card", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) { echo ".{$uid} .it-card{{$border_css}}"; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized border settings
+            if ( $border_css ) { echo ".{$uid} .it-card{{$border_css}}"; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border helpers from sanitized border settings
         }
 
         return ob_get_clean();
@@ -431,7 +431,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         echo '<div class="nv-viewport"><div class="nv-track"><span class="nv-base"></span><span class="nv-fill"></span>';
         foreach ( $items as $i => $item ) {
             $nv_name = trim( $item['title'] . ' ' . $item['date'] );
-            if ( $nv_name === '' ) { $nv_name = sprintf( olo_t( 'Tappa %d', 'olobuilder' ), $i + 1 ); }
+            if ( $nv_name === '' ) { $nv_name = sprintf( olobuild_t( 'Tappa %d', 'olobuilder' ), $i + 1 ); }
             echo '<div class="nv-step" role="button" tabindex="0"'
                 . ' aria-label="' . esc_attr( $nv_name ) . '"'
                 . ' data-yr="' . esc_attr( $item['date'] ) . '"'

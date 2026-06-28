@@ -2,14 +2,14 @@
 /**
  * Olobuild Full-Page Cache — drop-in advanced-cache.php
  *
- * Questo file viene copiato in wp-content/advanced-cache.php da Olo_FullPage_Cache.
+ * Questo file viene copiato in wp-content/advanced-cache.php da Olobuild_FullPage_Cache.
  * WordPress lo include MOLTO presto (in wp-settings.php, se define('WP_CACHE', true)),
  * PRIMA di caricare plugin, tema e query: qui possiamo servire l'HTML già cachato e
  * uscire, azzerando il costo di rigenerazione della pagina (TTFB).
  *
  * NON usa API di WordPress (non è ancora caricato): solo $_SERVER, $_COOKIE e PHP core.
  * La configurazione (enabled, ttl, esclusioni) è letta da cache/olobuild/fpc-config.php,
- * scritto da Olo_FullPage_Cache. Se manca o enabled=false, il drop-in è inerte.
+ * scritto da Olobuild_FullPage_Cache. Se manca o enabled=false, il drop-in è inerte.
  *
  * Sicurezza-prima: in caso di dubbio NON si serve e NON si salva (passthrough a WP).
  */
@@ -154,10 +154,10 @@ if ( ! defined( 'WP_CONTENT_DIR' ) ) {
         return; // non generiamo cache da una HEAD.
     }
 
-    $GLOBALS['olo_fpc_ctx'] = [ 'dir' => $dir, 'file' => $file ];
+    $GLOBALS['olobuild_fpc_ctx'] = [ 'dir' => $dir, 'file' => $file ];
 
     ob_start( static function ( $html ) {
-        $ctx = isset( $GLOBALS['olo_fpc_ctx'] ) ? $GLOBALS['olo_fpc_ctx'] : null;
+        $ctx = isset( $GLOBALS['olobuild_fpc_ctx'] ) ? $GLOBALS['olobuild_fpc_ctx'] : null;
         if ( ! $ctx || $html === '' ) {
             return $html;
         }

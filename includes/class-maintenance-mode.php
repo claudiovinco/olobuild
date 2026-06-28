@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Maintenance_Mode {
+class Olobuild_Maintenance_Mode {
 
     /**
      * Initialize the maintenance mode hooks.
@@ -120,7 +120,7 @@ class Olo_Maintenance_Mode {
      * Render an Olobuild template for the maintenance/coming soon page.
      */
     private function render_template( $template_id ) {
-        $db       = new Olo_Database();
+        $db       = new Olobuild_Database();
         $template = $db->get_template( $template_id );
 
         if ( ! $template ) {
@@ -128,7 +128,7 @@ class Olo_Maintenance_Mode {
             return;
         }
 
-        $renderer   = new Olo_Frontend_Renderer();
+        $renderer   = new Olobuild_Frontend_Renderer();
         $inner_html = $renderer->render_shortcode( [ 'id' => $template_id ] );
         ?>
 <!DOCTYPE html>
@@ -150,7 +150,7 @@ class Olo_Maintenance_Mode {
 </head>
 <body <?php body_class( 'olo-maintenance-page' ); ?>>
     <?php
-    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- template HTML rendered by Olo_Frontend_Renderer::render_shortcode(); each tile escapes its own output at build time
+    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- template HTML rendered by Olobuild_Frontend_Renderer::render_shortcode(); each tile escapes its own output at build time
     echo $inner_html;
     ?>
     <?php wp_footer(); ?>

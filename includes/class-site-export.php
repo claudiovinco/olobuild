@@ -1,7 +1,7 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
-class Olo_Site_Export {
+class Olobuild_Site_Export {
 
     /**
      * Export all Olobuild data as a JSON package.
@@ -11,7 +11,7 @@ class Olo_Site_Export {
         global $wpdb;
 
         $data = [
-            'version'     => OLO_VERSION,
+            'version'     => OLOBUILD_VERSION,
             'exported_at' => current_time('mysql'),
             'site_url'    => get_site_url(),
         ];

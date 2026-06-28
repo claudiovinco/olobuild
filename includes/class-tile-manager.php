@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Tile_Manager {
+class Olobuild_Tile_Manager {
 
     private static $instance = null;
     private $tiles = [];
@@ -19,7 +19,7 @@ class Olo_Tile_Manager {
     private function __construct() {}
 
     public function register_tile( $tile_instance ) {
-        if ( ! $tile_instance instanceof Olo_Tile_Base ) {
+        if ( ! $tile_instance instanceof Olobuild_Tile_Base ) {
             return false;
         }
         $this->tiles[ $tile_instance->get_type() ] = $tile_instance;

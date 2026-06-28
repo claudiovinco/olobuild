@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Standard Olobuild: i18n, separazione contenuto/stile, withHover su CTA,
  * border-radius 4 angoli + hover, sfondo creativo unificato, inline editing.
  */
-class Olo_CtaBanner_Tile extends Olo_Tile_Base {
+class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'cta-banner';
     protected $name     = 'CTA Banner';
@@ -112,8 +112,8 @@ class Olo_CtaBanner_Tile extends Olo_Tile_Base {
 
         $bg_css = '';
         $bg = $s['bg'] ?? [ 'type' => 'solid', 'color' => '#0f172a' ];
-        if ( is_array( $bg ) && ( $bg['type'] ?? 'none' ) !== 'none' && class_exists( 'Olo_CSS_Builder' ) ) {
-            $cssb = new Olo_CSS_Builder();
+        if ( is_array( $bg ) && ( $bg['type'] ?? 'none' ) !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
+            $cssb = new Olobuild_CSS_Builder();
             $bg_css = $cssb->get_bg_inline_css( $bg );
         }
         if ( ! $bg_css ) $bg_css = 'background:#0f172a';

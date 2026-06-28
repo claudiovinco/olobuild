@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Wpcomments_Tile extends Olo_Tile_Base {
+class Olobuild_Wpcomments_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'wpcomments';
     protected $name     = 'Commenti';
@@ -75,11 +75,11 @@ class Olo_Wpcomments_Tile extends Olo_Tile_Base {
         // Sanitize settings
         $allowed_tags = [ 'h2', 'h3', 'h4', 'h5' ];
         $title_tag    = in_array( $s['title_tag'], $allowed_tags, true ) ? $s['title_tag'] : 'h3';
-        $title_text   = esc_html( $s['title_text'] ?: olo_t( 'Commenti' ) );
+        $title_text   = esc_html( $s['title_text'] ?: olobuild_t( 'Commenti' ) );
         $show_title   = ! empty( $s['show_title'] );
         $show_avatar  = ! empty( $s['show_avatar'] );
         $avatar_size  = max( 24, min( 96, absint( $s['avatar_size'] ) ) );
-        $avatar_radius = max( 0, min( 50, Olo_Tile_Utils::radius_int( $s['avatar_border_radius'] ) ) );
+        $avatar_radius = max( 0, min( 50, Olobuild_Tile_Utils::radius_int( $s['avatar_border_radius'] ) ) );
         $show_date    = ! empty( $s['show_date'] );
         $show_reply   = ! empty( $s['show_reply_link'] );
         $show_form    = ! empty( $s['show_form'] );
@@ -242,7 +242,7 @@ class Olo_Wpcomments_Tile extends Olo_Tile_Base {
             ], $comments );
             echo '</ol>';
         } else {
-            echo '<p style="font-size:0.9em;opacity:0.7">' . esc_html( olo_t( 'Nessun commento ancora.' ) ) . '</p>';
+            echo '<p style="font-size:0.9em;opacity:0.7">' . esc_html( olobuild_t( 'Nessun commento ancora.' ) ) . '</p>';
         }
 
         // Comment form
@@ -250,10 +250,10 @@ class Olo_Wpcomments_Tile extends Olo_Tile_Base {
             if ( comments_open( $post->ID ) ) {
                 echo '<div class="olo-comment-form-wrap">';
                 comment_form( [
-                    'title_reply'         => olo_t( 'Lascia un commento' ),
-                    'title_reply_to'      => olo_t( 'Rispondi a %s' ),
-                    'cancel_reply_link'   => olo_t( 'Annulla risposta' ),
-                    'label_submit'        => olo_t( 'Invia commento' ),
+                    'title_reply'         => olobuild_t( 'Lascia un commento' ),
+                    'title_reply_to'      => olobuild_t( 'Rispondi a %s' ),
+                    'cancel_reply_link'   => olobuild_t( 'Annulla risposta' ),
+                    'label_submit'        => olobuild_t( 'Invia commento' ),
                     'comment_notes_before' => '',
                     'comment_notes_after'  => '',
                 ], $post->ID );
@@ -269,8 +269,8 @@ class Olo_Wpcomments_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized values (intval/safe color whitelist)
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized values
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base::build_border_css() from sanitized values (intval/safe color whitelist)
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border helpers from sanitized values
         }
         return ob_get_clean();
     }
@@ -305,7 +305,7 @@ class Olo_Wpcomments_Tile extends Olo_Tile_Base {
                     <div class="olo-comment-content">
                         <?php
                         if ( '0' === (string) $comment->comment_approved ) {
-                            echo '<em>' . esc_html( olo_t( 'Il commento è in attesa di moderazione.' ) ) . '</em>';
+                            echo '<em>' . esc_html( olobuild_t( 'Il commento è in attesa di moderazione.' ) ) . '</em>';
                         } else {
                             comment_text( $comment );
                         }
@@ -316,7 +316,7 @@ class Olo_Wpcomments_Tile extends Olo_Tile_Base {
                     <div class="olo-comment-reply">
                         <?php
                         comment_reply_link( array_merge( $args, [
-                            'reply_text' => olo_t( 'Rispondi' ),
+                            'reply_text' => olobuild_t( 'Rispondi' ),
                             'depth'      => $depth,
                             'max_depth'  => $args['max_depth'],
                         ] ), $comment );

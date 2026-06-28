@@ -1,6 +1,6 @@
 <?php
 /**
- * Olo_Global_Popups — Display popups globally based on conditions.
+ * Olobuild_Global_Popups — Display popups globally based on conditions.
  *
  * Allows popups to be shown across the entire site based on:
  * - Page/post type conditions
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Global_Popups {
+class Olobuild_Global_Popups {
 
     private static $instance = null;
 
@@ -79,13 +79,13 @@ class Olo_Global_Popups {
             $max_width       = intval( $popup['max_width'] ?? 700 );
 
             // Render template content
-            $db       = new Olo_Database();
+            $db       = new Olobuild_Database();
             $template = $db->get_template( $template_id );
             if ( ! $template || empty( $template['content'] ) ) {
                 continue;
             }
 
-            $renderer  = new Olo_Frontend_Renderer();
+            $renderer  = new Olobuild_Frontend_Renderer();
             $content   = do_shortcode( '[olo_template id="' . $template_id . '"]' );
 
             $overlay_alpha = round( $overlay_opacity / 100, 2 );
@@ -106,7 +106,7 @@ class Olo_Global_Popups {
                 <div class="uk-modal-dialog uk-margin-auto-vertical">
                     <button class="uk-modal-close-default" type="button" uk-close></button>
                     <div class="uk-modal-body" uk-overflow-auto style="max-height:80vh">
-                        <?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- popup body is the rendered [olo_template] shortcode output (Olo_Frontend_Renderer); each tile escapes its own output at build time ?>
+                        <?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- popup body is the rendered [olo_template] shortcode output (Olobuild_Frontend_Renderer); each tile escapes its own output at build time ?>
                     </div>
                 </div>
             </div>
@@ -420,7 +420,7 @@ class Olo_Global_Popups {
 
     public function render_admin_page() {
         $popups   = get_option( 'olo_global_popups', [] );
-        $db       = new Olo_Database();
+        $db       = new Olobuild_Database();
         $result   = $db->list_templates( [ 'per_page' => 500, 'orderby' => 'title', 'order' => 'ASC' ] );
         $tpls_raw = $result['items'] ?? [];
         $templates = [];
@@ -437,11 +437,11 @@ class Olo_Global_Popups {
             foreach ( $popups as $p ) if ( ! empty( $p['enabled'] ) ) $active_count++;
         }
         ?>
-        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Popup Globali', 'olobuild' ) . '</b>' ); ?>
+        <?php Olobuild_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Popup Globali', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy">
             <?php
-            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally; counts are int-cast.
-            echo Olo_Builder::cockpit_page_head( [
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olobuild_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally; counts are int-cast.
+            echo Olobuild_Builder::cockpit_page_head( [
                 'title' => __( 'Popup Globali', 'olobuild' ),
                 'sub'   => sprintf(
                     /* translators: 1: total popups, 2: active popups */
@@ -671,7 +671,7 @@ class Olo_Global_Popups {
             </script>
             <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         </main>
-        <?php Olo_Builder::cockpit_shell_close(); ?>
+        <?php Olobuild_Builder::cockpit_shell_close(); ?>
         <?php
     }
 }

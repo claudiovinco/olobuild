@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * - CTA principale                 → data-olo-cta
  * - heading principale             → data-olo-wave
  */
-class Olo_StudioHero_Tile extends Olo_Tile_Base {
+class Olobuild_StudioHero_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'studiohero';
     protected $name     = 'Hero — Studio (Editorial + OLOmap)';
@@ -233,8 +233,8 @@ class Olo_StudioHero_Tile extends Olo_Tile_Base {
         // ── KIT standard: sfondo completo (override del bg base SOLO se valorizzato) ──
         $bg_block = 'background:' . $bgcol . ';';
         $bg_obj   = $s['bg'] ?? null;
-        if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && $bg_obj['type'] !== 'none' && class_exists( 'Olo_CSS_Builder' ) ) {
-            $bg_decl = ( new Olo_CSS_Builder() )->get_bg_inline_css( $bg_obj );
+        if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && $bg_obj['type'] !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
+            $bg_decl = ( new Olobuild_CSS_Builder() )->get_bg_inline_css( $bg_obj );
             if ( $bg_decl !== '' ) {
                 $bg_block = rtrim( trim( $bg_decl ), ';' ) . ';';
             }
@@ -254,7 +254,7 @@ class Olo_StudioHero_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist or fixed var()/color-mix() literals, sizes via intval()/floatval() with clamps, fixed font-stack literals, background/shadow/border via the Olo_CSS_Builder/Olo_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist or fixed var()/color-mix() literals, sizes via intval()/floatval() with clamps, fixed font-stack literals, background/shadow/border via the Olobuild_CSS_Builder/Olobuild_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?>{position:relative;padding:<?php echo $vpad; ?>;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;line-height:1.55;<?php echo $bg_block; ?><?php echo $kit_decl; ?>}
             .<?php echo $uid; ?> .sth-wrap{max-width:1280px;margin:0 auto;padding-left:clamp(20px,5vw,72px);padding-right:clamp(20px,5vw,72px);}

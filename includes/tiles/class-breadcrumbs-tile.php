@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Breadcrumbs_Tile extends Olo_Tile_Base {
+class Olobuild_Breadcrumbs_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'breadcrumbs';
     protected $name     = 'Breadcrumbs';
@@ -73,7 +73,7 @@ class Olo_Breadcrumbs_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <nav class="olo-breadcrumbs olo-bc-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" aria-label="<?php echo esc_attr( olo_t( 'Breadcrumb' ) ); ?>">
+        <nav class="olo-breadcrumbs olo-bc-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" aria-label="<?php echo esc_attr( olobuild_t( 'Breadcrumb' ) ); ?>">
             <ul class="uk-breadcrumb">
                 <?php echo implode( "\n", $items ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- each list item is assembled above exclusively from esc_url()/esc_html()/esc_html__() output and literal markup. ?>
             </ul>

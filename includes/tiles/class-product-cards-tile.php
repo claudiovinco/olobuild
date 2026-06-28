@@ -8,12 +8,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Product Cards — griglia di card prodotto stile editoriale (split top/bottom).
  * Allineato agli standard Olobuild:
  *   - border-radius 4 angoli + hover via withHover
- *   - background creativo unificato (Olo_CSS_Builder::get_bg_inline_css) per
+ *   - background creativo unificato (Olobuild_CSS_Builder::get_bg_inline_css) per
  *     card e per la metà superiore di ogni item
  *   - rich text per la descrizione (safe_richtext_content)
  *   - inline editing su tutti i testi (data-olo-editable)
  */
-class Olo_ProductCards_Tile extends Olo_Tile_Base {
+class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'product-cards';
     protected $name     = 'Product Cards';
@@ -75,8 +75,8 @@ class Olo_ProductCards_Tile extends Olo_Tile_Base {
 
     private function _bg_inline_css( $bg ) {
         if ( ! is_array( $bg ) || ( $bg['type'] ?? 'none' ) === 'none' ) return '';
-        if ( ! class_exists( 'Olo_CSS_Builder' ) ) return '';
-        $cssb = new Olo_CSS_Builder();
+        if ( ! class_exists( 'Olobuild_CSS_Builder' ) ) return '';
+        $cssb = new Olobuild_CSS_Builder();
         return $cssb->get_bg_inline_css( $bg );
     }
 

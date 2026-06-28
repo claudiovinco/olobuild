@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Viewer360_Tile extends Olo_Tile_Base {
+class Olobuild_Viewer360_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'viewer360';
     protected $name     = 'Viewer 360°';
@@ -83,7 +83,7 @@ class Olo_Viewer360_Tile extends Olo_Tile_Base {
 
         $height = absint( $s['height'] ) ?: 400;
         $radius_css = $this->build_border_radius_css( $s['border_radius'] ?? 0 );
-        $radius_css_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
+        $radius_css_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
         // Build config
         if ( $is_object ) {
@@ -126,7 +126,7 @@ class Olo_Viewer360_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <?php if ( $radius_css_hover_css !== '' ) : ?>
-        <style>#<?php echo esc_attr( $uid ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?>:hover{border-radius:<?php echo $radius_css_hover_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- integer px list from Olo_Tile_Utils::radius_force_css() (absint-built) ?> !important}</style>
+        <style>#<?php echo esc_attr( $uid ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?>:hover{border-radius:<?php echo $radius_css_hover_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- integer px list from Olobuild_Tile_Utils::radius_force_css() (absint-built) ?> !important}</style>
         <?php endif; ?>
         <?php if ( $is_object ) : ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is fixed literals; $uid is internally generated ('olo-v360-' . wp_rand()). ?>
@@ -142,31 +142,31 @@ class Olo_Viewer360_Tile extends Olo_Tile_Base {
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <?php endif; ?>
         <div class="olo-v360 <?php echo $is_object ? 'olo-v3-obj ' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed class-name literal from the ternary ?>olo-v3-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" id="<?php echo esc_attr( $uid ); ?>"
-             <?php if ( $is_object ) : ?>tabindex="0" role="img" aria-label="<?php echo esc_attr( ( $s['caption'] ?? '' ) ?: olo_t( 'Oggetto girevole 360°' ) ); ?>"<?php endif; ?>
-             style="height:<?php echo (int) $height; ?>px;<?php if ( $radius_css ) echo 'border-radius:' . $radius_css . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- integer px list from Olo_Tile_Base::build_border_radius_css() (intval-built) ?>overflow:hidden;position:relative;background:#111"
+             <?php if ( $is_object ) : ?>tabindex="0" role="img" aria-label="<?php echo esc_attr( ( $s['caption'] ?? '' ) ?: olobuild_t( 'Oggetto girevole 360°' ) ); ?>"<?php endif; ?>
+             style="height:<?php echo (int) $height; ?>px;<?php if ( $radius_css ) echo 'border-radius:' . $radius_css . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- integer px list from Olobuild_Tile_Base::build_border_radius_css() (intval-built) ?>overflow:hidden;position:relative;background:#111"
              data-olo-v360='<?php echo esc_attr( wp_json_encode( $config ) ); ?>'>
             <?php if ( $is_object ) : ?>
             <div class="olo-v360-stage">
                 <img class="olo-v360-frame" src="<?php echo esc_url( $src ); ?>" alt="<?php echo esc_attr( $s['caption'] ?? '' ); ?>" draggable="false" loading="lazy" />
             </div>
-            <button type="button" class="olo-v360-arrow olo-v360-prev" aria-label="<?php echo esc_attr( olo_t( 'Ruota a sinistra' ) ); ?>">&#8249;</button>
-            <button type="button" class="olo-v360-arrow olo-v360-next" aria-label="<?php echo esc_attr( olo_t( 'Ruota a destra' ) ); ?>">&#8250;</button>
+            <button type="button" class="olo-v360-arrow olo-v360-prev" aria-label="<?php echo esc_attr( olobuild_t( 'Ruota a sinistra' ) ); ?>">&#8249;</button>
+            <button type="button" class="olo-v360-arrow olo-v360-next" aria-label="<?php echo esc_attr( olobuild_t( 'Ruota a destra' ) ); ?>">&#8250;</button>
             <?php if ( ! empty( $s['show_angle'] ) ) : ?>
             <div class="olo-v360-angle" aria-hidden="true">0&deg;</div>
             <?php endif; ?>
             <?php else : ?>
             <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px">
-                <span><?php echo esc_html( olo_t( 'Caricamento 360°...' ) ); ?></span>
+                <span><?php echo esc_html( olobuild_t( 'Caricamento 360°...' ) ); ?></span>
             </div>
             <?php endif; ?>
         </div>
         <?php if ( ! empty( $s['caption'] ) ) : ?>
             <?php list( $vc_cls, $vc_data ) = $this->tfx_attrs( $s, 'caption', $s['caption'] ); ?>
-            <p class="olo-v360-caption<?php echo $vc_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally by Olo_Text_Effects (sanitize_html_class/esc_attr); caption escaped inline ?>" style="text-align:center;font-size:0.875em;color:var(--olo-color-text-muted,#9CA3AF);margin:8px 0 0"<?php echo $vc_data; ?>><?php echo esc_html( $s['caption'] ); ?></p>
+            <p class="olo-v360-caption<?php echo $vc_cls; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally by Olobuild_Text_Effects (sanitize_html_class/esc_attr); caption escaped inline ?>" style="text-align:center;font-size:0.875em;color:var(--olo-color-text-muted,#9CA3AF);margin:8px 0 0"<?php echo $vc_data; ?>><?php echo esc_html( $s['caption'] ); ?></p>
         <?php endif; ?>
         <?php
         $tfx_css = $this->tfx_css( $s, '#' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -174,8 +174,8 @@ class Olo_Viewer360_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * under the Olobuild menu to view, search, mark as read, delete, and export
  * form submissions.
  */
-class Olo_Form_Submissions {
+class Olobuild_Form_Submissions {
 
     /** @var string DB table name (set in init) */
     private static $table = '';
@@ -188,7 +188,7 @@ class Olo_Form_Submissions {
 
         // Header row
         $header = array_merge( [ 'ID', 'Form' ], array_map( 'ucfirst', $all_keys ), [ 'IP', 'Data', 'Stato' ] );
-        fputcsv( $out, array_map( 'olo_csv_safe', $header ), ';' );
+        fputcsv( $out, array_map( 'olobuild_csv_safe', $header ), ';' );
 
         // Data rows
         foreach ( $decoded_rows as $dr ) {
@@ -204,7 +204,7 @@ class Olo_Form_Submissions {
             $row_data[] = $dr['submitted_at'];
             $row_data[] = $dr['read_status'] ? 'Letto' : 'Non letto';
             // Anti CSV-injection: prefissa i valori che iniziano con =,+,-,@ (formula Excel/Sheets).
-            fputcsv( $out, array_map( 'olo_csv_safe', $row_data ), ';' );
+            fputcsv( $out, array_map( 'olobuild_csv_safe', $row_data ), ';' );
         }
 
         // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- closing the php://output CSV stream
@@ -251,7 +251,7 @@ class Olo_Form_Submissions {
         }
 
         // Boot data (preload prima riga di KPI + items per evitare skeleton flash)
-        $rest = new Olo_Rest_Api();
+        $rest = new Olobuild_Rest_Api();
         $boot_stats = $rest->submissions_stats( null );
         $stats = is_wp_error( $boot_stats ) ? [] : $boot_stats->get_data();
 
@@ -286,7 +286,7 @@ class Olo_Form_Submissions {
         );
 
         // Actions: bottone Esporta CSV
-        $actions = Olo_Builder::cockpit_button( [
+        $actions = Olobuild_Builder::cockpit_button( [
             'label'   => __( 'Esporta CSV', 'olobuild' ),
             'variant' => 'sec',
             'href'    => $export_url,
@@ -294,16 +294,16 @@ class Olo_Form_Submissions {
         ] );
 
         ?>
-        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Invii Form', 'olobuild' ) . '</b>' ); ?>
+        <?php Olobuild_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Invii Form', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-submissions-page">
             <?php
             // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- internal cockpit helpers: cockpit_page_head() escapes title (esc_html), sub (wp_kses_post) and pre-escaped actions internally; cockpit_toolbar() escapes all chip/search parts internally (esc_attr/esc_html/esc_url).
-            echo Olo_Builder::cockpit_page_head( [
+            echo Olobuild_Builder::cockpit_page_head( [
                 'title'   => __( 'Invii Form', 'olobuild' ),
                 'sub'     => $sub,
                 'actions' => $actions,
             ] );
-            echo Olo_Builder::cockpit_toolbar( [
+            echo Olobuild_Builder::cockpit_toolbar( [
                 'chips'              => $chips,
                 'active_chip'        => 'all',
                 'search'             => true,
@@ -349,7 +349,7 @@ class Olo_Form_Submissions {
             </aside>
         </div>
 
-        <?php Olo_Builder::cockpit_shell_close(); ?>
+        <?php Olobuild_Builder::cockpit_shell_close(); ?>
         <?php
     }
 
@@ -548,7 +548,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
     require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
-class Olo_Form_Submissions_List_Table extends WP_List_Table {
+class Olobuild_Form_Submissions_List_Table extends WP_List_Table {
 
     public function __construct() {
         parent::__construct( [

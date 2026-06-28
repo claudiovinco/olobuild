@@ -1,6 +1,6 @@
 <?php
 /**
- * Olo_Site_Import_Export — Export/import templates with embedded media.
+ * Olobuild_Site_Import_Export — Export/import templates with embedded media.
  *
  * Exports: template JSON + referenced images as base64 or URL list.
  * Imports: uploads media to new site, remaps URLs in template data.
@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Site_Import_Export {
+class Olobuild_Site_Import_Export {
 
     private static $instance = null;
 
@@ -90,7 +90,7 @@ class Olo_Site_Import_Export {
         $id            = intval( $request['id'] );
         $include_media = ! empty( $request['include_media'] );
 
-        $db       = new Olo_Database();
+        $db       = new Olobuild_Database();
         $template = $db->get_template( $id );
 
         if ( ! $template ) {
@@ -105,7 +105,7 @@ class Olo_Site_Import_Export {
 
         $export = [
             'format'     => 'olobuild-template',
-            'version'    => OLO_VERSION,
+            'version'    => OLOBUILD_VERSION,
             'name'       => $template['title'] ?? ( 'Template #' . $id ),
             'type'       => $template['type'] ?? 'page',
             'data'       => $data,
@@ -132,7 +132,7 @@ class Olo_Site_Import_Export {
     public function export_site( $request ) {
         $include_media = ! empty( $request['include_media'] );
 
-        $db        = new Olo_Database();
+        $db        = new Olobuild_Database();
         $result    = $db->list_templates( [ 'per_page' => 999 ] );
         $templates = $result['items'] ?? $result;
         if ( ! is_array( $templates ) ) {
@@ -156,7 +156,7 @@ class Olo_Site_Import_Export {
 
         $site_export = [
             'format'        => 'olobuild-site',
-            'version'       => OLO_VERSION,
+            'version'       => OLOBUILD_VERSION,
             'site_url'      => home_url(),
             'exported_at'   => gmdate( 'Y-m-d\TH:i:s\Z' ),
             'templates'     => $exported,
@@ -209,7 +209,7 @@ class Olo_Site_Import_Export {
      * ───────────────────────────────────────────── */
 
     public function import_template( $request ) {
-        if ( olo_imports_disabled() ) return olo_imports_disabled_error();
+        if ( olobuild_imports_disabled() ) return olobuild_imports_disabled_error();
         $json = $request->get_json_params();
         if ( empty( $json['format'] ) || $json['format'] !== 'olobuild-template' ) {
             return new WP_Error( 'invalid', 'Formato non valido. Richiesto olobuild-template.', [ 'status' => 400 ] );
@@ -232,7 +232,7 @@ class Olo_Site_Import_Export {
         }
 
         // Save template
-        $db = new Olo_Database();
+        $db = new Olobuild_Database();
         $name = sanitize_text_field( $json['name'] ?? 'Template importato' );
         $type = sanitize_text_field( $json['type'] ?? 'page' );
         $styles = $json['styles'] ?? [];
@@ -262,7 +262,7 @@ class Olo_Site_Import_Export {
      * ───────────────────────────────────────────── */
 
     public function import_site( $request ) {
-        if ( olo_imports_disabled() ) return olo_imports_disabled_error();
+        if ( olobuild_imports_disabled() ) return olobuild_imports_disabled_error();
         $json = $request->get_json_params();
         if ( empty( $json['format'] ) || $json['format'] !== 'olobuild-site' ) {
             return new WP_Error( 'invalid', 'Formato non valido. Richiesto olobuild-site.', [ 'status' => 400 ] );
@@ -281,7 +281,7 @@ class Olo_Site_Import_Export {
             $menu_map = $this->import_menus( $json['menus'] );
         }
 
-        $db = new Olo_Database();
+        $db = new Olobuild_Database();
         $imported = [];
         $id_map = []; // old_id => new_id
 
@@ -334,17 +334,17 @@ class Olo_Site_Import_Export {
 
         // Import global styles — SEMPRE attraverso sanitize_styles per evitare
         // stored XSS via bundle malevolo. `olo_styles` viene poi interpolato in
-        // <style> da Olo_Style_System::generate_css() (es. var(--olo-color-X)),
+        // <style> da Olobuild_Style_System::generate_css() (es. var(--olo-color-X)),
         // quindi un valore tipo "</style><script>..." persisterebbe su ogni pagina.
         // L'import sito è una MIGRAZIONE esplicita: gli stili del pacchetto
         // sostituiscono quelli del sito di destinazione (prima venivano applicati
         // solo a sito "vergine" → i colori non arrivavano mai).
         if ( ! empty( $json['global_styles'] ) && is_array( $json['global_styles'] ) ) {
-            // ⚠️ Olo_Style_System è un singleton (costruttore privato): usare
+            // ⚠️ Olobuild_Style_System è un singleton (costruttore privato): usare
             // instance(), mai `new` (fatal — il vecchio ramo non girava mai e
             // il bug era rimasto invisibile).
-            $sanitized_styles = class_exists( 'Olo_Style_System' )
-                ? Olo_Style_System::instance()->sanitize_styles( $json['global_styles'] )
+            $sanitized_styles = class_exists( 'Olobuild_Style_System' )
+                ? Olobuild_Style_System::instance()->sanitize_styles( $json['global_styles'] )
                 : [];
             if ( ! empty( $sanitized_styles ) ) {
                 update_option( 'olo_styles', $sanitized_styles );
@@ -632,17 +632,17 @@ class Olo_Site_Import_Export {
         $o = (array) $options;
 
         if ( isset( $o['cursor_hud'] ) && is_array( $o['cursor_hud'] ) ) {
-            if ( ! class_exists( 'Olo_Cursor_Hud' ) ) {
-                require_once OLO_PATH . 'includes/class-cursor-hud.php';
+            if ( ! class_exists( 'Olobuild_Cursor_Hud' ) ) {
+                require_once OLOBUILD_PATH . 'includes/class-cursor-hud.php';
             }
-            update_option( 'olo_cursor_hud', Olo_Cursor_Hud::sanitize( $o['cursor_hud'] ), false );
+            update_option( 'olo_cursor_hud', Olobuild_Cursor_Hud::sanitize( $o['cursor_hud'] ), false );
         }
 
         if ( isset( $o['magnetic_cursor'] ) && is_array( $o['magnetic_cursor'] ) ) {
-            if ( ! class_exists( 'Olo_Magnetic_Cursor' ) ) {
-                require_once OLO_PATH . 'includes/class-magnetic-cursor.php';
+            if ( ! class_exists( 'Olobuild_Magnetic_Cursor' ) ) {
+                require_once OLOBUILD_PATH . 'includes/class-magnetic-cursor.php';
             }
-            update_option( 'olo_magnetic_cursor', Olo_Magnetic_Cursor::sanitize( $o['magnetic_cursor'] ), false );
+            update_option( 'olo_magnetic_cursor', Olobuild_Magnetic_Cursor::sanitize( $o['magnetic_cursor'] ), false );
         }
 
         if ( isset( $o['global_colors'] ) && is_array( $o['global_colors'] ) ) {
@@ -863,15 +863,15 @@ class Olo_Site_Import_Export {
     }
 
     public function render_admin_page() {
-        $db        = new Olo_Database();
+        $db        = new Olobuild_Database();
         $templates = $db->list_templates();
         $tpl_count = isset( $templates['total'] ) ? (int) $templates['total'] : count( $templates['items'] ?? [] );
         ?>
-        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Import / Export', 'olobuild' ) . '</b>' ); ?>
+        <?php Olobuild_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Import / Export', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy">
             <?php
-            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally; count is int-cast.
-            echo Olo_Builder::cockpit_page_head( [
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olobuild_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally; count is int-cast.
+            echo Olobuild_Builder::cockpit_page_head( [
                 'title' => __( 'Import / Export', 'olobuild' ),
                 'sub'   => sprintf(
                     /* translators: %d: total templates */
@@ -1140,7 +1140,7 @@ class Olo_Site_Import_Export {
             })();
             </script>
         </main>
-        <?php Olo_Builder::cockpit_shell_close(); ?>
+        <?php Olobuild_Builder::cockpit_shell_close(); ?>
         <?php
     }
 }

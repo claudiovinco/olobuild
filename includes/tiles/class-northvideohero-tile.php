@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * Render == Vue (NorthVideoHeroTile.vue). Colori via token, KIT bordi/ombra/sfondo standard.
  * Estratta dal blueprint cohere.com/north.
  */
-class Olo_NorthVideoHero_Tile extends Olo_Tile_Base {
+class Olobuild_NorthVideoHero_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'northvideohero';
     protected $name     = 'Hero — North Video';
@@ -104,7 +104,7 @@ class Olo_NorthVideoHero_Tile extends Olo_Tile_Base {
         $reveal  = ! empty( $s['mock_reveal'] );
         $hmax    = max( 480, min( 1600, intval( $s['headline_max'] ) ) );
 
-        $in_pad       = Olo_Tile_Utils::spacing_css( $s['content_padding'] ?? [ 'top' => 160, 'right' => 40, 'bottom' => 96, 'left' => 40 ], 0 );
+        $in_pad       = Olobuild_Tile_Utils::spacing_css( $s['content_padding'] ?? [ 'top' => 160, 'right' => 40, 'bottom' => 96, 'left' => 40 ], 0 );
         $frame_radius = $this->build_border_radius_css( $s['frame_radius'] ?? [] );
         if ( '' === $frame_radius ) { $frame_radius = '0'; }
 
@@ -124,8 +124,8 @@ class Olo_NorthVideoHero_Tile extends Olo_Tile_Base {
         // KIT standard: sfondo completo + ombra + bordo (sul contenitore)
         $bg_obj  = $s['bg'] ?? null;
         $bg_decl = '';
-        if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && $bg_obj['type'] !== 'none' && class_exists( 'Olo_CSS_Builder' ) ) {
-            $bg_decl = ( new Olo_CSS_Builder() )->get_bg_inline_css( $bg_obj );
+        if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && $bg_obj['type'] !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
+            $bg_decl = ( new Olobuild_CSS_Builder() )->get_bg_inline_css( $bg_obj );
         }
         $kit_bg_css     = $bg_decl ? rtrim( $bg_decl, '; ' ) . ';' : '';
         $shadow_css     = $this->build_shadow_decl( $s );
@@ -133,7 +133,7 @@ class Olo_NorthVideoHero_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, intval() clamps for sizes/percent, Olo_Tile_Utils::spacing_css()/build_border_radius_css() integer-built values, esc_url() for image URLs, internal Olo_CSS_Builder/build_shadow_decl() helpers, fixed font-stack literals, internal wp_rand() uid. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, intval() clamps for sizes/percent, Olobuild_Tile_Utils::spacing_css()/build_border_radius_css() integer-built values, esc_url() for image URLs, internal Olobuild_CSS_Builder/build_shadow_decl() helpers, fixed font-stack literals, internal wp_rand() uid. ?>
         <style>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;background:<?php echo $bg; ?>;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;<?php echo $kit_bg_css . $kit_shadow_css; ?>}
             <?php if ( $grass !== '' ) : ?>

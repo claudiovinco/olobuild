@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * proprio $uid (nessun `&&`/`||` inline). Render == Vue (SmearHeroTile.vue).
  * Estratta dal blueprint OLOthemes "Canvas — Jonah Veld".
  */
-class Olo_SmearHero_Tile extends Olo_Tile_Base {
+class Olobuild_SmearHero_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'smearhero';
     protected $name     = 'Hero — Smear (Canvas)';
@@ -93,8 +93,8 @@ class Olo_SmearHero_Tile extends Olo_Tile_Base {
         // (solid/gradient/image/pattern/mesh/glow/crt) sostituisce l'intero blocco.
         $bg_block = 'background:' . $bg . ';';
         $bg_obj   = $s['bg'] ?? null;
-        if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && $bg_obj['type'] !== 'none' && class_exists( 'Olo_CSS_Builder' ) ) {
-            $bg_decl = ( new Olo_CSS_Builder() )->get_bg_inline_css( $bg_obj );
+        if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && $bg_obj['type'] !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
+            $bg_decl = ( new Olobuild_CSS_Builder() )->get_bg_inline_css( $bg_obj );
             if ( $bg_decl !== '' ) {
                 $bg_block = rtrim( trim( $bg_decl ), ';' ) . ';';
             }
@@ -121,7 +121,7 @@ class Olo_SmearHero_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist, min-height via intval() with min()/max() clamp, padding integer-forced or a fixed clamp() literal, fixed font-stack literals, background/radius/shadow/border via the Olo_CSS_Builder/Olo_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist, min-height via intval() with min()/max() clamp, padding integer-forced or a fixed clamp() literal, fixed font-stack literals, background/radius/shadow/border via the Olobuild_CSS_Builder/Olobuild_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;min-height:<?php echo $mh; ?>vh;display:flex;align-items:center;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;<?php echo $bg_block; ?><?php echo $radius_css; ?><?php echo $kit_decl; ?>}
             .<?php echo $uid; ?>::before{content:"";position:absolute;inset:0;z-index:1;background:radial-gradient(80% 90% at 70% 20%,<?php echo $glow; ?>,transparent 60%);pointer-events:none;}

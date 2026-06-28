@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Work Grid — griglia di lavori con immagine (placeholder a strisce se vuota),
  * titolo + meta e descrizione, zoom dell'immagine al hover.
  */
-class Olo_WorkGrid_Tile extends Olo_Tile_Base {
+class Olobuild_WorkGrid_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'workgrid';
     protected $name     = 'Work Grid';

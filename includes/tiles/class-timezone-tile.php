@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * Estratto dai demo OLOthemes (setupTimezone). Render == Vue (TimezoneTile.vue).
  * Stati orari precomputati lato PHP (stringa 24 char w/o/s) → JS senza '&&' né '<'/'>'.
  */
-class Olo_Timezone_Tile extends Olo_Tile_Base {
+class Olobuild_Timezone_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'timezone';
     protected $name     = 'Timezone';

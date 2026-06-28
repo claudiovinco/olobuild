@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Loginform_Tile extends Olo_Tile_Base {
+class Olobuild_Loginform_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'loginform';
     protected $name     = 'Login / Registrazione';
@@ -104,20 +104,20 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
         $input_border     = $this->safe_color_css( $s['input_border_color'] );
         $input_focus      = $this->safe_color_css( $s['input_focus_color'] );
         $input_padding    = max( 4, intval( $s['input_padding'] ) ?: 11 );
-        $input_radius     = Olo_Tile_Utils::border_radius( $s['input_radius'] ?? 0 );
-        $input_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['input_radius_hover'] ?? null );
+        $input_radius     = Olobuild_Tile_Utils::border_radius( $s['input_radius'] ?? 0 );
+        $input_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['input_radius_hover'] ?? null );
         $submit_bg        = $this->safe_color_css( $s['submit_bg'] );
         $submit_color     = $this->safe_color_css( $s['submit_color'] );
-        $submit_radius    = Olo_Tile_Utils::border_radius( $s['submit_radius'] ?? 0 );
-        $submit_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['submit_radius_hover'] ?? null );
+        $submit_radius    = Olobuild_Tile_Utils::border_radius( $s['submit_radius'] ?? 0 );
+        $submit_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['submit_radius_hover'] ?? null );
         $submit_hover_bg  = $this->safe_color_css( $s['submit_hover_bg'] );
         $link_color_css   = $this->safe_color_css( $s['link_color'] );
         $icon_color_css   = $this->safe_color_css( $s['icon_color'] );
-        $form_radius      = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
-        $form_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
+        $form_radius      = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $form_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $form_bw          = intval( $s['border_width'] );
         $form_bc          = $this->safe_color_css( $s['border_color'] );
-        $form_pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['form_padding'] ?? 32, 32 );
+        $form_pad = Olobuild_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['form_padding'] ?? 32, 32 );
 
         $submit_bg_val    = $submit_bg ?: 'var(--olo-color-primary, #e1474f)';
         $text_color_val   = $text_color ?: 'var(--olo-color-text, #374151)';
@@ -199,7 +199,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist, Olo_Tile_Utils absint/intval helpers, in_array() whitelists and the generated $uid. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist, Olobuild_Tile_Utils absint/intval helpers, in_array() whitelists and the generated $uid. ?>
         <style>
             .<?php echo $uid; ?> {
                 padding: <?php echo $form_pad; ?>;
@@ -470,7 +470,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
                 <div class="olo-lf-user-name"><?php echo esc_html( $logged_in_msg ); ?></div>
                 <div class="olo-lf-welcome"><?php echo esc_html( $current_user->display_name ); ?></div>
                 <div style="margin-top:16px;">
-                    <a href="<?php echo esc_url( $logout_url ); ?>" class="olo-lf-link"><?php echo esc_html( olo_t( 'Esci' ) ); ?></a>
+                    <a href="<?php echo esc_url( $logout_url ); ?>" class="olo-lf-link"><?php echo esc_html( olobuild_t( 'Esci' ) ); ?></a>
                 </div>
             </div>
         <?php else : ?>
@@ -511,19 +511,19 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
                     <input type="hidden" name="olo_uid" value="<?php echo esc_attr( $uid ); ?>" />
                     <input type="hidden" name="redirect_to" value="<?php echo esc_attr( $redirect_to ); ?>" />
                     <div class="olo-lf-field">
-                        <label class="olo-lf-label" for="<?php echo esc_attr( $uid ); ?>-user"><?php echo esc_html( olo_t( 'Nome utente o email' ) ); ?></label>
+                        <label class="olo-lf-label" for="<?php echo esc_attr( $uid ); ?>-user"><?php echo esc_html( olobuild_t( 'Nome utente o email' ) ); ?></label>
                         <div class="olo-lf-input-wrap">
                             <?php if ( $show_icons ) : ?><span class="olo-lf-icon"><?php echo $icon_user; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above in this method ?></span><?php endif; ?>
-                            <input type="text" id="<?php echo esc_attr( $uid ); ?>-user" name="log" class="olo-lf-input" placeholder="<?php echo esc_attr( olo_t( 'nome@esempio.it' ) ); ?>" required autocomplete="username" />
+                            <input type="text" id="<?php echo esc_attr( $uid ); ?>-user" name="log" class="olo-lf-input" placeholder="<?php echo esc_attr( olobuild_t( 'nome@esempio.it' ) ); ?>" required autocomplete="username" />
                         </div>
                     </div>
                     <div class="olo-lf-field">
-                        <label class="olo-lf-label" for="<?php echo esc_attr( $uid ); ?>-pass"><?php echo esc_html( olo_t( 'Password' ) ); ?></label>
+                        <label class="olo-lf-label" for="<?php echo esc_attr( $uid ); ?>-pass"><?php echo esc_html( olobuild_t( 'Password' ) ); ?></label>
                         <div class="olo-lf-input-wrap">
                             <?php if ( $show_icons ) : ?><span class="olo-lf-icon"><?php echo $icon_lock; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above in this method ?></span><?php endif; ?>
-                            <input type="password" id="<?php echo esc_attr( $uid ); ?>-pass" name="pwd" class="olo-lf-input" placeholder="<?php echo esc_attr( olo_t( 'La tua password' ) ); ?>" required autocomplete="current-password" />
+                            <input type="password" id="<?php echo esc_attr( $uid ); ?>-pass" name="pwd" class="olo-lf-input" placeholder="<?php echo esc_attr( olobuild_t( 'La tua password' ) ); ?>" required autocomplete="current-password" />
                             <?php if ( $show_pw_toggle ) : ?>
-                            <button type="button" class="olo-lf-pw-toggle" data-olo-pw-toggle aria-label="<?php echo esc_attr( olo_t( 'Mostra/nascondi password' ) ); ?>" aria-pressed="false" aria-controls="<?php echo esc_attr( $uid ); ?>-pass">
+                            <button type="button" class="olo-lf-pw-toggle" data-olo-pw-toggle aria-label="<?php echo esc_attr( olobuild_t( 'Mostra/nascondi password' ) ); ?>" aria-pressed="false" aria-controls="<?php echo esc_attr( $uid ); ?>-pass">
                                 <span class="olo-eye-on"><?php echo $icon_eye; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above in this method ?></span>
                                 <span class="olo-eye-off"><?php echo $icon_eye_off; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above in this method ?></span>
                             </button>
@@ -534,17 +534,17 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
                         <?php if ( $show_remember ) : ?>
                         <label class="olo-lf-remember">
                             <input type="checkbox" name="rememberme" value="forever" />
-                            <span><?php echo esc_html( olo_t( 'Ricordami' ) ); ?></span>
+                            <span><?php echo esc_html( olobuild_t( 'Ricordami' ) ); ?></span>
                         </label>
                         <?php else : ?><span></span><?php endif; ?>
                         <?php if ( $show_lost_pw ) : ?>
-                        <a href="<?php echo esc_url( wp_lostpassword_url() ); ?>" class="olo-lf-link"><?php echo esc_html( olo_t( 'Password dimenticata?' ) ); ?></a>
+                        <a href="<?php echo esc_url( wp_lostpassword_url() ); ?>" class="olo-lf-link"><?php echo esc_html( olobuild_t( 'Password dimenticata?' ) ); ?></a>
                         <?php endif; ?>
                     </div>
                     <button type="submit" class="olo-lf-submit"><?php echo esc_html( $login_btn_text ); ?></button>
                 </form>
                 <?php if ( $mode === 'both' ) : ?>
-                <div class="olo-lf-switch">Non hai un account? <a href="#" data-olo-switch="register" data-olo-uid="<?php echo esc_attr( $uid ); ?>"><?php echo esc_html( olo_t( 'Registrati' ) ); ?></a></div>
+                <div class="olo-lf-switch">Non hai un account? <a href="#" data-olo-switch="register" data-olo-uid="<?php echo esc_attr( $uid ); ?>"><?php echo esc_html( olobuild_t( 'Registrati' ) ); ?></a></div>
                 <?php endif; ?>
             </div>
             <?php endif; ?>
@@ -628,7 +628,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
                             <?php if ( $show_icons ) : ?><span class="olo-lf-icon"><?php echo $icon_lock; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above in this method ?></span><?php endif; ?>
                             <input type="password" id="<?php echo esc_attr( $uid ); ?>-reg-pass" name="user_pass" class="olo-lf-input olo-lf-pw-input" placeholder="<?php echo esc_attr( $rf_ph ); ?>"<?php echo esc_attr( $req_attr ); ?> autocomplete="new-password" minlength="<?php echo esc_attr( $pw_min_length ); ?>" />
                             <?php if ( $show_pw_toggle ) : ?>
-                            <button type="button" class="olo-lf-pw-toggle" data-olo-pw-toggle aria-label="<?php echo esc_attr( olo_t( 'Mostra/nascondi password' ) ); ?>" aria-pressed="false" aria-controls="<?php echo esc_attr( $uid ); ?>-reg-pass">
+                            <button type="button" class="olo-lf-pw-toggle" data-olo-pw-toggle aria-label="<?php echo esc_attr( olobuild_t( 'Mostra/nascondi password' ) ); ?>" aria-pressed="false" aria-controls="<?php echo esc_attr( $uid ); ?>-reg-pass">
                                 <span class="olo-eye-on"><?php echo $icon_eye; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above in this method ?></span>
                                 <span class="olo-eye-off"><?php echo $icon_eye_off; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup defined above in this method ?></span>
                             </button>
@@ -753,7 +753,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
                 </p>
                 <?php endif; ?>
                 <?php if ( $mode === 'both' ) : ?>
-                <div class="olo-lf-switch">Hai già un account? <a href="#" data-olo-switch="login" data-olo-uid="<?php echo esc_attr( $uid ); ?>"><?php echo esc_html( olo_t( 'Accedi' ) ); ?></a></div>
+                <div class="olo-lf-switch">Hai già un account? <a href="#" data-olo-switch="login" data-olo-uid="<?php echo esc_attr( $uid ); ?>"><?php echo esc_html( olobuild_t( 'Accedi' ) ); ?></a></div>
                 <?php endif; ?>
             </div>
             <?php endif; ?>
@@ -1011,7 +1011,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_css() from sanitized settings
             echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by build_border_hover_css()/build_border_effect_css() base-class helpers
         }
         return ob_get_clean();
@@ -1030,19 +1030,19 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
             <?php if ( ! empty( $s['social_google'] ) ) : ?>
             <a href="<?php echo esc_url( $s['social_google_url'] ?: '#' ); ?>" class="olo-lf-social-btn" style="background:<?php echo $input_bg; ?>;color:<?php echo $text_color; ?>;border:1px solid <?php echo $border; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS colors on this line sanitized via safe_color_css() whitelist above ?>;">
                 <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 0 0 1 12c0 1.77.42 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-                <span><?php echo esc_html( olo_t( 'Continua con Google' ) ); ?></span>
+                <span><?php echo esc_html( olobuild_t( 'Continua con Google' ) ); ?></span>
             </a>
             <?php endif; ?>
             <?php if ( ! empty( $s['social_facebook'] ) ) : ?>
             <a href="<?php echo esc_url( $s['social_facebook_url'] ?: '#' ); ?>" class="olo-lf-social-btn" style="background:<?php echo $input_bg; ?>;color:<?php echo $text_color; ?>;border:1px solid <?php echo $border; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS colors on this line sanitized via safe_color_css() whitelist above ?>;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                <span><?php echo esc_html( olo_t( 'Continua con Facebook' ) ); ?></span>
+                <span><?php echo esc_html( olobuild_t( 'Continua con Facebook' ) ); ?></span>
             </a>
             <?php endif; ?>
             <?php if ( ! empty( $s['social_apple'] ) ) : ?>
             <a href="<?php echo esc_url( $s['social_apple_url'] ?: '#' ); ?>" class="olo-lf-social-btn" style="background:#000;color:#FFF;border:1px solid #000;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="#FFF"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
-                <span><?php echo esc_html( olo_t( 'Continua con Apple' ) ); ?></span>
+                <span><?php echo esc_html( olobuild_t( 'Continua con Apple' ) ); ?></span>
             </a>
             <?php endif; ?>
         </div>
@@ -1145,7 +1145,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
         $meta_keys = self::get_olo_custom_meta_keys();
         if ( empty( $meta_keys ) ) return;
         ?>
-        <h3><?php echo esc_html( olo_t( 'Dati registrazione (Olobuild)' ) ); ?></h3>
+        <h3><?php echo esc_html( olobuild_t( 'Dati registrazione (Olobuild)' ) ); ?></h3>
         <table class="form-table">
             <?php foreach ( $meta_keys as $key ) :
                 $label = str_replace( 'olo_cf_', '', $key );

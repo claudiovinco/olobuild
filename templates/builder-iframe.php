@@ -1,7 +1,7 @@
 <?php
 /**
  * Builder iframe page — renders the live preview canvas.
- * Loaded via ?olo_builder_iframe=1 (served by Olo_Builder::serve_builder_iframe).
+ * Loaded via ?olo_builder_iframe=1 (served by Olobuild_Builder::serve_builder_iframe).
  * Receives template HTML via postMessage from the parent builder app.
  */
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -12,13 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <?php
 // Tutti gli stili dell'iframe sono registrati via wp_enqueue_style in
-// Olo_Builder::enqueue_builder_iframe_assets() ed emessi qui in ordine di dipendenza.
+// Olobuild_Builder::enqueue_builder_iframe_assets() ed emessi qui in ordine di dipendenza.
 wp_print_styles( $this->iframe_style_handles );
 ?>
 <?php
 // Style system CSS
-if ( class_exists( 'Olo_Style_System' ) ) {
-    echo '<style id="olo-style-system">' . Olo_Style_System::instance()->generate_css() . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated internally by Olo_Style_System from sanitized style options; escaping would corrupt valid CSS.
+if ( class_exists( 'Olobuild_Style_System' ) ) {
+    echo '<style id="olo-style-system">' . Olobuild_Style_System::instance()->generate_css() . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated internally by Olobuild_Style_System from sanitized style options; escaping would corrupt valid CSS.
 }
 ?>
 <style>
@@ -54,11 +54,11 @@ body[data-olo-pagebg], html[data-olo-pagebg], body[data-olo-pagebg] #olo-iframe-
 </head>
 <body>
 <div id="olo-iframe-root">
-    <?php echo Olo_Builder::get_iframe_empty_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static markup built internally with esc_html__() labels ?>
+    <?php echo Olobuild_Builder::get_iframe_empty_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static markup built internally with esc_html__() labels ?>
 </div>
 <?php
 // Tutti gli script dell'iframe sono registrati via wp_enqueue_script in
-// Olo_Builder::enqueue_builder_iframe_assets() (uikit→runtimes→bridge per ultimo,
+// Olobuild_Builder::enqueue_builder_iframe_assets() (uikit→runtimes→bridge per ultimo,
 // type="module" applicato via filtro). Il worker pdf.js è inline-script su olo-ifr-pdfjs.
 wp_print_scripts( $this->iframe_script_handles );
 ?>

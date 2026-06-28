@@ -3,14 +3,14 @@
  * Olobuild Animation Builder
  *
  * Parallax, scrollspy, mouse tracking, and animation utilities
- * extracted from Olo_Frontend_Renderer.
+ * extracted from Olobuild_Frontend_Renderer.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Animation_Builder {
+class Olobuild_Animation_Builder {
 
     /**
      * Format a parallax value: integers as int, floats with minimal decimals.

@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Single_Integration {
+class Olobuild_Single_Integration {
 
     public function init() {
         // Priority 15: before page-integration (20) and location-single (20)
@@ -32,7 +32,7 @@ class Olo_Single_Integration {
             return $content;
         }
 
-        $db  = new Olo_Database();
+        $db  = new Olobuild_Database();
         $tpl = $db->get_template( $template_id );
 
         if ( ! $tpl || ( $tpl['status'] !== 'published' && $tpl['status'] !== 'draft' ) ) {
@@ -40,7 +40,7 @@ class Olo_Single_Integration {
         }
 
         $rendering = true;
-        $renderer  = new Olo_Frontend_Renderer();
+        $renderer  = new Olobuild_Frontend_Renderer();
         $output    = $renderer->render_shortcode( [ 'id' => $template_id ] );
         $rendering = false;
 

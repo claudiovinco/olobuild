@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_TemplateEmbed_Tile extends Olo_Tile_Base {
+class Olobuild_TemplateEmbed_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'templateembed';
     protected $name     = 'Includi template';
@@ -23,8 +23,8 @@ class Olo_TemplateEmbed_Tile extends Olo_Tile_Base {
 
     public function get_controls() {
         return [
-            [ 'key' => 'template_id',    'type' => 'number', 'label' => olo_t( 'ID Template' ) ],
-            [ 'key' => 'template_label', 'type' => 'text',   'label' => olo_t( 'Etichetta (anteprima)' ) ],
+            [ 'key' => 'template_id',    'type' => 'number', 'label' => olobuild_t( 'ID Template' ) ],
+            [ 'key' => 'template_label', 'type' => 'text',   'label' => olobuild_t( 'Etichetta (anteprima)' ) ],
         ];
     }
 
@@ -43,11 +43,11 @@ class Olo_TemplateEmbed_Tile extends Olo_Tile_Base {
         }
 
         // Load template from database
-        if ( ! class_exists( 'Olo_Database' ) ) {
+        if ( ! class_exists( 'Olobuild_Database' ) ) {
             return '<!-- Olobuild TemplateEmbed: classe database non disponibile -->';
         }
 
-        $db       = new Olo_Database();
+        $db       = new Olobuild_Database();
         $template = $db->get_template( $template_id );
 
         if ( ! $template ) {
@@ -60,13 +60,13 @@ class Olo_TemplateEmbed_Tile extends Olo_Tile_Base {
         }
 
         // Render using the frontend renderer
-        if ( ! class_exists( 'Olo_Frontend_Renderer' ) ) {
+        if ( ! class_exists( 'Olobuild_Frontend_Renderer' ) ) {
             return '<!-- Olobuild TemplateEmbed: renderer non disponibile -->';
         }
 
         self::$render_depth++;
 
-        $renderer = new Olo_Frontend_Renderer();
+        $renderer = new Olobuild_Frontend_Renderer();
         $output   = $renderer->render_shortcode( [ 'id' => $template_id ] );
 
         self::$render_depth--;

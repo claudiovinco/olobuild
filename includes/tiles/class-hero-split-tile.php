@@ -14,11 +14,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  *   - 2 CTA pill con hover bilaterale
  *   - fascia stats configurabile
  *   - showcase 2x2 con sfondo creativo unificato per ogni card
- *     (solid/gradient/pattern/image/video/gallery via Olo_CSS_Builder)
+ *     (solid/gradient/pattern/image/video/gallery via Olobuild_CSS_Builder)
  *   - 5 effetti hover card (radius-morph, lift, scale, tilt, none)
  *   - shadow preset per le card
  */
-class Olo_HeroSplit_Tile extends Olo_Tile_Base {
+class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'hero-split';
     protected $name     = 'Hero Split';
@@ -167,8 +167,8 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
         // Showcase bg (sfondo creativo unificato)
         $showcase_bg_css = '';
         $sc_bg_obj = $s['showcase_bg'] ?? [ 'type' => 'none' ];
-        if ( is_array( $sc_bg_obj ) && ( $sc_bg_obj['type'] ?? 'none' ) !== 'none' && class_exists( 'Olo_CSS_Builder' ) ) {
-            $cssb = new Olo_CSS_Builder();
+        if ( is_array( $sc_bg_obj ) && ( $sc_bg_obj['type'] ?? 'none' ) !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
+            $cssb = new Olobuild_CSS_Builder();
             $showcase_bg_css = $cssb->get_bg_inline_css( $sc_bg_obj );
         } elseif ( ! is_array( $sc_bg_obj ) ) {
             // Backward-compat: legacy string color
@@ -317,12 +317,12 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
                                     $txt_clr = $this->safe_color_css( $it['text_color'] ?? '' ) ?: '#0f172a';
                                     $italic  = ! empty( $it['italic'] ) ? 'font-style:italic;' : '';
 
-                                    // Card bg via Olo_CSS_Builder (background creativo unificato)
+                                    // Card bg via Olobuild_CSS_Builder (background creativo unificato)
                                     $card_bg_css = '';
                                     $card_media  = ''; // <video>/<gallery>: tipi non esprimibili come background CSS
                                     $card_bg_obj = $it['bg'] ?? [ 'type' => 'solid', 'color' => '#ffffff' ];
-                                    if ( is_array( $card_bg_obj ) && ( $card_bg_obj['type'] ?? 'none' ) !== 'none' && class_exists( 'Olo_CSS_Builder' ) ) {
-                                        $cssb        = new Olo_CSS_Builder();
+                                    if ( is_array( $card_bg_obj ) && ( $card_bg_obj['type'] ?? 'none' ) !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
+                                        $cssb        = new Olobuild_CSS_Builder();
                                         $card_bg_css = $cssb->get_bg_inline_css( $card_bg_obj );
                                         $cb_type     = $card_bg_obj['type'] ?? '';
                                         if ( $cb_type === 'video' && ! empty( $card_bg_obj['video_url'] ) ) {

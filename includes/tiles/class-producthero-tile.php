@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * cornice browser) e DataFold (teal glow + KPI + bar chart). Default fedeli a Circuit.
  * Render == Vue (ProductHeroTile.vue). Nessun JS.
  */
-class Olo_ProductHero_Tile extends Olo_Tile_Base {
+class Olobuild_ProductHero_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'producthero';
     protected $name     = 'Hero — Product (SaaS)';
@@ -145,8 +145,8 @@ class Olo_ProductHero_Tile extends Olo_Tile_Base {
         // Sfondo completo: override del bg di sezione SOLO se valorizzato (default none → invariato).
         $bg_obj  = $s['bg'] ?? null;
         $bg_decl = '';
-        if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && $bg_obj['type'] !== 'none' && class_exists( 'Olo_CSS_Builder' ) ) {
-            $bg_decl = ( new Olo_CSS_Builder() )->get_bg_inline_css( $bg_obj );
+        if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && $bg_obj['type'] !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
+            $bg_decl = ( new Olobuild_CSS_Builder() )->get_bg_inline_css( $bg_obj );
         }
         $kit_bg_css = $bg_decl ? rtrim( $bg_decl, '; ' ) . ';' : '';
         // Ombra (preset/custom). '' = nessuna → invariato.
@@ -155,7 +155,7 @@ class Olo_ProductHero_Tile extends Olo_Tile_Base {
 
         // ── Spaziatura + Raggio (additivi, no-op coi default) ──
         // Padding inner: default '0px 28px 0px 28px' (== '0 28px' attuale).
-        $in_pad = Olo_Tile_Utils::spacing_css( $s['content_padding'] ?? [ 'top' => 0, 'right' => 28, 'bottom' => 0, 'left' => 28 ], 0 );
+        $in_pad = Olobuild_Tile_Utils::spacing_css( $s['content_padding'] ?? [ 'top' => 0, 'right' => 28, 'bottom' => 0, 'left' => 28 ], 0 );
         // Raggio cornice browser: default '16px 16px 0px 0px' (== '16px 16px 0 0' attuale).
         $frame_radius = $this->build_border_radius_css( $s['frame_radius'] ?? [] );
         if ( '' === $frame_radius ) { $frame_radius = '0'; }
@@ -165,7 +165,7 @@ class Olo_ProductHero_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() for every colour, color_to_rgb() digit triplets, intval()-clamped grid size, Olo_Tile_Utils::spacing_css()/build_border_radius_css() int-built values, internal Olo_CSS_Builder::get_bg_inline_css()/build_shadow_decl() helpers, fixed font-stack literals, internal wp_rand() uid. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() for every colour, color_to_rgb() digit triplets, intval()-clamped grid size, Olobuild_Tile_Utils::spacing_css()/build_border_radius_css() int-built values, internal Olobuild_CSS_Builder::get_bg_inline_css()/build_shadow_decl() helpers, fixed font-stack literals, internal wp_rand() uid. ?>
         <style>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;text-align:center;padding:clamp(56px,8vw,104px) 0 0;background:<?php echo $bg; ?>;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;<?php echo $kit_bg_css . $kit_shadow_css; ?>}
             .<?php echo $uid; ?> .oph-glow{position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:760px;height:560px;border-radius:50%;filter:blur(90px);pointer-events:none;background:radial-gradient(circle, rgba(<?php echo $glowRgb; ?>,.34) 0%, rgba(<?php echo $glowRgb; ?>,0) 70%);}
@@ -273,7 +273,7 @@ class Olo_ProductHero_Tile extends Olo_Tile_Base {
     /**
      * Restituisce la dichiarazione box-shadow (valore, senza "box-shadow:")
      * dal setting shadow (preset sm/md/lg/xl o custom). '' se none.
-     * Copiato 1:1 da Olo_Particlefx_Tile (KIT standard OLObuild).
+     * Copiato 1:1 da Olobuild_Particlefx_Tile (KIT standard OLObuild).
      */
     private function build_shadow_decl( $s ) {
         $preset = $s['shadow'] ?? 'none';

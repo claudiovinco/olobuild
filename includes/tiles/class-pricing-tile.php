@@ -1,7 +1,7 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class Olo_Pricing_Tile extends Olo_Tile_Base {
+class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'pricing';
     protected $name     = 'Listino prezzi';
@@ -91,8 +91,8 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
         $feat_raw  = is_array( $s['features'] ) ? implode( "\n", $s['features'] ) : (string) $s['features'];
         $features  = array_filter( array_map( 'trim', explode( "\n", $feat_raw ) ) );
         $popular   = filter_var( $s['is_popular'], FILTER_VALIDATE_BOOLEAN );
-        $tile_r    = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
-        $tile_r_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
+        $tile_r    = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $tile_r_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $tile_bw   = intval( $s['border_width'] );
         $tile_bc   = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-text, #374151)';
 
@@ -110,8 +110,8 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
         // CTA
         $cta_bg  = $this->safe_color_css( $s['cta_bg_color'] ) ?: $accent;
         $cta_fg  = $this->safe_color_css( $s['cta_text_color'] ) ?: '#FFFFFF';
-        $cta_r   = Olo_Tile_Utils::border_radius( $s['cta_radius'] ?? 0 );
-        $cta_r_hover_css = Olo_Tile_Utils::radius_force_css( $s['cta_radius_hover'] ?? null );
+        $cta_r   = Olobuild_Tile_Utils::border_radius( $s['cta_radius'] ?? 0 );
+        $cta_r_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['cta_radius_hover'] ?? null );
         $cta_bw  = intval( $s['cta_border_width'] );
         $cta_bc  = $this->safe_color_css( $s['cta_border_color'] ) ?: '#FFFFFF';
         $hover   = $s['cta_hover_effect'] ?: 'none';
@@ -134,8 +134,8 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
         // Badge
         $badge_bg  = $this->safe_color_css( $s['badge_bg_color'] ) ?: $accent;
         $badge_fg  = $this->safe_color_css( $s['badge_text_color'] ) ?: '#FFFFFF';
-        $badge_r   = Olo_Tile_Utils::border_radius( $s['badge_radius'] ?? 0 );
-        $badge_r_hover_css = Olo_Tile_Utils::radius_force_css( $s['badge_radius_hover'] ?? null );
+        $badge_r   = Olobuild_Tile_Utils::border_radius( $s['badge_radius'] ?? 0 );
+        $badge_r_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['badge_radius_hover'] ?? null );
         $badge_st  = $s['badge_style'] ?: 'pill';
         $badge_top = intval( $s['badge_top'] );
 
@@ -170,7 +170,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
         $price_monthly = esc_html( $s['price'] );
 
         ob_start();
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval/whitelists/Olo_Tile_Utils helpers; $uid is internal).
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval/whitelists/Olobuild_Tile_Utils helpers; $uid is internal).
         ?>
         <style>
             .<?php echo $uid; ?> {
@@ -561,8 +561,8 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized border settings
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized border settings
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base::build_border_css() from sanitized border settings
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border helpers from sanitized border settings
         }
         return ob_get_clean();
     }

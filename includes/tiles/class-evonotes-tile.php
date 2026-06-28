@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * Vue inline nel canvas (EvoNotesTile.vue) — i marker reali si ancorano alle
  * sezioni solo sul frontend. Estratta dal blueprint "Clod — Evoluzione v2".
  */
-class Olo_EvoNotes_Tile extends Olo_Tile_Base {
+class Olobuild_EvoNotes_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'evonotes';
     protected $name     = 'Evo Notes (layer annotazioni)';

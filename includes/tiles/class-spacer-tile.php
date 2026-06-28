@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Spacer_Tile extends Olo_Tile_Base {
+class Olobuild_Spacer_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'spacer';
     protected $name     = 'Spaziatore';

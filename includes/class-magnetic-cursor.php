@@ -1,6 +1,6 @@
 <?php
 /**
- * Olo_Magnetic_Cursor — cursore custom neon (anello + dot) con "pull" magnetico.
+ * Olobuild_Magnetic_Cursor — cursore custom neon (anello + dot) con "pull" magnetico.
  *
  * NON è un tile in pagina: è una FEATURE GLOBALE DI TEMA/HEADER (bucket C, scheda §4
  * famiglia A del doc tile-speciali). Sostituisce il cursore di sistema con un anello +
@@ -21,8 +21,8 @@
  * Storage: option `olo_magnetic_cursor` (array). Chiavi additive: non rompono nulla.
  *
  * ── WIRING (lo fa il coordinatore, NON questo file) ───────────────────────────────────
- *   require_once OLO_PATH . 'includes/class-magnetic-cursor.php';
- *   Olo_Magnetic_Cursor::init();
+ *   require_once OLOBUILD_PATH . 'includes/class-magnetic-cursor.php';
+ *   Olobuild_Magnetic_Cursor::init();
  * NESSUNA UI admin: la pagina nativa in Impostazioni è stata rimossa (scelta utente
  * 2026-06-11). La feature resta dormiente: si attiva solo scrivendo l'option
  * `olo_magnetic_cursor` (REST `cursor` o wp-cli) con `enabled => true`; appena
@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Magnetic_Cursor {
+class Olobuild_Magnetic_Cursor {
 
     /** Option key (wp_options). */
     const OPT = 'olo_magnetic_cursor';
@@ -59,7 +59,7 @@ class Olo_Magnetic_Cursor {
         }
 
         // Non emettere dentro l'iframe di editing del builder (cursore di sistema in canvas).
-        if ( defined( 'OLO_BUILDER_PREVIEW' ) && OLO_BUILDER_PREVIEW ) {
+        if ( defined( 'OLOBUILD_BUILDER_PREVIEW' ) && OLOBUILD_BUILDER_PREVIEW ) {
             return;
         }
 

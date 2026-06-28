@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * Render == Vue (NorthQuoteSliderTile.vue). Colori via token/safe_color_css, KIT standard.
  * Estratta dal blueprint cohere.com/north (§ "Why enterprises and innovators choose Cohere").
  */
-class Olo_NorthQuoteSlider_Tile extends Olo_Tile_Base {
+class Olobuild_NorthQuoteSlider_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'northquoteslider';
     protected $name     = 'Quote Slider — North';
@@ -99,8 +99,8 @@ class Olo_NorthQuoteSlider_Tile extends Olo_Tile_Base {
         // KIT bg/shadow/border
         $bg_obj  = $s['bg'] ?? null;
         $bg_decl = '';
-        if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && 'none' !== $bg_obj['type'] && class_exists( 'Olo_CSS_Builder' ) ) {
-            $bg_decl = ( new Olo_CSS_Builder() )->get_bg_inline_css( $bg_obj );
+        if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && 'none' !== $bg_obj['type'] && class_exists( 'Olobuild_CSS_Builder' ) ) {
+            $bg_decl = ( new Olobuild_CSS_Builder() )->get_bg_inline_css( $bg_obj );
         }
         $kit_bg_css     = $bg_decl ? rtrim( $bg_decl, '; ' ) . ';' : '';
         $shadow_css     = $this->build_shadow_decl( $s );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Olo_Unsplash — Integrazione Unsplash per Olobuild.
+ * Olobuild_Unsplash — Integrazione Unsplash per Olobuild.
  *
  * Fornisce 2 endpoint REST:
  *   GET  olo/v1/unsplash/search   — Cerca foto su Unsplash
@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Unsplash {
+class Olobuild_Unsplash {
 
     /**
      * Restituisce la Access Key Unsplash.
@@ -131,11 +131,11 @@ class Olo_Unsplash {
             return new WP_Error( 'missing_url', 'URL immagine mancante', [ 'status' => 400 ] );
         }
         // Anti-SSRF: gli URL arrivano dal client — accetta solo host Unsplash.
-        if ( ! olo_validate_remote_media_url( $regular_url, [ 'unsplash.com' ] ) ) {
+        if ( ! olobuild_validate_remote_media_url( $regular_url, [ 'unsplash.com' ] ) ) {
             return new WP_Error( 'invalid_url', 'URL non consentito.', [ 'status' => 400 ] );
         }
         // Il ping di tracking spedisce l'Authorization header (Client-ID): mai verso host arbitrari.
-        if ( $download_location && ! olo_validate_remote_media_url( $download_location, [ 'unsplash.com' ] ) ) {
+        if ( $download_location && ! olobuild_validate_remote_media_url( $download_location, [ 'unsplash.com' ] ) ) {
             $download_location = '';
         }
 
@@ -148,7 +148,7 @@ class Olo_Unsplash {
         }
 
         // Hotlink mode: se download_local=false, ritorna URL diretto Unsplash senza sideload.
-        $behavior = olo_stockmedia_behavior();
+        $behavior = olobuild_stockmedia_behavior();
         if ( empty( $behavior['download_local'] ) ) {
             return rest_ensure_response( [
                 'id'       => 0,
@@ -171,7 +171,7 @@ class Olo_Unsplash {
 
         // Optimize: converti in WebP se richiesto
         if ( ! empty( $behavior['optimize_on_download'] ) ) {
-            $webp = olo_convert_to_webp( $tmp_file, 82 );
+            $webp = olobuild_convert_to_webp( $tmp_file, 82 );
             if ( $webp && $webp !== $tmp_file ) {
                 wp_delete_file( $tmp_file );
                 $tmp_file = $webp;

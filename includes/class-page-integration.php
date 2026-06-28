@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Page_Integration {
+class Olobuild_Page_Integration {
 
     public function init() {
         // Row action in pages list
@@ -221,13 +221,13 @@ class Olo_Page_Integration {
      *
      * Esposto su page, post e tutti i Custom Post Type pubblici (es. olo_service)
      * così che ogni singolo dynamic post possa avere header/footer/template
-     * Olobuild personalizzati. Filtrabile via `olo_metabox_post_types` per togliere
+     * Olobuild personalizzati. Filtrabile via `olobuild_metabox_post_types` per togliere
      * eventuali CPT che non vuoi tracciare.
      */
     public function add_meta_box() {
         $public_cpts = get_post_types( [ 'public' => true, '_builtin' => false ], 'names' );
         $post_types  = array_unique( array_merge( [ 'page', 'post' ], array_values( $public_cpts ) ) );
-        $post_types  = apply_filters( 'olo_metabox_post_types', $post_types );
+        $post_types  = apply_filters( 'olobuild_metabox_post_types', $post_types );
 
         foreach ( $post_types as $post_type ) {
             add_meta_box(
@@ -248,7 +248,7 @@ class Olo_Page_Integration {
         $url = self::get_builder_url( $post->ID );
 
         // Fetch all templates for the select
-        $db = new Olo_Database();
+        $db = new Olobuild_Database();
         $result = $db->list_templates( [ 'per_page' => 100, 'orderby' => 'title', 'order' => 'ASC' ] );
         $all_templates = $result['items'] ?? [];
 
@@ -397,7 +397,7 @@ class Olo_Page_Integration {
 
         // Create new template
         $post = get_post( $post_id );
-        $db = new Olo_Database();
+        $db = new Olobuild_Database();
         $template_id = $db->create_template( [
             'title'    => $post->post_title ?: 'Senza titolo',
             'type'     => $post->post_type,
@@ -479,7 +479,7 @@ class Olo_Page_Integration {
         }
 
         $rendering = true;
-        $renderer = new Olo_Frontend_Renderer();
+        $renderer = new Olobuild_Frontend_Renderer();
         $olo_content = $renderer->render_shortcode( [ 'id' => $template_id ] );
         $rendering = false;
 

@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Audio_Tile extends Olo_Tile_Base {
+class Olobuild_Audio_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'audio';
     protected $name     = 'Audio';
@@ -105,8 +105,8 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
 
     private function render_default( $s, $src ) {
         $bg_color     = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
-        $radius       = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
-        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
+        $radius       = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $accent       = $this->safe_color_css( $s['accent_color'] );
         $text_color   = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
 
@@ -115,14 +115,14 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <?php if ( $radius_hover_css !== '' ) : ?>
-        <style>#<?php echo esc_attr( $uid ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?>:hover{border-radius:<?php echo $radius_hover_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- integer px list from Olo_Tile_Utils::radius_force_css() (absint-built) ?> !important}</style>
+        <style>#<?php echo esc_attr( $uid ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?>:hover{border-radius:<?php echo $radius_hover_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- integer px list from Olobuild_Tile_Utils::radius_force_css() (absint-built) ?> !important}</style>
         <?php endif; ?>
-        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-audio olo-audio-default" style="background:<?php echo $bg_color; ?>;border-radius:<?php echo $radius; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour from the safe_color_css() whitelist (may be a var() token, not esc_attr-safe inside style attr), radius integer px from Olo_Tile_Utils::border_radius() ?>;padding:16px;">
+        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-audio olo-audio-default" style="background:<?php echo $bg_color; ?>;border-radius:<?php echo $radius; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour from the safe_color_css() whitelist (may be a var() token, not esc_attr-safe inside style attr), radius integer px from Olobuild_Tile_Utils::border_radius() ?>;padding:16px;">
             <?php if ( ! empty( $s['title'] ) || ! empty( $s['artist'] ) ) : ?>
             <div style="margin-bottom:8px;<?php echo 'color:' . $text_color . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour from the safe_color_css() whitelist (may be a var() token, not esc_attr-safe inside style attr) ?>">
                 <?php if ( ! empty( $s['title'] ) ) : ?>
                     <?php list( $at_cls, $at_data ) = $this->tfx_attrs( $s, 'title', $s['title'] ); ?>
-                    <div class="olo-audio-title<?php echo $at_cls; ?>" style="font-weight:600;font-size:14px;"<?php echo $at_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally by Olo_Text_Effects (sanitize_html_class/esc_attr); title escaped inline ?>><?php echo esc_html( $s['title'] ); ?></div>
+                    <div class="olo-audio-title<?php echo $at_cls; ?>" style="font-weight:600;font-size:14px;"<?php echo $at_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally by Olobuild_Text_Effects (sanitize_html_class/esc_attr); title escaped inline ?>><?php echo esc_html( $s['title'] ); ?></div>
                 <?php endif; ?>
                 <?php if ( ! empty( $s['artist'] ) ) : ?>
                     <div style="font-size:12px;opacity:0.7;"><?php echo esc_html( $s['artist'] ); ?></div>
@@ -167,17 +167,17 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
         $bg_color   = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
         $text_color = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $accent     = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
-        $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
-        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
+        $radius     = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
         $uid = $this->_audio_uid ?? ( 'olo-audio-' . wp_unique_id() );
 
         ob_start();
         ?>
         <?php if ( $radius_hover_css !== '' ) : ?>
-        <style>#<?php echo esc_attr( $uid ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?>:hover{border-radius:<?php echo $radius_hover_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- integer px list from Olo_Tile_Utils::radius_force_css() (absint-built) ?> !important}</style>
+        <style>#<?php echo esc_attr( $uid ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?>:hover{border-radius:<?php echo $radius_hover_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- integer px list from Olobuild_Tile_Utils::radius_force_css() (absint-built) ?> !important}</style>
         <?php endif; ?>
-        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-audio olo-audio-minimal" style="background:<?php echo $bg_color; ?>;border-radius:<?php echo $radius; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour from the safe_color_css() whitelist (may be a var() token, not esc_attr-safe inside style attr), radius integer px from Olo_Tile_Utils::border_radius() ?>;padding:12px 16px;display:flex;align-items:center;gap:12px;">
+        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-audio olo-audio-minimal" style="background:<?php echo $bg_color; ?>;border-radius:<?php echo $radius; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour from the safe_color_css() whitelist (may be a var() token, not esc_attr-safe inside style attr), radius integer px from Olobuild_Tile_Utils::border_radius() ?>;padding:12px 16px;display:flex;align-items:center;gap:12px;">
             <button type="button" class="olo-audio-playbtn" aria-label="<?php echo esc_attr__( 'Riproduci', 'olobuild' ); ?>" style="background:none;border:none;cursor:pointer;padding:0;flex-shrink:0;width:32px;height:32px;display:flex;align-items:center;justify-content:center;">
                 <svg class="olo-audio-icon-play" aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24"><polygon points="6,4 6,20 20,12" fill="<?php echo esc_attr( $accent ); ?>"/></svg>
                 <svg class="olo-audio-icon-pause" aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" style="display:none;"><rect x="5" y="4" width="4" height="16" rx="1" fill="<?php echo esc_attr( $accent ); ?>"/><rect x="15" y="4" width="4" height="16" rx="1" fill="<?php echo esc_attr( $accent ); ?>"/></svg>
@@ -288,17 +288,17 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
         $bg_color   = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
         $text_color = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $accent     = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
-        $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
-        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
+        $radius     = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
         $uid = $this->_audio_uid ?? ( 'olo-audio-' . wp_unique_id() );
 
         ob_start();
         ?>
         <?php if ( $radius_hover_css !== '' ) : ?>
-        <style>#<?php echo esc_attr( $uid ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?>:hover{border-radius:<?php echo $radius_hover_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- integer px list from Olo_Tile_Utils::radius_force_css() (absint-built) ?> !important}</style>
+        <style>#<?php echo esc_attr( $uid ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?>:hover{border-radius:<?php echo $radius_hover_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- integer px list from Olobuild_Tile_Utils::radius_force_css() (absint-built) ?> !important}</style>
         <?php endif; ?>
-        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-audio olo-audio-custom" style="background:<?php echo $bg_color; ?>;border-radius:<?php echo $radius; ?>;padding:16px;color:<?php echo $text_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colours from the safe_color_css() whitelist (may be var() tokens, not esc_attr-safe inside style attr), radius integer px from Olo_Tile_Utils::border_radius() ?>;">
+        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-audio olo-audio-custom" style="background:<?php echo $bg_color; ?>;border-radius:<?php echo $radius; ?>;padding:16px;color:<?php echo $text_color; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colours from the safe_color_css() whitelist (may be var() tokens, not esc_attr-safe inside style attr), radius integer px from Olobuild_Tile_Utils::border_radius() ?>;">
             <div style="display:flex;gap:16px;align-items:center;">
                 <!-- Cover image -->
                 <?php if ( ! empty( $s['cover_image'] ) ) : ?>
@@ -311,7 +311,7 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
                     <!-- Title & Artist -->
                     <?php if ( ! empty( $s['title'] ) ) : ?>
                     <?php list( $ac_cls, $ac_data ) = $this->tfx_attrs( $s, 'title', $s['title'] ); ?>
-                    <div class="olo-audio-title<?php echo $ac_cls; ?>" style="font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"<?php echo $ac_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally by Olo_Text_Effects (sanitize_html_class/esc_attr); title escaped inline ?>><?php echo esc_html( $s['title'] ); ?></div>
+                    <div class="olo-audio-title<?php echo $ac_cls; ?>" style="font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"<?php echo $ac_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- tfx_attrs() fragments are escaped internally by Olobuild_Text_Effects (sanitize_html_class/esc_attr); title escaped inline ?>><?php echo esc_html( $s['title'] ); ?></div>
                     <?php endif; ?>
                     <?php if ( ! empty( $s['artist'] ) ) : ?>
                     <div style="font-size:12px;opacity:0.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:8px;"><?php echo esc_html( $s['artist'] ); ?></div>

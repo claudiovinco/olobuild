@@ -6,7 +6,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class Olo_Setup_Wizard {
+class Olobuild_Setup_Wizard {
 
     public function init() {
         // Register wizard page (no auto-redirect to avoid potential loops on restrictive installs)
@@ -95,8 +95,8 @@ class Olo_Setup_Wizard {
 
         $wizard_url  = admin_url( 'admin.php?page=olo-setup' );
         $dismiss_url = wp_nonce_url( add_query_arg( 'olo_welcome_dismiss', '1' ), 'olo_welcome_dismiss' );
-        $logo_url    = apply_filters( 'olo_brand_logo_url', OLO_URL . 'assets/img/olobuild-logo-200-white.png' );
-        $brand       = apply_filters( 'olo_brand_name', 'Olobuild' );
+        $logo_url    = apply_filters( 'olobuild_brand_logo_url', OLOBUILD_URL . 'assets/img/olobuild-logo-200-white.png' );
+        $brand       = apply_filters( 'olobuild_brand_name', 'Olobuild' );
         ?>
         <style>
             .olo-welcome{position:relative;overflow:hidden;margin:20px 20px 20px 2px;padding:0;border:0;border-radius:14px;
@@ -165,8 +165,8 @@ class Olo_Setup_Wizard {
         $theme_active    = get_stylesheet() === 'hello-olobuild';
 
         // Get available Olobuild themes (con campi visivi per le mini-anteprime del picker)
-        require_once OLO_PATH . 'includes/class-theme-importer.php';
-        $themes = Olo_Theme_Importer::get_themes();
+        require_once OLOBUILD_PATH . 'includes/class-theme-importer.php';
+        $themes = Olobuild_Theme_Importer::get_themes();
 
         ?>
         <!DOCTYPE html>
@@ -220,8 +220,8 @@ class Olo_Setup_Wizard {
         <body>
             <div class="wizard">
                 <div class="wizard-logo">
-                    <?php if ( file_exists( OLO_PATH . 'assets/img/olobuild-logo-200-v2.png' ) ) : ?>
-                        <img src="<?php echo esc_url( OLO_URL . 'assets/img/olobuild-logo-200-v2.png' ); ?>" alt="Olobuild">
+                    <?php if ( file_exists( OLOBUILD_PATH . 'assets/img/olobuild-logo-200-v2.png' ) ) : ?>
+                        <img src="<?php echo esc_url( OLOBUILD_URL . 'assets/img/olobuild-logo-200-v2.png' ); ?>" alt="Olobuild">
                     <?php endif; ?>
                     <h1><?php esc_html_e( 'Benvenuto in Olobuild', 'olobuild' ); ?></h1>
                     <p><?php echo wp_kses( __( 'Configuriamo il tuo sito in pochi secondi.<br>Potrai personalizzare tutto in seguito.', 'olobuild' ), [ 'br' => [] ] ); ?></p>
@@ -317,12 +317,12 @@ class Olo_Setup_Wizard {
             // Pipeline thumbnail (render REST → html2canvas → upload): theme-picker e
             // thumb-capture registrati via wp_enqueue_script ed emessi qui con
             // wp_print_scripts (questa è una pagina takeover full-page, niente admin_footer).
-            wp_enqueue_script( 'olo-wizard-theme-picker', OLO_URL . 'assets/js/theme-picker.js', [], OLO_VERSION, true );
-            wp_enqueue_script( 'olo-wizard-thumb-capture', OLO_URL . 'assets/js/olo-thumb-capture.js', [], OLO_VERSION, true );
+            wp_enqueue_script( 'olo-wizard-theme-picker', OLOBUILD_URL . 'assets/js/theme-picker.js', [], OLOBUILD_VERSION, true );
+            wp_enqueue_script( 'olo-wizard-thumb-capture', OLOBUILD_URL . 'assets/js/olo-thumb-capture.js', [], OLOBUILD_VERSION, true );
             wp_add_inline_script( 'olo-wizard-thumb-capture', 'window.oloThumbConfig=' . wp_json_encode( [
                 'restUrl'   => esc_url_raw( rest_url( 'olo/v1/' ) ),
                 'nonce'     => wp_create_nonce( 'wp_rest' ),
-                'vendorUrl' => OLO_URL . 'assets/vendor/html2canvas.min.js',
+                'vendorUrl' => OLOBUILD_URL . 'assets/vendor/html2canvas.min.js',
                 'debug'     => false,
             ] ) . ';', 'before' );
             wp_print_scripts( [ 'olo-wizard-theme-picker', 'olo-wizard-thumb-capture' ] );
@@ -527,7 +527,7 @@ class Olo_Setup_Wizard {
 
         // Copy theme from plugin bundle if not installed
         if ( ! wp_get_theme( $theme_slug )->exists() ) {
-            $source = OLO_PATH . 'includes/theme-bundle/';
+            $source = OLOBUILD_PATH . 'includes/theme-bundle/';
             if ( ! is_dir( $source ) ) {
                 wp_send_json_error( __( 'Bundle tema non trovato nel plugin.', 'olobuild' ) );
             }
@@ -552,7 +552,7 @@ class Olo_Setup_Wizard {
         if ( ! current_user_can( 'manage_options' ) ) {
             wp_send_json_error( __( 'Permessi insufficienti.', 'olobuild' ) );
         }
-        if ( olo_imports_disabled() ) {
+        if ( olobuild_imports_disabled() ) {
             wp_send_json_error( __( 'L\'importazione di temi è disabilitata su questo sito.', 'olobuild' ) );
         }
 
@@ -561,8 +561,8 @@ class Olo_Setup_Wizard {
             wp_send_json_error( __( 'Nessun tema selezionato.', 'olobuild' ) );
         }
 
-        require_once OLO_PATH . 'includes/class-theme-importer.php';
-        $result = Olo_Theme_Importer::import_theme( $theme_id );
+        require_once OLOBUILD_PATH . 'includes/class-theme-importer.php';
+        $result = Olobuild_Theme_Importer::import_theme( $theme_id );
 
         if ( is_wp_error( $result ) ) {
             wp_send_json_error( $result->get_error_message() );
@@ -600,7 +600,7 @@ class Olo_Setup_Wizard {
             wp_send_json_error( __( 'Permessi insufficienti.', 'olobuild' ) );
         }
 
-        $db = Olo_Database::instance();
+        $db = Olobuild_Database::instance();
 
         // 1) Nav menu primario (creato se non esiste già)
         $menu_id = $this->ensure_primary_menu();

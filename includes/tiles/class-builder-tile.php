@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * Estratto dai demo OLOthemes (setupBuilder). Token-first: `zone_accent`.
  * Render == Vue (BuilderTile.vue). Runtime inline scoped, senza '&&' né '<'/'>'.
  */
-class Olo_Builder_Tile extends Olo_Tile_Base {
+class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'builder';
     protected $name     = 'Builder';

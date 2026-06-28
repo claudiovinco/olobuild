@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * Estratto dai demo OLOthemes (AvailabilityHeat). Render == Vue (AvailabilityTile.vue).
  * Lookup conteggio→tier precomputato lato PHP (stringa di cifre) → JS senza '&&' né '<'/'>'.
  */
-class Olo_Availability_Tile extends Olo_Tile_Base {
+class Olobuild_Availability_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'availability';
     protected $name     = 'Availability';

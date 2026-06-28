@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Builder {
+class Olobuild_Builder {
 
     private static $instance = null;
 
@@ -43,37 +43,37 @@ class Olo_Builder {
         add_filter( 'admin_body_class', [ $this, 'admin_body_class' ] );
 
         // Initialize REST API
-        $rest_api = new Olo_Rest_Api();
+        $rest_api = new Olobuild_Rest_Api();
         $rest_api->init();
 
         // Initialize frontend renderer (shortcode)
-        $frontend = new Olo_Frontend_Renderer();
+        $frontend = new Olobuild_Frontend_Renderer();
         $frontend->init();
 
         // Initialize page integration (Edit with Olobuild buttons)
-        $page_integration = new Olo_Page_Integration();
+        $page_integration = new Olobuild_Page_Integration();
         $page_integration->init();
 
         // Initialize header integration
-        $header = new Olo_Header_Integration();
+        $header = new Olobuild_Header_Integration();
         $header->init();
 
         // Initialize footer integration
-        $footer = new Olo_Footer_Integration();
+        $footer = new Olobuild_Footer_Integration();
         $footer->init();
 
         // Initialize single template integration
-        $single = new Olo_Single_Integration();
+        $single = new Olobuild_Single_Integration();
         $single->init();
 
         // Initialize archive template integration
-        Olo_Archive_Integration::instance();
+        Olobuild_Archive_Integration::instance();
 
         // Initialize 404 template integration
-        Olo_404_Integration::instance();
+        Olobuild_404_Integration::instance();
 
         // Initialize search results template integration
-        Olo_Search_Results_Integration::instance();
+        Olobuild_Search_Results_Integration::instance();
 
         // Builder iframe page (live preview)
         add_action( 'template_redirect', [ $this, 'serve_builder_iframe' ] );
@@ -82,26 +82,26 @@ class Olo_Builder {
         $this->register_core_tiles();
 
         // LiveSearch REST endpoint
-        add_action( 'rest_api_init', [ 'Olo_LiveSearch_Tile', 'register_rest_routes' ] );
+        add_action( 'rest_api_init', [ 'Olobuild_LiveSearch_Tile', 'register_rest_routes' ] );
 
         // Unsplash integration
-        $unsplash = new Olo_Unsplash();
+        $unsplash = new Olobuild_Unsplash();
         $unsplash->init();
 
         // Pexels integration
-        $pexels = new Olo_Pexels();
+        $pexels = new Olobuild_Pexels();
         $pexels->init();
 
         // Pixabay integration
-        $pixabay = new Olo_Pixabay();
+        $pixabay = new Olobuild_Pixabay();
         $pixabay->init();
 
         // Openverse integration
-        $openverse = new Olo_Openverse();
+        $openverse = new Olobuild_Openverse();
         $openverse->init();
 
         // Freesound integration
-        $freesound = new Olo_Freesound();
+        $freesound = new Olobuild_Freesound();
         $freesound->init();
     }
 
@@ -180,7 +180,7 @@ class Olo_Builder {
 
         // Fallback: standalone iframe template (home root, no associated post).
         $this->enqueue_builder_iframe_assets();
-        include OLO_PATH . 'templates/builder-iframe.php';
+        include OLOBUILD_PATH . 'templates/builder-iframe.php';
         exit;
     }
 
@@ -196,8 +196,8 @@ class Olo_Builder {
      * garantito dalle dipendenze: uikit→icons, leaflet→markercluster→map, bridge ultimo.
      */
     private function enqueue_builder_iframe_assets() {
-        $v       = OLO_VERSION;
-        $leaflet = OLO_URL . 'assets/vendor/leaflet/';
+        $v       = OLOBUILD_VERSION;
+        $leaflet = OLOBUILD_URL . 'assets/vendor/leaflet/';
 
         // ── CSS (cascade: uikit → frontend → overrides) ──
         $styles = [];
@@ -205,19 +205,19 @@ class Olo_Builder {
             wp_enqueue_style( $handle, $url, $deps, $v );
             $styles[] = $handle;
         };
-        $st( 'olo-ifr-uikit', OLO_URL . 'assets/vendor/uikit/css/uikit.min.css' );
-        $st( 'olo-ifr-frontend', OLO_URL . 'assets/css/frontend.css', [ 'olo-ifr-uikit' ] );
-        $st( 'olo-ifr-proslider', OLO_URL . 'assets/css/olo-proslider.css', [ 'olo-ifr-frontend' ] );
-        $st( 'olo-ifr-svganimator', OLO_URL . 'assets/css/olo-svganimator.css', [ 'olo-ifr-frontend' ] );
-        if ( file_exists( OLO_PATH . 'assets/css/olo-livesearch.css' ) ) {
-            $st( 'olo-ifr-livesearch', OLO_URL . 'assets/css/olo-livesearch.css', [ 'olo-ifr-frontend' ] );
+        $st( 'olo-ifr-uikit', OLOBUILD_URL . 'assets/vendor/uikit/css/uikit.min.css' );
+        $st( 'olo-ifr-frontend', OLOBUILD_URL . 'assets/css/frontend.css', [ 'olo-ifr-uikit' ] );
+        $st( 'olo-ifr-proslider', OLOBUILD_URL . 'assets/css/olo-proslider.css', [ 'olo-ifr-frontend' ] );
+        $st( 'olo-ifr-svganimator', OLOBUILD_URL . 'assets/css/olo-svganimator.css', [ 'olo-ifr-frontend' ] );
+        if ( file_exists( OLOBUILD_PATH . 'assets/css/olo-livesearch.css' ) ) {
+            $st( 'olo-ifr-livesearch', OLOBUILD_URL . 'assets/css/olo-livesearch.css', [ 'olo-ifr-frontend' ] );
         }
         $st( 'olo-ifr-leaflet', $leaflet . 'leaflet.css' );
         $st( 'olo-ifr-markercluster', $leaflet . 'leaflet.markercluster.css', [ 'olo-ifr-leaflet' ] );
         $st( 'olo-ifr-markercluster-default', $leaflet . 'leaflet.markercluster-default.css', [ 'olo-ifr-leaflet' ] );
-        $st( 'olo-ifr-builder', OLO_URL . 'assets/css/iframe-builder.css', [ 'olo-ifr-frontend' ] );
-        if ( file_exists( OLO_PATH . 'assets/css/olo-pdfviewer.css' ) ) {
-            $st( 'olo-ifr-pdfviewer-css', OLO_URL . 'assets/css/olo-pdfviewer.css', [ 'olo-ifr-frontend' ] );
+        $st( 'olo-ifr-builder', OLOBUILD_URL . 'assets/css/iframe-builder.css', [ 'olo-ifr-frontend' ] );
+        if ( file_exists( OLOBUILD_PATH . 'assets/css/olo-pdfviewer.css' ) ) {
+            $st( 'olo-ifr-pdfviewer-css', OLOBUILD_URL . 'assets/css/olo-pdfviewer.css', [ 'olo-ifr-frontend' ] );
         }
         $booking_path = WP_PLUGIN_DIR . '/olo-booking/';
         $booking_url  = plugins_url( 'olo-booking/' );
@@ -242,41 +242,41 @@ class Olo_Builder {
                 $modules[] = $handle;
             }
         };
-        $js( 'olo-ifr-uikit-js', OLO_URL . 'assets/vendor/uikit/js/uikit.min.js' );
-        $js( 'olo-ifr-uikit-icons-js', OLO_URL . 'assets/vendor/uikit/js/uikit-icons.min.js', [ 'olo-ifr-uikit-js' ] );
-        if ( file_exists( OLO_PATH . 'assets/js/olo-proslider.js' ) ) {
-            $js( 'olo-ifr-proslider-js', OLO_URL . 'assets/js/olo-proslider.js', [], true );
+        $js( 'olo-ifr-uikit-js', OLOBUILD_URL . 'assets/vendor/uikit/js/uikit.min.js' );
+        $js( 'olo-ifr-uikit-icons-js', OLOBUILD_URL . 'assets/vendor/uikit/js/uikit-icons.min.js', [ 'olo-ifr-uikit-js' ] );
+        if ( file_exists( OLOBUILD_PATH . 'assets/js/olo-proslider.js' ) ) {
+            $js( 'olo-ifr-proslider-js', OLOBUILD_URL . 'assets/js/olo-proslider.js', [], true );
         }
-        if ( file_exists( OLO_PATH . 'assets/js/olo-postgrid.js' ) ) {
-            $js( 'olo-ifr-postgrid-js', OLO_URL . 'assets/js/olo-postgrid.js', [], true );
+        if ( file_exists( OLOBUILD_PATH . 'assets/js/olo-postgrid.js' ) ) {
+            $js( 'olo-ifr-postgrid-js', OLOBUILD_URL . 'assets/js/olo-postgrid.js', [], true );
         }
         $js( 'olo-ifr-leaflet-js', $leaflet . 'leaflet.js' );
         $js( 'olo-ifr-markercluster-js', $leaflet . 'leaflet.markercluster.js', [ 'olo-ifr-leaflet-js' ] );
-        if ( file_exists( OLO_PATH . 'assets/js/olo-map.js' ) ) {
-            $js( 'olo-ifr-map-js', OLO_URL . 'assets/js/olo-map.js', [ 'olo-ifr-markercluster-js' ] );
+        if ( file_exists( OLOBUILD_PATH . 'assets/js/olo-map.js' ) ) {
+            $js( 'olo-ifr-map-js', OLOBUILD_URL . 'assets/js/olo-map.js', [ 'olo-ifr-markercluster-js' ] );
         }
-        if ( file_exists( OLO_PATH . 'assets/js/olo-svganimator.js' ) ) {
-            $js( 'olo-ifr-svganimator-js', OLO_URL . 'assets/js/olo-svganimator.js', [], true );
+        if ( file_exists( OLOBUILD_PATH . 'assets/js/olo-svganimator.js' ) ) {
+            $js( 'olo-ifr-svganimator-js', OLOBUILD_URL . 'assets/js/olo-svganimator.js', [], true );
         }
-        if ( file_exists( OLO_PATH . 'assets/js/olo-viewer360.js' ) ) {
-            $js( 'olo-ifr-viewer360-js', OLO_URL . 'assets/js/olo-viewer360.js' );
+        if ( file_exists( OLOBUILD_PATH . 'assets/js/olo-viewer360.js' ) ) {
+            $js( 'olo-ifr-viewer360-js', OLOBUILD_URL . 'assets/js/olo-viewer360.js' );
         }
-        if ( file_exists( OLO_PATH . 'assets/vendor/pdfjs/pdf.min.js' ) ) {
-            $js( 'olo-ifr-pdfjs', OLO_URL . 'assets/vendor/pdfjs/pdf.min.js' );
-            $worker = esc_url( OLO_URL . 'assets/vendor/pdfjs/pdf.worker.min.js' );
+        if ( file_exists( OLOBUILD_PATH . 'assets/vendor/pdfjs/pdf.min.js' ) ) {
+            $js( 'olo-ifr-pdfjs', OLOBUILD_URL . 'assets/vendor/pdfjs/pdf.min.js' );
+            $worker = esc_url( OLOBUILD_URL . 'assets/vendor/pdfjs/pdf.worker.min.js' );
             wp_add_inline_script( 'olo-ifr-pdfjs', "window.oloPdfViewerData={workerUrl:'{$worker}'};window.oloPdfProData={workerUrl:'{$worker}'};", 'after' );
         }
-        if ( file_exists( OLO_PATH . 'assets/vendor/pageflip/page-flip.browser.js' ) ) {
-            $js( 'olo-ifr-pageflip', OLO_URL . 'assets/vendor/pageflip/page-flip.browser.js' );
+        if ( file_exists( OLOBUILD_PATH . 'assets/vendor/pageflip/page-flip.browser.js' ) ) {
+            $js( 'olo-ifr-pageflip', OLOBUILD_URL . 'assets/vendor/pageflip/page-flip.browser.js' );
         }
-        if ( file_exists( OLO_PATH . 'assets/js/olo-pdfviewer.js' ) ) {
-            $js( 'olo-ifr-pdfviewer-js', OLO_URL . 'assets/js/olo-pdfviewer.js' );
+        if ( file_exists( OLOBUILD_PATH . 'assets/js/olo-pdfviewer.js' ) ) {
+            $js( 'olo-ifr-pdfviewer-js', OLOBUILD_URL . 'assets/js/olo-pdfviewer.js' );
         }
-        if ( file_exists( OLO_PATH . 'assets/js/olo-pdfpro.js' ) ) {
-            $js( 'olo-ifr-pdfpro-js', OLO_URL . 'assets/js/olo-pdfpro.js' );
+        if ( file_exists( OLOBUILD_PATH . 'assets/js/olo-pdfpro.js' ) ) {
+            $js( 'olo-ifr-pdfpro-js', OLOBUILD_URL . 'assets/js/olo-pdfpro.js' );
         }
-        if ( file_exists( OLO_PATH . 'assets/js/olo-utils.js' ) ) {
-            $js( 'olo-ifr-utils-js', OLO_URL . 'assets/js/olo-utils.js', [], true );
+        if ( file_exists( OLOBUILD_PATH . 'assets/js/olo-utils.js' ) ) {
+            $js( 'olo-ifr-utils-js', OLOBUILD_URL . 'assets/js/olo-utils.js', [], true );
         }
         if ( file_exists( $booking_path . 'assets/js/booking-front.js' ) ) {
             $js( 'olo-ifr-booking-js', $booking_url . 'assets/js/booking-front.js' );
@@ -289,7 +289,7 @@ class Olo_Builder {
             $js( 'olo-ifr-vtour-js', $vtour_url . 'assets/js/olo-vtour-viewer.js' );
         }
         // Bridge: deve caricarsi DOPO ogni runtime → dipende da tutti gli handle sopra.
-        wp_enqueue_script( 'olo-ifr-bridge', OLO_URL . 'assets/js/iframe-bridge.js', $scripts, $v, true );
+        wp_enqueue_script( 'olo-ifr-bridge', OLOBUILD_URL . 'assets/js/iframe-bridge.js', $scripts, $v, true );
         $scripts[] = 'olo-ifr-bridge';
 
         $this->iframe_script_handles = $scripts;
@@ -325,19 +325,19 @@ class Olo_Builder {
         // Quando l'utente sta editando un template di tipo header o footer
         // nel builder iframe, evitiamo il DOPPIO render (header/footer dal tema
         // + template in editing renderizzato come body): definiamo una costante
-        // che Olo_Header_Integration/Olo_Footer_Integration leggono per
+        // che Olobuild_Header_Integration/Olobuild_Footer_Integration leggono per
         // skippare il rendering dell'header/footer attivo.
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per routing iframe builder (skip doppio render header/footer); nessuna modifica di stato; valore sanitizzato via absint().
         $tpl_id = isset( $_GET['olo_tpl'] ) ? absint( wp_unslash( $_GET['olo_tpl'] ) ) : 0;
-        if ( $tpl_id && class_exists( 'Olo_Database' ) ) {
-            $db = new Olo_Database();
+        if ( $tpl_id && class_exists( 'Olobuild_Database' ) ) {
+            $db = new Olobuild_Database();
             $tpl = $db->get_template( $tpl_id );
             $editing_type = is_array( $tpl ) ? ( $tpl['type'] ?? '' ) : '';
-            if ( $editing_type === 'header' && ! defined( 'OLO_BUILDER_EDITING_HEADER' ) ) {
-                define( 'OLO_BUILDER_EDITING_HEADER', true );
+            if ( $editing_type === 'header' && ! defined( 'OLOBUILD_BUILDER_EDITING_HEADER' ) ) {
+                define( 'OLOBUILD_BUILDER_EDITING_HEADER', true );
             }
-            if ( $editing_type === 'footer' && ! defined( 'OLO_BUILDER_EDITING_FOOTER' ) ) {
-                define( 'OLO_BUILDER_EDITING_FOOTER', true );
+            if ( $editing_type === 'footer' && ! defined( 'OLOBUILD_BUILDER_EDITING_FOOTER' ) ) {
+                define( 'OLOBUILD_BUILDER_EDITING_FOOTER', true );
             }
         }
 
@@ -404,26 +404,26 @@ class Olo_Builder {
     /** @internal Enqueue degli stessi asset di templates/builder-iframe.php. */
     public function enqueue_inline_preview_assets() {
         // Core CSS (mirror del builder-iframe.php)
-        wp_enqueue_style( 'olo-uikit-inline', OLO_URL . 'assets/vendor/uikit/css/uikit.min.css', [], OLO_VERSION );
-        wp_enqueue_style( 'olo-frontend-inline', OLO_URL . 'assets/css/frontend.css', [], OLO_VERSION );
-        wp_enqueue_style( 'olo-iframe-builder-inline', OLO_URL . 'assets/css/iframe-builder.css', [], OLO_VERSION );
+        wp_enqueue_style( 'olo-uikit-inline', OLOBUILD_URL . 'assets/vendor/uikit/css/uikit.min.css', [], OLOBUILD_VERSION );
+        wp_enqueue_style( 'olo-frontend-inline', OLOBUILD_URL . 'assets/css/frontend.css', [], OLOBUILD_VERSION );
+        wp_enqueue_style( 'olo-iframe-builder-inline', OLOBUILD_URL . 'assets/css/iframe-builder.css', [], OLOBUILD_VERSION );
         // Tile-specific CSS (mirror del builder-iframe.php)
-        wp_enqueue_style( 'olo-proslider-css', OLO_URL . 'assets/css/olo-proslider.css', [], OLO_VERSION );
+        wp_enqueue_style( 'olo-proslider-css', OLOBUILD_URL . 'assets/css/olo-proslider.css', [], OLOBUILD_VERSION );
         // Core JS
-        wp_enqueue_script( 'olo-uikit-inline', OLO_URL . 'assets/vendor/uikit/js/uikit.min.js', [], OLO_VERSION, true );
-        wp_enqueue_script( 'olo-uikit-icons-inline', OLO_URL . 'assets/vendor/uikit/js/uikit-icons.min.js', [ 'olo-uikit-inline' ], OLO_VERSION, true );
+        wp_enqueue_script( 'olo-uikit-inline', OLOBUILD_URL . 'assets/vendor/uikit/js/uikit.min.js', [], OLOBUILD_VERSION, true );
+        wp_enqueue_script( 'olo-uikit-icons-inline', OLOBUILD_URL . 'assets/vendor/uikit/js/uikit-icons.min.js', [ 'olo-uikit-inline' ], OLOBUILD_VERSION, true );
         // Tile runtimes (proslider, postgrid, map, ecc.)
-        if ( file_exists( OLO_PATH . 'assets/js/olo-proslider.js' ) ) {
-            wp_enqueue_script( 'olo-proslider-js', OLO_URL . 'assets/js/olo-proslider.js', [], OLO_VERSION, true );
+        if ( file_exists( OLOBUILD_PATH . 'assets/js/olo-proslider.js' ) ) {
+            wp_enqueue_script( 'olo-proslider-js', OLOBUILD_URL . 'assets/js/olo-proslider.js', [], OLOBUILD_VERSION, true );
         }
-        if ( file_exists( OLO_PATH . 'assets/js/olo-postgrid.js' ) ) {
-            wp_enqueue_script( 'olo-postgrid-js', OLO_URL . 'assets/js/olo-postgrid.js', [], OLO_VERSION, true );
+        if ( file_exists( OLOBUILD_PATH . 'assets/js/olo-postgrid.js' ) ) {
+            wp_enqueue_script( 'olo-postgrid-js', OLOBUILD_URL . 'assets/js/olo-postgrid.js', [], OLOBUILD_VERSION, true );
         }
-        if ( file_exists( OLO_PATH . 'assets/js/olo-utils.js' ) ) {
-            wp_enqueue_script( 'olo-utils', OLO_URL . 'assets/js/olo-utils.js', [], OLO_VERSION, true );
+        if ( file_exists( OLOBUILD_PATH . 'assets/js/olo-utils.js' ) ) {
+            wp_enqueue_script( 'olo-utils', OLOBUILD_URL . 'assets/js/olo-utils.js', [], OLOBUILD_VERSION, true );
         }
         // Bridge: deve essere DOPO ogni runtime (postMessage receiver)
-        wp_enqueue_script( 'olo-iframe-bridge', OLO_URL . 'assets/js/iframe-bridge.js', [], OLO_VERSION, true );
+        wp_enqueue_script( 'olo-iframe-bridge', OLOBUILD_URL . 'assets/js/iframe-bridge.js', [], OLOBUILD_VERSION, true );
         // Mode flag letto dal bridge.js → segnala al parent (Vue useIframeBridge) che
         // questa è una pagina WP reale, header/footer NON vanno re-iniettati.
         wp_add_inline_script( 'olo-iframe-bridge', "window.OLO_IFRAME_MODE='inline';", 'before' );
@@ -457,7 +457,7 @@ class Olo_Builder {
             'manage_options',
             'olobuild',
             [ $this, 'render_dashboard_page' ],
-            OLO_URL . 'assets/img/ob-menu-v2.png',
+            OLOBUILD_URL . 'assets/img/ob-menu-v2.png',
             30
         );
 
@@ -495,7 +495,7 @@ class Olo_Builder {
             __( 'Ricerca Media', 'olobuild' ),
             'upload_files',
             'olo-media-search',
-            [ 'Olo_Media_Search', 'render_page' ]
+            [ 'Olobuild_Media_Search', 'render_page' ]
         );
 
         add_submenu_page(
@@ -504,7 +504,7 @@ class Olo_Builder {
             __( 'Invii Form', 'olobuild' ),
             'manage_options',
             'olo-form-submissions',
-            [ 'Olo_Form_Submissions', 'render_page' ]
+            [ 'Olobuild_Form_Submissions', 'render_page' ]
         );
 
         add_submenu_page(
@@ -513,7 +513,7 @@ class Olo_Builder {
             __( 'Newsletter', 'olobuild' ),
             'manage_options',
             'olo-newsletter',
-            [ 'Olo_Newsletter', 'render_page' ]
+            [ 'Olobuild_Newsletter', 'render_page' ]
         );
     }
 
@@ -604,9 +604,9 @@ class Olo_Builder {
         if ( str_contains( $hook, 'olobuild' ) || str_contains( $hook, 'olo-' ) ) {
             wp_enqueue_style(
                 'olo-admin-css',
-                OLO_URL . 'assets/css/olo-admin.css',
+                OLOBUILD_URL . 'assets/css/olo-admin.css',
                 [],
-                OLO_VERSION
+                OLOBUILD_VERSION
             );
         }
 
@@ -614,9 +614,9 @@ class Olo_Builder {
         if ( in_array( $hook, self::cockpit_screen_ids(), true ) ) {
             wp_enqueue_style(
                 'olo-cockpit-css',
-                OLO_URL . 'assets/css/dashboard.css',
+                OLOBUILD_URL . 'assets/css/dashboard.css',
                 [],
-                OLO_VERSION
+                OLOBUILD_VERSION
             );
         }
 
@@ -624,9 +624,9 @@ class Olo_Builder {
         if ( $hook === 'olobuild_page_olo-form-submissions' ) {
             wp_enqueue_script(
                 'olo-submissions-js',
-                OLO_URL . 'assets/js/olo-submissions.js',
+                OLOBUILD_URL . 'assets/js/olo-submissions.js',
                 [],
-                OLO_VERSION,
+                OLOBUILD_VERSION,
                 true
             );
             wp_localize_script( 'olo-submissions-js', 'oloSubmissionsConfig', [
@@ -654,20 +654,20 @@ class Olo_Builder {
         if ( 'toplevel_page_olobuild' === $hook ) {
             wp_enqueue_style(
                 'olo-dashboard-css',
-                OLO_URL . 'assets/css/dashboard.css',
+                OLOBUILD_URL . 'assets/css/dashboard.css',
                 [],
-                OLO_VERSION
+                OLOBUILD_VERSION
             );
             wp_enqueue_script(
                 'olo-dashboard-js',
-                OLO_URL . 'assets/js/dashboard.js',
+                OLOBUILD_URL . 'assets/js/dashboard.js',
                 [],
-                OLO_VERSION,
+                OLOBUILD_VERSION,
                 true
             );
 
             // Boot data per evitare flash di skeleton
-            $rest = new Olo_Rest_Api();
+            $rest = new Olobuild_Rest_Api();
             $req_recent = new WP_REST_Request( 'GET' );
             $req_recent->set_query_params( [ 'limit' => 6 ] );
             $req_changelog = new WP_REST_Request( 'GET' );
@@ -691,8 +691,8 @@ class Olo_Builder {
                 'restUrl'     => esc_url_raw( rest_url( 'olo/v1/' ) ),
                 'adminUrl'    => admin_url(),
                 'nonce'       => wp_create_nonce( 'wp_rest' ),
-                'pluginUrl'   => OLO_URL,
-                'version'     => OLO_VERSION,
+                'pluginUrl'   => OLOBUILD_URL,
+                'version'     => OLOBUILD_VERSION,
                 'prefs'       => $user_prefs,
                 'searchIndex' => self::dashboard_search_index(),
                 'boot' => [
@@ -723,13 +723,13 @@ class Olo_Builder {
             // CSS is injected inline by Vite IIFE build + render_configurazione_page inline styles
             wp_enqueue_script(
                 'olo-admin-settings-js',
-                OLO_URL . 'assets/js/admin-settings.js',
+                OLOBUILD_URL . 'assets/js/admin-settings.js',
                 [],
-                OLO_VERSION,
+                OLOBUILD_VERSION,
                 true
             );
 
-            $style_system = Olo_Style_System::instance();
+            $style_system = Olobuild_Style_System::instance();
             // Timestamp ultimo save (mostrato nella savebar). Ogni tab al suo POST aggiorna
             // l'option `olo_settings_last_saved`; questo è solo il bootstrap iniziale.
             $last_saved_ts = (int) get_option( 'olo_settings_last_saved', 0 );
@@ -748,15 +748,15 @@ class Olo_Builder {
             wp_localize_script( 'olo-admin-settings-js', 'oloData', [
                 'restUrl'           => esc_url_raw( rest_url( 'olo/v1' ) . '/' ),
                 'nonce'             => wp_create_nonce( 'wp_rest' ),
-                'importsDisabled'   => olo_imports_disabled(),
+                'importsDisabled'   => olobuild_imports_disabled(),
                 'perfNonce'         => wp_create_nonce( 'olo_perf_action' ),
                 'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
                 'adminUrl'          => admin_url(),
                 'siteUrl'           => home_url( '/' ),
-                'pluginUrl'         => OLO_URL,
-                'version'           => OLO_VERSION,
-                'locale'            => olo_current_locale(),
-                'translations'      => olo_get_translations_map(),
+                'pluginUrl'         => OLOBUILD_URL,
+                'version'           => OLOBUILD_VERSION,
+                'locale'            => olobuild_current_locale(),
+                'translations'      => olobuild_get_translations_map(),
                 'styles'            => $style_system->get_styles(),
                 'presets'           => $style_system->get_presets(),
                 'globalColors'      => $style_system->get_global_colors(),
@@ -777,24 +777,24 @@ class Olo_Builder {
         // e ha bisogno delle stesse regole, including @keyframes entrance animations.
         wp_enqueue_style(
             'olo-builder-frontend-styles',
-            OLO_URL . 'assets/css/frontend.css',
+            OLOBUILD_URL . 'assets/css/frontend.css',
             [],
-            OLO_VERSION
+            OLOBUILD_VERSION
         );
 
-        // Cache-busting basato sul mtime reale dei file (oltre OLO_VERSION),
+        // Cache-busting basato sul mtime reale dei file (oltre OLOBUILD_VERSION),
         // così ogni rebuild forza il reload del bundle anche se la versione
         // del plugin non è stata bumpata (utile in dev/staging).
-        $css_path = OLO_PATH . 'assets/css/builder.css';
-        $js_path  = OLO_PATH . 'assets/js/builder.js';
+        $css_path = OLOBUILD_PATH . 'assets/css/builder.css';
+        $js_path  = OLOBUILD_PATH . 'assets/js/builder.js';
         $mtime    = file_exists( $js_path ) ? filemtime( $js_path ) : 0;
-        $css_ver  = OLO_VERSION . '.' . ( file_exists( $css_path ) ? filemtime( $css_path ) : 0 );
-        // OLO_VERSION + mtime sono sufficienti: ogni build aggiorna mtime,
-        // ogni release aggiorna OLO_VERSION → il browser riscarica solo quando
+        $css_ver  = OLOBUILD_VERSION . '.' . ( file_exists( $css_path ) ? filemtime( $css_path ) : 0 );
+        // OLOBUILD_VERSION + mtime sono sufficienti: ogni build aggiorna mtime,
+        // ogni release aggiorna OLOBUILD_VERSION → il browser riscarica solo quando
         // serve. Aggiungere time() come prima rompeva la cache del browser
         // ad ogni F5 in admin (4 MB di builder.js riscaricati senza motivo).
         // Per forzare il reload in dev: aggiungere `?olo_no_cache=1`.
-        $js_ver   = OLO_VERSION . '.' . $mtime;
+        $js_ver   = OLOBUILD_VERSION . '.' . $mtime;
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per cache-busting asset in admin; nessuna modifica di stato; sola verifica di presenza del flag.
         if ( isset( $_GET['olo_no_cache'] ) ) {
             $js_ver .= '.' . time();
@@ -805,7 +805,7 @@ class Olo_Builder {
         if ( file_exists( $css_path ) ) {
             wp_enqueue_style(
                 'olobuilder-css',
-                OLO_URL . 'assets/css/builder.css',
+                OLOBUILD_URL . 'assets/css/builder.css',
                 [],
                 $css_ver
             );
@@ -813,7 +813,7 @@ class Olo_Builder {
 
         wp_enqueue_script(
             'olobuilder-js',
-            OLO_URL . 'assets/js/builder.js',
+            OLOBUILD_URL . 'assets/js/builder.js',
             [ 'media-views' ],
             $js_ver,
             true
@@ -847,19 +847,19 @@ class Olo_Builder {
         // Auto-thumbnail capture: listener su `olobuild:saved` → html2canvas → upload
         wp_enqueue_script(
             'olo-thumb-capture',
-            OLO_URL . 'assets/js/olo-thumb-capture.js',
+            OLOBUILD_URL . 'assets/js/olo-thumb-capture.js',
             [],
-            OLO_VERSION,
+            OLOBUILD_VERSION,
             true
         );
         wp_localize_script( 'olo-thumb-capture', 'oloThumbConfig', [
             'restUrl'   => esc_url_raw( rest_url( 'olo/v1/' ) ),
             'nonce'     => wp_create_nonce( 'wp_rest' ),
-            'vendorUrl' => OLO_URL . 'assets/vendor/html2canvas.min.js?v=' . OLO_VERSION,
+            'vendorUrl' => OLOBUILD_URL . 'assets/vendor/html2canvas.min.js?v=' . OLOBUILD_VERSION,
             'debug'     => defined( 'WP_DEBUG' ) && WP_DEBUG,
         ] );
 
-        $style_system = Olo_Style_System::instance();
+        $style_system = Olobuild_Style_System::instance();
 
         // Inject primary color as CSS custom properties so admin UI can use it
         $styles   = $style_system->get_styles();
@@ -888,8 +888,8 @@ class Olo_Builder {
         $linked_post_id = 0;
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per bootstrap del builder admin (risoluzione permalink template); nessuna modifica di stato; valore sanitizzato via absint.
         $template_id_for_link = absint( wp_unslash( $_GET['template_id'] ?? 0 ) );
-        if ( $template_id_for_link && class_exists( 'Olo_Database' ) ) {
-            $db_for_link = new Olo_Database();
+        if ( $template_id_for_link && class_exists( 'Olobuild_Database' ) ) {
+            $db_for_link = new Olobuild_Database();
             $tpl_for_link = $db_for_link->get_template( $template_id_for_link );
             if ( $tpl_for_link && ! empty( $tpl_for_link['settings']['post_id'] ) ) {
                 $linked_post_id = absint( $tpl_for_link['settings']['post_id'] );
@@ -902,12 +902,12 @@ class Olo_Builder {
         wp_localize_script( 'olobuilder-js', 'oloData', [
             'restUrl'        => esc_url_raw( rest_url( 'olo/v1' ) ),
             'nonce'          => wp_create_nonce( 'wp_rest' ),
-            'importsDisabled' => olo_imports_disabled(),
+            'importsDisabled' => olobuild_imports_disabled(),
             'userId'         => get_current_user_id(),
             'userName'       => wp_get_current_user()->display_name,
-            'version'        => OLO_VERSION,
-            'pluginUrl'      => OLO_URL,
-            'brandName'      => apply_filters( 'olo_brand_name', 'Olobuild' ),
+            'version'        => OLOBUILD_VERSION,
+            'pluginUrl'      => OLOBUILD_URL,
+            'brandName'      => apply_filters( 'olobuild_brand_name', 'Olobuild' ),
             // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per bootstrap del builder admin (template in editing); nessuna modifica di stato; valore sanitizzato via absint.
             'templateId'     => absint( wp_unslash( $_GET['template_id'] ?? 0 ) ),
             'postId'         => $post_id,
@@ -928,7 +928,7 @@ class Olo_Builder {
             'active404Id'    => (int) get_option( 'olo_active_404', 0 ),
             'activeSingles'  => $this->get_active_singles_map(),
             'stockmedia'     => wp_parse_args(
-                get_option( 'olo_stockmedia_behavior', [] ) ?: [],
+                get_option( 'olobuild_stockmedia_behavior', [] ) ?: [],
                 [ 'preferred' => 'unsplash', 'download_local' => true, 'optimize_on_download' => false ]
             ),
             'templateList'       => $this->get_template_list(),
@@ -955,8 +955,8 @@ class Olo_Builder {
             'userRestrictions' => Olobuild_Role_Manager::instance()->get_current_user_restrictions(),
             'isContentOnly'    => Olobuild_Role_Manager::instance()->is_content_only(),
             'isDesignOnly'     => Olobuild_Role_Manager::instance()->is_design_only(),
-            'locale'         => olo_current_locale(),
-            'translations'   => olo_get_translations_map(),
+            'locale'         => olobuild_current_locale(),
+            'translations'   => olobuild_get_translations_map(),
             'siteInfo'       => [
                 'name'     => get_bloginfo( 'name' ),
                 'tagline'  => get_bloginfo( 'description' ),
@@ -966,7 +966,7 @@ class Olo_Builder {
         ] );
 
         // Filtro per plugin esterni che vogliono aggiungere dati a oloData
-        $olo_data = apply_filters( 'olo_builder_localize_data', [] );
+        $olo_data = apply_filters( 'olobuild_builder_localize_data', [] );
         if ( ! empty( $olo_data ) ) {
             wp_localize_script( 'olobuilder-js', 'oloExternalData', $olo_data );
         }
@@ -988,7 +988,7 @@ class Olo_Builder {
 
         if ( $template_id > 0 ) {
             // Fullscreen editor mode — keep existing behaviour
-            include OLO_PATH . 'templates/builder-page.php';
+            include OLOBUILD_PATH . 'templates/builder-page.php';
         } else {
             // Template list mode — usa il cockpit shell della dashboard
             // (topbar OLObuild + appback strip + WP sidebar collassata in app mode)
@@ -1072,8 +1072,8 @@ class Olo_Builder {
      * backward compat con eventuali plugin/tema che lo chiamano.
      */
     public static function page_shell_open( $page_title = '', $extra_class = '' ) {
-        $logo_url  = OLO_URL . 'assets/img/olobuild-logo-200-v2.png';
-        $white_url = apply_filters( 'olo_brand_logo_url', OLO_URL . 'assets/img/olobuild-logo-200-white.png' );
+        $logo_url  = OLOBUILD_URL . 'assets/img/olobuild-logo-200-v2.png';
+        $white_url = apply_filters( 'olobuild_brand_logo_url', OLOBUILD_URL . 'assets/img/olobuild-logo-200-white.png' );
         $cls = 'olo-admin-wrap' . ( $extra_class ? ' ' . esc_attr( $extra_class ) : '' );
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per evidenziare la voce di menu corrente nella sidebar admin; nessuna modifica di stato; valore sanitizzato via sanitize_key.
         $current   = sanitize_key( wp_unslash( $_GET['page'] ?? '' ) );
@@ -1083,12 +1083,12 @@ class Olo_Builder {
             <div class="olo-shell-topbar">
                 <div class="olo-shell-topbar-brand">
                     <a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuild' ) ); ?>">
-                        <img src="<?php echo esc_url( $white_url ); ?>" alt="<?php echo esc_attr( apply_filters( 'olo_brand_name', 'Olobuild' ) ); ?>" />
+                        <img src="<?php echo esc_url( $white_url ); ?>" alt="<?php echo esc_attr( apply_filters( 'olobuild_brand_name', 'Olobuild' ) ); ?>" />
                     </a>
                     <span class="olo-shell-topbar-label">website builder</span>
                 </div>
                 <div class="olo-shell-topbar-actions">
-                    <span class="olo-shell-topbar-version">v<?php echo esc_html( OLO_VERSION ); ?></span>
+                    <span class="olo-shell-topbar-version">v<?php echo esc_html( OLOBUILD_VERSION ); ?></span>
                 </div>
             </div>
 
@@ -1445,8 +1445,8 @@ class Olo_Builder {
                 if ( $thumb_id ) $thumbnail = wp_get_attachment_image_url( $thumb_id, 'large' );
             }
 
-            $edit_url = class_exists( 'Olo_Page_Integration' )
-                ? Olo_Page_Integration::get_builder_url( $p->ID )
+            $edit_url = class_exists( 'Olobuild_Page_Integration' )
+                ? Olobuild_Page_Integration::get_builder_url( $p->ID )
                 : admin_url( 'admin.php?page=olobuilder-templates' );
 
             return [
@@ -1454,7 +1454,7 @@ class Olo_Builder {
                 'sub'       => sprintf(
                     /* translators: 1: human time diff, 2: status word */
                     __( 'Hai modificato questa pagina %1$s. La pagina è %2$s.', 'olobuild' ),
-                    '<b>' . Olo_Rest_Api::human_time_ago( $p->post_modified_gmt, $p->post_modified ) . '</b>',
+                    '<b>' . Olobuild_Rest_Api::human_time_ago( $p->post_modified_gmt, $p->post_modified ) . '</b>',
                     $p->post_status === 'publish' ? __( 'pubblicata', 'olobuild' ) : __( 'in bozza', 'olobuild' )
                 ),
                 'edit'      => $edit_url,
@@ -1511,9 +1511,9 @@ class Olo_Builder {
 
             <div class="olo-cockpit-topbar">
                 <a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuild' ) ); ?>" style="display:inline-flex;align-items:center;text-decoration:none;">
-                    <img class="logo" src="<?php echo esc_url( OLO_URL . 'assets/img/olobuild-horizontal.png' ); ?>" alt="Olobuild" />
+                    <img class="logo" src="<?php echo esc_url( OLOBUILD_URL . 'assets/img/olobuild-horizontal.png' ); ?>" alt="Olobuild" />
                 </a>
-                <button type="button" class="ver" data-olo-app-mode-toggle title="<?php esc_attr_e( 'Cambia modalità', 'olobuild' ); ?>">v<?php echo esc_html( OLO_VERSION ); ?></button>
+                <button type="button" class="ver" data-olo-app-mode-toggle title="<?php esc_attr_e( 'Cambia modalità', 'olobuild' ); ?>">v<?php echo esc_html( OLOBUILD_VERSION ); ?></button>
                 <span class="sep"></span>
                 <span class="crumb"><a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuild' ) ); ?>" style="color:inherit;text-decoration:none">Olobuild</a> · <?php echo $crumb_html ?: '<b>' . esc_html__( 'Dashboard', 'olobuild' ) . '</b>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- breadcrumb HTML built by internal callers from esc_html()/esc_url()'d parts. ?></span>
                 <span class="spc"></span>
@@ -1561,10 +1561,10 @@ class Olo_Builder {
      * }
      *
      * @example
-     *   echo Olo_Builder::cockpit_page_head([
+     *   echo Olobuild_Builder::cockpit_page_head([
      *     'title'   => __('Strumenti', 'olobuild'),
      *     'sub'     => sprintf(__('Cache: %s · DB: %s'), '<b>2.4 MB</b>', '<b>OK</b>'),
-     *     'actions' => Olo_Builder::cockpit_button(['label' => 'Nuovo', 'variant' => 'pri']),
+     *     'actions' => Olobuild_Builder::cockpit_button(['label' => 'Nuovo', 'variant' => 'pri']),
      *   ]);
      */
     public static function cockpit_page_head( $args = [] ) {
@@ -1593,7 +1593,7 @@ class Olo_Builder {
      * @param string $active  Slug del tab attivo.
      *
      * @example
-     *   echo Olo_Builder::cockpit_subnav([
+     *   echo Olobuild_Builder::cockpit_subnav([
      *     ['slug' => 'general', 'label' => 'Generale', 'href' => admin_url('admin.php?page=olo-seo')],
      *     ['slug' => 'meta',    'label' => 'Meta tag', 'href' => admin_url('admin.php?page=olo-seo&tab=meta'), 'count' => 12],
      *   ], 'general');
@@ -1635,7 +1635,7 @@ class Olo_Builder {
      * }
      *
      * @example
-     *   echo Olo_Builder::cockpit_toolbar([
+     *   echo Olobuild_Builder::cockpit_toolbar([
      *     'chips' => [
      *       ['id'=>'all', 'label'=>'Tutti', 'count'=>128],
      *       ['id'=>'unread', 'label'=>'Non letti', 'count'=>12, 'dot_color'=>'#ef4444'],
@@ -1714,7 +1714,7 @@ class Olo_Builder {
      * }
      *
      * @example
-     *   echo Olo_Builder::cockpit_button([
+     *   echo Olobuild_Builder::cockpit_button([
      *     'label' => 'Salva', 'variant' => 'pri', 'type' => 'submit',
      *     'icon' => '<path d="M19 21H5..." />',
      *   ]);
@@ -1776,7 +1776,7 @@ class Olo_Builder {
      * }
      *
      * @example
-     *   echo Olo_Builder::cockpit_card_grid([
+     *   echo Olobuild_Builder::cockpit_card_grid([
      *     'items'  => $submissions,
      *     'layout' => 'grid',
      *     'render' => function($s) {
@@ -1883,7 +1883,7 @@ class Olo_Builder {
                             <div class="meta-row">
                                 <span class="item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg> <?php echo esc_html( $site_host ); ?></span>
                                 <span class="item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg> <b><?php echo esc_html( wp_count_posts( 'page' )->publish ); ?></b> <?php esc_html_e( 'pagine', 'olobuild' ); ?></span>
-                                <span class="item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19l3-3a4 4 0 015.7 0l.3.3 4-9-9 4 .3.3a4 4 0 010 5.7L5 19zM4 14a3 3 0 00-1 6 3 3 0 006-1"/></svg> v<?php echo esc_html( OLO_VERSION ); ?></span>
+                                <span class="item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19l3-3a4 4 0 015.7 0l.3.3 4-9-9 4 .3.3a4 4 0 010 5.7L5 19zM4 14a3 3 0 00-1 6 3 3 0 006-1"/></svg> v<?php echo esc_html( OLOBUILD_VERSION ); ?></span>
                             </div>
                             <div class="ctas">
                                 <a class="pri" href="<?php echo esc_url( $hero['edit'] ); ?>">
@@ -2054,7 +2054,7 @@ class Olo_Builder {
                         <div class="olo-rail-section">
                             <h3>
                                 <?php esc_html_e( 'Cosa c\'è di nuovo', 'olobuild' ); ?>
-                                <span class="pill">v<?php echo esc_html( OLO_VERSION ); ?></span>
+                                <span class="pill">v<?php echo esc_html( OLOBUILD_VERSION ); ?></span>
                             </h3>
                             <div data-olo-changelog></div>
                         </div>
@@ -2474,7 +2474,7 @@ class Olo_Builder {
                     if ( ! is_array( $payload ) ) $payload = [];
                     $merged = array_merge( $existing, $payload );
                     update_option( 'olo_performance', $merged );
-                    // Olo_Critical_CSS::init() si attiva sulla legacy option: va tenuta in sync
+                    // Olobuild_Critical_CSS::init() si attiva sulla legacy option: va tenuta in sync
                     // (la vecchia pagina lo faceva nel sanitize di register_setting).
                     update_option( 'olo_critical_css_enabled', ! empty( $merged['critical_css_enabled'] ) ? '1' : '' );
                     update_option( 'olo_settings_last_saved', time() );
@@ -2490,16 +2490,16 @@ class Olo_Builder {
                 'methods'             => 'GET',
                 'callback'            => function () {
                     // get_option() della classe = defaults-aware (i flag attivi di default contano)
-                    $opt = class_exists( 'Olo_Performance_Settings' )
-                        ? Olo_Performance_Settings::get_option()
+                    $opt = class_exists( 'Olobuild_Performance_Settings' )
+                        ? Olobuild_Performance_Settings::get_option()
                         : get_option( 'olo_performance', [] );
                     if ( ! is_array( $opt ) ) $opt = [];
 
                     // Critical CSS pages cached
                     $ccss_count = 0;
                     $ccss_last  = '';
-                    if ( class_exists( 'Olo_Critical_CSS' ) && method_exists( 'Olo_Critical_CSS', 'get_status' ) ) {
-                        $st = Olo_Critical_CSS::get_status();
+                    if ( class_exists( 'Olobuild_Critical_CSS' ) && method_exists( 'Olobuild_Critical_CSS', 'get_status' ) ) {
+                        $st = Olobuild_Critical_CSS::get_status();
                         if ( is_array( $st ) ) {
                             $ccss_count = (int) ( $st['cached_count'] ?? 0 );
                             $ccss_last  = (string) ( $st['last_generated'] ?? '' );
@@ -2557,7 +2557,7 @@ class Olo_Builder {
                 'methods'             => 'GET',
                 'callback'            => function () {
                     $defaults = [ 'preferred' => 'unsplash', 'download_local' => true, 'optimize_on_download' => false ];
-                    $saved = get_option( 'olo_stockmedia_behavior', [] );
+                    $saved = get_option( 'olobuild_stockmedia_behavior', [] );
                     if ( ! is_array( $saved ) ) $saved = [];
                     return rest_ensure_response( wp_parse_args( $saved, $defaults ) );
                 },
@@ -2574,7 +2574,7 @@ class Olo_Builder {
                         'download_local'       => ! empty( $b['download_local'] ),
                         'optimize_on_download' => ! empty( $b['optimize_on_download'] ),
                     ];
-                    update_option( 'olo_stockmedia_behavior', $clean );
+                    update_option( 'olobuild_stockmedia_behavior', $clean );
                     update_option( 'olo_settings_last_saved', time() );
                     return rest_ensure_response( [ 'ok' => true ] );
                 },
@@ -2730,8 +2730,8 @@ class Olo_Builder {
             'callback'            => function ( $req ) {
                 $params = $req->get_json_params();
                 $kind   = ( $params['kind'] ?? 'coming_soon' ) === 'maintenance' ? 'maintenance' : 'coming_soon';
-                if ( ! class_exists( 'Olo_Database' ) ) {
-                    return new WP_Error( 'no_db', 'Olo_Database non disponibile', [ 'status' => 500 ] );
+                if ( ! class_exists( 'Olobuild_Database' ) ) {
+                    return new WP_Error( 'no_db', 'Olobuild_Database non disponibile', [ 'status' => 500 ] );
                 }
                 $launch_at = strtotime( '+30 days' );
                 $launch_iso = wp_date( 'Y-m-d\TH:i:s', $launch_at );
@@ -2897,7 +2897,7 @@ class Olo_Builder {
                     ],
                 ];
 
-                $db = new Olo_Database();
+                $db = new Olobuild_Database();
                 $title = $kind === 'coming_soon' ? __( 'Coming Soon — Default', 'olobuild' ) : __( 'Manutenzione — Default', 'olobuild' );
                 $new_id = $db->create_template( [
                     'title'   => $title,
@@ -3098,7 +3098,7 @@ class Olo_Builder {
         ];
         // La recaptcha_site_key e' pubblica (renderizzata nell'HTML): resta in chiaro.
         // Tutto il resto e' segreto e viene mascherato: solo gli ultimi 4 caratteri
-        // lasciano il server, coerente con Olo_AI_Assistant::get_settings().
+        // lasciano il server, coerente con Olobuild_AI_Assistant::get_settings().
         $public = [ 'olo_recaptcha_site_key' ];
         $data   = [];
         foreach ( $keys as $k ) {
@@ -3186,459 +3186,459 @@ class Olo_Builder {
     }
 
     private function register_core_tiles() {
-        require_once OLO_PATH . 'includes/class-tile-utils.php';
-        require_once OLO_PATH . 'includes/class-text-effects.php';
-        require_once OLO_PATH . 'includes/tiles/class-tile-base.php';
-        require_once OLO_PATH . 'includes/tiles/class-section-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-column-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-hero-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-hero-split-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-audiohero-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-section-header-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-info-cards-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-worklist-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-workgrid-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-statstrip-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-hoursstrip-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-hoverlist-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-lookbookmixer-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-categoryrail-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-beforeafter-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-tripfinder-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-maskedvideohero-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-searchhero-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-smearhero-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-photocover-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-masthead-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-matchfixtures-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-showcasegrid-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-productgrid-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-announcementbar-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-introsplit-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-mediacta-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-imagehero-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-glowhero-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-producthero-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-northvideohero-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-northquoteslider-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-featuredstory-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-glowgallery-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-chathero-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-product-cards-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-step-timeline-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-process-steps-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-cta-banner-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-trust-strip-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-content-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-image-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-video-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-spacer-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-button-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-gallery-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-row-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-testimonial-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-pricing-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-counter-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-iconbox-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-alert-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-badge-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-team-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-accordion-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-icontabs-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-projector-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-finder-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-builder-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-mixer-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-schedule-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-hotspots-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-scaler-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-timezone-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-availability-tile.php';
+        require_once OLOBUILD_PATH . 'includes/class-tile-utils.php';
+        require_once OLOBUILD_PATH . 'includes/class-text-effects.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-tile-base.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-section-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-column-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-hero-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-hero-split-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-audiohero-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-section-header-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-info-cards-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-worklist-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-workgrid-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-statstrip-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-hoursstrip-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-hoverlist-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-lookbookmixer-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-categoryrail-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-beforeafter-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-tripfinder-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-maskedvideohero-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-searchhero-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-smearhero-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-photocover-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-masthead-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-matchfixtures-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-showcasegrid-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-productgrid-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-announcementbar-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-introsplit-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-mediacta-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-imagehero-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-glowhero-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-producthero-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-northvideohero-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-northquoteslider-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-featuredstory-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-glowgallery-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-chathero-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-product-cards-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-step-timeline-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-process-steps-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-cta-banner-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-trust-strip-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-content-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-image-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-video-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-spacer-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-button-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-gallery-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-row-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-testimonial-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-pricing-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-counter-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-iconbox-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-alert-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-badge-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-team-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-accordion-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-icontabs-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-projector-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-finder-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-builder-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-mixer-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-schedule-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-hotspots-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-scaler-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-timezone-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-availability-tile.php';
 
-        require_once OLO_PATH . 'includes/tiles/class-social-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-map-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-countdown-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-headline-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-html-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-list-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-text-block-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-slideshow-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-table-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-overlay-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-divider-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-progress-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-desclist-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-panel-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-quotation-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-code-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-icon-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-totop-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-fragment-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-grid-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-switcher-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-switcherpanel-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-nav-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-subnav-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-panelslider-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-overlayslider-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-overlaygrid-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-popover-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-breadcrumbs-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-search-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-sitelogo-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-navmenu-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-postgrid-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-proslider-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-popup-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-megamenu-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-oloheader-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-inner-columns-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-timeline-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-flipcard-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-imgcompare-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-marquee-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-togglebtn-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-form-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-killnextprev-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-langswitcher-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-livesearch-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-shatteredimage-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-textmask-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-blendtext-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-progallery-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-pdfviewer-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-pdfpro-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-starrating-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-iconlist-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-animatedheading-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-toc-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-lottie-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-sharebuttons-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-scrollprogress-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-newsticker-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-hotspot-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-loginform-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-videoplaylist-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-textpath-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-social-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-map-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-countdown-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-headline-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-html-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-list-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-text-block-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-slideshow-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-table-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-overlay-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-divider-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-progress-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-desclist-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-panel-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-quotation-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-code-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-icon-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-totop-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-fragment-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-grid-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-switcher-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-switcherpanel-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-nav-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-subnav-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-panelslider-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-overlayslider-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-overlaygrid-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-popover-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-breadcrumbs-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-search-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-sitelogo-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-navmenu-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-postgrid-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-proslider-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-popup-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-megamenu-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-oloheader-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-inner-columns-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-timeline-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-flipcard-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-imgcompare-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-marquee-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-togglebtn-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-form-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-killnextprev-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-langswitcher-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-livesearch-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-shatteredimage-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-textmask-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-blendtext-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-progallery-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-pdfviewer-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-pdfpro-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-starrating-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-iconlist-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-animatedheading-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-toc-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-lottie-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-sharebuttons-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-scrollprogress-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-newsticker-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-hotspot-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-loginform-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-videoplaylist-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-textpath-tile.php';
 
-        require_once OLO_PATH . 'includes/tiles/class-chart-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-audio-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-shapedivider-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-countercircle-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-postmeta-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-relatedposts-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-wpcomments-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-pagination-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-carousel-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-authorbox-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-soundcloud-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-tagcloud-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-viewscounter-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-menuanchor-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-osmmap-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-instagram-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-facebookpage-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-twitterfeed-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-postnavigation-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-pricelist-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-progresstracker-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-sitemap-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-linkinbio-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-shortcode-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-templateembed-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-paymentbuttons-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-pagetitlebar-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-portfolio-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-queryloop-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-readingtime-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-darkmode-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-lightbox-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-chart-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-audio-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-shapedivider-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-countercircle-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-postmeta-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-relatedposts-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-wpcomments-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-pagination-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-carousel-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-authorbox-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-soundcloud-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-tagcloud-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-viewscounter-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-menuanchor-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-osmmap-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-instagram-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-facebookpage-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-twitterfeed-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-postnavigation-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-pricelist-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-progresstracker-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-sitemap-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-linkinbio-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-shortcode-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-templateembed-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-paymentbuttons-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-pagetitlebar-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-portfolio-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-queryloop-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-readingtime-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-darkmode-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-lightbox-tile.php';
 
         // Clod — Evoluzione (studio editorial)
-        require_once OLO_PATH . 'includes/tiles/class-studiohero-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-filmreel-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-scrubtext-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-themedemos-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-evonotes-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-studiohero-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-filmreel-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-scrubtext-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-themedemos-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-evonotes-tile.php';
 
         // WooCommerce tiles (solo se WooCommerce attivo)
         if ( class_exists( 'WooCommerce' ) ) {
-            require_once OLO_PATH . 'includes/tiles/class-woo-products-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-price-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-minicart-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-addtocart-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-categories-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-rating-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-product-tabs-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-related-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-upsells-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-cart-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-checkout-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-checkout-multistep-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-product-title-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-product-image-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-product-description-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-product-meta-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-product-stock-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-order-tracking-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-breadcrumbs-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-notices-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-product-navigation-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-sale-badge-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-cross-sells-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-recently-viewed-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-product-bundle-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-product-filter-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-product-gallery-slider-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-quickview-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-wishlist-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-comparison-tile.php';
-            require_once OLO_PATH . 'includes/tiles/class-woo-myaccount-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-products-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-price-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-minicart-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-addtocart-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-categories-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-rating-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-product-tabs-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-related-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-upsells-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-cart-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-checkout-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-checkout-multistep-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-product-title-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-product-image-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-product-description-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-product-meta-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-product-stock-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-order-tracking-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-breadcrumbs-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-notices-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-product-navigation-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-sale-badge-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-cross-sells-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-recently-viewed-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-product-bundle-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-product-filter-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-product-gallery-slider-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-quickview-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-wishlist-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-comparison-tile.php';
+            require_once OLOBUILD_PATH . 'includes/tiles/class-woo-myaccount-tile.php';
         }
 
         // ── Tile speciali (batch tile-speciali) — require ──
-        require_once OLO_PATH . 'includes/tiles/class-stackscroll-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-crtoverlay-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-physicsbin-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-scratchfx-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-particlefx-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-asciiviz-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-variablespecimen-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-presencegrid-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-leaderboard-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-scrollscrub-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-goo-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-buildermock-tile.php';
-        require_once OLO_PATH . 'includes/class-magnetic-cursor.php';
-        Olo_Magnetic_Cursor::init();
-        require_once OLO_PATH . 'includes/class-cursor-hud.php';
-        Olo_Cursor_Hud::init();
+        require_once OLOBUILD_PATH . 'includes/tiles/class-stackscroll-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-crtoverlay-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-physicsbin-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-scratchfx-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-particlefx-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-asciiviz-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-variablespecimen-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-presencegrid-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-leaderboard-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-scrollscrub-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-goo-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-buildermock-tile.php';
+        require_once OLOBUILD_PATH . 'includes/class-magnetic-cursor.php';
+        Olobuild_Magnetic_Cursor::init();
+        require_once OLOBUILD_PATH . 'includes/class-cursor-hud.php';
+        Olobuild_Cursor_Hud::init();
 
-        $manager = Olo_Tile_Manager::instance();
-        $manager->register_tile( new Olo_Section_Tile() );
+        $manager = Olobuild_Tile_Manager::instance();
+        $manager->register_tile( new Olobuild_Section_Tile() );
         // ── Tile speciali (batch tile-speciali) — register ──
-        $manager->register_tile( new Olo_Stackscroll_Tile() );
-        // Olo_Crtoverlay_Tile NON è un tile in flusso: è un EFFETTO DI PAGINA
+        $manager->register_tile( new Olobuild_Stackscroll_Tile() );
+        // Olobuild_Crtoverlay_Tile NON è un tile in flusso: è un EFFETTO DI PAGINA
         // (Impostazioni Pagina → Effetti di pagina), reso da render_tiles_array. La classe
         // resta require'd sopra come helper di render; nessun register_tile.
-        $manager->register_tile( new Olo_Physicsbin_Tile() );
-        $manager->register_tile( new Olo_Scratchfx_Tile() );
-        $manager->register_tile( new Olo_Particlefx_Tile() );
-        $manager->register_tile( new Olo_Asciiviz_Tile() );
-        $manager->register_tile( new Olo_Variablespecimen_Tile() );
-        $manager->register_tile( new Olo_Presencegrid_Tile() );
-        $manager->register_tile( new Olo_Leaderboard_Tile() );
-        $manager->register_tile( new Olo_Scrollscrub_Tile() );
-        $manager->register_tile( new Olo_Goo_Tile() );
-        $manager->register_tile( new Olo_BuilderMock_Tile() );
-        $manager->register_tile( new Olo_Column_Tile() );
-        $manager->register_tile( new Olo_Hero_Tile() );
-        $manager->register_tile( new Olo_HeroSplit_Tile() );
-        $manager->register_tile( new Olo_AudioHero_Tile() );
-        $manager->register_tile( new Olo_SectionHeader_Tile() );
-        $manager->register_tile( new Olo_InfoCards_Tile() );
-        $manager->register_tile( new Olo_WorkList_Tile() );
-        $manager->register_tile( new Olo_WorkGrid_Tile() );
-        $manager->register_tile( new Olo_StatStrip_Tile() );
-        $manager->register_tile( new Olo_HoursStrip_Tile() );
-        $manager->register_tile( new Olo_HoverList_Tile() );
-        $manager->register_tile( new Olo_LookbookMixer_Tile() );
-        $manager->register_tile( new Olo_CategoryRail_Tile() );
-        $manager->register_tile( new Olo_BeforeAfter_Tile() );
-        $manager->register_tile( new Olo_TripFinder_Tile() );
-        $manager->register_tile( new Olo_MaskedVideoHero_Tile() );
-        $manager->register_tile( new Olo_SearchHero_Tile() );
-        $manager->register_tile( new Olo_SmearHero_Tile() );
-        $manager->register_tile( new Olo_PhotoCover_Tile() );
-        $manager->register_tile( new Olo_Masthead_Tile() );
-        $manager->register_tile( new Olo_MatchFixtures_Tile() );
-        $manager->register_tile( new Olo_ShowcaseGrid_Tile() );
-        $manager->register_tile( new Olo_ProductGrid_Tile() );
-        $manager->register_tile( new Olo_AnnouncementBar_Tile() );
-        $manager->register_tile( new Olo_IntroSplit_Tile() );
-        $manager->register_tile( new Olo_MediaCTA_Tile() );
-        $manager->register_tile( new Olo_ImageHero_Tile() );
-        $manager->register_tile( new Olo_GlowHero_Tile() );
-        $manager->register_tile( new Olo_ProductHero_Tile() );
-        $manager->register_tile( new Olo_NorthVideoHero_Tile() );
-        $manager->register_tile( new Olo_NorthQuoteSlider_Tile() );
-        $manager->register_tile( new Olo_FeaturedStory_Tile() );
-        $manager->register_tile( new Olo_GlowGallery_Tile() );
-        $manager->register_tile( new Olo_ChatHero_Tile() );
-        $manager->register_tile( new Olo_ProductCards_Tile() );
-        $manager->register_tile( new Olo_StepTimeline_Tile() );
-        $manager->register_tile( new Olo_Process_Steps_Tile() );
-        $manager->register_tile( new Olo_CtaBanner_Tile() );
-        $manager->register_tile( new Olo_TrustStrip_Tile() );
-        $manager->register_tile( new Olo_Content_Tile() );
-        $manager->register_tile( new Olo_Image_Tile() );
-        $manager->register_tile( new Olo_Video_Tile() );
-        $manager->register_tile( new Olo_Spacer_Tile() );
-        $manager->register_tile( new Olo_Button_Tile() );
-        $manager->register_tile( new Olo_Gallery_Tile() );
-        $manager->register_tile( new Olo_Row_Tile() );
-        $manager->register_tile( new Olo_Testimonial_Tile() );
-        $manager->register_tile( new Olo_Pricing_Tile() );
-        $manager->register_tile( new Olo_Counter_Tile() );
-        $manager->register_tile( new Olo_IconBox_Tile() );
-        $manager->register_tile( new Olo_Alert_Tile() );
-        $manager->register_tile( new Olo_Badge_Tile() );
-        $manager->register_tile( new Olo_Team_Tile() );
-        $manager->register_tile( new Olo_Accordion_Tile() );
-        $manager->register_tile( new Olo_IconTabs_Tile() );
-        $manager->register_tile( new Olo_Projector_Tile() );
-        $manager->register_tile( new Olo_Finder_Tile() );
-        $manager->register_tile( new Olo_Builder_Tile() );
-        $manager->register_tile( new Olo_Mixer_Tile() );
-        $manager->register_tile( new Olo_Schedule_Tile() );
-        $manager->register_tile( new Olo_Hotspots_Tile() );
-        $manager->register_tile( new Olo_Scaler_Tile() );
-        $manager->register_tile( new Olo_Timezone_Tile() );
-        $manager->register_tile( new Olo_Availability_Tile() );
+        $manager->register_tile( new Olobuild_Physicsbin_Tile() );
+        $manager->register_tile( new Olobuild_Scratchfx_Tile() );
+        $manager->register_tile( new Olobuild_Particlefx_Tile() );
+        $manager->register_tile( new Olobuild_Asciiviz_Tile() );
+        $manager->register_tile( new Olobuild_Variablespecimen_Tile() );
+        $manager->register_tile( new Olobuild_Presencegrid_Tile() );
+        $manager->register_tile( new Olobuild_Leaderboard_Tile() );
+        $manager->register_tile( new Olobuild_Scrollscrub_Tile() );
+        $manager->register_tile( new Olobuild_Goo_Tile() );
+        $manager->register_tile( new Olobuild_BuilderMock_Tile() );
+        $manager->register_tile( new Olobuild_Column_Tile() );
+        $manager->register_tile( new Olobuild_Hero_Tile() );
+        $manager->register_tile( new Olobuild_HeroSplit_Tile() );
+        $manager->register_tile( new Olobuild_AudioHero_Tile() );
+        $manager->register_tile( new Olobuild_SectionHeader_Tile() );
+        $manager->register_tile( new Olobuild_InfoCards_Tile() );
+        $manager->register_tile( new Olobuild_WorkList_Tile() );
+        $manager->register_tile( new Olobuild_WorkGrid_Tile() );
+        $manager->register_tile( new Olobuild_StatStrip_Tile() );
+        $manager->register_tile( new Olobuild_HoursStrip_Tile() );
+        $manager->register_tile( new Olobuild_HoverList_Tile() );
+        $manager->register_tile( new Olobuild_LookbookMixer_Tile() );
+        $manager->register_tile( new Olobuild_CategoryRail_Tile() );
+        $manager->register_tile( new Olobuild_BeforeAfter_Tile() );
+        $manager->register_tile( new Olobuild_TripFinder_Tile() );
+        $manager->register_tile( new Olobuild_MaskedVideoHero_Tile() );
+        $manager->register_tile( new Olobuild_SearchHero_Tile() );
+        $manager->register_tile( new Olobuild_SmearHero_Tile() );
+        $manager->register_tile( new Olobuild_PhotoCover_Tile() );
+        $manager->register_tile( new Olobuild_Masthead_Tile() );
+        $manager->register_tile( new Olobuild_MatchFixtures_Tile() );
+        $manager->register_tile( new Olobuild_ShowcaseGrid_Tile() );
+        $manager->register_tile( new Olobuild_ProductGrid_Tile() );
+        $manager->register_tile( new Olobuild_AnnouncementBar_Tile() );
+        $manager->register_tile( new Olobuild_IntroSplit_Tile() );
+        $manager->register_tile( new Olobuild_MediaCTA_Tile() );
+        $manager->register_tile( new Olobuild_ImageHero_Tile() );
+        $manager->register_tile( new Olobuild_GlowHero_Tile() );
+        $manager->register_tile( new Olobuild_ProductHero_Tile() );
+        $manager->register_tile( new Olobuild_NorthVideoHero_Tile() );
+        $manager->register_tile( new Olobuild_NorthQuoteSlider_Tile() );
+        $manager->register_tile( new Olobuild_FeaturedStory_Tile() );
+        $manager->register_tile( new Olobuild_GlowGallery_Tile() );
+        $manager->register_tile( new Olobuild_ChatHero_Tile() );
+        $manager->register_tile( new Olobuild_ProductCards_Tile() );
+        $manager->register_tile( new Olobuild_StepTimeline_Tile() );
+        $manager->register_tile( new Olobuild_Process_Steps_Tile() );
+        $manager->register_tile( new Olobuild_CtaBanner_Tile() );
+        $manager->register_tile( new Olobuild_TrustStrip_Tile() );
+        $manager->register_tile( new Olobuild_Content_Tile() );
+        $manager->register_tile( new Olobuild_Image_Tile() );
+        $manager->register_tile( new Olobuild_Video_Tile() );
+        $manager->register_tile( new Olobuild_Spacer_Tile() );
+        $manager->register_tile( new Olobuild_Button_Tile() );
+        $manager->register_tile( new Olobuild_Gallery_Tile() );
+        $manager->register_tile( new Olobuild_Row_Tile() );
+        $manager->register_tile( new Olobuild_Testimonial_Tile() );
+        $manager->register_tile( new Olobuild_Pricing_Tile() );
+        $manager->register_tile( new Olobuild_Counter_Tile() );
+        $manager->register_tile( new Olobuild_IconBox_Tile() );
+        $manager->register_tile( new Olobuild_Alert_Tile() );
+        $manager->register_tile( new Olobuild_Badge_Tile() );
+        $manager->register_tile( new Olobuild_Team_Tile() );
+        $manager->register_tile( new Olobuild_Accordion_Tile() );
+        $manager->register_tile( new Olobuild_IconTabs_Tile() );
+        $manager->register_tile( new Olobuild_Projector_Tile() );
+        $manager->register_tile( new Olobuild_Finder_Tile() );
+        $manager->register_tile( new Olobuild_Builder_Tile() );
+        $manager->register_tile( new Olobuild_Mixer_Tile() );
+        $manager->register_tile( new Olobuild_Schedule_Tile() );
+        $manager->register_tile( new Olobuild_Hotspots_Tile() );
+        $manager->register_tile( new Olobuild_Scaler_Tile() );
+        $manager->register_tile( new Olobuild_Timezone_Tile() );
+        $manager->register_tile( new Olobuild_Availability_Tile() );
 
-        $manager->register_tile( new Olo_Social_Tile() );
-        $manager->register_tile( new Olo_Map_Tile() );
-        $manager->register_tile( new Olo_Countdown_Tile() );
-        $manager->register_tile( new Olo_Headline_Tile() );
-        $manager->register_tile( new Olo_Html_Tile() );
-        $manager->register_tile( new Olo_List_Tile() );
-        $manager->register_tile( new Olo_TextBlock_Tile() );
-        $manager->register_tile( new Olo_Slideshow_Tile() );
-        $manager->register_tile( new Olo_Table_Tile() );
-        $manager->register_tile( new Olo_Overlay_Tile() );
-        $manager->register_tile( new Olo_Divider_Tile() );
-        $manager->register_tile( new Olo_Progress_Tile() );
-        $manager->register_tile( new Olo_DescList_Tile() );
-        $manager->register_tile( new Olo_Panel_Tile() );
-        $manager->register_tile( new Olo_Quotation_Tile() );
-        $manager->register_tile( new Olo_Code_Tile() );
-        $manager->register_tile( new Olo_Icon_Tile() );
-        $manager->register_tile( new Olo_Totop_Tile() );
-        $manager->register_tile( new Olo_Fragment_Tile() );
-        $manager->register_tile( new Olo_Grid_Tile() );
-        $manager->register_tile( new Olo_Switcher_Tile() );
-        $manager->register_tile( new Olo_SwitcherPanel_Tile() );
-        $manager->register_tile( new Olo_Nav_Tile() );
-        $manager->register_tile( new Olo_Subnav_Tile() );
-        $manager->register_tile( new Olo_PanelSlider_Tile() );
-        $manager->register_tile( new Olo_OverlaySlider_Tile() );
-        $manager->register_tile( new Olo_OverlayGrid_Tile() );
-        $manager->register_tile( new Olo_Popover_Tile() );
-        $manager->register_tile( new Olo_Breadcrumbs_Tile() );
-        $manager->register_tile( new Olo_Search_Tile() );
-        $manager->register_tile( new Olo_SiteLogo_Tile() );
-        $manager->register_tile( new Olo_NavMenu_Tile() );
-        $manager->register_tile( new Olo_PostGrid_Tile() );
-        $manager->register_tile( new Olo_ProSlider_Tile() );
-        $manager->register_tile( new Olo_Popup_Tile() );
-        $manager->register_tile( new Olo_MegaMenu_Tile() );
-        $manager->register_tile( new Olo_OloHeader_Tile() );
-        $manager->register_tile( new Olo_InnerColumns_Tile() );
-        $manager->register_tile( new Olo_Timeline_Tile() );
-        $manager->register_tile( new Olo_FlipCard_Tile() );
-        $manager->register_tile( new Olo_ImgCompare_Tile() );
-        $manager->register_tile( new Olo_Marquee_Tile() );
-        $manager->register_tile( new Olo_ToggleBtn_Tile() );
-        $manager->register_tile( new Olo_Form_Tile() );
-        $manager->register_tile( new Olo_KillNextPrev_Tile() );
-        $manager->register_tile( new Olo_LangSwitcher_Tile() );
-        $manager->register_tile( new Olo_LiveSearch_Tile() );
-        $manager->register_tile( new Olo_ShatteredImage_Tile() );
-        $manager->register_tile( new Olo_Textmask_Tile() );
-        $manager->register_tile( new Olo_Blendtext_Tile() );
-        $manager->register_tile( new Olo_ProGallery_Tile() );
-        $manager->register_tile( new Olo_PdfViewer_Tile() );
-        $manager->register_tile( new Olo_PdfPro_Tile() );
-        $manager->register_tile( new Olo_Starrating_Tile() );
-        $manager->register_tile( new Olo_Iconlist_Tile() );
-        $manager->register_tile( new Olo_Animatedheading_Tile() );
-        $manager->register_tile( new Olo_Toc_Tile() );
-        $manager->register_tile( new Olo_Lottie_Tile() );
-        $manager->register_tile( new Olo_Sharebuttons_Tile() );
-        $manager->register_tile( new Olo_Scrollprogress_Tile() );
-        $manager->register_tile( new Olo_Newsticker_Tile() );
-        $manager->register_tile( new Olo_Hotspot_Tile() );
-        $manager->register_tile( new Olo_Loginform_Tile() );
-        $manager->register_tile( new Olo_Videoplaylist_Tile() );
-        $manager->register_tile( new Olo_Textpath_Tile() );
+        $manager->register_tile( new Olobuild_Social_Tile() );
+        $manager->register_tile( new Olobuild_Map_Tile() );
+        $manager->register_tile( new Olobuild_Countdown_Tile() );
+        $manager->register_tile( new Olobuild_Headline_Tile() );
+        $manager->register_tile( new Olobuild_Html_Tile() );
+        $manager->register_tile( new Olobuild_List_Tile() );
+        $manager->register_tile( new Olobuild_TextBlock_Tile() );
+        $manager->register_tile( new Olobuild_Slideshow_Tile() );
+        $manager->register_tile( new Olobuild_Table_Tile() );
+        $manager->register_tile( new Olobuild_Overlay_Tile() );
+        $manager->register_tile( new Olobuild_Divider_Tile() );
+        $manager->register_tile( new Olobuild_Progress_Tile() );
+        $manager->register_tile( new Olobuild_DescList_Tile() );
+        $manager->register_tile( new Olobuild_Panel_Tile() );
+        $manager->register_tile( new Olobuild_Quotation_Tile() );
+        $manager->register_tile( new Olobuild_Code_Tile() );
+        $manager->register_tile( new Olobuild_Icon_Tile() );
+        $manager->register_tile( new Olobuild_Totop_Tile() );
+        $manager->register_tile( new Olobuild_Fragment_Tile() );
+        $manager->register_tile( new Olobuild_Grid_Tile() );
+        $manager->register_tile( new Olobuild_Switcher_Tile() );
+        $manager->register_tile( new Olobuild_SwitcherPanel_Tile() );
+        $manager->register_tile( new Olobuild_Nav_Tile() );
+        $manager->register_tile( new Olobuild_Subnav_Tile() );
+        $manager->register_tile( new Olobuild_PanelSlider_Tile() );
+        $manager->register_tile( new Olobuild_OverlaySlider_Tile() );
+        $manager->register_tile( new Olobuild_OverlayGrid_Tile() );
+        $manager->register_tile( new Olobuild_Popover_Tile() );
+        $manager->register_tile( new Olobuild_Breadcrumbs_Tile() );
+        $manager->register_tile( new Olobuild_Search_Tile() );
+        $manager->register_tile( new Olobuild_SiteLogo_Tile() );
+        $manager->register_tile( new Olobuild_NavMenu_Tile() );
+        $manager->register_tile( new Olobuild_PostGrid_Tile() );
+        $manager->register_tile( new Olobuild_ProSlider_Tile() );
+        $manager->register_tile( new Olobuild_Popup_Tile() );
+        $manager->register_tile( new Olobuild_MegaMenu_Tile() );
+        $manager->register_tile( new Olobuild_OloHeader_Tile() );
+        $manager->register_tile( new Olobuild_InnerColumns_Tile() );
+        $manager->register_tile( new Olobuild_Timeline_Tile() );
+        $manager->register_tile( new Olobuild_FlipCard_Tile() );
+        $manager->register_tile( new Olobuild_ImgCompare_Tile() );
+        $manager->register_tile( new Olobuild_Marquee_Tile() );
+        $manager->register_tile( new Olobuild_ToggleBtn_Tile() );
+        $manager->register_tile( new Olobuild_Form_Tile() );
+        $manager->register_tile( new Olobuild_KillNextPrev_Tile() );
+        $manager->register_tile( new Olobuild_LangSwitcher_Tile() );
+        $manager->register_tile( new Olobuild_LiveSearch_Tile() );
+        $manager->register_tile( new Olobuild_ShatteredImage_Tile() );
+        $manager->register_tile( new Olobuild_Textmask_Tile() );
+        $manager->register_tile( new Olobuild_Blendtext_Tile() );
+        $manager->register_tile( new Olobuild_ProGallery_Tile() );
+        $manager->register_tile( new Olobuild_PdfViewer_Tile() );
+        $manager->register_tile( new Olobuild_PdfPro_Tile() );
+        $manager->register_tile( new Olobuild_Starrating_Tile() );
+        $manager->register_tile( new Olobuild_Iconlist_Tile() );
+        $manager->register_tile( new Olobuild_Animatedheading_Tile() );
+        $manager->register_tile( new Olobuild_Toc_Tile() );
+        $manager->register_tile( new Olobuild_Lottie_Tile() );
+        $manager->register_tile( new Olobuild_Sharebuttons_Tile() );
+        $manager->register_tile( new Olobuild_Scrollprogress_Tile() );
+        $manager->register_tile( new Olobuild_Newsticker_Tile() );
+        $manager->register_tile( new Olobuild_Hotspot_Tile() );
+        $manager->register_tile( new Olobuild_Loginform_Tile() );
+        $manager->register_tile( new Olobuild_Videoplaylist_Tile() );
+        $manager->register_tile( new Olobuild_Textpath_Tile() );
 
-        $manager->register_tile( new Olo_Chart_Tile() );
-        $manager->register_tile( new Olo_Audio_Tile() );
-        $manager->register_tile( new Olo_Shapedivider_Tile() );
-        $manager->register_tile( new Olo_Countercircle_Tile() );
-        $manager->register_tile( new Olo_PostMeta_Tile() );
-        $manager->register_tile( new Olo_RelatedPosts_Tile() );
-        $manager->register_tile( new Olo_Wpcomments_Tile() );
-        $manager->register_tile( new Olo_Pagination_Tile() );
-        $manager->register_tile( new Olo_Carousel_Tile() );
-        $manager->register_tile( new Olo_Authorbox_Tile() );
-        $manager->register_tile( new Olo_Viewscounter_Tile() );
-        $manager->register_tile( new Olo_Menuanchor_Tile() );
-        $manager->register_tile( new Olo_Osmmap_Tile() );
-        $manager->register_tile( new Olo_Soundcloud_Tile() );
-        $manager->register_tile( new Olo_Tagcloud_Tile() );
-        $manager->register_tile( new Olo_Instagram_Tile() );
-        $manager->register_tile( new Olo_Facebookpage_Tile() );
-        $manager->register_tile( new Olo_Twitterfeed_Tile() );
-        $manager->register_tile( new Olo_Postnavigation_Tile() );
-        $manager->register_tile( new Olo_Pricelist_Tile() );
-        $manager->register_tile( new Olo_Progresstracker_Tile() );
-        $manager->register_tile( new Olo_Sitemap_Tile() );
-        $manager->register_tile( new Olo_LinkInBio_Tile() );
-        $manager->register_tile( new Olo_Shortcode_Tile() );
-        $manager->register_tile( new Olo_TemplateEmbed_Tile() );
-        $manager->register_tile( new Olo_Paymentbuttons_Tile() );
-        $manager->register_tile( new Olo_Pagetitlebar_Tile() );
-        $manager->register_tile( new Olo_Portfolio_Tile() );
-        $manager->register_tile( new Olo_Queryloop_Tile() );
-        $manager->register_tile( new Olo_Readingtime_Tile() );
-        $manager->register_tile( new Olo_Darkmode_Tile() );
-        $manager->register_tile( new Olo_Lightbox_Tile() );
+        $manager->register_tile( new Olobuild_Chart_Tile() );
+        $manager->register_tile( new Olobuild_Audio_Tile() );
+        $manager->register_tile( new Olobuild_Shapedivider_Tile() );
+        $manager->register_tile( new Olobuild_Countercircle_Tile() );
+        $manager->register_tile( new Olobuild_PostMeta_Tile() );
+        $manager->register_tile( new Olobuild_RelatedPosts_Tile() );
+        $manager->register_tile( new Olobuild_Wpcomments_Tile() );
+        $manager->register_tile( new Olobuild_Pagination_Tile() );
+        $manager->register_tile( new Olobuild_Carousel_Tile() );
+        $manager->register_tile( new Olobuild_Authorbox_Tile() );
+        $manager->register_tile( new Olobuild_Viewscounter_Tile() );
+        $manager->register_tile( new Olobuild_Menuanchor_Tile() );
+        $manager->register_tile( new Olobuild_Osmmap_Tile() );
+        $manager->register_tile( new Olobuild_Soundcloud_Tile() );
+        $manager->register_tile( new Olobuild_Tagcloud_Tile() );
+        $manager->register_tile( new Olobuild_Instagram_Tile() );
+        $manager->register_tile( new Olobuild_Facebookpage_Tile() );
+        $manager->register_tile( new Olobuild_Twitterfeed_Tile() );
+        $manager->register_tile( new Olobuild_Postnavigation_Tile() );
+        $manager->register_tile( new Olobuild_Pricelist_Tile() );
+        $manager->register_tile( new Olobuild_Progresstracker_Tile() );
+        $manager->register_tile( new Olobuild_Sitemap_Tile() );
+        $manager->register_tile( new Olobuild_LinkInBio_Tile() );
+        $manager->register_tile( new Olobuild_Shortcode_Tile() );
+        $manager->register_tile( new Olobuild_TemplateEmbed_Tile() );
+        $manager->register_tile( new Olobuild_Paymentbuttons_Tile() );
+        $manager->register_tile( new Olobuild_Pagetitlebar_Tile() );
+        $manager->register_tile( new Olobuild_Portfolio_Tile() );
+        $manager->register_tile( new Olobuild_Queryloop_Tile() );
+        $manager->register_tile( new Olobuild_Readingtime_Tile() );
+        $manager->register_tile( new Olobuild_Darkmode_Tile() );
+        $manager->register_tile( new Olobuild_Lightbox_Tile() );
 
         // Clod — Evoluzione (studio editorial)
-        $manager->register_tile( new Olo_StudioHero_Tile() );
-        $manager->register_tile( new Olo_FilmReel_Tile() );
-        $manager->register_tile( new Olo_ScrubText_Tile() );
-        $manager->register_tile( new Olo_ThemeDemos_Tile() );
-        $manager->register_tile( new Olo_EvoNotes_Tile() );
+        $manager->register_tile( new Olobuild_StudioHero_Tile() );
+        $manager->register_tile( new Olobuild_FilmReel_Tile() );
+        $manager->register_tile( new Olobuild_ScrubText_Tile() );
+        $manager->register_tile( new Olobuild_ThemeDemos_Tile() );
+        $manager->register_tile( new Olobuild_EvoNotes_Tile() );
 
         // WooCommerce tiles (solo se WooCommerce attivo)
         if ( class_exists( 'WooCommerce' ) ) {
-            $manager->register_tile( new Olo_Woo_Products_Tile() );
-            $manager->register_tile( new Olo_Woo_Price_Tile() );
-            $manager->register_tile( new Olo_Woo_Minicart_Tile() );
-            $manager->register_tile( new Olo_Woo_Addtocart_Tile() );
-            $manager->register_tile( new Olo_Woo_Categories_Tile() );
-            $manager->register_tile( new Olo_Woo_Rating_Tile() );
-            $manager->register_tile( new Olo_Woo_Product_Tabs_Tile() );
-            $manager->register_tile( new Olo_Woo_Related_Tile() );
-            $manager->register_tile( new Olo_Woo_Upsells_Tile() );
-            $manager->register_tile( new Olo_Woo_Cart_Tile() );
-            $manager->register_tile( new Olo_Woo_Checkout_Tile() );
-            $manager->register_tile( new Olo_Woo_Checkout_Multistep_Tile() );
-            $manager->register_tile( new Olo_Woo_Product_Title_Tile() );
-            $manager->register_tile( new Olo_Woo_Product_Image_Tile() );
-            $manager->register_tile( new Olo_Woo_Product_Description_Tile() );
-            $manager->register_tile( new Olo_Woo_Product_Meta_Tile() );
-            $manager->register_tile( new Olo_Woo_Product_Stock_Tile() );
-            $manager->register_tile( new Olo_Woo_Order_Tracking_Tile() );
-            $manager->register_tile( new Olo_Woo_Breadcrumbs_Tile() );
-            $manager->register_tile( new Olo_Woo_Notices_Tile() );
-            $manager->register_tile( new Olo_Woo_Product_Navigation_Tile() );
-            $manager->register_tile( new Olo_Woo_Sale_Badge_Tile() );
-            $manager->register_tile( new Olo_Woo_Cross_Sells_Tile() );
-            $manager->register_tile( new Olo_Woo_Recently_Viewed_Tile() );
-            $manager->register_tile( new Olo_Woo_Product_Bundle_Tile() );
-            $manager->register_tile( new Olo_Woo_Product_Filter_Tile() );
-            $manager->register_tile( new Olo_Woo_Product_Gallery_Slider_Tile() );
-            $manager->register_tile( new Olo_Woo_Quickview_Tile() );
-            $manager->register_tile( new Olo_Woo_Wishlist_Tile() );
-            $manager->register_tile( new Olo_Woo_Comparison_Tile() );
-            $manager->register_tile( new Olo_Woo_Myaccount_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Products_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Price_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Minicart_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Addtocart_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Categories_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Rating_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Product_Tabs_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Related_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Upsells_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Cart_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Checkout_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Checkout_Multistep_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Product_Title_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Product_Image_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Product_Description_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Product_Meta_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Product_Stock_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Order_Tracking_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Breadcrumbs_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Notices_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Product_Navigation_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Sale_Badge_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Cross_Sells_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Recently_Viewed_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Product_Bundle_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Product_Filter_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Product_Gallery_Slider_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Quickview_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Wishlist_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Comparison_Tile() );
+            $manager->register_tile( new Olobuild_Woo_Myaccount_Tile() );
         }
 
         // Hook per plugin esterni che vogliono registrare tile
-        do_action( 'olo_register_external_tiles', $manager );
+        do_action( 'olobuild_register_external_tiles', $manager );
     }
 
     /**
@@ -3690,7 +3690,7 @@ class Olo_Builder {
      * Get all published Olobuild templates for the template selector (e.g. Popup element).
      */
     private function get_template_list() {
-        $db     = new Olo_Database();
+        $db     = new Olobuild_Database();
         $result = $db->list_templates( [ 'status' => 'published', 'per_page' => 100 ] );
         $list   = [ [ 'value' => 0, 'label' => '— Seleziona template —' ] ];
         foreach ( $result['items'] as $t ) {
@@ -3703,7 +3703,7 @@ class Olo_Builder {
      * Get published templates of type "megapanel" for the mega menu panel selector.
      */
     private function get_megapanel_templates() {
-        $db     = new Olo_Database();
+        $db     = new Olobuild_Database();
         $result = $db->list_templates( [ 'status' => 'published', 'type' => 'megapanel', 'per_page' => 100 ] );
         $list   = [ [ 'value' => 0, 'label' => 'Auto (colonne)' ] ];
         foreach ( $result['items'] as $t ) {
@@ -3717,7 +3717,7 @@ class Olo_Builder {
      * delle schede/items dei tile container (accordion, tab, slider, ecc.).
      */
     private function get_widget_templates() {
-        $db     = new Olo_Database();
+        $db     = new Olobuild_Database();
         $result = $db->list_templates( [ 'status' => 'published', 'type' => 'widget', 'per_page' => 100 ] );
         $list   = [ [ 'value' => 0, 'label' => '— Nessun widget —' ] ];
         foreach ( $result['items'] as $t ) {
@@ -3821,7 +3821,7 @@ class Olo_Builder {
         }
 
         // Allow themes/plugins to customize labels
-        $result = apply_filters( 'olo_meta_prefix_options', $result );
+        $result = apply_filters( 'olobuild_meta_prefix_options', $result );
 
         // Fallback: always include olo_service
         $has_service = false;

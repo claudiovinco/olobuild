@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Column_Tile extends Olo_Tile_Base {
+class Olobuild_Column_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'column';
     protected $name     = 'Colonna';

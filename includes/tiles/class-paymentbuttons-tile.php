@@ -1,7 +1,7 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class Olo_Paymentbuttons_Tile extends Olo_Tile_Base {
+class Olobuild_Paymentbuttons_Tile extends Olobuild_Tile_Base {
     protected $type     = 'paymentbuttons';
     protected $name     = 'Pulsanti Pagamento';
     protected $icon     = 'dashicons-money-alt';
@@ -21,7 +21,7 @@ class Olo_Paymentbuttons_Tile extends Olo_Tile_Base {
         $alignment   = esc_attr( $settings['alignment'] ?? 'center' );
         $bg_color    = $settings['bg_color'] ?: 'var(--olo-color-primary, #e1474f)';
         $text_color  = $settings['text_color'] ?: '#ffffff';
-        $radius      = Olo_Tile_Utils::border_radius( $settings['border_radius'] ?? 8 );
+        $radius      = Olobuild_Tile_Utils::border_radius( $settings['border_radius'] ?? 8 );
         $font_size   = intval( $settings['font_size'] ?? 16 );
         $full_width  = ! empty( $settings['full_width'] );
         $stripe_key  = esc_attr( $settings['stripe_key'] ?? '' );

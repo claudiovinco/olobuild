@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Style_System {
+class Olobuild_Style_System {
 
     private static $instance = null;
 
@@ -1014,13 +1014,13 @@ class Olo_Style_System {
      * Generate self-hosted @font-face CSS for the given Google Font families.
      *
      * I file vengono scaricati una sola volta e serviti da /uploads (vedi
-     * Olo_Font_Host): nessuna richiesta del visitatore a Google.
+     * Olobuild_Font_Host): nessuna richiesta del visitatore a Google.
      */
     public function generate_google_fonts_import( $fonts = [] ) {
         if ( empty( $fonts ) ) {
             return '';
         }
-        if ( class_exists( 'Olo_Font_Host' ) ) {
+        if ( class_exists( 'Olobuild_Font_Host' ) ) {
             // I temi possono richiedere pesi extra (es. Big Shoulders 800/900) via
             // olo_styles.google_fonts_weights, formato css2 "300;400;...;900".
             $weights = '300;400;500;600;700';
@@ -1029,7 +1029,7 @@ class Olo_Style_System {
                 && preg_match( '/^[0-9;]+$/', (string) $styles['google_fonts_weights'] ) ) {
                 $weights = (string) $styles['google_fonts_weights'];
             }
-            return Olo_Font_Host::get_font_face_css( $fonts, $weights );
+            return Olobuild_Font_Host::get_font_face_css( $fonts, $weights );
         }
         return '';
     }

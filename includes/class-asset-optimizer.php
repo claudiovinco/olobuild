@@ -7,7 +7,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class Olo_Asset_Optimizer {
+class Olobuild_Asset_Optimizer {
 
     private static $instance = null;
 
@@ -89,8 +89,8 @@ class Olo_Asset_Optimizer {
         if ( empty( $css ) ) return false;
 
         // Check user preference: se css_cache_files è off, fallback a inline.
-        $opt = class_exists( 'Olo_Performance_Settings' )
-            ? Olo_Performance_Settings::get_option()
+        $opt = class_exists( 'Olobuild_Performance_Settings' )
+            ? Olobuild_Performance_Settings::get_option()
             : [ 'css_cache_files' => true, 'minify_css' => true ];
         if ( empty( $opt['css_cache_files'] ) ) {
             return false;
@@ -118,7 +118,7 @@ class Olo_Asset_Optimizer {
 
     /**
      * Serve a minified cached copy of a static plugin CSS file.
-     * Invalidated by file mtime + OLO_VERSION. Falls back to false (= original URL)
+     * Invalidated by file mtime + OLOBUILD_VERSION. Falls back to false (= original URL)
      * if the file is unreadable, the write fails, or the minified output looks
      * corrupted (brace count mismatch).
      *
@@ -127,7 +127,7 @@ class Olo_Asset_Optimizer {
      * @return string|false URL of minified file, or false to keep the original.
      */
     public static function cache_static_css( $rel_path, $slug ) {
-        $src_path = OLO_PATH . $rel_path;
+        $src_path = OLOBUILD_PATH . $rel_path;
         if ( ! is_readable( $src_path ) ) {
             return false;
         }
@@ -137,7 +137,7 @@ class Olo_Asset_Optimizer {
         $cache_dir  = $upload_dir['basedir'] . '/olobuild-cache/';
         $cache_url  = $upload_dir['baseurl'] . '/olobuild-cache/';
         $slug       = sanitize_key( $slug );
-        $hash       = substr( md5( $rel_path . '|' . $mtime . '|' . OLO_VERSION ), 0, 12 );
+        $hash       = substr( md5( $rel_path . '|' . $mtime . '|' . OLOBUILD_VERSION ), 0, 12 );
         $filename   = "olo-static-{$slug}-{$hash}.css";
         $filepath   = $cache_dir . $filename;
 
@@ -182,12 +182,12 @@ class Olo_Asset_Optimizer {
             return $src;
         }
 
-        $opt = class_exists( 'Olo_Performance_Settings' ) ? Olo_Performance_Settings::get_option() : [];
+        $opt = class_exists( 'Olobuild_Performance_Settings' ) ? Olobuild_Performance_Settings::get_option() : [];
 
         // UIkit: subset auto-appreso dei soli componenti usati dal sito
         if ( 'uikit-css' === $handle ) {
-            if ( ! empty( $opt['uikit_subset'] ) && class_exists( 'Olo_Uikit_Subset' ) ) {
-                $url = Olo_Uikit_Subset::subset_url();
+            if ( ! empty( $opt['uikit_subset'] ) && class_exists( 'Olobuild_Uikit_Subset' ) ) {
+                $url = Olobuild_Uikit_Subset::subset_url();
                 if ( $url ) {
                     return $url;
                 }
@@ -196,8 +196,8 @@ class Olo_Asset_Optimizer {
         }
 
         // CSS per-tile: core + sole famiglie dei tile presenti in pagina
-        if ( ! empty( $opt['css_per_tile'] ) && class_exists( 'Olo_Page_CSS' ) ) {
-            $url = Olo_Page_CSS::page_css_url();
+        if ( ! empty( $opt['css_per_tile'] ) && class_exists( 'Olobuild_Page_CSS' ) ) {
+            $url = Olobuild_Page_CSS::page_css_url();
             if ( $url ) {
                 return $url;
             }
@@ -243,7 +243,7 @@ class Olo_Asset_Optimizer {
         // Try to cache to file
         $url = self::cache_css( $css, $tpl_id );
         if ( $url ) {
-            $ver = OLO_VERSION;
+            $ver = OLOBUILD_VERSION;
             // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet -- il modulo Asset Optimizer inietta nel markup renderizzato un file CSS combinato e pre-generato per-template (gira come filtro di render, dopo la fase di enqueue)
             return '<link rel="stylesheet" href="' . esc_url( $url ) . '?v=' . $ver . '" media="all" />';
         }
@@ -263,8 +263,8 @@ class Olo_Asset_Optimizer {
         self::clean_cache( $template_id );
 
         // Pre-render the template to generate CSS
-        if ( ! class_exists( 'Olo_Database' ) ) return;
-        $db  = new Olo_Database();
+        if ( ! class_exists( 'Olobuild_Database' ) ) return;
+        $db  = new Olobuild_Database();
         $tpl = $db->get_template( $template_id );
         if ( ! $tpl || empty( $tpl->content ) ) return;
 
@@ -295,11 +295,11 @@ class Olo_Asset_Optimizer {
 
     /**
      * Initialize optimizer hooks.
-     * I flag defer_js / css_cache_files / minify_css sono gestiti da Olo_Performance_Settings.
+     * I flag defer_js / css_cache_files / minify_css sono gestiti da Olobuild_Performance_Settings.
      */
     public static function init() {
-        $opt = class_exists( 'Olo_Performance_Settings' )
-            ? Olo_Performance_Settings::get_option()
+        $opt = class_exists( 'Olobuild_Performance_Settings' )
+            ? Olobuild_Performance_Settings::get_option()
             : [ 'defer_js' => true, 'minify_css' => true ];
 
         // Defer frontend scripts solo se l'utente ha il flag attivo

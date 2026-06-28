@@ -1,10 +1,10 @@
 <?php
 /**
- * Olo_Cursor_Hud — HUD "mirino da sala di regia": crosshair full-viewport che segue
+ * Olobuild_Cursor_Hud — HUD "mirino da sala di regia": crosshair full-viewport che segue
  * il puntatore + tag con coordinate (X · Y assoluta) e label della sezione corrente.
  *
  * NON è un tile in pagina: è una FEATURE GLOBALE DI TEMA (stessa famiglia di
- * Olo_Magnetic_Cursor). Reference: blueprint "Clod — Evoluzione v2",
+ * Olobuild_Magnetic_Cursor). Reference: blueprint "Clod — Evoluzione v2",
  * design-clod/…/clod/evo-fx.js [2] + evo-fx.css [2] (.fx-hud).
  *
  * Contratto §2 (tile-speciali):
@@ -21,8 +21,8 @@
  * Storage: option `olo_cursor_hud` (array). Chiavi additive: non rompono nulla.
  *
  * ── WIRING (coordinatore, NON questo file) ────────────────────────────────────
- *   require_once OLO_PATH . 'includes/class-cursor-hud.php';
- *   Olo_Cursor_Hud::init();
+ *   require_once OLOBUILD_PATH . 'includes/class-cursor-hud.php';
+ *   Olobuild_Cursor_Hud::init();
  * Feature dormiente: si attiva solo con option `enabled => true` (import tema,
  * REST o wp-cli).
  *
@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Cursor_Hud {
+class Olobuild_Cursor_Hud {
 
     /** Option key (wp_options). */
     const OPT = 'olo_cursor_hud';
@@ -54,7 +54,7 @@ class Olo_Cursor_Hud {
         }
 
         // Non emettere dentro l'iframe di editing del builder.
-        if ( defined( 'OLO_BUILDER_PREVIEW' ) && OLO_BUILDER_PREVIEW ) {
+        if ( defined( 'OLOBUILD_BUILDER_PREVIEW' ) && OLOBUILD_BUILDER_PREVIEW ) {
             return;
         }
 

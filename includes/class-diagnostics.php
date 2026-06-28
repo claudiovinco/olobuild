@@ -11,7 +11,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class Olo_Diagnostics {
+class Olobuild_Diagnostics {
 
     public static function init() {
         add_action( 'admin_menu', [ __CLASS__, 'register_page' ], 5 );
@@ -77,8 +77,8 @@ class Olo_Diagnostics {
 
             <h2><?php esc_html_e( 'Stato Olobuild', 'olobuild' ); ?></h2>
             <table class="widefat striped" style="max-width:800px">
-                <tr><td><strong>OLO_VERSION</strong></td><td><?php echo esc_html( defined( 'OLO_VERSION' ) ? OLO_VERSION : __( 'NON DEFINITO', 'olobuild' ) ); ?></td></tr>
-                <tr><td><strong>OLO_PATH</strong></td><td><?php echo esc_html( defined( 'OLO_PATH' ) ? OLO_PATH : __( 'NON DEFINITO', 'olobuild' ) ); ?></td></tr>
+                <tr><td><strong>OLOBUILD_VERSION</strong></td><td><?php echo esc_html( defined( 'OLOBUILD_VERSION' ) ? OLOBUILD_VERSION : __( 'NON DEFINITO', 'olobuild' ) ); ?></td></tr>
+                <tr><td><strong>OLOBUILD_PATH</strong></td><td><?php echo esc_html( defined( 'OLOBUILD_PATH' ) ? OLOBUILD_PATH : __( 'NON DEFINITO', 'olobuild' ) ); ?></td></tr>
                 <tr><td><strong>olo_setup_complete</strong></td><td><?php echo $setup_complete ? esc_html( $yes ) . ' (' . esc_html( $setup_complete ) . ')' : esc_html( $no ); ?></td></tr>
                 <tr><td><strong>olo_activating transient</strong></td><td><?php echo $activating ? esc_html( $yes ) : esc_html( $no ); ?></td></tr>
                 <tr><td><strong>olo_builder_roles</strong></td><td><code><?php echo esc_html( wp_json_encode( get_option( 'olo_builder_roles' ) ) ); ?></code></td></tr>

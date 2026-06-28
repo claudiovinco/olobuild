@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Team_Tile extends Olo_Tile_Base {
+class Olobuild_Team_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'team';
     protected $name     = 'Membro del team';
@@ -64,8 +64,8 @@ class Olo_Team_Tile extends Olo_Tile_Base {
 
         $bg       = $this->safe_color_css( $s['bg_color'] ) ?: 'transparent';
         $fg       = $this->safe_color_css( $s['info_text_color'] ) ?: 'var(--olo-color-on-primary, #FFFFFF)';
-        $tile_r   = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
-        $tile_r_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
+        $tile_r   = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $tile_r_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $tile_bw  = intval( $s['border_width'] );
         $tile_bc  = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $tile_pad = intval( $s['tile_padding'] );
@@ -77,7 +77,7 @@ class Olo_Team_Tile extends Olo_Tile_Base {
         $ph_bc     = $this->safe_color_css( $s['photo_border_color'] ) ?: 'var(--olo-color-on-primary, #FFFFFF)';
         $ph_gap    = max( intval( $s['photo_gap'] ), 0 );
         $outer_sz  = $ph_size + $ph_bw * 2;
-        $ph_shadow  = Olo_Tile_Utils::shadow( $s['photo_shadow'] ?? 'none', 'photo' );
+        $ph_shadow  = Olobuild_Tile_Utils::shadow( $s['photo_shadow'] ?? 'none', 'photo' );
 
         // Photo shape
         $hex_clip = 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)';
@@ -86,9 +86,9 @@ class Olo_Team_Tile extends Olo_Tile_Base {
             $outer_radius = '50%';
             $inner_radius = '50%';
         } elseif ( $ph_shape === 'rounded' ) {
-            $r = Olo_Tile_Utils::radius_int( $s['photo_radius'] );
-            $outer_radius = Olo_Tile_Utils::border_radius( $s['photo_radius'] ?? 0 );
-            $outer_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['photo_radius_hover'] ?? null );
+            $r = Olobuild_Tile_Utils::radius_int( $s['photo_radius'] );
+            $outer_radius = Olobuild_Tile_Utils::border_radius( $s['photo_radius'] ?? 0 );
+            $outer_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['photo_radius_hover'] ?? null );
             $inner_radius = max( $r - $ph_bw, 0 ) . 'px';
         } else {
             $outer_radius = '0';
@@ -97,11 +97,11 @@ class Olo_Team_Tile extends Olo_Tile_Base {
 
         // Info
         $info_bg  = $this->safe_color_css( $s['info_bg_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
-        $info_pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['info_padding'] ?? 24, 24 );
+        $info_pad = Olobuild_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['info_padding'] ?? 24, 24 );
         $info_w   = intval( $s['info_width'] ) ?: 100;
         $info_m   = intval( $s['info_margin'] );
-        $info_r   = Olo_Tile_Utils::border_radius( $s['info_radius'] ?? 0 );
-        $info_r_hover_css = Olo_Tile_Utils::radius_force_css( $s['info_radius_hover'] ?? null );
+        $info_r   = Olobuild_Tile_Utils::border_radius( $s['info_radius'] ?? 0 );
+        $info_r_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['info_radius_hover'] ?? null );
         $info_bw  = intval( $s['info_border_width'] );
         $info_bc  = $this->safe_color_css( $s['info_border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $align    = in_array( $s['info_align'], [ 'left', 'center', 'right' ] ) ? $s['info_align'] : 'center';
@@ -128,7 +128,7 @@ class Olo_Team_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: intval() for all sizes, safe_color_css() whitelist for every colour, in_array() whitelist for alignment, Olo_Tile_Utils helpers (border_radius/radius_force_css/shadow/spacing_css, all absint-based), fixed clip-path/justify-content literals and the internally generated uid. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: intval() for all sizes, safe_color_css() whitelist for every colour, in_array() whitelist for alignment, Olobuild_Tile_Utils helpers (border_radius/radius_force_css/shadow/spacing_css, all absint-based), fixed clip-path/justify-content literals and the internally generated uid. ?>
         <style>
             .<?php echo $uid; ?> {
                 overflow: visible;
@@ -251,11 +251,11 @@ class Olo_Team_Tile extends Olo_Tile_Base {
                             <video src="<?php echo esc_url( $s['photo'] ); ?>" autoplay muted loop playsinline></video>
                         <?php elseif ( ! empty( $s['photo'] ) ) : ?>
                             <?php
-                            $img = Olo_Tile_Utils::img_srcset( absint( $s['photo_id'] ?? 0 ), $s['photo'], $s['name'] );
-                            echo $this->render_hover_wrap( $img, $s['hover_image'] ?? '', $s['hover_video'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup generated by Olo_Tile_Utils::img_srcset() and render_hover_wrap(), both escape internally via esc_url()/esc_attr()
+                            $img = Olobuild_Tile_Utils::img_srcset( absint( $s['photo_id'] ?? 0 ), $s['photo'], $s['name'] );
+                            echo $this->render_hover_wrap( $img, $s['hover_image'] ?? '', $s['hover_video'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup generated by Olobuild_Tile_Utils::img_srcset() and render_hover_wrap(), both escape internally via esc_url()/esc_attr()
                             ?>
                         <?php else : ?>
-                            <div class="olo-team-photo-ph" style="width:100%;height:100%;background:var(--olo-color-surface-alt, #F3F4F6);color:var(--olo-color-text-faint, #9CA3AF);display:flex;align-items:center;justify-content:center"><span style="width:<?php echo (int) round( $ph_size * 0.4 ); ?>px;height:<?php echo (int) round( $ph_size * 0.4 ); ?>px;display:inline-flex"><?php echo $this->render_icon_html( 'user', $ph_size * 0.4 / 20 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup generated by render_icon_html() which escapes/sanitizes internally (esc_attr/olo_sanitize_svg/wp_kses_post) ?></span></div>
+                            <div class="olo-team-photo-ph" style="width:100%;height:100%;background:var(--olo-color-surface-alt, #F3F4F6);color:var(--olo-color-text-faint, #9CA3AF);display:flex;align-items:center;justify-content:center"><span style="width:<?php echo (int) round( $ph_size * 0.4 ); ?>px;height:<?php echo (int) round( $ph_size * 0.4 ); ?>px;display:inline-flex"><?php echo $this->render_icon_html( 'user', $ph_size * 0.4 / 20 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup generated by render_icon_html() which escapes/sanitizes internally (esc_attr/olobuild_sanitize_svg/wp_kses_post) ?></span></div>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -263,7 +263,7 @@ class Olo_Team_Tile extends Olo_Tile_Base {
             <div class="olo-team-info-wrap">
                 <div class="olo-team-info">
                     <?php list( $tn_cls, $tn_data ) = $this->tfx_attrs( $s, 'name', wp_strip_all_tags( $name_html ) ); ?>
-                    <h3 class="olo-team-name<?php echo $tn_cls; ?>"<?php echo $tn_data; ?>><?php echo $name_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- class/data fragments generated and escaped by Olo_Text_Effects (sanitize_html_class/esc_attr); name escaped via esc_html() at assignment above ?></h3>
+                    <h3 class="olo-team-name<?php echo $tn_cls; ?>"<?php echo $tn_data; ?>><?php echo $name_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- class/data fragments generated and escaped by Olobuild_Text_Effects (sanitize_html_class/esc_attr); name escaped via esc_html() at assignment above ?></h3>
                     <div class="olo-team-role"><?php echo $role_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() at assignment above ?></div>
                     <?php if ( ! empty( $s['bio'] ) ) : ?>
                         <div class="olo-team-bio"><?php echo $bio_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_html() then nl2br() at assignment above ?></div>
@@ -276,7 +276,7 @@ class Olo_Team_Tile extends Olo_Tile_Base {
         </div>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by the Olo_Text_Effects::css() shared helper from sanitized settings
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by the Olobuild_Text_Effects::css() shared helper from sanitized settings
         $this->tfx_print_script();
 
         // Border system
@@ -285,8 +285,8 @@ class Olo_Team_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() (integer-forced widths) for the internally generated uid
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() shared helpers
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_css() (integer-forced widths) for the internally generated uid
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_hover_css()/build_border_effect_css() shared helpers
         }
 
         return ob_get_clean();

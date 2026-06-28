@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Carousel_Tile extends Olo_Tile_Base {
+class Olobuild_Carousel_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'carousel';
     protected $name     = 'Carosello immagini';
@@ -52,7 +52,7 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
 
         $slides = is_array( $s['slides'] ) ? $s['slides'] : [];
         if ( empty( $slides ) ) {
-            return '<div class="olo-carousel" style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF)">' . olo_t( 'Aggiungi immagini al carosello' ) . '</div>';
+            return '<div class="olo-carousel" style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF)">' . olobuild_t( 'Aggiungi immagini al carosello' ) . '</div>';
         }
 
         $uid        = 'olo-car-' . wp_rand( 10000, 99999 );
@@ -60,8 +60,8 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
         $show       = max( 1, min( 6, absint( $s['slides_to_show'] ) ) );
         $mob_show   = max( 1, min( 3, absint( $s['mobile_slides'] ) ) );
         $gap        = absint( $s['gap'] );
-        $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
-        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
+        $radius     = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $autoplay   = filter_var( $s['autoplay'], FILTER_VALIDATE_BOOLEAN );
         $speed      = max( 1000, absint( $s['autoplay_speed'] ) );
         $loop       = filter_var( $s['loop'], FILTER_VALIDATE_BOOLEAN );
@@ -88,7 +88,7 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
         $dot_count = (int) ceil( $total / $show );
 
         ob_start();
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist, integers via absint() with min()/max() clamps, radius via Olo_Tile_Utils border_radius()/radius_force_css(), object-fit via in_array() whitelist, object-position via strict regex whitelist + esc_attr(); $uid is internally generated.
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist, integers via absint() with min()/max() clamps, radius via Olobuild_Tile_Utils border_radius()/radius_force_css(), object-fit via in_array() whitelist, object-position via strict regex whitelist + esc_attr(); $uid is internally generated.
         ?>
         <style>
             .<?php echo $uid; ?> {
@@ -219,7 +219,7 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
                 ?>
                 <div class="olo-car-slide">
                     <?php if ( $widget_html ) : ?>
-                    <div class="olo-item-widget"><?php echo $widget_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- widget HTML rendered by Olo_Tile_Base::render_widget_template() through the frontend renderer (each tile escapes its own output) ?></div>
+                    <div class="olo-item-widget"><?php echo $widget_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- widget HTML rendered by Olobuild_Tile_Base::render_widget_template() through the frontend renderer (each tile escapes its own output) ?></div>
                     <?php endif; ?>
                     <?php if ( $url ) : ?>
                         <?php if ( $link ) : ?>
@@ -239,10 +239,10 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
             </div>
 
             <?php if ( $arrows && $total > $show ) : ?>
-            <button class="olo-car-arrow olo-car-prev" data-dir="prev" aria-label="<?php echo esc_attr( olo_t( 'Precedente' ) ); ?>">
+            <button class="olo-car-arrow olo-car-prev" data-dir="prev" aria-label="<?php echo esc_attr( olobuild_t( 'Precedente' ) ); ?>">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <button class="olo-car-arrow olo-car-next" data-dir="next" aria-label="<?php echo esc_attr( olo_t( 'Successivo' ) ); ?>">
+            <button class="olo-car-arrow olo-car-next" data-dir="next" aria-label="<?php echo esc_attr( olobuild_t( 'Successivo' ) ); ?>">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
             <?php endif; ?>
@@ -251,7 +251,7 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
         <?php if ( $dots && $total > $show ) : ?>
         <div class="<?php echo esc_attr( $uid ); ?>-dots" id="<?php echo esc_attr( $uid ); ?>-dots">
             <?php for ( $d = 0; $d < $dot_count; $d++ ) : ?>
-            <button class="olo-car-dot<?php echo $d === 0 ? ' active' : ''; ?>" data-index="<?php echo (int) $d; ?>"<?php echo $d === 0 ? ' aria-current="true"' : ''; ?> aria-label="<?php echo esc_attr( olo_t( 'Vai a gruppo' ) . ' ' . ( $d + 1 ) ); ?>"></button>
+            <button class="olo-car-dot<?php echo $d === 0 ? ' active' : ''; ?>" data-index="<?php echo (int) $d; ?>"<?php echo $d === 0 ? ' aria-current="true"' : ''; ?> aria-label="<?php echo esc_attr( olobuild_t( 'Vai a gruppo' ) . ' ' . ( $d + 1 ) ); ?>"></button>
             <?php endfor; ?>
         </div>
         <?php endif; ?>
@@ -391,7 +391,7 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
         </script>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from fixed effect definitions
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Text_Effects::css() from fixed effect definitions
         $this->tfx_print_script();
 
         // Border system
@@ -400,8 +400,8 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base border helpers from sanitized border settings
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base border helpers from sanitized border settings
         }
 
         return ob_get_clean();

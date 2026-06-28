@@ -1,6 +1,6 @@
 <?php
 /**
- * Olo_Pixabay — Integrazione Pixabay per Olobuild.
+ * Olobuild_Pixabay — Integrazione Pixabay per Olobuild.
  *
  * Fornisce 4 endpoint REST:
  *   GET  olo/v1/pixabay/search         — Cerca foto su Pixabay
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Pixabay {
+class Olobuild_Pixabay {
 
     /**
      * Restituisce la API key Pixabay.
@@ -161,12 +161,12 @@ class Olo_Pixabay {
             return new WP_Error( 'missing_url', 'URL immagine mancante', [ 'status' => 400 ] );
         }
         // Anti-SSRF: l'URL arriva dal client — accetta solo host Pixabay.
-        if ( ! olo_validate_remote_media_url( $regular_url, [ 'pixabay.com' ] ) ) {
+        if ( ! olobuild_validate_remote_media_url( $regular_url, [ 'pixabay.com' ] ) ) {
             return new WP_Error( 'invalid_url', 'URL non consentito.', [ 'status' => 400 ] );
         }
 
         // Hotlink mode: skip sideload
-        $behavior = olo_stockmedia_behavior();
+        $behavior = olobuild_stockmedia_behavior();
         if ( empty( $behavior['download_local'] ) ) {
             return rest_ensure_response( [
                 'id'      => 0,
@@ -199,7 +199,7 @@ class Olo_Pixabay {
 
         // Optimize: WebP conversion se richiesto
         if ( ! empty( $behavior['optimize_on_download'] ) ) {
-            $webp = olo_convert_to_webp( $tmp_file, 82 );
+            $webp = olobuild_convert_to_webp( $tmp_file, 82 );
             if ( $webp && $webp !== $tmp_file ) {
                 wp_delete_file( $tmp_file );
                 $tmp_file = $webp;
@@ -339,7 +339,7 @@ class Olo_Pixabay {
             return new WP_Error( 'missing_url', 'URL video mancante', [ 'status' => 400 ] );
         }
         // Anti-SSRF: l'URL arriva dal client — accetta solo host Pixabay.
-        if ( ! olo_validate_remote_media_url( $video_url, [ 'pixabay.com' ] ) ) {
+        if ( ! olobuild_validate_remote_media_url( $video_url, [ 'pixabay.com' ] ) ) {
             return new WP_Error( 'invalid_url', 'URL non consentito.', [ 'status' => 400 ] );
         }
 

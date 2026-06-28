@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_KillNextPrev_Tile extends Olo_Tile_Base {
+class Olobuild_KillNextPrev_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'killnextprev';
     protected $name     = 'Kill Next/Prev';
@@ -18,8 +18,8 @@ class Olo_KillNextPrev_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         // 1) PHP filter — strip post navigation blocks from rendering
-        if ( ! has_filter( 'render_block', 'olo_kill_nextprev_filter' ) ) {
-            add_filter( 'render_block', 'olo_kill_nextprev_filter', 10, 2 );
+        if ( ! has_filter( 'render_block', 'olobuild_kill_nextprev_filter' ) ) {
+            add_filter( 'render_block', 'olobuild_kill_nextprev_filter', 10, 2 );
         }
 
         // 2) CSS — immediate hide + JS — remove empty nav wrapper from DOM
@@ -34,8 +34,8 @@ class Olo_KillNextPrev_Tile extends Olo_Tile_Base {
 /**
  * Strip WordPress post navigation blocks.
  */
-if ( ! function_exists( 'olo_kill_nextprev_filter' ) ) {
-    function olo_kill_nextprev_filter( $block_content, $block ) {
+if ( ! function_exists( 'olobuild_kill_nextprev_filter' ) ) {
+    function olobuild_kill_nextprev_filter( $block_content, $block ) {
         if ( ! empty( $block['blockName'] ) && $block['blockName'] === 'core/post-navigation-link' ) {
             return '';
         }

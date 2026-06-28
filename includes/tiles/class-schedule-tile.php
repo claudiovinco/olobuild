@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * Celle evidenziabili (prefisso "!" nelle stringhe, o {text,on} negli array).
  * Render == Vue (ScheduleTile.vue).
  */
-class Olo_Schedule_Tile extends Olo_Tile_Base {
+class Olobuild_Schedule_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'schedule';
     protected $name     = 'Schedule';

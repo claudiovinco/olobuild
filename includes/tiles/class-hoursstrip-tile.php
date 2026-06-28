@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Hours Strip — banda orari di apertura (giorno · orario · nota) con divisori.
  * Token-first: orario dal font heading del tema, giorno/nota in monospace.
  */
-class Olo_HoursStrip_Tile extends Olo_Tile_Base {
+class Olobuild_HoursStrip_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'hoursstrip';
     protected $name     = 'Hours Strip';

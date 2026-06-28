@@ -10,8 +10,11 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$tpl_id    = $GLOBALS['olo_archive_template_id'] ?? 0;
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variabile locale del template (inclusa nello scope del render, non un global del plugin)
+$tpl_id    = $GLOBALS['olobuild_archive_template_id'] ?? 0;
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variabile locale del template (inclusa nello scope del render, non un global del plugin)
 $header_id = (int) get_option( 'olo_active_header', 0 );
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variabile locale del template (inclusa nello scope del render, non un global del plugin)
 $footer_id = (int) get_option( 'olo_active_footer', 0 );
 
 ?><!DOCTYPE html>
@@ -26,7 +29,8 @@ $footer_id = (int) get_option( 'olo_active_footer', 0 );
 
 <?php
 if ( $header_id ) {
-    $header_int = new Olo_Header_Integration();
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variabile locale del template (inclusa nello scope del render, non un global del plugin)
+    $header_int = new Olobuild_Header_Integration();
     echo $header_int->render_header( $header_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- header markup built by the plugin's own tile renderer; tile output is escaped at the source.
 }
 ?>
@@ -41,7 +45,8 @@ if ( $tpl_id ) {
 
 <?php
 if ( $footer_id ) {
-    $footer_int = new Olo_Footer_Integration();
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variabile locale del template (inclusa nello scope del render, non un global del plugin)
+    $footer_int = new Olobuild_Footer_Integration();
     echo $footer_int->render_footer( $footer_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- footer markup built by the plugin's own tile renderer; tile output is escaped at the source.
 }
 ?>

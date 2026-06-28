@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Map_Tile extends Olo_Tile_Base {
+class Olobuild_Map_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'map';
     protected $name     = 'Mappa Pro';
@@ -157,8 +157,8 @@ class Olo_Map_Tile extends Olo_Tile_Base {
 
         $zoom   = absint( $s['zoom'] ) ?: 13;
         $height = absint( $s['height'] ) ?: 400;
-        $radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 8 );
-        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
+        $radius = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 8 );
+        $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
         $src = "https://www.openstreetmap.org/export/embed.html?bbox="
              . ( $lng - 0.02 ) . ',' . ( $lat - 0.01 ) . ','
@@ -271,8 +271,8 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $lng          = floatval( $s['longitude'] ) ?: 12.4964;
         $zoom         = absint( $s['zoom'] ) ?: 13;
         $height       = absint( $s['height'] ) ?: 400;
-        $radius       = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
-        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
+        $radius       = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $show_marker  = filter_var( $s['marker'], FILTER_VALIDATE_BOOLEAN );
         $scroll_zoom  = filter_var( $s['scroll_wheel_zoom'] ?? false, FILTER_VALIDATE_BOOLEAN );
         $dragging     = filter_var( $s['dragging'] ?? true, FILTER_VALIDATE_BOOLEAN );
@@ -295,8 +295,8 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $uid            = 'olo-map-single-' . wp_unique_id();
         $fs_enabled     = ! empty( $s['fullscreen_btn'] );
 
-        wp_enqueue_style( 'leaflet', OLO_URL . 'assets/vendor/leaflet/leaflet.css', [], '1.9.4' );
-        wp_enqueue_script( 'leaflet', OLO_URL . 'assets/vendor/leaflet/leaflet.js', [], '1.9.4', true );
+        wp_enqueue_style( 'leaflet', OLOBUILD_URL . 'assets/vendor/leaflet/leaflet.css', [], '1.9.4' );
+        wp_enqueue_script( 'leaflet', OLOBUILD_URL . 'assets/vendor/leaflet/leaflet.js', [], '1.9.4', true );
 
         ob_start();
         ?>
@@ -462,7 +462,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $sort_default  = in_array( $s['sort_default'] ?? 'default', [ 'default', 'title_asc', 'title_desc', 'newest', 'distance' ], true ) ? $s['sort_default'] : 'default';
         $per_page      = max( 1, absint( $s['results_per_page'] ?? 10 ) );
         $card_mh       = max( 0, absint( $s['card_max_height'] ?? 0 ) );
-        $card_r        = max( 0, Olo_Tile_Utils::radius_int( $s['card_border_radius'] ?? 8 ) );
+        $card_r        = max( 0, Olobuild_Tile_Utils::radius_int( $s['card_border_radius'] ?? 8 ) );
         $show_search   = ! empty( $s['show_location_search'] );
         $show_radius   = ! empty( $s['show_radius'] );
         $radius_d      = max( 1, min( 50, absint( $s['radius_default'] ?? 5 ) ) );
@@ -512,11 +512,11 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             'markerAnchorY' => $marker_info['anchor_y'],
             'mode'          => 'locations',
             'i18n'          => [
-                'noResults'  => olo_t( 'Nessun risultato trovato' ),
-                'tryFilters' => olo_t( 'Prova a modificare i filtri' ),
-                'cam'        => olo_t( 'cam.' ),
-                'bagni'      => olo_t( 'bagni' ),
-                'notte'      => olo_t( 'notte' ),
+                'noResults'  => olobuild_t( 'Nessun risultato trovato' ),
+                'tryFilters' => olobuild_t( 'Prova a modificare i filtri' ),
+                'cam'        => olobuild_t( 'cam.' ),
+                'bagni'      => olobuild_t( 'bagni' ),
+                'notte'      => olobuild_t( 'notte' ),
             ],
         ];
 
@@ -526,11 +526,11 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         <?php echo $this->build_plm_css( $uid, $map_pos, $map_w, $height, $f_cols, $grid_cols, $card_r, $card_mh, $color, $btn_bg, $btn_color, $filter_pos, $filter_w ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by build_plm_css() exclusively from absint/clamped ints, safe_hex() colors and whitelisted enums ?>
         </style>
 
-        <div class="olo-tile olo-tile--plm <?php echo esc_attr( $uid ); ?>" role="region" aria-label="<?php echo esc_attr( olo_t( 'Mappa luoghi' ) ); ?>">
+        <div class="olo-tile olo-tile--plm <?php echo esc_attr( $uid ); ?>" role="region" aria-label="<?php echo esc_attr( olobuild_t( 'Mappa luoghi' ) ); ?>">
             <div class="plm-map-panel">
                 <div class="plm-map" id="<?php echo esc_attr( $map_id ); ?>"></div>
                 <?php if ( $fs_enabled ) : ?>
-                    <button type="button" class="plm-fullscreen-btn" id="<?php echo esc_attr( $uid ); ?>-fs" title="<?php echo esc_attr( olo_t( 'Schermo intero' ) ); ?>" aria-label="<?php echo esc_attr( olo_t( 'Attiva o disattiva schermo intero' ) ); ?>">
+                    <button type="button" class="plm-fullscreen-btn" id="<?php echo esc_attr( $uid ); ?>-fs" title="<?php echo esc_attr( olobuild_t( 'Schermo intero' ) ); ?>" aria-label="<?php echo esc_attr( olobuild_t( 'Attiva o disattiva schermo intero' ) ); ?>">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
                     </button>
                 <?php endif; ?>
@@ -541,9 +541,9 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                     <div class="plm-filters-grid">
                         <?php if ( $show_search ) : ?>
                             <div class="plm-filter-group plm-filter-group--full">
-                                <span class="plm-filter-label"><?php echo esc_html( olo_t( 'Localit&agrave;' ) ); ?></span>
+                                <span class="plm-filter-label"><?php echo esc_html( olobuild_t( 'Localit&agrave;' ) ); ?></span>
                                 <div class="plm-autocomplete-wrap">
-                                    <input type="text" class="plm-filter-input" data-filter="location" placeholder="<?php echo esc_attr( olo_t( 'Cerca citt&agrave;, zona, indirizzo...' ) ); ?>" autocomplete="off" />
+                                    <input type="text" class="plm-filter-input" data-filter="location" placeholder="<?php echo esc_attr( olobuild_t( 'Cerca citt&agrave;, zona, indirizzo...' ) ); ?>" autocomplete="off" />
                                     <ul class="plm-autocomplete-list" id="<?php echo esc_attr( $uid ); ?>-ac"></ul>
                                 </div>
                             </div>
@@ -551,7 +551,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
 
                         <?php if ( $show_radius ) : ?>
                             <div class="plm-filter-group plm-filter-group--full">
-                                <span class="plm-filter-label"><?php echo esc_html( olo_t( 'Raggio di ricerca' ) ); ?></span>
+                                <span class="plm-filter-label"><?php echo esc_html( olobuild_t( 'Raggio di ricerca' ) ); ?></span>
                                 <div class="plm-radius-wrap">
                                     <input type="range" min="1" max="50" value="<?php echo esc_attr( $radius_d ); ?>" data-filter="radius" />
                                     <span class="plm-radius-val"><?php echo esc_html( $radius_d ); ?> km</span>
@@ -561,9 +561,9 @@ class Olo_Map_Tile extends Olo_Tile_Base {
 
                         <?php if ( $show_filters ) : ?>
                             <div class="plm-filter-group plm-filter-group--full">
-                                <span class="plm-filter-label"><?php echo esc_html( olo_t( 'Categoria' ) ); ?></span>
+                                <span class="plm-filter-label"><?php echo esc_html( olobuild_t( 'Categoria' ) ); ?></span>
                                 <select class="plm-filter-select" data-filter="taxonomy">
-                                    <option value=""><?php echo esc_html( olo_t( 'Tutte' ) ); ?></option>
+                                    <option value=""><?php echo esc_html( olobuild_t( 'Tutte' ) ); ?></option>
                                     <?php foreach ( $terms as $term ) : ?>
                                         <option value="<?php echo esc_attr( $term['slug'] ); ?>"><?php echo esc_html( $term['name'] ); ?></option>
                                     <?php endforeach; ?>
@@ -574,27 +574,27 @@ class Olo_Map_Tile extends Olo_Tile_Base {
 
                     <div class="plm-actions">
                         <button type="button" class="plm-btn-search" id="<?php echo esc_attr( $uid ); ?>-search"><?php echo esc_html( $btn_text ); ?></button>
-                        <button type="button" class="plm-btn-reset" id="<?php echo esc_attr( $uid ); ?>-reset" title="<?php echo esc_attr( olo_t( 'Azzera filtri' ) ); ?>" aria-label="<?php echo esc_attr( olo_t( 'Azzera filtri' ) ); ?>">
+                        <button type="button" class="plm-btn-reset" id="<?php echo esc_attr( $uid ); ?>-reset" title="<?php echo esc_attr( olobuild_t( 'Azzera filtri' ) ); ?>" aria-label="<?php echo esc_attr( olobuild_t( 'Azzera filtri' ) ); ?>">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
                         </button>
                     </div>
                 </div>
 
                 <div class="plm-results-header">
-                    <span class="plm-results-count" id="<?php echo esc_attr( $uid ); ?>-count"><strong>0</strong> <?php echo esc_html( olo_t( 'Risultati' ) ); ?></span>
+                    <span class="plm-results-count" id="<?php echo esc_attr( $uid ); ?>-count"><strong>0</strong> <?php echo esc_html( olobuild_t( 'Risultati' ) ); ?></span>
                     <div class="plm-sort-wrap">
                         <select class="plm-sort-select" id="<?php echo esc_attr( $uid ); ?>-sort">
-                            <option value="default" <?php selected( $sort_default, 'default' ); ?>><?php echo esc_html( olo_t( 'Ordine predefinito' ) ); ?></option>
-                            <option value="title_asc" <?php selected( $sort_default, 'title_asc' ); ?>><?php echo esc_html( olo_t( 'Titolo A-Z' ) ); ?></option>
-                            <option value="title_desc" <?php selected( $sort_default, 'title_desc' ); ?>><?php echo esc_html( olo_t( 'Titolo Z-A' ) ); ?></option>
-                            <option value="newest" <?php selected( $sort_default, 'newest' ); ?>><?php echo esc_html( olo_t( 'Pi&ugrave; recenti' ) ); ?></option>
-                            <option value="distance" <?php selected( $sort_default, 'distance' ); ?>><?php echo esc_html( olo_t( 'Distanza' ) ); ?></option>
+                            <option value="default" <?php selected( $sort_default, 'default' ); ?>><?php echo esc_html( olobuild_t( 'Ordine predefinito' ) ); ?></option>
+                            <option value="title_asc" <?php selected( $sort_default, 'title_asc' ); ?>><?php echo esc_html( olobuild_t( 'Titolo A-Z' ) ); ?></option>
+                            <option value="title_desc" <?php selected( $sort_default, 'title_desc' ); ?>><?php echo esc_html( olobuild_t( 'Titolo Z-A' ) ); ?></option>
+                            <option value="newest" <?php selected( $sort_default, 'newest' ); ?>><?php echo esc_html( olobuild_t( 'Pi&ugrave; recenti' ) ); ?></option>
+                            <option value="distance" <?php selected( $sort_default, 'distance' ); ?>><?php echo esc_html( olobuild_t( 'Distanza' ) ); ?></option>
                         </select>
-                        <div class="plm-view-toggles" role="group" aria-label="<?php echo esc_attr( olo_t( 'Tipo di vista' ) ); ?>">
-                            <button type="button" class="plm-view-btn<?php echo $view_mode === 'list' ? ' is-active' : ''; ?>" data-view="list" aria-label="<?php echo esc_attr( olo_t( 'Vista lista' ) ); ?>" title="<?php echo esc_attr( olo_t( 'Vista lista' ) ); ?>">
+                        <div class="plm-view-toggles" role="group" aria-label="<?php echo esc_attr( olobuild_t( 'Tipo di vista' ) ); ?>">
+                            <button type="button" class="plm-view-btn<?php echo $view_mode === 'list' ? ' is-active' : ''; ?>" data-view="list" aria-label="<?php echo esc_attr( olobuild_t( 'Vista lista' ) ); ?>" title="<?php echo esc_attr( olobuild_t( 'Vista lista' ) ); ?>">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>
                             </button>
-                            <button type="button" class="plm-view-btn<?php echo $view_mode === 'grid' ? ' is-active' : ''; ?>" data-view="grid" aria-label="<?php echo esc_attr( olo_t( 'Vista griglia' ) ); ?>" title="<?php echo esc_attr( olo_t( 'Vista griglia' ) ); ?>">
+                            <button type="button" class="plm-view-btn<?php echo $view_mode === 'grid' ? ' is-active' : ''; ?>" data-view="grid" aria-label="<?php echo esc_attr( olobuild_t( 'Vista griglia' ) ); ?>" title="<?php echo esc_attr( olobuild_t( 'Vista griglia' ) ); ?>">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
                             </button>
                         </div>
@@ -604,9 +604,9 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                 <div class="plm-results-list<?php echo $view_mode === 'grid' ? ' plm-grid-view' : ''; ?>" id="<?php echo esc_attr( $uid ); ?>-list"></div>
 
                 <div class="plm-pagination" id="<?php echo esc_attr( $uid ); ?>-pagination">
-                    <button type="button" class="plm-page-btn" data-page="prev"><?php echo esc_html( olo_t( '&larr; Precedente' ) ); ?></button>
+                    <button type="button" class="plm-page-btn" data-page="prev"><?php echo esc_html( olobuild_t( '&larr; Precedente' ) ); ?></button>
                     <span class="plm-page-info" id="<?php echo esc_attr( $uid ); ?>-pageinfo">1 / 1</span>
-                    <button type="button" class="plm-page-btn" data-page="next"><?php echo esc_html( olo_t( 'Successivo &rarr;' ) ); ?></button>
+                    <button type="button" class="plm-page-btn" data-page="next"><?php echo esc_html( olobuild_t( 'Successivo &rarr;' ) ); ?></button>
                 </div>
             </div>
         </div>
@@ -870,7 +870,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $sort_default  = in_array( $s['sort_default'] ?? 'default', [ 'default', 'title_asc', 'title_desc', 'newest', 'distance' ], true ) ? $s['sort_default'] : 'default';
         $per_page      = max( 1, absint( $s['results_per_page'] ?? 10 ) );
         $card_mh       = max( 0, absint( $s['card_max_height'] ?? 0 ) );
-        $card_r        = max( 0, Olo_Tile_Utils::radius_int( $s['card_border_radius'] ?? 8 ) );
+        $card_r        = max( 0, Olobuild_Tile_Utils::radius_int( $s['card_border_radius'] ?? 8 ) );
         $show_search   = ! empty( $s['show_location_search'] );
         $show_radius   = ! empty( $s['show_radius'] );
         $radius_d      = max( 1, min( 50, absint( $s['radius_default'] ?? 5 ) ) );
@@ -918,7 +918,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             'popupBtnColor' => $this->safe_hex( $s['svc_popup_btn_color'] ?? '', 'var(--olo-color-primary, #e1474f)' ),
             'popupBg'       => $this->safe_hex( $s['svc_popup_bg'] ?? '', '#ffffff' ),
             'popupColor'    => $this->safe_hex( $s['svc_popup_color'] ?? '', '#333333' ),
-            'popupRadius'   => Olo_Tile_Utils::radius_int( $s['svc_popup_radius'] ?? 8 ),
+            'popupRadius'   => Olobuild_Tile_Utils::radius_int( $s['svc_popup_radius'] ?? 8 ),
             'popupLink'     => true,
             'showRadius'    => $show_radius,
             'radiusDefault' => $radius_d,
@@ -932,11 +932,11 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             'markerAnchorY' => $marker_info['anchor_y'],
             'mode'          => 'services',
             'i18n'          => [
-                'noResults'  => olo_t( 'Nessun risultato trovato' ),
-                'tryFilters' => olo_t( 'Prova a modificare i filtri' ),
-                'cam'        => olo_t( 'cam.' ),
-                'bagni'      => olo_t( 'bagni' ),
-                'notte'      => olo_t( 'notte' ),
+                'noResults'  => olobuild_t( 'Nessun risultato trovato' ),
+                'tryFilters' => olobuild_t( 'Prova a modificare i filtri' ),
+                'cam'        => olobuild_t( 'cam.' ),
+                'bagni'      => olobuild_t( 'bagni' ),
+                'notte'      => olobuild_t( 'notte' ),
             ],
         ];
 
@@ -946,11 +946,11 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         <?php echo $this->build_plm_css( $uid, $map_pos, $map_w, $height, $f_cols, $grid_cols, $card_r, $card_mh, $color, $btn_bg, $btn_color, $filter_pos, $filter_w ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by build_plm_css() exclusively from absint/clamped ints, safe_hex() colors and whitelisted enums ?>
         </style>
 
-        <div class="olo-tile olo-tile--plm <?php echo esc_attr( $uid ); ?>" role="region" aria-label="<?php echo esc_attr( olo_t( 'Mappa servizi' ) ); ?>">
+        <div class="olo-tile olo-tile--plm <?php echo esc_attr( $uid ); ?>" role="region" aria-label="<?php echo esc_attr( olobuild_t( 'Mappa servizi' ) ); ?>">
             <div class="plm-map-panel">
                 <div class="plm-map" id="<?php echo esc_attr( $map_id ); ?>"></div>
                 <?php if ( $fs_enabled ) : ?>
-                    <button type="button" class="plm-fullscreen-btn" id="<?php echo esc_attr( $uid ); ?>-fs" title="<?php echo esc_attr( olo_t( 'Schermo intero' ) ); ?>" aria-label="<?php echo esc_attr( olo_t( 'Attiva o disattiva schermo intero' ) ); ?>">
+                    <button type="button" class="plm-fullscreen-btn" id="<?php echo esc_attr( $uid ); ?>-fs" title="<?php echo esc_attr( olobuild_t( 'Schermo intero' ) ); ?>" aria-label="<?php echo esc_attr( olobuild_t( 'Attiva o disattiva schermo intero' ) ); ?>">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
                     </button>
                 <?php endif; ?>
@@ -961,9 +961,9 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                     <div class="plm-filters-grid">
                         <?php if ( $show_search ) : ?>
                             <div class="plm-filter-group plm-filter-group--full">
-                                <span class="plm-filter-label"><?php echo esc_html( olo_t( 'Localit&agrave;' ) ); ?></span>
+                                <span class="plm-filter-label"><?php echo esc_html( olobuild_t( 'Localit&agrave;' ) ); ?></span>
                                 <div class="plm-autocomplete-wrap">
-                                    <input type="text" class="plm-filter-input" data-filter="location" placeholder="<?php echo esc_attr( olo_t( 'Cerca citt&agrave;, zona, indirizzo...' ) ); ?>" autocomplete="off" />
+                                    <input type="text" class="plm-filter-input" data-filter="location" placeholder="<?php echo esc_attr( olobuild_t( 'Cerca citt&agrave;, zona, indirizzo...' ) ); ?>" autocomplete="off" />
                                     <ul class="plm-autocomplete-list" id="<?php echo esc_attr( $uid ); ?>-ac"></ul>
                                 </div>
                             </div>
@@ -971,7 +971,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
 
                         <?php if ( $show_radius ) : ?>
                             <div class="plm-filter-group plm-filter-group--full">
-                                <span class="plm-filter-label"><?php echo esc_html( olo_t( 'Raggio di ricerca' ) ); ?></span>
+                                <span class="plm-filter-label"><?php echo esc_html( olobuild_t( 'Raggio di ricerca' ) ); ?></span>
                                 <div class="plm-radius-wrap">
                                     <input type="range" min="1" max="50" value="<?php echo esc_attr( $radius_d ); ?>" data-filter="radius" />
                                     <span class="plm-radius-val"><?php echo esc_html( $radius_d ); ?> km</span>
@@ -984,27 +984,27 @@ class Olo_Map_Tile extends Olo_Tile_Base {
 
                     <div class="plm-actions">
                         <button type="button" class="plm-btn-search" id="<?php echo esc_attr( $uid ); ?>-search"><?php echo esc_html( $btn_text ); ?></button>
-                        <button type="button" class="plm-btn-reset" id="<?php echo esc_attr( $uid ); ?>-reset" title="<?php echo esc_attr( olo_t( 'Azzera filtri' ) ); ?>" aria-label="<?php echo esc_attr( olo_t( 'Azzera filtri' ) ); ?>">
+                        <button type="button" class="plm-btn-reset" id="<?php echo esc_attr( $uid ); ?>-reset" title="<?php echo esc_attr( olobuild_t( 'Azzera filtri' ) ); ?>" aria-label="<?php echo esc_attr( olobuild_t( 'Azzera filtri' ) ); ?>">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
                         </button>
                     </div>
                 </div>
 
                 <div class="plm-results-header">
-                    <span class="plm-results-count" id="<?php echo esc_attr( $uid ); ?>-count"><strong>0</strong> <?php echo esc_html( olo_t( 'Risultati' ) ); ?></span>
+                    <span class="plm-results-count" id="<?php echo esc_attr( $uid ); ?>-count"><strong>0</strong> <?php echo esc_html( olobuild_t( 'Risultati' ) ); ?></span>
                     <div class="plm-sort-wrap">
                         <select class="plm-sort-select" id="<?php echo esc_attr( $uid ); ?>-sort">
-                            <option value="default" <?php selected( $sort_default, 'default' ); ?>><?php echo esc_html( olo_t( 'Ordine predefinito' ) ); ?></option>
-                            <option value="title_asc" <?php selected( $sort_default, 'title_asc' ); ?>><?php echo esc_html( olo_t( 'Titolo A-Z' ) ); ?></option>
-                            <option value="title_desc" <?php selected( $sort_default, 'title_desc' ); ?>><?php echo esc_html( olo_t( 'Titolo Z-A' ) ); ?></option>
-                            <option value="newest" <?php selected( $sort_default, 'newest' ); ?>><?php echo esc_html( olo_t( 'Pi&ugrave; recenti' ) ); ?></option>
-                            <option value="distance" <?php selected( $sort_default, 'distance' ); ?>><?php echo esc_html( olo_t( 'Distanza' ) ); ?></option>
+                            <option value="default" <?php selected( $sort_default, 'default' ); ?>><?php echo esc_html( olobuild_t( 'Ordine predefinito' ) ); ?></option>
+                            <option value="title_asc" <?php selected( $sort_default, 'title_asc' ); ?>><?php echo esc_html( olobuild_t( 'Titolo A-Z' ) ); ?></option>
+                            <option value="title_desc" <?php selected( $sort_default, 'title_desc' ); ?>><?php echo esc_html( olobuild_t( 'Titolo Z-A' ) ); ?></option>
+                            <option value="newest" <?php selected( $sort_default, 'newest' ); ?>><?php echo esc_html( olobuild_t( 'Pi&ugrave; recenti' ) ); ?></option>
+                            <option value="distance" <?php selected( $sort_default, 'distance' ); ?>><?php echo esc_html( olobuild_t( 'Distanza' ) ); ?></option>
                         </select>
-                        <div class="plm-view-toggles" role="group" aria-label="<?php echo esc_attr( olo_t( 'Tipo di vista' ) ); ?>">
-                            <button type="button" class="plm-view-btn<?php echo $view_mode === 'list' ? ' is-active' : ''; ?>" data-view="list" aria-label="<?php echo esc_attr( olo_t( 'Vista lista' ) ); ?>" title="<?php echo esc_attr( olo_t( 'Vista lista' ) ); ?>">
+                        <div class="plm-view-toggles" role="group" aria-label="<?php echo esc_attr( olobuild_t( 'Tipo di vista' ) ); ?>">
+                            <button type="button" class="plm-view-btn<?php echo $view_mode === 'list' ? ' is-active' : ''; ?>" data-view="list" aria-label="<?php echo esc_attr( olobuild_t( 'Vista lista' ) ); ?>" title="<?php echo esc_attr( olobuild_t( 'Vista lista' ) ); ?>">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>
                             </button>
-                            <button type="button" class="plm-view-btn<?php echo $view_mode === 'grid' ? ' is-active' : ''; ?>" data-view="grid" aria-label="<?php echo esc_attr( olo_t( 'Vista griglia' ) ); ?>" title="<?php echo esc_attr( olo_t( 'Vista griglia' ) ); ?>">
+                            <button type="button" class="plm-view-btn<?php echo $view_mode === 'grid' ? ' is-active' : ''; ?>" data-view="grid" aria-label="<?php echo esc_attr( olobuild_t( 'Vista griglia' ) ); ?>" title="<?php echo esc_attr( olobuild_t( 'Vista griglia' ) ); ?>">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
                             </button>
                         </div>
@@ -1014,9 +1014,9 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                 <div class="plm-results-list<?php echo $view_mode === 'grid' ? ' plm-grid-view' : ''; ?>" id="<?php echo esc_attr( $uid ); ?>-list"></div>
 
                 <div class="plm-pagination" id="<?php echo esc_attr( $uid ); ?>-pagination">
-                    <button type="button" class="plm-page-btn" data-page="prev"><?php echo esc_html( olo_t( '&larr; Precedente' ) ); ?></button>
+                    <button type="button" class="plm-page-btn" data-page="prev"><?php echo esc_html( olobuild_t( '&larr; Precedente' ) ); ?></button>
                     <span class="plm-page-info" id="<?php echo esc_attr( $uid ); ?>-pageinfo">1 / 1</span>
-                    <button type="button" class="plm-page-btn" data-page="next"><?php echo esc_html( olo_t( 'Successivo &rarr;' ) ); ?></button>
+                    <button type="button" class="plm-page-btn" data-page="next"><?php echo esc_html( olobuild_t( 'Successivo &rarr;' ) ); ?></button>
                 </div>
             </div>
         </div>
@@ -1337,7 +1337,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             if ( $ranges ) {
                 ?>
                 <select class="olo-map-compact-select" data-filter-type="altitude" data-map-target="<?php echo esc_attr( $map_id ); ?>">
-                    <option value=""><?php echo esc_html( olo_t( 'Altitudine' ) ); ?></option>
+                    <option value=""><?php echo esc_html( olobuild_t( 'Altitudine' ) ); ?></option>
                     <?php foreach ( $ranges as $range ) :
                         $parts = explode( '-', $range );
                         if ( count( $parts ) !== 2 ) continue;
@@ -1365,7 +1365,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                 sort( $names );
                 ?>
                 <select class="olo-map-compact-select" data-filter-type="valley" data-map-target="<?php echo esc_attr( $map_id ); ?>">
-                    <option value=""><?php echo esc_html( olo_t( 'Localit&agrave;' ) ); ?></option>
+                    <option value=""><?php echo esc_html( olobuild_t( 'Localit&agrave;' ) ); ?></option>
                     <?php foreach ( $names as $n ) : ?>
                     <option value="<?php echo esc_attr( $n ); ?>"><?php echo esc_html( $n ); ?></option>
                     <?php endforeach; ?>
@@ -1380,7 +1380,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             if ( $ranges ) {
                 ?>
                 <select class="olo-map-compact-select" data-filter-type="guests" data-map-target="<?php echo esc_attr( $map_id ); ?>">
-                    <option value=""><?php echo esc_html( olo_t( 'Ospiti' ) ); ?></option>
+                    <option value=""><?php echo esc_html( olobuild_t( 'Ospiti' ) ); ?></option>
                     <?php foreach ( $ranges as $range ) :
                         $parts = explode( '-', $range );
                         if ( count( $parts ) !== 2 ) continue;
@@ -1401,7 +1401,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             if ( $ranges ) {
                 ?>
                 <select class="olo-map-compact-select" data-filter-type="price" data-map-target="<?php echo esc_attr( $map_id ); ?>">
-                    <option value=""><?php echo esc_html( olo_t( 'Prezzo / notte' ) ); ?></option>
+                    <option value=""><?php echo esc_html( olobuild_t( 'Prezzo / notte' ) ); ?></option>
                     <?php foreach ( $ranges as $range ) :
                         $parts = explode( '-', $range );
                         if ( count( $parts ) !== 2 ) continue;
@@ -1427,11 +1427,11 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             if ( $has_bedrooms ) {
                 ?>
                 <select class="olo-map-compact-select" data-filter-type="bedrooms" data-map-target="<?php echo esc_attr( $map_id ); ?>">
-                    <option value=""><?php echo esc_html( olo_t( 'Camere' ) ); ?></option>
-                    <option value="1"><?php echo esc_html( olo_t( '1 camera' ) ); ?></option>
-                    <option value="2"><?php echo esc_html( olo_t( '2 camere' ) ); ?></option>
-                    <option value="3"><?php echo esc_html( olo_t( '3 camere' ) ); ?></option>
-                    <option value="4+"><?php echo esc_html( olo_t( '4+ camere' ) ); ?></option>
+                    <option value=""><?php echo esc_html( olobuild_t( 'Camere' ) ); ?></option>
+                    <option value="1"><?php echo esc_html( olobuild_t( '1 camera' ) ); ?></option>
+                    <option value="2"><?php echo esc_html( olobuild_t( '2 camere' ) ); ?></option>
+                    <option value="3"><?php echo esc_html( olobuild_t( '3 camere' ) ); ?></option>
+                    <option value="4+"><?php echo esc_html( olobuild_t( '4+ camere' ) ); ?></option>
                 </select>
                 <?php
             }
@@ -1468,9 +1468,9 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         }
         ?>
         <div class="olo-map-svc-filter-group" data-filter-type="altitude" data-map-target="<?php echo esc_attr( $map_id ); ?>">
-            <span class="olo-map-svc-filter-label"><?php echo esc_html( olo_t( 'Altitudine' ) ); ?></span>
+            <span class="olo-map-svc-filter-label"><?php echo esc_html( olobuild_t( 'Altitudine' ) ); ?></span>
             <div class="olo-map-svc-filter-pills">
-                <button class="olo-map-filter-pill olo-map-filter-active" data-svc-filter=""><?php echo esc_html( olo_t( 'Tutte' ) ); ?></button>
+                <button class="olo-map-filter-pill olo-map-filter-active" data-svc-filter=""><?php echo esc_html( olobuild_t( 'Tutte' ) ); ?></button>
                 <?php foreach ( $labels as $item ) : ?>
                     <button class="olo-map-filter-pill" data-svc-filter="<?php echo esc_attr( $item['range'] ); ?>">
                         <?php echo esc_html( $item['label'] ); ?>
@@ -1498,9 +1498,9 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         sort( $locality_names );
         ?>
         <div class="olo-map-svc-filter-group" data-filter-type="valley" data-map-target="<?php echo esc_attr( $map_id ); ?>">
-            <span class="olo-map-svc-filter-label"><?php echo esc_html( olo_t( 'Localit&agrave;' ) ); ?></span>
+            <span class="olo-map-svc-filter-label"><?php echo esc_html( olobuild_t( 'Localit&agrave;' ) ); ?></span>
             <div class="olo-map-svc-filter-pills">
-                <button class="olo-map-filter-pill olo-map-filter-active" data-svc-filter=""><?php echo esc_html( olo_t( 'Tutte' ) ); ?></button>
+                <button class="olo-map-filter-pill olo-map-filter-active" data-svc-filter=""><?php echo esc_html( olobuild_t( 'Tutte' ) ); ?></button>
                 <?php foreach ( $locality_names as $loc_name ) : ?>
                     <button class="olo-map-filter-pill" data-svc-filter="<?php echo esc_attr( $loc_name ); ?>">
                         <?php echo esc_html( $loc_name ); ?>
@@ -1521,8 +1521,8 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         }
 
         $labels_map = [
-            'guests' => olo_t( 'Ospiti' ),
-            'price'  => olo_t( 'Prezzo / notte' ),
+            'guests' => olobuild_t( 'Ospiti' ),
+            'price'  => olobuild_t( 'Prezzo / notte' ),
         ];
         $group_label = $labels_map[ $type ] ?? ucfirst( $type );
 
@@ -1555,7 +1555,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         <div class="olo-map-svc-filter-group" data-filter-type="<?php echo esc_attr( $type ); ?>" data-map-target="<?php echo esc_attr( $map_id ); ?>">
             <span class="olo-map-svc-filter-label"><?php echo esc_html( $group_label ); ?></span>
             <div class="olo-map-svc-filter-pills">
-                <button class="olo-map-filter-pill olo-map-filter-active" data-svc-filter=""><?php echo esc_html( olo_t( 'Tutti' ) ); ?></button>
+                <button class="olo-map-filter-pill olo-map-filter-active" data-svc-filter=""><?php echo esc_html( olobuild_t( 'Tutti' ) ); ?></button>
                 <?php foreach ( $labels as $item ) : ?>
                     <button class="olo-map-filter-pill" data-svc-filter="<?php echo esc_attr( $item['range'] ); ?>">
                         <?php echo $item['label']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- label built above from intval()'d numbers and the static &euro; entity; esc_html() would double-encode the entity ?>
@@ -1582,9 +1582,9 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         }
         ?>
         <div class="olo-map-svc-filter-group" data-filter-type="bedrooms" data-map-target="<?php echo esc_attr( $map_id ); ?>">
-            <span class="olo-map-svc-filter-label"><?php echo esc_html( olo_t( 'Camere' ) ); ?></span>
+            <span class="olo-map-svc-filter-label"><?php echo esc_html( olobuild_t( 'Camere' ) ); ?></span>
             <div class="olo-map-svc-filter-pills">
-                <button class="olo-map-filter-pill olo-map-filter-active" data-svc-filter=""><?php echo esc_html( olo_t( 'Tutte' ) ); ?></button>
+                <button class="olo-map-filter-pill olo-map-filter-active" data-svc-filter=""><?php echo esc_html( olobuild_t( 'Tutte' ) ); ?></button>
                 <button class="olo-map-filter-pill" data-svc-filter="1">1</button>
                 <button class="olo-map-filter-pill" data-svc-filter="2">2</button>
                 <button class="olo-map-filter-pill" data-svc-filter="3">3</button>
@@ -1628,7 +1628,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         ];
         ?>
         <div class="olo-map-svc-filter-group olo-map-svc-filter-group--amenities" data-filter-type="amenities" data-map-target="<?php echo esc_attr( $map_id ); ?>">
-            <span class="olo-map-svc-filter-label"><?php echo esc_html( olo_t( 'Servizi' ) ); ?></span>
+            <span class="olo-map-svc-filter-label"><?php echo esc_html( olobuild_t( 'Servizi' ) ); ?></span>
             <div class="olo-map-svc-filter-pills">
                 <?php foreach ( $amenities as $slug ) :
                     $label = $amenity_labels[ $slug ] ?? ucfirst( $slug );
@@ -1713,7 +1713,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
     }
 
     /**
-     * Safe color fallback (class may extend Olo_Tile_Base that provides safe_color_css,
+     * Safe color fallback (class may extend Olobuild_Tile_Base that provides safe_color_css,
      * but guard here in case of environments where it's missing).
      */
     private function safe_hex( $c, $fallback = '#e74c3c' ) {
@@ -1844,7 +1844,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
     private function build_fullscreen_btn( $uid ) {
         ob_start();
         ?>
-        <button type="button" class="olo-map-fs-btn" data-fs-for="<?php echo esc_attr( $uid ); ?>" title="<?php echo esc_attr( olo_t( 'Schermo intero' ) ); ?>" aria-label="<?php echo esc_attr( olo_t( 'Attiva o disattiva schermo intero' ) ); ?>">
+        <button type="button" class="olo-map-fs-btn" data-fs-for="<?php echo esc_attr( $uid ); ?>" title="<?php echo esc_attr( olobuild_t( 'Schermo intero' ) ); ?>" aria-label="<?php echo esc_attr( olobuild_t( 'Attiva o disattiva schermo intero' ) ); ?>">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
         </button>
         <?php
@@ -1855,7 +1855,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
      * Enqueue Leaflet (and MarkerCluster if requested).
      */
     private function enqueue_leaflet( $cluster ) {
-        $vendor = OLO_URL . 'assets/vendor/leaflet/';
+        $vendor = OLOBUILD_URL . 'assets/vendor/leaflet/';
         if ( ! wp_style_is( 'leaflet', 'enqueued' ) && ! wp_style_is( 'leaflet-css', 'enqueued' ) ) {
             wp_enqueue_style( 'leaflet', $vendor . 'leaflet.css', [], '1.9.4' );
         }

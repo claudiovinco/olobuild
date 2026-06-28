@@ -1,6 +1,6 @@
 <?php
 /**
- * Olo_Accessibility — Skip navigation, ARIA enhancements, focus styles,
+ * Olobuild_Accessibility — Skip navigation, ARIA enhancements, focus styles,
  * reduced-motion, heading checker, alt-text warnings.
  */
 
@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Accessibility {
+class Olobuild_Accessibility {
 
     private static $instance = null;
 
@@ -27,7 +27,7 @@ class Olo_Accessibility {
         add_action( 'wp_head', [ $this, 'output_a11y_css' ], 20 );
 
         // Filter tile output to add ARIA enhancements
-        add_filter( 'olo_tile_output', [ $this, 'enhance_tile_aria' ], 10, 3 );
+        add_filter( 'olobuild_tile_output', [ $this, 'enhance_tile_aria' ], 10, 3 );
 
         // Heading structure check (admin notice in builder)
         add_action( 'wp_footer', [ $this, 'output_a11y_scripts' ], 99 );
@@ -249,7 +249,7 @@ class Olo_Accessibility {
      */
     public function check_contrast( $request ) {
         $template_id = intval( $request['id'] );
-        $db          = new Olo_Database();
+        $db          = new Olobuild_Database();
         $template    = $db->get_template( $template_id );
 
         if ( ! $template ) {
@@ -593,7 +593,7 @@ class Olo_Accessibility {
 
     public function output_a11y_scripts() {
         // Only output on pages with Olobuild content
-        if ( ! did_action( 'olo_frontend_rendered' ) ) {
+        if ( ! did_action( 'olobuild_frontend_rendered' ) ) {
             return;
         }
         ?>

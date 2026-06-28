@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Row_Tile extends Olo_Tile_Base {
+class Olobuild_Row_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'row';
     protected $name     = 'Riga / Colonne';
@@ -60,7 +60,7 @@ class Olo_Row_Tile extends Olo_Tile_Base {
         $align_map = [ 'stretch' => 'stretch', 'start' => 'flex-start', 'center' => 'center', 'end' => 'flex-end' ];
 
         $columns_data = is_array( $s['columns_data'] ) ? $s['columns_data'] : [];
-        $manager = Olo_Tile_Manager::instance();
+        $manager = Olobuild_Tile_Manager::instance();
 
         $stack_class  = ! empty( $s['stack_mobile'] ) ? ' olo-row--stack-mobile olo-row--stack' : '';
         $stack_class .= ! empty( $s['stack_tablet'] ) ? ' olo-row--stack-tablet' : '';

@@ -1,13 +1,13 @@
 <?php
 /**
- * Olo_Performance_Settings — Pagina admin per Critical CSS, Asset Optimizer, Performance Hints.
+ * Olobuild_Performance_Settings — Pagina admin per Critical CSS, Asset Optimizer, Performance Hints.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Performance_Settings {
+class Olobuild_Performance_Settings {
 
     private static $instance = null;
 
@@ -172,7 +172,7 @@ class Olo_Performance_Settings {
         if ( ! str_contains( $hook, 'olo-performance' ) ) {
             return;
         }
-        wp_enqueue_style( 'olo-perf-admin', OLO_URL . 'assets/css/perf-admin.css', [], OLO_VERSION );
+        wp_enqueue_style( 'olo-perf-admin', OLOBUILD_URL . 'assets/css/perf-admin.css', [], OLOBUILD_VERSION );
     }
 
     public function sanitize( $input ) {
@@ -223,8 +223,8 @@ class Olo_Performance_Settings {
 
         // Critical CSS status
         $ccss_status = null;
-        if ( class_exists( 'Olo_Critical_CSS' ) ) {
-            $ccss_status = Olo_Critical_CSS::get_status();
+        if ( class_exists( 'Olobuild_Critical_CSS' ) ) {
+            $ccss_status = Olobuild_Critical_CSS::get_status();
         }
 
         // CSS cache info
@@ -237,11 +237,11 @@ class Olo_Performance_Settings {
         $ccss_pages = is_array( $ccss_status ) ? (int) ( $ccss_status['generated'] ?? 0 ) : 0;
         $cache_size = $css_cache_info['size_human'] ?? '—';
         ?>
-        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Performance', 'olobuild' ) . '</b>' ); ?>
+        <?php Olobuild_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Performance', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy olo-perf-page">
             <?php
             // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- cockpit_page_head() escapes internally (esc_html title, wp_kses_post sub).
-            echo Olo_Builder::cockpit_page_head( [
+            echo Olobuild_Builder::cockpit_page_head( [
                 'title' => __( 'Performance', 'olobuild' ),
                 'sub'   => sprintf(
                     /* translators: 1: pages with critical css, 2: cache size */
@@ -251,7 +251,7 @@ class Olo_Performance_Settings {
                 ),
             ] );
             // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
-            echo Olo_Builder::cockpit_subnav( $subnav, $tab ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- cockpit_subnav() escapes internally (esc_url/esc_html/int cast).
+            echo Olobuild_Builder::cockpit_subnav( $subnav, $tab ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- cockpit_subnav() escapes internally (esc_url/esc_html/int cast).
             ?>
 
             <form method="post" action="options.php" class="olo-perf-form" style="margin-top:16px">
@@ -277,7 +277,7 @@ class Olo_Performance_Settings {
                 <div class="olo-actions" style="margin-top: 24px;">
                     <?php
                     // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- cockpit_button() escapes internally (sanitize_html_class/esc_attr/esc_html); icon is a fixed SVG path literal.
-                    echo Olo_Builder::cockpit_button( [
+                    echo Olobuild_Builder::cockpit_button( [
                         'label'   => __( 'Salva impostazioni', 'olobuild' ),
                         'variant' => 'pri',
                         'type'    => 'submit',
@@ -288,7 +288,7 @@ class Olo_Performance_Settings {
                 </div>
             </form>
         </main>
-        <?php Olo_Builder::cockpit_shell_close(); ?>
+        <?php Olobuild_Builder::cockpit_shell_close(); ?>
         <?php
     }
 
@@ -739,11 +739,11 @@ class Olo_Performance_Settings {
             wp_send_json_error( 'Permesso negato' );
         }
 
-        if ( ! class_exists( 'Olo_Critical_CSS' ) ) {
+        if ( ! class_exists( 'Olobuild_Critical_CSS' ) ) {
             wp_send_json_error( 'Critical CSS non disponibile' );
         }
 
-        $result = Olo_Critical_CSS::regenerate_all();
+        $result = Olobuild_Critical_CSS::regenerate_all();
         wp_send_json_success( [
             'message'   => sprintf(
                 /* translators: 1: pages regenerated, 2: total pages, 3: number of errors */
@@ -761,11 +761,11 @@ class Olo_Performance_Settings {
             wp_send_json_error( 'Permesso negato' );
         }
 
-        if ( ! class_exists( 'Olo_Critical_CSS' ) ) {
+        if ( ! class_exists( 'Olobuild_Critical_CSS' ) ) {
             wp_send_json_error( 'Critical CSS non disponibile' );
         }
 
-        $purged = Olo_Critical_CSS::purge_all();
+        $purged = Olobuild_Critical_CSS::purge_all();
         wp_send_json_success( [
             /* translators: %d: number of purged transients */
             'message' => sprintf( __( 'Svuotati %d transient Critical CSS', 'olobuild' ), $purged ),
@@ -778,8 +778,8 @@ class Olo_Performance_Settings {
             wp_send_json_error( 'Permesso negato' );
         }
 
-        if ( class_exists( 'Olo_Asset_Optimizer' ) ) {
-            Olo_Asset_Optimizer::flush_all_cache();
+        if ( class_exists( 'Olobuild_Asset_Optimizer' ) ) {
+            Olobuild_Asset_Optimizer::flush_all_cache();
         }
 
         wp_send_json_success( [

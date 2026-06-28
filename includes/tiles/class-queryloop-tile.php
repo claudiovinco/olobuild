@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Queryloop_Tile extends Olo_Tile_Base {
+class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'queryloop';
     protected $name     = 'Query Loop';
@@ -588,7 +588,7 @@ class Olo_Queryloop_Tile extends Olo_Tile_Base {
         $post = $post_obj;
         setup_postdata( $post );
 
-        $renderer = new Olo_Frontend_Renderer();
+        $renderer = new Olobuild_Frontend_Renderer();
         $output = $renderer->render_template( $template_id );
 
         $post = $old_post;

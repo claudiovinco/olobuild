@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *   - toggle granulari (icon, counter, counter_label, arrow, footer, divider)
  *   - 5 effetti hover (lift/scale/glow/tilt/none)
  */
-class Olo_InfoCards_Tile extends Olo_Tile_Base {
+class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'info-cards';
     protected $name     = 'Info Cards';
@@ -136,16 +136,16 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
         // Container bg
         $container_bg_css = '';
         $cbg = $s['container_bg'] ?? [ 'type' => 'none' ];
-        if ( is_array( $cbg ) && ( $cbg['type'] ?? 'none' ) !== 'none' && class_exists( 'Olo_CSS_Builder' ) ) {
-            $cssb = new Olo_CSS_Builder();
+        if ( is_array( $cbg ) && ( $cbg['type'] ?? 'none' ) !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
+            $cssb = new Olobuild_CSS_Builder();
             $container_bg_css = $cssb->get_bg_inline_css( $cbg );
         }
 
         // Card bg (applicato a ogni card; se ogni card vuole bg singolo, si fa per item)
         $card_bg_css_default = '';
         $cardbg = $s['card_bg'] ?? [ 'type' => 'none' ];
-        if ( is_array( $cardbg ) && ( $cardbg['type'] ?? 'none' ) !== 'none' && class_exists( 'Olo_CSS_Builder' ) ) {
-            $cssb = new Olo_CSS_Builder();
+        if ( is_array( $cardbg ) && ( $cardbg['type'] ?? 'none' ) !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
+            $cssb = new Olobuild_CSS_Builder();
             $card_bg_css_default = $cssb->get_bg_inline_css( $cardbg );
         }
 
@@ -205,7 +205,7 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
                                         $icon_box = $icon_bg ? 'width:44px;height:44px;border-radius:11px;background:' . esc_attr( $icon_bg ) . ';display:inline-flex;align-items:center;justify-content:center;' : '';
                                     ?>
                                         <span style="<?php echo $icon_box; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $icon_box is assembled above from fixed literals and an esc_attr()'d colour ?>line-height:1;color:<?php echo esc_attr( $icon_color ); ?>">
-                                            <?php echo $this->render_icon_html( $icon_name, $icon_bg ? 1.2 : 1.8 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup built by Olo_Tile_Base::render_icon_html(), which sanitizes SVG internally ?>
+                                            <?php echo $this->render_icon_html( $icon_name, $icon_bg ? 1.2 : 1.8 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup built by Olobuild_Tile_Base::render_icon_html(), which sanitizes SVG internally ?>
                                         </span>
                                     <?php elseif ( ! empty( $s['show_counter'] ) && $counter && $counter_shape === 'circle' ) : ?>
                                         <span style="width:36px;height:36px;border-radius:50%;background:<?php echo esc_attr( $counter_bg ?: 'rgba(127,127,127,.14)' ); ?>;display:inline-flex;align-items:center;justify-content:center;font-family:<?php echo esc_attr( $tfam ); ?>;font-weight:800;font-size:15px;color:<?php echo esc_attr( $counter_color ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.counter'; ?>"><?php echo esc_html( $counter ); ?></span>

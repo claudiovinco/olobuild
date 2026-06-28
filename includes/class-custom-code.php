@@ -5,12 +5,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Olo_Custom_Code
+ * Olobuild_Custom_Code
  *
  * Output custom HTML/JS/CSS snippets in <head>, after <body>, or before </body>.
  * Values stored in wp_options: olo_custom_code_head, olo_custom_code_body, olo_custom_code_footer.
  */
-class Olo_Custom_Code {
+class Olobuild_Custom_Code {
 
     public static function init() {
         add_action( 'wp_head',      [ __CLASS__, 'output_head_code' ], 99 );
@@ -25,7 +25,7 @@ class Olo_Custom_Code {
         $code = get_option( 'olo_custom_code_head', '' );
         if ( $code ) {
             // Custom code is saved only by users with unfiltered_html capability
-            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- raw output by design: snippets can only be saved by users with the unfiltered_html capability (gated in Olo_Rest_Api::save_custom_code) and printing is capability-gated above.
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- raw output by design: snippets can only be saved by users with the unfiltered_html capability (gated in Olobuild_Rest_Api::save_custom_code) and printing is capability-gated above.
             echo "<!-- Olobuild Custom Head -->\n" . $code . "\n";
         }
     }
@@ -36,7 +36,7 @@ class Olo_Custom_Code {
         }
         $code = get_option( 'olo_custom_code_body', '' );
         if ( $code ) {
-            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- raw output by design: snippets can only be saved by users with the unfiltered_html capability (gated in Olo_Rest_Api::save_custom_code) and printing is capability-gated above.
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- raw output by design: snippets can only be saved by users with the unfiltered_html capability (gated in Olobuild_Rest_Api::save_custom_code) and printing is capability-gated above.
             echo "<!-- Olobuild Custom Body -->\n" . $code . "\n";
         }
     }
@@ -47,7 +47,7 @@ class Olo_Custom_Code {
         }
         $code = get_option( 'olo_custom_code_footer', '' );
         if ( $code ) {
-            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- raw output by design: snippets can only be saved by users with the unfiltered_html capability (gated in Olo_Rest_Api::save_custom_code) and printing is capability-gated above.
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- raw output by design: snippets can only be saved by users with the unfiltered_html capability (gated in Olobuild_Rest_Api::save_custom_code) and printing is capability-gated above.
             echo "<!-- Olobuild Custom Footer -->\n" . $code . "\n";
         }
     }

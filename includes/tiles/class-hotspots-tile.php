@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * Estratto dai demo OLOthemes (data-hotspot). Image-free (pannello astratto).
  * Render == Vue (HotspotsTile.vue). Runtime inline scoped, senza '&&' né '<'/'>'.
  */
-class Olo_Hotspots_Tile extends Olo_Tile_Base {
+class Olobuild_Hotspots_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'hotspots';
     protected $name     = 'Hotspots';

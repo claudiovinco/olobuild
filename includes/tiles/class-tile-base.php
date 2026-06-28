@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-abstract class Olo_Tile_Base {
+abstract class Olobuild_Tile_Base {
 
     protected $type     = '';
     protected $name     = '';
@@ -374,8 +374,8 @@ abstract class Olo_Tile_Base {
      */
     protected function bg_media_parts( $bg, $scope = '' ) {
         $out = [ 'has' => false, 'css' => '', 'markup' => '' ];
-        if ( is_array( $bg ) && ! empty( $bg['type'] ) && $bg['type'] !== 'none' && class_exists( 'Olo_CSS_Builder' ) ) {
-            $cssb = new Olo_CSS_Builder();
+        if ( is_array( $bg ) && ! empty( $bg['type'] ) && $bg['type'] !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
+            $cssb = new Olobuild_CSS_Builder();
             $out['css']    = (string) $cssb->get_bg_inline_css( $bg );
             $out['markup'] = (string) $cssb->get_bg_html_markup( $bg, $scope );
             $out['has']    = ( $out['css'] !== '' || $out['markup'] !== '' );
@@ -615,7 +615,7 @@ abstract class Olo_Tile_Base {
         if ( ! is_array( $bg ) || empty( $bg['type'] ) || $bg['type'] === 'none' ) {
             return '';
         }
-        if ( ! class_exists( 'Olo_Css_Builder' ) ) {
+        if ( ! class_exists( 'Olobuild_Css_Builder' ) ) {
             return '';
         }
         // Solo solid/gradient/pattern qui: image/video/gallery vanno al wrapper.
@@ -625,7 +625,7 @@ abstract class Olo_Tile_Base {
         }
         static $css_builder = null;
         if ( $css_builder === null ) {
-            $css_builder = new Olo_Css_Builder();
+            $css_builder = new Olobuild_Css_Builder();
         }
         $decl = $css_builder->get_bg_inline_css( $bg );
         return $decl ? rtrim( $decl, ';' ) . ';' : '';
@@ -739,8 +739,8 @@ abstract class Olo_Tile_Base {
      *   echo "<h2 class=\"olo-heading{$h_cls}\"{$h_data}>{$heading_text}</h2>";
      *
      * The tile must also:
-     *   - Emit CSS for CSS-driven effects via Olo_Text_Effects::css($s, $sel)  (or style_block)
-     *   - Print the runtime script via Olo_Text_Effects::print_script() once per render
+     *   - Emit CSS for CSS-driven effects via Olobuild_Text_Effects::css($s, $sel)  (or style_block)
+     *   - Print the runtime script via Olobuild_Text_Effects::print_script() once per render
      *
      * `'all'` is a shorthand target that matches anything except an explicit other target — used by
      * tiles that expose multiple text fields and want one effect to apply to all of them at once.
@@ -751,8 +751,8 @@ abstract class Olo_Tile_Base {
      * @return array [$class_fragment_with_lead_space, $data_attrs_with_lead_space]
      */
     protected function tfx_attrs( $s, $target, $plain_text = '' ) {
-        if ( ! class_exists( 'Olo_Text_Effects' ) ) return [ '', '' ];
-        if ( ! Olo_Text_Effects::active( $s ) ) return [ '', '' ];
+        if ( ! class_exists( 'Olobuild_Text_Effects' ) ) return [ '', '' ];
+        if ( ! Olobuild_Text_Effects::active( $s ) ) return [ '', '' ];
         $tgt = $s['text_effect_target'] ?? 'heading';
         $hits = ( $tgt === 'all' ) || ( $tgt === 'both' && in_array( $target, [ 'heading', 'text' ], true ) ) || ( $tgt === $target );
         if ( ! $hits ) return [ '', '' ];
@@ -760,8 +760,8 @@ abstract class Olo_Tile_Base {
         $faux = $s;
         $faux['text_effect_target'] = $target;
         return [
-            Olo_Text_Effects::classes( $faux, $target ),
-            Olo_Text_Effects::data_attrs( $faux, $target, $plain_text ),
+            Olobuild_Text_Effects::classes( $faux, $target ),
+            Olobuild_Text_Effects::data_attrs( $faux, $target, $plain_text ),
         ];
     }
 
@@ -769,16 +769,16 @@ abstract class Olo_Tile_Base {
      * Convenience: return the CSS block (without <style>) for the active text effect, scoped to $sel.
      */
     protected function tfx_css( $s, $sel ) {
-        if ( ! class_exists( 'Olo_Text_Effects' ) ) return '';
-        return Olo_Text_Effects::css( $s, $sel );
+        if ( ! class_exists( 'Olobuild_Text_Effects' ) ) return '';
+        return Olobuild_Text_Effects::css( $s, $sel );
     }
 
     /**
      * Convenience: print the runtime script once per request.
      */
     protected function tfx_print_script() {
-        if ( ! class_exists( 'Olo_Text_Effects' ) ) return;
-        Olo_Text_Effects::print_script();
+        if ( ! class_exists( 'Olobuild_Text_Effects' ) ) return;
+        Olobuild_Text_Effects::print_script();
     }
 
     /**
@@ -798,7 +798,7 @@ abstract class Olo_Tile_Base {
             if ( isset( $icons[ $name ] ) ) {
                 $size = round( 20 * $ratio );
                 // Sanitize SVG output to prevent stored XSS
-                $safe_svg = function_exists( 'olo_sanitize_svg' ) ? olo_sanitize_svg( $icons[ $name ] ) : wp_kses_post( $icons[ $name ] );
+                $safe_svg = function_exists( 'olobuild_sanitize_svg' ) ? olobuild_sanitize_svg( $icons[ $name ] ) : wp_kses_post( $icons[ $name ] );
                 return '<span class="olo-custom-icon" style="display:inline-flex;width:' . $size . 'px;height:' . $size . 'px;" ' . $extra_attr . '>' . $safe_svg . '</span>';
             }
             return '';
@@ -808,7 +808,7 @@ abstract class Olo_Tile_Base {
         // Lucide (~1700 icone, ISC) coprono il resto via SVG inline server-side.
         static $uikit_lib = null;
         if ( $uikit_lib === null ) {
-            $uikit_path = OLO_PATH . 'assets/data/uikit-icons.json';
+            $uikit_path = OLOBUILD_PATH . 'assets/data/uikit-icons.json';
             if ( file_exists( $uikit_path ) ) {
                 $raw = file_get_contents( $uikit_path );
                 $uikit_lib = json_decode( $raw, true ) ?: [];
@@ -821,7 +821,7 @@ abstract class Olo_Tile_Base {
         }
         static $lucide_lib = null;
         if ( $lucide_lib === null ) {
-            $lucide_path = OLO_PATH . 'assets/data/lucide-icons.json';
+            $lucide_path = OLOBUILD_PATH . 'assets/data/lucide-icons.json';
             if ( file_exists( $lucide_path ) ) {
                 $raw = file_get_contents( $lucide_path );
                 $lucide_lib = json_decode( $raw, true ) ?: [];
@@ -962,7 +962,7 @@ abstract class Olo_Tile_Base {
             return '<!-- olo: widget max nesting depth reached -->';
         }
 
-        $db  = new Olo_Database();
+        $db  = new Olobuild_Database();
         $tpl = $db->get_template( $widget_id );
         if ( ! $tpl ) return '';
         if ( ( $tpl['type'] ?? '' ) !== 'widget' ) {
@@ -974,8 +974,8 @@ abstract class Olo_Tile_Base {
         // che WordPress applichi filtri the_content/wpautop/wptexturize all'HTML
         // del widget — quei filtri possono spostare elementi block-level (section,
         // div) fuori dal contesto annidato (es. fuori dai <li> di uno switcher).
-        if ( class_exists( 'Olo_Frontend_Renderer' ) ) {
-            $renderer = new Olo_Frontend_Renderer();
+        if ( class_exists( 'Olobuild_Frontend_Renderer' ) ) {
+            $renderer = new Olobuild_Frontend_Renderer();
             $output = $renderer->render_shortcode( [ 'id' => $widget_id ] );
         } else {
             $output = do_shortcode( '[olo_template id="' . $widget_id . '"]' );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Olo_White_Label — Rename plugin name/icon, hide credits,
+ * Olobuild_White_Label — Rename plugin name/icon, hide credits,
  * custom welcome screen, hide menu for non-admins.
  */
 
@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_White_Label {
+class Olobuild_White_Label {
 
     private static $instance = null;
 
@@ -41,10 +41,10 @@ class Olo_White_Label {
         }
 
         // Filter builder brand name
-        add_filter( 'olo_brand_name', [ $this, 'get_brand_name' ] );
+        add_filter( 'olobuild_brand_name', [ $this, 'get_brand_name' ] );
 
         // Filter builder/wizard brand logo
-        add_filter( 'olo_brand_logo_url', [ $this, 'get_logo_url' ] );
+        add_filter( 'olobuild_brand_logo_url', [ $this, 'get_logo_url' ] );
     }
 
     /* ─────────────────────────────────────────────
@@ -191,11 +191,11 @@ class Olo_White_Label {
         $s = $this->get_settings();
         $custom_brand = ! empty( $s['plugin_name'] ) || ! empty( $s['plugin_logo_url'] );
         ?>
-        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'White Label', 'olobuild' ) . '</b>' ); ?>
+        <?php Olobuild_Builder::cockpit_shell_open( '<b>' . esc_html__( 'White Label', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy">
             <?php
-            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally.
-            echo Olo_Builder::cockpit_page_head( [
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olobuild_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally.
+            echo Olobuild_Builder::cockpit_page_head( [
                 'title' => __( 'White Label', 'olobuild' ),
                 'sub'   => $custom_brand
                     ? __( 'Branding personalizzato attivo. Nasconde il marchio Olobuild dai tuoi clienti.', 'olobuild' )
@@ -343,7 +343,7 @@ class Olo_White_Label {
             });
             </script>
         </main>
-        <?php Olo_Builder::cockpit_shell_close(); ?>
+        <?php Olobuild_Builder::cockpit_shell_close(); ?>
         <?php
     }
 }

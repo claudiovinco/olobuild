@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Woo_Rating_Tile extends Olo_Tile_Base {
+class Olobuild_Woo_Rating_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'woo_rating';
     protected $name     = 'Valutazione Prodotto';
@@ -27,17 +27,18 @@ class Olo_Woo_Rating_Tile extends Olo_Tile_Base {
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
             return '<div style="padding:20px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
-                 . esc_html( olo_t( 'WooCommerce non attivo.' ) )
+                 . esc_html( olobuild_t( 'WooCommerce non attivo.' ) )
                  . '</div>';
         }
 
         global $product;
         if ( ! is_a( $product, 'WC_Product' ) ) {
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- global $product di WooCommerce, non un global definito da olobuild
             $product = wc_get_product( get_the_ID() );
         }
         if ( ! $product ) {
             return '<div style="padding:20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF)">'
-                 . esc_html( olo_t( 'Nessun prodotto trovato' ) )
+                 . esc_html( olobuild_t( 'Nessun prodotto trovato' ) )
                  . '</div>';
         }
 
@@ -77,7 +78,7 @@ class Olo_Woo_Rating_Tile extends Olo_Tile_Base {
             $meta_parts[] = number_format( $avg, 1 );
         }
         if ( ! empty( $s['show_count'] ) ) {
-            $meta_parts[] = '(' . $count . ' ' . esc_html( olo_t( 'recensioni' ) ) . ')';
+            $meta_parts[] = '(' . $count . ' ' . esc_html( olobuild_t( 'recensioni' ) ) . ')';
         }
         if ( ! empty( $meta_parts ) ) {
             echo '<span style="color:' . $txt . ';font-size:' . (int) $t_size . 'px">' . implode( ' ', $meta_parts ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $txt safe_color_css()'d above; $meta_parts built from number_format(), (int) count and esc_html()'d label

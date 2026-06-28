@@ -1,6 +1,6 @@
 <?php
 /**
- * Olo_Analytics_Tracking — GA4, Facebook Pixel, GTM, Microsoft Clarity, Hotjar.
+ * Olobuild_Analytics_Tracking — GA4, Facebook Pixel, GTM, Microsoft Clarity, Hotjar.
  *
  * Pagina admin + output script con integrazione Cookie Consent.
  * Gli script di tracking vengono bloccati se il Cookie Consent è attivo
@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Analytics_Tracking {
+class Olobuild_Analytics_Tracking {
 
     const OPT = 'olo_analytics';
 
@@ -85,8 +85,8 @@ class Olo_Analytics_Tracking {
         if ( ! str_contains( $hook, 'olo-analytics' ) ) {
             return;
         }
-        wp_enqueue_style( 'olo-admin', OLO_URL . 'assets/css/olo-admin.css', [], OLO_VERSION );
-        wp_enqueue_style( 'olo-analytics-admin', OLO_URL . 'assets/css/analytics-admin.css', [ 'olo-admin' ], OLO_VERSION );
+        wp_enqueue_style( 'olo-admin', OLOBUILD_URL . 'assets/css/olo-admin.css', [], OLOBUILD_VERSION );
+        wp_enqueue_style( 'olo-analytics-admin', OLOBUILD_URL . 'assets/css/analytics-admin.css', [ 'olo-admin' ], OLOBUILD_VERSION );
     }
 
     public static function sanitize( $input ) {
@@ -170,16 +170,16 @@ class Olo_Analytics_Tracking {
         );
 
         ?>
-        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Analytics & Tracking', 'olobuild' ) . '</b>' ); ?>
+        <?php Olobuild_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Analytics & Tracking', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy olo-analytics-page">
             <?php
-            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally.
-            echo Olo_Builder::cockpit_page_head( [
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olobuild_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally.
+            echo Olobuild_Builder::cockpit_page_head( [
                 'title' => __( 'Analytics & Tracking', 'olobuild' ),
                 'sub'   => $sub,
             ] );
             // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
-            echo Olo_Builder::cockpit_subnav( $subnav, $tab ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_subnav(), which escapes via esc_url()/esc_html() internally.
+            echo Olobuild_Builder::cockpit_subnav( $subnav, $tab ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olobuild_Builder::cockpit_subnav(), which escapes via esc_url()/esc_html() internally.
             ?>
 
             <form method="post" action="options.php" class="olo-analytics-form" style="margin-top:16px">
@@ -197,8 +197,8 @@ class Olo_Analytics_Tracking {
 
                 <div class="olo-actions" style="margin-top:24px">
                     <?php
-                    // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_button(), which escapes all parts internally.
-                    echo Olo_Builder::cockpit_button( [
+                    // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olobuild_Builder::cockpit_button(), which escapes all parts internally.
+                    echo Olobuild_Builder::cockpit_button( [
                         'label'   => __( 'Salva impostazioni', 'olobuild' ),
                         'variant' => 'pri',
                         'type'    => 'submit',
@@ -209,7 +209,7 @@ class Olo_Analytics_Tracking {
                 </div>
             </form>
         </main>
-        <?php Olo_Builder::cockpit_shell_close(); ?>
+        <?php Olobuild_Builder::cockpit_shell_close(); ?>
         <?php
     }
 
@@ -537,11 +537,11 @@ class Olo_Analytics_Tracking {
         }
 
         // Check if cookie consent system is active
-        if ( ! class_exists( 'Olo_Cookie_Consent' ) ) {
+        if ( ! class_exists( 'Olobuild_Cookie_Consent' ) ) {
             return 'text/javascript';
         }
 
-        $cc_opts = Olo_Cookie_Consent::get_options();
+        $cc_opts = Olobuild_Cookie_Consent::get_options();
         if ( empty( $cc_opts['enabled'] ) ) {
             return 'text/javascript';
         }

@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_PostGrid_Tile extends Olo_Tile_Base {
+class Olobuild_PostGrid_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'postgrid';
     protected $name     = 'Griglia articoli';
@@ -301,9 +301,9 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         $uid          = 'olo-postgrid-' . wp_rand( 10000, 99999 );
         $image_height = absint( $s['image_height'] ) ?: 200;
         $image_radius = $this->build_border_radius_css( $s["image_radius"] ?? 0 );
-        $image_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['image_radius_hover'] ?? null );
+        $image_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['image_radius_hover'] ?? null );
         $card_radius  = $this->build_border_radius_css( $s["card_radius"] ?? 4 );
-        $card_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['card_radius_hover'] ?? null );
+        $card_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['card_radius_hover'] ?? null );
 
         // Folded / cut bottom-right corner ("piega"). Default OFF = card invariata.
         $corner_cut  = ! empty( $s['corner_cut'] );
@@ -344,7 +344,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         $overlay_height    = max( 20, min( 100, absint( $s['overlay_height'] ?? 50 ) ) );
 
         // Stile testo
-        $body_padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['body_padding'] ?? 15, 15 );
+        $body_padding = Olobuild_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['body_padding'] ?? 15, 15 );
         $title_size      = max( 0.7, min( 2.5, floatval( $s['title_size'] ?? 1 ) ) );
         $excerpt_size    = max( 0.7, min( 1.5, floatval( $s['excerpt_size'] ?? 0.92 ) ) );
         $title_color     = $s['title_color'] ?? '';
@@ -485,8 +485,8 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                                 <a href="<?php echo esc_url( $item['url'] ); ?>">
                             <?php endif; ?>
                             <?php
-                            $pg_min_img = Olo_Tile_Utils::img_srcset( $item['image_id'] ?? 0, $item['image'], $item['title'], 'olo-card-minimal__img ' . $img_class );
-                            echo $this->render_hover_wrap( $pg_min_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Tile_Utils::img_srcset()/render_hover_wrap(), which escape all attributes via esc_url()/esc_attr() internally.
+                            $pg_min_img = Olobuild_Tile_Utils::img_srcset( $item['image_id'] ?? 0, $item['image'], $item['title'], 'olo-card-minimal__img ' . $img_class );
+                            echo $this->render_hover_wrap( $pg_min_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olobuild_Tile_Utils::img_srcset()/render_hover_wrap(), which escape all attributes via esc_url()/esc_attr() internally.
                             ?>
                             <?php if ( $s['link_style'] === 'card' ) : ?>
                                 </a>
@@ -556,8 +556,8 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                                 <a href="<?php echo esc_url( $item['url'] ); ?>">
                             <?php endif; ?>
                             <?php
-                            $pg_img = Olo_Tile_Utils::img_srcset( $item['image_id'] ?? 0, $item['image'], $item['title'], $img_class );
-                            echo $this->render_hover_wrap( $pg_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Tile_Utils::img_srcset()/render_hover_wrap(), which escape all attributes via esc_url()/esc_attr() internally.
+                            $pg_img = Olobuild_Tile_Utils::img_srcset( $item['image_id'] ?? 0, $item['image'], $item['title'], $img_class );
+                            echo $this->render_hover_wrap( $pg_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olobuild_Tile_Utils::img_srcset()/render_hover_wrap(), which escape all attributes via esc_url()/esc_attr() internally.
                             ?>
                             <?php if ( $s['link_style'] === 'card' ) : ?>
                                 </a>
@@ -695,11 +695,11 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                 <?php else : ?>
             <div class="olo-pg-pagination" data-pagination-style="<?php echo esc_attr( $pagination_style ); ?>">
                 <?php if ( $pagination_style === 'arrows' ) : ?>
-                    <button class="olo-pg-page-btn olo-pg-prev" aria-label="<?php echo esc_attr( olo_t( 'Pagina precedente' ) ); ?>" disabled><?php echo esc_html( olo_t( '&lsaquo;' ) ); ?></button>
+                    <button class="olo-pg-page-btn olo-pg-prev" aria-label="<?php echo esc_attr( olobuild_t( 'Pagina precedente' ) ); ?>" disabled><?php echo esc_html( olobuild_t( '&lsaquo;' ) ); ?></button>
                     <span class="olo-pg-page-info"></span>
-                    <button class="olo-pg-page-btn olo-pg-next" aria-label="<?php echo esc_attr( olo_t( 'Pagina successiva' ) ); ?>"><?php echo esc_html( olo_t( '&rsaquo;' ) ); ?></button>
+                    <button class="olo-pg-page-btn olo-pg-next" aria-label="<?php echo esc_attr( olobuild_t( 'Pagina successiva' ) ); ?>"><?php echo esc_html( olobuild_t( '&rsaquo;' ) ); ?></button>
                 <?php elseif ( $pagination_style === 'loadmore' ) : ?>
-                    <button class="olo-pg-loadmore"><?php echo esc_html( olo_t( 'Carica altri' ) ); ?></button>
+                    <button class="olo-pg-loadmore"><?php echo esc_html( olobuild_t( 'Carica altri' ) ); ?></button>
                 <?php else : ?>
                     <!-- dots/numbers generati via JS -->
                 <?php endif; ?>
@@ -708,7 +708,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             <?php endif; ?>
 
             <div class="olo-postgrid-empty" style="display:none;">
-                <p><?php echo esc_html( olo_t( 'Nessun risultato trovato.' ) ); ?></p>
+                <p><?php echo esc_html( olobuild_t( 'Nessun risultato trovato.' ) ); ?></p>
             </div>
         </div>
         <?php

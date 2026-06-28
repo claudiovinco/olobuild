@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Woo_Addtocart_Tile extends Olo_Tile_Base {
+class Olobuild_Woo_Addtocart_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'woo_addtocart';
     protected $name     = 'Aggiungi al Carrello';
@@ -41,7 +41,7 @@ class Olo_Woo_Addtocart_Tile extends Olo_Tile_Base {
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
             return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
-                 . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
+                 . esc_html( olobuild_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
 
@@ -50,11 +50,12 @@ class Olo_Woo_Addtocart_Tile extends Olo_Tile_Base {
         // Get the current product
         global $product;
         if ( ! is_a( $product, 'WC_Product' ) ) {
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- global $product di WooCommerce, non un global definito da olobuild
             $product = wc_get_product( get_the_ID() );
         }
         if ( ! $product ) {
             return '<div style="padding:20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">'
-                 . esc_html( olo_t( 'Nessun prodotto disponibile in questo contesto' ) )
+                 . esc_html( olobuild_t( 'Nessun prodotto disponibile in questo contesto' ) )
                  . '</div>';
         }
 
@@ -65,8 +66,8 @@ class Olo_Woo_Addtocart_Tile extends Olo_Tile_Base {
         $text_color = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
         $hover_bg   = $this->safe_color_css( $s['hover_bg'] )   ?: 'var(--olo-color-primary, #e1474f)';
         $hover_text = $this->safe_color_css( $s['hover_text'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
-        $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
-        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
+        $radius     = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
         // Size
         $size_map = [
@@ -87,12 +88,12 @@ class Olo_Woo_Addtocart_Tile extends Olo_Tile_Base {
         ];
         $icon_svg = isset( $icon_svgs[ $s['icon'] ] ) ? $icon_svgs[ $s['icon'] ] : $icon_svgs['cart'];
 
-        $btn_text = esc_html( $s['button_text'] ?: olo_t( 'Aggiungi al carrello' ) );
+        $btn_text = esc_html( $s['button_text'] ?: olobuild_t( 'Aggiungi al carrello' ) );
         $full_w   = ! empty( $s['full_width'] );
         $product_id = $product->get_id();
 
         ob_start();
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist (with var() fallbacks), sizes from the fixed internal $size_map, radius via Olo_Tile_Utils::border_radius()/radius_force_css() (integer-forced), style from an in_array() whitelist; $uid is internally generated.
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist (with var() fallbacks), sizes from the fixed internal $size_map, radius via Olobuild_Tile_Utils::border_radius()/radius_force_css() (integer-forced), style from an in_array() whitelist; $uid is internally generated.
         ?>
         <style>
             .<?php echo $uid; ?> {
@@ -180,9 +181,9 @@ class Olo_Woo_Addtocart_Tile extends Olo_Tile_Base {
             <?php if ( ! empty( $s['show_quantity'] ) ) : ?>
             <div class="olo-atc-qty-wrap">
                 <?php if ( $s['quantity_style'] === 'stepper' ) : ?>
-                <button type="button" class="olo-atc-stepper-btn" data-dir="minus" aria-label="<?php echo esc_attr( olo_t( 'Diminuisci' ) ); ?>">-</button>
+                <button type="button" class="olo-atc-stepper-btn" data-dir="minus" aria-label="<?php echo esc_attr( olobuild_t( 'Diminuisci' ) ); ?>">-</button>
                 <span class="olo-atc-stepper-val" data-qty-val>1</span>
-                <button type="button" class="olo-atc-stepper-btn" data-dir="plus" aria-label="<?php echo esc_attr( olo_t( 'Aumenta' ) ); ?>">+</button>
+                <button type="button" class="olo-atc-stepper-btn" data-dir="plus" aria-label="<?php echo esc_attr( olobuild_t( 'Aumenta' ) ); ?>">+</button>
                 <input type="hidden" name="quantity" value="1" class="olo-atc-qty-hidden" />
                 <?php else : ?>
                 <input type="number" name="quantity" value="1" min="1" max="<?php echo esc_attr( $product->get_max_purchase_quantity() > 0 ? $product->get_max_purchase_quantity() : '' ); ?>" class="olo-atc-qty-input" />
@@ -195,7 +196,7 @@ class Olo_Woo_Addtocart_Tile extends Olo_Tile_Base {
                     <?php if ( ! empty( $s['show_icon'] ) ) : ?>
                     <?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup from the hardcoded $icon_svgs map above ?>
                     <?php endif; ?>
-                    <span><?php echo esc_html( olo_t( 'Seleziona opzioni' ) ); ?></span>
+                    <span><?php echo esc_html( olobuild_t( 'Seleziona opzioni' ) ); ?></span>
                 </a>
             <?php else : ?>
                 <a href="<?php echo esc_url( $product->add_to_cart_url() ); ?>"
@@ -248,8 +249,8 @@ class Olo_Woo_Addtocart_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base border helpers from sanitized border settings
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base border helpers from sanitized border settings
         }
         return ob_get_clean();
     }

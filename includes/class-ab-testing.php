@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Allows creating experiments where a tile has 2+ variants.
  * The system shows a random variant to visitors and tracks conversions.
  */
-class Olo_AB_Testing {
+class Olobuild_AB_Testing {
 
     /**
      * Cookie duration: 30 days.

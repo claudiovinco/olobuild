@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Location_Single {
+class Olobuild_Location_Single {
 
     private static $instance = null;
 
@@ -49,8 +49,8 @@ class Olo_Location_Single {
 
         if ( $extra ) {
             // Enqueue UIkit if not already
-            wp_enqueue_style( 'uikit-css', OLO_URL . 'assets/vendor/uikit/css/uikit.min.css', [], '3.21.16' );
-            wp_enqueue_style( 'olo-location-single-css', OLO_URL . 'assets/css/location-single.css', [], OLO_VERSION );
+            wp_enqueue_style( 'uikit-css', OLOBUILD_URL . 'assets/vendor/uikit/css/uikit.min.css', [], '3.21.16' );
+            wp_enqueue_style( 'olo-location-single-css', OLOBUILD_URL . 'assets/css/location-single.css', [], OLOBUILD_VERSION );
         }
 
         return $content . $extra;

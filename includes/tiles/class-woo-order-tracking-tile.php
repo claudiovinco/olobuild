@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Woo_Order_Tracking_Tile extends Olo_Tile_Base {
+class Olobuild_Woo_Order_Tracking_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'woo_order_tracking';
     protected $name     = 'Tracciamento Ordine';
@@ -35,7 +35,7 @@ class Olo_Woo_Order_Tracking_Tile extends Olo_Tile_Base {
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
             return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
-                 . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
+                 . esc_html( olobuild_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
 
@@ -126,34 +126,34 @@ class Olo_Woo_Order_Tracking_Tile extends Olo_Tile_Base {
         <div class="<?php echo esc_attr( $uid ); ?>">
             <?php if ( $title !== '' ) : ?>
             <?php list( $ot_cls, $ot_data ) = $this->tfx_attrs( $s, 'title', $title ); ?>
-            <<?php echo $title_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $title_tag whitelisted via in_array() above; tfx attrs escaped internally by Olo_Text_Effects ?> class="olo-ot-title<?php echo $ot_cls; ?>"<?php echo $ot_data; ?>><?php echo esc_html( $title ); ?></<?php echo $title_tag; ?>>
+            <<?php echo $title_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $title_tag whitelisted via in_array() above; tfx attrs escaped internally by Olobuild_Text_Effects ?> class="olo-ot-title<?php echo $ot_cls; ?>"<?php echo $ot_data; ?>><?php echo esc_html( $title ); ?></<?php echo $title_tag; ?>>
             <?php endif; ?>
             <form class="olo-ot-form" method="post" action="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>">
                 <div class="olo-ot-field">
-                    <label class="olo-ot-label" for="<?php echo esc_attr( $uid ); ?>-order-id"><?php echo esc_html( olo_t( 'Numero ordine' ) ); ?></label>
-                    <input type="text" class="olo-ot-input" name="orderid" id="<?php echo esc_attr( $uid ); ?>-order-id" placeholder="<?php echo esc_attr( olo_t( 'Inserisci qui il numero del tuo ordine' ) ); ?>" required />
+                    <label class="olo-ot-label" for="<?php echo esc_attr( $uid ); ?>-order-id"><?php echo esc_html( olobuild_t( 'Numero ordine' ) ); ?></label>
+                    <input type="text" class="olo-ot-input" name="orderid" id="<?php echo esc_attr( $uid ); ?>-order-id" placeholder="<?php echo esc_attr( olobuild_t( 'Inserisci qui il numero del tuo ordine' ) ); ?>" required />
                 </div>
                 <div class="olo-ot-field">
-                    <label class="olo-ot-label" for="<?php echo esc_attr( $uid ); ?>-email"><?php echo esc_html( olo_t( 'Email di fatturazione' ) ); ?></label>
-                    <input type="email" class="olo-ot-input" name="order_email" id="<?php echo esc_attr( $uid ); ?>-email" placeholder="<?php echo esc_attr( olo_t( 'Email usata per l\'ordine' ) ); ?>" required />
+                    <label class="olo-ot-label" for="<?php echo esc_attr( $uid ); ?>-email"><?php echo esc_html( olobuild_t( 'Email di fatturazione' ) ); ?></label>
+                    <input type="email" class="olo-ot-input" name="order_email" id="<?php echo esc_attr( $uid ); ?>-email" placeholder="<?php echo esc_attr( olobuild_t( 'Email usata per l\'ordine' ) ); ?>" required />
                 </div>
                 <?php wp_nonce_field( 'woocommerce-order_tracking', 'woocommerce-order-tracking-nonce' ); ?>
-                <button type="submit" class="olo-ot-btn" name="track" value="<?php echo esc_attr( olo_t( 'Traccia' ) ); ?>">
+                <button type="submit" class="olo-ot-btn" name="track" value="<?php echo esc_attr( olobuild_t( 'Traccia' ) ); ?>">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <span><?php echo esc_html( olo_t( 'Traccia ordine' ) ); ?></span>
+                    <span><?php echo esc_html( olobuild_t( 'Traccia ordine' ) ); ?></span>
                 </button>
             </form>
         </div>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated internally by Olo_Text_Effects::css() from sanitized settings.
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated internally by Olobuild_Text_Effects::css() from sanitized settings.
         $this->tfx_print_script();
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
         $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
-            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- border CSS generated by Olo_Tile_Base::build_border_*() helpers (intval sizes, fixed templates); $uid is an internal generated class name.
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- border CSS generated by Olobuild_Tile_Base::build_border_*() helpers (intval sizes, fixed templates); $uid is an internal generated class name.
             echo '<style>';
             if ( $border_css ) echo ".{$uid}{{$border_css}}";
             echo $border_hover_css . $border_effect_css . '</style>';

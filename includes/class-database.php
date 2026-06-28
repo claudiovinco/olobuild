@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Database {
+class Olobuild_Database {
 
     /**
      * Singleton instance.
@@ -385,7 +385,7 @@ class Olo_Database {
         $insert_id = $wpdb->insert_id;
 
         // Prune old revisions — keep max 50 per template
-        $max_revisions = apply_filters( 'olo_max_revisions', 50 );
+        $max_revisions = apply_filters( 'olobuild_max_revisions', 50 );
         $table = $this->table_revisions();
         $wpdb->query( $wpdb->prepare(
             "DELETE FROM $table WHERE template_id = %d AND id NOT IN (

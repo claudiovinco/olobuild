@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * (nome · prezzo · colore) e una card che somma il totale live. Voci piatte raggruppate per "step".
  * Runtime inline scoped, senza operatori vietati da wptexturize.
  */
-class Olo_LookbookMixer_Tile extends Olo_Tile_Base {
+class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'lookbookmixer';
     protected $name     = 'Lookbook Mixer';

@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Form_Handler {
+class Olobuild_Form_Handler {
 
     /**
      * Secret key used to sign form tokens (HMAC).
@@ -588,9 +588,9 @@ class Olo_Form_Handler {
         $this->store_submission( $form_id, $sanitized, $config );
 
         // 14. Store in form submissions dashboard table
-        if ( class_exists( 'Olo_Form_Submissions' ) ) {
+        if ( class_exists( 'Olobuild_Form_Submissions' ) ) {
             $form_name = $form_id ?: sanitize_text_field( $config['email_subject'] ?? 'Form' );
-            Olo_Form_Submissions::save_submission( $form_name, $sanitized, $this->get_client_ip() );
+            Olobuild_Form_Submissions::save_submission( $form_name, $sanitized, $this->get_client_ip() );
         }
 
         if ( $sent ) {
@@ -945,8 +945,8 @@ class Olo_Form_Handler {
             }
             $row_data[] = $dr['ip_address'];
             $row_data[] = $dr['created_at'];
-            // olo_csv_safe: i campi arrivano dal form pubblico → anti CSV formula injection.
-            fputcsv( $out, array_map( 'olo_csv_safe', $row_data ), ';' );
+            // olobuild_csv_safe: i campi arrivano dal form pubblico → anti CSV formula injection.
+            fputcsv( $out, array_map( 'olobuild_csv_safe', $row_data ), ';' );
         }
 
         // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- closing the php://output CSV stream

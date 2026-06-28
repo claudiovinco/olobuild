@@ -1,6 +1,6 @@
 <?php
 /**
- * Olo_Template_Conditions — Advanced display conditions for templates.
+ * Olobuild_Template_Conditions — Advanced display conditions for templates.
  *
  * Allows multiple conditions with AND/OR logic per template assignment.
  * Extends the simple "one template per post type" system.
@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Template_Conditions {
+class Olobuild_Template_Conditions {
 
     private static $instance = null;
 
@@ -26,7 +26,7 @@ class Olo_Template_Conditions {
         add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 
         // Override single template selection with conditions
-        add_filter( 'olo_resolve_template_id', [ $this, 'resolve_by_conditions' ], 10, 2 );
+        add_filter( 'olobuild_resolve_template_id', [ $this, 'resolve_by_conditions' ], 10, 2 );
 
         // Admin UI: pagina dedicata sotto Olobuild
         add_action( 'admin_menu', [ $this, 'register_admin_page' ], 30 );
@@ -337,7 +337,7 @@ class Olo_Template_Conditions {
         if ( ! is_array( $assignments ) ) $assignments = [];
 
         // Carica template per dropdown
-        $db = new Olo_Database();
+        $db = new Olobuild_Database();
         $all = $db->list_templates( [ 'per_page' => 200, 'orderby' => 'title', 'order' => 'ASC' ] )['items'] ?? [];
         $headers = array_values( array_filter( $all, function ( $t ) { return ( $t['type'] ?? '' ) === 'header' && $t['status'] === 'published'; } ) );
         $footers = array_values( array_filter( $all, function ( $t ) { return ( $t['type'] ?? '' ) === 'footer' && $t['status'] === 'published'; } ) );

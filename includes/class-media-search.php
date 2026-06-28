@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ricerca Media — admin page for searching free stock photos, videos, audio, and 360 content.
  * UI dal design handoff "OLObuild - Ricerca Media redesign" (cockpit language, token --olo-*).
  */
-class Olo_Media_Search {
+class Olobuild_Media_Search {
 
     public static function render_page() {
         $nonce = wp_create_nonce( 'wp_rest' );
@@ -18,9 +18,9 @@ class Olo_Media_Search {
 
         // Check configured API keys (costante wp-config o opzione; nessun fallback hardcoded)
         $keys = [
-            'unsplash'  => class_exists( 'Olo_Unsplash' ) && ! empty( Olo_Unsplash::get_access_key() ),
-            'pexels'    => class_exists( 'Olo_Pexels' ) && ! empty( Olo_Pexels::get_api_key() ),
-            'pixabay'   => class_exists( 'Olo_Pixabay' ) && ! empty( Olo_Pixabay::get_api_key() ),
+            'unsplash'  => class_exists( 'Olobuild_Unsplash' ) && ! empty( Olobuild_Unsplash::get_access_key() ),
+            'pexels'    => class_exists( 'Olobuild_Pexels' ) && ! empty( Olobuild_Pexels::get_api_key() ),
+            'pixabay'   => class_exists( 'Olobuild_Pixabay' ) && ! empty( Olobuild_Pixabay::get_api_key() ),
             'openverse' => true,
             'freesound' => ! empty( get_option( 'olo_freesound_api_key', '' ) ),
             'polyhaven' => $vtour_active,
@@ -30,11 +30,11 @@ class Olo_Media_Search {
         $providers_total  = count( $keys );
         $settings_url     = admin_url( 'admin.php?page=olobuilder-settings&tab=stockmedia' );
         ?>
-        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Ricerca Media', 'olobuild' ) . '</b>' ); ?>
+        <?php Olobuild_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Ricerca Media', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy olo-ms-wrap">
             <?php
-            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head()/cockpit_button(), which escape via esc_html()/esc_url()/wp_kses_post() internally.
-            echo Olo_Builder::cockpit_page_head( [
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olobuild_Builder::cockpit_page_head()/cockpit_button(), which escape via esc_html()/esc_url()/wp_kses_post() internally.
+            echo Olobuild_Builder::cockpit_page_head( [
                 'title' => __( 'Ricerca Media', 'olobuild' ),
                 'sub'   => sprintf(
                     /* translators: 1: active providers, 2: total providers */
@@ -42,7 +42,7 @@ class Olo_Media_Search {
                     '<b>' . (int) $providers_active . '</b>',
                     (int) $providers_total
                 ),
-                'actions' => Olo_Builder::cockpit_button( [
+                'actions' => Olobuild_Builder::cockpit_button( [
                     'label'   => __( 'Configura provider', 'olobuild' ),
                     'variant' => 'sec',
                     'href'    => $settings_url,
@@ -152,7 +152,7 @@ class Olo_Media_Search {
                 </div>
             </div>
         </main>
-        <?php Olo_Builder::cockpit_shell_close(); ?>
+        <?php Olobuild_Builder::cockpit_shell_close(); ?>
 
         <style>
             /* ── Ricerca Media — redesign (token mancanti in dashboard.css, scoped) ── */

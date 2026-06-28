@@ -2,7 +2,7 @@
 /**
  * Olobuild CSS Builder
  *
- * Pure CSS generation utilities extracted from Olo_Frontend_Renderer.
+ * Pure CSS generation utilities extracted from Olobuild_Frontend_Renderer.
  * All methods are stateless — they take a config array and return CSS strings or arrays.
  */
 
@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_CSS_Builder {
+class Olobuild_CSS_Builder {
 
     private $shadow_map = [
         'sm' => '0 1px 2px 0 rgba(0,0,0,0.05)',

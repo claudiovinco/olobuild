@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Chiavi additive: badge_live (bool), badge_live_color ('success'|'primary').
  */
-class Olo_Badge_Tile extends Olo_Tile_Base {
+class Olobuild_Badge_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'badge';
     protected $name     = 'Badge / Etichetta';
@@ -120,9 +120,9 @@ class Olo_Badge_Tile extends Olo_Tile_Base {
         <div class="olo-badge-wrap <?php echo esc_attr( $uid ); ?>" style="display:flex;justify-content:<?php echo esc_attr( $justify ); ?>;">
             <span class="olo-badge" style="<?php echo esc_attr( $badge_css ); ?>">
                 <?php echo $live_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed internal literal markup (live dot span) ?>
-                <?php echo $icon_before; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon HTML built by render_icon_html(), which sanitizes SVG internally (olo_sanitize_svg/wp_kses_post) ?>
+                <?php echo $icon_before; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon HTML built by render_icon_html(), which sanitizes SVG internally (olobuild_sanitize_svg/wp_kses_post) ?>
                 <span class="olo-badge-text" data-olo-editable="text"><?php echo $text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_html()'d at assignment above ?></span>
-                <?php echo $icon_after; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon HTML built by render_icon_html(), which sanitizes SVG internally (olo_sanitize_svg/wp_kses_post) ?>
+                <?php echo $icon_after; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon HTML built by render_icon_html(), which sanitizes SVG internally (olobuild_sanitize_svg/wp_kses_post) ?>
             </span>
         </div>
         <?php

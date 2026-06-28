@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Woo_Wishlist_Tile extends Olo_Tile_Base {
+class Olobuild_Woo_Wishlist_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'woo_wishlist';
     protected $name     = 'Wishlist WC';
@@ -48,7 +48,7 @@ class Olo_Woo_Wishlist_Tile extends Olo_Tile_Base {
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
             return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
-                 . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
+                 . esc_html( olobuild_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
 
@@ -79,8 +79,8 @@ class Olo_Woo_Wishlist_Tile extends Olo_Tile_Base {
             $card_extra = 'border:1px solid var(--olo-color-border, #E5E7EB);';
         }
 
-        $empty_text  = esc_html( $s['empty_text'] ?: olo_t( 'La tua wishlist è vuota' ) );
-        $remove_text = esc_html( $s['remove_text'] ?: olo_t( 'Rimuovi' ) );
+        $empty_text  = esc_html( $s['empty_text'] ?: olobuild_t( 'La tua wishlist è vuota' ) );
+        $remove_text = esc_html( $s['remove_text'] ?: olobuild_t( 'Rimuovi' ) );
 
         // Heart SVGs
         $heart_outline = '<svg width="' . $icon_size . '" height="' . $icon_size . '" viewBox="0 0 24 24" fill="none" stroke="' . $icon_color . '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>';
@@ -229,7 +229,7 @@ class Olo_Woo_Wishlist_Tile extends Olo_Tile_Base {
 
         <div class="<?php echo esc_attr( $uid ); ?>-wrap">
             <!-- Wishlist Toggle Button -->
-            <button class="<?php echo esc_attr( $uid ); ?>-btn" data-olo-wl-toggle title="<?php echo esc_attr( olo_t( 'Wishlist' ) ); ?>">
+            <button class="<?php echo esc_attr( $uid ); ?>-btn" data-olo-wl-toggle title="<?php echo esc_attr( olobuild_t( 'Wishlist' ) ); ?>">
                 <span class="olo-wl-heart-outline"><?php echo $heart_outline; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup built above from a clamped absint() size and a safe_color_css()-validated color ?></span>
                 <span class="olo-wl-heart-filled"><?php echo $heart_filled; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup built above from a clamped absint() size and a safe_color_css()-validated color ?></span>
                 <?php if ( ! empty( $s['show_count'] ) ) : ?>
@@ -260,7 +260,7 @@ class Olo_Woo_Wishlist_Tile extends Olo_Tile_Base {
             var restNonce   = '<?php echo esc_js( wp_create_nonce( 'wp_rest' ) ); ?>';
             var ajaxUrl     = '<?php echo esc_js( rest_url( 'olo/v1/woo-wishlist-products' ) ); ?>';
             var removeText  = '<?php echo esc_js( $remove_text ); ?>';
-            var atcText     = '<?php echo esc_js( olo_t( 'Aggiungi al carrello' ) ); ?>';
+            var atcText     = '<?php echo esc_js( olobuild_t( 'Aggiungi al carrello' ) ); ?>';
 
             /* Cookie helpers */
             function getWishlist(){
@@ -389,8 +389,8 @@ class Olo_Woo_Wishlist_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized border settings
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base::build_border_css() from sanitized border settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border helpers from sanitized border settings
         }
         return ob_get_clean();
     }

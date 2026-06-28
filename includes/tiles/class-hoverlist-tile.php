@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *                         (viewfinder + ● STILL + barra label) invece dell'immagine.
  * Default invariati = resa storica identica.
  */
-class Olo_HoverList_Tile extends Olo_Tile_Base {
+class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'hoverlist';
     protected $name     = 'Hover List';
@@ -138,8 +138,8 @@ class Olo_HoverList_Tile extends Olo_Tile_Base {
                 // sulle voci senza sfondo, e quelle con sfondo lo mantengono in hover.
                 $rowbg_cls = '';
                 $row_bg    = $it['row_bg'] ?? null;
-                if ( is_array( $row_bg ) && ! empty( $row_bg['type'] ) && $row_bg['type'] !== 'none' && class_exists( 'Olo_CSS_Builder' ) ) {
-                    $rowbg_decl = trim( ( new Olo_CSS_Builder() )->get_bg_inline_css( $row_bg ) );
+                if ( is_array( $row_bg ) && ! empty( $row_bg['type'] ) && $row_bg['type'] !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
+                    $rowbg_decl = trim( ( new Olobuild_CSS_Builder() )->get_bg_inline_css( $row_bg ) );
                     if ( $rowbg_decl !== '' ) {
                         $rowbg_cls = ' olo-hoverlist__row--' . intval( $idx );
                         $rowbg_rules[ intval( $idx ) ] = rtrim( $rowbg_decl, ';' ) . ';';

@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *  - A11y: il pulsante "Scopri" è focus-visible e rivela tutto da tastiera; il testo premio è
  *    reale (selezionabile) dietro al canvas; il canvas è aria-hidden.
  */
-class Olo_Scratchfx_Tile extends Olo_Tile_Base {
+class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'scratchfx';
     protected $name     = 'Gratta e Scopri';
@@ -567,8 +567,8 @@ class Olo_Scratchfx_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid} .olo-scratch-stage", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid} .olo-scratch-stage{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized values (intval/safe color whitelist)
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized values
+            if ( $border_css ) echo ".{$uid} .olo-scratch-stage{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base::build_border_css() from sanitized values (intval/safe color whitelist)
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border helpers from sanitized values
         }
         return ob_get_clean();
     }

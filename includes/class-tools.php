@@ -1,13 +1,13 @@
 <?php
 /**
- * Olo_Tools — Pagina strumenti unificata.
+ * Olobuild_Tools — Pagina strumenti unificata.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Tools {
+class Olobuild_Tools {
 
     private static $instance = null;
 
@@ -28,7 +28,7 @@ class Olo_Tools {
         add_action( 'wp_ajax_olo_tools_rollback',          [ $this, 'ajax_rollback' ] );
         add_action( 'wp_ajax_olo_tools_save_maintenance',  [ $this, 'ajax_save_maintenance' ] );
 
-        // Maintenance mode frontend hook — handled by Olo_Maintenance_Mode (class-maintenance-mode.php)
+        // Maintenance mode frontend hook — handled by Olobuild_Maintenance_Mode (class-maintenance-mode.php)
         // Removed duplicate hook to prevent race condition. Only class-maintenance-mode.php runs at priority 1.
     }
 
@@ -77,17 +77,17 @@ class Olo_Tools {
         }
 
         ?>
-        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Strumenti', 'olobuild' ) . '</b>' ); ?>
+        <?php Olobuild_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Strumenti', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy olo-tools-page">
 
             <?php
-            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally.
-            echo Olo_Builder::cockpit_page_head( [
+            // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olobuild_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally.
+            echo Olobuild_Builder::cockpit_page_head( [
                 'title' => __( 'Strumenti', 'olobuild' ),
                 'sub'   => __( 'Cache, manutenzione, sostituzione URL e rollback. Utilizzare con cura.', 'olobuild' ),
             ] );
             // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
-            echo Olo_Builder::cockpit_subnav( $subnav_items, $tab ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olo_Builder::cockpit_subnav(), which escapes via esc_url()/esc_html() internally.
+            echo Olobuild_Builder::cockpit_subnav( $subnav_items, $tab ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olobuild_Builder::cockpit_subnav(), which escapes via esc_url()/esc_html() internally.
             ?>
 
             <div id="olo-tools-msg" style="margin-top:16px"></div>
@@ -113,7 +113,7 @@ class Olo_Tools {
             ?>
 
         </main>
-        <?php Olo_Builder::cockpit_shell_close(); ?>
+        <?php Olobuild_Builder::cockpit_shell_close(); ?>
 
         <script>
         var oloToolsNonce = '<?php echo esc_js( wp_create_nonce( 'olo_tools_nonce' ) ); ?>';
@@ -655,8 +655,8 @@ class Olo_Tools {
      * ───────────────────────────────────────────── */
 
     private function render_tab_template_website() {
-        // Delegate to Olo_Site_Import_Export if render method exists
-        if ( class_exists( 'Olo_Site_Import_Export' ) && method_exists( Olo_Site_Import_Export::instance(), 'render_admin_page' ) ) {
+        // Delegate to Olobuild_Site_Import_Export if render method exists
+        if ( class_exists( 'Olobuild_Site_Import_Export' ) && method_exists( Olobuild_Site_Import_Export::instance(), 'render_admin_page' ) ) {
             // Re-use the import/export cards inline (without shell, since we already have one)
             $this->render_template_website_inline();
             return;
@@ -811,14 +811,14 @@ class Olo_Tools {
         $count = 0;
 
         // Asset optimizer cache
-        if ( class_exists( 'Olo_Asset_Optimizer' ) ) {
-            Olo_Asset_Optimizer::flush_all_cache();
+        if ( class_exists( 'Olobuild_Asset_Optimizer' ) ) {
+            Olobuild_Asset_Optimizer::flush_all_cache();
             $count++;
         }
 
         // Critical CSS
-        if ( class_exists( 'Olo_Critical_CSS' ) ) {
-            $purged = Olo_Critical_CSS::purge_all();
+        if ( class_exists( 'Olobuild_Critical_CSS' ) ) {
+            $purged = Olobuild_Critical_CSS::purge_all();
             $count += (int) $purged;
         }
 
@@ -882,7 +882,7 @@ class Olo_Tools {
         // Tabella custom del plugin ({prefix}olo_templates); nessun equivalente WP_Query; risultato non cacheabile (sostituzione URL una-tantum). $table è solo $wpdb->prefix + nome fisso, nessun valore utente in SQL.
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $rows  = $wpdb->get_results( "SELECT id, content FROM {$table}" );
-        $db    = new Olo_Database();
+        $db    = new Olobuild_Database();
 
         $modified = 0;
 
@@ -929,7 +929,7 @@ class Olo_Tools {
             wp_send_json_error( 'ID revisione non valido.' );
         }
 
-        $db       = new Olo_Database();
+        $db       = new Olobuild_Database();
         $revision = $db->get_revision( $revision_id );
 
         if ( ! $revision ) {
@@ -954,11 +954,11 @@ class Olo_Tools {
         ] );
 
         // Flush cache
-        if ( class_exists( 'Olo_Asset_Optimizer' ) ) {
-            Olo_Asset_Optimizer::flush_all_cache();
+        if ( class_exists( 'Olobuild_Asset_Optimizer' ) ) {
+            Olobuild_Asset_Optimizer::flush_all_cache();
         }
-        if ( class_exists( 'Olo_Critical_CSS' ) ) {
-            Olo_Critical_CSS::purge_all();
+        if ( class_exists( 'Olobuild_Critical_CSS' ) ) {
+            Olobuild_Critical_CSS::purge_all();
         }
 
         wp_send_json_success( [
@@ -1057,9 +1057,9 @@ class Olo_Tools {
         }
 
         // Render the template
-        if ( class_exists( 'Olo_Frontend_Renderer' ) ) {
-            $renderer = new Olo_Frontend_Renderer();
-            $db       = new Olo_Database();
+        if ( class_exists( 'Olobuild_Frontend_Renderer' ) ) {
+            $renderer = new Olobuild_Frontend_Renderer();
+            $db       = new Olobuild_Database();
             $template = $db->get_template( $template_id );
 
             if ( $template ) {
@@ -1068,7 +1068,7 @@ class Olo_Tools {
                 echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
                 wp_head();
                 echo '</head><body class="olo-maintenance-page">';
-                echo do_shortcode( '[olo_template id="' . intval( $template_id ) . '"]' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- [olo_template] shortcode output (Olo_Frontend_Renderer); each tile escapes its own output at build time
+                echo do_shortcode( '[olo_template id="' . intval( $template_id ) . '"]' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- [olo_template] shortcode output (Olobuild_Frontend_Renderer); each tile escapes its own output at build time
                 wp_footer();
                 echo '</body></html>';
                 exit;

@@ -9,14 +9,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Centralizes shadow maps, border helpers, and color utilities
  * to avoid duplication across 80+ tile renderers.
  */
-class Olo_Tile_Utils {
+class Olobuild_Tile_Utils {
 
     /**
      * Sostituisce i dynamic tag (es. {{site_name}}, {{current_year}}) nei testi
      * dei tile con i valori reali al momento del rendering.
      *
      * Inserito dall'editor rich text via il dropdown "campo dinamico".
-     * Applicato globalmente in Olo_Frontend_Renderer dopo il render di ogni tile.
+     * Applicato globalmente in Olobuild_Frontend_Renderer dopo il render di ogni tile.
      *
      * @param string $text HTML/testo del tile.
      * @return string Testo con tag sostituiti.

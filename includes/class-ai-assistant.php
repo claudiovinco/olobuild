@@ -5,13 +5,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Olo_AI_Assistant
+ * Olobuild_AI_Assistant
  *
  * Gestisce le chiamate API AI (Anthropic Claude) per generazione testo,
  * miglioramento testo, traduzione, layout, stile, alt text e CSS.
  * La generazione immagini usa OpenAI DALL-E (chiave separata, opzionale).
  */
-class Olo_AI_Assistant {
+class Olobuild_AI_Assistant {
 
     private static $namespace = 'olo/v1';
 
@@ -112,8 +112,8 @@ class Olo_AI_Assistant {
         // Il vero costo (generazione immagini) ha un cap dedicato e piu' stretto in generate_image().
         return self::rate_limit_guard(
             'all',
-            apply_filters( 'olo_ai_rate_limit', 200 ),
-            apply_filters( 'olo_ai_rate_window', 600 )
+            apply_filters( 'olobuild_ai_rate_limit', 200 ),
+            apply_filters( 'olobuild_ai_rate_window', 600 )
         );
     }
 
@@ -262,8 +262,8 @@ class Olo_AI_Assistant {
         // Cap dedicato: la generazione immagini (DALL-E) e' l'endpoint a costo unitario piu' alto.
         $img_guard = self::rate_limit_guard(
             'img',
-            apply_filters( 'olo_ai_image_rate_limit', 10 ),
-            apply_filters( 'olo_ai_image_rate_window', 3600 )
+            apply_filters( 'olobuild_ai_image_rate_limit', 10 ),
+            apply_filters( 'olobuild_ai_image_rate_window', 3600 )
         );
         if ( is_wp_error( $img_guard ) ) {
             return $img_guard;
@@ -838,4 +838,4 @@ class Olo_AI_Assistant {
 }
 
 // Auto-init: la classe si registra autonomamente quando il file viene incluso
-add_action( 'plugins_loaded', [ 'Olo_AI_Assistant', 'init' ], 20 );
+add_action( 'plugins_loaded', [ 'Olobuild_AI_Assistant', 'init' ], 20 );

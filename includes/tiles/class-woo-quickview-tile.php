@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
+class Olobuild_Woo_Quickview_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'woo_quickview';
     protected $name     = 'Quick View WC';
@@ -40,7 +40,7 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
             return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
-                 . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
+                 . esc_html( olobuild_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
 
@@ -51,7 +51,7 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
         $text_col  = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $modal_w   = max( 400, min( 1200, absint( $s['modal_width'] ) ) );
         $img_w     = max( 30, min( 70, absint( $s['image_width'] ) ) );
-        $btn_text  = esc_html( $s['button_text'] ?: olo_t( 'Vista rapida' ) );
+        $btn_text  = esc_html( $s['button_text'] ?: olobuild_t( 'Vista rapida' ) );
         $btn_style = in_array( $s['button_style'], [ 'filled', 'outline', 'text' ], true ) ? $s['button_style'] : 'outline';
 
         // Register REST endpoint
@@ -275,14 +275,14 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
 
         <!-- Quick View Modal Shell -->
         <div class="<?php echo esc_attr( $uid ); ?>-overlay" data-olo-qv-overlay>
-            <div class="<?php echo esc_attr( $uid ); ?>-modal" role="dialog" aria-modal="true" aria-label="<?php echo esc_attr( olo_t( 'Vista rapida prodotto' ) ); ?>" tabindex="-1" data-olo-qv-dialog>
-                <button class="<?php echo esc_attr( $uid ); ?>-close" data-olo-qv-close aria-label="<?php echo esc_attr( olo_t( 'Chiudi' ) ); ?>">
+            <div class="<?php echo esc_attr( $uid ); ?>-modal" role="dialog" aria-modal="true" aria-label="<?php echo esc_attr( olobuild_t( 'Vista rapida prodotto' ) ); ?>" tabindex="-1" data-olo-qv-dialog>
+                <button class="<?php echo esc_attr( $uid ); ?>-close" data-olo-qv-close aria-label="<?php echo esc_attr( olobuild_t( 'Chiudi' ) ); ?>">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
                 <div class="<?php echo esc_attr( $uid ); ?>-body">
                     <div class="<?php echo esc_attr( $uid ); ?>-loading" data-olo-qv-loading>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-                        <div style="margin-top:8px"><?php echo esc_html( olo_t( 'Caricamento...' ) ); ?></div>
+                        <div style="margin-top:8px"><?php echo esc_html( olobuild_t( 'Caricamento...' ) ); ?></div>
                     </div>
                     <div data-olo-qv-content style="display:none"></div>
                 </div>
@@ -385,7 +385,7 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
                     }
                 })
                 .catch(function(){
-                    content.innerHTML = '<p style="text-align:center;color:var(--olo-color-danger, #EF4444);padding:30px">' + '<?php echo esc_js( olo_t( 'Errore nel caricamento.' ) ); ?>' + '</p>';
+                    content.innerHTML = '<p style="text-align:center;color:var(--olo-color-danger, #EF4444);padding:30px">' + '<?php echo esc_js( olobuild_t( 'Errore nel caricamento.' ) ); ?>' + '</p>';
                     loading.style.display = 'none';
                     content.style.display = 'block';
                 });
@@ -401,7 +401,7 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
 
                 var btn = document.createElement('button');
                 btn.className = 'olo-qv-trigger';
-                btn.textContent = '<?php echo esc_js( $s['button_text'] ?: olo_t( 'Vista rapida' ) ); ?>';
+                btn.textContent = '<?php echo esc_js( $s['button_text'] ?: olobuild_t( 'Vista rapida' ) ); ?>';
                 btn.setAttribute('aria-haspopup', 'dialog');
                 btn.addEventListener('click', function(e){
                     e.preventDefault();
@@ -473,7 +473,7 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
                         $large_url = wp_get_attachment_image_url( $gid, 'large' );
                         if ( ! $thumb_url ) { continue; }
                     ?>
-                    <button type="button" class="olo-qv-thumb" data-olo-qv-thumb-src="<?php echo esc_url( $large_url ); ?>" aria-label="<?php echo esc_attr( sprintf( olo_t( 'Mostra immagine: %s' ), $product->get_name() ) ); ?>" style="padding:0;border:2px solid transparent;border-radius:4px;cursor:pointer;background:none;line-height:0">
+                    <button type="button" class="olo-qv-thumb" data-olo-qv-thumb-src="<?php echo esc_url( $large_url ); ?>" aria-label="<?php echo esc_attr( sprintf( olobuild_t( 'Mostra immagine: %s' ), $product->get_name() ) ); ?>" style="padding:0;border:2px solid transparent;border-radius:4px;cursor:pointer;background:none;line-height:0">
                         <img src="<?php echo esc_url( $thumb_url ); ?>" alt="" style="width:56px;height:56px;object-fit:cover;border-radius:2px;display:block" />
                     </button>
                     <?php endforeach; ?>
@@ -498,10 +498,10 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
                     <?php if ( $product->is_in_stock() ) : ?>
                     <div style="display:flex;gap:10px;align-items:center;margin-top:16px">
                         <input type="number" class="olo-qv-qty" value="1" min="1" max="<?php echo (int) ( $product->get_stock_quantity() ?: 99 ); ?>" style="width:60px;height:40px;text-align:center;border:1px solid var(--olo-color-border, #E5E7EB);border-radius:6px;font-size:14px" />
-                        <button data-olo-qv-atc-btn style="padding:10px 24px;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:14px;background:var(--olo-color-primary,#e1474f);color:var(--olo-color-primary-contrast, #FFFFFF)"><?php echo esc_html( olo_t( 'Aggiungi al carrello' ) ); ?></button>
+                        <button data-olo-qv-atc-btn style="padding:10px 24px;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:14px;background:var(--olo-color-primary,#e1474f);color:var(--olo-color-primary-contrast, #FFFFFF)"><?php echo esc_html( olobuild_t( 'Aggiungi al carrello' ) ); ?></button>
                     </div>
                     <?php else : ?>
-                    <div style="color:var(--olo-color-danger, #EF4444);font-weight:600;margin-top:12px"><?php echo esc_html( olo_t( 'Esaurito' ) ); ?></div>
+                    <div style="color:var(--olo-color-danger, #EF4444);font-weight:600;margin-top:12px"><?php echo esc_html( olobuild_t( 'Esaurito' ) ); ?></div>
                     <?php endif; ?>
                 <?php endif; ?>
                 <div style="font-size:12px;color:var(--olo-color-text-muted, #9CA3AF);margin-top:16px;line-height:1.8">
@@ -511,10 +511,10 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
                     <?php
                     $cats = wc_get_product_category_list( $pid );
                     if ( $cats ) : ?>
-                    <div><?php echo esc_html( olo_t( 'Categorie' ) ); ?>: <?php echo $cats; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- category links HTML built and escaped by WooCommerce core (wc_get_product_category_list()). ?></div>
+                    <div><?php echo esc_html( olobuild_t( 'Categorie' ) ); ?>: <?php echo $cats; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- category links HTML built and escaped by WooCommerce core (wc_get_product_category_list()). ?></div>
                     <?php endif; ?>
                 </div>
-                <a href="<?php echo esc_url( get_permalink( $pid ) ); ?>" style="display:inline-block;margin-top:16px;font-size:13px;color:var(--olo-color-primary,#e1474f);text-decoration:none"><?php echo esc_html( olo_t( 'Vedi dettagli completi' ) ); ?> &rarr;</a>
+                <a href="<?php echo esc_url( get_permalink( $pid ) ); ?>" style="display:inline-block;margin-top:16px;font-size:13px;color:var(--olo-color-primary,#e1474f);text-decoration:none"><?php echo esc_html( olobuild_t( 'Vedi dettagli completi' ) ); ?> &rarr;</a>
             </div>
         </div>
         <?php

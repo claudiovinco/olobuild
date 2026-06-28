@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Woo_Products_Tile extends Olo_Tile_Base {
+class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'woo_products';
     protected $name     = 'Prodotti WC';
@@ -56,7 +56,7 @@ class Olo_Woo_Products_Tile extends Olo_Tile_Base {
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
             return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
-                 . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
+                 . esc_html( olobuild_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
 
@@ -158,7 +158,7 @@ class Olo_Woo_Products_Tile extends Olo_Tile_Base {
             } else {
                 // No products on sale
                 return '<div style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF)">'
-                     . esc_html( olo_t( 'Nessun prodotto in saldo' ) )
+                     . esc_html( olobuild_t( 'Nessun prodotto in saldo' ) )
                      . '</div>';
             }
         }
@@ -173,7 +173,7 @@ class Olo_Woo_Products_Tile extends Olo_Tile_Base {
 
         if ( ! $products->have_posts() ) {
             return '<div style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF)">'
-                 . esc_html( olo_t( 'Nessun prodotto trovato' ) )
+                 . esc_html( olobuild_t( 'Nessun prodotto trovato' ) )
                  . '</div>';
         }
 
@@ -311,6 +311,7 @@ class Olo_Woo_Products_Tile extends Olo_Tile_Base {
             $products->the_post();
             global $product;
             if ( ! is_a( $product, 'WC_Product' ) ) {
+                // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- global $product di WooCommerce, non un global definito da olobuild
                 $product = wc_get_product( get_the_ID() );
             }
             if ( ! $product ) {
@@ -379,7 +380,7 @@ class Olo_Woo_Products_Tile extends Olo_Tile_Base {
                     <?php if ( ! empty( $s['show_add_to_cart'] ) ) : ?>
                     <?php
                     $add_url = $product->add_to_cart_url();
-                    $add_text = $product->is_type( 'simple' ) ? olo_t( 'Aggiungi al carrello' ) : olo_t( 'Seleziona opzioni' );
+                    $add_text = $product->is_type( 'simple' ) ? olobuild_t( 'Aggiungi al carrello' ) : olobuild_t( 'Seleziona opzioni' );
                     ?>
                     <a href="<?php echo esc_url( $add_url ); ?>" class="olo-woo-btn"
                        data-product_id="<?php echo absint( $product->get_id() ); ?>"
@@ -391,8 +392,8 @@ class Olo_Woo_Products_Tile extends Olo_Tile_Base {
                     ><?php echo esc_html( $add_text ); ?></a>
                     <?php endif; ?>
                     <?php if ( ! empty( $s['show_compare'] ) ) : ?>
-                    <button type="button" class="olo-woo-btn olo-woo-compare-btn" style="margin-top:6px;background:transparent;border:1px solid <?php echo esc_attr( $btn_bg ); ?>;color:<?php echo esc_attr( $btn_bg ); ?>" onclick="var id=<?php echo absint( $product->get_id() ); ?>;var K='olo_compare_ids';var ids;try{ids=JSON.parse(localStorage.getItem(K)||'[]')}catch(e){ids=[]}if(ids.indexOf(id)===-1){ids.push(id);localStorage.setItem(K,JSON.stringify(ids));this.textContent='<?php echo esc_js( olo_t( 'Aggiunto!' ) ); ?>';var b=this;setTimeout(function(){b.textContent='<?php echo esc_js( olo_t( 'Confronta' ) ); ?>'},1500)}">
-                        <?php echo esc_html( olo_t( 'Confronta' ) ); ?>
+                    <button type="button" class="olo-woo-btn olo-woo-compare-btn" style="margin-top:6px;background:transparent;border:1px solid <?php echo esc_attr( $btn_bg ); ?>;color:<?php echo esc_attr( $btn_bg ); ?>" onclick="var id=<?php echo absint( $product->get_id() ); ?>;var K='olo_compare_ids';var ids;try{ids=JSON.parse(localStorage.getItem(K)||'[]')}catch(e){ids=[]}if(ids.indexOf(id)===-1){ids.push(id);localStorage.setItem(K,JSON.stringify(ids));this.textContent='<?php echo esc_js( olobuild_t( 'Aggiunto!' ) ); ?>';var b=this;setTimeout(function(){b.textContent='<?php echo esc_js( olobuild_t( 'Confronta' ) ); ?>'},1500)}">
+                        <?php echo esc_html( olobuild_t( 'Confronta' ) ); ?>
                     </button>
                     <?php endif; ?>
                 </div>
@@ -420,8 +421,8 @@ class Olo_Woo_Products_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base::build_border_css() from sanitized values (intval/safe color whitelist)
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olo_Tile_Base border helpers from sanitized values
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base::build_border_css() from sanitized values (intval/safe color whitelist)
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by Olobuild_Tile_Base border helpers from sanitized values
         }
         return ob_get_clean();
     }

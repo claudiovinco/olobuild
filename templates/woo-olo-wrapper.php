@@ -2,10 +2,13 @@
 // Olobuild WooCommerce wrapper template
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variabile locale del template (inclusa nello scope del render, non un global del plugin)
 $tpl_id = get_query_var( 'olo_woo_tpl_id', 0 );
 
 // Resolve Olobuild header/footer IDs
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variabile locale del template (inclusa nello scope del render, non un global del plugin)
 $header_id = (int) get_option( 'olo_active_header', 0 );
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variabile locale del template (inclusa nello scope del render, non un global del plugin)
 $footer_id = (int) get_option( 'olo_active_footer', 0 );
 
 ?><!DOCTYPE html>
@@ -21,7 +24,8 @@ $footer_id = (int) get_option( 'olo_active_footer', 0 );
 <?php
 // Render Olobuild header
 if ( $header_id ) {
-    $header_integration = new Olo_Header_Integration();
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variabile locale del template (inclusa nello scope del render, non un global del plugin)
+    $header_integration = new Olobuild_Header_Integration();
     echo $header_integration->render_header( $header_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- header markup built by the plugin's own tile renderer; tile output is escaped at the source.
 }
 ?>
@@ -37,7 +41,8 @@ if ( $tpl_id ) {
 <?php
 // Render Olobuild footer
 if ( $footer_id ) {
-    $footer_integration = new Olo_Footer_Integration();
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variabile locale del template (inclusa nello scope del render, non un global del plugin)
+    $footer_integration = new Olobuild_Footer_Integration();
     echo $footer_integration->render_footer( $footer_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- footer markup built by the plugin's own tile renderer; tile output is escaped at the source.
 }
 ?>

@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * parte evidenziata (accento), link opzionale, chiudibile opzionale (memoria localStorage).
  * Estratta 1:1 dal blueprint OLOthemes Atelier Noir (.an-ann). Render == Vue. No '&&' nello script.
  */
-class Olo_AnnouncementBar_Tile extends Olo_Tile_Base {
+class Olobuild_AnnouncementBar_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'announcementbar';
     protected $name     = 'Announcement Bar';
@@ -43,8 +43,8 @@ class Olo_AnnouncementBar_Tile extends Olo_Tile_Base {
 
         $bg_obj  = $s['bg'] ?? null;
         $bg_decl = '';
-        if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && $bg_obj['type'] !== 'none' && class_exists( 'Olo_CSS_Builder' ) ) {
-            $bg_decl = ( new Olo_CSS_Builder() )->get_bg_inline_css( $bg_obj );
+        if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && $bg_obj['type'] !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
+            $bg_decl = ( new Olobuild_CSS_Builder() )->get_bg_inline_css( $bg_obj );
         }
         $bgcol = $this->safe_color_css( $s['bg_color'] ?? '' ) ?: 'var(--olo-color-text, #0c0c0c)';
         $bg    = $bg_decl !== '' ? $bg_decl : ( 'background:' . $bgcol );
@@ -67,7 +67,7 @@ class Olo_AnnouncementBar_Tile extends Olo_Tile_Base {
         if ( $accent !== '' ) { $inner .= '<b>' . esc_html( $accent ) . '</b>'; }
 
         ob_start();
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: background via Olo_CSS_Builder::get_bg_inline_css() or the safe_color_css() whitelist, colours via safe_color_css(), $fs/$bb via intval() clamps, $fw/$tt/$align via in_array() whitelists, $ls via preg_replace() character whitelist, padding integer-forced, font stack fixed literal; $uid is internally generated.
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: background via Olobuild_CSS_Builder::get_bg_inline_css() or the safe_color_css() whitelist, colours via safe_color_css(), $fs/$bb via intval() clamps, $fw/$tt/$align via in_array() whitelists, $ls via preg_replace() character whitelist, padding integer-forced, font stack fixed literal; $uid is internally generated.
         ?>
         <style>
             .<?php echo $uid; ?>{<?php echo $bg; ?>;color:<?php echo $tcol; ?>;text-align:<?php echo $align; ?>;font-family:<?php echo $sans; ?>;font-size:<?php echo $fs; ?>px;font-weight:<?php echo $fw; ?>;letter-spacing:<?php echo $ls; ?>;text-transform:<?php echo $tt; ?>;padding:<?php echo $pad; ?>;<?php if ( $bb > 0 ) : ?>border-bottom:<?php echo $bb; ?>px solid <?php echo $bc; ?>;<?php endif; ?>position:relative;line-height:1.4;}

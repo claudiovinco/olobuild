@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_LinkInBio_Tile extends Olo_Tile_Base {
+class Olobuild_LinkInBio_Tile extends Olobuild_Tile_Base {
 
     protected $type     = 'linkinbio';
     protected $name     = 'Link in Bio';
@@ -40,23 +40,23 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
 
     public function get_controls() {
         return [
-            [ 'key' => 'items',              'type' => 'content-items', 'label' => olo_t( 'Link' ) ],
-            [ 'key' => 'profile_image',      'type' => 'image',   'label' => olo_t( 'Foto profilo' ) ],
-            [ 'key' => 'profile_name',       'type' => 'text',    'label' => olo_t( 'Nome' ) ],
-            [ 'key' => 'profile_bio',        'type' => 'text',    'label' => olo_t( 'Bio' ) ],
-            [ 'key' => 'profile_name_color', 'type' => 'color',   'label' => olo_t( 'Colore nome' ) ],
-            [ 'key' => 'bio_color',          'type' => 'color',   'label' => olo_t( 'Colore bio' ) ],
-            [ 'key' => 'max_width',          'type' => 'range',   'label' => olo_t( 'Larghezza max' ), 'min' => 300, 'max' => 600 ],
-            [ 'key' => 'text_align',         'type' => 'select',  'label' => olo_t( 'Allineamento' ), 'options' => [ 'left' => 'Sinistra', 'center' => 'Centro', 'right' => 'Destra' ] ],
-            [ 'key' => 'gap',                'type' => 'range',   'label' => olo_t( 'Gap (px)' ), 'min' => 4, 'max' => 24 ],
-            [ 'key' => 'link_color',         'type' => 'color',   'label' => olo_t( 'Colore testo link' ) ],
-            [ 'key' => 'link_bg',            'type' => 'color',   'label' => olo_t( 'Sfondo link' ) ],
-            [ 'key' => 'link_hover_bg',      'type' => 'color',   'label' => olo_t( 'Sfondo hover' ) ],
-            [ 'key' => 'link_border_radius', 'type' => 'range',   'label' => olo_t( 'Arrotondamento' ), 'min' => 0, 'max' => 30 ],
-            [ 'key' => 'link_padding',       'type' => 'range',   'label' => olo_t( 'Padding' ), 'min' => 8, 'max' => 24 ],
-            [ 'key' => 'background_color',   'type' => 'color',   'label' => olo_t( 'Colore sfondo' ) ],
-            [ 'key' => 'background_gradient','type' => 'text',    'label' => olo_t( 'Gradiente CSS' ) ],
-            [ 'key' => 'show_social_icons',  'type' => 'toggle',  'label' => olo_t( 'Mostra icone social' ) ],
+            [ 'key' => 'items',              'type' => 'content-items', 'label' => olobuild_t( 'Link' ) ],
+            [ 'key' => 'profile_image',      'type' => 'image',   'label' => olobuild_t( 'Foto profilo' ) ],
+            [ 'key' => 'profile_name',       'type' => 'text',    'label' => olobuild_t( 'Nome' ) ],
+            [ 'key' => 'profile_bio',        'type' => 'text',    'label' => olobuild_t( 'Bio' ) ],
+            [ 'key' => 'profile_name_color', 'type' => 'color',   'label' => olobuild_t( 'Colore nome' ) ],
+            [ 'key' => 'bio_color',          'type' => 'color',   'label' => olobuild_t( 'Colore bio' ) ],
+            [ 'key' => 'max_width',          'type' => 'range',   'label' => olobuild_t( 'Larghezza max' ), 'min' => 300, 'max' => 600 ],
+            [ 'key' => 'text_align',         'type' => 'select',  'label' => olobuild_t( 'Allineamento' ), 'options' => [ 'left' => 'Sinistra', 'center' => 'Centro', 'right' => 'Destra' ] ],
+            [ 'key' => 'gap',                'type' => 'range',   'label' => olobuild_t( 'Gap (px)' ), 'min' => 4, 'max' => 24 ],
+            [ 'key' => 'link_color',         'type' => 'color',   'label' => olobuild_t( 'Colore testo link' ) ],
+            [ 'key' => 'link_bg',            'type' => 'color',   'label' => olobuild_t( 'Sfondo link' ) ],
+            [ 'key' => 'link_hover_bg',      'type' => 'color',   'label' => olobuild_t( 'Sfondo hover' ) ],
+            [ 'key' => 'link_border_radius', 'type' => 'range',   'label' => olobuild_t( 'Arrotondamento' ), 'min' => 0, 'max' => 30 ],
+            [ 'key' => 'link_padding',       'type' => 'range',   'label' => olobuild_t( 'Padding' ), 'min' => 8, 'max' => 24 ],
+            [ 'key' => 'background_color',   'type' => 'color',   'label' => olobuild_t( 'Colore sfondo' ) ],
+            [ 'key' => 'background_gradient','type' => 'text',    'label' => olobuild_t( 'Gradiente CSS' ) ],
+            [ 'key' => 'show_social_icons',  'type' => 'toggle',  'label' => olobuild_t( 'Mostra icone social' ) ],
         ];
     }
 
@@ -65,14 +65,14 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
 
         $items = is_array( $s['items'] ) ? $s['items'] : [];
         if ( empty( $items ) ) {
-            return '<div class="olo-linkinbio" style="text-align:center;padding:20px;color:var(--olo-color-text-faint, #9CA3AF);">' . olo_t( 'Aggiungi dei link nell\'inspector.' ) . '</div>';
+            return '<div class="olo-linkinbio" style="text-align:center;padding:20px;color:var(--olo-color-text-faint, #9CA3AF);">' . olobuild_t( 'Aggiungi dei link nell\'inspector.' ) . '</div>';
         }
 
         $max_width    = max( 300, min( 600, absint( $s['max_width'] ) ) );
         $gap          = max( 4, min( 24, absint( $s['gap'] ) ) );
-        $radius       = Olo_Tile_Utils::border_radius( $s['link_border_radius'] ?? 0 );
-        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['link_border_radius_hover'] ?? null );
-        $padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['link_padding'] ?? 14, 14 );
+        $radius       = Olobuild_Tile_Utils::border_radius( $s['link_border_radius'] ?? 0 );
+        $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['link_border_radius_hover'] ?? null );
+        $padding = Olobuild_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['link_padding'] ?? 14, 14 );
         $text_align   = in_array( $s['text_align'], [ 'left', 'center', 'right' ], true ) ? $s['text_align'] : 'center';
 
         $link_color      = $this->safe_color_css( $s['link_color'] )      ?: 'var(--olo-color-primary, #e1474f)';
@@ -94,7 +94,7 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colours via the safe_color_css() whitelist, gradient via a strict preg_replace() character whitelist, absint()/min()/max() clamps for sizes, in_array() whitelist for alignment, Olo_Tile_Utils border_radius()/radius_force_css()/spacing_css() helpers; $uid is internally generated. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colours via the safe_color_css() whitelist, gradient via a strict preg_replace() character whitelist, absint()/min()/max() clamps for sizes, in_array() whitelist for alignment, Olobuild_Tile_Utils border_radius()/radius_force_css()/spacing_css() helpers; $uid is internally generated. ?>
         <style>
             #<?php echo $uid; ?> { background: <?php echo $bg_style; ?>; padding: 32px 16px; display: flex; justify-content: center; }
             #<?php echo $uid; ?> .olo-lib-inner { width: 100%; max-width: <?php echo $max_width; ?>px; text-align: <?php echo $text_align; ?>; }
@@ -167,7 +167,7 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
         </div>
         <?php
         $tfx_css = $this->tfx_css( $s, '#' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Text_Effects::css() from whitelisted effects, sanitized colors and integer timings
         $this->tfx_print_script();
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
@@ -175,8 +175,8 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
-            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olo_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
+            if ( $border_css ) echo ".{$uid}{{$border_css}}"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_css() from sanitized settings; $uid is internally generated
+            echo $border_hover_css . $border_effect_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS generated by Olobuild_Tile_Base::build_border_hover_css()/build_border_effect_css() from sanitized settings
         }
         return ob_get_clean();
     }

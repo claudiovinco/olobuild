@@ -1,6 +1,6 @@
 <?php
 /**
- * Olo_Font_Host — self-hosting dei Google Fonts.
+ * Olobuild_Font_Host — self-hosting dei Google Fonts.
  *
  * Scarica i file woff2 da Google una sola volta, li salva in
  * /uploads/olo-fonts/ e genera regole @font-face con URL locali.
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Olo_Font_Host {
+class Olobuild_Font_Host {
 
     const DIR = 'olo-fonts';
     const UA  = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';

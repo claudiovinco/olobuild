@@ -1,10 +1,10 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class Olo_Theme_Importer {
+class Olobuild_Theme_Importer {
 
     public static function get_themes() {
-        $themes_dir = OLO_PATH . 'assets/data/themes/';
+        $themes_dir = OLOBUILD_PATH . 'assets/data/themes/';
         $themes = [];
         if ( ! is_dir( $themes_dir ) ) return $themes;
 
@@ -16,7 +16,7 @@ class Olo_Theme_Importer {
             $screenshot = '';
             foreach ( [ 'screenshot.jpg', 'screenshot.png', 'screenshot.webp' ] as $ext ) {
                 if ( file_exists( $dir . '/' . $ext ) ) {
-                    $screenshot = OLO_URL . 'assets/data/themes/' . $theme_id . '/' . $ext;
+                    $screenshot = OLOBUILD_URL . 'assets/data/themes/' . $theme_id . '/' . $ext;
                     break;
                 }
             }
@@ -62,9 +62,9 @@ class Olo_Theme_Importer {
             ? array_values( $styles['google_fonts'] ) : [];
 
         // Link alla pagina del tema. Predisposto: vuoto finché olotheme.com non avrà un
-        // catalogo. Quando ci sarà, basta il filtro `olo_theme_catalog_url` (o un `url` in
+        // catalogo. Quando ci sarà, basta il filtro `olobuild_theme_catalog_url` (o un `url` in
         // theme.json) → il link compare in automatico su tutte le card, zero altre modifiche.
-        $catalog = apply_filters( 'olo_theme_catalog_url', '' );
+        $catalog = apply_filters( 'olobuild_theme_catalog_url', '' );
         $url = ( isset( $data['url'] ) && $data['url'] ) ? $data['url']
             : ( $catalog ? rtrim( $catalog, '/' ) . '/' . $theme_id . '/' : '' );
 
@@ -165,7 +165,7 @@ class Olo_Theme_Importer {
 
         $dir = $theme['dir'];
         $theme_json = json_decode( file_get_contents( $dir . '/theme.json' ), true );
-        $db = new Olo_Database();
+        $db = new Olobuild_Database();
         $results = [ 'templates' => [], 'styles' => false, 'activated' => [] ];
 
         // ── Step 1: Copy logos to uploads ──
@@ -297,8 +297,8 @@ class Olo_Theme_Importer {
             // Allinea le palette derivate ai colori del tema: senza questo i
             // olo_global_colors[core] (che VINCONO in generate_css) e i dark_colors restano
             // placeholder e SOVRASCRIVONO il tema (primario verde/indaco invece del brand).
-            if ( ! empty( $merged['colors'] ) && is_array( $merged['colors'] ) && class_exists( 'Olo_Style_System' ) ) {
-                $ss = Olo_Style_System::instance();
+            if ( ! empty( $merged['colors'] ) && is_array( $merged['colors'] ) && class_exists( 'Olobuild_Style_System' ) ) {
+                $ss = Olobuild_Style_System::instance();
                 $ss->sync_global_palette( $merged['colors'] );
                 // Allinea i ruoli brand del dark SOLO se il tema non porta una propria palette dark.
                 if ( empty( $theme_json['styles']['dark_colors'] ) ) {
@@ -307,25 +307,25 @@ class Olo_Theme_Importer {
             }
         }
 
-        // ── Step 5b: Global feature — cursore custom (Olo_Magnetic_Cursor) ──
+        // ── Step 5b: Global feature — cursore custom (Olobuild_Magnetic_Cursor) ──
         // Il tema può attivare/configurare il cursore neon (anello+dot, blend, pull).
         // Se la chiave 'cursor' manca, il cursore resta com'è (nessuna regressione).
         if ( ! empty( $theme_json['cursor'] ) && is_array( $theme_json['cursor'] ) ) {
-            if ( ! class_exists( 'Olo_Magnetic_Cursor' ) ) {
-                require_once OLO_PATH . 'includes/class-magnetic-cursor.php';
+            if ( ! class_exists( 'Olobuild_Magnetic_Cursor' ) ) {
+                require_once OLOBUILD_PATH . 'includes/class-magnetic-cursor.php';
             }
-            update_option( 'olo_magnetic_cursor', Olo_Magnetic_Cursor::sanitize( $theme_json['cursor'] ) );
+            update_option( 'olo_magnetic_cursor', Olobuild_Magnetic_Cursor::sanitize( $theme_json['cursor'] ) );
             $results['cursor'] = true;
         }
 
-        // ── Step 5c: Global feature — HUD mirino (Olo_Cursor_Hud) ──
+        // ── Step 5c: Global feature — HUD mirino (Olobuild_Cursor_Hud) ──
         // Crosshair + coordinate + label sezione corrente (tema "sala di regia").
         // Se la chiave 'cursor_hud' manca, l'HUD resta com'è (nessuna regressione).
         if ( ! empty( $theme_json['cursor_hud'] ) && is_array( $theme_json['cursor_hud'] ) ) {
-            if ( ! class_exists( 'Olo_Cursor_Hud' ) ) {
-                require_once OLO_PATH . 'includes/class-cursor-hud.php';
+            if ( ! class_exists( 'Olobuild_Cursor_Hud' ) ) {
+                require_once OLOBUILD_PATH . 'includes/class-cursor-hud.php';
             }
-            update_option( 'olo_cursor_hud', Olo_Cursor_Hud::sanitize( $theme_json['cursor_hud'] ) );
+            update_option( 'olo_cursor_hud', Olobuild_Cursor_Hud::sanitize( $theme_json['cursor_hud'] ) );
             $results['cursor_hud'] = true;
         }
 
