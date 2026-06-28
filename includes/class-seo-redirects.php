@@ -117,7 +117,9 @@ class Olo_Seo_Redirects {
         global $wpdb;
 
         // Exact match
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olo_redirects); nessun equivalente WP_Query; risultato non cacheabile; solo il nome tabella e' interpolato, il valore passa da $wpdb->prepare (%s).
         $redirect = $wpdb->get_row( $wpdb->prepare(
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
             "SELECT * FROM {$this->table_redirects()} WHERE from_url = %s LIMIT 1",
             $request_path
         ) );
@@ -128,7 +130,9 @@ class Olo_Seo_Redirects {
             if ( $alt === $request_path ) {
                 $alt = $request_path . '/';
             }
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olo_redirects); nessun equivalente WP_Query; risultato non cacheabile; solo il nome tabella e' interpolato, il valore passa da $wpdb->prepare (%s).
             $redirect = $wpdb->get_row( $wpdb->prepare(
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
                 "SELECT * FROM {$this->table_redirects()} WHERE from_url = %s LIMIT 1",
                 $alt
             ) );
@@ -136,7 +140,9 @@ class Olo_Seo_Redirects {
 
         // Regex match (from_url starts with ~)
         if ( ! $redirect ) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olo_redirects); nessun equivalente WP_Query; risultato non cacheabile; query senza valori utente (solo nome tabella interpolato, filtro LIKE su letterale costante).
             $regex_redirects = $wpdb->get_results(
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
                 "SELECT * FROM {$this->table_redirects()} WHERE from_url LIKE '~%' LIMIT 50"
             );
             foreach ( $regex_redirects as $r ) {
@@ -145,6 +151,7 @@ class Olo_Seo_Redirects {
                 if ( $result === false ) {
                     // Invalid regex pattern — skip to avoid ReDoS and log for debug
                     if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- diagnostica gated su WP_DEBUG: pattern regex di redirect non valido
                         error_log( 'Olobuild: invalid redirect regex pattern: ' . $pattern );
                     }
                     continue;
@@ -168,7 +175,9 @@ class Olo_Seo_Redirects {
         }
 
         // Update hit counter
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olo_redirects); nessun equivalente WP_Query; scrittura non cacheabile; solo il nome tabella e' interpolato, il valore passa da $wpdb->prepare (%d).
         $wpdb->query( $wpdb->prepare(
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
             "UPDATE {$this->table_redirects()} SET hits = hits + 1 WHERE id = %d",
             $redirect->id
         ) );
@@ -190,12 +199,14 @@ class Olo_Seo_Redirects {
             exit;
         }
 
+        // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- redirect SEO verso una destinazione configurata dall'amministratore (può essere esterna per scelta); wp_safe_redirect bloccherebbe i redirect cross-domain voluti
         wp_redirect( $to_url, $status );
         exit;
     }
 
     private function get_request_path() {
-        $request_uri = $_SERVER['REQUEST_URI'] ?? '';
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only di REQUEST_URI per il routing front-end (matching redirect / log 404); nessuna modifica di stato indotta dall'input; valore sanitizzato sotto.
+        $request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
         $parsed      = wp_parse_url( $request_uri );
         $path        = $parsed['path'] ?? '/';
 
@@ -232,10 +243,13 @@ class Olo_Seo_Redirects {
 
         global $wpdb;
         $url        = substr( $path, 0, 500 );
-        $referer    = isset( $_SERVER['HTTP_REFERER'] ) ? substr( sanitize_text_field( $_SERVER['HTTP_REFERER'] ), 0, 500 ) : '';
-        $user_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? substr( sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ), 0, 500 ) : '';
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only di header HTTP per il log diagnostico 404; nessuna elaborazione di form; valori sanitizzati.
+        $referer    = isset( $_SERVER['HTTP_REFERER'] ) ? substr( sanitize_text_field( wp_unslash( $_SERVER['HTTP_REFERER'] ) ), 0, 500 ) : '';
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only di header HTTP per il log diagnostico 404; nessuna elaborazione di form; valori sanitizzati.
+        $user_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? substr( sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ), 0, 500 ) : '';
 
-        // Upsert: increment hits if exists, otherwise insert
+        // Upsert: increment hits if exists, otherwise insert.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olo_404_log); nessun equivalente WP_Query; letture/scritture non cacheabili; solo il nome tabella e' interpolato, tutti i valori passano da $wpdb->prepare (%s/%d).
         $existing = $wpdb->get_var( $wpdb->prepare(
             "SELECT id FROM {$this->table_404_log()} WHERE url = %s LIMIT 1",
             $url
@@ -261,8 +275,9 @@ class Olo_Seo_Redirects {
         // Prune old entries (keep max 500)
         $count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_404_log()}" );
         if ( $count > 500 ) {
-            $wpdb->query( "DELETE FROM {$this->table_404_log()} ORDER BY last_hit ASC LIMIT " . ( $count - 500 ) );
+            $wpdb->query( $wpdb->prepare( "DELETE FROM {$this->table_404_log()} ORDER BY last_hit ASC LIMIT %d", max( 0, $count - 500 ) ) );
         }
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
     }
 
     /* ═══════════════════════════════════════════════════
@@ -320,11 +335,14 @@ class Olo_Seo_Redirects {
             return;
         }
 
-        $active_tab = sanitize_text_field( $_GET['tab'] ?? 'redirects' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per selezione tab della pagina admin (routing UI); nessuna modifica di stato; valore sanitizzato.
+        $active_tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'redirects';
         global $wpdb;
 
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabelle custom del plugin (olo_redirects/olo_404_log); nessun equivalente WP_Query; conteggio non cacheabile; solo nomi tabella interpolati, nessun valore utente in query.
         $redirect_count = intval( $wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_redirects()}" ) );
         $monitor_count  = intval( $wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_404_log()}" ) );
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
         $subnav = [
             [ 'slug' => 'redirects', 'label' => __( 'Redirect', 'olobuild' ),    'count' => (int) $redirect_count, 'href' => admin_url( 'admin.php?page=olo-redirects&tab=redirects' ) ],
@@ -369,6 +387,7 @@ class Olo_Seo_Redirects {
 
     private function render_tab_redirects() {
         global $wpdb;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olo_redirects); nessun equivalente WP_Query; lista admin non cacheabile; solo il nome tabella e' interpolato, nessun valore utente in query.
         $redirects = $wpdb->get_results( "SELECT * FROM {$this->table_redirects()} ORDER BY created_at DESC LIMIT 200" );
         ?>
         <!-- Add redirect card -->
@@ -523,6 +542,7 @@ class Olo_Seo_Redirects {
 
     private function render_tab_monitor() {
         global $wpdb;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olo_404_log); nessun equivalente WP_Query; lista admin non cacheabile; solo il nome tabella e' interpolato, nessun valore utente in query.
         $entries = $wpdb->get_results( "SELECT * FROM {$this->table_404_log()} ORDER BY hits DESC, last_hit DESC LIMIT 100" );
         ?>
         <div class="olo-card">
@@ -739,9 +759,9 @@ class Olo_Seo_Redirects {
             wp_send_json_error( 'Permesso negato.' );
         }
 
-        $from = sanitize_text_field( $_POST['from_url'] ?? '' );
-        $to   = sanitize_text_field( $_POST['to_url'] ?? '' );
-        $type = intval( $_POST['type'] ?? 301 );
+        $from = isset( $_POST['from_url'] ) ? sanitize_text_field( wp_unslash( $_POST['from_url'] ) ) : '';
+        $to   = isset( $_POST['to_url'] ) ? sanitize_text_field( wp_unslash( $_POST['to_url'] ) ) : '';
+        $type = isset( $_POST['type'] ) ? intval( wp_unslash( $_POST['type'] ) ) : 301;
 
         if ( ! $from ) {
             wp_send_json_error( 'URL di origine obbligatorio.' );
@@ -750,7 +770,9 @@ class Olo_Seo_Redirects {
         global $wpdb;
 
         // Check duplicates
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olo_redirects); nessun equivalente WP_Query; risultato non cacheabile; solo il nome tabella e' interpolato, il valore passa da $wpdb->prepare (%s).
         $exists = $wpdb->get_var( $wpdb->prepare(
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
             "SELECT id FROM {$this->table_redirects()} WHERE from_url = %s",
             $from
         ) );
@@ -758,6 +780,7 @@ class Olo_Seo_Redirects {
             wp_send_json_error( 'Redirect per questo URL esiste già.' );
         }
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_redirects); nessun equivalente WP_Query; inserimento non cacheabile; valori passati come array a $wpdb->insert con formati %s/%d.
         $wpdb->insert( $this->table_redirects(), [
             'from_url'   => $from,
             'to_url'     => $to,
@@ -775,12 +798,13 @@ class Olo_Seo_Redirects {
             wp_send_json_error( 'Permesso negato.' );
         }
 
-        $id = intval( $_POST['id'] ?? 0 );
+        $id = isset( $_POST['id'] ) ? intval( wp_unslash( $_POST['id'] ) ) : 0;
         if ( ! $id ) {
             wp_send_json_error( 'ID obbligatorio.' );
         }
 
         global $wpdb;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_redirects); nessun equivalente WP_Query; cancellazione non cacheabile; id passato come array a $wpdb->delete con formato %d.
         $wpdb->delete( $this->table_redirects(), [ 'id' => $id ], [ '%d' ] );
 
         wp_send_json_success();
@@ -792,12 +816,13 @@ class Olo_Seo_Redirects {
             wp_send_json_error( 'Permesso negato.' );
         }
 
-        $id = intval( $_POST['id'] ?? 0 );
+        $id = isset( $_POST['id'] ) ? intval( wp_unslash( $_POST['id'] ) ) : 0;
         if ( ! $id ) {
             wp_send_json_error();
         }
 
         global $wpdb;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_404_log); nessun equivalente WP_Query; cancellazione non cacheabile; id passato come array a $wpdb->delete con formato %d.
         $wpdb->delete( $this->table_404_log(), [ 'id' => $id ], [ '%d' ] );
 
         wp_send_json_success();
@@ -810,6 +835,7 @@ class Olo_Seo_Redirects {
         }
 
         global $wpdb;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olo_404_log); nessun equivalente WP_Query; svuotamento log non cacheabile; solo il nome tabella e' interpolato, nessun valore utente in query.
         $wpdb->query( "TRUNCATE TABLE {$this->table_404_log()}" );
 
         wp_send_json_success();
@@ -821,15 +847,17 @@ class Olo_Seo_Redirects {
             wp_send_json_error( 'Permesso negato.' );
         }
 
-        $id    = intval( $_POST['id'] ?? 0 );
-        $to    = sanitize_text_field( $_POST['to_url'] ?? '' );
+        $id    = isset( $_POST['id'] ) ? intval( wp_unslash( $_POST['id'] ) ) : 0;
+        $to    = isset( $_POST['to_url'] ) ? sanitize_text_field( wp_unslash( $_POST['to_url'] ) ) : '';
 
         if ( ! $id || ! $to ) {
             wp_send_json_error( 'Dati mancanti.' );
         }
 
         global $wpdb;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olo_404_log); nessun equivalente WP_Query; risultato non cacheabile; solo il nome tabella e' interpolato, il valore passa da $wpdb->prepare (%d).
         $entry = $wpdb->get_row( $wpdb->prepare(
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
             "SELECT * FROM {$this->table_404_log()} WHERE id = %d",
             $id
         ) );
@@ -839,6 +867,7 @@ class Olo_Seo_Redirects {
         }
 
         // Create redirect
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_redirects); nessun equivalente WP_Query; inserimento non cacheabile; valori passati come array a $wpdb->insert con formati %s/%d.
         $wpdb->insert( $this->table_redirects(), [
             'from_url'   => $entry->url,
             'to_url'     => $to,
@@ -848,6 +877,7 @@ class Olo_Seo_Redirects {
         ], [ '%s', '%s', '%d', '%d', '%s' ] );
 
         // Remove from 404 log
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_404_log); nessun equivalente WP_Query; cancellazione non cacheabile; id passato come array a $wpdb->delete con formato %d.
         $wpdb->delete( $this->table_404_log(), [ 'id' => $id ], [ '%d' ] );
 
         wp_send_json_success();

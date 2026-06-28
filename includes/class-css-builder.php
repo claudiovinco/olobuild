@@ -1188,6 +1188,6 @@ class Olo_CSS_Builder {
         if ( function_exists( 'wp_generate_uuid4' ) ) {
             return wp_generate_uuid4();
         }
-        return 'tile-' . uniqid() . '-' . substr( md5( mt_rand() ), 0, 8 );
+        return 'tile-' . uniqid() . '-' . substr( md5( wp_rand() ), 0, 8 );
     }
 }

@@ -69,7 +69,7 @@ class Olo_Performance_Settings {
         }
 
         $htaccess = get_home_path() . '.htaccess';
-        if ( file_exists( $htaccess ) ? ! is_writable( $htaccess ) : ! is_writable( dirname( $htaccess ) ) ) {
+        if ( file_exists( $htaccess ) ? ! wp_is_writable( $htaccess ) : ! wp_is_writable( dirname( $htaccess ) ) ) {
             return false;
         }
 
@@ -212,7 +212,8 @@ class Olo_Performance_Settings {
 
     public function render_page() {
         $opt  = self::get_option();
-        $tab  = sanitize_key( $_GET['tab'] ?? 'critical-css' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only di $_GET per routing della tab admin; nessuna modifica di stato; valore sanitizzato con sanitize_key( wp_unslash() ).
+        $tab  = sanitize_key( wp_unslash( $_GET['tab'] ?? 'critical-css' ) );
         $tabs = [
             'critical-css'    => __( 'Critical CSS', 'olobuild' ),
             'assets'          => __( 'Asset Optimizer', 'olobuild' ),
@@ -745,7 +746,8 @@ class Olo_Performance_Settings {
         $result = Olo_Critical_CSS::regenerate_all();
         wp_send_json_success( [
             'message'   => sprintf(
-                __( 'Rigenerato %d su %d pagine (%d errori)', 'olobuild' ),
+                /* translators: 1: pages regenerated, 2: total pages, 3: number of errors */
+                __( 'Rigenerato %1$d su %2$d pagine (%3$d errori)', 'olobuild' ),
                 $result['generated'], $result['total'], $result['failed']
             ),
             'generated' => $result['generated'],
@@ -765,6 +767,7 @@ class Olo_Performance_Settings {
 
         $purged = Olo_Critical_CSS::purge_all();
         wp_send_json_success( [
+            /* translators: %d: number of purged transients */
             'message' => sprintf( __( 'Svuotati %d transient Critical CSS', 'olobuild' ), $purged ),
         ] );
     }

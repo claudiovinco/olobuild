@@ -56,10 +56,13 @@ class Olo_Woo_Recently_Viewed_Tile extends Olo_Tile_Base {
 
         $s = wp_parse_args( $settings, $this->defaults );
 
-        // Get recently viewed product IDs from WooCommerce cookie
+        // Get recently viewed product IDs from WooCommerce cookie.
+        // Read-only render: the pipe-separated cookie is sanitized to a list of
+        // positive integers via sanitize_text_field() + per-element absint().
         $viewed_products = [];
         if ( isset( $_COOKIE['woocommerce_recently_viewed'] ) ) {
-            $viewed_products = array_filter( array_map( 'absint', explode( '|', wp_unslash( $_COOKIE['woocommerce_recently_viewed'] ) ) ) );
+            $rv_cookie       = sanitize_text_field( wp_unslash( $_COOKIE['woocommerce_recently_viewed'] ) );
+            $viewed_products = array_filter( array_map( 'absint', explode( '|', $rv_cookie ) ) );
         }
 
         if ( empty( $viewed_products ) ) {

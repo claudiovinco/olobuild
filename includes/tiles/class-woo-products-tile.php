@@ -111,13 +111,13 @@ class Olo_Woo_Products_Tile extends Olo_Tile_Base {
 
         // Orderby mapping for WooCommerce
         if ( $s['orderby'] === 'price' ) {
-            $query_args['meta_key'] = '_price';
+            $query_args['meta_key'] = '_price'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- ordinamento prodotti WooCommerce per prezzo; meta query necessaria alla funzione del tile, volume limitato (posts_per_page)
             $query_args['orderby']  = 'meta_value_num';
         } elseif ( $s['orderby'] === 'popularity' ) {
-            $query_args['meta_key'] = 'total_sales';
+            $query_args['meta_key'] = 'total_sales'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- ordinamento prodotti WooCommerce per popolarità; meta query necessaria alla funzione del tile, volume limitato (posts_per_page)
             $query_args['orderby']  = 'meta_value_num';
         } elseif ( $s['orderby'] === 'rating' ) {
-            $query_args['meta_key'] = '_wc_average_rating';
+            $query_args['meta_key'] = '_wc_average_rating'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- ordinamento prodotti WooCommerce per valutazione; meta query necessaria alla funzione del tile, volume limitato (posts_per_page)
             $query_args['orderby']  = 'meta_value_num';
         }
 
@@ -147,7 +147,7 @@ class Olo_Woo_Products_Tile extends Olo_Tile_Base {
             ];
         }
         if ( count( $tax_query ) > 1 ) {
-            $query_args['tax_query'] = $tax_query;
+            $query_args['tax_query'] = $tax_query; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- filtro prodotti per categoria/tag/featured WooCommerce; tax query necessaria alla funzione del tile, volume limitato (posts_per_page)
         }
 
         // On sale

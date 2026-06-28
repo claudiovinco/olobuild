@@ -175,6 +175,7 @@ class Olo_Critical_CSS {
 
         // Also invalidate any posts that use this template
         global $wpdb;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- lookup mirato per meta_key/meta_value su postmeta per invalidare i transient legati al template; valore passato via $wpdb->prepare; risultato puntuale non cacheabile (cache gestita via transient).
         $posts = $wpdb->get_col( $wpdb->prepare(
             "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_olo_template_id' AND meta_value = %s",
             (string) $post_id
@@ -196,6 +197,7 @@ class Olo_Critical_CSS {
         global $wpdb;
 
         // Find all posts with Olobuild template assignments
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- scansione una-tantum di postmeta per il batch di rigenerazione; nessun valore utente in SQL (solo literal); operazione di manutenzione non cacheabile.
         $post_ids = $wpdb->get_col(
             "SELECT DISTINCT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_olo_template_id' AND meta_value != '0' AND meta_value != ''"
         );
@@ -229,6 +231,7 @@ class Olo_Critical_CSS {
     public static function purge_all() {
         global $wpdb;
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- purge in blocco dei transient del Critical CSS via pattern LIKE su options (nessuna API WP per cancellazione bulk per prefisso); valori LIKE passati via $wpdb->prepare; operazione di scrittura non cacheabile.
         $count = $wpdb->query(
             $wpdb->prepare(
                 "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
@@ -248,6 +251,7 @@ class Olo_Critical_CSS {
     public static function get_status() {
         global $wpdb;
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- conteggio dei transient Critical CSS via pattern LIKE su options (nessuna API WP per enumerazione per prefisso); valori LIKE passati via $wpdb->prepare; statistica live non cacheabile.
         $cached_count = (int) $wpdb->get_var(
             $wpdb->prepare(
                 "SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE %s AND option_name NOT LIKE %s",
@@ -256,6 +260,7 @@ class Olo_Critical_CSS {
             )
         );
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- lettura del timeout transient più recente via pattern LIKE su options (nessuna API WP equivalente); valore LIKE passato via $wpdb->prepare; statistica live non cacheabile.
         $last_generated = $wpdb->get_var(
             $wpdb->prepare(
                 "SELECT option_value FROM {$wpdb->options} WHERE option_name LIKE %s ORDER BY option_value DESC LIMIT 1",
@@ -266,7 +271,7 @@ class Olo_Critical_CSS {
         return [
             'enabled'        => (bool) get_option( 'olo_critical_css_enabled', false ),
             'cached_count'   => $cached_count,
-            'last_generated' => $last_generated ? date( 'Y-m-d H:i:s', intval( $last_generated ) - self::CACHE_TTL ) : null,
+            'last_generated' => $last_generated ? wp_date( 'Y-m-d H:i:s', intval( $last_generated ) - self::CACHE_TTL ) : null,
         ];
     }
 

@@ -56,7 +56,8 @@ class Olo_Tools {
             return;
         }
 
-        $tab  = sanitize_key( $_GET['tab'] ?? 'generale' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per routing/selezione tab della pagina admin; nessuna modifica di stato; valore sanitizzato con sanitize_key + wp_unslash.
+        $tab  = sanitize_key( wp_unslash( $_GET['tab'] ?? 'generale' ) );
         $tabs = [
             'generale'         => __( 'Generale', 'olobuild' ),
             'url-replace'      => __( 'Sostituzione URL', 'olobuild' ),
@@ -356,11 +357,14 @@ class Olo_Tools {
         global $wpdb;
         $prefix = $wpdb->prefix;
 
+        // Tabelle custom del plugin ({prefix}olo_templates, {prefix}olo_revisions); nessun equivalente WP_Query; risultato non cacheabile (lista admin). Solo nomi tabella da $wpdb->prefix interpolati, nessun valore utente in SQL.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $templates = $wpdb->get_results(
             "SELECT t.id, t.title, t.type, t.updated_at,
                 (SELECT COUNT(*) FROM {$prefix}olo_revisions r WHERE r.template_id = t.id) AS rev_count
              FROM {$prefix}olo_templates t ORDER BY t.title"
         );
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         ?>
         <div class="olo-card">
             <div class="olo-card-head">
@@ -508,6 +512,8 @@ class Olo_Tools {
         $bypass_secret          = get_option( 'olo_maintenance_bypass_secret', '' );
 
         // Get all templates
+        // Tabella custom del plugin ({prefix}olo_templates); nessun equivalente WP_Query; risultato non cacheabile (lista admin). Solo il nome tabella da $wpdb->prefix è interpolato, nessun valore utente in SQL.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $templates = $wpdb->get_results( "SELECT id, title, type FROM {$prefix}olo_templates ORDER BY title" );
 
         // Get all WP roles
@@ -683,6 +689,8 @@ class Olo_Tools {
     private function render_template_website_inline() {
         global $wpdb;
         $prefix    = $wpdb->prefix;
+        // Tabella custom del plugin ({prefix}olo_templates); nessun equivalente WP_Query; risultato non cacheabile (lista admin). Solo il nome tabella da $wpdb->prefix è interpolato, nessun valore utente in SQL.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $templates = $wpdb->get_results( "SELECT id, title, type FROM {$prefix}olo_templates ORDER BY title" );
         $rest_url  = esc_url( rest_url( 'olo/v1/' ) );
         $nonce     = wp_create_nonce( 'wp_rest' );
@@ -816,6 +824,8 @@ class Olo_Tools {
 
         // DB transients matching %olo_%
         global $wpdb;
+        // Pulizia transient del plugin: il LIKE è una stringa letterale (nessun input utente), interpolato solo $wpdb->options (nome tabella core); operazione di flush cache una-tantum non cacheabile.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $deleted = $wpdb->query(
             "DELETE FROM {$wpdb->options} WHERE option_name LIKE '%\_transient\_%olo\_%'"
         );
@@ -836,8 +846,8 @@ class Olo_Tools {
         }
 
         $allowed_keys = [ 'olo_safe_mode', 'olo_debug_bar' ];
-        $key   = sanitize_key( $_POST['key'] ?? '' );
-        $value = sanitize_text_field( $_POST['value'] ?? '' );
+        $key   = sanitize_key( wp_unslash( $_POST['key'] ?? '' ) );
+        $value = sanitize_text_field( wp_unslash( $_POST['value'] ?? '' ) );
 
         if ( ! in_array( $key, $allowed_keys, true ) ) {
             wp_send_json_error( 'Opzione non valida.' );
@@ -860,8 +870,8 @@ class Olo_Tools {
             wp_send_json_error( 'Permesso negato.' );
         }
 
-        $old_url = esc_url_raw( trim( $_POST['old_url'] ?? '' ) );
-        $new_url = esc_url_raw( trim( $_POST['new_url'] ?? '' ) );
+        $old_url = trim( esc_url_raw( wp_unslash( $_POST['old_url'] ?? '' ) ) );
+        $new_url = trim( esc_url_raw( wp_unslash( $_POST['new_url'] ?? '' ) ) );
 
         if ( empty( $old_url ) || empty( $new_url ) ) {
             wp_send_json_error( 'Inserisci entrambi gli URL.' );
@@ -869,6 +879,8 @@ class Olo_Tools {
 
         global $wpdb;
         $table = $wpdb->prefix . 'olo_templates';
+        // Tabella custom del plugin ({prefix}olo_templates); nessun equivalente WP_Query; risultato non cacheabile (sostituzione URL una-tantum). $table è solo $wpdb->prefix + nome fisso, nessun valore utente in SQL.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $rows  = $wpdb->get_results( "SELECT id, content FROM {$table}" );
         $db    = new Olo_Database();
 
@@ -886,6 +898,7 @@ class Olo_Tools {
                 }
 
                 // Update template with replaced content (raw JSON string)
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
                 $wpdb->update(
                     $table,
                     [ 'content' => $replaced ],
@@ -911,7 +924,7 @@ class Olo_Tools {
             wp_send_json_error( 'Permesso negato.' );
         }
 
-        $revision_id = intval( $_POST['revision_id'] ?? 0 );
+        $revision_id = intval( wp_unslash( $_POST['revision_id'] ?? 0 ) );
         if ( ! $revision_id ) {
             wp_send_json_error( 'ID revisione non valido.' );
         }
@@ -962,11 +975,11 @@ class Olo_Tools {
             wp_send_json_error( 'Permesso negato.' );
         }
 
-        $mode                    = sanitize_key( $_POST['mode'] ?? 'off' );
-        $template_id             = intval( $_POST['template_id'] ?? 0 );
-        $coming_soon_template_id = intval( $_POST['coming_soon_template_id'] ?? 0 );
-        $bypass_secret           = sanitize_text_field( $_POST['bypass_secret'] ?? '' );
-        $bypass_roles            = array_map( 'sanitize_key', (array) ( $_POST['bypass_roles'] ?? [ 'administrator' ] ) );
+        $mode                    = sanitize_key( wp_unslash( $_POST['mode'] ?? 'off' ) );
+        $template_id             = intval( wp_unslash( $_POST['template_id'] ?? 0 ) );
+        $coming_soon_template_id = intval( wp_unslash( $_POST['coming_soon_template_id'] ?? 0 ) );
+        $bypass_secret           = sanitize_text_field( wp_unslash( $_POST['bypass_secret'] ?? '' ) );
+        $bypass_roles            = array_map( 'sanitize_key', (array) wp_unslash( $_POST['bypass_roles'] ?? [ 'administrator' ] ) );
 
         $valid_modes = [ 'off', 'coming_soon', 'maintenance' ];
         if ( ! in_array( $mode, $valid_modes, true ) ) {
@@ -1018,8 +1031,10 @@ class Olo_Tools {
 
         // Bypass via secret URL parameter
         $bypass_secret = get_option( 'olo_maintenance_bypass_secret', '' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- frontend pubblico servito da cache: nessun nonce disponibile; lettura read-only confrontata con un segreto lato server; nessuna modifica di stato; valore sanitizzato con sanitize_text_field + wp_unslash.
         if ( $bypass_secret && isset( $_GET['bypass'] ) ) {
-            if ( sanitize_text_field( $_GET['bypass'] ) === $bypass_secret ) {
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- frontend pubblico servito da cache: nessun nonce; lettura read-only confrontata con un segreto lato server; nessuna modifica di stato; valore sanitizzato.
+            if ( sanitize_text_field( wp_unslash( $_GET['bypass'] ) ) === $bypass_secret ) {
                 return;
             }
         }
@@ -1028,7 +1043,9 @@ class Olo_Tools {
         if ( is_admin() || wp_doing_ajax() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
             return;
         }
-        if ( strpos( $_SERVER['REQUEST_URI'], 'wp-login.php' ) !== false ) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- frontend pubblico read-only: controllo di routing per non bloccare wp-login.php; nessuna modifica di stato; $_SERVER['REQUEST_URI'] sanitizzato con sanitize_text_field + wp_unslash.
+        $request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+        if ( strpos( $request_uri, 'wp-login.php' ) !== false ) {
             return;
         }
 

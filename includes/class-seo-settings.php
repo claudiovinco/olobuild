@@ -145,7 +145,8 @@ class Olo_Seo_Settings {
             'advanced'  => 'Avanzate',
         ];
 
-        $active_tab = sanitize_text_field( $_GET['tab'] ?? 'titles' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per il routing del tab nella pagina admin (sotto current_user_can manage_options); nessuna modifica di stato; valore sanitizzato e validato contro la whitelist $tabs.
+        $active_tab = sanitize_text_field( wp_unslash( $_GET['tab'] ?? 'titles' ) );
         if ( ! array_key_exists( $active_tab, $tabs ) ) {
             $active_tab = 'titles';
         }
@@ -1509,7 +1510,7 @@ class Olo_Seo_Settings {
     }
 
     public function save_seo_meta_box( $post_id, $post ) {
-        if ( ! isset( $_POST['olo_seo_nonce'] ) || ! wp_verify_nonce( $_POST['olo_seo_nonce'], 'olo_seo_meta_box' ) ) {
+        if ( ! isset( $_POST['olo_seo_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['olo_seo_nonce'] ) ), 'olo_seo_meta_box' ) ) {
             return;
         }
         if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
@@ -1534,8 +1535,9 @@ class Olo_Seo_Settings {
             'olo_seo_schema_type'    => '_olo_seo_schema_type',
         ];
 
+        // Nonce verificato sopra (wp_verify_nonce 'olo_seo_meta_box') + current_user_can edit_post.
         foreach ( $fields as $post_key => $meta_key ) {
-            $value = sanitize_text_field( $_POST[ $post_key ] ?? '' );
+            $value = sanitize_text_field( wp_unslash( $_POST[ $post_key ] ?? '' ) );
             if ( $value ) {
                 update_post_meta( $post_id, $meta_key, $value );
             } else {
@@ -1544,6 +1546,7 @@ class Olo_Seo_Settings {
         }
 
         // JSON-LD custom — textarea, sanitizzato preservando struttura JSON.
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- valore unslashato qui e sanitizzato sotto con wp_kses_post() (preserva la struttura JSON-LD) prima di update_post_meta; nonce verificato sopra.
         $extra = isset( $_POST['olo_seo_extra_jsonld'] ) ? wp_unslash( $_POST['olo_seo_extra_jsonld'] ) : '';
         if ( is_string( $extra ) && trim( $extra ) !== '' ) {
             update_post_meta( $post_id, '_olo_seo_extra_jsonld', wp_kses_post( $extra ) );
@@ -1551,8 +1554,8 @@ class Olo_Seo_Settings {
             delete_post_meta( $post_id, '_olo_seo_extra_jsonld' );
         }
 
-        // FAQ Schema data
-        $faq_raw = $_POST['olo_seo_faq'] ?? [];
+        // FAQ Schema data — nonce verificato sopra ('olo_seo_meta_box') + current_user_can edit_post.
+        $faq_raw = isset( $_POST['olo_seo_faq'] ) ? wp_unslash( $_POST['olo_seo_faq'] ) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- array grezzo: ogni elemento (q/a) sanitizzato singolarmente sotto con sanitize_text_field/sanitize_textarea_field.
         if ( is_array( $faq_raw ) && ! empty( $faq_raw ) ) {
             $faq_clean = [];
             foreach ( $faq_raw as $item ) {

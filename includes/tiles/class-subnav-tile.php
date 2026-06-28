@@ -61,7 +61,8 @@ class Olo_Subnav_Tile extends Olo_Tile_Base {
         }
 
         $uid = 'olo-sn-' . wp_unique_id();
-        $current_url = isset( $_SERVER['REQUEST_URI'] ) ? rtrim( strtok( $_SERVER['REQUEST_URI'], '?' ), '/' ) : '';
+        $request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+        $current_url = $request_uri !== '' ? rtrim( strtok( $request_uri, '?' ), '/' ) : '';
         $highlight   = ! empty( $s['highlight_current'] );
 
         // Colors (safe_color_css: solo formati colore CSS validi, '' altrimenti)
@@ -225,7 +226,8 @@ class Olo_Subnav_Tile extends Olo_Tile_Base {
 
         if ( $depth === 'auto' ) {
             // Children of the current page's menu item
-            $current_url  = home_url( isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '' );
+            $request_uri  = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+            $current_url  = home_url( $request_uri );
             $current_path = rtrim( strtok( wp_parse_url( $current_url, PHP_URL_PATH ) ?: '', '?' ), '/' );
 
             // Find current item in menu

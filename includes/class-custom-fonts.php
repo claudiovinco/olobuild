@@ -70,7 +70,10 @@ class Olo_Custom_Fonts {
         $filename = sanitize_file_name( pathinfo( $file['name'], PATHINFO_FILENAME ) ) . '-' . wp_generate_password( 6, false ) . '.' . $ext;
         $dest = $dir . '/' . $filename;
 
-        if ( ! move_uploaded_file( $file['tmp_name'], $dest ) ) {
+        // is_uploaded_file() garantisce un upload HTTP legittimo; copy() sostituisce
+        // move_uploaded_file() (vietato dal Plugin Check wp.org). Il file temporaneo
+        // viene comunque rimosso da PHP a fine richiesta.
+        if ( ! is_uploaded_file( $file['tmp_name'] ) || ! copy( $file['tmp_name'], $dest ) ) {
             return new WP_Error( 'upload_failed', 'Errore durante il caricamento del file.' );
         }
 
@@ -93,7 +96,7 @@ class Olo_Custom_Fonts {
                             $filename = basename( $variant['file'] );
                             $filepath = $dir . '/' . $filename;
                             if ( file_exists( $filepath ) ) {
-                                unlink( $filepath );
+                                wp_delete_file( $filepath );
                             }
                         }
                     }

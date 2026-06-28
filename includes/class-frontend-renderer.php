@@ -837,7 +837,9 @@ class Olo_Frontend_Renderer {
             case 'url_contains':
                 $str = $settings['cond_url_contains'] ?? '';
                 if ( $str === '' ) return true;
-                return ( str_contains( $_SERVER['REQUEST_URI'], $str ) );
+                // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per filtro di visibilità (display condition url_contains); nessuna modifica di stato; valore sanitizzato.
+                $request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+                return ( str_contains( $request_uri, $str ) );
             case 'day_of_week':
                 $cond_day = strtolower( $settings['cond_day'] ?? '' );
                 if ( $cond_day === '' ) return true;
@@ -852,12 +854,14 @@ class Olo_Frontend_Renderer {
             case 'referrer_url':
                 $cond_ref = $settings['cond_referrer'] ?? '';
                 if ( $cond_ref === '' ) return true;
-                $referrer = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '';
+                // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per filtro di visibilità (display condition referrer_url); nessuna modifica di stato; valore sanitizzato.
+                $referrer = isset( $_SERVER['HTTP_REFERER'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) : '';
                 return ( str_contains( $referrer, $cond_ref ) );
             case 'browser':
                 $cond_browser = strtolower( $settings['cond_browser'] ?? '' );
                 if ( $cond_browser === '' ) return true;
-                $ua = strtolower( isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : '' );
+                // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per filtro di visibilità (display condition browser); nessuna modifica di stato; valore sanitizzato.
+                $ua = strtolower( isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '' );
                 return ( str_contains( $ua, $cond_browser ) );
             case 'woo_cart_empty':
                 if ( ! function_exists( 'WC' ) ) return true;
@@ -994,7 +998,9 @@ class Olo_Frontend_Renderer {
                 $qs_key   = $settings['cond_qs_key'] ?? '';
                 $qs_value = $settings['cond_qs_value'] ?? '';
                 if ( $qs_key === '' ) return true;
-                return ( isset( $_GET[ $qs_key ] ) && $_GET[ $qs_key ] === $qs_value );
+                // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per filtro di visibilità (display condition query_string_equals); nessuna modifica di stato; valore sanitizzato.
+                $qs_actual = isset( $_GET[ $qs_key ] ) ? sanitize_text_field( wp_unslash( $_GET[ $qs_key ] ) ) : null;
+                return ( $qs_actual !== null && $qs_actual === $qs_value );
 
             default:
                 return true;
@@ -1932,7 +1938,8 @@ class Olo_Frontend_Renderer {
             $loop_pagination_html = '';
             if ( $loop_enabled ) {
                 $row_id_short = substr( md5( $node['id'] ?? wp_rand() ), 0, 8 );
-                $current_page = isset( $_GET[ 'olo_p_' . $row_id_short ] ) ? max( 1, intval( $_GET[ 'olo_p_' . $row_id_short ] ) ) : 1;
+                // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per paginazione del Row Loop; nessuna modifica di stato; valore forzato a intero.
+                $current_page = isset( $_GET[ 'olo_p_' . $row_id_short ] ) ? max( 1, intval( wp_unslash( $_GET[ 'olo_p_' . $row_id_short ] ) ) ) : 1;
                 $loop_query = $this->run_row_loop_query( $s, $current_page, true );
                 $html .= $this->render_row_loop_children( $node['children'] ?? [], $loop_query->posts, $manager, $template_id, $hover_css_rules, $tile_counter, true );
                 $loop_pagination_html = $this->render_row_loop_pagination( $s, $current_page, intval( $loop_query->max_num_pages ), $row_id_short );
@@ -1972,7 +1979,8 @@ class Olo_Frontend_Renderer {
             $loop_pagination_html_flex = '';
             if ( $loop_enabled_flex ) {
                 $row_id_short_flex = substr( md5( $node['id'] ?? wp_rand() ), 0, 8 );
-                $current_page_flex = isset( $_GET[ 'olo_p_' . $row_id_short_flex ] ) ? max( 1, intval( $_GET[ 'olo_p_' . $row_id_short_flex ] ) ) : 1;
+                // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per paginazione del Row Loop; nessuna modifica di stato; valore forzato a intero.
+                $current_page_flex = isset( $_GET[ 'olo_p_' . $row_id_short_flex ] ) ? max( 1, intval( wp_unslash( $_GET[ 'olo_p_' . $row_id_short_flex ] ) ) ) : 1;
                 $loop_query_flex   = $this->run_row_loop_query( $s, $current_page_flex, true );
                 $html .= $this->render_row_loop_children( $node['children'] ?? [], $loop_query_flex->posts, $manager, $template_id, $hover_css_rules, $tile_counter, false );
                 $loop_pagination_html_flex = $this->render_row_loop_pagination( $s, $current_page_flex, intval( $loop_query_flex->max_num_pages ), $row_id_short_flex );
@@ -2038,6 +2046,7 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $s['loop_exclude_current'] ) ) {
             $current_id = get_the_ID();
             if ( $current_id ) {
+                // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- esclusione post necessaria alla funzione del tile; query a volume limitato
                 $args['post__not_in'] = [ $current_id ];
             }
         }
@@ -2072,7 +2081,7 @@ class Olo_Frontend_Renderer {
             }
         }
         if ( ! empty( $tax_query ) ) {
-            $args['tax_query'] = $tax_query;
+            $args['tax_query'] = $tax_query; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- query per il Row Loop del tile (filtro per tassonomia/termini scelti dall'utente); tax query necessaria alla funzione, volume limitato da posts_per_page.
         }
 
         // Meta query
@@ -2090,12 +2099,12 @@ class Olo_Frontend_Renderer {
             if ( ! in_array( $meta_compare, [ 'EXISTS', 'NOT EXISTS' ], true ) ) {
                 $mq['value'] = $meta_value;
             }
-            $args['meta_query'] = [ $mq ];
+            $args['meta_query'] = [ $mq ]; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- query per il Row Loop del tile (filtro per meta scelto dall'utente); meta query necessaria alla funzione, volume limitato da posts_per_page.
 
             // Orderby meta
             $orderby = $s['loop_orderby'] ?? 'date';
             if ( in_array( $orderby, [ 'meta_value', 'meta_value_num' ], true ) ) {
-                $args['meta_key'] = $meta_key;
+                $args['meta_key'] = $meta_key; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- query per il Row Loop del tile (ordinamento per valore meta scelto dall'utente); meta key necessaria all'orderby, volume limitato da posts_per_page.
             }
         }
 
@@ -2654,6 +2663,7 @@ class Olo_Frontend_Renderer {
         // Resolve global widget
         if ( ! empty( $node['global_id'] ) ) {
             global $wpdb;
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_global_widgets); nessun equivalente WP_Query; lookup per id su PK, valore passato via $wpdb->prepare con placeholder %d; risultato non cacheabile (può cambiare salvando il widget globale).
             $gw = $wpdb->get_row( $wpdb->prepare(
                 "SELECT tile_data FROM {$wpdb->prefix}olo_global_widgets WHERE id = %d",
                 absint( $node['global_id'] )
@@ -3925,7 +3935,7 @@ class Olo_Frontend_Renderer {
      * Get video MIME type from URL.
      */
     private function get_video_mime( $url ) {
-        $ext = strtolower( pathinfo( parse_url( $url, PHP_URL_PATH ), PATHINFO_EXTENSION ) );
+        $ext = strtolower( pathinfo( wp_parse_url( $url, PHP_URL_PATH ), PATHINFO_EXTENSION ) );
         $map = [ 'mp4' => 'video/mp4', 'webm' => 'video/webm', 'ogg' => 'video/ogg' ];
         return $map[ $ext ] ?? 'video/mp4';
     }

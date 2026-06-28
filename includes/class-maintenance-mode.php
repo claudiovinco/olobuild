@@ -66,8 +66,10 @@ class Olo_Maintenance_Mode {
         // Check bypass secret URL parameter
         $bypass_secret = get_option( 'olo_maintenance_bypass_secret', '' );
         if ( ! empty( $bypass_secret ) ) {
-            // If the secret is in the URL, set a bypass cookie for 24 hours
+            // If the secret is in the URL, set a bypass cookie for 24 hours.
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only front-end bypass check on template_redirect (no state change beyond setting a same-site bypass cookie matched against a server-side secret); value sanitized below.
             if ( isset( $_GET['bypass'] ) ) {
+                // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only front-end bypass check on template_redirect (no state change beyond a same-site bypass cookie matched against a server-side secret); value sanitized inline.
                 if ( sanitize_text_field( wp_unslash( $_GET['bypass'] ) ) === $bypass_secret ) {
                     setcookie( 'olo_maintenance_bypass', md5( $bypass_secret ), [
                         'expires'  => time() + DAY_IN_SECONDS,
@@ -79,9 +81,10 @@ class Olo_Maintenance_Mode {
                     return;
                 }
             }
-            // If the bypass cookie exists and is valid
+            // If the bypass cookie exists and is valid.
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only front-end bypass check on template_redirect; no state change; value unslashed and sanitized below.
             if ( isset( $_COOKIE['olo_maintenance_bypass'] ) ) {
-                if ( $_COOKIE['olo_maintenance_bypass'] === md5( $bypass_secret ) ) {
+                if ( sanitize_text_field( wp_unslash( $_COOKIE['olo_maintenance_bypass'] ) ) === md5( $bypass_secret ) ) {
                     return;
                 }
             }
@@ -287,7 +290,7 @@ class Olo_Maintenance_Mode {
      * Check if the current request is for the WP login page.
      */
     private function is_login_page() {
-        $script = isset( $_SERVER['SCRIPT_NAME'] ) ? basename( $_SERVER['SCRIPT_NAME'] ) : '';
+        $script = isset( $_SERVER['SCRIPT_NAME'] ) ? basename( sanitize_text_field( wp_unslash( $_SERVER['SCRIPT_NAME'] ) ) ) : '';
         if ( $script === 'wp-login.php' ) {
             return true;
         }

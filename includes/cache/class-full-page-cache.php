@@ -121,7 +121,7 @@ class Olo_FullPage_Cache {
         if ( file_exists( $dest ) ) {
             $head = (string) @file_get_contents( $dest, false, null, 0, 600 );
             if ( strpos( $head, self::DROPIN_SIG ) !== false ) {
-                @unlink( $dest );
+                wp_delete_file( $dest );
             }
         }
     }
@@ -134,7 +134,7 @@ class Olo_FullPage_Cache {
      */
     public static function ensure_wp_cache( $on ) {
         $path = self::wp_config_path();
-        if ( $path === '' || ! is_writable( $path ) ) {
+        if ( $path === '' || ! wp_is_writable( $path ) ) {
             return false;
         }
         $src     = (string) file_get_contents( $path );
@@ -214,6 +214,7 @@ class Olo_FullPage_Cache {
             @file_put_contents( $dir . 'index.html', '' );
         }
 
+        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export -- var_export() serializza l'array di config in un file PHP valido (config del drop-in), non è codice di debug
         $php = "<?php\n// Generato da Olo_FullPage_Cache: non modificare a mano.\nreturn " . var_export( $cfg, true ) . ";\n";
 
         return (bool) @file_put_contents( self::config_path(), $php, LOCK_EX );
@@ -228,7 +229,8 @@ class Olo_FullPage_Cache {
         }
         $n = 0;
         foreach ( (array) glob( $dir . '*.html' ) as $f ) {
-            if ( @unlink( $f ) ) {
+            wp_delete_file( $f );
+            if ( ! file_exists( $f ) ) {
                 $n++;
             }
         }

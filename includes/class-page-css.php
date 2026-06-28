@@ -166,6 +166,7 @@ class Olo_Page_CSS {
 
         // Header/footer: TUTTI i pubblicati (copre Template Conditions per-pagina)
         global $wpdb;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin ({prefix}olo_templates); nessun equivalente WP_Query; solo letterali e nome tabella interpolati (nessun valore utente); risultato non cacheabile (cache gestita dal file CSS combinato in olobuild-cache).
         $hf = $wpdb->get_col(
             "SELECT content FROM {$wpdb->prefix}olo_templates WHERE type IN ('header','footer') AND status = 'published'"
         );
@@ -414,7 +415,7 @@ class Olo_Page_CSS {
         $files      = glob( $upload_dir['basedir'] . '/olobuild-cache/olo-pagecss-*.css' );
         if ( $files ) {
             foreach ( $files as $file ) {
-                @unlink( $file );
+                wp_delete_file( $file );
             }
         }
     }

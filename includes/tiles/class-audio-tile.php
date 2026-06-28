@@ -178,12 +178,12 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
         <style>#<?php echo esc_attr( $uid ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?>:hover{border-radius:<?php echo $radius_hover_css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- integer px list from Olo_Tile_Utils::radius_force_css() (absint-built) ?> !important}</style>
         <?php endif; ?>
         <div id="<?php echo esc_attr( $uid ); ?>" class="olo-audio olo-audio-minimal" style="background:<?php echo $bg_color; ?>;border-radius:<?php echo $radius; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour from the safe_color_css() whitelist (may be a var() token, not esc_attr-safe inside style attr), radius integer px from Olo_Tile_Utils::border_radius() ?>;padding:12px 16px;display:flex;align-items:center;gap:12px;">
-            <button type="button" class="olo-audio-playbtn" aria-label="<?php echo esc_attr__( 'Riproduci', 'olobuilder' ); ?>" style="background:none;border:none;cursor:pointer;padding:0;flex-shrink:0;width:32px;height:32px;display:flex;align-items:center;justify-content:center;">
+            <button type="button" class="olo-audio-playbtn" aria-label="<?php echo esc_attr__( 'Riproduci', 'olobuild' ); ?>" style="background:none;border:none;cursor:pointer;padding:0;flex-shrink:0;width:32px;height:32px;display:flex;align-items:center;justify-content:center;">
                 <svg class="olo-audio-icon-play" aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24"><polygon points="6,4 6,20 20,12" fill="<?php echo esc_attr( $accent ); ?>"/></svg>
                 <svg class="olo-audio-icon-pause" aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" style="display:none;"><rect x="5" y="4" width="4" height="16" rx="1" fill="<?php echo esc_attr( $accent ); ?>"/><rect x="15" y="4" width="4" height="16" rx="1" fill="<?php echo esc_attr( $accent ); ?>"/></svg>
             </button>
 
-            <div class="olo-audio-progress-wrap" tabindex="0" role="slider" aria-label="<?php echo esc_attr__( 'Avanzamento', 'olobuilder' ); ?>" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="flex:1;height:6px;background:var(--olo-color-border, #E5E7EB);border-radius:3px;cursor:pointer;position:relative;">
+            <div class="olo-audio-progress-wrap" tabindex="0" role="slider" aria-label="<?php echo esc_attr__( 'Avanzamento', 'olobuild' ); ?>" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="flex:1;height:6px;background:var(--olo-color-border, #E5E7EB);border-radius:3px;cursor:pointer;position:relative;">
                 <div class="olo-audio-progress-bar" style="height:100%;width:0%;background:<?php echo esc_attr( $accent ); ?>;border-radius:3px;transition:width 0.1s linear;"></div>
             </div>
 
@@ -231,12 +231,12 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
             audio.addEventListener('play', function(){
                 iconPlay.style.display = 'none';
                 iconPause.style.display = 'block';
-                btn.setAttribute('aria-label', <?php echo wp_json_encode( __( 'Pausa', 'olobuilder' ) ); ?>);
+                btn.setAttribute('aria-label', <?php echo wp_json_encode( __( 'Pausa', 'olobuild' ) ); ?>);
             });
             audio.addEventListener('pause', function(){
                 iconPlay.style.display = 'block';
                 iconPause.style.display = 'none';
-                btn.setAttribute('aria-label', <?php echo wp_json_encode( __( 'Riproduci', 'olobuilder' ) ); ?>);
+                btn.setAttribute('aria-label', <?php echo wp_json_encode( __( 'Riproduci', 'olobuild' ) ); ?>);
             });
             audio.addEventListener('timeupdate', function(){
                 if(audio.duration){
@@ -319,14 +319,14 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
 
                     <!-- Controls row -->
                     <div style="display:flex;align-items:center;gap:10px;">
-                        <button type="button" class="olo-audio-playbtn" aria-label="<?php echo esc_attr__( 'Riproduci', 'olobuilder' ); ?>" style="background:<?php echo esc_attr( $accent ); ?>;border:none;cursor:pointer;padding:0;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <button type="button" class="olo-audio-playbtn" aria-label="<?php echo esc_attr__( 'Riproduci', 'olobuild' ); ?>" style="background:<?php echo esc_attr( $accent ); ?>;border:none;cursor:pointer;padding:0;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                             <svg class="olo-audio-icon-play" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24"><polygon points="8,5 8,19 19,12" fill="#fff"/></svg>
                             <svg class="olo-audio-icon-pause" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" style="display:none;"><rect x="6" y="5" width="4" height="14" rx="1" fill="#fff"/><rect x="14" y="5" width="4" height="14" rx="1" fill="#fff"/></svg>
                         </button>
 
                         <span class="olo-audio-time-current" style="font-size:11px;opacity:0.7;min-width:32px;">0:00</span>
 
-                        <div class="olo-audio-progress-wrap" tabindex="0" role="slider" aria-label="<?php echo esc_attr__( 'Avanzamento', 'olobuilder' ); ?>" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="flex:1;height:6px;background:var(--olo-color-border, #E5E7EB);border-radius:3px;cursor:pointer;position:relative;">
+                        <div class="olo-audio-progress-wrap" tabindex="0" role="slider" aria-label="<?php echo esc_attr__( 'Avanzamento', 'olobuild' ); ?>" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="flex:1;height:6px;background:var(--olo-color-border, #E5E7EB);border-radius:3px;cursor:pointer;position:relative;">
                             <div class="olo-audio-progress-bar" style="height:100%;width:0%;background:<?php echo esc_attr( $accent ); ?>;border-radius:3px;transition:width 0.1s linear;"></div>
                         </div>
 
@@ -337,7 +337,7 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
                             <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none">
                                 <path d="M11 5L6 9H2v6h4l5 4V5z" fill="<?php echo esc_attr( $text_color ); ?>" opacity="0.7"/>
                             </svg>
-                            <input type="range" class="olo-audio-volume" aria-label="<?php echo esc_attr__( 'Volume', 'olobuilder' ); ?>" min="0" max="1" step="0.05" value="1" style="width:60px;accent-color:<?php echo esc_attr( $accent ); ?>;" />
+                            <input type="range" class="olo-audio-volume" aria-label="<?php echo esc_attr__( 'Volume', 'olobuild' ); ?>" min="0" max="1" step="0.05" value="1" style="width:60px;accent-color:<?php echo esc_attr( $accent ); ?>;" />
                         </div>
                     </div>
                 </div>
@@ -388,12 +388,12 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
             audio.addEventListener('play', function(){
                 iconPlay.style.display = 'none';
                 iconPause.style.display = 'block';
-                btn.setAttribute('aria-label', <?php echo wp_json_encode( __( 'Pausa', 'olobuilder' ) ); ?>);
+                btn.setAttribute('aria-label', <?php echo wp_json_encode( __( 'Pausa', 'olobuild' ) ); ?>);
             });
             audio.addEventListener('pause', function(){
                 iconPlay.style.display = 'block';
                 iconPause.style.display = 'none';
-                btn.setAttribute('aria-label', <?php echo wp_json_encode( __( 'Riproduci', 'olobuilder' ) ); ?>);
+                btn.setAttribute('aria-label', <?php echo wp_json_encode( __( 'Riproduci', 'olobuild' ) ); ?>);
             });
             audio.addEventListener('loadedmetadata', function(){
                 timeTotal.textContent = formatTime(audio.duration);
@@ -451,7 +451,7 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
     // =========================================================================
 
     private function get_audio_mime( $url ) {
-        $ext = strtolower( pathinfo( parse_url( $url, PHP_URL_PATH ) ?: '', PATHINFO_EXTENSION ) );
+        $ext = strtolower( pathinfo( wp_parse_url( $url, PHP_URL_PATH ) ?: '', PATHINFO_EXTENSION ) );
         $map = [
             'mp3'  => 'audio/mpeg',
             'ogg'  => 'audio/ogg',

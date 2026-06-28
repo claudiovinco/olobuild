@@ -51,7 +51,7 @@ class Olo_Viewscounter_Tile extends Olo_Tile_Base {
         if ( empty( $_SERVER['HTTP_USER_AGENT'] ) ) {
             return true; // No UA = treat as bot
         }
-        $ua = strtolower( $_SERVER['HTTP_USER_AGENT'] );
+        $ua = strtolower( sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) );
         foreach ( self::$bot_patterns as $pattern ) {
             if ( str_contains( $ua, $pattern ) ) {
                 return true;

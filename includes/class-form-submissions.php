@@ -73,12 +73,13 @@ class Olo_Form_Submissions {
         global $wpdb;
         $table = $wpdb->prefix . 'olo_form_submissions';
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_form_submissions); nessun equivalente WP_Query; scrittura non cacheabile.
         $result = $wpdb->insert( $table, [
             'form_name'   => sanitize_text_field( $form_name ),
             'fields_data' => wp_json_encode( $fields_data ),
             'submitted_at' => current_time( 'mysql' ),
             'ip_address'  => sanitize_text_field( $ip ),
-            'user_agent'  => isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( substr( $_SERVER['HTTP_USER_AGENT'], 0, 500 ) ) : '',
+            'user_agent'  => isset( $_SERVER['HTTP_USER_AGENT'] ) ? substr( sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ), 0, 500 ) : '',
             'read_status' => 0,
         ], [ '%s', '%s', '%s', '%s', '%s', '%d' ] );
 
@@ -91,6 +92,7 @@ class Olo_Form_Submissions {
     public static function mark_read( $id ) {
         global $wpdb;
         $table = $wpdb->prefix . 'olo_form_submissions';
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_form_submissions); nessun equivalente WP_Query; scrittura non cacheabile.
         return $wpdb->update( $table, [ 'read_status' => 1 ], [ 'id' => absint( $id ) ], [ '%d' ], [ '%d' ] );
     }
 
@@ -100,6 +102,7 @@ class Olo_Form_Submissions {
     public static function mark_unread( $id ) {
         global $wpdb;
         $table = $wpdb->prefix . 'olo_form_submissions';
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_form_submissions); nessun equivalente WP_Query; scrittura non cacheabile.
         return $wpdb->update( $table, [ 'read_status' => 0 ], [ 'id' => absint( $id ) ], [ '%d' ], [ '%d' ] );
     }
 
@@ -109,6 +112,7 @@ class Olo_Form_Submissions {
     public static function delete_submission( $id ) {
         global $wpdb;
         $table = $wpdb->prefix . 'olo_form_submissions';
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_form_submissions); nessun equivalente WP_Query; scrittura non cacheabile.
         return $wpdb->delete( $table, [ 'id' => absint( $id ) ], [ '%d' ] );
     }
 
@@ -128,8 +132,11 @@ class Olo_Form_Submissions {
 
         global $wpdb;
         $table     = $wpdb->prefix . 'olo_form_submissions';
-        $form_name = sanitize_text_field( $_GET['form_name'] ?? '' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce verificato sopra da check_admin_referer( 'olo_export_submissions' ) (riga ~131); valore unslashed e sanitizzato.
+        $form_name = sanitize_text_field( wp_unslash( $_GET['form_name'] ?? '' ) );
 
+        // $table proviene da $wpdb->prefix (tabella custom del plugin); il valore utente $form_name passa da $wpdb->prepare con placeholder %s.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         if ( $form_name ) {
             $rows = $wpdb->get_results(
                 $wpdb->prepare( "SELECT * FROM $table WHERE form_name = %s ORDER BY submitted_at DESC", $form_name ),
@@ -138,6 +145,7 @@ class Olo_Form_Submissions {
         } else {
             $rows = $wpdb->get_results( "SELECT * FROM $table ORDER BY submitted_at DESC", ARRAY_A );
         }
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
         if ( empty( $rows ) ) {
             wp_die( 'Nessun invio trovato.' );
@@ -167,7 +175,7 @@ class Olo_Form_Submissions {
         }
 
         // Send CSV headers
-        $filename = 'form-submissions-' . ( $form_name ? sanitize_file_name( $form_name ) : 'all' ) . '-' . date( 'Y-m-d' ) . '.csv';
+        $filename = 'form-submissions-' . ( $form_name ? sanitize_file_name( $form_name ) : 'all' ) . '-' . gmdate( 'Y-m-d' ) . '.csv';
         header( 'Content-Type: text/csv; charset=UTF-8' );
         header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
         header( 'Pragma: no-cache' );
@@ -175,6 +183,7 @@ class Olo_Form_Submissions {
 
         $out = fopen( 'php://output', 'w' );
         // BOM for Excel UTF-8
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- CSV streamed to php://output (download), not a filesystem file
         fwrite( $out, "\xEF\xBB\xBF" );
 
         // Header row
@@ -198,6 +207,7 @@ class Olo_Form_Submissions {
             fputcsv( $out, array_map( 'olo_csv_safe', $row_data ), ';' );
         }
 
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- closing the php://output CSV stream
         fclose( $out );
         exit;
     }
@@ -234,6 +244,7 @@ class Olo_Form_Submissions {
         }
 
         // Handle CSV export (before any HTML output)
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- semplice gate booleano di esistenza (valore non usato); il nonce è verificato in export_csv() da check_admin_referer( 'olo_export_submissions' ).
         if ( ! empty( $_GET['olo_export_csv'] ) ) {
             self::export_csv();
             return;
@@ -348,6 +359,8 @@ class Olo_Form_Submissions {
     private static function render_detail_view( $id ) {
         global $wpdb;
         $table = $wpdb->prefix . 'olo_form_submissions';
+        // $table da $wpdb->prefix (tabella custom del plugin); $id passa da $wpdb->prepare con placeholder %d.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
         $row   = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table WHERE id = %d", $id ), ARRAY_A );
 
         if ( ! $row ) {
@@ -477,28 +490,36 @@ class Olo_Form_Submissions {
         $table = $wpdb->prefix . 'olo_form_submissions';
 
         // Single delete
-        if ( ! empty( $_GET['action'] ) && $_GET['action'] === 'delete' && ! empty( $_GET['submission_id'] ) ) {
-            check_admin_referer( 'olo_delete_submission_' . $_GET['submission_id'] );
-            self::delete_submission( absint( $_GET['submission_id'] ) );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce verificato sotto da check_admin_referer; valori unslashed/sanitizzati.
+        if ( ! empty( $_GET['action'] ) && sanitize_key( wp_unslash( $_GET['action'] ) ) === 'delete' && ! empty( $_GET['submission_id'] ) ) {
+            $submission_id = absint( wp_unslash( $_GET['submission_id'] ) );
+            check_admin_referer( 'olo_delete_submission_' . $submission_id );
+            self::delete_submission( $submission_id );
             echo '<div class="notice notice-success is-dismissible"><p>Invio eliminato.</p></div>';
         }
 
         // Single mark read
-        if ( ! empty( $_GET['action'] ) && $_GET['action'] === 'mark_read' && ! empty( $_GET['submission_id'] ) ) {
-            check_admin_referer( 'olo_read_submission_' . $_GET['submission_id'] );
-            self::mark_read( absint( $_GET['submission_id'] ) );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce verificato sotto da check_admin_referer; valori unslashed/sanitizzati.
+        if ( ! empty( $_GET['action'] ) && sanitize_key( wp_unslash( $_GET['action'] ) ) === 'mark_read' && ! empty( $_GET['submission_id'] ) ) {
+            $submission_id = absint( wp_unslash( $_GET['submission_id'] ) );
+            check_admin_referer( 'olo_read_submission_' . $submission_id );
+            self::mark_read( $submission_id );
             echo '<div class="notice notice-success is-dismissible"><p>Segnato come letto.</p></div>';
         }
 
         // Bulk actions
-        if ( ! empty( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'bulk-submissions' ) ) {
-            $action = $_POST['action'] ?? '';
+        if ( ! empty( $_POST['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'bulk-submissions' ) ) {
+            $action = isset( $_POST['action'] ) ? sanitize_key( wp_unslash( $_POST['action'] ) ) : '';
             if ( $action === '-1' ) {
-                $action = $_POST['action2'] ?? '';
+                $action = isset( $_POST['action2'] ) ? sanitize_key( wp_unslash( $_POST['action2'] ) ) : '';
             }
-            $ids = array_map( 'absint', $_POST['submission_ids'] ?? [] );
+            // wp_unslash su array prima di mappare ogni elemento con absint.
+            $ids = isset( $_POST['submission_ids'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['submission_ids'] ) ) : [];
 
             if ( ! empty( $ids ) ) {
+                // $table da $wpdb->prefix (tabella custom del plugin); $placeholders è una stringa di soli segnaposto
+                // %d (uno per ogni id), gli id (interi, già passati da absint) sono forniti come argomenti a $wpdb->prepare.
+                // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, PluginCheck.Security.DirectDB.UnescapedDBParameter
                 if ( $action === 'bulk_delete' ) {
                     $placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
                     $wpdb->query( $wpdb->prepare( "DELETE FROM $table WHERE id IN ($placeholders)", ...$ids ) );
@@ -512,6 +533,7 @@ class Olo_Form_Submissions {
                     $wpdb->query( $wpdb->prepare( "UPDATE $table SET read_status = 0 WHERE id IN ($placeholders)", ...$ids ) );
                     echo '<div class="notice notice-success is-dismissible"><p>' . count( $ids ) . ' invii segnati come non letti.</p></div>';
                 }
+                // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, PluginCheck.Security.DirectDB.UnescapedDBParameter
             }
         }
     }
@@ -706,14 +728,16 @@ class Olo_Form_Submissions_List_Table extends WP_List_Table {
 
         global $wpdb;
         $table     = $wpdb->prefix . 'olo_form_submissions';
-        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table is built from $wpdb->prefix constant
+        // $table da $wpdb->prefix (tabella custom del plugin); nessun valore utente nella query, nessun equivalente WP_Query; lista a basso volume non cacheata.
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
         $form_names = $wpdb->get_col( "SELECT DISTINCT form_name FROM `$table` WHERE form_name != '' ORDER BY form_name" );
 
         if ( empty( $form_names ) ) {
             return;
         }
 
-        $current = sanitize_text_field( $_REQUEST['form_name'] ?? '' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per filtro list-table (nessuna modifica di stato); valore unslashed e sanitizzato.
+        $current = sanitize_text_field( wp_unslash( $_REQUEST['form_name'] ?? '' ) );
         ?>
         <div class="alignleft actions">
             <select name="form_name">
@@ -753,14 +777,16 @@ class Olo_Form_Submissions_List_Table extends WP_List_Table {
         $where_values = [];
 
         // Filter by form name
-        $form_name = sanitize_text_field( $_REQUEST['form_name'] ?? '' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per filtro list-table (nessuna modifica di stato); valore unslashed/sanitizzato e passato da $wpdb->prepare.
+        $form_name = sanitize_text_field( wp_unslash( $_REQUEST['form_name'] ?? '' ) );
         if ( $form_name !== '' ) {
             $where_parts[]  = 'form_name = %s';
             $where_values[] = $form_name;
         }
 
         // Search
-        $search = sanitize_text_field( $_REQUEST['s'] ?? '' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per ricerca list-table (nessuna modifica di stato); valore unslashed/sanitizzato e passato da $wpdb->prepare.
+        $search = sanitize_text_field( wp_unslash( $_REQUEST['s'] ?? '' ) );
         if ( $search !== '' ) {
             $like = '%' . $wpdb->esc_like( $search ) . '%';
             $where_parts[]  = '(form_name LIKE %s OR fields_data LIKE %s OR ip_address LIKE %s)';
@@ -776,17 +802,24 @@ class Olo_Form_Submissions_List_Table extends WP_List_Table {
 
         // Sorting
         $allowed_orderby = [ 'id', 'form_name', 'submitted_at', 'read_status' ];
-        $orderby = sanitize_sql_orderby( $_REQUEST['orderby'] ?? 'id' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per ordinamento list-table (nessuna modifica di stato); valore unslashed e validato su whitelist sotto.
+        $orderby = sanitize_sql_orderby( sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ?? 'id' ) ) );
         if ( ! in_array( $orderby, $allowed_orderby, true ) ) {
             $orderby = 'id';
         }
-        $order = strtoupper( $_REQUEST['order'] ?? 'DESC' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per ordinamento list-table (nessuna modifica di stato); valore unslashed e validato su whitelist ASC/DESC sotto.
+        $order = strtoupper( sanitize_text_field( wp_unslash( $_REQUEST['order'] ?? 'DESC' ) ) );
         if ( ! in_array( $order, [ 'ASC', 'DESC' ], true ) ) {
             $order = 'DESC';
         }
 
+        // $table da $wpdb->prefix (tabella custom del plugin); $orderby (whitelist allowed_orderby) e $order (ASC/DESC)
+        // validati sopra; $where_sql contiene solo frammenti con placeholder e i valori utente passano da $wpdb->prepare.
+        // Nessun equivalente WP_Query su tabella custom; lista paginata non cacheata.
+        // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         // Count total
         if ( ! empty( $where_values ) ) {
+            // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
             $total = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $table $where_sql", ...$where_values ) );
         } else {
             $total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM $table" );
@@ -796,6 +829,7 @@ class Olo_Form_Submissions_List_Table extends WP_List_Table {
         $query = "SELECT * FROM $table $where_sql ORDER BY $orderby $order LIMIT %d OFFSET %d";
         $query_values = array_merge( $where_values, [ $per_page, $offset ] );
         $this->items = $wpdb->get_results( $wpdb->prepare( $query, ...$query_values ), ARRAY_A );
+        // phpcs:enable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
         // Pagination
         $this->set_pagination_args( [

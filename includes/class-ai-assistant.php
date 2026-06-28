@@ -360,7 +360,7 @@ class Olo_AI_Assistant {
         $attachment_id = media_handle_sideload( $file_array, 0, 'Immagine AI: ' . wp_trim_words( $prompt, 10 ) );
 
         if ( is_wp_error( $attachment_id ) ) {
-            @unlink( $tmp_file );
+            wp_delete_file( $tmp_file );
             return new WP_Error( 'sideload_error', 'Impossibile salvare l\'immagine nella Media Library.', [ 'status' => 500 ] );
         }
 

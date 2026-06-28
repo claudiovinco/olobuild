@@ -98,6 +98,7 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
                     'default'           => '',
                     'sanitize_callback' => 'sanitize_text_field',
                 ],
+                // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- esclusione post necessaria alla funzione del tile; query a volume limitato
                 'exclude' => [
                     'default'           => '',
                     'sanitize_callback' => 'sanitize_text_field',
@@ -115,7 +116,7 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
      */
     public static function handle_search( $request ) {
         // Rate limiting: max 30 requests per minute per IP
-        $ip  = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( $_SERVER['REMOTE_ADDR'] ) : 'unknown';
+        $ip  = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : 'unknown';
         $key = 'olo_ls_rl_' . md5( $ip );
         $count = (int) get_transient( $key );
         if ( $count > 30 ) {
@@ -167,7 +168,7 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
         if ( ! empty( $taxonomy ) && taxonomy_exists( $taxonomy ) && ! empty( $terms_raw ) ) {
             $term_slugs = array_filter( array_map( 'trim', explode( ',', $terms_raw ) ) );
             if ( ! empty( $term_slugs ) ) {
-                $args['tax_query'] = [
+                $args['tax_query'] = [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- query per filtro tassonomia della ricerca live; tax query necessaria alla funzione, volume limitato (max 100 risultati)
                     [
                         'taxonomy' => $taxonomy,
                         'field'    => 'slug',
@@ -297,6 +298,7 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
             'titleOnly'   => ! empty( $s['title_only'] ),
             'taxonomy'    => $s['taxonomy_filter'],
             'terms'       => $s['taxonomy_terms'],
+            // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- esclusione post necessaria alla funzione del tile; query a volume limitato
             'exclude'     => $s['exclude_terms'],
             'showThumb'   => ! empty( $s['show_thumbnail'] ),
             'showExcerpt' => ! empty( $s['show_excerpt'] ),

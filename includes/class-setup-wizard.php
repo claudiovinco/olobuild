@@ -39,7 +39,9 @@ class Olo_Setup_Wizard {
      */
     public function maybe_takeover() {
         if ( wp_doing_ajax() ) return;
-        if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'olo-setup' ) return;
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per routing pagina admin; nessuna modifica di stato; valore sanitizzato.
+        $page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+        if ( $page !== 'olo-setup' ) return;
         if ( ! current_user_can( 'manage_options' ) ) return;
         $this->render_wizard(); // prints a full HTML document and exits
     }
@@ -52,6 +54,7 @@ class Olo_Setup_Wizard {
         delete_transient( 'olo_activating' ); // prima del redirect: mai due volte, mai loop
 
         if ( wp_doing_ajax() || wp_doing_cron() || is_network_admin() ) return;
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only (sola presenza chiave) per routing redirect attivazione; nessuna modifica di stato.
         if ( isset( $_GET['activate-multi'] ) ) return; // attivazione bulk: solo notice
         if ( ! current_user_can( 'manage_options' ) ) return;
         if ( get_option( 'olo_setup_complete' ) ) return;
@@ -64,6 +67,7 @@ class Olo_Setup_Wizard {
      * "Più tardi": nasconde il pannello di benvenuto in modo persistente (option).
      */
     public function maybe_dismiss_welcome() {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- gate di presenza; il nonce 'olo_welcome_dismiss' è verificato sotto con wp_verify_nonce prima di update_option.
         if ( ! isset( $_GET['olo_welcome_dismiss'] ) ) return;
         if ( ! current_user_can( 'manage_options' ) ) return;
         $nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
@@ -82,7 +86,9 @@ class Olo_Setup_Wizard {
     public function show_activation_notice() {
         if ( ! current_user_can( 'manage_options' ) ) return;
         if ( get_option( 'olo_setup_complete' ) || get_option( 'olo_welcome_dismissed' ) ) return;
-        if ( isset( $_GET['page'] ) && $_GET['page'] === 'olo-setup' ) return;
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per nascondere il notice nella pagina del wizard; nessuna modifica di stato; valore sanitizzato.
+        $current_page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+        if ( $current_page === 'olo-setup' ) return;
 
         $screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
         if ( $screen && ! in_array( $screen->id, [ 'dashboard', 'plugins' ], true ) ) return;
@@ -307,17 +313,20 @@ class Olo_Setup_Wizard {
                 <a href="#" role="button" class="skip-link" onclick="skipSetup(); return false;"><?php esc_html_e( 'Salta configurazione', 'olobuild' ); ?></a>
             </div>
 
-            <script src="<?php echo esc_url( OLO_URL . 'assets/js/theme-picker.js' ); ?>?v=<?php echo esc_attr( OLO_VERSION ); ?>"></script>
-            <?php // Pipeline thumbnail (render REST → html2canvas → upload): genera le anteprime card subito dopo l'import del tema ?>
-            <script>
-            window.oloThumbConfig = {
-                restUrl:   '<?php echo esc_url_raw( rest_url( 'olo/v1/' ) ); ?>',
-                nonce:     '<?php echo esc_js( wp_create_nonce( 'wp_rest' ) ); ?>',
-                vendorUrl: '<?php echo esc_url( OLO_URL . 'assets/vendor/html2canvas.min.js' ); ?>',
-                debug:     false
-            };
-            </script>
-            <script src="<?php echo esc_url( OLO_URL . 'assets/js/olo-thumb-capture.js' ); ?>?v=<?php echo esc_attr( OLO_VERSION ); ?>"></script>
+            <?php
+            // Pipeline thumbnail (render REST → html2canvas → upload): theme-picker e
+            // thumb-capture registrati via wp_enqueue_script ed emessi qui con
+            // wp_print_scripts (questa è una pagina takeover full-page, niente admin_footer).
+            wp_enqueue_script( 'olo-wizard-theme-picker', OLO_URL . 'assets/js/theme-picker.js', [], OLO_VERSION, true );
+            wp_enqueue_script( 'olo-wizard-thumb-capture', OLO_URL . 'assets/js/olo-thumb-capture.js', [], OLO_VERSION, true );
+            wp_add_inline_script( 'olo-wizard-thumb-capture', 'window.oloThumbConfig=' . wp_json_encode( [
+                'restUrl'   => esc_url_raw( rest_url( 'olo/v1/' ) ),
+                'nonce'     => wp_create_nonce( 'wp_rest' ),
+                'vendorUrl' => OLO_URL . 'assets/vendor/html2canvas.min.js',
+                'debug'     => false,
+            ] ) . ';', 'before' );
+            wp_print_scripts( [ 'olo-wizard-theme-picker', 'olo-wizard-thumb-capture' ] );
+            ?>
             <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline JS below only outputs wp_json_encode()'d JSON strings, a wp_create_nonce() token, esc_url()'d admin URLs and a fixed integer literal from a ternary. ?>
             <script>
             var oloWizardThemes = <?php echo wp_json_encode( array_map( function ( $t ) { unset( $t['dir'] ); return $t; }, $themes ) ); ?>;
@@ -335,7 +344,7 @@ class Olo_Setup_Wizard {
                 starterReady: <?php echo wp_json_encode( __( 'Header e footer base pronti!', 'olobuild' ) ); ?>,
                 starterIntro: <?php echo wp_json_encode( __( 'Ho creato un header con il logo del sito e un footer con copyright e link rapidi. Personalizzali con un click:', 'olobuild' ) ); ?>,
                 creatingTemplates: <?php echo wp_json_encode( __( 'Creazione template, menu, pagine...', 'olobuild' ) ); ?>,
-                templatesCreated: <?php echo wp_json_encode( __( '%d template creati, homepage impostata!', 'olobuild' ) ); ?>
+                templatesCreated: <?php echo wp_json_encode( /* translators: %d: number of templates created */ __( '%d template creati, homepage impostata!', 'olobuild' ) ); ?>
             };
             var oloBuilderBase = <?php echo wp_json_encode( admin_url( 'admin.php?page=olobuilder-templates&template_id=' ) ); ?>;
 
@@ -512,7 +521,7 @@ class Olo_Setup_Wizard {
             wp_send_json_error( __( 'Permessi insufficienti.', 'olobuild' ) );
         }
 
-        $mode = sanitize_text_field( $_POST['mode'] ?? 'install' );
+        $mode = isset( $_POST['mode'] ) ? sanitize_text_field( wp_unslash( $_POST['mode'] ) ) : 'install';
         $theme_slug = 'hello-olobuild';
         $theme_dir  = get_theme_root() . '/' . $theme_slug;
 
@@ -547,7 +556,7 @@ class Olo_Setup_Wizard {
             wp_send_json_error( __( 'L\'importazione di temi è disabilitata su questo sito.', 'olobuild' ) );
         }
 
-        $theme_id = sanitize_text_field( $_POST['theme_id'] ?? '' );
+        $theme_id = isset( $_POST['theme_id'] ) ? sanitize_text_field( wp_unslash( $_POST['theme_id'] ) ) : '';
         if ( empty( $theme_id ) ) {
             wp_send_json_error( __( 'Nessun tema selezionato.', 'olobuild' ) );
         }
@@ -1022,7 +1031,7 @@ class Olo_Setup_Wizard {
      */
     private function get_starter_footer_content( $home_id = 0 ) {
         $site_name = get_bloginfo( 'name' );
-        $year      = date( 'Y' );
+        $year      = date_i18n( 'Y' );
         $copyright = sprintf( '<p>&copy; %s %s. ' . esc_html__( 'Tutti i diritti riservati.', 'olobuild' ) . '</p>', $year, esc_html( $site_name ) );
         $home_url  = $home_id ? get_permalink( $home_id ) : home_url( '/' );
         $privacy_id = (int) get_option( 'wp_page_for_privacy_policy', 0 );

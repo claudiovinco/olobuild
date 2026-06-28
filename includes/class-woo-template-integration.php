@@ -239,12 +239,14 @@ class Olo_Woo_Template_Integration {
         global $wpdb;
         $table = $wpdb->prefix . 'olo_templates';
         $templates = [];
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin ({prefix}olo_templates): nessun equivalente WP_Query; interpolato solo il nome tabella (da $wpdb->prefix) senza alcun valore utente; nessun input grezzo in SQL, quindi nessuna injection; risultato a uso una-tantum (dropdown admin), non cacheabile.
         if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table}'" ) === $table ) {
             $rows = $wpdb->get_results( "SELECT id, title FROM {$table} WHERE status = 'published' ORDER BY title ASC" );
             foreach ( $rows as $row ) {
                 $templates[] = [ 'id' => (int) $row->id, 'name' => $row->title ];
             }
         }
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
         $icons = [
             'product_single'  => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',

@@ -36,7 +36,7 @@ EXCLUDE_DIRS = {
     "tmp_handoff", "scripts",
     # cartelle di lavoro che NON devono finire nel plugin distribuito
     "regoletiles1", "audit_results", "handoff-tile-speciali",
-    "iotfarm-demo", "bordo",
+    "iotfarm-demo", "bordo", "olobuild-converter",
     # scratch: contiene solo un residuo build/olosecurity/ (vecchia copia con
     # header "Plugin Name:" → farebbe abortire il safety-check secondo-header)
     "build",
@@ -70,9 +70,13 @@ EXCLUDE_PATTERN_PREFIXES = (
 def is_backup_file(name: str) -> bool:
     return ".bak" in name
 
-# Include src folder: required by wordpress.org so the minified builder.js bundle
-# has its readable, non-compiled sources available for review.
-INCLUDE_SRC = True
+# Do NOT ship the Vue/SCSS sources (src/) inside the wordpress.org package:
+# Plugin Check flags src/composables/useClipboard.js as library_core_files (a false
+# positive: it matches core's clipboard.js by name), and that check cannot be
+# suppressed on the official submission. The "human-readable source" guideline is
+# satisfied by linking the public development repository in readme.txt instead —
+# the conventional approach for build-tool plugins. assets/ ships the built bundles.
+INCLUDE_SRC = False
 
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 

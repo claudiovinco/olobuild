@@ -198,7 +198,7 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
         $alignment = $s['alignment'];
         $mobile    = ! empty( $s['mobile_toggle'] );
         $mob_style = $s['mobile_style'];
-        $nav_id    = 'olo-nav-' . $menu_id . '-' . mt_rand( 100, 999 );
+        $nav_id    = 'olo-nav-' . $menu_id . '-' . wp_rand( 100, 999 );
 
         // Build scoped CSS for custom styles
         $scoped_css = $this->build_scoped_css( $s, $nav_id );

@@ -313,6 +313,7 @@ class Olo_Queryloop_Tile extends Olo_Tile_Base {
             }
         }
         if ( ! empty( $not_in ) ) {
+            // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- esclusione post necessaria alla funzione del tile; query a volume limitato
             $args['post__not_in'] = array_unique( $not_in );
         }
 
@@ -340,6 +341,7 @@ class Olo_Queryloop_Tile extends Olo_Tile_Base {
             $args['ignore_sticky_posts'] = true;
             $sticky_ids = get_option( 'sticky_posts', [] );
             if ( ! empty( $sticky_ids ) ) {
+                // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- esclusione post necessaria alla funzione del tile; query a volume limitato
                 $args['post__not_in'] = array_unique( array_merge( $args['post__not_in'] ?? [], $sticky_ids ) );
             }
         } elseif ( $sticky === 'only' ) {
@@ -380,6 +382,7 @@ class Olo_Queryloop_Tile extends Olo_Tile_Base {
             $tax_query['relation'] = 'AND';
         }
         if ( ! empty( $tax_query ) ) {
+            // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- filtro tassonomia necessario alla funzione del tile Query Loop; volume limitato (loop di archivio impaginato).
             $args['tax_query'] = $tax_query;
         }
 
@@ -413,11 +416,13 @@ class Olo_Queryloop_Tile extends Olo_Tile_Base {
             if ( ! in_array( $meta_compare, [ 'EXISTS', 'NOT EXISTS' ], true ) ) {
                 $mq['value'] = $meta_value;
             }
+            // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- filtro campo personalizzato (ACF/meta) necessario alla funzione del tile Query Loop; volume limitato (loop di archivio impaginato).
             $args['meta_query'] = [ $mq ];
 
             // Support orderby meta_value
             $orderby = $s['orderby'] ?? 'date';
             if ( in_array( $orderby, [ 'meta_value', 'meta_value_num' ], true ) ) {
+                // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- ordinamento per meta_value necessario alla funzione del tile Query Loop; volume limitato (loop di archivio impaginato).
                 $args['meta_key'] = $meta_key;
             }
         }
@@ -1067,9 +1072,14 @@ class Olo_Queryloop_Tile extends Olo_Tile_Base {
     public function ajax_load_page() {
         check_ajax_referer( 'olo_ql_nonce', 'nonce' );
 
-        $page = absint( $_POST['page'] ?? 1 );
-        $settings_raw = $_POST['settings'] ?? '';
-        $s = json_decode( stripslashes( $settings_raw ), true );
+        $page = isset( $_POST['page'] ) ? absint( wp_unslash( $_POST['page'] ) ) : 1;
+        // Settings arrivano come blob JSON prodotto da wp_json_encode() (singola riga,
+        // nessun newline/tab): sanitize_text_field lo preserva ma rimuove eventuali
+        // caratteri di controllo. Il payload decodificato viene comunque ri-sanitizzato
+        // campo-per-campo a valle (wp_parse_args + build_query_args con sanitize_key/
+        // sanitize_text_field/absint).
+        $settings_raw = isset( $_POST['settings'] ) ? sanitize_text_field( wp_unslash( $_POST['settings'] ) ) : '';
+        $s = json_decode( $settings_raw, true );
         if ( ! is_array( $s ) ) {
             wp_send_json_error( [ 'message' => 'Invalid settings' ] );
         }

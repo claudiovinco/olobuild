@@ -106,6 +106,7 @@ import PostGridTile from './PostGridTile.vue';
 import ProSliderTile from './ProSliderTile.vue';
 import PopupTile from './PopupTile.vue';
 import MegaMenuTile from './MegaMenuTile.vue';
+import OloHeaderTile from './OloHeaderTile.vue';
 import InnerColumnsTile from './InnerColumnsTile.vue';
 import StudioHeroTile from './StudioHeroTile.vue';
 import FilmReelTile from './FilmReelTile.vue';
@@ -401,6 +402,7 @@ const tileComponents = {
   proslider: ProSliderTile,
   popup: PopupTile,
   megamenu: MegaMenuTile,
+  oloheader: OloHeaderTile,
   'inner-columns': InnerColumnsTile,
   timeline: TimelineTile,
   flipcard: FlipCardTile,

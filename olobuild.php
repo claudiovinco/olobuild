@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Page builder professionale olonico con sistema a griglia (tile drag & drop).
- * Version:     1.4.292
+ * Version:     1.4.300
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuild
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '1.4.298' );
+define( 'OLO_VERSION', '1.4.300' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
 
@@ -537,6 +537,12 @@ register_activation_hook( __FILE__, function () {
     $new_templates  = $wpdb->prefix . 'olo_templates';
     $new_revisions  = $wpdb->prefix . 'olo_revisions';
 
+    // Migrazione one-shot all'attivazione su tabelle custom del plugin (olo_templates/olo_revisions)
+    // e su {$wpdb->postmeta}: query dirette $wpdb legittime, nessun equivalente WP_Query; risultato
+    // non cacheabile (operazione DDL/UPDATE una tantum). I nomi tabella interpolati derivano SOLO da
+    // $wpdb->prefix + suffissi letterali (nessun input utente); RENAME TABLE non ammette placeholder per
+    // gli identificatori. Tutti i VALORI passano da $wpdb->prepare con placeholder.
+    // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
     // Rename tables if old ones exist and new ones don't
     if ( $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $old_templates ) ) && ! $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $new_templates ) ) ) {
         $wpdb->query( "RENAME TABLE `{$old_templates}` TO `{$new_templates}`" );
@@ -586,6 +592,7 @@ register_activation_hook( __FILE__, function () {
     $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->postmeta} SET meta_key = %s WHERE meta_key = %s", '_olo_template_id', '_mosaic_template_id' ) );
     $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->postmeta} SET meta_key = %s WHERE meta_key = %s", '_olo_header_id', '_mosaic_header_id' ) );
     $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->postmeta} SET meta_key = %s WHERE meta_key = %s", '_olo_footer_id', '_mosaic_footer_id' ) );
+    // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
     // Migrate nav menu location assignment
     $locations = get_theme_mod( 'nav_menu_locations', [] );

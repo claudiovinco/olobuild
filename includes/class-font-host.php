@@ -133,6 +133,10 @@ class Olo_Font_Host {
      */
     public static function flush() {
         global $wpdb;
+        // Pulizia massiva dei transient del plugin nella tabella core delle option:
+        // nessun valore utente interpolato (solo $wpdb->options e pattern LIKE letterali),
+        // nessun equivalente WP_Query per un DELETE bulk, risultato non cacheabile.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $wpdb->query(
             "DELETE FROM {$wpdb->options}
              WHERE option_name LIKE '\_transient\_olo\_fonthost\_%'

@@ -108,6 +108,7 @@ class Olo_Facebookpage_Tile extends Olo_Tile_Base {
      */
     private function enqueue_facebook_sdk( $language = 'it_IT' ) {
         $lang = preg_match( '/^[a-z]{2}_[A-Z]{2}$/', $language ) ? $language : 'it_IT';
+        // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- SDK/embed di terze parti da URL remoto: versione controllata dal provider, non si versiona un asset remoto
         wp_enqueue_script( 'facebook-sdk', 'https://connect.facebook.net/' . $lang . '/sdk.js#xfbml=1&version=v19.0', [], null, true );
     }
 }

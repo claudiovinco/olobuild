@@ -213,7 +213,7 @@ class Olo_Pexels {
             $finfo_mime = function_exists( 'finfo_open' ) ? finfo_file( finfo_open( FILEINFO_MIME_TYPE ), $tmp_file ) : ( function_exists( 'mime_content_type' ) ? mime_content_type( $tmp_file ) : '' );
             $allowed = [ 'image/jpeg', 'image/png', 'image/webp', 'image/gif', 'video/mp4', 'video/webm' ];
             if ( $finfo_mime && ! in_array( $finfo_mime, $allowed, true ) ) {
-                @unlink( $tmp_file );
+                wp_delete_file( $tmp_file );
                 return new WP_Error( 'invalid_mime', 'Il file scaricato non è un tipo media valido.' );
             }
         }
@@ -222,7 +222,7 @@ class Olo_Pexels {
         if ( ! empty( $behavior['optimize_on_download'] ) ) {
             $webp = olo_convert_to_webp( $tmp_file, 82 );
             if ( $webp && $webp !== $tmp_file ) {
-                @unlink( $tmp_file );
+                wp_delete_file( $tmp_file );
                 $tmp_file = $webp;
             }
         }
@@ -241,7 +241,7 @@ class Olo_Pexels {
         $upload    = wp_handle_sideload( $file_data, $overrides );
 
         if ( ! empty( $upload['error'] ) ) {
-            @unlink( $tmp_file );
+            wp_delete_file( $tmp_file );
             return new WP_Error( 'upload_failed', $upload['error'], [ 'status' => 500 ] );
         }
 
@@ -391,7 +391,7 @@ class Olo_Pexels {
             $finfo_mime = function_exists( 'finfo_open' ) ? finfo_file( finfo_open( FILEINFO_MIME_TYPE ), $tmp_file ) : ( function_exists( 'mime_content_type' ) ? mime_content_type( $tmp_file ) : '' );
             $allowed = [ 'image/jpeg', 'image/png', 'image/webp', 'image/gif', 'video/mp4', 'video/webm' ];
             if ( $finfo_mime && ! in_array( $finfo_mime, $allowed, true ) ) {
-                @unlink( $tmp_file );
+                wp_delete_file( $tmp_file );
                 return new WP_Error( 'invalid_mime', 'Il file scaricato non è un tipo media valido.' );
             }
         }
@@ -409,7 +409,7 @@ class Olo_Pexels {
         $upload    = wp_handle_sideload( $file_data, $overrides );
 
         if ( ! empty( $upload['error'] ) ) {
-            @unlink( $tmp_file );
+            wp_delete_file( $tmp_file );
             return new WP_Error( 'upload_failed', $upload['error'], [ 'status' => 500 ] );
         }
 

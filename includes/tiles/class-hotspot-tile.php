@@ -217,7 +217,7 @@ class Olo_Hotspot_Tile extends Olo_Tile_Base {
                 $m_label = trim( wp_strip_all_tags( $title ) );
                 if ( $m_label === '' ) {
                     /* translators: %d: marker number */
-                    $m_label = sprintf( __( 'Hotspot %d', 'olobuilder' ), (int) $idx + 1 );
+                    $m_label = sprintf( __( 'Hotspot %d', 'olobuild' ), (int) $idx + 1 );
                 }
             ?>
             <div class="olo-hs-marker"

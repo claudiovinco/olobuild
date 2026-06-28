@@ -1156,6 +1156,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         // Filter by service type if specified
         $booking_mode = $s['svc_booking_mode'] ?? '';
         if ( $booking_mode ) {
+            // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- query per filtrare i servizi (olo_service) per tipo di prenotazione; meta query necessaria alla funzione del tile, volume limitato (max 200 post).
             $args['meta_query'] = [
                 [
                     'key'   => '_olo_service_type',

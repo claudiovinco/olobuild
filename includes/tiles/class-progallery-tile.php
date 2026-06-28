@@ -1853,7 +1853,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
      * Get video MIME type from URL extension.
      */
     private function get_video_mime( $url ) {
-        $ext = strtolower( pathinfo( parse_url( $url, PHP_URL_PATH ) ?: '', PATHINFO_EXTENSION ) );
+        $ext = strtolower( pathinfo( wp_parse_url( $url, PHP_URL_PATH ) ?: '', PATHINFO_EXTENSION ) );
         $map = [ 'mp4' => 'video/mp4', 'webm' => 'video/webm', 'ogg' => 'video/ogg', 'ogv' => 'video/ogg' ];
         return $map[ $ext ] ?? 'video/mp4';
     }

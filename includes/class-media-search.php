@@ -588,8 +588,11 @@ class Olo_Media_Search {
                 'provider'      => __( 'Provider', 'olobuild' ),
                 'quickLbl'      => __( 'Prova:', 'olobuild' ),
                 'keyMissing'    => __( 'API key mancante — configurala in Configurazione → Stock Media', 'olobuild' ),
+                /* translators: %s: search term */
                 'searching'     => __( 'Ricerca di «%s» in corso…', 'olobuild' ),
+                /* translators: 1: results count, 2: search term, 3: current page, 4: total pages */
                 'resultsFor'    => __( '%1$s risultati per «%2$s» · pagina %3$s di %4$s', 'olobuild' ),
+                /* translators: %s: provider name */
                 'via'           => __( 'via %s', 'olobuild' ),
                 'error'         => __( 'Errore', 'olobuild' ),
                 'import'        => __( 'Importa', 'olobuild' ),

@@ -148,22 +148,26 @@ class Olo_Newsletter {
         $table = self::table();
 
         // 4. Dedup — email già in lista = idempotente (non riveliamo nulla di più).
+        // Solo il nome tabella custom ({prefix}olo_newsletter) è interpolato; il valore $email passa da prepare con placeholder %s. Tabella custom: nessun equivalente WP_Query; risultato non cacheabile.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $existing = $wpdb->get_row( $wpdb->prepare( "SELECT id, status FROM $table WHERE email = %s", $email ) );
         if ( $existing ) {
             if ( $existing->status !== 'subscribed' ) {
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin ({prefix}olo_newsletter); $wpdb->update usa placeholder; nessun equivalente WP_Query; scrittura non cacheabile.
                 $wpdb->update( $table, [ 'status' => 'subscribed' ], [ 'id' => $existing->id ], [ '%s' ], [ '%d' ] );
             }
             return self::ok( $custom_msg ?: __( 'Sei già iscritto. Grazie!', 'olobuild' ) );
         }
 
         // 5. Inserimento.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin ({prefix}olo_newsletter); $wpdb->insert usa placeholder; nessun equivalente WP_Query; scrittura non cacheabile.
         $inserted = $wpdb->insert( $table, [
             'email'      => $email,
             'name'       => $name,
             'source'     => $source,
             'status'     => 'subscribed',
             'ip_address' => $ip,
-            'user_agent' => isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( substr( $_SERVER['HTTP_USER_AGENT'], 0, 255 ) ) : '',
+            'user_agent' => isset( $_SERVER['HTTP_USER_AGENT'] ) ? substr( sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ), 0, 255 ) : '',
             'created_at' => current_time( 'mysql' ),
         ], [ '%s', '%s', '%s', '%s', '%s', '%s', '%s' ] );
 
@@ -200,14 +204,14 @@ class Olo_Newsletter {
     private static function client_ip() {
         $candidates = [];
         if ( ! empty( $_SERVER['HTTP_CF_CONNECTING_IP'] ) ) {
-            $candidates[] = $_SERVER['HTTP_CF_CONNECTING_IP'];
+            $candidates[] = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_CONNECTING_IP'] ) );
         }
         if ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
-            $parts = explode( ',', $_SERVER['HTTP_X_FORWARDED_FOR'] );
+            $parts = explode( ',', sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) );
             $candidates[] = trim( $parts[0] );
         }
         if ( ! empty( $_SERVER['REMOTE_ADDR'] ) ) {
-            $candidates[] = $_SERVER['REMOTE_ADDR'];
+            $candidates[] = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) );
         }
         foreach ( $candidates as $ip ) {
             $ip = filter_var( $ip, FILTER_VALIDATE_IP );
@@ -227,8 +231,12 @@ class Olo_Newsletter {
         global $wpdb;
         $table = self::table();
         if ( $status ) {
+            // Solo il nome tabella custom è interpolato; il valore $status passa da prepare (%s). Tabella custom del plugin ({prefix}olo_newsletter): nessun equivalente WP_Query; conteggio non cacheabile.
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
             return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $table WHERE status = %s", $status ) );
         }
+        // Query senza valori utente: interpolato solo il nome tabella custom ({prefix}olo_newsletter). Nessun equivalente WP_Query; conteggio non cacheabile.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         return (int) $wpdb->get_var( "SELECT COUNT(*) FROM $table" );
     }
 
@@ -237,7 +245,10 @@ class Olo_Newsletter {
     // =========================================================================
 
     public static function maybe_export_csv() {
-        if ( empty( $_GET['olo_nl_export'] ) || ( $_GET['page'] ?? '' ) !== 'olo-newsletter' ) {
+        // Routing read-only della pagina admin: si decide solo SE intercettare l'export.
+        // L'azione effettiva è protetta subito sotto da current_user_can + check_admin_referer( 'olo_export_newsletter' ).
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per routing pagina admin; nessuna modifica di stato qui; il nonce è verificato sotto con check_admin_referer prima di qualsiasi azione.
+        if ( empty( $_GET['olo_nl_export'] ) || sanitize_key( wp_unslash( $_GET['page'] ?? '' ) ) !== 'olo-newsletter' ) {
             return;
         }
         if ( ! current_user_can( 'manage_options' ) ) {
@@ -247,21 +258,26 @@ class Olo_Newsletter {
 
         global $wpdb;
         $table = self::table();
+        // Export CSV: query senza valori utente, interpolato solo il nome tabella custom ({prefix}olo_newsletter). Nessun equivalente WP_Query; export una-tantum non cacheabile.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $rows  = $wpdb->get_results( "SELECT email, name, source, status, ip_address, created_at FROM $table ORDER BY created_at DESC", ARRAY_A );
 
-        $filename = 'newsletter-' . date( 'Y-m-d' ) . '.csv';
+        $filename = 'newsletter-' . gmdate( 'Y-m-d' ) . '.csv';
         header( 'Content-Type: text/csv; charset=UTF-8' );
         header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
         header( 'Pragma: no-cache' );
         header( 'Expires: 0' );
 
         $out = fopen( 'php://output', 'w' );
-        fwrite( $out, "\xEF\xBB\xBF" ); // BOM per Excel
+        // BOM per Excel
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- CSV streamed to php://output (download), not a filesystem file
+        fwrite( $out, "\xEF\xBB\xBF" );
         fputcsv( $out, [ 'Email', 'Nome', 'Origine', 'Stato', 'IP', 'Data' ], ';' );
         foreach ( (array) $rows as $r ) {
             // olo_csv_safe: email/name/source arrivano dal form pubblico → anti CSV formula injection.
             fputcsv( $out, array_map( 'olo_csv_safe', [ $r['email'], $r['name'], $r['source'], $r['status'], $r['ip_address'], $r['created_at'] ] ), ';' );
         }
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- closing the php://output CSV stream
         fclose( $out );
         exit;
     }
@@ -279,9 +295,15 @@ class Olo_Newsletter {
         $table = self::table();
 
         // Eliminazione singola.
-        if ( ( $_GET['action'] ?? '' ) === 'delete' && ! empty( $_GET['id'] ) ) {
-            check_admin_referer( 'olo_nl_delete_' . $_GET['id'] );
-            $wpdb->delete( $table, [ 'id' => absint( $_GET['id'] ) ], [ '%d' ] );
+        // I read $_GET['action']/$_GET['id'] servono solo a decidere SE entrare nel ramo delete;
+        // l'azione di scrittura è autorizzata da current_user_can( 'manage_options' ) (sopra) +
+        // check_admin_referer( 'olo_nl_delete_' . $id ) eseguito qui prima del $wpdb->delete.
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- gate read-only; il nonce è verificato con check_admin_referer prima della scrittura.
+        if ( ( sanitize_key( wp_unslash( $_GET['action'] ?? '' ) ) ) === 'delete' && ! empty( $_GET['id'] ) ) {
+            $del_id = absint( wp_unslash( $_GET['id'] ) );
+            check_admin_referer( 'olo_nl_delete_' . $del_id );
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin ({prefix}olo_newsletter); $wpdb->delete usa placeholder (id=absint); nessun equivalente WP_Query; scrittura non cacheabile.
+            $wpdb->delete( $table, [ 'id' => $del_id ], [ '%d' ] );
             echo '<div class="notice notice-success is-dismissible"><p>Iscritto eliminato.</p></div>';
         }
 
@@ -289,12 +311,17 @@ class Olo_Newsletter {
 
         // Paginazione semplice.
         $per_page = 50;
-        $paged    = max( 1, absint( $_GET['paged'] ?? 1 ) );
+        // Lettura read-only per la paginazione della lista admin; nessuna modifica di stato; valore convertito con absint.
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per paginazione; nessuna azione che cambia stato; valore sanitizzato con absint.
+        $paged    = max( 1, absint( wp_unslash( $_GET['paged'] ?? 1 ) ) );
         $offset   = ( $paged - 1 ) * $per_page;
         $all      = self::count( '' );
         $pages    = max( 1, (int) ceil( $all / $per_page ) );
 
+        // Interpolato solo il nome tabella custom ({prefix}olo_newsletter); i valori paginazione passano da prepare (%d/%d). Nessun equivalente WP_Query; lista admin non cacheabile.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $rows = $wpdb->get_results( $wpdb->prepare(
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
             "SELECT * FROM $table ORDER BY created_at DESC LIMIT %d OFFSET %d",
             $per_page, $offset
         ), ARRAY_A );

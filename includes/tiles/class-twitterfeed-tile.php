@@ -145,6 +145,7 @@ class Olo_Twitterfeed_Tile extends Olo_Tile_Base {
      * Enqueue Twitter widgets.js once per page via wp_enqueue_script.
      */
     private function enqueue_twitter_js() {
+        // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- SDK/embed di terze parti da URL remoto: versione controllata dal provider, non si versiona un asset remoto
         wp_enqueue_script( 'twitter-widgets', 'https://platform.twitter.com/widgets.js', [], null, true );
     }
 }

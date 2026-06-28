@@ -349,6 +349,7 @@ class Olo_Performance_Hints {
         $html = implode( '', $parts );
 
         if ( $this->lazy_video_count > 0 ) {
+            // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript -- helper lazy-video iniettato da un filtro di output-buffer che gira dopo wp_head/wp_footer; in questa fase l'enqueue non è più possibile
             $script = '<script src="' . esc_url( OLO_URL . 'assets/js/olo-lazy-video.js' ) . '?ver=' . rawurlencode( OLO_VERSION ) . '" defer></script>';
             $pos    = strripos( $html, '</body>' );
             $html   = ( false !== $pos ) ? substr_replace( $html, $script, $pos, 0 ) : $html . $script;

@@ -186,7 +186,7 @@ class Olo_Openverse {
         if ( ! empty( $behavior['optimize_on_download'] ) ) {
             $webp = olo_convert_to_webp( $tmp_file, 82 );
             if ( $webp && $webp !== $tmp_file ) {
-                @unlink( $tmp_file );
+                wp_delete_file( $tmp_file );
                 $tmp_file = $webp;
             }
         }
@@ -219,7 +219,7 @@ class Olo_Openverse {
         $upload    = wp_handle_sideload( $file_data, $overrides );
 
         if ( ! empty( $upload['error'] ) ) {
-            @unlink( $tmp_file );
+            wp_delete_file( $tmp_file );
             return new WP_Error( 'upload_failed', $upload['error'], [ 'status' => 500 ] );
         }
 

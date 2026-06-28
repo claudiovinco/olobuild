@@ -41,7 +41,7 @@ add_action( 'after_setup_theme', function() {
 
     // Registra posizione menu
     register_nav_menus( [
-        'primary' => __( 'Menu Principale', 'hello-olobuild' ),
+        'primary' => __( 'Menu Principale', 'olobuild' ),
     ] );
 } );
 

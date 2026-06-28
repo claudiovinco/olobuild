@@ -68,8 +68,10 @@ class Olo_Woo_Product_Filter_Tile extends Olo_Tile_Base {
         $price_max  = floatval( $s['price_max'] );
         if ( function_exists( 'wc_get_min_max_price_meta_query' ) ) {
             global $wpdb;
+            // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- aggregati MIN/MAX su {$wpdb->postmeta} (tabella core WP); nessun valore utente interpolato (solo il nome tabella da $wpdb e il literal '_price'); risultato range prezzi non cacheabile qui (varia col catalogo).
             $actual_min = $wpdb->get_var( "SELECT MIN(CAST(meta_value AS DECIMAL(10,2))) FROM {$wpdb->postmeta} WHERE meta_key = '_price' AND meta_value > 0" );
             $actual_max = $wpdb->get_var( "SELECT MAX(CAST(meta_value AS DECIMAL(10,2))) FROM {$wpdb->postmeta} WHERE meta_key = '_price'" );
+            // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             if ( $actual_min ) { $price_min = floor( floatval( $actual_min ) ); }
             if ( $actual_max ) { $price_max = ceil( floatval( $actual_max ) ); }
         }

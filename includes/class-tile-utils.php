@@ -30,7 +30,7 @@ class Olo_Tile_Utils {
             '{{site_name}}'    => get_bloginfo( 'name' ),
             '{{site_tagline}}' => get_bloginfo( 'description' ),
             '{{site_url}}'     => home_url( '/' ),
-            '{{current_year}}' => date( 'Y' ),
+            '{{current_year}}' => date_i18n( 'Y' ),
             '{{current_date}}' => date_i18n( get_option( 'date_format' ) ),
             '{{current_time}}' => date_i18n( get_option( 'time_format' ) ),
         ];

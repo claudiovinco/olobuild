@@ -197,9 +197,10 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
             }
         }
 
-        // Detect current URL for active state
-        $current_url = isset( $_SERVER['REQUEST_URI'] ) ? home_url( $_SERVER['REQUEST_URI'] ) : '';
-        $current_path = isset( $_SERVER['REQUEST_URI'] ) ? rtrim( strtok( $_SERVER['REQUEST_URI'], '?' ), '/' ) : '';
+        // Detect current URL for active state (read-only: solo confronto path per stato attivo, nessuna modifica di stato)
+        $request_uri  = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+        $current_url  = $request_uri !== '' ? home_url( $request_uri ) : '';
+        $current_path = $request_uri !== '' ? rtrim( strtok( $request_uri, '?' ), '/' ) : '';
 
         $tag = $is_horizontal ? 'div' : 'ul';
 

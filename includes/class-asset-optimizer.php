@@ -162,7 +162,7 @@ class Olo_Asset_Optimizer {
             $old = glob( $cache_dir . "olo-static-{$slug}-*.css" );
             if ( $old ) {
                 foreach ( $old as $f ) {
-                    @unlink( $f );
+                    wp_delete_file( $f );
                 }
             }
             if ( false === file_put_contents( $filepath, $min ) ) {
@@ -224,7 +224,7 @@ class Olo_Asset_Optimizer {
         $files = glob( $cache_dir . "olo-{$template_id}-*.css" );
         if ( $files ) {
             foreach ( $files as $file ) {
-                @unlink( $file );
+                wp_delete_file( $file );
             }
         }
     }
@@ -244,6 +244,7 @@ class Olo_Asset_Optimizer {
         $url = self::cache_css( $css, $tpl_id );
         if ( $url ) {
             $ver = OLO_VERSION;
+            // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet -- il modulo Asset Optimizer inietta nel markup renderizzato un file CSS combinato e pre-generato per-template (gira come filtro di render, dopo la fase di enqueue)
             return '<link rel="stylesheet" href="' . esc_url( $url ) . '?v=' . $ver . '" media="all" />';
         }
 
@@ -287,7 +288,7 @@ class Olo_Asset_Optimizer {
         $files = glob( $cache_dir . 'olo-*.css' );
         if ( $files ) {
             foreach ( $files as $file ) {
-                @unlink( $file );
+                wp_delete_file( $file );
             }
         }
     }

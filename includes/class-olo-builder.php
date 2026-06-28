@@ -125,6 +125,7 @@ class Olo_Builder {
      *      standalone come fallback (status quo).
      */
     public function serve_builder_iframe() {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per routing dell'iframe builder; nessuna modifica di stato; sola verifica di presenza del flag.
         if ( empty( $_GET['olo_builder_iframe'] ) ) return;
         if ( ! current_user_can( 'edit_pages' ) ) {
             // Diagnostica: distingue tra "non loggato" e "loggato ma senza permessi"
@@ -145,7 +146,8 @@ class Olo_Builder {
             wp_die( $msg, 'Olobuild Builder', [ 'response' => 403 ] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $msg is static diagnostic HTML built above; the only dynamic parts (user_login, roles) are esc_html()'d.
         }
 
-        $tpl_id = isset( $_GET['olo_tpl'] ) ? (int) $_GET['olo_tpl'] : 0;
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per routing/paginazione iframe builder; nessuna modifica di stato; valore sanitizzato via absint().
+        $tpl_id = isset( $_GET['olo_tpl'] ) ? absint( wp_unslash( $_GET['olo_tpl'] ) ) : 0;
 
         // Modalità inline (1): siamo già su un permalink reale.
         if ( is_singular() ) {
@@ -157,8 +159,8 @@ class Olo_Builder {
         if ( $tpl_id ) {
             $associated = get_posts( [
                 'post_type'      => 'any',
-                'meta_key'       => '_olo_template_id',
-                'meta_value'     => $tpl_id,
+                'meta_key'       => '_olo_template_id', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- lookup del post associato al template Olobuild; meta query necessaria alla funzione, una sola riga (posts_per_page=1, fields=ids), volume limitato.
+                'meta_value'     => $tpl_id, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- lookup del post associato al template Olobuild; meta query necessaria alla funzione, una sola riga, volume limitato.
                 'posts_per_page' => 1,
                 'fields'         => 'ids',
                 'post_status'    => [ 'publish', 'private', 'draft' ],
@@ -177,8 +179,132 @@ class Olo_Builder {
         }
 
         // Fallback: standalone iframe template (home root, no associated post).
+        $this->enqueue_builder_iframe_assets();
         include OLO_PATH . 'templates/builder-iframe.php';
         exit;
+    }
+
+    /** Handles registrati per il documento standalone builder-iframe.php. */
+    private $iframe_style_handles  = [];
+    private $iframe_script_handles = [];
+    private $iframe_module_handles = [];
+
+    /**
+     * Registra/enqueue TUTTI gli asset di templates/builder-iframe.php tramite
+     * l'API wp_enqueue (niente più <link>/<script> raw nel template: il documento
+     * standalone li emette con wp_print_styles()/wp_print_scripts()). L'ordine è
+     * garantito dalle dipendenze: uikit→icons, leaflet→markercluster→map, bridge ultimo.
+     */
+    private function enqueue_builder_iframe_assets() {
+        $v       = OLO_VERSION;
+        $leaflet = OLO_URL . 'assets/vendor/leaflet/';
+
+        // ── CSS (cascade: uikit → frontend → overrides) ──
+        $styles = [];
+        $st = function ( $handle, $url, $deps = [] ) use ( &$styles, $v ) {
+            wp_enqueue_style( $handle, $url, $deps, $v );
+            $styles[] = $handle;
+        };
+        $st( 'olo-ifr-uikit', OLO_URL . 'assets/vendor/uikit/css/uikit.min.css' );
+        $st( 'olo-ifr-frontend', OLO_URL . 'assets/css/frontend.css', [ 'olo-ifr-uikit' ] );
+        $st( 'olo-ifr-proslider', OLO_URL . 'assets/css/olo-proslider.css', [ 'olo-ifr-frontend' ] );
+        $st( 'olo-ifr-svganimator', OLO_URL . 'assets/css/olo-svganimator.css', [ 'olo-ifr-frontend' ] );
+        if ( file_exists( OLO_PATH . 'assets/css/olo-livesearch.css' ) ) {
+            $st( 'olo-ifr-livesearch', OLO_URL . 'assets/css/olo-livesearch.css', [ 'olo-ifr-frontend' ] );
+        }
+        $st( 'olo-ifr-leaflet', $leaflet . 'leaflet.css' );
+        $st( 'olo-ifr-markercluster', $leaflet . 'leaflet.markercluster.css', [ 'olo-ifr-leaflet' ] );
+        $st( 'olo-ifr-markercluster-default', $leaflet . 'leaflet.markercluster-default.css', [ 'olo-ifr-leaflet' ] );
+        $st( 'olo-ifr-builder', OLO_URL . 'assets/css/iframe-builder.css', [ 'olo-ifr-frontend' ] );
+        if ( file_exists( OLO_PATH . 'assets/css/olo-pdfviewer.css' ) ) {
+            $st( 'olo-ifr-pdfviewer-css', OLO_URL . 'assets/css/olo-pdfviewer.css', [ 'olo-ifr-frontend' ] );
+        }
+        $booking_path = WP_PLUGIN_DIR . '/olo-booking/';
+        $booking_url  = plugins_url( 'olo-booking/' );
+        if ( file_exists( $booking_path . 'assets/css/booking-front.css' ) ) {
+            $st( 'olo-ifr-booking', $booking_url . 'assets/css/booking-front.css' );
+        }
+        $vtour_path = WP_PLUGIN_DIR . '/olo-vtour/';
+        $vtour_url  = plugins_url( 'olo-vtour/' );
+        if ( file_exists( $vtour_path . 'assets/vendor/psv/psv-bundle.css' ) ) {
+            $st( 'olo-ifr-psv', $vtour_url . 'assets/vendor/psv/psv-bundle.css' );
+            $st( 'olo-ifr-vtour', $vtour_url . 'assets/css/olo-vtour-viewer.css' );
+        }
+        $this->iframe_style_handles = $styles;
+
+        // ── JS (uikit/icons → runtimes → bridge ultimo) ──
+        $scripts = [];
+        $modules = [];
+        $js = function ( $handle, $url, $deps = [], $module = false ) use ( &$scripts, &$modules, $v ) {
+            wp_enqueue_script( $handle, $url, $deps, $v, true );
+            $scripts[] = $handle;
+            if ( $module ) {
+                $modules[] = $handle;
+            }
+        };
+        $js( 'olo-ifr-uikit-js', OLO_URL . 'assets/vendor/uikit/js/uikit.min.js' );
+        $js( 'olo-ifr-uikit-icons-js', OLO_URL . 'assets/vendor/uikit/js/uikit-icons.min.js', [ 'olo-ifr-uikit-js' ] );
+        if ( file_exists( OLO_PATH . 'assets/js/olo-proslider.js' ) ) {
+            $js( 'olo-ifr-proslider-js', OLO_URL . 'assets/js/olo-proslider.js', [], true );
+        }
+        if ( file_exists( OLO_PATH . 'assets/js/olo-postgrid.js' ) ) {
+            $js( 'olo-ifr-postgrid-js', OLO_URL . 'assets/js/olo-postgrid.js', [], true );
+        }
+        $js( 'olo-ifr-leaflet-js', $leaflet . 'leaflet.js' );
+        $js( 'olo-ifr-markercluster-js', $leaflet . 'leaflet.markercluster.js', [ 'olo-ifr-leaflet-js' ] );
+        if ( file_exists( OLO_PATH . 'assets/js/olo-map.js' ) ) {
+            $js( 'olo-ifr-map-js', OLO_URL . 'assets/js/olo-map.js', [ 'olo-ifr-markercluster-js' ] );
+        }
+        if ( file_exists( OLO_PATH . 'assets/js/olo-svganimator.js' ) ) {
+            $js( 'olo-ifr-svganimator-js', OLO_URL . 'assets/js/olo-svganimator.js', [], true );
+        }
+        if ( file_exists( OLO_PATH . 'assets/js/olo-viewer360.js' ) ) {
+            $js( 'olo-ifr-viewer360-js', OLO_URL . 'assets/js/olo-viewer360.js' );
+        }
+        if ( file_exists( OLO_PATH . 'assets/vendor/pdfjs/pdf.min.js' ) ) {
+            $js( 'olo-ifr-pdfjs', OLO_URL . 'assets/vendor/pdfjs/pdf.min.js' );
+            $worker = esc_url( OLO_URL . 'assets/vendor/pdfjs/pdf.worker.min.js' );
+            wp_add_inline_script( 'olo-ifr-pdfjs', "window.oloPdfViewerData={workerUrl:'{$worker}'};window.oloPdfProData={workerUrl:'{$worker}'};", 'after' );
+        }
+        if ( file_exists( OLO_PATH . 'assets/vendor/pageflip/page-flip.browser.js' ) ) {
+            $js( 'olo-ifr-pageflip', OLO_URL . 'assets/vendor/pageflip/page-flip.browser.js' );
+        }
+        if ( file_exists( OLO_PATH . 'assets/js/olo-pdfviewer.js' ) ) {
+            $js( 'olo-ifr-pdfviewer-js', OLO_URL . 'assets/js/olo-pdfviewer.js' );
+        }
+        if ( file_exists( OLO_PATH . 'assets/js/olo-pdfpro.js' ) ) {
+            $js( 'olo-ifr-pdfpro-js', OLO_URL . 'assets/js/olo-pdfpro.js' );
+        }
+        if ( file_exists( OLO_PATH . 'assets/js/olo-utils.js' ) ) {
+            $js( 'olo-ifr-utils-js', OLO_URL . 'assets/js/olo-utils.js', [], true );
+        }
+        if ( file_exists( $booking_path . 'assets/js/booking-front.js' ) ) {
+            $js( 'olo-ifr-booking-js', $booking_url . 'assets/js/booking-front.js' );
+        }
+        if ( file_exists( $booking_path . 'assets/js/olo-restaurant-booking.js' ) ) {
+            $js( 'olo-ifr-restaurant-booking-js', $booking_url . 'assets/js/olo-restaurant-booking.js' );
+        }
+        if ( file_exists( $vtour_path . 'assets/vendor/psv/psv-bundle.js' ) ) {
+            $js( 'olo-ifr-psv-js', $vtour_url . 'assets/vendor/psv/psv-bundle.js' );
+            $js( 'olo-ifr-vtour-js', $vtour_url . 'assets/js/olo-vtour-viewer.js' );
+        }
+        // Bridge: deve caricarsi DOPO ogni runtime → dipende da tutti gli handle sopra.
+        wp_enqueue_script( 'olo-ifr-bridge', OLO_URL . 'assets/js/iframe-bridge.js', $scripts, $v, true );
+        $scripts[] = 'olo-ifr-bridge';
+
+        $this->iframe_script_handles = $scripts;
+        $this->iframe_module_handles = $modules;
+        if ( $modules ) {
+            add_filter( 'script_loader_tag', [ $this, 'iframe_module_script_tag' ], 10, 2 );
+        }
+    }
+
+    /** @internal Aggiunge type="module" agli script ES module dell'iframe del builder. */
+    public function iframe_module_script_tag( $tag, $handle ) {
+        if ( in_array( $handle, $this->iframe_module_handles, true ) ) {
+            $tag = preg_replace( '/<script /', '<script type="module" ', $tag, 1 );
+        }
+        return $tag;
     }
 
     /**
@@ -201,7 +327,8 @@ class Olo_Builder {
         // + template in editing renderizzato come body): definiamo una costante
         // che Olo_Header_Integration/Olo_Footer_Integration leggono per
         // skippare il rendering dell'header/footer attivo.
-        $tpl_id = isset( $_GET['olo_tpl'] ) ? (int) $_GET['olo_tpl'] : 0;
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per routing iframe builder (skip doppio render header/footer); nessuna modifica di stato; valore sanitizzato via absint().
+        $tpl_id = isset( $_GET['olo_tpl'] ) ? absint( wp_unslash( $_GET['olo_tpl'] ) ) : 0;
         if ( $tpl_id && class_exists( 'Olo_Database' ) ) {
             $db = new Olo_Database();
             $tpl = $db->get_template( $tpl_id );
@@ -612,6 +739,7 @@ class Olo_Builder {
                 if ( $diff < 60 ) {
                     $last_saved_str = __( 'pochi secondi fa', 'olobuild' );
                 } elseif ( $diff < 3600 ) {
+                    /* translators: %d: minutes elapsed */
                     $last_saved_str = sprintf( __( '%d minuti fa', 'olobuild' ), intval( $diff / 60 ) );
                 } else {
                     $last_saved_str = wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $last_saved_ts );
@@ -667,6 +795,7 @@ class Olo_Builder {
         // ad ogni F5 in admin (4 MB di builder.js riscaricati senza motivo).
         // Per forzare il reload in dev: aggiungere `?olo_no_cache=1`.
         $js_ver   = OLO_VERSION . '.' . $mtime;
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per cache-busting asset in admin; nessuna modifica di stato; sola verifica di presenza del flag.
         if ( isset( $_GET['olo_no_cache'] ) ) {
             $js_ver .= '.' . time();
         }
@@ -744,7 +873,8 @@ class Olo_Builder {
         );
 
         // Validate post_id — user must be able to edit that post
-        $post_id = absint( $_GET['post_id'] ?? 0 );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per bootstrap del builder admin (preselezione post); nessuna modifica di stato; valore sanitizzato via absint + capability check edit_post sotto.
+        $post_id = absint( wp_unslash( $_GET['post_id'] ?? 0 ) );
         if ( $post_id && ! current_user_can( 'edit_post', $post_id ) ) {
             $post_id = 0;
         }
@@ -756,7 +886,8 @@ class Olo_Builder {
         // sulle pages (che usano `?page_id=ID`) o sui CPT.
         $linked_post_permalink = '';
         $linked_post_id = 0;
-        $template_id_for_link = absint( $_GET['template_id'] ?? 0 );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per bootstrap del builder admin (risoluzione permalink template); nessuna modifica di stato; valore sanitizzato via absint.
+        $template_id_for_link = absint( wp_unslash( $_GET['template_id'] ?? 0 ) );
         if ( $template_id_for_link && class_exists( 'Olo_Database' ) ) {
             $db_for_link = new Olo_Database();
             $tpl_for_link = $db_for_link->get_template( $template_id_for_link );
@@ -777,7 +908,8 @@ class Olo_Builder {
             'version'        => OLO_VERSION,
             'pluginUrl'      => OLO_URL,
             'brandName'      => apply_filters( 'olo_brand_name', 'Olobuild' ),
-            'templateId'     => absint( $_GET['template_id'] ?? 0 ),
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per bootstrap del builder admin (template in editing); nessuna modifica di stato; valore sanitizzato via absint.
+            'templateId'     => absint( wp_unslash( $_GET['template_id'] ?? 0 ) ),
             'postId'         => $post_id,
             'postPermalink'  => $post_id ? get_permalink( $post_id ) : '',
             // Permalink REALE del post collegato al template (vedi commento sopra).
@@ -810,7 +942,8 @@ class Olo_Builder {
             'wpPages'        => $this->get_wp_pages(),
             'singlePostItems' => $this->get_single_post_items(),
             'iframeEmptyHtml' => self::get_iframe_empty_html(),
-            '_debug_tpl_id'   => absint( $_GET['template_id'] ?? 0 ),
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per debug bootstrap builder admin; nessuna modifica di stato; valore sanitizzato via absint.
+            '_debug_tpl_id'   => absint( wp_unslash( $_GET['template_id'] ?? 0 ) ),
             'hasAiKey'       => ! empty( get_option( 'olo_ai_anthropic_key', '' ) ),
             'breakpointsEnabled' => wp_parse_args( get_option( 'olo_breakpoints_enabled', [] ), [
                 'widescreen'       => true,
@@ -840,7 +973,8 @@ class Olo_Builder {
     }
 
     public function render_builder_page() {
-        $template_id = absint( $_GET['template_id'] ?? 0 );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per routing della pagina admin (editor vs lista template); nessuna modifica di stato; valore sanitizzato via absint.
+        $template_id = absint( wp_unslash( $_GET['template_id'] ?? 0 ) );
 
         // Forza il browser a NON usare la cache locale per la pagina builder.
         // Senza questi header alcuni browser (Chrome con bfcache) riservano
@@ -941,7 +1075,8 @@ class Olo_Builder {
         $logo_url  = OLO_URL . 'assets/img/olobuild-logo-200-v2.png';
         $white_url = apply_filters( 'olo_brand_logo_url', OLO_URL . 'assets/img/olobuild-logo-200-white.png' );
         $cls = 'olo-admin-wrap' . ( $extra_class ? ' ' . esc_attr( $extra_class ) : '' );
-        $current   = sanitize_key( $_GET['page'] ?? '' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per evidenziare la voce di menu corrente nella sidebar admin; nessuna modifica di stato; valore sanitizzato via sanitize_key.
+        $current   = sanitize_key( wp_unslash( $_GET['page'] ?? '' ) );
         ?>
         <div class="olo-shell">
             <!-- Top bar -->
@@ -1256,6 +1391,7 @@ class Olo_Builder {
         // Top template
         global $wpdb;
         $tpl_table = $wpdb->prefix . 'olo_templates';
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabella custom del plugin ($wpdb->prefix . 'olo_templates'); nessun equivalente WP_Query. L'unica parte interpolata è il nome tabella derivato da $wpdb->prefix (nessun valore utente); risultato dell'indice di ricerca dashboard non cacheabile.
         if ( $wpdb->get_var( "SHOW TABLES LIKE '$tpl_table'" ) === $tpl_table ) {
             $tpls = $wpdb->get_results(
                 "SELECT id, title, type FROM $tpl_table ORDER BY updated_at DESC LIMIT 30",
@@ -1270,6 +1406,7 @@ class Olo_Builder {
                 ];
             }
         }
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
         return $idx;
     }
@@ -1281,6 +1418,7 @@ class Olo_Builder {
     private static function dashboard_hero_data() {
         global $wpdb;
         $tpl_table = $wpdb->prefix . 'olo_templates';
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabella custom del plugin ($wpdb->prefix . 'olo_templates'); nessun equivalente WP_Query. Interpolato solo il nome tabella da $wpdb->prefix (nessun valore utente); check di esistenza tabella non cacheabile.
         $tpl_table_exists = ( $wpdb->get_var( "SHOW TABLES LIKE '$tpl_table'" ) === $tpl_table );
 
         $pages = get_posts( [
@@ -1295,7 +1433,9 @@ class Olo_Builder {
             $thumbnail = '';
             $tpl_id = (int) get_post_meta( $p->ID, '_olo_template_id', true );
             if ( $tpl_id && $tpl_table_exists ) {
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabella custom del plugin ($wpdb->prefix . 'olo_templates'); nessun equivalente WP_Query. Interpolato solo il nome tabella da $wpdb->prefix; il valore utente $tpl_id passa da $wpdb->prepare con %d; risultato (thumbnail) non cacheabile.
                 $thumbnail = (string) $wpdb->get_var( $wpdb->prepare(
+                    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
                     "SELECT thumbnail FROM $tpl_table WHERE id = %d", $tpl_id
                 ) );
             }
@@ -1717,7 +1857,7 @@ class Olo_Builder {
                     <?php if ( $update_available ) : ?>
                     <div class="olo-banner" data-banner="update-<?php echo esc_attr( $update_info['version'] ?? '0' ); ?>">
                         <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l9 16H3z"/><path d="M12 11v4M12 18h.01"/></svg></span>
-                        <span><b><?php printf( esc_html__( 'Aggiornamento disponibile · v%s', 'olobuild' ), esc_html( $update_info['version'] ?? '' ) ); ?></b> — <?php echo esc_html( $update_info['note'] ?? '' ); ?></span>
+                        <span><b><?php /* translators: %s: version number */ printf( esc_html__( 'Aggiornamento disponibile · v%s', 'olobuild' ), esc_html( $update_info['version'] ?? '' ) ); ?></b> — <?php echo esc_html( $update_info['note'] ?? '' ); ?></span>
                         <span class="spc"></span>
                         <a class="act" href="<?php echo esc_url( admin_url( 'plugins.php' ) ); ?>"><?php esc_html_e( 'Aggiorna ora', 'olobuild' ); ?></a>
                         <button type="button" class="x" title="<?php esc_attr_e( 'Chiudi', 'olobuild' ); ?>"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
@@ -2045,6 +2185,7 @@ class Olo_Builder {
                 $via_const = defined( 'OLO_PIXABAY_API_KEY' ) && OLO_PIXABAY_API_KEY;
                 echo '<input type="text" name="olo_pixabay_api_key" value="' . esc_attr( $val ) . '" class="regular-text"' . ( $via_const ? ' placeholder="' . esc_attr__( 'Definita in wp-config.php (OLO_PIXABAY_API_KEY)', 'olobuild' ) . '" disabled' : '' ) . ' />';
                 echo '<p class="description">' . sprintf(
+                    /* translators: %s: link to the Pixabay API documentation */
                     esc_html__( 'Ottieni una chiave su %s', 'olobuild' ),
                     '<a href="https://pixabay.com/api/docs/" target="_blank" rel="noopener">pixabay.com/api/docs</a>'
                 ) . '</p>';
@@ -2067,6 +2208,7 @@ class Olo_Builder {
                 $via_const = defined( 'OLO_UNSPLASH_API_KEY' ) && OLO_UNSPLASH_API_KEY;
                 echo '<input type="text" name="olo_unsplash_api_key" value="' . esc_attr( $val ) . '" class="regular-text"' . ( $via_const ? ' placeholder="' . esc_attr__( 'Definita in wp-config.php (OLO_UNSPLASH_API_KEY)', 'olobuild' ) . '" disabled' : '' ) . ' />';
                 echo '<p class="description">' . sprintf(
+                    /* translators: %s: link to the Unsplash developers page */
                     esc_html__( 'Ottieni una chiave su %s', 'olobuild' ),
                     '<a href="https://unsplash.com/developers" target="_blank" rel="noopener">unsplash.com/developers</a>'
                 ) . '</p>';
@@ -2088,6 +2230,7 @@ class Olo_Builder {
                 $val = get_option( 'olo_freesound_api_key', '' );
                 echo '<input type="text" name="olo_freesound_api_key" value="' . esc_attr( $val ) . '" class="regular-text" placeholder="xbKm7Gp3..." />';
                 echo '<p class="description">' . sprintf(
+                    /* translators: %s: link to the Freesound API page */
                     esc_html__( 'Ottieni una chiave su %s', 'olobuild' ),
                     '<a href="https://freesound.org/apiv2/apply" target="_blank" rel="noopener">freesound.org/apiv2/apply</a>'
                 ) . '</p>';
@@ -2160,6 +2303,7 @@ class Olo_Builder {
                 $val = get_option( 'olo_mailchimp_api_key', '' );
                 echo '<input type="text" name="olo_mailchimp_api_key" value="' . esc_attr( $val ) . '" class="regular-text" placeholder="xxxxxxxxxxxxxxxx-us1" />';
                 echo '<p class="description">' . sprintf(
+                    /* translators: %s: link to the Mailchimp help page */
                     esc_html__( 'Ottieni una chiave su %s', 'olobuild' ),
                     '<a href="https://mailchimp.com/help/about-api-keys/" target="_blank" rel="noopener">mailchimp.com</a>'
                 ) . '</p>';
@@ -2375,6 +2519,7 @@ class Olo_Builder {
 
                     // Templates totali (proxy per "pages_total")
                     global $wpdb;
+                    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabella custom del plugin ({$wpdb->prefix}olo_templates); nessun equivalente WP_Query. Interpolato solo il nome tabella da $wpdb->prefix; il valore 'published' passa da $wpdb->prepare con %s; conteggio non cacheabile.
                     $pages_total = (int) $wpdb->get_var( $wpdb->prepare(
                         "SELECT COUNT(*) FROM {$wpdb->prefix}olo_templates WHERE status = %s",
                         'published'
@@ -2883,12 +3028,14 @@ class Olo_Builder {
                     $log404    = [];
                     $rt = $wpdb->prefix . 'olo_redirects';
                     $lt = $wpdb->prefix . 'olo_404_log';
+                    // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabelle custom del plugin ($wpdb->prefix . 'olo_redirects'/'olo_404_log'); nessun equivalente WP_Query. Interpolati solo i nomi tabella derivati da $wpdb->prefix (nessun valore utente); liste redirect/404 non cacheabili (lette al volo nell'admin).
                     if ( $wpdb->get_var( "SHOW TABLES LIKE '$rt'" ) === $rt ) {
                         $redirects = $wpdb->get_results( "SELECT id, from_url, to_url, type, hits FROM $rt ORDER BY id DESC LIMIT 500", ARRAY_A );
                     }
                     if ( $wpdb->get_var( "SHOW TABLES LIKE '$lt'" ) === $lt ) {
                         $log404 = $wpdb->get_results( "SELECT id, url, hits, last_hit FROM $lt ORDER BY hits DESC LIMIT 200", ARRAY_A );
                     }
+                    // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
                     $advanced = (array) get_option( 'olo_seo_advanced', [] );
                     return rest_ensure_response( [
                         'redirects'    => $redirects ?: [],
@@ -2906,6 +3053,7 @@ class Olo_Builder {
                     $action = $p['action'] ?? '';
                     $rt = $wpdb->prefix . 'olo_redirects';
                     $lt = $wpdb->prefix . 'olo_404_log';
+                    // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabelle custom del plugin ($wpdb->prefix . 'olo_redirects'/'olo_404_log'); nessun equivalente WP_Query. insert/delete usano l'API $wpdb con valori parametrizzati; il TRUNCATE interpola solo il nome tabella da $wpdb->prefix (nessun valore utente); operazioni di scrittura non cacheabili.
                     if ( $action === 'add' ) {
                         if ( empty( $p['from_url'] ) || empty( $p['to_url'] ) ) {
                             return new WP_Error( 'missing', 'from_url e to_url obbligatori', [ 'status' => 400 ] );
@@ -2927,6 +3075,7 @@ class Olo_Builder {
                         $wpdb->query( "TRUNCATE TABLE $lt" );
                         return rest_ensure_response( [ 'ok' => true ] );
                     }
+                    // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
                     if ( $action === 'save_indexnow' ) {
                         $adv = (array) get_option( 'olo_seo_advanced', [] );
                         $adv['indexnow_key'] = sanitize_text_field( $p['indexnow_key'] ?? '' );
@@ -3142,6 +3291,7 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-proslider-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-popup-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-megamenu-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-oloheader-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-inner-columns-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-timeline-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-flipcard-tile.php';
@@ -3382,6 +3532,7 @@ class Olo_Builder {
         $manager->register_tile( new Olo_ProSlider_Tile() );
         $manager->register_tile( new Olo_Popup_Tile() );
         $manager->register_tile( new Olo_MegaMenu_Tile() );
+        $manager->register_tile( new Olo_OloHeader_Tile() );
         $manager->register_tile( new Olo_InnerColumns_Tile() );
         $manager->register_tile( new Olo_Timeline_Tile() );
         $manager->register_tile( new Olo_FlipCard_Tile() );
@@ -3597,6 +3748,7 @@ class Olo_Builder {
         global $wpdb;
         $post_types = get_post_types( [ 'public' => true ], 'names' );
         $map = [];
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Query DISTINCT su postmeta per costruire i menu dell'inspector; nessun helper WP equivalente per "valori distinti di una meta_key". Interpolati solo $wpdb->postmeta/$wpdb->posts (nomi tabella core); tutti i valori utente passano da $wpdb->prepare (%s). Risultato cacheato in transient (vedi set_transient a fine metodo).
         foreach ( $post_types as $type ) {
             // Top 50 meta keys per post_type (esclude _edit_*, _wp_*, _oembed_* interne)
             $keys = $wpdb->get_col( $wpdb->prepare(
@@ -3633,6 +3785,7 @@ class Olo_Builder {
             }
             $map[ $type ] = $entries;
         }
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         set_transient( $cache_key, $map, 5 * MINUTE_IN_SECONDS );
         return $map;
     }
@@ -3714,7 +3867,8 @@ class Olo_Builder {
      * Looks up which post type this template is assigned to, then returns all published posts of that type.
      */
     private function get_single_post_items() {
-        $tpl_id = absint( $_GET['template_id'] ?? 0 );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per bootstrap del builder admin (lista post del template); nessuna modifica di stato; valore sanitizzato via absint.
+        $tpl_id = absint( wp_unslash( $_GET['template_id'] ?? 0 ) );
         if ( ! $tpl_id ) return [];
 
         // Find which post type uses this template

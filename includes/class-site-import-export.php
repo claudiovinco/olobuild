@@ -535,6 +535,7 @@ class Olo_Site_Import_Export {
             'post_type'   => 'page',
             'post_status' => [ 'publish', 'draft', 'private' ],
             'numberposts' => -1,
+            // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- query per esportare le pagine WP collegate a un template olobuild; meta query necessaria alla funzione, volume limitato (solo pagine).
             'meta_key'    => '_olo_template_id',
         ] );
 
@@ -784,7 +785,7 @@ class Olo_Site_Import_Export {
             $attachment_id = media_handle_sideload( $file_array, 0 );
 
             if ( is_wp_error( $attachment_id ) ) {
-                @unlink( $tmp_file );
+                wp_delete_file( $tmp_file );
                 continue;
             }
 

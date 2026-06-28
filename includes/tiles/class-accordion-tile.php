@@ -545,7 +545,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
         }
 
         // Direct video file
-        $ext = strtolower( pathinfo( parse_url( $url, PHP_URL_PATH ) ?: '', PATHINFO_EXTENSION ) );
+        $ext = strtolower( pathinfo( wp_parse_url( $url, PHP_URL_PATH ) ?: '', PATHINFO_EXTENSION ) );
         $mime_map = [ 'mp4' => 'video/mp4', 'webm' => 'video/webm', 'ogg' => 'video/ogg' ];
         $mime = $mime_map[ $ext ] ?? 'video/mp4';
         return '<video controls preload="metadata"><source src="' . esc_url( $url ) . '" type="' . esc_attr( $mime ) . '"></video>';

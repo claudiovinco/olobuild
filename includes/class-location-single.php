@@ -203,7 +203,7 @@ class Olo_Location_Single {
                 <?php
                 $lines = preg_split( '/\r\n|\r|\n|<br\s*\/?>/', $highlights );
                 foreach ( $lines as $line ) {
-                    $line = trim( strip_tags( $line ) );
+                    $line = trim( wp_strip_all_tags( $line ) );
                     if ( $line ) {
                         echo '<li>' . esc_html( $line ) . '</li>';
                     }

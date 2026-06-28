@@ -1,0 +1,55 @@
+# wordpress.org packaging — keep development/working files out of `git archive`.
+# Mirrors the exclusion rules in build_zip.py. The shipped package keeps:
+# olobuild.php, includes/, assets/, templates/, languages/, database/, src/,
+# readme.txt and LICENSE.
+
+# --- Development / build tooling ---
+/node_modules/        export-ignore
+/dist/                export-ignore
+/build/               export-ignore
+/docs/                export-ignore
+/scripts/             export-ignore
+/.github/             export-ignore
+/.vscode/             export-ignore
+/.idea/               export-ignore
+
+# --- Working / design / audit folders ---
+/regoletiles1/        export-ignore
+/audit_results/       export-ignore
+/handoff-tile-speciali/ export-ignore
+/iotfarm-demo/        export-ignore
+/bordo/               export-ignore
+/olobuild-converter/  export-ignore
+/design-clod/         export-ignore
+/design-north/        export-ignore
+design_handoff_*/     export-ignore
+languages._backup_*/  export-ignore
+tmp_*/                export-ignore
+NOVA*/                export-ignore
+OLObuild?design*/     export-ignore
+
+# --- Working / build files at any level ---
+*.md                  export-ignore
+*.cjs                 export-ignore
+*.py                  export-ignore
+*.zip                 export-ignore
+*.log                 export-ignore
+*.tsv                 export-ignore
+tmp_*                 export-ignore
+_*                    export-ignore
+
+# --- Repo / tooling config (root) ---
+/.gitignore           export-ignore
+/.gitattributes       export-ignore
+/.editorconfig        export-ignore
+/package.json         export-ignore
+/package-lock.json    export-ignore
+/composer.json        export-ignore
+/composer.lock        export-ignore
+/vite.config.js       export-ignore
+/vite.config.admin.js export-ignore
+/vite.picker.config.js export-ignore
+/tailwind.config.js   export-ignore
+/postcss.config.js    export-ignore
+
+# readme.txt and LICENSE are intentionally NOT ignored — they ship.

@@ -344,6 +344,7 @@ class Olo_Template_Conditions {
 
         $public_cpts = get_post_types( [ 'public' => true ], 'objects' );
 
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per mostrare la notice "salvato" dopo il redirect; nessuna modifica di stato; isset() non usa il valore.
         $saved   = isset( $_GET['olo_saved'] );
         ?>
         <div class="wrap olo-tpl-rules">
@@ -531,7 +532,11 @@ class Olo_Template_Conditions {
         }
         check_admin_referer( 'olo_save_template_conditions' );
 
-        $raw   = $_POST['rules'] ?? [];
+        // Nonce verificato sopra con check_admin_referer(). wp_unslash() rimuove gli
+        // slash WP sull'intero array; ogni scalare viene poi sanitizzato singolarmente
+        // sotto (sanitize_text_field / cast int / whitelist).
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- array sanitizzato per-campo nel loop sottostante.
+        $raw   = isset( $_POST['rules'] ) ? wp_unslash( $_POST['rules'] ) : [];
         if ( ! is_array( $raw ) ) $raw = [];
 
         $clean = [];

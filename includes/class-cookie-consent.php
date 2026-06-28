@@ -226,7 +226,8 @@ class Olo_Cookie_Consent {
 
     public function render_admin_page() {
         $opts = self::get_options();
-        $tab  = sanitize_key( $_GET['tab'] ?? 'general' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per routing tab della pagina admin; nessuna modifica di stato; valore sanitizzato con sanitize_key + wp_unslash.
+        $tab  = sanitize_key( wp_unslash( $_GET['tab'] ?? 'general' ) );
         $tabs = [
             'general'     => __( 'Generale', 'olobuild' ),
             'texts'       => __( 'Testi', 'olobuild' ),
@@ -904,12 +905,13 @@ class Olo_Cookie_Consent {
         $table = $wpdb->prefix . self::LOG_TABLE;
 
         $total = 0;
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- tabella custom del plugin (olo_consent_log); nessun equivalente WP_Query; il nome tabella deriva da $wpdb->prefix (non da input utente), i valori (LIMIT/OFFSET) passano da $wpdb->prepare con %d; log di audit non cacheabile.
         if ( $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table ) ) === $table ) {
-            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table is built from $wpdb->prefix constant
             $total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `$table`" );
         }
 
-        $page     = max( 1, intval( $_GET['paged'] ?? 1 ) );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per paginazione del log; nessuna modifica di stato; valore convertito con intval + wp_unslash.
+        $page     = max( 1, intval( wp_unslash( $_GET['paged'] ?? 1 ) ) );
         $per_page = 30;
         $offset   = ( $page - 1 ) * $per_page;
         $rows     = [];
@@ -920,6 +922,7 @@ class Olo_Cookie_Consent {
                 $per_page, $offset
             ), ARRAY_A );
         }
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
         ?>
         <div class="olo-card">
@@ -932,6 +935,7 @@ class Olo_Cookie_Consent {
                     <p>
                         <?php
                         printf(
+                            /* translators: %d: number of recorded consents */
                             esc_html__( '%d consensi registrati. Il GDPR richiede di poter dimostrare il consenso raccolto.', 'olobuild' ),
                             (int) $total
                         );
@@ -1081,7 +1085,7 @@ class Olo_Cookie_Consent {
 
     public function ajax_log_consent() {
         // Rate limiting for anonymous consent logging (5 per IP per hour to prevent flooding)
-        $ip_raw = sanitize_text_field( $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0' );
+        $ip_raw = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0' ) );
         $rl_key = 'olo_consent_rl_' . md5( $ip_raw );
         $rl_count = intval( get_transient( $rl_key ) );
         if ( $rl_count >= 5 ) {
@@ -1091,10 +1095,12 @@ class Olo_Cookie_Consent {
 
         global $wpdb;
 
-        $consent_id   = sanitize_text_field( $_POST['consent_id'] ?? '' );
-        $categories   = sanitize_text_field( $_POST['categories'] ?? '' );
-        $action_type  = sanitize_text_field( $_POST['action_type'] ?? 'initial' );
-        $bv           = intval( $_POST['banner_version'] ?? 1 );
+        // phpcs:disable WordPress.Security.NonceVerification.Missing -- endpoint pubblico di logging consenso (wp_ajax_nopriv) servito anche da pagine in cache: il modello anti-abuso è il rate-limit per IP (transient olo_consent_rl_*, max 5/ora) impostato sopra, non un nonce; nessun dato sensibile letto/scritto, solo log GDPR del consenso.
+        $consent_id   = sanitize_text_field( wp_unslash( $_POST['consent_id'] ?? '' ) );
+        $categories   = sanitize_text_field( wp_unslash( $_POST['categories'] ?? '' ) );
+        $action_type  = sanitize_text_field( wp_unslash( $_POST['action_type'] ?? 'initial' ) );
+        $bv           = intval( wp_unslash( $_POST['banner_version'] ?? 1 ) );
+        // phpcs:enable WordPress.Security.NonceVerification.Missing
 
         if ( empty( $consent_id ) ) {
             wp_send_json_error( 'Missing consent_id' );
@@ -1106,16 +1112,17 @@ class Olo_Cookie_Consent {
         }
 
         // Hash IP for privacy (GDPR: no plain IP storage)
-        $ip_hash = hash( 'sha256', $_SERVER['REMOTE_ADDR'] . wp_salt( 'auth' ) );
-        $ua      = sanitize_text_field( substr( $_SERVER['HTTP_USER_AGENT'] ?? '', 0, 512 ) );
+        $ip_hash = hash( 'sha256', sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ?? '' ) ) . wp_salt( 'auth' ) );
+        $ua      = substr( sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ?? '' ) ), 0, 512 );
 
-        // Validate categories JSON
-        $cats = json_decode( stripslashes( $categories ), true );
+        // Validate categories JSON ($categories già unslashed alla fonte da wp_unslash sopra).
+        $cats = json_decode( $categories, true );
         if ( ! is_array( $cats ) ) {
             $cats = [];
         }
 
         $table = $wpdb->prefix . self::LOG_TABLE;
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- tabella custom del plugin (olo_consent_log); nessun equivalente WP_Query; il nome tabella deriva da $wpdb->prefix (non da input utente), il valore del LIMIT passa da $wpdb->prepare con %d; scrittura/prune log non cacheabile.
         $wpdb->insert( $table, [
             'consent_id'     => $consent_id,
             'ip_hash'        => $ip_hash,
@@ -1126,11 +1133,11 @@ class Olo_Cookie_Consent {
         ] );
 
         // Auto-prune: keep max 10000 entries
-        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table is built from $wpdb->prefix constant
         $count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `$table`" );
         if ( $count > 10000 ) {
             $wpdb->query( $wpdb->prepare( "DELETE FROM `$table` ORDER BY created_at ASC LIMIT %d", $count - 10000 ) );
         }
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
         wp_send_json_success();
     }
@@ -1142,7 +1149,7 @@ class Olo_Cookie_Consent {
         }
 
         global $wpdb;
-        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- table name from constant
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- tabella custom del plugin (olo_consent_log); nome tabella da $wpdb->prefix (non input utente); nessun valore utente in query; svuotamento log non cacheabile.
         $wpdb->query( "TRUNCATE TABLE `" . $wpdb->prefix . self::LOG_TABLE . "`" );
         wp_send_json_success();
     }
@@ -1154,11 +1161,11 @@ class Olo_Cookie_Consent {
         }
 
         global $wpdb;
-        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- table name from constant
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared -- tabella custom del plugin (olo_consent_log); nome tabella da $wpdb->prefix (non input utente); nessun valore utente in query; export CSV del log non cacheabile.
         $rows = $wpdb->get_results( "SELECT * FROM `" . $wpdb->prefix . self::LOG_TABLE . "` ORDER BY created_at DESC", ARRAY_A );
 
         header( 'Content-Type: text/csv; charset=utf-8' );
-        header( 'Content-Disposition: attachment; filename=consent-log-' . date( 'Y-m-d' ) . '.csv' );
+        header( 'Content-Disposition: attachment; filename=consent-log-' . gmdate( 'Y-m-d' ) . '.csv' );
 
         $out = fopen( 'php://output', 'w' );
         fputcsv( $out, [ 'ID', 'Consent ID', 'IP Hash', 'Categories', 'Action Type', 'Banner Version', 'User Agent', 'Date' ] );
@@ -1177,6 +1184,7 @@ class Olo_Cookie_Consent {
             ] ) );
         }
 
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- closing the php://output CSV stream
         fclose( $out );
         exit;
     }
@@ -1730,6 +1738,7 @@ class Olo_Cookie_Consent {
 
         // Don't block if consent already given
         if ( isset( $_COOKIE['olo_cc'] ) ) {
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- lettura read-only del cookie di consenso nel filtro script_loader_tag; nessuna modifica di stato; il valore non viene mai emesso/salvato: json_decode + is_array lo validano in struttura, usata solo per controlli booleani empty().
             $consent = json_decode( wp_unslash( $_COOKIE['olo_cc'] ), true );
             if ( json_last_error() !== JSON_ERROR_NONE ) { $consent = []; }
             if ( is_array( $consent ) ) {
@@ -1774,6 +1783,7 @@ class Olo_Cookie_Consent {
 
                 // Check if this specific category is consented
                 if ( isset( $_COOKIE['olo_cc'] ) ) {
+                    // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- lettura read-only del cookie di consenso nel filtro script_loader_tag; nessuna modifica di stato; il valore non viene mai emesso/salvato: json_decode + is_array lo validano in struttura, usata solo per controlli booleani empty().
                     $consent = json_decode( wp_unslash( $_COOKIE['olo_cc'] ), true );
                     if ( json_last_error() !== JSON_ERROR_NONE ) { $consent = []; }
                     if ( is_array( $consent ) ) {

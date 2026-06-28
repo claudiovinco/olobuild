@@ -175,6 +175,7 @@ class Olo_Instagram_Tile extends Olo_Tile_Base {
      * Enqueue Instagram embed.js once per page via wp_enqueue_script.
      */
     private function enqueue_instagram_js() {
+        // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- SDK/embed di terze parti da URL remoto: versione controllata dal provider, non si versiona un asset remoto
         wp_enqueue_script( 'instagram-embed', 'https://www.instagram.com/embed.js', [], null, true );
     }
 }

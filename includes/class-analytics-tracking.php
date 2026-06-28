@@ -128,7 +128,8 @@ class Olo_Analytics_Tracking {
 
     public static function render_page() {
         $opts = self::get_options();
-        $tab  = sanitize_key( $_GET['tab'] ?? 'providers' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per routing tab della pagina admin; nessuna modifica di stato; valore sanitizzato con sanitize_key + wp_unslash.
+        $tab  = sanitize_key( wp_unslash( $_GET['tab'] ?? 'providers' ) );
         $tabs = [
             'providers' => __( 'Provider', 'olobuild' ),
             'events'    => __( 'Eventi', 'olobuild' ),
@@ -513,7 +514,9 @@ class Olo_Analytics_Tracking {
         // Respect DNT
         if ( ! empty( $opts['respect_dnt'] ) ) {
             if ( isset( $_SERVER['HTTP_DNT'] ) ) {
-                if ( $_SERVER['HTTP_DNT'] === '1' ) {
+                // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only header browser su richiesta frontend pubblica per disattivare il tracking; nessuna modifica di stato.
+                $dnt = sanitize_text_field( wp_unslash( $_SERVER['HTTP_DNT'] ) );
+                if ( $dnt === '1' ) {
                     return true;
                 }
             }
@@ -545,7 +548,8 @@ class Olo_Analytics_Tracking {
 
         // Check the consent cookie
         if ( isset( $_COOKIE['olo_cc'] ) ) {
-            $consent = json_decode( wp_unslash( $_COOKIE['olo_cc'] ), true );
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing -- lettura read-only del cookie di consenso su richiesta frontend pubblica (spesso servita da cache); nessuna API nonce disponibile, non è elaborazione di form; valore sanitizzato e validato via json_decode/json_last_error.
+            $consent = json_decode( sanitize_text_field( wp_unslash( $_COOKIE['olo_cc'] ) ), true );
             if ( json_last_error() !== JSON_ERROR_NONE ) { $consent = []; }
             if ( is_array( $consent ) ) {
                 if ( ! empty( $consent[ $category ] ) ) {

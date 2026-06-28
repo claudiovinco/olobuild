@@ -416,7 +416,7 @@ class Olo_Portfolio_Tile extends Olo_Tile_Base {
         $car_speed_css = "--olo-pf-speed:{$car_speed}s";
 
         // Site URL host (per external link badge)
-        $site_host = parse_url( home_url(), PHP_URL_HOST );
+        $site_host = wp_parse_url( home_url(), PHP_URL_HOST );
 
         ob_start();
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, absint()/floatval() clamps for numbers, in_array() whitelists for enums, fixed ratio maps, build_border_radius_css() and the internally generated $uid (get_layout_css/get_hover_effect_css/get_magic_css only interpolate those same sanitized values).
@@ -618,7 +618,7 @@ class Olo_Portfolio_Tile extends Olo_Tile_Base {
                             $cat_names = array_map( 'trim', explode( ',', $item['category'] ) );
                             foreach ( $cat_names as $cn ) { if ( $cn !== '' ) $cat_slugs[] = sanitize_title( $cn ); }
                             $cat_data = implode( ',', $cat_slugs );
-                            $is_ext = ! empty( $item['link'] ) && $site_host && ( parse_url( $item['link'], PHP_URL_HOST ) !== $site_host );
+                            $is_ext = ! empty( $item['link'] ) && $site_host && ( wp_parse_url( $item['link'], PHP_URL_HOST ) !== $site_host );
                             $extra_class = $item['featured'] ? ' is-featured' : '';
                             if ( $is_ext && ! empty( $s['external_link_badge'] ) ) $extra_class .= ' is-external';
                         ?>
@@ -767,7 +767,7 @@ class Olo_Portfolio_Tile extends Olo_Tile_Base {
         foreach ( $cat_names as $cn ) { if ( $cn !== '' ) $cat_slugs[] = sanitize_title( $cn ); }
         $cat_data = implode( ',', $cat_slugs );
         $has_link = ! empty( $item['link'] );
-        $is_ext = $has_link && $site_host && ( parse_url( $item['link'], PHP_URL_HOST ) !== $site_host );
+        $is_ext = $has_link && $site_host && ( wp_parse_url( $item['link'], PHP_URL_HOST ) !== $site_host );
 
         $extra_class = '';
         if ( ! empty( $item['featured'] ) ) $extra_class .= ' is-featured';

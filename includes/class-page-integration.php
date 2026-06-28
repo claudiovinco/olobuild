@@ -330,7 +330,7 @@ class Olo_Page_Integration {
         if ( ! isset( $_POST['olo_metabox_nonce'] ) ) {
             return;
         }
-        if ( ! wp_verify_nonce( $_POST['olo_metabox_nonce'], 'olo_metabox_' . $post_id ) ) {
+        if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['olo_metabox_nonce'] ) ), 'olo_metabox_' . $post_id ) ) {
             return;
         }
         if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
@@ -340,7 +340,7 @@ class Olo_Page_Integration {
             return;
         }
 
-        $template_id = isset( $_POST['olo_template_id'] ) ? absint( $_POST['olo_template_id'] ) : 0;
+        $template_id = isset( $_POST['olo_template_id'] ) ? absint( wp_unslash( $_POST['olo_template_id'] ) ) : 0;
 
         if ( $template_id ) {
             update_post_meta( $post_id, '_olo_template_id', $template_id );
@@ -349,7 +349,7 @@ class Olo_Page_Integration {
         }
 
         // Header per-page override
-        $header_id = isset( $_POST['olo_header_id'] ) ? absint( $_POST['olo_header_id'] ) : 0;
+        $header_id = isset( $_POST['olo_header_id'] ) ? absint( wp_unslash( $_POST['olo_header_id'] ) ) : 0;
         if ( $header_id ) {
             update_post_meta( $post_id, '_olo_header_id', $header_id );
         } else {
@@ -357,7 +357,7 @@ class Olo_Page_Integration {
         }
 
         // Footer per-page override
-        $footer_id = isset( $_POST['olo_footer_id'] ) ? absint( $_POST['olo_footer_id'] ) : 0;
+        $footer_id = isset( $_POST['olo_footer_id'] ) ? absint( wp_unslash( $_POST['olo_footer_id'] ) ) : 0;
         if ( $footer_id ) {
             update_post_meta( $post_id, '_olo_footer_id', $footer_id );
         } else {
@@ -369,16 +369,22 @@ class Olo_Page_Integration {
      * Handle creating a new template linked to a post.
      */
     public function handle_create_template() {
-        if ( empty( $_GET['action'] ) || $_GET['action'] !== 'olo_create' ) {
+        // Routing read-only: si determina solo QUALE azione admin_init eseguire; nessuna
+        // modifica di stato qui. Il nonce vero è verificato sotto (wp_verify_nonce olo_create_*)
+        // prima di qualsiasi scrittura.
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        if ( empty( $_GET['action'] ) || sanitize_key( wp_unslash( $_GET['action'] ) ) !== 'olo_create' ) {
             return;
         }
 
-        $post_id = absint( $_GET['post_id'] ?? 0 );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- post_id letto per il routing; nonce verificato subito sotto prima di scrivere.
+        $post_id = isset( $_GET['post_id'] ) ? absint( wp_unslash( $_GET['post_id'] ) ) : 0;
         if ( ! $post_id || ! current_user_can( 'edit_post', $post_id ) ) {
             return;
         }
 
-        if ( ! wp_verify_nonce( $_GET['_wpnonce'] ?? '', 'olo_create_' . $post_id ) ) {
+        $nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
+        if ( ! wp_verify_nonce( $nonce, 'olo_create_' . $post_id ) ) {
             wp_die( 'Controllo di sicurezza fallito.' );
         }
 
@@ -447,6 +453,11 @@ class Olo_Page_Integration {
         // tornano sulla via veloce.
         if ( ! $template_id ) {
             global $wpdb;
+            // Tabella custom del plugin ({prefix}olo_templates); nessun equivalente WP_Query.
+            // Nome tabella interpolato da $wpdb->prefix (sicuro); il valore utente ($post_id) è
+            // intval e passato come argomento a $wpdb->prepare con placeholder %s (no injection).
+            // Risultato non cacheabile (self-healing lookup occasionale, volume limitato).
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $rows = $wpdb->get_results( $wpdb->prepare(
                 "SELECT id, settings FROM {$wpdb->prefix}olo_templates WHERE type = 'page' AND status = 'published' AND settings LIKE %s ORDER BY id DESC",
                 '%"post_id":' . intval( $post_id ) . '%'

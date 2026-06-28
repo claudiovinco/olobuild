@@ -16,7 +16,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         'posts_per_page'  => '12',
         'orderby'         => 'date',
         'order'           => 'DESC',
-        'meta_key'        => '',
+        'meta_key'        => '', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- default vuoto per WP_Query del tile; meta_key necessaria all'ordinamento per meta, volume limitato.
         'taxonomy'        => '',
         'show_filters'    => false,
         'filter_style'    => 'pills',
@@ -143,7 +143,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         ];
 
         if ( in_array( $s['orderby'], [ 'meta_value_num', 'meta_value' ], true ) && ! empty( $s['meta_key'] ) ) {
-            $query_args['meta_key'] = sanitize_key( $s['meta_key'] );
+            $query_args['meta_key'] = sanitize_key( $s['meta_key'] ); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- query per ordinamento del tile per valore meta; meta_key necessaria alla funzione, volume limitato.
         }
 
         // Meta filter — modalità nuova (select chiave + select valore)
@@ -155,13 +155,13 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             } else {
                 $mq['compare'] = 'EXISTS';
             }
-            $query_args['meta_query'] = [ $mq ];
+            $query_args['meta_query'] = [ $mq ]; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- query per filtro contenuti del tile; meta query necessaria alla funzione, volume limitato.
         }
         // Meta filter — modalità legacy "key=value" testo libero (back-compat)
         elseif ( ! empty( $s['meta_filter'] ) && str_contains( $s['meta_filter'], '=' ) ) {
             list( $mf_key, $mf_val ) = array_map( 'trim', explode( '=', $s['meta_filter'], 2 ) );
             if ( $mf_key && $mf_val ) {
-                $query_args['meta_query'] = [
+                $query_args['meta_query'] = [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- query per filtro contenuti legacy del tile; meta query necessaria alla funzione, volume limitato.
                     [ 'key' => sanitize_key( $mf_key ), 'value' => sanitize_text_field( $mf_val ) ],
                 ];
             }

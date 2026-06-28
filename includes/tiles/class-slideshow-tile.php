@@ -127,12 +127,12 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
             </div>
 
             <?php if ( $s['show_arrows'] && $count > 1 ) : ?>
-                <a class="uk-slidenav-large uk-position-center-left uk-position-small" href role="button" aria-label="<?php echo esc_attr__( 'Slide precedente', 'olobuilder' ); ?>" uk-slidenav-previous uk-slideshow-item="previous"></a>
-                <a class="uk-slidenav-large uk-position-center-right uk-position-small" href role="button" aria-label="<?php echo esc_attr__( 'Slide successiva', 'olobuilder' ); ?>" uk-slideshow-item="next" uk-slidenav-next></a>
+                <a class="uk-slidenav-large uk-position-center-left uk-position-small" href role="button" aria-label="<?php echo esc_attr__( 'Slide precedente', 'olobuild' ); ?>" uk-slidenav-previous uk-slideshow-item="previous"></a>
+                <a class="uk-slidenav-large uk-position-center-right uk-position-small" href role="button" aria-label="<?php echo esc_attr__( 'Slide successiva', 'olobuild' ); ?>" uk-slideshow-item="next" uk-slidenav-next></a>
             <?php endif; ?>
 
             <?php if ( $s['show_dots'] && $count > 1 ) : ?>
-                <ul class="uk-slideshow-nav uk-dotnav uk-flex-center uk-margin" role="tablist" aria-label="<?php echo esc_attr__( 'Naviga tra le slide', 'olobuilder' ); ?>"></ul>
+                <ul class="uk-slideshow-nav uk-dotnav uk-flex-center uk-margin" role="tablist" aria-label="<?php echo esc_attr__( 'Naviga tra le slide', 'olobuild' ); ?>"></ul>
             <?php endif; ?>
         </div>
         <?php
@@ -157,9 +157,9 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
         // A11y (WCAG 4.1.2 / 2.2.2): nomi accessibili + stato sui dot generati a runtime da UIkit,
         // e pulsante Pausa/Riproduci per l'autoplay (rispetta anche prefers-reduced-motion).
         $a11y_autoplay = ! empty( $s['autoplay'] ) && $count > 1;
-        $lbl_dot   = __( 'Vai alla slide', 'olobuilder' );
-        $lbl_pause = __( 'Metti in pausa la presentazione', 'olobuilder' );
-        $lbl_play  = __( 'Riproduci la presentazione', 'olobuilder' );
+        $lbl_dot   = __( 'Vai alla slide', 'olobuild' );
+        $lbl_pause = __( 'Metti in pausa la presentazione', 'olobuild' );
+        $lbl_play  = __( 'Riproduci la presentazione', 'olobuild' );
         ?>
         <script>
         (function(){

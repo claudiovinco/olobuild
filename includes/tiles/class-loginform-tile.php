@@ -1083,6 +1083,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
         if ( $cache !== null ) return $cache;
 
         global $wpdb;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- aggregazione DISTINCT su meta_key della usermeta: nessun equivalente WP_Query/get_users per elencare le chiavi distinte; il pattern LIKE 'olo_cf_%' e' un literal fisso (nessun valore utente); risultato memoizzato nello static $cache di questo metodo.
         $keys = $wpdb->get_col(
             "SELECT DISTINCT meta_key FROM {$wpdb->usermeta} WHERE meta_key LIKE 'olo_cf_%' ORDER BY meta_key"
         );
@@ -1165,8 +1166,14 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
      */
     public static function save_user_profile_fields( $user_id ) {
         if ( ! current_user_can( 'edit_user', $user_id ) ) return;
+        // Nonce: hooked to personal_options_update/edit_user_profile_update — WP core
+        // verifies the 'update-user_{id}' nonce in wp-admin/profile.php/user-edit.php
+        // before these actions fire; capability re-checked above.
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- core verifies update-user_{id} nonce before personal_options_update/edit_user_profile_update fire; current_user_can('edit_user') re-checked above
         if ( empty( $_POST['olo_profile_meta'] ) || ! is_array( $_POST['olo_profile_meta'] ) ) return;
-        foreach ( $_POST['olo_profile_meta'] as $key => $value ) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- core verifies update-user_{id} nonce before these actions fire (see above); array values sanitized per-element below (sanitize_key + sanitize_text_field)
+        $profile_meta = wp_unslash( $_POST['olo_profile_meta'] );
+        foreach ( $profile_meta as $key => $value ) {
             $safe_key = sanitize_key( $key );
             if ( str_starts_with( $safe_key, 'olo_cf_' ) ) {
                 update_user_meta( $user_id, $safe_key, sanitize_text_field( $value ) );
@@ -1179,14 +1186,16 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
      */
     public static function handle_ajax_login() {
         // CSRF protection — nonce was generated as olo_loginform_{uid}
-        $nonce_val = sanitize_text_field( $_POST['olo_login_nonce'] ?? '' );
-        $uid       = sanitize_text_field( $_POST['olo_uid'] ?? '' );
+        $nonce_val = isset( $_POST['olo_login_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['olo_login_nonce'] ) ) : '';
+        $uid       = isset( $_POST['olo_uid'] ) ? sanitize_text_field( wp_unslash( $_POST['olo_uid'] ) ) : '';
         if ( ! $uid || ! wp_verify_nonce( $nonce_val, 'olo_loginform_' . $uid ) ) {
             wp_send_json_error( 'Sessione scaduta. Ricarica la pagina.' );
         }
 
-        $user = sanitize_text_field( $_POST['log'] ?? '' );
-        $pass = wp_unslash( $_POST['pwd'] ?? '' );
+        $user = isset( $_POST['log'] ) ? sanitize_text_field( wp_unslash( $_POST['log'] ) ) : '';
+        // Password kept raw (unslashed only): wp_signon must receive the literal
+        // password the user typed; sanitizing would corrupt valid passwords.
+        $pass = isset( $_POST['pwd'] ) ? wp_unslash( $_POST['pwd'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- raw password required by wp_signon(); nonce verified above; not output
         $remember = ! empty( $_POST['rememberme'] );
 
         if ( empty( $user ) ) {
@@ -1216,8 +1225,8 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
      */
     public static function handle_ajax_register() {
         // CSRF protection — nonce was generated as olo_loginform_{uid}
-        $nonce_val = sanitize_text_field( $_POST['olo_register_nonce'] ?? '' );
-        $uid       = sanitize_text_field( $_POST['olo_uid'] ?? '' );
+        $nonce_val = isset( $_POST['olo_register_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['olo_register_nonce'] ) ) : '';
+        $uid       = isset( $_POST['olo_uid'] ) ? sanitize_text_field( wp_unslash( $_POST['olo_uid'] ) ) : '';
         if ( ! $uid || ! wp_verify_nonce( $nonce_val, 'olo_loginform_' . $uid ) ) {
             wp_send_json_error( 'Sessione scaduta. Ricarica la pagina.' );
         }
@@ -1226,9 +1235,11 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
             wp_send_json_error( 'La registrazione non è attiva.' );
         }
 
-        $username = sanitize_user( $_POST['user_login'] ?? '' );
-        $email    = sanitize_email( $_POST['user_email'] ?? '' );
-        $password = wp_unslash( $_POST['user_pass'] ?? '' );
+        $username = isset( $_POST['user_login'] ) ? sanitize_user( wp_unslash( $_POST['user_login'] ) ) : '';
+        $email    = isset( $_POST['user_email'] ) ? sanitize_email( wp_unslash( $_POST['user_email'] ) ) : '';
+        // Password kept raw (unslashed only): wp_create_user must receive the literal
+        // password the user typed; sanitizing would corrupt valid passwords.
+        $password = isset( $_POST['user_pass'] ) ? wp_unslash( $_POST['user_pass'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- raw password required by wp_create_user(); nonce verified above; not output
 
         if ( empty( $username ) ) {
             wp_send_json_error( 'Compila tutti i campi.' );
@@ -1242,13 +1253,16 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
 
         // Confirm password check
         if ( isset( $_POST['user_pass_confirm'] ) ) {
-            if ( wp_unslash( $_POST['user_pass_confirm'] ) !== $password ) {
+            // Raw compare against the raw password (both unslashed only); sanitizing
+            // would break valid passwords. Used only for equality, never output.
+            $pass_confirm = wp_unslash( $_POST['user_pass_confirm'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- raw password compared for equality only; nonce verified above; not output
+            if ( $pass_confirm !== $password ) {
                 wp_send_json_error( 'Le password non corrispondono.' );
             }
         }
 
         // Password complexity validation — read from saved config (NEVER from $_POST to prevent client-side bypass)
-        $form_config_b64 = sanitize_text_field( $_POST['_olo_form_config'] ?? '' );
+        $form_config_b64 = isset( $_POST['_olo_form_config'] ) ? sanitize_text_field( wp_unslash( $_POST['_olo_form_config'] ) ) : '';
         $form_config     = $form_config_b64 ? json_decode( base64_decode( $form_config_b64 ), true ) : [];
         $pw_min_len  = max( 1, intval( $form_config['pw_min_length'] ?? 8 ) );
         $pw_req_up   = ! empty( $form_config['pw_req_upper'] );
@@ -1299,15 +1313,15 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
         }
 
         // Save custom fields as user meta — only allow olo_cf_ prefixed keys to prevent privilege escalation
-        if ( ! empty( $_POST['olo_custom'] ) ) {
-            if ( is_array( $_POST['olo_custom'] ) ) {
-                foreach ( $_POST['olo_custom'] as $meta_key => $meta_value ) {
-                    $safe_key   = sanitize_key( $meta_key );
-                    $safe_value = sanitize_text_field( $meta_value );
-                    // SECURITY: only allow olo_cf_ prefixed keys — block wp_capabilities, wp_user_level etc.
-                    if ( $safe_key && str_starts_with( $safe_key, 'olo_cf_' ) ) {
-                        update_user_meta( $user_id, $safe_key, $safe_value );
-                    }
+        if ( ! empty( $_POST['olo_custom'] ) && is_array( $_POST['olo_custom'] ) ) {
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- array values sanitized per-element below (sanitize_key + sanitize_text_field)
+            $custom_fields = wp_unslash( $_POST['olo_custom'] );
+            foreach ( $custom_fields as $meta_key => $meta_value ) {
+                $safe_key   = sanitize_key( $meta_key );
+                $safe_value = sanitize_text_field( $meta_value );
+                // SECURITY: only allow olo_cf_ prefixed keys — block wp_capabilities, wp_user_level etc.
+                if ( $safe_key && str_starts_with( $safe_key, 'olo_cf_' ) ) {
+                    update_user_meta( $user_id, $safe_key, $safe_value );
                 }
             }
         }

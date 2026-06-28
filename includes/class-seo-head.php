@@ -1317,6 +1317,7 @@ class Olo_Seo_Head {
     }
 
     public function serve_olo_sitemap() {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only di $_GET per routing della sitemap pubblica (rilevazione richiesta /?olo_sitemap=1); nessuna modifica di stato, valore usato solo come flag empty() e mai come dato.
         if ( empty( $_GET['olo_sitemap'] ) ) {
             return;
         }
@@ -1337,6 +1338,7 @@ class Olo_Seo_Head {
                 'post_type'      => 'any',
                 'post_status'    => 'publish',
                 'posts_per_page' => $max_urls,
+                // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- query per sitemap: trova i post associati al template OloBuild via meta _olo_template_id; meta query necessaria alla funzione, volume limitato (cap posts_per_page).
                 'meta_query'     => [
                     [
                         'key'     => '_olo_template_id',

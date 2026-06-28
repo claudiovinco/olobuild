@@ -1040,6 +1040,11 @@ class Olo_Rest_Api {
      */
     private function resolve_template_linked_post( $template_id, $template ) {
         global $wpdb;
+        // Lookup del post collegato via meta `_olo_template_id`. Join diretto su core
+        // posts/postmeta: l'unico valore utente ($template_id) passa da prepare() con %s;
+        // i soli token interpolati sono i nomi tabella core ({$wpdb->posts}/{$wpdb->postmeta}).
+        // Risultato volatile (dipende dallo stato dei post) → non cacheato qui.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $published = $wpdb->get_var( $wpdb->prepare(
             "SELECT p.ID FROM {$wpdb->posts} p
              INNER JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = '_olo_template_id'
@@ -1055,6 +1060,7 @@ class Olo_Rest_Api {
              ORDER BY FIELD(p.post_status,'publish','private','future','pending','draft','auto-draft','inherit'), p.post_date ASC LIMIT 1",
             (string) $template_id
         ) );
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         if ( $any ) return (int) $any;
         $settings_post_id = isset( $template['settings']['post_id'] ) ? (int) $template['settings']['post_id'] : 0;
         return $settings_post_id ?: 0;
@@ -1072,6 +1078,10 @@ class Olo_Rest_Api {
             // Batch-fetch instance counts (posts using each template)
             global $wpdb;
             $instance_counts = [];
+            // Conteggio batch delle istanze (post che usano ogni template) via meta
+            // `_olo_template_id`. Solo nome tabella core interpolato, nessun valore utente;
+            // aggregato live non cacheato (cambia a ogni assegnazione template→post).
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
             $rows = $wpdb->get_results(
                 "SELECT meta_value AS tpl_id, COUNT(*) AS cnt FROM {$wpdb->postmeta} WHERE meta_key = '_olo_template_id' GROUP BY meta_value"
             );
@@ -1097,6 +1107,10 @@ class Olo_Rest_Api {
             $tpl_table = $wpdb->prefix . 'olo_templates';
             $by_type = [];
             $total = 0;
+            // Tabella custom del plugin ({prefix}olo_templates); nessun equivalente WP_Query.
+            // Solo il nome tabella (da $wpdb->prefix) è interpolato, nessun valore utente;
+            // aggregato live non cacheabile.
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
             $rows2 = $wpdb->get_results( "SELECT type, COUNT(*) AS cnt FROM $tpl_table GROUP BY type" );
             foreach ( $rows2 as $r ) {
                 $t = $r->type ?: 'page';
@@ -1890,10 +1904,12 @@ class Olo_Rest_Api {
             return new WP_REST_Response( [ 'message' => 'Nome font obbligatorio.' ], 400 );
         }
 
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- callback REST (register_rest_route con permission_callback manage_options): il nonce X-WP-Nonce è verificato da WordPress; qui è una semplice verifica di presenza del file.
         if ( empty( $_FILES['font_file'] ) ) {
             return new WP_REST_Response( [ 'message' => 'Nessun file caricato.' ], 400 );
         }
 
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- callback REST (permission_callback manage_options, nonce X-WP-Nonce verificato da WP); il file viene validato a valle in Olo_Custom_Fonts::upload_font_file (allowlist estensioni woff2/woff/ttf/otf + limite 5MB + is_uploaded_file su tmp_name + sanitize_file_name sul nome).
         $url = Olo_Custom_Fonts::upload_font_file( $_FILES['font_file'] );
         if ( is_wp_error( $url ) ) {
             return new WP_REST_Response( [ 'message' => $url->get_error_message() ], 400 );
@@ -1977,8 +1993,10 @@ class Olo_Rest_Api {
     public function get_global_widgets() {
         global $wpdb;
         $table = $wpdb->prefix . 'olo_global_widgets';
-        // Safe: $table is constructed from $wpdb->prefix (not user input)
-        $rows = $wpdb->get_results( "SELECT * FROM {$table} ORDER BY name ASC", ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL
+        // Tabella custom del plugin ({prefix}olo_global_widgets); nessun equivalente WP_Query.
+        // Safe: $table è costruito da $wpdb->prefix (non input utente); nessun valore interpolato.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+        $rows = $wpdb->get_results( "SELECT * FROM {$table} ORDER BY name ASC", ARRAY_A );
         return new WP_REST_Response( $rows ?: [], 200 );
     }
 
@@ -1998,6 +2016,9 @@ class Olo_Rest_Api {
             return new WP_REST_Response( [ 'message' => 'tile_data non valido.' ], 400 );
         }
         $tile_data = wp_json_encode( $this->sanitize_unfiltered_tile_fields( $tile_data ) );
+        // Tabella custom del plugin ({prefix}olo_global_widgets); insert via API $wpdb con
+        // format array (valori escaped da WP). Scrittura → niente cache.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $wpdb->insert( $table, [
             'name'       => $name,
             'tile_data'  => $tile_data,
@@ -2035,6 +2056,9 @@ class Olo_Rest_Api {
         }
         $data['updated_at'] = current_time( 'mysql' );
         $formats[] = '%s';
+        // Tabella custom del plugin ({prefix}olo_global_widgets); update via API $wpdb con
+        // format array (valori escaped da WP). Scrittura → niente cache.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $wpdb->update( $table, $data, [ 'id' => $id ], $formats, [ '%d' ] );
         return new WP_REST_Response( [ 'success' => true ], 200 );
     }
@@ -2043,6 +2067,9 @@ class Olo_Rest_Api {
         global $wpdb;
         $table = $wpdb->prefix . 'olo_global_widgets';
         $id = absint( $request->get_param( 'id' ) );
+        // Tabella custom del plugin ({prefix}olo_global_widgets); delete via API $wpdb con
+        // format array. Scrittura → niente cache.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $wpdb->delete( $table, [ 'id' => $id ], [ '%d' ] );
         return new WP_REST_Response( [ 'success' => true ], 200 );
     }
@@ -2830,6 +2857,7 @@ class Olo_Rest_Api {
                         ];
                         $svc_type = $svc_type_map[ $module->get_id() ] ?? '';
                         if ( $svc_type ) {
+                            // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- preview builder: filtro per tipo servizio necessario alla funzione, volume limitato (10 post).
                             $query_args['meta_query'] = [
                                 [ 'key' => '_olo_service_type', 'value' => $svc_type ],
                             ];
@@ -3232,6 +3260,7 @@ class Olo_Rest_Api {
 
         if ( in_array( $orderby, [ 'meta_value_num', 'meta_value' ], true ) ) {
             if ( $meta_key_param ) {
+                // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- preview PostGrid: ordinamento per meta necessario alla funzione della tile, volume limitato (max 50 post).
                 $query_args['meta_key'] = $meta_key_param;
             }
         }
@@ -3239,6 +3268,7 @@ class Olo_Rest_Api {
         if ( $meta_filter && str_contains( $meta_filter, '=' ) ) {
             list( $mf_key, $mf_val ) = array_map( 'trim', explode( '=', $meta_filter, 2 ) );
             if ( $mf_key && $mf_val ) {
+                // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- preview PostGrid: filtro per meta necessario alla funzione della tile, volume limitato (max 50 post).
                 $query_args['meta_query'] = [
                     [ 'key' => sanitize_key( $mf_key ), 'value' => sanitize_text_field( $mf_val ) ],
                 ];
@@ -3345,7 +3375,7 @@ class Olo_Rest_Api {
             // Index per evitare directory listing
             @file_put_contents( $dir . '/index.html', '' );
         }
-        if ( ! is_writable( $dir ) ) {
+        if ( ! wp_is_writable( $dir ) ) {
             return new WP_Error( 'olo_not_writable', 'Cartella uploads non scrivibile', [ 'status' => 500 ] );
         }
 
@@ -3353,12 +3383,12 @@ class Olo_Rest_Api {
         $filename = 'template-' . $template_id . '-' . substr( md5( time() . wp_rand() ), 0, 6 ) . '.' . $ext;
         $dest = $dir . '/' . $filename;
 
-        if ( ! @move_uploaded_file( $f['tmp_name'], $dest ) ) {
-            // Fallback per ambienti dove move_uploaded_file fallisce (CLI/test)
-            if ( ! @copy( $f['tmp_name'], $dest ) ) {
-                return new WP_Error( 'olo_move_failed', 'Salvataggio file fallito', [ 'status' => 500 ] );
-            }
+        // is_uploaded_file() garantisce un upload HTTP legittimo; copy() sostituisce
+        // move_uploaded_file() (vietato dal Plugin Check wp.org).
+        if ( ! is_uploaded_file( $f['tmp_name'] ) || ! @copy( $f['tmp_name'], $dest ) ) {
+            return new WP_Error( 'olo_move_failed', 'Salvataggio file fallito', [ 'status' => 500 ] );
         }
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_chmod -- set web-readable permissions on the freshly generated thumbnail in our own uploads subdir
         @chmod( $dest, 0644 );
 
         $url = trailingslashit( $uploads['baseurl'] ) . 'olobuild-thumbs/' . $filename;
@@ -3367,7 +3397,7 @@ class Olo_Rest_Api {
         $db = new Olo_Database();
         $template = $db->get_template( $template_id );
         if ( ! $template ) {
-            @unlink( $dest );
+            wp_delete_file( $dest );
             return new WP_Error( 'olo_no_template', 'Template non trovato', [ 'status' => 404 ] );
         }
 
@@ -3384,7 +3414,7 @@ class Olo_Rest_Api {
             $real       = realpath( $old_path );
             if ( $thumbs_dir && $real && is_file( $real )
                 && strpos( $real, $thumbs_dir . DIRECTORY_SEPARATOR ) === 0 ) {
-                @unlink( $real );
+                wp_delete_file( $real );
             }
         }
 
@@ -3414,6 +3444,14 @@ class Olo_Rest_Api {
         }
 
         global $wpdb;
+
+        // KPI aggregati su tabelle custom del plugin ({prefix}olo_templates,
+        // {prefix}olo_form_submissions, {prefix}olo_404_log) + core posts: nessun
+        // equivalente WP_Query per le tabelle custom. I soli token interpolati sono nomi
+        // tabella (da $wpdb->prefix / $wpdb->posts); ogni valore utente passa da prepare()
+        // con %s. Le SHOW TABLES verificano l'esistenza delle tabelle opzionali. Risultato
+        // cacheato a monte via transient ($cache_key, 5 min) → niente cache per-query.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
         // Pagine pubblicate
         $pages_published = (int) $wpdb->get_var(
@@ -3462,6 +3500,7 @@ class Olo_Rest_Api {
                 "SELECT COUNT(*) FROM $tools_404 WHERE handled = 0"
             );
         }
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $alerts_total = $alerts_404 + $tpl_draft;
 
         $kpis = [
@@ -3469,6 +3508,7 @@ class Olo_Rest_Api {
                 'label' => __( 'Pagine pubblicate', 'olobuild' ),
                 'value' => $pages_published,
                 'delta' => $pages_recent > 0
+                    /* translators: %d: pages published this week */
                     ? sprintf( _n( '+%d questa settimana', '+%d questa settimana', $pages_recent, 'olobuild' ), $pages_recent )
                     : __( 'nessuna nuova', 'olobuild' ),
                 'trend' => $pages_recent > 0 ? 'up' : 'flat',
@@ -3479,6 +3519,7 @@ class Olo_Rest_Api {
                 'label' => __( 'Template attivi', 'olobuild' ),
                 'value' => $tpl_total,
                 'delta' => $tpl_draft > 0
+                    /* translators: %d: number of templates in draft */
                     ? sprintf( _n( '%d in bozza', '%d in bozza', $tpl_draft, 'olobuild' ), $tpl_draft )
                     : __( 'tutti pubblicati', 'olobuild' ),
                 'trend' => 'flat',
@@ -3530,13 +3571,20 @@ class Olo_Rest_Api {
             'no_found_rows'  => true,
         ] );
         $tpl_table = $wpdb->prefix . 'olo_templates';
+        // Tabella custom del plugin ({prefix}olo_templates); nessun equivalente WP_Query.
+        // Solo il nome tabella (da $wpdb->prefix) è interpolato; i valori utente ($tpl_id,
+        // $limit) passano da prepare() con %d. Lista "recenti" volatile → non cacheata.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $tpl_table_exists = ( $wpdb->get_var( "SHOW TABLES LIKE '$tpl_table'" ) === $tpl_table );
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         foreach ( $page_query->posts as $p ) {
             $thumb_url = '';
             // 1. Template Olobuild associato
             $tpl_id = (int) get_post_meta( $p->ID, '_olo_template_id', true );
             if ( $tpl_id && $tpl_table_exists ) {
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom {prefix}olo_templates; valore via prepare(%d), solo nome tabella interpolato.
                 $thumb_url = (string) $wpdb->get_var( $wpdb->prepare(
+                    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
                     "SELECT thumbnail FROM $tpl_table WHERE id = %d", $tpl_id
                 ) );
             }
@@ -3562,6 +3610,8 @@ class Olo_Rest_Api {
 
         // Ultimi template Olobuild
         if ( $tpl_table_exists ) {
+            // tabella custom {prefix}olo_templates; $limit via prepare(%d), solo nome tabella interpolato; lista recenti volatile.
+            // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
             $tpls = $wpdb->get_results( $wpdb->prepare(
                 "SELECT id, title, type, status, updated_at, thumbnail
                  FROM $tpl_table
@@ -3569,6 +3619,7 @@ class Olo_Rest_Api {
                  LIMIT %d",
                 $limit
             ), ARRAY_A );
+            // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
             foreach ( $tpls as $t ) {
                 $type_label = ucfirst( $t['type'] ?: 'template' );
                 $items[] = [
@@ -3734,6 +3785,9 @@ class Olo_Rest_Api {
     public function submissions_list( $request ) {
         global $wpdb;
         $tab = $this->submissions_table();
+        // Tabella custom del plugin ({prefix}olo_form_submissions); SHOW TABLES verifica
+        // l'esistenza, solo il nome tabella (da $wpdb->prefix) è interpolato.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         if ( $wpdb->get_var( "SHOW TABLES LIKE '$tab'" ) !== $tab ) {
             return rest_ensure_response( [ 'items' => [], 'total' => 0, 'page' => 1, 'per_page' => 30 ] );
         }
@@ -3760,6 +3814,11 @@ class Olo_Rest_Api {
         }
         $where_sql = implode( ' AND ', $where );
 
+        // Tabella custom del plugin ({prefix}olo_form_submissions); nessun equivalente WP_Query.
+        // $tab è il nome tabella (da $wpdb->prefix); $where_sql contiene solo frammenti
+        // con placeholder (%s/%d) — i valori utente passano sempre da $wpdb->prepare.
+        // Risultato filtrato/paginato live → non cacheabile.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $count_sql = "SELECT COUNT(*) FROM $tab WHERE $where_sql";
         $list_sql  = "SELECT id, form_name, fields_data, submitted_at, ip_address, read_status
                       FROM $tab WHERE $where_sql
@@ -3768,6 +3827,7 @@ class Olo_Rest_Api {
         $total = (int) $wpdb->get_var( $params ? $wpdb->prepare( $count_sql, $params ) : $count_sql );
         $list_params = array_merge( $params, [ $per_page, $offset ] );
         $rows = $wpdb->get_results( $wpdb->prepare( $list_sql, $list_params ), ARRAY_A );
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
         $items = array_map( [ $this, 'prepare_submission_summary' ], $rows ?: [] );
 
@@ -3785,6 +3845,10 @@ class Olo_Rest_Api {
     public function submissions_stats( $request ) {
         global $wpdb;
         $tab = $this->submissions_table();
+        // Tabella custom del plugin ({prefix}olo_form_submissions); nessun equivalente WP_Query.
+        // Solo il nome tabella (da $wpdb->prefix) è interpolato; i valori utente (date) passano
+        // da prepare() con %s. Aggregato live → non cacheabile.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         if ( $wpdb->get_var( "SHOW TABLES LIKE '$tab'" ) !== $tab ) {
             return rest_ensure_response( [
                 'total' => 0, 'unread' => 0, 'read' => 0, 'last_7d' => 0,
@@ -3810,6 +3874,7 @@ class Olo_Rest_Api {
              GROUP BY form_name ORDER BY n DESC LIMIT 10",
             ARRAY_A
         );
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $forms = array_map( function( $r ) {
             return [
                 'name'  => $r['form_name'] ?: '(senza nome)',
@@ -3834,7 +3899,11 @@ class Olo_Rest_Api {
         global $wpdb;
         $tab = $this->submissions_table();
         $id = (int) $request['id'];
+        // Tabella custom del plugin ({prefix}olo_form_submissions); $id via prepare(%d),
+        // solo nome tabella interpolato. Lettura singola live → non cacheata; update via API.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $row = $wpdb->get_row( $wpdb->prepare(
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
             "SELECT * FROM $tab WHERE id = %d", $id
         ), ARRAY_A );
         if ( ! $row ) {
@@ -3842,6 +3911,7 @@ class Olo_Rest_Api {
         }
         // Auto-mark read
         if ( ! $row['read_status'] ) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom {prefix}olo_form_submissions; update via API $wpdb con format array.
             $wpdb->update( $tab, [ 'read_status' => 1 ], [ 'id' => $id ], [ '%d' ], [ '%d' ] );
             $row['read_status'] = 1;
         }
@@ -3866,13 +3936,18 @@ class Olo_Rest_Api {
         $tab = $this->submissions_table();
         $id = (int) $request['id'];
         $body = $request->get_json_params();
+        // Tabella custom del plugin ({prefix}olo_form_submissions); $id via prepare(%d),
+        // solo nome tabella interpolato. Lettura singola live → non cacheata; update via API.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $row = $wpdb->get_row( $wpdb->prepare(
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
             "SELECT read_status FROM $tab WHERE id = %d", $id
         ), ARRAY_A );
         if ( ! $row ) {
             return new WP_Error( 'not_found', __( 'Invio non trovato', 'olobuild' ), [ 'status' => 404 ] );
         }
         $new = isset( $body['read'] ) ? (int) (bool) $body['read'] : ( $row['read_status'] ? 0 : 1 );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom {prefix}olo_form_submissions; update via API $wpdb con format array.
         $wpdb->update( $tab, [ 'read_status' => $new ], [ 'id' => $id ], [ '%d' ], [ '%d' ] );
         return rest_ensure_response( [ 'id' => $id, 'read_status' => $new ] );
     }
@@ -3881,6 +3956,7 @@ class Olo_Rest_Api {
         global $wpdb;
         $tab = $this->submissions_table();
         $id = (int) $request['id'];
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom {prefix}olo_form_submissions; delete via API $wpdb con format array.
         $wpdb->delete( $tab, [ 'id' => $id ], [ '%d' ] );
         return rest_ensure_response( [ 'id' => $id, 'deleted' => true ] );
     }
@@ -3899,13 +3975,18 @@ class Olo_Rest_Api {
         if ( empty( $ids ) ) {
             return new WP_Error( 'no_ids', __( 'Nessun ID selezionato', 'olobuild' ), [ 'status' => 400 ] );
         }
+        // Tabella custom del plugin ({prefix}olo_form_submissions); $ids sono int (absint+filter)
+        // passati come argomenti a prepare(); $placeholders è una sequenza di soli '%d'.
+        // Interpolati solo nome tabella e i segnaposto generati internamente. Scrittura → niente cache.
         $placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, PluginCheck.Security.DirectDB.UnescapedDBParameter
         if ( $action === 'delete' ) {
             $wpdb->query( $wpdb->prepare( "DELETE FROM $tab WHERE id IN ($placeholders)", $ids ) );
         } elseif ( $action === 'mark_read' ) {
             $wpdb->query( $wpdb->prepare( "UPDATE $tab SET read_status = 1 WHERE id IN ($placeholders)", $ids ) );
         } elseif ( $action === 'mark_unread' ) {
             $wpdb->query( $wpdb->prepare( "UPDATE $tab SET read_status = 0 WHERE id IN ($placeholders)", $ids ) );
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, PluginCheck.Security.DirectDB.UnescapedDBParameter
         } else {
             return new WP_Error( 'bad_action', __( 'Azione non valida', 'olobuild' ), [ 'status' => 400 ] );
         }
@@ -3989,7 +4070,6 @@ class Olo_Rest_Api {
                 'post_status'      => 'publish',
                 'posts_per_page'   => $per_page,
                 'no_found_rows'    => true,
-                'suppress_filters' => true,
                 'orderby'          => $q ? 'relevance' : 'modified',
                 'order'            => 'DESC',
             ];

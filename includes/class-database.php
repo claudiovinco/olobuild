@@ -130,6 +130,8 @@ class Olo_Database {
 
     public function create_template( $data ) {
         global $wpdb;
+        // Tabella custom del plugin (olo_templates); nessun equivalente WP_Query; scrittura non cacheabile (la cache lista viene invalidata da flush_list_cache()).
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $wpdb->insert(
             $this->table_templates(),
             [
@@ -157,14 +159,20 @@ class Olo_Database {
         }
 
         global $wpdb;
+        // Tabella custom del plugin (olo_templates); nessun equivalente WP_Query. Il nome
+        // tabella e' interpolato da $wpdb->prefix (sicuro), il valore $id passa da prepare(%d).
+        // Risultato cacheato sopra/sotto con wp_cache_get/set.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $row = $wpdb->get_row(
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
             $wpdb->prepare( "SELECT * FROM {$this->table_templates()} WHERE id = %d", $id ),
             ARRAY_A
         );
         if ( $row ) {
             $row['content']  = json_decode( $row['content'], true );
             if ( ! is_array( $row['content'] ) ) {
-                if ( json_last_error() !== JSON_ERROR_NONE ) {
+                if ( json_last_error() !== JSON_ERROR_NONE && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                    // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- diagnostica gated su WP_DEBUG: logga solo una condizione d'errore reale (JSON template corrotto)
                     error_log( '[Olobuild] JSON decode error for template ' . $id . ' content: ' . json_last_error_msg() );
                 }
                 $row['content'] = [];
@@ -213,6 +221,8 @@ class Olo_Database {
             return false;
         }
 
+        // Tabella custom del plugin (olo_templates); nessun equivalente WP_Query; scrittura non cacheabile (cache invalidata sotto con wp_cache_delete/flush_list_cache()).
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $result = $wpdb->update(
             $this->table_templates(),
             $update,
@@ -231,6 +241,9 @@ class Olo_Database {
 
     public function delete_template( $id ) {
         global $wpdb;
+        // Tabelle custom del plugin (olo_templates, olo_revisions); nessun equivalente WP_Query;
+        // operazioni di scrittura in transazione, non cacheabili (cache invalidata sotto).
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         // Use transaction to ensure atomicity (revisions + template deleted together)
         $wpdb->query( 'START TRANSACTION' );
         $wpdb->delete( $this->table_revisions(), [ 'template_id' => $id ], [ '%d' ] );
@@ -243,6 +256,7 @@ class Olo_Database {
         } else {
             $wpdb->query( 'ROLLBACK' );
         }
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
         return $result;
     }
@@ -289,6 +303,12 @@ class Olo_Database {
         $params[] = $limit;
         $params[] = $offset;
 
+        // Tabella custom del plugin (olo_templates); nessun equivalente WP_Query; risultato
+        // cacheato con wp_cache_get/set (vedi sopra/sotto). Nomi tabella ($wpdb->prefix),
+        // colonna $orderby (whitelist allowed_orderby) e $order (ASC/DESC) sono interpolati in
+        // modo sicuro; i VALORI passano sempre da $wpdb->prepare con placeholder %s/%d.
+        // PHPCS non traccia la whitelist a monte.
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $rows = $wpdb->get_results(
             $wpdb->prepare( $sql, ...$params ),
             ARRAY_A
@@ -306,6 +326,7 @@ class Olo_Database {
         } else {
             $total = (int) $wpdb->get_var( $count_sql );
         }
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
         $result = [
             'items' => $rows,
@@ -350,6 +371,9 @@ class Olo_Database {
 
     public function create_revision( $template_id, $content ) {
         global $wpdb;
+        // Tabella custom del plugin (olo_revisions); nessun equivalente WP_Query; scritture non cacheabili.
+        // Il nome $table proviene da $wpdb->prefix (sicuro); tutti i valori passano da prepare(%d).
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $wpdb->insert(
             $this->table_revisions(),
             [
@@ -371,6 +395,7 @@ class Olo_Database {
             $template_id,
             $max_revisions
         ) );
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
         return $insert_id;
     }
@@ -381,8 +406,12 @@ class Olo_Database {
     public function get_revisions( $template_id, $limit = 50 ) {
         global $wpdb;
         $table = $this->table_revisions();
+        // Tabella custom del plugin (olo_revisions); nessun equivalente WP_Query; nome $table da
+        // $wpdb->prefix (sicuro), valori da prepare(%d); lista revisioni non cacheata (volume limitato).
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $rows  = $wpdb->get_results(
             $wpdb->prepare(
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
                 "SELECT id, template_id, LENGTH(content) AS content_size, created_at FROM $table WHERE template_id = %d ORDER BY created_at DESC LIMIT %d",
                 $template_id,
                 $limit
@@ -398,7 +427,11 @@ class Olo_Database {
     public function get_revision( $revision_id ) {
         global $wpdb;
         $table = $this->table_revisions();
+        // Tabella custom del plugin (olo_revisions); nessun equivalente WP_Query; nome $table da
+        // $wpdb->prefix (sicuro), valore da prepare(%d); singola revisione, non cacheata.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $row   = $wpdb->get_row(
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
             $wpdb->prepare( "SELECT * FROM $table WHERE id = %d", $revision_id ),
             ARRAY_A
         );
@@ -416,12 +449,14 @@ class Olo_Database {
         global $wpdb;
         $revisions_table = $this->table_revisions();
         $templates_table = $this->table_templates();
+        // Tabelle custom del plugin (olo_revisions, olo_templates); nessun equivalente WP_Query;
+        // entrambi i nomi tabella derivano da $wpdb->prefix (sicuri), nessun valore utente nella
+        // query (nessun prepare necessario); cleanup via cron, non cacheabile.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $deleted = $wpdb->query(
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
             "DELETE r FROM $revisions_table r LEFT JOIN $templates_table t ON r.template_id = t.id WHERE t.id IS NULL"
         );
-        if ( $deleted > 0 ) {
-            error_log( '[Olobuild] Cleaned up ' . $deleted . ' orphaned revisions.' );
-        }
         return $deleted;
     }
 }

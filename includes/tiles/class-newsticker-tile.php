@@ -603,7 +603,7 @@ class Olo_Newsticker_Tile extends Olo_Tile_Base {
             <?php if ( $show_indicators && ! $is_marquee ) : ?>
                 <div class="olo-nt-indicators">
                     <?php for ( $j = 0; $j < $count; $j++ ) : ?>
-                        <button type="button" class="olo-nt-dot <?php echo $j === 0 ? 'olo-nt-dot-active' : ''; ?>" data-target="<?php echo (int) $j; ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Notizia %d', 'olobuild' ), $j + 1 ) ); ?>"></button>
+                        <button type="button" class="olo-nt-dot <?php echo $j === 0 ? 'olo-nt-dot-active' : ''; ?>" data-target="<?php echo (int) $j; ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: news item number */ __( 'Notizia %d', 'olobuild' ), $j + 1 ) ); ?>"></button>
                     <?php endfor; ?>
                 </div>
             <?php endif; ?>

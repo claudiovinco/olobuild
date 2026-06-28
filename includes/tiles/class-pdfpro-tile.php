@@ -63,6 +63,7 @@ class Olo_PdfPro_Tile extends Olo_Tile_Base {
         $pdf_url = esc_url( $s['pdf_url'] );
         if ( empty( $pdf_url ) ) {
             // Nel builder mostra un placeholder invece del vuoto
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per routing contesto builder (rilevamento iframe); nessuna modifica di stato; valore usato solo come booleano via ! empty()
             if ( ! empty( $_GET['olo_builder_iframe'] ) ) {
                 $h = max( 200, (int) $s['viewer_height'] );
                 return '<div style="height:' . $h . 'px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;background:#f5f5f5;border:2px dashed #d1d5db;border-radius:8px;color:#6b7280;font-size:14px;">'

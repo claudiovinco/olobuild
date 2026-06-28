@@ -61,7 +61,7 @@ class Olo_Readingtime_Tile extends Olo_Tile_Base {
         $post = get_post();
         if ( $post ) {
             $content    = get_the_content( null, false, $post );
-            $word_count = str_word_count( strip_tags( $content ) );
+            $word_count = str_word_count( wp_strip_all_tags( $content ) );
             $minutes    = (int) ceil( $word_count / $wpm );
             if ( $minutes < 1 ) {
                 $minutes = 1;

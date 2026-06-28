@@ -221,6 +221,7 @@ class Olo_Sitemap_Tile extends Olo_Tile_Base {
                 'orderby'        => $page_tree ? 'menu_order title' : $order_args['orderby'],
                 'order'          => $page_tree ? 'ASC' : $order_args['order'],
             ];
+            // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- esclusione post necessaria alla funzione del tile; query a volume limitato
             if ( ! empty( $exclude_ids ) ) $pages_args['post__not_in'] = $exclude_ids;
             $pages = get_posts( $pages_args );
             if ( $pages ) {
@@ -248,6 +249,7 @@ class Olo_Sitemap_Tile extends Olo_Tile_Base {
                 'post_status'    => 'publish',
                 'orderby'        => $order_args['orderby'],
                 'order'          => $order_args['order'],
+                // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- esclusione post necessaria alla funzione del tile; query a volume limitato
                 'post__not_in'   => $exclude_ids ?: [],
             ] );
             if ( $posts ) {
@@ -355,6 +357,7 @@ class Olo_Sitemap_Tile extends Olo_Tile_Base {
                     'post_status'    => 'publish',
                     'orderby'        => $order_args['orderby'],
                     'order'          => $order_args['order'],
+                    // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- esclusione post necessaria alla funzione del tile; query a volume limitato
                     'post__not_in'   => $exclude_ids ?: [],
                 ] );
                 if ( $cpt_posts ) {

@@ -155,8 +155,8 @@ class Olo_NorthQuoteSlider_Tile extends Olo_Tile_Base {
                     <?php if ( ! empty( $s['heading'] ) ) : ?><h2 class="nqs-title"><?php echo esc_html( $s['heading'] ); ?></h2><?php else : ?><span></span><?php endif; ?>
                     <?php if ( $multi ) : ?>
                     <div class="nqs-nav">
-                        <button type="button" class="nqs-arrow" data-dir="-1" aria-label="<?php esc_attr_e( 'Precedente', 'olobuilder' ); ?>"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
-                        <button type="button" class="nqs-arrow" data-dir="1" aria-label="<?php esc_attr_e( 'Successivo', 'olobuilder' ); ?>"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+                        <button type="button" class="nqs-arrow" data-dir="-1" aria-label="<?php esc_attr_e( 'Precedente', 'olobuild' ); ?>"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+                        <button type="button" class="nqs-arrow" data-dir="1" aria-label="<?php esc_attr_e( 'Successivo', 'olobuild' ); ?>"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
                     </div>
                     <?php endif; ?>
                 </div>
@@ -173,14 +173,14 @@ class Olo_NorthQuoteSlider_Tile extends Olo_Tile_Base {
                         <?php if ( $multi ) : ?>
                         <div class="nqs-dots">
                             <?php foreach ( $items as $i => $it ) : ?>
-                            <button type="button" class="nqs-dot<?php echo 0 === $i ? ' is-active' : ''; ?>" data-idx="<?php echo (int) $i; ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %d slide number */ __( 'Slide %d', 'olobuilder' ), $i + 1 ) ); ?>"></button>
+                            <button type="button" class="nqs-dot<?php echo 0 === $i ? ' is-active' : ''; ?>" data-idx="<?php echo (int) $i; ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %d slide number */ __( 'Slide %d', 'olobuild' ), $i + 1 ) ); ?>"></button>
                             <?php endforeach; ?>
                         </div>
                         <?php endif; ?>
                     </div>
                     <div class="nqs-right">
                         <div class="nqs-graphic" aria-hidden="true">
-                            <svg viewBox="0 0 400 640" preserveAspectRatio="xMidYMid slice"><g class="nqs-lines"><?php echo $topo; ?></g></svg>
+                            <svg viewBox="0 0 400 640" preserveAspectRatio="xMidYMid slice"><g class="nqs-lines"><?php echo $topo; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $topo is SVG <path> markup generated internally by topo_paths() (numeric coordinates only) ?></g></svg>
                             <span class="nqs-glabel">North · enterprise AI</span>
                         </div>
                     </div>

@@ -32,6 +32,7 @@ class Olo_AB_Testing {
     public static function maybe_create_table() {
         global $wpdb;
         $table = self::table();
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olo_ab_tests); SHOW TABLES non supporta placeholder, $table costruito da $wpdb->prefix; controllo esistenza tabella non cacheabile.
         if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table}'" ) === $table ) {
             return;
         }
@@ -150,7 +151,7 @@ class Olo_AB_Testing {
     public static function get_tests() {
         global $wpdb;
         $table = self::table();
-        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table built from $wpdb->prefix constant
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olo_ab_tests); nessun equivalente WP_Query; $table costruito da $wpdb->prefix, nessun valore utente interpolato; risultato non cacheabile.
         $rows  = $wpdb->get_results( "SELECT * FROM `$table` ORDER BY created_at DESC", ARRAY_A );
 
         if ( ! is_array( $rows ) ) {
@@ -172,6 +173,7 @@ class Olo_AB_Testing {
         global $wpdb;
         $table = self::table();
         $id    = absint( $request['id'] );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olo_ab_tests); solo $table (da $wpdb->prefix) interpolato, l'id passa da $wpdb->prepare con placeholder %d; risultato non cacheabile.
         $row   = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table WHERE id = %d", $id ), ARRAY_A );
 
         if ( ! $row ) {
@@ -204,6 +206,7 @@ class Olo_AB_Testing {
             return new WP_Error( 'missing_template_id', 'Template ID obbligatorio.', [ 'status' => 400 ] );
         }
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_ab_tests); $wpdb->insert con formati espliciti; scrittura, nessuna cache da gestire.
         $wpdb->insert( $table, [
             'name'          => $name,
             'tile_id'       => $tile_id,
@@ -232,6 +235,7 @@ class Olo_AB_Testing {
         $id    = absint( $request['id'] );
         $body  = $request->get_json_params();
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olo_ab_tests); solo $table (da $wpdb->prefix) interpolato, l'id passa da $wpdb->prepare con placeholder %d; risultato non cacheabile.
         $existing = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table WHERE id = %d", $id ), ARRAY_A );
         if ( ! $existing ) {
             return new WP_Error( 'not_found', 'Test A/B non trovato.', [ 'status' => 404 ] );
@@ -258,6 +262,7 @@ class Olo_AB_Testing {
         }
 
         if ( ! empty( $data ) ) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_ab_tests); $wpdb->update con formati espliciti; scrittura, nessuna cache da gestire.
             $wpdb->update( $table, $data, [ 'id' => $id ], $formats, [ '%d' ] );
         }
 
@@ -272,6 +277,7 @@ class Olo_AB_Testing {
         $table = self::table();
         $id    = absint( $request['id'] );
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_ab_tests); $wpdb->delete con formato esplicito; scrittura, nessuna cache da gestire.
         $wpdb->delete( $table, [ 'id' => $id ], [ '%d' ] );
 
         return rest_ensure_response( [ 'deleted' => true ] );
@@ -285,6 +291,7 @@ class Olo_AB_Testing {
         $table = self::table();
         $id    = absint( $request['id'] );
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_ab_tests); $wpdb->update con formati espliciti; scrittura, nessuna cache da gestire.
         $wpdb->update( $table, [
             'status'     => 'running',
             'started_at' => current_time( 'mysql' ),
@@ -301,6 +308,7 @@ class Olo_AB_Testing {
         $table = self::table();
         $id    = absint( $request['id'] );
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_ab_tests); $wpdb->update con formati espliciti; scrittura, nessuna cache da gestire.
         $wpdb->update( $table, [
             'status'   => 'stopped',
             'ended_at' => current_time( 'mysql' ),
@@ -317,6 +325,7 @@ class Olo_AB_Testing {
         $table = self::table();
         $id    = absint( $request['id'] );
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olo_ab_tests); solo $table (da $wpdb->prefix) interpolato, l'id passa da $wpdb->prepare con placeholder %d; risultato non cacheabile.
         $test = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table WHERE id = %d", $id ), ARRAY_A );
         if ( ! $test ) {
             return new WP_Error( 'not_found', 'Test A/B non trovato.', [ 'status' => 404 ] );
@@ -398,7 +407,7 @@ class Olo_AB_Testing {
         }
 
         // Rate limiting: max 1 per IP per test per event type per hour
-        $ip  = sanitize_text_field( $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0' );
+        $ip  = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '0.0.0.0';
         $key = 'olo_ab_rl_' . md5( $ip . '_' . $test_id . '_' . $event );
         $existing = get_transient( $key );
         if ( $existing ) {
@@ -410,6 +419,7 @@ class Olo_AB_Testing {
         $table = self::table();
 
         // Verify test exists and is running
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olo_ab_tests); solo $table (da $wpdb->prefix) interpolato, l'id passa da $wpdb->prepare con placeholder %d; risultato non cacheabile.
         $test = $wpdb->get_row( $wpdb->prepare( "SELECT status FROM $table WHERE id = %d", $test_id ), ARRAY_A );
         if ( ! $test ) {
             return new WP_Error( 'not_found', 'Test non trovato.', [ 'status' => 404 ] );
@@ -427,7 +437,9 @@ class Olo_AB_Testing {
         }
 
         // Safe column name (already validated $variant is 'a' or 'b')
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olo_ab_tests); $table da $wpdb->prefix e $column whitelist (views_a/views_b/conversions_a/conversions_b, $variant validato 'a'/'b' in_array), l'id passa da $wpdb->prepare con placeholder %d; scrittura, nessuna cache da gestire.
         $wpdb->query( $wpdb->prepare(
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
             "UPDATE $table SET {$column} = {$column} + 1 WHERE id = %d",
             $test_id
         ) );
@@ -446,7 +458,8 @@ class Olo_AB_Testing {
         $cookie_name = 'olo_ab_' . intval( $test_id );
 
         if ( isset( $_COOKIE[ $cookie_name ] ) ) {
-            $variant = $_COOKIE[ $cookie_name ];
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only del cookie di assegnazione variante per rendering frontend; nessuna modifica di stato; valore sanitizzato e validato in whitelist.
+            $variant = sanitize_text_field( wp_unslash( $_COOKIE[ $cookie_name ] ) );
             if ( in_array( $variant, [ 'a', 'b' ], true ) ) {
                 return $variant;
             }
@@ -484,7 +497,9 @@ class Olo_AB_Testing {
 
         // Guard: skip query if table doesn't exist yet
         $suppress = $wpdb->suppress_errors( true );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olo_ab_tests); solo $table (da $wpdb->prefix) interpolato, tile_id/template_id passano da $wpdb->prepare con placeholder %s/%d; risultato non cacheabile.
         $test = $wpdb->get_row( $wpdb->prepare(
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
             "SELECT * FROM $table WHERE tile_id = %s AND template_id = %d AND status = 'running' LIMIT 1",
             $tile_id,
             $template_id

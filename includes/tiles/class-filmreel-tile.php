@@ -237,7 +237,7 @@ class Olo_FilmReel_Tile extends Olo_Tile_Base {
                             }
                         }
                     ?>
-                    <<?php echo $tag_el; ?> class="ofr-item<?php echo esc_attr( $cls ); ?>"<?php if ( $link !== '' ) : ?> href="<?php echo esc_url( $link ); ?>"<?php endif; ?><?php echo $cta; ?>>
+                    <<?php echo tag_escape( $tag_el ); ?> class="ofr-item<?php echo esc_attr( $cls ); ?>"<?php if ( $link !== '' ) : ?> href="<?php echo esc_url( $link ); ?>"<?php endif; ?><?php echo $cta; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $cta is a fixed internal literal (' data-olo-cta' or '') ?>>
                         <?php if ( $mbg_kind === 'video' ) : ?>
                             <video class="ofr-img" src="<?php echo esc_url( $mbg['video_url'] ); ?>"<?php echo ! empty( $mbg['video_poster'] ) ? ' poster="' . esc_url( $mbg['video_poster'] ) . '"' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url() inline above ?> autoplay muted loop playsinline aria-hidden="true"></video>
                         <?php elseif ( $mbg_kind === 'bg' && class_exists( 'Olo_CSS_Builder' ) ) : ?>
@@ -260,7 +260,7 @@ class Olo_FilmReel_Tile extends Olo_Tile_Base {
                             <?php if ( $tag !== '' ) : ?><span class="ofr-tag" data-olo-editable="<?php echo esc_attr( 'items.' . intval( $idx ) . '.tag' ); ?>"><?php echo esc_html( $tag ); ?></span><?php endif; ?>
                         </span>
                         <?php endif; ?>
-                    </<?php echo $tag_el; ?>>
+                    </<?php echo tag_escape( $tag_el ); ?>>
                     <?php endforeach; ?>
                 </div>
             </div>

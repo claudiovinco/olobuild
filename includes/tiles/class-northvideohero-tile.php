@@ -77,7 +77,7 @@ class Olo_NorthVideoHero_Tile extends Olo_Tile_Base {
     public function get_controls() { return []; }
 
     private function video_mime( $url ) {
-        $ext = strtolower( pathinfo( (string) parse_url( $url, PHP_URL_PATH ), PATHINFO_EXTENSION ) );
+        $ext = strtolower( pathinfo( (string) wp_parse_url( $url, PHP_URL_PATH ), PATHINFO_EXTENSION ) );
         $map = [ 'mp4' => 'video/mp4', 'webm' => 'video/webm', 'ogg' => 'video/ogg', 'm3u8' => 'application/x-mpegURL' ];
         return $map[ $ext ] ?? 'video/mp4';
     }

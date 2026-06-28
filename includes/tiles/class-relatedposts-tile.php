@@ -96,9 +96,10 @@ class Olo_RelatedPosts_Tile extends Olo_Tile_Base {
         $query_args = [
             'post_type'              => get_post_type( $post_id ),
             'posts_per_page'         => $count,
+            // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- esclusione post necessaria alla funzione del tile; query a volume limitato
             'post__not_in'           => [ $post_id ],
             'post_status'            => 'publish',
-            'tax_query'              => $tax_queries,
+            'tax_query'              => $tax_queries, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- query per articoli correlati (categorie/tag condivisi); tax query necessaria alla funzione del tile, volume limitato (max 12 post)
             'orderby'                => $orderby,
             'order'                  => $order,
             'no_found_rows'          => true,

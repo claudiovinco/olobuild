@@ -121,6 +121,7 @@ class Olo_Dynamic_Content {
                 if ( ! in_array( $key, $allowed_cookies, true ) ) {
                     $value = '';
                 } else {
+                    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only di un cookie da allowlist per visualizzazione; nessuna modifica di stato; valore sanitizzato con wp_unslash + sanitize_text_field.
                     $value = isset( $_COOKIE[ $key ] ) ? sanitize_text_field( wp_unslash( $_COOKIE[ $key ] ) ) : '';
                 }
                 break;
@@ -351,7 +352,8 @@ class Olo_Dynamic_Content {
         switch ( $field ) {
             case 'request_url':
                 $protocol = is_ssl() ? 'https://' : 'http://';
-                return $protocol . sanitize_text_field( $_SERVER['HTTP_HOST'] ?? '' ) . esc_url_raw( $_SERVER['REQUEST_URI'] ?? '' );
+                // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only di $_SERVER per comporre l'URL corrente (display); nessuna modifica di stato; valori sanitizzati con wp_unslash + sanitize_text_field / esc_url_raw.
+                return $protocol . sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ?? '' ) ) . esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ?? '' ) );
 
             case 'request_param':
                 // Field config should pass the param name as the field key in format "request_param:name"
@@ -364,6 +366,7 @@ class Olo_Dynamic_Content {
                 // Support request_param:param_name format
                 if ( str_starts_with( $field, 'request_param:' ) ) {
                     $param_name = substr( $field, 14 );
+                    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only di un parametro GET per visualizzazione del relativo valore; nessuna modifica di stato; valore sanitizzato con wp_unslash + sanitize_text_field.
                     return isset( $_GET[ $param_name ] ) ? sanitize_text_field( wp_unslash( $_GET[ $param_name ] ) ) : '';
                 }
                 return '';
@@ -616,7 +619,7 @@ class Olo_Dynamic_Content {
                     break;
 
                 case 'current_year':
-                    $value = date( 'Y' );
+                    $value = date_i18n( 'Y' );
                     break;
 
                 case 'current_date':
@@ -767,6 +770,7 @@ class Olo_Dynamic_Content {
         $taxonomy = $query_config['taxonomy'] ?? '';
         $terms    = $query_config['terms'] ?? [];
         if ( ! empty( $taxonomy ) && ! empty( $terms ) ) {
+            // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- query dinamica per filtro contenuti per termine di tassonomia; tax_query necessaria alla funzione del modulo, volume limitato (posts_per_page).
             $args['tax_query'] = [
                 [
                     'taxonomy' => sanitize_text_field( $taxonomy ),

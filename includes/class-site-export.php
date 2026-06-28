@@ -17,10 +17,12 @@ class Olo_Site_Export {
         ];
 
         // All templates
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_templates); nessun equivalente WP_Query; export una tantum, risultato non cacheabile.
         $templates = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}olo_templates", ARRAY_A);
         $data['templates'] = $templates ?: [];
 
         // Global widgets
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_global_widgets); nessun equivalente WP_Query; export una tantum, risultato non cacheabile.
         $widgets = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}olo_global_widgets", ARRAY_A);
         $data['global_widgets'] = $widgets ?: [];
 
@@ -62,6 +64,7 @@ class Olo_Site_Export {
         $id_map = []; // old_id => new_id
         $count  = 0;
 
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabelle custom del plugin (olo_templates, olo_global_widgets); nessun equivalente WP_Query; insert di import una tantum, nessuna cache da invalidare.
         foreach ($data['templates'] as $tpl) {
             $old_id = $tpl['id'];
             unset($tpl['id']); // Let DB auto-increment
@@ -97,6 +100,7 @@ class Olo_Site_Export {
                 ]);
             }
         }
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
         // Styles
         if (isset($data['styles'])) update_option('olo_styles', $data['styles']);

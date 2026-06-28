@@ -161,7 +161,7 @@ class Olo_Freesound {
 
         $attachment_id = media_handle_sideload( $file_array, 0 );
         if ( is_wp_error( $attachment_id ) ) {
-            @unlink( $tmp_file );
+            wp_delete_file( $tmp_file );
             return new WP_Error( 'sideload_failed', $attachment_id->get_error_message(), [ 'status' => 500 ] );
         }
 

@@ -114,7 +114,7 @@ class Olo_Uikit_Subset {
             $old = glob( $cache_dir . 'olo-uikit-*.css' );
             if ( $old ) {
                 foreach ( $old as $f ) {
-                    @unlink( $f );
+                    wp_delete_file( $f );
                 }
             }
             if ( false === file_put_contents( $filepath, $css ) ) {
@@ -162,6 +162,7 @@ class Olo_Uikit_Subset {
         if ( null !== self::$served_families && ! empty( $new ) ) {
             $missing = array_diff( self::expand_families( $needed ), self::$served_families );
             if ( ! empty( $missing ) ) {
+                // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet -- fallback di auto-guarigione iniettato da un filtro di output-buffer (post-render); la fase di enqueue è già passata
                 $tag = '<link rel="stylesheet" href="' . esc_url( OLO_URL . 'assets/vendor/uikit/css/uikit.min.css' ) . '?ver=' . rawurlencode( OLO_VERSION ) . '" media="all" />';
                 $pos = strripos( $html, '</body>' );
                 $html = ( false !== $pos ) ? substr_replace( $html, $tag, $pos, 0 ) : $html . $tag;
@@ -356,7 +357,7 @@ class Olo_Uikit_Subset {
         $files      = glob( $upload_dir['basedir'] . '/olobuild-cache/olo-uikit-*.css' );
         if ( $files ) {
             foreach ( $files as $file ) {
-                @unlink( $file );
+                wp_delete_file( $file );
             }
         }
         self::$served_families = null;
