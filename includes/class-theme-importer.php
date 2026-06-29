@@ -13,11 +13,22 @@ class Olobuild_Theme_Importer {
             if ( ! $data || empty( $data['id'] ) ) continue;
             $dir = dirname( $file );
             $theme_id = basename( $dir );
+            // Anteprima (screenshot): servita dalla LIBRERIA REMOTA su olotheme.com, così lo
+            // zip del plugin resta leggero (le immagini NON sono nel pacchetto wp.org). Il
+            // contenuto dei template resta locale → l'import funziona anche offline. Base URL
+            // filtrabile via 'olobuild_library_url'; impostandola a '' si torna agli screenshot
+            // locali se presenti (dev/air-gapped). Il theme-picker ha comunque un fallback ad
+            // anteprima sintetica dai token se l'immagine manca o non carica.
             $screenshot = '';
-            foreach ( [ 'screenshot.jpg', 'screenshot.png', 'screenshot.webp' ] as $ext ) {
-                if ( file_exists( $dir . '/' . $ext ) ) {
-                    $screenshot = OLOBUILD_URL . 'assets/data/themes/' . $theme_id . '/' . $ext;
-                    break;
+            $lib = rtrim( (string) apply_filters( 'olobuild_library_url', 'https://olotheme.com/olobuild-library' ), '/' );
+            if ( $lib !== '' ) {
+                $screenshot = $lib . '/themes/' . $theme_id . '/screenshot.jpg';
+            } else {
+                foreach ( [ 'screenshot.jpg', 'screenshot.png', 'screenshot.webp' ] as $ext ) {
+                    if ( file_exists( $dir . '/' . $ext ) ) {
+                        $screenshot = OLOBUILD_URL . 'assets/data/themes/' . $theme_id . '/' . $ext;
+                        break;
+                    }
                 }
             }
             $themes[] = array_merge( [

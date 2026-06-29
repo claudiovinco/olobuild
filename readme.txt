@@ -4,7 +4,7 @@ Tags: page-builder, drag-and-drop, builder, grid, blocks
 Requires at least: 5.9
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.4.302
+Stable tag: 1.4.303
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,10 @@ key. The following list documents what is sent, when, and to whom.
 * OpenAI — AI image generation. Sends your prompt. Terms: https://openai.com/policies/terms-of-use — Privacy: https://openai.com/policies/privacy-policy
 * Anthropic — AI layout suggestions and SEO alt-text. Sends your prompt and, for alt-text, the selected image. Terms: https://www.anthropic.com/legal/consumer-terms — Privacy: https://www.anthropic.com/legal/privacy
 * LottieFiles — animation search. Sends your search terms. Terms: https://lottiefiles.com/terms — Privacy: https://lottiefiles.com/privacy
+
+**Theme library previews (WordPress admin only — Theme Importer / setup wizard):**
+
+* olotheme.com — the preview thumbnails of the starter themes are loaded from `https://olotheme.com/olobuild-library/` so they don't have to be bundled in the plugin (keeps it lightweight). Only an image request for the theme you are viewing is made; no personal data is sent. The base URL is filterable via the `olobuild_library_url` hook. The template content itself ships inside the plugin, so importing a theme works even without this service. Terms & Privacy: https://olotheme.com/
 
 **Front-end services (only on pages where you use the related tile/feature):**
 

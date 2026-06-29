@@ -120,6 +120,14 @@ for root, dirs, files in os.walk(PROJECT_ROOT):
         abs_path = root_path / filename
         rel_path = abs_path.relative_to(PROJECT_ROOT)
 
+        # Theme preview screenshots are served from the remote library (olotheme.com),
+        # NOT bundled — keeps the zip small. See Olobuild_Theme_Importer::get_themes()
+        # and the "External services" section of readme.txt. The template JSON + logos
+        # stay local so imports work offline.
+        _rp = rel_path.as_posix()
+        if _rp.startswith("assets/data/themes/") and filename.startswith("screenshot."):
+            continue
+
         # Use forward slashes (Linux style)
         arc_name = f"{PLUGIN}/" + rel_path.as_posix()
 

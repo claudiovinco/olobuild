@@ -134,24 +134,30 @@ export function createThemePicker(opts = {}) {
     return `${esc(name || '')}<em>.</em>`;
   }
 
+  // Anteprima sintetica dai token (barra + headline + riga + swatches). Usata sia per i
+  // temi senza screenshot, sia come fallback se lo screenshot remoto non carica.
+  function synthPreviewInner(t) {
+    const pal = (t.pal || []).slice(0, 4).map(c => `<i style="background:${esc(c)}"></i>`).join('');
+    return `<div class="otmp-pv-bar"><span class="otmp-pv-logo"></span><span class="otmp-pv-nav"><i></i><i></i><i></i></span></div>
+        <div class="otmp-pv-h">${headline(t.name)}</div>
+        <div class="otmp-pv-row"><span class="otmp-pv-btn"></span><span class="otmp-pv-line"></span></div>
+        <span class="otmp-pv-sw">${pal}</span>`;
+  }
+
   function previewHTML(t) {
     const zone = t.zone ? `<span class="otmp-pv-zone"><span class="d"></span>${esc(t.zone)}</span>` : '';
     if (t.screenshot) {
-      // miniatura reale del tema (screenshot); la palette è ridondante sull'immagine
-      return `<div class="otmp-pv otmp-pv-shot${t.light ? ' light' : ''}">
-          <img class="otmp-shot" src="${esc(t.screenshot)}" alt="${esc(t.name || '')} — anteprima" loading="lazy" decoding="async"/>
+      // miniatura reale del tema (screenshot remoto da olotheme.com). Se l'immagine non
+      // carica (offline / non ancora pubblicata sul server) l'onerror ripiega sull'anteprima
+      // sintetica dai token (HTML conservato in data-synth), così non si vede mai un'immagine rotta.
+      const synth = synthPreviewInner(t).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+      return `<div class="otmp-pv otmp-pv-shot${t.light ? ' light' : ''}" data-synth="${synth}">
+          <img class="otmp-shot" src="${esc(t.screenshot)}" alt="${esc(t.name || '')} — anteprima" loading="lazy" decoding="async" onerror="var p=this.parentNode;p.classList.remove('otmp-pv-shot');p.innerHTML=p.getAttribute('data-synth')||'';"/>
           ${zone}
         </div>`;
     }
-    // fallback: anteprima sintetica dai token (tema senza screenshot)
-    const pal = (t.pal || []).slice(0, 4).map(c => `<i style="background:${esc(c)}"></i>`).join('');
-    return `<div class="otmp-pv${t.light ? ' light' : ''}">
-        <div class="otmp-pv-bar"><span class="otmp-pv-logo"></span><span class="otmp-pv-nav"><i></i><i></i><i></i></span></div>
-        <div class="otmp-pv-h">${headline(t.name)}</div>
-        <div class="otmp-pv-row"><span class="otmp-pv-btn"></span><span class="otmp-pv-line"></span></div>
-        ${zone}
-        <span class="otmp-pv-sw">${pal}</span>
-      </div>`;
+    // anteprima sintetica dai token (tema senza screenshot)
+    return `<div class="otmp-pv${t.light ? ' light' : ''}">${synthPreviewInner(t)}${zone}</div>`;
   }
 
   function cardHTML(t) {
