@@ -274,24 +274,24 @@ class Olobuild_Theme_Importer {
         if ( ! empty( $theme_json['activate'] ) ) {
             $act = $theme_json['activate'];
             if ( ! empty( $act['header'] ) && isset( $id_map[ $act['header'] ] ) ) {
-                update_option( 'olo_active_header', $id_map[ $act['header'] ] );
+                update_option( 'olobuild_active_header', $id_map[ $act['header'] ] );
                 $results['activated'][] = 'header';
             }
             if ( ! empty( $act['footer'] ) && isset( $id_map[ $act['footer'] ] ) ) {
-                update_option( 'olo_active_footer', $id_map[ $act['footer'] ] );
+                update_option( 'olobuild_active_footer', $id_map[ $act['footer'] ] );
                 $results['activated'][] = 'footer';
             }
             if ( ! empty( $act['404'] ) && isset( $id_map[ $act['404'] ] ) ) {
-                update_option( 'olo_active_404', $id_map[ $act['404'] ] );
+                update_option( 'olobuild_active_404', $id_map[ $act['404'] ] );
                 $results['activated'][] = '404';
             }
         }
 
         // ── Step 5: Apply global styles ──
         if ( ! empty( $theme_json['styles'] ) ) {
-            $current = get_option( 'olo_styles', [] );
+            $current = get_option( 'olobuild_styles', [] );
             $merged = wp_parse_args( $theme_json['styles'], is_array( $current ) ? $current : [] );
-            update_option( 'olo_styles', $merged );
+            update_option( 'olobuild_styles', $merged );
             $results['styles'] = true;
 
             // Allinea le palette derivate ai colori del tema: senza questo i
@@ -314,7 +314,7 @@ class Olobuild_Theme_Importer {
             if ( ! class_exists( 'Olobuild_Magnetic_Cursor' ) ) {
                 require_once OLOBUILD_PATH . 'includes/class-magnetic-cursor.php';
             }
-            update_option( 'olo_magnetic_cursor', Olobuild_Magnetic_Cursor::sanitize( $theme_json['cursor'] ) );
+            update_option( 'olobuild_magnetic_cursor', Olobuild_Magnetic_Cursor::sanitize( $theme_json['cursor'] ) );
             $results['cursor'] = true;
         }
 
@@ -325,7 +325,7 @@ class Olobuild_Theme_Importer {
             if ( ! class_exists( 'Olobuild_Cursor_Hud' ) ) {
                 require_once OLOBUILD_PATH . 'includes/class-cursor-hud.php';
             }
-            update_option( 'olo_cursor_hud', Olobuild_Cursor_Hud::sanitize( $theme_json['cursor_hud'] ) );
+            update_option( 'olobuild_cursor_hud', Olobuild_Cursor_Hud::sanitize( $theme_json['cursor_hud'] ) );
             $results['cursor_hud'] = true;
         }
 
@@ -382,7 +382,7 @@ class Olobuild_Theme_Importer {
         }
 
         // Mark setup complete
-        update_option( 'olo_setup_complete', true );
+        update_option( 'olobuild_setup_complete', true );
 
         return $results;
     }

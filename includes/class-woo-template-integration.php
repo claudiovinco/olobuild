@@ -67,21 +67,21 @@ class Olobuild_Woo_Template_Integration {
 
         // Cart page
         if ( function_exists( 'is_cart' ) && is_cart() ) {
-            $tpl = (int) get_option( 'olo_woo_tpl_cart', 0 );
+            $tpl = (int) get_option( 'olobuild_woo_tpl_cart', 0 );
             if ( $tpl > 0 ) return do_shortcode( '[olo_template id="' . $tpl . '"]' );
         }
 
         // Checkout page
         if ( function_exists( 'is_checkout' ) && is_checkout() ) {
             if ( ! is_order_received_page() ) {
-                $tpl = (int) get_option( 'olo_woo_tpl_checkout', 0 );
+                $tpl = (int) get_option( 'olobuild_woo_tpl_checkout', 0 );
                 if ( $tpl > 0 ) return do_shortcode( '[olo_template id="' . $tpl . '"]' );
             }
         }
 
         // My Account page
         if ( function_exists( 'is_account_page' ) && is_account_page() ) {
-            $tpl = (int) get_option( 'olo_woo_tpl_myaccount', 0 );
+            $tpl = (int) get_option( 'olobuild_woo_tpl_myaccount', 0 );
             if ( $tpl > 0 ) return do_shortcode( '[olo_template id="' . $tpl . '"]' );
         }
 
@@ -94,7 +94,7 @@ class Olobuild_Woo_Template_Integration {
     public function maybe_override_template( $template ) {
         // Product single
         if ( function_exists( 'is_product' ) && is_product() ) {
-            $tpl = (int) get_option( 'olo_woo_tpl_product_single', 0 );
+            $tpl = (int) get_option( 'olobuild_woo_tpl_product_single', 0 );
             if ( $tpl > 0 ) {
                 // Use a minimal template that renders the Olobuild template
                 return $this->get_olo_wrapper_template( $tpl );
@@ -103,7 +103,7 @@ class Olobuild_Woo_Template_Integration {
 
         // Product archive / shop
         if ( function_exists( 'is_shop' ) && is_shop() ) {
-            $tpl = (int) get_option( 'olo_woo_tpl_product_archive', 0 );
+            $tpl = (int) get_option( 'olobuild_woo_tpl_product_archive', 0 );
             if ( $tpl > 0 ) {
                 return $this->get_olo_wrapper_template( $tpl );
             }
@@ -111,9 +111,9 @@ class Olobuild_Woo_Template_Integration {
 
         // Product category / tag archives — option dedicata, fallback storico sull'archivio
         if ( is_product_category() || is_product_tag() ) {
-            $tpl = (int) get_option( 'olo_woo_tpl_product_category', 0 );
+            $tpl = (int) get_option( 'olobuild_woo_tpl_product_category', 0 );
             if ( ! $tpl ) {
-                $tpl = (int) get_option( 'olo_woo_tpl_product_archive', 0 );
+                $tpl = (int) get_option( 'olobuild_woo_tpl_product_archive', 0 );
             }
             if ( $tpl > 0 ) {
                 return $this->get_olo_wrapper_template( $tpl );
@@ -127,19 +127,19 @@ class Olobuild_Woo_Template_Integration {
         // bypassa i block template e rende il template OLO con header/footer OLO,
         // come gia' avviene per il prodotto singolo.
         if ( function_exists( 'is_cart' ) && is_cart() ) {
-            $tpl = (int) get_option( 'olo_woo_tpl_cart', 0 );
+            $tpl = (int) get_option( 'olobuild_woo_tpl_cart', 0 );
             if ( $tpl > 0 ) {
                 return $this->get_olo_wrapper_template( $tpl );
             }
         }
         if ( function_exists( 'is_checkout' ) && is_checkout() && ! is_order_received_page() ) {
-            $tpl = (int) get_option( 'olo_woo_tpl_checkout', 0 );
+            $tpl = (int) get_option( 'olobuild_woo_tpl_checkout', 0 );
             if ( $tpl > 0 ) {
                 return $this->get_olo_wrapper_template( $tpl );
             }
         }
         if ( function_exists( 'is_account_page' ) && is_account_page() ) {
-            $tpl = (int) get_option( 'olo_woo_tpl_myaccount', 0 );
+            $tpl = (int) get_option( 'olobuild_woo_tpl_myaccount', 0 );
             if ( $tpl > 0 ) {
                 return $this->get_olo_wrapper_template( $tpl );
             }
@@ -159,7 +159,7 @@ class Olobuild_Woo_Template_Integration {
                   . '// Olobuild WooCommerce wrapper template' . "\n"
                   . 'if ( ! defined( \'ABSPATH\' ) ) exit;' . "\n"
                   . 'get_header();' . "\n"
-                  . '$tpl_id = get_query_var( \'olo_woo_tpl_id\', 0 );' . "\n"
+                  . '$tpl_id = get_query_var( \'olobuild_woo_tpl_id\', 0 );' . "\n"
                   . 'if ( $tpl_id ) {' . "\n"
                   . '    echo do_shortcode( \'[olo_template id="\' . intval( $tpl_id ) . \'"]\' );' . "\n"
                   . '}' . "\n"
@@ -168,7 +168,7 @@ class Olobuild_Woo_Template_Integration {
         }
 
         // Pass template ID via query var
-        set_query_var( 'olo_woo_tpl_id', $template_id );
+        set_query_var( 'olobuild_woo_tpl_id', $template_id );
 
         return $wrapper;
     }
@@ -177,13 +177,13 @@ class Olobuild_Woo_Template_Integration {
      * REST API routes for WooCommerce template assignments.
      */
     public function register_routes() {
-        register_rest_route( 'olo/v1', '/woo-templates', [
+        register_rest_route( 'olobuild/v1', '/woo-templates', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'get_woo_templates' ],
             'permission_callback' => function () { return current_user_can( 'manage_options' ); },
         ] );
 
-        register_rest_route( 'olo/v1', '/woo-templates', [
+        register_rest_route( 'olobuild/v1', '/woo-templates', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'save_woo_templates' ],
             'permission_callback' => function () { return current_user_can( 'manage_options' ); },
@@ -193,13 +193,13 @@ class Olobuild_Woo_Template_Integration {
     public function get_woo_templates() {
         $data = [ 'woo_active' => class_exists( 'WooCommerce' ) ];
         foreach ( $this->page_types as $key => $info ) {
-            $tpl_id = (int) get_option( "olo_woo_tpl_{$key}", 0 );
+            $tpl_id = (int) get_option( "olobuild_woo_tpl_{$key}", 0 );
             // Formato annidato (storico) + chiave flat con l'option key (usata dalla tab cfg)
             $data[ $key ] = [
                 'label'       => $info['label'],
                 'template_id' => $tpl_id,
             ];
-            $data[ "olo_woo_tpl_{$key}" ] = $tpl_id;
+            $data[ "olobuild_woo_tpl_{$key}" ] = $tpl_id;
         }
         return rest_ensure_response( $data );
     }
@@ -209,17 +209,17 @@ class Olobuild_Woo_Template_Integration {
         foreach ( $this->page_types as $key => $info ) {
             // Accetta sia la chiave breve (storico) sia l'option key flat (tab cfg)
             $val = null;
-            if ( isset( $body[ "olo_woo_tpl_{$key}" ] ) ) {
-                $val = $body[ "olo_woo_tpl_{$key}" ];
+            if ( isset( $body[ "olobuild_woo_tpl_{$key}" ] ) ) {
+                $val = $body[ "olobuild_woo_tpl_{$key}" ];
             } elseif ( isset( $body[ $key ] ) ) {
                 $val = $body[ $key ];
             }
             if ( null !== $val ) {
                 $tpl_id = absint( $val );
                 if ( $tpl_id > 0 ) {
-                    update_option( "olo_woo_tpl_{$key}", $tpl_id, false );
+                    update_option( "olobuild_woo_tpl_{$key}", $tpl_id, false );
                 } else {
-                    delete_option( "olo_woo_tpl_{$key}" );
+                    delete_option( "olobuild_woo_tpl_{$key}" );
                 }
             }
         }
@@ -237,7 +237,7 @@ class Olobuild_Woo_Template_Integration {
     public function render_admin_page() {
         // Get all Olobuild templates for dropdown
         global $wpdb;
-        $table = $wpdb->prefix . 'olo_templates';
+        $table = $wpdb->prefix . 'olobuild_templates';
         $templates = [];
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin ({prefix}olo_templates): nessun equivalente WP_Query; interpolato solo il nome tabella (da $wpdb->prefix) senza alcun valore utente; nessun input grezzo in SQL, quindi nessuna injection; risultato a uso una-tantum (dropdown admin), non cacheabile.
         if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table}'" ) === $table ) {
@@ -259,7 +259,7 @@ class Olobuild_Woo_Template_Integration {
         // Conta override attivi (template Olobuild assegnati alle pagine WC)
         $woo_overrides = 0;
         foreach ( $this->page_types as $key => $info ) {
-            if ( (int) get_option( "olo_woo_tpl_{$key}", 0 ) > 0 ) $woo_overrides++;
+            if ( (int) get_option( "olobuild_woo_tpl_{$key}", 0 ) > 0 ) $woo_overrides++;
         }
         ?>
         <?php Olobuild_Builder::cockpit_shell_open( '<b>' . esc_html__( 'WooCommerce', 'olobuild' ) . '</b>' ); ?>
@@ -292,7 +292,7 @@ class Olobuild_Woo_Template_Integration {
                 </div>
                 <div class="olo-card-body">
                     <?php foreach ( $this->page_types as $key => $info ) :
-                        $current = (int) get_option( "olo_woo_tpl_{$key}", 0 );
+                        $current = (int) get_option( "olobuild_woo_tpl_{$key}", 0 );
                         $icon_class = ( $key === 'cart' || $key === 'checkout' ) ? 'orange' : 'black';
                     ?>
                     <div class="olo-field-row">
@@ -335,7 +335,7 @@ class Olobuild_Woo_Template_Integration {
                 document.querySelectorAll('.olo-woo-tpl-select').forEach(function(sel){
                     data[sel.getAttribute('data-key')] = parseInt(sel.value) || 0;
                 });
-                fetch('<?php echo esc_url( rest_url( 'olo/v1/woo-templates' ) ); ?>', {
+                fetch('<?php echo esc_url( rest_url( 'olobuild/v1/woo-templates' ) ); ?>', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': '<?php echo esc_js( wp_create_nonce( 'wp_rest' ) ); ?>' },
                     body: JSON.stringify(data)

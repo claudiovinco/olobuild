@@ -18,7 +18,7 @@ class Olobuild_Maintenance_Mode {
      * Check if maintenance mode is active and show the appropriate page.
      */
     public function maybe_show_maintenance() {
-        $mode = get_option( 'olo_maintenance_mode', 'off' );
+        $mode = get_option( 'olobuild_maintenance_mode', 'off' );
 
         if ( $mode === 'off' ) {
             return;
@@ -51,7 +51,7 @@ class Olobuild_Maintenance_Mode {
 
         // Check bypass by user role
         if ( is_user_logged_in() ) {
-            $bypass_roles = get_option( 'olo_maintenance_bypass_roles', [ 'administrator' ] );
+            $bypass_roles = get_option( 'olobuild_maintenance_bypass_roles', [ 'administrator' ] );
             if ( ! is_array( $bypass_roles ) ) {
                 $bypass_roles = [ 'administrator' ];
             }
@@ -64,7 +64,7 @@ class Olobuild_Maintenance_Mode {
         }
 
         // Check bypass secret URL parameter
-        $bypass_secret = get_option( 'olo_maintenance_bypass_secret', '' );
+        $bypass_secret = get_option( 'olobuild_maintenance_bypass_secret', '' );
         if ( ! empty( $bypass_secret ) ) {
             // If the secret is in the URL, set a bypass cookie for 24 hours.
             // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only front-end bypass check on template_redirect (no state change beyond setting a same-site bypass cookie matched against a server-side secret); value sanitized below.
@@ -101,10 +101,10 @@ class Olobuild_Maintenance_Mode {
 
         // Try to render the Olobuild template — separate template per mode
         if ( $mode === 'coming_soon' ) {
-            $template_id = (int) get_option( 'olo_coming_soon_template_id', 0 );
+            $template_id = (int) get_option( 'olobuild_coming_soon_template_id', 0 );
         }
         if ( empty( $template_id ) ) {
-            $template_id = (int) get_option( 'olo_maintenance_template_id', 0 );
+            $template_id = (int) get_option( 'olobuild_maintenance_template_id', 0 );
         }
 
         if ( $template_id ) {
@@ -124,7 +124,7 @@ class Olobuild_Maintenance_Mode {
         $template = $db->get_template( $template_id );
 
         if ( ! $template ) {
-            $this->render_default_page( get_option( 'olo_maintenance_mode', 'maintenance' ) );
+            $this->render_default_page( get_option( 'olobuild_maintenance_mode', 'maintenance' ) );
             return;
         }
 
@@ -138,7 +138,7 @@ class Olobuild_Maintenance_Mode {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
     <title><?php
-        if ( get_option( 'olo_maintenance_mode' ) === 'coming_soon' ) {
+        if ( get_option( 'olobuild_maintenance_mode' ) === 'coming_soon' ) {
             echo esc_html( get_bloginfo( 'name' ) . ' — Presto online' );
         } else {
             echo esc_html( get_bloginfo( 'name' ) . ' — Manutenzione' );

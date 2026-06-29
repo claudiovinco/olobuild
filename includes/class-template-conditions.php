@@ -46,7 +46,7 @@ class Olobuild_Template_Conditions {
      * @return int Template ID
      */
     public function resolve_by_conditions( $template_id, $context = 'single' ) {
-        $assignments = get_option( 'olo_template_conditions', [] );
+        $assignments = get_option( 'olobuild_template_conditions', [] );
         if ( empty( $assignments ) || ! is_array( $assignments ) ) {
             return $template_id;
         }
@@ -239,7 +239,7 @@ class Olobuild_Template_Conditions {
      * ───────────────────────────────────────────── */
 
     public function register_routes() {
-        register_rest_route( 'olo/v1', '/template-conditions', [
+        register_rest_route( 'olobuild/v1', '/template-conditions', [
             [
                 'methods'             => 'GET',
                 'callback'            => [ $this, 'get_conditions' ],
@@ -267,7 +267,7 @@ class Olobuild_Template_Conditions {
     }
 
     public function get_conditions( $request ) {
-        return rest_ensure_response( get_option( 'olo_template_conditions', [] ) );
+        return rest_ensure_response( get_option( 'olobuild_template_conditions', [] ) );
     }
 
     public function save_conditions( $request ) {
@@ -294,7 +294,7 @@ class Olobuild_Template_Conditions {
             ];
         }
 
-        update_option( 'olo_template_conditions', $clean, false );
+        update_option( 'olobuild_template_conditions', $clean, false );
         return rest_ensure_response( [ 'success' => true ] );
     }
 
@@ -333,7 +333,7 @@ class Olobuild_Template_Conditions {
             wp_die( esc_html__( 'Accesso negato.', 'olobuild' ) );
         }
 
-        $assignments = get_option( 'olo_template_conditions', [] );
+        $assignments = get_option( 'olobuild_template_conditions', [] );
         if ( ! is_array( $assignments ) ) $assignments = [];
 
         // Carica template per dropdown
@@ -563,7 +563,7 @@ class Olobuild_Template_Conditions {
             $idx++;
         }
 
-        update_option( 'olo_template_conditions', $clean, false );
+        update_option( 'olobuild_template_conditions', $clean, false );
 
         wp_safe_redirect( add_query_arg( 'olo_saved', '1', admin_url( 'admin.php?page=olobuilder-template-rules' ) ) );
         exit;

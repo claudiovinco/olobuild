@@ -21,7 +21,7 @@ class Olobuild_Form_Submissions {
      */
     public static function init() {
         global $wpdb;
-        self::$table = $wpdb->prefix . 'olo_form_submissions';
+        self::$table = $wpdb->prefix . 'olobuild_form_submissions';
 
         // Screen options (per-page) only on our page
         add_action( 'load-olobuilder_page_olo-form-submissions', [ __CLASS__, 'screen_options' ] );
@@ -40,7 +40,7 @@ class Olobuild_Form_Submissions {
      */
     public static function create_table() {
         global $wpdb;
-        $table           = $wpdb->prefix . 'olo_form_submissions';
+        $table           = $wpdb->prefix . 'olobuild_form_submissions';
         $charset_collate = $wpdb->get_charset_collate();
 
         $sql = "CREATE TABLE $table (
@@ -71,7 +71,7 @@ class Olobuild_Form_Submissions {
      */
     public static function save_submission( $form_name, $fields_data, $ip = '' ) {
         global $wpdb;
-        $table = $wpdb->prefix . 'olo_form_submissions';
+        $table = $wpdb->prefix . 'olobuild_form_submissions';
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_form_submissions); nessun equivalente WP_Query; scrittura non cacheabile.
         $result = $wpdb->insert( $table, [
@@ -91,7 +91,7 @@ class Olobuild_Form_Submissions {
      */
     public static function mark_read( $id ) {
         global $wpdb;
-        $table = $wpdb->prefix . 'olo_form_submissions';
+        $table = $wpdb->prefix . 'olobuild_form_submissions';
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_form_submissions); nessun equivalente WP_Query; scrittura non cacheabile.
         return $wpdb->update( $table, [ 'read_status' => 1 ], [ 'id' => absint( $id ) ], [ '%d' ], [ '%d' ] );
     }
@@ -101,7 +101,7 @@ class Olobuild_Form_Submissions {
      */
     public static function mark_unread( $id ) {
         global $wpdb;
-        $table = $wpdb->prefix . 'olo_form_submissions';
+        $table = $wpdb->prefix . 'olobuild_form_submissions';
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_form_submissions); nessun equivalente WP_Query; scrittura non cacheabile.
         return $wpdb->update( $table, [ 'read_status' => 0 ], [ 'id' => absint( $id ) ], [ '%d' ], [ '%d' ] );
     }
@@ -111,7 +111,7 @@ class Olobuild_Form_Submissions {
      */
     public static function delete_submission( $id ) {
         global $wpdb;
-        $table = $wpdb->prefix . 'olo_form_submissions';
+        $table = $wpdb->prefix . 'olobuild_form_submissions';
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_form_submissions); nessun equivalente WP_Query; scrittura non cacheabile.
         return $wpdb->delete( $table, [ 'id' => absint( $id ) ], [ '%d' ] );
     }
@@ -131,7 +131,7 @@ class Olobuild_Form_Submissions {
         check_admin_referer( 'olo_export_submissions' );
 
         global $wpdb;
-        $table     = $wpdb->prefix . 'olo_form_submissions';
+        $table     = $wpdb->prefix . 'olobuild_form_submissions';
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce verificato sopra da check_admin_referer( 'olo_export_submissions' ) (riga ~131); valore unslashed e sanitizzato.
         $form_name = sanitize_text_field( wp_unslash( $_GET['form_name'] ?? '' ) );
 
@@ -220,12 +220,12 @@ class Olobuild_Form_Submissions {
         add_screen_option( 'per_page', [
             'label'   => 'Invii per pagina',
             'default' => 20,
-            'option'  => 'olo_submissions_per_page',
+            'option'  => 'olobuild_submissions_per_page',
         ] );
     }
 
     public static function set_screen_option( $status, $option, $value ) {
-        if ( $option === 'olo_submissions_per_page' ) {
+        if ( $option === 'olobuild_submissions_per_page' ) {
             return absint( $value );
         }
         return $status;
@@ -358,7 +358,7 @@ class Olobuild_Form_Submissions {
      */
     private static function render_detail_view( $id ) {
         global $wpdb;
-        $table = $wpdb->prefix . 'olo_form_submissions';
+        $table = $wpdb->prefix . 'olobuild_form_submissions';
         // $table da $wpdb->prefix (tabella custom del plugin); $id passa da $wpdb->prepare con placeholder %d.
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
         $row   = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table WHERE id = %d", $id ), ARRAY_A );
@@ -487,7 +487,7 @@ class Olobuild_Form_Submissions {
      */
     private static function process_actions() {
         global $wpdb;
-        $table = $wpdb->prefix . 'olo_form_submissions';
+        $table = $wpdb->prefix . 'olobuild_form_submissions';
 
         // Single delete
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce verificato sotto da check_admin_referer; valori unslashed/sanitizzati.
@@ -727,7 +727,7 @@ class Olobuild_Form_Submissions_List_Table extends WP_List_Table {
         }
 
         global $wpdb;
-        $table     = $wpdb->prefix . 'olo_form_submissions';
+        $table     = $wpdb->prefix . 'olobuild_form_submissions';
         // $table da $wpdb->prefix (tabella custom del plugin); nessun valore utente nella query, nessun equivalente WP_Query; lista a basso volume non cacheata.
         // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
         $form_names = $wpdb->get_col( "SELECT DISTINCT form_name FROM `$table` WHERE form_name != '' ORDER BY form_name" );
@@ -758,7 +758,7 @@ class Olobuild_Form_Submissions_List_Table extends WP_List_Table {
      */
     public function prepare_items() {
         global $wpdb;
-        $table = $wpdb->prefix . 'olo_form_submissions';
+        $table = $wpdb->prefix . 'olobuild_form_submissions';
 
         // Columns
         $this->_column_headers = [
@@ -768,7 +768,7 @@ class Olobuild_Form_Submissions_List_Table extends WP_List_Table {
         ];
 
         // Per page
-        $per_page = $this->get_items_per_page( 'olo_submissions_per_page', 20 );
+        $per_page = $this->get_items_per_page( 'olobuild_submissions_per_page', 20 );
         $page_num = $this->get_pagenum();
         $offset   = ( $page_num - 1 ) * $per_page;
 

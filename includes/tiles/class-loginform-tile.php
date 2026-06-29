@@ -912,7 +912,7 @@ class Olobuild_Loginform_Tile extends Olobuild_Tile_Base {
                     if (msgEl) { msgEl.style.display = 'none'; }
 
                     var fd = new FormData(loginForm);
-                    fd.append('action', 'olo_ajax_login');
+                    fd.append('action', 'olobuild_ajax_login');
 
                     var xhr = new XMLHttpRequest();
                     xhr.open('POST', (typeof oloData !== 'undefined' ? oloData.ajax_url : '/wp-admin/admin-ajax.php'), true);
@@ -964,7 +964,7 @@ class Olobuild_Loginform_Tile extends Olobuild_Tile_Base {
                     if (msgEl) { msgEl.style.display = 'none'; }
 
                     var fd = new FormData(regForm);
-                    fd.append('action', 'olo_ajax_register');
+                    fd.append('action', 'olobuild_ajax_register');
 
                     var xhr = new XMLHttpRequest();
                     xhr.open('POST', (typeof oloData !== 'undefined' ? oloData.ajax_url : '/wp-admin/admin-ajax.php'), true);
@@ -1058,9 +1058,9 @@ class Olobuild_Loginform_Tile extends Olobuild_Tile_Base {
      * Register AJAX handlers for login and register.
      */
     public static function register_ajax_handlers() {
-        add_action( 'wp_ajax_nopriv_olo_ajax_login', [ __CLASS__, 'handle_ajax_login' ] );
-        add_action( 'wp_ajax_olo_ajax_login', [ __CLASS__, 'handle_ajax_login' ] );
-        add_action( 'wp_ajax_nopriv_olo_ajax_register', [ __CLASS__, 'handle_ajax_register' ] );
+        add_action( 'wp_ajax_nopriv_olobuild_ajax_login', [ __CLASS__, 'handle_ajax_login' ] );
+        add_action( 'wp_ajax_olobuild_ajax_login', [ __CLASS__, 'handle_ajax_login' ] );
+        add_action( 'wp_ajax_nopriv_olobuild_ajax_register', [ __CLASS__, 'handle_ajax_register' ] );
 
         // Colonne custom nella tabella utenti admin
         add_filter( 'manage_users_columns', [ __CLASS__, 'add_user_columns' ] );

@@ -177,7 +177,7 @@ class Olobuild_Style_System {
      * Get saved styles merged with defaults.
      */
     public function get_styles() {
-        $saved    = get_option( 'olo_styles', [] );
+        $saved    = get_option( 'olobuild_styles', [] );
         $defaults = $this->get_defaults();
 
         return [
@@ -209,10 +209,10 @@ class Olobuild_Style_System {
      */
     public function save_styles( $styles ) {
         $sanitized = $this->sanitize_styles( $styles );
-        $existing  = get_option( 'olo_styles', [] );
+        $existing  = get_option( 'olobuild_styles', [] );
         if ( ! is_array( $existing ) ) $existing = [];
         $merged    = array_replace( $existing, $sanitized );
-        update_option( 'olo_styles', $merged, false );
+        update_option( 'olobuild_styles', $merged, false );
 
         // Allinea i global color dei ruoli core al valore appena salvato (vedi sync_global_palette).
         if ( isset( $sanitized['colors'] ) && is_array( $sanitized['colors'] ) ) {
@@ -241,7 +241,7 @@ class Olobuild_Style_System {
             'accent-2' => $colors['accent-2'] ?? ( $colors['secondary'] ?? null ),
             'accent_2' => $colors['accent_2'] ?? ( $colors['secondary'] ?? null ),
         ];
-        $gc = get_option( 'olo_global_colors', [] );
+        $gc = get_option( 'olobuild_global_colors', [] );
         if ( ! is_array( $gc ) || ! $gc ) {
             return;
         }
@@ -259,7 +259,7 @@ class Olobuild_Style_System {
         }
         unset( $g );
         if ( $changed ) {
-            update_option( 'olo_global_colors', $gc, false );
+            update_option( 'olobuild_global_colors', $gc, false );
         }
     }
 
@@ -276,7 +276,7 @@ class Olobuild_Style_System {
         if ( ! is_array( $colors ) || empty( $colors ) ) {
             return;
         }
-        $st = get_option( 'olo_styles', [] );
+        $st = get_option( 'olobuild_styles', [] );
         if ( ! is_array( $st ) ) {
             return;
         }
@@ -291,7 +291,7 @@ class Olobuild_Style_System {
         }
         if ( $changed ) {
             $st['dark_colors'] = $dc;
-            update_option( 'olo_styles', $st, false );
+            update_option( 'olobuild_styles', $st, false );
         }
     }
 
@@ -299,7 +299,7 @@ class Olobuild_Style_System {
      * Reset to defaults.
      */
     public function reset_styles() {
-        delete_option( 'olo_styles' );
+        delete_option( 'olobuild_styles' );
         return $this->get_defaults();
     }
 
@@ -543,7 +543,7 @@ class Olobuild_Style_System {
      * Get global colors from wp_options.
      */
     public function get_global_colors() {
-        $colors = get_option( 'olo_global_colors', [] );
+        $colors = get_option( 'olobuild_global_colors', [] );
         return is_array( $colors ) ? $colors : [];
     }
 
@@ -551,7 +551,7 @@ class Olobuild_Style_System {
      * Get global typography sets from wp_options.
      */
     public function get_global_typography() {
-        $sets = get_option( 'olo_global_typography', [] );
+        $sets = get_option( 'olobuild_global_typography', [] );
         return is_array( $sets ) ? $sets : [];
     }
 
@@ -1024,7 +1024,7 @@ class Olobuild_Style_System {
             // I temi possono richiedere pesi extra (es. Big Shoulders 800/900) via
             // olo_styles.google_fonts_weights, formato css2 "300;400;...;900".
             $weights = '300;400;500;600;700';
-            $styles  = get_option( 'olo_styles', [] );
+            $styles  = get_option( 'olobuild_styles', [] );
             if ( is_array( $styles ) && ! empty( $styles['google_fonts_weights'] )
                 && preg_match( '/^[0-9;]+$/', (string) $styles['google_fonts_weights'] ) ) {
                 $weights = (string) $styles['google_fonts_weights'];

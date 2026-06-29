@@ -97,7 +97,7 @@ class Olobuild_Form_Handler {
         $admin_domain = strtolower( substr( strrchr( $admin_email, '@' ), 1 ) );
         if ( $email_domain && $email_domain === $admin_domain ) return true;
 
-        $extra = (string) get_option( 'olo_allowed_form_recipients', '' );
+        $extra = (string) get_option( 'olobuild_allowed_form_recipients', '' );
         if ( $extra !== '' ) {
             $list = array_filter( array_map( 'trim', explode( ',', strtolower( $extra ) ) ) );
             if ( in_array( strtolower( $email ), $list, true ) ) return true;
@@ -135,13 +135,13 @@ class Olobuild_Form_Handler {
     }
 
     public function register_routes() {
-        register_rest_route( 'olo/v1', '/form/submit', [
+        register_rest_route( 'olobuild/v1', '/form/submit', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'handle_submit' ],
             'permission_callback' => '__return_true', // Public endpoint (contact form)
         ] );
 
-        register_rest_route( 'olo/v1', '/submissions/export', [
+        register_rest_route( 'olobuild/v1', '/submissions/export', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'export_csv' ],
             'permission_callback' => function () {
@@ -243,7 +243,7 @@ class Olobuild_Form_Handler {
 
         // 4b. reCAPTCHA v3 verification
         if ( ! empty( $config['recaptcha_enabled'] ) ) {
-            $recaptcha_secret = get_option( 'olo_recaptcha_secret_key', '' );
+            $recaptcha_secret = get_option( 'olobuild_recaptcha_secret_key', '' );
             $recaptcha_token  = sanitize_text_field( $request->get_param( '_olo_recaptcha_token' ) ?? '' );
             if ( $recaptcha_secret ) {
                 if ( empty( $recaptcha_token ) ) {
@@ -618,7 +618,7 @@ class Olobuild_Form_Handler {
         }
 
         global $wpdb;
-        $table = $wpdb->prefix . 'olo_submissions';
+        $table = $wpdb->prefix . 'olobuild_submissions';
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_submissions); nessun equivalente WP_Query; insert (scrittura) non cacheabile.
         $wpdb->insert( $table, [
@@ -633,7 +633,7 @@ class Olobuild_Form_Handler {
      * Send subscriber to Mailchimp via API v3.
      */
     private function send_to_mailchimp( $form_data, $config ) {
-        $api_key = get_option( 'olo_mailchimp_api_key', '' );
+        $api_key = get_option( 'olobuild_mailchimp_api_key', '' );
         $list_id = sanitize_text_field( $config['mailchimp_list_id'] ?? '' );
         if ( empty( $api_key ) || empty( $list_id ) ) {
             return;
@@ -726,8 +726,8 @@ class Olobuild_Form_Handler {
      * Send contact to ActiveCampaign via API v3.
      */
     private function send_to_activecampaign( $form_data, $config ) {
-        $api_url = rtrim( get_option( 'olo_activecampaign_url', '' ), '/' );
-        $api_key = get_option( 'olo_activecampaign_key', '' );
+        $api_url = rtrim( get_option( 'olobuild_activecampaign_url', '' ), '/' );
+        $api_key = get_option( 'olobuild_activecampaign_key', '' );
         $list_id = sanitize_text_field( $config['activecampaign_list_id'] ?? '' );
 
         if ( empty( $api_url ) || empty( $api_key ) ) return;
@@ -777,7 +777,7 @@ class Olobuild_Form_Handler {
      * Send subscriber to ConvertKit via API v3.
      */
     private function send_to_convertkit( $form_data, $config ) {
-        $api_key = get_option( 'olo_convertkit_key', '' );
+        $api_key = get_option( 'olobuild_convertkit_key', '' );
         $form_id = sanitize_text_field( $config['convertkit_form_id'] ?? '' );
 
         if ( empty( $api_key ) || empty( $form_id ) ) return;
@@ -806,7 +806,7 @@ class Olobuild_Form_Handler {
      * Send contact to Brevo (Sendinblue) via API v3.
      */
     private function send_to_brevo( $form_data, $config ) {
-        $api_key = get_option( 'olo_brevo_key', '' );
+        $api_key = get_option( 'olobuild_brevo_key', '' );
         $list_id = (int) ( $config['brevo_list_id'] ?? 0 );
 
         if ( empty( $api_key ) ) return;
@@ -876,7 +876,7 @@ class Olobuild_Form_Handler {
      */
     public function export_csv( $request ) {
         global $wpdb;
-        $table   = $wpdb->prefix . 'olo_submissions';
+        $table   = $wpdb->prefix . 'olobuild_submissions';
         $form_id = sanitize_text_field( $request->get_param( 'form_id' ) ?? '' );
 
         if ( $form_id ) {

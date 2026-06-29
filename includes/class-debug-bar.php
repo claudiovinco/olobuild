@@ -12,7 +12,7 @@ class Olobuild_Debug_Bar {
 	private static $rendered = [];
 
 	public static function init() {
-		if ( ! get_option( 'olo_debug_bar' ) || ! current_user_can( 'manage_options' ) || is_admin() ) {
+		if ( ! get_option( 'olobuild_debug_bar' ) || ! current_user_can( 'manage_options' ) || is_admin() ) {
 			return;
 		}
 

@@ -27,25 +27,25 @@ class Olobuild_Site_Export {
         $data['global_widgets'] = $widgets ?: [];
 
         // Styles
-        $data['styles']             = get_option('olo_styles', []);
-        $data['global_colors']      = get_option('olo_global_colors', []);
-        $data['global_typography']  = get_option('olo_global_typography', []);
+        $data['styles']             = get_option('olobuild_styles', []);
+        $data['global_colors']      = get_option('olobuild_global_colors', []);
+        $data['global_typography']  = get_option('olobuild_global_typography', []);
 
         // Options
         $data['options'] = [
-            'active_header'         => get_option('olo_active_header', ''),
-            'active_footer'         => get_option('olo_active_footer', ''),
-            'custom_fonts'          => get_option('olo_custom_fonts', []),
-            'custom_code_head'      => get_option('olo_custom_code_head', ''),
-            'custom_code_body'      => get_option('olo_custom_code_body', ''),
-            'custom_code_footer'    => get_option('olo_custom_code_footer', ''),
-            'cookie_consent_enabled'=> get_option('olo_cookie_consent_enabled', false),
+            'active_header'         => get_option('olobuild_active_header', ''),
+            'active_footer'         => get_option('olobuild_active_footer', ''),
+            'custom_fonts'          => get_option('olobuild_custom_fonts', []),
+            'custom_code_head'      => get_option('olobuild_custom_code_head', ''),
+            'custom_code_body'      => get_option('olobuild_custom_code_body', ''),
+            'custom_code_footer'    => get_option('olobuild_custom_code_footer', ''),
+            'cookie_consent_enabled'=> get_option('olobuild_cookie_consent_enabled', false),
         ];
 
         // Active singles
         $post_types = get_post_types(['public' => true], 'names');
         foreach ($post_types as $pt) {
-            $val = get_option("olo_active_single_{$pt}", '');
+            $val = get_option("olobuild_active_single_{$pt}", '');
             if ($val) $data['options']["active_single_{$pt}"] = $val;
         }
 
@@ -57,7 +57,7 @@ class Olobuild_Site_Export {
      */
     public static function import_site($data) {
         global $wpdb;
-        $table = $wpdb->prefix . 'olo_templates';
+        $table = $wpdb->prefix . 'olobuild_templates';
 
         if (empty($data['templates'])) return ['imported' => 0];
 
@@ -90,7 +90,7 @@ class Olobuild_Site_Export {
 
         // Global widgets
         if (!empty($data['global_widgets'])) {
-            $gw_table = $wpdb->prefix . 'olo_global_widgets';
+            $gw_table = $wpdb->prefix . 'olobuild_global_widgets';
             foreach ($data['global_widgets'] as $gw) {
                 $wpdb->insert($gw_table, [
                     'name'       => $gw['name'] ?? 'Widget',
@@ -103,27 +103,27 @@ class Olobuild_Site_Export {
         // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
         // Styles
-        if (isset($data['styles'])) update_option('olo_styles', $data['styles']);
-        if (isset($data['global_colors'])) update_option('olo_global_colors', $data['global_colors']);
-        if (isset($data['global_typography'])) update_option('olo_global_typography', $data['global_typography']);
+        if (isset($data['styles'])) update_option('olobuild_styles', $data['styles']);
+        if (isset($data['global_colors'])) update_option('olobuild_global_colors', $data['global_colors']);
+        if (isset($data['global_typography'])) update_option('olobuild_global_typography', $data['global_typography']);
 
         // Options with ID remapping
         if (isset($data['options'])) {
             $opts = $data['options'];
             if (isset($opts['active_header'])) {
                 if (isset($id_map[$opts['active_header']])) {
-                    update_option('olo_active_header', $id_map[$opts['active_header']]);
+                    update_option('olobuild_active_header', $id_map[$opts['active_header']]);
                 }
             }
             if (isset($opts['active_footer'])) {
                 if (isset($id_map[$opts['active_footer']])) {
-                    update_option('olo_active_footer', $id_map[$opts['active_footer']]);
+                    update_option('olobuild_active_footer', $id_map[$opts['active_footer']]);
                 }
             }
-            if (isset($opts['custom_fonts'])) update_option('olo_custom_fonts', $opts['custom_fonts']);
-            if (isset($opts['custom_code_head'])) update_option('olo_custom_code_head', $opts['custom_code_head']);
-            if (isset($opts['custom_code_body'])) update_option('olo_custom_code_body', $opts['custom_code_body']);
-            if (isset($opts['custom_code_footer'])) update_option('olo_custom_code_footer', $opts['custom_code_footer']);
+            if (isset($opts['custom_fonts'])) update_option('olobuild_custom_fonts', $opts['custom_fonts']);
+            if (isset($opts['custom_code_head'])) update_option('olobuild_custom_code_head', $opts['custom_code_head']);
+            if (isset($opts['custom_code_body'])) update_option('olobuild_custom_code_body', $opts['custom_code_body']);
+            if (isset($opts['custom_code_footer'])) update_option('olobuild_custom_code_footer', $opts['custom_code_footer']);
         }
 
         return ['imported' => $count, 'id_map' => $id_map];

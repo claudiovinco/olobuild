@@ -127,7 +127,7 @@ class Olobuild_White_Label {
         ];
         // Merge coi default: opzioni salvate prima di nuove chiavi (es. plugin_logo_url)
         // non devono generare undefined-key notice.
-        $saved = get_option( 'olo_white_label', [] );
+        $saved = get_option( 'olobuild_white_label', [] );
         return wp_parse_args( is_array( $saved ) ? $saved : [], $defaults );
     }
 
@@ -136,7 +136,7 @@ class Olobuild_White_Label {
      * ───────────────────────────────────────────── */
 
     public function register_routes() {
-        register_rest_route( 'olo/v1', '/white-label', [
+        register_rest_route( 'olobuild/v1', '/white-label', [
             [
                 'methods'             => 'GET',
                 'callback'            => function() {
@@ -173,7 +173,7 @@ class Olobuild_White_Label {
             'hide_credits'        => ! empty( $data['hide_credits'] ),
         ];
 
-        update_option( 'olo_white_label', $clean );
+        update_option( 'olobuild_white_label', $clean );
         return rest_ensure_response( [ 'success' => true ] );
     }
 
@@ -319,7 +319,7 @@ class Olobuild_White_Label {
                     hide_for_non_admins: document.getElementById('wl_hide').checked,
                     hide_credits: document.getElementById('wl_credits').checked
                 };
-                fetch('<?php echo esc_js( rest_url( 'olo/v1/white-label' ) ); ?>', {
+                fetch('<?php echo esc_js( rest_url( 'olobuild/v1/white-label' ) ); ?>', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': '<?php echo esc_js( wp_create_nonce( 'wp_rest' ) ); ?>' },
                     body: JSON.stringify(data)

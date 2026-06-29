@@ -116,7 +116,7 @@ function totalCount() {
 async function loadCustomIcons() {
   if (customLoaded.value) return;
   try {
-    const res = await fetch(`${window.oloData?.restUrl || '/wp-json/'}olo/v1/custom-icons`, {
+    const res = await fetch(`${window.oloData?.restUrl || '/wp-json/'}olobuild/v1/custom-icons`, {
       headers: { 'X-WP-Nonce': window.oloData?.nonce || '' },
     });
     if (res.ok) {
@@ -136,7 +136,7 @@ async function uploadIcons(event) {
     formData.append('svg_file', file);
     formData.append('name', file.name.replace('.svg', ''));
     try {
-      const res = await fetch(`${window.oloData?.restUrl || '/wp-json/'}olo/v1/custom-icons`, {
+      const res = await fetch(`${window.oloData?.restUrl || '/wp-json/'}olobuild/v1/custom-icons`, {
         method: 'POST',
         headers: { 'X-WP-Nonce': window.oloData?.nonce || '' },
         body: formData,

@@ -91,7 +91,7 @@ class Olobuild_Page_Integration {
         // Check for CPT single template (olo_active_single_{post_type})
         $post_type = get_post_type( $post_id );
         if ( $post_type && $post_type !== 'page' && $post_type !== 'post' ) {
-            $single_tpl = (int) get_option( "olo_active_single_{$post_type}", 0 );
+            $single_tpl = (int) get_option( "olobuild_active_single_{$post_type}", 0 );
             if ( $single_tpl ) {
                 return admin_url( 'admin.php?page=olobuilder-templates&template_id=' . $single_tpl . '&post_id=' . $post_id );
             }
@@ -150,7 +150,7 @@ class Olobuild_Page_Integration {
                 if ( ! $template_id ) {
                     $pt = get_post_type( $post_id );
                     if ( $pt && $pt !== 'page' && $pt !== 'post' ) {
-                        $template_id = (int) get_option( "olo_active_single_{$pt}", 0 );
+                        $template_id = (int) get_option( "olobuild_active_single_{$pt}", 0 );
                     }
                 }
                 $node = [
@@ -173,7 +173,7 @@ class Olobuild_Page_Integration {
                     ];
                 }
             } elseif ( is_404() ) {
-                $tpl_404 = (int) get_option( 'olo_active_404', 0 );
+                $tpl_404 = (int) get_option( 'olobuild_active_404', 0 );
                 $node = [
                     'href'  => $tpl_404
                         ? admin_url( 'admin.php?page=olobuilder-templates&template_id=' . $tpl_404 )
@@ -181,7 +181,7 @@ class Olobuild_Page_Integration {
                     'label' => $tpl_404 ? 'Modifica 404 con Olobuild' : 'Apri Olobuild',
                 ];
             } elseif ( is_search() ) {
-                $tpl_search = (int) get_option( 'olo_active_search', 0 );
+                $tpl_search = (int) get_option( 'olobuild_active_search', 0 );
                 $node = [
                     'href'  => $tpl_search
                         ? admin_url( 'admin.php?page=olobuilder-templates&template_id=' . $tpl_search )

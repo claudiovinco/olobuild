@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * email all'admin. Questa classe fornisce:
  *
  *   - tabella dedicata `{prefix}olo_newsletter` (email unica + stato)
- *   - endpoint REST pubblico `olo/v1/newsletter/subscribe`
+ *   - endpoint REST pubblico `olobuild/v1/newsletter/subscribe`
  *   - honeypot + rate-limit anti-bot
  *   - pagina admin (Olobuild → Newsletter) con conteggio, lista ed export CSV
  *
@@ -26,7 +26,7 @@ class Olobuild_Newsletter {
     /** Nome tabella (senza prefix). */
     private static function table() {
         global $wpdb;
-        return $wpdb->prefix . 'olo_newsletter';
+        return $wpdb->prefix . 'olobuild_newsletter';
     }
 
     // =========================================================================
@@ -51,11 +51,11 @@ class Olobuild_Newsletter {
 
     /** Crea la tabella se manca o se la versione schema è cambiata. */
     public static function maybe_install() {
-        if ( get_option( 'olo_newsletter_db_version' ) === self::DB_VERSION ) {
+        if ( get_option( 'olobuild_newsletter_db_version' ) === self::DB_VERSION ) {
             return;
         }
         self::create_table();
-        update_option( 'olo_newsletter_db_version', self::DB_VERSION );
+        update_option( 'olobuild_newsletter_db_version', self::DB_VERSION );
     }
 
     /** dbDelta della tabella iscritti. Idempotente. */
@@ -89,7 +89,7 @@ class Olobuild_Newsletter {
     // =========================================================================
 
     public static function register_routes() {
-        register_rest_route( 'olo/v1', '/newsletter/subscribe', [
+        register_rest_route( 'olobuild/v1', '/newsletter/subscribe', [
             'methods'             => 'POST',
             'callback'            => [ __CLASS__, 'subscribe' ],
             'permission_callback' => '__return_true', // endpoint pubblico

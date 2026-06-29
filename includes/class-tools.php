@@ -22,11 +22,11 @@ class Olobuild_Tools {
         add_action( 'admin_menu', [ $this, 'add_menu' ] );
 
         // AJAX handlers
-        add_action( 'wp_ajax_olo_tools_flush_cache',       [ $this, 'ajax_flush_cache' ] );
-        add_action( 'wp_ajax_olo_tools_toggle_option',     [ $this, 'ajax_toggle_option' ] );
-        add_action( 'wp_ajax_olo_tools_url_replace',       [ $this, 'ajax_url_replace' ] );
-        add_action( 'wp_ajax_olo_tools_rollback',          [ $this, 'ajax_rollback' ] );
-        add_action( 'wp_ajax_olo_tools_save_maintenance',  [ $this, 'ajax_save_maintenance' ] );
+        add_action( 'wp_ajax_olobuild_tools_flush_cache',       [ $this, 'ajax_flush_cache' ] );
+        add_action( 'wp_ajax_olobuild_tools_toggle_option',     [ $this, 'ajax_toggle_option' ] );
+        add_action( 'wp_ajax_olobuild_tools_url_replace',       [ $this, 'ajax_url_replace' ] );
+        add_action( 'wp_ajax_olobuild_tools_rollback',          [ $this, 'ajax_rollback' ] );
+        add_action( 'wp_ajax_olobuild_tools_save_maintenance',  [ $this, 'ajax_save_maintenance' ] );
 
         // Maintenance mode frontend hook — handled by Olobuild_Maintenance_Mode (class-maintenance-mode.php)
         // Removed duplicate hook to prevent race condition. Only class-maintenance-mode.php runs at priority 1.
@@ -159,8 +159,8 @@ class Olobuild_Tools {
      * ───────────────────────────────────────────── */
 
     private function render_tab_generale() {
-        $safe_mode = get_option( 'olo_safe_mode', '' );
-        $debug_bar = get_option( 'olo_debug_bar', '' );
+        $safe_mode = get_option( 'olobuild_safe_mode', '' );
+        $debug_bar = get_option( 'olobuild_debug_bar', '' );
         ?>
 
         <!-- Cache -->
@@ -198,7 +198,7 @@ class Olobuild_Tools {
                     <div class="olo-field-info">
                         <label>Stato</label>
                     </div>
-                    <select class="olo-select olo-w-md" id="olo-tools-safe-mode" data-key="olo_safe_mode">
+                    <select class="olo-select olo-w-md" id="olo-tools-safe-mode" data-key="olobuild_safe_mode">
                         <option value="" <?php selected( $safe_mode, '' ); ?>>Disabilita</option>
                         <option value="1" <?php selected( $safe_mode, '1' ); ?>>Abilita</option>
                     </select>
@@ -222,7 +222,7 @@ class Olobuild_Tools {
                     <div class="olo-field-info">
                         <label>Stato</label>
                     </div>
-                    <select class="olo-select olo-w-md" id="olo-tools-debug-bar" data-key="olo_debug_bar">
+                    <select class="olo-select olo-w-md" id="olo-tools-debug-bar" data-key="olobuild_debug_bar">
                         <option value="" <?php selected( $debug_bar, '' ); ?>>Disabilita</option>
                         <option value="1" <?php selected( $debug_bar, '1' ); ?>>Abilita</option>
                     </select>
@@ -241,7 +241,7 @@ class Olobuild_Tools {
                 fetch(ajaxurl, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                    body: 'action=olo_tools_flush_cache&_wpnonce=' + oloToolsNonce
+                    body: 'action=olobuild_tools_flush_cache&_wpnonce=' + oloToolsNonce
                 })
                 .then(function(r) { return r.json(); })
                 .then(function(data) {
@@ -263,7 +263,7 @@ class Olobuild_Tools {
                     fetch(ajaxurl, {
                         method: 'POST',
                         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                        body: 'action=olo_tools_toggle_option&_wpnonce=' + oloToolsNonce + '&key=' + encodeURIComponent(key) + '&value=' + encodeURIComponent(val)
+                        body: 'action=olobuild_tools_toggle_option&_wpnonce=' + oloToolsNonce + '&key=' + encodeURIComponent(key) + '&value=' + encodeURIComponent(val)
                     })
                     .then(function(r) { return r.json(); })
                     .then(function(data) {
@@ -329,7 +329,7 @@ class Olobuild_Tools {
                 fetch(ajaxurl, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                    body: 'action=olo_tools_url_replace&_wpnonce=' + oloToolsNonce
+                    body: 'action=olobuild_tools_url_replace&_wpnonce=' + oloToolsNonce
                         + '&old_url=' + encodeURIComponent(oldUrl)
                         + '&new_url=' + encodeURIComponent(newUrl)
                 })
@@ -438,7 +438,7 @@ class Olobuild_Tools {
             function loadRevisions(templateId) {
                 var container = document.querySelector('.olo-rev-list[data-id="' + templateId + '"]');
                 container.innerHTML = 'Caricamento...';
-                fetch(wpApiSettings.root + 'olo/v1/templates/' + templateId + '/revisions', {
+                fetch(wpApiSettings.root + 'olobuild/v1/templates/' + templateId + '/revisions', {
                     headers: { 'X-WP-Nonce': wpApiSettings.nonce }
                 })
                 .then(function(r) { return r.json(); })
@@ -470,7 +470,7 @@ class Olobuild_Tools {
                             fetch(ajaxurl, {
                                 method: 'POST',
                                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                                body: 'action=olo_tools_rollback&_wpnonce=' + oloToolsNonce + '&revision_id=' + revId
+                                body: 'action=olobuild_tools_rollback&_wpnonce=' + oloToolsNonce + '&revision_id=' + revId
                             })
                             .then(function(r) { return r.json(); })
                             .then(function(data) {
@@ -502,14 +502,14 @@ class Olobuild_Tools {
         global $wpdb;
         $prefix = $wpdb->prefix;
 
-        $mode          = get_option( 'olo_maintenance_mode', 'off' );
-        $bypass_roles  = get_option( 'olo_maintenance_bypass_roles', [ 'administrator' ] );
+        $mode          = get_option( 'olobuild_maintenance_mode', 'off' );
+        $bypass_roles  = get_option( 'olobuild_maintenance_bypass_roles', [ 'administrator' ] );
         if ( ! is_array( $bypass_roles ) ) {
             $bypass_roles = [ 'administrator' ];
         }
-        $template_id            = get_option( 'olo_maintenance_template_id', '' );
-        $coming_soon_template_id = get_option( 'olo_coming_soon_template_id', '' );
-        $bypass_secret          = get_option( 'olo_maintenance_bypass_secret', '' );
+        $template_id            = get_option( 'olobuild_maintenance_template_id', '' );
+        $coming_soon_template_id = get_option( 'olobuild_coming_soon_template_id', '' );
+        $bypass_secret          = get_option( 'olobuild_maintenance_bypass_secret', '' );
 
         // Get all templates
         // Tabella custom del plugin ({prefix}olo_templates); nessun equivalente WP_Query; risultato non cacheabile (lista admin). Solo il nome tabella da $wpdb->prefix è interpolato, nessun valore utente in SQL.
@@ -619,7 +619,7 @@ class Olobuild_Tools {
                     }
                 }
 
-                var body = 'action=olo_tools_save_maintenance&_wpnonce=' + oloToolsNonce
+                var body = 'action=olobuild_tools_save_maintenance&_wpnonce=' + oloToolsNonce
                     + '&mode=' + encodeURIComponent(document.getElementById('olo-maint-mode').value)
                     + '&template_id=' + encodeURIComponent(document.getElementById('olo-maint-template').value)
                     + '&coming_soon_template_id=' + encodeURIComponent(document.getElementById('olo-maint-coming-soon-template').value)
@@ -692,7 +692,7 @@ class Olobuild_Tools {
         // Tabella custom del plugin ({prefix}olo_templates); nessun equivalente WP_Query; risultato non cacheabile (lista admin). Solo il nome tabella da $wpdb->prefix è interpolato, nessun valore utente in SQL.
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $templates = $wpdb->get_results( "SELECT id, title, type FROM {$prefix}olo_templates ORDER BY title" );
-        $rest_url  = esc_url( rest_url( 'olo/v1/' ) );
+        $rest_url  = esc_url( rest_url( 'olobuild/v1/' ) );
         $nonce     = wp_create_nonce( 'wp_rest' );
         ?>
 
@@ -845,7 +845,7 @@ class Olobuild_Tools {
             wp_send_json_error( 'Permesso negato.' );
         }
 
-        $allowed_keys = [ 'olo_safe_mode', 'olo_debug_bar' ];
+        $allowed_keys = [ 'olobuild_safe_mode', 'olobuild_debug_bar' ];
         $key   = sanitize_key( wp_unslash( $_POST['key'] ?? '' ) );
         $value = sanitize_text_field( wp_unslash( $_POST['value'] ?? '' ) );
 
@@ -878,7 +878,7 @@ class Olobuild_Tools {
         }
 
         global $wpdb;
-        $table = $wpdb->prefix . 'olo_templates';
+        $table = $wpdb->prefix . 'olobuild_templates';
         // Tabella custom del plugin ({prefix}olo_templates); nessun equivalente WP_Query; risultato non cacheabile (sostituzione URL una-tantum). $table è solo $wpdb->prefix + nome fisso, nessun valore utente in SQL.
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $rows  = $wpdb->get_results( "SELECT id, content FROM {$table}" );
@@ -986,11 +986,11 @@ class Olobuild_Tools {
             $mode = 'off';
         }
 
-        update_option( 'olo_maintenance_mode', $mode );
-        update_option( 'olo_maintenance_template_id', $template_id );
-        update_option( 'olo_coming_soon_template_id', $coming_soon_template_id );
-        update_option( 'olo_maintenance_bypass_secret', $bypass_secret );
-        update_option( 'olo_maintenance_bypass_roles', $bypass_roles );
+        update_option( 'olobuild_maintenance_mode', $mode );
+        update_option( 'olobuild_maintenance_template_id', $template_id );
+        update_option( 'olobuild_coming_soon_template_id', $coming_soon_template_id );
+        update_option( 'olobuild_maintenance_bypass_secret', $bypass_secret );
+        update_option( 'olobuild_maintenance_bypass_roles', $bypass_roles );
 
         wp_send_json_success( [
             'message' => 'Impostazioni di manutenzione salvate.',
@@ -1005,19 +1005,19 @@ class Olobuild_Tools {
      * Show maintenance/coming soon page to visitors.
      */
     public function maybe_show_maintenance() {
-        $mode = get_option( 'olo_maintenance_mode', 'off' );
+        $mode = get_option( 'olobuild_maintenance_mode', 'off' );
         if ( $mode === 'off' ) {
             return;
         }
 
-        $template_id = get_option( 'olo_maintenance_template_id', 0 );
+        $template_id = get_option( 'olobuild_maintenance_template_id', 0 );
         if ( empty( $template_id ) ) {
             return;
         }
 
         // Bypass for allowed roles
         if ( is_user_logged_in() ) {
-            $bypass_roles = get_option( 'olo_maintenance_bypass_roles', [ 'administrator' ] );
+            $bypass_roles = get_option( 'olobuild_maintenance_bypass_roles', [ 'administrator' ] );
             if ( ! is_array( $bypass_roles ) ) {
                 $bypass_roles = [ 'administrator' ];
             }
@@ -1030,7 +1030,7 @@ class Olobuild_Tools {
         }
 
         // Bypass via secret URL parameter
-        $bypass_secret = get_option( 'olo_maintenance_bypass_secret', '' );
+        $bypass_secret = get_option( 'olobuild_maintenance_bypass_secret', '' );
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- frontend pubblico servito da cache: nessun nonce disponibile; lettura read-only confrontata con un segreto lato server; nessuna modifica di stato; valore sanitizzato con sanitize_text_field + wp_unslash.
         if ( $bypass_secret && isset( $_GET['bypass'] ) ) {
             // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- frontend pubblico servito da cache: nessun nonce; lettura read-only confrontata con un segreto lato server; nessuna modifica di stato; valore sanitizzato.

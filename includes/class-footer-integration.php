@@ -35,7 +35,7 @@ class Olobuild_Footer_Integration {
         }
         $by_rules = (int) apply_filters( 'olobuild_resolve_template_id', 0, 'footer' );
         if ( $by_rules ) return $by_rules;
-        return (int) get_option( 'olo_active_footer', 0 );
+        return (int) get_option( 'olobuild_active_footer', 0 );
     }
 
     /**

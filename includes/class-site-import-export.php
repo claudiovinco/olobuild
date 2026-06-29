@@ -34,7 +34,7 @@ class Olobuild_Site_Import_Export {
 
     public function register_routes() {
         // Export template as JSON (with optional media)
-        register_rest_route( 'olo/v1', '/export-template/(?P<id>\d+)', [
+        register_rest_route( 'olobuild/v1', '/export-template/(?P<id>\d+)', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'export_template' ],
             'permission_callback' => function () {
@@ -49,7 +49,7 @@ class Olobuild_Site_Import_Export {
         ] );
 
         // Export full site (all templates + header + footer + global styles)
-        register_rest_route( 'olo/v1', '/export-site', [
+        register_rest_route( 'olobuild/v1', '/export-site', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'export_site' ],
             'permission_callback' => function () {
@@ -64,7 +64,7 @@ class Olobuild_Site_Import_Export {
         ] );
 
         // Import template from JSON
-        register_rest_route( 'olo/v1', '/import-template', [
+        register_rest_route( 'olobuild/v1', '/import-template', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'import_template' ],
             'permission_callback' => function () {
@@ -73,7 +73,7 @@ class Olobuild_Site_Import_Export {
         ] );
 
         // Import full site
-        register_rest_route( 'olo/v1', '/import-site', [
+        register_rest_route( 'olobuild/v1', '/import-site', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'import_site' ],
             'permission_callback' => function () {
@@ -160,9 +160,9 @@ class Olobuild_Site_Import_Export {
             'site_url'      => home_url(),
             'exported_at'   => gmdate( 'Y-m-d\TH:i:s\Z' ),
             'templates'     => $exported,
-            'global_styles' => get_option( 'olo_styles', [] ),
-            'active_header' => get_option( 'olo_active_header', '' ),
-            'active_footer' => get_option( 'olo_active_footer', '' ),
+            'global_styles' => get_option( 'olobuild_styles', [] ),
+            'active_header' => get_option( 'olobuild_active_header', '' ),
+            'active_footer' => get_option( 'olobuild_active_footer', '' ),
         ];
 
         // ── Export COMPLETO: menu WP, pagine collegate, opzioni globali ──
@@ -179,11 +179,11 @@ class Olobuild_Site_Import_Export {
 
         // Opzioni globali della famiglia olobuild (HUD, cursore, colori extra…).
         $site_export['options'] = [
-            'cursor_hud'        => get_option( 'olo_cursor_hud', [] ),
-            'magnetic_cursor'   => get_option( 'olo_magnetic_cursor', [] ),
-            'global_colors'     => get_option( 'olo_global_colors', [] ),
-            'global_typography' => get_option( 'olo_global_typography', [] ),
-            'custom_fonts'      => get_option( 'olo_custom_fonts', [] ),
+            'cursor_hud'        => get_option( 'olobuild_cursor_hud', [] ),
+            'magnetic_cursor'   => get_option( 'olobuild_magnetic_cursor', [] ),
+            'global_colors'     => get_option( 'olobuild_global_colors', [] ),
+            'global_typography' => get_option( 'olobuild_global_typography', [] ),
+            'custom_fonts'      => get_option( 'olobuild_custom_fonts', [] ),
         ];
 
         // Collect media from all templates — content E page settings (lo sfondo
@@ -347,7 +347,7 @@ class Olobuild_Site_Import_Export {
                 ? Olobuild_Style_System::instance()->sanitize_styles( $json['global_styles'] )
                 : [];
             if ( ! empty( $sanitized_styles ) ) {
-                update_option( 'olo_styles', $sanitized_styles );
+                update_option( 'olobuild_styles', $sanitized_styles );
             }
         }
 
@@ -366,13 +366,13 @@ class Olobuild_Site_Import_Export {
         if ( ! empty( $json['active_header'] ) ) {
             $old_h = intval( $json['active_header'] );
             if ( isset( $id_map[ $old_h ] ) ) {
-                update_option( 'olo_active_header', $id_map[ $old_h ] );
+                update_option( 'olobuild_active_header', $id_map[ $old_h ] );
             }
         }
         if ( ! empty( $json['active_footer'] ) ) {
             $old_f = intval( $json['active_footer'] );
             if ( isset( $id_map[ $old_f ] ) ) {
-                update_option( 'olo_active_footer', $id_map[ $old_f ] );
+                update_option( 'olobuild_active_footer', $id_map[ $old_f ] );
             }
         }
 
@@ -635,14 +635,14 @@ class Olobuild_Site_Import_Export {
             if ( ! class_exists( 'Olobuild_Cursor_Hud' ) ) {
                 require_once OLOBUILD_PATH . 'includes/class-cursor-hud.php';
             }
-            update_option( 'olo_cursor_hud', Olobuild_Cursor_Hud::sanitize( $o['cursor_hud'] ), false );
+            update_option( 'olobuild_cursor_hud', Olobuild_Cursor_Hud::sanitize( $o['cursor_hud'] ), false );
         }
 
         if ( isset( $o['magnetic_cursor'] ) && is_array( $o['magnetic_cursor'] ) ) {
             if ( ! class_exists( 'Olobuild_Magnetic_Cursor' ) ) {
                 require_once OLOBUILD_PATH . 'includes/class-magnetic-cursor.php';
             }
-            update_option( 'olo_magnetic_cursor', Olobuild_Magnetic_Cursor::sanitize( $o['magnetic_cursor'] ), false );
+            update_option( 'olobuild_magnetic_cursor', Olobuild_Magnetic_Cursor::sanitize( $o['magnetic_cursor'] ), false );
         }
 
         if ( isset( $o['global_colors'] ) && is_array( $o['global_colors'] ) ) {
@@ -662,15 +662,15 @@ class Olobuild_Site_Import_Export {
                 }
                 $clean[] = $entry;
             }
-            update_option( 'olo_global_colors', $clean, false );
+            update_option( 'olobuild_global_colors', $clean, false );
         }
 
         if ( isset( $o['global_typography'] ) && is_array( $o['global_typography'] ) ) {
-            update_option( 'olo_global_typography', map_deep( $o['global_typography'], 'sanitize_text_field' ), false );
+            update_option( 'olobuild_global_typography', map_deep( $o['global_typography'], 'sanitize_text_field' ), false );
         }
 
         if ( isset( $o['custom_fonts'] ) && is_array( $o['custom_fonts'] ) ) {
-            update_option( 'olo_custom_fonts', map_deep( $o['custom_fonts'], 'sanitize_text_field' ), false );
+            update_option( 'olobuild_custom_fonts', map_deep( $o['custom_fonts'], 'sanitize_text_field' ), false );
         }
     }
 
@@ -968,7 +968,7 @@ class Olobuild_Site_Import_Export {
 
             <script>
             (function() {
-                var restUrl = '<?php echo esc_js( rest_url( 'olo/v1' ) ); ?>';
+                var restUrl = '<?php echo esc_js( rest_url( 'olobuild/v1' ) ); ?>';
                 var nonce = '<?php echo esc_js( wp_create_nonce( 'wp_rest' ) ); ?>';
                 var msg = document.getElementById('olo-ie-msg');
                 var log = document.getElementById('olo-import-log');

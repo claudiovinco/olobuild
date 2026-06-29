@@ -75,7 +75,7 @@ const label = computed(() => tileDef.value?.name || t('Elemento esterno'));
 const rawIcon = computed(() => tileDef.value?.icon || 'dashicons-admin-generic');
 
 // ──────────────────────────────────────────────────────────────────────
-// Live server-side preview via /olo/v1/builder/render-tile
+// Live server-side preview via /olobuild/v1/builder/render-tile
 // ──────────────────────────────────────────────────────────────────────
 const serverHtml = ref('');
 const loading   = ref(false);
@@ -119,7 +119,7 @@ async function fetchPreview(force = false) {
   error.value = false;
 
   try {
-    const restUrl = (window.oloData?.restUrl || '/wp-json/olo/v1').replace(/\/$/, '');
+    const restUrl = (window.oloData?.restUrl || '/wp-json/olobuild/v1').replace(/\/$/, '');
     const res = await fetch(restUrl + '/builder/render-tile', {
       method:  'POST',
       headers: {

@@ -373,7 +373,7 @@ async function purgeAll() {
   purging.value = true;
   try {
     const body = new FormData();
-    body.append('action', 'olo_perf_purge_critical');
+    body.append('action', 'olobuild_perf_purge_critical');
     body.append('_nonce', window.oloData.perfNonce);
     const res = await fetch(window.oloData.ajaxUrl, { method: 'POST', body, credentials: 'same-origin' });
     const d = res.ok ? await res.json() : null;
@@ -387,7 +387,7 @@ async function purgeAll() {
 async function regenerateCache() {
   try {
     const body = new FormData();
-    body.append('action', 'olo_perf_regenerate_critical');
+    body.append('action', 'olobuild_perf_regenerate_critical');
     body.append('_nonce', window.oloData.perfNonce);
     const res = await fetch(window.oloData.ajaxUrl, { method: 'POST', body, credentials: 'same-origin' });
     const d = res.ok ? await res.json() : null;

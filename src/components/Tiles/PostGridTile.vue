@@ -85,7 +85,7 @@ const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
-const oloData = inject('oloData', { restUrl: '/wp-json/olo/v1', nonce: '' });
+const oloData = inject('oloData', { restUrl: '/wp-json/olobuild/v1', nonce: '' });
 
 // Fake data fallback
 const fakeTitles = ['Come migliorare le performance', 'Guida completa al design', 'Le ultime novità del settore', 'Consigli pratici per iniziare', 'Tendenze e ispirazioni', 'Strategie per il successo'];

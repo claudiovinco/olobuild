@@ -3,8 +3,8 @@
  * Olobuild_Unsplash — Integrazione Unsplash per Olobuild.
  *
  * Fornisce 2 endpoint REST:
- *   GET  olo/v1/unsplash/search   — Cerca foto su Unsplash
- *   POST olo/v1/unsplash/download — Scarica foto nel WP Media Library
+ *   GET  olobuild/v1/unsplash/search   — Cerca foto su Unsplash
+ *   POST olobuild/v1/unsplash/download — Scarica foto nel WP Media Library
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,7 +24,7 @@ class Olobuild_Unsplash {
         if ( defined( 'OLO_UNSPLASH_API_KEY' ) && OLO_UNSPLASH_API_KEY ) {
             return OLO_UNSPLASH_API_KEY;
         }
-        return (string) get_option( 'olo_unsplash_api_key', '' );
+        return (string) get_option( 'olobuild_unsplash_api_key', '' );
     }
 
     public function init() {
@@ -32,7 +32,7 @@ class Olobuild_Unsplash {
     }
 
     public function register_routes() {
-        register_rest_route( 'olo/v1', '/unsplash/search', [
+        register_rest_route( 'olobuild/v1', '/unsplash/search', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'search' ],
             'permission_callback' => function () {
@@ -46,7 +46,7 @@ class Olobuild_Unsplash {
             ],
         ] );
 
-        register_rest_route( 'olo/v1', '/unsplash/download', [
+        register_rest_route( 'olobuild/v1', '/unsplash/download', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'download' ],
             'permission_callback' => function () {

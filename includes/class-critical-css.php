@@ -21,7 +21,7 @@ class Olobuild_Critical_CSS {
      * Initialize hooks.
      */
     public static function init() {
-        if ( ! get_option( 'olo_critical_css_enabled', false ) ) {
+        if ( ! get_option( 'olobuild_critical_css_enabled', false ) ) {
             return;
         }
 
@@ -50,7 +50,7 @@ class Olobuild_Critical_CSS {
             // Check if it's a single CPT with active template
             $post_type = get_post_type( $post_id );
             if ( $post_type ) {
-                $template_id = (int) get_option( "olo_active_single_{$post_type}", 0 );
+                $template_id = (int) get_option( "olobuild_active_single_{$post_type}", 0 );
             }
         }
 
@@ -269,7 +269,7 @@ class Olobuild_Critical_CSS {
         );
 
         return [
-            'enabled'        => (bool) get_option( 'olo_critical_css_enabled', false ),
+            'enabled'        => (bool) get_option( 'olobuild_critical_css_enabled', false ),
             'cached_count'   => $cached_count,
             'last_generated' => $last_generated ? wp_date( 'Y-m-d H:i:s', intval( $last_generated ) - self::CACHE_TTL ) : null,
         ];

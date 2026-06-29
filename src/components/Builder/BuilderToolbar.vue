@@ -852,7 +852,7 @@ function cancelTitle() {
 const isPublished = computed(() => builderStore.currentTemplate?.status === 'published');
 const templateType = computed(() => builderStore.currentTemplate?.type || 'page');
 const oloData = window.oloData || {};
-const wpAdminUrl = (oloData.restUrl || '').replace('/wp-json/olo/v1', '/wp-admin/');
+const wpAdminUrl = (oloData.restUrl || '').replace('/wp-json/olobuild/v1', '/wp-admin/');
 
 const activeHeaderId = ref(parseInt(oloData.activeHeaderId) || 0);
 const isActiveHeader = computed(() => {

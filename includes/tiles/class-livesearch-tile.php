@@ -69,7 +69,7 @@ class Olobuild_LiveSearch_Tile extends Olobuild_Tile_Base {
      * Register REST routes for live search.
      */
     public static function register_rest_routes() {
-        register_rest_route( 'olo/v1', '/livesearch', [
+        register_rest_route( 'olobuild/v1', '/livesearch', [
             'methods'             => 'GET',
             'callback'            => [ __CLASS__, 'handle_search' ],
             'permission_callback' => '__return_true',
@@ -305,7 +305,7 @@ class Olobuild_LiveSearch_Tile extends Olobuild_Tile_Base {
             'noResultsText' => $s['no_results_text'],
             'showAllUrl'  => $s['show_all_url'],
             'showAllText' => $s['show_all_text'],
-            'restUrl'     => esc_url_raw( rest_url( 'olo/v1/livesearch' ) ),
+            'restUrl'     => esc_url_raw( rest_url( 'olobuild/v1/livesearch' ) ),
             'modalWidth'  => $modal_width,
         ];
 

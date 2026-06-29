@@ -1010,7 +1010,7 @@ async function generateAiAlt() {
   if (!imageUrl) return;
   aiAltLoading.value = true;
   try {
-    const resp = await fetch((window.oloData?.restUrl || '/wp-json/') + 'olo/v1/ai/generate-alt', {
+    const resp = await fetch((window.oloData?.restUrl || '/wp-json/') + 'olobuild/v1/ai/generate-alt', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData?.nonce || '' },
       body: JSON.stringify({ image_url: imageUrl, language: 'it' }),

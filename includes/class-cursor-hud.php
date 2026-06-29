@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olobuild_Cursor_Hud {
 
     /** Option key (wp_options). */
-    const OPT = 'olo_cursor_hud';
+    const OPT = 'olobuild_cursor_hud';
 
     /**
      * Registra gli hook frontend. Idempotente: safe se chiamato più volte.

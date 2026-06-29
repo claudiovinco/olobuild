@@ -3,10 +3,10 @@
  * Olobuild_Pixabay — Integrazione Pixabay per Olobuild.
  *
  * Fornisce 4 endpoint REST:
- *   GET  olo/v1/pixabay/search         — Cerca foto su Pixabay
- *   POST olo/v1/pixabay/download       — Scarica foto nel WP Media Library
- *   GET  olo/v1/pixabay/videos         — Cerca video su Pixabay
- *   POST olo/v1/pixabay/video-download — Scarica video nel WP Media Library
+ *   GET  olobuild/v1/pixabay/search         — Cerca foto su Pixabay
+ *   POST olobuild/v1/pixabay/download       — Scarica foto nel WP Media Library
+ *   GET  olobuild/v1/pixabay/videos         — Cerca video su Pixabay
+ *   POST olobuild/v1/pixabay/video-download — Scarica video nel WP Media Library
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -26,7 +26,7 @@ class Olobuild_Pixabay {
         if ( defined( 'OLO_PIXABAY_API_KEY' ) && OLO_PIXABAY_API_KEY ) {
             return OLO_PIXABAY_API_KEY;
         }
-        return (string) get_option( 'olo_pixabay_api_key', '' );
+        return (string) get_option( 'olobuild_pixabay_api_key', '' );
     }
 
     public function init() {
@@ -34,7 +34,7 @@ class Olobuild_Pixabay {
     }
 
     public function register_routes() {
-        register_rest_route( 'olo/v1', '/pixabay/search', [
+        register_rest_route( 'olobuild/v1', '/pixabay/search', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'search' ],
             'permission_callback' => function () {
@@ -50,7 +50,7 @@ class Olobuild_Pixabay {
             ],
         ] );
 
-        register_rest_route( 'olo/v1', '/pixabay/download', [
+        register_rest_route( 'olobuild/v1', '/pixabay/download', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'download' ],
             'permission_callback' => function () {
@@ -58,7 +58,7 @@ class Olobuild_Pixabay {
             },
         ] );
 
-        register_rest_route( 'olo/v1', '/pixabay/videos', [
+        register_rest_route( 'olobuild/v1', '/pixabay/videos', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'video_search' ],
             'permission_callback' => function () {
@@ -73,7 +73,7 @@ class Olobuild_Pixabay {
             ],
         ] );
 
-        register_rest_route( 'olo/v1', '/pixabay/video-download', [
+        register_rest_route( 'olobuild/v1', '/pixabay/video-download', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'video_download' ],
             'permission_callback' => function () {

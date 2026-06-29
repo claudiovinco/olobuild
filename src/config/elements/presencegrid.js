@@ -95,7 +95,7 @@ export default {
       { value: 'endpoint', label: t('Endpoint REST (poll live)') },
     ], description: t('Manuale = elenco curato qui sotto. Query/Endpoint aggiornano lo stato in tempo reale; se non rispondono, resta lo stato demo qui sotto.') },
     { key: 'endpoint_url', label: t('URL endpoint'), type: 'text',
-      placeholder: t('es. /wp-json/olo/v1/presence'),
+      placeholder: t('es. /wp-json/olobuild/v1/presence'),
       description: t('Deve restituire JSON: array di { name, avatar, role, online } o { members: [...] }.'),
       condition: { field: 'source', op: 'eq', value: 'endpoint' } },
     { key: 'poll_interval', label: t('Intervallo aggiornamento (ms)'), type: 'range', min: 2000, max: 60000, step: 1000,

@@ -302,7 +302,7 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
             var hp1=form.querySelector('input[name="olo_website_url"]'); if(hp1&&hp1.value){payload.olo_website_url=hp1.value}
             var hp2=form.querySelector('input[name="olo_hp_field"]'); if(hp2&&hp2.value){payload.olo_hp_field=hp2.value}
 
-            fetch('<?php echo esc_url( rest_url( 'olo/v1/newsletter/subscribe' ) ); ?>',{
+            fetch('<?php echo esc_url( rest_url( 'olobuild/v1/newsletter/subscribe' ) ); ?>',{
               method:'POST',
               headers:{'Content-Type':'application/json'},
               body:JSON.stringify(payload)

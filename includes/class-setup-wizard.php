@@ -22,10 +22,10 @@ class Olobuild_Setup_Wizard {
         add_action( 'admin_init', [ $this, 'maybe_dismiss_welcome' ], 3 );
 
         // AJAX handlers
-        add_action( 'wp_ajax_olo_setup_install_theme', [ $this, 'ajax_install_theme' ] );
-        add_action( 'wp_ajax_olo_setup_import_theme', [ $this, 'ajax_import_theme' ] );
-        add_action( 'wp_ajax_olo_setup_skip', [ $this, 'ajax_skip' ] );
-        add_action( 'wp_ajax_olo_setup_blank_starter', [ $this, 'ajax_blank_starter' ] );
+        add_action( 'wp_ajax_olobuild_setup_install_theme', [ $this, 'ajax_install_theme' ] );
+        add_action( 'wp_ajax_olobuild_setup_import_theme', [ $this, 'ajax_import_theme' ] );
+        add_action( 'wp_ajax_olobuild_setup_skip', [ $this, 'ajax_skip' ] );
+        add_action( 'wp_ajax_olobuild_setup_blank_starter', [ $this, 'ajax_blank_starter' ] );
 
         // First-run: redirect una-tantum al wizard dopo l'attivazione (pattern WooCommerce).
         // Niente rischio loop: il transient viene cancellato PRIMA del redirect, quindi
@@ -57,7 +57,7 @@ class Olobuild_Setup_Wizard {
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only (sola presenza chiave) per routing redirect attivazione; nessuna modifica di stato.
         if ( isset( $_GET['activate-multi'] ) ) return; // attivazione bulk: solo notice
         if ( ! current_user_can( 'manage_options' ) ) return;
-        if ( get_option( 'olo_setup_complete' ) ) return;
+        if ( get_option( 'olobuild_setup_complete' ) ) return;
 
         wp_safe_redirect( admin_url( 'admin.php?page=olo-setup' ) );
         exit;
@@ -73,7 +73,7 @@ class Olobuild_Setup_Wizard {
         $nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
         if ( ! wp_verify_nonce( $nonce, 'olo_welcome_dismiss' ) ) return;
 
-        update_option( 'olo_welcome_dismissed', 1, false );
+        update_option( 'olobuild_welcome_dismissed', 1, false );
         wp_safe_redirect( remove_query_arg( [ 'olo_welcome_dismiss', '_wpnonce' ] ) );
         exit;
     }
@@ -85,7 +85,7 @@ class Olobuild_Setup_Wizard {
      */
     public function show_activation_notice() {
         if ( ! current_user_can( 'manage_options' ) ) return;
-        if ( get_option( 'olo_setup_complete' ) || get_option( 'olo_welcome_dismissed' ) ) return;
+        if ( get_option( 'olobuild_setup_complete' ) || get_option( 'olobuild_welcome_dismissed' ) ) return;
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per nascondere il notice nella pagina del wizard; nessuna modifica di stato; valore sanitizzato.
         $current_page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
         if ( $current_page === 'olo-setup' ) return;
@@ -320,7 +320,7 @@ class Olobuild_Setup_Wizard {
             wp_enqueue_script( 'olo-wizard-theme-picker', OLOBUILD_URL . 'assets/js/theme-picker.js', [], OLOBUILD_VERSION, true );
             wp_enqueue_script( 'olo-wizard-thumb-capture', OLOBUILD_URL . 'assets/js/olo-thumb-capture.js', [], OLOBUILD_VERSION, true );
             wp_add_inline_script( 'olo-wizard-thumb-capture', 'window.oloThumbConfig=' . wp_json_encode( [
-                'restUrl'   => esc_url_raw( rest_url( 'olo/v1/' ) ),
+                'restUrl'   => esc_url_raw( rest_url( 'olobuild/v1/' ) ),
                 'nonce'     => wp_create_nonce( 'wp_rest' ),
                 'vendorUrl' => OLOBUILD_URL . 'assets/vendor/html2canvas.min.js',
                 'debug'     => false,
@@ -369,7 +369,7 @@ class Olobuild_Setup_Wizard {
                 fetch(ajaxurl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: 'action=olo_setup_install_theme&_nonce=' + nonce + '&mode=' + action
+                    body: 'action=olobuild_setup_install_theme&_nonce=' + nonce + '&mode=' + action
                 })
                 .then(function(r) { return r.json(); })
                 .then(function(data) {
@@ -427,7 +427,7 @@ class Olobuild_Setup_Wizard {
                     fetch(ajaxurl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: 'action=olo_setup_blank_starter&_nonce=' + nonce
+                        body: 'action=olobuild_setup_blank_starter&_nonce=' + nonce
                     })
                     .then(function(r) { return r.json(); })
                     .then(function(data) {
@@ -467,7 +467,7 @@ class Olobuild_Setup_Wizard {
                 fetch(ajaxurl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: 'action=olo_setup_import_theme&_nonce=' + nonce + '&theme_id=' + selectedThemeId
+                    body: 'action=olobuild_setup_import_theme&_nonce=' + nonce + '&theme_id=' + selectedThemeId
                 })
                 .then(function(r) { return r.json(); })
                 .then(function(data) {
@@ -493,7 +493,7 @@ class Olobuild_Setup_Wizard {
                 fetch(ajaxurl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: 'action=olo_setup_skip&_nonce=' + nonce
+                    body: 'action=olobuild_setup_skip&_nonce=' + nonce
                 });
             }
 
@@ -569,7 +569,7 @@ class Olobuild_Setup_Wizard {
         }
 
         // Mark setup as complete
-        update_option( 'olo_setup_complete', true );
+        update_option( 'olobuild_setup_complete', true );
 
         wp_send_json_success( [
             'templates'    => count( $result['templates'] ?? [] ),
@@ -584,7 +584,7 @@ class Olobuild_Setup_Wizard {
      */
     public function ajax_skip() {
         check_ajax_referer( 'olo_setup', '_nonce' );
-        update_option( 'olo_setup_complete', true );
+        update_option( 'olobuild_setup_complete', true );
         wp_send_json_success();
     }
 
@@ -643,9 +643,9 @@ class Olobuild_Setup_Wizard {
             'status'  => 'published',
         ] );
 
-        if ( $header_id ) update_option( 'olo_active_header', (int) $header_id );
-        if ( $footer_id ) update_option( 'olo_active_footer', (int) $footer_id );
-        update_option( 'olo_setup_complete', true );
+        if ( $header_id ) update_option( 'olobuild_active_header', (int) $header_id );
+        if ( $footer_id ) update_option( 'olobuild_active_footer', (int) $footer_id );
+        update_option( 'olobuild_setup_complete', true );
 
         wp_send_json_success( [
             'header_id'   => (int) $header_id,

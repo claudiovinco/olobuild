@@ -65,7 +65,7 @@ watch(() => props.modelValue, async (val) => {
   const name = val.slice(7);
   if (customSvgCache.value[name]) return;
   try {
-    const res = await fetch(`${window.oloData?.restUrl || '/wp-json/'}olo/v1/custom-icons`, {
+    const res = await fetch(`${window.oloData?.restUrl || '/wp-json/'}olobuild/v1/custom-icons`, {
       headers: { 'X-WP-Nonce': window.oloData?.nonce || '' },
     });
     if (res.ok) {

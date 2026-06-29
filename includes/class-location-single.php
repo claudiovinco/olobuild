@@ -28,7 +28,7 @@ class Olobuild_Location_Single {
         }
 
         // Skip if a Olobuilder single template is active for locations
-        if ( get_option( 'olo_active_single_location' ) ) {
+        if ( get_option( 'olobuild_active_single_location' ) ) {
             return $content;
         }
 

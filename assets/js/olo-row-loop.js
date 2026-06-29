@@ -3,7 +3,7 @@
  *
  * Listener delegato sul `<body>` per i click sui bottoni "Carica altri" generati
  * da `Olo_Frontend_Renderer::render_row_loop_pagination()`. Chiama il REST endpoint
- * `olo/v1/row-loop/page` e appende l'HTML restituito al container della Row.
+ * `olobuild/v1/row-loop/page` e appende l'HTML restituito al container della Row.
  */
 (function() {
   'use strict';
@@ -13,8 +13,8 @@
 
   function getRestBase() {
     return (window.oloFrontendData && window.oloFrontendData.restUrl)
-      || (window.wpApiSettings && window.wpApiSettings.root + 'olo/v1')
-      || '/wp-json/olo/v1';
+      || (window.wpApiSettings && window.wpApiSettings.root + 'olobuild/v1')
+      || '/wp-json/olobuild/v1';
   }
 
   function findContainer(rowId) {

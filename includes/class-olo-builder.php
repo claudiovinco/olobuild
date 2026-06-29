@@ -630,7 +630,7 @@ class Olobuild_Builder {
                 true
             );
             wp_localize_script( 'olo-submissions-js', 'oloSubmissionsConfig', [
-                'restUrl' => esc_url_raw( rest_url( 'olo/v1/' ) ),
+                'restUrl' => esc_url_raw( rest_url( 'olobuild/v1/' ) ),
                 'nonce'   => wp_create_nonce( 'wp_rest' ),
                 'i18n'    => [
                     'noResults'    => __( 'Nessun invio trovato.', 'olobuild' ),
@@ -688,7 +688,7 @@ class Olobuild_Builder {
             ] );
 
             wp_localize_script( 'olo-dashboard-js', 'oloDashboardData', [
-                'restUrl'     => esc_url_raw( rest_url( 'olo/v1/' ) ),
+                'restUrl'     => esc_url_raw( rest_url( 'olobuild/v1/' ) ),
                 'adminUrl'    => admin_url(),
                 'nonce'       => wp_create_nonce( 'wp_rest' ),
                 'pluginUrl'   => OLOBUILD_URL,
@@ -732,7 +732,7 @@ class Olobuild_Builder {
             $style_system = Olobuild_Style_System::instance();
             // Timestamp ultimo save (mostrato nella savebar). Ogni tab al suo POST aggiorna
             // l'option `olo_settings_last_saved`; questo è solo il bootstrap iniziale.
-            $last_saved_ts = (int) get_option( 'olo_settings_last_saved', 0 );
+            $last_saved_ts = (int) get_option( 'olobuild_settings_last_saved', 0 );
             $last_saved_str = '';
             if ( $last_saved_ts > 0 ) {
                 $diff = max( 0, time() - $last_saved_ts );
@@ -746,7 +746,7 @@ class Olobuild_Builder {
                 }
             }
             wp_localize_script( 'olo-admin-settings-js', 'oloData', [
-                'restUrl'           => esc_url_raw( rest_url( 'olo/v1' ) . '/' ),
+                'restUrl'           => esc_url_raw( rest_url( 'olobuild/v1' ) . '/' ),
                 'nonce'             => wp_create_nonce( 'wp_rest' ),
                 'importsDisabled'   => olobuild_imports_disabled(),
                 'perfNonce'         => wp_create_nonce( 'olo_perf_action' ),
@@ -853,7 +853,7 @@ class Olobuild_Builder {
             true
         );
         wp_localize_script( 'olo-thumb-capture', 'oloThumbConfig', [
-            'restUrl'   => esc_url_raw( rest_url( 'olo/v1/' ) ),
+            'restUrl'   => esc_url_raw( rest_url( 'olobuild/v1/' ) ),
             'nonce'     => wp_create_nonce( 'wp_rest' ),
             'vendorUrl' => OLOBUILD_URL . 'assets/vendor/html2canvas.min.js?v=' . OLOBUILD_VERSION,
             'debug'     => defined( 'WP_DEBUG' ) && WP_DEBUG,
@@ -900,7 +900,7 @@ class Olobuild_Builder {
         }
 
         wp_localize_script( 'olobuilder-js', 'oloData', [
-            'restUrl'        => esc_url_raw( rest_url( 'olo/v1' ) ),
+            'restUrl'        => esc_url_raw( rest_url( 'olobuild/v1' ) ),
             'nonce'          => wp_create_nonce( 'wp_rest' ),
             'importsDisabled' => olobuild_imports_disabled(),
             'userId'         => get_current_user_id(),
@@ -923,9 +923,9 @@ class Olobuild_Builder {
             'globalColors'   => $style_system->get_global_colors(),
             'globalTypography' => $style_system->get_global_typography(),
             'wpMenus'        => $this->get_wp_menus(),
-            'activeHeaderId' => (int) get_option( 'olo_active_header', 0 ),
-            'activeFooterId' => (int) get_option( 'olo_active_footer', 0 ),
-            'active404Id'    => (int) get_option( 'olo_active_404', 0 ),
+            'activeHeaderId' => (int) get_option( 'olobuild_active_header', 0 ),
+            'activeFooterId' => (int) get_option( 'olobuild_active_footer', 0 ),
+            'active404Id'    => (int) get_option( 'olobuild_active_404', 0 ),
             'activeSingles'  => $this->get_active_singles_map(),
             'stockmedia'     => wp_parse_args(
                 get_option( 'olobuild_stockmedia_behavior', [] ) ?: [],
@@ -944,8 +944,8 @@ class Olobuild_Builder {
             'iframeEmptyHtml' => self::get_iframe_empty_html(),
             // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- lettura read-only per debug bootstrap builder admin; nessuna modifica di stato; valore sanitizzato via absint.
             '_debug_tpl_id'   => absint( wp_unslash( $_GET['template_id'] ?? 0 ) ),
-            'hasAiKey'       => ! empty( get_option( 'olo_ai_anthropic_key', '' ) ),
-            'breakpointsEnabled' => wp_parse_args( get_option( 'olo_breakpoints_enabled', [] ), [
+            'hasAiKey'       => ! empty( get_option( 'olobuild_ai_anthropic_key', '' ) ),
+            'breakpointsEnabled' => wp_parse_args( get_option( 'olobuild_breakpoints_enabled', [] ), [
                 'widescreen'       => true,
                 'tablet_landscape' => false,
                 'tablet'           => true,
@@ -1390,8 +1390,8 @@ class Olobuild_Builder {
 
         // Top template
         global $wpdb;
-        $tpl_table = $wpdb->prefix . 'olo_templates';
-        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabella custom del plugin ($wpdb->prefix . 'olo_templates'); nessun equivalente WP_Query. L'unica parte interpolata è il nome tabella derivato da $wpdb->prefix (nessun valore utente); risultato dell'indice di ricerca dashboard non cacheabile.
+        $tpl_table = $wpdb->prefix . 'olobuild_templates';
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabella custom del plugin ($wpdb->prefix . 'olobuild_templates'); nessun equivalente WP_Query. L'unica parte interpolata è il nome tabella derivato da $wpdb->prefix (nessun valore utente); risultato dell'indice di ricerca dashboard non cacheabile.
         if ( $wpdb->get_var( "SHOW TABLES LIKE '$tpl_table'" ) === $tpl_table ) {
             $tpls = $wpdb->get_results(
                 "SELECT id, title, type FROM $tpl_table ORDER BY updated_at DESC LIMIT 30",
@@ -1417,8 +1417,8 @@ class Olobuild_Builder {
      */
     private static function dashboard_hero_data() {
         global $wpdb;
-        $tpl_table = $wpdb->prefix . 'olo_templates';
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabella custom del plugin ($wpdb->prefix . 'olo_templates'); nessun equivalente WP_Query. Interpolato solo il nome tabella da $wpdb->prefix (nessun valore utente); check di esistenza tabella non cacheabile.
+        $tpl_table = $wpdb->prefix . 'olobuild_templates';
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabella custom del plugin ($wpdb->prefix . 'olobuild_templates'); nessun equivalente WP_Query. Interpolato solo il nome tabella da $wpdb->prefix (nessun valore utente); check di esistenza tabella non cacheabile.
         $tpl_table_exists = ( $wpdb->get_var( "SHOW TABLES LIKE '$tpl_table'" ) === $tpl_table );
 
         $pages = get_posts( [
@@ -1433,7 +1433,7 @@ class Olobuild_Builder {
             $thumbnail = '';
             $tpl_id = (int) get_post_meta( $p->ID, '_olo_template_id', true );
             if ( $tpl_id && $tpl_table_exists ) {
-                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabella custom del plugin ($wpdb->prefix . 'olo_templates'); nessun equivalente WP_Query. Interpolato solo il nome tabella da $wpdb->prefix; il valore utente $tpl_id passa da $wpdb->prepare con %d; risultato (thumbnail) non cacheabile.
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabella custom del plugin ($wpdb->prefix . 'olobuild_templates'); nessun equivalente WP_Query. Interpolato solo il nome tabella da $wpdb->prefix; il valore utente $tpl_id passa da $wpdb->prepare con %d; risultato (thumbnail) non cacheabile.
                 $thumbnail = (string) $wpdb->get_var( $wpdb->prepare(
                     // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- query su tabella custom del plugin: nome tabella da $wpdb->prefix / colonna whitelist; tutti i valori utente passano da $wpdb->prepare
                     "SELECT thumbnail FROM $tpl_table WHERE id = %d", $tpl_id
@@ -2149,18 +2149,18 @@ class Olobuild_Builder {
         );
 
         // Pexels
-        register_setting( 'olo_settings_group', 'olo_pexels_api_key', [
+        register_setting( 'olobuild_settings_group', 'olobuild_pexels_api_key', [
             'type'              => 'string',
             'sanitize_callback' => 'sanitize_text_field',
             'default'           => '',
         ] );
         add_settings_field(
-            'olo_pexels_api_key',
+            'olobuild_pexels_api_key',
             __( 'Pexels API Key', 'olobuild' ),
             function () {
-                $val = get_option( 'olo_pexels_api_key', '' );
+                $val = get_option( 'olobuild_pexels_api_key', '' );
                 $via_const = defined( 'OLO_PEXELS_API_KEY' ) && OLO_PEXELS_API_KEY;
-                echo '<input type="text" name="olo_pexels_api_key" value="' . esc_attr( $val ) . '" class="regular-text"' . ( $via_const ? ' placeholder="' . esc_attr__( 'Definita in wp-config.php (OLO_PEXELS_API_KEY)', 'olobuild' ) . '" disabled' : '' ) . ' />';
+                echo '<input type="text" name="olobuild_pexels_api_key" value="' . esc_attr( $val ) . '" class="regular-text"' . ( $via_const ? ' placeholder="' . esc_attr__( 'Definita in wp-config.php (OLO_PEXELS_API_KEY)', 'olobuild' ) . '" disabled' : '' ) . ' />';
                 echo '<p class="description">' . sprintf(
                     /* translators: %s = URL */
                     esc_html__( 'Ottieni una chiave su %s', 'olobuild' ),
@@ -2172,18 +2172,18 @@ class Olobuild_Builder {
         );
 
         // Pixabay
-        register_setting( 'olo_settings_group', 'olo_pixabay_api_key', [
+        register_setting( 'olobuild_settings_group', 'olobuild_pixabay_api_key', [
             'type'              => 'string',
             'sanitize_callback' => 'sanitize_text_field',
             'default'           => '',
         ] );
         add_settings_field(
-            'olo_pixabay_api_key',
+            'olobuild_pixabay_api_key',
             __( 'Pixabay API Key', 'olobuild' ),
             function () {
-                $val = get_option( 'olo_pixabay_api_key', '' );
+                $val = get_option( 'olobuild_pixabay_api_key', '' );
                 $via_const = defined( 'OLO_PIXABAY_API_KEY' ) && OLO_PIXABAY_API_KEY;
-                echo '<input type="text" name="olo_pixabay_api_key" value="' . esc_attr( $val ) . '" class="regular-text"' . ( $via_const ? ' placeholder="' . esc_attr__( 'Definita in wp-config.php (OLO_PIXABAY_API_KEY)', 'olobuild' ) . '" disabled' : '' ) . ' />';
+                echo '<input type="text" name="olobuild_pixabay_api_key" value="' . esc_attr( $val ) . '" class="regular-text"' . ( $via_const ? ' placeholder="' . esc_attr__( 'Definita in wp-config.php (OLO_PIXABAY_API_KEY)', 'olobuild' ) . '" disabled' : '' ) . ' />';
                 echo '<p class="description">' . sprintf(
                     /* translators: %s: link to the Pixabay API documentation */
                     esc_html__( 'Ottieni una chiave su %s', 'olobuild' ),
@@ -2195,18 +2195,18 @@ class Olobuild_Builder {
         );
 
         // Unsplash
-        register_setting( 'olo_settings_group', 'olo_unsplash_api_key', [
+        register_setting( 'olobuild_settings_group', 'olobuild_unsplash_api_key', [
             'type'              => 'string',
             'sanitize_callback' => 'sanitize_text_field',
             'default'           => '',
         ] );
         add_settings_field(
-            'olo_unsplash_api_key',
+            'olobuild_unsplash_api_key',
             __( 'Unsplash Access Key', 'olobuild' ),
             function () {
-                $val = get_option( 'olo_unsplash_api_key', '' );
+                $val = get_option( 'olobuild_unsplash_api_key', '' );
                 $via_const = defined( 'OLO_UNSPLASH_API_KEY' ) && OLO_UNSPLASH_API_KEY;
-                echo '<input type="text" name="olo_unsplash_api_key" value="' . esc_attr( $val ) . '" class="regular-text"' . ( $via_const ? ' placeholder="' . esc_attr__( 'Definita in wp-config.php (OLO_UNSPLASH_API_KEY)', 'olobuild' ) . '" disabled' : '' ) . ' />';
+                echo '<input type="text" name="olobuild_unsplash_api_key" value="' . esc_attr( $val ) . '" class="regular-text"' . ( $via_const ? ' placeholder="' . esc_attr__( 'Definita in wp-config.php (OLO_UNSPLASH_API_KEY)', 'olobuild' ) . '" disabled' : '' ) . ' />';
                 echo '<p class="description">' . sprintf(
                     /* translators: %s: link to the Unsplash developers page */
                     esc_html__( 'Ottieni una chiave su %s', 'olobuild' ),
@@ -2218,17 +2218,17 @@ class Olobuild_Builder {
         );
 
         // Freesound
-        register_setting( 'olo_settings_group', 'olo_freesound_api_key', [
+        register_setting( 'olobuild_settings_group', 'olobuild_freesound_api_key', [
             'type'              => 'string',
             'sanitize_callback' => 'sanitize_text_field',
             'default'           => '',
         ] );
         add_settings_field(
-            'olo_freesound_api_key',
+            'olobuild_freesound_api_key',
             __( 'Freesound API Key', 'olobuild' ),
             function () {
-                $val = get_option( 'olo_freesound_api_key', '' );
-                echo '<input type="text" name="olo_freesound_api_key" value="' . esc_attr( $val ) . '" class="regular-text" placeholder="xbKm7Gp3..." />';
+                $val = get_option( 'olobuild_freesound_api_key', '' );
+                echo '<input type="text" name="olobuild_freesound_api_key" value="' . esc_attr( $val ) . '" class="regular-text" placeholder="xbKm7Gp3..." />';
                 echo '<p class="description">' . sprintf(
                     /* translators: %s: link to the Freesound API page */
                     esc_html__( 'Ottieni una chiave su %s', 'olobuild' ),
@@ -2249,33 +2249,33 @@ class Olobuild_Builder {
             'olobuilder-settings'
         );
 
-        register_setting( 'olo_settings_group', 'olo_recaptcha_site_key', [
+        register_setting( 'olobuild_settings_group', 'olobuild_recaptcha_site_key', [
             'type'              => 'string',
             'sanitize_callback' => 'sanitize_text_field',
             'default'           => '',
         ] );
         add_settings_field(
-            'olo_recaptcha_site_key',
+            'olobuild_recaptcha_site_key',
             __( 'Site Key', 'olobuild' ),
             function () {
-                $val = get_option( 'olo_recaptcha_site_key', '' );
-                echo '<input type="text" name="olo_recaptcha_site_key" value="' . esc_attr( $val ) . '" class="regular-text" />';
+                $val = get_option( 'olobuild_recaptcha_site_key', '' );
+                echo '<input type="text" name="olobuild_recaptcha_site_key" value="' . esc_attr( $val ) . '" class="regular-text" />';
             },
             'olobuilder-settings',
             'olo_recaptcha_section'
         );
 
-        register_setting( 'olo_settings_group', 'olo_recaptcha_secret_key', [
+        register_setting( 'olobuild_settings_group', 'olobuild_recaptcha_secret_key', [
             'type'              => 'string',
             'sanitize_callback' => 'sanitize_text_field',
             'default'           => '',
         ] );
         add_settings_field(
-            'olo_recaptcha_secret_key',
+            'olobuild_recaptcha_secret_key',
             __( 'Secret Key', 'olobuild' ),
             function () {
-                $val = get_option( 'olo_recaptcha_secret_key', '' );
-                echo '<input type="password" name="olo_recaptcha_secret_key" value="' . esc_attr( $val ) . '" class="regular-text" />';
+                $val = get_option( 'olobuild_recaptcha_secret_key', '' );
+                echo '<input type="password" name="olobuild_recaptcha_secret_key" value="' . esc_attr( $val ) . '" class="regular-text" />';
             },
             'olobuilder-settings',
             'olo_recaptcha_section'
@@ -2291,17 +2291,17 @@ class Olobuild_Builder {
             'olobuilder-settings'
         );
 
-        register_setting( 'olo_settings_group', 'olo_mailchimp_api_key', [
+        register_setting( 'olobuild_settings_group', 'olobuild_mailchimp_api_key', [
             'type'              => 'string',
             'sanitize_callback' => 'sanitize_text_field',
             'default'           => '',
         ] );
         add_settings_field(
-            'olo_mailchimp_api_key',
+            'olobuild_mailchimp_api_key',
             __( 'Mailchimp API Key', 'olobuild' ),
             function () {
-                $val = get_option( 'olo_mailchimp_api_key', '' );
-                echo '<input type="text" name="olo_mailchimp_api_key" value="' . esc_attr( $val ) . '" class="regular-text" placeholder="xxxxxxxxxxxxxxxx-us1" />';
+                $val = get_option( 'olobuild_mailchimp_api_key', '' );
+                echo '<input type="text" name="olobuild_mailchimp_api_key" value="' . esc_attr( $val ) . '" class="regular-text" placeholder="xxxxxxxxxxxxxxxx-us1" />';
                 echo '<p class="description">' . sprintf(
                     /* translators: %s: link to the Mailchimp help page */
                     esc_html__( 'Ottieni una chiave su %s', 'olobuild' ),
@@ -2335,7 +2335,7 @@ class Olobuild_Builder {
      * REST endpoints per la pagina Configurazione.
      */
     public function register_settings_rest_routes() {
-        $ns = 'olo/v1';
+        $ns = 'olobuild/v1';
 
         // API Keys
         register_rest_route( $ns, '/settings/api-keys', [
@@ -2371,11 +2371,11 @@ class Olobuild_Builder {
                 'methods'             => 'GET',
                 'callback'            => function () {
                     return rest_ensure_response( [
-                        'palette'      => get_option( 'olo_palette', [] ),
-                        'neutrals'     => get_option( 'olo_neutrals', [] ),
-                        'neutral_mode' => get_option( 'olo_neutral_mode', 'auto' ),
-                        'neutral_tint' => get_option( 'olo_neutral_tint', 'zinc' ),
-                        'dark'         => get_option( 'olo_dark_settings', [ 'enabled' => true, 'strategy' => 'auto' ] ),
+                        'palette'      => get_option( 'olobuild_palette', [] ),
+                        'neutrals'     => get_option( 'olobuild_neutrals', [] ),
+                        'neutral_mode' => get_option( 'olobuild_neutral_mode', 'auto' ),
+                        'neutral_tint' => get_option( 'olobuild_neutral_tint', 'zinc' ),
+                        'dark'         => get_option( 'olobuild_dark_settings', [ 'enabled' => true, 'strategy' => 'auto' ] ),
                     ] );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
@@ -2398,34 +2398,34 @@ class Olobuild_Builder {
                                 'hex'  => $hex ?: '#000000',
                             ];
                         }
-                        update_option( 'olo_palette', $clean );
+                        update_option( 'olobuild_palette', $clean );
                     }
 
                     if ( isset( $b['neutrals'] ) && is_array( $b['neutrals'] ) ) {
                         $clean = array_values( array_filter( array_map( 'sanitize_hex_color', $b['neutrals'] ) ) );
-                        update_option( 'olo_neutrals', $clean );
+                        update_option( 'olobuild_neutrals', $clean );
                     }
 
                     if ( isset( $b['neutral_mode'] ) ) {
                         $m = $b['neutral_mode'] === 'manual' ? 'manual' : 'auto';
-                        update_option( 'olo_neutral_mode', $m );
+                        update_option( 'olobuild_neutral_mode', $m );
                     }
 
                     if ( isset( $b['neutral_tint'] ) ) {
                         $allowed = [ 'slate', 'gray', 'zinc', 'neutral', 'stone' ];
                         $tint = in_array( $b['neutral_tint'], $allowed, true ) ? $b['neutral_tint'] : 'zinc';
-                        update_option( 'olo_neutral_tint', $tint );
+                        update_option( 'olobuild_neutral_tint', $tint );
                     }
 
                     if ( isset( $b['dark'] ) && is_array( $b['dark'] ) ) {
                         $strategy = in_array( $b['dark']['strategy'] ?? '', [ 'auto', 'manual', 'luminance' ], true ) ? $b['dark']['strategy'] : 'auto';
-                        update_option( 'olo_dark_settings', [
+                        update_option( 'olobuild_dark_settings', [
                             'enabled'  => ! empty( $b['dark']['enabled'] ),
                             'strategy' => $strategy,
                         ] );
                     }
 
-                    update_option( 'olo_settings_last_saved', time() );
+                    update_option( 'olobuild_settings_last_saved', time() );
                     return rest_ensure_response( [ 'ok' => true ] );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
@@ -2438,18 +2438,18 @@ class Olobuild_Builder {
             [
                 'methods'             => 'GET',
                 'callback'            => function () {
-                    return rest_ensure_response( get_option( 'olo_cookie_settings', [] ) );
+                    return rest_ensure_response( get_option( 'olobuild_cookie_settings', [] ) );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
             ],
             [
                 'methods'             => 'POST',
                 'callback'            => function ( $req ) {
-                    $existing = get_option( 'olo_cookie_settings', [] );
+                    $existing = get_option( 'olobuild_cookie_settings', [] );
                     $payload  = $req->get_json_params();
                     if ( ! is_array( $payload ) ) $payload = [];
-                    update_option( 'olo_cookie_settings', array_merge( $existing, $payload ) );
-                    update_option( 'olo_settings_last_saved', time() );
+                    update_option( 'olobuild_cookie_settings', array_merge( $existing, $payload ) );
+                    update_option( 'olobuild_settings_last_saved', time() );
                     return rest_ensure_response( [ 'ok' => true ] );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
@@ -2461,23 +2461,23 @@ class Olobuild_Builder {
             [
                 'methods'             => 'GET',
                 'callback'            => function () {
-                    return rest_ensure_response( get_option( 'olo_performance', [] ) );
+                    return rest_ensure_response( get_option( 'olobuild_performance', [] ) );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
             ],
             [
                 'methods'             => 'POST',
                 'callback'            => function ( $req ) {
-                    $existing = get_option( 'olo_performance', [] );
+                    $existing = get_option( 'olobuild_performance', [] );
                     if ( ! is_array( $existing ) ) $existing = [];
                     $payload  = $req->get_json_params();
                     if ( ! is_array( $payload ) ) $payload = [];
                     $merged = array_merge( $existing, $payload );
-                    update_option( 'olo_performance', $merged );
+                    update_option( 'olobuild_performance', $merged );
                     // Olobuild_Critical_CSS::init() si attiva sulla legacy option: va tenuta in sync
                     // (la vecchia pagina lo faceva nel sanitize di register_setting).
-                    update_option( 'olo_critical_css_enabled', ! empty( $merged['critical_css_enabled'] ) ? '1' : '' );
-                    update_option( 'olo_settings_last_saved', time() );
+                    update_option( 'olobuild_critical_css_enabled', ! empty( $merged['critical_css_enabled'] ) ? '1' : '' );
+                    update_option( 'olobuild_settings_last_saved', time() );
                     return rest_ensure_response( [ 'ok' => true ] );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
@@ -2492,7 +2492,7 @@ class Olobuild_Builder {
                     // get_option() della classe = defaults-aware (i flag attivi di default contano)
                     $opt = class_exists( 'Olobuild_Performance_Settings' )
                         ? Olobuild_Performance_Settings::get_option()
-                        : get_option( 'olo_performance', [] );
+                        : get_option( 'olobuild_performance', [] );
                     if ( ! is_array( $opt ) ) $opt = [];
 
                     // Critical CSS pages cached
@@ -2575,7 +2575,7 @@ class Olobuild_Builder {
                         'optimize_on_download' => ! empty( $b['optimize_on_download'] ),
                     ];
                     update_option( 'olobuild_stockmedia_behavior', $clean );
-                    update_option( 'olo_settings_last_saved', time() );
+                    update_option( 'olobuild_settings_last_saved', time() );
                     return rest_ensure_response( [ 'ok' => true ] );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
@@ -2587,7 +2587,7 @@ class Olobuild_Builder {
             [
                 'methods'             => 'GET',
                 'callback'            => function () {
-                    $log = get_option( 'olo_ai_usage', [] );
+                    $log = get_option( 'olobuild_ai_usage', [] );
                     if ( ! is_array( $log ) ) $log = [];
 
                     // Filter ultimi 30 giorni
@@ -2632,7 +2632,7 @@ class Olobuild_Builder {
             'local_business' => 'olo_seo_local_business',
             'webmaster'      => 'olo_seo_webmaster',
             'sitemap'        => 'olo_seo_sitemap',
-            'advanced'       => 'olo_seo_advanced',
+            'advanced'       => 'olobuild_seo_advanced',
         ];
         foreach ( $seo_subkeys as $route => $option_key ) {
             register_rest_route( $ns, '/seo/' . $route, [
@@ -2650,7 +2650,7 @@ class Olobuild_Builder {
                         $payload  = $req->get_json_params();
                         if ( ! is_array( $payload ) ) $payload = [];
                         update_option( $option_key, array_merge( $existing, $payload ) );
-                        update_option( 'olo_settings_last_saved', time() );
+                        update_option( 'olobuild_settings_last_saved', time() );
                         return rest_ensure_response( [ 'ok' => true ] );
                     },
                     'permission_callback' => function () { return current_user_can( 'manage_options' ); },
@@ -2664,24 +2664,24 @@ class Olobuild_Builder {
             [
                 'methods'             => 'GET',
                 'callback'            => function () {
-                    return rest_ensure_response( get_option( 'olo_analytics', [] ) );
+                    return rest_ensure_response( get_option( 'olobuild_analytics', [] ) );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
             ],
             [
                 'methods'             => 'POST',
                 'callback'            => function ( $req ) {
-                    $existing = get_option( 'olo_analytics', [] );
+                    $existing = get_option( 'olobuild_analytics', [] );
                     $payload  = $req->get_json_params();
                     if ( ! is_array( $payload ) ) $payload = [];
-                    update_option( 'olo_analytics', array_merge( $existing, $payload ) );
+                    update_option( 'olobuild_analytics', array_merge( $existing, $payload ) );
                     // Mantieni anche le 3 option singole legacy per compat con codice frontend più vecchio.
                     foreach ( [ 'ga_id', 'fb_pixel_id', 'gtm_id' ] as $legacy_k ) {
                         if ( isset( $payload[ $legacy_k ] ) ) {
                             update_option( 'olo_' . ( $legacy_k === 'ga_id' ? 'ga_measurement_id' : $legacy_k ), sanitize_text_field( $payload[ $legacy_k ] ) );
                         }
                     }
-                    update_option( 'olo_settings_last_saved', time() );
+                    update_option( 'olobuild_settings_last_saved', time() );
                     return rest_ensure_response( [ 'ok' => true ] );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
@@ -2694,11 +2694,11 @@ class Olobuild_Builder {
                 'methods'             => 'GET',
                 'callback'            => function () {
                     return rest_ensure_response( [
-                        'mode'                    => get_option( 'olo_maintenance_mode', 'off' ),
-                        'template_id'             => (int) get_option( 'olo_maintenance_template_id', 0 ),
-                        'coming_soon_template_id' => (int) get_option( 'olo_coming_soon_template_id', 0 ),
-                        'bypass_roles'            => (array) get_option( 'olo_maintenance_bypass_roles', [ 'administrator' ] ),
-                        'bypass_secret'           => get_option( 'olo_maintenance_bypass_secret', '' ),
+                        'mode'                    => get_option( 'olobuild_maintenance_mode', 'off' ),
+                        'template_id'             => (int) get_option( 'olobuild_maintenance_template_id', 0 ),
+                        'coming_soon_template_id' => (int) get_option( 'olobuild_coming_soon_template_id', 0 ),
+                        'bypass_roles'            => (array) get_option( 'olobuild_maintenance_bypass_roles', [ 'administrator' ] ),
+                        'bypass_secret'           => get_option( 'olobuild_maintenance_bypass_secret', '' ),
                     ] );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
@@ -2709,15 +2709,15 @@ class Olobuild_Builder {
                     $p = $req->get_json_params();
                     if ( isset( $p['mode'] ) ) {
                         $mode = in_array( $p['mode'], [ 'off', 'coming_soon', 'maintenance' ], true ) ? $p['mode'] : 'off';
-                        update_option( 'olo_maintenance_mode', $mode );
+                        update_option( 'olobuild_maintenance_mode', $mode );
                     }
-                    if ( isset( $p['template_id'] ) )             update_option( 'olo_maintenance_template_id', (int) $p['template_id'] );
-                    if ( isset( $p['coming_soon_template_id'] ) ) update_option( 'olo_coming_soon_template_id', (int) $p['coming_soon_template_id'] );
+                    if ( isset( $p['template_id'] ) )             update_option( 'olobuild_maintenance_template_id', (int) $p['template_id'] );
+                    if ( isset( $p['coming_soon_template_id'] ) ) update_option( 'olobuild_coming_soon_template_id', (int) $p['coming_soon_template_id'] );
                     if ( isset( $p['bypass_roles'] ) && is_array( $p['bypass_roles'] ) ) {
-                        update_option( 'olo_maintenance_bypass_roles', array_map( 'sanitize_key', $p['bypass_roles'] ) );
+                        update_option( 'olobuild_maintenance_bypass_roles', array_map( 'sanitize_key', $p['bypass_roles'] ) );
                     }
-                    if ( isset( $p['bypass_secret'] ) )            update_option( 'olo_maintenance_bypass_secret', sanitize_text_field( $p['bypass_secret'] ) );
-                    update_option( 'olo_settings_last_saved', time() );
+                    if ( isset( $p['bypass_secret'] ) )            update_option( 'olobuild_maintenance_bypass_secret', sanitize_text_field( $p['bypass_secret'] ) );
+                    update_option( 'olobuild_settings_last_saved', time() );
                     return rest_ensure_response( [ 'ok' => true ] );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
@@ -2911,9 +2911,9 @@ class Olobuild_Builder {
                     return new WP_Error( 'create_failed', 'Errore creazione template', [ 'status' => 500 ] );
                 }
 
-                $option_key = $kind === 'coming_soon' ? 'olo_coming_soon_template_id' : 'olo_maintenance_template_id';
+                $option_key = $kind === 'coming_soon' ? 'olobuild_coming_soon_template_id' : 'olobuild_maintenance_template_id';
                 update_option( $option_key, (int) $new_id );
-                update_option( 'olo_settings_last_saved', time() );
+                update_option( 'olobuild_settings_last_saved', time() );
 
                 return rest_ensure_response( [
                     'ok'          => true,
@@ -2931,12 +2931,12 @@ class Olobuild_Builder {
                 'methods'             => 'GET',
                 'callback'            => function () {
                     return rest_ensure_response( [
-                        'olo_woo_tpl_product_single'   => (int) get_option( 'olo_woo_tpl_product_single', 0 ),
-                        'olo_woo_tpl_product_archive'  => (int) get_option( 'olo_woo_tpl_product_archive', 0 ),
-                        'olo_woo_tpl_product_category' => (int) get_option( 'olo_woo_tpl_product_category', 0 ),
-                        'olo_woo_tpl_cart'             => (int) get_option( 'olo_woo_tpl_cart', 0 ),
-                        'olo_woo_tpl_checkout'         => (int) get_option( 'olo_woo_tpl_checkout', 0 ),
-                        'olo_woo_tpl_myaccount'        => (int) get_option( 'olo_woo_tpl_myaccount', 0 ),
+                        'olobuild_woo_tpl_product_single'   => (int) get_option( 'olobuild_woo_tpl_product_single', 0 ),
+                        'olobuild_woo_tpl_product_archive'  => (int) get_option( 'olobuild_woo_tpl_product_archive', 0 ),
+                        'olobuild_woo_tpl_product_category' => (int) get_option( 'olobuild_woo_tpl_product_category', 0 ),
+                        'olobuild_woo_tpl_cart'             => (int) get_option( 'olobuild_woo_tpl_cart', 0 ),
+                        'olobuild_woo_tpl_checkout'         => (int) get_option( 'olobuild_woo_tpl_checkout', 0 ),
+                        'olobuild_woo_tpl_myaccount'        => (int) get_option( 'olobuild_woo_tpl_myaccount', 0 ),
                         'woo_active'                   => class_exists( 'WooCommerce' ),
                     ] );
                 },
@@ -2946,11 +2946,11 @@ class Olobuild_Builder {
                 'methods'             => 'POST',
                 'callback'            => function ( $req ) {
                     $p = $req->get_json_params();
-                    $allowed = [ 'olo_woo_tpl_product_single', 'olo_woo_tpl_product_archive', 'olo_woo_tpl_product_category', 'olo_woo_tpl_cart', 'olo_woo_tpl_checkout', 'olo_woo_tpl_myaccount' ];
+                    $allowed = [ 'olobuild_woo_tpl_product_single', 'olobuild_woo_tpl_product_archive', 'olobuild_woo_tpl_product_category', 'olobuild_woo_tpl_cart', 'olobuild_woo_tpl_checkout', 'olobuild_woo_tpl_myaccount' ];
                     foreach ( $allowed as $k ) {
                         if ( isset( $p[ $k ] ) ) update_option( $k, (int) $p[ $k ] );
                     }
-                    update_option( 'olo_settings_last_saved', time() );
+                    update_option( 'olobuild_settings_last_saved', time() );
                     return rest_ensure_response( [ 'ok' => true ] );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
@@ -2963,7 +2963,7 @@ class Olobuild_Builder {
             [
                 'methods'             => 'GET',
                 'callback'            => function () {
-                    return rest_ensure_response( get_option( 'olo_design_preset_behavior', [
+                    return rest_ensure_response( get_option( 'olobuild_design_preset_behavior', [
                         'overwrite_manual' => true,
                         'snapshot_before'  => true,
                         'preview_mode'     => 'side_by_side',
@@ -2976,8 +2976,8 @@ class Olobuild_Builder {
                 'callback'            => function ( $req ) {
                     $payload = $req->get_json_params();
                     if ( ! is_array( $payload ) ) $payload = [];
-                    update_option( 'olo_design_preset_behavior', $payload );
-                    update_option( 'olo_settings_last_saved', time() );
+                    update_option( 'olobuild_design_preset_behavior', $payload );
+                    update_option( 'olobuild_settings_last_saved', time() );
                     return rest_ensure_response( [ 'ok' => true ] );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
@@ -2990,8 +2990,8 @@ class Olobuild_Builder {
             'callback'            => function ( $req ) {
                 $p = $req->get_json_params();
                 $preset_id = sanitize_key( $p['preset_id'] ?? '' );
-                update_option( 'olo_active_preset_id', $preset_id );
-                update_option( 'olo_settings_last_saved', time() );
+                update_option( 'olobuild_active_preset_id', $preset_id );
+                update_option( 'olobuild_settings_last_saved', time() );
                 // TODO: applicare effettivamente i colori/font/tokens del preset a `olo_styles`,
                 // `olo_global_colors`, `olo_global_typography`. Per ora salva solo il flag attivo.
                 return rest_ensure_response( [ 'ok' => true, 'preset_id' => $preset_id ] );
@@ -3004,7 +3004,7 @@ class Olobuild_Builder {
             [
                 'methods'             => 'GET',
                 'callback'            => function () {
-                    return rest_ensure_response( get_option( 'olo_design_preset_snapshots', [] ) );
+                    return rest_ensure_response( get_option( 'olobuild_design_preset_snapshots', [] ) );
                 },
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
             ],
@@ -3026,9 +3026,9 @@ class Olobuild_Builder {
                     global $wpdb;
                     $redirects = [];
                     $log404    = [];
-                    $rt = $wpdb->prefix . 'olo_redirects';
+                    $rt = $wpdb->prefix . 'olobuild_redirects';
                     $lt = $wpdb->prefix . 'olo_404_log';
-                    // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabelle custom del plugin ($wpdb->prefix . 'olo_redirects'/'olo_404_log'); nessun equivalente WP_Query. Interpolati solo i nomi tabella derivati da $wpdb->prefix (nessun valore utente); liste redirect/404 non cacheabili (lette al volo nell'admin).
+                    // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabelle custom del plugin ($wpdb->prefix . 'olobuild_redirects'/'olo_404_log'); nessun equivalente WP_Query. Interpolati solo i nomi tabella derivati da $wpdb->prefix (nessun valore utente); liste redirect/404 non cacheabili (lette al volo nell'admin).
                     if ( $wpdb->get_var( "SHOW TABLES LIKE '$rt'" ) === $rt ) {
                         $redirects = $wpdb->get_results( "SELECT id, from_url, to_url, type, hits FROM $rt ORDER BY id DESC LIMIT 500", ARRAY_A );
                     }
@@ -3036,7 +3036,7 @@ class Olobuild_Builder {
                         $log404 = $wpdb->get_results( "SELECT id, url, hits, last_hit FROM $lt ORDER BY hits DESC LIMIT 200", ARRAY_A );
                     }
                     // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
-                    $advanced = (array) get_option( 'olo_seo_advanced', [] );
+                    $advanced = (array) get_option( 'olobuild_seo_advanced', [] );
                     return rest_ensure_response( [
                         'redirects'    => $redirects ?: [],
                         'log404'       => $log404 ?: [],
@@ -3051,9 +3051,9 @@ class Olobuild_Builder {
                     global $wpdb;
                     $p = $req->get_json_params();
                     $action = $p['action'] ?? '';
-                    $rt = $wpdb->prefix . 'olo_redirects';
+                    $rt = $wpdb->prefix . 'olobuild_redirects';
                     $lt = $wpdb->prefix . 'olo_404_log';
-                    // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabelle custom del plugin ($wpdb->prefix . 'olo_redirects'/'olo_404_log'); nessun equivalente WP_Query. insert/delete usano l'API $wpdb con valori parametrizzati; il TRUNCATE interpola solo il nome tabella da $wpdb->prefix (nessun valore utente); operazioni di scrittura non cacheabili.
+                    // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabelle custom del plugin ($wpdb->prefix . 'olobuild_redirects'/'olo_404_log'); nessun equivalente WP_Query. insert/delete usano l'API $wpdb con valori parametrizzati; il TRUNCATE interpola solo il nome tabella da $wpdb->prefix (nessun valore utente); operazioni di scrittura non cacheabili.
                     if ( $action === 'add' ) {
                         if ( empty( $p['from_url'] ) || empty( $p['to_url'] ) ) {
                             return new WP_Error( 'missing', 'from_url e to_url obbligatori', [ 'status' => 400 ] );
@@ -3077,10 +3077,10 @@ class Olobuild_Builder {
                     }
                     // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
                     if ( $action === 'save_indexnow' ) {
-                        $adv = (array) get_option( 'olo_seo_advanced', [] );
+                        $adv = (array) get_option( 'olobuild_seo_advanced', [] );
                         $adv['indexnow_key'] = sanitize_text_field( $p['indexnow_key'] ?? '' );
-                        update_option( 'olo_seo_advanced', $adv );
-                        update_option( 'olo_settings_last_saved', time() );
+                        update_option( 'olobuild_seo_advanced', $adv );
+                        update_option( 'olobuild_settings_last_saved', time() );
                         return rest_ensure_response( [ 'ok' => true ] );
                     }
                     return new WP_Error( 'invalid_action', 'Azione non riconosciuta', [ 'status' => 400 ] );
@@ -3092,14 +3092,14 @@ class Olobuild_Builder {
 
     public function rest_get_api_keys() {
         $keys = [
-            'olo_pexels_api_key', 'olo_pixabay_api_key', 'olo_unsplash_api_key',
-            'olo_freesound_api_key', 'olo_recaptcha_site_key', 'olo_recaptcha_secret_key',
-            'olo_mailchimp_api_key',
+            'olobuild_pexels_api_key', 'olobuild_pixabay_api_key', 'olobuild_unsplash_api_key',
+            'olobuild_freesound_api_key', 'olobuild_recaptcha_site_key', 'olobuild_recaptcha_secret_key',
+            'olobuild_mailchimp_api_key',
         ];
         // La recaptcha_site_key e' pubblica (renderizzata nell'HTML): resta in chiaro.
         // Tutto il resto e' segreto e viene mascherato: solo gli ultimi 4 caratteri
         // lasciano il server, coerente con Olobuild_AI_Assistant::get_settings().
-        $public = [ 'olo_recaptcha_site_key' ];
+        $public = [ 'olobuild_recaptcha_site_key' ];
         $data   = [];
         foreach ( $keys as $k ) {
             $val = (string) get_option( $k, '' );
@@ -3116,9 +3116,9 @@ class Olobuild_Builder {
 
     public function rest_put_api_keys( $request ) {
         $allowed = [
-            'olo_pexels_api_key', 'olo_pixabay_api_key', 'olo_unsplash_api_key',
-            'olo_freesound_api_key', 'olo_recaptcha_site_key', 'olo_recaptcha_secret_key',
-            'olo_mailchimp_api_key',
+            'olobuild_pexels_api_key', 'olobuild_pixabay_api_key', 'olobuild_unsplash_api_key',
+            'olobuild_freesound_api_key', 'olobuild_recaptcha_site_key', 'olobuild_recaptcha_secret_key',
+            'olobuild_mailchimp_api_key',
         ];
         $body = $request->get_json_params();
         foreach ( $allowed as $k ) {
@@ -3145,8 +3145,8 @@ class Olobuild_Builder {
         ];
         $defaults_adv = [ 'strategy' => 'mobile' ];
 
-        $bps = get_option( 'olo_breakpoints_v2', $defaults_bps );
-        $adv = get_option( 'olo_breakpoints_advanced', $defaults_adv );
+        $bps = get_option( 'olobuild_breakpoints_v2', $defaults_bps );
+        $adv = get_option( 'olobuild_breakpoints_advanced', $defaults_adv );
 
         if ( ! is_array( $bps ) || empty( $bps ) ) $bps = $defaults_bps;
         if ( ! is_array( $adv ) ) $adv = $defaults_adv;
@@ -3173,15 +3173,15 @@ class Olobuild_Builder {
                     'is_default' => ! empty( $b['is_default'] ),
                 ];
             }
-            update_option( 'olo_breakpoints_v2', $clean );
+            update_option( 'olobuild_breakpoints_v2', $clean );
         }
 
         if ( isset( $body['advanced'] ) && is_array( $body['advanced'] ) ) {
             $strategy = in_array( $body['advanced']['strategy'] ?? '', [ 'mobile', 'desktop' ], true ) ? $body['advanced']['strategy'] : 'mobile';
-            update_option( 'olo_breakpoints_advanced', [ 'strategy' => $strategy ] );
+            update_option( 'olobuild_breakpoints_advanced', [ 'strategy' => $strategy ] );
         }
 
-        update_option( 'olo_settings_last_saved', time() );
+        update_option( 'olobuild_settings_last_saved', time() );
         return rest_ensure_response( [ 'success' => true ] );
     }
 
@@ -3649,7 +3649,7 @@ class Olobuild_Builder {
         $result     = [];
         foreach ( $post_types as $pt ) {
             if ( in_array( $pt, [ 'page', 'attachment' ], true ) ) continue;
-            $tpl_id = (int) get_option( "olo_active_single_{$pt}", 0 );
+            $tpl_id = (int) get_option( "olobuild_active_single_{$pt}", 0 );
             if ( $tpl_id ) {
                 $result[ $pt ] = $tpl_id;
             }
@@ -3802,7 +3802,7 @@ class Olobuild_Builder {
         ];
 
         foreach ( $post_types as $pt ) {
-            $tpl_id = (int) get_option( "olo_active_single_{$pt->name}", 0 );
+            $tpl_id = (int) get_option( "olobuild_active_single_{$pt->name}", 0 );
             if ( ! $tpl_id ) {
                 continue;
             }
@@ -3875,7 +3875,7 @@ class Olobuild_Builder {
         $post_types = get_post_types( [ 'public' => true ], 'names' );
         $target_pt  = '';
         foreach ( $post_types as $pt ) {
-            $opt_val = get_option( "olo_active_single_{$pt}", 0 );
+            $opt_val = get_option( "olobuild_active_single_{$pt}", 0 );
             if ( (int) $opt_val === $tpl_id ) {
                 $target_pt = $pt;
                 break;

@@ -34,11 +34,11 @@ class Olobuild_Seo_Redirects {
         add_action( 'admin_menu', [ $this, 'add_menu' ] );
 
         // Admin AJAX handlers
-        add_action( 'wp_ajax_olo_seo_save_redirect', [ $this, 'ajax_save_redirect' ] );
-        add_action( 'wp_ajax_olo_seo_delete_redirect', [ $this, 'ajax_delete_redirect' ] );
-        add_action( 'wp_ajax_olo_seo_delete_404', [ $this, 'ajax_delete_404' ] );
-        add_action( 'wp_ajax_olo_seo_clear_404_log', [ $this, 'ajax_clear_404_log' ] );
-        add_action( 'wp_ajax_olo_seo_404_to_redirect', [ $this, 'ajax_404_to_redirect' ] );
+        add_action( 'wp_ajax_olobuild_seo_save_redirect', [ $this, 'ajax_save_redirect' ] );
+        add_action( 'wp_ajax_olobuild_seo_delete_redirect', [ $this, 'ajax_delete_redirect' ] );
+        add_action( 'wp_ajax_olobuild_seo_delete_404', [ $this, 'ajax_delete_404' ] );
+        add_action( 'wp_ajax_olobuild_seo_clear_404_log', [ $this, 'ajax_clear_404_log' ] );
+        add_action( 'wp_ajax_olobuild_seo_404_to_redirect', [ $this, 'ajax_404_to_redirect' ] );
 
         // IndexNow on publish/update
         add_action( 'publish_post', [ $this, 'indexnow_ping' ], 20 );
@@ -54,7 +54,7 @@ class Olobuild_Seo_Redirects {
 
     private function table_redirects() {
         global $wpdb;
-        return $wpdb->prefix . 'olo_redirects';
+        return $wpdb->prefix . 'olobuild_redirects';
     }
 
     private function table_404_log() {
@@ -63,7 +63,7 @@ class Olobuild_Seo_Redirects {
     }
 
     private function maybe_create_tables() {
-        $db_version = get_option( 'olo_seo_redirects_db', '0' );
+        $db_version = get_option( 'olobuild_seo_redirects_db', '0' );
         if ( $db_version === '1.0' ) {
             return;
         }
@@ -97,7 +97,7 @@ class Olobuild_Seo_Redirects {
         dbDelta( $sql1 );
         dbDelta( $sql2 );
 
-        update_option( 'olo_seo_redirects_db', '1.0' );
+        update_option( 'olobuild_seo_redirects_db', '1.0' );
     }
 
     /* ═══════════════════════════════════════════════════
@@ -285,7 +285,7 @@ class Olobuild_Seo_Redirects {
      * ═══════════════════════════════════════════════════ */
 
     public function indexnow_ping( $post_id ) {
-        $general = get_option( 'olo_seo_advanced', [] );
+        $general = get_option( 'olobuild_seo_advanced', [] );
         if ( empty( $general['indexnow_key'] ) ) {
             return;
         }
@@ -504,7 +504,7 @@ class Olobuild_Seo_Redirects {
             if (!to && type !== '410') { alert('Inserisci URL di destinazione.'); return; }
 
             var fd = new FormData();
-            fd.append('action', 'olo_seo_save_redirect');
+            fd.append('action', 'olobuild_seo_save_redirect');
             fd.append('_wpnonce', '<?php echo esc_js( wp_create_nonce( 'olo_seo_redirect' ) ); ?>');
             fd.append('from_url', from);
             fd.append('to_url', to);
@@ -521,7 +521,7 @@ class Olobuild_Seo_Redirects {
         function oloDeleteRedirect(id) {
             if (!confirm('Eliminare questo redirect?')) return;
             var fd = new FormData();
-            fd.append('action', 'olo_seo_delete_redirect');
+            fd.append('action', 'olobuild_seo_delete_redirect');
             fd.append('_wpnonce', '<?php echo esc_js( wp_create_nonce( 'olo_seo_redirect' ) ); ?>');
             fd.append('id', id);
 
@@ -642,7 +642,7 @@ class Olobuild_Seo_Redirects {
             if (!to) { alert('Inserisci URL di destinazione.'); return; }
 
             var fd = new FormData();
-            fd.append('action', 'olo_seo_404_to_redirect');
+            fd.append('action', 'olobuild_seo_404_to_redirect');
             fd.append('_wpnonce', '<?php echo esc_js( wp_create_nonce( 'olo_seo_redirect' ) ); ?>');
             fd.append('id', id);
             fd.append('to_url', to);
@@ -661,7 +661,7 @@ class Olobuild_Seo_Redirects {
         }
         function oloDelete404(id) {
             var fd = new FormData();
-            fd.append('action', 'olo_seo_delete_404');
+            fd.append('action', 'olobuild_seo_delete_404');
             fd.append('_wpnonce', '<?php echo esc_js( wp_create_nonce( 'olo_seo_redirect' ) ); ?>');
             fd.append('id', id);
 
@@ -677,7 +677,7 @@ class Olobuild_Seo_Redirects {
         function oloClear404Log() {
             if (!confirm('Svuotare tutto il log 404?')) return;
             var fd = new FormData();
-            fd.append('action', 'olo_seo_clear_404_log');
+            fd.append('action', 'olobuild_seo_clear_404_log');
             fd.append('_wpnonce', '<?php echo esc_js( wp_create_nonce( 'olo_seo_redirect' ) ); ?>');
 
             fetch(ajaxurl, { method: 'POST', body: fd })
@@ -693,7 +693,7 @@ class Olobuild_Seo_Redirects {
     /* ─── Tab: IndexNow ─── */
 
     private function render_tab_indexnow() {
-        $adv = get_option( 'olo_seo_advanced', [] );
+        $adv = get_option( 'olobuild_seo_advanced', [] );
         $key = $adv['indexnow_key'] ?? '';
         ?>
         <div class="olo-card">
@@ -713,14 +713,14 @@ class Olobuild_Seo_Redirects {
             </div>
             <div class="olo-card-body">
                 <form method="post" action="options.php">
-                    <?php settings_fields( 'olo_seo_group' ); ?>
+                    <?php settings_fields( 'olobuild_seo_group' ); ?>
                     <div class="olo-field-row">
                         <div class="olo-field-info">
                             <label>API Key</label>
                             <span class="olo-field-hint">Genera una chiave casuale e inseriscila qui</span>
                         </div>
                         <div class="olo-field-input-wrap">
-                            <input type="text" name="olo_seo_advanced[indexnow_key]" value="<?php echo esc_attr( $key ); ?>" class="olo-field-input" placeholder="Chiave alfanumerica">
+                            <input type="text" name="olobuild_seo_advanced[indexnow_key]" value="<?php echo esc_attr( $key ); ?>" class="olo-field-input" placeholder="Chiave alfanumerica">
                         </div>
                     </div>
 

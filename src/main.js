@@ -10,7 +10,7 @@ app.use(pinia);
 
 // Make WordPress data available to stores
 app.provide('oloData', window.oloData || {
-  restUrl: '/wp-json/olo/v1',
+  restUrl: '/wp-json/olobuild/v1',
   nonce: '',
   userId: 0,
   userName: 'Guest',

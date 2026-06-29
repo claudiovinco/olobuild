@@ -12,7 +12,7 @@ class Olobuild_Media_Search {
 
     public static function render_page() {
         $nonce = wp_create_nonce( 'wp_rest' );
-        $rest_url = esc_url_raw( rest_url( 'olo/v1' ) );
+        $rest_url = esc_url_raw( rest_url( 'olobuild/v1' ) );
         $rest_url_vtour = esc_url_raw( rest_url( 'olo-vtour/v1' ) );
         $vtour_active = is_plugin_active( 'olo-vtour/olo-vtour.php' );
 
@@ -22,7 +22,7 @@ class Olobuild_Media_Search {
             'pexels'    => class_exists( 'Olobuild_Pexels' ) && ! empty( Olobuild_Pexels::get_api_key() ),
             'pixabay'   => class_exists( 'Olobuild_Pixabay' ) && ! empty( Olobuild_Pixabay::get_api_key() ),
             'openverse' => true,
-            'freesound' => ! empty( get_option( 'olo_freesound_api_key', '' ) ),
+            'freesound' => ! empty( get_option( 'olobuild_freesound_api_key', '' ) ),
             'polyhaven' => $vtour_active,
             'googlesv'  => $vtour_active,
         ];

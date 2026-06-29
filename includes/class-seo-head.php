@@ -169,7 +169,7 @@ class Olobuild_Seo_Head {
     private function get_robots_directives() {
         global $post;
         $directives = [];
-        $adv = $this->opt( 'olo_seo_advanced' );
+        $adv = $this->opt( 'olobuild_seo_advanced' );
 
         // Per-page override
         if ( is_singular() && $post ) {
@@ -1081,7 +1081,7 @@ class Olobuild_Seo_Head {
      * ═══════════════════════════════════════════════════ */
 
     public function cleanup_head() {
-        $adv = $this->opt( 'olo_seo_advanced' );
+        $adv = $this->opt( 'olobuild_seo_advanced' );
 
         // oEmbed discovery: quando LinkedIn trova il link json+oembed lo PREFERISCE
         // ai tag Open Graph → anteprima "Rich media" senza immagine ("No image found")
@@ -1112,7 +1112,7 @@ class Olobuild_Seo_Head {
      * ═══════════════════════════════════════════════════ */
 
     public function custom_robots_txt( $output ) {
-        $adv = $this->opt( 'olo_seo_advanced' );
+        $adv = $this->opt( 'olobuild_seo_advanced' );
         $custom = $adv['robots_txt'] ?? '';
 
         if ( $custom ) {
@@ -1127,7 +1127,7 @@ class Olobuild_Seo_Head {
      * ═══════════════════════════════════════════════════ */
 
     public function register_routes() {
-        register_rest_route( 'olo/v1', '/heading-check/(?P<id>\d+)', [
+        register_rest_route( 'olobuild/v1', '/heading-check/(?P<id>\d+)', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'check_heading_structure' ],
             'permission_callback' => function () {
@@ -1388,7 +1388,7 @@ class Olobuild_Seo_Head {
                 continue;
             }
 
-            $single_tpl = get_option( "olo_active_single_{$pt}", 0 );
+            $single_tpl = get_option( "olobuild_active_single_{$pt}", 0 );
             if ( $single_tpl ) {
                 $pt_posts = get_posts( [
                     'post_type'      => $pt,

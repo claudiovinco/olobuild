@@ -298,7 +298,7 @@ class Olobuild_Woo_Quickview_Tile extends Olobuild_Tile_Base {
             var closeBtn = overlay.querySelector('[data-olo-qv-close]');
             var dialog = overlay.querySelector('[data-olo-qv-dialog]');
             var lastTrigger = null;
-            var restBase = '<?php echo esc_js( rest_url( 'olo/v1/woo-quickview/' ) ); ?>';
+            var restBase = '<?php echo esc_js( rest_url( 'olobuild/v1/woo-quickview/' ) ); ?>';
 
             /* Focusable elements inside the dialog (for focus trap) */
             function qvFocusables(){
@@ -440,7 +440,7 @@ class Olobuild_Woo_Quickview_Tile extends Olobuild_Tile_Base {
         $registered = true;
 
         add_action( 'rest_api_init', function() {
-            register_rest_route( 'olo/v1', '/woo-quickview/(?P<id>\d+)', [
+            register_rest_route( 'olobuild/v1', '/woo-quickview/(?P<id>\d+)', [
                 'methods'             => 'GET',
                 'callback'            => [ $this, 'get_quickview_data' ],
                 'permission_callback' => '__return_true',

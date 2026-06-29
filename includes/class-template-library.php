@@ -96,7 +96,7 @@ class Olobuild_Template_Library {
      * Save a section as a user template.
      */
     public function save_user_template( $name, $category, $content ) {
-        $templates = get_option( 'olo_user_templates', [] );
+        $templates = get_option( 'olobuild_user_templates', [] );
         if ( ! is_array( $templates ) ) $templates = [];
 
         $id = 'user-' . wp_generate_password( 8, false );
@@ -109,7 +109,7 @@ class Olobuild_Template_Library {
             'is_user'    => true,
         ];
 
-        update_option( 'olo_user_templates', $templates, false );
+        update_option( 'olobuild_user_templates', $templates, false );
         return $id;
     }
 
@@ -117,7 +117,7 @@ class Olobuild_Template_Library {
      * Delete a user template.
      */
     public function delete_user_template( $id ) {
-        $templates = get_option( 'olo_user_templates', [] );
+        $templates = get_option( 'olobuild_user_templates', [] );
         if ( ! is_array( $templates ) ) return false;
 
         $found = false;
@@ -130,7 +130,7 @@ class Olobuild_Template_Library {
         } ) );
 
         if ( $found ) {
-            update_option( 'olo_user_templates', $templates, false );
+            update_option( 'olobuild_user_templates', $templates, false );
         }
         return $found;
     }
@@ -140,7 +140,7 @@ class Olobuild_Template_Library {
      */
     public function get_all_templates() {
         $builtin = $this->get_templates();
-        $user    = get_option( 'olo_user_templates', [] );
+        $user    = get_option( 'olobuild_user_templates', [] );
         if ( ! is_array( $user ) ) $user = [];
         return array_merge( $builtin, $user );
     }

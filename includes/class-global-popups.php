@@ -45,7 +45,7 @@ class Olobuild_Global_Popups {
             return;
         }
 
-        $popups = get_option( 'olo_global_popups', [] );
+        $popups = get_option( 'olobuild_global_popups', [] );
         if ( empty( $popups ) || ! is_array( $popups ) ) {
             return;
         }
@@ -324,7 +324,7 @@ class Olobuild_Global_Popups {
      * ───────────────────────────────────────────── */
 
     public function register_routes() {
-        register_rest_route( 'olo/v1', '/global-popups', [
+        register_rest_route( 'olobuild/v1', '/global-popups', [
             [
                 'methods'             => 'GET',
                 'callback'            => [ $this, 'get_popups' ],
@@ -352,7 +352,7 @@ class Olobuild_Global_Popups {
     }
 
     public function get_popups( $request ) {
-        return rest_ensure_response( get_option( 'olo_global_popups', [] ) );
+        return rest_ensure_response( get_option( 'olobuild_global_popups', [] ) );
     }
 
     public function save_popups( $request ) {
@@ -389,7 +389,7 @@ class Olobuild_Global_Popups {
             ];
         }
 
-        update_option( 'olo_global_popups', $clean, false );
+        update_option( 'olobuild_global_popups', $clean, false );
         return rest_ensure_response( [ 'success' => true ] );
     }
 
@@ -419,7 +419,7 @@ class Olobuild_Global_Popups {
     }
 
     public function render_admin_page() {
-        $popups   = get_option( 'olo_global_popups', [] );
+        $popups   = get_option( 'olobuild_global_popups', [] );
         $db       = new Olobuild_Database();
         $result   = $db->list_templates( [ 'per_page' => 500, 'orderby' => 'title', 'order' => 'ASC' ] );
         $tpls_raw = $result['items'] ?? [];
@@ -468,7 +468,7 @@ class Olobuild_Global_Popups {
             (function(){
                 var popups = <?php echo wp_json_encode( $popups ); ?>;
                 var templates = <?php echo wp_json_encode( $templates ); ?>;
-                var restUrl = '<?php echo esc_js( rest_url( 'olo/v1/global-popups' ) ); ?>';
+                var restUrl = '<?php echo esc_js( rest_url( 'olobuild/v1/global-popups' ) ); ?>';
                 var nonce = '<?php echo esc_js( wp_create_nonce( 'wp_rest' ) ); ?>';
 
                 var app = document.getElementById('olo-global-popups-app');

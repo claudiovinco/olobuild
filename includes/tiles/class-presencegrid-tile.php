@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - a11y: lo stato è comunicato anche a parole ("Online"/"Offline"), non solo col colore del pallino;
  *   avatar con role=img + aria-label; pallino aria-hidden.
  * - Performance: poll/flip girano solo dentro il viewport (IntersectionObserver), fetch debounced.
- * - Origine dati esplicita: manual | query (utenti WP) | endpoint (poll olo/v1). Vuoto → stato demo.
+ * - Origine dati esplicita: manual | query (utenti WP) | endpoint (poll olobuild/v1). Vuoto → stato demo.
  */
 class Olobuild_Presencegrid_Tile extends Olobuild_Tile_Base {
 
@@ -431,7 +431,7 @@ class Olobuild_Presencegrid_Tile extends Olobuild_Tile_Base {
         <script>
         /* PresenceGrid — runtime scoped per istanza (rif. 60-tema-community-gamer.html).
            - SSR già completo: il JS solo AGGIORNA lo stato.
-           - endpoint → poll debounced di olo/v1 (o URL custom); demo/manual/query → flip casuale.
+           - endpoint → poll debounced di olobuild/v1 (o URL custom); demo/manual/query → flip casuale.
            - idempotente (guard dataset), multi-istanza, si ferma fuori dal viewport (IO),
              rispetta prefers-reduced-motion (niente flip cosmetico). */
         (function(){

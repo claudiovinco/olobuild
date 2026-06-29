@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class Olobuild_Custom_Fonts {
 
-    private static $option_key = 'olo_custom_fonts';
+    private static $option_key = 'olobuild_custom_fonts';
 
     /**
      * Get all registered custom fonts.

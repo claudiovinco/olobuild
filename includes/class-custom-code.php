@@ -22,7 +22,7 @@ class Olobuild_Custom_Code {
         if ( ! current_user_can( 'unfiltered_html' ) && ! self::is_admin_saved() ) {
             return;
         }
-        $code = get_option( 'olo_custom_code_head', '' );
+        $code = get_option( 'olobuild_custom_code_head', '' );
         if ( $code ) {
             // Custom code is saved only by users with unfiltered_html capability
             // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- raw output by design: snippets can only be saved by users with the unfiltered_html capability (gated in Olobuild_Rest_Api::save_custom_code) and printing is capability-gated above.
@@ -34,7 +34,7 @@ class Olobuild_Custom_Code {
         if ( ! current_user_can( 'unfiltered_html' ) && ! self::is_admin_saved() ) {
             return;
         }
-        $code = get_option( 'olo_custom_code_body', '' );
+        $code = get_option( 'olobuild_custom_code_body', '' );
         if ( $code ) {
             // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- raw output by design: snippets can only be saved by users with the unfiltered_html capability (gated in Olobuild_Rest_Api::save_custom_code) and printing is capability-gated above.
             echo "<!-- Olobuild Custom Body -->\n" . $code . "\n";
@@ -45,7 +45,7 @@ class Olobuild_Custom_Code {
         if ( ! current_user_can( 'unfiltered_html' ) && ! self::is_admin_saved() ) {
             return;
         }
-        $code = get_option( 'olo_custom_code_footer', '' );
+        $code = get_option( 'olobuild_custom_code_footer', '' );
         if ( $code ) {
             // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- raw output by design: snippets can only be saved by users with the unfiltered_html capability (gated in Olobuild_Rest_Api::save_custom_code) and printing is capability-gated above.
             echo "<!-- Olobuild Custom Footer -->\n" . $code . "\n";

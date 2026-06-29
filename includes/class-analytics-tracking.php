@@ -13,14 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Olobuild_Analytics_Tracking {
 
-    const OPT = 'olo_analytics';
+    const OPT = 'olobuild_analytics';
 
     public static function get_options() {
         $defaults = [
             // Provider IDs
-            'ga_id'              => get_option( 'olo_ga_measurement_id', '' ),
-            'fb_pixel_id'        => get_option( 'olo_fb_pixel_id', '' ),
-            'gtm_id'             => get_option( 'olo_gtm_container_id', '' ),
+            'ga_id'              => get_option( 'olobuild_ga_measurement_id', '' ),
+            'fb_pixel_id'        => get_option( 'olobuild_fb_pixel_id', '' ),
+            'gtm_id'             => get_option( 'olobuild_gtm_container_id', '' ),
             'clarity_id'         => '',
             'hotjar_id'          => '',
             // Features
@@ -76,7 +76,7 @@ class Olobuild_Analytics_Tracking {
     }
 
     public static function register_settings() {
-        register_setting( 'olo_analytics_group', self::OPT, [
+        register_setting( 'olobuild_analytics_group', self::OPT, [
             'sanitize_callback' => [ __CLASS__, 'sanitize' ],
         ] );
     }
@@ -117,9 +117,9 @@ class Olobuild_Analytics_Tracking {
         $clean['body_scripts'] = wp_unslash( $input['body_scripts'] ?? '' );
 
         // Sync legacy options for REST API compatibility
-        update_option( 'olo_ga_measurement_id', $clean['ga_id'], false );
-        update_option( 'olo_fb_pixel_id', $clean['fb_pixel_id'], false );
-        update_option( 'olo_gtm_container_id', $clean['gtm_id'], false );
+        update_option( 'olobuild_ga_measurement_id', $clean['ga_id'], false );
+        update_option( 'olobuild_fb_pixel_id', $clean['fb_pixel_id'], false );
+        update_option( 'olobuild_gtm_container_id', $clean['gtm_id'], false );
 
         return $clean;
     }
@@ -183,7 +183,7 @@ class Olobuild_Analytics_Tracking {
             ?>
 
             <form method="post" action="options.php" class="olo-analytics-form" style="margin-top:16px">
-                <?php settings_fields( 'olo_analytics_group' ); ?>
+                <?php settings_fields( 'olobuild_analytics_group' ); ?>
                 <?php self::render_hidden_fields( $opts, $tab ); ?>
 
                 <?php

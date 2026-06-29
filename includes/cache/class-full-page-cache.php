@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olobuild_FullPage_Cache {
 
     /** Opzione condivisa col pannello Performance. */
-    const OPT = 'olo_performance';
+    const OPT = 'olobuild_performance';
 
     /** Opzione che custodisce il salt della cache key. */
     const SALT_OPT = 'olo_fpc_salt';
@@ -42,7 +42,7 @@ class Olobuild_FullPage_Cache {
         add_action( 'wp_update_nav_menu', [ __CLASS__, 'purge_all' ] );
         add_action( 'switch_theme', [ __CLASS__, 'purge_all' ] );
         add_action( 'customize_save_after', [ __CLASS__, 'purge_all' ] );
-        foreach ( [ 'olo_active_header', 'olo_active_footer', 'olo_styles' ] as $opt ) {
+        foreach ( [ 'olobuild_active_header', 'olobuild_active_footer', 'olobuild_styles' ] as $opt ) {
             add_action( 'update_option_' . $opt, [ __CLASS__, 'purge_all' ] );
         }
     }

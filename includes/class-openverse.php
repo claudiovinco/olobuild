@@ -3,8 +3,8 @@
  * Olobuild_Openverse — Integrazione Openverse per Olobuild.
  *
  * Fornisce 2 endpoint REST:
- *   GET  olo/v1/openverse/search   — Cerca immagini CC su Openverse
- *   POST olo/v1/openverse/download — Scarica immagine nel WP Media Library
+ *   GET  olobuild/v1/openverse/search   — Cerca immagini CC su Openverse
+ *   POST olobuild/v1/openverse/download — Scarica immagine nel WP Media Library
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -20,7 +20,7 @@ class Olobuild_Openverse {
     }
 
     public function register_routes() {
-        register_rest_route( 'olo/v1', '/openverse/search', [
+        register_rest_route( 'olobuild/v1', '/openverse/search', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'search' ],
             'permission_callback' => function () {
@@ -35,7 +35,7 @@ class Olobuild_Openverse {
             ],
         ] );
 
-        register_rest_route( 'olo/v1', '/openverse/download', [
+        register_rest_route( 'olobuild/v1', '/openverse/download', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'download' ],
             'permission_callback' => function () {

@@ -6,19 +6,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Olobuild_Rest_Api {
 
-    private $namespace = 'olo/v1';
+    private $namespace = 'olobuild/v1';
 
     public function init() {
         add_action( 'rest_api_init', [ $this, 'register_routes' ] );
         // During REST requests, WP's determine_locale() returns the SITE locale,
         // not the user_locale. This breaks __() output for endpoints that return
         // translated strings to the JS dashboard. Switch to the logged-in user's
-        // locale before dispatching any /olo/v1/ route.
+        // locale before dispatching any /olobuild/v1/ route.
         add_filter( 'rest_pre_dispatch', [ $this, 'apply_user_locale' ], 10, 3 );
     }
 
     /**
-     * Switch to the logged-in user's locale for /olo/v1/ routes so that __()
+     * Switch to the logged-in user's locale for /olobuild/v1/ routes so that __()
      * returns strings in the right language (matches admin context behavior).
      */
     public function apply_user_locale( $result, $server, $request ) {
@@ -1104,7 +1104,7 @@ class Olobuild_Rest_Api {
 
             // Aggregato byType per i counter chip della UI templates.
             // Calcolato sull'intero set (non solo la pagina corrente).
-            $tpl_table = $wpdb->prefix . 'olo_templates';
+            $tpl_table = $wpdb->prefix . 'olobuild_templates';
             $by_type = [];
             $total = 0;
             // Tabella custom del plugin ({prefix}olo_templates); nessun equivalente WP_Query.
@@ -1496,19 +1496,19 @@ class Olobuild_Rest_Api {
             return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
         }
 
-        update_option( 'olo_active_header', $id );
+        update_option( 'olobuild_active_header', $id );
 
         return rest_ensure_response( [ 'active_header' => $id ] );
     }
 
     public function deactivate_header() {
-        delete_option( 'olo_active_header' );
+        delete_option( 'olobuild_active_header' );
         return rest_ensure_response( [ 'active_header' => 0 ] );
     }
 
     public function get_active_header() {
         return rest_ensure_response( [
-            'active_header' => (int) get_option( 'olo_active_header', 0 ),
+            'active_header' => (int) get_option( 'olobuild_active_header', 0 ),
         ] );
     }
 
@@ -1527,19 +1527,19 @@ class Olobuild_Rest_Api {
             return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
         }
 
-        update_option( 'olo_active_footer', $id );
+        update_option( 'olobuild_active_footer', $id );
 
         return rest_ensure_response( [ 'active_footer' => $id ] );
     }
 
     public function deactivate_footer() {
-        delete_option( 'olo_active_footer' );
+        delete_option( 'olobuild_active_footer' );
         return rest_ensure_response( [ 'active_footer' => 0 ] );
     }
 
     public function get_active_footer() {
         return rest_ensure_response( [
-            'active_footer' => (int) get_option( 'olo_active_footer', 0 ),
+            'active_footer' => (int) get_option( 'olobuild_active_footer', 0 ),
         ] );
     }
 
@@ -1558,7 +1558,7 @@ class Olobuild_Rest_Api {
             return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
         }
 
-        update_option( "olo_active_single_{$post_type}", $id );
+        update_option( "olobuild_active_single_{$post_type}", $id );
 
         return rest_ensure_response( [ 'post_type' => $post_type, 'template_id' => $id ] );
     }
@@ -1571,7 +1571,7 @@ class Olobuild_Rest_Api {
             return new WP_Error( 'missing_params', 'post_type is required.', [ 'status' => 400 ] );
         }
 
-        delete_option( "olo_active_single_{$post_type}" );
+        delete_option( "olobuild_active_single_{$post_type}" );
 
         return rest_ensure_response( [ 'post_type' => $post_type, 'template_id' => 0 ] );
     }
@@ -1582,7 +1582,7 @@ class Olobuild_Rest_Api {
 
         foreach ( $post_types as $pt ) {
             if ( in_array( $pt, [ 'page', 'attachment' ], true ) ) continue;
-            $tpl_id = (int) get_option( "olo_active_single_{$pt}", 0 );
+            $tpl_id = (int) get_option( "olobuild_active_single_{$pt}", 0 );
             if ( $tpl_id ) {
                 $result[ $pt ] = $tpl_id;
             }
@@ -1610,12 +1610,12 @@ class Olobuild_Rest_Api {
 
         if ( $post_type ) {
             // Post-type-specific archive template
-            update_option( "olo_active_archive_{$post_type}", $id );
+            update_option( "olobuild_active_archive_{$post_type}", $id );
             return rest_ensure_response( [ 'post_type' => $post_type, 'template_id' => $id ] );
         }
 
         // Generic archive template (fallback)
-        update_option( 'olo_active_archive', $id );
+        update_option( 'olobuild_active_archive', $id );
         return rest_ensure_response( [ 'active_archive' => $id ] );
     }
 
@@ -1624,11 +1624,11 @@ class Olobuild_Rest_Api {
         $post_type = sanitize_key( $body['post_type'] ?? '' );
 
         if ( $post_type ) {
-            delete_option( "olo_active_archive_{$post_type}" );
+            delete_option( "olobuild_active_archive_{$post_type}" );
             return rest_ensure_response( [ 'post_type' => $post_type, 'template_id' => 0 ] );
         }
 
-        delete_option( 'olo_active_archive' );
+        delete_option( 'olobuild_active_archive' );
         return rest_ensure_response( [ 'active_archive' => 0 ] );
     }
 
@@ -1637,7 +1637,7 @@ class Olobuild_Rest_Api {
         $result     = [];
 
         // Generic archive fallback
-        $generic = (int) get_option( 'olo_active_archive', 0 );
+        $generic = (int) get_option( 'olobuild_active_archive', 0 );
         if ( $generic ) {
             $result['_generic'] = $generic;
         }
@@ -1645,7 +1645,7 @@ class Olobuild_Rest_Api {
         // Per-post-type archive templates
         foreach ( $post_types as $pt ) {
             if ( in_array( $pt, [ 'page', 'attachment' ], true ) ) continue;
-            $tpl_id = (int) get_option( "olo_active_archive_{$pt}", 0 );
+            $tpl_id = (int) get_option( "olobuild_active_archive_{$pt}", 0 );
             if ( $tpl_id ) {
                 $result[ $pt ] = $tpl_id;
             }
@@ -1670,19 +1670,19 @@ class Olobuild_Rest_Api {
             return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
         }
 
-        update_option( 'olo_active_404', $id );
+        update_option( 'olobuild_active_404', $id );
 
         return rest_ensure_response( [ 'active_404' => $id ] );
     }
 
     public function deactivate_404() {
-        delete_option( 'olo_active_404' );
+        delete_option( 'olobuild_active_404' );
         return rest_ensure_response( [ 'active_404' => 0 ] );
     }
 
     public function get_active_404() {
         return rest_ensure_response( [
-            'active_404' => (int) get_option( 'olo_active_404', 0 ),
+            'active_404' => (int) get_option( 'olobuild_active_404', 0 ),
         ] );
     }
 
@@ -1702,19 +1702,19 @@ class Olobuild_Rest_Api {
             return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
         }
 
-        update_option( 'olo_active_search', $id );
+        update_option( 'olobuild_active_search', $id );
 
         return rest_ensure_response( [ 'active_search' => $id ] );
     }
 
     public function deactivate_search() {
-        delete_option( 'olo_active_search' );
+        delete_option( 'olobuild_active_search' );
         return rest_ensure_response( [ 'active_search' => 0 ] );
     }
 
     public function get_active_search() {
         return rest_ensure_response( [
-            'active_search' => (int) get_option( 'olo_active_search', 0 ),
+            'active_search' => (int) get_option( 'olobuild_active_search', 0 ),
         ] );
     }
 
@@ -1797,9 +1797,9 @@ class Olobuild_Rest_Api {
         }
 
         $db            = new Olobuild_Database();
-        $active_header = (int) get_option( 'olo_active_header', 0 );
-        $active_footer = (int) get_option( 'olo_active_footer', 0 );
-        $active_404    = (int) get_option( 'olo_active_404', 0 );
+        $active_header = (int) get_option( 'olobuild_active_header', 0 );
+        $active_footer = (int) get_option( 'olobuild_active_footer', 0 );
+        $active_404    = (int) get_option( 'olobuild_active_404', 0 );
 
         $templates = [];
         $activate  = [];
@@ -1877,9 +1877,9 @@ class Olobuild_Rest_Api {
 
         $activated = [];
         $activate  = ( isset( $body['activate'] ) && is_array( $body['activate'] ) ) ? $body['activate'] : [];
-        if ( ! empty( $activate['header'] ) && isset( $id_map[ $activate['header'] ] ) ) { update_option( 'olo_active_header', $id_map[ $activate['header'] ] ); $activated[] = 'header'; }
-        if ( ! empty( $activate['footer'] ) && isset( $id_map[ $activate['footer'] ] ) ) { update_option( 'olo_active_footer', $id_map[ $activate['footer'] ] ); $activated[] = 'footer'; }
-        if ( ! empty( $activate['404'] ) && isset( $id_map[ $activate['404'] ] ) )       { update_option( 'olo_active_404', $id_map[ $activate['404'] ] ); $activated[] = '404'; }
+        if ( ! empty( $activate['header'] ) && isset( $id_map[ $activate['header'] ] ) ) { update_option( 'olobuild_active_header', $id_map[ $activate['header'] ] ); $activated[] = 'header'; }
+        if ( ! empty( $activate['footer'] ) && isset( $id_map[ $activate['footer'] ] ) ) { update_option( 'olobuild_active_footer', $id_map[ $activate['footer'] ] ); $activated[] = 'footer'; }
+        if ( ! empty( $activate['404'] ) && isset( $id_map[ $activate['404'] ] ) )       { update_option( 'olobuild_active_404', $id_map[ $activate['404'] ] ); $activated[] = '404'; }
 
         return rest_ensure_response( [
             'success'   => true,
@@ -1949,7 +1949,7 @@ class Olobuild_Rest_Api {
     // === Custom Icons ===
 
     public function get_custom_icons() {
-        $icons = get_option( 'olo_custom_icons', [] );
+        $icons = get_option( 'olobuild_custom_icons', [] );
         return new WP_REST_Response( $icons, 200 );
     }
 
@@ -1973,18 +1973,18 @@ class Olobuild_Rest_Api {
         $name = sanitize_file_name( pathinfo( $file['name'], PATHINFO_FILENAME ) );
         $name = preg_replace( '/[^a-zA-Z0-9_-]/', '', $name );
 
-        $icons = get_option( 'olo_custom_icons', [] );
+        $icons = get_option( 'olobuild_custom_icons', [] );
         $icons[ $name ] = $svg_content;
-        update_option( 'olo_custom_icons', $icons );
+        update_option( 'olobuild_custom_icons', $icons );
 
         return new WP_REST_Response( [ 'success' => true, 'name' => $name, 'svg' => $svg_content, 'icons' => $icons ], 200 );
     }
 
     public function delete_custom_icon( $request ) {
         $name = sanitize_text_field( $request->get_param( 'name' ) );
-        $icons = get_option( 'olo_custom_icons', [] );
+        $icons = get_option( 'olobuild_custom_icons', [] );
         unset( $icons[ $name ] );
-        update_option( 'olo_custom_icons', $icons );
+        update_option( 'olobuild_custom_icons', $icons );
         return new WP_REST_Response( [ 'success' => true, 'icons' => $icons ], 200 );
     }
 
@@ -1992,7 +1992,7 @@ class Olobuild_Rest_Api {
 
     public function get_global_widgets() {
         global $wpdb;
-        $table = $wpdb->prefix . 'olo_global_widgets';
+        $table = $wpdb->prefix . 'olobuild_global_widgets';
         // Tabella custom del plugin ({prefix}olo_global_widgets); nessun equivalente WP_Query.
         // Safe: $table è costruito da $wpdb->prefix (non input utente); nessun valore interpolato.
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
@@ -2002,7 +2002,7 @@ class Olobuild_Rest_Api {
 
     public function create_global_widget( $request ) {
         global $wpdb;
-        $table = $wpdb->prefix . 'olo_global_widgets';
+        $table = $wpdb->prefix . 'olobuild_global_widgets';
         $name = sanitize_text_field( $request->get_param( 'name' ) ?? 'Widget globale' );
         $tile_data = $request->get_param( 'tile_data' );
         // I widget globali finiscono nel render frontend: stesso gate kses dei template.
@@ -2031,7 +2031,7 @@ class Olobuild_Rest_Api {
 
     public function update_global_widget( $request ) {
         global $wpdb;
-        $table = $wpdb->prefix . 'olo_global_widgets';
+        $table = $wpdb->prefix . 'olobuild_global_widgets';
         $id = absint( $request->get_param( 'id' ) );
         $data = [];
         $formats = [];
@@ -2065,7 +2065,7 @@ class Olobuild_Rest_Api {
 
     public function delete_global_widget( $request ) {
         global $wpdb;
-        $table = $wpdb->prefix . 'olo_global_widgets';
+        $table = $wpdb->prefix . 'olobuild_global_widgets';
         $id = absint( $request->get_param( 'id' ) );
         // Tabella custom del plugin ({prefix}olo_global_widgets); delete via API $wpdb con
         // format array. Scrittura → niente cache.
@@ -2077,7 +2077,7 @@ class Olobuild_Rest_Api {
     // === Global Colors ===
 
     public function get_global_colors() {
-        $colors = get_option( 'olo_global_colors', [] );
+        $colors = get_option( 'olobuild_global_colors', [] );
         if ( ! is_array( $colors ) ) {
             $colors = [];
         }
@@ -2107,7 +2107,7 @@ class Olobuild_Rest_Api {
             $sanitized[] = $entry;
         }
 
-        update_option( 'olo_global_colors', $sanitized, false );
+        update_option( 'olobuild_global_colors', $sanitized, false );
 
         return rest_ensure_response( $sanitized );
     }
@@ -2115,7 +2115,7 @@ class Olobuild_Rest_Api {
     // === Global Typography ===
 
     public function get_global_typography() {
-        $sets = get_option( 'olo_global_typography', [] );
+        $sets = get_option( 'olobuild_global_typography', [] );
         if ( ! is_array( $sets ) ) {
             $sets = [];
         }
@@ -2145,7 +2145,7 @@ class Olobuild_Rest_Api {
             ];
         }
 
-        update_option( 'olo_global_typography', $sanitized, false );
+        update_option( 'olobuild_global_typography', $sanitized, false );
 
         return rest_ensure_response( $sanitized );
     }
@@ -2177,16 +2177,16 @@ class Olobuild_Rest_Api {
 
     public function get_api_keys() {
         return rest_ensure_response( [
-            'olo_unsplash_api_key'  => (string) get_option( 'olo_unsplash_api_key', '' ),
-            'olo_pexels_api_key'    => (string) get_option( 'olo_pexels_api_key', '' ),
-            'olo_pixabay_api_key'   => (string) get_option( 'olo_pixabay_api_key', '' ),
-            'olo_freesound_api_key' => (string) get_option( 'olo_freesound_api_key', '' ),
+            'olobuild_unsplash_api_key'  => (string) get_option( 'olobuild_unsplash_api_key', '' ),
+            'olobuild_pexels_api_key'    => (string) get_option( 'olobuild_pexels_api_key', '' ),
+            'olobuild_pixabay_api_key'   => (string) get_option( 'olobuild_pixabay_api_key', '' ),
+            'olobuild_freesound_api_key' => (string) get_option( 'olobuild_freesound_api_key', '' ),
         ] );
     }
 
     public function save_api_keys( $request ) {
         $b    = $request->get_json_params();
-        $keys = [ 'olo_unsplash_api_key', 'olo_pexels_api_key', 'olo_pixabay_api_key', 'olo_freesound_api_key' ];
+        $keys = [ 'olobuild_unsplash_api_key', 'olobuild_pexels_api_key', 'olobuild_pixabay_api_key', 'olobuild_freesound_api_key' ];
         foreach ( $keys as $k ) {
             if ( is_array( $b ) && array_key_exists( $k, $b ) ) {
                 update_option( $k, sanitize_text_field( $b[ $k ] ?? '' ), false );
@@ -2248,9 +2248,9 @@ class Olobuild_Rest_Api {
 
     public function get_custom_code() {
         return rest_ensure_response( [
-            'head'   => get_option( 'olo_custom_code_head', '' ),
-            'body'   => get_option( 'olo_custom_code_body', '' ),
-            'footer' => get_option( 'olo_custom_code_footer', '' ),
+            'head'   => get_option( 'olobuild_custom_code_head', '' ),
+            'body'   => get_option( 'olobuild_custom_code_body', '' ),
+            'footer' => get_option( 'olobuild_custom_code_footer', '' ),
         ] );
     }
 
@@ -2263,19 +2263,19 @@ class Olobuild_Rest_Api {
         $body = $request->get_json_params();
 
         if ( isset( $body['head'] ) ) {
-            update_option( 'olo_custom_code_head', $body['head'], false );
+            update_option( 'olobuild_custom_code_head', $body['head'], false );
         }
         if ( isset( $body['body'] ) ) {
-            update_option( 'olo_custom_code_body', $body['body'], false );
+            update_option( 'olobuild_custom_code_body', $body['body'], false );
         }
         if ( isset( $body['footer'] ) ) {
-            update_option( 'olo_custom_code_footer', $body['footer'], false );
+            update_option( 'olobuild_custom_code_footer', $body['footer'], false );
         }
 
         return rest_ensure_response( [
-            'head'   => get_option( 'olo_custom_code_head', '' ),
-            'body'   => get_option( 'olo_custom_code_body', '' ),
-            'footer' => get_option( 'olo_custom_code_footer', '' ),
+            'head'   => get_option( 'olobuild_custom_code_head', '' ),
+            'body'   => get_option( 'olobuild_custom_code_body', '' ),
+            'footer' => get_option( 'olobuild_custom_code_footer', '' ),
         ] );
     }
 
@@ -2283,11 +2283,11 @@ class Olobuild_Rest_Api {
 
     public function get_maintenance() {
         return rest_ensure_response( [
-            'mode'                   => get_option( 'olo_maintenance_mode', 'off' ),
-            'template_id'            => (int) get_option( 'olo_maintenance_template_id', 0 ),
-            'coming_soon_template_id' => (int) get_option( 'olo_coming_soon_template_id', 0 ),
-            'bypass_roles'           => get_option( 'olo_maintenance_bypass_roles', [ 'administrator' ] ),
-            'bypass_secret'          => get_option( 'olo_maintenance_bypass_secret', '' ),
+            'mode'                   => get_option( 'olobuild_maintenance_mode', 'off' ),
+            'template_id'            => (int) get_option( 'olobuild_maintenance_template_id', 0 ),
+            'coming_soon_template_id' => (int) get_option( 'olobuild_coming_soon_template_id', 0 ),
+            'bypass_roles'           => get_option( 'olobuild_maintenance_bypass_roles', [ 'administrator' ] ),
+            'bypass_secret'          => get_option( 'olobuild_maintenance_bypass_secret', '' ),
         ] );
     }
 
@@ -2297,15 +2297,15 @@ class Olobuild_Rest_Api {
         if ( isset( $body['mode'] ) ) {
             $allowed = [ 'off', 'maintenance', 'coming_soon' ];
             $mode = in_array( $body['mode'], $allowed, true ) ? $body['mode'] : 'off';
-            update_option( 'olo_maintenance_mode', $mode, false );
+            update_option( 'olobuild_maintenance_mode', $mode, false );
         }
 
         if ( isset( $body['template_id'] ) ) {
-            update_option( 'olo_maintenance_template_id', absint( $body['template_id'] ), false );
+            update_option( 'olobuild_maintenance_template_id', absint( $body['template_id'] ), false );
         }
 
         if ( isset( $body['coming_soon_template_id'] ) ) {
-            update_option( 'olo_coming_soon_template_id', absint( $body['coming_soon_template_id'] ), false );
+            update_option( 'olobuild_coming_soon_template_id', absint( $body['coming_soon_template_id'] ), false );
         }
 
         if ( isset( $body['bypass_roles'] ) ) {
@@ -2315,19 +2315,19 @@ class Olobuild_Rest_Api {
                     $roles[] = sanitize_key( $role );
                 }
             }
-            update_option( 'olo_maintenance_bypass_roles', $roles, false );
+            update_option( 'olobuild_maintenance_bypass_roles', $roles, false );
         }
 
         if ( isset( $body['bypass_secret'] ) ) {
-            update_option( 'olo_maintenance_bypass_secret', sanitize_text_field( $body['bypass_secret'] ), false );
+            update_option( 'olobuild_maintenance_bypass_secret', sanitize_text_field( $body['bypass_secret'] ), false );
         }
 
         return rest_ensure_response( [
-            'mode'                   => get_option( 'olo_maintenance_mode', 'off' ),
-            'template_id'            => (int) get_option( 'olo_maintenance_template_id', 0 ),
-            'coming_soon_template_id' => (int) get_option( 'olo_coming_soon_template_id', 0 ),
-            'bypass_roles'           => get_option( 'olo_maintenance_bypass_roles', [ 'administrator' ] ),
-            'bypass_secret'          => get_option( 'olo_maintenance_bypass_secret', '' ),
+            'mode'                   => get_option( 'olobuild_maintenance_mode', 'off' ),
+            'template_id'            => (int) get_option( 'olobuild_maintenance_template_id', 0 ),
+            'coming_soon_template_id' => (int) get_option( 'olobuild_coming_soon_template_id', 0 ),
+            'bypass_roles'           => get_option( 'olobuild_maintenance_bypass_roles', [ 'administrator' ] ),
+            'bypass_secret'          => get_option( 'olobuild_maintenance_bypass_secret', '' ),
         ] );
     }
 
@@ -2376,7 +2376,7 @@ class Olobuild_Rest_Api {
     // === Design Presets ===
 
     public function get_design_presets() {
-        $presets = get_option( 'olo_design_presets', [] );
+        $presets = get_option( 'olobuild_design_presets', [] );
         if ( ! is_array( $presets ) ) {
             $presets = [];
         }
@@ -2392,7 +2392,7 @@ class Olobuild_Rest_Api {
             return new WP_Error( 'invalid_style', 'Lo stile deve essere un oggetto.', [ 'status' => 400 ] );
         }
 
-        $presets = get_option( 'olo_design_presets', [] );
+        $presets = get_option( 'olobuild_design_presets', [] );
         if ( ! is_array( $presets ) ) {
             $presets = [];
         }
@@ -2405,7 +2405,7 @@ class Olobuild_Rest_Api {
         ];
 
         $presets[] = $new_preset;
-        update_option( 'olo_design_presets', $presets, false );
+        update_option( 'olobuild_design_presets', $presets, false );
 
         return rest_ensure_response( $new_preset );
     }
@@ -2414,7 +2414,7 @@ class Olobuild_Rest_Api {
         $id   = sanitize_text_field( $request['id'] );
         $body = $request->get_json_params();
 
-        $presets = get_option( 'olo_design_presets', [] );
+        $presets = get_option( 'olobuild_design_presets', [] );
         if ( ! is_array( $presets ) ) {
             $presets = [];
         }
@@ -2440,7 +2440,7 @@ class Olobuild_Rest_Api {
             return new WP_Error( 'not_found', 'Preset non trovato.', [ 'status' => 404 ] );
         }
 
-        update_option( 'olo_design_presets', $presets, false );
+        update_option( 'olobuild_design_presets', $presets, false );
 
         return rest_ensure_response( [ 'success' => true ] );
     }
@@ -2448,7 +2448,7 @@ class Olobuild_Rest_Api {
     public function delete_design_preset( $request ) {
         $id = sanitize_text_field( $request['id'] );
 
-        $presets = get_option( 'olo_design_presets', [] );
+        $presets = get_option( 'olobuild_design_presets', [] );
         if ( ! is_array( $presets ) ) {
             $presets = [];
         }
@@ -2467,7 +2467,7 @@ class Olobuild_Rest_Api {
             return new WP_Error( 'not_found', 'Preset non trovato.', [ 'status' => 404 ] );
         }
 
-        update_option( 'olo_design_presets', $new_presets, false );
+        update_option( 'olobuild_design_presets', $new_presets, false );
 
         return rest_ensure_response( [ 'success' => true ] );
     }
@@ -2513,7 +2513,7 @@ class Olobuild_Rest_Api {
         $tpl = $lib->get_template( $id );
         if ( ! $tpl ) {
             // Check user templates
-            $user = get_option( 'olo_user_templates', [] );
+            $user = get_option( 'olobuild_user_templates', [] );
             foreach ( (array) $user as $u ) {
                 if ( ( $u['id'] ?? '' ) === $id ) {
                     $tpl = $u;
@@ -2595,7 +2595,7 @@ class Olobuild_Rest_Api {
         ];
 
         // Global colors
-        $global_colors = get_option( 'olo_global_colors', [] );
+        $global_colors = get_option( 'olobuild_global_colors', [] );
         if ( ! empty( $global_colors ) && is_array( $global_colors ) ) {
             $tokens['global_colors'] = $global_colors;
         }
@@ -2629,9 +2629,9 @@ class Olobuild_Rest_Api {
 
     public function get_analytics() {
         return rest_ensure_response( [
-            'ga_measurement_id' => get_option( 'olo_ga_measurement_id', '' ),
-            'fb_pixel_id'       => get_option( 'olo_fb_pixel_id', '' ),
-            'gtm_container_id'  => get_option( 'olo_gtm_container_id', '' ),
+            'ga_measurement_id' => get_option( 'olobuild_ga_measurement_id', '' ),
+            'fb_pixel_id'       => get_option( 'olobuild_fb_pixel_id', '' ),
+            'gtm_container_id'  => get_option( 'olobuild_gtm_container_id', '' ),
         ] );
     }
 
@@ -2639,19 +2639,19 @@ class Olobuild_Rest_Api {
         $body = $request->get_json_params();
 
         if ( isset( $body['ga_measurement_id'] ) ) {
-            update_option( 'olo_ga_measurement_id', sanitize_text_field( $body['ga_measurement_id'] ), false );
+            update_option( 'olobuild_ga_measurement_id', sanitize_text_field( $body['ga_measurement_id'] ), false );
         }
         if ( isset( $body['fb_pixel_id'] ) ) {
-            update_option( 'olo_fb_pixel_id', sanitize_text_field( $body['fb_pixel_id'] ), false );
+            update_option( 'olobuild_fb_pixel_id', sanitize_text_field( $body['fb_pixel_id'] ), false );
         }
         if ( isset( $body['gtm_container_id'] ) ) {
-            update_option( 'olo_gtm_container_id', sanitize_text_field( $body['gtm_container_id'] ), false );
+            update_option( 'olobuild_gtm_container_id', sanitize_text_field( $body['gtm_container_id'] ), false );
         }
 
         return rest_ensure_response( [
-            'ga_measurement_id' => get_option( 'olo_ga_measurement_id', '' ),
-            'fb_pixel_id'       => get_option( 'olo_fb_pixel_id', '' ),
-            'gtm_container_id'  => get_option( 'olo_gtm_container_id', '' ),
+            'ga_measurement_id' => get_option( 'olobuild_ga_measurement_id', '' ),
+            'fb_pixel_id'       => get_option( 'olobuild_fb_pixel_id', '' ),
+            'gtm_container_id'  => get_option( 'olobuild_gtm_container_id', '' ),
         ] );
     }
 
@@ -3466,7 +3466,7 @@ class Olobuild_Rest_Api {
         ) );
 
         // Template Olobuild
-        $tpl_table = $wpdb->prefix . 'olo_templates';
+        $tpl_table = $wpdb->prefix . 'olobuild_templates';
         $tpl_total = 0;
         $tpl_draft = 0;
         if ( $wpdb->get_var( "SHOW TABLES LIKE '$tpl_table'" ) === $tpl_table ) {
@@ -3475,7 +3475,7 @@ class Olobuild_Rest_Api {
         }
 
         // Invii form ultimi 7gg (se la tabella esiste)
-        $sub_table = $wpdb->prefix . 'olo_form_submissions';
+        $sub_table = $wpdb->prefix . 'olobuild_form_submissions';
         $form_7d = 0;
         $form_prev = 0;
         if ( $wpdb->get_var( "SHOW TABLES LIKE '$sub_table'" ) === $sub_table ) {
@@ -3570,7 +3570,7 @@ class Olobuild_Rest_Api {
             'order'          => 'DESC',
             'no_found_rows'  => true,
         ] );
-        $tpl_table = $wpdb->prefix . 'olo_templates';
+        $tpl_table = $wpdb->prefix . 'olobuild_templates';
         // Tabella custom del plugin ({prefix}olo_templates); nessun equivalente WP_Query.
         // Solo il nome tabella (da $wpdb->prefix) è interpolato; i valori utente ($tpl_id,
         // $limit) passano da prepare() con %d. Lista "recenti" volatile → non cacheata.
@@ -3776,7 +3776,7 @@ class Olobuild_Rest_Api {
 
     private function submissions_table() {
         global $wpdb;
-        return $wpdb->prefix . 'olo_form_submissions';
+        return $wpdb->prefix . 'olobuild_form_submissions';
     }
 
     /**

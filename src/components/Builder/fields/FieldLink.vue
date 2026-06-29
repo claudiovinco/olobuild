@@ -206,7 +206,7 @@ async function doSearch() {
     const olo = window.oloData || {};
     const params = new URLSearchParams({ q: query.value || '', per_page: '15' });
     if (props.types) params.set('types', props.types);
-    const base = (olo.restUrl || '/wp-json/olo/v1').replace(/\/$/, '');
+    const base = (olo.restUrl || '/wp-json/olobuild/v1').replace(/\/$/, '');
     const url = `${base}/link-search?${params.toString()}`;
     const res = await fetch(url, {
       headers: { 'X-WP-Nonce': olo.nonce || '' },

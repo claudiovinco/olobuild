@@ -42,7 +42,7 @@ class Olobuild_Diagnostics {
         ];
 
         $active_plugins = get_option( 'active_plugins', [] );
-        $setup_complete = get_option( 'olo_setup_complete' );
+        $setup_complete = get_option( 'olobuild_setup_complete' );
         $activating     = get_transient( 'olo_activating' );
 
         $yes = __( 'Sì', 'olobuild' );
@@ -81,7 +81,7 @@ class Olobuild_Diagnostics {
                 <tr><td><strong>OLOBUILD_PATH</strong></td><td><?php echo esc_html( defined( 'OLOBUILD_PATH' ) ? OLOBUILD_PATH : __( 'NON DEFINITO', 'olobuild' ) ); ?></td></tr>
                 <tr><td><strong>olo_setup_complete</strong></td><td><?php echo $setup_complete ? esc_html( $yes ) . ' (' . esc_html( $setup_complete ) . ')' : esc_html( $no ); ?></td></tr>
                 <tr><td><strong>olo_activating transient</strong></td><td><?php echo $activating ? esc_html( $yes ) : esc_html( $no ); ?></td></tr>
-                <tr><td><strong>olo_builder_roles</strong></td><td><code><?php echo esc_html( wp_json_encode( get_option( 'olo_builder_roles' ) ) ); ?></code></td></tr>
+                <tr><td><strong>olo_builder_roles</strong></td><td><code><?php echo esc_html( wp_json_encode( get_option( 'olobuild_builder_roles' ) ) ); ?></code></td></tr>
             </table>
 
             <h2><?php esc_html_e( 'Plugin attivi', 'olobuild' ); ?></h2>

@@ -133,7 +133,7 @@ class Olobuild_Page_CSS {
                 }
                 $post_type = get_post_type( $pid );
                 if ( $post_type ) {
-                    $t = (int) get_option( "olo_active_single_{$post_type}", 0 );
+                    $t = (int) get_option( "olobuild_active_single_{$post_type}", 0 );
                     if ( $t ) {
                         $tpl_ids[] = $t;
                     }
@@ -147,7 +147,7 @@ class Olobuild_Page_CSS {
             }
         } else {
             // Archivi / search / 404: includi tutti gli attivi pertinenti (conservativo)
-            foreach ( [ 'olo_active_archive', 'olo_active_search', 'olo_active_404' ] as $opt ) {
+            foreach ( [ 'olobuild_active_archive', 'olobuild_active_search', 'olobuild_active_404' ] as $opt ) {
                 $t = (int) get_option( $opt, 0 );
                 if ( $t ) {
                     $tpl_ids[] = $t;
@@ -155,7 +155,7 @@ class Olobuild_Page_CSS {
             }
             $qo = get_queried_object();
             if ( $qo instanceof WP_Post_Type || ( is_object( $qo ) && ! empty( $qo->name ) ) ) {
-                $t = (int) get_option( 'olo_active_archive_' . $qo->name, 0 );
+                $t = (int) get_option( 'olobuild_active_archive_' . $qo->name, 0 );
                 if ( $t ) {
                     $tpl_ids[] = $t;
                 }
@@ -180,7 +180,7 @@ class Olobuild_Page_CSS {
         }
 
         // Popup globali
-        $popups = get_option( 'olo_global_popups', [] );
+        $popups = get_option( 'olobuild_global_popups', [] );
         if ( is_array( $popups ) ) {
             foreach ( $popups as $popup ) {
                 if ( is_array( $popup ) && ! empty( $popup['template_id'] ) ) {

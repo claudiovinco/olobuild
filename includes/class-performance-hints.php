@@ -153,7 +153,7 @@ class Olobuild_Performance_Hints {
 
     public function output_font_preload() {
         // Preload custom fonts that are used in the global style system
-        $styles = get_option( 'olo_styles', [] );
+        $styles = get_option( 'olobuild_styles', [] );
         if ( ! is_array( $styles ) ) {
             return;
         }
@@ -162,7 +162,7 @@ class Olobuild_Performance_Hints {
         $heading_font = $styles['heading_font'] ?? '';
 
         // If custom fonts are woff2 URLs, preload them
-        $custom_fonts = get_option( 'olo_custom_fonts', [] );
+        $custom_fonts = get_option( 'olobuild_custom_fonts', [] );
         if ( is_array( $custom_fonts ) ) {
             foreach ( $custom_fonts as $font ) {
                 $name = $font['name'] ?? '';

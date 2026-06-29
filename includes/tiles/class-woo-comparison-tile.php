@@ -51,7 +51,7 @@ class Olobuild_Woo_Comparison_Tile extends Olobuild_Tile_Base {
      * Register REST endpoint for fetching comparison data.
      */
     public static function register_rest_routes() {
-        register_rest_route( 'olo/v1', '/woo-compare', [
+        register_rest_route( 'olobuild/v1', '/woo-compare', [
             'methods'             => 'GET',
             'callback'            => [ __CLASS__, 'api_compare' ],
             'permission_callback' => '__return_true',
@@ -191,7 +191,7 @@ class Olobuild_Woo_Comparison_Tile extends Olobuild_Tile_Base {
                 tableEl.style.display = 'block';
                 tableEl.innerHTML = '<p style="text-align:center;color:var(--olo-color-text-muted, #9CA3AF)">Caricamento confronto...</p>';
 
-                fetch('<?php echo esc_js( rest_url( 'olo/v1/woo-compare' ) ); ?>?ids=' + ids.join(','), {
+                fetch('<?php echo esc_js( rest_url( 'olobuild/v1/woo-compare' ) ); ?>?ids=' + ids.join(','), {
                     headers: { 'X-WP-Nonce': '<?php echo esc_js( wp_create_nonce( 'wp_rest' ) ); ?>' }
                 })
                 .then(function(r) { return r.json(); })

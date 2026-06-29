@@ -37,10 +37,10 @@ class Olobuild_Archive_Integration {
             $post_type = 'post';
         }
 
-        $tpl_id = (int) get_option( "olo_active_archive_{$post_type}", 0 );
+        $tpl_id = (int) get_option( "olobuild_active_archive_{$post_type}", 0 );
         if ( ! $tpl_id ) {
             // Fallback to generic archive template
-            $tpl_id = (int) get_option( 'olo_active_archive', 0 );
+            $tpl_id = (int) get_option( 'olobuild_active_archive', 0 );
         }
 
         if ( ! $tpl_id ) {
@@ -77,9 +77,9 @@ class Olobuild_Archive_Integration {
             $post_type = 'post';
         }
 
-        $tpl_id = (int) get_option( "olo_active_archive_{$post_type}", 0 );
+        $tpl_id = (int) get_option( "olobuild_active_archive_{$post_type}", 0 );
         if ( ! $tpl_id ) {
-            $tpl_id = (int) get_option( 'olo_active_archive', 0 );
+            $tpl_id = (int) get_option( 'olobuild_active_archive', 0 );
         }
         if ( ! $tpl_id ) {
             return;

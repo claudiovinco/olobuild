@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Page builder professionale olonico con sistema a griglia (tile drag & drop).
- * Version:     1.4.300
+ * Version:     1.4.301
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuild
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLOBUILD_VERSION', '1.4.300' );
+define( 'OLOBUILD_VERSION', '1.4.301' );
 define( 'OLOBUILD_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLOBUILD_URL', plugin_dir_url( __FILE__ ) );
 
@@ -441,6 +441,11 @@ function olobuild_current_locale() {
     return get_locale();
 }
 
+// Migrazione una-tantum del prefisso dati olo_ → olobuild_ (opzioni + tabelle custom).
+// DEVE girare PRIMA di qualunque classe che legga le opzioni con il nuovo prefisso.
+require_once OLOBUILD_PATH . 'includes/class-prefix-migration.php';
+Olobuild_Prefix_Migration::maybe_migrate();
+
 require_once OLOBUILD_PATH . 'includes/class-database.php';
 require_once OLOBUILD_PATH . 'includes/class-tile-manager.php';
 require_once OLOBUILD_PATH . 'includes/class-rest-api.php';
@@ -534,8 +539,8 @@ register_activation_hook( __FILE__, function () {
     global $wpdb;
     $old_templates  = $wpdb->prefix . 'mosaic_templates';
     $old_revisions  = $wpdb->prefix . 'mosaic_revisions';
-    $new_templates  = $wpdb->prefix . 'olo_templates';
-    $new_revisions  = $wpdb->prefix . 'olo_revisions';
+    $new_templates  = $wpdb->prefix . 'olobuild_templates';
+    $new_revisions  = $wpdb->prefix . 'olobuild_revisions';
 
     // Migrazione one-shot all'attivazione su tabelle custom del plugin (olo_templates/olo_revisions)
     // e su {$wpdb->postmeta}: query dirette $wpdb legittime, nessun equivalente WP_Query; risultato
@@ -566,9 +571,9 @@ register_activation_hook( __FILE__, function () {
 
     // Migrate options
     $option_map = [
-        'mosaic_active_header' => 'olo_active_header',
-        'mosaic_active_footer' => 'olo_active_footer',
-        'mosaic_styles'        => 'olo_styles',
+        'mosaic_active_header' => 'olobuild_active_header',
+        'mosaic_active_footer' => 'olobuild_active_footer',
+        'mosaic_styles'        => 'olobuild_styles',
     ];
     foreach ( $option_map as $old_key => $new_key ) {
         $val = get_option( $old_key );
@@ -580,7 +585,7 @@ register_activation_hook( __FILE__, function () {
     // Migrate per-post-type single options
     foreach ( get_post_types( [ 'public' => true ], 'names' ) as $pt ) {
         $old_key = "mosaic_active_single_{$pt}";
-        $new_key = "olo_active_single_{$pt}";
+        $new_key = "olobuild_active_single_{$pt}";
         $val     = get_option( $old_key );
         if ( false !== $val && false === get_option( $new_key ) ) {
             update_option( $new_key, $val, false );
@@ -603,7 +608,7 @@ register_activation_hook( __FILE__, function () {
     }
 
     // Set transient for first-run wizard redirect
-    if ( ! get_option( 'olo_setup_complete' ) ) {
+    if ( ! get_option( 'olobuild_setup_complete' ) ) {
         set_transient( 'olo_activating', true, 60 );
     }
 
@@ -656,7 +661,7 @@ add_action( 'send_headers', function() {
 
 // Custom Fonts @font-face CSS — only if custom fonts exist
 add_action( 'wp_head', function() {
-    $fonts = get_option( 'olo_custom_fonts', [] );
+    $fonts = get_option( 'olobuild_custom_fonts', [] );
     if ( empty( $fonts ) ) return;
     $css = Olobuild_Custom_Fonts::generate_css();
     if ( $css ) {

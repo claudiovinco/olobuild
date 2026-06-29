@@ -222,7 +222,7 @@ class Olobuild_Accessibility {
 
     public function register_routes() {
         // Contrast check for template
-        register_rest_route( 'olo/v1', '/contrast-check/(?P<id>\d+)', [
+        register_rest_route( 'olobuild/v1', '/contrast-check/(?P<id>\d+)', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'check_contrast' ],
             'permission_callback' => function () {
@@ -231,7 +231,7 @@ class Olobuild_Accessibility {
         ] );
 
         // Single color pair check
-        register_rest_route( 'olo/v1', '/contrast-ratio', [
+        register_rest_route( 'olobuild/v1', '/contrast-ratio', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'get_contrast_ratio' ],
             'permission_callback' => function () {
@@ -518,7 +518,7 @@ class Olobuild_Accessibility {
         $id       = sanitize_key( $m[1] );
         $fallback = isset( $m[2] ) ? trim( $m[2] ) : '';
 
-        $gc = get_option( 'olo_global_colors', [] );
+        $gc = get_option( 'olobuild_global_colors', [] );
         if ( is_array( $gc ) ) {
             foreach ( $gc as $g ) {
                 if ( isset( $g['id'], $g['value'] ) && $g['id'] === $id && $g['value'] !== '' ) {
@@ -526,7 +526,7 @@ class Olobuild_Accessibility {
                 }
             }
         }
-        $styles = get_option( 'olo_styles', [] );
+        $styles = get_option( 'olobuild_styles', [] );
         if ( ! empty( $styles['colors'][ $id ] ) ) {
             return $styles['colors'][ $id ];
         }

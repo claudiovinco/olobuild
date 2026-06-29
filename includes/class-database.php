@@ -33,12 +33,12 @@ class Olobuild_Database {
 
     private function table_templates() {
         global $wpdb;
-        return $wpdb->prefix . 'olo_templates';
+        return $wpdb->prefix . 'olobuild_templates';
     }
 
     private function table_revisions() {
         global $wpdb;
-        return $wpdb->prefix . 'olo_revisions';
+        return $wpdb->prefix . 'olobuild_revisions';
     }
 
     public function create_tables() {
@@ -73,7 +73,7 @@ class Olobuild_Database {
         ) $charset_collate;";
 
         // Form submissions table
-        $submissions = $wpdb->prefix . 'olo_submissions';
+        $submissions = $wpdb->prefix . 'olobuild_submissions';
         $sql_submissions = "CREATE TABLE $submissions (
             id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
             form_id varchar(100) NOT NULL DEFAULT '',
@@ -86,7 +86,7 @@ class Olobuild_Database {
         ) $charset_collate;";
 
         // Global widgets table
-        $global_widgets = $wpdb->prefix . 'olo_global_widgets';
+        $global_widgets = $wpdb->prefix . 'olobuild_global_widgets';
         $sql_global_widgets = "CREATE TABLE $global_widgets (
             id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
             name varchar(255) NOT NULL DEFAULT '',
@@ -98,7 +98,7 @@ class Olobuild_Database {
         ) $charset_collate;";
 
         // A/B tests table
-        $ab_tests = $wpdb->prefix . 'olo_ab_tests';
+        $ab_tests = $wpdb->prefix . 'olobuild_ab_tests';
         $sql_ab_tests = "CREATE TABLE $ab_tests (
             id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
             name varchar(255) NOT NULL,

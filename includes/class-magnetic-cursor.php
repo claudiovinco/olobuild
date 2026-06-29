@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olobuild_Magnetic_Cursor {
 
     /** Option key (wp_options). */
-    const OPT = 'olo_magnetic_cursor';
+    const OPT = 'olobuild_magnetic_cursor';
 
     /** Blend mode ammessi per l'anello (whitelist anti-injection). */
     const BLEND_MODES = [ 'normal', 'screen', 'difference', 'exclusion', 'overlay', 'lighten', 'multiply' ];

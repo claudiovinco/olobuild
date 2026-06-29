@@ -26,7 +26,7 @@ class Olobuild_Single_Integration {
         }
 
         $post_type   = get_post_type();
-        $template_id = (int) get_option( "olo_active_single_{$post_type}", 0 );
+        $template_id = (int) get_option( "olobuild_active_single_{$post_type}", 0 );
 
         if ( ! $template_id ) {
             return $content;

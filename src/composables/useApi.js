@@ -26,7 +26,7 @@ function getOloData() {
 export async function oloFetch(endpoint, options = {}) {
   const oloData = getOloData();
   const baseUrl = (oloData.restUrl || '/wp-json/').replace(/\/$/, '');
-  const namespace = 'olo/v1';
+  const namespace = 'olobuild/v1';
 
   let url = `${baseUrl}/${namespace}${endpoint}`;
 

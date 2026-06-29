@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Olobuild_AI_Assistant {
 
-    private static $namespace = 'olo/v1';
+    private static $namespace = 'olobuild/v1';
 
     /**
      * Auto-init su plugins_loaded
@@ -287,12 +287,12 @@ class Olobuild_AI_Assistant {
             $style = 'vivid';
         }
 
-        $api_key = get_option( 'olo_ai_openai_key', '' );
+        $api_key = get_option( 'olobuild_ai_openai_key', '' );
         if ( empty( $api_key ) ) {
             return new WP_Error( 'no_api_key', 'Chiave API OpenAI non configurata. Vai nelle impostazioni AI.', [ 'status' => 400 ] );
         }
 
-        $image_model = get_option( 'olo_ai_image_model', 'dall-e-3' );
+        $image_model = get_option( 'olobuild_ai_image_model', 'dall-e-3' );
 
         $body = [
             'model'  => $image_model,
@@ -490,12 +490,12 @@ class Olobuild_AI_Assistant {
         ];
         $lang = isset( $lang_names[ $language ] ) ? $lang_names[ $language ] : 'italiano';
 
-        $api_key = get_option( 'olo_ai_anthropic_key', '' );
+        $api_key = get_option( 'olobuild_ai_anthropic_key', '' );
         if ( empty( $api_key ) ) {
             return new WP_Error( 'no_api_key', 'Chiave API Anthropic non configurata.', [ 'status' => 400 ] );
         }
 
-        $model = get_option( 'olo_ai_model', 'claude-sonnet-4-6' );
+        $model = get_option( 'olobuild_ai_model', 'claude-sonnet-4-6' );
 
         // Validate URL to prevent SSRF (no internal IPs, only http/https)
         if ( ! wp_http_validate_url( $image_url ) ) {
@@ -642,10 +642,10 @@ class Olobuild_AI_Assistant {
     // ──────────────────────────────────────────────────
 
     public static function get_settings( $request ) {
-        $anthropic_key = get_option( 'olo_ai_anthropic_key', '' );
-        $openai_key    = get_option( 'olo_ai_openai_key', '' );
-        $model         = get_option( 'olo_ai_model', 'claude-sonnet-4-6' );
-        $image_model   = get_option( 'olo_ai_image_model', 'dall-e-3' );
+        $anthropic_key = get_option( 'olobuild_ai_anthropic_key', '' );
+        $openai_key    = get_option( 'olobuild_ai_openai_key', '' );
+        $model         = get_option( 'olobuild_ai_model', 'claude-sonnet-4-6' );
+        $image_model   = get_option( 'olobuild_ai_image_model', 'dall-e-3' );
 
         // Maschera le key: mostra solo gli ultimi 4 caratteri
         $masked_anthropic = '';
@@ -675,32 +675,32 @@ class Olobuild_AI_Assistant {
 
         // Chiave Anthropic: salva se nuova, cancella se vuota
         if ( empty( $anthropic_key ) ) {
-            delete_option( 'olo_ai_anthropic_key' );
+            delete_option( 'olobuild_ai_anthropic_key' );
         } elseif ( ! str_contains( $anthropic_key, '*' ) ) {
-            update_option( 'olo_ai_anthropic_key', sanitize_text_field( $anthropic_key ) );
+            update_option( 'olobuild_ai_anthropic_key', sanitize_text_field( $anthropic_key ) );
         }
 
         // Chiave OpenAI: salva se nuova, cancella se vuota
         if ( empty( $openai_key ) ) {
-            delete_option( 'olo_ai_openai_key' );
+            delete_option( 'olobuild_ai_openai_key' );
         } elseif ( ! str_contains( $openai_key, '*' ) ) {
-            update_option( 'olo_ai_openai_key', sanitize_text_field( $openai_key ) );
+            update_option( 'olobuild_ai_openai_key', sanitize_text_field( $openai_key ) );
         }
 
         $allowed_models = [ 'claude-sonnet-4-6', 'claude-haiku-4-5-20251001', 'claude-opus-4-6' ];
         if ( in_array( $model, $allowed_models, true ) ) {
-            update_option( 'olo_ai_model', $model );
+            update_option( 'olobuild_ai_model', $model );
         }
 
         $allowed_image_models = [ 'dall-e-3', 'dall-e-2' ];
         if ( in_array( $image_model, $allowed_image_models, true ) ) {
-            update_option( 'olo_ai_image_model', $image_model );
+            update_option( 'olobuild_ai_image_model', $image_model );
         }
 
         return rest_ensure_response( [
             'success'     => true,
-            'model'       => get_option( 'olo_ai_model', 'claude-sonnet-4-6' ),
-            'image_model' => get_option( 'olo_ai_image_model', 'dall-e-3' ),
+            'model'       => get_option( 'olobuild_ai_model', 'claude-sonnet-4-6' ),
+            'image_model' => get_option( 'olobuild_ai_image_model', 'dall-e-3' ),
         ] );
     }
 
@@ -752,12 +752,12 @@ class Olobuild_AI_Assistant {
      * Chiama l'API Messages di Anthropic (Claude)
      */
     private static function call_chat_api( $system_prompt, $user_message ) {
-        $api_key = get_option( 'olo_ai_anthropic_key', '' );
+        $api_key = get_option( 'olobuild_ai_anthropic_key', '' );
         if ( empty( $api_key ) ) {
             return new WP_Error( 'no_api_key', 'Chiave API Anthropic non configurata. Vai nelle impostazioni AI.', [ 'status' => 400 ] );
         }
 
-        $model = get_option( 'olo_ai_model', 'claude-sonnet-4-6' );
+        $model = get_option( 'olobuild_ai_model', 'claude-sonnet-4-6' );
 
         $started = microtime( true );
         $response = wp_remote_post( 'https://api.anthropic.com/v1/messages', [
@@ -814,7 +814,7 @@ class Olobuild_AI_Assistant {
      * @param int   $ms      Latenza in millisecondi.
      */
     public static function log_usage( $tokens = 0, $cost = 0.0, $ms = 0 ) {
-        $log = get_option( 'olo_ai_usage', [] );
+        $log = get_option( 'olobuild_ai_usage', [] );
         if ( ! is_array( $log ) ) $log = [];
 
         $log[] = [
@@ -833,7 +833,7 @@ class Olobuild_AI_Assistant {
             $log = array_slice( $log, -1000 );
         }
 
-        update_option( 'olo_ai_usage', $log, false );
+        update_option( 'olobuild_ai_usage', $log, false );
     }
 }
 

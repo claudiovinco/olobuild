@@ -20,7 +20,7 @@ class Olobuild_Cookie_Consent {
 
     private static $instance = null;
 
-    const OPT = 'olo_cookie_settings';
+    const OPT = 'olobuild_cookie_settings';
 
     /** Default cookie categories */
     const CATEGORIES = [ 'necessary', 'analytics', 'marketing', 'preferences' ];
@@ -44,10 +44,10 @@ class Olobuild_Cookie_Consent {
         add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_assets' ] );
 
         // AJAX
-        add_action( 'wp_ajax_olo_cookie_log_consent', [ $this, 'ajax_log_consent' ] );
-        add_action( 'wp_ajax_nopriv_olo_cookie_log_consent', [ $this, 'ajax_log_consent' ] );
-        add_action( 'wp_ajax_olo_cookie_clear_log', [ $this, 'ajax_clear_log' ] );
-        add_action( 'wp_ajax_olo_cookie_export_log', [ $this, 'ajax_export_log' ] );
+        add_action( 'wp_ajax_olobuild_cookie_log_consent', [ $this, 'ajax_log_consent' ] );
+        add_action( 'wp_ajax_nopriv_olobuild_cookie_log_consent', [ $this, 'ajax_log_consent' ] );
+        add_action( 'wp_ajax_olobuild_cookie_clear_log', [ $this, 'ajax_clear_log' ] );
+        add_action( 'wp_ajax_olobuild_cookie_export_log', [ $this, 'ajax_export_log' ] );
 
         // Frontend
         $opts = self::get_options();
@@ -61,8 +61,10 @@ class Olobuild_Cookie_Consent {
             }
         }
 
-        // Shortcode
+        // Shortcode — 'olo_cookie_settings' è il tag usato nei contenuti esistenti
+        // (NON va rinominato, romperebbe le pagine); 'olobuild_cookie_settings' è il nuovo alias.
         add_shortcode( 'olo_cookie_settings', [ $this, 'shortcode_open_preferences' ] );
+        add_shortcode( 'olobuild_cookie_settings', [ $this, 'shortcode_open_preferences' ] );
 
         // Create table
         add_action( 'admin_init', [ $this, 'maybe_create_table' ] );
@@ -140,7 +142,7 @@ class Olobuild_Cookie_Consent {
     }
 
     public function register_settings() {
-        register_setting( 'olo_cookie_group', self::OPT, [
+        register_setting( 'olobuild_cookie_group', self::OPT, [
             'sanitize_callback' => [ $this, 'sanitize_options' ],
         ] );
     }
@@ -215,7 +217,7 @@ class Olobuild_Cookie_Consent {
         }
 
         // Sync legacy option
-        update_option( 'olo_cookie_consent_enabled', $clean['enabled'] ? '1' : '' );
+        update_option( 'olobuild_cookie_consent_enabled', $clean['enabled'] ? '1' : '' );
 
         return $clean;
     }
@@ -259,7 +261,7 @@ class Olobuild_Cookie_Consent {
 
             <?php if ( $tab !== 'consent_log' ) : ?>
             <form method="post" action="options.php" class="olo-ck-form" style="margin-top:16px">
-                <?php settings_fields( 'olo_cookie_group' ); ?>
+                <?php settings_fields( 'olobuild_cookie_group' ); ?>
                 <?php $this->render_hidden_fields( $opts, $tab ); ?>
 
                 <?php
@@ -1033,7 +1035,7 @@ class Olobuild_Cookie_Consent {
                 if(!confirm('<?php echo esc_js( __( 'Svuotare tutti i log dei consensi?', 'olobuild' ) ); ?>'))return;
                 this.disabled = true;
                 var self = this;
-                fetch(ajaxurl + '?action=olo_cookie_clear_log&_nonce=' + nonce)
+                fetch(ajaxurl + '?action=olobuild_cookie_clear_log&_nonce=' + nonce)
                     .then(function(r){return r.json()})
                     .then(function(d){
                         if(d.success){ location.reload(); }
@@ -1042,7 +1044,7 @@ class Olobuild_Cookie_Consent {
             });
 
             document.getElementById('olo-ck-export-log').addEventListener('click', function(){
-                window.location = ajaxurl + '?action=olo_cookie_export_log&_nonce=' + nonce;
+                window.location = ajaxurl + '?action=olobuild_cookie_export_log&_nonce=' + nonce;
             });
         })();
         </script>
@@ -1596,7 +1598,7 @@ class Olobuild_Cookie_Consent {
 
                 logConsent: function(cats, actionType){
                     var fd = new FormData();
-                    fd.append('action', 'olo_cookie_log_consent');
+                    fd.append('action', 'olobuild_cookie_log_consent');
                     fd.append('consent_id', this.consentId);
                     fd.append('categories', JSON.stringify(cats));
                     fd.append('action_type', actionType || 'initial');

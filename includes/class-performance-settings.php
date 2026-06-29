@@ -11,7 +11,7 @@ class Olobuild_Performance_Settings {
 
     private static $instance = null;
 
-    const OPT = 'olo_performance';
+    const OPT = 'olobuild_performance';
 
     public static function instance() {
         if ( null === self::$instance ) {
@@ -26,9 +26,9 @@ class Olobuild_Performance_Settings {
         add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
 
         // AJAX handlers
-        add_action( 'wp_ajax_olo_perf_regenerate_critical', [ $this, 'ajax_regenerate_critical' ] );
-        add_action( 'wp_ajax_olo_perf_purge_critical', [ $this, 'ajax_purge_critical' ] );
-        add_action( 'wp_ajax_olo_perf_flush_css_cache', [ $this, 'ajax_flush_css_cache' ] );
+        add_action( 'wp_ajax_olobuild_perf_regenerate_critical', [ $this, 'ajax_regenerate_critical' ] );
+        add_action( 'wp_ajax_olobuild_perf_purge_critical', [ $this, 'ajax_purge_critical' ] );
+        add_action( 'wp_ajax_olobuild_perf_flush_css_cache', [ $this, 'ajax_flush_css_cache' ] );
 
         // Sync regole cache browser in .htaccess quando l'opzione cambia
         // (sia dal form options.php sia dal POST REST /performance).
@@ -163,7 +163,7 @@ class Olobuild_Performance_Settings {
     }
 
     public function register_settings() {
-        register_setting( 'olo_performance_group', self::OPT, [
+        register_setting( 'olobuild_performance_group', self::OPT, [
             'sanitize_callback' => [ $this, 'sanitize' ],
         ] );
     }
@@ -201,7 +201,7 @@ class Olobuild_Performance_Settings {
         $clean['full_page_exclude']    = sanitize_textarea_field( $input['full_page_exclude'] ?? '' );
 
         // Sync legacy option for Critical CSS
-        update_option( 'olo_critical_css_enabled', $clean['critical_css_enabled'] ? '1' : '' );
+        update_option( 'olobuild_critical_css_enabled', $clean['critical_css_enabled'] ? '1' : '' );
 
         return $clean;
     }
@@ -255,7 +255,7 @@ class Olobuild_Performance_Settings {
             ?>
 
             <form method="post" action="options.php" class="olo-perf-form" style="margin-top:16px">
-                <?php settings_fields( 'olo_performance_group' ); ?>
+                <?php settings_fields( 'olobuild_performance_group' ); ?>
 
                 <?php
                 switch ( $tab ) {
@@ -417,7 +417,7 @@ class Olobuild_Performance_Settings {
                 this.disabled = true;
                 msg.textContent = '<?php echo esc_js( __( 'Rigenerazione in corso...', 'olobuild' ) ); ?>';
                 msg.className = 'olo-perf-inline-msg';
-                fetch(ajaxurl + '?action=olo_perf_regenerate_critical&_nonce=' + nonce)
+                fetch(ajaxurl + '?action=olobuild_perf_regenerate_critical&_nonce=' + nonce)
                     .then(function(r){return r.json()})
                     .then(function(d){
                         if(d.success){
@@ -436,7 +436,7 @@ class Olobuild_Performance_Settings {
             document.getElementById('olo-ccss-purge').addEventListener('click', function(){
                 if(!confirm('<?php echo esc_js( __( 'Svuotare tutta la cache Critical CSS?', 'olobuild' ) ); ?>'))return;
                 this.disabled = true;
-                fetch(ajaxurl + '?action=olo_perf_purge_critical&_nonce=' + nonce)
+                fetch(ajaxurl + '?action=olobuild_perf_purge_critical&_nonce=' + nonce)
                     .then(function(r){return r.json()})
                     .then(function(d){
                         if(d.success){
@@ -550,7 +550,7 @@ class Olobuild_Performance_Settings {
                 if(!confirm('<?php echo esc_js( __( 'Svuotare la cache CSS? I file verranno rigenerati automaticamente.', 'olobuild' ) ); ?>'))return;
                 this.disabled = true;
                 var msg = document.getElementById('olo-css-cache-msg');
-                fetch(ajaxurl + '?action=olo_perf_flush_css_cache&_nonce=' + nonce)
+                fetch(ajaxurl + '?action=olobuild_perf_flush_css_cache&_nonce=' + nonce)
                     .then(function(r){return r.json()})
                     .then(function(d){
                         if(d.success){

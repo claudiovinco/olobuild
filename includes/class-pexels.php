@@ -3,10 +3,10 @@
  * Olobuild_Pexels — Integrazione Pexels per Olobuild.
  *
  * Fornisce 4 endpoint REST:
- *   GET  olo/v1/pexels/search         — Cerca foto su Pexels
- *   POST olo/v1/pexels/download       — Scarica foto nel WP Media Library
- *   GET  olo/v1/pexels/videos         — Cerca video su Pexels
- *   POST olo/v1/pexels/video-download — Scarica video nel WP Media Library
+ *   GET  olobuild/v1/pexels/search         — Cerca foto su Pexels
+ *   POST olobuild/v1/pexels/download       — Scarica foto nel WP Media Library
+ *   GET  olobuild/v1/pexels/videos         — Cerca video su Pexels
+ *   POST olobuild/v1/pexels/video-download — Scarica video nel WP Media Library
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -26,7 +26,7 @@ class Olobuild_Pexels {
         if ( defined( 'OLO_PEXELS_API_KEY' ) && OLO_PEXELS_API_KEY ) {
             return OLO_PEXELS_API_KEY;
         }
-        return (string) get_option( 'olo_pexels_api_key', '' );
+        return (string) get_option( 'olobuild_pexels_api_key', '' );
     }
 
     public function init() {
@@ -34,7 +34,7 @@ class Olobuild_Pexels {
     }
 
     public function register_routes() {
-        register_rest_route( 'olo/v1', '/pexels/search', [
+        register_rest_route( 'olobuild/v1', '/pexels/search', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'search' ],
             'permission_callback' => function () {
@@ -49,7 +49,7 @@ class Olobuild_Pexels {
             ],
         ] );
 
-        register_rest_route( 'olo/v1', '/pexels/download', [
+        register_rest_route( 'olobuild/v1', '/pexels/download', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'download' ],
             'permission_callback' => function () {
@@ -57,7 +57,7 @@ class Olobuild_Pexels {
             },
         ] );
 
-        register_rest_route( 'olo/v1', '/pexels/videos', [
+        register_rest_route( 'olobuild/v1', '/pexels/videos', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'video_search' ],
             'permission_callback' => function () {
@@ -72,7 +72,7 @@ class Olobuild_Pexels {
             ],
         ] );
 
-        register_rest_route( 'olo/v1', '/pexels/video-download', [
+        register_rest_route( 'olobuild/v1', '/pexels/video-download', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'video_download' ],
             'permission_callback' => function () {

@@ -19,7 +19,7 @@ class Olobuild_Seo_Settings {
     const OPT_SOCIAL    = 'olo_seo_social';
     const OPT_LOCAL     = 'olo_seo_local_business';
     const OPT_WEBMASTER = 'olo_seo_webmaster';
-    const OPT_ADVANCED  = 'olo_seo_advanced';
+    const OPT_ADVANCED  = 'olobuild_seo_advanced';
     const OPT_SITEMAP   = 'olo_seo_sitemap';
 
     public static function instance() {
@@ -81,7 +81,7 @@ class Olobuild_Seo_Settings {
         ];
 
         foreach ( $options as $opt ) {
-            register_setting( 'olo_seo_group', $opt, [
+            register_setting( 'olobuild_seo_group', $opt, [
                 'type'              => 'array',
                 'sanitize_callback' => [ $this, 'sanitize_array_option' ],
                 'default'           => [],
@@ -172,7 +172,7 @@ class Olobuild_Seo_Settings {
 
             <form method="post" action="options.php" class="olo-seo-form" style="margin-top:16px">
                 <?php
-                settings_fields( 'olo_seo_group' );
+                settings_fields( 'olobuild_seo_group' );
                 $this->{'render_tab_' . $active_tab}();
                 ?>
                 <div style="margin-top:24px;">

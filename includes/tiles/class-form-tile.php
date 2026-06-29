@@ -206,7 +206,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         $has_recaptcha  = ! empty( $s['recaptcha_enabled'] );
         $recaptcha_site_key = '';
         if ( $has_recaptcha ) {
-            $recaptcha_site_key = get_option( 'olo_recaptcha_site_key', '' );
+            $recaptcha_site_key = get_option( 'olobuild_recaptcha_site_key', '' );
             if ( ! $recaptcha_site_key ) {
                 $has_recaptcha = false;
             }
@@ -1172,7 +1172,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                     fd.append(standaloneHidden[sh].name, standaloneHidden[sh].value);
                 }
 
-                fetch('<?php echo esc_url( rest_url( 'olo/v1/form/submit' ) ); ?>', {
+                fetch('<?php echo esc_url( rest_url( 'olobuild/v1/form/submit' ) ); ?>', {
                     method: 'POST',
                     body: fd,
                     credentials: 'same-origin'

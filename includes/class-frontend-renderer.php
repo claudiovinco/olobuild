@@ -334,8 +334,9 @@ class Olobuild_Frontend_Renderer {
     }
 
     public function init() {
-        add_shortcode( 'olo_template', [ $this, 'render_shortcode' ] );
-        add_shortcode( 'mosaic_template', [ $this, 'render_shortcode' ] ); // backward compat
+        add_shortcode( 'olobuild_template', [ $this, 'render_shortcode' ] );
+        add_shortcode( 'olo_template', [ $this, 'render_shortcode' ] );       // backward compat (contenuti esistenti)
+        add_shortcode( 'mosaic_template', [ $this, 'render_shortcode' ] );    // backward compat (storico)
         add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_frontend_styles' ] );
         add_action( 'template_redirect', [ $this, 'add_security_headers' ] );
     }
@@ -359,7 +360,7 @@ class Olobuild_Frontend_Renderer {
         // Also check single CPT pages with active single templates
         if ( ! $has_olo && is_singular() && ! is_page() ) {
             $pt     = get_post_type();
-            $tpl_id = (int) get_option( "olo_active_single_{$pt}", 0 );
+            $tpl_id = (int) get_option( "olobuild_active_single_{$pt}", 0 );
             if ( $tpl_id ) {
                 $has_olo = true;
             }
@@ -367,8 +368,8 @@ class Olobuild_Frontend_Renderer {
 
         // Also check header/footer templates
         if ( ! $has_olo ) {
-            $header_id = (int) get_option( 'olo_active_header', 0 );
-            $footer_id = (int) get_option( 'olo_active_footer', 0 );
+            $header_id = (int) get_option( 'olobuild_active_header', 0 );
+            $footer_id = (int) get_option( 'olobuild_active_footer', 0 );
             if ( $header_id || $footer_id ) {
                 $has_olo = true;
             }
@@ -384,22 +385,22 @@ class Olobuild_Frontend_Renderer {
                 if ( ! $pt ) {
                     $pt = 'post';
                 }
-                $tpl_id = (int) get_option( "olo_active_archive_{$pt}", 0 );
+                $tpl_id = (int) get_option( "olobuild_active_archive_{$pt}", 0 );
                 if ( ! $tpl_id ) {
-                    $tpl_id = (int) get_option( 'olo_active_archive', 0 );
+                    $tpl_id = (int) get_option( 'olobuild_active_archive', 0 );
                 }
                 if ( $tpl_id ) {
                     $has_olo = true;
                 }
             }
             if ( is_404() ) {
-                $tpl_id = (int) get_option( 'olo_active_404', 0 );
+                $tpl_id = (int) get_option( 'olobuild_active_404', 0 );
                 if ( $tpl_id ) {
                     $has_olo = true;
                 }
             }
             if ( is_search() ) {
-                $tpl_id = (int) get_option( 'olo_active_search', 0 );
+                $tpl_id = (int) get_option( 'olobuild_active_search', 0 );
                 if ( $tpl_id ) {
                     $has_olo = true;
                 }
@@ -425,14 +426,14 @@ class Olobuild_Frontend_Renderer {
         // Also enqueue for single CPT pages with active single templates
         if ( ! $has_olo && is_singular() && ! is_page() ) {
             $pt     = get_post_type();
-            $tpl_id = (int) get_option( "olo_active_single_{$pt}", 0 );
+            $tpl_id = (int) get_option( "olobuild_active_single_{$pt}", 0 );
             if ( $tpl_id ) {
                 $has_olo = true;
             }
         }
 
         if ( $has_olo ) {
-            $safe_mode = get_option( 'olo_safe_mode', false );
+            $safe_mode = get_option( 'olobuild_safe_mode', false );
 
             if ( $safe_mode ) {
                 add_filter( 'body_class', function( $classes ) { $classes[] = 'olo-safe-mode'; return $classes; } );
@@ -4000,7 +4001,7 @@ class Olobuild_Frontend_Renderer {
             'mobile'           => 480,
         ] );
 
-        $safe_mode = get_option( 'olo_safe_mode', false );
+        $safe_mode = get_option( 'olobuild_safe_mode', false );
 
         // Shared utilities (escHtml etc.) — loaded before all olo-*.js scripts
         if ( ! $safe_mode ) {
@@ -4038,7 +4039,7 @@ class Olobuild_Frontend_Renderer {
             );
             wp_add_inline_script(
                 'olo-row-loop-js',
-                'window.oloFrontendData = window.oloFrontendData || {}; window.oloFrontendData.restUrl = "' . esc_js( esc_url_raw( rest_url( 'olo/v1' ) ) ) . '";',
+                'window.oloFrontendData = window.oloFrontendData || {}; window.oloFrontendData.restUrl = "' . esc_js( esc_url_raw( rest_url( 'olobuild/v1' ) ) ) . '";',
                 'before'
             );
         }

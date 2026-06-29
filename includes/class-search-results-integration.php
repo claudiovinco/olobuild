@@ -28,7 +28,7 @@ class Olobuild_Search_Results_Integration {
             return $template;
         }
 
-        $tpl_id = (int) get_option( 'olo_active_search', 0 );
+        $tpl_id = (int) get_option( 'olobuild_active_search', 0 );
         if ( ! $tpl_id ) {
             return $template;
         }
@@ -53,7 +53,7 @@ class Olobuild_Search_Results_Integration {
             return;
         }
 
-        $tpl_id = (int) get_option( 'olo_active_search', 0 );
+        $tpl_id = (int) get_option( 'olobuild_active_search', 0 );
         if ( ! $tpl_id ) {
             return;
         }

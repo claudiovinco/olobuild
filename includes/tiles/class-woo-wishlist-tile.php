@@ -258,7 +258,7 @@ class Olobuild_Woo_Wishlist_Tile extends Olobuild_Tile_Base {
             var gridEl      = wrap.querySelector('[data-olo-wl-grid]');
             var emptyEl     = wrap.querySelector('[data-olo-wl-empty]');
             var restNonce   = '<?php echo esc_js( wp_create_nonce( 'wp_rest' ) ); ?>';
-            var ajaxUrl     = '<?php echo esc_js( rest_url( 'olo/v1/woo-wishlist-products' ) ); ?>';
+            var ajaxUrl     = '<?php echo esc_js( rest_url( 'olobuild/v1/woo-wishlist-products' ) ); ?>';
             var removeText  = '<?php echo esc_js( $remove_text ); ?>';
             var atcText     = '<?php echo esc_js( olobuild_t( 'Aggiungi al carrello' ) ); ?>';
 
@@ -406,7 +406,7 @@ class Olobuild_Woo_Wishlist_Tile extends Olobuild_Tile_Base {
         $registered = true;
 
         add_action( 'rest_api_init', function() {
-            register_rest_route( 'olo/v1', '/woo-wishlist-products', [
+            register_rest_route( 'olobuild/v1', '/woo-wishlist-products', [
                 'methods'             => 'GET',
                 'callback'            => [ $this, 'get_wishlist_products' ],
                 'permission_callback' => '__return_true',

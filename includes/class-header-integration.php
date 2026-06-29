@@ -87,7 +87,7 @@ class Olobuild_Header_Integration {
         }
         $by_rules = (int) apply_filters( 'olobuild_resolve_template_id', 0, 'header' );
         if ( $by_rules ) return $by_rules;
-        return (int) get_option( 'olo_active_header', 0 );
+        return (int) get_option( 'olobuild_active_header', 0 );
     }
 
     /**

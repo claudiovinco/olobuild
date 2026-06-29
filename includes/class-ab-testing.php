@@ -68,14 +68,14 @@ class Olobuild_AB_Testing {
      */
     private static function table() {
         global $wpdb;
-        return $wpdb->prefix . 'olo_ab_tests';
+        return $wpdb->prefix . 'olobuild_ab_tests';
     }
 
     /**
      * Register REST API routes.
      */
     public static function register_routes() {
-        $namespace = 'olo/v1';
+        $namespace = 'olobuild/v1';
 
         // List all tests
         register_rest_route( $namespace, '/ab-tests', [
@@ -559,7 +559,7 @@ class Olobuild_AB_Testing {
         if (!testId) return;
 
         /* Track view */
-        fetch(restUrl + "olo/v1/ab-tests/track", {
+        fetch(restUrl + "olobuild/v1/ab-tests/track", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({test_id: testId, variant: variant, event: "view"})
@@ -570,7 +570,7 @@ class Olobuild_AB_Testing {
             var target = goalSelector ? el.querySelector(goalSelector) : el;
             if (target) {
                 target.addEventListener("click", function() {
-                    fetch(restUrl + "olo/v1/ab-tests/track", {
+                    fetch(restUrl + "olobuild/v1/ab-tests/track", {
                         method: "POST",
                         headers: {"Content-Type": "application/json"},
                         body: JSON.stringify({test_id: testId, variant: variant, event: "conversion"})
@@ -583,7 +583,7 @@ class Olobuild_AB_Testing {
             var form = goalSelector ? el.querySelector(goalSelector) : el.querySelector("form");
             if (form) {
                 form.addEventListener("submit", function() {
-                    fetch(restUrl + "olo/v1/ab-tests/track", {
+                    fetch(restUrl + "olobuild/v1/ab-tests/track", {
                         method: "POST",
                         headers: {"Content-Type": "application/json"},
                         body: JSON.stringify({test_id: testId, variant: variant, event: "conversion"})

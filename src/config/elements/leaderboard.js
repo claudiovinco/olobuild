@@ -82,7 +82,7 @@ export default {
     { key: 'source', label: t('Origine dati'), type: 'select', options: [
       { value: 'manual', label: t('Manuale') },
       { value: 'query',  label: t('Query (in arrivo)') },
-    ], description: t('Manuale usa le righe sotto. Query collegherà un endpoint olo/v1 (placeholder: usa le righe come demo).') },
+    ], description: t('Manuale usa le righe sotto. Query collegherà un endpoint olobuild/v1 (placeholder: usa le righe come demo).') },
 
     { key: 'rows', label: t('Righe classifica'), type: 'content-items',
       condition: { field: 'source', op: 'eq', value: 'manual' },

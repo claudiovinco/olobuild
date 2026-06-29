@@ -1,5 +1,5 @@
 // usePageSeo — fetch/save per i meta SEO del post collegato al template corrente.
-// Endpoint: /olo/v1/page-seo/{postId} (vedi class-rest-api.php::page_seo_*).
+// Endpoint: /olobuild/v1/page-seo/{postId} (vedi class-rest-api.php::page_seo_*).
 //
 // Pattern: pull al mount (quando il post_id è noto), debounced push su ogni cambio.
 // Stato locale reattivo, NON nel Pinia store (i meta vivono come post_meta WP,
@@ -40,7 +40,7 @@ export function usePageSeo(postIdRef) {
   let suppressWatch = false;
 
   function url(id) {
-    // oloData.restUrl include già "olo/v1" (es. https://site/wp-json/olo/v1).
+    // oloData.restUrl include già "olobuild/v1" (es. https://site/wp-json/olobuild/v1).
     // Quindi qui appendiamo solo il segmento finale, niente doppio prefisso.
     return restRoot.replace(/\/$/, '') + '/page-seo/' + Number(id);
   }

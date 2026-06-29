@@ -96,8 +96,8 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
 
     public function __construct() {
         if ( ! self::$ajax_registered ) {
-            add_action( 'wp_ajax_olo_queryloop_page', [ $this, 'ajax_load_page' ] );
-            add_action( 'wp_ajax_nopriv_olo_queryloop_page', [ $this, 'ajax_load_page' ] );
+            add_action( 'wp_ajax_olobuild_queryloop_page', [ $this, 'ajax_load_page' ] );
+            add_action( 'wp_ajax_nopriv_olobuild_queryloop_page', [ $this, 'ajax_load_page' ] );
             self::$ajax_registered = true;
         }
     }
@@ -975,7 +975,7 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
                     btn.disabled = true;
                     btn.textContent = 'Caricamento...';
                     var fd = new FormData();
-                    fd.append('action', 'olo_queryloop_page');
+                    fd.append('action', 'olobuild_queryloop_page');
                     fd.append('page', page);
                     fd.append('settings', '<?php echo esc_js( $settings_json ); ?>');
                     fd.append('nonce', '<?php echo esc_js( wp_create_nonce( 'olo_ql_nonce' ) ); ?>');
@@ -1034,7 +1034,7 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
                         }
                         loading = true;
                         var fd = new FormData();
-                        fd.append('action', 'olo_queryloop_page');
+                        fd.append('action', 'olobuild_queryloop_page');
                         fd.append('page', page);
                         fd.append('settings', '<?php echo esc_js( $settings_json ); ?>');
                         fd.append('nonce', '<?php echo esc_js( wp_create_nonce( 'olo_ql_nonce' ) ); ?>');

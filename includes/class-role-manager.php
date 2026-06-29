@@ -36,7 +36,7 @@ class Olobuild_Role_Manager {
         // Se l'amministratore non ha MAI configurato i ruoli del builder, non restringere:
         // si mantiene il comportamento storico (chi possiede edit_pages puo' editare). Cosi'
         // l'attivazione di questo enforcement non blocca utenti che oggi hanno gia' accesso.
-        $roles = get_option( 'olo_builder_roles', null );
+        $roles = get_option( 'olobuild_builder_roles', null );
         if ( ! is_array( $roles ) || empty( $roles ) ) {
             return $can_edit;
         }
@@ -96,7 +96,7 @@ class Olobuild_Role_Manager {
             $user_id = get_current_user_id();
         }
 
-        $content_only_roles = get_option( 'olo_content_only_roles', [] );
+        $content_only_roles = get_option( 'olobuild_content_only_roles', [] );
 
         if ( empty( $content_only_roles ) ) {
             return false;
@@ -122,7 +122,7 @@ class Olobuild_Role_Manager {
      * @return array List of role slugs allowed to use the builder.
      */
     public function get_allowed_roles() {
-        return get_option( 'olo_builder_roles', [ 'administrator' ] );
+        return get_option( 'olobuild_builder_roles', [ 'administrator' ] );
     }
 
     /**
@@ -140,7 +140,7 @@ class Olobuild_Role_Manager {
             array_unshift( $sanitized, 'administrator' );
         }
 
-        return update_option( 'olo_builder_roles', $sanitized );
+        return update_option( 'olobuild_builder_roles', $sanitized );
     }
 
     /**
@@ -149,7 +149,7 @@ class Olobuild_Role_Manager {
      * @return array List of role slugs restricted to content-only editing.
      */
     public function get_content_only_roles() {
-        return get_option( 'olo_content_only_roles', [] );
+        return get_option( 'olobuild_content_only_roles', [] );
     }
 
     /**
@@ -162,7 +162,7 @@ class Olobuild_Role_Manager {
         $sanitized = array_map( 'sanitize_key', (array) $roles );
         $sanitized = array_values( array_filter( $sanitized ) );
 
-        return update_option( 'olo_content_only_roles', $sanitized );
+        return update_option( 'olobuild_content_only_roles', $sanitized );
     }
 
     /* ─────────────────────────────────────────────
@@ -191,7 +191,7 @@ class Olobuild_Role_Manager {
      * Get restrictions for a specific role.
      */
     public function get_role_restrictions( $role ) {
-        $all = get_option( 'olo_role_restrictions', [] );
+        $all = get_option( 'olobuild_role_restrictions', [] );
         return $all[ $role ] ?? [];
     }
 
@@ -209,7 +209,7 @@ class Olobuild_Role_Manager {
             return [];
         }
 
-        $all_restrictions = get_option( 'olo_role_restrictions', [] );
+        $all_restrictions = get_option( 'olobuild_role_restrictions', [] );
         $merged = [];
 
         foreach ( (array) $user->roles as $role ) {
@@ -239,7 +239,7 @@ class Olobuild_Role_Manager {
             $user_id = get_current_user_id();
         }
 
-        $design_only_roles = get_option( 'olo_design_only_roles', [] );
+        $design_only_roles = get_option( 'olobuild_design_only_roles', [] );
         if ( empty( $design_only_roles ) ) {
             return false;
         }
@@ -272,7 +272,7 @@ class Olobuild_Role_Manager {
         $roles           = $this->get_available_roles();
         $allowed         = $this->get_allowed_roles();
         $content_only    = $this->get_content_only_roles();
-        $design_only     = get_option( 'olo_design_only_roles', [] );
+        $design_only     = get_option( 'olobuild_design_only_roles', [] );
         $allowed_count = is_array( $allowed ) ? count( $allowed ) : 0;
         $design_only_count = is_array( $design_only ) ? count( $design_only ) : 0;
         ?>
@@ -361,7 +361,7 @@ class Olobuild_Role_Manager {
 
             <?php
             $restriction_opts = self::get_restriction_options();
-            $all_restrictions = get_option( 'olo_role_restrictions', [] );
+            $all_restrictions = get_option( 'olobuild_role_restrictions', [] );
             $non_admin_roles  = array_filter( $roles, function( $r ) { return $r['value'] !== 'administrator'; } );
             ?>
 
@@ -430,7 +430,7 @@ class Olobuild_Role_Manager {
                     });
                     data['administrator'] = 'full';
 
-                    fetch('<?php echo esc_js( rest_url( 'olo/v1/role-manager' ) ); ?>', {
+                    fetch('<?php echo esc_js( rest_url( 'olobuild/v1/role-manager' ) ); ?>', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': '<?php echo esc_js( wp_create_nonce( 'wp_rest' ) ); ?>' },
                         body: JSON.stringify(data)
@@ -453,7 +453,7 @@ class Olobuild_Role_Manager {
                         if (cb.checked) { data[role].push(key); }
                     });
 
-                    fetch('<?php echo esc_js( rest_url( 'olo/v1/role-restrictions' ) ); ?>', {
+                    fetch('<?php echo esc_js( rest_url( 'olobuild/v1/role-restrictions' ) ); ?>', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': '<?php echo esc_js( wp_create_nonce( 'wp_rest' ) ); ?>' },
                         body: JSON.stringify(data)
@@ -476,7 +476,7 @@ class Olobuild_Role_Manager {
      * ───────────────────────────────────────────── */
 
     public function register_routes() {
-        register_rest_route( 'olo/v1', '/role-manager', [
+        register_rest_route( 'olobuild/v1', '/role-manager', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'save_roles_api' ],
             'permission_callback' => function () {
@@ -484,7 +484,7 @@ class Olobuild_Role_Manager {
             },
         ] );
 
-        register_rest_route( 'olo/v1', '/role-restrictions', [
+        register_rest_route( 'olobuild/v1', '/role-restrictions', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'save_restrictions_api' ],
             'permission_callback' => function () {
@@ -527,7 +527,7 @@ class Olobuild_Role_Manager {
 
         $this->set_allowed_roles( $full_access );
         $this->set_content_only_roles( $content_only );
-        update_option( 'olo_design_only_roles', $design_only );
+        update_option( 'olobuild_design_only_roles', $design_only );
 
         return rest_ensure_response( [ 'success' => true ] );
     }
@@ -567,7 +567,7 @@ class Olobuild_Role_Manager {
             }
         }
 
-        update_option( 'olo_role_restrictions', $clean );
+        update_option( 'olobuild_role_restrictions', $clean );
 
         return rest_ensure_response( [ 'success' => true ] );
     }

@@ -794,7 +794,7 @@ abstract class Olobuild_Tile_Base {
         if ( empty( $icon_name ) ) return '';
         if ( str_starts_with( $icon_name, 'custom:' ) ) {
             $name = substr( $icon_name, 7 );
-            $icons = get_option( 'olo_custom_icons', [] );
+            $icons = get_option( 'olobuild_custom_icons', [] );
             if ( isset( $icons[ $name ] ) ) {
                 $size = round( 20 * $ratio );
                 // Sanitize SVG output to prevent stored XSS

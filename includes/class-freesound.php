@@ -17,7 +17,7 @@ class Olobuild_Freesound {
     }
 
     public function register_routes() {
-        register_rest_route( 'olo/v1', '/freesound/search', [
+        register_rest_route( 'olobuild/v1', '/freesound/search', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'search' ],
             'permission_callback' => function () {
@@ -31,7 +31,7 @@ class Olobuild_Freesound {
             ],
         ] );
 
-        register_rest_route( 'olo/v1', '/freesound/download', [
+        register_rest_route( 'olobuild/v1', '/freesound/download', [
             'methods'             => 'POST',
             'callback'            => [ $this, 'download' ],
             'permission_callback' => function () {
@@ -47,7 +47,7 @@ class Olobuild_Freesound {
     }
 
     private function get_api_key() {
-        return get_option( 'olo_freesound_api_key', '' );
+        return get_option( 'olobuild_freesound_api_key', '' );
     }
 
     public function search( $request ) {
