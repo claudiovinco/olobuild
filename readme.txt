@@ -4,7 +4,7 @@ Tags: page-builder, drag-and-drop, builder, grid, blocks
 Requires at least: 5.9
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.4.301
+Stable tag: 1.4.302
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,23 @@ under assets/vendor/ — no library is loaded from a CDN:
 * PDF.js (Apache-2.0)
 * Pannellum (MIT)
 * StPageFlip (MIT)
+
+== Development ==
+
+The Olobuild admin builder is a single-page application written in Vue 3 and bundled with
+Vite. The shipped file `assets/js/builder.js` (and the chunks under `assets/js/chunks/`) is a
+compiled, minified production bundle. The complete, human-readable source code and the build
+tooling are published in the plugin's public repository:
+
+* Source repository: https://github.com/claudiovinco/olobuild
+* The `src/` directory contains the Vue/SCSS sources; `package.json` and the `vite.config*.js`
+  files define the build.
+* To rebuild from source: run `npm install`, then build with Vite
+  (`node node_modules/vite/bin/vite.js build`). The admin-settings and theme-picker bundles
+  use their own Vite configs — see the repository README for the exact commands.
+
+Nothing is obfuscated: the minification is standard production bundling, fully reproducible
+from the sources above.
 
 == Installation ==
 

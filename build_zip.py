@@ -60,7 +60,7 @@ EXCLUDE_FILES = {
     "add_borders.py", "add_borders_special.py",
 }
 # .md non serve nel plugin distribuito (il riferimento è readme.txt); idem file di lavoro
-EXCLUDE_EXT = {".log", ".po~", ".bak", ".tmp", ".swp", ".tsv", ".cjs", ".zip", ".md"}
+EXCLUDE_EXT = {".log", ".po", ".po~", ".bak", ".tmp", ".swp", ".tsv", ".cjs", ".zip", ".md"}
 # test-*.php, BRIEF_*.md, AUDIT-*.md, HERO_AUDIT_*.json, tmp_*, _tmp*, _b.txt, HANDOFF*
 EXCLUDE_PATTERN_PREFIXES = (
     "test-", "BRIEF_", "AUDIT-", "AUDIT_", "HERO_AUDIT", "HANDOFF",
