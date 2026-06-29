@@ -3,13 +3,13 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variabile locale del template (inclusa nello scope del render, non un global del plugin)
-$tpl_id = get_query_var( 'olo_woo_tpl_id', 0 );
+$tpl_id = get_query_var( 'olobuild_woo_tpl_id', 0 );
 
 // Resolve Olobuild header/footer IDs
 // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variabile locale del template (inclusa nello scope del render, non un global del plugin)
-$header_id = (int) get_option( 'olo_active_header', 0 );
+$header_id = (int) get_option( 'olobuild_active_header', 0 );
 // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- variabile locale del template (inclusa nello scope del render, non un global del plugin)
-$footer_id = (int) get_option( 'olo_active_footer', 0 );
+$footer_id = (int) get_option( 'olobuild_active_footer', 0 );
 
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
