@@ -15,6 +15,12 @@ export default {
   icon: 'dashicons-media-document',
   category: 'marketing',
 
+  // Unificazione COPERTINA: la vecchia immagine di copertina (cover_image) confluisce
+  // nel pannello universale media_cover (immagine/video/gradiente/colore…). Non
+  // distruttivo: la chiave vecchia resta come fallback nei renderer. NB: media_bg
+  // qui è il COLORE di sfondo del placeholder copertina, NON il pannello — non si tocca.
+  bgMigrate: { imageKey: 'cover_image', imagePosKey: 'cover_image_object_position', target: 'media_cover' },
+
   defaults: {
     // Content
     kicker_text: 'The Essay · Cities',
@@ -26,6 +32,7 @@ export default {
     byline_meta: '18 min read',
     cover_image: '',
     ...focalDefault('cover_image'),
+    media_cover: { type: 'none' },
     cover_url: '#',
     cover_label: 'cover — empty night market, lanterns, long exposure',
     // CTAs (optional)
@@ -86,8 +93,7 @@ export default {
     { key: 'byline_meta', label: t('Meta (es. 18 min read)'), type: 'text' },
 
     { type: 'separator', label: t('Copertina') },
-    { key: 'cover_image', label: t('Immagine di copertina (vuoto = placeholder)'), type: 'image' },
-    focalField('cover_image', { ratio: 'cover_aspect' }),
+    { key: 'media_cover', label: t('Copertina (immagine, video, gradiente…)'), type: 'background', showParallax: false },
     { key: 'cover_url', label: t('Link copertina'), type: 'link' },
     { key: 'cover_label', label: t('Etichetta placeholder'), type: 'text' },
 

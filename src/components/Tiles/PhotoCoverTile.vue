@@ -1,7 +1,14 @@
 <template>
   <section class="olo-photocover pc" :style="rootStyle">
     <div class="pc-media" :style="mediaStyle">
-      <span v-if="!s.bg_image && s.media_label" class="pc-medialabel" :style="mediaLabelStyle">{{ s.media_label }}</span>
+      <video
+        v-if="isCoverVideo"
+        class="pc-media-video"
+        :src="s.media_cover.video_url"
+        autoplay loop muted playsinline
+        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"
+      ></video>
+      <span v-if="!hasMediaCover && !s.bg_image && s.media_label" class="pc-medialabel" :style="mediaLabelStyle">{{ s.media_label }}</span>
     </div>
     <div class="pc-overlay" :style="overlayStyle"></div>
     <div class="pc-in" :style="inStyle">
@@ -31,6 +38,7 @@ const defaults = {
     { text: '12 min' },
   ],
   bg_image: '',
+  media_cover: { type: 'none' },
   media_label: 'cover photograph — rain-soaked city street, single figure',
   aspect_ratio: '16/9',
   min_height: 560,
@@ -106,6 +114,17 @@ function borderStyle(b) {
 
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
+// ── Copertina universale (pannello media_cover) con fallback all'immagine legacy bg_image ──
+const hasMediaCover = computed(() => {
+  const m = s.value.media_cover;
+  return !!(m && typeof m === 'object' && m.type && m.type !== 'none');
+});
+const mediaCoverStyle = computed(() => (hasMediaCover.value ? buildBgStyle(s.value.media_cover) : {}));
+const isCoverVideo = computed(() => {
+  const m = s.value.media_cover;
+  return hasMediaCover.value && m.type === 'video' && !!m.video_url;
+});
+
 const DISP = "var(--olo-font-family-heading, 'Archivo',-apple-system,sans-serif)";
 const SANS = "var(--olo-font-family, 'Archivo',-apple-system,sans-serif)";
 const MONO = "var(--olo-font-family-mono, 'Archivo Narrow','Archivo',sans-serif)";
@@ -170,9 +189,15 @@ const mediaStyle = computed(() => {
     background: s.value.media_bg || '#1a1a1a', backgroundSize: 'cover', backgroundPosition: focalPos(s.value, 'bg_image'),
   };
   if (mh.value > 0) st.minHeight = mh.value + 'px';
-  st.backgroundImage = s.value.bg_image
-    ? 'url(' + s.value.bg_image + ')'
-    : 'repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 16px, transparent 16px 32px)';
+  if (hasMediaCover.value) {
+    // COPERTINA universale: precedenza sul media legacy. buildBgStyle sovrascrive
+    // le proprietà background-* (image/gradient/solid…); il video ha layer proprio.
+    Object.assign(st, mediaCoverStyle.value);
+  } else {
+    st.backgroundImage = s.value.bg_image
+      ? 'url(' + s.value.bg_image + ')'
+      : 'repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 16px, transparent 16px 32px)';
+  }
   if (mediaRadius.value) st.borderRadius = mediaRadius.value;
   return st;
 });

@@ -3,10 +3,12 @@
     <div class="fs-in" :style="inStyle">
       <div class="fs-media" :style="{ order: mediaOrder }">
         <a v-if="coverHref" :href="coverHref"><span class="fs-frame" :style="frameStyle">
-          <span v-if="!s.cover_image && s.cover_label" class="fs-label" :style="labelStyle">{{ s.cover_label }}</span>
+          <video v-if="isCoverVideo" class="fs-frame-video" :src="s.media_cover.video_url" autoplay loop muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>
+          <span v-if="!hasMediaCover && !s.cover_image && s.cover_label" class="fs-label" :style="labelStyle">{{ s.cover_label }}</span>
         </span></a>
         <span v-else class="fs-frame" :style="frameStyle">
-          <span v-if="!s.cover_image && s.cover_label" class="fs-label" :style="labelStyle">{{ s.cover_label }}</span>
+          <video v-if="isCoverVideo" class="fs-frame-video" :src="s.media_cover.video_url" autoplay loop muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>
+          <span v-if="!hasMediaCover && !s.cover_image && s.cover_label" class="fs-label" :style="labelStyle">{{ s.cover_label }}</span>
         </span>
       </div>
       <div class="fs-col" :style="{ order: colOrder }">
@@ -50,6 +52,7 @@ const defaults = {
   byline_name: 'Elena Russo',
   byline_meta: '18 min read',
   cover_image: '',
+  media_cover: { type: 'none' },
   cover_url: '#',
   cover_label: 'cover — empty night market, lanterns, long exposure',
   // CTAs (optional)
@@ -100,6 +103,17 @@ const defaults = {
 };
 
 const s = computed(() => ({ ...defaults, ...props.settings }));
+
+// ── Copertina universale (pannello media_cover) con fallback all'immagine legacy cover_image ──
+const hasMediaCover = computed(() => {
+  const m = s.value.media_cover;
+  return !!(m && typeof m === 'object' && m.type && m.type !== 'none');
+});
+const mediaCoverStyle = computed(() => (hasMediaCover.value ? buildBgStyle(s.value.media_cover) : {}));
+const isCoverVideo = computed(() => {
+  const m = s.value.media_cover;
+  return hasMediaCover.value && m.type === 'video' && !!m.video_url;
+});
 
 const bg = computed(() => s.value.bg_color || 'var(--olo-color-surface, #f3f0e9)');
 const kicker = computed(() => s.value.kicker_color || 'var(--olo-color-primary, #9a2b22)');
@@ -240,7 +254,13 @@ const phLine = computed(() => 'rgba(' + phRgb.value + ',.05)');
 const phLabel = computed(() => 'rgba(' + phRgb.value + ',' + (phDark.value ? '.4' : '.42') + ')');
 const frameStyle = computed(() => {
   const st = { position: 'relative', display: 'block', overflow: 'hidden', aspectRatio: aspect.value, background: mediabg.value, borderRadius: coverRadiusCss.value, backgroundSize: 'cover', backgroundPosition: focalPos(s.value, 'cover_image') };
-  st.backgroundImage = s.value.cover_image ? 'url(' + s.value.cover_image + ')' : 'repeating-linear-gradient(135deg, ' + phLine.value + ' 0 15px, transparent 15px 30px)';
+  if (hasMediaCover.value) {
+    // COPERTINA universale: precedenza sul media legacy. buildBgStyle sovrascrive
+    // le proprietà background-* (image/gradient/solid…); il video ha layer proprio.
+    Object.assign(st, mediaCoverStyle.value);
+  } else {
+    st.backgroundImage = s.value.cover_image ? 'url(' + s.value.cover_image + ')' : 'repeating-linear-gradient(135deg, ' + phLine.value + ' 0 15px, transparent 15px 30px)';
+  }
   return st;
 });
 const labelStyle = computed(() => ({ position: 'absolute', left: '13px', right: '13px', bottom: '11px', fontWeight: 600, fontSize: '10.5px', letterSpacing: '.05em', textTransform: 'uppercase', color: phLabel.value }));

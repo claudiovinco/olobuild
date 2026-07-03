@@ -1,7 +1,10 @@
 <template>
   <div class="olo-revealbox" :class="'olo-reveal-' + s.reveal_effect" :style="containerStyle">
-    <!-- Global background image (behind everything, fixed) -->
-    <div v-if="s.image_url" class="olo-revealbox-bg" :style="globalBgStyle"></div>
+    <!-- Global background (behind everything, fixed): media object → fallback legacy image_url -->
+    <template v-if="hasGlobalBg">
+      <div class="olo-revealbox-bg" :style="globalBgStyle"></div>
+      <video v-if="isMediaVideo(globalMedia)" class="olo-revealbox-bgvid" :src="globalMedia.video_url" autoplay muted loop playsinline></video>
+    </template>
 
     <!-- SLIDE effects: inner wrapper moves -->
     <template v-if="isSlideEffect">
@@ -9,8 +12,8 @@
         <!-- slide-down / slide-right: bottom first, then top -->
         <template v-if="s.reveal_effect === 'slide-down' || s.reveal_effect === 'slide-right'">
           <div class="olo-revealbox-face olo-revealbox-bottom" :style="faceStyleObj('bottom')">
-            <div v-if="s.bottom_image_url" class="olo-revealbox-bg" :style="bgStyle('bottom')"></div>
-            <video v-else-if="s.bottom_video_url" class="olo-revealbox-bgvid" :src="s.bottom_video_url" autoplay muted loop playsinline></video>
+            <div v-if="faceBgLayerStyle('bottom')" class="olo-revealbox-bg" :style="faceBgLayerStyle('bottom')"></div>
+            <video v-if="faceVideoSrc('bottom')" class="olo-revealbox-bgvid" :src="faceVideoSrc('bottom')" autoplay muted loop playsinline></video>
             <div v-if="bottomOverlayOpacity > 0" class="olo-revealbox-overlay" :style="bottomOverlayStyle"></div>
             <div class="olo-revealbox-content" :style="contentPad('bottom')">
               <div v-if="s.bottom_icon" class="olo-revealbox-icon" :style="iconStyle('bottom')">
@@ -20,8 +23,8 @@
             </div>
           </div>
           <div class="olo-revealbox-face olo-revealbox-top" :style="faceStyleObj('top')">
-            <div v-if="s.top_image_url" class="olo-revealbox-bg" :style="bgStyle('top')"></div>
-            <video v-else-if="s.top_video_url" class="olo-revealbox-bgvid" :src="s.top_video_url" autoplay muted loop playsinline></video>
+            <div v-if="faceBgLayerStyle('top')" class="olo-revealbox-bg" :style="faceBgLayerStyle('top')"></div>
+            <video v-if="faceVideoSrc('top')" class="olo-revealbox-bgvid" :src="faceVideoSrc('top')" autoplay muted loop playsinline></video>
             <div v-if="topOverlayOpacity > 0" class="olo-revealbox-overlay" :style="topOverlayStyle"></div>
             <div class="olo-revealbox-content" :style="contentPad('top')">
               <div v-if="s.top_icon" class="olo-revealbox-icon" :style="iconStyle('top')">
@@ -34,8 +37,8 @@
         <!-- Other slides: top first, then bottom -->
         <template v-else>
           <div class="olo-revealbox-face olo-revealbox-top" :style="faceStyleObj('top')">
-            <div v-if="s.top_image_url" class="olo-revealbox-bg" :style="bgStyle('top')"></div>
-            <video v-else-if="s.top_video_url" class="olo-revealbox-bgvid" :src="s.top_video_url" autoplay muted loop playsinline></video>
+            <div v-if="faceBgLayerStyle('top')" class="olo-revealbox-bg" :style="faceBgLayerStyle('top')"></div>
+            <video v-if="faceVideoSrc('top')" class="olo-revealbox-bgvid" :src="faceVideoSrc('top')" autoplay muted loop playsinline></video>
             <div v-if="topOverlayOpacity > 0" class="olo-revealbox-overlay" :style="topOverlayStyle"></div>
             <div class="olo-revealbox-content" :style="contentPad('top')">
               <div v-if="s.top_icon" class="olo-revealbox-icon" :style="iconStyle('top')">
@@ -45,8 +48,8 @@
             </div>
           </div>
           <div class="olo-revealbox-face olo-revealbox-bottom" :style="faceStyleObj('bottom')">
-            <div v-if="s.bottom_image_url" class="olo-revealbox-bg" :style="bgStyle('bottom')"></div>
-            <video v-else-if="s.bottom_video_url" class="olo-revealbox-bgvid" :src="s.bottom_video_url" autoplay muted loop playsinline></video>
+            <div v-if="faceBgLayerStyle('bottom')" class="olo-revealbox-bg" :style="faceBgLayerStyle('bottom')"></div>
+            <video v-if="faceVideoSrc('bottom')" class="olo-revealbox-bgvid" :src="faceVideoSrc('bottom')" autoplay muted loop playsinline></video>
             <div v-if="bottomOverlayOpacity > 0" class="olo-revealbox-overlay" :style="bottomOverlayStyle"></div>
             <div class="olo-revealbox-content" :style="contentPad('bottom')">
               <div v-if="s.bottom_icon" class="olo-revealbox-icon" :style="iconStyle('bottom')">
@@ -62,8 +65,8 @@
     <!-- FADE / ZOOM / ROTATE effects: two stacked layers -->
     <template v-else-if="isStackEffect">
       <div class="olo-revealbox-face olo-revealbox-top olo-revealbox-stack-top" :style="stackTopStyle">
-        <div v-if="s.top_image_url" class="olo-revealbox-bg" :style="bgStyle('top')"></div>
-        <video v-else-if="s.top_video_url" class="olo-revealbox-bgvid" :src="s.top_video_url" autoplay muted loop playsinline></video>
+        <div v-if="faceBgLayerStyle('top')" class="olo-revealbox-bg" :style="faceBgLayerStyle('top')"></div>
+        <video v-if="faceVideoSrc('top')" class="olo-revealbox-bgvid" :src="faceVideoSrc('top')" autoplay muted loop playsinline></video>
         <div v-if="topOverlayOpacity > 0" class="olo-revealbox-overlay" :style="topOverlayStyle"></div>
         <div class="olo-revealbox-content" :style="contentPad('top')">
           <div v-if="s.top_icon" class="olo-revealbox-icon" :style="iconStyle('top')">
@@ -73,8 +76,8 @@
         </div>
       </div>
       <div class="olo-revealbox-face olo-revealbox-bottom olo-revealbox-stack-bottom" :style="stackBottomStyle">
-        <div v-if="s.bottom_image_url" class="olo-revealbox-bg" :style="bgStyle('bottom')"></div>
-        <video v-else-if="s.bottom_video_url" class="olo-revealbox-bgvid" :src="s.bottom_video_url" autoplay muted loop playsinline></video>
+        <div v-if="faceBgLayerStyle('bottom')" class="olo-revealbox-bg" :style="faceBgLayerStyle('bottom')"></div>
+        <video v-if="faceVideoSrc('bottom')" class="olo-revealbox-bgvid" :src="faceVideoSrc('bottom')" autoplay muted loop playsinline></video>
         <div v-if="bottomOverlayOpacity > 0" class="olo-revealbox-overlay" :style="bottomOverlayStyle"></div>
         <div class="olo-revealbox-content" :style="contentPad('bottom')">
           <div v-if="s.bottom_icon" class="olo-revealbox-icon" :style="iconStyle('bottom')">
@@ -89,8 +92,8 @@
     <template v-else-if="isFlipEffect">
       <div class="olo-revealbox-flipper" :style="flipperStyle">
         <div class="olo-revealbox-face olo-revealbox-flip-front" :style="flipFrontStyle">
-          <div v-if="s.top_image_url" class="olo-revealbox-bg" :style="bgStyle('top')"></div>
-          <video v-else-if="s.top_video_url" class="olo-revealbox-bgvid" :src="s.top_video_url" autoplay muted loop playsinline></video>
+          <div v-if="faceBgLayerStyle('top')" class="olo-revealbox-bg" :style="faceBgLayerStyle('top')"></div>
+          <video v-if="faceVideoSrc('top')" class="olo-revealbox-bgvid" :src="faceVideoSrc('top')" autoplay muted loop playsinline></video>
           <div v-if="topOverlayOpacity > 0" class="olo-revealbox-overlay" :style="topOverlayStyle"></div>
           <div class="olo-revealbox-content" :style="contentPad('top')">
             <div v-if="s.top_icon" class="olo-revealbox-icon" :style="iconStyle('top')">
@@ -100,8 +103,8 @@
           </div>
         </div>
         <div class="olo-revealbox-face olo-revealbox-flip-back" :style="flipBackStyle">
-          <div v-if="s.bottom_image_url" class="olo-revealbox-bg" :style="bgStyle('bottom')"></div>
-          <video v-else-if="s.bottom_video_url" class="olo-revealbox-bgvid" :src="s.bottom_video_url" autoplay muted loop playsinline></video>
+          <div v-if="faceBgLayerStyle('bottom')" class="olo-revealbox-bg" :style="faceBgLayerStyle('bottom')"></div>
+          <video v-if="faceVideoSrc('bottom')" class="olo-revealbox-bgvid" :src="faceVideoSrc('bottom')" autoplay muted loop playsinline></video>
           <div v-if="bottomOverlayOpacity > 0" class="olo-revealbox-overlay" :style="bottomOverlayStyle"></div>
           <div class="olo-revealbox-content" :style="contentPad('bottom')">
             <div v-if="s.bottom_icon" class="olo-revealbox-icon" :style="iconStyle('bottom')">
@@ -117,12 +120,14 @@
 
 <script setup>
 import { computed } from 'vue';
+import { buildBgStyle } from '@/composables/useBackgroundStyle';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
 const defaults = {
+  media: { type: 'none' }, top_media: { type: 'none' }, bottom_media: { type: 'none' },
   visible_height: '300',
   top_image_url: '', top_image_position: 'center center', top_image_size: 'cover', top_video_url: '',
   bottom_image_url: '', bottom_image_position: 'center center', bottom_image_size: 'cover', bottom_video_url: '',
@@ -175,16 +180,61 @@ const containerStyle = computed(() => ({
   perspective: isFlipEffect.value ? (parseInt(s.value.perspective) || 800) + 'px' : undefined,
 }));
 
-// ── Global background ──
-const globalBgStyle = computed(() => ({
-  position: 'absolute', inset: '0', zIndex: '0',
-  backgroundImage: `url(${s.value.image_url})`,
-  backgroundSize: s.value.image_size || 'cover',
-  backgroundPosition: s.value.image_position || 'center center',
-  backgroundRepeat: 'no-repeat',
-}));
+// ── Sfondi unificati (pannello media universale) PER ZONA, con fallback legacy ──
+// `media` = globale (dietro entrambe), `top_media`/`bottom_media` = per-faccia.
+// Precedenza al media object (type!=none); altrimenti le vecchie chiavi image/video.
+function mediaObj(key) {
+  const m = s.value[key];
+  return (m && typeof m === 'object' && m.type && m.type !== 'none') ? m : null;
+}
+const globalMedia = computed(() => mediaObj('media'));
+const topMedia = computed(() => mediaObj('top_media'));
+const bottomMedia = computed(() => mediaObj('bottom_media'));
 
-// ── Per-face background ──
+const hasGlobalMedia = computed(() => !!globalMedia.value);
+const hasGlobalBg = computed(() => hasGlobalMedia.value || !!s.value.image_url);
+
+function faceMedia(zone) { return zone === 'top' ? topMedia.value : bottomMedia.value; }
+function isMediaVideo(m) { return !!(m && m.type === 'video' && m.video_url); }
+
+// Style dello strato media (immagine/gradiente/colore…) posizionato absolute inset:0.
+function mediaLayerStyle(m) {
+  return { position: 'absolute', inset: '0', zIndex: '0', ...buildBgStyle(m) };
+}
+
+// ── Merge media+legacy per faccia (usati nel template) ──
+// Style del layer di sfondo faccia: media object (precedenza) → immagine legacy.
+// null se non c'è nulla da dipingere (né media né immagine legacy).
+function faceBgLayerStyle(zone) {
+  const m = faceMedia(zone);
+  if (m) return mediaLayerStyle(m);
+  const legacyImg = zone === 'top' ? s.value.top_image_url : s.value.bottom_image_url;
+  return legacyImg ? bgStyle(zone) : null;
+}
+// URL video della faccia: media video (precedenza) → video legacy.
+// Legacy XOR immagine (come prima: se c'è l'immagine legacy, il video legacy non parte).
+function faceVideoSrc(zone) {
+  const m = faceMedia(zone);
+  if (isMediaVideo(m)) return m.video_url;
+  if (m) return null; // media non-video impostato → il legacy non deve intromettersi
+  const legacyImg = zone === 'top' ? s.value.top_image_url : s.value.bottom_image_url;
+  if (legacyImg) return null;
+  return zone === 'top' ? (s.value.top_video_url || null) : (s.value.bottom_video_url || null);
+}
+
+// ── Global background ──
+const globalBgStyle = computed(() => {
+  if (hasGlobalMedia.value) return mediaLayerStyle(globalMedia.value);
+  return {
+    position: 'absolute', inset: '0', zIndex: '0',
+    backgroundImage: `url(${s.value.image_url})`,
+    backgroundSize: s.value.image_size || 'cover',
+    backgroundPosition: s.value.image_position || 'center center',
+    backgroundRepeat: 'no-repeat',
+  };
+});
+
+// ── Per-face background (legacy) ──
 function bgStyle(zone) {
   const url = zone === 'top' ? s.value.top_image_url : s.value.bottom_image_url;
   const size = zone === 'top' ? s.value.top_image_size : s.value.bottom_image_size;

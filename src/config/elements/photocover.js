@@ -15,6 +15,12 @@ export default {
   icon: 'dashicons-format-image',
   category: 'marketing',
 
+  // Unificazione COPERTINA: la vecchia immagine di copertina (bg_image) confluisce
+  // nel pannello universale media_cover (immagine/video/gradiente/colore…). Non
+  // distruttivo: la chiave vecchia resta come fallback nei renderer. NB: media_bg
+  // qui è il COLORE di sfondo del media (backdrop), NON il pannello — non si tocca.
+  bgMigrate: { imageKey: 'bg_image', imagePosKey: 'bg_image_object_position', target: 'media_cover' },
+
   defaults: {
     kicker_text: 'Photo Essay · Issue 41',
     headline_text: 'The City After Rain',
@@ -26,6 +32,7 @@ export default {
     ],
     bg_image: '',
     ...focalDefault('bg_image'),
+    media_cover: { type: 'none' },
     media_label: 'cover photograph — rain-soaked city street, single figure',
     aspect_ratio: '16/9',
     min_height: 560,
@@ -71,8 +78,7 @@ export default {
     },
 
     { type: 'separator', label: t('Foto di copertina') },
-    { key: 'bg_image', label: t('Immagine di copertina (vuoto = placeholder)'), type: 'image' },
-    focalField('bg_image', { ratio: 'aspect_ratio' }),
+    { key: 'media_cover', label: t('Copertina (immagine, video, gradiente…)'), type: 'background', showParallax: false },
     { key: 'media_label', label: t('Etichetta placeholder'), type: 'text' },
   ],
 

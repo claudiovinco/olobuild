@@ -9,20 +9,29 @@
     <div class="olo-fc-inner" :style="innerStyle">
       <!-- Front -->
       <div class="olo-fc-face olo-fc-face-front" :style="frontStyle">
+        <!-- Sfondo unificato (front_media): immagine/gradiente/colore via style + video element -->
+        <div v-if="hasFrontMedia" class="olo-fc-bg" :style="frontMediaStyle"></div>
+        <video
+          v-if="isFrontVideo"
+          class="olo-fc-bg"
+          :src="s.front_media.video_url"
+          autoplay loop muted playsinline
+        ></video>
+        <!-- Fallback legacy (solo se front_media non impostato) -->
         <img
-          v-if="s.front_image"
+          v-if="!hasFrontMedia && s.front_image"
           class="olo-fc-bg"
           :src="s.front_image"
           :style="frontImgStyle"
           alt=""
         />
         <div
-          v-if="s.front_image && s.front_overlay"
+          v-if="!hasFrontMedia && s.front_image && s.front_overlay"
           class="olo-fc-overlay"
           :style="{ background: s.front_overlay }"
         ></div>
         <video
-          v-if="s.front_video && !s.front_image"
+          v-if="!hasFrontMedia && s.front_video && !s.front_image"
           class="olo-fc-bg"
           :src="s.front_video"
           autoplay loop muted playsinline
@@ -38,20 +47,29 @@
 
       <!-- Back -->
       <div class="olo-fc-face olo-fc-face-back" :style="backFaceStyle">
+        <!-- Sfondo unificato (back_media): immagine/gradiente/colore via style + video element -->
+        <div v-if="hasBackMedia" class="olo-fc-bg" :style="backMediaStyle"></div>
+        <video
+          v-if="isBackVideo"
+          class="olo-fc-bg"
+          :src="s.back_media.video_url"
+          autoplay loop muted playsinline
+        ></video>
+        <!-- Fallback legacy (solo se back_media non impostato) -->
         <img
-          v-if="s.back_image"
+          v-if="!hasBackMedia && s.back_image"
           class="olo-fc-bg"
           :src="s.back_image"
           :style="backImgStyle"
           alt=""
         />
         <div
-          v-if="s.back_image && s.back_overlay"
+          v-if="!hasBackMedia && s.back_image && s.back_overlay"
           class="olo-fc-overlay"
           :style="{ background: s.back_overlay }"
         ></div>
         <video
-          v-if="s.back_video && !s.back_image"
+          v-if="!hasBackMedia && s.back_video && !s.back_image"
           class="olo-fc-bg"
           :src="s.back_video"
           autoplay loop muted playsinline
@@ -74,12 +92,15 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { resolveColor, TOKENS, SHADOW } from '@/composables/oloTileDefaults';
+import { buildBgStyle } from '@/composables/useBackgroundStyle';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
 const s = computed(() => ({
+  front_media: { type: 'none' },
+  back_media: { type: 'none' },
   front_image: '',
   front_video: '',
   front_icon: 'star',
@@ -133,6 +154,27 @@ const s = computed(() => ({
   desc_size: '14',
   ...props.settings,
 }));
+
+// ── Sfondo unificato per faccia (pannelli front_media / back_media) con fallback legacy ──
+const hasFrontMedia = computed(() => {
+  const m = s.value.front_media;
+  return !!(m && typeof m === 'object' && m.type && m.type !== 'none');
+});
+const frontMediaStyle = computed(() => (hasFrontMedia.value ? buildBgStyle(s.value.front_media) : {}));
+const isFrontVideo = computed(() => {
+  const m = s.value.front_media;
+  return hasFrontMedia.value && m.type === 'video' && !!m.video_url;
+});
+
+const hasBackMedia = computed(() => {
+  const m = s.value.back_media;
+  return !!(m && typeof m === 'object' && m.type && m.type !== 'none');
+});
+const backMediaStyle = computed(() => (hasBackMedia.value ? buildBgStyle(s.value.back_media) : {}));
+const isBackVideo = computed(() => {
+  const m = s.value.back_media;
+  return hasBackMedia.value && m.type === 'video' && !!m.video_url;
+});
 
 const flipped = ref(false);
 

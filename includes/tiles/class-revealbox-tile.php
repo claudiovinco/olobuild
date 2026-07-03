@@ -12,6 +12,10 @@ class Olobuild_Revealbox_Tile extends Olobuild_Tile_Base {
     protected $category = 'general';
 
     protected $defaults = [
+        // Sfondi unificati sul pannello media universale, PER ZONA (chiavi legacy tenute sotto come fallback).
+        'media'                  => [ 'type' => 'none' ],
+        'top_media'              => [ 'type' => 'none' ],
+        'bottom_media'           => [ 'type' => 'none' ],
         'visible_height'         => '300',
         'top_image_url'          => '',
         'top_image_position'     => 'center center',
@@ -109,8 +113,11 @@ class Olobuild_Revealbox_Tile extends Olobuild_Tile_Base {
         $is_horiz = $effect === 'slide-left' || $effect === 'slide-right';
 
         // ── Per-face BG helpers ──
-        $top_bg  = $this->render_face_bg( $s['top_image_url'], $s['top_image_position'], $s['top_image_size'], $s['top_video_url'] );
-        $bot_bg  = $this->render_face_bg( $s['bottom_image_url'], $s['bottom_image_position'], $s['bottom_image_size'], $s['bottom_video_url'] );
+        // Sfondi unificati sul pannello media universale PER ZONA (top_media/bottom_media):
+        // se presente un media object (type!=none) ha la precedenza (bg_media_parts:
+        // css sul wrapper + markup video/gallery); altrimenti resa legacy image/video.
+        $top_bg  = $this->render_face_bg( $s['top_image_url'], $s['top_image_position'], $s['top_image_size'], $s['top_video_url'], $s['top_media'] ?? null, $uid . '-top' );
+        $bot_bg  = $this->render_face_bg( $s['bottom_image_url'], $s['bottom_image_position'], $s['bottom_image_size'], $s['bottom_video_url'], $s['bottom_media'] ?? null, $uid . '-bot' );
 
         // ── Overlay helpers ──
         $top_overlay = $top_ov_op > 0
@@ -223,13 +230,9 @@ class Olobuild_Revealbox_Tile extends Olobuild_Tile_Base {
         if ( $css ) {
             echo '<style>' . $css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- hover/transition CSS assembled above from the internally generated $uid, intval()'d heights, floatval()'d speed and a fixed easing map
         }
-        // Global background image (behind everything)
-        $global_bg = '';
-        if ( ! empty( $s['image_url'] ) ) {
-            $g_size = esc_attr( $s['image_size'] ?? 'cover' );
-            $g_pos  = esc_attr( $s['image_position'] ?? 'center center' );
-            $global_bg = '<div style="position:absolute;inset:0;background:url(' . esc_url( $s['image_url'] ) . ') ' . $g_pos . '/' . $g_size . ' no-repeat;z-index:0"></div>';
-        }
+        // Global background (behind everything): media object `media` (precedenza) →
+        // fallback legacy image_url. Stesso layer posizionato z-index:0 di render_face_bg.
+        $global_bg = $this->render_face_bg( $s['image_url'], $s['image_position'] ?? 'center center', $s['image_size'] ?? 'cover', '', $s['media'] ?? null, $uid . '-glob' );
 
         echo '<div id="' . esc_attr( $uid ) . '" class="olo-revealbox olo-reveal-' . $effect . '" style="' . $container_css . '">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $effect is sanitize_html_class()'d above; $container_css is built from intval()'d height/perspective/radius and a preg_replace() character-whitelisted colour
         echo $global_bg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup assembled above with esc_url()/esc_attr() only
@@ -249,8 +252,29 @@ class Olobuild_Revealbox_Tile extends Olobuild_Tile_Base {
 
     /**
      * Render background image or video for a face zone.
+     *
+     * Sfondo unificato: se $media è un oggetto background (type!=none) ha la
+     * PRECEDENZA (pannello media universale immagine/video/gradiente/colore/gallery…):
+     * si usa bg_media_parts() — css sul wrapper posizionato + markup (video/gallery)
+     * al suo interno. Altrimenti resa LEGACY dai campi image_url/video_url (fallback,
+     * i template non ri-salvati continuano a rendere identici).
+     *
+     * @param string      $image_url      Immagine legacy.
+     * @param string      $image_position Focal legacy.
+     * @param string      $image_size     Fit legacy.
+     * @param string      $video_url      Video legacy.
+     * @param array|null  $media          Oggetto background universale (top_media/bottom_media/media).
+     * @param string      $scope          Scope univoco per la gallery (es. "{$uid}-top").
      */
-    private function render_face_bg( $image_url, $image_position, $image_size, $video_url ) {
+    private function render_face_bg( $image_url, $image_position, $image_size, $video_url, $media = null, $scope = '' ) {
+        // Precedenza al pannello media universale.
+        if ( is_array( $media ) && ! empty( $media['type'] ) && $media['type'] !== 'none' ) {
+            $mb = $this->bg_media_parts( $media, $scope );
+            if ( $mb['has'] ) {
+                return '<div style="position:absolute;inset:0;z-index:0;' . esc_attr( $mb['css'] ) . '">' . $mb['markup'] . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $mb['markup'] generato da Olobuild_CSS_Builder::get_bg_html_markup() (auto-escapato); $mb['css'] passato in esc_attr()
+            }
+        }
+        // ── Fallback legacy ──
         if ( ! empty( $image_url ) ) {
             $bg_size = esc_attr( $image_size );
             $bg_pos  = esc_attr( $image_position );

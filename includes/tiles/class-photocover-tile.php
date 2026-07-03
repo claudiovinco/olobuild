@@ -88,6 +88,12 @@ class Olobuild_PhotoCover_Tile extends Olobuild_Tile_Base {
             ? 'url(' . esc_url( $img ) . ')'
             : 'repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 16px, transparent 16px 32px)';
 
+        // COPERTINA universale: pannello media_cover (immagine/video/gradiente/…) con
+        // precedenza sull'immagine legacy bg_image (tenuta come fallback). NB: media_bg
+        // resta il colore backdrop del media, indipendente dal pannello.
+        $mc      = $this->bg_media_parts( $s['media_cover'] ?? null, $uid );
+        $has_mc  = $mc['has'];
+
         // clamp padding faithful to blueprint clamp(28px,5vw,56px) at default; driven by frame_padding (lo=fp, hi=fp*2).
         $pad = 'clamp(' . max( 8, $fp ) . 'px,5vw,' . max( 16, $fp * 2 ) . 'px)';
 
@@ -129,8 +135,8 @@ class Olobuild_PhotoCover_Tile extends Olobuild_Tile_Base {
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colours via the safe_color_css() whitelist, overlay alphas via floatval() clamps, sizes/padding via intval() clamps (or fixed clamp() literal), aspect ratio via preg_match() whitelist, image via esc_url() (or fixed gradient literal), media label esc_attr()'d inline, fixed font-stack literals, root decorations via the Olobuild_CSS_Builder/Olobuild_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;font-family:<?php echo $sans; ?>;<?php echo $root_extra; ?>}
-            .<?php echo $uid; ?> .pc-media{position:relative;overflow:hidden;aspect-ratio:<?php echo $ar; ?>;<?php if ( $mh > 0 ) : ?>min-height:<?php echo $mh; ?>px;<?php endif; ?>background:<?php echo $mediaBg; ?>;background-image:<?php echo $mediaImg; ?>;background-size:cover;background-position:<?php echo esc_attr( Olobuild_Tile_Utils::focal_pos( $s, 'bg_image' ) ); ?>;<?php if ( $media_radius !== '' ) : ?>border-radius:<?php echo $media_radius; ?>;<?php endif; ?>}
-            <?php if ( $img === '' && ! empty( $s['media_label'] ) ) : ?>
+            .<?php echo $uid; ?> .pc-media{position:relative;overflow:hidden;aspect-ratio:<?php echo $ar; ?>;<?php if ( $mh > 0 ) : ?>min-height:<?php echo $mh; ?>px;<?php endif; ?>background:<?php echo $mediaBg; ?>;<?php if ( $has_mc ) : ?><?php echo $mc['css']; ?><?php else : ?>background-image:<?php echo $mediaImg; ?>;background-size:cover;background-position:<?php echo esc_attr( Olobuild_Tile_Utils::focal_pos( $s, 'bg_image' ) ); ?>;<?php endif; ?><?php if ( $media_radius !== '' ) : ?>border-radius:<?php echo $media_radius; ?>;<?php endif; ?>}
+            <?php if ( ! $has_mc && $img === '' && ! empty( $s['media_label'] ) ) : ?>
             .<?php echo $uid; ?> .pc-media::after{content:"<?php echo esc_attr( $s['media_label'] ); ?>";position:absolute;left:14px;bottom:12px;right:14px;font-family:<?php echo $mono; ?>;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.4);}
             <?php endif; ?>
             .<?php echo $uid; ?>::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,<?php echo $aTop; ?>),transparent 35%,rgba(0,0,0,<?php echo $aBot; ?>));pointer-events:none;}
@@ -143,7 +149,7 @@ class Olobuild_PhotoCover_Tile extends Olobuild_Tile_Base {
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <section class="olo-photocover <?php echo esc_attr( $uid ); ?>">
-            <div class="pc-media"></div>
+            <div class="pc-media"><?php if ( $has_mc ) { echo $mc['markup']; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup generato da Olobuild_CSS_Builder::get_bg_html_markup(), che escapa il proprio output ?></div>
             <div class="pc-in">
                 <?php if ( ! empty( $s['kicker_text'] ) ) : ?><span class="pc-kicker"><?php echo esc_html( $s['kicker_text'] ); ?></span><?php endif; ?>
                 <?php if ( ! empty( $s['headline_text'] ) ) : ?><h1 class="pc-h"><?php echo esc_html( $s['headline_text'] ); ?></h1><?php endif; ?>

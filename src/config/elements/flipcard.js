@@ -12,7 +12,20 @@ export default {
   name: t('FlipCard'),
   icon: 'dashicons-image-flip-horizontal',
   category: 'marketing',
+
+  // Unificazione sfondo: ogni faccia ha il suo pannello unico media (immagine/video/
+  // gradiente/colore…). I campi legacy front_image/front_video e back_image/back_video
+  // confluiscono rispettivamente in front_media e back_media. Non distruttivo: le chiavi
+  // vecchie restano come fallback nei renderer (Vue+PHP) e nei defaults; front_media/
+  // back_media hanno la precedenza. Migrazione al load in src/utils/bgMigrate.js.
+  bgMigrate: [
+    { imageKey: 'front_image', imagePosKey: 'front_image_position', videoKey: 'front_video', target: 'front_media' },
+    { imageKey: 'back_image',  imagePosKey: 'back_image_position',  videoKey: 'back_video',  target: 'back_media' },
+  ],
+
   defaults: {
+    front_media: { type: 'none' },
+    back_media: { type: 'none' },
     bg: { type: 'none' },
     typography_preset: '',
     preset: 'custom',
@@ -78,15 +91,13 @@ export default {
 
   fields: [
     { type: 'separator', label: t('Fronte — Contenuto') },
-    { key: 'front_image', label: t('Immagine sfondo'), type: 'image' },
-    { key: 'front_video', label: t('Video sfondo (mp4)'), type: 'media' },
+    { key: 'front_media', label: t('Fronte — sfondo (immagine, video, gradiente…)'), type: 'background', showParallax: false },
     { key: 'front_icon', label: t('Icona'), type: 'icon' },
     { key: 'front_title', label: t('Titolo'), type: 'text' },
     { key: 'front_description', label: t('Descrizione'), type: 'textarea' },
 
     { type: 'separator', label: t('Retro — Contenuto') },
-    { key: 'back_image', label: t('Immagine sfondo'), type: 'image' },
-    { key: 'back_video', label: t('Video sfondo (mp4)'), type: 'media' },
+    { key: 'back_media', label: t('Retro — sfondo (immagine, video, gradiente…)'), type: 'background', showParallax: false },
     { key: 'back_icon', label: t('Icona'), type: 'icon' },
     { key: 'back_title', label: t('Titolo'), type: 'text' },
     { key: 'back_description', label: t('Descrizione'), type: 'textarea' },
