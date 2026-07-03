@@ -665,7 +665,34 @@
       });
     }
 
-    post('olo:layout-snapshot', { sections: sects, columns: cols, containers: containers, scrollX: scrollX, scrollY: scrollY });
+    // Elementi figli DIRETTI di ogni colonna, in ordine d'albero, con l'indice
+    // nel column.children: consente il drop element-level (dropline precisa "tra
+    // due tile" invece del solo append in fondo). Un discendente conta come figlio
+    // diretto se il suo contenitore-antenato più vicino (con data-olo-tile-type)
+    // è QUESTA colonna → salta gli elementi annidati in inner-columns/floatingpanel.
+    var STRUCT = { column: 1, 'inner-column': 1, 'inner-columns': 1, floatingpanel: 1, row: 1, section: 1 };
+    var elements = [];
+    for (var c = 0; c < columnEls.length; c++) {
+      var colEl = columnEls[c];
+      var colId = colEl.getAttribute('data-olo-tile-id');
+      var descendants = colEl.querySelectorAll('[data-olo-tile-id]');
+      var childIdx = 0;
+      for (var e = 0; e < descendants.length; e++) {
+        var d = descendants[e];
+        var owner = d.parentElement ? d.parentElement.closest('[data-olo-tile-type]') : null;
+        if (owner !== colEl) continue; // non è figlio diretto (albero) di questa colonna
+        var er = d.getBoundingClientRect();
+        elements.push({
+          columnId: colId,
+          index: childIdx,
+          top: er.top + scrollY, bottom: er.bottom + scrollY,
+          left: er.left + scrollX, right: er.right + scrollX,
+        });
+        childIdx++;
+      }
+    }
+
+    post('olo:layout-snapshot', { sections: sects, columns: cols, containers: containers, elements: elements, scrollX: scrollX, scrollY: scrollY });
   }
 
   // ── Height observer ──
@@ -1291,14 +1318,26 @@
 
       case 'olo:scroll-to':
         if (d.tileId) {
-          var scrollEl = findTileEl(d.tileId);
-          if (scrollEl) {
-            var sf = d.flash || {};
-            // scroll_ms: 0 = salto istantaneo, altrimenti smooth + attesa prima del flash.
-            var scrollMs = (sf.scroll_ms === undefined) ? 500 : (parseInt(sf.scroll_ms, 10) || 0);
-            scrollEl.scrollIntoView({ behavior: scrollMs === 0 ? 'auto' : 'smooth', block: 'center' });
-            applyScrollFlash(scrollEl, sf, scrollMs);
-          }
+          // Retry: dopo un inserimento il re-render del body è asincrono
+          // (~300ms debounce + fetch REST), quindi l'elemento può non esistere
+          // ancora al primo tentativo. Riprova per ~1.2s poi rinuncia.
+          (function(tileId, flash) {
+            var attempts = 0;
+            var MAX = 24; // 24 × 50ms ≈ 1.2s
+            var tryScroll = function() {
+              var scrollEl = findTileEl(tileId);
+              if (scrollEl) {
+                var sf = flash || {};
+                // scroll_ms: 0 = salto istantaneo, altrimenti smooth + attesa prima del flash.
+                var scrollMs = (sf.scroll_ms === undefined) ? 500 : (parseInt(sf.scroll_ms, 10) || 0);
+                scrollEl.scrollIntoView({ behavior: scrollMs === 0 ? 'auto' : 'smooth', block: 'center' });
+                applyScrollFlash(scrollEl, sf, scrollMs);
+                return;
+              }
+              if (++attempts < MAX) setTimeout(tryScroll, 50);
+            };
+            tryScroll();
+          })(d.tileId, d.flash);
         }
         break;
 

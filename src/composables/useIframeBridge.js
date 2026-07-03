@@ -5,6 +5,7 @@ import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { useTilesStore, createRow, createColumn } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { useDragDrop } from '@/composables/useDragDrop';
+import { useTileActions } from '@/composables/useTileActions';
 import { onScrollToTileRequest } from '@/utils/scrollToTileChannel';
 import { loadScrollFlashPrefs } from '@/utils/scrollFlashPrefs';
 
@@ -30,6 +31,7 @@ export function useIframeBridge(iframeRef) {
   const tilesStore = useTilesStore();
   const builderStore = useBuilderStore();
   const { handleDropFromSidebar, handleDropIntoColumn } = useDragDrop();
+  const { removeTiles } = useTileActions();
   const iframeReady = ref(false);
   const iframeHeight = ref(800);
   // 'standalone' (default): l'iframe carica il template builder-iframe.php standalone,
@@ -379,7 +381,7 @@ export function useIframeBridge(iframeRef) {
         break;
 
       case 'olo:layout-snapshot':
-        builderStore.iframeLayout = { sections: d.sections || [], columns: d.columns || [], containers: d.containers || [] };
+        builderStore.iframeLayout = { sections: d.sections || [], columns: d.columns || [], containers: d.containers || [], elements: d.elements || [] };
         break;
 
       case 'olo:open-finder-for':
@@ -455,9 +457,7 @@ export function useIframeBridge(iframeRef) {
             tilesStore.duplicateTile(d.tileId);
             builderStore.markDirtyForTile(d.tileId || builderStore.selectedTileId);
           } else if (d.action === 'delete') {
-            tilesStore.removeTile(d.tileId);
-            builderStore.markDirtyForTile(d.tileId || builderStore.selectedTileId);
-            builderStore.deselectTile();
+            removeTiles(d.tileId);
           } else if (d.action === 'moveup') {
             tilesStore.moveUp(d.tileId);
             builderStore.markDirtyForTile(d.tileId || builderStore.selectedTileId);

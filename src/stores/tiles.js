@@ -231,16 +231,94 @@ export const useTilesStore = defineStore('tiles', {
     },
 
     /**
-     * Remove tile from anywhere in the tree (searches all zones)
+     * Remove tile from anywhere in the tree (searches all zones).
+     * Se il nodo rimosso è un ELEMENTO foglia, pota anche gli involucri
+     * auto-generati rimasti vuoti (Colonna > Riga > Sezione del drop auto-wrap):
+     * senza questo, eliminare l'unica tile di una sezione lasciava un guscio
+     * che nel frontend rende una striscia vuota con padding.
      */
     removeTile(tileId) {
-      const result = findParentAndIndex(this.canvasTiles, tileId)
-        || findParentAndIndex(this.headerTiles, tileId)
-        || findParentAndIndex(this.footerTiles, tileId);
-      if (result) {
+      const roots = [this.canvasTiles, this.headerTiles, this.footerTiles];
+      for (const root of roots) {
+        const result = findParentAndIndex(root, tileId);
+        if (!result) continue;
+
+        const removed = result.parent[result.index];
+        // Path PRIMA della rimozione: [.. section, row, column, element]
+        const path = findAncestorPath(root, tileId) || [];
         result.parent.splice(result.index, 1);
+
+        // Prune solo per eliminazioni di elementi foglia (caso auto-wrap): evita
+        // di far sparire sezioni quando l'utente elimina di proposito una riga/sezione.
+        const isLeaf = removed && !CONTAINER_TYPES.includes(removed.type);
+        if (isLeaf && path.length >= 2) {
+          // Risali dagli antenati più profondi; fermati appena uno è "significativo".
+          for (let i = path.length - 2; i >= 0; i--) {
+            const anc = path[i];
+            if (!this._isPrunableEmpty(anc)) break;
+            const r = findParentAndIndex(root, anc.id);
+            if (!r) break;
+            // Righe/colonne: rimuovi SOLO se figlio unico (firma dell'auto-wrap
+            // Section>Row>Column). In un layout multi-colonna/multi-riga voluto,
+            // una colonna/riga svuotata resta (verrà segnalata come vuota), così
+            // non si stravolge la struttura sotto le mani dell'utente. Una sezione
+            // vuota invece è un blocco indipendente: si rimuove sempre.
+            if (anc.type !== 'section' && r.parent.length > 1) break;
+            r.parent.splice(r.index, 1);
+          }
+        }
+
         this._bumpVersion();
+        return;
       }
+    },
+
+    /**
+     * True se il nodo è un contenitore SENZA contenuto vivo e senza aspetto
+     * proprio (sfondo/colore) → può essere potato in sicurezza.
+     * Ricorsivo: un contenitore i cui figli sono tutti a loro volta gusci vuoti
+     * è esso stesso vuoto. Un elemento foglia non è mai un "guscio".
+     */
+    _isPrunableEmpty(node) {
+      if (!node) return false;
+      if (!CONTAINER_TYPES.includes(node.type)) return false;
+      if (this._hasVisualContent(node)) return false;
+      const kids = Array.isArray(node.children) ? node.children : [];
+      return kids.every(k => this._isPrunableEmpty(k));
+    },
+
+    /**
+     * True se il nodo ha un aspetto proprio da preservare (variante colore
+     * sezione, sfondo su settings o style). Conservativo: nel dubbio, mantiene.
+     */
+    _hasVisualContent(node) {
+      const s = node.settings || {};
+      if (s.style && s.style !== 'default') return true;
+      if (s.bg_type && s.bg_type !== 'none') return true;
+      if (s.bg_color || s.bg_image_url || s.bg_gradient_from) return true;
+      const st = (node.style && !Array.isArray(node.style)) ? node.style : {};
+      if (st.bg_type && st.bg_type !== 'none') return true;
+      if (st.bg_color || st.bg_image_url || st.bg_gradient_from) return true;
+      return false;
+    },
+
+    /**
+     * True se la sezione (o qualsiasi contenitore) non contiene alcun elemento
+     * foglia — usato dal canvas per marcare le sezioni "vuote" che nel frontend
+     * renderebbero uno spazio bianco.
+     */
+    isEmptyContainer(nodeId) {
+      const node = this.getTileById(nodeId);
+      if (!node) return false;
+      const hasLeaf = (n) => {
+        const kids = Array.isArray(n.children) ? n.children : [];
+        for (const k of kids) {
+          if (!CONTAINER_TYPES.includes(k.type)) return true;
+          if (hasLeaf(k)) return true;
+        }
+        return false;
+      };
+      return !hasLeaf(node);
     },
 
     /**
@@ -313,6 +391,7 @@ export const useTilesStore = defineStore('tiles', {
     moveTile(fromIndex, toIndex) {
       const [moved] = this.canvasTiles.splice(fromIndex, 1);
       this.canvasTiles.splice(toIndex, 0, moved);
+      this._bumpVersion();
     },
 
     duplicateTile(tileId) {
@@ -323,6 +402,7 @@ export const useTilesStore = defineStore('tiles', {
       const original = result.parent[result.index];
       const clone = deepCloneWithNewIds(original);
       result.parent.splice(result.index + 1, 0, clone);
+      this._bumpVersion();
       return clone;
     },
 
@@ -340,6 +420,7 @@ export const useTilesStore = defineStore('tiles', {
         this.addChild(parentId, clone, index);
       } else {
         this.canvasTiles.push(clone);
+        this._bumpVersion();
       }
       return clone;
     },
@@ -352,6 +433,7 @@ export const useTilesStore = defineStore('tiles', {
       if (result) {
         const clone = deepCloneWithNewIds(this.clipboardTile);
         result.parent.splice(result.index + 1, 0, clone);
+        this._bumpVersion();
         return clone;
       }
       return this.pasteTile(null);
@@ -423,6 +505,7 @@ export const useTilesStore = defineStore('tiles', {
       if (!result || result.index === 0) return;
       const [item] = result.parent.splice(result.index, 1);
       result.parent.splice(result.index - 1, 0, item);
+      this._bumpVersion();
     },
 
     moveDown(tileId) {
@@ -432,6 +515,7 @@ export const useTilesStore = defineStore('tiles', {
       if (!result || result.index >= result.parent.length - 1) return;
       const [item] = result.parent.splice(result.index, 1);
       result.parent.splice(result.index + 1, 0, item);
+      this._bumpVersion();
     },
 
     /**
@@ -465,6 +549,7 @@ export const useTilesStore = defineStore('tiles', {
         const [item] = tileResult.parent.splice(tileResult.index, 1);
         // Add to sibling column (at the end)
         siblingCol.children.push(item);
+        this._bumpVersion();
         return;
       }
     },
@@ -478,6 +563,7 @@ export const useTilesStore = defineStore('tiles', {
         const result = findParentAndIndex(root, targetTileId);
         if (result) {
           result.parent.splice(result.index + 1, 0, newTile);
+          this._bumpVersion();
           return true;
         }
       }
@@ -527,6 +613,7 @@ export const useTilesStore = defineStore('tiles', {
         } else {
           targetNode.children.push(sourceCheck);
         }
+        this._bumpVersion();
         return;
       }
 
@@ -554,12 +641,14 @@ export const useTilesStore = defineStore('tiles', {
         if (result) {
           const idx = before ? result.index : result.index + 1;
           result.parent.splice(idx, 0, sourceNode);
+          this._bumpVersion();
           return;
         }
       }
 
       // Fallback: put it back in canvasTiles
       this.canvasTiles.push(sourceNode);
+      this._bumpVersion();
     },
 
     /**
@@ -588,6 +677,7 @@ export const useTilesStore = defineStore('tiles', {
         const arr = sourceRoot || this.canvasTiles;
         const at = Math.max(0, Math.min(newIndex, arr.length));
         arr.splice(at, 0, sourceNode);
+        this._bumpVersion();
         return;
       }
       // Parent è un nodo (section/row/column)
@@ -597,11 +687,13 @@ export const useTilesStore = defineStore('tiles', {
           if (!Array.isArray(parentNode.children)) parentNode.children = [];
           const at = Math.max(0, Math.min(newIndex, parentNode.children.length));
           parentNode.children.splice(at, 0, sourceNode);
+          this._bumpVersion();
           return;
         }
       }
       // Fallback
       this.canvasTiles.push(sourceNode);
+      this._bumpVersion();
     },
 
     /**
@@ -666,6 +758,7 @@ export const useTilesStore = defineStore('tiles', {
       }
 
       row.children = newCols;
+      this._bumpVersion();
     },
 
     /**
@@ -782,6 +875,7 @@ export const useTilesStore = defineStore('tiles', {
         grid_rows: tpl.gridTemplateRows,
       };
       row.children = newCols;
+      this._bumpVersion();
     },
 
     /**
@@ -846,6 +940,7 @@ export const useTilesStore = defineStore('tiles', {
       }
 
       node.children = newCols;
+      this._bumpVersion();
     },
 
     applyCustomWidths(rowId, value) {
@@ -887,6 +982,7 @@ export const useTilesStore = defineStore('tiles', {
       }
 
       row.children = newCols;
+      this._bumpVersion();
       return widthsStr;
     },
 
@@ -901,6 +997,7 @@ export const useTilesStore = defineStore('tiles', {
         const column = rowTile.children[colIndex];
         if (column && Array.isArray(column.children)) {
           column.children.push(newTile);
+          this._bumpVersion();
           return;
         }
       }
@@ -934,6 +1031,7 @@ export const useTilesStore = defineStore('tiles', {
           const idx = column.children.findIndex(t => t.id === childTileId);
           if (idx !== -1) {
             column.children.splice(idx, 1);
+            this._bumpVersion();
             return;
           }
         }

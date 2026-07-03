@@ -504,13 +504,36 @@ body.olo-preview-mode .olo-iframe-toolbar {
   min-height: 30px !important;
 }
 [data-olo-empty="1"][data-olo-tile-type="section"] {
-  min-height: 30px !important;
+  min-height: 34px !important;
+  position: relative;
+}
+/* Etichetta esplicita: una sezione senza contenuti nel sito pubblicato rende
+   uno spazio bianco. Coerente col badge "vuota" del canvas classico. */
+[data-olo-empty="1"][data-olo-tile-type="section"]::after {
+  content: "Sezione vuota";
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font: 700 10px/1 system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #b45309;
+  background: rgba(245, 158, 11, 0.16);
+  padding: 4px 10px;
+  border-radius: 4px;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 2;
 }
 /* Preview mode: niente outline né min-height forzato */
 body.olo-preview-mode [data-olo-empty="1"] {
   min-height: 0 !important;
   outline: none !important;
   background-color: transparent !important;
+}
+body.olo-preview-mode [data-olo-empty="1"][data-olo-tile-type="section"]::after {
+  content: none;
 }
 
 /* ─────────────────────────────────────────────────────────

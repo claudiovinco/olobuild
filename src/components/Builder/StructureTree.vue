@@ -421,6 +421,7 @@ import { ref, reactive, computed, nextTick, watch } from 'vue';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { useHistory } from '@/composables/useHistory';
+import { useTileActions } from '@/composables/useTileActions';
 import { requestScrollToTile } from '@/utils/scrollToTileChannel';
 import {
   vOloDraggable,
@@ -514,6 +515,7 @@ function isVisible(id) {
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
+const { removeTiles } = useTileActions();
 const stRoot = ref(null);
 
 // Auto-scroll del pannello durante un drag: senza, trascinare un nodo oltre
@@ -909,9 +911,7 @@ function duplicate(id) {
 }
 
 function remove(id) {
-  tilesStore.removeTile(id);
-  if (builderStore.selectedTileId === id) builderStore.deselectTile();
-  builderStore.isDirty = true;
+  removeTiles(id);
 }
 
 function onZoneClick(zone) {

@@ -122,11 +122,12 @@ import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue';
 import { useTilesStore, deepCloneWithNewIds, generateId as oloGenerateId } from '../../stores/tiles';
 import { useBuilderStore } from '../../stores/builder';
 import { useDragDrop } from '../../composables/useDragDrop';
+import { requestScrollToTile } from '../../utils/scrollToTileChannel';
 import { getAllElements, getElementDef } from '../../config/elementRegistry';
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
-const { handleDropFromSidebar, handleDropIntoColumn } = useDragDrop();
+const { handleDropFromSidebar, handleDropIntoColumn, createTileFromType } = useDragDrop();
 
 const visible = ref(false);
 const query = ref('');
@@ -266,24 +267,27 @@ function typeIcon(type) {
 // ─── Azioni ───
 function addElement(tileType) {
   const afterId = builderStore.insertAfterTileId;
+  let newId = null;
+
   if (afterId) {
-    const reg = tilesStore.registeredTiles.find(t => t.type === tileType);
-    const newTile = {
-      id: oloGenerateId(),
-      type: tileType,
-      settings: JSON.parse(JSON.stringify((reg || {}).defaults || {})),
-      style: {},
-      advanced: {},
-    };
-    tilesStore.insertAfter(afterId, newTile);
-    builderStore.isDirty = true;
-    builderStore.selectTile(newTile.id);
+    // createTileFromType: placeholder + children per i container (prima costruito
+    // a mano → inner-columns/floatingpanel senza figli).
+    const newTile = createTileFromType(tileType);
+    if (newTile && tilesStore.insertAfter(afterId, newTile)) {
+      builderStore.markDirtyForTile(newTile.id);
+      builderStore.selectTile(newTile.id);
+      newId = newTile.id;
+    }
     builderStore.insertAfterTileId = null;
   } else if (targetColumnId.value) {
-    handleDropIntoColumn(tileType, targetColumnId.value);
+    const created = handleDropIntoColumn(tileType, targetColumnId.value);
+    newId = created?.id || builderStore.selectedTileId;
   } else {
-    handleDropFromSidebar(tileType);
+    const created = handleDropFromSidebar(tileType);
+    newId = created?.id || builderStore.selectedTileId;
   }
+
+  if (newId) requestScrollToTile(newId);
   close();
 }
 

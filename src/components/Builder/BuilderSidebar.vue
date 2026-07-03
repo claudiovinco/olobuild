@@ -238,14 +238,15 @@ import { useBuilderStore } from '@/stores/builder';
 import { useDnDStore } from '@/stores/dnd';
 import { useDragDrop } from '@/composables/useDragDrop';
 import { vOloDraggable, makeSidebarPayload, makeGlobalWidgetPayload, setCustomNativeDragPreview } from '@/composables/useDnD';
-import { createSection, createRow, createColumn, generateId } from '@/stores/tiles';
+import { createSection, createRow, createColumn, generateId, CONTAINER_TYPES } from '@/stores/tiles';
+import { requestScrollToTile } from '@/utils/scrollToTileChannel';
 import StructureTree from './StructureTree.vue';
 import { t } from '@/i18n';
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
 const dndStore = useDnDStore();
-const { handleDropFromSidebar } = useDragDrop();
+const { handleDropFromSidebar, createTileFromType } = useDragDrop();
 
 const tileSearch = ref('');
 const searchResults = computed(() => {
@@ -987,26 +988,40 @@ function addTile(tileType) {
   trackRecent(tileType);
   // Pragmatic sopprime il click dopo un drag: nessun flag temporale necessario.
   const afterId = builderStore.insertAfterTileId;
+  let newId = null;
+
   if (afterId) {
-    // Insert directly after the target tile (same column, no wrapping)
-    const newTile = {
-      id: generateId(),
-      type: tileType,
-      settings: JSON.parse(JSON.stringify(
-        (tilesStore.registeredTiles.find(t => t.type === tileType) || {}).defaults || {}
-      )),
-      style: {},
-      advanced: {},
-    };
-    const inserted = tilesStore.insertAfter(afterId, newTile);
-    if (inserted) {
-      builderStore.isDirty = true;
+    // Inserimento esplicito "dopo questa tile" (banner attivo), stessa colonna.
+    // createTileFromType applica placeholder di contenuto e crea children per i
+    // container (prima veniva costruito a mano → inner-columns senza colonne).
+    const newTile = createTileFromType(tileType);
+    if (newTile && tilesStore.insertAfter(afterId, newTile)) {
+      builderStore.markDirtyForTile(newTile.id);
       builderStore.selectTile(newTile.id);
+      newId = newTile.id;
     }
     builderStore.insertAfterTileId = null;
   } else {
-    handleDropFromSidebar(tileType);
+    // Inserimento contestuale: con un ELEMENTO foglia selezionato, inserisci
+    // subito dopo di esso invece che in fondo alla pagina (dove "sparirebbe").
+    const sel = builderStore.selectedTileId ? tilesStore.getTileById(builderStore.selectedTileId) : null;
+    const selIsLeaf = sel && !CONTAINER_TYPES.includes(sel.type);
+    if (selIsLeaf && tileType !== 'section' && tileType !== 'row') {
+      const newTile = createTileFromType(tileType);
+      if (newTile && tilesStore.insertAfter(sel.id, newTile)) {
+        builderStore.markDirtyForTile(newTile.id);
+        builderStore.selectTile(newTile.id);
+        newId = newTile.id;
+      }
+    }
+    if (!newId) {
+      const created = handleDropFromSidebar(tileType);
+      newId = created?.id || builderStore.selectedTileId;
+    }
   }
+
+  // Porta la nuova tile in vista + flash: l'occhio la ritrova sempre.
+  if (newId) requestScrollToTile(newId);
 }
 
 function addGlobalWidget(globalId) {

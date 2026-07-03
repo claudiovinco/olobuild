@@ -80,7 +80,7 @@ import InsertPanel from './components/Builder/InsertPanel.vue';
 
 const builderStore = useBuilderStore();
 const tilesStore = useTilesStore();
-const { initHistory, handleKeyboard } = useHistory();
+const { initHistory } = useHistory();
 const toast = useToast();
 const revisionHistoryRef = ref(null);
 const builderFinderRef = ref(null);
@@ -263,7 +263,6 @@ function onLoadTemplate() {
 onMounted(async () => {
   tilesStore.fetchRegisteredTiles();
   initHistory();
-  document.addEventListener('keydown', handleKeyboard);
   document.addEventListener('olo:save-section', onSaveSection);
   document.addEventListener('olo:load-template', onLoadTemplate);
   window.addEventListener('beforeunload', onBeforeUnload);
@@ -280,7 +279,6 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  document.removeEventListener('keydown', handleKeyboard);
   document.removeEventListener('olo:save-section', onSaveSection);
   document.removeEventListener('olo:load-template', onLoadTemplate);
   window.removeEventListener('beforeunload', onBeforeUnload);

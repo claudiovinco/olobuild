@@ -60,6 +60,7 @@
           <div class="olo-section-bar" @click.stop="selectTile(section.id)" @contextmenu.prevent="onTileContextMenu($event, section.id)">
             <span class="olo-section-grip" :title="t('Trascina per riordinare la sezione')">&#x2630;</span>
             <span class="olo-bar-type">{{ t('Sezione') }}</span>
+            <span v-if="isEmptySection(section)" class="olo-bar-badge olo-bar-badge--empty" :title="t('Sezione senza contenuti: nel sito pubblicato apparirà come spazio vuoto')">{{ t('vuota') }}</span>
             <span v-if="section.settings?.style && section.settings.style !== 'default'" class="olo-bar-badge">{{ section.settings.style }}</span>
             <span v-if="hasBgImage(section)" class="olo-bar-badge olo-bar-badge--bg">BG</span>
             <span v-if="hasVideo(section)" class="olo-bar-badge olo-bar-badge--bg">VID</span>
@@ -338,6 +339,7 @@ import { useTilesStore, createSection, createRow, createColumn } from '@/stores/
 import { useBuilderStore } from '@/stores/builder';
 import { useStylesStore } from '@/stores/styles';
 import { useDragDrop } from '@/composables/useDragDrop';
+import { useTileActions } from '@/composables/useTileActions';
 import {
   vOloDraggable,
   vOloDropTarget,
@@ -361,6 +363,7 @@ const props = defineProps({
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
 const stylesStore = useStylesStore();
+const { removeTiles } = useTileActions();
 
 /**
  * Computed ref to the correct tiles array based on zone prop.
@@ -933,9 +936,13 @@ function duplicateItem(id) {
 }
 
 function removeItem(id) {
-  tilesStore.removeTile(id);
-  if (builderStore.selectedTileId === id) builderStore.deselectTile();
-  builderStore.isDirty = true;
+  removeTiles(id);
+}
+
+// Sezione senza elementi foglia → nel frontend renderizza uno spazio vuoto:
+// segnalalo con un badge così l'utente sa perché vede una striscia bianca.
+function isEmptySection(section) {
+  return tilesStore.isEmptyContainer(section.id);
 }
 
 // ─── DnD Pragmatic: le operazioni di drop sono centralizzate nel monitor (sopra). ───
@@ -1143,6 +1150,13 @@ function changeRowLayout(row, layoutKey) {
 .olo-bar-badge--bg {
   background: rgba(16, 185, 129, 0.15);
   color: #34D399;
+}
+.olo-bar-badge--empty {
+  background: rgba(245, 158, 11, 0.18);
+  color: #D97706;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  font-weight: 700;
 }
 .olo-bar-badge--parallax {
   background: rgba(245, 158, 11, 0.15);

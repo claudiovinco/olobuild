@@ -217,6 +217,21 @@ export function useDragDrop() {
   }
 
   /**
+   * Come handleDropIntoColumn ma inserisce a un INDICE preciso nella colonna
+   * (drop element-level nel live preview: la dropline indica dove cade la tile).
+   */
+  function handleDropIntoColumnAt(tileType, columnId, index) {
+    if (!tileType || tileType === 'row' || tileType === 'section') return null;
+    const newTile = createTileFromType(tileType);
+    if (!newTile) return null;
+
+    tilesStore.addChild(columnId, newTile, index);
+    builderStore.isDirty = true;
+    builderStore.selectTile(newTile.id);
+    return newTile;
+  }
+
+  /**
    * Handle drop of a global widget from sidebar to canvas.
    * Creates the tile from the stored global widget data and wraps it.
    */
@@ -248,6 +263,19 @@ export function useDragDrop() {
     if (!newTile) return null;
 
     tilesStore.addChild(columnId, newTile);
+    builderStore.isDirty = true;
+    builderStore.selectTile(newTile.id);
+    return newTile;
+  }
+
+  /**
+   * Come handleGlobalWidgetDropIntoColumn ma a un INDICE preciso.
+   */
+  function handleGlobalWidgetDropIntoColumnAt(globalId, columnId, index) {
+    const newTile = tilesStore.insertGlobalWidget(globalId);
+    if (!newTile) return null;
+
+    tilesStore.addChild(columnId, newTile, index);
     builderStore.isDirty = true;
     builderStore.selectTile(newTile.id);
     return newTile;
@@ -447,8 +475,10 @@ export function useDragDrop() {
     createTileFromType,
     handleDropFromSidebar,
     handleDropIntoColumn,
+    handleDropIntoColumnAt,
     handleGlobalWidgetDrop,
     handleGlobalWidgetDropIntoColumn,
+    handleGlobalWidgetDropIntoColumnAt,
     handleReorder,
     applyPragmaticDrop,
     addRowToSection,

@@ -41,7 +41,7 @@ export const useBuilderStore = defineStore('builder', {
     unifiedMode: false,          // True when editing H+B+F together
     insertAfterTileId: null,     // When set, next element added from sidebar goes after this tile
     canvasZoom: 100,              // Canvas zoom percentage (25-200)
-    iframeLayout: { sections: [], columns: [] },  // Cached layout snapshot from iframe (usato da CanvasDragOverlay per hit-test)
+    iframeLayout: { sections: [], columns: [], containers: [], elements: [] },  // Cached layout snapshot from iframe (usato da CanvasDragOverlay per hit-test)
   }),
 
   getters: {

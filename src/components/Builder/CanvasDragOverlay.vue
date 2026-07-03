@@ -50,7 +50,7 @@ const props = defineProps({
 
 const builderStore = useBuilderStore();
 const dnd = useDnDStore();
-const { handleDropFromSidebar, handleDropIntoColumn, handleGlobalWidgetDrop, handleGlobalWidgetDropIntoColumn } = useDragDrop();
+const { handleDropFromSidebar, handleDropIntoColumn, handleDropIntoColumnAt, handleGlobalWidgetDrop, handleGlobalWidgetDropIntoColumn, handleGlobalWidgetDropIntoColumnAt } = useDragDrop();
 const { pushStateNow } = useHistory();
 
 const overlayEl = ref(null);
@@ -224,7 +224,13 @@ onBeforeUnmount(() => {
 const hit = ref(null); // { columnId, insertIndex, lineY, colRect, x, y, iframeRect }
 
 const hasHit = computed(() => hit.value !== null);
-const showLine = computed(() => hasHit.value && !hit.value.columnId);
+// Y (document-relative iframe) della dropline: dentro una colonna usa la posizione
+// element-level calcolata dall'hit-test, altrimenti il gap tra sezioni.
+const lineYDoc = computed(() => {
+  if (!hit.value) return null;
+  return hit.value.columnId ? (hit.value.columnLineY ?? null) : (hit.value.lineY ?? null);
+});
+const showLine = computed(() => hasHit.value && lineYDoc.value != null);
 const showColumnHi = computed(() => hasHit.value && !!hit.value.columnId);
 
 // Le coordinate in hit sono DOCUMENT-relative nell'iframe; per piazzare
@@ -234,11 +240,21 @@ const scrollTick = ref(0); // forza reattività
 function readScroll() { return hit.value?.scroll || getIframeScroll(); }
 
 const dropLineStyle = computed(() => {
-  if (!hit.value) return {};
+  if (!hit.value || lineYDoc.value == null) return {};
   void scrollTick.value;
   const zoom = builderStore.canvasZoom / 100;
   const cur = getIframeScroll();
-  const top = (hit.value.lineY - cur.y) * zoom;
+  const top = (lineYDoc.value - cur.y) * zoom;
+  // Dentro una colonna la dropline è larga quanto la colonna (non full-width).
+  if (hit.value.columnId && hit.value.colRect) {
+    const r = hit.value.colRect;
+    return {
+      top: `${top}px`,
+      left: `${(r.left - cur.x) * zoom}px`,
+      width: `${(r.right - r.left) * zoom}px`,
+      right: 'auto',
+    };
+  }
   return { top: `${top}px` };
 });
 
@@ -258,7 +274,7 @@ const columnHiStyle = computed(() => {
 
 const labelText = computed(() => {
   if (!hit.value) return '';
-  if (hit.value.columnId) return 'Aggiungi dentro colonna';
+  if (hit.value.columnId) return 'Inserisci qui';
   if (dnd.payload?.kind === 'global-widget') return 'Inserisci widget';
   if (dnd.payload?.tileType === 'section') return 'Inserisci sezione';
   if (dnd.payload?.tileType === 'row') return 'Inserisci riga';
@@ -340,6 +356,31 @@ function hitTest(clientX, clientY) {
     }
   }
 
+  // 1c. Dentro una colonna: calcola l'INDICE element-level (dropline precisa "tra
+  // due tile") dai rettangoli degli elementi figli. Prima si appendeva sempre in
+  // fondo; ora si inserisce esattamente dove cade il puntatore.
+  let columnInsertIndex = null;
+  let columnLineY = null;
+  if (columnId) {
+    const els = (layout.elements || []).filter(el => el.columnId === columnId);
+    if (els.length === 0) {
+      columnInsertIndex = 0;
+      columnLineY = colRect ? (colRect.top + colRect.bottom) / 2 : y;
+    } else {
+      const sorted = els.slice().sort((a, b) => a.top - b.top);
+      let placed = false;
+      for (const el of sorted) {
+        const mid = (el.top + el.bottom) / 2;
+        if (y < mid) { columnInsertIndex = el.index; columnLineY = el.top; placed = true; break; }
+      }
+      if (!placed) {
+        const last = sorted[sorted.length - 1];
+        columnInsertIndex = last.index + 1;
+        columnLineY = last.bottom;
+      }
+    }
+  }
+
   // 2. Calcola insertion index sezione
   let insertIndex = layout.sections.length;
   let lineY = 0; // document-relative nell'iframe
@@ -361,7 +402,7 @@ function hitTest(clientX, clientY) {
     if (!found) lineY = sects[sects.length - 1].bottom;
   }
 
-  return { columnId, colRect, insertIndex, lineY, x, y, iframeRect, scroll };
+  return { columnId, colRect, columnInsertIndex, columnLineY, insertIndex, lineY, x, y, iframeRect, scroll };
 }
 
 // ── Drop target options per Pragmatic (oggetto STABILE, no computed) ─────────
@@ -424,13 +465,21 @@ const dropTargetOpts = {
     try {
       if (data.kind === 'tile-type') {
         if (target.columnId && data.tileType !== 'section' && data.tileType !== 'row') {
-          handleDropIntoColumn(data.tileType, target.columnId);
+          if (typeof target.columnInsertIndex === 'number') {
+            handleDropIntoColumnAt(data.tileType, target.columnId, target.columnInsertIndex);
+          } else {
+            handleDropIntoColumn(data.tileType, target.columnId);
+          }
         } else {
           handleDropFromSidebar(data.tileType, target.insertIndex);
         }
       } else if (data.kind === 'global-widget') {
         if (target.columnId) {
-          handleGlobalWidgetDropIntoColumn(data.globalId, target.columnId);
+          if (typeof target.columnInsertIndex === 'number') {
+            handleGlobalWidgetDropIntoColumnAt(data.globalId, target.columnId, target.columnInsertIndex);
+          } else {
+            handleGlobalWidgetDropIntoColumn(data.globalId, target.columnId);
+          }
         } else {
           handleGlobalWidgetDrop(data.globalId, target.insertIndex);
         }

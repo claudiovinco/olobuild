@@ -61,6 +61,7 @@ import TileBase from '@/components/Tiles/TileBase.vue';
 import { useBackgroundStyle } from '@/composables/useBackgroundStyle';
 import { getShadowValue, getDropShadowValue } from '@/composables/useShadowMap';
 import { rv } from '@/composables/useResponsiveValue';
+import { useTileActions } from '@/composables/useTileActions';
 
 const props = defineProps({
   tile: { type: Object, required: true },
@@ -68,6 +69,7 @@ const props = defineProps({
 
 const builderStore = useBuilderStore();
 const tilesStore = useTilesStore();
+const { removeTiles } = useTileActions();
 
 // ── Anteprima "Spotlight cursore (torcia)" nel canvas builder ──────────────
 // Effetto advanced cursor_spotlight: nel frontend è gestito dal runtime di
@@ -610,9 +612,7 @@ function duplicate() {
 }
 
 function remove() {
-  tilesStore.removeTile(props.tile.id);
-  builderStore.deselectTile();
-  builderStore.isDirty = true;
+  removeTiles(props.tile.id);
 }
 </script>
 

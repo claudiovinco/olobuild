@@ -111,10 +111,12 @@ import { t } from '@/i18n';
 import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
+import { useTileActions } from '@/composables/useTileActions';
 import { columns as gridColumns, multirow as gridMultirow, masonry as gridMasonry, sidebar as gridSidebar } from '@/config/gridTemplates.js';
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
+const { removeTiles } = useTileActions();
 
 const visible = ref(false);
 const x = ref(0);
@@ -402,9 +404,7 @@ function doChangeGrid(templateId) {
 
 function doDelete() {
   if (tileId.value) {
-    tilesStore.removeTile(tileId.value);
-    builderStore.deselectTile();
-    builderStore.isDirty = true;
+    removeTiles(tileId.value);
   }
   close();
 }

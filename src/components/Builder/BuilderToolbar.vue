@@ -569,6 +569,7 @@ import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
 import { useHistory } from '@/composables/useHistory';
 import { useToast } from '@/composables/useToast';
+import { useTileActions } from '@/composables/useTileActions';
 import { useFocusTrap } from '@/composables/useFocusTrap';
 import { t } from '@/i18n';
 
@@ -582,6 +583,7 @@ const builderStore = useBuilderStore();
 const tilesStore = useTilesStore();
 const history = useHistory();
 const toast = useToast();
+const { removeTiles } = useTileActions();
 
 // ─── Indicatore stato salvataggio ───
 const lastSavedAt = ref(null);
@@ -677,16 +679,15 @@ function onGlobalKeydown(e) {
     return;
   }
 
-  // Delete / Backspace → elimina la/le tile selezionate (multi-selezione inclusa)
+  // Delete / Backspace → elimina la/le tile selezionate (multi-selezione inclusa).
+  // removeTiles centralizza checkpoint history + prune + toast "Annulla".
   if ((e.key === 'Delete' || e.key === 'Backspace') && !isEditing) {
     const ids = builderStore.selectedTileIds.length
       ? [...builderStore.selectedTileIds]
       : (builderStore.selectedTileId ? [builderStore.selectedTileId] : []);
     if (ids.length) {
       e.preventDefault();
-      ids.forEach(id => tilesStore.removeTile(id));
-      builderStore.deselectTile();
-      builderStore.isDirty = true;
+      removeTiles(ids);
     }
   }
   // Alt+↑/↓ → sposta il nodo selezionato su/giù dentro il suo parent
@@ -697,7 +698,20 @@ function onGlobalKeydown(e) {
       e.preventDefault();
       if (tilesStore.nudgeNode(id, e.key === 'ArrowUp' ? -1 : 1)) {
         builderStore.markDirtyForTile(id);
+        toast.announce(e.key === 'ArrowUp' ? t('Elemento spostato su') : t('Elemento spostato giù'));
       }
+      return;
+    }
+  }
+  // Alt+←/→ → sposta l'elemento nella colonna adiacente (sx/dx).
+  // Completa il riordino da tastiera con lo spostamento cross-contenitore.
+  if (e.altKey && !e.ctrlKey && !e.metaKey && (e.key === 'ArrowLeft' || e.key === 'ArrowRight') && !isEditing) {
+    const id = builderStore.selectedTileId;
+    if (id) {
+      e.preventDefault();
+      tilesStore.moveToSiblingColumn(id, e.key === 'ArrowLeft' ? -1 : 1);
+      builderStore.markDirtyForTile(id);
+      toast.announce(e.key === 'ArrowLeft' ? t('Elemento spostato a sinistra') : t('Elemento spostato a destra'));
       return;
     }
   }
