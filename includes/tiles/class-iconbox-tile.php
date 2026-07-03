@@ -67,11 +67,21 @@ class Olobuild_IconBox_Tile extends Olobuild_Tile_Base {
         $icon_clr   = $this->safe_color_css( $s['icon_color'] );
         $icon_shape = in_array( $s['icon_bg_shape'], [ 'circle', 'square', 'rounded' ], true ) ? $s['icon_bg_shape'] : 'circle';
 
+        // Sfondo unificato box icona: pannello media_bg (immagine/video/gradiente/…) con
+        // precedenza sui campi legacy bg_type/bg_color/bg_gradient/bg_image (tenuti come
+        // fallback). Quando media_bg è impostato, il box diventa contenitore posizionato
+        // (relative + overflow:hidden) e il layer/il <video> assoluti rendono lo sfondo.
+        $mb     = $this->bg_media_parts( $s['media_bg'] ?? null, $uid );
+        $has_mb = $mb['has'];
+
         // Tile background (mutually exclusive via bg_type) — fallback su style.bg
         // se settings.bg_type non è settato (utente preferisce tab Stile).
+        // Applicato SOLO se media_bg non è impostato (precedenza al pannello unico).
         $tile_bg_css = '';
         $bg_type = $s['bg_type'] ?? 'none';
-        if ( $bg_type === 'none' && is_array( $style ) && isset( $style['bg'] ) && is_array( $style['bg'] ) ) {
+        if ( $has_mb ) {
+            $tile_bg_css = 'position:relative;overflow:hidden;';
+        } elseif ( $bg_type === 'none' && is_array( $style ) && isset( $style['bg'] ) && is_array( $style['bg'] ) ) {
             $tile_bg_css = $this->build_bg_css_from_style_bg( $style['bg'] );
         } elseif ( $bg_type === 'color' ) {
             $c = $this->safe_color_css( $s['bg_color'] ?? '' );
@@ -139,11 +149,15 @@ class Olobuild_IconBox_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colours via the safe_color_css() whitelist, intval()/absint()/floatval() numerics, in_array() whitelists with fixed-literal ternaries for position/shape, Olobuild_Tile_Utils::radius_force_css() and build_border_css()/build_border_hover_css()/build_border_effect_css() helpers; $uid is internally generated. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colours via the safe_color_css() whitelist, intval()/absint()/floatval() numerics, in_array() whitelists with fixed-literal ternaries for position/shape, the media_bg declaration via Olobuild_CSS_Builder::get_bg_inline_css() (sanitized internally), Olobuild_Tile_Utils::radius_force_css() and build_border_css()/build_border_hover_css()/build_border_effect_css() helpers; $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?> {
                 <?php if ( $fg ) : ?>color: <?php echo $fg; ?>;<?php endif; ?>
             }
+            <?php if ( $has_mb ) : ?>
+            .<?php echo $uid; ?> .mib-bg { position: absolute; inset: 0; z-index: 0; <?php echo $mb['css']; ?> }
+            .<?php echo $uid; ?> > *:not(.mib-bg):not(.olo-bg-video) { position: relative; z-index: 1; }
+            <?php endif; ?>
             <?php if ( $is_horiz ) : ?>
             .<?php echo $uid; ?> .mib-flex {
                 display: flex;
@@ -193,6 +207,7 @@ class Olobuild_IconBox_Tile extends Olobuild_Tile_Base {
         </style><?php endif; ?>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-iconbox <?php echo $align_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $align_class built above with esc_attr(); inline style composed only of esc_url()/esc_attr()/safe_color_css()/intval()-sanitized fragments ?> <?php echo esc_attr( $uid ); ?> olo-ib-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="<?php echo $tile_bg_css . $tile_padding_css . $tile_border_css . $tile_radius_css . $tile_shadow_css; ?>">
+          <?php if ( $has_mb ) : ?><div class="mib-bg"></div><?php echo $mb['markup']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup generato da Olobuild_CSS_Builder::get_bg_html_markup(), che escapa il proprio output ?><?php endif; ?>
           <?php if ( $is_horiz ) : ?><div class="mib-flex"><?php endif; ?>
 
             <?php if ( ! empty( $s['icon_emoji'] ) ) : ?>

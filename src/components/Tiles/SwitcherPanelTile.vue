@@ -2,8 +2,10 @@
   <div class="olo-sp-preview" :class="['olo-sp--' + (s.nav_position || 'overlay'), 'olo-sp--preset-' + (s.preset || 'editorial-overlay'), { 'olo-sp--img-left': s.image_position === 'left' }]" :style="wrapStyle">
     <!-- Hero with overlay (overlay mode) -->
     <div v-if="(s.nav_position || 'overlay') === 'overlay'" class="sp-hero" :style="heroStyle">
-      <img v-if="s.hero_image" :src="s.hero_image" alt="" class="sp-hero__img" :style="heroImgStyle" />
-      <div v-else class="sp-hero__placeholder">{{ t('Hero') }}</div>
+      <div v-if="hasMediaBg" class="sp-hero__bg" :style="mediaBgStyle"></div>
+      <video v-if="isMediaVideo" class="sp-hero__video" :src="s.media_bg.video_url" autoplay loop muted playsinline></video>
+      <img v-if="!hasMediaBg && s.hero_image" :src="s.hero_image" alt="" class="sp-hero__img" :style="heroImgStyle" />
+      <div v-else-if="!hasMediaBg" class="sp-hero__placeholder">{{ t('Hero') }}</div>
       <div v-if="heroOverlayShown" class="sp-hero__overlay" :style="heroOverlayStyle"></div>
       <div class="sp-nav-wrap sp-nav-wrap--overlay">
         <ul class="sp-nav" :style="navStyle">
@@ -42,8 +44,10 @@
 
     <!-- Hero (non-overlay mode) -->
     <div v-if="hasHero && (s.nav_position === 'top' || s.nav_position === 'bottom' || s.nav_position === 'side-left' || s.nav_position === 'side-right')" class="sp-hero sp-hero--standalone" :style="heroStyle">
-      <img v-if="s.hero_image" :src="s.hero_image" alt="" class="sp-hero__img" :style="heroImgStyle" />
-      <div v-else class="sp-hero__placeholder">{{ t('Hero') }}</div>
+      <div v-if="hasMediaBg" class="sp-hero__bg" :style="mediaBgStyle"></div>
+      <video v-if="isMediaVideo" class="sp-hero__video" :src="s.media_bg.video_url" autoplay loop muted playsinline></video>
+      <img v-if="!hasMediaBg && s.hero_image" :src="s.hero_image" alt="" class="sp-hero__img" :style="heroImgStyle" />
+      <div v-else-if="!hasMediaBg" class="sp-hero__placeholder">{{ t('Hero') }}</div>
     </div>
 
     <!-- Active panel content -->
@@ -81,6 +85,7 @@
 import { t } from '@/i18n';
 import { ref, computed, watch } from 'vue';
 import { radiusToCss } from '@/composables/useRadius';
+import { buildBgStyle } from '@/composables/useBackgroundStyle';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -95,7 +100,20 @@ const items = computed(() => {
 });
 
 const activeItem = computed(() => items.value[activeIndex.value] || items.value[0] || null);
-const hasHero = computed(() => !!s.value.hero_image);
+
+// ── Hero unificato (pannello media_bg) con fallback all'immagine legacy hero_image ──
+// Precedenza: se media_bg è impostato (≠ none) lo usa; immagine/gradiente/colore come
+// layer background, video come <video>. Fallback = <img src=hero_image> attuale.
+const hasMediaBg  = computed(() => {
+  const m = s.value.media_bg;
+  return !!(m && typeof m === 'object' && m.type && m.type !== 'none');
+});
+const mediaBgStyle = computed(() => (hasMediaBg.value ? buildBgStyle(s.value.media_bg) : {}));
+const isMediaVideo = computed(() => {
+  const m = s.value.media_bg;
+  return hasMediaBg.value && m.type === 'video' && !!m.video_url;
+});
+const hasHero = computed(() => hasMediaBg.value || !!s.value.hero_image);
 
 watch(() => items.value.length, () => {
   if (activeIndex.value >= items.value.length) activeIndex.value = 0;
@@ -274,6 +292,20 @@ const imgStyle = computed(() => {
   height: 100%;
   object-fit: cover;
   display: block;
+}
+.sp-hero__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.sp-hero__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .sp-hero__placeholder {
   width: 100%;

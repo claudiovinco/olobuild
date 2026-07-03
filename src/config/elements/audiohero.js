@@ -15,6 +15,11 @@ export default {
   icon: 'dashicons-format-audio',
   category: 'marketing',
 
+  // Unificazione COPERTINA: la vecchia cover album (cover_image + focal object_position)
+  // confluisce nel pannello unico media_bg (immagine/video/gradiente/colore…). Non
+  // distruttivo: le chiavi vecchie restano come fallback nel renderer della cover 1/1.
+  bgMigrate: { imageKey: 'cover_image', imagePosKey: 'object_position', target: 'media_bg' },
+
   defaults: {
     tag_text: 'New album · out now',
     headline_text: 'Nightglass',
@@ -23,6 +28,7 @@ export default {
     cta2_text: 'See tour dates', cta2_url: '#tour',
     cover_image: '', cover_label: 'album cover — Nightglass, neon on black',
     object_position: 'center center',
+    media_bg: { type: 'none' },
     player_track: 'Glasshouse', player_meta: 'Kova · Nightglass', show_player: true,
     bg_color: 'var(--olo-color-dark, #16263d)', panel_color: 'var(--olo-color-dark, #16263d)',
     accent: 'var(--olo-color-accent, #f4a23b)', accent_2: 'var(--olo-color-primary, #e1474f)', accent_on: 'var(--olo-color-dark, #16263d)',
@@ -58,9 +64,7 @@ export default {
     { key: 'cta2_url', label: t('CTA 2 — link'), type: 'link' },
 
     { type: 'separator', label: t('Cover & player') },
-    { key: 'cover_image', label: t('Cover album (vuoto = placeholder)'), type: 'image' },
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position',
-      contextKeys: { src: 'cover_image', ratio: '1/1', fit: 'cover' } },
+    { key: 'media_bg', type: 'background', showParallax: false, label: t('Copertina (immagine, video, gradiente…)') },
     { key: 'cover_label', label: t('Etichetta placeholder cover'), type: 'text' },
     { key: 'show_player', label: t('Mostra mini-player'), type: 'toggle' },
     { key: 'player_track', label: t('Player — traccia'), type: 'text' },

@@ -11,6 +11,7 @@ class Olobuild_SwitcherPanel_Tile extends Olobuild_Tile_Base {
     protected $icon     = 'dashicons-images-alt';
     protected $category = 'interactive';
     protected $defaults = [
+        'media_bg'        => [ 'type' => 'none' ],
         'items' => [
             [ 'id' => 'sp-1', 'nav_label' => 'Chi siamo',       'title' => 'Benvenuti nel nostro mondo', 'text' => 'Lorem ipsum dolor sit amet.', 'button_text' => 'SCOPRI DI PIÙ',     'button_url' => '#', 'image' => '' ],
             [ 'id' => 'sp-2', 'nav_label' => 'Bar & Cocktail',  'title' => "Mixology d'autore",          'text' => 'Lorem ipsum dolor sit amet.', 'button_text' => 'VEDI LA CARTA',     'button_url' => '#', 'image' => '' ],
@@ -147,6 +148,22 @@ class Olobuild_SwitcherPanel_Tile extends Olobuild_Tile_Base {
         }
         $img_position = ( $s['image_position'] ?? 'right' ) === 'left' ? 'left' : 'right';
         $img_bleed    = ! empty( $s['image_bleed'] );
+
+        // ── Hero unificato: pannello media_bg (immagine/video/gradiente/…) con precedenza
+        // sull'immagine legacy hero_image (tenuta come fallback). Il markup interno del
+        // media (layer background + eventuale <video>) è costruito una volta e riusato in
+        // tutte le posizioni nav (overlay/top/side/bottom). ──
+        $mb        = $this->bg_media_parts( $s['media_bg'] ?? null, $uid );
+        $has_mb    = $mb['has'];
+        $has_hero  = $has_mb || ( $hero_image !== '' );
+        if ( $has_mb ) {
+            $hero_css  = $mb['css'] !== '' ? ' style="' . esc_attr( $mb['css'] ) . '"' : '';
+            $hero_inner = '<div class="olo-sp-hero__bg"' . $hero_css . '>' . $mb['markup'] . '</div>';
+        } elseif ( $hero_image !== '' ) {
+            $hero_inner = '<img src="' . esc_url( $hero_image ) . '" alt="' . esc_attr( $s['hero_alt'] ?? '' ) . '" class="olo-sp-hero__img" loading="lazy" style="object-position: ' . esc_attr( $obj_pos ) . ';">';
+        } else {
+            $hero_inner = '';
+        }
         $nav_position = $s['nav_position'] ?? 'overlay';
         $animation    = $s['animation'] ?? 'fade';
         $duration     = max( 80, intval( $s['animation_duration'] ?? 300 ) );
@@ -273,6 +290,20 @@ class Olobuild_SwitcherPanel_Tile extends Olobuild_Tile_Base {
                 height: 100%;
                 object-fit: cover;
                 display: block;
+            }
+            .<?php echo $uid; ?> .olo-sp-hero__bg {
+                position: absolute;
+                inset: 0;
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+            .<?php echo $uid; ?> .olo-sp-hero__bg video {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
             }
             .<?php echo $uid; ?> .olo-sp-hero__placeholder {
                 width: 100%;
@@ -483,8 +514,8 @@ class Olobuild_SwitcherPanel_Tile extends Olobuild_Tile_Base {
         <div class="<?php echo esc_attr( $wrap_class ); ?> <?php echo esc_attr( $uid ); ?>">
             <?php if ( $nav_position === 'overlay' ) : ?>
                 <div class="olo-sp-hero">
-                    <?php if ( ! empty( $hero_image ) ) : ?>
-                        <img src="<?php echo esc_url( $hero_image ); ?>" alt="<?php echo esc_attr( $s['hero_alt'] ?? '' ); ?>" class="olo-sp-hero__img" loading="lazy" style="object-position: <?php echo esc_attr( $obj_pos ); ?>;">
+                    <?php if ( $has_hero ) : ?>
+                        <?php echo $hero_inner; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $hero_inner built above: <img> via esc_url()/esc_attr(); media_bg layer via bg_media_parts() (css in esc_attr(), markup auto-escaped by Olobuild_CSS_Builder::get_bg_html_markup()) ?>
                     <?php else : ?>
                         <div class="olo-sp-hero__placeholder"></div>
                     <?php endif; ?>
@@ -509,8 +540,8 @@ class Olobuild_SwitcherPanel_Tile extends Olobuild_Tile_Base {
                         <?php endforeach; ?>
                     </ul>
                 </div>
-                <?php if ( ! empty( $hero_image ) ) : ?>
-                <div class="olo-sp-hero"><img src="<?php echo esc_url( $hero_image ); ?>" alt="" class="olo-sp-hero__img" loading="lazy" style="object-position: <?php echo esc_attr( $obj_pos ); ?>;"></div>
+                <?php if ( $has_hero ) : ?>
+                <div class="olo-sp-hero"><?php echo $hero_inner; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $hero_inner built above: <img> via esc_url()/esc_attr(); media_bg layer via bg_media_parts() (css in esc_attr(), markup auto-escaped) ?></div>
                 <?php endif; ?>
             <?php elseif ( $nav_position === 'side-left' || $nav_position === 'side-right' ) : ?>
                 <ul class="olo-sp-nav" uk-switcher="<?php echo esc_attr( $switcher_attr ); ?>">
@@ -520,12 +551,12 @@ class Olobuild_SwitcherPanel_Tile extends Olobuild_Tile_Base {
                     </li>
                     <?php endforeach; ?>
                 </ul>
-                <?php if ( ! empty( $hero_image ) ) : ?>
-                <div class="olo-sp-hero"><img src="<?php echo esc_url( $hero_image ); ?>" alt="" class="olo-sp-hero__img" loading="lazy" style="object-position: <?php echo esc_attr( $obj_pos ); ?>;"></div>
+                <?php if ( $has_hero ) : ?>
+                <div class="olo-sp-hero"><?php echo $hero_inner; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $hero_inner built above: <img> via esc_url()/esc_attr(); media_bg layer via bg_media_parts() (css in esc_attr(), markup auto-escaped) ?></div>
                 <?php endif; ?>
             <?php else : /* bottom */ ?>
-                <?php if ( ! empty( $hero_image ) ) : ?>
-                <div class="olo-sp-hero"><img src="<?php echo esc_url( $hero_image ); ?>" alt="" class="olo-sp-hero__img" loading="lazy" style="object-position: <?php echo esc_attr( $obj_pos ); ?>;"></div>
+                <?php if ( $has_hero ) : ?>
+                <div class="olo-sp-hero"><?php echo $hero_inner; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $hero_inner built above: <img> via esc_url()/esc_attr(); media_bg layer via bg_media_parts() (css in esc_attr(), markup auto-escaped) ?></div>
                 <?php endif; ?>
             <?php endif; ?>
 

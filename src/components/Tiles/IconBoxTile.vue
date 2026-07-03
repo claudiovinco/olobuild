@@ -3,8 +3,18 @@
     class="olo-iconbox-tile"
     :style="containerStyle"
   >
+    <!-- Sfondo unificato (media_bg): immagine/gradiente/colore via style + video element.
+         Ha precedenza sul rendering legacy bg_type/bg_color/bg_gradient/bg_image. -->
+    <div v-if="hasMediaBg" class="mb-absolute mb-inset-0" :style="mediaBgLayerStyle"></div>
+    <video
+      v-if="isMediaVideo"
+      class="mb-absolute mb-inset-0"
+      :src="s.media_bg.video_url"
+      autoplay loop muted playsinline
+      style="width:100%;height:100%;object-fit:cover;z-index:0"
+    ></video>
     <!-- Icon -->
-    <div v-if="s.icon_emoji" :class="{ 'mb-mb-4': !isHorizontal }" :style="isHorizontal ? { flexShrink: 0 } : {}">
+    <div v-if="s.icon_emoji" :class="{ 'mb-mb-4': !isHorizontal }" :style="isHorizontal ? { flexShrink: 0, position: 'relative', zIndex: 1 } : { position: 'relative', zIndex: 1 }">
       <div :style="iconWrapperStyle">
         <span
           v-if="iconSvg"
@@ -16,7 +26,7 @@
       </div>
     </div>
     <!-- Content -->
-    <div :style="isHorizontal ? { flex: 1 } : {}">
+    <div :style="isHorizontal ? { flex: 1, position: 'relative', zIndex: 1 } : { position: 'relative', zIndex: 1 }">
       <h3 class="mb-text-xl mb-font-semibold mb-mb-2" :style="{ fontSize: s.title_font_size + 'px', fontWeight: s.title_font_weight, color: s.title_color || undefined }" data-olo-editable="title">{{ s.title }}</h3>
       <div class="mb-opacity-80 mb-leading-relaxed mb-mb-4" style="white-space:pre-wrap" data-olo-editable="description" data-olo-multiline>{{ s.description }}</div>
       <span v-if="s.link_url" class="mb-font-medium" :style="{ color: s.link_color }" data-olo-editable="link_text">
@@ -32,6 +42,7 @@ import iconsSvg from '../ProSlider/uikitIconsSvg.js';
 import { useBuilderStore } from '@/stores/builder';
 import { rv } from '@/composables/useResponsiveValue';
 import { SHADOW } from '@/composables/oloTileDefaults';
+import { buildBgStyle } from '@/composables/useBackgroundStyle';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -60,6 +71,20 @@ const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const iconSvg = computed(() => iconsSvg[s.value.icon_emoji] || '');
 
+// ── Sfondo unificato (pannello media_bg) con fallback ai campi legacy bg_* ──
+const hasMediaBg = computed(() => {
+  const m = s.value.media_bg;
+  return !!(m && typeof m === 'object' && m.type && m.type !== 'none');
+});
+const mediaBgLayerStyle = computed(() => {
+  if (!hasMediaBg.value) return {};
+  return { zIndex: 0, ...buildBgStyle(s.value.media_bg) };
+});
+const isMediaVideo = computed(() => {
+  const m = s.value.media_bg;
+  return hasMediaBg.value && m.type === 'video' && !!m.video_url;
+});
+
 const isHorizontal = computed(() => s.value.icon_position === 'left' || s.value.icon_position === 'right');
 const containerStyle = computed(() => {
   const align = rv(props.settings, 'alignment', s.value.alignment, builderStore.viewMode);
@@ -71,21 +96,28 @@ const containerStyle = computed(() => {
     st.gap = (s.value.icon_gap || 16) + 'px';
     st.textAlign = 'left';
   }
-  // Tile background (mutually exclusive via bg_type)
-  const bgType = s.value.bg_type || 'none';
-  if (bgType === 'color' && s.value.bg_color) {
-    st.backgroundColor = s.value.bg_color;
-  } else if (bgType === 'gradient' && s.value.bg_gradient) {
-    const g = s.value.bg_gradient;
-    if (g && g.stops && g.stops.length) {
-      const stops = g.stops.map(s => s.color + ' ' + s.position + '%').join(', ');
-      st.background = (g.type === 'radial' ? 'radial-gradient(circle, ' : 'linear-gradient(' + (g.angle || 180) + 'deg, ') + stops + ')';
+  // Sfondo unificato media_bg: se impostato, il layer/il <video> assoluti lo rendono
+  // e il container fa da contenitore posizionato (clip su radius). Altrimenti fallback
+  // al rendering legacy (mutually exclusive via bg_type) applicato sul container stesso.
+  if (hasMediaBg.value) {
+    st.position = 'relative';
+    st.overflow = 'hidden';
+  } else {
+    const bgType = s.value.bg_type || 'none';
+    if (bgType === 'color' && s.value.bg_color) {
+      st.backgroundColor = s.value.bg_color;
+    } else if (bgType === 'gradient' && s.value.bg_gradient) {
+      const g = s.value.bg_gradient;
+      if (g && g.stops && g.stops.length) {
+        const stops = g.stops.map(s => s.color + ' ' + s.position + '%').join(', ');
+        st.background = (g.type === 'radial' ? 'radial-gradient(circle, ' : 'linear-gradient(' + (g.angle || 180) + 'deg, ') + stops + ')';
+      }
+    } else if (bgType === 'image' && s.value.bg_image) {
+      st.backgroundImage = 'url(' + s.value.bg_image + ')';
+      st.backgroundSize = s.value.bg_image_size || 'cover';
+      st.backgroundPosition = s.value.bg_image_position || 'center center';
+      st.backgroundRepeat = 'no-repeat';
     }
-  } else if (bgType === 'image' && s.value.bg_image) {
-    st.backgroundImage = 'url(' + s.value.bg_image + ')';
-    st.backgroundSize = s.value.bg_image_size || 'cover';
-    st.backgroundPosition = s.value.bg_image_position || 'center center';
-    st.backgroundRepeat = 'no-repeat';
   }
   // Tile padding
   const tp = s.value.tile_padding;

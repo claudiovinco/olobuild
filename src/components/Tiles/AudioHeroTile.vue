@@ -19,7 +19,14 @@
       </div>
       <div class="ah-art" :style="{ position: 'relative' }">
         <div class="ah-cover" :style="coverStyle">
-          <span v-if="!s.cover_image && s.cover_label" class="ah-cover-lab" :style="coverLabStyle">{{ s.cover_label }}</span>
+          <video
+            v-if="isMediaVideo"
+            class="ah-cover-video"
+            :src="s.media_bg.video_url"
+            autoplay loop muted playsinline
+            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0"
+          ></video>
+          <span v-if="!hasMediaBg && !s.cover_image && s.cover_label" class="ah-cover-lab" :style="coverLabStyle">{{ s.cover_label }}</span>
         </div>
         <div v-if="s.show_player" class="ah-player" :style="playerStyle">
           <span class="ah-play" aria-hidden="true" :style="playStyle">
@@ -79,6 +86,17 @@ const defaults = {
 };
 
 const s = computed(() => ({ ...defaults, ...props.settings }));
+
+// ── Copertina universale (pannello media_bg) con fallback all'immagine legacy cover_image ──
+const hasMediaBg = computed(() => {
+  const m = s.value.media_bg;
+  return !!(m && typeof m === 'object' && m.type && m.type !== 'none');
+});
+const mediaBgStyle = computed(() => (hasMediaBg.value ? buildBgStyle(s.value.media_bg) : {}));
+const isMediaVideo = computed(() => {
+  const m = s.value.media_bg;
+  return hasMediaBg.value && m.type === 'video' && !!m.video_url;
+});
 
 const DISP = "var(--olo-font-family-heading, 'Unbounded',-apple-system,sans-serif)";
 const SANS = "var(--olo-font-family, 'Figtree',-apple-system,sans-serif)";
@@ -204,7 +222,13 @@ const ghostStyle = computed(() => ({ display: 'inline-flex', alignItems: 'center
 
 const coverStyle = computed(() => {
   const st = { position: 'relative', aspectRatio: '1 / 1', borderRadius: coverRadius.value, overflow: 'hidden', border: '1px solid rgba(255,255,255,.09)', boxShadow: `0 30px 80px -30px ${rgbaFrom(accent.value, 0.4)}`, background: panel.value, backgroundSize: 'cover', backgroundPosition: (s.value.object_position || 'center center') };
-  st.backgroundImage = s.value.cover_image ? `url(${s.value.cover_image})` : 'repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 16px, transparent 16px 32px)';
+  if (hasMediaBg.value) {
+    // COPERTINA universale: precedenza sul media legacy. buildBgStyle sovrascrive
+    // le proprietà background-* (image/gradient/solid…); il video ha layer proprio.
+    Object.assign(st, mediaBgStyle.value);
+  } else {
+    st.backgroundImage = s.value.cover_image ? `url(${s.value.cover_image})` : 'repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 16px, transparent 16px 32px)';
+  }
   return st;
 });
 const coverLabStyle = { position: 'absolute', left: '14px', bottom: '12px', right: '14px', fontFamily: SANS, fontWeight: 600, fontSize: '10.5px', letterSpacing: '.04em', color: 'rgba(255,255,255,.4)', textTransform: 'uppercase' };

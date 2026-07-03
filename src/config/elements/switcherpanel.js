@@ -11,7 +11,15 @@ export default {
   name: t('Switcher Panel'),
   icon: 'dashicons-images-alt',
   category: 'interactive',
+
+  // Unificazione hero: la vecchia immagine hero (hero_image + focal hero_object_position)
+  // confluisce nel pannello unico media_bg (immagine/video/gradiente/colore…). Migrazione
+  // non distruttiva al load (src/utils/bgMigrate.js); i renderer (Vue+PHP) tengono
+  // hero_image come fallback quando media_bg è vuoto. image_bleed resta separato.
+  bgMigrate: { imageKey: 'hero_image', imagePosKey: 'hero_object_position', target: 'media_bg' },
+
   defaults: {
+    media_bg: { type: 'none' },
     bg: { type: 'none' },
     typography_preset: '',
     items: [
@@ -96,7 +104,8 @@ export default {
     },
 
     { type: 'separator', label: t('Hero') },
-    { key: 'hero_image', label: t('Immagine hero'), type: 'image' },
+    { key: 'media_bg', type: 'background', showParallax: false,
+      label: t('Hero (immagine, video, gradiente…)') },
     { key: 'hero_height', label: t('Altezza hero (px)'), type: 'range', min: 200, max: 800, step: 10 },
 
     { type: 'separator', label: t('Layout') },
@@ -169,8 +178,6 @@ export default {
 
     { type: 'separator', label: t('Hero — Aspetto') },
     { key: 'hero_radius', label: t('Arrotondamento hero (px)'), type: 'border-radius' },
-    { key: 'hero_object_position', label: t('Posizione contenuto'), type: 'object-position',
-      contextKeys: { src: 'hero_image', height: 'hero_height' } },
     { key: 'hero_overlay_color', label: t('Overlay colore'), type: 'color',
       condition: { field: 'nav_position', op: 'eq', value: 'overlay' } },
     { key: 'hero_overlay_gradient', label: t('Overlay gradiente (alto→basso)'), type: 'toggle',

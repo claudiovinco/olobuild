@@ -108,6 +108,12 @@ class Olobuild_AudioHero_Tile extends Olobuild_Tile_Base {
             ? 'background-image:url(' . esc_url( $img ) . ');background-size:cover;background-position:' . esc_attr( $obj_pos ) . ';'
             : 'background-image:repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 16px, transparent 16px 32px);';
 
+        // COPERTINA universale: pannello media_bg (immagine/video/gradiente/…) con
+        // precedenza sull'immagine legacy cover_image (tenuta come fallback). Il layer
+        // gira DENTRO il box cover 1/1 (.ah-cover): CSS su .ah-cover, markup (video) come figlio.
+        $mb     = $this->bg_media_parts( $s['media_bg'] ?? null, $uid );
+        $has_mb = $mb['has'];
+
         // Waveform: 12 barre con altezze fisse (statiche, decorative).
         $wave = [ 30, 60, 90, 50, 75, 40, 85, 55, 95, 35, 70, 45 ];
 
@@ -137,7 +143,7 @@ class Olobuild_AudioHero_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, rgba_from() (regex-validated hex with fixed fallback), intval()/max() clamped padding, build_border_radius_css() radii with fixed fallbacks, esc_url()'d cover image, fixed font-stack literals, Olobuild_CSS_Builder/Olobuild_Tile_Base shared helpers (sanitized internally), the esc_attr()'d split ratio and the internally generated $uid. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, rgba_from() (regex-validated hex with fixed fallback), intval()/max() clamped padding, build_border_radius_css() radii with fixed fallbacks, esc_url()'d cover image, the media_bg declaration via Olobuild_CSS_Builder::get_bg_inline_css() (sanitized internally), fixed font-stack literals, Olobuild_CSS_Builder/Olobuild_Tile_Base shared helpers, the esc_attr()'d split ratio and the internally generated $uid. ?>
         <style>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;background:<?php echo $bg; ?>;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;<?php echo $kit_decl; ?>}
             .<?php echo $uid; ?> .ah-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(70% 70% at 80% 15%, <?php echo $this->rgba_from( $accent, 0.2 ); ?>, transparent 55%),radial-gradient(60% 60% at 15% 90%, <?php echo $this->rgba_from( $accent2, 0.14 ); ?>, transparent 55%);}
@@ -163,7 +169,7 @@ class Olobuild_AudioHero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ah-btn--ghost:hover{border-color:<?php echo $accent; ?>;color:<?php echo $accent; ?>;}
             .<?php echo $uid; ?> .ah-btn:focus-visible{outline:2px solid <?php echo $accent; ?>;outline-offset:3px;}
             .<?php echo $uid; ?> .ah-art{position:relative;}
-            .<?php echo $uid; ?> .ah-cover{position:relative;aspect-ratio:1/1;border-radius:<?php echo $cover_radius; ?>;overflow:hidden;border:1px solid rgba(255,255,255,.09);box-shadow:0 30px 80px -30px <?php echo $this->rgba_from( $accent, 0.4 ); ?>;background:<?php echo $panel; ?>;<?php echo $cover_bg; ?>}
+            .<?php echo $uid; ?> .ah-cover{position:relative;aspect-ratio:1/1;border-radius:<?php echo $cover_radius; ?>;overflow:hidden;border:1px solid rgba(255,255,255,.09);box-shadow:0 30px 80px -30px <?php echo $this->rgba_from( $accent, 0.4 ); ?>;background:<?php echo $panel; ?>;<?php if ( $has_mb ) { echo $mb['css']; } else { echo $cover_bg; } // media_bg ha precedenza sul cover legacy ?>}
             .<?php echo $uid; ?> .ah-cover .ah-cover-lab{position:absolute;left:14px;bottom:12px;right:14px;font-family:<?php echo $sans; ?>;font-weight:600;font-size:10.5px;letter-spacing:.04em;color:rgba(255,255,255,.4);text-transform:uppercase;}
             .<?php echo $uid; ?> .ah-player{display:flex;align-items:center;gap:14px;margin-top:16px;background:<?php echo $panel; ?>;border:1px solid rgba(255,255,255,.09);border-radius:<?php echo $player_radius; ?>;padding:14px 16px;}
             .<?php echo $uid; ?> .ah-play{width:42px;height:42px;border-radius:50%;background:<?php echo $accent; ?>;display:grid;place-items:center;flex:none;}
@@ -193,7 +199,8 @@ class Olobuild_AudioHero_Tile extends Olobuild_Tile_Base {
                 </div>
                 <div class="ah-art">
                     <div class="ah-cover">
-                        <?php if ( $img === '' && ! empty( $s['cover_label'] ) ) : ?><span class="ah-cover-lab"><?php echo esc_html( $s['cover_label'] ); ?></span><?php endif; ?>
+                        <?php if ( $has_mb ) { echo $mb['markup']; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup generato da Olobuild_CSS_Builder::get_bg_html_markup(), che escapa il proprio output ?>
+                        <?php if ( ! $has_mb && $img === '' && ! empty( $s['cover_label'] ) ) : ?><span class="ah-cover-lab"><?php echo esc_html( $s['cover_label'] ); ?></span><?php endif; ?>
                     </div>
                     <?php if ( $showpl ) : ?>
                     <div class="ah-player">

@@ -24,6 +24,7 @@ class Olobuild_StudioHero_Tile extends Olobuild_Tile_Base {
     protected $icon     = 'dashicons-networking';
     protected $category = 'marketing';
     protected $defaults = [
+        'media_bg'           => [ 'type' => 'none' ],
         'eyebrow'            => 'R&S · divisione idee',
         'eyebrow_color'      => '',
         'title_line1'        => 'Visual',
@@ -130,6 +131,11 @@ class Olobuild_StudioHero_Tile extends Olobuild_Tile_Base {
         $map_on    = ( $s['media_mode'] === 'olomap' );
         $obj_pos   = trim( (string) ( $s['media_object_position'] ?? 'center center' ) );
         if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
+
+        // ── Media hero unificato: pannello media_bg (immagine/video/gradiente/…) con
+        // precedenza sull'immagine legacy media_image (tenuta come fallback). ──
+        $mb     = $this->bg_media_parts( $s['media_bg'] ?? null, $uid );
+        $has_mb = $mb['has'];
         $letters   = ! empty( $s['letters_entrance'] );
         $fill_on   = ! empty( $s['line2_scroll_fill'] ) && (string) $s['title_line2'] !== '';
         $parallax  = ! empty( $s['parallax_internal'] );
@@ -296,6 +302,8 @@ class Olobuild_StudioHero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .sth-olomap .lk.is-focus{stroke:<?php echo $acc; ?>;stroke-width:1.6;vector-effect:non-scaling-stroke;}
             .<?php echo $uid; ?> .sth-imgbox{position:relative;width:100%;height:clamp(320px,42vw,500px);overflow:hidden;border:1px solid <?php echo $line2; ?>;background:<?php echo $ink3; ?>;transition:transform .25s cubic-bezier(.2,.7,.3,1);transform-style:preserve-3d;will-change:transform;}
             .<?php echo $uid; ?> .sth-imgbox img{width:100%;height:100%;object-fit:cover;display:block;}
+            .<?php echo $uid; ?> .sth-imgbox .sth-imgbox__bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;}
+            .<?php echo $uid; ?> .sth-imgbox .sth-imgbox__bg video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
             .<?php echo $uid; ?> .sth-imgbox .sth-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:<?php echo $mono; ?>;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:<?php echo $tsoft; ?>;}
             .<?php echo $uid; ?> .sth-cap{position:absolute;left:14px;bottom:14px;font-family:<?php echo $mono; ?>;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--olo-color-text, #ECEAE3);background:color-mix(in srgb, var(--olo-color-background, #0b0c0f) 60%, transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);padding:7px 11px;border-radius:6px;border:1px solid <?php echo $line2; ?>;}
             @media(prefers-reduced-motion:reduce){.<?php echo $uid; ?> .sth-olomap{transition:none;}.<?php echo $uid; ?> .sth-imgbox{transition:none;}}
@@ -345,7 +353,9 @@ class Olobuild_StudioHero_Tile extends Olobuild_Tile_Base {
                         </div>
                         <?php else : ?>
                         <div class="sth-imgbox" data-olo-tilt-child>
-                            <?php if ( (string) $s['media_image'] !== '' ) : ?>
+                            <?php if ( $has_mb ) : ?>
+                            <div class="sth-imgbox__bg"<?php echo $mb['css'] !== '' ? ' style="' . esc_attr( $mb['css'] ) . '"' : ''; ?>><?php echo $mb['markup']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup generato da Olobuild_CSS_Builder::get_bg_html_markup() (auto-escapato); $mb['css'] passato in esc_attr() ?></div>
+                            <?php elseif ( (string) $s['media_image'] !== '' ) : ?>
                             <img src="<?php echo esc_url( $s['media_image'] ); ?>" alt="<?php echo esc_attr( $s['media_label'] ); ?>" style="object-position:<?php echo esc_attr( $obj_pos ); ?>;" />
                             <?php elseif ( (string) $s['media_label'] !== '' ) : ?>
                             <span class="sth-ph"><?php echo esc_html( $s['media_label'] ); ?></span>

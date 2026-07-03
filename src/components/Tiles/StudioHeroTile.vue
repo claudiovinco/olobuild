@@ -21,8 +21,17 @@
             <svg ref="svgEl" class="sth-map-svg" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
           </div>
           <div v-else class="sth-imgbox" data-olo-tilt-child>
-            <img v-if="s.media_image" :src="s.media_image" :alt="s.media_label" :style="{ objectPosition: s.media_object_position || 'center center' }" />
-            <span v-else-if="s.media_label" class="sth-ph">{{ s.media_label }}</span>
+            <!-- Media unificato (media_bg): immagine/gradiente/colore via background + video element -->
+            <div v-if="hasMediaBg" class="sth-imgbox__bg" :style="mediaBgStyle"></div>
+            <video
+              v-if="isMediaVideo"
+              class="sth-imgbox__video"
+              :src="s.media_bg.video_url"
+              autoplay loop muted playsinline
+            ></video>
+            <!-- Fallback legacy (solo se media_bg non impostato) -->
+            <img v-if="!hasMediaBg && s.media_image" :src="s.media_image" :alt="s.media_label" :style="{ objectPosition: s.media_object_position || 'center center' }" />
+            <span v-else-if="!hasMediaBg && s.media_label" class="sth-ph">{{ s.media_label }}</span>
           </div>
           <span v-if="s.cap_text" ref="capEl" class="sth-cap">{{ s.cap_text }}</span>
         </div>
@@ -41,6 +50,7 @@ const borderDefault = { top: 0, right: 0, bottom: 0, left: 0, linked: true, styl
 const borderHoverDefault = { top: 0, right: 0, bottom: 0, left: 0, linked: true, style: '', color: '' };
 
 const defaults = {
+  media_bg: { type: 'none' },
   eyebrow: 'R&S · divisione idee',
   eyebrow_color: '',
   title_line1: 'Visual',
@@ -149,6 +159,19 @@ const hasMedia  = computed(() => s.value.media_mode !== 'none');
 const mapOn     = computed(() => s.value.media_mode === 'olomap');
 const metaItems = computed(() => (Array.isArray(s.value.meta_items) ? s.value.meta_items : []).filter((m) => m && (m.strong || m.text)));
 const line1Chars = computed(() => Array.from(String(s.value.title_line1 || '')));
+
+// ── Media hero unificato (pannello media_bg) con fallback all'immagine legacy ──
+// Precedenza: se media_bg è impostato (≠ none) lo usa; immagine/gradiente/colore come
+// layer background (parità col box <img> object-fit), video come <video>. Fallback = <img>.
+const hasMediaBg  = computed(() => {
+  const m = s.value.media_bg;
+  return !!(m && typeof m === 'object' && m.type && m.type !== 'none');
+});
+const mediaBgStyle = computed(() => (hasMediaBg.value ? buildBgStyle(s.value.media_bg) : {}));
+const isMediaVideo = computed(() => {
+  const m = s.value.media_bg;
+  return hasMediaBg.value && m.type === 'video' && !!m.video_url;
+});
 
 // ── Sottotitolo: HTML inline passa, plain → escape + nl2br (parità PHP) ──
 const subHtml = computed(() => {
@@ -614,6 +637,8 @@ onBeforeUnmount(() => {
   transition: transform .25s cubic-bezier(.2, .7, .3, 1); transform-style: preserve-3d; will-change: transform;
 }
 .sth-imgbox img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sth-imgbox__bg { position: absolute; inset: 0; background-size: cover; background-position: center; background-repeat: no-repeat; }
+.sth-imgbox__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .sth-imgbox .sth-ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--sth-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--sth-tsoft); }
 .sth-cap { position: absolute; left: 14px; bottom: 14px; font-family: var(--sth-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--olo-color-text, #ECEAE3); background: color-mix(in srgb, var(--olo-color-background, #0b0c0f) 60%, transparent); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); padding: 7px 11px; border-radius: 6px; border: 1px solid var(--sth-line2); }
 @media (prefers-reduced-motion: reduce) {

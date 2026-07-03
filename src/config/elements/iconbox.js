@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, focalField } from './_shared.js';
+import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
@@ -11,7 +11,16 @@ export default {
   name: t('Icon Box'),
   icon: 'dashicons-star-filled',
   category: 'content',
+
+  // Unificazione sfondo box icona: i campi legacy bg_type/bg_color/bg_image (+size/focal)
+  // confluiscono nel pannello unico media_bg (immagine/video/gradiente/colore…).
+  // Non distruttivo: le chiavi vecchie restano come fallback nei renderer. NB: il gradiente
+  // legacy (bg_type==='gradient' → bg_gradient) NON è mappabile 1:1 nel media_bg → resta
+  // come fallback nel renderer (non migrato).
+  bgMigrate: { typeKey: 'bg_type', colorKey: 'bg_color', imageKey: 'bg_image', imageSizeKey: 'bg_image_size', imagePosKey: 'bg_image_position' },
+
   defaults: {
+    media_bg: { type: 'none' },
     bg: { type: 'none' },
     typography_preset: '',
     preset: 'custom',
@@ -138,24 +147,7 @@ export default {
 
     { type: 'separator', label: t('Sfondo box icona') },
     { key: '_bg_hint', type: 'description', label: '', description: t('Sfondo specifico del box icona (interno). Per lo sfondo del wrapper esterno usa il tab Stile → Sfondo.') },
-    { key: 'bg_type', label: t('Tipo sfondo'), type: 'select', options: [
-      { value: 'none', label: t('Nessuno') },
-      { value: 'color', label: t('Colore') },
-      { value: 'gradient', label: t('Gradiente') },
-      { value: 'image', label: t('Immagine') },
-    ]},
-    { key: 'bg_color', label: t('Colore sfondo'), type: 'color',
-      condition: { field: 'bg_type', value: 'color' } },
-    { key: 'bg_gradient', label: t('Gradiente'), type: 'gradient',
-      condition: { field: 'bg_type', value: 'gradient' } },
-    { key: 'bg_image', label: t('Immagine sfondo'), type: 'image',
-      condition: { field: 'bg_type', value: 'image' } },
-    { key: 'bg_image_size', label: t('Dimensione sfondo'), type: 'select', options: [
-      { value: 'cover', label: t('Cover') },
-      { value: 'contain', label: t('Contain') },
-      { value: 'auto', label: t('Auto') },
-    ], condition: { field: 'bg_type', value: 'image' } },
-    focalField('bg_image', { key: 'bg_image_position', fit: 'bg_image_size', condition: { field: 'bg_type', value: 'image' } }),
+    { key: 'media_bg', type: 'background', showParallax: false, label: t('Sfondo box (immagine, video, gradiente, colore…)') },
 
     { type: 'separator', label: t('Bordo e spaziatura') },
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 60 },

@@ -17,7 +17,14 @@ export default {
   icon: 'dashicons-networking',
   category: 'marketing',
 
+  // Unificazione media hero: il vecchio campo immagine (media_image + focal
+  // media_object_position) confluisce nel pannello unico media_bg (immagine/video/
+  // gradiente/colore…). Migrazione non distruttiva al load (src/utils/bgMigrate.js);
+  // i renderer (Vue+PHP) tengono media_image come fallback quando media_bg è vuoto.
+  bgMigrate: { imageKey: 'media_image', imagePosKey: 'media_object_position', target: 'media_bg' },
+
   defaults: {
+    media_bg: { type: 'none' },
     eyebrow: 'R&S · divisione idee',
     eyebrow_color: '',
     title_line1: 'Visual',
@@ -113,10 +120,8 @@ export default {
       { value: 'image', label: t('Immagine') },
       { value: 'olomap', label: t('OLOmap') },
     ]},
-    { key: 'media_image', label: t('Immagine'), type: 'image',
-      condition: { field: 'media_mode', op: 'eq', value: 'image' } },
-    { key: 'media_object_position', label: t('Posizione contenuto'), type: 'object-position',
-      contextKeys: { src: 'media_image' },
+    { key: 'media_bg', type: 'background', showParallax: false,
+      label: t('Immagine / media hero (immagine, video, gradiente…)'),
       condition: { field: 'media_mode', op: 'eq', value: 'image' } },
     { key: 'media_label', label: t('Etichetta placeholder'), type: 'text',
       condition: { field: 'media_mode', op: 'eq', value: 'image' } },
