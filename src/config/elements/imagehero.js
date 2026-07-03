@@ -17,6 +17,11 @@ export default {
   icon: 'dashicons-format-image',
   category: 'marketing',
 
+  // Unificazione sfondo: il vecchio campo immagine semplice (bg_image) confluisce
+  // nel pannello unico media_bg (immagine/video/gradiente/…). Migrazione non
+  // distruttiva al load (src/utils/bgMigrate.js); il renderer tiene bg_image come fallback.
+  bgMigrate: { imageKey: 'bg_image', imagePosKey: 'bg_image_object_position' },
+
   defaults: {
     eyebrow_text: "Autumn / Winter '26",
     eyebrow_dot: false,
@@ -88,9 +93,7 @@ export default {
     { key: 'cta2_url', label: t('CTA 2 — link'), type: 'link' },
 
     { type: 'separator', label: t('Sfondo / media') },
-    { key: 'bg_image', label: t('Immagine di sfondo (vuoto = placeholder)'), type: 'image' },
-    focalField('bg_image'),
-    { key: 'media_bg', label: t('Sfondo / media (ogni tipo)'), type: 'background', showParallax: false },
+    { key: 'media_bg', label: t('Sfondo / media (immagine, video, gradiente, colore…)'), type: 'background', showParallax: false },
     { key: 'media_label', label: t('Etichetta placeholder'), type: 'text' },
   ],
 

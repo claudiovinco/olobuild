@@ -6,6 +6,7 @@ import {
   findNodeById, findAncestorPath, findParentAndIndex, findNodeWithChildrenArray,
   normalizeNodes, countNodes,
 } from './treeUtils.js';
+import { migrateTreeBackgrounds } from '@/utils/bgMigrate';
 
 const oloData = window.oloData || {};
 
@@ -144,6 +145,8 @@ export const useTilesStore = defineStore('tiles', {
       }
       // Fix PHP json_decode round-trip: {} → [] → Array (named props lost in JSON.stringify)
       normalizeNodes(this.canvasTiles);
+      // Unifica i campi sfondo legacy nell'oggetto media_bg (non distruttivo).
+      migrateTreeBackgrounds(this.canvasTiles);
     },
 
     /**
@@ -156,6 +159,7 @@ export const useTilesStore = defineStore('tiles', {
         this.headerTiles = content || [];
       }
       normalizeNodes(this.headerTiles);
+      migrateTreeBackgrounds(this.headerTiles);
     },
 
     /**
@@ -168,6 +172,7 @@ export const useTilesStore = defineStore('tiles', {
         this.footerTiles = content || [];
       }
       normalizeNodes(this.footerTiles);
+      migrateTreeBackgrounds(this.footerTiles);
     },
 
     /**

@@ -13,6 +13,9 @@ export default {
   icon: 'dashicons-align-pull-left',
   category: 'marketing',
 
+  // Unificazione sfondo: media_image legacy → pannello unico media_bg (non distruttivo).
+  bgMigrate: { imageKey: 'media_image', imagePosKey: 'media_image_object_position' },
+
   defaults: {
     eyebrow: 'One unit · since 1974',
     eyebrow_color: '',
@@ -114,9 +117,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Media + badge') },
-    { key: 'media_image', label: t('Immagine (vuoto = placeholder)'), type: 'image' },
-    focalField('media_image'),
-    { key: 'media_bg', label: t('Sfondo / media (ogni tipo)'), type: 'background', showParallax: false },
+    { key: 'media_bg', label: t('Sfondo / media (immagine, video, gradiente, colore…)'), type: 'background', showParallax: false },
     { key: 'media_label', label: t('Etichetta placeholder'), type: 'text' },
     { key: 'media_light', label: t('Placeholder chiaro'), type: 'toggle' },
     { key: 'badge_number', label: t('Badge — numero'), type: 'text' },

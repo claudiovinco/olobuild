@@ -12,6 +12,9 @@ export default {
   icon: 'dashicons-megaphone',
   category: 'marketing',
 
+  // Unificazione sfondo: bg_image legacy → pannello unico media_bg (non distruttivo).
+  bgMigrate: { imageKey: 'bg_image', imagePosKey: 'bg_image_object_position' },
+
   defaults: {
     eyebrow: 'Membership',
     eyebrow_color: '',
@@ -86,9 +89,7 @@ export default {
     { key: 'cta2_url', label: t('CTA 2 — link'), type: 'link' },
 
     { type: 'separator', label: t('Sfondo') },
-    { key: 'bg_image', label: t('Immagine/poster (vuoto = placeholder)'), type: 'image' },
-    focalField('bg_image'),
-    { key: 'media_bg', label: t('Sfondo / media (ogni tipo)'), type: 'background', showParallax: false },
+    { key: 'media_bg', label: t('Sfondo / media (immagine, video, gradiente, colore…)'), type: 'background', showParallax: false },
     { key: 'media_label', label: t('Etichetta placeholder'), type: 'text' },
   ],
 
