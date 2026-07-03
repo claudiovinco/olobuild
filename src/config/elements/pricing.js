@@ -14,7 +14,15 @@ export default {
   name: t('Listino prezzi'),
   icon: 'dashicons-money-alt',
   category: 'marketing',
+
+  // Unificazione sfondo: i campi bg_image/bg_video legacy (sfondo avanzato della card)
+  // confluiscono nel pannello unico media_bg (immagine/video/gradiente/colore…). Non
+  // distruttivo: le chiavi vecchie restano come fallback nei renderer. NB: non c'è
+  // typeKey/colorKey perché il "colore" legacy è lo sfondo card (bg_color), separato.
+  bgMigrate: { imageKey: 'bg_image', imagePosKey: 'bg_image_object_position', videoKey: 'bg_video' },
+
   defaults: {
+    media_bg: { type: 'none' },
     bg: { type: 'none' },
     typography_preset: '',
     preset: 'custom',
@@ -150,18 +158,8 @@ export default {
       condition: { field: 'countdown_enabled', value: true } },
 
     { type: 'separator', label: t('Sfondo avanzato') },
-    { key: 'bg_type', label: t('Tipo sfondo'), type: 'select', options: [
-      { value: 'color', label: t('Colore') },
-      { value: 'image', label: t('Immagine') },
-      { value: 'video', label: t('Video') },
-    ]},
-    { key: 'bg_image', label: t('Immagine'), type: 'image',
-      condition: { field: 'bg_type', value: 'image' } },
-    focalField('bg_image', { condition: { field: 'bg_type', value: 'image' } }),
-    { key: 'bg_video', label: t('Video (mp4)'), type: 'media',
-      condition: { field: 'bg_type', value: 'video' } },
-    { key: 'overlay', label: t('Overlay'), type: 'toggle',
-      condition: { field: 'bg_type', operator: '!=', value: 'color' } },
+    { key: 'media_bg', label: t('Sfondo (immagine, video, gradiente, colore…)'), type: 'background', showParallax: false },
+    { key: 'overlay', label: t('Overlay scuro sul media'), type: 'toggle' },
   ],
 
   styleFields: [

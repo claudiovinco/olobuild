@@ -1,19 +1,24 @@
 <template>
   <div class="mb-relative mb-overflow-hidden" :style="wrapStyle">
-    <!-- Bg image -->
-    <div v-if="s.bg_type === 'image' && s.bg_image" class="mb-absolute mb-inset-0"
-      :style="{ backgroundImage: `url(${s.bg_image})`, backgroundSize: 'cover', backgroundPosition: focalPos(s, 'bg_image') }"></div>
-    <!-- Bg video -->
+    <!-- Sfondo unificato (media_bg): immagine/gradiente/colore via style + video element -->
+    <div v-if="hasMediaBg" class="mb-absolute mb-inset-0" :style="mediaBgStyle"></div>
     <video
-      v-if="s.bg_type === 'video' && s.bg_video"
+      v-if="isMediaVideo"
+      class="mb-absolute mb-inset-0"
+      :src="s.media_bg.video_url"
+      autoplay loop muted playsinline
+      style="width:100%;height:100%;object-fit:cover"
+    ></video>
+    <!-- Fallback legacy (solo se media_bg non impostato) -->
+    <div v-if="!hasMediaBg && s.bg_type === 'image' && s.bg_image" class="mb-absolute mb-inset-0"
+      :style="{ backgroundImage: `url(${s.bg_image})`, backgroundSize: 'cover', backgroundPosition: focalPos(s, 'bg_image') }"></div>
+    <video
+      v-if="!hasMediaBg && s.bg_type === 'video' && s.bg_video"
       class="mb-absolute mb-inset-0"
       :src="s.bg_video"
       autoplay loop muted playsinline
       style="width:100%;height:100%;object-fit:cover"
     ></video>
-    <div v-if="s.bg_type === 'video' && !s.bg_video" class="mb-absolute mb-inset-0 mb-flex mb-items-center mb-justify-center mb-bg-gray-900">
-      <div class="mb-text-gray-500 mb-text-xs">{{ t('&#9654; Video') }}</div>
-    </div>
     <!-- Overlay -->
     <div v-if="showOverlay" class="mb-absolute mb-inset-0" :style="overlayStyle"></div>
 
@@ -36,6 +41,7 @@ import { computed } from 'vue';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
 import { toRadiusCss, toSpacingCss } from '@/composables/useBoxModel';
 import { focalPos } from '@/utils/focalPoint';
+import { buildBgStyle } from '@/composables/useBackgroundStyle';
 import { t } from '@/i18n';
 
 const props = defineProps({
@@ -55,8 +61,21 @@ const s = computed(() => ({
 
 const iconSvg = computed(() => iconsSvg[s.value.icon_emoji] || '');
 
+// ── Sfondo unificato (pannello media_bg) con fallback ai campi legacy ──
+const hasMediaBg = computed(() => {
+  const m = s.value.media_bg;
+  return !!(m && typeof m === 'object' && m.type && m.type !== 'none');
+});
+const mediaBgStyle = computed(() => (hasMediaBg.value ? buildBgStyle(s.value.media_bg) : {}));
+const isMediaVideo = computed(() => {
+  const m = s.value.media_bg;
+  return hasMediaBg.value && m.type === 'video' && !!m.video_url;
+});
+
 const showOverlay = computed(() => {
-  if (s.value.bg_type === 'color') return false;
+  // Con media_bg: overlay solo su media non-tinta-unita. Fallback legacy: no overlay su bg_type color.
+  const isSolidOnly = hasMediaBg.value ? (s.value.media_bg.type === 'solid') : (s.value.bg_type === 'color');
+  if (isSolidOnly) return false;
   const v = s.value.overlay;
   return v && v !== 'false' && v !== '0' && v !== '';
 });

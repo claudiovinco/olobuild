@@ -1,4 +1,4 @@
-import { focalField, focalDefault } from './_shared.js';
+import { focalDefault } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
@@ -14,7 +14,13 @@ export default {
   icon: 'dashicons-format-video',
   category: 'marketing',
 
+  // Unificazione sfondo: il campo legacy bg_image (immagine/video poster) confluisce
+  // nel pannello unico media_bg (immagine/video/gradiente/colore…). Non distruttivo:
+  // la chiave vecchia resta come fallback nei renderer, la maschera resta su .mvh-media.
+  bgMigrate: { imageKey: 'bg_image', imagePosKey: 'bg_image_object_position' },
+
   defaults: {
+    media_bg: { type: 'none' },
     tag_text: 'Next home game · Sat 14 Mar · 15:00',
     tag_dot_color: '',
     headline_text: 'Forged on the',
@@ -58,8 +64,7 @@ export default {
     { type: 'separator', label: t('Sfondo / media') },
     { key: 'transparent_bg', label: t('Sfondo trasparente (no segnaposto)'), type: 'toggle',
       description: t('Niente colore pannello né striscia segnaposto: si vede lo sfondo della sezione.') },
-    { key: 'bg_image', label: t('Immagine/video poster di sfondo (vuoto = placeholder)'), type: 'image' },
-    focalField('bg_image'),
+    { key: 'media_bg', label: t('Sfondo / media (immagine, video, gradiente, colore…)'), type: 'background', showParallax: false },
     { key: 'media_label', label: t('Etichetta placeholder'), type: 'text' },
     { key: 'watermark_text', label: t('Watermark (ghost)'), type: 'text' },
   ],

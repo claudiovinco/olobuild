@@ -72,6 +72,13 @@ class Olobuild_Counter_Tile extends Olobuild_Tile_Base {
         $bg_type  = $s['bg_type'] ?: 'color';
         $bg_color = $this->safe_color_css( $s['bg_color'] ) ?: '';
 
+        // Sfondo unificato: pannello media_bg (immagine/video/gradiente/…) con precedenza
+        // sui campi legacy bg_type/bg_image/bg_video (tenuti come fallback).
+        $mb       = $this->bg_media_parts( $s['media_bg'] ?? null, $uid );
+        $has_mb   = $mb['has'];
+        $mb_type  = ( is_array( $s['media_bg'] ?? null ) ) ? ( $s['media_bg']['type'] ?? 'none' ) : 'none';
+        $has_media = $has_mb ? ( $mb_type !== 'solid' ) : ( $bg_type !== 'color' );
+
         $label    = esc_html( wp_strip_all_tags( $s['label'] ) );
 
         ob_start();
@@ -91,19 +98,21 @@ class Olobuild_Counter_Tile extends Olobuild_Tile_Base {
                 <?php endif; ?>
             }
             <?php if ( $tile_r_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $tile_r_hover_css; ?> !important}<?php endif; ?>
-            <?php if ( $bg_type === 'image' && ! empty( $s['bg_image'] ) ) : ?>
+            <?php if ( $has_mb && $mb['css'] !== '' ) : ?>
+            .<?php echo $uid; ?> .olo-cnt-bg { position: absolute; inset: 0; <?php echo $mb['css']; ?> }
+            <?php elseif ( $bg_type === 'image' && ! empty( $s['bg_image'] ) ) : ?>
             .<?php echo $uid; ?> .olo-cnt-bg {
                 position: absolute; inset: 0;
                 background: url('<?php echo esc_url( $s['bg_image'] ); ?>') <?php echo esc_attr( Olobuild_Tile_Utils::focal_pos( $s, 'bg_image' ) ); ?>/cover no-repeat;
             }
             <?php endif; ?>
-            <?php if ( $bg_type === 'video' && ! empty( $s['bg_video'] ) ) : ?>
+            <?php if ( ! $has_mb && $bg_type === 'video' && ! empty( $s['bg_video'] ) ) : ?>
             .<?php echo $uid; ?> .olo-cnt-video {
                 position: absolute; inset: 0; width: 100%; height: 100%;
                 object-fit: cover; z-index: 0;
             }
             <?php endif; ?>
-            <?php if ( filter_var( $s['overlay'], FILTER_VALIDATE_BOOLEAN ) && $bg_type !== 'color' ) : ?>
+            <?php if ( filter_var( $s['overlay'], FILTER_VALIDATE_BOOLEAN ) && $has_media ) : ?>
             .<?php echo $uid; ?> .olo-cnt-overlay {
                 position: absolute; inset: 0; z-index: 1;
                 background: <?php echo $this->safe_color_css( $s['overlay_color'] ) ?: '#000'; ?>;
@@ -140,13 +149,14 @@ class Olobuild_Counter_Tile extends Olobuild_Tile_Base {
         </style><?php endif; ?>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-counter <?php echo esc_attr( $uid ); ?> olo-cnt-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
-            <?php if ( $bg_type === 'image' && ! empty( $s['bg_image'] ) ) : ?>
+            <?php if ( $has_mb ) : ?>
+                <div class="olo-cnt-bg"><?php echo $mb['markup']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup generato da Olobuild_CSS_Builder::get_bg_html_markup(), che escapa il proprio output ?></div>
+            <?php elseif ( $bg_type === 'image' && ! empty( $s['bg_image'] ) ) : ?>
                 <div class="olo-cnt-bg"></div>
-            <?php endif; ?>
-            <?php if ( $bg_type === 'video' && ! empty( $s['bg_video'] ) ) : ?>
+            <?php elseif ( $bg_type === 'video' && ! empty( $s['bg_video'] ) ) : ?>
                 <video class="olo-cnt-video" src="<?php echo esc_url( $s['bg_video'] ); ?>" autoplay muted loop playsinline></video>
             <?php endif; ?>
-            <?php if ( filter_var( $s['overlay'], FILTER_VALIDATE_BOOLEAN ) && $bg_type !== 'color' ) : ?>
+            <?php if ( filter_var( $s['overlay'], FILTER_VALIDATE_BOOLEAN ) && $has_media ) : ?>
                 <div class="olo-cnt-overlay"></div>
             <?php endif; ?>
 

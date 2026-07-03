@@ -2,7 +2,14 @@
   <section class="olo-maskedvideohero mvh" :style="rootStyle">
     <div class="mvh-bg" :style="bgStyle">
       <div class="mvh-media" :style="mediaStyle">
-        <span v-if="!s.bg_image && !s.transparent_bg && s.media_label" class="mvh-medialabel" :style="mediaLabelStyle">{{ s.media_label }}</span>
+        <video
+          v-if="isMediaVideo"
+          class="mvh-media-video"
+          :src="s.media_bg.video_url"
+          autoplay loop muted playsinline
+          style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"
+        ></video>
+        <span v-if="!hasMediaBg && !s.bg_image && !s.transparent_bg && s.media_label" class="mvh-medialabel" :style="mediaLabelStyle">{{ s.media_label }}</span>
       </div>
       <div class="mvh-grad" :style="gradStyle"></div>
       <div v-if="s.watermark_text" class="mvh-ghost" :style="ghostStyle">{{ s.watermark_text }}</div>
@@ -26,6 +33,7 @@
 <script setup>
 import { computed } from 'vue';
 import { focalPos } from '@/utils/focalPoint';
+import { buildBgStyle } from '@/composables/useBackgroundStyle';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -34,12 +42,26 @@ const defaults = {
   headline_text: 'Forged on the', accent_text: 'pitch.', uppercase: true,
   subhead: 'Eight teams, one badge. Verdano FC has played, fought and grown in this city for fifty years — and we’re only getting started.',
   cta1_text: 'View fixtures', cta1_url: '#', cta2_text: 'Become a member', cta2_url: '#',
+  media_bg: { type: 'none' },
   bg_color: '#0a2a1e', bg_image: '', media_label: 'home hero — match footage · background video',
   overlay_color: '#0a2a1e', overlay_strength: 0.55, watermark_text: 'VFC', watermark_color: 'rgba(255,255,255,0.055)',
   accent: '', accent_on: '#0a2a1e', text_color: '#ffffff', sub_color: 'rgba(255,255,255,0.72)', arch: true, transparent_bg: false, min_height: 84,
 };
 
 const s = computed(() => ({ ...defaults, ...props.settings }));
+
+// ── Sfondo unificato (pannello media_bg) con fallback al campo legacy bg_image ──
+// Il layer media (immagine/gradiente/colore via style, o <video>) sta dentro .mvh-media,
+// che è mascherata dal parent .mvh-bg: la maschera ad arco resta applicata in ogni caso.
+const hasMediaBg = computed(() => {
+  const m = s.value.media_bg;
+  return !!(m && typeof m === 'object' && m.type && m.type !== 'none');
+});
+const mediaBgStyle = computed(() => (hasMediaBg.value ? buildBgStyle(s.value.media_bg) : {}));
+const isMediaVideo = computed(() => {
+  const m = s.value.media_bg;
+  return hasMediaBg.value && m.type === 'video' && !!m.video_url;
+});
 
 const DISP = "var(--olo-font-family-heading, 'Archivo',-apple-system,sans-serif)";
 const SANS = "var(--olo-font-family, 'Work Sans',-apple-system,sans-serif)";
@@ -59,6 +81,13 @@ const rootStyle = computed(() => ({ position: 'relative', overflow: 'hidden', mi
 const bgStyle = computed(() => ({ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden', background: s.value.transparent_bg ? 'transparent' : (s.value.bg_color || '#0a2a1e'), WebkitMask: mask.value, mask: mask.value }));
 const mediaStyle = computed(() => {
   const tr = s.value.transparent_bg;
+  // media_bg ha precedenza: immagine/gradiente/colore via buildBgStyle sull'elemento
+  // mascherato. Per il video lo style è vuoto (backgroundColor placeholder) e il <video>
+  // interno copre l'area. La maschera resta sul parent .mvh-bg.
+  if (hasMediaBg.value) {
+    return { position: 'absolute', inset: 0, ...mediaBgStyle.value };
+  }
+  // Fallback legacy: bg_image (immagine/poster) su .mvh-media, come da comportamento attuale.
   const st = { position: 'absolute', inset: 0, background: tr ? 'transparent' : (s.value.bg_color || '#0a2a1e'), backgroundSize: 'cover', backgroundPosition: focalPos(s.value, 'bg_image') };
   st.backgroundImage = s.value.bg_image ? 'url(' + s.value.bg_image + ')' : (tr ? 'none' : 'repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px)');
   return st;

@@ -16,8 +16,16 @@ export default {
   name: t('Page Title Bar'),
   icon: 'dashicons-format-aside',
   category: 'structure',
+
+  // Unificazione sfondo: il campo asset legacy bg_image (+ posizione focal bg_position)
+  // confluisce nel pannello unico media_bg (immagine/video/gradiente/colore…). Non
+  // distruttivo: le chiavi vecchie restano come fallback nei renderer. NB: qui la chiave
+  // posizione legacy è `bg_position` (non `bg_image_object_position`).
+  bgMigrate: { imageKey: 'bg_image', imagePosKey: 'bg_position' },
+
   defaults: {
     preset: 'custom',
+    media_bg: { type: 'none' },
     bg: { type: 'none' },
     typography_preset: '',
     title_tag: 'h1',
@@ -61,9 +69,10 @@ export default {
     { key: 'show_breadcrumbs', label: t('Mostra breadcrumbs'), type: 'toggle' },
     { key: 'breadcrumb_separator', label: t('Separatore'), type: 'text', show: s => s.show_breadcrumbs },
 
-    { type: 'separator', label: t('Sfondo (asset)') },
-    { key: 'bg_image', label: t('Immagine sfondo'), type: 'media' },
-    { key: 'bg_parallax', label: t('Parallax'), type: 'toggle', show: s => !!s.bg_image },
+    { type: 'separator', label: t('Sfondo') },
+    { key: 'media_bg', label: t('Sfondo (immagine, video, gradiente, colore…)'), type: 'background', showParallax: false },
+    { key: 'bg_parallax', label: t('Parallax'), type: 'toggle',
+      show: s => (s.media_bg && s.media_bg.type === 'image' && !!s.media_bg.image_url) || !!s.bg_image },
 
     { type: 'separator', label: t('Bordo inferiore') },
     { key: 'border_bottom', label: t('Bordo inferiore'), type: 'toggle' },
@@ -123,15 +132,22 @@ export default {
     ] },
 
     { type: 'separator', label: t('Sfondo') },
-    { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
-    { key: 'bg_overlay', label: t('Opacita overlay (%)'), type: 'range', min: 0, max: 100, show: s => !!s.bg_image },
-    { key: 'bg_overlay_color', label: t('Colore overlay'), type: 'color', show: s => !!s.bg_image },
+    // bg_color = superficie di base (backdrop scuro del brand) dietro il media_bg:
+    // resta visibile anche con media trasparente/PNG. Sempre disponibile.
+    { key: 'bg_color', label: t('Colore sfondo (base)'), type: 'color' },
+    // Overlay scuro sul media: vale sia per media_bg immagine/video sia per il legacy bg_image.
+    { key: 'bg_overlay', label: t('Opacita overlay (%)'), type: 'range', min: 0, max: 100,
+      show: s => (s.media_bg && (s.media_bg.type === 'image' || s.media_bg.type === 'video') && (!!s.media_bg.image_url || !!s.media_bg.video_url)) || !!s.bg_image },
+    { key: 'bg_overlay_color', label: t('Colore overlay'), type: 'color',
+      show: s => (s.media_bg && (s.media_bg.type === 'image' || s.media_bg.type === 'video') && (!!s.media_bg.image_url || !!s.media_bg.video_url)) || !!s.bg_image },
+    // Dimensione/posizione: solo per il legacy bg_image (il pannello media_bg gestisce size/posizione internamente).
     { key: 'bg_size', label: t('Dimensione sfondo'), type: 'select', options: [
       { value: 'cover', label: t('Cover') },
       { value: 'contain', label: t('Contain') },
       { value: 'auto', label: t('Auto') },
-    ], show: s => !!s.bg_image },
-    { ...focalField('bg_image', { key: 'bg_position', fit: 'bg_size' }), show: s => !!s.bg_image },
+    ], show: s => !!s.bg_image && !(s.media_bg && s.media_bg.type && s.media_bg.type !== 'none') },
+    { ...focalField('bg_image', { key: 'bg_position', fit: 'bg_size' }),
+      show: s => !!s.bg_image && !(s.media_bg && s.media_bg.type && s.media_bg.type !== 'none') },
 
     { type: 'separator', label: t('Layout') },
     { key: 'min_height', label: t('Altezza minima (px)'), type: 'range', min: 0, max: 600, step: 10 },

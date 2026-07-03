@@ -77,14 +77,25 @@ class Olobuild_MaskedVideoHero_Tile extends Olobuild_Tile_Base {
         $bgc    = $transp ? 'transparent' : $bg;
         $mask   = $arch ? 'radial-gradient(150% 125% at 50% 0%, #000 87%, transparent 87.5%)' : 'none';
 
+        // Sfondo unificato: pannello media_bg (immagine/video/gradiente/colore…) con
+        // precedenza sul campo legacy bg_image (tenuto come fallback). La maschera ad arco
+        // resta su .mvh-bg → qualunque layer dentro .mvh-media è mascherato.
+        $mb      = $this->bg_media_parts( $s['media_bg'] ?? null, $uid );
+        $has_mb  = $mb['has'];
+        $mb_type = ( is_array( $s['media_bg'] ?? null ) ) ? ( $s['media_bg']['type'] ?? 'none' ) : 'none';
+
         ob_start();
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, hex_rgb() preg_match-validated rgb triplet, intval()/round() clamped numbers, esc_url()/esc_attr() for image URL and label, fixed literal ternaries (mask/uppercase/font stacks); $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;min-height:<?php echo $mh; ?>vh;display:flex;align-items:center;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;}
             .<?php echo $uid; ?> .mvh-bg{position:absolute;inset:0;z-index:0;overflow:hidden;background:<?php echo $bgc; ?>;-webkit-mask:<?php echo $mask; ?>;mask:<?php echo $mask; ?>;}
+            <?php if ( $has_mb ) : ?>
+            .<?php echo $uid; ?> .mvh-media{position:absolute;inset:0;<?php echo $mb['css']; ?>}
+            <?php else : ?>
             .<?php echo $uid; ?> .mvh-media{position:absolute;inset:0;background:<?php echo $bgc; ?>;background-image:<?php echo $img !== '' ? 'url(' . esc_url( $img ) . ')' : ( $transp ? 'none' : 'repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px)' ); ?>;background-size:cover;background-position:<?php echo esc_attr( Olobuild_Tile_Utils::focal_pos( $s, 'bg_image' ) ); ?>;}
-            <?php if ( $img === '' && ! $transp && ! empty( $s['media_label'] ) ) : ?>
+            <?php endif; ?>
+            <?php if ( ! $has_mb && $img === '' && ! $transp && ! empty( $s['media_label'] ) ) : ?>
             .<?php echo $uid; ?> .mvh-media::after{content:"<?php echo esc_attr( $s['media_label'] ); ?>";position:absolute;left:18px;bottom:14px;font-size:11px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;color:rgba(255,255,255,.4);}
             <?php endif; ?>
             .<?php echo $uid; ?> .mvh-grad{position:absolute;inset:0;z-index:1;background:<?php echo $transp ? 'none' : 'linear-gradient(180deg, rgba(' . $orgb . ',' . $a_top . ') 0%, rgba(' . $orgb . ',' . $a_mid . ') 38%, rgba(' . $orgb . ',' . $a_bot . ') 100%)'; ?>;}
@@ -109,7 +120,7 @@ class Olobuild_MaskedVideoHero_Tile extends Olobuild_Tile_Base {
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <section class="olo-maskedvideohero <?php echo esc_attr( $uid ); ?>">
             <div class="mvh-bg">
-                <div class="mvh-media"></div>
+                <div class="mvh-media"><?php if ( $has_mb && $mb_type === 'video' ) { echo $mb['markup']; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup generato da Olobuild_CSS_Builder::get_bg_html_markup(), che escapa il proprio output ?></div>
                 <div class="mvh-grad"></div>
                 <?php if ( ! empty( $s['watermark_text'] ) ) : ?><div class="mvh-ghost"><?php echo esc_html( $s['watermark_text'] ); ?></div><?php endif; ?>
             </div>

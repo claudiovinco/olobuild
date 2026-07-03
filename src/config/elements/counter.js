@@ -11,7 +11,14 @@ export default {
   name: t('Contatore'),
   icon: 'dashicons-performance',
   category: 'marketing',
+
+  // Unificazione sfondo: i campi bg_type/bg_color/bg_image/bg_video legacy confluiscono
+  // nel pannello unico media_bg (immagine/video/gradiente/colore…). Non distruttivo:
+  // le chiavi vecchie restano come fallback nei renderer.
+  bgMigrate: { typeKey: 'bg_type', colorKey: 'bg_color', imageKey: 'bg_image', imagePosKey: 'bg_image_object_position', videoKey: 'bg_video' },
+
   defaults: {
+    media_bg: { type: 'none' },
     bg: { type: 'none' },
     typography_preset: '',
     preset: 'custom',
@@ -54,18 +61,8 @@ export default {
     { key: 'icon_emoji', label: t('Icona / Emoji'), type: 'icon' },
 
     { type: 'separator', label: t('Sfondo') },
-    { key: 'bg_type', label: t('Tipo sfondo'), type: 'select', options: [
-      { value: 'color', label: t('Colore') },
-      { value: 'image', label: t('Immagine') },
-      { value: 'video', label: t('Video') },
-    ]},
-    { key: 'bg_image', label: t('Immagine sfondo'), type: 'image',
-      condition: { field: 'bg_type', value: 'image' } },
-    focalField('bg_image', { condition: { field: 'bg_type', value: 'image' } }),
-    { key: 'bg_video', label: t('Video sfondo (mp4)'), type: 'media',
-      condition: { field: 'bg_type', value: 'video' } },
-    { key: 'overlay', label: t('Overlay'), type: 'toggle',
-      condition: { field: 'bg_type', operator: '!=', value: 'color' } },
+    { key: 'media_bg', label: t('Sfondo (immagine, video, gradiente, colore…)'), type: 'background', showParallax: false },
+    { key: 'overlay', label: t('Overlay scuro sul media'), type: 'toggle' },
   ],
 
   styleFields: [
@@ -115,8 +112,6 @@ export default {
     },
 
     { type: 'separator', label: t('Colori') },
-    { key: 'bg_color', label: t('Colore sfondo'), type: 'color',
-      condition: { field: 'bg_type', value: 'color' } },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color',
       condition: { field: 'overlay', value: true } },
     { key: 'overlay_opacity', label: t('Opacità overlay (%)'), type: 'range', min: 10, max: 100, step: 5,

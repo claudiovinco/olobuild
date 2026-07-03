@@ -1,10 +1,19 @@
 <template>
   <div class="mb-relative mb-overflow-hidden mb-text-center" :style="wrapStyle">
-    <!-- Bg image -->
-    <div v-if="s.bg_type === 'image' && s.bg_image" class="mb-absolute mb-inset-0"
+    <!-- Sfondo unificato (media_bg): immagine/gradiente/colore via style + video element -->
+    <div v-if="hasMediaBg" class="mb-absolute mb-inset-0" :style="mediaBgStyle"></div>
+    <video
+      v-if="isMediaVideo"
+      class="mb-absolute mb-inset-0"
+      :src="s.media_bg.video_url"
+      autoplay loop muted playsinline
+      style="width:100%;height:100%;object-fit:cover"
+    ></video>
+    <!-- Fallback legacy (solo se media_bg non impostato) -->
+    <div v-if="!hasMediaBg && s.bg_type === 'image' && s.bg_image" class="mb-absolute mb-inset-0"
       :style="{ backgroundImage: `url(${s.bg_image})`, backgroundSize: 'cover', backgroundPosition: focalPos(s, 'bg_image') }"></div>
     <!-- Bg video badge -->
-    <div v-if="s.bg_type === 'video'" class="mb-absolute mb-inset-0 mb-flex mb-items-center mb-justify-center mb-bg-gray-900">
+    <div v-if="!hasMediaBg && s.bg_type === 'video'" class="mb-absolute mb-inset-0 mb-flex mb-items-center mb-justify-center mb-bg-gray-900">
       <div class="mb-text-gray-500 mb-text-xs">{{ t('&#9654; Video') }}</div>
     </div>
     <!-- Overlay -->
@@ -81,6 +90,7 @@
 import { t } from '@/i18n';
 import { computed, ref, onMounted, onUnmounted, watch } from 'vue';
 import { focalPos } from '@/utils/focalPoint';
+import { buildBgStyle } from '@/composables/useBackgroundStyle';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -109,6 +119,17 @@ const s = computed(() => ({
   border_radius: '12', border_width: '0', border_color: 'var(--olo-color-border, #E5E7EB)',
   ...props.settings,
 }));
+
+// ── Sfondo unificato (pannello media_bg) con fallback ai campi legacy ──
+const hasMediaBg = computed(() => {
+  const m = s.value.media_bg;
+  return !!(m && typeof m === 'object' && m.type && m.type !== 'none');
+});
+const mediaBgStyle = computed(() => (hasMediaBg.value ? buildBgStyle(s.value.media_bg) : {}));
+const isMediaVideo = computed(() => {
+  const m = s.value.media_bg;
+  return hasMediaBg.value && m.type === 'video' && !!m.video_url;
+});
 
 // ── Toggle mensile/annuale ──
 const toggleEnabled = computed(() => {
@@ -197,7 +218,9 @@ const showBadge = computed(() => {
 });
 
 const showOverlay = computed(() => {
-  if (s.value.bg_type === 'color') return false;
+  // Con media_bg: overlay solo su media non-tinta-unita. Fallback legacy: no overlay su bg_type color.
+  const isSolidOnly = hasMediaBg.value ? (s.value.media_bg.type === 'solid') : (s.value.bg_type === 'color');
+  if (isSolidOnly) return false;
   const v = s.value.overlay;
   return v && v !== 'false' && v !== '0' && v !== '';
 });

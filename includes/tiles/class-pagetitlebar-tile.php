@@ -16,6 +16,7 @@ class Olobuild_Pagetitlebar_Tile extends Olobuild_Tile_Base {
     protected $icon     = 'dashicons-format-aside';
     protected $category = 'structure';
     protected $defaults = [
+        'media_bg'          => [ 'type' => 'none' ],
         'title_tag'         => 'h1',
         'title_color'       => '',
         'title_size'        => '36',
@@ -75,6 +76,17 @@ class Olobuild_Pagetitlebar_Tile extends Olobuild_Tile_Base {
         $overlay    = max( 0, min( 100, intval( $s['bg_overlay'] ) ) );
         $overlay_c  = $this->safe_color_css( $s['bg_overlay_color'] ) ?: '#000000';
         $min_h      = max( 0, intval( $s['min_height'] ) );
+
+        // Sfondo unificato: pannello media_bg (immagine/video/gradiente/colore/pattern…)
+        // con precedenza sul campo legacy bg_image (tenuto come fallback). La superficie
+        // di base bg_color resta sempre come backdrop dietro il media.
+        $mb        = $this->bg_media_parts( $s['media_bg'] ?? null, $uid );
+        $has_mb    = $mb['has'];
+        $mb_type   = ( is_array( $s['media_bg'] ?? null ) ) ? ( $s['media_bg']['type'] ?? 'none' ) : 'none';
+        // C'è un'immagine/video di sfondo (per overlay/parallax)?
+        $has_bg_image_like = $has_mb
+            ? in_array( $mb_type, [ 'image', 'video', 'gallery' ], true )
+            : ( $bg_img !== '' );
         $_tp = $s['tile_padding'] ?? null;
         $pad_y = is_array( $_tp ) ? max( 0, intval( $_tp['top'] ?? 40 ) ) : max( 0, intval( $s['padding_y'] ?? 40 ) );
         $max_w      = max( 0, intval( $s['content_width'] ) );
@@ -86,7 +98,12 @@ class Olobuild_Pagetitlebar_Tile extends Olobuild_Tile_Base {
         $border_c = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #374151)';
 
         $bg_style = "background-color:{$bg_c};";
-        if ( $bg_img ) {
+        if ( $has_mb && $mb['css'] !== '' ) {
+            // media_bg (immagine/gradiente/colore/pattern…) sul wrapper. Il video ha un
+            // layer <video> dedicato più sotto; qui vanno le dichiarazioni CSS.
+            $bg_style .= $mb['css'];
+        } elseif ( $bg_img ) {
+            // Fallback legacy: immagine di sfondo con posizione focal (bg_position).
             $bg_size = esc_attr( $s['bg_size'] ?? 'cover' );
             $bg_pos  = esc_attr( $s['bg_position'] ?? 'center center' );
             $bg_style .= "background-image:url({$bg_img});background-size:{$bg_size};background-position:{$bg_pos};background-repeat:no-repeat;";
@@ -94,10 +111,18 @@ class Olobuild_Pagetitlebar_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-page-title-bar" style="<?php echo $bg_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $bg_style assembled above from safe_color_css() colours, esc_url() image and esc_attr() size/position; $border_c via safe_color_css() or fixed var() fallback ?>position:relative;min-height:<?php echo (int) $min_h; ?>px;display:flex;align-items:center;text-align:<?php echo esc_attr( $align ); ?>;<?php if ( $border_b ) echo "border-bottom:1px solid {$border_c};"; ?>"<?php if ( ! empty( $s['bg_parallax'] ) && $bg_img ) echo ' uk-parallax="bgy: -100"'; ?>>
+        <?php
+        // Parallax: solo per sfondo IMMAGINE (media_bg image o legacy bg_image); non per il video.
+        $parallax_ok = ! empty( $s['bg_parallax'] ) && ( ( $has_mb && $mb_type === 'image' ) || ( ! $has_mb && $bg_img ) );
+        ?>
+        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-page-title-bar" style="<?php echo $bg_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $bg_style assembled above from safe_color_css() colours, media_bg CSS via Olobuild_CSS_Builder::get_bg_inline_css(), esc_url() image and esc_attr() size/position; $border_c via safe_color_css() or fixed var() fallback ?>position:relative;overflow:hidden;min-height:<?php echo (int) $min_h; ?>px;display:flex;align-items:center;text-align:<?php echo esc_attr( $align ); ?>;<?php if ( $border_b ) echo "border-bottom:1px solid {$border_c};"; ?>"<?php if ( $parallax_ok ) echo ' uk-parallax="bgy: -100"'; ?>>
 
-            <?php if ( $bg_img && $overlay > 0 ) : ?>
-            <div style="position:absolute;inset:0;background:<?php echo $overlay_c; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() or fixed '#000000' fallback; opacity is round() of an intval()-clamped 0-100 value ?>;opacity:<?php echo (float) round( $overlay / 100, 2 ); ?>;pointer-events:none" aria-hidden="true"></div>
+            <?php if ( $has_mb && $mb['markup'] !== '' ) : // media_bg video / gallery ?>
+            <div class="olo-ptb-media" style="position:absolute;inset:0;z-index:0;overflow:hidden"><?php echo $mb['markup']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup generato da Olobuild_CSS_Builder::get_bg_html_markup(), che escapa il proprio output ?></div>
+            <?php endif; ?>
+
+            <?php if ( $has_bg_image_like && $overlay > 0 ) : ?>
+            <div style="position:absolute;inset:0;z-index:1;background:<?php echo $overlay_c; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- colour validated by safe_color_css() or fixed '#000000' fallback; opacity is round() of an intval()-clamped 0-100 value ?>;opacity:<?php echo (float) round( $overlay / 100, 2 ); ?>;pointer-events:none" aria-hidden="true"></div>
             <?php endif; ?>
 
             <div style="position:relative;z-index:1;width:100%;max-width:<?php echo (int) $max_w; ?>px;margin:0 auto;padding:<?php echo (int) $pad_y; ?>px <?php echo (int) ( is_array( $_tp ) ? intval( $_tp['right'] ?? 20 ) : 20 ); ?>px <?php echo (int) ( is_array( $_tp ) ? intval( $_tp['bottom'] ?? $pad_y ) : $pad_y ); ?>px <?php echo (int) ( is_array( $_tp ) ? intval( $_tp['left'] ?? 20 ) : 20 ); ?>px">
