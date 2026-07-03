@@ -179,7 +179,7 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
             </div>
             <?php elseif ( $peek ) : ?>
             <div class="olo-hoverlist__peek" aria-hidden="true" style="position:fixed;z-index:90;pointer-events:none;opacity:0;transform:translate(16px,-50%);transition:opacity .18s ease;">
-                <span class="olo-hl-peek-img" style="display:block;width:<?php echo (int) $peek_w; ?>px;aspect-ratio:<?php echo esc_attr( $peek_r ); ?>;border-radius:14px;overflow:hidden;background:<?php echo esc_attr( $peek_ph ); ?>;background-size:cover;background-position:center;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.06) 0 16px,transparent 16px 32px);box-shadow:0 18px 50px rgba(0,0,0,.45);"></span>
+                <span class="olo-hl-peek-img" style="display:block;width:<?php echo (int) $peek_w; ?>px;aspect-ratio:<?php echo esc_attr( $peek_r ); ?>;border-radius:14px;overflow:hidden;background:<?php echo esc_attr( $peek_ph ); ?>;background-size:cover;background-position:<?php echo esc_attr( Olobuild_Tile_Utils::css_pos( $s, 'object_position' ) ); ?>;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.06) 0 16px,transparent 16px 32px);box-shadow:0 18px 50px rgba(0,0,0,.45);"></span>
             </div>
             <?php endif; ?>
         </div>

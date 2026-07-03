@@ -2,7 +2,7 @@
   <div class="mb-relative mb-overflow-hidden mb-text-center" :style="wrapStyle">
     <!-- Bg image -->
     <div v-if="s.bg_type === 'image' && s.bg_image" class="mb-absolute mb-inset-0"
-      :style="{ backgroundImage: `url(${s.bg_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }"></div>
+      :style="{ backgroundImage: `url(${s.bg_image})`, backgroundSize: 'cover', backgroundPosition: focalPos(s, 'bg_image') }"></div>
     <!-- Bg video badge -->
     <div v-if="s.bg_type === 'video'" class="mb-absolute mb-inset-0 mb-flex mb-items-center mb-justify-center mb-bg-gray-900">
       <div class="mb-text-gray-500 mb-text-xs">{{ t('&#9654; Video') }}</div>
@@ -80,6 +80,7 @@
 <script setup>
 import { t } from '@/i18n';
 import { computed, ref, onMounted, onUnmounted, watch } from 'vue';
+import { focalPos } from '@/utils/focalPoint';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

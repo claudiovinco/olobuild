@@ -199,7 +199,7 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
             <?php if ( $bg_type === 'image' && ! empty( $s['bg_image'] ) ) : ?>
             .<?php echo $uid; ?> .olo-price-bg {
                 position: absolute; inset: 0;
-                background: url('<?php echo esc_url( $s['bg_image'] ); ?>') center/cover no-repeat;
+                background: url('<?php echo esc_url( $s['bg_image'] ); ?>') <?php echo esc_attr( Olobuild_Tile_Utils::focal_pos( $s, 'bg_image' ) ); ?>/cover no-repeat;
             }
             <?php endif; ?>
             <?php if ( $bg_type === 'video' && ! empty( $s['bg_video'] ) ) : ?>

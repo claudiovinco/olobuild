@@ -177,7 +177,7 @@ function mediaStyle(it, i) {
     position: 'relative', overflow: 'hidden', width: 'clamp(150px,22vw,240px)', aspectRatio: '3/4',
     borderRadius: mediaRad.value, background: mbg.value,
     backgroundImage: 'repeating-linear-gradient(135deg, rgba(243,233,239,.05) 0 16px, transparent 16px 32px)',
-    backgroundSize: 'cover', backgroundPosition: 'center',
+    backgroundSize: 'cover', backgroundPosition: (s.value.object_position || 'center center'),
   };
   if (it && it.image) st.backgroundImage = 'url(' + it.image + ')';
   if (i === 1) st.marginTop = '-' + soff.value + 'px';

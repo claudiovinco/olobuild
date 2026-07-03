@@ -83,7 +83,7 @@ class Olobuild_MaskedVideoHero_Tile extends Olobuild_Tile_Base {
         <style>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;min-height:<?php echo $mh; ?>vh;display:flex;align-items:center;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;}
             .<?php echo $uid; ?> .mvh-bg{position:absolute;inset:0;z-index:0;overflow:hidden;background:<?php echo $bgc; ?>;-webkit-mask:<?php echo $mask; ?>;mask:<?php echo $mask; ?>;}
-            .<?php echo $uid; ?> .mvh-media{position:absolute;inset:0;background:<?php echo $bgc; ?>;background-image:<?php echo $img !== '' ? 'url(' . esc_url( $img ) . ')' : ( $transp ? 'none' : 'repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px)' ); ?>;background-size:cover;background-position:center;}
+            .<?php echo $uid; ?> .mvh-media{position:absolute;inset:0;background:<?php echo $bgc; ?>;background-image:<?php echo $img !== '' ? 'url(' . esc_url( $img ) . ')' : ( $transp ? 'none' : 'repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px)' ); ?>;background-size:cover;background-position:<?php echo esc_attr( Olobuild_Tile_Utils::focal_pos( $s, 'bg_image' ) ); ?>;}
             <?php if ( $img === '' && ! $transp && ! empty( $s['media_label'] ) ) : ?>
             .<?php echo $uid; ?> .mvh-media::after{content:"<?php echo esc_attr( $s['media_label'] ); ?>";position:absolute;left:18px;bottom:14px;font-size:11px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;color:rgba(255,255,255,.4);}
             <?php endif; ?>

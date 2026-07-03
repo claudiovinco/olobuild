@@ -1,5 +1,5 @@
 import { t } from '@/i18n';
-import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField } from './_shared.js';
 
 /**
  * Hero — Glow Gallery : hero EVENTI centrato su fondo scuro, con GLOW
@@ -32,6 +32,7 @@ export default {
     text_color: 'var(--olo-color-light, #f8f9fa)', sub_color: 'var(--olo-color-text-faint, #94a3b8)', eyebrow_color: 'var(--olo-color-accent, #f4a23b)', media_bg: 'var(--olo-color-dark, #16263d)',
     glow_color: 'rgba(224,175,202,0.22)', glow_w: 760, glow_h: 520, glow_blur: 120, glow_y: -160,
     h_size_min: 48, h_size_vw: 8, h_size_max: 108, max_width: 880,
+    object_position: 'center center',
 
     // Spaziatura & Raggio (additivi, no-op coi default)
     content_padding: { top: 0, right: 30, bottom: 0, left: 30 },
@@ -99,6 +100,7 @@ export default {
     { key: 'sub_color', label: t('Colore sottotitolo'), type: 'color' },
     { key: 'eyebrow_color', label: t('Colore eyebrow'), type: 'color' },
     { key: 'media_bg', label: t('Sfondo tessere media'), type: 'color' },
+    focalField('image', { key: 'object_position', src: '', reveal: true, label: t('Posizione — punto focale immagini') }),
 
     { type: 'separator', label: t('Spaziatura') },
     { key: 'content_padding', label: t('Padding contenuto (px)'), type: 'spacing',

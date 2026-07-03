@@ -1,4 +1,4 @@
-import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField, focalDefault } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
@@ -25,6 +25,7 @@ export default {
     byline_name: 'Elena Russo',
     byline_meta: '18 min read',
     cover_image: '',
+    ...focalDefault('cover_image'),
     cover_url: '#',
     cover_label: 'cover — empty night market, lanterns, long exposure',
     // CTAs (optional)
@@ -86,6 +87,7 @@ export default {
 
     { type: 'separator', label: t('Copertina') },
     { key: 'cover_image', label: t('Immagine di copertina (vuoto = placeholder)'), type: 'image' },
+    focalField('cover_image', { ratio: 'cover_aspect' }),
     { key: 'cover_url', label: t('Link copertina'), type: 'link' },
     { key: 'cover_label', label: t('Etichetta placeholder'), type: 'text' },
 

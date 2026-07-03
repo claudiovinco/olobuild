@@ -21,7 +21,7 @@
       <!-- bg image creativo: anteprima fedele -->
       <div
         v-else-if="bgImageUrl"
-        :style="{ position:'absolute', inset:0, backgroundImage:`url('${bgImageUrl}')`, backgroundSize:'cover', backgroundPosition:'center', zIndex:0 }"
+        :style="{ position:'absolute', inset:0, backgroundImage:`url('${bgImageUrl}')`, backgroundSize:'cover', backgroundPosition:bgImagePos, zIndex:0 }"
       ></div>
       <span style="display:inline-flex;align-items:center;position:relative;z-index:2;" :style="{ flexDirection: s.icon_position === 'after' ? 'row-reverse' : 'row', gap: (parseInt(s.icon_spacing) || 8) + 'px' }">
         <span v-if="iconSvg" class="olo-btn-icon" :style="{ width: '1em', height: '1em', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }" v-html="iconSvg"></span>
@@ -75,6 +75,12 @@ const bgImageUrl = computed(() => {
   const b = s.value.bg;
   if (b && typeof b === 'object' && b.type === 'image') return b.image_url || '';
   return '';
+});
+// Onora il punto focale dello sfondo universale (BackgroundControls salva image_position);
+// prima il canvas hardcodava 'center' ignorando la scelta dell'utente.
+const bgImagePos = computed(() => {
+  const b = s.value.bg;
+  return (b && typeof b === 'object' && b.image_position) ? b.image_position : 'center center';
 });
 
 const alignMap = {

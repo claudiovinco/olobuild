@@ -137,7 +137,7 @@ class Olobuild_NorthVideoHero_Tile extends Olobuild_Tile_Base {
         <style>
             .<?php echo $uid; ?>{position:relative;overflow:hidden;background:<?php echo $bg; ?>;color:<?php echo $txt; ?>;font-family:<?php echo $sans; ?>;<?php echo $kit_bg_css . $kit_shadow_css; ?>}
             <?php if ( $grass !== '' ) : ?>
-            .<?php echo $uid; ?> .nvh-grass{position:absolute;inset:0;z-index:0;background-image:url('<?php echo esc_url( $grass ); ?>');background-attachment:fixed;background-size:cover;background-position:center;-webkit-mask:linear-gradient(180deg,transparent 0%,transparent <?php echo $grassFrom; ?>%,#000 100%);mask:linear-gradient(180deg,transparent 0%,transparent <?php echo $grassFrom; ?>%,#000 100%);pointer-events:none;}
+            .<?php echo $uid; ?> .nvh-grass{position:absolute;inset:0;z-index:0;background-image:url('<?php echo esc_url( $grass ); ?>');background-attachment:fixed;background-size:cover;background-position:<?php echo esc_attr( Olobuild_Tile_Utils::focal_pos( $s, 'bg_fixed_image' ) ); ?>;-webkit-mask:linear-gradient(180deg,transparent 0%,transparent <?php echo $grassFrom; ?>%,#000 100%);mask:linear-gradient(180deg,transparent 0%,transparent <?php echo $grassFrom; ?>%,#000 100%);pointer-events:none;}
             @media(max-width:900px){.<?php echo $uid; ?> .nvh-grass{background-attachment:scroll;}}
             <?php endif; ?>
             .<?php echo $uid; ?> .nvh-in{position:relative;z-index:2;max-width:1280px;margin:0 auto;padding:<?php echo $in_pad; ?>;}

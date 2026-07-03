@@ -22,6 +22,7 @@
 import { computed, h } from 'vue';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 import { radiusToCss } from '@/composables/useRadius';
+import { focalPos } from '@/utils/focalPoint';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -180,7 +181,7 @@ const MediaBlock = computed(() => {
   const media = {
     position: 'relative', zIndex: 1,
     borderRadius: mediaRadius,
-    overflow: 'hidden', backgroundSize: 'cover', backgroundPosition: 'center',
+    overflow: 'hidden', backgroundSize: 'cover', backgroundPosition: focalPos(s.value, 'media_image'),
   };
   if (hasBg) { Object.assign(media, buildBgStyle(mbgObj)); }
   else { media.background = mbg; media.backgroundImage = img ? 'url(' + img + ')' : 'repeating-linear-gradient(135deg, ' + stripe + ' 0 18px, transparent 18px 36px)'; }

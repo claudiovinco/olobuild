@@ -36,6 +36,7 @@
 import { computed } from 'vue';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 import { SHADOW, resolveFontFamily } from '@/composables/oloTileDefaults';
+import { focalPos } from '@/utils/focalPoint';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -238,7 +239,7 @@ const phRgb = computed(() => phDark.value ? '22,22,26' : '238,242,247');
 const phLine = computed(() => 'rgba(' + phRgb.value + ',.05)');
 const phLabel = computed(() => 'rgba(' + phRgb.value + ',' + (phDark.value ? '.4' : '.42') + ')');
 const frameStyle = computed(() => {
-  const st = { position: 'relative', display: 'block', overflow: 'hidden', aspectRatio: aspect.value, background: mediabg.value, borderRadius: coverRadiusCss.value, backgroundSize: 'cover', backgroundPosition: 'center' };
+  const st = { position: 'relative', display: 'block', overflow: 'hidden', aspectRatio: aspect.value, background: mediabg.value, borderRadius: coverRadiusCss.value, backgroundSize: 'cover', backgroundPosition: focalPos(s.value, 'cover_image') };
   st.backgroundImage = s.value.cover_image ? 'url(' + s.value.cover_image + ')' : 'repeating-linear-gradient(135deg, ' + phLine.value + ' 0 15px, transparent 15px 30px)';
   return st;
 });

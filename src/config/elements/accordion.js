@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, widgetTemplateField, wowEffectsFields, wowEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, widgetTemplateField, wowEffectsFields, wowEffectsDefaults, focalField } from './_shared';
 import { shadowField } from './_shared.js';
 import { t } from '@/i18n';
 
@@ -31,6 +31,7 @@ export default {
     media_align: 'right',
     media_width: '35',
     media_radius: '8',
+    object_position: 'center center',
     header_bg: 'var(--olo-color-surface, #ffffff)',
     header_bg_active: 'var(--olo-color-surface, #ffffff)',
     header_text_color: 'var(--olo-color-text, #1f2937)',
@@ -85,6 +86,7 @@ export default {
       newItemDefaults: { title: t('Nuovo pannello'), content: 'Contenuto del pannello.', image: '', video: '', icon: '', hover_image: '', widget_template_id: 0, children: [] },
       itemLabel: 'Pannello',
     },
+    focalField('image', { key: 'object_position', src: '', reveal: true, label: t('Posizione — punto focale immagini') }),
 
     { type: 'separator', label: t('Comportamento') },
     { key: 'toggle_mode', label: t('Modalità alternata'), type: 'toggle' },

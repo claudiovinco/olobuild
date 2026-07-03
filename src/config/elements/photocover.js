@@ -1,5 +1,5 @@
 import { t } from '@/i18n';
-import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField, focalDefault } from './_shared.js';
 
 /**
  * Hero — Photo Cover (Frame) : hero editoriale full-bleed con grande foto di copertina
@@ -25,6 +25,7 @@ export default {
       { text: '12 min' },
     ],
     bg_image: '',
+    ...focalDefault('bg_image'),
     media_label: 'cover photograph — rain-soaked city street, single figure',
     aspect_ratio: '16/9',
     min_height: 560,
@@ -71,6 +72,7 @@ export default {
 
     { type: 'separator', label: t('Foto di copertina') },
     { key: 'bg_image', label: t('Immagine di copertina (vuoto = placeholder)'), type: 'image' },
+    focalField('bg_image', { ratio: 'aspect_ratio' }),
     { key: 'media_label', label: t('Etichetta placeholder'), type: 'text' },
   ],
 

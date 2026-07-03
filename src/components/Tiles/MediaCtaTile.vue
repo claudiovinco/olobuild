@@ -20,6 +20,7 @@
 <script setup>
 import { computed } from 'vue';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
+import { focalPos } from '@/utils/focalPoint';
 import { SHADOW } from '@/composables/oloTileDefaults';
 import { borderDefault, borderHoverDefault, borderEffectDefaults } from '@/config/elements/_shared.js';
 
@@ -134,7 +135,7 @@ const rootStyle = computed(() => {
 });
 const hasMediaBg = computed(() => { const m = s.value.media_bg; return !!(m && m.type && m.type !== 'none'); });
 const mediaStyle = computed(() => {
-  const base = { position: 'absolute', inset: 0, zIndex: 0, backgroundSize: 'cover', backgroundPosition: 'center' };
+  const base = { position: 'absolute', inset: 0, zIndex: 0, backgroundSize: 'cover', backgroundPosition: focalPos(s.value, 'bg_image') };
   if (hasMediaBg.value) return { ...base, ...buildBgStyle(s.value.media_bg) };
   return { ...base, background: s.value.overlay_color || '#0a2a1e', backgroundImage: s.value.bg_image ? 'url(' + s.value.bg_image + ')' : 'repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px)' };
 });

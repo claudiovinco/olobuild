@@ -1,5 +1,5 @@
 import { t } from '@/i18n';
-import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField, focalDefault } from './_shared.js';
 
 /**
  * Intro Split — feature split editoriale: testo (eyebrow + titolo gigante con parola-accento
@@ -39,6 +39,7 @@ export default {
     cta_bg: '',
     cta_color: 'var(--olo-color-light, #f8f9fa)',
     media_image: '',
+    ...focalDefault('media_image'),
     media_bg: { type: 'none' },
     media_label: 'club portrait — squad on the pitch',
     media_light: true,
@@ -114,6 +115,7 @@ export default {
 
     { type: 'separator', label: t('Media + badge') },
     { key: 'media_image', label: t('Immagine (vuoto = placeholder)'), type: 'image' },
+    focalField('media_image'),
     { key: 'media_bg', label: t('Sfondo / media (ogni tipo)'), type: 'background', showParallax: false },
     { key: 'media_label', label: t('Etichetta placeholder'), type: 'text' },
     { key: 'media_light', label: t('Placeholder chiaro'), type: 'toggle' },

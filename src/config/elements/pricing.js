@@ -1,4 +1,4 @@
-import { shadowField, textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { shadowField, textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, focalField, focalDefault } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
@@ -78,6 +78,7 @@ export default {
     text_color: '',
     bg_type: 'color',
     bg_image: '',
+    ...focalDefault('bg_image'),
     bg_video: '',
     overlay: false,
     overlay_color: 'var(--olo-color-dark, #16263d)',
@@ -156,6 +157,7 @@ export default {
     ]},
     { key: 'bg_image', label: t('Immagine'), type: 'image',
       condition: { field: 'bg_type', value: 'image' } },
+    focalField('bg_image', { condition: { field: 'bg_type', value: 'image' } }),
     { key: 'bg_video', label: t('Video (mp4)'), type: 'media',
       condition: { field: 'bg_type', value: 'video' } },
     { key: 'overlay', label: t('Overlay'), type: 'toggle',

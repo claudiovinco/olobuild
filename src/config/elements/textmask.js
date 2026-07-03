@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField } from './_shared';
 import { shadowField } from './_shared.js';
 import { t } from '@/i18n';
 
@@ -30,6 +30,7 @@ export default {
     video_url: '',
     video_poster: '',
     video_opacity: '100',
+    object_position: 'center center',
     min_height: '100vh',
     tile_padding: { top: 40, right: 20, bottom: 40, left: 20 },
     vertical_align: 'center',
@@ -67,6 +68,7 @@ export default {
     { type: 'separator', label: t('Video') },
     { key: 'video_url', label: t('Video (MP4/WebM)'), type: 'media' },
     { key: 'video_poster', label: t('Immagine poster'), type: 'image' },
+    focalField('video_poster', { key: 'object_position', reveal: true, label: t('Posizione — punto focale video') }),
     { key: 'video_opacity', label: t('Opacità video (%)'), type: 'range', min: 10, max: 100, step: 5 },
 
     { type: 'separator', label: t('Maschera') },

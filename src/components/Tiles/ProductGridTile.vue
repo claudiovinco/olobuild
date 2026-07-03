@@ -239,11 +239,11 @@ function mediaStyle(it) {
   const base = { display: 'block', aspectRatio: asp.value, transition: 'transform .7s cubic-bezier(.2,.7,.3,1)' };
   const mb = it && it.media_bg;
   if (mb && mb.type && mb.type !== 'none') {
-    return { ...base, backgroundSize: 'cover', backgroundPosition: 'center', ...buildBgStyle(mb) };
+    return { ...base, backgroundSize: 'cover', backgroundPosition: (s.value.object_position || 'center center'), ...buildBgStyle(mb) };
   }
   const img = it && it.image ? it.image : '';
   return {
-    ...base, background: mbg.value, backgroundSize: 'cover', backgroundPosition: 'center',
+    ...base, background: mbg.value, backgroundSize: 'cover', backgroundPosition: (s.value.object_position || 'center center'),
     backgroundImage: img ? `url(${img})` : `repeating-linear-gradient(135deg, ${stripe.value} 0 16px, transparent 16px 32px)`,
   };
 }

@@ -98,7 +98,7 @@ const hintStyle = computed(() => ({ fontSize: '11px', fontWeight: 600, letterSpa
 const trackStyle = computed(() => ({ display: 'flex', gap: (parseInt(s.value.gap, 10) || 16) + 'px', overflowX: 'auto', paddingBottom: '6px', scrollSnapType: 'x proximity', scrollbarWidth: 'none', msOverflowStyle: 'none' }));
 const cardStyle = computed(() => ({ flex: '0 0 ' + w.value, width: w.value, aspectRatio: asp.value, position: 'relative', borderRadius: cardRadiusCss.value || rad.value, overflow: 'hidden', textDecoration: 'none', display: 'block', background: mbg.value, scrollSnapAlign: 'start' }));
 function mediaStyle(img) {
-  const st = { position: 'absolute', inset: 0, backgroundSize: 'cover', backgroundPosition: 'center', transition: 'transform .5s ease' };
+  const st = { position: 'absolute', inset: 0, backgroundSize: 'cover', backgroundPosition: (s.value.object_position || 'center center'), transition: 'transform .5s ease' };
   if (img) st.backgroundImage = 'url(' + img + ')';
   return st;
 }

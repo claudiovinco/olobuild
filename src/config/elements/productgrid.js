@@ -1,4 +1,4 @@
-import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
@@ -32,6 +32,7 @@ export default {
     gap: 22,
     media_aspect: '3/4',
     media_bg: '',
+    object_position: 'center center',
     stripe_dark: false,
     hover_zoom: true,
     tag_bg: '',
@@ -163,6 +164,7 @@ export default {
       { value: '16/11', label: '16:11' },
     ]},
     { key: 'media_bg', label: t('Sfondo media'), type: 'color' },
+    focalField('image', { key: 'object_position', src: '', reveal: true, label: t('Posizione — punto focale immagini') }),
     { key: 'stripe_dark', label: t('Strisce scure (placeholder)'), type: 'toggle' },
     { key: 'hover_zoom', label: t('Zoom media in hover'), type: 'toggle' },
 

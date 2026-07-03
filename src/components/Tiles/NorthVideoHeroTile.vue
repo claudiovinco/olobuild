@@ -42,6 +42,7 @@
 import { computed } from 'vue';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 import { borderDefault, borderHoverDefault, borderEffectDefaults } from '@/config/elements/_shared.js';
+import { focalPos } from '@/utils/focalPoint';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -149,7 +150,7 @@ const rootStyle = computed(() => {
 const grassStyle = computed(() => {
   const from = Math.max(0, Math.min(100, parseInt(s.value.bg_fixed_from ?? 42, 10) || 0));
   const mask = `linear-gradient(180deg,transparent 0%,transparent ${from}%,#000 100%)`;
-  return { position: 'absolute', inset: 0, zIndex: 0, backgroundImage: `url('${s.value.bg_fixed_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', WebkitMask: mask, mask, pointerEvents: 'none' };
+  return { position: 'absolute', inset: 0, zIndex: 0, backgroundImage: `url('${s.value.bg_fixed_image}')`, backgroundSize: 'cover', backgroundPosition: focalPos(s.value, 'bg_fixed_image'), WebkitMask: mask, mask, pointerEvents: 'none' };
 });
 const inStyle = computed(() => ({ position: 'relative', zIndex: 2, maxWidth: '1280px', margin: '0 auto', padding: inPad.value }));
 const headStyle = { display: 'flex', alignItems: 'flex-start', gap: 'clamp(20px,4vw,72px)' };

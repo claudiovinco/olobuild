@@ -1,5 +1,5 @@
 import { t } from '@/i18n';
-import { withHover } from './_shared.js';
+import { withHover, focalField } from './_shared.js';
 
 /**
  * Hover List — lista a righe con pastiglia colore (swatch), nome e sotto-etichetta,
@@ -54,6 +54,7 @@ export default {
     peek_mode: 'image',
     peek_width: 170,
     peek_ratio: '4/5',
+    object_position: 'center center',
     mono_font_family: '',
   },
 
@@ -92,6 +93,7 @@ export default {
         { value: '3/4', label: '3:4' },
         { value: '16/11', label: '16:11' },
       ]},
+    focalField('image', { key: 'object_position', src: '', reveal: true, label: t('Posizione — punto focale immagini') }),
   ],
 
   // ═══ STILE ════════════════════════════════════════════════════

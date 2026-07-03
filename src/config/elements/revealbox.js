@@ -1,5 +1,5 @@
 
-import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, focalField } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
@@ -109,13 +109,7 @@ export default {
       { value: 'contain', label: t('Contieni') },
       { value: 'auto', label: t('Originale') },
     ], condition: { field: 'image_url', operator: '!=', value: '' } },
-    { key: 'image_position', label: t('Posizione'), type: 'select', options: [
-      { value: 'center center', label: t('Centro') },
-      { value: 'center top', label: t('Centro alto') },
-      { value: 'center bottom', label: t('Centro basso') },
-      { value: 'left center', label: t('Sinistra') },
-      { value: 'right center', label: t('Destra') },
-    ], condition: { field: 'image_url', operator: '!=', value: '' } },
+    focalField('image_url', { key: 'image_position', fit: 'image_size', condition: { field: 'image_url', operator: '!=', value: '' } }),
 
     { type: 'separator', label: t('Zona visibile — Aspetto') },
     { key: 'visible_height', label: t('Altezza visibile (px)'), type: 'range', min: 100, max: 800, step: 10 },
@@ -124,13 +118,7 @@ export default {
       { value: 'contain', label: t('Contieni') },
       { value: 'auto', label: t('Originale') },
     ], condition: { field: 'top_image_url', operator: '!=', value: '' } },
-    { key: 'top_image_position', label: t('Posizione immagine'), type: 'select', options: [
-      { value: 'center center', label: t('Centro') },
-      { value: 'center top', label: t('Centro alto') },
-      { value: 'center bottom', label: t('Centro basso') },
-      { value: 'left center', label: t('Sinistra') },
-      { value: 'right center', label: t('Destra') },
-    ], condition: { field: 'top_image_url', operator: '!=', value: '' } },
+    focalField('top_image_url', { key: 'top_image_position', fit: 'top_image_size', condition: { field: 'top_image_url', operator: '!=', value: '' } }),
     { key: 'top_icon_size', label: t('Dimensione icona'), type: 'range', min: 0.5, max: 6, step: 0.1,
       condition: { field: 'top_icon', operator: '!=', value: '' } },
     { key: 'top_icon_color', label: t('Colore icona'), type: 'color',
@@ -166,13 +154,7 @@ export default {
       { value: 'contain', label: t('Contieni') },
       { value: 'auto', label: t('Originale') },
     ], condition: { field: 'bottom_image_url', operator: '!=', value: '' } },
-    { key: 'bottom_image_position', label: t('Posizione immagine'), type: 'select', options: [
-      { value: 'center center', label: t('Centro') },
-      { value: 'center top', label: t('Centro alto') },
-      { value: 'center bottom', label: t('Centro basso') },
-      { value: 'left center', label: t('Sinistra') },
-      { value: 'right center', label: t('Destra') },
-    ], condition: { field: 'bottom_image_url', operator: '!=', value: '' } },
+    focalField('bottom_image_url', { key: 'bottom_image_position', fit: 'bottom_image_size', condition: { field: 'bottom_image_url', operator: '!=', value: '' } }),
     { key: 'bottom_icon_size', label: t('Dimensione icona'), type: 'range', min: 0.5, max: 6, step: 0.1,
       condition: { field: 'bottom_icon', operator: '!=', value: '' } },
     { key: 'bottom_icon_color', label: t('Colore icona'), type: 'color',

@@ -25,6 +25,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { focalPos } from '@/utils/focalPoint';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -58,7 +59,7 @@ const rootStyle = computed(() => ({ position: 'relative', overflow: 'hidden', mi
 const bgStyle = computed(() => ({ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden', background: s.value.transparent_bg ? 'transparent' : (s.value.bg_color || '#0a2a1e'), WebkitMask: mask.value, mask: mask.value }));
 const mediaStyle = computed(() => {
   const tr = s.value.transparent_bg;
-  const st = { position: 'absolute', inset: 0, background: tr ? 'transparent' : (s.value.bg_color || '#0a2a1e'), backgroundSize: 'cover', backgroundPosition: 'center' };
+  const st = { position: 'absolute', inset: 0, background: tr ? 'transparent' : (s.value.bg_color || '#0a2a1e'), backgroundSize: 'cover', backgroundPosition: focalPos(s.value, 'bg_image') };
   st.backgroundImage = s.value.bg_image ? 'url(' + s.value.bg_image + ')' : (tr ? 'none' : 'repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px)');
   return st;
 });

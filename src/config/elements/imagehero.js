@@ -1,4 +1,4 @@
-import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField, focalDefault } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
@@ -33,6 +33,7 @@ export default {
     meta_text: '',
     scroll_hint: '',
     bg_image: '',
+    ...focalDefault('bg_image'),
     media_bg: { type: 'none' },
     bg_color: 'var(--olo-color-dark, #16263d)',
     media_label: 'campaign — figure in black tailoring, gold light, full bleed',
@@ -88,6 +89,7 @@ export default {
 
     { type: 'separator', label: t('Sfondo / media') },
     { key: 'bg_image', label: t('Immagine di sfondo (vuoto = placeholder)'), type: 'image' },
+    focalField('bg_image'),
     { key: 'media_bg', label: t('Sfondo / media (ogni tipo)'), type: 'background', showParallax: false },
     { key: 'media_label', label: t('Etichetta placeholder'), type: 'text' },
   ],

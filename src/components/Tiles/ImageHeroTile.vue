@@ -28,6 +28,7 @@
 import { computed } from 'vue';
 import { resolveFontFamily } from '@/composables/oloTileDefaults';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
+import { focalPos } from '@/utils/focalPoint';
 import { borderDefault, borderHoverDefault, borderEffectDefaults } from '@/config/elements/_shared.js';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
@@ -243,7 +244,7 @@ const rootStyle = computed(() => ({
 }));
 const hasMediaBg = computed(() => { const m = s.value.media_bg; return !!(m && m.type && m.type !== 'none'); });
 const mediaStyle = computed(() => {
-  const base = { position: 'absolute', inset: 0, zIndex: 0, backgroundSize: 'cover', backgroundPosition: 'center', aspectRatio: aspect.value, minHeight: '100%' };
+  const base = { position: 'absolute', inset: 0, zIndex: 0, backgroundSize: 'cover', backgroundPosition: focalPos(s.value, 'bg_image'), aspectRatio: aspect.value, minHeight: '100%' };
   if (hasMediaBg.value) return { ...base, ...buildBgStyle(s.value.media_bg) };
   return { ...base, backgroundColor: bg.value, backgroundImage: s.value.bg_image ? 'url(' + s.value.bg_image + ')' : 'repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px)' };
 });

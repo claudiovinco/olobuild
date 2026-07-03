@@ -199,7 +199,7 @@ const imgPeekInnerStyle = computed(() => ({
   display: 'block', width: (s.value.peek_width || 170) + 'px',
   aspectRatio: s.value.peek_ratio || '4/5', borderRadius: '14px', overflow: 'hidden',
   background: 'var(--olo-color-muted, #2b2b2b)',
-  backgroundSize: 'cover', backgroundPosition: 'center',
+  backgroundSize: 'cover', backgroundPosition: (s.value.object_position || 'center center'),
   backgroundImage: peekImage.value ? `url(${peekImage.value})` : IMG_PH,
   boxShadow: '0 18px 50px rgba(0,0,0,.45)',
 }));

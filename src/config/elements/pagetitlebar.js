@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField } from './_shared';
 import { shadowField } from './_shared.js';
 import { t } from '@/i18n';
 
@@ -131,13 +131,7 @@ export default {
       { value: 'contain', label: t('Contain') },
       { value: 'auto', label: t('Auto') },
     ], show: s => !!s.bg_image },
-    { key: 'bg_position', label: t('Posizione sfondo'), type: 'select', options: [
-      { value: 'center center', label: t('Centro') },
-      { value: 'top center', label: t('Alto') },
-      { value: 'bottom center', label: t('Basso') },
-      { value: 'left center', label: t('Sinistra') },
-      { value: 'right center', label: t('Destra') },
-    ], show: s => !!s.bg_image },
+    { ...focalField('bg_image', { key: 'bg_position', fit: 'bg_size' }), show: s => !!s.bg_image },
 
     { type: 'separator', label: t('Layout') },
     { key: 'min_height', label: t('Altezza minima (px)'), type: 'range', min: 0, max: 600, step: 10 },

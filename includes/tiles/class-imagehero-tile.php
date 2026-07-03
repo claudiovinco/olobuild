@@ -151,7 +151,7 @@ class Olobuild_ImageHero_Tile extends Olobuild_Tile_Base {
         $mb = $this->bg_media_parts( $s['media_bg'] ?? null, $uid );
         $media_decl = ( $mb['has'] && $mb['css'] !== '' )
             ? $mb['css']
-            : ( 'background-color:' . $bg . ';background-image:' . $imgCss . ';background-size:cover;background-position:center;' );
+            : ( 'background-color:' . $bg . ';background-image:' . $imgCss . ';background-size:cover;background-position:' . esc_attr( Olobuild_Tile_Utils::focal_pos( $s, 'bg_image' ) ) . ';' );
 
         // gradiente verticale (sempre) + laterale (opzionale, stile atelier)
         $gradV = 'linear-gradient(180deg, rgba(' . $orgb . ',' . $oTop . ') 0%, rgba(' . $orgb . ',' . $oMid . ') 38%, rgba(' . $orgb . ',' . $oBot . ') 100%)';

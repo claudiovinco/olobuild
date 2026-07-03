@@ -339,6 +339,46 @@ class Olobuild_Tile_Utils {
     }
 
     /**
+     * Punto focale (object-position / background-position) di un campo immagine.
+     * Gemello PHP dell'helper JS `focalPos` (src/utils/focalPoint.js) e del config
+     * `focalField` (_shared.js). Legge `<image_key>_object_position` dai settings,
+     * con fallback a 'center center'. Il valore è una stringa CSS valida sia per
+     * object-position sia per background-position.
+     *
+     * Difesa CSS: la position è keyword ('center', 'top left') o percentuali
+     * ('34% 23%') — non contiene mai caratteri di breakout. Se presenti, scarta.
+     *
+     * @param array  $settings  Tile settings.
+     * @param string $image_key Chiave del campo immagine (es. 'bg_image').
+     * @param string $default   Fallback (default 'center center').
+     * @return string CSS position già sicura per contesto inline/<style>.
+     */
+    public static function focal_pos( $settings, $image_key, $default = 'center center' ) {
+        return self::css_pos( $settings, $image_key . '_object_position', $default );
+    }
+
+    /**
+     * Legge una chiave posizione CSS DIRETTA (es. 'object_position' globale delle
+     * tile multi-item, o 'bg_position'/'image_position' legacy) con fallback e
+     * difesa breakout. Gemello base di focal_pos().
+     *
+     * @param array  $settings Tile settings.
+     * @param string $key      Chiave settings diretta.
+     * @param string $default  Fallback.
+     * @return string CSS position sicura.
+     */
+    public static function css_pos( $settings, $key, $default = 'center center' ) {
+        $v = isset( $settings[ $key ] ) ? trim( (string) $settings[ $key ] ) : '';
+        if ( $v === '' ) {
+            return $default;
+        }
+        if ( preg_match( '#[;{}<>@\\\\"\']|/\*|\*/|[\x00-\x1f]#', $v ) ) {
+            return $default;
+        }
+        return $v;
+    }
+
+    /**
      * Parse a spacing value (from FieldSpacing) to CSS shorthand.
      * Accepts: array {top,right,bottom,left}, string 'N', int N.
      * Falls back to $fallback (int) if value is missing/invalid.

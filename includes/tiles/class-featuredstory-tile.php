@@ -162,7 +162,7 @@ class Olobuild_FeaturedStory_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .fs-media{order:<?php echo $media_order; ?>;}
             .<?php echo $uid; ?> .fs-col{order:<?php echo $col_order; ?>;}
             .<?php echo $uid; ?> .fs-media a{display:block;}
-            .<?php echo $uid; ?> .fs-frame{position:relative;display:block;overflow:hidden;aspect-ratio:<?php echo esc_attr( $aspect ); ?>;background:<?php echo $mediabg; ?>;border-radius:<?php echo $cover_radius_css; ?>;background-size:cover;background-position:center;<?php echo $img === '' ? 'background-image:repeating-linear-gradient(135deg, ' . $ph_line . ' 0 15px, transparent 15px 30px);' : 'background-image:url(' . esc_url( $img ) . ');'; ?>}
+            .<?php echo $uid; ?> .fs-frame{position:relative;display:block;overflow:hidden;aspect-ratio:<?php echo esc_attr( $aspect ); ?>;background:<?php echo $mediabg; ?>;border-radius:<?php echo $cover_radius_css; ?>;background-size:cover;background-position:<?php echo esc_attr( Olobuild_Tile_Utils::focal_pos( $s, 'cover_image' ) ); ?>;<?php echo $img === '' ? 'background-image:repeating-linear-gradient(135deg, ' . $ph_line . ' 0 15px, transparent 15px 30px);' : 'background-image:url(' . esc_url( $img ) . ');'; ?>}
             <?php if ( $img === '' && ! empty( $s['cover_label'] ) ) : ?>
             .<?php echo $uid; ?> .fs-frame::after{content:"<?php echo esc_attr( $s['cover_label'] ); ?>";position:absolute;left:13px;right:13px;bottom:11px;font-family:<?php echo $sans; ?>;font-weight:600;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:<?php echo $ph_lbl; ?>;}
             <?php endif; ?>

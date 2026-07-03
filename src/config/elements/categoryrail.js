@@ -1,5 +1,5 @@
 import { t } from '@/i18n';
-import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField } from './_shared.js';
 
 // Default no-op per i nuovi controlli additivi Spaziatura + Forma.
 // Identici alla resa attuale: caption padding 16px 18px, card radius 14px.
@@ -35,6 +35,7 @@ export default {
     title_color: 'var(--olo-color-light, #f8f9fa)',
     subtitle_color: 'rgba(255,255,255,0.8)',
     radius: 14,
+    object_position: 'center center',
     show_hint: true,
     hint_text: '← drag →',
     hint_color: '',
@@ -92,6 +93,7 @@ export default {
 
     { type: 'separator', label: t('Colori') },
     { key: 'media_bg', label: t('Sfondo media'), type: 'color' },
+    focalField('image', { key: 'object_position', src: '', reveal: true, label: t('Posizione — punto focale immagini') }),
     { key: 'overlay_color', label: t('Velo overlay'), type: 'color' },
     { key: 'title_color', label: t('Colore titolo'), type: 'color' },
     { key: 'subtitle_color', label: t('Colore sottotitolo'), type: 'color' },

@@ -2,7 +2,7 @@
   <div class="mb-relative mb-overflow-hidden" :style="wrapStyle">
     <!-- Bg image -->
     <div v-if="s.bg_type === 'image' && s.bg_image" class="mb-absolute mb-inset-0"
-      :style="{ backgroundImage: `url(${s.bg_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }"></div>
+      :style="{ backgroundImage: `url(${s.bg_image})`, backgroundSize: 'cover', backgroundPosition: focalPos(s, 'bg_image') }"></div>
     <!-- Bg video -->
     <video
       v-if="s.bg_type === 'video' && s.bg_video"
@@ -35,6 +35,7 @@
 import { computed } from 'vue';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
 import { toRadiusCss, toSpacingCss } from '@/composables/useBoxModel';
+import { focalPos } from '@/utils/focalPoint';
 import { t } from '@/i18n';
 
 const props = defineProps({

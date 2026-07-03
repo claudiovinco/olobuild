@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, focalField } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
@@ -155,13 +155,7 @@ export default {
       { value: 'contain', label: t('Contain') },
       { value: 'auto', label: t('Auto') },
     ], condition: { field: 'bg_type', value: 'image' } },
-    { key: 'bg_image_position', label: t('Posizione sfondo'), type: 'select', options: [
-      { value: 'center center', label: t('Centro') },
-      { value: 'top center', label: t('Alto') },
-      { value: 'bottom center', label: t('Basso') },
-      { value: 'left center', label: t('Sinistra') },
-      { value: 'right center', label: t('Destra') },
-    ], condition: { field: 'bg_type', value: 'image' } },
+    focalField('bg_image', { key: 'bg_image_position', fit: 'bg_image_size', condition: { field: 'bg_type', value: 'image' } }),
 
     { type: 'separator', label: t('Bordo e spaziatura') },
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 60 },

@@ -166,7 +166,7 @@ class Olobuild_GlowGallery_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .evh-btn--out:hover{border-color:<?php echo $accent; ?>;color:<?php echo $accent; ?>;}
             .<?php echo $uid; ?> .evh-btn:focus-visible{outline:2px solid <?php echo $accent; ?>;outline-offset:3px;}
             .<?php echo $uid; ?> .evh-strip{position:relative;z-index:2;display:flex;gap:14px;justify-content:center;margin-top:clamp(40px,6vw,64px);flex-wrap:wrap;max-width:<?php echo max( $mw, 1180 ); ?>px;margin-left:auto;margin-right:auto;padding:0 30px;}
-            .<?php echo $uid; ?> .evh-media{position:relative;overflow:hidden;width:clamp(150px,22vw,240px);aspect-ratio:3/4;border-radius:<?php echo $media_rad; ?>;background:<?php echo $mbg; ?>;background-image:repeating-linear-gradient(135deg, rgba(243,233,239,.05) 0 16px, transparent 16px 32px);background-size:cover;background-position:center;}
+            .<?php echo $uid; ?> .evh-media{position:relative;overflow:hidden;width:clamp(150px,22vw,240px);aspect-ratio:3/4;border-radius:<?php echo $media_rad; ?>;background:<?php echo $mbg; ?>;background-image:repeating-linear-gradient(135deg, rgba(243,233,239,.05) 0 16px, transparent 16px 32px);background-size:cover;background-position:<?php echo esc_attr( Olobuild_Tile_Utils::css_pos( $s, 'object_position' ) ); ?>;}
             .<?php echo $uid; ?> .evh-media:nth-child(2){margin-top:-<?php echo $soff; ?>px;}
             .<?php echo $uid; ?> .evh-media .evh-cap{position:absolute;left:14px;bottom:12px;right:14px;font-family:<?php echo $sans; ?>;font-size:10.5px;letter-spacing:.1em;color:rgba(243,233,239,.4);text-transform:uppercase;}
             @media(max-width:600px){.<?php echo $uid; ?> .evh-strip .evh-media:nth-child(3){display:none;}}

@@ -59,7 +59,7 @@
         <div class="olo-accordion-panel-inner">
           <!-- Panel media -->
           <div v-if="panel.image || panel.video" class="olo-accordion-media" :style="mediaStyle">
-            <img v-if="panel.image" :src="panel.image" alt="" class="olo-accordion-media-img" :style="{ borderRadius: (parseInt(s.media_radius) || 0) + 'px' }" />
+            <img v-if="panel.image" :src="panel.image" alt="" class="olo-accordion-media-img" :style="{ borderRadius: (parseInt(s.media_radius) || 0) + 'px', objectPosition: (s.object_position || 'center center') }" />
             <div v-else-if="panel.video" class="olo-accordion-media-video">{{ t('Video') }}</div>
           </div>
           <div

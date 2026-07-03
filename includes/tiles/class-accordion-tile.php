@@ -426,7 +426,7 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
                                 endif; ?>
                                 <?php if ( ! empty( $panel_img ) ) : ?>
                                     <?php
-                                    $acc_img = '<img src="' . esc_url( $panel_img ) . '" alt="' . esc_attr( wp_strip_all_tags( $panel['title'] ?? '' ) ) . '" loading="lazy" />';
+                                    $acc_img = '<img src="' . esc_url( $panel_img ) . '" alt="' . esc_attr( wp_strip_all_tags( $panel['title'] ?? '' ) ) . '" loading="lazy" style="object-position:' . esc_attr( Olobuild_Tile_Utils::css_pos( $s, 'object_position' ) ) . '" />';
                                     echo $this->render_hover_wrap( $acc_img, $panel['hover_image'] ?? '', '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $acc_img built with esc_url()/esc_attr() above; render_hover_wrap() escapes hover media URLs internally
                                     ?>
                                 <?php endif; ?>

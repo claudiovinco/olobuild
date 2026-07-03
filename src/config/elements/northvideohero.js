@@ -1,5 +1,5 @@
 import { t } from '@/i18n';
-import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField, focalDefault } from './_shared.js';
 
 /**
  * Hero — North Video : hero SaaS scuro stile "Cohere North". Eyebrow MONO nudo + crest ORB
@@ -34,6 +34,7 @@ export default {
     mock_reveal: true,
 
     bg_fixed_image: '',
+    ...focalDefault('bg_fixed_image'),
     bg_fixed_from: 42,
 
     headline_max: 1100,
@@ -97,6 +98,7 @@ export default {
     { type: 'separator', label: t('Sfondo fisso (parallasse)') },
     { key: 'bg_fixed_image', label: t('Immagine sfondo fisso'), type: 'media',
       description: t('Layer con background-attachment:fixed mascherato in basso — es. erba aerea.') },
+    focalField('bg_fixed_image', { condition: { field: 'bg_fixed_image', op: 'neq', value: '' } }),
     { key: 'bg_fixed_from', label: t('Inizio comparsa (%)'), type: 'range', min: 0, max: 100, step: 1,
       condition: { field: 'bg_fixed_image', op: 'neq', value: '' } },
 

@@ -17,6 +17,7 @@
 <script setup>
 import { computed } from 'vue';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
+import { focalPos } from '@/utils/focalPoint';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -166,7 +167,7 @@ const rootStyle = computed(() => {
 const mediaStyle = computed(() => {
   const st = {
     position: 'relative', overflow: 'hidden', aspectRatio: aspect.value,
-    background: s.value.media_bg || '#1a1a1a', backgroundSize: 'cover', backgroundPosition: 'center',
+    background: s.value.media_bg || '#1a1a1a', backgroundSize: 'cover', backgroundPosition: focalPos(s.value, 'bg_image'),
   };
   if (mh.value > 0) st.minHeight = mh.value + 'px';
   st.backgroundImage = s.value.bg_image

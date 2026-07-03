@@ -119,7 +119,8 @@ class Olobuild_Textmask_Tile extends Olobuild_Tile_Base {
 
         // Base container CSS
         $css  = "#{$uid}{position:relative;overflow:hidden;min-height:{$min_h};background:{$bg_color}}";
-        $css .= "#{$uid} .olo-tm-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:" . ( $vid_opacity / 100 ) . "}";
+        $tm_obj_pos = Olobuild_Tile_Utils::css_pos( $s, 'object_position' );
+        $css .= "#{$uid} .olo-tm-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{$tm_obj_pos};opacity:" . ( $vid_opacity / 100 ) . "}";
 
         // Responsive
         $css .= "@media(max-width:960px){#{$uid} .olo-tm-text{font-size:{$fs_tablet}px !important}}";

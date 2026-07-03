@@ -8,7 +8,7 @@
       v-if="s.video_url"
       class="mb-absolute mb-inset-0 mb-w-full mb-h-full"
       style="object-fit: cover;"
-      :style="{ opacity: (parseInt(s.video_opacity) || 100) / 100 }"
+      :style="{ opacity: (parseInt(s.video_opacity) || 100) / 100, objectPosition: (s.object_position || 'center center') }"
       :src="s.video_url"
       :poster="s.video_poster || undefined"
       muted autoplay loop playsinline

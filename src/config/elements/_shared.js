@@ -4,6 +4,55 @@ import { t } from '@/i18n';
  * Elements can spread these into their fields arrays.
  */
 
+// ─── Punto focale (object-position) — sistema elastico ──────────────────────
+// Aggiunge il controllo grafico "punto focale" accanto a QUALSIASI campo immagine
+// che venga reso come sfondo/copertura (background-position) o come immagine in
+// frame (object-position). Un solo punto di verità: cambia label/contract qui.
+//
+// Uso nel config:
+//   ...(nel fields array)  focalField('bg_image'),
+//   ...(nei defaults)      ...focalDefault('bg_image'),
+// e nel renderer Vue: focalPos(s, 'bg_image') / PHP: Olobuild_Tile_Utils::focal_pos($s,'bg_image').
+//
+// Chiave salvata: `<imageKey>_object_position` (default 'center center'). Il valore è
+// una stringa CSS valida sia per object-position sia per background-position → zero
+// migrazione, stesso contratto del rollout focal esistente (v1.4.244).
+//
+// opts:
+//   key         override della chiave salvata (default `<imageKey>_object_position`)
+//   label       etichetta (default "Posizione — punto focale")
+//   fit         chiave settings del fit OPPURE letterale ('(cover)' default, 'contain'…)
+//   ratio       chiave settings del ratio OPPURE letterale ('16/9','1/1','auto'…)
+//   ratioCustom chiave settings del ratio custom
+//   height      chiave settings dell'altezza (per il pad quando ratio='auto')
+//   reveal      pad dietro disclosure (default true; false = sempre aperto)
+//   condition   condizione di visibilità (di solito uguale a quella del campo immagine)
+//   contextKeys merge finale su contextKeys (override totale)
+export function focalField(imageKey, opts = {}) {
+  // src: default = imageKey. Per le tile MULTI-ITEM (una foto per item, focal
+  // GLOBALE) passare src:'' → il pad resta neutro e il valore si applica a tutte.
+  const ck = { src: opts.src !== undefined ? opts.src : imageKey, fit: opts.fit || '(cover)' };
+  if (opts.ratio != null)       ck.ratio       = opts.ratio;
+  if (opts.ratioCustom != null) ck.ratioCustom = opts.ratioCustom;
+  if (opts.height != null)      ck.height      = opts.height;
+  if (opts.contextKeys)         Object.assign(ck, opts.contextKeys);
+  const f = {
+    key: opts.key || (imageKey + '_object_position'),
+    label: opts.label || t('Posizione — punto focale'),
+    type: 'object-position',
+    reveal: opts.reveal !== false,
+    contextKeys: ck,
+  };
+  if (opts.condition)   f.condition = opts.condition;
+  if (opts.description) f.description = opts.description;
+  return f;
+}
+
+// Default da spreddare nei defaults del tile: `{ <imageKey>_object_position: 'center center' }`.
+export function focalDefault(imageKey, key) {
+  return { [key || (imageKey + '_object_position')]: 'center center' };
+}
+
 // ─── Link fields preset ───
 export const linkFields = [
   { key: 'link_url', label: t('URL link'), type: 'link' },

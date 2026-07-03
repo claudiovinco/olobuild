@@ -1,4 +1,4 @@
-import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField, focalDefault } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
@@ -28,6 +28,7 @@ export default {
     cta2_text: '',
     cta2_url: '',
     bg_image: '',
+    ...focalDefault('bg_image'),
     media_bg: { type: 'none' },
     media_label: 'membership — supporters in the stands · background video',
     overlay_color: 'var(--olo-color-dark, #16263d)',
@@ -86,6 +87,7 @@ export default {
 
     { type: 'separator', label: t('Sfondo') },
     { key: 'bg_image', label: t('Immagine/poster (vuoto = placeholder)'), type: 'image' },
+    focalField('bg_image'),
     { key: 'media_bg', label: t('Sfondo / media (ogni tipo)'), type: 'background', showParallax: false },
     { key: 'media_label', label: t('Etichetta placeholder'), type: 'text' },
   ],
