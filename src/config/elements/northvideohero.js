@@ -14,7 +14,14 @@ export default {
   icon: 'dashicons-video-alt2',
   category: 'marketing',
 
+  // Unificazione sfondo hero PRINCIPALE: il video legacy (video_src + video_poster)
+  // confluisce nel pannello unico media_bg (immagine/video/gradiente/colore…). Non
+  // distruttivo: le chiavi vecchie restano come fallback nei renderer (Vue+PHP).
+  // NB: bg_fixed_image (layer erba mascherato) NON è incluso — resta separato.
+  bgMigrate: { videoKey: 'video_src', posterKey: 'video_poster' },
+
   defaults: {
+    media_bg: { type: 'none' },
     eyebrow_text: 'NORTH',
     crest_on: true,
     headline_text: 'AI for business that turns complexity into clarity',
@@ -77,9 +84,7 @@ export default {
       { value: 'media', label: t('Placeholder') },
       { value: 'none', label: t('Nessuno') },
     ] },
-    { key: 'video_src', label: t('File video (mp4/webm)'), type: 'media',
-      condition: { field: 'mock_mode', op: 'eq', value: 'video' } },
-    { key: 'video_poster', label: t('Poster / immagine'), type: 'media',
+    { key: 'media_bg', label: t('Sfondo hero (video, immagine, gradiente, colore…)'), type: 'background', showParallax: false,
       condition: { field: 'mock_mode', op: 'eq', value: 'video' } },
     { key: 'show_controls', label: t('Mostra controlli player'), type: 'toggle',
       condition: { field: 'mock_mode', op: 'eq', value: 'video' } },

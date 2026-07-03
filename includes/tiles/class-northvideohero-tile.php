@@ -33,6 +33,7 @@ class Olobuild_NorthVideoHero_Tile extends Olobuild_Tile_Base {
 
         // mockup
         'mock_mode'      => 'video', // 'video' | 'media' | 'none'
+        'media_bg'       => [ 'type' => 'none' ], // sfondo hero unificato (precede su video_src/poster)
         'video_src'      => '',
         'video_poster'   => '',
         'show_controls'  => true,
@@ -112,6 +113,13 @@ class Olobuild_NorthVideoHero_Tile extends Olobuild_Tile_Base {
         $grass     = trim( (string) ( $s['bg_fixed_image'] ?? '' ) );
         $grassFrom = max( 0, min( 100, intval( $s['bg_fixed_from'] ) ) );
 
+        // Sfondo hero PRINCIPALE unificato: pannello media_bg (video/immagine/gradiente/…)
+        // con precedenza sui campi legacy video_src/video_poster (tenuti come fallback).
+        $mb          = $this->bg_media_parts( $s['media_bg'] ?? null, $uid );
+        $has_mb      = $mb['has'];
+        $mb_type     = ( is_array( $s['media_bg'] ?? null ) ) ? ( $s['media_bg']['type'] ?? 'none' ) : 'none';
+        $mb_is_video = $has_mb && $mb_type === 'video';
+
         // Video
         $is_builder  = ! empty( $s['_builder_mode'] );
         $vsrc        = trim( (string) ( $s['video_src'] ?? '' ) );
@@ -159,6 +167,9 @@ class Olobuild_NorthVideoHero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .nvh-mockwrap{position:relative;z-index:2;max-width:1180px;margin:clamp(40px,6vw,72px) auto 0;padding:0 40px;}
             .<?php echo $uid; ?> .nvh-frame{position:relative;border:1px solid <?php echo $frameBd; ?>;border-radius:<?php echo $frame_radius; ?>;background:<?php echo $frameBg; ?>;overflow:hidden;box-shadow:0 40px 80px -40px rgba(0,0,0,.6);}
             .<?php echo $uid; ?> .nvh-video{display:block;width:100%;height:auto;aspect-ratio:16/9.4;object-fit:cover;background:<?php echo $frameBg; ?>;}
+            <?php if ( $has_mb && ! $mb_is_video && $mb['css'] !== '' ) : ?>
+            .<?php echo $uid; ?> .nvh-mediabg{<?php echo $mb['css']; ?>}
+            <?php endif; ?>
             .<?php echo $uid; ?> .nvh-media{position:relative;aspect-ratio:16/9.4;background:<?php echo $frameBg; ?>;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,.035) 0 16px, transparent 16px 32px);}
             .<?php echo $uid; ?> .nvh-medialabel{position:absolute;left:18px;bottom:14px;font-family:<?php echo $mono; ?>;font-size:11px;letter-spacing:.03em;color:rgba(255,255,255,.42);text-transform:uppercase;}
             <?php if ( $reveal ) : ?>
@@ -201,7 +212,13 @@ class Olobuild_NorthVideoHero_Tile extends Olobuild_Tile_Base {
             <?php if ( $mode !== 'none' ) : ?>
             <div class="nvh-mockwrap">
                 <div class="nvh-frame">
-                    <?php if ( $mode === 'video' && $vsrc !== '' ) : ?>
+                    <?php if ( $mode === 'video' && $mb_is_video ) : ?>
+                        <div class="nvh-video" style="position:relative;">
+                            <?php echo $mb['markup']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup generato da Olobuild_CSS_Builder::get_bg_html_markup(), che escapa il proprio output ?>
+                        </div>
+                    <?php elseif ( $mode === 'video' && $has_mb ) : ?>
+                        <div class="nvh-video nvh-mediabg"></div>
+                    <?php elseif ( $mode === 'video' && $vsrc !== '' ) : ?>
                         <video class="nvh-video" preload="<?php echo esc_attr( $preload ); ?>"<?php echo $autoplay ? ' autoplay' : ''; ?><?php echo $muted ? ' muted' : ''; ?><?php echo ! empty( $s['loop'] ) ? ' loop' : ''; ?><?php echo $controls ? ' controls' : ''; ?><?php echo $vposter !== '' ? ' poster="' . esc_url( $vposter ) . '"' : ''; ?> playsinline>
                             <source src="<?php echo esc_url( $vsrc ); ?>" type="<?php echo esc_attr( $this->video_mime( $vsrc ) ); ?>">
                         </video>

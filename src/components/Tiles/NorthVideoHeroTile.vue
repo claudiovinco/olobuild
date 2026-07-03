@@ -24,7 +24,13 @@
     </div>
     <div v-if="mode !== 'none'" class="nvh-mockwrap" :style="mockWrapStyle">
       <div class="nvh-frame" :style="frameStyle">
-        <video v-if="mode === 'video' && s.video_src" class="nvh-video" :style="videoStyle"
+        <!-- Sfondo hero unificato (media_bg): precede sul contenuto della cornice -->
+        <video v-if="mode === 'video' && isMediaVideo" class="nvh-video" :style="videoStyle"
+               preload="metadata" :muted="!!s.muted" :loop="!!s.loop" controls
+               :src="s.media_bg.video_url" :poster="s.media_bg.video_poster || undefined" playsinline></video>
+        <div v-else-if="mode === 'video' && hasMediaBg" class="nvh-video" :style="[videoStyle, mediaBgStyle]"></div>
+        <!-- Fallback legacy (solo se media_bg non impostato) -->
+        <video v-else-if="mode === 'video' && s.video_src" class="nvh-video" :style="videoStyle"
                preload="metadata" :muted="!!s.muted" :loop="!!s.loop" controls
                :poster="s.video_poster || undefined" playsinline>
           <source :src="s.video_src" :type="videoMime" />
@@ -55,6 +61,7 @@ const defaults = {
   cta1_text: '', cta1_url: '#',
   cta2_text: '', cta2_url: '#',
   mock_mode: 'video',
+  media_bg: { type: 'none' },
   video_src: '', video_poster: '',
   show_controls: true, autoplay: false, muted: true, loop: false,
   media_label: 'product — North workspace',
@@ -91,6 +98,18 @@ const crestC = computed(() => s.value.crest_color || 'rgba(255,255,255,0.5)');
 const frameBg = computed(() => s.value.frame_bg || '#0a201a');
 const frameBd = computed(() => s.value.frame_border || 'rgba(255,255,255,0.12)');
 const mode = computed(() => (['video', 'media', 'none'].includes(s.value.mock_mode) ? s.value.mock_mode : 'video'));
+
+// ── Sfondo hero PRINCIPALE unificato (pannello media_bg) con fallback ai campi
+//    legacy video_src/video_poster. Precede sul contenuto della cornice mockup. ──
+const hasMediaBg = computed(() => {
+  const m = s.value.media_bg;
+  return !!(m && typeof m === 'object' && m.type && m.type !== 'none');
+});
+const mediaBgStyle = computed(() => (hasMediaBg.value ? buildBgStyle(s.value.media_bg) : {}));
+const isMediaVideo = computed(() => {
+  const m = s.value.media_bg;
+  return hasMediaBg.value && m.type === 'video' && !!m.video_url;
+});
 
 const videoMime = computed(() => {
   const ext = String(s.value.video_src || '').split('?')[0].split('.').pop().toLowerCase();
