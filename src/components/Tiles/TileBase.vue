@@ -35,6 +35,7 @@ import IntroSplitTile from './IntroSplitTile.vue';
 import MediaCtaTile from './MediaCtaTile.vue';
 import ImageHeroTile from './ImageHeroTile.vue';
 import GlowHeroTile from './GlowHeroTile.vue';
+import TerminalHeroTile from './TerminalHeroTile.vue';
 import ProductHeroTile from './ProductHeroTile.vue';
 import NorthVideoHeroTile from './NorthVideoHeroTile.vue';
 import NorthQuoteSliderTile from './NorthQuoteSliderTile.vue';
@@ -330,6 +331,7 @@ const tileComponents = {
   mediacta: MediaCtaTile,
   imagehero: ImageHeroTile,
   glowhero: GlowHeroTile,
+  terminalhero: TerminalHeroTile,
   producthero: ProductHeroTile,
   northvideohero: NorthVideoHeroTile,
   northquoteslider: NorthQuoteSliderTile,

@@ -3218,6 +3218,7 @@ class Olobuild_Builder {
         require_once OLOBUILD_PATH . 'includes/tiles/class-mediacta-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-imagehero-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-glowhero-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-terminalhero-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-producthero-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-northvideohero-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-northquoteslider-tile.php';
@@ -3459,6 +3460,7 @@ class Olobuild_Builder {
         $manager->register_tile( new Olobuild_MediaCTA_Tile() );
         $manager->register_tile( new Olobuild_ImageHero_Tile() );
         $manager->register_tile( new Olobuild_GlowHero_Tile() );
+        $manager->register_tile( new Olobuild_TerminalHero_Tile() );
         $manager->register_tile( new Olobuild_ProductHero_Tile() );
         $manager->register_tile( new Olobuild_NorthVideoHero_Tile() );
         $manager->register_tile( new Olobuild_NorthQuoteSlider_Tile() );
