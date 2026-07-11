@@ -9,7 +9,7 @@ const OUT = new URL('./olox-out/', import.meta.url).pathname.replace(/^\/([A-Za-
 mkdirSync(OUT, { recursive: true });
 
 const LOGO = (n) => `/wp-content/uploads/olotheme-site/${n}-orizz.png`;
-const HOME_URL = '/olotheme-experience/';
+const HOME_URL = '/'; // la Experience è la front page del sito
 const P = (slug) => `/${slug}/`;
 
 const tile = (type, settings) => ({ id: randomUUID(), type, settings, style: [], advanced: [] });
