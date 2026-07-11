@@ -141,7 +141,6 @@ const buildPage = {
   title: 'OLObuild · Il cantiere del tuo sito',
   slug: 'olobuild',
   content: page([
-    nav('build', 'build'),
     tile('oloxhero', {
       accent: 'build', bg_variant: 'build', logo: LOGO('olobuild'),
       kicker: 'Il telaio · page builder olonico',
@@ -214,7 +213,6 @@ const buildPage = {
     follow('build'),
     next('Approfondimento tecnico', 'Manuale base + <em>scheda tecnica</em> →', P('olobuild-manuale'), 'build'),
     next('Prossima fermata', 'OLO<em>booking</em> →', P('olobooking'), 'booking'),
-    foot('build'),
   ]),
 };
 
@@ -225,7 +223,6 @@ const bookingPage = {
   title: 'OLObooking · Il tempo è tuo',
   slug: 'olobooking',
   content: page([
-    nav('booking', 'booking'),
     tile('oloxhero', {
       accent: 'booking', bg_variant: 'booking', logo: LOGO('olobooking'),
       kicker: 'Prenotazioni · 6 verticali',
@@ -277,7 +274,6 @@ const bookingPage = {
     follow('booking'),
     next('Approfondimento tecnico', 'Manuale base + <em>scheda tecnica</em> →', P('olobooking-manuale'), 'booking'),
     next('Prossima fermata', 'OLO<em>lang</em> →', P('ololang'), 'lang'),
-    foot('booking'),
   ]),
 };
 
@@ -288,7 +284,6 @@ const langPage = {
   title: 'OLOlang · Di’ benvenuto in 28 modi',
   slug: 'ololang',
   content: page([
-    nav('lang', 'lang'),
     tile('oloxhero', {
       accent: 'lang', bg_variant: 'lang', logo: LOGO('ololang'),
       kicker: 'Multilingua nativo · 28 lingue',
@@ -344,7 +339,6 @@ const langPage = {
     follow('lang'),
     next('Approfondimento tecnico', 'Manuale base + <em>scheda tecnica</em> →', P('ololang-manuale'), 'lang'),
     next('Prossima fermata', 'OLO<em>security</em> →', P('olosecurity'), 'secur'),
-    foot('lang'),
   ]),
 };
 
@@ -356,7 +350,6 @@ const securPage = {
   slug: 'olosecurity',
   content: page([
     tile('oloxpagefx', { variant: 'scan' }),
-    nav('secur', 'secur'),
     tile('oloxhero', {
       accent: 'secur', bg_variant: 'secur', logo: LOGO('olosecurity'),
       kicker: 'Sicurezza · 100% locale',
@@ -409,7 +402,6 @@ const securPage = {
     follow('secur'),
     next('Approfondimento tecnico', 'Manuale base + <em>scheda tecnica</em> →', P('olosecurity-manuale'), 'secur'),
     next('Prossima fermata', 'OLO<em>tour</em> →', P('olotour'), 'tour'),
-    foot('security', 'GPL · Trento · no SaaS · 100% locale'),
   ]),
 };
 
@@ -421,7 +413,6 @@ const tourPage = {
   slug: 'olotour',
   content: page([
     tile('oloxpagefx', { variant: 'pano', deg_label: 'lo scroll ruota la vista' }),
-    nav('tour', 'tour'),
     tile('oloxhero', {
       accent: 'tour', bg_variant: 'none', logo: LOGO('olotour'),
       kicker: 'Tour virtuali · in arrivo',
@@ -460,7 +451,6 @@ const tourPage = {
     follow('tour'),
     next('Approfondimento tecnico', 'Manuale base + <em>scheda tecnica</em> →', P('olotour-manuale'), 'tour'),
     next('Prossima fermata', 'OLO<em>tutor</em> →', P('olotutor'), 'tutor'),
-    foot('tour'),
   ]),
 };
 
@@ -472,7 +462,6 @@ const tutorPage = {
   slug: 'olotutor',
   content: page([
     tile('oloxpagefx', { variant: 'xp', xp_label: 'corso · questa pagina', xp_total: 540, xp_cap: 630, xp_step: 180 }),
-    nav('tutor', 'tutor'),
     tile('oloxhero', {
       accent: 'tutor', bg_variant: 'tutor', logo: LOGO('olotutor'), pad_top: 150,
       kicker: 'Formazione · in arrivo',
@@ -515,7 +504,6 @@ const tutorPage = {
     follow('tutor'),
     next('Approfondimento tecnico', 'Manuale base + <em>scheda tecnica</em> →', P('olotutor-manuale'), 'tutor'),
     next('Fine del percorso', 'Torna al <em>viaggio</em> →', HOME_URL, 'olo'),
-    foot('tutor'),
   ]),
 };
 
@@ -526,7 +514,6 @@ const manual = (slug, prodSlug, active, accent, logoName, docCode, extraDoc, sub
   title: `Manuale ${logoName} · OLOtheme`,
   slug,
   content: page([
-    nav(active, accent, '← scheda prodotto', P(prodSlug)),
     tile('oloxmanual', {
       accent,
       doc_codes: [
@@ -544,7 +531,6 @@ const manual = (slug, prodSlug, active, accent, logoName, docCode, extraDoc, sub
       spec_cta1: '← Torna alla scheda prodotto', spec_url1: P(prodSlug),
       spec_cta2: spec.cta2 || 'Il viaggio OLOtheme', spec_url2: spec.url2 || HOME_URL,
     }),
-    footManuals(),
   ]),
 });
 
@@ -700,10 +686,49 @@ const manTutor = manual('olotutor-manuale', 'olotutor', 'tutor', 'tutor', 'olotu
     ],
   });
 
+/* ==================================================================== */
+/* HEADER & FOOTER condivisi (struttura classica olobuild)               */
+/* Tile in modalità AUTO: attivo/pill/link dedotti dallo slug corrente.  */
+/* ==================================================================== */
+const headerTpl = {
+  title: 'OLOtheme — Header',
+  slug: 'olox-header',
+  kind: 'header',
+  content: page([
+    tile('oloxnav', {
+      logo: LOGO('olotheme'), logo_url: '/',
+      links: NAV_LINKS(''),
+      show_lang: true,
+      exp_text: '← il viaggio', exp_url: '/',
+      active_auto: true, exp_auto: true,
+      exp_manual_text: '← scheda prodotto',
+      accent: 'olo',
+    }),
+  ]),
+};
+const footerTpl = {
+  title: 'OLOtheme — Footer',
+  slug: 'olox-footer',
+  kind: 'footer',
+  content: page([
+    tile('oloxfoot', {
+      logo: LOGO('olotheme'),
+      links_auto: true,
+      home_label: 'il viaggio',
+      fine: 'GPL · Trento · no SaaS',
+      fine_manual: 'manuali base · GPL · Trento',
+      fine_overrides: 'olosecurity:GPL · Trento · no SaaS · 100% locale',
+      show_credits: true,
+      credits_html: 'OLOtheme by <a href="https://clod.eu" target="_blank" rel="noopener">clod.eu</a> | @2026 | sito introduttivo | <a href="mailto:info@olotheme.com">info@olotheme.com</a>',
+      accent: 'olo',
+    }),
+  ]),
+};
+
 /* ---------- scrittura ---------- */
-const ALL = [home, buildPage, bookingPage, langPage, securPage, tourPage, tutorPage, manBuild, manBooking, manLang, manSecur, manTour, manTutor];
+const ALL = [headerTpl, footerTpl, home, buildPage, bookingPage, langPage, securPage, tourPage, tutorPage, manBuild, manBooking, manLang, manSecur, manTour, manTutor];
 for (const t of ALL) {
-  writeFileSync(`${OUT}/${t.slug}.json`, JSON.stringify({ title: t.title, slug: t.slug, content: t.content }), 'utf8');
-  console.log(`✓ ${t.slug}.json (${t.content.length} sezioni)`);
+  writeFileSync(`${OUT}/${t.slug}.json`, JSON.stringify({ title: t.title, slug: t.slug, kind: t.kind || 'page', content: t.content }), 'utf8');
+  console.log(`✓ ${t.slug}.json (${t.content.length} sezioni · ${t.kind || 'page'})`);
 }
 console.log(`\n${ALL.length} template generati in ${OUT}`);

@@ -26,7 +26,10 @@ export default {
     ],
     show_lang: true,
     exp_text: '← il viaggio',
-    exp_url: './',
+    exp_url: '/',
+    active_auto: false,
+    exp_auto: false,
+    exp_manual_text: '← scheda prodotto',
     accent: 'olo',
   },
 
@@ -52,6 +55,12 @@ export default {
     { key: 'show_lang', label: t('Mostra switch lingua'), type: 'toggle' },
     { key: 'exp_text', label: t('Testo link esperienza'), type: 'text' },
     { key: 'exp_url', label: t('Link esperienza'), type: 'link' },
+    { type: 'separator', label: t('Modalità header condiviso') },
+    { key: 'active_auto', label: t('Link attivo automatico (dalla pagina corrente)'), type: 'toggle',
+      description: t('Per l’uso come template Header: lo slug X o X-manuale attiva il prodotto X.') },
+    { key: 'exp_auto', label: t('Pill automatica sui manuali (← scheda prodotto)'), type: 'toggle' },
+    { key: 'exp_manual_text', label: t('Testo pill sui manuali'), type: 'text',
+      condition: { field: 'exp_auto', op: 'eq', value: true } },
   ],
 
   styleFields: [
