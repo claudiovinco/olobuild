@@ -10,7 +10,7 @@ Page builder WordPress professionale olonico con sistema a griglia (tile drag & 
 
 ## Naming
 - PHP classes: `Olo_*` (es. `Olo_Builder`, `Olo_Database`)
-- Constants: `OLO_*` (es. `OLO_VERSION`, `OLO_PATH`)
+- Constants: `OLOBUILD_*` (es. `OLOBUILD_VERSION`, `OLOBUILD_PATH`, `OLOBUILD_URL`)
 - CSS frontend: classi `olo-*` (es. `.olo-template`, `.olo-section`)
 - WP options: `olo_*` (es. `olo_active_header`, `olo_styles`)
 - JS global: `oloData`
@@ -42,7 +42,7 @@ database/                   → schema.sql
 - **Due bundle**: oltre a `builder.js` esiste `assets/js/theme-picker.js` (selettore temi
   condiviso `src/theme-picker/`, usato dal modale del builder E dal setup wizard). Dopo
   modifiche al picker buildare ANCHE: `node node_modules/vite/bin/vite.js build --config vite.picker.config.js`
-- Version bump obbligatorio dopo modifiche JS/CSS: `OLO_VERSION` in olobuild.php
+- Version bump obbligatorio dopo modifiche JS/CSS: `OLOBUILD_VERSION` in olobuild.php
 
 ## Regole
 - Tailwind prefix: `mb-` (evita conflitti con WordPress)
@@ -77,7 +77,7 @@ Regole sempre attive (sintesi):
   la UI/resa, non il formato dei dati. I template esistenti devono continuare a funzionare.
 - Non inventare nomi `--olo-color-*` che il `GlobalColorsPanel` non genera (vedi TOKEN_MAPPING).
 - Coerenza render: lo stesso aspetto va garantito sia in Vue (canvas) sia in PHP (frontend).
-- Dopo le modifiche: build (`node node_modules/vite/bin/vite.js build`) + bump `OLO_VERSION`.
+- Dopo le modifiche: build (`node node_modules/vite/bin/vite.js build`) + bump `OLOBUILD_VERSION`.
 
 > Anche creando una **nuova** tile (vedi playbook *Aggiungere un tile OloBuild*), applica
 > da subito queste regole: nasce già bella e coerente, default token-first curati.
