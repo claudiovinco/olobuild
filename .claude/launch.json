@@ -12,6 +12,12 @@
       "runtimeExecutable": "node",
       "runtimeArgs": ["node_modules/vite/bin/vite.js", "handoff-tile-speciali/_verify", "--port", "5199", "--strictPort"],
       "port": 5199
+    },
+    {
+      "name": "kong-preview",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["C:/Users/claudio/AppData/Local/Temp/claude/D--TECNICA-olobuild/ea3ef9ac-f5c9-451c-b633-0f2486adca2f/scratchpad/serve-preview.js"],
+      "port": 4173
     }
   ]
 }
