@@ -50,6 +50,8 @@ import OloxBannerTile from './OloxBannerTile.vue';
 import OloxFootTile from './OloxFootTile.vue';
 import OloxPageFxTile from './OloxPageFxTile.vue';
 import OloxManualTile from './OloxManualTile.vue';
+import OloxPanelTile from './OloxPanelTile.vue';
+import OloxRailTile from './OloxRailTile.vue';
 import OloxHomeTile from './OloxHomeTile.vue';
 import ProductHeroTile from './ProductHeroTile.vue';
 import NorthVideoHeroTile from './NorthVideoHeroTile.vue';
@@ -361,6 +363,8 @@ const tileComponents = {
   oloxfoot: OloxFootTile,
   oloxpagefx: OloxPageFxTile,
   oloxmanual: OloxManualTile,
+  oloxpanel: OloxPanelTile,
+  oloxrail: OloxRailTile,
   oloxhome: OloxHomeTile,
   producthero: ProductHeroTile,
   northvideohero: NorthVideoHeroTile,

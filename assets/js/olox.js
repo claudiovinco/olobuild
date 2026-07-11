@@ -393,6 +393,41 @@
   };
 
   /* ========================================================================
+     RAIL A SEZIONI — raccoglie le fermate (tile OLOX Panel, una per sezione
+     olobuild) e le monta nel binario orizzontale della tile OLOX Rail, poi
+     numera idx/bigno. Gira PRIMA del modulo "home" (ordine in data-olox).
+     ======================================================================== */
+  MODS.railassemble = (root) => {
+    const track = root.querySelector('.ox-track');
+    if (!track) { return; }
+    const wrappers = [...document.querySelectorAll('.olox-panel-src')];
+    const sections = [];
+    wrappers.forEach((w) => {
+      const panel = w.querySelector('.panel');
+      if (!panel) { return; }
+      track.appendChild(panel);
+      // rimuovi la sezione olobuild ormai vuota (fino al wrapper sezione)
+      const sec = w.closest('.uk-section') || w.closest('.olo-section') || w;
+      const secWrap = sec.closest('.olo-section-fullbleed') || sec;
+      sections.push(secWrap);
+    });
+    sections.forEach((sec) => { if (sec && sec.parentElement) { sec.remove(); } });
+    // numera i pannelli prodotto (idx "01 / 06" + filigrana bigno)
+    const products = [...track.querySelectorAll('.panel')].filter((p) => !p.classList.contains('intro') && !p.classList.contains('outro'));
+    const tot = String(products.length).padStart(2, '0');
+    products.forEach((p, i) => {
+      const n = String(i + 1).padStart(2, '0');
+      const idx = p.querySelector('.idx');
+      const big = p.querySelector('.bigno');
+      if (idx) { idx.textContent = n + ' / ' + tot; }
+      if (big) { big.textContent = n; }
+    });
+    // il wrapper del rail governa --panels per l'altezza del binario
+    const host = root.closest('.oloxp') || root;
+    host.style.setProperty('--panels', track.children.length);
+  };
+
+  /* ========================================================================
      HOME EXPERIENCE (rail + 6 minigiochi + madlib)
      ======================================================================== */
   MODS.home = (root) => {
@@ -1030,7 +1065,12 @@
       }, 300);
     }
     root.querySelectorAll('[data-go]').forEach((a) => {
-      a.addEventListener('click', (e) => { e.preventDefault(); goTo(+a.getAttribute('data-go')); });
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        let gi = +a.getAttribute('data-go');
+        if (gi < 0) { gi = panels.length + gi; } // -1 = ultima fermata
+        goTo(gi);
+      });
     });
     /* deep-link a una fermata: #go-N (usato anche per QA/screenshot) */
     const goMatch = /^#go-(\d+)$/.exec(location.hash || '');
