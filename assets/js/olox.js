@@ -1085,6 +1085,10 @@
     }
     const logoTop = root.querySelector('.chrome .logo');
     if (logoTop) { logoTop.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }); }
+    /* logo dell'header condiviso: sulla home riporta a inizio viaggio (il reload
+       ripristinerebbe la posizione salvata) */
+    const dnavLogo = document.querySelector('.oloxp .dnav .logo');
+    if (dnavLogo) { dnavLogo.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }); }
 
     /* ---- form folle: mad-lib ---- */
     const stampBtn = root.querySelector('.ox-stamp');

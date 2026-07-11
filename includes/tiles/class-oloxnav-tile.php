@@ -10,7 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * - active_auto: il link attivo è dedotto dallo slug della pagina corrente
  *   (lo slug `X-manuale` attiva il prodotto `X`).
  * - exp_auto: sulle pagine manuale la pill diventa "← scheda prodotto" e punta
- *   alla scheda; altrove resta il testo/link configurati (default "← il viaggio").
+ *   alla scheda; altrove resta il testo/link configurati (default "← il viaggio");
+ *   sulla pagina di destinazione stessa (es. la home experience) sparisce.
  */
 class Olobuild_OloxNav_Tile extends Olobuild_Olox_Base_Tile {
 
@@ -58,9 +59,16 @@ class Olobuild_OloxNav_Tile extends Olobuild_Olox_Base_Tile {
 
         $exp_text = $s['exp_text'];
         $exp_url  = $s['exp_url'];
-        if ( ! empty( $s['exp_auto'] ) && $is_manual ) {
-            $exp_text = $s['exp_manual_text'];
-            $exp_url  = '/' . $prod_slug . '/';
+        if ( ! empty( $s['exp_auto'] ) ) {
+            if ( $is_manual ) {
+                $exp_text = $s['exp_manual_text'];
+                $exp_url  = '/' . $prod_slug . '/';
+            } else {
+                // Sulla destinazione stessa la pill non serve (es. home experience).
+                $exp_path = trim( (string) wp_parse_url( (string) ( $exp_url ?: '/' ), PHP_URL_PATH ), '/' );
+                $on_dest  = ( '' === $exp_path ) ? ( function_exists( 'is_front_page' ) && is_front_page() ) : ( $exp_path === $slug );
+                if ( $on_dest ) { $exp_text = ''; }
+            }
         }
 
         ob_start();

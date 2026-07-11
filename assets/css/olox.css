@@ -643,6 +643,13 @@
   display:flex; align-items:center; justify-content:center; transition:all .18s;}
 .oloxp-home .chrome .jump button span{width:9px; height:9px; border-radius:50%; background:var(--jc,var(--c)); display:block; opacity:.55; transition:all .18s;}
 .oloxp-home .chrome .jump button:hover span, .oloxp-home .chrome .jump button.on span{opacity:1; box-shadow:0 0 10px var(--jc,var(--c));}
+/* Home con header/footer condivisi (template olobuild): la dnav porta già logo
+   e lingue, il footer porta i credits → il chrome tiene solo i pallini di salto,
+   sotto la barra. Solo frontend: nel canvas builder manca .oloxp-live. */
+body:has(.oloxp-live .dnav) .oloxp-live.oloxp-home .chrome{top:52px;}
+body:has(.oloxp-live .dnav) .oloxp-live.oloxp-home .chrome .logo,
+body:has(.oloxp-live .dnav) .oloxp-live.oloxp-home .chrome .langsw{display:none;}
+body:has(.oloxp-live .dfoot) .oloxp-live.oloxp-home .credits{display:none;}
 .oloxp-home .progress{bottom:0; left:0; right:0; height:3px; z-index:90; background:rgba(250,247,242,.08); position:relative;}
 .oloxp-live.oloxp-home .progress{position:fixed;}
 .oloxp-home .progress i{display:block; height:100%; width:0%;
@@ -1002,6 +1009,7 @@
   .oloxp-home .scene{height:auto; min-height:340px;}
   .oloxp-home .bigno{display:none;}
   .oloxp-home .chrome{gap:10px; padding:12px 14px; background:rgba(12,14,19,.88); backdrop-filter:blur(10px); border-bottom:1px solid var(--panelline);}
+  body:has(.oloxp-live .dnav) .oloxp-live.oloxp-home .chrome{background:transparent; backdrop-filter:none; border-bottom:0; padding-top:8px;}
   .oloxp-home .chrome .jump{gap:2px;}
   .oloxp-home .chrome .jump button{width:24px; height:24px;}
   .oloxp-home .chrome .jump button span{width:7px; height:7px;}

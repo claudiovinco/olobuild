@@ -13,7 +13,7 @@
     <div style="padding:14px 26px; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.18em;
       text-transform:uppercase; color:var(--faint); border-bottom:1px dashed var(--line); display:flex; gap:14px; align-items:center;">
       <span style="color:var(--olo);">◈ binario experience</span>
-      <span>sul sito le sezioni-fermata sotto scorrono in orizzontale · qui nel builder restano separate per l'editing</span>
+      <span>sul sito le sezioni-fermata sotto scorrono in orizzontale · con header/footer condivisi logo, lingue e credits del chrome si nascondono da soli</span>
     </div>
   </div>
 </template>

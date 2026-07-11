@@ -12,8 +12,11 @@ tile `olox*` (15 tile, v1.4.315+).
   fixed solo con `.oloxp-live`) + `assets/js/olox.js` (behaviors per
   `data-olox="…"`: rail home, 6 minigiochi, sticky assembler/day, scene hero,
   reveal, scan/pano/xp, quiz — HAND-AUTHORED, no build).
-- **Pagine** (13): home experience (`oloxhome`, rail orizzontale a 8 fermate),
-  6 pagine prodotto, 6 manuali tecnici (`oloxmanual`).
+- **Pagine** (13): home experience (composizione a sezioni: 1 `oloxrail` +
+  8 fermate `oloxpanel`, montate nel binario a runtime dal modulo JS
+  `railassemble`), 6 pagine prodotto, 6 manuali tecnici (`oloxmanual`).
+- **Header/Footer condivisi**: template olobuild dedicati (kind `header` /
+  `footer` nei JSON) con tile `oloxnav`/`oloxfoot` in modalità AUTO.
 
 ## Rigenerare i template
 
@@ -24,7 +27,9 @@ tile `olox*` (15 tile, v1.4.315+).
    crea/aggiorna template (status `published`) e pagine WP collegate via
    `_olo_template_id`; slug = nome file.
 4. Loghi attesi in `/wp-content/uploads/olotheme-site/` (`<prodotto>-orizz.png`).
-5. Le pagine sopprimono header/footer globali con `_olo_header_id = -1`.
+5. Header/footer condivisi assegnati a TUTTE le pagine (home inclusa) via
+   `_olo_header_id`/`_olo_footer_id`; sulla home il chrome della tile
+   `oloxrail` nasconde da solo logo/lingue/credits (CSS `:has` in olox.css).
 
 ## Gotcha noti
 

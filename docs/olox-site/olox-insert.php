@@ -5,9 +5,9 @@
  * Legge i JSON da /tmp/olox-tpl/*.json — { title, slug, kind, content }.
  *
  * kind 'header'/'footer': template condivisi (nessuna pagina WP), riusati su
- * tutte le pagine interne via meta _olo_header_id/_olo_footer_id — struttura
- * classica olobuild. La home experience tiene -1/-1 (chrome e credits sono
- * nella tile oloxhome).
+ * TUTTE le pagine (home inclusa) via meta _olo_header_id/_olo_footer_id —
+ * struttura classica olobuild. Sulla home il chrome della tile oloxrail si
+ * riduce da solo (logo/lingue/credits li portano header e footer).
  * kind 'page' (default): template + pagina WP collegata via _olo_template_id.
  * Idempotente: match per slug (pagine) o per titolo (header/footer).
  */
@@ -117,15 +117,10 @@ foreach ( $jobs as $data ) {
     }
     update_post_meta( $pid, '_olo_template_id', $tpl_id );
 
-    // Header/footer condivisi sulle pagine interne; la home tiene il suo chrome.
-    if ( 'olotheme-experience' === $slug ) {
-        update_post_meta( $pid, '_olo_header_id', -1 );
-        update_post_meta( $pid, '_olo_footer_id', -1 );
-        echo "  header/footer: soppressi (chrome nella tile)\n";
-    } else {
-        update_post_meta( $pid, '_olo_header_id', $header_id ? $header_id : -1 );
-        update_post_meta( $pid, '_olo_footer_id', $footer_id ? $footer_id : -1 );
-        echo '  header/footer: ' . ( $header_id ? "#{$header_id}" : '-1' ) . ' / ' . ( $footer_id ? "#{$footer_id}" : '-1' ) . "\n";
-    }
+    // Header/footer condivisi su tutte le pagine, home inclusa (il chrome
+    // della tile oloxrail si riduce da solo quando la dnav è presente).
+    update_post_meta( $pid, '_olo_header_id', $header_id ? $header_id : -1 );
+    update_post_meta( $pid, '_olo_footer_id', $footer_id ? $footer_id : -1 );
+    echo '  header/footer: ' . ( $header_id ? "#{$header_id}" : '-1' ) . ' / ' . ( $footer_id ? "#{$footer_id}" : '-1' ) . "\n";
 }
 echo "FATTO\n";

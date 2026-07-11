@@ -7,8 +7,10 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * fermate (tile OLOX Panel nelle sezioni successive) e le monta nel binario
  * orizzontale, numerandole. Porta con sé il chrome fisso (logo, lingue,
  * pallini di salto), la progress bar, l'hint, l'alone colorato, i credits e
- * la modale "olonica". Il runtime completo vive in assets/js/olox.js
- * (moduli railassemble + home).
+ * la modale "olonica". Se la pagina usa i template header/footer condivisi
+ * (oloxnav/oloxfoot), logo+lingue e credits del chrome si nascondono da soli
+ * (CSS :has in olox.css) e restano solo i pallini, sotto la barra. Il runtime
+ * completo vive in assets/js/olox.js (moduli railassemble + home).
  */
 class Olobuild_OloxRail_Tile extends Olobuild_Olox_Base_Tile {
 
