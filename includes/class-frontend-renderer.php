@@ -1203,6 +1203,12 @@ class Olobuild_Frontend_Renderer {
             return $html;
         }
 
+        // Famiglia OLOX (replica olotheme.com): tile scroll-driven, interattive o
+        // fixed con runtime inizializzato al DOMContentLoaded (olox.js) — mai lazy.
+        if ( strpos( $type, 'olox' ) === 0 ) {
+            return $html;
+        }
+
         // Effetti "tutta la pagina" (overlay fisso, es. ParticleFX/Goo con Ambito=Pagina):
         // devono attivarsi al caricamento, non quando lo scroll raggiunge il tile.
         if ( strpos( $html, '"scope":"page"' ) !== false ) {

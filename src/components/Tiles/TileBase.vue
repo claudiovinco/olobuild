@@ -36,6 +36,21 @@ import MediaCtaTile from './MediaCtaTile.vue';
 import ImageHeroTile from './ImageHeroTile.vue';
 import GlowHeroTile from './GlowHeroTile.vue';
 import TerminalHeroTile from './TerminalHeroTile.vue';
+import OloxNavTile from './OloxNavTile.vue';
+import OloxHeroTile from './OloxHeroTile.vue';
+import OloxMarqueeTile from './OloxMarqueeTile.vue';
+import OloxCardsTile from './OloxCardsTile.vue';
+import OloxStickyTile from './OloxStickyTile.vue';
+import OloxPricingTile from './OloxPricingTile.vue';
+import OloxStatementTile from './OloxStatementTile.vue';
+import OloxListTile from './OloxListTile.vue';
+import OloxLessonsTile from './OloxLessonsTile.vue';
+import OloxQuizTile from './OloxQuizTile.vue';
+import OloxBannerTile from './OloxBannerTile.vue';
+import OloxFootTile from './OloxFootTile.vue';
+import OloxPageFxTile from './OloxPageFxTile.vue';
+import OloxManualTile from './OloxManualTile.vue';
+import OloxHomeTile from './OloxHomeTile.vue';
 import ProductHeroTile from './ProductHeroTile.vue';
 import NorthVideoHeroTile from './NorthVideoHeroTile.vue';
 import NorthQuoteSliderTile from './NorthQuoteSliderTile.vue';
@@ -332,6 +347,21 @@ const tileComponents = {
   imagehero: ImageHeroTile,
   glowhero: GlowHeroTile,
   terminalhero: TerminalHeroTile,
+  oloxnav: OloxNavTile,
+  oloxhero: OloxHeroTile,
+  oloxmarquee: OloxMarqueeTile,
+  oloxcards: OloxCardsTile,
+  oloxsticky: OloxStickyTile,
+  oloxpricing: OloxPricingTile,
+  oloxstatement: OloxStatementTile,
+  oloxlist: OloxListTile,
+  oloxlessons: OloxLessonsTile,
+  oloxquiz: OloxQuizTile,
+  oloxbanner: OloxBannerTile,
+  oloxfoot: OloxFootTile,
+  oloxpagefx: OloxPageFxTile,
+  oloxmanual: OloxManualTile,
+  oloxhome: OloxHomeTile,
   producthero: ProductHeroTile,
   northvideohero: NorthVideoHeroTile,
   northquoteslider: NorthQuoteSliderTile,

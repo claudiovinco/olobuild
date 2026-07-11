@@ -8,8 +8,8 @@ const modules = import.meta.glob('./elements/*.js', { eager: true });
 const elements = {};
 
 for (const path in modules) {
-  // Skip _shared.js
-  if (path.includes('_shared')) continue;
+  // Skip helper modules (file che iniziano con "_", es. _shared.js, _oloxShared.js)
+  if (/\/_/.test(path)) continue;
   const def = modules[path].default;
   if (def && def.type) {
     elements[def.type] = def;
