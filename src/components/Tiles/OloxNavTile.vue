@@ -7,7 +7,9 @@
           <a v-for="(l, i) in s.links" :key="i" :class="{ on: l.active }"
             :style="{ '--pc': oloxColor(l.color) }" @click.prevent>{{ l.label }}</a>
         </div>
-        <div v-if="s.show_lang" class="langsw"><div class="lsw-list"><a class="on" @click.prevent>IT</a></div></div>
+        <div v-if="s.show_lang" class="langsw"><div class="lsw-list">
+          <a v-for="(l, i) in langs" :key="i" :class="{ on: l.active }" @click.prevent>{{ l.code }}</a>
+        </div></div>
         <a v-if="s.exp_text" class="exp" @click.prevent>{{ s.exp_text }}</a>
       </div>
     </nav>
@@ -23,4 +25,5 @@ import def from '@/config/elements/oloxnav.js';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const s = computed(() => ({ ...def.defaults, ...props.settings }));
 const accent = computed(() => oloxColor(s.value.accent));
+const langs = computed(() => (Array.isArray(s.value.langs) && s.value.langs.length ? s.value.langs : def.defaults.langs));
 </script>

@@ -27,9 +27,12 @@
 .oloxp .mono{font-family:'JetBrains Mono',monospace;}
 .oloxp p{margin:0;}
 .oloxp h1,.oloxp h2,.oloxp h3{margin:0;}
-/* Il tema/template WP impone color su heading e link con stile inline nel body
-   (pari specificità ma ordine successivo): doppia classe per vincere sempre. */
-.oloxp.oloxp h1,.oloxp.oloxp h2,.oloxp.oloxp h3,.oloxp.oloxp h4{color:var(--paper);}
+/* Il tema/template WP impone color e line-height su heading e link con stile
+   inline nel body (pari specificità ma ordine successivo): doppia classe per
+   vincere sempre. Il line-height 1.55 replica l'inheritance dal body del
+   design; le regole più specifiche del design (h1.d, .panel h2, …) lo
+   sovrascrivono dove serve. */
+.oloxp.oloxp h1,.oloxp.oloxp h2,.oloxp.oloxp h3,.oloxp.oloxp h4{color:var(--paper); line-height:1.55;}
 .oloxp.oloxp a{color:var(--paper); text-decoration:none;}
 .oloxp.oloxp a:hover{color:var(--c);}
 .oloxp.oloxp h1 em,.oloxp.oloxp h2 em{font-style:italic; color:var(--c);}
@@ -633,6 +636,7 @@
 .oloxp-live.oloxp-home .chrome{position:fixed;}
 .oloxp-home .chrome > *{pointer-events:auto;}
 .oloxp-home .chrome .logo img{height:26px; width:auto; max-width:42vw; object-fit:contain; object-position:left center; filter:brightness(0) invert(1); display:block;}
+.oloxp-home .chrome .langsw{margin-left:0;}
 .oloxp-home .chrome .jump{margin-left:auto; display:flex; gap:4px;}
 .oloxp-home .chrome .jump button{width:34px; height:34px; border-radius:50%; border:1px solid var(--panelline);
   background:rgba(12,14,19,.6); backdrop-filter:blur(8px); cursor:pointer; padding:0;
@@ -941,7 +945,8 @@
 .oloxp-home .blinkdot{width:8px; height:8px; border-radius:50%; background:var(--olo); animation:oloxbl 1.2s steps(1) infinite;}
 @keyframes oloxbl{50%{opacity:.15;}}
 .oloxp-home .madlib{font-family:'Fraunces',serif; font-weight:400; font-size:clamp(19px,1.7vw,26px); line-height:2.05; letter-spacing:-.01em;}
-.oloxp-home .madlib input{font-family:'Fraunces',serif; font-style:italic; font-size:inherit; color:var(--olo) !important;
+.oloxp-home .madlib input{font-family:'Fraunces',serif !important; font-style:italic !important; font-size:inherit !important;
+  color:var(--olo) !important; line-height:normal !important;
   background:transparent !important; border:none !important; border-bottom:2px dashed rgba(232,69,61,.55) !important;
   outline:none; box-shadow:none !important; border-radius:0 !important; height:auto !important;
   padding:0 6px 2px !important; margin:0 4px; max-width:100%; transition:all .2s; display:inline-block; width:auto;}
@@ -1022,6 +1027,20 @@
 /* Pagina con panorama fisso (tour): le tile diventano trasparenti, come il
    body del sito sorgente; la classe la aggiunge il modulo JS "pano". */
 .oloxp.oloxp-clear{background:transparent;}
+
+/* Il full-bleed dei template pagina usa transform:translateX(-50%) e
+   container-query: entrambi creano un containing block che ROMPE i
+   position:fixed interni (nav, chrome, progress, credits, scanline,
+   panorama, barra XP). Quando il template contiene tile olox live, si
+   ottiene lo stesso centraggio con un margin negativo — che un containing
+   block non lo crea — e si spegne il container. */
+.olo-template:has(.oloxp-live){
+  transform:none;
+  container:none;
+  left:auto;
+  margin-left:0;
+  width:100%;
+}
 
 /* ---- Canvas builder: neutralizza le altezze viewport dentro l'editor ---- */
 .oloxp:not(.oloxp-live) .dhero{min-height:70vh;}

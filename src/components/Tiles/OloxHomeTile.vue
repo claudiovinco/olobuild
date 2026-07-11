@@ -3,7 +3,9 @@
     <!-- anteprima canvas: chrome in linea, pannelli scorrevoli in orizzontale, giochi statici -->
     <div class="chrome">
       <a class="logo" @click.prevent><img v-if="s.logo" :src="s.logo" alt="OLOtheme" /></a>
-      <div class="langsw"><div class="lsw-list"><a class="on" @click.prevent>IT</a></div></div>
+      <div class="langsw"><div class="lsw-list">
+        <a v-for="(l, i) in langs" :key="i" :class="{ on: l.active }" @click.prevent>{{ l.code }}</a>
+      </div></div>
       <div class="jump">
         <button v-for="(p, i) in jumpDots" :key="i" :style="{ '--jc': p }" type="button"><span></span></button>
       </div>
@@ -144,6 +146,7 @@ import def from '@/config/elements/oloxhome.js';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const s = computed(() => ({ ...def.defaults, ...props.settings }));
 const panels = computed(() => (Array.isArray(s.value.panels) ? s.value.panels : []));
+const langs = computed(() => (Array.isArray(s.value.langs) && s.value.langs.length ? s.value.langs : def.defaults.langs));
 const madPicks = computed(() => (Array.isArray(s.value.mad_picks) ? s.value.mad_picks : []));
 const jumpDots = computed(() => ['var(--olo)', ...panels.value.map(p => oloxColor(p.color)), 'var(--olo)']);
 const marqueeLine = computed(() => {

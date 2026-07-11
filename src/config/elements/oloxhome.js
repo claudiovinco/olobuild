@@ -15,6 +15,13 @@ export default {
 
   defaults: {
     logo: '',
+    langs: [
+      { code: 'IT', url: '/', active: true },
+      { code: 'EN', url: '#', active: false },
+      { code: 'FR', url: '#', active: false },
+      { code: 'DE', url: '#', active: false },
+      { code: 'ES', url: '#', active: false },
+    ],
     intro_kicker: 'OLOtheme · suite WordPress',
     olw_text: 'olonica',
     intro_title: 'Un telaio. Sei prodotti. <em>Nessuna catena.</em>',
@@ -66,6 +73,13 @@ export default {
   fields: [
     { type: 'separator', label: t('Chrome') },
     { key: 'logo', label: t('Logo (reso bianco)'), type: 'image' },
+    { key: 'langs', label: t('Lingue'), type: 'content-items', itemLabel: t('Lingua'),
+      defaults: { code: 'EN', url: '#', active: false },
+      itemFields: [
+        { key: 'code', label: t('Codice'), type: 'text' },
+        { key: 'url', label: t('Link (# = non ancora attiva)'), type: 'link' },
+        { key: 'active', label: t('Lingua corrente'), type: 'toggle' },
+      ] },
     { key: 'credits_html', label: t('Credits fissi (HTML)'), type: 'textarea' },
     { type: 'separator', label: t('Intro (fermata 0)') },
     { key: 'intro_kicker', label: t('Kicker (prima della parola lampeggiante)'), type: 'text' },

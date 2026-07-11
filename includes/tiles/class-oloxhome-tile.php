@@ -20,6 +20,7 @@ class Olobuild_OloxHome_Tile extends Olobuild_Olox_Base_Tile {
     protected $category = 'marketing';
     protected $defaults = [
         'logo'          => '',
+        'langs'         => null, // null = default IT/EN/FR/DE/ES (vedi olox_default_langs)
         // Intro
         'intro_kicker'  => 'OLOtheme · suite WordPress',
         'olw_text'      => 'olonica',
@@ -100,7 +101,7 @@ class Olobuild_OloxHome_Tile extends Olobuild_Olox_Base_Tile {
         ?>
         <div class="chrome">
             <a class="logo" href="#"><?php if ( ! empty( $s['logo'] ) ) : ?><img src="<?php echo esc_url( $s['logo'] ); ?>" alt="OLOtheme" /><?php endif; ?></a>
-            <div class="langsw" data-olox="langsw"><button class="lsw-t" type="button">IT ▾</button><div class="lsw-list"><a class="on" href="#">IT</a></div></div>
+            <?php echo $this->olox_langsw( $s['langs'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- helper interno già escapato. ?>
             <div class="jump"></div>
         </div>
         <div class="progress"><i></i></div>

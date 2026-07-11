@@ -78,4 +78,30 @@ abstract class Olobuild_Olox_Base_Tile extends Olobuild_Tile_Base {
         $items = $s[ $key ] ?? [];
         return is_array( $items ) ? $items : [];
     }
+
+    /** Default lingue del sito (IT attiva; le altre si collegano con OLOlang). */
+    public static function olox_default_langs() {
+        return [
+            [ 'code' => 'IT', 'url' => '/', 'active' => true ],
+            [ 'code' => 'EN', 'url' => '#', 'active' => false ],
+            [ 'code' => 'FR', 'url' => '#', 'active' => false ],
+            [ 'code' => 'DE', 'url' => '#', 'active' => false ],
+            [ 'code' => 'ES', 'url' => '#', 'active' => false ],
+        ];
+    }
+
+    /** Markup lang switcher (lista inline desktop + tendina mobile), design .langsw. */
+    protected function olox_langsw( $langs ) {
+        $langs = is_array( $langs ) && $langs ? $langs : self::olox_default_langs();
+        $cur   = 'IT';
+        foreach ( $langs as $l ) {
+            if ( ! empty( $l['active'] ) ) { $cur = (string) ( $l['code'] ?? 'IT' ); }
+        }
+        $out = '<div class="langsw" data-olox="langsw"><button class="lsw-t" type="button">' . esc_html( $cur ) . ' ▾</button><div class="lsw-list">';
+        foreach ( $langs as $l ) {
+            $on   = ! empty( $l['active'] ) ? ' class="on"' : '';
+            $out .= '<a' . $on . ' href="' . esc_url( $l['url'] ?? '#' ) . '">' . esc_html( $l['code'] ?? '' ) . '</a>';
+        }
+        return $out . '</div></div>';
+    }
 }

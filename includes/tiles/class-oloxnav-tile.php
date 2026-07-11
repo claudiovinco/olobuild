@@ -30,6 +30,7 @@ class Olobuild_OloxNav_Tile extends Olobuild_Olox_Base_Tile {
             [ 'label' => 'tutor', 'url' => '/olotutor/', 'color' => 'tutor', 'active' => false ],
         ],
         'show_lang'   => true,
+        'langs'       => null, // null = default IT/EN/FR/DE/ES (vedi olox_default_langs)
         'exp_text'    => '← il viaggio',
         'exp_url'     => '/',
         'active_auto' => false,
@@ -82,7 +83,7 @@ class Olobuild_OloxNav_Tile extends Olobuild_Olox_Base_Tile {
                     <?php endforeach; ?>
                 </div>
                 <?php if ( ! empty( $s['show_lang'] ) ) : ?>
-                <div class="langsw" data-olox="langsw"><button class="lsw-t" type="button">IT ▾</button><div class="lsw-list"><a class="on" href="#">IT</a></div></div>
+                <?php echo $this->olox_langsw( $s['langs'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- helper interno già escapato. ?>
                 <?php endif; ?>
                 <?php if ( ! empty( $exp_text ) ) : ?>
                 <a class="exp" href="<?php echo esc_url( $exp_url ?: '/' ); ?>"><?php echo esc_html( $exp_text ); ?></a>
