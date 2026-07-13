@@ -18,6 +18,9 @@ export default {
   defaults: {
     preset: 'custom',
     typography_preset: '',
+    lang_source: 'auto',
+    custom_languages: [],
+    custom_current: '',
     style: 'flags',
     flag_shape: 'circle',
     flag_size: 24,
@@ -51,6 +54,22 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
+    { type: 'separator', label: t('Sorgente lingue') },
+    { key: 'lang_source', label: t('Sorgente'), type: 'select', options: [
+      { value: 'auto', label: t('Automatica (OLOlang)') },
+      { value: 'manual', label: t('Manuale (lista personalizzata)') },
+    ]},
+    { key: 'custom_languages', label: t('Lingue'), type: 'content-items', itemLabel: t('Lingua'),
+      newItemDefaults: { code: 'en', name: 'English', url: '#' },
+      itemFields: [
+        { key: 'code', label: t('Codice (it/en/de…)'), type: 'text' },
+        { key: 'name', label: t('Nome'), type: 'text' },
+        { key: 'url', label: t('URL'), type: 'link' },
+      ],
+      condition: { field: 'lang_source', op: 'eq', value: 'manual' } },
+    { key: 'custom_current', label: t('Codice lingua corrente'), type: 'text',
+      condition: { field: 'lang_source', op: 'eq', value: 'manual' } },
+
     { type: 'separator', label: t('Stile contenuto') },
     { key: 'style', label: t('Stile'), type: 'select', options: [
       { value: 'flags', label: t('Bandiere') },

@@ -41,6 +41,8 @@ export default {
     modal_title_letter_spacing: 0,
     button_radius: 6,
     button_uppercase: false,
+    button_color: '',
+    button_underline: false,
     button_letter_spacing: 0.02,
     button_weight: '600',
     effect_color: '',
@@ -215,6 +217,8 @@ export default {
     ]},
     { key: 'button_radius', label: t('Arrotondamento pulsante (px)'), type: 'border-radius' },
     { key: 'button_uppercase', label: t('Pulsante maiuscolo'), type: 'toggle' },
+    { key: 'button_color', label: t('Colore trigger (vuoto = tema)'), type: 'color' },
+    { key: 'button_underline', label: t('Sottolinea trigger'), type: 'toggle' },
 
     { type: 'separator', label: t('Modale — Aspetto') },
     { key: 'modal_size', label: t('Dimensione modale'), type: 'select', options: [

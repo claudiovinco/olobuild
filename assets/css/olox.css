@@ -14,7 +14,7 @@
   --build:#E8453D; --booking:#3D8BFF; --lang:#E8409A;
   --tour:#12A19A; --tutor:#38C172; --secur:#26B8E8;
   --c:var(--olo);
-  background:var(--bg); color:var(--paper);
+  background:transparent; color:var(--paper);
   font-family:'Inter',system-ui,sans-serif; -webkit-font-smoothing:antialiased;
   font-size:16px; line-height:1.55; margin:0; padding:0;
 }

@@ -93,17 +93,26 @@ class Olobuild_Toc_Tile extends Olobuild_Tile_Base {
             // le colonne interne sono .olo-inner-column; nel frontend la colonna è
             // il figlio diretto della row (classi uk-width-*), sempre dentro un
             // flex container alto quanto la colonna più alta — lo sticky lì ha corsa.
+            // ⚠️ SOLO con colonne affiancate (≥960px): impilate su mobile, la
+            // colonna sticky scorrerebbe SOPRA il contenuto che la segue.
             if(isSticky){
                 var nav = document.getElementById(uid);
                 if(nav){
+                    var stacked = window.matchMedia('(max-width: 959px)');
                     var p = nav.closest('.olo-inner-column') || nav.closest('[class*="uk-width-"]');
-                    if(p){
-                        p.style.position = 'sticky';
-                        p.style.top = headerOffset() + 'px';
-                        p.style.alignSelf = 'flex-start';
-                        p.style.zIndex = '5';
-                        nav.style.position = 'static';
+                    function applySticky(on){
+                        if(p){
+                            p.style.position = on ? 'sticky' : 'static';
+                            p.style.top = on ? headerOffset() + 'px' : '';
+                            p.style.alignSelf = on ? 'flex-start' : '';
+                            p.style.zIndex = on ? '5' : '';
+                        }
+                        nav.style.position = on ? 'static' : '';
                     }
+                    applySticky(!stacked.matches);
+                    var onSw = function(e){applySticky(!e.matches);};
+                    if(stacked.addEventListener){stacked.addEventListener('change', onSw);}
+                    else if(stacked.addListener){stacked.addListener(onSw);}
                 }
             }
 
@@ -151,7 +160,7 @@ class Olobuild_Toc_Tile extends Olobuild_Tile_Base {
                         for(var k = 0; k <= level; k++){
                             if(counter[k] > 0) parts.push(counter[k]);
                         }
-                        num = '<span style="opacity:0.5;margin-right:6px;">' + parts.join('.') + '.</span>';
+                        num = '<span style="color:' + linkClr + ';opacity:0.6;margin-right:6px;">' + parts.join('.') + '.</span>';
                     } else if(listStyle === 'bullets') {
                         num = '<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:' + linkClr + ';margin-right:8px;vertical-align:middle;"></span>';
                     }

@@ -521,6 +521,25 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
 }
 
 /* ========================================
+   Niente scroll orizzontale del documento
+   ======================================== */
+/* Marquee, decorazioni delle scene e altri elementi sporgono per design oltre
+   il bordo destro: su mobile allargherebbero il layout viewport (il browser
+   "zooma indietro" per far entrare tutto e la pagina appare rimpicciolita e
+   tagliata). `clip` — a differenza di `hidden` — NON crea uno scroll container,
+   quindi position:sticky (cover-h, colonne sticky, header) continua a
+   funzionare. Scoped: solo quando in pagina c'è un template olobuild. */
+body:has(.olo-frontend-grid) {
+  overflow-x: clip;
+}
+/* Anche sull'html: gli elementi FIXED (barre, luci di pagina) e il contenuto
+   clippato di body contribuiscono comunque alla scroll area del documento —
+   senza questa regola su mobile si può "pannare" verso una zona vuota a destra. */
+html:has(.olo-frontend-grid) {
+  overflow-x: clip;
+}
+
+/* ========================================
    Sticky Header
    ======================================== */
 .olo-site-header {
@@ -1839,6 +1858,15 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
 .olo-sticky-reveal-h {
   flex: 0 0 100%;
   width: 100%;
+}
+/* Le sezioni cover sono flex (centratura verticale del pannello): il
+   .uk-container figlio diventa flex item con margin auto e si dimensionerebbe
+   a FIT-CONTENT — stretto se il copy è corto, largo fino a max-width se dentro
+   c'è una track max-content (marquee, scene). Deve restare pieno. */
+.olo-sticky-cover-h > .uk-container,
+.olo-sticky-reveal-h > .uk-container {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Horizontal group wrapper */

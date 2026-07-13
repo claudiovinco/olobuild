@@ -33,7 +33,7 @@ class Olobuild_OloxLessons_Tile extends Olobuild_Olox_Base_Tile {
         ob_start();
         echo $this->olox_open( '', '--c:' . $accent ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         ?>
-        <section class="dsec"<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?>>
+        <section class="dsec" data-olox="xp"<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?>>
             <div class="wrap">
                 <div class="head" style="margin-left:auto; margin-right:auto; text-align:center; max-width:640px;">
                     <?php if ( ! empty( $s['kicker'] ) ) : ?><div class="k" style="justify-content:center;"><?php echo esc_html( $s['kicker'] ); ?></div><?php endif; ?>

@@ -53,6 +53,7 @@ import { useBuilderStore } from '@/stores/builder';
 import { resolveResponsive } from '@/composables/useResponsiveValue';
 import { resolveFontFamily } from '@/composables/oloTileDefaults';
 import iconsSvg from '../ProSlider/iconsLibrary.js';
+import { toSpacingCss } from '@/composables/useBoxModel';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -155,7 +156,7 @@ const cardStyle = computed(() => {
     ...parseCss(bgToCss(s.value.card_bg, 'background:#0f172a;')),
     color: cardColor.value,
     borderRadius: radiusToCss(s.value.card_radius) || '0',
-    padding: (s.value.card_padding || 0) + 'px',
+    padding: toSpacingCss(s.value.card_padding, { fallback: [40, 40, 40, 40] }),
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',

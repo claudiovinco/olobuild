@@ -172,6 +172,11 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
                 <?php echo $bg; ?>;
                 height: <?php echo (int) $height; ?>px;
                 overflow: hidden;
+                /* La track è width:max-content (anche migliaia di px): senza contain
+                   la sua larghezza intrinseca si propaga ai contenitori fit-content
+                   (es. .uk-container dentro una sezione flex) e su mobile allarga
+                   il layout. inline-size azzera il contributo intrinseco. */
+                contain: inline-size;
                 width: 100%;
                 <?php if ( $full_width ) : ?>
                 width: 100vw;

@@ -21,6 +21,7 @@ class Olobuild_Coverdots_Tile extends Olobuild_Tile_Base {
         'items'              => [],
         'hide_without_group' => true,
         'dot_size'           => 34,
+        'dot_size_mobile'    => 0, // 0 = come desktop
         'dot_gap'            => 4,
         'dot_inner'          => 9,
         'border_color'       => '',
@@ -57,14 +58,17 @@ class Olobuild_Coverdots_Tile extends Olobuild_Tile_Base {
         $hide   = ! empty( $s['hide_without_group'] );
         $items  = is_array( $s['items'] ) ? array_values( $s['items'] ) : [];
 
-        // Items serializzati per il runtime (colore per-pallino + tooltip).
+        // Items serializzati per il runtime (colore per-pallino + tooltip +
+        // url per la modalità LINK sulle pagine senza sezioni cover).
         $items_js = [];
         foreach ( $items as $it ) {
             $items_js[] = [
                 'label' => sanitize_text_field( $it['label'] ?? '' ),
                 'color' => $this->safe_color_css( $it['color'] ?? '' ),
+                'url'   => esc_url_raw( $it['url'] ?? '' ),
             ];
         }
+        $size_mobile = max( 0, min( 48, absint( $s['dot_size_mobile'] ) ) );
 
         ob_start();
         ?>
@@ -80,6 +84,17 @@ class Olobuild_Coverdots_Tile extends Olobuild_Tile_Base {
           background:var(--dc,var(--cd-color));display:block;opacity:.55;transition:all .18s;}
         .olo-coverdots button:hover span,.olo-coverdots button.olo-cd-on span{opacity:1;<?php if ( $glow ) : ?>box-shadow:0 0 10px var(--dc,var(--cd-color));<?php endif; ?>}
         .olo-coverdots button:focus-visible{outline:2px solid var(--dc,var(--cd-color));outline-offset:2px;}
+        <?php if ( $size_mobile > 0 ) : ?>
+        /* !important: le --cd-* di base stanno nello style inline del nav,
+           che altrimenti vincerebbe sulla media query. */
+        @media (max-width: 959px){
+            #<?php echo esc_attr( $uid ); ?>{
+                --cd-size:<?php echo (int) $size_mobile; ?>px !important;
+                --cd-gap:2px !important;
+                --cd-inner:<?php echo (int) max( 4, round( $inner * $size_mobile / max( 1, $size ) ) ); ?>px !important;
+            }
+        }
+        <?php endif; ?>
         </style>
         <script>
         (function(){
@@ -87,12 +102,8 @@ class Olobuild_Coverdots_Tile extends Olobuild_Tile_Base {
             if(!nav)return;
             var items=<?php echo wp_json_encode( $items_js ); ?>;
             var hide=<?php echo $hide ? 'true' : 'false'; ?>;
-            var group=null,btns=[];
-            function build(){
-                group=document.querySelector('.olo-h-group');
-                if(!group){ if(!hide){nav.style.display='inline-flex';} return false; }
-                var n=parseInt(group.dataset.oloCount)||0;
-                if(n<2)return false;
+            var group=null,btns=[],secs=[],secObs=null;
+            function makeBtns(n){
                 nav.innerHTML='';btns=[];
                 for(var i=0;i<n;i++){
                     var it=items[i]||{};
@@ -106,26 +117,88 @@ class Olobuild_Coverdots_Tile extends Olobuild_Tile_Base {
                     nav.appendChild(b);btns.push(b);
                 }
                 nav.style.display='inline-flex';
-                mark(parseInt(group.dataset.oloActive)||0);
-                return true;
+            }
+            var linkMode=false;
+            function build(){
+                group=document.querySelector('.olo-h-group');
+                if(group){
+                    var n=parseInt(group.dataset.oloCount)||0;
+                    if(n<2)return false;
+                    secs=[];linkMode=false;
+                    if(secObs){secObs.disconnect();secObs=null;}
+                    makeBtns(n);
+                    mark(parseInt(group.dataset.oloActive)||0);
+                    return true;
+                }
+                if(document.querySelector('.olo-h-marker')){
+                    /* Pagina CON sezioni cover: sul desktop il gruppo nasce al load
+                       (si aspetta); sotto il breakpoint di stacking (960px) le
+                       sezioni restano in flusso e i pallini saltano lì. */
+                    if(window.matchMedia('(min-width: 960px)').matches){
+                        if(!hide){nav.style.display='inline-flex';}
+                        return false;
+                    }
+                    secs=Array.prototype.slice.call(document.querySelectorAll('.olo-sticky-cover-h'));
+                    if(secs.length<2){ if(!hide){nav.style.display='inline-flex';} return false; }
+                    linkMode=false;
+                    var hdr=document.querySelector('header.olo-site-header');
+                    var off=(hdr?hdr.offsetHeight:0)+10;
+                    secs.forEach(function(sec){sec.style.scrollMarginTop=off+'px';});
+                    makeBtns(secs.length);
+                    if(secObs){secObs.disconnect();}
+                    secObs=new IntersectionObserver(function(entries){
+                        entries.forEach(function(e){
+                            if(e.isIntersecting&&e.intersectionRatio>0){mark(secs.indexOf(e.target));}
+                        });
+                    },{rootMargin:'-40% 0px -55% 0px'});
+                    secs.forEach(function(sec){secObs.observe(sec);});
+                    mark(0);
+                    return true;
+                }
+                /* Pagina SENZA sezioni cover (schede prodotto, manuali…): se le
+                   fermate hanno un URL i pallini restano nel menu come LINK —
+                   il viaggio è sempre a un tocco di distanza. */
+                var withUrl=items.filter(function(it){return it&&it.url;});
+                if(withUrl.length>=2){
+                    linkMode=true;secs=[];
+                    if(secObs){secObs.disconnect();secObs=null;}
+                    makeBtns(items.length);
+                    return true;
+                }
+                if(!hide){nav.style.display='inline-flex';}
+                return false;
             }
             function jump(i){
-                if(!group)return;
-                var n=btns.length;
-                var top=group.getBoundingClientRect().top+window.scrollY;
-                var stickyTop=parseInt(group.dataset.stickyTop)||0;
-                var travel=group.offsetHeight-(window.innerHeight-stickyTop);
-                var y=top+(n>1?travel*(i/(n-1)):0);
-                window.scrollTo({top:Math.round(y),behavior:'instant'});
+                if(group){
+                    var n=btns.length;
+                    var top=group.getBoundingClientRect().top+window.scrollY;
+                    var stickyTop=parseInt(group.dataset.stickyTop)||0;
+                    var travel=group.offsetHeight-(window.innerHeight-stickyTop);
+                    var y=top+(n>1?travel*(i/(n-1)):0);
+                    window.scrollTo({top:Math.round(y),behavior:'instant'});
+                    return;
+                }
+                if(linkMode){
+                    var it=items[i];
+                    if(it&&it.url){window.location=it.url;}
+                    return;
+                }
+                if(secs[i]){secs[i].scrollIntoView({behavior:'smooth',block:'start'});}
             }
             function mark(i){
                 btns.forEach(function(b,k){b.classList.toggle('olo-cd-on',k===i);});
             }
             window.addEventListener('olo:hgroup',function(e){
-                if(!btns.length){build();}
+                if(!group){btns=[];build();}
                 if(e.detail&&typeof e.detail.index==='number'){mark(e.detail.index);}
             });
-            /* Il gruppo nasce su DOMContentLoaded/load: riprova brevemente. */
+            /* Rotazione/resize oltre il breakpoint: il motore raggruppa, i pallini
+               si riagganciano al gruppo (l'evento olo:hgroup fa il resto). */
+            var mq=window.matchMedia('(min-width: 960px)');
+            var onCh=function(){btns=[];group=null;setTimeout(build,150);};
+            if(mq.addEventListener){mq.addEventListener('change',onCh);}
+            else if(mq.addListener){mq.addListener(onCh);}
+            /* Il gruppo/le sezioni nascono su DOMContentLoaded/load: riprova brevemente. */
             var tries=0;
             var t=setInterval(function(){
                 tries++;

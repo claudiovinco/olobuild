@@ -87,6 +87,9 @@ const containerStyle = computed(() => {
     background: s.value.bg_color || '#1F2937',
     height: (parseInt(s.value.height) || 50) + 'px',
     overflow: 'hidden',
+    // Twin del render PHP: la track max-content non deve propagare la sua
+    // larghezza intrinseca ai contenitori fit-content (sezioni flex).
+    contain: 'inline-size',
   };
   const bt = parseInt(s.value.border_top) || 0;
   const bb = parseInt(s.value.border_bottom) || 0;

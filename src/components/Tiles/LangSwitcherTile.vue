@@ -86,14 +86,27 @@ const defaults = {
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
-const languages = computed(() => [
-  { code: 'it', name: 'Italiano' },
-  { code: 'en', name: 'English' },
-  { code: 'de', name: 'Deutsch' },
-]);
+// Twin del PHP: in modalità manuale il canvas mostra la lista configurata,
+// altrimenti tre lingue demo (OLOlang non è interrogabile dal builder).
+const languages = computed(() => {
+  if (s.value.lang_source === 'manual' && Array.isArray(s.value.custom_languages) && s.value.custom_languages.length >= 2) {
+    return s.value.custom_languages.map((l) => ({ code: l.code || 'xx', name: l.name || (l.code || '').toUpperCase() }));
+  }
+  return [
+    { code: 'it', name: 'Italiano' },
+    { code: 'en', name: 'English' },
+    { code: 'de', name: 'Deutsch' },
+  ];
+});
 
 const defaultLang = 'it';
-const currentLang = computed(() => languages.value[0]);
+const currentLang = computed(() => {
+  if (s.value.lang_source === 'manual' && s.value.custom_current) {
+    const hit = languages.value.find((l) => l.code === s.value.custom_current);
+    if (hit) return hit;
+  }
+  return languages.value[0];
+});
 const otherLangs = computed(() => languages.value.filter(l => l.code !== currentLang.value.code));
 
 const wantsFlag = computed(() => s.value.style === 'flags' || s.value.style === 'flags_text' || s.value.style === 'flags_circle');

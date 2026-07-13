@@ -78,7 +78,7 @@ const PRODUCT_HEX = { build: '#E8453D', booking: '#3D8BFF', lang: '#E8409A', sec
 // Sezione-fermata: bg scuro edge-to-edge, contenuto centrato in verticale,
 // Stile → Sticky → "Cover orizzontale" (il core raggruppa le sezioni adiacenti
 // in un binario orizzontale a runtime — feature nativa di olobuild).
-const hSection = (rows, glowHex) => ({
+const hSection = (rows, glowHex, extra = {}) => ({
   id: randomUUID(), type: 'section',
   settings: {
     // Sezione TRASPARENTE: fondo e halo li porta la tile "Luce di pagina"
@@ -90,6 +90,7 @@ const hSection = (rows, glowHex) => ({
     width: 'default', padding: 'custom', padding_top_custom: 60, padding_bottom_custom: 60,
     bg_scope: 'section', sticky_effect: 'cover-h', sticky_top: 0,
     flex_direction: 'column', flex_justify: 'center',
+    ...extra,
   },
   style: [], advanced: [], children: rows,
 });
@@ -214,11 +215,11 @@ const productStop = (p) => hSection([
 // Le fermate prodotto: contenuti reali, composti con tile classiche.
 const STOPS = [
   { color: 'build', name: 'OLObuild', anchor: 'viaggio', kicker: 'Il telaio \u00b7 page builder', title: 'Costruisce come un cantiere', accent: 'cantiere', sub: '<p>Mattone su mattone: <strong>187 tile in 12 famiglie</strong>, tutti auto-discovered, con animazioni ed effetti di serie. <strong>La Free (100+ tile) vale quanto i builder Pro a pagamento della concorrenza</strong>; Pro sblocca l\u2019intera libreria.</p>', tags: ['\u20ac0 free \u00b7 100+ tile', '36 animazioni', 'Woo nativo', 'dark mode'], cta: 'Entra nel cantiere', url: P('olobuild'), scene: 'wall', coord: 'grid \u00b7 44\u00d744 \u00b7 lot 187', idx: '01 / 06' },
-  { color: 'booking', name: 'OLObooking', kicker: 'Prenotazioni \u00b7 6 verticali', title: 'Un motore che riempie l\u2019agenda', accent: 'l\u2019agenda', sub: '<p>Camere, tavoli, appuntamenti, eventi, noleggi, immobili: <strong>una sola configurazione</strong> e il motore diventa il tuo mestiere. Con caparra anti no-show e zero commissioni.</p>', tags: ['6 verticali', 'anti no-show', 'QR access', '0% commissioni'], cta: 'Apri il calendario', url: P('olobooking'), scene: 'cal', coord: 'occupancy feed \u00b7 live', idx: '02 / 06' },
-  { color: 'lang', name: 'OLOlang', kicker: 'Multilingua nativo', title: 'Lo stesso sito, 28 voci', accent: '28 voci', sub: '<p>DeepL + traduttore IA, glossario e memoria di traduzione. Contenuti, menu e stringhe tradotti <strong>via database</strong>, con hreflang, URL localizzati e sitemap per ogni lingua.</p>', tags: ['28 lingue', 'DeepL + IA', 'SEO hreflang', 'a vita con Pro'], cta: 'Cambia lingua', url: P('ololang'), scene: 'lang', coord: 'hreflang \u00d7 28', idx: '03 / 06' },
-  { color: 'secur', name: 'OLOsecurity', kicker: 'Sicurezza \u00b7 100% locale', title: 'Un radar che non dorme mai', accent: 'dorme mai', sub: '<p>Firewall OWASP, 2FA, scanner anti-webshell e bonifica guidata dal pannello <strong>Sentinel</strong>. Tutto elaborato <strong>sul tuo server</strong>: il traffico non finisce in nessun cloud altrui.</p>', tags: ['100% locale', 'mini-WAF', 'TOTP 2FA', 'Plugin Check 0/0'], cta: 'Accendi il radar', url: P('olosecurity'), scene: 'radar', coord: 'perimetro \u00b7 armato', idx: '04 / 06' },
-  { color: 'tour', name: 'OLOtour', kicker: 'Tour virtuali \u00b7 in arrivo', title: 'Guarda dentro, prima di entrare', accent: 'prima di entrare', sub: '<p>Panorami sferici e HDRI (Polyhaven, Street View), <strong>hot-spot cliccabili</strong>, ambienti collegati, fruizione VR. Il sopralluogo diventa parte del sito, e finisce sul bottone \u201cprenota\u201d.</p>', tags: ['360\u00b0', 'hot-spot', 'multi-stanza', 'VR ready'], cta: 'Affaccia lo sguardo', url: P('olotour'), scene: 'pano', coord: 'lat 46.07 \u00b7 lon 11.12 \u00b7 trento', idx: '05 / 06' },
-  { color: 'tutor', name: 'OLOtutor', kicker: 'Formazione \u00b7 in arrivo', title: 'Sali di livello, lezione dopo lezione', accent: 'lezione dopo lezione', sub: '<p>Corsi, quiz, punti e badge, registro voti e certificati, dentro il tuo WordPress. <strong>Gli allievi restano tuoi</strong>, non di un marketplace che ti mette in fila coi concorrenti.</p>', tags: ['LMS', 'quiz & badge', 'certificati', 'area allievi'], cta: 'Iscriviti all\u2019idea', url: P('olotutor'), scene: 'course', coord: 'syllabus \u00b7 v1 \u00b7 4 lezioni', idx: '06 / 06' },
+  { color: 'booking', name: 'OLObooking', anchor: 'stop-booking', kicker: 'Prenotazioni \u00b7 6 verticali', title: 'Un motore che riempie l\u2019agenda', accent: 'l\u2019agenda', sub: '<p>Camere, tavoli, appuntamenti, eventi, noleggi, immobili: <strong>una sola configurazione</strong> e il motore diventa il tuo mestiere. Con caparra anti no-show e zero commissioni.</p>', tags: ['6 verticali', 'anti no-show', 'QR access', '0% commissioni'], cta: 'Apri il calendario', url: P('olobooking'), scene: 'cal', coord: 'occupancy feed \u00b7 live', idx: '02 / 06' },
+  { color: 'lang', name: 'OLOlang', anchor: 'stop-lang', kicker: 'Multilingua nativo', title: 'Lo stesso sito, 28 voci', accent: '28 voci', sub: '<p>DeepL + traduttore IA, glossario e memoria di traduzione. Contenuti, menu e stringhe tradotti <strong>via database</strong>, con hreflang, URL localizzati e sitemap per ogni lingua.</p>', tags: ['28 lingue', 'DeepL + IA', 'SEO hreflang', 'a vita con Pro'], cta: 'Cambia lingua', url: P('ololang'), scene: 'lang', coord: 'hreflang \u00d7 28', idx: '03 / 06' },
+  { color: 'secur', name: 'OLOsecurity', anchor: 'stop-security', kicker: 'Sicurezza \u00b7 100% locale', title: 'Un radar che non dorme mai', accent: 'dorme mai', sub: '<p>Firewall OWASP, 2FA, scanner anti-webshell e bonifica guidata dal pannello <strong>Sentinel</strong>. Tutto elaborato <strong>sul tuo server</strong>: il traffico non finisce in nessun cloud altrui.</p>', tags: ['100% locale', 'mini-WAF', 'TOTP 2FA', 'Plugin Check 0/0'], cta: 'Accendi il radar', url: P('olosecurity'), scene: 'radar', coord: 'perimetro \u00b7 armato', idx: '04 / 06' },
+  { color: 'tour', name: 'OLOtour', anchor: 'stop-tour', kicker: 'Tour virtuali \u00b7 in arrivo', title: 'Guarda dentro, prima di entrare', accent: 'prima di entrare', sub: '<p>Panorami sferici e HDRI (Polyhaven, Street View), <strong>hot-spot cliccabili</strong>, ambienti collegati, fruizione VR. Il sopralluogo diventa parte del sito, e finisce sul bottone \u201cprenota\u201d.</p>', tags: ['360\u00b0', 'hot-spot', 'multi-stanza', 'VR ready'], cta: 'Affaccia lo sguardo', url: P('olotour'), scene: 'pano', coord: 'lat 46.07 \u00b7 lon 11.12 \u00b7 trento', idx: '05 / 06' },
+  { color: 'tutor', name: 'OLOtutor', anchor: 'stop-tutor', kicker: 'Formazione \u00b7 in arrivo', title: 'Sali di livello, lezione dopo lezione', accent: 'lezione dopo lezione', sub: '<p>Corsi, quiz, punti e badge, registro voti e certificati, dentro il tuo WordPress. <strong>Gli allievi restano tuoi</strong>, non di un marketplace che ti mette in fila coi concorrenti.</p>', tags: ['LMS', 'quiz & badge', 'certificati', 'area allievi'], cta: 'Iscriviti all\u2019idea', url: P('olotutor'), scene: 'course', coord: 'syllabus \u00b7 v1 \u00b7 4 lezioni', idx: '06 / 06' },
 ];
 
 const home = {
@@ -243,6 +244,8 @@ const home = {
           tile('popup', {
             mode: 'template', template_id: 'OLOX_TPL:olox-popup-olonica',
             button_text: 'olonica', button_style: 'link', button_size: 'small', button_uppercase: true,
+            // Trigger evidente (decisione utente): rosso brand + sottolineato
+            button_color: PRODUCT_HEX.build, button_underline: true,
             modal_title: '',
             modal_bg: '#0E1016', modal_text_color: INK.dim, modal_title_color: INK.paper,
             modal_radius: '16', modal_overlay: '72', modal_border_width: '1', modal_border_color: PRODUCT_HEX.build,
@@ -276,7 +279,10 @@ const home = {
           xMono('Scrolla in basso \u2192 si va a destra', { size: '10', ls: '3', align: 'right' }),
         ]),
       ]),
-    ], PRODUCT_HEX.build),
+      // Padding simmetrico 130/130: su desktop il contenuto resta centrato
+      // identico (flex center), su mobile \u2014 dove il cover-h si disattiva e la
+      // sezione \u00e8 la prima del flusso \u2014 il contenuto esce da sotto l'header fisso.
+    ], PRODUCT_HEX.build, { padding_top_custom: 130, padding_bottom_custom: 130 }),
     // Fermate prodotto \u00b7 una sezione "Cover orizzontale" ciascuna
     ...STOPS.map(productStop),
     // Fermata finale \u00b7 capolinea + scena mad-lib
@@ -351,8 +357,13 @@ const secHead = (kicker, title, accent, hex, lead, size = '44') => [
 ];
 // Griglia di card scure (famiglie/verticali/difese) su info-cards nativa.
 // items: [counterLabel, title, description, footerText?]
+// Colonne responsive: la tile NON collassa da sola (per-breakpoint espliciti).
 const xCards = (hex, columns, items) => tile('info-cards', {
-  columns, container_bg: { type: 'none' }, container_padding: 0,
+  columns,
+  columns_tablet: Math.min(columns, 2),
+  columns_mobile_landscape: 1,
+  columns_mobile: 1,
+  container_bg: { type: 'none' }, container_padding: 0,
   card_bg: { type: 'solid', color: '#12151D' },
   card_color: INK.paper, card_accent_color: hex, card_hover_effect: 'glow',
   title_size: 20, title_weight: '700', title_italic: false, counter_size: 10,
@@ -513,7 +524,8 @@ const buildPage = {
         xText('<p>Ogni famiglia arriva da sinistra e da destra, come in cantiere. 187 tile, un solo motore.</p>'),
         xGap(30),
         tile('info-cards', {
-          columns: 4, container_bg: { type: 'none' }, container_padding: 0,
+          columns: 4, columns_tablet: 2, columns_mobile_landscape: 1, columns_mobile: 1,
+          container_bg: { type: 'none' }, container_padding: 0,
           card_bg: { type: 'solid', color: '#12151D' },
           card_color: INK.paper, card_accent_color: PRODUCT_HEX.build,
           card_hover_effect: 'glow',
@@ -1199,57 +1211,82 @@ const headerTpl = {
       },
       style: [], advanced: [],
       children: [
-        hRow('50-50', [
-          // Sinistra: logo + lingue accanto (nessun menu testuale \u2014 decisione utente)
-          hColRow([
-            tile('sitelogo', {
-              source: 'custom_image', custom_image: '/wp-content/uploads/olotheme-site/olotheme-orizz-white.png',
-              max_height: 24, link_url: '/', alignment: 'left',
-            }),
-            // Lingue (decorative come sul live; langswitcher vero quando OLOlang avr\u00e0 pi\u00f9 lingue)
-            tile('badge', {
-              text: 'IT', variant: 'solid', bg_color: 'rgba(232,69,61,.18)', text_color: PRODUCT_HEX.build,
-              typography_preset: 'olox-mono',
-              font_size: '10', font_weight: '700', text_transform: 'uppercase', letter_spacing: '1',
-              padding_y: 4, padding_x: 7, alignment: 'left',
-              badge_radius: { tl: 4, tr: 4, br: 4, bl: 4 },
-              extra_items: ['EN', 'FR', 'DE', 'ES'].map((l) => ({ text: l, color: 'transparent', text_color: INK.faint })),
-            }),
-          ], '1-2', '22'),
-          {
-            id: randomUUID(), type: 'column',
-            settings: { bg: { type: 'none' }, width_medium: '1-2', flex_direction: 'row', flex_wrap: 'nowrap', flex_align: 'center', flex_justify: 'flex-end', flex_column_gap: '14', flex_row_gap: '8' },
-            style: [], advanced: [],
-            children: [
-              // Pallini fermate: solo sulle pagine con Cover orizzontale (AUTO)
-              tile('coverdots', {
-                items: [
-                  { label: 'OLOtheme', color: PRODUCT_HEX.build },
-                  { label: 'OLObuild', color: PRODUCT_HEX.build },
-                  { label: 'OLObooking', color: PRODUCT_HEX.booking },
-                  { label: 'OLOlang', color: PRODUCT_HEX.lang },
-                  { label: 'OLOsecurity', color: PRODUCT_HEX.secur },
-                  { label: 'OLOtour', color: PRODUCT_HEX.tour },
-                  { label: 'OLOtutor', color: PRODUCT_HEX.tutor },
-                  { label: 'Capolinea', color: PRODUCT_HEX.build },
-                ],
-                hide_without_group: true, dot_size: 26, dot_gap: 3, dot_inner: 8, active_glow: true,
-              }),
-              // Pill "\u2190 il viaggio": ovunque tranne che sulla front page
-              tile('button', {
-                text: '\u2190 il viaggio', url: '/', alignment: 'right',
-                bg_color: 'transparent', text_color: INK.paper,
-                hover_bg_color: 'rgba(250,247,242,.08)', hover_text_color: INK.paper,
-                typography_preset: 'olox-mono',
-                font_size: '10', font_weight: '700', text_transform: 'uppercase', letter_spacing: '1.5',
-                border_radius: { tl: 999, tr: 999, br: 999, bl: 999 },
-                tile_padding: { top: 9, right: 16, bottom: 9, left: 16 },
-                border: { top: 1, right: 1, bottom: 1, left: 1, linked: true, style: 'solid', color: 'rgba(250,247,242,.3)' },
-                cond_type: 'is_front_page', cond_negate: true,
-              }),
-            ],
-          },
-        ]),
+        // UNA SOLA RIGA a ogni larghezza (decisione utente: i pallini stanno
+        // sulla riga del logo anche su mobile): niente stack, colonne 2/5\u20133/5
+        // valide su tutti i breakpoint (width_default, non @m).
+        {
+          id: randomUUID(), type: 'row',
+          settings: { bg: { type: 'none' }, layout: '50-50', stack_mobile: false, gap: 8 },
+          style: [], advanced: [],
+          children: [
+            // Sinistra: logo (leggermente ridotto) + lingue a discesa
+            {
+              id: randomUUID(), type: 'column',
+              settings: { bg: { type: 'none' }, width_default: '2-5', flex_direction: 'row', flex_wrap: 'nowrap', flex_align: 'center', flex_column_gap: '10', flex_row_gap: '6' },
+              // 16px visivi: la prima colonna del grid parte già -14px (gutter negativo)
+              style: { padding_left: 30 }, advanced: [],
+              children: [
+                tile('sitelogo', {
+                  source: 'custom_image', custom_image: '/wp-content/uploads/olotheme-site/olotheme-orizz-white.png',
+                  max_height: 20, link_url: '/', alignment: 'left',
+                }),
+                // Lingue: selettore nativo a DISCESA. Sorgente manuale finch\u00e9
+                // OLOlang non ha le lingue attive; poi lang_source 'auto'.
+                tile('langswitcher', {
+                  lang_source: 'manual',
+                  custom_languages: [
+                    { code: 'it', name: 'Italiano', url: '/' },
+                    { code: 'en', name: 'English', url: '#' },
+                    { code: 'fr', name: 'Fran\u00e7ais', url: '#' },
+                    { code: 'de', name: 'Deutsch', url: '#' },
+                    { code: 'es', name: 'Espa\u00f1ol', url: '#' },
+                  ],
+                  custom_current: 'it',
+                  style: 'codes', layout: 'dropdown', compact: true, show_dropdown_arrow: true,
+                  typography_preset: 'olox-mono',
+                  bg: '#12151D', color: INK.dim,
+                  active_bg: 'rgba(232,69,61,.18)', active_color: PRODUCT_HEX.build,
+                  border_color: 'rgba(250,247,242,.2)', border_radius: 6,
+                }),
+              ],
+            },
+            // Destra: pallini fermate (SEMPRE: gruppo in home, link altrove)
+            // + freccetta di ritorno sulle pagine interne.
+            {
+              id: randomUUID(), type: 'column',
+              settings: { bg: { type: 'none' }, width_default: '3-5', flex_direction: 'row', flex_wrap: 'nowrap', flex_align: 'center', flex_justify: 'flex-end', flex_column_gap: '8', flex_row_gap: '6' },
+              style: { padding_right: 16 }, advanced: [],
+              children: [
+                tile('coverdots', {
+                  items: [
+                    { label: 'OLOtheme', color: PRODUCT_HEX.build, url: '/' },
+                    { label: 'OLObuild', color: PRODUCT_HEX.build, url: '/#viaggio' },
+                    { label: 'OLObooking', color: PRODUCT_HEX.booking, url: '/#stop-booking' },
+                    { label: 'OLOlang', color: PRODUCT_HEX.lang, url: '/#stop-lang' },
+                    { label: 'OLOsecurity', color: PRODUCT_HEX.secur, url: '/#stop-security' },
+                    { label: 'OLOtour', color: PRODUCT_HEX.tour, url: '/#stop-tour' },
+                    { label: 'OLOtutor', color: PRODUCT_HEX.tutor, url: '/#stop-tutor' },
+                    { label: 'Capolinea', color: PRODUCT_HEX.build, url: '/#capolinea' },
+                  ],
+                  hide_without_group: true, dot_size: 26, dot_size_mobile: 18, dot_gap: 3, dot_inner: 8, active_glow: true,
+                }),
+                // Freccetta di ritorno (al posto della pill "il viaggio"):
+                // compatta, ovunque tranne che sulla front page.
+                tile('button', {
+                  text: '\u2190', url: '/', alignment: 'right',
+                  bg_color: 'transparent', text_color: INK.paper,
+                  hover_bg_color: 'rgba(250,247,242,.08)', hover_text_color: INK.paper,
+                  typography_preset: 'olox-mono',
+                  font_size: '12', font_weight: '700', wrap_padding_y: 0,
+                  border_radius: { tl: 999, tr: 999, br: 999, bl: 999 },
+                  tile_padding: { top: 3, right: 8, bottom: 3, left: 8 },
+                  border: { top: 1, right: 1, bottom: 1, left: 1, linked: true, style: 'solid', color: 'rgba(250,247,242,.3)' },
+                  cond_type: 'is_front_page', cond_negate: true,
+                }),
+              ],
+            },
+          ],
+        },
       ],
     },
   ],

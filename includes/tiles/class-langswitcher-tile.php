@@ -26,6 +26,11 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
         'border_color'   => '',
         'border_radius'  => 8,
         'show_dropdown_arrow' => true,
+        // Lingue manuali (siti senza OLOlang o lingue non ancora attivate):
+        // items {code, name, url}; current = codice della lingua corrente.
+        'lang_source'     => 'auto',
+        'custom_languages'=> [],
+        'custom_current'  => '',
         // Tabs
         'tabs_edge'      => 'top',
         'tabs_offset'    => 20,
@@ -51,18 +56,35 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
     }
 
     public function render( $settings ) {
-        if ( ! class_exists( 'Olo_Lang_Language' ) ) {
-            return '<p style="color:var(--olo-color-text-muted, #9CA3AF);text-align:center;font-size:12px;">Plugin Olo Lang non attivo.</p>';
-        }
-
         $s = wp_parse_args( $settings, $this->defaults );
 
-        $languages = Olo_Lang_Language::get_active_languages();
-        if ( count( $languages ) < 2 ) {
-            return '';
+        if ( $s['lang_source'] === 'manual' ) {
+            // Lista manuale: nessuna dipendenza da OLOlang. Ogni voce porta il
+            // proprio URL (siti multipli, WPML, lingue in arrivo…).
+            $languages = [];
+            foreach ( (array) $s['custom_languages'] as $it ) {
+                $code = sanitize_key( $it['code'] ?? '' );
+                if ( $code === '' ) continue;
+                $languages[] = [
+                    'code' => $code,
+                    'name' => sanitize_text_field( $it['name'] ?? strtoupper( $code ) ),
+                    'url'  => esc_url_raw( $it['url'] ?? '#' ),
+                ];
+            }
+            if ( count( $languages ) < 2 ) {
+                return '';
+            }
+            $current = sanitize_key( $s['custom_current'] ) ?: $languages[0]['code'];
+        } else {
+            if ( ! class_exists( 'Olo_Lang_Language' ) ) {
+                return '<p style="color:var(--olo-color-text-muted, #9CA3AF);text-align:center;font-size:12px;">Plugin Olo Lang non attivo.</p>';
+            }
+            $languages = Olo_Lang_Language::get_active_languages();
+            if ( count( $languages ) < 2 ) {
+                return '';
+            }
+            $current = Olo_Lang_Language::detect_current_lang();
         }
-
-        $current = Olo_Lang_Language::detect_current_lang();
         $style   = sanitize_key( $s['style'] );
         $layout  = sanitize_key( $s['layout'] );
         $shape   = sanitize_key( $s['flag_shape'] );
@@ -271,10 +293,12 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
             . '.olsb-flag-code{display:inline-flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:10px;font-weight:800;letter-spacing:.3px;color:var(--olo-color-text,#374151);background:var(--olo-color-surface-alt,#f1f3f5)}'
             . '.olsb-code{font-weight:700;font-size:12px;letter-spacing:.5px}.olsb-name{font-weight:500}.olsb-label{font-size:10px;opacity:.8;margin-left:2px}.olsb-arrow{opacity:.55;margin-left:2px}'
             . '.olsb-dropdown{position:relative;display:inline-block}'
-            . '.olsb-menu{position:absolute;top:calc(100% + 6px);left:0;min-width:160px;display:flex;flex-direction:column;gap:2px;padding:6px;background:var(--olo-color-surface,#fff);border:1px solid var(--olo-color-border,#e5e7eb);border-radius:10px;box-shadow:0 8px 24px rgba(16,24,40,.16);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .15s,transform .15s,visibility .15s;z-index:2147483000}'
+            // Il menu consuma le --olsb-* della tile (fallback = token tema): senza,
+            // i colori configurati valgono per il trigger ma il pannello resta chiaro.
+            . '.olsb-menu{position:absolute;top:calc(100% + 6px);left:0;min-width:160px;display:flex;flex-direction:column;gap:2px;padding:6px;background:var(--olsb-bg,var(--olo-color-surface,#fff));border:1px solid var(--olsb-border,var(--olo-color-border,#e5e7eb));border-radius:10px;box-shadow:0 8px 24px rgba(16,24,40,.16);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .15s,transform .15s,visibility .15s;z-index:2147483000}'
             . '.olsb-menu.olsb-open{opacity:1;visibility:visible;transform:translateY(0)}'
-            . '.olsb-option{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:7px;text-decoration:none;color:var(--olo-color-text,#1f2937);font-size:13px;white-space:nowrap;transition:background .12s}'
-            . '.olsb-option:hover{background:var(--olo-color-surface-alt,#f1f3f5)}'
+            . '.olsb-option{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:7px;text-decoration:none;color:var(--olsb-color,var(--olo-color-text,#1f2937));font-size:13px;white-space:nowrap;transition:background .12s,color .12s}'
+            . '.olsb-option:hover{background:var(--olsb-active-bg,var(--olo-color-surface-alt,#f1f3f5));color:var(--olsb-active-color,var(--olsb-color,var(--olo-color-text,#1f2937)))}'
             . '.olsb-layout--floating{position:fixed;z-index:10050}'
             . '.olsb-float--bottom-right{bottom:20px;right:20px}.olsb-float--bottom-left{bottom:20px;left:20px}.olsb-float--top-right{top:20px;right:20px}.olsb-float--top-left{top:20px;left:20px}.olsb-float--middle-right{top:50%;right:20px;transform:translateY(-50%)}.olsb-float--middle-left{top:50%;left:20px;transform:translateY(-50%)}'
             . '</style>';
@@ -299,6 +323,17 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
             . 'if(t){setLang(t.getAttribute("hreflang"));}'
             . '},true);'
             . '})();</script>';
+    }
+
+    /**
+     * URL della lingua: in modalità manuale ogni voce porta il proprio URL,
+     * altrimenti lo costruisce OLOlang.
+     */
+    private function lang_url( $lang ) {
+        if ( isset( $lang['url'] ) && $lang['url'] !== '' ) {
+            return $lang['url'];
+        }
+        return Olo_Lang_Language::get_language_url( $lang['code'] );
     }
 
     /**
@@ -328,7 +363,7 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
         echo '<div class="' . esc_attr( $wrapper_class ) . '" style="' . $css_vars . '">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $css_vars is sprintf()-built in render() from %d integers, the absint()-based Olobuild_Tile_Utils::border_radius() value and safe_color_css() whitelisted colors only
         foreach ( $languages as $lang ) {
             $code   = $lang['code'];
-            $url    = Olo_Lang_Language::get_language_url( $code );
+            $url    = $this->lang_url( $lang );
             $active = $code === $current ? ' olsb-active' : '';
 
             echo '<a href="' . esc_url( $url ) . '" class="olsb-item' . $active . '" hreflang="' . esc_attr( $code ) . '" title="' . esc_attr( $lang['name'] ) . '">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $active is a fixed ' olsb-active'/'' literal from the ternary above; url/code/name escaped inline
@@ -407,7 +442,7 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
         echo '<div class="' . esc_attr( $uid ) . '">';
         foreach ( $languages as $lang ) {
             $code   = $lang['code'];
-            $url    = Olo_Lang_Language::get_language_url( $code );
+            $url    = $this->lang_url( $lang );
             $active = $code === $current ? ' olsb-active' : '';
 
             echo '<a href="' . esc_url( $url ) . '" class="olsb-tab' . $active . '" hreflang="' . esc_attr( $code ) . '" title="' . esc_attr( $lang['name'] ) . '">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $active is a fixed ' olsb-active'/'' literal from the ternary above; url/code/name escaped inline
@@ -439,11 +474,14 @@ class Olobuild_LangSwitcher_Tile extends Olobuild_Tile_Base {
         }
         echo '</button>';
 
-        echo '<div class="olsb-menu">';
+        // Le --olsb-* anche sul menu: all'apertura viene PORTATO in <body>
+        // (fuori dal wrapper che le definisce) e senza queste tornerebbe
+        // ai fallback chiari del tema.
+        echo '<div class="olsb-menu" style="' . $css_vars . '">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $css_vars is sprintf()-built in render() from %d integers, the absint()-based border_radius value and safe_color_css() whitelisted colors only
         foreach ( $languages as $lang ) {
             if ( $lang['code'] === $current ) continue;
             $code = $lang['code'];
-            $url  = Olo_Lang_Language::get_language_url( $code );
+            $url    = $this->lang_url( $lang );
 
             echo '<a href="' . esc_url( $url ) . '" class="olsb-option" hreflang="' . esc_attr( $code ) . '">';
             $this->render_item_content( $lang, $flags, $s );

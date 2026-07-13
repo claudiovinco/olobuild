@@ -1212,6 +1212,11 @@ class Olobuild_Frontend_Renderer {
             // altrimenti i link #anchor (navigazione, salti alle fermate cover-h)
             // non trovano il bersaglio finché la sezione non viene materializzata.
             'menuanchor',
+            // bottombar: barra fixed "sempre visibile" (credits). Il position:fixed è
+            // inline nel tile (non via advanced.position_mode), quindi il check fixed più
+            // sotto non lo intercetta: senza questo apparirebbe solo scrollando fino al
+            // footer e poi resterebbe fisso. Deve nascere nel DOM al load.
+            'bottombar',
         ];
         if ( in_array( $type, $no_lazy, true ) ) {
             return $html;
@@ -4396,6 +4401,14 @@ class Olobuild_Frontend_Renderer {
                         return el.querySelector('.uk-section');
                     }
                     function initHGroups(){
+                        /* Sotto il breakpoint di stacking delle colonne (uk-width-*@m,
+                           960px) i pannelli impilati diventano molto più alti della
+                           viewport: il binario orizzontale ne mostrerebbe solo la prima
+                           schermata e lo scroll traslerebbe layer enormi. Fallback
+                           mobile: niente raggruppamento, sezioni in flusso verticale
+                           (la luce di pagina passa all'IntersectionObserver, i pallini
+                           coverdots si nascondono da soli senza gruppo). */
+                        if(window.matchMedia('(max-width: 959px)').matches)return;
                         /* Collect all h-markers and group consecutive runs */
                         var markers=Array.from(document.querySelectorAll('.olo-h-marker'));
                         if(!markers.length)return;
@@ -4501,6 +4514,30 @@ class Olobuild_Frontend_Renderer {
                             window.addEventListener('scroll',onScroll,{passive:true});
                             onScroll();
                         });
+                        /* Arrivo da un'ALTRA pagina con #anchor dentro un gruppo
+                           (es. pallini header in modalità link): il salto nativo del
+                           browser avviene prima del raggruppamento e atterra male —
+                           qui si corregge sulla posizione calcolata della fermata. */
+                        if(location.hash&&!window.__oloHHashDone){
+                            var ht=document.getElementById(location.hash.slice(1));
+                            var hg=ht?ht.closest('.olo-h-group'):null;
+                            if(hg){
+                                window.__oloHHashDone=true;
+                                var htrk=hg.querySelector('.olo-h-track');
+                                var hsecs=htrk?Array.prototype.slice.call(htrk.children):[];
+                                var hidx=-1;
+                                for(var hi=0;hi<hsecs.length;hi++){
+                                    if(hsecs[hi]===ht||hsecs[hi].contains(ht)){hidx=hi;break;}
+                                }
+                                if(hidx>=0){
+                                    var hst=parseInt(hg.dataset.stickyTop)||0;
+                                    var hgTop=hg.getBoundingClientRect().top+window.scrollY;
+                                    var htr=hg.offsetHeight-(window.innerHeight-hst);
+                                    var hcnt=hsecs.length;
+                                    window.scrollTo({top:Math.round(hgTop+(hcnt>1?htr*(hidx/(hcnt-1)):0)),behavior:'instant'});
+                                }
+                            }
+                        }
                         /* Link ad anchor dentro sezioni raggruppate: l'anchor sta nel
                            track traslato, lo scroll nativo del browser porterebbe solo
                            all'inizio del gruppo. Qui il click viene rimappato sulla
@@ -4541,6 +4578,18 @@ class Olobuild_Frontend_Renderer {
                     if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initAll)}
                     else{initAll()}
                     window.addEventListener('load',initAll);
+                    <?php if ( $has_any_sticky_h ) : ?>
+                    /* Pagina caricata sotto i 960px e poi allargata (rotazione tablet,
+                       resize finestra): il raggruppamento è idempotente (oloHDone),
+                       si può fare in ritardo. Il percorso inverso (smontare il gruppo)
+                       richiederebbe un reload: caso raro, degradazione accettabile. */
+                    (function(){
+                        var mq=window.matchMedia('(min-width: 960px)');
+                        var onCh=function(e){if(e.matches)initHGroups();};
+                        if(mq.addEventListener){mq.addEventListener('change',onCh);}
+                        else if(mq.addListener){mq.addListener(onCh);}
+                    })();
+                    <?php endif; ?>
                 })();
                 </script>
             <?php endif; ?>

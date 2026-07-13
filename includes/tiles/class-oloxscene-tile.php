@@ -59,7 +59,11 @@ class Olobuild_OloxScene_Tile extends Olobuild_Olox_Base_Tile {
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         // background:transparent — dentro le sezioni classiche lo sfondo (halo
         // glow compreso) lo porta la sezione, non il design system .oloxp.
-        echo $this->olox_open( 'oloxp-home oloxp-scene', '--c:' . $accent . '; position:relative; background:transparent;' );
+        // contain:inline-size — le scene hanno track/parole width:max-content
+        // (langflow ~3000px): senza contain la larghezza intrinseca si propaga
+        // ai contenitori fit-content (sezioni flex) e su mobile la fermata
+        // non va più a capo (stesso gotcha del marquee).
+        echo $this->olox_open( 'oloxp-home oloxp-scene', '--c:' . $accent . '; position:relative; background:transparent; contain:inline-size;' );
         echo '<div data-olox="scene">';
         if ( 'madlib' === $scene ) {
             echo $this->olox_madlib( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- helper interno già escapato.

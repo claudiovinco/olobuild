@@ -121,7 +121,7 @@ export default {
     { key: 'card_bg',           label: t('Sfondo card'),            type: 'background', showParallax: false },
     { key: 'card_color',        label: t('Colore testo'),           type: 'color' },
     { key: 'card_accent_color', label: t('Colore accent (titolo)'), type: 'color' },
-    { key: 'card_padding',      label: t('Padding card (px)'),      type: 'range', min: 10, max: 80, step: 2 },
+    { key: 'card_padding',      label: t('Padding interno card'),   type: 'spacing' },
     { key: 'card_border',       label: t('Colore bordo (vuoto = nessuno)'), type: 'color' },
     withHover({ key: 'card_radius', label: t('Border radius card'), type: 'border-radius' }, { hoverKey: 'card_radius_hover', hoverDurationKey: 'card_radius_hover_duration' }),
 

@@ -42,6 +42,8 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
         'button_uppercase'          => false,
         'button_letter_spacing'     => 0.02,
         'button_weight'             => '600',
+        'button_color'              => '',
+        'button_underline'          => false,
         'effect_color'              => '',
         'effect_intensity'          => 'medium',
         'effect_speed'              => 0,
@@ -298,6 +300,28 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
             }
             .olo-popup-<?php echo esc_attr( $uid ); ?> { display: inline-block; }
             <?php endif; ?>
+            <?php
+            // Colore/sottolineatura del trigger (per gli stili link/text il default
+            // del tema può renderlo invisibile sul fondo della pagina).
+            $btn_color = $this->safe_color_css( $s['button_color'] ?? '' );
+            if ( $btn_color || ! empty( $s['button_underline'] ) ) : ?>
+            .olo-popup-<?php echo esc_attr( $uid ); ?> > button {
+                <?php if ( $btn_color ) : ?>color: <?php echo $btn_color; ?>;<?php endif; ?>
+                <?php if ( ! empty( $s['button_underline'] ) ) : ?>text-decoration: underline; text-underline-offset: 3px;<?php endif; ?>
+            }
+            .olo-popup-<?php echo esc_attr( $uid ); ?> > button:hover {
+                <?php if ( $btn_color ) : ?>color: <?php echo $btn_color; ?>; opacity: .85;<?php endif; ?>
+            }
+            <?php endif; ?>
+            /* Mobile: la modale container non deve sbordare né scentrarsi */
+            @media (max-width: 959px) {
+                #<?php echo esc_attr( $uid ); ?> .uk-modal-dialog {
+                    width: auto;
+                    max-width: calc(100vw - 24px);
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+            }
             /* Shadow + border-radius + border on modal dialog */
             #<?php echo esc_attr( $uid ); ?> .uk-modal-dialog {
                 <?php if ( $radius && $radius !== '0px' ) : ?>border-radius: <?php echo $radius; ?>; overflow: hidden;<?php endif; ?>
@@ -366,6 +390,13 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
                modal_bg: trasparenti, cosi' lo sfondo scelto governa tutto. */
             #<?php echo esc_attr( $uid ); ?> .uk-modal-header,
             #<?php echo esc_attr( $uid ); ?> .uk-modal-footer { background: transparent; }
+            /* Modalita' "template": i wrapper del template injettato (.olo-template /
+               .olo-frontend-grid) hanno un bg bianco di default che coprirebbe modal_bg
+               → trasparenti, cosi' lo sfondo del modal governa anche il contenuto. */
+            #<?php echo esc_attr( $uid ); ?> .uk-modal-body .olo-template,
+            #<?php echo esc_attr( $uid ); ?> .uk-modal-body .olo-frontend-grid,
+            #<?php echo esc_attr( $uid ); ?> .olo-popup-fullbody .olo-template,
+            #<?php echo esc_attr( $uid ); ?> .olo-popup-fullbody .olo-frontend-grid { background: transparent !important; }
             #<?php echo esc_attr( $uid ); ?> .uk-modal-dialog {
                 background: <?php echo $modal_bg; ?>;
                 color: <?php echo $modal_text; ?>;

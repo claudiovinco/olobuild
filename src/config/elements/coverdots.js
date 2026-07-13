@@ -18,6 +18,7 @@ export default {
     items: [],
     hide_without_group: true,
     dot_size: 34,
+    dot_size_mobile: 0,
     dot_gap: 4,
     dot_inner: 9,
     border_color: '',
@@ -29,11 +30,12 @@ export default {
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'items', label: t('Fermate'), type: 'content-items', itemLabel: t('Fermata'),
-      hint: t('Facoltative: etichetta e colore per ogni pallino. Se vuote, i pallini vengono creati dal gruppo Cover orizzontale della pagina.'),
-      newItemDefaults: { label: '', color: '' },
+      hint: t('Facoltative: etichetta e colore per ogni pallino. Se vuote, i pallini vengono creati dal gruppo Cover orizzontale della pagina. L\'URL rende il pallino un LINK sulle pagine senza gruppo (es. dalle schede prodotto alle fermate della home).'),
+      newItemDefaults: { label: '', color: '', url: '' },
       itemFields: [
         { key: 'label', label: t('Etichetta (tooltip)'), type: 'text' },
         { key: 'color', label: t('Colore'), type: 'color' },
+        { key: 'url', label: t('URL (pagine senza gruppo)'), type: 'link' },
       ] },
     { key: 'hide_without_group', label: t('Nascondi se la pagina non ha un gruppo Cover orizzontale'), type: 'toggle' },
   ],
@@ -41,6 +43,7 @@ export default {
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
     { key: 'dot_size', label: t('Diametro cerchio (px)'), type: 'range', min: 20, max: 48, step: 1 },
+    { key: 'dot_size_mobile', label: t('Diametro cerchio su mobile (0 = uguale)'), type: 'range', min: 0, max: 48, step: 1 },
     { key: 'dot_gap', label: t('Distanza fra cerchi (px)'), type: 'range', min: 0, max: 16, step: 1 },
     { key: 'dot_inner', label: t('Diametro pallino (px)'), type: 'range', min: 5, max: 16, step: 1 },
     { key: 'border_color', label: t('Colore bordo cerchio'), type: 'color' },

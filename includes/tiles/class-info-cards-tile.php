@@ -100,7 +100,7 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
         $items_gap  = max( 0, min( 60, absint( $s['items_gap'] ) ) );
         $c_pad      = max( 0, min( 80, absint( $s['container_padding'] ) ) );
         $c_gap      = max( 0, min( 40, absint( $s['container_gap'] ) ) );
-        $card_pad   = max( 10, min( 80, absint( $s['card_padding'] ) ) );
+        $card_pad   = Olobuild_Tile_Utils::spacing_css( $s['card_padding'] ?? 40, 40 );
         // Border-radius standard Olobuild (4 angoli + hover)
         $c_radius      = $this->build_border_radius_css( $s['container_radius'] ?? [] );
         $c_radius_h    = $this->_radius_hover_diff( $s['container_radius'] ?? [], $s['container_radius_hover'] ?? [] );
@@ -156,7 +156,7 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
         $grid_style = 'display:grid;grid-template-columns:repeat(' . $cols . ',minmax(0,1fr));gap:' . $items_gap . 'px;';
 
         // Card style template
-        $card_style_base = $card_bg_css_default . ';color:' . $card_color . ';' . ( $card_radius ? 'border-radius:' . $card_radius . ';' : '' ) . 'padding:' . $card_pad . 'px;position:relative;display:flex;flex-direction:column;min-height:280px;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease' . ( $card_radius_h ? ',border-radius ' . $card_rdur . 'ms ease' : '' ) . ';';
+        $card_style_base = $card_bg_css_default . ';color:' . $card_color . ';' . ( $card_radius ? 'border-radius:' . $card_radius . ';' : '' ) . 'padding:' . $card_pad . ';position:relative;display:flex;flex-direction:column;min-height:280px;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease' . ( $card_radius_h ? ',border-radius ' . $card_rdur . 'ms ease' : '' ) . ';';
         if ( $card_border ) $card_style_base .= 'border:1px solid ' . $card_border . ';';
 
         ob_start();

@@ -1,5 +1,6 @@
 <template>
-  <div class="oloxp oloxp-home oloxp-scene" :style="{ '--c': oloxColor(s.color), position: 'relative' }">
+  <!-- contain: twin del PHP — le scene non propagano larghezze intrinseche -->
+  <div class="oloxp oloxp-home oloxp-scene" :style="{ '--c': oloxColor(s.color), position: 'relative', contain: 'inline-size' }">
     <OloxScenePreview :scene="s.scene" :s="s" />
     <div v-if="s.scene !== 'madlib' && s.coord" class="deco d-coord" style="position:static; margin-top:8px; text-align:center;">{{ s.coord }}</div>
   </div>
