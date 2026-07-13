@@ -22,7 +22,7 @@ import { getCrtCSS } from '@/utils/crtCSS';
 // il bg deve essere VISIVAMENTE solo sull'elemento, non sull'area circostante.
 // Regola HARD validata con utente — è la differenza tra "wrapper colorato enorme attorno
 // al pulsante piccolo" (rotto) e "pulsante visibile sul background della pagina" (corretto).
-export const ATOMIC_TILE_TYPES = new Set(['button', 'icon', 'divider', 'spacer', 'togglebtn']);
+export const ATOMIC_TILE_TYPES = new Set(['button', 'icon', 'divider', 'spacer', 'togglebtn', 'badge']);
 
 // ────────────────────────────────────────────
 // Funzioni imperative (usate anche internamente dai computed)

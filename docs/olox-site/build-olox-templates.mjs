@@ -68,162 +68,528 @@ const marquee = (items, sep, accent, reverse) => tile('oloxmarquee', {
   items: items.map((text) => ({ text })), sep, accent, reverse: !!reverse, duration: 28,
 });
 
+/* ---------- home "vera olobuild": sezioni native + tile classiche ---------- */
+// Palette del design (valori contenuto, come li sceglierebbe l'utente dal picker).
+const INK = { bg: '#0C0E13', paper: '#FAF7F2', dim: '#B9BDC9', faint: '#8B90A0' };
+// tour = #12A19A: colore base del logo OLOtour (decisione utente 2026-07-13;
+// il vecchio design usava ambra #F5A623, ma il brand del prodotto è teal).
+const PRODUCT_HEX = { build: '#E8453D', booking: '#3D8BFF', lang: '#E8409A', secur: '#26B8E8', tour: '#12A19A', tutor: '#38C172' };
+
+// Sezione-fermata: bg scuro edge-to-edge, contenuto centrato in verticale,
+// Stile → Sticky → "Cover orizzontale" (il core raggruppa le sezioni adiacenti
+// in un binario orizzontale a runtime — feature nativa di olobuild).
+const hSection = (rows, glowHex) => ({
+  id: randomUUID(), type: 'section',
+  settings: {
+    // Sezione TRASPARENTE: fondo e halo li porta la tile "Luce di pagina"
+    // (atmosfera). La sezione dichiara solo il SUO colore luce: la luce fissa
+    // sfuma da un colore all'altro allo scroll, come sul sito originale.
+    bg: { type: 'none' },
+    light_color: glowHex || '',
+    style: 'default',
+    width: 'default', padding: 'custom', padding_top_custom: 60, padding_bottom_custom: 60,
+    bg_scope: 'section', sticky_effect: 'cover-h', sticky_top: 0,
+    flex_direction: 'column', flex_justify: 'center',
+  },
+  style: [], advanced: [], children: rows,
+});
+const hRow = (layout, cols) => ({
+  id: randomUUID(), type: 'row',
+  settings: { bg: { type: 'none' }, layout, stack_mobile: true },
+  style: [], advanced: [], children: cols,
+});
+const hCol = (children, w = '1-1') => ({
+  id: randomUUID(), type: 'column',
+  settings: { bg: { type: 'none' }, width_medium: w },
+  style: [], advanced: [], children,
+});
+
+// Tile classiche pre-configurate per il tema scuro del sito.
+// Kicker mono: etichetta senza pill, JetBrains via set globale olox-mono.
+const xKicker = (text, hex) => tile('badge', {
+  text, variant: 'outline', bg_color: 'transparent', text_color: hex || INK.faint,
+  typography_preset: 'olox-mono',
+  font_size: '11', font_weight: '700', text_transform: 'uppercase', letter_spacing: '2.4',
+  padding_y: 0, padding_x: 0, alignment: 'left',
+});
+// Titolo Fraunces regular con accento corsivo colorato (come il live).
+const xTitle = (heading, accent, hex, size, tag) => tile('headline', {
+  heading, accent_text: accent || '', accent_color: hex || PRODUCT_HEX.build, accent_italic: true,
+  tag: tag || 'h2', alignment: 'left', heading_size: 'lg', heading_font_size: size || '52',
+  heading_font: "'Fraunces', serif", heading_weight: '400',
+  heading_color: INK.paper, decoration: 'none', subtitle: '',
+});
+const xText = (html, size, color) => tile('text-block', {
+  content: html, text_color: color || INK.dim, font_size: size || '16',
+  text_align: 'left', max_width: '560',
+  tile_padding: { top: 0, right: 0, bottom: 0, left: 0 },
+});
+// Tag pills: la prima "hot" col colore prodotto, le altre neutre — un badge multiplo.
+const xTags = (tags, hex) => tile('badge', {
+  text: tags[0], variant: 'outline', bg_color: hex, text_color: hex,
+  typography_preset: 'olox-mono',
+  font_size: '11', font_weight: '600', text_transform: 'lowercase', letter_spacing: '0.5',
+  padding_y: 7, padding_x: 13, alignment: 'left',
+  extra_items: tags.slice(1).map((t) => ({ text: t, color: 'rgba(250,247,242,.25)' })),
+});
+// CTA mono squadrato: uppercase, spaziatura larga, angoli 3px.
+const xBtn = (text, url, hex) => tile('button', {
+  text, url, alignment: 'left', bg_color: hex, text_color: INK.bg,
+  hover_bg_color: INK.paper, hover_text_color: INK.bg,
+  typography_preset: 'olox-mono',
+  font_size: '12', font_weight: '700', text_transform: 'uppercase', letter_spacing: '2',
+  border_radius: { tl: 3, tr: 3, br: 3, bl: 3 },
+  tile_padding: { top: 15, right: 24, bottom: 15, left: 24 },
+});
+// CTA fantasma: bordo tenue, testo chiaro.
+const xBtnGhost = (text, url) => tile('button', {
+  text, url, alignment: 'left', bg_color: 'transparent', text_color: INK.paper,
+  hover_bg_color: 'rgba(250,247,242,.08)', hover_text_color: INK.paper,
+  typography_preset: 'olox-mono',
+  font_size: '12', font_weight: '700', text_transform: 'uppercase', letter_spacing: '2',
+  border_radius: { tl: 3, tr: 3, br: 3, bl: 3 },
+  tile_padding: { top: 15, right: 24, bottom: 15, left: 24 },
+  border: { top: 1, right: 1, bottom: 1, left: 1, linked: true, style: 'solid', color: 'rgba(250,247,242,.3)' },
+});
+// Logo prodotto (i PNG orizzontali sono già chiari su scuro).
+const xLogo = (name, alt) => tile('image', {
+  image_url: LOGO(name), alt_text: alt || name, image_width: '170px',
+  height: 'auto', object_fit: 'contain', image_alignment: 'left',
+});
+// Indice fermata "01 / 06" mono.
+const xIdx = (idx) => tile('badge', {
+  text: idx, variant: 'outline', bg_color: 'transparent', text_color: INK.faint,
+  typography_preset: 'olox-mono',
+  font_size: '12', font_weight: '600', text_transform: 'none', letter_spacing: '2',
+  padding_y: 0, padding_x: 0, alignment: 'left',
+});
+const xScene = (scene, color, coord) => tile('oloxscene', { scene, color, coord, show_deco: true });
+// Respiro verticale fra tile (la via del builder: tile spacer).
+const xGap = (h) => tile('spacer', { height: String(h) });
+// Etichetta mono "nuda" (idx, coordinate, hint): badge trasparente senza pill.
+const xMono = (text, { size = '11', color = INK.faint, ls = '2', align = 'left', upper = true } = {}) => tile('badge', {
+  text, variant: 'outline', bg_color: 'transparent', text_color: color,
+  typography_preset: 'olox-mono',
+  font_size: size, font_weight: '600', text_transform: upper ? 'uppercase' : 'none', letter_spacing: ls,
+  padding_y: 0, padding_x: 0, alignment: align,
+});
+// Coordinate tecniche mono (in fondo alla colonna testo, come il live).
+const xCoord = (text) => xMono(text, { size: '10', color: 'rgba(250,247,242,.35)', ls: '3' });
+// Colonna flex-row: più tile affiancate (coppie di bottoni, ecc.).
+const hColRow = (children, w = '1-1', gap = '12') => ({
+  id: randomUUID(), type: 'column',
+  settings: { bg: { type: 'none' }, width_medium: w, flex_direction: 'row', flex_wrap: 'wrap', flex_align: 'center', flex_column_gap: gap, flex_row_gap: gap },
+  style: [], advanced: [], children,
+});
+
+// Una fermata prodotto = sezione cover-h con row 50-50: copy classico + scena.
+const productStop = (p) => hSection([
+  hRow('50-50', [
+    hCol([
+      ...(p.anchor ? [ tile('menuanchor', { anchor_id: p.anchor }) ] : []),
+      xLogo(p.logo || p.name.toLowerCase(), p.name),
+      xGap(18),
+      xKicker(p.kicker, PRODUCT_HEX[p.color]),
+      xGap(12),
+      xTitle(p.title, p.accent, PRODUCT_HEX[p.color]),
+      xGap(14),
+      xText(p.sub, '16'),
+      xGap(24),
+      xTags(p.tags, PRODUCT_HEX[p.color]),
+      xGap(26),
+      xBtn(p.cta, p.url, PRODUCT_HEX[p.color]),
+      xGap(48),
+      xCoord(p.coord),
+    ], '1-2'),
+    hCol([
+      xIdx(p.idx),
+      xScene(p.scene, p.color, ''),
+    ], '1-2'),
+  ]),
+], PRODUCT_HEX[p.color]);
+
 /* ==================================================================== */
 /* HOME EXPERIENCE                                                       */
 /* ==================================================================== */
+// Le fermate prodotto: contenuti reali, composti con tile classiche.
+const STOPS = [
+  { color: 'build', name: 'OLObuild', anchor: 'viaggio', kicker: 'Il telaio \u00b7 page builder', title: 'Costruisce come un cantiere', accent: 'cantiere', sub: '<p>Mattone su mattone: <strong>187 tile in 12 famiglie</strong>, tutti auto-discovered, con animazioni ed effetti di serie. <strong>La Free (100+ tile) vale quanto i builder Pro a pagamento della concorrenza</strong>; Pro sblocca l\u2019intera libreria.</p>', tags: ['\u20ac0 free \u00b7 100+ tile', '36 animazioni', 'Woo nativo', 'dark mode'], cta: 'Entra nel cantiere', url: P('olobuild'), scene: 'wall', coord: 'grid \u00b7 44\u00d744 \u00b7 lot 187', idx: '01 / 06' },
+  { color: 'booking', name: 'OLObooking', kicker: 'Prenotazioni \u00b7 6 verticali', title: 'Un motore che riempie l\u2019agenda', accent: 'l\u2019agenda', sub: '<p>Camere, tavoli, appuntamenti, eventi, noleggi, immobili: <strong>una sola configurazione</strong> e il motore diventa il tuo mestiere. Con caparra anti no-show e zero commissioni.</p>', tags: ['6 verticali', 'anti no-show', 'QR access', '0% commissioni'], cta: 'Apri il calendario', url: P('olobooking'), scene: 'cal', coord: 'occupancy feed \u00b7 live', idx: '02 / 06' },
+  { color: 'lang', name: 'OLOlang', kicker: 'Multilingua nativo', title: 'Lo stesso sito, 28 voci', accent: '28 voci', sub: '<p>DeepL + traduttore IA, glossario e memoria di traduzione. Contenuti, menu e stringhe tradotti <strong>via database</strong>, con hreflang, URL localizzati e sitemap per ogni lingua.</p>', tags: ['28 lingue', 'DeepL + IA', 'SEO hreflang', 'a vita con Pro'], cta: 'Cambia lingua', url: P('ololang'), scene: 'lang', coord: 'hreflang \u00d7 28', idx: '03 / 06' },
+  { color: 'secur', name: 'OLOsecurity', kicker: 'Sicurezza \u00b7 100% locale', title: 'Un radar che non dorme mai', accent: 'dorme mai', sub: '<p>Firewall OWASP, 2FA, scanner anti-webshell e bonifica guidata dal pannello <strong>Sentinel</strong>. Tutto elaborato <strong>sul tuo server</strong>: il traffico non finisce in nessun cloud altrui.</p>', tags: ['100% locale', 'mini-WAF', 'TOTP 2FA', 'Plugin Check 0/0'], cta: 'Accendi il radar', url: P('olosecurity'), scene: 'radar', coord: 'perimetro \u00b7 armato', idx: '04 / 06' },
+  { color: 'tour', name: 'OLOtour', kicker: 'Tour virtuali \u00b7 in arrivo', title: 'Guarda dentro, prima di entrare', accent: 'prima di entrare', sub: '<p>Panorami sferici e HDRI (Polyhaven, Street View), <strong>hot-spot cliccabili</strong>, ambienti collegati, fruizione VR. Il sopralluogo diventa parte del sito, e finisce sul bottone \u201cprenota\u201d.</p>', tags: ['360\u00b0', 'hot-spot', 'multi-stanza', 'VR ready'], cta: 'Affaccia lo sguardo', url: P('olotour'), scene: 'pano', coord: 'lat 46.07 \u00b7 lon 11.12 \u00b7 trento', idx: '05 / 06' },
+  { color: 'tutor', name: 'OLOtutor', kicker: 'Formazione \u00b7 in arrivo', title: 'Sali di livello, lezione dopo lezione', accent: 'lezione dopo lezione', sub: '<p>Corsi, quiz, punti e badge, registro voti e certificati, dentro il tuo WordPress. <strong>Gli allievi restano tuoi</strong>, non di un marketplace che ti mette in fila coi concorrenti.</p>', tags: ['LMS', 'quiz & badge', 'certificati', 'area allievi'], cta: 'Iscriviti all\u2019idea', url: P('olotutor'), scene: 'course', coord: 'syllabus \u00b7 v1 \u00b7 4 lezioni', idx: '06 / 06' },
+];
+
 const home = {
-  title: 'OLOtheme · Experience',
+  title: 'OLOtheme \u00b7 Experience',
   slug: 'olotheme-experience',
-  content: page([
-    // Binario: chrome fisso + modale "olonica"; raccoglie le fermate sotto.
-    tile('oloxrail', {
-      logo: LOGO('olotheme'),
-      op_kicker: 'olos · intero e parte',
-      op_title: 'La cellula <em>olonica</em>',
-      op_p1: 'Un <strong>olone</strong> è qualcosa che è insieme <strong>un tutto e una parte</strong>: completo da solo, più forte dentro un organismo. OLOtheme è costruito così, ogni prodotto è una cellula autonoma che funziona da sola, ma condivide telaio, dati e lingua con le altre.',
-      op_p2: 'Niente monolite: <strong>i prodotti si uniscono a seconda della battaglia</strong> da affrontare, e si sciolgono quando non servono.',
-      battles: [
-        { q: 'Aprire un B&B', chips: 'build,booking,lang' },
-        { q: 'Respingere un attacco', chips: 'secur' },
-        { q: 'Vendere all\u2019estero', chips: 'build,lang' },
-        { q: 'Far visitare un immobile a distanza', chips: 'tour,booking' },
-        { q: 'Portare i corsi online', chips: 'tutor,booking,lang' },
-      ],
-      hint_desktop: 'Scrolla in basso', hint_desktop2: 'si va a destra',
-      hint_mobile: 'Scorri', hint_mobile2: 'una fermata alla volta',
-      credits_html: 'OLOtheme by <a href="https://clod.eu" target="_blank" rel="noopener">clod.eu</a> | @2026 | sito introduttivo | <a href="mailto:info@olotheme.com">info@olotheme.com</a>',
-    }),
-    // Fermata 0 · intro
-    tile('oloxpanel', {
-      variant: 'intro', label: 'Intro',
-      intro_kicker: 'OLOtheme · suite WordPress',
-      olw_text: 'olonica',
-      intro_title: 'Un telaio. Sei prodotti. <em>Nessuna catena.</em>',
-      intro_sub: 'Niente SaaS, niente lock-in, niente cloud altrui: tutto vive <strong>sul tuo hosting</strong>, in GPL, scritto a Trento. Scorri: ogni fermata è un prodotto.',
-      intro_cta1: 'Inizia il viaggio \u2192', intro_cta2: 'Contatti',
-      marquee_items: ['no SaaS', 'GPL', '187 tile', '28 lingue', '6 verticali booking', '100% locale', 'made in Trento'].map((text) => ({ text })),
-    }),
-    // Fermate prodotto · una sezione ciascuna
-    tile('oloxpanel', { variant: 'product', color: 'build', label: 'OLObuild', logo: LOGO('olobuild'), kicker: 'Il telaio · page builder', title_html: 'Costruisce come un <em>cantiere</em>', sub_html: 'Mattone su mattone: <strong>187 tile in 12 famiglie</strong>, tutti auto-discovered, con animazioni ed effetti di serie. <strong>La Free (100+ tile) vale quanto i builder Pro a pagamento della concorrenza</strong>; Pro sblocca l\u2019intera libreria.', tags: '\u20ac0 free · 100+ tile|36 animazioni|Woo nativo|dark mode', cta_text: 'Entra nel cantiere', cta_url: P('olobuild'), scene: 'wall', coord: 'grid · 44\u00d744 · lot 187' }),
-    tile('oloxpanel', { variant: 'product', color: 'booking', label: 'OLObooking', logo: LOGO('olobooking'), kicker: 'Prenotazioni · 6 verticali', title_html: 'Un motore che riempie <em>l\u2019agenda</em>', sub_html: 'Camere, tavoli, appuntamenti, eventi, noleggi, immobili: <strong>una sola configurazione</strong> e il motore diventa il tuo mestiere. Con caparra anti no-show e zero commissioni.', tags: '6 verticali|anti no-show|QR access|0% commissioni', cta_text: 'Apri il calendario', cta_url: P('olobooking'), scene: 'cal', coord: 'occupancy feed · live' }),
-    tile('oloxpanel', { variant: 'product', color: 'lang', label: 'OLOlang', logo: LOGO('ololang'), kicker: 'Multilingua nativo', title_html: 'Lo stesso sito, <em>28 voci</em>', sub_html: 'DeepL + traduttore IA, glossario e memoria di traduzione. Contenuti, menu e stringhe tradotti <strong>via database</strong>, con hreflang, URL localizzati e sitemap per ogni lingua.', tags: '28 lingue|DeepL + IA|SEO hreflang|a vita con Pro', cta_text: 'Cambia lingua', cta_url: P('ololang'), scene: 'lang', coord: 'hreflang \u00d7 28' }),
-    tile('oloxpanel', { variant: 'product', color: 'secur', label: 'OLOsecurity', logo: LOGO('olosecurity'), kicker: 'Sicurezza · 100% locale', title_html: 'Un radar che non <em>dorme mai</em>', sub_html: 'Firewall OWASP, 2FA, scanner anti-webshell e bonifica guidata dal pannello <strong>Sentinel</strong>. Tutto elaborato <strong>sul tuo server</strong>: il traffico non finisce in nessun cloud altrui.', tags: '100% locale|mini-WAF|TOTP 2FA|Plugin Check 0/0', cta_text: 'Accendi il radar', cta_url: P('olosecurity'), scene: 'radar', coord: 'perimetro · armato' }),
-    tile('oloxpanel', { variant: 'product', color: 'tour', label: 'OLOtour', logo: LOGO('olotour'), kicker: 'Tour virtuali · in arrivo', title_html: 'Guarda dentro, <em>prima di entrare</em>', sub_html: 'Panorami sferici e HDRI (Polyhaven, Street View), <strong>hot-spot cliccabili</strong>, ambienti collegati, fruizione VR. Il sopralluogo diventa parte del sito, e finisce sul bottone \u201cprenota\u201d.', tags: '360\u00b0|hot-spot|multi-stanza|VR ready', cta_text: 'Affaccia lo sguardo', cta_url: P('olotour'), scene: 'pano', coord: 'lat 46.07 · lon 11.12 · trento' }),
-    tile('oloxpanel', { variant: 'product', color: 'tutor', label: 'OLOtutor', logo: LOGO('olotutor'), kicker: 'Formazione · in arrivo', title_html: 'Sali di livello, <em>lezione dopo lezione</em>', sub_html: 'Corsi, quiz, punti e badge, registro voti e certificati, dentro il tuo WordPress. <strong>Gli allievi restano tuoi</strong>, non di un marketplace che ti mette in fila coi concorrenti.', tags: 'LMS|quiz & badge|certificati|area allievi', cta_text: 'Iscriviti all\u2019idea', cta_url: P('olotutor'), scene: 'course', coord: 'syllabus · v1 · 4 lezioni' }),
-    // Fermata finale · mad-lib
-    tile('oloxpanel', {
-      variant: 'outro', label: 'Finale',
-      outro_kicker: 'Capolinea · si scende',
-      outro_title: 'Tutto questo, <em>sul tuo hosting</em>',
-      outro_sub: 'GPL · niente SaaS · GDPR in casa · 30 giorni di rimborso su OLObuild Pro. Ogni fermata ha la sua pagina di approfondimento.',
-      outro_links: [
-        { label: 'OLObuild', url: P('olobuild'), color: 'build' },
-        { label: 'OLObooking', url: P('olobooking'), color: 'booking' },
-        { label: 'OLOlang', url: P('ololang'), color: 'lang' },
-        { label: 'OLOsecurity', url: P('olosecurity'), color: 'secur' },
-        { label: 'OLOtour', url: P('olotour'), color: 'tour' },
-        { label: 'OLOtutor', url: P('olotutor'), color: 'tutor' },
-      ],
-      outro_fine: 'OLOtheme · made in Trento · no SaaS · nessuna catena',
-      mad_doc: 'modulo · OLO-CNT-07', mad_line: 'linea diretta · Trento',
-      mad_intro: 'Ciao, mi chiamo', mad_nome_ph: 'nome e cognome',
-      mad_mid: 'e il mio sito sogna di diventare',
-      mad_picks: [
-        { label: 'cantiere', value: 'un cantiere', color: 'build' },
-        { label: 'agenda piena', value: 'un\u2019agenda piena', color: 'booking' },
-        { label: 'poliglotta', value: 'poliglotta', color: 'lang' },
-        { label: 'fortezza', value: 'una fortezza', color: 'secur' },
-        { label: 'tour 360\u00b0', value: 'un tour 360\u00b0', color: 'tour' },
-        { label: 'aula', value: 'un\u2019aula', color: 'tutor' },
-      ],
-      mad_pre_mail: 'Scrivetemi a', mad_mail_ph: 'nome@dominio.it',
-      mad_end: ', promesso, niente catene.',
-      mad_btn: 'Timbra e invia \u25be', mad_note: 'il timbro apre la tua mail gi\u00e0 compilata',
-      mad_stamp: 'Ricevuto \u25e6 OLOtheme', mad_mailto: 'info@olotheme.com',
-    }),
-  ]),
+  content: [
+    // Fermata 0 \u00b7 intro \u2014 tile classiche (barra scroll, badge, titolo, testo, CTA, marquee)
+    hSection([
+      hRow('100', [
+        hColRow([
+          // Atmosfera: fondo ink + luce che segue le fermate (colore per-sezione).
+          tile('pagelight', {
+            light_color: PRODUCT_HEX.build, base_color: INK.bg,
+            position: 'center', size: 90, intensity: 26, transition_ms: 800,
+          }),
+          tile('scrollprogress', { position: 'bottom', bar_color: PRODUCT_HEX.build, bar_bg: 'rgba(250,247,242,.08)', bar_height: '3', z_index: '9000' }),
+          xKicker('OLOtheme \u00b7 suite WordPress \u00b7'),
+          // Popup "olonica": tile nativa popup in modalit\u00e0 TEMPLATE \u2014 dentro la
+          // modale si monta il partial di tile classiche (kicker, titolo,
+          // testi, card battaglia con chips). Il segnaposto OLOX_TPL viene
+          // risolto in id reale dall'inserter.
+          tile('popup', {
+            mode: 'template', template_id: 'OLOX_TPL:olox-popup-olonica',
+            button_text: 'olonica', button_style: 'link', button_size: 'small', button_uppercase: true,
+            modal_title: '',
+            modal_bg: '#0E1016', modal_text_color: INK.dim, modal_title_color: INK.paper,
+            modal_radius: '16', modal_overlay: '72', modal_border_width: '1', modal_border_color: PRODUCT_HEX.build,
+            modal_size: 'container',
+          }),
+        ], '1-1', '8'),
+      ]),
+      hRow('100', [
+        hCol([
+          xTitle('Un telaio. Sei prodotti. Nessuna catena.', 'Nessuna catena.', PRODUCT_HEX.build, '68', 'h1'),
+          xText('<p>Niente SaaS, niente lock-in, niente cloud altrui: tutto vive <strong>sul tuo hosting</strong>, in GPL, scritto a Trento. Scorri: ogni fermata \u00e8 un prodotto.</p>', '17'),
+        ]),
+      ]),
+      hRow('100', [
+        hColRow([
+          xBtn('Inizia il viaggio \u2192', '#viaggio', PRODUCT_HEX.build),
+          xBtnGhost('Contatti', '#capolinea'),
+        ]),
+      ]),
+      hRow('100', [
+        hCol([
+          tile('marquee', {
+            content_type: 'text',
+            text_items: 'no SaaS \u25cf GPL \u25cf 187 tile \u25cf 28 lingue \u25cf 6 verticali booking \u25cf 100% locale \u25cf made in Trento',
+            separator: ' \u25cf ', speed: '30', direction: 'left', pause_hover: true, gap: '60',
+            bg_color: 'transparent', text_color: INK.faint, font_size: '12', font_weight: '600',
+            letter_spacing: '2', text_transform: 'uppercase', font_family: 'JetBrains Mono', height: '44',
+            border_top: '1', border_bottom: '0', border_color: 'rgba(250,247,242,.14)',
+          }),
+          xGap(10),
+          xMono('Scrolla in basso \u2192 si va a destra', { size: '10', ls: '3', align: 'right' }),
+        ]),
+      ]),
+    ], PRODUCT_HEX.build),
+    // Fermate prodotto \u00b7 una sezione "Cover orizzontale" ciascuna
+    ...STOPS.map(productStop),
+    // Fermata finale \u00b7 capolinea + scena mad-lib
+    hSection([
+      hRow('50-50', [
+        hCol([
+          tile('menuanchor', { anchor_id: 'capolinea' }),
+          xKicker('Capolinea \u00b7 si scende'),
+          xTitle('Tutto questo, sul tuo hosting', 'sul tuo hosting', PRODUCT_HEX.build, '56'),
+          xText('<p>GPL \u00b7 niente SaaS \u00b7 GDPR in casa \u00b7 30 giorni di rimborso su OLObuild Pro. Ogni fermata ha la sua pagina di approfondimento.</p>'),
+          xGap(20),
+          tile('badge', {
+            text: 'OLObuild', variant: 'outline', bg_color: 'rgba(250,247,242,.28)', text_color: INK.paper,
+            typography_preset: 'olox-mono',
+            font_size: '11', font_weight: '700', text_transform: 'uppercase', letter_spacing: '1.5',
+            padding_y: 10, padding_x: 18, alignment: 'left',
+            extra_items: ['OLObooking', 'OLOlang', 'OLOsecurity', 'OLOtour', 'OLOtutor'].map((t) => ({
+              text: t, color: 'rgba(250,247,242,.28)', text_color: INK.paper,
+            })),
+          }),
+          xGap(34),
+          xMono('OLOtheme \u00b7 made in Trento \u00b7 no SaaS \u00b7 nessuna catena', { size: '10', ls: '2.5' }),
+        ], '1-2'),
+        hCol([
+          xScene('madlib', 'olo', ''),
+        ], '1-2'),
+      ]),
+    ], PRODUCT_HEX.build),
+  ],
 };
 
 /* ==================================================================== */
 /* OLOBUILD                                                              */
 /* ==================================================================== */
+/* ==================================================================== */
+/* OLOBUILD — sezioni verticali + tile componibili                       */
+/* ==================================================================== */
+// Sezione verticale trasparente con colore luce (per la tile Luce di pagina).
+const vSection = (rows, lightHex, extra = {}) => ({
+  id: randomUUID(), type: 'section',
+  settings: {
+    bg: { type: 'none' }, light_color: lightHex || '',
+    style: 'default', width: 'default',
+    padding: 'custom', padding_top_custom: 90, padding_bottom_custom: 90,
+    bg_scope: 'section', sticky_effect: 'none',
+    ...extra,
+  },
+  style: [], advanced: [], children: rows,
+});
+
+/* ---------- helpers CLASSICI condivisi (pagine prodotto + manuali) ---------- */
+// Scena showcase con settings extra (righe console/terminale, medaglia…).
+const xSceneX = (scene, color, extra = {}) => tile('oloxscene', { scene, color, coord: '', show_deco: true, ...extra });
+// Colonna scena: centrata in verticale accanto al copy.
+const sceneCol = (scene, color, extra) => ({
+  id: randomUUID(), type: 'column',
+  settings: { bg: { type: 'none' }, width_medium: '1-2', flex_direction: 'column', flex_justify: 'center' },
+  style: [], advanced: [],
+  children: [ xSceneX(scene, color, extra) ],
+});
+// Pill singola outline colore prodotto (timbri, stati).
+const xPill = (text, hex) => tile('badge', {
+  text, variant: 'outline', bg_color: hex, text_color: hex,
+  typography_preset: 'olox-mono',
+  font_size: '11', font_weight: '700', text_transform: 'uppercase', letter_spacing: '1.5',
+  padding_y: 8, padding_x: 16, alignment: 'left',
+});
+// Testata di sezione: kicker + titolo + lead.
+const secHead = (kicker, title, accent, hex, lead, size = '44') => [
+  xKicker(kicker, hex), xGap(12), xTitle(title, accent, hex, size),
+  ...(lead ? [xGap(10), xText(`<p>${lead}</p>`)] : []), xGap(30),
+];
+// Griglia di card scure (famiglie/verticali/difese) su info-cards nativa.
+// items: [counterLabel, title, description, footerText?]
+const xCards = (hex, columns, items) => tile('info-cards', {
+  columns, container_bg: { type: 'none' }, container_padding: 0,
+  card_bg: { type: 'solid', color: '#12151D' },
+  card_color: INK.paper, card_accent_color: hex, card_hover_effect: 'glow',
+  title_size: 20, title_weight: '700', title_italic: false, counter_size: 10,
+  items: items.map(([label, t2, d, foot]) => ({
+    counter: label, counter_label: '', title: t2, title_accent: '', description: d,
+    icon: '', footer_dot_color: hex, footer_text: foot || '', link_url: '', media_image: '', media_label: '',
+  })),
+});
+// Marquee nativo mono con bordi sopra/sotto.
+const marqueeC = (items, sep) => tile('marquee', {
+  content_type: 'text', text_items: items.join(` ${sep} `),
+  separator: ` ${sep} `, speed: '30', direction: 'left', pause_hover: true, gap: '60',
+  bg_color: 'transparent', text_color: INK.faint, font_size: '12', font_weight: '600',
+  letter_spacing: '2', text_transform: 'uppercase', font_family: 'JetBrains Mono', height: '44',
+  border_top: '1', border_bottom: '1', border_color: 'rgba(250,247,242,.14)',
+});
+const marqueeSection = (items, sep, hex) => vSection([
+  hRow('100', [ hCol([ marqueeC(items, sep) ]) ]),
+], hex || '', { padding_top_custom: 0, padding_bottom_custom: 0 });
+// Sezione a colonna singola.
+const bodySection = (tiles, hex, extra) => vSection([ hRow('100', [ hCol(tiles) ]) ], hex, extra);
+// Hero prodotto classico: copy a sinistra, scena showcase a destra, CTA sotto.
+const productHeroC = (p) => vSection([
+  hRow('50-50', [
+    hCol([
+      tile('pagelight', { light_color: p.hex, base_color: INK.bg, position: 'top-right', size: 95, intensity: 24, transition_ms: 800 }),
+      xLogo(p.logo, p.name),
+      xGap(18),
+      xKicker(p.kicker, p.hex),
+      xGap(12),
+      xTitle(p.title, p.accent, p.hex, '62', 'h1'),
+      xGap(14),
+      xText(p.sub),
+      xGap(24),
+      xTags(p.tags, p.hex),
+    ], '1-2'),
+    sceneCol(p.scene, p.color, p.sceneExtra),
+  ]),
+  hRow('50-50', [
+    hColRow([ xBtn(p.cta1[0], p.cta1[1], p.hex), xBtnGhost(p.cta2[0], p.cta2[1]) ], '1-2'),
+    hCol([], '1-2'),
+  ]),
+], p.hex, { padding_top_custom: 130, padding_bottom_custom: 40 });
+// Banner "in arrivo / segui" — cta-banner nativa.
+const followC = (hex) => bodySection([
+  tile('cta-banner', {
+    headline: 'In arrivo', headline_accent: '', headline_accent_italic: false,
+    subtitle: 'Versione demo o gratuita/completa in arrivo: segui OLOtheme su LinkedIn per rimanere aggiornato.',
+    cta_text: 'OLOtheme su LinkedIn →', cta_url: 'https://www.linkedin.com/company/olotheme/',
+    bg: { type: 'solid', color: '#12151D' },
+  }),
+], hex, { padding_top_custom: 40, padding_bottom_custom: 0 });
+// Coppia di banner in coda pagina (manuale + prossima fermata).
+// items: [headline, accent, subtitle, ctaText, url]
+const nextBannersC = (hex, items) => vSection([
+  hRow('50-50', items.map(([headline, accent, sub, ctaText, url]) => hCol([
+    tile('cta-banner', {
+      headline, headline_accent: accent, headline_accent_italic: !!accent,
+      subtitle: sub, cta_text: ctaText, cta_url: url,
+      bg: { type: 'solid', color: '#12151D' },
+    }),
+  ], '1-2'))),
+], hex, { padding_top_custom: 40, padding_bottom_custom: 120 });
+// Estrae l'accento <em> da un titolo HTML → { text, accent } per la headline.
+const emSplit = (html) => {
+  const m = html.match(/<em>(.*?)<\/em>/);
+  const clean = (s) => s.replace(/<\/?em>/g, '').replace(/&amp;/g, '&');
+  return { text: clean(html), accent: m ? clean(m[1]) : '' };
+};
+const stripTags = (s) => s.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+// Normalizza i body HTML dei manuali (classi .dash/.notice/.dtab → HTML pulito
+// che il text-block nativo rende con i suoi stili).
+const mdBody = (html) => html
+  .replace(/<ul class="dash">/g, '<ul>')
+  .replace(/<div class="notice"><span class="nl">(.*?)<\/span><p>(.*?)<\/p><\/div>/g, '<p><strong>$1 — </strong>$2</p>')
+  .replace(/<table class="dtab"><tbody>(.*?)<\/tbody><\/table>/g, (mm, rows) => {
+    const items = [...rows.matchAll(/<tr><td class="f">(.*?)<\/td><td>(.*?)<\/td><\/tr>/g)]
+      .map(([, f, d]) => `<li><strong>${f.replace(/<span>(.*?)<\/span>/, ' · $1')}</strong> — ${d}</li>`);
+    return `<ul>${items.join('')}</ul>`;
+  });
 const buildPage = {
   title: 'OLObuild · Il cantiere del tuo sito',
   slug: 'olobuild',
-  content: page([
-    tile('oloxhero', {
-      accent: 'build', bg_variant: 'build', logo: LOGO('olobuild'),
-      kicker: 'Il telaio · page builder olonico',
-      title_html: 'Mattone su <em>mattone.</em>', title_fx: 'drop',
-      sub_html: '<strong>187 tile in 12 famiglie</strong>, auto-discovered, con animazioni ed effetti di serie. Il cantiere è aperto: la Free, con <strong>oltre 100 tile</strong>, è al livello delle versioni Pro a pagamento della concorrenza.',
-      tags: [
-        { text: '€0 free · 100+ tile', hot: true }, { text: '36 animazioni', hot: false },
-        { text: '11 effetti testo', hot: false }, { text: 'Woo nativo', hot: false },
-      ],
-      cta1_text: 'Guarda il cantiere ↓', cta1_url: '#cantiere',
-      cta2_text: 'Free vs Pro', cta2_url: '#prezzi',
-      scene: 'wall', wall_count: 187, wall_label: 'tile / 187',
-    }),
-    marquee(['quickview', 'hotspot 3D', 'before/after', 'viewer 360°', 'marquee', 'countdown', 'query loop', 'dark mode', 'form builder', 'lottie'], '▪', 'build'),
-    tile('oloxsticky', {
-      accent: 'build', variant: 'assembler', anchor: 'cantiere', kicker: 'Il cantiere',
-      browser_url: 'https://il-tuo-sito.it, costruito con OLObuild',
-      asm_hint: '▼ continua a scorrere',
-      asm_blocks: [
-        { text: 'header + menu' }, { text: 'hero animato' }, { text: 'galleria media' },
-        { text: 'form builder' }, { text: 'footer' },
-      ],
-      asm_steps: [
-        { text: 'Scrolla: il sito si <em>monta da solo</em>.' },
-        { text: 'Fase 1 · <em>header</em> e menu al loro posto.' },
-        { text: 'Fase 2, l’<em>hero</em> animato entra in scena.' },
-        { text: 'Fase 3, la <em>galleria</em> aggancia i media.' },
-        { text: 'Fase 4, il <em>form</em> raccoglie contatti.' },
-        { text: 'Fase 5 · <em>footer</em>: sito consegnato. ~1h30.' },
-      ],
-    }),
-    tile('oloxcards', {
-      accent: 'build', variant: 'brick', anchor: '',
-      kicker: 'La libreria', title_html: '12 famiglie, posate come <em>mattoni</em>',
-      lead: 'Ogni famiglia arriva da sinistra e da destra, come in cantiere. 187 tile, un solo motore.',
-      items: [
-        { label: '31', title: 'WooCommerce', text_html: 'Quickview, wishlist, comparazione, bundle, filtro AJAX, checkout multi-step.', extra: '' },
-        { label: '22', title: 'Booking', text_html: 'Calendario disponibilità, picker, slot orari, reception olo-spaces.', extra: '' },
-        { label: '20', title: 'Interactive', text_html: 'Card 3D, hotspot, before-after, immagini frantumate, Viewer 360°, Lottie.', extra: '' },
-        { label: '19', title: 'Media', text_html: 'Gallerie, video, audio, slider e feed social con lazy-load.', extra: '' },
-        { label: '18', title: 'Marketing', text_html: 'Hero, contatori, countdown, prezzi, testimonianze, newsletter.', extra: '' },
-        { label: '16', title: 'Navigation', text_html: 'Menu, header/footer, scroll-progress, switch lingua e dark-mode.', extra: '' },
-        { label: '15', title: 'Dynamic', text_html: 'Post grid, query loop, related, meta, ricerca live.', extra: '' },
-        { label: '10', title: 'Text', text_html: 'Heading animati, testo mascherato, marquee, TextPath.', extra: '' },
-        { label: '10', title: 'Olo-Space', text_html: 'Stanze, servizi, prezzi, host card, calendario.', extra: '' },
-        { label: '9', title: 'Essential', text_html: 'Immagine, video, bottone, icone, liste, tabella.', extra: '' },
-        { label: '7', title: 'Layout', text_html: 'Sezioni, righe, colonne, spacer, divisori di forma.', extra: '' },
-        { label: '2', title: 'Creative', text_html: 'Nastri e ticker animati a scorrimento infinito.', extra: '' },
-      ],
-    }),
-    tile('oloxpricing', {
-      accent: 'build', anchor: 'prezzi', kicker: 'Due edizioni', title_html: 'La gru cala il <em>Pro</em>',
-      free_kicker: 'OLObuild · Free', free_price: '€0', free_per: 'per sempre · GPL · su WP.org',
-      free_items: [
-        { text_html: '<strong>Oltre 100 tile nativi</strong> + form builder + dark mode' },
-        { text_html: 'Al livello dei <strong>builder Pro a pagamento</strong> della concorrenza' },
-        { text_html: '<strong>11</strong> effetti testo · <strong>36</strong> animazioni' },
-        { text_html: '<strong>OLOlang gratis</strong> il primo anno' },
-      ],
-      free_cta: 'Scarica Free', free_url: HOME_URL,
-      pro_kicker: 'OLObuild · Pro', pro_price: '€29<em>*</em>', pro_per: '*prezzo lancio · poi €59/anno',
-      pro_items: [
-        { text_html: 'L’intera libreria: <strong>187 tile</strong>' },
-        { text_html: 'Animazioni complete + ricerca media <strong>8 provider</strong>' },
-        { text_html: '<strong>OLOlang a vita</strong> · supporto prioritario' },
-        { text_html: '<strong>30 giorni</strong> di rimborso, senza domande' },
-      ],
-      pro_cta: 'Passa a Pro', pro_url: HOME_URL,
-    }),
-    follow('build'),
-    next('Approfondimento tecnico', 'Manuale base + <em>scheda tecnica</em> →', P('olobuild-manuale'), 'build'),
-    next('Prossima fermata', 'OLO<em>booking</em> →', P('olobooking'), 'booking'),
-  ]),
+  content: [
+    // HERO — luce rossa, testo classico + scena showcase griglia cantiere
+    vSection([
+      hRow('50-50', [
+        hCol([
+          tile('pagelight', { light_color: PRODUCT_HEX.build, base_color: INK.bg, position: 'top-right', size: 95, intensity: 24, transition_ms: 800 }),
+          xLogo('olobuild', 'OLObuild'),
+          xGap(18),
+          xKicker('Il telaio · page builder olonico', PRODUCT_HEX.build),
+          xGap(12),
+          xTitle('Mattone su\nmattone.', 'mattone.', PRODUCT_HEX.build, '62', 'h1'),
+          xGap(14),
+          xText('<p><strong>187 tile in 12 famiglie</strong>, auto-discovered, con animazioni ed effetti di serie. Il cantiere è aperto: la Free, con <strong>oltre 100 tile</strong>, è al livello delle versioni Pro a pagamento della concorrenza.</p>'),
+          xGap(24),
+          xTags(['€0 free · 100+ tile', '36 animazioni', '11 effetti testo', 'Woo nativo'], PRODUCT_HEX.build),
+        ], '1-2'),
+        {
+          id: randomUUID(), type: 'column',
+          settings: { bg: { type: 'none' }, width_medium: '1-2', flex_direction: 'column', flex_justify: 'center' },
+          style: [], advanced: [],
+          children: [ xScene('hero-wall', 'build', '') ],
+        },
+      ]),
+      hRow('50-50', [
+        hColRow([
+          xBtn('Guarda il cantiere ↓', '#cantiere', PRODUCT_HEX.build),
+          xBtnGhost('Free vs Pro', '#prezzi'),
+        ], '1-2'),
+        hCol([], '1-2'),
+      ]),
+    ], PRODUCT_HEX.build, { padding_top_custom: 130, padding_bottom_custom: 40 }),
+    // MARQUEE
+    vSection([
+      hRow('100', [ hCol([
+        tile('marquee', {
+          content_type: 'text',
+          text_items: 'quickview ▪ hotspot 3D ▪ before/after ▪ viewer 360° ▪ marquee ▪ countdown ▪ query loop ▪ dark mode ▪ form builder ▪ lottie',
+          separator: ' ▪ ', speed: '30', direction: 'left', pause_hover: true, gap: '60',
+          bg_color: 'transparent', text_color: INK.faint, font_size: '12', font_weight: '600',
+          letter_spacing: '2', text_transform: 'uppercase', font_family: 'JetBrains Mono', height: '44',
+          border_top: '1', border_bottom: '1', border_color: 'rgba(250,247,242,.14)',
+        }),
+      ]) ]),
+    ], '', { padding_top_custom: 0, padding_bottom_custom: 0 }),
+    // IL CANTIERE — assembler (tile scenografica dedicata, come i minigiochi)
+    vSection([
+      hRow('100', [ hCol([
+        tile('menuanchor', { anchor_id: 'cantiere' }),
+        tile('oloxsticky', {
+          accent: 'build', variant: 'assembler', kicker: 'Il cantiere',
+          browser_url: 'https://il-tuo-sito.it, costruito con OLObuild',
+          asm_hint: '▼ continua a scorrere',
+          asm_blocks: [
+            { text: 'header + menu' }, { text: 'hero animato' }, { text: 'galleria media' },
+            { text: 'form builder' }, { text: 'footer' },
+          ],
+          asm_steps: [
+            { text: 'Scrolla: il sito si <em>monta da solo</em>.' },
+            { text: 'Fase 1 · <em>header</em> e menu al loro posto.' },
+            { text: 'Fase 2, l’<em>hero</em> animato entra in scena.' },
+            { text: 'Fase 3, la <em>galleria</em> aggancia i media.' },
+            { text: 'Fase 4, il <em>form</em> raccoglie contatti.' },
+            { text: 'Fase 5 · <em>footer</em>: sito consegnato. ~1h30.' },
+          ],
+        }),
+      ]) ]),
+    ], PRODUCT_HEX.build, { padding_top_custom: 0, padding_bottom_custom: 0 }),
+    // LA LIBRERIA — 12 famiglie come card classiche
+    vSection([
+      hRow('100', [ hCol([
+        xKicker('La libreria', PRODUCT_HEX.build),
+        xGap(12),
+        xTitle('12 famiglie, posate come mattoni', 'mattoni', PRODUCT_HEX.build, '44'),
+        xGap(10),
+        xText('<p>Ogni famiglia arriva da sinistra e da destra, come in cantiere. 187 tile, un solo motore.</p>'),
+        xGap(30),
+        tile('info-cards', {
+          columns: 4, container_bg: { type: 'none' }, container_padding: 0,
+          card_bg: { type: 'solid', color: '#12151D' },
+          card_color: INK.paper, card_accent_color: PRODUCT_HEX.build,
+          card_hover_effect: 'glow',
+          title_size: 20, title_weight: '700', title_italic: false, counter_size: 10,
+          items: [
+            ['31', 'WooCommerce', 'Quickview, wishlist, comparazione, bundle, filtro AJAX, checkout multi-step.'],
+            ['22', 'Booking', 'Calendario disponibilità, picker, slot orari, reception olo-spaces.'],
+            ['20', 'Interactive', 'Card 3D, hotspot, before-after, immagini frantumate, Viewer 360°, Lottie.'],
+            ['19', 'Media', 'Gallerie, video, audio, slider e feed social con lazy-load.'],
+            ['18', 'Marketing', 'Hero, contatori, countdown, prezzi, testimonianze, newsletter.'],
+            ['16', 'Navigation', 'Menu, header/footer, scroll-progress, switch lingua e dark-mode.'],
+            ['15', 'Dynamic', 'Post grid, query loop, related, meta, ricerca live.'],
+            ['10', 'Text', 'Heading animati, testo mascherato, marquee, TextPath.'],
+            ['10', 'Olo-Space', 'Stanze, servizi, prezzi, host card, calendario.'],
+            ['9', 'Essential', 'Immagine, video, bottone, icone, liste, tabella.'],
+            ['7', 'Layout', 'Sezioni, righe, colonne, spacer, divisori di forma.'],
+            ['2', 'Creative', 'Nastri e ticker animati a scorrimento infinito.'],
+          ].map(([n, t2, d]) => ({
+            counter: n, counter_label: 'tile', title: t2, title_accent: '', description: d,
+            icon: '', footer_dot_color: PRODUCT_HEX.build, footer_text: '', link_url: '', media_image: '', media_label: '',
+          })),
+        }),
+      ]) ]),
+    ], PRODUCT_HEX.build),
+    // DUE EDIZIONI — 2× pricing classiche
+    vSection([
+      hRow('100', [ hCol([
+        tile('menuanchor', { anchor_id: 'prezzi' }),
+        xKicker('Due edizioni', PRODUCT_HEX.build),
+        xGap(12),
+        xTitle('La gru cala il Pro', 'Pro', PRODUCT_HEX.build, '44'),
+        xGap(30),
+      ]) ]),
+      hRow('50-50', [
+        hCol([
+          tile('pricing', {
+            plan_name: 'OLObuild · Free', price: '0', currency: '€', period: 'per sempre · GPL · su WP.org',
+            features: 'Oltre 100 tile nativi + form builder + dark mode\nAl livello dei builder Pro a pagamento della concorrenza\n11 effetti testo · 36 animazioni\nOLOlang gratis il primo anno',
+            feature_dividers: true, cta_text: 'Scarica Free', cta_url: '/',
+            bg_color: '#12151D', text_color: INK.paper,
+            cta_bg_color: 'rgba(250,247,242,.1)', cta_text_color: INK.paper,
+          }),
+        ], '1-2'),
+        hCol([
+          tile('pricing', {
+            plan_name: 'OLObuild · Pro', price: '29', currency: '€', period: 'prezzo lancio · poi €59/anno',
+            features: 'L’intera libreria: 187 tile\nAnimazioni complete + ricerca media 8 provider\nOLOlang a vita · supporto prioritario\n30 giorni di rimborso, senza domande',
+            feature_dividers: true, cta_text: 'Passa a Pro', cta_url: '/', is_popular: true,
+            bg_color: '#12151D', text_color: INK.paper,
+            cta_bg_color: PRODUCT_HEX.build, cta_text_color: INK.bg,
+          }),
+        ], '1-2'),
+      ]),
+    ], PRODUCT_HEX.build),
+    // PROSSIME FERMATE — banner classici
+    vSection([
+      hRow('50-50', [
+        hCol([
+          tile('cta-banner', {
+            headline: 'Approfondimento', headline_accent: 'tecnico.', headline_accent_italic: true,
+            subtitle: 'Manuale base + scheda tecnica.',
+            cta_text: 'Apri il manuale →', cta_url: P('olobuild-manuale'),
+            bg: { type: 'solid', color: '#12151D' },
+          }),
+        ], '1-2'),
+        hCol([
+          tile('cta-banner', {
+            headline: 'Prossima fermata', headline_accent: '', headline_accent_italic: false,
+            subtitle: 'OLObooking: il motore che riempie l’agenda.',
+            cta_text: 'OLObooking →', cta_url: P('olobooking'),
+            bg: { type: 'solid', color: '#12151D' },
+          }),
+        ], '1-2'),
+      ]),
+    ], PRODUCT_HEX.build, { padding_top_custom: 40, padding_bottom_custom: 120 }),
+  ],
 };
 
 /* ==================================================================== */
@@ -232,124 +598,160 @@ const buildPage = {
 const bookingPage = {
   title: 'OLObooking · Il tempo è tuo',
   slug: 'olobooking',
-  content: page([
-    tile('oloxhero', {
-      accent: 'booking', bg_variant: 'booking', logo: LOGO('olobooking'),
+  content: [
+    productHeroC({
+      hex: PRODUCT_HEX.booking, color: 'booking', logo: 'olobooking', name: 'OLObooking',
       kicker: 'Prenotazioni · 6 verticali',
-      title_html: 'Il tempo è tuo. <em>Riempilo.</em>', title_fx: 'none',
-      sub_html: 'Camere, tavoli, appuntamenti, eventi, noleggi, immobili: <strong>un solo motore</strong>, una sola configurazione, <strong>zero commissioni</strong> a piattaforme di mezzo.',
-      tags: [
-        { text: '6 verticali', hot: true }, { text: 'anti no-show', hot: false },
-        { text: 'QR access', hot: false }, { text: '0% commissioni', hot: false },
-      ],
-      cta1_text: 'Vivi una giornata ↓', cta1_url: '#giornata',
-      cta2_text: 'I sei biglietti', cta2_url: '#verticali',
-      scene: 'clock', clock_label: 'lo scroll muove le lancette',
+      title: 'Il tempo è tuo. Riempilo.', accent: 'Riempilo.',
+      sub: '<p>Camere, tavoli, appuntamenti, eventi, noleggi, immobili: <strong>un solo motore</strong>, una sola configurazione, <strong>zero commissioni</strong> a piattaforme di mezzo.</p>',
+      tags: ['6 verticali', 'anti no-show', 'QR access', '0% commissioni'],
+      cta1: ['Vivi una giornata ↓', '#giornata'], cta2: ['I sei biglietti', '#verticali'],
+      scene: 'hero-clock', sceneExtra: { clock_label: 'lo scroll muove le lancette' },
     }),
-    marquee(['check-in', 'tavolo 12', 'slot 15:30', 'biglietto QR', 'caparra', 'visita immobile', 'noleggio e-bike', 'conferma via mail'], '●', 'booking'),
-    tile('oloxsticky', {
-      accent: 'booking', variant: 'day', anchor: 'giornata', kicker: 'Una giornata col motore',
-      day_label: 'agenda riempita', day_hint: 'scrolla per far passare le ore', day_stamp: 'Confermato',
-      day_slots: [
-        { hh: '09:00', what: 'Visita immobile, via Verdi 8', who: 'real estate' },
-        { hh: '10:30', what: 'Consulenza fiscale, Studio B.', who: 'appuntamenti' },
-        { hh: '12:00', what: 'Check-in camera Doppia Nord', who: 'accommodation' },
-        { hh: '13:00', what: 'Tavolo 4, pranzo ×2', who: 'ristorante' },
-        { hh: '15:30', what: 'Noleggio e-bike, 3 ore', who: 'rentals' },
-        { hh: '17:00', what: 'Estetica, slot 45 min', who: 'appuntamenti' },
-        { hh: '19:00', what: 'Workshop serale, 24 posti', who: 'eventi' },
-        { hh: '20:30', what: 'Tavolo 12, cena ×6 (caparra)', who: 'ristorante' },
-      ],
-    }),
-    tile('oloxcards', {
-      accent: 'booking', variant: 'ticket', anchor: 'verticali',
-      kicker: 'I verticali', title_html: 'Sei biglietti, <em>stesso motore</em>',
-      lead: 'Attivi il verticale e campi, calendari e flussi si riconfigurano da soli. Se cambi mestiere, i dati restano.',
-      items: [
-        { label: 'Accommodation', title: 'Ospitalità', text_html: 'B&B, agriturismi, case-vacanza: calendario camere, tariffe stagionali, soggiorni minimi.', extra: 'OLO-ACC-01' },
-        { label: 'Restaurants', title: 'Ristoranti', text_html: 'Tavoli, turni e menu, con caparra anti no-show per proteggere le serate piene.', extra: 'OLO-RST-02' },
-        { label: 'Appointments', title: 'Appuntamenti', text_html: 'Studi, consulenza, estetica: slot orari, promemoria, gestione dello staff.', extra: 'OLO-APP-03' },
-        { label: 'Events', title: 'Eventi', text_html: 'Conferenze, concerti, workshop: ticketing, posti numerati, accessi con QR.', extra: 'OLO-EVT-04' },
-        { label: 'Rentals', title: 'Noleggi', text_html: 'Auto, bici, attrezzature, barche: inventario, cauzioni, contratti.', extra: 'OLO-RNT-05' },
-        { label: 'Real estate', title: 'Immobiliare', text_html: 'Visite immobili su slot, agenzie, raccolta proposte.', extra: 'OLO-EST-06' },
-      ],
-    }),
-    tile('oloxstatement', {
-      accent: 'booking', variant: 'stamp', anchor: '',
-      kicker: 'Incassi protetti',
-      title_html: 'Il tavolo vuoto <em>non paga più te</em>',
-      body_html: 'Prenotazione con <strong>caparra</strong>: chi non si presenta lascia qualcosa sul tavolo. E ogni prenotazione arriva <strong>senza commissioni</strong>: il canale diretto è davvero tuo.',
-      stamp_text: 'No-show ◦ Coperto',
-    }),
-    follow('booking'),
-    next('Approfondimento tecnico', 'Manuale base + <em>scheda tecnica</em> →', P('olobooking-manuale'), 'booking'),
-    next('Prossima fermata', 'OLO<em>lang</em> →', P('ololang'), 'lang'),
-  ]),
+    marqueeSection(['check-in', 'tavolo 12', 'slot 15:30', 'biglietto QR', 'caparra', 'visita immobile', 'noleggio e-bike', 'conferma via mail'], '●'),
+    // UNA GIORNATA — scena interattiva sticky dedicata (come l'assembler di build)
+    bodySection([
+      tile('menuanchor', { anchor_id: 'giornata' }),
+      tile('oloxsticky', {
+        accent: 'booking', variant: 'day', kicker: 'Una giornata col motore',
+        day_label: 'agenda riempita', day_hint: 'scrolla per far passare le ore', day_stamp: 'Confermato',
+        day_slots: [
+          { hh: '09:00', what: 'Visita immobile, via Verdi 8', who: 'real estate' },
+          { hh: '10:30', what: 'Consulenza fiscale, Studio B.', who: 'appuntamenti' },
+          { hh: '12:00', what: 'Check-in camera Doppia Nord', who: 'accommodation' },
+          { hh: '13:00', what: 'Tavolo 4, pranzo ×2', who: 'ristorante' },
+          { hh: '15:30', what: 'Noleggio e-bike, 3 ore', who: 'rentals' },
+          { hh: '17:00', what: 'Estetica, slot 45 min', who: 'appuntamenti' },
+          { hh: '19:00', what: 'Workshop serale, 24 posti', who: 'eventi' },
+          { hh: '20:30', what: 'Tavolo 12, cena ×6 (caparra)', who: 'ristorante' },
+        ],
+      }),
+    ], PRODUCT_HEX.booking, { padding_top_custom: 0, padding_bottom_custom: 0 }),
+    // I VERTICALI — 6 card classiche
+    bodySection([
+      tile('menuanchor', { anchor_id: 'verticali' }),
+      ...secHead('I verticali', 'Sei biglietti, stesso motore', 'stesso motore', PRODUCT_HEX.booking,
+        'Attivi il verticale e campi, calendari e flussi si riconfigurano da soli. Se cambi mestiere, i dati restano.'),
+      xCards(PRODUCT_HEX.booking, 3, [
+        ['Accommodation', 'Ospitalità', 'B&B, agriturismi, case-vacanza: calendario camere, tariffe stagionali, soggiorni minimi.', 'OLO-ACC-01'],
+        ['Restaurants', 'Ristoranti', 'Tavoli, turni e menu, con caparra anti no-show per proteggere le serate piene.', 'OLO-RST-02'],
+        ['Appointments', 'Appuntamenti', 'Studi, consulenza, estetica: slot orari, promemoria, gestione dello staff.', 'OLO-APP-03'],
+        ['Events', 'Eventi', 'Conferenze, concerti, workshop: ticketing, posti numerati, accessi con QR.', 'OLO-EVT-04'],
+        ['Rentals', 'Noleggi', 'Auto, bici, attrezzature, barche: inventario, cauzioni, contratti.', 'OLO-RNT-05'],
+        ['Real estate', 'Immobiliare', 'Visite immobili su slot, agenzie, raccolta proposte.', 'OLO-EST-06'],
+      ]),
+    ], PRODUCT_HEX.booking),
+    // INCASSI PROTETTI — statement classico con timbro pill
+    bodySection([
+      xKicker('Incassi protetti', PRODUCT_HEX.booking),
+      xGap(12),
+      xTitle('Il tavolo vuoto non paga più te', 'non paga più te', PRODUCT_HEX.booking, '48'),
+      xGap(14),
+      xText('<p>Prenotazione con <strong>caparra</strong>: chi non si presenta lascia qualcosa sul tavolo. E ogni prenotazione arriva <strong>senza commissioni</strong>: il canale diretto è davvero tuo.</p>'),
+      xGap(24),
+      xPill('No-show ◦ Coperto', PRODUCT_HEX.booking),
+    ], PRODUCT_HEX.booking),
+    followC(PRODUCT_HEX.booking),
+    nextBannersC(PRODUCT_HEX.booking, [
+      ['Approfondimento', 'tecnico.', 'Manuale base + scheda tecnica.', 'Apri il manuale →', P('olobooking-manuale')],
+      ['Prossima fermata', '', 'OLOlang: lo stesso sito, 28 voci.', 'OLOlang →', P('ololang')],
+    ]),
+  ],
 };
 
 /* ==================================================================== */
 /* OLOLANG                                                               */
 /* ==================================================================== */
+// Card del tabellone: flipcard nativa, fronte IT → retro tradotto.
+const langFlip = (srcLabel, src, dstLabel, dst) => tile('flipcard', {
+  front_title: src, front_description: srcLabel,
+  back_title: dst, back_description: dstLabel,
+  front_icon: '', back_icon: '',
+  front_bg: '#12151D', back_bg: 'rgba(232,64,154,.16)',
+  front_text_color: INK.paper, back_text_color: INK.paper,
+  front_text_align: 'left', back_text_align: 'left',
+  front_valign: 'center', back_valign: 'center',
+  back_cta_text: '', back_cta_url: '',
+  flip_direction: 'vertical', flip_trigger: 'hover', flip_duration: '600',
+  card_height: '200', card_border_radius: '10', card_shadow: 'none',
+  title_size: '19', title_weight: '600', desc_size: '11',
+  tile_padding: { top: 22, right: 22, bottom: 22, left: 22 },
+});
 const langPage = {
   title: 'OLOlang · Di’ benvenuto in 28 modi',
   slug: 'ololang',
-  content: page([
-    tile('oloxhero', {
-      accent: 'lang', bg_variant: 'lang', logo: LOGO('ololang'),
+  content: [
+    productHeroC({
+      hex: PRODUCT_HEX.lang, color: 'lang', logo: 'ololang', name: 'OLOlang',
       kicker: 'Multilingua nativo · 28 lingue',
-      title_html: 'Di’ «{scramble}»<br>in 28 modi.', title_fx: 'scramble',
-      scramble_words: ['Benvenuto', 'Welcome', 'Willkommen', 'Bienvenue', 'Bienvenido', 'Bem-vindo', 'Welkom', 'Välkommen', 'ようこそ', '欢迎'].map((text) => ({ text })),
-      sub_html: 'DeepL + traduttore IA con <strong>glossario e memoria di traduzione</strong>. Contenuti, menu e stringhe tradotti <strong>via database</strong>: non patch fragili sul frontend.',
-      tags: [
-        { text: '28 lingue', hot: true }, { text: 'DeepL + IA', hot: false },
-        { text: 'via DB', hot: false }, { text: 'a vita con Pro', hot: false },
-      ],
-      cta1_text: 'Guarda la lingua girare ↓', cta1_url: '#flip',
-      cta2_text: 'SEO multilingua', cta2_url: '#seo',
-      scene: 'console',
-      console_title: 'translator', console_sub: '· dashboard · batch in corso',
-      console_rows: [
-        { lc: 'EN', w: 100, pc: '' }, { lc: 'DE', w: 100, pc: '' }, { lc: 'FR', w: 96, pc: '' },
-        { lc: 'ES', w: 92, pc: '' }, { lc: 'PT', w: 84, pc: '' }, { lc: 'NL', w: 78, pc: '' },
-        { lc: 'JA', w: 64, pc: '' }, { lc: '+21', w: 52, pc: '…' },
-      ],
+      title: 'Di’ «Benvenuto» in 28 modi.', accent: '«Benvenuto»',
+      sub: '<p>DeepL + traduttore IA con <strong>glossario e memoria di traduzione</strong>. Contenuti, menu e stringhe tradotti <strong>via database</strong>: non patch fragili sul frontend.</p>',
+      tags: ['28 lingue', 'DeepL + IA', 'via DB', 'a vita con Pro'],
+      cta1: ['Guarda la lingua girare ↓', '#flip'], cta2: ['SEO multilingua', '#seo'],
+      scene: 'hero-console', sceneExtra: {
+        console_title: 'translator', console_sub: '· dashboard · batch in corso',
+        console_rows: [
+          { lc: 'EN', w: 100, pc: '' }, { lc: 'DE', w: 100, pc: '' }, { lc: 'FR', w: 96, pc: '' },
+          { lc: 'ES', w: 92, pc: '' }, { lc: 'PT', w: 84, pc: '' }, { lc: 'NL', w: 78, pc: '' },
+          { lc: 'JA', w: 64, pc: '' }, { lc: '+21', w: 52, pc: '…' },
+        ],
+      },
     }),
-    marquee(['Welcome', 'Willkommen', 'Bienvenue', 'Bienvenido', 'Bem-vindo', 'Welkom', 'Καλώς ήρθες', 'Добро пожаловать', 'ようこそ', '欢迎', 'Hoş geldin'], '·', 'lang'),
-    tile('oloxlist', {
-      accent: 'lang', variant: 'flip', anchor: 'flip',
-      kicker: 'Tradotto davvero', title_html: 'Ogni riga <em>gira</em> come un tabellone',
-      lead: 'Non solo i testi: menu, stringhe di tema e plugin, tutto passa dal database e torna fuori nella lingua giusta.',
-      flip_items: [
-        { src_label: 'contenuto · it', src_html: 'Prenota il tuo soggiorno', dst_label: 'content · en', dst_html: 'Book your stay' },
-        { src_label: 'menu · it', src_html: 'Chi siamo → Contatti', dst_label: 'menü · de', dst_html: 'Über uns → Kontakt' },
-        { src_label: 'stringa plugin · it', src_html: '«Aggiungi al carrello»', dst_label: 'chaîne · fr', dst_html: '«Ajouter au panier»' },
-        { src_label: 'glossario · it', src_html: 'OLObuild <i style="font-style:normal;">(non tradurre)</i>', dst_label: 'glossary · *', dst_html: 'OLObuild ✓ protetto' },
-        { src_label: 'memoria · it', src_html: '«Colazione inclusa», già tradotta', dst_label: 'memory · es', dst_html: '«Desayuno incluido» riusata, €0' },
-      ],
-    }),
-    tile('oloxlist', {
-      accent: 'lang', variant: 'url', anchor: 'seo',
-      kicker: 'SEO multilingua', title_html: 'Google vede <em>28 siti di prima classe</em>',
-      lead: 'hreflang, URL localizzati, sitemap e meta per ogni lingua: nessuna versione è figlia di un dio minore.',
-      url_items: [
-        { html: 'https://tuosito.it<b>/it/</b>camere-vista-lago', ok: 'indicizzata' },
-        { html: 'https://tuosito.it<b>/en/</b>lake-view-rooms', ok: 'indexed' },
-        { html: 'https://tuosito.it<b>/de/</b>zimmer-mit-seeblick', ok: 'indexiert' },
-        { html: '&lt;link rel="alternate" hreflang="en" …&gt;', ok: 'auto' },
-        { html: 'sitemap.xml, 28 varianti per pagina', ok: 'auto' },
-      ],
-    }),
-    tile('oloxstatement', {
-      accent: 'lang', variant: 'plain', anchor: '',
-      kicker: 'Incluso, non venduto due volte',
-      title_html: 'Gratis il 1° anno. <em>A vita</em> con OLObuild Pro.',
-      body_html: 'Il multilingua è un diritto del sito, non un upsell. E traduce anche i flussi di OLObooking e i tile di OLObuild: un solo sistema di lingue per tutto.',
-      cta_text: 'Prendilo con OLObuild', cta_url: P('olobuild'),
-    }),
-    follow('lang'),
-    next('Approfondimento tecnico', 'Manuale base + <em>scheda tecnica</em> →', P('ololang-manuale'), 'lang'),
-    next('Prossima fermata', 'OLO<em>security</em> →', P('olosecurity'), 'secur'),
-  ]),
+    marqueeSection(['Welcome', 'Willkommen', 'Bienvenue', 'Bienvenido', 'Bem-vindo', 'Welkom', 'Καλώς ήρθες', 'Добро пожаловать', 'ようこそ', '欢迎', 'Hoş geldin'], '·'),
+    // TRADOTTO DAVVERO — tabellone di flipcard native (hover = la riga "gira")
+    vSection([
+      hRow('100', [ hCol([
+        tile('menuanchor', { anchor_id: 'flip' }),
+        ...secHead('Tradotto davvero', 'Ogni riga gira come un tabellone', 'gira', PRODUCT_HEX.lang,
+          'Non solo i testi: menu, stringhe di tema e plugin, tutto passa dal database e torna fuori nella lingua giusta. Passa il mouse sulle schede.'),
+      ]) ]),
+      { ...hRow('33-33-33', [
+        hCol([ langFlip('contenuto · it', 'Prenota il tuo soggiorno', 'content · en', 'Book your stay') ], '1-3'),
+        hCol([ langFlip('menu · it', 'Chi siamo → Contatti', 'menü · de', 'Über uns → Kontakt') ], '1-3'),
+        hCol([ langFlip('stringa plugin · it', '«Aggiungi al carrello»', 'chaîne · fr', '«Ajouter au panier»') ], '1-3'),
+      ]), settings: { bg: { type: 'none' }, layout: '33-33-33', stack_mobile: true, gap: 24 } },
+      { ...hRow('33-33-33', [
+        hCol([ langFlip('glossario · it', 'OLObuild (non tradurre)', 'glossary · *', 'OLObuild ✓ protetto') ], '1-3'),
+        hCol([ langFlip('memoria · it', '«Colazione inclusa», già tradotta', 'memory · es', '«Desayuno incluido» riusata, €0') ], '1-3'),
+        hCol([], '1-3'),
+      ]), settings: { bg: { type: 'none' }, layout: '33-33-33', stack_mobile: true, gap: 24 } },
+    ], PRODUCT_HEX.lang),
+    // SEO MULTILINGUA — lista descrittiva mono (URL → stato)
+    bodySection([
+      tile('menuanchor', { anchor_id: 'seo' }),
+      ...secHead('SEO multilingua', 'Google vede 28 siti di prima classe', '28 siti di prima classe', PRODUCT_HEX.lang,
+        'hreflang, URL localizzati, sitemap e meta per ogni lingua: nessuna versione è figlia di un dio minore.'),
+      tile('desclist', {
+        items: [
+          ['https://tuosito.it/it/camere-vista-lago', 'indicizzata'],
+          ['https://tuosito.it/en/lake-view-rooms', 'indexed'],
+          ['https://tuosito.it/de/zimmer-mit-seeblick', 'indexiert'],
+          ['<link rel="alternate" hreflang="en" …>', 'auto'],
+          ['sitemap.xml, 28 varianti per pagina', 'auto'],
+        ].map(([term, definition], i) => ({ id: `seo-${i}`, term, definition, icon: '' })),
+        layout: 'stacked', show_icon: false, separator: true, striped: false,
+        typography_preset: 'olox-mono',
+        term_color: INK.paper, term_font_size: '14', term_font_weight: '600',
+        definition_color: PRODUCT_HEX.lang, definition_font_size: '11',
+        border_color: 'rgba(250,247,242,.12)', spacing: '14', text_align: 'left',
+      }),
+    ], PRODUCT_HEX.lang),
+    // INCLUSO, NON VENDUTO DUE VOLTE — statement classico
+    bodySection([
+      xKicker('Incluso, non venduto due volte', PRODUCT_HEX.lang),
+      xGap(12),
+      xTitle('Gratis il 1° anno. A vita con OLObuild Pro.', 'A vita', PRODUCT_HEX.lang, '48'),
+      xGap(14),
+      xText('<p>Il multilingua è un diritto del sito, non un upsell. E traduce anche i flussi di OLObooking e i tile di OLObuild: un solo sistema di lingue per tutto.</p>'),
+      xGap(24),
+      xBtn('Prendilo con OLObuild', P('olobuild'), PRODUCT_HEX.lang),
+    ], PRODUCT_HEX.lang),
+    followC(PRODUCT_HEX.lang),
+    nextBannersC(PRODUCT_HEX.lang, [
+      ['Approfondimento', 'tecnico.', 'Manuale base + scheda tecnica.', 'Apri il manuale →', P('ololang-manuale')],
+      ['Prossima fermata', '', 'OLOsecurity: un radar che non dorme mai.', 'OLOsecurity →', P('olosecurity')],
+    ]),
+  ],
 };
 
 /* ==================================================================== */
@@ -358,61 +760,85 @@ const langPage = {
 const securPage = {
   title: 'OLOsecurity · Chi bussa male resta fuori',
   slug: 'olosecurity',
-  content: page([
-    tile('oloxpagefx', { variant: 'scan' }),
-    tile('oloxhero', {
-      accent: 'secur', bg_variant: 'secur', logo: LOGO('olosecurity'),
+  content: [
+    productHeroC({
+      hex: PRODUCT_HEX.secur, color: 'secur', logo: 'olosecurity', name: 'OLOsecurity',
       kicker: 'Sicurezza · 100% locale',
-      title_html: 'Chi bussa male, <em>resta fuori</em>', title_fx: 'none',
-      sub_html: 'Firewall OWASP, 2FA, scanner anti-webshell e bonifica guidata dal pannello <strong>Sentinel</strong>. Tutto elaborato <strong>sul tuo server</strong>: il traffico non finisce in nessun cloud altrui.',
-      tags: [
-        { text: '100% locale', hot: true }, { text: 'mini-WAF', hot: false },
-        { text: 'TOTP 2FA', hot: false }, { text: 'v1.2.0 · GPL', hot: false },
-      ],
-      cta1_text: 'Togli i sigilli ↓', cta1_url: '#difese',
-      cta2_text: 'Plugin Check 0/0', cta2_url: '#zerozero',
-      scene: 'term',
-      term_title: 'sentinel', term_sub: '· boot sequence',
-      term_lines: [
-        { cls: 'cy', text: '[sentinel] avvio pannello v1.2.0 …' },
-        { cls: 'ok', text: '[waf]      regole OWASP caricate (4 famiglie)' },
-        { cls: 'ok', text: '[geo]      blocco IPv4/IPv6 + rate limit ARMATO' },
-        { cls: 'bad', text: '[waf]      SQLi da 185.220.•.•  → BLOCCATO' },
-        { cls: 'ok', text: '[2fa]      TOTP attivo · codici recupero ok' },
-        { cls: 'bad', text: '[bot]      finto Googlebot (FCrDNS) → RESPINTO' },
-        { cls: 'ok', text: '[scan]     checksum core 100% · 0 webshell' },
-        { cls: 'ok', text: '[cve]      feed firme sincronizzato' },
-        { cls: 'cy', text: '[sentinel] tutto sotto controllo. resto in ascolto…' },
-      ],
+      title: 'Chi bussa male, resta fuori', accent: 'resta fuori',
+      sub: '<p>Firewall OWASP, 2FA, scanner anti-webshell e bonifica guidata dal pannello <strong>Sentinel</strong>. Tutto elaborato <strong>sul tuo server</strong>: il traffico non finisce in nessun cloud altrui.</p>',
+      tags: ['100% locale', 'mini-WAF', 'TOTP 2FA', 'v1.2.0 · GPL'],
+      cta1: ['Togli i sigilli ↓', '#difese'], cta2: ['Plugin Check 0/0', '#zerozero'],
+      scene: 'hero-term', sceneExtra: {
+        term_title: 'sentinel', term_sub: '· boot sequence',
+        term_lines: [
+          { cls: 'cy', text: '[sentinel] avvio pannello v1.2.0 …' },
+          { cls: 'ok', text: '[waf]      regole OWASP caricate (4 famiglie)' },
+          { cls: 'ok', text: '[geo]      blocco IPv4/IPv6 + rate limit ARMATO' },
+          { cls: 'bad', text: '[waf]      SQLi da 185.220.•.•  → BLOCCATO' },
+          { cls: 'ok', text: '[2fa]      TOTP attivo · codici recupero ok' },
+          { cls: 'bad', text: '[bot]      finto Googlebot (FCrDNS) → RESPINTO' },
+          { cls: 'ok', text: '[scan]     checksum core 100% · 0 webshell' },
+          { cls: 'ok', text: '[cve]      feed firme sincronizzato' },
+          { cls: 'cy', text: '[sentinel] tutto sotto controllo. resto in ascolto…' },
+        ],
+      },
     }),
-    marquee(['SQLi', 'XSS', 'path traversal', 'LFI/RCE', 'brute force', 'finti crawler', 'webshell', 'password compromesse', 'bot'], '✕', 'secur'),
-    tile('oloxstatement', {
-      accent: 'secur', variant: 'counter', anchor: '',
-      kicker: 'Mentre leggevi questa pagina',
-      body_html: 'bloccati da un WordPress medio esposto in rete. Non serve essere famosi per essere un bersaglio: basta essere online.',
-      counter_to: 47, counter_after: 'tentativi',
-    }),
-    tile('oloxcards', {
-      accent: 'secur', variant: 'red', anchor: 'difese',
-      kicker: 'Il pannello Sentinel', title_html: 'Quattro linee di difesa, <em>declassificate</em>',
-      lead: 'Scorri: i sigilli si tolgono man mano. Otto schede operative, queste sono le quattro che fanno la differenza.',
-      items: [
-        { label: '01 · Prevenzione', title: 'Firewall · mini-WAF', text_html: 'Regole <strong>OWASP per famiglia</strong> (SQLi, XSS, traversal, LFI/RCE), reputazione IP, rate limiting, geo-blocco IPv4/IPv6.', extra: '' },
-        { label: '02 · Identità', title: 'Accessi &amp; 2FA', text_html: 'Anti brute-force, <strong>TOTP</strong> con codici di recupero, password compromesse (HIBP, k-anonymity), CAPTCHA, anti finti crawler con verifica <strong>FCrDNS</strong>.', extra: '' },
-        { label: '03 · Rilevamento', title: 'Scanner', text_html: 'Integrità di core, plugin e temi via <strong>checksum</strong>; scansione profonda <strong>anti-webshell</strong>; feed CVE e firme malware aggiornate.', extra: '' },
-        { label: '04 · Reazione', title: 'Ripristino', text_html: '<strong>Bonifica guidata</strong> post-attacco, quarantena reversibile, rigenerazione dei salt, report d’incidente pronto da consegnare.', extra: '' },
-      ],
-    }),
-    tile('oloxstatement', {
-      accent: 'secur', variant: 'zerozero', anchor: 'zerozero',
-      kicker: 'Trasparenza', zz_text: '0/0',
-      title_html: 'WP Plugin Check: zero errori, <em>zero warning</em>',
-      body_html: 'Codice GPL che puoi leggere riga per riga. Il contrario dei security-in-cloud che mandano il tuo traffico nei loro datacenter: qui analisi, firme e log restano <strong>a casa tua</strong>. GDPR semplice.',
-    }),
-    follow('secur'),
-    next('Approfondimento tecnico', 'Manuale base + <em>scheda tecnica</em> →', P('olosecurity-manuale'), 'secur'),
-    next('Prossima fermata', 'OLO<em>tour</em> →', P('olotour'), 'tour'),
-  ]),
+    marqueeSection(['SQLi', 'XSS', 'path traversal', 'LFI/RCE', 'brute force', 'finti crawler', 'webshell', 'password compromesse', 'bot'], '✕'),
+    // MENTRE LEGGEVI — contatore nativo + testo
+    vSection([
+      hRow('50-50', [
+        hCol([
+          xKicker('Mentre leggevi questa pagina', PRODUCT_HEX.secur),
+          xGap(10),
+          tile('counter', {
+            number: '47', prefix: '', suffix: '', label: 'tentativi',
+            icon_emoji: '', icon_size: '16',
+            text_color: PRODUCT_HEX.secur, number_font_size: '110', number_font_weight: '400',
+            label_color: INK.faint, label_font_size: '13', label_font_weight: '600',
+            typography_preset: 'olox-serif',
+            tile_padding: { top: 0, right: 0, bottom: 0, left: 0 },
+            bg: { type: 'none' }, media_bg: { type: 'none' }, shadow: 'none',
+          }),
+        ], '1-2'),
+        {
+          id: randomUUID(), type: 'column',
+          settings: { bg: { type: 'none' }, width_medium: '1-2', flex_direction: 'column', flex_justify: 'center' },
+          style: [], advanced: [],
+          children: [
+            xText('<p>bloccati da un WordPress medio esposto in rete. Non serve essere famosi per essere un bersaglio: basta essere online.</p>', '17'),
+          ],
+        },
+      ]),
+    ], PRODUCT_HEX.secur),
+    // QUATTRO LINEE DI DIFESA — 4 card classiche
+    bodySection([
+      tile('menuanchor', { anchor_id: 'difese' }),
+      ...secHead('Il pannello Sentinel', 'Quattro linee di difesa, declassificate', 'declassificate', PRODUCT_HEX.secur,
+        'Otto schede operative, queste sono le quattro che fanno la differenza.'),
+      xCards(PRODUCT_HEX.secur, 2, [
+        ['01 · Prevenzione', 'Firewall · mini-WAF', 'Regole OWASP per famiglia (SQLi, XSS, traversal, LFI/RCE), reputazione IP, rate limiting, geo-blocco IPv4/IPv6.'],
+        ['02 · Identità', 'Accessi & 2FA', 'Anti brute-force, TOTP con codici di recupero, password compromesse (HIBP, k-anonymity), CAPTCHA, anti finti crawler con verifica FCrDNS.'],
+        ['03 · Rilevamento', 'Scanner', 'Integrità di core, plugin e temi via checksum; scansione profonda anti-webshell; feed CVE e firme malware aggiornate.'],
+        ['04 · Reazione', 'Ripristino', 'Bonifica guidata post-attacco, quarantena reversibile, rigenerazione dei salt, report d’incidente pronto da consegnare.'],
+      ]),
+    ], PRODUCT_HEX.secur),
+    // 0/0 — statement classico con cifra gigante
+    bodySection([
+      tile('menuanchor', { anchor_id: 'zerozero' }),
+      xKicker('Trasparenza', PRODUCT_HEX.secur),
+      xGap(8),
+      xTitle('0/0', '0/0', PRODUCT_HEX.secur, '120', 'p'),
+      xGap(8),
+      xTitle('WP Plugin Check: zero errori, zero warning', 'zero warning', PRODUCT_HEX.secur, '44'),
+      xGap(14),
+      xText('<p>Codice GPL che puoi leggere riga per riga. Il contrario dei security-in-cloud che mandano il tuo traffico nei loro datacenter: qui analisi, firme e log restano <strong>a casa tua</strong>. GDPR semplice.</p>'),
+    ], PRODUCT_HEX.secur),
+    followC(PRODUCT_HEX.secur),
+    nextBannersC(PRODUCT_HEX.secur, [
+      ['Approfondimento', 'tecnico.', 'Manuale base + scheda tecnica.', 'Apri il manuale →', P('olosecurity-manuale')],
+      ['Prossima fermata', '', 'OLOtour: guarda dentro, prima di entrare.', 'OLOtour →', P('olotour')],
+    ]),
+  ],
 };
 
 /* ==================================================================== */
@@ -421,47 +847,48 @@ const securPage = {
 const tourPage = {
   title: 'OLOtour · Questa pagina gira a 360°',
   slug: 'olotour',
-  content: page([
-    tile('oloxpagefx', { variant: 'pano', deg_label: 'lo scroll ruota la vista' }),
-    tile('oloxhero', {
-      accent: 'tour', bg_variant: 'none', logo: LOGO('olotour'),
+  content: [
+    productHeroC({
+      hex: PRODUCT_HEX.tour, color: 'tour', logo: 'olotour', name: 'OLOtour',
       kicker: 'Tour virtuali · in arrivo',
-      title_html: 'Questa pagina <em>gira a 360°</em>', title_fx: 'none',
-      sub_html: 'Scrolla e guarda lo sfondo ruotare: è quello che faranno i tuoi visitatori nei tuoi spazi. Panorami sferici, <strong>hot-spot cliccabili</strong>, ambienti collegati, anche in <strong>VR</strong>.',
-      tags: [
-        { text: '360°', hot: true }, { text: 'Polyhaven · Street View', hot: false },
-        { text: 'multi-stanza', hot: false }, { text: 'VR ready', hot: false },
-      ],
-      cta1_text: 'Percorri le stanze ↓', cta1_url: '#stanze',
-      cta2_text: 'Gli hot-spot', cta2_url: '#hotspot',
-      scene: 'porthole',
+      title: 'Guarda dentro, prima di entrare', accent: 'prima di entrare',
+      sub: '<p>Affacciati all’oblò e trascinalo: è quello che faranno i tuoi visitatori nei tuoi spazi. Panorami sferici, <strong>hot-spot cliccabili</strong>, ambienti collegati, anche in <strong>VR</strong>.</p>',
+      tags: ['360°', 'Polyhaven · Street View', 'multi-stanza', 'VR ready'],
+      cta1: ['Percorri le stanze ↓', '#stanze'], cta2: ['Le fondamenta', '#hotspot'],
+      scene: 'hero-porthole',
     }),
-    tile('oloxcards', {
-      accent: 'tour', variant: 'room', anchor: 'stanze', section_bg: 'rgba(12,14,19,.6)',
-      kicker: 'Multi-stanza', title_html: 'Gli ambienti si <em>collegano</em>',
-      lead: 'Ogni panorama porta al successivo: il visitatore cammina nel sito come camminerebbe da te.',
-      items: [
-        { label: 'scena 01', title: 'Ingresso', text_html: 'Panorama di benvenuto, hot-spot verso la reception e le camere.', extra: '' },
-        { label: 'scena 02', title: 'Camera vista lago', text_html: 'Foto sferica reale, punti informativi su letto, vista, servizi.', extra: '' },
-        { label: 'scena 03', title: 'Terrazza', text_html: 'Video 360° al tramonto, il momento che vende la notte.', extra: '' },
-        { label: 'uscita', title: '→ Prenota', text_html: 'Il tour finisce dove deve: sul bottone di OLObooking.', extra: '1' },
-      ],
-    }),
-    tile('oloxcards', {
-      accent: 'tour', variant: 'hs', anchor: 'hotspot',
-      kicker: 'Test finali prelancio', title_html: 'Le fondamenta di <em>OLOtour</em>', lead: '',
-      items: [
-        { label: '', title: 'Panorami &amp; <em>HDRI</em>', text_html: 'Librerie <strong>Polyhaven</strong> e <strong>Google Street View</strong> integrate: parti da panorami professionali o dai tuoi scatti sferici.', extra: '' },
-        { label: '', title: 'Hot-spot <em>cliccabili</em>', text_html: 'Punti interattivi con testo, immagini e link tra ambienti: il visitatore esplora, tu racconti.', extra: '' },
-        { label: '', title: '3D, splat &amp; <em>VR</em>', text_html: 'Scene 3D e gaussian splat, fruizione con visore: l’immersione non è un embed di terzi, vive <strong>nel tuo WordPress</strong>.', extra: '' },
-      ],
-      foot_html: 'Un assaggio esiste già: il tile <strong>Viewer 360°</strong> della famiglia Interactive di OLObuild. OLOtour lo porta al livello successivo, senza piattaforme esterne a canone né branding altrui sui tuoi spazi.',
-      foot_cta: 'Prova il Viewer 360° in OLObuild', foot_url: P('olobuild'),
-    }),
-    follow('tour'),
-    next('Approfondimento tecnico', 'Manuale base + <em>scheda tecnica</em> →', P('olotour-manuale'), 'tour'),
-    next('Prossima fermata', 'OLO<em>tutor</em> →', P('olotutor'), 'tutor'),
-  ]),
+    // MULTI-STANZA — 4 card classiche
+    bodySection([
+      tile('menuanchor', { anchor_id: 'stanze' }),
+      ...secHead('Multi-stanza', 'Gli ambienti si collegano', 'collegano', PRODUCT_HEX.tour,
+        'Ogni panorama porta al successivo: il visitatore cammina nel sito come camminerebbe da te.'),
+      xCards(PRODUCT_HEX.tour, 4, [
+        ['scena 01', 'Ingresso', 'Panorama di benvenuto, hot-spot verso la reception e le camere.'],
+        ['scena 02', 'Camera vista lago', 'Foto sferica reale, punti informativi su letto, vista, servizi.'],
+        ['scena 03', 'Terrazza', 'Video 360° al tramonto, il momento che vende la notte.'],
+        ['uscita', '→ Prenota', 'Il tour finisce dove deve: sul bottone di OLObooking.'],
+      ]),
+    ], PRODUCT_HEX.tour),
+    // LE FONDAMENTA — 3 card + chiusura con CTA
+    bodySection([
+      tile('menuanchor', { anchor_id: 'hotspot' }),
+      ...secHead('Test finali prelancio', 'Le fondamenta di OLOtour', 'OLOtour', PRODUCT_HEX.tour, ''),
+      xCards(PRODUCT_HEX.tour, 3, [
+        ['01', 'Panorami & HDRI', 'Librerie Polyhaven e Google Street View integrate: parti da panorami professionali o dai tuoi scatti sferici.'],
+        ['02', 'Hot-spot cliccabili', 'Punti interattivi con testo, immagini e link tra ambienti: il visitatore esplora, tu racconti.'],
+        ['03', '3D, splat & VR', 'Scene 3D e gaussian splat, fruizione con visore: l’immersione non è un embed di terzi, vive nel tuo WordPress.'],
+      ]),
+      xGap(28),
+      xText('<p>Un assaggio esiste già: il tile <strong>Viewer 360°</strong> della famiglia Interactive di OLObuild. OLOtour lo porta al livello successivo, senza piattaforme esterne a canone né branding altrui sui tuoi spazi.</p>'),
+      xGap(20),
+      xBtnGhost('Prova il Viewer 360° in OLObuild', P('olobuild')),
+    ], PRODUCT_HEX.tour),
+    followC(PRODUCT_HEX.tour),
+    nextBannersC(PRODUCT_HEX.tour, [
+      ['Approfondimento', 'tecnico.', 'Manuale base + scheda tecnica.', 'Apri il manuale →', P('olotour-manuale')],
+      ['Prossima fermata', '', 'OLOtutor: sali di livello, lezione dopo lezione.', 'OLOtutor →', P('olotutor')],
+    ]),
+  ],
 };
 
 /* ==================================================================== */
@@ -470,79 +897,131 @@ const tourPage = {
 const tutorPage = {
   title: 'OLOtutor · Questa pagina è un corso',
   slug: 'olotutor',
-  content: page([
-    tile('oloxpagefx', { variant: 'xp', xp_label: 'corso · questa pagina', xp_total: 540, xp_cap: 630, xp_step: 180 }),
-    tile('oloxhero', {
-      accent: 'tutor', bg_variant: 'tutor', logo: LOGO('olotutor'), pad_top: 150,
+  content: [
+    productHeroC({
+      hex: PRODUCT_HEX.tutor, color: 'tutor', logo: 'olotutor', name: 'OLOtutor',
       kicker: 'Formazione · in arrivo',
-      title_html: 'Questa pagina è <em>un corso</em>', title_fx: 'none',
-      sub_html: 'Scrolla e guadagni XP: è la logica di OLOtutor. Corsi, lezioni, quiz, punti, badge e certificati, <strong>dentro il tuo WordPress</strong>, non su un marketplace che ti mette in fila coi concorrenti.',
-      tags: [
-        { text: 'LMS', hot: true }, { text: 'quiz & badge', hot: false },
-        { text: 'registro voti', hot: false }, { text: 'certificati', hot: false },
-      ],
-      cta1_text: 'Sblocca le lezioni ↓', cta1_url: '#lezioni',
-      cta2_text: 'Fai il quiz', cta2_url: '#quiz',
-      scene: 'medal', medal_top: 'livello', medal_big: '1', medal_bot: 'studente',
+      title: 'Questa pagina è un corso', accent: 'un corso',
+      sub: '<p>Scendi e sblocca le lezioni: è la logica di OLOtutor. Corsi, lezioni, quiz, punti, badge e certificati, <strong>dentro il tuo WordPress</strong>, non su un marketplace che ti mette in fila coi concorrenti.</p>',
+      tags: ['LMS', 'quiz & badge', 'registro voti', 'certificati'],
+      cta1: ['Sblocca le lezioni ↓', '#lezioni'], cta2: ['Fai il quiz', '#quiz'],
+      scene: 'hero-medal', sceneExtra: { medal_top: 'livello', medal_big: '1', medal_bot: 'studente' },
     }),
-    marquee(['+120 xp', 'quiz superato', 'badge sbloccato', 'lezione 4/12', 'certificato pronto', 'registro aggiornato', 'streak 7 giorni'], '★', 'tutor'),
-    tile('oloxlessons', {
-      accent: 'tutor', anchor: 'lezioni',
-      kicker: 'Il percorso', title_html: 'Le lezioni si <em>sbloccano</em> scendendo',
-      lock_text: 'scendi per sbloccare',
-      items: [
-        { xp: '+120 xp', title: 'Corsi &amp; lezioni', text_html: 'Strutture di corso, lezioni ordinate, area allievi con i progressi di ciascuno. Il programma lo detti tu.' },
-        { xp: '+180 xp', title: 'Quiz &amp; gamification', text_html: 'Quiz, mini-giochi, punti e badge. La motivazione fa parte del metodo, non è un plugin in più.' },
-        { xp: '+90 xp', title: 'Registro &amp; certificati', text_html: 'Registro voti e certificati di completamento: quello che serve a scuole, accademie e formatori.' },
-        { xp: '+150 xp', title: 'Gli allievi restano tuoi', text_html: 'Iscrizioni, dati e pagamenti sul tuo sito. Con OLObooking le lezioni individuali si prenotano su slot; con OLOlang i corsi parlano 28 lingue.' },
-      ],
-    }),
-    tile('oloxquiz', {
-      accent: 'tutor', anchor: 'quiz',
-      kicker: 'Verifica finale', title_html: 'Un quiz <em>vero</em>, provalo',
-      question_html: 'Dove vivono i tuoi corsi con <em>OLOtutor</em>?',
-      answers: [
-        { text: 'Su un marketplace, in fila coi concorrenti', ok: false },
-        { text: 'Sul mio WordPress, con i miei allievi e i miei dati', ok: true },
-        { text: 'In un cloud di terzi, a canone mensile', ok: false },
-      ],
-      hint: 'rispondi per guadagnare +90 xp',
-      ok_html: 'esatto · <b>+90 xp</b> · badge sbloccato',
-      ko_text: 'mmh, riprova: la risposta è nel nome della suite…',
-      bonus: 90,
-    }),
-    follow('tutor'),
-    next('Approfondimento tecnico', 'Manuale base + <em>scheda tecnica</em> →', P('olotutor-manuale'), 'tutor'),
-    next('Fine del percorso', 'Torna al <em>viaggio</em> →', HOME_URL, 'olo'),
-  ]),
+    marqueeSection(['+120 xp', 'quiz superato', 'badge sbloccato', 'lezione 4/12', 'certificato pronto', 'registro aggiornato', 'streak 7 giorni'], '★'),
+    // IL PERCORSO — minigioco lezioni-che-si-sbloccano (tile dedicata)
+    bodySection([
+      tile('menuanchor', { anchor_id: 'lezioni' }),
+      tile('oloxlessons', {
+        accent: 'tutor',
+        kicker: 'Il percorso', title_html: 'Le lezioni si <em>sbloccano</em> scendendo',
+        lock_text: 'scendi per sbloccare',
+        items: [
+          { xp: '+120 xp', title: 'Corsi &amp; lezioni', text_html: 'Strutture di corso, lezioni ordinate, area allievi con i progressi di ciascuno. Il programma lo detti tu.' },
+          { xp: '+180 xp', title: 'Quiz &amp; gamification', text_html: 'Quiz, mini-giochi, punti e badge. La motivazione fa parte del metodo, non è un plugin in più.' },
+          { xp: '+90 xp', title: 'Registro &amp; certificati', text_html: 'Registro voti e certificati di completamento: quello che serve a scuole, accademie e formatori.' },
+          { xp: '+150 xp', title: 'Gli allievi restano tuoi', text_html: 'Iscrizioni, dati e pagamenti sul tuo sito. Con OLObooking le lezioni individuali si prenotano su slot; con OLOlang i corsi parlano 28 lingue.' },
+        ],
+      }),
+    ], PRODUCT_HEX.tutor, { padding_top_custom: 0, padding_bottom_custom: 0 }),
+    // VERIFICA FINALE — minigioco quiz (tile dedicata)
+    bodySection([
+      tile('menuanchor', { anchor_id: 'quiz' }),
+      tile('oloxquiz', {
+        accent: 'tutor',
+        kicker: 'Verifica finale', title_html: 'Un quiz <em>vero</em>, provalo',
+        question_html: 'Dove vivono i tuoi corsi con <em>OLOtutor</em>?',
+        answers: [
+          { text: 'Su un marketplace, in fila coi concorrenti', ok: false },
+          { text: 'Sul mio WordPress, con i miei allievi e i miei dati', ok: true },
+          { text: 'In un cloud di terzi, a canone mensile', ok: false },
+        ],
+        hint: 'rispondi per guadagnare +90 xp',
+        ok_html: 'esatto · <b>+90 xp</b> · badge sbloccato',
+        ko_text: 'mmh, riprova: la risposta è nel nome della suite…',
+        bonus: 90,
+      }),
+    ], PRODUCT_HEX.tutor, { padding_top_custom: 0, padding_bottom_custom: 0 }),
+    followC(PRODUCT_HEX.tutor),
+    nextBannersC(PRODUCT_HEX.tutor, [
+      ['Approfondimento', 'tecnico.', 'Manuale base + scheda tecnica.', 'Apri il manuale →', P('olotutor-manuale')],
+      ['Fine del percorso', '', 'Torna al viaggio: ogni fermata è un prodotto.', 'Torna al viaggio →', HOME_URL],
+    ]),
+  ],
 };
 
 /* ==================================================================== */
 /* MANUALI                                                               */
 /* ==================================================================== */
-const manual = (slug, prodSlug, active, accent, logoName, docCode, extraDoc, subHtml, chapters, spec) => ({
-  title: `Manuale ${logoName} · OLOtheme`,
-  slug,
-  content: page([
-    tile('oloxmanual', {
-      accent,
-      doc_codes: [
-        { html: `doc <b>${docCode}</b>` }, { html: 'manuale base' }, { html: '+ scheda tecnica' },
-        ...(extraDoc ? [{ html: extraDoc }] : []),
-      ],
-      logo: LOGO(logoName),
-      title_html: 'Manuale <em>base</em>',
-      sub_html: subHtml,
-      chapters,
-      toc_spec: 'Scheda tecnica',
-      spec_title: 'Scheda <em>tecnica</em>',
-      spec_name: spec.name, spec_sub: spec.sub,
-      spec_rows: spec.rows.map(([f, text_html]) => ({ f, text_html })),
-      spec_cta1: '← Torna alla scheda prodotto', spec_url1: P(prodSlug),
-      spec_cta2: spec.cta2 || 'Il viaggio OLOtheme', spec_url2: spec.url2 || HOME_URL,
-    }),
-  ]),
-});
+// Manuale CLASSICO: testata + corpo a due colonne (toc sticky | capitoli),
+// scheda tecnica su desclist nativa, CTA in coda. Nessuna tile dedicata.
+const manual = (slug, prodSlug, active, accent, logoName, docCode, extraDoc, subHtml, chapters, spec) => {
+  const hex = PRODUCT_HEX[accent];
+  const chapC = (ch) => {
+    const { text, accent: acc } = emSplit(ch.title_html);
+    return [
+      tile('menuanchor', { anchor_id: ch.anchor }),
+      xMono(ch.no, { color: hex, size: '12' }),
+      xGap(8),
+      xTitle(text, acc, hex, '34'),
+      xGap(14),
+      xText(mdBody(ch.body_html), '15'),
+      xGap(44),
+    ];
+  };
+  return {
+    title: `Manuale ${logoName} · OLOtheme`,
+    slug,
+    content: [
+      // TESTATA
+      bodySection([
+        tile('pagelight', { light_color: hex, base_color: INK.bg, position: 'top-right', size: 95, intensity: 22, transition_ms: 800 }),
+        xMono(`doc ${docCode} · manuale base · + scheda tecnica${extraDoc ? ` · ${extraDoc}` : ''}`, { color: INK.faint, size: '10', ls: '2.5' }),
+        xGap(20),
+        xLogo(logoName, logoName),
+        xGap(18),
+        xTitle('Manuale base', 'base', hex, '56', 'h1'),
+        xGap(12),
+        xText(`<p>${subHtml}</p>`, '16'),
+      ], hex, { padding_top_custom: 130, padding_bottom_custom: 30 }),
+      // CORPO: sommario sticky a sinistra, capitoli + scheda tecnica a destra
+      vSection([
+        hRow('25-75', [
+          hCol([
+            tile('toc', {
+              title: 'Sommario', max_depth: '2', list_style: 'numbered',
+              sticky: true, highlight_active: true, smooth_scroll: true,
+              typography_preset: 'olox-mono', font_size: '12',
+              text_color: INK.faint, link_color: INK.dim, title_color: INK.paper,
+            }),
+          ], '1-4'),
+          hCol([
+            ...chapters.flatMap(chapC),
+            // SCHEDA TECNICA
+            tile('menuanchor', { anchor_id: 'spec' }),
+            xTitle('Scheda tecnica', 'tecnica', hex, '40'),
+            xGap(10),
+            xMono(`${spec.name} · ${stripTags(spec.sub)}`, { color: hex, size: '11' }),
+            xGap(22),
+            tile('desclist', {
+              items: spec.rows.map(([term, d], i) => ({ id: `sp-${i}`, term, definition: stripTags(d), icon: '' })),
+              layout: 'stacked', show_icon: false, separator: true, striped: false,
+              term_color: INK.paper, term_font_size: '14', term_font_weight: '700',
+              definition_color: INK.dim, definition_font_size: '14',
+              border_color: 'rgba(250,247,242,.12)', spacing: '14', text_align: 'left',
+            }),
+          ], '3-4'),
+        ]),
+        hRow('25-75', [
+          hCol([], '1-4'),
+          hColRow([
+            xBtn('← Torna alla scheda prodotto', P(prodSlug), hex),
+            xBtnGhost(spec.cta2 || 'Il viaggio OLOtheme', spec.url2 || HOME_URL),
+          ], '3-4'),
+        ]),
+      ], hex, { padding_top_custom: 20, padding_bottom_custom: 120 }),
+    ],
+  };
+};
 
 const manBuild = manual('olobuild-manuale', 'olobuild', 'build', 'build', 'olobuild', 'OLO-BLD-M01', '',
   'Cos’è OLObuild, come è costruito e perché regge 187 tile con un motore solo. Cinque capitoli, poi la scheda tecnica.',
@@ -700,43 +1179,244 @@ const manTutor = manual('olotutor-manuale', 'olotutor', 'tutor', 'tutor', 'olotu
 /* HEADER & FOOTER condivisi (struttura classica olobuild)               */
 /* Tile in modalità AUTO: attivo/pill/link dedotti dallo slug corrente.  */
 /* ==================================================================== */
+// Header VERO: tile "Mega Menu / Site Header" (oloheader) di olobuild,
+// configurata coi contenuti del sito (loghi bundled del plugin in assets/img/menu/).
+const MLOGO = (f) => `/wp-content/plugins/olobuild/assets/img/menu/${f}`;
+// Header classico: sitelogo + menu WP prodotti + lingue + pallini fermate +
+// pill viaggio (nascosta sulla front page via condizione invertita).
+const MENU_PRODOTTI_ID = 232; // menu WP "OLOX Prodotti" su mosaic
 const headerTpl = {
-  title: 'OLOtheme — Header',
+  title: 'OLOtheme \u2014 Header',
   slug: 'olox-header',
   kind: 'header',
+  content: [
+    {
+      id: randomUUID(), type: 'section',
+      settings: {
+        bg: { type: 'solid', color: 'rgba(12,14,19,.92)' }, style: 'default',
+        width: 'fullbleed', padding: 'custom', padding_top_custom: 9, padding_bottom_custom: 9,
+        bg_scope: 'section', sticky_effect: 'none',
+      },
+      style: [], advanced: [],
+      children: [
+        hRow('50-50', [
+          // Sinistra: logo + lingue accanto (nessun menu testuale \u2014 decisione utente)
+          hColRow([
+            tile('sitelogo', {
+              source: 'custom_image', custom_image: '/wp-content/uploads/olotheme-site/olotheme-orizz-white.png',
+              max_height: 24, link_url: '/', alignment: 'left',
+            }),
+            // Lingue (decorative come sul live; langswitcher vero quando OLOlang avr\u00e0 pi\u00f9 lingue)
+            tile('badge', {
+              text: 'IT', variant: 'solid', bg_color: 'rgba(232,69,61,.18)', text_color: PRODUCT_HEX.build,
+              typography_preset: 'olox-mono',
+              font_size: '10', font_weight: '700', text_transform: 'uppercase', letter_spacing: '1',
+              padding_y: 4, padding_x: 7, alignment: 'left',
+              badge_radius: { tl: 4, tr: 4, br: 4, bl: 4 },
+              extra_items: ['EN', 'FR', 'DE', 'ES'].map((l) => ({ text: l, color: 'transparent', text_color: INK.faint })),
+            }),
+          ], '1-2', '22'),
+          {
+            id: randomUUID(), type: 'column',
+            settings: { bg: { type: 'none' }, width_medium: '1-2', flex_direction: 'row', flex_wrap: 'nowrap', flex_align: 'center', flex_justify: 'flex-end', flex_column_gap: '14', flex_row_gap: '8' },
+            style: [], advanced: [],
+            children: [
+              // Pallini fermate: solo sulle pagine con Cover orizzontale (AUTO)
+              tile('coverdots', {
+                items: [
+                  { label: 'OLOtheme', color: PRODUCT_HEX.build },
+                  { label: 'OLObuild', color: PRODUCT_HEX.build },
+                  { label: 'OLObooking', color: PRODUCT_HEX.booking },
+                  { label: 'OLOlang', color: PRODUCT_HEX.lang },
+                  { label: 'OLOsecurity', color: PRODUCT_HEX.secur },
+                  { label: 'OLOtour', color: PRODUCT_HEX.tour },
+                  { label: 'OLOtutor', color: PRODUCT_HEX.tutor },
+                  { label: 'Capolinea', color: PRODUCT_HEX.build },
+                ],
+                hide_without_group: true, dot_size: 26, dot_gap: 3, dot_inner: 8, active_glow: true,
+              }),
+              // Pill "\u2190 il viaggio": ovunque tranne che sulla front page
+              tile('button', {
+                text: '\u2190 il viaggio', url: '/', alignment: 'right',
+                bg_color: 'transparent', text_color: INK.paper,
+                hover_bg_color: 'rgba(250,247,242,.08)', hover_text_color: INK.paper,
+                typography_preset: 'olox-mono',
+                font_size: '10', font_weight: '700', text_transform: 'uppercase', letter_spacing: '1.5',
+                border_radius: { tl: 999, tr: 999, br: 999, bl: 999 },
+                tile_padding: { top: 9, right: 16, bottom: 9, left: 16 },
+                border: { top: 1, right: 1, bottom: 1, left: 1, linked: true, style: 'solid', color: 'rgba(250,247,242,.3)' },
+                cond_type: 'is_front_page', cond_negate: true,
+              }),
+            ],
+          },
+        ]),
+      ],
+    },
+  ],
+};
+const headerTplOld = {
+  title: 'OLOtheme \u2014 Header (mega, inutilizzato)',
+  slug: 'olox-header-old',
+  kind: 'unused',
   content: page([
-    tile('oloxnav', {
-      logo: LOGO('olotheme'), logo_url: '/',
-      links: NAV_LINKS(''),
-      show_lang: true,
-      exp_text: '← il viaggio', exp_url: '/',
-      active_auto: true, exp_auto: true,
-      exp_manual_text: '← scheda prodotto',
-      accent: 'olo',
+    tile('oloheader', {
+      brand_logo: MLOGO('olotheme-orizz.png'),
+      brand_height: 25,
+      brand_url: '/',
+      nav_items: [
+        { label: 'Prodotti', url: '#', type: 'mega' },
+        { label: 'Esperienza', url: '/', type: 'link' },
+      ],
+      rail_show: true,
+      rail_badge: 'Ecosistema OLO',
+      rail_title: 'Un telaio, sei prodotti',
+      rail_text: 'Stessa anima olonica per costruire, gestire e far crescere il tuo sito WordPress. Senza SaaS, senza lock-in.',
+      rail_cta1_label: 'Inizia il viaggio',
+      rail_cta1_url: '/',
+      rail_cta2_label: 'OLObuild free',
+      rail_cta2_url: P('olobuild'),
+      mega_columns: 2,
+      mega_products: [
+        { group: 'Costruisci', logo: MLOGO('olobuild-q.png'), name: 'OLObuild', desc: 'Page builder \u00b7 187 tile drag & drop', url: P('olobuild'), soon: false },
+        { group: 'Costruisci', logo: MLOGO('ololang-q.png'), name: 'OLOlang', desc: 'Multilingua nativo \u00b7 28 lingue', url: P('ololang'), soon: false },
+        { group: 'Costruisci', logo: MLOGO('olosecurity-q.png'), name: 'OLOsecurity', desc: 'Firewall, 2FA e scanner \u00b7 100% locale', url: P('olosecurity'), soon: false },
+        { group: 'Gestisci & cresci', logo: MLOGO('olobooking-q.png'), name: 'OLObooking', desc: 'Prenotazioni \u00b7 6 verticali', url: P('olobooking'), soon: false },
+        { group: 'Gestisci & cresci', logo: MLOGO('olotour-q.png'), name: 'OLOtour', desc: 'Tour virtuali 360\u00b0', url: P('olotour'), soon: true },
+        { group: 'Gestisci & cresci', logo: MLOGO('olotutor-q.png'), name: 'OLOtutor', desc: 'Corsi, quiz e certificati', url: P('olotutor'), soon: true },
+      ],
+      mega_footer_show: true,
+      mega_footer_logos: [ { logo: MLOGO('olotour-q.png') }, { logo: MLOGO('olotutor-q.png') } ],
+      mega_footer_title: 'In arrivo \u00b7 OLOtour & OLOtutor',
+      mega_footer_text: 'Tour virtuali 360\u00b0 e corsi online. Le schede prodotto sono gi\u00e0 online.',
+      mega_footer_cta_label: 'Vedi le anteprime',
+      mega_footer_cta_url: P('olotour'),
+      featured_show: false,
+      search_show: false,
+      lang_show: true,
+      lang_current: 'it',
+      languages: [
+        { code: 'it', label: 'Italiano', url: '/' },
+        { code: 'en', label: 'English', url: '#' },
+        { code: 'fr', label: 'Fran\u00e7ais', url: '#' },
+        { code: 'de', label: 'Deutsch', url: '#' },
+        { code: 'es', label: 'Espa\u00f1ol', url: '#' },
+      ],
+      cta_show: true,
+      cta_label: 'Inizia il viaggio',
+      cta_url: '/',
+      open_mega_on: 'hover',
     }),
   ]),
 };
+// Footer composto con tile classiche: wordmark, link, fine + riga credits.
 const footerTpl = {
-  title: 'OLOtheme — Footer',
+  title: 'OLOtheme \u2014 Footer',
   slug: 'olox-footer',
   kind: 'footer',
-  content: page([
-    tile('oloxfoot', {
-      logo: LOGO('olotheme'),
-      links_auto: true,
-      home_label: 'il viaggio',
-      fine: 'GPL · Trento · no SaaS',
-      fine_manual: 'manuali base · GPL · Trento',
-      fine_overrides: 'olosecurity:GPL · Trento · no SaaS · 100% locale',
-      show_credits: true,
-      credits_html: 'OLOtheme by <a href="https://clod.eu" target="_blank" rel="noopener">clod.eu</a> | @2026 | sito introduttivo | <a href="mailto:info@olotheme.com">info@olotheme.com</a>',
-      accent: 'olo',
-    }),
-  ]),
+  content: [
+    {
+      id: randomUUID(), type: 'section',
+      settings: {
+        bg: { type: 'solid', color: INK.bg }, style: 'default',
+        width: 'default', padding: 'custom', padding_top_custom: 44, padding_bottom_custom: 28,
+        bg_scope: 'section', sticky_effect: 'none',
+      },
+      style: [], advanced: [],
+      children: [
+        hRow('25-50-25', [
+          hCol([ tile('image', {
+            image_url: '/wp-content/uploads/olotheme-site/olotheme-orizz-white.png', alt_text: 'OLOtheme',
+            image_width: '150px', height: 'auto', object_fit: 'contain', image_alignment: 'left',
+          }) ], '1-4'),
+          hCol([ xText('<p><a href="/">il viaggio</a> \u00b7 <a href="' + P('olobuild') + '">build</a> \u00b7 <a href="' + P('olobooking') + '">booking</a> \u00b7 <a href="' + P('ololang') + '">lang</a> \u00b7 <a href="' + P('olosecurity') + '">security</a> \u00b7 <a href="' + P('olotour') + '">tour</a> \u00b7 <a href="' + P('olotutor') + '">tutor</a></p>', '13', INK.dim) ], '1-2'),
+          hCol([ xText('<p>GPL \u00b7 Trento \u00b7 no SaaS</p>', '12', INK.faint) ], '1-4'),
+        ]),
+        hRow('100', [
+          hCol([
+            // Credits sempre visibili: barra fissa in fondo alla viewport.
+            tile('bottombar', {
+              content_html: 'OLOtheme by <a href="https://clod.eu" target="_blank" rel="noopener">clod.eu</a> | @2026 | sito introduttivo | <a href="mailto:info@olotheme.com">info@olotheme.com</a>',
+              align: 'center', bg_color: 'rgba(12,14,19,.92)', text_color: INK.faint, link_color: INK.paper,
+              font_size: 10, letter_spacing: 2, uppercase: true, font_preset: 'olox-mono',
+              padding_y: 14, border_top: false, z_index: 92,
+            }),
+          ]),
+        ]),
+      ],
+    },
+  ],
+};
+
+/* ==================================================================== */
+/* PARTIAL · contenuto della modale "olonica" (popup mode template)      */
+/* ==================================================================== */
+const CHIP_NAME = { build: 'build', booking: 'booking', lang: 'lang', secur: 'security', tour: 'tour', tutor: 'tutor' };
+// Riga battaglia: card scura con domanda serif a sinistra e chips prodotto a destra.
+const battleGap = () => hRow('100', [ hCol([ xGap(10) ]) ]);
+const battleRow = (q, chips) => ({
+  id: randomUUID(), type: 'row',
+  settings: { bg: { type: 'solid', color: '#161A23' }, layout: '50-50', stack_mobile: true },
+  style: [], advanced: [],
+  children: [
+    hCol([
+      xTitle(q, '', PRODUCT_HEX.build, '18', 'h4'),
+    ], '1-2'),
+    {
+      id: randomUUID(), type: 'column',
+      settings: { bg: { type: 'none' }, width_medium: '1-2', flex_direction: 'row', flex_wrap: 'wrap', flex_align: 'center', flex_justify: 'flex-end', flex_column_gap: '8', flex_row_gap: '8' },
+      style: [], advanced: [],
+      children: [
+        tile('badge', {
+          text: CHIP_NAME[chips[0]], variant: 'solid', bg_color: PRODUCT_HEX[chips[0]], text_color: INK.bg,
+          typography_preset: 'olox-mono',
+          font_size: '10', font_weight: '700', text_transform: 'lowercase', letter_spacing: '0.5',
+          padding_y: 6, padding_x: 12, alignment: 'right',
+          extra_items: chips.slice(1).map((c) => ({ text: CHIP_NAME[c], color: PRODUCT_HEX[c], text_color: INK.bg })),
+        }),
+      ],
+    },
+  ],
+});
+const olonicaPartial = {
+  title: 'OLOX — Popup olonica',
+  slug: 'olox-popup-olonica',
+  kind: 'partial',
+  content: [
+    {
+      id: randomUUID(), type: 'section',
+      settings: {
+        bg: { type: 'none' }, style: 'default', width: 'default',
+        padding: 'custom', padding_top_custom: 8, padding_bottom_custom: 8,
+        bg_scope: 'section', sticky_effect: 'none',
+      },
+      style: [], advanced: [],
+      children: [
+        hRow('100', [ hCol([
+          xKicker('—— OLOS · INTERO E PARTE', PRODUCT_HEX.build),
+          xGap(10),
+          xTitle('La cellula olonica', 'olonica', PRODUCT_HEX.build, '34', 'h3'),
+          xGap(8),
+          xText('<p>Un <strong>olone</strong> è qualcosa che è insieme <strong>un tutto e una parte</strong>: completo da solo, più forte dentro un organismo. OLOtheme è costruito così, ogni prodotto è una cellula autonoma che funziona da sola, ma condivide telaio, dati e lingua con le altre.</p>', '15'),
+          xGap(6),
+          xText('<p>Niente monolite: <strong>i prodotti si uniscono a seconda della battaglia</strong> da affrontare, e si sciolgono quando non servono.</p>', '15'),
+          xGap(14),
+        ]) ]),
+        battleRow('Aprire un B&B', ['build', 'booking', 'lang']),
+        battleGap(),
+        battleRow('Respingere un attacco', ['secur']),
+        battleGap(),
+        battleRow('Vendere all’estero', ['build', 'lang']),
+        battleGap(),
+        battleRow('Far visitare un immobile a distanza', ['tour', 'booking']),
+        battleGap(),
+        battleRow('Portare i corsi online', ['tutor', 'booking', 'lang']),
+      ],
+    },
+  ],
 };
 
 /* ---------- scrittura ---------- */
-const ALL = [headerTpl, footerTpl, home, buildPage, bookingPage, langPage, securPage, tourPage, tutorPage, manBuild, manBooking, manLang, manSecur, manTour, manTutor];
+const ALL = [olonicaPartial, headerTpl, footerTpl, home, buildPage, bookingPage, langPage, securPage, tourPage, tutorPage, manBuild, manBooking, manLang, manSecur, manTour, manTutor];
 for (const t of ALL) {
   writeFileSync(`${OUT}/${t.slug}.json`, JSON.stringify({ title: t.title, slug: t.slug, kind: t.kind || 'page', content: t.content }), 'utf8');
   console.log(`✓ ${t.slug}.json (${t.content.length} sezioni · ${t.kind || 'page'})`);

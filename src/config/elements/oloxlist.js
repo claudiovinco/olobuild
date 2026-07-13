@@ -11,6 +11,10 @@ export default {
   name: t('OLOX — Lista flip/URL'),
   icon: 'dashicons-list-view',
   category: 'marketing',
+  // Ritirata dalla palette: le pagine della replica olotheme.com sono composte
+  // con tile classiche (headline, badge, info-cards, pricing, cta-banner, toc,
+  // desclist, flipcard, counter, marquee). Resta per i template salvati.
+  hidden: true,
 
   defaults: {
     accent: 'lang',

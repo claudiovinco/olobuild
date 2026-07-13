@@ -26,6 +26,8 @@ export default {
     // Stato live (additive)
     badge_live: false,
     badge_live_color: 'success',
+    // Badge aggiuntivi (additive): pill gemelle in fila, colore per-item
+    extra_items: [],
     // Stile
     variant: 'soft',
     bg_color: '',
@@ -55,6 +57,16 @@ export default {
       { value: 'before', label: t('Prima del testo') },
       { value: 'after', label: t('Dopo il testo') },
     ]},
+
+    { type: 'separator', label: t('Badge aggiuntivi') },
+    { key: 'extra_items', label: t('Altre etichette'), type: 'content-items', itemLabel: t('Etichetta'),
+      hint: t('Pill gemelle affiancate alla prima: stesso stile, colore per-etichetta (vuoto = neutro).'),
+      newItemDefaults: { text: '', color: '', text_color: '' },
+      itemFields: [
+        { key: 'text', label: t('Testo'), type: 'text' },
+        { key: 'color', label: t('Colore'), type: 'color' },
+        { key: 'text_color', label: t('Colore testo (vuoto = come il colore)'), type: 'color' },
+      ] },
 
     { type: 'separator', label: t('Stato live') },
     { key: 'badge_live', label: t('Mostra pallino live'), type: 'toggle',

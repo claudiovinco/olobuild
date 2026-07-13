@@ -12,7 +12,7 @@
   --paper:#FAF7F2; --dim:rgba(250,247,242,.62); --faint:rgba(250,247,242,.34);
   --olo:#E8453D;
   --build:#E8453D; --booking:#3D8BFF; --lang:#E8409A;
-  --tour:#F5A623; --tutor:#38C172; --secur:#26B8E8;
+  --tour:#12A19A; --tutor:#38C172; --secur:#26B8E8;
   --c:var(--olo);
   background:var(--bg); color:var(--paper);
   font-family:'Inter',system-ui,sans-serif; -webkit-font-smoothing:antialiased;
@@ -518,7 +518,7 @@
   background:
     radial-gradient(circle at 12% 34%, rgba(245,166,35,.5) 0%, rgba(245,166,35,.14) 4%, transparent 9%),
     radial-gradient(circle at 58% 30%, rgba(245,166,35,.35) 0%, rgba(245,166,35,.1) 3%, transparent 7%),
-    repeating-linear-gradient(90deg, rgba(245,166,35,.22) 0 3px, transparent 3px 130px),
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--tour) 22%, transparent) 0 3px, transparent 3px 130px),
     repeating-linear-gradient(90deg, rgba(250,247,242,.05) 0 60px, transparent 60px 260px),
     linear-gradient(180deg, transparent 63.6%, rgba(245,166,35,.5) 63.8%, transparent 64.2%),
     linear-gradient(180deg, #10131C 0%, #1A2233 42%, #33283A 60%, #0E0C14 100%);
@@ -529,19 +529,19 @@
 .oloxp-live .degbox{position:fixed;}
 .oloxp .degbox b{font-family:'Fraunces',serif; font-size:34px; font-weight:500; letter-spacing:0; color:var(--paper); display:block;}
 .oloxp .compassbar{left:0; right:0; top:58px; z-index:70; overflow:hidden; pointer-events:none; position:absolute;
-  font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.5em; color:rgba(245,166,35,.65);
-  text-transform:uppercase; white-space:nowrap; padding:8px 0; border-bottom:1px solid rgba(245,166,35,.16);}
+  font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.5em; color:color-mix(in srgb, var(--tour) 65%, transparent);
+  text-transform:uppercase; white-space:nowrap; padding:8px 0; border-bottom:1px solid color-mix(in srgb, var(--tour) 16%, transparent);}
 .oloxp-live .compassbar{position:fixed;}
 .oloxp .compassbar .cin{display:inline-block; will-change:transform;}
 .oloxp .ox-porthole{width:min(46vh,360px); aspect-ratio:1; border-radius:50%; overflow:hidden; position:relative;
-  border:2px solid rgba(245,166,35,.55); box-shadow:0 0 0 16px rgba(245,166,35,.06), 0 50px 100px -30px rgba(0,0,0,.85);}
+  border:2px solid color-mix(in srgb, var(--tour) 55%, transparent); box-shadow:0 0 0 16px color-mix(in srgb, var(--tour) 6%, transparent), 0 50px 100px -30px rgba(0,0,0,.85);}
 .oloxp .ox-porthole .pano{position:absolute; top:0; bottom:0; left:0; width:300%; will-change:transform;
   background:
-    repeating-linear-gradient(90deg, rgba(245,166,35,.16) 0 2px, transparent 2px 84px),
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--tour) 16%, transparent) 0 2px, transparent 2px 84px),
     linear-gradient(180deg, #1B2030 0%, #26304A 46%, #3E3245 62%, #171320 100%);}
 .oloxp .spot{position:absolute; width:14px; height:14px; border-radius:50%; background:var(--tour);
   animation:oloxping 2.2s ease-out infinite; cursor:pointer;}
-@keyframes oloxping{0%{box-shadow:0 0 0 0 rgba(245,166,35,.55);}70%{box-shadow:0 0 0 16px rgba(245,166,35,0);}100%{box-shadow:0 0 0 0 rgba(245,166,35,0);}}
+@keyframes oloxping{0%{box-shadow:0 0 0 0 color-mix(in srgb, var(--c, var(--tour)) 55%, transparent);}70%{box-shadow:0 0 0 16px color-mix(in srgb, var(--c, var(--tour)) 0%, transparent);}100%{box-shadow:0 0 0 0 color-mix(in srgb, var(--c, var(--tour)) 0%, transparent);}}
 .oloxp .rooms{display:flex; align-items:center; gap:0; flex-wrap:wrap;}
 .oloxp .room{flex:1 1 200px; background:var(--bg-2); border:1px solid var(--line); border-radius:12px; padding:24px 22px; position:relative; z-index:1;}
 .oloxp .room h3{font-family:'Fraunces',serif; font-weight:500; font-size:20px; margin:0 0 8px; letter-spacing:-.01em;}
@@ -645,10 +645,19 @@
 .oloxp-home .chrome .jump button:hover span, .oloxp-home .chrome .jump button.on span{opacity:1; box-shadow:0 0 10px var(--jc,var(--c));}
 /* Home con header/footer condivisi (template olobuild): la dnav porta già logo
    e lingue, il footer porta i credits → il chrome tiene solo i pallini di salto,
-   sotto la barra. Solo frontend: nel canvas builder manca .oloxp-live. */
-body:has(.oloxp-live .dnav) .oloxp-live.oloxp-home .chrome{top:52px;}
+   DENTRO la barra come sul sito originale: chrome sovrapposto alla dnav (52px,
+   entrambi fixed; chrome z:90 > dnav z:80, pointer-events:none sul contenitore
+   lascia cliccabili menu e lingue sotto), pallini centrati (padding 9 = (52-34)/2)
+   e allineati al padding destro 26px della dnav. Il langsw della dnav si scosta
+   di 322px = 8 pallini ×34 + 7 gap ×4 + 22 di distacco. Solo frontend: nel
+   canvas builder manca .oloxp-live. Sotto i 900px resta la riga sotto la barra
+   (lì i link della dnav diventano già pallini). */
+body:has(.oloxp-live .dnav) .oloxp-live.oloxp-home .chrome{top:0; padding:9px 26px;}
 body:has(.oloxp-live .dnav) .oloxp-live.oloxp-home .chrome .logo,
 body:has(.oloxp-live .dnav) .oloxp-live.oloxp-home .chrome .langsw{display:none;}
+@media(min-width:901px){
+  body:has(.oloxp-live.oloxp-home) .oloxp-live .dnav .langsw{margin-right:322px;}
+}
 body:has(.oloxp-live .dfoot) .oloxp-live.oloxp-home .credits{display:none;}
 .oloxp-home .progress{bottom:0; left:0; right:0; height:3px; z-index:90; background:rgba(250,247,242,.08); position:relative;}
 .oloxp-live.oloxp-home .progress{position:fixed;}
@@ -723,6 +732,11 @@ body:has(.oloxp-live .dfoot) .oloxp-live.oloxp-home .credits{display:none;}
 .oloxp-home .scene{position:relative; height:min(66vh,620px); display:flex; align-items:center; justify-content:center;}
 .oloxp-live.oloxp-home .rise{transform:translateX(calc((1 - min(var(--pp,0)*2.4,1)) * 60px)); opacity:min(calc(var(--pp,0)*2.6),1);
   transition:transform .1s linear, opacity .1s linear;}
+/* --pp la imposta SOLO il runtime del rail dopo l'assemblaggio: finché il
+   pannello è ancora nel wrapper sorgente (canvas-iframe del builder, o frontend
+   un istante prima di railassemble) il default 0 renderebbe il testo invisibile
+   → qui il pannello è "fermo alla sua fermata": testo pieno. */
+.oloxp-home.olox-panel-src .rise{transform:none; opacity:1;}
 
 /* PANEL 0, INTRO */
 .oloxp-home .panel.intro{background:radial-gradient(circle at 30% 40%, #161A24 0%, var(--bg) 60%);}
@@ -861,7 +875,7 @@ body:has(.oloxp-live .dfoot) .oloxp-live.oloxp-home .credits{display:none;}
 
 /* SCENA TOUR — oblò con paesaggio */
 .oloxp-home .porthole{width:min(50vh,380px); aspect-ratio:1; border-radius:50%; overflow:hidden; position:relative;
-  border:2px solid rgba(245,166,35,.5); box-shadow:0 0 0 14px rgba(245,166,35,.07), 0 40px 80px -30px rgba(0,0,0,.8);
+  border:2px solid color-mix(in srgb, var(--tour) 50%, transparent); box-shadow:0 0 0 14px color-mix(in srgb, var(--tour) 7%, transparent), 0 40px 80px -30px rgba(0,0,0,.8);
   cursor:grab; touch-action:none;}
 .oloxp-home .porthole.grabbing{cursor:grabbing;}
 .oloxp-home .vista{position:absolute; top:0; bottom:0; left:0; width:300%; will-change:transform;}
@@ -878,11 +892,11 @@ body:has(.oloxp-live .dfoot) .oloxp-live.oloxp-home .credits{display:none;}
 .oloxp-home .vista.near{background:#12101B;
   clip-path:polygon(0 100%, 0 84%, 5% 74%, 11% 82%, 17% 68%, 24% 80%, 31% 72%, 38% 84%, 45% 70%, 53% 82%, 60% 74%, 68% 86%, 75% 72%, 83% 82%, 90% 76%, 100% 84%, 100% 100%);
   transform:translateX(calc(var(--pp,0) * -58% + var(--drag,0px) * 1));}
-.oloxp-home .spot{box-shadow:0 0 0 0 rgba(245,166,35,.5); pointer-events:auto;}
+.oloxp-home .spot{box-shadow:0 0 0 0 color-mix(in srgb, var(--tour) 50%, transparent); pointer-events:auto;}
 .oloxp-home .compass{position:absolute; bottom:-10px; left:50%; transform:translateX(-50%);
   font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.4em; color:var(--tour);}
 .oloxp-home .tg-card{position:absolute; z-index:7; left:50%; top:50%; transform:translate(-50%,-50%); width:84%;
-  background:rgba(12,14,19,.94); border:1px solid rgba(245,166,35,.55); border-radius:14px; padding:20px 22px;
+  background:rgba(12,14,19,.94); border:1px solid color-mix(in srgb, var(--tour) 55%, transparent); border-radius:14px; padding:20px 22px;
   text-align:center; box-shadow:0 30px 70px -20px rgba(0,0,0,.9);}
 .oloxp-home .tg-card .tg-k{font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; letter-spacing:.22em;
   text-transform:uppercase; color:var(--tour); display:block; margin-bottom:10px;}
@@ -891,11 +905,11 @@ body:has(.oloxp-live .dfoot) .oloxp-live.oloxp-home .credits{display:none;}
 .oloxp-home .tg-close:hover{color:var(--paper);}
 .oloxp-home .tg-digits{display:flex; gap:10px; justify-content:center; margin:12px 0 14px;}
 .oloxp-home .tg-dig{display:flex; flex-direction:column; align-items:center; gap:4px;}
-.oloxp-home .tg-dig button{width:34px; height:22px; background:transparent; border:1px solid rgba(245,166,35,.4); border-radius:5px;
+.oloxp-home .tg-dig button{width:34px; height:22px; background:transparent; border:1px solid color-mix(in srgb, var(--tour) 40%, transparent); border-radius:5px;
   color:var(--tour); cursor:pointer; font-size:10px; line-height:1;}
-.oloxp-home .tg-dig button:hover{background:rgba(245,166,35,.15);}
+.oloxp-home .tg-dig button:hover{background:color-mix(in srgb, var(--tour) 15%, transparent);}
 .oloxp-home .tg-dig .dv{font-family:'JetBrains Mono',monospace; font-size:26px; font-weight:700; color:var(--paper);
-  width:34px; padding:4px 0; border:1px solid rgba(245,166,35,.55); border-radius:6px; background:var(--bg-2); text-align:center;}
+  width:34px; padding:4px 0; border:1px solid color-mix(in srgb, var(--tour) 55%, transparent); border-radius:6px; background:var(--bg-2); text-align:center;}
 .oloxp-home .tg-card.wrong{animation:oloxlshake .3s ease;}
 .oloxp-home .tg-ok{font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--faint); margin-top:8px; display:block;}
 .oloxp-home .tg-win{position:absolute; inset:0; z-index:8; border-radius:50%; background:rgba(12,14,19,.85);
@@ -1009,7 +1023,7 @@ body:has(.oloxp-live .dfoot) .oloxp-live.oloxp-home .credits{display:none;}
   .oloxp-home .scene{height:auto; min-height:340px;}
   .oloxp-home .bigno{display:none;}
   .oloxp-home .chrome{gap:10px; padding:12px 14px; background:rgba(12,14,19,.88); backdrop-filter:blur(10px); border-bottom:1px solid var(--panelline);}
-  body:has(.oloxp-live .dnav) .oloxp-live.oloxp-home .chrome{background:transparent; backdrop-filter:none; border-bottom:0; padding-top:8px;}
+  body:has(.oloxp-live .dnav) .oloxp-live.oloxp-home .chrome{top:52px; background:transparent; backdrop-filter:none; border-bottom:0; padding-top:8px;}
   .oloxp-home .chrome .jump{gap:2px;}
   .oloxp-home .chrome .jump button{width:24px; height:24px;}
   .oloxp-home .chrome .jump button span{width:7px; height:7px;}
@@ -1048,6 +1062,25 @@ body:has(.oloxp-live .dfoot) .oloxp-live.oloxp-home .credits{display:none;}
   left:auto;
   margin-left:0;
   width:100%;
+}
+
+/* Stesso problema, altra trappola: i wrapper di olobuild creano stacking
+   context (header fixed z:1000, footer relative z:1, .olo-tile-content
+   relative z:2) e gli elementi FIXED delle tile olox (dnav 80, chrome/progress
+   90, credits 92, scanline/xp) restano intrappolati nel layer del proprio
+   wrapper invece di comporsi fra loro. Sul sito originale sono tutti figli di
+   body: qui si replica quella gerarchia — i tile-content che contengono olox
+   perdono lo z-index (i fixed salgono al root con i loro z di design) e
+   l'header wrapper scende a 80 = lo z della dnav originale (sopra il
+   contenuto, sotto chrome 90 e credits 92). */
+.olo-tile-content:has(.oloxp-live){
+  z-index:auto;
+}
+footer.olo-site-footer:has(.oloxp-live){
+  z-index:auto;
+}
+header.olo-site-header:has(.oloxp-live){
+  z-index:80;
 }
 
 /* ---- Canvas builder: neutralizza le altezze viewport dentro l'editor ---- */

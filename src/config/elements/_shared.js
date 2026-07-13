@@ -310,6 +310,8 @@ export const conditionFields = [
     condition: { field: 'cond_type', op: 'eq', value: 'post_type' } },
   { key: 'cond_url_contains', label: t('Stringa nell\'URL'), type: 'text', placeholder: t('/blog/'),
     condition: { field: 'cond_type', op: 'eq', value: 'url_contains' } },
+  { key: 'cond_negate', label: t('Inverti condizione (mostra quando NON vale)'), type: 'toggle',
+    condition: { field: 'cond_type', operator: '!=', value: '' } },
 ];
 
 export const conditionDefaults = {

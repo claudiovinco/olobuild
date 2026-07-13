@@ -12,6 +12,10 @@ export default {
   name: t('OLOX — Nav prodotti'),
   icon: 'dashicons-menu-alt3',
   category: 'navigation',
+  // Ritirata dalla palette: le pagine della replica olotheme.com sono composte
+  // con tile classiche (headline, badge, info-cards, pricing, cta-banner, toc,
+  // desclist, flipcard, counter, marquee). Resta per i template salvati.
+  hidden: true,
 
   defaults: {
     logo: '',

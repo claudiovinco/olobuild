@@ -14,6 +14,8 @@ class Olobuild_Headline_Tile extends Olobuild_Tile_Base {
         'heading'           => 'Titolo sezione',
         'accent_text'       => '',
         'accent_color'      => '',
+        'accent_italic'     => false,
+        'heading_weight'    => '',
         'subtitle'          => '',
         'tag'               => 'h2',
         'alignment'         => 'center',
@@ -121,6 +123,11 @@ class Olobuild_Headline_Tile extends Olobuild_Tile_Base {
         if ( ! empty( $s['heading_italic'] ) ) {
             $heading_style .= 'font-style:italic;';
         }
+        // Peso font esplicito (additivo): vince sul bold di default e sul preset.
+        $hd_fw = absint( $s['heading_weight'] ?? 0 );
+        if ( $hd_fw >= 100 && $hd_fw <= 900 ) {
+            $heading_style .= 'font-weight:' . $hd_fw . ';';
+        }
         if ( ! empty( $s['heading_uppercase'] ) ) {
             $heading_style .= 'text-transform:uppercase;letter-spacing:0.05em;';
         }
@@ -168,7 +175,11 @@ class Olobuild_Headline_Tile extends Olobuild_Tile_Base {
             $after   = substr( $raw, $acc_pos + strlen( $acc_txt ) );
             $before  = $has_nl ? nl2br( esc_html( $before ) ) : esc_html( $before );
             $after   = $has_nl ? nl2br( esc_html( $after ) ) : esc_html( $after );
-            $heading_text = $before . '<span style="color:' . $acc_clr . ';">' . esc_html( $acc_txt ) . '</span>' . $after;
+            $acc_style = 'color:' . $acc_clr . ';';
+            if ( ! empty( $s['accent_italic'] ) ) {
+                $acc_style .= 'font-style:italic;';
+            }
+            $heading_text = $before . '<span style="' . $acc_style . '">' . esc_html( $acc_txt ) . '</span>' . $after;
         } else {
             $heading_text = $has_nl
                 ? nl2br( esc_html( $raw ) )

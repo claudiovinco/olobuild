@@ -55,27 +55,12 @@ class Olobuild_OloxPanel_Tile extends Olobuild_Olox_Base_Tile {
             [ 'label' => 'OLOtutor', 'url' => '/olotutor/', 'color' => 'tutor' ],
         ],
         'outro_fine'   => 'OLOtheme · made in Trento · no SaaS · nessuna catena',
-        'mad_doc'      => 'modulo · OLO-CNT-07',
-        'mad_line'     => 'linea diretta · Trento',
-        'mad_intro'    => 'Ciao, mi chiamo',
-        'mad_nome_ph'  => 'nome e cognome',
-        'mad_mid'      => 'e il mio sito sogna di diventare',
-        'mad_picks'    => [
-            [ 'label' => 'cantiere', 'value' => 'un cantiere', 'color' => 'build' ],
-            [ 'label' => 'agenda piena', 'value' => 'un’agenda piena', 'color' => 'booking' ],
-            [ 'label' => 'poliglotta', 'value' => 'poliglotta', 'color' => 'lang' ],
-            [ 'label' => 'fortezza', 'value' => 'una fortezza', 'color' => 'secur' ],
-            [ 'label' => 'tour 360°', 'value' => 'un tour 360°', 'color' => 'tour' ],
-            [ 'label' => 'aula', 'value' => 'un’aula', 'color' => 'tutor' ],
-        ],
-        'mad_pre_mail' => 'Scrivetemi a',
-        'mad_mail_ph'  => 'nome@dominio.it',
-        'mad_end'      => ', promesso, niente catene.',
-        'mad_btn'      => 'Timbra e invia ▾',
-        'mad_note'     => 'il timbro apre la tua mail già compilata',
-        'mad_stamp'    => 'Ricevuto ◦ OLOtheme',
-        'mad_mailto'   => 'info@olotheme.com',
     ];
+
+    public function __construct() {
+        // Default mad-lib da fonte unica (condivisi con la tile oloxscene).
+        $this->defaults = array_merge( $this->defaults, self::madlib_defaults() );
+    }
 
     /** Decorazioni vettoriali per scena (posizioni fedeli al sorgente). */
     public static function scene_deco( $scene, $coord ) {
@@ -233,29 +218,7 @@ class Olobuild_OloxPanel_Tile extends Olobuild_Olox_Base_Tile {
                         </div>
                         <div class="fine" style="margin-top:40px;"><?php echo esc_html( $s['outro_fine'] ); ?></div>
                     </div>
-                    <div class="madwrap">
-                        <div class="madcard" data-mailto="<?php echo esc_attr( $s['mad_mailto'] ); ?>">
-                            <div class="madhead"><span><?php echo esc_html( $s['mad_doc'] ); ?></span><span class="blinkdot"></span><span><?php echo esc_html( $s['mad_line'] ); ?></span></div>
-                            <div class="madlib">
-                                <?php echo esc_html( $s['mad_intro'] ); ?>
-                                <input class="ox-f-nome" type="text" placeholder="<?php echo esc_attr( $s['mad_nome_ph'] ); ?>" size="14" autocomplete="name" />
-                                <?php echo esc_html( $s['mad_mid'] ); ?>
-                                <span class="pick"><?php
-                                    foreach ( $this->olox_items( $s, 'mad_picks' ) as $pk ) {
-                                        echo '<button type="button" data-v="' . esc_attr( $pk['value'] ?? '' ) . '" style="--c:' . esc_attr( $this->olox_color( $pk['color'] ?? 'olo' ) ) . '">' . esc_html( $pk['label'] ?? '' ) . '</button>';
-                                    }
-                                ?></span>.
-                                <?php echo esc_html( $s['mad_pre_mail'] ); ?>
-                                <input class="ox-f-mail" type="email" placeholder="<?php echo esc_attr( $s['mad_mail_ph'] ); ?>" size="16" autocomplete="email" />
-                                <?php echo esc_html( $s['mad_end'] ); ?>
-                            </div>
-                            <div class="madfoot">
-                                <button class="cta ox-stamp" type="button"><?php echo esc_html( $s['mad_btn'] ); ?></button>
-                                <span class="madnote"><?php echo esc_html( $s['mad_note'] ); ?></span>
-                            </div>
-                            <div class="bigstamp"><?php echo esc_html( $s['mad_stamp'] ); ?></div>
-                        </div>
-                    </div>
+                    <?php echo $this->olox_madlib( $s ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- helper interno già escapato. ?>
                 </div>
             </section>
         <?php else :

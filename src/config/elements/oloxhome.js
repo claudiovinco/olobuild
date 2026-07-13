@@ -12,6 +12,9 @@ export default {
   name: t('OLOX — Home Experience (rail + giochi)'),
   icon: 'dashicons-games',
   category: 'marketing',
+  // Ritirata dalla palette: lo scroll laterale e i pannelli sono feature native
+  // (sezioni Cover orizzontale + tile classiche). Resta per i template salvati.
+  hidden: true,
 
   defaults: {
     logo: '',

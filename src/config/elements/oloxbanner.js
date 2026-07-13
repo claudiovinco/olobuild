@@ -11,6 +11,10 @@ export default {
   name: t('OLOX — Banner follow/next'),
   icon: 'dashicons-migrate',
   category: 'marketing',
+  // Ritirata dalla palette: le pagine della replica olotheme.com sono composte
+  // con tile classiche (headline, badge, info-cards, pricing, cta-banner, toc,
+  // desclist, flipcard, counter, marquee). Resta per i template salvati.
+  hidden: true,
 
   defaults: {
     variant: 'next',

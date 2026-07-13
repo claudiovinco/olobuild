@@ -82,6 +82,10 @@ export default {
     ]},
     { key: 'sticky_top', label: t('Offset dall\'alto (px)'), type: 'number', min: 0, placeholder: '0', condition: { field: 'sticky_effect', operator: '!=', value: 'none' } },
 
+    { type: 'separator', label: t('Atmosfera') },
+    { key: 'light_color', label: t('Colore luce'), type: 'color',
+      description: t('Con la tile "Luce di pagina" in pagina, la luce di sfondo assume questo colore quando la sezione è visibile.') },
+
     { type: 'separator', label: t('Scroll Snap') },
     { key: 'scroll_snap', label: t('Sezione full-screen con snap'), type: 'toggle' },
     { key: 'snap_dots', label: t('Navigazione pallini'), type: 'toggle',

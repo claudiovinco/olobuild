@@ -40,7 +40,9 @@ export function getElementDef(type) {
  * @returns {object[]} Array of element definitions
  */
 export function getAllElements() {
-  return Object.values(elements);
+  // hidden: true = tile ritirata dalla palette (deprecata/superata da feature
+  // native) ma ancora risolvibile via getElementDef per i template salvati.
+  return Object.values(elements).filter((el) => !el.hidden);
 }
 
 /**

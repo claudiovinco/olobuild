@@ -344,6 +344,12 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
             }
             <?php endif; ?>
             #<?php echo esc_attr( $uid ); ?> .uk-modal-body { overflow-x: hidden; }
+            /* Il wrapper .olo-template porta il centering full-bleed da viewport
+               (left:50% + translateX(-50%) + container): dentro la modale
+               sposterebbe il contenuto fuori campo — qui va neutralizzato. */
+            #<?php echo esc_attr( $uid ); ?> .olo-template {
+                transform: none; left: auto; margin-left: 0; width: 100%; container: none;
+            }
             #<?php echo esc_attr( $uid ); ?> .olo-template,
             #<?php echo esc_attr( $uid ); ?> .olo-frontend-grid,
             #<?php echo esc_attr( $uid ); ?> .olo-section,
@@ -356,6 +362,10 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
             #<?php echo esc_attr( $uid ); ?> .entry-title { display: none; }
 
             /* V3.26.1 — Modal style tweaks (universal, all presets) */
+            /* Header/footer UIkit hanno un background proprio che coprirebbe
+               modal_bg: trasparenti, cosi' lo sfondo scelto governa tutto. */
+            #<?php echo esc_attr( $uid ); ?> .uk-modal-header,
+            #<?php echo esc_attr( $uid ); ?> .uk-modal-footer { background: transparent; }
             #<?php echo esc_attr( $uid ); ?> .uk-modal-dialog {
                 background: <?php echo $modal_bg; ?>;
                 color: <?php echo $modal_text; ?>;
@@ -711,11 +721,12 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
             $img_html = '<div class="olo-popup-image"><img src="' . esc_url( $image ) . '" alt="' . esc_attr( wp_strip_all_tags( $s['title'] ?? '' ) ) . '" loading="lazy" style="width:100%;height:auto;" /></div>';
         }
 
-        // Content HTML
+        // Content HTML — il campo e' un editor rich text: si preserva l'HTML
+        // lecito (p/ul/strong/em/a…) via wp_kses_post invece di appiattirlo.
         $content_html = '';
         if ( ! empty( $content ) ) {
             list( $pc_cls, $pc_data ) = $this->tfx_attrs( $s, 'content', wp_strip_all_tags( $content ) );
-            $content_html = '<div class="olo-popup-content' . $pc_cls . '"' . $pc_data . '>' . nl2br( esc_html( wp_strip_all_tags( $content ) ) ) . '</div>';
+            $content_html = '<div class="olo-popup-content' . $pc_cls . '"' . $pc_data . '>' . wp_kses_post( $content ) . '</div>';
         }
 
         if ( ! $has_image ) {

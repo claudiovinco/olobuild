@@ -433,13 +433,17 @@
   MODS.home = (root) => {
     const track = root.querySelector('.ox-track');
     const rail = root.querySelector('.ox-rail');
-    if (!track || !rail) { return; }
+    /* Con il rail: home monolitica / a sezioni oloxrail. Senza: il modulo serve
+       le scene standalone (tile oloxscene dentro sezioni "Cover orizzontale"
+       native di olobuild) — giochi e madlib sono già guarded sui selettori. */
+    const hasRail = !!(track && rail);
     const panels = [...root.querySelectorAll('.panel')];
+    const scenes = [...root.querySelectorAll('.scene')];
     const pbar = root.querySelector('.progress i');
     const hint = root.querySelector('.hint');
     const halo = root.querySelector('.ox-halo');
     const C = cfg(root, {});
-    root.style.setProperty('--panels', panels.length);
+    if (hasRail) { root.style.setProperty('--panels', panels.length); }
 
     const haloCols = panels.map((p) => {
       const h = getComputedStyle(p).getPropertyValue('--c').trim().replace('#', '');
@@ -982,7 +986,7 @@
     let trackW = 0, railH = 0, vh = 0, vw = 0;
     function measure() {
       vw = innerWidth; vh = innerHeight;
-      trackW = track.scrollWidth; railH = rail.offsetHeight;
+      if (hasRail) { trackW = track.scrollWidth; railH = rail.offsetHeight; }
     }
     measure(); addEventListener('resize', measure);
 
@@ -990,38 +994,56 @@
     const xpEl = root.querySelector('.ox-xp');
     function frame() {
       requestAnimationFrame(frame);
-      const maxScroll = railH - vh;
-      const t = maxScroll > 0 ? Math.min(Math.max(scrollY / maxScroll, 0), 1) : 0;
-      if (!isMobile()) {
-        track.style.transform = 'translateX(' + (-t * (trackW - vw)).toFixed(1) + 'px)';
-      }
-      if (pbar) { pbar.style.width = (t * 100).toFixed(2) + '%'; }
-      if (hint) { hint.classList.toggle('gone', t > 0.06); }
+      if (hasRail) {
+        const maxScroll = railH - vh;
+        const t = maxScroll > 0 ? Math.min(Math.max(scrollY / maxScroll, 0), 1) : 0;
+        if (!isMobile()) {
+          track.style.transform = 'translateX(' + (-t * (trackW - vw)).toFixed(1) + 'px)';
+        }
+        if (pbar) { pbar.style.width = (t * 100).toFixed(2) + '%'; }
+        if (hint) { hint.classList.toggle('gone', t > 0.06); }
 
-      let hr = 0, hg = 0, hb = 0, hw = 0;
-      panels.forEach((p, pi) => {
-        const r = p.getBoundingClientRect();
+        let hr = 0, hg = 0, hb = 0, hw = 0;
+        panels.forEach((p, pi) => {
+          const r = p.getBoundingClientRect();
+          let pp;
+          if (isMobile()) { pp = Math.min(Math.max((vh - r.top) / (vh * 0.9), 0), 1); }
+          else { pp = Math.min(Math.max((vw - r.left) / r.width, 0), 1); }
+          p.style.setProperty('--pp', pp.toFixed(4));
+          const dist = isMobile()
+            ? Math.abs((r.top + r.height / 2) - vh / 2) / Math.max(vh, 1)
+            : Math.abs((r.left + r.width / 2) - vw / 2) / Math.max(vw, 1);
+          const w = Math.max(0, 1 - dist);
+          const hc = haloCols[pi];
+          hr += hc[0] * w; hg += hc[1] * w; hb += hc[2] * w; hw += w;
+          const sc = p.querySelector('.scene');
+          if (sc) { sc.classList.toggle('go', pp > 0.2); }
+          const fx = sc ? sc.getAttribute('data-fx') : '';
+          if (fx === 'course' && xpEl) {
+            const n = Math.round(Math.min(pp * 1.6, 1) * 390) + tutorBonus;
+            if (n !== xpShown) { xpShown = n; xpEl.textContent = n; }
+          }
+        });
+        if (hw > 0 && halo) {
+          halo.style.setProperty('--halo', 'rgba(' + Math.round(hr / hw) + ',' + Math.round(hg / hw) + ',' + Math.round(hb / hw) + ',.5)');
+        }
+        return;
+      }
+      /* Scena standalone: --pp dalla posizione live nel viewport (stessa
+         formula del rail; vale anche dentro il track orizzontale nativo). */
+      scenes.forEach((sc) => {
+        const r = sc.getBoundingClientRect();
         let pp;
         if (isMobile()) { pp = Math.min(Math.max((vh - r.top) / (vh * 0.9), 0), 1); }
-        else { pp = Math.min(Math.max((vw - r.left) / r.width, 0), 1); }
-        p.style.setProperty('--pp', pp.toFixed(4));
-        const dist = isMobile()
-          ? Math.abs((r.top + r.height / 2) - vh / 2) / Math.max(vh, 1)
-          : Math.abs((r.left + r.width / 2) - vw / 2) / Math.max(vw, 1);
-        const w = Math.max(0, 1 - dist);
-        const hc = haloCols[pi];
-        hr += hc[0] * w; hg += hc[1] * w; hb += hc[2] * w; hw += w;
-        const sc = p.querySelector('.scene');
-        if (sc) { sc.classList.toggle('go', pp > 0.2); }
-        const fx = sc ? sc.getAttribute('data-fx') : '';
-        if (fx === 'course' && xpEl) {
+        else { pp = Math.min(Math.max((vw - r.left) / Math.max(r.width, 1), 0), 1); }
+        const host = sc.closest('.panel') || root;
+        host.style.setProperty('--pp', pp.toFixed(4));
+        sc.classList.toggle('go', pp > 0.2);
+        if (sc.getAttribute('data-fx') === 'course' && xpEl) {
           const n = Math.round(Math.min(pp * 1.6, 1) * 390) + tutorBonus;
           if (n !== xpShown) { xpShown = n; xpEl.textContent = n; }
         }
       });
-      if (hw > 0 && halo) {
-        halo.style.setProperty('--halo', 'rgba(' + Math.round(hr / hw) + ',' + Math.round(hg / hw) + ',' + Math.round(hb / hw) + ',.5)');
-      }
     }
     requestAnimationFrame(frame);
 
@@ -1035,8 +1057,8 @@
       opb.addEventListener('click', (e) => { if (e.target === opb) { opb.classList.remove('open'); } });
     }
 
-    /* ---- pallini di salto ---- */
-    const jump = root.querySelector('.jump');
+    /* ---- pallini di salto (solo col rail) ---- */
+    const jump = hasRail ? root.querySelector('.jump') : null;
     let dots = [];
     function goTo(i) {
       if (isMobile()) { window.scrollTo({ top: panels[i].offsetTop + rail.getBoundingClientRect().top + scrollY, behavior: 'smooth' }); return; }
@@ -1064,16 +1086,18 @@
         dots.forEach((d, i) => d.classList.toggle('on', i === best));
       }, 300);
     }
-    root.querySelectorAll('[data-go]').forEach((a) => {
-      a.addEventListener('click', (e) => {
-        e.preventDefault();
-        let gi = +a.getAttribute('data-go');
-        if (gi < 0) { gi = panels.length + gi; } // -1 = ultima fermata
-        goTo(gi);
+    if (hasRail) {
+      root.querySelectorAll('[data-go]').forEach((a) => {
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          let gi = +a.getAttribute('data-go');
+          if (gi < 0) { gi = panels.length + gi; } // -1 = ultima fermata
+          goTo(gi);
+        });
       });
-    });
+    }
     /* deep-link a una fermata: #go-N (usato anche per QA/screenshot) */
-    const goMatch = /^#go-(\d+)$/.exec(location.hash || '');
+    const goMatch = hasRail ? /^#go-(\d+)$/.exec(location.hash || '') : null;
     if (goMatch) {
       const gi = Math.min(panels.length - 1, Math.max(0, +goMatch[1]));
       setTimeout(() => {
@@ -1083,12 +1107,14 @@
         window.scrollTo({ top: Math.min((x / (trackW - vw)) * maxScroll, maxScroll), behavior: 'instant' });
       }, 300);
     }
-    const logoTop = root.querySelector('.chrome .logo');
+    const logoTop = hasRail ? root.querySelector('.chrome .logo') : null;
     if (logoTop) { logoTop.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }); }
     /* logo dell'header condiviso: sulla home riporta a inizio viaggio (il reload
        ripristinerebbe la posizione salvata) */
-    const dnavLogo = document.querySelector('.oloxp .dnav .logo');
-    if (dnavLogo) { dnavLogo.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }); }
+    if (hasRail) {
+      const dnavLogo = document.querySelector('.oloxp .dnav .logo');
+      if (dnavLogo) { dnavLogo.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }); }
+    }
 
     /* ---- form folle: mad-lib ---- */
     const stampBtn = root.querySelector('.ox-stamp');
@@ -1119,17 +1145,21 @@
       });
     }
 
-    /* ---- posizione persistente ---- */
-    try {
-      const saved = localStorage.getItem('olo-exp-scroll');
-      if (saved && !goMatch) { requestAnimationFrame(() => scrollTo({ top: +saved, behavior: 'instant' })); }
-      let st;
-      addEventListener('scroll', () => {
-        clearTimeout(st);
-        st = setTimeout(() => localStorage.setItem('olo-exp-scroll', String(scrollY)), 200);
-      });
-    } catch (e) { /* storage non disponibile */ }
+    /* ---- posizione persistente (solo col rail) ---- */
+    if (hasRail) {
+      try {
+        const saved = localStorage.getItem('olo-exp-scroll');
+        if (saved && !goMatch) { requestAnimationFrame(() => scrollTo({ top: +saved, behavior: 'instant' })); }
+        let st;
+        addEventListener('scroll', () => {
+          clearTimeout(st);
+          st = setTimeout(() => localStorage.setItem('olo-exp-scroll', String(scrollY)), 200);
+        });
+      } catch (e) { /* storage non disponibile */ }
+    }
   };
+  /* La tile oloxscene usa lo stesso runtime: giochi/madlib guarded, rail assente. */
+  MODS.scene = MODS.home;
 
   /* ======================================================================== */
   ready(() => {

@@ -82,8 +82,9 @@ const accentHtml = computed(() => {
   if (pos === -1) return '';
   const hasNl = plain.includes('\n');
   const part = (t) => { const e = escHtml(t); return hasNl ? e.replace(/\n/g, '<br>') : e; };
+  const accStyle = 'color:' + accentColor.value + ';' + (s.value.accent_italic ? 'font-style:italic;' : '');
   return part(plain.slice(0, pos))
-    + '<span style="color:' + accentColor.value + ';">' + escHtml(acc) + '</span>'
+    + '<span style="' + accStyle + '">' + escHtml(acc) + '</span>'
     + part(plain.slice(pos + acc.length));
 });
 // HTML del titolo quando serve v-html: accento (parti escapate) oppure multiriga (<br>).
@@ -107,6 +108,12 @@ const headingStyle = computed(() => {
   // Italic
   if (s.value.heading_italic) {
     st.fontStyle = 'italic';
+  }
+
+  // Peso font esplicito (additivo): vince sul bold di default e sul preset.
+  const fw = parseInt(s.value.heading_weight, 10);
+  if (fw >= 100 && fw <= 900) {
+    st.fontWeight = String(fw);
   }
 
   // Uppercase

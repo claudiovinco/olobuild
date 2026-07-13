@@ -140,7 +140,11 @@ class Olobuild_OloxHero_Tile extends Olobuild_Olox_Base_Tile {
     }
 
     /** Scena destra per prodotto. */
-    private function olox_scene( $s, $scene ) {
+    /**
+     * Markup delle scene showcase (wall/clock/console/term/porthole/medal).
+     * Pubblico: fonte unica riusata dalla tile oloxscene (scene "hero-*").
+     */
+    public function olox_scene( $s, $scene ) {
         if ( 'none' === $scene ) { return '<div></div>'; }
         ob_start();
         ?>

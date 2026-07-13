@@ -82,19 +82,34 @@ class Olobuild_Toc_Tile extends Olobuild_Tile_Base {
             var linkClr = '<?php echo esc_js( $link_clr ); ?>';
             var isSticky = <?php echo $sticky ? 'true' : 'false'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'true'/'false' literal from the ternary ?>;
 
-            // Fix sticky: push position:sticky up to the inner-column parent
+            // Offset per header fissi del sito: lo sticky e i salti alle sezioni
+            // non devono finire sotto la barra.
+            function headerOffset(){
+                var hdr = document.querySelector('header.olo-site-header');
+                return hdr ? hdr.offsetHeight + 14 : 20;
+            }
+
+            // Fix sticky: push position:sticky up to the column parent. Nel builder
+            // le colonne interne sono .olo-inner-column; nel frontend la colonna è
+            // il figlio diretto della row (classi uk-width-*), sempre dentro un
+            // flex container alto quanto la colonna più alta — lo sticky lì ha corsa.
             if(isSticky){
                 var nav = document.getElementById(uid);
                 if(nav){
-                    var p = nav.closest('.olo-inner-column');
+                    var p = nav.closest('.olo-inner-column') || nav.closest('[class*="uk-width-"]');
                     if(p){
                         p.style.position = 'sticky';
-                        p.style.top = '20px';
+                        p.style.top = headerOffset() + 'px';
                         p.style.alignSelf = 'flex-start';
+                        p.style.zIndex = '5';
                         nav.style.position = 'static';
                     }
                 }
             }
+
+            var builtCount = 0;      // heading indicizzati all'ultima build
+            var hlObserver = null;   // IntersectionObserver highlight corrente
+            var clickBound = false;
 
             function buildToc(){
                 var container = document.getElementById(uid);
@@ -116,12 +131,18 @@ class Olobuild_Toc_Tile extends Olobuild_Tile_Base {
                 }
 
                 if(!headings.length) return false;
+                // Contenuto lazy materializzato dopo la prima build: se il numero
+                // di heading non è cambiato, la lista è già aggiornata.
+                if(headings.length === builtCount) return true;
+                builtCount = headings.length;
 
                 var html = '';
                 var counter = [0,0,0,0,0,0];
+                var scrollMargin = headerOffset();
                 headings.forEach(function(h){
                     var level = parseInt(h.tagName.charAt(1)) - 1;
                     if(!h.id) h.id = 'olo-heading-' + Math.random().toString(36).substr(2,6);
+                    h.style.scrollMarginTop = scrollMargin + 'px';
                     counter[level]++;
                     for(var j = level + 1; j < 6; j++) counter[j] = 0;
                     var num = '';
@@ -138,7 +159,8 @@ class Olobuild_Toc_Tile extends Olobuild_Tile_Base {
                 });
                 listEl.innerHTML = html;
 
-                if(smooth){
+                if(smooth && !clickBound){
+                    clickBound = true;
                     listEl.addEventListener('click', function(e){
                         var a = e.target.closest('a');
                         if(a){
@@ -149,8 +171,9 @@ class Olobuild_Toc_Tile extends Olobuild_Tile_Base {
                     });
                 }
                 if(doHighlight){
+                    if(hlObserver) hlObserver.disconnect();
                     var tocLinks = listEl.querySelectorAll('a');
-                    var obs = new IntersectionObserver(function(entries){
+                    hlObserver = new IntersectionObserver(function(entries){
                         entries.forEach(function(entry){
                             if(entry.isIntersecting){
                                 tocLinks.forEach(function(l){ l.classList.remove('olo-toc-active'); });
@@ -159,37 +182,30 @@ class Olobuild_Toc_Tile extends Olobuild_Tile_Base {
                             }
                         });
                     }, {rootMargin: '-20% 0px -80% 0px'});
-                    headings.forEach(function(h){ obs.observe(h); });
+                    headings.forEach(function(h){ hlObserver.observe(h); });
                 }
                 return true;
             }
 
-            // Try immediately
-            if(buildToc()) return;
+            buildToc();
 
-            // Wait for lazy-loaded content via MutationObserver
-            var attempts = 0;
-            var maxAttempts = 50;
+            // Il rendering lazy dei contenuti materializza heading anche molto dopo
+            // il load: l'osservatore resta attivo e RICOSTRUISCE l'indice quando il
+            // numero di heading cambia (debounce per non pesare sullo scroll).
+            var moTimer = null;
             var mo = new MutationObserver(function(){
-                attempts++;
-                if(buildToc()){
-                    mo.disconnect();
-                    return;
-                }
-                if(attempts >= maxAttempts) mo.disconnect();
+                if(moTimer) clearTimeout(moTimer);
+                moTimer = setTimeout(buildToc, 250);
             });
             mo.observe(document.body, {childList: true, subtree: true});
 
-            // Fallback: also try after window load
+            // Fallback: messaggio se dopo il load non c'è ancora nessun heading
             window.addEventListener('load', function(){
                 setTimeout(function(){
-                    if(!document.querySelector('#' + uid + ' .olo-toc-item')){
-                        if(!buildToc()){
-                            var listEl = document.querySelector('#' + uid + ' .olo-toc-list');
-                            if(listEl) listEl.innerHTML = '<p style="font-size:13px;color:var(--olo-color-text-muted, #9CA3AF);font-style:italic;">Nessun heading trovato nella pagina.</p>';
-                        }
+                    if(!document.querySelector('#' + uid + ' .olo-toc-item') && !buildToc()){
+                        var listEl = document.querySelector('#' + uid + ' .olo-toc-list');
+                        if(listEl) listEl.innerHTML = '<p style="font-size:13px;color:var(--olo-color-text-muted, #9CA3AF);font-style:italic;">Nessun heading trovato nella pagina.</p>';
                     }
-                    mo.disconnect();
                 }, 500);
             });
         })();

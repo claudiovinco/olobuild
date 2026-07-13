@@ -3236,6 +3236,10 @@ class Olobuild_Builder {
         require_once OLOBUILD_PATH . 'includes/tiles/class-oloxmanual-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-oloxpanel-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-oloxrail-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-oloxscene-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-coverdots-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-bottombar-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-pagelight-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-oloxhome-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-producthero-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-northvideohero-tile.php';
@@ -3495,6 +3499,10 @@ class Olobuild_Builder {
         $manager->register_tile( new Olobuild_OloxManual_Tile() );
         $manager->register_tile( new Olobuild_OloxPanel_Tile() );
         $manager->register_tile( new Olobuild_OloxRail_Tile() );
+        $manager->register_tile( new Olobuild_OloxScene_Tile() );
+        $manager->register_tile( new Olobuild_Coverdots_Tile() );
+        $manager->register_tile( new Olobuild_Bottombar_Tile() );
+        $manager->register_tile( new Olobuild_Pagelight_Tile() );
         $manager->register_tile( new Olobuild_OloxHome_Tile() );
         $manager->register_tile( new Olobuild_ProductHero_Tile() );
         $manager->register_tile( new Olobuild_NorthVideoHero_Tile() );

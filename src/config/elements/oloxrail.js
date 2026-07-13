@@ -12,6 +12,9 @@ export default {
   name: t('OLOX — Binario Experience (rail)'),
   icon: 'dashicons-slides',
   category: 'marketing',
+  // Ritirata dalla palette: lo scroll laterale e i pannelli sono feature native
+  // (sezioni Cover orizzontale + tile classiche). Resta per i template salvati.
+  hidden: true,
 
   defaults: {
     logo: '',

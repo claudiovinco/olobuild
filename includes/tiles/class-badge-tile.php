@@ -69,37 +69,70 @@ class Olobuild_Badge_Tile extends Olobuild_Tile_Base {
         $tt     = esc_attr( $s['text_transform'] ?? 'none' );
         $ls     = floatval( $s['letter_spacing'] ?? 0 );
 
-        // Variant → background/border/color
-        switch ( $variant ) {
-            case 'solid':
-                $bg     = $accent;
-                $color  = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
-                $border = '1px solid transparent';
-                break;
-            case 'outline':
-                $bg     = 'transparent';
-                $color  = $this->safe_color_css( $s['text_color'] ) ?: $accent;
-                $border = '1px solid ' . $accent;
-                break;
-            case 'light':
-                $bg     = 'var(--olo-color-background, #ffffff)';
-                $color  = $txt;
-                $border = '1px solid var(--olo-color-border, #e6e8ec)';
-                break;
-            default: // soft
-                $bg     = 'color-mix(in srgb, ' . $accent . ' 12%, transparent)';
-                $color  = $txt;
-                $border = '1px solid color-mix(in srgb, ' . $accent . ' 22%, transparent)';
-        }
+        // Variant → background/border/color, per un accent dato. Per i badge
+        // aggiuntivi ($own_text=false) il colore testo segue l'accent dell'item,
+        // NON il text_color della tile (che appartiene al badge principale).
+        $variant_css = function ( $acc, $own_text = true ) use ( $variant, $s, $txt ) {
+            $text_override = $own_text ? $this->safe_color_css( $s['text_color'] ) : '';
+            switch ( $variant ) {
+                case 'solid':
+                    $bg     = $acc;
+                    $color  = $text_override ?: 'var(--olo-color-on-primary, #ffffff)';
+                    $border = '1px solid transparent';
+                    break;
+                case 'outline':
+                    $bg     = 'transparent';
+                    $color  = $text_override ?: $acc;
+                    $border = '1px solid ' . $acc;
+                    break;
+                case 'light':
+                    $bg     = 'var(--olo-color-background, #ffffff)';
+                    $color  = $txt;
+                    $border = '1px solid var(--olo-color-border, #e6e8ec)';
+                    break;
+                default: // soft
+                    $bg     = 'color-mix(in srgb, ' . $acc . ' 12%, transparent)';
+                    $color  = $txt;
+                    $border = '1px solid color-mix(in srgb, ' . $acc . ' 22%, transparent)';
+            }
+            return [ $bg, $border, $color ];
+        };
+        list( $bg, $border, $color ) = $variant_css( $accent );
 
         $justify = $s['alignment'] === 'center' ? 'center' : ( $s['alignment'] === 'right' ? 'flex-end' : 'flex-start' );
 
-        $badge_css = 'display:inline-flex;align-items:center;gap:8px;'
+        // Set tipografico globale (stesso pattern di headline): family dal set,
+        // gli altri assi restano quelli espliciti della tile.
+        $tp = sanitize_text_field( $s['typography_preset'] ?? '' );
+        if ( $tp !== '' && ! preg_match( '/^[A-Za-z0-9_-]+$/', $tp ) ) {
+            $tp = '';
+        }
+        $tp_css = $tp ? "font-family:var(--olo-font-{$tp}-family);" : '';
+
+        $base_css = 'display:inline-flex;align-items:center;gap:8px;'
             . 'padding:' . $pad_y . 'px ' . $pad_x . 'px;'
             . 'border-radius:' . $radius . ';'
-            . 'background:' . $bg . ';border:' . $border . ';color:' . $color . ';'
+            . $tp_css
             . 'font-size:' . $fs . 'px;font-weight:' . $fw . ';text-transform:' . $tt . ';'
             . 'letter-spacing:' . $ls . 'px;line-height:1;';
+        $badge_css = $base_css . 'background:' . $bg . ';border:' . $border . ';color:' . $color . ';';
+
+        // Badge aggiuntivi (additivo): pill gemelle con colore per-item.
+        $extras = [];
+        foreach ( ( is_array( $s['extra_items'] ?? null ) ? $s['extra_items'] : [] ) as $it ) {
+            $it_text = esc_html( wp_strip_all_tags( $it['text'] ?? '' ) );
+            if ( '' === $it_text ) {
+                continue;
+            }
+            $it_acc = $this->safe_color_css( $it['color'] ?? '' ) ?: 'var(--olo-color-border, #9aa0ad)';
+            list( $ibg, $ibrd, $iclr ) = $variant_css( $it_acc, false );
+            $it_txt_clr = $this->safe_color_css( $it['text_color'] ?? '' );
+            if ( $it_txt_clr ) {
+                $iclr = $it_txt_clr;
+            }
+            $extras[] = [ $it_text, $base_css . 'background:' . $ibg . ';border:' . $ibrd . ';color:' . $iclr . ';' ];
+        }
+        $wrap_extra = $extras ? 'flex-wrap:wrap;gap:8px;' : '';
 
         // Live dot
         $live_html = '';
@@ -117,13 +150,16 @@ class Olobuild_Badge_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-badge-wrap <?php echo esc_attr( $uid ); ?>" style="display:flex;justify-content:<?php echo esc_attr( $justify ); ?>;">
+        <div class="olo-badge-wrap <?php echo esc_attr( $uid ); ?>" style="display:flex;justify-content:<?php echo esc_attr( $justify ); ?>;<?php echo esc_attr( $wrap_extra ); ?>">
             <span class="olo-badge" style="<?php echo esc_attr( $badge_css ); ?>">
                 <?php echo $live_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed internal literal markup (live dot span) ?>
                 <?php echo $icon_before; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon HTML built by render_icon_html(), which sanitizes SVG internally (olobuild_sanitize_svg/wp_kses_post) ?>
                 <span class="olo-badge-text" data-olo-editable="text"><?php echo $text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_html()'d at assignment above ?></span>
                 <?php echo $icon_after; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon HTML built by render_icon_html(), which sanitizes SVG internally (olobuild_sanitize_svg/wp_kses_post) ?>
             </span>
+            <?php foreach ( $extras as $ex ) : ?>
+            <span class="olo-badge" style="<?php echo esc_attr( $ex[1] ); ?>"><span class="olo-badge-text"><?php echo $ex[0]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_html()'d at assignment above ?></span></span>
+            <?php endforeach; ?>
         </div>
         <?php
         return ob_get_clean();

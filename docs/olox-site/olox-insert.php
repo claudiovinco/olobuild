@@ -34,14 +34,52 @@ usort( $jobs, function ( $a, $b ) {
     return $rank( $a ) - $rank( $b );
 } );
 
-$header_id = 0;
-$footer_id = 0;
+$header_id   = 0;
+$footer_id   = 0;
+$partial_ids = [];
 
 foreach ( $jobs as $data ) {
     $title   = $data['title'];
     $slug    = $data['slug'];
     $kind    = $data['kind'];
     $content = wp_json_encode( $data['content'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+
+    // Segnaposto "OLOX_TPL:slug" → id reale del template partial (processati
+    // per primi grazie al rank): usati p.es. dal popup in modalità template.
+    foreach ( $partial_ids as $pslug => $pid ) {
+        $content = str_replace( '"OLOX_TPL:' . $pslug . '"', (string) $pid, $content );
+    }
+
+    if ( 'partial' === $kind ) {
+        // Template riusabile senza pagina (contenuto di popup/modali).
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- tabella interna del plugin.
+        $existing = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$table} WHERE title = %s LIMIT 1", $title ) );
+        if ( $existing ) {
+            $wpdb->update( $table, [
+                'content'    => $content,
+                'status'     => 'published',
+                'updated_at' => current_time( 'mysql' ),
+            ], [ 'id' => (int) $existing ] );
+            $tpl_id = (int) $existing;
+            echo "UPD partial #{$tpl_id} · {$title}\n";
+        } else {
+            $wpdb->insert( $table, [
+                'title'      => $title,
+                'type'       => 'page',
+                'content'    => $content,
+                'settings'   => '{}',
+                'thumbnail'  => '',
+                'status'     => 'published',
+                'author_id'  => 1,
+                'created_at' => current_time( 'mysql' ),
+                'updated_at' => current_time( 'mysql' ),
+            ] );
+            $tpl_id = (int) $wpdb->insert_id;
+            echo "NEW partial #{$tpl_id} · {$title}\n";
+        }
+        $partial_ids[ $slug ] = $tpl_id;
+        continue;
+    }
 
     if ( 'header' === $kind || 'footer' === $kind ) {
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- tabella interna del plugin.

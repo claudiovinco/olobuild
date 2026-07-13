@@ -765,6 +765,16 @@ class Olobuild_Frontend_Renderer {
      * Returns true if the element should be rendered.
      */
     private function check_conditions( $settings ) {
+        $result = $this->check_conditions_result( $settings );
+        // cond_negate: inverte l'esito della condizione (es. "mostra ovunque
+        // TRANNE che sulla front page").
+        if ( ! empty( $settings['cond_negate'] ) && ( $settings['cond_type'] ?? '' ) !== '' ) {
+            return ! $result;
+        }
+        return $result;
+    }
+
+    private function check_conditions_result( $settings ) {
         $cond_type = $settings['cond_type'] ?? '';
         if ( $cond_type === '' ) return true;
 
@@ -1198,6 +1208,10 @@ class Olobuild_Frontend_Renderer {
             // prima che esista e il pin non aggancia. evonotes: layer globale che si
             // ancora alle sezioni della pagina, deve nascere al load.
             'filmreel', 'evonotes',
+            // menuanchor: il punto di ancoraggio deve esistere nel DOM al load,
+            // altrimenti i link #anchor (navigazione, salti alle fermate cover-h)
+            // non trovano il bersaglio finché la sezione non viene materializzata.
+            'menuanchor',
         ];
         if ( in_array( $type, $no_lazy, true ) ) {
             return $html;
@@ -1492,6 +1506,12 @@ class Olobuild_Frontend_Renderer {
         if ( $inline_styles ) {
             $html .= ' style="' . esc_attr( implode( '; ', $inline_styles ) ) . '"';
         }
+        // Colore luce per la tile "Luce di pagina" (atmosfera): la sezione
+        // dichiara il colore, il layer fisso della tile lo segue allo scroll.
+        $light_color = $this->sanitize_light_color( $s['light_color'] ?? '' );
+        if ( $light_color ) {
+            $html .= ' data-olo-light="' . esc_attr( $light_color ) . '"';
+        }
         $html .= $scrollspy_attr . $el_parallax_attr . $snap_data_attr . $mouse_attrs . $this->anim->build_spotlight_attr( $advanced ) . '>';
 
         $bg_layers_html = '';
@@ -1590,6 +1610,18 @@ class Olobuild_Frontend_Renderer {
         }
 
         return $html;
+    }
+
+    /**
+     * Colore CSS "sicuro" per data-olo-light: hex, rgb(a), hsl(a) o var(--…).
+     */
+    private function sanitize_light_color( $value ) {
+        $v = trim( (string) $value );
+        if ( $v === '' ) return '';
+        if ( preg_match( '/^#[0-9a-fA-F]{3,8}$/', $v ) ) return $v;
+        if ( preg_match( '/^(rgb|rgba|hsl|hsla)\([\d\s.,%\/]+\)$/', $v ) ) return $v;
+        if ( preg_match( '/^var\(\s*--[\w-]+(?:\s*,\s*[^;{}<>]+)?\)$/', $v ) ) return $v;
+        return '';
     }
 
     /**
@@ -2800,7 +2832,7 @@ class Olobuild_Frontend_Renderer {
         // trasparente, ignora qualsiasi bg in style/settings (il bg appartiene all'elemento
         // interno, non al wrapper). Specchio della guardia ATOMIC_TILE_TYPES nel JS
         // useBackgroundStyle.js — regola HARD: nessun pulsante colora lo spazio circostante.
-        $ATOMIC_TILES = [ 'button', 'icon', 'divider', 'spacer', 'togglebtn' ];
+        $ATOMIC_TILES = [ 'button', 'icon', 'divider', 'spacer', 'togglebtn', 'badge' ];
         if ( in_array( $type, $ATOMIC_TILES, true ) ) {
             $bg_source = [ 'bg' => [ 'type' => 'none' ] ];
         }
@@ -4420,10 +4452,11 @@ class Olobuild_Frontend_Renderer {
                             track.className='olo-h-track';
                             track.style.height='100%';
                             var panelCSS='flex:0 0 100%;width:100%;min-height:'+viewH+'px;box-sizing:border-box;position:relative;overflow:hidden';
+                            /* Move (not clone) the real nodes: JS listeners, form state and
+                               media playback inside the panels survive the grouping. */
                             sections.forEach(function(item){
-                                var clone=item.sec.cloneNode(true);
-                                clone.style.cssText+=';'+panelCSS;
-                                track.appendChild(clone);
+                                item.sec.style.cssText+=';'+panelCSS;
+                                track.appendChild(item.sec);
                             });
                             viewport.appendChild(track);
                             group.appendChild(viewport);
@@ -4433,7 +4466,13 @@ class Olobuild_Frontend_Renderer {
                                 m.dataset.oloHDone='1';
                                 m.style.display='none';
                             });
-                            /* Scroll-linked translateX: travel across (n-1) panels */
+                            /* Scroll-linked translateX: travel across (n-1) panels.
+                               Stato esposto per altre tile (pallini, glow, testi):
+                               --olo-hp sul gruppo (progresso 0..1), --olo-pp per
+                               sezione (1 = pannello centrato), data-olo-active +
+                               CustomEvent 'olo:hgroup' al cambio pannello. */
+                            group.dataset.oloCount=n;
+                            group.dataset.stickyTop=stickyTop;
                             var ticking=false;
                             var maxShift=(n-1)*100;
                             function onScroll(){
@@ -4444,12 +4483,55 @@ class Olobuild_Frontend_Renderer {
                                     if(travel<=0){ticking=false;return;}
                                     var p=Math.max(0,Math.min(1,scrolled/travel));
                                     track.style.transform='translateX('+ (-p*maxShift) +'%)';
+                                    group.style.setProperty('--olo-hp',p.toFixed(4));
+                                    var pos=p*(n-1);
+                                    sections.forEach(function(item,i){
+                                        var pp=1-Math.min(1,Math.abs(pos-i));
+                                        item.sec.style.setProperty('--olo-pp',pp.toFixed(4));
+                                    });
+                                    var active=Math.round(pos);
+                                    if(group._oloActive!==active){
+                                        group._oloActive=active;
+                                        group.dataset.oloActive=active;
+                                        try{window.dispatchEvent(new CustomEvent('olo:hgroup',{detail:{group:group,index:active,count:n,progress:p}}));}catch(e){}
+                                    }
                                     ticking=false;
                                 });}
                             }
                             window.addEventListener('scroll',onScroll,{passive:true});
                             onScroll();
                         });
+                        /* Link ad anchor dentro sezioni raggruppate: l'anchor sta nel
+                           track traslato, lo scroll nativo del browser porterebbe solo
+                           all'inizio del gruppo. Qui il click viene rimappato sulla
+                           posizione verticale della fermata corrispondente. */
+                        if(!window.__oloHAnchorJump){
+                            window.__oloHAnchorJump=true;
+                            document.addEventListener('click',function(ev){
+                                var a=ev.target.closest?ev.target.closest('a[href*="#"]'):null;
+                                if(!a)return;
+                                var hash=a.hash||'';
+                                if(!hash||hash==='#')return;
+                                var target=document.getElementById(hash.slice(1));
+                                if(!target)return;
+                                var grp=target.closest('.olo-h-group');
+                                if(!grp)return;
+                                var trk=grp.querySelector('.olo-h-track');
+                                if(!trk)return;
+                                var secs=Array.prototype.slice.call(trk.children);
+                                var idx=-1;
+                                for(var i=0;i<secs.length;i++){
+                                    if(secs[i]===target||secs[i].contains(target)){idx=i;break;}
+                                }
+                                if(idx<0)return;
+                                ev.preventDefault();
+                                var st=parseInt(grp.dataset.stickyTop)||0;
+                                var gTop=grp.getBoundingClientRect().top+window.scrollY;
+                                var tr=grp.offsetHeight-(window.innerHeight-st);
+                                var cnt=secs.length;
+                                window.scrollTo({top:Math.round(gTop+(cnt>1?tr*(idx/(cnt-1)):0)),behavior:'smooth'});
+                            });
+                        }
                     }
                     <?php endif; ?>
                     function initAll(){
