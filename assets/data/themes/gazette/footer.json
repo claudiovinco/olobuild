@@ -3,7 +3,7 @@
   "id": "ga-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 56, "padding_bottom": 28 },
-  "style": { "bg": { "type": "solid", "color": "#16161a" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-secondary)" } },
   "advanced": {},
   "children": [
    {
@@ -20,8 +20,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "ga-fbrand", "type": "headline", "settings": { "heading": "Gazette", "tag": "div", "alignment": "left", "heading_font_size": "38", "heading_uppercase": false, "heading_color": "#f3f0e9", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ga-fbtext", "type": "text-block", "settings": { "content": "<p>A culture review, published weekly. Long reads on art, cities, food and ideas.</p>", "text_color": "rgba(243,240,233,.66)", "font_size": "13.5", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ga-fbrand", "type": "headline", "settings": { "heading": "Gazette", "tag": "div", "alignment": "left", "heading_font_size": "38", "heading_uppercase": false, "heading_color": "var(--olo-color-background)", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ga-fbtext", "type": "text-block", "settings": { "content": "<p>A culture review, published weekly. Long reads on art, cities, food and ideas.</p>", "text_color": "color-mix(in srgb, var(--olo-color-background) 66%, transparent)", "font_size": "13.5", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -31,8 +31,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "ga-fh1", "type": "headline", "settings": { "heading": "Read", "tag": "h4", "alignment": "left", "heading_font_size": "11.5", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f3f0e9", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ga-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "5", "padding_x": "0", "padding_y": "4", "font_size": "13.5", "link_color": "rgba(243,240,233,.66)", "link_hover_color": "#f3f0e9", "items": [ { "title": "Art", "content": "#culture", "tag": "" }, { "title": "Cities", "content": "#culture", "tag": "" }, { "title": "Food", "content": "#culture", "tag": "" }, { "title": "Ideas", "content": "#culture", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ga-fh1", "type": "headline", "settings": { "heading": "Read", "tag": "h4", "alignment": "left", "heading_font_size": "11.5", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-background)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ga-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "5", "padding_x": "0", "padding_y": "4", "font_size": "13.5", "link_color": "color-mix(in srgb, var(--olo-color-background) 66%, transparent)", "link_hover_color": "var(--olo-color-background)", "items": [ { "title": "Art", "content": "#culture", "tag": "" }, { "title": "Cities", "content": "#culture", "tag": "" }, { "title": "Food", "content": "#culture", "tag": "" }, { "title": "Ideas", "content": "#culture", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -42,8 +42,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "ga-fh2", "type": "headline", "settings": { "heading": "Magazine", "tag": "h4", "alignment": "left", "heading_font_size": "11.5", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f3f0e9", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ga-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "5", "padding_x": "0", "padding_y": "4", "font_size": "13.5", "link_color": "rgba(243,240,233,.66)", "link_hover_color": "#f3f0e9", "items": [ { "title": "About", "content": "#", "tag": "" }, { "title": "Contributors", "content": "#", "tag": "" }, { "title": "Submissions", "content": "#", "tag": "" }, { "title": "Archive", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ga-fh2", "type": "headline", "settings": { "heading": "Magazine", "tag": "h4", "alignment": "left", "heading_font_size": "11.5", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-background)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ga-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "5", "padding_x": "0", "padding_y": "4", "font_size": "13.5", "link_color": "color-mix(in srgb, var(--olo-color-background) 66%, transparent)", "link_hover_color": "var(--olo-color-background)", "items": [ { "title": "About", "content": "#", "tag": "" }, { "title": "Contributors", "content": "#", "tag": "" }, { "title": "Submissions", "content": "#", "tag": "" }, { "title": "Archive", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -53,8 +53,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "ga-fh3", "type": "headline", "settings": { "heading": "Subscribe", "tag": "h4", "alignment": "left", "heading_font_size": "11.5", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f3f0e9", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ga-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "5", "padding_x": "0", "padding_y": "4", "font_size": "13.5", "link_color": "rgba(243,240,233,.66)", "link_hover_color": "#f3f0e9", "items": [ { "title": "Newsletter", "content": "#newsletter", "tag": "" }, { "title": "Print edition", "content": "#", "tag": "" }, { "title": "Gift a subscription", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ga-fh3", "type": "headline", "settings": { "heading": "Subscribe", "tag": "h4", "alignment": "left", "heading_font_size": "11.5", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-background)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "ga-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "5", "padding_x": "0", "padding_y": "4", "font_size": "13.5", "link_color": "color-mix(in srgb, var(--olo-color-background) 66%, transparent)", "link_hover_color": "var(--olo-color-background)", "items": [ { "title": "Newsletter", "content": "#newsletter", "tag": "" }, { "title": "Print edition", "content": "#", "tag": "" }, { "title": "Gift a subscription", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -67,7 +67,7 @@
     "advanced": {},
     "children": [
      { "id": "ga-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
-      { "id": "ga-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(243,240,233,.14)", "alignment": "center", "spacing": 22 }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "ga-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "color-mix(in srgb, var(--olo-color-background) 14%, transparent)", "alignment": "center", "spacing": 22 }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    },
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "ga-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "ga-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Gazette — an OLOtheme demo.</p>", "text_color": "rgba(243,240,233,.46)", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "ga-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Gazette — an OLOtheme demo.</p>", "text_color": "color-mix(in srgb, var(--olo-color-background) 46%, transparent)", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "ga-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "ga-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "rgba(243,240,233,.46)", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "ga-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "color-mix(in srgb, var(--olo-color-background) 46%, transparent)", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

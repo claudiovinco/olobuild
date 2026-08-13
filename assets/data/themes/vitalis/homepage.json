@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0e3b3a"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -36,24 +36,24 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "Wellness & recovery clinic",
-         "eyebrow_color": "#6fd6c4",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline": "Feel like",
          "accent": "yourself",
          "headline_tail": "again.",
          "accent_italic": true,
          "uppercase": false,
          "headline_color": "#eaf6f2",
-         "accent_color": "#6fd6c4",
+         "accent_color": "var(--olo-color-primary)",
          "headline_weight": "500",
          "headline_size": "86",
          "lead": "Physiotherapy, recovery suites and longevity care under one calm roof — evidence-led, unhurried, and built around you.",
-         "lead_color": "#a9cfc7",
+         "lead_color": "var(--olo-color-text)",
          "stats": [],
          "cta_text": "Book a first visit",
          "cta_url": "#membership",
          "cta_style": "button",
-         "cta_bg": "#6fd6c4",
-         "cta_color": "#072422",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta2_text": "Explore services",
          "cta2_url": "#services",
          "cta2_style": "outline",
@@ -105,7 +105,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0e3b3a"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -132,8 +132,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "What we do",
-         "eyebrow_color": "#6fd6c4",
-         "eyebrow_dot_color": "#6fd6c4",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -143,7 +143,7 @@
           },
           {
            "text": "three pillars",
-           "color": "#6fd6c4",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -230,7 +230,7 @@
          "title_weight": "500",
          "title_letter_spacing": 0,
          "title_uppercase": false,
-         "subtitle_color": "#6fd6c4",
+         "subtitle_color": "var(--olo-color-primary)",
          "subtitle_size": 13.5,
          "show_cta": false,
          "shadow": "none"
@@ -256,7 +256,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#103f3e"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -283,8 +283,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "The recovery menu",
-         "eyebrow_color": "#6fd6c4",
-         "eyebrow_dot_color": "#6fd6c4",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -294,7 +294,7 @@
           },
           {
            "text": "hour",
-           "color": "#6fd6c4",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -306,7 +306,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6f9a92",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -346,10 +346,10 @@
          "show_image": false,
          "price_position": "right",
          "separator_style": "dotted",
-         "separator_color": "rgba(111,214,196,.42)",
+         "separator_color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "title_color": "#eaf6f2",
-         "price_color": "#6fd6c4",
-         "description_color": "#6f9a92",
+         "price_color": "var(--olo-color-primary)",
+         "description_color": "var(--olo-color-text-muted)",
          "card_bg": "",
          "card_border_radius": {
           "tl": 0,
@@ -444,7 +444,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0e3b3a"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -497,7 +497,7 @@
          "value_color": "#eaf6f2",
          "value_size": 56,
          "value_weight": "600",
-         "label_color": "#6f9a92",
+         "label_color": "var(--olo-color-text-muted)",
          "label_size": 12.5,
          "label_uppercase": false,
          "mono_font_family": ""
@@ -523,7 +523,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#103f3e"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -550,8 +550,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Your team",
-         "eyebrow_color": "#6fd6c4",
-         "eyebrow_dot_color": "#6fd6c4",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -561,7 +561,7 @@
           },
           {
            "text": "listen first",
-           "color": "#6fd6c4",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -573,7 +573,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6f9a92",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -621,7 +621,7 @@
          "photo_gap": "16",
          "info_bg_color": "transparent",
          "info_text_color": "#eaf6f2",
-         "role_color": "#6fd6c4",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "21",
          "name_weight": "500",
@@ -667,7 +667,7 @@
          "photo_gap": "16",
          "info_bg_color": "transparent",
          "info_text_color": "#eaf6f2",
-         "role_color": "#6fd6c4",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "21",
          "name_weight": "500",
@@ -713,7 +713,7 @@
          "photo_gap": "16",
          "info_bg_color": "transparent",
          "info_text_color": "#eaf6f2",
-         "role_color": "#6fd6c4",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "21",
          "name_weight": "500",
@@ -759,7 +759,7 @@
          "photo_gap": "16",
          "info_bg_color": "transparent",
          "info_text_color": "#eaf6f2",
-         "role_color": "#6fd6c4",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "21",
          "name_weight": "500",
@@ -794,7 +794,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#103f3e"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -821,8 +821,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Membership",
-         "eyebrow_color": "#6fd6c4",
-         "eyebrow_dot_color": "#6fd6c4",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -832,7 +832,7 @@
           },
           {
            "text": "compounds",
-           "color": "#6fd6c4",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -844,7 +844,7 @@
          "tagline_show": true,
          "tagline_text": "First assessment is complimentary. Memberships include recovery access and member rates on every treatment.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6f9a92",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -886,10 +886,10 @@
           "type": "none"
          },
          "text_color": "#eaf6f2",
-         "accent_color": "#6fd6c4",
-         "subtitle_color": "#a9cfc7",
-         "cta_bg": "#6fd6c4",
-         "cta_color": "#072422",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,
@@ -940,7 +940,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0e3b3a"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -977,10 +977,10 @@
          "avatar": "",
          "quote_font": "heading",
          "quote_size": 40,
-         "quote_accent_color": "#6fd6c4",
+         "quote_accent_color": "var(--olo-color-primary)",
          "quote_uppercase": false,
          "author_uppercase": true,
-         "author_color": "#6fd6c4"
+         "author_color": "var(--olo-color-primary)"
         },
         "style": {},
         "advanced": {},
@@ -1003,7 +1003,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#103f3e"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -1031,8 +1031,8 @@
          "eyebrow": "Where to begin",
          "heading": "What brings you in?",
          "intro": "",
-         "zone_accent": "#6fd6c4",
-         "zone_on": "#072422",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "card_bg": "#14504d",
          "card_border": "1px solid rgba(111,214,196,.42)",
          "align": "center",
@@ -1096,7 +1096,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0e3b3a"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -1130,7 +1130,7 @@
          "cta2_text": "See services",
          "cta2_url": "#services",
          "cta2_bg": "#eaf6f2",
-         "cta2_color": "#072422",
+         "cta2_color": "var(--olo-color-primary-contrast)",
          "cta2_radius": {
           "tl": 999,
           "tr": 999,
@@ -1141,13 +1141,13 @@
          "cta2_border": "",
          "bg": {
           "type": "solid",
-          "color": "#072422"
+          "color": "var(--olo-color-primary-contrast)"
          },
          "text_color": "#eaf6f2",
-         "accent_color": "#6fd6c4",
-         "subtitle_color": "#a9cfc7",
-         "cta_bg": "#6fd6c4",
-         "cta_color": "#072422",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,
@@ -1174,7 +1174,7 @@
         "style": {},
         "advanced": {
          "cursor_spotlight": true,
-         "cursor_spotlight_color": "#6fd6c4",
+         "cursor_spotlight_color": "var(--olo-color-primary)",
          "cursor_spotlight_blend": "screen",
          "cursor_spotlight_size": 460,
          "cursor_spotlight_softness": 68,

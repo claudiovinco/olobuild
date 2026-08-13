@@ -10,7 +10,7 @@
    "padding_bottom": 0
   },
   "style": {
-   "bg": { "type": "solid", "color": "#160a24" }
+   "bg": { "type": "solid", "color": "var(--olo-color-background)" }
   },
   "advanced": {},
   "children": [
@@ -46,14 +46,14 @@
          "cta2_url": "#",
          "scroll_text": "",
          "show_scroll": false,
-         "bg_color": "#160a24",
-         "accent": "#c14bff",
-         "accent2": "#4be0ff",
-         "accent_on": "#ffffff",
-         "text_color": "#ffffff",
-         "sub_color": "#7d6c92",
-         "eyebrow_color": "#c14bff",
-         "glow_color": "rgba(193,75,255,0.24)",
+         "bg_color": "var(--olo-color-background)",
+         "accent": "var(--olo-color-primary)",
+         "accent2": "var(--olo-color-secondary)",
+         "accent_on": "var(--olo-color-primary-contrast)",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "sub_color": "var(--olo-color-text-muted)",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "glow_color": "color-mix(in srgb, var(--olo-color-primary) 24%, transparent)",
          "glow_w": 600,
          "glow_h": 440,
          "glow_blur": 110,
@@ -89,7 +89,7 @@
    "padding_top": 52
   },
   "style": {
-   "bg": { "type": "solid", "color": "#160a24" }
+   "bg": { "type": "solid", "color": "var(--olo-color-background)" }
   },
   "advanced": {},
   "children": [
@@ -119,13 +119,13 @@
          "media_label_color": "#f1e9f7",
          "hover_zoom": true,
          "title_font_family": "heading",
-         "title_color": "#ffffff",
+         "title_color": "var(--olo-color-primary-contrast)",
          "title_size": 26,
          "title_weight": "800",
-         "meta_color": "#c14bff",
+         "meta_color": "var(--olo-color-primary)",
          "meta_size": 11,
          "show_desc": true,
-         "desc_color": "#7d6c92",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 14,
          "mono_font_family": "",
          "items": [
@@ -204,7 +204,7 @@
    "padding": "large"
   },
   "style": {
-   "bg": { "type": "solid", "color": "#160a24" }
+   "bg": { "type": "solid", "color": "var(--olo-color-background)" }
   },
   "advanced": {},
   "children": [
@@ -238,16 +238,16 @@
           "type": "gradient",
           "gradient": "linear-gradient(150deg,rgba(193,75,255,.2) 0%,rgba(75,224,255,.06) 100%)"
          },
-         "text_color": "#ffffff",
-         "accent_color": "#c14bff",
-         "subtitle_color": "#b6a6c8",
-         "cta_bg": "#c14bff",
-         "cta_color": "#ffffff",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999, "linked": true },
          "cta_size": 14,
          "cta2_bg": "transparent",
-         "cta2_color": "#ffffff",
-         "cta2_border": "rgba(193,75,255,.42)",
+         "cta2_color": "var(--olo-color-primary-contrast)",
+         "cta2_border": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "cta2_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999, "linked": true },
          "headline_font_family": "serif",
          "headline_size": 80,
@@ -257,7 +257,7 @@
          "vertical_align": "center",
          "banner_radius": { "tl": 24, "tr": 24, "br": 24, "bl": 24, "linked": true },
          "banner_padding": 80,
-         "border_color": "rgba(193,75,255,.42)"
+         "border_color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)"
         },
         "style": {},
         "advanced": {},

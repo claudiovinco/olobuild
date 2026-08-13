@@ -3,7 +3,7 @@
   "id": "lp-se-1",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "remove-vertical", "padding_top": 96, "padding_bottom": 42 },
-  "style": { "bg": { "type": "solid", "color": "#1c1c1e" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    { "id": "lp-ro-1", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
@@ -11,10 +11,10 @@
      { "id": "lp-ph", "type": "section-header", "settings": {
         "eyebrow_show": true,
         "eyebrow_text": "Private residence · 2025 · 240 m²",
-        "eyebrow_color": "#c9c2b6",
+        "eyebrow_color": "var(--olo-color-primary)",
         "eyebrow_separator": "",
         "headline_lines": [
-         { "text": "House on the Slope", "color": "#eeece6", "italic": false }
+         { "text": "House on the Slope", "color": "var(--olo-color-secondary-contrast)", "italic": false }
         ],
         "headline_font_family": "sans-serif",
         "headline_font_size": 92,
@@ -24,7 +24,7 @@
         "tagline_show": true,
         "tagline_text": "A family house built into a north-Italian hillside — organised around a single concrete spine, opening south to the valley and the light.",
         "tagline_text_italic": false,
-        "tagline_text_color": "#646058",
+        "tagline_text_color": "var(--olo-color-text-muted)",
         "tagline_text_size": 17,
         "tagline_caption": "",
         "layout": "stack",
@@ -38,7 +38,7 @@
   "id": "lp-se-2",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "remove-vertical", "padding_top": 48, "padding_bottom": 0 },
-  "style": { "bg": { "type": "solid", "color": "#1c1c1e" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    { "id": "lp-ro-2", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
@@ -61,14 +61,14 @@
   "id": "lp-se-3",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#1c1c1e" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    { "id": "lp-ro-3", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
     { "id": "lp-co-3", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
      { "id": "lp-lead", "type": "text-block", "settings": {
         "content": "<p>The site fell away sharply to the south. Rather than fight the slope, we used it: a board-marked concrete spine steps down the hill, holding back the earth on one side and carrying the house on the other. Everything hangs off that one decisive line.</p>",
-        "text_color": "#eeece6",
+        "text_color": "var(--olo-color-secondary-contrast)",
         "font_size": "19",
         "line_height": "1.8",
         "text_align": "left",
@@ -82,7 +82,7 @@
   "id": "lp-se-4",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "remove-vertical", "padding_top": 0, "padding_bottom": 56 },
-  "style": { "bg": { "type": "solid", "color": "#1c1c1e" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    { "id": "lp-ro-4", "type": "row", "settings": { "gap": 16, "vertical_align": "top" }, "style": {}, "advanced": {}, "children": [
@@ -116,7 +116,7 @@
   "id": "lp-se-5",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#202022" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    { "id": "lp-ro-5", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
@@ -126,13 +126,13 @@
         "items_gap": 0,
         "band_padding_y": 12,
         "show_dividers": true,
-        "divider_color": "rgba(238,236,230,.12)",
+        "divider_color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 12%, transparent)",
         "band_border": false,
         "value_font_family": "heading",
-        "value_color": "#eeece6",
+        "value_color": "var(--olo-color-secondary-contrast)",
         "value_size": 52,
         "value_weight": "600",
-        "label_color": "#646058",
+        "label_color": "var(--olo-color-text-muted)",
         "label_size": 12,
         "label_uppercase": false,
         "align": "left",
@@ -152,7 +152,7 @@
   "id": "lp-se-6",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "remove-vertical", "padding_top": 52, "padding_bottom": 96 },
-  "style": { "bg": { "type": "solid", "color": "#1c1c1e" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    { "id": "lp-ro-6", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
@@ -164,7 +164,7 @@
         "uppercase": false,
         "headline_color": "#ffffff",
         "subhead": "Every Loft project starts with a long conversation on the land. Let's have it.",
-        "subhead_color": "#eeece6",
+        "subhead_color": "var(--olo-color-secondary-contrast)",
         "cta1_text": "Start a project",
         "cta1_url": "#contact",
         "cta2_text": "",
@@ -176,10 +176,10 @@
         "overlay_color": "#121214",
         "overlay_top": 0.7,
         "overlay_bottom": 0.85,
-        "accent": "#c9c2b6",
-        "accent_on": "#121214",
-        "btn_bg": "#c9c2b6",
-        "btn_color": "#121214",
+        "accent": "var(--olo-color-primary)",
+        "accent_on": "var(--olo-color-primary-contrast)",
+        "btn_bg": "var(--olo-color-primary)",
+        "btn_color": "var(--olo-color-primary-contrast)",
         "btn_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0 },
         "text_color": "#ffffff",
         "align": "center",

@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#16161a"
+    "color": "var(--olo-color-secondary)"
    }
   },
   "advanced": {},
@@ -39,14 +39,14 @@
          "label_text": "Latest",
          "label_shape": "arrow",
          "label_position": "left",
-         "label_bg": "#9a2b22",
-         "label_color": "#ffffff",
+         "label_bg": "var(--olo-color-primary)",
+         "label_color": "var(--olo-color-primary-contrast)",
          "animation_type": "marquee",
          "marquee_direction": "left",
          "marquee_duration": 38,
          "marquee_gap": 44,
-         "bg_color": "#16161a",
-         "text_color": "rgba(243,240,233,.82)",
+         "bg_color": "var(--olo-color-secondary)",
+         "text_color": "color-mix(in srgb, var(--olo-color-background) 82%, transparent)",
          "height": "42",
          "font_size": 13,
          "font_family": "serif",
@@ -114,7 +114,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f3f0e9"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -159,16 +159,16 @@
          "media_radius": 0,
          "standfirst_italic": false,
          "placeholder_dark": true,
-         "bg_color": "#f3f0e9",
-         "kicker_color": "#9a2b22",
-         "headline_color": "#16161a",
-         "accent_color": "#9a2b22",
+         "bg_color": "var(--olo-color-background)",
+         "kicker_color": "var(--olo-color-primary)",
+         "headline_color": "var(--olo-color-secondary)",
+         "accent_color": "var(--olo-color-primary)",
          "standfirst_color": "#2c2c30",
-         "byline_color": "#76746e",
-         "byline_name_color": "#16161a",
-         "media_bg": "#e9e4d8",
-         "cta_solid_bg": "#16161a",
-         "cta_solid_text": "#f3f0e9",
+         "byline_color": "var(--olo-color-text-muted)",
+         "byline_name_color": "var(--olo-color-secondary)",
+         "media_bg": "var(--olo-color-muted)",
+         "cta_solid_bg": "var(--olo-color-secondary)",
+         "cta_solid_text": "var(--olo-color-background)",
          "heading_font": "'Libre Caslon Display', Georgia, serif",
          "serif_font": "'Libre Caslon Text', Georgia, serif",
          "sans_font": "'Mulish', -apple-system, sans-serif"
@@ -194,7 +194,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f3f0e9"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -223,7 +223,7 @@
          "headline_lines": [
           {
            "text": "This week",
-           "color": "#16161a",
+           "color": "var(--olo-color-secondary)",
            "italic": false
           }
          ],
@@ -234,7 +234,7 @@
          "headline_inline": false,
          "tagline_show": true,
          "tagline_text": "All stories →",
-         "tagline_text_color": "#9a2b22",
+         "tagline_text_color": "var(--olo-color-primary)",
          "tagline_text_size": 11.5,
          "tagline_text_italic": false,
          "layout": "split",
@@ -282,7 +282,7 @@
           "type": "solid",
           "color": "transparent"
          },
-         "card_color": "#76746e",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": {
           "tl": 0,
           "tr": 0,
@@ -301,7 +301,7 @@
          "media_position": "top",
          "media_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0, "linked": true },
          "counter_shape": "plain",
-         "counter_color": "#9a2b22",
+         "counter_color": "var(--olo-color-primary)",
          "counter_size": 11,
          "title_font_family": "serif",
          "title_size": 23,
@@ -319,7 +319,7 @@
            "title": "The painter who only works at dawn",
            "description": "Margit Halász hasn’t touched a brush after 9am in thirty years. We spent a week watching the light she chases — and the discipline behind it.",
            "footer_text": "By Tomas Veber · 12 min",
-           "footer_dot_color": "#9a2b22"
+           "footer_dot_color": "var(--olo-color-primary)"
           },
           {
            "media_image": "",
@@ -329,7 +329,7 @@
            "title": "What we lost when restaurants got quiet",
            "description": "On noise, intimacy, and the strange grief of a half-empty dining room.",
            "footer_text": "By A. Demir · 9 min",
-           "footer_dot_color": "#9a2b22"
+           "footer_dot_color": "var(--olo-color-primary)"
           },
           {
            "media_image": "",
@@ -339,7 +339,7 @@
            "title": "The last letterpress in the old quarter",
            "description": "One family, four tonnes of lead type, and a refusal to go digital.",
            "footer_text": "By J. Okoro · 7 min",
-           "footer_dot_color": "#9a2b22"
+           "footer_dot_color": "var(--olo-color-primary)"
           }
          ]
         },
@@ -393,7 +393,7 @@
          "headline_lines": [
           {
            "text": "More from the issue",
-           "color": "#16161a",
+           "color": "var(--olo-color-secondary)",
            "italic": false
           }
          ],
@@ -449,7 +449,7 @@
           "type": "solid",
           "color": "transparent"
          },
-         "card_color": "#76746e",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": {
           "tl": 0,
           "tr": 0,
@@ -468,7 +468,7 @@
          "media_position": "top",
          "media_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0, "linked": true },
          "counter_shape": "plain",
-         "counter_color": "#9a2b22",
+         "counter_color": "var(--olo-color-primary)",
          "counter_size": 11,
          "title_font_family": "serif",
          "title_size": 23,
@@ -486,7 +486,7 @@
            "title": "A short history of the public bath",
            "description": "How cities learned to be clean together — and what they traded for it.",
            "footer_text": "By R. Bianchi · 11 min",
-           "footer_dot_color": "#9a2b22"
+           "footer_dot_color": "var(--olo-color-primary)"
           },
           {
            "media_image": "",
@@ -496,7 +496,7 @@
            "title": "The case for the second-hand bookshop",
            "description": "Against the algorithm: in praise of finding what you weren’t looking for.",
            "footer_text": "By L. Haddad · 8 min",
-           "footer_dot_color": "#9a2b22"
+           "footer_dot_color": "var(--olo-color-primary)"
           }
          ]
         },
@@ -523,7 +523,7 @@
          "headline_lines": [
           {
            "text": "Most read",
-           "color": "#16161a",
+           "color": "var(--olo-color-secondary)",
            "italic": false
           }
          ],
@@ -615,7 +615,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f3f0e9"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -644,7 +644,7 @@
          "headline_lines": [
           {
            "text": "Departments",
-           "color": "#16161a",
+           "color": "var(--olo-color-secondary)",
            "italic": false
           }
          ],
@@ -698,7 +698,7 @@
           "color": "transparent"
          },
          "card_border": "1px solid #c7c0ae",
-         "card_color": "#76746e",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": {
           "tl": 3,
           "tr": 3,
@@ -719,10 +719,10 @@
          "title_italic": false,
          "title_color": "#16161a",
          "description_size": 12,
-         "description_color": "#76746e",
+         "description_color": "var(--olo-color-text-muted)",
          "card_hover_effect": "fill",
-         "card_hover_bg": "#16161a",
-         "card_hover_text": "#f3f0e9",
+         "card_hover_bg": "var(--olo-color-secondary)",
+         "card_hover_text": "var(--olo-color-background)",
          "items": [
           {
            "title": "Art",
@@ -763,7 +763,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#16161a"
+    "color": "var(--olo-color-secondary)"
    }
   },
   "advanced": {},
@@ -812,20 +812,20 @@
          },
          "title_size": "46",
          "title_weight": "400",
-         "title_color": "#f3f0e9",
+         "title_color": "var(--olo-color-background)",
          "subtitle_size": "16",
-         "subtitle_color": "rgba(243,240,233,.70)",
+         "subtitle_color": "color-mix(in srgb, var(--olo-color-background) 70%, transparent)",
          "icon_size": "13",
          "icon_color": "#d8a59f",
-         "input_bg": "rgba(243,240,233,.08)",
-         "input_color": "#f3f0e9",
-         "input_border": "rgba(243,240,233,.22)",
-         "input_focus_border": "#f3f0e9",
+         "input_bg": "color-mix(in srgb, var(--olo-color-background) 8%, transparent)",
+         "input_color": "var(--olo-color-background)",
+         "input_border": "color-mix(in srgb, var(--olo-color-background) 22%, transparent)",
+         "input_focus_border": "var(--olo-color-background)",
          "input_radius": 3,
          "input_height": "50",
-         "btn_bg": "#f3f0e9",
-         "btn_color": "#16161a",
-         "btn_hover_bg": "#e9e4d8",
+         "btn_bg": "var(--olo-color-background)",
+         "btn_color": "var(--olo-color-secondary)",
+         "btn_hover_bg": "var(--olo-color-muted)",
          "btn_radius": 2,
          "btn_font_size": "12",
          "btn_font_weight": "700"

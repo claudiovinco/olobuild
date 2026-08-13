@@ -3,7 +3,7 @@
   "id": "at-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large", "padding_top": 64, "padding_bottom": 32 },
-  "style": { "bg": { "type": "solid", "color": "#0c0c0c" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-primary-contrast)" } },
   "advanced": {},
   "children": [
    {
@@ -29,7 +29,7 @@
          "alignment": "left",
          "heading_font_size": "24",
          "heading_uppercase": true,
-         "heading_color": "#efe9de",
+         "heading_color": "var(--olo-color-secondary)",
          "decoration": "none"
         },
         "style": {},
@@ -41,7 +41,7 @@
         "type": "text-block",
         "settings": {
          "content": "<p>A Parisian fashion house. Ready-to-wear and made-to-measure, finished by hand since 1998.</p>",
-         "text_color": "#7c776e",
+         "text_color": "var(--olo-color-text-muted)",
          "font_size": "14",
          "line_height": "1.7",
          "text_align": "left",
@@ -63,7 +63,7 @@
        {
         "id": "at-fh1",
         "type": "headline",
-        "settings": { "heading": "Shop", "tag": "h4", "alignment": "left", "heading_font_size": "11", "heading_uppercase": true, "heading_color": "#efe9de", "decoration": "none" },
+        "settings": { "heading": "Shop", "tag": "h4", "alignment": "left", "heading_font_size": "11", "heading_uppercase": true, "heading_color": "var(--olo-color-secondary)", "decoration": "none" },
         "style": {},
         "advanced": {},
         "children": []
@@ -75,8 +75,8 @@
          "show_icons": false,
          "direction": "vertical",
          "alignment": "left",
-         "link_color": "#7c776e",
-         "link_hover_color": "#c9a86a",
+         "link_color": "var(--olo-color-text-muted)",
+         "link_hover_color": "var(--olo-color-link)",
          "items": [
           { "title": "The Collection", "content": "#", "tag": "" },
           { "title": "Outerwear", "content": "#", "tag": "" },
@@ -100,7 +100,7 @@
        {
         "id": "at-fh2",
         "type": "headline",
-        "settings": { "heading": "The House", "tag": "h4", "alignment": "left", "heading_font_size": "11", "heading_uppercase": true, "heading_color": "#efe9de", "decoration": "none" },
+        "settings": { "heading": "The House", "tag": "h4", "alignment": "left", "heading_font_size": "11", "heading_uppercase": true, "heading_color": "var(--olo-color-secondary)", "decoration": "none" },
         "style": {},
         "advanced": {},
         "children": []
@@ -112,8 +112,8 @@
          "show_icons": false,
          "direction": "vertical",
          "alignment": "left",
-         "link_color": "#7c776e",
-         "link_hover_color": "#c9a86a",
+         "link_color": "var(--olo-color-text-muted)",
+         "link_hover_color": "var(--olo-color-link)",
          "items": [
           { "title": "The Atelier", "content": "#", "tag": "" },
           { "title": "Craftsmanship", "content": "#", "tag": "" },
@@ -137,7 +137,7 @@
        {
         "id": "at-fh3",
         "type": "headline",
-        "settings": { "heading": "Client Care", "tag": "h4", "alignment": "left", "heading_font_size": "11", "heading_uppercase": true, "heading_color": "#efe9de", "decoration": "none" },
+        "settings": { "heading": "Client Care", "tag": "h4", "alignment": "left", "heading_font_size": "11", "heading_uppercase": true, "heading_color": "var(--olo-color-secondary)", "decoration": "none" },
         "style": {},
         "advanced": {},
         "children": []
@@ -149,8 +149,8 @@
          "show_icons": false,
          "direction": "vertical",
          "alignment": "left",
-         "link_color": "#7c776e",
-         "link_hover_color": "#c9a86a",
+         "link_color": "var(--olo-color-text-muted)",
+         "link_hover_color": "var(--olo-color-link)",
          "items": [
           { "title": "Shipping & returns", "content": "#", "tag": "" },
           { "title": "Book an appointment", "content": "#", "tag": "" },
@@ -183,7 +183,7 @@
        {
         "id": "at-fdiv",
         "type": "divider",
-        "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(239,233,222,.12)", "alignment": "center", "spacing": 24 },
+        "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "color-mix(in srgb, var(--olo-color-secondary) 12%, transparent)", "alignment": "center", "spacing": 24 },
         "style": {},
         "advanced": {},
         "children": []
@@ -211,7 +211,7 @@
         "type": "text-block",
         "settings": {
          "content": "<p>© 2026 Atelier Noir — an OLOtheme demo.</p>",
-         "text_color": "#7c776e",
+         "text_color": "var(--olo-color-text-muted)",
          "font_size": "12",
          "text_align": "left"
         },
@@ -233,7 +233,7 @@
         "type": "text-block",
         "settings": {
          "content": "<p>Built with OLObuild</p>",
-         "text_color": "#7c776e",
+         "text_color": "var(--olo-color-text-muted)",
          "font_size": "12",
          "text_align": "right"
         },

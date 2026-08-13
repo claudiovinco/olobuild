@@ -3,7 +3,7 @@
   "id": "sg-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 54, "padding_bottom": 28 },
-  "style": { "bg": { "type": "solid", "color": "#141b22" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -21,7 +21,7 @@
       "advanced": {},
       "children": [
        { "id": "sg-fbrand", "type": "headline", "settings": { "heading": "Signal", "tag": "div", "alignment": "left", "heading_font_size": "19", "heading_uppercase": false, "heading_color": "#eef2ec", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "sg-fbtext", "type": "text-block", "settings": { "content": "<p>A tech & ideas blog. Essays on software, systems and the people who build them.</p>", "text_color": "#5f6b76", "font_size": "13.5", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "sg-fbtext", "type": "text-block", "settings": { "content": "<p>A tech & ideas blog. Essays on software, systems and the people who build them.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "13.5", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -32,7 +32,7 @@
       "advanced": {},
       "children": [
        { "id": "sg-fh1", "type": "headline", "settings": { "heading": "// Read", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": false, "heading_font": "mono", "heading_color": "#eef2ec", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "sg-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "gap": "8", "link_color": "#5f6b76", "link_hover_color": "#a3e635", "items": [ { "title": "Articles", "content": "/signal-article/", "tag": "" }, { "title": "Topics", "content": "#topics", "tag": "" }, { "title": "Archive", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "sg-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "gap": "8", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Articles", "content": "/signal-article/", "tag": "" }, { "title": "Topics", "content": "#topics", "tag": "" }, { "title": "Archive", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -43,7 +43,7 @@
       "advanced": {},
       "children": [
        { "id": "sg-fh2", "type": "headline", "settings": { "heading": "// Signal", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": false, "heading_font": "mono", "heading_color": "#eef2ec", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "sg-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "gap": "8", "link_color": "#5f6b76", "link_hover_color": "#a3e635", "items": [ { "title": "About", "content": "#", "tag": "" }, { "title": "Write for us", "content": "#", "tag": "" }, { "title": "RSS", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "sg-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "gap": "8", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "About", "content": "#", "tag": "" }, { "title": "Write for us", "content": "#", "tag": "" }, { "title": "RSS", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -54,7 +54,7 @@
       "advanced": {},
       "children": [
        { "id": "sg-fh3", "type": "headline", "settings": { "heading": "// Subscribe", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": false, "heading_font": "mono", "heading_color": "#eef2ec", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "sg-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "gap": "8", "link_color": "#5f6b76", "link_hover_color": "#a3e635", "items": [ { "title": "Newsletter", "content": "#subscribe", "tag": "" }, { "title": "Podcast", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "sg-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "gap": "8", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Newsletter", "content": "#subscribe", "tag": "" }, { "title": "Podcast", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "sg-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "sg-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Signal — an OLOtheme demo.</p>", "text_color": "#5f6b76", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "sg-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Signal — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "sg-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "sg-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#5f6b76", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "sg-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

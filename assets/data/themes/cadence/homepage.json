@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1a1d24"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -36,24 +36,24 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "Coach Theo · 1:1 & online",
-         "eyebrow_color": "#ff6b54",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline": "Stronger on",
          "accent": "your",
          "headline_tail": "terms.",
          "accent_italic": false,
          "uppercase": true,
-         "headline_color": "#ffffff",
-         "accent_color": "#ff6b54",
+         "headline_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
          "headline_weight": "800",
          "headline_size": "120",
          "lead": "Personal training and online coaching built around your life — proper programming, weekly check-ins, and the accountability that finally makes it stick.",
-         "lead_color": "#aab1be",
+         "lead_color": "var(--olo-color-text)",
          "stats": [],
          "cta_text": "Book a free consult",
          "cta_url": "#pricing",
          "cta_style": "button",
-         "cta_bg": "#ff6b54",
-         "cta_color": "#ffffff",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta2_text": "See results",
          "cta2_url": "#results",
          "cta2_style": "outline",
@@ -74,8 +74,8 @@
          "media_radius_top": 0,
          "badge_number": "500+",
          "badge_label": "transformed",
-         "badge_bg": "#ff6b54",
-         "badge_color": "#ffffff",
+         "badge_bg": "var(--olo-color-primary)",
+         "badge_color": "var(--olo-color-primary-contrast)",
          "badge_radius": {
           "tl": 10,
           "tr": 10,
@@ -105,7 +105,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#101218"
+    "color": "var(--olo-color-secondary-contrast)"
    }
   },
   "advanced": {},
@@ -156,12 +156,12 @@
          "align": "center",
          "show_dividers": true,
          "band_border": false,
-         "divider_color": "rgba(255,255,255,.09)",
+         "divider_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 9%, transparent)",
          "value_font_family": "heading",
-         "value_color": "#ff6b54",
+         "value_color": "var(--olo-color-primary)",
          "value_size": 64,
          "value_weight": "800",
-         "label_color": "#6f7785",
+         "label_color": "var(--olo-color-text-muted)",
          "label_size": 12,
          "label_uppercase": false,
          "mono_font_family": ""
@@ -187,7 +187,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1a1d24"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -214,18 +214,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Ways to train",
-         "eyebrow_color": "#ff6b54",
-         "eyebrow_dot_color": "#ff6b54",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Pick your ",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           },
           {
            "text": "lane",
-           "color": "#ff6b54",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -237,7 +237,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6f7785",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -304,16 +304,16 @@
          "media_aspect": "16/10",
          "media_tall_aspect": "4/5",
          "media_bg": "#101218",
-         "media_label_color": "#ff6b54",
+         "media_label_color": "var(--olo-color-primary)",
          "hover_zoom": true,
          "title_font_family": "heading",
-         "title_color": "#ffffff",
+         "title_color": "var(--olo-color-primary-contrast)",
          "title_size": 24,
          "title_weight": "700",
-         "meta_color": "#ff6b54",
+         "meta_color": "var(--olo-color-primary)",
          "meta_size": 12,
          "show_desc": true,
-         "desc_color": "#6f7785",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 14.5,
          "mono_font_family": ""
         },
@@ -338,7 +338,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1e2129"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -365,18 +365,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Real people",
-         "eyebrow_color": "#ff6b54",
-         "eyebrow_dot_color": "#ff6b54",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "The ",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           },
           {
            "text": "proof",
-           "color": "#ff6b54",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -388,7 +388,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6f7785",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -451,11 +451,11 @@
          "gap": 24,
          "media_bg": "#252932",
          "media_aspect": "1/1",
-         "accent": "#ff6b54",
-         "before_label_color": "#ffffff",
-         "after_label_color": "#ffffff",
-         "title_color": "#ffffff",
-         "text_color": "#aab1be",
+         "accent": "var(--olo-color-primary)",
+         "before_label_color": "var(--olo-color-primary-contrast)",
+         "after_label_color": "var(--olo-color-primary-contrast)",
+         "title_color": "var(--olo-color-primary-contrast)",
+         "text_color": "var(--olo-color-text)",
          "card_bg": "transparent",
          "radius": 12
         },
@@ -480,7 +480,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1a1d24"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -507,18 +507,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "How it works",
-         "eyebrow_color": "#ff6b54",
-         "eyebrow_dot_color": "#ff6b54",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Simple, ",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           },
           {
            "text": "start to finish",
-           "color": "#ff6b54",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -530,7 +530,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6f7785",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -569,15 +569,15 @@
          "auto_number": false,
          "item_gap": 12,
          "number_style": "plain",
-         "number_color": "#ff6b54",
+         "number_color": "var(--olo-color-primary)",
          "number_size": 34,
          "number_font": "sans-serif",
          "number_weight": "800",
-         "title_color": "#ffffff",
+         "title_color": "var(--olo-color-primary-contrast)",
          "title_size": 20,
          "title_font": "sans-serif",
          "title_weight": "700",
-         "desc_color": "#6f7785",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 13.5,
          "card_bg": "#252932",
          "card_border": "1px solid rgba(255,255,255,.09)",
@@ -633,7 +633,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1e2129"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -682,10 +682,10 @@
            "text": "High-output week with full programming. For when you mean business."
           }
          ],
-         "zone_accent": "#ff6b54",
-         "zone_on": "#ff6b54",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary)",
          "cell_bg": "#252932",
-         "card_border": "rgba(255,255,255,.09)",
+         "card_border": "color-mix(in srgb, var(--olo-color-primary-contrast) 9%, transparent)",
          "align": "center"
         },
         "style": {},
@@ -709,7 +709,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1e2129"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -736,18 +736,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Pricing",
-         "eyebrow_color": "#ff6b54",
-         "eyebrow_dot_color": "#ff6b54",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Invest in ",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           },
           {
            "text": "showing up",
-           "color": "#ff6b54",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -759,7 +759,7 @@
          "tagline_show": true,
          "tagline_text": "First consult is always free. No lock-in — though most people stay.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6f7785",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -805,13 +805,13 @@
          "badge_text": "",
          "badge_bg_color": "#252932",
          "bg_color": "#252932",
-         "price_color": "#ffffff",
-         "accent_color": "#ff6b54",
+         "price_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
          "cta_text": "Start online",
          "cta_url": "#pricing",
          "cta_bg": "transparent",
-         "cta_color": "#ffffff",
-         "cta_border": "rgba(255,107,84,.42)",
+         "cta_color": "var(--olo-color-primary-contrast)",
+         "cta_border": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "border_radius": {
           "tl": 14,
           "tr": 14,
@@ -848,13 +848,13 @@
          "is_popular": true,
          "badge_text": "Most popular",
          "badge_bg_color": "#ed5840",
-         "bg_color": "#ff6b54",
-         "price_color": "#ffffff",
-         "accent_color": "#ffffff",
+         "bg_color": "var(--olo-color-primary)",
+         "price_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-primary-contrast)",
          "cta_text": "Book consult",
          "cta_url": "#pricing",
          "cta_bg": "#ffffff",
-         "cta_color": "#ff6b54",
+         "cta_color": "var(--olo-color-primary)",
          "cta_border": "transparent",
          "border_radius": {
           "tl": 14,
@@ -893,13 +893,13 @@
          "badge_text": "",
          "badge_bg_color": "#252932",
          "bg_color": "#252932",
-         "price_color": "#ffffff",
-         "accent_color": "#ff6b54",
+         "price_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
          "cta_text": "Join a squad",
          "cta_url": "#pricing",
          "cta_bg": "transparent",
-         "cta_color": "#ffffff",
-         "cta_border": "rgba(255,107,84,.42)",
+         "cta_color": "var(--olo-color-primary-contrast)",
+         "cta_border": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "border_radius": {
           "tl": 14,
           "tr": 14,
@@ -929,7 +929,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1a1d24"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -961,14 +961,14 @@
          "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
-         "text_color": "#ffffff",
+         "text_color": "var(--olo-color-primary-contrast)",
          "border_radius": "0",
          "avatar": "",
-         "quote_accent_color": "#ff6b54",
+         "quote_accent_color": "var(--olo-color-primary)",
          "quote_font": "heading",
          "quote_uppercase": true,
          "author_uppercase": true,
-         "author_color": "#6f7785",
+         "author_color": "var(--olo-color-text-muted)",
          "quote_size": 0
         },
         "style": {},
@@ -992,7 +992,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1e2129"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -1020,10 +1020,10 @@
          "eyebrow": "Match me up",
          "heading": "What’s the goal?",
          "intro": "",
-         "zone_accent": "#ff6b54",
-         "zone_on": "#ffffff",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "card_bg": "#252932",
-         "card_border": "rgba(255,255,255,.09)",
+         "card_border": "color-mix(in srgb, var(--olo-color-primary-contrast) 9%, transparent)",
          "align": "center",
          "items": [
           {
@@ -1085,7 +1085,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#ff6b54"
+    "color": "var(--olo-color-primary)"
    }
   },
   "advanced": {},
@@ -1119,13 +1119,13 @@
          "cta2_text": "",
          "bg": {
           "type": "solid",
-          "color": "#ff6b54"
+          "color": "var(--olo-color-primary)"
          },
-         "text_color": "#ffffff",
-         "accent_color": "#ffffff",
-         "subtitle_color": "rgba(255,255,255,.85)",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-primary-contrast)",
+         "subtitle_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 85%, transparent)",
          "cta_bg": "#ffffff",
-         "cta_color": "#ff6b54",
+         "cta_color": "var(--olo-color-primary)",
          "cta_radius": {
           "tl": 6,
           "tr": 6,

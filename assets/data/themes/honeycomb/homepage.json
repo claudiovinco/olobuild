@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f6ecd6"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -36,25 +36,25 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "Neighbourhood bakery · since 2016",
-         "eyebrow_color": "#c8870f",
+         "eyebrow_color": "var(--olo-color-link)",
          "headline": "Real bread,",
          "accent": "real",
          "accent_italic": true,
-         "accent_color": "#c8870f",
+         "accent_color": "var(--olo-color-link)",
          "headline_tail": "early.",
          "uppercase": false,
          "headline_color": "#3a2a12",
          "headline_weight": "400",
          "headline_size": "92",
          "lead": "Slow-proved sourdough, buttery viennoiserie and proper cakes — made by hand before the sun's up, every single day.",
-         "lead_color": "#6b552f",
+         "lead_color": "var(--olo-color-text)",
          "signature": "",
          "stats": [],
          "cta_text": "See today's bakes",
          "cta_url": "#bakes",
          "cta_style": "button",
-         "cta_bg": "#e09a18",
-         "cta_color": "#ffffff",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta2_text": "Our story",
          "cta2_url": "#story",
          "cta2_style": "outline",
@@ -135,8 +135,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Out of the oven",
-         "eyebrow_color": "#c8870f",
-         "eyebrow_dot_color": "#c8870f",
+         "eyebrow_color": "var(--olo-color-link)",
+         "eyebrow_dot_color": "var(--olo-color-link)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -146,7 +146,7 @@
           },
           {
            "text": "bakes",
-           "color": "#c8870f",
+           "color": "var(--olo-color-link)",
            "italic": true
           }
          ],
@@ -158,7 +158,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#9c8253",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 14
@@ -194,21 +194,21 @@
          "columns": 4,
          "gap": 20,
          "media_aspect": "1/1",
-         "media_bg": "#efe1c4",
+         "media_bg": "var(--olo-color-muted)",
          "stripe_dark": false,
          "hover_zoom": true,
          "card_bg": "#fbf5e7",
-         "card_border": "#e0cfa6",
+         "card_border": "var(--olo-color-border)",
          "card_radius": 18,
          "card_padding": 18,
          "quick_add_show": false,
-         "category_color": "#9a6a2f",
+         "category_color": "var(--olo-color-secondary)",
          "title_font": "heading",
          "title_size": 21,
          "title_color": "#3a2a12",
-         "notes_color": "#9c8253",
+         "notes_color": "var(--olo-color-text-muted)",
          "notes_mono": false,
-         "price_color": "#c8870f",
+         "price_color": "var(--olo-color-link)",
          "add_button": true,
          "add_label": "Add",
          "add_bg": "transparent",
@@ -297,7 +297,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f6ecd6"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -324,8 +324,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "When we're open",
-         "eyebrow_color": "#c8870f",
-         "eyebrow_dot_color": "#c8870f",
+         "eyebrow_color": "var(--olo-color-link)",
+         "eyebrow_dot_color": "var(--olo-color-link)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -335,7 +335,7 @@
           },
           {
            "text": "early",
-           "color": "#c8870f",
+           "color": "var(--olo-color-link)",
            "italic": true
           }
          ],
@@ -347,7 +347,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#9c8253",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 14
@@ -405,15 +405,15 @@
          "columns": 4,
          "band_padding_y": 36,
          "show_dividers": true,
-         "divider_color": "#e0cfa6",
+         "divider_color": "var(--olo-color-border)",
          "band_border": true,
-         "day_color": "#9c8253",
+         "day_color": "var(--olo-color-text-muted)",
          "day_size": 12,
          "time_font_family": "heading",
          "time_color": "#3a2a12",
          "time_size": 30,
          "time_weight": "400",
-         "note_color": "#9c8253",
+         "note_color": "var(--olo-color-text-muted)",
          "note_size": 13,
          "mono_font_family": ""
         },
@@ -464,18 +464,18 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "Our story",
-         "eyebrow_color": "#c8870f",
+         "eyebrow_color": "var(--olo-color-link)",
          "headline": "One oven, one",
          "accent": "starter,",
          "accent_italic": true,
-         "accent_color": "#c8870f",
+         "accent_color": "var(--olo-color-link)",
          "headline_tail": "a lot of mornings",
          "uppercase": false,
          "headline_color": "#3a2a12",
          "headline_weight": "400",
          "headline_size": "52",
          "lead": "Honeycomb began with a wild yeast starter named Doris and a market stall. Ten years on, Doris is still going — and still the boss.\n\nWe mill some of our own flour, prove everything slowly, and bake in small batches so it's always fresh. When it's gone, it's gone.",
-         "lead_color": "#6b552f",
+         "lead_color": "var(--olo-color-text)",
          "signature": "",
          "stats": [],
          "cta_text": "Meet the bakers",
@@ -521,7 +521,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f6ecd6"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -548,8 +548,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "From the bench",
-         "eyebrow_color": "#c8870f",
-         "eyebrow_dot_color": "#c8870f",
+         "eyebrow_color": "var(--olo-color-link)",
+         "eyebrow_dot_color": "var(--olo-color-link)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -559,7 +559,7 @@
           },
           {
            "text": "Honeycomb",
-           "color": "#c8870f",
+           "color": "var(--olo-color-link)",
            "italic": true
           }
          ],
@@ -571,7 +571,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#9c8253",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 14
@@ -619,7 +619,7 @@
          "overlay_gradient": true,
          "overlay_padding": "small",
          "title_size": "h4",
-         "title_color": "#f6ecd6",
+         "title_color": "var(--olo-color-background)",
          "title_weight": "400",
          "title_letter_spacing": 0,
          "title_uppercase": false,
@@ -696,7 +696,7 @@
          "quote_size": 40,
          "quote_uppercase": false,
          "author_uppercase": true,
-         "author_color": "#c8870f",
+         "author_color": "var(--olo-color-link)",
          "border_radius": "0",
          "avatar": ""
         },
@@ -721,7 +721,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f6ecd6"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -820,7 +820,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f6ecd6"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -847,8 +847,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "For the home bakers",
-         "eyebrow_color": "#c8870f",
-         "eyebrow_dot_color": "#c8870f",
+         "eyebrow_color": "var(--olo-color-link)",
+         "eyebrow_dot_color": "var(--olo-color-link)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -858,7 +858,7 @@
           },
           {
            "text": "dough",
-           "color": "#c8870f",
+           "color": "var(--olo-color-link)",
            "italic": true
           }
          ],
@@ -870,7 +870,7 @@
          "tagline_show": true,
          "tagline_text": "Our weekend sourdough, written the way bakers think — in percentages of the flour. Set your flour weight and everything else falls into place.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#9c8253",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 14
@@ -933,7 +933,7 @@
          "show_total": true,
          "total_label": "Total dough",
          "total_unit": "g",
-         "zone_accent": "#e09a18",
+         "zone_accent": "var(--olo-color-primary)",
          "card_bg": "#fbf5e7",
          "card_border": "1px solid #e0cfa6",
          "align": "left"
@@ -996,11 +996,11 @@
           "type": "solid",
           "color": "#3a2a12"
          },
-         "text_color": "#f6ecd6",
-         "accent_color": "#e09a18",
+         "text_color": "var(--olo-color-background)",
+         "accent_color": "var(--olo-color-primary)",
          "subtitle_color": "#e3d3ad",
-         "cta_bg": "#e09a18",
-         "cta_color": "#ffffff",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,

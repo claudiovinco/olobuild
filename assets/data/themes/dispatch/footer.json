@@ -3,7 +3,7 @@
   "id": "di-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 56, "padding_bottom": 30 },
-  "style": { "bg": { "type": "solid", "color": "#16161a" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-secondary)" } },
   "advanced": {},
   "children": [
    {
@@ -30,7 +30,7 @@
          "heading_font": "heading",
          "heading_font_size": "34",
          "heading_font_weight": "600",
-         "heading_color": "#ffffff",
+         "heading_color": "var(--olo-color-primary-contrast)",
          "decoration": "none"
         },
         "style": { "margin_bottom": 12 },
@@ -42,7 +42,7 @@
         "type": "text-block",
         "settings": {
          "content": "<p>Independent reporting since 1998. Member-funded, ad-light, beholden to no one.</p>",
-         "text_color": "#86848c",
+         "text_color": "var(--olo-color-text-muted)",
          "font_size": "13.5",
          "line_height": "1.6",
          "text_align": "left",
@@ -65,7 +65,7 @@
        {
         "id": "di-fh1",
         "type": "headline",
-        "settings": { "heading": "Sections", "tag": "h4", "alignment": "left", "heading_font_size": "11", "heading_uppercase": true, "heading_font": "body", "heading_font_weight": "700", "heading_color": "#ffffff", "decoration": "none" },
+        "settings": { "heading": "Sections", "tag": "h4", "alignment": "left", "heading_font_size": "11", "heading_uppercase": true, "heading_font": "body", "heading_font_weight": "700", "heading_color": "var(--olo-color-primary-contrast)", "decoration": "none" },
         "style": { "margin_bottom": 14 },
         "advanced": {},
         "children": []
@@ -80,8 +80,8 @@
          "font_size": "13.5",
          "gap": "9",
          "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 },
-         "link_color": "#86848c",
-         "link_hover_color": "#ffffff",
+         "link_color": "var(--olo-color-text-muted)",
+         "link_hover_color": "var(--olo-color-primary-contrast)",
          "items": [
           { "title": "Politics", "content": "#latest", "tag": "" },
           { "title": "Culture", "content": "#culture", "tag": "" },
@@ -105,7 +105,7 @@
        {
         "id": "di-fh2",
         "type": "headline",
-        "settings": { "heading": "The paper", "tag": "h4", "alignment": "left", "heading_font_size": "11", "heading_uppercase": true, "heading_font": "body", "heading_font_weight": "700", "heading_color": "#ffffff", "decoration": "none" },
+        "settings": { "heading": "The paper", "tag": "h4", "alignment": "left", "heading_font_size": "11", "heading_uppercase": true, "heading_font": "body", "heading_font_weight": "700", "heading_color": "var(--olo-color-primary-contrast)", "decoration": "none" },
         "style": { "margin_bottom": 14 },
         "advanced": {},
         "children": []
@@ -120,8 +120,8 @@
          "font_size": "13.5",
          "gap": "9",
          "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 },
-         "link_color": "#86848c",
-         "link_hover_color": "#ffffff",
+         "link_color": "var(--olo-color-text-muted)",
+         "link_hover_color": "var(--olo-color-primary-contrast)",
          "items": [
           { "title": "About us", "content": "#", "tag": "" },
           { "title": "Masthead", "content": "#", "tag": "" },
@@ -145,7 +145,7 @@
        {
         "id": "di-fh3",
         "type": "headline",
-        "settings": { "heading": "Subscribe", "tag": "h4", "alignment": "left", "heading_font_size": "11", "heading_uppercase": true, "heading_font": "body", "heading_font_weight": "700", "heading_color": "#ffffff", "decoration": "none" },
+        "settings": { "heading": "Subscribe", "tag": "h4", "alignment": "left", "heading_font_size": "11", "heading_uppercase": true, "heading_font": "body", "heading_font_weight": "700", "heading_color": "var(--olo-color-primary-contrast)", "decoration": "none" },
         "style": { "margin_bottom": 14 },
         "advanced": {},
         "children": []
@@ -160,8 +160,8 @@
          "font_size": "13.5",
          "gap": "9",
          "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 },
-         "link_color": "#86848c",
-         "link_hover_color": "#ffffff",
+         "link_color": "var(--olo-color-text-muted)",
+         "link_hover_color": "var(--olo-color-primary-contrast)",
          "items": [
           { "title": "Newsletters", "content": "#newsletter", "tag": "" },
           { "title": "Membership", "content": "#", "tag": "" },
@@ -194,7 +194,7 @@
        {
         "id": "di-fdiv",
         "type": "divider",
-        "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.12)", "alignment": "center", "spacing": 22 },
+        "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "color-mix(in srgb, var(--olo-color-primary-contrast) 12%, transparent)", "alignment": "center", "spacing": 22 },
         "style": {},
         "advanced": {},
         "children": []
@@ -220,7 +220,7 @@
        {
         "id": "di-fcopy",
         "type": "text-block",
-        "settings": { "content": "<p>© 2026 The Dispatch — an OLOtheme demo.</p>", "text_color": "#86848c", "font_size": "12.5", "text_align": "left" },
+        "settings": { "content": "<p>© 2026 The Dispatch — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "left" },
         "style": {},
         "advanced": {},
         "children": []
@@ -237,7 +237,7 @@
        {
         "id": "di-fbuilt",
         "type": "text-block",
-        "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#86848c", "font_size": "12.5", "text_align": "right" },
+        "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "right" },
         "style": {},
         "advanced": {},
         "children": []

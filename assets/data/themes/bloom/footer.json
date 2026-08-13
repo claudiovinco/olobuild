@@ -3,7 +3,7 @@
   "id": "bl-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
-  "style": { "bg": { "type": "solid", "color": "#432838" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -21,7 +21,7 @@
       "advanced": {},
       "children": [
        { "id": "bl-fbrand", "type": "headline", "settings": { "heading": "Bloom", "tag": "div", "alignment": "left", "heading_font_size": "26", "heading_uppercase": false, "heading_color": "#f6e9ec", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "bl-fbtext", "type": "text-block", "settings": { "content": "<p>Clean colour cosmetics in shades for everyone. Cruelty-free, refillable, made in the EU.</p>", "text_color": "#9c7e8c", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "bl-fbtext", "type": "text-block", "settings": { "content": "<p>Clean colour cosmetics in shades for everyone. Cruelty-free, refillable, made in the EU.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -32,7 +32,7 @@
       "advanced": {},
       "children": [
        { "id": "bl-fh1", "type": "headline", "settings": { "heading": "Shop", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f6e9ec", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "bl-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#9c7e8c", "link_hover_color": "#e7a0b4", "items": [ { "title": "All products", "content": "#shop", "tag": "" }, { "title": "Lips", "content": "#", "tag": "" }, { "title": "Cheeks", "content": "#", "tag": "" }, { "title": "Base", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "bl-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "All products", "content": "#shop", "tag": "" }, { "title": "Lips", "content": "#", "tag": "" }, { "title": "Cheeks", "content": "#", "tag": "" }, { "title": "Base", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -43,7 +43,7 @@
       "advanced": {},
       "children": [
        { "id": "bl-fh2", "type": "headline", "settings": { "heading": "Help", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f6e9ec", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "bl-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#9c7e8c", "link_hover_color": "#e7a0b4", "items": [ { "title": "Shade finder", "content": "#finder", "tag": "" }, { "title": "Shipping", "content": "#", "tag": "" }, { "title": "Returns", "content": "#", "tag": "" }, { "title": "Refills", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "bl-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Shade finder", "content": "#finder", "tag": "" }, { "title": "Shipping", "content": "#", "tag": "" }, { "title": "Returns", "content": "#", "tag": "" }, { "title": "Refills", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -54,7 +54,7 @@
       "advanced": {},
       "children": [
        { "id": "bl-fh3", "type": "headline", "settings": { "heading": "Bloom", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f6e9ec", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "bl-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#9c7e8c", "link_hover_color": "#e7a0b4", "items": [ { "title": "Our values", "content": "#values", "tag": "" }, { "title": "Ingredients", "content": "#", "tag": "" }, { "title": "Journal", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "bl-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Our values", "content": "#values", "tag": "" }, { "title": "Ingredients", "content": "#", "tag": "" }, { "title": "Journal", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "bl-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "bl-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Bloom — an OLOtheme demo.</p>", "text_color": "#9c7e8c", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "bl-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Bloom — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "bl-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "bl-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#9c7e8c", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "bl-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

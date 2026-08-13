@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#241820"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -39,7 +39,7 @@
         "settings": {
          "eyebrow_text": "Hair & beauty salon",
          "eyebrow_dot": false,
-         "eyebrow_color": "#cf8e6f",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline_text": "Leave feeling",
          "accent_text": "like you.",
          "headline_tail": "",
@@ -68,8 +68,8 @@
          "overlay_top": 0.2,
          "overlay_bottom": 0.65,
          "overlay_sides": true,
-         "accent": "#cf8e6f",
-         "accent_on": "#170f14",
+         "accent": "var(--olo-color-primary)",
+         "accent_on": "var(--olo-color-primary-contrast)",
          "text_color": "#ffffff",
          "sub_color": "#f2e8e6",
          "cta_radius": {
@@ -100,7 +100,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#241820"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -127,8 +127,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "The menu",
-         "eyebrow_color": "#cf8e6f",
-         "eyebrow_dot_color": "#cf8e6f",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -138,7 +138,7 @@
           },
           {
            "text": "pricing",
-           "color": "#cf8e6f",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -150,7 +150,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8f7780",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 16
@@ -188,10 +188,10 @@
          "show_image": false,
          "price_position": "right",
          "separator_style": "dotted",
-         "separator_color": "rgba(207,142,111,.42)",
+         "separator_color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "title_color": "#f2e8e6",
-         "price_color": "#cf8e6f",
-         "description_color": "#8f7780",
+         "price_color": "var(--olo-color-primary)",
+         "description_color": "var(--olo-color-text-muted)",
          "card_bg": "",
          "card_border_radius": "0",
          "card_border_color": "transparent",
@@ -260,10 +260,10 @@
          "show_image": false,
          "price_position": "right",
          "separator_style": "dotted",
-         "separator_color": "rgba(207,142,111,.42)",
+         "separator_color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "title_color": "#f2e8e6",
-         "price_color": "#cf8e6f",
-         "description_color": "#8f7780",
+         "price_color": "var(--olo-color-primary)",
+         "description_color": "var(--olo-color-text-muted)",
          "card_bg": "",
          "card_border_radius": "0",
          "card_border_color": "transparent",
@@ -344,7 +344,7 @@
          "bg_color": "transparent",
          "hover_bg_color": "transparent",
          "text_color": "#f2e8e6",
-         "hover_text_color": "#cf8e6f",
+         "hover_text_color": "var(--olo-color-primary)",
          "font_size": "12",
          "font_weight": "600",
          "letter_spacing": "1.9",
@@ -353,7 +353,7 @@
          "hover_effect": "none",
          "border_radius": "0",
          "tile_padding": { "top": 10, "right": 2, "bottom": 6, "left": 2 },
-         "border": { "top": 0, "right": 0, "bottom": 1, "left": 0, "linked": false, "style": "solid", "color": "#cf8e6f" }
+         "border": { "top": 0, "right": 0, "bottom": 1, "left": 0, "linked": false, "style": "solid", "color": "var(--olo-color-primary)" }
         },
         "style": {},
         "advanced": {},
@@ -376,7 +376,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#2a1d26"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -403,8 +403,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "The chairs",
-         "eyebrow_color": "#cf8e6f",
-         "eyebrow_dot_color": "#cf8e6f",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -414,7 +414,7 @@
           },
           {
            "text": "stylists",
-           "color": "#cf8e6f",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -426,7 +426,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8f7780",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 16
@@ -480,7 +480,7 @@
          "photo_gap": "16",
          "info_bg_color": "transparent",
          "info_text_color": "#f2e8e6",
-         "role_color": "#cf8e6f",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "22",
          "name_weight": "400",
@@ -532,7 +532,7 @@
          "photo_gap": "16",
          "info_bg_color": "transparent",
          "info_text_color": "#f2e8e6",
-         "role_color": "#cf8e6f",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "22",
          "name_weight": "400",
@@ -584,7 +584,7 @@
          "photo_gap": "16",
          "info_bg_color": "transparent",
          "info_text_color": "#f2e8e6",
-         "role_color": "#cf8e6f",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "22",
          "name_weight": "400",
@@ -636,7 +636,7 @@
          "photo_gap": "16",
          "info_bg_color": "transparent",
          "info_text_color": "#f2e8e6",
-         "role_color": "#cf8e6f",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "22",
          "name_weight": "400",
@@ -671,7 +671,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#241820"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -698,8 +698,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Recent work",
-         "eyebrow_color": "#cf8e6f",
-         "eyebrow_dot_color": "#cf8e6f",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -709,7 +709,7 @@
           },
           {
            "text": "chair",
-           "color": "#cf8e6f",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -721,7 +721,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8f7780",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 16
@@ -759,16 +759,16 @@
          "media_aspect": "4/3",
          "media_tall_aspect": "4/5",
          "media_bg": "#352630",
-         "media_label_color": "#cf8e6f",
+         "media_label_color": "var(--olo-color-primary)",
          "hover_zoom": true,
          "title_color": "#f2e8e6",
          "title_font_family": "heading",
          "title_size": 22,
          "title_weight": "400",
-         "meta_color": "#8f7780",
+         "meta_color": "var(--olo-color-text-muted)",
          "meta_size": 12,
          "show_desc": false,
-         "desc_color": "#8f7780",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 15,
          "items": [
           {
@@ -848,7 +848,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#2a1d26"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -881,9 +881,9 @@
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#f2e8e6",
-         "star_color": "#cf8e6f",
-         "author_color": "#cf8e6f",
-         "quote_accent_color": "#cf8e6f",
+         "star_color": "var(--olo-color-primary)",
+         "author_color": "var(--olo-color-primary)",
+         "quote_accent_color": "var(--olo-color-primary)",
          "quote_font": "heading",
          "quote_size": 40,
          "quote_uppercase": false,
@@ -912,7 +912,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#241820"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -942,8 +942,8 @@
          "intro": "Balayage is two tones living together. Tap a base and a gloss to preview the melt — then bring it to your colourist as a starting point.",
          "max": 2,
          "empty_label": "Tap two tones to blend",
-         "zone_accent": "#cf8e6f",
-         "zone_on": "#170f14",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "card_bg": "#352630",
          "card_border": "rgba(242,232,230,.13)",
          "align": "center",
@@ -995,7 +995,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#241820"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -1029,17 +1029,17 @@
          "cta2_text": "Call the salon",
          "cta2_url": "#",
          "cta2_bg": "#f2e8e6",
-         "cta2_color": "#170f14",
+         "cta2_color": "var(--olo-color-primary-contrast)",
          "cta2_border": "",
          "bg": {
           "type": "solid",
           "color": "#352630"
          },
          "text_color": "#f2e8e6",
-         "accent_color": "#cf8e6f",
-         "subtitle_color": "#c1aab2",
-         "cta_bg": "#cf8e6f",
-         "cta_color": "#170f14",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,

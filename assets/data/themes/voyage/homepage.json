@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#141d2e"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -55,16 +55,16 @@
          "media_radius": 8,
          "standfirst_italic": true,
          "placeholder_dark": false,
-         "bg_color": "#141d2e",
-         "kicker_color": "#ff8c69",
+         "bg_color": "var(--olo-color-background)",
+         "kicker_color": "var(--olo-color-primary)",
          "headline_color": "#eef2f7",
-         "accent_color": "#ff8c69",
+         "accent_color": "var(--olo-color-primary)",
          "standfirst_color": "#eef2f7",
-         "byline_color": "#6c7a90",
+         "byline_color": "var(--olo-color-text-muted)",
          "byline_name_color": "#eef2f7",
          "media_bg": "#27344c",
-         "cta_solid_bg": "#ff8c69",
-         "cta_solid_text": "#0c1320",
+         "cta_solid_bg": "var(--olo-color-primary)",
+         "cta_solid_text": "var(--olo-color-primary-contrast)",
          "heading_font": "\"Vollkorn\", Georgia, serif",
          "serif_font": "\"Vollkorn\", Georgia, serif",
          "sans_font": "\"Figtree\", -apple-system, sans-serif"
@@ -90,7 +90,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#172338"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -129,7 +129,7 @@
          "headline_align": "left",
          "tagline_show": true,
          "tagline_text": "← drag · all stories →",
-         "tagline_text_color": "#ff8c69",
+         "tagline_text_color": "var(--olo-color-primary)",
          "tagline_text_size": 12,
          "tagline_text_italic": false,
          "layout": "split",
@@ -197,11 +197,11 @@
          "media_bg": "#27344c",
          "overlay_color": "rgba(12,19,32,0.55)",
          "title_color": "#eef2f7",
-         "subtitle_color": "#ff8c69",
+         "subtitle_color": "var(--olo-color-primary)",
          "radius": 8,
          "show_hint": true,
          "hint_text": "← drag →",
-         "hint_color": "#6c7a90"
+         "hint_color": "var(--olo-color-text-muted)"
         },
         "style": {},
         "advanced": {},
@@ -224,7 +224,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#141d2e"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -263,7 +263,7 @@
          "headline_align": "left",
          "tagline_show": true,
          "tagline_text": "Carretera Austral · 1,240 km south",
-         "tagline_text_color": "#ff8c69",
+         "tagline_text_color": "var(--olo-color-primary)",
          "tagline_text_size": 12,
          "tagline_text_italic": false,
          "layout": "split",
@@ -301,13 +301,13 @@
           {
            "counter": "01",
            "tag_text": "DAY 1 · KM 0",
-           "tag_dot_color": "#ff8c69",
+           "tag_dot_color": "var(--olo-color-primary)",
            "media_label": "VILLA O'HIGGINS",
            "media_type": "placeholder",
            "media_content": "",
            "media_image": "",
            "media_bg": "#27344c",
-           "media_color": "#ff8c69",
+           "media_color": "var(--olo-color-primary)",
            "pre_title": "START",
            "title": "Villa O'Higgins",
            "title_accent": "",
@@ -322,13 +322,13 @@
           {
            "counter": "02",
            "tag_text": "DAY 3 · KM 228",
-           "tag_dot_color": "#ff8c69",
+           "tag_dot_color": "var(--olo-color-primary)",
            "media_label": "CALETA TORTEL",
            "media_type": "placeholder",
            "media_content": "",
            "media_image": "",
            "media_bg": "#27344c",
-           "media_color": "#7fb5d6",
+           "media_color": "var(--olo-color-secondary)",
            "pre_title": "VILLAGE",
            "title": "Caleta Tortel",
            "title_accent": "",
@@ -343,13 +343,13 @@
           {
            "counter": "03",
            "tag_text": "DAY 6 · KM 612",
-           "tag_dot_color": "#ff8c69",
+           "tag_dot_color": "var(--olo-color-primary)",
            "media_label": "RÍO TRANQUILO",
            "media_type": "placeholder",
            "media_content": "",
            "media_image": "",
            "media_bg": "#27344c",
-           "media_color": "#7fb5d6",
+           "media_color": "var(--olo-color-secondary)",
            "pre_title": "MARBLE CAVES",
            "title": "Río Tranquilo",
            "title_accent": "",
@@ -364,13 +364,13 @@
           {
            "counter": "04",
            "tag_text": "DAY 9 · KM 920",
-           "tag_dot_color": "#ff8c69",
+           "tag_dot_color": "var(--olo-color-primary)",
            "media_label": "CERRO CASTILLO",
            "media_type": "placeholder",
            "media_content": "",
            "media_image": "",
            "media_bg": "#27344c",
-           "media_color": "#ff8c69",
+           "media_color": "var(--olo-color-primary)",
            "pre_title": "PEAK HIKE",
            "title": "Cerro Castillo",
            "title_accent": "",
@@ -385,7 +385,7 @@
           {
            "counter": "05",
            "tag_text": "DAY 11 · KM 1,240",
-           "tag_dot_color": "#ff8c69",
+           "tag_dot_color": "var(--olo-color-primary)",
            "media_label": "COYHAIQUE",
            "media_type": "placeholder",
            "media_content": "",
@@ -405,18 +405,18 @@
           }
          ],
          "show_timeline": true,
-         "timeline_line_color": "rgba(255,140,105,.42)",
-         "timeline_dot_color": "#ff8c69",
+         "timeline_line_color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
+         "timeline_dot_color": "var(--olo-color-primary)",
          "timeline_dot_size": 12,
          "timeline_height": 2,
          "timeline_margin_bottom": 40,
          "counter_font_family": "serif",
          "counter_size": 80,
-         "counter_color": "rgba(255,140,105,.42)",
+         "counter_color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "counter_italic": true,
          "counter_weight": "700",
          "tag_size": 11,
-         "tag_color": "#a6b2c4",
+         "tag_color": "var(--olo-color-text)",
          "media_aspect_ratio": "16/10",
          "media_radius": {
           "tl": 8,
@@ -435,20 +435,20 @@
          "media_shadow": "none",
          "show_media_label": true,
          "pre_title_size": 11,
-         "pre_title_color": "#6c7a90",
+         "pre_title_color": "var(--olo-color-text-muted)",
          "title_font_family": "serif",
          "title_size": 26,
          "title_weight": "700",
          "title_color": "#eef2f7",
-         "title_accent_color": "#ff8c69",
+         "title_accent_color": "var(--olo-color-primary)",
          "description_size": 14,
-         "description_color": "#a6b2c4",
+         "description_color": "var(--olo-color-text)",
          "footer_icon": "map-pin",
          "footer_value_size": 16,
          "footer_value_color": "#eef2f7",
          "footer_label_size": 10,
-         "footer_label_color": "#6c7a90",
-         "separator_color": "#ff8c69",
+         "footer_label_color": "var(--olo-color-text-muted)",
+         "separator_color": "var(--olo-color-primary)",
          "show_separator": true,
          "columns": 5,
          "gap": 24,
@@ -475,7 +475,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#172338"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -514,7 +514,7 @@
          "headline_align": "left",
          "tagline_show": true,
          "tagline_text": "Atlas →",
-         "tagline_text_color": "#ff8c69",
+         "tagline_text_color": "var(--olo-color-primary)",
          "tagline_text_size": 12,
          "tagline_text_italic": false,
          "layout": "split",
@@ -582,16 +582,16 @@
          "media_aspect": "4/3",
          "media_tall_aspect": "4/5",
          "media_bg": "#27344c",
-         "media_label_color": "#a6b2c4",
+         "media_label_color": "var(--olo-color-text)",
          "hover_zoom": true,
          "title_font_family": "heading",
          "title_color": "#eef2f7",
          "title_size": 22,
          "title_weight": "700",
-         "meta_color": "#ff8c69",
+         "meta_color": "var(--olo-color-primary)",
          "meta_size": 12,
          "show_desc": true,
-         "desc_color": "#a6b2c4",
+         "desc_color": "var(--olo-color-text)",
          "desc_size": 14,
          "mono_font_family": ""
         },
@@ -616,7 +616,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#141d2e"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -692,16 +692,16 @@
          "media_aspect": "4/3",
          "media_tall_aspect": "4/5",
          "media_bg": "#27344c",
-         "media_label_color": "#a6b2c4",
+         "media_label_color": "var(--olo-color-text)",
          "hover_zoom": true,
          "title_font_family": "heading",
          "title_color": "#eef2f7",
          "title_size": 22,
          "title_weight": "700",
-         "meta_color": "#ff8c69",
+         "meta_color": "var(--olo-color-primary)",
          "meta_size": 12,
          "show_desc": true,
-         "desc_color": "#a6b2c4",
+         "desc_color": "var(--olo-color-text)",
          "desc_size": 14,
          "mono_font_family": ""
         },
@@ -819,7 +819,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#172338"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -855,7 +855,7 @@
          "button_icon": false,
          "privacy_text": "",
          "privacy_required": false,
-         "bg_color": "#ff8c69",
+         "bg_color": "var(--olo-color-primary)",
          "box_border": "",
          "border_radius": 14,
          "tile_padding": {
@@ -868,13 +868,13 @@
          "alignment": "center",
          "title_size": "46",
          "title_weight": "700",
-         "title_color": "#0c1320",
+         "title_color": "var(--olo-color-primary-contrast)",
          "subtitle_size": "16",
-         "subtitle_color": "rgba(12,19,32,.78)",
+         "subtitle_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 78%, transparent)",
          "input_bg": "rgba(12,19,32,.10)",
-         "input_color": "#0c1320",
-         "input_border": "rgba(12,19,32,.25)",
-         "input_focus_border": "#ff8c69",
+         "input_color": "var(--olo-color-primary-contrast)",
+         "input_border": "color-mix(in srgb, var(--olo-color-primary-contrast) 25%, transparent)",
+         "input_focus_border": "var(--olo-color-primary)",
          "input_radius": 999,
          "input_height": "50",
          "btn_bg": "#0c1320",

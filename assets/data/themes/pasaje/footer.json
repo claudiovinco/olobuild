@@ -3,7 +3,7 @@
   "id": "pa-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
-  "style": { "bg": { "type": "solid", "color": "#311f17" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -21,7 +21,7 @@
       "advanced": {},
       "children": [
        { "id": "pa-fbrand", "type": "headline", "settings": { "heading": "Pasaje", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "25", "heading_color": "#f3e7d6", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "pa-fbtext", "type": "text-block", "settings": { "content": "<p>A fourteen-room boutique hotel down a quiet passage in the old town.</p>", "text_color": "#967861", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "pa-fbtext", "type": "text-block", "settings": { "content": "<p>A fourteen-room boutique hotel down a quiet passage in the old town.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -32,7 +32,7 @@
       "advanced": {},
       "children": [
        { "id": "pa-fh1", "type": "headline", "settings": { "heading": "Stay", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f3e7d6", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "pa-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#967861", "link_hover_color": "#d98a4e", "items": [ { "title": "Rooms", "content": "#rooms", "tag": "" }, { "title": "Book", "content": "#book", "tag": "" }, { "title": "Experiences", "content": "#experiences", "tag": "" }, { "title": "Offers", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "pa-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Rooms", "content": "#rooms", "tag": "" }, { "title": "Book", "content": "#book", "tag": "" }, { "title": "Experiences", "content": "#experiences", "tag": "" }, { "title": "Offers", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -43,7 +43,7 @@
       "advanced": {},
       "children": [
        { "id": "pa-fh2", "type": "headline", "settings": { "heading": "Hotel", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f3e7d6", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "pa-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#967861", "link_hover_color": "#d98a4e", "items": [ { "title": "The stay", "content": "#stay", "tag": "" }, { "title": "Gallery", "content": "#gallery", "tag": "" }, { "title": "Dining", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "pa-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "The stay", "content": "#stay", "tag": "" }, { "title": "Gallery", "content": "#gallery", "tag": "" }, { "title": "Dining", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -54,7 +54,7 @@
       "advanced": {},
       "children": [
        { "id": "pa-fh3", "type": "headline", "settings": { "heading": "Find us", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f3e7d6", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "pa-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#967861", "link_hover_color": "#d98a4e", "items": [ { "title": "Pasaje del Mar 4", "content": "#", "tag": "" }, { "title": "+34 952 00 00", "content": "tel:+34952000000", "tag": "" }, { "title": "hola@pasaje.hotel", "content": "mailto:hola@pasaje.hotel", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "pa-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Pasaje del Mar 4", "content": "#", "tag": "" }, { "title": "+34 952 00 00", "content": "tel:+34952000000", "tag": "" }, { "title": "hola@pasaje.hotel", "content": "mailto:hola@pasaje.hotel", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "pa-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "pa-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Pasaje — an OLOtheme demo.</p>", "text_color": "#967861", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "pa-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Pasaje — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "pa-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "pa-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#967861", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "pa-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

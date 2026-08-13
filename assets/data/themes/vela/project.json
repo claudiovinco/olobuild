@@ -3,7 +3,7 @@
   "id": "vp-ph-se",
   "type": "section",
   "settings": { "style": "default", "width": "full", "padding": "none", "padding_top": 0, "padding_bottom": 0 },
-  "style": { "bg": { "type": "solid", "color": "#0a0a0c" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -39,14 +39,14 @@
          "show_scroll": false,
          "scroll_text": "",
          "bottom_split": false,
-         "bg_color": "#0a0a0c",
-         "accent": "#f4a23b",
+         "bg_color": "var(--olo-color-background)",
+         "accent": "var(--olo-color-primary)",
          "accent2": "#e08e26",
-         "accent_on": "#0a0a0c",
-         "text_color": "#ece9e3",
-         "sub_color": "#9b988f",
-         "eyebrow_color": "#f4a23b",
-         "glow_color": "rgba(244,162,59,0.14)",
+         "accent_on": "var(--olo-color-background)",
+         "text_color": "var(--olo-color-text)",
+         "sub_color": "var(--olo-color-text-muted)",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "glow_color": "color-mix(in srgb, var(--olo-color-primary) 14%, transparent)",
          "glow_w": 700,
          "glow_h": 520,
          "glow_blur": 110,
@@ -75,7 +75,7 @@
   "id": "vp-meta-se",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "none", "padding_top": 0, "padding_bottom": 20 },
-  "style": { "bg": { "type": "solid", "color": "#0a0a0c" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -105,7 +105,7 @@
       "advanced": {},
       "children": [
        { "id": "vp-m1l", "type": "headline", "settings": { "heading": "CLIENT", "tag": "div", "alignment": "left", "heading_font": "body", "heading_font_size": "11", "heading_uppercase": true, "heading_color": "#6a6862", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "vp-m1v", "type": "headline", "settings": { "heading": "Helio Energy", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "17", "heading_font_weight": "600", "heading_color": "#ece9e3", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "vp-m1v", "type": "headline", "settings": { "heading": "Helio Energy", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "17", "heading_font_weight": "600", "heading_color": "var(--olo-color-text)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -116,7 +116,7 @@
       "advanced": {},
       "children": [
        { "id": "vp-m2l", "type": "headline", "settings": { "heading": "SERVICES", "tag": "div", "alignment": "left", "heading_font": "body", "heading_font_size": "11", "heading_uppercase": true, "heading_color": "#6a6862", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "vp-m2v", "type": "headline", "settings": { "heading": "Brand · Identity · Campaign", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "17", "heading_font_weight": "600", "heading_color": "#ece9e3", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "vp-m2v", "type": "headline", "settings": { "heading": "Brand · Identity · Campaign", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "17", "heading_font_weight": "600", "heading_color": "var(--olo-color-text)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -127,7 +127,7 @@
       "advanced": {},
       "children": [
        { "id": "vp-m3l", "type": "headline", "settings": { "heading": "YEAR", "tag": "div", "alignment": "left", "heading_font": "body", "heading_font_size": "11", "heading_uppercase": true, "heading_color": "#6a6862", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "vp-m3v", "type": "headline", "settings": { "heading": "2025", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "17", "heading_font_weight": "600", "heading_color": "#ece9e3", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "vp-m3v", "type": "headline", "settings": { "heading": "2025", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "17", "heading_font_weight": "600", "heading_color": "var(--olo-color-text)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -138,7 +138,7 @@
       "advanced": {},
       "children": [
        { "id": "vp-m4l", "type": "headline", "settings": { "heading": "RECOGNITION", "tag": "div", "alignment": "left", "heading_font": "body", "heading_font_size": "11", "heading_uppercase": true, "heading_color": "#6a6862", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "vp-m4v", "type": "headline", "settings": { "heading": "Awwwards SOTD", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "17", "heading_font_weight": "600", "heading_color": "#ece9e3", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "vp-m4v", "type": "headline", "settings": { "heading": "Awwwards SOTD", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "17", "heading_font_weight": "600", "heading_color": "var(--olo-color-text)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -149,7 +149,7 @@
   "id": "vp-feat-se",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "none", "padding_top": 20, "padding_bottom": 0 },
-  "style": { "bg": { "type": "solid", "color": "#0a0a0c" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -194,7 +194,7 @@
   "id": "vp-body-se",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#0a0a0c" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -221,7 +221,7 @@
          "heading_font": "heading",
          "heading_font_size": "30",
          "heading_font_weight": "600",
-         "heading_color": "#ece9e3",
+         "heading_color": "var(--olo-color-text)",
          "decoration": "none",
          "max_width": "720"
         },
@@ -234,7 +234,7 @@
         "type": "text-block",
         "settings": {
          "content": "<p>We started by throwing out the clichés. Instead of selling panels, Helio would sell the feeling of independence — your own power, your own terms. That single idea reshaped the name, the identity and the entire launch.</p><p>The result is a warm, confident system built around a single graphic device — the rising mark — that works as a logo, a loading state, a billboard and everything in between.</p>",
-         "text_color": "#9b988f",
+         "text_color": "var(--olo-color-text-muted)",
          "font_size": "18",
          "line_height": "1.7",
          "text_align": "left",
@@ -296,7 +296,7 @@
         "type": "text-block",
         "settings": {
          "content": "<p>Across out-of-home, social and a new site, the campaign lifted brand search by a third in its first quarter — and gave the team an identity they're genuinely proud to ship.</p>",
-         "text_color": "#9b988f",
+         "text_color": "var(--olo-color-text-muted)",
          "font_size": "18",
          "line_height": "1.7",
          "text_align": "left",
@@ -316,7 +316,7 @@
   "id": "vp-cta-se",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#0a0a0c" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -352,14 +352,14 @@
          "show_scroll": false,
          "scroll_text": "",
          "bottom_split": false,
-         "bg_color": "#0a0a0c",
-         "accent": "#f4a23b",
+         "bg_color": "var(--olo-color-background)",
+         "accent": "var(--olo-color-primary)",
          "accent2": "#e08e26",
-         "accent_on": "#0a0a0c",
-         "text_color": "#ece9e3",
-         "sub_color": "#9b988f",
-         "eyebrow_color": "#f4a23b",
-         "glow_color": "rgba(244,162,59,0.2)",
+         "accent_on": "var(--olo-color-background)",
+         "text_color": "var(--olo-color-text)",
+         "sub_color": "var(--olo-color-text-muted)",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "glow_color": "color-mix(in srgb, var(--olo-color-primary) 20%, transparent)",
          "glow_w": 680,
          "glow_h": 480,
          "glow_blur": 100,

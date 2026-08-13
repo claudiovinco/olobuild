@@ -12,7 +12,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#241430"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -61,14 +61,14 @@
          ],
          "strip_offset": 28,
          "strip_radius": 200,
-         "bg_color": "#241430",
+         "bg_color": "var(--olo-color-background)",
          "accent": "",
-         "accent_on": "#170c1f",
+         "accent_on": "var(--olo-color-primary-contrast)",
          "text_color": "#f3e9ef",
-         "sub_color": "#c8b3c6",
-         "eyebrow_color": "#e0afca",
+         "sub_color": "var(--olo-color-text)",
+         "eyebrow_color": "var(--olo-color-primary)",
          "media_bg": "#33203f",
-         "glow_color": "rgba(224,175,202,0.22)",
+         "glow_color": "color-mix(in srgb, var(--olo-color-primary) 22%, transparent)",
          "glow_w": 760,
          "glow_h": 520,
          "glow_blur": 120,
@@ -99,7 +99,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#241430"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -126,8 +126,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "What we do",
-         "eyebrow_color": "#e0afca",
-         "eyebrow_dot_color": "#e0afca",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -137,7 +137,7 @@
           },
           {
            "text": "occasion",
-           "color": "#e0afca",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -149,7 +149,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#94809a",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -194,7 +194,7 @@
          "overlay_position": "bottom",
          "overlay_horizontal": "left",
          "overlay_style": "overlay-primary",
-         "overlay_color": "rgba(36,20,48,.66)",
+         "overlay_color": "color-mix(in srgb, var(--olo-color-background) 66%, transparent)",
          "overlay_gradient": true,
          "overlay_padding": "medium",
          "title_size": "h3",
@@ -202,7 +202,7 @@
          "title_weight": "400",
          "title_letter_spacing": 0,
          "title_uppercase": false,
-         "subtitle_color": "#e0afca",
+         "subtitle_color": "var(--olo-color-primary)",
          "subtitle_size": 12.5,
          "hover_effect": "zoom",
          "hover_overlay": "always",
@@ -260,7 +260,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#2a1838"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -287,8 +287,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Next showcase",
-         "eyebrow_color": "#e0afca",
-         "eyebrow_dot_color": "#e0afca",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -298,7 +298,7 @@
           },
           {
            "text": "Gala",
-           "color": "#e0afca",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -310,7 +310,7 @@
          "tagline_show": true,
          "tagline_text": "21 June 2026 · Villa Speranza, Lake Como",
          "tagline_text_italic": false,
-         "tagline_text_color": "#94809a",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 13,
          "layout": "center",
          "gap": 12
@@ -357,9 +357,9 @@
          "display_mode": "block",
          "expire_action": "message",
          "expired_message": "L'evento è iniziato!",
-         "accent_color": "#e0afca",
-         "text_color": "#94809a",
-         "separator_color": "rgba(224,175,202,.42)",
+         "accent_color": "var(--olo-color-primary)",
+         "text_color": "var(--olo-color-text-muted)",
+         "separator_color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "number_font_size": "72",
          "number_font_weight": "400",
          "label_font_size": "11",
@@ -402,7 +402,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#241430"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -428,10 +428,10 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "Featured",
-         "eyebrow_color": "#e0afca",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline": "Elena & Marco, on the",
          "accent": "water",
-         "accent_color": "#e0afca",
+         "accent_color": "var(--olo-color-primary)",
          "accent_italic": true,
          "headline_tail": "",
          "uppercase": false,
@@ -439,7 +439,7 @@
          "headline_weight": "400",
          "headline_size": "52",
          "lead": "Two hundred guests, one Venetian palazzo, and a sunset that refused to be upstaged. A weekend celebration built around long tables, candlelight and a string quartet on a boat.",
-         "lead_color": "#c8b3c6",
+         "lead_color": "var(--olo-color-text)",
          "signature": "",
          "stats": [],
          "cta_text": "See the full event",
@@ -481,7 +481,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#2a1838"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -508,8 +508,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "The gallery",
-         "eyebrow_color": "#e0afca",
-         "eyebrow_dot_color": "#e0afca",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -519,7 +519,7 @@
           },
           {
            "text": "made",
-           "color": "#e0afca",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -531,7 +531,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#94809a",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -575,7 +575,7 @@
          "match_height": false,
          "overlay_position": "bottom",
          "overlay_style": "overlay-primary",
-         "overlay_color": "rgba(36,20,48,.7)",
+         "overlay_color": "color-mix(in srgb, var(--olo-color-background) 70%, transparent)",
          "overlay_gradient": true,
          "overlay_padding": "small",
          "title_size": "h4",
@@ -583,7 +583,7 @@
          "title_weight": "400",
          "title_letter_spacing": 0,
          "title_uppercase": false,
-         "subtitle_color": "#e0afca",
+         "subtitle_color": "var(--olo-color-primary)",
          "subtitle_size": 11,
          "hover_effect": "zoom",
          "hover_overlay": "always",
@@ -646,7 +646,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#241430"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -673,8 +673,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "How we work",
-         "eyebrow_color": "#e0afca",
-         "eyebrow_dot_color": "#e0afca",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -684,7 +684,7 @@
           },
           {
            "text": "last dance",
-           "color": "#e0afca",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -696,7 +696,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#94809a",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -735,8 +735,8 @@
          "auto_number": false,
          "item_gap": 10,
          "number_style": "outline",
-         "number_color": "#e0afca",
-         "number_bg": "rgba(224,175,202,.42)",
+         "number_color": "var(--olo-color-primary)",
+         "number_bg": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "number_size": 26,
          "number_font": "serif",
          "number_weight": "400",
@@ -744,7 +744,7 @@
          "title_size": 23,
          "title_font": "serif",
          "title_weight": "400",
-         "desc_color": "#94809a",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 14.5,
          "card_bg": "",
          "card_border": "",
@@ -788,7 +788,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#2a1838"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -845,7 +845,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#241430"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -875,8 +875,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Enquire",
-         "eyebrow_color": "#e0afca",
-         "eyebrow_dot_color": "#e0afca",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -886,7 +886,7 @@
           },
           {
            "text": "something beautiful",
-           "color": "#e0afca",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -898,7 +898,7 @@
          "tagline_show": true,
          "tagline_text": "Tell us a little about your celebration and we’ll be in touch within two days to arrange a first conversation.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#94809a",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "stack",
          "gap": 16
@@ -994,8 +994,8 @@
          "submit_text": "Send enquiry",
          "submit_full_width": true,
          "submit_alignment": "left",
-         "submit_bg": "#e0afca",
-         "submit_color": "#170c1f",
+         "submit_bg": "var(--olo-color-primary)",
+         "submit_color": "var(--olo-color-primary-contrast)",
          "submit_radius": "999",
          "submit_font_size": "13",
          "submit_font_weight": "600",
@@ -1004,9 +1004,9 @@
          "submit_hover_bg": "#cf94b4",
          "email_subject": "New enquiry from Aurora website",
          "success_message": "Thank you! We’ll be in touch within two days.",
-         "input_bg": "#241430",
+         "input_bg": "var(--olo-color-background)",
          "input_color": "#f3e9ef",
-         "input_border_color": "rgba(224,175,202,.42)",
+         "input_border_color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "input_border_width": "1",
          "input_border_style": "box",
          "input_radius": {
@@ -1017,9 +1017,9 @@
           "linked": true
          },
          "input_size": "default",
-         "input_focus_border": "#e0afca",
+         "input_focus_border": "var(--olo-color-primary)",
          "input_focus_shadow": false,
-         "label_color": "#94809a",
+         "label_color": "var(--olo-color-text-muted)",
          "label_size": "11",
          "label_weight": "500",
          "label_transform": "uppercase",

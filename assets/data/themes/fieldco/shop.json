@@ -11,7 +11,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#232a1c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -38,18 +38,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "56 products · all guaranteed for life",
-         "eyebrow_color": "#c2ab63",
-         "eyebrow_dot_color": "#c2ab63",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "The ",
-           "color": "#eef0e3",
+           "color": "var(--olo-color-secondary-contrast)",
            "italic": false
           },
           {
            "text": "kit",
-           "color": "#c2ab63",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -61,7 +61,7 @@
          "tagline_show": true,
          "tagline_text": "Everything we make, in one place. Over-built and field-tested — filter by what you're heading out to do.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#79806a",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 17,
          "layout": "center",
          "gap": 16
@@ -87,7 +87,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#232a1c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -119,30 +119,30 @@
          "stripe_dark": false,
          "hover_zoom": true,
          "card_bg": "#2e3826",
-         "card_border": "rgba(238,240,227,.12)",
+         "card_border": "color-mix(in srgb, var(--olo-color-secondary-contrast) 12%, transparent)",
          "card_radius": 10,
          "card_padding": 18,
          "tag_bg": "#161b11",
-         "tag_color": "#c2ab63",
+         "tag_color": "var(--olo-color-primary)",
          "quick_add_show": false,
-         "category_color": "#79806a",
+         "category_color": "var(--olo-color-text-muted)",
          "title_font": "heading",
          "title_size": 22,
-         "title_color": "#eef0e3",
-         "notes_color": "#79806a",
+         "title_color": "var(--olo-color-secondary-contrast)",
+         "notes_color": "var(--olo-color-text-muted)",
          "notes_mono": false,
-         "price_color": "#eef0e3",
+         "price_color": "var(--olo-color-secondary-contrast)",
          "add_button": true,
          "add_label": "Add",
          "add_bg": "#eef0e3",
-         "add_color": "#161b11",
+         "add_color": "var(--olo-color-primary-contrast)",
          "show_filters": true,
          "filter_all_label": "All",
          "filter_list": "Packs, Shells, Footwear, Tools",
-         "filter_text_color": "#aab09a",
-         "filter_border_color": "rgba(238,240,227,.12)",
-         "filter_active_bg": "#c2ab63",
-         "filter_active_color": "#161b11",
+         "filter_text_color": "var(--olo-color-text)",
+         "filter_border_color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 12%, transparent)",
+         "filter_active_bg": "var(--olo-color-primary)",
+         "filter_active_color": "var(--olo-color-primary-contrast)",
          "footer_text": "",
          "footer_url": "#",
          "items": [
@@ -282,7 +282,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#232a1c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -315,13 +315,13 @@
          "cta_url": "#",
          "bg": {
           "type": "solid",
-          "color": "#283020"
+          "color": "var(--olo-color-muted)"
          },
-         "text_color": "#eef0e3",
-         "accent_color": "#c2ab63",
-         "subtitle_color": "#aab09a",
-         "cta_bg": "#c2ab63",
-         "cta_color": "#161b11",
+         "text_color": "var(--olo-color-secondary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 4,
           "tr": 4,

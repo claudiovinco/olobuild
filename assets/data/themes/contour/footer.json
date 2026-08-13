@@ -3,7 +3,7 @@
   "id": "co-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
-  "style": { "bg": { "type": "solid", "color": "#f4efe6" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -21,7 +21,7 @@
       "advanced": {},
       "children": [
        { "id": "co-fbrand", "type": "headline", "settings": { "heading": "Contour", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "24", "heading_color": "#2c2a26", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "co-fbtext", "type": "text-block", "settings": { "content": "<p>Pilates & movement studio. Small classes, good attention, a calm room.</p>", "text_color": "#938c7e", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "co-fbtext", "type": "text-block", "settings": { "content": "<p>Pilates & movement studio. Small classes, good attention, a calm room.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -32,7 +32,7 @@
       "advanced": {},
       "children": [
        { "id": "co-fh1", "type": "headline", "settings": { "heading": "Studio", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "12", "heading_uppercase": true, "heading_color": "#2c2a26", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "co-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#938c7e", "link_hover_color": "#cf7e4f", "items": [ { "title": "Classes", "content": "/classes/", "tag": "" }, { "title": "Timetable", "content": "#timetable", "tag": "" }, { "title": "Instructors", "content": "#team", "tag": "" }, { "title": "Pricing", "content": "#pricing", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "co-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Classes", "content": "/classes/", "tag": "" }, { "title": "Timetable", "content": "#timetable", "tag": "" }, { "title": "Instructors", "content": "#team", "tag": "" }, { "title": "Pricing", "content": "#pricing", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -43,7 +43,7 @@
       "advanced": {},
       "children": [
        { "id": "co-fh2", "type": "headline", "settings": { "heading": "About", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "12", "heading_uppercase": true, "heading_color": "#2c2a26", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "co-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#938c7e", "link_hover_color": "#cf7e4f", "items": [ { "title": "Our studio", "content": "#", "tag": "" }, { "title": "Teacher training", "content": "#", "tag": "" }, { "title": "Gift cards", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "co-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Our studio", "content": "#", "tag": "" }, { "title": "Teacher training", "content": "#", "tag": "" }, { "title": "Gift cards", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -54,7 +54,7 @@
       "advanced": {},
       "children": [
        { "id": "co-fh3", "type": "headline", "settings": { "heading": "Visit", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "12", "heading_uppercase": true, "heading_color": "#2c2a26", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "co-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#938c7e", "link_hover_color": "#cf7e4f", "items": [ { "title": "22 Linden Mews", "content": "#", "tag": "" }, { "title": "Mon–Sat from 7am", "content": "#", "tag": "" }, { "title": "hello@contour.studio", "content": "mailto:hello@contour.studio", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "co-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "22 Linden Mews", "content": "#", "tag": "" }, { "title": "Mon–Sat from 7am", "content": "#", "tag": "" }, { "title": "hello@contour.studio", "content": "mailto:hello@contour.studio", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -67,7 +67,7 @@
     "advanced": {},
     "children": [
      { "id": "co-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
-      { "id": "co-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "#ddd3c2", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "co-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "var(--olo-color-border)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    },
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "co-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "co-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Contour — an OLOtheme demo.</p>", "text_color": "#938c7e", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "co-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Contour — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "co-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "co-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#938c7e", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "co-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

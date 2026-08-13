@@ -30,7 +30,7 @@
          "heading_font": "heading",
          "heading_font_size": "25",
          "heading_uppercase": false,
-         "heading_color": "#f4e9dc",
+         "heading_color": "var(--olo-color-background)",
          "decoration": "none"
         },
         "style": {},
@@ -42,7 +42,7 @@
         "type": "text-block",
         "settings": {
          "content": "<p>Family trattoria. Handmade pasta, a short seasonal menu, and a long table.</p>",
-         "text_color": "#8a7567",
+         "text_color": "var(--olo-color-text-muted)",
          "font_size": "14",
          "line_height": "1.7",
          "text_align": "left",
@@ -71,7 +71,7 @@
          "heading_font": "body",
          "heading_font_size": "12",
          "heading_uppercase": true,
-         "heading_color": "#f4e9dc",
+         "heading_color": "var(--olo-color-background)",
          "decoration": "none"
         },
         "style": {},
@@ -85,8 +85,8 @@
          "show_icons": false,
          "direction": "vertical",
          "alignment": "left",
-         "link_color": "#8a7567",
-         "link_hover_color": "#d6552f",
+         "link_color": "var(--olo-color-text-muted)",
+         "link_hover_color": "var(--olo-color-link)",
          "items": [
           { "title": "Menu", "content": "/menu/", "tag": "" },
           { "title": "Wine list", "content": "#", "tag": "" },
@@ -117,7 +117,7 @@
          "heading_font": "body",
          "heading_font_size": "12",
          "heading_uppercase": true,
-         "heading_color": "#f4e9dc",
+         "heading_color": "var(--olo-color-background)",
          "decoration": "none"
         },
         "style": {},
@@ -131,8 +131,8 @@
          "show_icons": false,
          "direction": "vertical",
          "alignment": "left",
-         "link_color": "#8a7567",
-         "link_hover_color": "#d6552f",
+         "link_color": "var(--olo-color-text-muted)",
+         "link_hover_color": "var(--olo-color-link)",
          "items": [
           { "title": "Our story", "content": "#story", "tag": "" },
           { "title": "Private events", "content": "#", "tag": "" },
@@ -162,7 +162,7 @@
          "heading_font": "body",
          "heading_font_size": "12",
          "heading_uppercase": true,
-         "heading_color": "#f4e9dc",
+         "heading_color": "var(--olo-color-background)",
          "decoration": "none"
         },
         "style": {},
@@ -176,8 +176,8 @@
          "show_icons": false,
          "direction": "vertical",
          "alignment": "left",
-         "link_color": "#8a7567",
-         "link_hover_color": "#d6552f",
+         "link_color": "var(--olo-color-text-muted)",
+         "link_hover_color": "var(--olo-color-link)",
          "items": [
           { "title": "9 Via del Forno", "content": "#", "tag": "" },
           { "title": "Tue–Sun · from 12:30", "content": "#", "tag": "" },
@@ -210,7 +210,7 @@
        {
         "id": "ta-fdiv",
         "type": "divider",
-        "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(244,233,220,.14)", "alignment": "center", "spacing": 24 },
+        "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "color-mix(in srgb, var(--olo-color-background) 14%, transparent)", "alignment": "center", "spacing": 24 },
         "style": {},
         "advanced": {},
         "children": []
@@ -236,7 +236,7 @@
        {
         "id": "ta-fcopy",
         "type": "text-block",
-        "settings": { "content": "<p>© 2026 Tavola — an OLOtheme demo.</p>", "text_color": "rgba(244,233,220,.5)", "font_size": "12.5", "text_align": "left" },
+        "settings": { "content": "<p>© 2026 Tavola — an OLOtheme demo.</p>", "text_color": "color-mix(in srgb, var(--olo-color-background) 50%, transparent)", "font_size": "12.5", "text_align": "left" },
         "style": {},
         "advanced": {},
         "children": []
@@ -253,7 +253,7 @@
        {
         "id": "ta-fbuilt",
         "type": "text-block",
-        "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "rgba(244,233,220,.5)", "font_size": "12.5", "text_align": "right" },
+        "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "color-mix(in srgb, var(--olo-color-background) 50%, transparent)", "font_size": "12.5", "text_align": "right" },
         "style": {},
         "advanced": {},
         "children": []

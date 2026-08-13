@@ -3,7 +3,7 @@
   "id": "ho-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
-  "style": { "bg": { "type": "solid", "color": "#f6ecd6" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -21,7 +21,7 @@
       "advanced": {},
       "children": [
        { "id": "ho-fbrand", "type": "headline", "settings": { "heading": "Honeycomb", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "24", "heading_uppercase": false, "heading_color": "#3a2a12", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ho-fbtext", "type": "text-block", "settings": { "content": "<p>Neighbourhood bakery. Slow-proved bread, viennoiserie and cakes, fresh before dawn.</p>", "text_color": "#9c8253", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ho-fbtext", "type": "text-block", "settings": { "content": "<p>Neighbourhood bakery. Slow-proved bread, viennoiserie and cakes, fresh before dawn.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -32,7 +32,7 @@
       "advanced": {},
       "children": [
        { "id": "ho-fh0", "type": "headline", "settings": { "heading": "Bakery", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "12", "heading_uppercase": true, "heading_color": "#3a2a12", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ho-fn0", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#9c8253", "link_hover_color": "#c8870f", "items": [ { "title": "The bakes", "content": "#bakes", "tag": "" }, { "title": "Cakes to order", "content": "#", "tag": "" }, { "title": "Hours", "content": "#hours", "tag": "" }, { "title": "Pre-order", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ho-fn0", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "The bakes", "content": "#bakes", "tag": "" }, { "title": "Cakes to order", "content": "#", "tag": "" }, { "title": "Hours", "content": "#hours", "tag": "" }, { "title": "Pre-order", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -43,7 +43,7 @@
       "advanced": {},
       "children": [
        { "id": "ho-fh1", "type": "headline", "settings": { "heading": "About", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "12", "heading_uppercase": true, "heading_color": "#3a2a12", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ho-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#9c8253", "link_hover_color": "#c8870f", "items": [ { "title": "Our story", "content": "#story", "tag": "" }, { "title": "Wholesale", "content": "#", "tag": "" }, { "title": "Jobs", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ho-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Our story", "content": "#story", "tag": "" }, { "title": "Wholesale", "content": "#", "tag": "" }, { "title": "Jobs", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -54,7 +54,7 @@
       "advanced": {},
       "children": [
        { "id": "ho-fh2", "type": "headline", "settings": { "heading": "Find us", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "12", "heading_uppercase": true, "heading_color": "#3a2a12", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ho-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#9c8253", "link_hover_color": "#c8870f", "items": [ { "title": "14 Mill Street", "content": "", "tag": "" }, { "title": "Tue–Sun · from 7am", "content": "", "tag": "" }, { "title": "hello@honeycomb.bakery", "content": "", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ho-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "14 Mill Street", "content": "", "tag": "" }, { "title": "Tue–Sun · from 7am", "content": "", "tag": "" }, { "title": "hello@honeycomb.bakery", "content": "", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -67,7 +67,7 @@
     "advanced": {},
     "children": [
      { "id": "ho-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
-      { "id": "ho-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "#e0cfa6", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "ho-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "var(--olo-color-border)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    },
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "ho-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "ho-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Honeycomb — an OLOtheme demo.</p>", "text_color": "#9c8253", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "ho-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Honeycomb — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "ho-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "ho-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#9c8253", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "ho-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

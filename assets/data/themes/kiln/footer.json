@@ -3,7 +3,7 @@
   "id": "ki-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
-  "style": { "bg": { "type": "solid", "color": "#efe5da" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -21,7 +21,7 @@
       "advanced": {},
       "children": [
        { "id": "ki-fbrand", "type": "headline", "settings": { "heading": "Kiln", "tag": "div", "alignment": "left", "heading_font_size": "25", "heading_uppercase": false, "heading_color": "#2a211c", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ki-fbtext", "type": "text-block", "settings": { "content": "<p>The studio of ceramic artist Mara Sole. Wheel-thrown, wood-fired, one at a time.</p>", "text_color": "#928271", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ki-fbtext", "type": "text-block", "settings": { "content": "<p>The studio of ceramic artist Mara Sole. Wheel-thrown, wood-fired, one at a time.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -32,7 +32,7 @@
       "advanced": {},
       "children": [
        { "id": "ki-fh0", "type": "headline", "settings": { "heading": "Shop", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#2a211c", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ki-fn0", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#928271", "link_hover_color": "#bd6a40", "items": [ { "title": "The collection", "content": "/the-collection/", "tag": "" }, { "title": "Commissions", "content": "#commission", "tag": "" }, { "title": "Gift cards", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ki-fn0", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "The collection", "content": "/the-collection/", "tag": "" }, { "title": "Commissions", "content": "#commission", "tag": "" }, { "title": "Gift cards", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -43,7 +43,7 @@
       "advanced": {},
       "children": [
        { "id": "ki-fh1", "type": "headline", "settings": { "heading": "Studio", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#2a211c", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ki-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#928271", "link_hover_color": "#bd6a40", "items": [ { "title": "The studio", "content": "#studio", "tag": "" }, { "title": "Process", "content": "#process", "tag": "" }, { "title": "Workshops", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ki-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "The studio", "content": "#studio", "tag": "" }, { "title": "Process", "content": "#process", "tag": "" }, { "title": "Workshops", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -54,7 +54,7 @@
       "advanced": {},
       "children": [
        { "id": "ki-fh2", "type": "headline", "settings": { "heading": "Contact", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#2a211c", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ki-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#928271", "link_hover_color": "#bd6a40", "items": [ { "title": "Studio 6, The Old Pottery", "content": "#", "tag": "" }, { "title": "mara@kiln.studio", "content": "mailto:mara@kiln.studio", "tag": "" }, { "title": "@kiln.studio", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ki-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Studio 6, The Old Pottery", "content": "#", "tag": "" }, { "title": "mara@kiln.studio", "content": "mailto:mara@kiln.studio", "tag": "" }, { "title": "@kiln.studio", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -67,7 +67,7 @@
     "advanced": {},
     "children": [
      { "id": "ki-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
-      { "id": "ki-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "#dac9b6", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "ki-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "var(--olo-color-border)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    },
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "ki-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "ki-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Kiln — an OLOtheme demo.</p>", "text_color": "#928271", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "ki-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Kiln — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "ki-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "ki-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#928271", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "ki-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

@@ -11,7 +11,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#2a2620"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -51,7 +51,7 @@
          "meta_text": "",
          "scroll_hint": "",
          "bg_image": "",
-         "bg_color": "#2a2620",
+         "bg_color": "var(--olo-color-background)",
          "media_label": "wedding — couple, golden hour, full bleed",
          "text_position": "center",
          "text_align": "center",
@@ -63,11 +63,11 @@
          "overlay_top": 0.5,
          "overlay_bottom": 0.95,
          "overlay_sides": false,
-         "accent": "#cbab6a",
-         "accent_on": "#1b1813",
+         "accent": "var(--olo-color-primary)",
+         "accent_on": "var(--olo-color-primary-contrast)",
          "text_color": "#ffffff",
-         "sub_color": "#f3ecdf",
-         "eyebrow_color": "#cbab6a"
+         "sub_color": "var(--olo-color-secondary)",
+         "eyebrow_color": "var(--olo-color-primary)"
         },
         "style": {},
         "advanced": {},
@@ -90,7 +90,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#312c25"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -117,18 +117,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Next on our calendar",
-         "eyebrow_color": "#cbab6a",
-         "eyebrow_dot_color": "#cbab6a",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "A & J, married at",
-           "color": "#f3ecdf",
+           "color": "var(--olo-color-secondary)",
            "italic": false
           },
           {
            "text": "Villa Lume",
-           "color": "#cbab6a",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -140,7 +140,7 @@
          "tagline_show": true,
          "tagline_text": "19 September 2026 · Lake Garda",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8a7f6c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 13,
          "layout": "center",
          "gap": 12
@@ -165,8 +165,8 @@
          "label_seconds": "Seconds",
          "separator": "",
          "display_mode": "inline",
-         "accent_color": "#cbab6a",
-         "text_color": "#8a7f6c",
+         "accent_color": "var(--olo-color-primary)",
+         "text_color": "var(--olo-color-text-muted)",
          "separator_color": "transparent",
          "number_font_size": "72",
          "number_font_weight": "500",
@@ -206,7 +206,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#2a2620"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -233,18 +233,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "How we help",
-         "eyebrow_color": "#cbab6a",
-         "eyebrow_dot_color": "#cbab6a",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Three ways to ",
-           "color": "#f3ecdf",
+           "color": "var(--olo-color-secondary)",
            "italic": false
           },
           {
            "text": "say yes",
-           "color": "#cbab6a",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -256,7 +256,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8a7f6c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 16
@@ -295,15 +295,15 @@
          "auto_number": false,
          "item_gap": 10,
          "number_style": "plain",
-         "number_color": "#cbab6a",
+         "number_color": "var(--olo-color-primary)",
          "number_size": 20,
          "number_font": "serif",
          "number_weight": "500",
-         "title_color": "#f3ecdf",
+         "title_color": "var(--olo-color-secondary)",
          "title_size": 25,
          "title_font": "serif",
          "title_weight": "500",
-         "desc_color": "#8a7f6c",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 14,
          "card_bg": "#383228",
          "card_border": "1px solid rgba(243,236,223,.13)",
@@ -354,7 +354,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#312c25"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -381,18 +381,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "A few we've loved",
-         "eyebrow_color": "#cbab6a",
-         "eyebrow_dot_color": "#cbab6a",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Recently ",
-           "color": "#f3ecdf",
+           "color": "var(--olo-color-secondary)",
            "italic": false
           },
           {
            "text": "celebrated",
-           "color": "#cbab6a",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -404,7 +404,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8a7f6c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 16
@@ -451,11 +451,11 @@
          "overlay_gradient": true,
          "overlay_padding": "small",
          "title_size": "h4",
-         "title_color": "#f3ecdf",
+         "title_color": "var(--olo-color-secondary)",
          "title_weight": "500",
          "title_letter_spacing": 0,
          "title_uppercase": false,
-         "subtitle_color": "#cbab6a",
+         "subtitle_color": "var(--olo-color-primary)",
          "subtitle_size": 11,
          "hover_effect": "zoom",
          "hover_overlay": "fade",
@@ -491,7 +491,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#2a2620"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -523,13 +523,13 @@
          "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
-         "text_color": "#f3ecdf",
+         "text_color": "var(--olo-color-secondary)",
          "quote_font": "heading",
          "quote_size": 40,
-         "quote_accent_color": "#cbab6a",
+         "quote_accent_color": "var(--olo-color-primary)",
          "quote_uppercase": false,
-         "star_color": "#cbab6a",
-         "author_color": "#cbab6a",
+         "star_color": "var(--olo-color-primary)",
+         "author_color": "var(--olo-color-primary)",
          "author_uppercase": true,
          "border_radius": "0",
          "avatar": ""
@@ -555,7 +555,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#312c25"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -584,18 +584,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Enquire",
-         "eyebrow_color": "#cbab6a",
-         "eyebrow_dot_color": "#cbab6a",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Is your date",
-           "color": "#f3ecdf",
+           "color": "var(--olo-color-secondary)",
            "italic": false
           },
           {
            "text": "free?",
-           "color": "#cbab6a",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -607,7 +607,7 @@
          "tagline_show": true,
          "tagline_text": "We take a limited number of weddings each year so every couple gets our full attention. Tell us a little and we'll be in touch within two days.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8a7f6c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "stack",
          "gap": 20
@@ -621,7 +621,7 @@
         "type": "text-block",
         "settings": {
          "content": "<p><strong>hello@vows.studio</strong></p>",
-         "text_color": "#f3ecdf",
+         "text_color": "var(--olo-color-secondary)",
          "font_size": "15",
          "line_height": "1.6",
          "text_align": "left",
@@ -710,23 +710,23 @@
          "submit_alignment": "center",
          "submit_full_width": true,
          "form_layout": "stacked",
-         "input_bg": "#2a2620",
-         "input_color": "#f3ecdf",
-         "input_border_color": "rgba(203,171,106,.42)",
+         "input_bg": "var(--olo-color-background)",
+         "input_color": "var(--olo-color-secondary)",
+         "input_border_color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "input_border_width": "1",
          "input_border_style": "box",
          "input_radius": "8",
-         "input_focus_border": "#cbab6a",
+         "input_focus_border": "var(--olo-color-primary)",
          "input_focus_shadow": false,
          "input_size": "default",
-         "label_color": "#8a7f6c",
+         "label_color": "var(--olo-color-text-muted)",
          "label_size": "11",
          "label_weight": "500",
          "label_transform": "uppercase",
          "label_letter_spacing": "0.12em",
          "gap": "18",
-         "submit_bg": "#cbab6a",
-         "submit_color": "#1b1813",
+         "submit_bg": "var(--olo-color-primary)",
+         "submit_color": "var(--olo-color-primary-contrast)",
          "submit_hover_bg": "#d9bd82",
          "submit_radius": "999",
          "submit_font_size": "12",

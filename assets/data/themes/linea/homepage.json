@@ -12,7 +12,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#211f1d"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -66,11 +66,11 @@
          "overlay_top": 0.15,
          "overlay_bottom": 0.15,
          "overlay_sides": true,
-         "accent": "#bd9a6f",
-         "accent_on": "#161410",
+         "accent": "var(--olo-color-primary)",
+         "accent_on": "var(--olo-color-primary-contrast)",
          "text_color": "#ffffff",
-         "sub_color": "#efe9df",
-         "eyebrow_color": "#bd9a6f",
+         "sub_color": "var(--olo-color-secondary)",
+         "eyebrow_color": "var(--olo-color-primary)",
          "cta_radius": {
           "tl": 0,
           "tr": 0,
@@ -99,7 +99,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#211f1d"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -126,18 +126,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "New in",
-         "eyebrow_color": "#bd9a6f",
-         "eyebrow_dot_color": "#bd9a6f",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "This week's ",
-           "color": "#efe9df",
+           "color": "var(--olo-color-secondary)",
            "italic": false
           },
           {
            "text": "arrivals",
-           "color": "#bd9a6f",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -149,7 +149,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#827a6d",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 16
@@ -195,16 +195,16 @@
          "tag_bg": "",
          "tag_color": "",
          "quick_add_show": false,
-         "category_color": "#827a6d",
+         "category_color": "var(--olo-color-text-muted)",
          "title_font": "serif",
          "title_size": 22,
-         "title_color": "#efe9df",
-         "price_color": "#bd9a6f",
+         "title_color": "var(--olo-color-secondary)",
+         "price_color": "var(--olo-color-primary)",
          "add_button": false,
          "show_filters": false,
          "footer_text": "Shop everything",
          "footer_url": "#edit",
-         "footer_color": "#efe9df",
+         "footer_color": "var(--olo-color-secondary)",
          "items": [
           {
            "image": "",
@@ -281,7 +281,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#262320"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -308,18 +308,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "By category",
-         "eyebrow_color": "#bd9a6f",
-         "eyebrow_dot_color": "#bd9a6f",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "The ",
-           "color": "#efe9df",
+           "color": "var(--olo-color-secondary)",
            "italic": false
           },
           {
            "text": "edit",
-           "color": "#bd9a6f",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -331,7 +331,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#827a6d",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 16
@@ -414,7 +414,7 @@
          "title_weight": "400",
          "title_letter_spacing": 0,
          "title_uppercase": false,
-         "subtitle_color": "#bd9a6f",
+         "subtitle_color": "var(--olo-color-primary)",
          "subtitle_size": 12,
          "show_cta": false,
          "cta_text": "Shop",
@@ -469,23 +469,23 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "About Linea",
-         "eyebrow_color": "#bd9a6f",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline": "A shop that",
          "accent": "says no",
          "headline_tail": "for you",
          "accent_italic": true,
          "uppercase": false,
-         "headline_color": "#efe9df",
+         "headline_color": "var(--olo-color-secondary)",
          "headline_weight": "400",
          "headline_size": "52",
          "lead": "We see thousands of things and choose a few. Everything in Linea is here because it's beautifully made, will last, and earns its place on your shelf.\n\nWe work directly with small makers, in small runs, and we'll tell you the story behind every piece.",
-         "lead_color": "#b2a99c",
+         "lead_color": "var(--olo-color-text)",
          "signature": "— Sora & Idris, founders",
          "stats": [],
          "cta_text": "Read more",
          "cta_url": "#",
          "cta_style": "underline",
-         "cta_color": "#efe9df",
+         "cta_color": "var(--olo-color-secondary)",
          "cta2_text": "",
          "cta2_url": "#",
          "cta2_style": "outline",
@@ -524,7 +524,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#262320"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -552,10 +552,10 @@
          "eyebrow": "Personal edit",
          "heading": "Find your <em>edit</em>",
          "intro": "",
-         "zone_accent": "#bd9a6f",
-         "zone_on": "#161410",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "card_bg": "#2c2925",
-         "card_border": "rgba(189,154,111,.42)",
+         "card_border": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "card_radius": "2",
          "align": "center",
          "default_index": "0",
@@ -643,7 +643,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#211f1d"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -669,9 +669,9 @@
         "type": "newsletter",
         "settings": {
          "eyebrow": "Stay close",
-         "eyebrow_color": "#bd9a6f",
+         "eyebrow_color": "var(--olo-color-primary)",
          "title": "The <em>quiet</em> list",
-         "title_accent_color": "#bd9a6f",
+         "title_accent_color": "var(--olo-color-primary)",
          "subtitle": "One considered email a month — new arrivals, maker stories and the occasional private preview.",
          "layout": "horizontal",
          "show_name": false,
@@ -692,17 +692,17 @@
          },
          "title_size": "56",
          "title_weight": "400",
-         "title_color": "#efe9df",
+         "title_color": "var(--olo-color-secondary)",
          "subtitle_size": "16",
-         "subtitle_color": "#827a6d",
+         "subtitle_color": "var(--olo-color-text-muted)",
          "input_bg": "transparent",
-         "input_color": "#efe9df",
-         "input_border": "rgba(189,154,111,.42)",
-         "input_focus_border": "#bd9a6f",
+         "input_color": "var(--olo-color-secondary)",
+         "input_border": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
+         "input_focus_border": "var(--olo-color-primary)",
          "input_radius": 0,
          "input_height": "52",
-         "btn_bg": "#bd9a6f",
-         "btn_color": "#161410",
+         "btn_bg": "var(--olo-color-primary)",
+         "btn_color": "var(--olo-color-primary-contrast)",
          "btn_hover_bg": "#cfb088",
          "btn_radius": 0,
          "btn_font_size": "12",

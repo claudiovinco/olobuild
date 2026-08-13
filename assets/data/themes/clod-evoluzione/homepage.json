@@ -1,7 +1,7 @@
 {
  "settings": {
   "content_max_width": 1280,
-  "page_bg": { "type": "solid", "color": "#0b0c0f" },
+  "page_bg": { "type": "solid", "color": "var(--olo-color-background)" },
   "page_grain_enabled": true,
   "page_grain_opacity": 7,
   "page_grain_size": 240,
@@ -13,7 +13,7 @@
   "id": "ce-se-hero",
   "type": "section",
   "settings": { "style": "default", "width": "default", "padding": "remove-vertical" },
-  "style": { "bg": { "type": "pattern", "pattern_type": "diagonal-lines-reverse", "pattern_color": "#ECEAE3", "pattern_opacity": 5, "pattern_bg_color": "#0b0c0f", "pattern_size": 36, "pattern_thickness": 18 } },
+  "style": { "bg": { "type": "pattern", "pattern_type": "diagonal-lines-reverse", "pattern_color": "var(--olo-color-secondary)", "pattern_opacity": 5, "pattern_bg_color": "var(--olo-color-background)", "pattern_size": 36, "pattern_thickness": 18 } },
   "advanced": { "html_id": "top" },
   "children": [
    { "id": "ce-ro-hero", "type": "row", "settings": { "layout": "100", "gap": 0, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
@@ -66,7 +66,7 @@
   "id": "ce-se-strip",
   "type": "section",
   "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
-  "style": { "bg": { "type": "solid", "color": "#0b0c0f" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    { "id": "ce-ro-strip", "type": "row", "settings": { "layout": "100", "gap": 0, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
@@ -75,14 +75,14 @@
         "content_type": "text",
         "text_items": "Consulenza aziendale|Produzione media|Formazione|Corporate identity|Siti web",
         "separator": "●",
-        "separator_color": "#E94955",
+        "separator_color": "var(--olo-color-primary)",
         "separator_size": "10",
         "font_family": "heading",
         "font_size": "22",
         "font_weight": "700",
         "letter_spacing": "0",
         "text_transform": "uppercase",
-        "text_color": "#a0a298",
+        "text_color": "var(--olo-color-text-muted)",
         "bg_color": "#101218",
         "height": "58",
         "gap": "46",
@@ -90,7 +90,7 @@
         "full_width": true,
         "border_top": "1",
         "border_bottom": "1",
-        "border_color": "rgba(236,234,227,.10)",
+        "border_color": "color-mix(in srgb, var(--olo-color-secondary) 10%, transparent)",
         "velocity_skew": true,
         "vskew_base_speed": 0.6,
         "vskew_scroll_boost": 0.6,
@@ -106,7 +106,7 @@
   "id": "ce-se-manifesto",
   "type": "section",
   "settings": { "style": "default", "width": "default", "padding": "xlarge" },
-  "style": { "bg": { "type": "solid", "color": "#0b0c0f" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    { "id": "ce-ro-mani", "type": "row", "settings": { "layout": "100", "gap": 0, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
@@ -132,14 +132,14 @@
   "id": "ce-se-servizi",
   "type": "section",
   "settings": { "style": "default", "width": "default", "padding": "xlarge" },
-  "style": { "bg": { "type": "solid", "color": "#0b0c0f" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": { "html_id": "servizi" },
   "children": [
    { "id": "ce-ro-srvh", "type": "row", "settings": { "layout": "100", "gap": 0, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
     { "id": "ce-co-srvh", "type": "column", "settings": { "width": "1-1", "width_medium": "1-1" }, "style": {}, "advanced": {}, "children": [
      { "id": "ce-ti-srvh", "type": "section-header", "settings": {
         "eyebrow_show": false,
-        "headline_lines": [ { "text": "Servizi", "color": "#ECEAE3", "italic": false } ],
+        "headline_lines": [ { "text": "Servizi", "color": "var(--olo-color-secondary)", "italic": false } ],
         "headline_font_family": "heading",
         "headline_font_size": 86,
         "headline_line_height": 0.92,
@@ -148,7 +148,7 @@
         "tagline_show": true,
         "tagline_text": "",
         "tagline_caption": "/ COSA FACCIO — 05",
-        "tagline_caption_color": "#a0a298",
+        "tagline_caption_color": "var(--olo-color-text-muted)",
         "tagline_caption_size": 12,
         "layout": "split",
         "split_ratio": "1.6fr 1fr",
@@ -229,14 +229,14 @@
   "id": "ce-se-rs",
   "type": "section",
   "settings": { "style": "default", "width": "default", "padding": "xlarge" },
-  "style": { "bg": { "type": "solid", "color": "#0b0c0f" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": { "html_id": "rs" },
   "children": [
    { "id": "ce-ro-rsh", "type": "row", "settings": { "layout": "100", "gap": 0, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
     { "id": "ce-co-rsh", "type": "column", "settings": { "width": "1-1", "width_medium": "1-1" }, "style": {}, "advanced": {}, "children": [
      { "id": "ce-ti-rsh", "type": "section-header", "settings": {
         "eyebrow_show": false,
-        "headline_lines": [ { "text": "Dalla divisione idee", "color": "#ECEAE3", "italic": false } ],
+        "headline_lines": [ { "text": "Dalla divisione idee", "color": "var(--olo-color-secondary)", "italic": false } ],
         "headline_font_family": "heading",
         "headline_font_size": 86,
         "headline_line_height": 0.92,
@@ -245,7 +245,7 @@
         "tagline_show": true,
         "tagline_text": "",
         "tagline_caption": "/ R&S — PRODOTTO",
-        "tagline_caption_color": "#a0a298",
+        "tagline_caption_color": "var(--olo-color-text-muted)",
         "tagline_caption_size": 12,
         "layout": "split",
         "split_ratio": "1.6fr 1fr",
@@ -259,11 +259,11 @@
      { "id": "ce-ti-rsl", "type": "headline", "settings": {
         "heading": "La mia R&S ha un nome: OLObuild — un page builder professionale per WordPress, e una collezione di 50 temi originali. È il banco di prova dove le idee diventano sistema.",
         "accent_text": "OLObuild",
-        "accent_color": "#E94955",
+        "accent_color": "var(--olo-color-primary)",
         "tag": "h4",
         "heading_font": "inherit",
         "heading_font_size": 28,
-        "heading_color": "#ECEAE3",
+        "heading_color": "var(--olo-color-secondary)",
         "subtitle": ""
        }, "style": {}, "advanced": {}, "children": [] }
     ]},
@@ -273,8 +273,8 @@
         "url": "https://olotheme.com",
         "target": "_blank",
         "alignment": "right",
-        "bg_color": "#E94955",
-        "text_color": "#0b0c0f",
+        "bg_color": "var(--olo-color-primary)",
+        "text_color": "var(--olo-color-background)",
         "border_radius": 8,
         "font_size": 15,
         "font_weight": 700
@@ -291,8 +291,8 @@
           { "name": "Soundwave", "category": "Artist", "zone_label": "Sequencer", "bg": "#0c0c10", "ink": "#ffffff", "accent": "#27e0a3", "font_label": "Big Shoulders Display", "light": false, "link": "" }
         ],
         "card_bg": "#101218",
-        "card_border_color": "rgba(236,234,227,.10)",
-        "card_border_hover_color": "rgba(236,234,227,.20)",
+        "card_border_color": "color-mix(in srgb, var(--olo-color-secondary) 10%, transparent)",
+        "card_border_hover_color": "color-mix(in srgb, var(--olo-color-secondary) 20%, transparent)",
         "preview_height": 168,
         "gap": 16
        }, "style": {}, "advanced": {}, "children": [] }
@@ -305,29 +305,29 @@
   "id": "ce-se-contatto",
   "type": "section",
   "settings": { "style": "default", "width": "default", "padding": "xlarge" },
-  "style": { "bg": { "type": "solid", "color": "#0b0c0f" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": { "html_id": "contatto" },
   "children": [
    { "id": "ce-ro-cta", "type": "row", "settings": { "layout": "100", "gap": 0, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
     { "id": "ce-co-cta", "type": "column", "settings": { "width": "1-1", "width_medium": "1-1" }, "style": {}, "advanced": {}, "children": [
      { "id": "ce-ti-cta", "type": "mediacta", "settings": {
         "eyebrow": "Lavoriamo assieme",
-        "eyebrow_color": "#E94955",
+        "eyebrow_color": "var(--olo-color-primary)",
         "eyebrow_mono": true,
         "headline": "Parliamone",
         "accent_text": "",
         "uppercase": true,
-        "headline_color": "#ECEAE3",
+        "headline_color": "var(--olo-color-secondary)",
         "headline_size": 120,
         "subhead": "Sei interessato a progettare con me? Raccontami l'idea — partiamo da lì.",
-        "subhead_color": "#a0a298",
+        "subhead_color": "var(--olo-color-text-muted)",
         "cta_style": "maillink",
         "cta1_text": "info@clod.eu",
         "cta1_url": "mailto:info@clod.eu",
         "cta2_text": "",
         "align": "center",
-        "media_bg": { "type": "solid", "color": "#0b0c0f" },
-        "overlay_color": "#0b0c0f",
+        "media_bg": { "type": "solid", "color": "var(--olo-color-background)" },
+        "overlay_color": "var(--olo-color-background)",
         "media_label": "",
         "bg_image": ""
        }, "style": {}, "advanced": {}, "children": [] }
@@ -340,7 +340,7 @@
   "id": "ce-se-partner",
   "type": "section",
   "settings": { "style": "default", "width": "default", "padding": "default" },
-  "style": { "bg": { "type": "solid", "color": "#0b0c0f" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    { "id": "ce-ro-part", "type": "row", "settings": { "layout": "25-75", "gap": 40, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [
@@ -363,8 +363,8 @@
         "font_size": "28",
         "font_weight": "700",
         "text_transform": "uppercase",
-        "link_color": "#a0a298",
-        "link_hover_color": "#ECEAE3"
+        "link_color": "var(--olo-color-text-muted)",
+        "link_hover_color": "var(--olo-color-secondary)"
        }, "style": {}, "advanced": {}, "children": [] }
     ]}
    ]}
@@ -375,7 +375,7 @@
   "id": "ce-se-evo",
   "type": "section",
   "settings": { "style": "default", "width": "fullbleed", "padding": "remove-vertical" },
-  "style": { "bg": { "type": "solid", "color": "#0b0c0f" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    { "id": "ce-ro-evo", "type": "row", "settings": { "layout": "100", "gap": 0, "vertical_align": "center" }, "style": {}, "advanced": {}, "children": [

@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#a3e635"
+    "color": "var(--olo-color-primary)"
    }
   },
   "advanced": {},
@@ -80,8 +80,8 @@
          "show_controls": false,
          "show_indicators": false,
          "show_counter": false,
-         "bg_color": "#a3e635",
-         "text_color": "#0a0e12",
+         "bg_color": "var(--olo-color-primary)",
+         "text_color": "var(--olo-color-primary-contrast)",
          "font_size": 12,
          "font_weight": "500",
          "height": "38",
@@ -120,7 +120,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#11161c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -165,16 +165,16 @@
          "media_radius": 10,
          "standfirst_italic": false,
          "placeholder_dark": false,
-         "bg_color": "#11161c",
-         "kicker_color": "#a3e635",
+         "bg_color": "var(--olo-color-background)",
+         "kicker_color": "var(--olo-color-primary)",
          "headline_color": "#eef2ec",
-         "accent_color": "#a3e635",
-         "standfirst_color": "#9aa6b0",
-         "byline_color": "#5f6b76",
+         "accent_color": "var(--olo-color-primary)",
+         "standfirst_color": "var(--olo-color-text)",
+         "byline_color": "var(--olo-color-text-muted)",
          "byline_name_color": "#eef2ec",
          "media_bg": "#1a212a",
-         "cta_solid_bg": "#a3e635",
-         "cta_solid_text": "#0a0e12",
+         "cta_solid_bg": "var(--olo-color-primary)",
+         "cta_solid_text": "var(--olo-color-primary-contrast)",
          "heading_font": "\"IBM Plex Sans\", -apple-system, sans-serif",
          "serif_font": "\"IBM Plex Sans\", -apple-system, sans-serif",
          "sans_font": "\"IBM Plex Sans\", -apple-system, sans-serif",
@@ -206,7 +206,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#11161c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -236,7 +236,7 @@
          "headline_lines": [
           {
            "text": "// latest",
-           "color": "#5f6b76",
+           "color": "var(--olo-color-text-muted)",
            "italic": false
           }
          ],
@@ -289,10 +289,10 @@
          "title_color": "#eef2ec",
          "title_size": 21,
          "title_weight": "600",
-         "meta_color": "#a3e635",
+         "meta_color": "var(--olo-color-primary)",
          "meta_size": 12,
          "show_desc": true,
-         "desc_color": "#5f6b76",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 14,
          "mono_font_family": "IBM Plex Mono",
          "items": [
@@ -346,7 +346,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#141b22"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -376,7 +376,7 @@
          "headline_lines": [
           {
            "text": "// topics",
-           "color": "#5f6b76",
+           "color": "var(--olo-color-text-muted)",
            "italic": false
           }
          ],
@@ -422,47 +422,47 @@
           {
            "text": "architecture",
            "icon": "",
-           "icon_color": "#a3e635"
+           "icon_color": "var(--olo-color-primary)"
           },
           {
            "text": "performance",
            "icon": "",
-           "icon_color": "#a3e635"
+           "icon_color": "var(--olo-color-primary)"
           },
           {
            "text": "tooling",
            "icon": "",
-           "icon_color": "#a3e635"
+           "icon_color": "var(--olo-color-primary)"
           },
           {
            "text": "databases",
            "icon": "",
-           "icon_color": "#a3e635"
+           "icon_color": "var(--olo-color-primary)"
           },
           {
            "text": "frontend",
            "icon": "",
-           "icon_color": "#a3e635"
+           "icon_color": "var(--olo-color-primary)"
           },
           {
            "text": "careers",
            "icon": "",
-           "icon_color": "#a3e635"
+           "icon_color": "var(--olo-color-primary)"
           },
           {
            "text": "AI",
            "icon": "",
-           "icon_color": "#a3e635"
+           "icon_color": "var(--olo-color-primary)"
           },
           {
            "text": "culture",
            "icon": "",
-           "icon_color": "#a3e635"
+           "icon_color": "var(--olo-color-primary)"
           },
           {
            "text": "security",
            "icon": "",
-           "icon_color": "#a3e635"
+           "icon_color": "var(--olo-color-primary)"
           }
          ],
          "variant": "pill",
@@ -471,11 +471,11 @@
          "flow": "wrap",
          "gap": 10,
          "font_family": "mono",
-         "text_color": "#9aa6b0",
+         "text_color": "var(--olo-color-text)",
          "text_size": 13,
          "pill_bg": "transparent",
          "pill_border": "rgba(238,242,236,.1)",
-         "pill_text_color": "#9aa6b0",
+         "pill_text_color": "var(--olo-color-text)",
          "pill_padding_v": 9,
          "pill_padding_h": 15,
          "pill_radius": 8
@@ -501,7 +501,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#11161c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -536,7 +536,7 @@
          "max_width": "420",
          "alignment": "center",
          "bg_color": "#1a212a",
-         "box_border": "rgba(163,230,53,.4)",
+         "box_border": "color-mix(in srgb, var(--olo-color-primary) 40%, transparent)",
          "border_radius": 14,
          "tile_padding": {
           "top": 52,
@@ -548,15 +548,15 @@
          "title_weight": "600",
          "title_color": "#eef2ec",
          "subtitle_size": "15",
-         "subtitle_color": "#9aa6b0",
-         "input_bg": "#11161c",
+         "subtitle_color": "var(--olo-color-text)",
+         "input_bg": "var(--olo-color-background)",
          "input_color": "#eef2ec",
-         "input_border": "rgba(163,230,53,.4)",
-         "input_focus_border": "#a3e635",
+         "input_border": "color-mix(in srgb, var(--olo-color-primary) 40%, transparent)",
+         "input_focus_border": "var(--olo-color-primary)",
          "input_radius": 8,
          "input_height": "46",
-         "btn_bg": "#a3e635",
-         "btn_color": "#0a0e12",
+         "btn_bg": "var(--olo-color-primary)",
+         "btn_color": "var(--olo-color-primary-contrast)",
          "btn_hover_bg": "#8fce28",
          "btn_radius": 8,
          "btn_font_size": "14",

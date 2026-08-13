@@ -4,7 +4,7 @@
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large", "padding_bottom": 44 },
   "style": {
-   "bg": { "type": "solid", "color": "#1c1a17" },
+   "bg": { "type": "solid", "color": "var(--olo-color-background)" },
    "border": {
     "bottom": { "width": 1, "style": "solid", "color": "rgba(240,235,225,.12)" }
    }
@@ -31,13 +31,13 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "2026 · oil on linen",
-         "eyebrow_color": "#e0b13a",
-         "eyebrow_dot_color": "#e0b13a",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Tideline",
-           "color": "#e0b13a",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -49,7 +49,7 @@
          "tagline_show": true,
          "tagline_text": "Twelve paintings made over one winter on the harbour — the same stretch of water, painted at the hour the light turns.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#857c6d",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 17,
          "tagline_caption": "",
          "layout": "center",
@@ -69,7 +69,7 @@
   "id": "cv-sr-img-se",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_bottom": 0 },
-  "style": { "bg": { "type": "solid", "color": "#1c1a17" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -117,7 +117,7 @@
   "id": "cv-sr-wg-se",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#1c1a17" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -143,16 +143,16 @@
          "media_aspect": "4/3",
          "media_tall_aspect": "4/5",
          "media_bg": "#272320",
-         "media_label_color": "#857c6d",
+         "media_label_color": "var(--olo-color-text-muted)",
          "hover_zoom": true,
          "title_font_family": "heading",
          "title_color": "#f0ebe1",
          "title_size": 24,
          "title_weight": "400",
-         "meta_color": "#857c6d",
+         "meta_color": "var(--olo-color-text-muted)",
          "meta_size": 12,
          "show_desc": false,
-         "desc_color": "#857c6d",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 14,
          "items": [
           {
@@ -225,7 +225,7 @@
   "id": "cv-sr-q-se",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#211f1b" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -252,7 +252,7 @@
          "heading_font_size": "12",
          "heading_uppercase": true,
          "heading_font": "body",
-         "heading_color": "#e0b13a",
+         "heading_color": "var(--olo-color-primary)",
          "decoration": "none"
         },
         "style": {},
@@ -273,11 +273,11 @@
          "bg_color": "transparent",
          "text_color": "#f0ebe1",
          "border_radius": "0",
-         "quote_accent_color": "#e0b13a",
+         "quote_accent_color": "var(--olo-color-primary)",
          "quote_font": "heading",
          "quote_uppercase": false,
          "author_uppercase": false,
-         "author_color": "#857c6d",
+         "author_color": "var(--olo-color-text-muted)",
          "quote_size": 38
         },
         "style": {},
@@ -289,7 +289,7 @@
         "type": "text-block",
         "settings": {
          "content": "<p>Each canvas in Tideline was begun on the quay and abandoned at the moment the light changed — then carried back to the studio and argued with for months. What's left is less a view than a memory of standing there.</p>",
-         "text_color": "#b3aa9b",
+         "text_color": "var(--olo-color-text)",
          "font_size": "16",
          "text_align": "center",
          "line_height": "1.7",
@@ -309,7 +309,7 @@
   "id": "cv-sr-cta-se",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#1c1a17" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -338,12 +338,12 @@
          "cta_url": "/#contact",
          "cta2_text": "",
          "cta2_url": "",
-         "bg": { "type": "solid", "color": "#100e0c" },
+         "bg": { "type": "solid", "color": "var(--olo-color-primary-contrast)" },
          "text_color": "#f0ebe1",
-         "accent_color": "#e0b13a",
-         "subtitle_color": "#b3aa9b",
-         "cta_bg": "#e0b13a",
-         "cta_color": "#100e0c",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": { "tl": 2, "tr": 2, "br": 2, "bl": 2, "linked": true },
          "cta_size": 13,
          "headline_font_family": "serif",
@@ -355,10 +355,10 @@
          "banner_radius": { "tl": 6, "tr": 6, "br": 6, "bl": 6, "linked": true },
          "banner_padding": 80,
          "border": {
-          "top": { "width": 1, "style": "solid", "color": "rgba(224,177,58,.42)" },
-          "right": { "width": 1, "style": "solid", "color": "rgba(224,177,58,.42)" },
-          "bottom": { "width": 1, "style": "solid", "color": "rgba(224,177,58,.42)" },
-          "left": { "width": 1, "style": "solid", "color": "rgba(224,177,58,.42)" }
+          "top": { "width": 1, "style": "solid", "color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)" },
+          "right": { "width": 1, "style": "solid", "color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)" },
+          "bottom": { "width": 1, "style": "solid", "color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)" },
+          "left": { "width": 1, "style": "solid", "color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)" }
          }
         },
         "style": {},

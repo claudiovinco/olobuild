@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#20160f"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -36,25 +36,25 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "Roasted to order · shipped in 24h",
-         "eyebrow_color": "#c98a4b",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline": "Coffee with a",
          "accent": "provenance,",
-         "accent_color": "#c98a4b",
+         "accent_color": "var(--olo-color-primary)",
          "accent_italic": true,
          "headline_tail": " not a label.",
          "uppercase": false,
-         "headline_color": "#ead9c2",
+         "headline_color": "var(--olo-color-secondary-contrast)",
          "headline_weight": "700",
          "headline_size": "72",
          "lead": "We buy whole-lot, roast in small batches the morning your order lands, and tell you exactly who grew it. No blends hiding behind a brand.",
-         "lead_color": "#cbb89f",
+         "lead_color": "var(--olo-color-text)",
          "signature": "",
          "stats": [],
          "cta_text": "Find your roast",
          "cta_url": "#shop",
          "cta_style": "button",
-         "cta_bg": "#c98a4b",
-         "cta_color": "#170f0a",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta2_text": "Start a subscription",
          "cta2_url": "#subscribe",
          "cta2_style": "outline",
@@ -94,7 +94,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#c98a4b"
+    "color": "var(--olo-color-primary)"
    }
   },
   "advanced": {},
@@ -121,14 +121,14 @@
         "settings": {
          "speed": 40,
          "separator": "✦",
-         "separator_color": "#170f0a",
+         "separator_color": "var(--olo-color-primary-contrast)",
          "font_family": "monospace",
          "font_size": "13",
          "font_weight": "500",
          "text_transform": "uppercase",
          "letter_spacing": "0.06",
-         "text_color": "#170f0a",
-         "bg_color": "#c98a4b",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "bg_color": "var(--olo-color-primary)",
          "tile_padding": {
           "top": 11,
           "right": 0,
@@ -159,7 +159,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#20160f"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -186,13 +186,13 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// this month's lots",
-         "eyebrow_color": "#c98a4b",
-         "eyebrow_dot_color": "#c98a4b",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Fresh on the roaster",
-           "color": "#ead9c2",
+           "color": "var(--olo-color-secondary-contrast)",
            "italic": false
           }
          ],
@@ -204,7 +204,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8f7a63",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "stack",
          "gap": 14
@@ -240,33 +240,33 @@
          "columns": 3,
          "gap": 20,
          "media_aspect": "1/1",
-         "media_bg": "#251a12",
+         "media_bg": "var(--olo-color-muted)",
          "stripe_dark": false,
          "hover_zoom": true,
          "card_bg": "#2d2017",
-         "card_border": "rgba(234,217,194,.12)",
+         "card_border": "color-mix(in srgb, var(--olo-color-secondary-contrast) 12%, transparent)",
          "card_radius": 16,
          "card_padding": 20,
          "tag_bg": "#170f0a",
-         "tag_color": "#c98a4b",
+         "tag_color": "var(--olo-color-primary)",
          "quick_add_show": false,
-         "category_color": "#8f7a63",
+         "category_color": "var(--olo-color-text-muted)",
          "title_font": "heading",
          "title_size": 21,
-         "title_color": "#ead9c2",
-         "notes_color": "#8f7a63",
+         "title_color": "var(--olo-color-secondary-contrast)",
+         "notes_color": "var(--olo-color-text-muted)",
          "notes_mono": false,
          "roast_label": "Roast",
-         "roast_on_color": "#c98a4b",
-         "roast_off_color": "rgba(234,217,194,.15)",
-         "price_color": "#ead9c2",
+         "roast_on_color": "var(--olo-color-primary)",
+         "roast_off_color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 15%, transparent)",
+         "price_color": "var(--olo-color-secondary-contrast)",
          "add_button": true,
          "add_label": "Add",
          "add_bg": "#ead9c2",
-         "add_color": "#170f0a",
+         "add_color": "var(--olo-color-primary-contrast)",
          "footer_text": "View all 24 →",
          "footer_url": "#shop",
-         "footer_color": "#ead9c2",
+         "footer_color": "var(--olo-color-secondary-contrast)",
          "items": [
           {
            "image": "",
@@ -336,7 +336,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#251a12"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -383,13 +383,13 @@
          "items_gap": 0,
          "band_padding_y": 40,
          "show_dividers": true,
-         "divider_color": "rgba(234,217,194,.12)",
+         "divider_color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 12%, transparent)",
          "band_border": false,
          "value_font_family": "heading",
-         "value_color": "#c98a4b",
+         "value_color": "var(--olo-color-primary)",
          "value_size": 50,
          "value_weight": "700",
-         "label_color": "#8f7a63",
+         "label_color": "var(--olo-color-text-muted)",
          "label_size": 12,
          "label_uppercase": true,
          "align": "left",
@@ -416,7 +416,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#251a12"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -476,18 +476,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// the standing order",
-         "eyebrow_color": "#c98a4b",
-         "eyebrow_dot_color": "#c98a4b",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "A new origin on your shelf,",
-           "color": "#ead9c2",
+           "color": "var(--olo-color-secondary-contrast)",
            "italic": false
           },
           {
            "text": "every fortnight",
-           "color": "#c98a4b",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -499,7 +499,7 @@
          "tagline_show": true,
          "tagline_text": "Tell us how you brew and how much you drink. We pick the lot, roast it the day it ships, and you can skip, swap or pause whenever.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8f7a63",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "stack",
          "gap": 14
@@ -529,10 +529,10 @@
            "description": ""
           }
          ],
-         "icon_color": "#c98a4b",
+         "icon_color": "var(--olo-color-primary)",
          "icon_size": "18",
          "icon_style": "lucide",
-         "title_color": "#cbb89f",
+         "title_color": "var(--olo-color-text)",
          "title_size": "14.5",
          "layout": "vertical",
          "align": "left",
@@ -555,8 +555,8 @@
          "text": "Build my subscription — from €15/mo",
          "url": "#subscribe",
          "alignment": "left",
-         "bg_color": "#c98a4b",
-         "text_color": "#170f0a",
+         "bg_color": "var(--olo-color-primary)",
+         "text_color": "var(--olo-color-primary-contrast)",
          "hover_bg_color": "#dba869"
         },
         "style": {},
@@ -580,7 +580,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#20160f"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -607,13 +607,13 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// brew it right",
-         "eyebrow_color": "#c98a4b",
-         "eyebrow_dot_color": "#c98a4b",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Pour-over in four moves",
-           "color": "#ead9c2",
+           "color": "var(--olo-color-secondary-contrast)",
            "italic": false
           }
          ],
@@ -625,7 +625,7 @@
          "tagline_show": true,
          "tagline_text": "The ratio that works for most of our washed coffees. Adjust to taste — then write it on the bag.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8f7a63",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 14
@@ -663,20 +663,20 @@
          "align": "left",
          "auto_number": false,
          "number_style": "outline",
-         "number_color": "#c98a4b",
-         "number_bg": "#c98a4b",
+         "number_color": "var(--olo-color-primary)",
+         "number_bg": "var(--olo-color-primary)",
          "number_size": 38,
          "number_font": "mono",
          "number_weight": "400",
          "item_gap": 16,
-         "title_color": "#ead9c2",
+         "title_color": "var(--olo-color-secondary-contrast)",
          "title_size": 18,
          "title_font": "sans-serif",
          "title_weight": "700",
-         "desc_color": "#8f7a63",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 13,
          "card_bg": "#2d2017",
-         "card_border": "rgba(234,217,194,.12)",
+         "card_border": "color-mix(in srgb, var(--olo-color-secondary-contrast) 12%, transparent)",
          "card_radius": {
           "tl": 14,
           "tr": 14,
@@ -729,7 +729,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#251a12"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -755,24 +755,24 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "// our roastery",
-         "eyebrow_color": "#c98a4b",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline": "A drum roaster, a harbour, and a lot of notebooks",
          "accent": "",
-         "accent_color": "#c98a4b",
+         "accent_color": "var(--olo-color-primary)",
          "accent_italic": false,
          "headline_tail": "",
          "uppercase": false,
-         "headline_color": "#ead9c2",
+         "headline_color": "var(--olo-color-secondary-contrast)",
          "headline_weight": "700",
          "headline_size": "42",
          "lead": "Brewline started in a Trieste workshop with one second-hand roaster and a stubborn idea: that you should know your coffee’s farm by name. We still roast every batch by ear and log every curve — when a lot’s gone, it’s gone.",
-         "lead_color": "#cbb89f",
+         "lead_color": "var(--olo-color-text)",
          "signature": "",
          "stats": [],
          "cta_text": "Read our sourcing promise",
          "cta_url": "#",
          "cta_style": "outline",
-         "cta_color": "#ead9c2",
+         "cta_color": "var(--olo-color-secondary-contrast)",
          "cta2_text": "",
          "cta2_url": "#",
          "cta2_style": "outline",
@@ -812,7 +812,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#20160f"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -844,10 +844,10 @@
          "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
-         "text_color": "#ead9c2",
-         "star_color": "#c98a4b",
-         "quote_accent_color": "#c98a4b",
-         "author_color": "#8f7a63",
+         "text_color": "var(--olo-color-secondary-contrast)",
+         "star_color": "var(--olo-color-primary)",
+         "quote_accent_color": "var(--olo-color-primary)",
+         "author_color": "var(--olo-color-text-muted)",
          "quote_font": "heading",
          "quote_size": 0,
          "author_uppercase": false,
@@ -875,7 +875,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#251a12"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -909,10 +909,10 @@
          "count_label": "bags",
          "cta_text": "Start subscription",
          "cta_url": "#subscribe",
-         "zone_accent": "#c98a4b",
-         "zone_on": "#170f0a",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "card_bg": "#2d2017",
-         "card_border": "rgba(234,217,194,.12)",
+         "card_border": "color-mix(in srgb, var(--olo-color-secondary-contrast) 12%, transparent)",
          "align": "center",
          "items": [
           {
@@ -974,7 +974,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#20160f"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -1008,19 +1008,19 @@
          "cta2_text": "Subscribe & save",
          "cta2_url": "#subscribe",
          "cta2_bg": "transparent",
-         "cta2_color": "#ead9c2",
-         "cta2_border": "rgba(201,138,75,.4)",
+         "cta2_color": "var(--olo-color-secondary-contrast)",
+         "cta2_border": "color-mix(in srgb, var(--olo-color-primary) 40%, transparent)",
          "bg": {
           "type": "gradient",
-          "gradient_from": "rgba(201,138,75,.18)",
-          "gradient_to": "rgba(201,138,75,.04)",
+          "gradient_from": "color-mix(in srgb, var(--olo-color-primary) 18%, transparent)",
+          "gradient_to": "color-mix(in srgb, var(--olo-color-primary) 4%, transparent)",
           "gradient_angle": 150
          },
-         "text_color": "#ead9c2",
-         "accent_color": "#c98a4b",
-         "subtitle_color": "#cbb89f",
-         "cta_bg": "#c98a4b",
-         "cta_color": "#170f0a",
+         "text_color": "var(--olo-color-secondary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,

@@ -3,7 +3,7 @@
   "id": "pr-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 32 },
-  "style": { "bg": { "type": "solid", "color": "#1b0d2c" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -20,8 +20,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "pr-fbrand", "type": "headline", "settings": { "heading": "Prisma", "tag": "div", "alignment": "left", "heading_font_size": "21", "heading_uppercase": true, "heading_color": "#ffffff", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "pr-fbtext", "type": "text-block", "settings": { "content": "<p>Brand & digital agency. Identity, product and campaigns for the unforgettable.</p>", "text_color": "#7d6c92", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "pr-fbrand", "type": "headline", "settings": { "heading": "Prisma", "tag": "div", "alignment": "left", "heading_font_size": "21", "heading_uppercase": true, "heading_color": "var(--olo-color-primary-contrast)", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "pr-fbtext", "type": "text-block", "settings": { "content": "<p>Brand & digital agency. Identity, product and campaigns for the unforgettable.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -31,8 +31,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "pr-fh1", "type": "headline", "settings": { "heading": "Agency", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "pr-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#7d6c92", "link_hover_color": "#c14bff", "items": [ { "title": "Work", "content": "#work", "tag": "" }, { "title": "Services", "content": "#services", "tag": "" }, { "title": "Process", "content": "#process", "tag": "" }, { "title": "Studio", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "pr-fh1", "type": "headline", "settings": { "heading": "Agency", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-primary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "pr-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Work", "content": "#work", "tag": "" }, { "title": "Services", "content": "#services", "tag": "" }, { "title": "Process", "content": "#process", "tag": "" }, { "title": "Studio", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -42,8 +42,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "pr-fh2", "type": "headline", "settings": { "heading": "Connect", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "pr-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#7d6c92", "link_hover_color": "#c14bff", "items": [ { "title": "Instagram", "content": "#", "tag": "" }, { "title": "LinkedIn", "content": "#", "tag": "" }, { "title": "Behance", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "pr-fh2", "type": "headline", "settings": { "heading": "Connect", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-primary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "pr-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Instagram", "content": "#", "tag": "" }, { "title": "LinkedIn", "content": "#", "tag": "" }, { "title": "Behance", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -53,8 +53,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "pr-fh3", "type": "headline", "settings": { "heading": "Say hi", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "pr-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#7d6c92", "link_hover_color": "#c14bff", "items": [ { "title": "hello@prisma.agency", "content": "mailto:hello@prisma.agency", "tag": "" }, { "title": "+44 20 4538", "content": "tel:+44204538", "tag": "" }, { "title": "London · Berlin", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "pr-fh3", "type": "headline", "settings": { "heading": "Say hi", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-primary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "pr-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "hello@prisma.agency", "content": "mailto:hello@prisma.agency", "tag": "" }, { "title": "+44 20 4538", "content": "tel:+44204538", "tag": "" }, { "title": "London · Berlin", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "pr-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "pr-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Prisma — an OLOtheme demo.</p>", "text_color": "#7d6c92", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "pr-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Prisma — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "pr-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "pr-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#7d6c92", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "pr-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

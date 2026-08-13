@@ -14,7 +14,7 @@
     "advanced": {},
     "children": [
      { "id": "fi-fco-names", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
-      { "id": "fi-fbrand", "type": "headline", "settings": { "heading": "Marta & Elia", "tag": "div", "alignment": "center", "heading_font_size": "44", "heading_uppercase": false, "heading_color": "#ffffff", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "fi-fbrand", "type": "headline", "settings": { "heading": "Marta & Elia", "tag": "div", "alignment": "center", "heading_font_size": "44", "heading_uppercase": false, "heading_color": "var(--olo-color-primary-contrast)", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    },
@@ -36,8 +36,8 @@
          "font_weight": "500",
          "text_transform": "uppercase",
          "letter_spacing": "1",
-         "link_color": "rgba(255,255,255,.7)",
-         "link_hover_color": "#cfa6a0",
+         "link_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 70%, transparent)",
+         "link_hover_color": "var(--olo-color-secondary)",
          "gap": "12",
          "tile_padding": { "top": 6, "right": 12, "bottom": 6, "left": 12 },
          "items": [
@@ -58,7 +58,7 @@
     "advanced": {},
     "children": [
      { "id": "fi-fco-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
-      { "id": "fi-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.16)", "alignment": "center", "spacing": 22 }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "fi-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "color-mix(in srgb, var(--olo-color-primary-contrast) 16%, transparent)", "alignment": "center", "spacing": 22 }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    },
@@ -70,10 +70,10 @@
     "advanced": {},
     "children": [
      { "id": "fi-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "fi-fcopy", "type": "text-block", "settings": { "content": "<p>12 September 2026 · Lago di Como</p>", "text_color": "rgba(255,255,255,.7)", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "fi-fcopy", "type": "text-block", "settings": { "content": "<p>12 September 2026 · Lago di Como</p>", "text_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 70%, transparent)", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "fi-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "fi-fbuilt", "type": "text-block", "settings": { "content": "<p>An OLOtheme demo · Built with OLObuild</p>", "text_color": "rgba(255,255,255,.7)", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "fi-fbuilt", "type": "text-block", "settings": { "content": "<p>An OLOtheme demo · Built with OLObuild</p>", "text_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 70%, transparent)", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

@@ -12,7 +12,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#16273a"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -52,7 +52,7 @@
          "meta_text": "",
          "scroll_hint": "",
          "bg_image": "",
-         "bg_color": "#16273a",
+         "bg_color": "var(--olo-color-background)",
          "media_label": "hero — fjord at blue hour, kayak, sheer cliffs",
          "text_position": "left",
          "text_align": "left",
@@ -64,11 +64,11 @@
          "overlay_top": 0.5,
          "overlay_bottom": 0.95,
          "overlay_sides": false,
-         "accent": "#8fc7e0",
-         "accent_on": "#0e1c2c",
+         "accent": "var(--olo-color-primary)",
+         "accent_on": "var(--olo-color-primary-contrast)",
          "text_color": "#ffffff",
          "sub_color": "#eef4f8",
-         "eyebrow_color": "#8fc7e0"
+         "eyebrow_color": "var(--olo-color-primary)"
         },
         "style": {},
         "advanced": {},
@@ -91,7 +91,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#16273a"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -135,12 +135,12 @@
          ],
          "button_text": "Search expeditions",
          "button_url": "#trips",
-         "accent": "#8fc7e0",
-         "accent_on": "#0e1c2c",
+         "accent": "var(--olo-color-primary)",
+         "accent_on": "var(--olo-color-primary-contrast)",
          "bar_bg": "#1f3550",
          "field_bg": "transparent",
          "field_border": "rgba(238,244,248,.12)",
-         "label_color": "#6f87a0",
+         "label_color": "var(--olo-color-text-muted)",
          "value_color": "#eef4f8",
          "radius": 16
         },
@@ -165,7 +165,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1a2e44"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -217,7 +217,7 @@
          "value_color": "#eef4f8",
          "value_size": 52,
          "value_weight": "700",
-         "label_color": "#6f87a0",
+         "label_color": "var(--olo-color-text-muted)",
          "label_size": 13,
          "label_uppercase": false,
          "align": "center",
@@ -244,7 +244,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#16273a"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -271,8 +271,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Featured journeys",
-         "eyebrow_color": "#8fc7e0",
-         "eyebrow_dot_color": "#8fc7e0",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -282,7 +282,7 @@
           },
           {
            "text": "walk than watch",
-           "color": "#8fc7e0",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -294,7 +294,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6f87a0",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "stack",
          "gap": 14
@@ -346,7 +346,7 @@
          "title_weight": "700",
          "title_letter_spacing": -0.02,
          "title_uppercase": false,
-         "subtitle_color": "#8fc7e0",
+         "subtitle_color": "var(--olo-color-primary)",
          "subtitle_size": 12,
          "hover_effect": "zoom",
          "hover_overlay": "always",
@@ -418,13 +418,13 @@
          "alignment": "center",
          "bg_color": "rgba(238,244,248,.06)",
          "text_color": "#eef4f8",
-         "hover_text_color": "#8fc7e0",
+         "hover_text_color": "var(--olo-color-primary)",
          "font_size": "14",
          "font_weight": "600",
          "border_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999 },
          "tile_padding": { "top": 14, "right": 26, "bottom": 14, "left": 26 },
          "shadow": "none",
-         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "style": "solid", "color": "rgba(143,199,224,.4)" },
+         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "style": "solid", "color": "color-mix(in srgb, var(--olo-color-primary) 40%, transparent)" },
          "hover_effect": "lift"
         },
         "style": {},
@@ -448,7 +448,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1a2e44"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -478,8 +478,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Why Fjordline",
-         "eyebrow_color": "#8fc7e0",
-         "eyebrow_dot_color": "#8fc7e0",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -489,7 +489,7 @@
           },
           {
            "text": "local guides,",
-           "color": "#8fc7e0",
+           "color": "var(--olo-color-primary)",
            "italic": true
           },
           {
@@ -506,7 +506,7 @@
          "tagline_show": true,
          "tagline_text": "We cap every departure at twelve and never run the same trail as the tour buses. Our guides are born-and-raised locals who read the weather and know where the light falls.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6f87a0",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "stack",
          "gap": 14
@@ -534,10 +534,10 @@
           }
          ],
          "icon_default": "check",
-         "icon_color": "#8fc7e0",
+         "icon_color": "var(--olo-color-primary)",
          "icon_size": "16",
          "icon_gap": "13",
-         "text_color": "#aec3d6",
+         "text_color": "var(--olo-color-text)",
          "text_align": "left",
          "spacing": "14",
          "tile_padding": {
@@ -568,13 +568,13 @@
          "alignment": "left",
          "bg_color": "rgba(238,244,248,.06)",
          "text_color": "#eef4f8",
-         "hover_text_color": "#8fc7e0",
+         "hover_text_color": "var(--olo-color-primary)",
          "font_size": "14",
          "font_weight": "600",
          "border_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999 },
          "tile_padding": { "top": 14, "right": 26, "bottom": 14, "left": 26 },
          "shadow": "none",
-         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "style": "solid", "color": "rgba(143,199,224,.4)" },
+         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "style": "solid", "color": "color-mix(in srgb, var(--olo-color-primary) 40%, transparent)" },
          "hover_effect": "lift"
         },
         "style": {},
@@ -626,7 +626,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#16273a"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -665,7 +665,7 @@
          "out_caption": "Indicative all-in · per person",
          "note": "Guiding, lodging, meals and local transfers included — flights aren't. Your real quote depends on season, route and group size.",
          "show_contrib": true,
-         "zone_accent": "#8fc7e0",
+         "zone_accent": "var(--olo-color-primary)",
          "align": "left",
          "tile_padding": {
           "top": 44,
@@ -697,7 +697,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#16273a"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -730,8 +730,8 @@
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#eef4f8",
-         "quote_accent_color": "#8fc7e0",
-         "author_color": "#6f87a0",
+         "quote_accent_color": "var(--olo-color-primary)",
+         "author_color": "var(--olo-color-text-muted)",
          "quote_font": "heading",
          "quote_size": 40,
          "quote_uppercase": false,
@@ -760,7 +760,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#16273a"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -787,8 +787,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Plan your north",
-         "eyebrow_color": "#8fc7e0",
-         "eyebrow_dot_color": "#8fc7e0",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -798,7 +798,7 @@
           },
           {
            "text": "north?",
-           "color": "#8fc7e0",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -810,7 +810,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6f87a0",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -900,10 +900,10 @@
            "cta_url": "#"
           }
          ],
-         "zone_accent": "#8fc7e0",
-         "zone_on": "#0e1c2c",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "card_bg": "#1f3550",
-         "card_border": "rgba(143,199,224,.4)",
+         "card_border": "color-mix(in srgb, var(--olo-color-primary) 40%, transparent)",
          "media_bg": "#264062",
          "align": "center"
         },
@@ -928,7 +928,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#16273a"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -962,17 +962,17 @@
          "cta2_text": "Request the brochure",
          "cta2_url": "#",
          "cta2_bg": "#eef4f8",
-         "cta2_color": "#0e1c2c",
+         "cta2_color": "var(--olo-color-primary-contrast)",
          "cta2_border": "",
          "bg": {
           "type": "solid",
           "color": "#122133"
          },
          "text_color": "#ffffff",
-         "accent_color": "#8fc7e0",
+         "accent_color": "var(--olo-color-primary)",
          "subtitle_color": "#eef4f8",
-         "cta_bg": "#8fc7e0",
-         "cta_color": "#0e1c2c",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,

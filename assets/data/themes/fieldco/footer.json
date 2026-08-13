@@ -3,7 +3,7 @@
   "id": "fi-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
-  "style": { "bg": { "type": "solid", "color": "#283020" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -20,8 +20,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "fi-fbrand", "type": "headline", "settings": { "heading": "Field & Co", "tag": "div", "alignment": "left", "heading_font_size": "20", "heading_uppercase": true, "heading_color": "#eef0e3", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "fi-fbtext", "type": "text-block", "settings": { "content": "<p>Outdoor goods built to last and guaranteed for life. Buy it once.</p>", "text_color": "#79806a", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "fi-fbrand", "type": "headline", "settings": { "heading": "Field & Co", "tag": "div", "alignment": "left", "heading_font_size": "20", "heading_uppercase": true, "heading_color": "var(--olo-color-secondary-contrast)", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "fi-fbtext", "type": "text-block", "settings": { "content": "<p>Outdoor goods built to last and guaranteed for life. Buy it once.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -31,8 +31,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "fi-fh1", "type": "headline", "settings": { "heading": "Shop", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eef0e3", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "fi-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#79806a", "link_hover_color": "#c2ab63", "font_size": "14", "items": [ { "title": "All gear", "content": "#shop", "tag": "" }, { "title": "Packs", "content": "#cats", "tag": "" }, { "title": "Shells", "content": "#cats", "tag": "" }, { "title": "Footwear", "content": "#cats", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "fi-fh1", "type": "headline", "settings": { "heading": "Shop", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "fi-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-primary)", "font_size": "14", "items": [ { "title": "All gear", "content": "#shop", "tag": "" }, { "title": "Packs", "content": "#cats", "tag": "" }, { "title": "Shells", "content": "#cats", "tag": "" }, { "title": "Footwear", "content": "#cats", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -42,8 +42,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "fi-fh2", "type": "headline", "settings": { "heading": "Help", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eef0e3", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "fi-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#79806a", "link_hover_color": "#c2ab63", "font_size": "14", "items": [ { "title": "Guarantee", "content": "#guarantee", "tag": "" }, { "title": "Repairs", "content": "#", "tag": "" }, { "title": "Shipping", "content": "#", "tag": "" }, { "title": "Returns", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "fi-fh2", "type": "headline", "settings": { "heading": "Help", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "fi-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-primary)", "font_size": "14", "items": [ { "title": "Guarantee", "content": "#guarantee", "tag": "" }, { "title": "Repairs", "content": "#", "tag": "" }, { "title": "Shipping", "content": "#", "tag": "" }, { "title": "Returns", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -53,8 +53,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "fi-fh3", "type": "headline", "settings": { "heading": "Company", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eef0e3", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "fi-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#79806a", "link_hover_color": "#c2ab63", "font_size": "14", "items": [ { "title": "Our story", "content": "#", "tag": "" }, { "title": "Sustainability", "content": "#", "tag": "" }, { "title": "Stockists", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "fi-fh3", "type": "headline", "settings": { "heading": "Company", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "fi-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-primary)", "font_size": "14", "items": [ { "title": "Our story", "content": "#", "tag": "" }, { "title": "Sustainability", "content": "#", "tag": "" }, { "title": "Stockists", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -67,7 +67,7 @@
     "advanced": {},
     "children": [
      { "id": "fi-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
-      { "id": "fi-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(238,240,227,.12)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "fi-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 12%, transparent)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    },
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "fi-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "fi-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Field & Co — an OLOtheme demo.</p>", "text_color": "#79806a", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "fi-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Field & Co — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "fi-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "fi-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#79806a", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "fi-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

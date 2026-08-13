@@ -3,7 +3,7 @@
   "id": "li-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 64, "padding_bottom": 32 },
-  "style": { "bg": { "type": "solid", "color": "#161410" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-primary-contrast)" } },
   "advanced": {},
   "children": [
    {
@@ -20,8 +20,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "li-fbrand", "type": "headline", "settings": { "heading": "Linea", "tag": "div", "alignment": "left", "heading_font_size": "26", "heading_uppercase": true, "heading_color": "#efe9df", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "li-fbtext", "type": "text-block", "settings": { "content": "<p>A concept boutique. A tight edit of clothing, objects and scent from independent makers.</p>", "text_color": "#827a6d", "font_size": "13.5", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "li-fbrand", "type": "headline", "settings": { "heading": "Linea", "tag": "div", "alignment": "left", "heading_font_size": "26", "heading_uppercase": true, "heading_color": "var(--olo-color-secondary)", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "li-fbtext", "type": "text-block", "settings": { "content": "<p>A concept boutique. A tight edit of clothing, objects and scent from independent makers.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "13.5", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -31,8 +31,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "li-fh1", "type": "headline", "settings": { "heading": "Shop", "tag": "h4", "alignment": "left", "heading_font_size": "11", "heading_uppercase": true, "heading_font": "body", "heading_color": "#efe9df", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "li-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#827a6d", "link_hover_color": "#bd9a6f", "items": [ { "title": "All", "content": "#edit", "tag": "" }, { "title": "Wear", "content": "#edit", "tag": "" }, { "title": "Live", "content": "#edit", "tag": "" }, { "title": "Scent", "content": "#edit", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "li-fh1", "type": "headline", "settings": { "heading": "Shop", "tag": "h4", "alignment": "left", "heading_font_size": "11", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "li-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "All", "content": "#edit", "tag": "" }, { "title": "Wear", "content": "#edit", "tag": "" }, { "title": "Live", "content": "#edit", "tag": "" }, { "title": "Scent", "content": "#edit", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -42,8 +42,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "li-fh2", "type": "headline", "settings": { "heading": "Linea", "tag": "h4", "alignment": "left", "heading_font_size": "11", "heading_uppercase": true, "heading_font": "body", "heading_color": "#efe9df", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "li-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#827a6d", "link_hover_color": "#bd9a6f", "items": [ { "title": "About", "content": "#story", "tag": "" }, { "title": "Makers", "content": "#", "tag": "" }, { "title": "Visit us", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "li-fh2", "type": "headline", "settings": { "heading": "Linea", "tag": "h4", "alignment": "left", "heading_font_size": "11", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "li-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "About", "content": "#story", "tag": "" }, { "title": "Makers", "content": "#", "tag": "" }, { "title": "Visit us", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -53,8 +53,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "li-fh3", "type": "headline", "settings": { "heading": "Care", "tag": "h4", "alignment": "left", "heading_font_size": "11", "heading_uppercase": true, "heading_font": "body", "heading_color": "#efe9df", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "li-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#827a6d", "link_hover_color": "#bd9a6f", "items": [ { "title": "Shipping", "content": "#", "tag": "" }, { "title": "Returns", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "li-fh3", "type": "headline", "settings": { "heading": "Care", "tag": "h4", "alignment": "left", "heading_font_size": "11", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "li-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Shipping", "content": "#", "tag": "" }, { "title": "Returns", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -67,7 +67,7 @@
     "advanced": {},
     "children": [
      { "id": "li-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
-      { "id": "li-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(239,233,223,.13)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "li-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "color-mix(in srgb, var(--olo-color-secondary) 13%, transparent)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    },
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "li-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "li-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Linea — an OLOtheme demo.</p>", "text_color": "#827a6d", "font_size": "11", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "li-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Linea — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "11", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "li-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "li-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#827a6d", "font_size": "11", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "li-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "11", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

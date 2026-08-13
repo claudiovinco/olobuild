@@ -3,7 +3,7 @@
   "id": "dc-ph-se",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#0c1418" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -26,12 +26,12 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// customer stories",
-         "eyebrow_color": "#36d6c3",
-         "eyebrow_dot_color": "#36d6c3",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           { "text": "Teams that ship", "color": "#ffffff", "italic": false },
-          { "text": "on one number", "color": "#36d6c3", "italic": false }
+          { "text": "on one number", "color": "var(--olo-color-primary)", "italic": false }
          ],
          "headline_font_family": "sans-serif",
          "headline_font_size": 60,
@@ -40,7 +40,7 @@
          "headline_inline": false,
          "tagline_show": true,
          "tagline_text": "From seed-stage startups to public companies — here's what changes when everyone finally trusts the dashboard.",
-         "tagline_text_color": "#6e8088",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 17,
          "layout": "center",
          "gap": 16
@@ -93,10 +93,10 @@
          "divider_color": "rgba(255,255,255,.10)",
          "band_border": true,
          "value_font_family": "heading",
-         "value_color": "#36d6c3",
+         "value_color": "var(--olo-color-primary)",
          "value_size": 50,
          "value_weight": "700",
-         "label_color": "#6e8088",
+         "label_color": "var(--olo-color-text-muted)",
          "label_size": 13,
          "label_uppercase": false,
          "align": "center",
@@ -116,7 +116,7 @@
   "id": "dc-cases-se",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#0c1418" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -142,8 +142,8 @@
          "container_gap": 0,
          "columns": 2,
          "items_gap": 18,
-         "card_bg": { "type": "solid", "color": "#13212a" },
-         "card_color": "#6e8088",
+         "card_bg": { "type": "solid", "color": "var(--olo-color-muted)" },
+         "card_color": "var(--olo-color-text-muted)",
          "card_accent_color": "#ffffff",
          "card_radius": { "tl": 16, "tr": 16, "br": 16, "bl": 16, "linked": true },
          "card_padding": 26,
@@ -171,7 +171,7 @@
            "title": "Northbeam killed four spreadsheets",
            "description": "<p>The growth team modelled revenue once in DataFold and retired a tangle of sheets and a legacy BI tool — reporting went from Mondays to real-time.</p>",
            "footer_text": "−71% reporting time   ·   1 source of truth",
-           "footer_dot_color": "#36d6c3"
+           "footer_dot_color": "var(--olo-color-primary)"
           },
           {
            "media_image": "",
@@ -179,7 +179,7 @@
            "title": "Lumio caught churn before the board did",
            "description": "<p>Anomaly monitoring flagged a retention dip three weeks early. The team shipped a fix before it ever showed up in a QBR.</p>",
            "footer_text": "3 wks earlier warning   ·   +4 pts retention saved",
-           "footer_dot_color": "#36d6c3"
+           "footer_dot_color": "var(--olo-color-primary)"
           },
           {
            "media_image": "",
@@ -187,7 +187,7 @@
            "title": "Cartwheel closes the books in a day",
            "description": "<p>Finance and data share one semantic layer, so month-end numbers reconcile automatically instead of over a week of cross-checking.</p>",
            "footer_text": "6 → 1 days to close   ·   100% reconciled",
-           "footer_dot_color": "#36d6c3"
+           "footer_dot_color": "var(--olo-color-primary)"
           },
           {
            "media_image": "",
@@ -195,7 +195,7 @@
            "title": "Pellet went fully self-serve",
            "description": "<p>Governed models mean PMs and ops answer their own questions — the data team moved from ticket queue to platform work.</p>",
            "footer_text": "−58% ad-hoc requests   ·   240 self-serve users",
-           "footer_dot_color": "#36d6c3"
+           "footer_dot_color": "var(--olo-color-primary)"
           }
          ],
          "card_hover_effect": "lift"
@@ -243,11 +243,11 @@
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#ffffff",
-         "quote_accent_color": "#36d6c3",
+         "quote_accent_color": "var(--olo-color-primary)",
          "quote_font": "heading",
          "quote_uppercase": false,
          "author_uppercase": false,
-         "author_color": "#6e8088",
+         "author_color": "var(--olo-color-text-muted)",
          "quote_size": 0,
          "border_radius": "0",
          "avatar": ""
@@ -266,7 +266,7 @@
   "id": "dc-cta-se",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#0c1418" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -297,18 +297,18 @@
          "cta2_url": "#",
          "cta2_bg": "transparent",
          "cta2_color": "#ffffff",
-         "cta2_border": "rgba(54,214,195,.28)",
+         "cta2_border": "color-mix(in srgb, var(--olo-color-primary) 28%, transparent)",
          "bg": {
           "type": "gradient",
-          "color": "rgba(54,214,195,.16)",
-          "color2": "rgba(182,232,90,.05)",
+          "color": "color-mix(in srgb, var(--olo-color-primary) 16%, transparent)",
+          "color2": "color-mix(in srgb, var(--olo-color-secondary) 5%, transparent)",
           "angle": 160
          },
          "text_color": "#ffffff",
-         "accent_color": "#36d6c3",
-         "subtitle_color": "#aebec6",
-         "cta_bg": "#36d6c3",
-         "cta_color": "#070e11",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": { "tl": 8, "tr": 8, "br": 8, "bl": 8, "linked": true },
          "cta_size": 15,
          "headline_font_family": "sans-serif",

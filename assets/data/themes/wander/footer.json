@@ -3,7 +3,7 @@
   "id": "wa-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
-  "style": { "bg": { "type": "solid", "color": "#0d3b3f" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-secondary-contrast)" } },
   "advanced": {},
   "children": [
    {
@@ -20,8 +20,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "wa-fbrand", "type": "headline", "settings": { "heading": "Wander", "tag": "div", "alignment": "left", "heading_font_size": "22", "heading_uppercase": false, "heading_color": "#ffffff", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "wa-fbtext", "type": "text-block", "settings": { "content": "<p>Small-group expeditions to the world's wild places. Expert-led, low impact, far from the crowds.</p>", "text_color": "rgba(255,255,255,.62)", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "250" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "wa-fbrand", "type": "headline", "settings": { "heading": "Wander", "tag": "div", "alignment": "left", "heading_font_size": "22", "heading_uppercase": false, "heading_color": "var(--olo-color-primary-contrast)", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "wa-fbtext", "type": "text-block", "settings": { "content": "<p>Small-group expeditions to the world's wild places. Expert-led, low impact, far from the crowds.</p>", "text_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 62%, transparent)", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "250" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -31,8 +31,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "wa-fh1", "type": "headline", "settings": { "heading": "Travel", "tag": "h4", "alignment": "left", "heading_font_size": "13", "heading_uppercase": false, "heading_font": "heading", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "wa-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "9", "font_size": "14", "link_color": "rgba(255,255,255,.62)", "link_hover_color": "#e9c46a", "items": [ { "title": "Destinations", "content": "#destinations", "tag": "" }, { "title": "Trip types", "content": "#trips", "tag": "" }, { "title": "Group trips", "content": "#", "tag": "" }, { "title": "Private trips", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "wa-fh1", "type": "headline", "settings": { "heading": "Travel", "tag": "h4", "alignment": "left", "heading_font_size": "13", "heading_uppercase": false, "heading_font": "heading", "heading_color": "var(--olo-color-primary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "wa-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "9", "font_size": "14", "link_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 62%, transparent)", "link_hover_color": "var(--olo-color-secondary)", "items": [ { "title": "Destinations", "content": "#destinations", "tag": "" }, { "title": "Trip types", "content": "#trips", "tag": "" }, { "title": "Group trips", "content": "#", "tag": "" }, { "title": "Private trips", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -42,8 +42,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "wa-fh2", "type": "headline", "settings": { "heading": "Wander", "tag": "h4", "alignment": "left", "heading_font_size": "13", "heading_uppercase": false, "heading_font": "heading", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "wa-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "9", "font_size": "14", "link_color": "rgba(255,255,255,.62)", "link_hover_color": "#e9c46a", "items": [ { "title": "Why us", "content": "#why", "tag": "" }, { "title": "Our guides", "content": "#", "tag": "" }, { "title": "Sustainability", "content": "#", "tag": "" }, { "title": "Journal", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "wa-fh2", "type": "headline", "settings": { "heading": "Wander", "tag": "h4", "alignment": "left", "heading_font_size": "13", "heading_uppercase": false, "heading_font": "heading", "heading_color": "var(--olo-color-primary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "wa-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "9", "font_size": "14", "link_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 62%, transparent)", "link_hover_color": "var(--olo-color-secondary)", "items": [ { "title": "Why us", "content": "#why", "tag": "" }, { "title": "Our guides", "content": "#", "tag": "" }, { "title": "Sustainability", "content": "#", "tag": "" }, { "title": "Journal", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -53,8 +53,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "wa-fh3", "type": "headline", "settings": { "heading": "Help", "tag": "h4", "alignment": "left", "heading_font_size": "13", "heading_uppercase": false, "heading_font": "heading", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "wa-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "9", "font_size": "14", "link_color": "rgba(255,255,255,.62)", "link_hover_color": "#e9c46a", "items": [ { "title": "Booking & payments", "content": "#", "tag": "" }, { "title": "Travel insurance", "content": "#", "tag": "" }, { "title": "FAQ", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "wa-fh3", "type": "headline", "settings": { "heading": "Help", "tag": "h4", "alignment": "left", "heading_font_size": "13", "heading_uppercase": false, "heading_font": "heading", "heading_color": "var(--olo-color-primary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "wa-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "9", "font_size": "14", "link_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 62%, transparent)", "link_hover_color": "var(--olo-color-secondary)", "items": [ { "title": "Booking & payments", "content": "#", "tag": "" }, { "title": "Travel insurance", "content": "#", "tag": "" }, { "title": "FAQ", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -67,7 +67,7 @@
     "advanced": {},
     "children": [
      { "id": "wa-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
-      { "id": "wa-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.14)", "alignment": "center", "spacing": 22 }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "wa-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "color-mix(in srgb, var(--olo-color-primary-contrast) 14%, transparent)", "alignment": "center", "spacing": 22 }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    },
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "wa-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "wa-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Wander — an OLOtheme demo.</p>", "text_color": "rgba(255,255,255,.62)", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "wa-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Wander — an OLOtheme demo.</p>", "text_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 62%, transparent)", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "wa-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "wa-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "rgba(255,255,255,.62)", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "wa-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 62%, transparent)", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

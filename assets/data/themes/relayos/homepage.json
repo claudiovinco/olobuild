@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0d1117"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -39,8 +39,8 @@
         "type": "hero-split",
         "settings": {
          "eyebrow_text": "Relay OS · no-code automation",
-         "eyebrow_dot_color": "#3fb950",
-         "eyebrow_color": "#3fb950",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline_lines": [
           {
            "text": "Automate the",
@@ -49,7 +49,7 @@
           },
           {
            "text": "busywork.",
-           "color": "#3fb950",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -59,13 +59,13 @@
          "headline_font_weight": "700",
          "headline_align": "left",
          "subhead": "Connect your apps, drag blocks into a flow, and let Relay run it — every time a trigger fires, day or night. No code, no cron jobs, no babysitting.",
-         "subhead_color": "#646e7c",
+         "subhead_color": "var(--olo-color-text-muted)",
          "subhead_size": 18,
          "subhead_italic": false,
          "subhead_max_width": 480,
          "cta1_text": "Start free",
          "cta1_url": "#pricing",
-         "cta1_bg": "#3fb950",
+         "cta1_bg": "var(--olo-color-primary)",
          "cta1_color": "#04210a",
          "cta1_size": 15,
          "cta1_radius": {
@@ -143,10 +143,10 @@
          "items_gap": 12,
          "card_bg": {
           "type": "solid",
-          "color": "#10151c"
+          "color": "var(--olo-color-muted)"
          },
-         "card_color": "#646e7c",
-         "card_accent_color": "#3fb950",
+         "card_color": "var(--olo-color-text-muted)",
+         "card_accent_color": "var(--olo-color-primary)",
          "card_radius": {
           "tl": 10,
           "tr": 10,
@@ -164,15 +164,15 @@
          "show_footer": false,
          "show_divider": false,
          "show_media": false,
-         "icon_color": "#3fb950",
-         "icon_bg_color": "rgba(63,185,80,.16)",
+         "icon_color": "var(--olo-color-primary)",
+         "icon_bg_color": "color-mix(in srgb, var(--olo-color-primary) 16%, transparent)",
          "icon_size": 16,
          "title_color": "#ffffff",
          "title_font_family": "sans-serif",
          "title_size": 14,
          "title_weight": "600",
          "title_italic": false,
-         "counter_color": "#3fb950",
+         "counter_color": "var(--olo-color-primary)",
          "counter_size": 10,
          "description_size": 11,
          "items": [
@@ -230,7 +230,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0d1117"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -259,7 +259,7 @@
          "headline_lines": [
           {
            "text": "Quietly running ops at teams of every size",
-           "color": "#646e7c",
+           "color": "var(--olo-color-text-muted)",
            "italic": false
           }
          ],
@@ -327,11 +327,11 @@
          "flow": "wrap",
          "gap": 16,
          "font_family": "sans-serif",
-         "text_color": "#646e7c",
+         "text_color": "var(--olo-color-text-muted)",
          "text_size": 12,
-         "pill_bg": "rgba(63,185,80,.08)",
+         "pill_bg": "color-mix(in srgb, var(--olo-color-primary) 8%, transparent)",
          "pill_border": "rgba(255,255,255,.08)",
-         "pill_text_color": "#646e7c"
+         "pill_text_color": "var(--olo-color-text-muted)"
         },
         "style": {},
         "advanced": {},
@@ -354,7 +354,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#10151c"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -404,10 +404,10 @@
          "divider_color": "rgba(255,255,255,.08)",
          "band_border": true,
          "value_font_family": "heading",
-         "value_color": "#3fb950",
+         "value_color": "var(--olo-color-primary)",
          "value_size": 48,
          "value_weight": "800",
-         "label_color": "#646e7c",
+         "label_color": "var(--olo-color-text-muted)",
          "label_size": 11.5,
          "label_uppercase": false,
          "align": "center",
@@ -434,7 +434,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0d1117"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -464,8 +464,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// visual builder",
-         "eyebrow_color": "#3fb950",
-         "eyebrow_dot_color": "#3fb950",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -475,7 +475,7 @@
           },
           {
            "text": "automate it",
-           "color": "#3fb950",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -487,7 +487,7 @@
          "tagline_show": true,
          "tagline_text": "Drag triggers and actions onto the canvas, connect them, and Relay handles the rest — retries, errors, logs and all.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#646e7c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "left",
          "gap": 16
@@ -512,7 +512,7 @@
           "type": "solid",
           "color": "transparent"
          },
-         "card_color": "#9ba6b4",
+         "card_color": "var(--olo-color-text)",
          "card_radius": {
           "tl": 0,
           "tr": 0,
@@ -526,9 +526,9 @@
          "show_arrow": false,
          "show_footer": false,
          "show_media": false,
-         "icon_color": "#3fb950",
+         "icon_color": "var(--olo-color-primary)",
          "icon_bg_color": "transparent",
-         "title_color": "#9ba6b4",
+         "title_color": "var(--olo-color-text)",
          "title_font_family": "sans-serif",
          "title_size": 14.5,
          "title_weight": "500",
@@ -652,7 +652,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#10151c"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -679,8 +679,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// from trigger to done",
-         "eyebrow_color": "#3fb950",
-         "eyebrow_dot_color": "#3fb950",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -690,7 +690,7 @@
           },
           {
            "text": "a hundred ",
-           "color": "#3fb950",
+           "color": "var(--olo-color-primary)",
            "italic": false
           },
           {
@@ -707,7 +707,7 @@
          "tagline_show": true,
          "tagline_text": "Move your cursor here. Every step you'd do by hand becomes a block that runs itself.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#646e7c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 16
@@ -746,8 +746,8 @@
          "auto_number": false,
          "item_gap": 8,
          "number_style": "circle",
-         "number_color": "#080b0f",
-         "number_bg": "#3fb950",
+         "number_color": "var(--olo-color-primary-contrast)",
+         "number_bg": "var(--olo-color-primary)",
          "number_size": 14,
          "number_font": "sans-serif",
          "number_weight": "500",
@@ -816,7 +816,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0d1117"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -843,8 +843,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// 600+ connectors",
-         "eyebrow_color": "#3fb950",
-         "eyebrow_dot_color": "#3fb950",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -854,7 +854,7 @@
           },
           {
            "text": "stack",
-           "color": "#3fb950",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -866,7 +866,7 @@
          "tagline_show": true,
          "tagline_text": "If it has an API, Relay probably already speaks to it.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#646e7c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -911,7 +911,7 @@
           "type": "solid",
           "color": "#161b22"
          },
-         "card_color": "#646e7c",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": {
           "tl": 12,
           "tr": 12,
@@ -925,9 +925,9 @@
          "show_arrow": false,
          "show_footer": false,
          "show_media": false,
-         "icon_color": "#3fb950",
+         "icon_color": "var(--olo-color-primary)",
          "icon_bg_color": "rgba(255,255,255,.07)",
-         "title_color": "#9ba6b4",
+         "title_color": "var(--olo-color-text)",
          "title_font_family": "sans-serif",
          "title_size": 9,
          "title_weight": "400",
@@ -1019,7 +1019,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0d1117"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -1046,8 +1046,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// scheduling",
-         "eyebrow_color": "#3fb950",
-         "eyebrow_dot_color": "#3fb950",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -1057,7 +1057,7 @@
           },
           {
            "text": "awake",
-           "color": "#3fb950",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -1069,7 +1069,7 @@
          "tagline_show": true,
          "tagline_text": "Drag the trigger time and watch every region's clock move. Schedule reports, syncs and pings for the window where your people actually overlap.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#646e7c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -1131,11 +1131,11 @@
            "label": "UTC+8"
           }
          ],
-         "zone_accent": "#3fb950",
-         "work_color": "rgba(63,185,80,.14)",
-         "ok_color": "#3fb950",
-         "sleep_color": "#646e7c",
-         "card_bg": "#10151c",
+         "zone_accent": "var(--olo-color-primary)",
+         "work_color": "color-mix(in srgb, var(--olo-color-primary) 14%, transparent)",
+         "ok_color": "var(--olo-color-primary)",
+         "sleep_color": "var(--olo-color-text-muted)",
+         "card_bg": "var(--olo-color-muted)",
          "card_border": "rgba(255,255,255,.08)",
          "align": "center"
         },
@@ -1160,7 +1160,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#10151c"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -1187,8 +1187,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// pricing",
-         "eyebrow_color": "#3fb950",
-         "eyebrow_dot_color": "#3fb950",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -1198,7 +1198,7 @@
           },
           {
            "text": "task",
-           "color": "#3fb950",
+           "color": "var(--olo-color-primary)",
            "italic": false
           },
           {
@@ -1215,7 +1215,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#646e7c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -1260,7 +1260,7 @@
          "is_popular": false,
          "bg_color": "#161b22",
          "price_color": "#ffffff",
-         "accent_color": "#3fb950",
+         "accent_color": "var(--olo-color-primary)",
          "cta_text": "Start free",
          "cta_url": "#pricing",
          "cta_bg": "rgba(255,255,255,.05)",
@@ -1274,8 +1274,8 @@
           "linked": true
          },
          "title_color": "#ffffff",
-         "feature_color": "#9ba6b4",
-         "feature_icon_color": "#3fb950",
+         "feature_color": "var(--olo-color-text)",
+         "feature_icon_color": "var(--olo-color-primary)",
          "card_border_color": "rgba(255,255,255,.08)"
         },
         "style": {},
@@ -1305,14 +1305,14 @@
          "features": "50k tasks / mo\nReal-time triggers\nShared team workspace\nVersion history",
          "is_popular": true,
          "badge_text": "Most popular",
-         "badge_bg_color": "rgba(63,185,80,.12)",
-         "badge_text_color": "#3fb950",
+         "badge_bg_color": "color-mix(in srgb, var(--olo-color-primary) 12%, transparent)",
+         "badge_text_color": "var(--olo-color-primary)",
          "bg_color": "#161b22",
          "price_color": "#ffffff",
-         "accent_color": "#3fb950",
+         "accent_color": "var(--olo-color-primary)",
          "cta_text": "Start 14-day trial",
          "cta_url": "#pricing",
-         "cta_bg": "#3fb950",
+         "cta_bg": "var(--olo-color-primary)",
          "cta_color": "#04210a",
          "border_radius": {
           "tl": 18,
@@ -1322,9 +1322,9 @@
           "linked": true
          },
          "title_color": "#ffffff",
-         "feature_color": "#9ba6b4",
-         "feature_icon_color": "#3fb950",
-         "card_border_color": "#3fb950"
+         "feature_color": "var(--olo-color-text)",
+         "feature_icon_color": "var(--olo-color-primary)",
+         "card_border_color": "var(--olo-color-primary)"
         },
         "style": {},
         "advanced": {},
@@ -1354,7 +1354,7 @@
          "is_popular": false,
          "bg_color": "#161b22",
          "price_color": "#ffffff",
-         "accent_color": "#3fb950",
+         "accent_color": "var(--olo-color-primary)",
          "cta_text": "Talk to sales",
          "cta_url": "#",
          "cta_bg": "rgba(255,255,255,.05)",
@@ -1368,8 +1368,8 @@
           "linked": true
          },
          "title_color": "#ffffff",
-         "feature_color": "#9ba6b4",
-         "feature_icon_color": "#3fb950",
+         "feature_color": "var(--olo-color-text)",
+         "feature_icon_color": "var(--olo-color-primary)",
          "card_border_color": "rgba(255,255,255,.08)"
         },
         "style": {},
@@ -1393,7 +1393,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0d1117"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -1421,8 +1421,8 @@
          "eyebrow": "// recipes",
          "heading": "What should we automate first?",
          "intro": "",
-         "zone_accent": "#3fb950",
-         "zone_on": "#080b0f",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "card_bg": "#161b22",
          "card_border": "rgba(255,255,255,.08)",
          "align": "center",
@@ -1490,7 +1490,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0d1117"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -1531,10 +1531,10 @@
           "gradient": "linear-gradient(160deg, rgba(63,185,80,.16), rgba(86,211,100,.05))"
          },
          "text_color": "#ffffff",
-         "accent_color": "#3fb950",
-         "subtitle_color": "#9ba6b4",
-         "cta_bg": "#3fb950",
-         "cta_color": "#080b0f",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 8,
           "tr": 8,
@@ -1561,22 +1561,22 @@
           "top": {
            "width": 1,
            "style": "solid",
-           "color": "rgba(63,185,80,.4)"
+           "color": "color-mix(in srgb, var(--olo-color-primary) 40%, transparent)"
           },
           "right": {
            "width": 1,
            "style": "solid",
-           "color": "rgba(63,185,80,.4)"
+           "color": "color-mix(in srgb, var(--olo-color-primary) 40%, transparent)"
           },
           "bottom": {
            "width": 1,
            "style": "solid",
-           "color": "rgba(63,185,80,.4)"
+           "color": "color-mix(in srgb, var(--olo-color-primary) 40%, transparent)"
           },
           "left": {
            "width": 1,
            "style": "solid",
-           "color": "rgba(63,185,80,.4)"
+           "color": "color-mix(in srgb, var(--olo-color-primary) 40%, transparent)"
           }
          }
         },

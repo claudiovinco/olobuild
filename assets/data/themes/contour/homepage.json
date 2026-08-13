@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f4efe6"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -36,25 +36,25 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "Reformer · mat · private",
-         "eyebrow_color": "#cf7e4f",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline": "Move better, breathe",
          "accent": "easier.",
          "headline_tail": "",
          "accent_italic": true,
          "uppercase": false,
          "headline_color": "#2c2a26",
-         "accent_color": "#cf7e4f",
+         "accent_color": "var(--olo-color-primary)",
          "headline_weight": "400",
          "headline_size": "82",
          "lead": "A pilates studio built around small classes and good attention — so every session meets your body where it is today.",
-         "lead_color": "#5e584e",
+         "lead_color": "var(--olo-color-text)",
          "stats": [],
          "signature": "",
          "cta_text": "Start with an intro offer",
          "cta_url": "#pricing",
          "cta_style": "button",
-         "cta_bg": "#cf7e4f",
-         "cta_color": "#ffffff",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta2_text": "See timetable",
          "cta2_url": "#timetable",
          "cta2_style": "outline",
@@ -156,13 +156,13 @@
          "items_gap": 0,
          "band_padding_y": 40,
          "show_dividers": true,
-         "divider_color": "#ddd3c2",
+         "divider_color": "var(--olo-color-border)",
          "band_border": false,
          "value_font_family": "heading",
          "value_color": "#2c2a26",
          "value_size": 54,
          "value_weight": "400",
-         "label_color": "#938c7e",
+         "label_color": "var(--olo-color-text-muted)",
          "label_size": 13,
          "label_uppercase": false,
          "align": "center",
@@ -189,7 +189,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f4efe6"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -216,8 +216,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "What we teach",
-         "eyebrow_color": "#cf7e4f",
-         "eyebrow_dot_color": "#cf7e4f",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -227,7 +227,7 @@
           },
           {
            "text": "practise",
-           "color": "#cf7e4f",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -239,7 +239,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#938c7e",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -284,7 +284,7 @@
           "type": "solid",
           "color": "#fbf7f0"
          },
-         "card_color": "#5e584e",
+         "card_color": "var(--olo-color-text)",
          "card_accent_color": "#2c2a26",
          "card_radius": {
           "tl": 16,
@@ -294,7 +294,7 @@
           "linked": true
          },
          "card_padding": 26,
-         "card_border": "#ddd3c2",
+         "card_border": "var(--olo-color-border)",
          "show_icon": false,
          "show_counter": true,
          "show_counter_label": false,
@@ -310,7 +310,7 @@
           "bl": 12,
           "linked": true
          },
-         "counter_color": "#cf7e4f",
+         "counter_color": "var(--olo-color-primary)",
          "counter_size": 11,
          "title_font_family": "serif",
          "title_size": 25,
@@ -363,7 +363,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#ebe3d5"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -391,8 +391,8 @@
          "eyebrow": "Not sure where to start?",
          "heading": "Where's your body today?",
          "intro": "Pick the option that fits — we've got a class to match.",
-         "zone_accent": "#cf7e4f",
-         "zone_on": "#ffffff",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "card_bg": "#fbf7f0",
          "card_border": "1px solid #ddd3c2",
          "align": "center",
@@ -483,8 +483,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "This week",
-         "eyebrow_color": "#cf7e4f",
-         "eyebrow_dot_color": "#cf7e4f",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -494,7 +494,7 @@
           },
           {
            "text": "time",
-           "color": "#cf7e4f",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -506,7 +506,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#938c7e",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -557,10 +557,10 @@
            "cells": "!Reformer · Ana | Mat & Breath · Jo | !Reformer · Ana | Mat & Breath · Jo | "
           }
          ],
-         "zone_accent": "#cf7e4f",
-         "zone_on": "#ffffff",
-         "cell_bg": "#ebe3d5",
-         "card_border": "#ddd3c2",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
+         "cell_bg": "var(--olo-color-muted)",
+         "card_border": "var(--olo-color-border)",
          "head_color": "#2c2a26",
          "align": "left"
         },
@@ -646,7 +646,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f4efe6"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -673,8 +673,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Your teachers",
-         "eyebrow_color": "#cf7e4f",
-         "eyebrow_dot_color": "#cf7e4f",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -684,7 +684,7 @@
           },
           {
            "text": "present",
-           "color": "#cf7e4f",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -696,7 +696,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#938c7e",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -744,7 +744,7 @@
          "photo_gap": "16",
          "info_bg_color": "transparent",
          "info_text_color": "#2c2a26",
-         "role_color": "#cf7e4f",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "21",
          "name_weight": "400",
@@ -792,7 +792,7 @@
          "photo_gap": "16",
          "info_bg_color": "transparent",
          "info_text_color": "#2c2a26",
-         "role_color": "#cf7e4f",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "21",
          "name_weight": "400",
@@ -840,7 +840,7 @@
          "photo_gap": "16",
          "info_bg_color": "transparent",
          "info_text_color": "#2c2a26",
-         "role_color": "#cf7e4f",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "21",
          "name_weight": "400",
@@ -888,7 +888,7 @@
          "photo_gap": "16",
          "info_bg_color": "transparent",
          "info_text_color": "#2c2a26",
-         "role_color": "#cf7e4f",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "21",
          "name_weight": "400",
@@ -952,8 +952,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Memberships",
-         "eyebrow_color": "#cf7e4f",
-         "eyebrow_dot_color": "#cf7e4f",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -963,7 +963,7 @@
           },
           {
            "text": "flexible plans",
-           "color": "#cf7e4f",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -975,7 +975,7 @@
          "tagline_show": true,
          "tagline_text": "New here? Two weeks of unlimited classes for €49. No contract, freeze anytime.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#938c7e",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -1019,9 +1019,9 @@
          "is_popular": false,
          "badge_text": "",
          "bg_color": "#fbf7f0",
-         "border_color": "#ddd3c2",
+         "border_color": "var(--olo-color-border)",
          "price_color": "#2c2a26",
-         "accent_color": "#cf7e4f",
+         "accent_color": "var(--olo-color-primary)",
          "cta_text": "Claim offer",
          "cta_url": "#",
          "cta_bg": "transparent",
@@ -1062,14 +1062,14 @@
          "features": "Unlimited group classes\nPriority booking\n10% off privates",
          "is_popular": true,
          "badge_text": "Most popular",
-         "badge_bg_color": "#cf7e4f",
+         "badge_bg_color": "var(--olo-color-primary)",
          "bg_color": "#2c2a26",
-         "price_color": "#f4efe6",
-         "accent_color": "#cf7e4f",
+         "price_color": "var(--olo-color-background)",
+         "accent_color": "var(--olo-color-primary)",
          "cta_text": "Join now",
          "cta_url": "#",
-         "cta_bg": "#cf7e4f",
-         "cta_color": "#ffffff",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "border_radius": {
           "tl": 18,
           "tr": 18,
@@ -1106,9 +1106,9 @@
          "is_popular": false,
          "badge_text": "",
          "bg_color": "#fbf7f0",
-         "border_color": "#ddd3c2",
+         "border_color": "var(--olo-color-border)",
          "price_color": "#2c2a26",
-         "accent_color": "#cf7e4f",
+         "accent_color": "var(--olo-color-primary)",
          "cta_text": "Buy a pack",
          "cta_url": "#",
          "cta_bg": "transparent",
@@ -1144,7 +1144,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f4efe6"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -1177,13 +1177,13 @@
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#2c2a26",
-         "star_color": "#cf7e4f",
-         "quote_accent_color": "#cf7e4f",
+         "star_color": "var(--olo-color-primary)",
+         "quote_accent_color": "var(--olo-color-primary)",
          "quote_font": "heading",
          "quote_size": 40,
          "quote_uppercase": false,
          "author_uppercase": true,
-         "author_color": "#cf7e4f",
+         "author_color": "var(--olo-color-primary)",
          "border_radius": "0",
          "avatar": ""
         },
@@ -1243,11 +1243,11 @@
           "type": "solid",
           "color": "#2c2a26"
          },
-         "text_color": "#f4efe6",
-         "accent_color": "#cf7e4f",
+         "text_color": "var(--olo-color-background)",
+         "accent_color": "var(--olo-color-primary)",
          "subtitle_color": "#cfc7b9",
-         "cta_bg": "#cf7e4f",
-         "cta_color": "#ffffff",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,

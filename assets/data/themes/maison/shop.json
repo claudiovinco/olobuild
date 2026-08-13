@@ -11,7 +11,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f3eee4"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -38,8 +38,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Everything we make",
-         "eyebrow_color": "#a9794f",
-         "eyebrow_dot_color": "#a9794f",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -49,7 +49,7 @@
           },
           {
            "text": "shop",
-           "color": "#a9794f",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -61,7 +61,7 @@
          "tagline_show": true,
          "tagline_text": "Made in small batches in solid timber. Every piece ships flat-packed or fully assembled, with a 100-day trial.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#928572",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 17,
          "layout": "center",
          "gap": 16
@@ -87,7 +87,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f3eee4"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -123,21 +123,21 @@
          "card_radius": 0,
          "card_padding": 0,
          "tag_bg": "#2c2419",
-         "tag_color": "#ffffff",
+         "tag_color": "var(--olo-color-primary-contrast)",
          "quick_add_show": false,
-         "category_color": "#928572",
+         "category_color": "var(--olo-color-text-muted)",
          "title_font": "serif",
          "title_size": 20,
          "title_color": "#2c2419",
-         "price_color": "#a9794f",
+         "price_color": "var(--olo-color-primary)",
          "add_button": false,
          "show_filters": true,
          "filter_all_label": "All",
          "filter_list": "Seating, Storage, Dining, Lighting",
-         "filter_text_color": "#5d5142",
+         "filter_text_color": "var(--olo-color-text)",
          "filter_border_color": "#c8b89e",
          "filter_active_bg": "#2c2419",
-         "filter_active_color": "#f3eee4",
+         "filter_active_color": "var(--olo-color-background)",
          "footer_text": "",
          "footer_url": "#",
          "items": [
@@ -311,11 +311,11 @@
           "type": "solid",
           "color": "#2c2419"
          },
-         "text_color": "#f3eee4",
-         "accent_color": "#a9794f",
+         "text_color": "var(--olo-color-background)",
+         "accent_color": "var(--olo-color-primary)",
          "subtitle_color": "#c9bba6",
-         "cta_bg": "#a9794f",
-         "cta_color": "#ffffff",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 2,
           "tr": 2,

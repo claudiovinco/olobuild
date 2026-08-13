@@ -3,7 +3,7 @@
   "id": "fr-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 54, "padding_bottom": 28 },
-  "style": { "bg": { "type": "solid", "color": "#121212" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -20,8 +20,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "fr-fbrand", "type": "headline", "settings": { "heading": "Frame", "tag": "div", "alignment": "left", "heading_font_size": "21", "heading_uppercase": true, "heading_color": "#f4f4f2", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "fr-fbtext", "type": "text-block", "settings": { "content": "<p>An independent photo journal. Visual essays and the stories behind the image.</p>", "text_color": "#666666", "font_size": "13.5", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "fr-fbrand", "type": "headline", "settings": { "heading": "Frame", "tag": "div", "alignment": "left", "heading_font_size": "21", "heading_uppercase": true, "heading_color": "var(--olo-color-secondary)", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "fr-fbtext", "type": "text-block", "settings": { "content": "<p>An independent photo journal. Visual essays and the stories behind the image.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "13.5", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -31,8 +31,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "fr-fh1", "type": "headline", "settings": { "heading": "Read", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f4f4f2", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "fr-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "link_color": "#666666", "link_hover_color": "#f4f4f2", "items": [ { "title": "Essays", "content": "#essays", "tag": "" }, { "title": "Latest", "content": "#grid", "tag": "" }, { "title": "Archive", "content": "#", "tag": "" }, { "title": "Issues", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "fr-fh1", "type": "headline", "settings": { "heading": "Read", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "fr-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-secondary)", "items": [ { "title": "Essays", "content": "#essays", "tag": "" }, { "title": "Latest", "content": "#grid", "tag": "" }, { "title": "Archive", "content": "#", "tag": "" }, { "title": "Issues", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -42,8 +42,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "fr-fh2", "type": "headline", "settings": { "heading": "Journal", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f4f4f2", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "fr-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "link_color": "#666666", "link_hover_color": "#f4f4f2", "items": [ { "title": "About", "content": "#about", "tag": "" }, { "title": "Photographers", "content": "#", "tag": "" }, { "title": "Submit", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "fr-fh2", "type": "headline", "settings": { "heading": "Journal", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "fr-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-secondary)", "items": [ { "title": "About", "content": "#about", "tag": "" }, { "title": "Photographers", "content": "#", "tag": "" }, { "title": "Submit", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -53,8 +53,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "fr-fh3", "type": "headline", "settings": { "heading": "Subscribe", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f4f4f2", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "fr-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "link_color": "#666666", "link_hover_color": "#f4f4f2", "items": [ { "title": "Newsletter", "content": "#subscribe", "tag": "" }, { "title": "Print", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "fr-fh3", "type": "headline", "settings": { "heading": "Subscribe", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "fr-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-secondary)", "items": [ { "title": "Newsletter", "content": "#subscribe", "tag": "" }, { "title": "Print", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -67,7 +67,7 @@
     "advanced": {},
     "children": [
      { "id": "fr-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
-      { "id": "fr-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.12)", "alignment": "center", "spacing": 22 }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "fr-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "color-mix(in srgb, var(--olo-color-primary-contrast) 12%, transparent)", "alignment": "center", "spacing": 22 }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    },
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "fr-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "fr-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Frame — an OLOtheme demo.</p>", "text_color": "#666666", "font_size": "11.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "fr-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Frame — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "11.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "fr-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "fr-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#666666", "font_size": "11.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "fr-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "11.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

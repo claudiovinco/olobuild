@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f3eee4"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -36,24 +36,24 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "Furniture & objects",
-         "eyebrow_color": "#a9794f",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline": "Pieces you’ll keep for",
          "accent": "life.",
          "headline_tail": "",
          "accent_italic": true,
          "uppercase": false,
          "headline_color": "#2c2419",
-         "accent_color": "#a9794f",
+         "accent_color": "var(--olo-color-primary)",
          "headline_weight": "400",
          "headline_size": "84",
          "lead": "Solid materials, honest joinery and shapes that don’t date. Made in small runs to be lived with, not replaced.",
-         "lead_color": "#5d5142",
+         "lead_color": "var(--olo-color-text)",
          "stats": [],
          "cta_text": "Shop the collection",
          "cta_url": "/shop/",
          "cta_style": "button",
-         "cta_bg": "#a9794f",
-         "cta_color": "#ffffff",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta2_text": "Shop the room",
          "cta2_url": "#room",
          "cta2_style": "outline",
@@ -75,8 +75,8 @@
          "media_blob": false,
          "badge_number": "",
          "badge_label": "",
-         "badge_bg": "#a9794f",
-         "badge_color": "#ffffff",
+         "badge_bg": "var(--olo-color-primary)",
+         "badge_color": "var(--olo-color-primary-contrast)",
          "badge_radius": {
           "tl": 4,
           "tr": 4,
@@ -166,10 +166,10 @@
            "meta": "€520"
           }
          ],
-         "zone_accent": "#a9794f",
-         "zone_on": "#ffffff",
-         "panel_bg": "#e9e1d2",
-         "card_bg": "#f3eee4",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
+         "panel_bg": "var(--olo-color-muted)",
+         "card_bg": "var(--olo-color-background)",
          "card_border": "#c8b89e",
          "align": "left"
         },
@@ -194,7 +194,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f3eee4"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -221,8 +221,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "By room",
-         "eyebrow_color": "#a9794f",
-         "eyebrow_dot_color": "#a9794f",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -232,7 +232,7 @@
           },
           {
            "text": "collections",
-           "color": "#a9794f",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -315,11 +315,11 @@
          "item_radius": 6,
          "overlay_color": "rgba(44,36,25,0.55)",
          "overlay_gradient": true,
-         "title_color": "#ffffff",
+         "title_color": "var(--olo-color-primary-contrast)",
          "title_weight": "400",
          "title_letter_spacing": 0,
          "title_uppercase": false,
-         "subtitle_color": "rgba(255,255,255,0.82)",
+         "subtitle_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 82%, transparent)",
          "subtitle_size": 14,
          "show_cta": false,
          "shadow": "none"
@@ -372,8 +372,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "New this season",
-         "eyebrow_color": "#a9794f",
-         "eyebrow_dot_color": "#a9794f",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -383,7 +383,7 @@
           },
           {
            "text": "landed",
-           "color": "#a9794f",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -435,13 +435,13 @@
          "card_radius": 0,
          "card_padding": 0,
          "tag_bg": "#2c2419",
-         "tag_color": "#ffffff",
+         "tag_color": "var(--olo-color-primary-contrast)",
          "quick_add_show": false,
-         "category_color": "#928572",
+         "category_color": "var(--olo-color-text-muted)",
          "title_font": "serif",
          "title_size": 20,
          "title_color": "#2c2419",
-         "price_color": "#a9794f",
+         "price_color": "var(--olo-color-primary)",
          "add_button": false,
          "show_filters": false,
          "footer_text": "Shop everything",
@@ -535,7 +535,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f3eee4"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -561,18 +561,18 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "Our story",
-         "eyebrow_color": "#a9794f",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline": "Made in a",
          "accent": "workshop,",
          "headline_tail": "not a factory",
          "accent_italic": true,
          "uppercase": false,
          "headline_color": "#2c2419",
-         "accent_color": "#a9794f",
+         "accent_color": "var(--olo-color-primary)",
          "headline_weight": "400",
          "headline_size": "52",
          "lead": "Maison began with two cabinetmakers who were tired of furniture built to be thrown away. We work in solid timber, joined the old way, finished by hand. Everything is made in small batches in our own workshop — and built to be repaired, not replaced.",
-         "lead_color": "#5d5142",
+         "lead_color": "var(--olo-color-text)",
          "stats": [],
          "cta_text": "Meet the makers",
          "cta_url": "#story",
@@ -599,8 +599,8 @@
          "media_blob": false,
          "badge_number": "",
          "badge_label": "",
-         "badge_bg": "#a9794f",
-         "badge_color": "#ffffff",
+         "badge_bg": "var(--olo-color-primary)",
+         "badge_color": "var(--olo-color-primary-contrast)",
          "badge_radius": {
           "tl": 4,
           "tr": 4,
@@ -630,7 +630,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#e9e1d2"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -658,10 +658,10 @@
          "eyebrow": "Styling help",
          "heading": "Find your room",
          "intro": "Four curated room edits — everything you need, chosen together.",
-         "zone_accent": "#a9794f",
-         "zone_on": "#ffffff",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "card_bg": "#faf6ee",
-         "card_border": "#ddd1bd",
+         "card_border": "var(--olo-color-border)",
          "align": "center",
          "items": [
           {
@@ -758,11 +758,11 @@
           "type": "solid",
           "color": "#2c2419"
          },
-         "text_color": "#f3eee4",
-         "accent_color": "#a9794f",
+         "text_color": "var(--olo-color-background)",
+         "accent_color": "var(--olo-color-primary)",
          "subtitle_color": "#c9bba6",
-         "cta_bg": "#a9794f",
-         "cta_color": "#ffffff",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 2,
           "tr": 2,

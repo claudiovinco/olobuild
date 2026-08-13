@@ -3,7 +3,7 @@
   "id": "cr-dl-se-1",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large", "padding_bottom": 0 },
-  "style": { "bg": { "type": "solid", "color": "#1a1a22" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -26,12 +26,12 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Maker's Week",
-         "eyebrow_color": "#ff5a5f",
-         "eyebrow_dot_color": "#ff5a5f",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
-          { "text": "Up to ", "color": "#ffffff", "italic": false },
-          { "text": "40% off", "color": "#ff5a5f", "italic": false }
+          { "text": "Up to ", "color": "var(--olo-color-primary-contrast)", "italic": false },
+          { "text": "40% off", "color": "var(--olo-color-primary)", "italic": false }
          ],
          "headline_font_family": "sans-serif",
          "headline_font_size": 60,
@@ -41,7 +41,7 @@
          "tagline_show": true,
          "tagline_text": "Hand-picked deals from independent shops, this week only. New markdowns drop every morning.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6c6c7c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 14
@@ -60,7 +60,7 @@
   "id": "cr-dl-se-2",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "medium" },
-  "style": { "bg": { "type": "solid", "color": "#1a1a22" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -70,7 +70,7 @@
     "style": {
      "bg": {
       "type": "gradient",
-      "gradient_from": "#ff5a5f",
+      "gradient_from": "var(--olo-color-primary)",
       "gradient_to": "#ff8a5f",
       "gradient_angle": 100
      },
@@ -89,9 +89,9 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "cr-dl-deal-eyebrow", "type": "headline", "settings": { "heading": "Sale ends in", "tag": "div", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_color": "rgba(255,255,255,.85)", "heading_font": "body", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "cr-dl-deal-h", "type": "headline", "settings": { "heading": "Don't miss the drop", "tag": "h2", "alignment": "left", "heading_font_size": "40", "heading_uppercase": false, "heading_color": "#ffffff", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "cr-dl-deal-p", "type": "text-block", "settings": { "content": "<p>Prices return to normal when the clock hits zero.</p>", "text_color": "rgba(255,255,255,.85)", "font_size": "16", "line_height": "1.6", "text_align": "left", "max_width": "" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "cr-dl-deal-eyebrow", "type": "headline", "settings": { "heading": "Sale ends in", "tag": "div", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 85%, transparent)", "heading_font": "body", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "cr-dl-deal-h", "type": "headline", "settings": { "heading": "Don't miss the drop", "tag": "h2", "alignment": "left", "heading_font_size": "40", "heading_uppercase": false, "heading_color": "var(--olo-color-primary-contrast)", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "cr-dl-deal-p", "type": "text-block", "settings": { "content": "<p>Prices return to normal when the clock hits zero.</p>", "text_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 85%, transparent)", "font_size": "16", "line_height": "1.6", "text_align": "left", "max_width": "" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -119,8 +119,8 @@
          "separator": "",
          "display_mode": "inline",
          "bg": { "type": "none" },
-         "accent_color": "#ffffff",
-         "text_color": "rgba(255,255,255,.8)",
+         "accent_color": "var(--olo-color-primary-contrast)",
+         "text_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 80%, transparent)",
          "item_bg_color": "rgba(16,16,21,.25)",
          "item_radius": 10,
          "item_padding": 14,
@@ -146,7 +146,7 @@
   "id": "cr-dl-se-3",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large", "padding_top": 0 },
-  "style": { "bg": { "type": "solid", "color": "#1a1a22" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -169,13 +169,13 @@
         "settings": {
          "eyebrow_show": false,
          "eyebrow_text": "",
-         "eyebrow_color": "#ff5a5f",
-         "eyebrow_dot_color": "#ff5a5f",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
-          { "text": "On ", "color": "#ffffff", "italic": false },
-          { "text": "sale", "color": "#ff5a5f", "italic": false },
-          { "text": " now", "color": "#ffffff", "italic": false }
+          { "text": "On ", "color": "var(--olo-color-primary-contrast)", "italic": false },
+          { "text": "sale", "color": "var(--olo-color-primary)", "italic": false },
+          { "text": " now", "color": "var(--olo-color-primary-contrast)", "italic": false }
          ],
          "headline_font_family": "sans-serif",
          "headline_font_size": 38,
@@ -185,7 +185,7 @@
          "tagline_show": true,
          "tagline_text": "488 deals",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6c6c7c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 14,
          "layout": "stack",
          "gap": 8
@@ -223,23 +223,23 @@
          "stripe_dark": false,
          "hover_zoom": true,
          "card_bg": "#26262f",
-         "card_border": "rgba(255,255,255,.09)",
+         "card_border": "color-mix(in srgb, var(--olo-color-primary-contrast) 9%, transparent)",
          "card_radius": 12,
          "card_padding": 16,
-         "tag_bg": "#ff5a5f",
-         "tag_color": "#ffffff",
+         "tag_bg": "var(--olo-color-primary)",
+         "tag_color": "var(--olo-color-primary-contrast)",
          "quick_add_show": false,
-         "category_color": "#6c6c7c",
+         "category_color": "var(--olo-color-text-muted)",
          "title_font": "sans",
          "title_size": 15,
-         "title_color": "#ffffff",
-         "notes_color": "#3fd6a8",
+         "title_color": "var(--olo-color-primary-contrast)",
+         "notes_color": "var(--olo-color-secondary)",
          "notes_mono": false,
-         "price_color": "#ffffff",
+         "price_color": "var(--olo-color-primary-contrast)",
          "add_button": true,
          "add_label": "Add",
-         "add_bg": "#ff5a5f",
-         "add_color": "#ffffff",
+         "add_bg": "var(--olo-color-primary)",
+         "add_color": "var(--olo-color-primary-contrast)",
          "show_filters": false,
          "footer_text": "",
          "footer_url": "#",
@@ -268,7 +268,7 @@
   "id": "cr-dl-se-4",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#1a1a22" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -297,15 +297,15 @@
          "cta_url": "#",
          "bg": {
           "type": "gradient",
-          "gradient_from": "rgba(255,90,95,.16)",
-          "gradient_to": "rgba(63,214,168,.05)",
+          "gradient_from": "color-mix(in srgb, var(--olo-color-primary) 16%, transparent)",
+          "gradient_to": "color-mix(in srgb, var(--olo-color-secondary) 5%, transparent)",
           "gradient_angle": 160
          },
-         "text_color": "#ffffff",
-         "accent_color": "#ff5a5f",
-         "subtitle_color": "#a6a6b4",
-         "cta_bg": "#ff5a5f",
-         "cta_color": "#ffffff",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": { "tl": 10, "tr": 10, "br": 10, "bl": 10, "linked": true },
          "cta_size": 15,
          "headline_font_family": "sans-serif",

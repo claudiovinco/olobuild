@@ -3,7 +3,7 @@
   "id": "ma-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
-  "style": { "bg": { "type": "solid", "color": "#f3eee4" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -21,7 +21,7 @@
       "advanced": {},
       "children": [
        { "id": "ma-fbrand", "type": "headline", "settings": { "heading": "Maison", "tag": "div", "alignment": "left", "heading_font_size": "25", "heading_uppercase": false, "heading_color": "#2c2419", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ma-fbtext", "type": "text-block", "settings": { "content": "<p>Considered furniture & objects for the home. Solid materials, made to last.</p>", "text_color": "#928572", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ma-fbtext", "type": "text-block", "settings": { "content": "<p>Considered furniture & objects for the home. Solid materials, made to last.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -32,7 +32,7 @@
       "advanced": {},
       "children": [
        { "id": "ma-fh1", "type": "headline", "settings": { "heading": "Shop", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#2c2419", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ma-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#928572", "link_hover_color": "#a9794f", "items": [ { "title": "All", "content": "/shop/", "tag": "" }, { "title": "Living", "content": "#collections", "tag": "" }, { "title": "Dining", "content": "#collections", "tag": "" }, { "title": "Objects", "content": "#collections", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ma-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "All", "content": "/shop/", "tag": "" }, { "title": "Living", "content": "#collections", "tag": "" }, { "title": "Dining", "content": "#collections", "tag": "" }, { "title": "Objects", "content": "#collections", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -43,7 +43,7 @@
       "advanced": {},
       "children": [
        { "id": "ma-fh2", "type": "headline", "settings": { "heading": "Maison", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#2c2419", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ma-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#928572", "link_hover_color": "#a9794f", "items": [ { "title": "Our story", "content": "#story", "tag": "" }, { "title": "Materials", "content": "#", "tag": "" }, { "title": "Trade", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ma-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Our story", "content": "#story", "tag": "" }, { "title": "Materials", "content": "#", "tag": "" }, { "title": "Trade", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -54,7 +54,7 @@
       "advanced": {},
       "children": [
        { "id": "ma-fh3", "type": "headline", "settings": { "heading": "Care", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#2c2419", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ma-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#928572", "link_hover_color": "#a9794f", "items": [ { "title": "Delivery", "content": "#", "tag": "" }, { "title": "100-day trial", "content": "#", "tag": "" }, { "title": "Repairs", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ma-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Delivery", "content": "#", "tag": "" }, { "title": "100-day trial", "content": "#", "tag": "" }, { "title": "Repairs", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -67,7 +67,7 @@
     "advanced": {},
     "children": [
      { "id": "ma-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
-      { "id": "ma-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "#ddd1bd", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "ma-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "var(--olo-color-border)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    },
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "ma-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "ma-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Maison — an OLOtheme demo.</p>", "text_color": "#928572", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "ma-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Maison — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "ma-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "ma-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#928572", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "ma-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

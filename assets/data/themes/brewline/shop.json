@@ -11,7 +11,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#20160f"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -38,13 +38,13 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// the whole roaster",
-         "eyebrow_color": "#c98a4b",
-         "eyebrow_dot_color": "#c98a4b",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Shop all coffee",
-           "color": "#ead9c2",
+           "color": "var(--olo-color-secondary-contrast)",
            "italic": false
           }
          ],
@@ -56,7 +56,7 @@
          "tagline_show": true,
          "tagline_text": "Twenty-four lots, roasted to order. Filter by how you brew — every bag ships within a day of roasting.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8f7a63",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 17,
          "layout": "center",
          "gap": 16
@@ -82,7 +82,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#20160f"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -110,30 +110,30 @@
          "columns": 3,
          "gap": 20,
          "media_aspect": "1/1",
-         "media_bg": "#251a12",
+         "media_bg": "var(--olo-color-muted)",
          "stripe_dark": false,
          "hover_zoom": true,
          "card_bg": "#2d2017",
-         "card_border": "rgba(234,217,194,.12)",
+         "card_border": "color-mix(in srgb, var(--olo-color-secondary-contrast) 12%, transparent)",
          "card_radius": 16,
          "card_padding": 20,
          "tag_bg": "#170f0a",
-         "tag_color": "#c98a4b",
+         "tag_color": "var(--olo-color-primary)",
          "quick_add_show": false,
-         "category_color": "#8f7a63",
+         "category_color": "var(--olo-color-text-muted)",
          "title_font": "heading",
          "title_size": 21,
-         "title_color": "#ead9c2",
-         "notes_color": "#8f7a63",
+         "title_color": "var(--olo-color-secondary-contrast)",
+         "notes_color": "var(--olo-color-text-muted)",
          "notes_mono": false,
          "roast_label": "Roast",
-         "roast_on_color": "#c98a4b",
-         "roast_off_color": "rgba(234,217,194,.15)",
-         "price_color": "#ead9c2",
+         "roast_on_color": "var(--olo-color-primary)",
+         "roast_off_color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 15%, transparent)",
+         "price_color": "var(--olo-color-secondary-contrast)",
          "add_button": true,
          "add_label": "Add",
          "add_bg": "#ead9c2",
-         "add_color": "#170f0a",
+         "add_color": "var(--olo-color-primary-contrast)",
          "show_filters": true,
          "footer_text": "",
          "footer_url": "#",
@@ -285,10 +285,10 @@
          ],
          "filter_all_label": "All · 24",
          "filter_list": "Filter, Espresso, Decaf, Light roast, Under €18",
-         "filter_text_color": "#cbb89f",
-         "filter_border_color": "rgba(234,217,194,.12)",
-         "filter_active_bg": "#c98a4b",
-         "filter_active_color": "#170f0a"
+         "filter_text_color": "var(--olo-color-text)",
+         "filter_border_color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 12%, transparent)",
+         "filter_active_bg": "var(--olo-color-primary)",
+         "filter_active_color": "var(--olo-color-primary-contrast)"
         },
         "style": {},
         "advanced": {},
@@ -312,7 +312,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#20160f"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -345,15 +345,15 @@
          "cta_url": "#subscribe",
          "bg": {
           "type": "gradient",
-          "gradient_from": "rgba(201,138,75,.18)",
-          "gradient_to": "rgba(201,138,75,.04)",
+          "gradient_from": "color-mix(in srgb, var(--olo-color-primary) 18%, transparent)",
+          "gradient_to": "color-mix(in srgb, var(--olo-color-primary) 4%, transparent)",
           "gradient_angle": 150
          },
-         "text_color": "#ead9c2",
-         "accent_color": "#c98a4b",
-         "subtitle_color": "#cbb89f",
-         "cta_bg": "#c98a4b",
-         "cta_color": "#170f0a",
+         "text_color": "var(--olo-color-secondary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,

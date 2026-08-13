@@ -3,7 +3,7 @@
   "id": "sts-se-ph",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#14241c" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -26,12 +26,12 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "How we help",
-         "eyebrow_color": "#c9a44a",
-         "eyebrow_dot_color": "#c9a44a",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
-          { "text": "Our ", "color": "#eef2e9", "italic": false },
-          { "text": "services", "color": "#c9a44a", "italic": true }
+          { "text": "Our ", "color": "var(--olo-color-secondary-contrast)", "italic": false },
+          { "text": "services", "color": "var(--olo-color-primary)", "italic": true }
          ],
          "headline_font_family": "serif",
          "headline_font_size": 74,
@@ -41,7 +41,7 @@
          "tagline_show": true,
          "tagline_text": "Three disciplines, one joined-up plan. We rarely do just one — the value is in how they fit together.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#74866f",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 17,
          "layout": "center",
          "gap": 16
@@ -60,7 +60,7 @@
   "id": "sts-se-svcs",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 0, "padding_bottom": 64 },
-  "style": { "bg": { "type": "solid", "color": "#14241c" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -87,7 +87,7 @@
          "columns": 3,
          "items_gap": 16,
          "card_bg": { "type": "solid", "color": "#1d3328" },
-         "card_color": "#74866f",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": { "tl": 12, "tr": 12, "br": 12, "bl": 12, "linked": true },
          "card_padding": 30,
          "show_icon": true,
@@ -95,9 +95,9 @@
          "show_arrow": false,
          "show_footer": false,
          "show_media": false,
-         "icon_color": "#c9a44a",
-         "icon_bg_color": "rgba(201,164,74,.14)",
-         "title_color": "#eef2e9",
+         "icon_color": "var(--olo-color-primary)",
+         "icon_bg_color": "color-mix(in srgb, var(--olo-color-primary) 14%, transparent)",
+         "title_color": "var(--olo-color-secondary-contrast)",
          "title_font_family": "serif",
          "title_size": 24,
          "title_weight": "500",
@@ -136,7 +136,7 @@
   "id": "sts-se-fees",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#172a20" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -159,12 +159,12 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Fees, plainly",
-         "eyebrow_color": "#c9a44a",
-         "eyebrow_dot_color": "#c9a44a",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
-          { "text": "No surprises, ", "color": "#eef2e9", "italic": false },
-          { "text": "ever", "color": "#c9a44a", "italic": true }
+          { "text": "No surprises, ", "color": "var(--olo-color-secondary-contrast)", "italic": false },
+          { "text": "ever", "color": "var(--olo-color-primary)", "italic": true }
          ],
          "headline_font_family": "serif",
          "headline_font_size": 54,
@@ -174,7 +174,7 @@
          "tagline_show": true,
          "tagline_text": "A single, transparent annual fee as a percentage of assets — no commissions, no product kickbacks, no hidden layers.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#74866f",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -211,15 +211,15 @@
          "auto_number": false,
          "item_gap": 10,
          "number_style": "plain",
-         "number_color": "#c9a44a",
+         "number_color": "var(--olo-color-primary)",
          "number_size": 40,
          "number_font": "serif",
          "number_weight": "500",
-         "title_color": "#eef2e9",
+         "title_color": "var(--olo-color-secondary-contrast)",
          "title_size": 21,
          "title_font": "serif",
          "title_weight": "500",
-         "desc_color": "#74866f",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 14,
          "card_bg": "",
          "card_border": "",
@@ -245,7 +245,7 @@
   "id": "sts-se-cta",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#14241c" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -274,12 +274,12 @@
          "cta_url": "#contact",
          "cta2_text": "",
          "cta2_url": "#",
-         "bg": { "type": "solid", "color": "#0c1812" },
-         "text_color": "#eef2e9",
-         "accent_color": "#c9a44a",
-         "subtitle_color": "#aebcae",
-         "cta_bg": "#c9a44a",
-         "cta_color": "#0c1812",
+         "bg": { "type": "solid", "color": "var(--olo-color-primary-contrast)" },
+         "text_color": "var(--olo-color-secondary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": { "tl": 4, "tr": 4, "br": 4, "bl": 4, "linked": true },
          "cta_size": 13,
          "headline_font_family": "serif",

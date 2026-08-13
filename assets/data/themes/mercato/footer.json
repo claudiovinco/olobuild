@@ -3,7 +3,7 @@
   "id": "me-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
-  "style": { "bg": { "type": "solid", "color": "#141414" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-secondary)" } },
   "advanced": {},
   "children": [
    {
@@ -20,8 +20,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "me-fbrand", "type": "headline", "settings": { "heading": "MERCATO", "tag": "div", "alignment": "left", "heading_font_size": "24", "heading_uppercase": true, "heading_color": "#ffffff", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "me-fbtext", "type": "text-block", "settings": { "content": "<p>A concept store for well-made everyday objects. Chosen by hand, made to last.</p>", "text_color": "#8e897f", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "250" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "me-fbrand", "type": "headline", "settings": { "heading": "MERCATO", "tag": "div", "alignment": "left", "heading_font_size": "24", "heading_uppercase": true, "heading_color": "var(--olo-color-primary-contrast)", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "me-fbtext", "type": "text-block", "settings": { "content": "<p>A concept store for well-made everyday objects. Chosen by hand, made to last.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "250" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -31,8 +31,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "me-fh1", "type": "headline", "settings": { "heading": "Shop", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "me-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#8e897f", "link_hover_color": "#e1474f", "items": [ { "title": "New in", "content": "#shop", "tag": "" }, { "title": "Homeware", "content": "#categories", "tag": "" }, { "title": "Kitchen", "content": "#categories", "tag": "" }, { "title": "Accessories", "content": "#categories", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "me-fh1", "type": "headline", "settings": { "heading": "Shop", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-primary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "me-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "New in", "content": "#shop", "tag": "" }, { "title": "Homeware", "content": "#categories", "tag": "" }, { "title": "Kitchen", "content": "#categories", "tag": "" }, { "title": "Accessories", "content": "#categories", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -42,8 +42,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "me-fh2", "type": "headline", "settings": { "heading": "About", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "me-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#8e897f", "link_hover_color": "#e1474f", "items": [ { "title": "Our story", "content": "#", "tag": "" }, { "title": "Lookbook", "content": "#lookbook", "tag": "" }, { "title": "Makers", "content": "#", "tag": "" }, { "title": "Sustainability", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "me-fh2", "type": "headline", "settings": { "heading": "About", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-primary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "me-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Our story", "content": "#", "tag": "" }, { "title": "Lookbook", "content": "#lookbook", "tag": "" }, { "title": "Makers", "content": "#", "tag": "" }, { "title": "Sustainability", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -53,8 +53,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "me-fh3", "type": "headline", "settings": { "heading": "Help", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "me-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#8e897f", "link_hover_color": "#e1474f", "items": [ { "title": "Shipping", "content": "#", "tag": "" }, { "title": "Returns", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" }, { "title": "FAQ", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "me-fh3", "type": "headline", "settings": { "heading": "Help", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-primary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "me-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Shipping", "content": "#", "tag": "" }, { "title": "Returns", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" }, { "title": "FAQ", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -67,7 +67,7 @@
     "advanced": {},
     "children": [
      { "id": "me-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
-      { "id": "me-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.12)", "alignment": "center", "spacing": 22 }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "me-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "color-mix(in srgb, var(--olo-color-primary-contrast) 12%, transparent)", "alignment": "center", "spacing": 22 }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    },
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "me-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "me-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Mercato — an OLOtheme demo.</p>", "text_color": "#8e897f", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "me-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Mercato — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "me-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "me-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#8e897f", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "me-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

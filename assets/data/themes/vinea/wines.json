@@ -3,7 +3,7 @@
   "id": "vw-se-ph",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large", "padding_bottom": 48 },
-  "style": { "bg": { "type": "solid", "color": "#2a0f1a" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    { "id": "vw-ro-ph", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
@@ -14,12 +14,12 @@
       "settings": {
        "eyebrow_show": true,
        "eyebrow_text": "The cellar",
-       "eyebrow_color": "#c79a4e",
-       "eyebrow_dot_color": "#c79a4e",
+       "eyebrow_color": "var(--olo-color-primary)",
+       "eyebrow_dot_color": "var(--olo-color-primary)",
        "eyebrow_separator": "",
        "headline_lines": [
         { "text": "Every ", "color": "#f1e4d8", "italic": false },
-        { "text": "bottle", "color": "#c79a4e", "italic": true },
+        { "text": "bottle", "color": "var(--olo-color-primary)", "italic": true },
         { "text": " we make", "color": "#f1e4d8", "italic": false }
        ],
        "headline_font_family": "serif",
@@ -30,7 +30,7 @@
        "tagline_show": true,
        "tagline_text": "Twelve small-lot wines from a single hillside. When a vintage is gone, it's gone — so we tell you honestly how much is left.",
        "tagline_text_italic": false,
-       "tagline_text_color": "#977483",
+       "tagline_text_color": "var(--olo-color-text-muted)",
        "tagline_text_size": 17,
        "layout": "center",
        "gap": 18
@@ -47,7 +47,7 @@
   "id": "vw-se-reds",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large", "padding_top": 40 },
-  "style": { "bg": { "type": "solid", "color": "#2a0f1a" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    { "id": "vw-ro-redsh", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
@@ -58,12 +58,12 @@
       "settings": {
        "eyebrow_show": true,
        "eyebrow_text": "Reds",
-       "eyebrow_color": "#c79a4e",
-       "eyebrow_dot_color": "#c79a4e",
+       "eyebrow_color": "var(--olo-color-primary)",
+       "eyebrow_dot_color": "var(--olo-color-primary)",
        "eyebrow_separator": "",
        "headline_lines": [
         { "text": "The ", "color": "#f1e4d8", "italic": false },
-        { "text": "rossi", "color": "#c79a4e", "italic": true }
+        { "text": "rossi", "color": "var(--olo-color-primary)", "italic": true }
        ],
        "headline_font_family": "serif",
        "headline_font_size": 48,
@@ -97,11 +97,11 @@
        "card_border": "rgba(241,228,216,.13)",
        "card_radius": 10,
        "card_padding": 22,
-       "category_color": "#c79a4e",
+       "category_color": "var(--olo-color-primary)",
        "title_font": "serif",
        "title_size": 20,
        "title_color": "#f1e4d8",
-       "notes_color": "#977483",
+       "notes_color": "var(--olo-color-text-muted)",
        "price_color": "#f1e4d8",
        "footer_text": "",
        "footer_url": "#",
@@ -126,7 +126,7 @@
   "id": "vw-se-whites",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large", "padding_top": 0 },
-  "style": { "bg": { "type": "solid", "color": "#2a0f1a" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    { "id": "vw-ro-whh", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
@@ -137,12 +137,12 @@
       "settings": {
        "eyebrow_show": true,
        "eyebrow_text": "Whites & rosé",
-       "eyebrow_color": "#c79a4e",
-       "eyebrow_dot_color": "#c79a4e",
+       "eyebrow_color": "var(--olo-color-primary)",
+       "eyebrow_dot_color": "var(--olo-color-primary)",
        "eyebrow_separator": "",
        "headline_lines": [
         { "text": "The ", "color": "#f1e4d8", "italic": false },
-        { "text": "bianchi", "color": "#c79a4e", "italic": true }
+        { "text": "bianchi", "color": "var(--olo-color-primary)", "italic": true }
        ],
        "headline_font_family": "serif",
        "headline_font_size": 48,
@@ -176,11 +176,11 @@
        "card_border": "rgba(241,228,216,.13)",
        "card_radius": 10,
        "card_padding": 22,
-       "category_color": "#c79a4e",
+       "category_color": "var(--olo-color-primary)",
        "title_font": "serif",
        "title_size": 20,
        "title_color": "#f1e4d8",
-       "notes_color": "#977483",
+       "notes_color": "var(--olo-color-text-muted)",
        "price_color": "#f1e4d8",
        "footer_text": "",
        "footer_url": "#",
@@ -205,7 +205,7 @@
   "id": "vw-se-reserve",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#33121f" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    { "id": "vw-ro-res", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
@@ -215,18 +215,18 @@
       "type": "introsplit",
       "settings": {
        "eyebrow": "Worth the wait",
-       "eyebrow_color": "#c79a4e",
+       "eyebrow_color": "var(--olo-color-primary)",
        "headline": "Riserva del",
        "accent": "Nonno",
        "headline_tail": "",
        "accent_italic": true,
        "uppercase": false,
        "headline_color": "#f1e4d8",
-       "accent_color": "#c79a4e",
+       "accent_color": "var(--olo-color-primary)",
        "headline_weight": "400",
        "headline_size": "52",
        "lead": "Our grandfather's wine, made only in vintages the hill earns. Three years in old Slavonian oak, another in bottle, and a patience that can't be rushed.\n\nDried cherry, leather, tobacco and a finish that goes on quietly for a long time. We make 1,800 bottles, and not every year.",
-       "lead_color": "#cbb0b8",
+       "lead_color": "var(--olo-color-text)",
        "signature": "2021 · €46 · 280 left",
        "stats": [],
        "cta_text": "",
@@ -258,7 +258,7 @@
   "id": "vw-se-cta",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#2a0f1a" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    { "id": "vw-ro-cta", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
@@ -276,14 +276,14 @@
        "cta2_text": "Join the club",
        "cta2_url": "/#club",
        "cta2_bg": "#f1e4d8",
-       "cta2_color": "#1c0a12",
+       "cta2_color": "var(--olo-color-primary-contrast)",
        "cta2_border": "transparent",
        "bg": { "type": "solid", "color": "#481d30" },
        "text_color": "#ffffff",
-       "accent_color": "#c79a4e",
-       "subtitle_color": "#cbb0b8",
-       "cta_bg": "#c79a4e",
-       "cta_color": "#1c0a12",
+       "accent_color": "var(--olo-color-primary)",
+       "subtitle_color": "var(--olo-color-text)",
+       "cta_bg": "var(--olo-color-primary)",
+       "cta_color": "var(--olo-color-primary-contrast)",
        "cta_radius": { "tl": 2, "tr": 2, "br": 2, "bl": 2, "linked": true },
        "cta_size": 12,
        "headline_font_family": "serif",

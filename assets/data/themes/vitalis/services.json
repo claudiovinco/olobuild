@@ -3,7 +3,7 @@
   "id": "vts-ph-se",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#0e3b3a" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -26,12 +26,12 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "What we offer",
-         "eyebrow_color": "#6fd6c4",
-         "eyebrow_dot_color": "#6fd6c4",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           { "text": "Our ", "color": "#eaf6f2", "italic": false },
-          { "text": "services", "color": "#6fd6c4", "italic": true }
+          { "text": "services", "color": "var(--olo-color-primary)", "italic": true }
          ],
          "headline_font_family": "serif",
          "headline_font_size": 84,
@@ -42,7 +42,7 @@
          "tagline_show": true,
          "tagline_text": "Every path starts with a proper assessment — then a plan that fits your life, not a package we're trying to sell.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6f9a92",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 17,
          "layout": "center",
          "gap": 16
@@ -61,7 +61,7 @@
   "id": "vts-cat-se",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small" },
-  "style": { "bg": { "type": "solid", "color": "#0e3b3a" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -107,7 +107,7 @@
          "title_weight": "500",
          "title_letter_spacing": 0,
          "title_uppercase": false,
-         "subtitle_color": "#6fd6c4",
+         "subtitle_color": "var(--olo-color-primary)",
          "subtitle_size": 13.5,
          "show_cta": false,
          "shadow": "none"
@@ -126,7 +126,7 @@
   "id": "vts-pl-se",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#103f3e" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -149,12 +149,12 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Full price list",
-         "eyebrow_color": "#6fd6c4",
-         "eyebrow_dot_color": "#6fd6c4",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           { "text": "Clear, ", "color": "#eaf6f2", "italic": false },
-          { "text": "upfront", "color": "#6fd6c4", "italic": true }
+          { "text": "upfront", "color": "var(--olo-color-primary)", "italic": true }
          ],
          "headline_font_family": "serif",
          "headline_font_size": 50,
@@ -196,10 +196,10 @@
          "show_image": false,
          "price_position": "right",
          "separator_style": "dotted",
-         "separator_color": "rgba(111,214,196,.42)",
+         "separator_color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "title_color": "#eaf6f2",
-         "price_color": "#6fd6c4",
-         "description_color": "#6f9a92",
+         "price_color": "var(--olo-color-primary)",
+         "description_color": "var(--olo-color-text-muted)",
          "card_bg": "",
          "card_border_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0, "linked": true },
          "hover_lift": false,
@@ -230,7 +230,7 @@
   "id": "vts-cta-se",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#0e3b3a" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -257,12 +257,12 @@
          "subtitle": "Book a complimentary assessment — we'll point you to the right path, no pressure.",
          "cta_text": "Book an assessment",
          "cta_url": "#membership",
-         "bg": { "type": "solid", "color": "#072422" },
+         "bg": { "type": "solid", "color": "var(--olo-color-primary-contrast)" },
          "text_color": "#eaf6f2",
-         "accent_color": "#6fd6c4",
-         "subtitle_color": "#a9cfc7",
-         "cta_bg": "#6fd6c4",
-         "cta_color": "#072422",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999, "linked": true },
          "cta_size": 15,
          "headline_font_family": "serif",

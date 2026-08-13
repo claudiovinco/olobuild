@@ -12,7 +12,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#160a24"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -65,14 +65,14 @@
          "cta2_url": "#contact",
          "scroll_text": "Scroll to see the work",
          "show_scroll": false,
-         "bg_color": "#160a24",
-         "accent": "#c14bff",
-         "accent2": "#4be0ff",
-         "accent_on": "#ffffff",
-         "text_color": "#ffffff",
-         "sub_color": "#b6a6c8",
-         "eyebrow_color": "#c14bff",
-         "glow_color": "rgba(193,75,255,0.28)",
+         "bg_color": "var(--olo-color-background)",
+         "accent": "var(--olo-color-primary)",
+         "accent2": "var(--olo-color-secondary)",
+         "accent_on": "var(--olo-color-primary-contrast)",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "sub_color": "var(--olo-color-text)",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "glow_color": "color-mix(in srgb, var(--olo-color-primary) 28%, transparent)",
          "glow_w": 680,
          "glow_h": 520,
          "glow_blur": 120,
@@ -109,7 +109,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#160a24"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -136,18 +136,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Selected work",
-         "eyebrow_color": "#c14bff",
-         "eyebrow_dot_color": "#c14bff",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Recent ",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           },
           {
            "text": "projects",
-           "color": "#c14bff",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -159,7 +159,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#7d6c92",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "stack",
          "gap": 16
@@ -270,7 +270,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1b0d2c"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -297,18 +297,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "What we do",
-         "eyebrow_color": "#c14bff",
-         "eyebrow_dot_color": "#c14bff",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Three ",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           },
           {
            "text": "disciplines",
-           "color": "#c14bff",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -320,7 +320,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#7d6c92",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -365,7 +365,7 @@
           "type": "solid",
           "color": "#241338"
          },
-         "card_color": "#7d6c92",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": {
           "tl": 14,
           "tr": 14,
@@ -382,7 +382,7 @@
          "show_footer": false,
          "show_media": false,
          "counter_shape": "plain",
-         "counter_color": "#c14bff",
+         "counter_color": "var(--olo-color-primary)",
          "title_color": "#ffffff",
          "title_font_family": "serif",
          "title_size": 26,
@@ -430,7 +430,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#160a24"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -480,10 +480,10 @@
          "divider_color": "rgba(241,233,247,.1)",
          "band_border": true,
          "value_font_family": "heading",
-         "value_color": "#ffffff",
+         "value_color": "var(--olo-color-primary-contrast)",
          "value_size": 58,
          "value_weight": "800",
-         "label_color": "#7d6c92",
+         "label_color": "var(--olo-color-text-muted)",
          "label_size": 12,
          "label_uppercase": false,
          "align": "left",
@@ -510,7 +510,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#160a24"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -537,18 +537,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "How we work",
-         "eyebrow_color": "#c14bff",
-         "eyebrow_dot_color": "#c14bff",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "From brief to ",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           },
           {
            "text": "bang",
-           "color": "#c14bff",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -560,7 +560,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#7d6c92",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -599,7 +599,7 @@
          "auto_number": true,
          "item_gap": 12,
          "number_style": "plain",
-         "number_color": "#c14bff",
+         "number_color": "var(--olo-color-primary)",
          "number_size": 30,
          "number_font": "serif",
          "number_weight": "800",
@@ -607,7 +607,7 @@
          "title_size": 19,
          "title_font": "serif",
          "title_weight": "800",
-         "desc_color": "#7d6c92",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 13,
          "card_bg": "#241338",
          "card_border": "rgba(241,233,247,.1)",
@@ -663,7 +663,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#160a24"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -693,19 +693,19 @@
          "intro": "Every identity starts as a clash of colours that shouldn't work. Tap a few and find the one that does — then book us to make it real.",
          "max": 3,
          "empty_label": "Tap colours to mix",
-         "zone_accent": "#c14bff",
-         "zone_on": "#0d0518",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-secondary-contrast)",
          "card_bg": "#241338",
          "card_border": "rgba(241,233,247,.1)",
          "align": "left",
          "items": [
           {
            "name": "Ultra",
-           "color": "#c14bff"
+           "color": "var(--olo-color-primary)"
           },
           {
            "name": "Cyan",
-           "color": "#4be0ff"
+           "color": "var(--olo-color-secondary)"
           },
           {
            "name": "Punch",
@@ -746,7 +746,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1b0d2c"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -773,18 +773,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Brand toolkit",
-         "eyebrow_color": "#c14bff",
-         "eyebrow_dot_color": "#c14bff",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Generate a ",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           },
           {
            "text": "palette",
-           "color": "#c14bff",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -796,7 +796,7 @@
          "tagline_show": true,
          "tagline_text": "Pick a seed and a harmony rule — we build a five-stop scheme you can lift straight into a brand. Tap any swatch to copy the hex.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#7d6c92",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 16
@@ -841,7 +841,7 @@
           "type": "solid",
           "color": "#241338"
          },
-         "card_color": "#7d6c92",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": {
           "tl": 14,
           "tr": 14,
@@ -866,7 +866,7 @@
          "card_hover_effect": "lift",
          "items": [
           {
-           "title": "#c14bff",
+           "title": "var(--olo-color-primary)",
            "description": "Seed — Ultra"
           },
           {
@@ -908,7 +908,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#160a24"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -945,11 +945,11 @@
           "type": "gradient",
           "gradient": "linear-gradient(150deg,rgba(193,75,255,.2) 0%,rgba(75,224,255,.06) 100%)"
          },
-         "text_color": "#ffffff",
-         "accent_color": "#c14bff",
-         "subtitle_color": "#b6a6c8",
-         "cta_bg": "#c14bff",
-         "cta_color": "#ffffff",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,
@@ -959,8 +959,8 @@
          },
          "cta_size": 14,
          "cta2_bg": "transparent",
-         "cta2_color": "#ffffff",
-         "cta2_border": "rgba(193,75,255,.42)",
+         "cta2_color": "var(--olo-color-primary-contrast)",
+         "cta2_border": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "cta2_radius": {
           "tl": 999,
           "tr": 999,
@@ -982,7 +982,7 @@
           "linked": true
          },
          "banner_padding": 80,
-         "border_color": "rgba(193,75,255,.42)"
+         "border_color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)"
         },
         "style": {},
         "advanced": {},

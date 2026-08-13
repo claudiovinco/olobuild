@@ -3,7 +3,7 @@
   "id": "wd-se-ph",
   "type": "section",
   "settings": { "style": "default", "width": "full", "padding": "remove-vertical", "padding_top": 0, "padding_bottom": 0 },
-  "style": { "bg": { "type": "solid", "color": "#0d3b3f" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-secondary-contrast)" } },
   "advanced": {},
   "children": [
    {
@@ -51,11 +51,11 @@
          "overlay_top": 0.4,
          "overlay_bottom": 0.85,
          "overlay_sides": false,
-         "accent": "#e9c46a",
-         "accent_on": "#0d3b3f",
-         "text_color": "#ffffff",
-         "sub_color": "rgba(255,255,255,.85)",
-         "eyebrow_color": "#e9c46a"
+         "accent": "var(--olo-color-secondary)",
+         "accent_on": "var(--olo-color-secondary-contrast)",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "sub_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 85%, transparent)",
+         "eyebrow_color": "var(--olo-color-secondary)"
         },
         "style": {},
         "advanced": {},
@@ -71,7 +71,7 @@
   "id": "wd-se-ov",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#f5f1e8" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -93,24 +93,24 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "The trip",
-         "eyebrow_color": "#e76f51",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline": "Two countries, one great range",
          "accent": "",
          "headline_tail": "",
          "uppercase": false,
-         "headline_color": "#1d2a29",
-         "accent_color": "#e76f51",
+         "headline_color": "var(--olo-color-text)",
+         "accent_color": "var(--olo-color-primary)",
          "headline_weight": "600",
          "headline_size": "50",
          "lead": "From the granite towers of Torres del Paine to the spires of Fitz Roy, this is Patagonia at its rawest — long days on foot, big weather, and the kind of silence you travel a long way to find. We move slowly enough to actually be there: nights in mountain refugios, meals cooked over fire, and a guide who reads the sky better than any forecast.",
-         "lead_color": "#566260",
+         "lead_color": "var(--olo-color-text-muted)",
          "stats": [],
          "signature": "",
          "cta_text": "Check dates & book",
          "cta_url": "#book",
          "cta_style": "button",
          "cta_bg": "#0d3b3f",
-         "cta_color": "#f5f1e8",
+         "cta_color": "var(--olo-color-background)",
          "cta2_text": "",
          "cta2_url": "#",
          "media_image": "",
@@ -139,7 +139,7 @@
   "id": "wd-se-itin",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large", "border_top": "1px solid #e3ddcf", "border_bottom": "1px solid #e3ddcf" },
-  "style": { "bg": { "type": "solid", "color": "#ffffff" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-primary-contrast)" } },
   "advanced": {},
   "children": [
    {
@@ -162,11 +162,11 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Day by day",
-         "eyebrow_color": "#e76f51",
-         "eyebrow_dot_color": "#e76f51",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
-          { "text": "The itinerary", "color": "#1d2a29", "italic": false }
+          { "text": "The itinerary", "color": "var(--olo-color-text)", "italic": false }
          ],
          "headline_font_family": "serif",
          "headline_font_size": 52,
@@ -216,15 +216,15 @@
          "tl_line": "solid",
          "tl_transparent": true,
          "tl_show_tag": true,
-         "tl_rail_color": "#e3ddcf",
-         "tl_fill_from": "#0d3b3f",
-         "tl_fill_to": "#0d3b3f",
+         "tl_rail_color": "var(--olo-color-border)",
+         "tl_fill_from": "var(--olo-color-secondary-contrast)",
+         "tl_fill_to": "var(--olo-color-secondary-contrast)",
          "tl_card_bg": "transparent",
-         "tl_title_color": "#1d2a29",
+         "tl_title_color": "var(--olo-color-text)",
          "tl_title_family": "heading",
          "tl_title_size": 22,
-         "tl_text_color": "#566260",
-         "tl_tag_color": "#e76f51",
+         "tl_text_color": "var(--olo-color-text-muted)",
+         "tl_tag_color": "var(--olo-color-primary)",
          "items": [
           { "id": "wd-tl-1", "title": "Arrive Punta Arenas → Puerto Natales", "tag": "Day 1–2", "description": "Meet the group, gear check, and the long beautiful drive north to the edge of the park.", "date": "1", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
           { "id": "wd-tl-2", "title": "The \"W\" — Torres del Paine", "tag": "Day 3–6", "description": "Four days through the park's classic circuit: the towers at dawn, the French Valley, and Grey Glacier up close.", "date": "2", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
@@ -246,7 +246,7 @@
   "id": "wd-se-gal",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#f5f1e8" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -269,11 +269,11 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "A glimpse",
-         "eyebrow_color": "#e76f51",
-         "eyebrow_dot_color": "#e76f51",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
-          { "text": "On the trail", "color": "#1d2a29", "italic": false }
+          { "text": "On the trail", "color": "var(--olo-color-text)", "italic": false }
          ],
          "headline_font_family": "serif",
          "headline_font_size": 52,
@@ -325,11 +325,11 @@
          "overlay_gradient": true,
          "overlay_padding": "small",
          "title_size": "h4",
-         "title_color": "#ffffff",
+         "title_color": "var(--olo-color-primary-contrast)",
          "title_weight": "600",
          "title_letter_spacing": 0,
          "title_uppercase": false,
-         "subtitle_color": "#e9c46a",
+         "subtitle_color": "var(--olo-color-secondary)",
          "subtitle_size": 11,
          "hover_effect": "zoom",
          "hover_overlay": "always",
@@ -355,7 +355,7 @@
   "id": "wd-se-cta",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#0d3b3f" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-secondary-contrast)" } },
   "advanced": {},
   "children": [
    {
@@ -383,11 +383,11 @@
          "cta_text": "Check dates & book",
          "cta_url": "#book",
          "bg": { "type": "solid", "color": "#114a4f" },
-         "text_color": "#ffffff",
-         "accent_color": "#e9c46a",
-         "subtitle_color": "rgba(255,255,255,.8)",
-         "cta_bg": "#e9c46a",
-         "cta_color": "#0d3b3f",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-secondary)",
+         "subtitle_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 80%, transparent)",
+         "cta_bg": "var(--olo-color-secondary)",
+         "cta_color": "var(--olo-color-secondary-contrast)",
          "cta_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999, "linked": true },
          "cta_size": 15,
          "headline_font_family": "serif",
@@ -400,7 +400,7 @@
          "banner_padding": 80,
          "eyebrow_show": true,
          "eyebrow_text": "From €3,200 · 11 days",
-         "eyebrow_color": "#e9c46a"
+         "eyebrow_color": "var(--olo-color-secondary)"
         },
         "style": {},
         "advanced": {},

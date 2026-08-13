@@ -3,7 +3,7 @@
   "id": "fr-es-head",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#0c0c0c" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -26,11 +26,11 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Photo Essay · Issue 41",
-         "eyebrow_color": "#ff4438",
-         "eyebrow_dot_color": "#ff4438",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
-          { "text": "The City After Rain", "color": "#f4f4f2", "italic": false }
+          { "text": "The City After Rain", "color": "var(--olo-color-secondary)", "italic": false }
          ],
          "headline_font_family": "sans-serif",
          "headline_font_size": 84,
@@ -50,7 +50,7 @@
         "type": "text-block",
         "settings": {
          "content": "<p>Twenty-eight frames shot across one wet night in the old quarter, when the streets empty and the light does its best work. Photographs by Yuki Mori.</p>",
-         "text_color": "#f4f4f2",
+         "text_color": "var(--olo-color-secondary)",
          "font_size": "18",
          "line_height": "1.6",
          "text_align": "center",
@@ -70,7 +70,7 @@
   "id": "fr-es-shots1",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "remove-vertical", "padding_bottom": 16 },
-  "style": { "bg": { "type": "solid", "color": "#0c0c0c" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -214,7 +214,7 @@
   "id": "fr-es-quote",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#0c0c0c" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -244,8 +244,8 @@
          "author_name": "Yuki Mori",
          "author_role": "on the shoot",
          "author_uppercase": true,
-         "author_color": "#666666",
-         "text_color": "#f4f4f2",
+         "author_color": "var(--olo-color-text-muted)",
+         "text_color": "var(--olo-color-secondary)",
          "bg_color": "transparent",
          "show_line": false
         },
@@ -263,7 +263,7 @@
   "id": "fr-es-shots2",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "remove-vertical", "padding_bottom": 48 },
-  "style": { "bg": { "type": "solid", "color": "#0c0c0c" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -371,7 +371,7 @@
   "id": "fr-es-more",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#121212" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -396,7 +396,7 @@
          "eyebrow_text": "",
          "eyebrow_separator": "",
          "headline_lines": [
-          { "text": "More essays", "color": "#f4f4f2", "italic": false }
+          { "text": "More essays", "color": "var(--olo-color-secondary)", "italic": false }
          ],
          "headline_font_family": "sans-serif",
          "headline_font_size": 34,
@@ -437,16 +437,16 @@
          "media_aspect": "4/3",
          "media_tall_aspect": "4/5",
          "media_bg": "#1a1a1a",
-         "media_label_color": "#f4f4f2",
+         "media_label_color": "var(--olo-color-secondary)",
          "hover_zoom": true,
          "title_font_family": "heading",
-         "title_color": "#f4f4f2",
+         "title_color": "var(--olo-color-secondary)",
          "title_size": 21,
          "title_weight": "700",
-         "meta_color": "#ff4438",
+         "meta_color": "var(--olo-color-primary)",
          "meta_size": 11,
          "show_desc": false,
-         "desc_color": "#9a9a9a",
+         "desc_color": "var(--olo-color-text)",
          "desc_size": 13,
          "mono_font_family": "",
          "items": [

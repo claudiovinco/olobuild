@@ -3,7 +3,7 @@
   "id": "lgs-se-ph",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large", "padding_top": 96, "padding_bottom": 40 },
-  "style": { "bg": { "type": "solid", "color": "#16202a" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -26,12 +26,12 @@
         "settings": {
           "eyebrow_show": true,
           "eyebrow_text": "WHAT WE HANDLE",
-          "eyebrow_color": "#4fb3a6",
-          "eyebrow_dot_color": "#4fb3a6",
+          "eyebrow_color": "var(--olo-color-primary)",
+          "eyebrow_dot_color": "var(--olo-color-primary)",
           "eyebrow_separator": "",
           "headline_lines": [
             { "text": "Our", "color": "#eaf1f0", "italic": false },
-            { "text": "services", "color": "#4fb3a6", "italic": false }
+            { "text": "services", "color": "var(--olo-color-primary)", "italic": false }
           ],
           "headline_font_family": "sans-serif",
           "headline_font_size": 60,
@@ -52,7 +52,7 @@
         "type": "text-block",
         "settings": {
           "content": "<p>Everything the numbers side of your business needs — done by a named accountant, backed by software that never forgets a deadline.</p>",
-          "text_color": "#697b88",
+          "text_color": "var(--olo-color-text-muted)",
           "font_size": "17",
           "line_height": "1.6",
           "text_align": "center",
@@ -72,7 +72,7 @@
   "id": "lgs-se-grid",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 56, "padding_bottom": 96 },
-  "style": { "bg": { "type": "solid", "color": "#16202a" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -99,7 +99,7 @@
           "columns": 3,
           "items_gap": 16,
           "card_bg": { "type": "solid", "color": "#1f2d3a" },
-          "card_color": "#697b88",
+          "card_color": "var(--olo-color-text-muted)",
           "card_radius": { "tl": 14, "tr": 14, "br": 14, "bl": 14, "linked": true },
           "card_padding": 28,
           "show_icon": true,
@@ -107,8 +107,8 @@
           "show_arrow": false,
           "show_footer": false,
           "show_media": false,
-          "icon_color": "#4fb3a6",
-          "icon_bg_color": "rgba(79,179,166,.14)",
+          "icon_color": "var(--olo-color-primary)",
+          "icon_bg_color": "color-mix(in srgb, var(--olo-color-primary) 14%, transparent)",
           "title_color": "#eaf1f0",
           "title_font_family": "sans-serif",
           "title_size": 21,
@@ -139,7 +139,7 @@
   "id": "lgs-se-cta",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#192531" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -170,10 +170,10 @@
           "cta2_url": "#",
           "bg": { "type": "gradient", "gradient": "linear-gradient(160deg,rgba(79,179,166,.16),rgba(166,217,106,.05))" },
           "text_color": "#eaf1f0",
-          "accent_color": "#4fb3a6",
-          "subtitle_color": "#a3b4bf",
-          "cta_bg": "#4fb3a6",
-          "cta_color": "#0d141b",
+          "accent_color": "var(--olo-color-primary)",
+          "subtitle_color": "var(--olo-color-text)",
+          "cta_bg": "var(--olo-color-primary)",
+          "cta_color": "var(--olo-color-primary-contrast)",
           "cta_radius": { "tl": 9, "tr": 9, "br": 9, "bl": 9, "linked": true },
           "cta_size": 15,
           "headline_font_family": "sans-serif",

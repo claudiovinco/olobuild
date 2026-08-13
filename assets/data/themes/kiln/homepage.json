@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#efe5da"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -36,25 +36,25 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "Ceramic artist · studio of Mara Sole",
-         "eyebrow_color": "#bd6a40",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline": "Made by hand,",
          "accent": "kept",
          "headline_tail": "for years.",
          "accent_italic": true,
          "uppercase": false,
          "headline_color": "#2a211c",
-         "accent_color": "#bd6a40",
+         "accent_color": "var(--olo-color-primary)",
          "headline_weight": "500",
          "headline_size": "88",
          "lead": "Wheel-thrown, wood-fired vessels — each one a little different, none of them in a hurry. Functional pieces for slow mornings and long tables.",
-         "lead_color": "#5e5043",
+         "lead_color": "var(--olo-color-text)",
          "signature": "",
          "stats": [],
          "cta_text": "Shop the collection",
          "cta_url": "/the-collection/",
          "cta_style": "button",
-         "cta_bg": "#bd6a40",
-         "cta_color": "#ffffff",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,
@@ -76,7 +76,7 @@
          "media_blob": false,
          "badge_number": "1 of 1",
          "badge_label": "every piece",
-         "badge_bg": "#f7f0e7",
+         "badge_bg": "var(--olo-color-muted)",
          "badge_color": "#2a211c",
          "badge_radius": {
           "tl": 14,
@@ -107,7 +107,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f7f0e7"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -160,11 +160,11 @@
            "meta": ""
           }
          ],
-         "zone_accent": "#bd6a40",
-         "zone_on": "#ffffff",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "panel_bg": "#e5d8c9",
-         "card_bg": "#efe5da",
-         "card_border": "#dac9b6",
+         "card_bg": "var(--olo-color-background)",
+         "card_border": "var(--olo-color-border)",
          "align": "center"
         },
         "style": {},
@@ -188,7 +188,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#efe5da"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -215,8 +215,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Available now",
-         "eyebrow_color": "#bd6a40",
-         "eyebrow_dot_color": "#bd6a40",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -226,7 +226,7 @@
           },
           {
            "text": "pieces",
-           "color": "#bd6a40",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -238,7 +238,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#928271",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -284,11 +284,11 @@
          "tag_bg": "",
          "tag_color": "",
          "quick_add_show": false,
-         "category_color": "#928271",
+         "category_color": "var(--olo-color-text-muted)",
          "title_font": "serif",
          "title_size": 22,
          "title_color": "#2a211c",
-         "price_color": "#bd6a40",
+         "price_color": "var(--olo-color-primary)",
          "footer_text": "See the whole collection",
          "footer_url": "/the-collection/",
          "footer_color": "#2a211c",
@@ -413,7 +413,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f7f0e7"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -440,8 +440,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "From clay to keep",
-         "eyebrow_color": "#bd6a40",
-         "eyebrow_dot_color": "#bd6a40",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -451,7 +451,7 @@
           },
           {
            "text": "born",
-           "color": "#bd6a40",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -463,7 +463,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#928271",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -502,7 +502,7 @@
          "auto_number": false,
          "item_gap": 10,
          "number_style": "outline",
-         "number_color": "#bd6a40",
+         "number_color": "var(--olo-color-primary)",
          "number_bg": "#c7b29a",
          "number_size": 22,
          "number_font": "serif",
@@ -511,7 +511,7 @@
          "title_size": 20,
          "title_font": "serif",
          "title_weight": "500",
-         "desc_color": "#928271",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 13.5,
          "card_bg": "",
          "card_border": "",
@@ -560,7 +560,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#efe5da"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -587,8 +587,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "From the shelf",
-         "eyebrow_color": "#bd6a40",
-         "eyebrow_dot_color": "#bd6a40",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -598,7 +598,7 @@
           },
           {
            "text": "favourites",
-           "color": "#bd6a40",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -610,7 +610,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#928271",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -712,8 +712,8 @@
          "hover_effect": "zoom",
          "hover_overlay": "fade",
          "show_cta": false,
-         "title_color": "#ffffff",
-         "subtitle_color": "rgba(255,255,255,0.85)",
+         "title_color": "var(--olo-color-primary-contrast)",
+         "subtitle_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 85%, transparent)",
          "bg": {
           "type": "none"
          }
@@ -739,7 +739,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#efe5da"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -770,9 +770,9 @@
          "max": 3,
          "empty_label": "Tap a glaze to begin",
          "zone_accent": "#c2724a",
-         "zone_on": "#ffffff",
-         "card_bg": "#efe5da",
-         "card_border": "#dac9b6",
+         "zone_on": "var(--olo-color-primary-contrast)",
+         "card_bg": "var(--olo-color-background)",
+         "card_border": "var(--olo-color-border)",
          "align": "left",
          "items": [
           {
@@ -857,11 +857,11 @@
           "type": "solid",
           "color": "#2a211c"
          },
-         "text_color": "#efe5da",
-         "accent_color": "#bd6a40",
+         "text_color": "var(--olo-color-background)",
+         "accent_color": "var(--olo-color-primary)",
          "subtitle_color": "#cdbfad",
-         "cta_bg": "#bd6a40",
-         "cta_color": "#ffffff",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,

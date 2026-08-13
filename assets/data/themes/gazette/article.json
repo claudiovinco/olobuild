@@ -3,7 +3,7 @@
   "id": "gza-se-head",
   "type": "section",
   "settings": { "style": "default", "width": "small", "padding": "large", "padding_bottom": 0 },
-  "style": { "bg": { "type": "solid", "color": "#f3f0e9" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    { "id": "gza-ro-head", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
@@ -11,10 +11,10 @@
      { "id": "gza-head", "type": "section-header", "settings": {
         "eyebrow_show": true,
         "eyebrow_text": "The Essay · Cities",
-        "eyebrow_color": "#9a2b22",
+        "eyebrow_color": "var(--olo-color-primary)",
         "eyebrow_separator": "",
         "headline_lines": [
-         { "text": "The slow return of the city night market", "color": "#16161a", "italic": false }
+         { "text": "The slow return of the city night market", "color": "var(--olo-color-secondary)", "italic": false }
         ],
         "headline_font_family": "serif",
         "headline_font_size": 60,
@@ -32,7 +32,7 @@
        }, "style": {}, "advanced": {}, "children": [] },
      { "id": "gza-byline", "type": "text-block", "settings": {
         "content": "<p>By <strong>Elena Russo</strong> · Photographs by Kai Mendel · 18 min read</p>",
-        "text_color": "#76746e",
+        "text_color": "var(--olo-color-text-muted)",
         "font_size": "12.5",
         "line_height": "1.6",
         "text_align": "center",
@@ -46,7 +46,7 @@
   "id": "gza-se-hero",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#f3f0e9" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    { "id": "gza-ro-hero", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
@@ -70,7 +70,7 @@
   "id": "gza-se-body",
   "type": "section",
   "settings": { "style": "default", "width": "small", "padding": "large", "padding_top": 0 },
-  "style": { "bg": { "type": "solid", "color": "#f3f0e9" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    { "id": "gza-ro-body", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
@@ -89,7 +89,7 @@
         "alignment": "left",
         "heading_font": "heading",
         "heading_font_size": "28",
-        "heading_color": "#16161a",
+        "heading_color": "var(--olo-color-secondary)",
         "heading_uppercase": false,
         "decoration": "none"
        }, "style": {}, "advanced": {}, "children": [] },
@@ -107,10 +107,10 @@
         "alignment": "left",
         "heading_font": "heading",
         "heading_font_size": "27",
-        "heading_color": "#16161a",
+        "heading_color": "var(--olo-color-secondary)",
         "heading_uppercase": false,
         "decoration": "none",
-        "border": { "top": 0, "right": 0, "bottom": 0, "left": 3, "linked": false, "style": "solid", "color": "#9a2b22" }
+        "border": { "top": 0, "right": 0, "bottom": 0, "left": 3, "linked": false, "style": "solid", "color": "var(--olo-color-primary)" }
        }, "style": {}, "advanced": {}, "children": [] },
      { "id": "gza-body-3", "type": "text-block", "settings": {
         "content": "<p>That line belongs to Sofia Marchetti, who at sixty-one is both the market's unofficial historian and its most feared critic. She remembers the old market and refuses to be sentimental about it. The food was sometimes bad, she says. The hours were brutal. But it was the one place in the neighbourhood where the rules were written by the people standing in it.</p>",
@@ -138,7 +138,7 @@
         "alignment": "left",
         "heading_font": "heading",
         "heading_font_size": "28",
-        "heading_color": "#16161a",
+        "heading_color": "var(--olo-color-secondary)",
         "heading_uppercase": false,
         "decoration": "none"
        }, "style": {}, "advanced": {}, "children": [] },
@@ -150,7 +150,7 @@
         "text_align": "left",
         "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }
        }, "style": {}, "advanced": {}, "children": [] },
-     { "id": "gza-tags-div", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "#d8d2c4", "alignment": "left", "spacing": 18 }, "style": {}, "advanced": {}, "children": [] },
+     { "id": "gza-tags-div", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "var(--olo-color-border)", "alignment": "left", "spacing": 18 }, "style": {}, "advanced": {}, "children": [] },
      { "id": "gza-tags", "type": "nav", "settings": {
         "show_icons": false,
         "direction": "horizontal",
@@ -162,8 +162,8 @@
         "font_weight": "700",
         "text_transform": "uppercase",
         "letter_spacing": "0.6",
-        "link_color": "#76746e",
-        "link_hover_color": "#16161a",
+        "link_color": "var(--olo-color-text-muted)",
+        "link_hover_color": "var(--olo-color-secondary)",
         "border_radius": "999",
         "padding_x": "13",
         "padding_y": "6",
@@ -189,14 +189,14 @@
     { "id": "gza-co-rel-h", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
      { "id": "gza-rel-head", "type": "section-header", "settings": {
         "eyebrow_show": false,
-        "headline_lines": [ { "text": "Keep reading", "color": "#16161a", "italic": false } ],
+        "headline_lines": [ { "text": "Keep reading", "color": "var(--olo-color-secondary)", "italic": false } ],
         "headline_font_family": "serif",
         "headline_font_size": 24,
         "headline_font_weight": "400",
         "headline_align": "left",
         "tagline_show": true,
         "tagline_text": "All long reads →",
-        "tagline_text_color": "#9a2b22",
+        "tagline_text_color": "var(--olo-color-primary)",
         "tagline_text_size": 11.5,
         "tagline_text_italic": false,
         "layout": "stack",
@@ -213,7 +213,7 @@
         "columns": 3,
         "items_gap": 30,
         "card_bg": { "type": "solid", "color": "transparent" },
-        "card_color": "#76746e",
+        "card_color": "var(--olo-color-text-muted)",
         "card_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0, "linked": true },
         "card_padding": 0,
         "show_icon": false,
@@ -225,13 +225,13 @@
         "media_aspect_ratio": "3/2",
         "media_position": "top",
         "media_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0, "linked": true },
-        "counter_color": "#9a2b22",
+        "counter_color": "var(--olo-color-primary)",
         "counter_size": 11,
         "title_font_family": "serif",
         "title_size": 23,
         "title_weight": "400",
         "title_italic": false,
-        "title_color": "#16161a",
+        "title_color": "var(--olo-color-secondary)",
         "description_size": 14.5,
         "card_hover_effect": "none",
         "items": [
@@ -243,7 +243,7 @@
           "title": "The painter who only works at dawn",
           "description": "Thirty years of chasing one hour of light.",
           "footer_text": "By T. Weber · 12 min",
-          "footer_dot_color": "#9a2b22"
+          "footer_dot_color": "var(--olo-color-primary)"
          },
          {
           "media_image": "",
@@ -253,7 +253,7 @@
           "title": "What we lost when restaurants got quiet",
           "description": "On noise, intimacy, and the half-empty room.",
           "footer_text": "By A. Demir · 9 min",
-          "footer_dot_color": "#9a2b22"
+          "footer_dot_color": "var(--olo-color-primary)"
          },
          {
           "media_image": "",
@@ -263,7 +263,7 @@
           "title": "The last letterpress in the old quarter",
           "description": "Four tonnes of lead type and a refusal to quit.",
           "footer_text": "By J. Okoro · 7 min",
-          "footer_dot_color": "#9a2b22"
+          "footer_dot_color": "var(--olo-color-primary)"
          }
         ]
        }, "style": {}, "advanced": {}, "children": [] }
@@ -275,7 +275,7 @@
   "id": "gza-se-news",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#16161a" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-secondary)" } },
   "advanced": {},
   "children": [
    { "id": "gza-ro-news", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
@@ -300,18 +300,18 @@
         "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 },
         "title_size": "46",
         "title_weight": "400",
-        "title_color": "#f3f0e9",
+        "title_color": "var(--olo-color-background)",
         "subtitle_size": "16",
-        "subtitle_color": "rgba(243,240,233,.70)",
-        "input_bg": "rgba(243,240,233,.08)",
-        "input_color": "#f3f0e9",
-        "input_border": "rgba(243,240,233,.22)",
-        "input_focus_border": "#f3f0e9",
+        "subtitle_color": "color-mix(in srgb, var(--olo-color-background) 70%, transparent)",
+        "input_bg": "color-mix(in srgb, var(--olo-color-background) 8%, transparent)",
+        "input_color": "var(--olo-color-background)",
+        "input_border": "color-mix(in srgb, var(--olo-color-background) 22%, transparent)",
+        "input_focus_border": "var(--olo-color-background)",
         "input_radius": 3,
         "input_height": "50",
-        "btn_bg": "#f3f0e9",
-        "btn_color": "#16161a",
-        "btn_hover_bg": "#e9e4d8",
+        "btn_bg": "var(--olo-color-background)",
+        "btn_color": "var(--olo-color-secondary)",
+        "btn_hover_bg": "var(--olo-color-muted)",
         "btn_radius": 2,
         "btn_font_size": "12",
         "btn_font_weight": "700"

@@ -3,7 +3,7 @@
   "id": "sa-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 64, "padding_bottom": 32 },
-  "style": { "bg": { "type": "solid", "color": "#241a16" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-secondary-contrast)" } },
   "advanced": {},
   "children": [
    {
@@ -20,9 +20,9 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "sa-fbrand", "type": "headline", "settings": { "heading": "Saffron", "tag": "div", "alignment": "left", "heading_font_size": "24", "heading_font": "heading", "heading_color": "#e0a23a", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "sa-fbtext", "type": "text-block", "settings": { "content": "<p>A seasonal neighbourhood kitchen. Open fire, market produce, a short honest list.</p>", "text_color": "#6e6258", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "240" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "sa-fsoc", "type": "nav", "settings": { "show_icons": true, "icon_size": "16", "icon_color": "#ffffff", "direction": "horizontal", "alignment": "left", "gap": "10", "tile_padding": { "top": 8, "right": 0, "bottom": 0, "left": 0 }, "link_color": "#6e6258", "link_hover_color": "#e0a23a", "items": [ { "title": "", "content": "#", "tag": "instagram" }, { "title": "", "content": "#", "tag": "facebook" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "sa-fbrand", "type": "headline", "settings": { "heading": "Saffron", "tag": "div", "alignment": "left", "heading_font_size": "24", "heading_font": "heading", "heading_color": "var(--olo-color-secondary)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "sa-fbtext", "type": "text-block", "settings": { "content": "<p>A seasonal neighbourhood kitchen. Open fire, market produce, a short honest list.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "240" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "sa-fsoc", "type": "nav", "settings": { "show_icons": true, "icon_size": "16", "icon_color": "var(--olo-color-primary-contrast)", "direction": "horizontal", "alignment": "left", "gap": "10", "tile_padding": { "top": 8, "right": 0, "bottom": 0, "left": 0 }, "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-secondary)", "items": [ { "title": "", "content": "#", "tag": "instagram" }, { "title": "", "content": "#", "tag": "facebook" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -32,8 +32,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "sa-fh1", "type": "headline", "settings": { "heading": "Visit", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#e0a23a", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "sa-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "10", "font_size": "14", "link_color": "#6e6258", "link_hover_color": "#e0a23a", "items": [ { "title": "Menu", "content": "#menu", "tag": "" }, { "title": "Our story", "content": "#story", "tag": "" }, { "title": "Gallery", "content": "#gallery", "tag": "" }, { "title": "Reservations", "content": "#visit", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "sa-fh1", "type": "headline", "settings": { "heading": "Visit", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "sa-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "10", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-secondary)", "items": [ { "title": "Menu", "content": "#menu", "tag": "" }, { "title": "Our story", "content": "#story", "tag": "" }, { "title": "Gallery", "content": "#gallery", "tag": "" }, { "title": "Reservations", "content": "#visit", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -43,8 +43,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "sa-fh2", "type": "headline", "settings": { "heading": "Hours", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#e0a23a", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "sa-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "10", "font_size": "14", "link_color": "#6e6258", "link_hover_color": "#e0a23a", "items": [ { "title": "Lunch · 12:00–14:30", "content": "", "tag": "" }, { "title": "Dinner · 19:00–23:00", "content": "", "tag": "" }, { "title": "Closed Mondays", "content": "", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "sa-fh2", "type": "headline", "settings": { "heading": "Hours", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "sa-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "10", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-secondary)", "items": [ { "title": "Lunch · 12:00–14:30", "content": "", "tag": "" }, { "title": "Dinner · 19:00–23:00", "content": "", "tag": "" }, { "title": "Closed Mondays", "content": "", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -54,8 +54,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "sa-fh3", "type": "headline", "settings": { "heading": "Find us", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#e0a23a", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "sa-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "10", "font_size": "14", "link_color": "#6e6258", "link_hover_color": "#e0a23a", "items": [ { "title": "Via Brera 18, Milan", "content": "", "tag": "" }, { "title": "+39 02 555 12", "content": "tel:+390255512", "tag": "" }, { "title": "hello@saffron.kitchen", "content": "mailto:hello@saffron.kitchen", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "sa-fh3", "type": "headline", "settings": { "heading": "Find us", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "sa-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "gap": "10", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-secondary)", "items": [ { "title": "Via Brera 18, Milan", "content": "", "tag": "" }, { "title": "+39 02 555 12", "content": "tel:+390255512", "tag": "" }, { "title": "hello@saffron.kitchen", "content": "mailto:hello@saffron.kitchen", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -68,7 +68,7 @@
     "advanced": {},
     "children": [
      { "id": "sa-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
-      { "id": "sa-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.12)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "sa-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "color-mix(in srgb, var(--olo-color-primary-contrast) 12%, transparent)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    },
@@ -80,10 +80,10 @@
     "advanced": {},
     "children": [
      { "id": "sa-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "sa-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Saffron — an OLOtheme demo.</p>", "text_color": "#6e6258", "font_size": "13", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "sa-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Saffron — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "13", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "sa-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "sa-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#6e6258", "font_size": "13", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "sa-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "13", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

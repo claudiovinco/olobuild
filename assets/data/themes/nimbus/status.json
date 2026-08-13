@@ -3,7 +3,7 @@
   "id": "nbs-se-ph",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#0a1020" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -26,8 +26,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// status.nimbus.dev",
-         "eyebrow_color": "#5aa9ff",
-         "eyebrow_dot_color": "#5aa9ff",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           { "text": "System status", "color": "#ffffff", "italic": false }
@@ -39,7 +39,7 @@
          "tagline_show": true,
          "tagline_text": "Real-time health across every Nimbus service and region. Subscribe to get notified the moment anything changes.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6b7a96",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 17,
          "layout": "center",
          "gap": 16
@@ -58,7 +58,7 @@
   "id": "nbs-se-board",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small" },
-  "style": { "bg": { "type": "solid", "color": "#0a1020" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -148,7 +148,7 @@
   "id": "nbs-se-regions",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small" },
-  "style": { "bg": { "type": "solid", "color": "#0a1020" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -214,7 +214,7 @@
          "items_gap": 12,
          "card_bg": { "type": "solid", "color": "#111a30" },
          "card_border": "rgba(255,255,255,.08)",
-         "card_color": "#6b7a96",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": { "tl": 11, "tr": 11, "br": 11, "bl": 11, "linked": true },
          "card_padding": 16,
          "show_icon": false,
@@ -255,7 +255,7 @@
   "id": "nbs-se-incidents",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#0d1426" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -278,8 +278,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// incident history",
-         "eyebrow_color": "#5aa9ff",
-         "eyebrow_dot_color": "#5aa9ff",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           { "text": "Past 30 days", "color": "#ffffff", "italic": false }
@@ -335,10 +335,10 @@
          "tl_thread": "solid2",
          "tl_transparent": true,
          "tl_title_color": "#ffffff",
-         "tl_text_color": "#6b7a96",
-         "tl_yr_color": "#6b7a96",
+         "tl_text_color": "var(--olo-color-text-muted)",
+         "tl_yr_color": "var(--olo-color-text-muted)",
          "tl_show_tag": true,
-         "tl_tag_color": "#5aa9ff"
+         "tl_tag_color": "var(--olo-color-primary)"
         },
         "style": {},
         "advanced": {},
@@ -354,7 +354,7 @@
   "id": "nbs-se-cta",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#0a1020" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -391,16 +391,16 @@
           "value": "linear-gradient(160deg, rgba(90,169,255,.16), rgba(86,224,224,.05))",
           "angle": 160,
           "stops": [
-           { "color": "rgba(90,169,255,.16)", "position": 0 },
-           { "color": "rgba(86,224,224,.05)", "position": 100 }
+           { "color": "color-mix(in srgb, var(--olo-color-primary) 16%, transparent)", "position": 0 },
+           { "color": "color-mix(in srgb, var(--olo-color-secondary) 5%, transparent)", "position": 100 }
           ]
          },
-         "border_color": "rgba(90,169,255,.34)",
+         "border_color": "color-mix(in srgb, var(--olo-color-primary) 34%, transparent)",
          "text_color": "#ffffff",
-         "accent_color": "#5aa9ff",
-         "subtitle_color": "#aebbd0",
-         "cta_bg": "#5aa9ff",
-         "cta_color": "#060a14",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": { "tl": 9, "tr": 9, "br": 9, "bl": 9, "linked": true },
          "cta_size": 15,
          "headline_font_family": "sans-serif",

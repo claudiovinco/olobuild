@@ -3,7 +3,7 @@
   "id": "ni-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 32 },
-  "style": { "bg": { "type": "solid", "color": "#0d1426" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -21,7 +21,7 @@
       "advanced": {},
       "children": [
        { "id": "ni-fbrand", "type": "headline", "settings": { "heading": "Nimbus", "tag": "div", "alignment": "left", "heading_font_size": "20", "heading_uppercase": false, "heading_color": "#ffffff", "heading_font": "heading", "heading_font_weight": "700", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ni-fbtext", "type": "text-block", "settings": { "content": "<p>Cloud infrastructure for the edge. Deploy once, run everywhere, pay per request.</p>", "text_color": "#6b7a96", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ni-fbtext", "type": "text-block", "settings": { "content": "<p>Cloud infrastructure for the edge. Deploy once, run everywhere, pay per request.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -32,7 +32,7 @@
       "advanced": {},
       "children": [
        { "id": "ni-fh1", "type": "headline", "settings": { "heading": "Product", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "heading_font_weight": "700", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ni-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#6b7a96", "link_hover_color": "#ffffff", "items": [ { "title": "Platform", "content": "#platform", "tag": "" }, { "title": "Regions", "content": "#regions", "tag": "" }, { "title": "Pricing", "content": "#pricing", "tag": "" }, { "title": "Changelog", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ni-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "#ffffff", "items": [ { "title": "Platform", "content": "#platform", "tag": "" }, { "title": "Regions", "content": "#regions", "tag": "" }, { "title": "Pricing", "content": "#pricing", "tag": "" }, { "title": "Changelog", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -43,7 +43,7 @@
       "advanced": {},
       "children": [
        { "id": "ni-fh2", "type": "headline", "settings": { "heading": "Developers", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "heading_font_weight": "700", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ni-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#6b7a96", "link_hover_color": "#ffffff", "items": [ { "title": "Docs", "content": "#", "tag": "" }, { "title": "CLI", "content": "#", "tag": "" }, { "title": "API", "content": "#", "tag": "" }, { "title": "Status", "content": "/status", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ni-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "#ffffff", "items": [ { "title": "Docs", "content": "#", "tag": "" }, { "title": "CLI", "content": "#", "tag": "" }, { "title": "API", "content": "#", "tag": "" }, { "title": "Status", "content": "/status", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -54,7 +54,7 @@
       "advanced": {},
       "children": [
        { "id": "ni-fh3", "type": "headline", "settings": { "heading": "Company", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "heading_font_weight": "700", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ni-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#6b7a96", "link_hover_color": "#ffffff", "items": [ { "title": "About", "content": "#", "tag": "" }, { "title": "Security", "content": "#", "tag": "" }, { "title": "Careers", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ni-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "#ffffff", "items": [ { "title": "About", "content": "#", "tag": "" }, { "title": "Security", "content": "#", "tag": "" }, { "title": "Careers", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "ni-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "ni-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Nimbus — an OLOtheme demo.</p>", "text_color": "#6b7a96", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "ni-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Nimbus — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "ni-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "ni-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#6b7a96", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "ni-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

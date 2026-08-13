@@ -21,7 +21,7 @@
       "advanced": {},
       "children": [
        { "id": "da-fbrand", "type": "headline", "settings": { "heading": "DataFold", "tag": "div", "alignment": "left", "heading_font_size": "20", "heading_uppercase": false, "heading_color": "#ffffff", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "da-fbtext", "type": "text-block", "settings": { "content": "<p>One live workspace for every metric. Model once, query anywhere, trust the number.</p>", "text_color": "#6e8088", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "da-fbtext", "type": "text-block", "settings": { "content": "<p>One live workspace for every metric. Model once, query anywhere, trust the number.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -32,7 +32,7 @@
       "advanced": {},
       "children": [
        { "id": "da-fh1", "type": "headline", "settings": { "heading": "Product", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "da-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#6e8088", "link_hover_color": "#ffffff", "items": [ { "title": "Platform", "content": "#platform", "tag": "" }, { "title": "Data sources", "content": "#sources", "tag": "" }, { "title": "Pricing", "content": "#pricing", "tag": "" }, { "title": "Changelog", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "da-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "#ffffff", "items": [ { "title": "Platform", "content": "#platform", "tag": "" }, { "title": "Data sources", "content": "#sources", "tag": "" }, { "title": "Pricing", "content": "#pricing", "tag": "" }, { "title": "Changelog", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -43,7 +43,7 @@
       "advanced": {},
       "children": [
        { "id": "da-fh2", "type": "headline", "settings": { "heading": "Developers", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "da-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#6e8088", "link_hover_color": "#ffffff", "items": [ { "title": "Docs", "content": "#", "tag": "" }, { "title": "SQL reference", "content": "#", "tag": "" }, { "title": "API", "content": "#", "tag": "" }, { "title": "Status", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "da-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "#ffffff", "items": [ { "title": "Docs", "content": "#", "tag": "" }, { "title": "SQL reference", "content": "#", "tag": "" }, { "title": "API", "content": "#", "tag": "" }, { "title": "Status", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -54,7 +54,7 @@
       "advanced": {},
       "children": [
        { "id": "da-fh3", "type": "headline", "settings": { "heading": "Company", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "da-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#6e8088", "link_hover_color": "#ffffff", "items": [ { "title": "Customers", "content": "/customers/", "tag": "" }, { "title": "About", "content": "#", "tag": "" }, { "title": "Careers", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "da-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "#ffffff", "items": [ { "title": "Customers", "content": "/customers/", "tag": "" }, { "title": "About", "content": "#", "tag": "" }, { "title": "Careers", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "da-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "da-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 DataFold — an OLOtheme demo.</p>", "text_color": "#6e8088", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "da-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 DataFold — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "da-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "da-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#6e8088", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "da-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

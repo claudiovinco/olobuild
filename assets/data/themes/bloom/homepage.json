@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#3a2230"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -36,10 +36,10 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "Clean colour cosmetics",
-         "eyebrow_color": "#e7a0b4",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline": "Your colour, your",
          "accent": "rules.",
-         "accent_color": "#e7a0b4",
+         "accent_color": "var(--olo-color-primary)",
          "accent_italic": true,
          "headline_tail": "",
          "uppercase": false,
@@ -47,14 +47,14 @@
          "headline_weight": "400",
          "headline_size": "88",
          "lead": "High-pigment, skin-kind makeup in shades for every undertone — built to be mixed, layered and absolutely yours.",
-         "lead_color": "#cdb1bd",
+         "lead_color": "var(--olo-color-text)",
          "signature": "",
          "stats": [],
          "cta_text": "Shop the range",
          "cta_url": "#new",
          "cta_style": "button",
-         "cta_bg": "#e7a0b4",
-         "cta_color": "#23131d",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta2_text": "Find your shade",
          "cta2_url": "#finder",
          "cta2_style": "outline",
@@ -97,7 +97,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#3a2230"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -124,8 +124,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Best sellers",
-         "eyebrow_color": "#e7a0b4",
-         "eyebrow_dot_color": "#e7a0b4",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -147,7 +147,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#9c7e8c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -190,10 +190,10 @@
          "card_border": "rgba(246,233,236,.13)",
          "card_radius": 18,
          "card_padding": 20,
-         "tag_bg": "#e7a0b4",
-         "tag_color": "#23131d",
+         "tag_bg": "var(--olo-color-primary)",
+         "tag_color": "var(--olo-color-primary-contrast)",
          "quick_add_show": false,
-         "category_color": "#9c7e8c",
+         "category_color": "var(--olo-color-text-muted)",
          "title_font": "heading",
          "title_size": 22,
          "title_color": "#f6e9ec",
@@ -203,7 +203,7 @@
          "add_button": true,
          "add_label": "Add",
          "add_bg": "#f6e9ec",
-         "add_color": "#23131d",
+         "add_color": "var(--olo-color-primary-contrast)",
          "footer_text": "Shop all products",
          "footer_url": "#",
          "footer_color": "#f6e9ec",
@@ -287,7 +287,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#432838"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -317,8 +317,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Shade finder",
-         "eyebrow_color": "#e7a0b4",
-         "eyebrow_dot_color": "#e7a0b4",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -340,7 +340,7 @@
          "tagline_show": true,
          "tagline_text": "Run your cursor down the list — each shade previews as you go. Or take the 30-second quiz and we'll match you in three picks.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#9c7e8c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "stack",
          "gap": 16
@@ -356,8 +356,8 @@
          "text": "Take the quiz",
          "url": "#",
          "alignment": "left",
-         "bg_color": "#e7a0b4",
-         "text_color": "#23131d",
+         "bg_color": "var(--olo-color-primary)",
+         "text_color": "var(--olo-color-primary-contrast)",
          "hover_bg_color": "#d98aa1"
         },
         "style": {},
@@ -447,7 +447,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#3a2230"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -474,8 +474,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Build your ritual",
-         "eyebrow_color": "#e7a0b4",
-         "eyebrow_dot_color": "#e7a0b4",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -497,7 +497,7 @@
          "tagline_show": true,
          "tagline_text": "Four steps, your call. Tap through each to build a regimen — the total updates as you go.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#9c7e8c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -630,7 +630,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#432838"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -657,8 +657,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "What we stand for",
-         "eyebrow_color": "#e7a0b4",
-         "eyebrow_dot_color": "#e7a0b4",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -680,7 +680,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#9c7e8c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -782,7 +782,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#432838"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -815,9 +815,9 @@
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#f6e9ec",
-         "star_color": "#e7a0b4",
-         "quote_accent_color": "#e7a0b4",
-         "author_color": "#e7a0b4",
+         "star_color": "var(--olo-color-primary)",
+         "quote_accent_color": "var(--olo-color-primary)",
+         "author_color": "var(--olo-color-primary)",
          "quote_font": "heading",
          "quote_size": 0,
          "author_uppercase": true,
@@ -845,7 +845,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#3a2230"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -879,7 +879,7 @@
          "max_width": "520",
          "alignment": "center",
          "bg_color": "#4d2f40",
-         "box_border": "rgba(231,160,180,.42)",
+         "box_border": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "border_radius": 24,
          "tile_padding": {
           "top": 68,
@@ -891,15 +891,15 @@
          "title_weight": "400",
          "title_color": "#f6e9ec",
          "subtitle_size": "17",
-         "subtitle_color": "#cdb1bd",
+         "subtitle_color": "var(--olo-color-text)",
          "input_bg": "rgba(246,233,236,.08)",
          "input_color": "#f6e9ec",
-         "input_border": "rgba(231,160,180,.42)",
-         "input_focus_border": "#e7a0b4",
+         "input_border": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
+         "input_focus_border": "var(--olo-color-primary)",
          "input_radius": 999,
          "input_height": "48",
-         "btn_bg": "#e7a0b4",
-         "btn_color": "#23131d",
+         "btn_bg": "var(--olo-color-primary)",
+         "btn_color": "var(--olo-color-primary-contrast)",
          "btn_hover_bg": "#d98aa1",
          "btn_radius": 999,
          "btn_font_size": "15",

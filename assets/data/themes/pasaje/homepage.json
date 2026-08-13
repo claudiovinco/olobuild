@@ -12,7 +12,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#2a1a14"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -52,7 +52,7 @@
          "meta_text": "",
          "scroll_hint": "",
          "bg_image": "",
-         "bg_color": "#2a1a14",
+         "bg_color": "var(--olo-color-background)",
          "media_label": "hero — sunlit courtyard, terracotta & bougainvillea",
          "text_position": "center",
          "text_align": "center",
@@ -64,11 +64,11 @@
          "overlay_top": 0.4,
          "overlay_bottom": 0.9,
          "overlay_sides": false,
-         "accent": "#d98a4e",
-         "accent_on": "#1b110b",
+         "accent": "var(--olo-color-primary)",
+         "accent_on": "var(--olo-color-primary-contrast)",
          "text_color": "#ffffff",
          "sub_color": "#f3e7d6",
-         "eyebrow_color": "#d98a4e"
+         "eyebrow_color": "var(--olo-color-primary)"
         },
         "style": {},
         "advanced": {},
@@ -93,7 +93,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#2a1a14"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -137,13 +137,13 @@
          ],
          "button_text": "Check availability",
          "button_url": "#book",
-         "accent": "#d98a4e",
-         "accent_on": "#1b110b",
+         "accent": "var(--olo-color-primary)",
+         "accent_on": "var(--olo-color-primary-contrast)",
          "bar_bg": "#f3e7d6",
          "field_bg": "transparent",
          "field_border": "#ddcdb8",
-         "label_color": "#967861",
-         "value_color": "#2a1a14",
+         "label_color": "var(--olo-color-text-muted)",
+         "value_color": "var(--olo-color-background)",
          "radius": 16
         },
         "style": {},
@@ -167,7 +167,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#2a1a14"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -193,25 +193,25 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "The stay",
-         "eyebrow_color": "#d98a4e",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline": "A small hotel that",
          "accent": "",
          "headline_tail": "feels like a friend's house",
          "accent_italic": false,
          "uppercase": false,
          "headline_color": "#f3e7d6",
-         "accent_color": "#d98a4e",
+         "accent_color": "var(--olo-color-primary)",
          "headline_weight": "400",
          "headline_size": "52",
          "lead": "Pasaje sits in a restored merchant's house off a quiet passage. Fourteen rooms, no two alike, all lime-washed walls, local linen and shutters that throw stripes of afternoon light.\n\nBreakfast is whatever the market gave us, served in the courtyard. The roof is yours at sundown.",
-         "lead_color": "#c5ac96",
+         "lead_color": "var(--olo-color-text)",
          "stats": [],
          "signature": "— Inés & the Pasaje team",
          "cta_text": "",
          "cta_url": "#stay",
          "cta_style": "underline",
-         "cta_bg": "#d98a4e",
-         "cta_color": "#1b110b",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta2_text": "",
          "cta2_url": "",
          "cta2_style": "outline",
@@ -233,8 +233,8 @@
          "media_blob": false,
          "badge_number": "",
          "badge_label": "",
-         "badge_bg": "#d98a4e",
-         "badge_color": "#1b110b",
+         "badge_bg": "var(--olo-color-primary)",
+         "badge_color": "var(--olo-color-primary-contrast)",
          "badge_radius": {
           "tl": 10,
           "tr": 10,
@@ -264,7 +264,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#311f17"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -291,8 +291,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Where you'll sleep",
-         "eyebrow_color": "#d98a4e",
-         "eyebrow_dot_color": "#d98a4e",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -309,7 +309,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#967861",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -382,10 +382,10 @@
          "title_color": "#f3e7d6",
          "title_size": 25,
          "title_weight": "400",
-         "meta_color": "#d98a4e",
+         "meta_color": "var(--olo-color-primary)",
          "meta_size": 22,
          "show_desc": true,
-         "desc_color": "#967861",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 13,
          "mono_font_family": ""
         },
@@ -423,7 +423,7 @@
          "bg_color": "transparent",
          "text_color": "#f3e7d6",
          "hover_bg_color": "transparent",
-         "hover_text_color": "#d98a4e",
+         "hover_text_color": "var(--olo-color-primary)",
          "font_size": "13",
          "font_weight": "700",
          "text_transform": "uppercase",
@@ -449,7 +449,7 @@
           "left": 1,
           "linked": true,
           "style": "solid",
-          "color": "rgba(217,138,78,.42)"
+          "color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)"
          },
          "shadow": "none",
          "hover_effect": "none"
@@ -475,7 +475,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#2a1a14"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -502,8 +502,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "While you're here",
-         "eyebrow_color": "#d98a4e",
-         "eyebrow_dot_color": "#d98a4e",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -520,7 +520,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#967861",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -611,7 +611,7 @@
          "title_weight": "400",
          "title_letter_spacing": 0,
          "title_uppercase": false,
-         "subtitle_color": "#c5ac96",
+         "subtitle_color": "var(--olo-color-text)",
          "subtitle_size": 13,
          "show_cta": false,
          "cta_text": "Discover",
@@ -639,7 +639,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#311f17"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -666,8 +666,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "A look around",
-         "eyebrow_color": "#d98a4e",
-         "eyebrow_dot_color": "#d98a4e",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -684,7 +684,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#967861",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -801,7 +801,7 @@
          "title_weight": "400",
          "title_letter_spacing": 0,
          "title_uppercase": false,
-         "subtitle_color": "#c5ac96",
+         "subtitle_color": "var(--olo-color-text)",
          "subtitle_size": 13,
          "show_cta": false,
          "cta_text": "",
@@ -829,7 +829,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#2a1a14"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -857,10 +857,10 @@
          "eyebrow": "Which room is you?",
          "heading": "Find your <em>stay</em>",
          "intro": "",
-         "zone_accent": "#d98a4e",
-         "zone_on": "#1b110b",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "card_bg": "#3a261c",
-         "card_border": "rgba(217,138,78,.42)",
+         "card_border": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "align": "center",
          "items": [
           {
@@ -930,7 +930,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#2a1a14"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -964,17 +964,17 @@
          "cta2_text": "See the rooms",
          "cta2_url": "rooms",
          "cta2_bg": "#f3e7d6",
-         "cta2_color": "#1b110b",
+         "cta2_color": "var(--olo-color-primary-contrast)",
          "cta2_border": "transparent",
          "bg": {
           "type": "solid",
           "color": "#472f22"
          },
          "text_color": "#ffffff",
-         "accent_color": "#d98a4e",
+         "accent_color": "var(--olo-color-primary)",
          "subtitle_color": "#f3e7d6",
-         "cta_bg": "#d98a4e",
-         "cta_color": "#1b110b",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,

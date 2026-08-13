@@ -3,7 +3,7 @@
   "id": "au-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
-  "style": { "bg": { "type": "solid", "color": "#2a1838" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -41,7 +41,7 @@
         "type": "text-block",
         "settings": {
          "content": "<p>A full-service events studio. Weddings, galas and private celebrations since 2011.</p>",
-         "text_color": "#94809a",
+         "text_color": "var(--olo-color-text-muted)",
          "font_size": "14",
          "line_height": "1.7",
          "text_align": "left",
@@ -75,8 +75,8 @@
          "show_icons": false,
          "direction": "vertical",
          "alignment": "left",
-         "link_color": "#94809a",
-         "link_hover_color": "#e0afca",
+         "link_color": "var(--olo-color-text-muted)",
+         "link_hover_color": "var(--olo-color-link)",
          "items": [
           { "title": "What we do", "content": "#services", "tag": "" },
           { "title": "Process", "content": "#process", "tag": "" },
@@ -112,8 +112,8 @@
          "show_icons": false,
          "direction": "vertical",
          "alignment": "left",
-         "link_color": "#94809a",
-         "link_hover_color": "#e0afca",
+         "link_color": "var(--olo-color-text-muted)",
+         "link_hover_color": "var(--olo-color-link)",
          "items": [
           { "title": "Weddings", "content": "#", "tag": "" },
           { "title": "Galas", "content": "#", "tag": "" },
@@ -149,8 +149,8 @@
          "show_icons": false,
          "direction": "vertical",
          "alignment": "left",
-         "link_color": "#94809a",
-         "link_hover_color": "#e0afca",
+         "link_color": "var(--olo-color-text-muted)",
+         "link_hover_color": "var(--olo-color-link)",
          "items": [
           { "title": "hello@aurora.events", "content": "#", "tag": "" },
           { "title": "+39 02 8841", "content": "#", "tag": "" },
@@ -210,7 +210,7 @@
         "type": "text-block",
         "settings": {
          "content": "<p>© 2026 Aurora — an OLOtheme demo.</p>",
-         "text_color": "#94809a",
+         "text_color": "var(--olo-color-text-muted)",
          "font_size": "12",
          "text_align": "left"
         },
@@ -232,7 +232,7 @@
         "type": "text-block",
         "settings": {
          "content": "<p>Built with OLObuild</p>",
-         "text_color": "#94809a",
+         "text_color": "var(--olo-color-text-muted)",
          "font_size": "12",
          "text_align": "right"
         },

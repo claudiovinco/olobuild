@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0b0d18"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -45,9 +45,9 @@
          "cta2_text": "See how it works",
          "cta2_url": "#features",
          "glow_on": true,
-         "glow_color": "#6c8cff",
+         "glow_color": "var(--olo-color-primary)",
          "grid_on": true,
-         "grid_color": "rgba(255,255,255,0.04)",
+         "grid_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 4%, transparent)",
          "grid_size": 48,
          "mock_mode": "media",
          "mock_url": "app.circuit.io / workspace / releases",
@@ -136,19 +136,19 @@
            "alt": "1"
           }
          ],
-         "bg_color": "#0b0d18",
-         "panel_color": "#141a2e",
+         "bg_color": "var(--olo-color-background)",
+         "panel_color": "var(--olo-color-muted)",
          "panel2_color": "#1b2238",
          "cell_color": "#11142270",
-         "accent": "#6c8cff",
-         "accent2": "#b08bff",
-         "accent_on": "#ffffff",
+         "accent": "var(--olo-color-primary)",
+         "accent2": "var(--olo-color-secondary)",
+         "accent_on": "var(--olo-color-primary-contrast)",
          "down_color": "",
-         "text_color": "#ffffff",
-         "sub_color": "#8a90a8",
-         "pill_text_color": "#c9cde0",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "sub_color": "var(--olo-color-text-muted)",
+         "pill_text_color": "var(--olo-color-text)",
          "pill_bg": "rgba(255,255,255,0.05)",
-         "line_color": "rgba(255,255,255,0.09)",
+         "line_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 9%, transparent)",
          "pill_mono": false,
          "mono_meta": true
         },
@@ -173,7 +173,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#141a2e"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -202,7 +202,7 @@
          "headline_lines": [
           {
            "text": "Trusted by teams shipping every day",
-           "color": "#8a90a8",
+           "color": "var(--olo-color-text-muted)",
            "italic": false
           }
          ],
@@ -270,11 +270,11 @@
          "flow": "wrap",
          "gap": 16,
          "font_family": "sans-serif",
-         "text_color": "#8a90a8",
+         "text_color": "var(--olo-color-text-muted)",
          "text_size": 13,
          "pill_bg": "rgba(255,255,255,.06)",
-         "pill_border": "rgba(255,255,255,.09)",
-         "pill_text_color": "#8a90a8"
+         "pill_border": "color-mix(in srgb, var(--olo-color-primary-contrast) 9%, transparent)",
+         "pill_text_color": "var(--olo-color-text-muted)"
         },
         "style": {},
         "advanced": {},
@@ -297,7 +297,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0b0d18"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -324,18 +324,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// the platform",
-         "eyebrow_color": "#6c8cff",
-         "eyebrow_dot_color": "#6c8cff",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Everything between idea and",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           },
           {
            "text": "ship",
-           "color": "#6c8cff",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -347,7 +347,7 @@
          "tagline_show": true,
          "tagline_text": "One connected workspace for planning, building and releasing — so nothing falls through the cracks.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8a90a8",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 16
@@ -392,7 +392,7 @@
           "type": "solid",
           "color": "#1b2238"
          },
-         "card_color": "#8a90a8",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": {
           "tl": 16,
           "tr": 16,
@@ -406,9 +406,9 @@
          "show_arrow": false,
          "show_footer": false,
          "show_media": false,
-         "icon_color": "#6c8cff",
-         "icon_bg_color": "rgba(108,140,255,.14)",
-         "title_color": "#ffffff",
+         "icon_color": "var(--olo-color-primary)",
+         "icon_bg_color": "color-mix(in srgb, var(--olo-color-primary) 14%, transparent)",
+         "title_color": "var(--olo-color-primary-contrast)",
          "title_font_family": "sans-serif",
          "title_size": 21,
          "title_weight": "600",
@@ -464,7 +464,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0b0d18"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -494,18 +494,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// automation",
-         "eyebrow_color": "#6c8cff",
-         "eyebrow_dot_color": "#6c8cff",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Automate the work",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           },
           {
            "text": "nobody wants to do",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           }
          ],
@@ -515,7 +515,7 @@
          "headline_align": "left",
          "tagline_show": true,
          "tagline_text": "Circuit watches your pipeline and handles the routine — assigning reviewers, chasing approvals, updating status, closing the loop.",
-         "tagline_text_color": "#8a90a8",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "stack",
          "gap": 14
@@ -544,7 +544,7 @@
          ],
          "icon_default": "check",
          "icon_color": "#4fe0c0",
-         "text_color": "#c9cde0",
+         "text_color": "var(--olo-color-text)",
          "text_align": "left",
          "spacing": "12",
          "icon_size": "18",
@@ -570,7 +570,7 @@
          "alignment": "left",
          "full_width": false,
          "bg_color": "rgba(255,255,255,.06)",
-         "text_color": "#ffffff",
+         "text_color": "var(--olo-color-primary-contrast)",
          "font_size": 15,
          "font_weight": "600",
          "border_radius": {
@@ -593,7 +593,7 @@
           "left": 1,
           "linked": true,
           "style": "solid",
-          "color": "rgba(255,255,255,.16)"
+          "color": "color-mix(in srgb, var(--olo-color-primary-contrast) 16%, transparent)"
          },
          "shadow": "none",
          "hover_effect": "lift"
@@ -632,7 +632,7 @@
           "left": 1,
           "linked": true,
           "style": "solid",
-          "color": "rgba(255,255,255,.09)"
+          "color": "color-mix(in srgb, var(--olo-color-primary-contrast) 9%, transparent)"
          },
          "shadow": "none"
         },
@@ -657,7 +657,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0b0d18"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -700,7 +700,7 @@
           "left": 1,
           "linked": true,
           "style": "solid",
-          "color": "rgba(255,255,255,.09)"
+          "color": "color-mix(in srgb, var(--olo-color-primary-contrast) 9%, transparent)"
          },
          "shadow": "none"
         },
@@ -725,18 +725,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// insights",
-         "eyebrow_color": "#6c8cff",
-         "eyebrow_dot_color": "#6c8cff",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Decisions backed",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           },
           {
            "text": "by your own data",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           }
          ],
@@ -746,7 +746,7 @@
          "headline_align": "left",
          "tagline_show": true,
          "tagline_text": "Stop guessing where things slow down. Circuit measures cycle time, throughput and bottlenecks across every team in real time.",
-         "tagline_text_color": "#8a90a8",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "stack",
          "gap": 14
@@ -775,7 +775,7 @@
          ],
          "icon_default": "check",
          "icon_color": "#4fe0c0",
-         "text_color": "#c9cde0",
+         "text_color": "var(--olo-color-text)",
          "text_align": "left",
          "spacing": "12",
          "icon_size": "18",
@@ -801,7 +801,7 @@
          "alignment": "left",
          "full_width": false,
          "bg_color": "rgba(255,255,255,.06)",
-         "text_color": "#ffffff",
+         "text_color": "var(--olo-color-primary-contrast)",
          "font_size": 15,
          "font_weight": "600",
          "border_radius": {
@@ -824,7 +824,7 @@
           "left": 1,
           "linked": true,
           "style": "solid",
-          "color": "rgba(255,255,255,.16)"
+          "color": "color-mix(in srgb, var(--olo-color-primary-contrast) 16%, transparent)"
          },
          "shadow": "none",
          "hover_effect": "lift"
@@ -850,7 +850,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0b0d18"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -882,11 +882,11 @@
          "prefix": "",
          "label": "Teams onboard",
          "icon_emoji": "",
-         "text_color": "#ffffff",
-         "number_color": "#ffffff",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "number_color": "var(--olo-color-primary-contrast)",
          "number_font_size": "52",
          "number_font_weight": "700",
-         "label_color": "#8a90a8",
+         "label_color": "var(--olo-color-text-muted)",
          "label_font_size": "13",
          "bg_type": "color",
          "bg_color": "transparent",
@@ -917,11 +917,11 @@
          "prefix": "",
          "label": "Less cycle time",
          "icon_emoji": "",
-         "text_color": "#ffffff",
-         "number_color": "#ffffff",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "number_color": "var(--olo-color-primary-contrast)",
          "number_font_size": "52",
          "number_font_weight": "700",
-         "label_color": "#8a90a8",
+         "label_color": "var(--olo-color-text-muted)",
          "label_font_size": "13",
          "bg_type": "color",
          "bg_color": "transparent",
@@ -952,11 +952,11 @@
          "prefix": "",
          "label": "Platform uptime",
          "icon_emoji": "",
-         "text_color": "#ffffff",
-         "number_color": "#ffffff",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "number_color": "var(--olo-color-primary-contrast)",
          "number_font_size": "52",
          "number_font_weight": "700",
-         "label_color": "#8a90a8",
+         "label_color": "var(--olo-color-text-muted)",
          "label_font_size": "13",
          "bg_type": "color",
          "bg_color": "transparent",
@@ -987,11 +987,11 @@
          "prefix": "",
          "label": "Integrations",
          "icon_emoji": "",
-         "text_color": "#ffffff",
-         "number_color": "#ffffff",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "number_color": "var(--olo-color-primary-contrast)",
          "number_font_size": "52",
          "number_font_weight": "700",
-         "label_color": "#8a90a8",
+         "label_color": "var(--olo-color-text-muted)",
          "label_font_size": "13",
          "bg_type": "color",
          "bg_color": "transparent",
@@ -1019,7 +1019,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#141a2e"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -1046,18 +1046,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// integrations",
-         "eyebrow_color": "#6c8cff",
-         "eyebrow_dot_color": "#6c8cff",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Plays nicely with",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           },
           {
            "text": "your stack",
-           "color": "#6c8cff",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -1069,7 +1069,7 @@
          "tagline_show": true,
          "tagline_text": "Connect in a click — Circuit syncs both ways and stays out of the way.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8a90a8",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 16
@@ -1148,11 +1148,11 @@
          "flow": "wrap",
          "gap": 12,
          "font_family": "sans-serif",
-         "text_color": "#8a90a8",
+         "text_color": "var(--olo-color-text-muted)",
          "text_size": 13,
          "pill_bg": "#1b2238",
-         "pill_border": "rgba(255,255,255,.09)",
-         "pill_text_color": "#c9cde0"
+         "pill_border": "color-mix(in srgb, var(--olo-color-primary-contrast) 9%, transparent)",
+         "pill_text_color": "var(--olo-color-text)"
         },
         "style": {},
         "advanced": {},
@@ -1175,7 +1175,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0b0d18"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -1202,18 +1202,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// pricing",
-         "eyebrow_color": "#6c8cff",
-         "eyebrow_dot_color": "#6c8cff",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Simple, scales",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           },
           {
            "text": "with you",
-           "color": "#6c8cff",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -1225,7 +1225,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8a90a8",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 16
@@ -1273,9 +1273,9 @@
          "cta_url": "#",
          "cta_target": "_self",
          "cta_bg_color": "rgba(255,255,255,.06)",
-         "cta_text_color": "#ffffff",
+         "cta_text_color": "var(--olo-color-primary-contrast)",
          "cta_border_width": "1",
-         "cta_border_color": "rgba(255,255,255,.09)",
+         "cta_border_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 9%, transparent)",
          "cta_width": "100",
          "cta_radius": "9",
          "cta_hover_effect": "lift",
@@ -1283,12 +1283,12 @@
          "check_style": "checkmark",
          "check_size": "14",
          "check_color": "#4fe0c0",
-         "price_color": "#ffffff",
-         "text_color": "#c9cde0",
-         "accent_color": "#6c8cff",
-         "bg_color": "#141a2e",
+         "price_color": "var(--olo-color-primary-contrast)",
+         "text_color": "var(--olo-color-text)",
+         "accent_color": "var(--olo-color-primary)",
+         "bg_color": "var(--olo-color-muted)",
          "border_radius": "18",
-         "border_color": "rgba(255,255,255,.09)"
+         "border_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 9%, transparent)"
         },
         "style": {},
         "advanced": {},
@@ -1320,8 +1320,8 @@
          "cta_text": "Start free trial",
          "cta_url": "#",
          "cta_target": "_self",
-         "cta_bg_color": "#6c8cff",
-         "cta_text_color": "#ffffff",
+         "cta_bg_color": "var(--olo-color-primary)",
+         "cta_text_color": "var(--olo-color-primary-contrast)",
          "cta_border_width": "0",
          "cta_border_color": "",
          "cta_width": "100",
@@ -1331,17 +1331,17 @@
          "badge_text": "Most popular",
          "badge_style": "pill",
          "badge_radius": "6",
-         "badge_bg_color": "rgba(108,140,255,.14)",
-         "badge_text_color": "#6c8cff",
+         "badge_bg_color": "color-mix(in srgb, var(--olo-color-primary) 14%, transparent)",
+         "badge_text_color": "var(--olo-color-primary)",
          "check_style": "checkmark",
          "check_size": "14",
          "check_color": "#4fe0c0",
-         "price_color": "#ffffff",
-         "text_color": "#c9cde0",
-         "accent_color": "#6c8cff",
-         "bg_color": "#141a2e",
+         "price_color": "var(--olo-color-primary-contrast)",
+         "text_color": "var(--olo-color-text)",
+         "accent_color": "var(--olo-color-primary)",
+         "bg_color": "var(--olo-color-muted)",
          "border_radius": "18",
-         "border_color": "#6c8cff"
+         "border_color": "var(--olo-color-primary)"
         },
         "style": {},
         "advanced": {},
@@ -1374,9 +1374,9 @@
          "cta_url": "#",
          "cta_target": "_self",
          "cta_bg_color": "rgba(255,255,255,.06)",
-         "cta_text_color": "#ffffff",
+         "cta_text_color": "var(--olo-color-primary-contrast)",
          "cta_border_width": "1",
-         "cta_border_color": "rgba(255,255,255,.09)",
+         "cta_border_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 9%, transparent)",
          "cta_width": "100",
          "cta_radius": "9",
          "cta_hover_effect": "lift",
@@ -1384,12 +1384,12 @@
          "check_style": "checkmark",
          "check_size": "14",
          "check_color": "#4fe0c0",
-         "price_color": "#ffffff",
-         "text_color": "#c9cde0",
-         "accent_color": "#6c8cff",
-         "bg_color": "#141a2e",
+         "price_color": "var(--olo-color-primary-contrast)",
+         "text_color": "var(--olo-color-text)",
+         "accent_color": "var(--olo-color-primary)",
+         "bg_color": "var(--olo-color-muted)",
          "border_radius": "18",
-         "border_color": "rgba(255,255,255,.09)"
+         "border_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 9%, transparent)"
         },
         "style": {},
         "advanced": {},
@@ -1412,7 +1412,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#141a2e"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -1444,14 +1444,14 @@
          "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
-         "text_color": "#ffffff",
+         "text_color": "var(--olo-color-primary-contrast)",
          "border_radius": "0",
          "avatar": "",
-         "quote_accent_color": "#6c8cff",
+         "quote_accent_color": "var(--olo-color-primary)",
          "quote_font": "heading",
          "quote_uppercase": false,
          "author_uppercase": false,
-         "author_color": "#8a90a8",
+         "author_color": "var(--olo-color-text-muted)",
          "quote_size": 0
         },
         "style": {},
@@ -1475,7 +1475,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0b0d18"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -1509,10 +1509,10 @@
          "count_label": "add-ons",
          "cta_text": "Upgrade plan",
          "cta_url": "#pricing",
-         "zone_accent": "#6c8cff",
-         "zone_on": "#ffffff",
-         "card_bg": "#141a2e",
-         "card_border": "rgba(255,255,255,.09)",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
+         "card_bg": "var(--olo-color-muted)",
+         "card_border": "color-mix(in srgb, var(--olo-color-primary-contrast) 9%, transparent)",
          "align": "left",
          "items": [
           {
@@ -1574,7 +1574,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0b0d18"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -1608,15 +1608,15 @@
          "cta2_text": "Book a demo",
          "cta2_url": "#",
          "cta2_bg": "rgba(255,255,255,.06)",
-         "cta2_color": "#ffffff",
-         "cta2_border": "rgba(255,255,255,.16)",
+         "cta2_color": "var(--olo-color-primary-contrast)",
+         "cta2_border": "color-mix(in srgb, var(--olo-color-primary-contrast) 16%, transparent)",
          "bg": {
           "type": "gradient",
           "gradient": "linear-gradient(160deg, rgba(108,140,255,.18), rgba(176,139,255,.06))"
          },
-         "text_color": "#ffffff",
-         "accent_color": "#6c8cff",
-         "subtitle_color": "#c9cde0",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
          "cta_bg": "#ffffff",
          "cta_color": "#0e1020",
          "cta_radius": {

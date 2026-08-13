@@ -3,7 +3,7 @@
   "id": "ve-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 64, "padding_bottom": 34 },
-  "style": { "bg": { "type": "solid", "color": "#121216" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -20,7 +20,7 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "ve-fbrand", "type": "headline", "settings": { "heading": "Vela★", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "64", "heading_uppercase": true, "heading_color": "#ece9e3", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ve-fbrand", "type": "headline", "settings": { "heading": "Vela★", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "64", "heading_uppercase": true, "heading_color": "var(--olo-color-text)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -31,7 +31,7 @@
       "advanced": {},
       "children": [
        { "id": "ve-fh0", "type": "headline", "settings": { "heading": "Menu", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "11", "heading_uppercase": true, "heading_color": "#6a6862", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ve-fn0", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#9b988f", "link_hover_color": "#f4a23b", "items": [ { "title": "Work", "content": "#work", "tag": "" }, { "title": "Studio", "content": "#studio", "tag": "" }, { "title": "Services", "content": "#services", "tag": "" }, { "title": "Contact", "content": "#contact", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ve-fn0", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Work", "content": "#work", "tag": "" }, { "title": "Studio", "content": "#studio", "tag": "" }, { "title": "Services", "content": "#services", "tag": "" }, { "title": "Contact", "content": "#contact", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -42,7 +42,7 @@
       "advanced": {},
       "children": [
        { "id": "ve-fh1", "type": "headline", "settings": { "heading": "Social", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "11", "heading_uppercase": true, "heading_color": "#6a6862", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ve-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#9b988f", "link_hover_color": "#f4a23b", "items": [ { "title": "Instagram", "content": "#", "tag": "" }, { "title": "Behance", "content": "#", "tag": "" }, { "title": "LinkedIn", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ve-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Instagram", "content": "#", "tag": "" }, { "title": "Behance", "content": "#", "tag": "" }, { "title": "LinkedIn", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -53,7 +53,7 @@
       "advanced": {},
       "children": [
        { "id": "ve-fh2", "type": "headline", "settings": { "heading": "Studio", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "11", "heading_uppercase": true, "heading_color": "#6a6862", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "ve-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#9b988f", "link_hover_color": "#f4a23b", "items": [ { "title": "Via Tortona 9, Milan", "content": "#", "tag": "" }, { "title": "hello@vela.studio", "content": "mailto:hello@vela.studio", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "ve-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Via Tortona 9, Milan", "content": "#", "tag": "" }, { "title": "hello@vela.studio", "content": "mailto:hello@vela.studio", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]

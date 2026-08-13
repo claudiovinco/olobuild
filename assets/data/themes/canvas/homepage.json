@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1c1a17"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -40,13 +40,13 @@
          "accent_text": "Veld",
          "subhead": "Large-scale abstracts about colour, weather and memory.",
          "hint_text": "↑ drag the colour around",
-         "bg_color": "#1c1a17",
-         "glow_color": "rgba(224,177,58,0.08)",
-         "eyebrow_color": "#e0b13a",
+         "bg_color": "var(--olo-color-background)",
+         "glow_color": "color-mix(in srgb, var(--olo-color-primary) 8%, transparent)",
+         "eyebrow_color": "var(--olo-color-primary)",
          "text_color": "#f0ebe1",
          "accent_color": "",
          "sub_color": "#f0ebe1",
-         "hint_color": "#857c6d",
+         "hint_color": "var(--olo-color-text-muted)",
          "smear_palette": "#e0b13a,#cc5b3f,#5b86b8,#f0ebe1",
          "smear_enabled": true,
          "min_height": 72
@@ -72,7 +72,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#211f1b"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -99,8 +99,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Selected work",
-         "eyebrow_color": "#e0b13a",
-         "eyebrow_dot_color": "#e0b13a",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -110,7 +110,7 @@
           },
           {
            "text": "paintings",
-           "color": "#e0b13a",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -122,7 +122,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#b3aa9b",
+         "tagline_text_color": "var(--olo-color-text)",
          "tagline_text_size": 16,
          "layout": "stack",
          "gap": 12
@@ -160,16 +160,16 @@
          "media_aspect": "4/3",
          "media_tall_aspect": "4/5",
          "media_bg": "#272320",
-         "media_label_color": "#857c6d",
+         "media_label_color": "var(--olo-color-text-muted)",
          "hover_zoom": true,
          "title_font_family": "heading",
          "title_color": "#f0ebe1",
          "title_size": 24,
          "title_weight": "400",
-         "meta_color": "#857c6d",
+         "meta_color": "var(--olo-color-text-muted)",
          "meta_size": 12,
          "show_desc": true,
-         "desc_color": "#857c6d",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 14,
          "items": [
           {
@@ -257,25 +257,25 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "About",
-         "eyebrow_color": "#e0b13a",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline": "Painting the",
          "accent": "edges",
          "headline_tail": "of weather",
          "accent_italic": true,
          "uppercase": false,
          "headline_color": "#f0ebe1",
-         "accent_color": "#e0b13a",
+         "accent_color": "var(--olo-color-primary)",
          "headline_weight": "400",
          "headline_size": "52",
          "lead": "Jonah Veld (b. 1986) works in oil and hand-ground pigment from a harbour studio. His large abstracts begin outdoors, in notebooks and weather, and are finished slowly indoors over months.\n\nExhibited across Europe and held in private and public collections, his work is represented by Atelier 9.",
-         "lead_color": "#b3aa9b",
+         "lead_color": "var(--olo-color-text)",
          "signature": "— studio notes",
          "stats": [],
          "cta_text": "",
          "cta_url": "#contact",
          "cta_style": "button",
-         "cta_bg": "#e0b13a",
-         "cta_color": "#100e0c",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta2_text": "",
          "cta2_url": "",
          "cta2_style": "outline",
@@ -321,7 +321,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1c1a17"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -348,8 +348,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Selected shows",
-         "eyebrow_color": "#e0b13a",
-         "eyebrow_dot_color": "#e0b13a",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -359,7 +359,7 @@
           },
           {
            "text": "",
-           "color": "#e0b13a",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -371,7 +371,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#857c6d",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -474,7 +474,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#211f1b"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -504,8 +504,8 @@
          "intro": "Painting is mostly mixing. Tap two or three pigments from my working palette and watch the colour settle — the same muddy, hopeful guesswork I do every morning.",
          "max": 3,
          "empty_label": "Pick pigments to mix",
-         "zone_accent": "#e0b13a",
-         "zone_on": "#100e0c",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "card_bg": "#272320",
          "card_border": "rgba(240,235,225,.12)",
          "align": "left",
@@ -516,7 +516,7 @@
           },
           {
            "name": "Yellow Ochre",
-           "color": "#e0b13a"
+           "color": "var(--olo-color-primary)"
           },
           {
            "name": "Ultramarine",
@@ -557,7 +557,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1c1a17"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -592,16 +592,16 @@
          "cta2_url": "/tideline/",
          "cta2_bg": "transparent",
          "cta2_color": "#f0ebe1",
-         "cta2_border": "rgba(224,177,58,.42)",
+         "cta2_border": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "bg": {
           "type": "solid",
-          "color": "#100e0c"
+          "color": "var(--olo-color-primary-contrast)"
          },
          "text_color": "#f0ebe1",
-         "accent_color": "#e0b13a",
-         "subtitle_color": "#b3aa9b",
-         "cta_bg": "#e0b13a",
-         "cta_color": "#100e0c",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 2,
           "tr": 2,
@@ -628,22 +628,22 @@
           "top": {
            "width": 1,
            "style": "solid",
-           "color": "rgba(224,177,58,.42)"
+           "color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)"
           },
           "right": {
            "width": 1,
            "style": "solid",
-           "color": "rgba(224,177,58,.42)"
+           "color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)"
           },
           "bottom": {
            "width": 1,
            "style": "solid",
-           "color": "rgba(224,177,58,.42)"
+           "color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)"
           },
           "left": {
            "width": 1,
            "style": "solid",
-           "color": "rgba(224,177,58,.42)"
+           "color": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)"
           }
          }
         },

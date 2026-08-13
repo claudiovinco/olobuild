@@ -12,7 +12,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0d3b3f"
+    "color": "var(--olo-color-secondary-contrast)"
    }
   },
   "advanced": {},
@@ -64,11 +64,11 @@
          "overlay_top": 0.55,
          "overlay_bottom": 0.85,
          "overlay_sides": false,
-         "accent": "#e9c46a",
-         "accent_on": "#0d3b3f",
-         "text_color": "#ffffff",
-         "sub_color": "rgba(255,255,255,.82)",
-         "eyebrow_color": "#e9c46a"
+         "accent": "var(--olo-color-secondary)",
+         "accent_on": "var(--olo-color-secondary-contrast)",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "sub_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 82%, transparent)",
+         "eyebrow_color": "var(--olo-color-secondary)"
         },
         "style": {},
         "advanced": {},
@@ -91,7 +91,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f5f1e8"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -135,13 +135,13 @@
          ],
          "button_text": "Find a trip",
          "button_url": "#cta",
-         "accent": "#e76f51",
-         "accent_on": "#ffffff",
+         "accent": "var(--olo-color-primary)",
+         "accent_on": "var(--olo-color-primary-contrast)",
          "bar_bg": "#ffffff",
          "field_bg": "transparent",
-         "field_border": "#e3ddcf",
-         "label_color": "#566260",
-         "value_color": "#1d2a29",
+         "field_border": "var(--olo-color-border)",
+         "label_color": "var(--olo-color-text-muted)",
+         "value_color": "var(--olo-color-text)",
          "radius": 14
         },
         "style": {},
@@ -165,7 +165,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f5f1e8"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -192,13 +192,13 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Where to next",
-         "eyebrow_color": "#e76f51",
-         "eyebrow_dot_color": "#e76f51",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Featured expeditions",
-           "color": "#1d2a29",
+           "color": "var(--olo-color-text)",
            "italic": false
           }
          ],
@@ -210,7 +210,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#566260",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "stack",
          "gap": 12
@@ -247,17 +247,17 @@
          "items_gap": 24,
          "media_aspect": "4/3",
          "media_tall_aspect": "4/5",
-         "media_bg": "#ece5d6",
-         "media_label_color": "#0d3b3f",
+         "media_bg": "var(--olo-color-muted)",
+         "media_label_color": "var(--olo-color-secondary-contrast)",
          "hover_zoom": true,
          "title_font_family": "heading",
-         "title_color": "#1d2a29",
+         "title_color": "var(--olo-color-text)",
          "title_size": 26,
          "title_weight": "600",
-         "meta_color": "#e76f51",
+         "meta_color": "var(--olo-color-primary)",
          "meta_size": 12,
          "show_desc": true,
-         "desc_color": "#566260",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 14,
          "items": [
           {
@@ -310,7 +310,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#ffffff"
+    "color": "var(--olo-color-primary-contrast)"
    }
   },
   "advanced": {},
@@ -354,7 +354,7 @@
           "bl": 20
          },
          "bg_type": "color",
-         "bg_color": "#ece5d6"
+         "bg_color": "var(--olo-color-muted)"
         },
         "style": {},
         "advanced": {},
@@ -377,13 +377,13 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Why Wander",
-         "eyebrow_color": "#e76f51",
-         "eyebrow_dot_color": "#e76f51",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Travel that's worth the distance",
-           "color": "#1d2a29",
+           "color": "var(--olo-color-text)",
            "italic": false
           }
          ],
@@ -395,7 +395,7 @@
          "tagline_show": true,
          "tagline_text": "We keep groups to twelve, hire guides who actually live where they lead, and route around the crowds — not into them.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#566260",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "stack",
          "gap": 12
@@ -420,7 +420,7 @@
           "type": "solid",
           "color": "transparent"
          },
-         "card_color": "#566260",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": {
           "tl": 0,
           "tr": 0,
@@ -435,14 +435,14 @@
          "show_footer": false,
          "show_media": false,
          "icon_color": "#16615f",
-         "icon_bg_color": "#ece5d6",
-         "title_color": "#1d2a29",
+         "icon_bg_color": "var(--olo-color-muted)",
+         "title_color": "var(--olo-color-text)",
          "title_font_family": "heading",
          "title_size": 19,
          "title_weight": "600",
          "title_italic": false,
          "description_size": 14,
-         "description_color": "#566260",
+         "description_color": "var(--olo-color-text-muted)",
          "card_hover_effect": "none",
          "items": [
           {
@@ -476,7 +476,7 @@
          "alignment": "left",
          "full_width": false,
          "bg_color": "#0d3b3f",
-         "text_color": "#f5f1e8",
+         "text_color": "var(--olo-color-background)",
          "font_size": 15,
          "font_weight": "600",
          "border_radius": {
@@ -517,7 +517,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#ffffff"
+    "color": "var(--olo-color-primary-contrast)"
    }
   },
   "advanced": {},
@@ -544,13 +544,13 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Find your pace",
-         "eyebrow_color": "#e76f51",
-         "eyebrow_dot_color": "#e76f51",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Trips for every kind of traveller",
-           "color": "#1d2a29",
+           "color": "var(--olo-color-text)",
            "italic": false
           }
          ],
@@ -562,7 +562,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#566260",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -600,16 +600,16 @@
          "media_aspect": "4/3",
          "media_tall_aspect": "4/5",
          "media_bg": "#114a4f",
-         "media_label_color": "#e9c46a",
+         "media_label_color": "var(--olo-color-secondary)",
          "hover_zoom": true,
          "title_font_family": "heading",
-         "title_color": "#ffffff",
+         "title_color": "var(--olo-color-primary-contrast)",
          "title_size": 20,
          "title_weight": "600",
-         "meta_color": "rgba(255,255,255,.55)",
+         "meta_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 55%, transparent)",
          "meta_size": 11,
          "show_desc": false,
-         "desc_color": "rgba(255,255,255,.75)",
+         "desc_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 75%, transparent)",
          "desc_size": 13.5,
          "items": [
           {
@@ -671,7 +671,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0d3b3f"
+    "color": "var(--olo-color-secondary-contrast)"
    }
   },
   "advanced": {},
@@ -703,11 +703,11 @@
          "prefix": "",
          "label": "Countries",
          "icon_emoji": "",
-         "text_color": "#e9c46a",
-         "number_color": "#e9c46a",
+         "text_color": "var(--olo-color-secondary)",
+         "number_color": "var(--olo-color-secondary)",
          "number_font_size": "56",
          "number_font_weight": "700",
-         "label_color": "rgba(255,255,255,.7)",
+         "label_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 70%, transparent)",
          "label_font_size": "13",
          "bg_type": "color",
          "bg_color": "transparent",
@@ -738,11 +738,11 @@
          "prefix": "",
          "label": "Travellers guided",
          "icon_emoji": "",
-         "text_color": "#e9c46a",
-         "number_color": "#e9c46a",
+         "text_color": "var(--olo-color-secondary)",
+         "number_color": "var(--olo-color-secondary)",
          "number_font_size": "56",
          "number_font_weight": "700",
-         "label_color": "rgba(255,255,255,.7)",
+         "label_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 70%, transparent)",
          "label_font_size": "13",
          "bg_type": "color",
          "bg_color": "transparent",
@@ -773,11 +773,11 @@
          "prefix": "",
          "label": "Max group size",
          "icon_emoji": "",
-         "text_color": "#e9c46a",
-         "number_color": "#e9c46a",
+         "text_color": "var(--olo-color-secondary)",
+         "number_color": "var(--olo-color-secondary)",
          "number_font_size": "56",
          "number_font_weight": "700",
-         "label_color": "rgba(255,255,255,.7)",
+         "label_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 70%, transparent)",
          "label_font_size": "13",
          "bg_type": "color",
          "bg_color": "transparent",
@@ -808,11 +808,11 @@
          "prefix": "",
          "label": "Avg. rating",
          "icon_emoji": "",
-         "text_color": "#e9c46a",
-         "number_color": "#e9c46a",
+         "text_color": "var(--olo-color-secondary)",
+         "number_color": "var(--olo-color-secondary)",
          "number_font_size": "56",
          "number_font_weight": "700",
-         "label_color": "rgba(255,255,255,.7)",
+         "label_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 70%, transparent)",
          "label_font_size": "13",
          "bg_type": "color",
          "bg_color": "transparent",
@@ -840,7 +840,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f5f1e8"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -872,15 +872,15 @@
          "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
-         "text_color": "#1d2a29",
+         "text_color": "var(--olo-color-text)",
          "border_radius": "0",
          "avatar": "",
          "quote_font": "heading",
          "quote_size": 36,
          "quote_uppercase": false,
          "author_uppercase": false,
-         "star_color": "#e9c46a",
-         "quote_accent_color": "#e76f51",
+         "star_color": "var(--olo-color-secondary)",
+         "quote_accent_color": "var(--olo-color-primary)",
          "author_color": "#8a948f"
         },
         "style": {},
@@ -904,7 +904,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0d3b3f"
+    "color": "var(--olo-color-secondary-contrast)"
    }
   },
   "advanced": {},
@@ -939,11 +939,11 @@
           "type": "solid",
           "color": "#114a4f"
          },
-         "text_color": "#ffffff",
-         "accent_color": "#e9c46a",
-         "subtitle_color": "rgba(255,255,255,.8)",
-         "cta_bg": "#e9c46a",
-         "cta_color": "#0d3b3f",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-secondary)",
+         "subtitle_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 80%, transparent)",
+         "cta_bg": "var(--olo-color-secondary)",
+         "cta_color": "var(--olo-color-secondary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,
@@ -968,7 +968,7 @@
          "banner_padding": 80,
          "eyebrow_show": true,
          "eyebrow_text": "Let's plan it",
-         "eyebrow_color": "#e9c46a"
+         "eyebrow_color": "var(--olo-color-secondary)"
         },
         "style": {},
         "advanced": {},

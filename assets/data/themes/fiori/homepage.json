@@ -62,11 +62,11 @@
          "overlay_top": 0.4,
          "overlay_bottom": 0.6,
          "overlay_sides": false,
-         "accent": "#cfa6a0",
-         "accent_on": "#ffffff",
-         "text_color": "#ffffff",
-         "sub_color": "rgba(255,255,255,.85)",
-         "eyebrow_color": "rgba(255,255,255,.85)"
+         "accent": "var(--olo-color-secondary)",
+         "accent_on": "var(--olo-color-primary-contrast)",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "sub_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 85%, transparent)",
+         "eyebrow_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 85%, transparent)"
         },
         "style": {},
         "advanced": {},
@@ -119,7 +119,7 @@
          "headline_lines": [
           {
            "text": "Counting down to forever",
-           "color": "#cfa6a0",
+           "color": "var(--olo-color-secondary)",
            "italic": false
           }
          ],
@@ -184,8 +184,8 @@
          "expire_action": "message",
          "expire_message": "The big day has arrived!",
          "bg_color": "transparent",
-         "accent_color": "#ffffff",
-         "text_color": "rgba(255,255,255,.55)",
+         "accent_color": "var(--olo-color-primary-contrast)",
+         "text_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 55%, transparent)",
          "separator_color": "transparent",
          "number_font_size": "60",
          "number_font_weight": "400",
@@ -224,7 +224,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f3efe6"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -255,18 +255,18 @@
          "accent": "",
          "headline_tail": "",
          "uppercase": true,
-         "headline_color": "#34372e",
-         "accent_color": "#5f6f4e",
+         "headline_color": "var(--olo-color-text)",
+         "accent_color": "var(--olo-color-primary)",
          "headline_weight": "400",
          "headline_size": "34",
          "lead": "We met eight years ago, sheltering from the same downpour under the same café awning. Marta ordered the last cornetto; Elia has never quite forgiven her, and never quite left her side since. Two cities, one very stubborn houseplant, and a thousand small mornings later — we’re doing the most natural thing in the world. We’d love you there when we do.",
-         "lead_color": "#6a6d60",
+         "lead_color": "var(--olo-color-text-muted)",
          "stats": [],
          "signature": "",
          "cta_text": "All the details",
          "cta_url": "#details",
          "cta_style": "outline",
-         "cta_color": "#5f6f4e",
+         "cta_color": "var(--olo-color-primary)",
          "cta_bg": "transparent",
          "cta2_text": "",
          "cta2_url": "",
@@ -336,7 +336,7 @@
          "headline_lines": [
           {
            "text": "Where & when",
-           "color": "#34372e",
+           "color": "var(--olo-color-text)",
            "italic": false
           }
          ],
@@ -348,7 +348,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6a6d60",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 14
@@ -393,7 +393,7 @@
           "type": "solid",
           "color": "#fbf9f3"
          },
-         "card_color": "#6a6d60",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": {
           "tl": 6,
           "tr": 6,
@@ -407,14 +407,14 @@
          "show_arrow": false,
          "show_footer": true,
          "show_media": false,
-         "icon_color": "#5f6f4e",
+         "icon_color": "var(--olo-color-primary)",
          "icon_bg_color": "transparent",
-         "icon_border_color": "#cfa6a0",
+         "icon_border_color": "var(--olo-color-secondary)",
          "icon_border_width": 1,
          "icon_shape": "circle",
          "icon_size": 24,
          "icon_container_size": 54,
-         "title_color": "#34372e",
+         "title_color": "var(--olo-color-text)",
          "title_font_family": "serif",
          "title_size": 22,
          "title_weight": "400",
@@ -423,7 +423,7 @@
          "footer_size": 17,
          "footer_color": "#bb8b84",
          "footer_font_family": "serif",
-         "card_border_color": "#e3ddce",
+         "card_border_color": "var(--olo-color-border)",
          "card_border_width": 1,
          "card_hover_effect": "lift",
          "items": [
@@ -501,7 +501,7 @@
          "headline_lines": [
           {
            "text": "How the day unfolds",
-           "color": "#34372e",
+           "color": "var(--olo-color-text)",
            "italic": false
           }
          ],
@@ -513,7 +513,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6a6d60",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 14
@@ -558,12 +558,12 @@
          "tl_line": "solid",
          "tl_transparent": true,
          "tl_show_tag": false,
-         "tl_rail_color": "#e3ddce",
+         "tl_rail_color": "var(--olo-color-border)",
          "tl_card_bg": "transparent",
-         "tl_title_color": "#34372e",
+         "tl_title_color": "var(--olo-color-text)",
          "tl_title_family": "heading",
-         "tl_text_color": "#6a6d60",
-         "tl_yr_color": "#5f6f4e",
+         "tl_text_color": "var(--olo-color-text-muted)",
+         "tl_yr_color": "var(--olo-color-primary)",
          "tl_yr_family": "heading",
          "items": [
           { "id": "fi-tl-1", "title": "Arrival & welcome", "tag": "", "description": "Find your seat in the gardens — a glass of something cold awaits.", "date": "3:30 pm", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
@@ -594,7 +594,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f3efe6"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -627,7 +627,7 @@
          "headline_lines": [
           {
            "text": "A few favourites",
-           "color": "#34372e",
+           "color": "var(--olo-color-text)",
            "italic": false
           }
          ],
@@ -639,7 +639,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6a6d60",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 14
@@ -740,13 +740,13 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "join us",
-         "eyebrow_color": "#cfa6a0",
-         "eyebrow_dot_color": "#cfa6a0",
+         "eyebrow_color": "var(--olo-color-secondary)",
+         "eyebrow_dot_color": "var(--olo-color-secondary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Kindly reply",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           }
          ],
@@ -758,7 +758,7 @@
          "tagline_show": true,
          "tagline_text": "We’d be honoured to have you there. Please let us know by 1 July 2026.",
          "tagline_text_italic": false,
-         "tagline_text_color": "rgba(255,255,255,.82)",
+         "tagline_text_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 82%, transparent)",
          "tagline_text_size": 16,
          "layout": "center",
          "gap": 14,
@@ -880,12 +880,12 @@
          "form_max_width": "560",
          "form_align": "center",
          "form_layout": "stacked",
-         "label_color": "rgba(255,255,255,.7)",
+         "label_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 70%, transparent)",
          "label_size": "13",
          "label_weight": "500",
          "input_bg": "rgba(255,255,255,.08)",
-         "input_color": "#ffffff",
-         "input_border_color": "rgba(255,255,255,.3)",
+         "input_color": "var(--olo-color-primary-contrast)",
+         "input_border_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 30%, transparent)",
          "input_border_width": "1",
          "input_border_style": "box",
          "input_radius": {
@@ -896,12 +896,12 @@
           "linked": true
          },
          "input_size": "default",
-         "input_focus_border": "#cfa6a0",
+         "input_focus_border": "var(--olo-color-secondary)",
          "input_focus_shadow": false,
          "input_placeholder_opacity": "0.5",
          "gap": "12",
-         "submit_bg": "#cfa6a0",
-         "submit_color": "#ffffff",
+         "submit_bg": "var(--olo-color-secondary)",
+         "submit_color": "var(--olo-color-primary-contrast)",
          "submit_radius": {
           "tl": 999,
           "tr": 999,

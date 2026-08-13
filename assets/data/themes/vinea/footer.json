@@ -3,7 +3,7 @@
   "id": "vi-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
-  "style": { "bg": { "type": "solid", "color": "#33121f" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -21,7 +21,7 @@
       "advanced": {},
       "children": [
        { "id": "vi-fbrand", "type": "headline", "settings": { "heading": "Vinea", "tag": "div", "alignment": "left", "heading_font_size": "25", "heading_uppercase": false, "heading_color": "#f1e4d8", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "vi-fbtext", "type": "text-block", "settings": { "content": "<p>Family winery in the hills. Small-lot, estate-grown, made the patient way.</p>", "text_color": "#977483", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "vi-fbtext", "type": "text-block", "settings": { "content": "<p>Family winery in the hills. Small-lot, estate-grown, made the patient way.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -32,7 +32,7 @@
       "advanced": {},
       "children": [
        { "id": "vi-fh1", "type": "headline", "settings": { "heading": "Wine", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f1e4d8", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "vi-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#977483", "link_hover_color": "#c79a4e", "items": [ { "title": "The wines", "content": "/vinea-wines/", "tag": "" }, { "title": "Cellar club", "content": "#club", "tag": "" }, { "title": "Trade & export", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "vi-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "The wines", "content": "/vinea-wines/", "tag": "" }, { "title": "Cellar club", "content": "#club", "tag": "" }, { "title": "Trade & export", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -43,7 +43,7 @@
       "advanced": {},
       "children": [
        { "id": "vi-fh2", "type": "headline", "settings": { "heading": "Visit", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f1e4d8", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "vi-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#977483", "link_hover_color": "#c79a4e", "items": [ { "title": "Tastings", "content": "#experiences", "tag": "" }, { "title": "Long lunch", "content": "#experiences", "tag": "" }, { "title": "Our estate", "content": "#story", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "vi-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Tastings", "content": "#experiences", "tag": "" }, { "title": "Long lunch", "content": "#experiences", "tag": "" }, { "title": "Our estate", "content": "#story", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -54,7 +54,7 @@
       "advanced": {},
       "children": [
        { "id": "vi-fh3", "type": "headline", "settings": { "heading": "Find us", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f1e4d8", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "vi-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#977483", "link_hover_color": "#c79a4e", "items": [ { "title": "Podere Vinea, Toscana", "content": "#", "tag": "" }, { "title": "Wed–Sun · from 10am", "content": "#experiences", "tag": "" }, { "title": "ciao@vinea.wine", "content": "mailto:ciao@vinea.wine", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "vi-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Podere Vinea, Toscana", "content": "#", "tag": "" }, { "title": "Wed–Sun · from 10am", "content": "#experiences", "tag": "" }, { "title": "ciao@vinea.wine", "content": "mailto:ciao@vinea.wine", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "vi-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "vi-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Vinea — an OLOtheme demo.</p>", "text_color": "#977483", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "vi-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Vinea — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "vi-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "vi-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#977483", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "vi-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

@@ -12,7 +12,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#232a1c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -52,7 +52,7 @@
          "meta_text": "",
          "scroll_hint": "",
          "bg_image": "",
-         "bg_color": "#232a1c",
+         "bg_color": "var(--olo-color-background)",
          "media_label": "hero — trail at altitude, pack & figure, wide",
          "text_position": "bottom-left",
          "text_align": "left",
@@ -64,11 +64,11 @@
          "overlay_top": 0.45,
          "overlay_bottom": 0.92,
          "overlay_sides": false,
-         "accent": "#c2ab63",
-         "accent_on": "#161b11",
+         "accent": "var(--olo-color-primary)",
+         "accent_on": "var(--olo-color-primary-contrast)",
          "text_color": "#ffffff",
-         "sub_color": "#eef0e3",
-         "eyebrow_color": "#c2ab63"
+         "sub_color": "var(--olo-color-secondary-contrast)",
+         "eyebrow_color": "var(--olo-color-primary)"
         },
         "style": {},
         "advanced": {},
@@ -91,7 +91,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#232a1c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -118,18 +118,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "New & restocked",
-         "eyebrow_color": "#c2ab63",
-         "eyebrow_dot_color": "#c2ab63",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "This season's ",
-           "color": "#eef0e3",
+           "color": "var(--olo-color-secondary-contrast)",
            "italic": false
           },
           {
            "text": "gear",
-           "color": "#c2ab63",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -141,7 +141,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#79806a",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "stack",
          "gap": 12
@@ -181,23 +181,23 @@
          "stripe_dark": false,
          "hover_zoom": true,
          "card_bg": "#2e3826",
-         "card_border": "rgba(238,240,227,.12)",
+         "card_border": "color-mix(in srgb, var(--olo-color-secondary-contrast) 12%, transparent)",
          "card_radius": 10,
          "card_padding": 18,
          "tag_bg": "#161b11",
-         "tag_color": "#c2ab63",
+         "tag_color": "var(--olo-color-primary)",
          "quick_add_show": false,
-         "category_color": "#79806a",
+         "category_color": "var(--olo-color-text-muted)",
          "title_font": "heading",
          "title_size": 22,
-         "title_color": "#eef0e3",
-         "notes_color": "#79806a",
+         "title_color": "var(--olo-color-secondary-contrast)",
+         "notes_color": "var(--olo-color-text-muted)",
          "notes_mono": false,
-         "price_color": "#eef0e3",
+         "price_color": "var(--olo-color-secondary-contrast)",
          "add_button": true,
          "add_label": "Add",
          "add_bg": "#eef0e3",
-         "add_color": "#161b11",
+         "add_color": "var(--olo-color-primary-contrast)",
          "show_filters": false,
          "footer_text": "",
          "footer_url": "#shop",
@@ -305,7 +305,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#283020"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -365,11 +365,11 @@
            "meta": "€38"
           }
          ],
-         "zone_accent": "#c2ab63",
-         "zone_on": "#161b11",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "panel_bg": "#384430",
          "card_bg": "#2e3826",
-         "card_border": "rgba(238,240,227,.12)",
+         "card_border": "color-mix(in srgb, var(--olo-color-secondary-contrast) 12%, transparent)",
          "align": "left"
         },
         "style": {},
@@ -393,7 +393,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#232a1c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -420,18 +420,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "By category",
-         "eyebrow_color": "#c2ab63",
-         "eyebrow_dot_color": "#c2ab63",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Find your ",
-           "color": "#eef0e3",
+           "color": "var(--olo-color-secondary-contrast)",
            "italic": false
           },
           {
            "text": "gear",
-           "color": "#c2ab63",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -443,7 +443,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#79806a",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -522,11 +522,11 @@
          "item_radius": 10,
          "overlay_color": "rgba(22,27,17,.72)",
          "overlay_gradient": true,
-         "title_color": "#eef0e3",
+         "title_color": "var(--olo-color-secondary-contrast)",
          "title_weight": "600",
          "title_letter_spacing": 0,
          "title_uppercase": false,
-         "subtitle_color": "#c2ab63",
+         "subtitle_color": "var(--olo-color-primary)",
          "subtitle_size": 13,
          "show_cta": false,
          "shadow": "none"
@@ -552,7 +552,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#161b11"
+    "color": "var(--olo-color-primary-contrast)"
    }
   },
   "advanced": {},
@@ -599,13 +599,13 @@
          "items_gap": 0,
          "band_padding_y": 24,
          "show_dividers": true,
-         "divider_color": "rgba(238,240,227,.12)",
+         "divider_color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 12%, transparent)",
          "band_border": false,
          "value_font_family": "heading",
-         "value_color": "#eef0e3",
+         "value_color": "var(--olo-color-secondary-contrast)",
          "value_size": 52,
          "value_weight": "600",
-         "label_color": "#79806a",
+         "label_color": "var(--olo-color-text-muted)",
          "label_size": 12,
          "label_uppercase": true,
          "align": "center",
@@ -632,7 +632,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#232a1c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -666,10 +666,10 @@
          "count_label": "items",
          "cta_text": "Add to cart",
          "cta_url": "#kit",
-         "zone_accent": "#c2ab63",
-         "zone_on": "#161b11",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "card_bg": "#2e3826",
-         "card_border": "rgba(194,171,99,.42)",
+         "card_border": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "align": "left",
          "items": [
           {
@@ -731,7 +731,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#232a1c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -765,17 +765,17 @@
          "cta2_text": "Our guarantee",
          "cta2_url": "#guarantee",
          "cta2_bg": "#eef0e3",
-         "cta2_color": "#161b11",
+         "cta2_color": "var(--olo-color-primary-contrast)",
          "cta2_border": "",
          "bg": {
           "type": "solid",
           "color": "#384430"
          },
-         "text_color": "#eef0e3",
-         "accent_color": "#c2ab63",
-         "subtitle_color": "#aab09a",
-         "cta_bg": "#c2ab63",
-         "cta_color": "#161b11",
+         "text_color": "var(--olo-color-secondary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 4,
           "tr": 4,

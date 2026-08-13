@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0c0c10"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -47,14 +47,14 @@
          "player_track": "Glasshouse",
          "player_meta": "Kova · Nightglass",
          "show_player": true,
-         "bg_color": "#0c0c10",
+         "bg_color": "var(--olo-color-background)",
          "panel_color": "#16161d",
-         "accent": "#27e0a3",
-         "accent_2": "#ff5d9e",
-         "accent_on": "#060608",
-         "text_color": "#ffffff",
-         "sub_color": "#b6b6c2",
-         "meta_color": "#74747f",
+         "accent": "var(--olo-color-primary)",
+         "accent_2": "var(--olo-color-secondary)",
+         "accent_on": "var(--olo-color-primary-contrast)",
+         "text_color": "var(--olo-color-secondary-contrast)",
+         "sub_color": "var(--olo-color-text)",
+         "meta_color": "var(--olo-color-text-muted)",
          "split_ratio": "1.1fr .9fr"
         },
         "style": {},
@@ -78,7 +78,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#101016"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -116,10 +116,10 @@
          "image_alignment": "center",
          "border_radius": "18",
          "border": {
-          "top": { "width": 1, "style": "solid", "color": "rgba(255,255,255,.09)" },
-          "right": { "width": 1, "style": "solid", "color": "rgba(255,255,255,.09)" },
-          "bottom": { "width": 1, "style": "solid", "color": "rgba(255,255,255,.09)" },
-          "left": { "width": 1, "style": "solid", "color": "rgba(255,255,255,.09)" },
+          "top": { "width": 1, "style": "solid", "color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 9%, transparent)" },
+          "right": { "width": 1, "style": "solid", "color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 9%, transparent)" },
+          "bottom": { "width": 1, "style": "solid", "color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 9%, transparent)" },
+          "left": { "width": 1, "style": "solid", "color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 9%, transparent)" },
           "linked": true
          }
         },
@@ -144,13 +144,13 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "The album",
-         "eyebrow_color": "#27e0a3",
-         "eyebrow_dot_color": "#27e0a3",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Nightglass",
-           "color": "#ffffff",
+           "color": "var(--olo-color-secondary-contrast)",
            "italic": false
           }
          ],
@@ -162,7 +162,7 @@
          "tagline_show": true,
          "tagline_text": "LP · 11 tracks · 2026",
          "tagline_text_italic": false,
-         "tagline_text_color": "#27e0a3",
+         "tagline_text_color": "var(--olo-color-primary)",
          "tagline_text_size": 14,
          "layout": "stack",
          "gap": 10
@@ -248,17 +248,17 @@
          "cta2_text": "Vinyl & merch",
          "cta2_url": "#",
          "cta2_bg": "rgba(255,255,255,.05)",
-         "cta2_color": "#ffffff",
-         "cta2_border": "rgba(255,255,255,.09)",
+         "cta2_color": "var(--olo-color-secondary-contrast)",
+         "cta2_border": "color-mix(in srgb, var(--olo-color-secondary-contrast) 9%, transparent)",
          "bg": {
           "type": "solid",
           "color": "transparent"
          },
-         "text_color": "#ffffff",
-         "accent_color": "#27e0a3",
-         "subtitle_color": "#b6b6c2",
-         "cta_bg": "#27e0a3",
-         "cta_color": "#060608",
+         "text_color": "var(--olo-color-secondary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,
@@ -303,7 +303,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#101016"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -330,13 +330,13 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "On tour",
-         "eyebrow_color": "#27e0a3",
-         "eyebrow_dot_color": "#27e0a3",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Nightglass live",
-           "color": "#ffffff",
+           "color": "var(--olo-color-secondary-contrast)",
            "italic": false
           }
          ],
@@ -464,11 +464,11 @@
           "type": "solid",
           "color": "transparent"
          },
-         "text_color": "#ffffff",
-         "accent_color": "#27e0a3",
-         "subtitle_color": "#b6b6c2",
+         "text_color": "var(--olo-color-secondary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
          "cta_bg": "rgba(255,255,255,.05)",
-         "cta_color": "#ffffff",
+         "cta_color": "var(--olo-color-secondary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,
@@ -513,7 +513,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0c0c10"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -540,13 +540,13 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Discography",
-         "eyebrow_color": "#27e0a3",
-         "eyebrow_dot_color": "#27e0a3",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Everything else",
-           "color": "#ffffff",
+           "color": "var(--olo-color-secondary-contrast)",
            "italic": false
           }
          ],
@@ -558,7 +558,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#74747f",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -634,16 +634,16 @@
          "media_aspect": "1/1",
          "media_tall_aspect": "4/5",
          "media_bg": "#16161d",
-         "media_label_color": "#27e0a3",
+         "media_label_color": "var(--olo-color-primary)",
          "hover_zoom": true,
          "title_font_family": "heading",
          "title_color": "#ffffff",
          "title_size": 17,
          "title_weight": "700",
-         "meta_color": "#74747f",
+         "meta_color": "var(--olo-color-text-muted)",
          "meta_size": 12,
          "show_desc": false,
-         "desc_color": "#74747f",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 15,
          "mono_font_family": ""
         },
@@ -668,7 +668,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#101016"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -695,13 +695,13 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Make something",
-         "eyebrow_color": "#27e0a3",
-         "eyebrow_dot_color": "#27e0a3",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Build a beat",
-           "color": "#ffffff",
+           "color": "var(--olo-color-secondary-contrast)",
            "italic": false
           }
          ],
@@ -713,7 +713,7 @@
          "tagline_show": true,
          "tagline_text": "Tap the squares to switch steps on, hit play and ride the tempo. Four voices, sixteen steps — synthesised live in your browser.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#74747f",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -756,9 +756,9 @@
          "items_gap": 16,
          "card_bg": {
           "type": "solid",
-          "color": "#101016"
+          "color": "var(--olo-color-muted)"
          },
-         "card_color": "#74747f",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": {
           "tl": 8,
           "tr": 8,
@@ -772,8 +772,8 @@
          "show_arrow": false,
          "show_footer": false,
          "show_media": false,
-         "icon_color": "#27e0a3",
-         "icon_bg_color": "rgba(39,224,163,.12)",
+         "icon_color": "var(--olo-color-primary)",
+         "icon_bg_color": "color-mix(in srgb, var(--olo-color-primary) 12%, transparent)",
          "title_color": "#ffffff",
          "title_font_family": "sans-serif",
          "title_size": 18,
@@ -825,7 +825,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#101016"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -851,24 +851,24 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "About",
-         "eyebrow_color": "#27e0a3",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline": "Kova",
          "accent": "",
          "headline_tail": "",
          "uppercase": false,
-         "headline_color": "#ffffff",
-         "accent_color": "#27e0a3",
+         "headline_color": "var(--olo-color-secondary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
          "headline_weight": "700",
          "headline_size": "46",
          "lead": "Producer, multi-instrumentalist and live performer. Kova builds tracks the slow way — field recordings, modular synths and a refusal to quantise the life out of anything. Since 2019, three records, two continents, and one very patient sound engineer.",
-         "lead_color": "#74747f",
+         "lead_color": "var(--olo-color-text-muted)",
          "stats": [
           { "number": "2.4M", "label": "Monthly listeners" },
           { "number": "3", "label": "Albums" },
           { "number": "140+", "label": "Shows played" }
          ],
-         "stat_number_color": "#27e0a3",
-         "stat_label_color": "#74747f",
+         "stat_number_color": "var(--olo-color-primary)",
+         "stat_label_color": "var(--olo-color-text-muted)",
          "cta_text": "",
          "cta_url": "#",
          "cta2_text": "",
@@ -906,7 +906,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0c0c10"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -940,27 +940,27 @@
          "cta2_text": "Get tickets",
          "cta2_url": "#tour",
          "cta2_bg": "rgba(255,255,255,.05)",
-         "cta2_color": "#ffffff",
-         "cta2_border": "rgba(255,255,255,.09)",
+         "cta2_color": "var(--olo-color-secondary-contrast)",
+         "cta2_border": "color-mix(in srgb, var(--olo-color-secondary-contrast) 9%, transparent)",
          "bg": {
           "type": "gradient",
           "direction": "150deg",
           "stops": [
            {
-            "color": "rgba(39,224,163,.16)",
+            "color": "color-mix(in srgb, var(--olo-color-primary) 16%, transparent)",
             "position": 0
            },
            {
-            "color": "rgba(255,93,158,.06)",
+            "color": "color-mix(in srgb, var(--olo-color-secondary) 6%, transparent)",
             "position": 100
            }
           ]
          },
-         "text_color": "#ffffff",
-         "accent_color": "#27e0a3",
-         "subtitle_color": "#b6b6c2",
-         "cta_bg": "#27e0a3",
-         "cta_color": "#060608",
+         "text_color": "var(--olo-color-secondary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,
@@ -1035,11 +1035,11 @@
          "flow": "wrap",
          "gap": 12,
          "font_family": "sans-serif",
-         "text_color": "#b6b6c2",
+         "text_color": "var(--olo-color-text)",
          "text_size": 13,
          "pill_bg": "rgba(255,255,255,.04)",
-         "pill_border": "rgba(255,255,255,.09)",
-         "pill_text_color": "#b6b6c2"
+         "pill_border": "color-mix(in srgb, var(--olo-color-secondary-contrast) 9%, transparent)",
+         "pill_text_color": "var(--olo-color-text)"
         },
         "style": {},
         "advanced": {},

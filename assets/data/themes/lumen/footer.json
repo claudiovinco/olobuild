@@ -20,8 +20,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "lu-fbrand", "type": "headline", "settings": { "heading": "Lumen", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "30", "heading_uppercase": false, "heading_color": "#251f24", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "lu-fbtext", "type": "text-block", "settings": { "content": "<p>Clean, results-led skincare. Made in small batches, packed in glass you bring back.</p>", "text_color": "#6e636a", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "240" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "lu-fbrand", "type": "headline", "settings": { "heading": "Lumen", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "30", "heading_uppercase": false, "heading_color": "var(--olo-color-primary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "lu-fbtext", "type": "text-block", "settings": { "content": "<p>Clean, results-led skincare. Made in small batches, packed in glass you bring back.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "240" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -31,8 +31,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "lu-fh1", "type": "headline", "settings": { "heading": "Shop", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "11.5", "heading_uppercase": true, "heading_color": "#251f24", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "lu-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "gap": "9", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "active_style": "none", "link_color": "#6e636a", "link_hover_color": "#251f24", "items": [ { "title": "All products", "content": "#shop", "tag": "" }, { "title": "Serums", "content": "#", "tag": "" }, { "title": "Cleansers", "content": "#", "tag": "" }, { "title": "Refills", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "lu-fh1", "type": "headline", "settings": { "heading": "Shop", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "11.5", "heading_uppercase": true, "heading_color": "var(--olo-color-primary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "lu-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "gap": "9", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "active_style": "none", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-primary-contrast)", "items": [ { "title": "All products", "content": "#shop", "tag": "" }, { "title": "Serums", "content": "#", "tag": "" }, { "title": "Cleansers", "content": "#", "tag": "" }, { "title": "Refills", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -42,8 +42,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "lu-fh2", "type": "headline", "settings": { "heading": "About", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "11.5", "heading_uppercase": true, "heading_color": "#251f24", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "lu-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "gap": "9", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "active_style": "none", "link_color": "#6e636a", "link_hover_color": "#251f24", "items": [ { "title": "Our ritual", "content": "#ritual", "tag": "" }, { "title": "Ingredients", "content": "#", "tag": "" }, { "title": "Journal", "content": "#journal", "tag": "" }, { "title": "Sustainability", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "lu-fh2", "type": "headline", "settings": { "heading": "About", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "11.5", "heading_uppercase": true, "heading_color": "var(--olo-color-primary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "lu-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "gap": "9", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "active_style": "none", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-primary-contrast)", "items": [ { "title": "Our ritual", "content": "#ritual", "tag": "" }, { "title": "Ingredients", "content": "#", "tag": "" }, { "title": "Journal", "content": "#journal", "tag": "" }, { "title": "Sustainability", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -53,8 +53,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "lu-fh3", "type": "headline", "settings": { "heading": "Help", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "11.5", "heading_uppercase": true, "heading_color": "#251f24", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "lu-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "gap": "9", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "active_style": "none", "link_color": "#6e636a", "link_hover_color": "#251f24", "items": [ { "title": "Shipping", "content": "#", "tag": "" }, { "title": "Returns", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" }, { "title": "FAQ", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "lu-fh3", "type": "headline", "settings": { "heading": "Help", "tag": "h4", "alignment": "left", "heading_font": "body", "heading_font_size": "11.5", "heading_uppercase": true, "heading_color": "var(--olo-color-primary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "lu-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "gap": "9", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "active_style": "none", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-primary-contrast)", "items": [ { "title": "Shipping", "content": "#", "tag": "" }, { "title": "Returns", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" }, { "title": "FAQ", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -67,7 +67,7 @@
     "advanced": {},
     "children": [
      { "id": "lu-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
-      { "id": "lu-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "#ece0db", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "lu-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "var(--olo-color-border)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    },
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "lu-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "lu-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Lumen — an OLOtheme demo.</p>", "text_color": "#6e636a", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "lu-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Lumen — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "lu-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "lu-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#6e636a", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "lu-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

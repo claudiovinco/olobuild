@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#2a1a14"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -37,8 +37,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Fourteen, all different",
-         "eyebrow_color": "#d98a4e",
-         "eyebrow_dot_color": "#d98a4e",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -55,7 +55,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#967861",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 18
@@ -69,7 +69,7 @@
         "type": "text-block",
         "settings": {
          "content": "<p>No two rooms at Pasaje are the same — they follow the old house, not a floor plan. Rates include breakfast and the roof at sunset.</p>",
-         "text_color": "#967861",
+         "text_color": "var(--olo-color-text-muted)",
          "font_size": "16.5",
          "line_height": "1.7",
          "text_align": "center",
@@ -96,7 +96,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#2a1a14"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -188,10 +188,10 @@
          "title_color": "#f3e7d6",
          "title_size": 25,
          "title_weight": "400",
-         "meta_color": "#d98a4e",
+         "meta_color": "var(--olo-color-primary)",
          "meta_size": 22,
          "show_desc": true,
-         "desc_color": "#967861",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 13,
          "mono_font_family": ""
         },
@@ -216,7 +216,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#311f17"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -250,17 +250,17 @@
          "cta2_text": "",
          "cta2_url": "",
          "cta2_bg": "transparent",
-         "cta2_color": "#1b110b",
+         "cta2_color": "var(--olo-color-primary-contrast)",
          "cta2_border": "transparent",
          "bg": {
           "type": "solid",
           "color": "#472f22"
          },
          "text_color": "#ffffff",
-         "accent_color": "#d98a4e",
+         "accent_color": "var(--olo-color-primary)",
          "subtitle_color": "#f3e7d6",
-         "cta_bg": "#d98a4e",
-         "cta_color": "#1b110b",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,

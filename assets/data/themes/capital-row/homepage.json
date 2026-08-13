@@ -3,7 +3,7 @@
   "id": "cr-se-4",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#1a1730" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -25,12 +25,12 @@
         "type": "hero-split",
         "settings": {
          "eyebrow_text": "Early-stage & growth · since 2009",
-         "eyebrow_dot_color": "#8f7aef",
-         "eyebrow_color": "#8f7aef",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline_lines": [
-          { "text": "We back the", "color": "#ffffff", "italic": false },
-          { "text": "unreasonable", "color": "#8f7aef", "italic": true },
-          { "text": "ones.", "color": "#ffffff", "italic": false }
+          { "text": "We back the", "color": "var(--olo-color-primary-contrast)", "italic": false },
+          { "text": "unreasonable", "color": "var(--olo-color-primary)", "italic": true },
+          { "text": "ones.", "color": "var(--olo-color-primary-contrast)", "italic": false }
          ],
          "headline_font_family": "serif",
          "headline_font_size": 76,
@@ -38,22 +38,22 @@
          "headline_font_weight": "500",
          "headline_align": "left",
          "subhead": "Capital Row partners with founders building the infrastructure of the next decade — the unglamorous, foundational companies that quietly become indispensable.",
-         "subhead_color": "#b6b2cf",
+         "subhead_color": "var(--olo-color-text)",
          "subhead_size": 18,
          "subhead_italic": false,
          "subhead_max_width": 520,
          "cta1_text": "Pitch us",
          "cta1_url": "#pitch",
-         "cta1_bg": "#8f7aef",
-         "cta1_color": "#ffffff",
+         "cta1_bg": "var(--olo-color-primary)",
+         "cta1_color": "var(--olo-color-primary-contrast)",
          "cta1_size": 15,
          "cta1_radius": { "tl": 8, "tr": 8, "br": 8, "bl": 8, "linked": true },
          "cta1_radius_hover": { "tl": 8, "tr": 8, "br": 8, "bl": 8, "linked": true },
          "cta2_text": "See the portfolio",
          "cta2_url": "#portfolio",
          "cta2_bg": "rgba(255,255,255,.05)",
-         "cta2_color": "#ffffff",
-         "cta2_border": "rgba(255,255,255,.16)",
+         "cta2_color": "var(--olo-color-primary-contrast)",
+         "cta2_border": "color-mix(in srgb, var(--olo-color-primary-contrast) 16%, transparent)",
          "cta2_size": 15,
          "cta2_radius": { "tl": 8, "tr": 8, "br": 8, "bl": 8, "linked": true },
          "cta2_radius_hover": { "tl": 8, "tr": 8, "br": 8, "bl": 8, "linked": true },
@@ -64,14 +64,14 @@
          "showcase_radius": { "tl": 16, "tr": 16, "br": 16, "bl": 16, "linked": true },
          "showcase_radius_hover": { "tl": 16, "tr": 16, "br": 16, "bl": 16, "linked": true },
          "showcase_badge_text": "FUND IV · AT A GLANCE",
-         "showcase_badge_dot": "#8f7aef",
+         "showcase_badge_dot": "var(--olo-color-primary)",
          "showcase_badge_bg": "#100e22",
-         "showcase_badge_color": "#ffffff",
+         "showcase_badge_color": "var(--olo-color-primary-contrast)",
          "showcase_items": [
-          { "number": "Assets under management", "text": "€600M", "italic": false, "text_color": "#8f7aef", "bg": { "type": "solid", "color": "#1f1c38" } },
-          { "number": "Companies backed", "text": "84", "italic": false, "text_color": "#ffffff", "bg": { "type": "solid", "color": "#1f1c38" } },
-          { "number": "Initial cheque", "text": "€1–8M", "italic": false, "text_color": "#ffffff", "bg": { "type": "solid", "color": "#1f1c38" } },
-          { "number": "Notable exits", "text": "11", "italic": false, "text_color": "#ffffff", "bg": { "type": "solid", "color": "#1f1c38" } }
+          { "number": "Assets under management", "text": "€600M", "italic": false, "text_color": "var(--olo-color-primary)", "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
+          { "number": "Companies backed", "text": "84", "italic": false, "text_color": "var(--olo-color-primary-contrast)", "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
+          { "number": "Initial cheque", "text": "€1–8M", "italic": false, "text_color": "var(--olo-color-primary-contrast)", "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
+          { "number": "Notable exits", "text": "11", "italic": false, "text_color": "var(--olo-color-primary-contrast)", "bg": { "type": "solid", "color": "var(--olo-color-muted)" } }
          ],
          "showcase_card_radius": { "tl": 11, "tr": 11, "br": 11, "bl": 11, "linked": true },
          "showcase_card_radius_hover": { "tl": 11, "tr": 11, "br": 11, "bl": 11, "linked": true },
@@ -98,7 +98,7 @@
   "id": "cr-se-11",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small" },
-  "style": { "bg": { "type": "solid", "color": "#1f1c38" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -121,7 +121,7 @@
         "settings": {
          "eyebrow_show": false,
          "headline_lines": [
-          { "text": "A few of the companies we're proud to back", "color": "#7a769a", "italic": false }
+          { "text": "A few of the companies we're proud to back", "color": "var(--olo-color-text-muted)", "italic": false }
          ],
          "headline_font_family": "sans-serif",
          "headline_font_size": 12,
@@ -171,11 +171,11 @@
          "flow": "wrap",
          "gap": 46,
          "font_family": "sans-serif",
-         "text_color": "#7a769a",
+         "text_color": "var(--olo-color-text-muted)",
          "text_size": 13,
          "pill_bg": "rgba(255,255,255,.06)",
-         "pill_border": "rgba(255,255,255,.09)",
-         "pill_text_color": "#7a769a"
+         "pill_border": "color-mix(in srgb, var(--olo-color-primary-contrast) 9%, transparent)",
+         "pill_text_color": "var(--olo-color-text-muted)"
         },
         "style": {},
         "advanced": {},
@@ -191,7 +191,7 @@
   "id": "cr-se-21",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small" },
-  "style": { "bg": { "type": "solid", "color": "#1a1730" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -222,13 +222,13 @@
          "items_gap": 0,
          "band_padding_y": 40,
          "show_dividers": true,
-         "divider_color": "rgba(255,255,255,.09)",
+         "divider_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 9%, transparent)",
          "band_border": false,
          "value_font_family": "heading",
-         "value_color": "#ffffff",
+         "value_color": "var(--olo-color-primary-contrast)",
          "value_size": 54,
          "value_weight": "600",
-         "label_color": "#7a769a",
+         "label_color": "var(--olo-color-text-muted)",
          "label_size": 13,
          "label_uppercase": false,
          "align": "center",
@@ -248,7 +248,7 @@
   "id": "cr-se-28",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#1f1c38" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -271,12 +271,12 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Our thesis",
-         "eyebrow_color": "#8f7aef",
-         "eyebrow_dot_color": "#8f7aef",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
-          { "text": "Infrastructure beats ", "color": "#ffffff", "italic": false },
-          { "text": "hype", "color": "#8f7aef", "italic": true }
+          { "text": "Infrastructure beats ", "color": "var(--olo-color-primary-contrast)", "italic": false },
+          { "text": "hype", "color": "var(--olo-color-primary)", "italic": true }
          ],
          "headline_font_family": "serif",
          "headline_font_size": 46,
@@ -297,7 +297,7 @@
         "type": "text-block",
         "settings": {
          "content": "<p>We invest where the picks and shovels are — developer tools, fintech rails, climate hardware, the boring middle layer that everything else depends on.</p>",
-         "text_color": "#7a769a",
+         "text_color": "var(--olo-color-text-muted)",
          "font_size": "16",
          "line_height": "1.6",
          "text_align": "left",
@@ -318,11 +318,11 @@
          ],
          "layout": "vertical",
          "divider": false,
-         "icon_color": "#8f7aef",
+         "icon_color": "var(--olo-color-primary)",
          "icon_size": "16",
          "icon_shape": "rounded",
-         "icon_bg_color": "rgba(143,122,239,.14)",
-         "text_color": "#b6b2cf",
+         "icon_bg_color": "color-mix(in srgb, var(--olo-color-primary) 14%, transparent)",
+         "text_color": "var(--olo-color-text)",
          "text_size": "15",
          "text_align": "left",
          "gap": "14"
@@ -339,12 +339,12 @@
          "url": "#",
          "alignment": "left",
          "bg_color": "rgba(255,255,255,.05)",
-         "text_color": "#ffffff",
+         "text_color": "var(--olo-color-primary-contrast)",
          "font_size": "14",
          "font_weight": "700",
          "border_radius": { "tl": 8, "tr": 8, "br": 8, "bl": 8, "linked": true },
          "tile_padding": { "top": 13, "right": 24, "bottom": 13, "left": 24, "linked": false },
-         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "linked": true, "style": "solid", "color": "rgba(255,255,255,.16)" },
+         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "linked": true, "style": "solid", "color": "color-mix(in srgb, var(--olo-color-primary-contrast) 16%, transparent)" },
          "shadow": "none"
         },
         "style": {},
@@ -389,7 +389,7 @@
   "id": "cr-se-35",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#1a1730" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -412,12 +412,12 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Portfolio",
-         "eyebrow_color": "#8f7aef",
-         "eyebrow_dot_color": "#8f7aef",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
-          { "text": "Companies we ", "color": "#ffffff", "italic": false },
-          { "text": "believe in", "color": "#8f7aef", "italic": true }
+          { "text": "Companies we ", "color": "var(--olo-color-primary-contrast)", "italic": false },
+          { "text": "believe in", "color": "var(--olo-color-primary)", "italic": true }
          ],
          "headline_font_family": "serif",
          "headline_font_size": 44,
@@ -461,17 +461,17 @@
          "columns": 3,
          "items_gap": 16,
          "card_bg": { "type": "solid", "color": "#252244" },
-         "card_color": "#7a769a",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": { "tl": 14, "tr": 14, "br": 14, "bl": 14, "linked": true },
          "card_padding": 26,
-         "card_border": "rgba(255,255,255,.09)",
+         "card_border": "color-mix(in srgb, var(--olo-color-primary-contrast) 9%, transparent)",
          "show_icon": false,
          "show_counter": true,
          "show_counter_label": true,
          "show_arrow": false,
          "show_footer": true,
          "show_media": false,
-         "card_accent_color": "#ffffff",
+         "card_accent_color": "var(--olo-color-primary-contrast)",
          "title_font_family": "serif",
          "title_size": 21,
          "title_weight": "500",
@@ -480,9 +480,9 @@
          "counter_size": 18,
          "footer_size": 12,
          "items": [
-          { "counter": "Ar", "counter_label": "Series A", "title": "Arclight", "description": "Climate · grid software. Balancing the grid for utilities running on renewables.", "footer_text": "Led Series A · 2024", "footer_dot_color": "#8f7aef" },
-          { "counter": "Tk", "counter_label": "Seed", "title": "Tollkeep", "description": "Fintech · payments rails. Settlement infrastructure for cross-border marketplaces.", "footer_text": "Led Seed · 2025", "footer_dot_color": "#8f7aef" },
-          { "counter": "Vx", "counter_label": "Series B", "title": "Vellum", "description": "Dev tools · data. The versioned data layer for AI teams in production.", "footer_text": "Co-led Series A · 2023", "footer_dot_color": "#8f7aef" }
+          { "counter": "Ar", "counter_label": "Series A", "title": "Arclight", "description": "Climate · grid software. Balancing the grid for utilities running on renewables.", "footer_text": "Led Series A · 2024", "footer_dot_color": "var(--olo-color-primary)" },
+          { "counter": "Tk", "counter_label": "Seed", "title": "Tollkeep", "description": "Fintech · payments rails. Settlement infrastructure for cross-border marketplaces.", "footer_text": "Led Seed · 2025", "footer_dot_color": "var(--olo-color-primary)" },
+          { "counter": "Vx", "counter_label": "Series B", "title": "Vellum", "description": "Dev tools · data. The versioned data layer for AI teams in production.", "footer_text": "Co-led Series A · 2023", "footer_dot_color": "var(--olo-color-primary)" }
          ],
          "card_hover_effect": "lift"
         },
@@ -518,12 +518,12 @@
          "url": "#portfolio",
          "alignment": "left",
          "bg_color": "rgba(255,255,255,.05)",
-         "text_color": "#ffffff",
+         "text_color": "var(--olo-color-primary-contrast)",
          "font_size": "14",
          "font_weight": "700",
          "border_radius": { "tl": 8, "tr": 8, "br": 8, "bl": 8, "linked": true },
          "tile_padding": { "top": 13, "right": 24, "bottom": 13, "left": 24, "linked": false },
-         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "linked": true, "style": "solid", "color": "rgba(255,255,255,.16)" },
+         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "linked": true, "style": "solid", "color": "color-mix(in srgb, var(--olo-color-primary-contrast) 16%, transparent)" },
          "shadow": "none"
         },
         "style": {},
@@ -540,7 +540,7 @@
   "id": "cr-se-42",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#1f1c38" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -563,12 +563,12 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "How we work",
-         "eyebrow_color": "#8f7aef",
-         "eyebrow_dot_color": "#8f7aef",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
-          { "text": "Conviction, then ", "color": "#ffffff", "italic": false },
-          { "text": "patience", "color": "#8f7aef", "italic": true }
+          { "text": "Conviction, then ", "color": "var(--olo-color-primary-contrast)", "italic": false },
+          { "text": "patience", "color": "var(--olo-color-primary)", "italic": true }
          ],
          "headline_font_family": "serif",
          "headline_font_size": 46,
@@ -579,7 +579,7 @@
          "tagline_show": true,
          "tagline_text": "We move quickly to a decision and slowly out of a company. Here's what working with us actually looks like.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#7a769a",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -616,18 +616,18 @@
          "auto_number": false,
          "item_gap": 14,
          "number_style": "plain",
-         "number_color": "rgba(143,122,239,.5)",
+         "number_color": "color-mix(in srgb, var(--olo-color-primary) 50%, transparent)",
          "number_size": 40,
          "number_font": "serif",
          "number_weight": "500",
-         "title_color": "#ffffff",
+         "title_color": "var(--olo-color-primary-contrast)",
          "title_size": 21,
          "title_font": "serif",
          "title_weight": "500",
-         "desc_color": "#7a769a",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 14,
          "card_bg": "#252244",
-         "card_border": "rgba(255,255,255,.09)",
+         "card_border": "color-mix(in srgb, var(--olo-color-primary-contrast) 9%, transparent)",
          "card_radius": { "tl": 14, "tr": 14, "br": 14, "bl": 14, "linked": true },
          "card_padding": 30,
          "items": [
@@ -650,7 +650,7 @@
   "id": "cr-se-46",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#1a1730" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -678,13 +678,13 @@
          "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
-         "text_color": "#ffffff",
-         "quote_accent_color": "#8f7aef",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "quote_accent_color": "var(--olo-color-primary)",
          "quote_font": "heading",
          "quote_size": 0,
          "quote_uppercase": false,
          "author_uppercase": false,
-         "author_color": "#7a769a",
+         "author_color": "var(--olo-color-text-muted)",
          "border_radius": "0",
          "avatar": ""
         },
@@ -702,7 +702,7 @@
   "id": "cr-se-50",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#1f1c38" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -737,7 +737,7 @@
          "out_caption": "Projected after 10 years",
          "note": "Illustrative only · 15% net IRR, annual commitments. Private markets are illiquid; capital is at risk and past performance is not indicative.",
          "show_contrib": true,
-         "zone_accent": "#8f7aef",
+         "zone_accent": "var(--olo-color-primary)",
          "align": "left",
          "tile_padding": { "top": 52, "right": 52, "bottom": 52, "left": 52 },
          "border_radius": "16",
@@ -757,7 +757,7 @@
   "id": "cr-se-54",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#1a1730" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -787,14 +787,14 @@
          "cta2_text": "See who we back",
          "cta2_url": "#portfolio",
          "cta2_bg": "rgba(255,255,255,.05)",
-         "cta2_color": "#ffffff",
-         "cta2_border": "rgba(255,255,255,.16)",
+         "cta2_color": "var(--olo-color-primary-contrast)",
+         "cta2_border": "color-mix(in srgb, var(--olo-color-primary-contrast) 16%, transparent)",
          "bg": { "type": "gradient", "gradient": "linear-gradient(160deg, rgba(143,122,239,.18), rgba(143,122,239,.04))" },
-         "text_color": "#ffffff",
-         "accent_color": "#8f7aef",
-         "subtitle_color": "#b6b2cf",
-         "cta_bg": "#8f7aef",
-         "cta_color": "#ffffff",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": { "tl": 8, "tr": 8, "br": 8, "bl": 8, "linked": true },
          "cta_size": 15,
          "headline_font_family": "serif",

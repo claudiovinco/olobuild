@@ -12,7 +12,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0c0d10"
+    "color": "var(--olo-color-primary-contrast)"
    }
   },
   "advanced": {},
@@ -38,7 +38,7 @@
         "type": "maskedvideohero",
         "settings": {
          "tag_text": "Strength & conditioning · Est. 2019",
-         "tag_dot_color": "#c6f24e",
+         "tag_dot_color": "var(--olo-color-primary)",
          "headline_text": "Train with",
          "accent_text": "intent.",
          "uppercase": false,
@@ -54,10 +54,10 @@
          "overlay_strength": 0.55,
          "watermark_text": "PULSE",
          "watermark_color": "rgba(255,255,255,0.055)",
-         "accent": "#c6f24e",
-         "accent_on": "#0c0d10",
+         "accent": "var(--olo-color-primary)",
+         "accent_on": "var(--olo-color-primary-contrast)",
          "text_color": "#ffffff",
-         "sub_color": "#c7ccd4",
+         "sub_color": "var(--olo-color-text)",
          "arch": true,
          "min_height": 84
         },
@@ -84,7 +84,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#c6f24e"
+    "color": "var(--olo-color-primary)"
    }
   },
   "advanced": {},
@@ -121,14 +121,14 @@
          "font_weight": "400",
          "letter_spacing": "0.5",
          "text_transform": "uppercase",
-         "text_color": "#0c0d10",
-         "separator_color": "rgba(12,13,16,.6)",
-         "bg_color": "#c6f24e",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "separator_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 60%, transparent)",
+         "bg_color": "var(--olo-color-primary)",
          "height": "50",
          "full_width": true,
          "border_top": "2",
          "border_bottom": "2",
-         "border_color": "#0c0d10"
+         "border_color": "var(--olo-color-primary-contrast)"
         },
         "style": {},
         "advanced": {},
@@ -153,7 +153,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0c0d10"
+    "color": "var(--olo-color-primary-contrast)"
    }
   },
   "advanced": {},
@@ -202,10 +202,10 @@
          "divider_color": "rgba(255,255,255,.09)",
          "band_border": true,
          "value_font_family": "heading",
-         "value_color": "#c6f24e",
+         "value_color": "var(--olo-color-primary)",
          "value_size": 64,
          "value_weight": "400",
-         "label_color": "#8b919c",
+         "label_color": "var(--olo-color-text-muted)",
          "label_size": 12,
          "label_uppercase": true,
          "align": "center",
@@ -232,7 +232,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#181b20"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -259,8 +259,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// what we run",
-         "eyebrow_color": "#c6f24e",
-         "eyebrow_dot_color": "#c6f24e",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -270,7 +270,7 @@
           },
           {
            "text": "get strong",
-           "color": "#c6f24e",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -282,7 +282,7 @@
          "tagline_show": true,
          "tagline_text": "Every program is coached, scaled to you, and built on a 12-week block — so you always know why you`re doing what you`re doing.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8b919c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 17,
          "layout": "stack",
          "gap": 16
@@ -321,7 +321,7 @@
          "auto_number": false,
          "item_gap": 10,
          "number_style": "plain",
-         "number_color": "#c6f24e",
+         "number_color": "var(--olo-color-primary)",
          "number_size": 13,
          "number_font": "sans-serif",
          "number_weight": "500",
@@ -329,7 +329,7 @@
          "title_size": 30,
          "title_font": "sans-serif",
          "title_weight": "400",
-         "desc_color": "#8b919c",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 14.5,
          "card_bg": "#1c2026",
          "card_border": "rgba(255,255,255,.09)",
@@ -380,7 +380,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#14161a"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -407,8 +407,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// this week",
-         "eyebrow_color": "#c6f24e",
-         "eyebrow_dot_color": "#c6f24e",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -418,7 +418,7 @@
           },
           {
            "text": "book from",
-           "color": "#c6f24e",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -430,7 +430,7 @@
          "tagline_show": true,
          "tagline_text": "Reserve your spot in seconds. Full classes show a waitlist — drop in and we'll text you when a place opens.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8b919c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 17,
          "layout": "center",
          "gap": 16
@@ -481,8 +481,8 @@
            "cells": "Strength · Devi | !Platform · Yuki | Strength · Devi | !Platform · Yuki | Mobility"
           }
          ],
-         "zone_accent": "#c6f24e",
-         "zone_on": "#0c0d10",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "cell_bg": "#23272f",
          "card_border": "rgba(255,255,255,.09)",
          "head_color": "#ffffff",
@@ -526,7 +526,7 @@
          "bg_color": "transparent",
          "text_color": "#ffffff",
          "hover_bg_color": "transparent",
-         "hover_text_color": "#c6f24e",
+         "hover_text_color": "var(--olo-color-primary)",
          "font_size": "13",
          "font_weight": "700",
          "letter_spacing": "1",
@@ -577,7 +577,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#181b20"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -604,8 +604,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// the floor",
-         "eyebrow_color": "#c6f24e",
-         "eyebrow_dot_color": "#c6f24e",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -615,7 +615,7 @@
           },
           {
            "text": "people who lift",
-           "color": "#c6f24e",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -627,7 +627,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8b919c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 17,
          "layout": "stack",
          "gap": 16
@@ -675,7 +675,7 @@
          "photo_gap": "16",
          "info_bg_color": "transparent",
          "info_text_color": "#ffffff",
-         "role_color": "#c6f24e",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "21",
          "name_weight": "400",
@@ -721,7 +721,7 @@
          "photo_gap": "16",
          "info_bg_color": "transparent",
          "info_text_color": "#ffffff",
-         "role_color": "#c6f24e",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "21",
          "name_weight": "400",
@@ -767,7 +767,7 @@
          "photo_gap": "16",
          "info_bg_color": "transparent",
          "info_text_color": "#ffffff",
-         "role_color": "#c6f24e",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "21",
          "name_weight": "400",
@@ -813,7 +813,7 @@
          "photo_gap": "16",
          "info_bg_color": "transparent",
          "info_text_color": "#ffffff",
-         "role_color": "#c6f24e",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "21",
          "name_weight": "400",
@@ -848,7 +848,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#14161a"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -875,8 +875,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// membership",
-         "eyebrow_color": "#c6f24e",
-         "eyebrow_dot_color": "#c6f24e",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -886,7 +886,7 @@
           },
           {
            "text": "commitment",
-           "color": "#c6f24e",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -898,7 +898,7 @@
          "tagline_show": true,
          "tagline_text": "No joining fee, freeze anytime, cancel with 30 days. First session is always free.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8b919c",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 17,
          "layout": "center",
          "gap": 16
@@ -942,9 +942,9 @@
          "features": "Any single class\nOpen gym access\nBook up to 7 days out",
          "is_popular": false,
          "bg_color": "#1c2026",
-         "text_color": "#c7ccd4",
+         "text_color": "var(--olo-color-text)",
          "price_color": "#ffffff",
-         "accent_color": "#c6f24e",
+         "accent_color": "var(--olo-color-primary)",
          "cta_text": "Buy a class",
          "cta_url": "#",
          "cta_bg": "transparent",
@@ -985,10 +985,10 @@
          "is_popular": true,
          "badge_text": "Most chosen",
          "badge_bg_color": "#0c0d10",
-         "bg_color": "#c6f24e",
-         "text_color": "#0c0d10",
-         "price_color": "#0c0d10",
-         "accent_color": "#0c0d10",
+         "bg_color": "var(--olo-color-primary)",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "price_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-primary-contrast)",
          "cta_text": "Start free session",
          "cta_url": "#",
          "cta_bg": "#0c0d10",
@@ -1028,9 +1028,9 @@
          "features": "10 classes, your pace\nShareable with a partner\nOpen gym included",
          "is_popular": false,
          "bg_color": "#1c2026",
-         "text_color": "#c7ccd4",
+         "text_color": "var(--olo-color-text)",
          "price_color": "#ffffff",
-         "accent_color": "#c6f24e",
+         "accent_color": "var(--olo-color-primary)",
          "cta_text": "Buy a pack",
          "cta_url": "#",
          "cta_bg": "transparent",
@@ -1064,7 +1064,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0c0d10"
+    "color": "var(--olo-color-primary-contrast)"
    }
   },
   "advanced": {},
@@ -1097,9 +1097,9 @@
          "quote_font": "heading",
          "quote_size": 48,
          "quote_uppercase": true,
-         "quote_accent_color": "#c6f24e",
+         "quote_accent_color": "var(--olo-color-primary)",
          "author_uppercase": true,
-         "author_color": "#8b919c",
+         "author_color": "var(--olo-color-text-muted)",
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#ffffff",
@@ -1127,7 +1127,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#181b20"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -1155,8 +1155,8 @@
          "eyebrow": "Where do we start?",
          "heading": "Pick a goal",
          "intro": "",
-         "zone_accent": "#c6f24e",
-         "zone_on": "#0c0d10",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "card_bg": "#1c2026",
          "card_border": "rgba(255,255,255,.16)",
          "align": "center",
@@ -1220,7 +1220,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#c6f24e"
+    "color": "var(--olo-color-primary)"
    }
   },
   "advanced": {},
@@ -1253,11 +1253,11 @@
          "cta_url": "#membership",
          "bg": {
           "type": "solid",
-          "color": "#c6f24e"
+          "color": "var(--olo-color-primary)"
          },
-         "text_color": "#0c0d10",
-         "accent_color": "#0c0d10",
-         "subtitle_color": "rgba(12,13,16,.78)",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-primary-contrast)",
+         "subtitle_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 78%, transparent)",
          "cta_bg": "#0c0d10",
          "cta_color": "#ffffff",
          "cta_radius": {

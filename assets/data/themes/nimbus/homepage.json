@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0a1020"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -36,10 +36,10 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "● All systems operational · 30 regions",
-         "eyebrow_color": "#5aa9ff",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline": "Ship to the edge",
          "accent": "in one command.",
-         "accent_color": "#5aa9ff",
+         "accent_color": "var(--olo-color-primary)",
          "accent_italic": false,
          "headline_tail": "",
          "uppercase": false,
@@ -47,14 +47,14 @@
          "headline_weight": "700",
          "headline_size": "72",
          "lead": "Nimbus runs your apps on a global network with cold starts under 40ms. Push once — we place it in every region your users are in.",
-         "lead_color": "#6b7a96",
+         "lead_color": "var(--olo-color-text-muted)",
          "signature": "",
          "stats": [],
          "cta_text": "Deploy free",
          "cta_url": "#pricing",
          "cta_style": "button",
-         "cta_bg": "#5aa9ff",
-         "cta_color": "#060a14",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 9,
           "tr": 9,
@@ -101,7 +101,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0d1426"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -130,7 +130,7 @@
          "headline_lines": [
           {
            "text": "Running production for teams that can't go down",
-           "color": "#6b7a96",
+           "color": "var(--olo-color-text-muted)",
            "italic": false
           }
          ],
@@ -198,11 +198,11 @@
          "flow": "wrap",
          "gap": 16,
          "font_family": "sans-serif",
-         "text_color": "#6b7a96",
+         "text_color": "var(--olo-color-text-muted)",
          "text_size": 13,
          "pill_bg": "rgba(255,255,255,.05)",
          "pill_border": "rgba(255,255,255,.08)",
-         "pill_text_color": "#6b7a96"
+         "pill_text_color": "var(--olo-color-text-muted)"
         },
         "style": {},
         "advanced": {},
@@ -225,7 +225,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0d1426"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -278,7 +278,7 @@
          "value_color": "#ffffff",
          "value_size": 50,
          "value_weight": "700",
-         "label_color": "#6b7a96",
+         "label_color": "var(--olo-color-text-muted)",
          "label_size": 13,
          "label_uppercase": false,
          "align": "center",
@@ -305,7 +305,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0a1020"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -332,8 +332,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// global edge",
-         "eyebrow_color": "#5aa9ff",
-         "eyebrow_dot_color": "#5aa9ff",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -350,7 +350,7 @@
          "tagline_show": true,
          "tagline_text": "Thirty regions across five continents, one anycast network. Requests resolve to the nearest healthy node automatically.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6b7a96",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -396,7 +396,7 @@
           "color": "#111a30"
          },
          "card_border": "rgba(255,255,255,.08)",
-         "card_color": "#6b7a96",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": {
           "tl": 12,
           "tr": 12,
@@ -410,8 +410,8 @@
          "show_arrow": false,
          "show_footer": true,
          "show_media": false,
-         "icon_color": "#5aa9ff",
-         "icon_bg_color": "rgba(90,169,255,.13)",
+         "icon_color": "var(--olo-color-primary)",
+         "icon_bg_color": "color-mix(in srgb, var(--olo-color-primary) 13%, transparent)",
          "title_color": "#ffffff",
          "title_font_family": "sans-serif",
          "title_size": 16,
@@ -439,21 +439,21 @@
            "title": "london",
            "description": "Europe West — Tier IV data centre",
            "footer_text": "● operational",
-           "footer_dot_color": "#56e0e0"
+           "footer_dot_color": "var(--olo-color-secondary)"
           },
           {
            "icon": "globe",
            "title": "frankfurt",
            "description": "Europe Central — DE hub",
            "footer_text": "● operational",
-           "footer_dot_color": "#5aa9ff"
+           "footer_dot_color": "var(--olo-color-primary)"
           },
           {
            "icon": "globe",
            "title": "cape-town",
            "description": "Africa South — 2025 expansion",
            "footer_text": "● operational",
-           "footer_dot_color": "#56e0e0"
+           "footer_dot_color": "var(--olo-color-secondary)"
           },
           {
            "icon": "globe",
@@ -467,14 +467,14 @@
            "title": "tokyo",
            "description": "APAC East — Japan + Korea coverage",
            "footer_text": "● operational",
-           "footer_dot_color": "#5aa9ff"
+           "footer_dot_color": "var(--olo-color-primary)"
           },
           {
            "icon": "globe",
            "title": "sydney",
            "description": "Australia — ANZ edge node",
            "footer_text": "● operational",
-           "footer_dot_color": "#56e0e0"
+           "footer_dot_color": "var(--olo-color-secondary)"
           }
          ]
         },
@@ -499,7 +499,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0d1426"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -526,8 +526,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// the platform",
-         "eyebrow_color": "#5aa9ff",
-         "eyebrow_dot_color": "#5aa9ff",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -544,7 +544,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6b7a96",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -590,7 +590,7 @@
           "color": "#111a30"
          },
          "card_border": "rgba(255,255,255,.08)",
-         "card_color": "#6b7a96",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": {
           "tl": 14,
           "tr": 14,
@@ -604,8 +604,8 @@
          "show_arrow": false,
          "show_footer": false,
          "show_media": false,
-         "icon_color": "#5aa9ff",
-         "icon_bg_color": "rgba(90,169,255,.13)",
+         "icon_color": "var(--olo-color-primary)",
+         "icon_bg_color": "color-mix(in srgb, var(--olo-color-primary) 13%, transparent)",
          "title_color": "#ffffff",
          "title_font_family": "sans-serif",
          "title_size": 19,
@@ -667,7 +667,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0a1020"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -693,10 +693,10 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "// scaling",
-         "eyebrow_color": "#5aa9ff",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline": "Scales to zero,",
          "accent": "and to millions",
-         "accent_color": "#5aa9ff",
+         "accent_color": "var(--olo-color-primary)",
          "accent_italic": false,
          "headline_tail": "",
          "uppercase": false,
@@ -704,7 +704,7 @@
          "headline_weight": "700",
          "headline_size": "44",
          "lead": "Nimbus spins capacity up the instant traffic arrives and back to nothing when it leaves. You pay for requests served, never for idle machines.",
-         "lead_color": "#6b7a96",
+         "lead_color": "var(--olo-color-text-muted)",
          "signature": "",
          "stats": [
           {
@@ -721,7 +721,7 @@
           }
          ],
          "stat_number_color": "#46d18a",
-         "stat_label_color": "#aebbd0",
+         "stat_label_color": "var(--olo-color-text)",
          "cta_text": "How autoscaling works →",
          "cta_url": "#platform",
          "cta_style": "outline",
@@ -766,7 +766,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0d1426"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -793,8 +793,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// pricing",
-         "eyebrow_color": "#5aa9ff",
-         "eyebrow_dot_color": "#5aa9ff",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -804,7 +804,7 @@
           },
           {
            "text": "not for idle",
-           "color": "#5aa9ff",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -816,7 +816,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#6b7a96",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -862,7 +862,7 @@
          "bg_color": "#111a30",
          "border_color": "rgba(255,255,255,.08)",
          "price_color": "#ffffff",
-         "accent_color": "#5aa9ff",
+         "accent_color": "var(--olo-color-primary)",
          "cta_text": "Start free",
          "cta_url": "#pricing",
          "cta_bg": "rgba(255,255,255,.07)",
@@ -875,7 +875,7 @@
           "linked": true
          },
          "feature_icon": "check",
-         "feature_icon_color": "#5aa9ff"
+         "feature_icon_color": "var(--olo-color-primary)"
         },
         "style": {},
         "advanced": {},
@@ -904,16 +904,16 @@
          "features": "All 30 regions\nEdge data & KV\nCustom domains & TLS\nEmail support",
          "is_popular": true,
          "badge_text": "Most popular",
-         "badge_bg_color": "rgba(90,169,255,.12)",
-         "badge_text_color": "#5aa9ff",
+         "badge_bg_color": "color-mix(in srgb, var(--olo-color-primary) 12%, transparent)",
+         "badge_text_color": "var(--olo-color-primary)",
          "bg_color": "#16223c",
-         "border_color": "#5aa9ff",
-         "price_color": "#5aa9ff",
-         "accent_color": "#5aa9ff",
+         "border_color": "var(--olo-color-primary)",
+         "price_color": "var(--olo-color-primary)",
+         "accent_color": "var(--olo-color-primary)",
          "cta_text": "Start building",
          "cta_url": "#pricing",
-         "cta_bg": "#5aa9ff",
-         "cta_color": "#060a14",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "border_radius": {
           "tl": 18,
           "tr": 18,
@@ -922,7 +922,7 @@
           "linked": true
          },
          "feature_icon": "check",
-         "feature_icon_color": "#5aa9ff"
+         "feature_icon_color": "var(--olo-color-primary)"
         },
         "style": {},
         "advanced": {},
@@ -953,7 +953,7 @@
          "bg_color": "#111a30",
          "border_color": "rgba(255,255,255,.08)",
          "price_color": "#ffffff",
-         "accent_color": "#5aa9ff",
+         "accent_color": "var(--olo-color-primary)",
          "cta_text": "Talk to sales",
          "cta_url": "#pricing",
          "cta_bg": "rgba(255,255,255,.07)",
@@ -966,7 +966,7 @@
           "linked": true
          },
          "feature_icon": "check",
-         "feature_icon_color": "#5aa9ff"
+         "feature_icon_color": "var(--olo-color-primary)"
         },
         "style": {},
         "advanced": {},
@@ -989,7 +989,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0a1020"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -1024,11 +1024,11 @@
          "text_color": "#ffffff",
          "border_radius": "0",
          "avatar": "",
-         "quote_accent_color": "#5aa9ff",
+         "quote_accent_color": "var(--olo-color-primary)",
          "quote_font": "heading",
          "quote_uppercase": false,
          "author_uppercase": false,
-         "author_color": "#6b7a96",
+         "author_color": "var(--olo-color-text-muted)",
          "quote_size": 0
         },
         "style": {},
@@ -1052,7 +1052,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0a1020"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -1091,7 +1091,7 @@
          "out_caption": "Estimated monthly bill",
          "note": "Includes 1M free requests & global edge routing. Volume discounts above 500M.",
          "show_contrib": false,
-         "zone_accent": "#5aa9ff",
+         "zone_accent": "var(--olo-color-primary)",
          "align": "left",
          "tile_padding": {
           "top": 52,
@@ -1123,7 +1123,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0d1426"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -1165,21 +1165,21 @@
           "angle": 160,
           "stops": [
            {
-            "color": "rgba(90,169,255,.16)",
+            "color": "color-mix(in srgb, var(--olo-color-primary) 16%, transparent)",
             "position": 0
            },
            {
-            "color": "rgba(86,224,224,.05)",
+            "color": "color-mix(in srgb, var(--olo-color-secondary) 5%, transparent)",
             "position": 100
            }
           ]
          },
-         "border_color": "rgba(90,169,255,.34)",
+         "border_color": "color-mix(in srgb, var(--olo-color-primary) 34%, transparent)",
          "text_color": "#ffffff",
-         "accent_color": "#5aa9ff",
-         "subtitle_color": "#aebbd0",
-         "cta_bg": "#5aa9ff",
-         "cta_color": "#060a14",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 9,
           "tr": 9,

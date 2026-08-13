@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f2efe8"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -38,7 +38,7 @@
          "heading_font": "mono",
          "heading_size": "sm",
          "heading_font_size": "12",
-         "heading_color": "#8d8a82",
+         "heading_color": "var(--olo-color-secondary)",
          "heading_uppercase": true,
          "alignment": "left",
          "decoration": "none"
@@ -65,7 +65,7 @@
          "heading_font": "mono",
          "heading_size": "sm",
          "heading_font_size": "12",
-         "heading_color": "#8d8a82",
+         "heading_color": "var(--olo-color-secondary)",
          "heading_uppercase": true,
          "alignment": "right",
          "decoration": "none"
@@ -103,7 +103,7 @@
          "heading_font": "heading",
          "heading_size": "xl",
          "heading_font_size": "104",
-         "heading_color": "#18181a",
+         "heading_color": "var(--olo-color-primary)",
          "heading_weight": "500",
          "alignment": "left",
          "decoration": "none"
@@ -164,7 +164,7 @@
          "variant": "outline",
          "alignment": "right",
          "bg_color": "#c2bcab",
-         "text_color": "#18181a",
+         "text_color": "var(--olo-color-primary)",
          "font_size": "12",
          "font_weight": "400",
          "text_transform": "none",
@@ -193,7 +193,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f2efe8"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -222,7 +222,7 @@
          "headline_lines": [
           {
            "text": "Selected work",
-           "color": "#8d8a82",
+           "color": "var(--olo-color-secondary)",
            "italic": false
           }
          ],
@@ -233,7 +233,7 @@
          "tagline_show": true,
          "tagline_text": "12 projects",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8d8a82",
+         "tagline_text_color": "var(--olo-color-secondary)",
          "tagline_text_size": 12,
          "layout": "stack",
          "gap": 0
@@ -344,7 +344,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#e8e3d7"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -373,7 +373,7 @@
          "headline_lines": [
           {
            "text": "Recent / featured",
-           "color": "#8d8a82",
+           "color": "var(--olo-color-secondary)",
            "italic": false
           }
          ],
@@ -384,7 +384,7 @@
          "tagline_show": true,
          "tagline_text": "↓ scroll",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8d8a82",
+         "tagline_text_color": "var(--olo-color-secondary)",
          "tagline_text_size": 12,
          "layout": "stack",
          "gap": 0
@@ -460,16 +460,16 @@
          "media_aspect": "4/3",
          "media_tall_aspect": "4/5",
          "media_bg": "#ebe7dc",
-         "media_label_color": "#18181a",
+         "media_label_color": "var(--olo-color-primary)",
          "hover_zoom": true,
          "title_font_family": "heading",
          "title_color": "#18181a",
          "title_size": 22,
          "title_weight": "500",
-         "meta_color": "#8d8a82",
+         "meta_color": "var(--olo-color-secondary)",
          "meta_size": 12,
          "show_desc": true,
-         "desc_color": "#8d8a82",
+         "desc_color": "var(--olo-color-secondary)",
          "desc_size": 15,
          "mono_font_family": "Space Mono"
         },
@@ -494,7 +494,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f2efe8"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -523,7 +523,7 @@
          "headline_lines": [
           {
            "text": "Type / specimen",
-           "color": "#8d8a82",
+           "color": "var(--olo-color-secondary)",
            "italic": false
           }
          ],
@@ -534,7 +534,7 @@
          "tagline_show": true,
          "tagline_text": "drag · edit the words",
          "tagline_text_italic": false,
-         "tagline_text_color": "#8d8a82",
+         "tagline_text_color": "var(--olo-color-secondary)",
          "tagline_text_size": 12,
          "layout": "stack",
          "gap": 0
@@ -590,8 +590,8 @@
            "default_val": 24
           }
          ],
-         "text_color": "#18181a",
-         "accent_color": "#8d8a82",
+         "text_color": "var(--olo-color-primary)",
+         "accent_color": "var(--olo-color-secondary)",
          "bg_color": "#ebe7dc",
          "font_size": "72",
          "font_weight_fallback": "400",
@@ -619,7 +619,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#e8e3d7"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -645,15 +645,15 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "About",
-         "eyebrow_color": "#8d8a82",
+         "eyebrow_color": "var(--olo-color-secondary)",
          "headline": "I'm Nadia — a designer who'd rather remove ten things than add one.",
          "accent": "",
          "headline_tail": "",
          "uppercase": false,
-         "headline_color": "#18181a",
+         "headline_color": "var(--olo-color-primary)",
          "headline_weight": "500",
          "headline_size": "42",
-         "accent_color": "#18181a",
+         "accent_color": "var(--olo-color-primary)",
          "lead": "For eight years I've worked between brand and digital, mostly with small teams who care about craft. Before going independent I led design at a studio in Copenhagen; now it's just me, which is exactly the right number of people.\n\nI work in tight loops, show early, and treat your constraints as the brief — not the obstacle.",
          "lead_color": "#3a3a3c",
          "stats": [],
@@ -725,7 +725,7 @@
           "type": "solid",
           "color": "transparent"
          },
-         "card_color": "#8d8a82",
+         "card_color": "var(--olo-color-secondary)",
          "card_radius": {
           "tl": 0,
           "tr": 0,
@@ -734,7 +734,7 @@
           "linked": true
          },
          "card_padding": 15,
-         "card_border": "#d7d1c2",
+         "card_border": "var(--olo-color-border)",
          "show_icon": false,
          "show_counter": true,
          "show_counter_label": false,
@@ -794,7 +794,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f2efe8"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -826,18 +826,18 @@
          "direction": "left",
          "pause_hover": true,
          "gap": "60",
-         "separator_color": "#8d8a82",
+         "separator_color": "var(--olo-color-secondary)",
          "font_family": "heading",
          "font_style": "normal",
          "font_size": "52",
          "font_weight": "500",
          "text_transform": "none",
-         "text_color": "#18181a",
+         "text_color": "var(--olo-color-primary)",
          "bg_color": "transparent",
          "height": "104",
          "border_top": "1",
          "border_bottom": "1",
-         "border_color": "#d7d1c2",
+         "border_color": "var(--olo-color-border)",
          "letter_spacing": "0"
         },
         "style": {},
@@ -861,7 +861,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#e8e3d7"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -895,17 +895,17 @@
          "cta2_text": "Book a call",
          "cta2_url": "#",
          "cta2_bg": "transparent",
-         "cta2_color": "#18181a",
+         "cta2_color": "var(--olo-color-primary)",
          "cta2_border": "#c2bcab",
          "bg": {
           "type": "solid",
-          "color": "#e8e3d7"
+          "color": "var(--olo-color-muted)"
          },
-         "text_color": "#18181a",
-         "accent_color": "#18181a",
-         "subtitle_color": "#8d8a82",
-         "cta_bg": "#18181a",
-         "cta_color": "#f2efe8",
+         "text_color": "var(--olo-color-primary)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-secondary)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-background)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,

@@ -3,7 +3,7 @@
   "id": "vo-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 56, "padding_bottom": 28 },
-  "style": { "bg": { "type": "solid", "color": "#172338" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -21,7 +21,7 @@
       "advanced": {},
       "children": [
        { "id": "vo-fbrand", "type": "headline", "settings": { "heading": "Voyage", "tag": "div", "alignment": "left", "heading_font_size": "24", "heading_font": "heading", "heading_color": "#eef2f7", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "vo-fbtext", "type": "text-block", "settings": { "content": "<p>A travel journal. Slow, photo-led dispatches from the road since 2017.</p>", "text_color": "#6c7a90", "font_size": "13.5", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "vo-fbtext", "type": "text-block", "settings": { "content": "<p>A travel journal. Slow, photo-led dispatches from the road since 2017.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "13.5", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -32,7 +32,7 @@
       "advanced": {},
       "children": [
        { "id": "vo-fh1", "type": "headline", "settings": { "heading": "Read", "tag": "h4", "alignment": "left", "heading_font_size": "11.5", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eef2f7", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "vo-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "link_color": "#6c7a90", "link_hover_color": "#ff8c69", "items": [ { "title": "Dispatches", "content": "#dispatches", "tag": "" }, { "title": "Destinations", "content": "#destinations", "tag": "" }, { "title": "Columns", "content": "#columns", "tag": "" }, { "title": "Guides", "content": "#guides", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "vo-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Dispatches", "content": "#dispatches", "tag": "" }, { "title": "Destinations", "content": "#destinations", "tag": "" }, { "title": "Columns", "content": "#columns", "tag": "" }, { "title": "Guides", "content": "#guides", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -43,7 +43,7 @@
       "advanced": {},
       "children": [
        { "id": "vo-fh2", "type": "headline", "settings": { "heading": "Journal", "tag": "h4", "alignment": "left", "heading_font_size": "11.5", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eef2f7", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "vo-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "link_color": "#6c7a90", "link_hover_color": "#ff8c69", "items": [ { "title": "About", "content": "#", "tag": "" }, { "title": "Contributors", "content": "#", "tag": "" }, { "title": "Submissions", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "vo-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "About", "content": "#", "tag": "" }, { "title": "Contributors", "content": "#", "tag": "" }, { "title": "Submissions", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -54,7 +54,7 @@
       "advanced": {},
       "children": [
        { "id": "vo-fh3", "type": "headline", "settings": { "heading": "Subscribe", "tag": "h4", "alignment": "left", "heading_font_size": "11.5", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eef2f7", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "vo-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "link_color": "#6c7a90", "link_hover_color": "#ff8c69", "items": [ { "title": "Newsletter", "content": "#subscribe", "tag": "" }, { "title": "Print annual", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "vo-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "13.5", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Newsletter", "content": "#subscribe", "tag": "" }, { "title": "Print annual", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "vo-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "vo-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Voyage — an OLOtheme demo.</p>", "text_color": "#6c7a90", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "vo-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Voyage — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "vo-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "vo-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#6c7a90", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "vo-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

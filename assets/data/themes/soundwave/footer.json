@@ -3,7 +3,7 @@
   "id": "so-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 56, "padding_bottom": 30 },
-  "style": { "bg": { "type": "solid", "color": "#101016" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -20,8 +20,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "so-fbrand", "type": "headline", "settings": { "heading": "KOVA", "tag": "div", "alignment": "left", "heading_font_size": "20", "heading_uppercase": false, "heading_color": "#ffffff", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "so-fbtext", "type": "text-block", "settings": { "content": "<p>Electronic producer & live act. New album Nightglass out now.</p>", "text_color": "#74747f", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "so-fbrand", "type": "headline", "settings": { "heading": "KOVA", "tag": "div", "alignment": "left", "heading_font_size": "20", "heading_uppercase": false, "heading_color": "var(--olo-color-secondary-contrast)", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "so-fbtext", "type": "text-block", "settings": { "content": "<p>Electronic producer & live act. New album Nightglass out now.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -31,8 +31,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "so-fh1", "type": "headline", "settings": { "heading": "Music", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "so-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#74747f", "link_hover_color": "#27e0a3", "font_size": "14", "gap": "10", "items": [ { "title": "Nightglass", "content": "#release", "tag": "" }, { "title": "Discography", "content": "#", "tag": "" }, { "title": "Streaming", "content": "#listen", "tag": "" }, { "title": "Remixes", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "so-fh1", "type": "headline", "settings": { "heading": "Music", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "so-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "font_size": "14", "gap": "10", "items": [ { "title": "Nightglass", "content": "#release", "tag": "" }, { "title": "Discography", "content": "#", "tag": "" }, { "title": "Streaming", "content": "#listen", "tag": "" }, { "title": "Remixes", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -42,8 +42,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "so-fh2", "type": "headline", "settings": { "heading": "Live", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "so-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#74747f", "link_hover_color": "#27e0a3", "font_size": "14", "gap": "10", "items": [ { "title": "Tour dates", "content": "#tour", "tag": "" }, { "title": "Past shows", "content": "#", "tag": "" }, { "title": "Booking", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "so-fh2", "type": "headline", "settings": { "heading": "Live", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "so-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "font_size": "14", "gap": "10", "items": [ { "title": "Tour dates", "content": "#tour", "tag": "" }, { "title": "Past shows", "content": "#", "tag": "" }, { "title": "Booking", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -53,8 +53,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "so-fh3", "type": "headline", "settings": { "heading": "Connect", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#ffffff", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "so-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "#74747f", "link_hover_color": "#27e0a3", "font_size": "14", "gap": "10", "items": [ { "title": "Instagram", "content": "#", "tag": "" }, { "title": "Bandcamp", "content": "#", "tag": "" }, { "title": "Newsletter", "content": "#", "tag": "" }, { "title": "Press kit", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "so-fh3", "type": "headline", "settings": { "heading": "Connect", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "so-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "font_size": "14", "gap": "10", "items": [ { "title": "Instagram", "content": "#", "tag": "" }, { "title": "Bandcamp", "content": "#", "tag": "" }, { "title": "Newsletter", "content": "#", "tag": "" }, { "title": "Press kit", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -67,7 +67,7 @@
     "advanced": {},
     "children": [
      { "id": "so-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
-      { "id": "so-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(255,255,255,.09)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "so-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 9%, transparent)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    },
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "so-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "so-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Kova — an OLOtheme demo.</p>", "text_color": "#74747f", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "so-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Kova — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "so-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "so-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#74747f", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "so-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

@@ -9,7 +9,7 @@
    "padding_top": 0,
    "padding_bottom": 0
   },
-  "style": { "bg": { "type": "solid", "color": "#16273a" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -45,7 +45,7 @@
          "meta_text": "8 days · Moderate · hiking + kayak · Max 12 travellers · From €2,150 pp",
          "scroll_hint": "",
          "bg_image": "",
-         "bg_color": "#16273a",
+         "bg_color": "var(--olo-color-background)",
          "media_label": "Lofoten — peaks & red cabins over the fjord",
          "text_position": "bottom-left",
          "text_align": "left",
@@ -57,11 +57,11 @@
          "overlay_top": 0.35,
          "overlay_bottom": 0.95,
          "overlay_sides": false,
-         "accent": "#8fc7e0",
-         "accent_on": "#0e1c2c",
+         "accent": "var(--olo-color-primary)",
+         "accent_on": "var(--olo-color-primary-contrast)",
          "text_color": "#ffffff",
          "sub_color": "#eef4f8",
-         "eyebrow_color": "#8fc7e0"
+         "eyebrow_color": "var(--olo-color-primary)"
         },
         "style": {},
         "advanced": {},
@@ -77,7 +77,7 @@
   "id": "fe-se-over",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#16273a" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -100,12 +100,12 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "The journey",
-         "eyebrow_color": "#8fc7e0",
-         "eyebrow_dot_color": "#8fc7e0",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           { "text": "Island to island, ", "color": "#eef4f8", "italic": false },
-          { "text": "peak to sea", "color": "#8fc7e0", "italic": true }
+          { "text": "peak to sea", "color": "var(--olo-color-primary)", "italic": true }
          ],
          "headline_font_family": "sans-serif",
          "headline_font_size": 44,
@@ -126,7 +126,7 @@
         "type": "text-block",
         "settings": {
          "content": "<p>We start in the fishing village of Reine and work our way north — hiking the ridgelines by day, paddling the sheltered sounds, and sleeping in rorbu cabins and a wild camp or two.</p><p>It's a real traverse, not a basecamp loop. You'll feel the distance in your legs and earn every view. No technical climbing — just steady days on good trails with one of our Lofoten-born guides.</p>",
-         "text_color": "#6f87a0",
+         "text_color": "var(--olo-color-text-muted)",
          "font_size": "16",
          "line_height": "1.7",
          "text_align": "left",
@@ -172,7 +172,7 @@
   "id": "fe-se-itin",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#1a2e44" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -195,12 +195,12 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Day by day",
-         "eyebrow_color": "#8fc7e0",
-         "eyebrow_dot_color": "#8fc7e0",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           { "text": "Eight days, ", "color": "#eef4f8", "italic": false },
-          { "text": "north", "color": "#8fc7e0", "italic": true }
+          { "text": "north", "color": "var(--olo-color-primary)", "italic": true }
          ],
          "headline_font_family": "sans-serif",
          "headline_font_size": 46,
@@ -255,10 +255,10 @@
          "tl_card_radius": 14,
          "tl_title_color": "#eef4f8",
          "tl_title_family": "heading",
-         "tl_text_color": "#6f87a0",
-         "tl_yr_color": "#8fc7e0",
+         "tl_text_color": "var(--olo-color-text-muted)",
+         "tl_yr_color": "var(--olo-color-primary)",
          "tl_yr_family": "heading",
-         "tl_tag_color": "#8fc7e0",
+         "tl_tag_color": "var(--olo-color-primary)",
          "items": [
           { "title": "Arrival & first light", "tag": "Reine", "description": "Meet the group over dinner in a harbour rorbu. Kit check, route briefing, and an easy sunset stroll to shake off the journey. Welcome dinner · rorbu cabin.", "date": "", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
           { "title": "The classic ridge", "tag": "Reinebringen", "description": "A steep stone stairway to one of the north's great viewpoints, then down to a hidden beach for lunch. Afternoon at your own pace. 6 hrs hiking · +440m.", "date": "", "image": "", "video": "", "icon": "", "category": "primary", "icon_color": "" },
@@ -284,7 +284,7 @@
   "id": "fe-se-incl",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#16273a" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -307,12 +307,12 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "What's included",
-         "eyebrow_color": "#8fc7e0",
-         "eyebrow_dot_color": "#8fc7e0",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           { "text": "Everything but the ", "color": "#eef4f8", "italic": false },
-          { "text": "flights", "color": "#8fc7e0", "italic": true }
+          { "text": "flights", "color": "var(--olo-color-primary)", "italic": true }
          ],
          "headline_font_family": "sans-serif",
          "headline_font_size": 46,
@@ -362,8 +362,8 @@
           { "counter": "", "counter_label": "", "title": "Kayaks & gear", "title_accent": "", "title_accent_italic": false, "description": "Boats, dry bags, safety kit and group equipment.", "icon": "eye", "footer_text": "", "footer_dot_color": "", "link_url": "", "media_image": "", "media_label": "" }
          ],
          "card_bg": { "type": "solid", "color": "#1f3550" },
-         "card_color": "#6f87a0",
-         "card_accent_color": "#8fc7e0",
+         "card_color": "var(--olo-color-text-muted)",
+         "card_accent_color": "var(--olo-color-primary)",
          "card_padding": 22,
          "card_border": "rgba(238,244,248,.12)",
          "card_radius": { "tl": 12, "tr": 12, "br": 12, "bl": 12, "linked": true },
@@ -395,7 +395,7 @@
   "id": "fe-se-cta",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#16273a" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    {
@@ -425,14 +425,14 @@
          "cta2_text": "Ask a question",
          "cta2_url": "#",
          "cta2_bg": "#eef4f8",
-         "cta2_color": "#0e1c2c",
+         "cta2_color": "var(--olo-color-primary-contrast)",
          "cta2_border": "",
          "bg": { "type": "solid", "color": "#122133" },
          "text_color": "#ffffff",
-         "accent_color": "#8fc7e0",
+         "accent_color": "var(--olo-color-primary)",
          "subtitle_color": "#eef4f8",
-         "cta_bg": "#8fc7e0",
-         "cta_color": "#0e1c2c",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999, "linked": true },
          "cta_size": 15,
          "cta_padding_y": 16,

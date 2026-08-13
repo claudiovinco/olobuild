@@ -3,7 +3,7 @@
   "id": "st-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
-  "style": { "bg": { "type": "solid", "color": "#172a20" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -20,8 +20,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "st-fbrand", "type": "headline", "settings": { "heading": "Sterling", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "25", "heading_color": "#eef2e9", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "st-fbtext", "type": "text-block", "settings": { "content": "<p>Independent private wealth management for families and founders, since 1994.</p>", "text_color": "#74866f", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "st-fbrand", "type": "headline", "settings": { "heading": "Sterling", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_font_size": "25", "heading_color": "var(--olo-color-secondary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "st-fbtext", "type": "text-block", "settings": { "content": "<p>Independent private wealth management for families and founders, since 1994.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -31,8 +31,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "st-fh1", "type": "headline", "settings": { "heading": "Firm", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eef2e9", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "st-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#74866f", "link_hover_color": "#c9a44a", "items": [ { "title": "Services", "content": "#services", "tag": "" }, { "title": "Approach", "content": "#approach", "tag": "" }, { "title": "Our people", "content": "#team", "tag": "" }, { "title": "Insights", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "st-fh1", "type": "headline", "settings": { "heading": "Firm", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "st-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-primary)", "items": [ { "title": "Services", "content": "#services", "tag": "" }, { "title": "Approach", "content": "#approach", "tag": "" }, { "title": "Our people", "content": "#team", "tag": "" }, { "title": "Insights", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -42,8 +42,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "st-fh2", "type": "headline", "settings": { "heading": "Clients", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eef2e9", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "st-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#74866f", "link_hover_color": "#c9a44a", "items": [ { "title": "Arrange a call", "content": "#contact", "tag": "" }, { "title": "Client login", "content": "#", "tag": "" }, { "title": "Fees", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "st-fh2", "type": "headline", "settings": { "heading": "Clients", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "st-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-primary)", "items": [ { "title": "Arrange a call", "content": "#contact", "tag": "" }, { "title": "Client login", "content": "#", "tag": "" }, { "title": "Fees", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -53,8 +53,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "st-fh3", "type": "headline", "settings": { "heading": "Contact", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eef2e9", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "st-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#74866f", "link_hover_color": "#c9a44a", "items": [ { "title": "1 Sterling Court", "content": "#", "tag": "" }, { "title": "+44 20 7946 00", "content": "tel:+442079460000", "tag": "" }, { "title": "hello@sterling.partners", "content": "mailto:hello@sterling.partners", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "st-fh3", "type": "headline", "settings": { "heading": "Contact", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary-contrast)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "st-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-primary)", "items": [ { "title": "1 Sterling Court", "content": "#", "tag": "" }, { "title": "+44 20 7946 00", "content": "tel:+442079460000", "tag": "" }, { "title": "hello@sterling.partners", "content": "mailto:hello@sterling.partners", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -67,7 +67,7 @@
     "advanced": {},
     "children": [
      { "id": "st-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
-      { "id": "st-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(238,242,233,.13)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "st-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 13%, transparent)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    },
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "st-fbot-l", "type": "column", "settings": { "width": "1-3" }, "style": {}, "advanced": {}, "children": [
-      { "id": "st-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Sterling — an OLOtheme demo.</p>", "text_color": "#74866f", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "st-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Sterling — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "st-fbot-r", "type": "column", "settings": { "width": "2-3" }, "style": {}, "advanced": {}, "children": [
-      { "id": "st-fdis", "type": "text-block", "settings": { "content": "<p>Sterling Partners is authorised and regulated for the purposes of this fictional demo. Capital at risk.</p>", "text_color": "#74866f", "font_size": "12.5", "line_height": "1.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "st-fdis", "type": "text-block", "settings": { "content": "<p>Sterling Partners is authorised and regulated for the purposes of this fictional demo. Capital at risk.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "line_height": "1.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

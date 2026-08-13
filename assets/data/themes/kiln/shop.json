@@ -11,7 +11,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#efe5da"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -38,8 +38,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Everything available",
-         "eyebrow_color": "#bd6a40",
-         "eyebrow_dot_color": "#bd6a40",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -49,7 +49,7 @@
           },
           {
            "text": "collection",
-           "color": "#bd6a40",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -61,7 +61,7 @@
          "tagline_show": true,
          "tagline_text": "Each piece is one of a kind — when it’s gone, it’s gone. New work lands after every firing, roughly once a month.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#928271",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 17,
          "layout": "center",
          "gap": 16
@@ -88,7 +88,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#efe5da"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -126,11 +126,11 @@
          "tag_bg": "",
          "tag_color": "",
          "quick_add_show": false,
-         "category_color": "#928271",
+         "category_color": "var(--olo-color-text-muted)",
          "title_font": "serif",
          "title_size": 22,
          "title_color": "#2a211c",
-         "price_color": "#bd6a40",
+         "price_color": "var(--olo-color-primary)",
          "footer_text": "",
          "footer_url": "#",
          "show_filters": false,
@@ -319,11 +319,11 @@
           "type": "solid",
           "color": "#2a211c"
          },
-         "text_color": "#efe5da",
-         "accent_color": "#bd6a40",
+         "text_color": "var(--olo-color-background)",
+         "accent_color": "var(--olo-color-primary)",
          "subtitle_color": "#cdbfad",
-         "cta_bg": "#bd6a40",
-         "cta_color": "#ffffff",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,

@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#14241c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -36,17 +36,17 @@
         "type": "hero-split",
         "settings": {
          "eyebrow_text": "Independent wealth management",
-         "eyebrow_dot_color": "#c9a44a",
-         "eyebrow_color": "#c9a44a",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline_lines": [
           {
            "text": "Wealth, managed",
-           "color": "#eef2e9",
+           "color": "var(--olo-color-secondary-contrast)",
            "italic": false
           },
           {
            "text": "with patience.",
-           "color": "#c9a44a",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -56,14 +56,14 @@
          "headline_font_weight": "500",
          "headline_align": "left",
          "subhead": "For three decades we’ve looked after the families and founders who’d rather think in decades than quarters. Independent, unhurried, and quietly thorough.",
-         "subhead_color": "#aebcae",
+         "subhead_color": "var(--olo-color-text)",
          "subhead_size": 18,
          "subhead_italic": false,
          "subhead_max_width": 520,
          "cta1_text": "Arrange a conversation",
          "cta1_url": "#contact",
-         "cta1_bg": "#c9a44a",
-         "cta1_color": "#0c1812",
+         "cta1_bg": "var(--olo-color-primary)",
+         "cta1_color": "var(--olo-color-primary-contrast)",
          "cta1_size": 13,
          "cta1_radius": {
           "tl": 4,
@@ -82,8 +82,8 @@
          "cta2_text": "Our services",
          "cta2_url": "#services",
          "cta2_bg": "transparent",
-         "cta2_color": "#eef2e9",
-         "cta2_border": "rgba(201,164,74,.42)",
+         "cta2_color": "var(--olo-color-secondary-contrast)",
+         "cta2_border": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "cta2_size": 13,
          "cta2_radius": {
           "tl": 4,
@@ -121,48 +121,48 @@
           "linked": true
          },
          "showcase_badge_text": "THE FIRM, IN FIGURES",
-         "showcase_badge_dot": "#c9a44a",
+         "showcase_badge_dot": "var(--olo-color-primary)",
          "showcase_badge_bg": "#0c1812",
-         "showcase_badge_color": "#eef2e9",
+         "showcase_badge_color": "var(--olo-color-secondary-contrast)",
          "showcase_items": [
           {
            "number": "Assets under care",
            "text": "£4.2bn",
            "italic": false,
-           "text_color": "#c9a44a",
+           "text_color": "var(--olo-color-primary)",
            "bg": {
             "type": "solid",
-            "color": "#172a20"
+            "color": "var(--olo-color-muted)"
            }
           },
           {
            "number": "Client families",
            "text": "320",
            "italic": false,
-           "text_color": "#eef2e9",
+           "text_color": "var(--olo-color-secondary-contrast)",
            "bg": {
             "type": "solid",
-            "color": "#172a20"
+            "color": "var(--olo-color-muted)"
            }
           },
           {
            "number": "Avg. relationship",
            "text": "14 yrs",
            "italic": false,
-           "text_color": "#eef2e9",
+           "text_color": "var(--olo-color-secondary-contrast)",
            "bg": {
             "type": "solid",
-            "color": "#172a20"
+            "color": "var(--olo-color-muted)"
            }
           },
           {
            "number": "Independent since",
            "text": "1994",
            "italic": false,
-           "text_color": "#eef2e9",
+           "text_color": "var(--olo-color-secondary-contrast)",
            "bg": {
             "type": "solid",
-            "color": "#172a20"
+            "color": "var(--olo-color-muted)"
            }
           }
          ],
@@ -195,11 +195,11 @@
          },
          "subhead_align": "left",
          "cta1_target": "_self",
-         "cta1_bg_hover": "#d8b766",
-         "cta1_color_hover": "#0c1812",
+         "cta1_bg_hover": "var(--olo-color-link)",
+         "cta1_color_hover": "var(--olo-color-primary-contrast)",
          "cta2_target": "_self",
          "cta2_bg_hover": "transparent",
-         "cta2_color_hover": "#c9a44a"
+         "cta2_color_hover": "var(--olo-color-primary)"
         },
         "style": {},
         "advanced": {},
@@ -222,7 +222,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#172a20"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -272,11 +272,11 @@
          "flow": "wrap",
          "gap": 16,
          "font_family": "sans-serif",
-         "text_color": "#74866f",
+         "text_color": "var(--olo-color-text-muted)",
          "text_size": 13,
          "pill_bg": "rgba(238,242,233,.06)",
-         "pill_border": "rgba(238,242,233,.13)",
-         "pill_text_color": "#74866f"
+         "pill_border": "color-mix(in srgb, var(--olo-color-secondary-contrast) 13%, transparent)",
+         "pill_text_color": "var(--olo-color-text-muted)"
         },
         "style": {},
         "advanced": {},
@@ -299,7 +299,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#14241c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -326,18 +326,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "What we do",
-         "eyebrow_color": "#c9a44a",
-         "eyebrow_dot_color": "#c9a44a",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Looking after the",
-           "color": "#eef2e9",
+           "color": "var(--olo-color-secondary-contrast)",
            "italic": false
           },
           {
            "text": "whole picture",
-           "color": "#c9a44a",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -390,7 +390,7 @@
           "type": "solid",
           "color": "#1d3328"
          },
-         "card_color": "#74866f",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": {
           "tl": 12,
           "tr": 12,
@@ -404,9 +404,9 @@
          "show_arrow": false,
          "show_footer": false,
          "show_media": false,
-         "icon_color": "#c9a44a",
-         "icon_bg_color": "rgba(201,164,74,.14)",
-         "title_color": "#eef2e9",
+         "icon_color": "var(--olo-color-primary)",
+         "icon_bg_color": "color-mix(in srgb, var(--olo-color-primary) 14%, transparent)",
+         "title_color": "var(--olo-color-secondary-contrast)",
          "title_font_family": "serif",
          "title_size": 24,
          "title_weight": "500",
@@ -452,7 +452,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#172a20"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -479,18 +479,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Our approach",
-         "eyebrow_color": "#c9a44a",
-         "eyebrow_dot_color": "#c9a44a",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Considered,",
-           "color": "#eef2e9",
+           "color": "var(--olo-color-secondary-contrast)",
            "italic": false
           },
           {
            "text": "every step",
-           "color": "#c9a44a",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -537,15 +537,15 @@
          "auto_number": false,
          "item_gap": 10,
          "number_style": "plain",
-         "number_color": "#c9a44a",
+         "number_color": "var(--olo-color-primary)",
          "number_size": 40,
          "number_font": "serif",
          "number_weight": "500",
-         "title_color": "#eef2e9",
+         "title_color": "var(--olo-color-secondary-contrast)",
          "title_size": 21,
          "title_font": "serif",
          "title_weight": "500",
-         "desc_color": "#74866f",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 14,
          "card_bg": "",
          "card_border": "",
@@ -594,7 +594,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#14241c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -621,18 +621,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Our people",
-         "eyebrow_color": "#c9a44a",
-         "eyebrow_dot_color": "#c9a44a",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "The same faces,",
-           "color": "#eef2e9",
+           "color": "var(--olo-color-secondary-contrast)",
            "italic": false
           },
           {
            "text": "year after year",
-           "color": "#c9a44a",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -687,8 +687,8 @@
          "photo_shadow": "none",
          "photo_gap": "16",
          "info_bg_color": "transparent",
-         "info_text_color": "#eef2e9",
-         "role_color": "#c9a44a",
+         "info_text_color": "var(--olo-color-secondary-contrast)",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "21",
          "name_weight": "600",
@@ -733,8 +733,8 @@
          "photo_shadow": "none",
          "photo_gap": "16",
          "info_bg_color": "transparent",
-         "info_text_color": "#eef2e9",
-         "role_color": "#c9a44a",
+         "info_text_color": "var(--olo-color-secondary-contrast)",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "21",
          "name_weight": "600",
@@ -779,8 +779,8 @@
          "photo_shadow": "none",
          "photo_gap": "16",
          "info_bg_color": "transparent",
-         "info_text_color": "#eef2e9",
-         "role_color": "#c9a44a",
+         "info_text_color": "var(--olo-color-secondary-contrast)",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "21",
          "name_weight": "600",
@@ -825,8 +825,8 @@
          "photo_shadow": "none",
          "photo_gap": "16",
          "info_bg_color": "transparent",
-         "info_text_color": "#eef2e9",
-         "role_color": "#c9a44a",
+         "info_text_color": "var(--olo-color-secondary-contrast)",
+         "role_color": "var(--olo-color-primary)",
          "info_align": "center",
          "name_size": "21",
          "name_weight": "600",
@@ -861,7 +861,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#172a20"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -893,16 +893,16 @@
          "layout": "editorial",
          "show_line": false,
          "bg_color": "transparent",
-         "text_color": "#eef2e9",
+         "text_color": "var(--olo-color-secondary-contrast)",
          "border_radius": "0",
          "avatar": "",
          "quote_font": "heading",
          "quote_size": 42,
          "quote_uppercase": false,
-         "quote_accent_color": "#c9a44a",
+         "quote_accent_color": "var(--olo-color-primary)",
          "author_uppercase": false,
-         "author_color": "#74866f",
-         "star_color": "#c9a44a"
+         "author_color": "var(--olo-color-text-muted)",
+         "star_color": "var(--olo-color-primary)"
         },
         "style": {},
         "advanced": {},
@@ -925,7 +925,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#14241c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -964,7 +964,7 @@
          "out_caption": "Projected after 20 years",
          "note": "Illustrative only — 6% p.a., contributions at year-end. Capital at risk; past performance is not a guide to the future.",
          "show_contrib": true,
-         "zone_accent": "#c9a44a",
+         "zone_accent": "var(--olo-color-primary)",
          "align": "left",
          "tile_padding": {
           "top": 52,
@@ -996,7 +996,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#14241c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -1030,17 +1030,17 @@
          "cta2_text": "Our services",
          "cta2_url": "#services",
          "cta2_bg": "transparent",
-         "cta2_color": "#eef2e9",
-         "cta2_border": "rgba(201,164,74,.42)",
+         "cta2_color": "var(--olo-color-secondary-contrast)",
+         "cta2_border": "color-mix(in srgb, var(--olo-color-primary) 42%, transparent)",
          "bg": {
           "type": "solid",
-          "color": "#0c1812"
+          "color": "var(--olo-color-primary-contrast)"
          },
-         "text_color": "#eef2e9",
-         "accent_color": "#c9a44a",
-         "subtitle_color": "#aebcae",
-         "cta_bg": "#c9a44a",
-         "cta_color": "#0c1812",
+         "text_color": "var(--olo-color-secondary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 4,
           "tr": 4,

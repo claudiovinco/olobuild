@@ -8,7 +8,7 @@
    "padding": "large"
   },
   "style": {
-   "bg": { "type": "solid", "color": "#0c0c10" }
+   "bg": { "type": "solid", "color": "var(--olo-color-background)" }
   },
   "advanced": {},
   "children": [
@@ -32,11 +32,11 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Nightglass world tour",
-         "eyebrow_color": "#27e0a3",
-         "eyebrow_dot_color": "#27e0a3",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
-          { "text": "Live, 2026", "color": "#ffffff", "italic": false }
+          { "text": "Live, 2026", "color": "var(--olo-color-secondary-contrast)", "italic": false }
          ],
          "headline_font_family": "sans-serif",
          "headline_font_size": 80,
@@ -46,7 +46,7 @@
          "tagline_show": true,
          "tagline_text": "Eighteen nights across Europe and North America. New live A/V show built for the album — come early, stay late.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#74747f",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 17,
          "layout": "center",
          "gap": 16
@@ -70,7 +70,7 @@
    "padding": "large"
   },
   "style": {
-   "bg": { "type": "solid", "color": "#0c0c10" }
+   "bg": { "type": "solid", "color": "var(--olo-color-background)" }
   },
   "advanced": {},
   "children": [
@@ -94,11 +94,11 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Europe · leg 1",
-         "eyebrow_color": "#27e0a3",
-         "eyebrow_dot_color": "#27e0a3",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
-          { "text": "June — July", "color": "#ffffff", "italic": false }
+          { "text": "June — July", "color": "var(--olo-color-secondary-contrast)", "italic": false }
          ],
          "headline_font_family": "sans-serif",
          "headline_font_size": 42,
@@ -182,7 +182,7 @@
    "padding": "large"
   },
   "style": {
-   "bg": { "type": "solid", "color": "#101016" }
+   "bg": { "type": "solid", "color": "var(--olo-color-muted)" }
   },
   "advanced": {},
   "children": [
@@ -206,11 +206,11 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "North America · leg 2",
-         "eyebrow_color": "#27e0a3",
-         "eyebrow_dot_color": "#27e0a3",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
-          { "text": "September", "color": "#ffffff", "italic": false }
+          { "text": "September", "color": "var(--olo-color-secondary-contrast)", "italic": false }
          ],
          "headline_font_family": "sans-serif",
          "headline_font_size": 42,
@@ -293,7 +293,7 @@
    "padding": "large"
   },
   "style": {
-   "bg": { "type": "solid", "color": "#0c0c10" }
+   "bg": { "type": "solid", "color": "var(--olo-color-background)" }
   },
   "advanced": {},
   "children": [
@@ -324,21 +324,21 @@
          "cta2_text": "Stream Nightglass",
          "cta2_url": "#listen",
          "cta2_bg": "rgba(255,255,255,.05)",
-         "cta2_color": "#ffffff",
-         "cta2_border": "rgba(255,255,255,.09)",
+         "cta2_color": "var(--olo-color-secondary-contrast)",
+         "cta2_border": "color-mix(in srgb, var(--olo-color-secondary-contrast) 9%, transparent)",
          "bg": {
           "type": "gradient",
           "direction": "150deg",
           "stops": [
-           { "color": "rgba(39,224,163,.16)", "position": 0 },
-           { "color": "rgba(255,93,158,.06)", "position": 100 }
+           { "color": "color-mix(in srgb, var(--olo-color-primary) 16%, transparent)", "position": 0 },
+           { "color": "color-mix(in srgb, var(--olo-color-secondary) 6%, transparent)", "position": 100 }
           ]
          },
-         "text_color": "#ffffff",
-         "accent_color": "#27e0a3",
-         "subtitle_color": "#b6b6c2",
-         "cta_bg": "#27e0a3",
-         "cta_color": "#060608",
+         "text_color": "var(--olo-color-secondary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": { "tl": 999, "tr": 999, "br": 999, "bl": 999, "linked": true },
          "cta_size": 15,
          "headline_font_family": "sans-serif",

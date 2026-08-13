@@ -10,7 +10,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#16263d"
+    "color": "var(--olo-color-primary-contrast)"
    }
   },
   "advanced": {},
@@ -36,11 +36,11 @@
         "type": "introsplit",
         "settings": {
          "eyebrow": "Independent advisory · since 2004",
-         "eyebrow_color": "#caa45a",
+         "eyebrow_color": "var(--olo-color-primary)",
          "headline": "Clear thinking for",
          "accent": "complex",
          "accent_italic": true,
-         "accent_color": "#caa45a",
+         "accent_color": "var(--olo-color-primary)",
          "headline_tail": " decisions.",
          "uppercase": false,
          "headline_color": "#ffffff",
@@ -53,8 +53,8 @@
          "cta_text": "Book a consultation",
          "cta_url": "#contact",
          "cta_style": "button",
-         "cta_bg": "#caa45a",
-         "cta_color": "#16263d",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta2_text": "Our services",
          "cta2_url": "#services",
          "cta2_style": "outline",
@@ -77,8 +77,8 @@
          "media_position": "right",
          "badge_number": "€18B+",
          "badge_label": "Transactions advised",
-         "badge_bg": "#caa45a",
-         "badge_color": "#16263d",
+         "badge_bg": "var(--olo-color-primary)",
+         "badge_color": "var(--olo-color-primary-contrast)",
          "badge_radius": {
           "tl": 10,
           "tr": 10,
@@ -230,7 +230,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f5f2ea"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -257,18 +257,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "What we do",
-         "eyebrow_color": "#b58e44",
-         "eyebrow_dot_color": "#b58e44",
+         "eyebrow_color": "var(--olo-color-secondary)",
+         "eyebrow_dot_color": "var(--olo-color-secondary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Advisory across the ",
-           "color": "#1b2433",
+           "color": "var(--olo-color-text)",
            "italic": false
           },
           {
            "text": "whole arc",
-           "color": "#b58e44",
+           "color": "var(--olo-color-secondary)",
            "italic": true
           }
          ],
@@ -280,7 +280,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#54607a",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "stack",
          "gap": 16
@@ -325,8 +325,8 @@
           "type": "solid",
           "color": "#ffffff"
          },
-         "card_border": "#e4e1d6",
-         "card_color": "#54607a",
+         "card_border": "var(--olo-color-border)",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": {
           "tl": 8,
           "tr": 8,
@@ -340,10 +340,10 @@
          "show_arrow": true,
          "show_footer": false,
          "show_media": false,
-         "icon_color": "#caa45a",
+         "icon_color": "var(--olo-color-primary)",
          "icon_bg_color": "#16263d",
          "icon_size": 23,
-         "title_color": "#1b2433",
+         "title_color": "var(--olo-color-text)",
          "title_font_family": "serif",
          "title_size": 23,
          "title_weight": "600",
@@ -404,7 +404,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#16263d"
+    "color": "var(--olo-color-primary-contrast)"
    }
   },
   "advanced": {},
@@ -431,8 +431,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "How we work",
-         "eyebrow_color": "#caa45a",
-         "eyebrow_dot_color": "#caa45a",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -488,7 +488,7 @@
          "auto_number": false,
          "item_gap": 10,
          "number_style": "plain",
-         "number_color": "#caa45a",
+         "number_color": "var(--olo-color-primary)",
          "number_size": 15,
          "number_font": "serif",
          "number_weight": "600",
@@ -591,10 +591,10 @@
          "columns": 4,
          "band_padding_y": 20,
          "show_dividers": true,
-         "divider_color": "#e4e1d6",
+         "divider_color": "var(--olo-color-border)",
          "band_border": true,
          "value_font_family": "heading",
-         "value_color": "#16263d",
+         "value_color": "var(--olo-color-primary-contrast)",
          "value_size": 52,
          "value_weight": "600",
          "label_color": "#8a91a3",
@@ -624,7 +624,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f5f2ea"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -651,18 +651,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Selected work",
-         "eyebrow_color": "#b58e44",
-         "eyebrow_dot_color": "#b58e44",
+         "eyebrow_color": "var(--olo-color-secondary)",
+         "eyebrow_dot_color": "var(--olo-color-secondary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Outcomes, not ",
-           "color": "#1b2433",
+           "color": "var(--olo-color-text)",
            "italic": false
           },
           {
            "text": "slideware",
-           "color": "#b58e44",
+           "color": "var(--olo-color-secondary)",
            "italic": true
           }
          ],
@@ -674,7 +674,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#54607a",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "stack",
          "gap": 16
@@ -719,8 +719,8 @@
           "type": "solid",
           "color": "#ffffff"
          },
-         "card_border": "#e4e1d6",
-         "card_color": "#54607a",
+         "card_border": "var(--olo-color-border)",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": {
           "tl": 10,
           "tr": 10,
@@ -736,10 +736,10 @@
          "show_footer": true,
          "show_media": false,
          "counter_shape": "square",
-         "counter_color": "#caa45a",
+         "counter_color": "var(--olo-color-primary)",
          "counter_bg": "#16263d",
          "counter_size": 18,
-         "title_color": "#1b2433",
+         "title_color": "var(--olo-color-text)",
          "title_font_family": "serif",
          "title_size": 22,
          "title_weight": "600",
@@ -754,7 +754,7 @@
            "title": "A €600M divestiture, closed in seven months",
            "description": "Buy-side tension, a tight timeline, and a clean separation that held post-close.",
            "footer_text": "Carve-out Advisory",
-           "footer_dot_color": "#caa45a"
+           "footer_dot_color": "var(--olo-color-primary)"
           },
           {
            "counter": "FS",
@@ -762,7 +762,7 @@
            "title": "From regional player to national platform",
            "description": "A three-year roadmap that doubled the franchise without diluting the brand.",
            "footer_text": "Corporate Strategy",
-           "footer_dot_color": "#caa45a"
+           "footer_dot_color": "var(--olo-color-primary)"
           }
          ]
         },
@@ -820,9 +820,9 @@
          "show_line": false,
          "bg_color": "transparent",
          "text_color": "#ffffff",
-         "star_color": "#caa45a",
-         "author_color": "#caa45a",
-         "quote_accent_color": "#caa45a",
+         "star_color": "var(--olo-color-primary)",
+         "author_color": "var(--olo-color-primary)",
+         "quote_accent_color": "var(--olo-color-primary)",
          "quote_font": "heading",
          "quote_size": 0,
          "quote_uppercase": false,
@@ -851,7 +851,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f5f2ea"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -878,18 +878,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Insights",
-         "eyebrow_color": "#b58e44",
-         "eyebrow_dot_color": "#b58e44",
+         "eyebrow_color": "var(--olo-color-secondary)",
+         "eyebrow_dot_color": "var(--olo-color-secondary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Sharper thinking, ",
-           "color": "#1b2433",
+           "color": "var(--olo-color-text)",
            "italic": false
           },
           {
            "text": "shared",
-           "color": "#b58e44",
+           "color": "var(--olo-color-secondary)",
            "italic": true
           }
          ],
@@ -901,7 +901,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#54607a",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "stack",
          "gap": 16
@@ -938,14 +938,14 @@
          "items_gap": 24,
          "media_aspect": "3/2",
          "media_tall_aspect": "4/5",
-         "media_bg": "#ece7da",
-         "media_label_color": "#16263d",
+         "media_bg": "var(--olo-color-muted)",
+         "media_label_color": "var(--olo-color-primary-contrast)",
          "hover_zoom": true,
          "title_font_family": "heading",
-         "title_color": "#1b2433",
+         "title_color": "var(--olo-color-text)",
          "title_size": 21,
          "title_weight": "600",
-         "meta_color": "#b58e44",
+         "meta_color": "var(--olo-color-secondary)",
          "meta_size": 12,
          "show_desc": true,
          "desc_color": "#8a91a3",
@@ -1002,7 +1002,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#ece7da"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -1030,10 +1030,10 @@
          "eyebrow": "Where to start",
          "heading": "What's the decision?",
          "intro": "",
-         "zone_accent": "#caa45a",
-         "zone_on": "#16263d",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "card_bg": "#ffffff",
-         "card_border": "#e4e1d6",
+         "card_border": "var(--olo-color-border)",
          "align": "center",
          "items": [
           {
@@ -1095,7 +1095,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#16263d"
+    "color": "var(--olo-color-primary-contrast)"
    }
   },
   "advanced": {},
@@ -1128,13 +1128,13 @@
          "cta_url": "#contact",
          "bg": {
           "type": "solid",
-          "color": "#16263d"
+          "color": "var(--olo-color-primary-contrast)"
          },
          "text_color": "#ffffff",
-         "accent_color": "#caa45a",
+         "accent_color": "var(--olo-color-primary)",
          "subtitle_color": "rgba(255,255,255,.7)",
-         "cta_bg": "#caa45a",
-         "cta_color": "#16263d",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 4,
           "tr": 4,

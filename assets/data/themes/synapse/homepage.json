@@ -12,7 +12,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#140e22"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -66,17 +66,17 @@
            "text": "…"
           }
          ],
-         "bg_color": "#140e22",
+         "bg_color": "var(--olo-color-background)",
          "panel_color": "#1e1633",
          "panel2_color": "#271d42",
-         "accent": "#a06bff",
+         "accent": "var(--olo-color-primary)",
          "accent2": "#ff7ad1",
-         "accent_on": "#ffffff",
-         "text_color": "#ffffff",
-         "sub_color": "#776e92",
-         "msg_text_color": "#b3a9cc",
-         "pill_color": "#a06bff",
-         "glow_color": "rgba(160,107,255,0.3)",
+         "accent_on": "var(--olo-color-primary-contrast)",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "sub_color": "var(--olo-color-text-muted)",
+         "msg_text_color": "var(--olo-color-text)",
+         "pill_color": "var(--olo-color-primary)",
+         "glow_color": "color-mix(in srgb, var(--olo-color-primary) 30%, transparent)",
          "glow_w": 820,
          "glow_h": 560,
          "glow_blur": 110,
@@ -109,7 +109,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#171029"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -138,7 +138,7 @@
          "headline_lines": [
           {
            "text": "The workspace for teams who'd rather think than search",
-           "color": "#776e92",
+           "color": "var(--olo-color-text-muted)",
            "italic": false
           }
          ],
@@ -206,11 +206,11 @@
          "flow": "wrap",
          "gap": 46,
          "font_family": "sans-serif",
-         "text_color": "#776e92",
+         "text_color": "var(--olo-color-text-muted)",
          "text_size": 13,
          "pill_bg": "rgba(255,255,255,.06)",
-         "pill_border": "rgba(255,255,255,.08)",
-         "pill_text_color": "#776e92"
+         "pill_border": "color-mix(in srgb, var(--olo-color-primary-contrast) 8%, transparent)",
+         "pill_text_color": "var(--olo-color-text-muted)"
         },
         "style": {},
         "advanced": {},
@@ -233,7 +233,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#171029"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -280,13 +280,13 @@
          "items_gap": 0,
          "band_padding_y": 28,
          "show_dividers": true,
-         "divider_color": "rgba(255,255,255,.08)",
+         "divider_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 8%, transparent)",
          "band_border": false,
          "value_font_family": "heading",
-         "value_color": "#ffffff",
+         "value_color": "var(--olo-color-primary-contrast)",
          "value_size": 48,
          "value_weight": "700",
-         "label_color": "#776e92",
+         "label_color": "var(--olo-color-text-muted)",
          "label_size": 12,
          "label_uppercase": false,
          "align": "center",
@@ -313,7 +313,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#140e22"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -342,18 +342,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// memory",
-         "eyebrow_color": "#a06bff",
-         "eyebrow_dot_color": "#a06bff",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "It learns your ",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           },
           {
            "text": "context, once",
-           "color": "#a06bff",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -365,7 +365,7 @@
          "tagline_show": true,
          "tagline_text": "Synapse builds a private memory of your projects, people and decisions — so you stop re-explaining yourself and start where you left off.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#776e92",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16,
          "layout": "stack",
          "gap": 12
@@ -392,8 +392,8 @@
            "icon": "check"
           }
          ],
-         "icon_color": "#a06bff",
-         "text_color": "#b3a9cc",
+         "icon_color": "var(--olo-color-primary)",
+         "text_color": "var(--olo-color-text)",
          "text_size": "14.5",
          "icon_shape": "none",
          "gap": "12",
@@ -411,13 +411,13 @@
          "url": "#",
          "alignment": "left",
          "bg_color": "rgba(255,255,255,.05)",
-         "text_color": "#ffffff",
+         "text_color": "var(--olo-color-primary-contrast)",
          "hover_bg_color": "rgba(255,255,255,.1)",
          "font_size": "14",
          "font_weight": "600",
          "border_radius": { "tl": 9, "tr": 9, "br": 9, "bl": 9, "linked": true },
          "tile_padding": { "top": 12, "right": 22, "bottom": 12, "left": 22 },
-         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "linked": true, "style": "solid", "color": "rgba(255,255,255,.16)" },
+         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "linked": true, "style": "solid", "color": "color-mix(in srgb, var(--olo-color-primary-contrast) 16%, transparent)" },
          "shadow": "none",
          "hover_effect": "lift"
         },
@@ -449,7 +449,7 @@
          "object_fit": "cover",
          "image_width": "100%",
          "border_radius": { "tl": 16, "tr": 16, "br": 16, "bl": 16, "linked": true },
-         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "linked": true, "style": "solid", "color": "rgba(255,255,255,.08)" },
+         "border": { "top": 1, "right": 1, "bottom": 1, "left": 1, "linked": true, "style": "solid", "color": "color-mix(in srgb, var(--olo-color-primary-contrast) 8%, transparent)" },
          "shadow": "none"
         },
         "style": {},
@@ -473,7 +473,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#171029"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -506,13 +506,13 @@
          "cta_url": "#features",
          "bg": {
           "type": "solid",
-          "color": "#0c0818"
+          "color": "var(--olo-color-secondary-contrast)"
          },
-         "text_color": "#ffffff",
-         "accent_color": "#a06bff",
-         "subtitle_color": "#776e92",
-         "cta_bg": "#a06bff",
-         "cta_color": "#ffffff",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text-muted)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 9,
           "tr": 9,
@@ -557,7 +557,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#140e22"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -584,18 +584,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// integrations",
-         "eyebrow_color": "#a06bff",
-         "eyebrow_dot_color": "#a06bff",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Connected to ",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           },
           {
            "text": "everything",
-           "color": "#a06bff",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -607,7 +607,7 @@
          "tagline_show": true,
          "tagline_text": "Plug in your stack and Synapse reasons across all of it.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#776e92",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -652,7 +652,7 @@
           "type": "solid",
           "color": "#1e1633"
          },
-         "card_color": "#776e92",
+         "card_color": "var(--olo-color-text-muted)",
          "card_radius": {
           "tl": 12,
           "tr": 12,
@@ -666,9 +666,9 @@
          "show_arrow": false,
          "show_footer": false,
          "show_media": false,
-         "icon_color": "#a06bff",
+         "icon_color": "var(--olo-color-primary)",
          "icon_bg_color": "rgba(255,255,255,.07)",
-         "title_color": "#776e92",
+         "title_color": "var(--olo-color-text-muted)",
          "title_font_family": "sans-serif",
          "title_size": 9,
          "title_weight": "400",
@@ -747,7 +747,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#171029"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -774,18 +774,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "// pricing",
-         "eyebrow_color": "#a06bff",
-         "eyebrow_dot_color": "#a06bff",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "Start free, ",
-           "color": "#ffffff",
+           "color": "var(--olo-color-primary-contrast)",
            "italic": false
           },
           {
            "text": "scale per seat",
-           "color": "#a06bff",
+           "color": "var(--olo-color-primary)",
            "italic": false
           }
          ],
@@ -797,7 +797,7 @@
          "tagline_show": false,
          "tagline_text": "",
          "tagline_text_italic": false,
-         "tagline_text_color": "#776e92",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 16.5,
          "layout": "center",
          "gap": 16
@@ -843,13 +843,13 @@
          "badge_text": "",
          "badge_bg_color": "",
          "bg_color": "#1e1633",
-         "price_color": "#ffffff",
-         "accent_color": "#a06bff",
+         "price_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
          "cta_text": "Get started",
          "cta_url": "#",
          "cta_bg": "rgba(255,255,255,.08)",
-         "cta_color": "#ffffff",
-         "cta_border": "rgba(255,255,255,.18)",
+         "cta_color": "var(--olo-color-primary-contrast)",
+         "cta_border": "color-mix(in srgb, var(--olo-color-primary-contrast) 18%, transparent)",
          "border_radius": {
           "tl": 18,
           "tr": 18,
@@ -885,14 +885,14 @@
          "features": "Unlimited memory\nAll integrations\nShared agents\nAdmin & SSO",
          "is_popular": true,
          "badge_text": "Most popular",
-         "badge_bg_color": "rgba(160,107,255,.14)",
+         "badge_bg_color": "color-mix(in srgb, var(--olo-color-primary) 14%, transparent)",
          "bg_color": "#1e1633",
-         "price_color": "#ffffff",
-         "accent_color": "#a06bff",
+         "price_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
          "cta_text": "Start free trial",
          "cta_url": "#",
-         "cta_bg": "#a06bff",
-         "cta_color": "#ffffff",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "border_radius": {
           "tl": 18,
           "tr": 18,
@@ -930,13 +930,13 @@
          "badge_text": "",
          "badge_bg_color": "",
          "bg_color": "#1e1633",
-         "price_color": "#ffffff",
-         "accent_color": "#a06bff",
+         "price_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
          "cta_text": "Talk to sales",
          "cta_url": "#",
          "cta_bg": "rgba(255,255,255,.08)",
-         "cta_color": "#ffffff",
-         "cta_border": "rgba(255,255,255,.18)",
+         "cta_color": "var(--olo-color-primary-contrast)",
+         "cta_border": "color-mix(in srgb, var(--olo-color-primary-contrast) 18%, transparent)",
          "border_radius": {
           "tl": 18,
           "tr": 18,
@@ -966,7 +966,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#140e22"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -1005,7 +1005,7 @@
          "out_caption": "Hours saved every week",
          "note": "≈ 6 hrs/person/week of triage, summarising and data-entry, automated. Based on aggregated customer usage.",
          "show_contrib": true,
-         "zone_accent": "#a06bff",
+         "zone_accent": "var(--olo-color-primary)",
          "align": "left",
          "tile_padding": {
           "top": 52,
@@ -1037,7 +1037,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#140e22"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -1071,19 +1071,19 @@
          "cta2_text": "See use cases",
          "cta2_url": "#",
          "cta2_bg": "rgba(255,255,255,.05)",
-         "cta2_color": "#ffffff",
-         "cta2_border": "rgba(255,255,255,.16)",
+         "cta2_color": "var(--olo-color-primary-contrast)",
+         "cta2_border": "color-mix(in srgb, var(--olo-color-primary-contrast) 16%, transparent)",
          "bg": {
           "type": "gradient",
           "gradient_angle": 160,
-          "gradient_from": "rgba(160,107,255,.18)",
+          "gradient_from": "color-mix(in srgb, var(--olo-color-primary) 18%, transparent)",
           "gradient_to": "rgba(255,122,209,.05)"
          },
-         "text_color": "#ffffff",
-         "accent_color": "#a06bff",
-         "subtitle_color": "#b3a9cc",
-         "cta_bg": "#a06bff",
-         "cta_color": "#ffffff",
+         "text_color": "var(--olo-color-primary-contrast)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 9,
           "tr": 9,

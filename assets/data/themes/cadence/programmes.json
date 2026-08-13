@@ -3,17 +3,17 @@
   "id": "cap-se-1",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#101218" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-secondary-contrast)" } },
   "advanced": {},
   "children": [
    { "id": "cap-ro-1", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
     { "id": "cap-co-1", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
      { "id": "cap-ph", "type": "section-header", "settings": {
-        "eyebrow_show": true, "eyebrow_text": "Choose your path", "eyebrow_color": "#ff6b54", "eyebrow_dot_color": "#ff6b54", "eyebrow_separator": "",
-        "headline_lines": [ { "text": "The ", "color": "#ffffff", "italic": false }, { "text": "programmes", "color": "#ff6b54", "italic": true } ],
+        "eyebrow_show": true, "eyebrow_text": "Choose your path", "eyebrow_color": "var(--olo-color-primary)", "eyebrow_dot_color": "var(--olo-color-primary)", "eyebrow_separator": "",
+        "headline_lines": [ { "text": "The ", "color": "var(--olo-color-primary-contrast)", "italic": false }, { "text": "programmes", "color": "var(--olo-color-primary)", "italic": true } ],
         "headline_font_family": "sans-serif", "headline_font_size": 84, "headline_font_weight": "800", "headline_align": "left", "headline_inline": true,
         "tagline_show": true, "tagline_text": "Whatever your starting point, there's a way in. Every programme begins with a free consult and a plan built around you.",
-        "tagline_text_italic": false, "tagline_text_color": "#6f7785", "tagline_text_size": 17,
+        "tagline_text_italic": false, "tagline_text_color": "var(--olo-color-text-muted)", "tagline_text_size": 17,
         "layout": "left", "gap": 16
        }, "style": {}, "advanced": {}, "children": [] }
     ]}
@@ -24,7 +24,7 @@
   "id": "cap-se-2",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large", "padding_top": 0 },
-  "style": { "bg": { "type": "solid", "color": "#1a1d24" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    { "id": "cap-ro-2", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
@@ -35,9 +35,9 @@
          { "image": "", "media_label": "online app", "title": "Online Coaching", "meta": "Anywhere · €90/mo", "description": "A custom programme that adapts weekly, video form reviews, and a check-in that keeps you honest. Train at your gym, on your schedule.", "link_url": "", "tall": false },
          { "image": "", "media_label": "small group", "title": "Strength Squad", "meta": "Small group · €140/mo", "description": "Eight sessions a month with no more than three others. Coached programming, shared cost, and a crew that shows up for each other.", "link_url": "", "tall": false }
         ],
-        "columns": 3, "items_gap": 18, "media_aspect": "16/10", "media_tall_aspect": "4/5", "media_bg": "#101218", "media_label_color": "#ff6b54", "hover_zoom": true,
-        "title_font_family": "heading", "title_color": "#ffffff", "title_size": 30, "title_weight": "700",
-        "meta_color": "#ff6b54", "meta_size": 12, "show_desc": true, "desc_color": "#6f7785", "desc_size": 14.5, "mono_font_family": ""
+        "columns": 3, "items_gap": 18, "media_aspect": "16/10", "media_tall_aspect": "4/5", "media_bg": "#101218", "media_label_color": "var(--olo-color-primary)", "hover_zoom": true,
+        "title_font_family": "heading", "title_color": "var(--olo-color-primary-contrast)", "title_size": 30, "title_weight": "700",
+        "meta_color": "var(--olo-color-primary)", "meta_size": 12, "show_desc": true, "desc_color": "var(--olo-color-text-muted)", "desc_size": 14.5, "mono_font_family": ""
        }, "style": {}, "advanced": {}, "children": [] }
     ]}
    ]}
@@ -47,22 +47,22 @@
   "id": "cap-se-3",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#1e2129" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    { "id": "cap-ro-3", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
     { "id": "cap-co-3", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
      { "id": "cap-essh", "type": "section-header", "settings": {
-        "eyebrow_show": true, "eyebrow_text": "Every programme includes", "eyebrow_color": "#ff6b54", "eyebrow_dot_color": "#ff6b54", "eyebrow_separator": "",
-        "headline_lines": [ { "text": "The ", "color": "#ffffff", "italic": false }, { "text": "essentials", "color": "#ff6b54", "italic": true } ],
+        "eyebrow_show": true, "eyebrow_text": "Every programme includes", "eyebrow_color": "var(--olo-color-primary)", "eyebrow_dot_color": "var(--olo-color-primary)", "eyebrow_separator": "",
+        "headline_lines": [ { "text": "The ", "color": "var(--olo-color-primary-contrast)", "italic": false }, { "text": "essentials", "color": "var(--olo-color-primary)", "italic": true } ],
         "headline_font_family": "sans-serif", "headline_font_size": 52, "headline_font_weight": "800", "headline_align": "center", "headline_inline": true,
         "tagline_show": false, "tagline_text": "", "layout": "center", "gap": 16
        }, "style": {}, "advanced": {}, "children": [] },
      { "id": "cap-ess", "type": "process-steps", "settings": {
         "columns": 4, "gap": 16, "align": "left", "auto_number": false, "item_gap": 12,
-        "number_style": "plain", "number_color": "#ff6b54", "number_size": 34, "number_font": "sans-serif", "number_weight": "800",
-        "title_color": "#ffffff", "title_size": 20, "title_font": "sans-serif", "title_weight": "700",
-        "desc_color": "#6f7785", "desc_size": 13.5,
+        "number_style": "plain", "number_color": "var(--olo-color-primary)", "number_size": 34, "number_font": "sans-serif", "number_weight": "800",
+        "title_color": "var(--olo-color-primary-contrast)", "title_size": 20, "title_font": "sans-serif", "title_weight": "700",
+        "desc_color": "var(--olo-color-text-muted)", "desc_size": 13.5,
         "card_bg": "#252932", "card_border": "1px solid rgba(255,255,255,.09)", "card_radius": { "tl": 12, "tr": 12, "br": 12, "bl": 12, "linked": true }, "card_padding": 26,
         "items": [
          { "number": "01", "title": "Custom plan", "description": "Built for your goals, your body and your week." },
@@ -79,7 +79,7 @@
   "id": "cap-se-4",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#ff6b54" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-primary)" } },
   "advanced": {},
   "children": [
    { "id": "cap-ro-4", "type": "row", "settings": {}, "style": {}, "advanced": {}, "children": [
@@ -88,8 +88,8 @@
         "headline": "Still", "headline_accent": "deciding?", "headline_accent_italic": true,
         "subtitle": "Book a free consult and we'll figure out the right programme together — zero pressure.",
         "cta_text": "Book your free consult", "cta_url": "#pricing", "cta2_text": "",
-        "bg": { "type": "solid", "color": "#ff6b54" }, "text_color": "#ffffff", "accent_color": "#ffffff", "subtitle_color": "rgba(255,255,255,.85)",
-        "cta_bg": "#ffffff", "cta_color": "#ff6b54", "cta_radius": { "tl": 6, "tr": 6, "br": 6, "bl": 6, "linked": true }, "cta_size": 14,
+        "bg": { "type": "solid", "color": "var(--olo-color-primary)" }, "text_color": "var(--olo-color-primary-contrast)", "accent_color": "var(--olo-color-primary-contrast)", "subtitle_color": "color-mix(in srgb, var(--olo-color-primary-contrast) 85%, transparent)",
+        "cta_bg": "#ffffff", "cta_color": "var(--olo-color-primary)", "cta_radius": { "tl": 6, "tr": 6, "br": 6, "bl": 6, "linked": true }, "cta_size": 14,
         "headline_font_family": "sans-serif", "headline_size": 88, "headline_weight": "800", "subtitle_size": 17,
         "layout": "stack", "vertical_align": "center", "banner_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0, "linked": true }, "banner_padding": 80
        }, "style": {}, "advanced": {}, "children": [] }

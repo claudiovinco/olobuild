@@ -3,7 +3,7 @@
   "id": "ce-fse",
   "type": "section",
   "settings": { "style": "default", "width": "default", "padding": "large" },
-  "style": { "bg": { "type": "solid", "color": "#0b0c0f" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-background)" } },
   "advanced": {},
   "children": [
    { "id": "ce-fro1", "type": "row", "settings": { "layout": "50-25-25", "gap": 30, "vertical_align": "top" }, "style": {}, "advanced": {}, "children": [
@@ -11,16 +11,16 @@
      { "id": "ce-fbrand", "type": "headline", "settings": {
         "heading": "clod.eu",
         "accent_text": ".",
-        "accent_color": "#E94955",
+        "accent_color": "var(--olo-color-primary)",
         "tag": "h3",
         "heading_font": "heading",
         "heading_font_size": 46,
-        "heading_color": "#ECEAE3",
+        "heading_color": "var(--olo-color-secondary)",
         "subtitle": ""
        }, "style": {}, "advanced": {}, "children": [] },
      { "id": "ce-fdesc", "type": "text-block", "settings": {
         "content": "<p>R&S · divisione idee — project media manager.<br/>Strategia, media e identità per le aziende che vogliono farsi vedere.</p>",
-        "text_color": "#a0a298",
+        "text_color": "var(--olo-color-text-muted)",
         "font_size": 14
        }, "style": {}, "advanced": {}, "children": [] }
     ]},
@@ -43,8 +43,8 @@
         "direction": "vertical",
         "show_icons": false,
         "font_size": "14",
-        "link_color": "#a0a298",
-        "link_hover_color": "#E94955"
+        "link_color": "var(--olo-color-text-muted)",
+        "link_hover_color": "var(--olo-color-link)"
        }, "style": {}, "advanced": {}, "children": [] }
     ]},
     { "id": "ce-fco3", "type": "column", "settings": { "width": "1-4", "width_medium": "1-2" }, "style": {}, "advanced": {}, "children": [
@@ -66,8 +66,8 @@
         "direction": "vertical",
         "show_icons": false,
         "font_size": "14",
-        "link_color": "#a0a298",
-        "link_hover_color": "#E94955"
+        "link_color": "var(--olo-color-text-muted)",
+        "link_hover_color": "var(--olo-color-link)"
        }, "style": {}, "advanced": {}, "children": [] }
     ]}
    ]},
@@ -77,7 +77,7 @@
         "style": "solid",
         "width": 100,
         "thickness": 1,
-        "color": "rgba(236,234,227,.10)",
+        "color": "color-mix(in srgb, var(--olo-color-secondary) 10%, transparent)",
         "alignment": "center",
         "spacing": 22
        }, "style": {}, "advanced": {}, "children": [] }

@@ -3,7 +3,7 @@
   "id": "vo-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 30 },
-  "style": { "bg": { "type": "solid", "color": "#312c25" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -20,8 +20,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "vo-fbrand", "type": "headline", "settings": { "heading": "Vows", "tag": "div", "alignment": "left", "heading_font_size": "26", "heading_uppercase": false, "heading_color": "#f3ecdf", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "vo-fbtext", "type": "text-block", "settings": { "content": "<p>Wedding planning & design studio. Beautiful days, calmly run, unmistakably yours.</p>", "text_color": "#8a7f6c", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "vo-fbrand", "type": "headline", "settings": { "heading": "Vows", "tag": "div", "alignment": "left", "heading_font_size": "26", "heading_uppercase": false, "heading_color": "var(--olo-color-secondary)", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vo-fbtext", "type": "text-block", "settings": { "content": "<p>Wedding planning & design studio. Beautiful days, calmly run, unmistakably yours.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -31,8 +31,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "vo-fh1", "type": "headline", "settings": { "heading": "Studio", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f3ecdf", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "vo-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#8a7f6c", "link_hover_color": "#cbab6a", "items": [ { "title": "Services", "content": "#services", "tag": "" }, { "title": "Real weddings", "content": "#weddings", "tag": "" }, { "title": "About", "content": "#about", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "vo-fh1", "type": "headline", "settings": { "heading": "Studio", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vo-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Services", "content": "#services", "tag": "" }, { "title": "Real weddings", "content": "#weddings", "tag": "" }, { "title": "About", "content": "#about", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -42,8 +42,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "vo-fh2", "type": "headline", "settings": { "heading": "Plan", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f3ecdf", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "vo-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#8a7f6c", "link_hover_color": "#cbab6a", "items": [ { "title": "Enquire", "content": "#enquire", "tag": "" }, { "title": "Guide & pricing", "content": "#", "tag": "" }, { "title": "FAQ", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "vo-fh2", "type": "headline", "settings": { "heading": "Plan", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vo-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Enquire", "content": "#enquire", "tag": "" }, { "title": "Guide & pricing", "content": "#", "tag": "" }, { "title": "FAQ", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -53,8 +53,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "vo-fh3", "type": "headline", "settings": { "heading": "Contact", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#f3ecdf", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "vo-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#8a7f6c", "link_hover_color": "#cbab6a", "items": [ { "title": "hello@vows.studio", "content": "mailto:hello@vows.studio", "tag": "" }, { "title": "Worldwide · based in Milan", "content": "#", "tag": "" }, { "title": "@vows.studio", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "vo-fh3", "type": "headline", "settings": { "heading": "Contact", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "var(--olo-color-secondary)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "vo-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "hello@vows.studio", "content": "mailto:hello@vows.studio", "tag": "" }, { "title": "Worldwide · based in Milan", "content": "#", "tag": "" }, { "title": "@vows.studio", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -67,7 +67,7 @@
     "advanced": {},
     "children": [
      { "id": "vo-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
-      { "id": "vo-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "rgba(243,236,223,.13)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "vo-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "color-mix(in srgb, var(--olo-color-secondary) 13%, transparent)", "alignment": "center", "spacing": 24 }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    },
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "vo-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "vo-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Vows — an OLOtheme demo.</p>", "text_color": "#8a7f6c", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "vo-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Vows — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "vo-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "vo-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#8a7f6c", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "vo-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

@@ -11,7 +11,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f4efe6"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -38,8 +38,8 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "The class guide",
-         "eyebrow_color": "#cf7e4f",
-         "eyebrow_dot_color": "#cf7e4f",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
@@ -49,7 +49,7 @@
           },
           {
            "text": "practice",
-           "color": "#cf7e4f",
+           "color": "var(--olo-color-primary)",
            "italic": true
           }
          ],
@@ -61,7 +61,7 @@
          "tagline_show": true,
          "tagline_text": "Every class is capped at eight so you're always seen. New to pilates? Start with Mat & Breath or an intro reformer workshop.",
          "tagline_text_italic": false,
-         "tagline_text_color": "#938c7e",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 17,
          "layout": "center",
          "gap": 16
@@ -87,7 +87,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#f4efe6"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -124,7 +124,7 @@
           "type": "solid",
           "color": "#fbf7f0"
          },
-         "card_color": "#5e584e",
+         "card_color": "var(--olo-color-text)",
          "card_accent_color": "#2c2a26",
          "card_radius": {
           "tl": 16,
@@ -134,7 +134,7 @@
           "linked": true
          },
          "card_padding": 26,
-         "card_border": "#ddd3c2",
+         "card_border": "var(--olo-color-border)",
          "show_icon": false,
          "show_counter": true,
          "show_counter_label": false,
@@ -150,7 +150,7 @@
           "bl": 12,
           "linked": true
          },
-         "counter_color": "#cf7e4f",
+         "counter_color": "var(--olo-color-primary)",
          "counter_size": 11,
          "title_font_family": "serif",
          "title_size": 25,
@@ -259,11 +259,11 @@
           "type": "solid",
           "color": "#2c2a26"
          },
-         "text_color": "#f4efe6",
-         "accent_color": "#cf7e4f",
+         "text_color": "var(--olo-color-background)",
+         "accent_color": "var(--olo-color-primary)",
          "subtitle_color": "#cfc7b9",
-         "cta_bg": "#cf7e4f",
-         "cta_color": "#ffffff",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
          "cta_radius": {
           "tl": 999,
           "tr": 999,

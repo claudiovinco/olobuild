@@ -12,7 +12,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0a0a0c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -61,14 +61,14 @@
          "cta2_url": "#",
          "scroll_text": "Scroll to see the work",
          "show_scroll": true,
-         "bg_color": "#0a0a0c",
-         "accent": "#f4a23b",
+         "bg_color": "var(--olo-color-background)",
+         "accent": "var(--olo-color-primary)",
          "accent2": "#e08e26",
-         "accent_on": "#0a0a0c",
-         "text_color": "#ece9e3",
-         "sub_color": "#9b988f",
-         "eyebrow_color": "#9b988f",
-         "glow_color": "rgba(244,162,59,0.18)",
+         "accent_on": "var(--olo-color-background)",
+         "text_color": "var(--olo-color-text)",
+         "sub_color": "var(--olo-color-text-muted)",
+         "eyebrow_color": "var(--olo-color-text-muted)",
+         "glow_color": "color-mix(in srgb, var(--olo-color-primary) 18%, transparent)",
          "glow_w": 760,
          "glow_h": 560,
          "glow_blur": 100,
@@ -105,7 +105,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0a0a0c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -133,13 +133,13 @@
          "content_type": "text",
          "text_items": "Branding ✦ Identity ✦ Digital ✦ Art Direction ✦ Motion ✦ Strategy",
          "separator": " ✦ ",
-         "separator_color": "#f4a23b",
+         "separator_color": "var(--olo-color-primary)",
          "speed": "28",
          "direction": "left",
          "pause_hover": true,
          "gap": "26",
          "bg_color": "transparent",
-         "text_color": "#ece9e3",
+         "text_color": "var(--olo-color-text)",
          "font_size": "26",
          "font_weight": "700",
          "letter_spacing": "0",
@@ -172,7 +172,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#121216"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -199,18 +199,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Selected work",
-         "eyebrow_color": "#f4a23b",
-         "eyebrow_dot_color": "#f4a23b",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "RECENT",
-           "color": "#ece9e3",
+           "color": "var(--olo-color-text)",
            "italic": false
           },
           {
            "text": "PROJECTS",
-           "color": "#ece9e3",
+           "color": "var(--olo-color-text)",
            "italic": false
           }
          ],
@@ -256,7 +256,7 @@
          "media_aspect": "16/10",
          "media_tall_aspect": "4/5",
          "media_bg": "#1a1a20",
-         "media_label_color": "#ece9e3",
+         "media_label_color": "var(--olo-color-text)",
          "hover_zoom": true,
          "title_font_family": "heading",
          "title_color": "#ece9e3",
@@ -265,7 +265,7 @@
          "meta_color": "#6a6862",
          "meta_size": 13,
          "show_desc": false,
-         "desc_color": "#9b988f",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 14,
          "mono_font_family": "",
          "items": [
@@ -337,7 +337,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0a0a0c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -366,7 +366,7 @@
          "headline_lines": [
           {
            "text": "THE STUDIO",
-           "color": "#9b988f",
+           "color": "var(--olo-color-text-muted)",
            "italic": false
           }
          ],
@@ -409,7 +409,7 @@
          "letter_spacing": "0",
          "line_height": "1.18",
          "text_align": "left",
-         "text_color": "#ece9e3",
+         "text_color": "var(--olo-color-text)",
          "blend_mode": "normal",
          "mode": "text",
          "tile_padding": {
@@ -440,7 +440,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#121216"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -467,13 +467,13 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "What we do",
-         "eyebrow_color": "#f4a23b",
-         "eyebrow_dot_color": "#f4a23b",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "SERVICES",
-           "color": "#ece9e3",
+           "color": "var(--olo-color-text)",
            "italic": false
           }
          ],
@@ -591,7 +591,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0a0a0c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -618,18 +618,18 @@
         "settings": {
          "eyebrow_show": true,
          "eyebrow_text": "Recognition",
-         "eyebrow_color": "#f4a23b",
-         "eyebrow_dot_color": "#f4a23b",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "eyebrow_dot_color": "var(--olo-color-primary)",
          "eyebrow_separator": "",
          "headline_lines": [
           {
            "text": "A FEW NICE",
-           "color": "#ece9e3",
+           "color": "var(--olo-color-text)",
            "italic": false
           },
           {
            "text": "SURPRISES",
-           "color": "#ece9e3",
+           "color": "var(--olo-color-text)",
            "italic": false
           }
          ],
@@ -676,11 +676,11 @@
          "prefix": "",
          "label": "Awwwards & FWA",
          "icon_emoji": "",
-         "text_color": "#ece9e3",
-         "number_color": "#ece9e3",
+         "text_color": "var(--olo-color-text)",
+         "number_color": "var(--olo-color-text)",
          "number_font_size": "40",
          "number_font_weight": "700",
-         "label_color": "#9b988f",
+         "label_color": "var(--olo-color-text-muted)",
          "label_font_size": "13",
          "bg_type": "color",
          "bg_color": "transparent",
@@ -693,7 +693,7 @@
           "left": 0,
           "linked": false,
           "style": "solid",
-          "color": "#f4a23b"
+          "color": "var(--olo-color-primary)"
          },
          "tile_padding": {
           "top": 18,
@@ -726,11 +726,11 @@
          "prefix": "",
          "label": "Brands shipped",
          "icon_emoji": "",
-         "text_color": "#ece9e3",
-         "number_color": "#ece9e3",
+         "text_color": "var(--olo-color-text)",
+         "number_color": "var(--olo-color-text)",
          "number_font_size": "40",
          "number_font_weight": "700",
-         "label_color": "#9b988f",
+         "label_color": "var(--olo-color-text-muted)",
          "label_font_size": "13",
          "bg_type": "color",
          "bg_color": "transparent",
@@ -743,7 +743,7 @@
           "left": 0,
           "linked": false,
           "style": "solid",
-          "color": "#f4a23b"
+          "color": "var(--olo-color-primary)"
          },
          "tile_padding": {
           "top": 18,
@@ -776,11 +776,11 @@
          "prefix": "",
          "label": "Years independent",
          "icon_emoji": "",
-         "text_color": "#ece9e3",
-         "number_color": "#ece9e3",
+         "text_color": "var(--olo-color-text)",
+         "number_color": "var(--olo-color-text)",
          "number_font_size": "40",
          "number_font_weight": "700",
-         "label_color": "#9b988f",
+         "label_color": "var(--olo-color-text-muted)",
          "label_font_size": "13",
          "bg_type": "color",
          "bg_color": "transparent",
@@ -793,7 +793,7 @@
           "left": 0,
           "linked": false,
           "style": "solid",
-          "color": "#f4a23b"
+          "color": "var(--olo-color-primary)"
          },
          "tile_padding": {
           "top": 18,
@@ -826,11 +826,11 @@
          "prefix": "",
          "label": "People, no suits",
          "icon_emoji": "",
-         "text_color": "#ece9e3",
-         "number_color": "#ece9e3",
+         "text_color": "var(--olo-color-text)",
+         "number_color": "var(--olo-color-text)",
          "number_font_size": "40",
          "number_font_weight": "700",
-         "label_color": "#9b988f",
+         "label_color": "var(--olo-color-text-muted)",
          "label_font_size": "13",
          "bg_type": "color",
          "bg_color": "transparent",
@@ -843,7 +843,7 @@
           "left": 0,
           "linked": false,
           "style": "solid",
-          "color": "#f4a23b"
+          "color": "var(--olo-color-primary)"
          },
          "tile_padding": {
           "top": 18,
@@ -873,7 +873,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#121216"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -901,8 +901,8 @@
          "eyebrow": "Where do we start?",
          "heading": "What are you <em>making?</em>",
          "intro": "",
-         "zone_accent": "#f4a23b",
-         "zone_on": "#0a0a0c",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-background)",
          "card_bg": "#1a1a20",
          "card_border": "rgba(255,255,255,.1)",
          "align": "center",
@@ -970,7 +970,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#0a0a0c"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -1011,14 +1011,14 @@
          "show_scroll": false,
          "scroll_text": "",
          "bottom_split": false,
-         "bg_color": "#0a0a0c",
-         "accent": "#f4a23b",
+         "bg_color": "var(--olo-color-background)",
+         "accent": "var(--olo-color-primary)",
          "accent2": "#e08e26",
-         "accent_on": "#0a0a0c",
-         "text_color": "#ece9e3",
-         "sub_color": "#9b988f",
-         "eyebrow_color": "#f4a23b",
-         "glow_color": "rgba(244,162,59,0.2)",
+         "accent_on": "var(--olo-color-background)",
+         "text_color": "var(--olo-color-text)",
+         "sub_color": "var(--olo-color-text-muted)",
+         "eyebrow_color": "var(--olo-color-primary)",
+         "glow_color": "color-mix(in srgb, var(--olo-color-primary) 20%, transparent)",
          "glow_w": 680,
          "glow_h": 480,
          "glow_blur": 100,

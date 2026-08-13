@@ -3,7 +3,7 @@
   "id": "mo-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 48, "padding_bottom": 32 },
-  "style": { "bg": { "type": "solid", "color": "#e8e3d7" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -20,8 +20,8 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "mo-fbrand", "type": "headline", "settings": { "heading": "Nadia Halford", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_size": "sm", "heading_font_size": "20", "heading_weight": "500", "heading_color": "#18181a", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "mo-fbtext", "type": "text-block", "settings": { "content": "<p>Independent brand &amp; digital designer. Working worldwide from Lisbon.</p>", "text_color": "#8d8a82", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "280" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "mo-fbrand", "type": "headline", "settings": { "heading": "Nadia Halford", "tag": "div", "alignment": "left", "heading_font": "heading", "heading_size": "sm", "heading_font_size": "20", "heading_weight": "500", "heading_color": "var(--olo-color-primary)", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
+       { "id": "mo-fbtext", "type": "text-block", "settings": { "content": "<p>Independent brand &amp; digital designer. Working worldwide from Lisbon.</p>", "text_color": "var(--olo-color-secondary)", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "280" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -31,7 +31,7 @@
       "style": {},
       "advanced": {},
       "children": [
-       { "id": "mo-fnav", "type": "nav", "settings": { "show_icons": false, "direction": "horizontal", "alignment": "right", "gap": "12", "tile_padding": { "top": 4, "right": 6, "bottom": 4, "left": 6 }, "font_size": "13", "font_weight": "400", "link_color": "#4a4a48", "link_hover_color": "#18181a", "items": [ { "title": "Instagram", "content": "#", "tag": "" }, { "title": "Are.na", "content": "#", "tag": "" }, { "title": "LinkedIn", "content": "#", "tag": "" }, { "title": "Read.cv", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "mo-fnav", "type": "nav", "settings": { "show_icons": false, "direction": "horizontal", "alignment": "right", "gap": "12", "tile_padding": { "top": 4, "right": 6, "bottom": 4, "left": 6 }, "font_size": "13", "font_weight": "400", "link_color": "var(--olo-color-text)", "link_hover_color": "var(--olo-color-link)", "items": [ { "title": "Instagram", "content": "#", "tag": "" }, { "title": "Are.na", "content": "#", "tag": "" }, { "title": "LinkedIn", "content": "#", "tag": "" }, { "title": "Read.cv", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -44,7 +44,7 @@
     "advanced": {},
     "children": [
      { "id": "mo-fcol-div", "type": "column", "settings": { "width": "1-1" }, "style": {}, "advanced": {}, "children": [
-      { "id": "mo-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "#d7d1c2", "alignment": "center", "spacing": 20 }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "mo-fdiv", "type": "divider", "settings": { "style": "solid", "width": 100, "thickness": 1, "color": "var(--olo-color-border)", "alignment": "center", "spacing": 20 }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    },
@@ -56,10 +56,10 @@
     "advanced": {},
     "children": [
      { "id": "mo-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "mo-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Nadia Halford — an OLOtheme demo.</p>", "text_color": "#8d8a82", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "mo-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Nadia Halford — an OLOtheme demo.</p>", "text_color": "var(--olo-color-secondary)", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "mo-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "mo-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#8d8a82", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "mo-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-secondary)", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

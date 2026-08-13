@@ -12,7 +12,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1c1c1e"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -52,7 +52,7 @@
          "meta_text": "",
          "scroll_hint": "",
          "bg_image": "",
-         "bg_color": "#1c1c1e",
+         "bg_color": "var(--olo-color-background)",
          "media_label": "hero — concrete & timber house, raking light",
          "text_position": "bottom-left",
          "text_align": "left",
@@ -60,15 +60,15 @@
          "aspect_ratio": "21/10",
          "min_height": 540,
          "heading_font": "sans",
-         "overlay_color": "#1c1c1e",
+         "overlay_color": "var(--olo-color-background)",
          "overlay_top": 0.35,
          "overlay_bottom": 0.88,
          "overlay_sides": false,
-         "accent": "#c9c2b6",
-         "accent_on": "#121214",
+         "accent": "var(--olo-color-primary)",
+         "accent_on": "var(--olo-color-primary-contrast)",
          "text_color": "#ffffff",
-         "sub_color": "#eeece6",
-         "eyebrow_color": "#c9c2b6"
+         "sub_color": "var(--olo-color-secondary-contrast)",
+         "eyebrow_color": "var(--olo-color-primary)"
         },
         "style": {},
         "advanced": {},
@@ -91,7 +91,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1c1c1e"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -120,7 +120,7 @@
          "headline_lines": [
           {
            "text": "Selected projects",
-           "color": "#eeece6",
+           "color": "var(--olo-color-secondary-contrast)",
            "italic": false
           }
          ],
@@ -131,7 +131,7 @@
          "tagline_show": true,
          "tagline_text": "← drag · all work →",
          "tagline_text_italic": false,
-         "tagline_text_color": "#646058",
+         "tagline_text_color": "var(--olo-color-text-muted)",
          "tagline_text_size": 13,
          "tagline_caption": "",
          "layout": "split",
@@ -198,12 +198,12 @@
          "gap": 16,
          "media_bg": "#26262a",
          "overlay_color": "rgba(18,18,20,0.55)",
-         "title_color": "#eeece6",
-         "subtitle_color": "#c9c2b6",
+         "title_color": "var(--olo-color-secondary-contrast)",
+         "subtitle_color": "var(--olo-color-primary)",
          "radius": 6,
          "show_hint": true,
          "hint_text": "← drag · all work →",
-         "hint_color": "#646058"
+         "hint_color": "var(--olo-color-text-muted)"
         },
         "style": {},
         "advanced": {},
@@ -226,7 +226,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#202022"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -279,11 +279,11 @@
            "meta": ""
           }
          ],
-         "zone_accent": "#c9c2b6",
-         "zone_on": "#121214",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "panel_bg": "#26262a",
          "card_bg": "#2f2f34",
-         "card_border": "rgba(238,236,230,.12)",
+         "card_border": "color-mix(in srgb, var(--olo-color-secondary-contrast) 12%, transparent)",
          "align": "left"
         },
         "style": {},
@@ -307,7 +307,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1c1c1e"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -336,7 +336,7 @@
          "headline_lines": [
           {
            "text": "How we work",
-           "color": "#eeece6",
+           "color": "var(--olo-color-secondary-contrast)",
            "italic": false
           }
          ],
@@ -382,18 +382,18 @@
          "auto_number": false,
          "item_gap": 10,
          "number_style": "plain",
-         "number_color": "#c9c2b6",
+         "number_color": "var(--olo-color-primary)",
          "number_size": 13,
          "number_font": "sans-serif",
          "number_weight": "600",
-         "title_color": "#eeece6",
+         "title_color": "var(--olo-color-secondary-contrast)",
          "title_size": 24,
          "title_font": "sans-serif",
          "title_weight": "600",
-         "desc_color": "#646058",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 14.5,
-         "card_bg": "#1c1c1e",
-         "card_border": "rgba(238,236,230,.12)",
+         "card_bg": "var(--olo-color-background)",
+         "card_border": "color-mix(in srgb, var(--olo-color-secondary-contrast) 12%, transparent)",
          "card_radius": {
           "tl": 0,
           "tr": 0,
@@ -441,7 +441,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#202022"
+    "color": "var(--olo-color-muted)"
    }
   },
   "advanced": {},
@@ -470,13 +470,13 @@
          "items_gap": 0,
          "band_padding_y": 12,
          "show_dividers": true,
-         "divider_color": "rgba(238,236,230,.12)",
+         "divider_color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 12%, transparent)",
          "band_border": false,
          "value_font_family": "heading",
-         "value_color": "#eeece6",
+         "value_color": "var(--olo-color-secondary-contrast)",
          "value_size": 52,
          "value_weight": "600",
-         "label_color": "#646058",
+         "label_color": "var(--olo-color-text-muted)",
          "label_size": 12,
          "label_uppercase": false,
          "align": "left",
@@ -521,7 +521,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1c1c1e"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -550,7 +550,7 @@
          "headline_lines": [
           {
            "text": "The studio",
-           "color": "#eeece6",
+           "color": "var(--olo-color-secondary-contrast)",
            "italic": false
           }
          ],
@@ -601,16 +601,16 @@
          "media_aspect": "3/2",
          "media_tall_aspect": "3/4",
          "media_bg": "#26262a",
-         "media_label_color": "rgba(238,236,230,.4)",
+         "media_label_color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 40%, transparent)",
          "hover_zoom": true,
          "title_font_family": "heading",
-         "title_color": "#eeece6",
+         "title_color": "var(--olo-color-secondary-contrast)",
          "title_size": 18,
          "title_weight": "600",
-         "meta_color": "#c9c2b6",
+         "meta_color": "var(--olo-color-primary)",
          "meta_size": 12,
          "show_desc": false,
-         "desc_color": "#646058",
+         "desc_color": "var(--olo-color-text-muted)",
          "desc_size": 14
         },
         "style": {},
@@ -634,7 +634,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1c1c1e"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -664,10 +664,10 @@
          "intro": "Every project starts as a few materials on the bench. Tap two or three and see how the tones sit together before we ever draw a line.",
          "max": 3,
          "empty_label": "Tap materials to blend",
-         "zone_accent": "#c9c2b6",
-         "zone_on": "#121214",
+         "zone_accent": "var(--olo-color-primary)",
+         "zone_on": "var(--olo-color-primary-contrast)",
          "card_bg": "#26262a",
-         "card_border": "rgba(238,236,230,.12)",
+         "card_border": "color-mix(in srgb, var(--olo-color-secondary-contrast) 12%, transparent)",
          "align": "left",
          "items": [
           {
@@ -676,7 +676,7 @@
           },
           {
            "name": "Oak",
-           "color": "#b08968"
+           "color": "var(--olo-color-secondary)"
           },
           {
            "name": "Clay",
@@ -719,7 +719,7 @@
   "style": {
    "bg": {
     "type": "solid",
-    "color": "#1c1c1e"
+    "color": "var(--olo-color-background)"
    }
   },
   "advanced": {},
@@ -750,7 +750,7 @@
          "uppercase": false,
          "headline_color": "#ffffff",
          "subhead": "We take on a handful of projects a year. Tell us about the site and the idea — we'll tell you honestly if we're the right studio.",
-         "subhead_color": "#eeece6",
+         "subhead_color": "var(--olo-color-secondary-contrast)",
          "cta1_text": "Start a project",
          "cta1_url": "#contact",
          "cta2_text": "See the work",
@@ -762,10 +762,10 @@
          "overlay_color": "#121214",
          "overlay_top": 0.7,
          "overlay_bottom": 0.85,
-         "accent": "#c9c2b6",
-         "accent_on": "#121214",
-         "btn_bg": "#c9c2b6",
-         "btn_color": "#121214",
+         "accent": "var(--olo-color-primary)",
+         "accent_on": "var(--olo-color-primary-contrast)",
+         "btn_bg": "var(--olo-color-primary)",
+         "btn_color": "var(--olo-color-primary-contrast)",
          "btn_radius": { "tl": 0, "tr": 0, "br": 0, "bl": 0 },
          "text_color": "#ffffff",
          "align": "center",

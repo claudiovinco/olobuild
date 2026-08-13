@@ -3,7 +3,7 @@
   "id": "lg-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 60, "padding_bottom": 32 },
-  "style": { "bg": { "type": "solid", "color": "#192531" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -21,7 +21,7 @@
       "advanced": {},
       "children": [
        { "id": "lg-fbrand", "type": "headline", "settings": { "heading": "Ledger", "tag": "div", "alignment": "left", "heading_font_size": "20", "heading_color": "#eaf1f0", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "lg-fbtext", "type": "text-block", "settings": { "content": "<p>Modern accountancy for small business. Real accountants, clever software.</p>", "text_color": "#697b88", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "lg-fbtext", "type": "text-block", "settings": { "content": "<p>Modern accountancy for small business. Real accountants, clever software.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.6", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -32,7 +32,7 @@
       "advanced": {},
       "children": [
        { "id": "lg-fh1", "type": "headline", "settings": { "heading": "Product", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eaf1f0", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "lg-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#697b88", "link_hover_color": "#eaf1f0", "items": [ { "title": "Services", "content": "#services", "tag": "" }, { "title": "How it works", "content": "#how", "tag": "" }, { "title": "Pricing", "content": "#pricing", "tag": "" }, { "title": "The app", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "lg-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "#eaf1f0", "items": [ { "title": "Services", "content": "#services", "tag": "" }, { "title": "How it works", "content": "#how", "tag": "" }, { "title": "Pricing", "content": "#pricing", "tag": "" }, { "title": "The app", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -43,7 +43,7 @@
       "advanced": {},
       "children": [
        { "id": "lg-fh2", "type": "headline", "settings": { "heading": "Resources", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eaf1f0", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "lg-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#697b88", "link_hover_color": "#eaf1f0", "items": [ { "title": "Tax guides", "content": "#", "tag": "" }, { "title": "Calculators", "content": "#", "tag": "" }, { "title": "Blog", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "lg-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "#eaf1f0", "items": [ { "title": "Tax guides", "content": "#", "tag": "" }, { "title": "Calculators", "content": "#", "tag": "" }, { "title": "Blog", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -54,7 +54,7 @@
       "advanced": {},
       "children": [
        { "id": "lg-fh3", "type": "headline", "settings": { "heading": "Company", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eaf1f0", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "lg-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#697b88", "link_hover_color": "#eaf1f0", "items": [ { "title": "About", "content": "#", "tag": "" }, { "title": "Careers", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "lg-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "#eaf1f0", "items": [ { "title": "About", "content": "#", "tag": "" }, { "title": "Careers", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "lg-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "lg-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Ledger — an OLOtheme demo.</p>", "text_color": "#697b88", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "lg-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Ledger — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "lg-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "lg-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#697b88", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "lg-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }

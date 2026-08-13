@@ -3,7 +3,7 @@
   "id": "fj-fse",
   "type": "section",
   "settings": { "style": "default", "width": "large", "padding": "small", "padding_top": 62, "padding_bottom": 30 },
-  "style": { "bg": { "type": "solid", "color": "#1a2e44" } },
+  "style": { "bg": { "type": "solid", "color": "var(--olo-color-muted)" } },
   "advanced": {},
   "children": [
    {
@@ -21,7 +21,7 @@
       "advanced": {},
       "children": [
        { "id": "fj-fbrand", "type": "headline", "settings": { "heading": "Fjordline", "tag": "div", "alignment": "left", "heading_font_size": "21", "heading_color": "#eef4f8", "heading_font": "heading", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "fj-fbtext", "type": "text-block", "settings": { "content": "<p>Small-group adventure expeditions across the Nordic north, led by local guides.</p>", "text_color": "#6f87a0", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "fj-fbtext", "type": "text-block", "settings": { "content": "<p>Small-group adventure expeditions across the Nordic north, led by local guides.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "14", "line_height": "1.7", "text_align": "left", "max_width": "260" }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -32,7 +32,7 @@
       "advanced": {},
       "children": [
        { "id": "fj-fh1", "type": "headline", "settings": { "heading": "Travel", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eef4f8", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "fj-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#6f87a0", "link_hover_color": "#8fc7e0", "gap": "10", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "items": [ { "title": "Expeditions", "content": "#trips", "tag": "" }, { "title": "Itineraries", "content": "#itineraries", "tag": "" }, { "title": "Private trips", "content": "#", "tag": "" }, { "title": "Gift vouchers", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "fj-fn1", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "gap": "10", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "items": [ { "title": "Expeditions", "content": "#trips", "tag": "" }, { "title": "Itineraries", "content": "#itineraries", "tag": "" }, { "title": "Private trips", "content": "#", "tag": "" }, { "title": "Gift vouchers", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -43,7 +43,7 @@
       "advanced": {},
       "children": [
        { "id": "fj-fh2", "type": "headline", "settings": { "heading": "Company", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eef4f8", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "fj-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#6f87a0", "link_hover_color": "#8fc7e0", "gap": "10", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "items": [ { "title": "Why Fjordline", "content": "#why", "tag": "" }, { "title": "Our guides", "content": "#", "tag": "" }, { "title": "Sustainability", "content": "#", "tag": "" }, { "title": "Journal", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "fj-fn2", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "gap": "10", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "items": [ { "title": "Why Fjordline", "content": "#why", "tag": "" }, { "title": "Our guides", "content": "#", "tag": "" }, { "title": "Sustainability", "content": "#", "tag": "" }, { "title": "Journal", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      },
      {
@@ -54,7 +54,7 @@
       "advanced": {},
       "children": [
        { "id": "fj-fh3", "type": "headline", "settings": { "heading": "Plan", "tag": "h4", "alignment": "left", "heading_font_size": "12", "heading_uppercase": true, "heading_font": "body", "heading_color": "#eef4f8", "decoration": "none" }, "style": {}, "advanced": {}, "children": [] },
-       { "id": "fj-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "#6f87a0", "link_hover_color": "#8fc7e0", "gap": "10", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "items": [ { "title": "How to book", "content": "#", "tag": "" }, { "title": "Kit lists", "content": "#", "tag": "" }, { "title": "Travel insurance", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
+       { "id": "fj-fn3", "type": "nav", "settings": { "show_icons": false, "direction": "vertical", "alignment": "left", "font_size": "14", "link_color": "var(--olo-color-text-muted)", "link_hover_color": "var(--olo-color-link)", "gap": "10", "tile_padding": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "items": [ { "title": "How to book", "content": "#", "tag": "" }, { "title": "Kit lists", "content": "#", "tag": "" }, { "title": "Travel insurance", "content": "#", "tag": "" }, { "title": "Contact", "content": "#", "tag": "" } ] }, "style": {}, "advanced": {}, "children": [] }
       ]
      }
     ]
@@ -79,10 +79,10 @@
     "advanced": {},
     "children": [
      { "id": "fj-fbot-l", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "fj-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Fjordline — an OLOtheme demo.</p>", "text_color": "#6f87a0", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "fj-fcopy", "type": "text-block", "settings": { "content": "<p>© 2026 Fjordline — an OLOtheme demo.</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "left" }, "style": {}, "advanced": {}, "children": [] }
      ]},
      { "id": "fj-fbot-r", "type": "column", "settings": { "width": "1-2" }, "style": {}, "advanced": {}, "children": [
-      { "id": "fj-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "#6f87a0", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
+      { "id": "fj-fbuilt", "type": "text-block", "settings": { "content": "<p>Built with OLObuild</p>", "text_color": "var(--olo-color-text-muted)", "font_size": "12.5", "text_align": "right" }, "style": {}, "advanced": {}, "children": [] }
      ]}
     ]
    }
