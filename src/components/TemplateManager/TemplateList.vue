@@ -106,6 +106,22 @@
       <div>{{ t('Caricamento template…') }}</div>
     </div>
 
+    <!-- La lista non ha potuto caricare: NON è uno stato vuoto. Dire "nessun
+         template" quando la richiesta è fallita fa credere che i template siano
+         stati persi (e invita a ricrearli), mentre di solito sono lì e manca
+         solo il permesso: sessione scaduta, o un plugin di ruoli che toglie le
+         capability all'amministratore sulle chiamate REST. -->
+    <div v-else-if="loadError" class="tpl-empty">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="opacity:.35"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+      <h3>{{ loadError === 'forbidden' ? t('Non hai i permessi per vedere i template') : t('Impossibile caricare i template') }}</h3>
+      <p v-if="loadError === 'forbidden'">{{ t('I template non sono stati persi: la richiesta è stata rifiutata. Ricarica la pagina; se il problema resta, verifica di essere ancora connesso come amministratore.') }}</p>
+      <p v-else>{{ t('La richiesta al server non è riuscita. Controlla la connessione e riprova.') }}</p>
+      <button class="btn-pri" @click="fetchTemplates()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        {{ t('Riprova') }}
+      </button>
+    </div>
+
     <div v-else-if="filteredSorted.length === 0" class="tpl-empty">
       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="opacity:.3"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
       <h3>{{ query ? t('Nessun template trovato per la ricerca') : (activeType === 'all' ? t('Nessun template ancora') : t('Nessun template di questo tipo')) }}</h3>
@@ -275,6 +291,8 @@ const postTypes = oloData.postTypes || [];
 
 /* ─── State ────────────────────────────────────────────────────────── */
 const loading = ref(true);
+/* null = tutto bene · 'forbidden' = 401/403 · 'failed' = rete o server */
+const loadError = ref(null);
 const templates = ref([]);
 const byType = ref({});
 const activeHeaderId = ref(parseInt(oloData.activeHeaderId) || 0);
@@ -467,17 +485,23 @@ function handleClickOutside(e) {
 /* ─── Data fetch ────────────────────────────────────────────────────── */
 async function fetchTemplates() {
   loading.value = true;
+  loadError.value = null;
   try {
     const res = await fetch(`${oloData.restUrl}/templates?per_page=200`, {
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
-    if (!res.ok) throw new Error('Failed');
+    if (!res.ok) {
+      // 401/403 = la richiesta è stata rifiutata, non "zero template": va
+      // distinto, altrimenti la schermata vuota fa pensare a dati persi.
+      throw new Error(res.status === 401 || res.status === 403 ? 'forbidden' : 'failed');
+    }
     const data = await res.json();
     templates.value = data.items || [];
     byType.value = data.byType || {};
     healMissingThumbs();
   } catch (err) {
     console.error('fetchTemplates:', err);
+    loadError.value = err && err.message === 'forbidden' ? 'forbidden' : 'failed';
     templates.value = [];
   } finally {
     loading.value = false;
