@@ -534,7 +534,12 @@ body:has(.olo-frontend-grid) {
 }
 /* Anche sull'html: gli elementi FIXED (barre, luci di pagina) e il contenuto
    clippato di body contribuiscono comunque alla scroll area del documento —
-   senza questa regola su mobile si può "pannare" verso una zona vuota a destra. */
+   senza questa regola su mobile si può "pannare" verso una zona vuota a destra.
+
+   NON aggiungere `overflow-y: auto` qui: `clip` diventerebbe `hidden`, che a
+   differenza di `clip` CREA uno scroll container e rompe position:sticky
+   (header, colonne, cover-h). Verificato il 2026-08-12: con `clip` il documento
+   scrolla regolarmente, l'asse Y non viene bloccato. */
 html:has(.olo-frontend-grid) {
   overflow-x: clip;
 }
