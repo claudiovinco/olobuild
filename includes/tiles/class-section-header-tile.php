@@ -81,7 +81,7 @@ class Olobuild_SectionHeader_Tile extends Olobuild_Tile_Base {
         $hsize   = absint( $s['headline_font_size'] ) ?: 96;
         $hlh     = floatval( $s['headline_line_height'] ) ?: 1.0;
         $hweight = preg_match( '/^\d+$/', (string) $s['headline_font_weight'] ) ? $s['headline_font_weight'] : '700';
-        $halign  = in_array( $s['headline_align'] ?? 'left', [ 'left', 'center', 'right', 'justify' ], true ) ? $s['headline_align'] : 'left';
+        $halign  = in_array( $s['headline_align'] ?? 'left', [ 'left', 'center', 'right', 'justify' ], true ) ? ( $s['headline_align'] ?? 'left' ) : 'left';
         if ( $layout === 'center' ) $halign = 'center';
         $inline  = ! empty( $s['headline_inline'] );
 

@@ -106,7 +106,7 @@ class Olobuild_Blendtext_Tile extends Olobuild_Tile_Base {
             $sp_half  = intval( round( $sp_size / 2 ) );
             $sp_soft  = max( 0, min( 100, intval( $s['spotlight_softness'] ?? 40 ) ) );
             $sp_inner = max( 0, min( 100, 100 - $sp_soft ) );  // softness alto → inner basso → bordo più sfumato
-            $sp_blend = in_array( $s['spotlight_blend'] ?? 'difference', [ 'difference', 'exclusion', 'screen' ], true ) ? $s['spotlight_blend'] : 'difference';
+            $sp_blend = in_array( $s['spotlight_blend'] ?? 'difference', [ 'difference', 'exclusion', 'screen' ], true ) ? ( $s['spotlight_blend'] ?? 'difference' ) : 'difference';
             $sp_color = $this->safe_color_css( $s['spotlight_color'] ?? '' ) ?: '#ffffff';
             $sp_ease  = max( 5, min( 90, intval( $s['spotlight_easing'] ?? 22 ) ) ) / 100;
             $flash_id = $uid . '-flash';

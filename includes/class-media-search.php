@@ -13,8 +13,8 @@ class Olobuild_Media_Search {
     public static function render_page() {
         $nonce = wp_create_nonce( 'wp_rest' );
         $rest_url = esc_url_raw( rest_url( 'olobuild/v1' ) );
-        $rest_url_vtour = esc_url_raw( rest_url( 'olo-vtour/v1' ) );
-        $vtour_active = is_plugin_active( 'olo-vtour/olo-vtour.php' );
+        $rest_url_vtour = esc_url_raw( rest_url( 'olotour/v1' ) );
+        $vtour_active = is_plugin_active( 'olotour/olotour.php' );
 
         // Check configured API keys (costante wp-config o opzione; nessun fallback hardcoded)
         $keys = [

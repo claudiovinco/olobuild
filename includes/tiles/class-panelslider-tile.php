@@ -274,7 +274,7 @@ class Olobuild_PanelSlider_Tile extends Olobuild_Tile_Base {
         $card_bg     = $this->safe_color_css( $s['card_bg'] ?? '#ffffff' ) ?: '#ffffff';
         $card_bcol   = $this->safe_color_css( $s['card_border_color'] ?? 'transparent' );
         $card_bw     = max( 0, intval( $s['card_border_width'] ?? 0 ) );
-        $card_bs     = in_array( $s['card_border_style'] ?? 'solid', [ 'solid', 'dashed', 'dotted', 'double' ], true ) ? $s['card_border_style'] : 'solid';
+        $card_bs     = in_array( $s['card_border_style'] ?? 'solid', [ 'solid', 'dashed', 'dotted', 'double' ], true ) ? ( $s['card_border_style'] ?? 'solid' ) : 'solid';
         $card_border_decl = ( $card_bw > 0 && $card_bcol && $card_bcol !== 'transparent' )
             ? "border: {$card_bw}px {$card_bs} {$card_bcol};"
             : 'border: 0;';
@@ -326,7 +326,7 @@ class Olobuild_PanelSlider_Tile extends Olobuild_Tile_Base {
         // Image ratio / height / fit
         $img_ratio  = $s['image_ratio'] ?? '4/3';
         $img_height = absint( $s['image_height'] ?? 0 );
-        $img_fit    = in_array( $s['image_fit'] ?? 'cover', [ 'cover', 'contain', 'fill' ], true ) ? $s['image_fit'] : 'cover';
+        $img_fit    = in_array( $s['image_fit'] ?? 'cover', [ 'cover', 'contain', 'fill' ], true ) ? ( $s['image_fit'] ?? 'cover' ) : 'cover';
         // Punto focale comune a tutte le immagini delle card; default = comportamento attuale.
         $obj_pos    = trim( (string) ( $s['object_position'] ?? 'center center' ) );
         if ( $obj_pos === '' ) {
@@ -390,7 +390,7 @@ class Olobuild_PanelSlider_Tile extends Olobuild_Tile_Base {
         $title_w     = preg_match( '/^[1-9]00$/', (string) ( $s['title_weight'] ?? '700' ) ) ? $s['title_weight'] : '700';
         $title_ls    = floatval( $s['title_letter_spacing'] ?? 0 );
         $title_upper = ! empty( $s['title_uppercase'] );
-        $title_align = in_array( $s['title_align'] ?? 'left', [ 'left', 'center', 'right' ], true ) ? $s['title_align'] : 'left';
+        $title_align = in_array( $s['title_align'] ?? 'left', [ 'left', 'center', 'right' ], true ) ? ( $s['title_align'] ?? 'left' ) : 'left';
 
         $title_styles = "font-weight:{$title_w};letter-spacing:{$title_ls}em;text-align:{$title_align};";
         if ( $title_size > 0 ) $title_styles .= "font-size:{$title_size}px;";
@@ -401,7 +401,7 @@ class Olobuild_PanelSlider_Tile extends Olobuild_Tile_Base {
         // Content
         $content_size  = absint( $s['content_size'] ?? 0 );
         $content_col   = $s['content_color'] ?? '';
-        $content_align = in_array( $s['content_align'] ?? 'left', [ 'left', 'center', 'right' ], true ) ? $s['content_align'] : 'left';
+        $content_align = in_array( $s['content_align'] ?? 'left', [ 'left', 'center', 'right' ], true ) ? ( $s['content_align'] ?? 'left' ) : 'left';
         $content_clamp = max( 0, intval( $s['content_lines_clamp'] ?? 0 ) );
 
         $content_styles = "text-align:{$content_align};line-height:1.6;margin:0;";

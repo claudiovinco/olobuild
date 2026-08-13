@@ -51,10 +51,10 @@ class Olobuild_AnnouncementBar_Tile extends Olobuild_Tile_Base {
         $tcol  = $this->safe_color_css( $s['text_color'] ?? '' ) ?: 'var(--olo-color-secondary, #efe9de)';
         $acol  = $this->safe_color_css( $s['accent_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
         $fs    = max( 8, intval( $s['font_size'] ?? 11 ) );
-        $fw    = in_array( (string) ( $s['font_weight'] ?? '500' ), [ '400', '500', '600', '700' ], true ) ? (string) $s['font_weight'] : '500';
+        $fw    = in_array( (string) ( $s['font_weight'] ?? '500' ), [ '400', '500', '600', '700' ], true ) ? (string) ( $s['font_weight'] ?? '500' ) : '500';
         $ls    = preg_replace( '/[^0-9a-z.\-]/i', '', (string) ( $s['letter_spacing'] ?? '0.2em' ) ) ?: '0.2em';
-        $tt    = in_array( $s['text_transform'] ?? 'uppercase', [ 'none', 'uppercase', 'lowercase' ], true ) ? $s['text_transform'] : 'uppercase';
-        $align = in_array( $s['alignment'] ?? 'center', [ 'left', 'center', 'right' ], true ) ? $s['alignment'] : 'center';
+        $tt    = in_array( $s['text_transform'] ?? 'uppercase', [ 'none', 'uppercase', 'lowercase' ], true ) ? ( $s['text_transform'] ?? 'uppercase' ) : 'uppercase';
+        $align = in_array( $s['alignment'] ?? 'center', [ 'left', 'center', 'right' ], true ) ? ( $s['alignment'] ?? 'center' ) : 'center';
         $cp    = is_array( $s['tile_padding'] ?? null ) ? $s['tile_padding'] : [];
         $pad   = intval( $cp['top'] ?? 10 ) . 'px ' . intval( $cp['right'] ?? 20 ) . 'px ' . intval( $cp['bottom'] ?? 10 ) . 'px ' . intval( $cp['left'] ?? 20 ) . 'px';
         $bb    = max( 0, intval( $s['border_bottom'] ?? 0 ) );

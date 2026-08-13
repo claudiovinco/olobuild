@@ -385,7 +385,7 @@ class Olobuild_Global_Popups {
                 'radius'           => max( 0, intval( $popup['radius'] ?? 12 ) ),
                 'max_width'        => max( 300, intval( $popup['max_width'] ?? 700 ) ),
                 'conditions'       => $this->sanitize_conditions( $popup['conditions'] ?? [] ),
-                'conditions_logic' => in_array( $popup['conditions_logic'] ?? 'OR', [ 'AND', 'OR' ], true ) ? $popup['conditions_logic'] : 'OR',
+                'conditions_logic' => in_array( $popup['conditions_logic'] ?? 'OR', [ 'AND', 'OR' ], true ) ? ( $popup['conditions_logic'] ?? 'OR' ) : 'OR',
             ];
         }
 

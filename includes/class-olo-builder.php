@@ -224,11 +224,11 @@ class Olobuild_Builder {
         if ( file_exists( $booking_path . 'assets/css/booking-front.css' ) ) {
             $st( 'olo-ifr-booking', $booking_url . 'assets/css/booking-front.css' );
         }
-        $vtour_path = WP_PLUGIN_DIR . '/olo-vtour/';
-        $vtour_url  = plugins_url( 'olo-vtour/' );
+        $vtour_path = WP_PLUGIN_DIR . '/olotour/';
+        $vtour_url  = plugins_url( 'olotour/' );
         if ( file_exists( $vtour_path . 'assets/vendor/psv/psv-bundle.css' ) ) {
             $st( 'olo-ifr-psv', $vtour_url . 'assets/vendor/psv/psv-bundle.css' );
-            $st( 'olo-ifr-vtour', $vtour_url . 'assets/css/olo-vtour-viewer.css' );
+            $st( 'olo-ifr-vtour', $vtour_url . 'assets/css/olotour-viewer.css' );
         }
         $this->iframe_style_handles = $styles;
 
@@ -286,7 +286,7 @@ class Olobuild_Builder {
         }
         if ( file_exists( $vtour_path . 'assets/vendor/psv/psv-bundle.js' ) ) {
             $js( 'olo-ifr-psv-js', $vtour_url . 'assets/vendor/psv/psv-bundle.js' );
-            $js( 'olo-ifr-vtour-js', $vtour_url . 'assets/js/olo-vtour-viewer.js' );
+            $js( 'olo-ifr-vtour-js', $vtour_url . 'assets/js/olotour-viewer.js' );
         }
         // Bridge: deve caricarsi DOPO ogni runtime → dipende da tutti gli handle sopra.
         wp_enqueue_script( 'olo-ifr-bridge', OLOBUILD_URL . 'assets/js/iframe-bridge.js', $scripts, $v, true );
@@ -601,7 +601,11 @@ class Olobuild_Builder {
 
     public function admin_enqueue_scripts( $hook ) {
         // Shared admin CSS for ALL Olobuild pages
-        if ( str_contains( $hook, 'olobuild' ) || str_contains( $hook, 'olo-' ) ) {
+        //
+        // Stesso riconoscimento di admin_body_class(), e per la stessa ragione:
+        // 'olo-' come sottostringa faceva servire il foglio di stile di
+        // Olobuild dentro le pagine di ogni altro prodotto della famiglia.
+        if ( str_contains( $hook, 'olobuild' ) || in_array( $hook, self::extra_olo_screen_ids(), true ) ) {
             wp_enqueue_style(
                 'olo-admin-css',
                 OLOBUILD_URL . 'assets/css/olo-admin.css',
@@ -1029,9 +1033,41 @@ class Olobuild_Builder {
         ];
     }
 
+    /**
+     * Le pagine Olobuild che NON hanno 'olobuild' nel proprio screen id.
+     *
+     * Sono quelle appese a un menu di WordPress invece che al nostro: la
+     * diagnostica sta sotto Strumenti, il wizard sotto Impostazioni, e i loro
+     * screen id diventano 'tools_page_olo-diagnostics' e
+     * 'settings_page_olo-setup'. Tutto il resto passa da add_submenu_page con
+     * parent 'olobuild' e si riconosce dal prefisso.
+     */
+    public static function extra_olo_screen_ids() {
+        return apply_filters( 'olobuild_extra_screen_ids', [
+            'tools_page_olo-diagnostics',
+            'settings_page_olo-setup',
+        ] );
+    }
+
     public function admin_body_class( $classes ) {
         $screen = get_current_screen();
-        $is_olo_page = $screen && ( str_contains( $screen->id, 'olobuild' ) || str_contains( $screen->id, 'olo-' ) );
+
+        /*
+         * Il riconoscimento e' per PREFISSO, non per sottostringa 'olo-'.
+         *
+         * Cercare 'olo-' dentro lo screen id faceva passare per pagina Olobuild
+         * qualunque schermata di qualunque altro prodotto della famiglia: gli
+         * screen di OLOtutor si chiamano 'olo_course_page_olo-tutor-*', quindi
+         * si prendevano addosso 'olo-admin-shell' e 'olobuild-app-mode' — cioe'
+         * la sidebar di wp-admin stretta a 52px e il sottomenu nascosto, dentro
+         * un plugin che con Olobuild non c'entra. Misurato il 9 agosto 2026: il
+         * menu di wp-admin restava contratto sopra i contenuti di OLOtutor e
+         * non si riapriva piu'.
+         */
+        $is_olo_page = $screen && (
+            str_contains( $screen->id, 'olobuild' )
+            || in_array( $screen->id, self::extra_olo_screen_ids(), true )
+        );
 
         if ( $is_olo_page ) {
             $classes .= ' olo-admin-shell';
@@ -2418,7 +2454,7 @@ class Olobuild_Builder {
                     }
 
                     if ( isset( $b['dark'] ) && is_array( $b['dark'] ) ) {
-                        $strategy = in_array( $b['dark']['strategy'] ?? '', [ 'auto', 'manual', 'luminance' ], true ) ? $b['dark']['strategy'] : 'auto';
+                        $strategy = in_array( $b['dark']['strategy'] ?? '', [ 'auto', 'manual', 'luminance' ], true ) ? ( $b['dark']['strategy'] ?? '' ) : 'auto';
                         update_option( 'olobuild_dark_settings', [
                             'enabled'  => ! empty( $b['dark']['enabled'] ),
                             'strategy' => $strategy,
@@ -2519,9 +2555,10 @@ class Olobuild_Builder {
 
                     // Templates totali (proxy per "pages_total")
                     global $wpdb;
-                    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabella custom del plugin ({$wpdb->prefix}olo_templates); nessun equivalente WP_Query. Interpolato solo il nome tabella da $wpdb->prefix; il valore 'published' passa da $wpdb->prepare con %s; conteggio non cacheabile.
+                    $t_templates = Olobuild_Database::table( 'templates' );
+                    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabella custom del plugin ({prefix}olobuild_templates); nessun equivalente WP_Query. Interpolato solo il nome tabella da $wpdb->prefix; il valore 'published' passa da $wpdb->prepare con %s; conteggio non cacheabile.
                     $pages_total = (int) $wpdb->get_var( $wpdb->prepare(
-                        "SELECT COUNT(*) FROM {$wpdb->prefix}olo_templates WHERE status = %s",
+                        "SELECT COUNT(*) FROM {$t_templates} WHERE status = %s",
                         'published'
                     ) );
 
@@ -2570,7 +2607,7 @@ class Olobuild_Builder {
                     if ( ! is_array( $b ) ) $b = [];
                     $allowed_providers = [ 'unsplash', 'pexels', 'pixabay', 'freesound', 'openverse' ];
                     $clean = [
-                        'preferred'            => in_array( $b['preferred'] ?? '', $allowed_providers, true ) ? $b['preferred'] : 'unsplash',
+                        'preferred'            => in_array( $b['preferred'] ?? '', $allowed_providers, true ) ? ( $b['preferred'] ?? '' ) : 'unsplash',
                         'download_local'       => ! empty( $b['download_local'] ),
                         'optimize_on_download' => ! empty( $b['optimize_on_download'] ),
                     ];
@@ -3177,7 +3214,7 @@ class Olobuild_Builder {
         }
 
         if ( isset( $body['advanced'] ) && is_array( $body['advanced'] ) ) {
-            $strategy = in_array( $body['advanced']['strategy'] ?? '', [ 'mobile', 'desktop' ], true ) ? $body['advanced']['strategy'] : 'mobile';
+            $strategy = in_array( $body['advanced']['strategy'] ?? '', [ 'mobile', 'desktop' ], true ) ? ( $body['advanced']['strategy'] ?? '' ) : 'mobile';
             update_option( 'olobuild_breakpoints_advanced', [ 'strategy' => $strategy ] );
         }
 

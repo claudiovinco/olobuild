@@ -118,7 +118,7 @@ class Olobuild_StepTimeline_Tile extends Olobuild_Tile_Base {
         $tag_color = $this->safe_color_css( $s['tag_color'] ) ?: 'var(--olo-color-text, #374151)';
 
         $aspect_allow = [ '16/9', '5/4', '4/3', '1/1', '3/2' ];
-        $media_aspect = in_array( $s['media_aspect_ratio'] ?? '5/4', $aspect_allow, true ) ? $s['media_aspect_ratio'] : '5/4';
+        $media_aspect = in_array( $s['media_aspect_ratio'] ?? '5/4', $aspect_allow, true ) ? ( $s['media_aspect_ratio'] ?? '5/4' ) : '5/4';
 
         $obj_pos = trim( (string) ( $s['media_object_position'] ?? 'center center' ) );
         if ( $obj_pos === '' ) { $obj_pos = 'center center'; }

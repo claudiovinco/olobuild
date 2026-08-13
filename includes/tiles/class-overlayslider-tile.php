@@ -109,9 +109,9 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
         }
 
         $columns  = absint( $s['columns'] ) ?: 1;
-        $gap      = in_array( $s['gap'] ?? 'default', [ 'collapse', 'small', 'default', 'medium', 'large' ], true ) ? $s['gap'] : 'default';
+        $gap      = in_array( $s['gap'] ?? 'default', [ 'collapse', 'small', 'default', 'medium', 'large' ], true ) ? ( $s['gap'] ?? 'default' ) : 'default';
         $img_ratio  = $s['image_ratio'] ?? 'auto';
-        $img_fit    = in_array( $s['image_fit'] ?? 'cover', [ 'cover', 'contain', 'fill' ], true ) ? $s['image_fit'] : 'cover';
+        $img_fit    = in_array( $s['image_fit'] ?? 'cover', [ 'cover', 'contain', 'fill' ], true ) ? ( $s['image_fit'] ?? 'cover' ) : 'cover';
         $obj_pos    = trim( (string) ( $s['object_position'] ?? 'center center' ) );
         if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
         $height   = absint( $s['image_height'] ?? $s['height'] ?? 400 ) ?: 400;
@@ -149,7 +149,7 @@ class Olobuild_OverlaySlider_Tile extends Olobuild_Tile_Base {
         if ( $pad === 'large' )  $pad_class = ' uk-padding';
 
         // Title tag
-        $title_tag = in_array( $s['title_size'] ?? 'h3', [ 'h1', 'h2', 'h3', 'h4' ], true ) ? $s['title_size'] : 'h3';
+        $title_tag = in_array( $s['title_size'] ?? 'h3', [ 'h1', 'h2', 'h3', 'h4' ], true ) ? ( $s['title_size'] ?? 'h3' ) : 'h3';
 
         // Hover effects
         $hover_effect  = $s['hover_effect'] ?? 'none';

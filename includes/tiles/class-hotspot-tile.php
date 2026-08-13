@@ -212,7 +212,7 @@ class Olobuild_Hotspot_Tile extends Olobuild_Tile_Base {
                 $title   = wp_kses_post( $marker['title'] ?? '' );
                 $desc    = wp_kses_post( $marker['description'] ?? '' );
                 $m_icon  = sanitize_text_field( $marker['icon'] ?? 'pin' );
-                $tt_pos  = in_array( $marker['tooltip_position'] ?? 'top', [ 'top', 'bottom', 'left', 'right' ], true ) ? $marker['tooltip_position'] : 'top';
+                $tt_pos  = in_array( $marker['tooltip_position'] ?? 'top', [ 'top', 'bottom', 'left', 'right' ], true ) ? ( $marker['tooltip_position'] ?? 'top' ) : 'top';
                 $tt_id   = $uid . '-tip-' . (int) $idx;
                 $m_label = trim( wp_strip_all_tags( $title ) );
                 if ( $m_label === '' ) {

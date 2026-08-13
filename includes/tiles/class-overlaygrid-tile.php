@@ -149,7 +149,7 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
         if ( $pad === 'large' )  $pad_class = ' uk-padding';
 
         // Title tag
-        $title_tag = in_array( $s['title_size'] ?? 'h3', [ 'h1', 'h2', 'h3', 'h4' ], true ) ? $s['title_size'] : 'h3';
+        $title_tag = in_array( $s['title_size'] ?? 'h3', [ 'h1', 'h2', 'h3', 'h4' ], true ) ? ( $s['title_size'] ?? 'h3' ) : 'h3';
 
         // Hover effects
         $hover_effect  = $s['hover_effect'] ?? 'none';

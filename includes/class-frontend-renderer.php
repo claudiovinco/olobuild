@@ -2707,9 +2707,10 @@ class Olobuild_Frontend_Renderer {
         // Resolve global widget
         if ( ! empty( $node['global_id'] ) ) {
             global $wpdb;
-            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_global_widgets); nessun equivalente WP_Query; lookup per id su PK, valore passato via $wpdb->prepare con placeholder %d; risultato non cacheabile (può cambiare salvando il widget globale).
+            $t_widgets = Olobuild_Database::table( 'global_widgets' );
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olobuild_global_widgets); nessun equivalente WP_Query; lookup per id su PK, valore passato via $wpdb->prepare con placeholder %d; risultato non cacheabile (può cambiare salvando il widget globale).
             $gw = $wpdb->get_row( $wpdb->prepare(
-                "SELECT tile_data FROM {$wpdb->prefix}olo_global_widgets WHERE id = %d",
+                "SELECT tile_data FROM {$t_widgets} WHERE id = %d",
                 absint( $node['global_id'] )
             ) );
             if ( $gw ) {

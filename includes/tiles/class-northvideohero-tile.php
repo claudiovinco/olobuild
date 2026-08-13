@@ -100,7 +100,7 @@ class Olobuild_NorthVideoHero_Tile extends Olobuild_Tile_Base {
         $sans = "var(--olo-font-family, 'Inter','Work Sans',-apple-system,sans-serif)";
         $mono = "var(--olo-font-family-mono, 'Space Mono',ui-monospace,'SF Mono',Menlo,monospace)";
 
-        $mode    = in_array( ( $s['mock_mode'] ?? 'video' ), [ 'video', 'media', 'none' ], true ) ? $s['mock_mode'] : 'video';
+        $mode    = in_array( ( $s['mock_mode'] ?? 'video' ), [ 'video', 'media', 'none' ], true ) ? ( $s['mock_mode'] ?? 'video' ) : 'video';
         $crestOn = ! empty( $s['crest_on'] );
         $reveal  = ! empty( $s['mock_reveal'] );
         $hmax    = max( 480, min( 1600, intval( $s['headline_max'] ) ) );

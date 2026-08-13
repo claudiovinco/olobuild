@@ -184,7 +184,7 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
         $header_text_active = $this->safe_color_css( $s['header_text_color_active'] ?? '' );
         $bp_blur       = max( 0, intval( $s['backdrop_blur'] ?? 0 ) );
         $bp_sat        = max( 100, intval( $s['backdrop_saturate'] ?? 100 ) );
-        $icon_shape    = in_array( $s['icon_shape'] ?? 'none', [ 'none', 'pill', 'circle' ], true ) ? $s['icon_shape'] : 'none';
+        $icon_shape    = in_array( $s['icon_shape'] ?? 'none', [ 'none', 'pill', 'circle' ], true ) ? ( $s['icon_shape'] ?? 'none' ) : 'none';
         $icon_sh_size  = max( 16, intval( $s['icon_shape_size'] ?? 32 ) );
         $icon_sh_bg    = $this->safe_color_css( $s['icon_shape_bg'] ?? '' );
         $panel_lift    = ! empty( $s['panel_hover_lift'] );

@@ -355,14 +355,15 @@ class Olobuild_Tools {
 
     private function render_tab_versioni() {
         global $wpdb;
-        $prefix = $wpdb->prefix;
+        $t_templates = Olobuild_Database::table( 'templates' );
+        $t_revisions = Olobuild_Database::table( 'revisions' );
 
-        // Tabelle custom del plugin ({prefix}olo_templates, {prefix}olo_revisions); nessun equivalente WP_Query; risultato non cacheabile (lista admin). Solo nomi tabella da $wpdb->prefix interpolati, nessun valore utente in SQL.
+        // Tabelle custom del plugin ({prefix}olobuild_templates, {prefix}olobuild_revisions); nessun equivalente WP_Query; risultato non cacheabile (lista admin). Solo nomi tabella da $wpdb->prefix interpolati, nessun valore utente in SQL.
         // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $templates = $wpdb->get_results(
             "SELECT t.id, t.title, t.type, t.updated_at,
-                (SELECT COUNT(*) FROM {$prefix}olo_revisions r WHERE r.template_id = t.id) AS rev_count
-             FROM {$prefix}olo_templates t ORDER BY t.title"
+                (SELECT COUNT(*) FROM {$t_revisions} r WHERE r.template_id = t.id) AS rev_count
+             FROM {$t_templates} t ORDER BY t.title"
         );
         // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         ?>
@@ -500,7 +501,6 @@ class Olobuild_Tools {
 
     private function render_tab_manutenzione() {
         global $wpdb;
-        $prefix = $wpdb->prefix;
 
         $mode          = get_option( 'olobuild_maintenance_mode', 'off' );
         $bypass_roles  = get_option( 'olobuild_maintenance_bypass_roles', [ 'administrator' ] );
@@ -512,9 +512,10 @@ class Olobuild_Tools {
         $bypass_secret          = get_option( 'olobuild_maintenance_bypass_secret', '' );
 
         // Get all templates
-        // Tabella custom del plugin ({prefix}olo_templates); nessun equivalente WP_Query; risultato non cacheabile (lista admin). Solo il nome tabella da $wpdb->prefix è interpolato, nessun valore utente in SQL.
+        $t_templates = Olobuild_Database::table( 'templates' );
+        // Tabella custom del plugin ({prefix}olobuild_templates); nessun equivalente WP_Query; risultato non cacheabile (lista admin). Solo il nome tabella da $wpdb->prefix è interpolato, nessun valore utente in SQL.
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
-        $templates = $wpdb->get_results( "SELECT id, title, type FROM {$prefix}olo_templates ORDER BY title" );
+        $templates = $wpdb->get_results( "SELECT id, title, type FROM {$t_templates} ORDER BY title" );
 
         // Get all WP roles
         $wp_roles = wp_roles()->get_names();
@@ -688,10 +689,10 @@ class Olobuild_Tools {
      */
     private function render_template_website_inline() {
         global $wpdb;
-        $prefix    = $wpdb->prefix;
-        // Tabella custom del plugin ({prefix}olo_templates); nessun equivalente WP_Query; risultato non cacheabile (lista admin). Solo il nome tabella da $wpdb->prefix è interpolato, nessun valore utente in SQL.
+        $t_templates = Olobuild_Database::table( 'templates' );
+        // Tabella custom del plugin ({prefix}olobuild_templates); nessun equivalente WP_Query; risultato non cacheabile (lista admin). Solo il nome tabella da $wpdb->prefix è interpolato, nessun valore utente in SQL.
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
-        $templates = $wpdb->get_results( "SELECT id, title, type FROM {$prefix}olo_templates ORDER BY title" );
+        $templates = $wpdb->get_results( "SELECT id, title, type FROM {$t_templates} ORDER BY title" );
         $rest_url  = esc_url( rest_url( 'olobuild/v1/' ) );
         $nonce     = wp_create_nonce( 'wp_rest' );
         ?>

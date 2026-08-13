@@ -119,8 +119,8 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
         if ( ! $bg_css ) $bg_css = 'background:#0f172a';
 
         $banner_padding = max( 16, min( 120, absint( $s['banner_padding'] ) ) );
-        $layout         = in_array( $s['layout'] ?? 'split-3', [ 'split-3', 'split-2', 'stack' ], true ) ? $s['layout'] : 'split-3';
-        $valign         = in_array( $s['vertical_align'] ?? 'center', [ 'start', 'center', 'end' ], true ) ? $s['vertical_align'] : 'center';
+        $layout         = in_array( $s['layout'] ?? 'split-3', [ 'split-3', 'split-2', 'stack' ], true ) ? ( $s['layout'] ?? 'split-3' ) : 'split-3';
+        $valign         = in_array( $s['vertical_align'] ?? 'center', [ 'start', 'center', 'end' ], true ) ? ( $s['vertical_align'] ?? 'center' ) : 'center';
         $gap            = max( 0, min( 120, absint( $s['gap'] ) ) );
         $allowed_ratio  = [ '1.4fr 1fr auto', '1fr 1fr auto', '2fr 1fr auto', '1fr auto' ];
         $ratio          = in_array( $s['ratio'], $allowed_ratio, true ) ? $s['ratio'] : '1.4fr 1fr auto';

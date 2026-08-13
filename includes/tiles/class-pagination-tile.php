@@ -111,7 +111,7 @@ class Olobuild_Pagination_Tile extends Olobuild_Tile_Base {
 
             ob_start();
             $this->render_styles( $uid, $justify, $gap, $font_size, $radius, $bw, $padding_css,
-                $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg );
+                $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg, $radius_hover_css );
             ?>
             <nav class="olo-pagination <?php echo esc_attr( $uid ); ?> olo-pg-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" role="navigation" aria-label="<?php echo esc_attr( olobuild_t( 'Paginazione' ) ); ?>">
             <?php
@@ -178,7 +178,7 @@ class Olobuild_Pagination_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         $this->render_styles( $uid, $justify, $gap, $font_size, $radius, $bw, $padding_css,
-            $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg );
+            $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg, $radius_hover_css );
         ?>
         <nav class="olo-pagination <?php echo esc_attr( $uid ); ?>" role="navigation" aria-label="<?php echo esc_attr( olobuild_t( 'Paginazione' ) ); ?>">
         <?php
@@ -257,8 +257,16 @@ class Olobuild_Pagination_Tile extends Olobuild_Tile_Base {
     /**
      * Render shared CSS styles
      */
+    /*
+     * $radius_hover_css arriva da fuori, e prima non arrivava affatto: era
+     * calcolato in render() e letto qui dentro, dove non esisteva. Il guaio non
+     * era l'avviso ma il CSS che ne usciva: `null !== ''` in PHP e' VERO, quindi
+     * la regola veniva scritta sempre, con il valore vuoto, cioe'
+     * `border-radius: !important` — una dichiarazione che il browser scarta. Il
+     * raggio in evidenza impostato dal docente non si e' mai visto.
+     */
     private function render_styles( $uid, $justify, $gap, $font_size, $radius, $bw, $padding_css,
-        $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg ) {
+        $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg, $radius_hover_css = '' ) {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized in render(): colors via the safe_color_css() whitelist (with token fallbacks), integers via absint() with min()/max() clamps, alignment from a fixed map, padding/radius via absint() parts and Olobuild_Tile_Utils helpers; $uid is internally generated. ?>
         <style>

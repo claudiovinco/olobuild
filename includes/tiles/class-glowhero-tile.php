@@ -105,7 +105,7 @@ class Olobuild_GlowHero_Tile extends Olobuild_Tile_Base {
         $hlh    = is_numeric( $s['h_line_height'] ) ? floatval( $s['h_line_height'] ) : 0.86;
         $strk   = max( 0, floatval( $s['stroke_width'] ) );
 
-        $align  = in_array( $s['align'] ?? 'left', [ 'left', 'center' ], true ) ? $s['align'] : 'left';
+        $align  = in_array( $s['align'] ?? 'left', [ 'left', 'center' ], true ) ? ( $s['align'] ?? 'left' ) : 'left';
         $alignI = $align === 'center' ? 'center' : 'flex-start';
         $txtAl  = $align === 'center' ? 'center' : 'left';
         $mw     = max( 600, intval( $s['max_width'] ) );

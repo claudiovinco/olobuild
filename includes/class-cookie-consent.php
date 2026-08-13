@@ -209,7 +209,7 @@ class Olobuild_Cookie_Consent {
                             'provider' => sanitize_text_field( $row['provider'] ?? '' ),
                             'purpose'  => sanitize_text_field( $row['purpose'] ?? '' ),
                             'expiry'   => sanitize_text_field( $row['expiry'] ?? '' ),
-                            'category' => in_array( $row['category'] ?? '', self::CATEGORIES, true ) ? $row['category'] : 'necessary',
+                            'category' => in_array( $row['category'] ?? '', self::CATEGORIES, true ) ? ( $row['category'] ?? '' ) : 'necessary',
                         ];
                     }
                 }

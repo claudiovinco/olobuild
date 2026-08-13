@@ -389,8 +389,8 @@ class Olobuild_Video_Tile extends Olobuild_Tile_Base {
         if ( $has_text ) {
             $ov_size    = max( 8, absint( $s['overlay_text_size'] ?? 32 ) );
             $ov_t_color = $this->safe_color_css( $s['overlay_text_color'] ?? '#ffffff' ) ?: '#ffffff';
-            $ov_weight  = in_array( (string) ( $s['overlay_text_weight'] ?? '700' ), [ '300','400','500','600','700','800','900' ], true ) ? $s['overlay_text_weight'] : '700';
-            $ov_align   = in_array( $s['overlay_text_align'] ?? 'center', [ 'left', 'center', 'right' ], true ) ? $s['overlay_text_align'] : 'center';
+            $ov_weight  = in_array( (string) ( $s['overlay_text_weight'] ?? '700' ), [ '300','400','500','600','700','800','900' ], true ) ? ( $s['overlay_text_weight'] ?? '700' ) : '700';
+            $ov_align   = in_array( $s['overlay_text_align'] ?? 'center', [ 'left', 'center', 'right' ], true ) ? ( $s['overlay_text_align'] ?? 'center' ) : 'center';
             $ov_text_style = sprintf(
                 'text-align:%s;color:%s;padding:24px;max-width:800px;pointer-events:auto;font-size:%dpx;font-weight:%s;line-height:1.25;',
                 esc_attr( $ov_align ), $ov_t_color, $ov_size, esc_attr( $ov_weight )

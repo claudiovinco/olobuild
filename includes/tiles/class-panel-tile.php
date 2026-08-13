@@ -119,7 +119,7 @@ class Olobuild_Panel_Tile extends Olobuild_Tile_Base {
         $card_class = "uk-card uk-card-{$style} uk-card-body";
         $tag        = in_array( $s['title_element'], [ 'h2', 'h3', 'h4', 'div' ], true ) ? $s['title_element'] : 'h3';
         $target     = $s['link_target'] === '_blank' ? ' target="_blank" rel="noopener"' : '';
-        $media_type = in_array( $s['media_type'] ?? 'image', [ 'none', 'image', 'video' ], true ) ? $s['media_type'] : 'image';
+        $media_type = in_array( $s['media_type'] ?? 'image', [ 'none', 'image', 'video' ], true ) ? ( $s['media_type'] ?? 'image' ) : 'image';
         $preset_id  = $s['preset'] ?? 'card-classic';
 
         $css  = $this->build_scoped_css( $uid, $s, $media_type );
@@ -266,7 +266,7 @@ class Olobuild_Panel_Tile extends Olobuild_Tile_Base {
         if ( $media_type !== 'none' ) {
             $img_ratio  = $s['image_ratio'] ?? 'auto';
             $img_height = absint( $s['image_height'] ?? 0 );
-            $img_fit    = in_array( $s['image_fit'] ?? 'cover', [ 'cover', 'contain', 'fill' ], true ) ? $s['image_fit'] : 'cover';
+            $img_fit    = in_array( $s['image_fit'] ?? 'cover', [ 'cover', 'contain', 'fill' ], true ) ? ( $s['image_fit'] ?? 'cover' ) : 'cover';
 
             // Punto focale (object-position). Sanitizza: keyword whitelist oppure coppia di valori
             // numerici con unità (%, px, em, rem) o keyword. Fallback sicuro a 'center center'.
@@ -308,7 +308,7 @@ class Olobuild_Panel_Tile extends Olobuild_Tile_Base {
         }
 
         // Text alignment
-        $align = in_array( $s['text_align'] ?? 'left', [ 'left', 'center', 'right' ], true ) ? $s['text_align'] : 'left';
+        $align = in_array( $s['text_align'] ?? 'left', [ 'left', 'center', 'right' ], true ) ? ( $s['text_align'] ?? 'left' ) : 'left';
         if ( $align !== 'left' ) {
             $css .= $sel . '.olo-panel{text-align:' . $align . ';}';
         }

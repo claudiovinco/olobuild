@@ -217,6 +217,25 @@ class Olobuild_Style_System {
         // Allinea i global color dei ruoli core al valore appena salvato (vedi sync_global_palette).
         if ( isset( $sanitized['colors'] ) && is_array( $sanitized['colors'] ) ) {
             $this->sync_global_palette( $sanitized['colors'] );
+
+            // Un ruolo brand cambiato nel pannello deve cambiare anche in modalità scura:
+            // il blocco `html.olo-dark-mode .olo-template` ha specificità maggiore di
+            // `.olo-template`, quindi con dark_colors fermi ai valori del tema importato le
+            // modifiche ai Colori del brand non si vedevano affatto sui siti in dark mode.
+            // Propago SOLO i ruoli toccati adesso, così una palette scura personalizzata
+            // sugli altri ruoli resta intatta.
+            $before  = ( isset( $existing['colors'] ) && is_array( $existing['colors'] ) ) ? $existing['colors'] : [];
+            $touched = [];
+            foreach ( [ 'primary', 'primary_contrast', 'secondary', 'secondary_contrast', 'link' ] as $role ) {
+                if ( isset( $sanitized['colors'][ $role ] )
+                    && ( $before[ $role ] ?? null ) !== $sanitized['colors'][ $role ] ) {
+                    $touched[] = $role;
+                }
+            }
+            if ( $touched ) {
+                $this->sync_dark_palette( $sanitized['colors'], $touched );
+                $merged = get_option( 'olobuild_styles', $merged );
+            }
         }
 
         return $merged;
@@ -268,11 +287,13 @@ class Olobuild_Style_System {
      * colori del tema. I default generici (indaco/slate) farebbero rendere il primario, gli
      * accenti e i link in indaco quando html.olo-dark-mode è attivo, ignorando il tema. Tocca
      * SOLO i ruoli brand: i neutri dark (background/text/border) restano (dark mode resta scuro).
-     * Pensato per l'IMPORT/applicazione di un tema, non per ogni salvataggio fine. Idempotente.
+     * Usato dall'IMPORT di un tema (tutti i ruoli brand) e da save_styles() con $only = i soli
+     * ruoli appena modificati nel pannello. Idempotente.
      *
-     * @param array $colors  blocco olo_styles['colors'].
+     * @param array      $colors blocco olo_styles['colors'].
+     * @param array|null $only   sottoinsieme di ruoli brand da propagare; null = tutti.
      */
-    public function sync_dark_palette( $colors ) {
+    public function sync_dark_palette( $colors, $only = null ) {
         if ( ! is_array( $colors ) || empty( $colors ) ) {
             return;
         }
@@ -282,6 +303,9 @@ class Olobuild_Style_System {
         }
         $dc    = ( isset( $st['dark_colors'] ) && is_array( $st['dark_colors'] ) ) ? $st['dark_colors'] : [];
         $brand = [ 'primary', 'primary_contrast', 'secondary', 'secondary_contrast', 'link' ];
+        if ( is_array( $only ) && $only ) {
+            $brand = array_values( array_intersect( $brand, $only ) );
+        }
         $changed = false;
         foreach ( $brand as $k ) {
             if ( isset( $colors[ $k ] ) && ( ! isset( $dc[ $k ] ) || $dc[ $k ] !== $colors[ $k ] ) ) {

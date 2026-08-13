@@ -595,7 +595,7 @@ class Olobuild_Site_Import_Export {
                 update_post_meta( $existing->ID, '_olo_template_id', $tpl_new );
                 $page_id = $existing->ID;
             } else {
-                $status  = in_array( $pg['status'] ?? 'publish', [ 'publish', 'draft', 'private' ], true ) ? $pg['status'] : 'publish';
+                $status  = in_array( $pg['status'] ?? 'publish', [ 'publish', 'draft', 'private' ], true ) ? ( $pg['status'] ?? 'publish' ) : 'publish';
                 $page_id = wp_insert_post( [
                     'post_type'      => 'page',
                     'post_title'     => sanitize_text_field( $pg['title'] ?? 'Pagina importata' ),
@@ -864,8 +864,14 @@ class Olobuild_Site_Import_Export {
 
     public function render_admin_page() {
         $db        = new Olobuild_Database();
-        $templates = $db->list_templates();
-        $tpl_count = isset( $templates['total'] ) ? (int) $templates['total'] : count( $templates['items'] ?? [] );
+        // list_templates() risponde con l'involucro [ items, total, pages ], e la
+        // tendina piu' sotto va riempita con items: ciclare sull'involucro
+        // significa passarle tre voci sbagliate (un array, un intero e il float
+        // di ceil()), che e' esattamente cosa faceva. Il per_page serve perche'
+        // il valore predefinito e' 20 e la tendina deve mostrarli tutti.
+        $templates = $db->list_templates( [ 'per_page' => 999 ] );
+        $tpl_items = isset( $templates['items'] ) && is_array( $templates['items'] ) ? $templates['items'] : [];
+        $tpl_count = isset( $templates['total'] ) ? (int) $templates['total'] : count( $tpl_items );
         ?>
         <?php Olobuild_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Import / Export', 'olobuild' ) . '</b>' ); ?>
         <main class="olo-cockpit-main olo-cockpit-legacy">
@@ -904,8 +910,9 @@ class Olobuild_Site_Import_Export {
                             </div>
                             <div class="olo-field-input-wrap">
                                 <select id="olo-export-tpl" class="olo-select olo-w-md">
-                                    <?php foreach ( $templates as $t ) : ?>
-                                    <option value="<?php echo intval( $t->id ); ?>"><?php echo esc_html( $t->name ); ?> (<?php echo esc_html( $t->type ); ?>)</option>
+                                    <?php foreach ( $tpl_items as $t ) : ?>
+                                    <?php // Le righe arrivano come array associativi (ARRAY_A), e la colonna del nome si chiama title. ?>
+                                    <option value="<?php echo intval( $t['id'] ?? 0 ); ?>"><?php echo esc_html( $t['title'] ?? '' ); ?> (<?php echo esc_html( $t['type'] ?? '' ); ?>)</option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>

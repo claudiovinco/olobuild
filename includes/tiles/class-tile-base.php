@@ -254,7 +254,7 @@ abstract class Olobuild_Tile_Base {
         $blur     = max( 0, min( 40, intval( $s['wow_backdrop_blur'] ?? 0 ) ) );
         $sat      = max( 100, min( 200, intval( $s['wow_backdrop_saturate'] ?? 100 ) ) );
         $bstyle_a = [ 'solid', 'dashed', 'dotted', 'double' ];
-        $bstyle   = in_array( $s['wow_border_style'] ?? 'solid', $bstyle_a, true ) ? $s['wow_border_style'] : 'solid';
+        $bstyle   = in_array( $s['wow_border_style'] ?? 'solid', $bstyle_a, true ) ? ( $s['wow_border_style'] ?? 'solid' ) : 'solid';
         $font_map = [
             'inherit'   => 'inherit',
             'monospace' => 'ui-monospace, SFMono-Regular, Menlo, monospace',

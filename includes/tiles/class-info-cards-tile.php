@@ -112,7 +112,7 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
         $media_radius_h = $this->_radius_hover_diff( $s['media_radius'] ?? [], $s['media_radius_hover'] ?? [] );
         $media_rdur     = max( 50, intval( $s['media_radius_hover_duration'] ?? 400 ) );
         $aspect_allow  = [ '16/9', '4/3', '3/2', '1/1', '21/9' ];
-        $media_aspect  = in_array( $s['media_aspect_ratio'] ?? '4/3', $aspect_allow, true ) ? $s['media_aspect_ratio'] : '4/3';
+        $media_aspect  = in_array( $s['media_aspect_ratio'] ?? '4/3', $aspect_allow, true ) ? ( $s['media_aspect_ratio'] ?? '4/3' ) : '4/3';
         $obj_pos       = trim( (string) ( $s['object_position'] ?? 'center center' ) );
         if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
 
@@ -150,7 +150,7 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
         }
 
         $items = is_array( $s['items'] ) ? $s['items'] : [];
-        $hover_effect = in_array( $s['card_hover_effect'] ?? 'none', [ 'none', 'lift', 'scale', 'glow', 'tilt' ], true ) ? $s['card_hover_effect'] : 'none';
+        $hover_effect = in_array( $s['card_hover_effect'] ?? 'none', [ 'none', 'lift', 'scale', 'glow', 'tilt' ], true ) ? ( $s['card_hover_effect'] ?? 'none' ) : 'none';
 
         $container_style = $container_bg_css . ';' . ( $c_radius ? 'border-radius:' . $c_radius . ';' : '' ) . 'padding:' . $c_pad . 'px;' . ( $c_radius_h ? 'transition:border-radius ' . $c_rdur . 'ms ease;' : '' );
         $grid_style = 'display:grid;grid-template-columns:repeat(' . $cols . ',minmax(0,1fr));gap:' . $items_gap . 'px;';

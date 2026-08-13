@@ -117,7 +117,7 @@ class Olobuild_ImageHero_Tile extends Olobuild_Tile_Base {
         $pos = (string) ( $s['text_position'] ?? 'left' );
         $allowedPos = [ 'center', 'bottom-left', 'left', 'center-right' ];
         if ( ! in_array( $pos, $allowedPos, true ) ) { $pos = 'left'; }
-        $align = in_array( ( $s['text_align'] ?? 'left' ), [ 'left', 'center', 'right' ], true ) ? $s['text_align'] : 'left';
+        $align = in_array( ( $s['text_align'] ?? 'left' ), [ 'left', 'center', 'right' ], true ) ? ( $s['text_align'] ?? 'left' ) : 'left';
 
         // mappa posizione → flex del contenitore
         if ( $pos === 'center' ) {

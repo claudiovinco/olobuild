@@ -428,7 +428,7 @@ class Olobuild_Image_Tile extends Olobuild_Tile_Base {
                 : $aspect;
         }
         $valid_fit = [ 'cover', 'contain', 'fill', 'none', 'scale-down' ];
-        $obj_fit   = in_array( $s['object_fit'] ?? 'cover', $valid_fit, true ) ? $s['object_fit'] : 'cover';
+        $obj_fit   = in_array( $s['object_fit'] ?? 'cover', $valid_fit, true ) ? ( $s['object_fit'] ?? 'cover' ) : 'cover';
         $obj_pos   = trim( (string) ( $s['object_position'] ?? 'center center' ) );
         $align     = $s['image_alignment'] ?? 'center';
         $valid_align = [ 'left', 'center', 'right' ];

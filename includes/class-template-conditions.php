@@ -290,7 +290,7 @@ class Olobuild_Template_Conditions {
                 'context'          => sanitize_text_field( $item['context'] ?? 'single' ),
                 'priority'         => max( 1, intval( $item['priority'] ?? 10 ) ),
                 'conditions'       => $this->sanitize_conditions_arr( $item['conditions'] ?? [] ),
-                'conditions_logic' => in_array( $item['conditions_logic'] ?? 'AND', [ 'AND', 'OR' ], true ) ? $item['conditions_logic'] : 'AND',
+                'conditions_logic' => in_array( $item['conditions_logic'] ?? 'AND', [ 'AND', 'OR' ], true ) ? ( $item['conditions_logic'] ?? 'AND' ) : 'AND',
             ];
         }
 
@@ -555,7 +555,7 @@ class Olobuild_Template_Conditions {
                 'enabled'          => ! empty( $r['enabled'] ),
                 'name'             => sanitize_text_field( $r['name'] ?? '' ),
                 'template_id'      => $tid,
-                'context'          => in_array( $r['context'] ?? '', [ 'header', 'footer' ], true ) ? $r['context'] : 'header',
+                'context'          => in_array( $r['context'] ?? '', [ 'header', 'footer' ], true ) ? ( $r['context'] ?? '' ) : 'header',
                 'priority'         => max( 1, (int) ( $r['priority'] ?? 10 ) ),
                 'conditions'       => [ [ 'type' => $ct, 'value' => $cv, 'negate' => false ] ],
                 'conditions_logic' => 'AND',

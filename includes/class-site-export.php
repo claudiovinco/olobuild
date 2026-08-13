@@ -17,13 +17,15 @@ class Olobuild_Site_Export {
         ];
 
         // All templates
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_templates); nessun equivalente WP_Query; export una tantum, risultato non cacheabile.
-        $templates = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}olo_templates", ARRAY_A);
+        $t_templates = Olobuild_Database::table( 'templates' );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olobuild_templates); nessun equivalente WP_Query; export una tantum, risultato non cacheabile.
+        $templates = $wpdb->get_results("SELECT * FROM {$t_templates}", ARRAY_A);
         $data['templates'] = $templates ?: [];
 
         // Global widgets
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- tabella custom del plugin (olo_global_widgets); nessun equivalente WP_Query; export una tantum, risultato non cacheabile.
-        $widgets = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}olo_global_widgets", ARRAY_A);
+        $t_widgets = Olobuild_Database::table( 'global_widgets' );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- tabella custom del plugin (olobuild_global_widgets); nessun equivalente WP_Query; export una tantum, risultato non cacheabile.
+        $widgets = $wpdb->get_results("SELECT * FROM {$t_widgets}", ARRAY_A);
         $data['global_widgets'] = $widgets ?: [];
 
         // Styles

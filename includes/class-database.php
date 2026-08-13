@@ -31,14 +31,38 @@ class Olobuild_Database {
      */
     private $cache_ttl = 3600;
 
-    private function table_templates() {
+    /**
+     * Il nome di una tabella del plugin, da un posto solo.
+     *
+     * Dalla v1.4.301 le tabelle si chiamano {prefix}olobuild_* invece di
+     * {prefix}olo_* (vedi Olobuild_Prefix_Migration): la migrazione le rinomina
+     * al primo avvio, e da quel momento il vecchio nome non esiste piu'.
+     *
+     * Il nome pero' era scritto a mano dentro ogni query, e otto sono rimaste
+     * indietro. Non davano errore visibile: $wpdb restituiva null e il codice
+     * proseguiva come se la tabella fosse vuota. Il conto misurato in produzione
+     * il 13 agosto 2026: la testata e il piede del sito perdevano il proprio CSS
+     * (class-page-css.php non riusciva piu' a sapere quali tile contengono), i
+     * widget globali non si risolvevano, tre schermate di Strumenti mostravano
+     * elenchi vuoti e l'esportazione del sito usciva senza template.
+     *
+     * Da qui in avanti il nome lo dice questo metodo, e una tabella nuova si
+     * aggiunge in un punto solo.
+     *
+     * @param string $nome Il nome senza prefisso: 'templates', 'revisions', ...
+     * @return string Il nome completo di prefisso.
+     */
+    public static function table( $nome ) {
         global $wpdb;
-        return $wpdb->prefix . 'olobuild_templates';
+        return $wpdb->prefix . 'olobuild_' . ltrim( (string) $nome, '_' );
+    }
+
+    private function table_templates() {
+        return self::table( 'templates' );
     }
 
     private function table_revisions() {
-        global $wpdb;
-        return $wpdb->prefix . 'olobuild_revisions';
+        return self::table( 'revisions' );
     }
 
     public function create_tables() {

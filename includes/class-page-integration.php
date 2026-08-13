@@ -453,13 +453,13 @@ class Olobuild_Page_Integration {
         // tornano sulla via veloce.
         if ( ! $template_id ) {
             global $wpdb;
-            // Tabella custom del plugin ({prefix}olo_templates); nessun equivalente WP_Query.
+            // Tabella custom del plugin ({prefix}olobuild_templates); nessun equivalente WP_Query.
             // Nome tabella interpolato da $wpdb->prefix (sicuro); il valore utente ($post_id) è
             // intval e passato come argomento a $wpdb->prepare con placeholder %s (no injection).
             // Risultato non cacheabile (self-healing lookup occasionale, volume limitato).
             // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $rows = $wpdb->get_results( $wpdb->prepare(
-                "SELECT id, settings FROM {$wpdb->prefix}olo_templates WHERE type = 'page' AND status = 'published' AND settings LIKE %s ORDER BY id DESC",
+                "SELECT id, settings FROM {$wpdb->prefix}olobuild_templates WHERE type = 'page' AND status = 'published' AND settings LIKE %s ORDER BY id DESC",
                 '%"post_id":' . intval( $post_id ) . '%'
             ), ARRAY_A );
             if ( $rows ) {
@@ -483,7 +483,51 @@ class Olobuild_Page_Integration {
         $olo_content = $renderer->render_shortcode( [ 'id' => $template_id ] );
         $rendering = false;
 
+        // Il post_content di una pagina gestita da Olobuild è spesso un residuo invisibile
+        // (un commento segnaposto, una riga vuota) che wpautop — filtro a priorità 10, quindi
+        // già eseguito quando arriviamo qui a 20 — ha avvolto in <p></p>. Il paragrafo non si
+        // vede ma porta i suoi margini (20px nei temi a blocchi): sotto il template compare
+        // una banda del colore di sfondo del body. Se non resta contenuto reale, non lo
+        // concateno affatto.
+        if ( $this->content_is_blank( $content ) ) {
+            return $olo_content;
+        }
+
         // Prepend Olobuild content before the regular content
         return $olo_content . $content;
+    }
+
+    /**
+     * Il markup non produce nulla di visibile? (whitespace, commenti HTML, <br> e wrapper
+     * rimasti vuoti). Deliberatamente conservativo: qualunque cosa non riconosca come vuota
+     * — un <img>, uno shortcode già risolto, del testo — fa restituire false, così il
+     * contenuto vero dell'utente non viene mai scartato.
+     */
+    private function content_is_blank( $html ) {
+        if ( ! is_string( $html ) || '' === trim( $html ) ) {
+            return true;
+        }
+
+        $stripped = preg_replace( '/<!--.*?-->/s', '', $html );
+        if ( null === $stripped ) {
+            return false; // Guardia anti-backtrack PCRE: nel dubbio, non tocco niente.
+        }
+
+        // Wrapper vuoti, anche annidati (<p><span>&nbsp;</span></p>): sfoglio a strati.
+        $empty_wrapper = '#<(p|div|span|figure|section)\b[^>]*>(?:\s|&nbsp;|<br\s*/?>)*</\1>#i';
+        for ( $i = 0; $i < 5; $i++ ) {
+            $next = preg_replace( $empty_wrapper, '', $stripped );
+            if ( null === $next || $next === $stripped ) {
+                break;
+            }
+            $stripped = $next;
+        }
+
+        $stripped = preg_replace( '#<br\s*/?>#i', '', $stripped );
+        if ( null === $stripped ) {
+            return false;
+        }
+
+        return '' === trim( str_replace( '&nbsp;', '', $stripped ) );
     }
 }

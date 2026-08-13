@@ -75,7 +75,7 @@ class Olobuild_ProductGrid_Tile extends Olobuild_Tile_Base {
         if ( ! function_exists( 'wc_get_products' ) ) { return []; }
 
         $limit   = max( 1, min( 24, intval( $s['woo_limit'] ?? 8 ) ) );
-        $orderby = in_array( $s['woo_orderby'] ?? 'date', [ 'date', 'title', 'price', 'popularity', 'rand' ], true ) ? $s['woo_orderby'] : 'date';
+        $orderby = in_array( $s['woo_orderby'] ?? 'date', [ 'date', 'title', 'price', 'popularity', 'rand' ], true ) ? ( $s['woo_orderby'] ?? 'date' ) : 'date';
         $order   = ( strtoupper( (string) ( $s['woo_order'] ?? 'DESC' ) ) === 'ASC' ) ? 'ASC' : 'DESC';
         $qa      = trim( (string) ( $s['woo_quick_add'] ?? 'Quick add' ) );
 

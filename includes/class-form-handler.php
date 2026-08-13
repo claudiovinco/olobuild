@@ -700,7 +700,7 @@ class Olobuild_Form_Handler {
      */
     private function send_webhook( $form_data, $config ) {
         $url    = esc_url_raw( $config['webhook_url'] ?? '' );
-        $method = in_array( $config['webhook_method'] ?? 'POST', [ 'POST', 'PUT' ], true ) ? $config['webhook_method'] : 'POST';
+        $method = in_array( $config['webhook_method'] ?? 'POST', [ 'POST', 'PUT' ], true ) ? ( $config['webhook_method'] ?? 'POST' ) : 'POST';
 
         if ( empty( $url ) ) {
             return;

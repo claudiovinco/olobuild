@@ -116,11 +116,11 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
         $card_color    = $this->safe_color_css( $s['card_color'] ) ?: 'var(--olo-color-text, #374151)';
         $card_padding  = max( 12, min( 60, absint( $s['card_padding'] ) ) );
 
-        $top_aspect    = in_array( $s['top_aspect_ratio'] ?? '3/4', [ '1/1', '4/5', '3/4', '2/3', '3/2' ], true ) ? $s['top_aspect_ratio'] : '3/4';
+        $top_aspect    = in_array( $s['top_aspect_ratio'] ?? '3/4', [ '1/1', '4/5', '3/4', '2/3', '3/2' ], true ) ? ( $s['top_aspect_ratio'] ?? '3/4' ) : '3/4';
         $top_padding   = max( 0, min( 60, absint( $s['top_padding'] ) ) );
         $letter_size   = max( 40, min( 280, absint( $s['letter_size'] ) ) );
         $letter_italic = ! empty( $s['letter_italic'] ) ? 'italic' : 'normal';
-        $letter_align  = in_array( $s['letter_align'] ?? 'center', [ 'left', 'center', 'right' ], true ) ? $s['letter_align'] : 'center';
+        $letter_align  = in_array( $s['letter_align'] ?? 'center', [ 'left', 'center', 'right' ], true ) ? ( $s['letter_align'] ?? 'center' ) : 'center';
         $logo_height   = max( 16, min( 160, absint( $s['logo_height'] ?? 52 ) ) );
 
         $sl_color = $this->safe_color_css( $s['screenshot_label_color'] ) ?: 'var(--olo-color-text-faint, #9ca3af)';
@@ -132,7 +132,7 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
         $desc_size  = max( 11, min( 22, absint( $s['description_size'] ) ) );
         $cta_size   = max( 9, min( 16, absint( $s['cta_size'] ) ) );
 
-        $hover_effect = in_array( $s['card_hover_effect'] ?? 'lift', [ 'none', 'lift', 'scale', 'tilt' ], true ) ? $s['card_hover_effect'] : 'lift';
+        $hover_effect = in_array( $s['card_hover_effect'] ?? 'lift', [ 'none', 'lift', 'scale', 'tilt' ], true ) ? ( $s['card_hover_effect'] ?? 'lift' ) : 'lift';
 
         $grid_style = sprintf( 'display:grid;grid-template-columns:repeat(%d,1fr);gap:%dpx;', $cols, $gap );
 

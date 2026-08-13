@@ -72,7 +72,7 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
 
         // Heading tag/size/color
         $allowed_tags = [ 'h2', 'h3', 'h4', 'h5', 'p' ];
-        $htag = in_array( $s['heading_tag'] ?? 'h2', $allowed_tags, true ) ? $s['heading_tag'] : 'h2';
+        $htag = in_array( $s['heading_tag'] ?? 'h2', $allowed_tags, true ) ? ( $s['heading_tag'] ?? 'h2' ) : 'h2';
 
         $size_px_map = [ 'sm' => '1.25rem', 'md' => '1.7rem', 'lg' => '2.3rem', 'xl' => '3rem' ];
         $base_size   = $s['heading_size'] ?? 'md';
@@ -105,7 +105,7 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
         $hd_lh  = isset( $s['heading_line_height'] ) ? floatval( $s['heading_line_height'] ) : 0;
         if ( $hd_lh > 0 ) { $hstyle .= 'line-height:' . $hd_lh . ';'; }
         $allowed_align = [ 'left', 'center', 'right', 'justify' ];
-        $hd_align = in_array( $s['heading_align'] ?? '', $allowed_align, true ) ? $s['heading_align'] : '';
+        $hd_align = in_array( $s['heading_align'] ?? '', $allowed_align, true ) ? ( $s['heading_align'] ?? '' ) : '';
         if ( $hd_align ) { $hstyle .= 'text-align:' . $hd_align . ';'; }
         if ( $hd_clr ) { $hstyle .= 'color:' . $hd_clr . ';'; }
 
@@ -278,7 +278,7 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
         <?php
         // ─── Text Effects ───
         $effect = $s['text_effect'] ?? 'none';
-        $tgt    = in_array( $s['text_effect_target'] ?? 'heading', [ 'heading', 'text', 'both' ], true ) ? $s['text_effect_target'] : 'heading';
+        $tgt    = in_array( $s['text_effect_target'] ?? 'heading', [ 'heading', 'text', 'both' ], true ) ? ( $s['text_effect_target'] ?? 'heading' ) : 'heading';
         $h_fx_class = '';
         $t_fx_class = '';
         $h_fx_data  = '';

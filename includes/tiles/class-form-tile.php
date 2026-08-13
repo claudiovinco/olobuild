@@ -130,7 +130,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         if ( ! preg_match( '/^[a-z0-9]+$/i', $label_weight ) ) {
             $label_weight = '500'; // Only numeric weights / CSS keywords are valid here.
         }
-        $label_tt    = in_array( $s['label_transform'] ?? '', [ 'none', 'uppercase', 'lowercase', 'capitalize' ], true ) ? $s['label_transform'] : '';
+        $label_tt    = in_array( $s['label_transform'] ?? '', [ 'none', 'uppercase', 'lowercase', 'capitalize' ], true ) ? ( $s['label_transform'] ?? '' ) : '';
         $label_ls    = floatval( $s['label_letter_spacing'] ?? 0 );
         // Font-family: stack web-safe (con virgola/apici) usato as-is, nome singolo quotato con fallback.
         $mk_font = function( $v ) {
@@ -144,7 +144,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         $input_ff    = $mk_font( $s['input_font_family'] ?? '' );
         $submit_ff   = $mk_font( $s['submit_font_family'] ?? '' );
         // Stile bordo input: box (tutti i lati) | underline (solo sotto) | none.
-        $border_style = in_array( $s['input_border_style'] ?? 'box', [ 'box', 'underline', 'none' ], true ) ? $s['input_border_style'] : 'box';
+        $border_style = in_array( $s['input_border_style'] ?? 'box', [ 'box', 'underline', 'none' ], true ) ? ( $s['input_border_style'] ?? 'box' ) : 'box';
         // In underline/none lo sfondo di default è trasparente (look editoriale su sezioni scure);
         // resta sovrascrivibile da input_bg esplicito.
         $input_bg    = $this->safe_color_css( $s['input_bg'] );
@@ -263,7 +263,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
             'mailchimp_merge_fields' => sanitize_textarea_field( $s['mailchimp_merge_fields'] ?? '' ),
             'webhook_enabled'   => ! empty( $s['webhook_enabled'] ),
             'webhook_url'       => esc_url_raw( $s['webhook_url'] ?? '' ),
-            'webhook_method'    => in_array( $s['webhook_method'] ?? 'POST', [ 'POST', 'PUT' ], true ) ? $s['webhook_method'] : 'POST',
+            'webhook_method'    => in_array( $s['webhook_method'] ?? 'POST', [ 'POST', 'PUT' ], true ) ? ( $s['webhook_method'] ?? 'POST' ) : 'POST',
         ] );
 
         // Container style

@@ -86,7 +86,7 @@ class Olobuild_Physicsbin_Tile extends Olobuild_Tile_Base {
         $items = [];
         foreach ( $items_raw as $it ) {
             if ( ! is_array( $it ) ) continue;
-            $shape = in_array( ( $it['shape'] ?? 'circle' ), [ 'circle', 'square', 'star' ], true ) ? $it['shape'] : 'circle';
+            $shape = in_array( ( $it['shape'] ?? 'circle' ), [ 'circle', 'square', 'star' ], true ) ? ( $it['shape'] ?? 'circle' ) : 'circle';
             $r     = max( 14, min( 90, intval( $it['radius'] ?? 40 ) ) );
             $color = $this->safe_color_css( $it['color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
             $glyph = mb_substr( wp_strip_all_tags( (string) ( $it['glyph'] ?? '' ) ), 0, 2 );

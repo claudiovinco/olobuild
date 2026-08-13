@@ -225,7 +225,7 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
         $border_w = max( 0, intval( $s['modal_border_width'] ?? 0 ) );
         $border_c = $this->safe_color_css( $s['modal_border_color'] ?? '' ) ?: 'var(--olo-color-border, #E5E7EB)';
         $border_style_allowed = [ 'solid', 'dashed', 'dotted', 'double' ];
-        $border_style = in_array( $s['modal_border_style'] ?? 'solid', $border_style_allowed, true ) ? $s['modal_border_style'] : 'solid';
+        $border_style = in_array( $s['modal_border_style'] ?? 'solid', $border_style_allowed, true ) ? ( $s['modal_border_style'] ?? 'solid' ) : 'solid';
 
         // Effetti avanzati modale (v1.0.60+)
         $backdrop_blur     = max( 0, min( 40, intval( $s['modal_backdrop_blur'] ?? 0 ) ) );

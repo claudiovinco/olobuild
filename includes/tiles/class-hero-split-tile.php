@@ -204,7 +204,7 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
         $sc_rdur        = max( 50, intval( $s['showcase_radius_hover_duration'] ?? 400 ) );
         $card_rdur      = max( 50, intval( $s['showcase_card_radius_hover_duration'] ?? 400 ) );
 
-        $hover_effect = in_array( $s['showcase_hover_effect'] ?? 'none', [ 'none', 'lift', 'scale', 'tilt' ], true ) ? $s['showcase_hover_effect'] : 'none';
+        $hover_effect = in_array( $s['showcase_hover_effect'] ?? 'none', [ 'none', 'lift', 'scale', 'tilt' ], true ) ? ( $s['showcase_hover_effect'] ?? 'none' ) : 'none';
 
         ob_start();
         ?>
@@ -226,7 +226,7 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                         $hsize   = absint( $s['headline_font_size'] ) ?: 96;
                         $hlh     = floatval( $s['headline_line_height'] ) ?: 1.0;
                         $hweight = preg_match( '/^\d+$/', (string) $s['headline_font_weight'] ) ? $s['headline_font_weight'] : '700';
-                        $halign  = in_array( $s['headline_align'] ?? 'left', [ 'left', 'center', 'right', 'justify' ], true ) ? $s['headline_align'] : 'left';
+                        $halign  = in_array( $s['headline_align'] ?? 'left', [ 'left', 'center', 'right', 'justify' ], true ) ? ( $s['headline_align'] ?? 'left' ) : 'left';
                     ?>
                         <h1 class="olo-hsplit__headline" style="font-family:<?php echo esc_attr( $headline_family ); ?>;font-size:<?php echo (int) $hsize; ?>px;line-height:<?php echo (float) $hlh; ?>;font-weight:<?php echo esc_attr( $hweight ); ?>;letter-spacing:-0.02em;text-align:<?php echo esc_attr( $halign ); ?>;margin:0 0 28px">
                             <?php foreach ( $headlines as $idx => $line ) :
@@ -246,7 +246,7 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                         $sub_italic = ! empty( $s['subhead_italic'] ) ? 'font-style:italic;' : '';
                         $sub_mw     = absint( $s['subhead_max_width'] ?? 0 );
                         $sub_mw_css = $sub_mw ? 'max-width:' . $sub_mw . 'px;' : '';
-                        $sub_align  = in_array( $s['subhead_align'] ?? 'left', [ 'left', 'center', 'right', 'justify' ], true ) ? $s['subhead_align'] : 'left';
+                        $sub_align  = in_array( $s['subhead_align'] ?? 'left', [ 'left', 'center', 'right', 'justify' ], true ) ? ( $s['subhead_align'] ?? 'left' ) : 'left';
                     ?>
                         <?php
                         $subhead_raw  = $s['subhead'] ?? '';

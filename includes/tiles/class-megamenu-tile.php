@@ -2198,6 +2198,22 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         $crest_bg    = $this->safe_color_css( $s['logo_crest_bg'] ?? '' ) ?: 'var(--olo-color-primary, #c8ff3c)';
         $crest_col   = $this->safe_color_css( $s['logo_crest_color'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #0a2a1e)';
         $mob_search  = ! empty( $s['mobile_search'] );
+        /*
+         * Le quattro impostazioni del menu a schermo intero erano lette solo in
+         * render_css(): qui dentro non esistevano, e PHP le trattava come null.
+         *
+         * Il guaio non era l'avviso ma cosa ne seguiva. `null !== ''` in PHP e'
+         * VERO, quindi la condizione «c'e' qualcosa da scrivere nel piede»
+         * risultava sempre soddisfatta: il menu a schermo intero mostrava una
+         * fascia in fondo con un collegamento vuoto che porta a '#'. E
+         * $mob_numbers, sempre nullo, spegneva la numerazione delle voci anche
+         * quando il docente l'aveva accesa. Contati 252 avvisi nei registri del
+         * server il 12 agosto 2026.
+         */
+        $mob_numbers   = ! empty( $s['mobile_numbers'] );
+        $mob_foot_text = trim( (string) ( $s['mobile_footer_text'] ?? '' ) );
+        $mob_foot_cta  = trim( (string) ( $s['mobile_footer_cta_text'] ?? '' ) );
+        $mob_foot_url  = trim( (string) ( $s['mobile_footer_cta_url'] ?? '' ) );
         $mob_bar_logo= ! empty( $s['mobile_bar_logo'] );
         $search_icon = ! empty( $s['search_icon'] );
         $ham_style_val = $s['hamburger_style'] ?? 'classic';

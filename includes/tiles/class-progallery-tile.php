@@ -179,7 +179,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         $film_tilt    = max( 0, min( 60, absint( $s['filmstrip_side_tilt'] ) ) );
         $film_auto    = ! empty( $s['filmstrip_autoplay'] );
         $film_speed   = max( 2.0, min( 8.0, floatval( $s['filmstrip_speed'] ) ) );
-        $film_dots    = in_array( $s['filmstrip_dots'] ?? '', [ 'dots', 'lines', 'progress', 'fraction', 'none' ], true ) ? $s['filmstrip_dots'] : 'dots';
+        $film_dots    = in_array( $s['filmstrip_dots'] ?? '', [ 'dots', 'lines', 'progress', 'fraction', 'none' ], true ) ? ( $s['filmstrip_dots'] ?? '' ) : 'dots';
         $film_dots_c  = $this->safe_color_css( $s['filmstrip_dots_color'] ?? '' ) ?: '';
         // Padding verticale per compensare zoom 3D del coverflow
         $film_pad     = min( 80, max( 25, (int) ceil( intval( $img_height ?: 250 ) * ( $film_zoom - 1 ) / 2 ) + 15 ) );
@@ -191,13 +191,13 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         $strip_pause    = ! empty( $s['strip_pause_hover'] );
         $strip_dir      = ( $s['strip_direction'] === 'right' ) ? 'right' : 'left';
         $strip_fade     = ! empty( $s['strip_fade_edges'] );
-        $video_preview  = in_array( $s['video_preview'] ?? '', [ 'poster', 'autoplay' ], true ) ? $s['video_preview'] : 'poster';
+        $video_preview  = in_array( $s['video_preview'] ?? '', [ 'poster', 'autoplay' ], true ) ? ( $s['video_preview'] ?? '' ) : 'poster';
         $is_strip       = ( str_starts_with( $layout, 'strip' ) );
         $is_strip_drag  = in_array( $layout, [ 'strip', 'strip_collage', 'strip_multi' ], true );
         $is_strip_auto  = in_array( $layout, [ 'strip_marquee', 'strip_split' ], true );
         $is_coverflow   = ( $layout === 'strip_coverflow' );
         $strip_arrows   = $is_strip && ! $is_coverflow && ! empty( $s['strip_arrows'] );
-        $sa_style       = in_array( $s['strip_arrows_style'] ?? '', [ 'chevron', 'arrow', 'circle', 'square', 'pill', 'minimal' ], true ) ? $s['strip_arrows_style'] : 'chevron';
+        $sa_style       = in_array( $s['strip_arrows_style'] ?? '', [ 'chevron', 'arrow', 'circle', 'square', 'pill', 'minimal' ], true ) ? ( $s['strip_arrows_style'] ?? '' ) : 'chevron';
         $sa_size        = max( 24, min( 60, absint( $s['strip_arrows_size'] ) ) );
         $sa_color       = $this->safe_color_css( $s['strip_arrows_color'] ) ?: '#ffffff';
         $sa_bg          = $this->safe_color_css( $s['strip_arrows_bg'] ) ?: 'rgba(0,0,0,0.4)';
