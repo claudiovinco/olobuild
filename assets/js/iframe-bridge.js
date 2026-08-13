@@ -788,11 +788,11 @@
     }
 
     // Re-init virtual tour viewer
-    if (typeof window.__oloVtourBoot === 'function') {
-      var vtourContainers = root.querySelectorAll('.olo-vtour-container[data-vtour-config]:not([data-vtour-init])');
+    if (typeof window.__olotourBoot === 'function') {
+      var vtourContainers = root.querySelectorAll('.olotour-container[data-vtour-config]:not([data-vtour-init])');
       if (vtourContainers.length) {
         vtourContainers.forEach(function(c) { c.setAttribute('data-vtour-init', '1'); });
-        window.__oloVtourBoot();
+        window.__olotourBoot();
       }
     }
   }
