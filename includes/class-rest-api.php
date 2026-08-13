@@ -3478,13 +3478,16 @@ class Olobuild_Rest_Api {
         $sub_table = $wpdb->prefix . 'olobuild_form_submissions';
         $form_7d = 0;
         $form_prev = 0;
+        // La colonna della data si chiama submitted_at: con created_at MySQL
+        // rispondeva «Unknown column» e i due conteggi restavano a zero, quindi
+        // il cruscotto diceva sempre «nessun invio» e la variazione era 0%.
         if ( $wpdb->get_var( "SHOW TABLES LIKE '$sub_table'" ) === $sub_table ) {
             $form_7d = (int) $wpdb->get_var( $wpdb->prepare(
-                "SELECT COUNT(*) FROM $sub_table WHERE created_at >= %s",
+                "SELECT COUNT(*) FROM $sub_table WHERE submitted_at >= %s",
                 gmdate( 'Y-m-d H:i:s', strtotime( '-7 days' ) )
             ) );
             $form_prev = (int) $wpdb->get_var( $wpdb->prepare(
-                "SELECT COUNT(*) FROM $sub_table WHERE created_at >= %s AND created_at < %s",
+                "SELECT COUNT(*) FROM $sub_table WHERE submitted_at >= %s AND submitted_at < %s",
                 gmdate( 'Y-m-d H:i:s', strtotime( '-14 days' ) ),
                 gmdate( 'Y-m-d H:i:s', strtotime( '-7 days' ) )
             ) );
@@ -3494,11 +3497,29 @@ class Olobuild_Rest_Api {
         // Avvisi: redirect 404 + revisioni in bozza + ecc.
         $alerts_404   = 0;
         $alerts_break = 0;
+        /*
+         * «404 non gestiti» = indirizzi finiti nel registro per i quali NON
+         * esiste un redirect.
+         *
+         * La query cercava una colonna `handled` che in quella tabella non c'è
+         * mai stata (le colonne sono url, hits, last_hit, referer, user_agent):
+         * MySQL rifiutava tutto e l'avviso restava a zero anche con 500 righe
+         * nel registro. Lo stato «gestito» non è un campo, è l'esistenza di un
+         * redirect che parte da quell'indirizzo.
+         *
+         * ⚠️ wp_olo_404_log si chiama così davvero: è fuori dalla migrazione
+         * del prefisso, non è un residuo da correggere.
+         */
         $tools_404 = $wpdb->prefix . 'olo_404_log';
+        $redirects = $wpdb->prefix . 'olobuild_redirects';
         if ( $wpdb->get_var( "SHOW TABLES LIKE '$tools_404'" ) === $tools_404 ) {
-            $alerts_404 = (int) $wpdb->get_var(
-                "SELECT COUNT(*) FROM $tools_404 WHERE handled = 0"
-            );
+            $alerts_404 = ( $wpdb->get_var( "SHOW TABLES LIKE '$redirects'" ) === $redirects )
+                ? (int) $wpdb->get_var(
+                    "SELECT COUNT(*) FROM $tools_404 l
+                     LEFT JOIN $redirects r ON r.from_url = l.url
+                     WHERE r.id IS NULL"
+                )
+                : (int) $wpdb->get_var( "SELECT COUNT(*) FROM $tools_404" );
         }
         // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $alerts_total = $alerts_404 + $tpl_draft;
