@@ -1574,10 +1574,27 @@ class Olobuild_Builder {
                 <a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuild' ) ); ?>" style="display:inline-flex;align-items:center;text-decoration:none;">
                     <img class="logo" src="<?php echo esc_url( OLOBUILD_URL . 'assets/img/olobuild-horizontal.png' ); ?>" alt="Olobuild" />
                 </a>
-                <button type="button" class="ver" data-olo-app-mode-toggle title="<?php esc_attr_e( 'Cambia modalità', 'olobuild' ); ?>">v<?php echo esc_html( OLOBUILD_VERSION ); ?></button>
+                <span class="ver">v<?php echo esc_html( OLOBUILD_VERSION ); ?></span>
                 <span class="sep"></span>
                 <span class="crumb"><a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuild' ) ); ?>" style="color:inherit;text-decoration:none">Olobuild</a> · <?php echo $crumb_html ?: '<b>' . esc_html__( 'Dashboard', 'olobuild' ) . '</b>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- breadcrumb HTML built by internal callers from esc_html()/esc_url()'d parts. ?></span>
                 <span class="spc"></span>
+                <?php
+                /*
+                 * ⚠️ IL COMANDO STA QUI, E NON PIU' SUL NUMERO DI VERSIONE.
+                 * Prima l'interruttore della modalita' app era il pulsante che
+                 * scrive `v1.4.379`: un comando che nessuno cerca li', e che
+                 * per giunta funzionava solo nella dashboard, perche' la sua
+                 * JS si carica soltanto la'. Adesso e' un pulsante che dice
+                 * cosa fa, e lo dice anche a un lettore di schermo
+                 * (`aria-pressed`).
+                 */
+                ?>
+                <button type="button" class="ico-btn" data-olo-app-mode-toggle
+                        aria-pressed="<?php echo $app_mode ? 'true' : 'false'; ?>"
+                        title="<?php esc_attr_e( 'Stringi il menu di WordPress', 'olobuild' ); ?>"
+                        aria-label="<?php esc_attr_e( 'Stringi il menu di WordPress', 'olobuild' ); ?>">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+                </button>
                 <div class="search-mini" data-olo-palette-trigger>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--olo-text-muted)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                     <input type="text" placeholder="<?php esc_attr_e( 'Cerca pagine, template, impostazioni…', 'olobuild' ); ?>" readonly/>
@@ -1593,6 +1610,48 @@ class Olobuild_Builder {
                     <span class="av"><?php echo esc_html( $initials ); ?></span>
                 </a>
             </div>
+        <?php
+        self::stampa_interruttore_app_mode();
+    }
+
+    /**
+     * L'INTERRUTTORE DELLA MODALITA' APP, che vive dove vive la barra.
+     *
+     * ⚠️ NON STA IN `dashboard.js`, e prima ci stava. Quel file si accoda
+     * soltanto su `toplevel_page_olobuild`, quindi su ogni altra pagina di
+     * Olobuild il pulsante c'era, aveva il suo suggerimento, e non faceva
+     * niente: un comando morto e' peggio di un comando assente, perche' chi
+     * lo preme conclude che il prodotto non funziona.
+     *
+     * Qui invece viene stampato insieme alla barra: dove c'e' la barra c'e'
+     * il comando, e non ci sono due elenchi da tenere allineati.
+     */
+    private static function stampa_interruttore_app_mode() {
+        $rotta  = esc_url_raw( rest_url( 'olobuild/v1/dashboard/prefs' ) );
+        $chiave = wp_create_nonce( 'wp_rest' );
+        ?>
+        <script>
+        ( function () {
+            var b = document.querySelector( '[data-olo-app-mode-toggle]' );
+            if ( ! b ) { return; }
+            b.addEventListener( 'click', function () {
+                var acceso = ! document.body.classList.contains( 'olobuild-app-mode' );
+                document.body.classList.toggle( 'olobuild-app-mode', acceso );
+                b.setAttribute( 'aria-pressed', acceso ? 'true' : 'false' );
+
+                /* La striscia «Torna a WordPress» esiste solo in modalita' app. */
+                var striscia = document.querySelector( '.olo-cockpit-appback' );
+                if ( striscia ) { striscia.style.display = acceso ? '' : 'none'; }
+
+                fetch( <?php echo wp_json_encode( $rotta ); ?>, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': <?php echo wp_json_encode( $chiave ); ?> },
+                    body: JSON.stringify( { app_mode: acceso } )
+                } ).catch( function () {} );
+            } );
+        } )();
+        </script>
         <?php
     }
 

@@ -78,6 +78,14 @@
     }, cfg.prefs || {});
 
     const savePrefs = debounce(() => {
+        /*
+         * ⚠️ La modalita' app si legge dal documento, non dalla copia in
+         * memoria: a cambiarla e' l'interruttore stampato dal PHP, che questo
+         * file non vede. Senza questa riga, il primo salvataggio fatto per
+         * un'altra ragione (una tessera appuntata, la barra laterale aperta)
+         * rimetterebbe indietro la scelta appena fatta.
+         */
+        prefs.app_mode = document.body.classList.contains('olobuild-app-mode');
         api('dashboard/prefs', {
             method: 'POST',
             body: JSON.stringify(prefs)
@@ -285,18 +293,14 @@
     /* ─────────────────────────────────────────────────────────────────
        App-mode toggle (icona nella topbar)
        ───────────────────────────────────────────────────────────────── */
-    function bindAppModeToggle() {
-        const btn = root.querySelector('[data-olo-app-mode-toggle]');
-        if (!btn) return;
-        btn.addEventListener('click', () => {
-            prefs.app_mode = !prefs.app_mode;
-            document.body.classList.toggle('olobuild-app-mode', prefs.app_mode);
-            // strip back-to-wp visibile solo in app-mode
-            const back = root.querySelector('.olo-cockpit-appback');
-            if (back) back.style.display = prefs.app_mode ? '' : 'none';
-            savePrefs();
-        });
-    }
+    /*
+     * ⚠️ L'INTERRUTTORE DELLA MODALITA' APP NON STA PIU' QUI.
+     * Lo stampa il PHP insieme alla barra in cima
+     * (`Olo_Builder::stampa_interruttore_app_mode()`), perche' questo file si
+     * accoda solo su `toplevel_page_olobuild`: su ogni altra pagina di
+     * Olobuild il pulsante c'era e non faceva niente. Tenerlo in due posti
+     * vorrebbe dire due comportamenti che divergono.
+     */
 
     /* ─────────────────────────────────────────────────────────────────
        Search palette ⌘K
@@ -417,7 +421,6 @@
         bindPin();
         bindRail();
         bindBanner();
-        bindAppModeToggle();
         bindPalette();
         bindNewPage();
     }
