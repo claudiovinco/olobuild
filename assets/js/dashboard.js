@@ -72,7 +72,8 @@
     let prefs = Object.assign({
         pinned: ['tpl', 'cfg', 'media'],
         rail: defaultRail,
-        app_mode: true,
+        // Spento di serie: deve dire lo stesso di admin_body_class() in PHP.
+        app_mode: false,
         banners_off: []
     }, cfg.prefs || {});
 

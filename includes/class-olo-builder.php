@@ -687,7 +687,15 @@ class Olobuild_Builder {
             $user_prefs = wp_parse_args( $user_prefs, [
                 'pinned'      => [ 'tpl', 'cfg', 'media' ],
                 'rail'        => 'expanded',
-                'app_mode'    => true,
+                /*
+                 * ⚠️ SPENTO, e deve dire lo stesso che dice `admin_body_class()`.
+                 * Questo valore di serie sta scritto in QUATTRO punti (qui, la
+                 * rotta REST, `dashboard.js` e la classe sul body): se uno dice
+                 * acceso e un altro spento, l'interruttore parte credendo il
+                 * contrario di quello che si vede, e il primo clic non fa
+                 * niente.
+                 */
+                'app_mode'    => false,
                 'banners_off' => [],
             ] );
 
@@ -1084,14 +1092,31 @@ class Olobuild_Builder {
             }
         }
 
-        // App mode: applicato a TUTTE le pagine Olobuild (sidebar 52px,
-        // sotto-menu Olobuild nascosto perché ridondante con cockpit + page-shell).
+        /*
+         * App mode: la sidebar di wp-admin stretta a 52 pixel e il sotto-menu
+         * Olobuild nascosto, su tutte le pagine del prodotto.
+         *
+         * ⚠️ SPENTO DI SERIE, e prima era acceso. Contrarre il menu di
+         * WordPress e' una cosa che WordPress sa gia' fare, con il suo
+         * «Riduci menu», e chi lo vuole se lo tiene ovunque. Deciderlo noi al
+         * posto suo vuol dire che aprendo Olobuild il menu si stringe da solo,
+         * e chi non l'ha chiesto non ha modo di capire perche'.
+         *
+         * ⚠️ E il modo per spegnerlo era il NUMERO DI VERSIONE nella barra in
+         * cima (`data-olo-app-mode-toggle` su `v1.4.379`): un comando che
+         * nessuno cerca li'. Peggio, funzionava solo nella dashboard, perche'
+         * `dashboard.js` si carica solo su `toplevel_page_olobuild`: su tutte
+         * le altre pagine quel pulsante c'era, aveva il suo suggerimento
+         * «Cambia modalita'», e non faceva niente.
+         *
+         * Chi la vuole se la accende dalla dashboard, e da li' resta accesa.
+         */
         if ( $is_olo_page ) {
             $user_id = get_current_user_id();
             $prefs = get_user_meta( $user_id, 'olo_dashboard_prefs', true );
             $app_mode = is_array( $prefs ) && array_key_exists( 'app_mode', $prefs )
                 ? (bool) $prefs['app_mode']
-                : true; // default ON
+                : false; // default SPENTO
             if ( $app_mode ) {
                 $classes .= ' olobuild-app-mode';
             }
@@ -1529,7 +1554,7 @@ class Olobuild_Builder {
 
         $user_prefs = get_user_meta( $user->ID, 'olo_dashboard_prefs', true );
         if ( ! is_array( $user_prefs ) ) $user_prefs = [];
-        $app_mode = array_key_exists( 'app_mode', $user_prefs ) ? (bool) $user_prefs['app_mode'] : true;
+        $app_mode = array_key_exists( 'app_mode', $user_prefs ) ? (bool) $user_prefs['app_mode'] : false;
         ?>
         <div class="olo-cockpit-wrap">
             <?php if ( $app_mode ) : ?>

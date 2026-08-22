@@ -3767,7 +3767,7 @@ class Olobuild_Rest_Api {
         return rest_ensure_response( wp_parse_args( $prefs, [
             'pinned'      => [ 'tpl', 'cfg', 'media' ],
             'rail'        => 'expanded',
-            'app_mode'    => true,
+            'app_mode'    => false,
             'banners_off' => [],
         ] ) );
     }
