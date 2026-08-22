@@ -28,6 +28,9 @@ class Olobuild_Cookie_Consent {
     /** Consent log table (without prefix) */
     const LOG_TABLE = 'olo_consent_log';
 
+    /** Versione schema DB — si alza per rifare passare dbDelta una volta. */
+    const DB_VERSION = '1.0.0';
+
     public static function instance() {
         if ( null === self::$instance ) {
             self::$instance = new self();
@@ -1055,7 +1058,36 @@ class Olobuild_Cookie_Consent {
      * DATABASE
      * ═══════════════════════════════════════════════════ */
 
+    /**
+     * Crea la tabella del registro consensi, UNA VOLTA.
+     *
+     * ⚠️ QUESTA GIRAVA A OGNI PAGINA DI wp-admin, e non a vuoto. dbDelta
+     * confronta i tipi come STRINGHE: la SQL dichiarava `BIGINT UNSIGNED`
+     * senza larghezza, MariaDB risponde `bigint(20) unsigned`, e il confronto
+     * non torna mai. Quindi a ogni richiesta partivano due ALTER TABLE:
+     *
+     *     Changed type of …id from bigint(20) unsigned to BIGINT UNSIGNED
+     *     Changed type of …banner_version from int(10) unsigned to INT UNSIGNED
+     *
+     * Misurato su olotutor.clod.eu: 4,8 secondi su OGNI caricamento di
+     * wp-admin, bacheca compresa. Su un altro server con lo stesso identico
+     * codice erano 32 millisecondi, perché lì una DDL costa 6 millesimi
+     * invece di 2,4 secondi: il difetto c'era su tutti e due, lo pagava uno
+     * solo. È il motivo per cui una cosa così non si scopre finché non tocca
+     * la macchina sbagliata.
+     *
+     * Due correzioni, e servono tutte e due. Le larghezze scritte
+     * (`BIGINT(20)`, `INT(10)`) fanno tornare il confronto di dbDelta; la
+     * guardia sulla versione fa sì che qui non si passi nemmeno. Con la sola
+     * guardia, il giorno che si alza `DB_VERSION` tornerebbero due ALTER
+     * inutili; con le sole larghezze, resterebbe una migrazione agganciata a
+     * `admin_init`, che è il posto sbagliato per una migrazione.
+     */
     public function maybe_create_table() {
+        if ( get_option( 'olobuild_consent_db_version' ) === self::DB_VERSION ) {
+            return;
+        }
+
         global $wpdb;
         $table   = $wpdb->prefix . self::LOG_TABLE;
         $charset = $wpdb->get_charset_collate();
@@ -1064,12 +1096,12 @@ class Olobuild_Cookie_Consent {
         // NOTE: dbDelta requires PRIMARY KEY on its own line (not inline) to avoid
         // "Multiple primary key defined" error on subsequent runs.
         $sql = "CREATE TABLE $table (
-            id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             consent_id VARCHAR(64) NOT NULL,
             ip_hash VARCHAR(64) NOT NULL DEFAULT '',
             categories TEXT NOT NULL,
             action_type VARCHAR(20) NOT NULL DEFAULT 'initial',
-            banner_version INT UNSIGNED NOT NULL DEFAULT 1,
+            banner_version INT(10) UNSIGNED NOT NULL DEFAULT 1,
             user_agent VARCHAR(512) NOT NULL DEFAULT '',
             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY  (id),
@@ -1079,6 +1111,8 @@ class Olobuild_Cookie_Consent {
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         dbDelta( $sql );
+
+        update_option( 'olobuild_consent_db_version', self::DB_VERSION, false );
     }
 
     /* ═══════════════════════════════════════════════════
