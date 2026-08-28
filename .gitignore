@@ -1,18 +1,14 @@
 *.bak*
 *.log
-*.log
 *.original
 *.tar.gz
 *.zip
---no-same-owner
 .DS_Store
 .claude/worktrees/
 Thumbs.db
 check_config.py
 dist/
-dist/
 local_zip_list.txt
-node_modules/
 node_modules/
 server_zip_list.txt
 src_backup_*/
@@ -34,3 +30,5 @@ build/
 /tmp_*.json
 /tmp_blocks/
 /tmp_design_*/
+/tmp_gen_*
+/tmp_try_*/
