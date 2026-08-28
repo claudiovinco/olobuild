@@ -33,8 +33,34 @@
         </div>
       </div>
 
-      <!-- RIGHT -->
-      <div v-if="s.showcase_enabled" class="olo-hsplit__right" :style="rightStyle">
+      <!-- RIGHT (pannello: showcase | media+badge | cover+player audio) -->
+      <div v-if="panelVisible && s.panel !== 'showcase'" class="olo-hsplit__right" :style="panelRightStyle">
+        <div :style="panelMediaBoxStyle">
+          <div :style="panelMediaLayerStyle">
+            <video
+              v-if="panelVideoUrl"
+              :style="{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: (s.panel_media && s.panel_media.video_fit) || 'cover', objectPosition: (s.panel_media && s.panel_media.image_position) || 'center center', zIndex: 0, pointerEvents: 'none' }"
+              :src="panelVideoUrl"
+              :poster="(s.panel_media && s.panel_media.video_poster) || undefined"
+              muted autoplay loop playsinline
+            ></video>
+            <span v-if="!hasPanelMedia && s.panel_media_label" :style="panelLabelStyle">{{ s.panel_media_label }}</span>
+          </div>
+          <div v-if="s.panel === 'media' && (s.panel_badge_number || s.panel_badge_label)" :style="panelBadgeStyle">
+            <b v-if="s.panel_badge_number" :style="{ fontFamily: headlineFamily, fontWeight: 900, fontSize: '34px', display: 'block', lineHeight: 1 }">{{ s.panel_badge_number }}</b>
+            <span v-if="s.panel_badge_label" style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">{{ s.panel_badge_label }}</span>
+          </div>
+        </div>
+        <div v-if="s.panel === 'audio'" :style="playerStyle">
+          <span :style="playBtnStyle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px"><path d="M8 5v14l11-7z"/></svg></span>
+          <div style="flex:1;min-width:0">
+            <b style="display:block;font-weight:700;font-size:14px">{{ s.panel_track_title }}</b>
+            <span style="font-size:12px;opacity:.65">{{ s.panel_track_meta }}</span>
+          </div>
+          <div :style="waveWrapStyle" aria-hidden="true"><span v-for="(h, i) in WAVE" :key="i" :style="waveBarStyle(h)"></span></div>
+        </div>
+      </div>
+      <div v-else-if="panelVisible" class="olo-hsplit__right" :style="rightStyle">
         <div v-if="s.showcase_badge_text" class="olo-hsplit__badge" :style="{ background: s.showcase_badge_bg || '#ffffff' }">
           <span class="olo-hsplit__dot olo-hsplit__dot--sm" :style="{ background: s.showcase_badge_dot || '#dc2626' }"></span>
           <span>{{ s.showcase_badge_text }}</span>
@@ -117,6 +143,15 @@ const defaults = {
     { value: 'Gratis', value_color: '#b3261e', label: 'OLOBUILD, PER SEMPRE' },
     { value: '0 %',    value_color: '#0f172a', label: 'SAAS · LOCK-IN · COMMISSIONI' },
   ],
+  // Pannello destro (unificazione hero, Fase 1c) — default 'showcase' = resa attuale
+  panel: 'showcase',
+  panel_media: { type: 'none' },
+  panel_media_label: 'media — 4/5',
+  panel_aspect: '4/5',
+  panel_badge_number: '',
+  panel_badge_label: '',
+  panel_track_title: 'Glasshouse',
+  panel_track_meta: 'Kova · Nightglass',
   showcase_enabled: true,
   showcase_bg: { type: 'solid', color: '#f0e9dc' },
   showcase_padding: 28,
@@ -165,9 +200,57 @@ const wrapStyle = computed(() => {
   return style;
 });
 
+/* ── Pannello destro (unificazione hero, Fase 1c) ── */
+const panelVisible = computed(() => {
+  const p = s.value.panel || 'showcase';
+  if (p === 'showcase') return !!s.value.showcase_enabled;
+  return ['media', 'audio'].includes(p);
+});
+const hasPanelMedia = computed(() => { const m = s.value.panel_media; return !!(m && m.type && m.type !== 'none'); });
+const panelVideoUrl = computed(() => {
+  const m = s.value.panel_media;
+  return (m && m.type === 'video' && m.video_url) ? m.video_url : '';
+});
+const mixP = (pct) => `color-mix(in srgb, currentColor ${pct}%, transparent)`;
+const WAVE = [30, 60, 90, 50, 75, 40, 85, 55, 95, 35, 70, 45];
+const panelRightStyle = { position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' };
+const panelMediaBoxStyle = computed(() => {
+  const ar = /^\d+\s*\/\s*\d+$/.test(String(s.value.panel_aspect || '')) ? String(s.value.panel_aspect).replace(/\s/g, '') : '4/5';
+  return {
+    position: 'relative',
+    aspectRatio: s.value.panel === 'audio' ? '1/1' : ar,
+  };
+});
+const panelMediaLayerStyle = computed(() => ({
+  position: 'absolute', inset: 0, borderRadius: '18px', overflow: 'hidden',
+  border: `1px solid ${mixP(10)}`,
+  backgroundColor: mixP(5),
+  backgroundImage: 'repeating-linear-gradient(135deg, color-mix(in srgb, currentColor 4%, transparent) 0 16px, transparent 16px 32px)',
+  backgroundSize: 'cover', backgroundPosition: 'center center',
+  ...(hasPanelMedia.value ? buildBgStyle(s.value.panel_media) : {}),
+}));
+const panelLabelStyle = { position: 'absolute', left: '14px', bottom: '12px', right: '14px', fontSize: '10.5px', letterSpacing: '.04em', textTransform: 'uppercase', fontWeight: 600, opacity: 0.5, zIndex: 1 };
+const panelBadgeStyle = {
+  position: 'absolute', left: '-18px', bottom: '24px', zIndex: 2,
+  background: 'var(--olo-color-primary, #e1474f)', color: 'var(--olo-color-on-primary, #ffffff)',
+  borderRadius: '16px', padding: '18px 22px', boxShadow: '0 18px 40px -16px rgba(22,38,61,.5)',
+};
+const playerStyle = computed(() => ({
+  display: 'flex', alignItems: 'center', gap: '14px', marginTop: '16px',
+  background: mixP(5), border: `1px solid ${mixP(10)}`, borderRadius: '14px', padding: '14px 16px',
+}));
+const playBtnStyle = {
+  width: '42px', height: '42px', borderRadius: '50%', background: 'var(--olo-color-primary, #e1474f)',
+  color: 'var(--olo-color-on-primary, #ffffff)', display: 'grid', placeItems: 'center', flex: 'none',
+};
+const waveWrapStyle = { display: 'flex', alignItems: 'center', gap: '2px', height: '26px', flex: 'none' };
+function waveBarStyle(h) {
+  return { width: '2.5px', background: 'var(--olo-color-primary, #e1474f)', borderRadius: '2px', opacity: 0.5, height: h + '%' };
+}
+
 const gridStyle = computed(() => ({
   display: 'grid',
-  gridTemplateColumns: s.value.showcase_enabled ? (s.value.split_ratio || '1fr 1fr') : '1fr',
+  gridTemplateColumns: panelVisible.value ? (s.value.split_ratio || '1fr 1fr') : '1fr',
   gap: (s.value.gap || 60) + 'px',
   alignItems: 'center',
 }));

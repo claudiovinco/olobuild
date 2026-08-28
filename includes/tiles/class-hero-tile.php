@@ -23,6 +23,67 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
         'subtitle'   => 'Scopri qualcosa di straordinario',
         'text_color' => '',
 
+        // Scena (unificazione hero, Fase 1) — tutti default no-op, parità col JS.
+        'eyebrow_text'    => '',
+        'eyebrow_dot'     => false,
+        'media_bg'        => [ 'type' => 'none' ],
+        'overlay_color'   => '',
+        'overlay_top'     => 0,
+        'overlay_bottom'  => 0,
+        'overlay_sides'   => false,
+        'glow_on'         => false,
+        'glow_color'      => '',
+        'glow_w'          => 760,
+        'glow_h'          => 560,
+        'glow_blur'       => 100,
+        'glow_x'          => 50,
+        'glow_y'          => 20,
+        'arch'            => false,
+        'frame_on'        => false,
+        'frame_inset'     => 24,
+        'watermark_text'  => '',
+        'watermark_color' => '',
+        'accent'          => '',
+        'meta_text'       => '',
+        'scroll_hint'     => '',
+
+        // Modulo sotto il contenuto (unificazione hero, Fase 1) — '' = no-op.
+        'module'             => '',
+        'strip_items'        => [
+            [ 'image' => '', 'caption' => 'dettaglio — 01' ],
+            [ 'image' => '', 'caption' => 'dettaglio — 02' ],
+            [ 'image' => '', 'caption' => 'dettaglio — 03' ],
+        ],
+        'strip_offset'       => 28,
+        'strip_radius'       => 200,
+        'search_placeholder' => 'Cerca…',
+        'search_button'      => 'Cerca',
+        'search_url'         => '',
+        'search_chips'       => '',
+        'mock_mode'          => 'media',
+        'mock_media'         => [ 'type' => 'none' ],
+        'mock_label'         => 'screenshot prodotto — 16/8.5',
+        'mock_url'           => 'app.tuoprodotto.com',
+        'mock_kpis'          => [
+            [ 'label' => 'MRR', 'value' => '€48.2k', 'delta' => '+12% sul mese', 'down' => false ],
+            [ 'label' => 'Utenti attivi', 'value' => '3.204', 'delta' => '+8%', 'down' => false ],
+            [ 'label' => 'Churn', 'value' => '1,9%', 'delta' => '−0,4%', 'down' => true ],
+        ],
+        'mock_chart_title'   => 'Revenue',
+        'mock_chart_meta'    => 'ultimi 12 mesi',
+        'mock_bars'          => [
+            [ 'h' => 34, 'label' => 'G', 'alt' => false ], [ 'h' => 52, 'label' => 'F', 'alt' => false ],
+            [ 'h' => 44, 'label' => 'M', 'alt' => true ],  [ 'h' => 68, 'label' => 'A', 'alt' => false ],
+            [ 'h' => 58, 'label' => 'M', 'alt' => false ], [ 'h' => 80, 'label' => 'G', 'alt' => true ],
+            [ 'h' => 72, 'label' => 'L', 'alt' => false ], [ 'h' => 92, 'label' => 'A', 'alt' => false ],
+        ],
+        'chat_label'         => 'workspace',
+        'chat_messages'      => [
+            [ 'side' => 'you', 'text' => 'Riassumi le chiamate della settimana e segnala i temi sul prezzo.' ],
+            [ 'side' => 'ai', 'text' => 'Su 9 chiamate: 3 citano il prezzo — due chiedono la fatturazione annuale. Ho preparato una bozza di follow-up per ciascuna.' ],
+            [ 'side' => 'you', 'text' => 'Perfetto, aggiungile al CRM.' ],
+        ],
+
         // Titolo tipografia
         'title_tag'            => 'h1',
         'title_font_family'    => '',
@@ -128,6 +189,73 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             $pad_r = $pad_l = 20;
         }
 
+        // ── Scena (unificazione hero, Fase 1) — media + glow + velo + watermark ──
+        // Tutti i valori sono no-op coi default: $has_scene false → CSS/markup identici a prima.
+        $accent_set  = $this->safe_color_css( $s['accent'] ?? '' );
+        $accent_css  = $accent_set ?: 'var(--olo-color-primary, #e1474f)';
+        $mb          = $this->bg_media_parts( $s['media_bg'] ?? null, $uid );
+        $o_top       = max( 0, min( 1, floatval( $s['overlay_top'] ?? 0 ) ) );
+        $o_bot       = max( 0, min( 1, floatval( $s['overlay_bottom'] ?? 0 ) ) );
+        $has_overlay = ( $o_top > 0 || $o_bot > 0 );
+        $glow_on     = ! empty( $s['glow_on'] );
+        $wm_text     = trim( (string) ( $s['watermark_text'] ?? '' ) );
+        $has_scene   = ( $mb['has'] || $glow_on || $has_overlay || $wm_text !== '' );
+
+        // color-mix: velo/glow su QUALSIASI colore, token inclusi (parità col JS).
+        $mix = static function ( $color, $alpha ) {
+            return 'color-mix(in srgb, ' . $color . ' ' . round( max( 0, min( 1, $alpha ) ) * 100 ) . '%, transparent)';
+        };
+
+        $veil_grad = '';
+        if ( $has_overlay ) {
+            $oc     = $this->safe_color_css( $s['overlay_color'] ?? '' ) ?: 'var(--olo-color-dark, #16263d)';
+            $o_mid  = round( $o_top * 0.6, 3 );
+            $grad_v = 'linear-gradient(180deg, ' . $mix( $oc, $o_top ) . ' 0%, ' . $mix( $oc, $o_mid ) . ' 38%, ' . $mix( $oc, $o_bot ) . ' 100%)';
+            if ( ! empty( $s['overlay_sides'] ) ) {
+                $s_top     = round( $o_top * 0.4, 3 );
+                $s_bot     = round( $o_bot * 0.7, 3 );
+                $veil_grad = 'linear-gradient(90deg, ' . $mix( $oc, $o_bot ) . ' 0%, ' . $mix( $oc, $s_top ) . ' 52%, ' . $mix( $oc, $s_bot ) . ' 100%), ' . $grad_v;
+            } else {
+                $veil_grad = $grad_v;
+            }
+        }
+
+        $glow_color = $this->safe_color_css( $s['glow_color'] ?? '' ) ?: $mix( $accent_css, 0.2 );
+        $glow_w     = max( 100, intval( $s['glow_w'] ?? 760 ) ?: 760 );
+        $glow_h     = max( 100, intval( $s['glow_h'] ?? 560 ) ?: 560 );
+        $glow_blur  = max( 0, intval( $s['glow_blur'] ?? 100 ) );
+        $glow_x     = is_numeric( $s['glow_x'] ?? null ) ? max( 0, min( 100, intval( $s['glow_x'] ) ) ) : 50;
+        $glow_y     = is_numeric( $s['glow_y'] ?? null ) ? max( -50, min( 100, intval( $s['glow_y'] ) ) ) : 20;
+
+        $frame_on    = ! empty( $s['frame_on'] );
+        $frame_inset = max( 0, absint( $s['frame_inset'] ?? 24 ) );
+        $scene_inset = $frame_on ? ( $frame_inset . 'px' ) : '0';
+        $arch_mask   = ! empty( $s['arch'] ) ? 'radial-gradient(150% 125% at 50% 0%, #000 87%, transparent 87.5%)' : '';
+        $wm_color    = $this->safe_color_css( $s['watermark_color'] ?? '' ) ?: 'rgba(255,255,255,.06)';
+
+        // ── Modulo sotto il contenuto (unificazione hero, Fase 1) ──
+        $module      = in_array( ( $s['module'] ?? '' ), [ 'strip', 'search', 'mockup', 'chat' ], true ) ? $s['module'] : '';
+        $strip_items = ( 'strip' === $module && is_array( $s['strip_items'] ?? null ) ) ? $s['strip_items'] : [];
+        $strip_off   = max( 0, intval( $s['strip_offset'] ?? 28 ) );
+        $strip_rad   = max( 0, intval( $s['strip_radius'] ?? 200 ) );
+        $chips       = ( 'search' === $module )
+            ? array_filter( array_map( 'trim', explode( ',', (string) ( $s['search_chips'] ?? '' ) ) ), 'strlen' )
+            : [];
+        $search_url  = trim( (string) ( $s['search_url'] ?? '' ) );
+        if ( 'search' === $module && '' === $search_url ) {
+            $search_url = home_url( '/' );
+        }
+        // mockup + chat: pannelli in color-mix(currentColor) → si adattano a scene chiare/scure.
+        $mixc       = static function ( $pct ) {
+            return 'color-mix(in srgb, currentColor ' . intval( $pct ) . '%, transparent)';
+        };
+        $mock_mode  = ( ( $s['mock_mode'] ?? 'media' ) === 'dashboard' ) ? 'dashboard' : 'media';
+        $mock_media = ( 'mockup' === $module ) ? $this->bg_media_parts( $s['mock_media'] ?? null, $uid . '-mock' ) : [ 'has' => false, 'css' => '', 'markup' => '' ];
+        $mock_kpis  = ( 'mockup' === $module && is_array( $s['mock_kpis'] ?? null ) ) ? array_values( $s['mock_kpis'] ) : [];
+        $mock_bars  = ( 'mockup' === $module && is_array( $s['mock_bars'] ?? null ) ) ? array_values( $s['mock_bars'] ) : [];
+        $chat_msgs  = ( 'chat' === $module && is_array( $s['chat_messages'] ?? null ) ) ? $s['chat_messages'] : [];
+        $has_module = ( ( 'strip' === $module && ! empty( $strip_items ) ) || in_array( $module, [ 'search', 'mockup', 'chat' ], true ) );
+
         // CTA sizing (range value = font-size in px, padding proportional)
         $cta_fs       = intval( $s['cta_size'] ) ?: 15;
         $cta_pad_y    = round( $cta_fs * 0.8 );
@@ -156,14 +284,106 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist (with token fallbacks), min-height esc_attr()'d at assignment, integers via intval()/round(), alignments from fixed maps/in_array() whitelists, CTA declarations via build_cta_css()/build_border_radius_css()/Olobuild_Tile_Utils radius helpers; $uid is internally generated. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist (with token fallbacks), min-height esc_attr()'d at assignment, integers via intval()/round(), alignments from fixed maps/in_array() whitelists, CTA declarations via build_cta_css()/build_border_radius_css()/Olobuild_Tile_Utils radius helpers; scene values via bg_media_parts() (Olobuild_CSS_Builder), the $mix() closure (safe_color_css colours + clamped floats), intval()/absint()/is_numeric() clamps and fixed mask/inset literals; $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?> {
                 position: relative;
                 min-height: <?php echo $min_height; ?>;
                 display: flex;
                 color: <?php echo $fg; ?>;
+                <?php if ( $has_scene ) : ?>overflow: hidden;<?php endif; ?>
+                <?php if ( $has_module ) : ?>flex-direction: column;<?php endif; ?>
             }
+            <?php if ( $has_module ) : ?>
+            .<?php echo $uid; ?> .olo-hero-modwrap{position:relative;z-index:1;width:100%;padding:0 30px clamp(40px,6vh,64px);}
+            <?php endif; ?>
+            <?php if ( 'strip' === $module && ! empty( $strip_items ) ) : ?>
+            .<?php echo $uid; ?> .olo-hero-strip{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;max-width:1180px;margin:0 auto;}
+            .<?php echo $uid; ?> .olo-hero-stripmedia{position:relative;overflow:hidden;width:clamp(150px,22vw,240px);aspect-ratio:3/4;border-radius:<?php echo (int) $strip_rad; ?>px <?php echo (int) $strip_rad; ?>px 8px 8px;background-color:rgba(255,255,255,.06);background-image:repeating-linear-gradient(135deg, rgba(243,233,239,.05) 0 16px, transparent 16px 32px);background-size:cover;background-position:center center;}
+            <?php if ( $strip_off > 0 ) : ?>.<?php echo $uid; ?> .olo-hero-stripmedia:nth-child(2){margin-top:-<?php echo (int) $strip_off; ?>px;}<?php endif; ?>
+            .<?php echo $uid; ?> .olo-hero-stripcap{position:absolute;left:14px;bottom:12px;right:14px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(243,233,239,.4);}
+            @media(max-width:600px){.<?php echo $uid; ?> .olo-hero-strip .olo-hero-stripmedia:nth-child(3){display:none;}}
+            <?php endif; ?>
+            <?php if ( 'search' === $module ) :
+                $sb_margin   = ( $text_align === 'center' ) ? '0 auto' : ( ( $text_align === 'right' ) ? '0 0 0 auto' : '0' );
+                $chip_margin = ( $text_align === 'center' ) ? '18px auto 0' : '18px 0 0';
+                $chip_just   = ( $text_align === 'center' ) ? 'center' : ( ( $text_align === 'right' ) ? 'flex-end' : 'flex-start' );
+            ?>
+            .<?php echo $uid; ?> .olo-hero-searchbox{display:flex;gap:8px;align-items:center;max-width:560px;margin:<?php echo $sb_margin; ?>;background:rgba(255,255,255,.07);border:1px solid <?php echo $mix( $accent_css, 0.4 ); ?>;border-radius:14px;padding:8px;}
+            .<?php echo $uid; ?> .olo-hero-searchbox input{flex:1;background:transparent;border:0;padding:12px 14px;font-size:15px;color:<?php echo $fg; ?>;min-width:0;font-family:inherit;}
+            .<?php echo $uid; ?> .olo-hero-searchbox input::placeholder{color:<?php echo $fg; ?>;opacity:.55;}
+            .<?php echo $uid; ?> .olo-hero-searchbox input:focus{outline:none;}
+            .<?php echo $uid; ?> .olo-hero-searchbox input:focus-visible{outline:2px solid <?php echo $accent_css; ?>;outline-offset:2px;border-radius:8px;}
+            .<?php echo $uid; ?> .olo-hero-searchbtn{cursor:pointer;white-space:nowrap;font-family:inherit;}
+            .<?php echo $uid; ?> .olo-hero-searchbtn:focus-visible{outline:2px solid <?php echo $accent_css; ?>;outline-offset:2px;}
+            .<?php echo $uid; ?> .olo-hero-chips{display:flex;gap:8px;flex-wrap:wrap;max-width:560px;margin:<?php echo $chip_margin; ?>;justify-content:<?php echo $chip_just; ?>;}
+            .<?php echo $uid; ?> .olo-hero-chip{font-size:13px;font-weight:600;opacity:.85;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:7px 15px;text-decoration:none;color:inherit;transition:border-color .15s,opacity .15s;}
+            .<?php echo $uid; ?> .olo-hero-chip:hover{border-color:<?php echo $accent_css; ?>;opacity:1;}
+            .<?php echo $uid; ?> .olo-hero-chip:focus-visible{outline:2px solid <?php echo $accent_css; ?>;outline-offset:2px;}
+            <?php endif; ?>
+            <?php
+            $mono_ff = "var(--olo-font-family-mono, ui-monospace,'SF Mono',Menlo,monospace)";
+            if ( 'mockup' === $module || 'chat' === $module ) : ?>
+            .<?php echo $uid; ?> .olo-hero-winbar{display:flex;align-items:center;gap:7px;padding:13px 16px;border-bottom:1px solid <?php echo $mixc( 10 ); ?>;background:<?php echo $mixc( 7 ); ?>;}
+            .<?php echo $uid; ?> .olo-hero-windot{width:11px;height:11px;border-radius:50%;background:<?php echo $mixc( 18 ); ?>;flex:none;}
+            .<?php echo $uid; ?> .olo-hero-winlabel{margin-left:13px;font-family:<?php echo $mono_ff; ?>;font-size:11px;opacity:.6;}
+            <?php endif; ?>
+            <?php if ( 'mockup' === $module ) : ?>
+            .<?php echo $uid; ?> .olo-hero-mockframe{max-width:1020px;margin:0 auto;border:1px solid <?php echo $mixc( 10 ); ?>;border-radius:16px 16px 0 0;background:<?php echo $mixc( 5 ); ?>;overflow:hidden;text-align:left;box-shadow:0 -10px 80px -20px <?php echo $mix( $accent_css, 0.4 ); ?>;}
+            .<?php echo $uid; ?> .olo-hero-mockmedia{position:relative;overflow:hidden;aspect-ratio:16/8.5;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,.035) 0 16px, transparent 16px 32px);background-size:cover;background-position:center center;<?php echo $mock_media['has'] ? $mock_media['css'] : ''; ?>}
+            .<?php echo $uid; ?> .olo-hero-mocklabel{position:absolute;left:14px;bottom:12px;right:14px;font-family:<?php echo $mono_ff; ?>;font-size:10.5px;letter-spacing:.03em;text-transform:uppercase;opacity:.45;text-align:left;}
+            .<?php echo $uid; ?> .olo-hero-mockbody{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;padding:20px;text-align:left;}
+            .<?php echo $uid; ?> .olo-hero-kpi{background:<?php echo $mixc( 5 ); ?>;border:1px solid <?php echo $mixc( 10 ); ?>;border-radius:11px;padding:16px;}
+            .<?php echo $uid; ?> .olo-hero-kpi .k{font-family:<?php echo $mono_ff; ?>;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.6;}
+            .<?php echo $uid; ?> .olo-hero-kpi .v{font-weight:700;font-size:26px;margin:7px 0 4px;line-height:1.1;}
+            .<?php echo $uid; ?> .olo-hero-kpi .t{font-family:<?php echo $mono_ff; ?>;font-size:11px;color:<?php echo $accent_css; ?>;}
+            .<?php echo $uid; ?> .olo-hero-kpi .t.dn{color:inherit;opacity:.6;}
+            .<?php echo $uid; ?> .olo-hero-chart{grid-column:1/-1;background:<?php echo $mixc( 5 ); ?>;border:1px solid <?php echo $mixc( 10 ); ?>;border-radius:11px;padding:18px 18px 10px;}
+            .<?php echo $uid; ?> .olo-hero-chhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-size:14px;}
+            .<?php echo $uid; ?> .olo-hero-chhead span{font-family:<?php echo $mono_ff; ?>;font-size:11px;opacity:.6;}
+            .<?php echo $uid; ?> .olo-hero-chbars{display:flex;align-items:flex-end;gap:7px;height:120px;}
+            .<?php echo $uid; ?> .olo-hero-chcol{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;height:100%;}
+            .<?php echo $uid; ?> .olo-hero-chcol i{display:block;width:100%;border-radius:3px 3px 0 0;background:linear-gradient(180deg,<?php echo $accent_css; ?>,<?php echo $mix( $accent_css, 0.25 ); ?>);min-height:4px;}
+            .<?php echo $uid; ?> .olo-hero-chcol i.alt{background:linear-gradient(180deg,<?php echo $mixc( 50 ); ?>,<?php echo $mixc( 15 ); ?>);}
+            .<?php echo $uid; ?> .olo-hero-chcol span{font-family:<?php echo $mono_ff; ?>;font-size:9.5px;text-align:center;opacity:.55;}
+            @media(max-width:680px){.<?php echo $uid; ?> .olo-hero-mockbody{grid-template-columns:1fr 1fr;}}
+            <?php endif; ?>
+            <?php if ( 'chat' === $module ) : ?>
+            .<?php echo $uid; ?> .olo-hero-chatwin{max-width:760px;margin:0 auto;border:1px solid <?php echo $mixc( 10 ); ?>;border-radius:16px 16px 0 0;background:<?php echo $mixc( 5 ); ?>;overflow:hidden;text-align:left;box-shadow:0 -10px 90px -24px <?php echo $mix( $accent_css, 0.4 ); ?>;}
+            .<?php echo $uid; ?> .olo-hero-chatbody{padding:22px;display:flex;flex-direction:column;gap:16px;}
+            .<?php echo $uid; ?> .olo-hero-msg{max-width:80%;padding:13px 16px;border-radius:14px;font-size:14.5px;line-height:1.5;}
+            .<?php echo $uid; ?> .olo-hero-msg.you{align-self:flex-end;background:<?php echo $accent_css; ?>;color:#fff;border-bottom-right-radius:4px;}
+            .<?php echo $uid; ?> .olo-hero-msg.ai{align-self:flex-start;background:<?php echo $mixc( 8 ); ?>;border:1px solid <?php echo $mixc( 10 ); ?>;border-bottom-left-radius:4px;opacity:.92;}
+            @media(max-width:680px){.<?php echo $uid; ?> .olo-hero-msg{max-width:92%;}}
+            <?php endif; ?>
+            <?php if ( $has_scene ) : ?>
+            .<?php echo $uid; ?> .olo-hero-scene{position:absolute;inset:<?php echo $scene_inset; ?>;z-index:0;overflow:hidden;pointer-events:none;<?php if ( $arch_mask ) : ?>-webkit-mask:<?php echo $arch_mask; ?>;mask:<?php echo $arch_mask; ?>;<?php endif; ?>}
+            <?php if ( $mb['has'] ) : ?>
+            .<?php echo $uid; ?> .olo-hero-media{position:absolute;inset:0;<?php echo $mb['css']; ?>}
+            <?php endif; ?>
+            <?php if ( $glow_on ) : ?>
+            .<?php echo $uid; ?> .olo-hero-glow{position:absolute;top:<?php echo (int) $glow_y; ?>%;left:<?php echo (int) $glow_x; ?>%;transform:translate(-50%,-30%);width:<?php echo (int) $glow_w; ?>px;height:<?php echo (int) $glow_h; ?>px;border-radius:50%;filter:blur(<?php echo (int) $glow_blur; ?>px);background:radial-gradient(circle, <?php echo $glow_color; ?>, transparent 70%);}
+            <?php endif; ?>
+            <?php if ( $has_overlay ) : ?>
+            .<?php echo $uid; ?> .olo-hero-veil{position:absolute;inset:0;background:<?php echo $veil_grad; ?>;}
+            <?php endif; ?>
+            <?php if ( $wm_text !== '' ) : ?>
+            .<?php echo $uid; ?> .olo-hero-wm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(120px,26vw,380px);font-weight:800;line-height:1;letter-spacing:-0.02em;color:<?php echo $wm_color; ?>;user-select:none;white-space:nowrap;}
+            <?php endif; ?>
+            <?php endif; ?>
+            <?php if ( $accent_set ) : ?>
+            .<?php echo $uid; ?> .olo-hero-title em{color:<?php echo $accent_css; ?>;}
+            <?php endif; ?>
+            <?php if ( ! empty( $s['eyebrow_text'] ) ) : ?>
+            .<?php echo $uid; ?> .olo-hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:11.5px;letter-spacing:.28em;text-transform:uppercase;color:<?php echo $accent_css; ?>;margin:0 0 18px;}
+            .<?php echo $uid; ?> .olo-hero-eyedot{width:6px;height:6px;border-radius:50%;background:<?php echo $accent_css; ?>;box-shadow:0 0 8px <?php echo $accent_css; ?>;flex:none;}
+            <?php endif; ?>
+            <?php if ( ! empty( $s['meta_text'] ) ) : ?>
+            .<?php echo $uid; ?> .olo-hero-meta{margin-top:22px;font-size:14px;letter-spacing:.16em;text-transform:uppercase;opacity:.85;}
+            <?php endif; ?>
+            <?php if ( ! empty( $s['scroll_hint'] ) ) : ?>
+            .<?php echo $uid; ?> .olo-hero-scrollhint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:2;font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.7;}
+            <?php endif; ?>
 
             .<?php echo $uid; ?> .olo-hero-content {
                 position: relative;
@@ -245,8 +465,19 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
         <div class="olo-hero <?php echo esc_attr( $uid ); ?> olo-hero-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
+            <?php if ( $has_scene ) : ?>
+            <div class="olo-hero-scene">
+                <?php if ( $mb['has'] ) : ?><div class="olo-hero-media"><?php if ( $mb['markup'] !== '' ) { echo $mb['markup']; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- media markup generated by Olobuild_CSS_Builder::get_bg_html_markup() which escapes its own attributes ?></div><?php endif; ?>
+                <?php if ( $glow_on ) : ?><span class="olo-hero-glow"></span><?php endif; ?>
+                <?php if ( $has_overlay ) : ?><div class="olo-hero-veil"></div><?php endif; ?>
+                <?php if ( $wm_text !== '' ) : ?><span class="olo-hero-wm" aria-hidden="true"><?php echo esc_html( $wm_text ); ?></span><?php endif; ?>
+            </div>
+            <?php endif; ?>
             <div class="olo-hero-content">
                 <div class="olo-hero-inner">
+                    <?php if ( ! empty( $s['eyebrow_text'] ) ) : ?>
+                    <span class="olo-hero-eyebrow"><?php if ( ! empty( $s['eyebrow_dot'] ) ) : ?><span class="olo-hero-eyedot"></span><?php endif; ?><?php echo esc_html( $s['eyebrow_text'] ); ?></span>
+                    <?php endif; ?>
                     <?php
                     // Title inline style
                     $title_css = '';
@@ -314,8 +545,85 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
                             <?php endif; ?>
                         </div>
                     <?php endif; ?>
+                    <?php if ( ! empty( $s['meta_text'] ) ) : ?>
+                        <div class="olo-hero-meta"><?php echo esc_html( $s['meta_text'] ); ?></div>
+                    <?php endif; ?>
                 </div>
             </div>
+            <?php if ( $has_module ) : ?>
+            <div class="olo-hero-modwrap">
+                <?php if ( 'strip' === $module ) : ?>
+                <div class="olo-hero-strip">
+                    <?php foreach ( $strip_items as $it ) :
+                        $img  = isset( $it['image'] ) ? trim( (string) $it['image'] ) : '';
+                        $cap  = isset( $it['caption'] ) ? (string) $it['caption'] : '';
+                        $isty = $img !== '' ? ' style="background-image:url(' . esc_url( $img ) . ')"' : '';
+                        ?>
+                        <div class="olo-hero-stripmedia"<?php echo $isty; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- style attribute built above with esc_url()'d image URL, or empty string ?>><?php if ( $cap !== '' ) : ?><span class="olo-hero-stripcap"><?php echo esc_html( $cap ); ?></span><?php endif; ?></div>
+                    <?php endforeach; ?>
+                </div>
+                <?php elseif ( 'search' === $module ) : ?>
+                <form class="olo-hero-searchbox" role="search" method="get" action="<?php echo esc_url( $search_url ); ?>">
+                    <input type="search" name="s" placeholder="<?php echo esc_attr( $s['search_placeholder'] ); ?>" aria-label="<?php echo esc_attr( $s['search_placeholder'] ?: 'Cerca' ); ?>"/>
+                    <?php if ( ! empty( $s['search_button'] ) ) : ?>
+                        <button type="submit" class="olo-hero-cta1 olo-hero-searchbtn"><?php echo esc_html( $s['search_button'] ); ?></button>
+                    <?php endif; ?>
+                </form>
+                <?php if ( ! empty( $chips ) ) : ?>
+                <div class="olo-hero-chips">
+                    <?php foreach ( $chips as $chip ) : ?>
+                        <a class="olo-hero-chip" href="<?php echo esc_url( add_query_arg( 's', $chip, $search_url ) ); ?>"><?php echo esc_html( $chip ); ?></a>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+                <?php elseif ( 'mockup' === $module ) : ?>
+                <div class="olo-hero-mockframe">
+                    <div class="olo-hero-winbar"><span class="olo-hero-windot"></span><span class="olo-hero-windot"></span><span class="olo-hero-windot"></span><?php if ( ! empty( $s['mock_url'] ) ) : ?><span class="olo-hero-winlabel"><?php echo esc_html( $s['mock_url'] ); ?></span><?php endif; ?></div>
+                    <?php if ( 'media' === $mock_mode ) : ?>
+                    <div class="olo-hero-mockmedia"><?php if ( $mock_media['has'] && $mock_media['markup'] !== '' ) { echo $mock_media['markup']; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- media markup generated by Olobuild_CSS_Builder::get_bg_html_markup() which escapes its own attributes ?><?php if ( ! $mock_media['has'] && ! empty( $s['mock_label'] ) ) : ?><span class="olo-hero-mocklabel"><?php echo esc_html( $s['mock_label'] ); ?></span><?php endif; ?></div>
+                    <?php else : ?>
+                    <div class="olo-hero-mockbody">
+                        <?php foreach ( $mock_kpis as $k ) :
+                            $kl = isset( $k['label'] ) ? (string) $k['label'] : '';
+                            $kv = isset( $k['value'] ) ? (string) $k['value'] : '';
+                            $kt = isset( $k['delta'] ) ? (string) $k['delta'] : '';
+                            $kd = ! empty( $k['down'] ) ? ' dn' : '';
+                            ?>
+                        <div class="olo-hero-kpi"><div class="k"><?php echo esc_html( $kl ); ?></div><div class="v"><?php echo esc_html( $kv ); ?></div><?php if ( $kt !== '' ) : ?><div class="t<?php echo esc_attr( $kd ); ?>"><?php echo esc_html( $kt ); ?></div><?php endif; ?></div>
+                        <?php endforeach; ?>
+                        <div class="olo-hero-chart">
+                            <div class="olo-hero-chhead"><b><?php echo esc_html( $s['mock_chart_title'] ); ?></b><span><?php echo esc_html( $s['mock_chart_meta'] ); ?></span></div>
+                            <div class="olo-hero-chbars">
+                                <?php foreach ( $mock_bars as $b ) :
+                                    $bh = max( 0, min( 100, intval( $b['h'] ?? 0 ) ) );
+                                    $bl = isset( $b['label'] ) ? (string) $b['label'] : '';
+                                    $b2 = ! empty( $b['alt'] ) ? ' class="alt"' : '';
+                                    ?>
+                                <div class="olo-hero-chcol"><i<?php echo $b2; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed class-attribute literal from the ternary above ?> style="height:<?php echo (int) $bh; ?>%"></i><?php if ( $bl !== '' ) : ?><span><?php echo esc_html( $bl ); ?></span><?php endif; ?></div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+                </div>
+                <?php elseif ( 'chat' === $module ) : ?>
+                <div class="olo-hero-chatwin">
+                    <div class="olo-hero-winbar"><span class="olo-hero-windot"></span><span class="olo-hero-windot"></span><span class="olo-hero-windot"></span><?php if ( ! empty( $s['chat_label'] ) ) : ?><span class="olo-hero-winlabel"><?php echo esc_html( $s['chat_label'] ); ?></span><?php endif; ?></div>
+                    <div class="olo-hero-chatbody">
+                        <?php foreach ( $chat_msgs as $m ) {
+                            $mtext = isset( $m['text'] ) ? (string) $m['text'] : '';
+                            if ( $mtext === '' ) { continue; }
+                            $side = ( isset( $m['side'] ) && $m['side'] === 'you' ) ? 'you' : 'ai';
+                            echo '<div class="olo-hero-msg ' . esc_attr( $side ) . '">' . esc_html( $mtext ) . '</div>';
+                        } ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
+            <?php if ( ! empty( $s['scroll_hint'] ) ) : ?>
+                <span class="olo-hero-scrollhint"><?php echo esc_html( $s['scroll_hint'] ); ?></span>
+            <?php endif; ?>
         </div>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
