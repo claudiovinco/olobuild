@@ -1,10 +1,12 @@
+// Token di SISTEMA (fallback globali): on-primary, neutri fini, semantici.
+// I 6 ruoli globali arrivano dal GlobalColorsPanel/store. Vedi _olo-tokens.scss.
+// @use (obbligatoriamente in testa al file): solo custom properties su :root,
+// nessuna variabile Sass consumata qui → nessun namespace necessario.
+@use 'olo-tokens';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-// Token di SISTEMA (fallback globali): on-primary, neutri fini, semantici.
-// I 6 ruoli globali arrivano dal GlobalColorsPanel/store. Vedi _olo-tokens.scss.
-@import 'olo-tokens';
 
 // Reset for WP admin area
 #olobuilder-app {
