@@ -374,6 +374,58 @@ trait Olobuild_Rest_Dashboard_Trait {
         return rest_ensure_response( $existing );
     }
 
+    /**
+     * Dati per la palette globale ⌘K (olo-palette.js): pagine/articoli con il
+     * link all'EDITOR OLOBUILD (get_builder_url, non post.php) + template.
+     * Le voci di menu/azioni viaggiano nel localize; l'indice dei campi
+     * Configurazione è il JSON statico assets/data/settings-search-index.json.
+     */
+    public function dashboard_palette( $request ) {
+        $pages = [];
+        $posts = get_posts( [
+            'post_type'      => [ 'page', 'post' ],
+            'post_status'    => [ 'publish', 'draft' ],
+            'posts_per_page' => 100,
+            'orderby'        => 'modified',
+            'order'          => 'DESC',
+        ] );
+        foreach ( $posts as $p ) {
+            $pages[] = [
+                'label'  => $p->post_title ?: __( '(senza titolo)', 'olobuild' ),
+                'hint'   => ( $p->post_type === 'post' ? __( 'Articolo', 'olobuild' ) : __( 'Pagina', 'olobuild' ) )
+                    . ( $p->post_status === 'draft' ? ' · ' . __( 'bozza', 'olobuild' ) : '' ),
+                'href'   => class_exists( 'Olobuild_Page_Integration' )
+                    ? Olobuild_Page_Integration::get_builder_url( $p->ID )
+                    : admin_url( 'post.php?post=' . $p->ID . '&action=edit' ),
+                'view'   => get_permalink( $p->ID ),
+            ];
+        }
+
+        $templates = [];
+        global $wpdb;
+        $tpl_table = $wpdb->prefix . 'olobuild_templates';
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabella custom del plugin ($wpdb->prefix . 'olobuild_templates'); nessun equivalente WP_Query. Interpolato solo il nome tabella da $wpdb->prefix (nessun valore utente); dati palette non cacheabili (riflettono l'ultimo salvataggio).
+        if ( $wpdb->get_var( "SHOW TABLES LIKE '$tpl_table'" ) === $tpl_table ) {
+            $tpls = $wpdb->get_results(
+                "SELECT id, title, type FROM $tpl_table ORDER BY updated_at DESC LIMIT 100",
+                ARRAY_A
+            );
+            foreach ( $tpls as $t ) {
+                $templates[] = [
+                    'label' => $t['title'] ?: __( '(senza titolo)', 'olobuild' ),
+                    'hint'  => ucfirst( $t['type'] ?: 'template' ),
+                    'href'  => admin_url( 'admin.php?page=olobuilder-templates&template_id=' . (int) $t['id'] ),
+                ];
+            }
+        }
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+
+        return rest_ensure_response( [
+            'pages'     => $pages,
+            'templates' => $templates,
+        ] );
+    }
+
     /* ════════════════════════════════════════════════════════════════
        FORM SUBMISSIONS — list / detail / read / delete / bulk / stats
        ════════════════════════════════════════════════════════════════ */

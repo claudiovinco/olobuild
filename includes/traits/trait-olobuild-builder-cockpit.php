@@ -305,59 +305,10 @@ trait Olobuild_Builder_Cockpit_Trait {
         ];
     }
 
-    /**
-     * Indice di ricerca per la palette ⌘K.
-     * Voci di menu + pagine + template (top N più recenti).
-     */
-    public static function dashboard_search_index() {
-        $idx = [];
-
-        foreach ( self::dashboard_manage_tiles() as $t ) {
-            $idx[] = [ 'label' => $t['label'], 'hint' => $t['hint'], 'href' => $t['href'], 'icon' => $t['icon'] ];
-        }
-        foreach ( self::dashboard_system_chips() as $t ) {
-            $idx[] = [ 'label' => $t['label'], 'hint' => '', 'href' => $t['href'], 'icon' => $t['icon'] ];
-        }
-
-        // Top pagine recenti
-        $pages = get_posts( [
-            'post_type'      => [ 'page', 'post' ],
-            'post_status'    => [ 'publish', 'draft' ],
-            'posts_per_page' => 30,
-            'orderby'        => 'modified',
-            'order'          => 'DESC',
-        ] );
-        foreach ( $pages as $p ) {
-            $idx[] = [
-                'label' => $p->post_title ?: __( '(senza titolo)', 'olobuild' ),
-                'hint'  => $p->post_type === 'post' ? __( 'Articolo', 'olobuild' ) : __( 'Pagina', 'olobuild' ),
-                'href'  => admin_url( 'post.php?post=' . $p->ID . '&action=edit' ),
-                'icon'  => 'fileText',
-            ];
-        }
-
-        // Top template
-        global $wpdb;
-        $tpl_table = $wpdb->prefix . 'olobuild_templates';
-        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Tabella custom del plugin ($wpdb->prefix . 'olobuild_templates'); nessun equivalente WP_Query. L'unica parte interpolata è il nome tabella derivato da $wpdb->prefix (nessun valore utente); risultato dell'indice di ricerca dashboard non cacheabile.
-        if ( $wpdb->get_var( "SHOW TABLES LIKE '$tpl_table'" ) === $tpl_table ) {
-            $tpls = $wpdb->get_results(
-                "SELECT id, title, type FROM $tpl_table ORDER BY updated_at DESC LIMIT 30",
-                ARRAY_A
-            );
-            foreach ( $tpls as $t ) {
-                $idx[] = [
-                    'label' => $t['title'] ?: __( '(senza titolo)', 'olobuild' ),
-                    'hint'  => __( 'Template', 'olobuild' ) . ' · ' . ucfirst( $t['type'] ?: 'template' ),
-                    'href'  => admin_url( 'admin.php?page=olobuilder-templates&template_id=' . $t['id'] ),
-                    'icon'  => 'template',
-                ];
-            }
-        }
-        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
-
-        return $idx;
-    }
+    /* La palette ⌘K è globale dalla 1.4.392: vive in assets/js/olo-palette.js
+       (voci menu nel localize, pagine+template via REST dashboard/palette,
+       campi Configurazione dal JSON generato a build time). Il vecchio
+       dashboard_search_index() è stato assorbito da quelle tre fonti. */
 
     /**
      * Dato per l'hero contestuale: prima la pagina più recentemente modificata,

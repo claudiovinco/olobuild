@@ -303,94 +303,11 @@
      */
 
     /* ─────────────────────────────────────────────────────────────────
-       Search palette ⌘K
+       Search palette ⌘K — SPOSTATA in assets/js/olo-palette.js (1.4.392):
+       è globale su tutte le pagine Olobuild e cerca anche pagine, template
+       e singoli campi della Configurazione. Il trigger in topbar e la
+       scorciatoia sono agganciati da quel file.
        ───────────────────────────────────────────────────────────────── */
-    function buildPalette() {
-        if (root.querySelector('.olo-palette-back')) return;
-        const html = '<div class="olo-palette-back" data-olo-palette>' +
-            '<div class="olo-palette" role="dialog" aria-label="Cerca">' +
-                '<div class="olo-palette-input">' + svgIcon('search', 16) +
-                    '<input type="text" placeholder="' + escapeHtml(T('searchPh', 'Cerca pagine, template, impostazioni…')) + '" autocomplete="off"/>' +
-                    '<kbd>ESC</kbd>' +
-                '</div>' +
-                '<div class="olo-palette-results" data-olo-palette-results></div>' +
-            '</div>' +
-        '</div>';
-        document.body.insertAdjacentHTML('beforeend', html);
-    }
-
-    let paletteIndex = null;
-    function loadPaletteIndex() {
-        if (paletteIndex) return Promise.resolve(paletteIndex);
-        // Costruisce un indice statico dalle voci di menu + dati pagina
-        const idx = (cfg.searchIndex || []).slice();
-        paletteIndex = idx;
-        return Promise.resolve(idx);
-    }
-
-    function openPalette() {
-        buildPalette();
-        loadPaletteIndex();
-        const back = document.querySelector('.olo-palette-back');
-        back.classList.add('open');
-        const input = back.querySelector('input');
-        input.value = '';
-        renderPaletteResults('');
-        setTimeout(() => input.focus(), 10);
-    }
-    function closePalette() {
-        const back = document.querySelector('.olo-palette-back');
-        if (back) back.classList.remove('open');
-    }
-
-    function renderPaletteResults(q) {
-        const out = document.querySelector('[data-olo-palette-results]');
-        if (!out) return;
-        const ql = q.toLowerCase().trim();
-        let items = paletteIndex || [];
-        if (ql) {
-            items = items.filter(i =>
-                i.label.toLowerCase().includes(ql) ||
-                (i.hint || '').toLowerCase().includes(ql)
-            );
-        }
-        items = items.slice(0, 12);
-        if (!items.length) {
-            out.innerHTML = '<div class="olo-palette-empty">' + escapeHtml(T('noResults', 'Nessun risultato')) + '</div>';
-            return;
-        }
-        out.innerHTML = items.map((i, n) => {
-            return '<a class="olo-palette-item ' + (n === 0 ? 'focus' : '') + '" href="' + i.href + '">' +
-                '<span class="ic">' + svgIcon(i.icon || 'arrow', 16) + '</span>' +
-                '<span class="lab"><span class="t">' + escapeHtml(i.label) + '</span>' +
-                (i.hint ? '<span class="h">' + escapeHtml(i.hint) + '</span>' : '') +
-                '</span>' +
-            '</a>';
-        }).join('');
-    }
-
-    function bindPalette() {
-        document.addEventListener('keydown', e => {
-            const isCmd = e.metaKey || e.ctrlKey;
-            if (isCmd && e.key.toLowerCase() === 'k') {
-                e.preventDefault(); openPalette(); return;
-            }
-            const back = document.querySelector('.olo-palette-back.open');
-            if (!back) return;
-            if (e.key === 'Escape') { e.preventDefault(); closePalette(); }
-        });
-        document.addEventListener('click', e => {
-            const back = e.target.closest('.olo-palette-back');
-            if (back && e.target === back) closePalette();
-        });
-        document.addEventListener('input', e => {
-            if (e.target.matches('.olo-palette-input input')) {
-                renderPaletteResults(e.target.value);
-            }
-        });
-        const trigger = root.querySelector('[data-olo-palette-trigger]');
-        if (trigger) trigger.addEventListener('click', openPalette);
-    }
 
     /* ─────────────────────────────────────────────────────────────────
        Utility
@@ -421,7 +338,6 @@
         bindPin();
         bindRail();
         bindBanner();
-        bindPalette();
         bindNewPage();
     }
 

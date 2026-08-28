@@ -668,6 +668,11 @@ class Olobuild_Rest_Api {
             'callback'            => [ $this, 'dashboard_kpis' ],
             'permission_callback' => [ $this, 'check_dashboard_permission' ],
         ] );
+        register_rest_route( $this->namespace, '/dashboard/palette', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'dashboard_palette' ],
+            'permission_callback' => [ $this, 'check_dashboard_permission' ],
+        ] );
         register_rest_route( $this->namespace, '/dashboard/recent', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'dashboard_recent' ],

@@ -618,6 +618,47 @@ class Olobuild_Builder {
                 [],
                 OLOBUILD_VERSION
             );
+
+            // Palette globale ⌘K su TUTTE le pagine Olobuild (prima viveva in
+            // dashboard.js: sulle altre pagine il trigger in topbar era morto).
+            // Voci menu/azioni nel localize; pagine+template via REST al primo
+            // uso; campi Configurazione dal JSON statico generato a build time.
+            wp_enqueue_script(
+                'olo-palette-js',
+                OLOBUILD_URL . 'assets/js/olo-palette.js',
+                [],
+                OLOBUILD_VERSION,
+                true
+            );
+            $palette_menu = [];
+            foreach ( self::dashboard_manage_tiles() as $t ) {
+                $palette_menu[] = [ 'label' => $t['label'], 'hint' => $t['hint'], 'href' => $t['href'] ];
+            }
+            foreach ( self::dashboard_system_chips() as $t ) {
+                $palette_menu[] = [ 'label' => $t['label'], 'hint' => '', 'href' => $t['href'] ];
+            }
+            wp_localize_script( 'olo-palette-js', 'oloPaletteConfig', [
+                'restUrl'  => esc_url_raw( rest_url( 'olobuild/v1/' ) ),
+                'nonce'    => wp_create_nonce( 'wp_rest' ),
+                'adminUrl' => admin_url(),
+                'indexUrl' => OLOBUILD_URL . 'assets/data/settings-search-index.json?ver=' . OLOBUILD_VERSION,
+                'menu'     => $palette_menu,
+                'i18n'     => [
+                    'searchPh'   => __( 'Cerca pagine, template, impostazioni…', 'olobuild' ),
+                    'noResults'  => __( 'Nessun risultato', 'olobuild' ),
+                    'loading'    => __( 'Carico l\'indice…', 'olobuild' ),
+                    'goto'       => __( 'Vai a', 'olobuild' ),
+                    'settings'   => __( 'Impostazioni', 'olobuild' ),
+                    'pages'      => __( 'Pagine', 'olobuild' ),
+                    'templates'  => __( 'Template', 'olobuild' ),
+                    'goField'    => __( 'Vai al campo', 'olobuild' ),
+                    'openEditor' => __( 'Apri editor', 'olobuild' ),
+                    'openTab'    => __( 'Configurazione', 'olobuild' ),
+                    'nav'        => __( 'scorri', 'olobuild' ),
+                    'open'       => __( 'apri', 'olobuild' ),
+                    'scope'      => __( 'pagine · template · impostazioni · azioni', 'olobuild' ),
+                ],
+            ] );
         }
 
         // Cockpit CSS condiviso per tutte le pagine top-level che usano cockpit_shell_open()
@@ -712,7 +753,6 @@ class Olobuild_Builder {
                 'pluginUrl'   => OLOBUILD_URL,
                 'version'     => OLOBUILD_VERSION,
                 'prefs'       => $user_prefs,
-                'searchIndex' => self::dashboard_search_index(),
                 'boot' => [
                     'kpis'      => is_wp_error( $boot_kpis )      ? [] : $boot_kpis->get_data(),
                     'recent'    => is_wp_error( $boot_recent )    ? [] : $boot_recent->get_data(),
