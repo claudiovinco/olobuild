@@ -7,6 +7,7 @@ import {
   normalizeNodes, countNodes,
 } from './treeUtils.js';
 import { migrateTreeBackgrounds } from '@/utils/bgMigrate';
+import { getElementDef } from '@/config/elementRegistry';
 
 const oloData = window.oloData || {};
 
@@ -27,9 +28,20 @@ export const useTilesStore = defineStore('tiles', {
   }),
 
   getters: {
-    tilesByCategory(state) {
+    // Tile proponibili nella palette: esclude le tile ritirate (`hidden: true` nel
+    // config JS — unificazione hero Fase 2, OLOX, …). `registeredTiles` resta COMPLETO
+    // di proposito: StructureTree/InspectorField/DnD lo usano per risolvere le tile
+    // dei template esistenti, che devono continuare a funzionare.
+    paletteTiles(state) {
+      return state.registeredTiles.filter((t) => {
+        const def = getElementDef(t.type);
+        return !(def && def.hidden);
+      });
+    },
+
+    tilesByCategory() {
       const unordered = {};
-      for (const tile of state.registeredTiles) {
+      for (const tile of this.paletteTiles) {
         // Don't show structure tiles (section, column) in the palette
         if (tile.category === 'structure') continue;
         const cat = tile.category || 'general';

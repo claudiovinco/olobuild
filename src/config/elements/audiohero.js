@@ -14,6 +14,9 @@ export default {
   name: t('Hero — Audio (Soundwave)'),
   icon: 'dashicons-format-audio',
   category: 'marketing',
+  // Ritirata dalla palette (unificazione hero, Fase 2): assorbita da `hero-split`
+  // (pannello "cover + player audio"). I template salvati continuano a renderizzare.
+  hidden: true,
 
   // Unificazione COPERTINA: la vecchia cover album (cover_image + focal object_position)
   // confluisce nel pannello unico media_bg (immagine/video/gradiente/colore…). Non

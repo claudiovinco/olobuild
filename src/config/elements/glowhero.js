@@ -14,6 +14,9 @@ export default {
   name: t('Hero — Glow Statement'),
   icon: 'dashicons-superhero',
   category: 'marketing',
+  // Ritirata dalla palette (unificazione hero, Fase 2): assorbita da `hero`
+  // (scena glow; preset "Glow Statement"). I template salvati continuano a renderizzare.
+  hidden: true,
 
   defaults: {
     eyebrow: 'Independent studio | Est. 2015 | Milan / everywhere',

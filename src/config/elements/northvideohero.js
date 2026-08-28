@@ -13,6 +13,10 @@ export default {
   name: t('Hero — North Video'),
   icon: 'dashicons-video-alt2',
   category: 'marketing',
+  // Tile firma, fuori palette (unificazione hero, Fase 2): <video> nativo con controlli
+  // + parallasse background-attachment. Disponibile come blocco "Hero speciale — North Video"
+  // nella libreria Blocchi & Pagine. I template salvati continuano a renderizzare.
+  hidden: true,
 
   // Unificazione sfondo hero PRINCIPALE: il video legacy (video_src + video_poster)
   // confluisce nel pannello unico media_bg (immagine/video/gradiente/colore…). Non

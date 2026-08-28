@@ -10307,6 +10307,251 @@
      ]
     }
    ]
+  },
+  {
+   "id": "hero-special-masthead",
+   "name": "Hero speciale — Masthead (giornale)",
+   "category": "hero",
+   "preview_description": "Testata da giornale stampato: nameplate serif gigante tra hairline rules, riga edizione/data e lead story con firma. Tile firma a resa dedicata.",
+   "content": [
+    {
+     "id": "hsp-masthead-sec",
+     "type": "section",
+     "settings": {
+      "style": "default",
+      "width": "fullbleed",
+      "padding": "remove-vertical"
+     },
+     "style": {},
+     "advanced": {},
+     "children": [
+      {
+       "id": "hsp-masthead-row",
+       "type": "row",
+       "settings": {},
+       "style": {},
+       "advanced": {},
+       "children": [
+        {
+         "id": "hsp-masthead-col",
+         "type": "column",
+         "settings": {
+          "width": "1-1"
+         },
+         "style": {},
+         "advanced": {},
+         "children": [
+          {
+           "id": "hsp-masthead-tile",
+           "type": "masthead",
+           "settings": {},
+           "style": {},
+           "advanced": {},
+           "children": []
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hero-special-terminal",
+   "name": "Hero speciale — Terminale (typewriter)",
+   "category": "hero",
+   "preview_description": "Hero tech chiaro con riga typewriter a frasi rotanti, chip [parentesi], form di cattura email inline e crosshair d’angolo. Tile firma con runtime dedicato.",
+   "content": [
+    {
+     "id": "hsp-terminal-sec",
+     "type": "section",
+     "settings": {
+      "style": "default",
+      "width": "fullbleed",
+      "padding": "remove-vertical"
+     },
+     "style": {},
+     "advanced": {},
+     "children": [
+      {
+       "id": "hsp-terminal-row",
+       "type": "row",
+       "settings": {},
+       "style": {},
+       "advanced": {},
+       "children": [
+        {
+         "id": "hsp-terminal-col",
+         "type": "column",
+         "settings": {
+          "width": "1-1"
+         },
+         "style": {},
+         "advanced": {},
+         "children": [
+          {
+           "id": "hsp-terminal-tile",
+           "type": "terminalhero",
+           "settings": {},
+           "style": {},
+           "advanced": {},
+           "children": []
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hero-special-northvideo",
+   "name": "Hero speciale — North Video (mockup)",
+   "category": "hero",
+   "preview_description": "Hero SaaS scuro con mockup prodotto in cornice e vero elemento video con controlli e poster, su sfondo fisso in parallasse. Tile firma.",
+   "content": [
+    {
+     "id": "hsp-northvideo-sec",
+     "type": "section",
+     "settings": {
+      "style": "default",
+      "width": "fullbleed",
+      "padding": "remove-vertical"
+     },
+     "style": {},
+     "advanced": {},
+     "children": [
+      {
+       "id": "hsp-northvideo-row",
+       "type": "row",
+       "settings": {},
+       "style": {},
+       "advanced": {},
+       "children": [
+        {
+         "id": "hsp-northvideo-col",
+         "type": "column",
+         "settings": {
+          "width": "1-1"
+         },
+         "style": {},
+         "advanced": {},
+         "children": [
+          {
+           "id": "hsp-northvideo-tile",
+           "type": "northvideohero",
+           "settings": {},
+           "style": {},
+           "advanced": {},
+           "children": []
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hero-special-studio",
+   "name": "Hero speciale — Studio (OLOmap)",
+   "category": "hero",
+   "preview_description": "Hero editoriale su fondo inchiostro con OLOmap: infografica SVG animata con camera dive su 4 livelli e titolo outline che si riempie allo scroll. Tile firma.",
+   "content": [
+    {
+     "id": "hsp-studio-sec",
+     "type": "section",
+     "settings": {
+      "style": "default",
+      "width": "fullbleed",
+      "padding": "remove-vertical"
+     },
+     "style": {},
+     "advanced": {},
+     "children": [
+      {
+       "id": "hsp-studio-row",
+       "type": "row",
+       "settings": {},
+       "style": {},
+       "advanced": {},
+       "children": [
+        {
+         "id": "hsp-studio-col",
+         "type": "column",
+         "settings": {
+          "width": "1-1"
+         },
+         "style": {},
+         "advanced": {},
+         "children": [
+          {
+           "id": "hsp-studio-tile",
+           "type": "studiohero",
+           "settings": {},
+           "style": {},
+           "advanced": {},
+           "children": []
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hero-special-smear",
+   "name": "Hero speciale — Smear (pittura)",
+   "category": "hero",
+   "preview_description": "Hero da galleria d’arte: il cursore deposita pennellate di pigmento che sfumano, su fondo caldo con glow ambra. Tile firma con runtime canvas.",
+   "content": [
+    {
+     "id": "hsp-smear-sec",
+     "type": "section",
+     "settings": {
+      "style": "default",
+      "width": "fullbleed",
+      "padding": "remove-vertical"
+     },
+     "style": {},
+     "advanced": {},
+     "children": [
+      {
+       "id": "hsp-smear-row",
+       "type": "row",
+       "settings": {},
+       "style": {},
+       "advanced": {},
+       "children": [
+        {
+         "id": "hsp-smear-col",
+         "type": "column",
+         "settings": {
+          "width": "1-1"
+         },
+         "style": {},
+         "advanced": {},
+         "children": [
+          {
+           "id": "hsp-smear-tile",
+           "type": "smearhero",
+           "settings": {},
+           "style": {},
+           "advanced": {},
+           "children": []
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
   }
  ]
 }

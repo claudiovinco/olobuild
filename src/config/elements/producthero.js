@@ -17,6 +17,9 @@ export default {
   name: t('Hero — Product (SaaS)'),
   icon: 'dashicons-desktop',
   category: 'marketing',
+  // Ritirata dalla palette (unificazione hero, Fase 2): assorbita da `hero`
+  // (scena glow + modulo "mockup prodotto" media/dashboard). I template salvati continuano a renderizzare.
+  hidden: true,
 
   defaults: {
     pill_pre: 'New',

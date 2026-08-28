@@ -16,6 +16,10 @@ export default {
   name: t('Hero — Studio (Editorial + OLOmap)'),
   icon: 'dashicons-networking',
   category: 'marketing',
+  // Tile firma, fuori palette (unificazione hero, Fase 2): OLOmap camera-dive + outline
+  // fill scroll-driven, irreplicabile con opzioni. Disponibile come blocco
+  // "Hero speciale — Studio" nella libreria Blocchi & Pagine. I template salvati continuano a renderizzare.
+  hidden: true,
 
   // Unificazione media hero: il vecchio campo immagine (media_image + focal
   // media_object_position) confluisce nel pannello unico media_bg (immagine/video/

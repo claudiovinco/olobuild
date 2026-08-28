@@ -11,6 +11,9 @@ export default {
   name: t('Media CTA (sfondo full-bleed)'),
   icon: 'dashicons-megaphone',
   category: 'marketing',
+  // Ritirata dalla palette (unificazione hero, Fase 2): assorbita da `hero`
+  // (preset "Centered Statement"). I template salvati continuano a renderizzare.
+  hidden: true,
 
   // Unificazione sfondo: bg_image legacy → pannello unico media_bg (non distruttivo).
   bgMigrate: { imageKey: 'bg_image', imagePosKey: 'bg_image_object_position' },

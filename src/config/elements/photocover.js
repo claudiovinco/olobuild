@@ -14,6 +14,9 @@ export default {
   name: t('Hero — Photo Cover'),
   icon: 'dashicons-format-image',
   category: 'marketing',
+  // Ritirata dalla palette (unificazione hero, Fase 2): assorbita da `hero`
+  // (finitura cornice; preset "Photo Frame"). I template salvati continuano a renderizzare.
+  hidden: true,
 
   // Unificazione COPERTINA: la vecchia immagine di copertina (bg_image) confluisce
   // nel pannello universale media_cover (immagine/video/gradiente/colore…). Non

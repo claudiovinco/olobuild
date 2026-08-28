@@ -12,6 +12,9 @@ export default {
   name: t('Hero — Search (Carrello)'),
   icon: 'dashicons-search',
   category: 'marketing',
+  // Ritirata dalla palette (unificazione hero, Fase 2): assorbita da `hero`
+  // (scena glow + modulo "barra di ricerca + chip"). I template salvati continuano a renderizzare.
+  hidden: true,
 
   defaults: {
     eyebrow_text: 'Marketplace for independent makers',

@@ -12,6 +12,10 @@ export default {
   name: t('Hero — Masthead (Dispatch)'),
   icon: 'dashicons-text-page',
   category: 'marketing',
+  // Tile firma, fuori palette (unificazione hero, Fase 2): grammatica da giornale
+  // irreplicabile con opzioni. Disponibile come blocco "Hero speciale — Masthead"
+  // nella libreria Blocchi & Pagine. I template salvati continuano a renderizzare.
+  hidden: true,
 
   defaults: {
     edition_text: 'Friday, 6 March 2026 · Milan',

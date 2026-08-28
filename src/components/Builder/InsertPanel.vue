@@ -171,7 +171,7 @@ const STRUCTURAL = new Set(['section', 'row', 'column', 'inner-columns']);
 // Available modules
 const availableModules = computed(() => {
   const all = [];
-  for (const t of tilesStore.registeredTiles) {
+  for (const t of tilesStore.paletteTiles) {
     if (!STRUCTURAL.has(t.type)) {
       all.push(t);
     }

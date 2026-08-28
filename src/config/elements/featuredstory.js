@@ -14,6 +14,9 @@ export default {
   name: t('Hero — Featured Story'),
   icon: 'dashicons-media-document',
   category: 'marketing',
+  // Ritirata dalla palette (unificazione hero, Fase 2): assorbita da `hero-split`
+  // (pannello "media"). I template salvati continuano a renderizzare.
+  hidden: true,
 
   // Unificazione COPERTINA: la vecchia immagine di copertina (cover_image) confluisce
   // nel pannello universale media_cover (immagine/video/gradiente/colore…). Non

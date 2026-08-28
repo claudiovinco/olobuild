@@ -13,6 +13,9 @@ export default {
   name: t('Hero — Masked Video'),
   icon: 'dashicons-format-video',
   category: 'marketing',
+  // Ritirata dalla palette (unificazione hero, Fase 2): assorbita da `hero`
+  // (finiture arco+watermark; preset "Masked Arch"). I template salvati continuano a renderizzare.
+  hidden: true,
 
   // Unificazione sfondo: il campo legacy bg_image (immagine/video poster) confluisce
   // nel pannello unico media_bg (immagine/video/gradiente/colore…). Non distruttivo:

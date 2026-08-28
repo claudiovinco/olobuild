@@ -12,6 +12,9 @@ export default {
   name: t('Intro Split (testo + stats + media badge)'),
   icon: 'dashicons-align-pull-left',
   category: 'marketing',
+  // Ritirata dalla palette (unificazione hero, Fase 2): assorbita da `hero-split`
+  // (pannello "media + badge d'angolo"; stats già nel lato messaggio). I template salvati continuano a renderizzare.
+  hidden: true,
 
   // Unificazione sfondo: media_image legacy → pannello unico media_bg (non distruttivo).
   bgMigrate: { imageKey: 'media_image', imagePosKey: 'media_image_object_position' },

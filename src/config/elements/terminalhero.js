@@ -16,6 +16,10 @@ export default {
   name: t('Hero — Terminale (typewriter)'),
   icon: 'dashicons-editor-code',
   category: 'marketing',
+  // Tile firma, fuori palette (unificazione hero, Fase 2): typewriter a frasi + form
+  // email inline. Disponibile come blocco "Hero speciale — Terminale" nella libreria
+  // Blocchi & Pagine. I template salvati continuano a renderizzare.
+  hidden: true,
 
   defaults: {
     show_label: true,

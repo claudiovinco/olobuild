@@ -15,6 +15,9 @@ export default {
   name: t('Hero — Glow Gallery'),
   icon: 'dashicons-buddicons-activity',
   category: 'marketing',
+  // Ritirata dalla palette (unificazione hero, Fase 2): assorbita da `hero`
+  // (scena glow + modulo "striscia media"). I template salvati continuano a renderizzare.
+  hidden: true,
 
   defaults: {
     eyebrow: 'Events studio · est. 2011',

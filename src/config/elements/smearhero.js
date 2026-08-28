@@ -14,6 +14,10 @@ export default {
   name: t('Hero — Smear (Canvas)'),
   icon: 'dashicons-art',
   category: 'marketing',
+  // Tile firma, fuori palette (unificazione hero, Fase 2): paint smear interattivo
+  // (runtime canvas). Disponibile come blocco "Hero speciale — Smear" nella libreria
+  // Blocchi & Pagine. I template salvati continuano a renderizzare.
+  hidden: true,
 
   defaults: {
     eyebrow_text: 'Painter · oil & pigment',

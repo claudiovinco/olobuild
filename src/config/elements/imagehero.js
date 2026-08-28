@@ -16,6 +16,10 @@ export default {
   name: t('Hero — Image Overlay'),
   icon: 'dashicons-format-image',
   category: 'marketing',
+  // Ritirata dalla palette (unificazione hero, Fase 2): assorbita da `hero`
+  // (scena media_bg + velo + posizioni; preset "Editorial Overlay").
+  // I template salvati continuano a renderizzare con questo codice.
+  hidden: true,
 
   // Unificazione sfondo: il vecchio campo immagine semplice (bg_image) confluisce
   // nel pannello unico media_bg (immagine/video/gradiente/…). Migrazione non

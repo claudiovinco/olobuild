@@ -252,7 +252,7 @@ const tileSearch = ref('');
 const searchResults = computed(() => {
   const q = tileSearch.value.trim().toLowerCase();
   if (!q) return [];
-  const all = tilesStore.registeredTiles || [];
+  const all = tilesStore.paletteTiles || [];
   return all
     .filter(t => (t.name || '').toLowerCase().includes(q) || (t.type || '').toLowerCase().includes(q))
     .map(t => ({ ...t, cat: t.category }));
@@ -289,7 +289,7 @@ function toggleFavorite(type) {
 }
 
 const favoriteTilesList = computed(() => {
-  const all = tilesStore.registeredTiles || [];
+  const all = tilesStore.paletteTiles || [];
   return all.filter(t => favorites.value.has(t.type));
 });
 
@@ -307,7 +307,7 @@ function trackRecent(type) {
 }
 
 const recentTilesList = computed(() => {
-  const all = tilesStore.registeredTiles || [];
+  const all = tilesStore.paletteTiles || [];
   const map = {};
   all.forEach(t => { map[t.type] = t; });
   return recentTypes.value.map(type => map[type]).filter(Boolean);

@@ -14,6 +14,9 @@ export default {
   name: t('Hero — Chat (Glow + Conversation Cards)'),
   icon: 'dashicons-format-chat',
   category: 'marketing',
+  // Ritirata dalla palette (unificazione hero, Fase 2): assorbita da `hero`
+  // (scena glow + modulo "finestra chat"). I template salvati continuano a renderizzare.
+  hidden: true,
 
   defaults: {
     pill_text: 'Synapse 3 · now with long-term memory',
