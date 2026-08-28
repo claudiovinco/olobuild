@@ -1,17 +1,13 @@
 <template>
   <div class="mb-space-y-2">
-    <draggable
-      v-if="Array.isArray(modelValue) && modelValue.length"
-      :modelValue="modelValue"
-      @update:modelValue="emit('update:modelValue', $event)"
-      :item-key="itemKey"
-      handle=".fg-grip"
-      ghost-class="fg-ghost"
-      :animation="150"
-      class="mb-space-y-2"
-    >
-      <template #item="{ element: img, index: idx }">
-        <div class="mb-relative mb-group mb-flex mb-gap-2 mb-items-start">
+    <!-- v1.4.387 — riordino via useListSort (motore DnD custom) al posto di vuedraggable. -->
+    <div v-if="Array.isArray(modelValue) && modelValue.length" class="mb-space-y-2">
+      <template v-for="(img, idx) in modelValue" :key="itemKey(img)">
+        <div
+          class="mb-relative mb-group mb-flex mb-gap-2 mb-items-start"
+          v-olo-draggable="itemDraggable(idx)"
+          v-olo-drop-target="itemDrop(idx)"
+        >
           <!-- Grip handle -->
           <div class="fg-grip mb-flex mb-items-center mb-self-stretch mb-cursor-grab mb-opacity-0 group-hover:mb-opacity-100 mb-transition-opacity mb-shrink-0 mb-text-gray-500 hover:mb-text-gray-300">
             <svg width="8" height="14" viewBox="0 0 8 14" fill="currentColor">
@@ -65,7 +61,7 @@
           >{{ t('&times;') }}</button>
         </div>
       </template>
-    </draggable>
+    </div>
 
     <!-- Bottoni -->
     <div class="mb-flex mb-gap-1.5 mb-flex-wrap">
@@ -232,7 +228,8 @@
 <script setup>
 import { t } from '@/i18n';
 import { ref, reactive, computed } from 'vue';
-import draggable from 'vuedraggable';
+import { vOloDraggable, vOloDropTarget } from '@/composables/useDnD';
+import { useListSort } from '@/composables/useListSort';
 import { useMediaPicker } from '@/composables/useMediaPicker';
 import { useToast } from '@/composables/useToast';
 
@@ -247,6 +244,21 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const { openGallery, openVideo, openPosterImage } = useMediaPicker();
+
+// Riordino immagini col motore DnD custom (v1.4.387, ex vuedraggable).
+const { itemDraggable, itemDrop } = useListSort({
+  handleSelector: '.fg-grip',
+  ghostLabel: (index) => {
+    const it = (props.modelValue || [])[index];
+    return (it && (it.caption || it.alt)) || t('Immagine') + ' ' + (index + 1);
+  },
+  onMove: (from, to) => {
+    const arr = [...(props.modelValue || [])];
+    const [moved] = arr.splice(from, 1);
+    arr.splice(to, 0, moved);
+    emit('update:modelValue', arr);
+  },
+});
 
 function itemKey(item) {
   return `${item.id || 0}-${item.url || ''}-${item.embed || ''}`;
@@ -543,11 +555,6 @@ function formatDuration(sec) {
 </script>
 
 <style scoped>
-.fg-ghost {
-  opacity: 0.4;
-  border: 1px dashed var(--olo-ui-accent, #e8622a);
-  border-radius: 6px;
-}
 .fg-grip:active {
   cursor: grabbing;
 }

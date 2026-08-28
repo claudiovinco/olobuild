@@ -16,17 +16,16 @@
     </div>
 
     <!-- Static items list (hidden when query active) -->
-    <draggable
-      v-if="!isDynamicQueryActive"
-      :list="localItems"
-      item-key="id"
-      handle=".cie-grip"
-      ghost-class="cie-ghost"
-      @end="emitUpdate"
-      class="cie-list"
-    >
-      <template #item="{ element, index }">
-        <div class="cie-item" :class="{ 'cie-item--open': expandedId === element.id }">
+    <!-- v1.4.387 — riordino via useListSort (motore DnD custom) al posto di vuedraggable:
+         drag dal grip, indicatore di inserimento, riordino del modello al rilascio. -->
+    <div v-if="!isDynamicQueryActive" class="cie-list">
+      <template v-for="(element, index) in localItems" :key="element.id">
+        <div
+          class="cie-item"
+          :class="{ 'cie-item--open': expandedId === element.id }"
+          v-olo-draggable="itemDraggable(index)"
+          v-olo-drop-target="itemDrop(index)"
+        >
           <!-- Item header row -->
           <div class="cie-header" @click="toggleExpand(element.id)">
             <span class="cie-grip" :title="t('Trascina per riordinare')">&#10303;</span>
@@ -219,7 +218,7 @@
           </div>
         </div>
       </template>
-    </draggable>
+    </div>
 
     <button v-if="!isDynamicQueryActive" type="button" class="cie-add" @click="addItem">{{ t('&#65291; Aggiungi') }} {{ itemLabel }}</button>
 
@@ -282,7 +281,8 @@
 <script setup>
 import { t } from '@/i18n';
 import { ref, computed, watch } from 'vue';
-import draggable from 'vuedraggable';
+import { vOloDraggable, vOloDropTarget } from '@/composables/useDnD';
+import { useListSort } from '@/composables/useListSort';
 import RichTextEditor from './RichTextEditor.vue';
 import FieldColor from './fields/FieldColor.vue';
 import NumberScrubber from './fields/NumberScrubber.vue';
@@ -352,6 +352,18 @@ function _ensureIds(items) {
 const localItems = ref(_ensureIds(JSON.parse(JSON.stringify(ensureArray(props.modelValue)))));
 const expandedId = ref(null);
 const iconPickerTarget = ref(null);
+
+// Riordino item col motore DnD custom (v1.4.387, ex vuedraggable).
+const { itemDraggable, itemDrop } = useListSort({
+  handleSelector: '.cie-grip',
+  ghostLabel: (index) => getItemLabel(localItems.value[index] || {}),
+  onMove: (from, to) => {
+    const arr = localItems.value;
+    const [moved] = arr.splice(from, 1);
+    arr.splice(to, 0, moved);
+    emitUpdate();
+  },
+});
 
 // Find first image field key for thumbnail preview in header
 const thumbField = computed(() => {
@@ -952,11 +964,6 @@ function removeItem(index) {
 .cie-add:hover {
   border-color: var(--olo-color-primary, #e8622a);
   color: #e8622a;
-}
-
-.cie-ghost {
-  opacity: 0.4;
-  border: 1px dashed var(--olo-color-primary, #e8622a) !important;
 }
 
 .cie-dynamic-info {

@@ -19,31 +19,24 @@
         v-for="icol in innerColumns"
         :key="icol.id"
         class="olo-ic-column"
-        :class="{
-          'olo-ic-column--selected': builderStore.selectedTileId === icol.id,
-          'olo-ic-column--dragover': dragOverColId === icol.id
-        }"
+        :class="{ 'olo-ic-column--selected': builderStore.selectedTileId === icol.id }"
         :style="{ width: icol.settings?.width + '%', minWidth: 0 }"
         :data-tile-id="icol.id"
+        v-olo-drop-target="innerColDrop(icol)"
         @click.stop="builderStore.selectTile(icol.id)"
-        @dragover.prevent.stop="dragOverColId = icol.id"
-        @dragleave="onColDragLeave($event, icol.id)"
-        @drop.prevent.stop="onDropIntoInnerCol($event, icol.id)"
       >
-        <!-- Elements inside inner column -->
-        <draggable
-          :list="icol.children"
-          item-key="id"
-          ghost-class="olo-ghost"
-          animation="150"
-          :group="{ name: 'elements' }"
-          class="olo-ic-elements"
-          @change="onChange"
-        >
-          <template #item="{ element: tile }">
-            <GridCell :tile="tile" />
+        <!-- Elements inside inner column — motore DnD custom (v1.4.387, ex
+             vuedraggable): stesso pattern dei container annidati del canvas
+             (floatingpanel in OlobuilderGrid); lo spostamento lo esegue il
+             monitor globale (applyPragmaticDrop). Bonus: ora i tile si
+             spostano anche tra colonna interna e canvas, non solo qui dentro. -->
+        <div class="olo-ic-elements" v-olo-drop-target="listEndDrop(icol.id)">
+          <template v-for="(tile, elIdx) in (icol.children || [])" :key="tile.id">
+            <div v-olo-draggable="elementDraggable(tile, icol.id, elIdx)" v-olo-drop-target="elementDrop(tile, icol.id, elIdx)">
+              <GridCell :tile="tile" />
+            </div>
           </template>
-        </draggable>
+        </div>
 
         <!-- Empty placeholder -->
         <div v-if="!icol.children || icol.children.length === 0" class="olo-ic-empty">
@@ -66,11 +59,17 @@
 
 <script setup>
 import { t } from '@/i18n';
-import { computed, ref } from 'vue';
-import draggable from 'vuedraggable';
+import { computed } from 'vue';
+import {
+  vOloDraggable,
+  vOloDropTarget,
+  attachClosestEdge,
+  makeNodePayload,
+  isOloData,
+} from '@/composables/useDnD';
+import { useDnDStore } from '@/stores/dnd';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
-import { useDragDrop } from '@/composables/useDragDrop';
 
 import GridCell from '../Grid/GridCell.vue';
 
@@ -81,7 +80,7 @@ const props = defineProps({
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
-const { handleDropIntoColumn } = useDragDrop();
+const dndStore = useDnDStore();
 
 function shouldStack() {
   const m = builderStore.viewMode;
@@ -91,8 +90,6 @@ function shouldStack() {
   if (isTab && props.settings.stack_tablet) return true;
   return false;
 }
-
-const dragOverColId = ref(null);
 
 const alignMap = {
   stretch: 'stretch',
@@ -120,23 +117,69 @@ function changeLayout(layoutKey) {
   builderStore.isDirty = true;
 }
 
-function onColDragLeave(event, colId) {
-  if (!event.currentTarget.contains(event.relatedTarget)) {
-    if (dragOverColId.value === colId) dragOverColId.value = null;
+// ── DnD col motore custom (v1.4.387) ─────────────────────────────────
+// Factory con lo stesso contratto payload del canvas (makeDraggableOpts /
+// makeEdgeDrop / columnDrop / listEndDrop in OlobuilderGrid): il monitor
+// globale (applyPragmaticDrop in useDragDrop) esegue lo spostamento via
+// tilesStore.moveNodeTo / addChild, che risolvono qualsiasi parent per id.
+
+// Vietato annidare tipi strutturali dentro le colonne interne.
+const FORBIDDEN_TYPES = ['section', 'row', 'inner-columns'];
+
+function canAcceptPayload(p) {
+  if (p.kind === 'tile-type') return !FORBIDDEN_TYPES.includes(p.tileType);
+  if (p.kind === 'global-widget') return true;
+  if (p.kind === 'node' && p.nodeKind === 'element') {
+    const node = tilesStore.getTileById(p.nodeId);
+    return !node || !FORBIDDEN_TYPES.includes(node.type);
   }
+  return false;
 }
 
-function onDropIntoInnerCol(event, colId) {
-  dragOverColId.value = null;
-  const tileType = event.dataTransfer.getData('tile-type');
-  if (!tileType) return;
-  // Prevent nesting structural types inside inner columns
-  if (tileType === 'row' || tileType === 'section' || tileType === 'inner-columns') return;
-  handleDropIntoColumn(tileType, colId);
+function elementDraggable(el, parentId, idx) {
+  return {
+    getInitialData: () => makeNodePayload(el.id, 'element', parentId, idx),
+    onDragStart: () => dndStore.startDrag(makeNodePayload(el.id, 'element', parentId, idx)),
+    onDrop: () => { if (!dndStore.isIdle) dndStore.endDrag(); },
+  };
 }
 
-function onChange() {
-  builderStore.isDirty = true;
+function elementDrop(el, parentId, idx) {
+  return {
+    canDrop: ({ source }) => {
+      if (!isOloData(source.data)) return false;
+      const p = source.data;
+      if (p.kind === 'node') return p.nodeKind === 'element' && p.nodeId !== el.id && canAcceptPayload(p);
+      return canAcceptPayload(p);
+    },
+    getData: ({ input, element }) => attachClosestEdge(
+      { _olo: true, kind: 'node-edge', nodeKind: 'element', nodeId: el.id, parentId, index: idx },
+      { element, input, allowedEdges: ['top', 'bottom'] }
+    ),
+    getIsSticky: () => true,
+    onDragEnter: ({ self } = {}) => { if (self?.element) self.element.classList.add('olo-dnd-over'); },
+    onDragLeave: ({ self } = {}) => { if (self?.element) self.element.classList.remove('olo-dnd-over'); },
+    onDrop: ({ self } = {}) => { if (self?.element) self.element.classList.remove('olo-dnd-over'); },
+  };
+}
+
+function innerColDrop(icol) {
+  return {
+    canDrop: ({ source }) => isOloData(source.data) && canAcceptPayload(source.data),
+    getData: () => ({ _olo: true, kind: 'column-body', columnId: icol.id }),
+    getIsSticky: () => true,
+    onDragEnter: ({ self } = {}) => { if (self?.element) self.element.classList.add('olo-ic-column--dragover'); },
+    onDragLeave: ({ self } = {}) => { if (self?.element) self.element.classList.remove('olo-ic-column--dragover'); },
+    onDrop: ({ self } = {}) => { if (self?.element) self.element.classList.remove('olo-ic-column--dragover'); },
+  };
+}
+
+function listEndDrop(parentId) {
+  return {
+    canDrop: ({ source }) => isOloData(source.data) && canAcceptPayload(source.data),
+    getData: () => ({ _olo: true, kind: 'list-end', listKind: 'elements', parentId }),
+    getIsSticky: () => false,
+  };
 }
 </script>
 
@@ -230,9 +273,5 @@ function onChange() {
   border-color: var(--olo-color-primary, #e1474f);
   color: var(--olo-color-primary, #e1474f);
   background: color-mix(in srgb, var(--olo-color-primary, #e1474f) 10%, transparent);
-}
-
-.olo-ghost {
-  opacity: 0.3;
 }
 </style>

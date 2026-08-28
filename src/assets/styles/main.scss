@@ -216,6 +216,49 @@
   box-shadow: 0 3px 0 0 var(--olo-ui-accent, #e8622a);
 }
 
+// ── useListSort (riordino liste inspector/gallery sul motore custom) ──
+// v1.4.387 — sostituisce vuedraggable: indicatore di inserimento + ghost compatto.
+.olo-listsort-dragging {
+  opacity: 0.35;
+}
+.olo-listsort-above,
+.olo-listsort-below {
+  position: relative;
+}
+.olo-listsort-above::after,
+.olo-listsort-below::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--olo-ui-accent, #e8622a);
+  z-index: 5;
+  pointer-events: none;
+}
+.olo-listsort-above::after { top: -2px; }
+.olo-listsort-below::after { bottom: -2px; }
+.olo-listsort-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: #fff;
+  border: 2px solid var(--olo-ui-accent, #e8622a);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.1);
+  font-size: 11px;
+  font-weight: 600;
+  color: #1f2937;
+  max-width: 240px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transform: rotate(-1.5deg);
+  pointer-events: none;
+}
+
 // Cursor SVG personalizzati Olotheme — due manine vettoriali con stati distinti:
 //   - manoaperta    → grab     (hover su elemento trascinabile, dita estese in alto)
 //   - manotrascina  → grabbing (drag attivo, dita raccolte che afferrano)

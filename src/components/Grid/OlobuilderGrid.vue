@@ -347,6 +347,7 @@ import {
   makeNodePayload,
   isOloData,
 } from '@/composables/useDnD';
+import { useDnDStore } from '@/stores/dnd';
 import { resolveNodeBg, buildBgStyle, buildOverlayStyle } from '@/composables/useBackgroundStyle';
 import { rv } from '@/composables/useResponsiveValue';
 import GridCell from './GridCell.vue';
@@ -363,6 +364,11 @@ const props = defineProps({
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
 const stylesStore = useStylesStore();
+// v1.4.387 — dndStore era usato nelle factory draggable (righe startDrag/endDrag)
+// ma MAI definito: ReferenceError silenziato da safeCall a ogni drag di nodo dal
+// canvas → lo stato del dnd store non si aggiornava (gli indicatori overlay
+// funzionavano solo per i drag dalla sidebar).
+const dndStore = useDnDStore();
 const { removeTiles } = useTileActions();
 
 /**
