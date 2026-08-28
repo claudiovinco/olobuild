@@ -169,7 +169,7 @@ const triggerBadgeStyle = computed(() => ({
   gap: '4px',
   background: '#111827',
   color: '#d1d5db',
-  border: '1px dashed #e1474f',
+  border: '1px dashed var(--olo-color-primary, #e1474f)',
   borderRadius: '8px',
   padding: '12px 18px',
   fontSize: '12px',
@@ -254,7 +254,7 @@ const triggerDetailStyle = computed(() => ({
 
 /* Magnetic */
 .olo-pop--preset-magnetic-liquid :deep(button) {
-  background: linear-gradient(135deg, #e1474f 0%, #f07a80 100%) !important;
+  background: linear-gradient(135deg, var(--olo-color-primary, #e1474f) 0%, color-mix(in srgb, var(--olo-color-primary, #e1474f) 65%, white) 100%) !important;
   color: #fff !important;
   border: 0 !important;
   border-radius: 999px !important;
@@ -266,7 +266,7 @@ const triggerDetailStyle = computed(() => ({
 /* Sticker */
 .olo-pop--preset-sticker :deep(button) {
   background: rgba(232,98,42,0.15) !important;
-  border: 2px dashed #e1474f !important;
+  border: 2px dashed var(--olo-color-primary, #e1474f) !important;
   color: #b04217 !important;
   border-radius: 8px !important;
   transform: rotate(-1.2deg);

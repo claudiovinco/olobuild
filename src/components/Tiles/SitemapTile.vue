@@ -363,13 +363,13 @@ function iconSvg(type) {
 .olo-sm-preset-sticky-notes :deep(.olo-sm-title) { font-family: 'Caveat', cursive; font-size: 1.3em; border-bottom: 2px dashed rgba(15,23,42,0.3); padding-bottom: 6px; }
 
 .olo-sm-preset-honeycomb { display: grid !important; }
-.olo-sm-preset-honeycomb .olo-sm-section { aspect-ratio: 1.155; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #fff !important; background: linear-gradient(135deg, #e1474f 0%, #fbbf24 100%); }
+.olo-sm-preset-honeycomb .olo-sm-section { aspect-ratio: 1.155; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #fff !important; background: linear-gradient(135deg, var(--olo-color-primary, #e1474f) 0%, #fbbf24 100%); }
 .olo-sm-preset-honeycomb .olo-sm-section:nth-child(2) { background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%); }
 .olo-sm-preset-honeycomb .olo-sm-section:nth-child(3) { background: linear-gradient(135deg, #f4a23b 0%, #f4a23b 100%); }
 .olo-sm-preset-honeycomb .olo-sm-section:nth-child(4) { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); }
 
 .olo-sm-preset-mind-map { position: relative; min-height: 380px; }
-.olo-sm-preset-mind-map::before { content: '⚡'; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 70px; height: 70px; background: radial-gradient(circle, #e1474f 0%, rgba(232,98,42,0.4) 60%, transparent 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; color: #fff; box-shadow: 0 0 40px #e1474f; z-index: 2; }
+.olo-sm-preset-mind-map::before { content: '⚡'; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 70px; height: 70px; background: radial-gradient(circle, var(--olo-color-primary, #e1474f) 0%, color-mix(in srgb, var(--olo-color-primary, #e1474f) 40%, transparent) 60%, transparent 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; color: #fff; box-shadow: 0 0 40px var(--olo-color-primary, #e1474f); z-index: 2; }
 
 .olo-sm-preset-glass-cards .olo-sm-section { backdrop-filter: blur(14px) saturate(160%); -webkit-backdrop-filter: blur(14px) saturate(160%); background: rgba(255,255,255,0.55) !important; border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 8px 32px rgba(15,23,42,0.08); }
 

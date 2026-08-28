@@ -487,7 +487,7 @@ const contentStyle = computed(() => {
   font-size: 15px !important;
 }
 .olo-accordion--preset-minimal-underline .olo-accordion-icon {
-  color: #e1474f;
+  color: var(--olo-color-primary, #e1474f);
 }
 
 /* Pill Brand (Linear-style) */
@@ -498,7 +498,7 @@ const contentStyle = computed(() => {
   transition: box-shadow 0.2s, transform 0.2s;
 }
 .olo-accordion--preset-pill-brand .olo-accordion-panel:hover {
-  box-shadow: 0 6px 20px rgba(232,98,42,0.18) !important;
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--olo-color-primary, #e1474f) 18%, transparent) !important;
   transform: translateY(-1px);
 }
 .olo-accordion--preset-pill-brand .olo-accordion-header {
@@ -518,12 +518,12 @@ const contentStyle = computed(() => {
 
 /* Outline Sharp (brutalist) */
 .olo-accordion--preset-outline-sharp .olo-accordion-panel {
-  border: 2px solid #e1474f !important;
+  border: 2px solid var(--olo-color-primary, #e1474f) !important;
   border-radius: 6px !important;
   box-shadow: none !important;
 }
 .olo-accordion--preset-outline-sharp .olo-accordion-panel:has(.is-open) {
-  box-shadow: 0 0 0 4px rgba(232,98,42,0.12) !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--olo-color-primary, #e1474f) 12%, transparent) !important;
 }
 .olo-accordion--preset-outline-sharp .olo-accordion-header {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -531,14 +531,14 @@ const contentStyle = computed(() => {
   letter-spacing: -0.02em;
 }
 .olo-accordion--preset-outline-sharp .olo-accordion-icon {
-  background: #fdf2ec;
+  background: color-mix(in srgb, var(--olo-color-primary, #e1474f) 9%, white);
   width: 32px;
   height: 32px;
   border-radius: 4px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #e1474f;
+  color: var(--olo-color-primary, #e1474f);
 }
 
 /* Glass Soft (glassmorphism) */
@@ -561,7 +561,7 @@ const contentStyle = computed(() => {
   -webkit-backdrop-filter: blur(8px) saturate(140%);
 }
 .olo-accordion--preset-glass-soft .olo-accordion-icon {
-  color: #e1474f;
+  color: var(--olo-color-primary, #e1474f);
 }
 
 /* Card Soft active accent (default preset, also enhanced) */
@@ -571,10 +571,10 @@ const contentStyle = computed(() => {
 }
 .olo-accordion--preset-card-soft .olo-accordion-header[aria-expanded="true"] + .olo-accordion-panel-body,
 .olo-accordion--preset-card-soft .olo-accordion-panel:has([aria-expanded="true"]) {
-  border-color: #e1474f !important;
-  box-shadow: 0 1px 2px rgba(232,98,42,0.05), 0 4px 12px rgba(232,98,42,0.08) !important;
+  border-color: var(--olo-color-primary, #e1474f) !important;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--olo-color-primary, #e1474f) 5%, transparent), 0 4px 12px color-mix(in srgb, var(--olo-color-primary, #e1474f) 8%, transparent) !important;
 }
 .olo-accordion--preset-card-soft .olo-accordion-icon {
-  color: #e1474f;
+  color: var(--olo-color-primary, #e1474f);
 }
 </style>

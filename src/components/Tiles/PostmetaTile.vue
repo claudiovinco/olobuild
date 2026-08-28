@@ -216,7 +216,7 @@ function itemStyle(idx) {
 @keyframes olo-pm-blink { 50% { opacity: 0; } }
 
 .olo-pm-preset-gradient-glow .olo-postmeta-item {
-  background: linear-gradient(90deg, #e1474f 0%, rgba(232,98,42,0.6) 50%, #e1474f 100%);
+  background: linear-gradient(90deg, var(--olo-color-primary, #e1474f) 0%, color-mix(in srgb, var(--olo-color-primary, #e1474f) 60%, transparent) 50%, var(--olo-color-primary, #e1474f) 100%);
   background-size: 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -226,7 +226,7 @@ function itemStyle(idx) {
 }
 .olo-pm-preset-gradient-glow .olo-postmeta-icon {
   -webkit-text-fill-color: initial;
-  color: #e1474f !important;
+  color: var(--olo-color-primary, #e1474f) !important;
 }
 @keyframes olo-pm-grad {
   0% { background-position: 0% 50%; }

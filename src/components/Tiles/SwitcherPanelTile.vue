@@ -489,7 +489,7 @@ const imgStyle = computed(() => {
 }
 .olo-sp--preset-brutalist-block .sp-nav > li:last-child .sp-nav__btn { border-right: 0; }
 .olo-sp--preset-brutalist-block .sp-nav__btn.is-active {
-  background: #e1474f !important;
+  background: var(--olo-color-primary, #e1474f) !important;
   color: #000 !important;
 }
 .olo-sp--preset-brutalist-block .sp-panel {
@@ -517,7 +517,7 @@ const imgStyle = computed(() => {
   box-shadow: 0 4px 12px rgba(232,98,42,0.45) !important;
 }
 .olo-sp--preset-magnetic-liquid .sp-panel__btn {
-  background: linear-gradient(135deg, #e1474f 0%, #f07a80 100%) !important;
+  background: linear-gradient(135deg, var(--olo-color-primary, #e1474f) 0%, color-mix(in srgb, var(--olo-color-primary, #e1474f) 65%, white) 100%) !important;
   color: #fff !important;
   border: 0 !important;
 }
@@ -536,7 +536,7 @@ const imgStyle = computed(() => {
 .olo-sp--preset-sticker .sp-nav__btn.is-active {
   transform: rotate(0deg) scale(1.06) !important;
   border-style: solid !important;
-  border-color: #e1474f !important;
+  border-color: var(--olo-color-primary, #e1474f) !important;
   background: #fdf2ec !important;
 }
 .olo-sp--preset-sticker .sp-panel {
