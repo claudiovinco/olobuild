@@ -101,6 +101,17 @@
           </div>
         </div>
 
+        <!-- Fase 3 unificazione hero: conversione esplicita tile legacy → canonico -->
+        <div v-if="heroConversionTarget" class="insp-heroconvert">
+          <div class="insp-heroconvert-txt">
+            {{ t('Questa tile è stata sostituita da') }} <b>{{ heroConversionTarget === 'hero' ? 'Hero' : 'Hero Split' }}</b>.
+            {{ t('Puoi convertirla mantenendo contenuti e scena (annullabile con Ctrl+Z).') }}
+          </div>
+          <button class="insp-heroconvert-btn" @click="onConvertToHero">
+            {{ t('Converti in') }} {{ heroConversionTarget === 'hero' ? 'Hero' : 'Hero Split' }}
+          </button>
+        </div>
+
         <!-- Tile state badges (hover/responsive/cond/animation/sticky) -->
         <div v-if="tileBadges.length" class="mb-flex mb-flex-wrap mb-gap-1 mb-mb-3">
           <button
@@ -1372,7 +1383,8 @@ import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue';
 import { t } from '@/i18n';
 import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
-import { getElementDef, getElementFields } from '@/config/elementRegistry';
+import { getElementDef, getElementFields, getElementDefaults } from '@/config/elementRegistry';
+import { heroConvertTarget, convertHeroTile } from '@/utils/heroConvert';
 import BackgroundControls from './BackgroundControls.vue';
 import PageSettingsPanel from './PageSettingsPanel.vue';
 import ContentItemsEditor from './ContentItemsEditor.vue';
@@ -2106,6 +2118,20 @@ function deletePreset(id) {
   if (!window.confirm(t('Eliminare il preset?'))) return;
   tilePresets.value = tilePresets.value.filter(p => p.id !== id);
   savePresets();
+}
+
+// ── Fase 3 unificazione hero: conversione esplicita legacy → canonico ──
+const heroConversionTarget = computed(() => {
+  const tile = selectedTile.value;
+  return tile ? heroConvertTarget(tile.type) : null;
+});
+
+function onConvertToHero() {
+  const tile = selectedTile.value;
+  if (!tile) return;
+  const conv = convertHeroTile(tile.type, tile.settings, getElementDefaults);
+  if (!conv) return;
+  tilesStore.convertTileType(tile.id, conv.type, conv.settings, conv.styleBg);
 }
 
 // Directive minima v-click-outside per chiudere il menu preset
@@ -6253,6 +6279,23 @@ function updateDynamicItemMap(itemMap) {
 .insp-badge:hover { background: currentColor; box-shadow: 0 0 0 1px currentColor inset; }
 
 /* Action buttons (copy/paste style) nell'header inspector */
+/* Fase 3 unificazione hero — banner di conversione tile legacy */
+.insp-heroconvert {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  padding: 10px 12px; border-radius: 8px;
+  background: color-mix(in srgb, var(--olo-ui-accent, #e8622a) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--olo-ui-accent, #e8622a) 30%, transparent);
+}
+.insp-heroconvert-txt { flex: 1; font-size: 11.5px; line-height: 1.45; opacity: .92; }
+.insp-heroconvert-btn {
+  flex: none; padding: 7px 12px; border: 0; border-radius: 6px; cursor: pointer;
+  font-size: 11.5px; font-weight: 700;
+  background: var(--olo-ui-accent, #e8622a); color: #fff;
+  transition: filter .15s;
+}
+.insp-heroconvert-btn:hover { filter: brightness(1.08); }
+.insp-heroconvert-btn:focus-visible { outline: 2px solid var(--olo-ui-accent, #e8622a); outline-offset: 2px; }
+
 .insp-action-btn {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);

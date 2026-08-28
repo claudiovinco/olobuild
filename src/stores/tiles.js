@@ -348,6 +348,23 @@ export const useTilesStore = defineStore('tiles', {
       }
     },
 
+    // Fase 3 unificazione hero: sostituisce tipo+settings di una tile legacy col
+    // canonico mappato (heroConvert). styleFill (es. bg del wrapper) viene applicato
+    // SOLO se lo style attuale non ha già uno sfondo proprio.
+    convertTileType(tileId, newType, newSettings, styleFill = null) {
+      const tile = this.getTileById(tileId);
+      if (!tile) return false;
+      tile.type = newType;
+      tile.settings = newSettings;
+      if (styleFill && typeof styleFill === 'object') {
+        const existing = (!tile.style || Array.isArray(tile.style)) ? {} : tile.style;
+        const hasBg = existing.bg && existing.bg.type && existing.bg.type !== 'none';
+        if (!hasBg) tile.style = { ...existing, ...styleFill };
+      }
+      this.tilesVersion++;
+      return true;
+    },
+
     updateTileStyle(tileId, styleProps) {
       const tile = this.getTileById(tileId);
       if (tile) {
