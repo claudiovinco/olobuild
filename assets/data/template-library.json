@@ -10355,7 +10355,8 @@
       }
      ]
     }
-   ]
+   ],
+   "thumbnail": "assets/img/block-thumbs/hero-special-masthead.jpg"
   },
   {
    "id": "hero-special-terminal",
@@ -10404,7 +10405,8 @@
       }
      ]
     }
-   ]
+   ],
+   "thumbnail": "assets/img/block-thumbs/hero-special-terminal.jpg"
   },
   {
    "id": "hero-special-northvideo",
@@ -10453,7 +10455,8 @@
       }
      ]
     }
-   ]
+   ],
+   "thumbnail": "assets/img/block-thumbs/hero-special-northvideo.jpg"
   },
   {
    "id": "hero-special-studio",
@@ -10502,7 +10505,8 @@
       }
      ]
     }
-   ]
+   ],
+   "thumbnail": "assets/img/block-thumbs/hero-special-studio.jpg"
   },
   {
    "id": "hero-special-smear",
@@ -10551,7 +10555,8 @@
       }
      ]
     }
-   ]
+   ],
+   "thumbnail": "assets/img/block-thumbs/hero-special-smear.jpg"
   }
  ]
 }

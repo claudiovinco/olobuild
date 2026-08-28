@@ -3565,7 +3565,9 @@ class Olobuild_Rest_Api {
                     : __( 'tutto a posto', 'olobuild' ),
                 'trend' => $alerts_total > 0 ? 'warn' : 'up',
                 'icon'  => 'alert',
-                'href'  => $alerts_404 > 0 ? admin_url( 'admin.php?page=olo-redirects' ) : admin_url( 'admin.php?page=olobuilder-templates' ),
+                // La pagina standalone ?page=olo-redirects non è più registrata (v1.0.31):
+                // la gestione vive in Configurazione → tab "Redirect & 404".
+                'href'  => $alerts_404 > 0 ? admin_url( 'admin.php?page=olobuilder-settings&tab=redirects' ) : admin_url( 'admin.php?page=olobuilder-templates' ),
             ],
         ];
 

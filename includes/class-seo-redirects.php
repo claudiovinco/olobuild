@@ -344,10 +344,14 @@ class Olobuild_Seo_Redirects {
         $monitor_count  = intval( $wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_404_log()}" ) );
         // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
+        // NB: la pagina standalone ?page=olo-redirects non è più registrata (v1.0.31,
+        // add_menu vuoto): questo render è legacy. I link puntano alla sede attuale
+        // (Configurazione → tab "Redirect & 404") per non produrre URL rotti.
+        $settings_redirects = admin_url( 'admin.php?page=olobuilder-settings&tab=redirects' );
         $subnav = [
-            [ 'slug' => 'redirects', 'label' => __( 'Redirect', 'olobuild' ),    'count' => (int) $redirect_count, 'href' => admin_url( 'admin.php?page=olo-redirects&tab=redirects' ) ],
-            [ 'slug' => 'monitor',   'label' => __( 'Monitor 404', 'olobuild' ), 'count' => (int) $monitor_count,  'href' => admin_url( 'admin.php?page=olo-redirects&tab=monitor' ) ],
-            [ 'slug' => 'indexnow',  'label' => 'IndexNow',                      'href' => admin_url( 'admin.php?page=olo-redirects&tab=indexnow' ) ],
+            [ 'slug' => 'redirects', 'label' => __( 'Redirect', 'olobuild' ),    'count' => (int) $redirect_count, 'href' => $settings_redirects ],
+            [ 'slug' => 'monitor',   'label' => __( 'Monitor 404', 'olobuild' ), 'count' => (int) $monitor_count,  'href' => $settings_redirects ],
+            [ 'slug' => 'indexnow',  'label' => 'IndexNow',                      'href' => $settings_redirects ],
         ];
         $sub_text = $monitor_count > 0
             ? sprintf( /* translators: 1: redirects count, 2: 404 count */ __( '%1$s redirect attivi · %2$s pagine 404 da gestire', 'olobuild' ),

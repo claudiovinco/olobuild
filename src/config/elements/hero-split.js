@@ -46,6 +46,9 @@ export default {
   category: 'layout',
 
   defaults: {
+    // Preset stilistico (rifiniture hero) — solo builder-side, il renderer non la legge.
+    preset: 'custom',
+
     // Eyebrow
     eyebrow_text: 'STACK WORDPRESS · PER AGENZIE E PMI',
     eyebrow_dot_color: 'var(--olo-color-accent, #f4a23b)',
@@ -237,6 +240,15 @@ export default {
   // ═══ STILE ════════════════════════════════════════════════════
   // Tutto il resto: colori, dimensioni, tipografia, layout, sfondi, bordi, hover.
   styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'showcase-live',   label: t('Showcase Live (demo card)') },
+      { value: 'editorial-cover', label: t('Editorial Cover (Featured Story)') },
+      { value: 'media-badge',     label: t('Media + Badge (Intro Split)') },
+      { value: 'audio-feature',   label: t('Audio Feature (player scuro)') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ], description: t('Un look completo in un click: pannello, palette e tipografia. I tuoi testi non vengono toccati.') },
+
     { type: 'separator', label: t('Eyebrow stile') },
     { key: 'eyebrow_color',     label: t('Colore testo'),    type: 'color' },
     { key: 'eyebrow_dot_color', label: t('Colore pallino'),  type: 'color' },
