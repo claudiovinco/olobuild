@@ -1,0 +1,912 @@
+// ─────────────────────────────────────────────────────────────────────
+// GENERATO da scripts/build-settings-search-index.cjs (hook buildStart di
+// vite.config.admin.js). NON modificare a mano: rigenerare con
+//   node scripts/build-settings-search-index.cjs
+// Indice dei campi della Configurazione per la ricerca a livello di campo.
+// ─────────────────────────────────────────────────────────────────────
+export const SETTINGS_FIELD_INDEX = {
+	"colori": [
+		{
+			"kind": "section",
+			"label": "Preset di stile",
+			"hint": "Un punto di partenza con un click. Applica la palette completa del preset ai ruoli qui sotto."
+		},
+		{
+			"kind": "section",
+			"label": "Genera palette",
+			"hint": "Parti da uno o due colori e ottieni una palette armonica con le regole della teoria del colore."
+		}
+	],
+	"tipografia": [
+		{
+			"kind": "section",
+			"label": "Coppia di font",
+			"hint": "Display per titoli, body per testo corrente. Tieni 2 famiglie max per buona leggibilità."
+		},
+		{
+			"kind": "section",
+			"label": "Scala tipografica",
+			"hint": "Ratio matematico tra le grandezze. Anteprima live a destra."
+		},
+		{
+			"kind": "field",
+			"label": "Dimensione base",
+			"hint": "Punto di partenza, di solito 16px per il corpo del testo.",
+			"section": "Scala tipografica"
+		},
+		{
+			"kind": "field",
+			"label": "Ratio scala",
+			"hint": "Più alto = differenza più marcata fra body e h1.",
+			"section": "Scala tipografica"
+		},
+		{
+			"kind": "field",
+			"label": "Interlinea body",
+			"hint": "Altezza riga del testo corrente.",
+			"section": "Scala tipografica"
+		},
+		{
+			"kind": "field",
+			"label": "Anteprima scala",
+			"hint": "",
+			"section": "Scala tipografica"
+		}
+	],
+	"spaziature": [
+		{
+			"kind": "section",
+			"label": "Scala di spacing",
+			"hint": "8 token globali usati ovunque (--olo-space-*). Tutti i padding e i gap del builder pescano da qui."
+		},
+		{
+			"kind": "section",
+			"label": "Larghezze container",
+			"hint": "Tre preset di larghezza massima del contenuto. Il valore Default è il container principale del sito."
+		},
+		{
+			"kind": "field",
+			"label": "Narrow",
+			"hint": "Per testi lunghi e blog, leggibilità ottimale.",
+			"section": "Larghezze container"
+		},
+		{
+			"kind": "field",
+			"label": "Default",
+			"hint": "Larghezza standard del contenuto del sito.",
+			"section": "Larghezze container"
+		},
+		{
+			"kind": "field",
+			"label": "Wide",
+			"hint": "Per hero, gallerie ampie, layout immersivi.",
+			"section": "Larghezze container"
+		},
+		{
+			"kind": "section",
+			"label": "Ritmo verticale sezioni",
+			"hint": "Padding-top/bottom di default per le sezioni. I valori sono token della scala spacing — cambiando lì cambia tutto."
+		},
+		{
+			"kind": "section",
+			"label": "Gutter responsive",
+			"hint": "Gap tra colonne griglia e padding laterale del container, per ciascun breakpoint."
+		},
+		{
+			"kind": "field",
+			"label": "Gap colonne",
+			"hint": "",
+			"section": "Gutter responsive"
+		},
+		{
+			"kind": "field",
+			"label": "Padding laterale",
+			"hint": "",
+			"section": "Gutter responsive"
+		},
+		{
+			"kind": "section",
+			"label": "Scaling fluido responsive",
+			"hint": "Rimpicciolisce automaticamente tutti i token spacing su tablet e mobile, senza dover ritoccare ogni tile."
+		},
+		{
+			"kind": "field",
+			"label": "Fattore tablet",
+			"hint": "Es. 0.85 → spacing al 85% sotto 960px.",
+			"section": "Scaling fluido responsive"
+		},
+		{
+			"kind": "field",
+			"label": "Fattore mobile",
+			"hint": "Es. 0.65 → spacing al 65% sotto 640px.",
+			"section": "Scaling fluido responsive"
+		}
+	],
+	"responsive": [
+		{
+			"kind": "section",
+			"label": "Visualizzazione scala",
+			"hint": "Anteprima della copertura dei tuoi breakpoint sulle larghezze reali."
+		},
+		{
+			"kind": "section",
+			"label": "Breakpoint configurati",
+			"hint": "Trascina per riordinare. Il primo dall'alto è il device di default in cui si apre l'editor."
+		},
+		{
+			"kind": "section",
+			"label": "Comportamento avanzato",
+			"hint": ""
+		},
+		{
+			"kind": "field",
+			"label": "Strategia generazione CSS",
+			"hint": "Mobile-first usa min-width, desktop-first usa max-width.",
+			"section": "Comportamento avanzato"
+		}
+	],
+	"tplconditions": [
+		{
+			"kind": "field",
+			"label": "Nome regola",
+			"hint": "Dove si applica la regola.",
+			"section": ""
+		},
+		{
+			"kind": "field",
+			"label": "Contesto",
+			"hint": "Dove si applica la regola.",
+			"section": ""
+		},
+		{
+			"kind": "field",
+			"label": "Template",
+			"hint": "1-999. Più basso = vince. Default 10.",
+			"section": ""
+		},
+		{
+			"kind": "field",
+			"label": "Priorità",
+			"hint": "1-999. Più basso = vince. Default 10.",
+			"section": ""
+		},
+		{
+			"kind": "field",
+			"label": "Operatore condizioni",
+			"hint": "",
+			"section": ""
+		},
+		{
+			"kind": "field",
+			"label": "Condizioni di match",
+			"hint": "Aggiungi condizioni per cui la regola si applica.",
+			"section": ""
+		}
+	],
+	"wootemplates": [
+		{
+			"kind": "section",
+			"label": "Mappa template",
+			"hint": "Lascia \"Default WooCommerce\" per usare il rendering nativo di Woo."
+		}
+	],
+	"popups": [
+		{
+			"kind": "field",
+			"label": "Nome interno",
+			"hint": "Quale template Olobuild usare come contenuto del popup.",
+			"section": ""
+		},
+		{
+			"kind": "field",
+			"label": "Template",
+			"hint": "Quale template Olobuild usare come contenuto del popup.",
+			"section": ""
+		},
+		{
+			"kind": "field",
+			"label": "Trigger",
+			"hint": "",
+			"section": ""
+		},
+		{
+			"kind": "field",
+			"label": "Ritardo (secondi)",
+			"hint": "",
+			"section": ""
+		},
+		{
+			"kind": "field",
+			"label": "% scroll",
+			"hint": "",
+			"section": ""
+		},
+		{
+			"kind": "field",
+			"label": "Secondi di inattività",
+			"hint": "",
+			"section": ""
+		},
+		{
+			"kind": "field",
+			"label": "Frequenza",
+			"hint": "",
+			"section": ""
+		},
+		{
+			"kind": "field",
+			"label": "Overlay opacità",
+			"hint": "",
+			"section": ""
+		},
+		{
+			"kind": "field",
+			"label": "Larghezza massima (px)",
+			"hint": "",
+			"section": ""
+		}
+	],
+	"seo": [
+		{
+			"kind": "section",
+			"label": "Default site-wide",
+			"hint": "Usati quando una pagina non ha meta-tag specifici."
+		},
+		{
+			"kind": "field",
+			"label": "Title pattern",
+			"hint": "Schema del title delle pagine. Variabili: {page}, {sep}, {site}.",
+			"section": "Default site-wide"
+		},
+		{
+			"kind": "field",
+			"label": "Separatore",
+			"hint": "Carattere che separa i blocchi nel title.",
+			"section": "Default site-wide"
+		},
+		{
+			"kind": "field",
+			"label": "Meta description default",
+			"hint": "Massimo 160 caratteri. Usato come fallback quando la pagina non ne ha una propria.",
+			"section": "Default site-wide"
+		},
+		{
+			"kind": "field",
+			"label": "Lingua sito",
+			"hint": "Attributo lang dell'HTML.",
+			"section": "Default site-wide"
+		},
+		{
+			"kind": "field",
+			"label": "Robots default",
+			"hint": "Comportamento di default per i motori di ricerca.",
+			"section": "Default site-wide"
+		},
+		{
+			"kind": "section",
+			"label": "Open Graph & Twitter Card",
+			"hint": "Come appare il sito quando viene condiviso su social e messaggistica."
+		},
+		{
+			"kind": "field",
+			"label": "Immagine OG default",
+			"hint": "1200×630 consigliato. Usata quando la pagina non ne ha una propria.",
+			"section": "Open Graph & Twitter Card"
+		},
+		{
+			"kind": "field",
+			"label": "Twitter handle",
+			"hint": "Username Twitter del sito (con @).",
+			"section": "Open Graph & Twitter Card"
+		},
+		{
+			"kind": "field",
+			"label": "Card type",
+			"hint": "Formato della preview su Twitter.",
+			"section": "Open Graph & Twitter Card"
+		},
+		{
+			"kind": "section",
+			"label": "Sitemap & schema.org",
+			"hint": ""
+		},
+		{
+			"kind": "field",
+			"label": "Sitemap XML",
+			"hint": "Generato automaticamente a /sitemap.xml.",
+			"section": "Sitemap & schema.org"
+		},
+		{
+			"kind": "field",
+			"label": "Tipo organizzazione",
+			"hint": "Schema.org markup iniettato in ogni pagina.",
+			"section": "Sitemap & schema.org"
+		},
+		{
+			"kind": "field",
+			"label": "Auto-ping search engines",
+			"hint": "Notifica Google e Bing ad ogni pubblicazione.",
+			"section": "Sitemap & schema.org"
+		}
+	],
+	"redirects": [
+		{
+			"kind": "section",
+			"label": "Redirect configurate",
+			"hint": "Prefisso \"~\" su \"Da URL\" attiva il match regex."
+		},
+		{
+			"kind": "section",
+			"label": "Pagine non trovate",
+			"hint": "URL richieste che hanno restituito 404. Promuovi a redirect quelle ricorrenti."
+		},
+		{
+			"kind": "field",
+			"label": "API Key IndexNow",
+			"hint": "",
+			"section": "Pagine non trovate"
+		}
+	],
+	"cookie": [
+		{
+			"kind": "section",
+			"label": "Stato e modalità",
+			"hint": "Il banner viene mostrato al primo accesso e ai visitatori che non hanno ancora scelto."
+		},
+		{
+			"kind": "field",
+			"label": "Cookie banner",
+			"hint": "Disattiva solo se il sito non usa cookie non-essenziali.",
+			"section": "Stato e modalità"
+		},
+		{
+			"kind": "field",
+			"label": "Modalità",
+			"hint": "Opt-in è richiesto in UE. Opt-out solo dove ammesso.",
+			"section": "Stato e modalità"
+		},
+		{
+			"kind": "field",
+			"label": "Blocca script fino al consenso",
+			"hint": "Google Analytics, Meta Pixel, ecc. non partono finché l'utente non accetta.",
+			"section": "Stato e modalità"
+		},
+		{
+			"kind": "field",
+			"label": "Re-richiedi consenso dopo",
+			"hint": "Mesi dopo i quali il banner ricompare.",
+			"section": "Stato e modalità"
+		},
+		{
+			"kind": "section",
+			"label": "Categorie di cookie",
+			"hint": "Le categorie mostrate nel pannello di preferenze."
+		},
+		{
+			"kind": "section",
+			"label": "Copy del banner",
+			"hint": "Testi mostrati al visitatore. Supporta multilingua."
+		},
+		{
+			"kind": "field",
+			"label": "Lingua attiva",
+			"hint": "",
+			"section": "Copy del banner"
+		},
+		{
+			"kind": "field",
+			"label": "Titolo banner",
+			"hint": "",
+			"section": "Copy del banner"
+		},
+		{
+			"kind": "field",
+			"label": "Testo banner",
+			"hint": "",
+			"section": "Copy del banner"
+		},
+		{
+			"kind": "field",
+			"label": "CTA primario",
+			"hint": "",
+			"section": "Copy del banner"
+		},
+		{
+			"kind": "field",
+			"label": "Posizione",
+			"hint": "",
+			"section": "Copy del banner"
+		}
+	],
+	"analytics": [
+		{
+			"kind": "section",
+			"label": "ID dei tracker",
+			"hint": "Lascia vuoto per disattivare un tracker."
+		},
+		{
+			"kind": "field",
+			"label": "Google Analytics 4",
+			"hint": "Measurement ID (es. G-XXXXXXXX).",
+			"section": "ID dei tracker"
+		},
+		{
+			"kind": "field",
+			"label": "Facebook Pixel",
+			"hint": "",
+			"section": "ID dei tracker"
+		},
+		{
+			"kind": "field",
+			"label": "Google Tag Manager",
+			"hint": "",
+			"section": "ID dei tracker"
+		},
+		{
+			"kind": "field",
+			"label": "Microsoft Clarity",
+			"hint": "",
+			"section": "ID dei tracker"
+		},
+		{
+			"kind": "field",
+			"label": "Hotjar Site ID",
+			"hint": "",
+			"section": "ID dei tracker"
+		},
+		{
+			"kind": "section",
+			"label": "Eventi automatici",
+			"hint": "Olobuild emette eventi GA4 / FB Pixel quando un utente interagisce con i tile."
+		},
+		{
+			"kind": "field",
+			"label": "Percentuali scroll (CSV)",
+			"hint": "Quando tracciare scroll depth, es. 25,50,75,100.",
+			"section": "Eventi automatici"
+		},
+		{
+			"kind": "field",
+			"label": "Estensioni download (CSV)",
+			"hint": "",
+			"section": "Eventi automatici"
+		},
+		{
+			"kind": "section",
+			"label": "Privacy & Consenso",
+			"hint": ""
+		},
+		{
+			"kind": "field",
+			"label": "Anonimizza IP (GA4)",
+			"hint": "",
+			"section": "Privacy & Consenso"
+		},
+		{
+			"kind": "field",
+			"label": "Rispetta Do-Not-Track",
+			"hint": "Non tracciare le visite degli utenti loggati come admin.",
+			"section": "Privacy & Consenso"
+		},
+		{
+			"kind": "field",
+			"label": "Escludi amministratori",
+			"hint": "Non tracciare le visite degli utenti loggati come admin.",
+			"section": "Privacy & Consenso"
+		},
+		{
+			"kind": "field",
+			"label": "Richiedi consenso cookie",
+			"hint": "Carica i tracker solo dopo il consenso del banner.",
+			"section": "Privacy & Consenso"
+		},
+		{
+			"kind": "section",
+			"label": "Script custom",
+			"hint": "Codice arbitrario da iniettare nel sito. Usa con attenzione — possono rompere la pagina o esporre dati sensibili."
+		},
+		{
+			"kind": "field",
+			"label": "In <head>",
+			"hint": "Meta tag, fonts, link prefetch, codice di verifica.",
+			"section": "Script custom"
+		},
+		{
+			"kind": "field",
+			"label": "In <body>",
+			"hint": "Subito dopo l'apertura del body (GTM noscript, chat widget…).",
+			"section": "Script custom"
+		}
+	],
+	"performance": [
+		{
+			"kind": "section",
+			"label": "Stato cache",
+			"hint": "Ultima generazione"
+		},
+		{
+			"kind": "section",
+			"label": "Critical CSS",
+			"hint": "Inietta inline il CSS above-the-fold per ogni pagina, defera il resto. Boost diretto su FCP e LCP."
+		},
+		{
+			"kind": "field",
+			"label": "Abilita Critical CSS",
+			"hint": "Genera e inietta il CSS critico per ogni pagina visitata.",
+			"section": "Critical CSS"
+		},
+		{
+			"kind": "field",
+			"label": "Durata cache (giorni)",
+			"hint": "Dopo quanti giorni il critical CSS viene rigenerato. Invalidato comunque al save di un template.",
+			"section": "Critical CSS"
+		},
+		{
+			"kind": "field",
+			"label": "Sezioni above-the-fold",
+			"hint": "Quante sezioni iniziali analizzare per estrarre il CSS critico.",
+			"section": "Critical CSS"
+		},
+		{
+			"kind": "section",
+			"label": "Asset optimizer",
+			"hint": "Defer JS, cache file CSS, minify del CSS generato dai template."
+		},
+		{
+			"kind": "field",
+			"label": "Full-page cache",
+			"hint": "Salva l'HTML generato e lo serve prima di WordPress: abbatte il tempo di risposta (TTFB). Esclude automaticamente utenti loggati, carrello/checkout WooCommerce e richieste POST. Installa il drop-in advanced-cache.php e attiva WP_CACHE; si svuota a ogni modifica di contenuto.",
+			"section": "Asset optimizer"
+		},
+		{
+			"kind": "field",
+			"label": "Defer JavaScript",
+			"hint": "Aggiunge defer agli script frontend di Olobuild. Non blocca il rendering della pagina.",
+			"section": "Asset optimizer"
+		},
+		{
+			"kind": "field",
+			"label": "Cache CSS su file statici",
+			"hint": "Salva il CSS dei template come file invece di iniettarlo inline. Migliora il caching del browser.",
+			"section": "Asset optimizer"
+		},
+		{
+			"kind": "field",
+			"label": "Minifica CSS",
+			"hint": "Rimuove commenti, spazi e newline dal CSS generato dai template e dal CSS frontend del plugin.",
+			"section": "Asset optimizer"
+		},
+		{
+			"kind": "field",
+			"label": "CSS per-tile",
+			"hint": "Serve solo le porzioni di CSS dei tile presenti in pagina (mappa, gallery, hero, postgrid…) invece dell'intero foglio. Riduce il CSS inutilizzato; fallback automatico al CSS completo in caso di dubbio.",
+			"section": "Asset optimizer"
+		},
+		{
+			"kind": "field",
+			"label": "UIkit subset",
+			"hint": "Serve solo i componenti UIkit usati dal sito, appresi automaticamente dalle pagine. Prima visita col CSS completo, poi subset; si ri-apprende al salvataggio dei template.",
+			"section": "Asset optimizer"
+		},
+		{
+			"kind": "field",
+			"label": "Cache browser per i media (.htaccess)",
+			"hint": "Scrive header Expires/Cache-Control per immagini, video e font (6 mesi) e CSS/JS (1 mese). Solo server Apache/LiteSpeed.",
+			"section": "Asset optimizer"
+		},
+		{
+			"kind": "section",
+			"label": "Resource hints & loading",
+			"hint": "Suggerimenti al browser per precaricare risorse e ottimizzare il caricamento immagini."
+		},
+		{
+			"kind": "field",
+			"label": "DNS prefetch & preconnect automatici",
+			"hint": "dns-prefetch + preconnect per Google Fonts, YouTube, Vimeo e altri domini esterni rilevati.",
+			"section": "Resource hints & loading"
+		},
+		{
+			"kind": "field",
+			"label": "Preload font custom",
+			"hint": "Precarica i font usati come body/heading per evitare FOUT (Flash of Unstyled Text).",
+			"section": "Resource hints & loading"
+		},
+		{
+			"kind": "field",
+			"label": "Video facade YouTube/Vimeo",
+			"hint": "Mostra una preview statica, l'iframe carica solo al click. ~500 KB risparmiati per video.",
+			"section": "Resource hints & loading"
+		},
+		{
+			"kind": "field",
+			"label": "Lazy load video self-hosted",
+			"hint": "I video autoplay (sfondi, filmreel, decorativi) si scaricano e partono solo quando entrano nel viewport. Risparmia decine di MB su pagine ricche di video.",
+			"section": "Resource hints & loading"
+		},
+		{
+			"kind": "field",
+			"label": "fetchpriority hero image",
+			"hint": "Aggiunge fetchpriority=\"high\" alla prima immagine e rimuove lazy dagli elementi above-fold.",
+			"section": "Resource hints & loading"
+		},
+		{
+			"kind": "field",
+			"label": "Lazy loading immagini below-fold",
+			"hint": "Aggiunge loading=\"lazy\" alle immagini sotto la fold. Riduce il peso iniziale della pagina.",
+			"section": "Resource hints & loading"
+		},
+		{
+			"kind": "section",
+			"label": "Domini custom",
+			"hint": "Aggiungi domini per dns-prefetch e preconnect personalizzati (uno per riga)."
+		},
+		{
+			"kind": "field",
+			"label": "DNS prefetch",
+			"hint": "Risolve il DNS in anticipo. Utile per CDN e servizi esterni.",
+			"section": "Domini custom"
+		},
+		{
+			"kind": "field",
+			"label": "Preconnect",
+			"hint": "Apre connessione completa (DNS + TCP + TLS). Usare solo per risorse critiche.",
+			"section": "Domini custom"
+		},
+		{
+			"kind": "section",
+			"label": "Pulizia head",
+			"hint": "Rimuovi script e CSS non necessari dal <head> per ridurre richieste e peso."
+		},
+		{
+			"kind": "field",
+			"label": "Rimuovi jQuery Migrate",
+			"hint": "jquery-migrate.js (~10 KB). Necessario solo per plugin molto vecchi.",
+			"section": "Pulizia head"
+		},
+		{
+			"kind": "field",
+			"label": "Rimuovi emoji scripts",
+			"hint": "wp-emoji-release.min.js — i browser moderni gestiscono emoji nativamente.",
+			"section": "Pulizia head"
+		},
+		{
+			"kind": "field",
+			"label": "Rimuovi Block CSS",
+			"hint": "wp-block-library-css (~30 KB). Solo se non usi blocchi Gutenberg nel frontend.",
+			"section": "Pulizia head"
+		},
+		{
+			"kind": "field",
+			"label": "Rimuovi Classic Theme CSS",
+			"hint": "classic-theme-styles-css. Inutile se non usi un tema classico WordPress.",
+			"section": "Pulizia head"
+		}
+	],
+	"maintenance": [
+		{
+			"kind": "section",
+			"label": "Modalità",
+			"hint": ""
+		},
+		{
+			"kind": "field",
+			"label": "Stato sito",
+			"hint": "",
+			"section": "Modalità"
+		},
+		{
+			"kind": "field",
+			"label": "Template Coming Soon",
+			"hint": "Quale template Olobuild mostrare come \"Coming Soon\".",
+			"section": "Modalità"
+		},
+		{
+			"kind": "field",
+			"label": "Template Manutenzione",
+			"hint": "Quale template Olobuild mostrare durante la manutenzione (HTTP 503).",
+			"section": "Modalità"
+		},
+		{
+			"kind": "section",
+			"label": "Chi può accedere comunque",
+			"hint": "Anche con il sito offline, alcuni ruoli e un URL segreto possono bypassare la pagina di manutenzione."
+		},
+		{
+			"kind": "field",
+			"label": "Ruoli che bypassano",
+			"hint": "Possono navigare il sito normalmente.",
+			"section": "Chi può accedere comunque"
+		},
+		{
+			"kind": "field",
+			"label": "URL segreta di bypass",
+			"hint": "Aggiungi ?bypass=SECRET all'URL del sito per accedere. Lascia vuoto per disabilitare.",
+			"section": "Chi può accedere comunque"
+		}
+	],
+	"ai": [
+		{
+			"kind": "section",
+			"label": "Provider",
+			"hint": "Scegli il modello che muove le funzioni AI dentro l'editor."
+		},
+		{
+			"kind": "field",
+			"label": "Provider AI",
+			"hint": "Puoi cambiarlo in qualsiasi momento — la chiave API è salvata per provider.",
+			"section": "Provider"
+		},
+		{
+			"kind": "field",
+			"label": "Modello",
+			"hint": "Modelli più potenti = risposte migliori ma costo maggiore per chiamata.",
+			"section": "Provider"
+		},
+		{
+			"kind": "field",
+			"label": "Budget mensile",
+			"hint": "Soglia di spesa oltre la quale le funzioni AI vengono disattivate.",
+			"section": "Provider"
+		},
+		{
+			"kind": "section",
+			"label": "Comportamento",
+			"hint": "Tono, lingua e creatività del modello."
+		},
+		{
+			"kind": "field",
+			"label": "Lingua di default",
+			"hint": "Il modello risponderà in questa lingua se non specifichi altrimenti.",
+			"section": "Comportamento"
+		},
+		{
+			"kind": "field",
+			"label": "Temperatura",
+			"hint": "0 = preciso e ripetibile · 1 = creativo e variabile.",
+			"section": "Comportamento"
+		},
+		{
+			"kind": "field",
+			"label": "Tono di voce",
+			"hint": "Personalità di base che il modello adotta in tutti i task.",
+			"section": "Comportamento"
+		},
+		{
+			"kind": "field",
+			"label": "Istruzioni di sistema",
+			"hint": "Contesto del brand che viene incluso in ogni chiamata. Max 500 caratteri.",
+			"section": "Comportamento"
+		},
+		{
+			"kind": "section",
+			"label": "Utilizzo questo mese",
+			"hint": "Statistiche delle chiamate API negli ultimi 30 giorni."
+		}
+	],
+	"stockmedia": [
+		{
+			"kind": "section",
+			"label": "Provider connessi",
+			"hint": ""
+		},
+		{
+			"kind": "section",
+			"label": "Comportamento default",
+			"hint": ""
+		},
+		{
+			"kind": "field",
+			"label": "Provider preferito",
+			"hint": "Quello che si apre per primo dalla ricerca media nell'editor.",
+			"section": "Comportamento default"
+		},
+		{
+			"kind": "field",
+			"label": "Scarica in locale",
+			"hint": "Quando inserisci un'immagine, viene scaricata nella Libreria media di WordPress. Disattivato = hotlink al provider.",
+			"section": "Comportamento default"
+		},
+		{
+			"kind": "field",
+			"label": "Ottimizza al download",
+			"hint": "Comprime e converte in WebP automaticamente. Richiede modulo Performance attivo.",
+			"section": "Comportamento default"
+		}
+	],
+	"whitelabel": [
+		{
+			"kind": "section",
+			"label": "Identità del plugin",
+			"hint": "Come appare nel menu di WordPress e nel builder."
+		},
+		{
+			"kind": "field",
+			"label": "Nome plugin",
+			"hint": "Sostituisce \"Olobuild\" nelle voci di menu WP, nell'editor e nei messaggi di sistema.",
+			"section": "Identità del plugin"
+		},
+		{
+			"kind": "field",
+			"label": "Nome agenzia",
+			"hint": "Visibile in footer di alcune schermate e nei meta dei file esportati.",
+			"section": "Identità del plugin"
+		},
+		{
+			"kind": "field",
+			"label": "Logo (chiaro)",
+			"hint": "32×32px. Visibile in voce di menu WordPress.",
+			"section": "Identità del plugin"
+		},
+		{
+			"kind": "field",
+			"label": "Logo (scuro)",
+			"hint": "Usato in barre scure dell'editor.",
+			"section": "Identità del plugin"
+		},
+		{
+			"kind": "field",
+			"label": "URL sito agenzia",
+			"hint": "Link \"Powered by\" nei file esportati (se attivo).",
+			"section": "Identità del plugin"
+		},
+		{
+			"kind": "section",
+			"label": "Visibilità",
+			"hint": ""
+		},
+		{
+			"kind": "field",
+			"label": "Nascondi \"Powered by Olobuild\"",
+			"hint": "Toglie attribuzione nel footer dell'editor e nei file generati.",
+			"section": "Visibilità"
+		},
+		{
+			"kind": "field",
+			"label": "Nascondi changelog & roadmap",
+			"hint": "Il cliente non vede comunicazioni del team Olobuild.",
+			"section": "Visibilità"
+		},
+		{
+			"kind": "field",
+			"label": "Nascondi a non-admin",
+			"hint": "Gli utenti senza ruolo amministratore non vedono il menu Olobuild in admin.",
+			"section": "Visibilità"
+		},
+		{
+			"kind": "field",
+			"label": "Link Documentazione custom",
+			"hint": "Sostituisci il link \"Documentazione\" con uno tuo.",
+			"section": "Visibilità"
+		}
+	],
+	"permessi": [
+		{
+			"kind": "section",
+			"label": "Matrice permessi",
+			"hint": "Cliccare una cella per cambiare un permesso. I ruoli custom si possono creare e modificare."
+		},
+		{
+			"kind": "section",
+			"label": "Opzioni avanzate",
+			"hint": ""
+		},
+		{
+			"kind": "field",
+			"label": "Lock dei template Header/Footer",
+			"hint": "Solo Admin può modificarli. Sicurezza per agenzie che consegnano siti ai clienti.",
+			"section": "Opzioni avanzate"
+		},
+		{
+			"kind": "field",
+			"label": "Lock degli Stili globali",
+			"hint": "Una volta consegnato il sito, il cliente non può rovinare la palette/tipografia.",
+			"section": "Opzioni avanzate"
+		},
+		{
+			"kind": "field",
+			"label": "Sandbox per Contributors",
+			"hint": "I contributor lavorano su una copia draft, niente live edit.",
+			"section": "Opzioni avanzate"
+		}
+	]
+};

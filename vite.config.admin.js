@@ -1,9 +1,19 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
+import { execFileSync } from 'child_process';
+
+// Rigenera l'indice di ricerca dei campi Configurazione prima di ogni build
+// admin, così src/config/settingsSearchIndex.js non deriva mai dai tab reali.
+const settingsSearchIndex = {
+  name: 'olo-settings-search-index',
+  buildStart() {
+    execFileSync(process.execPath, [path.resolve(__dirname, 'scripts/build-settings-search-index.cjs')], { stdio: 'inherit' });
+  },
+};
 
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [settingsSearchIndex, vue()],
   define: {
     'process.env': {},
   },

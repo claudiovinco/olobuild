@@ -19,8 +19,11 @@
       <div class="top-search" role="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input
+          ref="topSearchEl"
           type="search"
-          v-model="filterQuery"
+          :value="filterQuery"
+          @input="onSearchInput"
+          @focus="searchArmed = true"
           :placeholder="t('Cerca un\'impostazione…')"
           :aria-label="t('Cerca impostazione')"
           autocomplete="off"
@@ -52,7 +55,9 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
           <input
             type="search"
-            v-model="filterQuery"
+            :value="filterQuery"
+            @input="onSearchInput"
+            @focus="searchArmed = true"
             :placeholder="t('Filtra impostazioni…')"
             :aria-label="t('Filtra impostazioni')"
             autocomplete="off"
@@ -66,6 +71,24 @@
         </div>
       </div>
       <div class="cfg-sidegroups">
+        <!-- Usate di recente (nascosto durante la ricerca) -->
+        <div v-if="recentItems.length && !searchActive" class="cfg-group cfg-group-recent">
+          <div class="cfg-group-head cfg-recent-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            {{ t('Usate di recente') }}
+          </div>
+          <div
+            v-for="r in recentItems"
+            :key="'recent-' + r.item.id"
+            class="cfg-side-item"
+            @click="onPick(r.item)"
+          >
+            <span class="ic" v-html="iconSvg(r.item.icon)"></span>
+            <span>{{ t(r.item.label) }}</span>
+            <span class="recent-when">{{ r.when }}</span>
+          </div>
+        </div>
+
         <div v-for="group in filteredGroups" :key="group.id" class="cfg-group">
           <div class="cfg-group-head">
             {{ t(group.title) }}
@@ -81,6 +104,8 @@
           >
             <span class="ic" v-html="iconSvg(item.icon)"></span>
             <span>{{ t(item.label) }}</span>
+            <span v-if="dirtyTabs.has(item.id)" class="dirty-dot" :title="t('Modifiche non salvate')"></span>
+            <span v-if="searchActive && hitCount(item.id)" class="hit-n">{{ hitCount(item.id) }}</span>
             <span v-if="item.soon" class="pill-soon">Soon</span>
             <span v-else-if="item.badge" class="badge-new">{{ item.badge }}</span>
             <span v-else class="chev">
@@ -100,13 +125,60 @@
 
     <!-- ═══ CONTENT ═══ -->
     <main ref="contentEl" class="cfg-content" :id="'cfg-panel-' + activeTab" role="tabpanel" :aria-labelledby="'cfg-tab-' + activeTab">
-      <component :is="currentTabComponent" v-bind="currentTabProps" @dirty="onTabDirty" />
+      <!-- Ricerca a livello di campo: la vista risultati sostituisce il tab finché c'è una query -->
+      <div v-if="searchActive" class="cfg-sr">
+        <div class="cfg-sr-head">
+          <h1>{{ srTitle }}</h1>
+          <span v-if="totalHits" class="sub">{{ t('in') }} {{ fieldResults.length }} {{ fieldResults.length === 1 ? t('scheda') : t('schede') }}</span>
+        </div>
+        <div v-if="!totalHits" class="cfg-sr-empty">
+          <p>{{ t('Nessun campo combacia. Prova con una parola diversa, o sfoglia le schede a sinistra.') }}</p>
+        </div>
+        <div v-for="res in fieldResults" :key="'sr-' + res.item.id" class="cfg-sr-group">
+          <button type="button" class="cfg-sr-group-head" @click="onPick(res.item)">
+            <span class="ic" v-html="iconSvg(res.item.icon)"></span>
+            <b>{{ t(res.item.label) }}</b>
+            <span class="grp">{{ t(res.groupTitle) }}</span>
+            <span class="open">{{ t('Apri scheda') }} →</span>
+          </button>
+          <button
+            v-for="(hit, hi) in res.hits"
+            :key="'hit-' + res.item.id + '-' + hi"
+            type="button"
+            class="cfg-sr-row"
+            @click="openField(res.item, hit)"
+          >
+            <span class="sr-lab">
+              <span v-html="hl(t(hit.label))"></span>
+              <span v-if="hit.kind === 'section'" class="sr-kind">{{ t('sezione') }}</span>
+            </span>
+            <span v-if="hit.hint" class="sr-hint" v-html="hl(t(hit.hint))"></span>
+            <span class="sr-go">{{ t('Vai al campo') }} →</span>
+          </button>
+        </div>
+      </div>
+      <!-- v-show (non v-else): il KeepAlive deve restare montato durante la
+           ricerca, o la cache dei tab (e le modifiche non salvate) si perde. -->
+      <div v-show="!searchActive" class="cfg-tab-host">
+        <KeepAlive>
+          <component :is="currentTabComponent" v-bind="currentTabProps" @dirty="onTabDirty" />
+        </KeepAlive>
+      </div>
     </main>
 
     <!-- ═══ SAVEBAR ═══ -->
     <footer class="cfg-savebar">
       <div class="meta">
-        <span v-if="dirty" class="dirty"><span class="dot"></span> {{ t('Modifiche non salvate') }}</span>
+        <span v-if="dirty" class="dirty">
+          <span class="dot"></span> {{ t('Modifiche non salvate in') }}:
+          <button
+            v-for="d in dirtyTabItems"
+            :key="'dirty-' + d.id"
+            type="button"
+            class="dirty-tab-link"
+            @click="onPick(d)"
+          >{{ t(d.label) }}</button>
+        </span>
         <span v-if="lastSavedAt">{{ t('Ultimo salvataggio') }} <b>{{ lastSavedAt }}</b></span>
       </div>
       <div class="grow"></div>
@@ -140,6 +212,7 @@
 <script setup>
 import { ref, computed, provide, watch, onMounted, nextTick } from 'vue';
 import { t } from '@/i18n';
+import { SETTINGS_FIELD_INDEX } from '@/config/settingsSearchIndex';
 
 // ─── Tab components ─────────────────────────────────────────────────
 import ColorsTab from './ColorsTab.vue';
@@ -207,11 +280,29 @@ const ALL_ITEMS = IA_GROUPS.flatMap(g => g.items);
 // ─── State ──────────────────────────────────────────────────────────
 const activeTab = ref(initialTab());
 const filterQuery = ref('');
-const dirty = ref(false);
+// Dirty per-tab: sappiamo DOVE sono le modifiche non salvate, non solo che
+// esistono. Set riassegnato a ogni cambio (mai mutato) per la reattività.
+const dirtyTabs = ref(new Set());
+const dirty = computed(() => dirtyTabs.value.size > 0);
 const saving = ref(false);
 const lastSavedAt = ref(window.oloData?.settingsLastSaved || '');
 const toast = ref(null);
 const contentEl = ref(null);
+const topSearchEl = ref(null);
+// Anti-autofill: il modello accetta testo SOLO dopo un focus reale sul campo.
+// Chrome accoppia il password dell'API key (tab AI) con uno "username" e lo
+// scriveva qui senza alcun focus: la vista risultati si apriva da sola.
+const searchArmed = ref(false);
+function onSearchInput(e) {
+  if (!searchArmed.value) {
+    e.target.value = filterQuery.value; // ripulisce l'autofill dal campo
+    return;
+  }
+  filterQuery.value = e.target.value;
+}
+// Schede usate di recente: [{id, at}] in localStorage.
+const RECENT_KEY = 'olo_cfg_recent_tabs';
+const recentRaw = ref(loadRecent());
 
 const version = window.oloData?.version || '1.0.0';
 const logoUrl = (window.oloData?.pluginUrl || '/wp-content/plugins/olobuild/') + 'assets/img/olobuild-horizontal.png';
@@ -235,14 +326,103 @@ function initialTab() {
   return 'colori';
 }
 
+// ─── Ricerca a livello di campo ─────────────────────────────────────
+// L'indice (generato dai *Tab.vue) elenca label/hint/sezioni di ogni scheda;
+// il match usa t() così vale anche con l'interfaccia tradotta.
+const searchActive = computed(() => filterQuery.value.trim().length >= 2);
+
+function entryMatches(entry, q) {
+  if (t(entry.label).toLowerCase().includes(q)) return true;
+  if (entry.hint && t(entry.hint).toLowerCase().includes(q)) return true;
+  if (entry.section && t(entry.section).toLowerCase().includes(q)) return true;
+  return false;
+}
+
+const fieldResults = computed(() => {
+  const q = filterQuery.value.trim().toLowerCase();
+  if (q.length < 2) return [];
+  const out = [];
+  for (const group of IA_GROUPS) {
+    for (const item of group.items) {
+      if (item.soon) continue;
+      const entries = SETTINGS_FIELD_INDEX[item.id] || [];
+      const hits = entries.filter(e => entryMatches(e, q));
+      // Il nome della scheda che combacia conta come risultato anche senza campi.
+      if (hits.length || t(item.label).toLowerCase().includes(q)) {
+        out.push({ item, groupTitle: group.title, hits });
+      }
+    }
+  }
+  return out;
+});
+
+const totalHits = computed(() => fieldResults.value.reduce((n, r) => n + r.hits.length, 0));
+const srTitle = computed(() => {
+  const q = filterQuery.value.trim();
+  if (!totalHits.value) return `${t('Nessun campo trovato per')} «${q}»`;
+  const n = totalHits.value;
+  return `${n} ${n === 1 ? t('campo trovato per') : t('campi trovati per')} «${q}»`;
+});
+
+function hitCount(tabId) {
+  const r = fieldResults.value.find(x => x.item.id === tabId);
+  return r ? r.hits.length : 0;
+}
+
+// Evidenzia il termine cercato (testo escapato prima, poi <mark>).
+function hl(text) {
+  const q = filterQuery.value.trim();
+  const esc = String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  if (!q) return esc;
+  const safeQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return esc.replace(new RegExp(`(${safeQ})`, 'ig'), '<mark>$1</mark>');
+}
+
 // ─── Filtered groups (live search) ──────────────────────────────────
+// La sidebar tiene le voci il cui NOME combacia oppure che hanno campi trovati.
 const filteredGroups = computed(() => {
   const q = filterQuery.value.trim().toLowerCase();
   if (!q) return IA_GROUPS;
   return IA_GROUPS
-    .map(g => ({ ...g, items: g.items.filter(i => i.label.toLowerCase().includes(q)) }))
+    .map(g => ({ ...g, items: g.items.filter(i => i.label.toLowerCase().includes(q) || hitCount(i.id) > 0) }))
     .filter(g => g.items.length > 0);
 });
+
+// ─── Usate di recente ───────────────────────────────────────────────
+function loadRecent() {
+  try {
+    const arr = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
+    return Array.isArray(arr) ? arr.filter(r => r && r.id) : [];
+  } catch (e) { return []; }
+}
+function touchRecent(id) {
+  const next = [{ id, at: Date.now() }, ...recentRaw.value.filter(r => r.id !== id)].slice(0, 6);
+  recentRaw.value = next;
+  try { localStorage.setItem(RECENT_KEY, JSON.stringify(next)); } catch (e) { /* ignore */ }
+}
+function relTime(at) {
+  const mins = Math.round((Date.now() - at) / 60000);
+  if (mins < 2) return t('adesso');
+  if (mins < 60) return `${mins} min`;
+  const hours = Math.round(mins / 60);
+  if (hours < 24) return `${hours} h`;
+  const days = Math.round(hours / 24);
+  return days === 1 ? t('ieri') : `${days} ${t('gg')}`;
+}
+const recentItems = computed(() =>
+  recentRaw.value
+    .filter(r => r.id !== activeTab.value)
+    .map(r => {
+      const item = ALL_ITEMS.find(i => i.id === r.id && !i.soon);
+      return item ? { item, when: relTime(r.at) } : null;
+    })
+    .filter(Boolean)
+    .slice(0, 3)
+);
+
+const dirtyTabItems = computed(() =>
+  ALL_ITEMS.filter(i => dirtyTabs.value.has(i.id))
+);
 
 const currentItem    = computed(() => ALL_ITEMS.find(i => i.id === activeTab.value));
 const activeTabLabel = computed(() => t(currentItem.value?.label || ''));
@@ -275,7 +455,13 @@ function iconSvg(name) {
 
 // ─── Actions ────────────────────────────────────────────────────────
 function onPick(item) {
-  if (item.soon || item.id === activeTab.value) return;
+  if (item.soon) return;
+  touchRecent(item.id);
+  if (item.id === activeTab.value) {
+    // Già attiva: la ricerca (se aperta) si chiude e si torna alla scheda.
+    filterQuery.value = '';
+    return;
+  }
   activeTab.value = item.id;
   try { localStorage.setItem('olo_cfg_active_tab', item.id); } catch (e) { /* ignore */ }
   // Aggiorna l'URL senza reload per supportare bookmark/deep link.
@@ -288,8 +474,52 @@ function onPick(item) {
   });
 }
 
+// «Vai al campo»: apre la scheda giusta, scorre fino al campo e lo illumina.
+function openField(item, entry) {
+  onPick(item);
+  filterQuery.value = '';
+  // I tab montano subito (import statici) ma alcuni idratano async: pochi
+  // tentativi distanziati, poi ci si arrende in silenzio (la scheda è comunque aperta).
+  let tries = 0;
+  const attempt = () => {
+    tries++;
+    if (findAndFlash(entry) || tries >= 10) return;
+    setTimeout(attempt, 150);
+  };
+  nextTick(attempt);
+}
+
+function findAndFlash(entry) {
+  const host = contentEl.value;
+  if (!host) return false;
+  const wanted = t(entry.label).trim();
+  const selector = entry.kind === 'section' ? 'h3' : 'label';
+  const nodes = host.querySelectorAll(selector);
+  for (const node of nodes) {
+    if (node.textContent.trim() !== wanted) continue;
+    const target = node.closest('.cfg-row') || node.closest('.cfg-card') || node;
+    // Scroll SOLO del pannello contenuti (mai scrollIntoView: scrolla anche
+    // gli antenati della pagina admin).
+    const top = target.getBoundingClientRect().top - host.getBoundingClientRect().top + host.scrollTop - 84;
+    host.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    target.classList.remove('cfg-field-flash');
+    // Reflow per far ripartire l'animazione se il campo era già evidenziato.
+    void target.offsetWidth;
+    target.classList.add('cfg-field-flash');
+    setTimeout(() => target.classList.remove('cfg-field-flash'), 2400);
+    return true;
+  }
+  return false;
+}
+
 // I tab figli emettono `dirty` quando un loro field cambia.
-function onTabDirty() { dirty.value = true; }
+function markDirty(v) {
+  const id = activeTab.value;
+  const next = new Set(dirtyTabs.value);
+  if (v) next.add(id); else next.delete(id);
+  dirtyTabs.value = next;
+}
+function onTabDirty() { markDirty(true); }
 
 async function onSave() {
   if (!dirty.value || saving.value) return;
@@ -301,7 +531,7 @@ async function onSave() {
     window.dispatchEvent(new CustomEvent('olo-cfg-save'));
     // Mostriamo toast subito; il singolo tab fa il proprio toast in caso di errore.
     showToast(t('Impostazioni salvate'), 'success');
-    dirty.value = false;
+    dirtyTabs.value = new Set();
     lastSavedAt.value = formatNow();
   } catch (e) {
     showToast(e?.message || t('Errore di salvataggio'), 'error');
@@ -314,7 +544,7 @@ function onDiscard() {
   if (!dirty.value) return;
   if (!confirm(t('Annullare tutte le modifiche non salvate?'))) return;
   window.dispatchEvent(new CustomEvent('olo-cfg-discard'));
-  dirty.value = false;
+  dirtyTabs.value = new Set();
 }
 
 function onPreview() {
@@ -336,17 +566,33 @@ function showToast(message, type = 'success') {
 // Provide il setter di toast ai tab figli (mantiene compat con codice esistente).
 provide('showToast', showToast);
 // Provide anche il setter di dirty per i tab che vogliono notificarlo direttamente.
-provide('setDirty', (v) => { dirty.value = !!v; });
+provide('setDirty', (v) => { markDirty(!!v); });
 
 // Cleanup search se cambia tab.
 watch(activeTab, () => { filterQuery.value = ''; });
 
 onMounted(() => {
-  // Trap Ctrl/Cmd+S → Save
+  // Deep-link dalla palette globale ⌘K: ?tab=…&field=<label> apre la scheda
+  // (già fatto da initialTab) e scorre fino al campo, illuminandolo.
+  try {
+    const wanted = new URL(window.location.href).searchParams.get('field');
+    if (wanted) {
+      const entry = (SETTINGS_FIELD_INDEX[activeTab.value] || []).find(e => e.label === wanted);
+      if (entry) openField(currentItem.value, entry);
+    }
+  } catch (e) { /* ignore */ }
+
   window.addEventListener('keydown', (e) => {
+    // Trap Ctrl/Cmd+S → Save
     if ((e.ctrlKey || e.metaKey) && e.key === 's') {
       e.preventDefault();
       onSave();
+    }
+    // Ctrl/Cmd+K → focus sulla ricerca (il badge ⌘K in topbar ora dice il vero)
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+      e.preventDefault();
+      topSearchEl.value?.focus();
+      topSearchEl.value?.select();
     }
   });
 });
@@ -966,5 +1212,82 @@ onMounted(() => {
   .cfg-content { padding: 20px; }
   .cfg-row { grid-template-columns: 1fr; gap: 8px; }
   .cfg-savebar { padding: 0 16px; }
+}
+
+/* ═══ Usate di recente (sidebar) ═══ */
+.cfg-recent-head { display: flex; align-items: center; gap: 6px; color: var(--c-warning); }
+.cfg-recent-head svg { width: 11px; height: 11px; }
+.cfg-group-recent { border-bottom: 1px solid var(--c-line-soft); padding-bottom: 10px; }
+.cfg-group-recent .cfg-side-item .recent-when { margin-left: auto; font-size: 11px; color: var(--c-text-faint); }
+
+/* ═══ Stato modifiche per scheda ═══ */
+.cfg-side-item .dirty-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #f59e0b; margin-left: auto; flex-shrink: 0;
+}
+.cfg-side-item .dirty-dot + .hit-n,
+.cfg-side-item .dirty-dot + .pill-soon,
+.cfg-side-item .dirty-dot + .badge-new,
+.cfg-side-item .dirty-dot + .chev { margin-left: 6px; }
+.cfg-savebar .meta .dirty-tab-link {
+  background: none; border: 0; padding: 0; margin: 0 0 0 6px; cursor: pointer;
+  font: inherit; font-weight: 600; color: var(--c-warning);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.cfg-savebar .meta .dirty-tab-link:hover { color: var(--c-red-dark); }
+
+/* ═══ Ricerca a livello di campo ═══ */
+.cfg-side-item .hit-n {
+  margin-left: auto; flex-shrink: 0;
+  font-size: 10.5px; font-weight: 700; line-height: 1;
+  background: var(--c-red); color: #fff;
+  border-radius: 9px; padding: 3px 7px;
+}
+.cfg-sr { display: flex; flex-direction: column; gap: 16px; max-width: 860px; }
+.cfg-sr-head { display: flex; align-items: baseline; gap: 12px; }
+.cfg-sr-head h1 {
+  margin: 0; font-family: var(--c-display); font-weight: 400;
+  font-size: 26px; color: var(--c-navy);
+}
+.cfg-sr-head .sub { font-size: 13px; color: var(--c-text-mute); }
+.cfg-sr-empty { font-size: 14px; color: var(--c-text-mute); }
+.cfg-sr mark { background: #fde68a; color: inherit; border-radius: 3px; padding: 0 1px; }
+.cfg-sr-group { background: #fff; border: 1px solid var(--c-line); border-radius: 12px; overflow: hidden; }
+.cfg-sr-group-head {
+  display: flex; align-items: center; gap: 9px; width: 100%;
+  background: var(--c-cream); border: 0; border-bottom: 1px solid var(--c-line);
+  padding: 11px 18px; cursor: pointer; font: inherit; text-align: left;
+}
+.cfg-sr-group-head .ic { display: flex; color: var(--c-red); }
+.cfg-sr-group-head .ic svg { width: 14px; height: 14px; }
+.cfg-sr-group-head b { font-size: 13px; color: var(--c-navy); }
+.cfg-sr-group-head .grp { font-size: 11.5px; color: var(--c-text-faint); }
+.cfg-sr-group-head .open { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--c-text-mute); }
+.cfg-sr-group-head:hover .open { color: var(--c-red); }
+.cfg-sr-row {
+  display: flex; flex-direction: column; gap: 2px; width: 100%;
+  background: none; border: 0; border-top: 1px solid var(--c-line-soft);
+  padding: 11px 18px; cursor: pointer; font: inherit; text-align: left;
+}
+.cfg-sr-row:first-of-type { border-top: 0; }
+.cfg-sr-row:hover { background: var(--c-red-soft); }
+.cfg-sr-row .sr-lab { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: var(--c-text); }
+.cfg-sr-row .sr-kind {
+  font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+  color: var(--c-text-faint); border: 1px solid var(--c-line); border-radius: 5px; padding: 1px 6px;
+}
+.cfg-sr-row .sr-hint { font-size: 12px; color: var(--c-text-mute); }
+.cfg-sr-row .sr-go { font-size: 12px; font-weight: 600; color: var(--c-red); opacity: 0; }
+.cfg-sr-row:hover .sr-go { opacity: 1; }
+
+/* ═══ Flash del campo raggiunto da «Vai al campo» ═══ */
+@keyframes cfg-field-flash-kf {
+  0%   { box-shadow: 0 0 0 3px rgba(245,158,11,.65); background: #fef3c7; }
+  70%  { box-shadow: 0 0 0 3px rgba(245,158,11,.35); background: #fef3c7; }
+  100% { box-shadow: 0 0 0 3px rgba(245,158,11,0); background: transparent; }
+}
+.cfg-field-flash { border-radius: 8px; animation: cfg-field-flash-kf 2.2s ease-out both; }
+@media (prefers-reduced-motion: reduce) {
+  .cfg-field-flash { animation: none; box-shadow: 0 0 0 3px rgba(245,158,11,.55); background: #fef3c7; }
 }
 </style>

@@ -42,12 +42,15 @@
         </div>
         <div class="control-col">
           <div class="cfg-input mono">
+            <!-- autocomplete="new-password": con "off" Chrome tratta il campo
+                 come login e AUTOFILLA lo username nel primo input di testo
+                 della pagina (la ricerca in topbar si riempiva di "admin"). -->
             <input
               :type="revealKey ? 'text' : 'password'"
               :value="currentKey"
               @input="updateKey($event.target.value)"
               :placeholder="placeholderKey"
-              autocomplete="off"
+              autocomplete="new-password"
               spellcheck="false"
               name="olo-ai-apikey"
               data-1p-ignore
