@@ -2,9 +2,9 @@
 Contributors: claudiovinco
 Tags: page-builder, drag-and-drop, builder, grid, blocks
 Requires at least: 5.9
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.4.304
+Stable tag: 1.4.385
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -124,6 +124,14 @@ Yes. Enter them in Olobuild settings, or define them as constants in wp-config.p
 (`OLO_UNSPLASH_API_KEY`, `OLO_PEXELS_API_KEY`, `OLO_PIXABAY_API_KEY`).
 
 == Changelog ==
+
+= 1.4.385 =
+* Hero unification: the Hero tile gains a full scene system (media background, gradient veil, radial glow, arch mask, photo frame, ghost watermark), an optional sub-fold module (media strip, search bar, product mockup, chat window) and 5 blueprint presets; Hero Split gains selectable right panels (showcase cards, media with corner badge, cover with audio player).
+* The tile palette now offers 2 hero tiles instead of 19: 12 legacy heroes were absorbed (saved templates keep rendering unchanged) and 5 signature heroes moved to the Blocks library.
+* New explicit "Convert to Hero" action in the inspector maps a legacy hero tile to the canonical one (per tile, undoable, never automatic).
+* Fix: added the missing str_ends_with() polyfill — PHP 7.4 on WordPress < 6.0 could fatal on the Button tile and on stock-media downloads.
+* Build chain upgraded to Vite 8 (Rolldown) and Pinia 3; removed unused dependencies; Sass moved from @import to @use; repository hygiene.
+* Full commit-level changelog: https://github.com/claudiovinco/olobuild/commits/main
 
 = 1.4.172 =
 * Security/compliance: output-escaping hardening campaign across all PHP renderers (246 files). User-supplied values are escaped or whitelisted at the point of output (esc_html/esc_attr/esc_url/int casts); internally-built CSS/JS blocks are documented with specific phpcs annotations after per-variable upstream-sanitization review.

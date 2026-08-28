@@ -812,8 +812,8 @@ class Olobuild_Builder {
             $js_ver .= '.' . time();
         }
 
-        // CSS is bundled inline in builder.js by Vite (iife mode injects <style> tags at runtime).
-        // Enqueue only if a separate builder.css exists (e.g. if build config switches to extracted CSS).
+        // Build ESM con cssCodeSplit:false: Vite estrae il CSS in assets/css/builder.css.
+        // Il file esiste sempre nelle build correnti; il check resta come guardia.
         if ( file_exists( $css_path ) ) {
             wp_enqueue_style(
                 'olobuilder-css',
