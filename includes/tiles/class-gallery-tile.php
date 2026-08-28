@@ -68,7 +68,7 @@ class Olobuild_Gallery_Tile extends Olobuild_Tile_Base {
         $images = is_array( $s['images'] ) ? $s['images'] : [];
 
         if ( empty( $images ) ) {
-            return '<div style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF)">Aggiungi immagini alla galleria</div>';
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF)">' . esc_html( olobuild_t( 'Aggiungi immagini alla galleria' ) ) . '</div>';
         }
 
         // Random order

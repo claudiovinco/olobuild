@@ -189,7 +189,7 @@ class Olobuild_Woo_Comparison_Tile extends Olobuild_Tile_Base {
 
                 emptyEl.style.display = 'none';
                 tableEl.style.display = 'block';
-                tableEl.innerHTML = '<p style="text-align:center;color:var(--olo-color-text-muted, #9CA3AF)">Caricamento confronto...</p>';
+                tableEl.innerHTML = '<p style="text-align:center;color:var(--olo-color-text-muted, #9CA3AF)">' + <?php echo wp_json_encode( olobuild_t( 'Caricamento confronto...' ) ); ?> + '</p>';
 
                 fetch('<?php echo esc_js( rest_url( 'olobuild/v1/woo-compare' ) ); ?>?ids=' + ids.join(','), {
                     headers: { 'X-WP-Nonce': '<?php echo esc_js( wp_create_nonce( 'wp_rest' ) ); ?>' }
@@ -204,7 +204,7 @@ class Olobuild_Woo_Comparison_Tile extends Olobuild_Tile_Base {
                     buildTable(products);
                 })
                 .catch(function() {
-                    tableEl.innerHTML = '<p style="color:var(--olo-color-danger, #EF4444);text-align:center">Errore caricamento</p>';
+                    tableEl.innerHTML = '<p style="color:var(--olo-color-danger, #EF4444);text-align:center">' + <?php echo wp_json_encode( olobuild_t( 'Errore caricamento' ) ); ?> + '</p>';
                 });
             }
 
@@ -221,11 +221,11 @@ class Olobuild_Woo_Comparison_Tile extends Olobuild_Tile_Base {
 
                 // Image row
                 if (showImage) {
-                    html += '<tr><td>Immagine</td>';
+                    html += '<tr><td>' + <?php echo wp_json_encode( olobuild_t( 'Immagine' ) ); ?> + '</td>';
                     products.forEach(function(p) {
                         html += '<td>';
                         if (p.image) { html += '<img src="' + esc(p.image) + '" class="cmp-img" alt="' + esc(p.name) + '" />'; }
-                        html += '<br/><a href="#" class="cmp-remove" data-id="' + p.id + '" title="Rimuovi">&times;</a>';
+                        html += '<br/><a href="#" class="cmp-remove" data-id="' + p.id + '" title="' + <?php echo wp_json_encode( olobuild_t( 'Rimuovi' ) ); ?> + '">&times;</a>';
                         html += '</td>';
                     });
                     html += '</tr>';

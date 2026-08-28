@@ -393,8 +393,8 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
         $cw = intval( $s['h_card_width'] ) ?: 268;
         echo '<div class="hwrap">';
         echo '<div class="hbar"><span class="ht"></span><div class="hnav">';
-        echo '<button class="prev" type="button" aria-label="Precedente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>';
-        echo '<button class="next" type="button" aria-label="Successivo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>';
+        echo '<button class="prev" type="button" aria-label="' . esc_attr( olobuild_t( 'Precedente' ) ) . '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>';
+        echo '<button class="next" type="button" aria-label="' . esc_attr( olobuild_t( 'Successivo' ) ) . '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>';
         echo '</div></div>';
         echo '<div class="hscroll"><div class="htrack">';
         foreach ( $items as $i => $item ) {
@@ -427,11 +427,11 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
     private function render_navigator( $items, $s, $obj_pos = 'center center' ) {
         echo '<div class="navd">';
         echo '<div class="nv-nav">';
-        echo '<button class="nv-arrow nv-prev" type="button" aria-label="Precedente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>';
+        echo '<button class="nv-arrow nv-prev" type="button" aria-label="' . esc_attr( olobuild_t( 'Precedente' ) ) . '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>';
         echo '<div class="nv-viewport"><div class="nv-track"><span class="nv-base"></span><span class="nv-fill"></span>';
         foreach ( $items as $i => $item ) {
             $nv_name = trim( $item['title'] . ' ' . $item['date'] );
-            if ( $nv_name === '' ) { $nv_name = sprintf( olobuild_t( 'Tappa %d', 'olobuilder' ), $i + 1 ); }
+            if ( $nv_name === '' ) { $nv_name = sprintf( olobuild_t( 'Tappa %d' ), $i + 1 ); }
             echo '<div class="nv-step" role="button" tabindex="0"'
                 . ' aria-label="' . esc_attr( $nv_name ) . '"'
                 . ' data-yr="' . esc_attr( $item['date'] ) . '"'
@@ -442,7 +442,7 @@ class Olobuild_Timeline_Tile extends Olobuild_Tile_Base {
                 . '<span class="l">' . esc_html( $item['date'] ) . '</span><span class="d"></span></div>';
         }
         echo '</div></div>';
-        echo '<button class="nv-arrow nv-next" type="button" aria-label="Successivo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>';
+        echo '<button class="nv-arrow nv-next" type="button" aria-label="' . esc_attr( olobuild_t( 'Successivo' ) ) . '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>';
         echo '</div>';
         echo '<div class="nv-stage"><div class="nv-post">';
         echo '<div class="nv-media"><img alt="" style="object-position:' . esc_attr( $obj_pos ) . ';" /><span class="nyr nv-yr"></span><span class="nph nv-ph"></span></div>';

@@ -943,7 +943,7 @@ class Olobuild_Loginform_Tile extends Olobuild_Tile_Base {
                         } catch(ex) {
                             if (msgEl) {
                                 msgEl.className = 'olo-lf-msg olo-lf-msg--error';
-                                msgEl.textContent = 'Errore di comunicazione. Riprova.';
+                                msgEl.textContent = <?php echo wp_json_encode( olobuild_t( 'Errore di comunicazione. Riprova.' ) ); ?>;
                                 msgEl.style.display = 'block';
                             }
                         }
@@ -993,7 +993,7 @@ class Olobuild_Loginform_Tile extends Olobuild_Tile_Base {
                         } catch(ex) {
                             if (msgEl) {
                                 msgEl.className = 'olo-lf-msg olo-lf-msg--error';
-                                msgEl.textContent = 'Errore di comunicazione. Riprova.';
+                                msgEl.textContent = <?php echo wp_json_encode( olobuild_t( 'Errore di comunicazione. Riprova.' ) ); ?>;
                                 msgEl.style.display = 'block';
                             }
                         }

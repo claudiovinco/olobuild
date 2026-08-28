@@ -79,7 +79,7 @@ class Olobuild_Slideshow_Tile extends Olobuild_Tile_Base {
         $id = 'olo-ss-' . wp_unique_id();
 
         $slides = is_array( $s['slides'] ) ? $s['slides'] : [];
-        if ( empty( $slides ) ) return '<div class="olo-slideshow" style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);">Nessuna slide aggiunta</div>';
+        if ( empty( $slides ) ) return '<div class="olo-slideshow" style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);">' . esc_html( olobuild_t( 'Nessuna slide aggiunta' ) ) . '</div>';
 
         $h     = absint( $s['slide_height'] );
         $count = count( $slides );

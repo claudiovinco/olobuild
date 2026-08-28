@@ -62,11 +62,11 @@ class Olobuild_Lottie_Tile extends Olobuild_Tile_Base {
             if ( $alt_label !== '' ) {
                 $a11y_attrs .= ' aria-pressed="false"';
             } else {
-                $a11y_attrs .= ' aria-label="' . esc_attr( olobuild_t( 'Riproduci/Pausa animazione', 'olobuilder' ) ) . '" aria-pressed="false"';
+                $a11y_attrs .= ' aria-label="' . esc_attr( olobuild_t( 'Riproduci/Pausa animazione' ) ) . '" aria-pressed="false"';
             }
         }
 
-        if (empty($url)) return '<div class="olo-lottie" style="text-align:center;padding:20px;color:var(--olo-color-text-muted, #9CA3AF);">Nessun file Lottie configurato</div>';
+        if (empty($url)) return '<div class="olo-lottie" style="text-align:center;padding:20px;color:var(--olo-color-text-muted, #9CA3AF);">' . esc_html( olobuild_t( 'Nessun file Lottie configurato' ) ) . '</div>';
 
         wp_enqueue_script( 'lottie-web', OLOBUILD_URL . 'assets/vendor/lottie/lottie.min.js', [], '5.12.2', true );
 

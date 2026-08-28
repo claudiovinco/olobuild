@@ -148,7 +148,7 @@ class Olobuild_Subnav_Tile extends Olobuild_Tile_Base {
         ob_start();
         echo '<style>' . $css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS built exclusively from values sanitized above: safe_color_css()'d colors, intval()'d sizes, esc_attr()'d font props, whitelist-mapped alignment, Olobuild_Tile_Utils radius helpers; $uid is internally generated
         ?>
-        <nav aria-label="<?php echo esc_attr( olobuild_t( 'Sotto-navigazione', 'olobuilder' ) ); ?>">
+        <nav aria-label="<?php echo esc_attr( olobuild_t( 'Sotto-navigazione' ) ); ?>">
         <ul id="<?php echo esc_attr( $uid ); ?>">
             <?php foreach ( $items as $idx => $item ) :
                 $url   = $item['url'] ?: '#';

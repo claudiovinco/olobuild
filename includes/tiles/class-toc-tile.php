@@ -213,7 +213,7 @@ class Olobuild_Toc_Tile extends Olobuild_Tile_Base {
                 setTimeout(function(){
                     if(!document.querySelector('#' + uid + ' .olo-toc-item') && !buildToc()){
                         var listEl = document.querySelector('#' + uid + ' .olo-toc-list');
-                        if(listEl) listEl.innerHTML = '<p style="font-size:13px;color:var(--olo-color-text-muted, #9CA3AF);font-style:italic;">Nessun heading trovato nella pagina.</p>';
+                        if(listEl) listEl.innerHTML = '<p style="font-size:13px;color:var(--olo-color-text-muted, #9CA3AF);font-style:italic;">' + <?php echo wp_json_encode( olobuild_t( 'Nessun heading trovato nella pagina.' ) ); ?> + '</p>';
                     }
                 }, 500);
             });

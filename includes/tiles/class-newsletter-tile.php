@@ -280,7 +280,7 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
             e.preventDefault();
             var emailField=form.querySelector('input[type="email"]');
             var email=emailField?emailField.value.trim():'';
-            if(!email){errEl.textContent='Inserisci un indirizzo email';errEl.style.display='block';return}
+            if(!email){errEl.textContent=<?php echo wp_json_encode( olobuild_t( 'Inserisci un indirizzo email' ) ); ?>;errEl.style.display='block';return}
 
             // Privacy check
             var privCb=form.querySelector('input[type="checkbox"][required]');
@@ -337,7 +337,7 @@ class Olobuild_Newsletter_Tile extends Olobuild_Tile_Base {
             })
             .catch(function(){
               form.classList.remove('olo-nl-loading');
-              errEl.textContent='Errore di connessione';
+              errEl.textContent=<?php echo wp_json_encode( olobuild_t( 'Errore di connessione' ) ); ?>;
               errEl.style.display='block';
             });
           });

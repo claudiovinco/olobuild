@@ -62,7 +62,7 @@ class Olobuild_PdfViewer_Tile extends Olobuild_Tile_Base {
                 $h = max( 200, (int) $s['viewer_height'] );
                 return '<div style="height:' . $h . 'px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;background:#f5f5f5;border:2px dashed #d1d5db;border-radius:8px;color:#6b7280;font-size:14px;">'
                      . '<svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" style="opacity:.35"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg>'
-                     . '<span>Seleziona un file PDF dall\'inspector</span>'
+                     . '<span>' . esc_html( olobuild_t( 'Seleziona un file PDF dall\'inspector' ) ) . '</span>'
                      . '</div>';
             }
             return '';

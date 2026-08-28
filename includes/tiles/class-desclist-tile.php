@@ -72,7 +72,7 @@ class Olobuild_DescList_Tile extends Olobuild_Tile_Base {
         $items = $this->parse_items( $s['items'] );
 
         if ( empty( $items ) ) {
-            return '<div class="olo-desclist" style="padding:20px;text-align:center;color:var(--olo-color-text-faint, #9CA3AF);">Nessun elemento definito</div>';
+            return '<div class="olo-desclist" style="padding:20px;text-align:center;color:var(--olo-color-text-faint, #9CA3AF);">' . esc_html( olobuild_t( 'Nessun elemento definito' ) ) . '</div>';
         }
 
         $uid    = 'mdl-' . wp_rand( 10000, 99999 );

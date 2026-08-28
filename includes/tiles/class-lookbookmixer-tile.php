@@ -86,8 +86,8 @@ class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
                             </div>
                         </div>
                         <div class="olo-lbmix__nav" style="display:flex;gap:6px;flex:none;">
-                            <button type="button" data-prev aria-label="Precedente" style="width:40px;height:40px;border-radius:50%;border:1px solid <?php echo esc_attr( $acc ); ?>;background:transparent;color:<?php echo esc_attr( $namec ); ?>;cursor:pointer;display:grid;place-items:center;font-size:20px;line-height:1;">‹</button>
-                            <button type="button" data-next aria-label="Successivo" style="width:40px;height:40px;border-radius:50%;border:1px solid <?php echo esc_attr( $acc ); ?>;background:transparent;color:<?php echo esc_attr( $namec ); ?>;cursor:pointer;display:grid;place-items:center;font-size:20px;line-height:1;">›</button>
+                            <button type="button" data-prev aria-label="<?php echo esc_attr( olobuild_t( 'Precedente' ) ); ?>" style="width:40px;height:40px;border-radius:50%;border:1px solid <?php echo esc_attr( $acc ); ?>;background:transparent;color:<?php echo esc_attr( $namec ); ?>;cursor:pointer;display:grid;place-items:center;font-size:20px;line-height:1;">‹</button>
+                            <button type="button" data-next aria-label="<?php echo esc_attr( olobuild_t( 'Successivo' ) ); ?>" style="width:40px;height:40px;border-radius:50%;border:1px solid <?php echo esc_attr( $acc ); ?>;background:transparent;color:<?php echo esc_attr( $namec ); ?>;cursor:pointer;display:grid;place-items:center;font-size:20px;line-height:1;">›</button>
                         </div>
                         <?php foreach ( $opts as $o ) : ?>
                             <span data-opt data-name="<?php echo esc_attr( $o['name'] ?? '' ); ?>" data-price="<?php echo esc_attr( preg_replace( '/[^0-9.]/', '', (string) ( $o['price'] ?? '0' ) ) ); ?>" data-color="<?php echo esc_attr( $this->safe_color_css( $o['color'] ?? '' ) ?: '#999' ); ?>" style="display:none;"></span>

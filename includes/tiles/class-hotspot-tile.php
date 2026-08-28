@@ -203,7 +203,7 @@ class Olobuild_Hotspot_Tile extends Olobuild_Tile_Base {
             <?php if ( $image ) : ?>
                 <img src="<?php echo $image; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped via esc_url() at assignment above ?>" alt="" loading="lazy" />
             <?php else : ?>
-                <div style="width:100%;height:100%;background:var(--olo-color-surface-alt, #F3F4F6);display:flex;align-items:center;justify-content:center;color:var(--olo-color-text-faint, #9CA3AF);font-size:14px;">Seleziona un'immagine</div>
+                <div style="width:100%;height:100%;background:var(--olo-color-surface-alt, #F3F4F6);display:flex;align-items:center;justify-content:center;color:var(--olo-color-text-faint, #9CA3AF);font-size:14px;"><?php echo esc_html( olobuild_t( "Seleziona un'immagine" ) ); ?></div>
             <?php endif; ?>
 
             <?php foreach ( $markers as $idx => $marker ) :

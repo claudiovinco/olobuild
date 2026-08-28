@@ -137,7 +137,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         $images = array_values( $images );
 
         if ( empty( $images ) ) {
-            return '<div style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF)">Aggiungi immagini alla Pro Gallery</div>';
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF)">' . esc_html( olobuild_t( 'Aggiungi immagini alla Pro Gallery' ) ) . '</div>';
         }
 
         $layout       = $s['layout'] ?: 'grid';

@@ -339,13 +339,13 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
             <?php if ( $show_arrows || $show_dots ) : ?>
             <div class="olo-test-slider-nav">
                 <?php if ( $show_arrows ) : ?>
-                <a href="#" uk-slidenav-previous uk-slider-item="previous" role="button" aria-label="Testimonianza precedente"></a>
+                <a href="#" uk-slidenav-previous uk-slider-item="previous" role="button" aria-label="<?php echo esc_attr( olobuild_t( 'Testimonianza precedente' ) ); ?>"></a>
                 <?php endif; ?>
                 <?php if ( $show_dots ) : ?>
                 <ul class="uk-dotnav uk-slider-nav"></ul>
                 <?php endif; ?>
                 <?php if ( $show_arrows ) : ?>
-                <a href="#" uk-slidenav-next uk-slider-item="next" role="button" aria-label="Testimonianza successiva"></a>
+                <a href="#" uk-slidenav-next uk-slider-item="next" role="button" aria-label="<?php echo esc_attr( olobuild_t( 'Testimonianza successiva' ) ); ?>"></a>
                 <?php endif; ?>
             </div>
             <?php endif; ?>

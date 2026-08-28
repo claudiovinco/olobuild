@@ -153,7 +153,7 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
                     }
                 }
             } else {
-                $inner_html = '<span class="olo-mq-text" style="opacity:0.5;">Aggiungi immagini...</span>';
+                $inner_html = '<span class="olo-mq-text" style="opacity:0.5;">' . esc_html( olobuild_t( 'Aggiungi immagini...' ) ) . '</span>';
             }
         }
 

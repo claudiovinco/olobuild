@@ -295,11 +295,11 @@ class Olobuild_Stackscroll_Tile extends Olobuild_Tile_Base {
                     <div class="scard" style="top:<?php echo (int) $top_offset; ?>px;" role="listitem">
                         <div class="scard__txt">
                             <?php if ( $show_num ) : ?><div class="scard__num">01</div><?php endif; ?>
-                            <h3 class="scard__title">Aggiungi una card</h3>
-                            <div class="scard__text"><p>Usa il pannello a destra per aggiungere le card della pila.</p></div>
+                            <h3 class="scard__title"><?php echo esc_html( olobuild_t( 'Aggiungi una card' ) ); ?></h3>
+                            <div class="scard__text"><p><?php echo esc_html( olobuild_t( 'Usa il pannello a destra per aggiungere le card della pila.' ) ); ?></p></div>
                         </div>
                         <?php if ( $has_media ) : ?>
-                        <div class="scard__media"><span class="ph">Immagine</span></div>
+                        <div class="scard__media"><span class="ph"><?php echo esc_html( olobuild_t( 'Immagine' ) ); ?></span></div>
                         <?php endif; ?>
                     </div>
                 <?php else : ?>
@@ -364,7 +364,7 @@ class Olobuild_Stackscroll_Tile extends Olobuild_Tile_Base {
                                     <?php elseif ( $media_lbl !== '' ) : ?>
                                         <span class="ph" data-olo-editable="cards.<?php echo intval( $i ); ?>.media_label"><?php echo esc_html( $media_lbl ); ?></span>
                                     <?php else : ?>
-                                        <span class="ph">Immagine</span>
+                                        <span class="ph"><?php echo esc_html( olobuild_t( 'Immagine' ) ); ?></span>
                                     <?php endif; ?>
                                 </div>
                             <?php endif; ?>

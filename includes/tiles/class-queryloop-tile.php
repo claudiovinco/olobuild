@@ -615,7 +615,7 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
         $query = new WP_Query( $query_args );
 
         if ( ! $query->have_posts() ) {
-            return '<p class="olo-ql-empty" style="color:var(--olo-color-text-muted, #9CA3AF);text-align:center;">Nessun risultato trovato.</p>';
+            return '<p class="olo-ql-empty" style="color:var(--olo-color-text-muted, #9CA3AF);text-align:center;">' . esc_html( olobuild_t( 'Nessun risultato trovato.' ) ) . '</p>';
         }
 
         $layout  = $s['layout'];
@@ -782,7 +782,7 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
             } elseif ( $s['pagination_type'] === 'loadmore' ) {
                 if ( $query->max_num_pages > 1 ) {
                     echo '<div class="olo-ql-loadmore-wrap" style="text-align:center;margin-top:' . (int) $gap . 'px">';
-                    echo '<button class="olo-ql-loadmore-btn" data-ql-id="' . esc_attr( $instance_id ) . '" data-ql-page="1" data-ql-max="' . esc_attr( $query->max_num_pages ) . '">Carica altro</button>';
+                    echo '<button class="olo-ql-loadmore-btn" data-ql-id="' . esc_attr( $instance_id ) . '" data-ql-page="1" data-ql-max="' . esc_attr( $query->max_num_pages ) . '">' . esc_html( olobuild_t( 'Carica altro' ) ) . '</button>';
                     echo '</div>';
                     $this->enqueue_ajax_script( $instance_id, $s, $query->max_num_pages );
                 }
@@ -973,7 +973,7 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
                     var maxP = parseInt(btn.getAttribute('data-ql-max'));
                     if(page > maxP) return;
                     btn.disabled = true;
-                    btn.textContent = 'Caricamento...';
+                    btn.textContent = <?php echo wp_json_encode( olobuild_t( 'Caricamento...' ) ); ?>;
                     var fd = new FormData();
                     fd.append('action', 'olobuild_queryloop_page');
                     fd.append('page', page);
@@ -995,7 +995,7 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
                                     btn.parentNode.style.display = 'none';
                                 } else {
                                     btn.disabled = false;
-                                    btn.textContent = 'Carica altro';
+                                    btn.textContent = <?php echo wp_json_encode( olobuild_t( 'Carica altro' ) ); ?>;
                                 }
                             }
                         });

@@ -484,10 +484,10 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                                 $html_type = ( $ftype === 'datetime' ) ? 'datetime-local' : $ftype;
                                 $extra_attrs = '';
                                 if ( $ftype === 'tel' ) {
-                                    $extra_attrs .= ' pattern="[+]?[0-9\\s\\-().]{6,20}" title="Inserisci un numero di telefono valido"';
+                                    $extra_attrs .= ' pattern="[+]?[0-9\\s\\-().]{6,20}" title="' . esc_attr( olobuild_t( 'Inserisci un numero di telefono valido' ) ) . '"';
                                 }
                                 if ( $ftype === 'url' ) {
-                                    $extra_attrs .= ' title="Inserisci un URL valido (es. https://esempio.com)"';
+                                    $extra_attrs .= ' title="' . esc_attr( olobuild_t( 'Inserisci un URL valido (es. https://esempio.com)' ) ) . '"';
                                 }
                             ?>
                                 <?php if ( $is_floating ) : ?>
@@ -1277,7 +1277,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
 
                         var files = input.files;
                         if (!files.length) {
-                            info.textContent = 'Nessun file selezionato';
+                            info.textContent = <?php echo wp_json_encode( olobuild_t( 'Nessun file selezionato' ) ); ?>;
                             return;
                         }
 
@@ -1286,7 +1286,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                             errEl.textContent = 'Massimo ' + maxFiles + ' file consentiti.';
                             errEl.style.display = 'block';
                             input.value = '';
-                            info.textContent = 'Nessun file selezionato';
+                            info.textContent = <?php echo wp_json_encode( olobuild_t( 'Nessun file selezionato' ) ); ?>;
                             return;
                         }
 
@@ -1329,7 +1329,7 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
                             errEl.textContent = errors.join('; ');
                             errEl.style.display = 'block';
                             input.value = '';
-                            info.textContent = 'Nessun file selezionato';
+                            info.textContent = <?php echo wp_json_encode( olobuild_t( 'Nessun file selezionato' ) ); ?>;
                             listEl.innerHTML = '';
                             return;
                         }

@@ -368,7 +368,7 @@ class Olobuild_Woo_Wishlist_Tile extends Olobuild_Tile_Base {
                     });
                 })
                 .catch(function(){
-                    gridEl.innerHTML = '<div style="padding:20px;color:var(--olo-color-danger, #EF4444)">Errore caricamento wishlist</div>';
+                    gridEl.innerHTML = '<div style="padding:20px;color:var(--olo-color-danger, #EF4444)">' + <?php echo wp_json_encode( olobuild_t( 'Errore caricamento wishlist' ) ); ?> + '</div>';
                     gridEl.style.display = 'block';
                 });
             }

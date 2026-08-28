@@ -151,7 +151,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
 
         if ( ! $lat && ! $lng ) {
             return '<div style="padding:24px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);background:var(--olo-color-muted, #F3F4F6);border-radius:8px">'
-                 . '<p style="margin:0">Nessuna coordinata GPS impostata per questo servizio.</p>'
+                 . '<p style="margin:0">' . esc_html( olobuild_t( 'Nessuna coordinata GPS impostata per questo servizio.' ) ) . '</p>'
                  . '</div>';
         }
 
@@ -1057,8 +1057,8 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         if ( ! empty( $s['svc_show_altitude_filter'] ) ) {
             $ranges = array_filter( array_map( 'trim', explode( ',', $s['svc_altitude_ranges'] ) ) );
             if ( $ranges ) {
-                echo '<div class="plm-filter-group"><span class="plm-filter-label">Altitudine</span>';
-                echo '<select class="plm-filter-select" data-filter="altitude"><option value="">Tutte</option>';
+                echo '<div class="plm-filter-group"><span class="plm-filter-label">' . esc_html( olobuild_t( 'Altitudine' ) ) . '</span>';
+                echo '<select class="plm-filter-select" data-filter="altitude"><option value="">' . esc_html( olobuild_t( 'Tutte' ) ) . '</option>';
                 foreach ( $ranges as $range ) {
                     $parts = explode( '-', $range );
                     if ( count( $parts ) !== 2 ) continue;
@@ -1082,7 +1082,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                 $names = array_keys( $localities );
                 sort( $names );
                 echo '<div class="plm-filter-group"><span class="plm-filter-label">Localit&agrave;</span>';
-                echo '<select class="plm-filter-select" data-filter="valley"><option value="">Tutte</option>';
+                echo '<select class="plm-filter-select" data-filter="valley"><option value="">' . esc_html( olobuild_t( 'Tutte' ) ) . '</option>';
                 foreach ( $names as $n ) {
                     echo '<option value="' . esc_attr( $n ) . '">' . esc_html( $n ) . '</option>';
                 }
@@ -1093,8 +1093,8 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         if ( ! empty( $s['svc_show_guests_filter'] ) ) {
             $ranges = array_filter( array_map( 'trim', explode( ',', $s['svc_guests_ranges'] ) ) );
             if ( $ranges ) {
-                echo '<div class="plm-filter-group"><span class="plm-filter-label">Ospiti</span>';
-                echo '<select class="plm-filter-select" data-filter="guests"><option value="">Tutti</option>';
+                echo '<div class="plm-filter-group"><span class="plm-filter-label">' . esc_html( olobuild_t( 'Ospiti' ) ) . '</span>';
+                echo '<select class="plm-filter-select" data-filter="guests"><option value="">' . esc_html( olobuild_t( 'Tutti' ) ) . '</option>';
                 foreach ( $ranges as $range ) {
                     $parts = explode( '-', $range );
                     if ( count( $parts ) !== 2 ) continue;
@@ -1111,7 +1111,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
             $ranges = array_filter( array_map( 'trim', explode( ',', $s['svc_price_ranges'] ) ) );
             if ( $ranges ) {
                 echo '<div class="plm-filter-group"><span class="plm-filter-label">Prezzo / notte</span>';
-                echo '<select class="plm-filter-select" data-filter="price"><option value="">Tutti</option>';
+                echo '<select class="plm-filter-select" data-filter="price"><option value="">' . esc_html( olobuild_t( 'Tutti' ) ) . '</option>';
                 foreach ( $ranges as $range ) {
                     $parts = explode( '-', $range );
                     if ( count( $parts ) !== 2 ) continue;
@@ -1132,7 +1132,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                 if ( isset( $loc['bedrooms'] ) ) { $has = true; break; }
             }
             if ( $has ) {
-                echo '<div class="plm-filter-group"><span class="plm-filter-label">Camere</span>';
+                echo '<div class="plm-filter-group"><span class="plm-filter-label">' . esc_html( olobuild_t( 'Camere' ) ) . '</span>';
                 echo '<select class="plm-filter-select" data-filter="bedrooms"><option value="">Qualsiasi</option>';
                 echo '<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4+">4+</option>';
                 echo '</select></div>';
@@ -2920,7 +2920,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
                         items = filtered;
                     }
                     if (!items.length) {
-                        listEl.innerHTML = '<div style="padding:16px;text-align:center;color:#9CA3AF;font-size:13px">Nessun risultato</div>';
+                        listEl.innerHTML = '<div style="padding:16px;text-align:center;color:#9CA3AF;font-size:13px">' + <?php echo wp_json_encode( olobuild_t( 'Nessun risultato' ) ); ?> + '</div>';
                         return;
                     }
                     listEl.classList.toggle('is-grid', isGridView);

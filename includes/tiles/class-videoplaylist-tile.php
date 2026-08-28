@@ -53,7 +53,7 @@ class Olobuild_Videoplaylist_Tile extends Olobuild_Tile_Base {
 
         $videos = is_array( $s['videos'] ) ? $s['videos'] : [];
         if ( empty( $videos ) ) {
-            return '<div style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF)">Aggiungi video alla playlist</div>';
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF)">' . esc_html( olobuild_t( 'Aggiungi video alla playlist' ) ) . '</div>';
         }
 
         $uid           = 'olo-videoplaylist-' . wp_unique_id();
@@ -189,7 +189,7 @@ class Olobuild_Videoplaylist_Tile extends Olobuild_Tile_Base {
             </div>
 
             <!-- Sidebar / Playlist -->
-            <div class="olo-vp-sidebar" role="list" aria-label="<?php echo esc_attr( olobuild_t( 'Playlist video', 'olobuilder' ) ); ?>">
+            <div class="olo-vp-sidebar" role="list" aria-label="<?php echo esc_attr( olobuild_t( 'Playlist video' ) ); ?>">
                 <?php foreach ( $videos as $idx => $video ) :
                     $v_url       = esc_attr( trim( $video['url'] ?? '' ) );
                     $v_title_raw = $video['title'] ?? 'Video ' . ( $idx + 1 );
@@ -342,10 +342,10 @@ class Olobuild_Videoplaylist_Tile extends Olobuild_Tile_Base {
     private function get_player_html( $url, $title = '' ) {
         $url = trim( $url );
         if ( empty( $url ) ) {
-            return '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">Nessun video</div>';
+            return '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">' . esc_html( olobuild_t( 'Nessun video' ) ) . '</div>';
         }
 
-        $title_attr = ' title="' . esc_attr( $title !== '' ? $title : olobuild_t( 'Video', 'olobuilder' ) ) . '"';
+        $title_attr = ' title="' . esc_attr( $title !== '' ? $title : olobuild_t( 'Video' ) ) . '"';
 
         // YouTube
         if ( preg_match( '/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $url, $m ) ) {

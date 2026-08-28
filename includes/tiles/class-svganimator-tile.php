@@ -84,7 +84,7 @@ class Olobuild_Svganimator_Tile extends Olobuild_Tile_Base {
 
         if ( empty( $svg_content ) ) {
             return '<div style="padding:24px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);background:var(--olo-color-muted, #F3F4F6);border-radius:8px">'
-                 . '<p style="font-size:1em;margin:0">Inserisci un file SVG per attivare l\'animazione.</p>'
+                 . '<p style="font-size:1em;margin:0">' . esc_html( olobuild_t( 'Inserisci un file SVG per attivare l\'animazione.' ) ) . '</p>'
                  . '</div>';
         }
 

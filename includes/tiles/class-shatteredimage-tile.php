@@ -410,7 +410,7 @@ class Olobuild_ShatteredImage_Tile extends Olobuild_Tile_Base {
 
         $image_url = esc_url( $s['image_url'] );
         if ( empty( $image_url ) ) {
-            return '<div class="olo-shattered"><p style="text-align:center;color:var(--olo-color-text-muted, #9CA3AF);padding:40px 0">Seleziona un\'immagine</p></div>';
+            return '<div class="olo-shattered"><p style="text-align:center;color:var(--olo-color-text-muted, #9CA3AF);padding:40px 0">' . esc_html( olobuild_t( 'Seleziona un\'immagine' ) ) . '</p></div>';
         }
 
         // A11y (WCAG 1.1.1): the image is rendered as background-image of fragments,

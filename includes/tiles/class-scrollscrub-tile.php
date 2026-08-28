@@ -399,14 +399,14 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                     </div>
                     <?php endif; ?>
 
-                    <div class="olo-scrub__track" tabindex="0" role="region" aria-label="<?php echo esc_attr( $heading !== '' ? $heading : 'Galleria a scorrimento orizzontale' ); ?>">
+                    <div class="olo-scrub__track" tabindex="0" role="region" aria-label="<?php echo esc_attr( $heading !== '' ? $heading : olobuild_t( 'Galleria a scorrimento orizzontale' ) ); ?>">
                         <?php if ( $total === 0 ) : ?>
                             <div class="olo-scrub__item">
-                                <div class="olo-scrub__media"><span class="ph">Immagine</span></div>
+                                <div class="olo-scrub__media"><span class="ph"><?php echo esc_html( olobuild_t( 'Immagine' ) ); ?></span></div>
                                 <div class="olo-scrub__body">
                                     <?php if ( $show_num ) : ?><div class="olo-scrub__num">01</div><?php endif; ?>
-                                    <h3 class="olo-scrub__itemtitle">Aggiungi un elemento</h3>
-                                    <p class="olo-scrub__text">Usa il pannello a destra per aggiungere gli elementi del nastro.</p>
+                                    <h3 class="olo-scrub__itemtitle"><?php echo esc_html( olobuild_t( 'Aggiungi un elemento' ) ); ?></h3>
+                                    <p class="olo-scrub__text"><?php echo esc_html( olobuild_t( 'Usa il pannello a destra per aggiungere gli elementi del nastro.' ) ); ?></p>
                                 </div>
                             </div>
                         <?php else : ?>
@@ -437,7 +437,7 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                                         <?php elseif ( $media_lbl !== '' ) : ?>
                                             <span class="ph" data-olo-editable="items.<?php echo intval( $i ); ?>.media_label"><?php echo esc_html( $media_lbl ); ?></span>
                                         <?php else : ?>
-                                            <span class="ph">Immagine</span>
+                                            <span class="ph"><?php echo esc_html( olobuild_t( 'Immagine' ) ); ?></span>
                                         <?php endif; ?>
                                     </div>
                                     <div class="olo-scrub__body">

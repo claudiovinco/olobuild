@@ -171,8 +171,8 @@ class Olobuild_BeforeAfter_Tile extends Olobuild_Tile_Base {
                 $bsty = $bimg !== '' ? ' style="background-image:url(' . esc_url( $bimg ) . ')"' : '';
                 $asty = $aimg !== '' ? ' style="background-image:url(' . esc_url( $aimg ) . ')"' : '';
                 $it_title = ! empty( $it['title'] ) ? trim( $it['title'] ) : '';
-                $b_lab    = ! empty( $it['before_label'] ) ? trim( $it['before_label'] ) : olobuild_t( 'Prima', 'olobuilder' );
-                $a_lab    = ! empty( $it['after_label'] ) ? trim( $it['after_label'] ) : olobuild_t( 'Dopo', 'olobuilder' );
+                $b_lab    = ! empty( $it['before_label'] ) ? trim( $it['before_label'] ) : olobuild_t( 'Prima' );
+                $a_lab    = ! empty( $it['after_label'] ) ? trim( $it['after_label'] ) : olobuild_t( 'Dopo' );
                 $b_aria   = $it_title !== '' ? $b_lab . ' – ' . $it_title : $b_lab;
                 $a_aria   = $it_title !== '' ? $a_lab . ' – ' . $it_title : $a_lab;
             ?>

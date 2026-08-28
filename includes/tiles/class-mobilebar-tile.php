@@ -515,13 +515,13 @@ class Olobuild_Mobilebar_Tile extends Olobuild_Tile_Base {
 
     private function render_menu_items( $menu_id, $current_url, $chevron_svg ) {
         if ( ! $menu_id ) {
-            echo '<ul><li><a href="/">Home</a></li><li><a href="#">Seleziona un menu nelle impostazioni</a></li></ul>';
+            echo '<ul><li><a href="/">Home</a></li><li><a href="#">' . esc_html( olobuild_t( 'Seleziona un menu nelle impostazioni' ) ) . '</a></li></ul>';
             return;
         }
 
         $items = wp_get_nav_menu_items( $menu_id );
         if ( ! $items ) {
-            echo '<ul><li><a href="#">Menu vuoto</a></li></ul>';
+            echo '<ul><li><a href="#">' . esc_html( olobuild_t( 'Menu vuoto' ) ) . '</a></li></ul>';
             return;
         }
 
@@ -550,7 +550,7 @@ class Olobuild_Mobilebar_Tile extends Olobuild_Tile_Base {
             if ( ! empty( $subs ) ) {
                 echo '<div class="olo-mb-item">';
                 echo '<a href="' . esc_url( $item->url ) . '">' . esc_html( $item->title ) . '</a>';
-                echo '<button class="olo-mb-chevron" type="button" aria-expanded="false" aria-label="Espandi">' . $chevron_svg . '</button>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $chevron_svg is static SVG markup defined above in render_html()
+                echo '<button class="olo-mb-chevron" type="button" aria-expanded="false" aria-label="' . esc_attr( olobuild_t( 'Espandi' ) ) . '">' . $chevron_svg . '</button>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $chevron_svg is static SVG markup defined above in render_html()
                 echo '</div>';
 
                 // Sub-menu
@@ -567,7 +567,7 @@ class Olobuild_Mobilebar_Tile extends Olobuild_Tile_Base {
                     if ( ! empty( $sub_subs ) ) {
                         echo '<div class="olo-mb-item">';
                         echo '<a href="' . esc_url( $sub->url ) . '">' . esc_html( $sub->title ) . '</a>';
-                        echo '<button class="olo-mb-chevron" type="button" aria-expanded="false" aria-label="Espandi">' . $chevron_svg . '</button>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $chevron_svg is static SVG markup defined above in render_html()
+                        echo '<button class="olo-mb-chevron" type="button" aria-expanded="false" aria-label="' . esc_attr( olobuild_t( 'Espandi' ) ) . '">' . $chevron_svg . '</button>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $chevron_svg is static SVG markup defined above in render_html()
                         echo '</div>';
                         echo '<ul class="olo-mb-sub">';
                         foreach ( $sub_subs as $ss ) {
