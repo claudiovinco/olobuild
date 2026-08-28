@@ -98,9 +98,30 @@
     function renderKpis(data) {
         const wrap = root.querySelector('.olo-kpi-strip');
         if (!wrap || !Array.isArray(data)) return;
+        // Con un breakdown la card avvisi occupa una riga intera con una riga
+        // per categoria (numero + contesto + azione): la strip passa a 3
+        // colonne per le card normali, la wide finisce sotto a tutta larghezza.
+        const anyWide = data.some(k => Array.isArray(k.breakdown) && k.breakdown.length);
+        wrap.classList.toggle('has-wide', anyWide);
         wrap.innerHTML = data.map(k => {
             const trendCls = k.trend === 'up' ? 'up' : (k.trend === 'warn' ? 'warn' : '');
             const trendIc  = k.trend === 'up' ? 'trendUp' : (k.trend === 'warn' ? 'warn' : 'trendFlat');
+            if (Array.isArray(k.breakdown) && k.breakdown.length) {
+                return '<div class="olo-kpi wide ' + trendCls + '">' +
+                    '<div class="kpi-h"><span class="kpi-ic">' + svgIcon(k.icon, 13) + '</span><span>' + escapeHtml(k.label) + '</span>' +
+                        '<span class="kpi-sub">' + escapeHtml(k.delta || '') + '</span>' +
+                    '</div>' +
+                    '<div class="kpi-rows">' + k.breakdown.map(b => {
+                        return '<a class="kpi-row" href="' + b.href + '">' +
+                            '<span class="n">' + escapeHtml(String(b.count)) + '</span>' +
+                            '<span class="lab"><span class="t">' + escapeHtml(b.label) + '</span>' +
+                            (b.hint ? '<span class="h">' + escapeHtml(b.hint) + '</span>' : '') +
+                            '</span>' +
+                            '<span class="cta">' + escapeHtml(b.cta || '') + ' ' + svgIcon('arrow', 12) + '</span>' +
+                        '</a>';
+                    }).join('') + '</div>' +
+                '</div>';
+            }
             const href = k.href ? ('href="' + k.href + '"') : '';
             const tag  = k.href ? 'a' : 'div';
             return '<' + tag + ' class="olo-kpi ' + trendCls + '" ' + href + '>' +

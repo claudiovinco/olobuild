@@ -102,6 +102,57 @@ trait Olobuild_Rest_Dashboard_Trait {
                 )
                 : (int) $wpdb->get_var( "SELECT COUNT(*) FROM $tools_404" );
         }
+        /*
+         * Drill-down degli avvisi: un numero aggregato (500 404 + 66 bozze =
+         * "566") non dice cosa fare. Ogni categoria porta il SUO conteggio,
+         * un contesto e la SUA azione: il render fa della card una riga per
+         * categoria invece di un totale.
+         */
+        $alerts_breakdown = [];
+        if ( $alerts_404 > 0 ) {
+            $hint_404 = '';
+            $top_urls = ( $wpdb->get_var( "SHOW TABLES LIKE '$redirects'" ) === $redirects )
+                ? $wpdb->get_col(
+                    "SELECT l.url FROM $tools_404 l
+                     LEFT JOIN $redirects r ON r.from_url = l.url
+                     WHERE r.id IS NULL ORDER BY l.hits DESC LIMIT 2"
+                )
+                : $wpdb->get_col( "SELECT url FROM $tools_404 ORDER BY hits DESC LIMIT 2" );
+            if ( ! empty( $top_urls ) ) {
+                $short = array_map( function ( $u ) {
+                    return mb_strlen( $u ) > 34 ? mb_substr( $u, 0, 33 ) . '…' : $u;
+                }, $top_urls );
+                /* translators: %s: list of most-hit 404 URLs */
+                $hint_404 = sprintf( __( 'i più colpiti: %s', 'olobuild' ), implode( ' · ', $short ) );
+            }
+            if ( $alerts_404 >= 500 ) {
+                // Il registro tiene al massimo 500 indirizzi (prune): il
+                // conteggio è al tetto, i 404 reali possono essere di più.
+                $hint_404 = __( 'registro al tetto (500)', 'olobuild' ) . ( $hint_404 ? ' · ' . $hint_404 : '' );
+            }
+            $alerts_breakdown[] = [
+                'count' => $alerts_404,
+                'label' => __( 'URL in 404 senza redirect', 'olobuild' ),
+                'hint'  => $hint_404,
+                'href'  => admin_url( 'admin.php?page=olobuilder-settings&tab=redirects' ),
+                'cta'   => __( 'Apri Redirect & 404', 'olobuild' ),
+            ];
+        }
+        if ( $tpl_draft > 0 ) {
+            $hint_draft = __( 'template salvati e mai pubblicati', 'olobuild' );
+            $oldest = $wpdb->get_var( "SELECT title FROM $tpl_table WHERE status = 'draft' ORDER BY updated_at ASC LIMIT 1" );
+            if ( $oldest ) {
+                /* translators: %s: title of the oldest draft template */
+                $hint_draft .= ' · ' . sprintf( __( 'il più fermo: %s', 'olobuild' ), $oldest );
+            }
+            $alerts_breakdown[] = [
+                'count' => $tpl_draft,
+                'label' => __( 'Template in bozza', 'olobuild' ),
+                'hint'  => $hint_draft,
+                'href'  => admin_url( 'admin.php?page=olobuilder-templates' ),
+                'cta'   => __( 'Rivedi le bozze', 'olobuild' ),
+            ];
+        }
         // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
         $alerts_total = $alerts_404 + $tpl_draft;
 
@@ -142,13 +193,17 @@ trait Olobuild_Rest_Dashboard_Trait {
                 'label' => __( 'Avvisi da risolvere', 'olobuild' ),
                 'value' => $alerts_total,
                 'delta' => $alerts_total > 0
-                    ? sprintf( '%d 404 · %d bozze', $alerts_404, $tpl_draft )
+                    /* translators: %d: number of alert categories */
+                    ? sprintf( _n( '%d categoria', '%d categorie', count( $alerts_breakdown ), 'olobuild' ), count( $alerts_breakdown ) )
                     : __( 'tutto a posto', 'olobuild' ),
                 'trend' => $alerts_total > 0 ? 'warn' : 'up',
                 'icon'  => 'alert',
                 // La pagina standalone ?page=olo-redirects non è più registrata (v1.0.31):
                 // la gestione vive in Configurazione → tab "Redirect & 404".
                 'href'  => $alerts_404 > 0 ? admin_url( 'admin.php?page=olobuilder-settings&tab=redirects' ) : admin_url( 'admin.php?page=olobuilder-templates' ),
+                // Con breakdown il render mostra una riga per categoria, ognuna
+                // con la propria azione (la card diventa larga una riga intera).
+                'breakdown' => $alerts_breakdown,
             ],
         ];
 

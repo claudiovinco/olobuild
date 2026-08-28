@@ -507,6 +507,56 @@ body.olobuild-cockpit .olo-cockpit-legacy .error {
 .olo-kpi.loading .kpi-val { color: transparent; background: var(--olo-bg-muted); border-radius: 4px; min-height: 26px; min-width: 60px; }
 .olo-kpi.loading .kpi-d { color: transparent; background: var(--olo-bg-muted); border-radius: 4px; min-height: 11px; min-width: 100px; }
 
+/* Avvisi con drill-down: quando la card ha un breakdown occupa una riga
+   intera (una riga per categoria, ognuna con la sua azione) e le tre card
+   normali si stringono su tre colonne. */
+.olo-kpi-strip.has-wide { grid-template-columns: repeat(3, 1fr); }
+.olo-kpi.wide {
+    grid-column: 1 / -1;
+    padding: 0;
+    cursor: default;
+    border-color: #f5c877;
+}
+.olo-kpi.wide:hover { transform: none; box-shadow: var(--olo-shadow-xs); }
+.olo-kpi.wide .kpi-h { padding: 12px 16px 8px; }
+.olo-kpi.wide .kpi-h .kpi-sub {
+    margin-left: auto;
+    font-weight: 600;
+    color: var(--olo-warning-dark);
+}
+.olo-kpi.wide .kpi-rows { display: flex; flex-direction: column; }
+.olo-kpi.wide .kpi-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 16px;
+    border-top: 1px solid var(--olo-border-light);
+    color: inherit; text-decoration: none;
+    transition: background .12s;
+}
+.olo-kpi.wide .kpi-row:hover { background: var(--olo-bg-soft); }
+.olo-kpi.wide .kpi-row .n {
+    min-width: 52px;
+    font-size: 20px; font-weight: 700; line-height: 1;
+    color: var(--olo-warning-dark);
+    font-variant-numeric: tabular-nums;
+}
+.olo-kpi.wide .kpi-row .lab { display: flex; flex-direction: column; gap: 1px; flex: 1; min-width: 0; }
+.olo-kpi.wide .kpi-row .lab .t { font-size: 13px; font-weight: 600; color: var(--olo-text); }
+.olo-kpi.wide .kpi-row .lab .h {
+    font-size: 11.5px; color: var(--olo-text-muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.olo-kpi.wide .kpi-row .cta {
+    display: inline-flex; align-items: center; gap: 6px;
+    flex-shrink: 0;
+    font-size: 12px; font-weight: 600;
+    color: var(--olo-primary);
+    background: var(--olo-primary-50);
+    border: 1px solid var(--olo-primary-100);
+    border-radius: 8px;
+    padding: 6px 11px;
+}
+.olo-kpi.wide .kpi-row:hover .cta { background: var(--olo-primary-100); }
+
 /* ─────────────────────────────────────────────────────────────────────
    Section header
    ───────────────────────────────────────────────────────────────────── */
