@@ -74,6 +74,32 @@
 .olo-cockpit-wrap *::before,
 .olo-cockpit-wrap *::after { box-sizing: border-box; }
 
+/* ── Focus ring ROSSO, mai il blu di wp-admin ─────────────────────────
+   forms.css/common.css di WordPress mettono bordo e box-shadow #2271b1 su
+   input/bottoni/link al focus, e vincono per specificità sui nostri stili
+   base. Dentro la shell il ring è rosso Olobuild; i campi con un proprio
+   focus più specifico (es. search-mini) non sono toccati. */
+.olo-cockpit-wrap input:focus,
+.olo-cockpit-wrap textarea:focus,
+.olo-cockpit-wrap select:focus {
+    border-color: var(--olo-primary);
+    box-shadow: 0 0 0 1px var(--olo-primary);
+    outline: 2px solid transparent;
+}
+.olo-cockpit-wrap .button:focus,
+.olo-cockpit-wrap .button-primary:focus {
+    border-color: var(--olo-primary);
+    box-shadow: 0 0 0 1px #fff, 0 0 0 3px var(--olo-primary-200);
+    outline: 2px solid transparent;
+}
+.olo-cockpit-wrap a:focus { box-shadow: none; outline: none; }
+.olo-cockpit-wrap a:focus-visible {
+    outline: 2px solid var(--olo-primary);
+    outline-offset: 2px;
+    box-shadow: none;
+    border-radius: 4px;
+}
+
 /* ── Body class hooks: layout WP admin ottimizzato per il cockpit ────
    `olobuild-cockpit` = qualunque pagina top-level che usa cockpit_shell_open()
    (dashboard + lista template + altre pagine future).

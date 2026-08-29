@@ -40,6 +40,9 @@
         '.olopal-input{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid #f1f5f9}' +
         '.olopal-input svg{flex-shrink:0;color:#64748b}' +
         '.olopal-input input{flex:1;border:0;outline:0;background:none;font:inherit;font-size:15px;color:#111827;box-shadow:none}' +
+        /* wp-admin forms.css mette bordo+ring BLU su input:focus con specificità
+           maggiore: qui il modale stesso è l'evidenza del focus, niente ring. */
+        '.olopal-input input:focus{border:0!important;outline:0!important;box-shadow:none!important}' +
         '.olopal-input kbd{font-size:11px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:5px;padding:2px 7px;color:#94a3b8;font-family:inherit}' +
         '.olopal-results{max-height:56vh;overflow-y:auto;padding:6px 0 8px}' +
         '.olopal-ghead{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#94a3b8;padding:10px 18px 4px}' +

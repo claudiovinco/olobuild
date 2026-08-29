@@ -1033,6 +1033,26 @@ onMounted(() => {
   border-color: var(--c-red);
   box-shadow: 0 0 0 3px var(--c-red-soft);
 }
+/* Mai il blu di wp-admin (forms.css vince sui nostri stili base al focus):
+   i campi nudi prendono il ring rosso; quelli dentro i wrapper .cfg-* lo
+   lasciano al wrapper (focus-within qui sopra), niente doppio anello. */
+.cfg-root input:focus, .cfg-layer input:focus,
+.cfg-root textarea:focus, .cfg-layer textarea:focus,
+.cfg-root select:focus, .cfg-layer select:focus {
+  border-color: var(--c-red);
+  box-shadow: 0 0 0 1px var(--c-red);
+  outline: 2px solid transparent;
+}
+.cfg-input input:focus, .cfg-select select:focus, .cfg-textarea textarea:focus,
+.cfg-topbar .top-search input:focus {
+  border-color: transparent;
+  box-shadow: none;
+  outline: none;
+}
+.cfg-topbar .top-search:focus-within {
+  border-color: var(--c-red);
+  box-shadow: 0 0 0 3px var(--c-red-soft);
+}
 .cfg-textarea {
   padding: 10px 12px;
   font-family: var(--c-mono);

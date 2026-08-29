@@ -1030,6 +1030,8 @@ class Olobuild_Seo_Settings {
             .olo-seo-metabox .olo-seo-tab-btn { padding: 10px 18px; border: none; background: none; cursor: pointer; font-size: 13px; font-weight: 500; color: #666; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
             .olo-seo-metabox .olo-seo-tab-btn:hover { color: #333; }
             .olo-seo-metabox .olo-seo-tab-btn.active { color: #e1474f; border-bottom-color: #e1474f; }
+            /* Focus rosso Olobuild al posto del blu di wp-admin sui campi del metabox. */
+            .olo-seo-metabox input:focus, .olo-seo-metabox textarea:focus, .olo-seo-metabox select:focus { border-color: #e1474f; box-shadow: 0 0 0 1px #e1474f; outline: 2px solid transparent; }
             .olo-seo-metabox .olo-seo-tab-panel { display: none; }
             .olo-seo-metabox .olo-seo-tab-panel.active { display: block; }
 
