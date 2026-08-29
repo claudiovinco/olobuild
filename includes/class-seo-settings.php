@@ -1029,7 +1029,7 @@ class Olobuild_Seo_Settings {
             .olo-seo-metabox .olo-seo-tabs-nav { display: flex; gap: 0; border-bottom: 2px solid #e0e0e0; margin-bottom: 16px; }
             .olo-seo-metabox .olo-seo-tab-btn { padding: 10px 18px; border: none; background: none; cursor: pointer; font-size: 13px; font-weight: 500; color: #666; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
             .olo-seo-metabox .olo-seo-tab-btn:hover { color: #333; }
-            .olo-seo-metabox .olo-seo-tab-btn.active { color: #2271b1; border-bottom-color: #2271b1; }
+            .olo-seo-metabox .olo-seo-tab-btn.active { color: #e1474f; border-bottom-color: #e1474f; }
             .olo-seo-metabox .olo-seo-tab-panel { display: none; }
             .olo-seo-metabox .olo-seo-tab-panel.active { display: block; }
 

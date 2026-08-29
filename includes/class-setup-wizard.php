@@ -186,14 +186,14 @@ class Olobuild_Setup_Wizard {
                 .wizard-logo p { font-size: 15px; color: #94A3B8; margin-top: 8px; line-height: 1.5; }
                 .wizard-steps { display: flex; gap: 8px; margin-bottom: 32px; justify-content: center; }
                 .wizard-step { width: 40px; height: 4px; border-radius: 2px; background: #3a3a3a; transition: background 0.3s; }
-                .wizard-step.active { background: #e8622a; }
+                .wizard-step.active { background: #e1474f; }
                 .wizard-step.done { background: #22C55E; }
                 .wizard-card { background: #262626; border: 1px solid #3a3a3a; border-radius: 16px; padding: 32px; margin-bottom: 16px; }
                 .wizard-card h2 { font-size: 18px; font-weight: 600; color: #F1F5F9; margin-bottom: 8px; }
                 .wizard-card p { font-size: 14px; color: #94A3B8; line-height: 1.6; margin-bottom: 20px; }
                 .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-                .btn-primary { background: #e8622a; color: #fff; }
-                .btn-primary:hover { background: #d4561f; transform: translateY(-1px); }
+                .btn-primary { background: #e1474f; color: #fff; }
+                .btn-primary:hover { background: #c8323a; transform: translateY(-1px); }
                 .btn-primary:disabled { background: #475569; cursor: not-allowed; transform: none; }
                 .btn-secondary { background: transparent; color: #94A3B8; border: 1px solid #475569; }
                 .btn-secondary:hover { border-color: #64748B; color: #CBD5E1; }
@@ -208,11 +208,11 @@ class Olobuild_Setup_Wizard {
                 .wizard-picker .otmp { height: 56vh; min-height: 320px; }
                 .skip-link { display: block; text-align: center; margin-top: 20px; color: #64748B; font-size: 13px; cursor: pointer; text-decoration: none; }
                 .skip-link:hover { color: #94A3B8; }
-                .btn:focus-visible, .skip-link:focus-visible, .quick-card:focus-visible { outline: 2px solid #e8622a; outline-offset: 2px; }
+                .btn:focus-visible, .skip-link:focus-visible, .quick-card:focus-visible { outline: 2px solid #e1474f; outline-offset: 2px; }
                 .quick-cards { display: grid; gap: 10px; }
                 .quick-card { display: flex; gap: 14px; align-items: center; padding: 14px 16px; background: #1a1a1a; border: 1px solid #3a3a3a; border-radius: 10px; text-decoration: none; color: #E2E8F0; transition: all 0.2s; }
-                .quick-card:hover { border-color: #e8622a; transform: translateX(2px); }
-                .quick-card-icon { font-size: 20px; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; background: #262626; border-radius: 8px; color: #f0a883; flex-shrink: 0; }
+                .quick-card:hover { border-color: #e1474f; transform: translateX(2px); }
+                .quick-card-icon { font-size: 20px; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; background: #262626; border-radius: 8px; color: #f2989e; flex-shrink: 0; }
                 .quick-card strong { display: block; font-size: 14px; font-weight: 600; color: #F1F5F9; }
                 .quick-card small { display: block; font-size: 12px; color: #94A3B8; margin-top: 2px; }
             </style>

@@ -331,31 +331,29 @@ class Olobuild_Newsletter {
             'olo_export_newsletter'
         );
 
+        // Restyling: la Newsletter entra nella shell cockpit come tutte le
+        // pagine operative (era l'ultima fuori). Screen id aggiunto anche a
+        // Olobuild_Builder::cockpit_screen_ids() per il CSS condiviso.
+        $export_btn = '<a href="' . esc_url( $export_url ) . '" class="olo-nl-export">'
+            . '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
+            . esc_html__( 'Esporta CSV', 'olobuild' ) . '</a>';
         ?>
-        <div class="wrap olo-nl-page">
-            <div class="olo-nl-wrap">
+        <?php Olobuild_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Newsletter', 'olobuild' ) . '</b>' ); ?>
+        <main class="olo-cockpit-main olo-cockpit-legacy olo-nl-wrap">
 
-                <div class="olo-admin-header">
-                    <div class="olo-admin-header-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg>
-                    </div>
-                    <div>
-                        <h1><?php esc_html_e( 'Newsletter', 'olobuild' ); ?></h1>
-                        <p>
-                            <?php
-                            printf(
-                                /* translators: %s: numero iscritti */
-                                esc_html__( '%s iscritti attivi raccolti dalle tile Newsletter del sito.', 'olobuild' ),
-                                '<b>' . esc_html( number_format_i18n( $total ) ) . '</b>'
-                            );
-                            ?>
-                        </p>
-                    </div>
-                    <a href="<?php echo esc_url( $export_url ); ?>" class="olo-btn-reset olo-btn-sm olo-nl-export">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                        <?php esc_html_e( 'Esporta CSV', 'olobuild' ); ?>
-                    </a>
-                </div>
+                <?php
+                // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built by Olobuild_Builder::cockpit_page_head(), which escapes via esc_html()/wp_kses_post() internally; actions markup escaped above.
+                echo Olobuild_Builder::cockpit_page_head( [
+                    'title'   => __( 'Newsletter', 'olobuild' ),
+                    'sub'     => sprintf(
+                        /* translators: %s: numero iscritti */
+                        __( '%s iscritti attivi raccolti dalle tile Newsletter del sito.', 'olobuild' ),
+                        '<b>' . esc_html( number_format_i18n( $total ) ) . '</b>'
+                    ),
+                    'actions' => $export_btn,
+                ] );
+                // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+                ?>
 
                 <div class="olo-card">
                     <div class="olo-card-body olo-nl-card-body">
@@ -413,56 +411,49 @@ class Olobuild_Newsletter {
                         ?>
                     </div></div>
                 <?php endif; ?>
-            </div>
-        </div>
+        </main>
+        <?php Olobuild_Builder::cockpit_shell_close(); ?>
 
         <style>
-            /* ── Newsletter — card e tabella coerenti col design admin ── */
-            .olo-nl-wrap {
-                max-width: 1060px;
-                margin: 28px auto 40px;
-                padding: 0 24px;
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            /* ── Newsletter — dentro la shell cockpit, accenti dai token ── */
+            .olo-nl-wrap { max-width: 1060px; }
+            .olo-nl-export {
+                display: inline-flex; align-items: center; gap: 7px;
+                text-decoration: none; flex-shrink: 0;
+                font-size: 13px; font-weight: 600; color: var(--olo-text-soft);
+                background: #fff; border: 1px solid var(--olo-border);
+                border-radius: 8px; padding: 7px 13px;
+                transition: border-color .15s, color .15s;
             }
-            .olo-nl-wrap * { box-sizing: border-box; }
-            .olo-nl-wrap .olo-admin-header h1 {
-                font-size: 20px;
-                font-weight: 700;
-                color: #1a1a1a;
-                margin: 0;
-                padding: 0;
-                letter-spacing: -0.02em;
-                line-height: 1.2;
-            }
-            .olo-nl-export { margin-left: auto; text-decoration: none; flex-shrink: 0; }
-            .olo-nl-export:focus { color: #1a1a1a; box-shadow: none; outline: 2px solid rgba(232,98,42,.4); outline-offset: 2px; }
+            .olo-nl-export:hover { border-color: var(--olo-primary-200); color: var(--olo-primary); }
+            .olo-nl-export:focus-visible { outline: 2px solid var(--olo-primary); outline-offset: 2px; box-shadow: none; }
             .olo-nl-card-body { padding: 6px 10px; }
             .olo-nl-table { table-layout: fixed; }
-            .olo-nl-id { color: #999; font-size: 12px; }
-            .olo-nl-email { font-weight: 600; color: #1a1a1a; text-decoration: none; }
-            .olo-nl-email:hover { color: #e8622a; }
-            .olo-nl-source { color: #999; font-size: 12px; }
-            .olo-nl-date { color: #666; font-size: 12px; white-space: nowrap; }
+            .olo-nl-id { color: var(--olo-text-light); font-size: 12px; }
+            .olo-nl-email { font-weight: 600; color: var(--olo-text); text-decoration: none; }
+            .olo-nl-email:hover { color: var(--olo-primary); }
+            .olo-nl-source { color: var(--olo-text-light); font-size: 12px; }
+            .olo-nl-date { color: var(--olo-text-muted); font-size: 12px; white-space: nowrap; }
             .olo-nl-delete { color: #dc2626 !important; font-size: 12px; font-weight: 600; text-decoration: none; }
             .olo-nl-delete:hover { text-decoration: underline; }
-            .olo-nl-empty { text-align: center; padding: 36px 20px !important; color: #999; }
+            .olo-nl-empty { text-align: center; padding: 36px 20px !important; color: var(--olo-text-light); }
             .olo-nl-pagination { margin-top: 16px; height: auto; }
             .olo-nl-pagination .tablenav-pages { float: none; display: flex; justify-content: flex-end; gap: 4px; }
             .olo-nl-pagination .page-numbers {
                 display: inline-flex;
                 align-items: center;
                 padding: 6px 12px;
-                border: 1.5px solid #e5e0d8;
+                border: 1.5px solid var(--olo-border);
                 border-radius: 8px;
                 background: #fff;
-                color: #666;
+                color: var(--olo-text-muted);
                 font-size: 13px;
                 font-weight: 600;
                 text-decoration: none;
                 transition: all .15s;
             }
-            .olo-nl-pagination a.page-numbers:hover { border-color: #1a1a1a; color: #1a1a1a; }
-            .olo-nl-pagination .page-numbers.current { background: #1a1a1a; border-color: #1a1a1a; color: #fff; }
+            .olo-nl-pagination a.page-numbers:hover { border-color: var(--olo-primary); color: var(--olo-primary); }
+            .olo-nl-pagination .page-numbers.current { background: var(--olo-primary); border-color: var(--olo-primary); color: #fff; }
             .olo-nl-pagination .page-numbers.dots { border: none; background: none; }
         </style>
         <?php

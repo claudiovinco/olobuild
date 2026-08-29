@@ -117,7 +117,7 @@ class Olobuild_Page_Integration {
         $label = $template_id ? 'Olobuild' : 'Crea con Olobuild';
 
         $actions['olo_builder'] = sprintf(
-            '<a href="%s" style="color: #6366f1; font-weight: 600;">%s</a>',
+            '<a href="%s" style="color: #e1474f; font-weight: 600;">%s</a>',
             esc_url( $url ),
             esc_html( $label )
         );
@@ -309,13 +309,13 @@ class Olobuild_Page_Integration {
                 </p>
                 <a href="<?php echo esc_url( $url ); ?>"
                    class="button button-primary"
-                   style="background: #6366f1; border-color: #6366f1; width: 100%; text-align: center;">
+                   style="background: #e1474f; border-color: #e1474f; width: 100%; text-align: center;">
                     Modifica con Olobuild
                 </a>
             <?php else : ?>
                 <a href="<?php echo esc_url( $url ); ?>"
                    class="button button-primary"
-                   style="background: #6366f1; border-color: #6366f1; width: 100%; text-align: center;">
+                   style="background: #e1474f; border-color: #e1474f; width: 100%; text-align: center;">
                     Crea nuovo template
                 </a>
             <?php endif; ?>
