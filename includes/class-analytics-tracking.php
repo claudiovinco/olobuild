@@ -71,8 +71,22 @@ class Olobuild_Analytics_Tracking {
      * ═══════════════════════════════════════════════════ */
 
     public static function add_menu() {
-        // v1.0.31 — pagina migrata in ?page=olobuilder-settings&tab=analytics
-        // La classe resta attiva per l'injection dei tracker GA4/FB Pixel/GTM/Clarity/Hotjar nel frontend.
+        /*
+         * v1.0.31 la pagina era stata migrata in ?page=olobuilder-settings&tab=analytics.
+         * Col restyling a aree torna a esistere: è la destinazione di
+         * "Tracking & Analytics" nella sub-nav dell'area Raccolta — pagina
+         * DENTRO la shell, non un salto nella console. Nessuna voce di menu
+         * (admin_menu_trim su admin_head); la scheda console resta per
+         * ricerca/deep-link, la option salvata è la stessa (self::OPT).
+         */
+        add_submenu_page(
+            'olobuild',
+            __( 'Tracking & Analytics', 'olobuild' ),
+            __( 'Tracking & Analytics', 'olobuild' ),
+            'manage_options',
+            'olo-analytics',
+            [ __CLASS__, 'render_page' ]
+        );
     }
 
     public static function register_settings() {

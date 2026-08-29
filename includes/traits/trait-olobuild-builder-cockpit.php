@@ -194,7 +194,7 @@ trait Olobuild_Builder_Cockpit_Trait {
         return [
             [
                 'id'    => 'tpl',
-                'label' => __( 'Gestione Template', 'olobuild' ),
+                'label' => __( 'Blocchi & Pagine', 'olobuild' ),
                 'hint'  => __( 'Crea e modifica i tuoi template', 'olobuild' ),
                 'icon'  => 'template',
                 'color' => '#f97316',
@@ -399,9 +399,17 @@ trait Olobuild_Builder_Cockpit_Trait {
                 'label'  => __( 'Costruisci', 'olobuild' ),
                 'icon'   => '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>',
                 'url'    => admin_url( 'admin.php?page=olobuilder-templates' ),
+                /*
+                 * REGOLA delle sub-nav (feedback utente): ogni voce apre SOLO
+                 * pagine dentro la shell (stessa topbar + stessa sub-nav), MAI
+                 * la console o pagine WP nude — cambiare menu a metà strada fa
+                 * perdere la rotta. 'tab' resta accanto a 'screen' dove esiste
+                 * anche la scheda console: serve alla console per evidenziare
+                 * la voce quando la scheda è aperta come ospite (via ricerca).
+                 */
                 'subnav' => [
                     [ 'label' => __( 'Blocchi & Pagine', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olobuilder-templates' ), 'screen' => 'olobuild_page_olobuilder-templates' ],
-                    [ 'label' => __( 'Popup', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olobuilder-settings&tab=popups' ), 'tab' => 'popups' ],
+                    [ 'label' => __( 'Popup', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olo-global-popups' ), 'screen' => 'olobuild_page_olo-global-popups', 'tab' => 'popups' ],
                     [ 'label' => __( 'Importa / Esporta', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olo-import-export' ), 'screen' => 'olobuild_page_olo-import-export' ],
                 ],
             ],
@@ -409,10 +417,11 @@ trait Olobuild_Builder_Cockpit_Trait {
                 'label'  => __( 'Media', 'olobuild' ),
                 'icon'   => '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>',
                 'url'    => admin_url( 'admin.php?page=olo-media-search' ),
+                // Libreria WordPress (upload.php) e Chiavi provider (console)
+                // RIMOSSE: portavano fuori dalla shell. Le chiavi provider
+                // restano una scheda visibile della Configurazione.
                 'subnav' => [
                     [ 'label' => __( 'Ricerca media', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olo-media-search' ), 'screen' => 'olobuild_page_olo-media-search' ],
-                    [ 'label' => __( 'Libreria WordPress', 'olobuild' ), 'url' => admin_url( 'upload.php' ), 'screen' => 'upload' ],
-                    [ 'label' => __( 'Chiavi provider', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olobuilder-settings&tab=stockmedia' ), 'tab' => 'stockmedia' ],
                 ],
             ],
             'raccolta' => [
@@ -422,17 +431,19 @@ trait Olobuild_Builder_Cockpit_Trait {
                 'subnav' => [
                     [ 'label' => __( 'Invii form', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olo-form-submissions' ), 'screen' => 'olobuild_page_olo-form-submissions' ],
                     [ 'label' => __( 'Newsletter', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olo-newsletter' ), 'screen' => 'olobuild_page_olo-newsletter' ],
-                    [ 'label' => __( 'Tracking & Analytics', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olobuilder-settings&tab=analytics' ), 'tab' => 'analytics' ],
+                    [ 'label' => __( 'Tracking & Analytics', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olo-analytics' ), 'screen' => 'olobuild_page_olo-analytics', 'tab' => 'analytics' ],
                 ],
             ],
             'sistema' => [
                 'label'  => __( 'Sistema', 'olobuild' ),
                 'icon'   => '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 5V3M12 21v-2M5 12H3M21 12h-2M6.3 6.3 4.9 4.9M19.1 19.1l-1.4-1.4M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg>',
                 'url'    => admin_url( 'admin.php?page=olobuilder-settings' ),
+                // Diagnostica RIMOSSA dalla sub-nav: è una pagina di debug
+                // volutamente nuda sotto Strumenti WP (deve funzionare anche
+                // quando la shell è rotta) — resta raggiungibile da lì e dalla palette.
                 'subnav' => [
                     [ 'label' => __( 'Configurazione', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olobuilder-settings' ), 'screen' => 'olobuild_page_olobuilder-settings' ],
                     [ 'label' => __( 'Strumenti', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olo-tools' ), 'screen' => 'olobuild_page_olo-tools' ],
-                    [ 'label' => __( 'Diagnostica', 'olobuild' ), 'url' => admin_url( 'tools.php?page=olo-diagnostics' ), 'screen' => 'tools_page_olo-diagnostics' ],
                 ],
             ],
         ];
@@ -451,7 +462,7 @@ trait Olobuild_Builder_Cockpit_Trait {
         $tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- sola lettura per evidenziare la nav.
 
         if ( 'olobuild_page_olobuilder-settings' === $id ) {
-            $moved = [ 'popups' => 'costruisci', 'stockmedia' => 'media', 'analytics' => 'raccolta' ];
+            $moved = [ 'popups' => 'costruisci', 'analytics' => 'raccolta' ];
             return $moved[ $tab ] ?? 'sistema';
         }
 
@@ -563,7 +574,7 @@ trait Olobuild_Builder_Cockpit_Trait {
             <?php if ( $olo_current_area && ! empty( $olo_areas[ $olo_current_area ]['subnav'] ) ) : ?>
             <nav class="olo-cockpit-subnav" aria-label="<?php esc_attr_e( 'Sezioni dell\'area', 'olobuild' ); ?>">
                 <?php foreach ( $olo_areas[ $olo_current_area ]['subnav'] as $it ) :
-                    $it_active = ( isset( $it['screen'] ) && $it['screen'] === $olo_screen_id && ( 'olobuild_page_olobuilder-settings' !== $olo_screen_id || '' === $olo_current_tab || ! in_array( $olo_current_tab, [ 'popups', 'stockmedia', 'analytics' ], true ) ) )
+                    $it_active = ( isset( $it['screen'] ) && $it['screen'] === $olo_screen_id && ( 'olobuild_page_olobuilder-settings' !== $olo_screen_id || '' === $olo_current_tab || ! in_array( $olo_current_tab, [ 'popups', 'analytics' ], true ) ) )
                         || ( isset( $it['tab'] ) && 'olobuild_page_olobuilder-settings' === $olo_screen_id && $it['tab'] === $olo_current_tab );
                     ?>
                 <a href="<?php echo esc_url( $it['url'] ); ?>" class="<?php echo $it_active ? 'is-active' : ''; ?>" <?php echo $it_active ? 'aria-current="page"' : ''; ?>><?php echo esc_html( $it['label'] ); ?></a>

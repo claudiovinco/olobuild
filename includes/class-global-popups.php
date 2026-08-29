@@ -414,8 +414,23 @@ class Olobuild_Global_Popups {
      * ───────────────────────────────────────────── */
 
     public function add_admin_page() {
-        // v1.0.31 — pagina migrata in ?page=olobuilder-settings&tab=popups
-        // La classe resta attiva per il rendering dei popup nel frontend in base alle condizioni.
+        /*
+         * v1.0.31 la pagina era stata migrata in ?page=olobuilder-settings&tab=popups.
+         * Col restyling a aree torna a esistere: è la destinazione della voce
+         * "Popup" nella sub-nav dell'area Costruisci — una pagina DENTRO la
+         * shell (stessa topbar e sub-nav), non un salto nella console. Nessuna
+         * voce di menu (admin_menu_trim la toglie su admin_head); la scheda
+         * console resta raggiungibile da ricerca/deep-link: entrambe parlano
+         * allo stesso REST olobuild/v1/global-popups.
+         */
+        add_submenu_page(
+            'olobuild',
+            __( 'Popup Globali', 'olobuild' ),
+            __( 'Popup Globali', 'olobuild' ),
+            'manage_options',
+            'olo-global-popups',
+            [ $this, 'render_admin_page' ]
+        );
     }
 
     public function render_admin_page() {

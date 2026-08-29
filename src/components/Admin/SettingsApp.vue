@@ -8,12 +8,23 @@
         </a>
         <span class="brand-version">v{{ version }}</span>
       </div>
-      <nav class="crumb" aria-label="breadcrumb">
-        <a :href="dashboardUrl">{{ t('Dashboard') }}</a>
-        <span class="sep">/</span>
-        <a href="#" @click.prevent="">{{ t('Configurazione') }}</a>
-        <span class="sep">/</span>
-        <b>{{ activeTabLabel }}</b>
+      <!-- Le 4 aree della shell: la STESSA topbar delle altre pagine Olobuild.
+           Il breadcrumb "Configurazione" è sparito: imbrogliava (menu "Sistema",
+           atterraggio "Configurazione"); qui l'area attiva resta evidenziata,
+           anche per i tab traslocati (Popup → Costruisci, ecc.). -->
+      <nav v-if="AREAS.length" class="areas" :aria-label="t('Aree di Olobuild')">
+        <a
+          v-for="a in AREAS"
+          :key="a.id"
+          class="area-tab"
+          :class="{ 'is-active': a.id === activeAreaId }"
+          :href="a.url"
+          :aria-current="a.id === activeAreaId ? 'true' : undefined"
+          @click="onAreaClick(a, $event)"
+        >
+          <span class="ic" v-html="a.icon"></span>
+          <span class="lbl">{{ a.label }}</span>
+        </a>
       </nav>
       <div class="spacer"></div>
       <div class="top-search" role="search">
@@ -47,6 +58,21 @@
         </a>
       </div>
     </header>
+
+    <!-- ═══ Sub-nav dell'area attiva: la STESSA riga delle altre pagine della
+         shell. Da Sistema si vede [Configurazione | Strumenti]; con una scheda
+         ospite (es. Popup via ricerca) si vede la sub-nav della sua area, con
+         la voce evidenziata — nessun click "cambia menu". ═══ -->
+    <nav v-if="areaSubnav.length" class="cfg-area-subnav" :aria-label="t('Sezioni dell\'area')">
+      <a
+        v-for="(it, i) in areaSubnav"
+        :key="'as-' + i"
+        :href="it.url"
+        :class="{ 'is-active': isAreaSubnavActive(it) }"
+        :aria-current="isAreaSubnavActive(it) ? 'page' : undefined"
+        @click="onAreaSubnavClick(it, $event)"
+      >{{ it.label }}</a>
+    </nav>
 
     <!-- ═══ NAV: 5 aree come macro-schede, le voci dell'area come sotto-schede.
          Gli id delle 17 schede restano invariati (deep-link ?tab= e palette). ═══ -->
@@ -214,8 +240,9 @@ const IA_GROUPS = [
       { id: 'tplconditions', label: 'Assegnazione template', icon: 'sitemap', component: TemplateConditionsTab },
       { id: 'wootemplates',  label: 'WooCommerce template',  icon: 'cart',    component: WooTemplatesTab },
       // Traslocata nell'area Costruisci (restyling Fase 3): hidden = fuori
-      // dalla navigazione, ma il deep-link ?tab= e la ricerca la aprono ancora.
-      { id: 'popups',        label: 'Popup globali',         icon: 'window',  component: PopupsTab, hidden: true },
+      // dalla navigazione, ma il deep-link ?tab= e la ricerca la aprono ancora;
+      // `area` dice quale area della topbar resta evidenziata quando è attiva.
+      { id: 'popups',        label: 'Popup globali',         icon: 'window',  component: PopupsTab, hidden: true, area: 'costruisci' },
     ],
   },
   {
@@ -224,7 +251,7 @@ const IA_GROUPS = [
       { id: 'redirects', label: 'Redirect & 404',        icon: 'redirect',   component: RedirectsTab },
       { id: 'cookie',    label: 'Cookie Consent & GDPR', icon: 'key',        component: CookieTab },
       // Traslocata nell'area Raccolta (restyling Fase 3), vedi sopra.
-      { id: 'analytics', label: 'Tracking & Analytics',  icon: 'chart',      component: AnalyticsTab, hidden: true },
+      { id: 'analytics', label: 'Tracking & Analytics',  icon: 'chart',      component: AnalyticsTab, hidden: true, area: 'raccolta' },
     ],
   },
   {
@@ -232,8 +259,10 @@ const IA_GROUPS = [
       { id: 'performance', label: 'Performance & Cache',      icon: 'gauge',    component: PerformanceTab },
       { id: 'maintenance', label: 'Manutenzione & Coming Soon', icon: 'tool',    component: MaintenanceTab },
       { id: 'ai',          label: 'AI Assistant',             icon: 'sparkles', component: AITab,          badge: 'NEW' },
-      // Traslocata nell'area Media come «Chiavi provider» (restyling Fase 3), vedi sopra.
-      { id: 'stockmedia',  label: 'Stock media',              icon: 'image',    component: StockmediaTab, hidden: true },
+      // Tornata visibile: la voce "Chiavi provider" nell'area Media portava
+      // alla console = salto di menu (feedback utente); senza una pagina
+      // cockpit dedicata, la sua casa resta la Configurazione.
+      { id: 'stockmedia',  label: 'Stock media',              icon: 'image',    component: StockmediaTab },
     ],
   },
   {
@@ -284,6 +313,38 @@ const buildId = computed(() => {
 const dashboardUrl = computed(() => (window.oloData?.adminUrl || '') + 'admin.php?page=olobuild');
 const docsUrl = 'https://olotheme.com/docs/olobuild/';
 const siteUrl = computed(() => window.oloData?.siteUrl || '/');
+
+// Le 4 aree della shell (dal localize PHP, single source = cockpit_areas()).
+// La console è la pagina dell'area Sistema; i tab traslocati dichiarano la
+// loro area in IA_GROUPS e la topbar la tiene evidenziata.
+const AREAS = window.oloData?.areas || [];
+const activeAreaId = computed(() => currentItem.value?.area || 'sistema');
+function onAreaClick(area, e) {
+  // Già qui: non ricaricare la pagina (perderebbe le modifiche non salvate),
+  // chiudi solo l'eventuale ricerca aperta.
+  if (area.id === activeAreaId.value) {
+    e.preventDefault();
+    filterQuery.value = '';
+  }
+}
+
+// Sub-nav dell'area attiva (stessa riga delle pagine cockpit): in area Sistema
+// la voce "Configurazione" è questa pagina; una scheda ospite (tab traslocato
+// aperto via ricerca/deep-link) evidenzia la sua voce nell'area di provenienza.
+const areaSubnav = computed(() => {
+  const area = AREAS.find(a => a.id === activeAreaId.value);
+  return area?.subnav || [];
+});
+function isAreaSubnavActive(it) {
+  if (it.tab) return it.tab === activeTab.value;
+  return activeAreaId.value === 'sistema' && it.url.includes('olobuilder-settings');
+}
+function onAreaSubnavClick(it, e) {
+  if (isAreaSubnavActive(it)) {
+    e.preventDefault();
+    filterQuery.value = '';
+  }
+}
 
 function initialTab() {
   const url = new URL(window.location.href);
@@ -379,7 +440,6 @@ const dirtyTabItems = computed(() =>
 );
 
 const currentItem    = computed(() => ALL_ITEMS.find(i => i.id === activeTab.value));
-const activeTabLabel = computed(() => t(currentItem.value?.label || ''));
 const currentTabComponent = computed(() => currentItem.value?.component || ColorsTab);
 const currentTabProps = computed(() => ({}));
 
@@ -532,7 +592,34 @@ provide('setDirty', (v) => { markDirty(!!v); });
 // Cleanup search se cambia tab.
 watch(activeTab, () => { filterQuery.value = ''; });
 
+// La console è position:fixed e deve partire dove finisce il menu wp-admin.
+// La larghezza vera si MISURA (#adminmenuwrap): 160px è solo il default, il
+// menu può essere ripiegato (36), in app mode (52) o allargato da altri
+// plugin. ResizeObserver segue fold/unfold e il toggle app mode dal vivo.
+function syncWpMenuOffset() {
+  const menuEl = document.getElementById('adminmenuwrap');
+  if (!menuEl) return;
+  const apply = () => {
+    const w = window.innerWidth > 782 ? Math.round(menuEl.getBoundingClientRect().width) : 0;
+    document.documentElement.style.setProperty('--olo-wpmenu-w', w + 'px');
+  };
+  apply();
+  if (window.ResizeObserver) new ResizeObserver(apply).observe(menuEl);
+  window.addEventListener('resize', apply);
+}
+
 onMounted(() => {
+  syncWpMenuOffset();
+
+  // La topbar ora ha link che lasciano la pagina (aree, Strumenti…): con
+  // modifiche non salvate il browser chiede conferma prima di buttarle via.
+  window.addEventListener('beforeunload', (e) => {
+    if (dirty.value) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+
   // Deep-link dalla palette globale ⌘K: ?tab=…&field=<label> apre la scheda
   // (già fatto da initialTab) e scorre fino al campo, illuminandolo.
   try {
@@ -610,9 +697,11 @@ onMounted(() => {
   line-height: 1.45;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 56px 44px 42px 1fr 64px;
+  /* La riga areasub è auto: collassa a zero se il localize non porta le aree. */
+  grid-template-rows: 56px auto 44px 42px 1fr 64px;
   grid-template-areas:
     'topbar'
+    'areasub'
     'macrobar'
     'subbar'
     'content'
@@ -626,17 +715,19 @@ onMounted(() => {
   top: var(--wp-admin--admin-bar--height, 32px);
   right: 0;
   bottom: 0;
-  left: 160px; /* larghezza del menu wp-admin desktop */
+  /* La larghezza del menu wp-admin NON è affidabile a priori: 160px di
+     default, 36 ripiegato, 52 in app mode, ma altri plugin possono
+     allargarlo (successo su olotheme.com: console sotto il menu). La var
+     è MISURATA dal componente su #adminmenuwrap (ResizeObserver), quindi
+     copre anche fold/app-mode senza regole per stato. */
+  left: var(--olo-wpmenu-w, 160px);
   background: var(--c-bg);
   overflow: hidden;
   isolation: isolate;
   -webkit-font-smoothing: antialiased;
 }
-/* Menu ripiegato (scelta utente o auto-fold di WP sotto i 960px) e app mode. */
-body.folded .cfg-root,
-body.auto-fold .cfg-root { left: 36px; }
-body.olobuild-app-mode .cfg-root { left: 52px; }
 @media (max-width: 782px) {
+  /* Sotto i 783px il menu WP è un overlay a scomparsa: la console parte da 0. */
   .cfg-root { left: 0; top: 46px; }
 }
 
@@ -671,19 +762,55 @@ body.olobuild-app-mode .cfg-root { left: 52px; }
   font-family: var(--c-mono);
   white-space: nowrap;
 }
-.cfg-topbar .crumb {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 13px;
-  color: var(--c-text-mute);
-  padding-left: 24px;
-  margin-left: 8px;
-  border-left: 1px solid var(--c-line);
-  height: 26px;
+/* Le 4 aree in topbar: stesso linguaggio di .olo-area-tab della shell cockpit. */
+.cfg-topbar .areas {
+  display: flex; gap: 4px; margin-left: 6px;
+  overflow-x: auto; scrollbar-width: none;
 }
-.cfg-topbar .crumb a { color: var(--c-text-mute); text-decoration: none; cursor: pointer; }
-.cfg-topbar .crumb a:hover { color: var(--c-navy); }
-.cfg-topbar .crumb b { color: var(--c-navy); font-weight: 600; }
-.cfg-topbar .crumb .sep { color: var(--c-text-faint); }
+.cfg-topbar .areas::-webkit-scrollbar { display: none; }
+.cfg-topbar .area-tab {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 13px; font-weight: 600; color: var(--c-text-mute);
+  border-radius: 8px; padding: 7px 13px;
+  text-decoration: none; white-space: nowrap;
+  transition: background .12s, color .12s;
+}
+.cfg-topbar .area-tab:hover { background: var(--c-bg); color: var(--c-text); }
+.cfg-topbar .area-tab.is-active { background: var(--c-red-soft); color: var(--c-red); }
+.cfg-topbar .area-tab:focus-visible { outline: 2px solid var(--c-red); outline-offset: 2px; }
+.cfg-topbar .area-tab .ic { display: flex; }
+.cfg-topbar .area-tab .ic svg { width: 15px; height: 15px; }
+@media (max-width: 1180px) {
+  .cfg-topbar .area-tab .lbl { display: none; }
+  .cfg-topbar .area-tab { padding: 7px 10px; }
+}
+
+/* ── Sub-nav dell'area (stessa riga di .olo-cockpit-subnav della shell) ── */
+.cfg-area-subnav {
+  grid-area: areasub;
+  height: 42px;
+  display: flex; align-items: stretch; gap: 2px;
+  padding: 0 20px;
+  background: #fff;
+  border-bottom: 1px solid var(--c-line);
+  overflow-x: auto; scrollbar-width: none;
+}
+.cfg-area-subnav::-webkit-scrollbar { display: none; }
+.cfg-area-subnav a {
+  display: inline-flex; align-items: center;
+  font-size: 13px; font-weight: 500; color: var(--c-text-mute);
+  padding: 0 12px; text-decoration: none;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  white-space: nowrap;
+  transition: color .12s, border-color .12s;
+}
+.cfg-area-subnav a:hover { color: var(--c-text); }
+.cfg-area-subnav a.is-active {
+  color: var(--c-red-dark);
+  border-bottom-color: var(--c-red);
+  font-weight: 600;
+}
+.cfg-area-subnav a:focus-visible { outline: 2px solid var(--c-red); outline-offset: -2px; border-radius: 6px; }
 .cfg-topbar .spacer { flex: 1; }
 .cfg-topbar .top-search {
   display: flex; align-items: center; gap: 8px;
@@ -691,7 +818,7 @@ body.olobuild-app-mode .cfg-root { left: 52px; }
   border: 1px solid var(--c-line);
   border-radius: 8px;
   padding: 7px 12px;
-  width: 320px;
+  width: 280px; /* come la search-mini del cockpit: topbar uguali ovunque */
   font-size: 13px;
   color: var(--c-text-mute);
 }
@@ -1142,7 +1269,6 @@ body.olobuild-app-mode .cfg-root { left: 52px; }
 /* ── Responsive (sotto 960: le due barre restano, scorrono in orizzontale) ── */
 @media (max-width: 960px) {
   .cfg-topbar .top-search { display: none; }
-  .cfg-topbar .crumb { display: none; }
   .cfg-macrobar { padding: 0 12px; }
   .cfg-subbar { padding: 0 12px; }
   .cfg-macrobar .macro-version { display: none; }

@@ -28,7 +28,16 @@ class Olobuild_Builder {
     private function init() {
         // Admin menu
         add_action( 'admin_menu', [ $this, 'admin_menu' ] );
-        add_action( 'admin_menu', [ $this, 'admin_menu_trim' ], 999 );
+        /*
+         * ⚠️ admin_head, NON admin_menu: per le pagine di plugin il permission
+         * check di WordPress (user_can_access_admin_page) risolve il parent
+         * cercando lo slug nel $submenu — se la voce è già stata rimossa il
+         * parent risolto è vuoto, l'hookname non combacia con quello registrato
+         * e la pagina muore con "Non hai il permesso" (successo con
+         * olo-newsletter). admin_head gira DOPO quel check e PRIMA del render
+         * del menu (menu-header.php): la voce sparisce, l'accesso resta.
+         */
+        add_action( 'admin_head', [ $this, 'admin_menu_trim' ] );
 
         // Settings page (API keys)
         add_action( 'admin_init', [ $this, 'register_settings' ] );
@@ -534,14 +543,16 @@ class Olobuild_Builder {
 
     /**
      * Toglie dal menu le voci traslocate nelle sub-nav delle aree (restyling
-     * Fase 2). remove_submenu_page rimuove SOLO la voce: le pagine restano
-     * registrate e i loro URL continuano a funzionare. Priorità 999 perché
-     * Strumenti e Import/Export sono registrate da altre classi a priorità 10.
+     * Fase 2). Le pagine restano registrate e i loro URL continuano a
+     * funzionare, ma SOLO perché questo gira su admin_head: rimuoverle su
+     * admin_menu blocca l'accesso diretto (vedi il commento sull'add_action).
      */
     public function admin_menu_trim() {
-        remove_submenu_page( 'olobuild', 'olo-newsletter' );    // → sub-nav Raccolta
-        remove_submenu_page( 'olobuild', 'olo-tools' );         // → sub-nav Sistema
-        remove_submenu_page( 'olobuild', 'olo-import-export' ); // → sub-nav Costruisci
+        remove_submenu_page( 'olobuild', 'olo-newsletter' );     // → sub-nav Raccolta
+        remove_submenu_page( 'olobuild', 'olo-tools' );          // → sub-nav Sistema
+        remove_submenu_page( 'olobuild', 'olo-import-export' );  // → sub-nav Costruisci
+        remove_submenu_page( 'olobuild', 'olo-global-popups' );  // → sub-nav Costruisci
+        remove_submenu_page( 'olobuild', 'olo-analytics' );      // → sub-nav Raccolta
     }
 
     /**
@@ -824,7 +835,32 @@ class Olobuild_Builder {
                     $last_saved_str = wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $last_saved_ts );
                 }
             }
+            // Le 4 aree della shell (CON le loro sub-nav) per la topbar della
+            // console: la Configurazione mostra la STESSA navigazione delle
+            // altre pagine — topbar aree + sub-nav dell'area — così nessun
+            // click "cambia menu". Il campo 'tab' di una voce serve alla
+            // console per evidenziarla quando la sua scheda è aperta come
+            // ospite (arrivando da ricerca/deep-link).
+            $areas_nav = [];
+            foreach ( self::cockpit_areas() as $area_id => $area ) {
+                $subnav = [];
+                foreach ( $area['subnav'] as $it ) {
+                    $entry = [ 'label' => $it['label'], 'url' => $it['url'] ];
+                    if ( isset( $it['tab'] ) ) {
+                        $entry['tab'] = $it['tab'];
+                    }
+                    $subnav[] = $entry;
+                }
+                $areas_nav[] = [
+                    'id'     => $area_id,
+                    'label'  => $area['label'],
+                    'url'    => $area['url'],
+                    'icon'   => $area['icon'],
+                    'subnav' => $subnav,
+                ];
+            }
             wp_localize_script( 'olo-admin-settings-js', 'oloData', [
+                'areas'             => $areas_nav,
                 'restUrl'           => esc_url_raw( rest_url( 'olobuild/v1' ) . '/' ),
                 'nonce'             => wp_create_nonce( 'wp_rest' ),
                 'importsDisabled'   => olobuild_imports_disabled(),

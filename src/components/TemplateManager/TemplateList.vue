@@ -3,7 +3,9 @@
     <!-- ═══ Page header ══════════════════════════════════════════════ -->
     <div class="tpl-head">
       <div class="titles">
-        <h1>{{ t('Gestione Template') }}</h1>
+        <!-- Stesso nome della voce di sub-nav "Blocchi & Pagine": un solo nome
+             per una sola destinazione (i titoli doppi disorientano). -->
+        <h1>{{ t('Blocchi & Pagine') }}</h1>
         <div class="sub">
           <b>{{ templates.length }}</b> {{ t('totali') }}
           <template v-if="activeCount > 0"> · <b>{{ activeCount }}</b> {{ t('attivi') }}</template>

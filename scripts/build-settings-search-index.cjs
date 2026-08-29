@@ -33,7 +33,7 @@ const TAB_META = {
 	performance:   { label: 'Performance & Cache',     group: 'Prestazioni & Servizi' },
 	maintenance:   { label: 'Manutenzione & Coming Soon', group: 'Prestazioni & Servizi' },
 	ai:            { label: 'AI Assistant',            group: 'Prestazioni & Servizi' },
-	stockmedia:    { label: 'Stock media',             group: 'Area Media' },
+	stockmedia:    { label: 'Stock media',             group: 'Prestazioni & Servizi' },
 	whitelabel:    { label: 'White Label',             group: 'Team & Brand' },
 	permessi:      { label: 'Permessi & Ruoli',        group: 'Team & Brand' },
 };
