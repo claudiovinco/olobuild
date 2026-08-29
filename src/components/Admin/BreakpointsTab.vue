@@ -65,7 +65,9 @@
       </div>
       <div v-for="(b, i) in breakpoints" :key="b.id" class="bp-row" :class="{ 'is-active': b.is_default }">
         <div class="bp-handle" :title="t('Trascina')">⋮⋮</div>
-        <div class="bp-icon">{{ b.icon }}</div>
+        <!-- Icona derivata dalla larghezza (SVG stroke, la firma): il campo
+             `icon` salvato nelle config resta com'è ma non si mostra più. -->
+        <div class="bp-icon" v-html="bpIconSvg(b)"></div>
         <div class="bp-name">{{ b.name }}</div>
         <div class="cfg-input mono">
           <input type="text" :value="b.min" @input="setField(i, 'min', $event.target.value)" />
@@ -126,6 +128,19 @@ const DEFAULT_BPS = [
   { id: 'mobile_l',   name: 'Mobile L',   min: '576',  max: '767',  icon: '📱', is_default: false },
   { id: 'mobile',     name: 'Mobile',     min: '0',    max: '575',  icon: '📱', is_default: false },
 ];
+
+// Icona per larghezza minima, sempre SVG stroke monocroma (niente emoji in UI;
+// il campo `icon` resta nei dati solo per compatibilità con le config salvate).
+function bpIconSvg(b) {
+  const min = parseInt(b.min, 10) || 0;
+  if (min >= 992) {
+    return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>';
+  }
+  if (min >= 576) {
+    return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M11 18h2"/></svg>';
+  }
+  return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>';
+}
 
 const breakpoints = ref(JSON.parse(JSON.stringify(DEFAULT_BPS)));
 const advanced = ref({ strategy: 'mobile' });

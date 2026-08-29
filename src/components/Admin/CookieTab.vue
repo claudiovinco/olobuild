@@ -179,8 +179,8 @@ const categories = ref([
 
 const activeLang = ref('it');
 const copy = ref({
-  it: { title: 'Utilizziamo i cookie 🍪', body: 'Per offrirti la migliore esperienza utilizziamo cookie. Puoi accettare tutti, solo gli essenziali o personalizzare le tue preferenze.', accept_all: 'Accetta tutti', only_essentials: 'Solo essenziali', customize: 'Personalizza' },
-  en: { title: 'We use cookies 🍪', body: 'To give you the best experience we use cookies. Accept all, essentials only, or customize your preferences.', accept_all: 'Accept all', only_essentials: 'Essentials only', customize: 'Customize' },
+  it: { title: 'Utilizziamo i cookie', body: 'Per offrirti la migliore esperienza utilizziamo cookie. Puoi accettare tutti, solo gli essenziali o personalizzare le tue preferenze.', accept_all: 'Accetta tutti', only_essentials: 'Solo essenziali', customize: 'Personalizza' },
+  en: { title: 'We use cookies', body: 'To give you the best experience we use cookies. Accept all, essentials only, or customize your preferences.', accept_all: 'Accept all', only_essentials: 'Essentials only', customize: 'Customize' },
 });
 
 function set(k, v) { form.value[k] = v; setDirty(true); }

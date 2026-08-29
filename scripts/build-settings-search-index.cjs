@@ -23,15 +23,17 @@ const TAB_META = {
 	responsive:    { label: 'Breakpoint responsive',   group: 'Design' },
 	tplconditions: { label: 'Assegnazione template',   group: 'Contenuti & Template' },
 	wootemplates:  { label: 'WooCommerce template',    group: 'Contenuti & Template' },
-	popups:        { label: 'Popup globali',           group: 'Contenuti & Template' },
+	// Le tre schede traslocate nelle aree (restyling Fase 3) dichiarano la
+	// nuova casa come gruppo: la palette globale mostra dove si arriva davvero.
+	popups:        { label: 'Popup globali',           group: 'Area Costruisci' },
 	seo:           { label: 'SEO globale',             group: 'SEO & Privacy' },
 	redirects:     { label: 'Redirect & 404',          group: 'SEO & Privacy' },
 	cookie:        { label: 'Cookie Consent & GDPR',   group: 'SEO & Privacy' },
-	analytics:     { label: 'Tracking & Analytics',    group: 'SEO & Privacy' },
+	analytics:     { label: 'Tracking & Analytics',    group: 'Area Raccolta' },
 	performance:   { label: 'Performance & Cache',     group: 'Prestazioni & Servizi' },
 	maintenance:   { label: 'Manutenzione & Coming Soon', group: 'Prestazioni & Servizi' },
 	ai:            { label: 'AI Assistant',            group: 'Prestazioni & Servizi' },
-	stockmedia:    { label: 'Stock media',             group: 'Prestazioni & Servizi' },
+	stockmedia:    { label: 'Stock media',             group: 'Area Media' },
 	whitelabel:    { label: 'White Label',             group: 'Team & Brand' },
 	permessi:      { label: 'Permessi & Ruoli',        group: 'Team & Brand' },
 };

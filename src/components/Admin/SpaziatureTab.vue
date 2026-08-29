@@ -134,9 +134,9 @@
       <div class="gutter-table">
         <div class="gutter-th">
           <span></span>
-          <span>🖥️ {{ t('Desktop') }}</span>
-          <span>📱 {{ t('Tablet') }}</span>
-          <span>📱 {{ t('Mobile') }}</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg> {{ t('Desktop') }}</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M11 18h2"/></svg> {{ t('Tablet') }}</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg> {{ t('Mobile') }}</span>
         </div>
         <div class="gutter-tr">
           <label>{{ t('Gap colonne') }}</label>

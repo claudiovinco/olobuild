@@ -48,80 +48,46 @@
       </div>
     </header>
 
-    <!-- ═══ SIDEBAR ═══ -->
-    <aside class="cfg-sidebar">
-      <div class="cfg-side-search">
-        <div class="cfg-side-search-input">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input
-            type="search"
-            :value="filterQuery"
-            @input="onSearchInput"
-            @focus="searchArmed = true"
-            :placeholder="t('Filtra impostazioni…')"
-            :aria-label="t('Filtra impostazioni')"
-            autocomplete="off"
-            autocorrect="off"
-            autocapitalize="off"
-            spellcheck="false"
-            name="olo-cfg-sidebar-filter"
-            data-1p-ignore
-            data-lpignore="true"
-          />
-        </div>
-      </div>
-      <div class="cfg-sidegroups">
-        <!-- Usate di recente (nascosto durante la ricerca) -->
-        <div v-if="recentItems.length && !searchActive" class="cfg-group cfg-group-recent">
-          <div class="cfg-group-head cfg-recent-head">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-            {{ t('Usate di recente') }}
-          </div>
-          <div
-            v-for="r in recentItems"
-            :key="'recent-' + r.item.id"
-            class="cfg-side-item"
-            @click="onPick(r.item)"
-          >
-            <span class="ic" v-html="iconSvg(r.item.icon)"></span>
-            <span>{{ t(r.item.label) }}</span>
-            <span class="recent-when">{{ r.when }}</span>
-          </div>
-        </div>
-
-        <div v-for="group in filteredGroups" :key="group.id" class="cfg-group">
-          <div class="cfg-group-head">
-            {{ t(group.title) }}
-            <span class="count">{{ group.items.length }}</span>
-          </div>
-          <div
-            v-for="item in group.items"
-            :key="item.id"
-            class="cfg-side-item"
-            :class="{ 'is-active': activeTab === item.id, 'is-soon': item.soon }"
-            :title="item.soon ? t('In arrivo nella prossima release') : ''"
-            @click="onPick(item)"
-          >
-            <span class="ic" v-html="iconSvg(item.icon)"></span>
-            <span>{{ t(item.label) }}</span>
-            <span v-if="dirtyTabs.has(item.id)" class="dirty-dot" :title="t('Modifiche non salvate')"></span>
-            <span v-if="searchActive && hitCount(item.id)" class="hit-n">{{ hitCount(item.id) }}</span>
-            <span v-if="item.soon" class="pill-soon">Soon</span>
-            <span v-else-if="item.badge" class="badge-new">{{ item.badge }}</span>
-            <span v-else class="chev">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="cfg-side-footer">
-        <div class="lic">
-          <span class="ok"></span>
-          <span>{{ t('Versione') }} <b>{{ version }}</b></span>
-        </div>
-        <div class="ver">build {{ buildId }}</div>
-      </div>
-    </aside>
+    <!-- ═══ NAV: 5 aree come macro-schede, le voci dell'area come sotto-schede.
+         Gli id delle 17 schede restano invariati (deep-link ?tab= e palette). ═══ -->
+    <nav class="cfg-macrobar" role="tablist" :aria-label="t('Aree della configurazione')">
+      <button
+        v-for="group in IA_GROUPS"
+        :key="group.id"
+        type="button"
+        class="cfg-macro-tab"
+        :class="{ 'is-active': activeGroupId === group.id }"
+        role="tab"
+        :aria-selected="activeGroupId === group.id"
+        @click="onPickGroup(group)"
+      >
+        {{ t(group.title) }}
+        <span v-if="groupDirty(group)" class="dirty-dot" :title="t('Modifiche non salvate')"></span>
+        <span v-if="searchActive && groupHits(group)" class="hit-n">{{ groupHits(group) }}</span>
+      </button>
+      <div class="macro-spacer"></div>
+      <div class="macro-version"><span class="ok"></span>v{{ version }} · build {{ buildId }}</div>
+    </nav>
+    <nav class="cfg-subbar" role="tablist" :aria-label="t('Schede dell\'area')">
+      <button
+        v-for="item in visibleGroupItems"
+        :key="item.id"
+        type="button"
+        class="cfg-sub-tab"
+        :class="{ 'is-active': activeTab === item.id, 'is-soon': item.soon }"
+        role="tab"
+        :aria-selected="activeTab === item.id"
+        :title="item.soon ? t('In arrivo nella prossima release') : ''"
+        @click="onPick(item)"
+      >
+        <span class="ic" v-html="iconSvg(item.icon)"></span>
+        {{ t(item.label) }}
+        <span v-if="dirtyTabs.has(item.id)" class="dirty-dot" :title="t('Modifiche non salvate')"></span>
+        <span v-if="searchActive && hitCount(item.id)" class="hit-n">{{ hitCount(item.id) }}</span>
+        <span v-if="item.soon" class="pill-soon">Soon</span>
+        <span v-else-if="item.badge" class="badge-new">{{ item.badge }}</span>
+      </button>
+    </nav>
 
     <!-- ═══ CONTENT ═══ -->
     <main ref="contentEl" class="cfg-content" :id="'cfg-panel-' + activeTab" role="tabpanel" :aria-labelledby="'cfg-tab-' + activeTab">
@@ -247,7 +213,9 @@ const IA_GROUPS = [
     id: 'content', title: 'Contenuti & Template', items: [
       { id: 'tplconditions', label: 'Assegnazione template', icon: 'sitemap', component: TemplateConditionsTab },
       { id: 'wootemplates',  label: 'WooCommerce template',  icon: 'cart',    component: WooTemplatesTab },
-      { id: 'popups',        label: 'Popup globali',         icon: 'window',  component: PopupsTab },
+      // Traslocata nell'area Costruisci (restyling Fase 3): hidden = fuori
+      // dalla navigazione, ma il deep-link ?tab= e la ricerca la aprono ancora.
+      { id: 'popups',        label: 'Popup globali',         icon: 'window',  component: PopupsTab, hidden: true },
     ],
   },
   {
@@ -255,7 +223,8 @@ const IA_GROUPS = [
       { id: 'seo',       label: 'SEO globale',           icon: 'search',     component: SeoTab },
       { id: 'redirects', label: 'Redirect & 404',        icon: 'redirect',   component: RedirectsTab },
       { id: 'cookie',    label: 'Cookie Consent & GDPR', icon: 'key',        component: CookieTab },
-      { id: 'analytics', label: 'Tracking & Analytics',  icon: 'chart',      component: AnalyticsTab },
+      // Traslocata nell'area Raccolta (restyling Fase 3), vedi sopra.
+      { id: 'analytics', label: 'Tracking & Analytics',  icon: 'chart',      component: AnalyticsTab, hidden: true },
     ],
   },
   {
@@ -263,7 +232,8 @@ const IA_GROUPS = [
       { id: 'performance', label: 'Performance & Cache',      icon: 'gauge',    component: PerformanceTab },
       { id: 'maintenance', label: 'Manutenzione & Coming Soon', icon: 'tool',    component: MaintenanceTab },
       { id: 'ai',          label: 'AI Assistant',             icon: 'sparkles', component: AITab,          badge: 'NEW' },
-      { id: 'stockmedia',  label: 'Stock media',              icon: 'image',    component: StockmediaTab },
+      // Traslocata nell'area Media come «Chiavi provider» (restyling Fase 3), vedi sopra.
+      { id: 'stockmedia',  label: 'Stock media',              icon: 'image',    component: StockmediaTab, hidden: true },
     ],
   },
   {
@@ -300,9 +270,9 @@ function onSearchInput(e) {
   }
   filterQuery.value = e.target.value;
 }
-// Schede usate di recente: [{id, at}] in localStorage.
-const RECENT_KEY = 'olo_cfg_recent_tabs';
-const recentRaw = ref(loadRecent());
+// Ultima scheda aperta per ogni area: {groupId: tabId} in localStorage.
+// Cliccando una macro-scheda si riapre dove si era rimasti in quell'area.
+const GROUP_LAST_KEY = 'olo_cfg_group_last';
 
 const version = window.oloData?.version || '1.0.0';
 const logoUrl = (window.oloData?.pluginUrl || '/wp-content/plugins/olobuild/') + 'assets/img/olobuild-horizontal.png';
@@ -378,47 +348,31 @@ function hl(text) {
   return esc.replace(new RegExp(`(${safeQ})`, 'ig'), '<mark>$1</mark>');
 }
 
-// ─── Filtered groups (live search) ──────────────────────────────────
-// La sidebar tiene le voci il cui NOME combacia oppure che hanno campi trovati.
-const filteredGroups = computed(() => {
-  const q = filterQuery.value.trim().toLowerCase();
-  if (!q) return IA_GROUPS;
-  return IA_GROUPS
-    .map(g => ({ ...g, items: g.items.filter(i => i.label.toLowerCase().includes(q) || hitCount(i.id) > 0) }))
-    .filter(g => g.items.length > 0);
-});
-
-// ─── Usate di recente ───────────────────────────────────────────────
-function loadRecent() {
-  try {
-    const arr = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
-    return Array.isArray(arr) ? arr.filter(r => r && r.id) : [];
-  } catch (e) { return []; }
-}
-function touchRecent(id) {
-  const next = [{ id, at: Date.now() }, ...recentRaw.value.filter(r => r.id !== id)].slice(0, 6);
-  recentRaw.value = next;
-  try { localStorage.setItem(RECENT_KEY, JSON.stringify(next)); } catch (e) { /* ignore */ }
-}
-function relTime(at) {
-  const mins = Math.round((Date.now() - at) / 60000);
-  if (mins < 2) return t('adesso');
-  if (mins < 60) return `${mins} min`;
-  const hours = Math.round(mins / 60);
-  if (hours < 24) return `${hours} h`;
-  const days = Math.round(hours / 24);
-  return days === 1 ? t('ieri') : `${days} ${t('gg')}`;
-}
-const recentItems = computed(() =>
-  recentRaw.value
-    .filter(r => r.id !== activeTab.value)
-    .map(r => {
-      const item = ALL_ITEMS.find(i => i.id === r.id && !i.soon);
-      return item ? { item, when: relTime(r.at) } : null;
-    })
-    .filter(Boolean)
-    .slice(0, 3)
+// ─── Aree (macro-schede) ────────────────────────────────────────────
+const activeGroup = computed(() =>
+  IA_GROUPS.find(g => g.items.some(i => i.id === activeTab.value)) || IA_GROUPS[0]
 );
+const activeGroupId = computed(() => activeGroup.value.id);
+// Le schede traslocate nelle aree (hidden) non compaiono nella subbar,
+// TRANNE quella eventualmente attiva (aperta via deep-link o ricerca):
+// si mostra come scheda ospite, così l'utente vede dove si trova.
+const visibleGroupItems = computed(() =>
+  activeGroup.value.items.filter(i => !i.hidden || i.id === activeTab.value)
+);
+
+function groupHits(group) {
+  return group.items.reduce((n, i) => n + hitCount(i.id), 0);
+}
+function groupDirty(group) {
+  return group.items.some(i => dirtyTabs.value.has(i.id));
+}
+function onPickGroup(group) {
+  let lastId = null;
+  try { lastId = JSON.parse(localStorage.getItem(GROUP_LAST_KEY) || '{}')[group.id]; } catch (e) { /* ignore */ }
+  const item = group.items.find(i => i.id === lastId && !i.soon && !i.hidden)
+    || group.items.find(i => !i.soon && !i.hidden);
+  if (item) onPick(item);
+}
 
 const dirtyTabItems = computed(() =>
   ALL_ITEMS.filter(i => dirtyTabs.value.has(i.id))
@@ -456,7 +410,14 @@ function iconSvg(name) {
 // ─── Actions ────────────────────────────────────────────────────────
 function onPick(item) {
   if (item.soon) return;
-  touchRecent(item.id);
+  try {
+    const g = IA_GROUPS.find(gr => gr.items.some(i => i.id === item.id));
+    if (g) {
+      const map = JSON.parse(localStorage.getItem(GROUP_LAST_KEY) || '{}');
+      map[g.id] = item.id;
+      localStorage.setItem(GROUP_LAST_KEY, JSON.stringify(map));
+    }
+  } catch (e) { /* ignore */ }
   if (item.id === activeTab.value) {
     // Già attiva: la ricerca (se aperta) si chiude e si torna alla scheda.
     filterQuery.value = '';
@@ -599,7 +560,7 @@ onMounted(() => {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
 /* La pagina admin WP riserva l'area #wpbody-content; vogliamo che la nostra shell la riempia per intero. */
 #wpbody-content { padding-bottom: 0 !important; }
@@ -613,9 +574,11 @@ onMounted(() => {
   --c-red-dark:   #c8323a;
   --c-red-soft:   #fef2f3;
   --c-red-soft-2: #fde2e4;
-  --c-navy:       #0f172a;
-  --c-navy-2:     #1e293b;
-  --c-navy-3:     #334155;
+  /* Antracite della barra wp-admin, non piu' navy: l'utente non vuole
+     superfici blu nelle pagine Olobuild (stessi grigi del menu WordPress). */
+  --c-navy:       #1d2327;
+  --c-navy-2:     #2c3338;
+  --c-navy-3:     #3c434a;
   --c-cream:      #faf7f2;
   --c-cream-2:    #f3ede2;
   --c-line:       #e6e8ee;
@@ -628,8 +591,11 @@ onMounted(() => {
   --c-success-soft:#dcfce7;
   --c-warning:    #b45309;
   --c-warning-soft:#fef3c7;
-  --c-sans:    'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --c-display: 'Instrument Serif', 'Playfair Display', Georgia, serif;
+  /* Inter come il builder: un'unica famiglia per tutta la shell Olobuild
+     (il serif dei titoli è stato ritirato col restyling, --c-display resta
+     come token per i punti che lo usano — numeri grandi, heading). */
+  --c-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --c-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --c-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
 }
 .cfg-layer {
@@ -643,21 +609,35 @@ onMounted(() => {
   font-size: 14px;
   line-height: 1.45;
   display: grid;
-  grid-template-columns: 264px 1fr;
-  grid-template-rows: 56px 1fr 64px;
+  grid-template-columns: 1fr;
+  grid-template-rows: 56px 44px 42px 1fr 64px;
   grid-template-areas:
-    'topbar topbar'
-    'sidebar content'
-    'sidebar savebar';
-  /* Altezza calcolata sottraendo la barra admin di WP (32px desktop, 46px mobile) */
-  height: calc(100vh - var(--wp-admin--admin-bar--height, 32px));
+    'topbar'
+    'macrobar'
+    'subbar'
+    'content'
+    'savebar';
+  /* FIXED, non height:100vh nel flusso: su siti col menu wp-admin più alto
+     della viewport la pagina scrolla comunque, e sotto la console compariva
+     una fascia vuota. Fissata al viewport, la console riempie sempre lo
+     schermo a destra del menu; lo scroll del body muove solo il menu di
+     WordPress (le voci in fondo restano raggiungibili). */
+  position: fixed;
+  top: var(--wp-admin--admin-bar--height, 32px);
+  right: 0;
+  bottom: 0;
+  left: 160px; /* larghezza del menu wp-admin desktop */
   background: var(--c-bg);
   overflow: hidden;
   isolation: isolate;
   -webkit-font-smoothing: antialiased;
 }
+/* Menu ripiegato (scelta utente o auto-fold di WP sotto i 960px) e app mode. */
+body.folded .cfg-root,
+body.auto-fold .cfg-root { left: 36px; }
+body.olobuild-app-mode .cfg-root { left: 52px; }
 @media (max-width: 782px) {
-  .cfg-root { height: calc(100vh - 46px); }
+  .cfg-root { left: 0; top: 46px; }
 }
 
 /* ── TOPBAR ────────────────────────────────────────────────────────── */
@@ -739,94 +719,80 @@ onMounted(() => {
 .cfg-topbar .doc-link:hover { background: var(--c-bg); color: var(--c-navy); }
 .cfg-topbar .doc-link svg { width: 14px; height: 14px; }
 
-/* ── SIDEBAR ──────────────────────────────────────────────────────── */
-.cfg-sidebar {
-  grid-area: sidebar / sidebar / savebar / sidebar;
+/* ── MACROBAR: le 5 aree come schede ──────────────────────────────── */
+.cfg-macrobar {
+  grid-area: macrobar;
+  display: flex; align-items: center; gap: 4px;
+  padding: 0 20px;
   background: var(--c-navy);
-  border-right: 0;
-  overflow-y: auto;
-  display: flex; flex-direction: column;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
-.cfg-side-search { padding: 16px 16px 8px; }
-.cfg-side-search-input {
-  display: flex; align-items: center; gap: 8px;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 8px;
-  padding: 8px 10px;
-  font-size: 13px;
-  color: rgba(255,255,255,.6);
-}
-.cfg-side-search-input svg { width: 14px; height: 14px; color: rgba(255,255,255,.5); flex-shrink: 0; }
-.cfg-side-search-input input {
-  flex: 1; border: 0; outline: none; background: transparent;
-  font: inherit; color: #fff; min-width: 0;
-}
-.cfg-side-search-input input::placeholder { color: rgba(255,255,255,.4); }
-.cfg-sidegroups { flex: 1; padding: 4px 8px 16px; }
-.cfg-group { padding: 8px 0 4px; }
-.cfg-group-head {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 10px; font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .12em;
-  color: rgba(255,255,255,.4);
-  padding: 10px 12px 6px;
-}
-.cfg-group-head .count {
-  margin-left: auto;
-  background: rgba(255,255,255,.06);
-  color: rgba(255,255,255,.5);
-  font-size: 10px;
-  padding: 1px 6px;
-  border-radius: 999px;
-  font-weight: 600;
-}
-.cfg-side-item {
-  display: grid;
-  grid-template-columns: 28px 1fr auto;
-  align-items: center; gap: 8px;
-  padding: 8px 10px;
-  margin: 1px 4px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 13.5px;
-  font-weight: 500;
-  color: rgba(255,255,255,.85);
+.cfg-macrobar::-webkit-scrollbar { display: none; }
+.cfg-macro-tab {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 0; background: none; cursor: pointer;
+  font: 600 13px var(--c-sans);
+  color: rgba(255,255,255,.72);
+  padding: 7px 14px; border-radius: 8px;
+  white-space: nowrap;
   transition: background .12s, color .12s;
 }
-.cfg-side-item:hover { background: rgba(255,255,255,.05); }
-.cfg-side-item .ic {
-  width: 26px; height: 26px;
-  display: grid; place-items: center;
-  border-radius: 7px;
-  background: rgba(255,255,255,.05);
-  color: rgba(255,255,255,.7);
+.cfg-macro-tab:hover { background: rgba(255,255,255,.08); color: #fff; }
+.cfg-macro-tab.is-active { background: var(--c-red); color: #fff; }
+.cfg-macro-tab:focus-visible { outline: 2px solid var(--c-red-soft-2); outline-offset: 2px; }
+.cfg-macrobar .macro-spacer { flex: 1; }
+.cfg-macrobar .macro-version {
+  display: flex; align-items: center; gap: 7px;
+  font-family: var(--c-mono); font-size: 11px;
+  color: rgba(255,255,255,.45); white-space: nowrap;
 }
-.cfg-side-item .ic svg { width: 14px; height: 14px; }
-.cfg-side-item.is-active { background: var(--c-red); color: #fff; }
-.cfg-side-item.is-active .ic {
-  background: rgba(255,255,255,.18);
-  color: #fff;
+.cfg-macrobar .macro-version .ok {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--c-success);
+  box-shadow: 0 0 0 3px rgba(21,128,61,.25);
 }
-.cfg-side-item.is-active .chev { color: rgba(255,255,255,.7); }
-.cfg-side-item.is-soon { color: rgba(255,255,255,.35); cursor: not-allowed; }
-.cfg-side-item .pill-soon {
+
+/* ── SUBBAR: schede dell'area attiva ──────────────────────────────── */
+.cfg-subbar {
+  grid-area: subbar;
+  display: flex; align-items: stretch; gap: 2px;
+  padding: 0 20px;
+  background: #fff;
+  border-bottom: 1px solid var(--c-line);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.cfg-subbar::-webkit-scrollbar { display: none; }
+.cfg-sub-tab {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 0; background: none; cursor: pointer;
+  font: 500 13px var(--c-sans);
+  color: var(--c-text-mute);
+  padding: 0 12px;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  white-space: nowrap;
+  transition: color .12s, border-color .12s;
+}
+.cfg-sub-tab:hover { color: var(--c-text); }
+.cfg-sub-tab.is-active { color: var(--c-red-dark); border-bottom-color: var(--c-red); font-weight: 600; }
+.cfg-sub-tab:focus-visible { outline: 2px solid var(--c-red); outline-offset: -2px; border-radius: 6px; }
+.cfg-sub-tab .ic { display: flex; color: inherit; opacity: .7; }
+.cfg-sub-tab .ic svg { width: 14px; height: 14px; }
+.cfg-sub-tab.is-active .ic { opacity: 1; }
+.cfg-sub-tab.is-soon { color: var(--c-text-faint); cursor: not-allowed; }
+.cfg-sub-tab .pill-soon {
   font-size: 9px;
-  background: rgba(255,255,255,.06);
-  color: rgba(255,255,255,.4);
+  background: var(--c-bg);
+  color: var(--c-text-faint);
+  border: 1px solid var(--c-line);
   padding: 2px 6px;
   border-radius: 4px;
   font-weight: 700; letter-spacing: .04em;
   text-transform: uppercase;
 }
-.cfg-side-item .chev {
-  color: rgba(255,255,255,.4);
-  width: 14px; height: 14px;
-  display: grid; place-items: center;
-}
-.cfg-side-item .chev svg { width: 14px; height: 14px; }
-.cfg-side-item .badge-new {
+.cfg-sub-tab .badge-new {
   background: var(--c-red-soft);
   color: var(--c-red-dark);
   font-size: 9px; font-weight: 700;
@@ -835,21 +801,6 @@ onMounted(() => {
   letter-spacing: .04em;
   text-transform: uppercase;
 }
-.cfg-side-footer {
-  border-top: 1px solid rgba(255,255,255,.08);
-  padding: 14px 16px;
-  display: grid; gap: 6px;
-  font-size: 12px;
-  color: rgba(255,255,255,.5);
-}
-.cfg-side-footer .lic { display: flex; align-items: center; gap: 8px; }
-.cfg-side-footer .lic .ok {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--c-success);
-  box-shadow: 0 0 0 3px var(--c-success-soft);
-}
-.cfg-side-footer .lic b { color: #fff; font-weight: 600; }
-.cfg-side-footer .ver { font-family: var(--c-mono); font-size: 11px; color: rgba(255,255,255,.35); }
 
 /* ── CONTENT ──────────────────────────────────────────────────────── */
 .cfg-content {
@@ -1188,47 +1139,25 @@ onMounted(() => {
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* ── Responsive (sotto 960: collassa sidebar in drawer-stack) ───────── */
+/* ── Responsive (sotto 960: le due barre restano, scorrono in orizzontale) ── */
 @media (max-width: 960px) {
-  .cfg-root {
-    grid-template-columns: 1fr;
-    grid-template-rows: 56px auto 1fr 64px;
-    grid-template-areas:
-      'topbar'
-      'sidebar'
-      'content'
-      'savebar';
-    height: auto;
-    min-height: calc(100vh - var(--wp-admin--admin-bar--height, 32px));
-  }
-  .cfg-sidebar {
-    max-height: 280px;
-    grid-area: sidebar;
-    border-right: 0;
-    border-bottom: 1px solid rgba(255,255,255,.08);
-  }
   .cfg-topbar .top-search { display: none; }
   .cfg-topbar .crumb { display: none; }
+  .cfg-macrobar { padding: 0 12px; }
+  .cfg-subbar { padding: 0 12px; }
+  .cfg-macrobar .macro-version { display: none; }
   .cfg-content { padding: 20px; }
   .cfg-row { grid-template-columns: 1fr; gap: 8px; }
   .cfg-savebar { padding: 0 16px; }
 }
 
-/* ═══ Usate di recente (sidebar) ═══ */
-.cfg-recent-head { display: flex; align-items: center; gap: 6px; color: var(--c-warning); }
-.cfg-recent-head svg { width: 11px; height: 11px; }
-.cfg-group-recent { border-bottom: 1px solid var(--c-line-soft); padding-bottom: 10px; }
-.cfg-group-recent .cfg-side-item .recent-when { margin-left: auto; font-size: 11px; color: var(--c-text-faint); }
-
 /* ═══ Stato modifiche per scheda ═══ */
-.cfg-side-item .dirty-dot {
+.cfg-macro-tab .dirty-dot,
+.cfg-sub-tab .dirty-dot {
   width: 7px; height: 7px; border-radius: 50%;
-  background: #f59e0b; margin-left: auto; flex-shrink: 0;
+  background: #f59e0b; flex-shrink: 0;
 }
-.cfg-side-item .dirty-dot + .hit-n,
-.cfg-side-item .dirty-dot + .pill-soon,
-.cfg-side-item .dirty-dot + .badge-new,
-.cfg-side-item .dirty-dot + .chev { margin-left: 6px; }
+.cfg-macro-tab.is-active .dirty-dot { background: #fde68a; }
 .cfg-savebar .meta .dirty-tab-link {
   background: none; border: 0; padding: 0; margin: 0 0 0 6px; cursor: pointer;
   font: inherit; font-weight: 600; color: var(--c-warning);
@@ -1237,17 +1166,20 @@ onMounted(() => {
 .cfg-savebar .meta .dirty-tab-link:hover { color: var(--c-red-dark); }
 
 /* ═══ Ricerca a livello di campo ═══ */
-.cfg-side-item .hit-n {
-  margin-left: auto; flex-shrink: 0;
+.cfg-macro-tab .hit-n,
+.cfg-sub-tab .hit-n {
+  flex-shrink: 0;
   font-size: 10.5px; font-weight: 700; line-height: 1;
   background: var(--c-red); color: #fff;
   border-radius: 9px; padding: 3px 7px;
 }
+.cfg-macro-tab.is-active .hit-n { background: rgba(255,255,255,.25); }
+.cfg-sub-tab .hit-n { background: var(--c-red-soft-2); color: var(--c-red-dark); }
 .cfg-sr { display: flex; flex-direction: column; gap: 16px; max-width: 860px; }
 .cfg-sr-head { display: flex; align-items: baseline; gap: 12px; }
 .cfg-sr-head h1 {
-  margin: 0; font-family: var(--c-display); font-weight: 400;
-  font-size: 26px; color: var(--c-navy);
+  margin: 0; font-family: var(--c-sans); font-weight: 700;
+  font-size: 21px; letter-spacing: -0.01em; color: var(--c-navy);
 }
 .cfg-sr-head .sub { font-size: 13px; color: var(--c-text-mute); }
 .cfg-sr-empty { font-size: 14px; color: var(--c-text-mute); }
