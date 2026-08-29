@@ -158,19 +158,19 @@ class Olobuild_Media_Search {
             /* ── Ricerca Media — redesign (token mancanti in dashboard.css, scoped) ── */
             .olo-ms-wrap {
                 --olo-border-strong: #d1d5db;
-                --olo-border-focus:  #3fa23f;
-                --olo-shadow-focus:  0 0 0 3px rgba(63,162,63,.30);
+                --olo-border-focus:  #e1474f;
+                --olo-shadow-focus:  0 0 0 3px rgba(225,71,79,.22);
                 --olo-text-faint:    #9ca3af;
                 --olo-navy:          #0f172a;
                 --olo-navy-hover:    #1e293b;
                 --olo-bg-softer:     #f3f4f6;
                 --olo-slate-300:     #cbd5e1;
-                --olo-primary-300:   #8fcb78;
+                --olo-primary-300:   #f2989e;
                 --olo-shadow-lg:     0 8px 32px rgba(0,0,0,.10);
                 --olo-shadow-xl:     0 24px 64px rgba(0,0,0,.15);
-                --olo-info-50:       #eff6ff;
-                --olo-info-soft:     #dbeafe;
-                --olo-info-dark:     #1d4ed8;
+                --olo-info-50:       #f3f4f6;
+                --olo-info-soft:     #e5e7eb;
+                --olo-info-dark:     #3c434a;
                 --olo-radius-lg:     12px;
                 --olo-ease-out:      cubic-bezier(0.25, 0.46, 0.45, 0.94);
                 --olo-transition:    all .2s cubic-bezier(.4, 0, .2, 1);

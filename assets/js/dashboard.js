@@ -143,9 +143,11 @@
             return;
         }
         wrap.innerHTML = data.map(r => {
+            // Senza miniatura: fondo neutro piatto (il gradient colorato per-id
+            // di thumb_grad è stato ritirato col restyling, il dato resta nel payload).
             const bg = r.thumb
                 ? 'background-image:url(' + encodeURI(r.thumb) + ');'
-                : 'background:' + r.thumb_grad + ';';
+                : 'background:var(--olo-bg-muted);';
             const pillTxt = r.status === 'live' ? T('live', 'live') : T('draft', 'bozza');
             const pillCls = r.status || '';
             return '<a class="olo-recent-card" href="' + r.href + '">' +

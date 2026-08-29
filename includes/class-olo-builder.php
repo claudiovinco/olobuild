@@ -28,6 +28,7 @@ class Olobuild_Builder {
     private function init() {
         // Admin menu
         add_action( 'admin_menu', [ $this, 'admin_menu' ] );
+        add_action( 'admin_menu', [ $this, 'admin_menu_trim' ], 999 );
 
         // Settings page (API keys)
         add_action( 'admin_init', [ $this, 'register_settings' ] );
@@ -477,10 +478,16 @@ class Olobuild_Builder {
             [ $this, 'render_dashboard_page' ]
         );
 
+        /*
+         * Restyling Fase 2: il menu si accorcia a Dashboard + 4 aree
+         * (Costruisci · Media · Raccolta · Sistema). Gli slug NON cambiano —
+         * ogni area apre la sua pagina d'ingresso di sempre e i vecchi URL
+         * continuano a funzionare — cambiano solo etichette e ordine.
+         */
         add_submenu_page(
             'olobuild',
-            __( 'Gestione Template', 'olobuild' ),
-            __( 'Gestione Template', 'olobuild' ),
+            __( 'Costruisci', 'olobuild' ),
+            __( 'Costruisci', 'olobuild' ),
             'manage_options',
             'olobuilder-templates',
             [ $this, 'render_builder_page' ]
@@ -488,17 +495,8 @@ class Olobuild_Builder {
 
         add_submenu_page(
             'olobuild',
-            __( 'Configurazione', 'olobuild' ),
-            __( 'Configurazione', 'olobuild' ),
-            'manage_options',
-            'olobuilder-settings',
-            [ $this, 'render_configurazione_page' ]
-        );
-
-        add_submenu_page(
-            'olobuild',
-            __( 'Ricerca Media', 'olobuild' ),
-            __( 'Ricerca Media', 'olobuild' ),
+            __( 'Media', 'olobuild' ),
+            __( 'Media', 'olobuild' ),
             'upload_files',
             'olo-media-search',
             [ 'Olobuild_Media_Search', 'render_page' ]
@@ -506,13 +504,24 @@ class Olobuild_Builder {
 
         add_submenu_page(
             'olobuild',
-            __( 'Invii Form', 'olobuild' ),
-            __( 'Invii Form', 'olobuild' ),
+            __( 'Raccolta', 'olobuild' ),
+            __( 'Raccolta', 'olobuild' ),
             'manage_options',
             'olo-form-submissions',
             [ 'Olobuild_Form_Submissions', 'render_page' ]
         );
 
+        add_submenu_page(
+            'olobuild',
+            __( 'Sistema', 'olobuild' ),
+            __( 'Sistema', 'olobuild' ),
+            'manage_options',
+            'olobuilder-settings',
+            [ $this, 'render_configurazione_page' ]
+        );
+
+        // Registrata ma senza voce di menu (rimossa in admin_menu_trim):
+        // vive nella sub-nav dell'area Raccolta, l'URL resta lo stesso.
         add_submenu_page(
             'olobuild',
             __( 'Newsletter', 'olobuild' ),
@@ -521,6 +530,18 @@ class Olobuild_Builder {
             'olo-newsletter',
             [ 'Olobuild_Newsletter', 'render_page' ]
         );
+    }
+
+    /**
+     * Toglie dal menu le voci traslocate nelle sub-nav delle aree (restyling
+     * Fase 2). remove_submenu_page rimuove SOLO la voce: le pagine restano
+     * registrate e i loro URL continuano a funzionare. Priorità 999 perché
+     * Strumenti e Import/Export sono registrate da altre classi a priorità 10.
+     */
+    public function admin_menu_trim() {
+        remove_submenu_page( 'olobuild', 'olo-newsletter' );    // → sub-nav Raccolta
+        remove_submenu_page( 'olobuild', 'olo-tools' );         // → sub-nav Sistema
+        remove_submenu_page( 'olobuild', 'olo-import-export' ); // → sub-nav Costruisci
     }
 
     /**
@@ -1073,6 +1094,7 @@ class Olobuild_Builder {
             'olobuild_page_olobuilder-settings',     // Configurazione (Vue app)
             'olobuild_page_olo-media-search',
             'olobuild_page_olo-form-submissions',
+            'olobuild_page_olo-newsletter',
             'olobuild_page_olo-analytics',
             'olobuild_page_olo-cookie-consent',
             'olobuild_page_olo-role-manager',

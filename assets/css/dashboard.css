@@ -4,19 +4,20 @@
    Tutti i selettori sotto .olo-cockpit per non disturbare WP admin
    ═══════════════════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 /* ── Reset/scope: la dashboard occupa l'intera area #wpbody-content ── */
 .olo-cockpit-wrap {
-    /* Brand */
-    --olo-primary:        #4a8c2a;
-    --olo-primary-bright: #3fa23f;
-    --olo-primary-hover:  #348634;
-    --olo-primary-dark:   #2d722d;
-    --olo-primary-50:     #f0f7ec;
-    --olo-primary-100:    #dcefd2;
-    --olo-primary-200:    #b9dfaa;
-    --olo-primary-700:    #325e1d;
+    /* Brand: rosso Olobuild #e1474f, lo stesso accento del resto della shell
+       (restyling Fase 1 — il verde "Olo Tutor" è stato ritirato). */
+    --olo-primary:        #e1474f;
+    --olo-primary-bright: #e8636a;
+    --olo-primary-hover:  #c8323a;
+    --olo-primary-dark:   #a52833;
+    --olo-primary-50:     #fef2f3;
+    --olo-primary-100:    #fde2e4;
+    --olo-primary-200:    #f8c3c7;
+    --olo-primary-700:    #8c1f29;
 
     /* Neutrals */
     --olo-bg:        #f6f7f7;
@@ -39,7 +40,7 @@
     --olo-warning-dark: #b45309;
     --olo-warning-soft: #fef3c7;
     --olo-danger:       #ef4444;
-    --olo-info:         #3b82f6;
+    --olo-info:         #3c434a; /* antracite, niente blu nelle pagine Olobuild */
 
     /* WP admin */
     --olo-wp-bg:     #1d2327;
@@ -48,7 +49,7 @@
     --olo-wp-mute:   #c3c4c7;
 
     /* Type */
-    --olo-font-sans: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --olo-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --olo-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 
     /* Shadows */
@@ -156,7 +157,7 @@ body.olobuild-cockpit .olo-cockpit-legacy .error {
 .olo-cockpit-appback a:hover { color: #fff; }
 .olo-cockpit-appback .spc { flex: 1; }
 .olo-cockpit-appback .pill-app {
-    background: rgba(74,140,42,.2); color: #b9dfaa;
+    background: rgba(225,71,79,.22); color: #f8c3c7;
     padding: 2px 8px; border-radius: 99px;
     font-size: 10px; font-weight: 700;
     text-transform: uppercase; letter-spacing: .04em;
@@ -229,6 +230,57 @@ body.olobuild-cockpit .olo-cockpit-legacy .error {
     background: #fff; border: 1px solid var(--olo-border);
     color: var(--olo-text-muted);
 }
+
+/* ── Le 4 aree in topbar (restyling Fase 2) ─────────────────────────── */
+.olo-cockpit-topbar .areas {
+    display: flex; gap: 4px; margin-left: 10px;
+    overflow-x: auto; scrollbar-width: none;
+}
+.olo-cockpit-topbar .areas::-webkit-scrollbar { display: none; }
+.olo-area-tab {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 13px; font-weight: 600; color: var(--olo-text-soft);
+    border-radius: 8px; padding: 7px 13px;
+    text-decoration: none; white-space: nowrap;
+    transition: background .12s, color .12s;
+}
+.olo-area-tab:hover { background: var(--olo-bg-muted); color: var(--olo-text); }
+.olo-area-tab.is-active { background: var(--olo-primary-50); color: var(--olo-primary); }
+.olo-area-tab:focus-visible { outline: 2px solid var(--olo-primary); outline-offset: 2px; }
+.olo-area-tab svg { flex-shrink: 0; }
+@media (max-width: 1180px) {
+    .olo-area-tab span { display: none; }
+    .olo-area-tab { padding: 7px 10px; }
+}
+@media (max-width: 900px) {
+    /* La palette resta raggiungibile con Ctrl+K e dal menu: il campo cede spazio alle aree. */
+    .olo-cockpit-topbar .search-mini { display: none; }
+}
+
+/* ── Sub-nav dell'area attiva ───────────────────────────────────────── */
+.olo-cockpit-subnav {
+    height: 42px; background: #fff;
+    border-bottom: 1px solid var(--olo-border);
+    display: flex; align-items: stretch; gap: 2px;
+    padding: 0 20px; flex-shrink: 0;
+    overflow-x: auto; scrollbar-width: none;
+}
+.olo-cockpit-subnav::-webkit-scrollbar { display: none; }
+.olo-cockpit-subnav a {
+    display: inline-flex; align-items: center;
+    font-size: 13px; font-weight: 500; color: var(--olo-text-muted);
+    padding: 0 12px; text-decoration: none;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+    white-space: nowrap;
+    transition: color .12s, border-color .12s;
+}
+.olo-cockpit-subnav a:hover { color: var(--olo-text); }
+.olo-cockpit-subnav a.is-active {
+    color: var(--olo-primary-dark);
+    border-bottom-color: var(--olo-primary);
+    font-weight: 600;
+}
+.olo-cockpit-subnav a:focus-visible { outline: 2px solid var(--olo-primary); outline-offset: -2px; border-radius: 6px; }
 
 /* ─────────────────────────────────────────────────────────────────────
    Main area — split main / rail
@@ -677,12 +729,12 @@ body.olobuild-cockpit .olo-cockpit-legacy .error {
 .olo-quick-card .ic-box {
     width: 38px; height: 38px; border-radius: 9px;
     display: grid; place-items: center; flex-shrink: 0;
-    color: #fff;
+    /* Fondi piatti soft + icona a tratto scuro: la firma minimale Olobuild
+       (i gradient colorati del vecchio cockpit sono stati ritirati). */
+    background: var(--olo-bg-muted);
+    color: var(--olo-text-soft);
 }
-.olo-quick-card.tone-primary .ic-box { background: linear-gradient(135deg, var(--olo-primary), var(--olo-primary-bright)); }
-.olo-quick-card.tone-info    .ic-box { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-.olo-quick-card.tone-purple  .ic-box { background: linear-gradient(135deg, #a855f7, #7e22ce); }
-.olo-quick-card.tone-neutral .ic-box { background: linear-gradient(135deg, #475569, #1e293b); }
+.olo-quick-card.tone-primary .ic-box { background: var(--olo-primary-50); color: var(--olo-primary); }
 .olo-quick-card .lab { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
 .olo-quick-card .lab .t { font-size: 13px; font-weight: 700; color: var(--olo-text); }
 .olo-quick-card .lab .h { font-size: 11px; color: var(--olo-text-muted); }
@@ -714,13 +766,22 @@ body.olobuild-cockpit .olo-cockpit-legacy .error {
 }
 .olo-manage-tile:hover {
     border-color: var(--olo-primary-200);
-    background: #fafefa;
+    background: #fff;
+    box-shadow: var(--olo-shadow-sm);
     color: inherit;
 }
 .olo-manage-tile .ic-sq {
     width: 36px; height: 36px; border-radius: 8px;
     display: grid; place-items: center; flex-shrink: 0;
-    color: #fff;
+    /* Neutra a riposo, si accende di rosso al passaggio (niente quadrati
+       colorati per-tile: icone monocrome, un solo accento). */
+    background: var(--olo-bg-muted);
+    color: var(--olo-text-soft);
+    transition: background .15s, color .15s;
+}
+.olo-manage-tile:hover .ic-sq {
+    background: var(--olo-primary-50);
+    color: var(--olo-primary);
 }
 .olo-manage-tile .lab { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
 .olo-manage-tile .lab .t {

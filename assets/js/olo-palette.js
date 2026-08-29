@@ -36,7 +36,7 @@
     var CSS = '' +
         '.olopal-back{position:fixed;inset:0;z-index:100000;background:rgba(15,23,42,.4);display:none;align-items:flex-start;justify-content:center;padding:96px 16px 16px}' +
         '.olopal-back.open{display:flex}' +
-        '.olopal{width:640px;max-width:100%;background:#fff;border-radius:14px;box-shadow:0 24px 60px rgba(15,23,42,.28),0 4px 12px rgba(16,24,40,.08);overflow:hidden;font-family:"Work Sans",-apple-system,"Segoe UI",Roboto,sans-serif;color:#1e293b}' +
+        '.olopal{width:640px;max-width:100%;background:#fff;border-radius:14px;box-shadow:0 24px 60px rgba(15,23,42,.28),0 4px 12px rgba(16,24,40,.08);overflow:hidden;font-family:"Inter",-apple-system,"Segoe UI",Roboto,sans-serif;color:#1e293b}' +
         '.olopal-input{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid #f1f5f9}' +
         '.olopal-input svg{flex-shrink:0;color:#64748b}' +
         '.olopal-input input{flex:1;border:0;outline:0;background:none;font:inherit;font-size:15px;color:#111827;box-shadow:none}' +

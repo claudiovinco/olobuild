@@ -385,6 +385,98 @@ trait Olobuild_Builder_Cockpit_Trait {
      *
      * @param string $crumb_html  HTML del breadcrumb dopo "Olobuild · ".
      */
+    /**
+     * Le 4 aree della shell (restyling Fase 2): tutto il sistema in una riga.
+     *
+     * Ogni area ha la sua sub-nav con le destinazioni REALI di oggi: le rotte
+     * wp-admin non cambiano, cambia dove le funzioni COMPAIONO. Le voci che
+     * puntano a `olobuilder-settings&tab=X` sono le schede della Configurazione
+     * traslocate qui (Fase 3): il deep-link ?tab= le apre come sempre.
+     */
+    public static function cockpit_areas() {
+        return [
+            'costruisci' => [
+                'label'  => __( 'Costruisci', 'olobuild' ),
+                'icon'   => '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>',
+                'url'    => admin_url( 'admin.php?page=olobuilder-templates' ),
+                'subnav' => [
+                    [ 'label' => __( 'Blocchi & Pagine', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olobuilder-templates' ), 'screen' => 'olobuild_page_olobuilder-templates' ],
+                    [ 'label' => __( 'Popup', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olobuilder-settings&tab=popups' ), 'tab' => 'popups' ],
+                    [ 'label' => __( 'Importa / Esporta', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olo-import-export' ), 'screen' => 'olobuild_page_olo-import-export' ],
+                ],
+            ],
+            'media' => [
+                'label'  => __( 'Media', 'olobuild' ),
+                'icon'   => '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>',
+                'url'    => admin_url( 'admin.php?page=olo-media-search' ),
+                'subnav' => [
+                    [ 'label' => __( 'Ricerca media', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olo-media-search' ), 'screen' => 'olobuild_page_olo-media-search' ],
+                    [ 'label' => __( 'Libreria WordPress', 'olobuild' ), 'url' => admin_url( 'upload.php' ), 'screen' => 'upload' ],
+                    [ 'label' => __( 'Chiavi provider', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olobuilder-settings&tab=stockmedia' ), 'tab' => 'stockmedia' ],
+                ],
+            ],
+            'raccolta' => [
+                'label'  => __( 'Raccolta', 'olobuild' ),
+                'icon'   => '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 6l-10 7L2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>',
+                'url'    => admin_url( 'admin.php?page=olo-form-submissions' ),
+                'subnav' => [
+                    [ 'label' => __( 'Invii form', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olo-form-submissions' ), 'screen' => 'olobuild_page_olo-form-submissions' ],
+                    [ 'label' => __( 'Newsletter', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olo-newsletter' ), 'screen' => 'olobuild_page_olo-newsletter' ],
+                    [ 'label' => __( 'Tracking & Analytics', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olobuilder-settings&tab=analytics' ), 'tab' => 'analytics' ],
+                ],
+            ],
+            'sistema' => [
+                'label'  => __( 'Sistema', 'olobuild' ),
+                'icon'   => '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 5V3M12 21v-2M5 12H3M21 12h-2M6.3 6.3 4.9 4.9M19.1 19.1l-1.4-1.4M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg>',
+                'url'    => admin_url( 'admin.php?page=olobuilder-settings' ),
+                'subnav' => [
+                    [ 'label' => __( 'Configurazione', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olobuilder-settings' ), 'screen' => 'olobuild_page_olobuilder-settings' ],
+                    [ 'label' => __( 'Strumenti', 'olobuild' ), 'url' => admin_url( 'admin.php?page=olo-tools' ), 'screen' => 'olobuild_page_olo-tools' ],
+                    [ 'label' => __( 'Diagnostica', 'olobuild' ), 'url' => admin_url( 'tools.php?page=olo-diagnostics' ), 'screen' => 'tools_page_olo-diagnostics' ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * L'area della shell a cui appartiene la schermata corrente ('' = Dashboard
+     * o pagina fuori mappa: nessuna area evidenziata, niente sub-nav).
+     *
+     * La Configurazione è area Sistema TRANNE per le schede traslocate
+     * (popups/stockmedia/analytics), che rispondono alla loro nuova casa.
+     */
+    public static function cockpit_current_area() {
+        $screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+        $id  = $screen ? $screen->id : '';
+        $tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- sola lettura per evidenziare la nav.
+
+        if ( 'olobuild_page_olobuilder-settings' === $id ) {
+            $moved = [ 'popups' => 'costruisci', 'stockmedia' => 'media', 'analytics' => 'raccolta' ];
+            return $moved[ $tab ] ?? 'sistema';
+        }
+
+        $map = [
+            'olobuild_page_olobuilder-templates' => 'costruisci',
+            'olobuild_page_olo-import-export'    => 'costruisci',
+            'olobuild_page_olo-global-popups'    => 'costruisci',
+            'olobuild_page_olo-woo-templates'    => 'costruisci',
+            'olobuild_page_olo-media-search'     => 'media',
+            'olobuild_page_olo-form-submissions' => 'raccolta',
+            'olobuild_page_olo-newsletter'       => 'raccolta',
+            'olobuild_page_olo-analytics'        => 'raccolta',
+            'olobuild_page_olo-tools'            => 'sistema',
+            'olobuild_page_olo-cookie-consent'   => 'sistema',
+            'olobuild_page_olo-role-manager'     => 'sistema',
+            'olobuild_page_olo-seo'              => 'sistema',
+            'olobuild_page_olo-redirects'        => 'sistema',
+            'olobuild_page_olo-performance'      => 'sistema',
+            'olobuild_page_olo-white-label'      => 'sistema',
+            'tools_page_olo-diagnostics'         => 'sistema',
+            'settings_page_olo-setup'            => 'sistema',
+        ];
+        return $map[ $id ] ?? '';
+    }
+
     public static function cockpit_shell_open( $crumb_html = '' ) {
         $user = wp_get_current_user();
         $initials = strtoupper( substr( $user->first_name ?: $user->display_name ?: 'U', 0, 2 ) );
@@ -408,13 +500,33 @@ trait Olobuild_Builder_Cockpit_Trait {
             </div>
             <?php endif; ?>
 
+            <?php
+            /*
+             * Restyling Fase 2: al posto del breadcrumb, le 4 aree del sistema.
+             * $crumb_html resta in firma per i caller esistenti ma non si stampa
+             * più: la sub-nav dell'area dice già dove sei.
+             */
+            $olo_areas        = self::cockpit_areas();
+            $olo_current_area = self::cockpit_current_area();
+            $olo_screen_obj   = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+            $olo_screen_id    = $olo_screen_obj ? $olo_screen_obj->id : '';
+            $olo_current_tab  = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- sola lettura per evidenziare la nav.
+            ?>
             <div class="olo-cockpit-topbar">
                 <a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuild' ) ); ?>" style="display:inline-flex;align-items:center;text-decoration:none;">
                     <img class="logo" src="<?php echo esc_url( OLOBUILD_URL . 'assets/img/olobuild-horizontal.png' ); ?>" alt="Olobuild" />
                 </a>
                 <span class="ver">v<?php echo esc_html( OLOBUILD_VERSION ); ?></span>
-                <span class="sep"></span>
-                <span class="crumb"><a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuild' ) ); ?>" style="color:inherit;text-decoration:none">Olobuild</a> · <?php echo $crumb_html ?: '<b>' . esc_html__( 'Dashboard', 'olobuild' ) . '</b>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- breadcrumb HTML built by internal callers from esc_html()/esc_url()'d parts. ?></span>
+                <nav class="areas" aria-label="<?php esc_attr_e( 'Aree di Olobuild', 'olobuild' ); ?>">
+                    <?php foreach ( $olo_areas as $area_id => $area ) : ?>
+                    <a class="olo-area-tab<?php echo $area_id === $olo_current_area ? ' is-active' : ''; ?>"
+                       href="<?php echo esc_url( $area['url'] ); ?>"
+                       <?php echo $area_id === $olo_current_area ? 'aria-current="true"' : ''; ?>>
+                        <?php echo $area['icon']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded cockpit_areas() map. ?>
+                        <span><?php echo esc_html( $area['label'] ); ?></span>
+                    </a>
+                    <?php endforeach; ?>
+                </nav>
                 <span class="spc"></span>
                 <?php
                 /*
@@ -448,6 +560,16 @@ trait Olobuild_Builder_Cockpit_Trait {
                     <span class="av"><?php echo esc_html( $initials ); ?></span>
                 </a>
             </div>
+            <?php if ( $olo_current_area && ! empty( $olo_areas[ $olo_current_area ]['subnav'] ) ) : ?>
+            <nav class="olo-cockpit-subnav" aria-label="<?php esc_attr_e( 'Sezioni dell\'area', 'olobuild' ); ?>">
+                <?php foreach ( $olo_areas[ $olo_current_area ]['subnav'] as $it ) :
+                    $it_active = ( isset( $it['screen'] ) && $it['screen'] === $olo_screen_id && ( 'olobuild_page_olobuilder-settings' !== $olo_screen_id || '' === $olo_current_tab || ! in_array( $olo_current_tab, [ 'popups', 'stockmedia', 'analytics' ], true ) ) )
+                        || ( isset( $it['tab'] ) && 'olobuild_page_olobuilder-settings' === $olo_screen_id && $it['tab'] === $olo_current_tab );
+                    ?>
+                <a href="<?php echo esc_url( $it['url'] ); ?>" class="<?php echo $it_active ? 'is-active' : ''; ?>" <?php echo $it_active ? 'aria-current="page"' : ''; ?>><?php echo esc_html( $it['label'] ); ?></a>
+                <?php endforeach; ?>
+            </nav>
+            <?php endif; ?>
         <?php
         self::stampa_interruttore_app_mode();
     }
@@ -954,7 +1076,7 @@ trait Olobuild_Builder_Cockpit_Trait {
                         <div class="olo-manage-grid">
                             <?php foreach ( $manage as $i => $t ) : ?>
                             <a class="olo-manage-tile" href="<?php echo esc_url( $t['href'] ); ?>" data-id="<?php echo esc_attr( $t['id'] ); ?>" data-order="<?php echo esc_attr( $i ); ?>">
-                                <div class="ic-sq" style="background: <?php echo esc_attr( $t['color'] ); ?>"><?php echo self::dashboard_svg( $t['icon'], 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded dashboard_svg() map, size is int-cast. ?></div>
+                                <div class="ic-sq"><?php // Il colore per-tile ($t['color']) resta nei dati ma non si applica più: icone neutre, accensione rossa in hover (CSS). ?><?php echo self::dashboard_svg( $t['icon'], 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded dashboard_svg() map, size is int-cast. ?></div>
                                 <div class="lab">
                                     <span class="t"><?php echo esc_html( $t['label'] ); ?></span>
                                     <span class="h"><?php echo esc_html( $t['hint'] ); ?></span>
@@ -1018,20 +1140,21 @@ trait Olobuild_Builder_Cockpit_Trait {
                         </div>
                         <div class="olo-rail-section">
                             <h3><?php esc_html_e( 'Impara Olobuild', 'olobuild' ); ?></h3>
+                            <?php /* Niente emoji né gradient: icone SVG stroke su fondo neutro, la firma dei prodotti OLO. */ ?>
                             <a class="olo-learn-card" href="https://olotheme.com/docs/onboarding" target="_blank" rel="noopener">
-                                <div class="th" style="background: linear-gradient(135deg,#4a8c2a,#3fa23f);">🚀</div>
+                                <div class="th" style="background: var(--olo-bg-muted); color: var(--olo-text-soft);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg></div>
                                 <div class="info"><span class="t"><?php esc_html_e( 'Onboarding 60 secondi', 'olobuild' ); ?></span><span class="d"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg> 1:02</span></div>
                             </a>
                             <a class="olo-learn-card" href="https://olotheme.com/docs/templates" target="_blank" rel="noopener">
-                                <div class="th" style="background: linear-gradient(135deg,#f97316,#ef4444);">🎨</div>
+                                <div class="th" style="background: var(--olo-bg-muted); color: var(--olo-text-soft);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
                                 <div class="info"><span class="t"><?php esc_html_e( 'Template come pro', 'olobuild' ); ?></span><span class="d"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg> 4:18</span></div>
                             </a>
                             <a class="olo-learn-card" href="https://olotheme.com/docs/seo" target="_blank" rel="noopener">
-                                <div class="th" style="background: linear-gradient(135deg,#3b82f6,#1d4ed8);">🔍</div>
+                                <div class="th" style="background: var(--olo-bg-muted); color: var(--olo-text-soft);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
                                 <div class="info"><span class="t"><?php esc_html_e( 'SEO e Open Graph', 'olobuild' ); ?></span><span class="d"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg> 3:45</span></div>
                             </a>
                             <a class="olo-learn-card" href="https://olotheme.com/docs/performance" target="_blank" rel="noopener">
-                                <div class="th" style="background: linear-gradient(135deg,#eab308,#ca8a04);">⚡</div>
+                                <div class="th" style="background: var(--olo-bg-muted); color: var(--olo-text-soft);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14 8 10"/><circle cx="12" cy="14" r="9"/><path d="M3 14a9 9 0 0 1 18 0"/></svg></div>
                                 <div class="info"><span class="t"><?php esc_html_e( 'Performance: punteggio 100', 'olobuild' ); ?></span><span class="d"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg> 5:30</span></div>
                             </a>
                         </div>

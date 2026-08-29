@@ -1060,3 +1060,33 @@ body.folded.olobuild-app-mode #adminmenu .wp-submenu-wrap { display: none; }
     body.olobuild-app-mode #adminmenu { width: 0 !important; display: none !important; }
     body.olobuild-app-mode #wpcontent { margin-left: 0 !important; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   Menu wp-admin SENZA blu nelle pagine Olobuild.
+
+   La voce corrente prende il colore dello schema admin dell'utente (blu
+   #2271b1 col "Predefinito", blu elettrico #3858e9 col "Moderno"): qui la
+   riportiamo all'antracite della barra stessa (#3c434a, il grigio WP).
+   Il foglio si carica solo sulle pagine Olobuild, quindi il resto di
+   wp-admin non cambia. !important perche' i colors.css degli schemi
+   possono arrivare dopo di noi.
+   ═══════════════════════════════════════════════════════════════════ */
+#adminmenu .wp-has-current-submenu .wp-submenu-head,
+#adminmenu li.current a.menu-top,
+#adminmenu li.wp-has-current-submenu a.wp-has-current-submenu,
+.folded #adminmenu li.current.menu-top,
+#adminmenu .wp-menu-arrow,
+#adminmenu .wp-menu-arrow div {
+    background: #3c434a !important;
+    color: #fff !important;
+}
+#adminmenu li.current div.wp-menu-image::before,
+#adminmenu li.wp-has-current-submenu div.wp-menu-image::before {
+    color: #fff !important;
+}
+/* Il triangolino che "entra" nel contenuto resta del colore dello schema:
+   senza blu non serve piu', via. */
+#adminmenu li.current:after,
+#adminmenu li.wp-has-current-submenu:after {
+    display: none !important;
+}
