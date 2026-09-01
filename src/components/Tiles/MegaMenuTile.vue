@@ -295,6 +295,9 @@ const defaults = {
   show_descriptions: false, desc_color: '',
   button_mode: 'none', btn_bg: '', btn_color: '',
   btn_radius: '6', btn_hover_bg: '',
+  btn_padding: { top: 8, right: 20, bottom: 8, left: 20 },
+  btn_font_size: '0', btn_font_weight: '600', btn_transform: 'none',
+  btn_letter_spacing: '0', btn_shadow: 'none',
   search_icon: true, hamburger_style: 'classic', hamburger_size: '28',
   hamburger_color: '',
   mobile_breakpoint: '1024', mobile_style: 'offcanvas', mobile_side: 'left',
@@ -705,16 +708,51 @@ function getLinkStyle(item, idx) {
   };
 }
 
-const btnStyle = computed(() => ({
-  display: 'inline-flex', alignItems: 'center',
-  padding: '8px 20px',
-  // CTA = primario brand (era #e1474f indaco off-brand)
-  background: s.value.btn_bg || 'var(--olo-color-primary, #e1474f)',
-  color: (s.value.btn_color || 'var(--olo-color-primary-contrast, #fff)') + ' !important',
-  borderRadius: (parseInt(s.value.btn_radius) || 6) + 'px',
-  fontSize: (parseInt(s.value.font_size) || 15) + 'px',
-  fontWeight: '600', textDecoration: 'none', whiteSpace: 'nowrap',
-}));
+// Ombre CTA — stesse stringhe di Olobuild_Tile_Utils::SHADOW_BUTTON (coerenza canvas/frontend).
+const BTN_SHADOWS = {
+  sm: '0 1px 2px rgba(15,23,42,.12), 0 4px 12px -4px rgba(15,23,42,.22)',
+  md: '0 2px 4px rgba(15,23,42,.14), 0 8px 20px -6px rgba(15,23,42,.30)',
+  lg: '0 4px 8px -2px rgba(15,23,42,.16), 0 14px 30px -8px rgba(15,23,42,.36)',
+};
+
+// Padding CTA: chiave unificata btn_padding; fallback legacy btn_padding_v/h
+// (stessa composizione del PHP: v → top/bottom, h → left/right).
+function btnPadding(sv) {
+  const side = (o, k, d) => {
+    if (o && typeof o === 'object') return parseInt(o[k]) || 0;
+    const n = parseInt(o);
+    return isNaN(n) ? d : n;
+  };
+  const p = sv.btn_padding;
+  if (p && typeof p === 'object') {
+    return `${side(p, 'top', 8)}px ${side(p, 'right', 20)}px ${side(p, 'bottom', 8)}px ${side(p, 'left', 20)}px`;
+  }
+  const pv = sv.btn_padding_v, ph = sv.btn_padding_h;
+  return `${side(pv, 'top', 8)}px ${side(ph, 'right', 20)}px ${side(pv, 'bottom', 8)}px ${side(ph, 'left', 20)}px`;
+}
+
+const btnStyle = computed(() => {
+  const r = s.value.btn_radius;
+  const radius = (r && typeof r === 'object')
+    ? `${parseInt(r.tl) || 0}px ${parseInt(r.tr) || 0}px ${parseInt(r.br) || 0}px ${parseInt(r.bl) || 0}px`
+    : (parseInt(r) || 6) + 'px';
+  const st = {
+    display: 'inline-flex', alignItems: 'center',
+    padding: btnPadding(s.value),
+    // CTA = primario brand (era #e1474f indaco off-brand)
+    background: s.value.btn_bg || 'var(--olo-color-primary, #e1474f)',
+    color: (s.value.btn_color || 'var(--olo-color-primary-contrast, #fff)') + ' !important',
+    borderRadius: radius,
+    fontSize: (parseInt(s.value.btn_font_size) || parseInt(s.value.font_size) || 15) + 'px',
+    fontWeight: s.value.btn_font_weight || '600',
+    textDecoration: 'none', whiteSpace: 'nowrap',
+  };
+  if (s.value.btn_transform && s.value.btn_transform !== 'none') st.textTransform = s.value.btn_transform;
+  const lsp = parseFloat(s.value.btn_letter_spacing);
+  if (lsp) st.letterSpacing = lsp + 'px';
+  if (BTN_SHADOWS[s.value.btn_shadow]) st.boxShadow = BTN_SHADOWS[s.value.btn_shadow];
+  return st;
+});
 
 // ── Panel styles ──
 const panelContainerStyle = computed(() => {

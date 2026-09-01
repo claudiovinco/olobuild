@@ -91,12 +91,21 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         'btn_color'          => '',
         'btn_radius'         => [ 'tl' => 6, 'tr' => 6, 'br' => 6, 'bl' => 6 ],
         'btn_hover_bg'       => '',
+        // NB: 'btn_padding' (unificato, 4 lati) NON va nei default: se assente il
+        // render lo ricompone dai legacy btn_padding_v/h (template già salvati).
         'btn_padding_v'      => [ 'top' => 8, 'right' => 0, 'bottom' => 8, 'left' => 0 ],
         'btn_padding_h'      => [ 'top' => 0, 'right' => 20, 'bottom' => 0, 'left' => 20 ],
         'btn_margin_left'    => [ 'top' => 0, 'right' => 0, 'bottom' => 0, 'left' => 0 ],
         'btn_margin_right'   => [ 'top' => 0, 'right' => 0, 'bottom' => 0, 'left' => 0 ],
         'btn_border_width'   => '0',
         'btn_border_color'   => '',
+        'btn_font_size'      => '0',
+        'btn_font_weight'    => '600',
+        'btn_transform'      => 'none',
+        'btn_letter_spacing' => '0',
+        'btn_hover_color'    => '',
+        'btn_shadow'         => 'none',
+        'btn_hover_effect'   => 'lift',
         // Search
         'search_icon'        => true,
         'search_position'    => 'navbar',
@@ -363,14 +372,30 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         // Buttons
         $btn_bg      = $this->safe_color( $s['btn_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $btn_color   = $this->safe_color( $s['btn_color'] ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)';
-        $btn_radius  = Olobuild_Tile_Utils::radius_int( $s['btn_radius'] );
+        // 4 angoli reali (prima radius_int appiattiva al massimo) — coerenza col canvas.
+        $btn_radius  = Olobuild_Tile_Utils::border_radius( $s['btn_radius'] ) ?: '0px';
         $btn_hbg     = $this->safe_color( $s['btn_hover_bg'] );
-        $btn_pv      = $this->pad_int( $s['btn_padding_v'] ?? null, 8 );
-        $btn_ph      = $this->pad_int( $s['btn_padding_h'] ?? null, 20 );
+        // Padding interno: chiave unificata btn_padding (4 lati); fallback per i
+        // template salvati con i legacy btn_padding_v/h — di cui pad_int leggeva
+        // solo 'top', azzerando di fatto il padding orizzontale.
+        if ( is_array( $s['btn_padding'] ?? null ) ) {
+            $btn_pad = $this->pad_obj( $s['btn_padding'], 8 );
+        } else {
+            $pv      = $this->pad_obj( $s['btn_padding_v'] ?? null, 8 );
+            $ph      = $this->pad_obj( $s['btn_padding_h'] ?? null, 20 );
+            $btn_pad = [ 'top' => $pv['top'], 'right' => $ph['right'], 'bottom' => $pv['bottom'], 'left' => $ph['left'] ];
+        }
         $btn_ml      = $this->pad_int( $s['btn_margin_left'] ?? null, 0 );
         $btn_mr      = $this->pad_int( $s['btn_margin_right'] ?? null, 0 );
         $btn_bw      = intval( $s['btn_border_width'] ?? 0 );
         $btn_bc      = $this->safe_color( $s['btn_border_color'] ?? '' );
+        $btn_fs      = intval( $s['btn_font_size'] ?? 0 );
+        $btn_fw      = esc_attr( $s['btn_font_weight'] ?? '600' ) ?: '600';
+        $btn_tt      = esc_attr( $s['btn_transform'] ?? 'none' ) ?: 'none';
+        $btn_lsp     = floatval( $s['btn_letter_spacing'] ?? 0 );
+        $btn_hc      = $this->safe_color( $s['btn_hover_color'] ?? '' );
+        $btn_sh      = Olobuild_Tile_Utils::shadow( $s['btn_shadow'] ?? 'none', 'button' );
+        $btn_hfx     = $s['btn_hover_effect'] ?? 'lift';
 
         // Mobile
         $mob_side    = $s['mobile_side'] === 'right' ? 'right' : 'left';
@@ -1069,22 +1094,28 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-btn {
             display: inline-flex;
             align-items: center;
-            padding: <?php echo $btn_pv; ?>px <?php echo $btn_ph; ?>px !important;
+            padding: <?php echo $btn_pad['top']; ?>px <?php echo $btn_pad['right']; ?>px <?php echo $btn_pad['bottom']; ?>px <?php echo $btn_pad['left']; ?>px !important;
             margin-left: <?php echo $btn_ml; ?>px;
             margin-right: <?php echo $btn_mr; ?>px;
             background: <?php echo $btn_bg; ?>;
             color: <?php echo $btn_color; ?> !important;
-            border-radius: <?php echo $btn_radius; ?>px;
-            font-size: <?php echo $fs; ?>px;
-            font-weight: 600;
+            border-radius: <?php echo $btn_radius; ?>;
+            font-size: <?php echo $btn_fs ?: $fs; ?>px;
+            font-weight: <?php echo $btn_fw; ?>;
+            <?php if ( $btn_tt !== 'none' ) : ?>text-transform: <?php echo $btn_tt; ?>;<?php endif; ?>
+            <?php if ( $btn_lsp ) : ?>letter-spacing: <?php echo $btn_lsp; ?>px;<?php endif; ?>
+            <?php if ( $btn_sh !== 'none' ) : ?>box-shadow: <?php echo $btn_sh; ?>;<?php endif; ?>
             text-decoration: none;
-            transition: background .2s, transform .15s;
+            transition: background .2s, transform .15s, box-shadow .2s, color .2s;
             white-space: nowrap;
             <?php if ( $btn_bw > 0 ) : ?>border: <?php echo $btn_bw; ?>px solid <?php echo $btn_bc ?: $btn_color; ?>;<?php endif; ?>
         }
         .<?php echo $uid; ?> .olo-mm-btn:hover {
-            <?php if ( $btn_hbg ) : ?>background: <?php echo $btn_hbg; ?>;<?php else : ?>filter: brightness(1.1);<?php endif; ?>
-            transform: translateY(-1px);
+            <?php if ( $btn_hbg ) : ?>background: <?php echo $btn_hbg; ?>;<?php elseif ( $btn_hfx !== 'none' ) : ?>filter: brightness(1.1);<?php endif; ?>
+            <?php if ( $btn_hc ) : ?>color: <?php echo $btn_hc; ?> !important;<?php endif; ?>
+            <?php if ( $btn_hfx === 'lift' ) : ?>transform: translateY(-1px);<?php endif; ?>
+            <?php if ( $btn_hfx === 'scale' ) : ?>transform: scale(1.04);<?php endif; ?>
+            <?php if ( $btn_hfx === 'glow' ) : ?>box-shadow: 0 6px 20px rgba(15,23,42,.28);<?php endif; ?>
         }
         .<?php echo $uid; ?> .olo-mm-btn::after { display: none; }
 
@@ -1355,10 +1386,10 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-mob-cta-link {
             display: block !important;
             text-align: center;
-            padding: <?php echo $btn_pv; ?>px <?php echo $btn_ph; ?>px !important;
+            padding: <?php echo $btn_pad['top']; ?>px <?php echo $btn_pad['right']; ?>px <?php echo $btn_pad['bottom']; ?>px <?php echo $btn_pad['left']; ?>px !important;
             background: <?php echo $btn_bg; ?> !important;
             color: <?php echo $btn_color; ?> !important;
-            border-radius: <?php echo $btn_radius; ?>px;
+            border-radius: <?php echo $btn_radius; ?>;
             font-weight: 600;
             font-size: 15px;
             text-decoration: none;
@@ -1650,7 +1681,8 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         }
         .<?php echo $uid; ?> .olo-mm-mobile-cta .olo-mm-mob-btn {
             font-size: 13px;
-            padding: <?php echo max(4, $btn_pv - 2); ?>px <?php echo max(8, $btn_ph - 4); ?>px;
+            /* !important: deve vincere sul padding !important della base .olo-mm-btn */
+            padding: <?php echo max( 4, $btn_pad['top'] - 2 ); ?>px <?php echo max( 8, $btn_pad['right'] - 4 ); ?>px <?php echo max( 4, $btn_pad['bottom'] - 2 ); ?>px <?php echo max( 8, $btn_pad['left'] - 4 ); ?>px !important;
         }
         .<?php echo $uid; ?> .olo-mm-mob-search-panel {
             display: none; padding: 10px <?php echo $this->pad_int($s['bar_padding'] ?? null, 12); ?>px;
