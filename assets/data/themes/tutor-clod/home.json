@@ -1,0 +1,1348 @@
+[
+ {
+  "id": "ot-h-hero",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "custom",
+   "padding_top_custom": 120,
+   "padding_bottom_custom": 120
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "var(--olo-color-muted)"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-h-hro",
+    "type": "row",
+    "settings": {
+     "layout": "custom",
+     "custom_widths": "54,46",
+     "gap": 48,
+     "vertical_align": "center"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-h-hc1",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-h-eyeb",
+        "type": "text-block",
+        "settings": {
+         "content": "<p style=\"text-transform:uppercase;letter-spacing:.09em;font-weight:600\">Piattaforma e-learning per la scuola · WCAG 2.1 AA · WordPress</p>",
+         "text_color": "var(--olo-color-primary)",
+         "font_size": "12",
+         "line_height": "1.4",
+         "text_align": "left",
+         "preset": "custom",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 8,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-h-ah",
+        "type": "animatedheading",
+        "settings": {
+         "before_text": "Come si impara, e come si",
+         "animated_words": "studia\nricorda\nripassa",
+         "after_text": "?",
+         "animation": "rotating",
+         "tag": "h1",
+         "alignment": "left",
+         "preset": "custom",
+         "font_size": "56",
+         "font_weight": "700",
+         "text_color": "var(--olo-color-text)",
+         "animated_color": "var(--olo-color-primary)",
+         "pause_time": "2600",
+         "typing_speed": "100",
+         "typography_preset": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-h-lead",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>OLOtutor porta dentro il lavoro che una classe fa già i metodi che la ricerca sull'apprendimento ha misurato: nell'ora di lezione, e nei giorni fra una lezione e l'altra.</p>",
+         "text_color": "var(--olo-color-text-muted)",
+         "font_size": "18",
+         "line_height": "1.62",
+         "text_align": "left",
+         "max_width": "540",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-h-cta",
+        "type": "row",
+        "settings": {
+         "layout": "custom",
+         "custom_widths": "50,50",
+         "gap": 12,
+         "vertical_align": "center"
+        },
+        "style": {},
+        "advanced": {},
+        "children": [
+         {
+          "id": "ot-h-cta1",
+          "type": "column",
+          "settings": {
+           "width_medium": "1-2"
+          },
+          "style": {},
+          "advanced": {},
+          "children": [
+           {
+            "id": "ot-h-b1",
+            "type": "button",
+            "settings": {
+             "text": "Prova con una classe",
+             "url": "/come-si-prova/",
+             "target": "_self",
+             "alignment": "left",
+             "preset": "custom",
+             "bg_color": "var(--olo-color-primary)",
+             "text_color": "var(--olo-color-primary-contrast)",
+             "hover_bg_color": "",
+             "font_size": "15",
+             "font_weight": "500",
+             "border_radius": {
+              "tl": 8,
+              "tr": 8,
+              "br": 8,
+              "bl": 8,
+              "linked": true
+             },
+             "tile_padding": {
+              "top": 13,
+              "right": 26,
+              "bottom": 13,
+              "left": 26
+             },
+             "shadow": "none",
+             "hover_effect": "lift",
+             "wrap_padding_y": 0
+            },
+            "style": {},
+            "advanced": {},
+            "children": []
+           }
+          ]
+         },
+         {
+          "id": "ot-h-cta2",
+          "type": "column",
+          "settings": {
+           "width_medium": "1-2"
+          },
+          "style": {},
+          "advanced": {},
+          "children": [
+           {
+            "id": "ot-h-b2",
+            "type": "button",
+            "settings": {
+             "text": "Leggi la nota di sintesi",
+             "url": "/come-si-prova/",
+             "target": "_self",
+             "alignment": "left",
+             "preset": "custom",
+             "bg_color": "var(--olo-color-surface)",
+             "text_color": "var(--olo-color-text)",
+             "hover_bg_color": "",
+             "font_size": "15",
+             "font_weight": "500",
+             "border_radius": {
+              "tl": 8,
+              "tr": 8,
+              "br": 8,
+              "bl": 8,
+              "linked": true
+             },
+             "tile_padding": {
+              "top": 13,
+              "right": 26,
+              "bottom": 13,
+              "left": 26
+             },
+             "shadow": "none",
+             "hover_effect": "lift",
+             "wrap_padding_y": 0
+            },
+            "style": {},
+            "advanced": {},
+            "children": []
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "ot-h-hc2",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-h-mock",
+        "type": "content",
+        "settings": {
+         "heading": "",
+         "heading_tag": "div",
+         "text": "<p>Screenshot del portale docente</p>",
+         "text_color": "var(--olo-color-text-faint)",
+         "image": "",
+         "image_position": "top",
+         "image_height": "340",
+         "image_fit": "cover",
+         "image_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "image_shadow": "lg",
+         "preset": "custom",
+         "heading_gap": "0",
+         "image_gap": "8"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-h-div",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "fullbleed",
+   "padding": "remove-vertical"
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-h-dro",
+    "type": "row",
+    "settings": {
+     "layout": "100",
+     "gap": 0
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-h-dco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-h-shape",
+        "type": "shapedivider",
+        "settings": {
+         "shape": "wave",
+         "position": "top",
+         "flip_horizontal": false,
+         "flip_vertical": false,
+         "width": "100",
+         "height": "80",
+         "color": "var(--olo-color-background)",
+         "z_index": "1",
+         "responsive_height_tablet": "60",
+         "responsive_height_mobile": "40"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-h-man",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "default",
+   "padding": "custom",
+   "padding_top_custom": 40,
+   "padding_bottom_custom": 140
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-h-mro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-h-mco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-h-meye",
+        "type": "text-block",
+        "settings": {
+         "content": "<p style=\"text-transform:uppercase;letter-spacing:.09em;font-weight:600\">Il principio, uno solo</p>",
+         "text_color": "var(--olo-color-text-muted)",
+         "font_size": "12",
+         "line_height": "1.4",
+         "text_align": "left",
+         "preset": "custom",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 8,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-h-scrub",
+        "type": "scrubtext",
+        "settings": {
+         "text": "Ripescare dalla memoria una cosa appena studiata, subito e in una forma <em>diversa</em>, è ciò che la <em>fissa.</em>",
+         "show_lead": true,
+         "lead": "Le parole si accendono man mano che la pagina scorre: a fondo corsa la frase è tutta piena.",
+         "scroll_reveal": true,
+         "dim_opacity": 14,
+         "accent": "var(--olo-color-primary)",
+         "text_color": "var(--olo-color-text)",
+         "lead_color": "var(--olo-color-text-faint)",
+         "size_min": 26,
+         "size_max": 46,
+         "max_width_ch": 28,
+         "lead_size": 14,
+         "lead_max_width_ch": 60
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-h-2mh",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "custom",
+   "padding_top_custom": 0,
+   "padding_bottom_custom": 28
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-h-2mhro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-h-2mhco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-h-2mht",
+        "type": "headline",
+        "settings": {
+         "heading": "Due momenti della stessa giornata",
+         "tag": "h2",
+         "alignment": "left",
+         "heading_font": "heading",
+         "heading_font_size": "40",
+         "heading_weight": "700",
+         "heading_color": "var(--olo-color-text)",
+         "decoration": "none",
+         "heading_uppercase": false,
+         "preset": "custom",
+         "subtitle": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-h-scA",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "custom",
+   "padding_top_custom": 56,
+   "padding_bottom_custom": 56,
+   "sticky_effect": "cover",
+   "sticky_top": 64
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "var(--olo-color-background)"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-h-Aro",
+    "type": "row",
+    "settings": {
+     "layout": "50-50",
+     "gap": 48,
+     "vertical_align": "center"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-h-Ac1",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-h-Aeye",
+        "type": "text-block",
+        "settings": {
+         "content": "<p style=\"text-transform:uppercase;letter-spacing:.09em;font-weight:600\">Momento uno</p>",
+         "text_color": "var(--olo-color-primary)",
+         "font_size": "12",
+         "line_height": "1.4",
+         "text_align": "left",
+         "preset": "custom",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 8,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-h-Ah",
+        "type": "headline",
+        "settings": {
+         "heading": "L'ora di lezione",
+         "tag": "h3",
+         "alignment": "left",
+         "heading_font": "heading",
+         "heading_font_size": "44",
+         "heading_weight": "700",
+         "heading_color": "var(--olo-color-text)",
+         "decoration": "none",
+         "heading_uppercase": false,
+         "preset": "custom",
+         "subtitle": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-h-At1",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>Decine di attività da comporre sui propri contenuti, dentro e fuori dall'aula.</p>",
+         "text_color": "var(--olo-color-text-muted)",
+         "font_size": "17",
+         "line_height": "1.62",
+         "text_align": "left",
+         "max_width": "460",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-h-At2",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>In qualunque materia, per il tempo che decide chi insegna.</p>",
+         "text_color": "var(--olo-color-text-muted)",
+         "font_size": "17",
+         "line_height": "1.62",
+         "text_align": "left",
+         "max_width": "460",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-h-Ab",
+        "type": "button",
+        "settings": {
+         "text": "In aula →",
+         "url": "/l-ora-di-lezione/",
+         "target": "_self",
+         "alignment": "left",
+         "preset": "custom",
+         "bg_color": "transparent",
+         "text_color": "var(--olo-color-primary)",
+         "hover_bg_color": "",
+         "font_size": "15",
+         "font_weight": "500",
+         "border_radius": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "tile_padding": {
+          "top": 13,
+          "right": 26,
+          "bottom": 13,
+          "left": 26
+         },
+         "shadow": "none",
+         "hover_effect": "lift",
+         "wrap_padding_y": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ot-h-Ac2",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-h-Aimg",
+        "type": "content",
+        "settings": {
+         "heading": "",
+         "heading_tag": "div",
+         "text": "<p>Foto d'aula</p>",
+         "text_color": "var(--olo-color-text-faint)",
+         "image": "",
+         "image_position": "top",
+         "image_height": "340",
+         "image_fit": "cover",
+         "image_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "image_shadow": "lg",
+         "preset": "custom",
+         "heading_gap": "0",
+         "image_gap": "8"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-h-scB",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "custom",
+   "padding_top_custom": 56,
+   "padding_bottom_custom": 56,
+   "sticky_effect": "cover",
+   "sticky_top": 64
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "var(--olo-color-secondary)"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-h-Bro",
+    "type": "row",
+    "settings": {
+     "layout": "50-50",
+     "gap": 48,
+     "vertical_align": "center"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-h-Bc1",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-h-Beye",
+        "type": "text-block",
+        "settings": {
+         "content": "<p style=\"text-transform:uppercase;letter-spacing:.09em;font-weight:600\">Momento due</p>",
+         "text_color": "color-mix(in srgb, var(--olo-color-primary) 70%, var(--olo-color-background))",
+         "font_size": "12",
+         "line_height": "1.4",
+         "text_align": "left",
+         "preset": "custom",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 8,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-h-Bh",
+        "type": "headline",
+        "settings": {
+         "heading": "I giorni fra le lezioni",
+         "tag": "h3",
+         "alignment": "left",
+         "heading_font": "heading",
+         "heading_font_size": "44",
+         "heading_weight": "700",
+         "heading_color": "var(--olo-color-secondary-contrast)",
+         "decoration": "none",
+         "heading_uppercase": false,
+         "preset": "custom",
+         "subtitle": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-h-Bt1",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>Ogni errore diventa una carta di ripasso con una data di ritorno: cinque nuove al giorno, uguali per tutti.</p>",
+         "text_color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 76%, transparent)",
+         "font_size": "17",
+         "line_height": "1.62",
+         "text_align": "left",
+         "max_width": "460",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-h-Bt2",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>Nessun impegno in più, per nessuno.</p>",
+         "text_color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 76%, transparent)",
+         "font_size": "17",
+         "line_height": "1.62",
+         "text_align": "left",
+         "max_width": "460",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-h-Bb",
+        "type": "button",
+        "settings": {
+         "text": "Lo studio →",
+         "url": "/i-giorni-fra-le-lezioni/",
+         "target": "_self",
+         "alignment": "left",
+         "preset": "custom",
+         "bg_color": "transparent",
+         "text_color": "color-mix(in srgb, var(--olo-color-primary) 70%, var(--olo-color-background))",
+         "hover_bg_color": "",
+         "font_size": "15",
+         "font_weight": "500",
+         "border_radius": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "tile_padding": {
+          "top": 13,
+          "right": 26,
+          "bottom": 13,
+          "left": 26
+         },
+         "shadow": "none",
+         "hover_effect": "lift",
+         "wrap_padding_y": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ot-h-Bc2",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-h-Bcards",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>Carta di ripasso · storia · <strong>oggi</strong></p><p>Carta di ripasso · fisica · fra 2 giorni</p><p>Carta di ripasso · diritto · fra 9 giorni</p>",
+         "text_color": "var(--olo-color-secondary-contrast)",
+         "font_size": "15",
+         "line_height": "2.4",
+         "text_align": "left",
+         "max_width": "",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-h-cap",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "custom",
+   "padding_top_custom": 28,
+   "padding_bottom_custom": 0
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-h-capro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-h-capco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-h-capt",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>La stessa piattaforma, vista in due ore diverse del giorno: scorrendo, la seconda scena sale sopra la prima.</p>",
+         "text_color": "var(--olo-color-text-faint)",
+         "font_size": "14",
+         "line_height": "1.65",
+         "text_align": "left",
+         "max_width": "560",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-h-num",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "custom",
+   "padding_top_custom": 120,
+   "padding_bottom_custom": 120
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-h-numro",
+    "type": "row",
+    "settings": {
+     "layout": "25-25-25-25",
+     "gap": 24,
+     "vertical_align": "stretch"
+    },
+    "style": {},
+    "advanced": {
+     "scrollspy_animation": "slide-bottom-small",
+     "scrollspy_stagger": 180
+    },
+    "children": [
+     {
+      "id": "ot-h-nc0",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-h-cnt0",
+        "type": "counter",
+        "settings": {
+         "number": "77",
+         "label": "definizioni ufficiali di competenza",
+         "prefix": "",
+         "suffix": "",
+         "icon_emoji": "",
+         "number_font_size": "46",
+         "number_font_weight": "700",
+         "text_color": "var(--olo-color-text)",
+         "label_font_size": "14",
+         "label_font_weight": "400",
+         "label_color": "var(--olo-color-text-muted)",
+         "media_bg": {
+          "type": "solid",
+          "color": "var(--olo-color-muted)"
+         },
+         "overlay": false,
+         "tile_padding": {
+          "top": 26,
+          "right": 24,
+          "bottom": 26,
+          "left": 24
+         },
+         "border_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "shadow": "none",
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ot-h-nc1",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-h-cnt1",
+        "type": "counter",
+        "settings": {
+         "number": "5",
+         "label": "quadri europei col testo ufficiale",
+         "prefix": "",
+         "suffix": "",
+         "icon_emoji": "",
+         "number_font_size": "46",
+         "number_font_weight": "700",
+         "text_color": "var(--olo-color-text)",
+         "label_font_size": "14",
+         "label_font_weight": "400",
+         "label_color": "var(--olo-color-text-muted)",
+         "media_bg": {
+          "type": "solid",
+          "color": "var(--olo-color-muted)"
+         },
+         "overlay": false,
+         "tile_padding": {
+          "top": 26,
+          "right": 24,
+          "bottom": 26,
+          "left": 24
+         },
+         "border_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "shadow": "none",
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ot-h-nc2",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-h-cnt2",
+        "type": "counter",
+        "settings": {
+         "number": "4",
+         "label": "livelli in ogni griglia di valutazione",
+         "prefix": "",
+         "suffix": "",
+         "icon_emoji": "",
+         "number_font_size": "46",
+         "number_font_weight": "700",
+         "text_color": "var(--olo-color-text)",
+         "label_font_size": "14",
+         "label_font_weight": "400",
+         "label_color": "var(--olo-color-text-muted)",
+         "media_bg": {
+          "type": "solid",
+          "color": "var(--olo-color-muted)"
+         },
+         "overlay": false,
+         "tile_padding": {
+          "top": 26,
+          "right": 24,
+          "bottom": 26,
+          "left": 24
+         },
+         "border_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "shadow": "none",
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ot-h-nc3",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-h-cnt3",
+        "type": "counter",
+        "settings": {
+         "number": "5",
+         "label": "carte di ripasso nuove al giorno",
+         "prefix": "",
+         "suffix": "",
+         "icon_emoji": "",
+         "number_font_size": "46",
+         "number_font_weight": "700",
+         "text_color": "var(--olo-color-text)",
+         "label_font_size": "14",
+         "label_font_weight": "400",
+         "label_color": "var(--olo-color-text-muted)",
+         "media_bg": {
+          "type": "solid",
+          "color": "var(--olo-color-muted)"
+         },
+         "overlay": false,
+         "tile_padding": {
+          "top": 26,
+          "right": 24,
+          "bottom": 26,
+          "left": 24
+         },
+         "border_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "shadow": "none",
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-h-mq",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "fullbleed",
+   "padding": "remove-vertical"
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-h-mqro",
+    "type": "row",
+    "settings": {
+     "layout": "100",
+     "gap": 0
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-h-mqco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-h-mqt",
+        "type": "marquee",
+        "settings": {
+         "content_type": "text",
+         "text_items": "Ripasso distanziato · Pratica di recupero · Pratica intercalata · Peer Instruction · Ipercorrezione · Rubriche a quattro livelli · Open Badges 2.0",
+         "separator": " · ",
+         "speed": "40",
+         "direction": "left",
+         "pause_hover": true,
+         "gap": "60",
+         "velocity_skew": false,
+         "bg_color": "var(--olo-color-background)",
+         "text_color": "var(--olo-color-text-muted)",
+         "font_size": "22",
+         "font_weight": "600",
+         "letter_spacing": "0",
+         "text_transform": "none",
+         "font_family": "heading",
+         "separator_color": "var(--olo-color-primary)",
+         "height": "84",
+         "full_width": true,
+         "border_top": "1",
+         "border_bottom": "1",
+         "border_color": "var(--olo-color-border)",
+         "preset": "custom",
+         "shadow": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-h-cta",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "custom",
+   "padding_top_custom": 120,
+   "padding_bottom_custom": 120
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-h-ctaro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-h-ctaco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-h-ctab",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Si comincia da una classe, e da un corso.",
+         "headline_accent": "",
+         "headline_accent_italic": false,
+         "subtitle": "<p>Il resto dell'istituto non se ne accorge, finché non lo si decide.</p>",
+         "cta_text": "Contatta per una demo",
+         "cta_url": "/come-si-prova/",
+         "cta_target": "_self",
+         "cta2_text": "",
+         "cta2_url": "#",
+         "bg": {
+          "type": "solid",
+          "color": "color-mix(in srgb, var(--olo-color-primary) 12%, var(--olo-color-background))"
+         },
+         "text_color": "var(--olo-color-text)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text-muted)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
+         "cta_radius": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "cta_radius_hover": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "cta_size": 15,
+         "cta_padding_y": 14,
+         "cta_padding_x": 28,
+         "headline_font_family": "heading",
+         "headline_size": 40,
+         "headline_weight": "700",
+         "subtitle_size": 17,
+         "layout": "split-2",
+         "ratio": "1fr auto",
+         "gap": 40,
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 24,
+          "tr": 24,
+          "br": 24,
+          "bl": 24,
+          "linked": true
+         },
+         "banner_radius_hover": {
+          "tl": 24,
+          "tr": 24,
+          "br": 24,
+          "bl": 24,
+          "linked": true
+         },
+         "banner_padding": 56
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

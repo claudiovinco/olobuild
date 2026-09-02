@@ -1,0 +1,929 @@
+[
+ {
+  "id": "ot-c-t-se",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "fullbleed",
+   "padding": "remove-vertical"
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-c-t-ro",
+    "type": "row",
+    "settings": {
+     "layout": "100",
+     "gap": 0
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-c-t-co",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-c-t-ptb",
+        "type": "pagetitlebar",
+        "settings": {
+         "title_tag": "h1",
+         "title_size": "56",
+         "title_weight": "700",
+         "title_align": "left",
+         "title_color": "var(--olo-color-text)",
+         "subtitle": "Registro, presenze, famiglie, standard: ogni parte si adotta per intero, oppure si usa solo dove serve.",
+         "subtitle_size": "18",
+         "subtitle_color": "var(--olo-color-text-muted)",
+         "show_breadcrumbs": false,
+         "breadcrumb_separator": "/",
+         "media_bg": {
+          "type": "none"
+         },
+         "bg_color": "var(--olo-color-muted)",
+         "bg_parallax": true,
+         "min_height": "300",
+         "tile_padding": {
+          "top": 140,
+          "right": 0,
+          "bottom": 80,
+          "left": 0
+         },
+         "content_width": "1200",
+         "border_bottom": false,
+         "shadow": "none",
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-c-sw",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "custom",
+   "padding_top_custom": 100,
+   "padding_bottom_custom": 100
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-c-swro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-c-swco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-c-swh",
+        "type": "headline",
+        "settings": {
+         "heading": "Un numero solo per ogni domanda",
+         "tag": "h2",
+         "alignment": "left",
+         "heading_font": "heading",
+         "heading_font_size": "38",
+         "heading_weight": "700",
+         "heading_color": "var(--olo-color-text)",
+         "decoration": "none",
+         "heading_uppercase": false,
+         "preset": "custom",
+         "subtitle": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-c-swt",
+        "type": "switcher",
+        "settings": {
+         "items": [
+          {
+           "id": "sw-reg",
+           "title": "Registro",
+           "content": "<p>Media, frequenza e presenze si calcolano ciascuna in un punto solo del sistema: un registro che dà due risposte alla stessa domanda non è discutibile con una famiglia.</p><p>Le categorie si costruiscono su misura, e ogni strategia di media ha un nome: niente formule scritte a mano tre anni fa.</p><p><strong>Registro voti</strong><br/>Prova scritta del 12 marzo · P<br/>Colloquio orale · R<br/>Uscita sul territorio · G</p>"
+          },
+          {
+           "id": "sw-pre",
+           "title": "Presenze a ore",
+           "content": "<p>Media, frequenza e presenze si calcolano ciascuna in un punto solo del sistema: un registro che dà due risposte alla stessa domanda non è discutibile con una famiglia.</p><p>Le categorie si costruiscono su misura, e ogni strategia di media ha un nome: niente formule scritte a mano tre anni fa.</p><p><strong>Presenze a ore</strong><br/>Prima ora · presente<br/>Seconda ora · ritardo<br/>Terza ora · giustificata</p>"
+          },
+          {
+           "id": "sw-fam",
+           "title": "Famiglie",
+           "content": "<p>Media, frequenza e presenze si calcolano ciascuna in un punto solo del sistema: un registro che dà due risposte alla stessa domanda non è discutibile con una famiglia.</p><p>Le categorie si costruiscono su misura, e ogni strategia di media ha un nome: niente formule scritte a mano tre anni fa.</p><p><strong>Comunicazioni alle famiglie</strong><br/>Colloquio del 4 aprile<br/>Assenza del 9 aprile<br/>Pagella del primo periodo</p>"
+          },
+          {
+           "id": "sw-tut",
+           "title": "Tutor",
+           "content": "<p>Media, frequenza e presenze si calcolano ciascuna in un punto solo del sistema: un registro che dà due risposte alla stessa domanda non è discutibile con una famiglia.</p><p>Le categorie si costruiscono su misura, e ogni strategia di media ha un nome: niente formule scritte a mano tre anni fa.</p><p><strong>Ricevimento tutor</strong><br/>Classe 3B · ricevimento<br/>Segnalazione al consiglio<br/>Percorso individuale</p>"
+          }
+         ],
+         "preset": "underline-animated",
+         "nav_style": "tab-underline",
+         "animation": "fade",
+         "animation_duration": "250",
+         "vertical": false,
+         "tab_padding_y": "12",
+         "tab_padding_x": "16",
+         "tab_font_size": "15",
+         "tab_font_weight": "500",
+         "tab_gap": "8",
+         "tab_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "container_bg": "transparent",
+         "container_padding": "0",
+         "container_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "active_bg": "transparent",
+         "active_color": "var(--olo-color-text)",
+         "inactive_color": "var(--olo-color-text-muted)",
+         "hover_bg": "",
+         "indicator_type": "underline",
+         "indicator_color": "var(--olo-color-primary)",
+         "content_bg": "",
+         "content_color": "var(--olo-color-text-muted)",
+         "content_padding_y": "32",
+         "content_padding_x": "0",
+         "shadow": "none",
+         "typography_preset": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-c-sys",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "custom",
+   "padding_top_custom": 0,
+   "padding_bottom_custom": 110
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-c-sysHro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-c-sysHco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-c-sysh",
+        "type": "headline",
+        "settings": {
+         "heading": "Un sistema completo, di cui si usa la parte che serve",
+         "tag": "h2",
+         "alignment": "left",
+         "heading_font": "heading",
+         "heading_font_size": "36",
+         "heading_weight": "700",
+         "heading_color": "var(--olo-color-text)",
+         "decoration": "none",
+         "heading_uppercase": false,
+         "preset": "custom",
+         "subtitle": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ot-c-sysro",
+    "type": "row",
+    "settings": {
+     "layout": "25-25-25-25",
+     "gap": 24,
+     "vertical_align": "stretch"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-c-sc0",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-c-sib0",
+        "type": "iconbox",
+        "settings": {
+         "icon_emoji": "calendar",
+         "title": "Corsi e calendario",
+         "description": "La pianificazione dell'anno, in un posto solo.",
+         "link_url": "",
+         "link_text": "",
+         "alignment": "left",
+         "icon_size": "1.5",
+         "icon_position": "top",
+         "icon_color": "var(--olo-color-link)",
+         "icon_bg_color": "color-mix(in srgb, var(--olo-color-primary) 14%, var(--olo-color-background))",
+         "icon_bg_shape": "rounded",
+         "title_font_size": "18",
+         "title_font_weight": "600",
+         "title_color": "var(--olo-color-text)",
+         "text_color": "var(--olo-color-text-muted)",
+         "media_bg": {
+          "type": "solid",
+          "color": "var(--olo-color-surface)"
+         },
+         "tile_padding": {
+          "top": 26,
+          "right": 26,
+          "bottom": 26,
+          "left": 26
+         },
+         "border_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "shadow": "sm",
+         "preset": "custom",
+         "icon_gap": "18",
+         "title_gap": "8"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ot-c-sc1",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-c-sib1",
+        "type": "iconbox",
+        "settings": {
+         "icon_emoji": "copy",
+         "title": "Modelli riusabili",
+         "description": "Unità di apprendimento, griglie, banche di domande.",
+         "link_url": "",
+         "link_text": "",
+         "alignment": "left",
+         "icon_size": "1.5",
+         "icon_position": "top",
+         "icon_color": "var(--olo-color-link)",
+         "icon_bg_color": "color-mix(in srgb, var(--olo-color-primary) 14%, var(--olo-color-background))",
+         "icon_bg_shape": "rounded",
+         "title_font_size": "18",
+         "title_font_weight": "600",
+         "title_color": "var(--olo-color-text)",
+         "text_color": "var(--olo-color-text-muted)",
+         "media_bg": {
+          "type": "solid",
+          "color": "var(--olo-color-surface)"
+         },
+         "tile_padding": {
+          "top": 26,
+          "right": 26,
+          "bottom": 26,
+          "left": 26
+         },
+         "border_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "shadow": "sm",
+         "preset": "custom",
+         "icon_gap": "18",
+         "title_gap": "8"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ot-c-sc2",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-c-sib2",
+        "type": "iconbox",
+        "settings": {
+         "icon_emoji": "message-square",
+         "title": "Comunicazioni tracciate",
+         "description": "Amministrazione, tutor, studenti e famiglie su un canale solo.",
+         "link_url": "",
+         "link_text": "",
+         "alignment": "left",
+         "icon_size": "1.5",
+         "icon_position": "top",
+         "icon_color": "var(--olo-color-link)",
+         "icon_bg_color": "color-mix(in srgb, var(--olo-color-primary) 14%, var(--olo-color-background))",
+         "icon_bg_shape": "rounded",
+         "title_font_size": "18",
+         "title_font_weight": "600",
+         "title_color": "var(--olo-color-text)",
+         "text_color": "var(--olo-color-text-muted)",
+         "media_bg": {
+          "type": "solid",
+          "color": "var(--olo-color-surface)"
+         },
+         "tile_padding": {
+          "top": 26,
+          "right": 26,
+          "bottom": 26,
+          "left": 26
+         },
+         "border_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "shadow": "sm",
+         "preset": "custom",
+         "icon_gap": "18",
+         "title_gap": "8"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ot-c-sc3",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-c-sib3",
+        "type": "iconbox",
+        "settings": {
+         "icon_emoji": "bar-chart-3",
+         "title": "Statistiche e analisi",
+         "description": "Corsi, classi, singole domande, andamenti nel tempo.",
+         "link_url": "",
+         "link_text": "",
+         "alignment": "left",
+         "icon_size": "1.5",
+         "icon_position": "top",
+         "icon_color": "var(--olo-color-link)",
+         "icon_bg_color": "color-mix(in srgb, var(--olo-color-primary) 14%, var(--olo-color-background))",
+         "icon_bg_shape": "rounded",
+         "title_font_size": "18",
+         "title_font_weight": "600",
+         "title_color": "var(--olo-color-text)",
+         "text_color": "var(--olo-color-text-muted)",
+         "media_bg": {
+          "type": "solid",
+          "color": "var(--olo-color-surface)"
+         },
+         "tile_padding": {
+          "top": 26,
+          "right": 26,
+          "bottom": 26,
+          "left": 26
+         },
+         "border_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "shadow": "sm",
+         "preset": "custom",
+         "icon_gap": "18",
+         "title_gap": "8"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ot-c-syscro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-c-syscco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-c-syscap",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>Nessuna scuola usa tutto, e non serve.</p>",
+         "text_color": "var(--olo-color-text-faint)",
+         "font_size": "15",
+         "line_height": "1.62",
+         "text_align": "left",
+         "max_width": "",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-c-std",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "custom",
+   "padding_top_custom": 100,
+   "padding_bottom_custom": 100
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "var(--olo-color-muted)"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-c-stdHro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-c-stdHco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-c-stdh",
+        "type": "headline",
+        "settings": {
+         "heading": "Standard, con le parole ufficiali",
+         "tag": "h2",
+         "alignment": "left",
+         "heading_font": "heading",
+         "heading_font_size": "36",
+         "heading_weight": "700",
+         "heading_color": "var(--olo-color-text)",
+         "decoration": "none",
+         "heading_uppercase": false,
+         "preset": "custom",
+         "subtitle": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ot-c-stdro",
+    "type": "row",
+    "settings": {
+     "layout": "33-33-33",
+     "gap": 24,
+     "vertical_align": "stretch"
+    },
+    "style": {},
+    "advanced": {
+     "scrollspy_animation": "slide-bottom-small",
+     "scrollspy_stagger": 180
+    },
+    "children": [
+     {
+      "id": "ot-c-stc0",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-c-cnt0",
+        "type": "counter",
+        "settings": {
+         "number": "5",
+         "label": "quadri europei col testo ufficiale, su sei",
+         "prefix": "",
+         "suffix": "",
+         "icon_emoji": "",
+         "number_font_size": "44",
+         "number_font_weight": "700",
+         "text_color": "var(--olo-color-text)",
+         "label_font_size": "14",
+         "label_font_weight": "400",
+         "label_color": "var(--olo-color-text-muted)",
+         "media_bg": {
+          "type": "solid",
+          "color": "var(--olo-color-surface)"
+         },
+         "overlay": false,
+         "tile_padding": {
+          "top": 26,
+          "right": 24,
+          "bottom": 26,
+          "left": 24
+         },
+         "border_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "shadow": "none",
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ot-c-stc1",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-c-cnt1",
+        "type": "counter",
+        "settings": {
+         "number": "77",
+         "label": "definizioni di competenza",
+         "prefix": "",
+         "suffix": "",
+         "icon_emoji": "",
+         "number_font_size": "44",
+         "number_font_weight": "700",
+         "text_color": "var(--olo-color-text)",
+         "label_font_size": "14",
+         "label_font_weight": "400",
+         "label_color": "var(--olo-color-text-muted)",
+         "media_bg": {
+          "type": "solid",
+          "color": "var(--olo-color-surface)"
+         },
+         "overlay": false,
+         "tile_padding": {
+          "top": 26,
+          "right": 24,
+          "bottom": 26,
+          "left": 24
+         },
+         "border_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "shadow": "none",
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ot-c-stc2",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-c-cnt2",
+        "type": "counter",
+        "settings": {
+         "number": "71",
+         "label": "sotto-descrittori",
+         "prefix": "",
+         "suffix": "",
+         "icon_emoji": "",
+         "number_font_size": "44",
+         "number_font_weight": "700",
+         "text_color": "var(--olo-color-text)",
+         "label_font_size": "14",
+         "label_font_weight": "400",
+         "label_color": "var(--olo-color-text-muted)",
+         "media_bg": {
+          "type": "solid",
+          "color": "var(--olo-color-surface)"
+         },
+         "overlay": false,
+         "tile_padding": {
+          "top": 26,
+          "right": 24,
+          "bottom": 26,
+          "left": 24
+         },
+         "border_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "shadow": "none",
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ot-c-stdbro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-c-stdbco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-c-badges",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>DigComp 3.0 · LifeComp · GreenComp · RFCDC · EntreComp · QCER</p>",
+         "text_color": "var(--olo-color-text)",
+         "font_size": "14",
+         "line_height": "1.62",
+         "text_align": "left",
+         "max_width": "",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-c-stdnote",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>I riconoscimenti escono nel formato aperto Open Badges 2.0 e valgono fuori dalla piattaforma; l'interfaccia segue i criteri WCAG 2.1 AA, il riferimento della norma EN 301 549.</p>",
+         "text_color": "var(--olo-color-text-muted)",
+         "font_size": "15",
+         "line_height": "1.7",
+         "text_align": "left",
+         "max_width": "760",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-c-own",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "default",
+   "padding": "custom",
+   "padding_top_custom": 110,
+   "padding_bottom_custom": 110
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-c-ownro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-c-ownco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-c-ownh",
+        "type": "headline",
+        "settings": {
+         "heading": "Quello che una scuola scrive resta suo.",
+         "tag": "h2",
+         "alignment": "left",
+         "heading_font": "heading",
+         "heading_font_size": "42",
+         "heading_weight": "700",
+         "heading_color": "var(--olo-color-text)",
+         "decoration": "none",
+         "heading_uppercase": false,
+         "preset": "custom",
+         "subtitle": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-c-ownt",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>Corsi, banche di domande e glossari si esportano in qualsiasi momento.</p>",
+         "text_color": "var(--olo-color-text-muted)",
+         "font_size": "18",
+         "line_height": "1.62",
+         "text_align": "left",
+         "max_width": "",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -1,0 +1,889 @@
+[
+ {
+  "id": "ot-s-t-se",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "fullbleed",
+   "padding": "remove-vertical"
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-s-t-ro",
+    "type": "row",
+    "settings": {
+     "layout": "100",
+     "gap": 0
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-s-t-co",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-s-t-ptb",
+        "type": "pagetitlebar",
+        "settings": {
+         "title_tag": "h1",
+         "title_size": "56",
+         "title_weight": "700",
+         "title_align": "left",
+         "title_color": "var(--olo-color-text)",
+         "subtitle": "Il ripasso si organizza da sé, a partire dagli errori: a casa, dal telefono, senza che nessuno debba ricordarsene.",
+         "subtitle_size": "18",
+         "subtitle_color": "var(--olo-color-text-muted)",
+         "show_breadcrumbs": false,
+         "breadcrumb_separator": "/",
+         "media_bg": {
+          "type": "none"
+         },
+         "bg_color": "var(--olo-color-muted)",
+         "bg_parallax": true,
+         "min_height": "300",
+         "tile_padding": {
+          "top": 140,
+          "right": 0,
+          "bottom": 80,
+          "left": 0
+         },
+         "content_width": "1200",
+         "border_bottom": false,
+         "shadow": "none",
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-s-pila",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "default",
+   "padding": "custom",
+   "padding_top_custom": 110,
+   "padding_bottom_custom": 40
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-s-pilaHro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-s-pilaHco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-s-pilaeye",
+        "type": "text-block",
+        "settings": {
+         "content": "<p style=\"text-transform:uppercase;letter-spacing:.09em;font-weight:600\">Gli errori tornano, quando serve</p>",
+         "text_color": "var(--olo-color-text-muted)",
+         "font_size": "12",
+         "line_height": "1.4",
+         "text_align": "left",
+         "preset": "custom",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 8,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-s-pilah",
+        "type": "headline",
+        "settings": {
+         "heading": "Non si chiede nulla a nessuno: il segnale esiste già, ed è l'errore.",
+         "tag": "h2",
+         "alignment": "left",
+         "heading_font": "heading",
+         "heading_font_size": "40",
+         "heading_weight": "700",
+         "heading_color": "var(--olo-color-text)",
+         "decoration": "none",
+         "heading_uppercase": false,
+         "preset": "custom",
+         "subtitle": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-s-pilacap",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>Scorrendo, le carte si fermano una sopra l'altra, come una pila che si compone.</p>",
+         "text_color": "var(--olo-color-text-faint)",
+         "font_size": "14",
+         "line_height": "1.62",
+         "text_align": "left",
+         "max_width": "560",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ot-s-pilaro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-s-pilaco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-s-stack",
+        "type": "stackscroll",
+        "settings": {
+         "cards": [
+          {
+           "eyebrow": "",
+           "title": "Ogni errore diventa una carta",
+           "accent": "",
+           "text": "<p>Con una data di ritorno, calcolata da FSRS 4.5.</p>",
+           "media": "",
+           "media_label": "",
+           "color": "",
+           "text_color": ""
+          },
+          {
+           "eyebrow": "",
+           "title": "Prima le sbagliate con sicurezza",
+           "accent": "",
+           "text": "<p>Un errore commesso con convinzione, corretto, si ricorda meglio: è l'ipercorrezione di Butterfield e Metcalfe.</p>",
+           "media": "",
+           "media_label": "",
+           "color": "",
+           "text_color": ""
+          },
+          {
+           "eyebrow": "",
+           "title": "Argomenti alternati, mai a blocchi",
+           "accent": "",
+           "text": "<p>La pratica intercalata costa fatica sul momento, e prepara meglio alla verifica.</p>",
+           "media": "",
+           "media_label": "",
+           "color": "",
+           "text_color": ""
+          },
+          {
+           "eyebrow": "",
+           "title": "Cinque carte nuove al giorno",
+           "accent": "",
+           "text": "<p>Uguali per tutti: senza un tetto, chi sbaglia di più avrebbe la coda più lunga.</p>",
+           "media": "",
+           "media_label": "",
+           "color": "var(--olo-color-secondary)",
+           "text_color": "var(--olo-color-secondary-contrast)"
+          }
+         ],
+         "top_offset": 100,
+         "top_step": 20,
+         "card_gap": 24,
+         "scale_on_stack": true,
+         "scale_amount": 3,
+         "card_min_height": 260,
+         "round": {
+          "tl": 16,
+          "tr": 16,
+          "br": 16,
+          "bl": 16,
+          "linked": true
+         },
+         "card_padding": 40,
+         "media_position": "none",
+         "card_bg_default": "var(--olo-color-surface)",
+         "text_color_default": "var(--olo-color-text)",
+         "num_color_default": "var(--olo-color-primary)",
+         "show_number": true,
+         "title_display": false,
+         "shadow": "custom",
+         "shadow_h": "0",
+         "shadow_v": "8",
+         "shadow_blur": "32",
+         "shadow_spread": "0",
+         "shadow_color": "rgba(15,23,42,0.08)",
+         "shadow_inset": false
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-s-cert",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "custom",
+   "padding_top_custom": 110,
+   "padding_bottom_custom": 110
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "var(--olo-color-muted)"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-s-certHro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-s-certHco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-s-certh",
+        "type": "headline",
+        "settings": {
+         "heading": "Quanto uno sa, e quanto crede di sapere",
+         "tag": "h2",
+         "alignment": "left",
+         "heading_font": "heading",
+         "heading_font_size": "40",
+         "heading_weight": "700",
+         "heading_color": "var(--olo-color-text)",
+         "decoration": "none",
+         "heading_uppercase": false,
+         "preset": "custom",
+         "subtitle": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-s-certlead",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>Prima di rispondere si dichiara quanto ci si sente sicuri. Incrociata con l'esito, la dichiarazione dà quattro situazioni che il voto non distingue.</p>",
+         "text_color": "var(--olo-color-text-muted)",
+         "font_size": "17",
+         "line_height": "1.62",
+         "text_align": "left",
+         "max_width": "660",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ot-s-certro",
+    "type": "row",
+    "settings": {
+     "layout": "25-25-25-25",
+     "gap": 24,
+     "vertical_align": "stretch"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-s-cc0",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-s-fc0",
+        "type": "flipcard",
+        "settings": {
+         "front_media": {
+          "type": "none"
+         },
+         "back_media": {
+          "type": "none"
+         },
+         "front_icon": "",
+         "front_title": "SICURO · RISPOSTA GIUSTA",
+         "front_description": "Conoscenza solida",
+         "back_icon": "",
+         "back_title": "Conoscenza solida",
+         "back_description": "",
+         "back_cta_text": "",
+         "back_cta_url": "",
+         "front_bg": "var(--olo-color-surface)",
+         "back_bg": "var(--olo-color-primary)",
+         "front_text_color": "var(--olo-color-text)",
+         "back_text_color": "var(--olo-color-primary-contrast)",
+         "front_text_align": "left",
+         "front_valign": "top",
+         "back_text_align": "left",
+         "back_valign": "bottom",
+         "flip_direction": "horizontal",
+         "flip_duration": "700",
+         "flip_trigger": "hover",
+         "flip_easing": "ease-in-out",
+         "card_height": "230",
+         "card_border_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "card_shadow": "none",
+         "tile_padding": {
+          "top": 26,
+          "right": 26,
+          "bottom": 26,
+          "left": 26
+         },
+         "title_size": "13",
+         "title_weight": "600",
+         "desc_size": "16",
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ot-s-cc1",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-s-fc1",
+        "type": "flipcard",
+        "settings": {
+         "front_media": {
+          "type": "none"
+         },
+         "back_media": {
+          "type": "none"
+         },
+         "front_icon": "",
+         "front_title": "SICURO · RISPOSTA SBAGLIATA",
+         "front_description": "La nozione c'è, ma è sbagliata, e va prima smontata.",
+         "back_icon": "",
+         "back_title": "SICURO · RISPOSTA SBAGLIATA",
+         "back_description": "La nozione c'è, ma è sbagliata, e va prima smontata.",
+         "back_cta_text": "",
+         "back_cta_url": "",
+         "front_bg": "var(--olo-color-surface)",
+         "back_bg": "var(--olo-color-surface)",
+         "front_text_color": "var(--olo-color-text)",
+         "back_text_color": "var(--olo-color-text)",
+         "front_text_align": "left",
+         "front_valign": "top",
+         "back_text_align": "left",
+         "back_valign": "bottom",
+         "flip_direction": "horizontal",
+         "flip_duration": "700",
+         "flip_trigger": "hover",
+         "flip_easing": "ease-in-out",
+         "card_height": "230",
+         "card_border_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "card_shadow": "none",
+         "tile_padding": {
+          "top": 26,
+          "right": 26,
+          "bottom": 26,
+          "left": 26
+         },
+         "title_size": "13",
+         "title_weight": "600",
+         "desc_size": "16",
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ot-s-cc2",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-s-fc2",
+        "type": "flipcard",
+        "settings": {
+         "front_media": {
+          "type": "none"
+         },
+         "back_media": {
+          "type": "none"
+         },
+         "front_icon": "",
+         "front_title": "INCERTO · RISPOSTA GIUSTA",
+         "front_description": "Il voto non la distingue da una conoscenza solida.",
+         "back_icon": "",
+         "back_title": "INCERTO · RISPOSTA GIUSTA",
+         "back_description": "Il voto non la distingue da una conoscenza solida.",
+         "back_cta_text": "",
+         "back_cta_url": "",
+         "front_bg": "var(--olo-color-surface)",
+         "back_bg": "var(--olo-color-surface)",
+         "front_text_color": "var(--olo-color-text)",
+         "back_text_color": "var(--olo-color-text)",
+         "front_text_align": "left",
+         "front_valign": "top",
+         "back_text_align": "left",
+         "back_valign": "bottom",
+         "flip_direction": "horizontal",
+         "flip_duration": "700",
+         "flip_trigger": "hover",
+         "flip_easing": "ease-in-out",
+         "card_height": "230",
+         "card_border_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "card_shadow": "none",
+         "tile_padding": {
+          "top": 26,
+          "right": 26,
+          "bottom": 26,
+          "left": 26
+         },
+         "title_size": "13",
+         "title_weight": "600",
+         "desc_size": "16",
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ot-s-cc3",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-s-fc3",
+        "type": "flipcard",
+        "settings": {
+         "front_media": {
+          "type": "none"
+         },
+         "back_media": {
+          "type": "none"
+         },
+         "front_icon": "",
+         "front_title": "INCERTO · RISPOSTA SBAGLIATA",
+         "front_description": "Lacuna",
+         "back_icon": "",
+         "back_title": "Lacuna",
+         "back_description": "",
+         "back_cta_text": "",
+         "back_cta_url": "",
+         "front_bg": "var(--olo-color-surface)",
+         "back_bg": "var(--olo-color-secondary)",
+         "front_text_color": "var(--olo-color-text)",
+         "back_text_color": "var(--olo-color-secondary-contrast)",
+         "front_text_align": "left",
+         "front_valign": "top",
+         "back_text_align": "left",
+         "back_valign": "bottom",
+         "flip_direction": "horizontal",
+         "flip_duration": "700",
+         "flip_trigger": "hover",
+         "flip_easing": "ease-in-out",
+         "card_height": "230",
+         "card_border_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "card_shadow": "none",
+         "tile_padding": {
+          "top": 26,
+          "right": 26,
+          "bottom": 26,
+          "left": 26
+         },
+         "title_size": "13",
+         "title_weight": "600",
+         "desc_size": "16",
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ot-s-certcro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-s-certcco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-s-certcap",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>Due carte sono mostrate dal retro.</p>",
+         "text_color": "var(--olo-color-text-faint)",
+         "font_size": "14",
+         "line_height": "1.62",
+         "text_align": "left",
+         "max_width": "",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-s-quo",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "default",
+   "padding": "custom",
+   "padding_top_custom": 120,
+   "padding_bottom_custom": 60
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-s-quoro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-s-quoco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-s-quot",
+        "type": "quotation",
+        "settings": {
+         "content": "La certezza non entra mai nel voto.",
+         "author": "",
+         "preset": "big-mark",
+         "style": "default",
+         "alignment": "left",
+         "typography_preset": "",
+         "shadow": "none",
+         "bg": {
+          "type": "none"
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-s-quonote",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>Dove si penalizza chi si dichiara sicuro e sbaglia, conviene a tutti dichiararsi incerti sempre, e il dato smette di dire qualcosa.</p>",
+         "text_color": "var(--olo-color-text-muted)",
+         "font_size": "17",
+         "line_height": "1.62",
+         "text_align": "left",
+         "max_width": "680",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-s-ref",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "default",
+   "padding": "custom",
+   "padding_top_custom": 40,
+   "padding_bottom_custom": 120
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-s-refro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-s-refco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-s-refeye",
+        "type": "text-block",
+        "settings": {
+         "content": "<p style=\"text-transform:uppercase;letter-spacing:.09em;font-weight:600\">Chi ha misurato queste cose</p>",
+         "text_color": "var(--olo-color-text-muted)",
+         "font_size": "12",
+         "line_height": "1.4",
+         "text_align": "left",
+         "preset": "custom",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 8,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-s-reft",
+        "type": "table",
+        "settings": {
+         "table_data": [
+          [
+           "Butterfield e Metcalfe, 2001",
+           "Gli errori commessi con alta sicurezza, una volta corretti, vengono ricordati meglio degli errori commessi nel dubbio."
+          ],
+          [
+           "Roediger e Karpicke, 2006",
+           "Ripescare una nozione dalla memoria produce un ricordo più stabile che rileggerla."
+          ],
+          [
+           "Rohrer e Taylor, 2007 · Bjork",
+           "Alternare argomenti diversi rende l'esercizio più faticoso sul momento e la prestazione migliore alla verifica."
+          ],
+          [
+           "Eric Mazur, Peer Instruction, 1997",
+           "Il confronto fra pari fra due tornate di voto sposta la classe verso la risposta corretta più di una spiegazione ripetuta."
+          ]
+         ],
+         "has_header": false,
+         "striped": false,
+         "bordered": false,
+         "hover_effect": true,
+         "compact": false,
+         "first_col_bold": true,
+         "col_alignments": [],
+         "responsive_mode": "stack",
+         "header_bg": "",
+         "text_color": "var(--olo-color-text)",
+         "border_color": "var(--olo-color-border)",
+         "even_row_bg": "",
+         "shadow": "none",
+         "preset": "minimal-line"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-s-refnote",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>Sintesi dei risultati, non citazioni letterali.</p>",
+         "text_color": "var(--olo-color-text-faint)",
+         "font_size": "13",
+         "line_height": "1.62",
+         "text_align": "left",
+         "max_width": "",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

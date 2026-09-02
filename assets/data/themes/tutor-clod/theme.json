@@ -1,0 +1,148 @@
+{
+ "id": "tutor-clod",
+ "name": "OLOtutor · Vetrina",
+ "author": "OLOtutor",
+ "version": "1.0.0",
+ "category": "education",
+ "tags": [
+  "education",
+  "school",
+  "e-learning",
+  "lms"
+ ],
+ "description": "Vetrina OLOtutor · cinque tavole: la pagina d'ingresso, In aula, Lo studio, La scuola, Come si prova. Palette e tipografia dell'Olo Tutor Design System.",
+ "menu": {
+  "name": "OLOtutor Menu",
+  "items": [
+   {
+    "title": "In aula",
+    "url": "/l-ora-di-lezione/"
+   },
+   {
+    "title": "Lo studio",
+    "url": "/i-giorni-fra-le-lezioni/"
+   },
+   {
+    "title": "La scuola",
+    "url": "/una-scuola-intera/"
+   },
+   {
+    "title": "Come si prova",
+    "url": "/come-si-prova/"
+   }
+  ]
+ },
+ "templates": {
+  "header": {
+   "file": "header.json",
+   "type": "header",
+   "title": "OLOtutor · Header"
+  },
+  "footer": {
+   "file": "footer.json",
+   "type": "footer",
+   "title": "OLOtutor · Footer"
+  },
+  "home": {
+   "file": "home.json",
+   "type": "page",
+   "title": "OLOtutor · Ingresso"
+  },
+  "in-aula": {
+   "file": "in-aula.json",
+   "type": "page",
+   "title": "OLOtutor · In aula"
+  },
+  "lo-studio": {
+   "file": "lo-studio.json",
+   "type": "page",
+   "title": "OLOtutor · Lo studio"
+  },
+  "la-scuola": {
+   "file": "la-scuola.json",
+   "type": "page",
+   "title": "OLOtutor · La scuola"
+  },
+  "come-si-prova": {
+   "file": "come-si-prova.json",
+   "type": "page",
+   "title": "OLOtutor · Come si prova"
+  }
+ },
+ "activate": {
+  "header": "header",
+  "footer": "footer"
+ },
+ "pages": {
+  "home": {
+   "title": "OLOtutor",
+   "template": "home",
+   "set_as_homepage": true
+  },
+  "in-aula": {
+   "title": "L'ora di lezione",
+   "template": "in-aula",
+   "slug": "l-ora-di-lezione"
+  },
+  "lo-studio": {
+   "title": "I giorni fra le lezioni",
+   "template": "lo-studio",
+   "slug": "i-giorni-fra-le-lezioni"
+  },
+  "la-scuola": {
+   "title": "Una scuola intera",
+   "template": "la-scuola",
+   "slug": "una-scuola-intera"
+  },
+  "come-si-prova": {
+   "title": "Come si prova",
+   "template": "come-si-prova",
+   "slug": "come-si-prova"
+  }
+ },
+ "styles": {
+  "colors": {
+   "primary": "#3fa23f",
+   "primary_contrast": "#ffffff",
+   "secondary": "#0f172a",
+   "secondary_contrast": "#ffffff",
+   "muted": "#f8fafc",
+   "muted_contrast": "#475569",
+   "success": "#22c55e",
+   "warning": "#f59e0b",
+   "danger": "#ef4444",
+   "text": "#1e293b",
+   "text_muted": "#64748b",
+   "background": "#ffffff",
+   "border": "#e2e8f0",
+   "link": "#2d722d"
+  },
+  "typography": {
+   "font_family": "\"Work Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+   "font_family_heading": "\"Playfair Display\", Georgia, serif",
+   "font_size_base": "16px",
+   "line_height": "1.6",
+   "font_weight_heading": "700",
+   "font_weight_body": "400",
+   "heading_line_height": "1.12",
+   "heading_letter_spacing": "-0.02em",
+   "heading_text_transform": "none",
+   "font_size_h1": "56px",
+   "font_size_h2": "40px",
+   "font_size_h3": "28px",
+   "font_size_h4": "20px",
+   "font_size_h5": "16px",
+   "font_size_h6": "14px",
+   "font_size_h1_tablet": "42px",
+   "font_size_h2_tablet": "32px",
+   "font_size_h3_tablet": "24px",
+   "font_size_h1_mobile": "32px",
+   "font_size_h2_mobile": "26px",
+   "font_size_h3_mobile": "21px"
+  },
+  "google_fonts": [
+   "Work Sans",
+   "Playfair Display"
+  ]
+ }
+}

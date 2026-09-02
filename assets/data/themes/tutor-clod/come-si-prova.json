@@ -1,0 +1,615 @@
+[
+ {
+  "id": "ot-p-t-se",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "fullbleed",
+   "padding": "remove-vertical"
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-p-t-ro",
+    "type": "row",
+    "settings": {
+     "layout": "100",
+     "gap": 0
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-p-t-co",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-p-t-ptb",
+        "type": "pagetitlebar",
+        "settings": {
+         "title_tag": "h1",
+         "title_size": "56",
+         "title_weight": "700",
+         "title_align": "left",
+         "title_color": "var(--olo-color-text)",
+         "subtitle": "Senza un progetto, e senza che il resto dell'istituto se ne accorga.",
+         "subtitle_size": "18",
+         "subtitle_color": "var(--olo-color-text-muted)",
+         "show_breadcrumbs": false,
+         "breadcrumb_separator": "/",
+         "media_bg": {
+          "type": "none"
+         },
+         "bg_color": "var(--olo-color-muted)",
+         "bg_parallax": true,
+         "min_height": "300",
+         "tile_padding": {
+          "top": 140,
+          "right": 0,
+          "bottom": 80,
+          "left": 0
+         },
+         "content_width": "1200",
+         "border_bottom": false,
+         "shadow": "none",
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-p-steps",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "custom",
+   "padding_top_custom": 110,
+   "padding_bottom_custom": 110
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-p-stepsro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-p-stepsco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-p-st",
+        "type": "step-timeline",
+        "settings": {
+         "items": [
+          {
+           "counter": "01",
+           "tag_text": "",
+           "tag_dot_color": "var(--olo-color-primary)",
+           "media_type": "placeholder",
+           "media_label": "",
+           "media_content": "",
+           "media_image": "",
+           "media_bg": "var(--olo-color-muted)",
+           "media_color": "var(--olo-color-primary)",
+           "pre_title": "",
+           "title": "Una classe e un corso",
+           "title_accent": "",
+           "title_accent_italic": false,
+           "title_after": "",
+           "title_after_italic": false,
+           "description": "Si comincia da lì, senza un progetto.",
+           "footer_value": "",
+           "footer_label": "",
+           "separator_text": ""
+          },
+          {
+           "counter": "02",
+           "tag_text": "",
+           "tag_dot_color": "var(--olo-color-primary)",
+           "media_type": "placeholder",
+           "media_label": "",
+           "media_content": "",
+           "media_image": "",
+           "media_bg": "var(--olo-color-muted)",
+           "media_color": "var(--olo-color-primary)",
+           "pre_title": "",
+           "title": "Le attività, su un gruppo ristretto",
+           "title_accent": "",
+           "title_accent_italic": false,
+           "title_after": "",
+           "title_after_italic": false,
+           "description": "Il funzionamento è lo stesso che con una classe intera.",
+           "footer_value": "",
+           "footer_label": "",
+           "separator_text": ""
+          },
+          {
+           "counter": "03",
+           "tag_text": "",
+           "tag_dot_color": "var(--olo-color-primary)",
+           "media_type": "placeholder",
+           "media_label": "",
+           "media_content": "",
+           "media_image": "",
+           "media_bg": "var(--olo-color-muted)",
+           "media_color": "var(--olo-color-primary)",
+           "pre_title": "",
+           "title": "Il resto dell'istituto non se ne accorge",
+           "title_accent": "",
+           "title_accent_italic": false,
+           "title_after": "",
+           "title_after_italic": false,
+           "description": "Finché non lo si decide.",
+           "footer_value": "",
+           "footer_label": "",
+           "separator_text": ""
+          }
+         ],
+         "show_timeline": true,
+         "show_separator": false,
+         "show_media_label": false,
+         "timeline_line_color": "var(--olo-color-border)",
+         "timeline_dot_color": "var(--olo-color-primary)",
+         "timeline_dot_size": 12,
+         "timeline_height": 1,
+         "timeline_margin_bottom": 44,
+         "counter_font_family": "heading",
+         "counter_size": 64,
+         "counter_color": "var(--olo-color-primary)",
+         "counter_italic": false,
+         "counter_weight": "700",
+         "media_aspect_ratio": "16/9",
+         "media_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "media_shadow": "none",
+         "title_font_family": "heading",
+         "title_size": 28,
+         "title_weight": "700",
+         "title_color": "var(--olo-color-text)",
+         "title_accent_color": "var(--olo-color-primary)",
+         "description_size": 16,
+         "description_color": "var(--olo-color-text-muted)",
+         "pre_title_size": 12,
+         "pre_title_color": "var(--olo-color-text-faint)",
+         "footer_icon": "",
+         "footer_value_size": 16,
+         "footer_label_size": 11,
+         "footer_value_color": "var(--olo-color-text)",
+         "footer_label_color": "var(--olo-color-text-faint)",
+         "separator_color": "var(--olo-color-border)",
+         "columns": 3,
+         "gap": 32,
+         "items_align": "start"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-p-quo",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "custom",
+   "padding_top_custom": 0,
+   "padding_bottom_custom": 110
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-p-quoro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-p-quoco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-p-quoin",
+        "type": "section",
+        "settings": {
+         "style": "secondary",
+         "width": "expand",
+         "padding": "custom",
+         "padding_top_custom": 56,
+         "padding_bottom_custom": 56
+        },
+        "style": {
+         "bg": {
+          "type": "none"
+         }
+        },
+        "advanced": {},
+        "children": [
+         {
+          "id": "ot-p-quoinro",
+          "type": "row",
+          "settings": {
+           "layout": "100"
+          },
+          "style": {},
+          "advanced": {},
+          "children": [
+           {
+            "id": "ot-p-quoinco",
+            "type": "column",
+            "settings": {
+             "width_medium": "1-1"
+            },
+            "style": {},
+            "advanced": {},
+            "children": [
+             {
+              "id": "ot-p-quot",
+              "type": "quotation",
+              "settings": {
+               "content": "Il conto dei punti e la raccolta delle risposte sono provati su sessioni vere. Quello che non è ancora accaduto è una giornata intera, in una scuola vera, con venticinque ragazzi.",
+               "author": "",
+               "preset": "big-mark",
+               "style": "default",
+               "alignment": "left",
+               "typography_preset": "",
+               "shadow": "none",
+               "bg": {
+                "type": "none"
+               }
+              },
+              "style": {},
+              "advanced": {},
+              "children": []
+             },
+             {
+              "id": "ot-p-quonote",
+              "type": "text-block",
+              "settings": {
+               "content": "<p>Un punto detto con precisione, perché la fiducia si costruisce così.</p>",
+               "text_color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 60%, transparent)",
+               "font_size": "15",
+               "line_height": "1.62",
+               "text_align": "left",
+               "max_width": "",
+               "tile_padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+               },
+               "preset": "custom"
+              },
+              "style": {},
+              "advanced": {},
+              "children": []
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-p-ref",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "default",
+   "padding": "custom",
+   "padding_top_custom": 0,
+   "padding_bottom_custom": 110
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-p-refro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-p-refco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-p-refh",
+        "type": "headline",
+        "settings": {
+         "heading": "I riferimenti, e dove decidono",
+         "tag": "h2",
+         "alignment": "left",
+         "heading_font": "heading",
+         "heading_font_size": "36",
+         "heading_weight": "700",
+         "heading_color": "var(--olo-color-text)",
+         "decoration": "none",
+         "heading_uppercase": false,
+         "preset": "custom",
+         "subtitle": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-p-reflead",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>Ogni metodo citato corrisponde a una decisione presa nel sistema, e alla forma che quella decisione ha preso.</p>",
+         "text_color": "var(--olo-color-text-muted)",
+         "font_size": "16",
+         "line_height": "1.62",
+         "text_align": "left",
+         "max_width": "680",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-p-reft",
+        "type": "table",
+        "settings": {
+         "table_data": [
+          [
+           "Butterfield e Metcalfe, 2001",
+           "L'ipercorrezione, che ordina la coda del ripasso."
+          ],
+          [
+           "Eric Mazur, Peer Instruction",
+           "Il doppio giro di voto del sondaggio."
+          ],
+          [
+           "FSRS 4.5",
+           "La data di ritorno di ogni carta."
+          ],
+          [
+           "Pratica intercalata",
+           "L'ordine in cui escono le domande."
+          ],
+          [
+           "Pratica di recupero",
+           "I quiz di allenamento, fuori dalle medie."
+          ],
+          [
+           "Lezione capovolta",
+           "Studio prima, lavoro insieme in classe."
+          ],
+          [
+           "Rubriche analitiche",
+           "Quattro livelli, per i compiti."
+          ],
+          [
+           "Quadri di competenza",
+           "Sei, cinque col testo ufficiale."
+          ],
+          [
+           "Open Badges 2.0, WCAG 2.1 AA",
+           "Riconoscimenti, e accessibilità."
+          ],
+          [
+           "AprilTag, tag36h11",
+           "Edwin Olson, University of Michigan."
+          ]
+         ],
+         "has_header": false,
+         "striped": false,
+         "bordered": false,
+         "hover_effect": true,
+         "compact": false,
+         "first_col_bold": true,
+         "col_alignments": [],
+         "responsive_mode": "stack",
+         "header_bg": "",
+         "text_color": "var(--olo-color-text-muted)",
+         "border_color": "var(--olo-color-border)",
+         "even_row_bg": "",
+         "shadow": "none",
+         "preset": "minimal-line"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ot-p-cta",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "custom",
+   "padding_top_custom": 0,
+   "padding_bottom_custom": 120
+  },
+  "style": {
+   "bg": {
+    "type": "none"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-p-ctaro",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-p-ctaco",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-p-ctab",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Si comincia da una classe.",
+         "headline_accent": "",
+         "headline_accent_italic": false,
+         "subtitle": "",
+         "cta_text": "Scrivici",
+         "cta_url": "mailto:info@olotutor.it",
+         "cta_target": "_self",
+         "cta2_text": "Scarica la nota di sintesi",
+         "cta2_url": "#",
+         "cta2_target": "_self",
+         "cta2_bg": "transparent",
+         "cta2_color": "var(--olo-color-text)",
+         "cta2_border": "var(--olo-color-border)",
+         "bg": {
+          "type": "solid",
+          "color": "var(--olo-color-muted)"
+         },
+         "text_color": "var(--olo-color-text)",
+         "accent_color": "var(--olo-color-primary)",
+         "subtitle_color": "var(--olo-color-text-muted)",
+         "cta_bg": "var(--olo-color-primary)",
+         "cta_color": "var(--olo-color-primary-contrast)",
+         "cta_radius": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "cta_radius_hover": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "cta_size": 15,
+         "cta_padding_y": 14,
+         "cta_padding_x": 28,
+         "headline_font_family": "heading",
+         "headline_size": 42,
+         "headline_weight": "700",
+         "subtitle_size": 17,
+         "layout": "split-2",
+         "ratio": "1fr auto",
+         "gap": 40,
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 24,
+          "tr": 24,
+          "br": 24,
+          "bl": 24,
+          "linked": true
+         },
+         "banner_radius_hover": {
+          "tl": 24,
+          "tr": 24,
+          "br": 24,
+          "bl": 24,
+          "linked": true
+         },
+         "banner_padding": 56
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -1,0 +1,288 @@
+[
+ {
+  "id": "ot-fse",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "custom",
+   "padding_top_custom": 64,
+   "padding_bottom_custom": 32
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "var(--olo-color-secondary)"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ot-fro1",
+    "type": "row",
+    "settings": {
+     "layout": "custom",
+     "custom_widths": "50,25,25",
+     "gap": 48,
+     "vertical_align": "start"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-fc0",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-flogo",
+        "type": "image",
+        "settings": {
+         "image_url": "/wp-content/uploads/olobuild-logo-light.png",
+         "media_bg": {
+          "type": "none"
+         },
+         "media_label": "",
+         "alt_text": "OLOtutor",
+         "caption": "",
+         "link_url": "/",
+         "link_target": "_self",
+         "image_width": "140px",
+         "height": "auto",
+         "max_width": "140px",
+         "aspect_ratio": "auto",
+         "object_fit": "contain",
+         "object_position": "center center",
+         "image_alignment": "left",
+         "align_in_column": "",
+         "border_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0
+         },
+         "shadow": "none",
+         "lightbox": false,
+         "hover_animation": "none",
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-ftxt",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>I contenuti dei corsi, le banche di domande e i glossari restano di chi li scrive, e si esportano in qualsiasi momento.</p>",
+         "text_color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 60%, transparent)",
+         "font_size": "14",
+         "line_height": "1.65",
+         "text_align": "left",
+         "max_width": "420",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ot-fc1",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-fh1",
+        "type": "headline",
+        "settings": {
+         "heading": "Il prodotto",
+         "tag": "h4",
+         "alignment": "left",
+         "heading_font": "body",
+         "heading_font_size": "12",
+         "heading_weight": "600",
+         "heading_color": "var(--olo-color-secondary-contrast)",
+         "decoration": "none",
+         "heading_uppercase": true,
+         "preset": "custom",
+         "subtitle": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-fn1",
+        "type": "nav",
+        "settings": {
+         "show_icons": false,
+         "direction": "vertical",
+         "alignment": "left",
+         "link_color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 65%, transparent)",
+         "link_hover_color": "var(--olo-color-secondary-contrast)",
+         "items": [
+          {
+           "title": "In aula",
+           "content": "/l-ora-di-lezione/",
+           "tag": ""
+          },
+          {
+           "title": "Lo studio",
+           "content": "/i-giorni-fra-le-lezioni/",
+           "tag": ""
+          },
+          {
+           "title": "La scuola",
+           "content": "/una-scuola-intera/",
+           "tag": ""
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ot-fc2",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-fh2",
+        "type": "headline",
+        "settings": {
+         "heading": "Documenti",
+         "tag": "h4",
+         "alignment": "left",
+         "heading_font": "body",
+         "heading_font_size": "12",
+         "heading_weight": "600",
+         "heading_color": "var(--olo-color-secondary-contrast)",
+         "decoration": "none",
+         "heading_uppercase": true,
+         "preset": "custom",
+         "subtitle": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-fn2",
+        "type": "nav",
+        "settings": {
+         "show_icons": false,
+         "direction": "vertical",
+         "alignment": "left",
+         "link_color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 65%, transparent)",
+         "link_hover_color": "var(--olo-color-secondary-contrast)",
+         "items": [
+          {
+           "title": "Nota di sintesi",
+           "content": "/come-si-prova/",
+           "tag": ""
+          },
+          {
+           "title": "Come si prova",
+           "content": "/come-si-prova/",
+           "tag": ""
+          },
+          {
+           "title": "Accessibilità",
+           "content": "/una-scuola-intera/",
+           "tag": ""
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ot-fro2",
+    "type": "row",
+    "settings": {
+     "layout": "100"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ot-fcd",
+      "type": "column",
+      "settings": {
+       "width_medium": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ot-fdiv",
+        "type": "divider",
+        "settings": {
+         "style": "solid",
+         "width": 100,
+         "thickness": 1,
+         "color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 8%, transparent)",
+         "alignment": "center",
+         "spacing": 24
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ot-fcopy",
+        "type": "text-block",
+        "settings": {
+         "content": "<p>OLOtutor · WCAG 2.1 AA · Open Badges 2.0</p>",
+         "text_color": "color-mix(in srgb, var(--olo-color-secondary-contrast) 45%, transparent)",
+         "font_size": "13",
+         "line_height": "1.62",
+         "text_align": "left",
+         "max_width": "",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]
