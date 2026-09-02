@@ -354,6 +354,13 @@ class Olobuild_Theme_Importer {
                 $is_blog = ! empty( $page_meta['set_as_blog'] );
                 $title   = $page_meta['title'] ?? ucfirst( $page_key );
 
+                // Slug dichiarato dal tema (facoltativo). Senza, WordPress lo ricava dal
+                // titolo, e quello che ne esce non e' sempre quello che il menu del tema
+                // si aspetta: sanitize_title("L'ora di lezione") da' "lora-di-lezione",
+                // mentre il menu punta a "/l-ora-di-lezione/" — cioe' un 404 sulla prima
+                // voce, da correggere a mano dopo ogni import.
+                $slug = isset( $page_meta['slug'] ) ? sanitize_title( $page_meta['slug'] ) : '';
+
                 // Riuso della pagina già assegnata a quel ruolo (home/blog), se esiste ancora.
                 $page_id = 0;
                 if ( $is_home ) {
@@ -368,15 +375,33 @@ class Olobuild_Theme_Importer {
                     }
                 }
 
+                // Chi dichiara uno slug sta dicendo «questa pagina vive a QUESTO
+                // indirizzo»: se ci abita gia' una pagina, si aggiorna quella. Senza
+                // questo, il secondo import produrrebbe "…-2" e lo slug dichiarato non
+                // servirebbe a niente proprio dalla seconda volta in poi. Vale solo per
+                // chi lo dichiara: i temi che non hanno la chiave si comportano come prima.
+                if ( ! $page_id && $slug !== '' ) {
+                    $gia = get_page_by_path( $slug );
+                    if ( $gia && 'page' === $gia->post_type ) {
+                        $page_id = (int) $gia->ID;
+                    }
+                }
+
                 if ( $page_id ) {
+                    // Lo slug di una pagina che esisteva gia' non si tocca: e' un indirizzo
+                    // pubblicato, e cambiarlo romperebbe i collegamenti di chi ce l'ha.
                     wp_update_post( [ 'ID' => $page_id, 'post_title' => $title, 'post_status' => 'publish' ] );
                 } else {
-                    $page_id = wp_insert_post( [
+                    $nuova = [
                         'post_title'   => $title,
                         'post_status'  => 'publish',
                         'post_type'    => 'page',
                         'post_content' => '',
-                    ] );
+                    ];
+                    if ( $slug !== '' ) {
+                        $nuova['post_name'] = $slug;
+                    }
+                    $page_id = wp_insert_post( $nuova );
                 }
 
                 if ( $page_id && ! is_wp_error( $page_id ) ) {
