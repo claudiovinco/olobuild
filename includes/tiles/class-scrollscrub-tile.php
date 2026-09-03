@@ -63,6 +63,14 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
         'progress_color'     => '',
         'show_number'        => true,
 
+        // Sovraimpressione (solo item_padding=0, testo sopra la foto): la sfumatura
+        // è un layer sull'ITEM che copre la parte bassa della foto — non più il solo
+        // background del box di testo, che su card piene lasciava il titolo sul vivo
+        // dell'immagine.
+        'overlay_scrim_color'   => '#000000',
+        'overlay_scrim_opacity' => 78,   // 0 = nessuna sfumatura
+        'overlay_scrim_height'  => 62,   // % dell'altezza card coperta (sfuma a trasparente)
+
         // Ombra (preset shadowField)
         'shadow'        => 'custom',
         'shadow_h'      => '0',
@@ -152,6 +160,18 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
         $txt_def  = $this->safe_color_css( $s['text_color_default'] ) ?: 'var(--olo-color-text, #1f2937)';
         $prog_c   = $this->safe_color_css( $s['progress_color'] )     ?: 'var(--olo-color-primary, #e1474f)';
         $show_num = ! empty( $s['show_number'] );
+
+        // In overlay il colore testo di default è bianco (leggibile sulla sfumatura),
+        // ma text_color_default impostato lo sovrascrive; il colore per-item (inline
+        // sull'item) vince su entrambi perché il body ora EREDITA, non forza #fff.
+        $item_txt_css = $overlay
+            ? ( $this->safe_color_css( $s['text_color_default'] ) ?: '#fff' )
+            : $txt_def;
+
+        // Scrim overlay: colore + intensità + altezza, tutti dall'inspector.
+        $scrim_c = $this->safe_color_css( $s['overlay_scrim_color'] ?? '' ) ?: '#000000';
+        $scrim_o = max( 0, min( 100, intval( $s['overlay_scrim_opacity'] ?? 78 ) ) );
+        $scrim_h = max( 20, min( 100, intval( $s['overlay_scrim_height'] ?? 62 ) ) );
 
         $shadow_css = $this->scrub_shadow_css( $s );
 
@@ -246,7 +266,7 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 border-radius: <?php echo $round; ?>;
                 overflow: hidden;
                 background: <?php echo $bg_def; ?>;
-                color: <?php echo $txt_def; ?>;
+                color: <?php echo $item_txt_css; ?>;
                 <?php if ( $shadow_css ) : ?>box-shadow: <?php echo $shadow_css; ?>;<?php endif; ?>
                 scroll-snap-align: center;
                 display: flex;
@@ -256,9 +276,26 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
 
             .<?php echo $uid; ?> .olo-scrub__media {
                 position: <?php echo $overlay ? 'absolute' : 'relative'; ?>;
-                <?php if ( $overlay ) : ?>inset: 0;<?php else : ?>width: 100%; aspect-ratio: 4 / 3;<?php endif; ?>
+                <?php if ( $overlay ) : ?>inset: 0; z-index: 0;<?php else : ?>width: 100%; aspect-ratio: 4 / 3;<?php endif; ?>
                 background: rgba(0,0,0,0.06);
             }
+            <?php if ( $overlay && $scrim_o > 0 ) : ?>
+            /* Scrim SOPRA la foto (z-index fra media e body): parte dal fondo e
+               sfuma a trasparente all'altezza scelta. L'item ha overflow:hidden,
+               quindi gli angoli restano puliti. */
+            .<?php echo $uid; ?> .olo-scrub__item::after {
+                content: '';
+                position: absolute;
+                left: 0; right: 0; bottom: 0;
+                height: <?php echo $scrim_h; ?>%;
+                background: linear-gradient(to top,
+                    color-mix(in srgb, <?php echo $scrim_c; ?> <?php echo $scrim_o; ?>%, transparent) 0%,
+                    color-mix(in srgb, <?php echo $scrim_c; ?> <?php echo (int) round( $scrim_o * 0.45 ); ?>%, transparent) 48%,
+                    transparent 100%);
+                z-index: 1;
+                pointer-events: none;
+            }
+            <?php endif; ?>
             .<?php echo $uid; ?> .olo-scrub__media img {
                 position: absolute;
                 inset: 0;
@@ -283,11 +320,10 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-scrub__body {
                 position: relative;
                 padding: <?php echo $overlay ? '20px' : ( $pad . 'px' ); ?>;
-                <?php if ( $overlay ) : ?>
-                background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0) 100%);
-                color: #fff;
-                <?php endif; ?>
-                z-index: 1;
+                /* Il colore si EREDITA dall'item (default overlay = bianco): così i
+                   campi "Colore testo" globale e per-elemento funzionano davvero.
+                   La sfumatura non vive più qui: è lo scrim sull'item (vedi ::after). */
+                z-index: 2;
             }
             .<?php echo $uid; ?> .olo-scrub__num {
                 font-size: 12px;

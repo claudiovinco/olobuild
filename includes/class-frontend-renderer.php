@@ -684,6 +684,10 @@ class Olobuild_Frontend_Renderer {
             // sotto non lo intercetta: senza questo apparirebbe solo scrollando fino al
             // footer e poi resterebbe fisso. Deve nascere nel DOM al load.
             'bottombar',
+            // marquee: con vskew o drag_scroll il runtime è uno script inline che non
+            // ri-gira quando la tile viene clonata dal <template> lazy — nastro senza
+            // skew né trascinamento. Tile leggera (testo/loghi): sempre eager.
+            'marquee',
         ];
         if ( in_array( $type, $no_lazy, true ) ) {
             return $html;

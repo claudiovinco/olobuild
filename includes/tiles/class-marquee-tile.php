@@ -24,6 +24,9 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
 
         // VelocitySkew (reattivo allo scroll) — default OFF: i Marquee esistenti restano invariati
         'velocity_skew'      => false,
+        // Scorrimento libero: il nastro si può trascinare (mouse/touch); il drift
+        // automatico riprende al rilascio. Loop sempre continuo (wrap modulare).
+        'drag_scroll'        => false,
         'vskew_base_speed'   => 0.6,
         'vskew_scroll_boost' => 0.6,
         'vskew_max_skew'     => 14,
@@ -70,6 +73,8 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
 
         // VelocitySkew (reattivo allo scroll) — vedi runtime in fondo
         $vskew     = ! empty( $s['velocity_skew'] );
+        // Trascinabile: attiva il motore JS anche senza vskew (drift = velocità CSS)
+        $drag      = ! empty( $s['drag_scroll'] );
         $vs_base   = max( 0,   min( 3,    floatval( $s['vskew_base_speed'] ) ) );
         $vs_boost  = max( 0,   min( 2,    floatval( $s['vskew_scroll_boost'] ) ) );
         $vs_max    = max( 0,   min( 30,   intval( $s['vskew_max_skew'] ) ) );
@@ -207,11 +212,20 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
                 <?php if ( $direction === 'right' ) : ?>
                 animation-direction: reverse;
                 <?php endif; ?>
-                <?php if ( $vskew ) : ?>
+                <?php if ( $vskew || $drag ) : ?>
                 will-change: transform;
+                <?php endif; ?>
+                <?php if ( $vskew ) : ?>
                 transition: transform .1s linear;
                 <?php endif; ?>
             }
+            <?php if ( $drag ) : ?>
+            /* Trascinabile: grab cursor; pan-y lascia libero lo scroll verticale
+               della pagina su touch, il drag orizzontale lo gestisce il runtime. */
+            .<?php echo $uid; ?> { cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+            .<?php echo $uid; ?>.is-dragging { cursor: grabbing; }
+            .<?php echo $uid; ?>.is-dragging .olo-mq-track { transition: none; }
+            <?php endif; ?>
 
             <?php if ( $pause ) : ?>
             .<?php echo $uid; ?>:hover .olo-mq-track {
@@ -264,9 +278,9 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
             </div>
         </div>
 
-        <?php if ( $vskew ) : ?>
+        <?php if ( $vskew || $drag ) : ?>
         <script>
-        /* Marquee · VelocitySkew — runtime scoped per istanza (rif. 64-tema-pastificio.html) */
+        /* Marquee · VelocitySkew + drag — runtime scoped per istanza (rif. 64-tema-pastificio.html) */
         (function(){
             var root = document.querySelector('.<?php echo esc_js( $uid ); ?>');
             if ( ! root ) { return; }
@@ -274,6 +288,10 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
             if ( ! track ) { return; }
             if ( track.dataset.oloVskew ) { return; }   // idempotente: una sola init per istanza
             track.dataset.oloVskew = '1';
+
+            var VSKEW = <?php echo $vskew ? 'true' : 'false'; ?>;
+            var DRAG  = <?php echo $drag ? 'true' : 'false'; ?>;
+            var CSS_SPEED = <?php echo (int) $speed; ?>;   // sec/ciclo dell'animazione CSS
 
             // prefers-reduced-motion → nessun JS: resta il drift base CSS, skew 0
             var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -290,6 +308,7 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
 
             var x = 0, vel = 0, lastY = window.scrollY || window.pageYOffset || 0;
             var paused = false, running = false, rafId = null;
+            var dragging = false, dragLastX = 0;
 
             window.addEventListener('scroll', function(){
                 var y = window.scrollY || window.pageYOffset || 0;
@@ -301,20 +320,52 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
             root.addEventListener('mouseleave', function(){ paused = false; });
             <?php endif; ?>
 
+            function wrap( half ){
+                if ( x <= -half ) { x += half; }
+                if ( x > 0 )      { x -= half; }
+            }
+
+            if ( DRAG && window.PointerEvent ) {
+                root.addEventListener('pointerdown', function( e ){
+                    if ( e.button !== undefined && e.button !== 0 ) { return; }
+                    dragging = true;
+                    dragLastX = e.clientX;
+                    root.classList.add('is-dragging');
+                    if ( root.setPointerCapture ) { try { root.setPointerCapture( e.pointerId ); } catch ( err ) {} }
+                });
+                root.addEventListener('pointermove', function( e ){
+                    if ( ! dragging ) { return; }
+                    x += e.clientX - dragLastX;
+                    dragLastX = e.clientX;
+                    wrap( ( track.scrollWidth / 2 ) || 1 );
+                });
+                function endDrag(){
+                    if ( ! dragging ) { return; }
+                    dragging = false;
+                    root.classList.remove('is-dragging');
+                }
+                root.addEventListener('pointerup', endDrag);
+                root.addEventListener('pointercancel', endDrag);
+            }
+
             function frame(){
                 if ( ! running ) { return; }
                 var half = ( track.scrollWidth / 2 ) || 1;
-                if ( ! paused ) {
-                    // drift costante + spinta dalla velocità di scroll
-                    x += ( DIR * BASE ) + ( -vel * BOOST );
-                    if ( x <= -half ) { x += half; }
-                    if ( x > 0 )      { x -= half; }
+                if ( ! paused && ! dragging ) {
+                    // drift costante (vskew: velocità propria + spinta dallo scroll;
+                    // solo drag: la stessa velocità dell'animazione CSS)
+                    var drift = VSKEW ? ( DIR * BASE ) : ( DIR * ( half / ( CSS_SPEED * 60 ) ) );
+                    x += drift + ( VSKEW ? ( -vel * BOOST ) : 0 );
+                    wrap( half );
                 }
-                // inclinazione proporzionale alla velocità, clampata
-                var sk = vel * BOOST;
-                if ( sk >  MAXSK ) { sk =  MAXSK; }
-                if ( sk < -MAXSK ) { sk = -MAXSK; }
-                track.style.transform = 'translateX(' + x + 'px) skewX(' + sk + 'deg)';
+                // inclinazione proporzionale alla velocità, clampata (solo vskew)
+                var sk = 0;
+                if ( VSKEW ) {
+                    sk = vel * BOOST;
+                    if ( sk >  MAXSK ) { sk =  MAXSK; }
+                    if ( sk < -MAXSK ) { sk = -MAXSK; }
+                }
+                track.style.transform = 'translateX(' + x + 'px)' + ( VSKEW ? ' skewX(' + sk + 'deg)' : '' );
                 vel *= DAMP;   // smorzamento → lo skew torna a 0 da fermo
                 rafId = requestAnimationFrame( frame );
             }

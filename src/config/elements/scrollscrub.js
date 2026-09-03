@@ -59,9 +59,14 @@ export default {
     item_padding: 0,            // px (0 = immagine a tutto bordo)
     object_position: 'center center', // punto focale GLOBALE applicato a ogni immagine del nastro
     item_bg_default: '',        // vuoto → token di superficie
-    text_color_default: '',     // vuoto → token testo
+    text_color_default: '',     // vuoto → token testo (overlay: bianco)
     progress_color: '',         // vuoto → accent
     show_number: true,
+
+    // Sovraimpressione (item_padding = 0): scrim sopra la foto
+    overlay_scrim_color: '#000000',
+    overlay_scrim_opacity: 78,
+    overlay_scrim_height: 62,
 
     shadow: 'custom',
     shadow_h: '0',
@@ -135,6 +140,16 @@ export default {
     { key: 'round', label: t('Raggio angoli (px)'), type: 'border-radius' },
     { key: 'item_padding', label: t('Padding interno (px)'), type: 'range', min: 0, max: 64, step: 2,
       description: t('0 = immagine a tutto bordo con testo sovrapposto in basso.') },
+
+    { type: 'separator', label: t('Sovraimpressione (foto a tutto bordo)'), condition: { field: 'item_padding', op: 'eq', value: 0 } },
+    { key: 'overlay_scrim_color', label: t('Colore sfumatura'), type: 'color',
+      condition: { field: 'item_padding', op: 'eq', value: 0 } },
+    { key: 'overlay_scrim_opacity', label: t('Intensità sfumatura (%)'), type: 'range', min: 0, max: 100, step: 2,
+      condition: { field: 'item_padding', op: 'eq', value: 0 },
+      description: t('La sfumatura sta SOPRA la foto e fa leggere il testo. 0 = nessuna sfumatura.') },
+    { key: 'overlay_scrim_height', label: t('Altezza sfumatura (%)'), type: 'range', min: 20, max: 100, step: 2,
+      condition: { field: 'item_padding', op: 'eq', value: 0 },
+      description: t('Quanta parte della card copre, dal fondo verso l\'alto.') },
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { fit: '' },
       description: t('Punto focale applicato a tutte le immagini del nastro (object-position).') },

@@ -23,6 +23,7 @@ export default {
     speed: '30',
     direction: 'left',
     pause_hover: true,
+    drag_scroll: false,          // scorrimento libero: nastro trascinabile (mouse/touch)
     gap: '60',
     // VelocitySkew (reattivo allo scroll) — default OFF: i Marquee esistenti restano invariati
     velocity_skew: false,
@@ -71,6 +72,8 @@ export default {
       { value: 'right', label: t('Verso destra') },
     ]},
     { key: 'pause_hover', label: t('Pausa al passaggio mouse'), type: 'toggle' },
+    { key: 'drag_scroll', label: t('Trascinabile (scorrimento libero)'), type: 'toggle',
+      description: t('Il nastro si può trascinare con mouse o dito; al rilascio riprende a scorrere da solo. Il loop resta continuo.') },
     { key: 'gap', label: t('Spazio tra elementi (px)'), type: 'range', min: 20, max: 120, step: 10 },
 
     { type: 'separator', label: t('Velocity Skew (reattivo allo scroll)') },
