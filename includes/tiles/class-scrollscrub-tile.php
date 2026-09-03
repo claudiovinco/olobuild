@@ -231,6 +231,9 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 font-weight: 700;
                 letter-spacing: -0.01em;
                 margin: 0;
+                /* inherit: UIkit stila h1..h6 con color:#333 — il titolo deve
+                   seguire il colore della sezione/card, non il grigio vendor. */
+                color: inherit;
             }
 
             /* TRACK — STATO BASE = scroll orizzontale nativo (overflow-x:auto).
@@ -340,6 +343,10 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 font-weight: 700;
                 margin: 0 0 6px;
                 letter-spacing: -0.01em;
+                /* inherit: batte il color:#333 che UIkit mette su ogni h1..h6 —
+                   il titolo card segue il colore dell'item (bianco in overlay,
+                   text_color_default, o il colore per-elemento). */
+                color: inherit;
             }
             .<?php echo $uid; ?> .olo-scrub__sub {
                 font-size: 12.5px;
