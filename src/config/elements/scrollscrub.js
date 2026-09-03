@@ -40,6 +40,7 @@ export default {
 
   defaults: {
     // ── Comportamento pin/scroll ──
+    behavior: 'pin',             // 'pin' (pagina ferma, fila guidata) | 'inline' (altezza contenuto)
     scroll_length: 3,            // × viewport (2–6): più alto = scroll più lungo/lento
     align: 'center',            // start / center: allineamento verticale della traccia nel pin
     gap: 24,                    // px tra gli item
@@ -105,7 +106,12 @@ export default {
     { key: 'kicker', label: t('Etichetta (kicker)'), type: 'text' },
 
     { type: 'separator', label: t('Scorrimento') },
+    { key: 'behavior', label: t('Comportamento'), type: 'select', options: [
+      { value: 'pin',    label: t('Pin — la pagina si ferma, la fila scorre (altezza schermo)') },
+      { value: 'inline', label: t('Scorrimento libero — altezza del contenuto') },
+    ], description: t('Pin: la sezione occupa lo schermo intero e lo scroll di pagina guida la fila. Scorrimento libero: la sezione è alta quanto le card e la fila si scorre direttamente (touch, trackpad, tastiera).') },
     { key: 'scroll_length', label: t('Lunghezza scroll (× schermo)'), type: 'range', min: 2, max: 6, step: 0.5,
+      condition: { field: 'behavior', op: 'neq', value: 'inline' },
       description: t('Quanto deve scendere la pagina per percorrere tutta la traccia. Più alto = scorrimento orizzontale più lento e lungo.') },
     { key: 'align', label: t('Allineamento verticale'), type: 'select', options: [
       { value: 'center', label: t('Centro') },

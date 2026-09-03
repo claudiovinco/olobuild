@@ -37,6 +37,10 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
     protected $category = 'layout';
     protected $defaults = [
         // Comportamento pin/scroll
+        // behavior: 'pin' = la pagina si ferma (100vh) e lo scroll guida la fila;
+        //           'inline' = niente pin, la sezione è alta quanto il contenuto e la
+        //           fila scorre nativamente (touch/trackpad/tastiera, snap + progress).
+        'behavior'                => 'pin',
         'scroll_length'           => 3,
         'align'                   => 'center',
         'gap'                     => 24,
@@ -116,6 +120,7 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
         $uid = 'olo-scrub-' . wp_rand( 10000, 99999 );
 
         // ── Parametri pin/scroll (clampati) ──
+        $behavior   = ( ( $s['behavior'] ?? 'pin' ) === 'inline' ) ? 'inline' : 'pin';
         $scroll_len = max( 2.0, min( 6.0, floatval( $s['scroll_length'] ) ) );
         // x100 per la height in vh: 3 → 300vh
         $outer_vh   = (int) round( $scroll_len * 100 );
@@ -491,6 +496,7 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
             var bar = root.querySelector('.olo-scrub__bar > i');
 
             var RESPECT_RM = <?php echo $respect_rm ? 'true' : 'false'; ?>;
+            var BEHAVIOR   = '<?php echo esc_js( $behavior ); ?>';
 
             // Condizioni per cui restiamo allo scroll orizzontale NATIVO (no pin):
             //  - prefers-reduced-motion (se l'opzione lo rispetta)
@@ -514,6 +520,7 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
             var ticking = false;    // throttle via rAF
 
             function shouldPin(){
+                if ( BEHAVIOR === 'inline' ) { return false; }   // scelta esplicita: mai pin
                 if ( RESPECT_RM && rm && rm.matches ) { return false; }
                 if ( small && small.matches ) { return false; }
                 if ( coarse && coarse.matches ) { return false; }
@@ -565,6 +572,14 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 if ( shouldPin() ) { enablePin(); recalc(); update(); }
                 else { disablePin(); }
             }
+
+            // Progress anche senza pin (inline / stato base / mobile): la barra
+            // segue lo scroll orizzontale NATIVO della traccia.
+            track.addEventListener( 'scroll', function(){
+                if ( pinned || ! bar ) { return; }
+                var m = track.scrollWidth - track.clientWidth;
+                bar.style.width = ( m > 0 ? ( track.scrollLeft / m ) * 100 : 0 ) + '%';
+            }, { passive: true } );
 
             function addScroll(){
                 if ( listening ) { return; }
