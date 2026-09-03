@@ -97,12 +97,13 @@ class Olobuild_StatStrip_Tile extends Olobuild_Tile_Base {
             <?php if ( $dividers ) : ?>
             .<?php echo $uid; ?> .olo-statstrip__cell:not(:first-child) { border-left: 1px solid <?php echo $line; ?>; }
             <?php endif; ?>
+            <?php // !important: il grid-template-columns arriva inline su __grid, senza non vincerebbero mai. ?>
             @media (max-width: 760px) {
-                .<?php echo $uid; ?> .olo-statstrip__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 0; }
+                .<?php echo $uid; ?> .olo-statstrip__grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 28px 0; }
                 <?php if ( $dividers ) : ?>.<?php echo $uid; ?> .olo-statstrip__cell:nth-child(odd) { border-left: 0; }<?php endif; ?>
             }
             @media (max-width: 420px) {
-                .<?php echo $uid; ?> .olo-statstrip__grid { grid-template-columns: 1fr; }
+                .<?php echo $uid; ?> .olo-statstrip__grid { grid-template-columns: 1fr !important; }
                 <?php if ( $dividers ) : ?>.<?php echo $uid; ?> .olo-statstrip__cell { border-left: 0 !important; }<?php endif; ?>
             }
         </style>
