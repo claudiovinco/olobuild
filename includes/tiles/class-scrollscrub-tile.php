@@ -16,6 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Anatomia:
  *   .outer { height: scroll_length*100vh } → .pin { position:sticky; top:0; height:100vh; overflow:hidden }
+ *   (il pin copre lo schermo per nascondere lo scroll verticale; il contenuto NON è stirato)
  *   → .track { display:flex; will-change:transform }. Progress bar opzionale.
  *
  * Contratto §2:
@@ -206,11 +207,17 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 flex-direction: column;
                 justify-content: <?php echo $align_css; ?>;
             }
+            /* In pin il blocco torna a coprire l'INTERO schermo (100vh): mentre le
+               card scorrono in orizzontale non si vede la pagina verticale muoversi
+               sotto la fila. Il CONTENUTO però NON viene stirato: «Altezza elemento»
+               comanda sempre, e con align=start la fila si aggancia in alto subito
+               sotto l'eventuale header sticky (padding-top misurato dal runtime). */
             .<?php echo $uid; ?> .olo-scrub__outer.is-pinned .olo-scrub__pin {
                 position: -webkit-sticky;
                 position: sticky;
                 top: 0;
                 height: 100vh;
+                box-sizing: border-box;
                 overflow: hidden;
             }
 
@@ -566,6 +573,7 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
 
             var pinned = false;     // pin attualmente attivo?
             var maxX = 0;           // corsa orizzontale massima (track.scrollW - vw)
+            var pinTop = 0;         // padding-top del pin = altezza dell'header fisso/sticky (0 se assente)
             var listening = false;  // scroll listener agganciato?
             var ticking = false;    // throttle via rAF
 
@@ -579,8 +587,24 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 return ( track.scrollWidth - window.innerWidth ) > 4;
             }
 
+            // Altezza dell'header sticky/fixed in cima alla pagina (megamenu, nav
+            // del tema…): con align=start il contenuto parte subito SOTTO l'header.
+            function hdrOffset(){
+                var cands = document.querySelectorAll( 'header, nav, .olo-megamenu' );
+                for ( var i = 0; i < cands.length; i++ ) {
+                    var cs = getComputedStyle( cands[i] );
+                    if ( 'sticky' === cs.position || 'fixed' === cs.position ) {
+                        var r = cands[i].getBoundingClientRect();
+                        if ( r.top <= 1 && r.height > 0 && r.height < 220 ) { return Math.round( r.height ); }
+                    }
+                }
+                return 0;
+            }
+
             function recalc(){
                 maxX = Math.max( 0, track.scrollWidth - window.innerWidth );
+                pinTop = hdrOffset();
+                if ( pinned ) { pin.style.paddingTop = pinTop + 'px'; }
             }
 
             function update(){
@@ -613,6 +637,7 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 if ( ! pinned ) { return; }
                 pinned = false;
                 outer.classList.remove( 'is-pinned' );
+                pin.style.paddingTop = '';
                 track.style.transform = '';
                 if ( bar ) { bar.style.width = '0'; }
             }
