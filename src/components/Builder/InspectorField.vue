@@ -796,6 +796,21 @@ const resolvedOptions = computed(() => {
       walk(tilesStore.canvasTiles || []);
       return results;
     }
+    if (props.field.optionsSource === 'langTiles') {
+      // Tile langswitcher del template, referenziabili dal megamenu (lang_tile_id).
+      const tilesStore = useTilesStore();
+      const results = [{ value: '', label: t('— Nessun selettore —') }];
+      const walk = (nodes) => {
+        for (const node of nodes) {
+          if (node.type === 'langswitcher') {
+            results.push({ value: node.id, label: t('Selettore lingua') + ' — ' + String(node.id).slice(0, 8) });
+          }
+          if (Array.isArray(node.children)) walk(node.children);
+        }
+      };
+      walk(tilesStore.canvasTiles || []);
+      return results;
+    }
     if (props.field.optionsSource === 'metaKeys') {
       // Lista meta_key disponibili per il post_type corrente, dipendente da optionsDependOn (default: 'post_type')
       const depKey = props.field.optionsDependOn || 'post_type';

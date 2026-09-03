@@ -75,6 +75,12 @@ class Olobuild_Frontend_Renderer {
                 if ( $ref_id !== '' ) {
                     self::$referenced_tile_ids[ $ref_id ] = true;
                 }
+                // Langswitcher referenziato dal megamenu (lang_tile_id): stessa
+                // soppressione in-loco della search tile.
+                $lang_ref = $node['settings']['lang_tile_id'] ?? '';
+                if ( $lang_ref !== '' ) {
+                    self::$referenced_tile_ids[ $lang_ref ] = true;
+                }
             }
             if ( ! empty( $node['children'] ) && is_array( $node['children'] ) ) {
                 self::index_tiles( $node['children'] );

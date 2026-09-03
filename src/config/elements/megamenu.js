@@ -136,6 +136,10 @@ export default {
     search_tile_id: '',
     search_tile_position: 'after',
 
+    // Selettore lingua referenziato: id di una tile langswitcher nel template,
+    // resa dentro la barra (dopo gli extra link) e nell'off-canvas mobile.
+    lang_tile_id: '',
+
     // Predefiniti '#' SOLO sui principali (Facebook/Instagram/X/LinkedIn): le icone
     // compaiono come punto di partenza (link no-op da sostituire). Gli altri restano
     // vuoti (nessuna icona finché il cliente non inserisce l'URL).
@@ -311,6 +315,9 @@ export default {
         { value: 'before', label: t('Prima del menu (sinistra)') },
         { value: 'after', label: t('Dopo il menu (destra)') },
       ]},
+
+    { type: 'separator', label: t('Lingua') },
+    { key: 'lang_tile_id', label: t('Tile selettore lingua (opzionale)'), type: 'select', optionsSource: 'langTiles' },
 
     { type: 'separator', label: t('Social — Account') },
     { key: 'social_facebook', label: t('Facebook URL'), type: 'link' },
