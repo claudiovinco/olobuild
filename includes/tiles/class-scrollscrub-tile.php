@@ -129,6 +129,10 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
 
         // ── Parametri pin/scroll (clampati) ──
         $behavior   = ( ( $s['behavior'] ?? 'pin' ) === 'inline' ) ? 'inline' : 'pin';
+        // Canvas del builder: l'iframe è alto quanto la pagina, il suo "100vh" è
+        // enorme e il pin diventerebbe un mostro. Niente runtime: resta lo stato
+        // base compatto (track scorrevole), l'altezza elemento si vede com'è.
+        $in_builder = ! empty( $s['_builder_mode'] );
         $scroll_len = max( 2.0, min( 6.0, floatval( $s['scroll_length'] ) ) );
         // x100 per la height in vh: 3 → 300vh
         $outer_vh   = (int) round( $scroll_len * 100 );
@@ -255,20 +259,9 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 scroll-snap-type: none;
                 will-change: transform;
                 transition: transform 0.06s <?php echo $easing; ?>;
-                /* PIN: il viewport si riempie col contenuto — la fila si espande
-                   fra la testata e la barra di progresso e le card si stirano
-                   alla sua altezza. Senza, un contenuto più basso dello schermo
-                   lasciava fasce vuote enormi sopra e sotto. */
-                flex: 1 1 auto;
-                min-height: 0;
-                padding-top: 24px;
-                padding-bottom: 64px;
             }
-            .<?php echo $uid; ?> .olo-scrub__outer.is-pinned .olo-scrub__item {
-                /* lo stretch della track governa l'altezza: il minimo fisso
-                   farebbe sbordare le card sui viewport più bassi */
-                min-height: 0;
-            }
+            <?php // NB: niente stiramento delle card in pin — «Altezza elemento» comanda
+                  // sempre (v1.4.413 stirava a tutto viewport e il campo diventava morto). ?>
             .<?php echo $uid; ?> .olo-scrub__track:focus-visible {
                 outline: 2px solid var(--olo-color-primary, #e1474f);
                 outline-offset: 3px;
@@ -528,6 +521,7 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
             </div>
         </div>
 
+        <?php if ( ! $in_builder ) : // canvas builder: niente pin, stato base compatto ?>
         <script>
         /* ScrollScrub — runtime INLINE, scoped per istanza, idempotente, multi-istanza.
            Rif. 62-tema-libreria-indie.html (pinned horizontal shelf) e 35-tema-immobiliare.html.
@@ -676,6 +670,7 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
             applyMode();
         })();
         </script>
+        <?php endif; ?>
 
         <?php
         // ── Sistema bordi (come il marquee) — applicato al singolo .olo-scrub__item ──
