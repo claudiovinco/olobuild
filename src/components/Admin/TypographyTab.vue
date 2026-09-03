@@ -125,19 +125,51 @@ import CfgNumber from './controls/CfgNumber.vue';
 const showToast = inject('showToast', () => {});
 const setDirty  = inject('setDirty',  () => {});
 
+// Display: serif prima, poi le famiglie senza grazie (etichettate · sans) —
+// css2 tollera pesi/assi mancanti, quindi ogni famiglia Google è caricabile
+// con la request standard di ensureFontLoaded.
 const DISPLAY_FONTS = [
-  { value: 'Instrument Serif',  label: 'Instrument Serif' },
-  { value: 'Playfair Display',  label: 'Playfair Display' },
-  { value: 'Fraunces',          label: 'Fraunces' },
-  { value: 'DM Serif Display',  label: 'DM Serif Display' },
-  { value: 'Cormorant Garamond', label: 'Cormorant Garamond' },
-  { value: 'Lora',              label: 'Lora' },
+  { value: 'Instrument Serif',  label: 'Instrument Serif · serif' },
+  { value: 'Playfair Display',  label: 'Playfair Display · serif' },
+  { value: 'Fraunces',          label: 'Fraunces · serif' },
+  { value: 'DM Serif Display',  label: 'DM Serif Display · serif' },
+  { value: 'Cormorant Garamond', label: 'Cormorant Garamond · serif' },
+  { value: 'Lora',              label: 'Lora · serif' },
+  { value: 'EB Garamond',       label: 'EB Garamond · serif' },
+  { value: 'Libre Baskerville', label: 'Libre Baskerville · serif' },
+  { value: 'Spectral',          label: 'Spectral · serif' },
+  { value: 'Marcellus',         label: 'Marcellus · serif' },
+  { value: 'Space Grotesk',     label: 'Space Grotesk · sans' },
+  { value: 'Archivo',           label: 'Archivo · sans' },
+  { value: 'Sora',              label: 'Sora · sans' },
+  { value: 'Outfit',            label: 'Outfit · sans' },
+  { value: 'Syne',              label: 'Syne · sans' },
+  { value: 'Bricolage Grotesque', label: 'Bricolage Grotesque · sans' },
+  { value: 'Montserrat',        label: 'Montserrat · sans' },
+  { value: 'Poppins',           label: 'Poppins · sans' },
+  { value: 'Oswald',            label: 'Oswald · sans' },
+  { value: 'Anton',             label: 'Anton · sans' },
+  { value: 'Bebas Neue',        label: 'Bebas Neue · sans' },
+  { value: 'Unbounded',         label: 'Unbounded · sans' },
 ];
+// Set di lookup per il fallback corretto nell'anteprima (serif vs sans-serif).
+const DISPLAY_SANS = new Set([
+  'Space Grotesk', 'Archivo', 'Sora', 'Outfit', 'Syne', 'Bricolage Grotesque',
+  'Montserrat', 'Poppins', 'Oswald', 'Anton', 'Bebas Neue', 'Unbounded',
+]);
 const BODY_FONTS = [
   { value: 'Work Sans',         label: 'Work Sans' },
   { value: 'Inter',             label: 'Inter' },
   { value: 'Manrope',           label: 'Manrope' },
   { value: 'Plus Jakarta Sans', label: 'Plus Jakarta Sans' },
+  { value: 'DM Sans',           label: 'DM Sans' },
+  { value: 'Figtree',           label: 'Figtree' },
+  { value: 'Rubik',             label: 'Rubik' },
+  { value: 'Barlow',            label: 'Barlow' },
+  { value: 'Karla',             label: 'Karla' },
+  { value: 'Source Sans 3',     label: 'Source Sans 3' },
+  { value: 'IBM Plex Sans',     label: 'IBM Plex Sans' },
+  { value: 'Nunito Sans',       label: 'Nunito Sans' },
   { value: 'system-ui',         label: 'System UI stack' },
 ];
 // Ruolo mono: '' = nessun override → le tile usano il fallback del proprio
@@ -149,6 +181,8 @@ const MONO_FONTS = [
   { value: 'IBM Plex Mono',    label: 'IBM Plex Mono' },
   { value: 'Fira Code',        label: 'Fira Code' },
   { value: 'Source Code Pro',  label: 'Source Code Pro' },
+  { value: 'Roboto Mono',      label: 'Roboto Mono' },
+  { value: 'Courier Prime',    label: 'Courier Prime' },
 ];
 const RATIO_OPTIONS = [
   { value: '1.125', label: '1.125 · Major Second' },
@@ -165,7 +199,7 @@ const mono    = ref({ family: '' });
 const scale   = ref({ base: 16, ratio: 1.25, lineHeight: 1.55 });
 const fullStyles = ref({});   // tutto olo_styles, per non perdere gli altri blocchi al PUT
 
-const displayFontFamily = computed(() => `'${display.value.family}', serif`);
+const displayFontFamily = computed(() => `'${display.value.family}', ${DISPLAY_SANS.has(display.value.family) ? 'sans-serif' : 'serif'}`);
 const bodyFontFamily    = computed(() => `'${body.value.family}', sans-serif`);
 const monoFontFamily    = computed(() => mono.value.family ? `'${mono.value.family}', monospace` : 'ui-monospace, Menlo, Consolas, monospace');
 
