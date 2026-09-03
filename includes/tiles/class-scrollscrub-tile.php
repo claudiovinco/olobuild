@@ -255,6 +255,19 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 scroll-snap-type: none;
                 will-change: transform;
                 transition: transform 0.06s <?php echo $easing; ?>;
+                /* PIN: il viewport si riempie col contenuto — la fila si espande
+                   fra la testata e la barra di progresso e le card si stirano
+                   alla sua altezza. Senza, un contenuto più basso dello schermo
+                   lasciava fasce vuote enormi sopra e sotto. */
+                flex: 1 1 auto;
+                min-height: 0;
+                padding-top: 24px;
+                padding-bottom: 64px;
+            }
+            .<?php echo $uid; ?> .olo-scrub__outer.is-pinned .olo-scrub__item {
+                /* lo stretch della track governa l'altezza: il minimo fisso
+                   farebbe sbordare le card sui viewport più bassi */
+                min-height: 0;
             }
             .<?php echo $uid; ?> .olo-scrub__track:focus-visible {
                 outline: 2px solid var(--olo-color-primary, #e1474f);
