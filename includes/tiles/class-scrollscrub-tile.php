@@ -52,6 +52,11 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
         // Testata
         'heading' => 'Scorri in orizzontale',
         'kicker'  => 'scroll → orizzontale',
+        // Stile testata (vuoto = comportamento storico: eredita dalla sezione)
+        'heading_color' => '',
+        'kicker_color'  => '',
+        'heading_size'  => 44,
+        'heading_font'  => '',
 
         // Aspetto item
         'item_width'         => 360,
@@ -148,6 +153,14 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
         $heading = isset( $s['heading'] ) ? (string) $s['heading'] : '';
         $kicker  = isset( $s['kicker'] )  ? (string) $s['kicker']  : '';
 
+        // Stile testata: colori via token/safe_color_css, dimensione = max del clamp,
+        // font via resolve_font_family (ruoli heading/serif/… o famiglia esplicita).
+        $head_c    = $this->safe_color_css( $s['heading_color'] ?? '' );
+        $kick_c    = $this->safe_color_css( $s['kicker_color'] ?? '' );
+        $head_size = intval( $s['heading_size'] ?? 44 );
+        $head_size = $head_size > 0 ? max( 18, min( 120, $head_size ) ) : 44;
+        $head_font = $this->resolve_font_family( $s['heading_font'] ?? '' );
+
         // ── Aspetto item ──
         $item_w   = max( 120, min( 900, intval( $s['item_width'] ) ) );
         $item_mh  = max( 160, min( 900, intval( $s['item_min_height'] ) ) );
@@ -234,17 +247,23 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 letter-spacing: 0.16em;
                 text-transform: uppercase;
                 font-weight: 600;
+                <?php if ( $kick_c ) : ?>
+                color: <?php echo $kick_c; ?>;
+                opacity: 1;
+                <?php else : ?>
                 opacity: 0.7;
+                <?php endif; ?>
             }
             .<?php echo $uid; ?> .olo-scrub__title {
-                font-size: clamp(24px, 3.2vw, 44px);
+                font-size: clamp(24px, 3.2vw, <?php echo $head_size; ?>px);
                 line-height: 1.05;
                 font-weight: 700;
                 letter-spacing: -0.01em;
                 margin: 0;
+                <?php if ( $head_font ) : ?>font-family: <?php echo $head_font; ?>;<?php endif; ?>
                 /* inherit: UIkit stila h1..h6 con color:#333 — il titolo deve
-                   seguire il colore della sezione/card, non il grigio vendor. */
-                color: inherit;
+                   seguire il colore scelto o quello della sezione, mai il grigio vendor. */
+                color: <?php echo $head_c ?: 'inherit'; ?>;
             }
 
             /* TRACK — STATO BASE = scroll orizzontale nativo (overflow-x:auto).

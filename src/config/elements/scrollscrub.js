@@ -51,6 +51,10 @@ export default {
     // ── Testata (opzionale) ──
     heading: 'Scorri in orizzontale',
     kicker: 'scroll → orizzontale',
+    heading_color: '',           // vuoto → eredita dalla sezione
+    kicker_color: '',            // vuoto → come il titolo, attenuato
+    heading_size: 44,            // px: massimo del clamp responsive
+    heading_font: '',            // vuoto → font della sezione
 
     // ── Aspetto item (default, sovrascrivibili per item) ──
     item_width: 360,            // px (desktop)
@@ -134,6 +138,15 @@ export default {
   ],
 
   styleFields: [
+    { type: 'separator', label: t('Testata') },
+    { key: 'heading_color', label: t('Colore titolo'), type: 'color',
+      description: t('Vuoto → eredita dalla sezione. Con foto di sfondo scegli un colore leggibile (es. bianco).') },
+    { key: 'kicker_color', label: t('Colore etichetta (kicker)'), type: 'color',
+      description: t('Vuoto → come il titolo, attenuato.') },
+    { key: 'heading_size', label: t('Dimensione titolo (px)'), type: 'range', min: 20, max: 96, step: 2,
+      description: t('Dimensione massima: sotto i grandi schermi scala da sola (clamp responsive).') },
+    { key: 'heading_font', label: t('Font titolo'), type: 'font-family' },
+
     { type: 'separator', label: t('Aspetto elementi') },
     { key: 'item_width', label: t('Larghezza elemento (px)'), type: 'range', min: 160, max: 720, step: 10, responsive: true },
     { key: 'item_min_height', label: t('Altezza elemento (px)'), type: 'range', min: 200, max: 760, step: 10, responsive: true },
