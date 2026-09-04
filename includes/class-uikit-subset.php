@@ -120,6 +120,12 @@ class Olobuild_Uikit_Subset {
             if ( false === file_put_contents( $filepath, $css ) ) {
                 return false;
             }
+            // Hash nuovo = file nuovo e vecchi cancellati: l'HTML in full-page cache
+            // punterebbe ancora ai file spariti (404 → pagina senza UIkit, incidente
+            // clod.eu 2026-09-04). Svuota la cache pagine insieme al subset.
+            if ( class_exists( 'Olobuild_FullPage_Cache' ) ) {
+                Olobuild_FullPage_Cache::purge_all();
+            }
         }
 
         self::$served_families = $families;

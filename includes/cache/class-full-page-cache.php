@@ -30,7 +30,18 @@ class Olobuild_FullPage_Cache {
     /** Marcatore della riga WP_CACHE che inseriamo in wp-config.php. */
     const WPCONFIG_MARKER = 'OLOBUILD_FPC';
 
+    /** Opzione con la versione del plugin per cui la cache è valida. */
+    const VERSION_OPT = 'olobuild_fpc_version';
+
     public static function init() {
+        // Ogni deploy (bump di OLOBUILD_VERSION) invalida le pagine in cache: gli asset
+        // versionati (subset UIkit, CSS pagina) cambiano nome e l'HTML vecchio li
+        // referenzierebbe a vuoto (incidente clod.eu 2026-09-04).
+        if ( get_option( self::VERSION_OPT ) !== OLOBUILD_VERSION ) {
+            self::purge_all();
+            update_option( self::VERSION_OPT, OLOBUILD_VERSION, true );
+        }
+
         // Reagisce al cambio delle impostazioni Performance (toggle/ttl/esclusioni).
         add_action( 'update_option_' . self::OPT, [ __CLASS__, 'on_settings_change' ], 10, 2 );
         add_action( 'add_option_' . self::OPT, [ __CLASS__, 'on_settings_add' ], 10, 2 );
