@@ -296,7 +296,10 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-scrub__item {
                 position: relative;
                 flex: 0 0 auto;
-                width: <?php echo $item_w; ?>px;
+                /* Rete di sicurezza mobile: la card non supera mai lo schermo
+                   (60px = padding traccia + spiraglio della card successiva);
+                   i valori per-breakpoint dell'inspector restano sovrani sotto il cap. */
+                width: min(<?php echo $item_w; ?>px, calc(100vw - 60px));
                 min-height: <?php echo $item_mh; ?>px;
                 border-radius: <?php echo $round; ?>;
                 overflow: hidden;
@@ -456,7 +459,7 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
                 $sc_mh = $s[ 'item_min_height_' . $sc_bp ] ?? '';
                 if ( $sc_iw === '' && $sc_mh === '' ) { continue; }
                 $sc_decls = '';
-                if ( $sc_iw !== '' ) { $sc_decls .= 'width:' . max( 120, min( 900, absint( $sc_iw ) ) ) . 'px;'; }
+                if ( $sc_iw !== '' ) { $sc_decls .= 'width:min(' . max( 120, min( 900, absint( $sc_iw ) ) ) . 'px, calc(100vw - 60px));'; }
                 if ( $sc_mh !== '' ) { $sc_decls .= 'min-height:' . max( 160, min( 900, absint( $sc_mh ) ) ) . 'px;'; }
                 if ( $sc_decls === '' ) { continue; }
                 ?>
