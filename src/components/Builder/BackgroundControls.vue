@@ -568,7 +568,7 @@ const defaultBg = {
   parallax_blur: false,
   parallax_blur_start: 5,
   parallax_blur_end: 0,
-  parallax_nomobile: true,
+  parallax_nomobile: false,
   cover_height: 0,
   video_scale: 100,
   mesh_c1: 'var(--olo-color-primary)',
@@ -852,7 +852,7 @@ const bgParallaxData = computed(() => {
     return b.parallax;
   }
   // Migrate from old flat keys
-  const obj = { bgx: [], bgy: [], scale: [], opacity: [], blur: [], nomobile: true, easing: null, start: '', end: '' };
+  const obj = { bgx: [], bgy: [], scale: [], opacity: [], blur: [], nomobile: false, easing: null, start: '', end: '' };
   if (b.parallax === true) {
     const bgy = b.parallax_bgy ?? -200;
     if (bgy !== 0) {
@@ -880,7 +880,7 @@ const bgParallaxData = computed(() => {
         { value: parseInt(b.parallax_blur_end ?? 0), position: 100 },
       ];
     }
-    obj.nomobile = b.parallax_nomobile !== false;
+    obj.nomobile = b.parallax_nomobile === true;
   }
   return obj;
 });

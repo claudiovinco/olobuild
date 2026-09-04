@@ -2772,7 +2772,7 @@ const elementParallaxData = computed(() => {
     return adv.parallax;
   }
   // Migrate from old flat keys
-  const obj = { x: [], y: [], scale: [], rotate: [], opacity: [], blur: [], nomobile: true, easing: null, start: '', end: '' };
+  const obj = { x: [], y: [], scale: [], rotate: [], opacity: [], blur: [], nomobile: false, easing: null, start: '', end: '' };
   const yStart = parseInt(adv.parallax_y_start) || 0;
   const yEnd = parseInt(adv.parallax_y_end) || 0;
   if (yStart !== 0 || yEnd !== 0) {
@@ -2789,7 +2789,7 @@ const elementParallaxData = computed(() => {
     obj.scale = [{ value: parseFloat(scStart), position: 0 }, { value: parseFloat(scEnd), position: 100 }];
   }
   if (adv.parallax_nomobile !== undefined) {
-    obj.nomobile = adv.parallax_nomobile !== false;
+    obj.nomobile = adv.parallax_nomobile === true;
   }
   return obj;
 });
@@ -3061,7 +3061,7 @@ function toggleParallax() {
     updateAdvanced('parallax', null);
   } else {
     updateAdvanced('bezier_path', null);
-    updateAdvanced('parallax', { x:[], y:[], scale:[], rotate:[], opacity:[], blur:[], nomobile:true });
+    updateAdvanced('parallax', { x:[], y:[], scale:[], rotate:[], opacity:[], blur:[], nomobile:false });
   }
 }
 

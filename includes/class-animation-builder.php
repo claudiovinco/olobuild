@@ -85,8 +85,9 @@ class Olobuild_Animation_Builder {
             $parts[] = 'easing: ' . floatval( $parallax['easing'] );
         }
 
-        $nomobile = $parallax['nomobile'] ?? true;
-        if ( $nomobile ) {
+        // Regola di prodotto: gli effetti girano ANCHE su mobile. media:@m solo
+        // se l'utente ha scelto esplicitamente «Disattiva su mobile».
+        if ( ! empty( $parallax['nomobile'] ) ) {
             $parts[] = 'media: @m';
         }
 
@@ -140,8 +141,8 @@ class Olobuild_Animation_Builder {
             $parts[] = 'blur: ' . $start . ',' . $end;
         }
 
-        $nomobile = $bg['parallax_nomobile'] ?? true;
-        if ( $nomobile ) {
+        // Come sopra: niente disattivazione mobile di default.
+        if ( ! empty( $bg['parallax_nomobile'] ) ) {
             $parts[] = 'media: @m';
         }
 
@@ -223,8 +224,8 @@ class Olobuild_Animation_Builder {
             return '';
         }
 
-        $nomobile = $advanced['parallax_nomobile'] ?? true;
-        if ( $nomobile !== false ) {
+        // Niente disattivazione mobile di default: media:@m solo su scelta esplicita.
+        if ( ! empty( $advanced['parallax_nomobile'] ) ) {
             $parts[] = 'media: @m';
         }
 

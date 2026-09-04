@@ -104,28 +104,30 @@
             <span class="mb-text-[10px] mb-text-gray-400 mb-w-6 mb-text-right">{{ data.easing != null ? data.easing : '-' }}</span>
           </div>
         </div>
-        <!-- Disable on mobile -->
-        <div>
-          <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
-            <button
-              @click="updateOption('nomobile', !(data.nomobile !== false))"
-              :class="[
-                'mb-relative mb-w-8 mb-h-4 mb-rounded-full mb-transition-colors mb-shrink-0',
-                (data.nomobile !== false) ? 'mb-bg-primary-600' : 'mb-bg-gray-600'
-              ]"
-            >
-              <span
-                :class="[
-                  'mb-absolute mb-top-0.5 mb-w-3 mb-h-3 mb-rounded-full mb-bg-white mb-transition-transform',
-                  (data.nomobile !== false) ? 'mb-left-4' : 'mb-left-0.5'
-                ]"
-              ></span>
-            </button>
-            <span class="mb-text-[10px] mb-text-gray-400">{{ t('Disattiva su mobile') }}</span>
-          </label>
-        </div>
       </div>
     </details>
+
+    <!-- Disattiva su mobile: fuori dalle «Opzioni avanzate» — decide se
+         l'effetto esiste sui telefoni, deve essere visibile subito. -->
+    <div>
+      <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+        <button
+          @click="updateOption('nomobile', !(data.nomobile === true))"
+          :class="[
+            'mb-relative mb-w-8 mb-h-4 mb-rounded-full mb-transition-colors mb-shrink-0',
+            (data.nomobile === true) ? 'mb-bg-primary-600' : 'mb-bg-gray-600'
+          ]"
+        >
+          <span
+            :class="[
+              'mb-absolute mb-top-0.5 mb-w-3 mb-h-3 mb-rounded-full mb-bg-white mb-transition-transform',
+              (data.nomobile === true) ? 'mb-left-4' : 'mb-left-0.5'
+            ]"
+          ></span>
+        </button>
+        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Disattiva su mobile') }}</span>
+      </label>
+    </div>
   </div>
 </template>
 

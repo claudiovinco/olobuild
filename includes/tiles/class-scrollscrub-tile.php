@@ -579,11 +579,11 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
 
             // Condizioni per cui restiamo allo scroll orizzontale NATIVO (no pin):
             //  - prefers-reduced-motion (se l'opzione lo rispetta)
-            //  - viewport stretto / touch primario (mobile): il pin ruba lo scroll verticale
             //  - sticky non supportato
+            // NB: il pin vale ANCHE su mobile/touch (richiesta esplicita: stesso
+            // comportamento del desktop — lo scroll di pagina guida la fila; è
+            // scroll nativo + sticky + transform, nessuna intercettazione touch).
             var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
-            var small = window.matchMedia && window.matchMedia('(max-width: 880px)');
-            var coarse = window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)');
 
             function stickyOK(){
                 try {
@@ -602,8 +602,6 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
             function shouldPin(){
                 if ( BEHAVIOR === 'inline' ) { return false; }   // scelta esplicita: mai pin
                 if ( RESPECT_RM && rm && rm.matches ) { return false; }
-                if ( small && small.matches ) { return false; }
-                if ( coarse && coarse.matches ) { return false; }
                 if ( ! stickyOK() ) { return false; }
                 // Inutile pinnare se la traccia non eccede la viewport
                 return ( track.scrollWidth - window.innerWidth ) > 4;

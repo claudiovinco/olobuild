@@ -110,7 +110,7 @@ export function init() {
         keyframes: kf,
         origTop: origTop,
         height: el.offsetHeight || 100,
-        nomobile: config.nomobile !== false,
+        nomobile: config.nomobile === true, // spento su mobile SOLO per scelta esplicita
         smooth: parseFloat(config.smooth) || 0,
         scrollRange: config.scrollRange || 'viewport',
         scrollStart: parseFloat(config.scrollStart) || 0,

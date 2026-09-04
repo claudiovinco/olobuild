@@ -319,7 +319,7 @@ watch(() => props.modelValue, (val) => {
     keyframes.value = kfs;
   }
   if (val) {
-    noMobile.value = val.nomobile !== false;
+    noMobile.value = val.nomobile === true; // spento su mobile SOLO per scelta esplicita
     bezierTarget.value = val.bezierTarget || 'element';
     scrollRange.value = val.scrollRange || 'viewport';
     scrollStart.value = val.scrollStart || 0;
@@ -333,7 +333,7 @@ const bezierTarget = ref('element');
 function setBezierTarget(val) { bezierTarget.value = val; emitData(); }
 
 // No mobile flag
-const noMobile = ref(true);
+const noMobile = ref(false); // regola di prodotto: effetti attivi anche su mobile di default
 const mobileEnabled = computed(() => !noMobile.value);
 function onMobileToggle(e) { noMobile.value = !e.target.checked; emitData(); }
 
@@ -713,7 +713,7 @@ function resetAll() {
     { pos: 0, x: 0, y: 0, scale: 1, rotate: 0, opacity: 1, blur: 0, cpOutX: 0, cpOutY: 0 },
     { pos: 100, x: 0, y: 0, scale: 1, rotate: 0, opacity: 1, blur: 0, cpInX: 0, cpInY: 0 },
   ];
-  noMobile.value = true;
+  noMobile.value = false;
   bezierTarget.value = 'element';
   scrollRange.value = 'viewport';
   scrollStart.value = 0;
