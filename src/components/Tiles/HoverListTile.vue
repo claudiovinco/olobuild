@@ -49,16 +49,30 @@
 import { computed, ref } from 'vue';
 import { resolveFontFamily } from '@/composables/oloTileDefaults';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
-import def from '@/config/elements/hoverlist.js';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
+
+const defaults = {
+  items: [
+    { color: '#9a3b52', name: 'Rosewood', sub: 'Cool · matte', link_url: '' },
+    { color: '#c77a6a', name: 'Terracotta', sub: 'Warm · matte', link_url: '' },
+    { color: '#e79aa6', name: 'Peony', sub: 'Cool · blush', link_url: '' },
+    { color: '#e6a17e', name: 'Apricot', sub: 'Warm · blush', link_url: '' },
+    { color: '#7d2e3e', name: 'Merlot', sub: 'Deep · matte', link_url: '' },
+  ],
+  lead_mode: 'swatch',
+  swatch_size: 26, swatch_shape: 'circle',
+  number_color: '', number_hover_color: '',
+  name_font_family: 'heading', name_color: '#f6e9ec', name_size: 22, name_uppercase: false,
+  sub_color: '#9c7e8c', sub_size: 12, sub_uppercase: true,
+  desc_color: '', desc_size: 14,
+  row_padding_y: 20, hover_indent: 20, hover_bg: '#4d2f40', line_color: 'rgba(246,233,236,.13)',
+  peek: true, peek_mode: 'image', peek_width: 170, peek_ratio: '4/5', mono_font_family: '',
+};
 
 const HEADING = "var(--olo-font-family-heading, 'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
 const BODY = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
 const MONO_FB = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
-const LIGHT = 'var(--olo-color-light, #f8f9fa)';
-const LINE_FB = `color-mix(in srgb, ${LIGHT} 13%, transparent)`;
-const SW_RING = `color-mix(in srgb, ${LIGHT} 30%, transparent)`;
 // Monitor "sala di regia" — palette token-first (ink-3/ink-2/bone/signal del blueprint come fallback).
 const ACC = 'var(--olo-color-primary, #C6F24E)';
 const MON_BORDER = 'var(--olo-color-border, rgba(236,234,227,.2))';
@@ -68,10 +82,9 @@ const MON_STRIPE = 'color-mix(in srgb, var(--olo-color-text, #ECEAE3) 5%, transp
 const MON_TEXT = 'var(--olo-color-text, #ECEAE3)';
 const IMG_PH = 'repeating-linear-gradient(135deg,rgba(255,255,255,.06) 0 16px,transparent 16px 32px)';
 
-// Default da fonte unica: il config dell'inspector (nessuna copia divergente qui).
-const s = computed(() => ({ ...def.defaults, ...props.settings }));
+const s = computed(() => ({ ...defaults, ...props.settings }));
 const items = computed(() => Array.isArray(s.value.items) ? s.value.items : []);
-const line = computed(() => s.value.line_color || LINE_FB);
+const line = computed(() => s.value.line_color || 'rgba(246,233,236,.13)');
 const isNumber = computed(() => s.value.lead_mode === 'number');
 const mono = computed(() => {
   const fam = resolveFontFamily(s.value.mono_font_family);
@@ -81,25 +94,8 @@ const mono = computed(() => {
 });
 const nfam = computed(() => resolveFontFamily(s.value.name_font_family, { heading: HEADING, body: BODY, mono: mono.value }) || HEADING);
 
-// ── Hover bilaterale (gemello di build_hover_css): valore hover vuoto = proprietà invariata. ──
-const isSet = (v) => v !== '' && v !== null && v !== undefined;
-const hv = (hover, base) => (isSet(hover) ? hover : base);
-const clamp = (v, min, max, fb) => { const n = parseInt(v, 10); return Number.isFinite(n) ? Math.max(min, Math.min(max, n)) : fb; };
-// Durata: < 1 → 300ms, come il default dell'helper PHP.
-const ms = (v) => { const n = parseInt(v, 10); return (n > 0 ? n : 300) + 'ms'; };
-
 const numColor = computed(() => s.value.number_color || 'var(--olo-color-text-faint, #6a6c64)');
-// Al hover il numero passa al primario se non specificato (blueprint sala di regia).
-const numHoverColor = computed(() => s.value.number_hover_color || ACC);
-const nameColor = computed(() => s.value.name_color || LIGHT);
-const subColor = computed(() => s.value.sub_color || 'var(--olo-color-text-soft, #6b7280)');
-const descColor = computed(() => s.value.desc_color || 'var(--olo-color-text-soft, #a0a298)');
-const swSize = computed(() => clamp(s.value.swatch_size, 14, 44, 26));
-const swHoverSize = computed(() => (isSet(s.value.swatch_hover_size) ? clamp(s.value.swatch_hover_size, 14, 44, swSize.value) : swSize.value));
-// Rientro riga a riposo: '' = automatico (8px pastiglia / 4px numerato = resa storica).
-const indentBase = computed(() => (isSet(s.value.row_indent) ? clamp(s.value.row_indent, 0, 60, 8) : (isNumber.value ? 4 : 8)));
-const indentHover = computed(() => (isSet(s.value.hover_indent) ? clamp(s.value.hover_indent, 0, 60, indentBase.value) : indentBase.value));
-const rowBg = computed(() => s.value.row_bg_color || 'transparent');
+const numHoverColor = computed(() => s.value.number_hover_color || 'var(--olo-color-primary, #C6F24E)');
 const descSize = computed(() => {
   const raw = s.value.desc_size;
   if (raw === '' || raw === null || raw === undefined) return 14;
@@ -111,53 +107,45 @@ function itemNumber(it, idx) {
   return ov !== '' ? ov : String(idx + 1).padStart(2, '0');
 }
 
-// Layout e box della riga vivono in <style scoped> (così le regole :hover vincono per
-// cascata, senza !important). Inline restano SOLO le custom property che le pilotano
-// e lo "scudo" contro gli stili link del tema (color/text-decoration).
-const rowStyle = computed(() => ({
-  color: 'inherit', textDecoration: 'none',
-  '--olo-hl-py': isNumber.value ? 'clamp(20px,2.6vw,32px)' : clamp(s.value.row_padding_y, 8, 40, 20) + 'px',
-  '--olo-hl-pr': isNumber.value ? '4px' : '8px',
-  '--olo-hl-pl': indentBase.value + 'px',
-  '--olo-hl-indent': indentHover.value + 'px',
-  '--olo-hl-bg': rowBg.value,
-  '--olo-hl-bg-h': hv(s.value.hover_bg, rowBg.value),
-  '--olo-hl-line': line.value,
-  '--olo-hl-line-h': hv(s.value.line_hover_color, line.value),
-  '--olo-hl-nm': nameColor.value,
-  '--olo-hl-nm-h': hv(s.value.name_hover_color, nameColor.value),
-  '--olo-hl-sub': subColor.value,
-  '--olo-hl-sub-h': hv(s.value.sub_hover_color, subColor.value),
-  '--olo-hl-desc': descColor.value,
-  '--olo-hl-desc-h': hv(s.value.desc_hover_color, descColor.value),
-  '--olo-hl-num': numColor.value,
-  '--olo-hl-num-h': numHoverColor.value,
-  '--olo-hl-sw': swSize.value + 'px',
-  '--olo-hl-sw-h': swHoverSize.value + 'px',
-  '--olo-hl-t-indent': ms(s.value.hover_indent_duration),
-  '--olo-hl-t-bg': ms(s.value.hover_bg_duration),
-  '--olo-hl-t-line': ms(s.value.line_color_hover_duration),
-  '--olo-hl-t-nm': ms(s.value.name_color_hover_duration),
-  '--olo-hl-t-sub': ms(s.value.sub_color_hover_duration),
-  '--olo-hl-t-desc': ms(s.value.desc_color_hover_duration),
-  '--olo-hl-t-num': ms(s.value.number_color_hover_duration),
-  '--olo-hl-t-sw': ms(s.value.swatch_size_hover_duration),
-}));
-// Sfondo per-voce (row_bg: solid/gradient/image): inline, quindi vince sulle regole
-// scoped a riposo E in hover → la voce con sfondo proprio lo mantiene al passaggio del mouse.
+const rowStyle = computed(() => {
+  if (isNumber.value) {
+    // Riga "sala di regia": griglia 64px 1fr auto (blueprint .srv__row).
+    return {
+      display: 'grid', gridTemplateColumns: '64px 1fr auto', gap: '24px', alignItems: 'center',
+      padding: 'clamp(20px,2.6vw,32px) 4px',
+      borderBottom: '1px solid ' + line.value, color: 'inherit', textDecoration: 'none', position: 'relative',
+      '--olo-hl-indent': '18px', '--olo-hl-bg': 'var(--olo-color-surface-alt, #101218)',
+      '--olo-hl-numhc': numHoverColor.value,
+    };
+  }
+  return {
+    display: 'flex', alignItems: 'center', gap: '18px', padding: (s.value.row_padding_y || 20) + 'px 8px',
+    borderBottom: '1px solid ' + line.value, color: 'inherit', textDecoration: 'none',
+    '--olo-hl-indent': (s.value.hover_indent || 0) + 'px', '--olo-hl-bg': s.value.hover_bg || 'rgba(255,255,255,.05)',
+  };
+});
+// Sfondo per-voce (row_bg: solid/gradient/image). La voce con sfondo proprio lo
+// mantiene anche in hover (override della custom property usata dalla regola :hover).
 function rowStyleFor(it) {
   const bg = it && it.row_bg;
   if (!bg || !bg.type || bg.type === 'none') return rowStyle.value;
-  return { ...rowStyle.value, ...buildBgStyle(bg) };
+  const bgStyle = buildBgStyle(bg);
+  const st = { ...rowStyle.value, ...bgStyle };
+  const short = bgStyle.background || bgStyle.backgroundColor
+    || (bgStyle.backgroundImage ? `${bgStyle.backgroundImage} ${bgStyle.backgroundPosition || 'center'} / ${bgStyle.backgroundSize || 'cover'} no-repeat` : '');
+  if (short) st['--olo-hl-bg'] = short;
+  return st;
 }
 function swStyle(color) {
-  return { borderRadius: s.value.swatch_shape === 'square' ? '7px' : '50%', flex: 'none',
-    background: color || 'var(--olo-color-border, #e5e7eb)',
-    boxShadow: 'inset 0 0 0 1.5px ' + SW_RING };
+  return { width: (s.value.swatch_size || 26) + 'px', height: (s.value.swatch_size || 26) + 'px',
+    borderRadius: s.value.swatch_shape === 'square' ? '7px' : '50%', flex: 'none', background: color || '#999',
+    boxShadow: 'inset 0 0 0 1.5px rgba(246,233,236,.3)' };
 }
-const numStyle = computed(() => ({ fontFamily: mono.value, fontSize: '13px' }));
+const numStyle = computed(() => ({
+  fontFamily: mono.value, fontSize: '13px', color: numColor.value, transition: 'color .2s ease',
+}));
 const nameStyle = computed(() => {
-  const st = { fontFamily: nfam.value, lineHeight: 1.1 };
+  const st = { fontFamily: nfam.value, color: s.value.name_color || '#f6e9ec', lineHeight: 1.1 };
   if (isNumber.value) {
     st.fontWeight = 700;
     st.fontSize = `clamp(26px,3.4vw,${s.value.name_size || 22}px)`;
@@ -167,10 +155,11 @@ const nameStyle = computed(() => {
   if (s.value.name_uppercase) st.textTransform = 'uppercase';
   return st;
 });
-const subStyle = computed(() => ({ marginLeft: 'auto', fontFamily: mono.value, fontSize: (s.value.sub_size || 12) + 'px', letterSpacing: '0.06em', textTransform: s.value.sub_uppercase ? 'uppercase' : 'none' }));
-const subStyleNum = computed(() => ({ justifySelf: 'end', fontFamily: mono.value, fontSize: (s.value.sub_size || 12) + 'px', letterSpacing: '0.06em', textAlign: 'right', textTransform: s.value.sub_uppercase ? 'uppercase' : 'none' }));
+const subStyle = computed(() => ({ marginLeft: 'auto', fontFamily: mono.value, fontSize: (s.value.sub_size || 12) + 'px', letterSpacing: '0.06em', color: s.value.sub_color || '#9c7e8c', textTransform: s.value.sub_uppercase ? 'uppercase' : 'none' }));
+const subStyleNum = computed(() => ({ justifySelf: 'end', fontFamily: mono.value, fontSize: (s.value.sub_size || 12) + 'px', letterSpacing: '0.06em', color: s.value.sub_color || '#9c7e8c', textAlign: 'right', textTransform: s.value.sub_uppercase ? 'uppercase' : 'none' }));
 const descStyle = computed(() => ({
   justifySelf: 'end', fontSize: descSize.value + 'px',
+  color: s.value.desc_color || 'var(--olo-color-text-soft, #a0a298)',
   maxWidth: '30ch', textAlign: 'right',
 }));
 
@@ -249,36 +238,12 @@ const monLabStyle = computed(() => ({
 </script>
 
 <style scoped>
-/* Riga: base + hover pilotati dalle custom property inline (gemello del CSS di classe PHP).
-   Nessun !important: base e :hover stanno nella stessa foglia, vince la cascata. */
-.olo-hoverlist__row {
-  display: flex; align-items: center; gap: 18px;
-  padding: var(--olo-hl-py) var(--olo-hl-pr) var(--olo-hl-py) var(--olo-hl-pl);
-  border-bottom: 1px solid var(--olo-hl-line);
-  background-color: var(--olo-hl-bg);
-  transition: padding-left var(--olo-hl-t-indent) ease, background-color var(--olo-hl-t-bg) ease, border-bottom-color var(--olo-hl-t-line) ease;
-}
-/* Riga "sala di regia": griglia 64px 1fr auto (blueprint .srv__row). */
-.olo-hoverlist__row--num { display: grid; grid-template-columns: 64px 1fr auto; gap: 24px; position: relative; }
-.olo-hoverlist__row:hover {
-  padding-left: var(--olo-hl-indent);
-  background-color: var(--olo-hl-bg-h);
-  border-bottom-color: var(--olo-hl-line-h);
-}
-.olo-hoverlist__nm { color: var(--olo-hl-nm); transition: color var(--olo-hl-t-nm) ease; }
-.olo-hoverlist__row:hover .olo-hoverlist__nm { color: var(--olo-hl-nm-h); }
-/* La descrizione esclude il "sub in colonna destra" (che porta entrambe le classi). */
-.olo-hoverlist__desc:not(.olo-hoverlist__sub) { color: var(--olo-hl-desc); transition: color var(--olo-hl-t-desc) ease; }
-.olo-hoverlist__row:hover .olo-hoverlist__desc:not(.olo-hoverlist__sub) { color: var(--olo-hl-desc-h); }
-.olo-hoverlist__sub { color: var(--olo-hl-sub); transition: color var(--olo-hl-t-sub) ease; }
-.olo-hoverlist__row:hover .olo-hoverlist__sub { color: var(--olo-hl-sub-h); }
-.olo-hoverlist__num { color: var(--olo-hl-num); transition: color var(--olo-hl-t-num) ease; }
-.olo-hoverlist__row:hover .olo-hoverlist__num { color: var(--olo-hl-num-h); }
-.olo-hoverlist__sw { width: var(--olo-hl-sw); height: var(--olo-hl-sw); transition: width var(--olo-hl-t-sw) ease, height var(--olo-hl-t-sw) ease; }
-.olo-hoverlist__row:hover .olo-hoverlist__sw { width: var(--olo-hl-sw-h); height: var(--olo-hl-sw-h); }
-a.olo-hoverlist__row:focus-visible { outline: 2px solid var(--olo-hl-nm); outline-offset: -2px; }
+.olo-hoverlist__row { transition: padding .25s ease, background .2s ease; }
+.olo-hoverlist__row--num { transition: background .2s ease, padding .2s ease; }
+.olo-hoverlist__row:hover { padding-left: var(--olo-hl-indent) !important; background: var(--olo-hl-bg); }
+.olo-hoverlist__row--num:hover .olo-hoverlist__num { color: var(--olo-hl-numhc); }
 @media (max-width: 680px) {
-  .olo-hoverlist__row--num { grid-template-columns: 44px 1fr; }
+  .olo-hoverlist__row--num { grid-template-columns: 44px 1fr !important; }
   .olo-hoverlist__row--num .olo-hoverlist__desc { display: none; }
 }
 </style>
