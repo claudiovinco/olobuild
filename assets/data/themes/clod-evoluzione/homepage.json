@@ -173,7 +173,7 @@
         "desc_color": "#a0a298",
         "desc_size": 14,
         "row_padding_y": 28,
-        "hover_indent": 14,
+        "hover_indent": 18,
         "hover_bg": "#101218",
         "line_color": "rgba(236,234,227,.10)",
         "peek": true,

@@ -14,6 +14,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *   peek_mode 'monitor' → il box che segue il cursore diventa un monitor di regia
  *                         (viewfinder + ● STILL + barra label) invece dell'immagine.
  * Default invariati = resa storica identica.
+ *
+ * Hover delle voci — standard dichiarativo bilaterale: `withHover()` nel config JS ↔
+ * `build_hover_css()` qui (vedi class-tile-base.php). Le proprietà hover-abili (rientro,
+ * sfondo e linea della riga; colore di nome, sotto-etichetta, descrizione, numero;
+ * dimensione della pastiglia) sono rese come regole di CLASSE base + :hover nello stesso
+ * <style>, mai inline: così la :hover vince per cascata senza !important e lo sfondo
+ * per-voce (regola successiva) resta sovrano. Valore hover vuoto = proprietà invariata.
+ * Chiavi salvate invariate (hover_indent, hover_bg, number_hover_color).
  */
 class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
 
@@ -29,29 +37,44 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
             [ 'color' => '#e6a17e', 'name' => 'Apricot',     'sub' => 'Warm · blush', 'link_url' => '' ],
             [ 'color' => '#7d2e3e', 'name' => 'Merlot',      'sub' => 'Deep · matte', 'link_url' => '' ],
         ],
-        'lead_mode'          => 'swatch',
-        'swatch_size'        => 26,
-        'swatch_shape'       => 'circle',
-        'number_color'       => '',
-        'number_hover_color' => '',
-        'name_font_family'   => 'heading',
-        'name_color'         => '#f6e9ec',
-        'name_size'          => 22,
-        'name_uppercase'     => false,
-        'sub_color'          => '#9c7e8c',
-        'sub_size'           => 12,
-        'sub_uppercase'      => true,
-        'desc_color'         => '',
-        'desc_size'          => 14,
-        'row_padding_y'      => 20,
-        'hover_indent'       => 20,
-        'hover_bg'           => '#4d2f40',
-        'line_color'         => 'rgba(246,233,236,.13)',
-        'peek'               => true,
-        'peek_mode'          => 'image',
-        'peek_width'         => 170,
-        'peek_ratio'         => '4/5',
-        'mono_font_family'   => '',
+        'lead_mode'                   => 'swatch',
+        'swatch_size'                 => 26,
+        'swatch_hover_size'           => '',
+        'swatch_size_hover_duration'  => 200,
+        'swatch_shape'                => 'circle',
+        'number_color'                => '',
+        'number_hover_color'          => '',
+        'number_color_hover_duration' => 200,
+        'name_font_family'            => 'heading',
+        'name_color'                  => 'var(--olo-color-light, #f8f9fa)',
+        'name_hover_color'            => '',
+        'name_color_hover_duration'   => 200,
+        'name_size'                   => 22,
+        'name_uppercase'              => false,
+        'sub_color'                   => 'var(--olo-color-text-soft, #6b7280)',
+        'sub_hover_color'             => '',
+        'sub_color_hover_duration'    => 200,
+        'sub_size'                    => 12,
+        'sub_uppercase'               => true,
+        'desc_color'                  => '',
+        'desc_hover_color'            => '',
+        'desc_color_hover_duration'   => 200,
+        'desc_size'                   => 14,
+        'row_padding_y'               => 20,
+        'row_indent'                  => '',
+        'hover_indent'                => 20,
+        'hover_indent_duration'       => 250,
+        'row_bg_color'                => '',
+        'hover_bg'                    => 'var(--olo-color-dark, #16263d)',
+        'hover_bg_duration'           => 200,
+        'line_color'                  => 'color-mix(in srgb, var(--olo-color-light, #f8f9fa) 13%, transparent)',
+        'line_hover_color'            => '',
+        'line_color_hover_duration'   => 200,
+        'peek'                        => true,
+        'peek_mode'                   => 'image',
+        'peek_width'                  => 170,
+        'peek_ratio'                  => '4/5',
+        'mono_font_family'            => '',
     ];
 
     public function get_controls() { return []; }
@@ -78,16 +101,22 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
         $name_up = ! empty( $s['name_uppercase'] );
         $sub_sz  = max( 10, min( 18, absint( $s['sub_size'] ) ) );
         $pad_y   = max( 8, min( 40, absint( $s['row_padding_y'] ) ) );
-        $indent  = max( 0, min( 40, absint( $s['hover_indent'] ) ) );
 
-        $name_c  = $this->safe_color_css( $s['name_color'] ) ?: '#f6e9ec';
-        $sub_c   = $this->safe_color_css( $s['sub_color'] ) ?: '#9c7e8c';
-        $hbg     = $this->safe_color_css( $s['hover_bg'] ) ?: 'rgba(255,255,255,.05)';
-        $line    = $this->safe_color_css( $s['line_color'] ) ?: 'rgba(255,255,255,.13)';
+        // Rientro riga a riposo: '' = automatico (8px pastiglia / 4px numerato = resa storica).
+        $indent_raw  = $s['row_indent'] ?? '';
+        $indent_base = ( $indent_raw === '' || $indent_raw === null ) ? ( $lead === 'number' ? 4 : 8 ) : max( 0, min( 60, absint( $indent_raw ) ) );
+
+        $light   = 'var(--olo-color-light, #f8f9fa)';
+        $name_c  = $this->safe_color_css( $s['name_color'] ) ?: $light;
+        $sub_c   = $this->safe_color_css( $s['sub_color'] ) ?: 'var(--olo-color-text-soft, #6b7280)';
+        $row_bg  = $this->safe_color_css( $s['row_bg_color'] ?? '' ) ?: 'transparent';
+        $line    = $this->safe_color_css( $s['line_color'] ) ?: 'color-mix(in srgb, ' . $light . ' 13%, transparent)';
+        $sw_ring = 'color-mix(in srgb, ' . $light . ' 30%, transparent)';
         $upper   = ! empty( $s['sub_uppercase'] );
 
         // Numero progressivo (lead_mode 'number') — token-first.
         $num_c   = $this->safe_color_css( $s['number_color'] ?? '' ) ?: 'var(--olo-color-text-faint, #6a6c64)';
+        // Al hover il numero passa al primario se non specificato (blueprint sala di regia).
         $num_hc  = $this->safe_color_css( $s['number_hover_color'] ?? '' ) ?: 'var(--olo-color-primary, #C6F24E)';
         // Descrizione (colonna destra, layout numerato). Il type 'number' preserva '' → default 14.
         $desc_c   = $this->safe_color_css( $s['desc_color'] ?? '' ) ?: 'var(--olo-color-text-soft, #a0a298)';
@@ -108,20 +137,72 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
         $mon_stripe = 'color-mix(in srgb, var(--olo-color-text, #ECEAE3) 5%, transparent)';
         $mon_text   = 'var(--olo-color-text, #ECEAE3)';
 
-        $items = is_array( $s['items'] ) ? $s['items'] : [];
+        // ── Hover dichiarativo delle voci (withHover ↔ build_hover_css) ──
+        // Un blocco per bersaglio: riga, nome, sotto-etichetta, descrizione, numero, pastiglia.
+        // Valore hover vuoto = proprietà invariata; le durate arrivano dalle chiavi *_duration.
+        $hs = $s;
+        $hs['number_hover_color'] = $num_hc;
+        $hs['hover_indent']       = ( $hs['hover_indent'] === '' || $hs['hover_indent'] === null ) ? '' : max( 0, min( 60, absint( $hs['hover_indent'] ) ) );
+        $hs['swatch_hover_size']  = ( $hs['swatch_hover_size'] === '' || $hs['swatch_hover_size'] === null ) ? '' : max( 14, min( 44, absint( $hs['swatch_hover_size'] ) ) );
+
+        $hv_row  = $this->build_hover_css( $hs, [
+            'row_indent'   => [ 'css' => 'padding-left',        'hover_key' => 'hover_indent',     'dur_key' => 'hover_indent_duration' ],
+            'row_bg_color' => [ 'css' => 'background-color',    'hover_key' => 'hover_bg',         'dur_key' => 'hover_bg_duration' ],
+            'line_color'   => [ 'css' => 'border-bottom-color', 'hover_key' => 'line_hover_color', 'dur_key' => 'line_color_hover_duration' ],
+        ] );
+        $hv_nm   = $this->build_hover_css( $hs, [ 'name_color'   => [ 'css' => 'color', 'hover_key' => 'name_hover_color',   'dur_key' => 'name_color_hover_duration' ] ] );
+        $hv_sub  = $this->build_hover_css( $hs, [ 'sub_color'    => [ 'css' => 'color', 'hover_key' => 'sub_hover_color',    'dur_key' => 'sub_color_hover_duration' ] ] );
+        $hv_desc = $this->build_hover_css( $hs, [ 'desc_color'   => [ 'css' => 'color', 'hover_key' => 'desc_hover_color',   'dur_key' => 'desc_color_hover_duration' ] ] );
+        $hv_num  = $this->build_hover_css( $hs, [ 'number_color' => [ 'css' => 'color', 'hover_key' => 'number_hover_color', 'dur_key' => 'number_color_hover_duration' ] ] );
+        // La stessa chiave hover pilota width E height della pastiglia.
+        $hv_sw   = $this->build_hover_css( $hs, [
+            'swatch_size'   => [ 'css' => 'width',  'hover_key' => 'swatch_hover_size', 'dur_key' => 'swatch_size_hover_duration' ],
+            'swatch_size_h' => [ 'css' => 'height', 'hover_key' => 'swatch_hover_size', 'dur_key' => 'swatch_size_hover_duration' ],
+        ] );
+
+        // Regole di CLASSE della riga (non inline): la :hover della stessa foglia vince per
+        // cascata, senza !important, e lo sfondo per-voce (regola successiva) resta sovrano.
         if ( $lead === 'number' ) {
             // Riga "sala di regia": griglia 64px 1fr auto (blueprint .srv__row).
-            $row_base = 'display:grid;grid-template-columns:64px 1fr auto;gap:24px;align-items:center;padding:clamp(20px,2.6vw,32px) 4px;border-bottom:1px solid ' . $line . ';color:inherit;text-decoration:none;position:relative;transition:background .2s ease,padding .2s ease;';
+            $row_base = 'display:grid;grid-template-columns:64px 1fr auto;gap:24px;align-items:center;position:relative;padding:clamp(20px,2.6vw,32px) 4px clamp(20px,2.6vw,32px) ' . $indent_base . 'px;';
         } else {
-            $row_base = 'display:flex;align-items:center;gap:18px;padding:' . $pad_y . 'px 8px;border-bottom:1px solid ' . $line . ';color:inherit;text-decoration:none;transition:padding .25s ease,background .2s ease;';
+            $row_base = 'display:flex;align-items:center;gap:18px;padding:' . $pad_y . 'px 8px ' . $pad_y . 'px ' . $indent_base . 'px;';
         }
+        $row_base .= 'border-bottom:1px solid ' . $line . ';background-color:' . $row_bg . ';';
+        if ( ! empty( $hv_row['transitions'] ) ) {
+            $row_base .= 'transition:' . implode( ', ', $hv_row['transitions'] ) . ';';
+        }
+
+        // Coppia "base + :hover" per un elemento figlio della riga.
+        $child_rule = static function ( $sel, $base, $hv ) use ( $uid ) {
+            $css = '.' . $uid . ' ' . $sel . '{' . $base;
+            if ( ! empty( $hv['transitions'] ) ) {
+                $css .= 'transition:' . implode( ', ', $hv['transitions'] ) . ';';
+            }
+            $css .= '}';
+            if ( $hv['hover_decls'] !== '' ) {
+                $css .= '.' . $uid . ' .olo-hoverlist__row:hover ' . $sel . '{' . $hv['hover_decls'] . '}';
+            }
+            return $css;
+        };
+        $child_css  = $child_rule( '.olo-hoverlist__nm', 'color:' . $name_c . ';', $hv_nm );
+        // La descrizione esclude il "sub in colonna destra" (che porta entrambe le classi).
+        $child_css .= $child_rule( '.olo-hoverlist__desc:not(.olo-hoverlist__sub)', 'color:' . $desc_c . ';', $hv_desc );
+        $child_css .= $child_rule( '.olo-hoverlist__sub', 'color:' . $sub_c . ';', $hv_sub );
+        if ( $lead === 'number' ) {
+            $child_css .= $child_rule( '.olo-hoverlist__num', 'color:' . $num_c . ';', $hv_num );
+        } else {
+            $child_css .= $child_rule( '.olo-hoverlist__sw', 'width:' . $sw_size . 'px;height:' . $sw_size . 'px;', $hv_sw );
+        }
+
+        $items = is_array( $s['items'] ) ? $s['items'] : [];
 
         ob_start();
         ?>
         <?php $rowbg_rules = []; ?>
         <div class="olo-hoverlist <?php echo esc_attr( $uid ); ?>" style="position:relative;border-top:1px solid <?php echo esc_attr( $line ); ?>;">
             <?php foreach ( $items as $idx => $it ) :
-                $color = $this->safe_color_css( $it['color'] ?? '' ) ?: '#999';
+                $color = $this->safe_color_css( $it['color'] ?? '' ) ?: 'var(--olo-color-border, #e5e7eb)';
                 $name  = $it['name'] ?? '';
                 $sub   = $it['sub'] ?? '';
                 $desc  = trim( (string) ( $it['desc'] ?? '' ) );
@@ -146,20 +227,20 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
                     }
                 }
             ?>
-                <<?php echo $tag . $attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tag is a fixed 'a'/'div' literal from the ternary above; $attrs is empty or built with esc_url() ?> class="olo-hoverlist__row<?php echo esc_attr( $rowbg_cls ); ?>" data-color="<?php echo esc_attr( $color ); ?>" data-name="<?php echo esc_attr( $name ); ?>" data-number="<?php echo esc_attr( $num ); ?>" data-image="<?php echo esc_url( $pimg ); ?>" style="<?php echo esc_attr( $row_base ); ?>">
+                <<?php echo $tag . $attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tag is a fixed 'a'/'div' literal from the ternary above; $attrs is empty or built with esc_url() ?> class="olo-hoverlist__row<?php echo esc_attr( $rowbg_cls ); ?>" data-color="<?php echo esc_attr( $color ); ?>" data-name="<?php echo esc_attr( $name ); ?>" data-number="<?php echo esc_attr( $num ); ?>" data-image="<?php echo esc_url( $pimg ); ?>" style="color:inherit;text-decoration:none;">
                     <?php if ( $lead === 'number' ) : ?>
-                        <span class="olo-hoverlist__num" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:13px;color:<?php echo esc_attr( $num_c ); ?>;transition:color .2s ease;"><?php echo esc_html( $num ); ?></span>
-                        <span class="olo-hoverlist__nm" style="font-family:<?php echo esc_attr( $nfam ); ?>;font-weight:700;font-size:clamp(26px,3.4vw,<?php echo (int) $name_sz; ?>px);color:<?php echo esc_attr( $name_c ); ?>;line-height:1.1;<?php echo $name_up ? 'text-transform:uppercase;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.name'; ?>"><?php echo esc_html( $name ); ?></span>
+                        <span class="olo-hoverlist__num" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:13px;"><?php echo esc_html( $num ); ?></span>
+                        <span class="olo-hoverlist__nm" style="font-family:<?php echo esc_attr( $nfam ); ?>;font-weight:700;font-size:clamp(26px,3.4vw,<?php echo (int) $name_sz; ?>px);line-height:1.1;<?php echo $name_up ? 'text-transform:uppercase;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.name'; ?>"><?php echo esc_html( $name ); ?></span>
                         <?php if ( $desc !== '' ) : ?>
-                            <span class="olo-hoverlist__desc" style="justify-self:end;font-size:<?php echo (int) $desc_sz; ?>px;color:<?php echo esc_attr( $desc_c ); ?>;max-width:30ch;text-align:right;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.desc'; ?>"><?php echo esc_html( $desc ); ?></span>
+                            <span class="olo-hoverlist__desc" style="justify-self:end;font-size:<?php echo (int) $desc_sz; ?>px;max-width:30ch;text-align:right;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.desc'; ?>"><?php echo esc_html( $desc ); ?></span>
                         <?php elseif ( $sub !== '' ) : ?>
-                            <span class="olo-hoverlist__sub olo-hoverlist__desc" style="justify-self:end;font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $sub_sz; ?>px;letter-spacing:0.06em;color:<?php echo esc_attr( $sub_c ); ?>;text-align:right;<?php echo $upper ? 'text-transform:uppercase;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.sub'; ?>"><?php echo esc_html( $sub ); ?></span>
+                            <span class="olo-hoverlist__sub olo-hoverlist__desc" style="justify-self:end;font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $sub_sz; ?>px;letter-spacing:0.06em;text-align:right;<?php echo $upper ? 'text-transform:uppercase;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.sub'; ?>"><?php echo esc_html( $sub ); ?></span>
                         <?php endif; ?>
                     <?php else : ?>
-                        <span class="olo-hoverlist__sw" style="width:<?php echo (int) $sw_size; ?>px;height:<?php echo (int) $sw_size; ?>px;border-radius:<?php echo esc_attr( $sw_rad ); ?>;flex:none;background:<?php echo esc_attr( $color ); ?>;box-shadow:inset 0 0 0 1.5px rgba(246,233,236,.3);"></span>
-                        <span class="olo-hoverlist__nm" style="font-family:<?php echo esc_attr( $nfam ); ?>;font-size:<?php echo (int) $name_sz; ?>px;color:<?php echo esc_attr( $name_c ); ?>;line-height:1.1;<?php echo $name_up ? 'text-transform:uppercase;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.name'; ?>"><?php echo esc_html( $name ); ?></span>
+                        <span class="olo-hoverlist__sw" style="border-radius:<?php echo esc_attr( $sw_rad ); ?>;flex:none;background:<?php echo esc_attr( $color ); ?>;box-shadow:inset 0 0 0 1.5px <?php echo esc_attr( $sw_ring ); ?>;"></span>
+                        <span class="olo-hoverlist__nm" style="font-family:<?php echo esc_attr( $nfam ); ?>;font-size:<?php echo (int) $name_sz; ?>px;line-height:1.1;<?php echo $name_up ? 'text-transform:uppercase;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.name'; ?>"><?php echo esc_html( $name ); ?></span>
                         <?php if ( $sub !== '' ) : ?>
-                            <span class="olo-hoverlist__sub" style="margin-left:auto;font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $sub_sz; ?>px;letter-spacing:0.06em;color:<?php echo esc_attr( $sub_c ); ?>;<?php echo $upper ? 'text-transform:uppercase;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.sub'; ?>"><?php echo esc_html( $sub ); ?></span>
+                            <span class="olo-hoverlist__sub" style="margin-left:auto;font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo (int) $sub_sz; ?>px;letter-spacing:0.06em;<?php echo $upper ? 'text-transform:uppercase;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.sub'; ?>"><?php echo esc_html( $sub ); ?></span>
                         <?php endif; ?>
                     <?php endif; ?>
                 </<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed 'a'/'div' literal from the ternary above ?>>
@@ -183,19 +264,21 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
             </div>
             <?php endif; ?>
         </div>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for the colours, absint()/max()/min() clamps for the indent, and the internally generated $uid. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for the colours, absint()/max()/min() clamps for sizes and indents, Olobuild_Tile_Base::build_hover_css() (which sanitizes through the same helpers) for the :hover declarations, and the internally generated $uid. ?>
         <style>
+            .<?php echo $uid; ?> .olo-hoverlist__row { <?php echo $row_base; ?> }
+            <?php if ( $hv_row['hover_decls'] !== '' ) : ?>
+            .<?php echo $uid; ?> .olo-hoverlist__row:hover { <?php echo $hv_row['hover_decls']; ?> }
+            <?php endif; ?>
+            <?php echo $child_css; ?>
+
+            .<?php echo $uid; ?> a.olo-hoverlist__row:focus-visible { outline: 2px solid <?php echo $name_c; ?>; outline-offset: -2px; }
             <?php if ( $lead === 'number' ) : ?>
-            .<?php echo $uid; ?> .olo-hoverlist__row:hover { padding-left: 18px; background: var(--olo-color-surface-alt, #101218); }
-            .<?php echo $uid; ?> .olo-hoverlist__row:hover .olo-hoverlist__num { color: <?php echo $num_hc; ?>; }
             @media (max-width: 680px) {
                 .<?php echo $uid; ?> .olo-hoverlist__row { grid-template-columns: 44px 1fr; }
                 .<?php echo $uid; ?> .olo-hoverlist__desc { display: none; }
             }
-            <?php else : ?>
-            .<?php echo $uid; ?> .olo-hoverlist__row:hover { padding-left: <?php echo $indent; ?>px; background: <?php echo $hbg; ?>; }
             <?php endif; ?>
-            .<?php echo $uid; ?> a.olo-hoverlist__row:focus-visible { outline: 2px solid <?php echo $name_c; ?>; outline-offset: -2px; }
             <?php foreach ( $rowbg_rules as $ri => $rdecl ) : ?>
             /* sfondo per-voce: vale a riposo E in hover (regola dopo la :hover generica) */
             .<?php echo $uid; ?> .olo-hoverlist__row--<?php echo (int) $ri; ?>,

@@ -45,7 +45,7 @@
             :max="field.max || 100"
             :step="field.step || 1"
             :defaultValue="fieldDefaultValue"
-            :placeholder="field.responsive && respBp !== 'desktop' ? t('Eredita') : ''"
+            :placeholder="field.responsive && respBp !== 'desktop' ? t('Eredita') : (field.placeholder || '')"
             @update:modelValue="onFieldUpdate($event)"
           />
           <FieldToggle
@@ -198,7 +198,7 @@
         :max="field.max || 100"
         :step="field.step || 1"
         :defaultValue="fieldDefaultValue"
-        :placeholder="field.responsive && respBp !== 'desktop' ? t('Eredita') : ''"
+        :placeholder="field.responsive && respBp !== 'desktop' ? t('Eredita') : (field.placeholder || '')"
         @update:modelValue="onFieldUpdate($event)"
       />
 
