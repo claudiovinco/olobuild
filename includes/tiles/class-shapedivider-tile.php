@@ -124,13 +124,34 @@ class Olobuild_Shapedivider_Tile extends Olobuild_Tile_Base {
                 height: <?php echo (int) $height; ?>px;
                 <?php echo $transform_css; ?>
             }
+            <?php
+            /*
+             * UN PIXEL DI SOVRAPPOSIZIONE, e non e' un ritocco estetico.
+             *
+             * Con lo spostamento pieno il bordo del divisore e il bordo della
+             * sua sezione cadono sulla stessa coordinata. Quella coordinata e'
+             * quasi sempre frazionaria, perche' dipende dall'altezza di tutto
+             * quello che c'e' sopra: il browser arrotonda le due cose per
+             * conto proprio, e resta una riga di pixel che non dipinge ne' il
+             * divisore ne' la sezione. Li' si vede quello che c'e' sotto, che
+             * di solito e' il bianco del body.
+             *
+             * Misurato il 7 settembre 2026 su olotutor.clod.eu: cucitura a
+             * 697,11 pixel, sezione sopra trasparente, riga bianca larga
+             * quanto la pagina.
+             *
+             * Un pixel non si vede (il divisore e' alto ottanta) e la cucitura
+             * sparisce, perche' i due elementi si sovrappongono invece di
+             * sfiorarsi.
+             */
+            ?>
             <?php if ( $position === 'bottom' ) : ?>
             .<?php echo $uid; ?> {
-                transform: translateY(100%);
+                transform: translateY(calc(100% - 1px));
             }
             <?php else : ?>
             .<?php echo $uid; ?> {
-                transform: translateY(-100%);
+                transform: translateY(calc(-100% + 1px));
             }
             <?php endif; ?>
             <?php if ( $resp_tablet !== '' ) : ?>
