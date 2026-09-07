@@ -292,6 +292,7 @@
       <FieldGallery
         v-else-if="field.type === 'gallery'"
         :modelValue="effectiveValue"
+        :righe-extra="!!field.righeExtra"
         @update:modelValue="onFieldUpdate($event)"
       />
 

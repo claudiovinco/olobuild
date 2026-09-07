@@ -44,9 +44,37 @@
               type="text"
               :value="img.caption || ''"
               @input="updateCaption(idx, $event.target.value)"
-              :placeholder="t('Didascalia...')"
+              :placeholder="righeExtra ? t('Titolo...') : t('Didascalia...')"
               class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200 mb-placeholder-gray-500"
             />
+            <!--
+              LE DUE RIGHE IN PIU' COMPAIONO SOLO DOVE IL TILE LE CHIEDE.
+
+              Il campo galleria lo montano anche Galleria, Marquee e 360: la',
+              di righe, ne serve una. Accese sempre, quelle tre schermate si
+              troverebbero due caselle in piu' per ogni immagine senza che
+              nessuno le abbia chieste.
+
+              I nomi sono `subtitle` e `text` perche' sono gli stessi degli
+              item dello ScrollScrub: lo stesso contenuto si sposta da un tile
+              all'altro senza riscriverlo.
+            -->
+            <template v-if="righeExtra">
+              <input
+                type="text"
+                :value="img.subtitle || ''"
+                @input="updateRiga(idx, 'subtitle', $event.target.value)"
+                :placeholder="t('Sottotitolo...')"
+                class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200 mb-placeholder-gray-500"
+              />
+              <input
+                type="text"
+                :value="img.text || ''"
+                @input="updateRiga(idx, 'text', $event.target.value)"
+                :placeholder="t('Testo...')"
+                class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200 mb-placeholder-gray-500"
+              />
+            </template>
             <!-- Bottone poster per video -->
             <button
               v-if="isVideo(img)"
@@ -240,6 +268,8 @@ const VIMEO_RE = /vimeo\.com\/(\d+)/;
 
 const props = defineProps({
   modelValue: { type: Array, default: () => [] },
+  /** Accende sottotitolo e testo su ogni immagine. Lo chiede il tile, non il campo. */
+  righeExtra: { type: Boolean, default: false },
 });
 const emit = defineEmits(['update:modelValue']);
 
@@ -337,6 +367,14 @@ function removeImage(index) {
 function updateCaption(index, value) {
   const updated = (props.modelValue || []).map((img, i) =>
     i === index ? { ...img, caption: value } : img
+  );
+  emit('update:modelValue', updated);
+}
+
+/** Il sottotitolo e il testo, che esistono solo con `righeExtra` acceso. */
+function updateRiga(index, chiave, value) {
+  const updated = (props.modelValue || []).map((img, i) =>
+    i === index ? { ...img, [chiave]: value } : img
   );
   emit('update:modelValue', updated);
 }

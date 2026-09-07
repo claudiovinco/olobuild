@@ -124,7 +124,10 @@ export default {
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     // ─── Media ───
-    { key: 'images', label: t('Media'), type: 'gallery' },
+    // `righeExtra`: ogni immagine porta anche sottotitolo e testo, con gli stessi
+    // nomi di campo degli item dello ScrollScrub (`subtitle`, `text`), cosi' lo
+    // stesso contenuto si sposta da un tile all'altro senza riscriverlo.
+    { key: 'images', label: t('Media'), type: 'gallery', righeExtra: true },
     { type: 'separator', label: t('Video'), show: s => s.images?.some(i => i.type === 'video') },
     { key: 'video_preview', label: t('Preview video'), type: 'select', options: [
       { value: 'poster', label: t('Poster statico') },
