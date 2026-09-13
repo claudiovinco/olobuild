@@ -340,10 +340,13 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: absint/intval/floatval with min/max clamps, number_format(), the safe_color_css() whitelist, esc_attr()'d strings, fixed string maps/ternaries and a generated unique id.
         echo '<style>';
 
-        // Punto focale GLOBALE: object-position su TUTTE le immagini/video di ogni layout.
-        // Nessuna regola esistente imposta object-position → questa aggiunge solo la proprietà
-        // (default 'center center' = resa attuale invariata).
-        echo ".{$uid} .olo-pg-item img,.{$uid} .olo-pg-item video{object-position:{$obj_pos}}";
+        // Punto focale della GALLERIA, che ora è il RIPIEGO: una foto con
+        // un'inquadratura sua scrive --olo-pg-fp sul proprio item e la scavalca.
+        // Una variabile CSS e non uno stile sull'<img> perché così la regola resta
+        // UNA per tutti i venti layout, invece di ventidue tag da tenere allineati.
+        // Chi non ha --olo-pg-fp prende il valore di ripiego: le gallerie salvate
+        // prima di questa versione non si spostano di un pixel.
+        echo ".{$uid} .olo-pg-item img,.{$uid} .olo-pg-item video{object-position:var(--olo-pg-fp,{$obj_pos})}";
 
         // Hover radius (applies to all layouts — items always have border-radius:$radius)
         if ( $radius_hover_css !== '' ) {
@@ -1061,14 +1064,19 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
                 }
 
                 // Collage height variation per item
-                $inline_style = '';
+                $dichiarazioni = [];
                 if ( $layout === 'strip_collage' ) {
                     $seed = $idx + 42;
                     $x = sin( $seed * 127.1 + 311.7 ) * 43758.5453123;
                     $rand = $x - floor( $x );
                     $h = round( $strip_height - 50 + $rand * 100 );
-                    $inline_style = ' style="height:' . $h . 'px"';
+                    $dichiarazioni[] = 'height:' . $h . 'px';
                 }
+                $fp = $that->fuoco_css( $img );
+                if ( '' !== $fp ) {
+                    $dichiarazioni[] = '--olo-pg-fp:' . $fp;
+                }
+                $inline_style = $dichiarazioni ? ' style="' . esc_attr( implode( ';', $dichiarazioni ) ) . '"' : '';
 
                 // Determine href for lightbox
                 $lb_href = $url;
@@ -1738,7 +1746,12 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             }
 
             if ( $is_visible ) {
-                $combined_style = trim( $inline_style . ( $puzzle_clip ? ';' . $puzzle_clip : '' ) );
+                $fp = $this->fuoco_css( $img );
+                $combined_style = implode( ';', array_filter( [
+                    trim( $inline_style ),
+                    $puzzle_clip ? trim( $puzzle_clip ) : '',
+                    '' !== $fp ? '--olo-pg-fp:' . $fp : '',
+                ] ) );
                 $style_attr = $combined_style ? ' style="' . esc_attr( $combined_style ) . '"' : '';
                 echo '<' . $tag . ' class="' . $item_class . '"' . $href . $caption_attr . $thumb_attr . $video_attrs . $plx_item_data . $style_attr . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $tag/$item_class are fixed literals; attributes are esc_url()/esc_attr()-escaped or numeric-built above.
 
@@ -1860,6 +1873,38 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
     /**
      * Check if gallery item is a video.
      */
+    /**
+     * L'inquadratura di UNA foto, ripulita, o '' se non ne ha una.
+     *
+     * ⚠️ Il valore finisce dentro un attributo `style`, quindi non basta
+     * escaparlo: si accetta SOLO quello che può essere una object-position, cioè
+     * una o due parole fra left/right/top/bottom/center oppure due misure in
+     * percentuale o pixel. Tutto il resto diventa '', e la foto torna a seguire
+     * la galleria. Un template importato da fuori è un pezzo di JSON come un
+     * altro, e questa è la sola porta da cui quel JSON entra nel CSS.
+     *
+     * @param array|string $img  la voce della galleria
+     * @return string  valore CSS valido, o '' per «segui la galleria»
+     */
+    private function fuoco_css( $img ) {
+        if ( ! is_array( $img ) || empty( $img['focal'] ) ) {
+            return '';
+        }
+        $v = strtolower( trim( (string) $img['focal'] ) );
+        $pezzi = preg_split( '/\\s+/', $v, -1, PREG_SPLIT_NO_EMPTY );
+        if ( ! $pezzi || count( $pezzi ) > 2 ) {
+            return '';
+        }
+        foreach ( $pezzi as $p ) {
+            $parola  = in_array( $p, [ 'left', 'right', 'top', 'bottom', 'center' ], true );
+            $misura  = (bool) preg_match( '/^-?\\d+(\\.\\d+)?(%|px)$/', $p );
+            if ( ! $parola && ! $misura ) {
+                return '';
+            }
+        }
+        return implode( ' ', $pezzi );
+    }
+
     private function is_video_item( $img ) {
         return is_array( $img ) && ( ( $img['type'] ?? '' ) === 'video' );
     }

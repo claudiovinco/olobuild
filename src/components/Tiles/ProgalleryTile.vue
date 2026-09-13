@@ -7,7 +7,7 @@
       <!-- Grid -->
       <div v-if="layout === 'grid'" :style="gridStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="itemStyle(i)">
-          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle(img)" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
           <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
         </div>
@@ -16,7 +16,7 @@
       <!-- Justified -->
       <div v-else-if="layout === 'justified'" :style="justifiedStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="justifiedItemStyle">
-          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle(img)" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
           <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
         </div>
@@ -25,7 +25,7 @@
       <!-- Masonry -->
       <div v-else-if="layout === 'masonry'" :style="masonryStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="masonryItemStyle(i)">
-          <img :src="imgUrl(img)" :alt="imgAlt(img)" style="width:100%;display:block;object-fit:cover" :style="{ borderRadius: radius + 'px', objectPosition: objPos }" />
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" style="width:100%;display:block;object-fit:cover" :style="{ borderRadius: radius + 'px', objectPosition: fuoco(img) }" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
           <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
         </div>
@@ -34,7 +34,7 @@
       <!-- Scattered -->
       <div v-else-if="layout === 'scattered'" :style="scatteredContainerStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="scatteredItemStyle(i)">
-          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle(img)" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
         </div>
       </div>
@@ -42,7 +42,7 @@
       <!-- Parallax -->
       <div v-else-if="layout === 'parallax'" :style="parallaxContainerStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="parallaxItemStyle(i)">
-          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyleAuto" />
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyleAuto(img)" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
         </div>
       </div>
@@ -50,7 +50,7 @@
       <!-- Drift (multi-directional parallax) -->
       <div v-else-if="layout === 'drift'" :style="driftContainerStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="driftItemStyle(i)">
-          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyleAuto" />
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyleAuto(img)" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
         </div>
       </div>
@@ -58,7 +58,7 @@
       <!-- Cascade (stacked cards) -->
       <div v-else-if="layout === 'cascade'" :style="cascadeContainerStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="cascadeItemStyle(i)">
-          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle(img)" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
         </div>
       </div>
@@ -66,7 +66,7 @@
       <!-- Metro (mixed sizes) -->
       <div v-else-if="layout === 'metro'" :style="metroStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="metroItemStyle(i)">
-          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle(img)" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
           <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
         </div>
@@ -75,7 +75,7 @@
       <!-- Collage -->
       <div v-else-if="layout === 'collage'" :style="collageStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="collageItemStyle(i)">
-          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle(img)" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
           <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
         </div>
@@ -85,7 +85,7 @@
       <div v-else-if="layout === 'strip_coverflow'" :style="filmstripWrapStyle">
         <div :style="filmstripStyle">
           <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="filmstripItemStyle(i)">
-            <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+            <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle(img)" />
             <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
           </div>
         </div>
@@ -111,7 +111,7 @@
       <!-- Strip (nastro orizzontale, drag-to-scroll) -->
       <div v-else-if="layout === 'strip'" :style="stripWrapStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="stripItemStyle(i)">
-          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle(img)" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
         </div>
       </div>
@@ -119,7 +119,7 @@
       <!-- Strip Collage (altezze variabili) -->
       <div v-else-if="layout === 'strip_collage'" :style="stripWrapStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="stripCollageItemStyle(i)">
-          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle(img)" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
         </div>
       </div>
@@ -127,7 +127,7 @@
       <!-- Strip Multi-riga -->
       <div v-else-if="layout === 'strip_multi'" :style="stripMultiStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="stripMultiItemStyle">
-          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle(img)" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
         </div>
       </div>
@@ -135,7 +135,7 @@
       <!-- Strip Marquee (auto-scroll) -->
       <div v-else-if="layout === 'strip_marquee'" :style="stripWrapStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="stripItemStyle(i)">
-          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle(img)" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
         </div>
       </div>
@@ -144,13 +144,13 @@
       <div v-else-if="layout === 'strip_split'" style="display:flex;flex-direction:column;gap:8px">
         <div :style="stripWrapStyle">
           <div v-for="(img, i) in evenImages" :key="'a'+i" :style="stripItemStyle(i*2)">
-            <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+            <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle(img)" />
             <div v-if="isVideoItem(evenImages[i])" :style="playBadgeStyle"></div>
           </div>
         </div>
         <div :style="stripWrapStyle">
           <div v-for="(img, i) in oddImages" :key="'b'+i" :style="stripItemStyle(i*2+1)">
-            <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+            <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle(img)" />
             <div v-if="isVideoItem(oddImages[i])" :style="playBadgeStyle"></div>
           </div>
         </div>
@@ -159,7 +159,7 @@
       <!-- Mosaic -->
       <div v-else-if="layout === 'mosaic'" :style="mosaicStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="mosaicItemStyle(i)">
-          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle(img)" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
           <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
         </div>
@@ -194,7 +194,7 @@
       <!-- Diagonal -->
       <div v-else-if="layout === 'diagonal'" :style="gridStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="diagonalItemStyle(i)">
-          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle(img)" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
           <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
         </div>
@@ -305,23 +305,53 @@ function seededRandom(seed) {
   return x - Math.floor(x);
 }
 
-const imgStyle = computed(() => ({
-  width: '100%',
-  height: '100%',
-  objectFit: objectFit.value,
-  objectPosition: objPos.value,
-  display: 'block',
-  borderRadius: radius.value + 'px',
-}));
+/*
+ * L'INQUADRATURA DI QUESTA FOTO, o quella della galleria se non ne ha una.
+ * `focal` e' una chiave che le gallerie salvate prima non hanno: senza, si
+ * legge `object_position` come e' sempre stato, quindi nessun template
+ * esistente si sposta di un pixel.
+ */
+const FUOCO_PAROLE = ['left', 'right', 'top', 'bottom', 'center'];
+function fuocoValido(v) {
+  const pezzi = String(v || '').trim().toLowerCase().split(/\s+/).filter(Boolean);
+  if (!pezzi.length || pezzi.length > 2) return '';
+  const ok = pezzi.every(p => FUOCO_PAROLE.includes(p) || /^-?\d+(\.\d+)?(%|px)$/.test(p));
+  return ok ? pezzi.join(' ') : '';
+}
+
+// ⚠️ La stessa regola del PHP (fuoco_css), e non per eccesso di zelo: un valore
+// storto deve far tornare la foto alla posizione della galleria in TUTTI E DUE
+// i render. Senza, il browser scarterebbe la proprieta' e il canvas mostrerebbe
+// il centro mentre il sito mostra la galleria: due immagini diverse per lo
+// stesso template, ed e' il genere di differenza che si scopre in produzione.
+function fuoco(img) {
+  return (img && fuocoValido(img.focal)) || objPos.value;
+}
+
+// ⚠️ Funzioni e non computed: il valore dipende dalla FOTO, non solo dal tile.
+// Erano due computed condivisi da tutti i layout, ed e' il motivo per cui il
+// punto focale poteva essere uno solo per tutta la galleria.
+function imgStyle(img) {
+  return {
+    width: '100%',
+    height: '100%',
+    objectFit: objectFit.value,
+    objectPosition: fuoco(img),
+    display: 'block',
+    borderRadius: radius.value + 'px',
+  };
+}
 
 // Per layout con item senza altezza esplicita (parallax, drift, scattered)
-const imgStyleAuto = computed(() => ({
-  width: '100%',
-  height: 'auto',
-  objectPosition: objPos.value,
-  display: 'block',
-  borderRadius: radius.value + 'px',
-}));
+function imgStyleAuto(img) {
+  return {
+    width: '100%',
+    height: 'auto',
+    objectPosition: fuoco(img),
+    display: 'block',
+    borderRadius: radius.value + 'px',
+  };
+}
 
 const filterStyle = computed(() => {
   const f = s.value.filter;

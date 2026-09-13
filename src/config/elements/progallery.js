@@ -127,7 +127,12 @@ export default {
     // `righeExtra`: ogni immagine porta anche sottotitolo e testo, con gli stessi
     // nomi di campo degli item dello ScrollScrub (`subtitle`, `text`), cosi' lo
     // stesso contenuto si sposta da un tile all'altro senza riscriverlo.
-    { key: 'images', label: t('Media'), type: 'gallery', righeExtra: true },
+    // `puntoFocale` accende l'inquadratura PER SINGOLA FOTO dentro la lista.
+    // I contextKeys dicono al campo con che ritaglio disegnare l'anteprima e da
+    // quale valore partire: senza, il pad mostrerebbe un ritaglio che non e'
+    // quello vero e la scelta si farebbe su un'immagine sbagliata.
+    { key: 'images', label: t('Media'), type: 'gallery', righeExtra: true, puntoFocale: true,
+      contextKeys: { fit: 'object_fit', pos: 'object_position' } },
     { type: 'separator', label: t('Video'), show: s => s.images?.some(i => i.type === 'video') },
     { key: 'video_preview', label: t('Preview video'), type: 'select', options: [
       { value: 'poster', label: t('Poster statico') },
@@ -266,8 +271,11 @@ export default {
       { value: 'cover', label: t('Riempi') },
       { value: 'contain', label: t('Contieni') },
     ]},
-    // Punto focale GLOBALE applicato a TUTTE le immagini della galleria (object-position).
-    // URL per-item → niente src nei contextKeys (anteprima focal point usa solo fit).
+    // Punto focale della GALLERIA: vale per ogni foto che non ne ha uno suo, ed e'
+    // quindi il valore di ripiego, non piu' l'unico. Quello per singola foto sta
+    // nella lista dei media, in CONTENUTO, dove si vede la foto a cui si applica.
+    // URL per-item → niente src nei contextKeys (qui il pad non ha un'immagine da
+    // mostrare: non saprebbe quale delle tante).
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { fit: 'object_fit' } },
     withHover({ key: 'thumb_radius', label: t('Raggio bordi (px)'), type: 'border-radius' }),

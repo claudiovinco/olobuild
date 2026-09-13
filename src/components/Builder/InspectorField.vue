@@ -293,6 +293,9 @@
         v-else-if="field.type === 'gallery'"
         :modelValue="effectiveValue"
         :righe-extra="!!field.righeExtra"
+        :punto-focale="!!field.puntoFocale"
+        :fit-galleria="contestoGalleria.fit"
+        :posizione-galleria="contestoGalleria.pos"
         @update:modelValue="onFieldUpdate($event)"
       />
 
@@ -947,6 +950,20 @@ function literalRatio(k) {
   if (/^\d+(?:\.\d+)?$/.test(k)) return k;                        // '1.5'
   return null;
 }
+/*
+ * Contesto per il campo galleria quando accende l'inquadratura per singola foto.
+ * Serve a due cose sole: disegnare il pad col ritaglio VERO (fit) e sapere da
+ * quale posizione parte una foto che non ne ha ancora una sua (pos).
+ */
+const contestoGalleria = computed(() => {
+  const s = props.tileSettings || {};
+  const ck = props.field.contextKeys || {};
+  return {
+    fit: (ck.fit && s[ck.fit]) || literalFit(ck.fit) || 'cover',
+    pos: (ck.pos && s[ck.pos]) || 'center center',
+  };
+});
+
 const objectPositionContext = computed(() => {
   const s = props.tileSettings || {};
   const ck = props.field.contextKeys;

@@ -105,6 +105,25 @@
                 @click="sostituisci(idx)"
                 class="mb-text-[10px] mb-text-gray-400 hover:mb-text-gray-200 mb-transition-colors"
               >{{ t('Cambia') }}</button>
+              <!--
+                L'INQUADRATURA DI QUESTA FOTO, non di tutte.
+                Il punto focale della galleria vale per ogni foto insieme, e in una
+                galleria vera i soggetti stanno in punti diversi: quella che
+                rimetti a posto ne taglia un'altra. Qui si apre il pad con DENTRO
+                questa foto, quindi si vede subito cosa resta nel riquadro.
+              -->
+              <button
+                v-if="puntoFocale && !isVideo(img)"
+                type="button"
+                @click="apriFocale(idx)"
+                class="mb-text-[10px] mb-transition-colors"
+                :class="img.focal
+                  ? 'mb-text-gray-200 hover:mb-text-white'
+                  : 'mb-text-gray-400 hover:mb-text-gray-200'"
+                :title="img.focal
+                  ? t('Inquadratura scelta per questa foto') + ': ' + img.focal
+                  : t('Segue la posizione della galleria')"
+              >{{ img.focal ? t('Inquadratura ●') : t('Inquadratura') }}</button>
               <!-- Bottone poster per video -->
               <button
                 v-if="isVideo(img)"
@@ -118,6 +137,35 @@
             class="mb-bg-red-600 mb-text-white mb-rounded-full mb-w-5 mb-h-5 mb-text-[10px] mb-flex mb-items-center mb-justify-center mb-opacity-0 group-hover:mb-opacity-100 mb-transition-opacity mb-shrink-0"
             :title="t('Rimuovi')"
           >{{ t('&times;') }}</button>
+        </div>
+
+        <!--
+          Il pad sta FUORI dalla riga e non dentro: la riga e' una striscia bassa
+          che si trascina per riordinare, e infilarci un riquadro alto 270 px la
+          renderebbe una cosa che non si riesce piu' ad afferrare. Una sola foto
+          per volta, o l'elenco diventa illeggibile.
+        -->
+        <div v-if="focaleAperta === idx" class="mb-ml-4 mb-mb-2 mb-p-2 mb-bg-gray-800 mb-border mb-border-gray-700 mb-rounded-md">
+          <FieldObjectPosition
+            :modelValue="img.focal || posizioneGalleria"
+            :image-src="img.url"
+            :object-fit="fitGalleria"
+            @update:modelValue="impostaFocale(idx, $event)"
+          />
+          <div class="mb-flex mb-gap-3 mb-mt-1.5">
+            <button
+              type="button"
+              @click="focaleAperta = null"
+              class="mb-text-[10px] mb-text-gray-400 hover:mb-text-gray-200 mb-transition-colors"
+            >{{ t('Chiudi') }}</button>
+            <button
+              v-if="img.focal"
+              type="button"
+              @click="azzeraFocale(idx)"
+              class="mb-text-[10px] mb-text-gray-400 hover:mb-text-gray-200 mb-transition-colors"
+              :title="t('Torna a seguire il punto focale della galleria')"
+            >{{ t('Come la galleria') }}</button>
+          </div>
         </div>
       </template>
     </div>
@@ -291,6 +339,7 @@ import { vOloDraggable, vOloDropTarget } from '@/composables/useDnD';
 import { useListSort } from '@/composables/useListSort';
 import { useMediaPicker } from '@/composables/useMediaPicker';
 import { useToast } from '@/composables/useToast';
+import FieldObjectPosition from './FieldObjectPosition.vue';
 
 const toast = useToast();
 
@@ -301,10 +350,23 @@ const props = defineProps({
   modelValue: { type: Array, default: () => [] },
   /** Accende sottotitolo e testo su ogni immagine. Lo chiede il tile, non il campo. */
   righeExtra: { type: Boolean, default: false },
+  /*
+   * Accende l'inquadratura per singola foto. Lo chiede il tile perche' deve
+   * essere il suo RENDER a saperla disegnare: un comando che salva un valore
+   * che poi nessuno guarda e' peggio di un comando che non c'e'.
+   */
+  puntoFocale: { type: Boolean, default: false },
+  /** Il ritaglio della galleria, per disegnare il pad com'e' davvero. */
+  fitGalleria: { type: String, default: 'cover' },
+  /** Da dove parte una foto che non ha ancora un'inquadratura sua. */
+  posizioneGalleria: { type: String, default: 'center center' },
 });
 const emit = defineEmits(['update:modelValue']);
 
 const { openSingleImage, openGallery, openVideo, openPosterImage } = useMediaPicker();
+
+/* Quale riga sta mostrando il pad, o null. Una sola per volta. */
+const focaleAperta = ref(null);
 
 // Riordino immagini col motore DnD custom (v1.4.387, ex vuedraggable).
 const { itemDraggable, itemDrop } = useListSort({
@@ -314,6 +376,9 @@ const { itemDraggable, itemDrop } = useListSort({
     return (it && (it.caption || it.alt)) || t('Immagine') + ' ' + (index + 1);
   },
   onMove: (from, to) => {
+    // Il pad e' agganciato all'INDICE: dopo uno spostamento mostrerebbe la foto
+    // sbagliata, e chi trascina non se ne accorgerebbe.
+    focaleAperta.value = null;
     const arr = [...(props.modelValue || [])];
     const [moved] = arr.splice(from, 1);
     arr.splice(to, 0, moved);
@@ -437,6 +502,35 @@ function pickPoster(idx) {
     );
     emit('update:modelValue', updated);
   });
+}
+
+function apriFocale(idx) {
+  focaleAperta.value = focaleAperta.value === idx ? null : idx;
+}
+
+/**
+ * L'inquadratura di UNA foto. Sta in `focal` sull'item, che e' una chiave nuova:
+ * una galleria salvata prima non ce l'ha, e chi non ce l'ha continua a seguire il
+ * punto focale della galleria, quindi nessun template esistente si sposta.
+ */
+function impostaFocale(index, valore) {
+  const updated = (props.modelValue || []).map((img, i) => (
+    i === index ? { ...img, focal: String(valore || '') } : img
+  ));
+  emit('update:modelValue', updated);
+}
+
+/* Torna a seguire la galleria: si TOGLIE la chiave, non si scrive il valore
+   della galleria dentro la foto, o cambiando quello globale questa resterebbe
+   indietro senza che si capisca perche'. */
+function azzeraFocale(index) {
+  const updated = (props.modelValue || []).map((img, i) => {
+    if (i !== index) return img;
+    const copia = { ...img };
+    delete copia.focal;
+    return copia;
+  });
+  emit('update:modelValue', updated);
 }
 
 function removeImage(index) {
