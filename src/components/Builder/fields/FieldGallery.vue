@@ -103,7 +103,7 @@
               <button
                 type="button"
                 @click="sostituisci(idx)"
-                class="fg-cmd"
+                class="fg-cmd mb-text-gray-300 hover:mb-text-gray-100"
               >{{ t('Cambia') }}</button>
               <!--
                 L'INQUADRATURA DI QUESTA FOTO, non di tutte.
@@ -116,7 +116,7 @@
                 v-if="puntoFocale && !isVideo(img)"
                 type="button"
                 @click="apriFocale(idx)"
-                class="fg-cmd"
+                class="fg-cmd mb-text-gray-300 hover:mb-text-gray-100"
                 :class="{ 'is-on': !!img.focal, 'is-open': focaleAperta === idx }"
                 :title="img.focal
                   ? t('Inquadratura scelta per questa foto') + ': ' + img.focal
@@ -127,7 +127,7 @@
                 v-if="isVideo(img)"
                 type="button"
                 @click="pickPoster(idx)"
-                class="fg-cmd"
+                class="fg-cmd mb-text-gray-300 hover:mb-text-gray-100"
               >{{ t('Poster') }}</button>
             </div>
           </div>
@@ -155,13 +155,13 @@
             <button
               type="button"
               @click="focaleAperta = null"
-              class="fg-cmd"
+              class="fg-cmd mb-text-gray-300 hover:mb-text-gray-100"
             >{{ t('Chiudi') }}</button>
             <button
               v-if="img.focal"
               type="button"
               @click="azzeraFocale(idx)"
-              class="fg-cmd"
+              class="fg-cmd mb-text-gray-300 hover:mb-text-gray-100"
               :title="t('Torna a seguire il punto focale della galleria')"
             >{{ t('Come la galleria') }}</button>
           </div>
@@ -350,11 +350,17 @@ const props = defineProps({
   /** Accende sottotitolo e testo su ogni immagine. Lo chiede il tile, non il campo. */
   righeExtra: { type: Boolean, default: false },
   /*
-   * Accende l'inquadratura per singola foto. Lo chiede il tile perche' deve
-   * essere il suo RENDER a saperla disegnare: un comando che salva un valore
-   * che poi nessuno guarda e' peggio di un comando che non c'e'.
+   * L'inquadratura per singola foto.
+   *
+   * ⚠️ DEFAULT ACCESO, e non e' una svista. Prima era spento e lo accendeva il
+   * tile passando un flag: quel flag a volte non arrivava, e il comando
+   * spariva senza un errore, senza una traccia, e senza che si potesse capire
+   * da fuori se fosse un problema di stile o di dati. Un comando che c'e' solo
+   * se una catena di quattro passaggi va a buon fine e' un comando che prima o
+   * poi non c'e'. Ora c'e' sempre, e chi non lo vuole passa esplicitamente
+   * :punto-focale="false".
    */
-  puntoFocale: { type: Boolean, default: false },
+  puntoFocale: { type: Boolean, default: true },
   /** Il ritaglio della galleria, per disegnare il pad com'e' davvero. */
   fitGalleria: { type: String, default: 'cover' },
   /** Da dove parte una foto che non ha ancora un'inquadratura sua. */
@@ -793,25 +799,30 @@ function formatDuration(sec) {
 .fg-cmds-pad {
   margin-top: 6px;
 }
+/*
+ * ⚠️ UN TASTO, CON FONDO E CONTORNO, e non una scritta grigia. Due tentativi
+ * sono finiti male proprio qui: prima due scritte attaccate e slavate, poi
+ * (col colore preso da currentColor) due scritte invisibili, perche' quel
+ * colore lo eredita dal tema SCURO mentre il pannello e' bianco. Il colore
+ * arriva quindi dalle classi mb-text-*, che il foglio del tema chiaro rimappa
+ * esplicitamente; da qui vengono solo forma, spaziatura e stato.
+ */
 .fg-cmd {
   appearance: none;
-  border: 1px solid transparent;
-  background: transparent;
-  border-radius: 4px;
-  padding: 2px 6px;
+  border: 1px solid rgba(127, 127, 127, 0.32);
+  background: rgba(127, 127, 127, 0.10);
+  border-radius: 5px;
+  padding: 3px 9px;
   font-size: 11px;
+  font-weight: 500;
   line-height: 1.4;
-  color: currentColor;
-  opacity: 0.7;
   cursor: pointer;
-  /* 0.7 e non meno: a 0.62 il contrasto sul pannello chiaro scende a 4.88, cioe'
-     appena sopra la soglia leggibile. Misurato, non stimato. */
-  transition: opacity 120ms, background-color 120ms, border-color 120ms;
+  white-space: nowrap;
+  transition: background-color 120ms, border-color 120ms, box-shadow 120ms;
 }
 .fg-cmd:hover {
-  opacity: 1;
-  background: rgba(127, 127, 127, 0.14);
-  border-color: rgba(127, 127, 127, 0.28);
+  background: rgba(127, 127, 127, 0.2);
+  border-color: rgba(127, 127, 127, 0.5);
 }
 .fg-cmd:focus-visible {
   outline: 2px solid var(--olo-color-primary, #e1474f);
@@ -820,13 +831,14 @@ function formatDuration(sec) {
 }
 /* Questa foto ha un'inquadratura sua: si vede scorrendo l'elenco, senza aprire niente. */
 .fg-cmd.is-on {
-  opacity: 1;
-  font-weight: 600;
-  border-color: rgba(127, 127, 127, 0.35);
+  font-weight: 700;
+  border-color: var(--olo-ui-accent, #e8622a);
+  box-shadow: inset 0 0 0 1px var(--olo-ui-accent, #e8622a);
 }
+/* Il pad di questa riga e' aperto adesso. */
 .fg-cmd.is-open {
-  opacity: 1;
-  background: rgba(127, 127, 127, 0.16);
-  border-color: rgba(127, 127, 127, 0.4);
+  background: var(--olo-ui-accent, #e8622a);
+  border-color: var(--olo-ui-accent, #e8622a);
+  color: #fff !important;
 }
 </style>

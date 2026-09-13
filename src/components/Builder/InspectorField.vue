@@ -293,7 +293,7 @@
         v-else-if="field.type === 'gallery'"
         :modelValue="effectiveValue"
         :righe-extra="!!field.righeExtra"
-        :punto-focale="!!field.puntoFocale"
+        :punto-focale="field.puntoFocale !== false"
         :fit-galleria="contestoGalleria.fit"
         :posizione-galleria="contestoGalleria.pos"
         @update:modelValue="onFieldUpdate($event)"
