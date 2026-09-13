@@ -99,11 +99,11 @@
               Il comando primario non sta dentro un hover: chi non sa che
               l'anteprima si clicca non ci passa sopra il mouse per scoprirlo.
             -->
-            <div class="mb-flex mb-gap-2.5">
+            <div class="fg-cmds">
               <button
                 type="button"
                 @click="sostituisci(idx)"
-                class="mb-text-[10px] mb-text-gray-400 hover:mb-text-gray-200 mb-transition-colors"
+                class="fg-cmd"
               >{{ t('Cambia') }}</button>
               <!--
                 L'INQUADRATURA DI QUESTA FOTO, non di tutte.
@@ -116,19 +116,18 @@
                 v-if="puntoFocale && !isVideo(img)"
                 type="button"
                 @click="apriFocale(idx)"
-                class="mb-text-[10px] mb-transition-colors"
-                :class="img.focal
-                  ? 'mb-text-gray-200 hover:mb-text-white'
-                  : 'mb-text-gray-400 hover:mb-text-gray-200'"
+                class="fg-cmd"
+                :class="{ 'is-on': !!img.focal, 'is-open': focaleAperta === idx }"
                 :title="img.focal
                   ? t('Inquadratura scelta per questa foto') + ': ' + img.focal
                   : t('Segue la posizione della galleria')"
-              >{{ img.focal ? t('Inquadratura ●') : t('Inquadratura') }}</button>
+              >{{ t('Inquadratura') }}</button>
               <!-- Bottone poster per video -->
               <button
                 v-if="isVideo(img)"
+                type="button"
                 @click="pickPoster(idx)"
-                class="mb-text-[10px] mb-text-gray-400 hover:mb-text-gray-200 mb-transition-colors"
+                class="fg-cmd"
               >{{ t('Poster') }}</button>
             </div>
           </div>
@@ -152,17 +151,17 @@
             :object-fit="fitGalleria"
             @update:modelValue="impostaFocale(idx, $event)"
           />
-          <div class="mb-flex mb-gap-3 mb-mt-1.5">
+          <div class="fg-cmds fg-cmds-pad">
             <button
               type="button"
               @click="focaleAperta = null"
-              class="mb-text-[10px] mb-text-gray-400 hover:mb-text-gray-200 mb-transition-colors"
+              class="fg-cmd"
             >{{ t('Chiudi') }}</button>
             <button
               v-if="img.focal"
               type="button"
               @click="azzeraFocale(idx)"
-              class="mb-text-[10px] mb-text-gray-400 hover:mb-text-gray-200 mb-transition-colors"
+              class="fg-cmd"
               :title="t('Torna a seguire il punto focale della galleria')"
             >{{ t('Come la galleria') }}</button>
           </div>
@@ -769,5 +768,65 @@ function formatDuration(sec) {
 <style scoped>
 .fg-grip:active {
   cursor: grabbing;
+}
+
+/*
+ * I COMANDI DELLA RIGA, con uno stile loro e non con le utility.
+ *
+ * Erano scritti con le classi del tema scuro (text-gray-400 a 10 px): nel
+ * pannello chiaro quel grigio diventa #888 su bianco e si legge a fatica, e i
+ * due comandi finivano appiccicati, «CambiaInquadratura», perche' la spaziatura
+ * arrivava da una utility che li' non arrivava mai. Un comando che non si legge
+ * e' un comando che non c'e', ed e' gia' successo una volta con questa riga.
+ *
+ * Qui il colore viene dal testo del pannello (currentColor smorzato), quindi
+ * funziona sul chiaro e sullo scuro senza due serie di classi da tenere
+ * allineate, e la spaziatura e' scritta accanto a chi la usa.
+ */
+.fg-cmds {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+.fg-cmds-pad {
+  margin-top: 6px;
+}
+.fg-cmd {
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: currentColor;
+  opacity: 0.7;
+  cursor: pointer;
+  /* 0.7 e non meno: a 0.62 il contrasto sul pannello chiaro scende a 4.88, cioe'
+     appena sopra la soglia leggibile. Misurato, non stimato. */
+  transition: opacity 120ms, background-color 120ms, border-color 120ms;
+}
+.fg-cmd:hover {
+  opacity: 1;
+  background: rgba(127, 127, 127, 0.14);
+  border-color: rgba(127, 127, 127, 0.28);
+}
+.fg-cmd:focus-visible {
+  outline: 2px solid var(--olo-color-primary, #e1474f);
+  outline-offset: 1px;
+  opacity: 1;
+}
+/* Questa foto ha un'inquadratura sua: si vede scorrendo l'elenco, senza aprire niente. */
+.fg-cmd.is-on {
+  opacity: 1;
+  font-weight: 600;
+  border-color: rgba(127, 127, 127, 0.35);
+}
+.fg-cmd.is-open {
+  opacity: 1;
+  background: rgba(127, 127, 127, 0.16);
+  border-color: rgba(127, 127, 127, 0.4);
 }
 </style>
