@@ -341,7 +341,7 @@
         <div v-else-if="activeTab === 'Stile'" class="mb-space-y-4" role="tabpanel" id="inspector-panel-Stile" :aria-labelledby="'inspector-tab-Stile'">
           <StyleFieldsRenderer
             :tileStyle="tileStyle"
-            :tileFields="elementDef?.styleFields || []"
+            :tileFields="campiStileElemento"
             :tileSettings="selectedTile.settings || {}"
             :tileType="selectedTile.type"
             :searchQuery="settingsSearch"
@@ -1878,7 +1878,7 @@ const searchTabCounts = computed(() => {
   if (!q) return {};
   const styleFields = [
     ...styleFieldsBase(selectedTile.value?.type),
-    ...(elementDef.value?.styleFields || []),
+    ...campiStileElemento.value,
   ];
   return {
     Contenuto: countSearchMatches(elementFields.value, q),
@@ -2214,6 +2214,42 @@ const viewports = [
 const selectedTile = computed(() => {
   if (!builderStore.selectedTileId) return null;
   return tilesStore.getTileById(builderStore.selectedTileId);
+});
+
+/*
+ * LA COLONNA DENTRO UNA GRIGLIA NON HA UNA LARGHEZZA SUA.
+ *
+ * Una riga in modalita' CSS Grid distribuisce le colonne con
+ * `grid-template-columns`: la larghezza la decide la RIGA, e i quattro campi
+ * «Larghezza telefono/tablet/desktop/schermo grande» della colonna appartengono
+ * all'altra modalita', quella Flex. Restavano visibili lo stesso, e toccarne
+ * uno dava a quella colonna una larghezza fissa dentro la cella: il blocco si
+ * scomponeva, senza che niente dicesse perche'. Su una pagina con dieci
+ * colonne in griglia il risultato e' che «si rompe tutto appena si tocca la
+ * larghezza», che e' esattamente come e' stato segnalato.
+ *
+ * Il percorso degli antenati include l'elemento stesso in fondo, quindi il
+ * genitore e' il penultimo. Le colonne legacy (`columns_data`) sono nodi
+ * sintetici e portano la loro riga in `_parentRow`.
+ */
+const colonnaInGriglia = computed(() => {
+  const sel = selectedTile.value;
+  if (!sel || sel.type !== 'column') return false;
+  const percorso = ancestorPath.value || [];
+  const riga = sel._parentRow || percorso[percorso.length - 2];
+  return !!riga && riga.type === 'row' && (riga.settings?.layout_mode === 'grid');
+});
+
+const LARGHEZZE_COLONNA = ['width_default', 'width_small', 'width_medium', 'width_large'];
+
+/*
+ * Tolti i quattro campi, il separatore «Larghezza responsive» resta senza
+ * niente sotto e sparisce da solo: groupBySeparator scarta le sezioni vuote.
+ */
+const campiStileElemento = computed(() => {
+  const base = elementDef.value?.styleFields || [];
+  if (!colonnaInGriglia.value) return base;
+  return base.filter(f => !LARGHEZZE_COLONNA.includes(f.key));
 });
 
 const tileZone = computed(() => {
