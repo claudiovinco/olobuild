@@ -2,6 +2,7 @@
  * Composable for WordPress Media Library integration.
  * Requires wp_enqueue_media() in PHP.
  */
+import { t } from '@/i18n';
 import { useToast } from './useToast.js';
 
 export function useMediaPicker() {

@@ -16,28 +16,48 @@
               <circle cx="2" cy="12" r="1.2"/><circle cx="6" cy="12" r="1.2"/>
             </svg>
           </div>
-          <!-- Preview: immagine o video -->
-          <div v-if="isVideo(img)" class="mb-relative mb-w-16 mb-h-16 mb-shrink-0 mb-rounded mb-border mb-border-gray-600 mb-overflow-hidden mb-bg-gray-800">
+          <!--
+            L'ANTEPRIMA E' IL PULSANTE PER CAMBIARE IL MEDIA (v1.4.425).
+
+            Prima, una foto gia' messa si poteva solo togliere e rimettere in
+            coda: si perdevano la posizione, la didascalia e, sulla Pro
+            Gallery, il sottotitolo e il testo. Chi cercava «sostituisci» non
+            trovava niente e concludeva che la funzione fosse sparita, mentre
+            non c'era mai stata. Cliccare qui cambia IL SOLO media e lascia
+            intatto tutto il resto della riga.
+          -->
+          <button
+            type="button"
+            @click="sostituisci(idx)"
+            :title="t('Cambia questo media')"
+            class="mb-relative mb-block mb-w-16 mb-h-16 mb-shrink-0 mb-rounded mb-border mb-border-gray-600 mb-overflow-hidden mb-bg-gray-800 mb-p-0"
+          >
+            <template v-if="isVideo(img)">
+              <img
+                v-if="img.poster"
+                :src="img.poster"
+                :alt="img.alt || ''"
+                class="mb-w-full mb-h-full mb-object-cover"
+              />
+              <div v-else class="mb-w-full mb-h-full mb-flex mb-items-center mb-justify-center mb-text-gray-500 mb-text-[9px]">{{ t('Video') }}</div>
+              <!-- Play icon overlay -->
+              <div class="mb-absolute mb-inset-0 mb-flex mb-items-center mb-justify-center mb-pointer-events-none">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white" opacity="0.85"><polygon points="8,5 19,12 8,19"/></svg>
+              </div>
+              <!-- Badge YT/VM -->
+              <span v-if="embedBadge(img)" class="mb-absolute mb-top-0.5 mb-right-0.5 mb-bg-black/70 mb-text-white mb-text-[8px] mb-px-1 mb-rounded mb-leading-tight">{{ embedBadge(img) }}</span>
+            </template>
             <img
-              v-if="img.poster"
-              :src="img.poster"
+              v-else
+              :src="img.url"
               :alt="img.alt || ''"
               class="mb-w-full mb-h-full mb-object-cover"
             />
-            <div v-else class="mb-w-full mb-h-full mb-flex mb-items-center mb-justify-center mb-text-gray-500 mb-text-[9px]">{{ t('Video') }}</div>
-            <!-- Play icon overlay -->
-            <div class="mb-absolute mb-inset-0 mb-flex mb-items-center mb-justify-center mb-pointer-events-none">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="white" opacity="0.85"><polygon points="8,5 19,12 8,19"/></svg>
-            </div>
-            <!-- Badge YT/VM -->
-            <span v-if="embedBadge(img)" class="mb-absolute mb-top-0.5 mb-right-0.5 mb-bg-black/70 mb-text-white mb-text-[8px] mb-px-1 mb-rounded mb-leading-tight">{{ embedBadge(img) }}</span>
-          </div>
-          <img
-            v-else
-            :src="img.url"
-            :alt="img.alt || ''"
-            class="mb-w-16 mb-h-16 mb-object-cover mb-rounded mb-border mb-border-gray-600 mb-shrink-0"
-          />
+            <!-- La matita si accende passandoci sopra; il comando scritto sta sotto, sempre visibile. -->
+            <span class="mb-absolute mb-inset-0 mb-flex mb-items-center mb-justify-center mb-bg-black/50 mb-opacity-0 group-hover:mb-opacity-100 mb-transition-opacity mb-pointer-events-none">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            </span>
+          </button>
 
           <div class="mb-flex-1 mb-min-w-0 mb-space-y-1">
             <input
@@ -75,12 +95,23 @@
                 class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200 mb-placeholder-gray-500"
               />
             </template>
-            <!-- Bottone poster per video -->
-            <button
-              v-if="isVideo(img)"
-              @click="pickPoster(idx)"
-              class="mb-text-[10px] mb-text-gray-400 hover:mb-text-gray-200 mb-transition-colors"
-            >{{ t('Poster') }}</button>
+            <!--
+              Il comando primario non sta dentro un hover: chi non sa che
+              l'anteprima si clicca non ci passa sopra il mouse per scoprirlo.
+            -->
+            <div class="mb-flex mb-gap-2.5">
+              <button
+                type="button"
+                @click="sostituisci(idx)"
+                class="mb-text-[10px] mb-text-gray-400 hover:mb-text-gray-200 mb-transition-colors"
+              >{{ t('Cambia') }}</button>
+              <!-- Bottone poster per video -->
+              <button
+                v-if="isVideo(img)"
+                @click="pickPoster(idx)"
+                class="mb-text-[10px] mb-text-gray-400 hover:mb-text-gray-200 mb-transition-colors"
+              >{{ t('Poster') }}</button>
+            </div>
           </div>
           <button
             @click="removeImage(idx)"
@@ -106,7 +137,7 @@
         Video
       </button>
       <button
-        @click="showEmbedInput = !showEmbedInput"
+        @click="apriEmbed()"
         class="mb-flex-1 mb-py-1.5 mb-px-2 mb-rounded-md mb-text-xs mb-transition-colors mb-border"
         :class="showEmbedInput
           ? 'mb-bg-gray-600 mb-border-gray-500 mb-text-white'
@@ -142,7 +173,7 @@
         class="mb-px-3 mb-py-1.5 mb-rounded-md mb-text-xs mb-text-white mb-transition-colors"
         style="background: var(--olo-ui-accent, #e8622a);"
       >
-        {{ t('Aggiungi') }}
+        {{ sostituendo === null ? t('Aggiungi') : t('Sostituisci') }}
       </button>
     </div>
 
@@ -273,7 +304,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['update:modelValue']);
 
-const { openGallery, openVideo, openPosterImage } = useMediaPicker();
+const { openSingleImage, openGallery, openVideo, openPosterImage } = useMediaPicker();
 
 // Riordino immagini col motore DnD custom (v1.4.387, ex vuedraggable).
 const { itemDraggable, itemDrop } = useListSort({
@@ -328,6 +359,14 @@ function addVideo() {
 // ── Embed YouTube/Vimeo ──
 const showEmbedInput = ref(false);
 const embedUrl = ref('');
+/** L'indice della riga che il pannello sta sostituendo, o null se aggiunge. */
+const sostituendo = ref(null);
+
+function apriEmbed() {
+  sostituendo.value = null;
+  embedUrl.value = '';
+  showEmbedInput.value = !showEmbedInput.value;
+}
 
 function addEmbedVideo() {
   const raw = embedUrl.value.trim();
@@ -340,13 +379,54 @@ function addEmbedVideo() {
   }
 
   const current = props.modelValue || [];
-  emit('update:modelValue', [
-    ...current,
-    { url: '', alt: '', id: 0, caption: '', type: 'video', embed: raw, poster },
-  ]);
+  if (sostituendo.value === null) {
+    emit('update:modelValue', [
+      ...current,
+      { url: '', alt: '', id: 0, caption: '', type: 'video', embed: raw, poster },
+    ]);
+  } else {
+    // Il video caricato che c'era prima se ne va con url e id: una riga con
+    // un embed E un file resterebbe ambigua per chi la disegna.
+    const i0 = sostituendo.value;
+    emit('update:modelValue', current.map((it, i) => (
+      i === i0 ? { ...it, type: 'video', embed: raw, poster: poster || it.poster || '', url: '', id: 0 } : it
+    )));
+  }
 
+  sostituendo.value = null;
   embedUrl.value = '';
   showEmbedInput.value = false;
+}
+
+/**
+ * CAMBIA IL MEDIA DI UNA RIGA E BASTA.
+ *
+ * Didascalia, sottotitolo, testo, poster scelto a mano e posizione nella
+ * galleria restano dov'erano: e' tutto il senso del comando, perche' «togli e
+ * rimetti in coda» li perdeva tutti. Un'immagine resta un'immagine e un video
+ * resta un video, cosi' chi clicca sa gia' cosa gli si aprira'.
+ */
+function sostituisci(idx) {
+  const riga = (props.modelValue || [])[idx];
+  if (!riga) return;
+
+  // Un embed non sta nella libreria di WordPress: si cambia il suo indirizzo.
+  if (riga.embed) {
+    embedUrl.value = riga.embed;
+    sostituendo.value = idx;
+    showEmbedInput.value = true;
+    return;
+  }
+
+  const apri = isVideo(riga) ? openVideo : openSingleImage;
+  apri((m) => {
+    const scelto = { url: m.url, alt: m.alt || '', id: m.id };
+    // Il poster scelto a mano non si perde per un cambio di video.
+    if (isVideo(riga)) scelto.poster = riga.poster || m.poster || '';
+    emit('update:modelValue', (props.modelValue || []).map((it, i) => (
+      i === idx ? { ...it, ...scelto } : it
+    )));
+  });
 }
 
 // ── Poster picker ──
