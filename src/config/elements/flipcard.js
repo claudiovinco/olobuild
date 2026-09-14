@@ -167,7 +167,7 @@ export default {
     { key: 'front_image_position', label: t('Posizione contenuto'), type: 'object-position',
       contextKeys: { src: 'front_image', fit: 'front_image_fit' },
       condition: { field: 'front_image', op: 'notEmpty' } },
-    { key: 'front_image_padding', label: t('Padding immagine (px)'), type: 'range', min: 0, max: 40, step: 1,
+    { key: 'front_image_padding', label: t('Padding immagine (px)'), type: 'spacing', min: 0, max: 60,
       condition: { field: 'front_image', op: 'notEmpty' } },
     withHover({ key: 'front_image_radius', label: t('Raggio immagine (px)'), type: 'border-radius',
       condition: { field: 'front_image', op: 'notEmpty' } }),
@@ -196,7 +196,7 @@ export default {
     { key: 'back_image_position', label: t('Posizione contenuto'), type: 'object-position',
       contextKeys: { src: 'back_image', fit: 'back_image_fit' },
       condition: { field: 'back_image', op: 'notEmpty' } },
-    { key: 'back_image_padding', label: t('Padding immagine (px)'), type: 'range', min: 0, max: 40, step: 1,
+    { key: 'back_image_padding', label: t('Padding immagine (px)'), type: 'spacing', min: 0, max: 60,
       condition: { field: 'back_image', op: 'notEmpty' } },
     withHover({ key: 'back_image_radius', label: t('Raggio immagine (px)'), type: 'border-radius',
       condition: { field: 'back_image', op: 'notEmpty' } }),
@@ -249,7 +249,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:   'title_size',
@@ -259,7 +258,6 @@ export default {
       sizeMin: 16, sizeMax: 40, sizeStep: 1,
     },
     { type: 'typography', label: t('Descrizione'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'desc_size',
@@ -268,7 +266,6 @@ export default {
       sizeMin: 12, sizeMax: 20, sizeStep: 1,
     },
     { type: 'typography', label: t('Pulsante CTA'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'back_cta_color',
       },

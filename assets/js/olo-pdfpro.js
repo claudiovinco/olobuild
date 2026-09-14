@@ -1646,9 +1646,9 @@
       if (hs.btn_color) link.style.color = hs.btn_color;
 
       // Padding
-      var pv = hs.btn_padding_v || 6;
-      var ph = hs.btn_padding_h || 14;
-      link.style.padding = pv + 'px ' + ph + 'px';
+      // Padding a 4 lati dal controllo standard; ripiego sul vecchio schema v/h.
+      link.style.padding = hs.btn_padding_css
+        || ((hs.btn_padding_v || 6) + 'px ' + (hs.btn_padding_h || 14) + 'px');
 
       // Bordo arrotondato
       if (hs.btn_radius && hs.btn_radius !== '0px') {

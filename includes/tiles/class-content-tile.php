@@ -119,6 +119,10 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
         $image_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['image_radius_hover'] ?? null );
         $border_width = absint( $s['image_border_width'] );
         $border_color = $this->safe_color_css( $s['image_border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
+        $image_border_decl = Olobuild_Tile_Utils::border_css(
+            $s['image_border'] ?? null,
+            [ 'width' => $border_width, 'color' => $border_color ]
+        );
         $image_gap    = absint( $s['image_gap'] );
         $hover_effect = $s['hover_effect'] ?? 'none';
         $link_url     = $s['link_url'] ?? '';
@@ -182,7 +186,7 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
                 object-position: <?php echo esc_attr( $obj_pos ); ?>;
                 border-radius: <?php echo $image_radius; ?>;
                 <?php if ( $border_width > 0 ) : ?>
-                border: <?php echo $border_width; ?>px solid <?php echo $border_color; ?>;
+                <?php echo esc_attr( $image_border_decl ); ?>
                 <?php endif; ?>
             }
             <?php if ( $shadow !== 'none' ) : ?>

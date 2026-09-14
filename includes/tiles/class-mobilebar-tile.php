@@ -51,6 +51,8 @@ class Olobuild_Mobilebar_Tile extends Olobuild_Tile_Base {
         // Barra = superficie scura del brand (navy secondario) invece di navy hardcodato
         $bar_bg      = $this->safe_color_css( $s['bar_bg'] ) ?: 'var(--olo-color-secondary, #16263d)';
         $bar_pad     = intval( $s['bar_padding'] );
+        // Padding del contenitore (controllo «Padding (px)», prima non collegato).
+        $root_pad_sides = Olobuild_Tile_Utils::spacing_sides( $s['tile_padding'] ?? null, [], [ 0, 0, 0, 0 ] );
         $bar_shadow  = ! empty( $s['bar_shadow'] );
         $ham_color   = $this->safe_color_css( $s['hamburger_color'] ) ?: '#fff';
         $ham_size    = intval( $s['hamburger_size'] ) ?: 28;
@@ -464,7 +466,7 @@ class Olobuild_Mobilebar_Tile extends Olobuild_Tile_Base {
         // Determine hamburger span count
         $ham_spans = ( $ham_style === 'dot-grid' ) ? 9 : 3;
         ?>
-        <div class="olo-mobilebar <?php echo esc_attr( $uid ); ?>" data-uid="<?php echo esc_attr( $uid ); ?>">
+        <div class="olo-mobilebar <?php echo esc_attr( $uid ); ?>" data-uid="<?php echo esc_attr( $uid ); ?>"<?php if ( array_sum( $root_pad_sides ) > 0 ) : ?> style="padding:<?php echo esc_attr( Olobuild_Tile_Utils::sides_css( $root_pad_sides ) ); ?>"<?php endif; ?>>
 
             <!-- Bar -->
             <div class="olo-mb-bar">

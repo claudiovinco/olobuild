@@ -93,7 +93,6 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Pulsante'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:   'btn_font_size',
@@ -112,8 +111,8 @@ export default {
     { type: 'separator', label: t('Stile pulsante') },
     // withHover: l'occhio scrive sulla chiave legacy btn_hover_bg (formato dati invariato).
     withHover({ key: 'btn_bg', label: t('Sfondo'), type: 'color' }, { hoverKey: 'btn_hover_bg' }),
-    { key: 'btn_border_width', label: t('Bordo (px)'), type: 'range', min: 0, max: 4 },
-    { key: 'btn_border_color', label: t('Colore bordo'), type: 'color' },
+    { key: 'btn_border', label: t('Bordo pulsante'), type: 'border',
+      legacyKeys: { width: 'btn_border_width', color: 'btn_border_color' } },
     withHover({ key: 'btn_border_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 48 },
     { key: 'btn_align', label: t('Allineamento'), type: 'select', options: [

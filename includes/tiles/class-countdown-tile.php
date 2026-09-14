@@ -97,7 +97,8 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
         $lbl_fw  = absint( $s['label_font_weight'] );
         $sep_fs  = absint( $s['separator_font_size'] );
         $min_w   = absint( $s['item_min_width'] );
-        $pad = Olobuild_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 32, 32 );
+        $pad_sides_all = Olobuild_Tile_Utils::spacing_sides( $s['tile_padding'] ?? $s['padding'] ?? 32, [], [ 32, 32, 32, 32 ] );
+        $pad           = Olobuild_Tile_Utils::sides_css( $pad_sides_all );
         // bg_color è un controllo legacy ridondante con `bg` (sfondo creativo universale).
         // Lo applichiamo solo se settato esplicitamente, NON come default vuoto — altrimenti
         // produrremmo `background: ;` (invalido) e nasconderemmo il bg universale applicato
@@ -110,7 +111,9 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
         $item_bg     = $this->safe_color_css( $s['item_bg_color'] ?? '' );
         // Dual-format: numero legacy ('8') O oggetto {tl,tr,br,bl} dal type 'border-radius'. '' se zero/vuoto.
         $item_radius_css = $this->build_border_radius_css( $s['item_radius'] ?? 0 );
-        $item_pad    = absint( $s['item_padding'] ?? 0 );
+        $item_pad_sides = Olobuild_Tile_Utils::spacing_sides( $s['item_padding'] ?? 0, [], [ 0, 0, 0, 0 ] );
+        $item_pad       = Olobuild_Tile_Utils::sides_css( $item_pad_sides );
+        $item_pad_any   = array_sum( $item_pad_sides ) > 0;
 
         ob_start();
         ?>
@@ -122,7 +125,9 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
                 align-items: <?php echo $is_inline ? 'baseline' : 'center'; ?>;
                 flex-wrap: <?php echo $is_inline ? 'nowrap' : 'wrap'; ?>;
                 gap: <?php echo $is_inline ? '4px' : '8px'; ?>;
-                padding: <?php echo $is_inline ? max(8, round((is_numeric($pad) ? (float)$pad : 32) / 2)) : $pad; ?>px;
+                padding: <?php echo esc_attr( $is_inline
+                    ? Olobuild_Tile_Utils::sides_css( array_map( static function ( $v ) { return max( 8, (int) round( $v / 2 ) ); }, $pad_sides_all ) )
+                    : $pad ); ?>;
                 <?php if ( $bg ) : ?>background: <?php echo $bg; ?>;<?php endif; ?>
                 color: <?php echo $fg; ?>;
             }
@@ -130,7 +135,7 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
                 text-align: center;
                 <?php if ( $item_bg ) : ?>background: <?php echo $item_bg; ?>;<?php endif; ?>
                 <?php if ( $item_radius_css ) : ?>border-radius: <?php echo $item_radius_css; ?>;<?php endif; ?>
-                <?php if ( $item_pad > 0 ) : ?>padding: <?php echo $item_pad; ?>px;<?php endif; ?>
+                <?php if ( $item_pad_any ) : ?>padding: <?php echo esc_attr( $item_pad ); ?>;<?php endif; ?>
                 <?php if ( ! $is_inline ) : ?>
                 min-width: <?php echo $min_w; ?>px;
                 <?php else : ?>
@@ -303,14 +308,17 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
         $sep_fs  = absint( $s['separator_font_size'] );
         // Bug pre-3.57.18: usava $s['padding'] che era stato sostituito da $s['tile_padding']
         // (oggetto spacing). Risultato: padding sempre 0 in uikit-mode. Allineiamo a render_custom.
-        $pad = Olobuild_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 32, 32 );
+        $pad_sides_all = Olobuild_Tile_Utils::spacing_sides( $s['tile_padding'] ?? $s['padding'] ?? 32, [], [ 32, 32, 32, 32 ] );
+        $pad           = Olobuild_Tile_Utils::sides_css( $pad_sides_all );
         $bg      = $this->safe_color_css( $s['bg_color'] ?? '' );
         $fg      = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $accent  = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $item_bg     = $this->safe_color_css( $s['item_bg_color'] ?? '' );
         // Dual-format: numero legacy ('8') O oggetto {tl,tr,br,bl} dal type 'border-radius'. '' se zero/vuoto.
         $item_radius_css = $this->build_border_radius_css( $s['item_radius'] ?? 0 );
-        $item_pad    = absint( $s['item_padding'] ?? 0 );
+        $item_pad_sides = Olobuild_Tile_Utils::spacing_sides( $s['item_padding'] ?? 0, [], [ 0, 0, 0, 0 ] );
+        $item_pad       = Olobuild_Tile_Utils::sides_css( $item_pad_sides );
+        $item_pad_any   = array_sum( $item_pad_sides ) > 0;
 
         $units = [];
         if ( $s['show_days'] )    $units[] = [ 'cls' => 'uk-countdown-days',    'label' => $s['label_days'] ];
@@ -323,14 +331,14 @@ class Olobuild_Countdown_Tile extends Olobuild_Tile_Base {
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: absint() for every size/weight, safe_color_css() whitelist for every colour, Olobuild_Tile_Utils::spacing_css()/build_border_radius_css() (integer-forced); uid is generated internally. ?>
         <style>
             .<?php echo $uid; ?> {
-                padding: <?php echo $pad; ?>px;
+                padding: <?php echo esc_attr( $pad ); ?>;
                 <?php if ( $bg ) : ?>background: <?php echo $bg; ?>;<?php endif; ?>
                 color: <?php echo $fg; ?>;
             }
             .<?php echo $uid; ?> .uk-countdown > div > div:not(.uk-countdown-separator) {
                 <?php if ( $item_bg ) : ?>background: <?php echo $item_bg; ?>;<?php endif; ?>
                 <?php if ( $item_radius_css ) : ?>border-radius: <?php echo $item_radius_css; ?>;<?php endif; ?>
-                <?php if ( $item_pad > 0 ) : ?>padding: <?php echo $item_pad; ?>px;<?php endif; ?>
+                <?php if ( $item_pad_any ) : ?>padding: <?php echo esc_attr( $item_pad ); ?>;<?php endif; ?>
             }
             .<?php echo $uid; ?> .uk-countdown-number {
                 font-size: <?php echo $num_fs; ?>px;

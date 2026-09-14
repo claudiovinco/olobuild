@@ -97,7 +97,8 @@ class Olobuild_Asciiviz_Tile extends Olobuild_Tile_Base {
         $ls      = max( 0.0, min( 6.0, floatval( $s['letter_spacing'] ) ) );
         // Dual-format: numero legacy ("18") E oggetto {tl,tr,br,bl} dal type 'border-radius'.
         $radius  = $this->build_border_radius_css( $s['radius'] ) ?: '0px';
-        $pad     = max( 0, min( 80, intval( $s['padding'] ) ) );
+        $pad_sides = Olobuild_Tile_Utils::spacing_sides( $s['padding'] ?? 0, [], [ 0, 0, 0, 0 ] );
+        $pad       = max( 0, min( 80, max( $pad_sides ) ) );
 
         // ── Player ──
         $show_player    = ! empty( $s['show_player'] );
@@ -172,7 +173,7 @@ class Olobuild_Asciiviz_Tile extends Olobuild_Tile_Base {
                 color: <?php echo $color; ?>;
                 white-space: pre;
                 margin: 0;
-                padding: <?php echo $pad; ?>px <?php echo $pad; ?>px 8px;
+                padding: <?php echo (int) $pad_sides['top']; ?>px <?php echo (int) $pad_sides['right']; ?>px 8px <?php echo (int) $pad_sides['left']; ?>px;
                 overflow: hidden;
                 <?php if ( $glow > 0 ) : ?>
                 text-shadow: 0 0 <?php echo $glow; ?>px <?php echo $color; ?>;

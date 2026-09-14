@@ -76,6 +76,7 @@
 
 <script setup>
 import { t } from '@/i18n';
+import { borderColorOf } from '@/composables/useBoxModel';
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -150,14 +151,14 @@ const linkStyle = computed(() => {
 
 const commentBorderStyle = computed(() => {
   return {
-    borderBottom: '1px solid ' + (s.value.border_color || 'var(--olo-color-border, #e5e7eb)'),
+    borderBottom: '1px solid ' + (borderColorOf(s.value.border_color, 'var(--olo-color-border, #e5e7eb)')),
   };
 });
 
 const formStyle = computed(() => {
   const st = {};
   if (s.value.form_background) st.background = s.value.form_background;
-  st.border = '1px solid ' + (s.value.border_color || 'var(--olo-color-border, #e5e7eb)');
+  st.border = '1px solid ' + (borderColorOf(s.value.border_color, 'var(--olo-color-border, #e5e7eb)'));
   return st;
 });
 </script>

@@ -18,6 +18,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { borderColorOf } from '@/composables/useBoxModel';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
@@ -76,7 +77,7 @@ const sub = computed(() => s.value.sub_color || '#6c6c7c');
 const glow = computed(() => s.value.glow_color || 'rgba(255,90,95,0.22)');
 const panel = computed(() => s.value.panel_color || '#26262f');
 const line = computed(() => s.value.border_color || 'rgba(255,255,255,0.09)');
-const sline = computed(() => s.value.search_border || 'rgba(255,90,95,0.4)');
+const sline = computed(() => borderColorOf(s.value.search_border, 'rgba(255,90,95,0.4)'));
 const chipCol = computed(() => s.value.chip_color || '#a6a6b4');
 
 const chips = computed(() => String(s.value.chips || '').split(',').map(c => c.trim()).filter(c => c.length));

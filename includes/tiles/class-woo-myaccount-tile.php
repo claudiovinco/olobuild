@@ -63,7 +63,7 @@ class Olobuild_Woo_Myaccount_Tile extends Olobuild_Tile_Base {
         $l_color   = $this->safe_color_css( $s['link_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $btn_bg    = $this->safe_color_css( $s['button_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $btn_c     = $this->safe_color_css( $s['button_color'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
-        $bdr_c     = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $bdr_c     = Olobuild_Tile_Utils::border_color( $s['border_color'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
         $radius_raw = max( 0, Olobuild_Tile_Utils::radius_int( $s['border_radius'] ) );
         $radius    = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
@@ -79,7 +79,7 @@ class Olobuild_Woo_Myaccount_Tile extends Olobuild_Tile_Base {
         #<?php echo $uid; ?> .woocommerce-MyAccount-navigation li a{display:block;padding:10px 16px;color:<?php echo $sb_c; ?>;text-decoration:none;border-radius:<?php echo max(0,$radius_raw-4); ?>px;transition:all .2s}
         #<?php echo $uid; ?> .woocommerce-MyAccount-navigation li.is-active a,
         #<?php echo $uid; ?> .woocommerce-MyAccount-navigation li a:hover{background:<?php echo $sb_act_bg; ?>;color:<?php echo $sb_act_c; ?>}
-        #<?php echo $uid; ?> .woocommerce-MyAccount-content{background:<?php echo $cnt_bg; ?>;border-radius:<?php echo $radius; ?>;padding:24px;border:1px solid <?php echo $bdr_c; ?>}
+        #<?php echo $uid; ?> .woocommerce-MyAccount-content{background:<?php echo $cnt_bg; ?>;border-radius:<?php echo $radius; ?>;padding:24px;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border_color'] ?? null, [ 'width' => 1, 'color' => $bdr_c ] ) ); ?>}
         #<?php echo $uid; ?> .woocommerce-MyAccount-content h2,
         #<?php echo $uid; ?> .woocommerce-MyAccount-content h3{color:<?php echo $h_color; ?>}
         #<?php echo $uid; ?> .woocommerce-MyAccount-content{color:<?php echo $t_color; ?>}

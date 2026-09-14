@@ -192,6 +192,7 @@ import FieldTextShadow from './fields/FieldTextShadow.vue';
 import FieldBackdropFilter from './fields/FieldBackdropFilter.vue';
 import FieldBorderLegacy from './fields/FieldBorderLegacy.vue';
 import { t } from '@/i18n';
+import { evaluateCondition } from '@/utils/fieldCondition';
 import { normalizeSearchQuery, fieldMatchesSearch, sectionLabelMatchesSearch } from '@/utils/inspectorSearch.js';
 
 // Mapping multi-key: oggetto-UI → chiavi piatte salvate su tile.style
@@ -267,31 +268,7 @@ function filterSectionsBySearch(sections) {
 // SOLO se `text_effect === 'typewriter-loop'`). Stessa logica di
 // BuilderInspector.evaluateCondition: senza questa i field tile-specific
 // venivano renderizzati sempre, ignorando la condizione.
-function evaluateCondition(condition, settings) {
-  if (!condition || !settings) return true;
-  const val = settings[condition.field];
-  if (condition.op) {
-    switch (condition.op) {
-      case 'notEmpty': return val !== undefined && val !== null && val !== '' && val !== false;
-      case 'empty':    return val === undefined || val === null || val === '' || val === false;
-      case 'eq':       return val === condition.value;
-      case 'neq':      return val !== condition.value;
-    }
-  }
-  if (condition.operator) {
-    const nv = parseFloat(val);
-    const nc = parseFloat(condition.value);
-    switch (condition.operator) {
-      case '!=': return Array.isArray(condition.value) ? !condition.value.includes(val) : val !== condition.value;
-      case '>':  return nv > nc;
-      case '<':  return nv < nc;
-      case '>=': return nv >= nc;
-      case '<=': return nv <= nc;
-      default:   return val === condition.value;
-    }
-  }
-  return Array.isArray(condition.value) ? condition.value.includes(val) : val === condition.value;
-}
+// evaluateCondition: helper condiviso (@/utils/fieldCondition).
 function isFieldVisible(field, settings) {
   if (field.condition && !evaluateCondition(field.condition, settings)) return false;
   if (typeof field.show === 'function' && !field.show(settings)) return false;

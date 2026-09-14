@@ -237,6 +237,10 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
         $css = '';
 
         $radius  = $this->build_border_radius_css( $s["card_radius"] ?? 8 );
+        // Solo i due angoli superiori (media in cima alla card): serve lo SCALARE,
+        // build_border_radius_css() restituisce gia' la stringa con unita'.
+        $radius_int = Olobuild_Tile_Utils::radius_int( $s["card_radius"] ?? 8 );
+        $radius_top = $radius_int > 0 ? "{$radius_int}px {$radius_int}px 0 0" : "0";
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['card_radius_hover'] ?? null );
         $padding = Olobuild_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['card_padding'] ?? 16, 16 );
         $card_style   = $s['card_style'] ?? 'default';
@@ -269,7 +273,7 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
         }
 
         // Card base
-        $css .= $sel . ' .olo-grid-card{position:relative;border-radius:' . $radius . 'px;' . $shadow_css . 'transition:transform 0.35s cubic-bezier(.4,0,.2,1),box-shadow 0.35s ease,border-color 0.3s,border-radius 400ms cubic-bezier(.4,0,.2,1);}';
+        $css .= $sel . ' .olo-grid-card{position:relative;border-radius:' . $radius . ';' . $shadow_css . 'transition:transform 0.35s cubic-bezier(.4,0,.2,1),box-shadow 0.35s ease,border-color 0.3s,border-radius 400ms cubic-bezier(.4,0,.2,1);}';
         if ( $radius_hover_css !== '' ) {
             $css .= $sel . ' .olo-grid-card:hover{border-radius:' . $radius_hover_css . ' !important;}';
         }
@@ -337,7 +341,7 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
             $obj_pos = 'center center';
         }
 
-        $css .= $sel . ' .olo-grid-media{position:relative;overflow:hidden;border-radius:' . $radius . 'px ' . $radius . 'px 0 0;}';
+        $css .= $sel . ' .olo-grid-media{position:relative;overflow:hidden;border-radius:' . $radius_top . ';}';
         if ( $img_ratio && $img_ratio !== 'auto' ) {
             $css .= $sel . ' .olo-grid-media{aspect-ratio:' . $img_ratio . ';}';
         } elseif ( $img_height > 0 ) {

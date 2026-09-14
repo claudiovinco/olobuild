@@ -189,11 +189,13 @@ class Olobuild_ProductGrid_Tile extends Olobuild_Tile_Base {
 
         // Card (sfondo opzionale) — default trasparente → tile minimale invariata
         $card_bg  = $this->safe_color_css( $s['card_bg'] ?? '' );
-        $card_bd  = $this->safe_color_css( $s['card_border'] ?? '' );
+        $card_bd  = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, '' );
         // Dual-format: numero legacy (range) E oggetto {tl,tr,br,bl}; '' se zero/vuoto.
         $card_rad = $this->build_border_radius_css( $s['card_radius'] ?? 0 );
-        $card_pad = max( 0, intval( $s['card_padding'] ?? 0 ) );
-        $has_card = ( $card_bg !== '' || $card_bd !== '' || $card_rad !== '' || $card_pad > 0 );
+        $card_pad_sides = Olobuild_Tile_Utils::spacing_sides( $s['card_padding'] ?? 0, [], [ 0, 0, 0, 0 ] );
+        $card_pad       = Olobuild_Tile_Utils::sides_css( $card_pad_sides );
+        $card_pad_any   = array_sum( $card_pad_sides ) > 0;
+        $has_card = ( $card_bg !== '' || $card_bd !== '' || $card_rad !== '' || $card_pad_any );
         // Shade swatches
         $shsize = max( 8, intval( $s['shade_size'] ?? 16 ) );
         $shbd   = $this->safe_color_css( $s['shade_border'] ?? '' ) ?: 'rgba(255,255,255,0.3)';
@@ -242,7 +244,7 @@ class Olobuild_ProductGrid_Tile extends Olobuild_Tile_Base {
         $show_filters = $show_filters && ! empty( $chips );
         $f_all  = (string) ( $s['filter_all_label'] ?? 'All' ); if ( $f_all === '' ) { $f_all = 'All'; }
         $f_txt  = $this->safe_color_css( $s['filter_text_color'] ?? '' ) ?: 'var(--olo-color-text, #111827)';
-        $f_bd   = $this->safe_color_css( $s['filter_border_color'] ?? '' ) ?: 'var(--olo-color-border, rgba(0,0,0,.14))';
+        $f_bd   = Olobuild_Tile_Utils::border_color( $s['filter_border_color'] ?? null, 'var(--olo-color-border, rgba(0,0,0,.14))' );
         $f_abg  = $this->safe_color_css( $s['filter_active_bg'] ?? '' ) ?: $pcol;
         $f_acol = $this->safe_color_css( $s['filter_active_color'] ?? '' ) ?: '#ffffff';
 
@@ -267,12 +269,12 @@ class Olobuild_ProductGrid_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?>{font-family:<?php echo $sans; ?>;<?php echo $kit_pos . $kit_decl; ?>}
             .<?php echo $uid; ?> .opg-grid{display:grid;grid-template-columns:repeat(<?php echo (int) $cols; ?>,1fr);gap:<?php echo $gap; ?>;}
             .<?php echo $uid; ?> .opg-filters{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;}
-            .<?php echo $uid; ?> .opg-filter{font-family:<?php echo $sans; ?>;font-weight:500;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:<?php echo $f_txt; ?>;border:1px solid <?php echo $f_bd; ?>;padding:10px 20px;cursor:pointer;background:transparent;transition:all .2s;}
+            .<?php echo $uid; ?> .opg-filter{font-family:<?php echo $sans; ?>;font-weight:500;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:<?php echo $f_txt; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['filter_border_color'] ?? null, [ 'width' => 1, 'color' => $f_bd ] ) ); ?>padding:10px 20px;cursor:pointer;background:transparent;transition:all .2s;}
             .<?php echo $uid; ?> .opg-filter.on,.<?php echo $uid; ?> .opg-filter:hover{background:<?php echo $f_abg; ?>;color:<?php echo $f_acol; ?>;border-color:<?php echo $f_abg; ?>;}
             .<?php echo $uid; ?> .opg-filter:focus-visible{outline:2px solid <?php echo $f_abg; ?>;outline-offset:2px;}
-            .<?php echo $uid; ?> .opg-card{display:flex;flex-direction:column;<?php if ( $has_card ) : ?>background:<?php echo $card_bg ?: 'transparent'; ?>;<?php if ( $card_bd ) : ?>border:1px solid <?php echo $card_bd; ?>;<?php endif; ?>border-radius:<?php echo $card_rad ?: '0px'; ?>;overflow:hidden;<?php endif; ?>}
+            .<?php echo $uid; ?> .opg-card{display:flex;flex-direction:column;<?php if ( $has_card ) : ?>background:<?php echo $card_bg ?: 'transparent'; ?>;<?php if ( $card_bd ) : ?><?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $card_bd ] ) ); ?><?php endif; ?>border-radius:<?php echo $card_rad ?: '0px'; ?>;overflow:hidden;<?php endif; ?>}
             .<?php echo $uid; ?> .opg-mw{position:relative;overflow:hidden;margin-bottom:<?php echo $mw_mb; ?>;display:block;}
-            .<?php echo $uid; ?> .opg-body{display:flex;flex-direction:column;flex:1;<?php if ( $has_card && $card_pad > 0 ) : ?>padding:<?php echo (int) $card_pad; ?>px;<?php endif; ?>}
+            .<?php echo $uid; ?> .opg-body{display:flex;flex-direction:column;flex:1;<?php if ( $has_card && $card_pad_any ) : ?>padding:<?php echo esc_attr( $card_pad ); ?>;<?php endif; ?>}
             .<?php echo $uid; ?> .opg-notes{font-size:13.5px;color:<?php echo $notes_col; ?>;margin:2px 0 14px;line-height:1.5;<?php if ( $notes_mono ) : ?>font-family:<?php echo $mono; ?>;<?php endif; ?>}
             .<?php echo $uid; ?> .opg-roast{display:flex;align-items:center;gap:8px;margin:0 0 18px;}
             .<?php echo $uid; ?> .opg-roast__lbl{font-family:<?php echo $mono; ?>;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:<?php echo $notes_col; ?>;}

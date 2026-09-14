@@ -25,6 +25,7 @@ class Olobuild_Bottombar_Tile extends Olobuild_Tile_Base {
         'font_size'      => 11,
         'letter_spacing' => 2,
         'uppercase'      => true,
+        'typography_preset' => '',
         'font_preset'    => '',
         'padding_y'      => 14,
         'border_top'     => false,
@@ -61,7 +62,11 @@ class Olobuild_Bottombar_Tile extends Olobuild_Tile_Base {
         $fsize   = max( 9, min( 16, absint( $s['font_size'] ) ) );
         $lspace  = max( 0, min( 6, floatval( $s['letter_spacing'] ) ) );
         $upper   = ! empty( $s['uppercase'] );
-        $pad     = max( 6, min( 28, absint( $s['padding_y'] ) ) );
+        $pad_css = Olobuild_Tile_Utils::sides_css( Olobuild_Tile_Utils::spacing_sides(
+            $s['padding'] ?? null,
+            [ 'y' => $s['padding_y'] ?? null ],
+            [ 14, 24, 14, 24 ]
+        ) );
         $zidx    = absint( $s['z_index'] ) ?: 92;
         $border  = '';
         if ( ! empty( $s['border_top'] ) ) {
@@ -69,8 +74,11 @@ class Olobuild_Bottombar_Tile extends Olobuild_Tile_Base {
             $border = 'border-top:1px solid ' . $bcol . ';';
         }
         $font = '';
-        if ( ! empty( $s['font_preset'] ) ) {
-            $font = 'font-family:var(--olo-font-' . sanitize_html_class( $s['font_preset'] ) . '-family, var(--olo-font-family-mono, monospace));';
+        // Chiave standard `typography_preset` (come le altre 144 tile); `font_preset`
+        // resta letto come ripiego per i template salvati prima dell'uniformazione.
+        $preset = $s['typography_preset'] ?? ( $s['font_preset'] ?? '' );
+        if ( ! empty( $preset ) ) {
+            $font = 'font-family:var(--olo-font-' . sanitize_html_class( $preset ) . '-family, var(--olo-font-family-mono, monospace));';
         } else {
             $font = 'font-family:var(--olo-font-family-mono, monospace);';
         }
@@ -79,7 +87,7 @@ class Olobuild_Bottombar_Tile extends Olobuild_Tile_Base {
         ?>
         <div id="<?php echo esc_attr( $uid ); ?>" class="olo-bottombar<?php echo ! empty( $s['hide_mobile'] ) ? ' olo-bb-hide-mobile' : ''; ?>"
              style="position:fixed;bottom:0;left:0;right:0;z-index:<?php echo (int) $zidx; ?>;<?php echo esc_attr( $border ); ?>background:<?php echo esc_attr( $bg ); ?>;color:<?php echo esc_attr( $text ); ?>;
-                    text-align:<?php echo esc_attr( $align ); ?>;padding:<?php echo (int) $pad; ?>px 24px;<?php echo esc_attr( $font ); ?>
+                    text-align:<?php echo esc_attr( $align ); ?>;padding:<?php echo esc_attr( $pad_css ); ?>;<?php echo esc_attr( $font ); ?>
                     font-size:<?php echo (int) $fsize; ?>px;letter-spacing:<?php echo esc_attr( $lspace ); ?>px;<?php echo $upper ? 'text-transform:uppercase;' : ''; ?>line-height:1.4;">
             <?php echo wp_kses_post( $s['content_html'] ); ?>
         </div>

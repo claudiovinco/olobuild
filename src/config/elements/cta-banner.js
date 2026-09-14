@@ -46,8 +46,7 @@ export default {
     cta_radius_hover:        { ...R(999) },
     cta_radius_hover_duration: 300,
     cta_size:                15,
-    cta_padding_y:           18,
-    cta_padding_x:           32,
+    cta_padding:             { top: 18, right: 32, bottom: 18, left: 32 },
 
     // Tipografia
     headline_font_family: 'serif',
@@ -63,7 +62,7 @@ export default {
     banner_radius:                  { ...R(20) },
     banner_radius_hover:            { ...R(20) },
     banner_radius_hover_duration:   400,
-    banner_padding:                 40,
+    banner_padding:                 { top: 40, right: 40, bottom: 40, left: 40 },
   },
 
   // ═══ CONTENUTO ═══════════════════════════════════════════════
@@ -97,7 +96,7 @@ export default {
   styleFields: [
     { type: 'separator', label: t('Banner') },
     { key: 'bg',              label: t('Sfondo'),         type: 'background', showParallax: false },
-    { key: 'banner_padding',  label: t('Padding (px)'),   type: 'range', min: 16, max: 120, step: 4 },
+    { key: 'banner_padding',  label: t('Padding interno (px)'), type: 'spacing', min: 0, max: 160 },
     withHover({ key: 'banner_radius', label: t('Border radius'), type: 'border-radius' }, { hoverKey: 'banner_radius_hover', hoverDurationKey: 'banner_radius_hover_duration' }),
 
     { type: 'separator', label: t('Headline stile') },
@@ -121,8 +120,7 @@ export default {
     withHover({ key: 'cta_bg',    label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta_bg_hover' }),
     withHover({ key: 'cta_color', label: t('Colore testo'), type: 'color' }, { hoverKey: 'cta_color_hover' }),
     { key: 'cta_size',      label: t('Dimensione testo (px)'), type: 'range', min: 12, max: 22, step: 1 },
-    { key: 'cta_padding_y', label: t('Padding verticale (px)'), type: 'range', min: 10, max: 30, step: 1 },
-    { key: 'cta_padding_x', label: t('Padding orizzontale (px)'), type: 'range', min: 16, max: 60, step: 2 },
+    { key: 'cta_padding',   label: t('Padding bottoni (px)'), type: 'spacing', min: 0, max: 80 },
     withHover({ key: 'cta_radius', label: t('Border radius CTA'), type: 'border-radius' }, { hoverKey: 'cta_radius_hover', hoverDurationKey: 'cta_radius_hover_duration' }),
 
     { type: 'separator', label: t('CTA 2 stile') },

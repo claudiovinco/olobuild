@@ -75,8 +75,14 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
         $bc          = $this->safe_color_css( $s['btn_border_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $radius      = Olobuild_Tile_Utils::border_radius( $s['btn_border_radius'] ?? 0 );
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['btn_border_radius_hover'] ?? null );
-        $px          = intval( $s['btn_padding_x'] );
-        $py          = intval( $s['btn_padding_y'] );
+        // Padding pulsante: controllo unico a 4 lati (tile_padding), ripiego legacy x/y.
+        $btn_pad = Olobuild_Tile_Utils::spacing_sides(
+            $s['tile_padding'] ?? null,
+            [ 'y' => $s['btn_padding_y'] ?? null, 'x' => $s['btn_padding_x'] ?? null ],
+            [ 12, 24, 12, 24 ]
+        );
+        $px          = intval( $btn_pad['left'] );
+        $py          = intval( $btn_pad['top'] );
         $fsize       = max( 12, intval( $s['btn_font_size'] ) );
         $fweight     = in_array( $s['btn_font_weight'], [ '400', '500', '600', '700' ] ) ? $s['btn_font_weight'] : '600';
         $align       = in_array( $s['btn_align'], [ 'left', 'center', 'right' ] ) ? $s['btn_align'] : 'center';
@@ -99,7 +105,7 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
                 font-size: <?php echo (int) $fsize; ?>px;
                 font-weight: <?php echo $fweight; ?>;
                 line-height: 1.2;
-                padding: <?php echo (int) $py; ?>px <?php echo (int) $px; ?>px;
+                padding: <?php echo esc_attr( Olobuild_Tile_Utils::sides_css( $btn_pad ) ); ?>;
                 <?php if ( $bw > 0 ) : ?>border: <?php echo (int) $bw; ?>px solid <?php echo $bc; ?>;<?php endif; ?>
                 <?php if ( $radius && $radius !== '0px' ) : ?>border-radius: <?php echo $radius; ?>;<?php endif; ?>
                 cursor: pointer;

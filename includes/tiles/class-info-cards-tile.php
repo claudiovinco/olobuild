@@ -98,7 +98,7 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
 
         $cols       = max( 1, min( 6, absint( $s['columns'] ) ) );
         $items_gap  = max( 0, min( 60, absint( $s['items_gap'] ) ) );
-        $c_pad      = max( 0, min( 80, absint( $s['container_padding'] ) ) );
+        $c_pad      = Olobuild_Tile_Utils::spacing_css( $s['container_padding'] ?? 12, 12 );
         $c_gap      = max( 0, min( 40, absint( $s['container_gap'] ) ) );
         $card_pad   = Olobuild_Tile_Utils::spacing_css( $s['card_padding'] ?? 40, 40 );
         // Border-radius standard Olobuild (4 angoli + hover)
@@ -124,7 +124,7 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
 
         $card_color   = $this->safe_color_css( $s['card_color'] ) ?: '#e5e7eb';
         $accent_color = $this->safe_color_css( $s['card_accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
-        $card_border  = $this->safe_color_css( $s['card_border'] ) ?: '';
+        $card_border  = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, '' );
         // Colori indipendenti (opzionali, fallback retro-compatibile):
         $title_color   = $this->safe_color_css( $s['title_color'] ?? '' ) ?: $accent_color;
         $counter_color = $this->safe_color_css( $s['counter_color'] ?? '' ) ?: $card_color;
@@ -152,12 +152,12 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
         $items = is_array( $s['items'] ) ? $s['items'] : [];
         $hover_effect = in_array( $s['card_hover_effect'] ?? 'none', [ 'none', 'lift', 'scale', 'glow', 'tilt' ], true ) ? ( $s['card_hover_effect'] ?? 'none' ) : 'none';
 
-        $container_style = $container_bg_css . ';' . ( $c_radius ? 'border-radius:' . $c_radius . ';' : '' ) . 'padding:' . $c_pad . 'px;' . ( $c_radius_h ? 'transition:border-radius ' . $c_rdur . 'ms ease;' : '' );
+        $container_style = $container_bg_css . ';' . ( $c_radius ? 'border-radius:' . $c_radius . ';' : '' ) . 'padding:' . $c_pad . ';' . ( $c_radius_h ? 'transition:border-radius ' . $c_rdur . 'ms ease;' : '' );
         $grid_style = 'display:grid;grid-template-columns:repeat(' . $cols . ',minmax(0,1fr));gap:' . $items_gap . 'px;';
 
         // Card style template
         $card_style_base = $card_bg_css_default . ';color:' . $card_color . ';' . ( $card_radius ? 'border-radius:' . $card_radius . ';' : '' ) . 'padding:' . $card_pad . ';position:relative;display:flex;flex-direction:column;min-height:280px;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease' . ( $card_radius_h ? ',border-radius ' . $card_rdur . 'ms ease' : '' ) . ';';
-        if ( $card_border ) $card_style_base .= 'border:1px solid ' . $card_border . ';';
+        if ( $card_border ) $card_style_base .= Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $card_border ] );
 
         ob_start();
         ?>

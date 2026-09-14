@@ -116,13 +116,18 @@ export default {
     { key: 'glow', label: t('Bagliore (glow px)'), type: 'range', min: 0, max: 30, step: 1 },
 
     { type: 'separator', label: t('Tipografia ASCII') },
-    { key: 'font_size', label: t('Dimensione carattere (px)'), type: 'range', min: 6, max: 24, step: 1 },
-    { key: 'line_height', label: t('Interlinea'), type: 'range', min: 0.8, max: 1.6, step: 0.02 },
-    { key: 'letter_spacing', label: t('Spaziatura lettere (px)'), type: 'range', min: 0, max: 6, step: 0.5 },
+    { type: 'typography', label: t('Caratteri'),
+      keys: {
+        size:          'font_size',
+        lineHeight:    'line_height',
+        letterSpacing: 'letter_spacing',
+      },
+      sizeMin: 6, sizeMax: 24, sizeStep: 1,
+    },
 
     { type: 'separator', label: t('Contenitore') },
     { key: 'radius', label: t('Raggio angoli (px)'), type: 'border-radius' },
-    { key: 'padding', label: t('Padding interno (px)'), type: 'range', min: 0, max: 60, step: 2 },
+    { key: 'padding', label: t('Padding interno (px)'), type: 'spacing', min: 0, max: 120 },
 
     ...shadowField,
     ...borderFields(),

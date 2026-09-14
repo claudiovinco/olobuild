@@ -82,7 +82,7 @@ export default {
     { key: 'heading_color', label: t('Colore intestazioni'), type: 'color' },
     { key: 'text_color', label: t('Colore testo'), type: 'color' },
     { key: 'link_color', label: t('Colore link'), type: 'color' },
-    { key: 'border_color', label: t('Colore bordi'), type: 'color' },
+    { key: 'border_color', label: t('Bordi'), type: 'border', legacyWidth: 1 },
     { key: 'button_bg', label: t('Sfondo pulsante'), type: 'color' },
     { key: 'button_color', label: t('Colore testo pulsante'), type: 'color' },
     ...borderFields(),

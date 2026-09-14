@@ -199,7 +199,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Voce nav'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size', 'letterSpacing'],
       letterSpacingUnit: 'em',
       keys: {
@@ -211,7 +210,6 @@ export default {
       sizeMin: 9, sizeMax: 20, sizeStep: 1,
     },
     { type: 'typography', label: t('Titolo pannello'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         tag:    'title_tag',
@@ -222,7 +220,6 @@ export default {
       sizeMin: 16, sizeMax: 56, sizeStep: 1,
     },
     { type: 'typography', label: t('Testo pannello'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'panel_text_size',
@@ -232,15 +229,15 @@ export default {
     },
 
     { type: 'separator', label: t('Nav — Spaziatura') },
-    { key: 'nav_padding_y', label: t('Padding verticale (px)'), type: 'range', min: 4, max: 24, step: 1 },
-    { key: 'nav_padding_x', label: t('Padding orizzontale (px)'), type: 'range', min: 8, max: 32, step: 1 },
+    { key: 'nav_padding', label: t('Padding voce (px)'), type: 'spacing', min: 0, max: 60,
+      legacyKeys: { y: 'nav_padding_y', x: 'nav_padding_x' } },
     { key: 'nav_uppercase', label: t('Maiuscole'), type: 'toggle' },
     { key: 'nav_gap', label: t('Spazio tra voci (px)'), type: 'range', min: 0, max: 32, step: 1 },
     { key: 'nav_radius', label: t('Arrotondamento voce (px)'), type: 'border-radius' },
 
     { type: 'separator', label: t('Nav — Container') },
     { key: 'nav_container_bg', label: t('Sfondo container'), type: 'color' },
-    { key: 'nav_container_padding', label: t('Padding container (px)'), type: 'range', min: 0, max: 24, step: 1 },
+    { key: 'nav_container_padding', label: t('Padding container (px)'), type: 'spacing', min: 0, max: 60 },
     { key: 'nav_container_radius', label: t('Arrotondamento container (px)'), type: 'border-radius' },
 
     { type: 'separator', label: t('Nav — Stati') },

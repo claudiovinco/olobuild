@@ -226,6 +226,10 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
         $border_c = $this->safe_color_css( $s['modal_border_color'] ?? '' ) ?: 'var(--olo-color-border, #E5E7EB)';
         $border_style_allowed = [ 'solid', 'dashed', 'dotted', 'double' ];
         $border_style = in_array( $s['modal_border_style'] ?? 'solid', $border_style_allowed, true ) ? ( $s['modal_border_style'] ?? 'solid' ) : 'solid';
+        $modal_border_decl = Olobuild_Tile_Utils::border_css(
+            $s['modal_border'] ?? null,
+            [ 'width' => $border_w, 'style' => $border_style, 'color' => $border_c ]
+        );
 
         // Effetti avanzati modale (v1.0.60+)
         $backdrop_blur     = max( 0, min( 40, intval( $s['modal_backdrop_blur'] ?? 0 ) ) );
@@ -326,7 +330,7 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
             #<?php echo esc_attr( $uid ); ?> .uk-modal-dialog {
                 <?php if ( $radius && $radius !== '0px' ) : ?>border-radius: <?php echo $radius; ?>; overflow: hidden;<?php endif; ?>
                 <?php if ( $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
-                <?php if ( $border_w > 0 ) : ?>border: <?php echo (int) $border_w; ?>px <?php echo $border_style; ?> <?php echo $border_c; ?>;<?php endif; ?>
+                <?php echo esc_attr( $modal_border_decl ); ?>
             }
             <?php if ( $radius_hover_css !== '' ) : ?>#<?php echo esc_attr( $uid ); ?> .uk-modal-dialog{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?> .uk-modal-dialog:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             /* Animation keyframes */
@@ -358,7 +362,7 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
                 display: flex;
                 flex-direction: column;
                 <?php if ( $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
-                <?php if ( $border_w > 0 ) : ?>border: <?php echo (int) $border_w; ?>px <?php echo $border_style; ?> <?php echo $border_c; ?>;<?php endif; ?>
+                <?php echo esc_attr( $modal_border_decl ); ?>
             }
             #<?php echo esc_attr( $uid ); ?> .olo-popup-fullbody {
                 flex: 1;

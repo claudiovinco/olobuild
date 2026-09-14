@@ -187,8 +187,8 @@ export default {
     { key: 'item_gap', label: t('Spazio tra voci (px)'), type: 'range', min: 0, max: 24, step: 1 },
 
     { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Voci'),
-      presetKey: 'typography_preset',
       keys: {
         family:        'font_family',
         weight:        'font_weight',
@@ -198,13 +198,11 @@ export default {
       },
     },
     { type: 'typography', label: t('Titolo sezione'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'title_color',
       },
     },
     { type: 'typography', label: t('Link'),
-      presetKey: 'typography_preset',
       keys: {
         color:      'link_color',
         colorHover: 'hover_color',

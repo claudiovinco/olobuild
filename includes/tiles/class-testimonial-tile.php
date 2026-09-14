@@ -191,7 +191,7 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
                 if ( $abw > 0 ) :
                     $abc = $this->safe_color_css( $s['avatar_border_color'] ) ?: 'var(--olo-color-on-primary, #FFFFFF)';
                 ?>
-                border: <?php echo $abw; ?>px solid <?php echo $abc; ?>;
+                <?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['avatar_border'] ?? null, [ 'width' => $abw, 'color' => $abc ] ) ); ?>
                 <?php endif; ?>
                 <?php
                 $filter_map = [ 'grayscale' => 'grayscale(100%)', 'sepia' => 'sepia(80%)', 'brightness' => 'brightness(1.15)', 'contrast' => 'contrast(1.3)' ];

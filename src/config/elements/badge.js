@@ -110,7 +110,6 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Testo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:          'font_size',
@@ -127,8 +126,8 @@ export default {
 
     { type: 'separator', label: t('Forma') },
     withHover({ key: 'badge_radius', label: t('Raggio bordo'), type: 'border-radius' }),
-    { key: 'padding_y', label: t('Padding verticale (px)'), type: 'range', min: 0, max: 30, step: 1 },
-    { key: 'padding_x', label: t('Padding orizzontale (px)'), type: 'range', min: 0, max: 48, step: 1 },
+    { key: 'padding', label: t('Padding (px)'), type: 'spacing', min: 0, max: 60,
+      legacyKeys: { y: 'padding_y', x: 'padding_x' } },
 
     ...shadowField,
     ...borderFields(),

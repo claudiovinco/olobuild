@@ -60,7 +60,6 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Tabs'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'text_color',
@@ -77,7 +76,7 @@ export default {
 
     { type: 'separator', label: t('Colori') },
     { key: 'active_color', label: t('Colore tab attiva'), type: 'color' },
-    { key: 'border_color', label: t('Colore bordo'), type: 'color' },
+    { key: 'border_color', label: t('Bordo'), type: 'border', legacyWidth: 1 },
     ...borderFields(),
   ],
 };

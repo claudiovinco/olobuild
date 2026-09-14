@@ -22,7 +22,7 @@ export default {
     bar_bg:              '',
     bar_height:          '56',
     bar_shadow:          true,
-    tile_padding: { top: 12, right: 12, bottom: 12, left: 12 },
+    tile_padding: { top: 0, right: 0, bottom: 0, left: 0 },
     hamburger_style:     'classic',
     hamburger_size:      '28',
     hamburger_color:     'var(--olo-color-light, #f8f9fa)',

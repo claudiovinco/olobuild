@@ -118,7 +118,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:   'title_font_size',
@@ -128,13 +127,11 @@ export default {
       sizeMin: 14, sizeMax: 48, sizeStep: 1,
     },
     { type: 'typography', label: t('Descrizione'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'text_color',
       },
     },
     { type: 'typography', label: t('Link'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'link_color',
       },

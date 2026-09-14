@@ -123,7 +123,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Testo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size', 'lineHeight', 'letterSpacing'],
       keys: {
         family:        'font_family',

@@ -64,6 +64,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { toSpacingCss } from '@/composables/useBoxModel';
 import iconsSvg from '../ProSlider/iconsLibrary.js';
 import { resolveColor, resolveFontFamily, TOKENS, SHADOW } from '@/composables/oloTileDefaults';
 
@@ -116,7 +117,7 @@ function radiusToCss(r) {
 const timelineStyle = computed(() => ({
   position: 'relative',
   height: (s.value.timeline_dot_size || 14) + 'px',
-  marginBottom: (s.value.timeline_margin_bottom || 50) + 'px',
+  margin: toSpacingCss(s.value.timeline_margin_bottom, { fallback: [0, 0, 50, 0] }),
 }));
 
 const lineStyle = computed(() => ({

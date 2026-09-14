@@ -53,7 +53,7 @@ export default {
     { key: 'zone_accent', label: t('Colore zona (accento)'), type: 'color' },
     { key: 'zone_on', label: t('Testo su accento'), type: 'color' },
     { key: 'card_bg', label: t('Sfondo pannello'), type: 'color' },
-    { key: 'card_border', label: t('Bordo pannello'), type: 'color' },
+    { key: 'card_border', label: t('Bordo pannello'), type: 'border', legacyWidth: 1 },
     { key: 'align', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },

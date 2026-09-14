@@ -41,7 +41,7 @@ class Olobuild_Hotspots_Tile extends Olobuild_Tile_Base {
         $on      = $this->safe_color_css( $s['zone_on'] ?? '' ) ?: '#ffffff';
         $panelbg = $this->safe_color_css( $s['panel_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #f1f1f1)';
         $cardbg  = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-surface, #ffffff)';
-        $line    = $this->safe_color_css( $s['card_border'] ?? '' ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $line    = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
         $center  = ( ( $s['align'] ?? 'left' ) === 'center' );
         $serif   = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
         $sans    = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
@@ -58,14 +58,14 @@ class Olobuild_Hotspots_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .osp-eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:<?php echo $accent; ?>;display:block;margin-bottom:10px;}
             .<?php echo $uid; ?> .osp-h{font-family:<?php echo $serif; ?>;font-size:clamp(26px,3.6vw,42px);line-height:1.12;margin:0;color:var(--olo-color-text,#111827);}
             .<?php echo $uid; ?> .osp-intro{font-size:15.5px;line-height:1.6;opacity:.8;margin:14px 0 0;max-width:560px;<?php echo $center ? 'margin-left:auto;margin-right:auto;' : ''; ?>}
-            .<?php echo $uid; ?> .osp-panel{position:relative;margin-top:24px;aspect-ratio:<?php echo esc_attr( $ar ); ?>;border-radius:16px;overflow:hidden;border:1px solid <?php echo $line; ?>;background:<?php echo $panelbg; ?>;background-image:repeating-linear-gradient(135deg, rgba(127,127,127,.05) 0 16px, transparent 16px 32px);}
+            .<?php echo $uid; ?> .osp-panel{position:relative;margin-top:24px;aspect-ratio:<?php echo esc_attr( $ar ); ?>;border-radius:16px;overflow:hidden;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $line ] ) ); ?>background:<?php echo $panelbg; ?>;background-image:repeating-linear-gradient(135deg, rgba(127,127,127,.05) 0 16px, transparent 16px 32px);}
             .<?php echo $uid; ?> .osp-panel__label{position:absolute;left:16px;bottom:14px;font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;opacity:.45;}
             .<?php echo $uid; ?> .osp-mk{position:absolute;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;border:0;cursor:pointer;background:<?php echo $accent; ?>;box-shadow:0 0 0 0 <?php echo $accent; ?>;padding:0;}
             .<?php echo $uid; ?> .osp-mk::after{content:'';position:absolute;inset:7px;border-radius:50%;background:<?php echo $on; ?>;}
             .<?php echo $uid; ?> .osp-mk{animation:ospping 2s infinite;}
             @keyframes ospping{0%{box-shadow:0 0 0 0 color-mix(in srgb, <?php echo $accent; ?> 55%, transparent)}70%{box-shadow:0 0 0 12px transparent}100%{box-shadow:0 0 0 0 transparent}}
             .<?php echo $uid; ?> .osp-mk:focus-visible{outline:2px solid <?php echo $on; ?>;outline-offset:2px;}
-            .<?php echo $uid; ?> .osp-tip{position:absolute;bottom:130%;left:50%;transform:translateX(-50%);width:220px;background:<?php echo $cardbg; ?>;border:1px solid <?php echo $line; ?>;border-radius:12px;padding:14px 16px;text-align:left;box-shadow:0 12px 30px -10px rgba(16,24,40,.3);display:none;z-index:5;}
+            .<?php echo $uid; ?> .osp-tip{position:absolute;bottom:130%;left:50%;transform:translateX(-50%);width:220px;background:<?php echo $cardbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $line ] ) ); ?>border-radius:12px;padding:14px 16px;text-align:left;box-shadow:0 12px 30px -10px rgba(16,24,40,.3);display:none;z-index:5;}
             .<?php echo $uid; ?> .osp-mk.on .osp-tip{display:block;}
             .<?php echo $uid; ?> .osp-tip__meta{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:<?php echo $accent; ?>;}
             .<?php echo $uid; ?> .osp-tip__t{font-family:<?php echo $serif; ?>;font-size:16px;margin:4px 0 0;color:var(--olo-color-text,#111827);}

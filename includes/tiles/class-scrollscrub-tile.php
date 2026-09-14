@@ -166,7 +166,9 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
         $item_mh  = max( 160, min( 900, intval( $s['item_min_height'] ) ) );
         // Dual-format: numero legacy (range) E oggetto {tl,tr,br,bl}; vuoto/zero → 0px (default storico).
         $round    = $this->build_border_radius_css( $s['round'] ?? 0 ) ?: '0px';
-        $pad      = max( 0,   min( 80,  intval( $s['item_padding'] ) ) );
+        $pad_sides = Olobuild_Tile_Utils::spacing_sides( $s['item_padding'] ?? 0, [], [ 0, 0, 0, 0 ] );
+        $pad_css   = Olobuild_Tile_Utils::sides_css( $pad_sides );
+        $pad       = array_sum( $pad_sides );
         $overlay  = $pad === 0; // 0 = immagine a tutto bordo, testo sovrapposto in basso
 
         // Punto focale GLOBALE (object-position) applicato a ogni <img> del nastro.
@@ -357,7 +359,7 @@ class Olobuild_Scrollscrub_Tile extends Olobuild_Tile_Base {
 
             .<?php echo $uid; ?> .olo-scrub__body {
                 position: relative;
-                padding: <?php echo $overlay ? '20px' : ( $pad . 'px' ); ?>;
+                padding: <?php echo esc_attr( $overlay ? '20px' : $pad_css ); ?>;
                 /* Il colore si EREDITA dall'item (default overlay = bianco): così i
                    campi "Colore testo" globale e per-elemento funzionano davvero.
                    La sfumatura non vive più qui: è lo scrim sull'item (vedi ::after). */

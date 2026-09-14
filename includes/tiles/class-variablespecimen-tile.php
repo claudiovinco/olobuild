@@ -134,7 +134,11 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
         $font_size   = max( 24, min( 800, intval( $s['font_size'] ) ) );
         $fw_fallback = in_array( $s['font_weight_fallback'], [ '300','400','500','600','700','900' ], true ) ? $s['font_weight_fallback'] : '700';
         $text_align  = in_array( $s['text_align'], [ 'left','center','right' ], true ) ? $s['text_align'] : 'left';
-        $pad_y       = max( 0, min( 200, intval( $s['padding_y'] ) ) );
+        $pad_css     = Olobuild_Tile_Utils::sides_css( Olobuild_Tile_Utils::spacing_sides(
+            $s['padding'] ?? null,
+            [ 'y' => $s['padding_y'] ?? null ],
+            [ 0, 0, 0, 0 ]
+        ) );
 
         // font-variation-settings iniziale (stato SSR — già "bello" senza JS)
         $fvs_parts = [];
@@ -161,7 +165,7 @@ class Olobuild_Variablespecimen_Tile extends Olobuild_Tile_Base {
         <style>
             .<?php echo $uid; ?> {
                 <?php echo $bg_decl; ?>
-                padding: <?php echo (int) $pad_y; ?>px 0;
+                padding: <?php echo esc_attr( $pad_css ); ?>;
                 text-align: <?php echo $text_align; ?>;
             }
             .<?php echo $uid; ?> .olo-vf-stage {

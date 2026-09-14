@@ -55,7 +55,11 @@ class Olobuild_HoursStrip_Tile extends Olobuild_Tile_Base {
         $tfam    = $this->resolve_font_family( $s['time_font_family'] ?? '', [ 'heading' => $heading, 'body' => $body, 'mono' => $mono ] ) ?: $heading;
 
         $cols   = max( 1, min( 6, absint( $s['columns'] ) ) );
-        $pad_y  = max( 0, min( 100, absint( $s['band_padding_y'] ) ) );
+        $pad_css = Olobuild_Tile_Utils::sides_css( Olobuild_Tile_Utils::spacing_sides(
+            $s['band_padding'] ?? null,
+            [ 'y' => $s['band_padding_y'] ?? null ],
+            [ 36, 0, 36, 0 ]
+        ) );
         $d_size = max( 10, min( 18, absint( $s['day_size'] ) ) );
         $t_size = max( 16, min( 56, absint( $s['time_size'] ) ) );
         $t_wt   = preg_match( '/^\d+$/', (string) $s['time_weight'] ) ? $s['time_weight'] : '500';
@@ -71,7 +75,7 @@ class Olobuild_HoursStrip_Tile extends Olobuild_Tile_Base {
 
         $items = is_array( $s['items'] ) ? $s['items'] : [];
 
-        $band_style = 'padding:' . $pad_y . 'px 0;';
+        $band_style = 'padding:' . $pad_css . ';';
         if ( $band_brd ) $band_style .= 'border-top:1px solid ' . $line . ';border-bottom:1px solid ' . $line . ';';
         $grid_style = 'display:grid;grid-template-columns:repeat(' . $cols . ',minmax(0,1fr));';
         $cell_style = 'display:flex;flex-direction:column;gap:7px;padding:4px 24px;';

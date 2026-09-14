@@ -130,7 +130,6 @@ export default {
     // `text_color` (ereditato dal wrapper .olo-countdown). Il mapping precedente era
     // invertito: il color picker sotto "Numeri" cambiava le etichette.
     { type: 'typography', label: t('Numeri'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:   'number_font_size',
@@ -140,7 +139,6 @@ export default {
       sizeMin: 16, sizeMax: 120, sizeStep: 2,
     },
     { type: 'typography', label: t('Etichette'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:   'label_font_size',
@@ -150,7 +148,6 @@ export default {
       sizeMin: 8, sizeMax: 24, sizeStep: 1,
     },
     { type: 'typography', label: t('Separatore'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'separator_font_size',
@@ -164,7 +161,7 @@ export default {
     { type: 'separator', label: t('Card unità (giorni/ore/min/sec)') },
     { key: 'item_bg_color', label: t('Sfondo card'), type: 'color' },
     { key: 'item_radius', label: t('Raggio angoli card (px)'), type: 'border-radius' },
-    { key: 'item_padding', label: t('Padding interno card (px)'), type: 'range', min: 0, max: 40, step: 2 },
+    { key: 'item_padding', label: t('Padding interno card (px)'), type: 'spacing', min: 0, max: 80 },
 
     ...shadowField,
     ...borderFields(),

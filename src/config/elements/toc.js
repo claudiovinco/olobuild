@@ -87,7 +87,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Indice'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'font_size',

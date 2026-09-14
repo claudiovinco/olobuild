@@ -61,8 +61,12 @@ class Olobuild_Badge_Tile extends Olobuild_Tile_Base {
         $txt    = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #1f2937)';
 
         // Box model
-        $pad_y  = max( 0, intval( $s['padding_y'] ?? 7 ) );
-        $pad_x  = max( 0, intval( $s['padding_x'] ?? 13 ) );
+        // Padding a 4 lati (controllo standard `spacing`), ripiego sulle chiavi piatte.
+        $pad_css = Olobuild_Tile_Utils::sides_css( Olobuild_Tile_Utils::spacing_sides(
+            $s['padding'] ?? null,
+            [ 'y' => $s['padding_y'] ?? null, 'x' => $s['padding_x'] ?? null ],
+            [ 7, 13, 7, 13 ]
+        ) );
         $radius = $this->build_border_radius_css( $s['badge_radius'] ?? null ) ?: '999px';
         $fs     = max( 8, intval( $s['font_size'] ?? 13 ) );
         $fw     = esc_attr( $s['font_weight'] ?? '600' );
@@ -110,7 +114,7 @@ class Olobuild_Badge_Tile extends Olobuild_Tile_Base {
         $tp_css = $tp ? "font-family:var(--olo-font-{$tp}-family);" : '';
 
         $base_css = 'display:inline-flex;align-items:center;gap:8px;'
-            . 'padding:' . $pad_y . 'px ' . $pad_x . 'px;'
+            . 'padding:' . $pad_css . ';'
             . 'border-radius:' . $radius . ';'
             . $tp_css
             . 'font-size:' . $fs . 'px;font-weight:' . $fw . ';text-transform:' . $tt . ';'

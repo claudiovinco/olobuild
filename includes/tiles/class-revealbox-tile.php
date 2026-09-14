@@ -96,8 +96,8 @@ class Olobuild_Revealbox_Tile extends Olobuild_Tile_Base {
 
         $top_ov_op    = intval( $s['overlay_opacity'] );
         $bot_ov_op    = intval( $s['reveal_overlay_opacity'] );
-        $top_pad      = intval( $s['top_padding'] );
-        $bot_pad      = intval( $s['bottom_padding'] );
+        $top_pad      = Olobuild_Tile_Utils::spacing_css( $s['top_padding'] ?? 24, 24 );
+        $bot_pad      = Olobuild_Tile_Utils::spacing_css( $s['bottom_padding'] ?? 24, 24 );
 
         $safe_text_color    = preg_replace( '/[^a-zA-Z0-9#\(\)\,\.\s\%]/', '', $s['text_color'] );
         $safe_top_text_clr  = preg_replace( '/[^a-zA-Z0-9#\(\)\,\.\s\%]/', '', $s['top_text_color'] ?: $s['text_color'] );
@@ -145,9 +145,9 @@ class Olobuild_Revealbox_Tile extends Olobuild_Tile_Base {
         $top_content = $this->safe_richtext_content( $s['top_content'] );
         $bot_content = $this->safe_richtext_content( $s['bottom_content'] );
 
-        $top_content_css = 'position:relative;z-index:2;padding:' . $top_pad . 'px;color:' . $safe_top_text_clr;
+        $top_content_css = 'position:relative;z-index:2;padding:' . $top_pad . ';color:' . $safe_top_text_clr;
         if ( $top_font_size > 0 ) { $top_content_css .= ';font-size:' . $top_font_size . 'px'; }
-        $bot_content_css = 'position:relative;z-index:2;padding:' . $bot_pad . 'px;color:' . $safe_bot_text_clr;
+        $bot_content_css = 'position:relative;z-index:2;padding:' . $bot_pad . ';color:' . $safe_bot_text_clr;
         if ( $bot_font_size > 0 ) { $bot_content_css .= ';font-size:' . $bot_font_size . 'px'; }
 
         $top_inner = $top_bg . $top_overlay . '<div style="' . $top_content_css . '">' . $top_icon_html . $top_content . '</div>';

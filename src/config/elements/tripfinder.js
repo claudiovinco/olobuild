@@ -71,13 +71,13 @@ export default {
     { key: 'accent_on', label: t('Testo su accento'), type: 'color' },
     { key: 'bar_bg', label: t('Sfondo barra'), type: 'color' },
     { key: 'field_bg', label: t('Sfondo campo'), type: 'color' },
-    { key: 'field_border', label: t('Bordo / divisori'), type: 'color' },
+    { key: 'field_border', label: t('Bordo / divisori'), type: 'border', legacyWidth: 1 },
     { key: 'label_color', label: t('Colore etichette'), type: 'color' },
     { key: 'value_color', label: t('Colore valori'), type: 'color' },
 
     { type: 'separator', label: t('Forma') },
-    { key: 'radius', label: t('Raggio bordo (px)'), type: 'range', min: 0, max: 40, step: 1 },
-    { key: 'radius_corners', label: t('Raggio per angolo (override)'), type: 'border-radius',
+    { key: 'radius_corners', label: t('Raggio bordo'), type: 'border-radius',
+      legacyKeys: { all: 'radius' },
       description: t('Lascia tutto a 0 per usare il «Raggio bordo» uniforme qui sopra.') },
 
     { type: 'separator', label: t('Spaziatura') },

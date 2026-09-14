@@ -182,53 +182,45 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Prezzo'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'price_color',
       },
     },
     { type: 'typography', label: t('Badge sconto'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'sale_badge_color',
       },
       condition: { field: 'sale_price', operator: '!=', value: '' },
     },
     { type: 'typography', label: t('CTA'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'cta_text_color',
       },
     },
     { type: 'typography', label: t('Badge popolare'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'badge_text_color',
       },
       condition: { field: 'is_popular', value: true },
     },
     { type: 'typography', label: t('Countdown'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'countdown_text_color',
       },
       condition: { field: 'countdown_enabled', value: true },
     },
     { type: 'typography', label: t('Toggle prezzo'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'toggle_color',
       },
       condition: { field: 'enable_toggle', value: true },
     },
     { type: 'typography', label: t('Testo card'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'text_color',
       },
     },
     { type: 'typography', label: t('Accento'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'accent_color',
       },
@@ -259,9 +251,10 @@ export default {
     withHover({ key: 'cta_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
     withHover({ key: 'cta_bg_color',   label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta_hover_bg_color' }),
     { key: 'cta_hover_text_color', label: t('Colore testo hover'), type: 'color' },
-    { key: 'cta_border_width', label: t('Bordo (px)'), type: 'range', min: 0, max: 5, step: 1 },
-    { key: 'cta_border_color', label: t('Colore bordo'), type: 'color',
-      condition: { field: 'cta_border_width', operator: '>', value: '0' } },
+    { key: 'cta_border', label: t('Bordo CTA'), type: 'border',
+      legacyKeys: { width: 'cta_border_width', color: 'cta_border_color' } },
+
+
     { key: 'cta_hover_effect', label: t('Animazione hover'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
       { value: 'lift', label: t('Solleva') },
@@ -292,10 +285,10 @@ export default {
     ]},
     { key: 'price_shape_color', label: t('Colore forma'), type: 'color',
       condition: { field: 'price_shape', operator: '!=', value: 'none' } },
-    { key: 'price_shape_border_width', label: t('Bordo (px)'), type: 'range', min: 0, max: 5, step: 1,
-      condition: { field: 'price_shape', operator: '!=', value: 'none' } },
-    { key: 'price_shape_border_color', label: t('Colore bordo'), type: 'color',
-      condition: { field: 'price_shape_border_width', operator: '>', value: '0' } },
+    { key: 'price_shape_border', label: t('Bordo forma prezzo'), type: 'border',
+      legacyKeys: { width: 'price_shape_border_width', color: 'price_shape_border_color' } },
+
+
     { key: 'price_shape_glow', label: t('Luce interna'), type: 'toggle',
       condition: { field: 'price_shape', operator: '!=', value: 'none' } },
     { key: 'price_shape_glow_color', label: t('Colore luce'), type: 'color',

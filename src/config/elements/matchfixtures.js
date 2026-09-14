@@ -81,8 +81,8 @@ export default {
   styleFields: [
     { type: 'separator', label: t('Card') },
     { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
-    { key: 'card_border', label: t('Bordo card'), type: 'color' },
-    { key: 'radius', label: t('Raggio (px)'), type: 'range', min: 0, max: 32, step: 1 },
+    { key: 'card_border', label: t('Bordo card'), type: 'border', legacyWidth: 1 },
+    { key: 'radius', label: t('Raggio (px)'), type: 'border-radius' },
     { key: 'gap', label: t('Spazio tra card (px)'), type: 'range', min: 8, max: 32, step: 2 },
 
     { type: 'separator', label: t('Spaziatura') },

@@ -192,7 +192,6 @@ export default {
       { value: 'justify', label: t('Giustificato') },
     ]},
     { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         tag:    'title_element',
@@ -203,7 +202,6 @@ export default {
       sizeMin: 0, sizeMax: 60, sizeStep: 1,
     },
     { type: 'typography', label: t('Meta'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'meta_size',
@@ -212,7 +210,6 @@ export default {
       sizeMin: 0, sizeMax: 24, sizeStep: 1,
     },
     { type: 'typography', label: t('Contenuto'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'content_size',
@@ -221,7 +218,6 @@ export default {
       sizeMin: 0, sizeMax: 28, sizeStep: 1,
     },
     { type: 'typography', label: t('Link'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'link_color',
       },

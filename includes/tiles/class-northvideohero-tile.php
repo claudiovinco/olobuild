@@ -94,7 +94,7 @@ class Olobuild_NorthVideoHero_Tile extends Olobuild_Tile_Base {
         $accent   = $this->safe_color_css( $s['accent'] ?? '' )       ?: 'var(--olo-color-primary, #ff7759)';
         $crestC   = $this->safe_color_css( $s['crest_color'] ?? '' )  ?: 'rgba(255,255,255,0.5)';
         $frameBg  = $this->safe_color_css( $s['frame_bg'] ?? '' )     ?: '#0a201a';
-        $frameBd  = $this->safe_color_css( $s['frame_border'] ?? '' ) ?: 'rgba(255,255,255,0.12)';
+        $frameBd  = Olobuild_Tile_Utils::border_color( $s['frame_border'] ?? null, 'rgba(255,255,255,0.12)' );
 
         $disp = "var(--olo-font-family-heading, 'Space Grotesk',-apple-system,sans-serif)";
         $sans = "var(--olo-font-family, 'Inter','Work Sans',-apple-system,sans-serif)";
@@ -165,7 +165,7 @@ class Olobuild_NorthVideoHero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .nvh-btn--ghost:hover{transform:translateY(-2px);background:rgba(255,255,255,.14);}
             .<?php echo $uid; ?> .nvh-btn:focus-visible{outline:2px solid <?php echo $accent; ?>;outline-offset:3px;}
             .<?php echo $uid; ?> .nvh-mockwrap{position:relative;z-index:2;max-width:1180px;margin:clamp(40px,6vw,72px) auto 0;padding:0 40px;}
-            .<?php echo $uid; ?> .nvh-frame{position:relative;border:1px solid <?php echo $frameBd; ?>;border-radius:<?php echo $frame_radius; ?>;background:<?php echo $frameBg; ?>;overflow:hidden;box-shadow:0 40px 80px -40px rgba(0,0,0,.6);}
+            .<?php echo $uid; ?> .nvh-frame{position:relative;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['frame_border'] ?? null, [ 'width' => 1, 'color' => $frameBd ] ) ); ?>border-radius:<?php echo $frame_radius; ?>;background:<?php echo $frameBg; ?>;overflow:hidden;box-shadow:0 40px 80px -40px rgba(0,0,0,.6);}
             .<?php echo $uid; ?> .nvh-video{display:block;width:100%;height:auto;aspect-ratio:16/9.4;object-fit:cover;background:<?php echo $frameBg; ?>;}
             <?php if ( $has_mb && ! $mb_is_video && $mb['css'] !== '' ) : ?>
             .<?php echo $uid; ?> .nvh-mediabg{<?php echo $mb['css']; ?>}

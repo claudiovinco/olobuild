@@ -44,8 +44,7 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
         'cta_radius_hover'        => [ 'tl' => 999, 'tr' => 999, 'br' => 999, 'bl' => 999, 'linked' => true ],
         'cta_radius_hover_duration' => 300,
         'cta_size'                => 15,
-        'cta_padding_y'           => 18,
-        'cta_padding_x'           => 32,
+        'cta_padding'             => [ 'top' => 18, 'right' => 32, 'bottom' => 18, 'left' => 32 ],
 
         'headline_font_family'    => 'serif',
         'headline_size'           => 36,
@@ -59,7 +58,7 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
         'banner_radius'                => [ 'tl' => 20, 'tr' => 20, 'br' => 20, 'bl' => 20, 'linked' => true ],
         'banner_radius_hover'          => [ 'tl' => 20, 'tr' => 20, 'br' => 20, 'bl' => 20, 'linked' => true ],
         'banner_radius_hover_duration' => 400,
-        'banner_padding'               => 40,
+        'banner_padding'               => [ 'top' => 40, 'right' => 40, 'bottom' => 40, 'left' => 40 ],
     ];
 
     public function get_controls() { return []; }
@@ -93,8 +92,16 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
         $cta_bg   = $this->safe_color_css( $s['cta_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $cta_c    = $this->safe_color_css( $s['cta_color'] ) ?: '#ffffff';
         $cta_size = max( 12, min( 22, absint( $s['cta_size'] ) ) );
-        $cta_py   = max( 10, min( 30, absint( $s['cta_padding_y'] ) ) );
-        $cta_px   = max( 16, min( 60, absint( $s['cta_padding_x'] ) ) );
+        // Padding bottoni: FieldSpacing 4 lati; le chiavi legacy cta_padding_y/x
+        // (template salvati prima della 1.4.430) restano valide come fallback.
+        $cta_pad_raw = $settings['cta_padding'] ?? null;
+        if ( $cta_pad_raw !== null && $cta_pad_raw !== '' ) {
+            $cta_pad = Olobuild_Tile_Utils::spacing_css( $cta_pad_raw, 18 );
+        } else {
+            $cta_py  = absint( $s['cta_padding_y'] ?? 18 );
+            $cta_px  = absint( $s['cta_padding_x'] ?? 32 );
+            $cta_pad = "{$cta_py}px {$cta_px}px {$cta_py}px {$cta_px}px";
+        }
         $cta_tgt  = $s['cta_target'] === '_blank' ? ' target="_blank" rel="noopener"' : '';
 
         $cta2_bg   = $this->safe_color_css( $s['cta2_bg'] ?? '' ) ?: 'transparent';
@@ -118,7 +125,9 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
         }
         if ( ! $bg_css ) $bg_css = 'background:#0f172a';
 
-        $banner_padding = max( 16, min( 120, absint( $s['banner_padding'] ) ) );
+        // Padding interno: FieldSpacing 4 lati ({top,right,bottom,left}); un numero
+        // legacy (template salvati prima della 1.4.430) resta valido e uniforme.
+        $banner_padding = Olobuild_Tile_Utils::spacing_css( $s['banner_padding'] ?? 40, 40 );
         $layout         = in_array( $s['layout'] ?? 'split-3', [ 'split-3', 'split-2', 'stack' ], true ) ? ( $s['layout'] ?? 'split-3' ) : 'split-3';
         $valign         = in_array( $s['vertical_align'] ?? 'center', [ 'start', 'center', 'end' ], true ) ? ( $s['vertical_align'] ?? 'center' ) : 'center';
         $gap            = max( 0, min( 120, absint( $s['gap'] ) ) );
@@ -136,7 +145,7 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-ctab <?php echo esc_attr( $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- unescaped fragments on this line are fixed-literal ternaries plus the absint()/intval() clamped padding, gap and duration; everything else is esc_attr()'d ?>" style="<?php echo esc_attr( $bg_css ); ?>;<?php if ( $banner_radius ) echo 'border-radius:' . esc_attr( $banner_radius ) . ';'; ?>padding:<?php echo (int) $banner_padding; ?>px;color:<?php echo esc_attr( $text_c ); ?>;display:grid;grid-template-columns:<?php echo esc_attr( $grid_cols ); ?>;gap:<?php echo (int) $gap; ?>px;align-items:<?php echo esc_attr( $valign === 'start' ? 'flex-start' : ( $valign === 'end' ? 'flex-end' : 'center' ) ); ?>;<?php echo ( $layout === 'stack' ) ? 'text-align:center;justify-items:center;' : ''; ?>transition:<?php echo $banner_radius_h ? 'border-radius ' . (int) $banner_rdur . 'ms ease' : 'none'; ?>">
+        <div class="olo-ctab <?php echo esc_attr( $uid ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- unescaped fragments on this line are fixed-literal ternaries plus the absint()/intval() clamped gap and duration; everything else (padding included, via the integer-forced spacing_css() helper) is esc_attr()'d ?>" style="<?php echo esc_attr( $bg_css ); ?>;<?php if ( $banner_radius ) echo 'border-radius:' . esc_attr( $banner_radius ) . ';'; ?>padding:<?php echo esc_attr( $banner_padding ); ?>;color:<?php echo esc_attr( $text_c ); ?>;display:grid;grid-template-columns:<?php echo esc_attr( $grid_cols ); ?>;gap:<?php echo (int) $gap; ?>px;align-items:<?php echo esc_attr( $valign === 'start' ? 'flex-start' : ( $valign === 'end' ? 'flex-end' : 'center' ) ); ?>;<?php echo ( $layout === 'stack' ) ? 'text-align:center;justify-items:center;' : ''; ?>transition:<?php echo $banner_radius_h ? 'border-radius ' . (int) $banner_rdur . 'ms ease' : 'none'; ?>">
 
             <!-- Headline -->
             <?php if ( ! empty( $s['headline'] ) || ! empty( $s['headline_accent'] ) ) : ?>
@@ -157,10 +166,10 @@ class Olobuild_CtaBanner_Tile extends Olobuild_Tile_Base {
             <?php if ( ! empty( $s['cta_text'] ) || ! empty( $s['cta2_text'] ) ) : ?>
                 <div class="olo-ctab__ctas" style="display:inline-flex;gap:12px;flex-wrap:wrap;align-items:center;<?php echo ( $layout === 'stack' ) ? 'justify-content:center;' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- both ternary branches are fixed literals ?>">
                     <?php if ( ! empty( $s['cta_text'] ) ) : ?>
-                        <a href="<?php echo esc_url( $s['cta_url'] ?: '#' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- unescaped fragments on this line are the fixed-literal $cta_tgt (' target="_blank" rel="noopener"' or '') and absint()/intval() clamped paddings/size/duration; everything else is esc_url()/esc_attr()/esc_html()'d ?>"<?php echo $cta_tgt; ?> class="olo-ctab__cta" data-olo-editable="cta_text" style="display:inline-flex;align-items:center;justify-content:center;padding:<?php echo (int) $cta_py; ?>px <?php echo (int) $cta_px; ?>px;background:<?php echo esc_attr( $cta_bg ); ?>;color:<?php echo esc_attr( $cta_c ); ?>;<?php if ( $cta_radius ) echo 'border-radius:' . esc_attr( $cta_radius ) . ';'; ?>font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo (int) $cta_size; ?>px;font-weight:600;text-decoration:none;white-space:nowrap;transition:transform .2s ease,background .2s,color .2s<?php if ( $cta_radius_h ) echo ',border-radius ' . (int) $cta_rdur . 'ms ease'; ?>"><?php echo esc_html( $s['cta_text'] ); ?></a>
+                        <a href="<?php echo esc_url( $s['cta_url'] ?: '#' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- unescaped fragments on this line are the fixed-literal $cta_tgt (' target="_blank" rel="noopener"' or '') and absint()/intval() clamped size/duration; everything else (padding included, via the integer-forced spacing_css() helper) is esc_url()/esc_attr()/esc_html()'d ?>"<?php echo $cta_tgt; ?> class="olo-ctab__cta" data-olo-editable="cta_text" style="display:inline-flex;align-items:center;justify-content:center;padding:<?php echo esc_attr( $cta_pad ); ?>;background:<?php echo esc_attr( $cta_bg ); ?>;color:<?php echo esc_attr( $cta_c ); ?>;<?php if ( $cta_radius ) echo 'border-radius:' . esc_attr( $cta_radius ) . ';'; ?>font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo (int) $cta_size; ?>px;font-weight:600;text-decoration:none;white-space:nowrap;transition:transform .2s ease,background .2s,color .2s<?php if ( $cta_radius_h ) echo ',border-radius ' . (int) $cta_rdur . 'ms ease'; ?>"><?php echo esc_html( $s['cta_text'] ); ?></a>
                     <?php endif; ?>
                     <?php if ( ! empty( $s['cta2_text'] ) ) : ?>
-                        <a href="<?php echo esc_url( $s['cta2_url'] ?: '#' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- unescaped fragments on this line are the fixed-literal $cta2_tgt (' target="_blank" rel="noopener"' or '') and absint() clamped paddings/size; everything else is esc_url()/esc_attr()/esc_html()'d ?>"<?php echo $cta2_tgt; ?> class="olo-ctab__cta2" data-olo-editable="cta2_text" style="display:inline-flex;align-items:center;justify-content:center;padding:<?php echo (int) $cta_py; ?>px <?php echo (int) $cta_px; ?>px;background:<?php echo esc_attr( $cta2_bg ); ?>;color:<?php echo esc_attr( $cta2_c ); ?>;<?php if ( $cta2_bord ) echo 'border:1px solid ' . esc_attr( $cta2_bord ) . ';'; ?><?php if ( $cta_radius ) echo 'border-radius:' . esc_attr( $cta_radius ) . ';'; ?>font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo (int) $cta_size; ?>px;font-weight:600;text-decoration:none;white-space:nowrap;transition:transform .2s ease,background .2s,color .2s,border-color .2s"><?php echo esc_html( $s['cta2_text'] ); ?></a>
+                        <a href="<?php echo esc_url( $s['cta2_url'] ?: '#' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- unescaped fragments on this line are the fixed-literal $cta2_tgt (' target="_blank" rel="noopener"' or '') and the absint() clamped size; everything else (padding included, via the integer-forced spacing_css() helper) is esc_url()/esc_attr()/esc_html()'d ?>"<?php echo $cta2_tgt; ?> class="olo-ctab__cta2" data-olo-editable="cta2_text" style="display:inline-flex;align-items:center;justify-content:center;padding:<?php echo esc_attr( $cta_pad ); ?>;background:<?php echo esc_attr( $cta2_bg ); ?>;color:<?php echo esc_attr( $cta2_c ); ?>;<?php if ( $cta2_bord ) echo 'border:1px solid ' . esc_attr( $cta2_bord ) . ';'; ?><?php if ( $cta_radius ) echo 'border-radius:' . esc_attr( $cta_radius ) . ';'; ?>font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo (int) $cta_size; ?>px;font-weight:600;text-decoration:none;white-space:nowrap;transition:transform .2s ease,background .2s,color .2s,border-color .2s"><?php echo esc_html( $s['cta2_text'] ); ?></a>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>

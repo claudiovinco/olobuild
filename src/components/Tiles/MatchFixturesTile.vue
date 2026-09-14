@@ -26,6 +26,8 @@
 
 <script setup>
 import { computed } from 'vue';
+import { borderColorOf } from '@/composables/useBoxModel';
+import { radiusToCss } from '@/composables/useRadius';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
@@ -65,7 +67,7 @@ const DISP = "var(--olo-font-family-heading, 'Archivo',-apple-system,sans-serif)
 const SANS = "var(--olo-font-family, 'Work Sans',-apple-system,sans-serif)";
 const accent = computed(() => s.value.accent || 'var(--olo-color-primary, #c8ff3c)');
 const cols = computed(() => Math.max(1, Math.min(4, parseInt(s.value.columns, 10) || 3)));
-const cbd = computed(() => s.value.card_border || 'rgba(255,255,255,0.1)');
+const cbd = computed(() => borderColorOf(s.value.card_border, 'rgba(255,255,255,0.1)'));
 
 // ── KIT standard: sfondo completo + ombra + bordo sul contenitore (no-op coi default) ──
 const kitStyle = computed(() => {
@@ -132,7 +134,7 @@ const cardRad = computed(() => {
   const br = Math.max(0, parseInt(cr.br, 10) || 0);
   const bl = Math.max(0, parseInt(cr.bl, 10) || 0);
   if (tl || tr || br || bl) return `${tl}px ${tr}px ${br}px ${bl}px`;
-  return (parseInt(s.value.radius, 10) || 18) + 'px';
+  return radiusToCss(s.value.radius, { fallback: '18px' });
 });
 const fixStyle = computed(() => ({ background: s.value.card_bg || '#0f3a2a', border: '1px solid ' + cbd.value, borderRadius: cardRad.value, padding: cardPad.value, display: 'flex', flexDirection: 'column', gap: '18px' }));
 const dayStyle = computed(() => ({ fontFamily: DISP, fontWeight: 800, fontSize: '15px', color: s.value.day_color || '#fff', display: 'block' }));

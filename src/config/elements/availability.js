@@ -58,7 +58,7 @@ export default {
     { key: 'zone_accent', label: t('Colore slot attivo'), type: 'color' },
     { key: 'zone_on', label: t('Testo su accento'), type: 'color' },
     { key: 'cell_bg', label: t('Sfondo celle'), type: 'color' },
-    { key: 'card_border', label: t('Bordo'), type: 'color' },
+    { key: 'card_border', label: t('Bordo'), type: 'border', legacyWidth: 1 },
     { key: 'align', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },

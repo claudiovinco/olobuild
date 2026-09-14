@@ -107,7 +107,7 @@ class Olobuild_StepTimeline_Tile extends Olobuild_Tile_Base {
         $tl_dot    = $this->safe_color_css( $s['timeline_dot_color'] )  ?: 'var(--olo-color-primary, #e1474f)';
         $tl_dotsz  = max( 6, min( 24, absint( $s['timeline_dot_size'] ) ) );
         $tl_h      = max( 1, min( 8, absint( $s['timeline_height'] ) ) );
-        $tl_mb     = max( 0, min( 120, absint( $s['timeline_margin_bottom'] ) ) );
+        $tl_margin = Olobuild_Tile_Utils::spacing_css( $s['timeline_margin_bottom'] ?? 50, 50 );
 
         $counter_size   = max( 40, min( 200, absint( $s['counter_size'] ) ) );
         $counter_clr    = $this->safe_color_css( $s['counter_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
@@ -165,7 +165,7 @@ class Olobuild_StepTimeline_Tile extends Olobuild_Tile_Base {
                 // Timeline: linea con (n+1) pallini (1 iniziale, 1 dopo ogni step)
                 $tl_dots = $n_items + 1;
             ?>
-                <div class="olo-stl__timeline" style="position:relative;height:<?php echo (int) $tl_dotsz; ?>px;margin-bottom:<?php echo (int) $tl_mb; ?>px">
+                <div class="olo-stl__timeline" style="position:relative;height:<?php echo (int) $tl_dotsz; ?>px;margin:<?php echo esc_attr( $tl_margin ); ?>">
                     <div style="position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:<?php echo (int) $tl_h; ?>px;background:<?php echo esc_attr( $tl_line ); ?>;border-radius:<?php echo (int) $tl_h; ?>px"></div>
                     <?php for ( $d = 0; $d < $tl_dots; $d++ ) :
                         $pct = $tl_dots > 1 ? ( $d / ( $tl_dots - 1 ) ) * 100 : 50;

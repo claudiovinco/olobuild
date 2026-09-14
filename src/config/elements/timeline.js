@@ -202,7 +202,7 @@ export default {
     { key: 'tl_card_bg', label: t('Sfondo card'), type: 'color' },
     { key: 'tl_card_radius', label: t('Arrotondamento card (px · 0 = auto)'), type: 'border-radius' },
     { key: 'tl_card_maxw', label: t('Larghezza max card (px · 0 = auto)'), type: 'range', min: 0, max: 600, step: 10 },
-    { key: 'tl_card_pad', label: t('Padding card (px · 0 = auto)'), type: 'range', min: 0, max: 32, step: 1 },
+    { key: 'tl_card_pad', label: t('Padding card (px · 0 = auto)'), type: 'spacing', min: 0, max: 80 },
 
     // ── Immagine ──
     { type: 'separator', label: t('Personalizza · Immagine') },

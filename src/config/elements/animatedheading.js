@@ -89,7 +89,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Testo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         tag:    'tag',
@@ -100,7 +99,6 @@ export default {
       sizeMin: 18, sizeMax: 80, sizeStep: 2,
     },
     { type: 'typography', label: t('Highlight'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'animated_color',
       },

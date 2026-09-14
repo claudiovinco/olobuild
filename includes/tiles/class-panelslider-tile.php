@@ -276,7 +276,7 @@ class Olobuild_PanelSlider_Tile extends Olobuild_Tile_Base {
         $card_bw     = max( 0, intval( $s['card_border_width'] ?? 0 ) );
         $card_bs     = in_array( $s['card_border_style'] ?? 'solid', [ 'solid', 'dashed', 'dotted', 'double' ], true ) ? ( $s['card_border_style'] ?? 'solid' ) : 'solid';
         $card_border_decl = ( $card_bw > 0 && $card_bcol && $card_bcol !== 'transparent' )
-            ? "border: {$card_bw}px {$card_bs} {$card_bcol};"
+            ? Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => $card_bw, 'style' => $card_bs, 'color' => $card_bcol ] )
             : 'border: 0;';
 
         // Shadow

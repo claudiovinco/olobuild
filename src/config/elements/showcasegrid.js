@@ -87,9 +87,9 @@ export default {
       contextKeys: { ratio: 'aspect' } },
 
     { type: 'separator', label: t('Raggio') },
-    { key: 'radius', label: t('Raggio (px)'), type: 'range', min: 0, max: 40, step: 1 },
+    
     // 4 angoli indipendenti. Default {0,0,0,0} → si usa il raggio legacy sopra (no-op).
-    { key: 'card_radius', label: t('Raggio card a 4 angoli (0 = usa raggio sopra)'), type: 'border-radius' },
+    { key: 'card_radius', label: t('Raggio card'), type: 'border-radius', legacyKeys: { all: 'radius' } },
 
     { type: 'separator', label: t('Spaziatura') },
     { key: 'card_padding', label: t('Padding interno card (px)'), type: 'spacing', max: 80 },

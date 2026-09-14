@@ -100,7 +100,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         tag:    'title_tag',
@@ -111,7 +110,6 @@ export default {
       sizeMin: 14, sizeMax: 80, sizeStep: 1,
     },
     { type: 'typography', label: t('Sottotitolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'subtitle_size',
@@ -120,7 +118,6 @@ export default {
       sizeMin: 12, sizeMax: 40, sizeStep: 1,
     },
     { type: 'typography', label: t('Breadcrumbs'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'breadcrumb_color',
       },

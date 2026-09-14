@@ -107,7 +107,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Tag'),
-      presetKey: 'typography_preset',
       keys: {
         weight:    'font_weight',
         color:     'text_color',

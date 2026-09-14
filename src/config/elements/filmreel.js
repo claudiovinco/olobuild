@@ -120,7 +120,7 @@ export default {
     { type: 'separator', label: t('Colori') },
     { key: 'accent', label: t('Colore accento'), type: 'color' },
     { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
-    { key: 'border_color', label: t('Colore linee'), type: 'color' },
+    { key: 'border_color', label: t('Colore linee'), type: 'border', legacyWidth: 1 },
     { key: 'progress_color', label: t('Colore barra progresso'), type: 'color',
       condition: { field: 'progress_bar', op: 'eq', value: true } },
 

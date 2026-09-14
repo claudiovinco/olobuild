@@ -18,6 +18,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue';
+import { borderColorOf } from '@/composables/useBoxModel';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = {
@@ -59,7 +60,7 @@ const SERIF = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)"
 const SANS = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
 const accent = computed(() => s.value.zone_accent || 'var(--olo-color-primary, #e1474f)');
 const center = computed(() => s.value.align === 'center');
-const cardbd = computed(() => s.value.card_border || 'var(--olo-color-border,#e5e7eb)');
+const cardbd = computed(() => borderColorOf(s.value.card_border, 'var(--olo-color-border,#e5e7eb)'));
 
 const rootStyle = computed(() => ({ fontFamily: SANS, textAlign: center.value ? 'center' : 'left' }));
 const eyebrowStyle = computed(() => ({ fontSize: '12px', fontWeight: 700, letterSpacing: '.16em', textTransform: 'uppercase', color: accent.value, display: 'block', marginBottom: '10px' }));

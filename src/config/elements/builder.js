@@ -71,7 +71,7 @@ export default {
     { key: 'zone_accent', label: t('Colore zona (accento)'), type: 'color' },
     { key: 'zone_on', label: t('Testo su accento'), type: 'color' },
     { key: 'card_bg', label: t('Sfondo pannello'), type: 'color' },
-    { key: 'card_border', label: t('Bordo pannello'), type: 'color' },
+    { key: 'card_border', label: t('Bordo pannello'), type: 'border', legacyWidth: 1 },
 
     { type: 'separator', label: t('Layout') },
     { key: 'layout', label: t('Disposizione'), type: 'select', options: [

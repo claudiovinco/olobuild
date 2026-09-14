@@ -61,7 +61,6 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Headings'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'heading_color',
@@ -69,7 +68,6 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
     { type: 'typography', label: t('Testo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'text_color',
@@ -77,7 +75,6 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
     { type: 'typography', label: t('Pulsante'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'button_color',
@@ -86,7 +83,7 @@ export default {
     },
 
     { type: 'separator', label: t('Colori') },
-    { key: 'border_color', label: t('Colore bordi'), type: 'color' },
+    { key: 'border_color', label: t('Bordi'), type: 'border', legacyWidth: 1 },
     { key: 'button_bg', label: t('Sfondo pulsante'), type: 'color' },
     ...borderFields(),
   ],

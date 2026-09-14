@@ -123,7 +123,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Voci'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:          'font_size',
@@ -136,7 +135,6 @@ export default {
       sizeMin: 10, sizeMax: 24, sizeStep: 1,
     },
     { type: 'typography', label: t('Link'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'link_color',
       },
@@ -161,9 +159,8 @@ export default {
     ]},
     { key: 'chip_bg', label: t('Sfondo chip'), type: 'color',
       condition: { field: 'chip_style', op: 'neq', value: 'none' } },
-    { key: 'chip_padding_x', label: t('Padding orizzontale chip (px)'), type: 'range', min: 0, max: 24, step: 1,
-      condition: { field: 'chip_style', op: 'neq', value: 'none' } },
-    { key: 'chip_padding_y', label: t('Padding verticale chip (px)'), type: 'range', min: 0, max: 16, step: 1,
+    { key: 'chip_padding', label: t('Padding chip (px)'), type: 'spacing', min: 0, max: 40,
+      legacyKeys: { y: 'chip_padding_y', x: 'chip_padding_x' },
       condition: { field: 'chip_style', op: 'neq', value: 'none' } },
     { key: 'chip_radius', label: t('Raggio bordi chip (px)'), type: 'border-radius',
       condition: { field: 'chip_style', op: 'neq', value: 'none' } },

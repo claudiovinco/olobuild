@@ -23,6 +23,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue';
+import { borderColorOf } from '@/composables/useBoxModel';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = {
@@ -51,7 +52,7 @@ function fmt(n) { return new Intl.NumberFormat('en-US', { maximumFractionDigits:
 const total = computed(() => items.value.reduce((t, it) => t + compute(it), 0));
 
 const accent = computed(() => s.value.zone_accent || 'var(--olo-color-primary, #e1474f)');
-const line = computed(() => s.value.card_border || 'var(--olo-color-border,#e5e7eb)');
+const line = computed(() => borderColorOf(s.value.card_border, 'var(--olo-color-border,#e5e7eb)'));
 const center = computed(() => s.value.align === 'center');
 const SERIF = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
 const SANS = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";

@@ -56,7 +56,7 @@ class Olobuild_Woo_Checkout_Tile extends Olobuild_Tile_Base {
         $accent_color  = $this->safe_color_css( $s['accent_color'] );
         $text_color    = $this->safe_color_css( $s['text_color'] );
         $heading_color = $this->safe_color_css( $s['heading_color'] );
-        $border_color  = $this->safe_color_css( $s['border_color'] );
+        $border_color  = Olobuild_Tile_Utils::border_color( $s['border_color'] ?? null, '' );
         $btn_color     = $this->safe_color_css( $s['button_color'] );
         $btn_bg        = $this->safe_color_css( $s['button_bg'] );
 
@@ -74,8 +74,8 @@ class Olobuild_Woo_Checkout_Tile extends Olobuild_Tile_Base {
         // Campi/pannelli — fallback = resa storica (input bianchi, pannelli muted)
         $input_bg     = $this->safe_color_css( $s['input_bg'] ?? '' ) ?: '#ffffff';
         $input_text   = $this->safe_color_css( $s['input_text_color'] ?? '' ) ?: ( $text_color ?: 'inherit' );
-        $input_radius = trim( (string) ( $s['input_radius'] ?? '' ) );
-        $input_radius = ( $input_radius !== '' && preg_match( '/^\d{1,3}$/', $input_radius ) ) ? $input_radius . 'px' : $border_radius;
+        // Controllo standard a 4 angoli: border_radius() accetta scalare e oggetto.
+        $input_radius = Olobuild_Tile_Utils::border_radius( $s['input_radius'] ?? '' ) ?: $border_radius;
         $panel_bg     = $this->safe_color_css( $s['panel_bg'] ?? '' ) ?: 'var(--olo-color-muted, #F3F4F6)';
         $notice_bg    = $this->safe_color_css( $s['notice_bg'] ?? '' ) ?: 'var(--olo-color-muted, #F3F4F6)';
         $notice_text  = $this->safe_color_css( $s['notice_text'] ?? '' ) ?: ( $text_color ?: 'inherit' );
@@ -137,7 +137,7 @@ class Olobuild_Woo_Checkout_Tile extends Olobuild_Tile_Base {
             /* Form coupon a scomparsa */
             .<?php echo $uid; ?> form.checkout_coupon {
                 background: <?php echo $panel_bg; ?>;
-                border: 1px solid <?php echo $border_color; ?>;
+                <?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border_color'] ?? null, [ 'width' => 1, 'color' => $border_color ] ) ); ?>
                 border-radius: <?php echo $border_radius; ?>;
                 padding: 20px;
                 margin: 0 0 28px;
@@ -174,7 +174,7 @@ class Olobuild_Woo_Checkout_Tile extends Olobuild_Tile_Base {
                 width: 100%;
                 padding: <?php echo $input_padding; ?>;
                 background: <?php echo $input_bg; ?>;
-                border: 1px solid <?php echo $border_color; ?>;
+                <?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border_color'] ?? null, [ 'width' => 1, 'color' => $border_color ] ) ); ?>
                 border-radius: <?php echo $input_radius; ?>;
                 font-size: 14px;
                 color: <?php echo $input_text; ?>;
@@ -206,7 +206,7 @@ class Olobuild_Woo_Checkout_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .woocommerce table.shop_table {
                 width: 100%;
                 border-collapse: collapse;
-                border: 1px solid <?php echo $border_color; ?>;
+                <?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border_color'] ?? null, [ 'width' => 1, 'color' => $border_color ] ) ); ?>
                 border-radius: <?php echo $border_radius; ?>;
                 overflow: hidden;
                 margin-bottom: 24px;
@@ -249,7 +249,7 @@ class Olobuild_Woo_Checkout_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?> .woocommerce .woocommerce-checkout-payment {
                 background: <?php echo $panel_bg; ?>;
-                border: 1px solid <?php echo $border_color; ?>;
+                <?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border_color'] ?? null, [ 'width' => 1, 'color' => $border_color ] ) ); ?>
                 border-radius: <?php echo $border_radius; ?>;
                 padding: 20px;
             }

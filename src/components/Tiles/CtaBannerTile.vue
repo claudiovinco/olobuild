@@ -15,6 +15,7 @@
 <script setup>
 import { computed } from 'vue';
 import { resolveFontFamily } from '@/composables/oloTileDefaults';
+import { toSpacingCss } from '@/composables/useBoxModel';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -30,11 +31,11 @@ const defaults = {
   bg: { type: 'solid', color: '#0f172a' },
   text_color: '#ffffff', accent_color: 'var(--olo-color-primary, #e1474f)', subtitle_color: '#9ca3af',
   cta_bg: 'var(--olo-color-primary, #e1474f)', cta_color: '#ffffff',
-  cta_radius: R(999), cta_size: 15, cta_padding_y: 18, cta_padding_x: 32,
+  cta_radius: R(999), cta_size: 15, cta_padding: { top: 18, right: 32, bottom: 18, left: 32 },
   headline_font_family: 'serif', headline_size: 36, headline_weight: '400',
   subtitle_size: 14,
   layout: 'split-3', ratio: '1.4fr 1fr auto', gap: 40, vertical_align: 'center',
-  banner_radius: R(20), banner_padding: 40,
+  banner_radius: R(20), banner_padding: { top: 40, right: 40, bottom: 40, left: 40 },
 };
 
 const s = computed(() => ({ ...defaults, ...props.settings }));
@@ -71,7 +72,7 @@ const gridCols = computed(() => {
 const bannerStyle = computed(() => ({
   background: bgToCss(s.value.bg),
   borderRadius: radiusToCss(s.value.banner_radius),
-  padding: (s.value.banner_padding || 40) + 'px',
+  padding: toSpacingCss(s.value.banner_padding, { fallback: [40, 40, 40, 40] }),
   color: s.value.text_color || '#ffffff',
   display: 'grid',
   gridTemplateColumns: gridCols.value,
@@ -99,11 +100,18 @@ const subtitleStyle = computed(() => ({
   color: s.value.subtitle_color || '#9ca3af',
 }));
 
+// Padding bottoni: FieldSpacing 4 lati; le chiavi legacy cta_padding_y/x
+// (template salvati prima della 1.4.430) restano valide come fallback.
+const ctaPadCss = computed(() => toSpacingCss(props.settings.cta_padding, {
+  legacy: { y: props.settings.cta_padding_y, x: props.settings.cta_padding_x },
+  fallback: [18, 32, 18, 32],
+}));
+
 const ctaStyle = computed(() => ({
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  padding: `${s.value.cta_padding_y || 18}px ${s.value.cta_padding_x || 32}px`,
+  padding: ctaPadCss.value,
   background: s.value.cta_bg || 'var(--olo-color-primary, #e1474f)',
   color: s.value.cta_color || '#ffffff',
   borderRadius: radiusToCss(s.value.cta_radius),
@@ -127,7 +135,7 @@ const cta2Style = computed(() => ({
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  padding: `${s.value.cta_padding_y || 18}px ${s.value.cta_padding_x || 32}px`,
+  padding: ctaPadCss.value,
   background: s.value.cta2_bg || 'transparent',
   color: s.value.cta2_color || '#ffffff',
   border: s.value.cta2_border ? `1px solid ${s.value.cta2_border}` : 'none',

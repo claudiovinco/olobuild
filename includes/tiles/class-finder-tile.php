@@ -86,7 +86,7 @@ class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
         $accent = $this->safe_color_css( $s['zone_accent'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $on     = $this->safe_color_css( $s['zone_on'] ?? '' ) ?: '#ffffff';
         $cardbg = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
-        $cardbd = $this->safe_color_css( $s['card_border'] ?? '' ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $cardbd = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
         $chipbg = $this->safe_color_css( $s['chip_bg'] ?? '' ) ?: 'transparent';
         $media_bg = $this->safe_color_css( $s['media_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #1e1e1e)';
         $center = ( ( $s['align'] ?? 'center' ) === 'center' );
@@ -125,7 +125,7 @@ class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
 
         // bordo card: 'border' avanzato (se impostato) sostituisce il card_border semplice
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
-        $card_border_decl  = $border_css ? $border_css : ( 'border:1px solid ' . $cardbd . ';' );
+        $card_border_decl  = $border_css ? $border_css : ( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $cardbd ] ) );
         $card_sel          = ".{$uid} .ofn-res";
         $border_hover_css  = $this->build_border_hover_css( $card_sel, $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
         $border_effect_css = $this->build_border_effect_css( $card_sel, $s['border'] ?? [], $s );

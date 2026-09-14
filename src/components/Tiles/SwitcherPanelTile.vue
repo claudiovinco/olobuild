@@ -84,6 +84,7 @@
 <script setup>
 import { t } from '@/i18n';
 import { ref, computed, watch } from 'vue';
+import { toSpacingCss } from '@/composables/useBoxModel';
 import { radiusToCss } from '@/composables/useRadius';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 
@@ -159,7 +160,7 @@ const navStyle = computed(() => {
   const isVert = np === 'side-left' || np === 'side-right';
   return {
     margin: '0',
-    padding: (parseInt(s.value.nav_container_padding) || 0) + 'px',
+    padding: toSpacingCss(s.value.nav_container_padding, { fallback: [0, 0, 0, 0] }),
     listStyle: 'none',
     display: 'flex',
     gap: (parseInt(s.value.nav_gap) || 0) + 'px',

@@ -127,6 +127,20 @@ trait Olobuild_Renderer_Css_Trait {
         if ( ! empty( $style['padding_bottom'] ) ) $inline_styles[] = 'padding-bottom: ' . intval( $style['padding_bottom'] ) . 'px';
         if ( ! empty( $style['padding_left'] ) )   $inline_styles[] = 'padding-left: ' . intval( $style['padding_left'] ) . 'px';
 
+        // Preset tipografico globale (Stili globali → Tipografia).
+        // 143 tile dichiarano `typography_preset` nel loro config ma solo 7 renderer
+        // lo leggevano: il controllo esisteva e non faceva niente. Applicato qui sul
+        // WRAPPER, le proprietà si ereditano a tutto il contenuto della tile e ogni
+        // valore esplicito della tile continua a vincere (inline sul figlio > eredità).
+        $typo_preset = isset( $settings['typography_preset'] ) ? sanitize_key( (string) $settings['typography_preset'] ) : '';
+        if ( $typo_preset !== '' ) {
+            $inline_styles[] = "font-family: var(--olo-font-{$typo_preset}-family, inherit)";
+            $inline_styles[] = "font-weight: var(--olo-font-{$typo_preset}-weight, inherit)";
+            $inline_styles[] = "text-transform: var(--olo-font-{$typo_preset}-transform, none)";
+            $inline_styles[] = "line-height: var(--olo-font-{$typo_preset}-line-height, inherit)";
+            $inline_styles[] = "letter-spacing: var(--olo-font-{$typo_preset}-letter-spacing, normal)";
+        }
+
         // Border radius
         if ( ! empty( $style['border_radius'] ) )  $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
 

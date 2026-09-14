@@ -46,7 +46,7 @@ class Olobuild_Timezone_Tile extends Olobuild_Tile_Base {
         $ok     = $this->safe_color_css( $s['ok_color'] ?? '' ) ?: '#e0a23a';
         $sleep  = $this->safe_color_css( $s['sleep_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #9ca3af)';
         $cardbg = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-surface, #ffffff)';
-        $line   = $this->safe_color_css( $s['card_border'] ?? '' ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $line   = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
         $center = ( ( $s['align'] ?? 'left' ) === 'center' );
         $serif  = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
         $sans   = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
@@ -86,7 +86,7 @@ class Olobuild_Timezone_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .otz-range::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;border:2px solid var(--tz-accent);cursor:pointer;}
             .<?php echo $uid; ?> .otz-grid{display:grid;grid-template-columns:repeat(<?php echo min( 4, max( 1, count( $items ) ) ); ?>,1fr);gap:12px;}
             @media(max-width:680px){.<?php echo $uid; ?> .otz-grid{grid-template-columns:1fr 1fr;}}
-            .<?php echo $uid; ?> .otz-city{background:<?php echo $cardbg; ?>;border:1px solid <?php echo $line; ?>;border-radius:12px;padding:16px;text-align:left;}
+            .<?php echo $uid; ?> .otz-city{background:<?php echo $cardbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $line ] ) ); ?>border-radius:12px;padding:16px;text-align:left;}
             .<?php echo $uid; ?> .otz-city__c{font-weight:600;font-size:14px;color:var(--olo-color-text,#111827);}
             .<?php echo $uid; ?> .otz-city__o{font-size:11px;opacity:.55;letter-spacing:.04em;}
             .<?php echo $uid; ?> .otz-city__t{font-family:<?php echo $serif; ?>;font-size:24px;margin-top:8px;color:var(--olo-color-text,#111827);font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:8px;}

@@ -88,18 +88,16 @@ export default {
     { key: 'eyebrow_dot_color', label: t('Colore pallino (se separatore = bullet)'), type: 'color' },
 
     { type: 'separator', label: t('Tipografia headline') },
-    { key: 'headline_font_family', label: t('Famiglia'), type: 'font-family' },
-    { key: 'headline_font_size',   label: t('Dimensione (px)'), type: 'range', min: 32, max: 160, step: 2 },
-    { key: 'headline_line_height', label: t('Interlinea'),      type: 'range', min: 0.8, max: 1.8, step: 0.05 },
-    { key: 'headline_font_weight', label: t('Peso'),            type: 'select', options: [
-      { value: '300', label: t('300 — Light') },
-      { value: '400', label: t('400 — Regular') },
-      { value: '500', label: t('500 — Medium') },
-      { value: '600', label: t('600 — SemiBold') },
-      { value: '700', label: t('700 — Bold') },
-      { value: '800', label: t('800 — ExtraBold') },
-      { value: '900', label: t('900 — Black') },
-    ]},
+    { type: 'typography', label: t('Headline'),
+      responsiveKeys: ['size'],
+      keys: {
+        family:     'headline_font_family',
+        size:       'headline_font_size',
+        lineHeight: 'headline_line_height',
+        weight:     'headline_font_weight',
+      },
+      sizeMin: 32, sizeMax: 160, sizeStep: 2,
+    },
     { key: 'headline_align', label: t('Allineamento'), type: 'select', options: ALIGN_OPTIONS() },
 
     { type: 'separator', label: t('Tagline stile') },

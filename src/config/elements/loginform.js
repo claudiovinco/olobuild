@@ -247,13 +247,12 @@ export default {
 
     { type: 'separator', label: t('Aspetto form') },
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 64 },
-    { key: 'input_padding', label: t('Padding input (px)'), type: 'range', min: 4, max: 24, step: 1 },
+    { key: 'input_padding', label: t('Padding input (px)'), type: 'spacing', min: 0, max: 40 },
     withHover({ key: 'input_radius', label: t('Raggio bordo input (px)'), type: 'border-radius' }),
     withHover({ key: 'submit_radius', label: t('Raggio bordo pulsante (px)'), type: 'border-radius' }),
     withHover({ key: 'border_radius', label: t('Raggio bordo form (px)'), type: 'border-radius' }),
-    { key: 'border_width', label: t('Bordo form (px)'), type: 'range', min: 0, max: 5, step: 1 },
-    { key: 'border_color', label: t('Colore bordo form'), type: 'color',
-      condition: { field: 'border_width', operator: '>', value: '0' } },
+    { key: 'border', label: t('Bordo'), type: 'border',
+      legacyKeys: { width: 'border_width', color: 'border_color' } },
 
     ...shadowField,
     ...borderFields(),

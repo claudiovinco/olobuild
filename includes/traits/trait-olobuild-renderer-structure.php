@@ -87,10 +87,14 @@ trait Olobuild_Renderer_Structure_Trait {
         // Padding verticale "Personalizzato (px)": valori espliciti sopra/sotto,
         // vincono sul default di .uk-section via inline style.
         if ( 'custom' === $padding ) {
-            $pt = max( 0, intval( $s['padding_top_custom'] ?? 70 ) );
-            $pb = max( 0, intval( $s['padding_bottom_custom'] ?? 70 ) );
-            $inline_styles[] = 'padding-top: ' . $pt . 'px';
-            $inline_styles[] = 'padding-bottom: ' . $pb . 'px';
+            // Controllo unico a 4 lati (`padding_custom`), con ripiego sulle due
+            // chiavi storiche sopra/sotto. Prima i lati orizzontali non esistevano.
+            $sec_pad = Olobuild_Tile_Utils::spacing_sides(
+                $s['padding_custom'] ?? null,
+                [ 'top' => $s['padding_top_custom'] ?? null, 'bottom' => $s['padding_bottom_custom'] ?? null ],
+                [ 70, 0, 70, 0 ]
+            );
+            $inline_styles[] = 'padding: ' . Olobuild_Tile_Utils::sides_css( $sec_pad );
         }
 
         // Background handling

@@ -52,7 +52,8 @@ class Olobuild_AnnouncementBar_Tile extends Olobuild_Tile_Base {
         $acol  = $this->safe_color_css( $s['accent_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
         $fs    = max( 8, intval( $s['font_size'] ?? 11 ) );
         $fw    = in_array( (string) ( $s['font_weight'] ?? '500' ), [ '400', '500', '600', '700' ], true ) ? (string) ( $s['font_weight'] ?? '500' ) : '500';
-        $ls    = preg_replace( '/[^0-9a-z.\-]/i', '', (string) ( $s['letter_spacing'] ?? '0.2em' ) ) ?: '0.2em';
+        // css_len(): accetta sia '0.2em' (FieldUnit) sia 0.2 (pannello Tipografia).
+        $ls    = Olobuild_Tile_Utils::css_len( $s['letter_spacing'] ?? '', 'em', '0.2em' );
         $tt    = in_array( $s['text_transform'] ?? 'uppercase', [ 'none', 'uppercase', 'lowercase' ], true ) ? ( $s['text_transform'] ?? 'uppercase' ) : 'uppercase';
         $align = in_array( $s['alignment'] ?? 'center', [ 'left', 'center', 'right' ], true ) ? ( $s['alignment'] ?? 'center' ) : 'center';
         $cp    = is_array( $s['tile_padding'] ?? null ) ? $s['tile_padding'] : [];

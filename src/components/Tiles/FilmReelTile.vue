@@ -48,6 +48,7 @@
  * in onMounted, con cleanup completo in onBeforeUnmount.
  */
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue';
+import { borderColorOf } from '@/composables/useBoxModel';
 import { resolveColor } from '@/composables/oloTileDefaults';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 import { t } from '@/i18n';
@@ -123,8 +124,8 @@ const ITEMBG = 'var(--olo-color-muted, #161922)';
 
 const accent = computed(() => resolveColor(s.value.accent, 'var(--olo-color-primary, #C6F24E)'));
 const bg = computed(() => resolveColor(s.value.bg_color, 'var(--olo-color-surface-alt, #101218)'));
-const line = computed(() => resolveColor(s.value.border_color, 'var(--olo-color-border, rgba(236,234,227,.10))'));
-const line2 = computed(() => resolveColor(s.value.border_color, 'rgba(236,234,227,.20)'));
+const line = computed(() => resolveColor(borderColorOf(s.value.border_color), 'var(--olo-color-border, rgba(236,234,227,.10))'));
+const line2 = computed(() => resolveColor(borderColorOf(s.value.border_color), 'rgba(236,234,227,.20)'));
 const prog = computed(() => resolveColor(s.value.progress_color, accent.value));
 const skmax = computed(() => Math.max(0, Math.min(20, parseFloat(s.value.skew_max !== '' ? s.value.skew_max : 7) || 0)));
 // Punto focale globale (object-position) — '' → 'center center' (= resa attuale).

@@ -80,12 +80,13 @@ class Olobuild_OloxHero_Tile extends Olobuild_Olox_Base_Tile {
         $accent  = $this->olox_color( $s['accent'] );
         $bg      = in_array( $s['bg_variant'], [ 'build', 'booking', 'lang', 'secur', 'tutor', 'none' ], true ) ? $s['bg_variant'] : 'none';
         $scene   = $s['scene'] ?? 'none';
-        $pad_top = intval( $s['pad_top'] );
+        $pad_sides = Olobuild_Tile_Utils::spacing_sides( $s['pad_top'] ?? 0, [], [ 0, 0, 0, 0 ] );
+        $pad_css   = array_sum( $pad_sides ) > 0 ? Olobuild_Tile_Utils::sides_css( $pad_sides ) : '';
 
         ob_start();
         echo $this->olox_open( '', '--c:' . $accent ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         ?>
-        <header class="dhero<?php echo 'none' !== $bg ? ' oxbg-' . esc_attr( $bg ) : ''; ?>"<?php echo $pad_top ? ' style="padding-top:' . (int) $pad_top . 'px"' : ''; ?>>
+        <header class="dhero<?php echo 'none' !== $bg ? ' oxbg-' . esc_attr( $bg ) : ''; ?>"<?php echo $pad_css ? ' style="padding:' . esc_attr( $pad_css ) . '"' : ''; ?>>
             <div class="wrap grid2">
                 <div>
                     <?php if ( ! empty( $s['logo'] ) ) : ?><img class="plogo" src="<?php echo esc_url( $s['logo'] ); ?>" alt="" /><?php endif; ?>

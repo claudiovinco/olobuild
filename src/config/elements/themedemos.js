@@ -69,7 +69,7 @@ export default {
       description: t('Vuoto = primario del tema.') },
     { key: 'card_bg', label: t('Sfondo card'), type: 'color',
       description: t('Vuoto = superficie attenuata del tema.') },
-    withHover({ key: 'card_border_color', label: t('Bordo card'), type: 'color',
+    withHover({ key: 'card_border_color', label: t('Bordo card'), type: 'border', legacyWidth: 1,
       description: t('Vuoto = bordo del tema.') }, { hoverKey: 'card_border_hover_color' }),
 
     { type: 'separator', label: t('Sfondo') },

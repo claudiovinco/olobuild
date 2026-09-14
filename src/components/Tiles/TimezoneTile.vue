@@ -20,6 +20,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
+import { borderColorOf } from '@/composables/useBoxModel';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = {
@@ -50,7 +51,7 @@ const accent = computed(() => s.value.zone_accent || 'var(--olo-color-primary, #
 const work = computed(() => s.value.work_color || accent.value);
 const ok = computed(() => s.value.ok_color || '#e0a23a');
 const sleep = computed(() => s.value.sleep_color || 'var(--olo-color-text-muted,#9ca3af)');
-const line = computed(() => s.value.card_border || 'var(--olo-color-border,#e5e7eb)');
+const line = computed(() => borderColorOf(s.value.card_border, 'var(--olo-color-border,#e5e7eb)'));
 const center = computed(() => s.value.align === 'center');
 const SERIF = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
 const SANS = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";

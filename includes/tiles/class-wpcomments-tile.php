@@ -93,7 +93,7 @@ class Olobuild_Wpcomments_Tile extends Olobuild_Tile_Base {
         $date_color   = $this->safe_color_css( $s['date_color'] );
         $link_color   = $this->safe_color_css( $s['link_color'] );
         $form_bg      = $this->safe_color_css( $s['form_background'] );
-        $border_color = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $border_color = Olobuild_Tile_Utils::border_color( $s['border_color'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
 
         // Get comments
         $comments = get_comments( [
@@ -181,7 +181,7 @@ class Olobuild_Wpcomments_Tile extends Olobuild_Tile_Base {
                 padding: 16px;
                 border-radius: 6px;
                 <?php if ( $form_bg ) : ?>background: <?php echo $form_bg; ?>;<?php endif; ?>
-                <?php if ( $border_color ) : ?>border: 1px solid <?php echo $border_color; ?>;<?php endif; ?>
+                <?php if ( $border_color ) : ?><?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border_color'] ?? null, [ 'width' => 1, 'color' => $border_color ] ) ); ?><?php endif; ?>
             }
             .<?php echo $uid; ?> .olo-comment-form-wrap .comment-form label {
                 display: block;
@@ -195,7 +195,7 @@ class Olobuild_Wpcomments_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-comment-form-wrap .comment-form textarea {
                 width: 100%;
                 padding: 8px 12px;
-                border: 1px solid <?php echo $border_color; ?>;
+                <?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border_color'] ?? null, [ 'width' => 1, 'color' => $border_color ] ) ); ?>
                 border-radius: 4px;
                 font-size: 0.9em;
                 box-sizing: border-box;

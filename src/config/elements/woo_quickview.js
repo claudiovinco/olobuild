@@ -85,7 +85,6 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'title_color',
@@ -93,7 +92,6 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
     { type: 'typography', label: t('Prezzo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'price_color',
@@ -101,7 +99,6 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
     { type: 'typography', label: t('Pulsante'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'button_color',

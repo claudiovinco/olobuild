@@ -137,7 +137,6 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Intestazione'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'heading_size',
@@ -146,7 +145,6 @@ export default {
       sizeMin: 14, sizeMax: 36,
     },
     { type: 'typography', label: t('Titolo card'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'title_size',
@@ -155,7 +153,6 @@ export default {
       sizeMin: 14, sizeMax: 24,
     },
     { type: 'typography', label: t('Meta'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'meta_color',
@@ -163,7 +160,6 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
     { type: 'typography', label: t('Prezzo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'price_color',

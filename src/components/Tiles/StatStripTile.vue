@@ -17,6 +17,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { toSpacingCss } from '@/composables/useBoxModel';
 import { resolveFontFamily } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
@@ -50,7 +51,7 @@ const vfam = computed(() => resolveFontFamily(s.value.value_font_family, { headi
 const align = computed(() => s.value.align === 'center' ? 'center' : 'left');
 
 const bandStyle = computed(() => {
-  const st = { padding: (s.value.band_padding_y || 0) + 'px 0' };
+  const st = { padding: toSpacingCss(s.value.band_padding, { legacy: { y: s.value.band_padding_y }, fallback: [40, 0, 40, 0] }) };
   if (s.value.band_border) { st.borderTop = '1px solid ' + line.value; st.borderBottom = '1px solid ' + line.value; }
   return st;
 });

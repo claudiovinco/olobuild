@@ -19,6 +19,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { toSpacingCss } from '@/composables/useBoxModel';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
 import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
@@ -73,7 +74,7 @@ function pillStyle(acc, ownText = true) {
     display: 'inline-flex',
     alignItems: 'center',
     gap: '8px',
-    padding: `${s.value.padding_y ?? 7}px ${s.value.padding_x ?? 13}px`,
+    padding: toSpacingCss(s.value.padding, { legacy: { y: s.value.padding_y, x: s.value.padding_x }, fallback: [7, 13, 7, 13] }),
     borderRadius: radiusCss(s.value.badge_radius),
     fontSize: `${parseInt(s.value.font_size) || 13}px`,
     fontWeight: s.value.font_weight || '600',

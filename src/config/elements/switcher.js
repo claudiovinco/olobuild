@@ -127,7 +127,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Tab'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:       'tab_font_size',
@@ -137,21 +136,20 @@ export default {
       sizeMin: 11, sizeMax: 20, sizeStep: 1,
     },
     { type: 'typography', label: t('Contenuto'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'content_color',
       },
     },
 
     { type: 'separator', label: t('Tab — Spaziatura') },
-    { key: 'tab_padding_y', label: t('Padding verticale (px)'), type: 'range', min: 4, max: 24, step: 1 },
-    { key: 'tab_padding_x', label: t('Padding orizzontale (px)'), type: 'range', min: 8, max: 32, step: 1 },
+    { key: 'tab_padding', label: t('Padding tab (px)'), type: 'spacing', min: 0, max: 60,
+      legacyKeys: { y: 'tab_padding_y', x: 'tab_padding_x' } },
     { key: 'tab_gap', label: t('Spazio tra tab (px)'), type: 'range', min: 0, max: 24, step: 1 },
     { key: 'tab_radius', label: t('Arrotondamento tab (px)'), type: 'border-radius' },
 
     { type: 'separator', label: t('Container nav') },
     { key: 'container_bg', label: t('Sfondo container'), type: 'color' },
-    { key: 'container_padding', label: t('Padding container (px)'), type: 'range', min: 0, max: 16, step: 1 },
+    { key: 'container_padding', label: t('Padding container (px)'), type: 'spacing', min: 0, max: 60 },
     { key: 'container_radius', label: t('Arrotondamento container (px)'), type: 'border-radius' },
 
     { type: 'separator', label: t('Colori tab') },
@@ -171,8 +169,8 @@ export default {
 
     { type: 'separator', label: t('Contenuto pannello') },
     { key: 'content_bg', label: t('Sfondo contenuto'), type: 'color' },
-    { key: 'content_padding_y', label: t('Padding verticale (px)'), type: 'range', min: 0, max: 40, step: 2 },
-    { key: 'content_padding_x', label: t('Padding orizzontale (px)'), type: 'range', min: 0, max: 40, step: 2 },
+    { key: 'content_padding', label: t('Padding contenuto (px)'), type: 'spacing', min: 0, max: 80,
+      legacyKeys: { y: 'content_padding_y', x: 'content_padding_x' } },
 
     ...textEffectsFields([
       { value: 'title', label: t('Solo Titolo') },

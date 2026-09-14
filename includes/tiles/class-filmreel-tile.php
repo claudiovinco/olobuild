@@ -86,7 +86,7 @@ class Olobuild_FilmReel_Tile extends Olobuild_Tile_Base {
         // ── Colori token-first (parità byte con FilmReelTile.vue) ──
         $accent = $this->safe_color_css( $s['accent'] ?? '' ) ?: 'var(--olo-color-primary, #C6F24E)';
         $bg     = $this->safe_color_css( $s['bg_color'] ?? '' ) ?: 'var(--olo-color-surface-alt, #101218)';
-        $line   = $this->safe_color_css( $s['border_color'] ?? '' ) ?: 'var(--olo-color-border, rgba(236,234,227,.10))';
+        $line   = Olobuild_Tile_Utils::border_color( $s['border_color'] ?? null, 'var(--olo-color-border, rgba(236,234,227,.10))' );
         $line2  = $this->safe_color_css( $s['border_color'] ?? '' ) ?: 'rgba(236,234,227,.20)';
         $prog   = $this->safe_color_css( $s['progress_color'] ?? '' ) ?: $accent;
         $text   = 'var(--olo-color-text, #ECEAE3)';
@@ -167,7 +167,7 @@ class Olobuild_FilmReel_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ofr-pcap{flex:0 0 clamp(220px,22vw,300px);display:flex;flex-direction:column;justify-content:center;padding-right:20px;align-self:center;}
             .<?php echo $uid; ?> .ofr-eyebrow{display:block;margin-bottom:16px;font-family:<?php echo $mono; ?>;font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:<?php echo $accent; ?>;}
             .<?php echo $uid; ?> .ofr-pcap p{color:<?php echo $muted; ?>;font-size:15px;line-height:1.6;margin:14px 0 0;max-width:30ch;}
-            .<?php echo $uid; ?> .ofr-item{position:relative;flex:0 0 clamp(260px,30vw,420px);height:clamp(320px,56vh,560px);overflow:hidden;border:1px solid <?php echo $line; ?>;background:<?php echo $itembg; ?>;scroll-snap-align:center;display:block;color:<?php echo $text; ?>;text-decoration:none;}
+            .<?php echo $uid; ?> .ofr-item{position:relative;flex:0 0 clamp(260px,30vw,420px);height:clamp(320px,56vh,560px);overflow:hidden;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border_color'] ?? null, [ 'width' => 1, 'color' => $line ] ) ); ?>background:<?php echo $itembg; ?>;scroll-snap-align:center;display:block;color:<?php echo $text; ?>;text-decoration:none;}
             .<?php echo $uid; ?> .ofr-item.tall{height:clamp(360px,62vh,610px);align-self:flex-start;}
             .<?php echo $uid; ?> .ofr-item.short{height:clamp(260px,46vh,460px);align-self:center;}
             .<?php echo $uid; ?> .ofr-item:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, <?php echo $accent; ?> 30%, transparent);}

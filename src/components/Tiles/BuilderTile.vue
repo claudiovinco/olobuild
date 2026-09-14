@@ -56,6 +56,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue';
+import { borderColorOf } from '@/composables/useBoxModel';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = {
@@ -103,7 +104,7 @@ const DISP = "var(--olo-font-family-heading, 'Archivo',-apple-system,sans-serif)
 const accent = computed(() => s.value.zone_accent || 'var(--olo-color-primary, #e1474f)');
 const on = computed(() => s.value.zone_on || '#ffffff');
 const center = computed(() => s.value.align === 'center');
-const cardbd = computed(() => s.value.card_border || 'var(--olo-color-border,#e5e7eb)');
+const cardbd = computed(() => borderColorOf(s.value.card_border, 'var(--olo-color-border,#e5e7eb)'));
 const cardbg = computed(() => s.value.card_bg || 'var(--olo-color-surface-alt,#f6f7f9)');
 const hcol = computed(() => s.value.heading_color || 'var(--olo-color-text,#111827)');
 const tally = computed(() => s.value.tally_bg || 'var(--olo-color-text,#111827)');

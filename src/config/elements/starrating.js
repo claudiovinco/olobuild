@@ -87,7 +87,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'title_color',
@@ -95,7 +94,6 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
     { type: 'typography', label: t('Sottotitolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'subtitle_color',

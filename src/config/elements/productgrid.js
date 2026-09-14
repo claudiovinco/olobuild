@@ -177,9 +177,9 @@ export default {
 
     { type: 'separator', label: t('Card (sfondo opzionale)') },
     { key: 'card_bg', label: t('Card — sfondo (vuoto = trasparente)'), type: 'color' },
-    { key: 'card_border', label: t('Card — bordo'), type: 'color' },
+    { key: 'card_border', label: t('Card — bordo'), type: 'border', legacyWidth: 1 },
     { key: 'card_radius', label: t('Card — raggio (px)'), type: 'border-radius' },
-    { key: 'card_padding', label: t('Card — padding interno (px)'), type: 'range', min: 0, max: 32, step: 1 },
+    { key: 'card_padding', label: t('Card — padding interno (px)'), type: 'spacing', min: 0, max: 80 },
 
     { type: 'separator', label: t('Shade swatches') },
     { key: 'shade_size', label: t('Pallini shade — dimensione (px)'), type: 'range', min: 10, max: 24, step: 1 },
@@ -208,7 +208,7 @@ export default {
 
     { type: 'separator', label: t('Filtri (chip)') },
     { key: 'filter_text_color', label: t('Chip — testo'), type: 'color' },
-    { key: 'filter_border_color', label: t('Chip — bordo'), type: 'color' },
+    { key: 'filter_border_color', label: t('Chip — bordo'), type: 'border', legacyWidth: 1 },
     { key: 'filter_active_bg', label: t('Chip attivo/hover — sfondo (vuoto = accento)'), type: 'color' },
     { key: 'filter_active_color', label: t('Chip attivo/hover — testo'), type: 'color' },
 

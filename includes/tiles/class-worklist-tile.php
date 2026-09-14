@@ -59,7 +59,11 @@ class Olobuild_WorkList_Tile extends Olobuild_Tile_Base {
         $mono    = $mono_fam !== '' ? $mono_fam : $mono_fb;
         $tfam    = $this->resolve_font_family( $s['title_font_family'] ?? '', [ 'heading' => $heading, 'body' => $body, 'mono' => $mono ] ) ?: $heading;
 
-        $pad_y       = max( 8, min( 60, absint( $s['row_padding_y'] ) ) );
+        $row_pad_css = Olobuild_Tile_Utils::sides_css( Olobuild_Tile_Utils::spacing_sides(
+            $s['row_padding'] ?? null,
+            [ 'y' => $s['row_padding_y'] ?? null ],
+            [ 26, 8, 26, 8 ]
+        ) );
         $indent      = max( 0, min( 48, absint( $s['hover_indent'] ) ) );
         $number_size = max( 10, min( 20, absint( $s['number_size'] ) ) );
         $title_size  = max( 20, min( 72, absint( $s['title_size'] ) ) );
@@ -86,7 +90,7 @@ class Olobuild_WorkList_Tile extends Olobuild_Tile_Base {
         if ( $show_arrow ) $cols .= ' auto';
 
         $items    = is_array( $s['items'] ) ? $s['items'] : [];
-        $row_base = 'display:grid;grid-template-columns:' . $cols . ';gap:24px;align-items:center;padding:' . $pad_y . 'px 8px;border-bottom:1px solid ' . $line . ';';
+        $row_base = 'display:grid;grid-template-columns:' . $cols . ';gap:24px;align-items:center;padding:' . $row_pad_css . ';border-bottom:1px solid ' . $line . ';';
 
         ob_start();
         ?>

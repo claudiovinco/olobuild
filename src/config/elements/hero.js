@@ -322,8 +322,8 @@ export default {
       description: t('Default per titolo + sottotitolo, sovrascritto dai colori specifici nei popover qui sotto.') },
     { key: 'accent', label: t('Colore accento'), type: 'color',
       description: t('Colora le parole in corsivo (em) del titolo, il dot eyebrow e il glow di default. Vuoto = nessun accento.') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size', 'lineHeight', 'letterSpacing'],
       keys: {
         tag:           'title_tag',
@@ -339,7 +339,6 @@ export default {
       sizeMin: 14, sizeMax: 120, sizeStep: 1,
     },
     { type: 'typography', label: t('Sottotitolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size', 'letterSpacing'],
       keys: {
         size:          'subtitle_font_size',

@@ -122,7 +122,11 @@ class Olobuild_Particlefx_Tile extends Olobuild_Tile_Base {
 
         // ── Layout sezione ────────────────────────────────────────────────
         $min_h     = max( 80,  intval( $s['min_height'] ) );
-        $pad_y     = max( 0,   intval( $s['padding_y'] ) );
+        $pad_css   = Olobuild_Tile_Utils::sides_css( Olobuild_Tile_Utils::spacing_sides(
+            $s['padding'] ?? null,
+            [ 'y' => $s['padding_y'] ?? null ],
+            [ 0, 0, 0, 0 ]
+        ) );
         $max_w     = max( 200, intval( $s['content_max_width'] ) );
         $align_v   = in_array( $s['align_v'], [ 'flex-start', 'center', 'flex-end' ], true ) ? $s['align_v'] : 'center';
         $align_h   = in_array( $s['align_h'], [ 'flex-start', 'center', 'flex-end' ], true ) ? $s['align_h'] : 'center';

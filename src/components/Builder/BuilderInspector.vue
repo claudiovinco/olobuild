@@ -1381,6 +1381,7 @@
 <script setup>
 import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue';
 import { t } from '@/i18n';
+import { evaluateCondition } from '@/utils/fieldCondition';
 import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
 import { getElementDef, getElementFields, getElementDefaults } from '@/config/elementRegistry';
@@ -2445,32 +2446,8 @@ function inferField(key, value) {
   return { key, label, type: 'text' };
 }
 
-function evaluateCondition(condition, settings) {
-  if (!condition || !settings) return true;
-  const val = settings[condition.field];
-  // Support op shorthand (notEmpty, empty, eq, neq)
-  if (condition.op) {
-    switch (condition.op) {
-      case 'notEmpty': return val !== undefined && val !== null && val !== '' && val !== false;
-      case 'empty':    return val === undefined || val === null || val === '' || val === false;
-      case 'eq':       return val === condition.value;
-      case 'neq':      return val !== condition.value;
-    }
-  }
-  if (condition.operator) {
-    const nv = parseFloat(val);
-    const nc = parseFloat(condition.value);
-    switch (condition.operator) {
-      case '!=': return Array.isArray(condition.value) ? !condition.value.includes(val) : val !== condition.value;
-      case '>':  return nv > nc;
-      case '<':  return nv < nc;
-      case '>=': return nv >= nc;
-      case '<=': return nv <= nc;
-      default:   return val === condition.value;
-    }
-  }
-  return Array.isArray(condition.value) ? condition.value.includes(val) : val === condition.value;
-}
+// evaluateCondition vive in @/utils/fieldCondition (unico valutatore condiviso
+// con StyleFieldsRenderer e ContentItemsEditor).
 
 /**
  * Check if a field should be visible — evaluates both `condition` (object) and `show` (function).

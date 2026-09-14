@@ -125,38 +125,26 @@ export default {
         { key: 'btn_label', label: t('Testo pulsante'), type: 'text' },
         { key: 'btn_url', label: t('URL pulsante'), type: 'link' },
         { key: 'btn_target', label: t('Apri in nuova scheda'), type: 'toggle' },
-        // Tipografia pulsante
-        { key: 'btn_font_size', label: t('Dim. testo (px)'), type: 'range', min: 10, max: 24, step: 1 },
-        { key: 'btn_font_weight', label: t('Peso testo'), type: 'select', options: [
-          { value: '', label: t('Medio (default)') },
-          { value: '400', label: t('Normale') },
-          { value: '600', label: t('Semi-grassetto') },
-          { value: '700', label: t('Grassetto') },
-          { value: '800', label: t('Extra-grassetto') },
-        ]},
-        { key: 'btn_letter_spacing', label: t('Spaziatura lettere (px)'), type: 'range', min: 0, max: 5, step: 0.5 },
-        { key: 'btn_text_transform', label: t('Trasformazione testo'), type: 'select', options: [
-          { value: '', label: t('Nessuna') },
-          { value: 'uppercase', label: t('MAIUSCOLO') },
-          { value: 'lowercase', label: t('minuscolo') },
-          { value: 'capitalize', label: t('Prima Maiuscola') },
-        ]},
+        // Tipografia pulsante — controllo unico standard (stesse chiavi salvate)
+        { type: 'typography', label: t('Tipografia pulsante'),
+          keys: {
+            size:          'btn_font_size',
+            weight:        'btn_font_weight',
+            transform:     'btn_text_transform',
+            letterSpacing: 'btn_letter_spacing',
+            color:         'btn_color',
+          },
+          sizeMin: 10, sizeMax: 24, sizeStep: 1,
+        },
         // Colori pulsante
         { key: 'btn_bg', label: t('Sfondo pulsante'), type: 'color' },
-        { key: 'btn_color', label: t('Colore testo'), type: 'color' },
         // Spaziatura interna
-        { key: 'btn_padding_v', label: t('Padding verticale (px)'), type: 'range', min: 0, max: 30, step: 1 },
-        { key: 'btn_padding_h', label: t('Padding orizzontale (px)'), type: 'range', min: 0, max: 50, step: 1 },
+        { key: 'btn_padding', label: t('Padding pulsante (px)'), type: 'spacing', min: 0, max: 60,
+          legacyKeys: { y: 'btn_padding_v', x: 'btn_padding_h' } },
         // Bordo
-        { key: 'btn_radius', label: t('Raggio angoli (px)'), type: 'number', min: 0 },
-        { key: 'btn_border_width', label: t('Spessore bordo (px)'), type: 'range', min: 0, max: 5, step: 1 },
-        { key: 'btn_border_color', label: t('Colore bordo'), type: 'color' },
-        { key: 'btn_border_style', label: t('Stile bordo'), type: 'select', options: [
-          { value: 'solid', label: t('Solido') },
-          { value: 'dashed', label: t('Tratteggiato') },
-          { value: 'dotted', label: t('Punteggiato') },
-          { value: 'double', label: t('Doppio') },
-        ]},
+        { key: 'btn_radius', label: t('Raggio angoli (px)'), type: 'border-radius' },
+        { key: 'btn_border', label: t('Bordo pulsante'), type: 'border',
+          legacyKeys: { width: 'btn_border_width', style: 'btn_border_style', color: 'btn_border_color' } },
         // Layout
         { key: 'btn_align', label: t('Allineamento'), type: 'select', options: [
           { value: '', label: t('Sinistra') },

@@ -75,8 +75,14 @@ class Olobuild_Subnav_Tile extends Olobuild_Tile_Base {
 
         // Dimensions
         $gap    = intval( $s['gap'] );
-        $px     = intval( $s['padding_x'] );
-        $py     = intval( $s['padding_y'] );
+        // Padding voce: controllo unico a 4 lati (tile_padding), ripiego legacy x/y.
+        $item_pad = Olobuild_Tile_Utils::spacing_sides(
+            $s['tile_padding'] ?? null,
+            [ 'y' => $s['padding_y'] ?? null, 'x' => $s['padding_x'] ?? null ],
+            [ 6, 12, 6, 12 ]
+        );
+        $px     = intval( $item_pad['left'] );
+        $py     = intval( $item_pad['top'] );
         $radius = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $fs     = intval( $s['font_size'] );
@@ -91,7 +97,7 @@ class Olobuild_Subnav_Tile extends Olobuild_Tile_Base {
 
         // CSS
         $css = "#{$uid}{display:flex;flex-wrap:wrap;align-items:center;gap:{$gap}px;justify-content:{$justify};list-style:none;padding:0;margin:0}";
-        $css .= "#{$uid} a{display:inline-block;padding:{$py}px {$px}px;border-radius:{$radius};font-size:{$fs}px;font-weight:{$fw};text-transform:{$tt};color:{$link_c};text-decoration:none;transition:all .2s ease";
+        $css .= "#{$uid} a{display:inline-block;padding:{$item_pad['top']}px {$item_pad['right']}px {$item_pad['bottom']}px {$item_pad['left']}px;border-radius:{$radius};font-size:{$fs}px;font-weight:{$fw};text-transform:{$tt};color:{$link_c};text-decoration:none;transition:all .2s ease";
         if ( $bg_c ) {
             $css .= ";background:{$bg_c}";
         }

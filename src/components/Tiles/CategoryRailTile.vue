@@ -18,6 +18,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { radiusToCss } from '@/composables/useRadius';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
@@ -66,7 +67,7 @@ const SERIF = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)"
 const SANS = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
 const w = computed(() => Math.max(140, Math.min(480, parseInt(s.value.card_width, 10) || 260)) + 'px');
 const asp = computed(() => String(s.value.card_aspect || '4/5').replace(/[^0-9/]/g, '') || '4/5');
-const rad = computed(() => (parseInt(s.value.radius, 10) || 0) + 'px');
+const rad = computed(() => radiusToCss(s.value.radius, { fallback: '0' }));
 const mbg = computed(() => s.value.media_bg || 'var(--olo-color-surface-alt, #eceff3)');
 
 // ── Override additivi gated (parità PHP, no-op coi default) ──

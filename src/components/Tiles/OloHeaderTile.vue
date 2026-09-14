@@ -114,6 +114,7 @@
 
 <script setup>
 import { ref, computed, onBeforeUnmount } from 'vue';
+import { radiusToCss } from '@/composables/useRadius';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const s = computed(() => props.settings || {});
@@ -181,7 +182,7 @@ const rootVars = computed(() => ({
 
 const barStyle = computed(() => ({
   width: isPill.value ? `min(${s.value.bar_max_width || 1200}px, 100%)` : '100%',
-  borderRadius: (isPill.value ? (s.value.bar_radius ?? 100) : 0) + 'px',
+  borderRadius: isPill.value ? radiusToCss(s.value.bar_radius, { fallback: '100px' }) : '0',
   backdropFilter: s.value.bar_blur ? 'saturate(140%) blur(8px)' : 'none',
 }));
 

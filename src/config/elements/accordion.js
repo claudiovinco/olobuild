@@ -178,7 +178,6 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Intestazione'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         family: 'header_font_family',
@@ -190,7 +189,6 @@ export default {
       sizeMin: 12, sizeMax: 22, sizeStep: 1,
     },
     { type: 'typography', label: t('Contenuto'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'content_font_size',
@@ -202,13 +200,13 @@ export default {
     { type: 'separator', label: t('Intestazione') },
     { key: 'header_bg', label: t('Sfondo intestazione'), type: 'color' },
     { key: 'header_bg_active', label: t('Sfondo intestazione attiva'), type: 'color' },
-    { key: 'header_padding_y', label: t('Padding verticale (px)'), type: 'range', min: 8, max: 32, step: 1 },
-    { key: 'header_padding_x', label: t('Padding orizzontale (px)'), type: 'range', min: 8, max: 32, step: 1 },
+    { key: 'header_padding', label: t('Padding intestazione (px)'), type: 'spacing', min: 0, max: 80,
+      legacyKeys: { y: 'header_padding_y', x: 'header_padding_x' } },
 
     { type: 'separator', label: t('Contenuto pannello') },
     { key: 'content_bg', label: t('Sfondo contenuto'), type: 'color' },
-    { key: 'content_padding_y', label: t('Padding verticale (px)'), type: 'range', min: 0, max: 32, step: 1 },
-    { key: 'content_padding_x', label: t('Padding orizzontale (px)'), type: 'range', min: 0, max: 32, step: 1 },
+    { key: 'content_padding', label: t('Padding contenuto (px)'), type: 'spacing', min: 0, max: 80,
+      legacyKeys: { y: 'content_padding_y', x: 'content_padding_x' } },
 
     { type: 'separator', label: t('Bordo e separatore') },
     { key: 'separator_style', label: t('Stile separatore'), type: 'select', options: [
@@ -216,8 +214,8 @@ export default {
       { value: 'shadow', label: t('Ombra') },
       { value: 'none', label: t('Nessuno') },
     ]},
-    { key: 'border_color', label: t('Colore bordo'), type: 'color' },
-    { key: 'border_width', label: t('Spessore bordo (px)'), type: 'range', min: 0, max: 4, step: 1 },
+    { key: 'border', label: t('Bordo'), type: 'border',
+      legacyKeys: { width: 'border_width', color: 'border_color' } },
 
     { type: 'separator', label: t('Effetti pannello (hover)') },
     { key: 'panel_hover_lift', label: t('Sollevamento al hover'), type: 'toggle' },

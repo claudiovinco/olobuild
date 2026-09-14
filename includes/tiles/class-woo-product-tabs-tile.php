@@ -57,7 +57,7 @@ class Olobuild_Woo_Product_Tabs_Tile extends Olobuild_Tile_Base {
         // Colors — TOKEN-FIRST: tab attivo col primario brand, testo neutro, bordo dal token.
         $active_color = $this->safe_color_css( $s['active_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $text_color   = $this->safe_color_css( $s['text_color'] )   ?: 'var(--olo-color-text, #1f2937)';
-        $border_color = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $border_color = Olobuild_Tile_Utils::border_color( $s['border_color'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
 
         $tab_style = in_array( $s['tab_style'], [ 'underline', 'pills', 'boxed' ], true ) ? $s['tab_style'] : 'underline';
 
@@ -95,7 +95,7 @@ class Olobuild_Woo_Product_Tabs_Tile extends Olobuild_Tile_Base {
                 border-bottom: 2px solid <?php echo $border_color; ?>;
                 <?php endif; ?>
                 <?php if ( $tab_style === 'boxed' ) : ?>
-                border: 1px solid <?php echo $border_color; ?>;
+                <?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border_color'] ?? null, [ 'width' => 1, 'color' => $border_color ] ) ); ?>
                 border-radius: 8px;
                 overflow: hidden;
                 <?php endif; ?>

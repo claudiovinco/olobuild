@@ -101,8 +101,8 @@ export default {
     ]},
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position',
       contextKeys: { src: 'before_image', fit: 'object_fit', height: 'height' } },
-    { key: 'card_border_width', label: t('Bordo (px)'), type: 'range', min: 0, max: 6 },
-    { key: 'card_border_color', label: t('Colore bordo'), type: 'color' },
+    { key: 'card_border', label: t('Bordo card'), type: 'border',
+      legacyKeys: { width: 'card_border_width', color: 'card_border_color' } },
     { key: 'card_shadow', label: t('Ombra'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
       { value: 'sm', label: t('Leggera') },

@@ -99,7 +99,8 @@ class Olobuild_FeaturedStory_Tile extends Olobuild_Tile_Base {
 
         $ratio   = preg_match( '/^[\d.\sfr]+$/', (string) $s['col_ratio'] ) ? (string) $s['col_ratio'] : '1.15fr .85fr';
         $aspect  = preg_match( '/^[\d.\s\/]+$/', (string) $s['cover_aspect'] ) ? (string) $s['cover_aspect'] : '4 / 3';
-        $radius  = max( 0, intval( $s['media_radius'] ) );
+        $radius  = Olobuild_Tile_Utils::radius_int( $s['media_radius'] ?? 0 );
+        $radius_css = Olobuild_Tile_Utils::border_radius( $s['media_radius'] ?? 0 ) ?: '0';
 
         // ── Spaziatura (override gated): se pad_custom è true usa content_padding,
         //    altrimenti mantieni il clamp responsivo originale → default invariato. ──
@@ -116,7 +117,7 @@ class Olobuild_FeaturedStory_Tile extends Olobuild_Tile_Base {
         // ── Raggio copertina (per-angolo): se tutti gli angoli sono 0 ricade su media_radius
         //    (default {0,0,0,0} → stringa "{$radius}px" originale, byte-per-byte invariata). ──
         $cover_br = $this->build_border_radius_css( $s['cover_radius'] ?? [] );
-        $cover_radius_css = $cover_br !== '' ? $cover_br : ( $radius . 'px' );
+        $cover_radius_css = $cover_br !== '' ? $cover_br : $radius_css;
         // ── Raggio pulsanti CTA: default {2,2,2,2} → ricade su '2px' originale (no-op). ──
         $cta_radius_css = $this->fs_uniform_radius( $s['cta_radius'] ?? [], 2 );
         $right   = ( (string) $s['media_side'] === 'right' );

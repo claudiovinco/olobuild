@@ -19,7 +19,7 @@
       </div>
 
       <!-- BOTTOM HALF -->
-      <div class="olo-pcards__bottom" :style="{ padding: (s.card_padding || 28) + 'px', flex: 1, display: 'flex', flexDirection: 'column', gap: '14px' }">
+      <div class="olo-pcards__bottom" :style="{ padding: toSpacingCss(s.card_padding, { fallback: [28, 28, 28, 28] }), flex: 1, display: 'flex', flexDirection: 'column', gap: '14px' }">
         <div v-if="it.brand_label || (it.show_badge && it.badge_text)" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
           <span v-if="it.brand_label" :style="brandStyle(it)">{{ it.brand_label }}</span>
           <span v-if="it.show_badge && it.badge_text" :style="badgeStyle(it)">{{ it.badge_text }}</span>
@@ -41,6 +41,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { toSpacingCss } from '@/composables/useBoxModel';
 import { resolveColor, resolveFontFamily, TOKENS, SHADOW } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
@@ -135,7 +136,7 @@ function topStyle(it) {
   return {
     ...bgToCss(it.top_bg, { background: '#f5f5f5' }),
     aspectRatio: s.value.top_aspect_ratio || '3/4',
-    padding: (s.value.top_padding || 24) + 'px',
+    padding: toSpacingCss(s.value.top_padding, { fallback: [24, 24, 24, 24] }),
     position: 'relative',
     display: 'flex',
     alignItems: 'center',

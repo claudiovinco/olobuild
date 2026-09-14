@@ -87,6 +87,7 @@
 
 <script setup>
 import { t } from '@/i18n';
+import { borderColorOf } from '@/composables/useBoxModel';
 import { computed } from 'vue';
 import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
@@ -110,7 +111,7 @@ const s = computed(() => ({
   ...sRaw.value,
   text_color: resolveColor(sRaw.value.text_color, TOKENS.text),
   heading_color: resolveColor(sRaw.value.heading_color, TOKENS.text),
-  border_color: resolveColor(sRaw.value.border_color, TOKENS.border),
+  border_color: resolveColor(borderColorOf(sRaw.value.border_color), TOKENS.border),
   button_color: resolveColor(sRaw.value.button_color, TOKENS.onPrimary),
   button_bg: resolveColor(sRaw.value.button_bg, TOKENS.primary),
 }));
@@ -127,7 +128,7 @@ const subtotal = computed(() => cartItems.reduce((acc, item) => acc + item.price
 const tableStyle = computed(() => ({
   width: '100%',
   borderCollapse: 'collapse',
-  border: `1px solid ${s.value.border_color}`,
+  border: `1px solid ${borderColorOf(s.value.border_color)}`,
   borderRadius: '8px',
   overflow: 'hidden',
 }));
@@ -140,13 +141,13 @@ const thStyle = computed(() => ({
   textTransform: 'uppercase',
   letterSpacing: '0.05em',
   padding: '12px 16px',
-  borderBottom: `1px solid ${s.value.border_color}`,
+  borderBottom: `1px solid ${borderColorOf(s.value.border_color)}`,
   textAlign: 'left',
 }));
 
 const tdStyle = computed(() => ({
   padding: '16px',
-  borderBottom: `1px solid ${s.value.border_color}`,
+  borderBottom: `1px solid ${borderColorOf(s.value.border_color)}`,
   verticalAlign: 'middle',
   fontSize: '14px',
   color: s.value.text_color,
@@ -165,7 +166,7 @@ const thumbStyle = {
 const qtyStyle = computed(() => ({
   width: '60px',
   padding: '6px 8px',
-  border: `1px solid ${s.value.border_color}`,
+  border: `1px solid ${borderColorOf(s.value.border_color)}`,
   borderRadius: '4px',
   fontSize: '14px',
   textAlign: 'center',
@@ -176,14 +177,14 @@ const actionsStyle = computed(() => ({
   justifyContent: 'space-between',
   alignItems: 'center',
   padding: '16px 0',
-  borderBottom: `1px solid ${s.value.border_color}`,
+  borderBottom: `1px solid ${borderColorOf(s.value.border_color)}`,
   flexWrap: 'wrap',
   gap: '12px',
 }));
 
 const couponInputStyle = computed(() => ({
   padding: '8px 12px',
-  border: `1px solid ${s.value.border_color}`,
+  border: `1px solid ${borderColorOf(s.value.border_color)}`,
   borderRadius: '4px',
   fontSize: '14px',
   width: '180px',
@@ -193,7 +194,7 @@ const couponBtnStyle = computed(() => ({
   padding: '8px 16px',
   background: 'transparent',
   color: s.value.text_color,
-  border: `1px solid ${s.value.border_color}`,
+  border: `1px solid ${borderColorOf(s.value.border_color)}`,
   borderRadius: '4px',
   fontSize: '13px',
   fontWeight: '600',
@@ -204,7 +205,7 @@ const updateBtnStyle = computed(() => ({
   padding: '8px 16px',
   background: 'transparent',
   color: s.value.text_color,
-  border: `1px solid ${s.value.border_color}`,
+  border: `1px solid ${borderColorOf(s.value.border_color)}`,
   borderRadius: '4px',
   fontSize: '13px',
   fontWeight: '600',
@@ -226,7 +227,7 @@ const totalsTitleStyle = computed(() => ({
 
 const totalsThStyle = computed(() => ({
   padding: '10px 0',
-  borderBottom: `1px solid ${s.value.border_color}`,
+  borderBottom: `1px solid ${borderColorOf(s.value.border_color)}`,
   fontWeight: '600',
   color: s.value.heading_color,
   textAlign: 'left',
@@ -236,7 +237,7 @@ const totalsThStyle = computed(() => ({
 
 const totalsTdStyle = computed(() => ({
   padding: '10px 0',
-  borderBottom: `1px solid ${s.value.border_color}`,
+  borderBottom: `1px solid ${borderColorOf(s.value.border_color)}`,
   fontSize: '14px',
   color: s.value.text_color,
   textAlign: 'right',

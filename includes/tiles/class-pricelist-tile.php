@@ -79,12 +79,18 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
         $badge_bw    = intval( $s['badge_border_width'] );
         $badge_bs    = in_array( $s['badge_border_style'], [ 'solid', 'dashed', 'dotted' ] ) ? $s['badge_border_style'] : 'solid';
         $badge_bc    = $this->safe_color_css( $s['badge_border_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $badge_border_decl = Olobuild_Tile_Utils::border_css(
+            $s['badge_border'] ?? null,
+            [ 'width' => $badge_bw, 'style' => $badge_bs, 'color' => $badge_bc ]
+        );
         $badge_br    = Olobuild_Tile_Utils::radius_int( $s['badge_border_radius'] ?? 6 );
         $gap         = intval( $s['gap'] ) ?: 12;
-        $padding = Olobuild_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 14, 14 );
+        $padding_sides = Olobuild_Tile_Utils::spacing_sides( $s['tile_padding'] ?? $s['padding'] ?? 14, [], [ 14, 14, 14, 14 ] );
+        $padding       = Olobuild_Tile_Utils::sides_css( $padding_sides );
+        $padding_x     = (int) $padding_sides['left'] . 'px';
         $card_bg     = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'rgba(255, 255, 255, 0.8)';
         $card_radius = Olobuild_Tile_Utils::radius_int( $s['card_border_radius'] ?? 12 );
-        $card_border = $this->safe_color_css( $s['card_border_color'] ?? '' ) ?: 'rgba(0, 0, 0, 0.06)';
+        $card_border = Olobuild_Tile_Utils::border_color( $s['card_border_color'] ?? null, 'rgba(0, 0, 0, 0.06)' );
         $hover_lift  = filter_var( $s['hover_lift'] ?? true, FILTER_VALIDATE_BOOLEAN );
         $hl_border   = $this->safe_color_css( $s['highlighted_bg'] ) ? $this->safe_color_css( $s['highlighted_bg'] ) : 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 20%, transparent)';
 
@@ -104,7 +110,7 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
                 padding: <?php echo $padding; ?>;
                 border-radius: <?php echo (int) $card_radius; ?>px;
                 background: <?php echo $card_bg; ?>;
-                border: 1px solid <?php echo $card_border; ?>;
+                <?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border_color'] ?? null, [ 'width' => 1, 'color' => $card_border ] ) ); ?>
                 transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
                 position: relative;
                 overflow: hidden;
@@ -181,7 +187,7 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
                 line-height: 1;
                 letter-spacing: 0.04em;
                 <?php if ( $badge_bw > 0 ) : ?>
-                border: <?php echo (int) $badge_bw; ?>px <?php echo $badge_bs; ?> <?php echo $badge_bc; ?>;
+                <?php echo esc_attr( $badge_border_decl ); ?>
                 <?php endif; ?>
             }
             .<?php echo $uid; ?> .olo-pl-price {
@@ -200,8 +206,8 @@ class Olobuild_Pricelist_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-pl-sep {
                 position: absolute;
                 bottom: 0;
-                left: <?php echo $padding; ?>px;
-                right: <?php echo $padding; ?>px;
+                left: <?php echo esc_attr( $padding_x ); ?>;
+                right: <?php echo esc_attr( $padding_x ); ?>;
                 border-bottom: 1px <?php echo $sep_style; ?> <?php echo $sep_color; ?>;
                 pointer-events: none;
             }

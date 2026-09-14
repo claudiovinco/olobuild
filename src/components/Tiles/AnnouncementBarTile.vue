@@ -8,6 +8,7 @@
 <script setup>
 import { computed } from 'vue';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
+import { cssLen } from '@/composables/useBoxModel';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -38,7 +39,7 @@ const rootStyle = computed(() => {
     fontFamily: SANS,
     fontSize: (parseInt(s.value.font_size, 10) || 11) + 'px',
     fontWeight: s.value.font_weight || '500',
-    letterSpacing: s.value.letter_spacing || '0.2em',
+    letterSpacing: cssLen(s.value.letter_spacing, 'em', '0.2em'),
     textTransform: s.value.text_transform || 'uppercase',
     padding: `${parseInt(cp.top, 10) || 10}px ${parseInt(cp.right, 10) || 20}px ${parseInt(cp.bottom, 10) || 10}px ${parseInt(cp.left, 10) || 20}px`,
     position: 'relative', lineHeight: 1.4,

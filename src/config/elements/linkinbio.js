@@ -96,7 +96,6 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Profilo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'profile_name_color',
@@ -104,7 +103,6 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
     { type: 'typography', label: t('Link'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'link_color',

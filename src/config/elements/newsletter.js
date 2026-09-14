@@ -220,7 +220,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:   'title_size',
@@ -232,7 +231,6 @@ export default {
     { key: 'eyebrow_color', label: t('Colore occhiello'), type: 'color' },
     { key: 'title_accent_color', label: t('Colore accento titolo (em)'), type: 'color' },
     { type: 'typography', label: t('Sottotitolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'subtitle_size',
@@ -241,7 +239,6 @@ export default {
       sizeMin: 11, sizeMax: 20, sizeStep: 1,
     },
     { type: 'typography', label: t('Pulsante'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:       'btn_font_size',

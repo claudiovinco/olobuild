@@ -268,6 +268,12 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
 
         // Container style
         $container_style = '';
+        // Padding del contenitore form: il controllo «Padding (px)» esisteva
+        // nell'inspector ma non era collegato a nulla.
+        $form_pad_sides  = Olobuild_Tile_Utils::spacing_sides( $s['tile_padding'] ?? null, [], [ 0, 0, 0, 0 ] );
+        if ( array_sum( $form_pad_sides ) > 0 ) {
+            $container_style .= 'padding:' . Olobuild_Tile_Utils::sides_css( $form_pad_sides ) . ';';
+        }
         if ( $max_w > 0 ) {
             $container_style .= 'max-width:' . $max_w . 'px;';
             if ( $form_align === 'center' ) $container_style .= 'margin-left:auto;margin-right:auto;';

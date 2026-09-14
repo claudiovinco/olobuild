@@ -196,7 +196,7 @@ export default {
     { key: 'timeline_dot_color',     label: t('Colore pallini'),  type: 'color' },
     { key: 'timeline_dot_size',      label: t('Dimensione pallini (px)'), type: 'range', min: 6, max: 24, step: 1 },
     { key: 'timeline_height',        label: t('Altezza linea (px)'),       type: 'range', min: 1, max: 8, step: 1 },
-    { key: 'timeline_margin_bottom', label: t('Spazio sotto timeline (px)'), type: 'range', min: 0, max: 120, step: 4 },
+    { key: 'timeline_margin_bottom', label: t('Margine timeline (px)'), type: 'spacing', min: 0, max: 160 },
 
     { type: 'separator', label: t('Numero step') },
     { key: 'counter_font_family', label: t('Famiglia'), type: 'font-family' },

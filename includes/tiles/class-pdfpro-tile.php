@@ -189,8 +189,13 @@ class Olobuild_PdfPro_Tile extends Olobuild_Tile_Base {
                 'btn_text_transform'=> sanitize_text_field( $hs['btn_text_transform'] ?? '' ),
                 'btn_bg'           => $this->safe_color_css( $hs['btn_bg'] ?? '' ),
                 'btn_color'        => $this->safe_color_css( $hs['btn_color'] ?? '' ),
-                'btn_padding_v'    => absint( $hs['btn_padding_v'] ?? 0 ),
-                'btn_padding_h'    => absint( $hs['btn_padding_h'] ?? 0 ),
+                // Padding pulsante: controllo unico a 4 lati (btn_padding), con ripiego
+                // sulle chiavi v/h dei dati salvati prima dell'uniformazione.
+                'btn_padding_css'  => Olobuild_Tile_Utils::sides_css( Olobuild_Tile_Utils::spacing_sides(
+                    $hs['btn_padding'] ?? null,
+                    [ 'y' => $hs['btn_padding_v'] ?? null, 'x' => $hs['btn_padding_h'] ?? null ],
+                    [ 6, 14, 6, 14 ]
+                ) ),
                 'btn_radius'       => Olobuild_Tile_Utils::border_radius( $hs['btn_radius'] ?? 0 ),
                 'btn_border_width' => absint( $hs['btn_border_width'] ?? 0 ),
                 'btn_border_color' => $this->safe_color_css( $hs['btn_border_color'] ?? '' ),

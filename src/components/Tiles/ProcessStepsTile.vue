@@ -11,6 +11,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { toSpacingCss, borderColorOf } from '@/composables/useBoxModel';
 import { resolveFontFamily } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
@@ -62,10 +63,10 @@ const itemStyle = computed(() => {
   const st = {
     display: 'flex', flexDirection: 'column', gap: (parseInt(s.value.item_gap) || 8) + 'px',
     textAlign: align, alignItems: align === 'center' ? 'center' : (align === 'right' ? 'flex-end' : 'flex-start'),
-    padding: s.value.card_padding ? (parseInt(s.value.card_padding) + 'px') : '0 12px',
+    padding: s.value.card_padding ? toSpacingCss(s.value.card_padding, { fallback: [0, 0, 0, 0] }) : '0 12px',
   };
   if (s.value.card_bg) st.background = s.value.card_bg;
-  if (s.value.card_border) st.border = `1px solid ${s.value.card_border}`;
+  if (s.value.card_border) st.border = `1px solid ${borderColorOf(s.value.card_border)}`;
   if (s.value.card_radius) st.borderRadius = radiusToCss(s.value.card_radius);
   return st;
 });

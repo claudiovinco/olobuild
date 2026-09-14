@@ -41,7 +41,7 @@ class Olobuild_Availability_Tile extends Olobuild_Tile_Base {
         $accent = $this->safe_color_css( $s['zone_accent'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $on     = $this->safe_color_css( $s['zone_on'] ?? '' ) ?: '#ffffff';
         $cellbg = $this->safe_color_css( $s['cell_bg'] ?? '' ) ?: 'var(--olo-color-surface, #ffffff)';
-        $line   = $this->safe_color_css( $s['card_border'] ?? '' ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $line   = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
         $center = ( ( $s['align'] ?? 'left' ) === 'center' );
         $serif  = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
         $sans   = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
@@ -78,7 +78,7 @@ class Olobuild_Availability_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .oav-grid{display:grid;grid-template-columns:minmax(64px,auto) repeat(<?php echo $nd; ?>,1fr);gap:6px;text-align:left;}
             .<?php echo $uid; ?> .oav-hd{font-weight:700;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--olo-color-text-muted,#6b7280);padding:6px 4px;align-self:center;}
             .<?php echo $uid; ?> .oav-bl{font-weight:700;font-size:12px;color:var(--olo-color-text-muted,#6b7280);align-self:center;}
-            .<?php echo $uid; ?> .oav-cell{background:<?php echo $cellbg; ?>;border:1px solid <?php echo $line; ?>;border-radius:8px;min-height:34px;cursor:pointer;transition:all .12s;padding:0;}
+            .<?php echo $uid; ?> .oav-cell{background:<?php echo $cellbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $line ] ) ); ?>border-radius:8px;min-height:34px;cursor:pointer;transition:all .12s;padding:0;}
             .<?php echo $uid; ?> .oav-cell:hover{border-color:var(--av-accent);}
             .<?php echo $uid; ?> .oav-cell.on{background:var(--av-accent);border-color:var(--av-accent);}
             .<?php echo $uid; ?> .oav-cell:focus-visible{outline:2px solid var(--av-accent);outline-offset:2px;}

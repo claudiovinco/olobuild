@@ -114,10 +114,11 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
         if ( ! $card_bg_css ) $card_bg_css = 'background:#ffffff';
 
         $card_color    = $this->safe_color_css( $s['card_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $card_padding  = max( 12, min( 60, absint( $s['card_padding'] ) ) );
+        $card_pad_css  = Olobuild_Tile_Utils::spacing_css( $s['card_padding'] ?? 28, 28 );
 
         $top_aspect    = in_array( $s['top_aspect_ratio'] ?? '3/4', [ '1/1', '4/5', '3/4', '2/3', '3/2' ], true ) ? ( $s['top_aspect_ratio'] ?? '3/4' ) : '3/4';
-        $top_padding   = max( 0, min( 60, absint( $s['top_padding'] ) ) );
+        $top_pad       = Olobuild_Tile_Utils::spacing_sides( $s['top_padding'] ?? 24, [], [ 24, 24, 24, 24 ] );
+        $top_pad_css   = Olobuild_Tile_Utils::sides_css( $top_pad );
         $letter_size   = max( 40, min( 280, absint( $s['letter_size'] ) ) );
         $letter_italic = ! empty( $s['letter_italic'] ) ? 'italic' : 'normal';
         $letter_align  = in_array( $s['letter_align'] ?? 'center', [ 'left', 'center', 'right' ], true ) ? ( $s['letter_align'] ?? 'center' ) : 'center';
@@ -169,7 +170,7 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
                 <div class="olo-pcards__card" style="<?php echo esc_attr( $card_bg_css ); ?>;color:<?php echo esc_attr( $card_color ); ?>;<?php if ( $card_radius ) echo 'border-radius:' . esc_attr( $card_radius ) . ';'; ?><?php if ( $card_shadow ) echo 'box-shadow:' . esc_attr( $card_shadow ) . ';'; ?>overflow:hidden;display:flex;flex-direction:column;transition:transform .3s ease,box-shadow .3s ease<?php if ( $card_radius_h ) echo ',border-radius ' . (int) $card_rdur . 'ms ease'; ?>">
 
                     <!-- TOP HALF: gradient + letter + screenshot label -->
-                    <div class="olo-pcards__top" style="<?php echo esc_attr( $top_bg_css ); ?>;aspect-ratio:<?php echo esc_attr( $top_aspect ); ?>;padding:<?php echo (int) $top_padding; ?>px;position:relative;display:flex;align-items:center;justify-content:<?php echo $letter_align === 'left' ? 'flex-start' : ( $letter_align === 'right' ? 'flex-end' : 'center' ); ?>">
+                    <div class="olo-pcards__top" style="<?php echo esc_attr( $top_bg_css ); ?>;aspect-ratio:<?php echo esc_attr( $top_aspect ); ?>;padding:<?php echo esc_attr( $top_pad_css ); ?>;position:relative;display:flex;align-items:center;justify-content:<?php echo $letter_align === 'left' ? 'flex-start' : ( $letter_align === 'right' ? 'flex-end' : 'center' ); ?>">
                         <?php
                         $ov_op = intval( $it['top_bg']['overlay_opacity'] ?? 0 );
                         if ( ( $it['top_bg']['type'] ?? 'none' ) !== 'none' && $ov_op > 0 ) :
@@ -184,12 +185,12 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
                         <?php endif; ?>
 
                         <?php if ( ! empty( $s['show_screenshot_label'] ) && $screen_lbl ) : ?>
-                            <div class="olo-pcards__screen-label" style="position:absolute;z-index:2;left:<?php echo (int) $top_padding; ?>px;right:<?php echo (int) $top_padding; ?>px;bottom:<?php echo (int) $top_padding; ?>px;border:1px dashed color-mix(in srgb, <?php echo esc_attr( $sl_color ); ?> 40%, transparent);border-radius:6px;padding:8px 12px;text-align:center;font-family:<?php echo esc_attr( $mono ); ?>;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:<?php echo esc_attr( $sl_color ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.screenshot_label'; ?>"><?php echo esc_html( $screen_lbl ); ?></div>
+                            <div class="olo-pcards__screen-label" style="position:absolute;z-index:2;left:<?php echo (int) $top_pad['left']; ?>px;right:<?php echo (int) $top_pad['right']; ?>px;bottom:<?php echo (int) $top_pad['bottom']; ?>px;border:1px dashed color-mix(in srgb, <?php echo esc_attr( $sl_color ); ?> 40%, transparent);border-radius:6px;padding:8px 12px;text-align:center;font-family:<?php echo esc_attr( $mono ); ?>;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:<?php echo esc_attr( $sl_color ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.screenshot_label'; ?>"><?php echo esc_html( $screen_lbl ); ?></div>
                         <?php endif; ?>
                     </div>
 
                     <!-- BOTTOM HALF: brand + badge + title + desc + cta -->
-                    <div class="olo-pcards__bottom" style="padding:<?php echo (int) $card_padding; ?>px;flex:1;display:flex;flex-direction:column;gap:14px">
+                    <div class="olo-pcards__bottom" style="padding:<?php echo esc_attr( $card_pad_css ); ?>;flex:1;display:flex;flex-direction:column;gap:14px">
                         <?php if ( $brand_lbl !== '' || ( $show_badge && $badge_txt !== '' ) ) : ?>
                             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
                                 <?php if ( $brand_lbl !== '' ) : ?>

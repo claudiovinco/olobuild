@@ -28,6 +28,7 @@
 
 <script setup>
 import { t } from '@/i18n';
+import { toSpacingCss } from '@/composables/useBoxModel';
 import { computed, ref } from 'vue';
 
 const oloData = window.oloData || {};
@@ -102,8 +103,10 @@ const containerStyle = computed(() => {
 function itemStyle(i) {
   const isActive = i === 0;
   const isHover = hoverIdx.value === i;
-  const px = parseInt(s.value.padding_x) || 12;
-  const py = parseInt(s.value.padding_y) || 6;
+  const itemPad = toSpacingCss(s.value.tile_padding, {
+    legacy: { y: s.value.padding_y, x: s.value.padding_x },
+    fallback: [6, 12, 6, 12],
+  });
   const radius = (v => isNaN(v) ? 4 : v)(parseInt(s.value.border_radius));
   const style_type = s.value.style;
 
@@ -111,7 +114,7 @@ function itemStyle(i) {
     fontSize: `${parseInt(s.value.font_size) || 14}px`,
     fontWeight: s.value.font_weight || '400',
     textTransform: s.value.text_transform || 'none',
-    padding: `${py}px ${px}px`,
+    padding: itemPad,
     borderRadius: `${radius}px`,
     color: isActive ? activeColor.value : isHover ? hoverColor.value : linkColor.value,
     background: s.value.bg_color || 'transparent',

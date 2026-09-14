@@ -66,7 +66,7 @@ class Olobuild_CategoryRail_Tile extends Olobuild_Tile_Base {
         $ov    = $this->safe_color_css( $s['overlay_color'] ?? '' ) ?: 'rgba(16,16,21,0.5)';
         $tc    = $this->safe_color_css( $s['title_color'] ?? '' ) ?: '#ffffff';
         $sc    = $this->safe_color_css( $s['subtitle_color'] ?? '' ) ?: 'rgba(255,255,255,0.8)';
-        $rad   = intval( $s['radius'] ) . 'px';
+        $rad   = Olobuild_Tile_Utils::border_radius( $s['radius'] ?? 14 ) ?: '0';
         $hint  = $this->safe_color_css( $s['hint_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #6b7280)';
         $serif = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
         $sans  = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";

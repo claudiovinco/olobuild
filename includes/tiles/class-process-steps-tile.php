@@ -74,9 +74,10 @@ class Olobuild_Process_Steps_Tile extends Olobuild_Tile_Base {
         $dsize   = max( 11, min( 22, absint( $s['desc_size'] ) ) );
         $igap    = max( 0, min( 40, absint( $s['item_gap'] ) ) );
         $cardbg  = $this->safe_color_css( $s['card_bg'] ?? '' );
-        $cardbd  = $this->safe_color_css( $s['card_border'] ?? '' );
+        $cardbd  = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, '' );
         $cardrad = $this->build_border_radius_css( $s['card_radius'] ?? [] );
-        $cardpad = max( 0, min( 60, absint( $s['card_padding'] ) ) );
+        $cardpad_sides = Olobuild_Tile_Utils::spacing_sides( $s['card_padding'] ?? 0, [], [ 0, 0, 0, 0 ] );
+        $cardpad       = array_sum( $cardpad_sides ) > 0 ? Olobuild_Tile_Utils::sides_css( $cardpad_sides ) : '';
         $auto    = ! empty( $s['auto_number'] );
         $items   = is_array( $s['items'] ) ? $s['items'] : [];
 
@@ -91,9 +92,9 @@ class Olobuild_Process_Steps_Tile extends Olobuild_Tile_Base {
                 $num = $auto ? sprintf( '%02d', $i + 1 ) : ( $it['number'] ?? sprintf( '%02d', $i + 1 ) );
                 $cardstyle  = 'display:flex;flex-direction:column;gap:' . $igap . 'px;text-align:' . $align . ';align-items:' . $align_items . ';';
                 if ( $cardbg )  $cardstyle .= 'background:' . $cardbg . ';';
-                if ( $cardbd )  $cardstyle .= 'border:1px solid ' . $cardbd . ';';
+                if ( $cardbd )  $cardstyle .= Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $cardbd ] );
                 if ( $cardrad ) $cardstyle .= 'border-radius:' . $cardrad . ';';
-                $cardstyle .= 'padding:' . ( $cardpad ? $cardpad . 'px' : '0 12px' ) . ';';
+                $cardstyle .= 'padding:' . ( $cardpad !== '' ? $cardpad : '0 12px' ) . ';';
             ?>
             <div class="olo-psteps__item" style="<?php echo esc_attr( $cardstyle ); ?>">
                 <?php if ( $circle ) : ?>

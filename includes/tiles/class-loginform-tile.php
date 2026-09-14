@@ -103,7 +103,8 @@ class Olobuild_Loginform_Tile extends Olobuild_Tile_Base {
         $input_color      = $this->safe_color_css( $s['input_color'] );
         $input_border     = $this->safe_color_css( $s['input_border_color'] );
         $input_focus      = $this->safe_color_css( $s['input_focus_color'] );
-        $input_padding    = max( 4, intval( $s['input_padding'] ) ?: 11 );
+        $input_pad        = Olobuild_Tile_Utils::spacing_sides( $s['input_padding'] ?? 11, [], [ 11, 14, 11, 14 ] );
+        $input_pad_css    = Olobuild_Tile_Utils::sides_css( $input_pad );
         $input_radius     = Olobuild_Tile_Utils::border_radius( $s['input_radius'] ?? 0 );
         $input_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['input_radius_hover'] ?? null );
         $submit_bg        = $this->safe_color_css( $s['submit_bg'] );
@@ -244,7 +245,7 @@ class Olobuild_Loginform_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-lf-input {
                 display: block; width: 100%; box-sizing: border-box;
-                padding: <?php echo (int) $input_padding; ?>px 14px <?php echo $show_icons ? (int) $input_padding . 'px 0' : (int) $input_padding . 'px 14px'; ?>;
+                padding: <?php echo esc_attr( $show_icons ? ( (int) $input_pad['top'] . 'px ' . (int) $input_pad['right'] . 'px ' . (int) $input_pad['bottom'] . 'px 0' ) : $input_pad_css ); ?>;
                 font-size: 14px; font-family: inherit;
                 background: transparent;
                 color: <?php echo $input_color_val; ?>;
@@ -262,7 +263,7 @@ class Olobuild_Loginform_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> select.olo-lf-input-standalone,
             .<?php echo $uid; ?> textarea.olo-lf-input-standalone {
                 display: block; width: 100%; box-sizing: border-box;
-                padding: <?php echo (int) $input_padding; ?>px 14px; font-size: 14px; font-family: inherit;
+                padding: <?php echo esc_attr( $input_pad_css ); ?>; font-size: 14px; font-family: inherit;
                 background-color: <?php echo $input_bg_val; ?>;
                 color: <?php echo $input_color_val; ?>;
                 border: 1px solid <?php echo $input_border_val; ?>;

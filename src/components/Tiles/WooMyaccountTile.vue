@@ -26,6 +26,7 @@
 
 <script setup>
 import { t } from '@/i18n';
+import { borderColorOf } from '@/composables/useBoxModel';
 import { computed } from 'vue';
 import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
@@ -60,7 +61,7 @@ const menuItemStyle = (i) => ({
 });
 const contentStyle = computed(() => ({
   background: resolveColor(s.value.content_bg, TOKENS.surface),
-  border: `1px solid ${resolveColor(s.value.border_color, TOKENS.border)}`,
+  border: `1px solid ${resolveColor(borderColorOf(s.value.border_color), TOKENS.border)}`,
   borderRadius: radius.value,
   padding: '24px',
 }));

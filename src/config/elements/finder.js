@@ -139,7 +139,7 @@ export default {
 
     { type: 'separator', label: t('Card risultato') },
     { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
-    { key: 'card_border', label: t('Colore bordo card (semplice)'), type: 'color',
+    { key: 'card_border', label: t('Bordo card (semplice)'), type: 'border', legacyWidth: 1,
       description: t('Bordo 1px rapido. Per bordi avanzati (spessore, lati, effetti) usa la sezione Bordo.') },
     { key: 'media_bg', label: t('Sfondo media (card con immagine)'), type: 'color' },
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,

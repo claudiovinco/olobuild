@@ -100,14 +100,11 @@ export default {
       condition: { field: 'show_avatar', value: true } },
     withHover({ key: 'avatar_border_radius', label: t('Raggio bordo avatar (%)'), type: 'border-radius',
       condition: { field: 'show_avatar', value: true } }),
-    { key: 'avatar_border_width', label: t('Bordo avatar (px)'), type: 'range', min: 0, max: 6, step: 1,
-      condition: { field: 'show_avatar', value: true } },
-    { key: 'avatar_border_color', label: t('Colore bordo avatar'), type: 'color',
-      condition: { field: 'avatar_border_width', operator: '>', value: '0' } },
+    { key: 'avatar_border', label: t('Bordo avatar'), type: 'border',
+      legacyKeys: { width: 'avatar_border_width', color: 'avatar_border_color' } },
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Nome'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         tag:    'name_tag',
@@ -118,7 +115,6 @@ export default {
       sizeMin: 14, sizeMax: 32, sizeStep: 1,
     },
     { type: 'typography', label: t('Biografia'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'bio_size',
@@ -127,7 +123,6 @@ export default {
       sizeMin: 11, sizeMax: 18, sizeStep: 1,
     },
     { type: 'typography', label: t('Ruolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'role_size',
@@ -136,13 +131,11 @@ export default {
       sizeMin: 10, sizeMax: 18, sizeStep: 1,
     },
     { type: 'typography', label: t('Link'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'link_color',
       },
     },
     { type: 'typography', label: t('Conteggio'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'count_color',
       },

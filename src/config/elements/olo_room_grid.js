@@ -248,7 +248,6 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'title_color',
@@ -256,7 +255,6 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
     { type: 'typography', label: t('Estratto'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'excerpt_color',
@@ -264,7 +262,6 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
     { type: 'typography', label: t('Meta'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'meta_color',
@@ -318,14 +315,9 @@ export default {
     // Card bordo
     // ═══════════════════════════════════════════
     { type: 'separator', label: t('Card — Bordo') },
-    withHover({ key: 'card_border_width', label: t('Spessore bordo (px)'), type: 'range', min: 0, max: 5, step: 1 }, { hoverKey: 'card_hover_border_width' }),
-    { key: 'card_border_style', label: t('Stile bordo'), type: 'select', options: [
-      { value: 'solid', label: t('Continuo') },
-      { value: 'dashed', label: t('Tratteggiato') },
-      { value: 'dotted', label: t('Puntinato') },
-      { value: 'none', label: t('Nessuno') },
-    ]},
-    withHover({ key: 'card_border_color', label: t('Colore bordo'), type: 'color' }, { hoverKey: 'card_border_hover' }),
+    withHover({ key: 'card_border', label: t('Bordo card'), type: 'border',
+      legacyKeys: { width: 'card_border_width', style: 'card_border_style', color: 'card_border_color' } },
+      { hoverKey: 'card_border_hover' }),
     withHover({ key: 'card_border_radius', label: t('Raggio angoli (4 valori)'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Card — Ombra normale') },

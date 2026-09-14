@@ -176,7 +176,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Notizie'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:          'font_size',
@@ -188,13 +187,11 @@ export default {
       sizeMin: 10, sizeMax: 24, sizeStep: 1,
     },
     { type: 'typography', label: t('Etichetta'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'label_color',
       },
     },
     { type: 'typography', label: t('Badge'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'badge_color',
       },

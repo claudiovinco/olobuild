@@ -17,6 +17,8 @@
 
 <script setup>
 import { computed } from 'vue';
+import { borderColorOf } from '@/composables/useBoxModel';
+import { radiusToCss } from '@/composables/useRadius';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
@@ -65,10 +67,10 @@ const accent = computed(() => s.value.accent || 'var(--olo-color-primary, #e1474
 const on = computed(() => s.value.accent_on || '#ffffff');
 const barBg = computed(() => s.value.bar_bg || 'var(--olo-color-surface, #ffffff)');
 const fieldBg = computed(() => s.value.field_bg || 'transparent');
-const fbd = computed(() => s.value.field_border || 'var(--olo-color-border, #e5e7eb)');
+const fbd = computed(() => borderColorOf(s.value.field_border, 'var(--olo-color-border, #e5e7eb)'));
 const labCol = computed(() => s.value.label_color || 'var(--olo-color-text-muted, #6b7280)');
 const valCol = computed(() => s.value.value_color || 'var(--olo-color-text, #111827)');
-const rad = computed(() => (parseInt(s.value.radius, 10) || 0) + 'px');
+const rad = computed(() => radiusToCss(s.value.radius, { fallback: '0' }));
 
 // FORMA: raggio per-angolo override (parità con build_border_radius_css PHP).
 // Tutti 0 → '' → fallback al raggio uniforme `rad` storico (no-op coi default).

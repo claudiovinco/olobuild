@@ -398,4 +398,196 @@ class Olobuild_Tile_Utils {
         $n = ( $val !== '' && $val !== null ) ? intval( $val ) : $fallback;
         return "{$n}px";
     }
+
+    /**
+     * Scompone una spaziatura nei suoi 4 lati numerici, accettando il formato
+     * nuovo (oggetto del controllo `spacing`), quello scalare e — in ripiego —
+     * le vecchie chiavi piatte y/x o singola.
+     *
+     * Gemello PHP di `toSpacingSides()` (useBoxModel.js). È l'helper da usare
+     * quando il renderer deve fare aritmetica su un lato (es. `top - 2`) e non
+     * gli basta la shorthand di spacing_css().
+     *
+     * @param  mixed $val      Valore del campo spacing (array|scalare|vuoto).
+     * @param  array $legacy   [ 'y' => mixed, 'x' => mixed, 'all' => mixed ] chiavi piatte storiche.
+     * @param  array $fallback [ top, right, bottom, left ] quando non c'è nulla.
+     * @return array [ 'top' => int, 'right' => int, 'bottom' => int, 'left' => int ]
+     */
+    public static function spacing_sides( $val, $legacy = [], $fallback = [ 0, 0, 0, 0 ] ) {
+        $fb = array_pad( array_values( (array) $fallback ), 4, 0 );
+        // Array VUOTO = "non impostato": si ricade sulle chiavi piatte/fallback.
+        if ( is_array( $val ) && count( array_intersect_key( $val, array_flip( [ 'top', 'right', 'bottom', 'left' ] ) ) ) === 0 ) {
+            $val = null;
+        }
+        if ( is_array( $val ) ) {
+            return [
+                'top'    => intval( $val['top'] ?? $fb[0] ),
+                'right'  => intval( $val['right'] ?? $fb[1] ),
+                'bottom' => intval( $val['bottom'] ?? $fb[2] ),
+                'left'   => intval( $val['left'] ?? $fb[3] ),
+            ];
+        }
+        if ( $val !== null && $val !== '' ) {
+            $n = intval( $val );
+            return [ 'top' => $n, 'right' => $n, 'bottom' => $n, 'left' => $n ];
+        }
+        $has = static function ( $v ) {
+            return $v !== null && $v !== '';
+        };
+        $all = $has( $legacy['all'] ?? null ) ? intval( $legacy['all'] ) : null;
+        $y   = $has( $legacy['y'] ?? null ) ? intval( $legacy['y'] ) : $all;
+        $x   = $has( $legacy['x'] ?? null ) ? intval( $legacy['x'] ) : $all;
+        // Chiavi legacy per-lato (es. section: padding_top_custom / padding_bottom_custom).
+        $side = static function ( $key, $axis, $fallback ) use ( $legacy, $has ) {
+            if ( $has( $legacy[ $key ] ?? null ) ) {
+                return intval( $legacy[ $key ] );
+            }
+            return $axis === null ? $fallback : $axis;
+        };
+        return [
+            'top'    => $side( 'top', $y, $fb[0] ),
+            'right'  => $side( 'right', $x, $fb[1] ),
+            'bottom' => $side( 'bottom', $y, $fb[2] ),
+            'left'   => $side( 'left', $x, $fb[3] ),
+        ];
+    }
+
+    /**
+     * Shorthand CSS dai 4 lati restituiti da spacing_sides().
+     *
+     * @param  array $sides [ top, right, bottom, left ]
+     * @return string "Tpx Rpx Bpx Lpx"
+     */
+    public static function sides_css( $sides ) {
+        return intval( $sides['top'] ?? 0 ) . 'px ' . intval( $sides['right'] ?? 0 ) . 'px '
+             . intval( $sides['bottom'] ?? 0 ) . 'px ' . intval( $sides['left'] ?? 0 ) . 'px';
+    }
+
+    /**
+     * Normalizza una LUNGHEZZA CSS accettando sia il numero nudo sia la stringa
+     * con unità. Serve a rendere i renderer indifferenti al controllo che ha
+     * scritto il valore: FieldUnit salva "0.2em", il pannello Tipografia salva
+     * 0.2 — entrambi devono produrre CSS valido.
+     *
+     * @param  mixed  $val      Valore grezzo ('0.2em', 0.2, '12', '').
+     * @param  string $unit     Unità da applicare quando il valore è numerico.
+     * @param  string $fallback CSS restituito se il valore è vuoto/non valido.
+     * @return string Lunghezza CSS pronta ('0.2em', '12px') o $fallback.
+     */
+    public static function css_len( $val, $unit = 'px', $fallback = '' ) {
+        if ( is_array( $val ) ) {
+            return $fallback;
+        }
+        $v = trim( (string) $val );
+        if ( $v === '' ) {
+            return $fallback;
+        }
+        // Già con unità (o parola chiave tipo 'normal'/'inherit'): passa verbatim,
+        // ma solo se non contiene caratteri che romperebbero il contesto CSS.
+        if ( ! is_numeric( $v ) ) {
+            if ( preg_match( '#[;{}<>@\\\\"\']|/\*|\*/|[\x00-\x1f]#', $v ) ) {
+                return $fallback;
+            }
+            return $v;
+        }
+        $u = preg_match( '/^[a-z%]{1,4}$/i', (string) $unit ) ? $unit : 'px';
+        return $v . $u;
+    }
+
+    /**
+     * Costruisce le proprietà CSS di un BORDO a partire dal controllo standard
+     * `type:'border'` — `{ top, right, bottom, left, linked, style, color }` —
+     * accettando in ripiego le vecchie chiavi piatte (spessore/stile/colore).
+     *
+     * Gemello PHP del ponte `fieldLegacyBridge.js`: una tile può passare al
+     * controllo completo nell'inspector e il frontend segue senza migrazioni.
+     *
+     * @param  mixed  $val    Valore del campo bordo (array composito) o null.
+     * @param  array  $legacy [ 'width' => mixed, 'style' => string, 'color' => string ]
+     *                        valori piatti usati se $val non è un array.
+     * @return string Dichiarazioni CSS ('border:1px solid #000;') o '' se inattivo.
+     */
+    /**
+     * Colore di un bordo, indipendentemente dal formato in cui è salvato.
+     *
+     * Dopo l'uniformazione dei controlli una chiave come `card_border` può
+     * contenere la vecchia stringa colore OPPURE l'oggetto del controllo
+     * standard. Passare l'oggetto a safe_color_css() darebbe "Array".
+     *
+     * @param  mixed  $val      Valore della chiave (stringa colore o array bordo).
+     * @param  string $fallback Colore da usare se non c'è nulla di valido.
+     * @return string Colore sicuro per il contesto CSS.
+     */
+    /**
+     * True se l'array di un bordo contiene qualcosa di davvero impostato
+     * (almeno un lato > 0 oppure un colore). Serve a distinguere il valore
+     * "non toccato" (`[]`) da un bordo azzerato di proposito.
+     *
+     * @param  mixed $val Valore del campo bordo.
+     * @return bool
+     */
+    public static function border_is_set( $val ) {
+        if ( ! is_array( $val ) ) {
+            return $val !== null && $val !== '';
+        }
+        if ( trim( (string) ( $val['color'] ?? '' ) ) !== '' ) {
+            return true;
+        }
+        foreach ( [ 'top', 'right', 'bottom', 'left' ] as $side ) {
+            if ( intval( $val[ $side ] ?? 0 ) > 0 ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static function border_color( $val, $fallback = '' ) {
+        if ( is_array( $val ) ) {
+            $c = self::safe_color( $val['color'] ?? '' );
+            return $c !== '' ? $c : $fallback;
+        }
+        $c = self::safe_color( $val );
+        return $c !== '' ? $c : $fallback;
+    }
+
+    public static function border_css( $val, $legacy = [] ) {
+        // Un array VUOTO (o senza alcun valore utile) significa "non impostato":
+        // va ignorato per ricadere sulle chiavi piatte. Diverse tile hanno già
+        // `'border' => []` nei default e senza questo controllo il bordo storico
+        // sparirebbe.
+        if ( is_array( $val ) && ! self::border_is_set( $val ) ) {
+            $val = null;
+        }
+        if ( is_array( $val ) ) {
+            $t     = max( 0, intval( $val['top'] ?? 0 ) );
+            $r     = max( 0, intval( $val['right'] ?? 0 ) );
+            $b     = max( 0, intval( $val['bottom'] ?? 0 ) );
+            $l     = max( 0, intval( $val['left'] ?? 0 ) );
+            $style = trim( (string) ( $val['style'] ?? 'solid' ) );
+            $color = self::safe_color( $val['color'] ?? '' );
+        } else {
+            $w     = max( 0, intval( $legacy['width'] ?? 0 ) );
+            $t     = $w;
+            $r     = $w;
+            $b     = $w;
+            $l     = $w;
+            $style = trim( (string) ( $legacy['style'] ?? 'solid' ) );
+            $color = self::safe_color( $legacy['color'] ?? '' );
+        }
+        if ( $color === '' || ( $t === 0 && $r === 0 && $b === 0 && $l === 0 ) ) {
+            return '';
+        }
+        if ( ! preg_match( '/^(solid|dashed|dotted|double|groove|ridge|inset|outset|none|hidden)$/', $style ) ) {
+            $style = 'solid';
+        }
+        if ( $t === $r && $r === $b && $b === $l ) {
+            return "border:{$t}px {$style} {$color};";
+        }
+        $css = '';
+        if ( $t ) { $css .= "border-top:{$t}px {$style} {$color};"; }
+        if ( $r ) { $css .= "border-right:{$r}px {$style} {$color};"; }
+        if ( $b ) { $css .= "border-bottom:{$b}px {$style} {$color};"; }
+        if ( $l ) { $css .= "border-left:{$l}px {$style} {$color};"; }
+        return $css;
+    }
 }

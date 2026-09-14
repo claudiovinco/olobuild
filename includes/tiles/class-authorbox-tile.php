@@ -186,7 +186,7 @@ class Olobuild_Authorbox_Tile extends Olobuild_Tile_Base {
                 if ( $abw > 0 ) :
                     $abc = $this->safe_color_css( $s['avatar_border_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
                 ?>
-                border: <?php echo (int) $abw; ?>px solid <?php echo $abc; ?>;
+                <?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['avatar_border'] ?? null, [ 'width' => $abw, 'color' => $abc ] ) ); ?>
                 <?php endif; ?>
             }
             .<?php echo $uid; ?> .olo-ab-info {

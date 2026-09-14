@@ -60,10 +60,10 @@ class Olobuild_TripFinder_Tile extends Olobuild_Tile_Base {
         $on     = $this->safe_color_css( $s['accent_on'] ?? '' ) ?: '#ffffff';
         $barbg  = $this->safe_color_css( $s['bar_bg'] ?? '' ) ?: 'var(--olo-color-surface, #ffffff)';
         $fbg    = $this->safe_color_css( $s['field_bg'] ?? '' ) ?: 'transparent';
-        $fbd    = $this->safe_color_css( $s['field_border'] ?? '' ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $fbd    = Olobuild_Tile_Utils::border_color( $s['field_border'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
         $lab    = $this->safe_color_css( $s['label_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #6b7280)';
         $val    = $this->safe_color_css( $s['value_color'] ?? '' ) ?: 'var(--olo-color-text, #111827)';
-        $rad    = intval( $s['radius'] ) . 'px';
+        $rad    = Olobuild_Tile_Utils::border_radius( $s['radius'] ?? 14 ) ?: '0';
         $sans   = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
 
         // FORMA: raggio per-angolo override. '' (tutti 0) → usa $rad uniforme storico.
@@ -104,7 +104,7 @@ class Olobuild_TripFinder_Tile extends Olobuild_Tile_Base {
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist (with fixed var() fallbacks), radius/padding via intval() helpers, box decorations via the Olobuild_CSS_Builder/Olobuild_Tile_Base shared helpers (sanitized internally), fixed font-stack literal; $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?>{font-family:<?php echo $sans; ?>;<?php echo $box_decl; ?>}
-            .<?php echo $uid; ?> .otf-bar{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;background:<?php echo $barbg; ?>;border:1px solid <?php echo $fbd; ?>;border-radius:<?php echo $rad_eff; ?>;padding:<?php echo $bar_pad; ?>;box-shadow:0 18px 50px -28px rgba(0,0,0,.35);}
+            .<?php echo $uid; ?> .otf-bar{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;background:<?php echo $barbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['field_border'] ?? null, [ 'width' => 1, 'color' => $fbd ] ) ); ?>border-radius:<?php echo $rad_eff; ?>;padding:<?php echo $bar_pad; ?>;box-shadow:0 18px 50px -28px rgba(0,0,0,.35);}
             .<?php echo $uid; ?> .otf-f{flex:1 1 160px;display:flex;flex-direction:column;gap:4px;padding:<?php echo $field_pad; ?>;background:<?php echo $fbg; ?>;border-left:1px solid <?php echo $fbd; ?>;min-width:0;}
             .<?php echo $uid; ?> .otf-f:first-child{border-left:0;}
             .<?php echo $uid; ?> .otf-lab{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:<?php echo $lab; ?>;}

@@ -54,6 +54,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
+import { toSpacingCss } from '@/composables/useBoxModel';
 import { resolveFontFamily } from '@/composables/oloTileDefaults';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
 
@@ -138,14 +139,16 @@ function itemClasses() {
 function itemStyle(i) {
   const isActive = i === 0;
   const isHover = hoverIndex.value === i;
-  const px = parseInt(s.value.padding_x) || 12;
-  const py = parseInt(s.value.padding_y) || 8;
+  const itemPad = toSpacingCss(s.value.tile_padding, {
+    legacy: { y: s.value.padding_y, x: s.value.padding_x },
+    fallback: [8, 12, 8, 12],
+  });
   const radius = (v => isNaN(v) ? 6 : v)(parseInt(s.value.border_radius));
   const style_type = s.value.style;
   const active_style = s.value.active_style;
 
   const st = {
-    padding: `${py}px ${px}px`,
+    padding: itemPad,
     borderRadius: `${radius}px`,
     fontSize: `${parseInt(s.value.font_size) || 14}px`,
     fontWeight: s.value.font_weight || '400',

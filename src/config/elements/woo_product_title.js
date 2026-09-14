@@ -67,7 +67,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size', 'lineHeight'],
       keys: {
         size:       'font_size',

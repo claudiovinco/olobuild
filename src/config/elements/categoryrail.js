@@ -83,7 +83,7 @@ export default {
       { value: '3/2', label: '3:2' },
     ]},
     { key: 'gap', label: t('Spazio tra tessere (px)'), type: 'range', min: 8, max: 32, step: 2 },
-    { key: 'radius', label: t('Raggio bordo (px)'), type: 'range', min: 0, max: 32, step: 1 },
+    { key: 'radius', label: t('Raggio bordo (px)'), type: 'border-radius' },
 
     { type: 'separator', label: t('Spaziatura') },
     { key: 'cap_padding', label: t('Padding didascalia (px)'), type: 'spacing', max: 64 },

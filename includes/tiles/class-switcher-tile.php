@@ -202,17 +202,26 @@ class Olobuild_Switcher_Tile extends Olobuild_Tile_Base {
         $content_bg      = $this->safe_color_css( $s['content_bg'] ) ?: '';
         $content_color   = $this->safe_color_css( $s['content_color'] ) ?: '';
 
-        $tab_pad_y = max( 0, intval( $s['tab_padding_y'] ?? 10 ) );
-        $tab_pad_x = max( 0, intval( $s['tab_padding_x'] ?? 18 ) );
+        // Padding a 4 lati (controllo standard `spacing`), con ripiego sulle chiavi piatte storiche.
+        $tab_pad   = Olobuild_Tile_Utils::spacing_sides(
+            $s['tab_padding'] ?? null,
+            [ 'y' => $s['tab_padding_y'] ?? null, 'x' => $s['tab_padding_x'] ?? null ],
+            [ 10, 18, 10, 18 ]
+        );
+        $tab_pad_y = max( 0, $tab_pad['top'] );
+        $tab_pad_x = max( 0, $tab_pad['left'] );
         $tab_fs    = max( 10, intval( $s['tab_font_size'] ?? 14 ) );
         $tab_fw    = preg_match( '/^[1-9]00$/', (string) ($s['tab_font_weight'] ?? '500') ) ? $s['tab_font_weight'] : '500';
         $tab_gap   = max( 0, intval( $s['tab_gap'] ?? 4 ) );
         // Dual-format: Number legacy E oggetto {tl,tr,br,bl} (build_border_radius_css ritorna '' se zero/vuoto).
         $tab_rad_css  = $this->build_border_radius_css( $s['tab_radius'] ?? 8 ) ?: '0px';
-        $cont_pad  = max( 0, intval( $s['container_padding'] ?? 4 ) );
+        $cont_pad_css = Olobuild_Tile_Utils::spacing_css( $s['container_padding'] ?? 4, 4 );
         $cont_rad_css = $this->build_border_radius_css( $s['container_radius'] ?? 10 );
-        $content_pad_y = max( 0, intval( $s['content_padding_y'] ?? 20 ) );
-        $content_pad_x = max( 0, intval( $s['content_padding_x'] ?? 0 ) );
+        $content_pad_css = Olobuild_Tile_Utils::sides_css( Olobuild_Tile_Utils::spacing_sides(
+            $s['content_padding'] ?? null,
+            [ 'y' => $s['content_padding_y'] ?? null, 'x' => $s['content_padding_x'] ?? null ],
+            [ 20, 0, 20, 0 ]
+        ) );
         $indicator = $s['indicator_type'] ?? 'none';
 
         $shadow_css = '';
@@ -235,7 +244,7 @@ class Olobuild_Switcher_Tile extends Olobuild_Tile_Base {
             .<?php echo esc_attr( $uid ); ?> ul.uk-subnav,
             .<?php echo esc_attr( $uid ); ?> ul.uk-tab-left {
                 margin: 0;
-                padding: <?php echo $cont_pad; ?>px;
+                padding: <?php echo esc_attr( $cont_pad_css ); ?>;
                 <?php if ( $container_bg ) : ?>background: <?php echo $container_bg; ?>;<?php endif; ?>
                 <?php if ( $cont_rad_css ) : ?>border-radius: <?php echo $cont_rad_css; ?>;<?php endif; ?>
                 <?php echo $shadow_css; ?>
@@ -264,7 +273,7 @@ class Olobuild_Switcher_Tile extends Olobuild_Tile_Base {
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                padding: <?php echo $tab_pad_y; ?>px <?php echo $tab_pad_x; ?>px;
+                padding: <?php echo esc_attr( Olobuild_Tile_Utils::sides_css( $tab_pad ) ); ?>;
                 font-size: <?php echo $tab_fs; ?>px;
                 font-weight: <?php echo $tab_fw; ?>;
                 line-height: 1.4;
@@ -345,7 +354,7 @@ class Olobuild_Switcher_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo esc_attr( $uid ); ?> .uk-switcher > li,
             .<?php echo esc_attr( $uid ); ?> .olo-switcher-content > li {
-                padding: <?php echo $content_pad_y; ?>px <?php echo $content_pad_x; ?>px;
+                padding: <?php echo esc_attr( $content_pad_css ); ?>;
                 <?php if ( $content_bg ) : ?>background: <?php echo $content_bg; ?>;<?php endif; ?>
                 <?php if ( $content_color ) : ?>color: <?php echo $content_color; ?>;<?php endif; ?>
                 line-height: 1.65;

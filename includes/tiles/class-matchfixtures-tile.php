@@ -57,13 +57,13 @@ class Olobuild_MatchFixtures_Tile extends Olobuild_Tile_Base {
         $gap    = intval( $s['gap'] ) . 'px';
         $accent = $this->safe_color_css( $s['accent'] ) ?: 'var(--olo-color-primary, #c8ff3c)';
         $cbg    = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #0f3a2a)';
-        $cbd    = $this->safe_color_css( $s['card_border'] ?? '' ) ?: 'rgba(255,255,255,0.1)';
+        $cbd    = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, 'rgba(255,255,255,0.1)' );
         $dayc   = $this->safe_color_css( $s['day_color'] ?? '' ) ?: '#ffffff';
         $meta   = $this->safe_color_css( $s['meta_color'] ?? '' ) ?: 'rgba(255,255,255,0.55)';
         $namec  = $this->safe_color_css( $s['name_color'] ?? '' ) ?: '#ffffff';
         $scorec = $this->safe_color_css( $s['score_color'] ?? '' ) ?: '#ffffff';
         $crestc = $this->safe_color_css( $s['crest_text_color'] ?? '' ) ?: '#ffffff';
-        $rad    = intval( $s['radius'] ) . 'px';
+        $rad    = Olobuild_Tile_Utils::border_radius( $s['radius'] ?? 18 ) ?: '0';
 
         // ── Spaziatura card: padding da 'content_padding' (default 22px su 4 lati = invariato) ──
         $cp   = is_array( $s['content_padding'] ?? null ) ? $s['content_padding'] : [];
@@ -114,7 +114,7 @@ class Olobuild_MatchFixtures_Tile extends Olobuild_Tile_Base {
         ?>
         <style>
             .<?php echo $uid; ?>{display:grid;grid-template-columns:repeat(<?php echo $cols; ?>,1fr);gap:<?php echo $gap; ?>;font-family:<?php echo $sans; ?>;<?php echo $kit_pos; ?><?php echo $kit_extra; ?>}
-            .<?php echo $uid; ?> .omf-fix{background:<?php echo $cbg; ?>;border:1px solid <?php echo $cbd; ?>;border-radius:<?php echo $card_rad; ?>;padding:<?php echo $card_pad; ?>;display:flex;flex-direction:column;gap:18px;transition:border-color .2s,transform .3s;}
+            .<?php echo $uid; ?> .omf-fix{background:<?php echo $cbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $cbd ] ) ); ?>border-radius:<?php echo $card_rad; ?>;padding:<?php echo $card_pad; ?>;display:flex;flex-direction:column;gap:18px;transition:border-color .2s,transform .3s;}
             .<?php echo $uid; ?> .omf-fix:hover{transform:translateY(-4px);border-color:color-mix(in srgb, <?php echo $accent; ?> 40%, transparent);}
             .<?php echo $uid; ?> .omf-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
             .<?php echo $uid; ?> .omf-when b{font-family:<?php echo $disp; ?>;font-weight:800;font-size:15px;color:<?php echo $dayc; ?>;display:block;}

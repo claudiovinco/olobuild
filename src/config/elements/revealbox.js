@@ -145,7 +145,7 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'flex-end', label: t('Destra') },
     ]},
-    { key: 'top_padding', label: t('Padding interno (px)'), type: 'range', min: 0, max: 80, step: 4 },
+    { key: 'top_padding', label: t('Padding interno (px)'), type: 'spacing', min: 0, max: 120 },
 
     { type: 'separator', label: t('Zona visibile — Overlay') },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
@@ -175,7 +175,7 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'flex-end', label: t('Destra') },
     ]},
-    { key: 'bottom_padding', label: t('Padding interno (px)'), type: 'range', min: 0, max: 80, step: 4 },
+    { key: 'bottom_padding', label: t('Padding interno (px)'), type: 'spacing', min: 0, max: 120 },
 
     { type: 'separator', label: t('Zona rivelata — Overlay') },
     { key: 'reveal_overlay_color', label: t('Colore overlay rivelato'), type: 'color' },

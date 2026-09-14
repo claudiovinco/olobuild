@@ -44,6 +44,27 @@ database/                   → schema.sql
   modifiche al picker buildare ANCHE: `node node_modules/vite/bin/vite.js build --config vite.picker.config.js`
 - Version bump obbligatorio dopo modifiche JS/CSS: `OLOBUILD_VERSION` in olobuild.php
 
+## 🧭 Uniformità dei controlli (inspector)
+Un tipo di controllo per famiglia, in TUTTE le tile e anche dentro i repeater:
+padding/margine → `type:'spacing'` (4 lati) · raggio → `type:'border-radius'` (4 angoli)
+· bordo → `type:'border'` (4 lati + stile + colore + hover) · tipografia → `type:'typography'`
+(key-mapped, chiavi invariate) · font → `type:'font-family'` · icone → `type:'icon'`.
+
+- **Controllo di regressione**: `node scripts/audit-ui-standard.mjs` (con `--list` il dettaglio).
+  Le soglie stanno in `scripts/ui-standard-baseline.json` e sono a **0**: non vanno alzate.
+- **Ponte legacy** (`src/config/fieldLegacyBridge.js`): un controllo composito montato su una
+  tile che salva ancora chiavi piatte si INIZIALIZZA da quelle (`legacyKeys`) e le tiene in
+  SINCRONIA a ogni modifica → nessuna migrazione dati, i renderer non ancora aggiornati
+  continuano a rendere corretto. Per i bordi salvati come sola stringa colore basta
+  `type:'border'` + `legacyWidth: 1`.
+- **Renderer**: PHP `Olobuild_Tile_Utils::spacing_sides()/sides_css()/border_css()/border_color()/css_len()`
+  — gemelli JS in `src/composables/useBoxModel.js` (`toSpacingSides`, `sidesCss`, `toBorderStyle`,
+  `borderColorOf`, `cssLen`). Accettano SEMPRE sia il formato nuovo sia quello storico.
+- **Repeater**: `ContentItemsEditor` delega a `InspectorField` ogni tipo che non rende
+  nativamente → un controllo nuovo nasce disponibile in entrambi i posti.
+- **Condizioni**: un solo valutatore, `src/utils/fieldCondition.js` (`op`/`operator`, alias
+  eq/neq/ne/in/not-in/empty/notEmpty/gt/lt…, compositi ridotti alla somma dei lati).
+
 ## Regole
 - Tailwind prefix: `mb-` (evita conflitti con WordPress)
 - **Colori solo via token** `var(--olo-color-*)` + `resolveColor()` — **mai hardcodare hex**.

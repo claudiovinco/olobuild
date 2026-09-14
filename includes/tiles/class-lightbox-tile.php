@@ -54,10 +54,10 @@ class Olobuild_Lightbox_Tile extends Olobuild_Tile_Base {
 
             if ( $url ) {
                 $html .= '<a href="' . $url . '" data-type="' . esc_attr( $type ) . '"' . $data_cap . ' class="olo-lb-item"'
-                       . ' style="display:block;position:relative;overflow:hidden;border-radius:' . $radius . 'px">';
+                       . ' style="display:block;position:relative;overflow:hidden;border-radius:' . $radius . '">';
             } else {
                 $html .= '<div class="olo-lb-item olo-lb-item--empty"'
-                       . ' style="display:block;position:relative;overflow:hidden;border-radius:' . $radius . 'px;background:#F3F4F6">';
+                       . ' style="display:block;position:relative;overflow:hidden;border-radius:' . $radius . ';background:#F3F4F6">';
             }
 
             if ( $padding ) {

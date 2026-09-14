@@ -191,7 +191,7 @@ class Olobuild_OloHeader_Tile extends Olobuild_Tile_Base {
         $bp_up     = $bp + 1;
         $max_w     = max( 600, intval( $s['bar_max_width'] ) ?: 1200 );
         $offset    = max( 0, intval( $s['bar_top_offset'] ) );
-        $radius    = max( 0, min( 100, intval( $s['bar_radius'] ) ) );
+        $radius    = max( 0, min( 100, Olobuild_Tile_Utils::radius_int( $s['bar_radius'] ?? 100 ) ) );
         $shadow    = $this->shadow_css( $s['bar_shadow'] ?? 'md' );
         $bg        = $this->safe_color_css( $s['bar_bg'] ) ?: '#FFFFFF';
         $text      = $this->safe_color_css( $s['bar_text'] ) ?: '#5A6076';

@@ -112,7 +112,6 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'title_color',
@@ -120,7 +119,6 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
     { type: 'typography', label: t('Descrizione'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'description_color',
@@ -128,7 +126,6 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
     { type: 'typography', label: t('Prezzo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'price_color',
@@ -136,7 +133,6 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
     { type: 'typography', label: t('Badge'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'badge_color',
@@ -147,7 +143,7 @@ export default {
     // ── Card ──
     { type: 'separator', label: t('Card') },
     { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
-    { key: 'card_border_color', label: t('Bordo card'), type: 'color' },
+    { key: 'card_border_color', label: t('Bordo card'), type: 'border', legacyWidth: 1 },
     withHover({ key: 'card_border_radius', label: t('Arrotondamento card (px)'), type: 'border-radius'}),
     { key: 'hover_lift', label: t('Effetto hover'), type: 'toggle' },
 
@@ -187,13 +183,8 @@ export default {
     // ── Badge ──
     { type: 'separator', label: t('Badge') },
     { key: 'badge_bg', label: t('Sfondo'), type: 'color' },
-    { key: 'badge_border_color', label: t('Colore bordo'), type: 'color' },
-    { key: 'badge_border_width', label: t('Spessore bordo (px)'), type: 'range', min: 0, max: 5, step: 1 },
-    { key: 'badge_border_style', label: t('Stile bordo'), type: 'select', options: [
-      { value: 'solid', label: t('Continuo') },
-      { value: 'dashed', label: t('Tratteggiato') },
-      { value: 'dotted', label: t('Puntinato') },
-    ], condition: { field: 'badge_border_width', operator: '!=', value: '0' } },
+    { key: 'badge_border', label: t('Bordo badge'), type: 'border',
+      legacyKeys: { width: 'badge_border_width', style: 'badge_border_style', color: 'badge_border_color' } },
     withHover({ key: 'badge_border_radius', label: t('Arrotondamento (px)'), type: 'border-radius'}),
 
     ...shadowField,

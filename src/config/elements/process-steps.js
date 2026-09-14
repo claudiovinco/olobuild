@@ -98,8 +98,8 @@ export default {
 
     { type: 'separator', label: t('Card (opzionale)') },
     { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
-    { key: 'card_border', label: t('Bordo card'), type: 'color' },
+    { key: 'card_border', label: t('Bordo card'), type: 'border', legacyWidth: 1 },
     { key: 'card_radius', label: t('Border radius'), type: 'border-radius' },
-    { key: 'card_padding', label: t('Padding card (px)'), type: 'range', min: 0, max: 60, step: 2 },
+    { key: 'card_padding', label: t('Padding card (px)'), type: 'spacing', min: 0, max: 80 },
   ],
 };

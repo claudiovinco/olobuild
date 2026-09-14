@@ -45,7 +45,7 @@ class Olobuild_Scaler_Tile extends Olobuild_Tile_Base {
 
         $accent = $this->safe_color_css( $s['zone_accent'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $cardbg = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
-        $line   = $this->safe_color_css( $s['card_border'] ?? '' ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $line   = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
         $center = ( ( $s['align'] ?? 'left' ) === 'center' );
         $serif  = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
         $sans   = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
@@ -67,7 +67,7 @@ class Olobuild_Scaler_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .osl-eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--sl-accent);display:block;margin-bottom:10px;}
             .<?php echo $uid; ?> .osl-h{font-family:<?php echo $serif; ?>;font-size:clamp(26px,3.6vw,42px);line-height:1.12;margin:0;color:var(--olo-color-text,#111827);}
             .<?php echo $uid; ?> .osl-intro{font-size:15.5px;line-height:1.6;opacity:.8;margin:14px 0 0;max-width:560px;<?php echo $center ? 'margin-left:auto;margin-right:auto;' : ''; ?>}
-            .<?php echo $uid; ?> .osl-panel{margin-top:26px;background:<?php echo $cardbg; ?>;border:1px solid <?php echo $line; ?>;border-radius:16px;padding:clamp(22px,3vw,34px);text-align:left;<?php echo $center ? 'max-width:620px;margin-left:auto;margin-right:auto;' : ''; ?>}
+            .<?php echo $uid; ?> .osl-panel{margin-top:26px;background:<?php echo $cardbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $line ] ) ); ?>border-radius:16px;padding:clamp(22px,3vw,34px);text-align:left;<?php echo $center ? 'max-width:620px;margin-left:auto;margin-right:auto;' : ''; ?>}
             .<?php echo $uid; ?> .osl-base{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:6px;}
             .<?php echo $uid; ?> .osl-base__l{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.7;}
             .<?php echo $uid; ?> .osl-base__v{font-family:<?php echo $serif; ?>;font-size:26px;color:var(--sl-accent);}

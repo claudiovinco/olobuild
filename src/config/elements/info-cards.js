@@ -113,7 +113,7 @@ export default {
 
     { type: 'separator', label: t('Sfondo container') },
     { key: 'container_bg',      label: t('Sfondo'),               type: 'background', showParallax: false },
-    { key: 'container_padding', label: t('Padding interno (px)'), type: 'range', min: 0, max: 80, step: 1 },
+    { key: 'container_padding', label: t('Padding interno (px)'), type: 'spacing', min: 0, max: 80 },
     { key: 'container_gap',     label: t('Gap container-card (px)'), type: 'range', min: 0, max: 40, step: 1 },
     withHover({ key: 'container_radius', label: t('Border radius container'), type: 'border-radius' }, { hoverKey: 'container_radius_hover', hoverDurationKey: 'container_radius_hover_duration' }),
 
@@ -122,7 +122,7 @@ export default {
     { key: 'card_color',        label: t('Colore testo'),           type: 'color' },
     { key: 'card_accent_color', label: t('Colore accent (titolo)'), type: 'color' },
     { key: 'card_padding',      label: t('Padding interno card'),   type: 'spacing' },
-    { key: 'card_border',       label: t('Colore bordo (vuoto = nessuno)'), type: 'color' },
+    { key: 'card_border',       label: t('Bordo (vuoto = nessuno)'), type: 'border', legacyWidth: 1 },
     withHover({ key: 'card_radius', label: t('Border radius card'), type: 'border-radius' }, { hoverKey: 'card_radius_hover', hoverDurationKey: 'card_radius_hover_duration' }),
 
     { type: 'separator', label: t('Media (immagine card)') },

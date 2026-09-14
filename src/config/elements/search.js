@@ -85,7 +85,6 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Input'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'text_color',
@@ -133,13 +132,15 @@ export default {
     { key: 'bg_color', label: t('Sfondo input'), type: 'color' },
     { key: 'placeholder_color', label: t('Colore placeholder'), type: 'color' },
     { key: 'icon_color', label: t('Colore icona'), type: 'color' },
-    { key: 'border_color', label: t('Colore bordo'), type: 'color' },
+    { key: 'border', label: t('Bordo'), type: 'border',
+      legacyKeys: { width: 'border_width', color: 'border_color' } },
+
     { key: 'focus_border_color', label: t('Colore bordo focus'), type: 'color' },
     { key: 'button_bg', label: t('Sfondo pulsante'), type: 'color', show: s => s.show_button },
     { key: 'button_color', label: t('Colore testo pulsante'), type: 'color', show: s => s.show_button },
 
     { type: 'separator', label: t('Bordi') },
-    { key: 'border_width', label: t('Spessore bordo (px)'), type: 'range', min: 0, max: 4 },
+
     withHover({ key: 'border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
     withHover({ key: 'button_radius', label: t('Arrotondamento pulsante (px)'), type: 'border-radius',
       show: s => s.show_button }),

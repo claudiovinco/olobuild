@@ -57,7 +57,7 @@ class Olobuild_Schedule_Tile extends Olobuild_Tile_Base {
         $accent  = $this->safe_color_css( $s['zone_accent'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $on      = $this->safe_color_css( $s['zone_on'] ?? '' ) ?: '#ffffff';
         $cellbg  = $this->safe_color_css( $s['cell_bg'] ?? '' ) ?: 'var(--olo-color-surface, #ffffff)';
-        $line    = $this->safe_color_css( $s['card_border'] ?? '' ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $line    = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
         $headc   = $this->safe_color_css( $s['head_color'] ?? '' ) ?: 'var(--olo-color-text-muted, #6b7280)';
         $center  = ( ( $s['align'] ?? 'left' ) === 'center' );
         $serif   = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
@@ -75,7 +75,7 @@ class Olobuild_Schedule_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?>{ font-family:<?php echo $sans; ?>; <?php if ( $center ) echo 'text-align:center;'; ?> }
             .<?php echo $uid; ?> .osc-eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:<?php echo $accent; ?>;display:block;margin-bottom:10px;}
             .<?php echo $uid; ?> .osc-h{font-family:<?php echo $serif; ?>;font-size:clamp(26px,3.6vw,42px);line-height:1.12;margin:0 0 22px;color:var(--olo-color-text,#111827);}
-            .<?php echo $uid; ?> .osc-grid{display:grid;grid-template-columns:minmax(56px,auto) repeat(<?php echo $nd; ?>,1fr);border:1px solid <?php echo $line; ?>;border-radius:14px;overflow:hidden;background:<?php echo $line; ?>;gap:1px;text-align:left;}
+            .<?php echo $uid; ?> .osc-grid{display:grid;grid-template-columns:minmax(56px,auto) repeat(<?php echo $nd; ?>,1fr);<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $line ] ) ); ?>border-radius:14px;overflow:hidden;background:<?php echo $line; ?>;gap:1px;text-align:left;}
             .<?php echo $uid; ?> .osc-cell{background:<?php echo $cellbg; ?>;padding:14px 12px;font-size:13.5px;min-height:30px;display:flex;align-items:center;}
             .<?php echo $uid; ?> .osc-head{font-weight:700;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:<?php echo $headc; ?>;}
             .<?php echo $uid; ?> .osc-time{font-weight:700;color:<?php echo $headc; ?>;font-size:12.5px;font-variant-numeric:tabular-nums;}

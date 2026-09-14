@@ -388,7 +388,8 @@ class Olobuild_FlipCard_Tile extends Olobuild_Tile_Base {
 
         // Background image
         if ( ! empty( $s[ $prefix . 'image' ] ) ) {
-            $img_pad = intval( $s[ $prefix . 'image_padding' ] ?? 0 );
+            $img_pad_sides = Olobuild_Tile_Utils::spacing_sides( $s[ $prefix . 'image_padding' ] ?? 0, [], [ 0, 0, 0, 0 ] );
+            $img_pad       = array_sum( $img_pad_sides );
             $img_rad = intval( $s[ $prefix . 'image_radius' ] ?? 0 );
             $img_fit = in_array( $s[ $prefix . 'image_fit' ] ?? 'cover', [ 'cover', 'contain', 'fill' ] ) ? $s[ $prefix . 'image_fit' ] : 'cover';
             $img_pos = trim( (string) ( $s[ $prefix . 'image_position' ] ?? 'center center' ) );
@@ -403,7 +404,7 @@ class Olobuild_FlipCard_Tile extends Olobuild_Tile_Base {
             if ( $img_pad > 0 || $img_rad > 0 ) {
                 $wrap_style = 'position:absolute;z-index:0;overflow:hidden;';
                 if ( $img_pad > 0 ) {
-                    $wrap_style .= "inset:{$img_pad}px;";
+                    $wrap_style .= 'inset:' . Olobuild_Tile_Utils::sides_css( $img_pad_sides ) . ';';
                 } else {
                     $wrap_style .= 'inset:0;';
                 }

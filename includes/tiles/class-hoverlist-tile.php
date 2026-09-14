@@ -100,7 +100,14 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
         $name_sz = max( 14, min( 56, absint( $s['name_size'] ) ) );
         $name_up = ! empty( $s['name_uppercase'] );
         $sub_sz  = max( 10, min( 18, absint( $s['sub_size'] ) ) );
-        $pad_y   = max( 8, min( 40, absint( $s['row_padding_y'] ) ) );
+        // Il lato SINISTRO resta guidato dal controllo Indentazione (hover_indent):
+        // qui valgono alto/destro/basso del padding riga.
+        $row_pad = Olobuild_Tile_Utils::spacing_sides(
+            $s['row_padding'] ?? null,
+            [ 'y' => $s['row_padding_y'] ?? null ],
+            [ 20, 8, 20, 8 ]
+        );
+        $pad_y   = max( 0, $row_pad['top'] );
 
         // Rientro riga a riposo: '' = automatico (8px pastiglia / 4px numerato = resa storica).
         $indent_raw  = $s['row_indent'] ?? '';
@@ -166,7 +173,7 @@ class Olobuild_HoverList_Tile extends Olobuild_Tile_Base {
             // Riga "sala di regia": griglia 64px 1fr auto (blueprint .srv__row).
             $row_base = 'display:grid;grid-template-columns:64px 1fr auto;gap:24px;align-items:center;position:relative;padding:clamp(20px,2.6vw,32px) 4px clamp(20px,2.6vw,32px) ' . $indent_base . 'px;';
         } else {
-            $row_base = 'display:flex;align-items:center;gap:18px;padding:' . $pad_y . 'px 8px ' . $pad_y . 'px ' . $indent_base . 'px;';
+            $row_base = 'display:flex;align-items:center;gap:18px;padding:' . (int) $row_pad['top'] . 'px ' . (int) $row_pad['right'] . 'px ' . (int) $row_pad['bottom'] . 'px ' . $indent_base . 'px;';
         }
         $row_base .= 'border-bottom:1px solid ' . $line . ';background-color:' . $row_bg . ';';
         if ( ! empty( $hv_row['transitions'] ) ) {

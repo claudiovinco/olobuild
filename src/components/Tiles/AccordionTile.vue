@@ -79,6 +79,7 @@
 import { ref, computed, watch } from 'vue';
 import { t } from '@/i18n';
 import { useBuilderStore } from '@/stores/builder';
+import { toSpacingSides, sidesCss } from '@/composables/useBoxModel';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -261,8 +262,10 @@ const separatorClass = computed(() => {
 function headerStyle(index) {
   const open = isOpen(index);
   const v = s.value;
-  const py = parseInt(v.header_padding_y) || 16;
-  const px = parseInt(v.header_padding_x) || 20;
+  const hp = toSpacingSides(v.header_padding, {
+    legacy: { y: v.header_padding_y, x: v.header_padding_x },
+    fallback: [16, 20, 16, 20],
+  });
   const fs = parseInt(v.header_font_size) || 15;
   const fw = v.header_font_weight || '600';
   const ffMap = { mono: 'ui-monospace, SFMono-Regular, Menlo, monospace', serif: "Georgia, 'Times New Roman', serif", sans: 'inherit' };
@@ -279,7 +282,7 @@ function headerStyle(index) {
   const style = {
     background: headerBg,
     color: headerColor,
-    padding: `${py}px ${px}px`,
+    padding: sidesCss(hp),
     fontSize: fs + 'px',
     fontWeight: fw,
     fontFamily: ff,
@@ -322,15 +325,17 @@ const mediaStyle = computed(() => {
 
 const contentStyle = computed(() => {
   const v = s.value;
-  const py = parseInt(v.content_padding_y) || 20;
-  const px = parseInt(v.content_padding_x) || 20;
+  const cp = toSpacingSides(v.content_padding, {
+    legacy: { y: v.content_padding_y, x: v.content_padding_x },
+    fallback: [20, 20, 20, 20],
+  });
   const fs = parseInt(v.content_font_size) || 14;
   const blur = Math.max(0, parseInt(v.backdrop_blur ?? 0));
   const sat  = Math.max(100, parseInt(v.backdrop_saturate ?? 100));
   const out = {
     background: v.content_bg || 'var(--olo-color-background, #FFFFFF)',
     color: v.text_color || 'var(--olo-color-text, #374151)',
-    padding: `4px ${px}px ${py}px`,
+    padding: sidesCss(cp),
     fontSize: fs + 'px',
   };
   if (blur > 0) {

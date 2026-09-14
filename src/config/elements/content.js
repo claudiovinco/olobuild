@@ -124,7 +124,6 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size', 'lineHeight'],
       keys: {
         tag:        'heading_tag',
@@ -134,7 +133,6 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
     { type: 'typography', label: t('Testo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'text_color',
@@ -169,9 +167,8 @@ export default {
     { key: 'object_position', label: t('Punto focale'), type: 'object-position',
       contextKeys: { src: 'image', fit: 'image_fit' } },
     withHover({ key: 'image_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
-    { key: 'image_border_width', label: t('Spessore bordo (px)'), type: 'range', min: 0, max: 10, step: 1 },
-    { key: 'image_border_color', label: t('Colore bordo'), type: 'color',
-      condition: { field: 'image_border_width', operator: '>', value: '0' } },
+    { key: 'image_border', label: t('Bordo immagine'), type: 'border',
+      legacyKeys: { width: 'image_border_width', color: 'image_border_color' } },
     { key: 'image_shadow', label: t('Ombra'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
       { value: 'sm', label: t('Piccola') },

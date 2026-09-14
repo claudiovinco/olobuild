@@ -39,7 +39,7 @@ class Olobuild_Mixer_Tile extends Olobuild_Tile_Base {
 
         $accent = $this->safe_color_css( $s['zone_accent'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $cardbg = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
-        $cardbd = $this->safe_color_css( $s['card_border'] ?? '' ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $cardbd = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
         $center = ( ( $s['align'] ?? 'left' ) === 'center' );
         $serif  = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
         $sans   = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
@@ -57,7 +57,7 @@ class Olobuild_Mixer_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .omx-eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mx-accent);display:block;margin-bottom:10px;}
             .<?php echo $uid; ?> .omx-h{font-family:<?php echo $serif; ?>;font-size:clamp(26px,3.6vw,42px);line-height:1.12;margin:0;color:var(--olo-color-text,#111827);}
             .<?php echo $uid; ?> .omx-intro{font-size:15.5px;line-height:1.6;opacity:.8;margin:14px 0 0;max-width:560px;<?php echo $center ? 'margin-left:auto;margin-right:auto;' : ''; ?>}
-            .<?php echo $uid; ?> .omx-panel{margin-top:26px;display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(20px,3vw,40px);align-items:center;background:<?php echo $cardbg; ?>;border:1px solid <?php echo $cardbd; ?>;border-radius:16px;padding:clamp(22px,3vw,34px);text-align:left;<?php echo $center ? 'max-width:760px;margin-left:auto;margin-right:auto;' : ''; ?>}
+            .<?php echo $uid; ?> .omx-panel{margin-top:26px;display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(20px,3vw,40px);align-items:center;background:<?php echo $cardbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $cardbd ] ) ); ?>border-radius:16px;padding:clamp(22px,3vw,34px);text-align:left;<?php echo $center ? 'max-width:760px;margin-left:auto;margin-right:auto;' : ''; ?>}
             @media(max-width:740px){.<?php echo $uid; ?> .omx-panel{grid-template-columns:1fr;}}
             .<?php echo $uid; ?> .omx-swatches{display:flex;flex-wrap:wrap;gap:12px;}
             .<?php echo $uid; ?> .omx-sw{width:64px;height:64px;border-radius:14px;border:2px solid transparent;cursor:pointer;transition:transform .15s,border-color .15s,box-shadow .15s;position:relative;}
@@ -65,7 +65,7 @@ class Olobuild_Mixer_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .omx-sw.on{border-color:var(--mx-accent);box-shadow:0 0 0 3px color-mix(in srgb, var(--mx-accent) 24%, transparent);}
             .<?php echo $uid; ?> .omx-sw:focus-visible{outline:2px solid var(--mx-accent);outline-offset:3px;}
             .<?php echo $uid; ?> .omx-prevwrap{text-align:center;}
-            .<?php echo $uid; ?> .omx-preview{width:100%;height:150px;border-radius:14px;border:1px solid <?php echo $cardbd; ?>;background:transparent;transition:background .35s;}
+            .<?php echo $uid; ?> .omx-preview{width:100%;height:150px;border-radius:14px;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $cardbd ] ) ); ?>background:transparent;transition:background .35s;}
             .<?php echo $uid; ?> .omx-out{margin-top:14px;font-family:<?php echo $serif; ?>;font-size:18px;color:var(--olo-color-text,#111827);min-height:1.4em;}
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>

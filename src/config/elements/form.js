@@ -65,7 +65,7 @@ export default {
     submit_bg: '',
     submit_color: '',
     submit_radius: '6',
-    tile_padding: { top: 12, right: 24, bottom: 12, left: 24 },
+    tile_padding: { top: 0, right: 0, bottom: 0, left: 0 },
     submit_font_size: '16',
     submit_font_weight: '600',
     submit_hover_bg: '',
@@ -369,7 +369,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Etichetta'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         family:        'label_font_family',
@@ -387,15 +386,10 @@ export default {
       { value: 'stacked', label: t('Label sopra (stacked)') },
       { value: 'floating', label: t('Label fluttuante') },
     ]},
-    { key: 'input_border_style', label: t('Stile bordo campo'), type: 'select', options: [
-      { value: 'box', label: t('Riquadro (tutti i lati)') },
-      { value: 'underline', label: t('Solo linea inferiore') },
-      { value: 'none', label: t('Nessun bordo') },
-    ]},
+    { key: 'input_border', label: t('Bordo campi'), type: 'border',
+      legacyKeys: { width: 'input_border_width', style: 'input_border_style', color: 'input_border_color' } },
     { key: 'input_bg', label: t('Sfondo input'), type: 'color' },
     { key: 'input_color', label: t('Colore testo input'), type: 'color' },
-    { key: 'input_border_color', label: t('Colore bordo input'), type: 'color' },
-    { key: 'input_border_width', label: t('Spessore bordo (px)'), type: 'range', min: 0, max: 3 },
     withHover({ key: 'input_radius', label: t('Raggio bordo input (px)'), type: 'border-radius' }),
     { key: 'input_size', label: t('Dimensione input'), type: 'select', options: [
       { value: 'small', label: t('Piccolo') },
@@ -416,7 +410,6 @@ export default {
     withHover({ key: 'submit_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 48 },
     { type: 'typography', label: t('Pulsante'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size', 'letterSpacing'],
       keys: {
         family:        'submit_font_family',
@@ -427,10 +420,9 @@ export default {
       },
       sizeMin: 12, sizeMax: 22, sizeStep: 1,
     },
-    { key: 'submit_border_width', label: t('Bordo pulsante (px)'), type: 'range', min: 0, max: 4 },
+    { key: 'submit_border', label: t('Bordo pulsante'), type: 'border',
+      legacyKeys: { width: 'submit_border_width', color: 'submit_border_color' } },
     withHover(
-      { key: 'submit_border_color', label: t('Colore bordo pulsante'), type: 'color',
-        condition: { field: 'submit_border_width', operator: '>', value: 0 } },
       { hoverKey: 'submit_hover_border_color' }
     ),
 

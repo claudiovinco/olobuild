@@ -119,7 +119,8 @@ export default {
 
     { type: 'separator', label: t('Sezione') },
     { key: 'min_height', label: t('Altezza minima (px)'), type: 'range', min: 80, max: 1000, step: 10 },
-    { key: 'padding_y', label: t('Padding verticale (px)'), type: 'range', min: 0, max: 200, step: 5 },
+    { key: 'padding', label: t('Padding (px)'), type: 'spacing', min: 0, max: 200,
+      legacyKeys: { y: 'padding_y' } },
     { key: 'content_max_width', label: t('Larghezza max contenuto (px)'), type: 'range', min: 200, max: 1400, step: 10 },
     { key: 'align_v', label: t('Allineamento verticale'), type: 'select', options: [
       { value: 'flex-start', label: t('Alto') },

@@ -170,15 +170,22 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
         $brand_accent = 'var(--olo-color-primary, #e1474f)';
 
         // V3.22: granular header/content controls.
-        $header_pad_y = max( 0, intval( $s['header_padding_y'] ?? 16 ) );
-        $header_pad_x = max( 0, intval( $s['header_padding_x'] ?? 20 ) );
+        // Padding a 4 lati (controllo standard `spacing`) con ripiego sulle chiavi piatte.
+        $header_pad   = Olobuild_Tile_Utils::spacing_sides(
+            $s['header_padding'] ?? null,
+            [ 'y' => $s['header_padding_y'] ?? null, 'x' => $s['header_padding_x'] ?? null ],
+            [ 16, 20, 16, 20 ]
+        );
         $header_fs    = max( 10, intval( $s['header_font_size'] ?? 15 ) );
         $header_fw    = preg_match( '/^[1-9]00$/', (string) ($s['header_font_weight'] ?? '600') ) ? $s['header_font_weight'] : '600';
         $header_ff    = $s['header_font_family'] ?? 'sans';
         $header_ff_css = $header_ff === 'mono' ? 'ui-monospace, SFMono-Regular, Menlo, monospace'
                        : ($header_ff === 'serif' ? "Georgia, 'Times New Roman', serif" : 'inherit');
-        $content_pad_y = max( 0, intval( $s['content_padding_y'] ?? 20 ) );
-        $content_pad_x = max( 0, intval( $s['content_padding_x'] ?? 20 ) );
+        $content_pad   = Olobuild_Tile_Utils::spacing_sides(
+            $s['content_padding'] ?? null,
+            [ 'y' => $s['content_padding_y'] ?? null, 'x' => $s['content_padding_x'] ?? null ],
+            [ 20, 20, 20, 20 ]
+        );
         $content_fs    = max( 10, intval( $s['content_font_size'] ?? 14 ) );
         $bw            = max( 0, intval( $s['border_width'] ?? 1 ) );
         $header_text_active = $this->safe_color_css( $s['header_text_color_active'] ?? '' );
@@ -197,7 +204,7 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
             .<?php echo esc_attr( $uid ); ?> .uk-accordion-title {
                 <?php if ( $header_bg ) : ?>background: <?php echo $header_bg; ?>;<?php else : ?>background: transparent;<?php endif; ?>
                 <?php if ( $header_text ) : ?>color: <?php echo $header_text; ?>;<?php endif; ?>
-                padding: <?php echo $header_pad_y; ?>px <?php echo $header_pad_x; ?>px;
+                padding: <?php echo esc_attr( Olobuild_Tile_Utils::sides_css( $header_pad ) ); ?>;
                 font-weight: <?php echo $header_fw; ?>;
                 font-size: <?php echo $header_fs; ?>px;
                 font-family: <?php echo $header_ff_css; ?>;
@@ -251,7 +258,7 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
                 <?php if ( $content_bg ) : ?>background: <?php echo $content_bg; ?>;<?php endif; ?>
                 <?php if ( $text_clr ) : ?>color: <?php echo $text_clr; ?>;<?php endif; ?>
                 margin-top: 0;
-                padding: 4px <?php echo $content_pad_x; ?>px <?php echo $content_pad_y; ?>px;
+                padding: <?php echo esc_attr( Olobuild_Tile_Utils::sides_css( $content_pad ) ); ?>;
                 font-size: <?php echo $content_fs; ?>px;
                 line-height: 1.65;
                 <?php if ( $bp_blur > 0 ) : ?>backdrop-filter: blur(<?php echo max( 0, $bp_blur - 4 ); ?>px) saturate(<?php echo max( 100, $bp_sat - 20 ); ?>%); -webkit-backdrop-filter: blur(<?php echo max( 0, $bp_blur - 4 ); ?>px) saturate(<?php echo max( 100, $bp_sat - 20 ); ?>%);<?php endif; ?>
@@ -314,7 +321,7 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
             .<?php echo esc_attr( $uid ); ?> > li {
                 <?php if ( $s['separator_style'] === 'border' && $border_clr && $bw > 0 ) : ?>
-                border: <?php echo $bw; ?>px solid <?php echo $border_clr; ?>;
+                <?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border'] ?? null, [ 'width' => $bw, 'color' => $border_clr ] ) ); ?>
                 <?php elseif ( $s['separator_style'] === 'shadow' ) : ?>
                 box-shadow: 0 1px 2px rgba(16,24,40,0.05), 0 1px 3px rgba(16,24,40,0.06);
                 <?php endif; ?>

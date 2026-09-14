@@ -28,6 +28,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue';
+import { borderColorOf } from '@/composables/useBoxModel';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = {
@@ -57,7 +58,7 @@ const tier = computed(() => {
 });
 
 const accent = computed(() => s.value.zone_accent || 'var(--olo-color-primary, #e1474f)');
-const line = computed(() => s.value.card_border || 'var(--olo-color-border,#e5e7eb)');
+const line = computed(() => borderColorOf(s.value.card_border, 'var(--olo-color-border,#e5e7eb)'));
 const cellbg = computed(() => s.value.cell_bg || 'var(--olo-color-surface,#ffffff)');
 const center = computed(() => s.value.align === 'center');
 const SERIF = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";

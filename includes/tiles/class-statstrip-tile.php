@@ -55,7 +55,11 @@ class Olobuild_StatStrip_Tile extends Olobuild_Tile_Base {
         $vfam    = $this->resolve_font_family( $s['value_font_family'] ?? '', [ 'heading' => $heading, 'body' => $body, 'mono' => $mono ] ) ?: $heading;
 
         $cols    = max( 1, min( 6, absint( $s['columns'] ) ) );
-        $pad_y   = max( 0, min( 100, absint( $s['band_padding_y'] ) ) );
+        $pad_css = Olobuild_Tile_Utils::sides_css( Olobuild_Tile_Utils::spacing_sides(
+            $s['band_padding'] ?? null,
+            [ 'y' => $s['band_padding_y'] ?? null ],
+            [ 40, 0, 40, 0 ]
+        ) );
         $v_size  = max( 20, min( 96, absint( $s['value_size'] ) ) );
         $v_wt    = preg_match( '/^\d+$/', (string) $s['value_weight'] ) ? $s['value_weight'] : '600';
         $l_size  = max( 10, min( 22, absint( $s['label_size'] ) ) );
@@ -71,7 +75,7 @@ class Olobuild_StatStrip_Tile extends Olobuild_Tile_Base {
 
         $items = is_array( $s['items'] ) ? $s['items'] : [];
 
-        $band_style = 'padding:' . $pad_y . 'px 0;';
+        $band_style = 'padding:' . $pad_css . ';';
         if ( $band_brd ) $band_style .= 'border-top:1px solid ' . $line . ';border-bottom:1px solid ' . $line . ';';
         $grid_style = 'display:grid;grid-template-columns:repeat(' . $cols . ',minmax(0,1fr));';
         $cell_style = 'display:flex;flex-direction:column;gap:8px;text-align:' . $align . ';padding:4px 24px;'

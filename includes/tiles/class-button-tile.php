@@ -349,9 +349,13 @@ class Olobuild_Button_Tile extends Olobuild_Tile_Base {
         <?php
         // Respiro verticale del wrapper (storico 16px): configurabile per i
         // contesti compatti (header, barre) dove gonfierebbe l'altezza.
-        $wrap_pad = isset( $s['wrap_padding_y'] ) ? max( 0, min( 48, absint( $s['wrap_padding_y'] ) ) ) : 16;
+        $wrap_pad_css = Olobuild_Tile_Utils::sides_css( Olobuild_Tile_Utils::spacing_sides(
+            $s['wrap_padding'] ?? null,
+            [ 'y' => $s['wrap_padding_y'] ?? null ],
+            [ 16, 0, 16, 0 ]
+        ) );
         ?>
-        <div class="olo-button <?php echo esc_attr( $align_class ); ?> <?php echo esc_attr( $uid ); ?>" style="padding: <?php echo (int) $wrap_pad; ?>px 0; overflow: visible;">
+        <div class="olo-button <?php echo esc_attr( $align_class ); ?> <?php echo esc_attr( $uid ); ?>" style="padding: <?php echo esc_attr( $wrap_pad_css ); ?>; overflow: visible;">
             <?php
             $target_attr = $s['target'] === '_blank' ? ' target="_blank" rel="noopener noreferrer"' : ' target="_self"';
 

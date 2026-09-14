@@ -70,7 +70,7 @@ class Olobuild_SearchHero_Tile extends Olobuild_Tile_Base {
         $sub     = $this->safe_color_css( $s['sub_color'] ?? '' ) ?: '#6c6c7c';
         $chipCol = $this->safe_color_css( $s['chip_color'] ?? '' ) ?: '#a6a6b4';
         $line    = $this->safe_color_css( $s['border_color'] ?? '' ) ?: 'rgba(255,255,255,0.09)';
-        $sline   = $this->safe_color_css( $s['search_border'] ?? '' ) ?: 'rgba(255,90,95,0.4)';
+        $sline   = Olobuild_Tile_Utils::border_color( $s['search_border'] ?? null, 'rgba(255,90,95,0.4)' );
         $mh      = max( 0, min( 100, intval( $s['min_height'] ) ) );
 
         // ── Spaziatura: override GATED del padding contenitore (no-op coi default) ──
@@ -126,7 +126,7 @@ class Olobuild_SearchHero_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .sh-h{font-family:<?php echo $disp; ?>;font-weight:800;font-size:clamp(40px,6.6vw,80px);line-height:1.0;letter-spacing:-.02em;color:<?php echo $txt; ?>;margin:0;}
             .<?php echo $uid; ?> .sh-acc{color:<?php echo $accent; ?>;}
             .<?php echo $uid; ?> .sh-sub{font-size:18px;line-height:1.6;color:<?php echo $sub; ?>;max-width:460px;margin:20px auto 30px;}
-            .<?php echo $uid; ?> .sh-search{display:flex;gap:8px;max-width:560px;margin:0 auto;background:<?php echo $panel; ?>;border:1px solid <?php echo $sline; ?>;border-radius:<?php echo $search_radius; ?>;padding:8px;}
+            .<?php echo $uid; ?> .sh-search{display:flex;gap:8px;max-width:560px;margin:0 auto;background:<?php echo $panel; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['search_border'] ?? null, [ 'width' => 1, 'color' => $sline ] ) ); ?>border-radius:<?php echo $search_radius; ?>;padding:8px;}
             .<?php echo $uid; ?> .sh-search input{flex:1;background:transparent;border:0;padding:12px 14px;font-family:<?php echo $sans; ?>;font-size:15px;color:<?php echo $txt; ?>;min-width:0;}
             .<?php echo $uid; ?> .sh-search input::placeholder{color:<?php echo $sub; ?>;}
             .<?php echo $uid; ?> .sh-search input:focus{outline:none;}

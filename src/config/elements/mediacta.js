@@ -119,7 +119,8 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'left', label: t('Sinistra') },
     ]},
-    { key: 'pad_y', label: t('Padding verticale (px)'), type: 'range', min: 60, max: 220, step: 4 },
+    { key: 'pad_y', label: t('Respiro fluido — massimo (px)'), type: 'range', min: 60, max: 220, step: 4,
+      description: t('Tetto del padding responsive clamp(64px, 12vw, N). Per i 4 lati fissi usa «Padding verticale custom».') },
     { key: 'headline_size', label: t('Dim. max titolo (px, 0 = auto)'), type: 'range', min: 0, max: 160, step: 2 },
 
     { type: 'separator', label: t('Spaziatura') },

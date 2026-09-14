@@ -36,6 +36,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { radiusToCss } from '@/composables/useRadius';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 import { SHADOW, resolveFontFamily } from '@/composables/oloTileDefaults';
 import { focalPos } from '@/utils/focalPoint';
@@ -134,7 +135,7 @@ const ratioRe = /^[\d.\sfr]+$/;
 const aspectRe = /^[\d.\s/]+$/;
 const ratio = computed(() => ratioRe.test(String(s.value.col_ratio)) ? String(s.value.col_ratio) : '1.15fr .85fr');
 const aspect = computed(() => aspectRe.test(String(s.value.cover_aspect)) ? String(s.value.cover_aspect) : '4 / 3');
-const radius = computed(() => Math.max(0, parseInt(s.value.media_radius, 10) || 0));
+const mediaRadiusCss = computed(() => radiusToCss(s.value.media_radius, { fallback: '0' }));
 const isRight = computed(() => String(s.value.media_side) === 'right');
 
 // ── Spaziatura (override gated): se pad_custom è true usa content_padding,
@@ -172,7 +173,7 @@ function uniformRadius(br, fallback) {
 // Raggio copertina: per-angolo se valorizzato, altrimenti media_radius (default 0 → '0px'). ── parità PHP.
 const coverRadiusCss = computed(() => {
   const r = radiusCss(s.value.cover_radius);
-  return r !== '' ? r : `${radius.value}px`;
+  return r !== '' ? r : mediaRadiusCss.value;
 });
 // Raggio CTA: default {2,2,2,2} → ricade su '2px' originale. ── parità PHP.
 const ctaRadiusCss = computed(() => uniformRadius(s.value.cta_radius, 2));

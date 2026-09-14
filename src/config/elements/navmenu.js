@@ -211,7 +211,6 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Link nav'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size', 'letterSpacing'],
       keys: {
         size:          'font_size',
@@ -224,19 +223,16 @@ export default {
       sizeMin: 11, sizeMax: 24, sizeStep: 1,
     },
     { type: 'typography', label: t('Voce attiva'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'active_color',
       },
     },
     { type: 'typography', label: t('Dropdown'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'dropdown_color',
       },
     },
     { type: 'typography', label: t('Icona verticale'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'v_icon_color',
       },

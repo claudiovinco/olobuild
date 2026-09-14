@@ -40,6 +40,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { borderColorOf } from '@/composables/useBoxModel';
 
 const defaults = {
   items: [
@@ -118,7 +119,7 @@ function cardStyle(item) {
     background: hl
       ? (s.value.highlighted_bg || 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 6%, transparent)')
       : (s.value.card_bg || 'rgba(255, 255, 255, 0.8)'),
-    border: '1px solid ' + (s.value.card_border_color || (hl ? 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 20%, transparent)' : 'rgba(0, 0, 0, 0.06)')),
+    border: '1px solid ' + borderColorOf(s.value.card_border_color, hl ? 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 20%, transparent)' : 'rgba(0, 0, 0, 0.06)'),
     transition: 'transform 0.2s, box-shadow 0.2s, border-color 0.2s',
     position: 'relative',
     overflow: 'hidden',

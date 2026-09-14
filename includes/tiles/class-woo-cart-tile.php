@@ -49,7 +49,7 @@ class Olobuild_Woo_Cart_Tile extends Olobuild_Tile_Base {
         $btn_bg        = $this->safe_color_css( $s['button_bg'] )     ?: 'var(--olo-color-primary, #e1474f)';
         $text_color    = $this->safe_color_css( $s['text_color'] )    ?: 'var(--olo-color-text, #1f2937)';
         $heading_color = $this->safe_color_css( $s['heading_color'] ) ?: 'var(--olo-color-text, #1f2937)';
-        $border_color  = $this->safe_color_css( $s['border_color'] )  ?: 'var(--olo-color-border, #e5e7eb)';
+        $border_color  = Olobuild_Tile_Utils::border_color( $s['border_color'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
 
         ob_start();
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every color via the safe_color_css() whitelist (with var() fallbacks); $uid is internally generated.
@@ -61,7 +61,7 @@ class Olobuild_Woo_Cart_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .woocommerce table.shop_table {
                 border-collapse: collapse;
                 width: 100%;
-                border: 1px solid <?php echo $border_color; ?>;
+                <?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border_color'] ?? null, [ 'width' => 1, 'color' => $border_color ] ) ); ?>
                 border-radius: 8px;
                 overflow: hidden;
             }
@@ -103,7 +103,7 @@ class Olobuild_Woo_Cart_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .woocommerce .quantity .qty {
                 width: 60px;
                 padding: 6px 8px;
-                border: 1px solid <?php echo $border_color; ?>;
+                <?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border_color'] ?? null, [ 'width' => 1, 'color' => $border_color ] ) ); ?>
                 border-radius: 4px;
                 font-size: 14px;
                 text-align: center;
@@ -167,7 +167,7 @@ class Olobuild_Woo_Cart_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?> .woocommerce .coupon input[type="text"] {
                 padding: 8px 12px;
-                border: 1px solid <?php echo $border_color; ?>;
+                <?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['border_color'] ?? null, [ 'width' => 1, 'color' => $border_color ] ) ); ?>
                 border-radius: 4px;
                 font-size: 14px;
                 margin-right: 8px;

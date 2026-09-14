@@ -211,7 +211,7 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
         // CTA / Showcase / Card: border-radius standard Olobuild (4 angoli + hover)
         $cta1_size      = max( 10, min( 30, absint( $s['cta1_size'] ?? 14 ) ) );
         $cta2_size      = max( 10, min( 30, absint( $s['cta2_size'] ?? 14 ) ) );
-        $sc_padding     = max( 0, min( 80, absint( $s['showcase_padding'] ?? 28 ) ) );
+        $sc_padding_css = Olobuild_Tile_Utils::spacing_css( $s['showcase_padding'] ?? 28, 28 );
         $cta1_radius    = $this->build_border_radius_css( $s['cta1_radius'] ?? [] );
         $cta2_radius    = $this->build_border_radius_css( $s['cta2_radius'] ?? [] );
         $sc_radius      = $this->build_border_radius_css( $s['showcase_radius'] ?? [] );
@@ -345,7 +345,7 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
                     $sc_badge_col = $this->safe_color_css( $s['showcase_badge_color'] ?? '' ) ?: '#0f172a';
                     $items        = is_array( $s['showcase_items'] ) ? array_slice( $s['showcase_items'], 0, 4 ) : [];
                 ?>
-                    <div class="olo-hsplit__right" style="<?php echo esc_attr( $showcase_bg_css ); ?>;<?php if ( $sc_radius ) echo 'border-radius:' . esc_attr( $sc_radius ) . ';'; ?>padding:<?php echo (int) $sc_padding; ?>px;position:relative;min-height:480px;display:flex;flex-direction:column<?php if ( $sc_radius_h ) echo ';transition:border-radius ' . (int) $sc_rdur . 'ms ease'; ?>">
+                    <div class="olo-hsplit__right" style="<?php echo esc_attr( $showcase_bg_css ); ?>;<?php if ( $sc_radius ) echo 'border-radius:' . esc_attr( $sc_radius ) . ';'; ?>padding:<?php echo esc_attr( $sc_padding_css ); ?>;position:relative;min-height:480px;display:flex;flex-direction:column<?php if ( $sc_radius_h ) echo ';transition:border-radius ' . (int) $sc_rdur . 'ms ease'; ?>">
                         <?php if ( ! empty( $s['showcase_badge_text'] ) ) : ?>
                             <div class="olo-hsplit__badge" style="display:inline-flex;align-items:center;gap:8px;background:<?php echo esc_attr( $sc_badge_bg ); ?>;padding:6px 14px;border-radius:999px;font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $sc_badge_col ); ?>;align-self:flex-start;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
                                 <span style="width:8px;height:8px;border-radius:50%;background:<?php echo esc_attr( $sc_badge_dot ); ?>"></span>

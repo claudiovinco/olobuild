@@ -27,6 +27,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { borderColorOf } from '@/composables/useBoxModel';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
@@ -70,7 +71,7 @@ const MONO = "var(--olo-font-family-mono, 'Space Mono', ui-monospace, monospace)
 
 const accent = computed(() => s.value.accent || 'var(--olo-color-primary, #C6F24E)');
 const cardBg = computed(() => s.value.card_bg || 'var(--olo-color-muted, #101218)');
-const cardBorder = computed(() => s.value.card_border_color || 'var(--olo-color-border, rgba(236,234,227,.10))');
+const cardBorder = computed(() => borderColorOf(s.value.card_border_color, 'var(--olo-color-border, rgba(236,234,227,.10))'));
 const cardBorderHover = computed(() => s.value.card_border_hover_color || 'color-mix(in srgb, var(--olo-color-text, #ECEAE3) 20%, transparent)');
 const pvHeight = computed(() => { const n = parseInt(s.value.preview_height, 10); return n > 0 ? Math.max(100, Math.min(320, n)) : 168; });
 const gap = computed(() => { const n = parseInt(s.value.gap, 10); return n > 0 ? n : 16; });

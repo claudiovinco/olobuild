@@ -247,14 +247,11 @@ export default {
     { key: 'modal_shadow_inset', label: t('Ombra interna'), type: 'toggle',
       condition: { field: 'modal_shadow', op: 'eq', value: 'custom' } },
     withHover({ key: 'modal_radius', label: t('Bordo arrotondato'), type: 'border-radius' }),
-    { key: 'modal_border_width', label: t('Spessore bordo'), type: 'range', min: 0, max: 10, step: 1 },
-    { key: 'modal_border_style', label: t('Stile bordo'), type: 'select', options: [
-      { value: 'solid',  label: t('Continuo') },
-      { value: 'dashed', label: t('Tratteggiato') },
-      { value: 'dotted', label: t('Puntinato') },
-      { value: 'double', label: t('Doppio') },
-    ]},
-    { key: 'modal_border_color', label: t('Colore bordo'), type: 'color' },
+    { key: 'modal_border', label: t('Bordo modale'), type: 'border',
+      legacyKeys: { width: 'modal_border_width', style: 'modal_border_style', color: 'modal_border_color' } },
+
+
+
     { key: 'modal_bg', label: t('Sfondo modale'), type: 'color' },
     { key: 'modal_text_color', label: t('Colore testo modale'), type: 'color' },
     { key: 'modal_backdrop_blur', label: t('Sfocatura sfondo modale (blur)'), type: 'range', min: 0, max: 40, step: 1 },
@@ -263,7 +260,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo modale'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size', 'letterSpacing'],
       letterSpacingUnit: 'em',
       keys: {
@@ -275,7 +271,6 @@ export default {
       sizeMin: 14, sizeMax: 48, sizeStep: 1,
     },
     { type: 'typography', label: t('Pulsante'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['letterSpacing'],
       letterSpacingUnit: 'em',
       keys: {

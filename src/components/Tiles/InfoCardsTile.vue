@@ -53,7 +53,7 @@ import { useBuilderStore } from '@/stores/builder';
 import { resolveResponsive } from '@/composables/useResponsiveValue';
 import { resolveFontFamily } from '@/composables/oloTileDefaults';
 import iconsSvg from '../ProSlider/iconsLibrary.js';
-import { toSpacingCss } from '@/composables/useBoxModel';
+import { toSpacingCss, borderColorOf } from '@/composables/useBoxModel';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -134,7 +134,7 @@ function parseCss(str) {
 const containerStyle = computed(() => ({
   ...parseCss(bgToCss(s.value.container_bg, 'background:#0f172a;')),
   borderRadius: radiusToCss(s.value.container_radius) || '0',
-  padding: (s.value.container_padding || 0) + 'px',
+  padding: toSpacingCss(s.value.container_padding, { fallback: [0, 0, 0, 0] }),
 }));
 
 // columns/items_gap sono PER-DEVICE (responsive: true in info-cards.js): si leggono col
@@ -164,7 +164,7 @@ const cardStyle = computed(() => {
     transition: 'transform .3s ease, box-shadow .3s ease, border-color .3s ease',
     textDecoration: 'none',
   };
-  if (s.value.card_border) out.border = '1px solid ' + s.value.card_border;
+  if (s.value.card_border) out.border = '1px solid ' + borderColorOf(s.value.card_border);
   return out;
 });
 

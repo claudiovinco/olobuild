@@ -85,8 +85,15 @@ class Olobuild_Nav_Tile extends Olobuild_Tile_Base {
         $sep_color   = $this->safe_color_css( $s['separator_color'] ) ?: 'var(--olo-color-text, #374151)';
 
         // Dimensions
-        $px     = intval( $s['padding_x'] );
-        $py     = intval( $s['padding_y'] );
+        // Padding voce: controllo unico a 4 lati (tile_padding), ripiego sulle
+        // chiavi piatte padding_x/padding_y dei template salvati prima.
+        $item_pad = Olobuild_Tile_Utils::spacing_sides(
+            $s['tile_padding'] ?? null,
+            [ 'y' => $s['padding_y'] ?? null, 'x' => $s['padding_x'] ?? null ],
+            [ 8, 12, 8, 12 ]
+        );
+        $px     = intval( $item_pad['left'] );
+        $py     = intval( $item_pad['top'] );
         $gap    = intval( $s['gap'] );
         $radius = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
@@ -113,7 +120,7 @@ class Olobuild_Nav_Tile extends Olobuild_Tile_Base {
         $css .= "#{$uid}{display:flex;{$direction_css};gap:{$gap}px;{$align_prop}:{$align_val};list-style:none;padding:0;margin:0}";
 
         // Items base
-        $css .= "#{$uid} .olo-nav-item{display:flex;align-items:center;gap:8px;padding:{$py}px {$px}px;";
+        $css .= "#{$uid} .olo-nav-item{display:flex;align-items:center;gap:8px;padding:{$item_pad['top']}px {$item_pad['right']}px {$item_pad['bottom']}px {$item_pad['left']}px;";
         $css .= "border-radius:{$radius};font-size:{$fs}px;font-weight:{$fw};text-transform:{$tt};";
         $css .= "letter-spacing:{$ls}px;color:{$link_color};text-decoration:none;transition:all .2s ease;position:relative}";
 

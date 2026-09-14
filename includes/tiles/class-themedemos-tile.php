@@ -54,7 +54,7 @@ class Olobuild_ThemeDemos_Tile extends Olobuild_Tile_Base {
 
         $acc  = $this->safe_color_css( $s['accent'] ?? '' ) ?: 'var(--olo-color-primary, #C6F24E)';
         $cbg  = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-muted, #101218)';
-        $cbd  = $this->safe_color_css( $s['card_border_color'] ?? '' ) ?: 'var(--olo-color-border, rgba(236,234,227,.10))';
+        $cbd  = Olobuild_Tile_Utils::border_color( $s['card_border_color'] ?? null, 'var(--olo-color-border, rgba(236,234,227,.10))' );
         $cbdh = $this->safe_color_css( $s['card_border_hover_color'] ?? '' ) ?: 'color-mix(in srgb, var(--olo-color-text, #ECEAE3) 20%, transparent)';
 
         $ph = intval( $s['preview_height'] );
@@ -91,7 +91,7 @@ class Olobuild_ThemeDemos_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .otd-row{display:flex;gap:<?php echo $gap; ?>px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:14px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;}
             .<?php echo $uid; ?> .otd-row::-webkit-scrollbar{height:6px;}
             .<?php echo $uid; ?> .otd-row::-webkit-scrollbar-thumb{background:<?php echo $cbdh; ?>;border-radius:3px;}
-            .<?php echo $uid; ?> .otd-card{flex:0 0 clamp(250px,28vw,320px);scroll-snap-align:start;border:1px solid <?php echo $cbd; ?>;border-radius:12px;overflow:hidden;background:<?php echo $cbg; ?>;transition:transform .18s,border-color .18s;display:block;text-decoration:none;color:inherit;}
+            .<?php echo $uid; ?> .otd-card{flex:0 0 clamp(250px,28vw,320px);scroll-snap-align:start;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border_color'] ?? null, [ 'width' => 1, 'color' => $cbd ] ) ); ?>border-radius:12px;overflow:hidden;background:<?php echo $cbg; ?>;transition:transform .18s,border-color .18s;display:block;text-decoration:none;color:inherit;}
             .<?php echo $uid; ?> .otd-card:hover{transform:translateY(-4px);border-color:<?php echo $cbdh; ?>;}
             .<?php echo $uid; ?> .otd-card:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, <?php echo $acc; ?> 30%, transparent);}
             .<?php echo $uid; ?> .otd-pv{position:relative;height:<?php echo $ph; ?>px;background:var(--c-bg);padding:15px 16px 0;display:flex;flex-direction:column;overflow:hidden;}

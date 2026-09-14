@@ -76,7 +76,6 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Headings'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'heading_color',
@@ -84,7 +83,6 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
     { type: 'typography', label: t('Testo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'text_color',
@@ -92,7 +90,6 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
     { type: 'typography', label: t('Pulsante'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'button_color',
@@ -102,13 +99,13 @@ export default {
 
     { type: 'separator', label: t('Colori') },
     { key: 'accent_color', label: t('Colore accento'), type: 'color' },
-    { key: 'border_color', label: t('Colore bordi'), type: 'color' },
+    { key: 'border_color', label: t('Bordi'), type: 'border', legacyWidth: 1 },
     { key: 'button_bg', label: t('Sfondo pulsante'), type: 'color' },
 
     { type: 'separator', label: t('Campi & pannelli') },
     { key: 'input_bg', label: t('Campi — sfondo (vuoto = bianco)'), type: 'color' },
     { key: 'input_text_color', label: t('Campi — testo'), type: 'color' },
-    { key: 'input_radius', label: t('Campi — raggio (px, vuoto = da stile form)'), type: 'number', min: 0, max: 30 },
+    { key: 'input_radius', label: t('Campi — raggio (vuoto = da stile form)'), type: 'border-radius' },
     { key: 'panel_bg', label: t('Pannelli (pagamento/coupon/intestazioni tabella) — sfondo'), type: 'color' },
     { key: 'notice_bg', label: t('Avvisi WooCommerce — sfondo'), type: 'color' },
     { key: 'notice_text', label: t('Avvisi WooCommerce — testo'), type: 'color' },

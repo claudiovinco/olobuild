@@ -71,6 +71,10 @@ class Olobuild_ImgCompare_Tile extends Olobuild_Tile_Base {
         $after_lbl   = esc_html( $s['after_label'] );
         $cbw         = intval( $s['card_border_width'] );
         $cbc         = $this->safe_color_css( $s['card_border_color'] ) ?: 'var(--olo-color-text, #374151)';
+        $card_border_decl = Olobuild_Tile_Utils::border_css(
+            $s['card_border'] ?? null,
+            [ 'width' => $cbw, 'color' => $cbc ]
+        );
         $shadow      = Olobuild_Tile_Utils::shadow_value( $s, 'card_shadow' );
         $autoplay    = ! empty( $s['autoplay'] );
         $ap_delay    = max( 1, intval( $s['autoplay_delay'] ) );
@@ -95,7 +99,7 @@ class Olobuild_ImgCompare_Tile extends Olobuild_Tile_Base {
                 overflow: hidden;
                 height: <?php echo $height; ?>px;
                 <?php if ( $radius && $radius !== '0px' ) : ?>border-radius: <?php echo $radius; ?>;<?php endif; ?>
-                <?php if ( $cbw > 0 ) : ?>border: <?php echo $cbw; ?>px solid <?php echo $cbc; ?>;<?php endif; ?>
+                <?php echo esc_attr( $card_border_decl ); ?>
                 <?php if ( $shadow && $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
                 cursor: <?php echo $is_vert ? 'row-resize' : 'col-resize'; ?>;
                 user-select: none;

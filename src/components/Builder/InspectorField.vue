@@ -419,6 +419,8 @@
         :keys="field.keys || {}"
         :values="tileSettings || {}"
         :label="field.label || 'Tipografia'"
+        :responsiveKeys="field.responsiveKeys || ['size']"
+        :letterSpacingUnit="field.letterSpacingUnit || 'px'"
         :sizeMin="field.sizeMin"
         :sizeMax="field.sizeMax"
         :sizeStep="field.sizeStep"
@@ -538,6 +540,11 @@
           :title="t('Reset valore hover')"
         >{{ t('Azzera') }}</button>
       </div>
+
+      <!-- Testo di aiuto del campo. Era dichiarato in 86 config (308 occorrenze) ma
+           veniva reso SOLO per i field `type:'description'`: su tutti gli altri
+           spariva in silenzio. Ora ogni campo può spiegarsi, ovunque e allo stesso modo. -->
+      <p v-if="field.description" class="olo-field-desc">{{ t(field.description) }}</p>
       </template>
       </template>
     </template>
@@ -579,6 +586,7 @@ import FieldIconSelect from './fields/FieldIconSelect.vue';
 import DynamicFieldToggle from './DynamicFieldToggle.vue';
 import { useTilesStore } from '@/stores/tiles';
 import { useStylesStore } from '@/stores/styles';
+import { seedFromLegacy, legacyMirror, seedBorderFromColor } from '@/config/fieldLegacyBridge';
 import { t } from '@/i18n';
 
 import FieldEditor from './fields/FieldEditor.vue';
@@ -678,6 +686,11 @@ function onFieldUpdate(value) {
     emit('update:responsiveValue', { key: respKey.value, value });
   } else {
     emit('update:modelValue', value);
+  }
+  // Ponte legacy: ricopia la sintesi del valore composito sulle vecchie chiavi
+  // piatte, così il renderer non ancora migrato continua a rendere corretto.
+  for (const m of legacyMirror(props.field, value)) {
+    emit('update:settingKey', m);
   }
 }
 
@@ -913,7 +926,20 @@ const fieldComponent = computed(() => {
 const effectiveValue = computed(() => {
   // Stato Hover attivo: il controllo principale mostra il valore hover (toggle Normale/Hover).
   if (props.field.hoverable && hoverOpen.value) return hoverValue.value;
-  return props.field.responsive ? respValue.value : props.modelValue;
+  const v = props.field.responsive ? respValue.value : props.modelValue;
+  // Ponte legacy: un controllo composito (spacing/border-radius/border) montato su
+  // una tile che salva ancora le chiavi piatte parte VUOTO. Invece di mostrare uno
+  // zero bugiardo, si inizializza dai valori legacy davvero in uso.
+  if (props.field.legacyKeys && (v === undefined || v === null || v === '')) {
+    const seed = seedFromLegacy(props.field, props.tileSettings);
+    if (seed !== undefined) return seed;
+  }
+  // Bordo nel formato storico: la chiave conteneva la sola stringa colore.
+  if (props.field.type === 'border' && typeof v === 'string' && v !== '') {
+    const seed = seedBorderFromColor(v, props.field.legacyWidth ?? 1);
+    if (seed !== undefined) return seed;
+  }
+  return v;
 });
 // `hoverOpen`/`hoverKey`/`hoverValue` sono definiti più sotto (const): vengono usati qui solo
 // a runtime (computed lazy / handler), mai durante l'inizializzazione → nessun TDZ.
@@ -1202,4 +1228,14 @@ function onDynamicUpdate(dynamicUpdate, isRemove) {
 .olo-reveal-btn.is-open .olo-reveal-chev { transform: rotate(90deg); }
 .olo-reveal-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--olo-ui-accent); margin-left: auto; }
 .olo-reveal-body { margin-top: 8px; }
+
+/* Testo di aiuto sotto al campo — stessa resa del field type:'description',
+   così l'aiuto ha UN SOLO aspetto in tutto l'inspector. */
+.olo-field-desc {
+  margin: 3px 0 0;
+  font-size: 10px;
+  line-height: 1.35;
+  font-style: italic;
+  color: #6b7280;
+}
 </style>

@@ -53,8 +53,8 @@
 
           <!-- Expanded editor -->
           <div v-if="expandedId === element.id" class="cie-body">
-            <div v-for="field in itemFields" :key="field.key || 'sep-' + field.label" v-show="isFieldVisible(field, element)" class="cie-field" :class="{ 'cie-field--inline': field.type === 'number' || field.type === 'range' }">
-              <label v-if="field.type !== 'separator'" class="cie-label">{{ field.label }}</label>
+            <div v-for="field in itemFields" :key="(field.key || '') + ':' + (field.type || '') + ':' + (field.label || '')" v-show="isFieldVisible(field, element)" class="cie-field" :class="{ 'cie-field--inline': field.type === 'number' || field.type === 'range' }">
+              <label v-if="field.type !== 'separator' && !isDelegated(field)" class="cie-label">{{ field.label }}</label>
 
               <!-- separator (intestazione di sezione, nessun input) -->
               <div v-if="field.type === 'separator'" class="cie-separator">{{ field.label }}</div>
@@ -205,6 +205,21 @@
                 @update:modelValue="updateField(index, field.key, $event)"
               />
 
+              <!-- Tutti gli ALTRI tipi (spacing, border, border-radius, punto focale,
+                   tipografia, unità, galleria, ombre, gradiente…) sono delegati a
+                   InspectorField: un solo dispatch, gli stessi controlli completi che
+                   si hanno a livello di tile. Prima cadevano nel campo di testo qui
+                   sotto e si degradavano in silenzio. -->
+              <InspectorField
+                v-else-if="isDelegated(field)"
+                :field="field"
+                :modelValue="element[field.key]"
+                :tileSettings="element"
+                @update:modelValue="updateField(index, field.key, $event)"
+                @update:settingKey="updateField(index, $event.key, $event.value)"
+                @update:attachmentId="updateField(index, field.key + '_id', $event)"
+              />
+
               <!-- text (default) -->
               <input
                 v-else
@@ -214,6 +229,9 @@
                 class="cie-input"
                 :placeholder="field.placeholder || ''"
               />
+
+              <!-- Testo di aiuto: reso anche qui, come nell'inspector della tile. -->
+              <p v-if="field.description && !isDelegated(field)" class="cie-desc">{{ t(field.description) }}</p>
             </div>
           </div>
         </div>
@@ -296,6 +314,23 @@ import IconPicker from '../ProSlider/IconPicker.vue';
 import { useToast } from '@/composables/useToast';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
 import { useMediaPicker } from '@/composables/useMediaPicker';
+import { isFieldVisible as sharedIsFieldVisible } from '@/utils/fieldCondition';
+import InspectorField from './InspectorField.vue';
+
+// Tipi resi NATIVAMENTE qui dentro (markup compatto pensato per la riga di un item).
+// Tutto il resto passa da InspectorField: così un controllo nuovo nasce disponibile
+// sia sulla tile sia dentro i repeater, senza doverlo riscrivere due volte.
+const CIE_NATIVE = new Set([
+  'separator', 'editor', 'image', 'media', 'textarea', 'range', 'number',
+  'color', 'font-family', 'select', 'icon', 'hotspot-position', 'toggle',
+  'link', 'background', 'text', '',
+]);
+// content-items annidato non ha senso dentro un item (non esiste lo slot).
+const CIE_SKIP = new Set(['content-items']);
+function isDelegated(field) {
+  const ty = field?.type || 'text';
+  return !CIE_NATIVE.has(ty) && !CIE_SKIP.has(ty);
+}
 
 const props = defineProps({
   modelValue: { type: Array, default: () => [] },
@@ -635,14 +670,10 @@ function duplicateItem(index) {
   emitUpdate();
 }
 
+// Visibilità dei sub-field: stesso valutatore dell'inspector della tile
+// (prima qui esistevano solo in/eq/notEmpty e `neq` veniva ignorato).
 function isFieldVisible(field, element) {
-  if (!field.condition) return true;
-  const { field: condField, op, value } = field.condition;
-  const val = element[condField];
-  if (op === 'in') return Array.isArray(value) && value.includes(val);
-  if (op === 'eq') return val === value;
-  if (op === 'notEmpty') return !!val;
-  return val === value;
+  return sharedIsFieldVisible(field, element || {});
 }
 
 function removeItem(index) {
@@ -814,6 +845,15 @@ function removeItem(index) {
   color: #666;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+/* Testo di aiuto del campo — stessa resa dell'inspector (.olo-field-desc). */
+.cie-desc {
+  margin: 3px 0 0;
+  font-size: 10px;
+  line-height: 1.35;
+  font-style: italic;
+  color: #6b7280;
 }
 
 .cie-separator {

@@ -136,7 +136,9 @@ export default {
         { key: 'label', label: t('Etichetta'), type: 'text' },
         { key: 'value', label: t('Valore'), type: 'number', step: 'any' },
         { key: 'color', label: t('Colore sfondo'), type: 'color' },
-        { key: 'border_color', label: t('Colore bordo'), type: 'color' },
+        { key: 'border', label: t('Bordo'), type: 'border',
+          legacyKeys: { width: 'border_width', color: 'border_color' } },
+
       ],
       newItemDefaults: { label: t('Nuovo'), value: '50', color: '#e1474f', border_color: '' },
       itemLabel: 'Dato',
@@ -258,7 +260,6 @@ export default {
     // ── Tipografia ──
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Legenda'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:   'legend_font_size',
@@ -268,7 +269,6 @@ export default {
       sizeMin: 8, sizeMax: 20, sizeStep: 1,
     },
     { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:   'title_font_size',
@@ -278,7 +278,6 @@ export default {
       sizeMin: 10, sizeMax: 32, sizeStep: 1,
     },
     { type: 'typography', label: t('Sottotitolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'subtitle_font_size',
@@ -287,7 +286,6 @@ export default {
       sizeMin: 8, sizeMax: 20, sizeStep: 1,
     },
     { type: 'typography', label: t('Tooltip'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'tooltip_font_size',
@@ -296,7 +294,6 @@ export default {
       sizeMin: 8, sizeMax: 18, sizeStep: 1,
     },
     { type: 'typography', label: t('Assi'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'tick_font_size',
@@ -321,10 +318,10 @@ export default {
     { type: 'separator', label: t('Tooltip — stile') },
     { key: 'tooltip_bg', label: t('Sfondo tooltip'), type: 'color',
       condition: { field: 'tooltip_enabled', value: true } },
-    { key: 'tooltip_border_color', label: t('Bordo tooltip'), type: 'color',
-      condition: { field: 'tooltip_enabled', value: true } },
-    { key: 'tooltip_border_width', label: t('Spessore bordo tooltip'), type: 'range', min: 0, max: 4, step: 1,
-      condition: { field: 'tooltip_enabled', value: true } },
+    { key: 'tooltip_border', label: t('Bordo tooltip'), type: 'border',
+      legacyKeys: { width: 'tooltip_border_width', color: 'tooltip_border_color' } },
+
+
     withHover({ key: 'tooltip_corner_radius', label: t('Raggio angoli tooltip'), type: 'border-radius',
       condition: { field: 'tooltip_enabled', value: true } }),
     { key: 'tooltip_padding', label: t('Padding tooltip'), type: 'spacing', max: 20,
@@ -332,7 +329,7 @@ export default {
 
     // ── Stile dati (aspetto) ──
     { type: 'separator', label: t('Stile dati — aspetto') },
-    { key: 'border_width', label: t('Spessore bordo dati'), type: 'range', min: 0, max: 6, step: 1 },
+
     { key: 'border_color_override', label: t('Colore bordo globale'), type: 'color' },
     withHover({ key: 'bar_radius', label: t('Raggio angoli barre'), type: 'border-radius',
       condition: { field: 'chart_type', value: 'bar' } }),

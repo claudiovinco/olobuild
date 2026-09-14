@@ -49,7 +49,7 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
         $accent = $this->safe_color_css( $s['zone_accent'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $on     = $this->safe_color_css( $s['zone_on'] ?? '' ) ?: '#ffffff';
         $cardbg = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
-        $cardbd = $this->safe_color_css( $s['card_border'] ?? '' ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $cardbd = Olobuild_Tile_Utils::border_color( $s['card_border'] ?? null, 'var(--olo-color-border, #e5e7eb)' );
         $center = ( ( $s['align'] ?? 'left' ) === 'center' );
         $serif  = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
         $sans   = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
@@ -81,7 +81,7 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .obds-tally .cnt span{font-weight:600;font-size:13px;opacity:.75;}
             .<?php echo $uid; ?> .obds-tally .tot{font-family:<?php echo $disp; ?>;font-weight:800;font-size:28px;line-height:1;border-left:1px solid color-mix(in srgb, <?php echo $accent; ?> 30%, transparent);padding-left:22px;}
             .<?php echo $uid; ?> .obds-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-            .<?php echo $uid; ?> .obds-item{display:flex;align-items:center;justify-content:space-between;gap:16px;background:<?php echo $cardbg; ?>;border:1px solid <?php echo $cardbd; ?>;border-radius:10px;padding:16px 20px;transition:border-color .25s,box-shadow .25s;}
+            .<?php echo $uid; ?> .obds-item{display:flex;align-items:center;justify-content:space-between;gap:16px;background:<?php echo $cardbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $cardbd ] ) ); ?>border-radius:10px;padding:16px 20px;transition:border-color .25s,box-shadow .25s;}
             .<?php echo $uid; ?> .obds-item.on{border-color:<?php echo $accent; ?>;box-shadow:0 12px 28px -18px rgba(0,0,0,.4);}
             .<?php echo $uid; ?> .obds-meta h3{font-family:<?php echo $disp; ?>;font-weight:700;font-size:18px;text-transform:uppercase;letter-spacing:.01em;color:<?php echo $inm; ?>;margin:0;}
             .<?php echo $uid; ?> .obds-meta .no{font-size:12px;color:var(--olo-color-text-muted,#8a948d);margin-top:2px;}
@@ -131,7 +131,7 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .obd-eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--bd-accent);display:block;margin-bottom:10px;}
             .<?php echo $uid; ?> .obd-h{font-family:<?php echo $serif; ?>;font-size:clamp(26px,3.6vw,42px);line-height:1.12;margin:0;color:var(--olo-color-text,#111827);}
             .<?php echo $uid; ?> .obd-intro{font-size:15.5px;line-height:1.6;opacity:.8;margin:14px 0 0;max-width:560px;<?php echo $center ? 'margin-left:auto;margin-right:auto;' : ''; ?>}
-            .<?php echo $uid; ?> .obd-panel{margin-top:26px;background:<?php echo $cardbg; ?>;border:1px solid <?php echo $cardbd; ?>;border-radius:16px;padding:clamp(20px,3vw,32px);text-align:left;<?php echo $center ? 'max-width:640px;margin-left:auto;margin-right:auto;' : ''; ?>}
+            .<?php echo $uid; ?> .obd-panel{margin-top:26px;background:<?php echo $cardbg; ?>;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $cardbd ] ) ); ?>border-radius:16px;padding:clamp(20px,3vw,32px);text-align:left;<?php echo $center ? 'max-width:640px;margin-left:auto;margin-right:auto;' : ''; ?>}
             .<?php echo $uid; ?> .obd-row{display:flex;align-items:center;gap:16px;padding:16px 0;border-top:1px solid <?php echo $cardbd; ?>;}
             .<?php echo $uid; ?> .obd-row:first-child{border-top:0;}
             .<?php echo $uid; ?> .obd-row.on{}
@@ -140,7 +140,7 @@ class Olobuild_Builder_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .obd-row__note{font-size:13px;opacity:.6;margin-top:2px;}
             .<?php echo $uid; ?> .obd-row__price{font-weight:600;font-size:14.5px;color:var(--bd-accent);white-space:nowrap;}
             .<?php echo $uid; ?> .obd-step{display:inline-flex;align-items:center;gap:12px;}
-            .<?php echo $uid; ?> .obd-step button{width:32px;height:32px;border-radius:50%;border:1px solid <?php echo $cardbd; ?>;background:transparent;color:var(--olo-color-text,#111827);font-size:18px;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;}
+            .<?php echo $uid; ?> .obd-step button{width:32px;height:32px;border-radius:50%;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border'] ?? null, [ 'width' => 1, 'color' => $cardbd ] ) ); ?>background:transparent;color:var(--olo-color-text,#111827);font-size:18px;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;}
             .<?php echo $uid; ?> .obd-step button:hover{border-color:var(--bd-accent);color:var(--bd-accent);}
             .<?php echo $uid; ?> .obd-step button:focus-visible{outline:2px solid var(--bd-accent);outline-offset:2px;}
             .<?php echo $uid; ?> .obd-step [data-bd-c]{min-width:20px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums;}

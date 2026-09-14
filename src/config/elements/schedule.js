@@ -51,7 +51,7 @@ export default {
     { key: 'zone_accent', label: t('Colore evidenziato'), type: 'color' },
     { key: 'zone_on', label: t('Testo su evidenziato'), type: 'color' },
     { key: 'cell_bg', label: t('Sfondo celle'), type: 'color' },
-    { key: 'card_border', label: t('Bordo griglia'), type: 'color' },
+    { key: 'card_border', label: t('Bordo griglia'), type: 'border', legacyWidth: 1 },
     { key: 'head_color', label: t('Colore intestazioni'), type: 'color' },
     { key: 'align', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },

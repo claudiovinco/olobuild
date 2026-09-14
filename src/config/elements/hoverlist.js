@@ -164,7 +164,8 @@ export default {
     { type: 'separator', label: t('Righe') },
     // Nel layout numerato l'altezza della riga segue la scala fluida del blueprint
     // (clamp 20-32px): il controllo resta nascosto lì invece di fingere di agire.
-    { key: 'row_padding_y', label: t('Padding verticale (px)'), type: 'range', min: 8, max: 40, step: 1,
+    { key: 'row_padding', label: t('Padding riga (px)'), type: 'spacing', min: 0, max: 80,
+      legacyKeys: { y: 'row_padding_y' },
       condition: { field: 'lead_mode', value: 'swatch' } },
     withHover({ key: 'row_indent', label: t('Rientro riga (px)'), type: 'range', min: 0, max: 60, step: 2,
       placeholder: t('auto') },

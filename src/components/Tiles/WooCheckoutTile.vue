@@ -108,6 +108,7 @@
 
 <script setup>
 import { t } from '@/i18n';
+import { borderColorOf } from '@/composables/useBoxModel';
 import { computed } from 'vue';
 import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
@@ -131,7 +132,7 @@ const s = computed(() => ({
   ...sRaw.value,
   text_color: resolveColor(sRaw.value.text_color, TOKENS.text),
   heading_color: resolveColor(sRaw.value.heading_color, TOKENS.text),
-  border_color: resolveColor(sRaw.value.border_color, TOKENS.border),
+  border_color: resolveColor(borderColorOf(sRaw.value.border_color), TOKENS.border),
   accent_color: resolveColor(sRaw.value.accent_color, TOKENS.primary),
   button_color: resolveColor(sRaw.value.button_color, TOKENS.onPrimary),
   button_bg: resolveColor(sRaw.value.button_bg, TOKENS.primary),
@@ -180,7 +181,7 @@ const labelStyle = computed(() => ({
 const inputStyle = computed(() => ({
   width: '100%',
   padding: inputPadding.value,
-  border: `1px solid ${s.value.border_color}`,
+  border: `1px solid ${borderColorOf(s.value.border_color)}`,
   borderRadius: borderRadius.value,
   fontSize: '14px',
   color: s.value.text_color,
@@ -197,7 +198,7 @@ const formGridStyle = {
 const orderTableStyle = computed(() => ({
   width: '100%',
   borderCollapse: 'collapse',
-  border: `1px solid ${s.value.border_color}`,
+  border: `1px solid ${borderColorOf(s.value.border_color)}`,
   borderRadius: borderRadius.value,
   overflow: 'hidden',
   marginBottom: '20px',
@@ -210,19 +211,19 @@ const orderThStyle = computed(() => ({
   fontSize: '13px',
   padding: '12px 16px',
   textAlign: 'left',
-  borderBottom: `1px solid ${s.value.border_color}`,
+  borderBottom: `1px solid ${borderColorOf(s.value.border_color)}`,
 }));
 
 const orderTdStyle = computed(() => ({
   padding: '12px 16px',
-  borderBottom: `1px solid ${s.value.border_color}`,
+  borderBottom: `1px solid ${borderColorOf(s.value.border_color)}`,
   fontSize: '14px',
   color: s.value.text_color,
 }));
 
 const orderThTotalStyle = computed(() => ({
   padding: '12px 16px',
-  borderBottom: `1px solid ${s.value.border_color}`,
+  borderBottom: `1px solid ${borderColorOf(s.value.border_color)}`,
   fontWeight: '600',
   color: s.value.heading_color,
   textAlign: 'left',
@@ -231,7 +232,7 @@ const orderThTotalStyle = computed(() => ({
 
 const paymentBoxStyle = computed(() => ({
   background: TOKENS.surfaceAlt,
-  border: `1px solid ${s.value.border_color}`,
+  border: `1px solid ${borderColorOf(s.value.border_color)}`,
   borderRadius: borderRadius.value,
   padding: '4px 16px',
   marginBottom: '16px',
@@ -241,7 +242,7 @@ const paymentOptionStyle = computed(() => ({
   display: 'flex',
   alignItems: 'center',
   padding: '12px 0',
-  borderBottom: `1px solid ${s.value.border_color}`,
+  borderBottom: `1px solid ${borderColorOf(s.value.border_color)}`,
 }));
 
 const placeOrderStyle = computed(() => ({

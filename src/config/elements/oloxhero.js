@@ -147,6 +147,6 @@ export default {
       { value: 'tutor', label: t('Alone verde (tutor)') },
       { value: 'none', label: t('Nessuno') },
     ] },
-    { key: 'pad_top', label: t('Padding top extra (px, 0 = default)'), type: 'number' },
+    { key: 'pad_top', label: t('Padding extra (px, 0 = default)'), type: 'spacing', min: 0, max: 200 },
   ],
 };

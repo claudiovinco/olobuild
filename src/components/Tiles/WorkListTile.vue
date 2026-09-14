@@ -19,6 +19,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { toSpacingCss } from '@/composables/useBoxModel';
 import { resolveFontFamily } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
@@ -70,7 +71,7 @@ const gridCols = computed(() => {
 });
 const rowStyle = computed(() => ({
   display: 'grid', gridTemplateColumns: gridCols.value, gap: '24px', alignItems: 'center',
-  padding: (s.value.row_padding_y || 26) + 'px 8px', borderBottom: '1px solid ' + line.value,
+  padding: toSpacingCss(s.value.row_padding, { legacy: { y: s.value.row_padding_y }, fallback: [26, 8, 26, 8] }), borderBottom: '1px solid ' + line.value,
   '--olo-wl-indent': (s.value.hover_indent || 0) + 'px', '--olo-wl-hover-bg': s.value.row_hover_bg || 'transparent',
 }));
 const titleStyle = computed(() => ({

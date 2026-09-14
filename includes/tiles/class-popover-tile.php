@@ -68,7 +68,10 @@ class Olobuild_Popover_Tile extends Olobuild_Tile_Base {
         }
 
         // Popup image top radius
-        $img_top_radius = $popup_radius > 0 ? $popup_radius . 'px ' . $popup_radius . 'px 0 0' : '0';
+        // Solo i due angoli superiori: build_border_radius_css() da' la stringa completa,
+        // qui serve lo scalare (radius_int), altrimenti usciva '8pxpx 8pxpx 0 0'.
+        $popup_radius_int = Olobuild_Tile_Utils::radius_int( $s['popup_radius'] ?? 8 );
+        $img_top_radius   = $popup_radius_int > 0 ? "{$popup_radius_int}px {$popup_radius_int}px 0 0" : '0';
 
         ob_start();
         ?>

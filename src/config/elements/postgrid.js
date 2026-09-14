@@ -210,7 +210,6 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'title_size',
@@ -219,7 +218,6 @@ export default {
       sizeMin: 0.7, sizeMax: 2.5, sizeStep: 0.05,
     },
     { type: 'typography', label: t('Estratto'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'excerpt_size',
@@ -228,13 +226,11 @@ export default {
       sizeMin: 0.7, sizeMax: 1.5, sizeStep: 0.05,
     },
     { type: 'typography', label: t('Meta (data/autore)'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'meta_color',
       },
     },
     { type: 'typography', label: t('Ribbon'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'ribbon_size',

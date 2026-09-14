@@ -172,15 +172,21 @@ class Olobuild_SwitcherPanel_Tile extends Olobuild_Tile_Base {
         $btn_style    = $s['button_style'] ?? 'primary';
 
         // ── Numeric fields ──
-        $nav_pad_y    = max( 0, intval( $s['nav_padding_y'] ?? 12 ) );
-        $nav_pad_x    = max( 0, intval( $s['nav_padding_x'] ?? 18 ) );
+        // Padding a 4 lati (controllo standard `spacing`) con ripiego sulle chiavi piatte.
+        $nav_pad      = Olobuild_Tile_Utils::spacing_sides(
+            $s['nav_padding'] ?? null,
+            [ 'y' => $s['nav_padding_y'] ?? null, 'x' => $s['nav_padding_x'] ?? null ],
+            [ 12, 18, 12, 18 ]
+        );
+        $nav_pad_y    = max( 0, $nav_pad['top'] );
+        $nav_pad_x    = max( 0, $nav_pad['left'] );
         $nav_fs       = max( 8, intval( $s['nav_font_size'] ?? 12 ) );
         $nav_fw       = preg_match( '/^[1-9]00$/', (string) ( $s['nav_font_weight'] ?? '700' ) ) ? $s['nav_font_weight'] : '700';
         $nav_ls       = floatval( $s['nav_letter_spacing'] ?? 0.08 );
         $nav_uppercase = ! empty( $s['nav_uppercase'] );
         $nav_gap      = max( 0, intval( $s['nav_gap'] ?? 0 ) );
         $nav_rad_css  = $this->build_border_radius_css( $s['nav_radius'] ?? 0 ) ?: '0px';
-        $nav_cont_pad = max( 0, intval( $s['nav_container_padding'] ?? 0 ) );
+        $nav_cont_pad = Olobuild_Tile_Utils::spacing_css( $s['nav_container_padding'] ?? 0, 0 );
         $nav_cont_rad_css = $this->build_border_radius_css( $s['nav_container_radius'] ?? 0 );
         $ind_thickness = max( 1, intval( $s['nav_indicator_thickness'] ?? 2 ) );
         $panel_gap    = max( 0, intval( $s['panel_gap'] ?? 24 ) );
@@ -344,7 +350,7 @@ class Olobuild_SwitcherPanel_Tile extends Olobuild_Tile_Base {
 
             .<?php echo $uid; ?> .olo-sp-nav {
                 margin: 0;
-                padding: <?php echo (int) $nav_cont_pad; ?>px;
+                padding: <?php echo esc_attr( $nav_cont_pad ); ?>;
                 list-style: none;
                 display: flex;
                 gap: <?php echo (int) $nav_gap; ?>px;
@@ -359,7 +365,7 @@ class Olobuild_SwitcherPanel_Tile extends Olobuild_Tile_Base {
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                padding: <?php echo (int) $nav_pad_y; ?>px <?php echo (int) $nav_pad_x; ?>px;
+                padding: <?php echo esc_attr( Olobuild_Tile_Utils::sides_css( $nav_pad ) ); ?>;
                 font-size: <?php echo (int) $nav_fs; ?>px;
                 font-weight: <?php echo $nav_fw; ?>;
                 <?php if ( $nav_uppercase ) : ?>text-transform: uppercase;<?php endif; ?>

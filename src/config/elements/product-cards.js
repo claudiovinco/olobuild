@@ -104,7 +104,7 @@ export default {
     { type: 'separator', label: t('Card') },
     { key: 'card_bg',      label: t('Sfondo card'),     type: 'background', showParallax: false },
     { key: 'card_color',   label: t('Colore testo'),    type: 'color' },
-    { key: 'card_padding', label: t('Padding card (px)'), type: 'range', min: 12, max: 60, step: 2 },
+    { key: 'card_padding', label: t('Padding card (px)'), type: 'spacing', min: 0, max: 80 },
     withHover({ key: 'card_radius', label: t('Border radius card'), type: 'border-radius' }, { hoverKey: 'card_radius_hover', hoverDurationKey: 'card_radius_hover_duration' }),
     { key: 'card_shadow', label: t('Ombra card'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
@@ -122,7 +122,7 @@ export default {
       { value: '2/3', label: '2 / 3' },
       { value: '3/2', label: '3 / 2' },
     ]},
-    { key: 'top_padding',       label: t('Padding interno (px)'), type: 'range', min: 0, max: 60, step: 2 },
+    { key: 'top_padding', label: t('Padding interno (px)'), type: 'spacing', min: 0, max: 80 },
     { key: 'letter_font_family', label: t('Famiglia lettera'), type: 'font-family' },
     { key: 'letter_size',   label: t('Dimensione lettera (px)'), type: 'range', min: 40, max: 280, step: 4 },
     { key: 'logo_height',   label: t('Altezza logo (px)'),       type: 'range', min: 16, max: 160, step: 2 },

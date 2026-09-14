@@ -56,6 +56,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
+import { borderColorOf } from '@/composables/useBoxModel';
 import { t } from '@/i18n';
 import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
@@ -76,7 +77,7 @@ const sRaw = computed(() => ({ ...defaults, ...props.settings }));
 const s = computed(() => ({
   ...sRaw.value,
   text_color: resolveColor(sRaw.value.text_color, TOKENS.text),
-  border_color: resolveColor(sRaw.value.border_color, TOKENS.border),
+  border_color: resolveColor(borderColorOf(sRaw.value.border_color), TOKENS.border),
   active_color: resolveColor(sRaw.value.active_color, TOKENS.primary),
 }));
 
@@ -112,12 +113,12 @@ const mockReviews = [
 const tabNavStyle = computed(() => {
   const base = { display: 'flex', marginBottom: '24px' };
   if (s.value.tab_style === 'underline') {
-    base.borderBottom = `2px solid ${s.value.border_color}`;
+    base.borderBottom = `2px solid ${borderColorOf(s.value.border_color)}`;
     base.gap = '0';
   } else if (s.value.tab_style === 'pills') {
     base.gap = '8px';
   } else if (s.value.tab_style === 'boxed') {
-    base.border = `1px solid ${s.value.border_color}`;
+    base.border = `1px solid ${borderColorOf(s.value.border_color)}`;
     base.borderRadius = '8px';
     base.overflow = 'hidden';
     base.gap = '0';
@@ -154,7 +155,7 @@ const tabBtnStyle = (isActive) => {
   } else if (s.value.tab_style === 'boxed') {
     base.flex = '1';
     base.textAlign = 'center';
-    base.borderRight = `1px solid ${s.value.border_color}`;
+    base.borderRight = `1px solid ${borderColorOf(s.value.border_color)}`;
     if (isActive) {
       base.background = s.value.active_color;
       base.color = '#fff';
@@ -166,7 +167,7 @@ const tabBtnStyle = (isActive) => {
 const tableStyle = { width: '100%', borderCollapse: 'collapse' };
 const thStyle = computed(() => ({
   padding: '10px 12px',
-  borderBottom: `1px solid ${s.value.border_color}`,
+  borderBottom: `1px solid ${borderColorOf(s.value.border_color)}`,
   textAlign: 'left',
   fontWeight: '600',
   fontSize: '14px',
@@ -175,13 +176,13 @@ const thStyle = computed(() => ({
 }));
 const tdStyle = computed(() => ({
   padding: '10px 12px',
-  borderBottom: `1px solid ${s.value.border_color}`,
+  borderBottom: `1px solid ${borderColorOf(s.value.border_color)}`,
   fontSize: '14px',
   color: s.value.text_color,
 }));
 const reviewStyle = computed(() => ({
   padding: '14px 0',
-  borderBottom: `1px solid ${s.value.border_color}`,
+  borderBottom: `1px solid ${borderColorOf(s.value.border_color)}`,
 }));
 </script>
 

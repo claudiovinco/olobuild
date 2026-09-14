@@ -69,7 +69,6 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Numero'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'font_size',
@@ -89,11 +88,11 @@ export default {
     { key: 'gap', label: t('Distanza tra pulsanti (px)'), type: 'range', min: 0, max: 24, step: 2 },
     { key: 'button_padding', label: t('Padding pulsanti (px)'), type: 'spacing', max: 50 },
     withHover({ key: 'border_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
-    { key: 'border_width', label: t('Spessore bordo (px)'), type: 'range', min: 0, max: 4, step: 1 },
+    { key: 'border', label: t('Bordo'), type: 'border',
+      legacyKeys: { width: 'border_width', color: 'border_color' } },
 
     { type: 'separator', label: t('Colori') },
     withHover({ key: 'background_color', label: t('Sfondo pulsanti'), type: 'color' }, { hoverKey: 'hover_background' }),
-    { key: 'border_color', label: t('Colore bordo'), type: 'color' },
     { key: 'active_text_color', label: t('Testo pagina attiva'), type: 'color' },
     { key: 'active_background', label: t('Sfondo pagina attiva'), type: 'color' },
 

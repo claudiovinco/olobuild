@@ -34,6 +34,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue';
+import { borderColorOf } from '@/composables/useBoxModel';
 import { resolveColor, TOKENS, SHADOW } from '@/composables/oloTileDefaults';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 import { radiusToCss } from '@/composables/useRadius';
@@ -121,7 +122,7 @@ function chipStyle(i) {
 const resStyle = computed(() => {
   const st = {
     background: resolveColor(s.value.card_bg, 'var(--olo-color-surface-alt,#f6f7f9)'),
-    border: '1px solid ' + resolveColor(s.value.card_border, 'var(--olo-color-border,#e5e7eb)'),
+    border: '1px solid ' + resolveColor(borderColorOf(s.value.card_border), 'var(--olo-color-border,#e5e7eb)'),
     borderRadius: radiusStr(s.value.card_radius, 16),
     padding: padStr(s.value.card_padding, 34),
     textAlign: 'left',

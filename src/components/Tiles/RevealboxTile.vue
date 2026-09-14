@@ -120,6 +120,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { toSpacingCss } from '@/composables/useBoxModel';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 
 const props = defineProps({
@@ -274,10 +275,10 @@ function faceStyleObj(zone) {
 }
 
 function contentPad(zone) {
-  const pad = parseInt(zone === 'top' ? s.value.top_padding : s.value.bottom_padding) || 0;
+  const pad = toSpacingCss(zone === 'top' ? s.value.top_padding : s.value.bottom_padding, { fallback: [24, 24, 24, 24] });
   const color = zone === 'top' ? (s.value.top_text_color || s.value.text_color) : (s.value.bottom_text_color || s.value.text_color);
   const fontSize = zone === 'top' ? s.value.top_font_size : s.value.bottom_font_size;
-  const style = { position: 'relative', zIndex: '2', padding: pad + 'px', color };
+  const style = { position: 'relative', zIndex: '2', padding: pad, color };
   if (fontSize && parseInt(fontSize) > 0) {
     style.fontSize = parseInt(fontSize) + 'px';
   }

@@ -7,6 +7,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { toSpacingCss } from '@/composables/useBoxModel';
 import { t } from '@/i18n';
 import def from '@/config/elements/bottombar.js';
 
@@ -19,7 +20,7 @@ const barStyle = computed(() => ({
   background: s.value.bg_color || 'var(--olo-color-surface, rgba(12,14,19,.92))',
   color: s.value.text_color || 'var(--olo-color-text-muted, #8B90A0)',
   textAlign: s.value.align || 'center',
-  padding: `${s.value.padding_y || 14}px 24px`,
+  padding: toSpacingCss(s.value.padding, { legacy: { y: s.value.padding_y }, fallback: [14, 24, 14, 24] }),
   fontFamily: 'var(--olo-font-family-mono, monospace)',
   fontSize: `${s.value.font_size || 11}px`,
   letterSpacing: `${s.value.letter_spacing ?? 2}px`,

@@ -64,7 +64,7 @@ export default {
     { key: 'ok_color', label: t('Colore "ai limiti"'), type: 'color' },
     { key: 'sleep_color', label: t('Colore "notte"'), type: 'color' },
     { key: 'card_bg', label: t('Sfondo righe città'), type: 'color' },
-    { key: 'card_border', label: t('Bordo'), type: 'color' },
+    { key: 'card_border', label: t('Bordo'), type: 'border', legacyWidth: 1 },
     { key: 'align', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },

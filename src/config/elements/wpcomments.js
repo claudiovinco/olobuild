@@ -101,7 +101,7 @@ export default {
     { key: 'date_color', label: t('Colore data'), type: 'color' },
     { key: 'link_color', label: t('Colore link'), type: 'color' },
     { key: 'form_background', label: t('Sfondo modulo'), type: 'color' },
-    { key: 'border_color', label: t('Colore bordo'), type: 'color' },
+    { key: 'border_color', label: t('Bordo'), type: 'border', legacyWidth: 1 },
     ...borderFields(),
   ],
 };

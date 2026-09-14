@@ -13,6 +13,7 @@ export default {
   category: 'marketing',
 
   defaults: {
+    typography_preset: '',
     text: 'Complimentary shipping & returns worldwide · ',
     accent_text: 'The Nocturne collection has arrived',
     link_url: '',
@@ -41,18 +42,22 @@ export default {
   styleFields: [
     { type: 'separator', label: t('Colori') },
     { key: 'bg_color', label: t('Sfondo'), type: 'color' },
-    { key: 'text_color', label: t('Testo'), type: 'color' },
     { key: 'accent_color', label: t('Accento'), type: 'color' },
 
     { type: 'separator', label: t('Tipografia') },
-    { key: 'font_size', label: t('Dim. testo (px)'), type: 'range', min: 9, max: 18, step: 1 },
-    { key: 'font_weight', label: t('Peso'), type: 'select', options: [
-      { value: '400', label: '400' }, { value: '500', label: '500' }, { value: '600', label: '600' }, { value: '700', label: '700' },
-    ]},
-    { key: 'letter_spacing', label: t('Spaziatura lettere (es. 0.2em)'), type: 'unit', units: ['em', 'px', 'rem'], min: 0, step: 0.05 },
-    { key: 'text_transform', label: t('Trasformazione'), type: 'select', options: [
-      { value: 'none', label: t('Nessuna') }, { value: 'uppercase', label: t('MAIUSCOLO') }, { value: 'lowercase', label: t('minuscolo') },
-    ]},
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Testo'),
+      responsiveKeys: ['size'],
+      letterSpacingUnit: 'em',
+      keys: {
+        size:          'font_size',
+        weight:        'font_weight',
+        transform:     'text_transform',
+        letterSpacing: 'letter_spacing',
+        color:         'text_color',
+      },
+      sizeMin: 9, sizeMax: 18, sizeStep: 1,
+    },
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
       { value: 'center', label: t('Centro') }, { value: 'left', label: t('Sinistra') }, { value: 'right', label: t('Destra') },
     ]},

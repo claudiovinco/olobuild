@@ -73,7 +73,7 @@ class Olobuild_ShowcaseGrid_Tile extends Olobuild_Tile_Base {
         // Punto focale GLOBALE (object-position) applicato a TUTTE le card. Default 'center center' → no-op.
         $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
         if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
-        $rad    = intval( $s['radius'] ) . 'px';
+        $rad    = Olobuild_Tile_Utils::border_radius( $s['radius'] ?? 20 ) ?: '0';
 
         // Raggio card a 4 angoli: OVERRIDE solo se valorizzato (default {0,0,0,0} → usa $rad legacy → no-op).
         $card_radius_css = $this->build_border_radius_css( $s['card_radius'] ?? [] );

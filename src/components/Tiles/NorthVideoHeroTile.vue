@@ -46,6 +46,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { borderColorOf } from '@/composables/useBoxModel';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 import { borderDefault, borderHoverDefault, borderEffectDefaults } from '@/config/elements/_shared.js';
 import { focalPos } from '@/utils/focalPoint';
@@ -96,7 +97,7 @@ const txt = computed(() => s.value.text_color || '#ffffff');
 const accent = computed(() => s.value.accent || 'var(--olo-color-primary, #ff7759)');
 const crestC = computed(() => s.value.crest_color || 'rgba(255,255,255,0.5)');
 const frameBg = computed(() => s.value.frame_bg || '#0a201a');
-const frameBd = computed(() => s.value.frame_border || 'rgba(255,255,255,0.12)');
+const frameBd = computed(() => borderColorOf(s.value.frame_border, 'rgba(255,255,255,0.12)'));
 const mode = computed(() => (['video', 'media', 'none'].includes(s.value.mock_mode) ? s.value.mock_mode : 'video'));
 
 // ── Sfondo hero PRINCIPALE unificato (pannello media_bg) con fallback ai campi

@@ -142,7 +142,6 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Citazione'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         color: 'text_color',
@@ -198,9 +197,8 @@ export default {
       condition: { field: 'avatar_shadow', op: 'eq', value: 'custom' } },
     { key: 'avatar_shadow_inset', label: t('Ombra interna'), type: 'toggle',
       condition: { field: 'avatar_shadow', op: 'eq', value: 'custom' } },
-    { key: 'avatar_border_width', label: t('Bordo avatar (px)'), type: 'range', min: 0, max: 5, step: 1 },
-    { key: 'avatar_border_color', label: t('Colore bordo avatar'), type: 'color',
-      condition: { field: 'avatar_border_width', operator: '>', value: '0' } },
+    { key: 'avatar_border', label: t('Bordo avatar'), type: 'border',
+      legacyKeys: { width: 'avatar_border_width', color: 'avatar_border_color' } },
     { key: 'avatar_filter', label: t('Filtro avatar'), type: 'select', options: [
       { value: 'none', label: t('Nessuno') },
       { value: 'grayscale', label: t('Scala di grigi') },

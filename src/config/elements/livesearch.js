@@ -130,7 +130,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Input'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'input_font_size',
@@ -139,19 +138,16 @@ export default {
       sizeMin: 12, sizeMax: 24, sizeStep: 1,
     },
     { type: 'typography', label: t('Risultato'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'title_color',
       },
     },
     { type: 'typography', label: t('Estratto'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'excerpt_color',
       },
     },
     { type: 'typography', label: t('Icona'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'icon_color',
       },

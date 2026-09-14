@@ -84,7 +84,7 @@ export default {
     { key: 'sub_color', label: t('Colore sottotitolo'), type: 'color' },
     { key: 'chip_color', label: t('Colore chip'), type: 'color' },
     { key: 'border_color', label: t('Bordo chip'), type: 'color' },
-    { key: 'search_border', label: t('Bordo barra ricerca'), type: 'color' },
+    { key: 'search_border', label: t('Bordo barra ricerca'), type: 'border', legacyWidth: 1 },
 
     { type: 'separator', label: t('Forma') },
     { key: 'min_height', label: t('Altezza minima (vh, 0 = auto)'), type: 'range', min: 0, max: 100, step: 1 },

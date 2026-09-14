@@ -64,7 +64,7 @@ export default {
     display_date_from: '',
     display_date_to: '',
     display_referrer: '',
-    tile_padding: { top: 0, right: 0, bottom: 0, left: 0 },
+    tile_padding: { top: 0, right: 0, bottom: 0, left: 0 }, // padding del contenitore
     border_radius: { tl: 0, tr: 0, br: 0, bl: 0 },
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
@@ -208,8 +208,8 @@ export default {
       { value: 'xl', label: t('Extra grande') },
     ]},
     withHover({ key: 'modal_radius', label: t('Bordo arrotondato'), type: 'border-radius' }),
-    { key: 'modal_border_width', label: t('Spessore bordo'), type: 'range', min: 0, max: 10, step: 1 },
-    { key: 'modal_border_color', label: t('Colore bordo'), type: 'color' },
+    { key: 'modal_border', label: t('Bordo modale'), type: 'border',
+      legacyKeys: { width: 'modal_border_width', color: 'modal_border_color' } },
 
     { type: 'separator', label: t('Overlay e comportamento') },
     { key: 'modal_overlay', label: t('Oscuramento sfondo'), type: 'range', min: 0, max: 100, step: 5 },

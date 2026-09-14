@@ -101,9 +101,8 @@ export default {
     ]},
     withHover({ key: 'photo_radius', label: t('Raggio bordo foto (px)'), type: 'border-radius',
       condition: { field: 'photo_shape', value: 'rounded' } }),
-    { key: 'photo_border_width', label: t('Bordo foto (px)'), type: 'range', min: 0, max: 8, step: 1 },
-    { key: 'photo_border_color', label: t('Colore bordo foto'), type: 'color',
-      condition: { field: 'photo_border_width', operator: '>', value: '0' } },
+    { key: 'photo_border', label: t('Bordo foto'), type: 'border',
+      legacyKeys: { width: 'photo_border_width', color: 'photo_border_color' } },
     { key: 'photo_shadow', label: t('Ombra foto'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
       { value: 'sm', label: t('Leggera') },
@@ -131,9 +130,8 @@ export default {
     { key: 'info_margin', label: t('Margine dal tile (px)'), type: 'spacing', max: 40 },
     { key: 'info_padding', label: t('Padding contenitore (px)'), type: 'spacing', max: 48 },
     withHover({ key: 'info_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
-    { key: 'info_border_width', label: t('Bordo contenitore (px)'), type: 'range', min: 0, max: 5, step: 1 },
-    { key: 'info_border_color', label: t('Colore bordo contenitore'), type: 'color',
-      condition: { field: 'info_border_width', operator: '>', value: '0' } },
+    { key: 'info_border', label: t('Bordo scheda'), type: 'border',
+      legacyKeys: { width: 'info_border_width', color: 'info_border_color' } },
     { key: 'info_align', label: t('Allineamento testo'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
@@ -142,7 +140,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Nome'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:   'name_size',
@@ -152,7 +149,6 @@ export default {
       sizeMin: 14, sizeMax: 36, sizeStep: 1,
     },
     { type: 'typography', label: t('Ruolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'role_size',
@@ -161,7 +157,6 @@ export default {
       sizeMin: 10, sizeMax: 24, sizeStep: 1,
     },
     { type: 'typography', label: t('Biografia'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'bio_size',

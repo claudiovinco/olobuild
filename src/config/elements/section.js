@@ -59,9 +59,9 @@ export default {
       { value: 'xlarge',          label: t('Extra grande') },
       { value: 'custom',          label: t('Personalizzato (px)') },
     ], description: t('Spazio sopra e sotto il contenuto della sezione. Imposta "Nessuno" per eliminare lo spazio verticale (es. band a contatto), "Personalizzato" per valori px precisi.') },
-    { key: 'padding_top_custom', label: t('Padding sopra (px)'), type: 'number', min: 0, max: 600,
-      condition: { field: 'padding', op: 'eq', value: 'custom' } },
-    { key: 'padding_bottom_custom', label: t('Padding sotto (px)'), type: 'number', min: 0, max: 600,
+    { key: 'padding_custom', label: t('Padding personalizzato (px)'), type: 'spacing', min: 0, max: 600,
+      legacyKeys: { top: 'padding_top_custom', bottom: 'padding_bottom_custom' },
+      description: t('Ora anche i lati sinistro e destro, non solo sopra/sotto.'),
       condition: { field: 'padding', op: 'eq', value: 'custom' } },
 
     { type: 'separator', label: t('Aspetto preset') },

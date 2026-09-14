@@ -299,7 +299,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo card'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['letterSpacing'],
       keys: {
         family:        'font_family',
@@ -310,19 +309,16 @@ export default {
       },
     },
     { type: 'typography', label: t('Testo'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'text_color',
       },
     },
     { type: 'typography', label: t('Meta'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'meta_color',
       },
     },
     { type: 'typography', label: t('Link / Accento'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'link_color',
       },

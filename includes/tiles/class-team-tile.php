@@ -75,6 +75,10 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
         $ph_shape  = $s['photo_shape'] ?: 'circle';
         $ph_bw     = intval( $s['photo_border_width'] );
         $ph_bc     = $this->safe_color_css( $s['photo_border_color'] ) ?: 'var(--olo-color-on-primary, #FFFFFF)';
+        $photo_border_decl = Olobuild_Tile_Utils::border_css(
+            $s['photo_border'] ?? null,
+            [ 'width' => $ph_bw, 'color' => $ph_bc ]
+        );
         $ph_gap    = max( intval( $s['photo_gap'] ), 0 );
         $outer_sz  = $ph_size + $ph_bw * 2;
         $ph_shadow  = Olobuild_Tile_Utils::shadow( $s['photo_shadow'] ?? 'none', 'photo' );
@@ -206,7 +210,7 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
                 background: <?php echo $info_bg; ?>;
                 <?php endif; ?>
                 <?php if ( $info_bw > 0 ) : ?>
-                border: <?php echo $info_bw; ?>px solid <?php echo $info_bc; ?>;
+                <?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['info_border'] ?? null, [ 'width' => $info_bw, 'color' => $info_bc ] ) ); ?>
                 <?php endif; ?>
             }
             <?php if ( $info_r_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-team-info{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-team-info:hover{border-radius:<?php echo $info_r_hover_css; ?> !important}<?php endif; ?>

@@ -286,7 +286,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
       keys: {
         family: 'font_family',
         weight: 'font_weight',
@@ -294,7 +293,6 @@ export default {
       },
     },
     { type: 'typography', label: t('Testo'),
-      presetKey: 'typography_preset',
       keys: {
         transform:     'text_transform',
         letterSpacing: 'letter_spacing',
@@ -302,7 +300,6 @@ export default {
       },
     },
     { type: 'typography', label: t('Accento'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'accent_color',
       },

@@ -110,31 +110,26 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Tab'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'active_color',
       },
     },
     { type: 'typography', label: t('Occhiello'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'heading_color',
       },
     },
     { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'title_color',
       },
     },
     { type: 'typography', label: t('Testo'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'text_color',
       },
     },
     { type: 'typography', label: t('Link'),
-      presetKey: 'typography_preset',
       keys: {
         color: 'link_color',
       },

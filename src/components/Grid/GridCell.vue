@@ -271,6 +271,17 @@ const cellStyle = computed(() => {
   const mode = builderStore.viewMode;
   const style = {};
 
+  // Preset tipografico globale — gemello canvas di apply_common_box_styles():
+  // le proprietà vanno sul wrapper e si ereditano al contenuto della tile.
+  const typoPreset = String(set.typography_preset || '').replace(/[^a-z0-9_-]/gi, '');
+  if (typoPreset) {
+    style.fontFamily = `var(--olo-font-${typoPreset}-family, inherit)`;
+    style.fontWeight = `var(--olo-font-${typoPreset}-weight, inherit)`;
+    style.textTransform = `var(--olo-font-${typoPreset}-transform, none)`;
+    style.lineHeight = `var(--olo-font-${typoPreset}-line-height, inherit)`;
+    style.letterSpacing = `var(--olo-font-${typoPreset}-letter-spacing, normal)`;
+  }
+
   // Entrance animation custom controls (CSS vars consumed by frontend.css rules)
   const eAnim = set.entrance_animation;
   if (eAnim && eAnim !== 'none') {

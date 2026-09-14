@@ -241,14 +241,11 @@ export default {
     // ────────── Stile Card ──────────
     { type: 'separator', label: t('Stile Card') },
     { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
-    { key: 'card_border_color', label: t('Colore bordo card'), type: 'color' },
-    { key: 'card_border_width', label: t('Spessore bordo (px)'), type: 'range', min: 0, max: 8, step: 1 },
-    { key: 'card_border_style', label: t('Stile bordo'), type: 'select', options: [
-      { value: 'solid',  label: t('Solido') },
-      { value: 'dashed', label: t('Tratteggiato') },
-      { value: 'dotted', label: t('Punteggiato') },
-      { value: 'double', label: t('Doppio') },
-    ]},
+    { key: 'card_border', label: t('Bordo card'), type: 'border',
+      legacyKeys: { width: 'card_border_width', style: 'card_border_style', color: 'card_border_color' } },
+
+
+
     withHover({ key: 'card_radius', label: t('Raggio bordi (px)'), type: 'border-radius'}),
     { key: 'card_padding', label: t('Padding interno (px)'), type: 'spacing', max: 48 },
     ...shadowField,
@@ -282,7 +279,6 @@ export default {
     // ────────── Tipografia ──────────
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size', 'letterSpacing'],
       letterSpacingUnit: 'em',
       keys: {
@@ -294,7 +290,6 @@ export default {
       sizeMin: 0, sizeMax: 48, sizeStep: 1,
     },
     { type: 'typography', label: t('Contenuto'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'content_size',

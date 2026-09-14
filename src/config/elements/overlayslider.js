@@ -253,7 +253,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['letterSpacing'],
       letterSpacingUnit: 'em',
       keys: {
@@ -263,7 +262,6 @@ export default {
       },
     },
     { type: 'typography', label: t('Sottotitolo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'subtitle_size',

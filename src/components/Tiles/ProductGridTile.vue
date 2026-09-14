@@ -41,6 +41,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue';
+import { borderColorOf } from '@/composables/useBoxModel';
 import { resolveFontFamily } from '@/composables/oloTileDefaults';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 import { radiusToCss } from '@/composables/useRadius';
@@ -135,7 +136,7 @@ const catcol = computed(() => s.value.category_color || 'var(--olo-color-text-mu
 const tcol = computed(() => s.value.title_color || 'var(--olo-color-text, #111827)');
 const pcol = computed(() => s.value.price_color || 'var(--olo-color-primary, #e1474f)');
 const fTxt = computed(() => s.value.filter_text_color || 'var(--olo-color-text, #111827)');
-const fBd = computed(() => s.value.filter_border_color || 'var(--olo-color-border, rgba(0,0,0,.14))');
+const fBd = computed(() => borderColorOf(s.value.filter_border_color, 'var(--olo-color-border, rgba(0,0,0,.14))'));
 const fAbg = computed(() => s.value.filter_active_bg || pcol.value);
 const fAcol = computed(() => s.value.filter_active_color || '#ffffff');
 const filtersStyle = { display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '48px' };
@@ -161,7 +162,7 @@ const cardStyle = computed(() => {
   if (!hasCard.value) return {};
   const o = { overflow: 'hidden' };
   if (s.value.card_bg) o.background = s.value.card_bg;
-  if (s.value.card_border) o.border = '1px solid ' + s.value.card_border;
+  if (s.value.card_border) o.border = '1px solid ' + borderColorOf(s.value.card_border);
   if (cardRadiusCss.value) o.borderRadius = cardRadiusCss.value;
   return o;
 });

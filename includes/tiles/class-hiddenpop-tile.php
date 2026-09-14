@@ -178,6 +178,10 @@ class Olobuild_Hiddenpop_Tile extends Olobuild_Tile_Base {
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['modal_radius_hover'] ?? null );
         $border_w    = max( 0, intval( $s['modal_border_width'] ?? 0 ) );
         $border_c    = $this->safe_color_css( $s['modal_border_color'] ?? '' ) ?: '#e5e7eb';
+        $modal_border_decl = Olobuild_Tile_Utils::border_css(
+            $s['modal_border'] ?? null,
+            [ 'width' => $border_w, 'color' => $border_c ]
+        );
         $overlay_pct = max( 0, min( 100, intval( $s['modal_overlay'] ?? 60 ) ) );
         $overlay_a   = round( $overlay_pct / 100, 2 );
         $blur        = max( 0, min( 20, intval( $s['popup_overlay_blur'] ?? 0 ) ) );
@@ -213,7 +217,7 @@ class Olobuild_Hiddenpop_Tile extends Olobuild_Tile_Base {
                 background: <?php echo $bg_color; ?>;
                 <?php if ( $radius && $radius !== '0px' ) : ?>border-radius: <?php echo $radius; ?>; overflow: hidden;<?php endif; ?>
                 <?php if ( $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
-                <?php if ( $border_w > 0 ) : ?>border: <?php echo (int) $border_w; ?>px solid <?php echo $border_c; ?>;<?php endif; ?>
+                <?php echo esc_attr( $modal_border_decl ); ?>
             }
             <?php if ( $radius_hover_css !== '' ) : ?>#<?php echo esc_attr( $uid ); ?>-modal .uk-modal-dialog{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?>-modal .uk-modal-dialog:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             <?php if ( $animation === 'slide-up' ) : ?>
@@ -277,7 +281,8 @@ class Olobuild_Hiddenpop_Tile extends Olobuild_Tile_Base {
         </style>
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
-        <div class="olo-hiddenpop" id="<?php echo esc_attr( $uid ); ?>">
+        <?php $hp_pad = Olobuild_Tile_Utils::spacing_sides( $s['tile_padding'] ?? null, [], [ 0, 0, 0, 0 ] ); ?>
+        <div class="olo-hiddenpop" id="<?php echo esc_attr( $uid ); ?>"<?php if ( array_sum( $hp_pad ) > 0 ) : ?> style="padding:<?php echo esc_attr( Olobuild_Tile_Utils::sides_css( $hp_pad ) ); ?>"<?php endif; ?>>
             <!-- Invisible scroll marker (must be visible to IntersectionObserver) -->
             <div class="olo-hiddenpop-marker" id="<?php echo esc_attr( $uid ); ?>-marker" style="height:1px;width:100%;pointer-events:none;"></div>
         </div>

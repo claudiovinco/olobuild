@@ -60,7 +60,7 @@ export default {
   },
 
   fields: [
-    { key: 'font_family', label: t('Font variabile (nome famiglia CSS)'), type: 'text',
+    { key: 'font_family', label: t('Font variabile'), type: 'font-family',
       placeholder: t('es. Recursive, "Roboto Flex"'),
       description: t('Deve essere un font variabile già caricato nella pagina (Google Fonts o @font-face). Vuoto = eredita dal tema.') },
     { key: 'sample_text', label: t('Testo campione'), type: 'text',
@@ -115,7 +115,6 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Lettera campione'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:  'font_size',
@@ -142,7 +141,8 @@ export default {
     { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
 
     { type: 'separator', label: t('Spaziatura') },
-    { key: 'padding_y', label: t('Padding verticale (px)'), type: 'range', min: 0, max: 160, step: 4 },
+    { key: 'padding', label: t('Padding (px)'), type: 'spacing', min: 0, max: 200,
+      legacyKeys: { y: 'padding_y' } },
 
     ...shadowField,
     ...borderFields(),

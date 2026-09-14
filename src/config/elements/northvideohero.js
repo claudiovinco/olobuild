@@ -114,7 +114,7 @@ export default {
     { type: 'separator', label: t('Colori — superfici') },
     { key: 'bg_color', label: t('Sfondo sezione'), type: 'color' },
     { key: 'frame_bg', label: t('Sfondo cornice mockup'), type: 'color' },
-    { key: 'frame_border', label: t('Bordo cornice mockup'), type: 'color' },
+    { key: 'frame_border', label: t('Bordo cornice mockup'), type: 'border', legacyWidth: 1 },
 
     { type: 'separator', label: t('Colori — testo') },
     { key: 'text_color', label: t('Colore titolo'), type: 'color' },

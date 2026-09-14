@@ -99,7 +99,6 @@ export default {
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Testo'),
-      presetKey: 'typography_preset',
       responsiveKeys: ['size'],
       keys: {
         size:          'font_size',
@@ -121,7 +120,8 @@ export default {
     { type: 'separator', label: t('Forma') },
     withHover({ key: 'border_radius', label: t('Border Radius'), type: 'border-radius' }),
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 80 },
-    { key: 'wrap_padding_y', label: t('Respiro sopra/sotto (px)'), type: 'range', min: 0, max: 48, step: 1 },
+    { key: 'wrap_padding', label: t('Respiro attorno al pulsante (px)'), type: 'spacing', min: 0, max: 80,
+      legacyKeys: { y: 'wrap_padding_y' } },
 
     // Ombra con toggle Normale/Hover: il select pilota `shadow` (normale) o `hover_shadow`
     // (hover) — stesse chiavi che il PHP legge. I 6 sotto-campi custom compaiono solo se il

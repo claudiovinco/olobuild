@@ -116,8 +116,14 @@ class Olobuild_PostMeta_Tile extends Olobuild_Tile_Base {
 
         $chip_style  = in_array( $s['chip_style'], [ 'none','pill','tag','sticker','chip-3d' ], true ) ? $s['chip_style'] : 'none';
         $chip_bg     = $this->safe_color_css( $s['chip_bg'] ?? '' );
-        $chip_px     = max( 0, min( 24, absint( $s['chip_padding_x'] ) ) );
-        $chip_py     = max( 0, min( 16, absint( $s['chip_padding_y'] ) ) );
+        // Padding chip a 4 lati (controllo standard), ripiego sulle chiavi piatte.
+        $chip_pad    = Olobuild_Tile_Utils::spacing_sides(
+            $s['chip_padding'] ?? null,
+            [ 'y' => $s['chip_padding_y'] ?? null, 'x' => $s['chip_padding_x'] ?? null ],
+            [ 0, 0, 0, 0 ]
+        );
+        $chip_px     = max( 0, $chip_pad['left'] );
+        $chip_py     = max( 0, $chip_pad['top'] );
         // Dual-format: numero legacy O oggetto {tl,tr,br,bl}; '' se zero/vuoto (storico: nessuna regola).
         $chip_radius = $this->build_border_radius_css( $s['chip_radius'] ?? 0 );
 
@@ -299,7 +305,7 @@ class Olobuild_PostMeta_Tile extends Olobuild_Tile_Base {
         // Strip outer span e ricostruisci con stili chip
         $extra_style = '';
         if ( $chip_bg ) $extra_style .= 'background:' . $chip_bg . ';';
-        if ( $chip_px || $chip_py ) $extra_style .= "padding:{$chip_py}px {$chip_px}px;";
+        if ( array_sum( $chip_pad ) > 0 ) $extra_style .= 'padding:' . Olobuild_Tile_Utils::sides_css( $chip_pad ) . ';';
         if ( $chip_radius !== '' ) $extra_style .= "border-radius:{$chip_radius};";
 
         // Inietta stili nello span esistente
