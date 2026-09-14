@@ -111,17 +111,27 @@
                 galleria vera i soggetti stanno in punti diversi: quella che
                 rimetti a posto ne taglia un'altra. Qui si apre il pad con DENTRO
                 questa foto, quindi si vede subito cosa resta nel riquadro.
+
+                ⚠️ NESSUNA CONDIZIONE, nemmeno sul tipo di media: `object-position`
+                vale anche per un <video>, e ogni condizione in più è un modo in
+                cui questo comando può sparire di nuovo senza lasciare traccia.
+                L'icona mirino sta qui perché «Inquadratura» accanto a «Cambia»
+                si legge ma non si riconosce: il tasto va trovato a colpo d'occhio.
               -->
               <button
-                v-if="puntoFocale && !isVideo(img)"
                 type="button"
                 @click="apriFocale(idx)"
-                class="fg-cmd mb-text-gray-300 hover:mb-text-gray-100"
+                class="fg-cmd fg-cmd--focale mb-text-gray-300 hover:mb-text-gray-100"
                 :class="{ 'is-on': !!img.focal, 'is-open': focaleAperta === idx }"
                 :title="img.focal
                   ? t('Inquadratura scelta per questa foto') + ': ' + img.focal
-                  : t('Segue la posizione della galleria')"
-              >{{ t('Inquadratura') }}</button>
+                  : t('Scegli il punto della foto che resta nel riquadro')"
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="7" /><path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+                </svg>
+                <span>{{ t('Inquadratura') }}</span>
+              </button>
               <!-- Bottone poster per video -->
               <button
                 v-if="isVideo(img)"
@@ -819,6 +829,13 @@ function formatDuration(sec) {
   cursor: pointer;
   white-space: nowrap;
   transition: background-color 120ms, border-color 120ms, box-shadow 120ms;
+}
+/* Il tasto dell'inquadratura porta il mirino: due scritte grigie affiancate si
+   leggono ma non si distinguono, e questo è il comando che l'utente cerca. */
+.fg-cmd--focale {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 .fg-cmd:hover {
   background: rgba(127, 127, 127, 0.2);
