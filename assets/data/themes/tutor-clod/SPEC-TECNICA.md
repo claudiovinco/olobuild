@@ -112,8 +112,8 @@ Tablet/mobile: `font_size_h1_tablet 42`, `h1_mobile 32` (già in `theme.json`).
 | Hero | `text-block` (occhiello) + `animatedheading` + `text-block` (lead) + 2 × `button` + `content` (mockup) | `animatedheading.animation:"rotating"`, `animated_words: studia/ricorda/ripassa`, `font_size:56` |
 | Onda | `shapedivider` | `shape:"wave"`, `height:80`, `color` = background, tablet 60 / mobile 40 |
 | Manifesto | `scrubtext` | `scroll_reveal:true`, `dim_opacity:14`, `size_min 26 / size_max 46`, `max_width_ch:28`; gli `<em>` sono le parole accento |
-| Due momenti | 2 × `section` con `sticky_effect:"cover"`, `sticky_top:64` | scena 1 su background, scena 2 su navy: la seconda **sale sopra** la prima |
-| Contatori | 4 × `counter` in row `25-25-25-25` | `number_font_size:46`, `media_bg` = muted, radius 12, nessun bordo colorato |
+| Due momenti | `section` su `muted` con due row: intestazione (`text-block` + `headline` + `text-block`) e una `html` con le due card | le card stanno affiancate e alte uguali con `repeat(auto-fit,minmax(320px,1fr))` + `align-items:stretch`: si impilano da sé sotto i 704px senza media query. La coda di ripasso è tre righe con la pill della data, e non esiste come tile |
+| I numeri | `section` `fullbleed` + `padding:"remove-vertical"` con una `html` | il navy, il padding e il contenitore da 1136 stanno nel markup: i cerchi di sfondo devono arrivare ai bordi dello schermo, e dentro un container del tema si fermerebbero. Griglia `repeat(auto-fit,minmax(220px,1fr))`, cifre in `clamp(48px,6vw,68px)`, niente card |
 | Nastro metodi | `marquee` | `speed:40`, `pause_hover:true`, `full_width:true`, `height:84`, bordi 1px `border` |
 | Invito | `cta-banner` | `layout:"split-2"`, `banner_padding:56`, fondo `color-mix(primary 12%, #fff)` |
 
@@ -162,7 +162,6 @@ Tablet/mobile: `font_size_h1_tablet 42`, `h1_mobile 32` (già in `theme.json`).
 Tenuti (nativi in olobuild):
 - **scrollprogress** in header;
 - **parallasse sfondo** del `pagetitlebar` (`bg_parallax`);
-- **sticky cover** fra le due scene della home (`section.sticky_effect:"cover"`);
 - **scrub testo** del manifesto (`scrubtext.scroll_reveal`);
 - **pila di card** (`stackscroll`);
 - **flip** delle card certezza/esito (`flipcard`, trigger hover);
@@ -192,7 +191,7 @@ Aggiornare in-place con `(new Olo_Database())->update_template(...)`.
 - [ ] Header sticky alto 64px, logo 130px, CTA pill radius 8.
 - [ ] H1 56/1.06, occhiello 12 uppercase tracking .09em.
 - [ ] Hero: colonne 54/46, gap 48, padding sopra 120.
-- [ ] Contatori: 4 colonne, gap 20, numero 46, card radius 12 **senza bordo colorato**.
+- [ ] I numeri: cifre sul navy allineate a sinistra, nessuna card, cerchi di sfondo `aria-hidden`.
 - [ ] Nastro: altezza 84, bordi 1px #e2e8f0, pausa al passaggio.
 - [ ] Band navy: contrasto testo ≥ 4.5:1 (bianco su #0f172a = 15.9:1).
 - [ ] Nessun gradiente decorativo, nessuna emoji.
