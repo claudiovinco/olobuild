@@ -1,6 +1,20 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
+import fs from 'fs';
+
+// Versione con cui il bundle viene compilato, letta dalla stessa riga che fa fede
+// a runtime (OLOBUILD_VERSION in olobuild.php). Serve a staleBundleGuard: se il
+// server dichiara un'altra versione, il codice in esecuzione arriva da una cache.
+const pluginVersion = (() => {
+  try {
+    const src = fs.readFileSync(path.resolve(__dirname, 'olobuild.php'), 'utf8');
+    const m = src.match(/define\(\s*'OLOBUILD_VERSION',\s*'([^']+)'\s*\)/);
+    return m ? m[1] : '';
+  } catch {
+    return '';
+  }
+})();
 
 export default defineConfig({
   plugins: [vue()],
@@ -9,6 +23,7 @@ export default defineConfig({
   base: './',
   define: {
     'process.env': {},
+    __OLO_BUNDLE_VERSION__: JSON.stringify(pluginVersion),
   },
   build: {
     outDir: 'assets',

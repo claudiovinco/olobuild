@@ -120,6 +120,19 @@
 
     <!-- Right: Actions -->
     <div class="mb-flex mb-items-center mb-gap-2">
+      <!--
+        VERSIONE DEL CODICE IN ESECUZIONE, sempre a schermo.
+        Non è vezzo da changelog: quando una funzione "sparisce" la prima cosa da
+        sapere è se il browser sta eseguendo il bundle del server o una copia
+        vecchia rimasta in cache, e chiederlo ogni volta fa perdere un giro.
+        Se le due versioni non coincidono il numero diventa rosso e il titolo dice
+        quale sta girando davvero.
+      -->
+      <span
+        class="olo-tb-ver"
+        :class="{ 'olo-tb-ver--stale': versioneDisallineata }"
+        :title="titoloVersione"
+      >{{ versioneBundle }}<span v-if="versioneDisallineata"> ≠ {{ versioneServer }}</span></span>
       <!-- Keyboard shortcuts help -->
       <button
         @click="showShortcuts = !showShortcuts"
@@ -601,6 +614,18 @@ const saveStatusTitle = computed(() => {
 const hasAiKey = !!(window.oloData && window.oloData.hasAiKey);
 const importsDisabled = !!(window.oloData && window.oloData.importsDisabled);
 
+// ─── Versione in esecuzione ───
+// `__OLO_BUNDLE_VERSION__` è incisa nel bundle da Vite al momento della build
+// (legge OLOBUILD_VERSION da olobuild.php); `oloData.version` è quella che il
+// server dichiara adesso. Se non coincidono, il codice che sta girando arriva da
+// una cache e le funzioni aggiunte dopo non ci sono.
+const versioneBundle = typeof __OLO_BUNDLE_VERSION__ === 'string' ? __OLO_BUNDLE_VERSION__ : '?';
+const versioneServer = (window.oloData && window.oloData.version) || '?';
+const versioneDisallineata = versioneBundle !== '?' && versioneServer !== '?' && versioneBundle !== versioneServer;
+const titoloVersione = versioneDisallineata
+  ? `${t('Questo editor sta girando con la versione')} ${versioneBundle}, ${t('sul server c\'è la')} ${versioneServer} — ${t('ricarica con Ctrl+Shift+R')}`
+  : `${t('Versione dell\'editor in esecuzione')}: ${versioneBundle}`;
+
 // ─── Dynamic viewport buttons (only show enabled breakpoints) ───
 const allViewports = [
   { key: 'widescreen', bpKey: 'widescreen', label: 'Widescreen', svg: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="22" height="12" x="1" y="4" rx="2"/><line x1="8" x2="16" y1="20" y2="20"/><line x1="12" x2="12" y1="16" y2="20"/></svg>' },
@@ -1032,3 +1057,28 @@ async function regenerateThumbnail() {
   }
 }
 </script>
+
+<style scoped>
+/*
+ * Il numero di versione: discreto quando tutto è allineato, evidente quando non
+ * lo è. I colori sono espliciti e non passano dalle classi utility, che vengono
+ * rimappate solo dentro #olobuilder-app.
+ */
+.olo-tb-ver {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #9ca3af;
+  padding: 2px 6px;
+  border-radius: 5px;
+  border: 1px solid rgba(127, 127, 127, 0.28);
+  white-space: nowrap;
+  cursor: default;
+  user-select: text;
+}
+.olo-tb-ver--stale {
+  color: #fff;
+  background: var(--olo-color-primary, #e1474f);
+  border-color: transparent;
+}
+</style>
