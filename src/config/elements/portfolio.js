@@ -257,8 +257,8 @@ export default {
     ]),
 
     { type: 'separator', label: t('Layout — aspetto') },
-    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 60, step: 2 },
-    withHover({ key: 'border_radius', label: t('Raggio bordi card (px)'), type: 'border-radius' }),
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 60, step: 2 },
+    withHover({ key: 'border_radius', label: t('Raggio card (px)'), type: 'border-radius' }),
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { ratio: 'image_ratio' } },
 
@@ -269,7 +269,7 @@ export default {
       condition: { field: 'layout', value: 'carousel' } },
 
     { type: 'separator', label: t('Magic — parametri visivi') },
-    { key: 'stagger_delay', label: t('Ritardo stagger (ms)'), type: 'range', min: 30, max: 300, step: 10,
+    { key: 'stagger_delay', label: t('Ritardo stagger'), type: 'range', min: 30, max: 300, step: 10,
       condition: { field: 'stagger_entrance', value: true } },
 
     { type: 'separator', label: t('Barra filtri — stile') },
@@ -308,11 +308,11 @@ export default {
     { type: 'separator', label: t('Colori') },
     { key: 'bg_color', label: t('Sfondo container'), type: 'color' },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
-    { key: 'overlay_opacity', label: t('Opacità overlay (%)'), type: 'range', min: 0, max: 100, step: 5 },
+    { key: 'overlay_opacity', label: t('Opacità overlay'), type: 'range', min: 0, max: 100, step: 5 },
 
     { type: 'separator', label: t('Container') },
     { key: 'container_padding', label: t('Padding container'), type: 'spacing', max: 60 },
-    { key: 'container_radius', label: t('Raggio bordi container'), type: 'border-radius' },
+    { key: 'container_radius', label: t('Raggio container'), type: 'border-radius' },
 
     ...shadowField,
     ...wowEffectsFields(),

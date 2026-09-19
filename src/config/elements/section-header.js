@@ -102,9 +102,9 @@ export default {
 
     { type: 'separator', label: t('Tagline stile') },
     { key: 'tagline_text_color',    label: t('Colore testo principale'),     type: 'color' },
-    { key: 'tagline_text_size',     label: t('Dimensione testo (px)'),       type: 'range', min: 12, max: 48, step: 1 },
+    { key: 'tagline_text_size',     label: t('Dimensione testo'),       type: 'range', min: 12, max: 48, step: 1 },
     { key: 'tagline_caption_color', label: t('Colore caption'),              type: 'color' },
-    { key: 'tagline_caption_size',  label: t('Dimensione caption (px)'),     type: 'range', min: 9, max: 18, step: 1 },
+    { key: 'tagline_caption_size',  label: t('Dimensione caption'),     type: 'range', min: 9, max: 18, step: 1 },
 
     { type: 'separator', label: t('Composizione (headline / tagline)') },
     { key: 'layout', label: t('Modalità'), type: 'select', options: [
@@ -124,6 +124,6 @@ export default {
       { value: 'end',      label: t('In basso') },
       { value: 'baseline', label: t('Baseline') },
     ]},
-    { key: 'gap', label: t('Gap colonne (px)'), type: 'range', min: 0, max: 200, step: 4 },
+    { key: 'gap', label: t('Gap colonne'), type: 'range', min: 0, max: 200, step: 4 },
   ],
 };

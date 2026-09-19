@@ -101,9 +101,9 @@ export default {
     ]},
 
     { type: 'separator', label: t('Torcia'), condition: { field: 'mode', value: ['spotlight'] } },
-    { key: 'spotlight_size', label: t('Dimensione luce (px)'), type: 'range', min: 80, max: 800, step: 10,
+    { key: 'spotlight_size', label: t('Dimensione luce'), type: 'range', min: 80, max: 800, step: 10,
       condition: { field: 'mode', value: ['spotlight'] } },
-    { key: 'spotlight_softness', label: t('Sfumatura bordo (%)'), type: 'range', min: 0, max: 100, step: 5,
+    { key: 'spotlight_softness', label: t('Sfumatura bordo'), type: 'range', min: 0, max: 100, step: 5,
       description: t('0 = bordo netto, 100 = molto morbido.'),
       condition: { field: 'mode', value: ['spotlight'] } },
     { key: 'spotlight_blend', label: t('Fusione'), type: 'select',

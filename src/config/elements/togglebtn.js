@@ -70,7 +70,7 @@ export default {
       { value: 'fade', label: t('Dissolvenza') },
       { value: 'slide', label: t('Scorrimento + dissolvenza') },
     ]},
-    { key: 'duration', label: t('Durata (ms)'), type: 'range', min: 100, max: 800, step: 50 },
+    { key: 'duration', label: t('Durata'), type: 'range', min: 100, max: 800, step: 50 },
   ],
 
   styleFields: [
@@ -113,7 +113,7 @@ export default {
     withHover({ key: 'btn_bg', label: t('Sfondo'), type: 'color' }, { hoverKey: 'btn_hover_bg' }),
     { key: 'btn_border', label: t('Bordo pulsante'), type: 'border',
       legacyKeys: { width: 'btn_border_width', color: 'btn_border_color' } },
-    withHover({ key: 'btn_border_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
+    withHover({ key: 'btn_border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 48 },
     { key: 'btn_align', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },

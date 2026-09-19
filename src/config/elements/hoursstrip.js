@@ -67,18 +67,18 @@ export default {
     { type: 'separator', label: t('Giorno') },
     { key: 'mono_font_family', label: t('Font etichette (vuoto = mono del tema)'), type: 'font-family' },
     { key: 'day_color', label: t('Colore'),          type: 'color' },
-    { key: 'day_size',  label: t('Dimensione (px)'), type: 'range', min: 10, max: 18, step: 1 },
+    { key: 'day_size',  label: t('Dimensione'), type: 'range', min: 10, max: 18, step: 1 },
 
     { type: 'separator', label: t('Orario') },
     { key: 'time_font_family', label: t('Famiglia'), type: 'font-family' },
     { key: 'time_color',  label: t('Colore'),          type: 'color' },
-    { key: 'time_size',   label: t('Dimensione (px)'), type: 'range', min: 16, max: 56, step: 1 },
+    { key: 'time_size',   label: t('Dimensione'), type: 'range', min: 16, max: 56, step: 1 },
     { key: 'time_weight', label: t('Peso'), type: 'select', options: [
       { value: '400', label: '400' }, { value: '500', label: '500' }, { value: '600', label: '600' }, { value: '700', label: '700' },
     ]},
 
     { type: 'separator', label: t('Nota') },
     { key: 'note_color', label: t('Colore'),          type: 'color' },
-    { key: 'note_size',  label: t('Dimensione (px)'), type: 'range', min: 10, max: 18, step: 1 },
+    { key: 'note_size',  label: t('Dimensione'), type: 'range', min: 10, max: 18, step: 1 },
   ],
 };

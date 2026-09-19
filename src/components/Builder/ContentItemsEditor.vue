@@ -54,7 +54,7 @@
           <!-- Expanded editor -->
           <div v-if="expandedId === element.id" class="cie-body">
             <div v-for="field in itemFields" :key="(field.key || '') + ':' + (field.type || '') + ':' + (field.label || '')" v-show="isFieldVisible(field, element)" class="cie-field" :class="{ 'cie-field--inline': field.type === 'number' || field.type === 'range' }">
-              <label v-if="field.type !== 'separator' && !isDelegated(field)" class="cie-label">{{ field.label }}</label>
+              <label v-if="field.type !== 'separator' && !isDelegated(field)" class="cie-label">{{ etichettaDi(field).testo }}</label>
 
               <!-- separator (intestazione di sezione, nessun input) -->
               <div v-if="field.type === 'separator'" class="cie-separator">{{ field.label }}</div>
@@ -111,6 +111,7 @@
                 :max="field.max ?? 100"
                 :step="field.step ?? 1"
                 :defaultValue="field.min ?? 0"
+                :unit="etichettaDi(field).unita"
                 emitAs="number"
                 :ariaLabel="field.label"
                 @update:modelValue="updateField(index, field.key, $event)"
@@ -123,6 +124,7 @@
                 :min="field.min ?? null"
                 :max="field.max ?? null"
                 :step="field.step ?? 1"
+                :unit="etichettaDi(field).unita"
                 emitAs="number"
                 :ariaLabel="field.label"
                 @update:modelValue="updateField(index, field.key, $event)"
@@ -304,6 +306,7 @@ import { useListSort } from '@/composables/useListSort';
 import RichTextEditor from './RichTextEditor.vue';
 import FieldColor from './fields/FieldColor.vue';
 import NumberScrubber from './fields/NumberScrubber.vue';
+import { staccaUnita } from '@/utils/fieldLabel';
 import FieldFontFamily from './fields/FieldFontFamily.vue';
 import FieldSelect from './fields/FieldSelect.vue';
 import FieldLink from './fields/FieldLink.vue';
@@ -327,6 +330,13 @@ const CIE_NATIVE = new Set([
 ]);
 // content-items annidato non ha senso dentro un item (non esiste lo slot).
 const CIE_SKIP = new Set(['content-items']);
+// Dentro un repeater i range e i number NON passano da InspectorField: li rende
+// questo componente. Senza questa riga l'unità sparirebbe dall'etichetta (dove
+// il codemod l'ha tolta) senza ricomparire accanto al numero.
+function etichettaDi(field) {
+  return staccaUnita(field?.label || '', field?.type);
+}
+
 function isDelegated(field) {
   const ty = field?.type || 'text';
   return !CIE_NATIVE.has(ty) && !CIE_SKIP.has(ty);

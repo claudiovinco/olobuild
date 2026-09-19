@@ -52,7 +52,7 @@ export default {
     { key: 'show_labels', label: t('Mostra etichette'), type: 'toggle' },
 
     { type: 'separator', label: t('Comportamento slider') },
-    { key: 'start_position', label: t('Posizione iniziale (%)'), type: 'range', min: 0, max: 100 },
+    { key: 'start_position', label: t('Posizione iniziale'), type: 'range', min: 0, max: 100 },
     { key: 'orientation', label: t('Orientamento'), type: 'select', options: [
       { value: 'horizontal', label: t('Orizzontale') },
       { value: 'vertical', label: t('Verticale') },
@@ -88,13 +88,13 @@ export default {
 
     { type: 'separator', label: t('Slider — Aspetto') },
     { key: 'handle_color', label: t('Colore maniglia'), type: 'color' },
-    { key: 'handle_size', label: t('Dimensione maniglia (px)'), type: 'range', min: 24, max: 60 },
-    { key: 'handle_border', label: t('Spessore bordo (px)'), type: 'range', min: 1, max: 6 },
-    { key: 'line_width', label: t('Spessore linea (px)'), type: 'range', min: 1, max: 6 },
+    { key: 'handle_size', label: t('Dimensione maniglia'), type: 'range', min: 24, max: 60 },
+    { key: 'handle_border', label: t('Spessore bordo'), type: 'range', min: 1, max: 6 },
+    { key: 'line_width', label: t('Spessore linea'), type: 'range', min: 1, max: 6 },
 
     { type: 'separator', label: t('Card') },
-    { key: 'height', label: t('Altezza (px)'), type: 'range', min: 200, max: 800, step: 10 },
-    withHover({ key: 'border_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
+    { key: 'height', label: t('Altezza'), type: 'range', min: 200, max: 800, step: 10 },
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     { key: 'object_fit', label: t('Adattamento immagini'), type: 'select', options: [
       { value: 'cover', label: t('Riempi (cover)') },
       { value: 'contain', label: t('Contieni') },
@@ -111,17 +111,8 @@ export default {
       { value: 'xl', label: t('Extra grande') },
       { value: 'custom', label: t('Personalizzata') },
     ]},
-    { key: 'card_shadow_h', label: t('Offset H (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_v', label: t('Offset V (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_blur', label: t('Sfocatura (px)'), type: 'range', min: 0, max: 100, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_spread', label: t('Espansione (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_color', label: t('Colore ombra'), type: 'color',
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_inset', label: t('Ombra interna'), type: 'toggle',
+    { key: 'card_shadow_custom', label: t('Ombra personalizzata'), type: 'box-shadow',
+      legacyKeys: { h: 'card_shadow_h', v: 'card_shadow_v', blur: 'card_shadow_blur', spread: 'card_shadow_spread', color: 'card_shadow_color', inset: 'card_shadow_inset' },
       condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
 
     ...borderFields(),

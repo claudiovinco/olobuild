@@ -66,7 +66,7 @@ export default {
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 40 },
 
     { type: 'separator', label: t('Bordo inferiore') },
-    { key: 'border_bottom', label: t('Spessore (px)'), type: 'range', min: 0, max: 4, step: 1 },
+    { key: 'border_bottom', label: t('Spessore'), type: 'range', min: 0, max: 4, step: 1 },
     { key: 'border_color', label: t('Colore bordo'), type: 'color' },
 
     { type: 'separator', label: t('Sfondo creativo') },

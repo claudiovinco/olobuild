@@ -24,13 +24,13 @@ function shapeFields(prefix, label, condField) {
   return [
     { type: 'separator', label },
     { key: prefix, label: t('Forma'), type: 'select', options: shapeOptions },
-    { key: prefix + '_height', label: t('Altezza (px)'), type: 'range', min: 20, max: 300, step: 5,
+    { key: prefix + '_height', label: t('Altezza'), type: 'range', min: 20, max: 300, step: 5,
       condition: { field: prefix, operator: '!=', value: 'none' } },
     { key: prefix + '_fill', label: t('Riempimento'), type: 'select', options: fillOptions,
       condition: { field: prefix, operator: '!=', value: 'none' } },
     { key: prefix + '_color', label: t('Colore'), type: 'color',
       condition: { field: prefix + '_fill', value: 'color' } },
-    { key: prefix + '_opacity', label: t('Opacità (%)'), type: 'range', min: 10, max: 100, step: 5,
+    { key: prefix + '_opacity', label: t('Opacità'), type: 'range', min: 10, max: 100, step: 5,
       condition: { field: prefix + '_fill', value: 'color' } },
     { key: prefix + '_fill_image', label: t('Immagine'), type: 'image',
       condition: { field: prefix + '_fill', value: 'image' } },
@@ -40,13 +40,13 @@ function shapeFields(prefix, label, condField) {
       condition: { field: prefix, operator: '!=', value: 'none' } },
     { key: prefix + '_invert', label: t('Inverti direzione'), type: 'toggle',
       condition: { field: prefix, operator: '!=', value: 'none' } },
-    { key: prefix + '_scale_x', label: t('Scala larghezza (%)'), type: 'range', min: 50, max: 300, step: 5,
+    { key: prefix + '_scale_x', label: t('Scala larghezza'), type: 'range', min: 50, max: 300, step: 5,
       condition: { field: prefix, operator: '!=', value: 'none' } },
     { key: prefix + '_layer2', label: t('Secondo livello'), type: 'toggle',
       condition: { field: prefix, operator: '!=', value: 'none' } },
     { key: prefix + '_layer2_color', label: t('Colore 2° livello'), type: 'color',
       condition: { field: prefix + '_layer2', value: true } },
-    { key: prefix + '_layer2_opacity', label: t('Opacità 2° livello (%)'), type: 'range', min: 5, max: 100, step: 5,
+    { key: prefix + '_layer2_opacity', label: t('Opacità 2° livello'), type: 'range', min: 5, max: 100, step: 5,
       condition: { field: prefix + '_layer2', value: true } },
   ];
 }
@@ -121,7 +121,7 @@ export default {
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
     { type: 'separator', label: t('Dimensione') },
-    { key: 'height', label: t('Altezza (px)'), type: 'range', min: 0, max: 300, step: 5 },
+    { key: 'height', label: t('Altezza'), type: 'range', min: 0, max: 300, step: 5 },
 
     ...shapeFields('shape_top', 'Forma sopra'),
     ...shapeFields('shape_bottom', 'Forma sotto'),
@@ -138,8 +138,8 @@ export default {
 
     { type: 'separator', label: t('Layout') },
     { key: 'full_bleed', label: t('Larghezza piena sito (100vw)'), type: 'toggle' },
-    { key: 'overlap_top', label: t('Sovrapposizione sopra (px)'), type: 'range', min: 0, max: 200, step: 5 },
-    { key: 'overlap_bottom', label: t('Sovrapposizione sotto (px)'), type: 'range', min: 0, max: 200, step: 5 },
+    { key: 'overlap_top', label: t('Sovrapposizione sopra'), type: 'range', min: 0, max: 200, step: 5 },
+    { key: 'overlap_bottom', label: t('Sovrapposizione sotto'), type: 'range', min: 0, max: 200, step: 5 },
 
     { type: 'separator', label: t('Linea divisore') },
     { key: 'show_divider', label: t('Mostra linea'), type: 'toggle' },
@@ -151,9 +151,9 @@ export default {
     ], condition: { field: 'show_divider', value: true } },
     { key: 'divider_color', label: t('Colore linea'), type: 'color',
       condition: { field: 'show_divider', value: true } },
-    { key: 'divider_width', label: t('Larghezza linea (%)'), type: 'range', min: 10, max: 100, step: 5,
+    { key: 'divider_width', label: t('Larghezza linea'), type: 'range', min: 10, max: 100, step: 5,
       condition: { field: 'show_divider', value: true } },
-    { key: 'divider_thickness', label: t('Spessore linea (px)'), type: 'range', min: 1, max: 10, step: 1,
+    { key: 'divider_thickness', label: t('Spessore linea'), type: 'range', min: 1, max: 10, step: 1,
       condition: { field: 'show_divider', value: true } },
   ],
 };

@@ -72,8 +72,8 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'separator', label: t('Dimensioni & velocità') },
-    { key: 'width', label: t('Larghezza (px)'), type: 'range', min: 50, max: 800, step: 10 },
-    { key: 'height', label: t('Altezza (px)'), type: 'range', min: 50, max: 800, step: 10 },
+    { key: 'width', label: t('Larghezza'), type: 'range', min: 50, max: 800, step: 10 },
+    { key: 'height', label: t('Altezza'), type: 'range', min: 50, max: 800, step: 10 },
     { key: 'speed', label: t('Velocità'), type: 'range', min: 0.1, max: 3, step: 0.1 },
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },

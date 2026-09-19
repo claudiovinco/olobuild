@@ -136,7 +136,7 @@ export default {
       { value: 'check',  label: t('Spunta ✓') },
       { value: 'none',   label: t('Nessuno') },
     ]},
-    { key: 'indent', label: t('Indentazione (px)'), type: 'range', min: 0, max: 60, step: 4,
+    { key: 'indent', label: t('Indentazione'), type: 'range', min: 0, max: 60, step: 4,
       condition: { field: 'layout_mode', op: 'in', value: ['columns', 'cards', 'tree'] } },
 
     { type: 'separator', label: t('Arricchimento voci') },
@@ -183,8 +183,8 @@ export default {
       condition: { field: 'preset', op: 'in', value: ['neon-schematic', 'retro-terminal', 'mind-map'] } },
 
     { type: 'separator', label: t('Spaziatura layout') },
-    { key: 'gap', label: t('Spazio tra sezioni (px)'), type: 'range', min: 0, max: 80, step: 4 },
-    { key: 'item_gap', label: t('Spazio tra voci (px)'), type: 'range', min: 0, max: 24, step: 1 },
+    { key: 'gap', label: t('Gap sezioni'), type: 'range', min: 0, max: 80, step: 4 },
+    { key: 'item_gap', label: t('Gap voci'), type: 'range', min: 0, max: 24, step: 1 },
 
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
@@ -215,7 +215,7 @@ export default {
 
     { type: 'separator', label: t('Container') },
     { key: 'container_padding', label: t('Padding container'), type: 'spacing', max: 48 },
-    { key: 'container_radius', label: t('Raggio bordi container'), type: 'border-radius' },
+    { key: 'container_radius', label: t('Raggio container'), type: 'border-radius' },
 
     ...shadowField,
     ...wowEffectsFields(),

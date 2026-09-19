@@ -232,7 +232,7 @@ export default {
     ]),
 
     { type: 'separator', label: t('Prezzo — Aspetto') },
-    { key: 'currency_size', label: t('Dimensione valuta (px)'), type: 'range', min: 10, max: 40, step: 1 },
+    { key: 'currency_size', label: t('Dimensione valuta'), type: 'range', min: 10, max: 40, step: 1 },
 
     { type: 'separator', label: t('Funzionalità — Aspetto') },
     { key: 'check_style', label: t('Icona spunta'), type: 'select', options: [
@@ -243,12 +243,12 @@ export default {
       { value: 'arrow', label: t('→ Freccia') },
       { value: 'none', label: t('Nessuna') },
     ]},
-    { key: 'check_size', label: t('Dimensione icona (px)'), type: 'range', min: 10, max: 28, step: 1,
+    { key: 'check_size', label: t('Dimensione icona'), type: 'range', min: 10, max: 28, step: 1,
       condition: { field: 'check_style', operator: '!=', value: 'none' } },
 
     { type: 'separator', label: t('CTA — Aspetto') },
-    { key: 'cta_width', label: t('Larghezza (%)'), type: 'range', min: 30, max: 100, step: 5 },
-    withHover({ key: 'cta_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
+    { key: 'cta_width', label: t('Larghezza'), type: 'range', min: 30, max: 100, step: 5 },
+    withHover({ key: 'cta_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     withHover({ key: 'cta_bg_color',   label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta_hover_bg_color' }),
     { key: 'cta_hover_text_color', label: t('Colore testo hover'), type: 'color' },
     { key: 'cta_border', label: t('Bordo CTA'), type: 'border',
@@ -270,9 +270,9 @@ export default {
       { value: 'classic', label: t('Classico') },
       { value: 'minimal', label: t('Minimale') },
     ], condition: { field: 'is_popular', value: true } },
-    { key: 'badge_top', label: t('Posizione verticale (px)'), type: 'range', min: -20, max: 40, step: 1,
+    { key: 'badge_top', label: t('Posizione verticale'), type: 'range', min: -20, max: 40, step: 1,
       condition: { field: 'is_popular', value: true } },
-    withHover({ key: 'badge_radius', label: t('Arrotondamento (px)'), type: 'border-radius',
+    withHover({ key: 'badge_radius', label: t('Raggio (px)'), type: 'border-radius',
       condition: { field: 'is_popular', value: true } }),
     { key: 'badge_bg_color', label: t('Sfondo'), type: 'color',
       condition: { field: 'is_popular', value: true } },
@@ -293,7 +293,7 @@ export default {
       condition: { field: 'price_shape', operator: '!=', value: 'none' } },
     { key: 'price_shape_glow_color', label: t('Colore luce'), type: 'color',
       condition: { field: 'price_shape_glow', value: true } },
-    { key: 'price_shape_glow_intensity', label: t('Intensità luce (px)'), type: 'range', min: 5, max: 40, step: 5,
+    { key: 'price_shape_glow_intensity', label: t('Intensità luce'), type: 'range', min: 5, max: 40, step: 5,
       condition: { field: 'price_shape_glow', value: true } },
 
     { type: 'separator', label: t('Countdown — Aspetto') },
@@ -306,11 +306,11 @@ export default {
     { type: 'separator', label: t('Overlay sfondo avanzato') },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color',
       condition: { field: 'overlay', value: true } },
-    { key: 'overlay_opacity', label: t('Opacità overlay (%)'), type: 'range', min: 10, max: 100, step: 5,
+    { key: 'overlay_opacity', label: t('Opacità overlay'), type: 'range', min: 10, max: 100, step: 5,
       condition: { field: 'overlay', value: true } },
 
     { type: 'separator', label: t('Aspetto card') },
-    withHover({ key: 'border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
 
     ...shadowField,
     ...borderFields(),

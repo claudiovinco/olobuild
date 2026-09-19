@@ -98,7 +98,7 @@ export default {
     ...textEffectsFields([ { value: 'heading', label: t('Solo Titolo') } ]),
 
     { type: 'separator', label: t('Layout grafico') },
-    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 48, step: 4 },
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4 },
     { key: 'image_ratio', label: t('Proporzione immagine'), type: 'select', options: [
       { value: '1-1', label: t('1:1 Quadrato') },
       { value: '4-3', label: '4:3' },

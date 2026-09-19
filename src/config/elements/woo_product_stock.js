@@ -77,7 +77,7 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
     ]},
-    { key: 'icon_size', label: t('Dimensione indicatore (px)'), type: 'range', min: 6, max: 16, step: 2 },
+    { key: 'icon_size', label: t('Dimensione indicatore'), type: 'range', min: 6, max: 16, step: 2 },
 
     { type: 'separator', label: t('Colori') },
     { key: 'in_stock_color', label: t('Colore disponibile'), type: 'color' },

@@ -83,7 +83,7 @@ export default {
     { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
     { key: 'card_border', label: t('Bordo card'), type: 'border', legacyWidth: 1 },
     { key: 'radius', label: t('Raggio (px)'), type: 'border-radius' },
-    { key: 'gap', label: t('Spazio tra card (px)'), type: 'range', min: 8, max: 32, step: 2 },
+    { key: 'gap', label: t('Gap card'), type: 'range', min: 8, max: 32, step: 2 },
 
     { type: 'separator', label: t('Spaziatura') },
     { key: 'content_padding', label: t('Padding card (px)'), type: 'spacing', max: 64,

@@ -114,18 +114,18 @@ export default {
     { key: 'bio_color', label: t('Colore bio'), type: 'color' },
 
     { type: 'separator', label: t('Layout') },
-    { key: 'max_width', label: t('Larghezza max (px)'), type: 'range', min: 300, max: 600, step: 10 },
+    { key: 'max_width', label: t('Larghezza max'), type: 'range', min: 300, max: 600, step: 10 },
     { key: 'text_align', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
     ]},
-    { key: 'gap', label: t('Gap tra link (px)'), type: 'range', min: 4, max: 24, step: 2 },
+    { key: 'gap', label: t('Gap link'), type: 'range', min: 4, max: 24, step: 2 },
 
     { type: 'separator', label: t('Stile bottoni') },
     { key: 'link_bg', label: t('Sfondo link'), type: 'color' },
     { key: 'link_hover_bg', label: t('Sfondo hover'), type: 'color' },
-    withHover({ key: 'link_border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
+    withHover({ key: 'link_border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 24 },
 
     { type: 'separator', label: t('Sfondo') },

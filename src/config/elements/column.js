@@ -36,7 +36,7 @@ export default {
     { key: '_sticky_hint', type: 'description', label: '',
       description: t('Mantiene questa colonna ferma mentre le altre colonne della stessa riga scorrono. Per layout immagine + testo: attiva sulla colonna che contiene l\'immagine.') },
     { key: 'sticky', label: t('Attiva scroll fisso'), type: 'toggle' },
-    { key: 'sticky_offset', label: t('Distanza dal bordo superiore (px)'), type: 'range', min: 0, max: 300, step: 5,
+    { key: 'sticky_offset', label: t('Distanza dal bordo superiore'), type: 'range', min: 0, max: 300, step: 5,
       condition: { field: 'sticky', value: true } },
   ],
 

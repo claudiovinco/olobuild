@@ -141,10 +141,17 @@ class Olobuild_Floatingpanel_Tile extends Olobuild_Tile_Base {
         }
 
         if ( ! empty( $s['shadow'] ) && $s['shadow'] !== 'false' ) {
+            // Il controllo ombra è quello standard a sei valori. Le chiavi storiche
+            // (shadow_y, shadow_blur, shadow_color) restano quelle; h, spread e
+            // inset sono nuove e assenti sulle pagine già pubblicate, dove valgono
+            // 0/0/off: la dichiarazione prodotta è identica a quella di prima.
             $sc = $this->safe_color_css( $s['shadow_color'] ) ?: 'rgba(0,0,0,0.15)';
-            $sb = intval( $s['shadow_blur'] );
-            $sy = intval( $s['shadow_y'] );
-            $pos_css .= "box-shadow:0 {$sy}px {$sb}px {$sc};";
+            $sb = intval( $s['shadow_blur'] ?? 0 );
+            $sy = intval( $s['shadow_y'] ?? 0 );
+            $sx = intval( $s['shadow_h'] ?? 0 );
+            $ss = intval( $s['shadow_spread'] ?? 0 );
+            $si = ! empty( $s['shadow_inset'] ) && $s['shadow_inset'] !== 'false' ? 'inset ' : '';
+            $pos_css .= "box-shadow:{$si}{$sx}px {$sy}px {$sb}px {$ss}px {$sc};";
         }
 
         // --- Layout for children ---

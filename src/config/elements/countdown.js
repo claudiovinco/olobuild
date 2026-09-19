@@ -155,12 +155,12 @@ export default {
       },
       sizeMin: 12, sizeMax: 80, sizeStep: 2,
     },
-    { key: 'item_min_width', label: t('Larghezza min elemento (px)'), type: 'range', min: 40, max: 160, step: 5 },
+    { key: 'item_min_width', label: t('Larghezza min elemento'), type: 'range', min: 40, max: 160, step: 5 },
     { key: 'tile_padding', label: t('Padding interno tile (px)'), type: 'spacing', max: 64 },
 
     { type: 'separator', label: t('Card unità (giorni/ore/min/sec)') },
     { key: 'item_bg_color', label: t('Sfondo card'), type: 'color' },
-    { key: 'item_radius', label: t('Raggio angoli card (px)'), type: 'border-radius' },
+    { key: 'item_radius', label: t('Raggio card (px)'), type: 'border-radius' },
     { key: 'item_padding', label: t('Padding interno card (px)'), type: 'spacing', min: 0, max: 80 },
 
     ...shadowField,

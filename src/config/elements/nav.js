@@ -109,7 +109,7 @@ export default {
       { value: 'right', label: t('Destra') },
       { value: 'stretch', label: t('Espandi') },
     ]},
-    { key: 'gap', label: t('Gap tra elementi (px)'), type: 'range', min: 0, max: 24, step: 2 },
+    { key: 'gap', label: t('Gap elementi'), type: 'range', min: 0, max: 24, step: 2 },
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 32 },
 
     { type: 'separator', label: t('Stile voci') },
@@ -128,7 +128,7 @@ export default {
       { value: 'bold', label: t('Grassetto') },
       { value: 'dot', label: t('Punto') },
     ]},
-    withHover({ key: 'border_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
       { value: 'none', label: t('Nessuno') },
       { value: 'slide-bg', label: t('Sfondo slide') },
@@ -157,7 +157,7 @@ export default {
       { value: 'left', label: t('Sinistra') },
       { value: 'right', label: t('Destra') },
     ], show: s => s.show_icons },
-    { key: 'icon_size', label: t('Dim. icona (px)'), type: 'range', min: 12, max: 28, step: 2, show: s => s.show_icons },
+    { key: 'icon_size', label: t('Dim. icona'), type: 'range', min: 12, max: 28, step: 2, show: s => s.show_icons },
     { key: 'icon_color', label: t('Colore icona'), type: 'color', show: s => s.show_icons },
 
     { type: 'separator', label: t('Colori') },

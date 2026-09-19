@@ -133,7 +133,7 @@ export default {
     // resta visibile anche con media trasparente/PNG. Sempre disponibile.
     { key: 'bg_color', label: t('Colore sfondo (base)'), type: 'color' },
     // Overlay scuro sul media: vale sia per media_bg immagine/video sia per il legacy bg_image.
-    { key: 'bg_overlay', label: t('Opacita overlay (%)'), type: 'range', min: 0, max: 100,
+    { key: 'bg_overlay', label: t('Opacita overlay'), type: 'range', min: 0, max: 100,
       show: s => (s.media_bg && (s.media_bg.type === 'image' || s.media_bg.type === 'video') && (!!s.media_bg.image_url || !!s.media_bg.video_url)) || !!s.bg_image },
     { key: 'bg_overlay_color', label: t('Colore overlay'), type: 'color',
       show: s => (s.media_bg && (s.media_bg.type === 'image' || s.media_bg.type === 'video') && (!!s.media_bg.image_url || !!s.media_bg.video_url)) || !!s.bg_image },
@@ -147,9 +147,9 @@ export default {
       show: s => !!s.bg_image && !(s.media_bg && s.media_bg.type && s.media_bg.type !== 'none') },
 
     { type: 'separator', label: t('Layout') },
-    { key: 'min_height', label: t('Altezza minima (px)'), type: 'range', min: 0, max: 600, step: 10 },
+    { key: 'min_height', label: t('Altezza minima'), type: 'range', min: 0, max: 600, step: 10 },
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 200 },
-    { key: 'content_width', label: t('Larghezza contenuto (px)'), type: 'range', min: 600, max: 1600, step: 50 },
+    { key: 'content_width', label: t('Larghezza contenuto'), type: 'range', min: 600, max: 1600, step: 50 },
 
     { type: 'separator', label: t('Bordo inferiore') },
     { key: 'border_color', label: t('Colore bordo'), type: 'color', show: s => s.border_bottom },

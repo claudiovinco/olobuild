@@ -65,7 +65,7 @@ export default {
     },
 
     { type: 'separator', label: t('Stile') },
-    withHover({ key: 'border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     ...borderFields(),
   ],
 };

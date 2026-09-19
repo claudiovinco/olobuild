@@ -79,8 +79,8 @@ export default {
       { value: 'icon-text',  label: t('Icona + testo') },
       { value: 'text-only',  label: t('Solo testo') },
     ]},
-    { key: 'size', label: t('Dimensione (px)'), type: 'range', min: 24, max: 64, step: 2 },
-    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 4, max: 24, step: 2 },
+    { key: 'size', label: t('Dimensione'), type: 'range', min: 24, max: 64, step: 2 },
+    { key: 'gap', label: t('Gap'), type: 'range', min: 4, max: 24, step: 2 },
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
       { value: 'left',   label: t('Sinistra') },
       { value: 'center', label: t('Centro') },

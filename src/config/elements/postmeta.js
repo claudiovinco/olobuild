@@ -119,7 +119,7 @@ export default {
       condition: { field: 'preset', op: 'in', value: ['neon-cyber', 'gradient-glow', 'retro-terminal'] } },
 
     { type: 'separator', label: t('Spaziatura') },
-    { key: 'item_gap', label: t('Spazio tra elementi (px)'), type: 'range', min: 0, max: 40, step: 2 },
+    { key: 'item_gap', label: t('Gap elementi'), type: 'range', min: 0, max: 40, step: 2 },
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Voci'),
@@ -147,7 +147,7 @@ export default {
 
     { type: 'separator', label: t('Container') },
     { key: 'container_padding', label: t('Padding container'), type: 'spacing', max: 32 },
-    { key: 'container_radius', label: t('Raggio bordi container'), type: 'border-radius' },
+    { key: 'container_radius', label: t('Raggio container'), type: 'border-radius' },
 
     { type: 'separator', label: t('Chip per item') },
     { key: 'chip_style', label: t('Stile chip'), type: 'select', options: [
@@ -162,7 +162,7 @@ export default {
     { key: 'chip_padding', label: t('Padding chip (px)'), type: 'spacing', min: 0, max: 40,
       legacyKeys: { y: 'chip_padding_y', x: 'chip_padding_x' },
       condition: { field: 'chip_style', op: 'neq', value: 'none' } },
-    { key: 'chip_radius', label: t('Raggio bordi chip (px)'), type: 'border-radius',
+    { key: 'chip_radius', label: t('Raggio chip (px)'), type: 'border-radius',
       condition: { field: 'chip_style', op: 'neq', value: 'none' } },
 
     ...wowEffectsFields(),

@@ -112,7 +112,7 @@ export default {
       itemLabel: t('Barra'),
       defaults: { h: 50, label: '', alt: '' },
       itemFields: [
-        { key: 'h', label: t('Altezza (%)'), type: 'range', min: 0, max: 100, step: 1 },
+        { key: 'h', label: t('Altezza'), type: 'range', min: 0, max: 100, step: 1 },
         { key: 'label', label: t('Etichetta'), type: 'text' },
         { key: 'alt', label: t('Colore alternativo (accento 2)'), type: 'toggle' },
       ],
@@ -125,7 +125,7 @@ export default {
     { key: 'glow_color', label: t('Colore glow'), type: 'color' },
     { key: 'grid_on', label: t('Griglia faint'), type: 'toggle' },
     { key: 'grid_color', label: t('Colore griglia'), type: 'color' },
-    { key: 'grid_size', label: t('Passo griglia (px)'), type: 'range', min: 16, max: 120, step: 2 },
+    { key: 'grid_size', label: t('Passo griglia'), type: 'range', min: 16, max: 120, step: 2 },
 
     { type: 'separator', label: t('Colori') },
     { key: 'accent', label: t('Accento (pill/CTA/barre)'), type: 'color',
@@ -156,8 +156,8 @@ export default {
     { key: 'content_padding', label: t('Padding contenuto (inner)'), type: 'spacing', max: 120 },
 
     { type: 'separator', label: t('Raggio') },
-    { key: 'frame_radius', label: t('Angoli cornice browser'), type: 'border-radius' },
-    { key: 'kpi_radius', label: t('Angoli card KPI'), type: 'border-radius' },
+    { key: 'frame_radius', label: t('Raggio cornice browser'), type: 'border-radius' },
+    { key: 'kpi_radius', label: t('Raggio card KPI'), type: 'border-radius' },
 
     { type: 'separator', label: t('Sfondo') },
     { key: 'bg', label: t('Sfondo completo'), type: 'background', showParallax: false },

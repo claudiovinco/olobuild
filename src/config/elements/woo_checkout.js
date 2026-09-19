@@ -105,7 +105,7 @@ export default {
     { type: 'separator', label: t('Campi & pannelli') },
     { key: 'input_bg', label: t('Campi — sfondo (vuoto = bianco)'), type: 'color' },
     { key: 'input_text_color', label: t('Campi — testo'), type: 'color' },
-    { key: 'input_radius', label: t('Campi — raggio (vuoto = da stile form)'), type: 'border-radius' },
+    { key: 'input_radius', label: t('Raggio campi (vuoto = da stile form)'), type: 'border-radius' },
     { key: 'panel_bg', label: t('Pannelli (pagamento/coupon/intestazioni tabella) — sfondo'), type: 'color' },
     { key: 'notice_bg', label: t('Avvisi WooCommerce — sfondo'), type: 'color' },
     { key: 'notice_text', label: t('Avvisi WooCommerce — testo'), type: 'color' },

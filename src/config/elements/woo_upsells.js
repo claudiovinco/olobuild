@@ -73,7 +73,7 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'separator', label: t('Layout grafico') },
-    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 48, step: 4 },
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4 },
     { key: 'card_style', label: t('Stile card'), type: 'select', options: [
       { value: 'none', label: t('Nessuno') },
       { value: 'shadow', label: t('Ombra') },

@@ -98,7 +98,7 @@ export default {
       placeholder: t('es. /wp-json/olobuild/v1/presence'),
       description: t('Deve restituire JSON: array di { name, avatar, role, online } o { members: [...] }.'),
       condition: { field: 'source', op: 'eq', value: 'endpoint' } },
-    { key: 'poll_interval', label: t('Intervallo aggiornamento (ms)'), type: 'range', min: 2000, max: 60000, step: 1000,
+    { key: 'poll_interval', label: t('Intervallo aggiornamento'), type: 'range', min: 2000, max: 60000, step: 1000,
       description: t('Ogni quanto ricontrollare lo stato. Debounced; si ferma fuori dal viewport.'),
       condition: { field: 'source', op: 'in', value: ['query', 'endpoint'] } },
 
@@ -126,14 +126,14 @@ export default {
     { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 10, step: 1, responsive: true },
     { key: 'columns_tablet', label: t('Colonne (tablet)'), type: 'range', min: 1, max: 8, step: 1 },
     { key: 'columns_mobile', label: t('Colonne (mobile)'), type: 'range', min: 1, max: 6, step: 1 },
-    { key: 'gap', label: t('Spazio tra card (px)'), type: 'range', min: 0, max: 40, step: 2 },
+    { key: 'gap', label: t('Gap card'), type: 'range', min: 0, max: 40, step: 2 },
     { key: 'show_ranks', label: t('Mostra ruolo / rango'), type: 'toggle' },
 
     { type: 'separator', label: t('Ticker attività (opzionale)') },
     { key: 'show_ticker', label: t('Mostra ticker sopra la griglia'), type: 'toggle' },
     { key: 'ticker_text', label: t('Testo ticker'), type: 'textarea',
       condition: { field: 'show_ticker', op: 'eq', value: true } },
-    { key: 'ticker_speed', label: t('Durata ciclo ticker (s)'), type: 'range', min: 8, max: 80, step: 2,
+    { key: 'ticker_speed', label: t('Durata ciclo ticker'), type: 'range', min: 8, max: 80, step: 2,
       condition: { field: 'show_ticker', op: 'eq', value: true } },
   ],
 
@@ -160,7 +160,7 @@ export default {
     { key: 'card_bg',    label: t('Sfondo card'),  type: 'color' },
     { key: 'card_color', label: t('Colore nome'),  type: 'color' },
     { key: 'role_color', label: t('Colore ruolo'), type: 'color' },
-    withHover({ key: 'card_radius', label: t('Raggio bordi card (px)'), type: 'border-radius' },
+    withHover({ key: 'card_radius', label: t('Raggio card (px)'), type: 'border-radius' },
       { hoverKey: 'card_radius_hover', hoverDurationKey: 'card_radius_hover_duration' }),
     { key: 'card_hover_effect', label: t('Effetto hover card'), type: 'select', options: [
       { value: 'none',  label: t('Nessuno') },
@@ -170,7 +170,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Avatar') },
-    { key: 'avatar_size', label: t('Dimensione avatar (px)'), type: 'range', min: 32, max: 96, step: 2 },
+    { key: 'avatar_size', label: t('Dimensione avatar'), type: 'range', min: 32, max: 96, step: 2 },
     { key: 'avatar_shape', label: t('Forma avatar'), type: 'select', options: [
       { value: 'circle',  label: t('Cerchio') },
       { value: 'rounded', label: t('Angoli arrotondati') },
@@ -180,17 +180,17 @@ export default {
     { type: 'separator', label: t('Pallino stato') },
     { key: 'online_color',  label: t('Colore online'),  type: 'color' },
     { key: 'offline_color', label: t('Colore offline'), type: 'color' },
-    { key: 'dot_size', label: t('Dimensione pallino (px)'), type: 'range', min: 6, max: 22, step: 1 },
+    { key: 'dot_size', label: t('Dimensione pallino'), type: 'range', min: 6, max: 22, step: 1 },
 
     { type: 'separator', label: t('Tipografia') },
-    { key: 'name_size', label: t('Dimensione nome (px)'), type: 'range', min: 10, max: 24, step: 1 },
+    { key: 'name_size', label: t('Dimensione nome'), type: 'range', min: 10, max: 24, step: 1 },
     { key: 'name_weight', label: t('Peso nome'), type: 'select', options: [
       { value: '400', label: t('400 — Regular') },
       { value: '500', label: t('500 — Medium') },
       { value: '600', label: t('600 — SemiBold') },
       { value: '700', label: t('700 — Bold') },
     ]},
-    { key: 'role_size', label: t('Dimensione ruolo (px)'), type: 'range', min: 8, max: 16, step: 1 },
+    { key: 'role_size', label: t('Dimensione ruolo'), type: 'range', min: 8, max: 16, step: 1 },
 
     { type: 'separator', label: t('Ticker — Aspetto'),
       condition: { field: 'show_ticker', op: 'eq', value: true } },

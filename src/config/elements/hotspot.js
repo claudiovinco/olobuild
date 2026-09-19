@@ -41,8 +41,8 @@ export default {
     { key: 'image', label: t('Immagine'), type: 'image' },
     { key: 'markers', label: t('Marker'), type: 'content-items',
       itemFields: [
-        { key: 'pos_x', label: t('Posizione X (%)'), type: 'range', min: 0, max: 100, step: 1 },
-        { key: 'pos_y', label: t('Posizione Y (%)'), type: 'range', min: 0, max: 100, step: 1 },
+        { key: 'pos_x', label: t('Posizione X'), type: 'range', min: 0, max: 100, step: 1 },
+        { key: 'pos_y', label: t('Posizione Y'), type: 'range', min: 0, max: 100, step: 1 },
         { key: 'title', label: t('Titolo'), type: 'text' },
         { key: 'description', label: t('Descrizione'), type: 'text' },
         { key: 'icon', label: t('Icona'), type: 'icon' },
@@ -78,8 +78,8 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'separator', label: t('Immagine') },
-    withHover({ key: 'border_radius', label: t('Border Radius immagine'), type: 'border-radius' }),
-    { key: 'image_height', label: t('Altezza immagine (px)'), type: 'range', min: 200, max: 800, step: 10 },
+    withHover({ key: 'border_radius', label: t('Raggio immagine'), type: 'border-radius' }),
+    { key: 'image_height', label: t('Altezza immagine'), type: 'range', min: 200, max: 800, step: 10 },
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', contextKeys: { src: 'image', height: 'image_height' } },
 
     ...textEffectsFields([
@@ -90,13 +90,13 @@ export default {
 
     { type: 'separator', label: t('Stile marker') },
     { key: 'marker_color', label: t('Colore marker'), type: 'color' },
-    { key: 'marker_size', label: t('Dimensione marker (px)'), type: 'range', min: 16, max: 40, step: 2 },
+    { key: 'marker_size', label: t('Dimensione marker'), type: 'range', min: 16, max: 40, step: 2 },
     { key: 'pulse_animation', label: t('Animazione pulse'), type: 'toggle' },
 
     { type: 'separator', label: t('Stile tooltip') },
     { key: 'tooltip_bg', label: t('Sfondo tooltip'), type: 'color' },
     { key: 'tooltip_color', label: t('Colore testo tooltip'), type: 'color' },
-    { key: 'tooltip_width', label: t('Larghezza tooltip (px)'), type: 'range', min: 150, max: 350, step: 10 },
+    { key: 'tooltip_width', label: t('Larghezza tooltip'), type: 'range', min: 150, max: 350, step: 10 },
 
     ...borderFields(),
   ],

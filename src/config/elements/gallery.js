@@ -92,7 +92,7 @@ export default {
     ]},
     { key: 'columns', label: t('Colonne'), type: 'range', min: 2, max: 12, step: 1 },
     { key: 'rows', label: t('Righe visibili (0 = tutte)'), type: 'range', min: 0, max: 5, step: 1 },
-    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 32, step: 2 },
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 32, step: 2 },
     { key: 'img_height', label: t('Altezza immagine'), type: 'unit', units: ['px'], min: 0, step: 10 },
     { key: 'object_fit', label: t('Adattamento'), type: 'select', options: [
       { value: 'cover', label: t('Riempi') },
@@ -101,7 +101,7 @@ export default {
     ]},
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { fit: 'object_fit', ratio: '' } },
-    withHover({ key: 'thumb_radius', label: t('Raggio bordi (px)'), type: 'border-radius' }),
+    withHover({ key: 'thumb_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     { key: 'mobile_columns', label: t('Colonne mobile'), type: 'range', min: 1, max: 4, step: 1 },
 
     { type: 'separator', label: t('Effetti automatici') },
@@ -116,7 +116,7 @@ export default {
     { key: 'fx_hover_zoom_scale', label: t('Intensità zoom'), type: 'range', min: 1.02, max: 1.15, step: 0.01,
       condition: { field: 'fx_hover_zoom', value: true } },
     { key: 'fx_hover_tilt', label: t('Tilt 3D al passaggio'), type: 'toggle' },
-    { key: 'fx_hover_tilt_angle', label: t('Angolo rotazione (deg)'), type: 'range', min: 3, max: 15, step: 1,
+    { key: 'fx_hover_tilt_angle', label: t('Angolo rotazione'), type: 'range', min: 3, max: 15, step: 1,
       condition: { field: 'fx_hover_tilt', value: true } },
 
     { type: 'separator', label: t('Filtri visivi') },
@@ -124,12 +124,12 @@ export default {
     { key: 'fx_vignette_strength', label: t('Intensità vignettatura'), type: 'range', min: 15, max: 60, step: 5,
       condition: { field: 'fx_vignette', value: true } },
     { key: 'fx_grain', label: t('Grana pellicola'), type: 'toggle' },
-    { key: 'fx_grain_opacity', label: t('Intensità grana (%)'), type: 'range', min: 3, max: 20, step: 1,
+    { key: 'fx_grain_opacity', label: t('Intensità grana'), type: 'range', min: 3, max: 20, step: 1,
       condition: { field: 'fx_grain', value: true } },
     { key: 'fx_tint', label: t('Tinta colore'), type: 'toggle' },
     { key: 'fx_tint_color', label: t('Colore tinta'), type: 'color',
       condition: { field: 'fx_tint', value: true } },
-    { key: 'fx_tint_opacity', label: t('Intensità tinta (%)'), type: 'range', min: 5, max: 50, step: 5,
+    { key: 'fx_tint_opacity', label: t('Intensità tinta'), type: 'range', min: 5, max: 50, step: 5,
       condition: { field: 'fx_tint', value: true } },
     { key: 'fx_tint_blend', label: t('Blend mode'), type: 'select', options: [
       { value: 'multiply', label: t('Moltiplica') },
@@ -142,7 +142,7 @@ export default {
     { type: 'separator', label: 'Indicatore "+N"' },
     { key: 'more_bg', label: t('Sfondo overlay'), type: 'color' },
     { key: 'more_color', label: t('Colore testo'), type: 'color' },
-    { key: 'more_size', label: t('Dimensione testo (px)'), type: 'range', min: 16, max: 48, step: 2 },
+    { key: 'more_size', label: t('Dimensione testo'), type: 'range', min: 16, max: 48, step: 2 },
 
     { type: 'separator', label: t('Lightbox') },
     { key: 'lightbox_animation', label: t('Animazione lightbox'), type: 'select', options: [

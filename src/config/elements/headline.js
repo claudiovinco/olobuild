@@ -141,7 +141,7 @@ export default {
     ]},
     { key: 'decoration_count', label: t('Quantità'), type: 'range', min: 1, max: 9, step: 1,
       condition: { field: 'decoration', value: ['dot', 'star'] } },
-    { key: 'decoration_spacing', label: t('Spaziatura (px)'), type: 'range', min: 2, max: 20, step: 1,
+    { key: 'decoration_spacing', label: t('Spaziatura'), type: 'range', min: 2, max: 20, step: 1,
       condition: { field: 'decoration', value: ['dot', 'star'] } },
     { key: 'decoration_color', label: t('Colore decorazione'), type: 'color',
       condition: { field: 'decoration', operator: '!=', value: 'none' } },
@@ -154,7 +154,7 @@ export default {
       condition: { field: 'gradient_text', operator: '==', value: true } },
     { key: 'gradient_angle', label: t('Angolo gradiente (°)'), type: 'range', min: 0, max: 360, step: 15,
       condition: { field: 'gradient_text', operator: '==', value: true } },
-    { key: 'text_stroke', label: t('Contorno testo (px)'), type: 'range', min: 0, max: 5, step: 1 },
+    { key: 'text_stroke', label: t('Contorno testo'), type: 'range', min: 0, max: 5, step: 1 },
     { key: 'text_stroke_color', label: t('Colore contorno'), type: 'color',
       condition: { field: 'text_stroke', operator: '>', value: '0' } },
     { key: 'text_shadow', label: t('Ombra testo'), type: 'select', options: [
@@ -170,13 +170,11 @@ export default {
       { value: '0 0 20px rgba(99,102,241,0.8)', label: t('Bagliore forte (legacy)') },
       { value: 'custom', label: t('Personalizzata') },
     ]},
-    { key: 'text_shadow_h', label: t('Offset H (px)'), type: 'range', min: -20, max: 20, step: 1,
-      condition: { field: 'text_shadow', op: 'eq', value: 'custom' } },
-    { key: 'text_shadow_v', label: t('Offset V (px)'), type: 'range', min: -20, max: 20, step: 1,
-      condition: { field: 'text_shadow', op: 'eq', value: 'custom' } },
-    { key: 'text_shadow_blur', label: t('Sfocatura (px)'), type: 'range', min: 0, max: 40, step: 1,
-      condition: { field: 'text_shadow', op: 'eq', value: 'custom' } },
-    { key: 'text_shadow_color', label: t('Colore ombra'), type: 'color',
+    // Un solo controllo (X, Y, sfocatura, colore) invece di quattro campi in
+    // fila: è lo stesso FieldTextShadow del pannello Stile. Le quattro chiavi
+    // storiche restano scritte dal ponte legacy, il renderer non cambia.
+    { key: 'text_shadow_custom', label: t('Ombra personalizzata'), type: 'text-shadow',
+      legacyKeys: { h: 'text_shadow_h', v: 'text_shadow_v', blur: 'text_shadow_blur', color: 'text_shadow_color' },
       condition: { field: 'text_shadow', op: 'eq', value: 'custom' } },
     { key: 'blend_mode', label: t('Blend mode'), type: 'select', options: [
       { value: 'normal', label: t('Normale') },

@@ -61,8 +61,8 @@ export default {
 
   styleFields: [
     { type: 'separator', label: t('Riga') },
-    { key: 'gap', label: t('Spazio tra card (px)'), type: 'range', min: 8, max: 32, step: 2 },
-    { key: 'preview_height', label: t('Altezza anteprima (px)'), type: 'number', min: 100, max: 320 },
+    { key: 'gap', label: t('Gap card'), type: 'range', min: 8, max: 32, step: 2 },
+    { key: 'preview_height', label: t('Altezza anteprima'), type: 'number', min: 100, max: 320 },
 
     { type: 'separator', label: t('Colori') },
     { key: 'accent', label: t('Accento (anello focus)'), type: 'color',

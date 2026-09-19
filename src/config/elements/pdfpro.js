@@ -114,8 +114,8 @@ export default {
       itemFields: [
         { key: 'page', label: t('Pagina'), type: 'number', min: 1 },
         { key: '_placer', label: t('Posiziona su PDF'), type: 'hotspot-position' },
-        { key: 'x', label: t('Posizione X (%)'), type: 'range', min: 0, max: 100, step: 0.5 },
-        { key: 'y', label: t('Posizione Y (%)'), type: 'range', min: 0, max: 100, step: 0.5 },
+        { key: 'x', label: t('Posizione X'), type: 'range', min: 0, max: 100, step: 0.5 },
+        { key: 'y', label: t('Posizione Y'), type: 'range', min: 0, max: 100, step: 0.5 },
         { key: 'color', label: t('Colore'), type: 'color' },
         { key: 'icon', label: t('Icona'), type: 'icon' },
         { key: 'title', label: t('Titolo'), type: 'text' },
@@ -142,7 +142,7 @@ export default {
         { key: 'btn_padding', label: t('Padding pulsante (px)'), type: 'spacing', min: 0, max: 60,
           legacyKeys: { y: 'btn_padding_v', x: 'btn_padding_h' } },
         // Bordo
-        { key: 'btn_radius', label: t('Raggio angoli (px)'), type: 'border-radius' },
+        { key: 'btn_radius', label: t('Raggio (px)'), type: 'border-radius' },
         { key: 'btn_border', label: t('Bordo pulsante'), type: 'border',
           legacyKeys: { width: 'btn_border_width', style: 'btn_border_style', color: 'btn_border_color' } },
         // Layout
@@ -175,14 +175,14 @@ export default {
     ]),
 
     { type: 'separator', label: t('Dimensioni') },
-    { key: 'viewer_height', label: t('Altezza viewer (px)'), type: 'range', min: 300, max: 1200, step: 10 },
+    { key: 'viewer_height', label: t('Altezza viewer'), type: 'range', min: 300, max: 1200, step: 10 },
 
     { type: 'separator', label: t('Colori') },
     { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
 
     { type: 'separator', label: t('Hotspot — stile') },
     { key: 'hotspot_color', label: t('Colore hotspot'), type: 'color' },
-    { key: 'hotspot_size', label: t('Dimensione hotspot (px)'), type: 'range', min: 8, max: 30, step: 1 },
+    { key: 'hotspot_size', label: t('Dimensione hotspot'), type: 'range', min: 8, max: 30, step: 1 },
 
     ...borderFields(),
   ],

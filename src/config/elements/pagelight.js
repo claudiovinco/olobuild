@@ -40,8 +40,8 @@ export default {
       { value: 'top-right', label: t('Alto a destra') },
       { value: 'spread', label: t('Diffusa (due aloni)') },
     ] },
-    { key: 'size', label: t('Ampiezza alone (%)'), type: 'range', min: 40, max: 140, step: 5 },
-    { key: 'intensity', label: t('Intensità (%)'), type: 'range', min: 5, max: 70, step: 1 },
-    { key: 'transition_ms', label: t('Velocità transizione (ms)'), type: 'range', min: 100, max: 2500, step: 100 },
+    { key: 'size', label: t('Ampiezza alone'), type: 'range', min: 40, max: 140, step: 5 },
+    { key: 'intensity', label: t('Intensità'), type: 'range', min: 5, max: 70, step: 1 },
+    { key: 'transition_ms', label: t('Velocità transizione'), type: 'range', min: 100, max: 2500, step: 100 },
   ],
 };

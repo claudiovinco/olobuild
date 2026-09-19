@@ -42,6 +42,7 @@
  *   spacing        all | y | x | top | right | bottom | left
  *   border-radius  all | tl | tr | br | bl
  *   border         width | style | color  (+ top|right|bottom|left per spessori per-lato)
+ *   box-shadow     h | v | blur | spread | color | inset
  */
 
 const int = (v, fb = 0) => {
@@ -152,10 +153,42 @@ function borderMirror(map, v) {
   return out;
 }
 
+// ─── BOX-SHADOW ─────────────────────────────────────────────────────────────
+// Il gruppo `shadowField` di _shared.js (importato da 109 tile) salva l'ombra
+// personalizzata su SEI chiavi piatte — shadow_h, shadow_v, shadow_blur,
+// shadow_spread, shadow_color, shadow_inset — mentre FieldBoxShadow lavora su un
+// oggetto con ESATTAMENTE gli stessi nomi: { h, v, blur, spread, color, inset }.
+// Il ponte è quindi una corrispondenza uno a uno, e nessun renderer si accorge
+// del cambio: PHP continua a leggere le sei chiavi con shadow_value().
+const SH_NUM = ['h', 'v', 'blur', 'spread'];
+
+function shadowSeed(map, s) {
+  const out = {};
+  for (const k of SH_NUM) out[k] = filled(s, map[k]) ? int(s[map[k]]) : undefined;
+  out.color = filled(s, map.color) ? String(s[map.color]) : undefined;
+  // L'interruttore può essere salvato come booleano o come '1'/'0'/'true'.
+  out.inset = filled(s, map.inset) ? (s[map.inset] === true || s[map.inset] === 1 || s[map.inset] === '1' || s[map.inset] === 'true') : undefined;
+  // I campi che il legacy non ha valorizzato restano fuori: ci pensa il default
+  // di FieldBoxShadow, che è la stessa terna di shadowDefaults.
+  for (const k of Object.keys(out)) if (out[k] === undefined) delete out[k];
+  return out;
+}
+
+function shadowMirror(map, v) {
+  const out = [];
+  for (const k of SH_NUM) if (map[k]) out.push({ key: map[k], value: int(v?.[k]) });
+  if (map.color) out.push({ key: map.color, value: v?.color || '' });
+  if (map.inset) out.push({ key: map.inset, value: !!v?.inset });
+  return out;
+}
+
 // ─── API ────────────────────────────────────────────────────────────────────
 
-const SEED = { spacing: spacingSeed, 'border-radius': radiusSeed, border: borderSeed };
-const MIRROR = { spacing: spacingMirror, 'border-radius': radiusMirror, border: borderMirror };
+// `text-shadow` usa le stesse funzioni: FieldTextShadow emette { h, v, blur,
+// color } — la stessa forma senza spread né inset, che in un'ombra del testo
+// non esistono. Le funzioni saltano da sole le sotto-chiavi non mappate.
+const SEED = { spacing: spacingSeed, 'border-radius': radiusSeed, border: borderSeed, 'box-shadow': shadowSeed, 'text-shadow': shadowSeed };
+const MIRROR = { spacing: spacingMirror, 'border-radius': radiusMirror, border: borderMirror, 'box-shadow': shadowMirror, 'text-shadow': shadowMirror };
 
 /**
  * Valore iniziale del controllo composito ricavato dalle chiavi legacy.

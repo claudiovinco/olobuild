@@ -99,13 +99,13 @@ export default {
   styleFields: [
     { type: 'separator', label: t('Griglia') },
     { key: 'columns', label: t('Numero colonne'), type: 'range', min: 1, max: 6, step: 1 },
-    { key: 'gap',     label: t('Gap tra card (px)'), type: 'range', min: 0, max: 60, step: 2 },
+    { key: 'gap',     label: t('Gap card'), type: 'range', min: 0, max: 60, step: 2 },
 
     { type: 'separator', label: t('Card') },
     { key: 'card_bg',      label: t('Sfondo card'),     type: 'background', showParallax: false },
     { key: 'card_color',   label: t('Colore testo'),    type: 'color' },
     { key: 'card_padding', label: t('Padding card (px)'), type: 'spacing', min: 0, max: 80 },
-    withHover({ key: 'card_radius', label: t('Border radius card'), type: 'border-radius' }, { hoverKey: 'card_radius_hover', hoverDurationKey: 'card_radius_hover_duration' }),
+    withHover({ key: 'card_radius', label: t('Raggio card'), type: 'border-radius' }, { hoverKey: 'card_radius_hover', hoverDurationKey: 'card_radius_hover_duration' }),
     { key: 'card_shadow', label: t('Ombra card'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
       { value: 'sm',   label: t('Leggera') },
@@ -122,10 +122,10 @@ export default {
       { value: '2/3', label: '2 / 3' },
       { value: '3/2', label: '3 / 2' },
     ]},
-    { key: 'top_padding', label: t('Padding interno (px)'), type: 'spacing', min: 0, max: 80 },
+    { key: 'top_padding', label: t('Padding (px)'), type: 'spacing', min: 0, max: 80 },
     { key: 'letter_font_family', label: t('Famiglia lettera'), type: 'font-family' },
-    { key: 'letter_size',   label: t('Dimensione lettera (px)'), type: 'range', min: 40, max: 280, step: 4 },
-    { key: 'logo_height',   label: t('Altezza logo (px)'),       type: 'range', min: 16, max: 160, step: 2 },
+    { key: 'letter_size',   label: t('Dimensione lettera'), type: 'range', min: 40, max: 280, step: 4 },
+    { key: 'logo_height',   label: t('Altezza logo'),       type: 'range', min: 16, max: 160, step: 2 },
     { key: 'letter_italic', label: t('Lettera in italico'),      type: 'toggle' },
     { key: 'letter_align', label: t('Allineamento lettera'), type: 'select', options: [
       { value: 'left',   label: t('Sinistra') },
@@ -135,10 +135,10 @@ export default {
     { key: 'screenshot_label_color', label: t('Colore label outline'), type: 'color' },
 
     { type: 'separator', label: t('Metà bassa') },
-    { key: 'brand_size',           label: t('Brand label dimensione (px)'), type: 'range', min: 10, max: 22, step: 1 },
-    { key: 'brand_letter_spacing', label: t('Brand letter-spacing (em)'),   type: 'range', min: 0, max: 0.3, step: 0.01 },
+    { key: 'brand_size',           label: t('Brand label dimensione'), type: 'range', min: 10, max: 22, step: 1 },
+    { key: 'brand_letter_spacing', label: t('Brand letter-spacing'),   type: 'range', min: 0, max: 0.3, step: 0.01 },
     { key: 'title_font_family', label: t('Titolo famiglia'), type: 'font-family' },
-    { key: 'title_size',   label: t('Titolo dimensione (px)'), type: 'range', min: 16, max: 80, step: 2 },
+    { key: 'title_size',   label: t('Titolo dimensione'), type: 'range', min: 16, max: 80, step: 2 },
     { key: 'title_weight', label: t('Titolo peso'), type: 'select', options: [
       { value: '300', label: t('300 — Light') },
       { value: '400', label: t('400 — Regular') },
@@ -146,8 +146,8 @@ export default {
       { value: '600', label: t('600 — SemiBold') },
       { value: '700', label: t('700 — Bold') },
     ]},
-    { key: 'description_size', label: t('Descrizione dimensione (px)'), type: 'range', min: 11, max: 22, step: 1 },
-    { key: 'cta_size',         label: t('CTA dimensione (px)'),         type: 'range', min: 9,  max: 16, step: 1 },
+    { key: 'description_size', label: t('Descrizione dimensione'), type: 'range', min: 11, max: 22, step: 1 },
+    { key: 'cta_size',         label: t('CTA dimensione'),         type: 'range', min: 9,  max: 16, step: 1 },
 
     { type: 'separator', label: t('Hover card') },
     { key: 'card_hover_effect', label: t('Effetto hover'), type: 'select', options: [

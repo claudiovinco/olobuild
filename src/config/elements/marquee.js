@@ -74,7 +74,7 @@ export default {
     { key: 'pause_hover', label: t('Pausa al passaggio mouse'), type: 'toggle' },
     { key: 'drag_scroll', label: t('Trascinabile (scorrimento libero)'), type: 'toggle',
       description: t('Il nastro si può trascinare con mouse o dito; al rilascio riprende a scorrere da solo. Il loop resta continuo.') },
-    { key: 'gap', label: t('Spazio tra elementi (px)'), type: 'range', min: 20, max: 120, step: 10 },
+    { key: 'gap', label: t('Gap elementi'), type: 'range', min: 20, max: 120, step: 10 },
 
     { type: 'separator', label: t('Velocity Skew (reattivo allo scroll)') },
     { key: 'velocity_skew', label: t('Inclina con la velocità di scroll'), type: 'toggle',
@@ -109,7 +109,7 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'separator', label: t('Aspetto immagini') },
-    { key: 'image_height', label: t('Altezza immagini (px)'), type: 'range', min: 20, max: 120,
+    { key: 'image_height', label: t('Altezza immagini'), type: 'range', min: 20, max: 120,
       condition: { field: 'content_type', value: 'images' } },
 
     { type: 'separator', label: t('Tipografia'),
@@ -143,10 +143,10 @@ export default {
 
     { type: 'separator', label: t('Aspetto') },
     { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
-    { key: 'height', label: t('Altezza nastro (px)'), type: 'range', min: 30, max: 120 },
+    { key: 'height', label: t('Altezza nastro'), type: 'range', min: 30, max: 120 },
     { key: 'full_width', label: t('Larghezza piena (100vw)'), type: 'toggle' },
-    { key: 'border_top', label: t('Bordo superiore (px)'), type: 'range', min: 0, max: 4 },
-    { key: 'border_bottom', label: t('Bordo inferiore (px)'), type: 'range', min: 0, max: 4 },
+    { key: 'border_top', label: t('Bordo superiore'), type: 'range', min: 0, max: 4 },
+    { key: 'border_bottom', label: t('Bordo inferiore'), type: 'range', min: 0, max: 4 },
     { key: 'border_color', label: t('Colore bordo'), type: 'color' },
 
     ...shadowField,

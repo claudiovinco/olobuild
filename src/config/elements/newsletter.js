@@ -137,9 +137,9 @@ export default {
     { key: 'content_lock', label: t('Blocca contenuto successivo'), type: 'toggle' },
     { key: 'lock_message', label: t('Messaggio blocco'), type: 'text',
       condition: { field: 'content_lock', value: true } },
-    { key: 'lock_blur', label: t('Sfocatura contenuto (px)'), type: 'range', min: 0, max: 20, step: 1,
+    { key: 'lock_blur', label: t('Sfocatura contenuto'), type: 'range', min: 0, max: 20, step: 1,
       condition: { field: 'content_lock', value: true } },
-    { key: 'lock_height', label: t('Altezza anteprima (px)'), type: 'range', min: 50, max: 500, step: 10,
+    { key: 'lock_height', label: t('Altezza anteprima'), type: 'range', min: 50, max: 500, step: 10,
       condition: { field: 'content_lock', value: true } },
 
     { type: 'separator', label: t('Integrazione Email') },
@@ -207,7 +207,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Contenitore') },
-    { key: 'max_width', label: t('Larghezza max (px)'), type: 'range', min: 320, max: 1200, step: 10 },
+    { key: 'max_width', label: t('Larghezza max'), type: 'range', min: 320, max: 1200, step: 10 },
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
@@ -215,7 +215,7 @@ export default {
     ]},
     { key: 'bg_color', label: t('Sfondo'), type: 'color' },
     { key: 'box_border', label: t('Colore bordo box'), type: 'color' },
-    withHover({ key: 'border_radius', label: t('Raggio bordi'), type: 'border-radius'}),
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius'}),
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 60 },
 
     { type: 'separator', label: t('Tipografia') },
@@ -250,7 +250,7 @@ export default {
     },
 
     { type: 'separator', label: t('Icona — Aspetto') },
-    { key: 'icon_size', label: t('Dimensione icona (px)'), type: 'range', min: 24, max: 96, step: 2 },
+    { key: 'icon_size', label: t('Dimensione icona'), type: 'range', min: 24, max: 96, step: 2 },
     { key: 'icon_color', label: t('Colore icona'), type: 'color' },
 
     { type: 'separator', label: t('Stile input') },
@@ -260,7 +260,7 @@ export default {
     { key: 'input_border', label: t('Bordo input'), type: 'color' },
     { key: 'input_focus_border', label: t('Bordo focus'), type: 'color' },
     withHover({ key: 'input_radius', label: t('Raggio input'), type: 'border-radius'}),
-    { key: 'input_height', label: t('Altezza input (px)'), type: 'range', min: 32, max: 56, step: 2 },
+    { key: 'input_height', label: t('Altezza input'), type: 'range', min: 32, max: 56, step: 2 },
 
     { type: 'separator', label: t('Stile pulsante') },
     withHover({ key: 'btn_bg', label: t('Sfondo pulsante'), type: 'color' }, { hoverKey: 'btn_hover_bg' }),

@@ -81,7 +81,7 @@ export default {
       { value: '4/5', label: '4:5' },
       { value: '3/4', label: '3:4' },
     ]},
-    { key: 'gap', label: t('Spazio tra card (px)'), type: 'range', min: 8, max: 32, step: 2 },
+    { key: 'gap', label: t('Gap card'), type: 'range', min: 8, max: 32, step: 2 },
     // Punto focale GLOBALE applicato a TUTTE le card (object-position). Default 'center center' → no-op.
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { ratio: 'aspect' } },
@@ -98,9 +98,9 @@ export default {
     { key: 'media_bg', label: t('Sfondo media'), type: 'color' },
     { key: 'veil_color', label: t('Velo (gradiente)'), type: 'color' },
     { key: 'kicker_color', label: t('Kicker (vuoto = accento tema)'), type: 'color' },
-    { key: 'kicker_size', label: t('Dim. kicker (px)'), type: 'range', min: 8, max: 16, step: 1 },
+    { key: 'kicker_size', label: t('Dim. kicker'), type: 'range', min: 8, max: 16, step: 1 },
     { key: 'title_color', label: t('Titolo'), type: 'color' },
-    { key: 'title_size', label: t('Dim. titolo (px)'), type: 'range', min: 14, max: 56, step: 1 },
+    { key: 'title_size', label: t('Dim. titolo'), type: 'range', min: 14, max: 56, step: 1 },
     { key: 'title_weight', label: t('Peso titolo'), type: 'select', options: [
       { value: '400', label: '400' }, { value: '500', label: '500' }, { value: '600', label: '600' }, { value: '700', label: '700' }, { value: '900', label: '900' },
     ]},

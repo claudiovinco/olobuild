@@ -1,5 +1,5 @@
 {
-  "aggiornato": "2026-09-14",
+  "aggiornato": "2026-09-19",
   "soglie": {
     "padding-spacing": 0,
     "margin-spacing": 0,
@@ -7,6 +7,10 @@
     "bordo-completo": 0,
     "tipografia-unica": 0,
     "font-family": 0,
-    "icona-picker": 0
+    "ombra-unica": 0,
+    "glossario": 0,
+    "unita-nel-controllo": 0,
+    "icona-picker": 0,
+    "ombra-wrapper-elenco": 0
   }
 }

@@ -42,10 +42,10 @@ export default {
 
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
-    { key: 'dot_size', label: t('Diametro cerchio (px)'), type: 'range', min: 20, max: 48, step: 1 },
+    { key: 'dot_size', label: t('Diametro cerchio'), type: 'range', min: 20, max: 48, step: 1 },
     { key: 'dot_size_mobile', label: t('Diametro cerchio su mobile (0 = uguale)'), type: 'range', min: 0, max: 48, step: 1 },
-    { key: 'dot_gap', label: t('Distanza fra cerchi (px)'), type: 'range', min: 0, max: 16, step: 1 },
-    { key: 'dot_inner', label: t('Diametro pallino (px)'), type: 'range', min: 5, max: 16, step: 1 },
+    { key: 'dot_gap', label: t('Gap cerchi'), type: 'range', min: 0, max: 16, step: 1 },
+    { key: 'dot_inner', label: t('Diametro pallino'), type: 'range', min: 5, max: 16, step: 1 },
     { key: 'border_color', label: t('Colore bordo cerchio'), type: 'color' },
     { key: 'dot_bg', label: t('Sfondo cerchio'), type: 'color' },
     { key: 'dot_color', label: t('Colore pallino (senza colore per-fermata)'), type: 'color' },

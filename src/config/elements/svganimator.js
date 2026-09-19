@@ -109,9 +109,9 @@ export default {
 
     // ── Tempistiche animazione (ms) ──
     { type: 'separator', label: t('Tempistiche animazione') },
-    { key: 'duration', label: t('Durata (ms)'), type: 'range', min: 200, max: 5000, step: 100 },
-    { key: 'delay', label: t('Ritardo iniziale (ms)'), type: 'range', min: 0, max: 3000, step: 100 },
-    { key: 'stagger_delay', label: t('Ritardo tra elementi (ms)'), type: 'range', min: 0, max: 500, step: 10,
+    { key: 'duration', label: t('Durata'), type: 'range', min: 200, max: 5000, step: 100 },
+    { key: 'delay', label: t('Ritardo iniziale'), type: 'range', min: 0, max: 3000, step: 100 },
+    { key: 'stagger_delay', label: t('Ritardo tra elementi'), type: 'range', min: 0, max: 500, step: 10,
       condition: { field: 'anim_sequence', value: ['delayed', 'one-by-one', 'random'] } },
     { key: 'easing', label: t('Easing'), type: 'select', options: [
       { value: 'linear', label: t('Linear') },
@@ -123,12 +123,12 @@ export default {
     ]},
     { key: 'easing_custom', label: t('Cubic Bezier'), type: 'text', placeholder: t('0.42, 0, 0.58, 1'),
       condition: { field: 'easing', value: 'custom' } },
-    { key: 'loop_pause', label: t('Pausa tra cicli (ms)'), type: 'range', min: 0, max: 3000, step: 100,
+    { key: 'loop_pause', label: t('Pausa tra cicli'), type: 'range', min: 0, max: 3000, step: 100,
       condition: { field: 'loop', value: true } },
 
     // ── STILE TRACCIATO ──
     { type: 'separator', label: t('Stile tracciato') },
-    { key: 'stroke_width', label: t('Spessore linea (px)'), type: 'range', min: 0, max: 20, step: 0.5 },
+    { key: 'stroke_width', label: t('Spessore linea'), type: 'range', min: 0, max: 20, step: 0.5 },
     { key: 'stroke_color', label: t('Colore linea'), type: 'color' },
     { key: 'stroke_linecap', label: t('Terminazione linea'), type: 'select', options: [
       { value: '', label: t('Default SVG') },
@@ -148,9 +148,9 @@ export default {
     { key: 'show_fill', label: t('Mostra riempimento'), type: 'toggle' },
     { key: 'fill_color', label: t('Colore riempimento'), type: 'color',
       condition: { field: 'show_fill', value: true } },
-    { key: 'fill_delay', label: t('Ritardo fill dopo disegno (ms)'), type: 'range', min: 0, max: 2000, step: 50,
+    { key: 'fill_delay', label: t('Ritardo fill dopo disegno'), type: 'range', min: 0, max: 2000, step: 50,
       condition: { field: 'show_fill', value: true } },
-    { key: 'fill_duration', label: t('Durata transizione fill (ms)'), type: 'range', min: 100, max: 2000, step: 50,
+    { key: 'fill_duration', label: t('Durata transizione fill'), type: 'range', min: 100, max: 2000, step: 50,
       condition: { field: 'show_fill', value: true } },
 
     // ── LAYOUT (dimensione) ──

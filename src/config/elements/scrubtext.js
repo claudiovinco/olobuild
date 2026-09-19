@@ -52,7 +52,7 @@ export default {
     { type: 'separator', label: t('Scrub allo scroll') },
     { key: 'scroll_reveal', label: t('Accendi le parole allo scroll'), type: 'toggle',
       description: t('Le parole partono attenuate e si accendono con lo scorrimento. Disattivato automaticamente con prefers-reduced-motion.') },
-    { key: 'dim_opacity', label: t('Opacità parole spente (%)'), type: 'number', min: 0, max: 100,
+    { key: 'dim_opacity', label: t('Opacità parole spente'), type: 'number', min: 0, max: 100,
       condition: { field: 'scroll_reveal', op: 'eq', value: true } },
   ],
 
@@ -66,11 +66,11 @@ export default {
       description: t('Vuoto = testo attenuato del tema.') },
 
     { type: 'separator', label: t('Tipografia') },
-    { key: 'size_min', label: t('Dimensione minima (px)'), type: 'number', min: 12, max: 120 },
-    { key: 'size_max', label: t('Dimensione massima (px)'), type: 'number', min: 16, max: 200 },
-    { key: 'max_width_ch', label: t('Larghezza massima (ch)'), type: 'number', min: 6, max: 60 },
-    { key: 'lead_size', label: t('Dimensione lead (px)'), type: 'number', min: 10, max: 32, step: 0.5 },
-    { key: 'lead_max_width_ch', label: t('Larghezza massima lead (ch)'), type: 'number', min: 20, max: 100 },
+    { key: 'size_min', label: t('Dimensione minima'), type: 'number', min: 12, max: 120 },
+    { key: 'size_max', label: t('Dimensione massima'), type: 'number', min: 16, max: 200 },
+    { key: 'max_width_ch', label: t('Larghezza massima'), type: 'number', min: 6, max: 60 },
+    { key: 'lead_size', label: t('Dimensione lead'), type: 'number', min: 10, max: 32, step: 0.5 },
+    { key: 'lead_max_width_ch', label: t('Larghezza massima lead'), type: 'number', min: 20, max: 100 },
 
     { type: 'separator', label: t('Sfondo') },
     { key: 'bg', label: t('Sfondo completo'), type: 'background', showParallax: false },

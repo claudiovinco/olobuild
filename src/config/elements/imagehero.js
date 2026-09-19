@@ -114,7 +114,7 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
     ]},
-    { key: 'content_width', label: t('Larghezza max contenuto (px)'), type: 'range', min: 280, max: 1200, step: 10 },
+    { key: 'content_width', label: t('Larghezza max contenuto'), type: 'range', min: 280, max: 1200, step: 10 },
     { key: 'aspect_ratio', label: t('Aspect ratio immagine (es. 21/10)'), type: 'text' },
     { key: 'min_height', label: t('Altezza minima (≤100 = vh, altrimenti px)'), type: 'range', min: 50, max: 900, step: 1 },
     { key: 'heading_font', label: t('Font titolo'), type: 'font-family' },

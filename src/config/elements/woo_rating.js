@@ -58,8 +58,8 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'separator', label: t('Dimensioni') },
-    { key: 'star_size', label: t('Dimensione stelle (px)'), type: 'range', min: 12, max: 48, step: 2 },
-    { key: 'text_size', label: t('Dimensione testo (px)'), type: 'range', min: 10, max: 24, step: 1 },
+    { key: 'star_size', label: t('Dimensione stelle'), type: 'range', min: 12, max: 48, step: 2 },
+    { key: 'text_size', label: t('Dimensione testo'), type: 'range', min: 10, max: 24, step: 1 },
 
     { type: 'separator', label: t('Colori') },
     { key: 'star_color', label: t('Colore stelle piene'), type: 'color' },

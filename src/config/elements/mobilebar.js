@@ -47,7 +47,7 @@ export default {
   fields: [
     // ── Generale ──
     { type: 'separator', label: t('Generale') },
-    { key: 'breakpoint', label: t('Breakpoint visibilità (px)'), type: 'range', min: 480, max: 1400, step: 10 },
+    { key: 'breakpoint', label: t('Breakpoint visibilità'), type: 'range', min: 480, max: 1400, step: 10 },
 
     // ── Logo ──
     { type: 'separator', label: t('Logo') },
@@ -73,12 +73,12 @@ export default {
   styleFields: [
     // ── Logo ──
     { type: 'separator', label: t('Logo') },
-    { key: 'logo_width', label: t('Larghezza logo (px)'), type: 'range', min: 40, max: 250, step: 5 },
+    { key: 'logo_width', label: t('Larghezza logo'), type: 'range', min: 40, max: 250, step: 5 },
 
     // ── Barra ──
     { type: 'separator', label: t('Barra') },
     { key: 'bar_bg', label: t('Sfondo barra'), type: 'color' },
-    { key: 'bar_height', label: t('Altezza barra (px)'), type: 'range', min: 40, max: 80, step: 2 },
+    { key: 'bar_height', label: t('Altezza barra'), type: 'range', min: 40, max: 80, step: 2 },
     { key: 'bar_shadow', label: t('Ombra barra'), type: 'toggle' },
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 30 },
 
@@ -91,7 +91,7 @@ export default {
       { value: 'dot-grid', label: t('Dot Grid (9 pallini)') },
       { value: 'minimal', label: t('Minimal (2 linee)') },
     ]},
-    { key: 'hamburger_size', label: t('Dimensione (px)'), type: 'range', min: 20, max: 44, step: 2 },
+    { key: 'hamburger_size', label: t('Dimensione'), type: 'range', min: 20, max: 44, step: 2 },
     { key: 'hamburger_color', label: t('Colore'), type: 'color' },
 
     // ── Tipografia ──

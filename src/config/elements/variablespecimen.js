@@ -89,7 +89,7 @@ export default {
       condition: { field: 'interaction', op: 'in', value: ['drag', 'both'] } },
     { key: 'auto_animate', label: t('Anima a riposo (loop)'), type: 'toggle',
       description: t('Quando nessuno interagisce, gli assi oscillano dolcemente. Rispetta prefers-reduced-motion (resta fermo).') },
-    { key: 'auto_speed', label: t('Velocità loop (s)'), type: 'range', min: 2, max: 16, step: 1,
+    { key: 'auto_speed', label: t('Velocità loop'), type: 'range', min: 2, max: 16, step: 1,
       condition: { field: 'auto_animate', op: 'eq', value: true } },
     { key: 'show_readout', label: t('Mostra valori (readout)'), type: 'toggle' },
   ],

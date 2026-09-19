@@ -59,7 +59,7 @@ export default {
 
     { type: 'separator', label: t('Riproduzione') },
     { key: 'autoplay', label: t('Riproduzione automatica'), type: 'toggle' },
-    { key: 'autoplay_speed', label: t('Velocità riproduzione (ms)'), type: 'range', min: 2000, max: 10000, step: 500 },
+    { key: 'autoplay_speed', label: t('Velocità riproduzione'), type: 'range', min: 2000, max: 10000, step: 500 },
 
     { type: 'separator', label: t('Controlli') },
     { key: 'show_arrows', label: t('Mostra frecce'), type: 'toggle' },
@@ -97,7 +97,7 @@ export default {
       { value: 'slide', label: t('Slide') },
       { value: 'fade', label: t('Fade') },
     ]},
-    { key: 'slide_height', label: t('Altezza slide (px)'), type: 'range', min: 200, max: 800, step: 25 },
+    { key: 'slide_height', label: t('Altezza slide'), type: 'range', min: 200, max: 800, step: 25 },
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       // Punto focale GLOBALE applicato a tutte le slide. L'immagine è per-item (slides[].image)
       // → niente src tile-level: il pad resta neutro ma il valore (keyword o '%') si applica

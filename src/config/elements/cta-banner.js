@@ -96,12 +96,12 @@ export default {
   styleFields: [
     { type: 'separator', label: t('Banner') },
     { key: 'bg',              label: t('Sfondo'),         type: 'background', showParallax: false },
-    { key: 'banner_padding',  label: t('Padding interno (px)'), type: 'spacing', min: 0, max: 160 },
-    withHover({ key: 'banner_radius', label: t('Border radius'), type: 'border-radius' }, { hoverKey: 'banner_radius_hover', hoverDurationKey: 'banner_radius_hover_duration' }),
+    { key: 'banner_padding',  label: t('Padding (px)'), type: 'spacing', min: 0, max: 160 },
+    withHover({ key: 'banner_radius', label: t('Raggio'), type: 'border-radius' }, { hoverKey: 'banner_radius_hover', hoverDurationKey: 'banner_radius_hover_duration' }),
 
     { type: 'separator', label: t('Headline stile') },
     { key: 'headline_font_family', label: t('Famiglia'), type: 'font-family' },
-    { key: 'headline_size',   label: t('Dimensione (px)'), type: 'range', min: 18, max: 80, step: 2 },
+    { key: 'headline_size',   label: t('Dimensione'), type: 'range', min: 18, max: 80, step: 2 },
     { key: 'headline_weight', label: t('Peso'), type: 'select', options: [
       { value: '300', label: t('300 — Light') },
       { value: '400', label: t('400 — Regular') },
@@ -113,15 +113,15 @@ export default {
     { key: 'accent_color', label: t('Colore accent'), type: 'color' },
 
     { type: 'separator', label: t('Sottotitolo stile') },
-    { key: 'subtitle_size',  label: t('Dimensione (px)'), type: 'range', min: 11, max: 22, step: 1 },
+    { key: 'subtitle_size',  label: t('Dimensione'), type: 'range', min: 11, max: 22, step: 1 },
     { key: 'subtitle_color', label: t('Colore'),          type: 'color' },
 
     { type: 'separator', label: t('CTA stile') },
     withHover({ key: 'cta_bg',    label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta_bg_hover' }),
     withHover({ key: 'cta_color', label: t('Colore testo'), type: 'color' }, { hoverKey: 'cta_color_hover' }),
-    { key: 'cta_size',      label: t('Dimensione testo (px)'), type: 'range', min: 12, max: 22, step: 1 },
+    { key: 'cta_size',      label: t('Dimensione testo'), type: 'range', min: 12, max: 22, step: 1 },
     { key: 'cta_padding',   label: t('Padding bottoni (px)'), type: 'spacing', min: 0, max: 80 },
-    withHover({ key: 'cta_radius', label: t('Border radius CTA'), type: 'border-radius' }, { hoverKey: 'cta_radius_hover', hoverDurationKey: 'cta_radius_hover_duration' }),
+    withHover({ key: 'cta_radius', label: t('Raggio CTA'), type: 'border-radius' }, { hoverKey: 'cta_radius_hover', hoverDurationKey: 'cta_radius_hover_duration' }),
 
     { type: 'separator', label: t('CTA 2 stile') },
     { key: 'cta2_bg',     label: t('Sfondo CTA 2'),   type: 'color' },
@@ -145,6 +145,6 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'end',    label: t('In basso') },
     ]},
-    { key: 'gap', label: t('Gap colonne (px)'), type: 'range', min: 0, max: 120, step: 4 },
+    { key: 'gap', label: t('Gap colonne'), type: 'range', min: 0, max: 120, step: 4 },
   ],
 };

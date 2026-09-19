@@ -135,7 +135,7 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'separator', label: t('Dimensioni linguette'), show: s => s.layout === 'tabs' },
-    { key: 'tabs_offset', label: t('Distanza dal bordo (px)'), type: 'range', min: 0, max: 200, step: 5,
+    { key: 'tabs_offset', label: t('Distanza dal bordo'), type: 'range', min: 0, max: 200, step: 5,
       show: s => s.layout === 'tabs' },
     { key: 'tabs_size', label: t('Dimensione linguette'), type: 'select',
       show: s => s.layout === 'tabs',
@@ -151,10 +151,10 @@ export default {
       { value: 'circle', label: t('Cerchio') },
       { value: 'rounded', label: t('Rettangolo arrotondato') },
     ], show: s => s.style === 'flags' || s.style === 'flags_text' },
-    { key: 'flag_size', label: t('Dimensione bandiere (px)'), type: 'range', min: 14, max: 48,
+    { key: 'flag_size', label: t('Dimensione bandiere'), type: 'range', min: 14, max: 48,
       show: s => s.style === 'flags' || s.style === 'flags_text' || s.style === 'flags_circle' },
 
-    { key: 'circle_size', label: t('Diametro cerchietto (px)'), type: 'range', min: 24, max: 56, step: 2,
+    { key: 'circle_size', label: t('Diametro cerchietto'), type: 'range', min: 24, max: 56, step: 2,
       show: s => s.style === 'flags_circle' },
     { key: 'circle_bg', label: t('Sfondo cerchietto'), type: 'color',
       show: s => s.style === 'flags_circle' },
@@ -162,7 +162,7 @@ export default {
       show: s => s.style === 'flags_circle' },
 
     { type: 'separator', label: t('Spaziatura') },
-    { key: 'gap', label: t('Spazio tra elementi (px)'), type: 'range', min: 0, max: 24 },
+    { key: 'gap', label: t('Gap elementi'), type: 'range', min: 0, max: 24 },
 
     { type: 'separator', label: t('Colori') },
     { key: 'active_bg', label: t('Sfondo lingua attiva'), type: 'color' },
@@ -170,7 +170,7 @@ export default {
     { key: 'bg', label: t('Sfondo'), type: 'color' },
     { key: 'color', label: t('Testo'), type: 'color' },
     { key: 'border_color', label: t('Bordo'), type: 'color' },
-    withHover({ key: 'border_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     ...borderFields(),
   ],
 };

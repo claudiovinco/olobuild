@@ -116,7 +116,7 @@ export default {
       { value: 'slide-flip', label: t('Slide + Flip') },
       { value: 'zoom-flip', label: t('Zoom + Flip') },
     ]},
-    { key: 'flip_duration', label: t('Durata (ms)'), type: 'range', min: 400, max: 1200, step: 50 },
+    { key: 'flip_duration', label: t('Durata'), type: 'range', min: 400, max: 1200, step: 50 },
     { key: 'flip_trigger', label: t('Trigger'), type: 'select', options: [
       { value: 'hover', label: t('Hover') },
       { value: 'click', label: t('Click') },
@@ -156,7 +156,7 @@ export default {
     ]),
 
     { type: 'separator', label: t('Fronte — Aspetto') },
-    { key: 'front_icon_size', label: t('Dimensione icona (px)'), type: 'range', min: 24, max: 80 },
+    { key: 'front_icon_size', label: t('Dimensione icona'), type: 'range', min: 24, max: 80 },
     { key: 'front_icon_color', label: t('Colore icona'), type: 'color' },
     { key: 'front_bg', label: t('Colore sfondo'), type: 'color' },
     { key: 'front_image_fit', label: t('Adattamento immagine'), type: 'select', options: [
@@ -185,7 +185,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Retro — Aspetto') },
-    { key: 'back_icon_size', label: t('Dimensione icona (px)'), type: 'range', min: 24, max: 80 },
+    { key: 'back_icon_size', label: t('Dimensione icona'), type: 'range', min: 24, max: 80 },
     { key: 'back_icon_color', label: t('Colore icona'), type: 'color' },
     { key: 'back_bg', label: t('Colore sfondo'), type: 'color' },
     { key: 'back_image_fit', label: t('Adattamento immagine'), type: 'select', options: [
@@ -215,11 +215,11 @@ export default {
 
     { type: 'separator', label: t('Retro — Pulsante CTA') },
     { key: 'back_cta_bg', label: t('Colore sfondo CTA'), type: 'color' },
-    withHover({ key: 'back_cta_radius', label: t('Raggio bordo CTA (px)'), type: 'border-radius' }),
+    withHover({ key: 'back_cta_radius', label: t('Raggio CTA (px)'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Card') },
-    { key: 'card_height', label: t('Altezza (px)'), type: 'range', min: 200, max: 600, step: 10 },
-    withHover({ key: 'card_border_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
+    { key: 'card_height', label: t('Altezza'), type: 'range', min: 200, max: 600, step: 10 },
+    withHover({ key: 'card_border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     withHover(
       { key: 'card_border', label: t('Bordo card'), type: 'border' },
       { hoverKey: 'card_border_hover', hoverDurationKey: 'card_border_hover_duration' }
@@ -232,17 +232,8 @@ export default {
       { value: 'xl', label: t('Extra grande') },
       { value: 'custom', label: t('Personalizzata') },
     ]},
-    { key: 'card_shadow_h', label: t('Offset H (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_v', label: t('Offset V (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_blur', label: t('Sfocatura (px)'), type: 'range', min: 0, max: 100, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_spread', label: t('Espansione (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_color', label: t('Colore ombra'), type: 'color',
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_inset', label: t('Ombra interna'), type: 'toggle',
+    { key: 'card_shadow_custom', label: t('Ombra personalizzata'), type: 'box-shadow',
+      legacyKeys: { h: 'card_shadow_h', v: 'card_shadow_v', blur: 'card_shadow_blur', spread: 'card_shadow_spread', color: 'card_shadow_color', inset: 'card_shadow_inset' },
       condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 40 },
     ...borderFields(),

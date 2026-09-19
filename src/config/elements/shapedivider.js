@@ -55,13 +55,13 @@ export default {
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
     { key: 'color', label: t('Colore'), type: 'color' },
-    { key: 'height', label: t('Altezza (px)'), type: 'range', min: 10, max: 500, step: 5 },
-    { key: 'width', label: t('Larghezza (%)'), type: 'range', min: 100, max: 300, step: 5 },
+    { key: 'height', label: t('Altezza'), type: 'range', min: 10, max: 500, step: 5 },
+    { key: 'width', label: t('Larghezza'), type: 'range', min: 100, max: 300, step: 5 },
     { key: 'z_index', label: t('Z-Index'), type: 'range', min: 0, max: 99, step: 1 },
 
     { type: 'separator', label: t('Responsive') },
-    { key: 'responsive_height_tablet', label: t('Altezza tablet (px)'), type: 'number', min: 10, max: 500 },
-    { key: 'responsive_height_mobile', label: t('Altezza mobile (px)'), type: 'number', min: 10, max: 500 },
+    { key: 'responsive_height_tablet', label: t('Altezza tablet'), type: 'number', min: 10, max: 500 },
+    { key: 'responsive_height_mobile', label: t('Altezza mobile'), type: 'number', min: 10, max: 500 },
     ...borderFields(),
   ],
 };

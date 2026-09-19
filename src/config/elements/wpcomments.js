@@ -89,7 +89,7 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'separator', label: t('Avatar') },
-    { key: 'avatar_size', label: t('Dimensione avatar (px)'), type: 'range', min: 24, max: 96, step: 4,
+    { key: 'avatar_size', label: t('Dimensione avatar'), type: 'range', min: 24, max: 96, step: 4,
       condition: { field: 'show_avatar', operator: '==', value: true } },
     withHover({ key: 'avatar_border_radius', label: t('Raggio avatar (%)'), type: 'border-radius',
       condition: { field: 'show_avatar', operator: '==', value: true } }),

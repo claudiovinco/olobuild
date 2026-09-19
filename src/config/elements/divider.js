@@ -46,19 +46,19 @@ export default {
       { value: 'dots', label: t('Puntini decorativi') },
       { value: 'diamonds', label: t('Diamanti') },
     ]},
-    { key: 'width', label: t('Larghezza (%)'), type: 'range', min: 10, max: 100, step: 5 },
-    { key: 'thickness', label: t('Spessore (px)'), type: 'range', min: 1, max: 10, step: 1 },
+    { key: 'width', label: t('Larghezza'), type: 'range', min: 10, max: 100, step: 5 },
+    { key: 'thickness', label: t('Spessore'), type: 'range', min: 1, max: 10, step: 1 },
     { key: 'color', label: t('Colore linea'), type: 'color' },
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
     ]},
-    { key: 'spacing', label: t('Spaziatura (px)'), type: 'range', min: 0, max: 80, step: 4 },
+    { key: 'spacing', label: t('Spaziatura'), type: 'range', min: 0, max: 80, step: 4 },
 
     { type: 'separator', label: t('Testo centrale') },
     { key: 'text_color', label: t('Colore testo'), type: 'color' },
-    { key: 'text_size', label: t('Dimensione testo (px)'), type: 'range', min: 10, max: 32, step: 1 },
+    { key: 'text_size', label: t('Dimensione testo'), type: 'range', min: 10, max: 32, step: 1 },
 
     ...borderFields(),
   ],

@@ -84,14 +84,14 @@ export default {
 
     { type: 'separator', label: t('Layout') },
     { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1 },
-    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 40, step: 5 },
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 40, step: 5 },
     { key: 'thumb_ratio', label: t('Proporzione miniature'), type: 'select', options: [
       { value: '1:1', label: '1:1' },
       { value: '4:3', label: '4:3' },
       { value: '16:9', label: '16:9' },
       { value: 'auto', label: t('Auto') },
     ] },
-    withHover({ key: 'thumb_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
+    withHover({ key: 'thumb_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { ratio: 'thumb_ratio' } },
 

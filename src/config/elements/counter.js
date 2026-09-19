@@ -87,7 +87,7 @@ export default {
     ...textEffectsFields([ { value: 'label', label: t('Solo Etichetta') } ]),
 
     { type: 'separator', label: t('Icona') },
-    { key: 'icon_size', label: t('Dimensione icona (px)'), type: 'range', min: 16, max: 80, step: 2 },
+    { key: 'icon_size', label: t('Dimensione icona'), type: 'range', min: 16, max: 80, step: 2 },
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Numero'),
@@ -112,12 +112,12 @@ export default {
     { type: 'separator', label: t('Colori') },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color',
       condition: { field: 'overlay', value: true } },
-    { key: 'overlay_opacity', label: t('Opacità overlay (%)'), type: 'range', min: 10, max: 100, step: 5,
+    { key: 'overlay_opacity', label: t('Opacità overlay'), type: 'range', min: 10, max: 100, step: 5,
       condition: { field: 'overlay', value: true } },
 
     { type: 'separator', label: t('Aspetto tile') },
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 80 },
-    withHover({ key: 'border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
 
     ...shadowField,
     ...borderFields(),

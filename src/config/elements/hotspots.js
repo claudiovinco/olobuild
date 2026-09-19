@@ -45,8 +45,8 @@ export default {
       itemLabel: t('Marker'),
       defaults: { x: 50, y: 50, title: 'Nuovo punto', text: 'Descrizione.', meta: '' },
       itemFields: [
-        { key: 'x', label: t('Posizione X (%)'), type: 'number' },
-        { key: 'y', label: t('Posizione Y (%)'), type: 'number' },
+        { key: 'x', label: t('Posizione X'), type: 'number' },
+        { key: 'y', label: t('Posizione Y'), type: 'number' },
         { key: 'title', label: t('Titolo'), type: 'text' },
         { key: 'text', label: t('Testo'), type: 'textarea' },
         { key: 'meta', label: t('Meta (prezzo/nota)'), type: 'text' },

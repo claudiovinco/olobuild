@@ -144,7 +144,7 @@ export default {
     { type: 'separator', label: t('Card') },
     { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
     { key: 'card_border_color', label: t('Bordo card'), type: 'border', legacyWidth: 1 },
-    withHover({ key: 'card_border_radius', label: t('Arrotondamento card (px)'), type: 'border-radius'}),
+    withHover({ key: 'card_border_radius', label: t('Raggio card (px)'), type: 'border-radius'}),
     { key: 'hover_lift', label: t('Effetto hover'), type: 'toggle' },
 
     // ── Separatore ──
@@ -160,9 +160,9 @@ export default {
 
     // ── Immagine ──
     { type: 'separator', label: t('Immagine') },
-    { key: 'image_size', label: t('Dimensione immagine (px)'), type: 'range', min: 30, max: 120, step: 5,
+    { key: 'image_size', label: t('Dimensione immagine'), type: 'range', min: 30, max: 120, step: 5,
       condition: { field: 'show_image', value: true } },
-    withHover({ key: 'image_border_radius', label: t('Arrotondamento immagine (px)'), type: 'border-radius',
+    withHover({ key: 'image_border_radius', label: t('Raggio immagine (px)'), type: 'border-radius',
       condition: { field: 'show_image', value: true } }),
     // Punto focale GLOBALE: le immagini sono per-item ma il frame è un quadrato 1:1 fisso
     // (dimensione unica image_size). Nessuna chiave tile-level per src/fit/ratio → contextKeys
@@ -173,7 +173,7 @@ export default {
 
     // ── Spaziatura ──
     { type: 'separator', label: t('Spaziatura') },
-    { key: 'gap', label: t('Gap tra elementi (px)'), type: 'range', min: 0, max: 32, step: 2 },
+    { key: 'gap', label: t('Gap elementi'), type: 'range', min: 0, max: 32, step: 2 },
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 32 },
 
     // ── Colori extra (non gestiti dai popover Tipografia) ──
@@ -185,7 +185,7 @@ export default {
     { key: 'badge_bg', label: t('Sfondo'), type: 'color' },
     { key: 'badge_border', label: t('Bordo badge'), type: 'border',
       legacyKeys: { width: 'badge_border_width', style: 'badge_border_style', color: 'badge_border_color' } },
-    withHover({ key: 'badge_border_radius', label: t('Arrotondamento (px)'), type: 'border-radius'}),
+    withHover({ key: 'badge_border_radius', label: t('Raggio (px)'), type: 'border-radius'}),
 
     ...shadowField,
     ...borderFields(),

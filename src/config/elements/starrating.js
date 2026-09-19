@@ -63,7 +63,7 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'separator', label: t('Stile stelle') },
-    { key: 'star_size', label: t('Dimensione stelle (px)'), type: 'range', min: 16, max: 64, step: 4 },
+    { key: 'star_size', label: t('Dimensione stelle'), type: 'range', min: 16, max: 64, step: 4 },
     { key: 'star_color', label: t('Colore stelle piene'), type: 'color' },
     { key: 'empty_color', label: t('Colore stelle vuote'), type: 'color' },
     { key: 'style', label: t('Stile'), type: 'select', options: [

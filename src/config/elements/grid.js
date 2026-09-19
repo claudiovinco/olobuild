@@ -185,15 +185,15 @@ export default {
       { value: 'border-glow', label: t('Bordo luminoso') },
       { value: 'tilt', label: t('Inclinazione 3D') },
     ]},
-    withHover({ key: 'card_radius', label: t('Raggio bordi (px)'), type: 'border-radius'}),
+    withHover({ key: 'card_radius', label: t('Raggio (px)'), type: 'border-radius'}),
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 48 },
     { key: 'card_bg_color', label: t('Colore sfondo card'), type: 'color' },
     { key: 'card_border_color', label: t('Colore bordo card'), type: 'color' },
 
     { type: 'separator', label: t('Immagine — stile') },
-    { key: 'image_height', label: t('Altezza immagine (px)'), type: 'range', min: 0, max: 500, step: 10,
+    { key: 'image_height', label: t('Altezza immagine'), type: 'range', min: 0, max: 500, step: 10,
       description: t('0 = automatica') },
-    { key: 'image_animation_speed', label: t('Velocità animazione (s)'), type: 'range', min: 2, max: 20, step: 1,
+    { key: 'image_animation_speed', label: t('Velocità animazione'), type: 'range', min: 2, max: 20, step: 1,
       condition: { field: 'image_animation', operator: '!=', value: 'none' } },
 
     { type: 'separator', label: t('Tipografia') },

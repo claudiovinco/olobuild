@@ -213,7 +213,7 @@ export default {
         { value: 'high',   label: t('Alta') },
       ],
       condition: { field: 'preset', op: 'in', value: ['liquid-glass','neon-cyber','brutalist-block','magnetic-liquid','sticker','retro-terminal','3d-tilt'] } },
-    { key: 'effect_speed', label: t('Velocità animazioni (ms)'), type: 'range',
+    { key: 'effect_speed', label: t('Velocità animazioni'), type: 'range',
       min: 0, max: 4000, step: 100,
       condition: { field: 'preset', op: 'in', value: ['neon-cyber','magnetic-liquid','retro-terminal','3d-tilt'] } },
 
@@ -224,13 +224,13 @@ export default {
     ]),
 
     { type: 'separator', label: t('Griglia — aspetto') },
-    { key: 'gap', label: t('Spaziatura'), type: 'select', options: [
+    { key: 'gap', label: t('Gap'), type: 'select', options: [
       { value: 'collapse', label: t('Nessuna') },
       { value: 'small', label: t('Piccola') },
       { value: 'medium', label: t('Media') },
       { value: 'large', label: t('Grande') },
     ]},
-    { key: 'height', label: t('Altezza (px)'), type: 'range', min: 150, max: 800, step: 25 },
+    { key: 'height', label: t('Altezza'), type: 'range', min: 150, max: 800, step: 25 },
     { key: 'layout_mode', label: t('Disposizione'), type: 'select', options: [
       { value: 'uniform', label: t('Uniforme (griglia)') },
       { value: 'masonry', label: t('Masonry (celle alte/larghe)') },
@@ -255,7 +255,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Stile elementi') },
-    { key: 'item_radius', label: t('Arrotondamento elementi (px)'), type: 'border-radius' },
+    { key: 'item_radius', label: t('Raggio elementi (px)'), type: 'border-radius' },
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { fit: '(cover)' },
       description: t('Punto focale delle immagini card (uguale per tutte). Default: centro.') },

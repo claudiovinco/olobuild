@@ -726,6 +726,33 @@ class Olobuild_Frontend_Renderer {
     }
 
 
+    /**
+     * Tile che montano il controllo «Ombra» condiviso senza renderlo da nessuna
+     * parte: per queste l'ombra la disegna il wrapper dell'elemento. Elenco
+     * ricavato meccanicamente (il config importa shadowField, il renderer PHP non
+     * nomina mai la chiave 'shadow') e verificato dall'audit, non scritto a memoria:
+     * `node scripts/audit-ui-standard.mjs` fallisce se diverge dal codice o dal
+     * gemello JS in GridCell.vue.
+     *
+     * @param string $type Slug della tile.
+     * @return bool
+     */
+    private static function tile_ombra_non_resa( $type ) {
+        static $elenco = [
+            'alert', 'animatedheading', 'audio', 'badge', 'breadcrumbs', 'chart', 'code',
+            'counter', 'desclist', 'gallery', 'headline', 'html', 'icon', 'iconlist',
+            'lightbox', 'linkinbio', 'livesearch', 'loginform', 'lottie', 'map', 'marquee',
+            'nav', 'offcanvas', 'overlay', 'pagetitlebar', 'popover', 'postnavigation',
+            'pricelist', 'pricing', 'progress', 'progresstracker', 'quotation', 'readingtime',
+            'search', 'shortcode', 'social', 'starrating', 'subnav', 'svganimator', 'table',
+            'templateembed', 'textmask', 'toc', 'totop', 'variablespecimen', 'viewer360',
+            'woo_cross_sells', 'woo_products', 'woo_product_bundle', 'woo_product_filter',
+            'woo_product_gallery_slider', 'woo_quickview', 'woo_recently_viewed',
+            'woo_wishlist',
+        ];
+        return in_array( (string) $type, $elenco, true );
+    }
+
     private function render_element_node( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter ) {
         // Resolve global widget
         if ( ! empty( $node['global_id'] ) ) {
@@ -933,6 +960,32 @@ class Olobuild_Frontend_Renderer {
             $drop_shadow = $this->css->build_drop_shadow_css( $style );
             if ( $drop_shadow ) {
                 $inline_styles[] = 'filter: ' . $drop_shadow;
+            }
+        }
+
+        // ── Ombra DELLA TILE (settings['shadow'], dal gruppo condiviso shadowField) ──
+        // 110 tile montano quel controllo. 54 non lo disegnano da nessuna parte: si
+        // sceglieva «Ombra media» e sulla pagina non succedeva niente. Qui l'ombra
+        // viene resa per quelle soltanto — le altre se la disegnano già sul pezzo
+        // giusto (la card, il pannello) e toccarle ne farebbe comparire due.
+        // La FORMA segue la stessa regola che il prodotto usa già per l'ombra del
+        // wrapper, due righe più sopra: box-shadow se c'è uno sfondo (il rettangolo
+        // è davvero lì), drop-shadow se il wrapper è trasparente — così l'ombra
+        // segue la sagoma visibile (la pillina di un badge, non il suo contenitore).
+        if ( self::tile_ombra_non_resa( $node['type'] ?? '' ) ) {
+            $ombra_tile = $settings['shadow'] ?? 'none';
+            if ( $ombra_tile && $ombra_tile !== 'none' ) {
+                if ( $has_bg_any ) {
+                    $val = Olobuild_Tile_Utils::shadow_value( $settings, 'shadow' );
+                    if ( $val && $val !== 'none' ) {
+                        $inline_styles[] = 'box-shadow: ' . $val;
+                    }
+                } else {
+                    $val = $this->css->build_drop_shadow_css( $settings );
+                    if ( $val ) {
+                        $inline_styles[] = 'filter: ' . $val;
+                    }
+                }
             }
         }
 

@@ -313,7 +313,7 @@ export default {
 
     { type: 'separator', label: t('Riproduzione') },
     { key: 'autoplay', label: t('Riproduzione automatica'), type: 'toggle' },
-    { key: 'autoplaySpeed', label: t('Velocita (ms)'), type: 'number', min: 1000, max: 20000, step: 500,
+    { key: 'autoplaySpeed', label: t('Velocita'), type: 'number', min: 1000, max: 20000, step: 500,
       condition: { field: 'autoplay', value: true } },
     { key: 'pauseOnHover', label: t('Pausa al passaggio mouse'), type: 'toggle',
       condition: { field: 'autoplay', value: true } },
@@ -370,7 +370,7 @@ export default {
 
     { type: 'separator', label: t('Scroll Timeline') },
     { key: 'scrollTimeline', label: t('Scroll-fixed timeline'), type: 'toggle' },
-    { key: 'scrollTimelineDistance', label: t('Distanza scroll (px)'), type: 'number', min: 500, max: 10000, step: 100,
+    { key: 'scrollTimelineDistance', label: t('Distanza scroll'), type: 'number', min: 500, max: 10000, step: 100,
       condition: { field: 'scrollTimeline', value: true } },
   ],
 
@@ -395,7 +395,7 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'separator', label: t('Transizione — aspetto') },
-    { key: 'transitionDuration', label: t('Durata (ms)'), type: 'number', min: 200, max: 3000, step: 100 },
+    { key: 'transitionDuration', label: t('Durata'), type: 'number', min: 200, max: 3000, step: 100 },
 
     { type: 'separator', label: t('Navigazione — stile') },
     { key: 'arrowStyle', label: t('Stile frecce'), type: 'select', options: [
@@ -440,7 +440,7 @@ export default {
     { type: 'separator', label: t('Carosello — dimensioni') },
     { key: 'carouselWidth', label: t('Larghezza slide %'), type: 'number', min: 40, max: 95,
       condition: { field: 'carousel', value: true } },
-    { key: 'carouselGap', label: t('Gap (px)'), type: 'number', min: 0, max: 60,
+    { key: 'carouselGap', label: t('Gap'), type: 'number', min: 0, max: 60,
       condition: { field: 'carousel', value: true } },
     { key: 'carouselSideScale', label: t('Scala laterali'), type: 'number', min: 0.5, max: 1, step: 0.05,
       condition: { field: 'carousel', value: true } },

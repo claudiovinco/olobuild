@@ -107,7 +107,7 @@ export default {
       { value: 'large', label: t('Grande') },
     ]},
     { key: 'full_width', label: t('Larghezza piena'), type: 'toggle' },
-    { key: 'max_width', label: t('Larghezza massima (px)'), type: 'number', min: 0,
+    { key: 'max_width', label: t('Larghezza massima'), type: 'number', min: 0,
       show: s => !s.full_width },
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
@@ -141,8 +141,8 @@ export default {
 
     { type: 'separator', label: t('Bordi') },
 
-    withHover({ key: 'border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
-    withHover({ key: 'button_radius', label: t('Arrotondamento pulsante (px)'), type: 'border-radius',
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'button_radius', label: t('Raggio pulsante (px)'), type: 'border-radius',
       show: s => s.show_button }),
 
     { type: 'separator', label: t('Effetti') },

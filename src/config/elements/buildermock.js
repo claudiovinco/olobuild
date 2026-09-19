@@ -54,7 +54,7 @@ export default {
     { key: 'accent', label: t('Colore accento'), type: 'color',
       description: t('Vuoto = primario del tema.') },
     { key: 'tilt', label: t('Inclinazione 3D (gradi)'), type: 'range', min: 0, max: 22, step: 1 },
-    { key: 'width', label: t('Larghezza (px)'), type: 'range', min: 480, max: 1100, step: 20 },
+    { key: 'width', label: t('Larghezza'), type: 'range', min: 480, max: 1100, step: 20 },
 
     ...shadowField,
     ...borderFields(),

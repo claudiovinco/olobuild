@@ -66,7 +66,7 @@ export default {
 
     { type: 'separator', label: t('Comportamento') },
     { key: 'autoplay', label: t('Autoplay'), type: 'toggle' },
-    { key: 'autoplay_speed', label: t('Velocità autoplay (ms)'), type: 'range', min: 1000, max: 10000, step: 500,
+    { key: 'autoplay_speed', label: t('Velocità autoplay'), type: 'range', min: 1000, max: 10000, step: 500,
       condition: { field: 'autoplay', value: true } },
     { key: 'loop', label: t('Loop infinito'), type: 'toggle' },
     { key: 'pause_on_hover', label: t('Pausa al passaggio'), type: 'toggle',
@@ -110,12 +110,12 @@ export default {
 
     { type: 'separator', label: t('Layout') },
     { key: 'slides_to_show', label: t('Slide visibili'), type: 'range', min: 1, max: 6, step: 1 },
-    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 48, step: 4 },
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4 },
     { key: 'slide_height', label: t('Altezza slide'), type: 'select', options: [
       { value: 'auto', label: t('Automatica') },
       { value: 'fixed', label: t('Fissa') },
     ]},
-    { key: 'fixed_height', label: t('Altezza fissa (px)'), type: 'range', min: 150, max: 600, step: 10,
+    { key: 'fixed_height', label: t('Altezza fissa'), type: 'range', min: 150, max: 600, step: 10,
       condition: { field: 'slide_height', value: 'fixed' } },
     { key: 'object_fit', label: t('Adattamento'), type: 'select', options: [
       { value: 'cover', label: t('Riempi') },
@@ -123,7 +123,7 @@ export default {
     ]},
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { fit: 'object_fit' } },
-    withHover({ key: 'border_radius', label: t('Raggio bordi (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     { key: 'mobile_slides', label: t('Slide mobile'), type: 'range', min: 1, max: 3, step: 1 },
 
     { type: 'separator', label: t('Colori') },

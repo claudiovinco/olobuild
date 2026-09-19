@@ -87,9 +87,9 @@ export default {
 
     { type: 'separator', label: t('Zoom frammenti') },
     { key: 'zoom_variation', label: t('Zoom variato per frammento'), type: 'toggle' },
-    { key: 'zoom_min', label: t('Zoom minimo (%)'), type: 'range', min: 100, max: 250, step: 5,
+    { key: 'zoom_min', label: t('Zoom minimo'), type: 'range', min: 100, max: 250, step: 5,
       show: s => !!s.zoom_variation },
-    { key: 'zoom_max', label: t('Zoom massimo (%)'), type: 'range', min: 120, max: 350, step: 5,
+    { key: 'zoom_max', label: t('Zoom massimo'), type: 'range', min: 120, max: 350, step: 5,
       show: s => !!s.zoom_variation },
     { key: 'zoom_random', label: t('Ordine casuale'), type: 'toggle',
       show: s => !!s.zoom_variation },
@@ -108,19 +108,19 @@ export default {
         { value: 'rotation', label: t('Rotazione (zoom + leggera rotazione)') },
         { value: 'chaotic', label: t('Caotico (massima variazione)') },
       ]},
-    { key: 'kenburns_duration', label: t('Durata ciclo (s)'), type: 'range', min: 10, max: 40, step: 1,
+    { key: 'kenburns_duration', label: t('Durata ciclo'), type: 'range', min: 10, max: 40, step: 1,
       show: s => !!s.kenburns },
     { key: 'kenburns_intensity', label: t('Intensità zoom'), type: 'range', min: 1.10, max: 1.40, step: 0.01,
       show: s => !!s.kenburns },
 
     { type: 'separator', label: t('Effetti scroll (solo frontend)') },
     { key: 'scroll_parallax', label: t('Parallax per frammento'), type: 'toggle' },
-    { key: 'scroll_parallax_intensity', label: t('Intensità (px)'), type: 'range', min: 10, max: 80, step: 5,
+    { key: 'scroll_parallax_intensity', label: t('Intensità'), type: 'range', min: 10, max: 80, step: 5,
       show: s => !!s.scroll_parallax },
     { key: 'scroll_reveal', label: t('Reveal sequenziale'), type: 'toggle' },
-    { key: 'scroll_reveal_stagger', label: t('Stagger (ms)'), type: 'range', min: 50, max: 400, step: 25,
+    { key: 'scroll_reveal_stagger', label: t('Stagger'), type: 'range', min: 50, max: 400, step: 25,
       show: s => !!s.scroll_reveal },
-    { key: 'scroll_reveal_duration', label: t('Durata (ms)'), type: 'range', min: 200, max: 1200, step: 50,
+    { key: 'scroll_reveal_duration', label: t('Durata'), type: 'range', min: 200, max: 1200, step: 50,
       show: s => !!s.scroll_reveal },
 
     { type: 'separator', label: t('Overlay') },
@@ -129,17 +129,17 @@ export default {
 
   styleFields: [
     { type: 'separator', label: t('Maschera — Aspetto') },
-    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 16, step: 1 },
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 16, step: 1 },
     { key: 'gap_color', label: t('Colore sfondo gap'), type: 'color' },
 
     { type: 'separator', label: t('Overlay — Aspetto') },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color',
       show: s => !!s.overlay },
-    { key: 'overlay_opacity', label: t('Opacità (%)'), type: 'range', min: 5, max: 90, step: 1,
+    { key: 'overlay_opacity', label: t('Opacità'), type: 'range', min: 5, max: 90, step: 1,
       show: s => !!s.overlay },
 
     { type: 'separator', label: t('Avanzato') },
-    withHover({ key: 'border_radius_outer', label: t('Border radius'), type: 'border-radius' }),
+    withHover({ key: 'border_radius_outer', label: t('Raggio'), type: 'border-radius' }),
 
     ...shadowField,
     ...borderFields(),

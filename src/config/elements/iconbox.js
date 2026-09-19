@@ -102,7 +102,7 @@ export default {
     ]),
 
     { type: 'separator', label: t('Icona') },
-    { key: 'icon_size', label: t('Dimensione icona (em)'), type: 'range', min: 1, max: 8, step: 0.5 },
+    { key: 'icon_size', label: t('Dimensione icona'), type: 'range', min: 1, max: 8, step: 0.5 },
     { key: 'icon_position', label: t('Posizione icona'), type: 'select', options: [
       { value: 'top', label: t('Sopra') },
       { value: 'left', label: t('Sinistra') },
@@ -138,9 +138,9 @@ export default {
     },
 
     { type: 'separator', label: t('Spaziatura elementi') },
-    { key: 'icon_gap', label: t('Distanza icona-titolo (px)'), type: 'range', min: 0, max: 48, step: 2 },
-    { key: 'title_gap', label: t('Distanza titolo-testo (px)'), type: 'range', min: 0, max: 32, step: 2 },
-    { key: 'desc_gap', label: t('Distanza testo-link (px)'), type: 'range', min: 0, max: 48, step: 2 },
+    { key: 'icon_gap', label: t('Gap icona-titolo'), type: 'range', min: 0, max: 48, step: 2 },
+    { key: 'title_gap', label: t('Gap titolo-testo'), type: 'range', min: 0, max: 32, step: 2 },
+    { key: 'desc_gap', label: t('Gap testo-link'), type: 'range', min: 0, max: 48, step: 2 },
 
     { type: 'separator', label: t('Sfondo box icona') },
     { key: '_bg_hint', type: 'description', label: '', description: t('Sfondo specifico del box icona (interno). Per lo sfondo del wrapper esterno usa il tab Stile → Sfondo.') },
@@ -148,7 +148,7 @@ export default {
 
     { type: 'separator', label: t('Bordo e spaziatura') },
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 60 },
-    withHover({ key: 'border_radius', label: t('Raggio bordi (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
 
     ...shadowField,
     ...borderFields(),

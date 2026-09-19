@@ -270,7 +270,7 @@ export default {
     },
 
     { type: 'separator', label: t('Mappa - aspetto') },
-    { key: 'map_height', label: t('Altezza mappa (px)'), type: 'range', min: 300, max: 800, step: 10,
+    { key: 'map_height', label: t('Altezza mappa'), type: 'range', min: 300, max: 800, step: 10,
       condition: { field: 'layout', operator: '!=', value: 'cards-only' } },
     { key: 'marker_color', label: t('Colore pin'), type: 'color',
       condition: { field: 'layout', operator: '!=', value: 'cards-only' } },
@@ -285,7 +285,7 @@ export default {
     { key: 'columns_mobile', label: t('Colonne su mobile'), type: 'select', options: [
       { value: '1', label: '1' }, { value: '2', label: '2' },
     ]},
-    { key: 'gap', label: t('Spaziatura tra card'), type: 'select', options: [
+    { key: 'gap', label: t('Gap card'), type: 'select', options: [
       { value: 'collapse', label: t('Nessuna') },
       { value: 'small', label: t('Piccola') },
       { value: 'default', label: t('Standard') },
@@ -318,7 +318,7 @@ export default {
     withHover({ key: 'card_border', label: t('Bordo card'), type: 'border',
       legacyKeys: { width: 'card_border_width', style: 'card_border_style', color: 'card_border_color' } },
       { hoverKey: 'card_border_hover' }),
-    withHover({ key: 'card_border_radius', label: t('Raggio angoli (4 valori)'), type: 'border-radius' }),
+    withHover({ key: 'card_border_radius', label: t('Raggio (4 valori)'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Card — Ombra normale') },
     { key: 'card_shadow', label: t('Ombra card'), type: 'select', options: [
@@ -329,17 +329,8 @@ export default {
       { value: 'xl', label: t('Molto forte') },
       { value: 'custom', label: t('Personalizzata') },
     ]},
-    { key: 'card_shadow_h', label: t('Offset H (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_v', label: t('Offset V (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_blur', label: t('Sfocatura (px)'), type: 'range', min: 0, max: 100, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_spread', label: t('Espansione (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_color', label: t('Colore ombra'), type: 'color',
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_inset', label: t('Ombra interna'), type: 'toggle',
+    { key: 'card_shadow_custom', label: t('Ombra personalizzata'), type: 'box-shadow',
+      legacyKeys: { h: 'card_shadow_h', v: 'card_shadow_v', blur: 'card_shadow_blur', spread: 'card_shadow_spread', color: 'card_shadow_color', inset: 'card_shadow_inset' },
       condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
 
     { type: 'separator', label: t('Card — Ombra hover') },
@@ -352,17 +343,8 @@ export default {
       { value: 'xl', label: t('Molto forte') },
       { value: 'custom', label: t('Personalizzata') },
     ]},
-    { key: 'card_hover_shadow_h', label: t('Offset H hover (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'card_hover_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_hover_shadow_v', label: t('Offset V hover (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'card_hover_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_hover_shadow_blur', label: t('Sfocatura hover (px)'), type: 'range', min: 0, max: 100, step: 1,
-      condition: { field: 'card_hover_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_hover_shadow_spread', label: t('Espansione hover (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'card_hover_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_hover_shadow_color', label: t('Colore ombra hover'), type: 'color',
-      condition: { field: 'card_hover_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_hover_shadow_inset', label: t('Ombra interna hover'), type: 'toggle',
+    { key: 'card_hover_shadow_custom', label: t('Ombra personalizzata'), type: 'box-shadow',
+      legacyKeys: { h: 'card_hover_shadow_h', v: 'card_hover_shadow_v', blur: 'card_hover_shadow_blur', spread: 'card_hover_shadow_spread', color: 'card_hover_shadow_color', inset: 'card_hover_shadow_inset' },
       condition: { field: 'card_hover_shadow', op: 'eq', value: 'custom' } },
     { key: 'card_hover_lift', label: t('Sollevamento su hover'), type: 'toggle' },
 
@@ -370,7 +352,7 @@ export default {
     // Immagine
     // ═══════════════════════════════════════════
     { type: 'separator', label: t('Immagine') },
-    { key: 'image_height', label: t('Altezza immagine (px)'), type: 'range', min: 80, max: 350, step: 10,
+    { key: 'image_height', label: t('Altezza immagine'), type: 'range', min: 80, max: 350, step: 10,
       condition: { field: 'image_aspect_ratio', value: '' } },
     { key: 'image_aspect_ratio', label: t('Proporzioni'), type: 'select', options: [
       { value: '', label: t('Altezza fissa (px)') },
@@ -385,7 +367,7 @@ export default {
       { value: 'contain', label: t('Adatta (contain)') },
       { value: 'fill', label: t('Distorci (fill)') },
     ]},
-    withHover({ key: 'image_radius', label: t('Raggio bordo immagine (px)'), type: 'border-radius' }),
+    withHover({ key: 'image_radius', label: t('Raggio immagine (px)'), type: 'border-radius' }),
     { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
       { value: 'none', label: t('Nessuno') },
       { value: 'zoom', label: t('Zoom') },
@@ -398,7 +380,7 @@ export default {
       { value: 'tilt', label: t('Tilt 3D') },
     ]},
     { key: 'fx_kenburns', label: t('Ken Burns (zoom cinematico)'), type: 'toggle' },
-    { key: 'fx_kenburns_speed', label: t('Velocita Ken Burns (s)'), type: 'range', min: 10, max: 40, step: 1,
+    { key: 'fx_kenburns_speed', label: t('Velocita Ken Burns'), type: 'range', min: 10, max: 40, step: 1,
       condition: { field: 'fx_kenburns', value: true } },
     { key: 'fx_kenburns_scale', label: t('Intensita zoom'), type: 'range', min: 1.05, max: 1.25, step: 0.01,
       condition: { field: 'fx_kenburns', value: true } },
@@ -408,15 +390,15 @@ export default {
     // ═══════════════════════════════════════════
     { type: 'separator', label: t('Filtri immagine') },
     { key: 'fx_vignette', label: t('Vignettatura'), type: 'toggle' },
-    { key: 'fx_vignette_strength', label: t('Intensita vignettatura (%)'), type: 'range', min: 10, max: 80, step: 5,
+    { key: 'fx_vignette_strength', label: t('Intensita vignettatura'), type: 'range', min: 10, max: 80, step: 5,
       condition: { field: 'fx_vignette', value: true } },
     { key: 'fx_grain', label: t('Grana pellicola'), type: 'toggle' },
-    { key: 'fx_grain_opacity', label: t('Opacita grana (%)'), type: 'range', min: 2, max: 20, step: 1,
+    { key: 'fx_grain_opacity', label: t('Opacita grana'), type: 'range', min: 2, max: 20, step: 1,
       condition: { field: 'fx_grain', value: true } },
     { key: 'fx_tint', label: t('Tinta colore'), type: 'toggle' },
     { key: 'fx_tint_color', label: t('Colore tinta'), type: 'color',
       condition: { field: 'fx_tint', value: true } },
-    { key: 'fx_tint_opacity', label: t('Opacita tinta (%)'), type: 'range', min: 5, max: 50, step: 5,
+    { key: 'fx_tint_opacity', label: t('Opacita tinta'), type: 'range', min: 5, max: 50, step: 5,
       condition: { field: 'fx_tint', value: true } },
     { key: 'fx_tint_blend', label: t('Modo fusione'), type: 'select', options: [
       { value: 'multiply', label: t('Moltiplica') },
@@ -433,7 +415,7 @@ export default {
     { key: 'overlay_gradient', label: t('Overlay sfumato'), type: 'toggle' },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color',
       condition: { field: 'overlay_gradient', value: true } },
-    { key: 'overlay_opacity', label: t('Opacita overlay (%)'), type: 'range', min: 10, max: 90, step: 5,
+    { key: 'overlay_opacity', label: t('Opacita overlay'), type: 'range', min: 10, max: 90, step: 5,
       condition: { field: 'overlay_gradient', value: true } },
     { key: 'overlay_direction', label: t('Direzione sfumatura'), type: 'select', options: [
       { value: 'bottom', label: t('Dal basso') },
@@ -441,7 +423,7 @@ export default {
       { value: 'left', label: t('Da sinistra') },
       { value: 'right', label: t('Da destra') },
     ], condition: { field: 'overlay_gradient', value: true } },
-    { key: 'overlay_height', label: t('Altezza gradiente (%)'), type: 'range', min: 20, max: 100, step: 5,
+    { key: 'overlay_height', label: t('Altezza gradiente'), type: 'range', min: 20, max: 100, step: 5,
       condition: { field: 'overlay_gradient', value: true } },
 
     // ═══════════════════════════════════════════
@@ -449,12 +431,12 @@ export default {
     // ═══════════════════════════════════════════
     { type: 'separator', label: t('Stile testo') },
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 40 },
-    { key: 'title_size', label: t('Dimensione titolo (em)'), type: 'range', min: 0.7, max: 2.5, step: 0.05 },
-    { key: 'excerpt_size', label: t('Dimensione estratto (em)'), type: 'range', min: 0.7, max: 1.5, step: 0.05 },
+    { key: 'title_size', label: t('Dimensione titolo'), type: 'range', min: 0.7, max: 2.5, step: 0.05 },
+    { key: 'excerpt_size', label: t('Dimensione estratto'), type: 'range', min: 0.7, max: 1.5, step: 0.05 },
     { key: 'tag_bg', label: t('Sfondo pill dotazioni'), type: 'color' },
     { key: 'tag_color', label: t('Testo pill dotazioni'), type: 'color' },
     { key: 'body_bg', label: t('Sfondo area testo'), type: 'color' },
-    { key: 'body_bg_opacity', label: t('Opacita sfondo (%)'), type: 'range', min: 0, max: 100, step: 5,
+    { key: 'body_bg_opacity', label: t('Opacita sfondo'), type: 'range', min: 0, max: 100, step: 5,
       condition: { field: 'body_bg', operator: '!=', value: '' } },
     ...borderFields(),
   ],

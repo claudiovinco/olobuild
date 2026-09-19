@@ -69,7 +69,7 @@ export default {
   styleFields: [
     { type: 'separator', label: t('Layout griglia') },
     { key: 'columns',   label: t('Numero colonne'),  type: 'range', min: 1, max: 4, step: 1, responsive: true },
-    { key: 'items_gap', label: t('Gap (px)'),        type: 'range', min: 8, max: 60, step: 2, responsive: true },
+    { key: 'items_gap', label: t('Gap'),        type: 'range', min: 8, max: 60, step: 2, responsive: true },
 
     { type: 'separator', label: t('Media') },
     { key: 'media_aspect', label: t('Aspect ratio'), type: 'select', options: [
@@ -92,7 +92,7 @@ export default {
     { type: 'separator', label: t('Titolo') },
     { key: 'title_font_family', label: t('Famiglia titolo'), type: 'font-family' },
     { key: 'title_color',  label: t('Colore'),         type: 'color' },
-    { key: 'title_size',   label: t('Dimensione (px)'), type: 'range', min: 14, max: 48, step: 1 },
+    { key: 'title_size',   label: t('Dimensione'), type: 'range', min: 14, max: 48, step: 1 },
     { key: 'title_weight', label: t('Peso'), type: 'select', options: [
       { value: '400', label: t('400 — Regular') },
       { value: '500', label: t('500 — Medium') },
@@ -103,8 +103,8 @@ export default {
     { type: 'separator', label: t('Meta e descrizione') },
     { key: 'mono_font_family', label: t('Font meta (vuoto = mono del tema)'), type: 'font-family' },
     { key: 'meta_color', label: t('Colore meta'), type: 'color' },
-    { key: 'meta_size',  label: t('Meta (px)'),   type: 'range', min: 10, max: 18, step: 1 },
+    { key: 'meta_size',  label: t('Meta'),   type: 'range', min: 10, max: 18, step: 1 },
     { key: 'desc_color', label: t('Colore descrizione'), type: 'color' },
-    { key: 'desc_size',  label: t('Descrizione (px)'),   type: 'range', min: 12, max: 20, step: 1 },
+    { key: 'desc_size',  label: t('Descrizione'),   type: 'range', min: 12, max: 20, step: 1 },
   ],
 };

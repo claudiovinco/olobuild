@@ -59,7 +59,7 @@ export default {
   styleFields: [
     { type: 'separator', label: t('Layout') },
     { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1, responsive: true },
-    { key: 'gap', label: t('Gap colonne (px)'), type: 'range', min: 0, max: 80, step: 2 },
+    { key: 'gap', label: t('Gap colonne'), type: 'range', min: 0, max: 80, step: 2 },
     { key: 'align', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
@@ -76,7 +76,7 @@ export default {
     { key: 'number_color', label: t('Colore numero'), type: 'color' },
     { key: 'number_bg', label: t('Sfondo/bordo cerchio'), type: 'color',
       condition: { field: 'number_style', operator: '!=', value: 'plain' } },
-    { key: 'number_size', label: t('Dimensione (px)'), type: 'range', min: 12, max: 96, step: 2 },
+    { key: 'number_size', label: t('Dimensione'), type: 'range', min: 12, max: 96, step: 2 },
     { key: 'number_font', label: t('Famiglia'), type: 'font-family' },
     { key: 'number_weight', label: t('Peso'), type: 'select', options: [
       { value: '300', label: '300' }, { value: '400', label: '400' }, { value: '500', label: '500' },
@@ -85,7 +85,7 @@ export default {
 
     { type: 'separator', label: t('Titolo') },
     { key: 'title_color', label: t('Colore titolo'), type: 'color' },
-    { key: 'title_size', label: t('Dimensione (px)'), type: 'range', min: 14, max: 48, step: 1 },
+    { key: 'title_size', label: t('Dimensione'), type: 'range', min: 14, max: 48, step: 1 },
     { key: 'title_font', label: t('Famiglia'), type: 'font-family' },
     { key: 'title_weight', label: t('Peso'), type: 'select', options: [
       { value: '400', label: '400' }, { value: '500', label: '500' }, { value: '600', label: '600' },
@@ -94,12 +94,12 @@ export default {
 
     { type: 'separator', label: t('Descrizione') },
     { key: 'desc_color', label: t('Colore'), type: 'color' },
-    { key: 'desc_size', label: t('Dimensione (px)'), type: 'range', min: 11, max: 22, step: 1 },
+    { key: 'desc_size', label: t('Dimensione'), type: 'range', min: 11, max: 22, step: 1 },
 
     { type: 'separator', label: t('Card (opzionale)') },
     { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
     { key: 'card_border', label: t('Bordo card'), type: 'border', legacyWidth: 1 },
-    { key: 'card_radius', label: t('Border radius'), type: 'border-radius' },
+    { key: 'card_radius', label: t('Raggio'), type: 'border-radius' },
     { key: 'card_padding', label: t('Padding card (px)'), type: 'spacing', min: 0, max: 80 },
   ],
 };

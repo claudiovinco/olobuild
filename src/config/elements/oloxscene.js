@@ -138,7 +138,7 @@ export default {
       newItemDefaults: { lc: 'EN', w: 100, pc: '' },
       itemFields: [
         { key: 'lc', label: t('Etichetta'), type: 'text' },
-        { key: 'w', label: t('Barra (%)'), type: 'number' },
+        { key: 'w', label: t('Barra'), type: 'number' },
         { key: 'pc', label: t('Testo % (vuoto = auto)'), type: 'text' },
       ],
       condition: { field: 'scene', op: 'eq', value: 'hero-console' } },

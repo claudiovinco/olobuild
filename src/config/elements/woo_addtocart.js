@@ -85,7 +85,7 @@ export default {
       { value: 'large', label: t('Grande') },
     ]},
     { key: 'full_width', label: t('Larghezza piena'), type: 'toggle' },
-    withHover({ key: 'border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Colori') },
     withHover({ key: 'bg_color', label: t('Sfondo'), type: 'color' }, { hoverKey: 'hover_bg' }),

@@ -144,7 +144,7 @@ export default {
         { value: 'high',   label: t('Alta') },
       ],
       condition: { field: 'preset', op: 'in', value: ['liquid-glass','neon-cyber','brutalist-block','magnetic-liquid','sticker','retro-terminal','3d-tilt'] } },
-    { key: 'effect_speed', label: t('Velocità animazioni (ms)'), type: 'range',
+    { key: 'effect_speed', label: t('Velocità animazioni'), type: 'range',
       min: 0, max: 4000, step: 100,
       condition: { field: 'preset', op: 'in', value: ['neon-cyber','magnetic-liquid','retro-terminal','3d-tilt'] } },
 
@@ -165,7 +165,7 @@ export default {
       { value: '3/4', label: t('3:4 Verticale') },
       { value: '2/3', label: t('2:3 Verticale') },
     ], condition: { field: 'media_type', op: 'neq', value: 'none' } },
-    { key: 'image_height', label: t('Altezza fissa (px)'), type: 'range', min: 0, max: 600, step: 10,
+    { key: 'image_height', label: t('Altezza fissa'), type: 'range', min: 0, max: 600, step: 10,
       description: t('0 = automatica'),
       condition: { field: 'media_type', op: 'neq', value: 'none' } },
     { key: 'image_fit', label: t('Adattamento'), type: 'select', options: [
@@ -178,10 +178,10 @@ export default {
       condition: { field: 'media_type', op: 'neq', value: 'none' } },
     { key: 'image_zoom', label: t('Zoom al hover'), type: 'toggle',
       condition: { field: 'media_type', op: 'neq', value: 'none' } },
-    { key: 'media_padding', label: t('Spazio attorno al media (px)'), type: 'spacing', max: 60,
+    { key: 'media_padding', label: t('Padding attorno al media (px)'), type: 'spacing', max: 60,
       description: t('Aggiunge uno spazio bianco attorno al media'),
       condition: { field: 'media_type', op: 'neq', value: 'none' } },
-    withHover({ key: 'border_radius', label: t('Border radius media'), type: 'border-radius',
+    withHover({ key: 'border_radius', label: t('Raggio media'), type: 'border-radius',
       condition: { field: 'media_type', op: 'neq', value: 'none' } }),
 
     { type: 'separator', label: t('Tipografia') },
@@ -225,8 +225,8 @@ export default {
     },
 
     { type: 'separator', label: t('Stile card') },
-    { key: 'card_padding', label: t('Padding interno'), type: 'spacing', max: 60 },
-    withHover({ key: 'card_radius', label: t('Border radius card (px)'), type: 'border-radius'}),
+    { key: 'card_padding', label: t('Padding'), type: 'spacing', max: 60 },
+    withHover({ key: 'card_radius', label: t('Raggio card (px)'), type: 'border-radius'}),
     ...shadowField,
     ...wowEffectsFields(),
     ...borderFields(),

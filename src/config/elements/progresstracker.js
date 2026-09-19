@@ -103,8 +103,8 @@ export default {
     },
 
     { type: 'separator', label: t('Dimensioni') },
-    { key: 'circle_size', label: t('Dimensione cerchio (px)'), type: 'range', min: 24, max: 60, step: 2 },
-    { key: 'gap', label: t('Gap aggiuntivo (px)'), type: 'range', min: 0, max: 40, step: 4 },
+    { key: 'circle_size', label: t('Dimensione cerchio'), type: 'range', min: 24, max: 60, step: 2 },
+    { key: 'gap', label: t('Gap aggiuntivo'), type: 'range', min: 0, max: 40, step: 4 },
 
     { type: 'separator', label: t('Connettore') },
     { key: 'connector_style', label: t('Stile connettore'), type: 'select', options: [

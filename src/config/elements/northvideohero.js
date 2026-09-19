@@ -108,7 +108,7 @@ export default {
     { key: 'bg_fixed_image', label: t('Immagine sfondo fisso'), type: 'media',
       description: t('Layer con background-attachment:fixed mascherato in basso — es. erba aerea.') },
     focalField('bg_fixed_image', { condition: { field: 'bg_fixed_image', op: 'neq', value: '' } }),
-    { key: 'bg_fixed_from', label: t('Inizio comparsa (%)'), type: 'range', min: 0, max: 100, step: 1,
+    { key: 'bg_fixed_from', label: t('Inizio comparsa'), type: 'range', min: 0, max: 100, step: 1,
       condition: { field: 'bg_fixed_image', op: 'neq', value: '' } },
 
     { type: 'separator', label: t('Colori — superfici') },
@@ -124,9 +124,9 @@ export default {
     { key: 'crest_color', label: t('Colore crest'), type: 'color' },
 
     { type: 'separator', label: t('Layout') },
-    { key: 'headline_max', label: t('Larghezza max titolo (px)'), type: 'range', min: 480, max: 1600, step: 20 },
+    { key: 'headline_max', label: t('Larghezza max titolo'), type: 'range', min: 480, max: 1600, step: 20 },
     { key: 'content_padding', label: t('Padding contenuto'), type: 'spacing', max: 240 },
-    { key: 'frame_radius', label: t('Angoli cornice mockup'), type: 'border-radius' },
+    { key: 'frame_radius', label: t('Raggio cornice mockup'), type: 'border-radius' },
 
     { type: 'separator', label: t('Sfondo') },
     { key: 'bg', label: t('Sfondo completo'), type: 'background', showParallax: false },

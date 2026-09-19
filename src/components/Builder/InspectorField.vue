@@ -27,8 +27,8 @@
            1–100 non occupa più una riga intera. Lo slider compare nel popover al
            focus (NumberScrubber). Escluso per hoverable o field.layout==='block'. -->
       <div v-if="renderInline" :class="inlineFill ? 'olo-field-inline-fill' : 'olo-field-inline'">
-        <label class="olo-fi-label" :title="t(field.label)">
-          <span class="olo-fi-text">{{ t(field.label) }}</span>
+        <label class="olo-fi-label" :title="etichetta.testo">
+          <span class="olo-fi-text">{{ etichetta.testo }}</span>
           <span
             v-if="field.responsive && respBp !== 'desktop'"
             class="mb-text-[9px] mb-bg-primary-700 mb-text-primary-200 mb-px-1.5 mb-py-0.5 mb-rounded mb-font-medium mb-ml-1"
@@ -44,6 +44,7 @@
             :min="field.min || 0"
             :max="field.max || 100"
             :step="field.step || 1"
+            :unit="unitaCampo"
             :defaultValue="fieldDefaultValue"
             :placeholder="field.responsive && respBp !== 'desktop' ? t('Eredita') : (field.placeholder || '')"
             @update:modelValue="onFieldUpdate($event)"
@@ -59,6 +60,7 @@
             :min="field.min ?? null"
             :max="field.max ?? null"
             :step="field.step ?? 1"
+            :unit="unitaCampo"
             :defaultValue="fieldDefaultValue"
             :placeholder="field.responsive && respBp !== 'desktop' ? t('Eredita') : (field.placeholder || '')"
             emitAs="string"
@@ -130,7 +132,7 @@
       <template v-if="field.responsive || field.hoverable">
         <div class="mb-flex mb-items-center mb-justify-between mb-mb-1">
           <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400">
-            {{ t(field.label) }}
+            {{ etichetta.testo }}
           </label>
           <div class="mb-flex mb-items-center mb-gap-1">
             <!-- Toggle Normale/Hover (sostituisce la vecchia icona "occhio"). Pilota la
@@ -168,7 +170,7 @@
         </div>
       </template>
       <label v-else-if="field.type !== 'typography' && field.type !== 'content-popup' && !field.reveal" class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">
-        {{ t(field.label) }}
+        {{ etichetta.testo }}
       </label>
 
       <FieldToggle
@@ -197,6 +199,7 @@
         :min="field.min || 0"
         :max="field.max || 100"
         :step="field.step || 1"
+        :unit="unitaCampo"
         :defaultValue="fieldDefaultValue"
         :placeholder="field.responsive && respBp !== 'desktop' ? t('Eredita') : (field.placeholder || '')"
         @update:modelValue="onFieldUpdate($event)"
@@ -587,6 +590,7 @@ import DynamicFieldToggle from './DynamicFieldToggle.vue';
 import { useTilesStore } from '@/stores/tiles';
 import { useStylesStore } from '@/stores/styles';
 import { seedFromLegacy, legacyMirror, seedBorderFromColor } from '@/config/fieldLegacyBridge';
+import { staccaUnita } from '@/utils/fieldLabel';
 import { t } from '@/i18n';
 
 import FieldEditor from './fields/FieldEditor.vue';
@@ -1042,11 +1046,17 @@ const hasNonDefaultValue = computed(() => {
   return def == null ? (v !== 'center center') : JSON.stringify(v) !== JSON.stringify(def);
 });
 
+// L'etichetta, già tradotta, meno l'unità di misura: quella va mostrata DENTRO
+// il controllo (la valbox di NumberScrubber), non scritta a mano nel nome del
+// campo. Vale solo per i controlli che sanno mostrarla — vedi utils/fieldLabel.
+const etichetta = computed(() => staccaUnita(t(props.field.label), props.field.type));
+const unitaCampo = computed(() => props.field.unit || etichetta.value.unita || '');
+
 const fieldProps = computed(() => {
   const base = { modelValue: effectiveValue.value };
   switch (props.field.type) {
     case 'select': return { ...base, options: resolvedOptions.value, ui: props.field.ui || 'auto' };
-    case 'range': return { ...base, min: props.field.min || 0, max: props.field.max || 100, step: props.field.step || 1, defaultValue: fieldDefaultValue.value };
+    case 'range': return { ...base, min: props.field.min || 0, max: props.field.max || 100, step: props.field.step || 1, defaultValue: fieldDefaultValue.value, unit: unitaCampo.value };
     case 'spacing': return { ...base, min: props.field.min ?? 0, max: props.field.max ?? 200, defaultValue: fieldDefaultValue.value };
     case 'object-position': return { ...base, imageSrc: objectPositionContext.value.imageSrc, frameRatio: objectPositionContext.value.frameRatio, objectFit: objectPositionContext.value.objectFit };
     case 'media': return { ...base, accept: mediaAccept.value };

@@ -174,19 +174,19 @@ export default {
 
     { type: 'separator', label: t('Forma') },
     withHover(
-      { key: 'border_radius', label: t('Border Radius'), type: 'border-radius' },
+      { key: 'border_radius', label: t('Raggio'), type: 'border-radius' },
       { hoverKey: 'hover_border_radius', hoverDurationKey: 'hover_radius_duration' }
     ),
 
     ...textEffectsFields([ { value: 'caption', label: t('Solo Didascalia') } ]),
 
     { type: 'separator', label: t('Filtri CSS') },
-    withHover({ key: 'filter_blur',       label: t('Sfocatura (px)'),       type: 'range', min: 0, max: 20,  step: 1 }, { hoverKey: 'hover_filter_blur' }),
-    withHover({ key: 'filter_brightness', label: t('Luminosità (%)'),       type: 'range', min: 0, max: 200, step: 5 }, { hoverKey: 'hover_filter_brightness' }),
-    withHover({ key: 'filter_contrast',   label: t('Contrasto (%)'),        type: 'range', min: 0, max: 200, step: 5 }, { hoverKey: 'hover_filter_contrast' }),
-    withHover({ key: 'filter_saturate',   label: t('Saturazione (%)'),      type: 'range', min: 0, max: 200, step: 5 }, { hoverKey: 'hover_filter_saturate' }),
-    withHover({ key: 'filter_grayscale',  label: t('Scala di grigi (%)'),   type: 'range', min: 0, max: 100, step: 5 }, { hoverKey: 'hover_filter_grayscale' }),
-    withHover({ key: 'filter_sepia',      label: t('Seppia (%)'),           type: 'range', min: 0, max: 100, step: 5 }, { hoverKey: 'hover_filter_sepia' }),
+    withHover({ key: 'filter_blur',       label: t('Sfocatura'),       type: 'range', min: 0, max: 20,  step: 1 }, { hoverKey: 'hover_filter_blur' }),
+    withHover({ key: 'filter_brightness', label: t('Luminosità'),       type: 'range', min: 0, max: 200, step: 5 }, { hoverKey: 'hover_filter_brightness' }),
+    withHover({ key: 'filter_contrast',   label: t('Contrasto'),        type: 'range', min: 0, max: 200, step: 5 }, { hoverKey: 'hover_filter_contrast' }),
+    withHover({ key: 'filter_saturate',   label: t('Saturazione'),      type: 'range', min: 0, max: 200, step: 5 }, { hoverKey: 'hover_filter_saturate' }),
+    withHover({ key: 'filter_grayscale',  label: t('Scala di grigi'),   type: 'range', min: 0, max: 100, step: 5 }, { hoverKey: 'hover_filter_grayscale' }),
+    withHover({ key: 'filter_sepia',      label: t('Seppia'),           type: 'range', min: 0, max: 100, step: 5 }, { hoverKey: 'hover_filter_sepia' }),
 
     { type: 'separator', label: t('Animazione hover') },
     { key: 'hover_animation', label: t('Animazione hover'), type: 'select', options: [
@@ -207,11 +207,11 @@ export default {
       { value: 'mask',    label: t('Maschera (scurisce attorno)') },
       { value: 'lighten', label: t('Luce (schiarisce al centro)') },
     ], condition: { field: 'spotlight_enabled', op: 'eq', value: true } },
-    { key: 'spotlight_radius', label: t('Raggio (px)'), type: 'range', min: 80, max: 600, step: 10, responsive: true,
+    { key: 'spotlight_radius', label: t('Raggio'), type: 'range', min: 80, max: 600, step: 10, responsive: true,
       condition: { field: 'spotlight_enabled', op: 'eq', value: true } },
-    { key: 'spotlight_intensity', label: t('Intensità (%)'), type: 'range', min: 0, max: 100, step: 5,
+    { key: 'spotlight_intensity', label: t('Intensità'), type: 'range', min: 0, max: 100, step: 5,
       condition: { field: 'spotlight_enabled', op: 'eq', value: true } },
-    { key: 'spotlight_falloff', label: t('Sfumatura (%)'), type: 'range', min: 0, max: 100, step: 5,
+    { key: 'spotlight_falloff', label: t('Sfumatura'), type: 'range', min: 0, max: 100, step: 5,
       description: t('Quanto è morbido il bordo dell\'alone: 0 = netto, 100 = molto graduale.'),
       condition: { field: 'spotlight_enabled', op: 'eq', value: true } },
     { key: 'spotlight_tint', label: t('Tinta luce'), type: 'color',

@@ -112,7 +112,7 @@ export default {
       { value: '3/4', label: t('3:4 Verticale') },
       { value: '2/3', label: t('2:3 Verticale') },
     ], description: t('Auto: usa altezza fissa. Altrimenti la larghezza determina l\'altezza') },
-    { key: 'image_height', label: t('Altezza fissa (px)'), type: 'range', min: 150, max: 900, step: 10,
+    { key: 'image_height', label: t('Altezza fissa'), type: 'range', min: 150, max: 900, step: 10,
       condition: { field: 'image_ratio', op: 'eq', value: 'auto' } },
     { key: 'image_fit', label: t('Adattamento'), type: 'select', options: [
       { value: 'cover', label: t('Copri (riempie e taglia)') },
@@ -210,7 +210,7 @@ export default {
         { value: 'high',   label: t('Alta') },
       ],
       condition: { field: 'preset', op: 'in', value: ['liquid-glass','neon-cyber','brutalist-block','magnetic-liquid','sticker','retro-terminal','3d-tilt'] } },
-    { key: 'effect_speed', label: t('Velocità animazioni (ms)'), type: 'range',
+    { key: 'effect_speed', label: t('Velocità animazioni'), type: 'range',
       min: 0, max: 4000, step: 100,
       description: t('0 = default del preset.'),
       condition: { field: 'preset', op: 'in', value: ['neon-cyber','magnetic-liquid','retro-terminal','3d-tilt'] } },
@@ -222,7 +222,7 @@ export default {
     ]),
 
     { type: 'separator', label: t('Gap tra slide') },
-    { key: 'gap', label: t('Gap tra slide'), type: 'select', options: [
+    { key: 'gap', label: t('Gap slide'), type: 'select', options: [
       { value: 'collapse', label: t('Collassato') },
       { value: 'small', label: t('Piccolo') },
       { value: 'default', label: t('Predefinito') },
@@ -247,7 +247,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Stile slide') },
-    { key: 'slide_radius', label: t('Arrotondamento slide (px)'), type: 'border-radius' },
+    { key: 'slide_radius', label: t('Raggio slide (px)'), type: 'border-radius' },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
     { key: 'overlay_gradient', label: t('Overlay gradiente (alto→basso)'), type: 'toggle' },
 

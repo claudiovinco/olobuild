@@ -35,7 +35,7 @@ export default {
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
     { type: 'separator', label: t('Spaziatura') },
-    { key: 'gap', label: t('Spaziatura (px)'), type: 'range', min: 0, max: 48, step: 4 },
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4 },
     { key: 'vertical_align', label: t('Allineamento verticale'), type: 'select', options: [
       { value: 'stretch', label: t('Stretch') },
       { value: 'start', label: t('Alto') },

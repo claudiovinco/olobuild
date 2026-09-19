@@ -198,7 +198,7 @@ export default {
     },
 
     { type: 'separator', label: t('Aspetto modale') },
-    { key: 'modal_max_width', label: t('Larghezza max (px)'), type: 'range', min: 300, max: 900, step: 10 },
+    { key: 'modal_max_width', label: t('Larghezza max'), type: 'range', min: 300, max: 900, step: 10 },
     { key: 'modal_bg_color', label: t('Sfondo card'), type: 'color' },
     { key: 'modal_shadow', label: t('Ombra'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
@@ -207,7 +207,7 @@ export default {
       { value: 'lg', label: t('Grande') },
       { value: 'xl', label: t('Extra grande') },
     ]},
-    withHover({ key: 'modal_radius', label: t('Bordo arrotondato'), type: 'border-radius' }),
+    withHover({ key: 'modal_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'modal_border', label: t('Bordo modale'), type: 'border',
       legacyKeys: { width: 'modal_border_width', color: 'modal_border_color' } },
 
@@ -215,7 +215,7 @@ export default {
     { key: 'modal_overlay', label: t('Oscuramento sfondo'), type: 'range', min: 0, max: 100, step: 5 },
     { key: 'modal_close_button', label: t('Pulsante chiudi (X)'), type: 'toggle' },
     { key: 'popup_close_overlay', label: t('Chiudi su click overlay'), type: 'toggle' },
-    { key: 'popup_overlay_blur', label: t('Sfocatura overlay (px)'), type: 'range', min: 0, max: 20, step: 1 },
+    { key: 'popup_overlay_blur', label: t('Sfocatura overlay'), type: 'range', min: 0, max: 20, step: 1 },
     { key: 'popup_animation', label: t('Animazione apertura'), type: 'select', options: [
       { value: 'fade', label: t('Fade') },
       { value: 'slide-up', label: t('Scorrimento su') },
@@ -225,8 +225,8 @@ export default {
     ]},
 
     { type: 'separator', label: t('Contenitore') },
-    { key: 'tile_padding', type: 'spacing', label: t('Spaziatura interna') },
-    withHover({ key: 'border_radius', type: 'border-radius', label: t('Raggio bordo') }),
+    { key: 'tile_padding', type: 'spacing', label: t('Padding') },
+    withHover({ key: 'border_radius', type: 'border-radius', label: t('Raggio') }),
     ...borderFields(),
   ],
 };

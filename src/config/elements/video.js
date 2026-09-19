@@ -104,10 +104,10 @@ export default {
       { value: '1:1', label: '1:1' },
       { value: 'cover', label: t('Cover (altezza fissa)') },
     ]},
-    { key: 'cover_height', label: t('Altezza (px)'), type: 'range', min: 100, max: 1200, step: 10 },
+    { key: 'cover_height', label: t('Altezza'), type: 'range', min: 100, max: 1200, step: 10 },
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { src: 'poster_image', ratio: 'display_mode', fit: 'cover' } },
-    withHover({ key: 'border_radius', label: t('Raggio bordi (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
 
     ...textEffectsFields([
       { value: 'overlay_text', label: t('Solo Testo overlay') },
@@ -116,13 +116,13 @@ export default {
     ]),
 
     { type: 'separator', label: t('Icona play — Aspetto') },
-    { key: 'play_icon_size', label: t('Dimensione icona play (px)'), type: 'range', min: 40, max: 160, step: 10 },
+    { key: 'play_icon_size', label: t('Dimensione icona play'), type: 'range', min: 40, max: 160, step: 10 },
     { key: 'play_icon_color', label: t('Colore icona play'), type: 'color' },
 
     { type: 'separator', label: t('Overlay — Aspetto') },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
-    { key: 'overlay_opacity', label: t('Opacità overlay (%)'), type: 'range', min: 0, max: 100, step: 5 },
-    { key: 'overlay_text_size', label: t('Dimensione testo (px)'), type: 'range', min: 12, max: 120, step: 1,
+    { key: 'overlay_opacity', label: t('Opacità overlay'), type: 'range', min: 0, max: 100, step: 5 },
+    { key: 'overlay_text_size', label: t('Dimensione testo'), type: 'range', min: 12, max: 120, step: 1,
       condition: { field: 'overlay_text', op: 'notEmpty' } },
     { key: 'overlay_text_weight', label: t('Peso testo'), type: 'select', options: [
       { value: '300', label: t('Light (300)') },

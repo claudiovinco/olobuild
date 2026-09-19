@@ -31,7 +31,7 @@ export default {
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
     { type: 'separator', label: t('Comportamento') },
-    { key: 'offset', label: t('Offset per header fisso (px)'), type: 'range', min: 0, max: 200, step: 5 },
+    { key: 'offset', label: t('Offset per header fisso'), type: 'range', min: 0, max: 200, step: 5 },
 
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },

@@ -104,7 +104,7 @@ export default {
       { value: 'right', label: t('Destra') },
     ]},
     { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
-    withHover({ key: 'border_radius', label: t('Raggio bordo'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'full_width', label: t('Larghezza piena'), type: 'toggle' },
     ...borderFields(),
   ],

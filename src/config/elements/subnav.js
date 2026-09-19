@@ -129,9 +129,9 @@ export default {
       { value: 'right', label: t('Destra') },
       { value: 'stretch', label: t('Distribuito') },
     ]},
-    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 32, step: 2 },
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 32, step: 2 },
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 24 },
-    withHover({ key: 'border_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Voci'),

@@ -346,7 +346,7 @@ export default {
     // ── Stile marker (single mode) ──
     { type: 'separator', label: t('Stile marker'), condition: { field: 'mode', value: 'single' } },
     { key: 'marker_color', label: t('Colore marker'), type: 'color', condition: { field: 'mode', value: 'single' } },
-    { key: 'marker_size', label: t('Dimensione marker (px)'), type: 'range', min: 20, max: 64, step: 2, condition: { field: 'mode', value: 'single' } },
+    { key: 'marker_size', label: t('Dimensione marker'), type: 'range', min: 20, max: 64, step: 2, condition: { field: 'mode', value: 'single' } },
 
     // ── Stile mappa (single mode) ──
     { type: 'separator', label: t('Stile mappa'), condition: { field: 'mode', value: 'single' } },
@@ -397,12 +397,12 @@ export default {
 
     // ── Stile popup (services) ──
     { type: 'separator', label: t('Stile popup'), condition: { field: 'mode', value: 'services' } },
-    { key: 'svc_popup_max_width', label: t('Larghezza max (px)'), type: 'range', min: 200, max: 500, step: 10, condition: { field: 'mode', value: 'services' } },
-    { key: 'svc_popup_img_height', label: t('Altezza immagine (px)'), type: 'range', min: 80, max: 300, step: 10, condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_max_width', label: t('Larghezza max'), type: 'range', min: 200, max: 500, step: 10, condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_img_height', label: t('Altezza immagine'), type: 'range', min: 80, max: 300, step: 10, condition: { field: 'mode', value: 'services' } },
     { key: 'svc_popup_btn_color', label: t('Colore pulsante'), type: 'color', condition: { field: 'mode', value: 'services' } },
     { key: 'svc_popup_bg', label: t('Sfondo'), type: 'color', condition: { field: 'mode', value: 'services' } },
     { key: 'svc_popup_color', label: t('Colore testo'), type: 'color', condition: { field: 'mode', value: 'services' } },
-    withHover({ key: 'svc_popup_radius', label: t('Border radius'), type: 'border-radius', condition: { field: 'mode', value: 'services' } }),
+    withHover({ key: 'svc_popup_radius', label: t('Raggio'), type: 'border-radius', condition: { field: 'mode', value: 'services' } }),
 
     // ══════ LAYOUT SPLIT-VIEW (locations + services) ══════
     // Il layout split-view ha mappa su un lato e pannello risultati (filtri + lista) dall'altro.
@@ -420,7 +420,7 @@ export default {
 
     { type: 'separator', label: t('Card risultati'), condition: { field: 'mode', value: 'locations' } },
     { key: 'card_max_height', label: t('Altezza max card (px, 0 = auto)'), type: 'range', min: 0, max: 400, step: 10, condition: { field: 'mode', value: 'locations' } },
-    withHover({ key: 'card_border_radius', label: t('Raggio angoli card'), type: 'border-radius', condition: { field: 'mode', value: 'locations' } }),
+    withHover({ key: 'card_border_radius', label: t('Raggio card'), type: 'border-radius', condition: { field: 'mode', value: 'locations' } }),
 
     { type: 'separator', label: t('Pulsante ricerca'), condition: { field: 'mode', value: 'locations' } },
     { key: 'btn_bg',    label: t('Colore sfondo'),   type: 'color', condition: { field: 'mode', value: 'locations' } },
@@ -439,7 +439,7 @@ export default {
 
     { type: 'separator', label: t('Card risultati'), condition: { field: 'mode', value: 'services' } },
     { key: 'card_max_height', label: t('Altezza max card (px, 0 = auto)'), type: 'range', min: 0, max: 400, step: 10, condition: { field: 'mode', value: 'services' } },
-    withHover({ key: 'card_border_radius', label: t('Raggio angoli card'), type: 'border-radius', condition: { field: 'mode', value: 'services' } }),
+    withHover({ key: 'card_border_radius', label: t('Raggio card'), type: 'border-radius', condition: { field: 'mode', value: 'services' } }),
 
     { type: 'separator', label: t('Pulsante ricerca'), condition: { field: 'mode', value: 'services' } },
     { key: 'btn_bg',    label: t('Colore sfondo'),   type: 'color', condition: { field: 'mode', value: 'services' } },
@@ -447,8 +447,8 @@ export default {
 
     // ── Condivisi ──
     { type: 'separator', label: t('Dimensioni') },
-    { key: 'height', label: t('Altezza (px)'), type: 'range', min: 150, max: 800, step: 10 },
-    withHover({ key: 'border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
+    { key: 'height', label: t('Altezza'), type: 'range', min: 150, max: 800, step: 10 },
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     ...shadowField,
     ...borderFields(),
   ],

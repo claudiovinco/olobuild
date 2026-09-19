@@ -75,15 +75,15 @@ export default {
 
   styleFields: [
     { type: 'separator', label: t('Tessere') },
-    { key: 'card_width', label: t('Larghezza tessera (px)'), type: 'range', min: 180, max: 380, step: 10 },
+    { key: 'card_width', label: t('Larghezza tessera'), type: 'range', min: 180, max: 380, step: 10 },
     { key: 'card_aspect', label: t('Proporzioni'), type: 'select', options: [
       { value: '4/5', label: '4:5' },
       { value: '3/4', label: '3:4' },
       { value: '1/1', label: '1:1' },
       { value: '3/2', label: '3:2' },
     ]},
-    { key: 'gap', label: t('Spazio tra tessere (px)'), type: 'range', min: 8, max: 32, step: 2 },
-    { key: 'radius', label: t('Raggio bordo (px)'), type: 'border-radius' },
+    { key: 'gap', label: t('Gap tessere'), type: 'range', min: 8, max: 32, step: 2 },
+    { key: 'radius', label: t('Raggio (px)'), type: 'border-radius' },
 
     { type: 'separator', label: t('Spaziatura') },
     { key: 'cap_padding', label: t('Padding didascalia (px)'), type: 'spacing', max: 64 },

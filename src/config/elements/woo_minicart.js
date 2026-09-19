@@ -81,8 +81,8 @@ export default {
     },
 
     { type: 'separator', label: t('Dimensioni') },
-    { key: 'icon_size', label: t('Dimensione icona (px)'), type: 'range', min: 16, max: 48, step: 2 },
-    { key: 'dropdown_width', label: t('Larghezza dropdown (px)'), type: 'range', min: 240, max: 480, step: 20,
+    { key: 'icon_size', label: t('Dimensione icona'), type: 'range', min: 16, max: 48, step: 2 },
+    { key: 'dropdown_width', label: t('Larghezza dropdown'), type: 'range', min: 240, max: 480, step: 20,
       condition: { field: 'dropdown', value: true } },
 
     { type: 'separator', label: t('Colori') },

@@ -93,14 +93,14 @@ export default {
 
     { type: 'separator', label: t('Immagine principale') },
     { key: 'main_height', label: t('Altezza principale'), type: 'text', placeholder: t('es. 500px, 60vh') },
-    withHover({ key: 'border_radius', label: t('Raggio bordi (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Miniature') },
-    { key: 'thumbnail_size', label: t('Dimensione miniature (px)'), type: 'range', min: 40, max: 150, step: 5 },
-    { key: 'thumbnail_gap', label: t('Gap miniature (px)'), type: 'range', min: 0, max: 24, step: 2 },
+    { key: 'thumbnail_size', label: t('Dimensione miniature'), type: 'range', min: 40, max: 150, step: 5 },
+    { key: 'thumbnail_gap', label: t('Gap miniature'), type: 'range', min: 0, max: 24, step: 2 },
 
     { type: 'separator', label: t('Slider') },
-    { key: 'autoplay_speed', label: t('Velocita autoplay (ms)'), type: 'range', min: 1000, max: 10000, step: 500 },
+    { key: 'autoplay_speed', label: t('Velocita autoplay'), type: 'range', min: 1000, max: 10000, step: 500 },
 
     { type: 'separator', label: t('Colori') },
     { key: 'main_bg', label: t('Sfondo immagine'), type: 'color' },

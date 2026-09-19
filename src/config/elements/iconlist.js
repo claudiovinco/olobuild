@@ -92,7 +92,7 @@ export default {
 
     { type: 'separator', label: t('Stile icone') },
     { key: 'icon_color', label: t('Colore icone'), type: 'color' },
-    { key: 'icon_size', label: t('Dimensione icone (px)'), type: 'range', min: 12, max: 48, step: 2 },
+    { key: 'icon_size', label: t('Dimensione icone'), type: 'range', min: 12, max: 48, step: 2 },
     { key: 'icon_shape', label: t('Sfondo icona'), type: 'select', options: [
       { value: 'none', label: t('Nessuno') },
       { value: 'circle', label: t('Cerchio') },
@@ -111,7 +111,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Spaziatura & separatore') },
-    { key: 'gap', label: t('Spazio tra voci (px)'), type: 'range', min: 4, max: 32, step: 2 },
+    { key: 'gap', label: t('Gap voci'), type: 'range', min: 4, max: 32, step: 2 },
     { key: 'divider_color', label: t('Colore separatore'), type: 'color',
       condition: { field: 'divider', operator: '==', value: true } },
 

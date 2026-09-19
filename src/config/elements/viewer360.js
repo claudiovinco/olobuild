@@ -114,11 +114,11 @@ export default {
       condition: { field: 'mode', value: 'hdri' } },
     { key: 'default_pitch', label: t('Inclinazione verticale (°)'), type: 'range', min: -90, max: 90, step: 5,
       condition: { field: 'mode', value: 'hdri' } },
-    { key: 'default_zoom', label: t('Zoom iniziale (%)'), type: 'range', min: 10, max: 100, step: 5,
+    { key: 'default_zoom', label: t('Zoom iniziale'), type: 'range', min: 10, max: 100, step: 5,
       condition: { field: 'mode', value: 'hdri' } },
-    { key: 'min_zoom', label: t('Zoom minimo (%)'), type: 'range', min: 10, max: 50, step: 5,
+    { key: 'min_zoom', label: t('Zoom minimo'), type: 'range', min: 10, max: 50, step: 5,
       condition: { field: 'mode', value: 'hdri' } },
-    { key: 'max_zoom', label: t('Zoom massimo (%)'), type: 'range', min: 50, max: 120, step: 5,
+    { key: 'max_zoom', label: t('Zoom massimo'), type: 'range', min: 50, max: 120, step: 5,
       condition: { field: 'mode', value: 'hdri' } },
 
     // ── Didascalia (testo) ──
@@ -159,8 +159,8 @@ export default {
 
     // ── LAYOUT ──
     { type: 'separator', label: t('Layout') },
-    { key: 'height', label: t('Altezza (px)'), type: 'range', min: 200, max: 800, step: 10 },
-    withHover({ key: 'border_radius', label: t('Raggio bordi (px)'), type: 'border-radius' }),
+    { key: 'height', label: t('Altezza'), type: 'range', min: 200, max: 800, step: 10 },
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
 
     ...shadowField,
     ...borderFields(),

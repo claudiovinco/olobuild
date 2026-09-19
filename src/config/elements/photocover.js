@@ -94,8 +94,8 @@ export default {
       { value: '4/3', label: '4:3' },
       { value: '1/1', label: '1:1' },
     ] },
-    { key: 'min_height', label: t('Altezza minima (px)'), type: 'range', min: 0, max: 1000, step: 10 },
-    { key: 'frame_padding', label: t('Cornice — spessore base (px)'), type: 'range', min: 0, max: 120, step: 2,
+    { key: 'min_height', label: t('Altezza minima'), type: 'range', min: 0, max: 1000, step: 10 },
+    { key: 'frame_padding', label: t('Cornice — spessore base'), type: 'range', min: 0, max: 120, step: 2,
       description: t('Base del clamp responsive della cornice (lo = N, hi = N×2). Per i 4 lati fissi usa «Padding contenuto».') },
     { key: 'media_bg', label: t('Sfondo media'), type: 'color' },
 

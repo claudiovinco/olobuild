@@ -60,6 +60,21 @@ import { useTilesStore } from '@/stores/tiles';
 import TileBase from '@/components/Tiles/TileBase.vue';
 import { useBackgroundStyle } from '@/composables/useBackgroundStyle';
 import { getShadowValue, getDropShadowValue } from '@/composables/useShadowMap';
+
+// Gemello JS dell'elenco in trait-olobuild-renderer-css.php: le tile che montano
+// il controllo «Ombra» condiviso ma non lo disegnano nel loro renderer. Se i due
+// elenchi divergono, canvas e sito mostrano ombre diverse — vanno tenuti allineati.
+const OMBRA_SUL_WRAPPER = new Set([
+  'alert', 'animatedheading', 'audio', 'badge', 'breadcrumbs', 'chart', 'code', 'counter',
+  'desclist', 'gallery', 'headline', 'html', 'icon', 'iconlist', 'lightbox', 'linkinbio',
+  'livesearch', 'loginform', 'lottie', 'map', 'marquee', 'nav', 'offcanvas', 'overlay',
+  'pagetitlebar', 'popover', 'postnavigation', 'pricelist', 'pricing', 'progress',
+  'progresstracker', 'quotation', 'readingtime', 'search', 'shortcode', 'social', 'starrating',
+  'subnav', 'svganimator', 'table', 'templateembed', 'textmask', 'toc', 'totop',
+  'variablespecimen', 'viewer360', 'woo_cross_sells', 'woo_products', 'woo_product_bundle',
+  'woo_product_filter', 'woo_product_gallery_slider', 'woo_quickview', 'woo_recently_viewed',
+  'woo_wishlist',
+]);
 import { rv } from '@/composables/useResponsiveValue';
 import { useTileActions } from '@/composables/useTileActions';
 
@@ -280,6 +295,24 @@ const cellStyle = computed(() => {
     style.textTransform = `var(--olo-font-${typoPreset}-transform, none)`;
     style.lineHeight = `var(--olo-font-${typoPreset}-line-height, inherit)`;
     style.letterSpacing = `var(--olo-font-${typoPreset}-letter-spacing, normal)`;
+  }
+
+  // Ombra DELLA TILE — gemello canvas di render_element_node(). 54 tile montano
+  // il controllo «Ombra» condiviso senza disegnarlo da nessuna parte: per quelle
+  // la disegna il wrapper. Le altre se la rendono già sul pezzo giusto e qui non
+  // si toccano, altrimenti se ne vedrebbero due.
+  // La FORMA segue la stessa regola del PHP: box-shadow se c'è uno sfondo (il
+  // rettangolo è davvero lì), drop-shadow se il wrapper è trasparente, così
+  // l'ombra segue la sagoma visibile (la pillina di un badge, non il contenitore).
+  if (OMBRA_SUL_WRAPPER.has(props.tile.type) && set.shadow && set.shadow !== 'none') {
+    const conSfondo = !!(bgInlineStyle.value?.backgroundColor || hasBgImage.value);
+    if (conSfondo) {
+      const sv = getShadowValue(set);
+      if (sv && sv !== 'none') style.boxShadow = sv;
+    } else {
+      const ds = getDropShadowValue(set);
+      if (ds && ds !== 'none') style.filter = style.filter ? style.filter + ' ' + ds : ds;
+    }
   }
 
   // Entrance animation custom controls (CSS vars consumed by frontend.css rules)

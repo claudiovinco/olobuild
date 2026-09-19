@@ -152,7 +152,7 @@ export default {
         { key: 'color', label: t('Colore'), type: 'color' },
       ],
       condition: { field: 'media_mode', op: 'eq', value: 'olomap' } },
-    { key: 'map_duration', label: t('Durata ciclo camera (s)'), type: 'number', min: 4, max: 120,
+    { key: 'map_duration', label: t('Durata ciclo camera'), type: 'number', min: 4, max: 120,
       condition: { field: 'media_mode', op: 'eq', value: 'olomap' } },
 
     { type: 'separator', label: t('Movimento') },
@@ -162,9 +162,9 @@ export default {
 
   styleFields: [
     { type: 'separator', label: t('Titolo') },
-    { key: 'title_size_min', label: t('Dimensione min (px)'), type: 'number', min: 20, max: 160 },
-    { key: 'title_size_max', label: t('Dimensione max (px)'), type: 'number', min: 60, max: 320 },
-    { key: 'line2_stroke_width', label: t('Spessore contorno riga 2 (px)'), type: 'range', min: 0.5, max: 4, step: 0.1 },
+    { key: 'title_size_min', label: t('Dimensione min'), type: 'number', min: 20, max: 160 },
+    { key: 'title_size_max', label: t('Dimensione max'), type: 'number', min: 60, max: 320 },
+    { key: 'line2_stroke_width', label: t('Spessore contorno riga 2'), type: 'range', min: 0.5, max: 4, step: 0.1 },
 
     { type: 'separator', label: t('Colori') },
     { key: 'accent_color', label: t('Accento (mappa + CTA + riempimento)'), type: 'color',

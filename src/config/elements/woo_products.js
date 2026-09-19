@@ -153,7 +153,7 @@ export default {
     { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1 },
     { key: 'columns_tablet', label: t('Colonne tablet'), type: 'range', min: 1, max: 4, step: 1 },
     { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 2, step: 1 },
-    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 48, step: 4 },
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4 },
     { key: 'image_ratio', label: t('Proporzione immagine'), type: 'select', options: [
       { value: '1-1', label: t('1:1 Quadrato') },
       { value: '4-3', label: '4:3' },
@@ -171,7 +171,7 @@ export default {
       { value: 'zoom', label: t('Zoom') },
       { value: 'shadow', label: t('Ombra') },
     ]},
-    { key: 'carousel_speed', label: t('Velocità (ms)'), type: 'range', min: 1000, max: 10000, step: 500,
+    { key: 'carousel_speed', label: t('Velocità'), type: 'range', min: 1000, max: 10000, step: 500,
       condition: { field: 'layout', value: 'carousel' } },
 
     { type: 'separator', label: t('Colori') },

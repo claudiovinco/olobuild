@@ -89,8 +89,8 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'separator', label: t('Layout') },
-    { key: 'size', label: t('Dim. icona (px)'), type: 'range', min: 20, max: 60, step: 4 },
-    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 48, step: 4 },
+    { key: 'size', label: t('Dim. icona'), type: 'range', min: 20, max: 60, step: 4 },
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4 },
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },

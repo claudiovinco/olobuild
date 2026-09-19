@@ -13,6 +13,7 @@
     :step="step"
     :defaultValue="defaultValue"
     :placeholder="placeholder"
+    :unit="unit"
     emitAs="string"
     :sliderOnFocus="compact"
     @update:modelValue="$emit('update:modelValue', $event)"
@@ -29,6 +30,11 @@ defineProps({
   step: { type: [Number, String], default: 1 },
   defaultValue: { type: [String, Number, null], default: null },
   placeholder: { type: String, default: '' },
+  // Unità mostrata NELLA valbox, accanto al numero (px, %, ms…). È puramente
+  // visiva: non entra nel valore salvato. Prima non c'era, ed è il motivo per
+  // cui 880 etichette si portavano dietro un «(px)» scritto a mano — con la
+  // maiuscola, la parentesi e il numero di spazi decisi tile per tile.
+  unit: { type: String, default: '' },
   // true → valbox compatta + slider in popover (layout inline); false → slider inline classico
   compact: { type: Boolean, default: false },
 });

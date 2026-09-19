@@ -100,7 +100,7 @@ export default {
     { key: 'title_color', label: t('Colore titolo'), type: 'color' },
 
     { type: 'separator', label: t('Dimensioni') },
-    { key: 'indent', label: t('Indentazione sotto-livelli (px)'), type: 'range', min: 0, max: 40, step: 4 },
+    { key: 'indent', label: t('Indentazione sotto-livelli'), type: 'range', min: 0, max: 40, step: 4 },
 
     ...shadowField,
     ...borderFields(),

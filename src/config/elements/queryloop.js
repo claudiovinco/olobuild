@@ -266,7 +266,7 @@ export default {
     { type: 'separator', label: t('Layout — Aspetto') },
     { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1,
       condition: { field: 'layout', op: 'in', value: ['grid', 'masonry', 'bento', 'newspaper'] } },
-    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 80, step: 5 },
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 80, step: 5 },
     { key: 'image_ratio', label: t('Proporzione immagine'), type: 'select', options: [
       { value: '16:9', label: '16:9' },
       { value: '4:3', label: '4:3' },
@@ -329,12 +329,12 @@ export default {
     withHover({ key: 'bg_color', label: t('Sfondo card'), type: 'color' }, { hoverKey: 'hover_bg' }),
     { key: 'overlay_color', label: t('Colore overlay (magazine)'), type: 'color',
       condition: { field: 'layout', op: 'in', value: ['magazine-trio', 'magazine-hero', 'alternating'] } },
-    { key: 'overlay_opacity', label: t('Opacità overlay (%)'), type: 'range', min: 0, max: 100, step: 5,
+    { key: 'overlay_opacity', label: t('Opacità overlay'), type: 'range', min: 0, max: 100, step: 5,
       condition: { field: 'layout', op: 'in', value: ['magazine-trio', 'magazine-hero', 'alternating'] } },
 
     { type: 'separator', label: t('Container') },
     { key: 'container_padding', label: t('Padding container'), type: 'spacing', max: 60 },
-    { key: 'container_radius', label: t('Raggio bordi container'), type: 'border-radius' },
+    { key: 'container_radius', label: t('Raggio container'), type: 'border-radius' },
 
     ...shadowField,
     ...wowEffectsFields(),

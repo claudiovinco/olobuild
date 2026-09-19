@@ -360,7 +360,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Contenitore') },
-    { key: 'form_max_width', label: t('Larghezza massima (px)'), type: 'range', min: 0, max: 900, step: 10 },
+    { key: 'form_max_width', label: t('Larghezza massima'), type: 'range', min: 0, max: 900, step: 10 },
     { key: 'form_align', label: t('Allineamento form'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
@@ -390,7 +390,7 @@ export default {
       legacyKeys: { width: 'input_border_width', style: 'input_border_style', color: 'input_border_color' } },
     { key: 'input_bg', label: t('Sfondo input'), type: 'color' },
     { key: 'input_color', label: t('Colore testo input'), type: 'color' },
-    withHover({ key: 'input_radius', label: t('Raggio bordo input (px)'), type: 'border-radius' }),
+    withHover({ key: 'input_radius', label: t('Raggio input (px)'), type: 'border-radius' }),
     { key: 'input_size', label: t('Dimensione input'), type: 'select', options: [
       { value: 'small', label: t('Piccolo') },
       { value: 'default', label: t('Normale') },
@@ -402,12 +402,12 @@ export default {
     { key: 'input_focus_border', label: t('Colore bordo focus'), type: 'color' },
     { key: 'input_focus_shadow', label: t('Ombra focus'), type: 'toggle' },
     { key: 'input_placeholder_opacity', label: t('Opacità placeholder'), type: 'range', min: 0.2, max: 0.8, step: 0.05 },
-    { key: 'gap', label: t('Gap tra campi (px)'), type: 'range', min: 8, max: 32, step: 4 },
+    { key: 'gap', label: t('Gap campi'), type: 'range', min: 8, max: 32, step: 4 },
 
     { type: 'separator', label: t('Stile pulsante') },
     withHover({ key: 'submit_bg', label: t('Sfondo pulsante'), type: 'color' }, { hoverKey: 'submit_hover_bg' }),
     { key: 'submit_color', label: t('Colore testo pulsante'), type: 'color' },
-    withHover({ key: 'submit_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
+    withHover({ key: 'submit_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 48 },
     { type: 'typography', label: t('Pulsante'),
       responsiveKeys: ['size', 'letterSpacing'],
@@ -430,8 +430,8 @@ export default {
     { key: 'check_accent_color', label: t('Colore accento (checked)'), type: 'color' },
     { key: 'check_bg', label: t('Sfondo'), type: 'color' },
     { key: 'check_border_color', label: t('Colore bordo'), type: 'color' },
-    { key: 'check_size', label: t('Dimensione (px)'), type: 'range', min: 14, max: 24 },
-    { key: 'check_label_gap', label: t('Gap etichetta (px)'), type: 'range', min: 4, max: 16 },
+    { key: 'check_size', label: t('Dimensione'), type: 'range', min: 14, max: 24 },
+    { key: 'check_label_gap', label: t('Gap etichetta'), type: 'range', min: 4, max: 16 },
 
     ...borderFields(),
   ],

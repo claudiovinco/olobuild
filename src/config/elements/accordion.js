@@ -126,7 +126,7 @@ export default {
         { value: 'high',   label: t('Alta') },
       ],
       condition: { field: 'preset', op: 'in', value: ['liquid-glass','neon-cyber','brutalist-block','magnetic-liquid','sticker','retro-terminal','3d-tilt'] } },
-    { key: 'effect_speed', label: t('Velocità animazioni (ms)'), type: 'range',
+    { key: 'effect_speed', label: t('Velocità animazioni'), type: 'range',
       min: 0, max: 4000, step: 100,
       condition: { field: 'preset', op: 'in', value: ['neon-cyber','magnetic-liquid','retro-terminal','3d-tilt'] } },
 
@@ -148,13 +148,13 @@ export default {
       { value: 'pill', label: t('Pill (riquadro)') },
       { value: 'circle', label: t('Cerchio') },
     ]},
-    { key: 'icon_shape_size', label: t('Dimensione riquadro (px)'), type: 'range', min: 24, max: 48, step: 1,
+    { key: 'icon_shape_size', label: t('Dimensione riquadro'), type: 'range', min: 24, max: 48, step: 1,
       condition: { field: 'icon_shape', op: 'in', value: [ 'pill', 'circle' ] } },
     { key: 'icon_shape_bg', label: t('Sfondo riquadro'), type: 'color',
       condition: { field: 'icon_shape', op: 'in', value: [ 'pill', 'circle' ] } },
 
     { type: 'separator', label: t('Animazione') },
-    { key: 'animation_speed', label: t('Velocità animazione (ms)'), type: 'range', min: 100, max: 800, step: 50 },
+    { key: 'animation_speed', label: t('Velocità animazione'), type: 'range', min: 100, max: 800, step: 50 },
     { key: 'content_transition', label: t('Transizione contenuto'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
       { value: 'fade', label: t('Dissolvenza') },
@@ -172,8 +172,8 @@ export default {
       { value: 'right', label: t('Destra') },
       { value: 'left', label: t('Sinistra') },
     ]},
-    { key: 'media_width', label: t('Larghezza media (%)'), type: 'range', min: 20, max: 50, step: 5 },
-    withHover({ key: 'media_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
+    { key: 'media_width', label: t('Larghezza media'), type: 'range', min: 20, max: 50, step: 5 },
+    withHover({ key: 'media_radius', label: t('Raggio (px)'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
@@ -227,12 +227,12 @@ export default {
     ]},
 
     { type: 'separator', label: t('Glassmorphism') },
-    { key: 'backdrop_blur', label: t('Sfocatura sfondo (px)'), type: 'range', min: 0, max: 20, step: 1 },
-    { key: 'backdrop_saturate', label: t('Saturazione sfondo (%)'), type: 'range', min: 100, max: 200, step: 5 },
+    { key: 'backdrop_blur', label: t('Sfocatura sfondo'), type: 'range', min: 0, max: 20, step: 1 },
+    { key: 'backdrop_saturate', label: t('Saturazione sfondo'), type: 'range', min: 100, max: 200, step: 5 },
 
     { type: 'separator', label: t('Forma') },
-    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 48, step: 4 },
-    withHover({ key: 'border_radius', label: t('Border Radius'), type: 'border-radius' }),
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4 },
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 
     ...shadowField,
     ...wowEffectsFields(),

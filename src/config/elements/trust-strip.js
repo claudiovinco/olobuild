@@ -74,7 +74,7 @@ export default {
     { key: 'pill_bg',         label: t('Sfondo'),             type: 'color', condition: { field: 'variant', value: 'pill' } },
     { key: 'pill_border',     label: t('Colore bordo'),       type: 'color', condition: { field: 'variant', value: 'pill' } },
     { key: 'pill_text_color', label: t('Colore testo'),       type: 'color', condition: { field: 'variant', value: 'pill' } },
-    { key: 'logo_height',     label: t('Altezza logo (px)'),  type: 'range', min: 10, max: 64, step: 1, condition: { field: 'variant', value: 'pill' } },
+    { key: 'logo_height',     label: t('Altezza logo'),  type: 'range', min: 10, max: 64, step: 1, condition: { field: 'variant', value: 'pill' } },
 
     { type: 'separator', label: t('Badge (pill)') },
     { key: 'badge_bg',    label: t('Sfondo'), type: 'color', condition: { field: 'variant', value: 'pill' } },
@@ -93,7 +93,7 @@ export default {
 
     { type: 'separator', label: t('Tipografia') },
     { key: 'font_family', label: t('Famiglia'), type: 'font-family' },
-    { key: 'text_size',  label: t('Dimensione (px)'),  type: 'range', min: 10, max: 24, step: 1 },
+    { key: 'text_size',  label: t('Dimensione'),  type: 'range', min: 10, max: 24, step: 1 },
     { key: 'text_color', label: t('Colore testo'),     type: 'color', condition: { field: 'variant', operator: '!=', value: 'pill' } },
 
     { type: 'separator', label: t('Layout') },
@@ -107,6 +107,6 @@ export default {
       { value: 'wrap',   label: t('A capo se serve') },
       { value: 'nowrap', label: t('Forza una riga') },
     ]},
-    { key: 'gap', label: t('Gap tra items (px)'), type: 'range', min: 4, max: 80, step: 2 },
+    { key: 'gap', label: t('Gap items'), type: 'range', min: 4, max: 80, step: 2 },
   ],
 };

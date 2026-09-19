@@ -76,7 +76,7 @@ export default {
     { key: 'value_color', label: t('Colore valori'), type: 'color' },
 
     { type: 'separator', label: t('Forma') },
-    { key: 'radius_corners', label: t('Raggio bordo'), type: 'border-radius',
+    { key: 'radius_corners', label: t('Raggio'), type: 'border-radius',
       legacyKeys: { all: 'radius' },
       description: t('Lascia tutto a 0 per usare il «Raggio bordo» uniforme qui sopra.') },
 

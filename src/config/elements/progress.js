@@ -76,14 +76,14 @@ export default {
     { key: 'text_color', label: t('Colore testo'), type: 'color' },
 
     { type: 'separator', label: t('Dimensioni') },
-    { key: 'height', label: t('Altezza (px)'), type: 'range', min: 10, max: 600, step: 5 },
-    { key: 'circle_size', label: t('Dimensione cerchio (px)'), type: 'range', min: 60, max: 200, step: 10,
+    { key: 'height', label: t('Altezza'), type: 'range', min: 10, max: 600, step: 5 },
+    { key: 'circle_size', label: t('Dimensione cerchio'), type: 'range', min: 60, max: 200, step: 10,
       condition: { field: 'layout', operator: '==', value: 'circle' } },
-    { key: 'circle_width', label: t('Spessore cerchio (px)'), type: 'range', min: 2, max: 20, step: 1,
+    { key: 'circle_width', label: t('Spessore cerchio'), type: 'range', min: 2, max: 20, step: 1,
       condition: { field: 'layout', operator: '==', value: 'circle' } },
 
     { type: 'separator', label: t('Velocità animazione') },
-    { key: 'animation_duration', label: t('Durata animazione (ms)'), type: 'range', min: 500, max: 3000, step: 100 },
+    { key: 'animation_duration', label: t('Durata animazione'), type: 'range', min: 500, max: 3000, step: 100 },
 
     ...shadowField,
     ...borderFields(),

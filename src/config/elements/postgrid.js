@@ -267,7 +267,7 @@ export default {
       { value: '1', label: '1' },
       { value: '2', label: '2' },
     ]},
-    { key: 'gap', label: t('Spaziatura'), type: 'select', options: [
+    { key: 'gap', label: t('Gap'), type: 'select', options: [
       { value: 'collapse', label: t('Nessuna') },
       { value: 'small', label: t('Piccola') },
       { value: 'default', label: t('Predefinita') },
@@ -286,13 +286,13 @@ export default {
       condition: { field: 'card_style', value: 'primary' } },
 
     { type: 'separator', label: t('Aspetto card') },
-    { key: 'image_height', label: t('Altezza immagine (px)'), type: 'range', min: 100, max: 500, step: 10,
+    { key: 'image_height', label: t('Altezza immagine'), type: 'range', min: 100, max: 500, step: 10,
       condition: { field: 'show_image', value: true } },
-    withHover({ key: 'image_radius', label: t('Raggio bordo immagine (px)'), type: 'border-radius',
+    withHover({ key: 'image_radius', label: t('Raggio immagine (px)'), type: 'border-radius',
       condition: { field: 'show_image', value: true } }),
-    withHover({ key: 'card_radius', label: t('Raggio bordo card (px)'), type: 'border-radius' }),
+    withHover({ key: 'card_radius', label: t('Raggio card (px)'), type: 'border-radius' }),
     { key: 'corner_cut', label: t('Angolo basso-destro tagliato (piega)'), type: 'toggle' },
-    { key: 'corner_size', label: t('Dimensione taglio (px)'), type: 'range', min: 12, max: 64, step: 2,
+    { key: 'corner_size', label: t('Dimensione taglio'), type: 'range', min: 12, max: 64, step: 2,
       condition: { field: 'corner_cut', value: true } },
     { key: 'category_badge_position', label: t('Posizione badge categoria'), type: 'select',
       condition: { field: 'show_category', value: true },
@@ -305,7 +305,7 @@ export default {
     },
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 40 },
     { key: 'body_bg', label: t('Sfondo area testo'), type: 'color' },
-    { key: 'body_bg_opacity', label: t('Opacità sfondo testo (%)'), type: 'range', min: 0, max: 100, step: 5,
+    { key: 'body_bg_opacity', label: t('Opacità sfondo testo'), type: 'range', min: 0, max: 100, step: 5,
       condition: { field: 'body_bg', value: '', operator: '!=' } },
 
     { type: 'separator', label: t('Effetti hover') },
@@ -324,7 +324,7 @@ export default {
     { type: 'separator', label: t('Effetti immagine') },
     { key: 'fx_kenburns', label: t('Ken Burns (zoom cinematico)'), type: 'toggle',
       condition: { field: 'show_image', value: true } },
-    { key: 'fx_kenburns_speed', label: t('Velocità Ken Burns (s)'), type: 'range', min: 10, max: 40, step: 1,
+    { key: 'fx_kenburns_speed', label: t('Velocità Ken Burns'), type: 'range', min: 10, max: 40, step: 1,
       condition: { field: 'fx_kenburns', value: true } },
     { key: 'fx_kenburns_scale', label: t('Intensità zoom'), type: 'range', min: 1.05, max: 1.25, step: 0.01,
       condition: { field: 'fx_kenburns', value: true } },
@@ -332,7 +332,7 @@ export default {
       condition: { field: 'show_image', value: true } },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color',
       condition: { field: 'overlay_gradient', value: true } },
-    { key: 'overlay_opacity', label: t('Opacità overlay (%)'), type: 'range', min: 10, max: 90, step: 5,
+    { key: 'overlay_opacity', label: t('Opacità overlay'), type: 'range', min: 10, max: 90, step: 5,
       condition: { field: 'overlay_gradient', value: true } },
     { key: 'overlay_direction', label: t('Direzione sfumatura'), type: 'select', options: [
       { value: 'bottom', label: t('Dal basso') },
@@ -340,7 +340,7 @@ export default {
       { value: 'left', label: t('Da sinistra') },
       { value: 'right', label: t('Da destra') },
     ], condition: { field: 'overlay_gradient', value: true } },
-    { key: 'overlay_height', label: t('Altezza gradiente (%)'), type: 'range', min: 20, max: 100, step: 5,
+    { key: 'overlay_height', label: t('Altezza gradiente'), type: 'range', min: 20, max: 100, step: 5,
       condition: { field: 'overlay_gradient', value: true } },
 
     { type: 'separator', label: t('Ribbon — Aspetto') },

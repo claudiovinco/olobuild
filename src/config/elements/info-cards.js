@@ -109,13 +109,13 @@ export default {
   styleFields: [
     { type: 'separator', label: t('Layout griglia') },
     { key: 'columns',   label: t('Numero colonne'),    type: 'range', min: 1, max: 6, step: 1, responsive: true },
-    { key: 'items_gap', label: t('Gap tra card (px)'), type: 'range', min: 0, max: 60, step: 2, responsive: true },
+    { key: 'items_gap', label: t('Gap card'), type: 'range', min: 0, max: 60, step: 2, responsive: true },
 
     { type: 'separator', label: t('Sfondo container') },
     { key: 'container_bg',      label: t('Sfondo'),               type: 'background', showParallax: false },
-    { key: 'container_padding', label: t('Padding interno (px)'), type: 'spacing', min: 0, max: 80 },
-    { key: 'container_gap',     label: t('Gap container-card (px)'), type: 'range', min: 0, max: 40, step: 1 },
-    withHover({ key: 'container_radius', label: t('Border radius container'), type: 'border-radius' }, { hoverKey: 'container_radius_hover', hoverDurationKey: 'container_radius_hover_duration' }),
+    { key: 'container_padding', label: t('Padding (px)'), type: 'spacing', min: 0, max: 80 },
+    { key: 'container_gap',     label: t('Gap container-card'), type: 'range', min: 0, max: 40, step: 1 },
+    withHover({ key: 'container_radius', label: t('Raggio container'), type: 'border-radius' }, { hoverKey: 'container_radius_hover', hoverDurationKey: 'container_radius_hover_duration' }),
 
     { type: 'separator', label: t('Card stile') },
     { key: 'card_bg',           label: t('Sfondo card'),            type: 'background', showParallax: false },
@@ -123,7 +123,7 @@ export default {
     { key: 'card_accent_color', label: t('Colore accent (titolo)'), type: 'color' },
     { key: 'card_padding',      label: t('Padding interno card'),   type: 'spacing' },
     { key: 'card_border',       label: t('Bordo (vuoto = nessuno)'), type: 'border', legacyWidth: 1 },
-    withHover({ key: 'card_radius', label: t('Border radius card'), type: 'border-radius' }, { hoverKey: 'card_radius_hover', hoverDurationKey: 'card_radius_hover_duration' }),
+    withHover({ key: 'card_radius', label: t('Raggio card'), type: 'border-radius' }, { hoverKey: 'card_radius_hover', hoverDurationKey: 'card_radius_hover_duration' }),
 
     { type: 'separator', label: t('Media (immagine card)') },
     { key: 'media_aspect_ratio', label: t('Aspect ratio'), type: 'select', options: [
@@ -134,11 +134,11 @@ export default {
       { value: '21/9', label: t('21 / 9 (ultra-wide)') },
     ], condition: { field: 'show_media', op: '=', value: true } },
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true, contextKeys: { ratio: 'media_aspect_ratio' }, condition: { field: 'show_media', op: '=', value: true } },
-    withHover({ key: 'media_radius', label: t('Border radius media'), type: 'border-radius' }, { hoverKey: 'media_radius_hover', hoverDurationKey: 'media_radius_hover_duration' }),
+    withHover({ key: 'media_radius', label: t('Raggio media'), type: 'border-radius' }, { hoverKey: 'media_radius_hover', hoverDurationKey: 'media_radius_hover_duration' }),
 
     { type: 'separator', label: t('Tipografia titolo') },
     { key: 'title_font_family', label: t('Famiglia'), type: 'font-family' },
-    { key: 'title_size',   label: t('Dimensione (px)'), type: 'range', min: 18, max: 160, step: 2 },
+    { key: 'title_size',   label: t('Dimensione'), type: 'range', min: 18, max: 160, step: 2 },
     { key: 'title_weight', label: t('Peso'), type: 'select', options: [
       { value: '300', label: t('300 — Light') },
       { value: '400', label: t('400 — Regular') },
@@ -151,9 +151,9 @@ export default {
     { key: 'title_italic', label: t('Titolo in italico'), type: 'toggle' },
 
     { type: 'separator', label: t('Dimensioni secondarie') },
-    { key: 'counter_size',     label: t('Counter (px)'),     type: 'range', min: 9, max: 22, step: 1 },
-    { key: 'description_size', label: t('Descrizione (px)'), type: 'range', min: 11, max: 22, step: 1 },
-    { key: 'footer_size',      label: t('Footer (px)'),      type: 'range', min: 9, max: 16, step: 1 },
+    { key: 'counter_size',     label: t('Counter'),     type: 'range', min: 9, max: 22, step: 1 },
+    { key: 'description_size', label: t('Descrizione'), type: 'range', min: 11, max: 22, step: 1 },
+    { key: 'footer_size',      label: t('Footer'),      type: 'range', min: 9, max: 16, step: 1 },
 
     { type: 'separator', label: t('Hover card') },
     { key: 'card_hover_effect', label: t('Effetto hover'), type: 'select', options: [

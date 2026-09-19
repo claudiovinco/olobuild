@@ -117,11 +117,11 @@ export default {
 
   styleFields: [
     { type: 'separator', label: t('Effetto reveal — Aspetto') },
-    { key: 'perspective', label: t('Prospettiva 3D (px)'), type: 'range', min: 200, max: 2000, step: 50,
+    { key: 'perspective', label: t('Prospettiva 3D'), type: 'range', min: 200, max: 2000, step: 50,
       condition: { field: 'reveal_effect', operator: 'in', value: ['flip-x', 'flip-y'] } },
 
     { type: 'separator', label: t('Zona visibile — Aspetto') },
-    { key: 'visible_height', label: t('Altezza visibile (px)'), type: 'range', min: 100, max: 800, step: 10 },
+    { key: 'visible_height', label: t('Altezza visibile'), type: 'range', min: 100, max: 800, step: 10 },
     { key: 'top_icon_size', label: t('Dimensione icona'), type: 'range', min: 0.5, max: 6, step: 0.1,
       condition: { field: 'top_icon', operator: '!=', value: '' } },
     { key: 'top_icon_color', label: t('Colore icona'), type: 'color',
@@ -145,11 +145,11 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'flex-end', label: t('Destra') },
     ]},
-    { key: 'top_padding', label: t('Padding interno (px)'), type: 'spacing', min: 0, max: 120 },
+    { key: 'top_padding', label: t('Padding (px)'), type: 'spacing', min: 0, max: 120 },
 
     { type: 'separator', label: t('Zona visibile — Overlay') },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
-    { key: 'overlay_opacity', label: t('Opacità overlay (%)'), type: 'range', min: 0, max: 100 },
+    { key: 'overlay_opacity', label: t('Opacità overlay'), type: 'range', min: 0, max: 100 },
 
     { type: 'separator', label: t('Zona rivelata — Aspetto') },
     { key: 'bottom_icon_size', label: t('Dimensione icona'), type: 'range', min: 0.5, max: 6, step: 0.1,
@@ -175,14 +175,14 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'flex-end', label: t('Destra') },
     ]},
-    { key: 'bottom_padding', label: t('Padding interno (px)'), type: 'spacing', min: 0, max: 120 },
+    { key: 'bottom_padding', label: t('Padding (px)'), type: 'spacing', min: 0, max: 120 },
 
     { type: 'separator', label: t('Zona rivelata — Overlay') },
     { key: 'reveal_overlay_color', label: t('Colore overlay rivelato'), type: 'color' },
-    { key: 'reveal_overlay_opacity', label: t('Opacità overlay rivelato (%)'), type: 'range', min: 0, max: 100 },
+    { key: 'reveal_overlay_opacity', label: t('Opacità overlay rivelato'), type: 'range', min: 0, max: 100 },
 
     { type: 'separator', label: t('Transizione') },
-    { key: 'transition_speed', label: t('Velocità transizione (s)'), type: 'range', min: 0.1, max: 2, step: 0.1 },
+    { key: 'transition_speed', label: t('Velocità transizione'), type: 'range', min: 0.1, max: 2, step: 0.1 },
     { key: 'transition_easing', label: t('Curva transizione'), type: 'select', options: [
       { value: 'ease', label: t('Ease') },
       { value: 'ease-in-out', label: t('Ease In/Out') },
@@ -190,8 +190,8 @@ export default {
       { value: 'cubic-bezier(0.4,0,0.2,1)', label: t('Smooth') },
       { value: 'linear', label: t('Lineare') },
     ]},
-    withHover({ key: 'border_radius', label: t('Bordo arrotondato (px)'), type: 'border-radius' }),
-    { key: 'tile_padding', type: 'spacing', label: t('Spaziatura interna') },
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    { key: 'tile_padding', type: 'spacing', label: t('Padding') },
 
     ...borderFields(),
   ],

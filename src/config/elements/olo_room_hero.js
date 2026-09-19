@@ -40,10 +40,10 @@ export default {
   styleFields: [
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'separator', label: t('Layout') },
-    { key: 'height', label: t('Altezza (px)'), type: 'range', min: 200, max: 800, step: 10 },
+    { key: 'height', label: t('Altezza'), type: 'range', min: 200, max: 800, step: 10 },
 
     { type: 'separator', label: t('Overlay') },
-    { key: 'overlay_opacity', label: t('Opacità overlay (%)'), type: 'range', min: 0, max: 100, step: 5 },
+    { key: 'overlay_opacity', label: t('Opacità overlay'), type: 'range', min: 0, max: 100, step: 5 },
     ...borderFields(),
   ],
 };

@@ -268,29 +268,29 @@ export default {
 
     { type: 'separator', label: t('Sottotitolo stile') },
     { key: 'subhead_color',     label: t('Colore'),             type: 'color' },
-    { key: 'subhead_size',      label: t('Dimensione (px)'),    type: 'range', min: 12, max: 32, step: 1 },
-    { key: 'subhead_max_width', label: t('Larghezza max (px)'), type: 'range', min: 200, max: 900, step: 10 },
+    { key: 'subhead_size',      label: t('Dimensione'),    type: 'range', min: 12, max: 32, step: 1 },
+    { key: 'subhead_max_width', label: t('Larghezza max'), type: 'range', min: 200, max: 900, step: 10 },
     { key: 'subhead_align',     label: t('Allineamento'),       type: 'select', options: ALIGN_OPTIONS() },
 
     { type: 'separator', label: t('CTA primaria stile') },
     withHover({ key: 'cta1_bg',    label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta1_bg_hover' }),
     withHover({ key: 'cta1_color', label: t('Colore testo'), type: 'color' }, { hoverKey: 'cta1_color_hover' }),
-    { key: 'cta1_size', label: t('Dimensione (px)'), type: 'range', min: 12, max: 22, step: 1 },
-    withHover({ key: 'cta1_radius', label: t('Border radius'), type: 'border-radius' }, { hoverKey: 'cta1_radius_hover', hoverDurationKey: 'cta1_radius_hover_duration' }),
+    { key: 'cta1_size', label: t('Dimensione'), type: 'range', min: 12, max: 22, step: 1 },
+    withHover({ key: 'cta1_radius', label: t('Raggio'), type: 'border-radius' }, { hoverKey: 'cta1_radius_hover', hoverDurationKey: 'cta1_radius_hover_duration' }),
 
     { type: 'separator', label: t('CTA secondaria stile') },
     withHover({ key: 'cta2_bg',     label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta2_bg_hover' }),
     withHover({ key: 'cta2_color',  label: t('Colore testo'), type: 'color' }, { hoverKey: 'cta2_color_hover' }),
     { key: 'cta2_border', label: t('Colore bordo'),    type: 'color' },
-    { key: 'cta2_size',   label: t('Dimensione (px)'), type: 'range', min: 12, max: 22, step: 1 },
-    withHover({ key: 'cta2_radius', label: t('Border radius'), type: 'border-radius' }, { hoverKey: 'cta2_radius_hover', hoverDurationKey: 'cta2_radius_hover_duration' }),
+    { key: 'cta2_size',   label: t('Dimensione'), type: 'range', min: 12, max: 22, step: 1 },
+    withHover({ key: 'cta2_radius', label: t('Raggio'), type: 'border-radius' }, { hoverKey: 'cta2_radius_hover', hoverDurationKey: 'cta2_radius_hover_duration' }),
 
     { type: 'separator', label: t('Showcase wrapper'), condition: { field: 'panel', op: 'eq', value: 'showcase' } },
     { key: 'showcase_bg',      label: t('Sfondo wrapper'),       type: 'background', showParallax: false,
       condition: { field: 'panel', op: 'eq', value: 'showcase' } },
     { key: 'showcase_padding', label: t('Padding wrapper (px)'), type: 'spacing', min: 0, max: 120,
       condition: { field: 'panel', op: 'eq', value: 'showcase' } },
-    withHover({ key: 'showcase_radius', label: t('Border radius wrapper'), type: 'border-radius',
+    withHover({ key: 'showcase_radius', label: t('Raggio wrapper'), type: 'border-radius',
       condition: { field: 'panel', op: 'eq', value: 'showcase' } }, { hoverKey: 'showcase_radius_hover', hoverDurationKey: 'showcase_radius_hover_duration' }),
 
     { type: 'separator', label: t('Showcase badge'), condition: { field: 'panel', op: 'eq', value: 'showcase' } },
@@ -300,7 +300,7 @@ export default {
       condition: { field: 'panel', op: 'eq', value: 'showcase' } },
 
     { type: 'separator', label: t('Showcase card'), condition: { field: 'panel', op: 'eq', value: 'showcase' } },
-    withHover({ key: 'showcase_card_radius', label: t('Border radius card'), type: 'border-radius',
+    withHover({ key: 'showcase_card_radius', label: t('Raggio card'), type: 'border-radius',
       condition: { field: 'panel', op: 'eq', value: 'showcase' } }, { hoverKey: 'showcase_card_radius_hover', hoverDurationKey: 'showcase_card_radius_hover_duration' }),
     { key: 'showcase_card_shadow', label: t('Ombra card'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
@@ -325,7 +325,7 @@ export default {
       { value: '1fr 0.8fr',   label: '60 / 40' },
       { value: '0.8fr 1fr',   label: '40 / 60' },
     ]},
-    { key: 'gap',        label: t('Gap colonne (px)'),    type: 'range', min: 0, max: 160, step: 4 },
-    { key: 'min_height', label: t('Altezza minima (px)'), type: 'range', min: 0, max: 1200, step: 20 },
+    { key: 'gap',        label: t('Gap colonne'),    type: 'range', min: 0, max: 160, step: 4 },
+    { key: 'min_height', label: t('Altezza minima'), type: 'range', min: 0, max: 1200, step: 20 },
   ],
 };

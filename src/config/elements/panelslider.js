@@ -150,7 +150,7 @@ export default {
       { value: '3/4',  label: t('3:4 Verticale') },
       { value: '2/3',  label: t('2:3 Verticale') },
     ]},
-    { key: 'image_height', label: t('Altezza fissa (px)'), type: 'range', min: 0, max: 500, step: 10,
+    { key: 'image_height', label: t('Altezza fissa'), type: 'range', min: 0, max: 500, step: 10,
       condition: { field: 'image_ratio', op: 'eq', value: 'auto' } },
     { key: 'image_fit', label: t('Adattamento'), type: 'select', options: [
       { value: 'cover',   label: t('Copri (riempie e taglia)') },
@@ -177,7 +177,7 @@ export default {
 
     { type: 'separator', label: t('Autoplay') },
     { key: 'autoplay', label: t('Autoplay'), type: 'toggle' },
-    { key: 'autoplay_interval', label: t('Intervallo (ms)'), type: 'range', min: 1000, max: 10000, step: 500,
+    { key: 'autoplay_interval', label: t('Intervallo'), type: 'range', min: 1000, max: 10000, step: 500,
       condition: { field: 'autoplay', op: 'eq', value: true } },
   ],
 
@@ -216,7 +216,7 @@ export default {
         { value: 'high',   label: t('Alta') },
       ],
       condition: { field: 'preset', op: 'in', value: ['liquid-glass','neon-cyber','brutalist-block','magnetic-liquid','sticker','retro-terminal','3d-tilt'] } },
-    { key: 'effect_speed', label: t('Velocità animazioni (ms)'), type: 'range',
+    { key: 'effect_speed', label: t('Velocità animazioni'), type: 'range',
       min: 0, max: 4000, step: 100,
       description: t('0 = default del preset. Controlla pulse neon, transizione magnetic/3d, cursor terminal.'),
       condition: { field: 'preset', op: 'in', value: ['neon-cyber','magnetic-liquid','retro-terminal','3d-tilt'] } },
@@ -246,8 +246,8 @@ export default {
 
 
 
-    withHover({ key: 'card_radius', label: t('Raggio bordi (px)'), type: 'border-radius'}),
-    { key: 'card_padding', label: t('Padding interno (px)'), type: 'spacing', max: 48 },
+    withHover({ key: 'card_radius', label: t('Raggio (px)'), type: 'border-radius'}),
+    { key: 'card_padding', label: t('Padding (px)'), type: 'spacing', max: 48 },
     ...shadowField,
 
     // ────────── Hover (stile) ──────────
@@ -262,7 +262,7 @@ export default {
 
     // ────────── Immagine (stile) ──────────
     { type: 'separator', label: t('Immagine — stile') },
-    { key: 'card_image_radius', label: t('Arrotondamento immagine (px)'), type: 'border-radius',
+    { key: 'card_image_radius', label: t('Raggio immagine (px)'), type: 'border-radius',
       description: t('0 = eredita dal raggio card') },
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { fit: 'image_fit', ratio: 'image_ratio' },
@@ -330,7 +330,7 @@ export default {
       { value: 'fancy',          label: t('Stilizzato (gradient)') },
       { value: 'uikit',          label: t('UIkit classico') },
     ], condition: { field: 'show_arrows', op: 'eq', value: true } },
-    { key: 'arrow_size', label: t('Dimensione frecce (px)'), type: 'range', min: 24, max: 80, step: 2,
+    { key: 'arrow_size', label: t('Dimensione frecce'), type: 'range', min: 24, max: 80, step: 2,
       condition: { field: 'show_arrows', op: 'eq', value: true } },
     { key: 'arrow_color', label: t('Colore icona'), type: 'color',
       condition: { field: 'show_arrows', op: 'eq', value: true } },

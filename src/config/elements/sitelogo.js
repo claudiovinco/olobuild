@@ -96,7 +96,7 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'separator', label: t('Dimensioni') },
-    { key: 'max_height', label: t('Altezza massima (px)'), type: 'range', min: 16, max: 200, step: 2 },
+    { key: 'max_height', label: t('Altezza massima'), type: 'range', min: 16, max: 200, step: 2 },
     { key: 'max_height_sticky', label: t('Altezza in sticky (px, vuoto = uguale)'), type: 'number', min: 0, placeholder: t('es. 36') },
     { key: 'max_width', label: t('Larghezza massima (px, vuoto = auto)'), type: 'number', min: 0 },
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
@@ -108,12 +108,12 @@ export default {
     { type: 'separator', label: t('Tagline') },
     { key: 'tagline_color', label: t('Colore motto'), type: 'color',
       condition: { field: 'show_tagline', value: true } },
-    { key: 'tagline_size', label: t('Dimensione motto (px)'), type: 'range', min: 10, max: 24, step: 1,
+    { key: 'tagline_size', label: t('Dimensione motto'), type: 'range', min: 10, max: 24, step: 1,
       condition: { field: 'show_tagline', value: true } },
 
     { type: 'separator', label: t('Effetti') },
-    { key: 'hover_opacity', label: t('Opacità hover (%)'), type: 'range', min: 20, max: 100, step: 5 },
-    { key: 'transition_duration', label: t('Durata transizione (s)'), type: 'range', min: 0, max: 1, step: 0.05 },
+    { key: 'hover_opacity', label: t('Opacità hover'), type: 'range', min: 20, max: 100, step: 5 },
+    { key: 'transition_duration', label: t('Durata transizione'), type: 'range', min: 0, max: 1, step: 0.05 },
 
     ...borderFields(),
   ],

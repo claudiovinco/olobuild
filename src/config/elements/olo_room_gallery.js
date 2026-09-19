@@ -54,8 +54,8 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'separator', label: t('Layout') },
     { key: 'columns', label: t('Colonne miniature'), type: 'range', min: 2, max: 8, step: 1 },
-    { key: 'main_height', label: t('Altezza immagine principale (px)'), type: 'range', min: 200, max: 800, step: 10 },
-    { key: 'thumb_height', label: t('Altezza miniature (px)'), type: 'range', min: 40, max: 150, step: 5 },
+    { key: 'main_height', label: t('Altezza immagine principale'), type: 'range', min: 200, max: 800, step: 10 },
+    { key: 'thumb_height', label: t('Altezza miniature'), type: 'range', min: 40, max: 150, step: 5 },
     ...borderFields(),
   ],
 };

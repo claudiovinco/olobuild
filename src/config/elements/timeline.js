@@ -181,7 +181,7 @@ export default {
     // ── Orizzontale ──
     { type: 'separator', label: t('Opzioni orizzontale'),
       condition: { field: 'tl_layout', value: 'horizontal' } },
-    { key: 'h_card_width', label: t('Larghezza card (px)'), type: 'range', min: 200, max: 420, step: 4,
+    { key: 'h_card_width', label: t('Larghezza card'), type: 'range', min: 200, max: 420, step: 4,
       condition: { field: 'tl_layout', value: 'horizontal' } },
 
     // ═══════════ PERSONALIZZAZIONE (override fine; 0/vuoto = default variante) ═══════════
@@ -200,7 +200,7 @@ export default {
     // ── Card ──
     { type: 'separator', label: t('Personalizza · Card') },
     { key: 'tl_card_bg', label: t('Sfondo card'), type: 'color' },
-    { key: 'tl_card_radius', label: t('Arrotondamento card (px · 0 = auto)'), type: 'border-radius' },
+    { key: 'tl_card_radius', label: t('Raggio card (px · 0 = auto)'), type: 'border-radius' },
     { key: 'tl_card_maxw', label: t('Larghezza max card (px · 0 = auto)'), type: 'range', min: 0, max: 600, step: 10 },
     { key: 'tl_card_pad', label: t('Padding card (px · 0 = auto)'), type: 'spacing', min: 0, max: 80 },
 
@@ -225,7 +225,7 @@ export default {
     // fit/ratio sono chiavi tile-level reali.
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { fit: 'tl_media_fit', ratio: 'tl_media_ratio' } },
-    { key: 'tl_media_radius', label: t('Arrotondamento immagine (px · 0 = auto)'), type: 'border-radius' },
+    { key: 'tl_media_radius', label: t('Raggio immagine (px · 0 = auto)'), type: 'border-radius' },
     { key: 'tl_media_bar', label: t('Barra colore sopra immagine'), type: 'toggle' },
 
     // ── Testi (popup tipografia — convenzione OLObuild) ──

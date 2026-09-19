@@ -63,15 +63,15 @@ export default {
 
   styleFields: [
     { type: 'separator', label: t('Pannello — Dimensione & colori') },
-    { key: 'width', label: t('Larghezza (px)'), type: 'range', min: 200, max: 600, step: 10 },
-    { key: 'height', label: t('Altezza (px)'), type: 'range', min: 200, max: 600, step: 10 },
+    { key: 'width', label: t('Larghezza'), type: 'range', min: 200, max: 600, step: 10 },
+    { key: 'height', label: t('Altezza'), type: 'range', min: 200, max: 600, step: 10 },
     { key: 'bg_color', label: t('Sfondo pannello'), type: 'color' },
     { key: 'text_color', label: t('Colore testo'), type: 'color' },
 
     { type: 'separator', label: t('Overlay — Aspetto') },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color',
       condition: { field: 'overlay', value: true } },
-    { key: 'overlay_opacity', label: t('Opacità overlay (%)'), type: 'range', min: 0, max: 100, step: 5,
+    { key: 'overlay_opacity', label: t('Opacità overlay'), type: 'range', min: 0, max: 100, step: 5,
       condition: { field: 'overlay', value: true } },
 
     { type: 'separator', label: t('Chiusura — Aspetto') },

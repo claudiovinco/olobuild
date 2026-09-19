@@ -78,7 +78,7 @@ export default {
     { key: 'hint_color', label: t('Colore hint'), type: 'color' },
 
     { type: 'separator', label: t('Dimensioni') },
-    { key: 'min_height', label: t('Altezza minima (vh)'), type: 'range', min: 40, max: 100, step: 1 },
+    { key: 'min_height', label: t('Altezza minima'), type: 'range', min: 40, max: 100, step: 1 },
 
     { type: 'separator', label: t('Spaziatura') },
     { key: 'pad_custom', label: t('Padding personalizzato'), type: 'toggle',

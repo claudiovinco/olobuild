@@ -169,7 +169,7 @@ export default {
 
     { type: 'separator', label: t('Layout - dimensioni') },
     { key: 'columns', label: t('Colonne'), type: 'range', min: 2, max: 5, step: 1, condition: { field: 'layout', value: 'grid' } },
-    { key: 'gap', label: t('Spazio tra card (px)'), type: 'range', min: 8, max: 40, step: 2 },
+    { key: 'gap', label: t('Gap card'), type: 'range', min: 8, max: 40, step: 2 },
 
     // Slider speed (durata in sec — categorizzata come stile per coerenza con animation duration)
     { key: 'autoplay_speed', label: t('Velocità autoplay (sec)'), type: 'range', min: 2, max: 10, step: 1, condition: { field: 'layout', value: 'slider' } },
@@ -186,12 +186,12 @@ export default {
     },
 
     { type: 'separator', label: t('Immagine card') },
-    { key: 'image_height', label: t('Altezza immagine (px)'), type: 'range', min: 100, max: 300, step: 10 },
+    { key: 'image_height', label: t('Altezza immagine'), type: 'range', min: 100, max: 300, step: 10 },
 
     // ── Stile card ──
     { type: 'separator', label: t('Stile card') },
     { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
-    withHover({ key: 'card_radius', label: t('Raggio angoli (px)'), type: 'border-radius' }),
+    withHover({ key: 'card_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     {
       key: 'card_shadow', label: t('Ombra'), type: 'select', options: [
         { value: 'none', label: t('Nessuna') },
@@ -201,17 +201,8 @@ export default {
         { value: 'custom', label: t('Personalizzata') },
       ],
     },
-    { key: 'card_shadow_h', label: t('Offset H (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_v', label: t('Offset V (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_blur', label: t('Sfocatura (px)'), type: 'range', min: 0, max: 100, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_spread', label: t('Espansione (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_color', label: t('Colore ombra'), type: 'color',
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_inset', label: t('Ombra interna'), type: 'toggle',
+    { key: 'card_shadow_custom', label: t('Ombra personalizzata'), type: 'box-shadow',
+      legacyKeys: { h: 'card_shadow_h', v: 'card_shadow_v', blur: 'card_shadow_blur', spread: 'card_shadow_spread', color: 'card_shadow_color', inset: 'card_shadow_inset' },
       condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
     {
       key: 'card_hover_effect', label: t('Effetto hover'), type: 'select', options: [

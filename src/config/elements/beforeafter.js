@@ -86,8 +86,8 @@ export default {
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { ratio: 'media_aspect', fit: 'cover' },
       description: t('Punto focale globale di tutte le immagini (prima + dopo).') },
-    { key: 'radius', label: t('Raggio bordo (px)'), type: 'border-radius' },
-    { key: 'gap', label: t('Spazio tra card (px)'), type: 'range', min: 8, max: 48, step: 2 },
+    { key: 'radius', label: t('Raggio (px)'), type: 'border-radius' },
+    { key: 'gap', label: t('Gap card'), type: 'range', min: 8, max: 48, step: 2 },
 
     { type: 'separator', label: t('Spaziatura') },
     { key: 'cap_padding', label: t('Padding didascalia (px)'), type: 'spacing', max: 64,

@@ -181,9 +181,9 @@ export default {
     // ── Stile dati (comportamento) ──
     { type: 'separator', label: t('Stile dati') },
     { key: 'animate', label: t('Animazione'), type: 'toggle' },
-    { key: 'bar_percentage', label: t('Larghezza barre (%)'), type: 'range', min: 0.1, max: 1, step: 0.05,
+    { key: 'bar_percentage', label: t('Larghezza barre'), type: 'range', min: 0.1, max: 1, step: 0.05,
       condition: { field: 'chart_type', value: 'bar' } },
-    { key: 'category_percentage', label: t('Larghezza categoria (%)'), type: 'range', min: 0.1, max: 1, step: 0.05,
+    { key: 'category_percentage', label: t('Larghezza categoria'), type: 'range', min: 0.1, max: 1, step: 0.05,
       condition: { field: 'chart_type', value: 'bar' } },
     { key: 'fill_area', label: t('Riempi area'), type: 'toggle',
       condition: { field: 'chart_type', op: 'in', value: ['line', 'radar'] } },
@@ -255,7 +255,7 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     ...textEffectsFields([ { value: 'label', label: t('Solo Etichetta') } ]),
-    { key: 'chart_height', label: t('Altezza (px)'), type: 'range', min: 200, max: 800, step: 10 },
+    { key: 'chart_height', label: t('Altezza'), type: 'range', min: 200, max: 800, step: 10 },
 
     // ── Tipografia ──
     { type: 'separator', label: t('Tipografia') },
@@ -322,7 +322,7 @@ export default {
       legacyKeys: { width: 'tooltip_border_width', color: 'tooltip_border_color' } },
 
 
-    withHover({ key: 'tooltip_corner_radius', label: t('Raggio angoli tooltip'), type: 'border-radius',
+    withHover({ key: 'tooltip_corner_radius', label: t('Raggio tooltip'), type: 'border-radius',
       condition: { field: 'tooltip_enabled', value: true } }),
     { key: 'tooltip_padding', label: t('Padding tooltip'), type: 'spacing', max: 20,
       condition: { field: 'tooltip_enabled', value: true } },
@@ -331,7 +331,7 @@ export default {
     { type: 'separator', label: t('Stile dati — aspetto') },
 
     { key: 'border_color_override', label: t('Colore bordo globale'), type: 'color' },
-    withHover({ key: 'bar_radius', label: t('Raggio angoli barre'), type: 'border-radius',
+    withHover({ key: 'bar_radius', label: t('Raggio barre'), type: 'border-radius',
       condition: { field: 'chart_type', value: 'bar' } }),
     { key: 'tension', label: t('Curvatura linea'), type: 'range', min: 0, max: 1, step: 0.05,
       condition: { field: 'chart_type', op: 'in', value: ['line', 'radar'] } },
@@ -339,7 +339,7 @@ export default {
       condition: { field: 'chart_type', op: 'in', value: ['line', 'radar'] } },
     { key: 'point_hover_radius', label: t('Raggio punti (hover)'), type: 'range', min: 0, max: 16, step: 1,
       condition: { field: 'chart_type', op: 'in', value: ['line', 'radar'] } },
-    { key: 'doughnut_cutout', label: t('Taglio ciambella (%)'), type: 'range', min: 10, max: 90, step: 5,
+    { key: 'doughnut_cutout', label: t('Taglio ciambella'), type: 'range', min: 10, max: 90, step: 5,
       condition: { field: 'chart_type', value: 'doughnut' } },
 
     // ── Griglia e assi (colori/dimensioni) ──

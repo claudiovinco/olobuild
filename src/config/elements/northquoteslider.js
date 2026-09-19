@@ -71,7 +71,7 @@ export default {
     { type: 'separator', label: t('Animazione') },
     { key: 'slant', label: t('Morph rettangolo → parallelogramma'), type: 'toggle' },
     { key: 'autoplay', label: t('Autoplay'), type: 'toggle' },
-    { key: 'autoplay_speed', label: t('Velocità autoplay (s)'), type: 'number', min: 2, max: 20,
+    { key: 'autoplay_speed', label: t('Velocità autoplay'), type: 'number', min: 2, max: 20,
       condition: { field: 'autoplay', op: 'eq', value: true } },
   ],
 

@@ -87,21 +87,21 @@ export default {
     },
 
     { type: 'separator', label: t('Impilamento') },
-    { key: 'top_offset', label: t('Distanza dall\'alto (px)'), type: 'range', min: 0, max: 240, step: 5,
+    { key: 'top_offset', label: t('Distanza dall\'alto'), type: 'range', min: 0, max: 240, step: 5,
       description: t('Quota a cui la prima card si "incolla" durante lo scroll.') },
-    { key: 'top_step', label: t('Scalino per card (px)'), type: 'range', min: 0, max: 80, step: 2,
+    { key: 'top_step', label: t('Scalino per card'), type: 'range', min: 0, max: 80, step: 2,
       description: t('Ogni card si ferma un po\' più in basso della precedente, così resta visibile un bordo della pila.') },
-    { key: 'card_gap', label: t('Spazio tra card (px)'), type: 'range', min: 0, max: 80, step: 2 },
+    { key: 'card_gap', label: t('Gap card'), type: 'range', min: 0, max: 80, step: 2 },
     { key: 'scale_on_stack', label: t('Rimpicciolisci le card sotto la pila'), type: 'toggle',
       description: t('Le card già impilate si riducono leggermente per dare profondità. Rispetta prefers-reduced-motion.') },
-    { key: 'scale_amount', label: t('Intensità rimpicciolimento (%)'), type: 'range', min: 1, max: 12, step: 1,
+    { key: 'scale_amount', label: t('Intensità rimpicciolimento'), type: 'range', min: 1, max: 12, step: 1,
       condition: { field: 'scale_on_stack', op: 'eq', value: true } },
   ],
 
   styleFields: [
     { type: 'separator', label: t('Aspetto card') },
-    { key: 'card_min_height', label: t('Altezza minima card (px)'), type: 'range', min: 200, max: 700, step: 10, responsive: true },
-    { key: 'card_padding', label: t('Padding interno (px)'), type: 'spacing', min: 0, max: 80 },
+    { key: 'card_min_height', label: t('Altezza minima card'), type: 'range', min: 200, max: 700, step: 10, responsive: true },
+    { key: 'card_padding', label: t('Padding (px)'), type: 'spacing', min: 0, max: 80 },
     { key: 'round', label: t('Raggio angoli (px)'), type: 'border-radius' },
     { key: 'media_position', label: t('Posizione immagine'), type: 'select', options: [
       { value: 'right', label: t('A destra del testo') },

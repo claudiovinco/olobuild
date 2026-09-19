@@ -58,7 +58,7 @@ export default {
       { value: 'tilt-3d',         label: t('3D Tilt') },
       { value: 'custom',          label: t('Personalizzato') },
     ] },
-    { key: 'height', label: t('Altezza (px)'), type: 'range', min: 100, max: 600, step: 10 },
+    { key: 'height', label: t('Altezza'), type: 'range', min: 100, max: 600, step: 10 },
     { type: 'separator', label: t('Stile') },
     { key: 'color', label: t('Colore accento'), type: 'color' },
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
@@ -66,7 +66,7 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
     ]},
-    withHover({ key: 'border_radius', label: t('Arrotondamento angoli (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     ...borderFields(),
   ],
 };

@@ -56,7 +56,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Sconto') },
-    { key: 'discount_percent', label: t('Sconto (%)'), type: 'range', min: 0, max: 50, step: 1 },
+    { key: 'discount_percent', label: t('Sconto'), type: 'range', min: 0, max: 50, step: 1 },
     { key: 'show_savings', label: t('Mostra risparmio'), type: 'toggle' },
 
     { type: 'separator', label: t('Elementi visibili') },
@@ -95,7 +95,7 @@ export default {
       { value: 'compact', label: t('Compatto') },
     ]},
     { key: 'columns', label: t('Colonne (griglia)'), type: 'range', min: 1, max: 6, step: 1 },
-    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 48, step: 4 },
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4 },
     { key: 'card_style', label: t('Stile card'), type: 'select', options: [
       { value: 'default', label: t('Default') },
       { value: 'shadow', label: t('Ombra') },

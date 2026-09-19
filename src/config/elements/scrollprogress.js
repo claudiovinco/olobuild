@@ -34,7 +34,7 @@ export default {
   styleFields: [
     { key: 'bar_color', label: t('Colore barra'), type: 'color' },
     { key: 'bar_bg', label: t('Colore sfondo'), type: 'color' },
-    { key: 'bar_height', label: t('Altezza barra (px)'), type: 'range', min: 2, max: 12, step: 1 },
+    { key: 'bar_height', label: t('Altezza barra'), type: 'range', min: 2, max: 12, step: 1 },
     { key: 'percentage_color', label: t('Colore percentuale'), type: 'color',
       condition: { field: 'show_percentage', operator: '==', value: true } },
     { key: 'z_index', label: t('Z-index'), type: 'range', min: 100, max: 10000, step: 100 },

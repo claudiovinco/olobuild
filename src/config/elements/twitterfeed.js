@@ -82,13 +82,13 @@ export default {
       { value: 'dark', label: t('Scuro') },
     ]},
     { key: 'width', label: t('Larghezza (px, vuoto = auto)'), type: 'number', min: 0, max: 1200, step: 10 },
-    { key: 'height', label: t('Altezza (px)'), type: 'range', min: 200, max: 1200, step: 50 },
+    { key: 'height', label: t('Altezza'), type: 'range', min: 200, max: 1200, step: 50 },
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
     ]},
-    withHover({ key: 'border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     ...borderFields(),
   ],
 };

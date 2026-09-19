@@ -95,13 +95,13 @@ export default {
     { type: 'separator', label: t('Stile marker') },
     { key: 'marker_color', label: t('Colore marker'), type: 'color',
       condition: { field: 'marker', value: true } },
-    { key: 'marker_size', label: t('Dimensione marker (px)'), type: 'range', min: 20, max: 64, step: 2,
+    { key: 'marker_size', label: t('Dimensione marker'), type: 'range', min: 20, max: 64, step: 2,
       condition: { field: 'marker', value: true } },
 
     // ── Aspetto ──
     { type: 'separator', label: t('Aspetto') },
-    { key: 'height', label: t('Altezza (px)'), type: 'range', min: 150, max: 800, step: 10 },
-    withHover({ key: 'border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
+    { key: 'height', label: t('Altezza'), type: 'range', min: 150, max: 800, step: 10 },
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     { key: 'tile_layer', label: t('Stile mappa'), type: 'select', options: [
       { value: 'standard', label: t('Standard') },
       { value: 'hot', label: t('Humanitarian') },

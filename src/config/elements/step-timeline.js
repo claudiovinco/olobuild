@@ -185,7 +185,7 @@ export default {
   styleFields: [
     { type: 'separator', label: t('Griglia') },
     { key: 'columns',     label: t('Numero colonne'),    type: 'range', min: 1, max: 5, step: 1 },
-    { key: 'gap',         label: t('Gap tra step (px)'), type: 'range', min: 0, max: 80, step: 4 },
+    { key: 'gap',         label: t('Gap step'), type: 'range', min: 0, max: 80, step: 4 },
     { key: 'items_align', label: t('Allineamento contenuto'), type: 'select', options: [
       { value: 'start',  label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
@@ -194,13 +194,13 @@ export default {
     { type: 'separator', label: t('Timeline') },
     { key: 'timeline_line_color',    label: t('Colore linea'),    type: 'color' },
     { key: 'timeline_dot_color',     label: t('Colore pallini'),  type: 'color' },
-    { key: 'timeline_dot_size',      label: t('Dimensione pallini (px)'), type: 'range', min: 6, max: 24, step: 1 },
-    { key: 'timeline_height',        label: t('Altezza linea (px)'),       type: 'range', min: 1, max: 8, step: 1 },
+    { key: 'timeline_dot_size',      label: t('Dimensione pallini'), type: 'range', min: 6, max: 24, step: 1 },
+    { key: 'timeline_height',        label: t('Altezza linea'),       type: 'range', min: 1, max: 8, step: 1 },
     { key: 'timeline_margin_bottom', label: t('Margine timeline (px)'), type: 'spacing', min: 0, max: 160 },
 
     { type: 'separator', label: t('Numero step') },
     { key: 'counter_font_family', label: t('Famiglia'), type: 'font-family' },
-    { key: 'counter_size',   label: t('Dimensione (px)'), type: 'range', min: 40, max: 200, step: 4 },
+    { key: 'counter_size',   label: t('Dimensione'), type: 'range', min: 40, max: 200, step: 4 },
     { key: 'counter_color',  label: t('Colore'),          type: 'color' },
     { key: 'counter_italic', label: t('Italico'),         type: 'toggle' },
     { key: 'counter_weight', label: t('Peso'),            type: 'select', options: [
@@ -212,7 +212,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Tag') },
-    { key: 'tag_size',  label: t('Dimensione (px)'), type: 'range', min: 10, max: 16, step: 1 },
+    { key: 'tag_size',  label: t('Dimensione'), type: 'range', min: 10, max: 16, step: 1 },
     { key: 'tag_color', label: t('Colore testo'),    type: 'color' },
 
     { type: 'separator', label: t('Mockup card') },
@@ -229,16 +229,16 @@ export default {
       { value: 'md',   label: t('Media') },
       { value: 'lg',   label: t('Forte') },
     ]},
-    withHover({ key: 'media_radius', label: t('Border radius mockup'), type: 'border-radius' }, { hoverKey: 'media_radius_hover', hoverDurationKey: 'media_radius_hover_duration' }),
+    withHover({ key: 'media_radius', label: t('Raggio mockup'), type: 'border-radius' }, { hoverKey: 'media_radius_hover', hoverDurationKey: 'media_radius_hover_duration' }),
     { key: 'media_object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true, contextKeys: { ratio: 'media_aspect_ratio' } },
 
     { type: 'separator', label: t('Pre-title') },
-    { key: 'pre_title_size',  label: t('Dimensione (px)'), type: 'range', min: 9, max: 16, step: 1 },
+    { key: 'pre_title_size',  label: t('Dimensione'), type: 'range', min: 9, max: 16, step: 1 },
     { key: 'pre_title_color', label: t('Colore'),          type: 'color' },
 
     { type: 'separator', label: t('Titolo') },
     { key: 'title_font_family', label: t('Famiglia'), type: 'font-family' },
-    { key: 'title_size',         label: t('Dimensione (px)'), type: 'range', min: 18, max: 60, step: 2 },
+    { key: 'title_size',         label: t('Dimensione'), type: 'range', min: 18, max: 60, step: 2 },
     { key: 'title_weight',       label: t('Peso'), type: 'select', options: [
       { value: '300', label: t('300 — Light') },
       { value: '400', label: t('400 — Regular') },
@@ -250,14 +250,14 @@ export default {
     { key: 'title_accent_color', label: t('Colore accent'), type: 'color' },
 
     { type: 'separator', label: t('Descrizione') },
-    { key: 'description_size',  label: t('Dimensione (px)'), type: 'range', min: 11, max: 20, step: 1 },
+    { key: 'description_size',  label: t('Dimensione'), type: 'range', min: 11, max: 20, step: 1 },
     { key: 'description_color', label: t('Colore'),          type: 'color' },
 
     { type: 'separator', label: t('Footer metric') },
     { key: 'footer_icon', label: t('Icona'), type: 'icon' },
-    { key: 'footer_value_size',  label: t('Valore dimensione (px)'), type: 'range', min: 12, max: 30, step: 1 },
+    { key: 'footer_value_size',  label: t('Valore dimensione'), type: 'range', min: 12, max: 30, step: 1 },
     { key: 'footer_value_color', label: t('Valore colore'),          type: 'color' },
-    { key: 'footer_label_size',  label: t('Label dimensione (px)'),  type: 'range', min: 9, max: 14, step: 1 },
+    { key: 'footer_label_size',  label: t('Label dimensione'),  type: 'range', min: 9, max: 14, step: 1 },
     { key: 'footer_label_color', label: t('Label colore'),           type: 'color' },
 
     { type: 'separator', label: t('Separatori tra step') },

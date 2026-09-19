@@ -88,9 +88,9 @@ export default {
         { value: 'custom', label: t('✎ Personalizzato') },
       ],
     },
-    { key: 'offset_x', label: t('Offset orizzontale (px)'), type: 'range', min: 0, max: 200, step: 5,
+    { key: 'offset_x', label: t('Offset orizzontale'), type: 'range', min: 0, max: 200, step: 5,
       condition: { field: 'placement', value: 'custom', operator: '!=' } },
-    { key: 'offset_y', label: t('Offset verticale (px)'), type: 'range', min: 0, max: 200, step: 5,
+    { key: 'offset_y', label: t('Offset verticale'), type: 'range', min: 0, max: 200, step: 5,
       condition: { field: 'placement', value: 'custom', operator: '!=' } },
     { key: 'custom_top', label: t('Top (px o %)'), type: 'text',
       condition: { field: 'placement', value: 'custom' } },
@@ -117,7 +117,7 @@ export default {
         { value: 'row', label: t('Orizzontale') },
       ],
     },
-    { key: 'layout_gap', label: t('Spaziatura figli (px)'), type: 'range', min: 0, max: 40, step: 2 },
+    { key: 'layout_gap', label: t('Gap figli'), type: 'range', min: 0, max: 40, step: 2 },
     {
       key: 'layout_align',
       label: t('Allineamento figli'),
@@ -194,25 +194,28 @@ export default {
     // ─── Aspetto ───
     { type: 'separator', label: t('Aspetto') },
     { key: 'bg_color', label: t('Sfondo'), type: 'color' },
-    withHover({ key: 'border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 60 },
     { key: 'shadow', label: t('Ombra'), type: 'toggle' },
-    { key: 'shadow_color', label: t('Colore ombra'), type: 'color',
-      condition: { field: 'shadow', value: true } },
-    { key: 'shadow_blur', label: t('Sfocatura ombra (px)'), type: 'range', min: 0, max: 60, step: 2,
-      condition: { field: 'shadow', value: true } },
-    { key: 'shadow_y', label: t('Offset Y ombra (px)'), type: 'range', min: 0, max: 30, step: 1,
+    // Un controllo solo, con le stesse possibilità che l'ombra ha in ogni altra
+    // tile: X, Y, sfocatura, estensione, colore, interna. Le tre chiavi storiche
+    // (shadow_y, shadow_blur, shadow_color) restano scritte dal ponte legacy; le
+    // tre nuove (h, spread, inset) sono state aggiunte AL RENDERER, così il
+    // controllo non offre comandi che non fanno niente.
+    { key: 'shadow_custom', label: t('Ombra'), type: 'box-shadow',
+      legacyKeys: { h: 'shadow_h', v: 'shadow_y', blur: 'shadow_blur',
+                    spread: 'shadow_spread', color: 'shadow_color', inset: 'shadow_inset' },
       condition: { field: 'shadow', value: true } },
 
     // ─── Stile trigger ───
     { type: 'separator', label: t('Stile pulsante trigger') },
-    { key: 'trigger_size', label: t('Dimensione trigger (px)'), type: 'range', min: 32, max: 80, step: 2,
+    { key: 'trigger_size', label: t('Dimensione trigger'), type: 'range', min: 32, max: 80, step: 2,
       condition: { field: 'trigger_mode', value: 'button' } },
     { key: 'trigger_bg', label: t('Sfondo trigger'), type: 'color',
       condition: { field: 'trigger_mode', value: 'button' } },
     { key: 'trigger_color', label: t('Colore icona trigger'), type: 'color',
       condition: { field: 'trigger_mode', value: 'button' } },
-    { key: 'trigger_radius', label: t('Arrotondamento trigger (%)'), type: 'range', min: 0, max: 50, step: 5,
+    { key: 'trigger_radius', label: t('Arrotondamento trigger'), type: 'range', min: 0, max: 50, step: 5,
       condition: { field: 'trigger_mode', value: 'button' } },
     { key: 'trigger_shadow', label: t('Ombra trigger'), type: 'toggle',
       condition: { field: 'trigger_mode', value: 'button' } },
@@ -221,12 +224,12 @@ export default {
     { type: 'separator', label: t('Stile pulsante chiudi') },
     { key: 'close_color', label: t('Colore X'), type: 'color',
       condition: { field: 'show_close', value: true } },
-    { key: 'close_size', label: t('Dimensione X (px)'), type: 'range', min: 12, max: 32, step: 2,
+    { key: 'close_size', label: t('Dimensione X'), type: 'range', min: 12, max: 32, step: 2,
       condition: { field: 'show_close', value: true } },
 
     // ─── Durata animazione ───
     { type: 'separator', label: t('Durata animazione') },
-    { key: 'animation_duration', label: t('Durata (ms)'), type: 'range', min: 100, max: 800, step: 50,
+    { key: 'animation_duration', label: t('Durata'), type: 'range', min: 100, max: 800, step: 50,
       condition: { field: 'trigger_mode', value: 'button' } },
 
     ...borderFields(),

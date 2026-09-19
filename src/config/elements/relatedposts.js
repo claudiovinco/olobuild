@@ -116,7 +116,7 @@ export default {
       { value: '3', label: '3' },
       { value: '4', label: '4' },
     ]},
-    { key: 'gap', label: t('Spaziatura (px)'), type: 'range', min: 0, max: 40, step: 2 },
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 40, step: 2 },
     { key: 'image_ratio', label: t('Rapporto immagine'), type: 'select', options: [
       { value: '16/9', label: '16:9' },
       { value: '4/3', label: '4:3' },
@@ -127,7 +127,7 @@ export default {
     { type: 'separator', label: t('Stile') },
     { key: 'card_background', label: t('Sfondo card'), type: 'color' },
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 32 },
-    withHover({ key: 'card_border_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
+    withHover({ key: 'card_border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
       { value: 'none', label: t('Nessuno') },
       { value: 'shadow', label: t('Ombra') },

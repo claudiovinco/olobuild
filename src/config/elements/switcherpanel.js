@@ -106,7 +106,7 @@ export default {
     { type: 'separator', label: t('Hero') },
     { key: 'media_bg', type: 'background', showParallax: false,
       label: t('Hero (immagine, video, gradiente…)') },
-    { key: 'hero_height', label: t('Altezza hero (px)'), type: 'range', min: 200, max: 800, step: 10 },
+    { key: 'hero_height', label: t('Altezza hero'), type: 'range', min: 200, max: 800, step: 10 },
 
     { type: 'separator', label: t('Layout') },
     { key: 'nav_position', label: t('Posizione navigazione'), type: 'select', options: [
@@ -133,7 +133,7 @@ export default {
       { value: 'slide-bottom', label: t('Scorrimento basso') },
       { value: 'scale',        label: t('Scala') },
     ]},
-    { key: 'animation_duration', label: t('Durata transizioni (ms)'), type: 'range', min: 100, max: 800, step: 50 },
+    { key: 'animation_duration', label: t('Durata transizioni'), type: 'range', min: 100, max: 800, step: 50 },
   ],
 
   styleFields: [
@@ -166,7 +166,7 @@ export default {
         { value: 'high',   label: t('Alta') },
       ],
       condition: { field: 'preset', op: 'in', value: ['liquid-glass','neon-cyber','brutalist-block','magnetic-liquid','sticker','retro-terminal','3d-tilt'] } },
-    { key: 'effect_speed', label: t('Velocità animazioni (ms)'), type: 'range',
+    { key: 'effect_speed', label: t('Velocità animazioni'), type: 'range',
       min: 0, max: 4000, step: 100,
       condition: { field: 'preset', op: 'in', value: ['neon-cyber','magnetic-liquid','retro-terminal','3d-tilt'] } },
 
@@ -177,14 +177,14 @@ export default {
     ]),
 
     { type: 'separator', label: t('Hero — Aspetto') },
-    { key: 'hero_radius', label: t('Arrotondamento hero (px)'), type: 'border-radius' },
+    { key: 'hero_radius', label: t('Raggio hero (px)'), type: 'border-radius' },
     { key: 'hero_overlay_color', label: t('Overlay colore'), type: 'color',
       condition: { field: 'nav_position', op: 'eq', value: 'overlay' } },
     { key: 'hero_overlay_gradient', label: t('Overlay gradiente (alto→basso)'), type: 'toggle',
       condition: { field: 'nav_position', op: 'eq', value: 'overlay' } },
 
     { type: 'separator', label: t('Pannello — Layout') },
-    { key: 'panel_image_width', label: t('Larghezza immagine (%)'), type: 'range', min: 25, max: 60, step: 1 },
+    { key: 'panel_image_width', label: t('Larghezza immagine'), type: 'range', min: 25, max: 60, step: 1 },
     { key: 'panel_image_ratio', label: t('Proporzione immagine'), type: 'select', options: [
       { value: 'auto', label: t('Auto') },
       { value: '16:9', label: '16:9' },
@@ -192,10 +192,10 @@ export default {
       { value: '1:1',  label: t('1:1 (quadrata)') },
       { value: '3:4',  label: t('3:4 (verticale)') },
     ]},
-    { key: 'panel_gap', label: t('Spazio testo↔immagine (px)'), type: 'range', min: 0, max: 80, step: 4 },
+    { key: 'panel_gap', label: t('Gap testo↔immagine'), type: 'range', min: 0, max: 80, step: 4 },
     { key: 'tile_padding', label: t('Padding pannello (px)'), type: 'spacing', max: 80 },
-    { key: 'panel_radius', label: t('Arrotondamento pannello (px)'), type: 'border-radius' },
-    { key: 'panel_image_radius', label: t('Arrotondamento immagine (px)'), type: 'border-radius' },
+    { key: 'panel_radius', label: t('Raggio pannello (px)'), type: 'border-radius' },
+    { key: 'panel_image_radius', label: t('Raggio immagine (px)'), type: 'border-radius' },
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Voce nav'),
@@ -232,13 +232,13 @@ export default {
     { key: 'nav_padding', label: t('Padding voce (px)'), type: 'spacing', min: 0, max: 60,
       legacyKeys: { y: 'nav_padding_y', x: 'nav_padding_x' } },
     { key: 'nav_uppercase', label: t('Maiuscole'), type: 'toggle' },
-    { key: 'nav_gap', label: t('Spazio tra voci (px)'), type: 'range', min: 0, max: 32, step: 1 },
-    { key: 'nav_radius', label: t('Arrotondamento voce (px)'), type: 'border-radius' },
+    { key: 'nav_gap', label: t('Gap voci'), type: 'range', min: 0, max: 32, step: 1 },
+    { key: 'nav_radius', label: t('Raggio voce (px)'), type: 'border-radius' },
 
     { type: 'separator', label: t('Nav — Container') },
     { key: 'nav_container_bg', label: t('Sfondo container'), type: 'color' },
     { key: 'nav_container_padding', label: t('Padding container (px)'), type: 'spacing', min: 0, max: 60 },
-    { key: 'nav_container_radius', label: t('Arrotondamento container (px)'), type: 'border-radius' },
+    { key: 'nav_container_radius', label: t('Raggio container (px)'), type: 'border-radius' },
 
     { type: 'separator', label: t('Nav — Stati') },
     { key: 'nav_active_bg', label: t('Sfondo voce attiva'), type: 'color' },
@@ -254,7 +254,7 @@ export default {
       { value: 'left-bar',  label: t('Barra sinistra (verticale)') },
     ]},
     { key: 'nav_indicator_color', label: t('Colore indicatore'), type: 'color' },
-    { key: 'nav_indicator_thickness', label: t('Spessore indicatore (px)'), type: 'range', min: 1, max: 6, step: 1 },
+    { key: 'nav_indicator_thickness', label: t('Spessore indicatore'), type: 'range', min: 1, max: 6, step: 1 },
 
     { type: 'separator', label: t('Pannello — Stile') },
     { key: 'panel_bg', label: t('Sfondo pannello'), type: 'color' },

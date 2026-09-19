@@ -40,6 +40,6 @@ export default {
   styleFields: [
     oloxAccentField(t('Colore separatore')),
     { key: 'reverse', label: t('Direzione inversa'), type: 'toggle' },
-    { key: 'duration', label: t('Durata loop (s)'), type: 'range', min: 8, max: 60, step: 1 },
+    { key: 'duration', label: t('Durata loop'), type: 'range', min: 8, max: 60, step: 1 },
   ],
 };

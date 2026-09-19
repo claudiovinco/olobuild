@@ -103,17 +103,18 @@ export const shadowField = [
     { value: 'xl', label: t('Molto forte') },
     { value: 'custom', label: t('Personalizzata') },
   ]},
-  { key: 'shadow_h', label: t('Offset H (px)'), type: 'range', min: -50, max: 50, step: 1,
-    condition: { field: 'shadow', op: 'eq', value: 'custom' } },
-  { key: 'shadow_v', label: t('Offset V (px)'), type: 'range', min: -50, max: 50, step: 1,
-    condition: { field: 'shadow', op: 'eq', value: 'custom' } },
-  { key: 'shadow_blur', label: t('Sfocatura (px)'), type: 'range', min: 0, max: 100, step: 1,
-    condition: { field: 'shadow', op: 'eq', value: 'custom' } },
-  { key: 'shadow_spread', label: t('Espansione (px)'), type: 'range', min: -50, max: 50, step: 1,
-    condition: { field: 'shadow', op: 'eq', value: 'custom' } },
-  { key: 'shadow_color', label: t('Colore ombra'), type: 'color',
-    condition: { field: 'shadow', op: 'eq', value: 'custom' } },
-  { key: 'shadow_inset', label: t('Ombra interna'), type: 'toggle',
+  // L'ombra personalizzata: UN controllo completo (offset X/Y, sfocatura,
+  // estensione, colore, interna) con l'anteprima, al posto dei sei campi
+  // separati che stavano qui. È lo STESSO controllo che il pannello «Stile» usa
+  // per il wrapper: prima lo stesso concetto aveva due facce diverse a seconda
+  // del pannello che si apriva, e questo è esattamente ciò che fa sentire
+  // l'utente in una casa non sua.
+  // I DATI NON SI MUOVONO: `legacyKeys` mappa uno a uno le sei chiavi storiche,
+  // che restano scritte a ogni modifica — il renderer PHP continua a leggerle
+  // con Olobuild_Tile_Utils::shadow_value() senza sapere niente del cambio.
+  { key: 'shadow_custom', label: t('Ombra personalizzata'), type: 'box-shadow',
+    legacyKeys: { h: 'shadow_h', v: 'shadow_v', blur: 'shadow_blur',
+                  spread: 'shadow_spread', color: 'shadow_color', inset: 'shadow_inset' },
     condition: { field: 'shadow', op: 'eq', value: 'custom' } },
 ];
 
@@ -541,13 +542,10 @@ export const transformDefaults = {
 export const textShadowFields = [
   { type: 'separator', label: t('Ombra testo') },
   { key: 'text_shadow_enabled', label: t('Ombra testo'), type: 'toggle' },
-  { key: 'text_shadow_h', label: t('Offset orizzontale (px)'), type: 'range', min: -20, max: 20, step: 1,
-    condition: { field: 'text_shadow_enabled', op: 'eq', value: true } },
-  { key: 'text_shadow_v', label: t('Offset verticale (px)'), type: 'range', min: -20, max: 20, step: 1,
-    condition: { field: 'text_shadow_enabled', op: 'eq', value: true } },
-  { key: 'text_shadow_blur', label: t('Sfocatura (px)'), type: 'range', min: 0, max: 40, step: 1,
-    condition: { field: 'text_shadow_enabled', op: 'eq', value: true } },
-  { key: 'text_shadow_color', label: t('Colore ombra'), type: 'color',
+  // Stessa scelta fatta per l'ombra del box: un controllo solo (X, Y, sfocatura,
+  // colore) al posto di quattro campi in fila. Chiavi salvate invariate.
+  { key: 'text_shadow_custom', label: t('Ombra testo'), type: 'text-shadow',
+    legacyKeys: { h: 'text_shadow_h', v: 'text_shadow_v', blur: 'text_shadow_blur', color: 'text_shadow_color' },
     condition: { field: 'text_shadow_enabled', op: 'eq', value: true } },
 ];
 

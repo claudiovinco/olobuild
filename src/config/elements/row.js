@@ -126,7 +126,7 @@ export default {
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
     { type: 'separator', label: t('Sfondo & spaziatura') },
-    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 48, step: 4,
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4,
       show: (s) => {
         const fcg = parseInt(s.flex_column_gap || 0);
         const frg = parseInt(s.flex_row_gap || 0);
@@ -145,8 +145,8 @@ export default {
     { key: 'stack_tablet', label: t('Impila su tablet'), type: 'toggle' },
 
     { key: '_grid_sep', label: t('Controlli CSS Grid'), type: 'separator', condition: { field: 'layout_mode', value: 'grid' } },
-    { key: 'grid_column_gap', label: t('Gap Orizzontale (px)'), type: 'range', min: 0, max: 60, step: 2, condition: { field: 'layout_mode', value: 'grid' } },
-    { key: 'grid_row_gap', label: t('Gap Verticale (px)'), type: 'range', min: 0, max: 60, step: 2, condition: { field: 'layout_mode', value: 'grid' } },
+    { key: 'grid_column_gap', label: t('Gap Orizzontale'), type: 'range', min: 0, max: 60, step: 2, condition: { field: 'layout_mode', value: 'grid' } },
+    { key: 'grid_row_gap', label: t('Gap Verticale'), type: 'range', min: 0, max: 60, step: 2, condition: { field: 'layout_mode', value: 'grid' } },
     { key: 'grid_auto_flow', label: t('Direzione Grid'), type: 'icon-select', options: [
       { value: 'row', label: t('Riga'), icon: 'arrow-right' },
       { value: 'column', label: t('Colonna'), icon: 'arrow-down' },

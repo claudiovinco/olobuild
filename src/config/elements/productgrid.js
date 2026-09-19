@@ -151,7 +151,7 @@ export default {
 
     { type: 'separator', label: t('Layout') },
     { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 5, step: 1, responsive: true },
-    { key: 'gap', label: t('Spazio tra card (px)'), type: 'range', min: 8, max: 40, step: 2 },
+    { key: 'gap', label: t('Gap card'), type: 'range', min: 8, max: 40, step: 2 },
   ],
 
   styleFields: [
@@ -178,11 +178,11 @@ export default {
     { type: 'separator', label: t('Card (sfondo opzionale)') },
     { key: 'card_bg', label: t('Card — sfondo (vuoto = trasparente)'), type: 'color' },
     { key: 'card_border', label: t('Card — bordo'), type: 'border', legacyWidth: 1 },
-    { key: 'card_radius', label: t('Card — raggio (px)'), type: 'border-radius' },
-    { key: 'card_padding', label: t('Card — padding interno (px)'), type: 'spacing', min: 0, max: 80 },
+    { key: 'card_radius', label: t('Raggio card (px)'), type: 'border-radius' },
+    { key: 'card_padding', label: t('Padding card (px)'), type: 'spacing', min: 0, max: 80 },
 
     { type: 'separator', label: t('Shade swatches') },
-    { key: 'shade_size', label: t('Pallini shade — dimensione (px)'), type: 'range', min: 10, max: 24, step: 1 },
+    { key: 'shade_size', label: t('Pallini shade — dimensione'), type: 'range', min: 10, max: 24, step: 1 },
     { key: 'shade_border', label: t('Pallini shade — bordo interno'), type: 'color' },
 
     { type: 'separator', label: t('Note & Roast meter') },
@@ -201,7 +201,7 @@ export default {
     { type: 'separator', label: t('Testo') },
     { key: 'category_color', label: t('Categoria'), type: 'color' },
     { key: 'title_font', label: t('Font titolo'), type: 'font-family' },
-    { key: 'title_size', label: t('Dim. titolo (px)'), type: 'range', min: 14, max: 32, step: 1 },
+    { key: 'title_size', label: t('Dim. titolo'), type: 'range', min: 14, max: 32, step: 1 },
     { key: 'title_color', label: t('Titolo'), type: 'color' },
     { key: 'price_color', label: t('Prezzo (accento)'), type: 'color' },
     { key: 'footer_color', label: t('Link finale — colore'), type: 'color' },

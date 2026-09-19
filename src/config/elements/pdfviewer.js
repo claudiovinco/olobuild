@@ -107,7 +107,7 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'separator', label: t('Dimensioni') },
-    { key: 'viewer_height', label: t('Altezza viewer (px)'), type: 'range', min: 300, max: 1200, step: 10 },
+    { key: 'viewer_height', label: t('Altezza viewer'), type: 'range', min: 300, max: 1200, step: 10 },
 
     { type: 'separator', label: t('Colori') },
     { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },

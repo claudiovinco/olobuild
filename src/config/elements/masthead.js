@@ -83,8 +83,8 @@ export default {
     { key: 'rule_color', label: t('Colore righe sottili'), type: 'color' },
 
     { type: 'separator', label: t('Tipografia') },
-    { key: 'nameplate_size', label: t('Dimensione nameplate (px)'), type: 'range', min: 24, max: 96, step: 1 },
-    { key: 'headline_size', label: t('Dimensione titolo (px)'), type: 'range', min: 24, max: 96, step: 1 },
+    { key: 'nameplate_size', label: t('Dimensione nameplate'), type: 'range', min: 24, max: 96, step: 1 },
+    { key: 'headline_size', label: t('Dimensione titolo'), type: 'range', min: 24, max: 96, step: 1 },
 
     { type: 'separator', label: t('Spaziatura') },
     { key: 'pad_custom', label: t('Padding personalizzato (blocco articolo)'), type: 'toggle',

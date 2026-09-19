@@ -145,7 +145,7 @@ export default {
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { ratio: '190/240', fit: 'cover' },
       description: t('Punto focale globale dell’immagine in tutte le card risultato.') },
-    { key: 'card_max_width', label: t('Larghezza max card (px)'), type: 'range', min: 480, max: 1000, step: 10 },
+    { key: 'card_max_width', label: t('Larghezza max card'), type: 'range', min: 480, max: 1000, step: 10 },
     { key: 'card_radius', label: t('Raggio card'), type: 'border-radius' },
     { key: 'card_padding', label: t('Padding card (px)'), type: 'spacing', max: 80 },
     { key: 'shadow', label: t('Ombra card'), type: 'select', options: [

@@ -86,7 +86,7 @@ export default {
     },
 
     { type: 'separator', label: t('Aspetto') },
-    { key: 'size', label: t('Dimensione (px)'), type: 'range', min: 60, max: 400, step: 10 },
+    { key: 'size', label: t('Dimensione'), type: 'range', min: 60, max: 400, step: 10 },
     { key: 'stroke_width', label: t('Spessore traccia'), type: 'range', min: 2, max: 30, step: 1 },
 
     { type: 'separator', label: t('Colori') },
@@ -94,7 +94,7 @@ export default {
     { key: 'track_color', label: t('Colore traccia'), type: 'color' },
 
     { type: 'separator', label: t('Animazione') },
-    { key: 'duration', label: t('Durata animazione (ms)'), type: 'range', min: 0, max: 5000, step: 100 },
+    { key: 'duration', label: t('Durata animazione'), type: 'range', min: 0, max: 5000, step: 100 },
 
     ...borderFields(),
   ],

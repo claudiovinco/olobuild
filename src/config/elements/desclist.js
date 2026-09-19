@@ -87,7 +87,7 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'separator', label: t('Icona — Aspetto') },
-    { key: 'icon_size', label: t('Dim. icona (px)'), type: 'range', min: 14, max: 32, step: 2 },
+    { key: 'icon_size', label: t('Dim. icona'), type: 'range', min: 14, max: 32, step: 2 },
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Termine'),
@@ -118,7 +118,7 @@ export default {
       { value: 'right', label: t('Destra') },
       { value: 'justify', label: t('Giustificato') },
     ]},
-    { key: 'spacing', label: t('Spaziatura tra voci (px)'), type: 'range', min: 4, max: 32, step: 2 },
+    { key: 'spacing', label: t('Spaziatura tra voci'), type: 'range', min: 4, max: 32, step: 2 },
 
     { type: 'separator', label: t('Colori') },
     { key: 'border_color', label: t('Colore bordo separatore'), type: 'color' },

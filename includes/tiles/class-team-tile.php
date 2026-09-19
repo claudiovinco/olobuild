@@ -68,7 +68,10 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
         $tile_r_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $tile_bw  = intval( $s['border_width'] );
         $tile_bc  = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
-        $tile_pad = intval( $s['tile_padding'] );
+        // `tile_padding` è passato al controllo a 4 lati, quindi arriva come
+        // array {top,right,bottom,left}: intval() su un array vale 1, e il padding
+        // della card collassava a 1px. L'helper accetta entrambi i formati.
+        $tile_pad = Olobuild_Tile_Utils::sides_css( Olobuild_Tile_Utils::spacing_sides( $s['tile_padding'] ?? null, [], [ 16, 16, 16, 16 ] ) );
 
         // Photo
         $ph_size   = intval( $s['photo_size'] ) ?: 120;
@@ -138,7 +141,7 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
                 overflow: visible;
                 border-radius: <?php echo $tile_r; ?>;
                 background: <?php echo $bg; ?>;
-                padding: <?php echo $tile_pad; ?>px;
+                padding: <?php echo $tile_pad; ?>;
                 <?php if ( $tile_bw > 0 ) : ?>
                 border: <?php echo $tile_bw; ?>px solid <?php echo $tile_bc; ?>;
                 <?php endif; ?>

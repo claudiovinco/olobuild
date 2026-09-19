@@ -76,7 +76,7 @@ export default {
 
     { type: 'separator', label: t('Aspetto tile') },
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 96 },
-    withHover({ key: 'border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     { key: 'shadow', label: t('Ombra'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
       { value: 'sm', label: t('Piccola') },

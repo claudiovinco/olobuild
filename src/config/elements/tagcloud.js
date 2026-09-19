@@ -103,7 +103,7 @@ export default {
     ]),
 
     { type: 'separator', label: t('Spaziatura layout') },
-    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 24, step: 2 },
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 24, step: 2 },
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Tag'),
@@ -113,14 +113,14 @@ export default {
         colorHover: 'hover_color',
       },
     },
-    { key: 'min_font', label: t('Dimensione min (px)'), type: 'range', min: 8, max: 24, step: 1 },
-    { key: 'max_font', label: t('Dimensione max (px)'), type: 'range', min: 16, max: 60, step: 1 },
+    { key: 'min_font', label: t('Dimensione min'), type: 'range', min: 8, max: 24, step: 1 },
+    { key: 'max_font', label: t('Dimensione max'), type: 'range', min: 16, max: 60, step: 1 },
 
     { type: 'separator', label: t('Colori') },
     withHover({ key: 'background_color', label: t('Sfondo tag'),   type: 'color' }, { hoverKey: 'hover_background' }),
 
     { type: 'separator', label: t('Stile tag') },
-    withHover({ key: 'border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     { key: 'padding', label: t('Padding (px)'), type: 'spacing', max: 32 },
 
     ...borderFields(),

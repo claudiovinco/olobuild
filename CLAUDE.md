@@ -64,6 +64,24 @@ padding/margine → `type:'spacing'` (4 lati) · raggio → `type:'border-radius
   nativamente → un controllo nuovo nasce disponibile in entrambi i posti.
 - **Condizioni**: un solo valutatore, `src/utils/fieldCondition.js` (`op`/`operator`, alias
   eq/neq/ne/in/not-in/empty/notEmpty/gt/lt…, compositi ridotti alla somma dei lati).
+- **Ombra** → `type:'box-shadow'` (FieldBoxShadow: X, Y, sfocatura, estensione, colore, interna,
+  con anteprima) · ombra del testo → `type:'text-shadow'`. Il gruppo condiviso `shadowField`
+  di `_shared.js` (importato da 109 tile) monta il preset + QUESTO controllo: le sei chiavi
+  storiche `shadow_h/v/blur/spread/color/inset` restano scritte dal ponte legacy.
+- **Il nome delle cose** (glossario): la stessa famiglia si chiama sempre allo stesso modo —
+  **Raggio · Padding · Gap · Ombra · Durata** — seguita dal qualificatore (`Raggio card`).
+  Vince la forma già più diffusa, non una preferenza: prima c'erano 103 nomi per il raggio.
+- **L'unità sta nel CONTROLLO, non nell'etichetta**: `range` e `number` la mostrano accanto al
+  numero (`src/utils/fieldLabel.js` la stacca dalla coda dell'etichetta e la passa al campo).
+  Per `spacing`, che nei 4 riquadri non la mostra, l'etichetta la tiene: non toglierla.
+- **Un controllo che non fa niente è peggio di un controllo che manca.** Se una tile offre una
+  proprietà, un renderer deve leggerla: 54 tile mostravano «Ombra» senza disegnarla
+  (`Olobuild_Frontend_Renderer::tile_ombra_non_resa()` + gemello `OMBRA_SUL_WRAPPER` in
+  `GridCell.vue`; l'audit fallisce se i due elenchi divergono dal codice).
+  ⚠️ Ombra su wrapper CON sfondo → `box-shadow`; wrapper trasparente → `filter: drop-shadow`,
+  che segue la sagoma visibile. Un box-shadow lì disegnerebbe un rettangolo attorno al vuoto.
+- ⚠️ Gli helper (`spacing_css`, `sides_css`, `border_radius`) **restituiscono già l'unità**:
+  aggiungere `px` nel template produce `16pxpx` e la dichiarazione viene scartata in silenzio.
 
 ## Regole
 - Tailwind prefix: `mb-` (evita conflitti con WordPress)

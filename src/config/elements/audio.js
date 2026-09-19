@@ -77,7 +77,7 @@ export default {
     { key: 'accent_color', label: t('Colore accent'), type: 'color' },
     { key: 'bg_color', label: t('Sfondo'), type: 'color' },
     { key: 'text_color', label: t('Colore testo'), type: 'color' },
-    { key: 'border_radius', label: t('Border Radius'), type: 'border-radius' },
+    { key: 'border_radius', label: t('Raggio'), type: 'border-radius' },
 
     ...shadowField,
     ...borderFields(),

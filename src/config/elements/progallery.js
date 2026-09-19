@@ -196,7 +196,7 @@ export default {
       show: s => s.layout === 'strip_coverflow' || s.layout === 'filmstrip' },
     { key: 'filmstrip_autoplay', label: t('Auto-avanzamento'), type: 'toggle',
       show: s => s.layout === 'strip_coverflow' || s.layout === 'filmstrip' },
-    { key: 'filmstrip_speed', label: t('Intervallo (s)'), type: 'range', min: 2, max: 8, step: 0.5,
+    { key: 'filmstrip_speed', label: t('Intervallo'), type: 'range', min: 2, max: 8, step: 0.5,
       show: s => (s.layout === 'strip_coverflow' || s.layout === 'filmstrip') && !!s.filmstrip_autoplay },
     { key: 'filmstrip_dots', label: t('Indicatore posizione'), type: 'select', options: [
       { value: 'dots', label: t('Pallini') },
@@ -263,7 +263,7 @@ export default {
 
     // ─── Dimensioni visive ───
     { type: 'separator', label: t('Dimensioni') },
-    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 24, step: 2 },
+    { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 24, step: 2 },
     // type 'unit': stessa stringa CSS salvata del vecchio text ('250px', 'auto' resta editabile raw)
     { key: 'img_height', label: t('Altezza immagine'), type: 'unit', units: ['px', 'vh'], min: 0,
       show: s => !(s.layout && s.layout.startsWith('strip')) },
@@ -278,7 +278,7 @@ export default {
     // mostrare: non saprebbe quale delle tante).
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { fit: 'object_fit' } },
-    withHover({ key: 'thumb_radius', label: t('Raggio bordi (px)'), type: 'border-radius' }),
+    withHover({ key: 'thumb_radius', label: t('Raggio (px)'), type: 'border-radius' }),
 
     // ─── Espandi ───
     { type: 'separator', label: t('Layout — Espandi (spotlight)'), show: s => s.layout === 'expand' },
@@ -286,47 +286,47 @@ export default {
       show: s => s.layout === 'expand' },
     { key: 'expand_shrink', label: t('Compressione altri'), type: 'range', min: 0.2, max: 1, step: 0.1,
       show: s => s.layout === 'expand' },
-    { key: 'expand_speed', label: t('Velocità (ms)'), type: 'range', min: 200, max: 1000, step: 50,
+    { key: 'expand_speed', label: t('Velocità'), type: 'range', min: 200, max: 1000, step: 50,
       show: s => s.layout === 'expand' },
 
     // ─── Parallasse ───
     { type: 'separator', label: t('Layout — Parallasse'), show: s => s.layout === 'parallax' },
-    { key: 'parallax_height', label: t('Altezza area (px)'), type: 'range', min: 800, max: 3000, step: 100,
+    { key: 'parallax_height', label: t('Altezza area'), type: 'range', min: 800, max: 3000, step: 100,
       show: s => s.layout === 'parallax' },
     { key: 'parallax_intensity', label: t('Intensità parallasse'), type: 'range', min: 10, max: 100, step: 5,
       show: s => s.layout === 'parallax' },
 
     // ─── Deriva ───
     { type: 'separator', label: t('Layout — Deriva'), show: s => s.layout === 'drift' },
-    { key: 'drift_height', label: t('Altezza area (px)'), type: 'range', min: 600, max: 2500, step: 100,
+    { key: 'drift_height', label: t('Altezza area'), type: 'range', min: 600, max: 2500, step: 100,
       show: s => s.layout === 'drift' },
     { key: 'drift_intensity', label: t('Intensità movimento'), type: 'range', min: 10, max: 100, step: 5,
       show: s => s.layout === 'drift' },
-    { key: 'drift_rotation', label: t('Rotazione max (deg)'), type: 'range', min: 0, max: 25, step: 1,
+    { key: 'drift_rotation', label: t('Rotazione max'), type: 'range', min: 0, max: 25, step: 1,
       show: s => s.layout === 'drift' },
 
     // ─── Cascata ───
     { type: 'separator', label: t('Layout — Cascata'), show: s => s.layout === 'cascade' },
     { key: 'cascade_spread', label: t('Distanza separazione'), type: 'range', min: 20, max: 100, step: 5,
       show: s => s.layout === 'cascade' },
-    { key: 'cascade_overlap', label: t('Sovrapposizione iniziale (%)'), type: 'range', min: 10, max: 80, step: 5,
+    { key: 'cascade_overlap', label: t('Sovrapposizione iniziale'), type: 'range', min: 10, max: 80, step: 5,
       show: s => s.layout === 'cascade' },
-    { key: 'cascade_rotation', label: t('Rotazione carte (deg)'), type: 'range', min: 0, max: 20, step: 1,
+    { key: 'cascade_rotation', label: t('Rotazione carte'), type: 'range', min: 0, max: 20, step: 1,
       show: s => s.layout === 'cascade' },
 
     // ─── Metro ───
     { type: 'separator', label: t('Layout — Metro'), show: s => s.layout === 'metro' },
-    { key: 'metro_cell_height', label: t('Altezza cella (px)'), type: 'range', min: 100, max: 400, step: 10,
+    { key: 'metro_cell_height', label: t('Altezza cella'), type: 'range', min: 100, max: 400, step: 10,
       show: s => s.layout === 'metro' },
 
     // ─── Coverflow 3D visivo ───
     { type: 'separator', label: t('Coverflow 3D — aspetto'),
       show: s => s.layout === 'strip_coverflow' || s.layout === 'filmstrip' },
-    { key: 'filmstrip_item_width', label: t('Larghezza foto (px)'), type: 'range', min: 180, max: 450, step: 10,
+    { key: 'filmstrip_item_width', label: t('Larghezza foto'), type: 'range', min: 180, max: 450, step: 10,
       show: s => s.layout === 'strip_coverflow' || s.layout === 'filmstrip' },
     { key: 'filmstrip_center_zoom', label: t('Zoom centro'), type: 'range', min: 1.0, max: 1.5, step: 0.05,
       show: s => s.layout === 'strip_coverflow' || s.layout === 'filmstrip' },
-    { key: 'filmstrip_side_tilt', label: t('Rotazione 3D laterali (deg)'), type: 'range', min: 0, max: 60, step: 1,
+    { key: 'filmstrip_side_tilt', label: t('Rotazione 3D laterali'), type: 'range', min: 0, max: 60, step: 1,
       show: s => s.layout === 'strip_coverflow' || s.layout === 'filmstrip' },
     { key: 'filmstrip_dots_color', label: t('Colore indicatore'), type: 'color',
       show: s => (s.layout === 'strip_coverflow' || s.layout === 'filmstrip') && s.filmstrip_dots && s.filmstrip_dots !== 'none' },
@@ -334,15 +334,15 @@ export default {
     // ─── Nastro aspetto ───
     { type: 'separator', label: t('Nastro — aspetto'),
       show: s => s.layout && s.layout.startsWith('strip') },
-    { key: 'strip_height', label: t('Altezza nastro (px)'), type: 'range', min: 150, max: 500, step: 10,
+    { key: 'strip_height', label: t('Altezza nastro'), type: 'range', min: 150, max: 500, step: 10,
       show: s => s.layout && s.layout.startsWith('strip') && s.layout !== 'strip_coverflow' },
-    { key: 'strip_item_width', label: t('Larghezza foto (px)'), type: 'range', min: 150, max: 500, step: 10,
+    { key: 'strip_item_width', label: t('Larghezza foto'), type: 'range', min: 150, max: 500, step: 10,
       show: s => s.layout && s.layout.startsWith('strip') && s.layout !== 'strip_multi' && s.layout !== 'strip_coverflow' },
     { key: 'strip_rows', label: t('Righe'), type: 'range', min: 2, max: 3, step: 1,
       show: s => s.layout === 'strip_multi' },
     { key: 'strip_fade_edges', label: t('Sfumatura bordi'), type: 'toggle',
       show: s => s.layout && s.layout.startsWith('strip') },
-    { key: 'strip_speed', label: t('Durata ciclo (s)'), type: 'range', min: 10, max: 60, step: 2,
+    { key: 'strip_speed', label: t('Durata ciclo'), type: 'range', min: 10, max: 60, step: 2,
       show: s => s.layout === 'strip_marquee' || s.layout === 'strip_split' },
     { key: 'strip_arrows_style', label: t('Stile frecce'), type: 'select', options: [
       { value: 'chevron', label: t('Chevron') },
@@ -352,7 +352,7 @@ export default {
       { value: 'pill', label: t('Pillola') },
       { value: 'minimal', label: t('Minimale') },
     ], show: s => s.layout && s.layout.startsWith('strip') && s.layout !== 'strip_coverflow' && !!s.strip_arrows },
-    { key: 'strip_arrows_size', label: t('Dimensione frecce (px)'), type: 'range', min: 24, max: 60, step: 2,
+    { key: 'strip_arrows_size', label: t('Dimensione frecce'), type: 'range', min: 24, max: 60, step: 2,
       show: s => s.layout && s.layout.startsWith('strip') && s.layout !== 'strip_coverflow' && !!s.strip_arrows },
     { key: 'strip_arrows_color', label: t('Colore frecce'), type: 'color',
       show: s => s.layout && s.layout.startsWith('strip') && s.layout !== 'strip_coverflow' && !!s.strip_arrows },
@@ -374,9 +374,9 @@ export default {
       { value: 'zoom-center', label: t('Zoom dal centro') },
       { value: 'land', label: t('Atterraggio 3D') },
     ]},
-    { key: 'entrance_stagger', label: t('Stagger (ms)'), type: 'range', min: 80, max: 400, step: 20,
+    { key: 'entrance_stagger', label: t('Stagger'), type: 'range', min: 80, max: 400, step: 20,
       show: s => s.entrance && s.entrance !== 'none' },
-    { key: 'entrance_duration', label: t('Durata (ms)'), type: 'range', min: 300, max: 1200, step: 50,
+    { key: 'entrance_duration', label: t('Durata'), type: 'range', min: 300, max: 1200, step: 50,
       show: s => s.entrance && s.entrance !== 'none' },
 
     // ─── Hover ───
@@ -392,13 +392,13 @@ export default {
     ]},
     { key: 'hover_zoom_scale', label: t('Intensità zoom'), type: 'range', min: 1.05, max: 1.30, step: 0.01,
       show: s => s.hover_effect === 'zoom' },
-    { key: 'hover_tilt_angle', label: t('Angolo tilt (deg)'), type: 'range', min: 5, max: 20, step: 1,
+    { key: 'hover_tilt_angle', label: t('Angolo tilt'), type: 'range', min: 5, max: 20, step: 1,
       show: s => s.hover_effect === 'tilt3d' },
     { key: 'hover_magnetic_strength', label: t('Intensità magnetismo'), type: 'range', min: 8, max: 60, step: 2,
       show: s => s.hover_effect === 'magnetic' },
     { key: 'hover_glow_color', label: t('Colore bagliore'), type: 'color',
       show: s => s.hover_effect === 'glow' },
-    { key: 'hover_glow_spread', label: t('Intensità bagliore (px)'), type: 'range', min: 8, max: 50, step: 2,
+    { key: 'hover_glow_spread', label: t('Intensità bagliore'), type: 'range', min: 8, max: 50, step: 2,
       show: s => s.hover_effect === 'glow' },
     { key: 'hover_caption', label: t('Didascalia hover'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
@@ -431,7 +431,7 @@ export default {
       { value: 'kenburns', label: t('Ken Burns') },
       { value: 'shimmer', label: t('Shimmer') },
     ]},
-    { key: 'continuous_speed', label: t('Durata ciclo (s)'), type: 'range', min: 10, max: 40, step: 1,
+    { key: 'continuous_speed', label: t('Durata ciclo'), type: 'range', min: 10, max: 40, step: 1,
       show: s => !!s.continuous && s.continuous !== 'none' },
 
     // ─── Filtro ───
@@ -452,7 +452,7 @@ export default {
       show: s => s.filter === 'duotone' },
     { key: 'duotone_light', label: t('Colore chiaro'), type: 'color',
       show: s => s.filter === 'duotone' },
-    { key: 'duotone_intensity', label: t('Intensità duotone (%)'), type: 'range', min: 0, max: 100, step: 5,
+    { key: 'duotone_intensity', label: t('Intensità duotone'), type: 'range', min: 0, max: 100, step: 5,
       show: s => s.filter === 'duotone' },
 
     // ─── Cornice ───
@@ -468,7 +468,7 @@ export default {
     ]},
     { key: 'frame_color', label: t('Colore cornice'), type: 'color',
       show: s => s.frame === 'polaroid' || s.frame === 'shadow-box' || s.frame === 'inset' },
-    { key: 'frame_inset_padding', label: t('Distanza dal bordo (px)'), type: 'spacing', max: 40 },
+    { key: 'frame_inset_padding', label: t('Padding dal bordo (px)'), type: 'spacing', max: 40 },
 
     // ─── Bordi animati ───
     { type: 'separator', label: t('Bordi animati') },
@@ -483,18 +483,18 @@ export default {
     ]},
     { key: 'anim_border_color', label: t('Colore'), type: 'color',
       show: s => s.anim_border && s.anim_border !== 'none' },
-    { key: 'anim_border_thickness', label: t('Spessore (px)'), type: 'range', min: 1, max: 6, step: 1,
+    { key: 'anim_border_thickness', label: t('Spessore'), type: 'range', min: 1, max: 6, step: 1,
       show: s => s.anim_border && s.anim_border !== 'none' && s.anim_border !== 'frame-in' },
-    { key: 'anim_border_inset', label: t('Distanza dal bordo (px)'), type: 'range', min: 4, max: 50, step: 2,
+    { key: 'anim_border_inset', label: t('Distanza dal bordo'), type: 'range', min: 4, max: 50, step: 2,
       show: s => s.anim_border === 'frame-in' },
-    { key: 'anim_border_speed', label: t('Velocità (s)'), type: 'range', min: 1, max: 10, step: 0.5,
+    { key: 'anim_border_speed', label: t('Velocità'), type: 'range', min: 1, max: 10, step: 0.5,
       show: s => s.anim_border && s.anim_border !== 'none' && s.anim_border !== 'frame-in' && s.anim_border !== 'corners' },
 
     // ─── +N overlay ───
     { type: 'separator', label: 'Indicatore "+N"' },
     { key: 'more_bg', label: t('Sfondo overlay'), type: 'color' },
     { key: 'more_color', label: t('Colore testo'), type: 'color' },
-    { key: 'more_size', label: t('Dimensione testo (px)'), type: 'range', min: 16, max: 48, step: 2 },
+    { key: 'more_size', label: t('Dimensione testo'), type: 'range', min: 16, max: 48, step: 2 },
 
     // ─── Ombra & bordi ───
     ...shadowField,

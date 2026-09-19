@@ -52,13 +52,13 @@ export default {
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
     { type: 'separator', label: t('Dimensioni') },
-    { key: 'icon_size', label: t('Dimensione icona (px)'), type: 'range', min: 16, max: 48, step: 2 },
+    { key: 'icon_size', label: t('Dimensione icona'), type: 'range', min: 16, max: 48, step: 2 },
 
     { type: 'separator', label: t('Colori') },
     { key: 'toggle_color', label: t('Colore toggle'), type: 'color' },
     { key: 'toggle_active_color', label: t('Colore toggle attivo'), type: 'color' },
 
     { type: 'separator', label: t('Transizione') },
-    { key: 'transition_duration', label: t('Durata transizione (ms)'), type: 'range', min: 0, max: 1000, step: 50 },
+    { key: 'transition_duration', label: t('Durata transizione'), type: 'range', min: 0, max: 1000, step: 50 },
   ],
 };

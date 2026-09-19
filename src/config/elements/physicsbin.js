@@ -59,7 +59,7 @@ export default {
           { value: 'star',   label: t('Stella') },
         ]},
         { key: 'color', label: t('Colore'), type: 'color' },
-        { key: 'radius', label: t('Raggio (px)'), type: 'range', min: 16, max: 80, step: 2 },
+        { key: 'radius', label: t('Raggio'), type: 'range', min: 16, max: 80, step: 2 },
         { key: 'glyph', label: t('Glifo (lettera/numero)'), type: 'text',
           description: t('Un carattere mostrato al centro. Ignorato se imposti un\'immagine.') },
         { key: 'image', label: t('Immagine (opzionale)'), type: 'image',
@@ -108,7 +108,7 @@ export default {
     { type: 'separator', label: t('Aspetto cesto') },
     { key: 'bg_color', label: t('Colore sfondo'), type: 'color',
       description: t('Lascia vuoto per il motivo a righe diagonali di default.') },
-    { key: 'height', label: t('Altezza (px)'), type: 'range', min: 240, max: 800, step: 10 },
+    { key: 'height', label: t('Altezza'), type: 'range', min: 240, max: 800, step: 10 },
     { key: 'border_radius', label: t('Raggio bordi'), type: 'border-radius' },
 
     ...shadowField,

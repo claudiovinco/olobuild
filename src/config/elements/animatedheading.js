@@ -49,8 +49,8 @@ export default {
     ]},
 
     { type: 'separator', label: t('Velocità') },
-    { key: 'typing_speed', label: t('Velocità digitazione (ms)'), type: 'range', min: 50, max: 300, step: 10 },
-    { key: 'pause_time', label: t('Pausa tra parole (ms)'), type: 'range', min: 500, max: 5000, step: 100 },
+    { key: 'typing_speed', label: t('Velocità digitazione'), type: 'range', min: 50, max: 300, step: 10 },
+    { key: 'pause_time', label: t('Pausa tra parole'), type: 'range', min: 500, max: 5000, step: 100 },
 
     { type: 'separator', label: t('Evidenziazione (se animation=highlight)') },
     { key: 'highlight_style', label: t('Stile evidenziazione'), type: 'select', options: [

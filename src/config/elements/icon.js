@@ -40,7 +40,7 @@ export default {
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
     { type: 'separator', label: t('Aspetto') },
-    { key: 'size', label: t('Dimensione (px)'), type: 'range', min: 16, max: 120, step: 4 },
+    { key: 'size', label: t('Dimensione'), type: 'range', min: 16, max: 120, step: 4 },
     { key: 'color', label: t('Colore'), type: 'color' },
     { key: 'view', label: t('Visualizzazione'), type: 'select', options: [
       { value: 'default', label: t('Solo icona') },

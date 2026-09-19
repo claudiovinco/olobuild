@@ -72,8 +72,8 @@ export default {
       { value: 'custom',          label: t('Personalizzato') },
     ] },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-    { key: 'width', label: t('Larghezza (px)'), type: 'range', min: 180, max: 500, step: 10 },
-    { key: 'height', label: t('Altezza (px)'), type: 'range', min: 70, max: 1000, step: 10 },
+    { key: 'width', label: t('Larghezza'), type: 'range', min: 180, max: 500, step: 10 },
+    { key: 'height', label: t('Altezza'), type: 'range', min: 70, max: 1000, step: 10 },
     { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },

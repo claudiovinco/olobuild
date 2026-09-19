@@ -92,7 +92,7 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
     ]},
-    { key: 'icon_spacing', label: t('Spazio icona (px)'), type: 'range', min: 0, max: 24, step: 2 },
+    { key: 'icon_spacing', label: t('Spazio icona'), type: 'range', min: 0, max: 24, step: 2 },
 
     ...textEffectsFields([ { value: 'text', label: t('Solo Testo') } ]),
 
@@ -118,9 +118,9 @@ export default {
     withHover({ key: 'text_color', label: t('Colore testo'), type: 'color' }, { hoverKey: 'hover_text_color' }),
 
     { type: 'separator', label: t('Forma') },
-    withHover({ key: 'border_radius', label: t('Border Radius'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 80 },
-    { key: 'wrap_padding', label: t('Respiro attorno al pulsante (px)'), type: 'spacing', min: 0, max: 80,
+    { key: 'wrap_padding', label: t('Padding attorno al pulsante (px)'), type: 'spacing', min: 0, max: 80,
       legacyKeys: { y: 'wrap_padding_y' } },
 
     // Ombra con toggle Normale/Hover: il select pilota `shadow` (normale) o `hover_shadow`
@@ -136,30 +136,12 @@ export default {
       { value: 'custom', label: t('Personalizzata') },
     ] }, { hoverKey: 'hover_shadow' }),
     // custom — ombra NORMALE
-    { key: 'shadow_h', label: t('Offset H (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'shadow', op: 'eq', value: 'custom' } },
-    { key: 'shadow_v', label: t('Offset V (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'shadow', op: 'eq', value: 'custom' } },
-    { key: 'shadow_blur', label: t('Sfocatura (px)'), type: 'range', min: 0, max: 100, step: 1,
-      condition: { field: 'shadow', op: 'eq', value: 'custom' } },
-    { key: 'shadow_spread', label: t('Espansione (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'shadow', op: 'eq', value: 'custom' } },
-    { key: 'shadow_color', label: t('Colore ombra'), type: 'color',
-      condition: { field: 'shadow', op: 'eq', value: 'custom' } },
-    { key: 'shadow_inset', label: t('Ombra interna'), type: 'toggle',
+    { key: 'shadow_custom', label: t('Ombra personalizzata'), type: 'box-shadow',
+      legacyKeys: { h: 'shadow_h', v: 'shadow_v', blur: 'shadow_blur', spread: 'shadow_spread', color: 'shadow_color', inset: 'shadow_inset' },
       condition: { field: 'shadow', op: 'eq', value: 'custom' } },
     // custom — ombra HOVER
-    { key: 'hover_shadow_h', label: t('Offset H hover (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
-    { key: 'hover_shadow_v', label: t('Offset V hover (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
-    { key: 'hover_shadow_blur', label: t('Sfocatura hover (px)'), type: 'range', min: 0, max: 100, step: 1,
-      condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
-    { key: 'hover_shadow_spread', label: t('Espansione hover (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
-    { key: 'hover_shadow_color', label: t('Colore ombra hover'), type: 'color',
-      condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
-    { key: 'hover_shadow_inset', label: t('Ombra interna hover'), type: 'toggle',
+    { key: 'hover_shadow_custom', label: t('Ombra personalizzata'), type: 'box-shadow',
+      legacyKeys: { h: 'hover_shadow_h', v: 'hover_shadow_v', blur: 'hover_shadow_blur', spread: 'hover_shadow_spread', color: 'hover_shadow_color', inset: 'hover_shadow_inset' },
       condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
 
     ...borderFields(),

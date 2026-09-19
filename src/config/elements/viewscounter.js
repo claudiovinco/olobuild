@@ -73,7 +73,7 @@ export default {
       { value: 'before', label: t('Prima del numero') },
       { value: 'after', label: t('Dopo il numero') },
     ], condition: { field: 'show_icon', value: true } },
-    { key: 'icon_size', label: t('Dimensione icona (px)'), type: 'range', min: 10, max: 40, step: 1,
+    { key: 'icon_size', label: t('Dimensione icona'), type: 'range', min: 10, max: 40, step: 1,
       condition: { field: 'show_icon', value: true } },
 
     { type: 'separator', label: t('Tipografia') },

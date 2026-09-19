@@ -221,7 +221,7 @@ export default {
       itemLabel: t('Barra'),
       defaults: { h: 50, label: '', alt: false },
       itemFields: [
-        { key: 'h', label: t('Altezza (%)'), type: 'range', min: 0, max: 100, step: 2 },
+        { key: 'h', label: t('Altezza'), type: 'range', min: 0, max: 100, step: 2 },
         { key: 'label', label: t('Etichetta'), type: 'text' },
         { key: 'alt', label: t('Colore alternativo'), type: 'toggle' },
       ],
@@ -290,29 +290,29 @@ export default {
     { key: 'glow_on', label: t('Glow radiale dietro il contenuto'), type: 'toggle' },
     { key: 'glow_color', label: t('Colore glow (vuoto = accento)'), type: 'color',
       condition: { field: 'glow_on', op: 'eq', value: true } },
-    { key: 'glow_w', label: t('Larghezza (px)'), type: 'range', min: 100, max: 1600, step: 20,
+    { key: 'glow_w', label: t('Larghezza'), type: 'range', min: 100, max: 1600, step: 20,
       condition: { field: 'glow_on', op: 'eq', value: true } },
-    { key: 'glow_h', label: t('Altezza (px)'), type: 'range', min: 100, max: 1200, step: 20,
+    { key: 'glow_h', label: t('Altezza'), type: 'range', min: 100, max: 1200, step: 20,
       condition: { field: 'glow_on', op: 'eq', value: true } },
-    { key: 'glow_blur', label: t('Sfocatura (px)'), type: 'range', min: 0, max: 200, step: 5,
+    { key: 'glow_blur', label: t('Sfocatura'), type: 'range', min: 0, max: 200, step: 5,
       condition: { field: 'glow_on', op: 'eq', value: true } },
-    { key: 'glow_x', label: t('Posizione X (%)'), type: 'range', min: 0, max: 100, step: 1,
+    { key: 'glow_x', label: t('Posizione X'), type: 'range', min: 0, max: 100, step: 1,
       condition: { field: 'glow_on', op: 'eq', value: true } },
-    { key: 'glow_y', label: t('Posizione Y (%)'), type: 'range', min: -50, max: 100, step: 1,
+    { key: 'glow_y', label: t('Posizione Y'), type: 'range', min: -50, max: 100, step: 1,
       condition: { field: 'glow_on', op: 'eq', value: true } },
 
     // ── Modulo: regolazioni striscia ──
     { type: 'separator', label: t('Modulo — striscia media'), condition: { field: 'module', op: 'eq', value: 'strip' } },
-    { key: 'strip_offset', label: t('Offset verticale 2ª tessera (px)'), type: 'range', min: 0, max: 80, step: 2,
+    { key: 'strip_offset', label: t('Offset verticale 2ª tessera'), type: 'range', min: 0, max: 80, step: 2,
       condition: { field: 'module', op: 'eq', value: 'strip' } },
-    { key: 'strip_radius', label: t('Raggio superiore tessere (px)'), type: 'range', min: 0, max: 260, step: 4,
+    { key: 'strip_radius', label: t('Raggio superiore tessere'), type: 'range', min: 0, max: 260, step: 4,
       condition: { field: 'module', op: 'eq', value: 'strip' } },
 
     // ── Finiture di scena ──
     { type: 'separator', label: t('Finiture') },
     { key: 'arch', label: t('Bordo inferiore ad arco (maschera)'), type: 'toggle' },
     { key: 'frame_on', label: t('Cornice fotografica (media in frame)'), type: 'toggle' },
-    { key: 'frame_inset', label: t('Spessore cornice (px)'), type: 'range', min: 8, max: 80, step: 2,
+    { key: 'frame_inset', label: t('Spessore cornice'), type: 'range', min: 8, max: 80, step: 2,
       condition: { field: 'frame_on', op: 'eq', value: true } },
     { key: 'watermark_color', label: t('Colore watermark (vuoto = bianco 6%)'), type: 'color',
       condition: { field: 'watermark_text', op: 'neq', value: '' } },
@@ -348,7 +348,7 @@ export default {
       },
       sizeMin: 12, sizeMax: 48, sizeStep: 1,
     },
-    { key: 'subtitle_max_width', label: t('Larghezza max sottotitolo (px)'), type: 'range', min: 200, max: 1000, step: 10 },
+    { key: 'subtitle_max_width', label: t('Larghezza max sottotitolo'), type: 'range', min: 200, max: 1000, step: 10 },
 
     // ── Effetti testo (gradient/neon/typewriter/...) ──
     ...textEffectsFields([
@@ -360,7 +360,7 @@ export default {
     // ── Layout interno ──
     { type: 'separator', label: t('Layout interno') },
     { key: 'min_height',         label: t('Altezza minima'), type: 'unit', units: ['px', 'vh', '%'], placeholder: 'auto' },
-    { key: 'content_max_width',  label: t('Larghezza max contenuto (px)'), type: 'range', min: 200, max: 1200, step: 50 },
+    { key: 'content_max_width',  label: t('Larghezza max contenuto'), type: 'range', min: 200, max: 1200, step: 50 },
     { key: 'vertical_align',     label: t('Posizione verticale del blocco'), type: 'select', options: [
       { value: 'top',    label: t('In alto') },
       { value: 'center', label: t('Al centro') },
@@ -385,10 +385,10 @@ export default {
       { value: 'outline', label: t('Contorno') },
       { value: 'ghost',   label: t('Trasparente') },
     ]},
-    { key: 'cta_size',       label: t('Dimensione testo (px)'), type: 'range', min: 12, max: 24, step: 1 },
+    { key: 'cta_size',       label: t('Dimensione testo'), type: 'range', min: 12, max: 24, step: 1 },
     { key: 'cta_bg_color',   label: t('Colore sfondo'), type: 'color' },
     { key: 'cta_text_color', label: t('Colore testo'),  type: 'color' },
-    withHover({ key: 'cta_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
+    withHover({ key: 'cta_radius', label: t('Raggio (px)'), type: 'border-radius' }),
 
     // ── Stile pulsante CTA Secondario ──
     { type: 'separator', label: t('Stile CTA Secondario') },

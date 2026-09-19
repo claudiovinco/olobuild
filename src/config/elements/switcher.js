@@ -80,7 +80,7 @@ export default {
       { value: 'slide-top', label: t('Slide alto') },
       { value: 'slide-bottom', label: t('Slide basso') },
     ]},
-    { key: 'animation_duration', label: t('Durata transizioni (ms)'), type: 'range', min: 100, max: 800, step: 50 },
+    { key: 'animation_duration', label: t('Durata transizioni'), type: 'range', min: 100, max: 800, step: 50 },
   ],
 
   styleFields: [
@@ -113,7 +113,7 @@ export default {
         { value: 'high',   label: t('Alta') },
       ],
       condition: { field: 'preset', op: 'in', value: ['liquid-glass','neon-cyber','brutalist-block','magnetic-liquid','sticker','retro-terminal','3d-tilt'] } },
-    { key: 'effect_speed', label: t('Velocità animazioni (ms)'), type: 'range',
+    { key: 'effect_speed', label: t('Velocità animazioni'), type: 'range',
       min: 0, max: 4000, step: 100,
       condition: { field: 'preset', op: 'in', value: ['neon-cyber','magnetic-liquid','retro-terminal','3d-tilt'] } },
 
@@ -144,13 +144,13 @@ export default {
     { type: 'separator', label: t('Tab — Spaziatura') },
     { key: 'tab_padding', label: t('Padding tab (px)'), type: 'spacing', min: 0, max: 60,
       legacyKeys: { y: 'tab_padding_y', x: 'tab_padding_x' } },
-    { key: 'tab_gap', label: t('Spazio tra tab (px)'), type: 'range', min: 0, max: 24, step: 1 },
-    { key: 'tab_radius', label: t('Arrotondamento tab (px)'), type: 'border-radius' },
+    { key: 'tab_gap', label: t('Gap tab'), type: 'range', min: 0, max: 24, step: 1 },
+    { key: 'tab_radius', label: t('Raggio tab (px)'), type: 'border-radius' },
 
     { type: 'separator', label: t('Container nav') },
     { key: 'container_bg', label: t('Sfondo container'), type: 'color' },
     { key: 'container_padding', label: t('Padding container (px)'), type: 'spacing', min: 0, max: 60 },
-    { key: 'container_radius', label: t('Arrotondamento container (px)'), type: 'border-radius' },
+    { key: 'container_radius', label: t('Raggio container (px)'), type: 'border-radius' },
 
     { type: 'separator', label: t('Colori tab') },
     { key: 'active_bg', label: t('Sfondo tab attiva'), type: 'color' },

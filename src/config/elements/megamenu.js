@@ -267,7 +267,7 @@ export default {
       description: t('"Sul punto": colora la prima occorrenza del carattere "." dentro il logo testuale.') },
     { key: 'logo_dot_color', label: t('Pallino — colore'), type: 'color', condition: { field: 'logo_dot', value: true } },
     { key: 'logo_text_color', label: t('Colore testo logo'), type: 'color', condition: { field: 'logo_text', op: 'ne', value: '' } },
-    { key: 'logo_text_size', label: t('Dim. testo logo (px)'), type: 'range', min: 12, max: 40, step: 1, condition: { field: 'logo_text', op: 'ne', value: '' } },
+    { key: 'logo_text_size', label: t('Dim. testo logo'), type: 'range', min: 12, max: 40, step: 1, condition: { field: 'logo_text', op: 'ne', value: '' } },
     { key: 'logo_crest', label: t('Crest / badge (monogramma, es. VF)'), type: 'text' },
     { key: 'logo_crest_bg', label: t('Crest — sfondo'), type: 'color', condition: { field: 'logo_crest', op: 'ne', value: '' } },
     { key: 'logo_crest_color', label: t('Crest — testo'), type: 'color', condition: { field: 'logo_crest', op: 'ne', value: '' } },
@@ -380,7 +380,7 @@ export default {
       description: t('Linea sottile sul bordo inferiore della barra, larga quanto il progresso di scroll.') },
     { key: 'progress_color', label: t('Colore hairline'), type: 'color',
       condition: { field: 'scroll_progress', value: true } },
-    { key: 'progress_height', label: t('Spessore hairline (px)'), type: 'number', min: 1, max: 8,
+    { key: 'progress_height', label: t('Spessore hairline'), type: 'number', min: 1, max: 8,
       condition: { field: 'scroll_progress', value: true } },
 
     { type: 'separator', label: t('Mobile — Bar') },
@@ -569,8 +569,8 @@ export default {
     },
 
     { type: 'separator', label: t('Logo — Aspetto') },
-    { key: 'logo_width', label: t('Larghezza logo (px)'), type: 'range', min: 60, max: 300, step: 5 },
-    { key: 'logo_min_height', label: t('Altezza logo (px)'), type: 'range', min: 0, max: 120, step: 2 },
+    { key: 'logo_width', label: t('Larghezza logo'), type: 'range', min: 60, max: 300, step: 5 },
+    { key: 'logo_min_height', label: t('Altezza logo'), type: 'range', min: 0, max: 120, step: 2 },
     { key: 'logo_position', label: t('Posizione logo'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro (sovrapposto)') },
@@ -578,7 +578,7 @@ export default {
       { value: 'stacked', label: t('Sopra il menu') },
       { value: 'split', label: t('In mezzo (split nav)') },
     ]},
-    { key: 'logo_gap', label: t('Distanza logo-menu (px)'), type: 'range', min: 0, max: 40, step: 2,
+    { key: 'logo_gap', label: t('Gap logo-menu'), type: 'range', min: 0, max: 40, step: 2,
       condition: { field: 'logo_position', op: 'eq', value: 'stacked' } },
 
     { type: 'separator', label: t('Navbar') },
@@ -588,8 +588,8 @@ export default {
       { value: 'right', label: t('Destra') },
     ]},
     { key: 'nav_bg', label: t('Sfondo navbar'), type: 'color' },
-    { key: 'nav_height', label: t('Altezza min (px)'), type: 'range', min: 40, max: 120, step: 2 },
-    { key: 'item_gap', label: t('Gap tra voci (px)'), type: 'range', min: 0, max: 40, step: 1 },
+    { key: 'nav_height', label: t('Altezza min'), type: 'range', min: 40, max: 120, step: 2 },
+    { key: 'item_gap', label: t('Gap voci'), type: 'range', min: 0, max: 40, step: 1 },
 
     { type: 'separator', label: t('Spaziatura barra') },
     { key: 'bar_width', label: t('Larghezza barra'), type: 'select', options: [
@@ -598,7 +598,7 @@ export default {
       { value: 'classic', label: t('Classica (1200px)') },
     ]},
     { key: 'bar_padding', label: t('Padding barra (px)'), type: 'spacing', max: 60 },
-    { key: 'bar_gap', label: t('Gap elementi barra (px)'), type: 'range', min: 0, max: 60, step: 2 },
+    { key: 'bar_gap', label: t('Gap elementi barra'), type: 'range', min: 0, max: 60, step: 2 },
     { key: 'logo_margin_right', label: t('Margine destro logo (px)'), type: 'spacing', max: 80 },
 
     { type: 'separator', label: t('Effetto hover voci') },
@@ -619,7 +619,7 @@ export default {
       { value: 'underline-grow', label: t('Underline Grow (cresce)') },
     ]},
     { key: 'hover_effect_color', label: t('Colore effetto'), type: 'color' },
-    { key: 'hover_effect_height', label: t('Spessore linea/bordo (px)'), type: 'range', min: 1, max: 5, step: 1 },
+    { key: 'hover_effect_height', label: t('Spessore linea/bordo'), type: 'range', min: 1, max: 5, step: 1 },
     { key: 'hover_effect_padding', label: t('Padding effetto (px)'), type: 'spacing', max: 30 },
 
     { type: 'separator', label: t('Mega Panel — Dimensione') },
@@ -634,7 +634,7 @@ export default {
       { value: 'container', label: t('Larghezza sezione (container)') },
       { value: 'viewport', label: t('Larghezza viewport (full)') },
     ]},
-    { key: 'panel_max_width', label: t('Larghezza max (px)'), type: 'range', min: 400, max: 1400, step: 10 },
+    { key: 'panel_max_width', label: t('Larghezza max'), type: 'range', min: 400, max: 1400, step: 10 },
     { key: 'panel_columns', label: t('Colonne'), type: 'range', min: 2, max: 6, step: 1 },
 
     { type: 'separator', label: t('Mega Panel — Sfondo e ombra') },
@@ -646,25 +646,16 @@ export default {
       { value: 'lg', label: t('Grande') },
       { value: 'custom', label: t('Personalizzata') },
     ]},
-    { key: 'panel_shadow_h', label: t('Offset H (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'panel_shadow', op: 'eq', value: 'custom' } },
-    { key: 'panel_shadow_v', label: t('Offset V (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'panel_shadow', op: 'eq', value: 'custom' } },
-    { key: 'panel_shadow_blur', label: t('Sfocatura (px)'), type: 'range', min: 0, max: 100, step: 1,
-      condition: { field: 'panel_shadow', op: 'eq', value: 'custom' } },
-    { key: 'panel_shadow_spread', label: t('Espansione (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'panel_shadow', op: 'eq', value: 'custom' } },
-    { key: 'panel_shadow_color', label: t('Colore ombra'), type: 'color',
-      condition: { field: 'panel_shadow', op: 'eq', value: 'custom' } },
-    { key: 'panel_shadow_inset', label: t('Ombra interna'), type: 'toggle',
+    { key: 'panel_shadow_custom', label: t('Ombra personalizzata'), type: 'box-shadow',
+      legacyKeys: { h: 'panel_shadow_h', v: 'panel_shadow_v', blur: 'panel_shadow_blur', spread: 'panel_shadow_spread', color: 'panel_shadow_color', inset: 'panel_shadow_inset' },
       condition: { field: 'panel_shadow', op: 'eq', value: 'custom' } },
 
     { type: 'separator', label: t('Mega Panel — Layout') },
-    withHover({ key: 'panel_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
+    withHover({ key: 'panel_radius', label: t('Raggio (px)'), type: 'border-radius' }),
     { key: 'panel_padding', label: t('Padding (px)'), type: 'spacing', max: 60 },
-    { key: 'panel_border_top', label: t('Linea accento top (px)'), type: 'range', min: 0, max: 5, step: 1 },
+    { key: 'panel_border_top', label: t('Linea accento top'), type: 'range', min: 0, max: 5, step: 1 },
     { key: 'panel_border_color', label: t('Colore linea accento'), type: 'color' },
-    { key: 'panel_offset_top', label: t('Distanza dal nav (px)'), type: 'range', min: 0, max: 30, step: 1 },
+    { key: 'panel_offset_top', label: t('Distanza dal nav'), type: 'range', min: 0, max: 30, step: 1 },
     { key: 'panel_origin', label: t('Origine pannello'), type: 'select', options: [
       { value: 'nav', label: t('Dal nav item (sotto la voce)') },
       { value: 'section', label: t('Dalla sezione (bordo inferiore header)') },
@@ -681,7 +672,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Mega panel — Spaziatura link') },
-    { key: 'link_spacing', label: t('Gap verticale link (px)'), type: 'range', min: 4, max: 16, step: 1 },
+    { key: 'link_spacing', label: t('Gap verticale link'), type: 'range', min: 4, max: 16, step: 1 },
 
     { type: 'separator', label: t('CTA — Aspetto') },
     // I controlli btn_* stilano .olo-mm-btn, usata sia dalle voci CTA sia dai
@@ -689,7 +680,7 @@ export default {
     // (la vecchia condition su button_mode li nascondeva con solo link extra).
     { key: 'btn_bg', label: t('Sfondo pulsante'), type: 'color',
       show: showBtnAspect },
-    withHover({ key: 'btn_radius', label: t('Arrotondamento pulsante (px)'), type: 'border-radius',
+    withHover({ key: 'btn_radius', label: t('Raggio pulsante (px)'), type: 'border-radius',
       show: showBtnAspect }),
     { key: 'btn_padding', label: t('Padding interno pulsante (px)'), type: 'spacing', max: 60,
       show: showBtnAspect },
@@ -734,7 +725,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Social — Aspetto') },
-    { key: 'social_size', label: t('Dimensione icone (px)'), type: 'range', min: 14, max: 36, step: 1 },
+    { key: 'social_size', label: t('Dimensione icone'), type: 'range', min: 14, max: 36, step: 1 },
     withHover({ key: 'social_color', label: t('Colore icone'), type: 'color' }, { hoverKey: 'social_hover_color' }),
     { key: 'social_style', label: t('Stile icone'), type: 'select', options: [
       { value: 'plain', label: t('Solo icona') },
@@ -778,7 +769,7 @@ export default {
       { value: 'scale', label: t('Scala') },
       { value: 'blur', label: t('Sfocatura') },
     ]},
-    { key: 'menu_items_stagger', label: t('Ritardo stagger (ms)'), type: 'range', min: 30, max: 200, step: 10,
+    { key: 'menu_items_stagger', label: t('Ritardo stagger'), type: 'range', min: 30, max: 200, step: 10,
       condition: { field: 'menu_items_animation', operator: '!=', value: 'none' } },
 
     { type: 'separator', label: t('Hamburger') },
@@ -794,7 +785,7 @@ export default {
       { value: 'morph', label: t('Morph (trasformazione fluida)') },
       { value: 'magnetic', label: t('Magnetic (2 step → X)') },
     ]},
-    { key: 'hamburger_size', label: t('Dimensione hamburger (px)'), type: 'range', min: 20, max: 44, step: 2 },
+    { key: 'hamburger_size', label: t('Dimensione hamburger'), type: 'range', min: 20, max: 44, step: 2 },
     { key: 'hamburger_color', label: t('Colore hamburger'), type: 'color' },
 
     { type: 'separator', label: t('Mobile — Pannello') },
@@ -808,7 +799,7 @@ export default {
       { value: 'none', label: t('Nessuno') },
     ]},
     { key: 'mobile_item_padding', label: t('Padding voci (px)'), type: 'spacing', max: 30 },
-    { key: 'mobile_logo_height', label: t('Altezza logo mobile (px)'), type: 'range', min: 20, max: 120, step: 2 },
+    { key: 'mobile_logo_height', label: t('Altezza logo mobile'), type: 'range', min: 20, max: 120, step: 2 },
 
     { type: 'separator', label: t('Mobile — Indicatore sottomenu') },
     { key: 'mob_toggle_style', label: t('Stile indicatore'), type: 'select', options: [
@@ -825,7 +816,7 @@ export default {
       { value: 'right', label: t('Destra') },
       { value: 'left', label: t('Sinistra') },
     ]},
-    { key: 'mob_toggle_size', label: t('Dimensione (px)'), type: 'range', min: 12, max: 32, step: 1 },
+    { key: 'mob_toggle_size', label: t('Dimensione'), type: 'range', min: 12, max: 32, step: 1 },
     { key: 'mob_toggle_color', label: t('Colore indicatore'), type: 'color' },
 
     { type: 'separator', label: t('Sticky — Aspetto') },
@@ -840,7 +831,7 @@ export default {
     { type: 'separator', label: t('Top Bar — Aspetto') },
     { key: 'topbar_bg', label: t('Sfondo top bar'), type: 'color',
       condition: { field: 'topbar_enabled', value: true } },
-    { key: 'topbar_height', label: t('Altezza (px)'), type: 'range', min: 28, max: 60, step: 2,
+    { key: 'topbar_height', label: t('Altezza'), type: 'range', min: 28, max: 60, step: 2,
       condition: { field: 'topbar_enabled', value: true } },
     { key: 'topbar_border_bottom', label: t('Bordo inferiore'), type: 'toggle',
       condition: { field: 'topbar_enabled', value: true } },

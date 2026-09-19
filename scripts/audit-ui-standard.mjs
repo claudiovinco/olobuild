@@ -103,6 +103,25 @@ const IGNORE = /pad_custom|_custom$|radius_default|point_radius|point_hover_radi
 const IGNORE_TILE = { physicsbin: /^radius$/, section: /^padding$/, progallery: /anim_border/ };
 const skip = (r) => IGNORE.test(r.key) || (IGNORE_TILE[r.file] && IGNORE_TILE[r.file].test(r.key));
 
+// Le etichette nei config sono avvolte in t('…'): qui serve il testo dentro.
+const etichetta = (raw) => {
+  const m = /^t\(\s*'([\s\S]*)'\s*\)$/.exec(String(raw || ''));
+  return (m ? m[1] : String(raw || '')).trim();
+};
+
+// Unità che un controllo numerico sa già mostrare accanto al valore.
+const UNITA_IN_CODA = /\s*\((px|%|ms|s|vh|vw|vmin|vmax|em|rem|ch|deg|fr|pt)\)\s*$/i;
+
+// Il nome canonico per famiglia — vince la forma già più diffusa, non la mia
+// preferenza. Cambia solo il testo mostrato: le chiavi salvate non si toccano.
+const GLOSSARIO = [
+  { nome: 'Raggio',  key: /radius/i },
+  { nome: 'Padding', key: /padding/i },
+  { nome: 'Gap',     key: /(^|_)gap$/i },
+  { nome: 'Ombra',   key: /(^|_)shadow$/i },
+  { nome: 'Durata',  key: /duration$/i },
+];
+
 const RULES = [
   {
     id: 'padding-spacing',
@@ -141,6 +160,38 @@ const RULES = [
     ok: (r) => r.type === 'font-family',
   },
   {
+    id: 'ombra-unica',
+    titolo: 'L\'ombra si compone in UN controllo (type:\'box-shadow\'), non in sotto-campi sparsi',
+    // shadow_h / shadow_v / shadow_blur / shadow_spread / shadow_inset dichiarati
+    // come campi a sé sono la vecchia forma: stanno DENTRO FieldBoxShadow, che li
+    // mostra insieme con l'anteprima. Le chiavi salvate restano quelle (ponte legacy).
+    match: (r) => /^([a-z0-9_]*_)?shadow_(h|v|blur|spread|inset)$/.test(r.key),
+    ok: () => false,
+  },
+  {
+    id: 'glossario',
+    titolo: 'La stessa cosa si chiama con lo STESSO nome in tutte le tile',
+    // Il nome canonico è quello già più diffuso (censimento dei 5.922 campi):
+    // Raggio (109 contro Arrotondamento 49 e Border Radius 23), Padding (117),
+    // Gap (50 contro Spazio 23, Distanza 9, Spaziatura 6).
+    // Un toggle non nomina mai una misura: «Mostra durata» accende una cosa,
+    // non è il campo in cui si scrive una durata.
+    match: (r) => !!r.label && r.type !== 'toggle' && !skip(r) && GLOSSARIO.some((g) => g.key.test(r.key)),
+    ok: (r) => {
+      const g = GLOSSARIO.find((x) => x.key.test(r.key));
+      return !g || new RegExp('^' + g.nome, 'i').test(etichetta(r.label));
+    },
+  },
+  {
+    id: 'unita-nel-controllo',
+    titolo: 'L\'unità di misura la mostra il controllo, non l\'etichetta',
+    // range e number hanno la valbox di NumberScrubber, che scrive l'unità accanto
+    // al numero: ripeterla nel nome del campo la fa scrivere in modi diversi tile
+    // per tile ed è la stessa informazione due volte.
+    match: (r) => ['range', 'number'].includes(r.type) && UNITA_IN_CODA.test(etichetta(r.label)),
+    ok: () => false,
+  },
+  {
     id: 'icona-picker',
     titolo: 'Le icone usano il picker (type:\'icon\'), mai testo libero',
     // I toggle 'mostra icona' non scelgono un'icona: non rientrano nella regola.
@@ -153,6 +204,38 @@ const violazioni = {};
 for (const rule of RULES) {
   violazioni[rule.id] = fields.filter((r) => rule.match(r) && !rule.ok(r));
 }
+
+// ─── coerenza dell'elenco «ombra sul wrapper» ───────────────────────────────
+// Le tile che montano il controllo Ombra condiviso senza disegnarlo nel proprio
+// renderer ricevono l'ombra sul wrapper. L'elenco è scritto due volte — in PHP e
+// in JS — perché il sito e il canvas devono decidere allo stesso modo. Qui lo si
+// RICALCOLA dal codice e si controlla che le due copie combacino: il giorno in cui
+// una tile impara a rendersi l'ombra da sé, l'elenco va accorciato in entrambe.
+function elencoDa(file, marcatore) {
+  try {
+    const src = fs.readFileSync(path.join(ROOT, file), 'utf8');
+    const i = src.indexOf(marcatore);
+    if (i < 0) return null;
+    const blocco = src.slice(i, src.indexOf(']', i));
+    return new Set([...blocco.matchAll(/'([a-z0-9_]+)'/g)].map((m) => m[1]));
+  } catch { return null; }
+}
+const atteso = new Set();
+for (const f of fs.readdirSync(ELEMENTS).filter((x) => x.endsWith('.js') && !x.startsWith('_'))) {
+  const tipo = f.replace(/\.js$/, '');
+  if (!/shadowField/.test(fs.readFileSync(path.join(ELEMENTS, f), 'utf8'))) continue;
+  const php = path.join(ROOT, 'includes/tiles', `class-${tipo}-tile.php`);
+  let rende = false;
+  try { rende = /shadow_value|'shadow'/.test(fs.readFileSync(php, 'utf8')); } catch { rende = false; }
+  if (!rende) atteso.add(tipo);
+}
+const inPhp = elencoDa('includes/class-frontend-renderer.php', 'static $elenco = [');
+const inJs = elencoDa('src/components/Grid/GridCell.vue', 'const OMBRA_SUL_WRAPPER = new Set([');
+const diff = (a, b) => (!a || !b ? ['(elenco non trovato)'] : [...new Set([...a].filter((x) => !b.has(x)).concat([...b].filter((x) => !a.has(x))))]);
+const scartiPhp = diff(atteso, inPhp);
+const scartiJs = diff(inPhp, inJs);
+violazioni['ombra-wrapper-elenco'] = [...scartiPhp, ...scartiJs].map((x) => ({ file: 'elenco', type: '', key: String(x), label: '' }));
+RULES.push({ id: 'ombra-wrapper-elenco', titolo: 'L\'elenco «ombra sul wrapper» combacia fra PHP, JS e stato reale del codice' });
 
 // ─── confronto con la baseline ──────────────────────────────────────────────
 const args = process.argv.slice(2);

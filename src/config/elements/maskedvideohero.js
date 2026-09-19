@@ -87,6 +87,6 @@ export default {
 
     { type: 'separator', label: t('Forma') },
     { key: 'arch', label: t('Bordo inferiore ad arco (maschera)'), type: 'toggle' },
-    { key: 'min_height', label: t('Altezza minima (vh)'), type: 'range', min: 50, max: 100, step: 1 },
+    { key: 'min_height', label: t('Altezza minima'), type: 'range', min: 50, max: 100, step: 1 },
   ],
 };
