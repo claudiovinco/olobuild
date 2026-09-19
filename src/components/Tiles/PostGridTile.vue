@@ -78,6 +78,7 @@
 </template>
 
 <script setup>
+import { uikitGap } from '@/composables/useUikitGap';
 import { t } from '@/i18n';
 import { computed, ref, watch, inject, onMounted } from 'vue';
 
@@ -196,8 +197,8 @@ const imgHeight = computed(() => {
   return Math.min(h, 180);
 });
 
-const gapMap = { collapse: '0px', small: '8px', default: '12px', medium: '16px', large: '24px' };
-const gap = computed(() => gapMap[props.settings.gap || 'medium'] || '16px');
+// vedi useUikitGap: i numeri sono quelli veri di UIkit
+const gap = computed(() => uikitGap(props.settings.gap, 'medium'));
 
 const gridStyle = computed(() => ({
   display: 'grid',

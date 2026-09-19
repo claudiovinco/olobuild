@@ -119,8 +119,8 @@ export default {
 
     { type: 'separator', label: t('Forma') },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 80 },
-    { key: 'wrap_padding', label: t('Padding attorno al pulsante (px)'), type: 'spacing', min: 0, max: 80,
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 80 },
+    { key: 'wrap_padding', label: t('Padding attorno al pulsante'), type: 'spacing', min: 0, max: 80,
       legacyKeys: { y: 'wrap_padding_y' } },
 
     // Ombra con toggle Normale/Hover: il select pilota `shadow` (normale) o `hover_shadow`

@@ -147,8 +147,8 @@ export default {
     { key: 'media_bg', type: 'background', showParallax: false, label: t('Sfondo box (immagine, video, gradiente, colore…)') },
 
     { type: 'separator', label: t('Bordo e spaziatura') },
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 60 },
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 60 },
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 
     ...shadowField,
     ...borderFields(),

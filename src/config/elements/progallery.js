@@ -278,7 +278,7 @@ export default {
     // mostrare: non saprebbe quale delle tante).
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { fit: 'object_fit' } },
-    withHover({ key: 'thumb_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'thumb_radius', label: t('Raggio'), type: 'border-radius' }),
 
     // ─── Espandi ───
     { type: 'separator', label: t('Layout — Espandi (spotlight)'), show: s => s.layout === 'expand' },
@@ -418,7 +418,7 @@ export default {
       { value: '700', label: t('Bold') },
       { value: '900', label: t('Extra bold') },
     ], show: s => s.hover_caption === 'centered' },
-    { key: 'hover_frame_inset', label: t('Padding cornice (px)'), type: 'spacing', max: 40,
+    { key: 'hover_frame_inset', label: t('Padding cornice'), type: 'spacing', max: 40,
       show: s => s.hover_caption === 'frame' },
 
     // ─── Animazione continua ───
@@ -468,7 +468,7 @@ export default {
     ]},
     { key: 'frame_color', label: t('Colore cornice'), type: 'color',
       show: s => s.frame === 'polaroid' || s.frame === 'shadow-box' || s.frame === 'inset' },
-    { key: 'frame_inset_padding', label: t('Padding dal bordo (px)'), type: 'spacing', max: 40 },
+    { key: 'frame_inset_padding', label: t('Padding dal bordo'), type: 'spacing', max: 40 },
 
     // ─── Bordi animati ───
     { type: 'separator', label: t('Bordi animati') },

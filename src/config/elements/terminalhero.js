@@ -150,11 +150,11 @@ export default {
     { type: 'separator', label: t('Spaziatura') },
     { key: 'pad_custom', label: t('Padding personalizzato'), type: 'toggle',
       description: t('Disattivo = padding fluido responsive (clamp). Attivo = usa i valori sotto.') },
-    { key: 'content_padding', label: t('Padding contenuto (px)'), type: 'spacing',
+    { key: 'content_padding', label: t('Padding contenuto'), type: 'spacing',
       condition: { field: 'pad_custom', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Forma') },
-    { key: 'btn_radius', label: t('Raggio input/bottoni (px)'), type: 'border-radius' },
+    { key: 'btn_radius', label: t('Raggio input/bottoni'), type: 'border-radius' },
 
     { type: 'separator', label: t('Titolo') },
     { key: 'h_size_min', label: t('Dimensione min'), type: 'range', min: 20, max: 90, step: 1 },

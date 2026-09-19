@@ -142,15 +142,15 @@ export default {
     },
 
     { type: 'separator', label: t('Tab — Spaziatura') },
-    { key: 'tab_padding', label: t('Padding tab (px)'), type: 'spacing', min: 0, max: 60,
+    { key: 'tab_padding', label: t('Padding tab'), type: 'spacing', min: 0, max: 60,
       legacyKeys: { y: 'tab_padding_y', x: 'tab_padding_x' } },
     { key: 'tab_gap', label: t('Gap tab'), type: 'range', min: 0, max: 24, step: 1 },
-    { key: 'tab_radius', label: t('Raggio tab (px)'), type: 'border-radius' },
+    { key: 'tab_radius', label: t('Raggio tab'), type: 'border-radius' },
 
     { type: 'separator', label: t('Container nav') },
     { key: 'container_bg', label: t('Sfondo container'), type: 'color' },
-    { key: 'container_padding', label: t('Padding container (px)'), type: 'spacing', min: 0, max: 60 },
-    { key: 'container_radius', label: t('Raggio container (px)'), type: 'border-radius' },
+    { key: 'container_padding', label: t('Padding container'), type: 'spacing', min: 0, max: 60 },
+    { key: 'container_radius', label: t('Raggio container'), type: 'border-radius' },
 
     { type: 'separator', label: t('Colori tab') },
     { key: 'active_bg', label: t('Sfondo tab attiva'), type: 'color' },
@@ -169,7 +169,7 @@ export default {
 
     { type: 'separator', label: t('Contenuto pannello') },
     { key: 'content_bg', label: t('Sfondo contenuto'), type: 'color' },
-    { key: 'content_padding', label: t('Padding contenuto (px)'), type: 'spacing', min: 0, max: 80,
+    { key: 'content_padding', label: t('Padding contenuto'), type: 'spacing', min: 0, max: 80,
       legacyKeys: { y: 'content_padding_y', x: 'content_padding_x' } },
 
     ...textEffectsFields([

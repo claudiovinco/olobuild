@@ -246,8 +246,8 @@ export default {
 
 
 
-    withHover({ key: 'card_radius', label: t('Raggio (px)'), type: 'border-radius'}),
-    { key: 'card_padding', label: t('Padding (px)'), type: 'spacing', max: 48 },
+    withHover({ key: 'card_radius', label: t('Raggio'), type: 'border-radius'}),
+    { key: 'card_padding', label: t('Padding'), type: 'spacing', max: 48 },
     ...shadowField,
 
     // ────────── Hover (stile) ──────────
@@ -262,7 +262,7 @@ export default {
 
     // ────────── Immagine (stile) ──────────
     { type: 'separator', label: t('Immagine — stile') },
-    { key: 'card_image_radius', label: t('Raggio immagine (px)'), type: 'border-radius',
+    { key: 'card_image_radius', label: t('Raggio immagine'), type: 'border-radius',
       description: t('0 = eredita dal raggio card') },
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { fit: 'image_fit', ratio: 'image_ratio' },

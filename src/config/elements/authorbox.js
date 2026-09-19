@@ -98,7 +98,7 @@ export default {
     { type: 'separator', label: t('Avatar') },
     { key: 'avatar_size', label: t('Dimensione avatar'), type: 'range', min: 40, max: 160, step: 8,
       condition: { field: 'show_avatar', value: true } },
-    withHover({ key: 'avatar_border_radius', label: t('Raggio avatar (%)'), type: 'border-radius',
+    withHover({ key: 'avatar_border_radius', label: t('Raggio avatar'), type: 'border-radius',
       condition: { field: 'show_avatar', value: true } }),
     { key: 'avatar_border', label: t('Bordo avatar'), type: 'border',
       legacyKeys: { width: 'avatar_border_width', color: 'avatar_border_color' } },
@@ -145,8 +145,8 @@ export default {
     { key: 'background_color', label: t('Sfondo'), type: 'color' },
 
     { type: 'separator', label: t('Aspetto') },
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 48 },
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 48 },
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 
     ...borderFields(),
   ],

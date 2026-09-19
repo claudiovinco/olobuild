@@ -160,7 +160,7 @@ export default {
     { key: 'card_bg',    label: t('Sfondo card'),  type: 'color' },
     { key: 'card_color', label: t('Colore nome'),  type: 'color' },
     { key: 'role_color', label: t('Colore ruolo'), type: 'color' },
-    withHover({ key: 'card_radius', label: t('Raggio card (px)'), type: 'border-radius' },
+    withHover({ key: 'card_radius', label: t('Raggio card'), type: 'border-radius' },
       { hoverKey: 'card_radius_hover', hoverDurationKey: 'card_radius_hover_duration' }),
     { key: 'card_hover_effect', label: t('Effetto hover card'), type: 'select', options: [
       { value: 'none',  label: t('Nessuno') },

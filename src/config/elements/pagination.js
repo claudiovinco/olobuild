@@ -86,8 +86,8 @@ export default {
 
     { type: 'separator', label: t('Dimensioni') },
     { key: 'gap', label: t('Gap pulsanti'), type: 'range', min: 0, max: 24, step: 2 },
-    { key: 'button_padding', label: t('Padding pulsanti (px)'), type: 'spacing', max: 50 },
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    { key: 'button_padding', label: t('Padding pulsanti'), type: 'spacing', max: 50 },
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'border', label: t('Bordo'), type: 'border',
       legacyKeys: { width: 'border_width', color: 'border_color' } },
 

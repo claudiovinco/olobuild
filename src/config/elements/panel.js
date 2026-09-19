@@ -178,7 +178,7 @@ export default {
       condition: { field: 'media_type', op: 'neq', value: 'none' } },
     { key: 'image_zoom', label: t('Zoom al hover'), type: 'toggle',
       condition: { field: 'media_type', op: 'neq', value: 'none' } },
-    { key: 'media_padding', label: t('Padding attorno al media (px)'), type: 'spacing', max: 60,
+    { key: 'media_padding', label: t('Padding attorno al media'), type: 'spacing', max: 60,
       description: t('Aggiunge uno spazio bianco attorno al media'),
       condition: { field: 'media_type', op: 'neq', value: 'none' } },
     withHover({ key: 'border_radius', label: t('Raggio media'), type: 'border-radius',
@@ -226,7 +226,7 @@ export default {
 
     { type: 'separator', label: t('Stile card') },
     { key: 'card_padding', label: t('Padding'), type: 'spacing', max: 60 },
-    withHover({ key: 'card_radius', label: t('Raggio card (px)'), type: 'border-radius'}),
+    withHover({ key: 'card_radius', label: t('Raggio card'), type: 'border-radius'}),
     ...shadowField,
     ...wowEffectsFields(),
     ...borderFields(),

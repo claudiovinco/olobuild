@@ -139,10 +139,10 @@ export default {
         // Colori pulsante
         { key: 'btn_bg', label: t('Sfondo pulsante'), type: 'color' },
         // Spaziatura interna
-        { key: 'btn_padding', label: t('Padding pulsante (px)'), type: 'spacing', min: 0, max: 60,
+        { key: 'btn_padding', label: t('Padding pulsante'), type: 'spacing', min: 0, max: 60,
           legacyKeys: { y: 'btn_padding_v', x: 'btn_padding_h' } },
         // Bordo
-        { key: 'btn_radius', label: t('Raggio (px)'), type: 'border-radius' },
+        { key: 'btn_radius', label: t('Raggio'), type: 'border-radius' },
         { key: 'btn_border', label: t('Bordo pulsante'), type: 'border',
           legacyKeys: { width: 'btn_border_width', style: 'btn_border_style', color: 'btn_border_color' } },
         // Layout

@@ -148,7 +148,7 @@ export default {
 
     { type: 'separator', label: t('Layout') },
     { key: 'min_height', label: t('Altezza minima'), type: 'range', min: 0, max: 600, step: 10 },
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 200 },
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 200 },
     { key: 'content_width', label: t('Larghezza contenuto'), type: 'range', min: 600, max: 1600, step: 50 },
 
     { type: 'separator', label: t('Bordo inferiore') },

@@ -597,9 +597,9 @@ export default {
       { value: 'wide', label: t('Wide (1400px)') },
       { value: 'classic', label: t('Classica (1200px)') },
     ]},
-    { key: 'bar_padding', label: t('Padding barra (px)'), type: 'spacing', max: 60 },
+    { key: 'bar_padding', label: t('Padding barra'), type: 'spacing', max: 60 },
     { key: 'bar_gap', label: t('Gap elementi barra'), type: 'range', min: 0, max: 60, step: 2 },
-    { key: 'logo_margin_right', label: t('Margine destro logo (px)'), type: 'spacing', max: 80 },
+    { key: 'logo_margin_right', label: t('Margine destro logo'), type: 'spacing', max: 80 },
 
     { type: 'separator', label: t('Effetto hover voci') },
     { key: 'hover_effect', label: t('Tipo effetto'), type: 'select', options: [
@@ -620,7 +620,7 @@ export default {
     ]},
     { key: 'hover_effect_color', label: t('Colore effetto'), type: 'color' },
     { key: 'hover_effect_height', label: t('Spessore linea/bordo'), type: 'range', min: 1, max: 5, step: 1 },
-    { key: 'hover_effect_padding', label: t('Padding effetto (px)'), type: 'spacing', max: 30 },
+    { key: 'hover_effect_padding', label: t('Padding effetto'), type: 'spacing', max: 30 },
 
     { type: 'separator', label: t('Mega Panel — Dimensione') },
     { key: 'panel_width', label: t('Larghezza panel (legacy)'), type: 'select', options: [
@@ -651,8 +651,8 @@ export default {
       condition: { field: 'panel_shadow', op: 'eq', value: 'custom' } },
 
     { type: 'separator', label: t('Mega Panel — Layout') },
-    withHover({ key: 'panel_radius', label: t('Raggio (px)'), type: 'border-radius' }),
-    { key: 'panel_padding', label: t('Padding (px)'), type: 'spacing', max: 60 },
+    withHover({ key: 'panel_radius', label: t('Raggio'), type: 'border-radius' }),
+    { key: 'panel_padding', label: t('Padding'), type: 'spacing', max: 60 },
     { key: 'panel_border_top', label: t('Linea accento top'), type: 'range', min: 0, max: 5, step: 1 },
     { key: 'panel_border_color', label: t('Colore linea accento'), type: 'color' },
     { key: 'panel_offset_top', label: t('Distanza dal nav'), type: 'range', min: 0, max: 30, step: 1 },
@@ -680,13 +680,13 @@ export default {
     // (la vecchia condition su button_mode li nascondeva con solo link extra).
     { key: 'btn_bg', label: t('Sfondo pulsante'), type: 'color',
       show: showBtnAspect },
-    withHover({ key: 'btn_radius', label: t('Raggio pulsante (px)'), type: 'border-radius',
+    withHover({ key: 'btn_radius', label: t('Raggio pulsante'), type: 'border-radius',
       show: showBtnAspect }),
-    { key: 'btn_padding', label: t('Padding interno pulsante (px)'), type: 'spacing', max: 60,
+    { key: 'btn_padding', label: t('Padding interno pulsante'), type: 'spacing', max: 60,
       show: showBtnAspect },
-    { key: 'btn_margin_left', label: t('Margine sinistro pulsante (px)'), type: 'spacing', max: 40,
+    { key: 'btn_margin_left', label: t('Margine sinistro pulsante'), type: 'spacing', max: 40,
       show: showBtnAspect },
-    { key: 'btn_margin_right', label: t('Margine destro pulsante (px)'), type: 'spacing', max: 40,
+    { key: 'btn_margin_right', label: t('Margine destro pulsante'), type: 'spacing', max: 40,
       show: showBtnAspect },
     { key: 'btn_border', label: t('Bordo pulsante'), type: 'border',
       legacyKeys: { width: 'btn_border_width', color: 'btn_border_color' } },
@@ -798,7 +798,7 @@ export default {
       { value: 'gradient', label: t('Sfumatura') },
       { value: 'none', label: t('Nessuno') },
     ]},
-    { key: 'mobile_item_padding', label: t('Padding voci (px)'), type: 'spacing', max: 30 },
+    { key: 'mobile_item_padding', label: t('Padding voci'), type: 'spacing', max: 30 },
     { key: 'mobile_logo_height', label: t('Altezza logo mobile'), type: 'range', min: 20, max: 120, step: 2 },
 
     { type: 'separator', label: t('Mobile — Indicatore sottomenu') },

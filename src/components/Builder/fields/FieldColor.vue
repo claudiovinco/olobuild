@@ -127,10 +127,25 @@ const isGlobalActive = computed(() => {
   return swatchColors.value.some(sc => sc.value?.toLowerCase() === cur);
 });
 
+/**
+ * Scompone un token colore nelle sue due parti: l'id e l'eventuale RISERVA.
+ *   var(--olo-color-dark)            -> { id: 'dark', fallback: '' }
+ *   var(--olo-color-dark, #16263d)   -> { id: 'dark', fallback: '#16263d' }
+ * Restituisce null se non e' un token.
+ */
+function tokenParts(val) {
+  const m = /^var\(\s*--olo-color-([a-z0-9_-]+)\s*(?:,\s*([^)]+))?\)$/i.exec(String(val || '').trim());
+  if (!m) return null;
+  return { id: m[1].toLowerCase(), fallback: (m[2] || '').trim() };
+}
+
 function isSwatchSelected(id) {
   const cur = (props.modelValue || '').toLowerCase();
   if (!cur) return false;
-  if (cur === `var(--olo-color-${id})`.toLowerCase()) return true;
+  // Il confronto sta sull'ID del token: `var(--olo-color-dark)` e
+  // `var(--olo-color-dark, #16263d)` sono lo stesso colore scelto.
+  const t = tokenParts(cur);
+  if (t && t.id === String(id).toLowerCase()) return true;
   const hex = resolveSwatch(id);
   return !!hex && cur === hex.toLowerCase();
 }
@@ -146,12 +161,18 @@ function selectColor(id) {
 function parseColor(val) {
   if (!val) return { hex: '#000000', alpha: 1 };
 
-  // var(--olo-color-*) — resolve from roles/globals for preview
+  // var(--olo-color-*) — risolto dai ruoli/globali per l'anteprima.
+  // ATTENZIONE alla forma con RISERVA, `var(--olo-color-dark, #16263d)`: e' quella
+  // usata da tutti i default delle tile. Il vecchio regex la leggeva come un id
+  // chiamato «dark, #16263d», non lo trovava e ripiegava su NERO — cioe' centinaia
+  // di campi colore mostravano una pastiglia nera al posto del loro colore vero.
   if (val.startsWith('var(--olo-color-')) {
-    const idMatch = val.match(/^var\(--olo-color-([^)]+)\)$/);
-    if (idMatch) {
-      const hex = resolveSwatch(idMatch[1]);
+    const t = tokenParts(val);
+    if (t) {
+      const hex = resolveSwatch(t.id);
       if (hex) return parseColor(hex);
+      // Token non ancora definito nella palette: vale la riserva scritta dentro.
+      if (t.fallback) return parseColor(t.fallback);
     }
     return { hex: '#000000', alpha: 1 };
   }

@@ -1,3 +1,15 @@
+<!--
+  ⚠️ COMPONENTE SUPERATO — non usarlo per campi nuovi.
+
+  `type:'spacing'` rende ora con FieldBox in modalità lati, lo STESSO controllo del
+  pannello «Spazi & Bordi»: icona, collega/scollega, cursore, selettore d'unità e i
+  quattro riquadri con l'icona del lato. Qui c'erano quattro caselle nude con le
+  scritte «Sopra/Destra/Sotto/Sinistra» e nessuna unità, e la stessa regolazione
+  aveva due facce a seconda del pannello che si apriva.
+
+  Resta in piedi solo perché `StyleSpacingBp` lo referenzia, e quel percorso
+  (`type:'spacing-bp'`) non è dichiarato da nessun config: è codice morto.
+-->
 <template>
   <div>
     <!-- Linked mode: single input -->

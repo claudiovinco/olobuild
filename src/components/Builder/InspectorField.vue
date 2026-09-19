@@ -205,12 +205,24 @@
         @update:modelValue="onFieldUpdate($event)"
       />
 
-      <FieldSpacing
+      <!--
+        Padding e margine usano lo STESSO controllo del pannello «Spazi & Bordi»
+        (FieldBox in modalita' lati): icona, collega/scollega, cursore, selettore
+        d'unita' e i quattro riquadri con l'icona del lato. Prima qui c'era
+        FieldSpacing — quattro caselle con le scritte «Sopra/Destra/Sotto/Sinistra»
+        e nessuna unita' — quindi la stessa identica regolazione aveva due facce a
+        seconda del pannello che aprivi. Il valore salvato non cambia: numero
+        quando i lati sono collegati, {top,right,bottom,left} quando sono separati,
+        entrambi gia' accettati dagli helper PHP e JS.
+      -->
+      <FieldBox
         v-else-if="field.type === 'spacing'"
+        mode="sides"
+        preview="none"
         :modelValue="effectiveValue"
-        :min="field.min ?? 0"
-        :max="field.max ?? 200"
-        :defaultValue="fieldDefaultValue"
+        :sliderMax="Number(field.max ?? 200)"
+        :units="unitaCampo ? [unitaCampo] : ['px']"
+        :defaultUnit="unitaCampo || 'px'"
         @update:modelValue="onFieldUpdate($event)"
       />
 
@@ -218,6 +230,8 @@
         v-else-if="field.type === 'border-radius'"
         :modelValue="effectiveValue"
         mode="corners"
+        :units="unitaCampo ? [unitaCampo] : ['px']"
+        :defaultUnit="unitaCampo || 'px'"
         @update:modelValue="onFieldUpdate($event)"
       />
 
@@ -900,6 +914,7 @@ const fieldComponent = computed(() => {
     case 'select': return FieldSelect;
     case 'range': return FieldRange;
     case 'border-radius': return FieldBox;
+    case 'spacing': return FieldBox;
     case 'border': return FieldBorder;
     case 'object-position': return FieldObjectPosition;
     case 'editor': return FieldEditor;
@@ -1057,7 +1072,8 @@ const fieldProps = computed(() => {
   switch (props.field.type) {
     case 'select': return { ...base, options: resolvedOptions.value, ui: props.field.ui || 'auto' };
     case 'range': return { ...base, min: props.field.min || 0, max: props.field.max || 100, step: props.field.step || 1, defaultValue: fieldDefaultValue.value, unit: unitaCampo.value };
-    case 'spacing': return { ...base, min: props.field.min ?? 0, max: props.field.max ?? 200, defaultValue: fieldDefaultValue.value };
+    case 'spacing': return { ...base, mode: 'sides', preview: 'none', sliderMax: Number(props.field.max ?? 200), units: unitaCampo.value ? [unitaCampo.value] : ['px'], defaultUnit: unitaCampo.value || 'px' };
+    case 'border-radius': return { ...base, mode: 'corners', units: unitaCampo.value ? [unitaCampo.value] : ['px'], defaultUnit: unitaCampo.value || 'px' };
     case 'object-position': return { ...base, imageSrc: objectPositionContext.value.imageSrc, frameRatio: objectPositionContext.value.frameRatio, objectFit: objectPositionContext.value.objectFit };
     case 'media': return { ...base, accept: mediaAccept.value };
     case 'editor': return { ...base, mode: props.field.mode || 'inline' };

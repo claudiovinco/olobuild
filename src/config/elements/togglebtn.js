@@ -113,8 +113,8 @@ export default {
     withHover({ key: 'btn_bg', label: t('Sfondo'), type: 'color' }, { hoverKey: 'btn_hover_bg' }),
     { key: 'btn_border', label: t('Bordo pulsante'), type: 'border',
       legacyKeys: { width: 'btn_border_width', color: 'btn_border_color' } },
-    withHover({ key: 'btn_border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 48 },
+    withHover({ key: 'btn_border_radius', label: t('Raggio'), type: 'border-radius' }),
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 48 },
     { key: 'btn_align', label: t('Allineamento'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },

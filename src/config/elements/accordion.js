@@ -173,7 +173,7 @@ export default {
       { value: 'left', label: t('Sinistra') },
     ]},
     { key: 'media_width', label: t('Larghezza media'), type: 'range', min: 20, max: 50, step: 5 },
-    withHover({ key: 'media_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'media_radius', label: t('Raggio'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
@@ -200,12 +200,12 @@ export default {
     { type: 'separator', label: t('Intestazione') },
     { key: 'header_bg', label: t('Sfondo intestazione'), type: 'color' },
     { key: 'header_bg_active', label: t('Sfondo intestazione attiva'), type: 'color' },
-    { key: 'header_padding', label: t('Padding intestazione (px)'), type: 'spacing', min: 0, max: 80,
+    { key: 'header_padding', label: t('Padding intestazione'), type: 'spacing', min: 0, max: 80,
       legacyKeys: { y: 'header_padding_y', x: 'header_padding_x' } },
 
     { type: 'separator', label: t('Contenuto pannello') },
     { key: 'content_bg', label: t('Sfondo contenuto'), type: 'color' },
-    { key: 'content_padding', label: t('Padding contenuto (px)'), type: 'spacing', min: 0, max: 80,
+    { key: 'content_padding', label: t('Padding contenuto'), type: 'spacing', min: 0, max: 80,
       legacyKeys: { y: 'content_padding_y', x: 'content_padding_x' } },
 
     { type: 'separator', label: t('Bordo e separatore') },

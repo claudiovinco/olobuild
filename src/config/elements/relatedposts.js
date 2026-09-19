@@ -126,8 +126,8 @@ export default {
 
     { type: 'separator', label: t('Stile') },
     { key: 'card_background', label: t('Sfondo card'), type: 'color' },
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 32 },
-    withHover({ key: 'card_border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 32 },
+    withHover({ key: 'card_border_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
       { value: 'none', label: t('Nessuno') },
       { value: 'shadow', label: t('Ombra') },

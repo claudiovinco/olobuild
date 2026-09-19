@@ -167,9 +167,9 @@ export default {
     { key: 'front_image_position', label: t('Posizione contenuto'), type: 'object-position',
       contextKeys: { src: 'front_image', fit: 'front_image_fit' },
       condition: { field: 'front_image', op: 'notEmpty' } },
-    { key: 'front_image_padding', label: t('Padding immagine (px)'), type: 'spacing', min: 0, max: 60,
+    { key: 'front_image_padding', label: t('Padding immagine'), type: 'spacing', min: 0, max: 60,
       condition: { field: 'front_image', op: 'notEmpty' } },
-    withHover({ key: 'front_image_radius', label: t('Raggio immagine (px)'), type: 'border-radius',
+    withHover({ key: 'front_image_radius', label: t('Raggio immagine'), type: 'border-radius',
       condition: { field: 'front_image', op: 'notEmpty' } }),
     { key: 'front_overlay', label: t('Overlay (su immagine)'), type: 'color',
       condition: { field: 'front_image', op: 'notEmpty' } },
@@ -196,9 +196,9 @@ export default {
     { key: 'back_image_position', label: t('Posizione contenuto'), type: 'object-position',
       contextKeys: { src: 'back_image', fit: 'back_image_fit' },
       condition: { field: 'back_image', op: 'notEmpty' } },
-    { key: 'back_image_padding', label: t('Padding immagine (px)'), type: 'spacing', min: 0, max: 60,
+    { key: 'back_image_padding', label: t('Padding immagine'), type: 'spacing', min: 0, max: 60,
       condition: { field: 'back_image', op: 'notEmpty' } },
-    withHover({ key: 'back_image_radius', label: t('Raggio immagine (px)'), type: 'border-radius',
+    withHover({ key: 'back_image_radius', label: t('Raggio immagine'), type: 'border-radius',
       condition: { field: 'back_image', op: 'notEmpty' } }),
     { key: 'back_overlay', label: t('Overlay (su immagine)'), type: 'color',
       condition: { field: 'back_image', op: 'notEmpty' } },
@@ -215,11 +215,11 @@ export default {
 
     { type: 'separator', label: t('Retro — Pulsante CTA') },
     { key: 'back_cta_bg', label: t('Colore sfondo CTA'), type: 'color' },
-    withHover({ key: 'back_cta_radius', label: t('Raggio CTA (px)'), type: 'border-radius' }),
+    withHover({ key: 'back_cta_radius', label: t('Raggio CTA'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Card') },
     { key: 'card_height', label: t('Altezza'), type: 'range', min: 200, max: 600, step: 10 },
-    withHover({ key: 'card_border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'card_border_radius', label: t('Raggio'), type: 'border-radius' }),
     withHover(
       { key: 'card_border', label: t('Bordo card'), type: 'border' },
       { hoverKey: 'card_border_hover', hoverDurationKey: 'card_border_hover_duration' }
@@ -235,7 +235,7 @@ export default {
     { key: 'card_shadow_custom', label: t('Ombra personalizzata'), type: 'box-shadow',
       legacyKeys: { h: 'card_shadow_h', v: 'card_shadow_v', blur: 'card_shadow_blur', spread: 'card_shadow_spread', color: 'card_shadow_color', inset: 'card_shadow_inset' },
       condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 40 },
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 40 },
     ...borderFields(),
 
     { type: 'separator', label: t('Tipografia') },

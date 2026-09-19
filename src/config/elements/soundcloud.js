@@ -66,7 +66,7 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'right', label: t('Destra') },
     ]},
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     ...borderFields(),
   ],
 };

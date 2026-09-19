@@ -89,11 +89,11 @@ export default {
     { type: 'separator', label: t('Spaziatura') },
     { key: 'pad_custom', label: t('Padding personalizzato (blocco articolo)'), type: 'toggle',
       description: t('Off = spaziatura responsive automatica. On = usa i valori sotto (px).') },
-    { key: 'lead_padding', label: t('Padding articolo (px)'), type: 'spacing', max: 160,
+    { key: 'lead_padding', label: t('Padding articolo'), type: 'spacing', max: 160,
       condition: { field: 'pad_custom', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Forma') },
-    { key: 'btn_radius', label: t('Raggio bottone (px)'), type: 'border-radius' },
+    { key: 'btn_radius', label: t('Raggio bottone'), type: 'border-radius' },
 
     { type: 'separator', label: t('Sfondo') },
     { key: 'bg', label: t('Sfondo completo'), type: 'background', showParallax: false },

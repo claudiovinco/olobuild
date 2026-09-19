@@ -125,8 +125,8 @@ export default {
     { type: 'separator', label: t('Stile bottoni') },
     { key: 'link_bg', label: t('Sfondo link'), type: 'color' },
     { key: 'link_hover_bg', label: t('Sfondo hover'), type: 'color' },
-    withHover({ key: 'link_border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 24 },
+    withHover({ key: 'link_border_radius', label: t('Raggio'), type: 'border-radius' }),
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 24 },
 
     { type: 'separator', label: t('Sfondo') },
     { key: 'background_color', label: t('Colore sfondo'), type: 'color' },

@@ -159,10 +159,10 @@ export default {
     ]},
     { key: 'chip_bg', label: t('Sfondo chip'), type: 'color',
       condition: { field: 'chip_style', op: 'neq', value: 'none' } },
-    { key: 'chip_padding', label: t('Padding chip (px)'), type: 'spacing', min: 0, max: 40,
+    { key: 'chip_padding', label: t('Padding chip'), type: 'spacing', min: 0, max: 40,
       legacyKeys: { y: 'chip_padding_y', x: 'chip_padding_x' },
       condition: { field: 'chip_style', op: 'neq', value: 'none' } },
-    { key: 'chip_radius', label: t('Raggio chip (px)'), type: 'border-radius',
+    { key: 'chip_radius', label: t('Raggio chip'), type: 'border-radius',
       condition: { field: 'chip_style', op: 'neq', value: 'none' } },
 
     ...wowEffectsFields(),

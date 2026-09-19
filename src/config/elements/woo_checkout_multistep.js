@@ -76,7 +76,7 @@ export default {
     { key: 'step_bg', label: t('Sfondo step'), type: 'color' },
 
     { type: 'separator', label: t('Stile') },
-    withHover({ key: 'card_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'card_radius', label: t('Raggio'), type: 'border-radius' }),
     ...borderFields(),
   ],
 };

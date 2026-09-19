@@ -55,7 +55,7 @@ export default {
       sizeMin: 9, sizeMax: 16, sizeStep: 1,
     },
     { key: 'uppercase', label: t('Maiuscolo'), type: 'toggle' },
-    { key: 'padding', label: t('Padding (px)'), type: 'spacing', min: 0, max: 80,
+    { key: 'padding', label: t('Padding'), type: 'spacing', min: 0, max: 80,
       legacyKeys: { y: 'padding_y' } },
     { key: 'border_top', label: t('Bordo superiore'), type: 'toggle' },
     { key: 'border_color', label: t('Colore bordo'), type: 'color',

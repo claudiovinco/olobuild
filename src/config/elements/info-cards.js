@@ -113,7 +113,7 @@ export default {
 
     { type: 'separator', label: t('Sfondo container') },
     { key: 'container_bg',      label: t('Sfondo'),               type: 'background', showParallax: false },
-    { key: 'container_padding', label: t('Padding (px)'), type: 'spacing', min: 0, max: 80 },
+    { key: 'container_padding', label: t('Padding'), type: 'spacing', min: 0, max: 80 },
     { key: 'container_gap',     label: t('Gap container-card'), type: 'range', min: 0, max: 40, step: 1 },
     withHover({ key: 'container_radius', label: t('Raggio container'), type: 'border-radius' }, { hoverKey: 'container_radius_hover', hoverDurationKey: 'container_radius_hover_duration' }),
 

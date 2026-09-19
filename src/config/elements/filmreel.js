@@ -132,7 +132,7 @@ export default {
     { type: 'separator', label: t('Spaziatura') },
     { key: 'pad_custom', label: t('Padding personalizzato'), type: 'toggle',
       description: t('Di base il padding verticale è responsivo: clamp(42px,6vw,78px).') },
-    { key: 'padding', label: t('Padding (px)'), type: 'spacing', max: 200,
+    { key: 'padding', label: t('Padding'), type: 'spacing', max: 200,
       condition: { field: 'pad_custom', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Sfondo') },

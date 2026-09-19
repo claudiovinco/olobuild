@@ -376,7 +376,7 @@ export default {
       { value: 'center', label: t('Al centro') },
       { value: 'right',  label: t('A destra') },
     ]},
-    { key: 'tile_padding', label: t('Padding del contenuto interno (px)'), type: 'spacing', max: 200 },
+    { key: 'tile_padding', label: t('Padding del contenuto interno'), type: 'spacing', max: 200 },
 
     // ── Stile pulsante CTA Primario ──
     { type: 'separator', label: t('Stile CTA Primario') },
@@ -388,7 +388,7 @@ export default {
     { key: 'cta_size',       label: t('Dimensione testo'), type: 'range', min: 12, max: 24, step: 1 },
     { key: 'cta_bg_color',   label: t('Colore sfondo'), type: 'color' },
     { key: 'cta_text_color', label: t('Colore testo'),  type: 'color' },
-    withHover({ key: 'cta_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'cta_radius', label: t('Raggio'), type: 'border-radius' }),
 
     // ── Stile pulsante CTA Secondario ──
     { type: 'separator', label: t('Stile CTA Secondario') },

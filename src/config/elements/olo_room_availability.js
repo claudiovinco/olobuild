@@ -53,7 +53,7 @@ export default {
 
     { type: 'separator', label: t('Aspetto') },
     { key: 'card_style', label: t('Stile card con sfondo'), type: 'toggle' },
-    withHover({ key: 'day_radius', label: t('Raggio celle giorno (px)'), type: 'border-radius' }),
+    withHover({ key: 'day_radius', label: t('Raggio celle giorno'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Colori stato') },
     { key: 'color_free', label: t('Libero'), type: 'color' },

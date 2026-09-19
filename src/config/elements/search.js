@@ -141,8 +141,8 @@ export default {
 
     { type: 'separator', label: t('Bordi') },
 
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
-    withHover({ key: 'button_radius', label: t('Raggio pulsante (px)'), type: 'border-radius',
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
+    withHover({ key: 'button_radius', label: t('Raggio pulsante'), type: 'border-radius',
       show: s => s.show_button }),
 
     { type: 'separator', label: t('Effetti') },

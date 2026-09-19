@@ -101,8 +101,8 @@ export default {
   styleFields: [
     { type: 'separator', label: t('Aspetto card') },
     { key: 'card_min_height', label: t('Altezza minima card'), type: 'range', min: 200, max: 700, step: 10, responsive: true },
-    { key: 'card_padding', label: t('Padding (px)'), type: 'spacing', min: 0, max: 80 },
-    { key: 'round', label: t('Raggio angoli (px)'), type: 'border-radius' },
+    { key: 'card_padding', label: t('Padding'), type: 'spacing', min: 0, max: 80 },
+    { key: 'round', label: t('Raggio angoli'), type: 'border-radius' },
     { key: 'media_position', label: t('Posizione immagine'), type: 'select', options: [
       { value: 'right', label: t('A destra del testo') },
       { value: 'left',  label: t('A sinistra del testo') },

@@ -87,6 +87,7 @@
 </template>
 
 <script setup>
+import { uikitGap } from '@/composables/useUikitGap';
 import { computed } from 'vue';
 import { t } from '@/i18n';
 import { SHADOW } from '@/composables/oloTileDefaults';
@@ -167,12 +168,13 @@ const filterClass = computed(() => {
   return 'mb-px-2 mb-py-0.5 mb-text-xs mb-rounded mb-bg-gray-600 mb-text-gray-300';
 });
 
-const gapMap = { collapse: '0px', small: '8px', default: '16px', medium: '24px', large: '40px' };
+// I valori del gap vengono da UIkit, non inventati qui: sul sito la parola
+// diventa una classe `uk-grid-*` e il canvas deve mostrare la STESSA distanza.
 
 const gridStyle = computed(() => ({
   display: 'grid',
   gridTemplateColumns: `repeat(${parseInt(s.value.columns) || 3}, 1fr)`,
-  gap: gapMap[s.value.gap] || '16px',
+  gap: uikitGap(s.value.gap),
 }));
 
 // Card style class (matches frontend olo-grid-card--*)

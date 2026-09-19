@@ -367,7 +367,7 @@ export default {
       { value: 'contain', label: t('Adatta (contain)') },
       { value: 'fill', label: t('Distorci (fill)') },
     ]},
-    withHover({ key: 'image_radius', label: t('Raggio immagine (px)'), type: 'border-radius' }),
+    withHover({ key: 'image_radius', label: t('Raggio immagine'), type: 'border-radius' }),
     { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
       { value: 'none', label: t('Nessuno') },
       { value: 'zoom', label: t('Zoom') },
@@ -430,7 +430,7 @@ export default {
     // Testo
     // ═══════════════════════════════════════════
     { type: 'separator', label: t('Stile testo') },
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 40 },
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 40 },
     { key: 'title_size', label: t('Dimensione titolo'), type: 'range', min: 0.7, max: 2.5, step: 0.05 },
     { key: 'excerpt_size', label: t('Dimensione estratto'), type: 'range', min: 0.7, max: 1.5, step: 0.05 },
     { key: 'tag_bg', label: t('Sfondo pill dotazioni'), type: 'color' },

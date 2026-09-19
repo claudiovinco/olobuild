@@ -82,15 +82,15 @@ export default {
     { type: 'separator', label: t('Card') },
     { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
     { key: 'card_border', label: t('Bordo card'), type: 'border', legacyWidth: 1 },
-    { key: 'radius', label: t('Raggio (px)'), type: 'border-radius' },
+    { key: 'radius', label: t('Raggio'), type: 'border-radius' },
     { key: 'gap', label: t('Gap card'), type: 'range', min: 8, max: 32, step: 2 },
 
     { type: 'separator', label: t('Spaziatura') },
-    { key: 'content_padding', label: t('Padding card (px)'), type: 'spacing', max: 64,
+    { key: 'content_padding', label: t('Padding card'), type: 'spacing', max: 64,
       description: t('Spaziatura interna della card. Default 22px.') },
 
     { type: 'separator', label: t('Forma') },
-    { key: 'card_radius', label: t('Raggio card — 4 angoli (px)'), type: 'border-radius',
+    { key: 'card_radius', label: t('Raggio card — 4 angoli'), type: 'border-radius',
       description: t('Override a 4 angoli. Vuoto/0 = usa il "Raggio (px)" sopra.') },
 
     { type: 'separator', label: t('Colori') },

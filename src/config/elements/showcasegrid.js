@@ -92,7 +92,7 @@ export default {
     { key: 'card_radius', label: t('Raggio card'), type: 'border-radius', legacyKeys: { all: 'radius' } },
 
     { type: 'separator', label: t('Spaziatura') },
-    { key: 'card_padding', label: t('Padding interno card (px)'), type: 'spacing', max: 80 },
+    { key: 'card_padding', label: t('Padding interno card'), type: 'spacing', max: 80 },
 
     { type: 'separator', label: t('Colori') },
     { key: 'media_bg', label: t('Sfondo media'), type: 'color' },

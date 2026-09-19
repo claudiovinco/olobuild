@@ -255,7 +255,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Stile elementi') },
-    { key: 'item_radius', label: t('Raggio elementi (px)'), type: 'border-radius' },
+    { key: 'item_radius', label: t('Raggio elementi'), type: 'border-radius' },
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { fit: '(cover)' },
       description: t('Punto focale delle immagini card (uguale per tutte). Default: centro.') },

@@ -215,7 +215,7 @@ export default {
       { value: 'small', label: t('Small') },
       { value: 'large', label: t('Large') },
     ]},
-    { key: 'button_radius', label: t('Raggio pulsante (px)'), type: 'border-radius' },
+    { key: 'button_radius', label: t('Raggio pulsante'), type: 'border-radius' },
     { key: 'button_uppercase', label: t('Pulsante maiuscolo'), type: 'toggle' },
     { key: 'button_color', label: t('Colore trigger (vuoto = tema)'), type: 'color' },
     { key: 'button_underline', label: t('Sottolinea trigger'), type: 'toggle' },

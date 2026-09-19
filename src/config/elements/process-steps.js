@@ -100,6 +100,6 @@ export default {
     { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
     { key: 'card_border', label: t('Bordo card'), type: 'border', legacyWidth: 1 },
     { key: 'card_radius', label: t('Raggio'), type: 'border-radius' },
-    { key: 'card_padding', label: t('Padding card (px)'), type: 'spacing', min: 0, max: 80 },
+    { key: 'card_padding', label: t('Padding card'), type: 'spacing', min: 0, max: 80 },
   ],
 };

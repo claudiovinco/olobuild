@@ -253,7 +253,7 @@ export default {
     { key: 'sticky_shrink', label: t('Riduci quando agganciata'), type: 'toggle', condition: { field: 'bar_sticky', op: 'eq', value: true } },
     { key: 'sticky_bg', label: t('Sfondo quando agganciata'), type: 'color', condition: { field: 'bar_sticky', op: 'eq', value: true } },
     { key: 'bar_blur',   label: t('Blur sfondo'),  type: 'toggle' },
-    { key: 'bar_radius', label: t('Raggio (px)'), type: 'border-radius' },
+    { key: 'bar_radius', label: t('Raggio'), type: 'border-radius' },
     { key: 'bar_shadow', label: t('Ombra'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
       { value: 'sm',   label: t('Leggera') },

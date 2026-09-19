@@ -106,14 +106,14 @@ export default {
     focalField('image', { key: 'object_position', src: '', reveal: true, label: t('Posizione — punto focale immagini') }),
 
     { type: 'separator', label: t('Spaziatura') },
-    { key: 'content_padding', label: t('Padding contenuto (px)'), type: 'spacing',
+    { key: 'content_padding', label: t('Padding contenuto'), type: 'spacing',
       description: t('Spazio interno dello stack di testo (default 0 / 30).') },
 
     { type: 'separator', label: t('Raggio') },
-    { key: 'btn_radius', label: t('Raggio CTA (px)'), type: 'border-radius' },
+    { key: 'btn_radius', label: t('Raggio CTA'), type: 'border-radius' },
     { key: 'media_radius_custom', label: t('Raggio tessere personalizzato'), type: 'toggle',
       description: t('Se attivo, sostituisce il raggio della striscia con i 4 angoli sotto.') },
-    { key: 'media_radius', label: t('Raggio tessere media (px)'), type: 'border-radius',
+    { key: 'media_radius', label: t('Raggio tessere media'), type: 'border-radius',
       condition: { field: 'media_radius_custom', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Sfondo') },

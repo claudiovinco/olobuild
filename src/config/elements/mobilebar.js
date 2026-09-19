@@ -80,7 +80,7 @@ export default {
     { key: 'bar_bg', label: t('Sfondo barra'), type: 'color' },
     { key: 'bar_height', label: t('Altezza barra'), type: 'range', min: 40, max: 80, step: 2 },
     { key: 'bar_shadow', label: t('Ombra barra'), type: 'toggle' },
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 30 },
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 30 },
 
     // ── Hamburger ──
     { type: 'separator', label: t('Hamburger') },
@@ -109,7 +109,7 @@ export default {
     // ── Pannello Menu ──
     { type: 'separator', label: t('Pannello menu') },
     { key: 'panel_bg', label: t('Sfondo pannello'), type: 'color' },
-    { key: 'panel_item_padding', label: t('Padding voci (px)'), type: 'spacing', max: 30 },
+    { key: 'panel_item_padding', label: t('Padding voci'), type: 'spacing', max: 30 },
     { key: 'panel_chevron_color', label: t('Colore chevron'), type: 'color' },
 
     // ── Ricerca ──

@@ -88,8 +88,8 @@ export default {
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 40, step: 4 },
     { key: 'thumbnail_size', label: t('Dimensione miniatura'), type: 'range', min: 30, max: 120, step: 5,
       condition: { field: 'show_thumbnail', value: true } },
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 40 },
-    withHover({ key: 'border_radius', label: t('Raggio card (px)'), type: 'border-radius' }),
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 40 },
+    withHover({ key: 'border_radius', label: t('Raggio card'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Colori') },
     withHover({ key: 'link_color', label: t('Colore link'), type: 'color' }, { hoverKey: 'hover_color' }),

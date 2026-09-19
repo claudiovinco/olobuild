@@ -258,7 +258,7 @@ export default {
 
     { type: 'separator', label: t('Layout — aspetto') },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 60, step: 2 },
-    withHover({ key: 'border_radius', label: t('Raggio card (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio card'), type: 'border-radius' }),
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { ratio: 'image_ratio' } },
 

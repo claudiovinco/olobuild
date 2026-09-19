@@ -172,7 +172,7 @@ export default {
       show: s => s.style === 'vertical' && s.v_show_icons },
     { key: 'v_item_spacing', label: t('Spaziatura voci'), type: 'range', min: 0, max: 24, step: 2,
       show: s => s.style === 'vertical' },
-    { key: 'v_item_padding', label: t('Padding voce (px)'), type: 'spacing', max: 20 },
+    { key: 'v_item_padding', label: t('Padding voce'), type: 'spacing', max: 20 },
     { key: 'v_separator_color', label: t('Colore separatore'), type: 'color',
       show: s => s.style === 'vertical' && s.v_separator },
     { key: 'v_active_indicator', label: t('Indicatore attivo'), type: 'select',
@@ -185,7 +185,7 @@ export default {
       ]},
     withHover({ key: 'v_active_bg', label: t('Sfondo attivo'), type: 'color',
       show: s => s.style === 'vertical' }, { hoverKey: 'v_hover_bg' }),
-    withHover({ key: 'v_border_radius', label: t('Raggio voci (px)'), type: 'border-radius',
+    withHover({ key: 'v_border_radius', label: t('Raggio voci'), type: 'border-radius',
       show: s => s.style === 'vertical' }),
 
     { type: 'separator', label: t('Indicatore menu') },

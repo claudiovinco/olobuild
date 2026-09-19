@@ -216,7 +216,7 @@ export default {
     { key: 'bg_color', label: t('Sfondo'), type: 'color' },
     { key: 'box_border', label: t('Colore bordo box'), type: 'color' },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius'}),
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 60 },
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 60 },
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo'),

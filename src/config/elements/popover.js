@@ -96,7 +96,7 @@ export default {
     { key: 'marker_color', label: t('Colore marcatore'), type: 'color' },
     { key: 'popup_bg', label: t('Sfondo popup'), type: 'color' },
     { key: 'popup_color', label: t('Colore testo popup'), type: 'color' },
-    withHover({ key: 'popup_radius', label: t('Raggio popup (px)'), type: 'border-radius' }),
+    withHover({ key: 'popup_radius', label: t('Raggio popup'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Immagine popup') },
     { key: 'popup_img_height', label: t('Altezza immagine popup'), type: 'range', min: 60, max: 300, step: 10 },

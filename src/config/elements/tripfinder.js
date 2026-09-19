@@ -81,8 +81,8 @@ export default {
       description: t('Lascia tutto a 0 per usare il «Raggio bordo» uniforme qui sopra.') },
 
     { type: 'separator', label: t('Spaziatura') },
-    { key: 'bar_padding', label: t('Padding barra (px)'), type: 'spacing', min: 0, max: 64 },
-    { key: 'field_padding', label: t('Padding campi (px)'), type: 'spacing', min: 0, max: 64 },
+    { key: 'bar_padding', label: t('Padding barra'), type: 'spacing', min: 0, max: 64 },
+    { key: 'field_padding', label: t('Padding campi'), type: 'spacing', min: 0, max: 64 },
 
     { type: 'separator', label: t('Sfondo') },
     { key: 'bg', label: t('Sfondo completo'), type: 'background', showParallax: false },

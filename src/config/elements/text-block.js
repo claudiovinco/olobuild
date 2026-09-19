@@ -87,8 +87,8 @@ export default {
     { key: 'columns', label: t('Numero colonne'), type: 'range', min: 1, max: 4, step: 1 },
     { key: 'column_gap', label: t('Gap colonne'), type: 'range', min: 0, max: 80, step: 2,
       condition: { field: 'columns', operator: '>', value: 1 } },
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 100 },
-    { key: 'tile_margin', label: t('Margine (px)'), type: 'spacing', min: -50, max: 100 },
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 100 },
+    { key: 'tile_margin', label: t('Margine'), type: 'spacing', min: -50, max: 100 },
     withHover(
       { key: 'border_radius', label: t('Raggio'), type: 'border-radius' },
       { hoverKey: 'hover_border_radius', hoverDurationKey: 'hover_radius_duration' }

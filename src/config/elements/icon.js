@@ -54,7 +54,7 @@ export default {
       { value: 'square', label: t('Quadrato') },
       { value: 'rounded', label: t('Arrotondato') },
     ]},
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 60 },
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 60 },
     { key: 'rotation', label: t('Rotazione (°)'), type: 'range', min: -180, max: 180, step: 15 },
 
     { type: 'separator', label: t('Hover') },

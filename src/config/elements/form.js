@@ -390,7 +390,7 @@ export default {
       legacyKeys: { width: 'input_border_width', style: 'input_border_style', color: 'input_border_color' } },
     { key: 'input_bg', label: t('Sfondo input'), type: 'color' },
     { key: 'input_color', label: t('Colore testo input'), type: 'color' },
-    withHover({ key: 'input_radius', label: t('Raggio input (px)'), type: 'border-radius' }),
+    withHover({ key: 'input_radius', label: t('Raggio input'), type: 'border-radius' }),
     { key: 'input_size', label: t('Dimensione input'), type: 'select', options: [
       { value: 'small', label: t('Piccolo') },
       { value: 'default', label: t('Normale') },
@@ -407,8 +407,8 @@ export default {
     { type: 'separator', label: t('Stile pulsante') },
     withHover({ key: 'submit_bg', label: t('Sfondo pulsante'), type: 'color' }, { hoverKey: 'submit_hover_bg' }),
     { key: 'submit_color', label: t('Colore testo pulsante'), type: 'color' },
-    withHover({ key: 'submit_radius', label: t('Raggio (px)'), type: 'border-radius' }),
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 48 },
+    withHover({ key: 'submit_radius', label: t('Raggio'), type: 'border-radius' }),
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 48 },
     { type: 'typography', label: t('Pulsante'),
       responsiveKeys: ['size', 'letterSpacing'],
       keys: {

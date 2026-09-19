@@ -107,7 +107,7 @@ export default {
     { key: 'cover_height', label: t('Altezza'), type: 'range', min: 100, max: 1200, step: 10 },
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { src: 'poster_image', ratio: 'display_mode', fit: 'cover' } },
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 
     ...textEffectsFields([
       { value: 'overlay_text', label: t('Solo Testo overlay') },

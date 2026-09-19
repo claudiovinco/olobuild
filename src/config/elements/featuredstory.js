@@ -117,7 +117,7 @@ export default {
       description: t('Es. "1.15fr .85fr". Invertito automaticamente se l\'immagine è a destra.') },
     { key: 'cover_aspect', label: t('Aspect ratio copertina'), type: 'text',
       description: t('Es. "4 / 3", "16 / 9", "4 / 5".') },
-    { key: 'media_radius', label: t('Raggio copertina (px)'), type: 'border-radius' },
+    { key: 'media_radius', label: t('Raggio copertina'), type: 'border-radius' },
     { key: 'standfirst_italic', label: t('Standfirst in corsivo'), type: 'toggle' },
     { key: 'placeholder_dark', label: t('Placeholder scuro su chiaro'), type: 'toggle',
       description: t('Attivo = righe/etichetta scure (tema chiaro). Spegni per temi scuri (es. navy).') },

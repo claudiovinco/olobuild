@@ -248,7 +248,7 @@ export default {
 
     { type: 'separator', label: t('CTA — Aspetto') },
     { key: 'cta_width', label: t('Larghezza'), type: 'range', min: 30, max: 100, step: 5 },
-    withHover({ key: 'cta_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'cta_radius', label: t('Raggio'), type: 'border-radius' }),
     withHover({ key: 'cta_bg_color',   label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta_hover_bg_color' }),
     { key: 'cta_hover_text_color', label: t('Colore testo hover'), type: 'color' },
     { key: 'cta_border', label: t('Bordo CTA'), type: 'border',
@@ -272,7 +272,7 @@ export default {
     ], condition: { field: 'is_popular', value: true } },
     { key: 'badge_top', label: t('Posizione verticale'), type: 'range', min: -20, max: 40, step: 1,
       condition: { field: 'is_popular', value: true } },
-    withHover({ key: 'badge_radius', label: t('Raggio (px)'), type: 'border-radius',
+    withHover({ key: 'badge_radius', label: t('Raggio'), type: 'border-radius',
       condition: { field: 'is_popular', value: true } }),
     { key: 'badge_bg_color', label: t('Sfondo'), type: 'color',
       condition: { field: 'is_popular', value: true } },
@@ -310,7 +310,7 @@ export default {
       condition: { field: 'overlay', value: true } },
 
     { type: 'separator', label: t('Aspetto card') },
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 
     ...shadowField,
     ...borderFields(),

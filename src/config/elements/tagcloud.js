@@ -120,8 +120,8 @@ export default {
     withHover({ key: 'background_color', label: t('Sfondo tag'),   type: 'color' }, { hoverKey: 'hover_background' }),
 
     { type: 'separator', label: t('Stile tag') },
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
-    { key: 'padding', label: t('Padding (px)'), type: 'spacing', max: 32 },
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
+    { key: 'padding', label: t('Padding'), type: 'spacing', max: 32 },
 
     ...borderFields(),
   ],

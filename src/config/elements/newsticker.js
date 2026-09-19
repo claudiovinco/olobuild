@@ -171,7 +171,7 @@ export default {
     { key: 'bg_angle', label: t('Angolo gradiente (°)'), type: 'range', min: 0, max: 360, step: 5, condition: { field: 'bg_gradient', value: true } },
     { key: 'height', label: t('Altezza'), type: 'range', min: 30, max: 120 },
     { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 32 },
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'separator', label: t('Separatore badge'), type: 'text' },
 
     { type: 'separator', label: t('Tipografia') },

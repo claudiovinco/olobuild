@@ -110,7 +110,7 @@ export default {
       { value: 'stretch', label: t('Espandi') },
     ]},
     { key: 'gap', label: t('Gap elementi'), type: 'range', min: 0, max: 24, step: 2 },
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 32 },
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 32 },
 
     { type: 'separator', label: t('Stile voci') },
     { key: 'style', label: t('Stile predefinito'), type: 'select', options: [
@@ -128,7 +128,7 @@ export default {
       { value: 'bold', label: t('Grassetto') },
       { value: 'dot', label: t('Punto') },
     ]},
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
       { value: 'none', label: t('Nessuno') },
       { value: 'slide-bg', label: t('Sfondo slide') },

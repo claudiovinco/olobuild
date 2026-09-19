@@ -191,7 +191,7 @@ export default {
     // ── Stile card ──
     { type: 'separator', label: t('Stile card') },
     { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
-    withHover({ key: 'card_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'card_radius', label: t('Raggio'), type: 'border-radius' }),
     {
       key: 'card_shadow', label: t('Ombra'), type: 'select', options: [
         { value: 'none', label: t('Nessuna') },
@@ -214,7 +214,7 @@ export default {
     },
     { key: 'btn_bg', label: t('Sfondo pulsante'), type: 'color' },
     { key: 'btn_color', label: t('Colore testo pulsante'), type: 'color' },
-    withHover({ key: 'btn_radius', label: t('Raggio pulsante (px)'), type: 'border-radius' }),
+    withHover({ key: 'btn_radius', label: t('Raggio pulsante'), type: 'border-radius' }),
     ...borderFields(),
   ],
 };

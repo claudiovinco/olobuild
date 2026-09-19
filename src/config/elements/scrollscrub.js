@@ -150,8 +150,8 @@ export default {
     { type: 'separator', label: t('Aspetto elementi') },
     { key: 'item_width', label: t('Larghezza elemento'), type: 'range', min: 160, max: 720, step: 10, responsive: true },
     { key: 'item_min_height', label: t('Altezza elemento'), type: 'range', min: 200, max: 760, step: 10, responsive: true },
-    { key: 'round', label: t('Raggio angoli (px)'), type: 'border-radius' },
-    { key: 'item_padding', label: t('Padding (px)'), type: 'spacing', min: 0, max: 80,
+    { key: 'round', label: t('Raggio angoli'), type: 'border-radius' },
+    { key: 'item_padding', label: t('Padding'), type: 'spacing', min: 0, max: 80,
       description: t('0 = immagine a tutto bordo con testo sovrapposto in basso.') },
 
     { type: 'separator', label: t('Sovraimpressione (foto a tutto bordo)'), condition: { field: 'item_padding', op: 'eq', value: 0 } },

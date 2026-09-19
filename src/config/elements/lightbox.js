@@ -91,7 +91,7 @@ export default {
       { value: '16:9', label: '16:9' },
       { value: 'auto', label: t('Auto') },
     ] },
-    withHover({ key: 'thumb_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'thumb_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { ratio: 'thumb_ratio' } },
 

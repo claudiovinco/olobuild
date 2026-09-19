@@ -63,7 +63,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Spaziatura') },
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 40 },
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 40 },
 
     { type: 'separator', label: t('Bordo inferiore') },
     { key: 'border_bottom', label: t('Spessore'), type: 'range', min: 0, max: 4, step: 1 },

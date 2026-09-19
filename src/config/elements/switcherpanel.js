@@ -177,7 +177,7 @@ export default {
     ]),
 
     { type: 'separator', label: t('Hero — Aspetto') },
-    { key: 'hero_radius', label: t('Raggio hero (px)'), type: 'border-radius' },
+    { key: 'hero_radius', label: t('Raggio hero'), type: 'border-radius' },
     { key: 'hero_overlay_color', label: t('Overlay colore'), type: 'color',
       condition: { field: 'nav_position', op: 'eq', value: 'overlay' } },
     { key: 'hero_overlay_gradient', label: t('Overlay gradiente (alto→basso)'), type: 'toggle',
@@ -193,9 +193,9 @@ export default {
       { value: '3:4',  label: t('3:4 (verticale)') },
     ]},
     { key: 'panel_gap', label: t('Gap testo↔immagine'), type: 'range', min: 0, max: 80, step: 4 },
-    { key: 'tile_padding', label: t('Padding pannello (px)'), type: 'spacing', max: 80 },
-    { key: 'panel_radius', label: t('Raggio pannello (px)'), type: 'border-radius' },
-    { key: 'panel_image_radius', label: t('Raggio immagine (px)'), type: 'border-radius' },
+    { key: 'tile_padding', label: t('Padding pannello'), type: 'spacing', max: 80 },
+    { key: 'panel_radius', label: t('Raggio pannello'), type: 'border-radius' },
+    { key: 'panel_image_radius', label: t('Raggio immagine'), type: 'border-radius' },
 
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Voce nav'),
@@ -229,16 +229,16 @@ export default {
     },
 
     { type: 'separator', label: t('Nav — Spaziatura') },
-    { key: 'nav_padding', label: t('Padding voce (px)'), type: 'spacing', min: 0, max: 60,
+    { key: 'nav_padding', label: t('Padding voce'), type: 'spacing', min: 0, max: 60,
       legacyKeys: { y: 'nav_padding_y', x: 'nav_padding_x' } },
     { key: 'nav_uppercase', label: t('Maiuscole'), type: 'toggle' },
     { key: 'nav_gap', label: t('Gap voci'), type: 'range', min: 0, max: 32, step: 1 },
-    { key: 'nav_radius', label: t('Raggio voce (px)'), type: 'border-radius' },
+    { key: 'nav_radius', label: t('Raggio voce'), type: 'border-radius' },
 
     { type: 'separator', label: t('Nav — Container') },
     { key: 'nav_container_bg', label: t('Sfondo container'), type: 'color' },
-    { key: 'nav_container_padding', label: t('Padding container (px)'), type: 'spacing', min: 0, max: 60 },
-    { key: 'nav_container_radius', label: t('Raggio container (px)'), type: 'border-radius' },
+    { key: 'nav_container_padding', label: t('Padding container'), type: 'spacing', min: 0, max: 60 },
+    { key: 'nav_container_radius', label: t('Raggio container'), type: 'border-radius' },
 
     { type: 'separator', label: t('Nav — Stati') },
     { key: 'nav_active_bg', label: t('Sfondo voce attiva'), type: 'color' },

@@ -135,7 +135,7 @@ export default {
 
     { type: 'separator', label: t('Chip') },
     { key: 'chip_bg', label: t('Sfondo chip (inattiva)'), type: 'color' },
-    { key: 'chip_radius', label: t('Raggio chip (px)'), type: 'border-radius' },
+    { key: 'chip_radius', label: t('Raggio chip'), type: 'border-radius' },
 
     { type: 'separator', label: t('Card risultato') },
     { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
@@ -147,7 +147,7 @@ export default {
       description: t('Punto focale globale dell’immagine in tutte le card risultato.') },
     { key: 'card_max_width', label: t('Larghezza max card'), type: 'range', min: 480, max: 1000, step: 10 },
     { key: 'card_radius', label: t('Raggio card'), type: 'border-radius' },
-    { key: 'card_padding', label: t('Padding card (px)'), type: 'spacing', max: 80 },
+    { key: 'card_padding', label: t('Padding card'), type: 'spacing', max: 80 },
     { key: 'shadow', label: t('Ombra card'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
       { value: 'sm', label: t('Piccola') },
@@ -157,7 +157,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Aspetto tile') },
-    { key: 'tile_padding', label: t('Padding tile (px)'), type: 'spacing', min: 0, max: 96 },
+    { key: 'tile_padding', label: t('Padding tile'), type: 'spacing', min: 0, max: 96 },
 
     ...borderFields(),
     ...wowEffectsFields(),

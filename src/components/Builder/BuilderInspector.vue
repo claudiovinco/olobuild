@@ -1393,7 +1393,6 @@ import InspectorField from './InspectorField.vue';
 import StyleFieldsRenderer from './StyleFieldsRenderer.vue';
 import { styleFieldsBase } from '@/config/elements/_styleFieldsBase.js';
 import { normalizeSearchQuery, fieldMatchesSearch, sectionLabelMatchesSearch, countSearchMatches } from '@/utils/inspectorSearch.js';
-import FieldSpacing from './fields/FieldSpacing.vue';
 import FieldSelect from './fields/FieldSelect.vue';
 import FieldColor from './fields/FieldColor.vue';
 import CollapseSection from './CollapseSection.vue';

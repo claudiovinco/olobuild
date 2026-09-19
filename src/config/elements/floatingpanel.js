@@ -194,8 +194,8 @@ export default {
     // ─── Aspetto ───
     { type: 'separator', label: t('Aspetto') },
     { key: 'bg_color', label: t('Sfondo'), type: 'color' },
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 60 },
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 60 },
     { key: 'shadow', label: t('Ombra'), type: 'toggle' },
     // Un controllo solo, con le stesse possibilità che l'ombra ha in ogni altra
     // tile: X, Y, sfocatura, estensione, colore, interna. Le tre chiavi storiche

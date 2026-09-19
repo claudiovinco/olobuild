@@ -133,11 +133,11 @@ export default {
     { key: 'pill_color', label: t('Colore testo pill (vuoto = accento)'), type: 'color' },
 
     { type: 'separator', label: t('Spaziatura') },
-    { key: 'content_padding', label: t('Padding contenuto (px)'), type: 'spacing', max: 200,
+    { key: 'content_padding', label: t('Padding contenuto'), type: 'spacing', max: 200,
       description: t('Spaziatura interna del blocco testo (eyebrow + titolo + sub + CTA).') },
 
     { type: 'separator', label: t('Forma') },
-    { key: 'chat_radius', label: t('Raggio finestra chat (px)'), type: 'border-radius' },
+    { key: 'chat_radius', label: t('Raggio finestra chat'), type: 'border-radius' },
 
     { type: 'separator', label: t('Sfondo') },
     { key: 'bg', label: t('Sfondo completo'), type: 'background', showParallax: false },

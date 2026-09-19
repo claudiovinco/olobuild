@@ -93,7 +93,7 @@ export default {
     { type: 'separator', label: t('Spaziatura') },
     { key: 'pad_custom', label: t('Padding interno personalizzato'), type: 'toggle',
       description: t('Disattivo = padding responsivo automatico (clamp).') },
-    { key: 'content_padding', label: t('Padding (px)'), type: 'spacing', max: 160,
+    { key: 'content_padding', label: t('Padding'), type: 'spacing', max: 160,
       condition: { field: 'pad_custom', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Forma') },

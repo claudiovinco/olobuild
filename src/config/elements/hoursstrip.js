@@ -56,7 +56,7 @@ export default {
   styleFields: [
     { type: 'separator', label: t('Banda') },
     { key: 'columns',        label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1, responsive: true },
-    { key: 'band_padding', label: t('Padding banda (px)'), type: 'spacing', min: 0, max: 120,
+    { key: 'band_padding', label: t('Padding banda'), type: 'spacing', min: 0, max: 120,
       legacyKeys: { y: 'band_padding_y' } },
 
     { type: 'separator', label: t('Divisori') },

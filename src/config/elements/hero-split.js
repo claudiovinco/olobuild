@@ -288,7 +288,7 @@ export default {
     { type: 'separator', label: t('Showcase wrapper'), condition: { field: 'panel', op: 'eq', value: 'showcase' } },
     { key: 'showcase_bg',      label: t('Sfondo wrapper'),       type: 'background', showParallax: false,
       condition: { field: 'panel', op: 'eq', value: 'showcase' } },
-    { key: 'showcase_padding', label: t('Padding wrapper (px)'), type: 'spacing', min: 0, max: 120,
+    { key: 'showcase_padding', label: t('Padding wrapper'), type: 'spacing', min: 0, max: 120,
       condition: { field: 'panel', op: 'eq', value: 'showcase' } },
     withHover({ key: 'showcase_radius', label: t('Raggio wrapper'), type: 'border-radius',
       condition: { field: 'panel', op: 'eq', value: 'showcase' } }, { hoverKey: 'showcase_radius_hover', hoverDurationKey: 'showcase_radius_hover_duration' }),

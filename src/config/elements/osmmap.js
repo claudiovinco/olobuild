@@ -101,7 +101,7 @@ export default {
     // ── Aspetto ──
     { type: 'separator', label: t('Aspetto') },
     { key: 'height', label: t('Altezza'), type: 'range', min: 150, max: 800, step: 10 },
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'tile_layer', label: t('Stile mappa'), type: 'select', options: [
       { value: 'standard', label: t('Standard') },
       { value: 'hot', label: t('Humanitarian') },

@@ -93,7 +93,7 @@ export default {
 
     { type: 'separator', label: t('Immagine principale') },
     { key: 'main_height', label: t('Altezza principale'), type: 'text', placeholder: t('es. 500px, 60vh') },
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Miniature') },
     { key: 'thumbnail_size', label: t('Dimensione miniature'), type: 'range', min: 40, max: 150, step: 5 },

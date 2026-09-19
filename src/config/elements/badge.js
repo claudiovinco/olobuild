@@ -126,7 +126,7 @@ export default {
 
     { type: 'separator', label: t('Forma') },
     withHover({ key: 'badge_radius', label: t('Raggio'), type: 'border-radius' }),
-    { key: 'padding', label: t('Padding (px)'), type: 'spacing', min: 0, max: 60,
+    { key: 'padding', label: t('Padding'), type: 'spacing', min: 0, max: 60,
       legacyKeys: { y: 'padding_y', x: 'padding_x' } },
 
     ...shadowField,

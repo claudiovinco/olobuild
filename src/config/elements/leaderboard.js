@@ -119,7 +119,7 @@ export default {
 
     { type: 'separator', label: t('Riga') },
     { key: 'row_bg', label: t('Sfondo riga'), type: 'color' },
-    { key: 'row_padding', label: t('Padding riga (px)'), type: 'spacing', max: 48 },
+    { key: 'row_padding', label: t('Padding riga'), type: 'spacing', max: 48 },
     { key: 'row_gap', label: t('Gap righe'), type: 'range', min: 0, max: 40, step: 2 },
 
     { type: 'separator', label: t('Barra XP') },
@@ -128,7 +128,7 @@ export default {
     { key: 'bar_gradient_to',   label: t('Gradiente barra — colore 2'), type: 'color' },
     { key: 'bar_gradient_angle', label: t('Angolo gradiente (°)'), type: 'range', min: 0, max: 360, step: 5 },
     { key: 'bar_height', label: t('Altezza barra'), type: 'range', min: 4, max: 28, step: 1 },
-    { key: 'bar_radius', label: t('Raggio barra (px)'), type: 'border-radius' },
+    { key: 'bar_radius', label: t('Raggio barra'), type: 'border-radius' },
 
     { type: 'separator', label: t('Colori') },
     { key: 'text_color',     label: t('Colore nome'), type: 'color' },
@@ -155,7 +155,7 @@ export default {
     { key: 'position_size', label: t('Dimensione posizione'), type: 'range', min: 14, max: 40, step: 1 },
 
     { type: 'separator', label: t('Aspetto') },
-    withHover({ key: 'border_radius', label: t('Raggio riga (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio riga'), type: 'border-radius' }),
 
     ...shadowField,
     ...borderFields(),

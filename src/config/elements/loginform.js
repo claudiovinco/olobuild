@@ -246,11 +246,11 @@ export default {
     { key: 'submit_hover_bg', label: t('Sfondo pulsante hover'), type: 'color' },
 
     { type: 'separator', label: t('Aspetto form') },
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 64 },
-    { key: 'input_padding', label: t('Padding input (px)'), type: 'spacing', min: 0, max: 40 },
-    withHover({ key: 'input_radius', label: t('Raggio input (px)'), type: 'border-radius' }),
-    withHover({ key: 'submit_radius', label: t('Raggio pulsante (px)'), type: 'border-radius' }),
-    withHover({ key: 'border_radius', label: t('Raggio form (px)'), type: 'border-radius' }),
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 64 },
+    { key: 'input_padding', label: t('Padding input'), type: 'spacing', min: 0, max: 40 },
+    withHover({ key: 'input_radius', label: t('Raggio input'), type: 'border-radius' }),
+    withHover({ key: 'submit_radius', label: t('Raggio pulsante'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio form'), type: 'border-radius' }),
     { key: 'border', label: t('Bordo'), type: 'border',
       legacyKeys: { width: 'border_width', color: 'border_color' } },
 

@@ -99,7 +99,7 @@ export default {
       { value: 'rounded', label: t('Arrotondata') },
       { value: 'hexagon', label: t('Esagonale') },
     ]},
-    withHover({ key: 'photo_radius', label: t('Raggio foto (px)'), type: 'border-radius',
+    withHover({ key: 'photo_radius', label: t('Raggio foto'), type: 'border-radius',
       condition: { field: 'photo_shape', value: 'rounded' } }),
     { key: 'photo_border', label: t('Bordo foto'), type: 'border',
       legacyKeys: { width: 'photo_border_width', color: 'photo_border_color' } },
@@ -118,9 +118,9 @@ export default {
     { type: 'separator', label: t('Contenitore info') },
     { key: 'info_bg_color', label: t('Sfondo contenitore'), type: 'color' },
     { key: 'info_width', label: t('Larghezza contenitore'), type: 'range', min: 50, max: 100, step: 5 },
-    { key: 'info_margin', label: t('Margine dal tile (px)'), type: 'spacing', max: 40 },
-    { key: 'info_padding', label: t('Padding contenitore (px)'), type: 'spacing', max: 48 },
-    withHover({ key: 'info_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    { key: 'info_margin', label: t('Margine dal tile'), type: 'spacing', max: 40 },
+    { key: 'info_padding', label: t('Padding contenitore'), type: 'spacing', max: 48 },
+    withHover({ key: 'info_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'info_border', label: t('Bordo scheda'), type: 'border',
       legacyKeys: { width: 'info_border_width', color: 'info_border_color' } },
     { key: 'info_align', label: t('Allineamento testo'), type: 'select', options: [
@@ -158,8 +158,8 @@ export default {
 
     { type: 'separator', label: t('Aspetto tile') },
     { key: 'bg_color', label: t('Colore sfondo tile'), type: 'color' },
-    { key: 'tile_padding', label: t('Padding tile (px)'), type: 'spacing', max: 40 },
-    withHover({ key: 'border_radius', label: t('Raggio tile (px)'), type: 'border-radius' }),
+    { key: 'tile_padding', label: t('Padding tile'), type: 'spacing', max: 40 },
+    withHover({ key: 'border_radius', label: t('Raggio tile'), type: 'border-radius' }),
 
     ...borderFields(),
     ...filterFields,

@@ -101,7 +101,7 @@ export default {
     ]},
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { fit: 'object_fit', ratio: '' } },
-    withHover({ key: 'thumb_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'thumb_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'mobile_columns', label: t('Colonne mobile'), type: 'range', min: 1, max: 4, step: 1 },
 
     { type: 'separator', label: t('Effetti automatici') },

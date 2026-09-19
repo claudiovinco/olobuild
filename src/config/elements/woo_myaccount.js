@@ -69,7 +69,7 @@ export default {
 
     { type: 'separator', label: t('Stile') },
     { key: 'avatar_size', label: t('Dimensione avatar'), type: 'range', min: 32, max: 128, step: 8 },
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Colori sidebar') },
     { key: 'sidebar_bg', label: t('Sfondo sidebar'), type: 'color' },

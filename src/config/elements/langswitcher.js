@@ -170,7 +170,7 @@ export default {
     { key: 'bg', label: t('Sfondo'), type: 'color' },
     { key: 'color', label: t('Testo'), type: 'color' },
     { key: 'border_color', label: t('Bordo'), type: 'color' },
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     ...borderFields(),
   ],
 };

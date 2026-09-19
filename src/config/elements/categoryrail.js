@@ -83,13 +83,13 @@ export default {
       { value: '3/2', label: '3:2' },
     ]},
     { key: 'gap', label: t('Gap tessere'), type: 'range', min: 8, max: 32, step: 2 },
-    { key: 'radius', label: t('Raggio (px)'), type: 'border-radius' },
+    { key: 'radius', label: t('Raggio'), type: 'border-radius' },
 
     { type: 'separator', label: t('Spaziatura') },
-    { key: 'cap_padding', label: t('Padding didascalia (px)'), type: 'spacing', max: 64 },
+    { key: 'cap_padding', label: t('Padding didascalia'), type: 'spacing', max: 64 },
 
     { type: 'separator', label: t('Forma') },
-    { key: 'card_radius', label: t('Raggio tessera (px)'), type: 'border-radius' },
+    { key: 'card_radius', label: t('Raggio tessera'), type: 'border-radius' },
 
     { type: 'separator', label: t('Colori') },
     { key: 'media_bg', label: t('Sfondo media'), type: 'color' },

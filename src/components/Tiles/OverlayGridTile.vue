@@ -54,6 +54,7 @@
 </template>
 
 <script setup>
+import { uikitGap } from '@/composables/useUikitGap';
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -97,8 +98,8 @@ const itemHeight = computed(() => {
   return Math.min(h, 300);
 });
 
-const gapMap = { collapse: '0px', small: '8px', medium: '16px', large: '24px' };
-const gap = computed(() => gapMap[s.value.gap || 'medium'] || '16px');
+// vedi useUikitGap: i numeri sono quelli veri di UIkit
+const gap = computed(() => uikitGap(s.value.gap, 'medium'));
 
 const masonry = computed(() => (s.value.layout_mode || 'uniform') === 'masonry');
 const gridStyle = computed(() => {

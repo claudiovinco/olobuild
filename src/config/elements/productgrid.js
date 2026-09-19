@@ -178,8 +178,8 @@ export default {
     { type: 'separator', label: t('Card (sfondo opzionale)') },
     { key: 'card_bg', label: t('Card — sfondo (vuoto = trasparente)'), type: 'color' },
     { key: 'card_border', label: t('Card — bordo'), type: 'border', legacyWidth: 1 },
-    { key: 'card_radius', label: t('Raggio card (px)'), type: 'border-radius' },
-    { key: 'card_padding', label: t('Padding card (px)'), type: 'spacing', min: 0, max: 80 },
+    { key: 'card_radius', label: t('Raggio card'), type: 'border-radius' },
+    { key: 'card_padding', label: t('Padding card'), type: 'spacing', min: 0, max: 80 },
 
     { type: 'separator', label: t('Shade swatches') },
     { key: 'shade_size', label: t('Pallini shade — dimensione'), type: 'range', min: 10, max: 24, step: 1 },

@@ -166,7 +166,7 @@ export default {
     ]},
     { key: 'object_position', label: t('Punto focale'), type: 'object-position',
       contextKeys: { src: 'image', fit: 'image_fit' } },
-    withHover({ key: 'image_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'image_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'image_border', label: t('Bordo immagine'), type: 'border',
       legacyKeys: { width: 'image_border_width', color: 'image_border_color' } },
     { key: 'image_shadow', label: t('Ombra'), type: 'select', options: [

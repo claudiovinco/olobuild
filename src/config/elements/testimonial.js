@@ -176,7 +176,7 @@ export default {
       { value: 'circle', label: t('Tonda') },
       { value: 'square', label: t('Quadrata') },
     ]},
-    withHover({ key: 'avatar_radius', label: t('Raggio avatar (px)'), type: 'border-radius',
+    withHover({ key: 'avatar_radius', label: t('Raggio avatar'), type: 'border-radius',
       condition: { field: 'avatar_shape', value: 'square' } }),
     { key: 'avatar_shadow', label: t('Ombra avatar'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
@@ -199,7 +199,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Aspetto card') },
-    withHover({ key: 'border_radius', label: t('Raggio tile (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio tile'), type: 'border-radius' }),
     withHover(
       { key: 'card_border', label: t('Bordo card'), type: 'border' },
       { hoverKey: 'card_border_hover', hoverDurationKey: 'card_border_hover_duration' }

@@ -126,8 +126,8 @@ export default {
     },
 
     { type: 'separator', label: t('Contenitore') },
-    { key: 'radius', label: t('Raggio (px)'), type: 'border-radius' },
-    { key: 'padding', label: t('Padding (px)'), type: 'spacing', min: 0, max: 120 },
+    { key: 'radius', label: t('Raggio'), type: 'border-radius' },
+    { key: 'padding', label: t('Padding'), type: 'spacing', min: 0, max: 120 },
 
     ...shadowField,
     ...borderFields(),

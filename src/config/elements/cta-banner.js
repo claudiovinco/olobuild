@@ -96,7 +96,7 @@ export default {
   styleFields: [
     { type: 'separator', label: t('Banner') },
     { key: 'bg',              label: t('Sfondo'),         type: 'background', showParallax: false },
-    { key: 'banner_padding',  label: t('Padding (px)'), type: 'spacing', min: 0, max: 160 },
+    { key: 'banner_padding',  label: t('Padding'), type: 'spacing', min: 0, max: 160 },
     withHover({ key: 'banner_radius', label: t('Raggio'), type: 'border-radius' }, { hoverKey: 'banner_radius_hover', hoverDurationKey: 'banner_radius_hover_duration' }),
 
     { type: 'separator', label: t('Headline stile') },
@@ -120,7 +120,7 @@ export default {
     withHover({ key: 'cta_bg',    label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta_bg_hover' }),
     withHover({ key: 'cta_color', label: t('Colore testo'), type: 'color' }, { hoverKey: 'cta_color_hover' }),
     { key: 'cta_size',      label: t('Dimensione testo'), type: 'range', min: 12, max: 22, step: 1 },
-    { key: 'cta_padding',   label: t('Padding bottoni (px)'), type: 'spacing', min: 0, max: 80 },
+    { key: 'cta_padding',   label: t('Padding bottoni'), type: 'spacing', min: 0, max: 80 },
     withHover({ key: 'cta_radius', label: t('Raggio CTA'), type: 'border-radius' }, { hoverKey: 'cta_radius_hover', hoverDurationKey: 'cta_radius_hover_duration' }),
 
     { type: 'separator', label: t('CTA 2 stile') },

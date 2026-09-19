@@ -83,11 +83,11 @@ export default {
     { type: 'separator', label: t('Spaziatura') },
     { key: 'pad_custom', label: t('Padding personalizzato'), type: 'toggle',
       description: t('Off = padding responsivo predefinito. On = usa i valori sotto.') },
-    { key: 'content_padding', label: t('Padding contenuto (px)'), type: 'spacing',
+    { key: 'content_padding', label: t('Padding contenuto'), type: 'spacing',
       condition: { field: 'pad_custom', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Forma') },
-    { key: 'container_radius', label: t('Raggio contenitore (px)'), type: 'border-radius',
+    { key: 'container_radius', label: t('Raggio contenitore'), type: 'border-radius',
       description: t('Arrotonda gli angoli della hero.') },
 
     { type: 'separator', label: t('Sfondo') },

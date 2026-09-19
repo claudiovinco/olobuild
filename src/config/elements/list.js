@@ -107,7 +107,7 @@ export default {
     { key: 'spacing', label: t('Spaziatura'), type: 'range', min: 4, max: 32, step: 2 },
     { key: 'icon_size', label: t('Dim. icona'), type: 'range', min: 14, max: 32, step: 2 },
     { key: 'icon_gap', label: t('Gap icona-testo'), type: 'range', min: 0, max: 32, step: 2 },
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 48 },
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 48 },
 
     ...shadowField,
     ...borderFields(),

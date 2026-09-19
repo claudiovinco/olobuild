@@ -86,17 +86,17 @@ export default {
     { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
       contextKeys: { ratio: 'media_aspect', fit: 'cover' },
       description: t('Punto focale globale di tutte le immagini (prima + dopo).') },
-    { key: 'radius', label: t('Raggio (px)'), type: 'border-radius' },
+    { key: 'radius', label: t('Raggio'), type: 'border-radius' },
     { key: 'gap', label: t('Gap card'), type: 'range', min: 8, max: 48, step: 2 },
 
     { type: 'separator', label: t('Spaziatura') },
-    { key: 'cap_padding', label: t('Padding didascalia (px)'), type: 'spacing', max: 64,
+    { key: 'cap_padding', label: t('Padding didascalia'), type: 'spacing', max: 64,
       description: t('Padding del blocco titolo + testo sotto le immagini.') },
 
     { type: 'separator', label: t('Raggio') },
-    { key: 'card_radius', label: t('Raggio card (px)'), type: 'border-radius',
+    { key: 'card_radius', label: t('Raggio card'), type: 'border-radius',
       description: t('Arrotondamento dei 4 angoli della card. Default = raggio base.') },
-    { key: 'label_radius', label: t('Raggio etichette (px)'), type: 'border-radius',
+    { key: 'label_radius', label: t('Raggio etichette'), type: 'border-radius',
       description: t('Arrotondamento delle pillole "Prima"/"Dopo".') },
 
     { type: 'separator', label: t('Sfondo') },

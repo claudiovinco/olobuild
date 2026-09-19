@@ -185,8 +185,8 @@ export default {
       { value: 'border-glow', label: t('Bordo luminoso') },
       { value: 'tilt', label: t('Inclinazione 3D') },
     ]},
-    withHover({ key: 'card_radius', label: t('Raggio (px)'), type: 'border-radius'}),
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 48 },
+    withHover({ key: 'card_radius', label: t('Raggio'), type: 'border-radius'}),
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 48 },
     { key: 'card_bg_color', label: t('Colore sfondo card'), type: 'color' },
     { key: 'card_border_color', label: t('Colore bordo card'), type: 'color' },
 

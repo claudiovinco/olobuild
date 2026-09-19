@@ -107,7 +107,7 @@ export default {
       { value: 'zoom', label: t('Zoom') },
       { value: 'darken', label: t('Scurisci') },
     ]},
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Colori') },
     { key: 'overlay', label: t('Overlay'), type: 'toggle' },

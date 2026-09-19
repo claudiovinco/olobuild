@@ -141,7 +141,7 @@ export default {
     { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
 
     { type: 'separator', label: t('Spaziatura') },
-    { key: 'padding', label: t('Padding (px)'), type: 'spacing', min: 0, max: 200,
+    { key: 'padding', label: t('Padding'), type: 'spacing', min: 0, max: 200,
       legacyKeys: { y: 'padding_y' } },
 
     ...shadowField,

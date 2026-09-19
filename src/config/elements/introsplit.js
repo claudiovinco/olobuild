@@ -165,14 +165,14 @@ export default {
       { value: '4/5', label: '4:5' },
       { value: '3/4', label: '3:4' },
     ]},
-    { key: 'media_radius', label: t('Raggio media (px)'), type: 'border-radius' },
+    { key: 'media_radius', label: t('Raggio media'), type: 'border-radius' },
     { key: 'media_radius_top', label: t('Raggio angoli superiori (arco, px — 0 = uniforme)'), type: 'range', min: 0, max: 300, step: 4 },
     { key: 'media_blob', label: t('Blob decorativo dietro il media'), type: 'toggle' },
     { key: 'media_blob_color', label: t('Blob — colore (vuoto = primario)'), type: 'color', condition: { field: 'media_blob', value: true } },
 
     { type: 'separator', label: t('Spaziatura') },
     { key: 'pad_custom', label: t('Padding personalizzato'), type: 'toggle' },
-    { key: 'content_padding', label: t('Padding contenitore (px)'), type: 'spacing',
+    { key: 'content_padding', label: t('Padding contenitore'), type: 'spacing',
       condition: { field: 'pad_custom', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Forma') },

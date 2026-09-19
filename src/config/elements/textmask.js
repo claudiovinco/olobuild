@@ -168,7 +168,7 @@ export default {
 
     { type: 'separator', label: t('Layout') },
     { key: 'min_height', label: t('Altezza minima (es. 100vh, 600px)'), type: 'text' },
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 200 },
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 200 },
     { key: 'vertical_align', label: t('Allineamento verticale'), type: 'select', options: [
       { value: 'top', label: t('Alto') },
       { value: 'center', label: t('Centro') },

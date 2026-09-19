@@ -116,8 +116,8 @@ export default {
       condition: { field: 'overlay', value: true } },
 
     { type: 'separator', label: t('Aspetto tile') },
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 80 },
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 80 },
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 
     ...shadowField,
     ...borderFields(),

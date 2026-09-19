@@ -17,19 +17,22 @@
  *
  * REGOLA DI PRUDENZA
  * ------------------
- * Si stacca SOLO per i controlli che l'unità la sanno mostrare (`range`,
- * `number`, `unit`). Per gli altri — `spacing`, per esempio, che ha quattro
- * riquadri senza indicazione d'unità — l'etichetta resta l'unico posto in cui
- * l'utente legge «px», e toglierla sarebbe una perdita, non una pulizia.
- * Se un giorno FieldSpacing mostrerà l'unità, basterà aggiungerlo qui.
+ * Si stacca SOLO per i controlli che l'unità la sanno mostrare. Per gli altri
+ * l'etichetta resta l'unico posto in cui l'utente legge «px», e toglierla sarebbe
+ * una perdita, non una pulizia: prima di aggiungere un tipo a questo elenco,
+ * verificare che il suo controllo l'unità la scriva davvero.
  */
 
 // Le unità che riconosciamo. Chiuso di proposito: una coda come «(opzionale)»
 // o «(secondi)» non è un'unità e non va toccata.
 const UNITA = /\s*\((px|%|ms|s|vh|vw|vmin|vmax|em|rem|ch|deg|fr|pt)\)\s*$/i;
 
-// I controlli con una valbox che sa ospitare l'unità accanto al numero.
-const SANNO_MOSTRARLA = new Set(['range', 'number', 'unit']);
+// I controlli che l'unità la sanno mostrare da sé.
+// `spacing` e `border-radius` sono entrati in questo elenco quando sono passati a
+// FieldBox (lo stesso controllo del pannello «Spazi & Bordi»), che ha il selettore
+// d'unità accanto ai quattro riquadri: prima avevano solo caselle nude e l'unità
+// poteva stare unicamente nell'etichetta.
+const SANNO_MOSTRARLA = new Set(['range', 'number', 'unit', 'spacing', 'border-radius']);
 
 /**
  * @param {string} etichetta  il testo GIÀ passato da t()

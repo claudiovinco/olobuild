@@ -71,7 +71,7 @@ export default {
   styleFields: [
     { type: 'separator', label: t('Righe') },
     { key: 'divider_color', label: t('Colore linee'),         type: 'color' },
-    { key: 'row_padding', label: t('Padding riga (px)'), type: 'spacing', min: 0, max: 80,
+    { key: 'row_padding', label: t('Padding riga'), type: 'spacing', min: 0, max: 80,
       legacyKeys: { y: 'row_padding_y' } },
     { key: 'row_hover_bg',  label: t('Sfondo riga (hover)'),  type: 'color' },
     { key: 'hover_indent',  label: t('Indentazione hover'), type: 'range', min: 0, max: 48, step: 2 },

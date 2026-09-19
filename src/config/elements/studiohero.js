@@ -182,7 +182,7 @@ export default {
     { type: 'separator', label: t('Spaziatura') },
     { key: 'pad_custom', label: t('Padding personalizzato'), type: 'toggle',
       description: t('Off = padding verticale responsivo predefinito. On = usa i valori sotto.') },
-    { key: 'content_padding', label: t('Padding (px)'), type: 'spacing', max: 240,
+    { key: 'content_padding', label: t('Padding'), type: 'spacing', max: 240,
       condition: { field: 'pad_custom', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Sfondo') },

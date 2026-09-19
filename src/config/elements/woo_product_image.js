@@ -73,12 +73,12 @@ export default {
       { value: '16-9', label: '16:9' },
       { value: 'auto', label: t('Automatico') },
     ]},
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Miniature') },
     { key: 'thumb_size', label: t('Dimensione miniature'), type: 'range', min: 40, max: 120, step: 4 },
     { key: 'thumb_gap', label: t('Gap miniature'), type: 'range', min: 4, max: 16, step: 2 },
-    withHover({ key: 'thumb_border_radius', label: t('Raggio miniature (px)'), type: 'border-radius' }),
+    withHover({ key: 'thumb_border_radius', label: t('Raggio miniature'), type: 'border-radius' }),
     ...borderFields(),
   ],
 };

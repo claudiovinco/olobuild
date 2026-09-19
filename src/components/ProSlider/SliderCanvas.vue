@@ -223,13 +223,18 @@ const globalBgStyle = computed(() => {
 
 const stylesStore = useStylesStore();
 
-// Risolve var(--olo-color-*) al valore hex reale per l'anteprima
+// Risolve var(--olo-color-*) al valore hex reale per l'anteprima.
+// ⚠️ La forma con RISERVA — `var(--olo-color-dark, #16263d)` — e' quella usata da
+// tutti i default delle tile: il vecchio regex la leggeva come un id chiamato
+// «dark, #16263d», non lo trovava, e l'anteprima restava sul token grezzo.
 function resolveColor(val) {
   if (!val || !val.startsWith('var(--olo-color-')) return val;
-  const m = val.match(/^var\(--olo-color-([^)]+)\)$/);
+  const m = val.match(/^var\(\s*--olo-color-([a-z0-9_-]+)\s*(?:,\s*([^)]+))?\)$/i);
   if (m) {
-    const gc = (stylesStore.globalColors || []).find(c => c.id === m[1]);
+    const gc = (stylesStore.globalColors || []).find(c => c.id === m[1].toLowerCase());
     if (gc) return gc.value;
+    // Token non ancora nella palette: vale la riserva scritta dentro.
+    if (m[2]) return m[2].trim();
   }
   return val;
 }

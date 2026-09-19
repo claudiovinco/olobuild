@@ -219,6 +219,8 @@
                 :tileSettings="element"
                 @update:modelValue="updateField(index, field.key, $event)"
                 @update:settingKey="updateField(index, $event.key, $event.value)"
+                @update:hoverValue="updateField(index, $event.key, $event.value)"
+                @update:responsiveValue="updateField(index, $event.key, $event.value)"
                 @update:attachmentId="updateField(index, field.key + '_id', $event)"
               />
 

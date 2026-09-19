@@ -145,7 +145,7 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'flex-end', label: t('Destra') },
     ]},
-    { key: 'top_padding', label: t('Padding (px)'), type: 'spacing', min: 0, max: 120 },
+    { key: 'top_padding', label: t('Padding'), type: 'spacing', min: 0, max: 120 },
 
     { type: 'separator', label: t('Zona visibile — Overlay') },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
@@ -175,7 +175,7 @@ export default {
       { value: 'center', label: t('Centro') },
       { value: 'flex-end', label: t('Destra') },
     ]},
-    { key: 'bottom_padding', label: t('Padding (px)'), type: 'spacing', min: 0, max: 120 },
+    { key: 'bottom_padding', label: t('Padding'), type: 'spacing', min: 0, max: 120 },
 
     { type: 'separator', label: t('Zona rivelata — Overlay') },
     { key: 'reveal_overlay_color', label: t('Colore overlay rivelato'), type: 'color' },
@@ -190,7 +190,7 @@ export default {
       { value: 'cubic-bezier(0.4,0,0.2,1)', label: t('Smooth') },
       { value: 'linear', label: t('Lineare') },
     ]},
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'tile_padding', type: 'spacing', label: t('Padding') },
 
     ...borderFields(),

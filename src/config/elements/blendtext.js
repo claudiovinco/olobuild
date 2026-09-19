@@ -142,7 +142,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Spaziatura') },
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 200 },
+    { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 200 },
 
     ...borderFields(),
   ],

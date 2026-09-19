@@ -188,7 +188,7 @@ const RULES = [
     // range e number hanno la valbox di NumberScrubber, che scrive l'unità accanto
     // al numero: ripeterla nel nome del campo la fa scrivere in modi diversi tile
     // per tile ed è la stessa informazione due volte.
-    match: (r) => ['range', 'number'].includes(r.type) && UNITA_IN_CODA.test(etichetta(r.label)),
+    match: (r) => ['range', 'number', 'spacing', 'border-radius'].includes(r.type) && UNITA_IN_CODA.test(etichetta(r.label)),
     ok: () => false,
   },
   {

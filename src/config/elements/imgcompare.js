@@ -94,7 +94,7 @@ export default {
 
     { type: 'separator', label: t('Card') },
     { key: 'height', label: t('Altezza'), type: 'range', min: 200, max: 800, step: 10 },
-    withHover({ key: 'border_radius', label: t('Raggio (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'object_fit', label: t('Adattamento immagini'), type: 'select', options: [
       { value: 'cover', label: t('Riempi (cover)') },
       { value: 'contain', label: t('Contieni') },

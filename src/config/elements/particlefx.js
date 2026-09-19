@@ -119,7 +119,7 @@ export default {
 
     { type: 'separator', label: t('Sezione') },
     { key: 'min_height', label: t('Altezza minima'), type: 'range', min: 80, max: 1000, step: 10 },
-    { key: 'padding', label: t('Padding (px)'), type: 'spacing', min: 0, max: 200,
+    { key: 'padding', label: t('Padding'), type: 'spacing', min: 0, max: 200,
       legacyKeys: { y: 'padding_y' } },
     { key: 'content_max_width', label: t('Larghezza max contenuto'), type: 'range', min: 200, max: 1400, step: 10 },
     { key: 'align_v', label: t('Allineamento verticale'), type: 'select', options: [
