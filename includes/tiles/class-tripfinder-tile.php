@@ -21,7 +21,7 @@ class Olobuild_TripFinder_Tile extends Olobuild_Tile_Base {
         'button_text'  => 'Search',
         'button_url'   => '#',
         'accent'       => '',
-        'accent_on'    => '#ffffff',
+        'accent_on'    => 'var(--olo-color-surface, #ffffff)',
         'bar_bg'       => '',
         'field_bg'     => '',
         'field_border' => '',

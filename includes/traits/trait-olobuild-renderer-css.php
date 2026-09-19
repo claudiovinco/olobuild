@@ -84,6 +84,54 @@ trait Olobuild_Renderer_Css_Trait {
     }
 
     /**
+     * Animazione d'ingresso — classi + variabili CSS, in UN SOLO posto.
+     *
+     * L'inspector offre quattro regolazioni (durata, ritardo, curva, intensità) su
+     * OGNI nodo, e il canvas Vue le mostra tutte. Sul sito, invece, le applicava
+     * soltanto la SEZIONE: riga, colonna e tile si fermavano alla classe, quindi
+     * chi impostava «durata 1200ms» la vedeva nel builder e non sulla pagina.
+     * Qui il blocco è uno solo e i quattro chiamanti lo condividono: non possono
+     * più divergere. Limiti identici a quelli del canvas (GridCell.vue).
+     *
+     * @param array  $s              settings del nodo
+     * @param array &$classes        classi CSS del wrapper (by-ref)
+     * @param array &$inline_styles  dichiarazioni inline del wrapper (by-ref)
+     */
+    private function apply_entrance_animation( array $s, array &$classes, array &$inline_styles ) {
+        $entrance = $s['entrance_animation'] ?? 'none';
+        if ( ! $entrance || $entrance === 'none' ) {
+            return;
+        }
+        $classes[] = 'olo-entrance-' . sanitize_html_class( $entrance );
+        // Applicata subito: l'animazione parte al page-load, senza IntersectionObserver.
+        $classes[] = 'olo-visible';
+
+        $dur = intval( $s['entrance_duration'] ?? 0 );
+        if ( $dur > 0 ) {
+            $inline_styles[] = '--olo-e-dur: ' . max( 50, min( 5000, $dur ) ) . 'ms';
+        }
+        $delay = intval( $s['entrance_delay'] ?? 0 );
+        if ( $delay > 0 ) {
+            $inline_styles[] = '--olo-e-delay: ' . min( 5000, $delay ) . 'ms';
+        }
+        $ease = $s['entrance_easing'] ?? 'auto';
+        // Whitelist: keyword o cubic-bezier — mai un valore libero dentro il CSS.
+        if ( $ease && $ease !== 'auto'
+            && preg_match( '/^(linear|ease|ease-in|ease-out|ease-in-out|cubic-bezier\([0-9.,\s\-]+\))$/', $ease ) ) {
+            $inline_styles[] = '--olo-e-ease: ' . $ease;
+        }
+        $int = floatval( $s['entrance_intensity'] ?? 1 );
+        if ( $int > 0 && abs( $int - 1 ) > 0.01 ) {
+            $inline_styles[] = '--olo-e-int: ' . max( 0.1, min( 5, $int ) );
+        }
+        if ( ! empty( $s['entrance_stagger'] ) ) {
+            $stagger = intval( $s['entrance_stagger_delay'] ?? 100 );
+            $classes[] = 'olo-stagger-parent';
+            $inline_styles[] = '--olo-stagger-delay: ' . max( 25, min( 500, $stagger ) ) . 'ms';
+        }
+    }
+
+    /**
      * Applica al `$inline_styles` (by-ref) tutti gli "box styles" che sono
      * identici tra section / row / column / element renderer:
      * margin, padding, border-radius, border, opacity, flex container, transform,

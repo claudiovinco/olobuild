@@ -20,7 +20,7 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         'tile_layer'           => 'standard',
         'marker'               => true,
         'marker_popup'         => '',
-        'marker_color'         => '#e74c3c',
+        'marker_color'         => 'var(--olo-color-primary, #e74c3c)',
         'loc_post_type'        => 'location',
         'loc_osm_field'        => 'location_map',
         'loc_taxonomy'         => '',
@@ -93,8 +93,8 @@ class Olobuild_Map_Tile extends Olobuild_Tile_Base {
         'filter_position'      => '',         // top | bottom | left | right (empty = fall back to legacy svc_filter_position, then 'right')
         'filter_width'         => '45',       // % of the tile taken by the filters+results panel (20-80). Map takes the rest.
         'btn_text'             => 'Ricerca',
-        'btn_bg'               => '#2563EB',
-        'btn_color'            => '#FFFFFF',
+        'btn_bg'               => 'var(--olo-color-primary, #2563EB)',
+        'btn_color'            => 'var(--olo-color-light, #FFFFFF)',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,

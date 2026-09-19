@@ -989,8 +989,6 @@ class Olobuild_Frontend_Renderer {
             }
         }
 
-        $style_attr = implode( '; ', $inline_styles );
-
         // Build classes
         $classes = [ 'olo-frontend-tile' ];
         if ( $shadow_class ) $classes[] = $shadow_class;
@@ -999,24 +997,27 @@ class Olobuild_Frontend_Renderer {
         // inline-block, più tile "adattate" consecutive si affiancano.
         if ( ( $advanced['tile_width'] ?? 'full' ) === 'inline' ) $classes[] = 'olo-tile-inline';
         if ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay ) { $classes[] = 'uk-position-relative'; $inline_styles[] = 'overflow: clip'; }
-        if ( ! empty( $style['border_radius'] ) ) $inline_styles[] = 'overflow: clip';
+        // NOTA: qui c'era anche un `overflow: clip` per il solo border_radius. Era
+        // morto da tempo — veniva aggiunto dopo che l'attributo style era gia'
+        // composto — e riattivarlo avrebbe iniziato a tagliare il contenuto di
+        // tile arrotondate gia' pubblicate, senza che nessuno l'abbia chiesto.
+        // Il canvas (GridCell) clippa per lo SFONDO, non per il raggio: qui si fa
+        // lo stesso, cosi' i due render restano d'accordo.
         if ( ! empty( $advanced['css_classes'] ) ) {
             $classes[] = esc_attr( $advanced['css_classes'] );
         }
 
-        // Entrance animation
-        $entrance = $settings['entrance_animation'] ?? 'none';
-        if ( $entrance && $entrance !== 'none' ) {
-            $classes[] = 'olo-entrance-' . sanitize_html_class( $entrance );
-            $classes[] = 'olo-visible'; // applicata subito: l'animation parte al page-load (no IntersectionObserver dependency)
-            // Stagger: animate children sequentially
-            if ( ! empty( $settings['entrance_stagger'] ) ) {
-                $stagger_delay = intval( $settings['entrance_stagger_delay'] ?? 100 );
-                $stagger_delay = max( 25, min( 500, $stagger_delay ) );
-                $classes[] = 'olo-stagger-parent';
-                $inline_styles[] = '--olo-stagger-delay: ' . $stagger_delay . 'ms';
-            }
-        }
+        // Entrance animation — stesso blocco del telaio. Prima la tile applicava solo
+        // la classe: durata, ritardo, curva e intensita' si vedevano nel builder e
+        // sparivano sul sito, che e' il modo peggiore in cui un comando puo' mentire.
+        $this->apply_entrance_animation( $settings, $classes, $inline_styles );
+
+        // L'attributo style si compone QUI, non prima: sopra ci sono ancora
+        // aggiunte a $inline_styles (overflow: clip dello sfondo e del raggio, e
+        // le variabili dell'animazione d'ingresso). Componendolo piu' in alto,
+        // come faceva prima, quelle dichiarazioni venivano scartate in silenzio:
+        // nessun errore, semplicemente non arrivavano in pagina.
+        $style_attr = implode( '; ', $inline_styles );
 
         // Responsive visibility — 5 breakpoints
         if ( isset( $advanced['visible_desktop'] ) && $advanced['visible_desktop'] === false ) {

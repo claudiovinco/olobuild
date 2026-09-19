@@ -53,13 +53,13 @@ class Olobuild_NorthVideoHero_Tile extends Olobuild_Tile_Base {
         'content_padding'=> [ 'top' => 160, 'right' => 40, 'bottom' => 96, 'left' => 40 ],
 
         // colori
-        'bg_color'       => '#062C22',
-        'text_color'     => '#ffffff',
+        'bg_color'       => 'var(--olo-color-dark, #062C22)',
+        'text_color'     => 'var(--olo-color-light, #ffffff)',
         'eyebrow_color'  => 'rgba(255,255,255,0.78)',
         'sub_color'      => 'rgba(255,255,255,0.72)',
         'accent'         => '',
         'crest_color'    => 'rgba(255,255,255,0.5)',
-        'frame_bg'       => '#0a201a',
+        'frame_bg'       => 'var(--olo-color-dark, #0a201a)',
         'frame_border'   => 'rgba(255,255,255,0.12)',
 
         // KIT standard OLObuild — default no-op

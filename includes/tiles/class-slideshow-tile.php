@@ -21,7 +21,7 @@ class Olobuild_Slideshow_Tile extends Olobuild_Tile_Base {
         'show_dots'      => true,
         'slide_height'   => '400',
         'object_position' => 'center center',
-        'overlay_color'  => '#000000',
+        'overlay_color'  => 'var(--olo-color-dark, #000000)',
         'text_color'     => '#FFFFFF',
         'transition'     => 'slide',
         'shadow'         => 'none',

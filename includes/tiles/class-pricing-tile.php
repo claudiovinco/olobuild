@@ -44,7 +44,7 @@ class Olobuild_Pricing_Tile extends Olobuild_Tile_Base {
         'bg_image'     => '',
         'bg_video'     => '',
         'overlay'      => false,
-        'overlay_color'   => '#000000',
+        'overlay_color'   => 'var(--olo-color-dark, #000000)',
         'overlay_opacity' => '50',
         'cta_text'     => 'Inizia ora',
         'cta_url'      => '#',

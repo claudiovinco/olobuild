@@ -42,7 +42,7 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
         'bg_color'        => '',
         'hover_bg'        => '',
         'accent_color'    => '',
-        'overlay_color'   => '#000000',
+        'overlay_color'   => 'var(--olo-color-dark, #000000)',
         'overlay_opacity' => 60,
         'card_style'      => 'none',
         'loop_template_id' => '',

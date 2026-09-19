@@ -24,16 +24,16 @@ class Olobuild_MaskedVideoHero_Tile extends Olobuild_Tile_Base {
         'cta1_url'       => '#',
         'cta2_text'      => 'Become a member',
         'cta2_url'       => '#',
-        'bg_color'       => '#0a2a1e',
+        'bg_color'       => 'var(--olo-color-dark, #0a2a1e)',
         'bg_image'       => '',
         'media_label'    => 'home hero — match footage · background video',
-        'overlay_color'  => '#0a2a1e',
+        'overlay_color'  => 'var(--olo-color-dark, #0a2a1e)',
         'overlay_strength' => 0.55,
         'watermark_text' => 'VFC',
         'watermark_color'=> 'rgba(255,255,255,0.055)',
         'accent'         => '',
-        'accent_on'      => '#0a2a1e',
-        'text_color'     => '#ffffff',
+        'accent_on'      => 'var(--olo-color-dark, #0a2a1e)',
+        'text_color'     => 'var(--olo-color-light, #ffffff)',
         'sub_color'      => 'rgba(255,255,255,0.72)',
         'arch'           => true,
         'transparent_bg' => false,
@@ -44,7 +44,8 @@ class Olobuild_MaskedVideoHero_Tile extends Olobuild_Tile_Base {
 
     /** "#rrggbb" → "r,g,b" (fallback su pitch se non valido). */
     private function hex_rgb( $hex, $fallback = '10,42,30' ) {
-        $hex = ltrim( (string) $hex, '#' );
+        // hex_digits legge anche la riserva dentro un token var(--x, #hex).
+        $hex = Olobuild_Tile_Utils::hex_digits( $hex );
         if ( strlen( $hex ) === 3 ) { $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2]; }
         if ( ! preg_match( '/^[0-9a-fA-F]{6}$/', $hex ) ) { return $fallback; }
         return hexdec( substr($hex,0,2) ) . ',' . hexdec( substr($hex,2,2) ) . ',' . hexdec( substr($hex,4,2) );

@@ -46,8 +46,8 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
 
         // Aspetto copertura
         'cover_type'       => 'gradient',
-        'cover_color'      => '#C9C2CC',
-        'cover_color2'     => '#9A93A0',
+        'cover_color'      => 'var(--olo-color-text-faint, #C9C2CC)',
+        'cover_color2'     => 'var(--olo-color-text-faint, #9A93A0)',
         'cover_angle'      => 135,
         'cover_image'      => '',
         'cover_text'       => '',

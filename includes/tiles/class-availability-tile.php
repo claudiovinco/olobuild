@@ -26,7 +26,7 @@ class Olobuild_Availability_Tile extends Olobuild_Tile_Base {
             [ 'min' => 10, 'label' => 'Peak', 'text' => 'Massima disponibilità: spingi.' ],
         ],
         'zone_accent'   => '',
-        'zone_on'       => '#ffffff',
+        'zone_on'       => 'var(--olo-color-surface, #ffffff)',
         'cell_bg'       => '',
         'card_border'   => '',
         'align'         => 'left',

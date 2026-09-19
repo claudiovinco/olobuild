@@ -31,7 +31,7 @@ class Olobuild_Pagetitlebar_Tile extends Olobuild_Tile_Base {
         'bg_color'          => '',
         'bg_image'          => '',
         'bg_overlay'        => '60',
-        'bg_overlay_color'  => '#000000',
+        'bg_overlay_color'  => 'var(--olo-color-dark, #000000)',
         'bg_size'           => 'cover',
         'bg_position'       => 'center center',
         'bg_parallax'       => false,

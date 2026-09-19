@@ -77,7 +77,7 @@ class Olobuild_PostGrid_Tile extends Olobuild_Tile_Base {
         'fx_kenburns_scale' => '1.12',
         // Overlay gradient
         'overlay_gradient'  => false,
-        'overlay_color'     => '#000000',
+        'overlay_color'     => 'var(--olo-color-dark, #000000)',
         'overlay_opacity'   => '50',
         'overlay_direction' => 'bottom',
         'overlay_height'    => '50',
@@ -85,8 +85,8 @@ class Olobuild_PostGrid_Tile extends Olobuild_Tile_Base {
         'show_service_stats'   => false,
         'show_service_club'    => false,
         'show_service_opening' => false,
-        'opening_bg_annual'    => '#059669',
-        'opening_bg_seasonal'  => '#d97706',
+        'opening_bg_annual'    => 'var(--olo-color-success, #059669)',
+        'opening_bg_seasonal'  => 'var(--olo-color-accent, #d97706)',
         'opening_size'         => '11',
             'border'                  => [],
         'border_hover'            => [],
@@ -407,9 +407,13 @@ class Olobuild_PostGrid_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-postgrid-meta { color: <?php echo $this->safe_color_css( $meta_color ); ?> !important; }
             <?php endif; ?>
             <?php if ( $body_bg ) :
-                $bg_r = hexdec( substr( $body_bg, 1, 2 ) );
-                $bg_g = hexdec( substr( $body_bg, 3, 2 ) );
-                $bg_b = hexdec( substr( $body_bg, 5, 2 ) );
+                // hex_digits normalizza (3 cifre, 8 cifre) e sa leggere la riserva
+                // dentro un token; senza, un `var(--olo-color-x, #fff)` finiva dritto
+                // in substr()/hexdec() e produceva un colore a caso.
+                $bg_hex = Olobuild_Tile_Utils::hex_digits( $body_bg, 'ffffff' );
+                $bg_r = hexdec( substr( $bg_hex, 0, 2 ) );
+                $bg_g = hexdec( substr( $bg_hex, 2, 2 ) );
+                $bg_b = hexdec( substr( $bg_hex, 4, 2 ) );
                 $bg_a = round( $body_bg_opacity / 100, 2 );
             ?>
             .<?php echo $uid; ?> .uk-card-body { background: rgba(<?php echo "$bg_r,$bg_g,$bg_b,$bg_a"; ?>); }
@@ -800,9 +804,12 @@ class Olobuild_PostGrid_Tile extends Olobuild_Tile_Base {
     }
 
     private function render_overlay_gradient( $color, $opacity, $direction, $height ) {
-        $r = hexdec( substr( $color, 1, 2 ) );
-        $g = hexdec( substr( $color, 3, 2 ) );
-        $b = hexdec( substr( $color, 5, 2 ) );
+        // Un gradiente si costruisce per componenti, quindi qui serve davvero l'hex:
+        // hex_digits lo ricava anche da un token con riserva, e normalizza le 3 cifre.
+        $hex = Olobuild_Tile_Utils::hex_digits( $color, '000000' );
+        $r = hexdec( substr( $hex, 0, 2 ) );
+        $g = hexdec( substr( $hex, 2, 2 ) );
+        $b = hexdec( substr( $hex, 4, 2 ) );
         $a = round( $opacity / 100, 2 );
 
         $dir_map = [ 'bottom' => 'to top', 'top' => 'to bottom', 'left' => 'to right', 'right' => 'to left' ];

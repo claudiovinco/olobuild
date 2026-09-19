@@ -32,10 +32,10 @@ class Olobuild_PhotoCover_Tile extends Olobuild_Tile_Base {
         'overlay_top'      => 0.3,
         'overlay_bottom'   => 0.85,
         'frame_padding'    => 28,
-        'media_bg'         => '#1a1a1a',
+        'media_bg'         => 'var(--olo-color-dark, #1a1a1a)',
         'kicker_color'     => '',
-        'headline_color'   => '#ffffff',
-        'meta_color'       => '#e8e8e8',
+        'headline_color'   => 'var(--olo-color-light, #ffffff)',
+        'meta_color'       => 'var(--olo-color-light, #e8e8e8)',
 
         // SPAZIATURA — override gated del padding del contenuto (.pc-in).
         // Default no-op: con pad_custom=false resta il clamp responsivo originale.

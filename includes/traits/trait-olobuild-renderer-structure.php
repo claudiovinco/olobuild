@@ -186,35 +186,8 @@ trait Olobuild_Renderer_Structure_Trait {
             $inline_styles[] = 'box-sizing: border-box';
         }
 
-        // Entrance animation (olo-entrance-*)
-        $entrance = $s['entrance_animation'] ?? 'none';
-        if ( $entrance && $entrance !== 'none' ) {
-            $classes[] = 'olo-entrance-' . sanitize_html_class( $entrance );
-            $classes[] = 'olo-visible'; // applicata subito: l'animation parte al page-load (no IntersectionObserver dependency)
-            // Override CSS variables per durata/delay/easing custom (via field inspector)
-            $e_dur = intval( $s['entrance_duration'] ?? 0 );
-            if ( $e_dur > 0 ) $inline_styles[] = '--olo-e-dur: ' . max( 50, min( 5000, $e_dur ) ) . 'ms';
-            $e_delay = intval( $s['entrance_delay'] ?? 0 );
-            if ( $e_delay > 0 ) $inline_styles[] = '--olo-e-delay: ' . min( 5000, $e_delay ) . 'ms';
-            $e_ease = $s['entrance_easing'] ?? 'auto';
-            if ( $e_ease && $e_ease !== 'auto' ) {
-                // Whitelist: keyword o cubic-bezier
-                if ( preg_match( '/^(linear|ease|ease-in|ease-out|ease-in-out|cubic-bezier\([0-9.,\s\-]+\))$/', $e_ease ) ) {
-                    $inline_styles[] = '--olo-e-ease: ' . $e_ease;
-                }
-            }
-            $e_int = floatval( $s['entrance_intensity'] ?? 1 );
-            if ( $e_int > 0 && abs( $e_int - 1 ) > 0.01 ) {
-                $e_int = max( 0.1, min( 5, $e_int ) );
-                $inline_styles[] = '--olo-e-int: ' . $e_int;
-            }
-            if ( ! empty( $s['entrance_stagger'] ) ) {
-                $stagger_delay = intval( $s['entrance_stagger_delay'] ?? 100 );
-                $stagger_delay = max( 25, min( 500, $stagger_delay ) );
-                $classes[] = 'olo-stagger-parent';
-                $inline_styles[] = '--olo-stagger-delay: ' . $stagger_delay . 'ms';
-            }
-        }
+        // Entrance animation — classi + variabili CSS (blocco unico, vedi trait css).
+        $this->apply_entrance_animation( $s, $classes, $inline_styles );
 
         // Scrollspy & element parallax attributes
         $scrollspy_attr = $this->anim->build_scrollspy_attr( $advanced );
@@ -594,18 +567,9 @@ trait Olobuild_Renderer_Structure_Trait {
         }
         $class_attr = ! empty( $pre_class_attr_classes ) ? ' class="' . esc_attr( implode( ' ', $pre_class_attr_classes ) ) . '"' : '';
 
-        // Entrance animation (olo-entrance-*) for row
-        $entrance = $s['entrance_animation'] ?? 'none';
-        if ( $entrance && $entrance !== 'none' ) {
-            $wrapper_classes[] = 'olo-entrance-' . sanitize_html_class( $entrance );
-            $wrapper_classes[] = 'olo-visible'; // applicata subito (no IntersectionObserver dependency)
-            if ( ! empty( $s['entrance_stagger'] ) ) {
-                $stagger_delay = intval( $s['entrance_stagger_delay'] ?? 100 );
-                $stagger_delay = max( 25, min( 500, $stagger_delay ) );
-                $wrapper_classes[] = 'olo-stagger-parent';
-                $wrapper_styles[] = '--olo-stagger-delay: ' . $stagger_delay . 'ms';
-            }
-        }
+        // Entrance animation — stesso blocco della sezione: prima la riga si fermava
+        // alla classe e ignorava durata, ritardo, curva e intensita'.
+        $this->apply_entrance_animation( $s, $wrapper_classes, $wrapper_styles );
 
         // Scrollspy & element parallax attributes for row
         $row_scrollspy_attr = $this->anim->build_scrollspy_attr( $advanced );
@@ -1127,18 +1091,9 @@ trait Olobuild_Renderer_Structure_Trait {
         // Custom CSS per colonna (campo settings.custom_css)
         $this->collect_custom_css( $s, $col_css_id, $hover_css_rules );
 
-        // Entrance animation (olo-entrance-*) for column
-        $entrance = $s['entrance_animation'] ?? 'none';
-        if ( $entrance && $entrance !== 'none' ) {
-            $classes[] = 'olo-entrance-' . sanitize_html_class( $entrance );
-            $classes[] = 'olo-visible'; // applicata subito: l'animation parte al page-load (no IntersectionObserver dependency)
-            if ( ! empty( $s['entrance_stagger'] ) ) {
-                $stagger_delay = intval( $s['entrance_stagger_delay'] ?? 100 );
-                $stagger_delay = max( 25, min( 500, $stagger_delay ) );
-                $classes[] = 'olo-stagger-parent';
-                $inline_styles[] = '--olo-stagger-delay: ' . $stagger_delay . 'ms';
-            }
-        }
+        // Entrance animation — stesso blocco della sezione: prima la colonna si
+        // fermava alla classe e ignorava durata, ritardo, curva e intensita'.
+        $this->apply_entrance_animation( $s, $classes, $inline_styles );
 
         // Scrollspy & element parallax attributes for column
         $col_scrollspy_attr = $this->anim->build_scrollspy_attr( $advanced );

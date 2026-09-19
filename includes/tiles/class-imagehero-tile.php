@@ -42,7 +42,7 @@ class Olobuild_ImageHero_Tile extends Olobuild_Tile_Base {
         // sfondo / media
         'bg_image'         => '',
         'media_bg'         => [ 'type' => 'none' ],
-        'bg_color'         => '#0c0c0c',
+        'bg_color'         => 'var(--olo-color-dark, #0c0c0c)',
         'media_label'      => 'campaign — figure in black tailoring, gold light, full bleed',
         // layout
         'text_position'    => 'left',
@@ -53,15 +53,15 @@ class Olobuild_ImageHero_Tile extends Olobuild_Tile_Base {
         // tipografia
         'heading_font'     => 'serif',
         // colori velo
-        'overlay_color'    => '#0c0c0c',
+        'overlay_color'    => 'var(--olo-color-dark, #0c0c0c)',
         'overlay_top'      => 0.2,
         'overlay_bottom'   => 0.75,
         'overlay_sides'    => true,
         // colori testo
         'accent'           => '',
-        'accent_on'        => '#0c0c0c',
-        'text_color'       => '#ffffff',
-        'sub_color'        => '#efe9de',
+        'accent_on'        => 'var(--olo-color-dark, #0c0c0c)',
+        'text_color'       => 'var(--olo-color-light, #ffffff)',
+        'sub_color'        => 'var(--olo-color-light, #efe9de)',
         'eyebrow_color'    => '',
         // spaziatura / forma (additivi, default no-op)
         'pad_custom'       => false,
@@ -85,7 +85,8 @@ class Olobuild_ImageHero_Tile extends Olobuild_Tile_Base {
 
     /** "#rrggbb" → "r,g,b" (fallback su nero atelier se non valido). */
     private function hex_rgb( $hex, $fallback = '12,12,12' ) {
-        $hex = ltrim( (string) $hex, '#' );
+        // hex_digits legge anche la riserva dentro un token var(--x, #hex).
+        $hex = Olobuild_Tile_Utils::hex_digits( $hex );
         if ( strlen( $hex ) === 3 ) { $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2]; }
         if ( ! preg_match( '/^[0-9a-fA-F]{6}$/', $hex ) ) { return $fallback; }
         return hexdec( substr($hex,0,2) ) . ',' . hexdec( substr($hex,2,2) ) . ',' . hexdec( substr($hex,4,2) );

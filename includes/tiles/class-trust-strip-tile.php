@@ -36,8 +36,8 @@ class Olobuild_TrustStrip_Tile extends Olobuild_Tile_Base {
         'pill_bg'         => 'rgba(255,255,255,0.05)',
         'pill_border'     => 'rgba(255,255,255,0.12)',
         'pill_text_color' => '',
-        'badge_bg'        => '#D8FF4A',
-        'badge_color'     => '#1B2A4E',
+        'badge_bg'        => 'var(--olo-color-surface-alt, #D8FF4A)',
+        'badge_color'     => 'var(--olo-color-dark, #1B2A4E)',
     ];
 
     public function get_controls() { return []; }

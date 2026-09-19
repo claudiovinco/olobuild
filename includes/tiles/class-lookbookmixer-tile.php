@@ -17,18 +17,18 @@ class Olobuild_LookbookMixer_Tile extends Olobuild_Tile_Base {
     protected $category = 'layout';
     protected $defaults = [
         'items' => [
-            [ 'step' => 'Cleanse', 'name' => 'Rosewater Gel',     'price' => '24', 'color' => '#f4c9d4' ],
-            [ 'step' => 'Cleanse', 'name' => 'Clay Melt Balm',    'price' => '29', 'color' => '#e3b778' ],
-            [ 'step' => 'Treat',   'name' => 'Vitamin C Drops',   'price' => '38', 'color' => '#e3b778' ],
-            [ 'step' => 'Treat',   'name' => 'Niacinamide 10%',   'price' => '32', 'color' => '#e7a0b4' ],
-            [ 'step' => 'Hydrate', 'name' => 'Ceramide Cream',    'price' => '34', 'color' => '#f4c9d4' ],
-            [ 'step' => 'Protect', 'name' => 'Sheer SPF 50',      'price' => '30', 'color' => '#f6e9ec' ],
+            [ 'step' => 'Cleanse', 'name' => 'Rosewater Gel',     'price' => '24', 'color' => 'var(--olo-color-light, #f4c9d4)' ],
+            [ 'step' => 'Cleanse', 'name' => 'Clay Melt Balm',    'price' => '29', 'color' => 'var(--olo-color-light, #e3b778)' ],
+            [ 'step' => 'Treat',   'name' => 'Vitamin C Drops',   'price' => '38', 'color' => 'var(--olo-color-primary, #e3b778)' ],
+            [ 'step' => 'Treat',   'name' => 'Niacinamide 10%',   'price' => '32', 'color' => 'var(--olo-color-light, #e7a0b4)' ],
+            [ 'step' => 'Hydrate', 'name' => 'Ceramide Cream',    'price' => '34', 'color' => 'var(--olo-color-primary, #f4c9d4)' ],
+            [ 'step' => 'Protect', 'name' => 'Sheer SPF 50',      'price' => '30', 'color' => 'var(--olo-color-light, #f6e9ec)' ],
         ],
         'currency' => '€', 'card_title' => 'Your routine', 'card_steps_label' => 'steps',
         'card_sub' => 'Built in four taps. Swap any step until it’s yours.',
         'cta_text' => 'Add routine to bag', 'cta_url' => '#',
-        'panel_bg' => '#4d2f40', 'slot_bg' => '#432838', 'accent' => '#e7a0b4', 'accent_ink' => '#23131d',
-        'name_color' => '#f6e9ec', 'price_color' => '#9c7e8c', 'line_color' => 'rgba(246,233,236,.13)',
+        'panel_bg' => 'var(--olo-color-dark, #4d2f40)', 'slot_bg' => 'var(--olo-color-dark, #432838)', 'accent' => 'var(--olo-color-primary, #e7a0b4)', 'accent_ink' => 'var(--olo-color-dark, #23131d)',
+        'name_color' => 'var(--olo-color-light, #f6e9ec)', 'price_color' => 'var(--olo-color-text-soft, #9c7e8c)', 'line_color' => 'rgba(246,233,236,.13)',
         'name_font_family' => 'heading', 'mono_font_family' => '',
     ];
 

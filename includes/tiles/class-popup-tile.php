@@ -31,9 +31,9 @@ class Olobuild_Popup_Tile extends Olobuild_Tile_Base {
 
         // Preset & granular controls (V3.26.1)
         'preset'                    => 'modal-classic',
-        'modal_bg'                  => '#ffffff',
-        'modal_text_color'          => '#1e293b',
-        'modal_title_color'         => '#0f172a',
+        'modal_bg'                  => 'var(--olo-color-surface, #ffffff)',
+        'modal_text_color'          => 'var(--olo-color-text, #1e293b)',
+        'modal_title_color'         => 'var(--olo-color-text, #0f172a)',
         'modal_title_size'          => 24,
         'modal_title_weight'        => '700',
         'modal_title_uppercase'     => false,

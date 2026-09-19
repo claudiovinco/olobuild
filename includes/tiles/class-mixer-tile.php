@@ -25,7 +25,7 @@ class Olobuild_Mixer_Tile extends Olobuild_Tile_Base {
             [ 'name' => 'Inchiostro', 'color' => '#1a1a1a' ],
         ],
         'zone_accent' => '',
-        'zone_on'     => '#ffffff',
+        'zone_on'     => 'var(--olo-color-surface, #ffffff)',
         'card_bg'     => '',
         'card_border' => '',
         'align'       => 'left',

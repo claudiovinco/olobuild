@@ -14,13 +14,13 @@ class Olobuild_MediaCTA_Tile extends Olobuild_Tile_Base {
     protected $category = 'marketing';
     protected $defaults = [
         'eyebrow' => 'Membership', 'eyebrow_color' => '', 'eyebrow_mono' => false,
-        'headline' => 'Become a member of our', 'accent_text' => 'club', 'accent' => '', 'uppercase' => true, 'headline_color' => '#ffffff',
+        'headline' => 'Become a member of our', 'accent_text' => 'club', 'accent' => '', 'uppercase' => true, 'headline_color' => 'var(--olo-color-light, #ffffff)',
         'subhead' => '', 'subhead_color' => 'rgba(255,255,255,0.78)',
         'cta_style' => 'button', 'cta1_text' => 'Go to membership', 'cta1_url' => '#', 'cta2_text' => '', 'cta2_url' => '',
         'bg_image' => '', 'media_bg' => [ 'type' => 'none' ], 'media_label' => 'membership — supporters in the stands · background video',
-        'overlay_color' => '#0a2a1e', 'overlay_top' => 0.78, 'overlay_bottom' => 0.9, 'overlay_type' => 'linear',
-        'accent_on' => '#0a2a1e', 'accent_italic' => false, 'btn_bg' => '', 'btn_color' => '', 'headline_size' => '',
-        'text_color' => '#ffffff', 'align' => 'center', 'pad_y' => 160,
+        'overlay_color' => 'var(--olo-color-dark, #0a2a1e)', 'overlay_top' => 0.78, 'overlay_bottom' => 0.9, 'overlay_type' => 'linear',
+        'accent_on' => 'var(--olo-color-dark, #0a2a1e)', 'accent_italic' => false, 'btn_bg' => '', 'btn_color' => '', 'headline_size' => '',
+        'text_color' => 'var(--olo-color-light, #ffffff)', 'align' => 'center', 'pad_y' => 160,
 
         // SPAZIATURA (additivo, no-op coi default)
         'content_padding'         => [ 'top' => 0, 'right' => 28, 'bottom' => 0, 'left' => 28 ],
@@ -46,7 +46,8 @@ class Olobuild_MediaCTA_Tile extends Olobuild_Tile_Base {
     public function get_controls() { return []; }
 
     private function hex_rgb( $hex, $fallback = '10,42,30' ) {
-        $hex = ltrim( (string) $hex, '#' );
+        // hex_digits legge anche la riserva dentro un token var(--x, #hex).
+        $hex = Olobuild_Tile_Utils::hex_digits( $hex );
         if ( strlen( $hex ) === 3 ) { $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2]; }
         if ( ! preg_match( '/^[0-9a-fA-F]{6}$/', $hex ) ) { return $fallback; }
         return hexdec( substr($hex,0,2) ) . ',' . hexdec( substr($hex,2,2) ) . ',' . hexdec( substr($hex,4,2) );

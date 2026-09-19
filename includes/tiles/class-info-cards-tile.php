@@ -17,7 +17,7 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
     protected $icon     = 'dashicons-grid-view';
     protected $category = 'layout';
     protected $defaults = [
-        'container_bg'                       => [ 'type' => 'solid', 'color' => '#0f172a' ],
+        'container_bg'                       => [ 'type' => 'solid', 'color' => 'var(--olo-color-dark, #0f172a)' ],
         'container_radius'                   => [ 'tl' => 24, 'tr' => 24, 'br' => 24, 'bl' => 24, 'linked' => true ],
         'container_radius_hover'             => [ 'tl' => 24, 'tr' => 24, 'br' => 24, 'bl' => 24, 'linked' => true ],
         'container_radius_hover_duration'    => 400,
@@ -28,13 +28,13 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
         'items_gap' => 0,
 
         'items' => [
-            [ 'counter' => '01', 'counter_label' => 'Carta',         'title' => 'Zero',    'title_accent' => '',   'title_accent_italic' => true,  'description' => 'Niente <strong>carta di credito</strong> per scaricare e provare. Niente trial scaduto, niente sblocchi nascosti.', 'icon' => '', 'footer_dot_color' => '#10b981', 'footer_text' => '', 'link_url' => '', 'link_text' => '', 'media_image' => '', 'media_label' => 'SCREENSHOT · 01' ],
+            [ 'counter' => '01', 'counter_label' => 'Carta',         'title' => 'Zero',    'title_accent' => '',   'title_accent_italic' => true,  'description' => 'Niente <strong>carta di credito</strong> per scaricare e provare. Niente trial scaduto, niente sblocchi nascosti.', 'icon' => '', 'footer_dot_color' => 'var(--olo-color-accent, #10b981)', 'footer_text' => '', 'link_url' => '', 'link_text' => '', 'media_image' => '', 'media_label' => 'SCREENSHOT · 01' ],
             [ 'counter' => '02', 'counter_label' => 'Registrazione', 'title' => 'Niente',  'title_accent' => '',   'title_accent_italic' => true,  'description' => 'Nessuna <strong>registrazione obbligatoria</strong>. Scarichi, installi, lavori. L\'account lo crei solo se vuoi.', 'icon' => '', 'footer_dot_color' => '#10b981', 'footer_text' => '', 'link_url' => '', 'link_text' => '', 'media_image' => '', 'media_label' => 'SCREENSHOT · 02' ],
             [ 'counter' => '03', 'counter_label' => 'Pro',           'title' => '30',      'title_accent' => 'gg', 'title_accent_italic' => false, 'description' => '<strong>Soddisfatti o rimborsati</strong> su OLObuild Pro. 30 giorni pieni, nessuna domanda, zero ostacoli.', 'icon' => '', 'footer_dot_color' => '#10b981', 'footer_text' => '', 'link_url' => '', 'link_text' => '', 'media_image' => '', 'media_label' => 'SCREENSHOT · 03' ],
         ],
 
         'card_bg'           => [ 'type' => 'solid', 'color' => '#0f172a' ],
-        'card_color'        => '#e5e7eb',
+        'card_color'        => 'var(--olo-color-surface-alt, #e5e7eb)',
         'card_accent_color' => '',
         'title_color'       => '',
         'counter_color'     => '',

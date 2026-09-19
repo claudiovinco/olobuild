@@ -21,14 +21,14 @@ class Olobuild_ShowcaseGrid_Tile extends Olobuild_Tile_Base {
         'aspect'            => '3/3.5',
         'object_position'   => 'center center',
         'radius'            => 20,
-        'media_bg'          => '#0f3a2a',
-        'veil_color'        => '#0a2a1e',
+        'media_bg'          => 'var(--olo-color-dark, #0f3a2a)',
+        'veil_color'        => 'var(--olo-color-dark, #0a2a1e)',
         'kicker_color'      => '',
-        'title_color'       => '#ffffff',
+        'title_color'       => 'var(--olo-color-light, #ffffff)',
         'arrow_bg'          => 'rgba(255,255,255,0.14)',
-        'arrow_color'       => '#ffffff',
+        'arrow_color'       => 'var(--olo-color-light, #ffffff)',
         'arrow_hover_bg'    => '',
-        'arrow_hover_color' => '#0a2a1e',
+        'arrow_hover_color' => 'var(--olo-color-dark, #0a2a1e)',
         'show_arrow'        => true,
         'title_size'        => 34,
         'title_weight'      => '900',
@@ -57,7 +57,8 @@ class Olobuild_ShowcaseGrid_Tile extends Olobuild_Tile_Base {
 
     /** "#rrggbb" → "r,g,b". */
     private function hex_rgb( $hex, $fallback = '10,42,30' ) {
-        $hex = ltrim( (string) $hex, '#' );
+        // hex_digits legge anche la riserva dentro un token var(--x, #hex).
+        $hex = Olobuild_Tile_Utils::hex_digits( $hex );
         if ( strlen( $hex ) === 3 ) { $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2]; }
         if ( ! preg_match( '/^[0-9a-fA-F]{6}$/', $hex ) ) { return $fallback; }
         return hexdec( substr($hex,0,2) ) . ',' . hexdec( substr($hex,2,2) ) . ',' . hexdec( substr($hex,4,2) );

@@ -30,14 +30,14 @@ class Olobuild_AudioHero_Tile extends Olobuild_Tile_Base {
         'player_track'    => 'Glasshouse',
         'player_meta'     => 'Kova · Nightglass',
         'show_player'     => true,
-        'bg_color'        => '#0c0c10',
-        'panel_color'     => '#16161d',
-        'accent'          => '#27e0a3',
-        'accent_2'        => '#ff5d9e',
-        'accent_on'       => '#060608',
-        'text_color'      => '#ffffff',
-        'sub_color'       => '#b6b6c2',
-        'meta_color'      => '#74747f',
+        'bg_color'        => 'var(--olo-color-dark, #0c0c10)',
+        'panel_color'     => 'var(--olo-color-dark, #16161d)',
+        'accent'          => 'var(--olo-color-accent, #27e0a3)',
+        'accent_2'        => 'var(--olo-color-primary, #ff5d9e)',
+        'accent_on'       => 'var(--olo-color-dark, #060608)',
+        'text_color'      => 'var(--olo-color-light, #ffffff)',
+        'sub_color'       => 'var(--olo-color-text-faint, #b6b6c2)',
+        'meta_color'      => 'var(--olo-color-text-soft, #74747f)',
         'split_ratio'     => '1.1fr .9fr',
 
         // Spaziatura (override gated del padding interno responsivo) — default no-op.
@@ -249,7 +249,8 @@ class Olobuild_AudioHero_Tile extends Olobuild_Tile_Base {
 
     /** Estrae r,g,b da un colore #hex e ritorna "rgba(r,g,b,a)" (fallback se non hex). */
     private function rgba_from( $color, $alpha ) {
-        $hex = ltrim( (string) $color, '#' );
+        // hex_digits legge anche la riserva dentro un token var(--x, #hex).
+        $hex = Olobuild_Tile_Utils::hex_digits( $color );
         if ( strlen( $hex ) === 3 ) { $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2]; }
         if ( ! preg_match( '/^[0-9a-fA-F]{6}$/', $hex ) ) {
             return 'rgba(39,224,163,' . $alpha . ')';

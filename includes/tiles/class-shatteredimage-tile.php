@@ -32,7 +32,7 @@ class Olobuild_ShatteredImage_Tile extends Olobuild_Tile_Base {
         'kenburns_style'      => 'mixed',
         'kenburns_intensity'  => 1.25,
         'overlay'             => false,
-        'overlay_color'       => '#000000',
+        'overlay_color'       => 'var(--olo-color-dark, #000000)',
         'overlay_opacity'     => 30,
         'border_radius_outer' => 0,
         'shadow'              => 'none',

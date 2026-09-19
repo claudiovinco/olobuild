@@ -29,23 +29,23 @@ class Olobuild_Revealbox_Tile extends Olobuild_Tile_Base {
         'bottom_content'         => '<p>Contenuto rivelato al passaggio del mouse</p>',
         'top_icon'               => '',
         'top_icon_size'          => '2',
-        'top_icon_color'         => '#ffffff',
+        'top_icon_color'         => 'var(--olo-color-light, #ffffff)',
         'bottom_icon'            => '',
         'bottom_icon_size'       => '2',
-        'bottom_icon_color'      => '#ffffff',
+        'bottom_icon_color'      => 'var(--olo-color-light, #ffffff)',
         'reveal_effect'          => 'slide-up',
         'reveal_amount'          => '',
         'transition_speed'       => '0.5',
         'transition_easing'      => 'ease',
-        'top_text_color'         => '#ffffff',
+        'top_text_color'         => 'var(--olo-color-light, #ffffff)',
         'top_font_size'          => '',
-        'bottom_text_color'      => '#ffffff',
+        'bottom_text_color'      => 'var(--olo-color-light, #ffffff)',
         'bottom_font_size'       => '',
-        'overlay_color'          => '#000000',
+        'overlay_color'          => 'var(--olo-color-dark, #000000)',
         'overlay_opacity'        => '0',
-        'reveal_overlay_color'   => '#000000',
+        'reveal_overlay_color'   => 'var(--olo-color-dark, #000000)',
         'reveal_overlay_opacity' => '60',
-        'text_color'             => '#ffffff',
+        'text_color'             => 'var(--olo-color-light, #ffffff)',
         'top_align'              => 'flex-end',
         'top_justify'            => 'flex-start',
         'bottom_align'           => 'flex-start',
@@ -99,13 +99,13 @@ class Olobuild_Revealbox_Tile extends Olobuild_Tile_Base {
         $top_pad      = Olobuild_Tile_Utils::spacing_css( $s['top_padding'] ?? 24, 24 );
         $bot_pad      = Olobuild_Tile_Utils::spacing_css( $s['bottom_padding'] ?? 24, 24 );
 
-        $safe_text_color    = preg_replace( '/[^a-zA-Z0-9#\(\)\,\.\s\%]/', '', $s['text_color'] );
-        $safe_top_text_clr  = preg_replace( '/[^a-zA-Z0-9#\(\)\,\.\s\%]/', '', $s['top_text_color'] ?: $s['text_color'] );
-        $safe_bot_text_clr  = preg_replace( '/[^a-zA-Z0-9#\(\)\,\.\s\%]/', '', $s['bottom_text_color'] ?: $s['text_color'] );
+        $safe_text_color    = $this->safe_color_css( $s['text_color'] );
+        $safe_top_text_clr  = $this->safe_color_css( $s['top_text_color'] ?: $s['text_color'] );
+        $safe_bot_text_clr  = $this->safe_color_css( $s['bottom_text_color'] ?: $s['text_color'] );
         $top_font_size      = intval( $s['top_font_size'] );
         $bot_font_size      = intval( $s['bottom_font_size'] );
-        $safe_overlay       = preg_replace( '/[^a-zA-Z0-9#\(\)\,\.\s\%]/', '', $s['overlay_color'] );
-        $safe_reveal_ov     = preg_replace( '/[^a-zA-Z0-9#\(\)\,\.\s\%]/', '', $s['reveal_overlay_color'] );
+        $safe_overlay       = $this->safe_color_css( $s['overlay_color'] );
+        $safe_reveal_ov     = $this->safe_color_css( $s['reveal_overlay_color'] );
 
         $is_slide = str_starts_with( $effect, 'slide-' );
         $is_flip  = str_starts_with( $effect, 'flip-' );
@@ -234,7 +234,7 @@ class Olobuild_Revealbox_Tile extends Olobuild_Tile_Base {
         // fallback legacy image_url. Stesso layer posizionato z-index:0 di render_face_bg.
         $global_bg = $this->render_face_bg( $s['image_url'], $s['image_position'] ?? 'center center', $s['image_size'] ?? 'cover', '', $s['media'] ?? null, $uid . '-glob' );
 
-        echo '<div id="' . esc_attr( $uid ) . '" class="olo-revealbox olo-reveal-' . $effect . '" style="' . $container_css . '">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $effect is sanitize_html_class()'d above; $container_css is built from intval()'d height/perspective/radius and a preg_replace() character-whitelisted colour
+        echo '<div id="' . esc_attr( $uid ) . '" class="olo-revealbox olo-reveal-' . $effect . '" style="' . $container_css . '">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $effect is sanitize_html_class()'d above; $container_css is built from intval()'d height/perspective/radius and a colour passed through safe_color_css()
         echo $global_bg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup assembled above with esc_url()/esc_attr() only
         echo $inner_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- faces assembled above from wp_kses_post()'d rich text (safe_richtext_content), esc_attr()/esc_url()'d media and alignment values, sanitize_html_class()'d icons, intval()'d paddings and preg_replace() character-whitelisted colours
         echo '</div>';
@@ -295,7 +295,7 @@ class Olobuild_Revealbox_Tile extends Olobuild_Tile_Base {
         }
         $icon_name = sanitize_html_class( $icon_name );
         $size      = floatval( $icon_size ) ?: 2;
-        $color     = preg_replace( '/[^a-zA-Z0-9#\(\)\,\.\s\%]/', '', $icon_color );
+        $color     = $this->safe_color_css( $icon_color );
         return '<div style="line-height:1;margin-bottom:8px;color:' . $color . '"><span uk-icon="icon: ' . $icon_name . '; ratio: ' . $size . '"></span></div>';
     }
 }

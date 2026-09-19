@@ -19,7 +19,7 @@ class Olobuild_Schedule_Tile extends Olobuild_Tile_Base {
         'corner_label' => '',
         'rows'         => [],
         'zone_accent'  => '',
-        'zone_on'      => '#ffffff',
+        'zone_on'      => 'var(--olo-color-surface, #ffffff)',
         'cell_bg'      => '',
         'card_border'  => '',
         'head_color'   => '',

@@ -29,7 +29,7 @@ class Olobuild_Counter_Tile extends Olobuild_Tile_Base {
         'bg_image'           => '',
         'bg_video'           => '',
         'overlay'            => false,
-        'overlay_color'      => '#000000',
+        'overlay_color'      => 'var(--olo-color-dark, #000000)',
         'overlay_opacity'    => '50',
         'padding'            => '32',
         'border_radius'           => '0',

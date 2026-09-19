@@ -28,11 +28,11 @@ class Olobuild_Physicsbin_Tile extends Olobuild_Tile_Base {
     protected $defaults = [
         'preset' => 'custom',
         'items'  => [
-            [ 'shape' => 'circle', 'color' => '#E63E3E', 'radius' => '46', 'glyph' => '★', 'image' => '' ],
-            [ 'shape' => 'square', 'color' => '#2E6BE6', 'radius' => '40', 'glyph' => 'A', 'image' => '' ],
-            [ 'shape' => 'circle', 'color' => '#F4B400', 'radius' => '34', 'glyph' => '',  'image' => '' ],
-            [ 'shape' => 'circle', 'color' => '#2BA65A', 'radius' => '50', 'glyph' => 'B', 'image' => '' ],
-            [ 'shape' => 'square', 'color' => '#8B53D6', 'radius' => '36', 'glyph' => 'C', 'image' => '' ],
+            [ 'shape' => 'circle', 'color' => 'var(--olo-color-primary, #E63E3E)', 'radius' => '46', 'glyph' => '★', 'image' => '' ],
+            [ 'shape' => 'square', 'color' => 'var(--olo-color-primary, #2E6BE6)', 'radius' => '40', 'glyph' => 'A', 'image' => '' ],
+            [ 'shape' => 'circle', 'color' => 'var(--olo-color-primary, #F4B400)', 'radius' => '34', 'glyph' => '',  'image' => '' ],
+            [ 'shape' => 'circle', 'color' => 'var(--olo-color-primary, #2BA65A)', 'radius' => '50', 'glyph' => 'B', 'image' => '' ],
+            [ 'shape' => 'square', 'color' => 'var(--olo-color-primary, #8B53D6)', 'radius' => '36', 'glyph' => 'C', 'image' => '' ],
             [ 'shape' => 'circle', 'color' => '#E63E3E', 'radius' => '32', 'glyph' => '',  'image' => '' ],
             [ 'shape' => 'circle', 'color' => '#2E6BE6', 'radius' => '44', 'glyph' => '1', 'image' => '' ],
             [ 'shape' => 'star',   'color' => '#F4B400', 'radius' => '42', 'glyph' => '',  'image' => '' ],

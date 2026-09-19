@@ -33,7 +33,7 @@ class Olobuild_ProductHero_Tile extends Olobuild_Tile_Base {
 
         // Backdrop
         'glow_on'       => true,
-        'glow_color'    => '#6c8cff',
+        'glow_color'    => 'var(--olo-color-info, #6c8cff)',
         'grid_on'       => true,
         'grid_color'    => 'rgba(255,255,255,0.04)',
         'grid_size'     => 48,
@@ -65,17 +65,17 @@ class Olobuild_ProductHero_Tile extends Olobuild_Tile_Base {
         ],
 
         // Colors / theme
-        'bg_color'      => '#0b0d18',
-        'panel_color'   => '#141a2e',
-        'panel2_color'  => '#1b2238',
-        'cell_color'    => '#11142270',
-        'accent'        => '#6c8cff',
-        'accent2'       => '#b08bff',
-        'accent_on'     => '#ffffff',
+        'bg_color'      => 'var(--olo-color-dark, #0b0d18)',
+        'panel_color'   => 'var(--olo-color-dark, #141a2e)',
+        'panel2_color'  => 'var(--olo-color-dark, #1b2238)',
+        'cell_color'    => 'var(--olo-color-text, #11142270)',
+        'accent'        => 'var(--olo-color-info, #6c8cff)',
+        'accent2'       => 'var(--olo-color-accent, #b08bff)',
+        'accent_on'     => 'var(--olo-color-light, #ffffff)',
         'down_color'    => '', // vuoto = usa accent2 (per blueprint con colore neg. dedicato, es. DataFold amber)
-        'text_color'    => '#ffffff',
-        'sub_color'     => '#8a90a8',
-        'pill_text_color' => '#c9cde0',
+        'text_color'    => 'var(--olo-color-light, #ffffff)',
+        'sub_color'     => 'var(--olo-color-text-soft, #8a90a8)',
+        'pill_text_color' => 'var(--olo-color-light, #c9cde0)',
         'pill_bg'       => 'rgba(255,255,255,0.05)',
         'line_color'    => 'rgba(255,255,255,0.09)',
         'pill_mono'     => false,

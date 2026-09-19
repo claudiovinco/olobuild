@@ -24,7 +24,7 @@ class Olobuild_IntroSplit_Tile extends Olobuild_Tile_Base {
             [ 'number' => '600+', 'label' => 'Active members' ],
         ],
         'stat_number_color' => '', 'stat_label_color' => '',
-        'cta_text' => 'About the club', 'cta_url' => '#', 'cta_bg' => '', 'cta_color' => '#ffffff',
+        'cta_text' => 'About the club', 'cta_url' => '#', 'cta_bg' => '', 'cta_color' => 'var(--olo-color-light, #ffffff)',
         'cta2_text' => '', 'cta2_url' => '#', 'cta2_style' => 'outline',
         'media_image' => '', 'media_bg' => [ 'type' => 'none' ], 'media_label' => 'club portrait — squad on the pitch', 'media_light' => true,
         'media_aspect' => '4/4.4', 'media_radius' => 20, 'media_radius_top' => 0, 'media_blob' => false, 'media_blob_color' => '',

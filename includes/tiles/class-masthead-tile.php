@@ -30,12 +30,12 @@ class Olobuild_Masthead_Tile extends Olobuild_Tile_Base {
         'subhead'        => 'For seventy-two hours the talks looked dead. Then a late-night compromise on housing rewrote the maths — and the coalition with it. We reconstruct the week.',
         'byline_text'    => 'By Elena Marchetti · 12 min read',
         // Colors / type
-        'bg_color'       => '#f4f1ea',
-        'ink_color'      => '#16161a',
-        'ink_soft_color' => '#44444c',
-        'ink_faint_color'=> '#86848c',
-        'accent'         => '#cf2e2e',
-        'rule_color'     => '#ddd8cc',
+        'bg_color'       => 'var(--olo-color-light, #f4f1ea)',
+        'ink_color'      => 'var(--olo-color-text, #16161a)',
+        'ink_soft_color' => 'var(--olo-color-text, #44444c)',
+        'ink_faint_color'=> 'var(--olo-color-text-soft, #86848c)',
+        'accent'         => 'var(--olo-color-primary, #cf2e2e)',
+        'rule_color'     => 'var(--olo-color-border, #ddd8cc)',
         'nameplate_size' => 52,
         'headline_size'  => 54,
 

@@ -474,6 +474,38 @@ class Olobuild_Tile_Utils {
      * @param  string $fallback CSS restituito se il valore è vuoto/non valido.
      * @return string Lunghezza CSS pronta ('0.2em', '12px') o $fallback.
      */
+    /**
+     * Le sei cifre esadecimali di un colore, anche quando arriva come TOKEN con
+     * riserva: `var(--olo-color-dark, #16263d)` -> `16263d`.
+     *
+     * Serve ai renderer che devono scomporre il colore in r,g,b per costruire una
+     * `rgba()`: a quelli un token da solo non basta, perche' il CSS non si puo'
+     * scomporre in PHP. Leggendo la riserva scritta dentro il token, la resa resta
+     * esattamente quella di prima invece di cadere su un colore di ripiego.
+     *
+     * @param mixed  $value    Colore salvato (hex, hex a 3 cifre, o var(--x, #hex)).
+     * @param string $fallback Cosa restituire se non si ricava nessun hex.
+     * @return string Sei cifre esadecimali SENZA cancelletto, oppure $fallback.
+     */
+    public static function hex_digits( $value, $fallback = '' ) {
+        $v = trim( (string) $value );
+        if ( $v === '' ) {
+            return $fallback;
+        }
+        // Token con riserva: si prende l'hex scritto dopo la virgola.
+        if ( stripos( $v, 'var(' ) === 0 && preg_match( '/#([0-9a-fA-F]{3,8})\s*\)\s*$/', $v, $m ) ) {
+            $v = '#' . $m[1];
+        }
+        $hex = ltrim( $v, '#' );
+        if ( strlen( $hex ) === 3 ) {
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+        }
+        if ( strlen( $hex ) === 8 ) {
+            $hex = substr( $hex, 0, 6 );
+        }
+        return preg_match( '/^[0-9a-fA-F]{6}$/', $hex ) ? $hex : $fallback;
+    }
+
     public static function css_len( $val, $unit = 'px', $fallback = '' ) {
         if ( is_array( $val ) ) {
             return $fallback;

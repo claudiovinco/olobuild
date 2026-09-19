@@ -26,7 +26,7 @@ class Olobuild_CategoryRail_Tile extends Olobuild_Tile_Base {
         'gap'            => 16,
         'media_bg'       => '',
         'overlay_color'  => 'rgba(16,16,21,0.5)',
-        'title_color'    => '#ffffff',
+        'title_color'    => 'var(--olo-color-light, #ffffff)',
         'subtitle_color' => 'rgba(255,255,255,0.8)',
         'radius'         => 14,
         'show_hint'      => true,

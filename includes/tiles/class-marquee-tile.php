@@ -32,7 +32,7 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
         'vskew_max_skew'     => 14,
         'vskew_damping'      => 0.86,
 
-        'bg_color'       => '#1F2937',
+        'bg_color'       => 'var(--olo-color-dark, #1F2937)',
         'text_color'     => '#FFFFFF',
         'font_size'      => '16',
         'font_weight'    => '500',

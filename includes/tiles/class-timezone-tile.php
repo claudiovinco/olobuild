@@ -28,7 +28,7 @@ class Olobuild_Timezone_Tile extends Olobuild_Tile_Base {
         ],
         'zone_accent' => '',
         'work_color'  => '',
-        'ok_color'    => '#e0a23a',
+        'ok_color'    => 'var(--olo-color-accent, #e0a23a)',
         'sleep_color' => '',
         'card_bg'     => '',
         'card_border' => '',

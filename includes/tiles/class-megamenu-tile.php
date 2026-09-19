@@ -213,7 +213,7 @@ class Olobuild_MegaMenu_Tile extends Olobuild_Tile_Base {
         // Hex storici come fallback → resa identica se il token non è definito.
         'topbar_bg'            => 'var(--olo-color-dark, #1F2937)',
         'topbar_text_color'    => 'var(--olo-color-light, #9CA3AF)',
-        'topbar_link_color'    => '#FFFFFF',
+        'topbar_link_color'    => 'var(--olo-color-light, #FFFFFF)',
         'topbar_height'        => '40',
         'topbar_font_size'     => '13',
         'topbar_hide_mobile'   => true,

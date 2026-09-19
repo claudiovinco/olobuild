@@ -24,7 +24,7 @@ class Olobuild_Hotspots_Tile extends Olobuild_Tile_Base {
             [ 'x' => 44, 'y' => 74, 'title' => 'Punto 3', 'text' => 'Descrizione.', 'meta' => '' ],
         ],
         'zone_accent'  => '',
-        'zone_on'      => '#ffffff',
+        'zone_on'      => 'var(--olo-color-surface, #ffffff)',
         'panel_bg'     => '',
         'card_bg'      => '',
         'card_border'  => '',

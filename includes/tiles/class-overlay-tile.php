@@ -17,7 +17,7 @@ class Olobuild_Overlay_Tile extends Olobuild_Tile_Base {
         'description'     => 'Una breve descrizione del progetto.',
         'link_url'        => '',
         'link_target'     => '_self',
-        'overlay_color'   => '#000000',
+        'overlay_color'   => 'var(--olo-color-dark, #000000)',
         'text_color'      => '#FFFFFF',
         'hover_effect'    => 'fade',
         'overlay_opacity' => '70',

@@ -27,14 +27,14 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
     protected $defaults = [
         // Eyebrow
         'eyebrow_text'      => 'STACK WORDPRESS · PER AGENZIE E PMI',
-        'eyebrow_dot_color' => '#10b981',
+        'eyebrow_dot_color' => 'var(--olo-color-accent, #10b981)',
         'eyebrow_color'     => 'var(--olo-color-text, #1f2937)',
 
         // Headline
         'headline_lines' => [
-            [ 'text' => 'Costruisci.', 'color' => '#0f172a', 'italic' => false ],
-            [ 'text' => 'Traduci.',    'color' => '#b3261e', 'italic' => true  ],
-            [ 'text' => 'Prenota.',    'color' => '#0f172a', 'italic' => false ],
+            [ 'text' => 'Costruisci.', 'color' => 'var(--olo-color-dark, #0f172a)', 'italic' => false ],
+            [ 'text' => 'Traduci.',    'color' => 'var(--olo-color-dark, #b3261e)', 'italic' => true  ],
+            [ 'text' => 'Prenota.',    'color' => 'var(--olo-color-light, #0f172a)', 'italic' => false ],
         ],
         'headline_font_family' => 'serif',
         'headline_font_size'   => 96,
@@ -54,9 +54,9 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
         'cta1_text'        => 'Prenota demo →',
         'cta1_url'         => '#',
         'cta1_target'      => '_self',
-        'cta1_bg'          => '#0f172a',
+        'cta1_bg'          => 'var(--olo-color-dark, #0f172a)',
         'cta1_bg_hover'    => '',
-        'cta1_color'       => '#ffffff',
+        'cta1_color'       => 'var(--olo-color-light, #ffffff)',
         'cta1_color_hover' => '',
         'cta1_size'        => 14,
         'cta1_radius'              => [ 'tl' => 999, 'tr' => 999, 'br' => 999, 'bl' => 999, 'linked' => true ],
@@ -68,10 +68,10 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
         'cta2_url'         => '#',
         'cta2_target'      => '_self',
         'cta2_bg'          => 'transparent',
-        'cta2_bg_hover'    => '#0f172a',
-        'cta2_color'       => '#0f172a',
-        'cta2_color_hover' => '#ffffff',
-        'cta2_border'      => '#0f172a',
+        'cta2_bg_hover'    => 'var(--olo-color-dark, #0f172a)',
+        'cta2_color'       => 'var(--olo-color-dark, #0f172a)',
+        'cta2_color_hover' => 'var(--olo-color-light, #ffffff)',
+        'cta2_border'      => 'var(--olo-color-dark, #0f172a)',
         'cta2_size'        => 14,
         'cta2_radius'              => [ 'tl' => 999, 'tr' => 999, 'br' => 999, 'bl' => 999, 'linked' => true ],
         'cta2_radius_hover'        => [ 'tl' => 999, 'tr' => 999, 'br' => 999, 'bl' => 999, 'linked' => true ],
@@ -79,9 +79,9 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
 
         // Stats
         'stats' => [
-            [ 'value' => '5',      'value_color' => '#0f172a', 'label' => 'PRODOTTI MODULARI' ],
-            [ 'value' => 'Gratis', 'value_color' => '#b3261e', 'label' => 'OLOBUILD, PER SEMPRE' ],
-            [ 'value' => '0 %',    'value_color' => '#0f172a', 'label' => 'SAAS · LOCK-IN · COMMISSIONI' ],
+            [ 'value' => '5',      'value_color' => 'var(--olo-color-dark, #0f172a)', 'label' => 'PRODOTTI MODULARI' ],
+            [ 'value' => 'Gratis', 'value_color' => 'var(--olo-color-dark, #b3261e)', 'label' => 'OLOBUILD, PER SEMPRE' ],
+            [ 'value' => '0 %',    'value_color' => 'var(--olo-color-primary, #0f172a)', 'label' => 'SAAS · LOCK-IN · COMMISSIONI' ],
         ],
 
         // Pannello destro (unificazione hero, Fase 1c) — default 'showcase' = resa attuale invariata.
@@ -96,20 +96,20 @@ class Olobuild_HeroSplit_Tile extends Olobuild_Tile_Base {
 
         // Showcase
         'showcase_enabled'        => true,
-        'showcase_bg'             => [ 'type' => 'solid', 'color' => '#f0e9dc' ],
+        'showcase_bg'             => [ 'type' => 'solid', 'color' => 'var(--olo-color-dark, #f0e9dc)' ],
         'showcase_padding'                => 28,
         'showcase_radius'                 => [ 'tl' => 24, 'tr' => 24, 'br' => 24, 'bl' => 24, 'linked' => true ],
         'showcase_radius_hover'           => [ 'tl' => 24, 'tr' => 24, 'br' => 24, 'bl' => 24, 'linked' => true ],
         'showcase_radius_hover_duration'  => 400,
         'showcase_badge_text'     => 'DEMO LIVE',
-        'showcase_badge_dot'      => '#dc2626',
-        'showcase_badge_bg'       => '#ffffff',
+        'showcase_badge_dot'      => 'var(--olo-color-primary, #dc2626)',
+        'showcase_badge_bg'       => 'var(--olo-color-light, #ffffff)',
         'showcase_badge_color'    => '#0f172a',
         'showcase_items' => [
-            [ 'number' => '01', 'text' => 'crea',     'italic' => true, 'text_color' => '#0f172a', 'bg' => [ 'type' => 'solid', 'color' => '#ffffff' ] ],
-            [ 'number' => '02', 'text' => 'anima',    'italic' => true, 'text_color' => '#0f172a', 'bg' => [ 'type' => 'solid', 'color' => '#ffffff' ] ],
-            [ 'number' => '03', 'text' => 'traduci',  'italic' => true, 'text_color' => '#0f172a', 'bg' => [ 'type' => 'solid', 'color' => '#ffffff' ] ],
-            [ 'number' => '04', 'text' => 'pubblica', 'italic' => true, 'text_color' => '#0f172a', 'bg' => [ 'type' => 'solid', 'color' => '#ffffff' ] ],
+            [ 'number' => '01', 'text' => 'crea',     'italic' => true, 'text_color' => 'var(--olo-color-dark, #0f172a)', 'bg' => [ 'type' => 'solid', 'color' => 'var(--olo-color-dark, #ffffff)' ] ],
+            [ 'number' => '02', 'text' => 'anima',    'italic' => true, 'text_color' => '#0f172a', 'bg' => [ 'type' => 'solid', 'color' => 'var(--olo-color-light, #ffffff)' ] ],
+            [ 'number' => '03', 'text' => 'traduci',  'italic' => true, 'text_color' => '#0f172a', 'bg' => [ 'type' => 'solid', 'color' => 'var(--olo-color-primary, #ffffff)' ] ],
+            [ 'number' => '04', 'text' => 'pubblica', 'italic' => true, 'text_color' => '#0f172a', 'bg' => [ 'type' => 'solid', 'color' => 'var(--olo-color-surface-alt, #ffffff)' ] ],
         ],
         'showcase_card_radius'                 => [ 'tl' => 18, 'tr' => 18, 'br' => 18, 'bl' => 18, 'linked' => true ],
         'showcase_card_radius_hover'           => [ 'tl' => 18, 'tr' => 18, 'br' => 18, 'bl' => 18, 'linked' => true ],

@@ -34,7 +34,7 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
         'text_color'          => '',
         'bg_color'            => '',
         'accent_color'        => '',
-        'overlay_color'       => '#000000',
+        'overlay_color'       => 'var(--olo-color-dark, #000000)',
         'overlay_opacity'     => 80,
         'image_ratio'         => '4:3',
         'object_position'     => 'center center',
