@@ -1,5 +1,11 @@
 <template>
   <div class="mb-relative mb-overflow-hidden" :style="{ borderRadius: brStyle }">
+    <!-- Proporzioni e punto focale arrivavano fin qui solo nei tre rami SENZA foto
+         (sfondo, segnaposto, vuoto): con un'immagine vera il canvas ignorava
+         aspect_ratio e object_position, e il ritaglio si vedeva soltanto sul sito.
+         Il sito mette l'aspect-ratio sul figure e height:100% sull'img
+         (class-image-tile.php); qui il contenitore non ha altezza propria, quindi
+         metterlo sull'img — larga 100% — produce la stessa identica scatola. -->
     <img
       v-if="s.image_url"
       :src="s.image_url"
@@ -7,8 +13,10 @@
       class="mb-w-full mb-block olo-img-anim"
       :class="s.hover_animation !== 'none' ? 'olo-img-' + s.hover_animation : ''"
       :style="{
-        height: s.height,
+        height: aspectSet ? undefined : s.height,
+        aspectRatio: aspectSet ? aspectRatioCss : undefined,
         objectFit: s.object_fit,
+        objectPosition: s.object_position,
         filter: filterStyle || undefined,
         borderRadius: brStyle,
         transition: 'filter 0.4s ease, transform 0.4s ease',
@@ -81,6 +89,10 @@ const defaults = {
   link_url: '',
   link_target: '_self',
   object_fit: 'cover',
+  // Stesso default del config e del PHP: senza, il canvas non emetteva affatto
+  // object-position e il ripiego lo faceva il browser (che vale lo stesso, ma
+  // lascia credere che la chiave non serva a nessuno).
+  object_position: 'center center',
   height: '300px',
   filter_blur: '0',
   filter_brightness: '100',

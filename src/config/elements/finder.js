@@ -3,6 +3,7 @@ import {
   borderFields, borderDefault, borderHoverDefault, borderEffectDefaults,
   wowEffectsFields, wowEffectsDefaults,
 } from './_shared';
+import { imageFrameFields } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -42,6 +43,12 @@ export default {
     card_bg: '',
     card_border: '',
     media_bg: '',
+    // Il riquadro media era ritagliato 190/240 e basta (larghezza fissa 190px +
+    // aspect-ratio nel CSS): il default RIPETE quel rapporto, così i 18 temi che
+    // usano il finder non si muovono. Fuori dal set canonico, quindi resta
+    // selezionabile come «extra».
+    media_ratio: '190/240',
+    media_ratio_custom: '190/240',
     object_position: 'center center',
     align: 'center',
     // ─── nuove (default = aspetto storico) ───
@@ -142,8 +149,18 @@ export default {
     { key: 'card_border', label: t('Bordo card (semplice)'), type: 'border', legacyWidth: 1,
       description: t('Bordo 1px rapido. Per bordi avanzati (spessore, lati, effetti) usa la sezione Bordo.') },
     { key: 'media_bg', label: t('Sfondo media (card con immagine)'), type: 'color' },
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
-      contextKeys: { ratio: '190/240', fit: 'cover' },
+    // Proporzioni del riquadro media. Niente voce «auto»: l'immagine è un
+    // background-image su un box largo 190px senza altezza propria — tolto il
+    // rapporto, il riquadro collasserebbe a zero. Il punto focale è la chiave
+    // storica `object_position` qui sotto, non `media_object_position`: resta
+    // com'è, ed è uno solo per tutte le card (le card si alternano nello stesso
+    // riquadro, un focale per voce non avrebbe senso).
+    ...imageFrameFields('media', {
+      separator: false, fit: false, focal: false,
+      ratioOpts: { auto: false, custom: true, extra: ['190/240'] },
+    }),
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
+      contextKeys: { ratio: 'media_ratio', ratioCustom: 'media_ratio_custom', fit: 'cover' },
       description: t('Punto focale globale dell’immagine in tutte le card risultato.') },
     { key: 'card_max_width', label: t('Larghezza max card'), type: 'range', min: 480, max: 1000, step: 10 },
     { key: 'card_radius', label: t('Raggio card'), type: 'border-radius' },

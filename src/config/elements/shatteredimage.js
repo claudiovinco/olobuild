@@ -1,4 +1,5 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { ratioOptions } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -16,6 +17,11 @@ export default {
     preset: 'shards',
     gap: 4,
     height: '400px',
+    // 'auto' = la resa di sempre: comanda `height` (400px). Un rapporto cablato qui
+    // cambierebbe l'altezza — e quindi la geometria dei frammenti — di ogni pagina
+    // pubblicata, perché le maschere sono calcolate su quell'altezza.
+    image_ratio: 'auto',
+    image_ratio_custom: '16/9',
     image_position: 'center center',
     gap_color: 'transparent',
     zoom_variation: false,
@@ -74,9 +80,22 @@ export default {
       { value: 'circles_7', label: t('Cerchi (7 hex)') },
       { value: 'circles_scattered', label: t('Cerchi sparsi (9)') },
     ]},
-    { key: 'height', label: t('Altezza'), type: 'unit', units: ['px', 'vh'], min: 0 },
-    { key: 'image_position', label: t('Posizione immagine'), type: 'object-position',
-      contextKeys: { src: 'image_url', fit: null, ratio: null, ratioCustom: null },
+    { key: 'image_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions({ custom: true }),
+      description: t('«Auto» tiene l’altezza fissa qui sotto, com’è sempre stato.') },
+    { key: 'image_ratio_custom', label: t('Proporzioni personalizzate'), type: 'text',
+      placeholder: t('es. 5/4'),
+      condition: { field: 'image_ratio', op: 'eq', value: 'custom' } },
+    // Con un rapporto scelto l'altezza la calcola il rapporto: il campo resterebbe
+    // lì a non fare niente.
+    // Scritto come `show` e non come `condition: eq 'auto'` perché l'inspector valuta
+    // sui settings GREZZI, senza fondere i default: una tile salvata PRIMA di questo
+    // sprint non ha affatto la chiave `image_ratio`, e con l'uguaglianza il campo
+    // Altezza sarebbe sparito proprio dalle pagine già pubblicate. Chiave assente =
+    // 'auto' = campo visibile.
+    { key: 'height', label: t('Altezza'), type: 'unit', units: ['px', 'vh'], min: 0,
+      show: (s) => (s.image_ratio || 'auto') === 'auto' },
+    { key: 'image_position', label: t('Punto focale'), type: 'object-position',
+      contextKeys: { src: 'image_url', fit: 'cover', ratio: 'image_ratio', ratioCustom: 'image_ratio_custom' },
       options: [
         { value: 'center center', label: t('Centro') },
         { value: 'top center', label: t('Alto') },

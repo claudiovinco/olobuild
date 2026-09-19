@@ -224,6 +224,7 @@
 <script setup>
 import { t } from '@/i18n';
 import { computed } from 'vue';
+import { imageFrame } from '@/composables/useImageFrame';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -231,7 +232,7 @@ const props = defineProps({
 
 const defaults = {
   images: [], layout: 'grid', layout_family: 'classic', puzzle_style: 'classic',
-  columns: '3', gap: '8', img_height: '250px', object_fit: 'cover', object_position: 'center center', thumb_radius: '8',
+  columns: '3', gap: '8', img_height: '250px', aspect_ratio: 'auto', aspect_ratio_custom: '16/9', object_fit: 'cover', object_position: 'center center', thumb_radius: '8',
   rows: '0', mobile_columns: '2', expand_ratio: '4', expand_shrink: '0.5', expand_speed: '500',
   parallax_height: '1500', parallax_intensity: '50',
   drift_height: '1200', drift_intensity: '60', drift_rotation: '12',
@@ -321,7 +322,7 @@ function fuocoValido(v) {
 
 // ⚠️ La stessa regola del PHP (fuoco_css), e non per eccesso di zelo: un valore
 // storto deve far tornare la foto alla posizione della galleria in TUTTI E DUE
-// i render. Senza, il browser scarterebbe la proprieta' e il canvas mostrerebbe
+// i render. Senza, il browser scarterebbe la proprietà e il canvas mostrerebbe
 // il centro mentre il sito mostra la galleria: due immagini diverse per lo
 // stesso template, ed e' il genere di differenza che si scopre in produzione.
 function fuoco(img) {
@@ -375,12 +376,20 @@ const gridStyle = computed(() => ({
   gap: gap.value + 'px',
 }));
 
+// La forma dell'item: la proporzione, quando c'e', prende il posto dell'altezza
+// fissa. Gemello esatto di $item_box nel PHP, e come li' vale solo per Griglia e
+// Diagonale — gli altri schemi hanno una geometria propria.
+const itemBox = computed(() => {
+  const { contenitore } = imageFrame(s.value, 'aspect', { ratio: 'auto' });
+  return contenitore.aspectRatio ? { aspectRatio: contenitore.aspectRatio } : { height: imgHeight.value };
+});
+
 function itemStyle() {
   return {
     position: 'relative',
     overflow: 'hidden',
     borderRadius: radius.value + 'px',
-    height: imgHeight.value,
+    ...itemBox.value,
     ...filterStyle.value,
   };
 }
@@ -1266,7 +1275,7 @@ function diagonalItemStyle(i) {
     position: 'relative',
     overflow: 'hidden',
     borderRadius: radius.value + 'px',
-    height: imgHeight.value,
+    ...itemBox.value,
     transform: `skewY(${skewDeg}deg)`,
     ...filterStyle.value,
   };

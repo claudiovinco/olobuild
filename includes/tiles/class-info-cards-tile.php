@@ -57,6 +57,9 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
         'show_divider'       => false,
         'show_media'                  => false,
         'media_aspect_ratio'          => '4/3',
+        // Prima l'adattamento era scritto a mano nell'<img> ('object-fit:cover'): il
+        // campo nasce con quel valore, così le card già pubblicate non cambiano.
+        'object_fit'                  => 'cover',
         'object_position'             => 'center center',
         'media_radius'                => [ 'tl' => 18, 'tr' => 18, 'br' => 18, 'bl' => 18, 'linked' => true ],
         'media_radius_hover'          => [ 'tl' => 18, 'tr' => 18, 'br' => 18, 'bl' => 18, 'linked' => true ],
@@ -111,10 +114,19 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
         $media_radius   = $this->build_border_radius_css( $s['media_radius'] ?? [] );
         $media_radius_h = $this->_radius_hover_diff( $s['media_radius'] ?? [], $s['media_radius_hover'] ?? [] );
         $media_rdur     = max( 50, intval( $s['media_radius_hover_duration'] ?? 400 ) );
-        $aspect_allow  = [ '16/9', '4/3', '3/2', '1/1', '21/9' ];
+        // Whitelist ALLARGATA all'elenco canonico delle proporzioni: i primi cinque sono
+        // quelli che la tile offriva da sempre e restano validi per i template salvati,
+        // gli altri quattro sono le voci nuove del select. Allargare, mai restringere:
+        // un valore fuori elenco ricade su '4/3', com'e' sempre stato.
+        $aspect_allow  = [ '16/9', '4/3', '3/2', '1/1', '21/9', '3/4', '4/5', '9/16', '2/3' ];
         $media_aspect  = in_array( $s['media_aspect_ratio'] ?? '4/3', $aspect_allow, true ) ? ( $s['media_aspect_ratio'] ?? '4/3' ) : '4/3';
+        $fit_allow     = [ 'cover', 'contain', 'fill', 'none', 'scale-down' ];
+        $obj_fit       = in_array( $s['object_fit'] ?? 'cover', $fit_allow, true ) ? ( $s['object_fit'] ?? 'cover' ) : 'cover';
         $obj_pos       = trim( (string) ( $s['object_position'] ?? 'center center' ) );
         if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
+        // Con 'fill' l'immagine e' deformata per riempire: il punto focale non sposta
+        // nulla e scriverlo darebbe l'idea che serva a qualcosa.
+        $obj_pos_css   = ( $obj_fit === 'fill' ) ? '' : 'object-position:' . $obj_pos . ';';
 
         $title_size  = max( 18, min( 160, absint( $s['title_size'] ) ) );
         $title_weight = preg_match( '/^\d+$/', (string) $s['title_weight'] ) ? $s['title_weight'] : '500';
@@ -190,7 +202,7 @@ class Olobuild_InfoCards_Tile extends Olobuild_Tile_Base {
                         ?>
                             <div class="olo-icards__media" style="<?php echo esc_attr( $media_inner_style ); ?>">
                                 <?php if ( $media_img ) : ?>
-                                    <img src="<?php echo esc_url( $media_img ); ?>" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:<?php echo esc_attr( $obj_pos ); ?>;display:block" />
+                                    <img src="<?php echo esc_url( $media_img ); ?>" alt="" loading="lazy" style="width:100%;height:100%;object-fit:<?php echo esc_attr( $obj_fit ); ?>;<?php echo esc_attr( $obj_pos_css ); ?>display:block" />
                                 <?php elseif ( $media_lbl ) : ?>
                                     <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:11px;letter-spacing:0.12em;color:<?php echo esc_attr( $card_color ); ?>;opacity:.45;text-transform:uppercase" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.media_label'; ?>"><?php echo esc_html( $media_lbl ); ?></span>
                                 <?php endif; ?>

@@ -108,7 +108,10 @@ const cards = computed(() => {
   return out;
 });
 
-const ratioMap = { '16:9': '56.25%', '4:3': '75%', '1:1': '100%', '3:2': '66.67%', '21:9': '42.85%', '3:4': '133.33%', 'auto': '60%' };
+// Gemella della mappa in get_ratio_padding() (PHP). 'auto' fa eccezione: qui la
+// card è un segnaposto senza immagine vera e senza un'altezza collasserebbe.
+const ratioMap = { '1:1': '100%', '4:3': '75%', '3:2': '66.67%', '16:9': '56.25%', '21:9': '42.86%',
+  '3:4': '133.33%', '4:5': '125%', '9:16': '177.78%', '2:3': '150%', 'auto': '60%' };
 
 function fontFamilyCss(v) {
   if (v === 'sans')  return 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';

@@ -1,4 +1,5 @@
-import { textEffectsFields, textEffectsDefaults, filterFields, filterDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { textEffectsFields, textEffectsDefaults, filterFields, filterDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, focalField } from './_shared.js';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -25,6 +26,13 @@ export default {
     link_text: 'Profilo',
     link_url: '',
     photo_size: '120',
+    // CORNICE della foto. '1/1' riproduce il riquadro quadrato di sempre
+    // (width = height = photo_size px): photo_size resta la sorgente della
+    // LARGHEZZA, la proporzione decide solo l'altezza derivata. 'cover' era
+    // cablato nei due renderer (class-team-tile.php e TeamTile.vue).
+    photo_ratio: '1/1',
+    photo_fit: 'cover',
+    photo_object_position: 'center center',
     photo_shape: 'circle',
     photo_radius: '12',
     photo_border_width: '3',
@@ -93,6 +101,20 @@ export default {
 
     { type: 'separator', label: t('Foto') },
     { key: 'photo_size', label: t('Dimensione foto'), type: 'range', min: 60, max: 250, step: 5 },
+    // Niente voce automatica: il riquadro della foto non ha altro da cui prendere
+    // l'altezza (e' un box di dimensione fissa), quindi senza proporzione collasserebbe.
+    { key: 'photo_ratio', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ auto: false }),
+      description: t('La larghezza resta «Dimensione foto»: la proporzione decide quanto è alta.') },
+    { key: 'photo_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
+    // Il punto focale si nasconde SOLO con 'fill': con 'contain' lavora eccome (decide
+    // da che parte la foto si appoggia nelle bande vuote, e i due renderer lo
+    // emettono), e una scheda salvata prima che l'adattamento esistesse non ha affatto
+    // la chiave `photo_fit` — l'inspector valuta le condizioni sui settings GREZZI,
+    // senza fondere i default, quindi con un elenco `in` il valore assente non
+    // combacerebbe con niente e il controllo sparirebbe per sempre.
+    focalField('photo', { ratio: 'photo_ratio', fit: 'photo_fit',
+      condition: { field: 'photo_fit', op: 'neq', value: 'fill' } }),
     { key: 'photo_shape', label: t('Maschera foto'), type: 'select', options: [
       { value: 'circle', label: t('Tonda') },
       { value: 'square', label: t('Quadrata') },

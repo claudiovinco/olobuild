@@ -1,3 +1,4 @@
+import { ratioOptions } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -72,22 +73,21 @@ export default {
     { key: 'items_gap', label: t('Gap'),        type: 'range', min: 8, max: 60, step: 2, responsive: true },
 
     { type: 'separator', label: t('Media') },
-    { key: 'media_aspect', label: t('Aspect ratio'), type: 'select', options: [
-      { value: '16/9', label: '16 / 9' },
-      { value: '16/10', label: '16 / 10' },
-      { value: '4/3',  label: '4 / 3' },
-      { value: '3/2',  label: '3 / 2' },
-      { value: '1/1',  label: t('1 / 1 (quadrato)') },
-    ]},
-    { key: 'media_tall_aspect', label: t('Aspect ratio "alto"'), type: 'select', options: [
-      { value: '4/5', label: '4 / 5' },
-      { value: '3/4', label: '3 / 4' },
-      { value: '2/3', label: '2 / 3' },
-    ]},
+    // Niente voce «Auto» in queste due tendine: il contenitore del media non ha
+    // un'altezza propria, vive solo dell'aspect-ratio. Toglierlo farebbe collassare
+    // a zero le card senza immagine (il placeholder a strisce). '16/10' non sta nel
+    // set canonico ma resta selezionabile: è uno dei rapporti storici di questa tile.
+    { key: 'media_aspect', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ auto: false, extra: ['16/10'] }) },
+    { key: 'media_tall_aspect', label: t('Proporzioni card alta'), type: 'select',
+      options: ratioOptions({ auto: false }) },
     { key: 'media_bg',          label: t('Sfondo placeholder'),  type: 'color' },
     { key: 'media_label_color', label: t('Colore label/strisce'), type: 'color' },
     { key: 'hover_zoom',        label: t('Zoom immagine al hover'), type: 'toggle' },
-    { key: 'object_position',   label: t('Posizione contenuto'), type: 'object-position', reveal: true, contextKeys: { ratio: 'media_aspect' } },
+    // Un punto focale solo per tutte le immagini della griglia: se fosse per card,
+    // le foto si muoverebbero una diversa dall'altra dentro la stessa fila.
+    { key: 'object_position',   label: t('Punto focale'), type: 'object-position', reveal: true,
+      contextKeys: { ratio: 'media_aspect', fit: '(cover)' } },
 
     { type: 'separator', label: t('Titolo') },
     { key: 'title_font_family', label: t('Famiglia titolo'), type: 'font-family' },

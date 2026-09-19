@@ -32,6 +32,10 @@ class Olobuild_Carousel_Tile extends Olobuild_Tile_Base {
         'caption_bg'       => 'rgba(0,0,0,0.6)',
         'object_fit'       => 'cover',
         'object_position'  => 'center center',
+        // 16/10 era cablato nel CSS del ramo "altezza automatica": e' la resa di
+        // ogni carousel già pubblicato che non usa l'altezza fissa.
+        'aspect_ratio'        => '16/10',
+        'aspect_ratio_custom' => '16/10',
         'mobile_slides'           => '1',
         'border'                  => [],
         'border_hover'            => [],
@@ -69,7 +73,9 @@ class Olobuild_Carousel_Tile extends Olobuild_Tile_Base {
         $arrows     = filter_var( $s['show_arrows'], FILTER_VALIDATE_BOOLEAN );
         $dots       = filter_var( $s['show_dots'], FILTER_VALIDATE_BOOLEAN );
         $captions   = filter_var( $s['show_caption'] ?? false, FILTER_VALIDATE_BOOLEAN );
-        $obj_fit    = in_array( $s['object_fit'], [ 'cover', 'contain' ], true ) ? $s['object_fit'] : 'cover';
+        // Whitelist allineata ad ADATTAMENTI (_imageFrame.js): un valore offerto dal
+        // select e assente da qui tornerebbe a 'cover' senza dirlo.
+        $obj_fit    = in_array( $s['object_fit'], [ 'cover', 'contain', 'fill', 'none', 'scale-down' ], true ) ? $s['object_fit'] : 'cover';
         $obj_pos    = trim( (string) ( $s['object_position'] ?? 'center center' ) );
         if ( $obj_pos === '' || ! preg_match( '/^[a-z0-9 %.\-]+$/i', $obj_pos ) ) {
             $obj_pos = 'center center';
@@ -84,6 +90,12 @@ class Olobuild_Carousel_Tile extends Olobuild_Tile_Base {
 
         $height_mode = $s['slide_height'] === 'fixed' ? 'fixed' : 'auto';
         $fixed_h     = max( 150, absint( $s['fixed_height'] ) );
+        // Ramo "altezza automatica": l'altezza della slide nasce dal rapporto, che
+        // prima era 16/10 CABLATO qui sotto ed e' ora il default della chiave. Il
+        // prefisso 'aspect' fa leggere all'helper `aspect_ratio`/`aspect_ratio_custom`;
+        // il ramo "altezza fissa" resta prioritario e non emette rapporto affatto.
+        $slide_frame = Olobuild_Tile_Utils::image_frame( $s, 'aspect', [ 'ratio' => '16/10' ] );
+        $slide_ar    = $slide_frame['contenitore'] !== '' ? $slide_frame['contenitore'] : 'aspect-ratio: 16 / 10;';
 
         $dot_count = (int) ceil( $total / $show );
 
@@ -123,7 +135,7 @@ class Olobuild_Carousel_Tile extends Olobuild_Tile_Base {
                 height: <?php echo $fixed_h; ?>px;
                 <?php else : ?>
                 height: auto;
-                aspect-ratio: 16 / 10;
+                <?php echo $slide_ar; ?>
                 <?php endif; ?>
             }
             <?php if ( $captions ) : ?>

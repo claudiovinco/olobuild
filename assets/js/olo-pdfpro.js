@@ -1576,6 +1576,13 @@
       img.className = 'olo-pdfv-popup-img';
       img.src = hs.image_url;
       img.alt = hs.title || '';
+      // Cornice: il PHP manda image_ratio vuoto quando la proporzione è «Auto»,
+      // e in quel caso non si tocca niente (height:auto dal foglio di stile).
+      if (hs.image_ratio) {
+        img.style.aspectRatio = hs.image_ratio;
+        img.style.objectFit = hs.image_fit || 'cover';
+        if (hs.image_pos) { img.style.objectPosition = hs.image_pos; }
+      }
       popup.appendChild(img);
     }
 

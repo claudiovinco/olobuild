@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, widgetTemplateField, wowEffectsFields, wowEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -140,23 +141,17 @@ export default {
 
     // ────────── Immagine (struttura/comportamento) ──────────
     { type: 'separator', label: t('Immagine') },
-    { key: 'image_ratio', label: t('Proporzione immagine'), type: 'select', options: [
-      { value: 'auto', label: t('Automatica (sconsigliato)') },
-      { value: '1/1',  label: t('1:1 Quadrato') },
-      { value: '4/3',  label: t('4:3 Standard') },
-      { value: '3/2',  label: t('3:2 Foto') },
-      { value: '16/9', label: t('16:9 Wide') },
-      { value: '21/9', label: t('21:9 Cinema') },
-      { value: '3/4',  label: t('3:4 Verticale') },
-      { value: '2/3',  label: t('2:3 Verticale') },
-    ]},
+    // Elenco canonico: la tile ne offriva 7 su 9 (mancavano 4:5 e 9:16). La voce
+    // automatica resta — qui non collassa nulla, perché senza proporzione subentra
+    // «Altezza fissa» (e il canvas ha comunque un minimo di 120px).
+    { key: 'image_ratio', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions() },
     { key: 'image_height', label: t('Altezza fissa'), type: 'range', min: 0, max: 500, step: 10,
       condition: { field: 'image_ratio', op: 'eq', value: 'auto' } },
-    { key: 'image_fit', label: t('Adattamento'), type: 'select', options: [
-      { value: 'cover',   label: t('Copri (riempie e taglia)') },
-      { value: 'contain', label: t('Contieni (visibile interamente)') },
-      { value: 'fill',    label: t('Riempi (deforma)') },
-    ]},
+    // Le tre voci storiche ('cover','contain','fill') sono le prime tre dell'elenco
+    // canonico: si aggiungono solo 'none' e 'scale-down', e la whitelist PHP
+    // (class-panelslider-tile.php) e' stata allargata di pari passo.
+    { key: 'image_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
     { key: 'image_zoom', label: t('Zoom al hover'), type: 'toggle' },
 
     // ────────── Hover behavior ──────────
@@ -264,8 +259,16 @@ export default {
     { type: 'separator', label: t('Immagine — stile') },
     { key: 'card_image_radius', label: t('Raggio immagine'), type: 'border-radius',
       description: t('0 = eredita dal raggio card') },
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+    // Si nasconde SOLO con 'fill', ed e' importante che sia scritto così: con
+    // 'contain' il focale lavora eccome (decide da che parte l'immagine si appoggia
+    // nelle bande vuote, e i due renderer lo emettono), mentre una card salvata prima
+    // che l'adattamento esistesse potrebbe non avere affatto la chiave `image_fit` —
+    // l'inspector valuta le condizioni sui settings GREZZI, senza fondere i default,
+    // e con un elenco `in` il valore assente non combacerebbe con niente: il controllo
+    // sparirebbe per sempre. `neq 'fill'` e' anche il criterio dei due renderer.
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
       contextKeys: { fit: 'image_fit', ratio: 'image_ratio' },
+      condition: { field: 'image_fit', op: 'neq', value: 'fill' },
       description: t('Punto focale comune a tutte le immagini delle card.') },
 
     // ────────── Caption overlay (per overlay-caption preset) ──────────

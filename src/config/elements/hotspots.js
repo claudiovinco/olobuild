@@ -1,4 +1,5 @@
 import { t } from '@/i18n';
+import { ratioOptions } from './_imageFrame.js';
 
 /**
  * Hotspots — pannello con marker posizionati (x%,y%): click → scheda info.
@@ -35,10 +36,12 @@ export default {
     { key: 'heading', label: t('Titolo'), type: 'text' },
     { key: 'intro', label: t('Introduzione'), type: 'textarea' },
     { key: 'panel_label', label: t('Etichetta pannello'), type: 'text' },
-    { key: 'aspect_ratio', label: t('Proporzioni pannello'), type: 'select', options: [
-      { value: '16/10', label: '16:10' }, { value: '16/9', label: '16:9' },
-      { value: '4/3', label: '4:3' }, { value: '3/2', label: '3:2' }, { value: '1/1', label: '1:1' },
-    ]},
+    // Elenco canonico. Niente voce «Auto»: il pannello non contiene un'immagine,
+    // la sua altezza NASCE dalla proporzione — senza, collasserebbe a zero.
+    // 16/10 non è fra le canoniche ma è il default storico di questa tile: resta
+    // selezionabile via `extra`, altrimenti chi l'ha salvato non lo ritroverebbe.
+    { key: 'aspect_ratio', label: t('Proporzioni pannello'), type: 'select',
+      options: ratioOptions({ auto: false, extra: ['16/10'] }) },
 
     { type: 'separator', label: t('Marker') },
     { key: 'items', label: t('Punti'), type: 'content-items',

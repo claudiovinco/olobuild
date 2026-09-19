@@ -307,11 +307,41 @@ function polyToClipPath(polygon) {
   return 'polygon(' + polygon.map(p => p[0].toFixed(2) + '% ' + p[1].toFixed(2) + '%').join(', ') + ')';
 }
 
+/* Cornice: proporzione del riquadro. Stesse chiavi e stessa whitelist del PHP
+   ('W/H' oppure un numero solo). 'auto' = comanda `height`, la resa di sempre. */
+const ratioWH = computed(() => {
+  let r = String(s.value.image_ratio ?? 'auto').trim();
+  if (r === 'custom') r = String(s.value.image_ratio_custom ?? '').trim();
+  r = r.replace(/:/g, '/');
+  if (!r || r === 'auto') return null;
+  const m = /^(\d+(?:\.\d+)?)(?:\s*\/\s*(\d+(?:\.\d+)?))?$/.exec(r);
+  if (!m) return null;
+  const w = parseFloat(m[1]);
+  const h = m[2] !== undefined ? parseFloat(m[2]) : 1;
+  return (w > 0 && h > 0) ? [w, h] : null;
+});
+
+/* Nel CSS va la STRINGA scritta dall'utente, già normalizzata e validata, non i due
+   numeri ricomposti: è la stessa scelta del PHP, dove ricomporli dipenderebbe da
+   LC_NUMERIC (un «3.5/2» diventerebbe «3,5/2», dichiarazione scartata). I due
+   numeri servono solo alla geometria delle maschere. */
+const ratioCss = computed(() => {
+  if (!ratioWH.value) return '';
+  let r = String(s.value.image_ratio ?? 'auto').trim();
+  if (r === 'custom') r = String(s.value.image_ratio_custom ?? '').trim();
+  return r.replace(/:/g, '/').replace(/\s+/g, '');
+});
+
 const fragments = computed(() => {
   const presetKey = s.value.preset || 'shards';
   const gap = parseInt(s.value.gap) || 0;
   const cw = 600;
-  const ch = parseInt(s.value.height) || 400;
+  // Le maschere sono disegnate su una tela 600 × altezza: col rapporto attivo
+  // l'altezza vera a 600px di larghezza la dà il rapporto, non `height` — con il
+  // numero sbagliato i cerchi verrebbero ovali (gemello della regola PHP).
+  const ch = ratioWH.value
+    ? Math.max(1, Math.round(600 * ratioWH.value[1] / ratioWH.value[0]))
+    : (parseInt(s.value.height) || 400);
 
   // Circle presets: generate polygon approximations
   const circleDef = CIRCLE_DEFS[presetKey];
@@ -406,7 +436,11 @@ const containerStyle = computed(() => {
   const style = {
     position: 'relative',
     width: '100%',
-    height: s.value.height || '400px',
+    // Col rapporto attivo l'altezza passa ad 'auto', altrimenti l'aspect-ratio
+    // sarebbe inerte (due dimensioni definite). Gemello della regola PHP.
+    ...(ratioWH.value
+      ? { aspectRatio: ratioCss.value, height: 'auto' }
+      : { height: s.value.height || '400px' }),
     overflow: 'hidden',
     borderRadius: radius + 'px',
     background: s.value.gap_color || 'transparent',

@@ -1,5 +1,6 @@
 
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { ratioOptions } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -65,14 +66,13 @@ export default {
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'separator', label: t('Layout') },
-    { key: 'image_ratio', label: t('Proporzione immagine'), type: 'select', options: [
-      { value: '1-1', label: t('1:1 Quadrato') },
-      { value: '4-3', label: '4:3' },
-      { value: '3-4', label: t('3:4 Verticale') },
-      { value: '3-2', label: '3:2' },
-      { value: '16-9', label: '16:9' },
-      { value: 'auto', label: t('Automatico') },
-    ]},
+    // Elenco canonico, ma scritto col TRATTINO: e' il formato che le cinque tile
+    // WooCommerce salvano da sempre ('16-9', non '16/9') e non si tocca. Qui il
+    // rapporto non diventa `aspect-ratio` ma una percentuale di padding-top, quindi
+    // ogni voce nuova ha la sua riga in $ratio_map (PHP) e in ratioMap (.vue).
+    // 'auto' resta: significa altezza naturale dell'immagine, non collasso.
+    { key: 'image_ratio', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ sep: '-', autoLabel: 'Auto (altezza naturale)' }) },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 
     { type: 'separator', label: t('Miniature') },

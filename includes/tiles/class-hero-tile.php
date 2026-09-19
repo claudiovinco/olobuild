@@ -238,6 +238,13 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
         $strip_items = ( 'strip' === $module && is_array( $s['strip_items'] ?? null ) ) ? $s['strip_items'] : [];
         $strip_off   = max( 0, intval( $s['strip_offset'] ?? 28 ) );
         $strip_rad   = max( 0, intval( $s['strip_radius'] ?? 200 ) );
+        // Cornice delle tessere. I default sono i valori che erano CABLATI nel CSS qui
+        // sotto (3/4 e center center): senza la chiave salvata la striscia rende come
+        // ha sempre reso. Le tessere sono background-image, quindi il rapporto diventa
+        // aspect-ratio sul contenitore e il punto focale background-position.
+        $strip_frame = Olobuild_Tile_Utils::image_frame( $s, 'strip', [ 'ratio' => '3/4' ] );
+        $strip_ar    = $strip_frame['contenitore'] !== '' ? $strip_frame['contenitore'] : 'aspect-ratio: 3/4;';
+        $strip_pos   = Olobuild_Tile_Utils::focal_pos( $s, 'strip', 'center center' );
         $chips       = ( 'search' === $module )
             ? array_filter( array_map( 'trim', explode( ',', (string) ( $s['search_chips'] ?? '' ) ) ), 'strlen' )
             : [];
@@ -299,7 +306,7 @@ class Olobuild_Hero_Tile extends Olobuild_Tile_Base {
             <?php endif; ?>
             <?php if ( 'strip' === $module && ! empty( $strip_items ) ) : ?>
             .<?php echo $uid; ?> .olo-hero-strip{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;max-width:1180px;margin:0 auto;}
-            .<?php echo $uid; ?> .olo-hero-stripmedia{position:relative;overflow:hidden;width:clamp(150px,22vw,240px);aspect-ratio:3/4;border-radius:<?php echo (int) $strip_rad; ?>px <?php echo (int) $strip_rad; ?>px 8px 8px;background-color:rgba(255,255,255,.06);background-image:repeating-linear-gradient(135deg, rgba(243,233,239,.05) 0 16px, transparent 16px 32px);background-size:cover;background-position:center center;}
+            .<?php echo $uid; ?> .olo-hero-stripmedia{position:relative;overflow:hidden;width:clamp(150px,22vw,240px);<?php echo $strip_ar; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- dichiarazione aspect-ratio prodotta da Olobuild_Tile_Utils::image_frame(), che filtra il valore con una whitelist "W/H" ?>border-radius:<?php echo (int) $strip_rad; ?>px <?php echo (int) $strip_rad; ?>px 8px 8px;background-color:rgba(255,255,255,.06);background-image:repeating-linear-gradient(135deg, rgba(243,233,239,.05) 0 16px, transparent 16px 32px);background-size:cover;background-position:<?php echo esc_attr( $strip_pos ); ?>;}
             <?php if ( $strip_off > 0 ) : ?>.<?php echo $uid; ?> .olo-hero-stripmedia:nth-child(2){margin-top:-<?php echo (int) $strip_off; ?>px;}<?php endif; ?>
             .<?php echo $uid; ?> .olo-hero-stripcap{position:absolute;left:14px;bottom:12px;right:14px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(243,233,239,.4);}
             @media(max-width:600px){.<?php echo $uid; ?> .olo-hero-strip .olo-hero-stripmedia:nth-child(3){display:none;}}

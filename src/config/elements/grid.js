@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, withHover } from './_shared';
 import { shadowField } from './_shared.js';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -93,23 +94,20 @@ export default {
     { key: 'equal_height', label: t('Altezza uguale'), type: 'toggle' },
 
     { type: 'separator', label: t('Immagine') },
-    { key: 'image_ratio', label: t('Proporzione immagine'), type: 'select', options: [
-      { value: 'auto', label: t('Automatica') },
-      { value: '1/1', label: t('1:1 Quadrato') },
-      { value: '4/3', label: '4:3' },
-      { value: '3/2', label: '3:2' },
-      { value: '16/9', label: '16:9' },
-      { value: '3/4', label: t('3:4 Verticale') },
-      { value: '2/3', label: t('2:3 Verticale') },
-    ]},
-    { key: 'image_fit', label: t('Adattamento immagine'), type: 'select', options: [
-      { value: 'cover', label: t('Copri') },
-      { value: 'contain', label: t('Contieni') },
-      { value: 'fill', label: t('Riempi') },
-    ]},
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+    // Elenco canonico al posto delle sette voci scelte a occhio (mancavano 21:9, 4:5,
+    // 9:16). Nessuna tabella da allargare: sia il PHP sia il canvas scrivono
+    // `aspect-ratio:<valore>` così com'e', quindi ogni rapporto nuovo rende subito.
+    // 'auto' resta il default e continua a significare «usa Altezza immagine».
+    { key: 'image_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions() },
+    // Stesso discorso per l'adattamento: `object-fit` viene emesso tale e quale, quindi
+    // le due voci che mancavano ('none' e 'scale-down') funzionano senza altro lavoro.
+    { key: 'image_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
       contextKeys: { fit: 'image_fit', ratio: 'image_ratio', ratioCustom: '' },
-      description: t('Punto focale globale: applicato a tutte le immagini della griglia.') },
+      description: t('Punto focale globale: applicato a tutte le immagini della griglia.'),
+      // Con «Deforma per riempire» la foto viene stirata sui due assi: non resta
+      // niente fuori dall'inquadratura da spostare.
+      condition: { field: 'image_fit', op: 'neq', value: 'fill' } },
     { key: 'image_zoom', label: t('Zoom immagine al hover'), type: 'toggle' },
     { key: 'image_animation', label: t('Animazione continua immagine'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },

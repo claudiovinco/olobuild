@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
 import { shadowField } from './_shared.js';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -24,6 +25,12 @@ export default {
     gap: '15',
     thumb_ratio: '1:1',
     thumb_radius: '8',
+    // La miniatura ritagliata e' sempre stata `object-fit:cover` cablato nel
+    // renderer: il default del controllo nuovo e' quello, così le gallerie già
+    // pubblicate non si muovono. Vale anche nel ramo 'auto', dove fino a ieri
+    // non si emetteva alcun object-fit: li' il riquadro ha la forma della foto,
+    // quindi 'cover' e l'iniziale 'fill' disegnano gli stessi pixel.
+    thumb_fit: 'cover',
     object_position: 'center center',
     overlay_style: 'dark',
     show_caption: true,
@@ -85,15 +92,34 @@ export default {
     { type: 'separator', label: t('Layout') },
     { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1 },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 40, step: 5 },
-    { key: 'thumb_ratio', label: t('Proporzione miniature'), type: 'select', options: [
-      { value: '1:1', label: '1:1' },
-      { value: '4:3', label: '4:3' },
-      { value: '16:9', label: '16:9' },
-      { value: 'auto', label: t('Auto') },
-    ] },
+    // ── La cornice della miniatura: proporzioni → adattamento → punto focale.
+    // Il valore salvato usa i DUE PUNTI ('1:1') da sempre: `sep: ':'` tiene il
+    // formato storico, l'elenco diventa quello canonico di tutte le tile.
+    { key: 'thumb_ratio', label: t('Proporzioni miniature'), type: 'select',
+      options: ratioOptions({ sep: ':', auto: true }) },
+    // NESSUNA condizione su 'auto', ed è una scelta ragionata contro l'istinto.
+    // Nel ramo 'auto' l'<img> è `width:100%` SENZA altezza: per un elemento
+    // rimpiazzato l'altezza usata è larghezza/proporzione-intrinseca, quindi il
+    // riquadro ha ESATTAMENTE la forma della foto. Lì «Riempi», «Contieni» e
+    // «Deforma» danno tutti e tre lo stesso pixel di oggi (l'iniziale di
+    // object-fit è proprio `fill`) → nessuna galleria pubblicata si muove.
+    // Ma «Dimensione originale» e «Riduci se necessario» in quel ramo cambiano
+    // davvero la resa: nasconderci il controllo lo toglierebbe proprio dove
+    // serve ancora. Per questo i due renderer ora emettono l'adattamento in
+    // entrambi i rami.
+    { key: 'thumb_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI,
+      description: t('Come la foto riempie la maschera: «Riempi» ritaglia, «Contieni» la mostra tutta.') },
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
+      contextKeys: { ratio: 'thumb_ratio', fit: 'thumb_fit' },
+      // Si nasconde SOLO con «Deforma per riempire»: è l'unico adattamento in cui
+      // la foto occupa tutto il riquadro e non c'è niente da spostare — lo stesso
+      // criterio dei due renderer, che lì non scrivono object-position.
+      // Scritto come `neq 'fill'` anche perché una lightbox salvata prima di
+      // questo sprint non ha affatto la chiave `thumb_fit`: l'inspector valuta le
+      // condizioni sui settings GREZZI, e con un elenco `in` il valore assente non
+      // combacerebbe con niente e il controllo sparirebbe per sempre.
+      condition: { field: 'thumb_fit', op: 'neq', value: 'fill' } },
     withHover({ key: 'thumb_radius', label: t('Raggio'), type: 'border-radius' }),
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
-      contextKeys: { ratio: 'thumb_ratio' } },
 
     { type: 'separator', label: t('Lightbox — Aspetto') },
     { key: 'overlay_style', label: t('Stile overlay'), type: 'select', options: [

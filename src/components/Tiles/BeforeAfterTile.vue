@@ -30,7 +30,7 @@ const defaults = {
     { before_image: '', after_image: '', before_label: 'Before', after_label: 'After', title: 'Priya · 6 months', text: 'Built real strength postpartum, pain-free and back to running.' },
     { before_image: '', after_image: '', before_label: 'Before', after_label: 'After', title: 'Sam · 1 year', text: 'From couch to first powerlifting meet — and stayed for the community.' },
   ],
-  columns: 3, gap: 24, media_bg: '', media_aspect: '1/1', object_position: 'center center', accent: '',
+  columns: 3, gap: 24, media_bg: '', media_aspect: '1/1', media_fit: 'cover', object_position: 'center center', accent: '',
   before_label_color: '#ffffff', after_label_color: '#ffffff', title_color: '', text_color: '', card_bg: '', radius: 12,
   // Spaziatura / Forma — additivi e no-op coi default (parità PHP)
   cap_padding: { top: 16, right: 4, bottom: 4, left: 4 },
@@ -53,6 +53,10 @@ const SANS = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
 const cols = computed(() => Math.max(1, Math.min(4, parseInt(s.value.columns, 10) || 3)));
 const mbg = computed(() => s.value.media_bg || 'var(--olo-color-surface-alt, #eceff3)');
 const asp = computed(() => String(s.value.media_aspect || '1/1').replace(/[^0-9/]/g, '') || '1/1');
+// Gemella della tabella nel PHP: le foto sono background-image, quindi l'adattamento
+// si traduce in `background-size`. 'cover' era il valore cablato prima del controllo.
+const FIT_BG = { cover: 'cover', contain: 'contain', fill: '100% 100%', none: 'auto' };
+const mfit = computed(() => FIT_BG[String(s.value.media_fit || 'cover')] || 'cover');
 const accent = computed(() => s.value.accent || 'var(--olo-color-primary, #e1474f)');
 // Dual-format: numero legacy (12) E oggetto {tl,tr,br,bl} dal type 'border-radius'.
 const rad = computed(() => radiusToCss(s.value.radius, { fallback: '0px' }));
@@ -147,7 +151,9 @@ const rootStyle = computed(() => ({ fontFamily: SANS, display: 'grid', gridTempl
 const cardStyle = computed(() => ({ background: s.value.card_bg || 'transparent', borderRadius: cardRadiusCss.value || rad.value, overflow: 'hidden' }));
 const pairStyle = computed(() => ({ position: 'relative', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px' }));
 function mediaStyle(img) {
-  const st = { position: 'relative', aspectRatio: asp.value, background: mbg.value, backgroundSize: 'cover', backgroundPosition: (s.value.object_position || 'center center') };
+  // `background` e' la shorthand e riporta background-repeat a `repeat`: con 'contain'
+  // o 'none' la foto si ripeterebbe a mosaico. Va DOPO la shorthand (gemello del PHP).
+  const st = { position: 'relative', aspectRatio: asp.value, background: mbg.value, backgroundSize: mfit.value, backgroundRepeat: 'no-repeat', backgroundPosition: (s.value.object_position || 'center center') };
   if (img) st.backgroundImage = 'url(' + img + ')';
   return st;
 }

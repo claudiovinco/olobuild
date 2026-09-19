@@ -20,7 +20,8 @@ import { t } from '@/i18n';
 //
 // opts:
 //   key         override della chiave salvata (default `<imageKey>_object_position`)
-//   label       etichetta (default "Posizione — punto focale")
+//   label       etichetta (default "Punto focale" — il nome canonico del glossario;
+//               si passa solo per aggiungere un qualificatore, es. "Punto focale avatar")
 //   fit         chiave settings del fit OPPURE letterale ('(cover)' default, 'contain'…)
 //   ratio       chiave settings del ratio OPPURE letterale ('16/9','1/1','auto'…)
 //   ratioCustom chiave settings del ratio custom
@@ -38,7 +39,7 @@ export function focalField(imageKey, opts = {}) {
   if (opts.contextKeys)         Object.assign(ck, opts.contextKeys);
   const f = {
     key: opts.key || (imageKey + '_object_position'),
-    label: opts.label || t('Posizione — punto focale'),
+    label: opts.label || t('Punto focale'),
     type: 'object-position',
     reveal: opts.reveal !== false,
     contextKeys: ck,

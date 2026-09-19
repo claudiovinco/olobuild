@@ -10,7 +10,7 @@
         :style="cardStyle"
       >
         <div v-if="s.show_media" class="olo-icards__media" :style="mediaStyle">
-          <img v-if="it.media_image" :src="it.media_image" alt="" :style="{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: (s.object_position || 'center center'), display: 'block' }" />
+          <img v-if="it.media_image" :src="it.media_image" alt="" :style="mediaImgStyle" />
           <span v-else-if="it.media_label" :style="mediaLabelStyle">{{ it.media_label }}</span>
         </div>
         <div v-if="s.show_icon || s.show_counter || s.show_arrow" class="olo-icards__top">
@@ -79,7 +79,7 @@ const defaults = {
   card_border:       '',
   show_icon: false, show_counter: true, show_counter_label: true,
   show_arrow: true, show_footer: false, show_link_text: false, show_divider: false,
-  show_media: false, media_aspect_ratio: '4/3', object_position: 'center center', media_radius: R(18),
+  show_media: false, media_aspect_ratio: '4/3', object_fit: 'cover', object_position: 'center center', media_radius: R(18),
   title_font_family: 'serif',
   title_size: 72, title_weight: '500', title_italic: true,
   counter_size: 11, description_size: 15, footer_size: 10,
@@ -196,9 +196,24 @@ const descStyle = computed(() => ({
   flex: 1,
 }));
 
+// Le stesse due whitelist del renderer PHP (class-info-cards-tile.php): senza, un
+// valore fuori elenco renderebbe nel canvas e non sul sito (o viceversa).
+const ASPECT_ALLOW = ['16/9', '4/3', '3/2', '1/1', '21/9', '3/4', '4/5', '9/16', '2/3'];
+const FIT_ALLOW = ['cover', 'contain', 'fill', 'none', 'scale-down'];
+
+// L'adattamento era cablato a 'cover' qui e nel PHP: ora lo comanda `object_fit`, che
+// nasce appunto a 'cover'. Con 'fill' la foto e' deformata per riempire e il punto
+// focale non sposterebbe nulla, quindi non si scrive.
+const mediaImgStyle = computed(() => {
+  const fit = FIT_ALLOW.includes(s.value.object_fit) ? s.value.object_fit : 'cover';
+  const st = { width: '100%', height: '100%', objectFit: fit, display: 'block' };
+  if (fit !== 'fill') st.objectPosition = s.value.object_position || 'center center';
+  return st;
+});
+
 const mediaStyle = computed(() => ({
   width: '100%',
-  aspectRatio: s.value.media_aspect_ratio || '4/3',
+  aspectRatio: ASPECT_ALLOW.includes(s.value.media_aspect_ratio) ? s.value.media_aspect_ratio : '4/3',
   borderRadius: radiusToCss(s.value.media_radius) || '0',
   overflow: 'hidden',
   background: cardColor.value + '14',

@@ -207,14 +207,25 @@ const overlayStyle = computed(() => {
   };
 });
 
-const imgStyle = computed(() => ({
-  width: '100%',
-  height: '100%',
-  objectFit: s.value.image_fit || 'cover',
-  objectPosition: s.value.object_position || 'center center',
-  display: 'block',
-  borderRadius: radiusToCss(s.value.card_image_radius, { fallback: '0px', zero: '0px' }),
-}));
+// Stessa whitelist del renderer PHP (class-panelslider-tile.php): senza, un valore
+// fuori elenco renderebbe nel canvas e non sul sito.
+const PS_FIT_OK = ['cover', 'contain', 'fill', 'none', 'scale-down'];
+
+const imgFit = computed(() => (PS_FIT_OK.includes(s.value.image_fit) ? s.value.image_fit : 'cover'));
+
+const imgStyle = computed(() => {
+  const st = {
+    width: '100%',
+    height: '100%',
+    objectFit: imgFit.value,
+    display: 'block',
+    borderRadius: radiusToCss(s.value.card_image_radius, { fallback: '0px', zero: '0px' }),
+  };
+  // Con 'fill' l'immagine e' deformata per riempire: il punto focale non sposterebbe
+  // nulla e scriverlo darebbe l'idea che serva a qualcosa. Stessa scelta nel PHP.
+  if (imgFit.value !== 'fill') st.objectPosition = s.value.object_position || 'center center';
+  return st;
+});
 
 const paddingCss = computed(() => {
   const p = s.value.card_padding;

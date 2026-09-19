@@ -1,4 +1,5 @@
 import { shadowField, withHover, wowEffectsFields, wowEffectsDefaults } from './_shared.js';
+import { ratioOptions } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -267,14 +268,11 @@ export default {
     { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1,
       condition: { field: 'layout', op: 'in', value: ['grid', 'masonry', 'bento', 'newspaper'] } },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 80, step: 5 },
-    { key: 'image_ratio', label: t('Proporzione immagine'), type: 'select', options: [
-      { value: '16:9', label: '16:9' },
-      { value: '4:3', label: '4:3' },
-      { value: '1:1', label: '1:1' },
-      { value: '3:2', label: '3:2' },
-      { value: '3:4', label: '3:4 verticale' },
-      { value: 'auto', label: t('Auto') },
-    ], condition: { field: 'show_image', op: 'eq', value: true } },
+    // Elenco canonico. Il separatore resta il DUE PUNTI: è come questa tile ha
+    // sempre salvato il rapporto ed è la chiave delle mappe rapporto→padding
+    // (PHP get_ratio_padding(), canvas ratioMap).
+    { key: 'image_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions({ sep: ':' }),
+      condition: { field: 'show_image', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Hover card') },
     { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [

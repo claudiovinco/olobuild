@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, wowEffectsFields, wowEffectsDefaults } from './_shared';
-import { shadowField } from './_shared.js';
+import { shadowField, focalField } from './_shared.js';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -34,6 +35,9 @@ export default {
     columns: '3',
     gap: '20',
     image_ratio: '4:3',
+    // 'cover' è l'adattamento che i renderer scrivevano cablato prima che diventasse
+    // scegliibile: qualunque altro default sposterebbe i portfolio già pubblicati.
+    image_fit: 'cover',
     object_position: 'center center',
     // Filtri
     filter_bar: true,
@@ -151,14 +155,20 @@ export default {
     ]},
     { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1,
       condition: { field: 'layout', op: 'in', value: ['grid', 'masonry', 'masonry-pin', 'bento', 'mosaic', 'polaroid'] } },
-    { key: 'image_ratio', label: t('Proporzione immagine'), type: 'select', options: [
-      { value: '1:1', label: t('1:1 Quadrato') },
-      { value: '4:3', label: '4:3' },
-      { value: '16:9', label: '16:9' },
-      { value: '3:2', label: '3:2' },
-      { value: '3:4', label: '3:4 Verticale' },
-      { value: 'auto', label: t('Automatico') },
-    ]},
+    // Proporzioni: l'elenco canonico condiviso. Il separatore resta il DUE PUNTI
+    // perché è quello che questa tile ha sempre salvato ('4:3') ed è la chiave con
+    // cui sono indicizzate le mappe rapporto→padding in PHP e nel canvas.
+    { key: 'image_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions({ sep: ':' }) },
+    // NESSUNA condizione sul rapporto, e non è una dimenticanza: qui l'adattamento
+    // non dipende dal rapporto ma dal LAYOUT, e le due cose non coincidono in
+    // nessuna delle due direzioni. Bento, magazine (prima card), mosaic e
+    // split-index ritagliano SEMPRE — anche con «Auto» — quindi una condizione
+    // `image_ratio neq auto` nasconderebbe un controllo che lì comanda davvero il
+    // CSS. Negli altri layout, dove l'immagine resta ad altezza naturale,
+    // l'object-fit viene emesso lo stesso dai due renderer: cover/contain/fill
+    // non cambiano nulla (la scatola ha già la proporzione della foto), mentre
+    // «Dimensione originale» e «Riduci se necessario» lavorano eccome.
+    { key: 'image_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
 
     { type: 'separator', label: t('Hover effect (comportamento)') },
     { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
@@ -259,8 +269,9 @@ export default {
     { type: 'separator', label: t('Layout — aspetto') },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 60, step: 2 },
     withHover({ key: 'border_radius', label: t('Raggio card'), type: 'border-radius' }),
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
-      contextKeys: { ratio: 'image_ratio' } },
+    // Un punto focale solo per TUTTE le immagini della griglia: uno per card
+    // sfalserebbe le proporzioni fra una card e l'altra.
+    focalField('image', { key: 'object_position', src: '', ratio: 'image_ratio', fit: 'image_fit', label: t('Punto focale') }),
 
     { type: 'separator', label: t('Carousel — aspetto') },
     { key: 'carousel_speed', label: t('Velocità (s per loop)'), type: 'range', min: 10, max: 120, step: 5,

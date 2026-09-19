@@ -97,6 +97,7 @@
 <script setup>
 import { t } from '@/i18n';
 import { computed } from 'vue';
+import { imageFrame } from '@/composables/useImageFrame';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -104,7 +105,7 @@ const props = defineProps({
 
 const defaults = {
   layout: 'grid', filter_bar: false, random_order: false,
-  columns: '3', rows: '0', gap: '8', img_height: '200px', object_fit: 'cover', object_position: 'center center', thumb_radius: '8',
+  columns: '3', rows: '0', gap: '8', img_height: '200px', img_ratio: 'auto', object_fit: 'cover', object_position: 'center center', thumb_radius: '8',
   fx_hover_zoom: true, fx_hover_zoom_scale: '1.08',
   fx_hover_tilt: false,
   fx_kenburns: false, fx_kenburns_speed: '20', fx_kenburns_scale: '1.15',
@@ -122,6 +123,19 @@ const rows = computed(() => Math.max(0, Math.min(5, parseInt(s.value.rows) || 0)
 const maxVisible = computed(() => rows.value > 0 ? cols.value * rows.value : images.value.length);
 const visibleImages = computed(() => images.value.slice(0, maxVisible.value));
 const extraCount = computed(() => Math.max(0, images.value.length - maxVisible.value));
+
+// La proporzione delle miniature vale solo nel layout a griglia — vedi il commento
+// nel config: masonry e giustificato hanno nell'altezza il loro layout. Vuota quando
+// e' 'auto', e allora resta l'altezza fissa.
+const gridRatio = computed(() => {
+  if (s.value.layout !== 'grid') return '';
+  return imageFrame(s.value, 'img', { ratio: 'auto' }).contenitore.aspectRatio || '';
+});
+
+// «Giustificato» come lo intende il template qui sopra: l'ultimo ramo, quello `v-else`.
+// Un valore fuori elenco finisce lì, quindi va trattato allo stesso modo o lo stile
+// direbbe una cosa e il markup un'altra.
+const giustificato = computed(() => s.value.layout !== 'grid' && s.value.layout !== 'masonry');
 
 const masonryHeight = (index) => {
   if (s.value.layout !== 'masonry') return s.value.img_height || '200px';
@@ -156,6 +170,10 @@ const thumbStyle = (index) => {
     base.height = masonryHeight(index);
     base.marginBottom = s.value.gap + 'px';
     base.breakInside = 'avoid';
+  } else if (gridRatio.value) {
+    // Stessa regola del frontend: scelta una proporzione, prende il posto
+    // dell'altezza fissa (mai insieme, o vincerebbe l'altezza).
+    base.aspectRatio = gridRatio.value;
   } else {
     base.height = s.value.img_height || '200px';
   }
@@ -175,7 +193,11 @@ const justifiedThumbStyle = computed(() => ({
 const imgInnerStyle = computed(() => {
   const st = {
     width: '100%', height: '100%',
-    objectFit: s.value.object_fit || 'cover',
+    // Nel giustificato il frontend ha `object-fit: cover` cablato (le righe si
+    // allineano solo se tutte le foto riempiono la stessa altezza): il canvas
+    // faceva invece quello che diceva il controllo e mostrava un'altra cosa.
+    // Si allinea il canvas al sito, non il contrario: così nessuna pagina si muove.
+    objectFit: giustificato.value ? 'cover' : (s.value.object_fit || 'cover'),
     objectPosition: s.value.object_position || 'center center',
     display: 'block',
     transition: 'transform 0.4s ease',

@@ -1,5 +1,6 @@
 import { t } from '@/i18n';
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField } from './_shared.js';
+import { ratioOptions } from './_imageFrame.js';
 
 // Default no-op per i nuovi controlli additivi Spaziatura + Forma.
 // Identici alla resa attuale: caption padding 16px 18px, card radius 14px.
@@ -29,6 +30,9 @@ export default {
     ],
     card_width: 260,
     card_aspect: '4/5',
+    // Prefilled col rapporto di default: scegliere «Personalizzato» non muove nulla
+    // finché non lo si riscrive davvero.
+    card_aspect_custom: '4/5',
     gap: 16,
     media_bg: '',
     overlay_color: 'rgba(16,16,21,0.5)',
@@ -76,12 +80,14 @@ export default {
   styleFields: [
     { type: 'separator', label: t('Tessere') },
     { key: 'card_width', label: t('Larghezza tessera'), type: 'range', min: 180, max: 380, step: 10 },
-    { key: 'card_aspect', label: t('Proporzioni'), type: 'select', options: [
-      { value: '4/5', label: '4:5' },
-      { value: '3/4', label: '3:4' },
-      { value: '1/1', label: '1:1' },
-      { value: '3/2', label: '3:2' },
-    ]},
+    // Elenco canonico. `auto` NON è offribile qui: dentro .ocr-card è tutto in
+    // position:absolute (media, velo, didascalia) e senza aspect-ratio la tessera
+    // avrebbe altezza zero. Il valore salvato resta la stringa '4/5' di sempre.
+    { key: 'card_aspect', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ auto: false, custom: true }) },
+    { key: 'card_aspect_custom', label: t('Proporzioni personalizzate'), type: 'text',
+      placeholder: t('es. 5/4'),
+      condition: { field: 'card_aspect', op: 'eq', value: 'custom' } },
     { key: 'gap', label: t('Gap tessere'), type: 'range', min: 8, max: 32, step: 2 },
     { key: 'radius', label: t('Raggio'), type: 'border-radius' },
 
@@ -93,7 +99,15 @@ export default {
 
     { type: 'separator', label: t('Colori') },
     { key: 'media_bg', label: t('Sfondo media'), type: 'color' },
-    focalField('image', { key: 'object_position', src: '', reveal: true, label: t('Posizione — punto focale immagini') }),
+    // Il pad deve disegnare la TESSERA vera, non un riquadro generico: la proporzione
+    // qui è nota e ora è pure configurabile, quindi gliela passiamo (con la sua
+    // personalizzata). `fit` è un LETTERALE fra parentesi — la convenzione di
+    // InspectorField per «non è una chiave di settings, è il valore» — perché
+    // .ocr-media ha background-size:cover cablato in tutti e due i renderer
+    // (class-categoryrail-tile.php:156, CategoryRailTile.vue:109): non c'è nessun
+    // controllo di adattamento da leggere, e non va inventato.
+    focalField('image', { key: 'object_position', src: '', reveal: true, label: t('Punto focale immagini'),
+      fit: '(cover)', ratio: 'card_aspect', ratioCustom: 'card_aspect_custom' }),
     { key: 'overlay_color', label: t('Velo overlay'), type: 'color' },
     { key: 'title_color', label: t('Colore titolo'), type: 'color' },
     { key: 'subtitle_color', label: t('Colore sottotitolo'), type: 'color' },

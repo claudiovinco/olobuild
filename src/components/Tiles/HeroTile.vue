@@ -102,6 +102,7 @@
 <script setup>
 import { computed } from 'vue';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
+import { imageFrame } from '@/composables/useImageFrame';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -138,6 +139,10 @@ const s = computed(() => ({
   strip_items: [],
   strip_offset: 28,
   strip_radius: 200,
+  // Stessi default del config e del PHP: la resa di prima, cablata.
+  strip_ratio: '3/4',
+  strip_ratio_custom: '3/4',
+  strip_object_position: 'center center',
   search_placeholder: 'Cerca…',
   search_button: 'Cerca',
   search_url: '',
@@ -267,14 +272,20 @@ const stripRowStyle = computed(() => ({
 function stripMediaStyle(it, i) {
   const rad = Math.max(0, parseInt(s.value.strip_radius, 10) || 0);
   const off = Math.max(0, parseInt(s.value.strip_offset, 10) || 0);
+  // Cornice delle tessere: stessi default del gemello PHP (3/4 e center center,
+  // i valori che erano cablati qui). Sono background-image, quindi il rapporto va
+  // sul contenitore e il punto focale diventa background-position.
+  const { contenitore } = imageFrame(s.value, 'strip', { ratio: '3/4' });
   const st = {
-    position: 'relative', overflow: 'hidden', width: 'clamp(150px,22vw,240px)', aspectRatio: '3/4',
+    position: 'relative', overflow: 'hidden', width: 'clamp(150px,22vw,240px)',
+    aspectRatio: contenitore.aspectRatio || '3/4',
     borderRadius: `${rad}px ${rad}px 8px 8px`,
     background: 'rgba(255,255,255,.06)',
     backgroundImage: it.image
       ? `url(${it.image})`
       : 'repeating-linear-gradient(135deg, rgba(243,233,239,.05) 0 16px, transparent 16px 32px)',
-    backgroundSize: 'cover', backgroundPosition: 'center center',
+    backgroundSize: 'cover',
+    backgroundPosition: s.value.strip_object_position || 'center center',
   };
   if (i === 1 && off) st.marginTop = `-${off}px`;
   return st;

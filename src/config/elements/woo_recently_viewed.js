@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 import { shadowField } from './_shared.js';
+import { ratioOptions } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -98,13 +99,12 @@ export default {
 
     { type: 'separator', label: t('Layout grafico') },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4 },
-    { key: 'image_ratio', label: t('Proporzione immagine'), type: 'select', options: [
-      { value: '1-1', label: t('1:1 Quadrato') },
-      { value: '4-3', label: '4:3' },
-      { value: '3-4', label: t('3:4 Verticale') },
-      { value: '16-9', label: '16:9' },
-      { value: 'auto', label: t('Automatico') },
-    ]},
+    // Le tile WooCommerce salvano il rapporto col TRATTINO ('4-3'): `sep` lo rispetta,
+    // così i valori già nel database restano quelli. Il renderer non scrive un
+    // aspect-ratio ma un padding-top in percentuale, e la mappa che lo traduce è stata
+    // allargata di pari passo (class-woo-recently-viewed-tile.php).
+    { key: 'image_ratio', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ sep: '-' }) },
     { key: 'card_style', label: t('Stile card'), type: 'select', options: [
       { value: 'default', label: t('Default') },
       { value: 'shadow', label: t('Ombra') },

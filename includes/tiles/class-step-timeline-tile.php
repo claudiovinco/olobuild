@@ -117,7 +117,11 @@ class Olobuild_StepTimeline_Tile extends Olobuild_Tile_Base {
         $tag_size  = max( 10, min( 16, absint( $s['tag_size'] ) ) );
         $tag_color = $this->safe_color_css( $s['tag_color'] ) ?: 'var(--olo-color-text, #374151)';
 
-        $aspect_allow = [ '16/9', '5/4', '4/3', '1/1', '3/2' ];
+        // Whitelist allineata al set canonico di ratioOptions() (_imageFrame.js): un
+        // rapporto offerto dal select e assente da qui verrebbe scartato in silenzio e il
+        // mockup tornerebbe a 5/4. '5/4' non e' canonico ma e' il default storico della
+        // tile, quindi resta dentro (e resta il fallback).
+        $aspect_allow = [ '1/1', '4/3', '3/2', '16/9', '21/9', '3/4', '4/5', '9/16', '2/3', '5/4' ];
         $media_aspect = in_array( $s['media_aspect_ratio'] ?? '5/4', $aspect_allow, true ) ? ( $s['media_aspect_ratio'] ?? '5/4' ) : '5/4';
 
         $obj_pos = trim( (string) ( $s['media_object_position'] ?? 'center center' ) );

@@ -68,7 +68,7 @@ export default {
     { type: 'separator', label: t('Video') },
     { key: 'video_url', label: t('Video (MP4/WebM)'), type: 'media' },
     { key: 'video_poster', label: t('Immagine poster'), type: 'image' },
-    focalField('video_poster', { key: 'object_position', reveal: true, label: t('Posizione — punto focale video') }),
+    focalField('video_poster', { key: 'object_position', reveal: true, label: t('Punto focale video') }),
     { key: 'video_opacity', label: t('Opacità video'), type: 'range', min: 10, max: 100, step: 5 },
 
     { type: 'separator', label: t('Maschera') },

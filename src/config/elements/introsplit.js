@@ -1,5 +1,6 @@
 import { t } from '@/i18n';
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField, focalDefault } from './_shared.js';
+import { ratioOptions } from './_imageFrame.js';
 
 /**
  * Intro Split — feature split editoriale: testo (eyebrow + titolo gigante con parola-accento
@@ -159,12 +160,13 @@ export default {
     { key: 'headline_size', label: t('Dim. max titolo (px, 0 = auto)'), type: 'range', min: 0, max: 120, step: 2 },
 
     { type: 'separator', label: t('Media') },
-    { key: 'media_aspect', label: t('Proporzioni media'), type: 'select', options: [
-      { value: '4/4.4', label: '4:4.4' },
-      { value: '1/1', label: '1:1' },
-      { value: '4/5', label: '4:5' },
-      { value: '3/4', label: '3:4' },
-    ]},
+    // Le proporzioni sono quelle canoniche di _imageFrame, con due vincoli storici:
+    // il media è un DIV con background-image (nessun <img> che gli dia altezza), quindi
+    // senza aspect-ratio il riquadro collasserebbe → niente voce 'Auto'; e il 4:4.4 del
+    // blueprint originale, che è il default salvato nelle pagine pubblicate, resta
+    // selezionabile via `extra` anche se non appartiene al set canonico.
+    { key: 'media_aspect', label: t('Proporzioni media'), type: 'select',
+      options: ratioOptions({ auto: false, extra: ['4/4.4'] }) },
     { key: 'media_radius', label: t('Raggio media'), type: 'border-radius' },
     { key: 'media_radius_top', label: t('Raggio angoli superiori (arco, px — 0 = uniforme)'), type: 'range', min: 0, max: 300, step: 4 },
     { key: 'media_blob', label: t('Blob decorativo dietro il media'), type: 'toggle' },

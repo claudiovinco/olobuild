@@ -1,5 +1,6 @@
 
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { ratioOptions } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -117,12 +118,14 @@ export default {
       { value: '4', label: '4' },
     ]},
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 40, step: 2 },
-    { key: 'image_ratio', label: t('Rapporto immagine'), type: 'select', options: [
-      { value: '16/9', label: '16:9' },
-      { value: '4/3', label: '4:3' },
-      { value: '1/1', label: '1:1' },
-      { value: 'auto', label: t('Automatico') },
-    ], condition: { field: 'show_image', value: true } },
+    // Elenco canonico al posto delle quattro voci di prima (16:9, 4:3, 1:1, auto):
+    // il default resta '16/9', quindi chi non ha mai toccato il controllo non vede
+    // nulla cambiare. L'etichetta di 'auto' dice «riquadro 160px» e non «segui
+    // altezza» perché qui il ripiego e' un'altezza fissa cablata nel renderer, non
+    // l'altezza naturale della foto.
+    { key: 'image_ratio', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ autoLabel: 'Auto (riquadro 160px)' }),
+      condition: { field: 'show_image', value: true } },
 
     { type: 'separator', label: t('Stile') },
     { key: 'card_background', label: t('Sfondo card'), type: 'color' },

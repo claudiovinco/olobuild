@@ -28,7 +28,9 @@ class Olobuild_ProductGrid_Tile extends Olobuild_Tile_Base {
         'columns'         => 4,
         'gap'             => 22,
         'media_aspect'    => '3/4',
+        'media_aspect_custom' => '3/4',
         'media_bg'        => '',
+        'media_fit'       => 'cover',
         'stripe_dark'     => false,
         'hover_zoom'      => true,
         'tag_bg'          => '',
@@ -169,7 +171,22 @@ class Olobuild_ProductGrid_Tile extends Olobuild_Tile_Base {
 
         $cols = max( 1, min( 5, intval( $s['columns'] ) ) );
         $gap  = max( 0, intval( $s['gap'] ) ) . 'px';
-        $asp  = preg_replace( '/[^0-9.\/]/', '', $s['media_aspect'] ?: '3/4' ) ?: '3/4';
+        // Proporzione del media: 'custom' la fa scrivere all'utente. Quel che non è
+        // "W/H" torna al 3/4 storico — senza aspect-ratio .opg-media (tutto figli
+        // assoluti su un background) non si rimpicciolirebbe, sparirebbe.
+        $asp_raw = (string) ( $s['media_aspect'] ?: '3/4' );
+        if ( 'custom' === $asp_raw ) {
+            $asp_raw = (string) ( $s['media_aspect_custom'] ?? '' );
+        }
+        $asp = preg_replace( '/[^0-9.\/]/', '', $asp_raw );
+        if ( ! preg_match( '/^\d+(?:\.\d+)?(?:\/\d+(?:\.\d+)?)?$/', (string) $asp ) ) {
+            $asp = '3/4';
+        }
+
+        // Adattamento → background-size, perché qui la foto è uno sfondo e non un <img>.
+        // 'cover' era cablato: resta il default, così le pagine pubblicate non si muovono.
+        $fit_map = [ 'cover' => 'cover', 'contain' => 'contain', 'fill' => '100% 100%', 'none' => 'auto' ];
+        $bsize   = $fit_map[ (string) ( $s['media_fit'] ?? 'cover' ) ] ?? 'cover';
 
         $dark   = ! empty( $s['stripe_dark'] );
         $mbg    = $this->safe_color_css( $s['media_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #f2f2f4)';
@@ -264,7 +281,7 @@ class Olobuild_ProductGrid_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-<?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist (with fixed var() fallbacks) for every colour, intval()/max()/min() clamps for numbers, preg_replace() charset filter for $asp, resolve_font_family() whitelist for fonts, fixed font-stack literals, Olobuild_Tile_Base/Olobuild_CSS_Builder helpers for the kit declarations; $uid is internally generated. Column 0 + closing tag so this line emits zero bytes. ?>
+<?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist (with fixed var() fallbacks) for every colour, intval()/max()/min() clamps for numbers, preg_replace() charset filter plus a "W/H" whitelist for $asp, a fixed lookup map for $bsize, resolve_font_family() whitelist for fonts, fixed font-stack literals, Olobuild_Tile_Base/Olobuild_CSS_Builder helpers for the kit declarations; $uid is internally generated. Column 0 + closing tag so this line emits zero bytes. ?>
         <style>
             .<?php echo $uid; ?>{font-family:<?php echo $sans; ?>;<?php echo $kit_pos . $kit_decl; ?>}
             .<?php echo $uid; ?> .opg-grid{display:grid;grid-template-columns:repeat(<?php echo (int) $cols; ?>,1fr);gap:<?php echo $gap; ?>;}
@@ -286,7 +303,7 @@ class Olobuild_ProductGrid_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .opg-cardfoot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;}
             .<?php echo $uid; ?> .opg-addbtn{font-family:<?php echo $sans; ?>;font-weight:700;font-size:12px;color:<?php echo $add_col; ?>;background:<?php echo $add_bg; ?>;border:0;border-radius:999px;padding:9px 15px;cursor:pointer;transition:opacity .2s;}
             .<?php echo $uid; ?> .opg-addbtn:hover{opacity:.85;}
-            .<?php echo $uid; ?> .opg-media{display:block;aspect-ratio:<?php echo $asp; ?>;background:<?php echo $mbg; ?>;background-size:cover;background-position:<?php echo esc_attr( Olobuild_Tile_Utils::css_pos( $s, 'object_position' ) ); ?>;background-image:repeating-linear-gradient(135deg, <?php echo $stripe; ?> 0 16px, transparent 16px 32px);transition:transform .7s cubic-bezier(.2,.7,.3,1);}
+            .<?php echo $uid; ?> .opg-media{display:block;aspect-ratio:<?php echo $asp; ?>;background:<?php echo $mbg; ?>;background-size:<?php echo $bsize; ?>;background-repeat:no-repeat;background-position:<?php echo esc_attr( Olobuild_Tile_Utils::css_pos( $s, 'object_position' ) ); ?>;background-image:repeating-linear-gradient(135deg, <?php echo $stripe; ?> 0 16px, transparent 16px 32px);transition:transform .7s cubic-bezier(.2,.7,.3,1);}
             <?php if ( $zoom ) : ?>.<?php echo $uid; ?> .opg-card:hover .opg-media{transform:scale(1.05);}<?php endif; ?>
             .<?php echo $uid; ?> .opg-lbl{position:absolute;left:14px;bottom:12px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:<?php echo $lblcol; ?>;}
             .<?php echo $uid; ?> .opg-tag{position:absolute;top:14px;left:14px;background:<?php echo $tagbg; ?>;color:<?php echo $tagcol; ?>;font-weight:500;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;padding:5px 11px;}

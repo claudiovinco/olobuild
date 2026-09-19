@@ -127,7 +127,20 @@ class Olobuild_RelatedPosts_Tile extends Olobuild_Tile_Base {
         $title_color   = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #374151)';
         $text_color    = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text-faint, #9CA3AF)';
         $date_color    = $this->safe_color_css( $s['date_color'] ) ?: 'var(--olo-color-text-soft, #6B7280)';
-        $image_ratio   = in_array( $s['image_ratio'], [ '16/9', '4/3', '1/1', 'auto' ], true ) ? $s['image_ratio'] : '16/9';
+        // La cornice la costruisce l'helper condiviso: la lista di tre rapporti che
+        // stava qui scartava in silenzio tutto il resto del set canonico (3:2, 21:9,
+        // 4:5, 9:16…) ricadendo su 16/9. Il default passato resta '16/9' e con 'auto'
+        // l'helper non emette niente: sotto riprende il riquadro da 160px di sempre.
+        // La chiave vuota va normalizzata prima, perché non vuol dire «nessun
+        // ritaglio» ma «mai scelto»: il vecchio in_array() la portava su 16/9, mentre
+        // per l'helper sarebbe un rapporto non valido e cadrebbe sui 160px.
+        $ratio_saved   = trim( (string) ( $s['image_ratio'] ?? '' ) );
+        $image_frame   = Olobuild_Tile_Utils::image_frame(
+            [ 'image_ratio' => ( $ratio_saved !== '' ? $ratio_saved : '16/9' ) ],
+            'image',
+            [ 'ratio' => '16/9' ]
+        );
+        $image_box_css = $image_frame['contenitore'] !== '' ? $image_frame['contenitore'] : 'height:160px;';
         $hover_effect  = $s['hover_effect'];
         $excerpt_len   = max( 5, min( 50, absint( $s['excerpt_length'] ) ) );
 
@@ -159,7 +172,11 @@ class Olobuild_RelatedPosts_Tile extends Olobuild_Tile_Base {
             <?php while ( $query->have_posts() ) : $query->the_post(); ?>
             <a href="<?php the_permalink(); ?>" class="olo-rp-card">
                 <?php if ( ! empty( $s['show_image'] ) ) : ?>
-                <div style="<?php echo $image_ratio !== 'auto' ? 'aspect-ratio:' . esc_attr( $image_ratio ) . ';' : 'height:160px;'; ?>overflow:hidden;background:#1F2937;">
+                <?php // Lo sfondo #1F2937 e' l'unico hex cablato rimasto qui: si vede solo
+                      // dietro le card senza copertina, e passarlo a token cambierebbe il
+                      // colore sulle pagine già pubblicate. Lo lascio a chi fara' il giro
+                      // token-first, che potra' verificarne la resa. ?>
+                <div style="<?php echo esc_attr( $image_box_css ); ?>overflow:hidden;background:#1F2937;">
                     <?php if ( has_post_thumbnail() ) : ?>
                         <?php the_post_thumbnail( 'medium_large', [ 'style' => 'width:100%;height:100%;object-fit:cover;display:block;' ] ); ?>
                     <?php endif; ?>

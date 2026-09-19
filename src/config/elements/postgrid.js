@@ -1,4 +1,5 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
+import { imageFrameFields } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -37,6 +38,13 @@ export default {
     card_style: 'default',
     card_primary_bg: '',
     image_height: '200',
+    // Cornice dell'immagine in evidenza. 'auto' = nessun ritaglio: resta in vigore
+    // l'Altezza immagine (200px), che e' come ogni griglia già pubblicata rende oggi.
+    // Un default tipo '16/9' cambierebbe l'altezza di TUTTE le card esistenti.
+    image_ratio: 'auto',
+    image_ratio_custom: '16/9',
+    image_fit: 'cover',              // era cablato nel CSS della card
+    image_object_position: 'center center',
     image_radius: '0',
     card_radius: '4',
     corner_cut: false,
@@ -286,8 +294,22 @@ export default {
       condition: { field: 'card_style', value: 'primary' } },
 
     { type: 'separator', label: t('Aspetto card') },
+    // Con un rapporto scelto l'Altezza non fa più niente e sparisce. L'elenco
+    // comprende vuoto/null/undefined perché le griglie salvate PRIMA di questo campo
+    // non hanno la chiave: leggerle come "non auto" nasconderebbe l'Altezza a tutte.
     { key: 'image_height', label: t('Altezza immagine'), type: 'range', min: 100, max: 500, step: 10,
-      condition: { field: 'show_image', value: true } },
+      condition: [
+        { field: 'show_image', value: true },
+        { field: 'image_ratio', op: 'in', value: ['auto', '', null, undefined] },
+      ] },
+    // Una cornice sola per tutte le card: sono affiancate in griglia e ritagli
+    // diversi le sfalserebbero. Vale anche per l'immagine di hover.
+    ...imageFrameFields('image', {
+      separator: false,
+      ratioOpts: { custom: true },
+      focalOpts: { src: '', height: 'image_height' }, // le foto vengono dai post: pad neutro
+      condition: { field: 'show_image', value: true },
+    }),
     withHover({ key: 'image_radius', label: t('Raggio immagine'), type: 'border-radius',
       condition: { field: 'show_image', value: true } }),
     withHover({ key: 'card_radius', label: t('Raggio card'), type: 'border-radius' }),

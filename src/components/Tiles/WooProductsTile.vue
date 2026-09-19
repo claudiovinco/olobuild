@@ -86,11 +86,21 @@ const wooActive = computed(() => true);
 const cols = computed(() => Math.max(1, Math.min(6, parseInt(s.value.columns) || 4)));
 const cardCount = computed(() => Math.min(parseInt(s.value.posts_per_page) || 4, cols.value * 2));
 
+// Gemella di $ratio_map nel renderer PHP (padding-top percentuale). Il '3-4'
+// passa da '133%' a '133.33%' proprio per allinearsi al sito: qui non ci sono
+// immagini vere, solo il segnaposto della card, quindi cambia solo l'anteprima.
 const ratioMap = {
   '1-1': '100%',
   '4-3': '75%',
-  '3-4': '133%',
+  '3-2': '66.67%',
   '16-9': '56.25%',
+  '21-9': '42.86%',
+  '3-4': '133.33%',
+  '4-5': '125%',
+  '9-16': '177.78%',
+  '2-3': '150%',
+  // Sul sito 'auto' lascia l'immagine alla sua altezza: nel canvas non c'e'
+  // un'immagine da misurare, si tiene l'altezza indicativa del 4:3.
   'auto': '75%',
 };
 

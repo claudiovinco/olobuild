@@ -1,8 +1,20 @@
 
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
+ * ⚠️ QUESTA TILE VIVE IN UN ALTRO PLUGIN, E OGGI NON SI CARICA.
+ * Il PHP e il JS che la disegnano stanno in olo-space; qui c'è solo l'inspector e
+ * un mock per il canvas. Il ponte fra i due plugin però è rimasto ai nomi di classe
+ * di PRIMA della migrazione 1.4.301: `class-olo-olobuild-integration.php` esce
+ * subito su `class_exists('Olo_Tile_Manager')` (oggi la classe si chiama
+ * `Olobuild_Tile_Manager`) e ogni tile sala fa `extends \Olo_Tile_Base`
+ * (oggi `Olobuild_Tile_Base`). Non esiste nessun class_alias in mezzo, né di qua
+ * né di là. Finché non si sistema quello, nessuna tile olo_room_* viene registrata:
+ * toccando questo file NON si rimette in piedi la tile, e il posto dove guardare
+ * quando «non compare» è l'integrazione, non l'inspector.
+ *
  * Tile Room Grid — split CONTENUTO/STILE (regola universale Olobuild).
  *   fields[]      → filtri attivi, configurazione mappa (layout/zoom/auto-fit), paginazione,
  *                   toggle contenuto card (image/gallery/video/excerpt/equipment/price)
@@ -352,21 +364,31 @@ export default {
     // Immagine
     // ═══════════════════════════════════════════
     { type: 'separator', label: t('Immagine') },
+    // `empty` e non `= ''`: l'inspector valuta le condizioni sui settings GREZZI, e una
+    // card salvata prima che esistesse `image_aspect_ratio` non ha affatto la chiave.
+    // Con l'uguaglianza `undefined` non combacia con '' e l'altezza — l'unica cosa che
+    // quella card usa davvero — sparirebbe dall'inspector per sempre.
     { key: 'image_height', label: t('Altezza immagine'), type: 'range', min: 80, max: 350, step: 10,
-      condition: { field: 'image_aspect_ratio', value: '' } },
-    { key: 'image_aspect_ratio', label: t('Proporzioni'), type: 'select', options: [
-      { value: '', label: t('Altezza fissa (px)') },
-      { value: '1/1', label: t('1:1 Quadrato') },
-      { value: '4/3', label: t('4:3 Classico') },
-      { value: '3/2', label: t('3:2 Foto') },
-      { value: '16/9', label: t('16:9 Panoramico') },
-      { value: '2/1', label: t('2:1 Ultra-wide') },
-    ]},
-    { key: 'image_object_fit', label: t('Adattamento immagine'), type: 'select', options: [
-      { value: 'cover', label: t('Riempi (cover)') },
-      { value: 'contain', label: t('Adatta (contain)') },
-      { value: 'fill', label: t('Distorci (fill)') },
-    ]},
+      condition: { field: 'image_aspect_ratio', op: 'empty' } },
+    // La voce automatica qui NON vale 'auto' ma la STRINGA VUOTA, ed è il default:
+    // il renderer (olo-space, room-filters.js) cade su `height:<image_height>px`
+    // solo quando il rapporto è vuoto, quindi cambiarne il valore spegnerebbe
+    // l'altezza fissa su ogni card già pubblicata. '2/1' resta perché era l'unica
+    // voce fuori dal set canonico che questa tile offriva.
+    { key: 'image_aspect_ratio', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ autoValue: '', autoLabel: 'Altezza fissa (px)', extra: ['2/1'] }) },
+    { key: 'image_object_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
+    // ⚠️ QUI MANCA IL «PUNTO FOCALE», ED È VOLUTO — non è una dimenticanza.
+    // Questa tile non ha un renderer in olobuild: la card la disegna olo-space, in
+    // `assets/js/frontend/room-filters.js` (buildMediaHtml), con la configurazione che
+    // gli passa `includes/tiles/class-olo-room-grid-tile.php`. Lì arrivano SOLO
+    // `imageAspectRatio` e `imageObjectFit`, e lo stile dell'<img> è letteralmente
+    // 'object-fit:' + objectFit: nessun object-position, da nessuna parte.
+    // Aggiungere `focalField('image', …)` adesso vorrebbe dire mettere nell'inspector
+    // un controllo che non arriva a nessun CSS. Per accenderlo servono due righe in
+    // QUELL'ALTRO plugin (la chiave `imageObjectPosition` nel config + l'append a
+    // imgStyle); finché non ci sono, la cornice di questa tile resta a due pezzi su tre.
+    // (E c'è un antefatto più grosso: vedi la nota in testa al file.)
     withHover({ key: 'image_radius', label: t('Raggio immagine'), type: 'border-radius' }),
     { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
       { value: 'none', label: t('Nessuno') },

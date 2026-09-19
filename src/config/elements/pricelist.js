@@ -167,7 +167,7 @@ export default {
     // Punto focale GLOBALE: le immagini sono per-item ma il frame è un quadrato 1:1 fisso
     // (dimensione unica image_size). Nessuna chiave tile-level per src/fit/ratio → contextKeys
     // vuoto: il pad resta neutro (cover) senza far trapelare l'immagine di una singola voce.
-    { key: 'image_object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+    { key: 'image_object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
       contextKeys: {},
       condition: { field: 'show_image', value: true } },
 

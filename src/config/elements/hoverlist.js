@@ -1,5 +1,6 @@
 import { t } from '@/i18n';
 import { withHover, focalField } from './_shared.js';
+import { ratioOptions } from './_imageFrame.js';
 
 /**
  * Hover List — lista a righe con pastiglia colore (swatch), nome e sotto-etichetta,
@@ -109,14 +110,18 @@ export default {
       ]},
     { key: 'peek_width', label: t('Larghezza anteprima'), type: 'range', min: 100, max: 320, step: 10,
       condition: { field: 'peek', value: true } },
+    // Elenco canonico. Niente voce automatica: il peek è uno <span> vuoto con la foto
+    // messa come background-image, quindi senza `aspect-ratio` il riquadro avrebbe
+    // altezza zero e l'anteprima sparirebbe. Il 16:11 non sta nel set canonico ma era
+    // una delle quattro voci offerte finora: resta selezionabile via `extra` per chi
+    // l'ha già salvato.
     { key: 'peek_ratio', label: t('Proporzioni anteprima'), type: 'select',
-      condition: { field: 'peek', value: true }, options: [
-        { value: '4/5', label: '4:5' },
-        { value: '1/1', label: '1:1' },
-        { value: '3/4', label: '3:4' },
-        { value: '16/11', label: '16:11' },
-      ]},
-    focalField('image', { key: 'object_position', src: '', reveal: true, label: t('Posizione — punto focale immagini') }),
+      condition: { field: 'peek', value: true },
+      options: ratioOptions({ auto: false, extra: ['16/11'] }) },
+    // Il focale e' UNO per tutta la lista (src:'' → pad neutro): le anteprime devono
+    // essere inquadrate allo stesso modo, altrimenti la lista "balla" al passaggio.
+    focalField('image', { key: 'object_position', src: '', reveal: true,
+      ratio: 'peek_ratio', label: t('Punto focale immagini') }),
   ],
 
   // ═══ STILE ════════════════════════════════════════════════════

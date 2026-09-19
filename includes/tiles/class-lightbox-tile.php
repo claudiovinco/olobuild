@@ -32,8 +32,40 @@ class Olobuild_Lightbox_Tile extends Olobuild_Tile_Base {
         $obj_pos = trim( (string) ( $settings['object_position'] ?? 'center center' ) );
         if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
 
-        $ratio_map = [ '1:1' => '100%', '4:3' => '75%', '16:9' => '56.25%', 'auto' => '' ];
+        // La miniatura si ritaglia col padding-bottom percentuale (tecnica storica di
+        // questa tile: NON aspect-ratio, cambiarla sposterebbe le gallerie pubblicate).
+        // La tabella e' la traduzione del rapporto in percentuale ed e' l'UNICO posto
+        // che decide quali proporzioni la tile sa davvero rendere: va tenuta allineata
+        // all'elenco del select (ratioOptions sep:':'), altrimenti una voce nuova
+        // cadrebbe nel fallback '100%' e ritaglierebbe quadrato senza dirlo.
+        $ratio_map = [
+            '1:1'  => '100%',
+            '4:3'  => '75%',
+            '3:2'  => '66.67%',
+            '16:9' => '56.25%',
+            '21:9' => '42.86%',
+            '3:4'  => '133.33%',
+            '4:5'  => '125%',
+            '9:16' => '177.78%',
+            '2:3'  => '150%',
+            'auto' => '',
+        ];
         $padding = $ratio_map[ $ratio ] ?? '100%';
+
+        // Adattamento: campo nuovo, default 'cover' = l'hardcode di prima → no-op.
+        // Si emette in TUTTI E DUE i rami, anche in 'auto' dove finora non c'era
+        // alcun object-fit. Non e' una svista: nel ramo 'auto' l'<img> e'
+        // `width:100%` senza altezza, quindi il riquadro ha esattamente la forma
+        // della foto e 'cover' disegna gli stessi pixel dell'iniziale 'fill' →
+        // le gallerie pubblicate non si muovono. In compenso 'none' e 'scale-down'
+        // li' fanno un lavoro vero (foto a dimensione naturale, ritagliata dal
+        // riquadro): senza questa riga sarebbero due voci del menu senza effetto.
+        // Col 'fill' l'immagine e' deformata per riempire e il punto focale non
+        // sposterebbe nulla: non lo si scrive, come fa image_frame().
+        $fit = (string) ( $settings['thumb_fit'] ?? 'cover' );
+        if ( ! in_array( $fit, [ 'cover', 'contain', 'fill', 'none', 'scale-down' ], true ) ) { $fit = 'cover'; }
+        $fit_css = 'object-fit:' . $fit . ';';
+        if ( $fit !== 'fill' ) { $fit_css .= 'object-position:' . esc_attr( $obj_pos ) . ';'; }
 
         $preset_id = isset( $settings['preset'] ) ? sanitize_key( $settings['preset'] ) : 'custom';
         $html = '<div class="olo-lightbox-grid ' . esc_attr( $uid ) . ' olo-lb-preset-' . esc_attr( $preset_id ) . '" uk-lightbox="animation: ' . esc_attr( $anim ) . '"'
@@ -64,7 +96,7 @@ class Olobuild_Lightbox_Tile extends Olobuild_Tile_Base {
                 $html .= '<div style="padding-bottom:' . $padding . ';position:relative">';
                 if ( $url || $src ) {
                     $html .= '<img src="' . $src . '" alt="' . $title . '" loading="lazy" decoding="async"'
-                           . ' style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:' . esc_attr( $obj_pos ) . '" />';
+                           . ' style="position:absolute;inset:0;width:100%;height:100%;' . $fit_css . '" />';
                 } else {
                     // Placeholder SVG inline (icona immagine grigia su sfondo neutro)
                     $html .= '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#9CA3AF">'
@@ -74,8 +106,11 @@ class Olobuild_Lightbox_Tile extends Olobuild_Tile_Base {
                 $html .= '</div>';
             } else {
                 if ( $url || $src ) {
+                    // Ramo 'auto': niente riquadro percentuale, l'immagine tiene la
+                    // sua altezza. $fit_css porta object-fit (+ object-position, che
+                    // qui c'era già) — vedi la nota sopra sul perché non muove nulla.
                     $html .= '<img src="' . $src . '" alt="' . $title . '" loading="lazy" decoding="async"'
-                           . ' style="width:100%;display:block;object-position:' . esc_attr( $obj_pos ) . '" />';
+                           . ' style="width:100%;display:block;' . $fit_css . '" />';
                 } else {
                     $html .= '<div style="aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;color:#9CA3AF">'
                            . '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>'

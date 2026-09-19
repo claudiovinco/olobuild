@@ -77,6 +77,7 @@
 import { t } from '@/i18n';
 import { computed, ref } from 'vue';
 import { radiusToCss } from '@/composables/useRadius';
+import { imageFrame } from '@/composables/useImageFrame';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -104,6 +105,10 @@ const defaults = {
   caption_bg: 'rgba(0,0,0,0.6)',
   object_fit: 'cover',
   object_position: 'center center',
+  // 16/10 era cablato qui sotto in tre punti: e' la resa storica del ramo
+  // «altezza automatica» e resta il default della chiave.
+  aspect_ratio: '16/10',
+  aspect_ratio_custom: '16/10',
   mobile_slides: '1',
 };
 
@@ -185,6 +190,13 @@ const slideInnerStyle = computed(() => ({
   color: 'inherit',
 }));
 
+/*
+ * Rapporto del ramo «altezza automatica», gemello del PHP. Lo usano tutte e tre le
+ * facce della slide — foto, placeholder e badge widget — perché altrimenti in
+ * canvas le slide senza immagine si disallineerebbero da quelle con immagine.
+ */
+const slideRatio = computed(() => imageFrame(s.value, 'aspect', { ratio: '16/10' }).contenitore.aspectRatio || '16/10');
+
 const imgStyle = computed(() => {
   const st = {
     width: '100%',
@@ -197,7 +209,7 @@ const imgStyle = computed(() => {
     st.height = (parseInt(s.value.fixed_height) || 300) + 'px';
   } else {
     st.height = 'auto';
-    st.aspectRatio = '16/10';
+    st.aspectRatio = slideRatio.value;
   }
   return st;
 });
@@ -216,7 +228,7 @@ const placeholderStyle = computed(() => {
   if (s.value.slide_height === 'fixed') {
     st.height = (parseInt(s.value.fixed_height) || 300) + 'px';
   } else {
-    st.aspectRatio = '16/10';
+    st.aspectRatio = slideRatio.value;
   }
   return st;
 });
@@ -238,7 +250,7 @@ const widgetBadgeStyle = computed(() => {
   if (s.value.slide_height === 'fixed') {
     st.height = (parseInt(s.value.fixed_height) || 300) + 'px';
   } else {
-    st.aspectRatio = '16/10';
+    st.aspectRatio = slideRatio.value;
   }
   return st;
 });

@@ -20,6 +20,10 @@ class Olobuild_Slideshow_Tile extends Olobuild_Tile_Base {
         'show_arrows'    => true,
         'show_dots'      => true,
         'slide_height'   => '400',
+        // Cornice tile-level: 'auto' = nessun rapporto, comanda slide_height (resa
+        // storica); 'cover' = quel che uk-cover applica già da sé.
+        'aspect_ratio'   => 'auto',
+        'object_fit'     => 'cover',
         'object_position' => 'center center',
         'overlay_color'  => 'var(--olo-color-dark, #000000)',
         'text_color'     => '#FFFFFF',
@@ -91,12 +95,45 @@ class Olobuild_Slideshow_Tile extends Olobuild_Tile_Base {
         if ( $obj_pos === '' ) {
             $obj_pos = 'center center';
         }
-        $img_pos_attr = 'uk-cover style="object-position:' . esc_attr( $obj_pos ) . ';"';
+
+        // Proporzioni tile-level. 'auto' (default) = si tiene l'altezza fissa in px,
+        // cioè la resa di sempre. Con un rapporto vero l'altezza in px va TOLTA: un'altezza
+        // definita vince sull'aspect-ratio e il rapporto non si vedrebbe.
+        // Il rapporto si passa a UIkit nella sua sintassi 'W:H' (i DUE PUNTI, non la barra
+        // del valore salvato) perché è lui a riscriverlo sulla lista a init
+        // (UIkit 3.21, Slideshow.watch.list → aspect-ratio + width:100% inline).
+        //
+        // Ma il rapporto lo scriviamo ANCHE noi, in CSS, subito nell'HTML. Le slide sono in
+        // position:absolute per CSS UIkit (.uk-slideshow-items>*{top:0;left:0;right:0;bottom:0}):
+        // senza un'altezza propria la lista è alta ZERO finché UIkit non è partito — salto di
+        // layout a ogni caricamento, e slideshow invisibile per sempre se uikit.js non arriva
+        // (FPC che serve l'HTML col nome vecchio dell'asset, subset 404: già successo su questi
+        // siti). UIkit poi riscrive lo STESSO identico valore inline, quindi non c'è conflitto.
+        $ratio    = trim( (string) ( $s['aspect_ratio'] ?? 'auto' ) );
+        $has_ratio = ( 'auto' !== $ratio && '' !== $ratio && preg_match( '#^\d+(?:\.\d+)?\s*/\s*\d+(?:\.\d+)?$#', $ratio ) );
+        $ratio_css = $has_ratio ? str_replace( ' ', '', $ratio ) : '';
+        $uk_ratio  = $has_ratio ? str_replace( '/', ':', $ratio_css ) : '';
+        // Il rapporto va SOLO sulla lista, non sulla radice: la radice si prende l'altezza
+        // dalla lista e può così ospitare sotto i pallini di navigazione (.uk-slideshow-nav
+        // è un dotnav in flusso normale, non in posizione assoluta). Forzandole un
+        // aspect-ratio i pallini finirebbero a cavallo del contenuto successivo.
+        $h_style    = $has_ratio ? '' : 'height:' . (int) $h . 'px;';
+        // Lista: rapporto + width:100%, cioè lettera per lettera quel che UIkit scriverà qui
+        // all'init. Coincidendo i valori, all'init non si muove niente.
+        $list_style = $has_ratio ? 'aspect-ratio:' . $ratio_css . ';width:100%;' : 'height:' . (int) $h . 'px;';
+
+        // Adattamento: inline sull'<img>, così scavalca l'object-fit:cover che UIkit
+        // mette su [uk-cover] (regola in :where(), specificità zero).
+        $fit = (string) ( $s['object_fit'] ?? 'cover' );
+        if ( ! in_array( $fit, [ 'cover', 'contain', 'fill', 'none', 'scale-down' ], true ) ) {
+            $fit = 'cover';
+        }
+        $img_pos_attr = 'uk-cover style="object-fit:' . esc_attr( $fit ) . ';object-position:' . esc_attr( $obj_pos ) . ';"';
 
         ob_start();
         ?>
-        <div id="<?php echo esc_attr( $id ); ?>" class="olo-slideshow olo-ss-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" uk-slideshow="autoplay: <?php echo esc_attr( $s['autoplay'] ? 'true' : 'false' ); ?>; autoplay-interval: <?php echo (int) $speed; ?>; animation: <?php echo esc_attr( $transition ); ?>" style="height:<?php echo (int) $h; ?>px;">
-            <div class="uk-slideshow-items" style="height:<?php echo (int) $h; ?>px;">
+        <div id="<?php echo esc_attr( $id ); ?>" class="olo-slideshow olo-ss-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" uk-slideshow="autoplay: <?php echo esc_attr( $s['autoplay'] ? 'true' : 'false' ); ?>; autoplay-interval: <?php echo (int) $speed; ?>; animation: <?php echo esc_attr( $transition ); ?><?php echo $uk_ratio ? '; ratio: ' . esc_attr( $uk_ratio ) : ''; ?>" style="<?php echo esc_attr( $h_style ); ?>">
+            <div class="uk-slideshow-items" style="<?php echo esc_attr( $list_style ); ?>">
                 <?php foreach ( $slides as $slide ) : ?>
                     <div>
                         <?php if ( ! empty( $slide['image'] ) ) : ?>

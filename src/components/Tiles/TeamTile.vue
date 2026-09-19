@@ -4,7 +4,7 @@
     <div :style="photoWrapStyle">
       <div :style="photoOuterStyle">
         <div :style="photoInnerStyle">
-          <img v-if="s.photo" :src="s.photo" :alt="s.name" style="width:100%;height:100%;object-fit:cover;display:block" />
+          <img v-if="s.photo" :src="s.photo" :alt="s.name" :style="photoImgStyle" />
           <div v-else class="olo-team-photo-ph" :style="photoPlaceholderStyle">
             <span :style="{ width: (photoSize * 0.4) + 'px', height: (photoSize * 0.4) + 'px', display: 'inline-flex' }" v-html="avatarPlaceholderSvg"></span>
           </div>
@@ -46,6 +46,7 @@ const s = computed(() => ({
   bio: 'Appassionata di creare esperienze utente eccellenti.',
   link_text: 'Profilo', link_url: '',
   photo_size: '120', photo_shape: 'circle', photo_radius: '12',
+  photo_ratio: '1/1', photo_fit: 'cover', photo_object_position: 'center center',
   photo_border_width: '3', photo_border_color: '',
   photo_shadow: 'md', photo_gap: '12',
   info_bg_color: '', info_text_color: '', info_padding: '24',
@@ -60,6 +61,25 @@ const s = computed(() => ({
 }));
 
 const photoSize = computed(() => parseInt(s.value.photo_size) || 120);
+// Le stesse due whitelist del renderer PHP (class-team-tile.php). La LARGHEZZA resta
+// photo_size: da qui esce solo l'altezza, e con '1/1' (il default) torna uguale alla
+// larghezza, cioè il riquadro quadrato che la tile ha sempre disegnato.
+const TEAM_RATIO_OK = ['1/1', '4/3', '3/2', '16/9', '21/9', '3/4', '4/5', '9/16', '2/3'];
+const TEAM_FIT_OK = ['cover', 'contain', 'fill', 'none', 'scale-down'];
+const photoHeight = computed(() => {
+  const r = TEAM_RATIO_OK.includes(s.value.photo_ratio) ? s.value.photo_ratio : '1/1';
+  if (r === '1/1') return photoSize.value;
+  const [rw, rh] = r.split('/').map(Number);
+  if (!(rw > 0) || !(rh > 0)) return photoSize.value;
+  return Math.max(1, Math.round(photoSize.value * rh / rw));
+});
+const photoImgStyle = computed(() => {
+  const fit = TEAM_FIT_OK.includes(s.value.photo_fit) ? s.value.photo_fit : 'cover';
+  const st = { width: '100%', height: '100%', objectFit: fit, display: 'block' };
+  // Con 'fill' la foto e' deformata per riempire: il punto focale non sposterebbe nulla.
+  if (fit !== 'fill') st.objectPosition = s.value.photo_object_position || 'center center';
+  return st;
+});
 // Placeholder foto = icona SVG "user" (no più emoji)
 const avatarPlaceholderSvg = computed(() => iconsSvg['user'] || iconsSvg['users'] || '');
 const photoGap = computed(() => {
@@ -95,7 +115,7 @@ const photoOuterStyle = computed(() => {
   const bw = photoBw.value;
   const outerSize = photoSize.value + bw * 2;
   const st = {
-    width: outerSize + 'px', height: outerSize + 'px', flexShrink: 0,
+    width: outerSize + 'px', height: (photoHeight.value + bw * 2) + 'px', flexShrink: 0,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
   };
   if (shape === 'hexagon') {
@@ -115,7 +135,7 @@ const photoOuterStyle = computed(() => {
 const photoInnerStyle = computed(() => {
   const shape = s.value.photo_shape;
   const st = {
-    width: photoSize.value + 'px', height: photoSize.value + 'px',
+    width: photoSize.value + 'px', height: photoHeight.value + 'px',
     overflow: 'hidden', flexShrink: 0,
   };
   if (shape === 'hexagon') st.clipPath = hexClip;

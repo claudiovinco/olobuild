@@ -36,6 +36,7 @@ import { computed } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import { rv } from '@/composables/useResponsiveValue';
 import { SHADOW } from '@/composables/oloTileDefaults';
+import { imageFrame } from '@/composables/useImageFrame';
 import { t } from '@/i18n';
 
 const props = defineProps({
@@ -57,6 +58,8 @@ const s = computed(() => ({
   image_position: 'top',
   image_width: '40',
   image_height: 'auto',
+  aspect_ratio: 'auto',
+  aspect_ratio_custom: '16/9',
   image_fit: 'cover',
   object_position: 'center center',
   image_radius: '0',
@@ -162,7 +165,12 @@ const imgStyle = computed(() => {
     objectFit: s.value.image_fit || 'cover',
     objectPosition: s.value.object_position || 'center center',
   };
-  if (h && h !== 'auto') {
+  // Proporzioni: stesse chiavi e stessa whitelist del gemello PHP. Se c'è una
+  // proporzione comanda lei, perché un'altezza esplicita vincerebbe sull'aspect-ratio.
+  const { contenitore } = imageFrame(s.value, 'aspect', { ratio: 'auto' });
+  if (contenitore.aspectRatio) {
+    style.aspectRatio = contenitore.aspectRatio;
+  } else if (h && h !== 'auto') {
     style.height = /^\d+$/.test(h) ? h + 'px' : h;
   }
   return style;

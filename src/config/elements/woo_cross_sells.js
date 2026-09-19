@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 import { shadowField } from './_shared.js';
+import { ratioOptions } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -27,7 +28,10 @@ export default {
     show_add_to_cart: true,
     show_badge: true,
     limit: '4',
+    // ⚠️ Il separatore è il TRATTINO: è il formato che le cinque tile WooCommerce
+    // salvano da sempre ('4-3', non '4/3'). Non si converte, si continua a scriverlo.
     image_ratio: '4-3',
+    image_ratio_custom: '4/3',
     gap: '24',
     hover_effect: 'zoom',
     heading_tag: 'h3',
@@ -99,13 +103,14 @@ export default {
 
     { type: 'separator', label: t('Layout grafico') },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4 },
-    { key: 'image_ratio', label: t('Proporzione immagine'), type: 'select', options: [
-      { value: '1-1', label: t('1:1 Quadrato') },
-      { value: '4-3', label: '4:3' },
-      { value: '3-4', label: t('3:4 Verticale') },
-      { value: '16-9', label: '16:9' },
-      { value: 'auto', label: t('Automatico') },
-    ]},
+    // Elenco canonico scritto col trattino, il formato storico di questa tile. Qui
+    // 'auto' non segue un'altezza (non c'è un campo altezza): lascia all'immagine la
+    // sua, quindi il nome della voce lo dice.
+    { key: 'image_ratio', label: t('Proporzioni immagine'), type: 'select',
+      options: ratioOptions({ sep: '-', custom: true, autoLabel: 'Auto (altezza naturale)' }) },
+    { key: 'image_ratio_custom', label: t('Proporzioni personalizzate'), type: 'text',
+      placeholder: t('es. 5/4'),
+      condition: { field: 'image_ratio', op: 'eq', value: 'custom' } },
     { key: 'card_style', label: t('Stile card'), type: 'select', options: [
       { value: 'default', label: t('Default') },
       { value: 'shadow', label: t('Ombra') },

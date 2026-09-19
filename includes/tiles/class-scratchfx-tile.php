@@ -33,6 +33,9 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
     protected $defaults = [
         // Contenuto sotto la copertura
         'image'           => '',
+        // Prima l'adattamento era scritto dentro la regola .olo-scratch-img
+        // ('object-fit: cover'): il campo nasce con quel valore.
+        'object_fit'      => 'cover',
         'object_position' => 'center center',
         'prize_eyebrow' => 'Edizione limitata',
         'prize_title'   => 'Gusto a sorpresa',
@@ -91,9 +94,23 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
 
         // ── Contenuto premio ──
         $image    = esc_url( $s['image'] );
+        $fit_ok   = [ 'cover', 'contain', 'fill', 'none', 'scale-down' ];
+        $obj_fit  = (string) ( $s['object_fit'] ?? 'cover' );
+        if ( ! in_array( $obj_fit, $fit_ok, true ) ) {
+            $obj_fit = 'cover';
+        }
         $obj_pos  = trim( (string) ( $s['object_position'] ?? 'center center' ) );
         if ( $obj_pos === '' ) {
             $obj_pos = 'center center';
+        }
+        // Con 'fill' l'immagine e' deformata per riempire: il focale non sposta nulla.
+        // Il secondo controllo e' la stessa difesa breakout di Olobuild_Tile_Utils, già
+        // applicata in marquee e team: qui il valore finisce dentro un <style>, dove
+        // esc_attr() non neutralizza ';' '{' '}' e una regola potrebbe essere chiusa a
+        // meta'. Il picker grafico non produce mai quei caratteri; un template importato
+        // via REST si'. Stringa vuota = dichiarazione non scritta.
+        if ( $obj_fit === 'fill' || preg_match( '/[;{}()]/', $obj_pos ) ) {
+            $obj_pos = '';
         }
         $eyebrow  = esc_html( wp_strip_all_tags( $s['prize_eyebrow'] ) );
         $title    = esc_html( wp_strip_all_tags( $s['prize_title'] ) );
@@ -122,7 +139,10 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
 
         // ── Layout ──
         $height_mode = $s['height_mode'] === 'fixed' ? 'fixed' : 'aspect';
-        $aspect_ok   = [ '16/10', '16/9', '4/3', '3/2', '1/1', '2/1' ];
+        // Whitelist ALLARGATA all'elenco canonico delle proporzioni. I primi sei sono
+        // quelli storici di questa tile ('16/10' e' anche il default) e restano validi
+        // per i template già salvati; gli altri sono le voci nuove del select.
+        $aspect_ok   = [ '16/10', '16/9', '4/3', '3/2', '1/1', '2/1', '21/9', '3/4', '4/5', '9/16', '2/3' ];
         $aspect      = in_array( $s['aspect'], $aspect_ok, true ) ? $s['aspect'] : '16/10';
         $height      = max( 80, intval( $s['height'] ) );
         $max_width   = max( 160, intval( $s['max_width'] ) );
@@ -197,8 +217,9 @@ class Olobuild_Scratchfx_Tile extends Olobuild_Tile_Base {
                 z-index: 0;
                 width: 100%;
                 height: 100%;
-                object-fit: cover;
-                object-position: <?php echo esc_attr( $obj_pos ); ?>;
+                object-fit: <?php echo esc_attr( $obj_fit ); ?>;
+                <?php // $obj_pos e' già vuoto con 'fill' o se conteneva caratteri da breakout. ?>
+                <?php if ( $obj_pos ) : ?>object-position: <?php echo esc_attr( $obj_pos ); ?>;<?php endif; ?>
                 display: block;
             }
             <?php endif; ?>

@@ -14,6 +14,10 @@ class Olobuild_Hotspot_Tile extends Olobuild_Tile_Base {
         'preset' => 'custom',
         'image'           => '',
         'image_height'    => '400',
+        // 'auto' = resa storica: il riquadro tiene l'altezza fissa di image_height.
+        'aspect_ratio'        => 'auto',
+        'aspect_ratio_custom' => '16/9',
+        'object_fit'          => 'cover',
         'object_position' => 'center center',
         'markers'         => [
             [ 'pos_x' => '30', 'pos_y' => '40', 'title' => 'Punto di interesse', 'description' => 'Descrizione del primo hotspot.', 'icon' => 'pin', 'tooltip_position' => 'top' ],
@@ -70,24 +74,41 @@ class Olobuild_Hotspot_Tile extends Olobuild_Tile_Base {
         if ( $obj_pos === '' ) {
             $obj_pos = 'center center';
         }
+        // Cornice: proporzione + adattamento. Le chiavi sono quelle piatte del tile
+        // Immagine (aspect_ratio/object_fit) perché `object_position` qui è già piatta:
+        // dentro una stessa tile si segue la convenzione che c'è.
+        $aspect = trim( (string) ( $s['aspect_ratio'] ?? 'auto' ) );
+        if ( $aspect === 'custom' ) {
+            $aspect = trim( (string) ( $s['aspect_ratio_custom'] ?? '' ) );
+        }
+        $aspect = str_replace( ':', '/', $aspect );
+        $has_aspect = ( $aspect !== '' && $aspect !== 'auto'
+            && preg_match( '/^\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?$/', $aspect ) );
+        // Con un rapporto scelto l'altezza DEVE cedere il passo, altrimenti sono due
+        // dimensioni definite e l'aspect-ratio non ha alcun effetto.
+        $frame_css = $has_aspect
+            ? 'aspect-ratio: ' . str_replace( ' ', '', $aspect ) . '; height: auto;'
+            : 'height: ' . $img_height . 'px;';
+        $valid_fit = [ 'cover', 'contain', 'fill', 'none', 'scale-down' ];
+        $obj_fit   = in_array( $s['object_fit'] ?? 'cover', $valid_fit, true ) ? ( $s['object_fit'] ?? 'cover' ) : 'cover';
 
         $pin_svg = '<svg width="' . $marker_size . '" height="' . $marker_size . '" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>';
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, intval()/max()/min()/round() clamps for every size, build_border_radius_css() (integer-forced) with a fixed fallback, and the internally generated esc_attr()'d $uid. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist for every colour, intval()/max()/min()/round() clamps for every size, build_border_radius_css() (integer-forced) with a fixed fallback, $frame_css built from a strict "W/H" regex whitelist (or an intval()'d height), $obj_fit from an in_array() whitelist, and the internally generated esc_attr()'d $uid. ?>
         <style>
             .<?php echo esc_attr( $uid ); ?> {
                 position: relative;
                 width: 100%;
-                height: <?php echo $img_height; ?>px;
+                <?php echo $frame_css; ?>
                 overflow: hidden;
                 border-radius: <?php echo $this->build_border_radius_css( $s['border_radius'] ?? '0' ) ?: '8px'; ?>;
             }
             .<?php echo esc_attr( $uid ); ?> > img {
                 width: 100%;
                 height: 100%;
-                object-fit: cover;
+                object-fit: <?php echo esc_attr( $obj_fit ); ?>;
                 object-position: <?php echo esc_attr( $obj_pos ); ?>;
                 display: block;
             }

@@ -13,6 +13,9 @@ class Olobuild_LinkInBio_Tile extends Olobuild_Tile_Base {
     protected $defaults = [
         'items'              => [],
         'profile_image'      => '',
+        // 'center center' = l'object-position iniziale del browser: il punto focale
+        // nasce senza spostare di un pixel gli avatar già pubblicati.
+        'profile_image_object_position' => 'center center',
         'profile_name'       => 'Il tuo nome',
         'profile_bio'        => 'Una breve descrizione qui',
         'max_width'          => '420',
@@ -74,6 +77,11 @@ class Olobuild_LinkInBio_Tile extends Olobuild_Tile_Base {
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['link_border_radius_hover'] ?? null );
         $padding = Olobuild_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['link_padding'] ?? 14, 14 );
         $text_align   = in_array( $s['text_align'], [ 'left', 'center', 'right' ], true ) ? $s['text_align'] : 'center';
+        // Punto focale dell'avatar: la cornice è un cerchio fisso 80x80 e il fit resta
+        // 'cover', quindi l'unica cosa che l'utente può davvero decidere è QUALE parte
+        // della foto ci finisce dentro. Default = 'center center' (= il valore iniziale
+        // del browser) → nessun avatar già pubblicato si sposta.
+        $avatar_pos   = Olobuild_Tile_Utils::focal_pos( $s, 'profile_image' );
 
         $link_color      = $this->safe_color_css( $s['link_color'] )      ?: 'var(--olo-color-primary, #e1474f)';
         $link_bg         = $this->safe_color_css( $s['link_bg'] )         ?: 'var(--olo-color-surface, #FFFFFF)';
@@ -94,11 +102,11 @@ class Olobuild_LinkInBio_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colours via the safe_color_css() whitelist, gradient via a strict preg_replace() character whitelist, absint()/min()/max() clamps for sizes, in_array() whitelist for alignment, Olobuild_Tile_Utils border_radius()/radius_force_css()/spacing_css() helpers; $uid is internally generated. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colours via the safe_color_css() whitelist, gradient via a strict preg_replace() character whitelist, absint()/min()/max() clamps for sizes, in_array() whitelist for alignment, Olobuild_Tile_Utils border_radius()/radius_force_css()/spacing_css()/focal_pos() helpers plus esc_attr() on the focal position; $uid is internally generated. ?>
         <style>
             #<?php echo $uid; ?> { background: <?php echo $bg_style; ?>; padding: 32px 16px; display: flex; justify-content: center; }
             #<?php echo $uid; ?> .olo-lib-inner { width: 100%; max-width: <?php echo $max_width; ?>px; text-align: <?php echo $text_align; ?>; }
-            #<?php echo $uid; ?> .olo-lib-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; <?php echo $text_align === 'center' ? 'margin: 0 auto 12px;' : 'margin: 0 0 12px;'; ?> display: block; }
+            #<?php echo $uid; ?> .olo-lib-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; object-position: <?php echo esc_attr( $avatar_pos ); ?>; <?php echo $text_align === 'center' ? 'margin: 0 auto 12px;' : 'margin: 0 0 12px;'; ?> display: block; }
             #<?php echo $uid; ?> .olo-lib-avatar-placeholder { width: 80px; height: 80px; border-radius: 50%; background: var(--olo-color-surface-alt, #F3F4F6); color: var(--olo-color-text-faint, #9CA3AF); <?php echo $text_align === 'center' ? 'margin: 0 auto 12px;' : 'margin: 0 0 12px;'; ?> display: flex; align-items: center; justify-content: center; }
             #<?php echo $uid; ?> .olo-lib-avatar-placeholder svg { width: 38px; height: 38px; fill: currentColor; stroke: currentColor; }
             #<?php echo $uid; ?> .olo-lib-name { font-weight: 700; font-size: 1.2em; color: <?php echo $name_color; ?>; margin: 0 0 4px; }

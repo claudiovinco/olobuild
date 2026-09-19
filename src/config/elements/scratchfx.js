@@ -1,4 +1,5 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -25,6 +26,9 @@ export default {
   defaults: {
     // ── Contenuto sotto la copertura ──
     image: '',
+    // L'adattamento era cablato a 'cover' nella regola .olo-scratch-img (PHP :200):
+    // il campo nasce con lo stesso valore, nessuna pagina pubblicata si sposta.
+    object_fit: 'cover',
     object_position: 'center center',
     prize_eyebrow: t('Edizione limitata'),
     prize_title: t('Gusto a sorpresa'),
@@ -72,9 +76,22 @@ export default {
     { type: 'separator', label: t('Contenuto sotto la copertura') },
     { key: 'image', label: t('Immagine premio'), type: 'image',
       description: t('Mostrata sotto la pellicola da grattare. Opzionale: puoi usare solo testo.') },
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position',
-      contextKeys: { src: 'image', ratio: 'aspect' },
+    { key: 'object_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI,
       condition: { field: 'image', op: 'neq', value: '' } },
+    // Il punto focale serve solo dove c'e' un ritaglio da spostare, e si nasconde
+    // SOLO con 'fill': con 'contain' lavora eccome (decide da che parte l'immagine si
+    // appoggia nelle bande vuote, e il renderer lo emette), e una tile salvata prima
+    // che l'adattamento esistesse non ha affatto la chiave `object_fit` — l'inspector
+    // valuta le condizioni sui settings GREZZI, senza fondere i default, quindi con un
+    // elenco `in` il valore assente non combacerebbe con niente e il controllo
+    // sparirebbe per sempre.
+    // L'AND si scrive come ARRAY, l'unica forma che evaluateCondition() valuta.
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position',
+      contextKeys: { src: 'image', ratio: 'aspect', fit: 'object_fit' },
+      condition: [
+        { field: 'image', op: 'neq', value: '' },
+        { field: 'object_fit', op: 'neq', value: 'fill' },
+      ] },
     { key: 'prize_eyebrow', label: t('Sopra-titolo'), type: 'text' },
     { key: 'prize_title', label: t('Titolo premio'), type: 'text' },
     { key: 'prize_text', label: t('Descrizione'), type: 'textarea' },
@@ -126,14 +143,14 @@ export default {
       { value: 'aspect', label: t('Proporzione (aspect-ratio)') },
       { value: 'fixed',  label: t('Altezza fissa (px)') },
     ]},
-    { key: 'aspect', label: t('Proporzione'), type: 'select', options: [
-      { value: '16/10', label: '16:10' },
-      { value: '16/9',  label: '16:9' },
-      { value: '4/3',   label: '4:3' },
-      { value: '3/2',   label: '3:2' },
-      { value: '1/1',   label: '1:1' },
-      { value: '2/1',   label: '2:1' },
-    ], condition: { field: 'height_mode', op: 'eq', value: 'aspect' } },
+    // Elenco canonico. NIENTE voce automatica: qui la proporzione E' l'altezza dello
+    // stage (l'immagine e' in position:absolute inset:0, non fa altezza) e senza
+    // aspect-ratio il riquadro collasserebbe. '16:10' e '2:1' non stanno nel set
+    // canonico ma sono due valori storici di questa tile — '16/10' e' anche il
+    // default — quindi restano selezionabili via `extra`.
+    { key: 'aspect', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ auto: false, extra: ['16/10', '2/1'] }),
+      condition: { field: 'height_mode', op: 'eq', value: 'aspect' } },
     { key: 'height', label: t('Altezza'), type: 'range', min: 120, max: 700, step: 10,
       condition: { field: 'height_mode', op: 'eq', value: 'fixed' } },
     { key: 'max_width', label: t('Larghezza massima'), type: 'range', min: 200, max: 1000, step: 10 },

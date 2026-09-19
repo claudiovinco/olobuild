@@ -29,8 +29,8 @@
       <template v-else>
         <!-- Image top -->
         <div v-if="s.image && (s.image_position === 'top' || !s.image_position)"
-          style="margin:-12px -16px 8px;border-radius:12px 12px 0 0;overflow:hidden;max-height:80px;">
-          <img :src="s.image" style="width:100%;height:80px;object-fit:cover;display:block;" />
+          :style="{ margin: '-12px -16px 8px', borderRadius: '12px 12px 0 0', overflow: 'hidden', ...previewWrapStyle }">
+          <img :src="s.image" :style="previewImgStyle" />
         </div>
 
         <div v-if="s.title" :style="titlePreviewStyle" data-olo-editable="title">{{ s.title }}</div>
@@ -43,8 +43,8 @@
 
         <!-- Image bottom -->
         <div v-if="s.image && s.image_position === 'bottom'"
-          style="margin:8px -16px -12px;border-radius:0 0 12px 12px;overflow:hidden;max-height:80px;">
-          <img :src="s.image" style="width:100%;height:80px;object-fit:cover;display:block;" />
+          :style="{ margin: '8px -16px -12px', borderRadius: '0 0 12px 12px', overflow: 'hidden', ...previewWrapStyle }">
+          <img :src="s.image" :style="previewImgStyle" />
         </div>
       </template>
     </div>
@@ -53,6 +53,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { imageFrame } from '@/composables/useImageFrame';
 import { t } from '@/i18n';
 
 const props = defineProps({
@@ -85,6 +86,45 @@ const subtitlePreview = computed(() => {
   const t = s.value.subtitle || '';
   return t.length > 80 ? t.slice(0, 80) + '\u2026' : t;
 });
+
+// ─── La cornice dell'immagine nell'anteprima del popup ───
+//
+// L'anteprima qui dentro è uno SCHIZZO del popup, non una copia in scala: il popup
+// vero (class-hiddenpop-tile.php) con «Proporzioni → Auto» mostra la foto intera
+// sopra/sotto, il canvas la incastra da sempre in una fascia di 80px. Quella fascia
+// resta: cambiarla sposterebbe la geometria di ogni popup già costruito.
+// Quando però l'utente SCEGLIE una proporzione, il cap fisso va tolto, altrimenti
+// l'overflow:hidden del contenitore ritaglierebbe di nuovo a 80px e del ritaglio
+// scelto non si vedrebbe niente: il controllo sembrerebbe inerte proprio nel posto
+// in cui lo si sta muovendo.
+const previewRatio = computed(
+  () => imageFrame(s.value, 'aspect', { ratio: 'auto' }).contenitore.aspectRatio || ''
+);
+
+// Il punto focale di hiddenpop sta sulla chiave PIATTA `object_position` (storica,
+// mai migrata): è quella che il PHP legge e quella che i popup pubblicati hanno
+// già salvata. NON è `aspect_object_position`, quindi non passa dall'helper.
+const previewPos = computed(() => {
+  const p = String(s.value.object_position ?? 'center center').trim();
+  // Stessa difesa breakout del gemello useImageFrame.js: è un campo di testo libero.
+  return p && !/[;{}()]/.test(p) ? p : 'center center';
+});
+
+const previewWrapStyle = computed(() =>
+  (previewRatio.value ? { aspectRatio: previewRatio.value } : { maxHeight: '80px' })
+);
+
+const previewImgStyle = computed(() => ({
+  width: '100%',
+  height: previewRatio.value ? '100%' : '80px',
+  objectFit: 'cover',
+  // Solo con una proporzione attiva, come fa il sito: con «Auto» il PHP emette
+  // `width:100%;height:auto` e basta (class-hiddenpop-tile.php, $img_crop solo se
+  // il rapporto c'e'), quindi muovere qui il punto focale mostrerebbe nel builder
+  // un'inquadratura che sulla pagina non succede.
+  objectPosition: previewRatio.value ? previewPos.value : undefined,
+  display: 'block',
+}));
 
 const freqLabel = computed(() => {
   const map = {

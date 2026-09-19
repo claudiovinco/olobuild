@@ -1,5 +1,6 @@
 
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
+import { imageFrameFields, imageFrameDefaults } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -30,6 +31,11 @@ export default {
     active_color: '',
     show_duration: true,
     autoplay_next: false,
+    // Cornice delle anteprime nella playlist. Il riquadro e' sempre stato 48×32px
+    // cablato nel CSS: 48 di larghezza + proporzione 3/2 danno ESATTAMENTE quei
+    // 32px, e l'immagine era già `object-fit:cover` centrato. Default = la resa
+    // di oggi, nessuna playlist pubblicata si muove.
+    ...imageFrameDefaults('thumbnail', { ratio: '3/2', fit: 'cover', pos: 'center center' }),
     ...textEffectsDefaults,
     text_effect_target: 'title',
     border: { ...borderDefault },
@@ -82,6 +88,17 @@ export default {
     ]},
     { key: 'player_height', label: t('Altezza player'), type: 'range', min: 200, max: 600, step: 10 },
     { key: 'sidebar_width', label: t('Larghezza sidebar'), type: 'range', min: 200, max: 400, step: 10 },
+
+    // Cornice delle anteprime: sta a livello di TILE, non dentro il ripetitore —
+    // una sola forma per tutte le voci, altrimenti le righe della playlist si
+    // sfalsano. Niente voce 'Auto': il riquadro ha una larghezza fissa (48px) e
+    // nessuna altezza propria, senza proporzione seguirebbe l'immagine e ogni
+    // riga verrebbe alta in modo diverso.
+    ...imageFrameFields('thumbnail', {
+      label: t('Anteprime della playlist'),
+      ratioOpts: { auto: false, custom: true },
+    }),
+
     { type: 'separator', label: t('Stile') },
     { key: 'sidebar_bg', label: t('Sfondo playlist'), type: 'color' },
     { key: 'text_color', label: t('Colore testo'), type: 'color' },

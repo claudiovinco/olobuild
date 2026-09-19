@@ -80,6 +80,7 @@ const defaults = {
   media_type: 'image',
   image: '',
   image_ratio: 'auto',
+  image_ratio_custom: '16/9',
   image_height: '',
   image_fit: 'cover',
   object_position: 'center center',
@@ -226,8 +227,17 @@ const mediaPaddingCss = computed(() => {
   return (parseInt(p) || 0) + 'px';
 });
 
+// Gemello del filtro PHP: 'custom' pesca da image_ratio_custom e quel che non è
+// "W/H" torna ad 'auto' (= comanda l'altezza), invece di finire in un aspect-ratio
+// invalido che il browser scarta in silenzio.
+const frameRatio = computed(() => {
+  let r = String(s.value.image_ratio === 'custom' ? (s.value.image_ratio_custom || '') : (s.value.image_ratio || 'auto')).trim();
+  if (r !== 'auto' && !/^\d+(?:\.\d+)?\s*\/\s*\d+(?:\.\d+)?$/.test(r)) r = 'auto';
+  return r;
+});
+
 const mediaStyle = computed(() => {
-  const ratio = s.value.image_ratio;
+  const ratio = frameRatio.value;
   const h = parseInt(s.value.image_height) || 0;
   // When media is "inset" (has radius or padding), don't pull it to card edges — keep it inside the card padding so radius is visible
   const margin = mediaInset.value ? '0 0 16px 0' : mediaMarginCss.value;

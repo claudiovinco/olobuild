@@ -24,6 +24,7 @@ class Olobuild_Woo_Cross_Sells_Tile extends Olobuild_Tile_Base {
         'show_badge'      => true,
         'hover_effect'    => 'zoom',
         'image_ratio'     => '4-3',
+        'image_ratio_custom' => '4/3',
         'title_color'     => '',
         'price_color'     => '',
         'sale_color'      => '',
@@ -102,17 +103,36 @@ class Olobuild_Woo_Cross_Sells_Tile extends Olobuild_Tile_Base {
         $heading_col = $this->safe_color_css( $s['heading_color'] ) ?: 'var(--olo-color-text, #374151)';
         $heading_sz  = max( 14, min( 40, absint( $s['heading_size'] ) ) );
 
-        // Ratio map
+        // Ratio map — qui il rapporto non diventa un aspect-ratio ma la percentuale di
+        // padding-top che tiene in piedi la scatola dell'immagine (H/W x 100). Le quattro
+        // voci storiche restano col valore IDENTICO a prima, virgole comprese: cambiare
+        // '133.33%' in '133.3333%' muoverebbe di un pelo ogni card già pubblicata.
+        // Le nuove sono il resto dell'elenco canonico, scritte col trattino come le altre.
         $ratio_map = [
             '1-1'  => '100%',
             '4-3'  => '75%',
-            '3-4'  => '133.33%',
+            '3-2'  => '66.6667%',
             '16-9' => '56.25%',
+            '21-9' => '42.8571%',
+            '3-4'  => '133.33%',
+            '4-5'  => '125%',
+            '9-16' => '177.7778%',
+            '2-3'  => '150%',
             'auto' => '0',
         ];
-        $ratio     = $s['image_ratio'];
-        $ratio_val = isset( $ratio_map[ $ratio ] ) ? $ratio_map[ $ratio ] : '75%';
-        $auto_h    = ( $ratio === 'auto' );
+        $ratio     = (string) $s['image_ratio'];
+        $auto_h    = ( 'auto' === $ratio );
+        if ( 'custom' === $ratio ) {
+            // Rapporto scritto a mano: si accetta sia '5/4' sia '5-4' sia '5:4' e si
+            // calcola la percentuale, altrimenti resta il 4:3 di default.
+            $c = str_replace( [ '-', ':' ], '/', trim( (string) ( $s['image_ratio_custom'] ?? '' ) ) );
+            $ratio_val = '75%';
+            if ( preg_match( '#^(\d+(?:\.\d+)?)\s*/\s*(\d+(?:\.\d+)?)$#', $c, $m ) && (float) $m[1] > 0 ) {
+                $ratio_val = rtrim( rtrim( number_format( (float) $m[2] / (float) $m[1] * 100, 4, '.', '' ), '0' ), '.' ) . '%';
+            }
+        } else {
+            $ratio_val = isset( $ratio_map[ $ratio ] ) ? $ratio_map[ $ratio ] : '75%';
+        }
 
         // Card style
         $card_extra = '';
@@ -131,7 +151,7 @@ class Olobuild_Woo_Cross_Sells_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/absint clamps/fixed maps/generated uid). ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/absint clamps/fixed maps/a number_format()'d percentage for the custom ratio/generated uid). ?>
         <style>
             .<?php echo $uid; ?>-heading {
                 font-size: <?php echo (int) $heading_sz; ?>px;

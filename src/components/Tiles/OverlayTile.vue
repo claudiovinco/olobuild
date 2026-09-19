@@ -5,8 +5,10 @@
     @mouseenter="hovered = true"
     @mouseleave="hovered = false"
   >
-    <!-- Background image -->
-    <div class="olo-ov-img" :style="imgStyle"></div>
+    <!-- L'immagine è un <img> come sul sito (prima era uno sfondo CSS): solo così
+         object-fit e object-position si comportano allo stesso modo nei due posti. -->
+    <img v-if="s.image_url" class="olo-ov-img" :src="s.image_url" alt="" :style="imgStyle" />
+    <div v-else class="olo-ov-img" :style="imgStyle"></div>
 
     <!-- Overlay -->
     <div class="olo-ov-overlay" :style="overlayStyle">
@@ -21,6 +23,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { imageFrame } from '@/composables/useImageFrame';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -28,6 +31,9 @@ const props = defineProps({
 
 const defaults = {
   image_url: '',
+  aspect_ratio: 'auto',
+  aspect_ratio_custom: '16/9',
+  object_fit: 'cover',
   object_position: 'center center',
   title: '',
   description: '',
@@ -42,26 +48,39 @@ const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const hovered = ref(false);
 
+// Cornice dell'immagine, con le stesse regole del renderer PHP. Le chiavi di questa
+// tile non hanno prefisso (come nella tile Immagine): si passa all'helper un alias
+// con lo schema che si aspetta, senza toccare niente di ciò che viene salvato.
+const frame = computed(() => imageFrame({
+  img_ratio: s.value.aspect_ratio,
+  img_ratio_custom: s.value.aspect_ratio_custom,
+  img_fit: s.value.object_fit,
+  img_object_position: s.value.object_position,
+}, 'img', { ratio: 'auto', fit: 'cover' }));
+
 const containerStyle = computed(() => ({
   position: 'relative',
   overflow: 'hidden',
   borderRadius: (parseInt(s.value.border_radius) || 0) + 'px',
-  height: (parseInt(s.value.height) || 300) + 'px',
+  // Altezza fissa OPPURE proporzioni: con tutt'e due definite il browser ignora
+  // l'aspect-ratio, quindi comanda una sola delle due (come nel PHP).
+  ...(frame.value.contenitore.aspectRatio
+    ? frame.value.contenitore
+    : { height: (parseInt(s.value.height) || 300) + 'px' }),
   cursor: 'pointer',
 }));
 
-const imgStyle = computed(() => {
-  const pos = s.value.object_position || 'center center';
-  const bg = s.value.image_url ? `url(${s.value.image_url}) ${pos}/cover no-repeat` : '#374151';
-  return {
-    position: 'absolute',
-    inset: '0',
-    background: bg,
-    backgroundPosition: pos,
-    transition: 'transform 0.4s ease',
-    transform: hovered.value && s.value.hover_effect === 'zoom' ? 'scale(1.1)' : 'scale(1)',
-  };
-});
+const imgStyle = computed(() => ({
+  position: 'absolute',
+  inset: '0',
+  width: '100%',
+  height: '100%',
+  // Senza immagine resta il rettangolo grigio di prima.
+  background: s.value.image_url ? undefined : '#374151',
+  ...frame.value.immagine,
+  transition: 'transform 0.4s ease',
+  transform: hovered.value && s.value.hover_effect === 'zoom' ? 'scale(1.1)' : 'scale(1)',
+}));
 
 const overlayStyle = computed(() => {
   const effect = s.value.hover_effect || 'fade';

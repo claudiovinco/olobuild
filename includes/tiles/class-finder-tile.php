@@ -33,6 +33,10 @@ class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
         'card_bg'     => '',
         'card_border' => '',
         'media_bg'    => '',
+        // Rapporto storico del riquadro media (era cablato nel CSS): il default lo
+        // ripete tale e quale, i temi che usano il finder non si spostano.
+        'media_ratio'        => '190/240',
+        'media_ratio_custom' => '190/240',
         'align'       => 'center',
         // additive (default = aspetto storico)
         'default_index'     => '0',
@@ -95,6 +99,12 @@ class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
         // esistenti rendono identici. Il ramo media_bg conserva la sua background-position.
         $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
         if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
+        // Proporzione del riquadro media. L'immagine è un background-image su un box
+        // largo 190px e SENZA altezza: se il rapporto non passa la whitelist (es. un
+        // «personalizzato» scritto male) si torna al 190/240 storico, altrimenti il
+        // riquadro collasserebbe a zero e l'immagine sparirebbe dalla pagina.
+        $media_ar = Olobuild_Tile_Utils::image_frame( $s, 'media', [ 'ratio' => '190/240' ] )['contenitore'];
+        if ( $media_ar === '' ) { $media_ar = 'aspect-ratio:190/240;'; }
         $serif  = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
         $sans   = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
         $preset = sanitize_key( $s['preset'] ?? 'custom' );
@@ -135,7 +145,7 @@ class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval/sanitize_key/build_border_radius_css/fixed literals/generated uid). ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/intval/sanitize_key/build_border_radius_css/Olobuild_Tile_Utils::image_frame() strict ratio whitelist/fixed literals/generated uid). ?>
         <style>
             .<?php echo $uid; ?>{ --fn-accent:<?php echo $accent; ?>; --fn-on:<?php echo $on; ?>; font-family:<?php echo $sans; ?>; <?php echo $typo_css; ?><?php if ( $center ) echo 'text-align:center;'; ?><?php echo $tile_pad_css; ?> }
             .<?php echo $uid; ?> .ofn-eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--fn-accent);display:block;margin-bottom:10px;}
@@ -155,7 +165,7 @@ class Olobuild_Finder_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .ofn-res__meta{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--fn-accent);}
             .<?php echo $uid; ?> .ofn-res--media{gap:32px;align-items:center;}
             .<?php echo $uid; ?> .ofn-res--media.show{display:flex;}
-            .<?php echo $uid; ?> .ofn-media{width:190px;flex:0 0 auto;aspect-ratio:190/240;border-radius:2px;overflow:hidden;position:relative;background:<?php echo $media_bg; ?>;background-size:cover;background-position:center;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,.06) 0 16px, transparent 16px 32px);}
+            .<?php echo $uid; ?> .ofn-media{width:190px;flex:0 0 auto;<?php echo $media_ar; ?>border-radius:2px;overflow:hidden;position:relative;background:<?php echo $media_bg; ?>;background-size:cover;background-position:center;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,.06) 0 16px, transparent 16px 32px);}
             .<?php echo $uid; ?> .ofn-media__lbl{position:absolute;left:12px;bottom:10px;font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.4);}
             .<?php echo $uid; ?> .ofn-res__body{flex:1;min-width:0;}
             .<?php echo $uid; ?> .ofn-kicker{display:block;font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--fn-accent);margin-bottom:6px;}

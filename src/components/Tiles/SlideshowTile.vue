@@ -1,5 +1,5 @@
 <template>
-  <div class="olo-slideshow" style="position:relative;overflow:hidden;" :style="{ height: slideHeight + 'px' }">
+  <div class="olo-slideshow" style="position:relative;overflow:hidden;" :style="rootStyle">
     <!-- Track -->
     <div
       class="olo-ss-track"
@@ -11,6 +11,10 @@
         class="olo-ss-slide"
         :style="slideStyle(slide)"
       >
+        <!-- Gemello dell'<img uk-cover> del renderer PHP: stessa scatola, stesso
+             object-fit/object-position. Prima era uno sfondo, e background-size non
+             sa fare «Riduci se necessario» — il canvas avrebbe mostrato altro. -->
+        <img v-if="slide.image" :src="slide.image" alt="" :style="slideImgStyle" />
         <div class="olo-ss-overlay" :style="{ background: s.overlay_color, opacity: (parseInt(s.overlay_opacity) || 45) / 100 }"></div>
         <div class="olo-ss-content" :style="{ color: s.text_color }">
           <div v-if="slide.title" class="mb-text-3xl mb-font-bold mb-mb-2" :data-olo-editable="'slides.' + i + '.title'">{{ slide.title }}</div>
@@ -53,6 +57,8 @@ const defaults = {
   show_arrows: true,
   show_dots: true,
   slide_height: '400',
+  aspect_ratio: 'auto',
+  object_fit: 'cover',
   object_position: 'center center',
   overlay_color: '#000000',
   overlay_opacity: '45',
@@ -72,6 +78,29 @@ const slides = computed(() => {
 
 const slideHeight = computed(() => parseInt(s.value.slide_height) || 400);
 
+// Cornice TILE-LEVEL, una per tutte le slide (come il punto focale): 'auto' = nessun
+// rapporto e comanda l'altezza in px, cioè la resa storica. Con un rapporto vero
+// l'altezza va tolta, altrimenti vincerebbe lei e l'aspect-ratio non si vedrebbe —
+// lato PHP fa lo stesso passando `ratio` a UIkit.
+const frameRatio = computed(() => {
+  const r = String(s.value.aspect_ratio || 'auto').trim();
+  return (r !== 'auto' && /^\d+(?:\.\d+)?\s*\/\s*\d+(?:\.\d+)?$/.test(r)) ? r.replace(/\s+/g, '') : '';
+});
+const rootStyle = computed(() => (
+  frameRatio.value ? { aspectRatio: frameRatio.value } : { height: slideHeight.value + 'px' }
+));
+
+// Twin della regola UIkit `[uk-cover]:where(img,video)` usata dal frontend.
+const slideImgStyle = computed(() => ({
+  position: 'absolute',
+  top: '0',
+  left: '0',
+  width: '100%',
+  height: '100%',
+  objectFit: s.value.object_fit || 'cover',
+  objectPosition: s.value.object_position || 'center center',
+}));
+
 const trackStyle = computed(() => ({
   display: 'flex',
   height: '100%',
@@ -80,9 +109,6 @@ const trackStyle = computed(() => ({
 }));
 
 function slideStyle(slide) {
-  // Punto focale globale applicato a OGNI slide (default 'center center' = comportamento storico).
-  const pos = s.value.object_position || 'center center';
-  const bg = slide.image ? `url(${slide.image}) ${pos}/cover no-repeat` : 'var(--olo-color-muted, #F3F4F6)';
   const opacity = s.value.transition === 'fade'
     ? (slides.value.indexOf(slide) === current.value ? 1 : 0)
     : 1;
@@ -90,8 +116,10 @@ function slideStyle(slide) {
     minWidth: '100%',
     height: '100%',
     position: 'relative',
-    background: bg,
-    backgroundPosition: pos,
+    overflow: 'hidden',
+    // La foto ora è un <img> sovrapposto: qui resta solo il fondo delle slide senza
+    // immagine, identico al riquadro grigio del renderer PHP.
+    background: slide.image ? 'transparent' : 'var(--olo-color-muted, #F3F4F6)',
   };
   if (s.value.transition === 'fade') {
     base.position = 'absolute';

@@ -7,8 +7,8 @@
     <div class="mpg-grid" :style="gridStyle">
       <div v-for="(item, idx) in displayItems" :key="idx" class="mpg-card" :class="cardClasses" :style="cardStyle">
         <!-- Image area -->
-        <div v-if="settings.show_image !== false" class="mpg-img-wrap" :style="{ height: imgHeight + 'px' }">
-          <div :class="['mpg-img-bg', hoverImgClass, kenburnsClass]" :style="{ ...kenburnsStyle, ...(item.image ? { backgroundImage: 'url(' + item.image + ')', backgroundSize: 'cover', backgroundPosition: 'center' } : {}) }"></div>
+        <div v-if="settings.show_image !== false" class="mpg-img-wrap" :style="imgWrapStyle">
+          <div :class="['mpg-img-bg', hoverImgClass, kenburnsClass]" :style="{ ...kenburnsStyle, ...(item.image ? { backgroundImage: 'url(' + item.image + ')', ...imgFrameStyle } : {}) }"></div>
           <!-- Overlay gradient -->
           <div v-if="settings.overlay_gradient" class="mpg-overlay" :style="overlayStyle"></div>
           <!-- Category badge -->
@@ -79,6 +79,7 @@
 
 <script setup>
 import { uikitGap } from '@/composables/useUikitGap';
+import { imageFrame } from '@/composables/useImageFrame';
 import { t } from '@/i18n';
 import { computed, ref, watch, inject, onMounted } from 'vue';
 
@@ -195,6 +196,29 @@ const imgHeight = computed(() => {
   if (c >= 4) return Math.min(h, 100);
   if (c >= 3) return Math.min(h, 130);
   return Math.min(h, 180);
+});
+
+/*
+ * Cornice dell'immagine, gemella del CSS del frontend. Qui la foto non e' un <img>
+ * ma lo sfondo di un div, quindi l'adattamento diventa background-size e il punto
+ * focale background-position: con i default ('auto' + cover + center center) il
+ * risultato e' quello di prima, altezza in px compresa.
+ */
+const BG_SIZE = { cover: 'cover', contain: 'contain', fill: '100% 100%', none: 'auto', 'scale-down': 'contain' };
+const imgWrapStyle = computed(() => {
+  const { contenitore } = imageFrame(props.settings, 'image', { ratio: 'auto' });
+  // aspect-ratio AL POSTO dell'altezza: insieme vincerebbe l'altezza fissa.
+  return contenitore.aspectRatio
+    ? { aspectRatio: contenitore.aspectRatio }
+    : { height: imgHeight.value + 'px' };
+});
+const imgFrameStyle = computed(() => {
+  const { immagine } = imageFrame(props.settings, 'image', { fit: 'cover' });
+  return {
+    backgroundSize: BG_SIZE[immagine.objectFit] || 'cover',
+    backgroundPosition: immagine.objectPosition || 'center center',
+    backgroundRepeat: 'no-repeat',
+  };
 });
 
 // vedi useUikitGap: i numeri sono quelli veri di UIkit

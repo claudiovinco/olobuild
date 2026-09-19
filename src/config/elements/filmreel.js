@@ -125,7 +125,7 @@ export default {
       condition: { field: 'progress_bar', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Media') },
-    { key: 'media_object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+    { key: 'media_object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
       description: t('Punto focale delle immagini/video nei fotogrammi (uguale per tutti).'),
       contextKeys: { frameRatio: 'auto' } },
 

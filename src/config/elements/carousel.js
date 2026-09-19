@@ -1,4 +1,5 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, widgetTemplateField } from './_shared.js';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -45,6 +46,11 @@ export default {
     caption_bg: '',
     object_fit: 'cover',
     object_position: 'center center',
+    // 16/10 era CABLATO nel CSS del ramo «altezza automatica»: e' la resa di ogni
+    // carousel pubblicato che non usa l'altezza fissa. Non e' un rapporto canonico,
+    // quindi resta selezionabile solo perché passato in `extra` — non toglierlo.
+    aspect_ratio: '16/10',
+    aspect_ratio_custom: '16/10',
     mobile_slides: '1',
     ...textEffectsDefaults,
     text_effect_target: 'caption',
@@ -117,12 +123,31 @@ export default {
     ]},
     { key: 'fixed_height', label: t('Altezza fissa'), type: 'range', min: 150, max: 600, step: 10,
       condition: { field: 'slide_height', value: 'fixed' } },
-    { key: 'object_fit', label: t('Adattamento'), type: 'select', options: [
-      { value: 'cover', label: t('Riempi') },
-      { value: 'contain', label: t('Contieni') },
-    ]},
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
-      contextKeys: { fit: 'object_fit' } },
+    // Con «Altezza automatica» l'altezza della slide NASCE da questo rapporto (prima
+    // era 16/10 cablato). Con «Altezza fissa» comanda l'altezza in px e il rapporto
+    // non viene nemmeno emesso, quindi qui sparisce: l'elenco della condizione tiene
+    // dentro vuoto/null/undefined perché le tile salvate prima non hanno la chiave.
+    //
+    // La prima voce vale STRINGA VUOTA e non 'auto', ed e' il ripiego di lettura per i
+    // carousel salvati PRIMA di questo campo: la chiave non ce l'hanno, e nessuna voce
+    // combacia con `undefined` (l'inspector valuta i settings GREZZI, senza fondere i
+    // default), quindi il select mostrava «—» mentre la slide rendeva 16/10.
+    // Vuoto NON vuol dire «nessun ritaglio»: i due renderer ripiegano entrambi su 16/10
+    // (`$slide_ar` in class-carousel-tile.php, `slideRatio` in CarouselTile.vue) — ed e'
+    // giusto così, perché senza rapporto le slide senza immagine (placeholder e
+    // widget) collasserebbero a zero e la fila si sfalserebbe.
+    { key: 'aspect_ratio', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ autoValue: '', autoLabel: 'Predefinito (16:10)', extra: ['16/10'], custom: true }),
+      condition: { field: 'slide_height', op: 'in', value: ['auto', '', null, undefined] } },
+    { key: 'aspect_ratio_custom', label: t('Proporzioni personalizzate'), type: 'text',
+      placeholder: t('es. 5/4'),
+      condition: [
+        { field: 'slide_height', op: 'in', value: ['auto', '', null, undefined] },
+        { field: 'aspect_ratio', op: 'eq', value: 'custom' },
+      ] },
+    { key: 'object_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
+      contextKeys: { fit: 'object_fit', ratio: 'aspect_ratio', ratioCustom: 'aspect_ratio_custom' } },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'mobile_slides', label: t('Slide mobile'), type: 'range', min: 1, max: 3, step: 1 },
 

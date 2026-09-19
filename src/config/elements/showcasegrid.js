@@ -1,4 +1,5 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -23,6 +24,10 @@ export default {
     gap: 18,
     aspect: '3/3.5',
     object_position: 'center center',
+    // Il media della card e' un background-image con `background-size:cover`
+    // cablato da sempre (PHP .ocg-media, twin in ShowcaseGridTile.vue): il
+    // controllo nuovo nasce su quel valore → nessuna card pubblicata si muove.
+    object_fit: 'cover',
     radius: 20,
     media_bg: 'var(--olo-color-dark, #16263d)',
     veil_color: 'var(--olo-color-dark, #16263d)',
@@ -66,7 +71,20 @@ export default {
         { key: 'title', label: t('Titolo'), type: 'text' },
         { key: 'link', label: t('Link'), type: 'link' },
         { key: 'span', label: t('Colonne occupate (0 = uniforme; 1-12 = editoriale)'), type: 'range', min: 0, max: 12, step: 1 },
-        { key: 'aspect', label: t('Proporzioni (es. 4/5, vuoto = generale)'), type: 'text' },
+        // Stesso concetto del select «Proporzioni» della tile, quindi stesso controllo:
+        // finché era un campo di testo libero si poteva scrivere «16:9» coi due punti e
+        // la regex dei renderer (`[^0-9.\/]`) lo riduceva a «169», card larghissima e
+        // nessun avviso. Nel select quell'errore non è possibile.
+        // ⚠ `autoValue: ''` è obbligatorio: la stringa vuota è il valore STORICO che
+        // significa «eredita dalla griglia» (ed è il default dell'item), e non si tocca.
+        // Niente condizione di visibilità: l'override per-item si accende quando ALMENO
+        // UNA card ha uno span (`$has_spans` in PHP, `hasSpans` nel canvas), non quando
+        // ce l'ha questa — una condizione su `span` di questo item lo nasconderebbe
+        // proprio nelle card a span 0 di una griglia editoriale, dove invece funziona.
+        // Lo dice la descrizione, che è la sede giusta per un cancello che sta altrove.
+        { key: 'aspect', label: t('Proporzioni'), type: 'select',
+          options: ratioOptions({ auto: true, autoValue: '', autoLabel: 'Come la griglia', extra: ['3/3.5'] }),
+          description: t('Vale solo in modalità editoriale, cioè quando almeno una card ha «Colonne occupate» maggiore di 0.') },
       ],
     },
     { type: 'separator', label: t('Layout') },
@@ -75,16 +93,25 @@ export default {
 
   styleFields: [
     { type: 'separator', label: t('Forma') },
-    { key: 'aspect', label: t('Proporzioni'), type: 'select', options: [
-      { value: '3/3.5', label: '3:3.5 (alto)' },
-      { value: '1/1', label: '1:1' },
-      { value: '4/5', label: '4:5' },
-      { value: '3/4', label: '3:4' },
-    ]},
+    // Elenco canonico delle proporzioni. `3/3.5` e' il rapporto storico di questa
+    // tile (e il suo default): sta fuori dal set comune e va tenuto in `extra`,
+    // altrimenti sparirebbe dal select di chi ce l'ha già salvato.
+    // Niente voce 'Auto': la card e' un background-image senza altezza propria —
+    // togliere l'aspect-ratio la farebbe collassare sul solo testo. E il renderer
+    // PHP ripulisce il valore da tutto cio' che non e' cifra o barra: 'auto'
+    // diventerebbe '' e ricadrebbe comunque su 3/3.5.
+    { key: 'aspect', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ auto: false, extra: ['3/3.5'] }) },
+    // L'adattamento qui pilota `background-size`, non `object-fit`: 'Riduci se
+    // necessario' (scale-down) non ha equivalente e non si offre — un controllo
+    // che il renderer non sa leggere e' peggio di un controllo che manca.
+    { key: 'object_fit', label: t('Adattamento'), type: 'select',
+      options: ADATTAMENTI.filter((o) => o.value !== 'scale-down'),
+      description: t('Come la foto riempie la maschera: «Riempi» ritaglia, «Contieni» la mostra tutta.') },
     { key: 'gap', label: t('Gap card'), type: 'range', min: 8, max: 32, step: 2 },
-    // Punto focale GLOBALE applicato a TUTTE le card (object-position). Default 'center center' → no-op.
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
-      contextKeys: { ratio: 'aspect' } },
+    // Punto focale GLOBALE applicato a TUTTE le card (background-position). Default 'center center' → no-op.
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
+      contextKeys: { ratio: 'aspect', fit: 'object_fit' } },
 
     { type: 'separator', label: t('Raggio') },
     

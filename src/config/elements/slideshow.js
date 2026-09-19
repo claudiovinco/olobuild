@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, filterFields, filterDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, widgetTemplateField, wowEffectsFields, wowEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -24,6 +25,13 @@ export default {
     autoplay_speed: '5000',
     show_arrows: true,
     show_dots: true,
+    // La cornice delle slide è TILE-LEVEL, una per tutte: le slide stanno una sopra
+    // l'altra nello stesso riquadro, un rapporto per slide le farebbe saltare.
+    // 'auto' = nessun aspect-ratio, comanda slide_height in px → la resa di sempre.
+    aspect_ratio: 'auto',
+    // 'cover' è esattamente ciò che uk-cover applica già lato PHP e il '/cover' dello
+    // sfondo lato canvas: il controllo nasce sul comportamento attuale.
+    object_fit: 'cover',
     slide_height: '400',
     object_position: 'center center',
     overlay_color: 'var(--olo-color-dark, #16263d)',
@@ -97,12 +105,23 @@ export default {
       { value: 'slide', label: t('Slide') },
       { value: 'fade', label: t('Fade') },
     ]},
-    { key: 'slide_height', label: t('Altezza slide'), type: 'range', min: 200, max: 800, step: 25 },
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+    { key: 'aspect_ratio', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions(),
+      description: t('La maschera di ritaglio delle slide. «Auto» = comanda l\'altezza in pixel.') },
+    // Con un rapporto vero l'altezza in pixel non decide più niente (i due renderer la
+    // tolgono): nasconderla è meno bugiardo che lasciarla lì inerte.
+    { key: 'slide_height', label: t('Altezza slide'), type: 'range', min: 200, max: 800, step: 25,
+      condition: { field: 'aspect_ratio', op: 'eq', value: 'auto' } },
+    { key: 'object_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI,
+      description: t('Come la foto riempie la maschera: «Riempi» ritaglia, «Contieni» la mostra tutta.') },
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
       // Punto focale GLOBALE applicato a tutte le slide. L'immagine è per-item (slides[].image)
       // → niente src tile-level: il pad resta neutro ma il valore (keyword o '%') si applica
-      // comunque a ogni slide. fit cover (slide a tutta altezza), nessun aspect ratio.
-      contextKeys: {} },
+      // comunque a ogni slide. Proporzioni e adattamento sono tile-level come lui: il pad può
+      // leggerli e disegnare il ritaglio vero.
+      contextKeys: { ratio: 'aspect_ratio', fit: 'object_fit' },
+      // Con «Deforma per riempire» non c'è nessun ritaglio da spostare.
+      condition: { field: 'object_fit', op: 'neq', value: 'fill' } },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
     { key: 'text_color', label: t('Colore testo'), type: 'color' },
 

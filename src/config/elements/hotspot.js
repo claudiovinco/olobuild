@@ -1,4 +1,5 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -17,6 +18,14 @@ export default {
     preset: 'custom',
     image: '',
     image_height: '400',
+    // 'auto' = la resa di sempre: il contenitore tiene l'altezza fissa di
+    // `image_height` (400px) e il ritaglio dipende dalla larghezza della colonna.
+    // Un rapporto cablato qui (16/9 o altro) cambierebbe l'inquadratura di ogni
+    // hotspot già pubblicato, perché i marker sono in percentuale sul riquadro.
+    aspect_ratio: 'auto',
+    aspect_ratio_custom: '16/9',
+    // Era cablato nel CSS di entrambi i renderer: esposto, ma con lo stesso valore.
+    object_fit: 'cover',
     object_position: 'center center',
     markers: [
       { id: 'hs-1', pos_x: '30', pos_y: '40', title: t('Punto di interesse'), description: t('Descrizione del primo hotspot.'), icon: 'pin', tooltip_position: 'top' },
@@ -79,8 +88,24 @@ export default {
 
     { type: 'separator', label: t('Immagine') },
     withHover({ key: 'border_radius', label: t('Raggio immagine'), type: 'border-radius' }),
-    { key: 'image_height', label: t('Altezza immagine'), type: 'range', min: 200, max: 800, step: 10 },
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', contextKeys: { src: 'image', height: 'image_height' } },
+    { key: 'aspect_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions({ custom: true }),
+      description: t('«Auto» tiene l’altezza fissa qui sotto, com’è sempre stato.') },
+    { key: 'aspect_ratio_custom', label: t('Proporzioni personalizzate'), type: 'text',
+      placeholder: t('es. 5/4'),
+      condition: { field: 'aspect_ratio', op: 'eq', value: 'custom' } },
+    // Con un rapporto scelto l'altezza la calcola il rapporto: lasciare il cursore
+    // visibile darebbe un controllo che non muove niente.
+    // Scritto come `show` e non come `condition: eq 'auto'` perché l'inspector valuta
+    // sui settings GREZZI, senza fondere i default: un hotspot salvato PRIMA di questo
+    // sprint non ha affatto la chiave `aspect_ratio`, e con l'uguaglianza il cursore
+    // dell'altezza sarebbe sparito proprio dalle tile già pubblicate — quelle che
+    // l'altezza ce l'hanno davvero. Chiave assente = 'auto' = cursore visibile.
+    { key: 'image_height', label: t('Altezza immagine'), type: 'range', min: 200, max: 800, step: 10,
+      show: (s) => (s.aspect_ratio || 'auto') === 'auto' },
+    { key: 'object_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position',
+      contextKeys: { src: 'image', height: 'image_height', ratio: 'aspect_ratio', ratioCustom: 'aspect_ratio_custom', fit: 'object_fit' },
+      condition: { field: 'object_fit', op: 'neq', value: 'fill' } },
 
     ...textEffectsFields([
       { value: 'title', label: t('Solo Titolo') },

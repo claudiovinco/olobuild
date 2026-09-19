@@ -326,11 +326,21 @@ class Olobuild_PanelSlider_Tile extends Olobuild_Tile_Base {
         // Image ratio / height / fit
         $img_ratio  = $s['image_ratio'] ?? '4/3';
         $img_height = absint( $s['image_height'] ?? 0 );
-        $img_fit    = in_array( $s['image_fit'] ?? 'cover', [ 'cover', 'contain', 'fill' ], true ) ? ( $s['image_fit'] ?? 'cover' ) : 'cover';
+        // Whitelist ALLARGATA all'elenco canonico degli adattamenti: le prime tre sono
+        // quelle che la tile offriva da sempre, 'none' e 'scale-down' le voci nuove.
+        $img_fit    = in_array( $s['image_fit'] ?? 'cover', [ 'cover', 'contain', 'fill', 'none', 'scale-down' ], true ) ? ( $s['image_fit'] ?? 'cover' ) : 'cover';
         // Punto focale comune a tutte le immagini delle card; default = comportamento attuale.
         $obj_pos    = trim( (string) ( $s['object_position'] ?? 'center center' ) );
         if ( $obj_pos === '' ) {
             $obj_pos = 'center center';
+        }
+        // Con 'fill' l'immagine e' deformata per riempire: object-position non sposta
+        // nulla, quindi la dichiarazione non si scrive — come già fanno info-cards,
+        // scratchfx, marquee e team. Il secondo controllo e' la difesa breakout di
+        // Olobuild_Tile_Utils: qui $css finisce dentro un <style>, dove esc_attr() non
+        // neutralizza ';' '{' '}' e una regola potrebbe essere chiusa a meta'.
+        if ( $img_fit === 'fill' || preg_match( '/[;{}()]/', $obj_pos ) ) {
+            $obj_pos = '';
         }
         // Dual-format: numero legacy O oggetto {tl,tr,br,bl}; '' se zero/vuoto.
         $img_radius_css = $this->build_border_radius_css( $s['card_image_radius'] ?? 0 );
@@ -344,7 +354,9 @@ class Olobuild_PanelSlider_Tile extends Olobuild_Tile_Base {
         if ( $img_radius_css !== '' ) {
             $css .= $sel . ' .olo-ps-media,' . $sel . ' .olo-ps-img{border-radius:' . $img_radius_css . ';}';
         }
-        $css .= $sel . ' .olo-ps-img{width:100%;height:100%;object-fit:' . esc_attr( $img_fit ) . ';object-position:' . esc_attr( $obj_pos ) . ';display:block;transition:transform 0.5s cubic-bezier(.4,0,.2,1);}';
+        $css .= $sel . ' .olo-ps-img{width:100%;height:100%;object-fit:' . esc_attr( $img_fit ) . ';'
+            . ( $obj_pos !== '' ? 'object-position:' . esc_attr( $obj_pos ) . ';' : '' )
+            . 'display:block;transition:transform 0.5s cubic-bezier(.4,0,.2,1);}';
 
         if ( ! empty( $s['image_zoom'] ) ) {
             $css .= $sel . ' .olo-ps-card:hover .olo-ps-img{transform:scale(1.06);}';

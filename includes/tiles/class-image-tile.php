@@ -268,7 +268,7 @@ class Olobuild_Image_Tile extends Olobuild_Tile_Base {
         }
 
         // ── WaterDisplacement (filtro acqua — rif. 68-tema-terme-spa.html) ──
-        // SSR: il filtro SVG con <animate> sul baseFrequency rende il moto base GIA' visibile,
+        // SSR: il filtro SVG con <animate> sul baseFrequency rende il moto base Già visibile,
         // anche senza JS. Il runtime fa solo l'easing dello "scale" del feDisplacementMap verso
         // rippleScale al passaggio del cursore, e il ritorno a displaceScale. Tutto scoped sull'UID
         // (id filtro/turbolenza/displacement) così N istanze non si calpestano. reduced-motion →
@@ -502,6 +502,28 @@ class Olobuild_Image_Tile extends Olobuild_Tile_Base {
                 . '</style>';
         }
         echo $align_css_block; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS built above from internal $uid class and fixed margin declarations.
+
+        // L'immagine (o il video) al passaggio del mouse sta nella STESSA cornice di
+        // quella principale, ma la regola globale di frontend.css — `.olo-hover-media
+        // img{object-fit:cover}`, senza object-position — la inchioda a «riempi» e al
+        // centro. Chi sceglieva «Contieni» o spostava il punto focale se lo vedeva
+        // annullare proprio al passaggio: la foto saltava. Qui si riemette la stessa
+        // cornice scoped sull'uid (specificità 0,2,1 > 0,1,1 della regola globale).
+        // Il precedente da copiare è class-panel-tile.php, che per il suo
+        // .olo-hover-wrap emette fit E focale: button-tile e team-tile emettono il solo
+        // object-fit e NON sono precedenti per il punto focale.
+        // Il focale passa da css_pos() e non dal $obj_pos grezzo qui sopra: in un
+        // <style> una parentesi graffa uscirebbe dalla regola, e esc_attr() non difende
+        // da quello (difende un attributo, non un foglio di stile).
+        if ( ! empty( $s['hover_image'] ) || ! empty( $s['hover_video'] ) ) {
+            $hover_pos = Olobuild_Tile_Utils::css_pos( $s, 'object_position', 'center center' );
+            echo '<style>'
+                . '.' . esc_attr( $uid ) . ' .olo-hover-media img,'
+                . '.' . esc_attr( $uid ) . ' .olo-hover-media video{'
+                . 'object-fit:' . esc_attr( $obj_fit ) . ';'
+                . 'object-position:' . esc_attr( $hover_pos ) . ';}'
+                . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $uid è generato internamente, $obj_fit viene da una whitelist di cinque valori e $hover_pos da Olobuild_Tile_Utils::css_pos(), che scarta i caratteri di breakout CSS.
+        }
         ?>
         <figure class="olo-image <?php echo esc_attr( $uid ); ?>"<?php echo $align_data_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attribute string built above with esc_attr() on a whitelisted value ?><?php if ( ! empty( $s['lightbox'] ) && empty( $s['link_url'] ) ) echo ' data-uk-lightbox'; ?> style="<?php echo esc_attr( $figure_style ); ?>">
             <?php

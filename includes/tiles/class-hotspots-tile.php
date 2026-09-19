@@ -45,7 +45,11 @@ class Olobuild_Hotspots_Tile extends Olobuild_Tile_Base {
         $center  = ( ( $s['align'] ?? 'left' ) === 'center' );
         $serif   = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
         $sans    = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
-        $ar      = in_array( $s['aspect_ratio'], [ '16/10', '16/9', '4/3', '3/2', '1/1' ], true ) ? $s['aspect_ratio'] : '16/10';
+        // La whitelist deve coprire TUTTE le voci offerte dal select (le canoniche
+        // di ratioOptions più il 16/10 storico): un rapporto fuori elenco tornerebbe
+        // in silenzio a 16/10 e il sito renderebbe diverso dal canvas.
+        $ar_allow = [ '1/1', '4/3', '3/2', '16/9', '21/9', '3/4', '4/5', '9/16', '2/3', '16/10' ];
+        $ar      = in_array( $s['aspect_ratio'], $ar_allow, true ) ? $s['aspect_ratio'] : '16/10';
 
         $items = is_array( $s['items'] ) ? array_values( $s['items'] ) : [];
         if ( empty( $items ) ) return '';

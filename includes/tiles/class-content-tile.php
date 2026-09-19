@@ -23,6 +23,8 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
         'image_position'     => 'top',
         'image_width'        => '40',
         'image_height'       => 'auto',
+        'aspect_ratio'       => 'auto',
+        'aspect_ratio_custom' => '16/9',
         'image_fit'          => 'cover',
         'object_position'    => 'center center',
         'image_radius'       => '0',
@@ -137,10 +139,21 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
             $img_class .= ' olo-ct-hover-' . esc_attr( $hover_effect );
         }
 
+        // Proporzioni (cornice): image_frame() legge `aspect_ratio`/`aspect_ratio_custom`
+        // e applica la stessa whitelist di tutte le altre tile. Il fit e il punto focale
+        // restano letti sopra dalle chiavi storiche (`image_fit`, `object_position`), per
+        // questo qui si prende solo il frammento del contenitore.
+        $frame_css = Olobuild_Tile_Utils::image_frame( $s, 'aspect', [ 'ratio' => 'auto' ] )['contenitore'];
+
         // Height CSS
         $height_css = 'auto';
         if ( ! empty( $image_height ) && $image_height !== 'auto' ) {
             $height_css = is_numeric( $image_height ) ? $image_height . 'px' : esc_attr( $image_height );
+        }
+        // Un'altezza esplicita vincerebbe sull'aspect-ratio: quando la proporzione c'è,
+        // comanda lei (ed è quello che il campo dichiara nell'inspector).
+        if ( $frame_css !== '' ) {
+            $height_css = 'auto';
         }
 
         // Flex direction map
@@ -156,7 +169,7 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
         ];
 
         ob_start();
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist, integers via absint() with min()/max() clamps, line-height via floatval(), radius via Olobuild_Tile_Utils::border_radius()/radius_force_css(), position/fit/align from in_array() whitelists and the fixed $dir_map/$size_px_map/$bp_map maps, height numeric-checked or esc_attr()'d, object-position esc_attr()'d; $uid is internally generated.
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist, integers via absint() with min()/max() clamps, line-height via floatval(), radius via Olobuild_Tile_Utils::border_radius()/radius_force_css(), position/fit/align from in_array() whitelists and the fixed $dir_map/$size_px_map/$bp_map maps, height numeric-checked or esc_attr()'d, object-position esc_attr()'d, aspect-ratio built by Olobuild_Tile_Utils::image_frame() behind its own regex whitelist; $uid is internally generated.
         ?>
         <style>
             .<?php echo $uid; ?> .olo-ct-layout {
@@ -182,6 +195,7 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
                 width: 100%;
                 display: block;
                 height: <?php echo $height_css; ?>;
+                <?php echo $frame_css; ?>
                 object-fit: <?php echo $image_fit; ?>;
                 object-position: <?php echo esc_attr( $obj_pos ); ?>;
                 border-radius: <?php echo $image_radius; ?>;

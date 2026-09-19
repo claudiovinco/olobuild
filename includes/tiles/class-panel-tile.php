@@ -35,6 +35,7 @@ class Olobuild_Panel_Tile extends Olobuild_Tile_Base {
         'media_type'     => 'image',
         'image'          => '',
         'image_ratio'    => 'auto',
+        'image_ratio_custom' => '16/9',
         'image_height'   => '',
         'image_fit'      => 'cover',
         'object_position' => 'center center',
@@ -264,9 +265,21 @@ class Olobuild_Panel_Tile extends Olobuild_Tile_Base {
 
         // Media: ratio / height / fit / radius / zoom
         if ( $media_type !== 'none' ) {
-            $img_ratio  = $s['image_ratio'] ?? 'auto';
+            // 'custom' = il rapporto lo scrive l'utente. La whitelist "W/H" non c'era:
+            // senza, una stringa qualsiasi finiva dentro aspect-ratio e la regola veniva
+            // scartata in silenzio (media senza proporzione). Tutti i valori storici
+            // ('1/1', '16/9', …) la passano: nessuna pagina cambia.
+            $img_ratio  = trim( (string) ( $s['image_ratio'] ?? 'auto' ) );
+            if ( 'custom' === $img_ratio ) {
+                $img_ratio = trim( (string) ( $s['image_ratio_custom'] ?? '' ) );
+            }
+            if ( 'auto' !== $img_ratio && ! preg_match( '#^\d+(?:\.\d+)?\s*/\s*\d+(?:\.\d+)?$#', $img_ratio ) ) {
+                $img_ratio = 'auto';
+            }
             $img_height = absint( $s['image_height'] ?? 0 );
-            $img_fit    = in_array( $s['image_fit'] ?? 'cover', [ 'cover', 'contain', 'fill' ], true ) ? ( $s['image_fit'] ?? 'cover' ) : 'cover';
+            // Adattamento: i 5 valori canonici (prima solo 3). Sono tutti object-fit
+            // validi su .olo-panel-img/.olo-panel-video, nessun altro ramo da toccare.
+            $img_fit    = in_array( $s['image_fit'] ?? 'cover', [ 'cover', 'contain', 'fill', 'none', 'scale-down' ], true ) ? ( $s['image_fit'] ?? 'cover' ) : 'cover';
 
             // Punto focale (object-position). Sanitizza: keyword whitelist oppure coppia di valori
             // numerici con unità (%, px, em, rem) o keyword. Fallback sicuro a 'center center'.

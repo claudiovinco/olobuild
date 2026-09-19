@@ -1,4 +1,5 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -25,6 +26,9 @@ export default {
     rows: '0',
     gap: '8',
     img_height: '200px',
+    // 'auto' = nessun ritaglio imposto: resta l'altezza fissa (200px) con cui la
+    // galleria ha sempre reso. Il ritaglio entra in gioco solo se scelto a mano.
+    img_ratio: 'auto',
     object_fit: 'cover',
     object_position: 'center center',
     thumb_radius: '8',
@@ -93,14 +97,43 @@ export default {
     { key: 'columns', label: t('Colonne'), type: 'range', min: 2, max: 12, step: 1 },
     { key: 'rows', label: t('Righe visibili (0 = tutte)'), type: 'range', min: 0, max: 5, step: 1 },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 32, step: 2 },
-    { key: 'img_height', label: t('Altezza immagine'), type: 'unit', units: ['px'], min: 0, step: 10 },
-    { key: 'object_fit', label: t('Adattamento'), type: 'select', options: [
-      { value: 'cover', label: t('Riempi') },
-      { value: 'contain', label: t('Contieni') },
-      { value: 'fill', label: t('Riempi (deforma)') },
-    ]},
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
-      contextKeys: { fit: 'object_fit', ratio: '' } },
+    // Le proporzioni mancavano: c'era solo l'altezza fissa, uguale per tutte le foto
+    // qualunque forma avessero. Con 'auto' non si emette nessun `aspect-ratio` e resta
+    // l'altezza di prima — e' il default proprio per questo.
+    // Solo per il layout a griglia: in masonry l'altezza naturale delle foto E' il
+    // layout, e nel giustificato lo e' l'altezza fissa combinata al flex-grow (e'
+    // quella che allinea le righe). Imporre li' una forma unica cancellerebbe il
+    // layout invece di rifinirlo, quindi il controllo si nasconde e il renderer lo
+    // ignora anche se un valore e' rimasto salvato da quando il layout era a griglia.
+    // La condizione e' scritta per ESCLUSIONE, non come `eq 'grid'`: l'inspector
+    // valuta sui settings GREZZI, senza i default, e una galleria che arriva da un
+    // tema o da un template JSON parziale può non avere affatto la chiave `layout`.
+    // Con `eq` quel caso e' falso e il controllo sparisce per sempre, mentre il
+    // renderer (class-gallery-tile.php:83, `in_array(...) ?: 'grid'`) la chiave
+    // assente la tratta come griglia e la proporzione la applicherebbe.
+    { key: 'img_ratio', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ autoLabel: 'Auto (usa Altezza immagine)' }),
+      condition: [
+        { field: 'layout', op: 'neq', value: 'masonry' },
+        { field: 'layout', op: 'neq', value: 'justified' },
+      ],
+      description: t('La maschera di ritaglio delle miniature: sostituisce l’altezza fissa.') },
+    { key: 'img_height', label: t('Altezza immagine'), type: 'unit', units: ['px'], min: 0, step: 10,
+      // Con una proporzione scelta l'altezza non viene più emessa nel layout a
+      // griglia, ma resta quella del giustificato: per questo il campo non si nasconde.
+      description: t('Usata quando le proporzioni sono automatiche, e sempre nel layout giustificato.') },
+    // Nascosto nel layout giustificato: li' l'<img> ha `object-fit: cover` CABLATO
+    // (class-gallery-tile.php:170) perché e' l'altezza uniforme a costruire le righe,
+    // quindi qualunque scelta sarebbe inerte. Il valore salvato resta dov'e' e torna
+    // disponibile appena si rimette la griglia. Anche qui per esclusione, così la
+    // chiave `layout` assente lascia il controllo visibile come nel renderer.
+    { key: 'object_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI,
+      condition: { field: 'layout', op: 'neq', value: 'justified' } },
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
+      contextKeys: { fit: 'object_fit', ratio: 'img_ratio' },
+      // Con «Deforma per riempire» la foto viene stirata sui due assi: non resta
+      // niente fuori dall'inquadratura da spostare.
+      condition: { field: 'object_fit', op: 'neq', value: 'fill' } },
     withHover({ key: 'thumb_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'mobile_columns', label: t('Colonne mobile'), type: 'range', min: 1, max: 4, step: 1 },
 

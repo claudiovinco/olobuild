@@ -101,6 +101,18 @@ class Olobuild_Woo_Recently_Viewed_Tile extends Olobuild_Tile_Base {
             '4-3'  => '75%',
             '3-4'  => '133.33%',
             '16-9' => '56.25%',
+            // Aggiunte insieme al resto dell'elenco canonico. La percentuale è
+            // l'ALTEZZA sulla larghezza (H/W x 100), non il rapporto letto ad alta
+            // voce: '3-2' è orizzontale e fa 66.67%, '2-3' è verticale e fa 150%.
+            // I quattro valori storici qui sopra NON si toccano, nemmeno nei decimali:
+            // ricalcolarli sposterebbe di un capello le griglie già pubblicate.
+            // Gemella JS: la mappa RAPPORTI in src/components/Tiles/WooRecentlyViewedTile.vue,
+            // che deve restare identica a questa riga per riga.
+            '3-2'  => '66.67%',
+            '21-9' => '42.86%',
+            '4-5'  => '125%',
+            '9-16' => '177.78%',
+            '2-3'  => '150%',
             'auto' => '0',
         ];
         $ratio     = $s['image_ratio'];

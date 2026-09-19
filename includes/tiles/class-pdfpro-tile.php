@@ -170,6 +170,19 @@ class Olobuild_PdfPro_Tile extends Olobuild_Tile_Base {
             if ( ! is_array( $hs ) ) {
                 continue;
             }
+            // Cornice dell'immagine del popover: 'auto' (o vuoto) non emette nulla e
+            // l'immagine resta ad altezza naturale, come ha sempre fatto.
+            $img_ratio = is_string( $hs['image_ratio'] ?? null ) ? trim( $hs['image_ratio'] ) : '';
+            $img_ratio = str_replace( ':', '/', $img_ratio );
+            // Stessa whitelist di Olobuild_Tile_Utils::image_frame(): "W/H" o un numero.
+            if ( ! preg_match( '/^\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?$/', $img_ratio ) ) {
+                $img_ratio = '';
+            }
+            $img_fit = is_string( $hs['image_fit'] ?? null ) ? $hs['image_fit'] : 'cover';
+            if ( ! in_array( $img_fit, [ 'cover', 'contain', 'fill', 'none', 'scale-down' ], true ) ) {
+                $img_fit = 'cover';
+            }
+
             $clean[] = [
                 'page'       => max( 1, absint( $hs['page'] ?? 1 ) ),
                 'x'          => max( 0, min( 100, floatval( $hs['x'] ?? 50 ) ) ),
@@ -179,6 +192,11 @@ class Olobuild_PdfPro_Tile extends Olobuild_Tile_Base {
                 'icon'       => sanitize_text_field( $hs['icon'] ?? '' ),
                 'description'=> wp_kses_post( $hs['description'] ?? '' ),
                 'image_url'  => esc_url( $hs['image_url'] ?? '' ),
+                'image_ratio'=> $img_ratio,
+                'image_fit'  => $img_fit,
+                // Il punto focale è salvato con la convenzione di focalField()
+                // (<chiave immagine>_object_position); al runtime arriva più corto.
+                'image_pos'  => Olobuild_Tile_Utils::css_pos( $hs, 'image_url_object_position' ),
                 'video_url'  => esc_url( $hs['video_url'] ?? '' ),
                 'btn_label'        => sanitize_text_field( $hs['btn_label'] ?? '' ),
                 'btn_url'          => esc_url( $hs['btn_url'] ?? '' ),

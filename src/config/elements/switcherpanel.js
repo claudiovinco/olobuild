@@ -1,4 +1,5 @@
-import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, shadowField, widgetTemplateField, wowEffectsFields, wowEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, shadowField, widgetTemplateField, wowEffectsFields, wowEffectsDefaults, focalField } from './_shared';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -72,6 +73,11 @@ export default {
     panel_radius: 0,
     panel_image_radius: 0,
     panel_image_ratio: 'auto',
+    // 'cover' è l'adattamento che il CSS del ritaglio appendeva già da sé, e che
+    // comunque arriva su OGNI immagine di pannello dalla regola globale di
+    // assets/css/frontend.css: estratto in un campo suo, il default è la resa di oggi.
+    panel_image_fit: 'cover',
+    panel_image_object_position: 'center center',
     panel_image_width: 40,
     shadow: 'none',
     effect_color: '',
@@ -185,13 +191,33 @@ export default {
 
     { type: 'separator', label: t('Pannello — Layout') },
     { key: 'panel_image_width', label: t('Larghezza immagine'), type: 'range', min: 25, max: 60, step: 1 },
-    { key: 'panel_image_ratio', label: t('Proporzione immagine'), type: 'select', options: [
-      { value: 'auto', label: t('Auto') },
-      { value: '16:9', label: '16:9' },
-      { value: '4:3',  label: '4:3' },
-      { value: '1:1',  label: t('1:1 (quadrata)') },
-      { value: '3:4',  label: t('3:4 (verticale)') },
-    ]},
+    // Il valore salvato qui usa i DUE PUNTI ('16:9'): quattro template pubblicati su
+    // cinque lo hanno scritto così e non si tocca. Il set canonico esce nello stesso
+    // formato grazie a `sep`, e i quattro storici ci stanno già dentro.
+    { key: 'panel_image_ratio', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ sep: ':' }) },
+    // SENZA GATE SUL RITAGLIO, ed è la scelta contro-intuitiva di questo campo.
+    // L'adattamento usciva incollato al ritaglio ('aspect-ratio: …; object-fit: cover;'),
+    // e sembrava quindi che con «Auto» l'immagine non avesse object-fit: non è vero,
+    // il 'cover' glielo mette assets/css/frontend.css con la regola globale
+    // `.olo-sp-panel__img{…object-fit:cover}`. Il default 'cover' qui sotto è dunque
+    // esattamente la resa di oggi, e tenere il campo nascosto significava soltanto
+    // che i nove preset su dodici che usano «Auto» non potevano scegliere «Contieni»
+    // senza accettare anche un ritaglio.
+    { key: 'panel_image_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
+    // Punto focale UNICO per tutte le immagini dei pannelli (src:'' → pad neutro):
+    // una foto per pannello, ma il ritaglio è lo stesso per tutti.
+    // Anche qui niente gate sul ritaglio: il media è un flex item stirato, quindi con
+    // «Auto» + 'cover' la foto è ritagliata lo stesso e il focale decide cosa resta
+    // dentro. Si nasconde solo con 'fill' — e con `neq` anche un pannello salvato
+    // prima dello sprint, che la chiave `_fit` non ce l'ha affatto, se lo vede.
+    focalField('panel_image', {
+      label: t('Punto focale'),
+      src: '',
+      ratio: 'panel_image_ratio',
+      fit: 'panel_image_fit',
+      condition: { field: 'panel_image_fit', op: 'neq', value: 'fill' },
+    }),
     { key: 'panel_gap', label: t('Gap testo↔immagine'), type: 'range', min: 0, max: 80, step: 4 },
     { key: 'tile_padding', label: t('Padding pannello'), type: 'spacing', max: 80 },
     { key: 'panel_radius', label: t('Raggio pannello'), type: 'border-radius' },

@@ -24,6 +24,12 @@ class Olobuild_Videoplaylist_Tile extends Olobuild_Tile_Base {
         'active_color'  => '',
         'show_duration' => true,
         'autoplay_next' => false,
+        // Cornice delle anteprime: 48px di larghezza + 3/2 = i 32px di altezza
+        // cablati da sempre nel CSS → default che non muove niente.
+        'thumbnail_ratio'           => '3/2',
+        'thumbnail_ratio_custom'    => '16/9',
+        'thumbnail_fit'             => 'cover',
+        'thumbnail_object_position' => 'center center',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -66,6 +72,18 @@ class Olobuild_Videoplaylist_Tile extends Olobuild_Tile_Base {
         $show_duration = ! empty( $s['show_duration'] );
         $autoplay_next = ! empty( $s['autoplay_next'] );
 
+        // Cornice delle anteprime (proporzione sul riquadro, adattamento + focale
+        // sull'immagine). La larghezza resta 48px: con 3/2 l'altezza torna a 32px,
+        // cioè il riquadro di sempre.
+        $thumb_frame = Olobuild_Tile_Utils::image_frame( $s, 'thumbnail', [
+            'ratio' => '3/2',
+            'fit'   => 'cover',
+            'pos'   => 'center center',
+        ] );
+        // Se la proporzione non produce nulla (personalizzata non valida) si torna
+        // ai 32px storici: senza altezza il riquadro collasserebbe sul contenuto.
+        $thumb_box = $thumb_frame['contenitore'] !== '' ? $thumb_frame['contenitore'] : 'height: 32px;';
+
         // Parse first video for initial embed
         $first_url   = trim( $videos[0]['url'] ?? '' );
         $first_title = $videos[0]['title'] ?? 'Video 1';
@@ -80,7 +98,7 @@ class Olobuild_Videoplaylist_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist (with var() token fallbacks), heights/widths via intval() with min()/max() clamps, flex-direction from fixed literals; $uid is internally generated and esc_attr()'d. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: colors via the safe_color_css() whitelist (with var() token fallbacks), heights/widths via intval() with min()/max() clamps, flex-direction from fixed literals, image frame via Olobuild_Tile_Utils::image_frame() (ratio/fit/position validated against regex + whitelist there); $uid is internally generated and esc_attr()'d. ?>
         <style>
             .<?php echo esc_attr( $uid ); ?> {
                 display: flex;
@@ -133,7 +151,7 @@ class Olobuild_Videoplaylist_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo esc_attr( $uid ); ?> .olo-vp-thumb {
                 width: 48px;
-                height: 32px;
+                <?php echo $thumb_box; ?>
                 flex-shrink: 0;
                 background: rgba(255,255,255,0.08);
                 border-radius: 3px;
@@ -145,7 +163,7 @@ class Olobuild_Videoplaylist_Tile extends Olobuild_Tile_Base {
             .<?php echo esc_attr( $uid ); ?> .olo-vp-thumb img {
                 width: 100%;
                 height: 100%;
-                object-fit: cover;
+                <?php echo $thumb_frame['immagine']; ?>
                 display: block;
             }
             .<?php echo esc_attr( $uid ); ?> .olo-vp-num {

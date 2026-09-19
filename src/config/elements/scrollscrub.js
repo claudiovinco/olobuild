@@ -163,7 +163,7 @@ export default {
     { key: 'overlay_scrim_height', label: t('Altezza sfumatura'), type: 'range', min: 20, max: 100, step: 2,
       condition: { field: 'item_padding', op: 'eq', value: 0 },
       description: t('Quanta parte della card copre, dal fondo verso l\'alto.') },
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
       contextKeys: { fit: '' },
       description: t('Punto focale applicato a tutte le immagini del nastro (object-position).') },
 

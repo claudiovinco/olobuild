@@ -58,12 +58,20 @@ class Olobuild_Woo_Product_Image_Tile extends Olobuild_Tile_Base {
         $uid = 'olo-woo-pimg-' . wp_rand( 10000, 99999 );
 
         // Image ratio
+        // Il rapporto qui non diventa `aspect-ratio` ma la percentuale di padding-top
+        // che tiene aperto il riquadro (H/W x 100). Le prime cinque righe sono quelle
+        // storiche e NON si ritoccano (66.66 resta 66.66): le ultime quattro sono le
+        // voci nuove del select, che senza una riga qui ricadrebbero su 1:1.
         $ratio_map = [
             '1-1'  => '100%',
             '4-3'  => '75%',
             '3-4'  => '133.33%',
             '3-2'  => '66.66%',
             '16-9' => '56.25%',
+            '21-9' => '42.86%',
+            '4-5'  => '125%',
+            '9-16' => '177.78%',
+            '2-3'  => '150%',
             'auto' => '0',
         ];
         $ratio     = $s['image_ratio'];

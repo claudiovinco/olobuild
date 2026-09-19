@@ -440,11 +440,20 @@ class Olobuild_Queryloop_Tile extends Olobuild_Tile_Base {
      * Get aspect ratio padding from setting.
      */
     private function get_ratio_padding( $ratio ) {
+        // padding-bottom in percentuale = altezza/larghezza. Deve elencare TUTTE le
+        // voci del select, altrimenti il rapporto scelto ricade in silenzio sul
+        // 16:9 — è quello che succedeva al 3:4, offerto nell'inspector e reso dal
+        // canvas ma non da qui: il sito disegnava 16:9 al posto del verticale.
         $map = [
-            '16:9' => '56.25%',
-            '4:3'  => '75%',
             '1:1'  => '100%',
+            '4:3'  => '75%',
             '3:2'  => '66.67%',
+            '16:9' => '56.25%',
+            '21:9' => '42.86%',
+            '3:4'  => '133.33%',
+            '4:5'  => '125%',
+            '9:16' => '177.78%',
+            '2:3'  => '150%',
             'auto' => '0',
         ];
         return $map[ $ratio ] ?? '56.25%';

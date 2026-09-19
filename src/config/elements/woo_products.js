@@ -1,5 +1,6 @@
 
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { ratioOptions } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -154,13 +155,14 @@ export default {
     { key: 'columns_tablet', label: t('Colonne tablet'), type: 'range', min: 1, max: 4, step: 1 },
     { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 2, step: 1 },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4 },
-    { key: 'image_ratio', label: t('Proporzione immagine'), type: 'select', options: [
-      { value: '1-1', label: t('1:1 Quadrato') },
-      { value: '4-3', label: '4:3' },
-      { value: '3-4', label: t('3:4 Verticale') },
-      { value: '16-9', label: '16:9' },
-      { value: 'auto', label: t('Automatico') },
-    ]},
+    // Le tile WooCommerce salvano il rapporto col TRATTINO ('4-3'): `sep: '-'`
+    // tiene quel formato storico e porta l'elenco a quello canonico. La voce
+    // automatica c'era già (l'immagine tiene la sua altezza) e resta.
+    // ⚠ Il renderer traduce il rapporto in una percentuale di padding-top
+    // (class-woo-products-tile.php $ratio_map, twin in WooProductsTile.vue):
+    // se aggiungi una voce qui, aggiungila anche li' o ritagliera' 4:3.
+    { key: 'image_ratio', label: t('Proporzioni immagine'), type: 'select',
+      options: ratioOptions({ sep: '-', auto: true }) },
     { key: 'card_style', label: t('Stile card'), type: 'select', options: [
       { value: 'none', label: t('Nessuno') },
       { value: 'shadow', label: t('Ombra') },

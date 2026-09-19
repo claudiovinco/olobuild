@@ -1,5 +1,6 @@
 import { t } from '@/i18n';
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField, focalDefault } from './_shared.js';
+import { ratioOptions } from './_imageFrame.js';
 
 /**
  * Hero — Photo Cover (Frame) : hero editoriale full-bleed con grande foto di copertina
@@ -87,13 +88,13 @@ export default {
 
   styleFields: [
     { type: 'separator', label: t('Cornice / media') },
-    { key: 'aspect_ratio', label: t('Proporzioni'), type: 'select', options: [
-      { value: '16/9', label: '16:9' },
-      { value: '21/9', label: '21:9' },
-      { value: '3/2', label: '3:2' },
-      { value: '4/3', label: '4:3' },
-      { value: '1/1', label: '1:1' },
-    ] },
+    // Elenco canonico delle proporzioni (stesse voci, stesso ordine, stessi nomi di
+    // ogni altra tile). Niente voce 'Auto': la copertina e' un background-image e
+    // l'«Altezza minima» qui sotto può valere 0 — senza proporzione il riquadro
+    // collasserebbe. I renderer, del resto, accettano solo la forma «N/N» e
+    // ricadrebbero comunque su 16/9 (class-photocover-tile.php:77, PhotoCoverTile.vue:141).
+    { key: 'aspect_ratio', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ auto: false }) },
     { key: 'min_height', label: t('Altezza minima'), type: 'range', min: 0, max: 1000, step: 10 },
     { key: 'frame_padding', label: t('Cornice — spessore base'), type: 'range', min: 0, max: 120, step: 2,
       description: t('Base del clamp responsive della cornice (lo = N, hi = N×2). Per i 4 lati fissi usa «Padding contenuto».') },

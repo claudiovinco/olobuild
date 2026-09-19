@@ -27,9 +27,9 @@
         </span>
 
         <!-- Image area -->
-        <div :style="imageAreaStyle(idx)">
+        <div :style="imageAreaStyle(item, idx)">
           <img v-if="item.image_url" :src="item.image_url" :alt="item.title"
-            :style="imgStyle" :class="{ 'olo-pf-grayscale': s.grayscale_default }" />
+            :style="imgStyle(idx)" :class="{ 'olo-pf-grayscale': s.grayscale_default }" />
           <div v-else :style="placeholderStyle">
             <span style="font-size:24px;opacity:0.5;">{{ t('&#x1F5BC;') }}</span>
           </div>
@@ -88,6 +88,7 @@ const defaults = {
   overlay_color: '#000000',
   overlay_opacity: '80',
   image_ratio: '4:3',
+  image_fit: 'cover',
   object_position: 'center center',
   border_radius: '8',
   font_family: 'inherit',
@@ -134,7 +135,12 @@ const previewCategories = computed(() => {
   return [s.value.filter_all_label || 'Tutti', ...Array.from(cats)];
 });
 
-const ratioMap = { '1:1': '100%', '4:3': '75%', '16:9': '56.25%', '3:2': '66.67%', '3:4': '133.33%', 'auto': '70%' };
+// Stesse voci della mappa PHP (padding-top = altezza/larghezza): se qui ne manca
+// una offerta dal select, il canvas mostra un ritaglio diverso dal sito.
+// 'auto' fa eccezione: nel canvas la card ha bisogno di un'altezza per non
+// collassare prima che l'immagine sia caricata.
+const ratioMap = { '1:1': '100%', '4:3': '75%', '3:2': '66.67%', '16:9': '56.25%', '21:9': '42.86%',
+  '3:4': '133.33%', '4:5': '125%', '9:16': '177.78%', '2:3': '150%', 'auto': '70%' };
 const cols = computed(() => Math.max(1, Math.min(6, parseInt(s.value.columns) || 3)));
 
 function fontFamilyCss(v) {
@@ -239,40 +245,60 @@ function cardClasses(item, idx) {
   };
 }
 
-function imageAreaStyle(idx) {
-  const skipPad = ['masonry-pin', 'split-index', 'postcard-stack', 'polaroid'].includes(layout.value);
-  const isBentoLarge = layout.value === 'bento' && idx % 7 === 0;
-  const isMagazineFirst = layout.value === 'magazine' && idx === 0;
-  const fullHeight = isBentoLarge || isMagazineFirst || layout.value === 'mosaic';
+// Le TRE rese possibili dell'area immagine, le stesse del frontend
+// (class-portfolio-tile.php):
+//   'fill'    → il layout impone l'altezza della card e l'immagine la riempie,
+//               qualunque sia il rapporto (get_layout_css() scrive lì
+//               `padding-top:0 !important;height:100%`);
+//   'ratio'   → la maschera padding-top del rapporto scelto;
+//   'natural' → nessun ritaglio, l'immagine tiene la sua altezza.
+// Prima qui c'erano due rami IDENTICI — `skipPad` era calcolato e poi ignorato —
+// e il canvas ritagliava sempre: con «Auto», o con polaroid / masonry-pin /
+// postcard-stack / split-index, mostrava un ritaglio che il sito non fa.
+function cropMode(idx) {
+  // Ritagliano sempre, anche con rapporto «Auto».
+  if (layout.value === 'bento' || layout.value === 'mosaic') return 'fill';
+  if (layout.value === 'magazine' && idx === 0) return 'fill';
+  // Qui il frontend salta la maschera: masonry-pin impone perfino
+  // `height:auto !important`, e split-index nasconde del tutto l'area immagine
+  // della riga (la foto si vede nell'anteprima laterale).
+  if (['masonry-pin', 'split-index', 'postcard-stack', 'polaroid'].includes(layout.value)) return 'natural';
+  return s.value.image_ratio === 'auto' ? 'natural' : 'ratio';
+}
 
+function imageAreaStyle(item, idx) {
   const base = {
     position: 'relative',
     overflow: 'hidden',
     borderRadius: 'inherit',
     background: TOKENS.surfaceAlt,
   };
+  const mode = cropMode(idx);
 
-  if (fullHeight) {
+  if (mode === 'fill') {
     base.height = '100%';
     base.minHeight = '160px';
-  } else if (skipPad) {
+  } else if (mode === 'ratio') {
     base.paddingTop = ratioMap[s.value.image_ratio] || '75%';
-  } else {
+  } else if (!item || !item.image_url) {
+    // Senza ritaglio l'altezza la dà l'immagine — ma il segnaposto è in
+    // posizione assoluta e non ne avrebbe nessuna: gli si tiene la maschera.
     base.paddingTop = ratioMap[s.value.image_ratio] || '75%';
   }
 
   return base;
 }
 
-const imgStyle = computed(() => ({
-  position: 'absolute',
-  inset: '0',
-  width: '100%',
-  height: '100%',
-  objectFit: 'cover',
-  objectPosition: s.value.object_position || 'center center',
-  display: 'block',
-}));
+function imgStyle(idx) {
+  const fit = s.value.image_fit || 'cover';
+  const pos = s.value.object_position || 'center center';
+  if (cropMode(idx) === 'natural') {
+    // Gemello del ramo `else` del CSS frontend: width:100%, height:auto e
+    // l'object-fit emesso lo stesso (con «Dimensione originale» cambia la resa).
+    return { position: 'relative', width: '100%', height: 'auto', objectFit: fit, objectPosition: pos, display: 'block' };
+  }
+  return { position: 'absolute', inset: '0', width: '100%', height: '100%', objectFit: fit, objectPosition: pos, display: 'block' };
+}
 
 const placeholderStyle = computed(() => ({
   position: 'absolute',

@@ -1,4 +1,5 @@
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { ratioOptions } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -19,6 +20,11 @@ export default {
     subtitle: '',
     image: '',
     image_position: 'top',
+    // 'auto' = nessun aspect-ratio: sopra/sotto l'immagine resta a height:auto (non
+    // ritagliata), di fianco resta a height:100% (si allunga come la colonna testo).
+    // È esattamente la resa di prima di questo campo: i popup pubblicati non cambiano.
+    aspect_ratio: 'auto',
+    aspect_ratio_custom: '16/9',
     object_position: 'center center',
     cta_text: '',
     cta_url: '#',
@@ -90,12 +96,23 @@ export default {
       { value: 'left', label: t('Sinistra') },
       { value: 'right', label: t('Destra') },
     ], condition: { field: 'mode', op: 'eq', value: 'simple' } },
-    // Punto focale immagine — attivo solo con immagine laterale (left/right),
-    // dove il PHP ritaglia con object-fit:cover. In top/bottom l'immagine è a
-    // height:auto (non ritagliata) e il valore resta ininfluente.
+    // Proporzioni: l'unico pezzo di cornice che mancava. L'adattamento resta cablato a
+    // «Riempi» come da sempre — offrirlo vorrebbe dire cambiare anche il caso sopra/sotto,
+    // che oggi NON ritaglia affatto.
+    { key: 'aspect_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions({ custom: true }),
+      description: t('«Auto» lascia la foto come oggi: intera sopra/sotto, alta quanto il testo di fianco.'),
+      condition: { field: 'mode', op: 'eq', value: 'simple' } },
+    { key: 'aspect_ratio_custom', label: t('Proporzioni personalizzate'), type: 'text',
+      placeholder: t('es. 5/4, 1.618'),
+      condition: [{ field: 'mode', op: 'eq', value: 'simple' }, { field: 'aspect_ratio', op: 'eq', value: 'custom' }] },
+    // Il punto focale non è più legato alla sola posizione laterale: con una proporzione
+    // scelta il ritaglio c'è anche sopra/sotto. Il valutatore di condizioni conosce solo
+    // l'AND (array), quindi una condizione «laterale OPPURE proporzione» non è esprimibile:
+    // meglio il campo sempre visibile che nascosto proprio quando servirebbe.
     { key: 'object_position', label: t('Punto focale immagine'), type: 'object-position', reveal: true,
-      contextKeys: { src: 'image' },
-      condition: { field: 'image_position', value: ['left', 'right'] } },
+      contextKeys: { src: 'image', ratio: 'aspect_ratio', ratioCustom: 'aspect_ratio_custom' },
+      description: t('Conta quando la foto viene ritagliata: di fianco al testo, o con una proporzione scelta.'),
+      condition: { field: 'mode', op: 'eq', value: 'simple' } },
     { key: 'template_id', label: t('Template'), type: 'select', optionsSource: 'templates',
       condition: { field: 'mode', op: 'eq', value: 'template' } },
 

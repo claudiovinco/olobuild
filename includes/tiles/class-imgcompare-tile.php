@@ -24,6 +24,10 @@ class Olobuild_ImgCompare_Tile extends Olobuild_Tile_Base {
         'handle_border'  => '3',
         'line_width'     => '3',
         'height'            => '400',
+        // 'auto' = nessun ritaglio, resta in vigore l'altezza in px: e' la resa
+        // storica della tile e non deve cambiare sulle pagine già pubblicate.
+        'aspect_ratio'        => 'auto',
+        'aspect_ratio_custom' => '16/9',
         'border_radius'     => '8',
         'object_fit'        => 'cover',
         'object_position'   => 'center center',
@@ -57,9 +61,20 @@ class Olobuild_ImgCompare_Tile extends Olobuild_Tile_Base {
         $is_vert     = $orientation === 'vertical';
         $start       = max( 0, min( 100, intval( $s['start_position'] ) ) );
         $height      = intval( $s['height'] ) ?: 400;
+        // PROPORZIONI della card. La cornice e' UNA per le due immagini: prima e dopo
+        // devono stare nella stessa maschera, altrimenti lo slider confronta ritagli
+        // diversi. Le chiavi sono piatte (`aspect_ratio`) come le vicine `object_fit`
+        // e `object_position`, non `<key>_ratio`: qui non c'e' una chiave-immagine da
+        // cui derivarle e la coerenza interna alla tile viene prima dello schema.
+        // Il prefisso 'aspect' fa leggere all'helper proprio `aspect_ratio` e
+        // `aspect_ratio_custom`; di `immagine` non si fa niente perché fit e punto
+        // focale qui hanno chiavi proprie, più vecchie dell'helper.
+        $aspect_css = Olobuild_Tile_Utils::image_frame( $s, 'aspect', [ 'ratio' => 'auto' ] )['contenitore'];
         $radius      = Olobuild_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
-        $fit         = in_array( $s['object_fit'], [ 'cover', 'contain' ] ) ? $s['object_fit'] : 'cover';
+        // Whitelist allineata ad ADATTAMENTI (_imageFrame.js): un valore offerto dal
+        // select e assente da qui tornerebbe a 'cover' senza dirlo.
+        $fit         = in_array( $s['object_fit'], [ 'cover', 'contain', 'fill', 'none', 'scale-down' ], true ) ? $s['object_fit'] : 'cover';
         $obj_pos     = trim( (string) ( $s['object_position'] ?? 'center center' ) );
         if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
         $handle_c    = $this->safe_color_css( $s['handle_color'] ) ?: '#FFFFFF';
@@ -97,7 +112,9 @@ class Olobuild_ImgCompare_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> {
                 position: relative;
                 overflow: hidden;
-                height: <?php echo $height; ?>px;
+                <?php /* aspect-ratio AL POSTO di height, mai insieme: con tutte e due
+                         l'altezza fissa vincerebbe e il rapporto scelto non si vedrebbe. */ ?>
+                <?php if ( $aspect_css !== '' ) : ?><?php echo $aspect_css; ?><?php else : ?>height: <?php echo $height; ?>px;<?php endif; ?>
                 <?php if ( $radius && $radius !== '0px' ) : ?>border-radius: <?php echo $radius; ?>;<?php endif; ?>
                 <?php echo esc_attr( $card_border_decl ); ?>
                 <?php if ( $shadow && $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>

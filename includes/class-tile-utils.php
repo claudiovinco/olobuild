@@ -479,7 +479,7 @@ class Olobuild_Tile_Utils {
      * riserva: `var(--olo-color-dark, #16263d)` -> `16263d`.
      *
      * Serve ai renderer che devono scomporre il colore in r,g,b per costruire una
-     * `rgba()`: a quelli un token da solo non basta, perche' il CSS non si puo'
+     * `rgba()`: a quelli un token da solo non basta, perché il CSS non si può
      * scomporre in PHP. Leggendo la riserva scritta dentro il token, la resa resta
      * esattamente quella di prima invece di cadere su un colore di ripiego.
      *
@@ -487,6 +487,67 @@ class Olobuild_Tile_Utils {
      * @param string $fallback Cosa restituire se non si ricava nessun hex.
      * @return string Sei cifre esadecimali SENZA cancelletto, oppure $fallback.
      */
+    /**
+     * CORNICE DELL'IMMAGINE — proporzione, adattamento e punto focale, in un colpo solo.
+     *
+     * E' la forma che la tile Immagine ha già e che va estesa ovunque si inserisca
+     * un'immagine: si sceglie una maschera di ritaglio (1:1, 16:9, ...), come la foto
+     * la riempie, e quale punto resta al centro dell'inquadratura.
+     *
+     * Chiavi lette (tutte facoltative, tutte con lo stesso schema):
+     *   <key>_ratio          'auto' | '16/9' | ... | 'custom'
+     *   <key>_ratio_custom   usata solo quando _ratio vale 'custom'
+     *   <key>_fit            cover | contain | fill | none | scale-down
+     *   <key>_object_position   punto focale (già gestito da focal_pos())
+     *
+     * @param array  $settings  settings della tile
+     * @param string $key       chiave del campo immagine (es. 'cover_image')
+     * @param array  $def       default che riproducono la resa ATTUALE della tile:
+     *                          [ 'ratio' => 'auto', 'fit' => 'cover', 'pos' => 'center center' ]
+     * @return array [ 'contenitore' => 'aspect-ratio: …;', 'immagine' => 'object-fit: …; object-position: …;' ]
+     *               Entrambe possono essere stringhe vuote: in quel caso non si
+     *               emette niente e la tile rende esattamente come prima.
+     */
+    public static function image_frame( $settings, $key, $def = [] ) {
+        $settings = is_array( $settings ) ? $settings : [];
+        $ratio_def = $def['ratio'] ?? 'auto';
+        $fit_def   = $def['fit'] ?? '';
+        $pos_def   = $def['pos'] ?? 'center center';
+
+        // ── proporzione ──
+        $ratio = trim( (string) ( $settings[ $key . '_ratio' ] ?? $ratio_def ) );
+        if ( $ratio === 'custom' ) {
+            $ratio = trim( (string) ( $settings[ $key . '_ratio_custom' ] ?? '' ) );
+        }
+        $contenitore = '';
+        // Cinque tile storiche salvano la proporzione col DUE PUNTI ('16:9'), che in
+        // CSS non e' valido: si normalizza qui, così i valori già salvati continuano
+        // a rendere e si può usare un formato solo d'ora in avanti.
+        $ratio = str_replace( ':', '/', $ratio );
+        // Whitelist stretta: "W/H" oppure un numero. Niente altro finisce nel CSS.
+        if ( $ratio !== '' && $ratio !== 'auto'
+            && preg_match( '/^\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?$/', $ratio ) ) {
+            $contenitore = 'aspect-ratio: ' . str_replace( ' ', '', $ratio ) . ';';
+        }
+
+        // ── adattamento + punto focale ──
+        $immagine = '';
+        $fit = (string) ( $settings[ $key . '_fit' ] ?? $fit_def );
+        if ( in_array( $fit, [ 'cover', 'contain', 'fill', 'none', 'scale-down' ], true ) ) {
+            $immagine .= 'object-fit: ' . $fit . ';';
+        }
+        // Il focale si emette solo se c'e' un ritaglio da spostare: con object-fit
+        // assente o 'fill' non cambierebbe niente.
+        if ( $immagine !== '' && $fit !== 'fill' ) {
+            $pos = self::focal_pos( $settings, $key, $pos_def );
+            if ( $pos !== '' ) {
+                $immagine .= 'object-position: ' . $pos . ';';
+            }
+        }
+
+        return [ 'contenitore' => $contenitore, 'immagine' => $immagine ];
+    }
+
     public static function hex_digits( $value, $fallback = '' ) {
         $v = trim( (string) $value );
         if ( $v === '' ) {

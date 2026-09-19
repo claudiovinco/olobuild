@@ -58,7 +58,8 @@ const defaults = {
     { image: '', media_label: 'tuxedo jacket', tag: '', category: 'Tailoring', title: 'Le Smoking Jacket', price: '€1,150', link: '#', quick_add: 'Quick add' },
     { image: '', media_label: 'cashmere knit', tag: 'Atelier', category: 'Knitwear', title: 'Cashmere Roll-Neck', price: '€620', link: '#', quick_add: 'Quick add' },
   ],
-  columns: 4, gap: 22, media_aspect: '3/4', media_bg: '', stripe_dark: false, hover_zoom: true,
+  columns: 4, gap: 22, media_aspect: '3/4', media_aspect_custom: '3/4', media_bg: '', media_fit: 'cover',
+  stripe_dark: false, hover_zoom: true,
   tag_bg: '', tag_color: '', quick_add_show: true, quick_add_bg: '', quick_add_color: '',
   category_color: '', title_font: 'heading', title_size: 21, title_color: '', price_color: '',
   footer_text: '', footer_url: '#', footer_color: '',
@@ -123,7 +124,16 @@ const cols = computed(() => Math.max(1, Math.min(5, parseInt(s.value.columns, 10
 const dark = computed(() => !!s.value.stripe_dark);
 const zoom = computed(() => !!s.value.hover_zoom);
 const qaShow = computed(() => !!s.value.quick_add_show);
-const asp = computed(() => String(s.value.media_aspect || '3/4').replace(/[^0-9.\/]/g, '') || '3/4');
+// Gemelli esatti del PHP: 'custom' pesca da media_aspect_custom e quel che non è
+// "W/H" torna al 3/4 storico; l'adattamento diventa background-size perché qui la
+// foto è uno sfondo, e parte da 'cover' che era il valore cablato.
+const asp = computed(() => {
+  const raw = String(s.value.media_aspect === 'custom' ? (s.value.media_aspect_custom || '') : (s.value.media_aspect || '3/4'));
+  const v = raw.replace(/[^0-9./]/g, '');
+  return /^\d+(?:\.\d+)?(?:\/\d+(?:\.\d+)?)?$/.test(v) ? v : '3/4';
+});
+const FIT_BG = { cover: 'cover', contain: 'contain', fill: '100% 100%', none: 'auto' };
+const bsize = computed(() => FIT_BG[s.value.media_fit] || 'cover');
 
 const mbg = computed(() => s.value.media_bg || 'var(--olo-color-surface-alt, #f2f2f4)');
 const stripe = computed(() => dark.value ? 'rgba(0,0,0,.06)' : 'rgba(255,255,255,.05)');
@@ -240,11 +250,11 @@ function mediaStyle(it) {
   const base = { display: 'block', aspectRatio: asp.value, transition: 'transform .7s cubic-bezier(.2,.7,.3,1)' };
   const mb = it && it.media_bg;
   if (mb && mb.type && mb.type !== 'none') {
-    return { ...base, backgroundSize: 'cover', backgroundPosition: (s.value.object_position || 'center center'), ...buildBgStyle(mb) };
+    return { ...base, backgroundSize: bsize.value, backgroundRepeat: 'no-repeat', backgroundPosition: (s.value.object_position || 'center center'), ...buildBgStyle(mb) };
   }
   const img = it && it.image ? it.image : '';
   return {
-    ...base, background: mbg.value, backgroundSize: 'cover', backgroundPosition: (s.value.object_position || 'center center'),
+    ...base, background: mbg.value, backgroundSize: bsize.value, backgroundRepeat: 'no-repeat', backgroundPosition: (s.value.object_position || 'center center'),
     backgroundImage: img ? `url(${img})` : `repeating-linear-gradient(135deg, ${stripe.value} 0 16px, transparent 16px 32px)`,
   };
 }

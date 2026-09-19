@@ -1,4 +1,5 @@
-import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField } from './_shared.js';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -23,6 +24,9 @@ export default {
     gap: 24,
     media_bg: '',
     media_aspect: '1/1',
+    // 'cover' = il background-size che i due renderer avevano cablato fino a ieri:
+    // cambiarlo qui sposterebbe ogni card già pubblicata.
+    media_fit: 'cover',
     object_position: 'center center',
     accent: '',
     before_label_color: 'var(--olo-color-light, #f8f9fa)',
@@ -76,16 +80,36 @@ export default {
     { key: 'text_color', label: t('Colore testo'), type: 'color' },
 
     { type: 'separator', label: t('Forma') },
-    { key: 'media_aspect', label: t('Proporzioni media'), type: 'select', options: [
-      { value: '1/1', label: '1:1' },
-      { value: '4/5', label: '4:5' },
-      { value: '3/4', label: '3:4' },
-      { value: '4/3', label: '4:3' },
-      { value: '3/2', label: '3:2' },
-    ]},
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
-      contextKeys: { ratio: 'media_aspect', fit: 'cover' },
-      description: t('Punto focale globale di tutte le immagini (prima + dopo).') },
+    // Elenco canonico: alle cinque voci di prima si aggiungono 16:9, 21:9, 9:16 e 2:3.
+    // Il default resta '1/1', che e' il quadrato con cui rendono tutte le card già
+    // pubblicate. Niente voce automatica: le due foto sono background-image di due
+    // <div> vuoti, quindi senza `aspect-ratio` il confronto collasserebbe a zero.
+    // La proporzione e' UNA per tutta la tile — prima e dopo, tutte le card: e' il
+    // confronto stesso a richiederlo, due maschere diverse non si confrontano.
+    { key: 'media_aspect', label: t('Proporzioni media'), type: 'select',
+      options: ratioOptions({ auto: false }) },
+    // L'adattamento mancava del tutto: il `background-size` era cablato su `cover`,
+    // che resta il default. Le foto sono sfondi, non <img>, quindi i valori si
+    // traducono (fill → '100% 100%', none → 'auto'); «Riduci se necessario» non ha
+    // un equivalente nel background e non viene offerto, per non mettere in elenco
+    // una voce che il renderer non saprebbe disegnare.
+    { key: 'media_fit', label: t('Adattamento media'), type: 'select',
+      options: ADATTAMENTI.filter((o) => o.value !== 'scale-down') },
+    // Il focale passa dall'helper condiviso invece di essere riscritto a mano: la
+    // chiave salvata resta `object_position` (storica, via `key`) e `src: ''` tiene il
+    // pad neutro, perché le foto stanno negli item e il focale vale per tutte.
+    // Scritto a mano l'oggetto era identico — ma «identico oggi» e' quello che si perde
+    // al primo ritocco dell'helper: la tile ora eredita, non copia.
+    focalField('', {
+      key: 'object_position',
+      src: '',
+      ratio: 'media_aspect',
+      fit: 'media_fit',
+      description: t('Punto focale globale di tutte le immagini (prima + dopo).'),
+      // Con «Deforma per riempire» la foto viene stirata sui due assi: non c'e'
+      // nessun ritaglio da spostare e il controllo non farebbe niente.
+      condition: { field: 'media_fit', op: 'neq', value: 'fill' },
+    }),
     { key: 'radius', label: t('Raggio'), type: 'border-radius' },
     { key: 'gap', label: t('Gap card'), type: 'range', min: 8, max: 48, step: 2 },
 

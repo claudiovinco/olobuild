@@ -45,6 +45,8 @@ const s = computed(() => ({
   separator: ' — ',
   images: [],
   image_height: '40',
+  image_fit: 'contain',
+  image_object_position: 'center center',
   speed: '30',
   direction: 'left',
   pause_hover: true,
@@ -147,13 +149,24 @@ const sepStyle = computed(() => {
   };
 });
 
-const imgStyle = computed(() => ({
-  height: (parseInt(s.value.image_height) || 40) + 'px',
-  width: 'auto',
-  flexShrink: 0,
-  objectFit: 'contain',
-  pointerEvents: 'none',
-}));
+// La stessa whitelist del renderer PHP (class-marquee-tile.php): senza, un valore
+// fuori elenco renderebbe nel canvas e non sul sito. Nessuna proporzione imposta:
+// l'altezza e' l'unica dimensione e la larghezza resta quella del logo.
+const MQ_FIT_OK = ['cover', 'contain', 'fill', 'none', 'scale-down'];
+
+const imgStyle = computed(() => {
+  const fit = MQ_FIT_OK.includes(s.value.image_fit) ? s.value.image_fit : 'contain';
+  const st = {
+    height: (parseInt(s.value.image_height) || 40) + 'px',
+    width: 'auto',
+    flexShrink: 0,
+    objectFit: fit,
+    pointerEvents: 'none',
+  };
+  // Con 'fill' la foto e' deformata per riempire: il punto focale non sposterebbe nulla.
+  if (fit !== 'fill') st.objectPosition = s.value.image_object_position || 'center center';
+  return st;
+});
 </script>
 
 <style>

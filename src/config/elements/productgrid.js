@@ -1,4 +1,5 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField } from './_shared.js';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -31,7 +32,13 @@ export default {
     columns: 4,
     gap: 22,
     media_aspect: '3/4',
+    // Prefilled col rapporto di default: scegliere «Personalizzato» non muove nulla
+    // finché non lo si riscrive davvero.
+    media_aspect_custom: '3/4',
     media_bg: '',
+    // Il media è un background-image e il background-size era cablato a 'cover':
+    // il controllo nasce lì, altrimenti le pagine pubblicate si muoverebbero.
+    media_fit: 'cover',
     object_position: 'center center',
     stripe_dark: false,
     hover_zoom: true,
@@ -156,15 +163,33 @@ export default {
 
   styleFields: [
     { type: 'separator', label: t('Media') },
-    { key: 'media_aspect', label: t('Proporzioni media'), type: 'select', options: [
-      { value: '3/4', label: '3:4' },
-      { value: '4/5', label: '4:5' },
-      { value: '1/1', label: '1:1' },
-      { value: '3/3.5', label: '3:3.5 (alto)' },
-      { value: '16/11', label: '16:11' },
-    ]},
+    // Elenco canonico + i due rapporti che questa tile si porta dietro dal blueprint
+    // Atelier Noir ('3/3.5' e '16/11'): restano selezionabili o chi li ha salvati non
+    // li ritroverebbe più. `auto` non c'è: .opg-media è un background-image con soli
+    // figli assoluti, senza aspect-ratio collasserebbe a zero.
+    { key: 'media_aspect', label: t('Proporzioni media'), type: 'select',
+      options: ratioOptions({ auto: false, custom: true, extra: ['3/3.5', '16/11'] }) },
+    { key: 'media_aspect_custom', label: t('Proporzioni media personalizzate'), type: 'text',
+      placeholder: t('es. 5/4'),
+      condition: { field: 'media_aspect', op: 'eq', value: 'custom' } },
+    // Il media è disegnato come background: l'adattamento diventa background-size.
+    // «Riduci se necessario» non ha un equivalente lì (non esiste uno scale-down per
+    // gli sfondi) e non va offerto: un controllo che non fa niente è peggio che assente.
+    { key: 'media_fit', label: t('Adattamento media'), type: 'select',
+      options: ADATTAMENTI.filter((o) => o.value !== 'scale-down'),
+      description: t('Come la foto riempie la maschera: «Riempi» ritaglia, «Contieni» la mostra tutta.') },
     { key: 'media_bg', label: t('Sfondo media'), type: 'color' },
-    focalField('image', { key: 'object_position', src: '', reveal: true, label: t('Posizione — punto focale immagini') }),
+    focalField('image', { key: 'object_position', src: '', reveal: true, label: t('Punto focale immagini'),
+      fit: 'media_fit', ratio: 'media_aspect', ratioCustom: 'media_aspect_custom',
+      // Qui l'adattamento è un background-size: con «Deforma per riempire» (100% 100%)
+      // l'immagine copre esattamente il riquadro e il background-position non sposta più
+      // nulla — il pad si muoverebbe, la chiave si salverebbe, e né canvas né sito
+      // cambierebbero di un pixel. Con `contain` e `none`, invece, lavora eccome.
+      // Scritta `neq 'fill'` e non come elenco `in`: una tile salvata prima di questo
+      // sprint non ha affatto la chiave media_fit, e l'inspector valuta le condizioni sui
+      // settings GREZZI, senza fondere i default — con un `in` il controllo sparirebbe
+      // per sempre proprio su quelle pagine. Stesso criterio di _imageFrame.js.
+      condition: { field: 'media_fit', op: 'neq', value: 'fill' } }),
     { key: 'stripe_dark', label: t('Strisce scure (placeholder)'), type: 'toggle' },
     { key: 'hover_zoom', label: t('Zoom media in hover'), type: 'toggle' },
 

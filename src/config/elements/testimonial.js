@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults, filterFields, filterDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { textEffectsFields, textEffectsDefaults, filterFields, filterDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, focalField } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
@@ -44,6 +44,10 @@ export default {
     author_position: 'bottom-left',
     avatar_size: '48',
     avatar_shape: 'circle',
+    // L'avatar è sempre ritagliato in quadrato (width = height = avatar_size) con
+    // `object-fit: cover` cablato nel CSS: l'unico pezzo di cornice che mancava era
+    // DOVE cade quel ritaglio. 'center center' = esattamente la resa di oggi.
+    avatar_object_position: 'center center',
     avatar_radius: '6',
     avatar_shadow: 'none',
     avatar_border_width: '0',
@@ -178,6 +182,11 @@ export default {
     ]},
     withHover({ key: 'avatar_radius', label: t('Raggio avatar'), type: 'border-radius',
       condition: { field: 'avatar_shape', value: 'square' } }),
+    // Ritaglio sempre quadrato e sempre «riempi»: ratio e fit sono LETTERALI nel
+    // contesto dell'anteprima (non esistono chiavi da leggere), si sceglie solo il
+    // punto. Vale per tutte le testimonianze della lista, non una per voce:
+    // altrimenti in griglia i volti si sfalserebbero riga per riga.
+    focalField('avatar', { ratio: '1/1', fit: '(cover)', label: t('Punto focale avatar') }),
     { key: 'avatar_shadow', label: t('Ombra avatar'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
       { value: 'sm', label: t('Piccola') },

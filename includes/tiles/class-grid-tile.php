@@ -104,7 +104,7 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
 
         ob_start();
 
-        echo '<style>' . $scoped_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS assembled in build_scoped_css() exclusively from absint/intval-clamped numbers, esc_attr()'d colours, shared radius/spacing helpers and fixed literal maps
+        echo '<style>' . $scoped_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS assembled in build_scoped_css() exclusively from absint/intval-clamped numbers, esc_attr()'d colours, shared radius/spacing helpers, Olobuild_Tile_Utils::image_frame() (which validates aspect ratio, object-fit and focal point with its own whitelists) and fixed literal maps
         ?>
         <div class="olo-grid <?php echo esc_attr( $uid ); ?>"<?php if ( $show_filter && $has_tags ) : ?> uk-filter="target: .js-filter; animation: fade"<?php endif; ?>>
 
@@ -238,7 +238,7 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
 
         $radius  = $this->build_border_radius_css( $s["card_radius"] ?? 8 );
         // Solo i due angoli superiori (media in cima alla card): serve lo SCALARE,
-        // build_border_radius_css() restituisce gia' la stringa con unita'.
+        // build_border_radius_css() restituisce già la stringa con unita'.
         $radius_int = Olobuild_Tile_Utils::radius_int( $s["card_radius"] ?? 8 );
         $radius_top = $radius_int > 0 ? "{$radius_int}px {$radius_int}px 0 0" : "0";
         $radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['card_radius_hover'] ?? null );
@@ -333,21 +333,46 @@ class Olobuild_Grid_Tile extends Olobuild_Tile_Base {
         }
 
         // Image
-        $img_ratio  = $s['image_ratio'] ?? 'auto';
+        // CORNICE DELL'IMMAGINE — la compone l'helper condiviso, che valida da se'
+        // proporzione e adattamento: il rapporto finiva nel CSS così com'era salvato,
+        // e ora che il select ne offre nove conviene che passi da un controllo solo.
+        // Il punto focale di questa tile sta sulla chiave GLOBALE `object_position`
+        // (una per tutte le card della griglia): si passa come default, la chiave
+        // salvata non cambia. Default 'auto' + 'cover' = la resa di sempre.
         $img_height = absint( $s['image_height'] ?? 0 );
-        $img_fit    = $s['image_fit'] ?? 'cover';
-        $obj_pos    = trim( (string) ( $s['object_position'] ?? 'center center' ) );
-        if ( $obj_pos === '' ) {
-            $obj_pos = 'center center';
-        }
+        $obj_pos    = Olobuild_Tile_Utils::css_pos( $s, 'object_position' );
+        // Un adattamento salvato VUOTO (o fuori elenco) non e' «nessun adattamento»,
+        // e' «mai scelto»: senza questa guardia l'helper — che usa `??` e quindi
+        // considera la stringa vuota un valore — non emetterebbe alcun object-fit e
+        // l'immagine resterebbe deformata (`fill`, il valore iniziale del CSS).
+        // Stessa guardia delle tile sorelle: overlaygrid:120-123, relatedposts:137-139.
+        $fit_salvato = trim( (string) ( $s['image_fit'] ?? '' ) );
+        $s_frame     = $s;
+        $s_frame['image_fit'] = ( $fit_salvato !== '' ) ? $fit_salvato : 'cover';
+        $img_frame  = Olobuild_Tile_Utils::image_frame( $s_frame, 'image', [
+            'ratio' => 'auto',
+            'fit'   => 'cover',
+            'pos'   => $obj_pos,
+        ] );
 
         $css .= $sel . ' .olo-grid-media{position:relative;overflow:hidden;border-radius:' . $radius_top . ';}';
-        if ( $img_ratio && $img_ratio !== 'auto' ) {
-            $css .= $sel . ' .olo-grid-media{aspect-ratio:' . $img_ratio . ';}';
+        if ( $img_frame['contenitore'] !== '' ) {
+            $css .= $sel . ' .olo-grid-media{' . $img_frame['contenitore'] . '}';
         } elseif ( $img_height > 0 ) {
             $css .= $sel . ' .olo-grid-media{height:' . $img_height . 'px;}';
         }
-        $css .= $sel . ' .olo-grid-img{width:100%;height:100%;object-fit:' . esc_attr( $img_fit ) . ';object-position:' . esc_attr( $obj_pos ) . ';display:block;transition:transform 0.5s cubic-bezier(.4,0,.2,1);}';
+        $css .= $sel . ' .olo-grid-img{width:100%;height:100%;' . $img_frame['immagine'] . 'display:block;transition:transform 0.5s cubic-bezier(.4,0,.2,1);}';
+        // Con un'immagine (o un video) di hover, render_hover_wrap() infila un
+        // <div class="olo-hover-wrap"> fra .olo-grid-media e l'<img>. Due conseguenze:
+        // il wrapper ha altezza automatica, quindi il `height:100%` della foto non ha
+        // più un riferimento e la cornice del contenitore perde presa; e la foto di
+        // hover resta sul `object-fit:cover` cablato in frontend.css:1693, cioè non
+        // segue ne' l'adattamento ne' il punto focale scelti per la principale — al
+        // passaggio del mouse l'inquadratura salta. Stesso schema di
+        // class-panel-tile.php:314-315. Il canvas non rende affatto lo scambio hover,
+        // quindi qui non c'e' un gemello da allineare.
+        $css .= $sel . ' .olo-grid-media .olo-hover-wrap{width:100%;height:100%;display:block;}';
+        $css .= $sel . ' .olo-grid-media .olo-hover-media img,' . $sel . ' .olo-grid-media .olo-hover-media video{width:100%;height:100%;' . $img_frame['immagine'] . 'display:block;}';
 
         // Image zoom on hover
         if ( ! empty( $s['image_zoom'] ) ) {

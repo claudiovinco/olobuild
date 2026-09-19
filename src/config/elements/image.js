@@ -1,4 +1,5 @@
 import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -124,32 +125,23 @@ export default {
       placeholder: t('es. 300px, auto, 50vh') },
     { key: 'max_width', label: t('Larghezza massima'), type: 'text', responsive: true,
       placeholder: t('es. 600px, none') },
-    { key: 'aspect_ratio', label: t('Proporzioni (Aspect Ratio)'), type: 'select', responsive: true, options: [
-      { value: 'auto',  label: t('Auto (segui altezza)') },
-      { value: '1/1',   label: t('1:1 (Quadrato)') },
-      { value: '4/3',   label: t('4:3 (TV classico)') },
-      { value: '3/2',   label: t('3:2 (Foto)') },
-      { value: '16/9',  label: t('16:9 (Widescreen)') },
-      { value: '21/9',  label: t('21:9 (Cinema)') },
-      { value: '9/16',  label: t('9:16 (Verticale)') },
-      { value: '2/3',   label: t('2:3 (Foto verticale)') },
-      { value: 'custom', label: t('Personalizzato') },
-    ]},
+    // Elenco canonico: la tile ne offriva 7 su 9 (mancavano 3:4 e 4:5, che i due
+    // renderer sanno già scrivere — qui l'aspect-ratio finisce tale e quale nel CSS,
+    // nessuna whitelist da allargare). Chiave e valori salvati restano identici.
+    { key: 'aspect_ratio', label: t('Proporzioni'), type: 'select', responsive: true,
+      options: ratioOptions({ custom: true }) },
     { key: 'aspect_ratio_custom', label: t('Proporzioni personalizzate'), type: 'text',
       placeholder: t('es. 5/4, 1.618'),
       condition: { field: 'aspect_ratio', op: 'eq', value: 'custom' } },
-    { key: 'object_fit', label: t('Adattamento'), type: 'select', options: [
-      { value: 'cover',      label: t('Riempi (cover)') },
-      { value: 'contain',    label: t('Contieni') },
-      { value: 'fill',       label: t('Riempi (deforma)') },
-      { value: 'none',       label: t('Originale') },
-      { value: 'scale-down', label: t('Riduci se necessario') },
-    ]},
+    { key: 'object_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
     // Punto focale grafico (FieldObjectPosition): sostituisce il select a 9 voci.
     // Emette la STESSA stringa CSS object-position (keyword in "Aggancia", '% %' in
     // "Libero") → chiave e formato salvati INVARIATI, nessuna migrazione. Le `options`
     // restano come fallback documentale/legacy.
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', options: [
+    // Stessa etichetta che `focalField()` mette in tutte le altre tile: qui il campo
+    // resta scritto a mano perché la chiave storica è `object_position` (senza prefisso)
+    // e perché il fallback di InspectorField punta già alle chiavi di questa tile.
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', options: [
       { value: 'left top',      label: t('↖ Alto sinistra') },
       { value: 'center top',    label: t('↑ Alto centro') },
       { value: 'right top',     label: t('↗ Alto destra') },

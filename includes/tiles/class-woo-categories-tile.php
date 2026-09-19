@@ -79,7 +79,23 @@ class Olobuild_Woo_Categories_Tile extends Olobuild_Tile_Base {
         $txt_color   = $this->safe_color_css( $s['text_color'] );
         $ov_color    = $s['overlay'] ? esc_attr( $s['overlay_color'] ) : 'transparent';
 
-        $ratio_map = [ '1-1' => '100%', '4-3' => '75%', '3-4' => '133.33%', '16-9' => '56.25%' ];
+        // Il riquadro immagine prende l'altezza dal padding-top percentuale (l'<img>
+        // è in position:absolute), quindi qui il rapporto va TRADOTTO in percentuale:
+        // altezza/larghezza × 100. Le quattro voci storiche tengono le percentuali di
+        // prima — 3-4 resta 133.33% — così nessuna griglia già pubblicata si muove;
+        // le cinque nuove completano l'elenco canonico. Gemella di `ratioMap` in
+        // WooCategoriesTile.vue: le due tabelle si allargano SEMPRE insieme.
+        $ratio_map = [
+            '1-1'  => '100%',
+            '4-3'  => '75%',
+            '3-2'  => '66.67%',
+            '16-9' => '56.25%',
+            '21-9' => '42.86%',
+            '3-4'  => '133.33%',
+            '4-5'  => '125%',
+            '9-16' => '177.78%',
+            '2-3'  => '150%',
+        ];
         $ratio_val = isset( $ratio_map[ $s['image_ratio'] ] ) ? $ratio_map[ $s['image_ratio'] ] : '100%';
 
         ob_start();

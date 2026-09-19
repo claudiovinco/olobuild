@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, widgetTemplateField, wowEffectsFields, wowEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
+import { ratioOptions } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -102,16 +103,11 @@ export default {
     ]},
 
     { type: 'separator', label: t('Dimensioni slide') },
-    { key: 'image_ratio', label: t('Proporzione'), type: 'select', options: [
-      { value: 'auto', label: t('Altezza fissa (px)') },
-      { value: '1/1', label: t('1:1 Quadrato') },
-      { value: '4/3', label: t('4:3 Standard') },
-      { value: '3/2', label: t('3:2 Foto') },
-      { value: '16/9', label: t('16:9 Wide') },
-      { value: '21/9', label: t('21:9 Cinema') },
-      { value: '3/4', label: t('3:4 Verticale') },
-      { value: '2/3', label: t('2:3 Verticale') },
-    ], description: t('Auto: usa altezza fissa. Altrimenti la larghezza determina l\'altezza') },
+    // Elenco canonico: la tile ne offriva 7 su 9 (mancavano 4:5 e 9:16). Valori
+    // salvati identici, con la barra: entrambi i renderer scrivono il rapporto
+    // tale e quale nel CSS, non c'è nessuna tabella da allargare.
+    { key: 'image_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions(),
+      description: t('Auto: usa altezza fissa. Altrimenti la larghezza determina l\'altezza') },
     { key: 'image_height', label: t('Altezza fissa'), type: 'range', min: 150, max: 900, step: 10,
       condition: { field: 'image_ratio', op: 'eq', value: 'auto' } },
     { key: 'image_fit', label: t('Adattamento'), type: 'select', options: [
@@ -119,7 +115,7 @@ export default {
       { value: 'contain', label: t('Contieni (visibile interamente)') },
       { value: 'fill', label: t('Riempi (deforma)') },
     ]},
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
       contextKeys: { fit: 'image_fit', ratio: 'image_ratio' } },
 
     { type: 'separator', label: t('Overlay') },

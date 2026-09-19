@@ -16,6 +16,12 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
         'separator'      => ' — ',
         'images'         => [],
         'image_height'   => '40',
+        // CORNICE dei loghi, senza maschera di ritaglio: nel nastro l'altezza e' l'unica
+        // dimensione imposta (width:auto) e ogni marchio tiene la sua sagoma. Il fit nasce
+        // 'contain' (era cablato nella regola .olo-mq-img) e NON 'cover': su un logo
+        // 'cover' taglierebbe via i bordi.
+        'image_fit'      => 'contain',
+        'image_object_position' => 'center center',
 
         'speed'          => '30',
         'direction'      => 'left',
@@ -121,6 +127,20 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
         // Image settings
         $images      = is_array( $s['images'] ) ? $s['images'] : [];
         $img_height  = max( 20, intval( $s['image_height'] ) );
+        // Nessun aspect-ratio: la larghezza resta intrinseca (width:auto), cioè il
+        // nastro di sempre. Qui si comanda solo l'adattamento.
+        $fit_ok      = [ 'cover', 'contain', 'fill', 'none', 'scale-down' ];
+        $img_fit     = (string) ( $s['image_fit'] ?? 'contain' );
+        if ( ! in_array( $img_fit, $fit_ok, true ) ) {
+            $img_fit = 'contain';
+        }
+        $img_pos     = trim( (string) ( $s['image_object_position'] ?? 'center center' ) );
+        // Con 'fill' l'immagine e' deformata per riempire: il focale non sposta nulla.
+        // La seconda condizione e' la stessa difesa breakout di Olobuild_Tile_Utils:
+        // qui il valore finisce dentro un <style>, dove esc_attr() non basterebbe.
+        if ( $img_fit === 'fill' || preg_match( '/[;{}()]/', $img_pos ) ) {
+            $img_pos = '';
+        }
 
         // Build the inner content HTML (will be duplicated for seamless loop)
         $inner_html = '';
@@ -265,7 +285,8 @@ class Olobuild_Marquee_Tile extends Olobuild_Tile_Base {
                 height: <?php echo (int) $img_height; ?>px;
                 width: auto;
                 flex-shrink: 0;
-                object-fit: contain;
+                object-fit: <?php echo esc_attr( $img_fit ); ?>;
+                <?php if ( $img_pos ) : ?>object-position: <?php echo esc_attr( $img_pos ); ?>;<?php endif; ?>
                 pointer-events: none;
                 -webkit-user-drag: none;
             }

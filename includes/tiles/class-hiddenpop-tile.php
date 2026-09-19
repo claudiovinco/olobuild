@@ -16,6 +16,8 @@ class Olobuild_Hiddenpop_Tile extends Olobuild_Tile_Base {
         'subtitle'            => '',
         'image'               => '',
         'image_position'      => 'top',
+        'aspect_ratio'        => 'auto',
+        'aspect_ratio_custom' => '16/9',
         'object_position'     => 'center center',
         'cta_text'            => '',
         'cta_url'             => '#',
@@ -305,20 +307,32 @@ class Olobuild_Hiddenpop_Tile extends Olobuild_Tile_Base {
                     $has_img  = ! empty( $image );
                     $is_side  = $has_img && ( $position === 'left' || $position === 'right' );
                     // Punto focale (object-position): default invariato = comportamento attuale.
-                    // Applicato SOLO alle immagini laterali (object-fit:cover); con top/bottom
-                    // l'immagine è height:auto e il valore resta ininfluente.
+                    // Si applica dove c'è un ritaglio: alle immagini laterali (object-fit:cover)
+                    // e, da quando esistono le proporzioni, anche a quelle sopra/sotto quando
+                    // l'utente ne sceglie una. Con 'auto' sopra/sotto resta height:auto e il
+                    // valore non tocca niente, come prima.
                     $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
                     if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
+                    // Proporzioni: unico pezzo di cornice configurabile (il fit resta cover).
+                    // Col default 'auto' le due stringhe qui sotto sono identiche carattere
+                    // per carattere a quelle che il popup emetteva prima: sopra/sotto immagine
+                    // intera (height:auto, nessun ritaglio), di fianco stirata sulla colonna
+                    // (height:100%). Con una proporzione scelta comanda la forma, quindi
+                    // height:auto anche di fianco — altrimenti il 100% vincerebbe sull'aspect-ratio.
+                    $ar       = Olobuild_Tile_Utils::image_frame( $s, 'aspect', [ 'ratio' => 'auto' ] )['contenitore'];
+                    $img_crop = 'object-fit:cover;object-position:' . $obj_pos . ';';
+                    $img_sty_stack = 'width:100%;height:auto;' . ( $ar !== '' ? $ar . $img_crop : '' ) . 'display:block;';
+                    $img_sty_side  = 'width:100%;' . ( $ar !== '' ? 'height:auto;' . $ar : 'height:100%;' ) . $img_crop . 'display:block;';
                     ?>
 
                     <?php if ( $has_img && $position === 'top' ) : ?>
-                    <div><img src="<?php echo esc_url( $image ); ?>" alt="" loading="lazy" style="width:100%;height:auto;display:block;" /></div>
+                    <div><img src="<?php echo esc_url( $image ); ?>" alt="" loading="lazy" style="<?php echo esc_attr( $img_sty_stack ); ?>" /></div>
                     <?php endif; ?>
 
                     <?php if ( $is_side ) : ?>
                     <div uk-grid class="uk-child-width-1-2@s uk-grid-collapse">
                         <?php if ( $position === 'left' ) : ?>
-                        <div><img src="<?php echo esc_url( $image ); ?>" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:<?php echo esc_attr( $obj_pos ); ?>;display:block;" /></div>
+                        <div><img src="<?php echo esc_url( $image ); ?>" alt="" loading="lazy" style="<?php echo esc_attr( $img_sty_side ); ?>" /></div>
                         <?php endif; ?>
                         <div class="uk-padding">
                     <?php else : ?>
@@ -345,7 +359,7 @@ class Olobuild_Hiddenpop_Tile extends Olobuild_Tile_Base {
                     <?php if ( $is_side ) : ?>
                         </div>
                         <?php if ( $position === 'right' ) : ?>
-                        <div><img src="<?php echo esc_url( $image ); ?>" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:<?php echo esc_attr( $obj_pos ); ?>;display:block;" /></div>
+                        <div><img src="<?php echo esc_url( $image ); ?>" alt="" loading="lazy" style="<?php echo esc_attr( $img_sty_side ); ?>" /></div>
                         <?php endif; ?>
                     </div>
                     <?php else : ?>
@@ -353,7 +367,7 @@ class Olobuild_Hiddenpop_Tile extends Olobuild_Tile_Base {
                     <?php endif; ?>
 
                     <?php if ( $has_img && $position === 'bottom' ) : ?>
-                    <div><img src="<?php echo esc_url( $image ); ?>" alt="" loading="lazy" style="width:100%;height:auto;display:block;" /></div>
+                    <div><img src="<?php echo esc_url( $image ); ?>" alt="" loading="lazy" style="<?php echo esc_attr( $img_sty_stack ); ?>" /></div>
                     <?php endif; ?>
                 <?php endif; ?>
             </div>

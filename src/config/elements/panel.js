@@ -1,4 +1,5 @@
 import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, wowEffectsFields, wowEffectsDefaults } from './_shared.js';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -25,6 +26,9 @@ export default {
     effect_intensity: 'medium',
     effect_speed: 0,
     image_ratio: 'auto',
+    // Prefilled col rapporto più comune: «Personalizzato» non cambia nulla finché non
+    // lo si riscrive. (Con image_ratio:'auto' — il default — non viene nemmeno letto.)
+    image_ratio_custom: '16/9',
     image_height: '',
     image_fit: 'cover',
     object_position: 'center center',
@@ -155,27 +159,45 @@ export default {
     ]),
 
     { type: 'separator', label: t('Dimensioni media') },
-    { key: 'image_ratio', label: t('Proporzione'), type: 'select', options: [
-      { value: 'auto', label: t('Automatica') },
-      { value: '1/1', label: t('1:1 Quadrato') },
-      { value: '4/3', label: t('4:3 Standard') },
-      { value: '3/2', label: t('3:2 Foto') },
-      { value: '16/9', label: t('16:9 Wide') },
-      { value: '21/9', label: t('21:9 Cinema') },
-      { value: '3/4', label: t('3:4 Verticale') },
-      { value: '2/3', label: t('2:3 Verticale') },
-    ], condition: { field: 'media_type', op: 'neq', value: 'none' } },
+    // Elenco canonico: la tile ne offriva 7 su 9 (mancavano 4:5 e 9:16). Qui il
+    // rapporto finisce tale e quale nel CSS del media, nessuna tabella da allargare.
+    { key: 'image_ratio', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ custom: true }),
+      condition: { field: 'media_type', op: 'neq', value: 'none' } },
+    // L'AND si esprime come ARRAY: è la forma che evaluateCondition() valuta davvero.
+    { key: 'image_ratio_custom', label: t('Proporzioni personalizzate'), type: 'text',
+      placeholder: t('es. 5/4'),
+      condition: [
+        { field: 'media_type', op: 'neq', value: 'none' },
+        { field: 'image_ratio', op: 'eq', value: 'custom' },
+      ] },
     { key: 'image_height', label: t('Altezza fissa'), type: 'range', min: 0, max: 600, step: 10,
       description: t('0 = automatica'),
+      // Con un rapporto scelto l'altezza non viene nemmeno letta — il renderer sceglie
+      // l'uno o l'altra (`if ratio !== auto … elseif height > 0`, class-panel-tile.php):
+      // mostrarla lì inerte sarebbe solo bugiardo.
+      // La lista comprende anche il vuoto in tutte le sue forme perché l'inspector valuta le condizioni
+      // sui settings GREZZI, senza fondere i default: un pannello salvato senza la chiave
+      // image_ratio viene reso come 'auto' (`$s['image_ratio'] ?? 'auto'`), cioè proprio
+      // dove l'altezza comanda — e con la sola voce 'auto' il controllo sparirebbe
+      // esattamente sulle pagine dove serve. Il caso «chiave assente» va dalla parte giusta.
+      condition: [
+        { field: 'media_type', op: 'neq', value: 'none' },
+        { field: 'image_ratio', op: 'eq', value: ['auto', '', null, undefined] },
+      ] },
+    { key: 'image_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI,
       condition: { field: 'media_type', op: 'neq', value: 'none' } },
-    { key: 'image_fit', label: t('Adattamento'), type: 'select', options: [
-      { value: 'cover', label: t('Copri (riempie e taglia)') },
-      { value: 'contain', label: t('Contieni (visibile interamente)') },
-      { value: 'fill', label: t('Riempi (deforma)') },
-    ], condition: { field: 'media_type', op: 'neq', value: 'none' } },
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position',
-      contextKeys: { src: 'image', fit: 'image_fit', ratio: 'image_ratio' },
-      condition: { field: 'media_type', op: 'neq', value: 'none' } },
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position',
+      contextKeys: { src: 'image', fit: 'image_fit', ratio: 'image_ratio', ratioCustom: 'image_ratio_custom' },
+      // Con «Deforma per riempire» la foto è stirata sul riquadro e l'object-position
+      // non sposta più niente: il renderer lo scrive lo stesso, ma non cambia un pixel.
+      // È lo stesso criterio dello standard condiviso (_imageFrame.js) e delle gemelle
+      // del gruppo. `neq` e non un elenco `in`: un pannello salvato prima dello sprint
+      // può non avere affatto la chiave image_fit, e così il controllo gli resta.
+      condition: [
+        { field: 'media_type', op: 'neq', value: 'none' },
+        { field: 'image_fit', op: 'neq', value: 'fill' },
+      ] },
     { key: 'image_zoom', label: t('Zoom al hover'), type: 'toggle',
       condition: { field: 'media_type', op: 'neq', value: 'none' } },
     { key: 'media_padding', label: t('Padding attorno al media'), type: 'spacing', max: 60,

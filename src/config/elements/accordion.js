@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, widgetTemplateField, wowEffectsFields, wowEffectsDefaults, focalField } from './_shared';
 import { shadowField } from './_shared.js';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -31,6 +32,11 @@ export default {
     media_align: 'right',
     media_width: '35',
     media_radius: '8',
+    // 'auto' = nessun ritaglio: l'immagine tiene la sua altezza naturale, che è
+    // come i pannelli hanno sempre reso. Scegliere una proporzione è ciò che
+    // accende il ritaglio — e con lui il punto focale, finora inerte.
+    aspect_ratio: 'auto',
+    object_fit: 'cover',
     object_position: 'center center',
     header_bg: 'var(--olo-color-surface, #ffffff)',
     header_bg_active: 'var(--olo-color-surface, #ffffff)',
@@ -86,7 +92,17 @@ export default {
       newItemDefaults: { title: t('Nuovo pannello'), content: 'Contenuto del pannello.', image: '', video: '', icon: '', hover_image: '', widget_template_id: 0, children: [] },
       itemLabel: 'Pannello',
     },
-    focalField('image', { key: 'object_position', src: '', reveal: true, label: t('Posizione — punto focale immagini') }),
+    // La cornice vale per TUTTE le immagini dei pannelli: una per pannello
+    // renderebbe i media di larghezza uguale ma altezza diversa.
+    { key: 'aspect_ratio', label: t('Proporzioni immagini'), type: 'select', options: ratioOptions(),
+      description: t('Con «Auto» l\'immagine tiene la sua altezza naturale.') },
+    { key: 'object_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI,
+      condition: { field: 'aspect_ratio', op: 'neq', value: 'auto' } },
+    focalField('image', { key: 'object_position', src: '', reveal: true, ratio: 'aspect_ratio', fit: 'object_fit',
+      label: t('Punto focale immagini'),
+      // Senza ritaglio non c'è niente da spostare: il controllo resta nascosto
+      // finché una proporzione non viene scelta.
+      condition: { field: 'aspect_ratio', op: 'neq', value: 'auto' } }),
 
     { type: 'separator', label: t('Comportamento') },
     { key: 'toggle_mode', label: t('Modalità alternata'), type: 'toggle' },

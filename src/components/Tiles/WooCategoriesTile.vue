@@ -56,11 +56,20 @@ const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const cols = computed(() => Math.max(1, Math.min(6, parseInt(s.value.columns) || 4)));
 
+// Gemella di `$ratio_map` nel PHP: il riquadro prende l'altezza dal padding-top
+// percentuale (altezza/larghezza × 100), quindi ogni voce del select deve stare
+// QUI dentro o la card tornerebbe quadrata di default. Il 3-4 allinea il canvas
+// al frontend (era 133%, il sito scrive 133.33%).
 const ratioMap = {
   '1-1': '100%',
   '4-3': '75%',
-  '3-4': '133%',
+  '3-2': '66.67%',
   '16-9': '56.25%',
+  '21-9': '42.86%',
+  '3-4': '133.33%',
+  '4-5': '125%',
+  '9-16': '177.78%',
+  '2-3': '150%',
 };
 
 const gridStyle = computed(() => ({

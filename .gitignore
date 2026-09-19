@@ -32,3 +32,4 @@ build/
 /tmp_design_*/
 /tmp_gen_*
 /tmp_try_*/
+script-temp/

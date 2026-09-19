@@ -76,12 +76,22 @@ class Olobuild_Woo_Products_Tile extends Olobuild_Tile_Base {
         $btn_bg       = $this->safe_color_css( $s['button_bg'] );
         $badge_bg     = $this->safe_color_css( $s['badge_bg'] );
 
-        // Ratio map
+        // Ratio map — traduzione del rapporto in percentuale di padding-top (tecnica
+        // storica di questa tile). E' anche la whitelist: cio' che non sta qui ricade
+        // sul 4:3 senza dirlo, quindi va tenuta allineata all'elenco del select
+        // (woo_products.js → ratioOptions sep:'-'). Il '3-4' resta scritto '133.33%'
+        // com'era: rifarlo con più decimali sposterebbe di un pelo le griglie già
+        // pubblicate.
         $ratio_map = [
             '1-1'  => '100%',
             '4-3'  => '75%',
-            '3-4'  => '133.33%',
+            '3-2'  => '66.67%',
             '16-9' => '56.25%',
+            '21-9' => '42.86%',
+            '3-4'  => '133.33%',
+            '4-5'  => '125%',
+            '9-16' => '177.78%',
+            '2-3'  => '150%',
             'auto' => '0',
         ];
         $ratio     = $s['image_ratio'];

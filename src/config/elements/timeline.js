@@ -1,4 +1,5 @@
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
+import { ratioOptions } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -206,16 +207,18 @@ export default {
 
     // ── Immagine ──
     { type: 'separator', label: t('Personalizza · Immagine') },
-    { key: 'tl_media_ratio', label: t('Proporzioni'), type: 'select', options: [
-      { value: 'auto',  label: t('Auto (usa altezza)') },
-      { value: '16/9',  label: '16:9' },
-      { value: '4/3',   label: '4:3' },
-      { value: '3/2',   label: '3:2' },
-      { value: '1/1',   label: '1:1 (quadrata)' },
-      { value: '21/9',  label: '21:9 (panoramica)' },
-    ]},
+    // Elenco canonico (_imageFrame): i cinque rapporti di prima erano un sottoinsieme,
+    // i nuovi sono tutti della forma "N/N" e passano quindi la whitelist `^\d+/\d+$` che
+    // PHP e canvas applicano prima di scrivere --tl-media-ar. 'auto' resta la voce che
+    // lascia comandare `tl_media_h`, ed è il default: le timeline pubblicate non si muovono.
+    { key: 'tl_media_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions() },
+    // L'altezza sparisce solo quando comanda la proporzione. Scritto come `show` e non
+    // come `condition: { field:'tl_media_ratio', value:'auto' }`: le condizioni si
+    // valutano sui settings GREZZI, e una timeline salvata prima che `tl_media_ratio`
+    // esistesse (v1.4.9) non ha la chiave — `undefined === 'auto'` è falso e il cursore
+    // dell'altezza sarebbe sparito per sempre proprio dalle timeline più vecchie.
     { key: 'tl_media_h', label: t('Altezza immagine (px · 0 = auto)'), type: 'range', min: 0, max: 420, step: 4,
-      condition: { field: 'tl_media_ratio', value: 'auto' } },
+      show: s => (s.tl_media_ratio || 'auto') === 'auto' },
     { key: 'tl_media_fit', label: t('Adattamento'), type: 'select', options: [
       { value: 'cover',   label: t('Riempi (cover)') },
       { value: 'contain', label: t('Contieni (contain)') },
@@ -223,7 +226,7 @@ export default {
     // Punto focale globale: applicato a OGNI immagine/video della timeline. L'immagine è
     // per-item (items[].image) → niente `src` nei contextKeys (il pad degrada a neutro);
     // fit/ratio sono chiavi tile-level reali.
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
       contextKeys: { fit: 'tl_media_fit', ratio: 'tl_media_ratio' } },
     { key: 'tl_media_radius', label: t('Raggio immagine (px · 0 = auto)'), type: 'border-radius' },
     { key: 'tl_media_bar', label: t('Barra colore sopra immagine'), type: 'toggle' },

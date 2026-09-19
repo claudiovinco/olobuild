@@ -64,10 +64,16 @@ class Olobuild_WorkGrid_Tile extends Olobuild_Tile_Base {
         $meta_size  = max( 10, min( 18, absint( $s['meta_size'] ) ) );
         $desc_size  = max( 12, min( 20, absint( $s['desc_size'] ) ) );
 
-        $aspect_allow = [ '16/9', '16/10', '4/3', '3/2', '1/1' ];
+        // Elenco canonico delle proporzioni (lo stesso che ratioOptions() offre
+        // nell'inspector) + '16/10', rapporto storico di questa tile. La whitelist si
+        // allarga, mai si stringe: i valori delle due tendine di prima ci stanno tutti
+        // (16/9, 16/10, 4/3, 3/2, 1/1 e 4/5, 3/4, 2/3), quindi nessuna card pubblicata
+        // ricade sul ripiego. Una sola lista per tutt'e due le tendine: quella «alta»
+        // non offre 16/10, ma accettarlo qui non fa male e toglie un elenco da tenere
+        // allineato a mano.
+        $aspect_allow = [ '1/1', '4/3', '3/2', '16/9', '21/9', '3/4', '4/5', '9/16', '2/3', '16/10' ];
         $aspect       = in_array( $s['media_aspect'] ?? '4/3', $aspect_allow, true ) ? ( $s['media_aspect'] ?? '4/3' ) : '4/3';
-        $tall_allow   = [ '4/5', '3/4', '2/3' ];
-        $tall_aspect  = in_array( $s['media_tall_aspect'] ?? '4/5', $tall_allow, true ) ? ( $s['media_tall_aspect'] ?? '4/5' ) : '4/5';
+        $tall_aspect  = in_array( $s['media_tall_aspect'] ?? '4/5', $aspect_allow, true ) ? ( $s['media_tall_aspect'] ?? '4/5' ) : '4/5';
 
         $media_bg   = $this->safe_color_css( $s['media_bg'] ) ?: '#ebe7dc';
         $label_c    = $this->safe_color_css( $s['media_label_color'] ) ?: '#18181a';

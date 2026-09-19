@@ -7,7 +7,7 @@
         :key="i"
         style="background:var(--olo-color-surface, #ffffff);border-radius:6px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08);"
       >
-        <div style="width:100%;padding-top:75%;background:var(--olo-color-surface-alt, #f6f7f9);position:relative;">
+        <div :style="mediaStyle">
           <svg style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:24px;height:24px;opacity:0.25;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <rect x="3" y="3" width="18" height="18" rx="2"/>
             <circle cx="8.5" cy="8.5" r="1.5"/>
@@ -41,10 +41,34 @@ const props = defineProps({
 const defaults = {
   columns: '4',
   gap: '16',
+  image_ratio: '4-3',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const cols = computed(() => Math.max(1, Math.min(6, parseInt(s.value.columns) || 4)));
+
+// Gemella della mappa in class-woo-recently-viewed-tile.php: il ritaglio qui non è un
+// aspect-ratio ma un padding-top in percentuale (altezza sulla larghezza). Il canvas
+// mostrava 75% fisso, cioè ignorava la scelta dell'utente: chi metteva 1:1 vedeva
+// comunque un 4:3 nel builder e il quadrato solo sul sito.
+const RAPPORTI = {
+  '1-1': '100%', '4-3': '75%', '3-4': '133.33%', '16-9': '56.25%',
+  '3-2': '66.67%', '21-9': '42.86%', '4-5': '125%', '9-16': '177.78%', '2-3': '150%',
+  auto: '0',
+};
+
+const mediaStyle = computed(() => {
+  const r = s.value.image_ratio || '4-3';
+  const pad = RAPPORTI[r] !== undefined ? RAPPORTI[r] : '75%';
+  return {
+    width: '100%',
+    // 'auto' sul sito lascia l'immagine alla sua altezza naturale: qui, dove non c'è
+    // una foto vera ma il segnaposto, si tiene un riquadro minimo visibile.
+    ...(r === 'auto' ? { paddingTop: '0', minHeight: '64px' } : { paddingTop: pad }),
+    background: 'var(--olo-color-surface-alt, #f6f7f9)',
+    position: 'relative',
+  };
+});
 
 const gridStyle = computed(() => ({
   display: 'grid',

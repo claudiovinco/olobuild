@@ -1,4 +1,5 @@
-import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField } from './_shared';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -121,6 +122,31 @@ export default {
         { key: 'title', label: t('Titolo'), type: 'text' },
         { key: 'description', label: t('Descrizione'), type: 'textarea' },
         { key: 'image_url', label: t('Immagine'), type: 'media' },
+        // Cornice dell'immagine del popover. Qui sta per HOTSPOT e non per tile
+        // perché i popover si aprono uno alla volta: non c'è una griglia da
+        // tenere allineata. Con «Auto» non si emette nulla e l'immagine resta ad
+        // altezza naturale, esattamente come prima di questo controllo.
+        { key: 'image_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions(),
+          condition: { field: 'image_url', op: 'notEmpty' } },
+        // ⚠️ La condizione è POSITIVA — «il rapporto c'è E non è Auto» — e non la
+        // forma breve `neq 'auto'`. Gli item di un repeater NON ricevono mai i
+        // default della tile (normalizeNodes() fonde solo quelli di livello tile,
+        // e `newItemDefaults` vale per gli hotspot creati da qui in avanti):
+        // su un hotspot salvato prima di questo sprint `image_ratio` è undefined,
+        // e `neq 'auto'` su undefined risulta VERO. I due controlli comparirebbero
+        // senza poter fare nulla, perché il runtime li legge solo dentro
+        // `if (hs.image_ratio)` (assets/js/olo-pdfpro.js) e il PHP manda '' quando
+        // il rapporto manca. Basta scegliere una proporzione per vederli apparire.
+        { key: 'image_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI,
+          condition: [{ field: 'image_url', op: 'notEmpty' }, { field: 'image_ratio', op: 'notEmpty' },
+            { field: 'image_ratio', op: 'neq', value: 'auto' }] },
+        focalField('image_url', { label: t('Punto focale'), ratio: 'image_ratio', fit: 'image_fit',
+          // Ultima clausola: con «Deforma per riempire» l'immagine copre tutta la
+          // cornice e il CSS ignora object-position — il focale non avrebbe nulla
+          // da spostare. Su un hotspot vecchio `image_fit` è undefined e `neq 'fill'`
+          // lo lascia visibile: il caso «chiave assente» cade dalla parte giusta.
+          condition: [{ field: 'image_url', op: 'notEmpty' }, { field: 'image_ratio', op: 'notEmpty' },
+            { field: 'image_ratio', op: 'neq', value: 'auto' }, { field: 'image_fit', op: 'neq', value: 'fill' }] }),
         { key: 'video_url', label: t('Video'), type: 'media' },
         { key: 'btn_label', label: t('Testo pulsante'), type: 'text' },
         { key: 'btn_url', label: t('URL pulsante'), type: 'link' },
@@ -154,7 +180,8 @@ export default {
         ]},
       ],
       newItemDefaults: { page: 1, x: 50, y: 50, title: t('Nuovo hotspot'), description: '',
-        color: '', icon: '', image_url: '', video_url: '', btn_label: '', btn_url: '', btn_target: false,
+        color: '', icon: '', image_url: '', image_ratio: 'auto', image_fit: 'cover',
+        image_url_object_position: 'center center', video_url: '', btn_label: '', btn_url: '', btn_target: false,
         btn_font_size: '', btn_font_weight: '', btn_letter_spacing: '', btn_text_transform: '',
         btn_bg: '', btn_color: '', btn_padding_v: 0, btn_padding_h: 0,
         btn_radius: '', btn_border_width: '', btn_border_color: '', btn_border_style: 'solid',

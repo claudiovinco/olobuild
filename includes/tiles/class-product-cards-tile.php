@@ -116,7 +116,11 @@ class Olobuild_ProductCards_Tile extends Olobuild_Tile_Base {
         $card_color    = $this->safe_color_css( $s['card_color'] ) ?: 'var(--olo-color-text, #374151)';
         $card_pad_css  = Olobuild_Tile_Utils::spacing_css( $s['card_padding'] ?? 28, 28 );
 
-        $top_aspect    = in_array( $s['top_aspect_ratio'] ?? '3/4', [ '1/1', '4/5', '3/4', '2/3', '3/2' ], true ) ? ( $s['top_aspect_ratio'] ?? '3/4' ) : '3/4';
+        // Whitelist allargata al set canonico dell'inspector (ratioOptions): i cinque
+        // rapporti di prima ci stanno dentro, quindi nessuna card pubblicata cambia
+        // forma. Restringerla rimetterebbe in piedi una tendina che offre ciò che non rende.
+        $top_ratio_allow = [ '1/1', '4/3', '3/2', '16/9', '21/9', '3/4', '4/5', '9/16', '2/3' ];
+        $top_aspect    = in_array( $s['top_aspect_ratio'] ?? '3/4', $top_ratio_allow, true ) ? ( $s['top_aspect_ratio'] ?? '3/4' ) : '3/4';
         $top_pad       = Olobuild_Tile_Utils::spacing_sides( $s['top_padding'] ?? 24, [], [ 24, 24, 24, 24 ] );
         $top_pad_css   = Olobuild_Tile_Utils::sides_css( $top_pad );
         $letter_size   = max( 40, min( 280, absint( $s['letter_size'] ) ) );

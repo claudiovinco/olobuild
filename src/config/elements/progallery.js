@@ -1,4 +1,5 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { ratioOptions } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -30,6 +31,11 @@ export default {
     columns: '3',
     gap: '8',
     img_height: '250px',
+    // 'auto' = nessuna proporzione: l'altezza dell'item resta quella di `img_height`,
+    // esattamente come prima che questo campo esistesse. Qualunque altro default
+    // cambierebbe l'altezza di TUTTE le gallerie già pubblicate.
+    aspect_ratio: 'auto',
+    aspect_ratio_custom: '16/9',
     object_fit: 'cover',
     object_position: 'center center',
     thumb_radius: '8',
@@ -125,7 +131,7 @@ export default {
   fields: [
     // ─── Media ───
     // `righeExtra`: ogni immagine porta anche sottotitolo e testo, con gli stessi
-    // nomi di campo degli item dello ScrollScrub (`subtitle`, `text`), cosi' lo
+    // nomi di campo degli item dello ScrollScrub (`subtitle`, `text`), così lo
     // stesso contenuto si sposta da un tile all'altro senza riscriverlo.
     // `puntoFocale` accende l'inquadratura PER SINGOLA FOTO dentro la lista.
     // I contextKeys dicono al campo con che ritaglio disegnare l'anteprima e da
@@ -265,19 +271,47 @@ export default {
     { type: 'separator', label: t('Dimensioni') },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 24, step: 2 },
     // type 'unit': stessa stringa CSS salvata del vecchio text ('250px', 'auto' resta editabile raw)
+    // Sparisce dove non produce CSS: sui nastri (hanno «Altezza nastro») e — da quando
+    // esistono le Proporzioni — su Griglia e Diagonale quando una proporzione è attiva,
+    // perché lì il renderer scrive la proporzione AL POSTO dell'altezza
+    // (class-progallery-tile.php:163 `$item_box`, gemello `itemBox` in ProgalleryTile.vue)
+    // e l'altezza non viene più letta da nessun'altra parte. Negli altri schemi (collage,
+    // mosaico, espandi, giustificato, puzzle…) l'altezza comanda ancora, e resta.
+    // `s.aspect_ratio || 'auto'`: le condizioni si valutano sui settings GREZZI, e una
+    // galleria salvata prima di questo sprint la chiave non ce l'ha proprio — il caso
+    // «chiave assente» deve cadere dalla parte del campo VISIBILE.
     { key: 'img_height', label: t('Altezza immagine'), type: 'unit', units: ['px', 'vh'], min: 0,
-      show: s => !(s.layout && s.layout.startsWith('strip')) },
+      show: s => !(s.layout && s.layout.startsWith('strip'))
+        && !(['grid', 'diagonal'].includes(s.layout || 'grid') && (s.aspect_ratio || 'auto') !== 'auto') },
+    // Proporzioni: il pezzo di cornice che mancava (adattamento e punto focale c'erano
+    // già). Visibile solo su Griglia e Diagonale, gli unici schemi in cui l'item e' un
+    // rettangolo largo quanto la colonna e la proporzione può davvero dargli la forma:
+    // negli altri l'altezza viene dalle righe della griglia, da posizioni assolute o
+    // dall'altezza del nastro, e un controllo mostrato li' non farebbe niente.
+    { key: 'aspect_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions({ custom: true }),
+      description: t('Con una proporzione attiva comanda lei, e «Altezza immagine» sparisce.'),
+      show: s => ['grid', 'diagonal'].includes(s.layout || 'grid') },
+    { key: 'aspect_ratio_custom', label: t('Proporzioni personalizzate'), type: 'text',
+      placeholder: t('es. 5/4, 1.618'),
+      show: s => ['grid', 'diagonal'].includes(s.layout || 'grid'),
+      condition: { field: 'aspect_ratio', op: 'eq', value: 'custom' } },
+    // La galleria è mista: gli item possono essere foto, video in autoplay (<video>,
+    // che object-fit lo segue) oppure embed YouTube/Vimeo, resi come <iframe>
+    // (class-progallery-tile.php, ramo `use_embed_autoplay`). Su un iframe object-fit e
+    // object-position non hanno alcun effetto: lì comanda solo la proporzione del
+    // contenitore. Non si può togliere il controllo — per foto e video serve — quindi
+    // lo si dichiara, invece di lasciar credere che agisca su tutto.
     { key: 'object_fit', label: t('Adattamento'), type: 'select', options: [
       { value: 'cover', label: t('Riempi') },
       { value: 'contain', label: t('Contieni') },
-    ]},
+    ], description: t('Vale per foto e video in autoplay; gli embed YouTube/Vimeo non lo seguono.') },
     // Punto focale della GALLERIA: vale per ogni foto che non ne ha uno suo, ed e'
-    // quindi il valore di ripiego, non piu' l'unico. Quello per singola foto sta
+    // quindi il valore di ripiego, non più l'unico. Quello per singola foto sta
     // nella lista dei media, in CONTENUTO, dove si vede la foto a cui si applica.
     // URL per-item → niente src nei contextKeys (qui il pad non ha un'immagine da
     // mostrare: non saprebbe quale delle tante).
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
-      contextKeys: { fit: 'object_fit' } },
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
+      contextKeys: { fit: 'object_fit', ratio: 'aspect_ratio', ratioCustom: 'aspect_ratio_custom' } },
     withHover({ key: 'thumb_radius', label: t('Raggio'), type: 'border-radius' }),
 
     // ─── Espandi ───

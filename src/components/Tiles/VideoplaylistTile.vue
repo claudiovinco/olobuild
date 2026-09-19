@@ -23,7 +23,7 @@
           <!-- Thumbnail or number -->
           <div :style="thumbStyle(video)">
             <span v-if="!video.thumbnail" style="font-size:10px;font-weight:700;opacity:0.6;">{{ i + 1 }}</span>
-            <img v-else :src="video.thumbnail" alt="" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:3px;" />
+            <img v-else :src="video.thumbnail" alt="" :style="thumbImgStyle" />
           </div>
           <div style="flex:1;min-width:0;">
             <div style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
@@ -50,6 +50,7 @@
 import { ref, computed } from 'vue';
 import { t } from '@/i18n';
 import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
+import { imageFrame } from '@/composables/useImageFrame';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -65,6 +66,11 @@ const defaults = {
   active_color: '',
   show_duration: true,
   autoplay_next: false,
+  // Cornice delle anteprime — stessi default del renderer PHP (48×32 = 3/2, cover).
+  thumbnail_ratio: '3/2',
+  thumbnail_ratio_custom: '16/9',
+  thumbnail_fit: 'cover',
+  thumbnail_object_position: 'center center',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
@@ -131,10 +137,17 @@ function itemStyle(index) {
   };
 }
 
+// Cornice delle anteprime — gemella dell'helper PHP (image_frame).
+// Nel canvas il riquadro e' più stretto del sito (40px invece di 48): e'
+// un'anteprima compatta, ma la FORMA dev'essere quella vera, quindi l'altezza
+// non e' più fissa e viene dalla proporzione scelta.
+const thumbFrame = computed(() => imageFrame(s.value, 'thumbnail', { ratio: '3/2', fit: 'cover', pos: 'center center' }));
+
 function thumbStyle(video) {
   return {
     width: '40px',
-    height: '28px',
+    // Senza proporzione valida si torna al riquadro storico, come fa il PHP.
+    ...(thumbFrame.value.contenitore.aspectRatio ? thumbFrame.value.contenitore : { height: '28px' }),
     flexShrink: '0',
     background: video.thumbnail ? 'transparent' : 'rgba(255,255,255,0.08)',
     borderRadius: '3px',
@@ -144,6 +157,14 @@ function thumbStyle(video) {
     overflow: 'hidden',
   };
 }
+
+const thumbImgStyle = computed(() => ({
+  width: '100%',
+  height: '100%',
+  ...thumbFrame.value.immagine,
+  display: 'block',
+  borderRadius: '3px',
+}));
 </script>
 
 <style scoped>

@@ -6,7 +6,7 @@
         :key="item.id || i"
         class="mog-cell"
         :class="cellClass(item)"
-        :style="masonry ? null : { height: itemHeight + 'px' }"
+        :style="cellStyle"
       >
         <!-- Image layer (receives hover effects) — card_type='image' (default) -->
         <div
@@ -55,6 +55,7 @@
 
 <script setup>
 import { uikitGap } from '@/composables/useUikitGap';
+import { imageFrame } from '@/composables/useImageFrame';
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -75,6 +76,8 @@ const defaults = {
   ribbon_bg: '#e11d48',
   ribbon_color: '#ffffff',
   layout_mode: 'uniform',
+  image_ratio: 'auto',
+  image_fit: 'cover',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
@@ -102,6 +105,16 @@ const itemHeight = computed(() => {
 const gap = computed(() => uikitGap(s.value.gap, 'medium'));
 
 const masonry = computed(() => (s.value.layout_mode || 'uniform') === 'masonry');
+
+// Cornice delle immagini, stessa regola del frontend: scelta una proporzione prende
+// il posto dell'altezza fissa, con 'auto' resta l'altezza. In Masonry l'altezza la
+// decide la griglia, quindi la proporzione non si applica nemmeno qui.
+const cellStyle = computed(() => {
+  if (masonry.value) return null;
+  const { contenitore } = imageFrame(s.value, 'image', { ratio: 'auto' });
+  if (contenitore.aspectRatio) return { aspectRatio: contenitore.aspectRatio };
+  return { height: itemHeight.value + 'px' };
+});
 const gridStyle = computed(() => {
   const st = { '--mog-cols': cols.value, '--mog-gap': gap.value };
   if (masonry.value) st['--mog-row'] = itemHeight.value + 'px';
@@ -118,9 +131,23 @@ function cardType(item) {
   return ['image', 'text', 'icon', 'graphic'].includes(t) ? t : 'image';
 }
 
+// Nel canvas la foto è un background-image (nel frontend è un <img>): l'adattamento
+// scelto si traduce nei valori corrispondenti di `background-size`. «Riduci se
+// necessario» non esiste per gli sfondi e si avvicina con `contain`, che gli
+// coincide in tutti i casi tranne le foto più piccole del riquadro.
+const FIT_BG = { cover: 'cover', contain: 'contain', fill: '100% 100%', none: 'auto', 'scale-down': 'contain' };
+
 function bgStyle(item) {
   if (item.image) {
-    return { backgroundImage: `url(${item.image})`, backgroundSize: 'cover', backgroundPosition: (s.value.object_position || 'center center') };
+    return {
+      backgroundImage: `url(${item.image})`,
+      backgroundSize: FIT_BG[s.value.image_fit] || 'cover',
+      // Lo sfondo si ripete di suo (valore iniziale `repeat`) e con 'cover' non si
+      // vedeva; con contain/none/scale-down il canvas mostrerebbe la stessa foto a
+      // mosaico mentre il sito — che usa un <img> con object-fit — ne mostra una sola.
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: (s.value.object_position || 'center center'),
+    };
   }
   return { background: '#374151' };
 }

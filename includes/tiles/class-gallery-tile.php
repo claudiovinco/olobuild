@@ -20,6 +20,10 @@ class Olobuild_Gallery_Tile extends Olobuild_Tile_Base {
         'rows'                => 0,
         'gap'                 => 8,
         'img_height'          => '200px',
+        // Anche qui, non solo nel config JS: il builder semina la tile appena
+        // inserita coi default PHP che arrivano dal REST, quindi senza questa riga
+        // il select «Proporzioni» nascerebbe senza nessuna voce selezionata.
+        'img_ratio'           => 'auto',
         'object_fit'          => 'cover',
         'object_position'     => 'center center',
         'thumb_radius'        => 8,
@@ -91,6 +95,15 @@ class Olobuild_Gallery_Tile extends Olobuild_Tile_Base {
 
         $img_height  = esc_attr( $s['img_height'] ?: '200px' );
         $object_fit  = esc_attr( $s['object_fit'] ?: 'cover' );
+        // Cornice delle miniature. 'auto' (il default) non emette niente e lascia in
+        // piedi l'altezza fissa di sempre: e' così che le gallerie già pubblicate
+        // restano identiche. La proporzione vale SOLO per il layout a griglia —
+        // in masonry le altezze naturali sono il layout, nel giustificato lo e'
+        // l'altezza fissa con flex-grow, e una forma unica li' li annullerebbe.
+        $img_frame   = Olobuild_Tile_Utils::image_frame( $s, 'img', [ 'ratio' => 'auto' ] );
+        $grid_box    = ( $layout === 'grid' && $img_frame['contenitore'] !== '' )
+            ? $img_frame['contenitore']
+            : 'height: ' . $img_height . ';';
         $obj_pos     = trim( (string) ( $s['object_position'] ?? 'center center' ) );
         if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
         $obj_pos     = esc_attr( $obj_pos );
@@ -108,7 +121,7 @@ class Olobuild_Gallery_Tile extends Olobuild_Tile_Base {
         $more_size = max( 16, min( 48, absint( $s['more_size'] ) ) );
 
         ob_start();
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist colors, absint()/floatval() clamped numbers, esc_attr()'d strings, Olobuild_Tile_Utils radius helpers and the internally generated $uid.
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() whitelist colors, absint()/floatval() clamped numbers, esc_attr()'d strings, Olobuild_Tile_Utils radius/image_frame helpers (the latter validates the aspect ratio with its own regex) and the internally generated $uid.
         ?>
         <style>
             <?php if ( $layout === 'masonry' ) : ?>
@@ -171,7 +184,7 @@ class Olobuild_Gallery_Tile extends Olobuild_Tile_Base {
                 display: block;
                 border-radius: <?php echo $radius; ?>;
                 overflow: hidden;
-                height: <?php echo $img_height; ?>;
+                <?php echo $grid_box; ?>
                 cursor: pointer;
             }
             .<?php echo $uid; ?> .olo-gal-item img {

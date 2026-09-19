@@ -37,6 +37,7 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
         'overlay_color'       => 'var(--olo-color-dark, #000000)',
         'overlay_opacity'     => 80,
         'image_ratio'         => '4:3',
+        'image_fit'           => 'cover',
         'object_position'     => 'center center',
         'border_radius'       => 8,
         'animation'           => 'fade',
@@ -105,7 +106,13 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
     /**
      * CSS per layout speciali (oltre grid/masonry classico).
      */
-    private function get_layout_css( $layout, $uid, $cols, $gap ) {
+    private function get_layout_css( $layout, $uid, $cols, $gap, $fit = 'cover' ) {
+        // I selettori delle immagini in questo switch nominano .olo-pf-img-wrap non
+        // per bellezza ma per Specificità: il CSS di layout si stampa PRIMA di quello
+        // di base (riga ~437 contro ~473) e con `.olo-pf-item img` avrebbe lo stesso
+        // peso della regola di base, che a parita' vince perché viene dopo e con
+        // «Proporzioni: Auto» rimette `height:auto` annullando il ritaglio. Magazine
+        // si salvava da se' col suo :nth-child(1); bento e mosaic no.
         switch ( $layout ) {
             case 'bento':
                 return ".{$uid}-grid{display:grid;grid-template-columns:repeat({$cols},1fr);grid-auto-rows:minmax(160px,auto);gap:{$gap}px}"
@@ -113,12 +120,12 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
                      . ".{$uid}-grid .olo-pf-item:nth-child(7n+4){grid-column:span 2}"
                      . ".{$uid}-grid .olo-pf-item:nth-child(7n+6){grid-row:span 2}"
                      . ".{$uid}-grid .olo-pf-item .olo-pf-img-wrap{padding-top:0 !important;height:100%}"
-                     . ".{$uid}-grid .olo-pf-item img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}";
+                     . ".{$uid}-grid .olo-pf-item .olo-pf-img-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:{$fit}}";
             case 'magazine':
                 return ".{$uid}-grid{display:grid;grid-template-columns:2fr 1fr 1fr;grid-auto-rows:minmax(120px,auto);gap:{$gap}px}"
                      . ".{$uid}-grid .olo-pf-item:nth-child(1){grid-column:span 1;grid-row:span 2}"
                      . ".{$uid}-grid .olo-pf-item:nth-child(1) .olo-pf-img-wrap{padding-top:0 !important;height:100%}"
-                     . ".{$uid}-grid .olo-pf-item:nth-child(1) img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}"
+                     . ".{$uid}-grid .olo-pf-item:nth-child(1) img{position:absolute;inset:0;width:100%;height:100%;object-fit:{$fit}}"
                      . "@media(max-width:768px){.{$uid}-grid{grid-template-columns:1fr}.{$uid}-grid .olo-pf-item:nth-child(1){grid-column:span 1;grid-row:auto}}";
             case 'masonry-pin':
                 return ".{$uid}-grid{column-count:{$cols};column-gap:{$gap}px}"
@@ -130,7 +137,7 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
                      . ".{$uid}-grid .olo-pf-item:nth-child(5n+1){grid-row:span 2}"
                      . ".{$uid}-grid .olo-pf-item:nth-child(5n+3){grid-column:span 2}"
                      . ".{$uid}-grid .olo-pf-item .olo-pf-img-wrap{padding-top:0 !important;height:100%}"
-                     . ".{$uid}-grid .olo-pf-item img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}";
+                     . ".{$uid}-grid .olo-pf-item .olo-pf-img-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:{$fit}}";
             case 'split-index':
                 return ".{$uid}-grid{display:grid;grid-template-columns:280px 1fr;gap:40px;min-height:480px}"
                      . ".{$uid}-grid .olo-pf-list{display:flex;flex-direction:column;gap:0}"
@@ -138,7 +145,7 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
                      . ".{$uid}-grid .olo-pf-item:hover{padding-left:8px}"
                      . ".{$uid}-grid .olo-pf-item .olo-pf-img-wrap{display:none}"
                      . ".{$uid}-grid .olo-pf-preview{position:sticky;top:24px;height:480px;border-radius:12px;overflow:hidden;background:#f8fafc}"
-                     . ".{$uid}-grid .olo-pf-preview img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 350ms ease;position:absolute;inset:0}"
+                     . ".{$uid}-grid .olo-pf-preview img{width:100%;height:100%;object-fit:{$fit};opacity:0;transition:opacity 350ms ease;position:absolute;inset:0}"
                      . ".{$uid}-grid .olo-pf-preview img.is-active{opacity:1}"
                      . "@media(max-width:768px){.{$uid}-grid{grid-template-columns:1fr}.{$uid}-grid .olo-pf-preview{display:none}.{$uid}-grid .olo-pf-item .olo-pf-img-wrap{display:block}}";
             case 'carousel':
@@ -325,9 +332,19 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
         $cpl = is_array( $cp ) ? absint( $cp['left']   ?? 0 ) : 0;
         $container_radius_css = $this->build_border_radius_css( $s['container_radius'] ?? [] );
 
-        $ratio_map = [ '1:1'=>'100%', '4:3'=>'75%', '16:9'=>'56.25%', '3:2'=>'66.67%', '3:4'=>'133.33%', 'auto'=>'0' ];
+        // padding-top in percentuale = altezza/larghezza: il vecchio trucco per
+        // tenere le proporzioni. La mappa deve elencare TUTTE le voci offerte dal
+        // select (ratioOptions con sep ':'), altrimenti un rapporto scelto
+        // ricadrebbe in silenzio sul 75% del 4:3.
+        $ratio_map = [ '1:1'=>'100%', '4:3'=>'75%', '3:2'=>'66.67%', '16:9'=>'56.25%', '21:9'=>'42.86%',
+                       '3:4'=>'133.33%', '4:5'=>'125%', '9:16'=>'177.78%', '2:3'=>'150%', 'auto'=>'0' ];
         $ratio = $s['image_ratio'];
         $ratio_css = isset( $ratio_map[ $ratio ] ) ? $ratio_map[ $ratio ] : '75%';
+        // Adattamento: prima era 'cover' cablato nel CSS, ora è scegliibile.
+        $fit = is_string( $s['image_fit'] ?? null ) ? $s['image_fit'] : 'cover';
+        if ( ! in_array( $fit, [ 'cover', 'contain', 'fill', 'none', 'scale-down' ], true ) ) {
+            $fit = 'cover';
+        }
 
         // Punto focale (object-position) globale a livello tile, applicato a ogni immagine.
         $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
@@ -423,7 +440,7 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
         ?>
         <style>
             /* ── Base layout ── */
-            <?php $layout_css = $this->get_layout_css( $layout, $uid, $cols, $gap ); ?>
+            <?php $layout_css = $this->get_layout_css( $layout, $uid, $cols, $gap, $fit ); ?>
             <?php if ( $layout_css ) : ?>
             <?php echo $layout_css; ?>
             <?php elseif ( $layout === 'masonry' ) : ?>
@@ -466,10 +483,18 @@ class Olobuild_Portfolio_Tile extends Olobuild_Tile_Base {
                 inset: 0;
                 width: 100%;
                 height: 100%;
-                object-fit: cover;
+                object-fit: <?php echo $fit; ?>;
                 <?php else : ?>
                 width: 100%;
                 height: auto;
+                /* Niente maschera: l'immagine tiene la sua altezza. L'object-fit
+                   si emette lo stesso, e non è ridondante — con «Dimensione
+                   originale» e «Riduci se necessario» decide davvero la resa, e
+                   fa lavorare l'object-position che ogni immagine porta inline
+                   (il punto focale, prima inerte qui). Con cover/contain/fill,
+                   invece, la scatola ha già la proporzione nativa della foto:
+                   nessuna pagina pubblicata si muove. */
+                object-fit: <?php echo $fit; ?>;
                 <?php endif; ?>
                 display: block;
                 transition: transform 0.5s cubic-bezier(.25,.46,.45,.94);

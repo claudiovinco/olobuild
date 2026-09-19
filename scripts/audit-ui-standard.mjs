@@ -93,7 +93,7 @@ for (const f of fs.readdirSync(ELEMENTS).filter((x) => x.endsWith('.js') && !x.s
     const key = topProp(body, 'key');
     const type = topProp(body, 'type');
     if (!key || !type) continue;
-    fields.push({ file: f.replace(/\.js$/, ''), key, type, label: topProp(body, 'label') || '' });
+    fields.push({ file: f.replace(/\.js$/, ''), key, type, label: topProp(body, 'label') || '', body });
   }
 }
 
@@ -108,6 +108,10 @@ const etichetta = (raw) => {
   const m = /^t\(\s*'([\s\S]*)'\s*\)$/.exec(String(raw || ''));
   return (m ? m[1] : String(raw || '')).trim();
 };
+
+// Le chiavi che nominano la maschera di ritaglio di un'immagine. Ogni tile se l'è
+// chiamata a modo suo: aspect, media_aspect, thumb_ratio, card_aspect, peek_ratio…
+const RAPPORTO = /(^|_)(ratio|aspect)(_ratio)?$/i;
 
 // Unità che un controllo numerico sa già mostrare accanto al valore.
 const UNITA_IN_CODA = /\s*\((px|%|ms|s|vh|vw|vmin|vmax|em|rem|ch|deg|fr|pt)\)\s*$/i;
@@ -197,6 +201,49 @@ const RULES = [
     // I toggle 'mostra icona' non scelgono un'icona: non rientrano nella regola.
     match: (r) => /^icon$|(^|_)icon$/i.test(r.key) && r.type !== 'toggle',
     ok: (r) => r.type === 'icon' || r.type === 'icon-select' || r.type === 'select',
+  },
+  {
+    id: 'proporzioni-canoniche',
+    titolo: 'Le proporzioni di un\'immagine si scelgono dall\'elenco canonico (ratioOptions)',
+    // Prima dell'uniformazione c'erano 29 selettori di proporzione e 29 elenchi
+    // diversi: chi offriva 4 voci, chi 9, e nessuno le stesse. Il valore salvato non
+    // si puo' cambiare (tre formati storici convivono: '16/9', '16:9', '16-9'), ma
+    // l'elenco, l'ordine e i nomi si': li genera ratioOptions() di _imageFrame.js,
+    // che il separatore giusto lo riceve come parametro.
+    // Restano fuori i rapporti che non sono maschere di ritaglio: le proporzioni di
+    // colonna, che si esprimono in `fr` e sono un layout, non un'immagine.
+    match: (r) => r.type === 'select' && RAPPORTO.test(r.key) && /value:\s*'\d+[/:-]\d/.test(r.body) && !/'[\d.]+fr/.test(r.body),
+    ok: (r) => /ratioOptions\s*\(/.test(r.body),
+  },
+  {
+    id: 'proporzioni-nome',
+    titolo: 'Il selettore di ritaglio si chiama «Proporzioni» in tutte le tile',
+    match: (r) => r.type === 'select' && RAPPORTO.test(r.key) && /ratioOptions\s*\(/.test(r.body) && !!r.label,
+    ok: (r) => /^Proporzioni/i.test(etichetta(r.label)),
+  },
+  {
+    id: 'adattamento-nome',
+    titolo: 'Il selettore di adattamento si chiama «Adattamento», mai «Object fit»',
+    match: (r) => r.type === 'select' && /(^|_)(object_)?fit$/i.test(r.key) && !!r.label,
+    ok: (r) => /^Adattamento/i.test(etichetta(r.label)),
+  },
+  {
+    id: 'focale-nome',
+    titolo: 'Il punto focale si chiama «Punto focale», non «Posizione contenuto»',
+    // Lo stesso controllo si chiamava in cinque modi: Posizione contenuto (15),
+    // Posizione — punto focale (9), Punto focale (7), Punto focale immagine,
+    // Posizione immagine. «Posizione» da sola non dice cosa fa: quel controllo
+    // sceglie QUALE PARTE della foto resta inquadrata quando viene ritagliata.
+    match: (r) => r.type === 'object-position' && !!r.label,
+    ok: (r) => /^Punto focale/i.test(etichetta(r.label)),
+  },
+  {
+    id: 'focale-grafico',
+    titolo: 'Il punto focale usa il picker grafico (type:\'object-position\'), mai un select a 9 voci',
+    // FieldObjectPosition permette anche la posizione LIBERA in percentuale; il
+    // select a nove voci no, e salva comunque la stessa identica stringa CSS.
+    match: (r) => /object_position$/i.test(r.key),
+    ok: (r) => r.type === 'object-position',
   },
 ];
 

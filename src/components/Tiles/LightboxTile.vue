@@ -74,6 +74,8 @@ const defaults = {
   gap: '15',
   thumb_ratio: '1:1',
   thumb_radius: 8,
+  // Cablato a 'cover' prima che esistesse il controllo: resta il default.
+  thumb_fit: 'cover',
   object_position: 'center center',
   show_caption: true,
   items: [],
@@ -83,27 +85,45 @@ const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const items = computed(() => Array.isArray(s.value.items) ? s.value.items : []);
 
-const ratioMap = { '1:1': '100%', '4:3': '75%', '16:9': '56.25%', 'auto': '0' };
+// Gemella ESATTA di $ratio_map nel renderer PHP (padding-bottom percentuale, non
+// aspect-ratio): se qui manca una voce del select, il canvas ritaglia quadrato
+// mentre il sito ritaglia giusto. Le due tabelle si toccano sempre insieme.
+const ratioMap = {
+  '1:1': '100%', '4:3': '75%', '3:2': '66.67%', '16:9': '56.25%', '21:9': '42.86%',
+  '3:4': '133.33%', '4:5': '125%', '9:16': '177.78%', '2:3': '150%', 'auto': '0',
+};
 const ratioPercent = computed(() => ratioMap[s.value.thumb_ratio] || '100%');
 
 const radiusCss = computed(() => radiusToCss(s.value.thumb_radius, { fallback: '8px' }));
 
 const objectPosition = computed(() => s.value.object_position || 'center center');
 
-const imgCoverStyle = computed(() => ({
-  position: 'absolute',
-  inset: '0',
-  width: '100%',
-  height: '100%',
-  objectFit: 'cover',
-  objectPosition: objectPosition.value,
-}));
+const FIT = ['cover', 'contain', 'fill', 'none', 'scale-down'];
+const objectFit = computed(() => (FIT.includes(s.value.thumb_fit) ? s.value.thumb_fit : 'cover'));
 
-const imgAutoStyle = computed(() => ({
-  width: '100%',
-  display: 'block',
-  objectPosition: objectPosition.value,
-}));
+const imgCoverStyle = computed(() => {
+  const st = {
+    position: 'absolute',
+    inset: '0',
+    width: '100%',
+    height: '100%',
+    objectFit: objectFit.value,
+  };
+  // Con 'fill' l'immagine e' deformata per riempire: il focale non sposta nulla
+  // e non si scrive (parita' col renderer PHP).
+  if (objectFit.value !== 'fill') st.objectPosition = objectPosition.value;
+  return st;
+});
+
+// Ramo 'auto' (nessun riquadro percentuale): l'adattamento si emette anche qui,
+// gemello del renderer PHP. Il riquadro ha la forma della foto, quindi 'cover',
+// 'contain' e 'fill' rendono identici — ma 'none' e 'scale-down' no, e senza
+// questa riga il canvas mostrerebbe una cosa e il sito un'altra.
+const imgAutoStyle = computed(() => {
+  const st = { width: '100%', display: 'block', objectFit: objectFit.value };
+  if (objectFit.value !== 'fill') st.objectPosition = objectPosition.value;
+  return st;
+});
 
 const gridStyle = computed(() => ({
   display: 'grid',

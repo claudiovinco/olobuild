@@ -59,7 +59,7 @@
         <div class="olo-accordion-panel-inner">
           <!-- Panel media -->
           <div v-if="panel.image || panel.video" class="olo-accordion-media" :style="mediaStyle">
-            <img v-if="panel.image" :src="panel.image" alt="" class="olo-accordion-media-img" :style="{ borderRadius: (parseInt(s.media_radius) || 0) + 'px', objectPosition: (s.object_position || 'center center') }" />
+            <img v-if="panel.image" :src="panel.image" alt="" class="olo-accordion-media-img" :style="[{ borderRadius: (parseInt(s.media_radius) || 0) + 'px' }, mediaFrame]" />
             <div v-else-if="panel.video" class="olo-accordion-media-video">{{ t('Video') }}</div>
           </div>
           <div
@@ -312,6 +312,18 @@ function iconShapeStyle() {
     justifyContent: 'center',
   };
 }
+
+// Cornice delle immagini dei pannelli: gemello del CSS che scrive il frontend.
+// Con 'auto' non si emette niente e l'immagine tiene la sua altezza naturale.
+const mediaFrame = computed(() => {
+  const out = { objectPosition: s.value.object_position || 'center center' };
+  const r = String(s.value.aspect_ratio || 'auto').trim().replace(/:/g, '/');
+  if (r && r !== 'auto' && /^\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?$/.test(r)) {
+    out.aspectRatio = r.replace(/\s+/g, '');
+    out.objectFit = s.value.object_fit || 'cover';
+  }
+  return out;
+});
 
 const mediaStyle = computed(() => {
   const align = s.value.media_align || 'right';

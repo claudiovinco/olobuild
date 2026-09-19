@@ -86,6 +86,7 @@ import { t } from '@/i18n';
 import { ref, computed, watch } from 'vue';
 import { toSpacingCss } from '@/composables/useBoxModel';
 import { radiusToCss } from '@/composables/useRadius';
+import { imageFrame } from '@/composables/useImageFrame';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 
 const props = defineProps({
@@ -262,16 +263,24 @@ const mediaStyle = computed(() => {
 });
 
 const imgStyle = computed(() => {
-  const ratio = s.value.panel_image_ratio || 'auto';
-  const map = { 'auto': '', '16:9': '16/9', '4:3': '4/3', '1:1': '1/1', '3:4': '3/4' };
-  const arOk = map[ratio];
+  // Gemello di `build_image_frame_css()` nel PHP, e le regole sono le sue due:
+  //  - l'ADATTAMENTO si emette sempre (sul sito il 'cover' arriva comunque dalla
+  //    regola globale `.olo-sp-panel__img` di frontend.css: qui va rimesso a mano,
+  //    altrimenti il canvas è l'unico posto dove l'immagine esce DEFORMATA);
+  //  - l'altezza passa ad 'auto' SOLO quando c'è davvero un rapporto: con
+  //    `height:100%` e la larghezza al 100% il browser ignora l'aspect-ratio.
+  // La mappa a quattro voci è sparita: imageFrame() accetta tutto il set canonico e
+  // converte da sé i due punti dei valori storici ('16:9') nella barra che il CSS vuole.
+  const { contenitore, immagine } = imageFrame(s.value, 'panel_image', {
+    ratio: 'auto', fit: 'cover', pos: 'center center',
+  });
   return {
     width: '100%',
-    height: arOk ? 'auto' : '100%',
-    aspectRatio: arOk || 'auto',
-    objectFit: 'cover',
+    height: contenitore.aspectRatio ? 'auto' : '100%',
     display: 'block',
     borderRadius: radiusToCss(s.value.panel_image_radius, { fallback: '0px' }),
+    ...contenitore,
+    ...immagine,
   };
 });
 </script>

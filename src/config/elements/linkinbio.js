@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, focalField } from './_shared';
 import { shadowField } from './_shared.js';
 import { t } from '@/i18n';
 
@@ -26,6 +26,9 @@ export default {
       { id: 'lib-4', title: t('Contattami'),   url: 'mailto:info@example.com', icon: 'mail', image_url: '', style: 'outline' },
     ],
     profile_image: '',
+    // 'center center' = quel che il browser applica già da sé (object-position
+    // iniziale 50% 50%): il controllo nasce senza spostare nessun avatar.
+    profile_image_object_position: 'center center',
     profile_name: 'Il tuo nome',
     profile_bio: 'Una breve descrizione qui',
     max_width: '420',
@@ -109,6 +112,14 @@ export default {
       },
       sizeMin: 12, sizeMax: 60,
     },
+
+    // La cornice dell'avatar è un cerchio di 80px a lato fisso: proporzioni e
+    // adattamento non hanno senso (16:9 su un avatar non vuol dire niente, il fit
+    // resta 'cover'). Serve invece il punto focale: oggi un viso decentrato viene
+    // tagliato male e non c'è alcun modo di correggerlo.
+    { type: 'separator', label: t('Foto profilo') },
+    focalField('profile_image', { fit: 'cover', ratio: '1/1',
+      condition: { field: 'profile_image', op: 'notEmpty' } }),
 
     { type: 'separator', label: t('Colore bio') },
     { key: 'bio_color', label: t('Colore bio'), type: 'color' },

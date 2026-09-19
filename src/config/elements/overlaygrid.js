@@ -1,5 +1,6 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, wowEffectsFields, wowEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -30,6 +31,11 @@ export default {
     columns_mobile: '1',
     gap: 'medium',
     height: '320',
+    // 'auto' = nessun ritaglio imposto, resta l'altezza fissa di sempre; 'cover' e'
+    // l'object-fit che i due renderer avevano cablato. Entrambi riproducono la resa
+    // che le pagine pubblicate hanno oggi.
+    image_ratio: 'auto',
+    image_fit: 'cover',
     object_position: 'center center',
     match_height: true,
     layout_mode: 'uniform',
@@ -230,7 +236,19 @@ export default {
       { value: 'medium', label: t('Media') },
       { value: 'large', label: t('Grande') },
     ]},
-    { key: 'height', label: t('Altezza'), type: 'range', min: 150, max: 800, step: 25 },
+    { key: 'height', label: t('Altezza'), type: 'range', min: 150, max: 800, step: 25,
+      description: t('Usata quando le proporzioni sono automatiche.') },
+    // La cornice mancava: si poteva scegliere solo l'altezza in pixel, uguale per ogni
+    // schermo. Scelta una proporzione, prende il posto dell'altezza; con 'auto' non si
+    // emette niente e resta l'altezza fissa, cioè la resa di oggi.
+    // In Masonry l'altezza della cella la decide la griglia (`grid-auto-rows` +
+    // `height:100%` sull'immagine), quindi la proporzione non avrebbe presa: il
+    // controllo si nasconde per non promettere un effetto che non c'e'.
+    { key: 'image_ratio', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ autoLabel: 'Auto (usa Altezza)' }),
+      condition: { field: 'layout_mode', op: 'neq', value: 'masonry' },
+      description: t('La maschera di ritaglio delle immagini: sostituisce l’altezza fissa.') },
+    { key: 'image_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
     { key: 'layout_mode', label: t('Disposizione'), type: 'select', options: [
       { value: 'uniform', label: t('Uniforme (griglia)') },
       { value: 'masonry', label: t('Masonry (celle alte/larghe)') },
@@ -256,9 +274,12 @@ export default {
 
     { type: 'separator', label: t('Stile elementi') },
     { key: 'item_radius', label: t('Raggio elementi'), type: 'border-radius' },
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
-      contextKeys: { fit: '(cover)' },
-      description: t('Punto focale delle immagini card (uguale per tutte). Default: centro.') },
+    // La chiave resta `object_position` (globale, non per-item): e' quella salvata nei
+    // template pubblicati e non si tocca, anche se le sorelle nuove si chiamano image_*.
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
+      contextKeys: { fit: 'image_fit', ratio: 'image_ratio' },
+      description: t('Punto focale delle immagini card (uguale per tutte). Default: centro.'),
+      condition: { field: 'image_fit', op: 'neq', value: 'fill' } },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
     { key: 'overlay_gradient', label: t('Overlay gradiente (alto→basso)'), type: 'toggle' },
 

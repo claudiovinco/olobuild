@@ -1,5 +1,6 @@
 import { t } from '@/i18n';
 import { withHover } from './_shared';
+import { ratioOptions } from './_imageFrame.js';
 
 const R = (n) => ({ tl: n, tr: n, br: n, bl: n, linked: true });
 
@@ -115,13 +116,11 @@ export default {
     ]},
 
     { type: 'separator', label: t('Metà alta (lettera)') },
-    { key: 'top_aspect_ratio', label: t('Aspect ratio'), type: 'select', options: [
-      { value: '1/1', label: t('1 / 1 (quadrato)') },
-      { value: '4/5', label: '4 / 5' },
-      { value: '3/4', label: '3 / 4' },
-      { value: '2/3', label: '2 / 3' },
-      { value: '3/2', label: '3 / 2' },
-    ]},
+    // Senza voce «Auto»: la metà alta è un riquadro con sfondo (colore o immagine),
+    // non un <img>, e senza aspect-ratio non avrebbe nessuna altezza — la card si
+    // schiaccerebbe sul testo. I cinque rapporti di prima sono tutti nel set canonico.
+    { key: 'top_aspect_ratio', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ auto: false }) },
     { key: 'top_padding', label: t('Padding'), type: 'spacing', min: 0, max: 80 },
     { key: 'letter_font_family', label: t('Famiglia lettera'), type: 'font-family' },
     { key: 'letter_size',   label: t('Dimensione lettera'), type: 'range', min: 40, max: 280, step: 4 },

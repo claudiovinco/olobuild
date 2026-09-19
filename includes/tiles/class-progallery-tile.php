@@ -21,6 +21,8 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         'columns'             => 3,
         'gap'                 => 8,
         'img_height'          => '250px',
+        'aspect_ratio'        => 'auto',
+        'aspect_ratio_custom' => '16/9',
         'object_fit'          => 'cover',
         'object_position'     => 'center center',
         'thumb_radius'        => 8,
@@ -151,6 +153,14 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         $radius_css   = $this->build_border_radius_css( $s["thumb_radius"] ?? 0 );
         $radius_css_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['thumb_radius_hover'] ?? null );
         $img_height   = esc_attr( $s['img_height'] ?: '250px' );
+        // Proporzioni (cornice): quando c'e' una proporzione e' lei a dare la forma
+        // all'item, al posto dell'altezza fissa. Col default 'auto' — obbligatorio — la
+        // stringa e' identica a prima, quindi tutte le gallerie pubblicate restano com'erano.
+        // Si applica ai due schemi in cui l'item e' un rettangolo largo quanto la colonna
+        // (Griglia e Diagonale); gli altri hanno una geometria propria (righe della griglia,
+        // posizioni assolute, nastri ad altezza fissa) e per questo il campo li' non compare.
+        $ar_decl      = Olobuild_Tile_Utils::image_frame( $s, 'aspect', [ 'ratio' => 'auto' ] )['contenitore'];
+        $item_box     = $ar_decl !== '' ? rtrim( $ar_decl, ';' ) : "height:{$img_height}";
         $object_fit   = esc_attr( $s['object_fit'] ?: 'cover' );
         // Punto focale GLOBALE (object-position) applicato a TUTTE le immagini/video.
         // '' o assente → 'center center' = resa identica a prima.
@@ -337,7 +347,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         ob_start();
 
         // ─── STYLE ───
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: absint/intval/floatval with min/max clamps, number_format(), the safe_color_css() whitelist, esc_attr()'d strings, fixed string maps/ternaries and a generated unique id.
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: absint/intval/floatval with min/max clamps, number_format(), the safe_color_css() whitelist, esc_attr()'d strings, fixed string maps/ternaries, the aspect-ratio built by Olobuild_Tile_Utils::image_frame() behind its own regex whitelist, and a generated unique id.
         echo '<style>';
 
         // Punto focale della GALLERIA, che ora è il RIPIEGO: una foto con
@@ -470,7 +480,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
             echo ".{$uid} .olo-pg-item img{width:100%;height:100%;object-fit:{$object_fit};display:block}";
         } elseif ( $layout === 'diagonal' ) {
             echo ".{$uid}{display:grid;grid-template-columns:repeat({$cols},1fr);gap:{$gap}px}";
-            echo ".{$uid} .olo-pg-item{position:relative;overflow:hidden;border-radius:{$radius};height:{$img_height}}";
+            echo ".{$uid} .olo-pg-item{position:relative;overflow:hidden;border-radius:{$radius};{$item_box}}";
             echo ".{$uid} .olo-pg-item:nth-child(odd){clip-path:polygon(0 0,100% 8%,100% 100%,0 92%)}";
             echo ".{$uid} .olo-pg-item:nth-child(even){clip-path:polygon(0 8%,100% 0,100% 92%,0 100%)}";
             echo ".{$uid} .olo-pg-item img{width:100%;height:100%;object-fit:{$object_fit};display:block}";
@@ -535,7 +545,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
         } else {
             // Default: grid
             echo ".{$uid}{display:grid;grid-template-columns:repeat({$cols},1fr);gap:{$gap}px}";
-            echo ".{$uid} .olo-pg-item{position:relative;overflow:hidden;border-radius:{$radius};height:{$img_height}}";
+            echo ".{$uid} .olo-pg-item{position:relative;overflow:hidden;border-radius:{$radius};{$item_box}}";
             echo ".{$uid} .olo-pg-item img{width:100%;height:100%;object-fit:{$object_fit};display:block;transition:transform .5s cubic-bezier(.25,.46,.45,.94),filter .5s ease}";
         }
 
@@ -613,7 +623,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
                 /*
                  * LE TRE RIGHE, quando ci sono.
                  *
-                 * Sta fuori dai rami qui sopra perche' vale per tutti e cinque
+                 * Sta fuori dai rami qui sopra perché vale per tutti e cinque
                  * i modi di mostrare la didascalia: cambia dove sta il
                  * riquadro, non come si impilano le righe dentro.
                  *
@@ -1843,7 +1853,7 @@ class Olobuild_ProGallery_Tile extends Olobuild_Tile_Base {
      * arrivano da `subtitle` e `text`, che sono gli stessi nomi che usano gli
      * item dello ScrollScrub: lo stesso contenuto si sposta da un tile
      * all'altro senza riscriverlo, ed e' l'unica ragione per cui i campi si
-     * chiamano cosi' invece che `caption2` e `caption3`.
+     * chiamano così invece che `caption2` e `caption3`.
      *
      * ⚠️ Chi non le compila non se ne accorge. Senza quei due campi esce
      * esattamente il markup di prima, un div con dentro il testo: le tre

@@ -37,6 +37,10 @@ class Olobuild_SwitcherPanel_Tile extends Olobuild_Tile_Base {
         'panel_gap'       => 24,
         'panel_image_width' => 40,
         'panel_image_ratio' => 'auto',
+        // 'cover' era già incollato dentro il CSS del ritaglio, e prima ancora sta nella
+        // regola globale di frontend.css: qui è solo estratto in un campo suo.
+        'panel_image_fit'   => 'cover',
+        'panel_image_object_position' => 'center center',
 
         'nav_padding_y'      => 12,
         'nav_padding_x'      => 18,
@@ -114,16 +118,46 @@ class Olobuild_SwitcherPanel_Tile extends Olobuild_Tile_Base {
     }
 
     /**
-     * Build CSS aspect-ratio from the panel_image_ratio setting.
+     * La cornice dell'immagine di pannello: ritaglio + adattamento + punto focale.
+     *
+     * Lo switch di prima conosceva quattro rapporti soli ('16:9','4:3','1:1','3:4') e
+     * ci appendeva 'object-fit: cover'. Ora il ritaglio è l'intero set canonico e
+     * l'adattamento è un campo suo.
+     *
+     * DUE COSE CONTRO-INTUITIVE, e vanno lette insieme alla regola che questa stringa
+     * va a riempire (`.uid .olo-sp-panel__img`, più sotto: `width:100%; height:100%;`).
+     *
+     * 1) L'ADATTAMENTO SI EMETTE SEMPRE, anche col ritaglio su 'auto'. Non cambia
+     *    niente sulle pagine già pubblicate perché il 'cover' è già addosso a ogni
+     *    immagine di pannello, ma da un'altra parte: assets/css/frontend.css
+     *    (`.olo-sp-panel__img{...object-fit:cover}`), una regola globale che nessun
+     *    inspector mostra. Tenere il campo dietro un gate sul ritaglio lo rendeva
+     *    irraggiungibile per i nove preset su dodici che usano 'auto': l'utente non
+     *    aveva NESSUN modo di scegliere 'contain' senza accettare anche un ritaglio.
+     *
+     * 2) COL RITAGLIO SERVE 'height: auto'. Il media è un flex item di un
+     *    `.olo-sp-panel{align-items:stretch}`: appena il testo è più alto
+     *    dell'immagine — cioè quasi sempre — l'altezza del contenitore è definita,
+     *    `height:100%` diventa un'altezza definita anche per l'<img>, e con larghezza
+     *    E altezza definite il browser IGNORA l'aspect-ratio. Senza questa riga i
+     *    rapporti sono un controllo che non fa niente, e il canvas (che mette
+     *    height:'auto') disegna un'altra cosa.
      */
-    private function build_image_ratio_css( $ratio ) {
-        switch ( $ratio ) {
-            case '16:9': return 'aspect-ratio: 16 / 9; object-fit: cover;';
-            case '4:3':  return 'aspect-ratio: 4 / 3; object-fit: cover;';
-            case '1:1':  return 'aspect-ratio: 1 / 1; object-fit: cover;';
-            case '3:4':  return 'aspect-ratio: 3 / 4; object-fit: cover;';
-            default:     return ''; // auto
+    private function build_image_frame_css( $s ) {
+        // image_frame() normalizza da sé i due punti in barra, quindi i valori storici
+        // ('16:9', '4:3', '1:1', '3:4') continuano a rendere senza convertire il database.
+        $frame = Olobuild_Tile_Utils::image_frame( $s, 'panel_image', [
+            'ratio' => 'auto',
+            'fit'   => 'cover',
+            'pos'   => 'center center',
+        ] );
+        $css = '';
+        if ( $frame['contenitore'] !== '' ) {
+            // Viene stampata DOPO `height:100%`, quindi la sovrascrive: è l'ordine che
+            // fa il lavoro, non un !important.
+            $css .= 'height: auto;' . $frame['contenitore'];
         }
+        return $css . $frame['immagine'];
     }
 
     public function render( $settings ) {
@@ -196,7 +230,7 @@ class Olobuild_SwitcherPanel_Tile extends Olobuild_Tile_Base {
         $panel_title_size = max( 12, intval( $s['panel_title_size'] ?? 28 ) );
         $panel_title_weight = preg_match( '/^[1-9]00$/', (string) ( $s['panel_title_weight'] ?? '700' ) ) ? $s['panel_title_weight'] : '700';
         $panel_text_size = max( 10, intval( $s['panel_text_size'] ?? 15 ) );
-        $img_ratio_css = $this->build_image_ratio_css( $s['panel_image_ratio'] ?? 'auto' );
+        $img_ratio_css = $this->build_image_frame_css( $s );
 
         // ── Color helpers ──
         $nav_cont_bg     = $this->safe_color_css( $s['nav_container_bg'] ?? 'transparent' );

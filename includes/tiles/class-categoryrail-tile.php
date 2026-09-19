@@ -23,6 +23,7 @@ class Olobuild_CategoryRail_Tile extends Olobuild_Tile_Base {
         ],
         'card_width'     => 260,
         'card_aspect'    => '4/5',
+        'card_aspect_custom' => '4/5',
         'gap'            => 16,
         'media_bg'       => '',
         'overlay_color'  => 'rgba(16,16,21,0.5)',
@@ -60,7 +61,18 @@ class Olobuild_CategoryRail_Tile extends Olobuild_Tile_Base {
         $uid = 'ocr-' . wp_rand( 10000, 99999 );
 
         $w     = max( 140, min( 480, intval( $s['card_width'] ) ) ) . 'px';
-        $asp   = preg_replace( '/[^0-9\/]/', '', $s['card_aspect'] ?: '4/5' ) ?: '4/5';
+        // Proporzione della tessera. 'custom' = la scrive l'utente; il filtro accetta
+        // anche il punto perché i rapporti non interi ('3/3.5') sono legittimi, e la
+        // whitelist finale scarta tutto il resto: un aspect-ratio invalido qui non
+        // degrada, ANNULLA la tessera (i figli sono tutti in position:absolute).
+        $asp_raw = (string) ( $s['card_aspect'] ?: '4/5' );
+        if ( 'custom' === $asp_raw ) {
+            $asp_raw = (string) ( $s['card_aspect_custom'] ?? '' );
+        }
+        $asp = preg_replace( '/[^0-9.\/]/', '', $asp_raw );
+        if ( ! preg_match( '/^\d+(?:\.\d+)?(?:\/\d+(?:\.\d+)?)?$/', (string) $asp ) ) {
+            $asp = '4/5';
+        }
         $gap   = intval( $s['gap'] ) . 'px';
         $mbg   = $this->safe_color_css( $s['media_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #eceff3)';
         $ov    = $this->safe_color_css( $s['overlay_color'] ?? '' ) ?: 'rgba(16,16,21,0.5)';

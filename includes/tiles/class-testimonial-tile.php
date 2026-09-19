@@ -39,6 +39,7 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
         'author_position' => 'bottom-left',
         'avatar_size'     => '48',
         'avatar_shape'    => 'circle',
+        'avatar_object_position' => 'center center',
         'avatar_radius'      => '6',
         'avatar_shadow'      => 'none',
         'avatar_border_width' => '0',
@@ -125,7 +126,7 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
     }
 
     private function render_common_styles( $uid, $bg, $fg, $line_col, $show_line, $is_bottom, $position, $av_size, $av_radius, $tile_radius, $tile_radius_hover_css, $bottom_jc, $s ) {
-        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized in render() (safe_color_css() whitelist for colors, intval() ints, Olobuild_Tile_Utils border_radius/radius_force_css/shadow helpers, fixed literal maps/ternaries) and the internally generated $uid.
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized in render() (safe_color_css() whitelist for colors, intval() ints, Olobuild_Tile_Utils border_radius/radius_force_css/shadow/focal_pos helpers, fixed literal maps/ternaries) and the internally generated $uid.
         ?>
         <style>
             .<?php echo $uid; ?> .olo-test-card {
@@ -180,6 +181,8 @@ class Olobuild_Testimonial_Tile extends Olobuild_Tile_Base {
                 height: <?php echo $av_size; ?>px;
                 border-radius: <?php echo $av_radius; ?>;
                 object-fit: cover;
+                <?php // Il ritaglio quadrato c'era già, mancava il punto su cui cade. ?>
+                object-position: <?php echo Olobuild_Tile_Utils::focal_pos( $s, 'avatar', 'center center' ); ?>;
                 <?php
                 $av_shadow = Olobuild_Tile_Utils::shadow( $s['avatar_shadow'] ?? 'none', 'photo' );
                 if ( $av_shadow !== 'none' ) :

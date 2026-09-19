@@ -88,6 +88,7 @@
 
 <script setup>
 import { uikitGap } from '@/composables/useUikitGap';
+import { imageFrame } from '@/composables/useImageFrame';
 import { computed } from 'vue';
 import { t } from '@/i18n';
 import { SHADOW } from '@/composables/oloTileDefaults';
@@ -263,13 +264,25 @@ const cardStyle = computed(() => {
   return style;
 });
 
+// Cornice dell'immagine, stesso helper del frontend: il punto focale di questa tile
+// sta sulla chiave GLOBALE `object_position`, quindi si passa come default invece di
+// lasciarlo cercare `image_object_position`, che qui non esiste.
+// Un adattamento salvato VUOTO (o fuori elenco) non è «nessun adattamento», è «mai
+// scelto»: l'helper usa `??`, quindi la stringa vuota per lui è un valore e passerebbe
+// il default senza toccarla, lasciando l'immagine deformata (`fill`). Fino a ieri qui
+// c'era `s.value.image_fit || 'cover'`, che quel caso lo copriva: la guardia lo
+// ripristina. Gemella di class-grid-tile.php.
+const fitSalvato = computed(() => String(s.value.image_fit ?? '').trim() || 'cover');
+const frame = computed(() => imageFrame({ ...s.value, image_fit: fitSalvato.value }, 'image', {
+  ratio: 'auto', fit: 'cover', pos: s.value.object_position || 'center center',
+}));
+
 const imageContainerStyle = computed(() => {
   const style = {};
-  const ratio = s.value.image_ratio;
   const h = parseInt(s.value.image_height);
   const r = parseInt(s.value.card_radius) || 0;
-  if (ratio && ratio !== 'auto') {
-    style.aspectRatio = ratio;
+  if (frame.value.contenitore.aspectRatio) {
+    style.aspectRatio = frame.value.contenitore.aspectRatio;
   } else if (h > 0) {
     style.height = h + 'px';
   }
@@ -285,8 +298,7 @@ const imageContainerStyle = computed(() => {
 const imageStyle = computed(() => ({
   width: '100%',
   height: '100%',
-  objectFit: s.value.image_fit || 'cover',
-  objectPosition: s.value.object_position || 'center center',
+  ...frame.value.immagine,
   display: 'block',
   transition: 'transform 0.5s cubic-bezier(.4,0,.2,1)',
 }));

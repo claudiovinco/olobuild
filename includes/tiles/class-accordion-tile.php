@@ -27,6 +27,8 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
         'media_align'       => 'right',
         'media_width'       => '35',
         'media_radius'      => '8',
+        'aspect_ratio'      => 'auto',
+        'object_fit'        => 'cover',
         'header_bg'         => '',
         'header_bg_active'  => '',
         'header_text_color' => '',
@@ -165,6 +167,19 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
         $media_width  = min( max( intval( $s['media_width'] ?? 35 ), 20 ), 50 );
         $media_radius = Olobuild_Tile_Utils::border_radius( $s['media_radius'] ?? 8 );
         $media_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['media_radius_hover'] ?? null );
+        // Cornice delle immagini dei pannelli. 'auto' (default storico) non emette
+        // nulla: resta l'height:auto di sempre, e nessuna pagina pubblicata si muove.
+        $acc_ratio = is_string( $s['aspect_ratio'] ?? null ) ? trim( $s['aspect_ratio'] ) : 'auto';
+        $acc_ratio = str_replace( ':', '/', $acc_ratio );
+        // Stessa whitelist del gemello Olobuild_Tile_Utils::image_frame(): "W/H" o
+        // un numero, niente altro finisce nel CSS.
+        if ( $acc_ratio === 'auto' || ! preg_match( '/^\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?$/', $acc_ratio ) ) {
+            $acc_ratio = '';
+        }
+        $acc_fit = is_string( $s['object_fit'] ?? null ) ? $s['object_fit'] : 'cover';
+        if ( ! in_array( $acc_fit, [ 'cover', 'contain', 'fill', 'none', 'scale-down' ], true ) ) {
+            $acc_fit = 'cover';
+        }
 
         // Brand accent for active state (Olobuild orange).
         $brand_accent = 'var(--olo-color-primary, #e1474f)';
@@ -292,9 +307,19 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
                 overflow: hidden;
             }
             <?php if ( $media_radius_hover_css !== '' ) : ?>.<?php echo esc_attr( $uid ); ?> .macc-panel-media{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo esc_attr( $uid ); ?> .macc-panel-media:hover{border-radius:<?php echo $media_radius_hover_css; ?> !important}<?php endif; ?>
-            .<?php echo esc_attr( $uid ); ?> .macc-panel-media img,
-            .<?php echo esc_attr( $uid ); ?> .macc-panel-media video,
-            .<?php echo esc_attr( $uid ); ?> .macc-panel-media iframe {
+            <?php /* Figli DIRETTI, e non `.macc-panel-media img`: quel selettore
+                     (0,2,1) vinceva anche sull'immagine di HOVER, che sta due
+                     livelli più giù dentro .olo-hover-wrap > .olo-hover-media, e
+                     le imponeva height:auto scavalcando la regola condivisa
+                     .olo-hover-media img{height:100%} di frontend.css (0,1,1).
+                     Risultato: l'hover non era ritagliata sulla base e, se aveva
+                     un'altra proporzione, sbordava o lasciava un vuoto.
+                     `> .olo-hover-wrap > img` è l'immagine BASE quando il wrap
+                     dell'hover c'è: deve continuare a ricevere queste regole. */ ?>
+            .<?php echo esc_attr( $uid ); ?> .macc-panel-media > img,
+            .<?php echo esc_attr( $uid ); ?> .macc-panel-media > .olo-hover-wrap > img,
+            .<?php echo esc_attr( $uid ); ?> .macc-panel-media > video,
+            .<?php echo esc_attr( $uid ); ?> .macc-panel-media > iframe {
                 display: block;
                 width: 100%;
                 height: auto;
@@ -303,6 +328,17 @@ class Olobuild_Accordion_Tile extends Olobuild_Tile_Base {
             .<?php echo esc_attr( $uid ); ?> .macc-panel-media iframe {
                 aspect-ratio: 16/9;
             }
+            <?php if ( $acc_ratio !== '' ) : ?>
+            /* La proporzione sta sull'IMG e non sul contenitore perché lo stesso
+               .macc-panel-media ospita anche video e iframe, che hanno la loro forma.
+               Qui il selettore resta DISCENDENTE apposta: così l'eventuale immagine
+               di hover eredita lo stesso adattamento della base (l'aspect-ratio su
+               di lei è inerte, ha già larghezza e altezza definite dal wrap). */
+            .<?php echo esc_attr( $uid ); ?> .macc-panel-media img {
+                aspect-ratio: <?php echo $acc_ratio; ?>;
+                object-fit: <?php echo $acc_fit; ?>;
+            }
+            <?php endif; ?>
             <?php if ( $icon_pos !== 'none' ) : ?>
             .<?php echo esc_attr( $uid ); ?> .macc-icon {
                 flex-shrink: 0;

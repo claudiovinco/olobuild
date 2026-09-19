@@ -108,7 +108,7 @@ export default {
       { value: 'left',  label: t('A sinistra del testo') },
       { value: 'none',  label: t('Nessuna immagine (solo testo)') },
     ]},
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true,
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
       contextKeys: { fit: 'cover' },
       condition: { field: 'media_position', op: 'neq', value: 'none' },
       description: t('Punto focale globale di tutte le immagini delle card.') },

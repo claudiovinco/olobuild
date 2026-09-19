@@ -10,7 +10,7 @@
             margin: s.text_align === 'center' ? '0 auto 12px' : '0 0 12px',
           }"
         >
-          <img :src="s.profile_image" alt="" style="width:100%;height:100%;object-fit:cover;" />
+          <img :src="s.profile_image" alt="" :style="avatarImgStyle" />
         </div>
         <div
           v-else
@@ -68,6 +68,7 @@ const defaults = {
     { id: 'lib-4', title: 'Contattami', url: '#', icon: '', image_url: '', style: 'outline' },
   ],
   profile_image: '',
+  profile_image_object_position: 'center center',
   profile_name: 'Il tuo nome',
   profile_bio: 'Una breve descrizione qui',
   max_width: '420',
@@ -99,6 +100,16 @@ function iconSvg(name) {
 
 // Placeholder avatar = icona SVG "user" (no più emoji)
 const avatarPlaceholderSvg = computed(() => iconsSvg['user'] || iconsSvg['users'] || '');
+
+// Cornice dell'avatar: cerchio fisso, fit sempre 'cover' — l'unica scelta è QUALE
+// parte della foto resta inquadrata. 'center center' = il default del browser, cioè
+// la resa di sempre. Gemello della regola .olo-lib-avatar del renderer PHP.
+const avatarImgStyle = computed(() => ({
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  objectPosition: s.value.profile_image_object_position || 'center center',
+}));
 
 const outerStyle = computed(() => {
   const bg = s.value.background_gradient || resolveColor(s.value.background_color, TOKENS.surfaceAlt);

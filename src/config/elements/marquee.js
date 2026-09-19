@@ -1,4 +1,5 @@
-import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, focalField } from './_shared.js';
+import { ADATTAMENTI } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -20,6 +21,14 @@ export default {
     separator: ' — ',
     images: [],
     image_height: '40',
+    // CORNICE dei loghi, SENZA maschera di ritaglio. Qui `images` e' una galleria
+    // (type:'gallery'), non un repeater: un solo selettore di proporzioni imporrebbe
+    // la stessa forma a TUTTI i marchi insieme, ed e' esattamente cio' che il
+    // `width:auto` del nastro evita — ogni logo tiene la sua sagoma. Resta il solo
+    // ADATTAMENTO, che nasce 'contain' (era cablato nella regola .olo-mq-img) e NON
+    // 'cover' come nella tile Immagine: su un logo 'cover' taglierebbe via i bordi.
+    image_fit: 'contain',
+    image_object_position: 'center center',
     speed: '30',
     direction: 'left',
     pause_hover: true,
@@ -111,6 +120,25 @@ export default {
     { type: 'separator', label: t('Aspetto immagini') },
     { key: 'image_height', label: t('Altezza immagini'), type: 'range', min: 20, max: 120,
       condition: { field: 'content_type', value: 'images' } },
+    // NIENTE selettore di proporzioni: il nastro e' fatto di loghi di sagoma diversa
+    // e l'altezza e' l'unica dimensione imposta (width:auto). Una maschera comune
+    // riempirebbe di bande vuote ogni marchio che non ha la forma dello slot.
+    { key: 'image_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI,
+      condition: { field: 'content_type', value: 'images' } },
+    focalField('image', { src: '', fit: 'image_fit',
+      // Senza maschera di ritaglio il focale morde solo con «Dimensione originale»,
+      // dove il logo a grandezza naturale viene tagliato dall'altezza del nastro:
+      // decide quale parte resta in vista.
+      // La guardia e' `neq 'fill'`, come nel resto della famiglia, e NON un elenco:
+      // un nastro salvato prima che il campo esistesse non ha affatto la chiave
+      // `image_fit`, e l'inspector valuta le condizioni sui settings GREZZI, senza
+      // fondere i default — con un `in` il valore assente non combacerebbe con niente
+      // e il controllo sparirebbe per sempre.
+      // L'AND si scrive come ARRAY: e' la forma che evaluateCondition() valuta davvero.
+      condition: [
+        { field: 'content_type', value: 'images' },
+        { field: 'image_fit', op: 'neq', value: 'fill' },
+      ] }),
 
     { type: 'separator', label: t('Tipografia'),
       condition: { field: 'content_type', value: 'text' } },

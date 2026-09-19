@@ -16,6 +16,9 @@ class Olobuild_ShatteredImage_Tile extends Olobuild_Tile_Base {
         'preset'              => 'shards',
         'gap'                 => 4,
         'height'              => '400px',
+        // 'auto' = resa storica: comanda `height`. Vedi il commento nel render.
+        'image_ratio'         => 'auto',
+        'image_ratio_custom'  => '16/9',
         'image_position'      => 'center center',
         'gap_color'           => 'transparent',
         'zoom_variation'      => false,
@@ -427,9 +430,41 @@ class Olobuild_ShatteredImage_Tile extends Olobuild_Tile_Base {
         $zoom_max     = max( 120, min( 350, intval( $s['zoom_max'] ) ) );
         $zoom_random  = ! empty( $s['zoom_random'] );
 
+        // ── Cornice: proporzione del riquadro ──
+        // Le chiavi seguono `image_position`, che qui è la forma storica del punto
+        // focale. 'auto' = comanda `height`, cioè la resa di sempre.
+        $ratio = trim( (string) ( $s['image_ratio'] ?? 'auto' ) );
+        if ( $ratio === 'custom' ) {
+            $ratio = trim( (string) ( $s['image_ratio_custom'] ?? '' ) );
+        }
+        $ratio = str_replace( ':', '/', $ratio );
+        $ratio_wh  = null;
+        $ratio_css = '';
+        // Stessa whitelist del gemello JS: "W/H" oppure un numero solo ('1.618' = W/1).
+        if ( $ratio !== '' && $ratio !== 'auto'
+            && preg_match( '#^(\d+(?:\.\d+)?)(?:\s*/\s*(\d+(?:\.\d+)?))?$#', $ratio, $m ) ) {
+            $rw = (float) $m[1];
+            $rh = isset( $m[2] ) ? (float) $m[2] : 1.0;
+            if ( $rw > 0 && $rh > 0 ) {
+                $ratio_wh = [ $rw, $rh ];
+                // Nel CSS va la STRINGA già validata, non i due float ricomposti:
+                // la conversione float→stringa segue LC_NUMERIC, e su un PHP 7.4 con
+                // setlocale() a virgola decimale un «3.5/2» uscirebbe «3,5/2» —
+                // dichiarazione scartata dal browser, ma `height:auto` resta, quindi
+                // il contenitore collasserebbe a zero e la tile sparirebbe.
+                // I float servono solo alla geometria delle maschere qui sotto.
+                // Stessa forma del gemello canonico Olobuild_Tile_Utils::image_frame().
+                $ratio_css = str_replace( ' ', '', $ratio );
+            }
+        }
+
         // Resolve polygons: circle presets or polygon presets
         $circle_defs = $this->get_circle_defs();
-        $container_h_px = intval( $s['height'] ) ?: 400;
+        // Le maschere sono disegnate su una tela di riferimento 600 × altezza: se il
+        // riquadro segue un rapporto, l'altezza vera a 600px di larghezza è quella del
+        // rapporto, non il valore di `height` (che in quel caso non comanda più).
+        // Usare il numero sbagliato qui farebbe uscire i cerchi ovali.
+        $container_h_px = $ratio_wh ? max( 1, (int) round( 600 * $ratio_wh[1] / $ratio_wh[0] ) ) : ( intval( $s['height'] ) ?: 400 );
         if ( isset( $circle_defs[ $preset_key ] ) ) {
             $polygons = [];
             foreach ( $circle_defs[ $preset_key ] as $c ) {
@@ -526,7 +561,10 @@ class Olobuild_ShatteredImage_Tile extends Olobuild_Tile_Base {
         $container_style = $this->build_style( [
             'position'      => 'relative',
             'width'         => '100%',
-            'height'        => $height,
+            // Con un rapporto l'altezza deve passare ad 'auto': due dimensioni
+            // definite renderebbero l'aspect-ratio inerte.
+            'aspect-ratio'  => $ratio_css,
+            'height'        => $ratio_wh ? 'auto' : $height,
             'overflow'      => 'hidden',
             'border-radius' => $radius,
             'background'    => $gap_color,
@@ -540,7 +578,9 @@ class Olobuild_ShatteredImage_Tile extends Olobuild_Tile_Base {
         echo '<div class="olo-shattered ' . $sh_uid . '" style="' . $container_style . '"' . $data_attrs . $a11y_attrs . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $container_style built by build_style() (esc_attr per value); $data_attrs built above from esc_attr( $uid ) and a clamped intval(); $a11y_attrs is esc_attr()'d aria-label; $sh_uid is internally generated
 
         // Render each fragment: outer = static mask, inner = animated image
-        $container_h = intval( $s['height'] ) ?: 400;
+        // Stessa altezza di riferimento usata per i cerchi: se il riquadro segue un
+        // rapporto, il gap va calcolato su QUELLA altezza, non su `height`.
+        $container_h = $container_h_px;
         foreach ( $polygons as $i => $poly ) {
             $shrunk   = $this->apply_gap( $poly, $gap, 600, $container_h );
             $clip     = $this->poly_to_clip( $shrunk );

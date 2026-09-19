@@ -21,6 +21,12 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
         'link_text'          => 'Profilo',
         'link_url'           => '',
         'photo_size'         => '120',
+        // CORNICE della foto: '1/1' e' il riquadro quadrato di sempre (photo_size resta
+        // la LARGHEZZA, la proporzione decide l'altezza derivata); 'cover' era cablato
+        // nella regola .olo-team-photo-inner img.
+        'photo_ratio'        => '1/1',
+        'photo_fit'          => 'cover',
+        'photo_object_position' => 'center center',
         'photo_shape'        => 'circle',
         'photo_radius'       => '12',
         'photo_border_width' => '3',
@@ -83,7 +89,37 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
             [ 'width' => $ph_bw, 'color' => $ph_bc ]
         );
         $ph_gap    = max( intval( $s['photo_gap'] ), 0 );
+        // Elenco canonico delle proporzioni. La LARGHEZZA resta $ph_size: qui si ricava
+        // solo l'altezza, e con '1/1' (il default) torna identica alla larghezza, cioè
+        // il riquadro quadrato che la tile ha sempre disegnato.
+        $ratio_ok  = [ '1/1', '4/3', '3/2', '16/9', '21/9', '3/4', '4/5', '9/16', '2/3' ];
+        $ph_ratio  = (string) ( $s['photo_ratio'] ?? '1/1' );
+        if ( ! in_array( $ph_ratio, $ratio_ok, true ) ) {
+            $ph_ratio = '1/1';
+        }
+        $ph_h      = $ph_size;
+        if ( $ph_ratio !== '1/1' ) {
+            $rp = explode( '/', $ph_ratio );
+            $rw = (float) ( $rp[0] ?? 0 );
+            $rh = (float) ( $rp[1] ?? 0 );
+            if ( $rw > 0 && $rh > 0 ) {
+                $ph_h = max( 1, (int) round( $ph_size * $rh / $rw ) );
+            }
+        }
+        $fit_ok    = [ 'cover', 'contain', 'fill', 'none', 'scale-down' ];
+        $ph_fit    = (string) ( $s['photo_fit'] ?? 'cover' );
+        if ( ! in_array( $ph_fit, $fit_ok, true ) ) {
+            $ph_fit = 'cover';
+        }
+        $ph_pos    = trim( (string) ( $s['photo_object_position'] ?? 'center center' ) );
+        // Con 'fill' l'immagine e' deformata per riempire: il focale non sposta nulla.
+        // Il secondo controllo e' la difesa breakout di Olobuild_Tile_Utils: il valore
+        // finisce dentro un <style>, dove esc_attr() non basterebbe.
+        if ( $ph_fit === 'fill' || preg_match( '/[;{}()]/', $ph_pos ) ) {
+            $ph_pos = '';
+        }
         $outer_sz  = $ph_size + $ph_bw * 2;
+        $outer_h   = $ph_h + $ph_bw * 2;
         $ph_shadow  = Olobuild_Tile_Utils::shadow( $s['photo_shadow'] ?? 'none', 'photo' );
 
         // Photo shape
@@ -154,7 +190,7 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-team-photo-outer {
                 width: <?php echo $outer_sz; ?>px;
-                height: <?php echo $outer_sz; ?>px;
+                height: <?php echo $outer_h; ?>px;
                 flex-shrink: 0;
                 display: flex; align-items: center; justify-content: center;
                 <?php if ( $ph_shape === 'hexagon' ) : ?>
@@ -174,7 +210,7 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .olo-team-photo-inner {
                 overflow: hidden;
                 width: <?php echo $ph_size; ?>px;
-                height: <?php echo $ph_size; ?>px;
+                height: <?php echo $ph_h; ?>px;
                 flex-shrink: 0;
                 <?php if ( $ph_shape === 'hexagon' ) : ?>
                 clip-path: <?php echo $hex_clip; ?>;
@@ -194,7 +230,7 @@ class Olobuild_Team_Tile extends Olobuild_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-team-photo-inner img,
             .<?php echo $uid; ?> .olo-team-photo-inner video {
-                width: 100%; height: 100%; object-fit: cover; display: block;
+                width: 100%; height: 100%; object-fit: <?php echo esc_attr( $ph_fit ); ?>; <?php if ( $ph_pos ) : ?>object-position: <?php echo esc_attr( $ph_pos ); ?>; <?php endif; ?>display: block;
             }
             .<?php echo $uid; ?> .olo-team-info-wrap {
                 display: flex;

@@ -22,6 +22,7 @@ class Olobuild_BeforeAfter_Tile extends Olobuild_Tile_Base {
         'gap'                => 24,
         'media_bg'           => '',
         'media_aspect'       => '1/1',
+        'media_fit'          => 'cover',
         'object_position'    => 'center center',
         'accent'             => '',
         'before_label_color' => 'var(--olo-color-light, #ffffff)',
@@ -59,6 +60,11 @@ class Olobuild_BeforeAfter_Tile extends Olobuild_Tile_Base {
         $gap    = intval( $s['gap'] ) . 'px';
         $mbg    = $this->safe_color_css( $s['media_bg'] ?? '' ) ?: 'var(--olo-color-surface-alt, #eceff3)';
         $asp    = preg_replace( '/[^0-9\/]/', '', $s['media_aspect'] ?: '1/1' ) ?: '1/1';
+        // Le due foto sono background-image, non <img>: l'adattamento scelto
+        // nell'inspector si traduce nei valori corrispondenti di `background-size`.
+        // 'cover' e' il default ed e' esattamente il valore che era cablato qui.
+        $fit_map = [ 'cover' => 'cover', 'contain' => 'contain', 'fill' => '100% 100%', 'none' => 'auto' ];
+        $mfit    = $fit_map[ (string) ( $s['media_fit'] ?? 'cover' ) ] ?? 'cover';
         $obj_pos = trim( (string) ( $s['object_position'] ?? 'center center' ) );
         if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
         $accent = $this->safe_color_css( $s['accent'] ) ?: 'var(--olo-color-primary, #e1474f)';
@@ -149,12 +155,13 @@ class Olobuild_BeforeAfter_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist (with fixed var() fallbacks), columns/gap/radii/padding via intval() clamps, aspect ratio via preg_replace() character whitelist, fixed font-stack literals, kit decorations via the Olobuild_CSS_Builder/Olobuild_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: every colour via the safe_color_css() whitelist (with fixed var() fallbacks), columns/gap/radii/padding via intval() clamps, aspect ratio via preg_replace() character whitelist, background-size picked from a fixed map, fixed font-stack literals, kit decorations via the Olobuild_CSS_Builder/Olobuild_Tile_Base shared helpers (sanitized internally); $uid is internally generated. ?>
         <style>
             .<?php echo $uid; ?>{font-family:<?php echo $sans; ?>;display:grid;grid-template-columns:repeat(<?php echo $cols; ?>,1fr);gap:<?php echo $gap; ?>;<?php echo $kit_decl; ?>}
             .<?php echo $uid; ?> .oba-card{background:<?php echo $cbg; ?>;border-radius:<?php echo $card_rad_css; ?>;overflow:hidden;}
             .<?php echo $uid; ?> .oba-pair{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:2px;}
-            .<?php echo $uid; ?> .oba-media{position:relative;aspect-ratio:<?php echo $asp; ?>;background:<?php echo $mbg; ?>;background-size:cover;background-position:<?php echo esc_attr( $obj_pos ); ?>;}
+            <?php // `background:` e' la shorthand: riazzera background-repeat al valore iniziale `repeat`. Con 'cover' non si notava (la foto riempie comunque), ma «Contieni» e «Dimensione originale» disegnerebbero la stessa foto a mosaico. Va DOPO la shorthand, altrimenti la shorthand se lo rimangia. ?>
+            .<?php echo $uid; ?> .oba-media{position:relative;aspect-ratio:<?php echo $asp; ?>;background:<?php echo $mbg; ?>;background-size:<?php echo $mfit; ?>;background-repeat:no-repeat;background-position:<?php echo esc_attr( $obj_pos ); ?>;}
             .<?php echo $uid; ?> .oba-lab{position:absolute;top:10px;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:<?php echo $lab_rad_css; ?>;}
             .<?php echo $uid; ?> .oba-lab--b{left:10px;background:rgba(0,0,0,.55);color:<?php echo $blc; ?>;}
             .<?php echo $uid; ?> .oba-lab--a{right:10px;background:<?php echo $accent; ?>;color:<?php echo $alc; ?>;}

@@ -1,4 +1,5 @@
 import { textEffectsFields, textEffectsDefaults, withHover } from './_shared';
+import { imageFrameFields } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -59,6 +60,12 @@ export default {
     ],
     strip_offset: 28,
     strip_radius: 200,
+    // Cornice delle tessere: i tre default sono ESATTAMENTE quel che il CSS aveva
+    // cablato (aspect-ratio:3/4 + background-position:center center), così ogni hero
+    // già pubblicato rende identico finché nessuno tocca i controlli.
+    strip_ratio: '3/4',
+    strip_ratio_custom: '3/4',
+    strip_object_position: 'center center',
     search_placeholder: t('Cerca…'),
     search_button: t('Cerca'),
     search_url: '',
@@ -307,6 +314,32 @@ export default {
       condition: { field: 'module', op: 'eq', value: 'strip' } },
     { key: 'strip_radius', label: t('Raggio superiore tessere'), type: 'range', min: 0, max: 260, step: 4,
       condition: { field: 'module', op: 'eq', value: 'strip' } },
+    // Una cornice sola per TUTTE le tessere, non una per elemento: sono affiancate
+    // in riga e con rapporti diversi la striscia si sfalserebbe.
+    // Niente «Adattamento»: qui non c'è un <img> ma un background-size cablato a
+    // `cover`; le altre voci (originale, deforma) su uno sfondo si ripeterebbero
+    // o deformerebbero la tessera, quindi non si offrono affatto.
+    //
+    // GEMELLA: la striscia di glowgallery (`media_ratio` in glowgallery.js) fa la
+    // stessa identica cosa — tessere background-image, stesso default '3/4', stesso
+    // elenco senza «Auto». I nomi delle chiavi restano diversi perché ognuna segue
+    // la famiglia della propria tile (`strip_*` qui, `media_*` là, dove `media_bg`
+    // esisteva già): se si ritocca una delle due, ritoccare anche l'altra.
+    //
+    // La prima voce vale STRINGA VUOTA e non 'auto': è il ripiego di lettura per le
+    // hero salvate PRIMA di questo campo, che la chiave non ce l'hanno affatto. Senza
+    // di essa il select mostrava «—» pur rendendo 3/4, perché nessuna voce combacia
+    // con `undefined` (l'inspector legge i settings GREZZI, senza fondere i default).
+    // Vuoto NON vuol dire «nessun ritaglio»: i due renderer ripiegano entrambi su
+    // 3/4 (`$strip_ar` in class-hero-tile.php, `|| '3/4'` in HeroTile.vue), che è
+    // anche l'unica cosa che tiene aperte le tessere — un div senza altezza propria.
+    ...imageFrameFields('strip', {
+      separator: false,
+      fit: false,
+      ratioOpts: { autoValue: '', autoLabel: 'Predefinito (3:4)', custom: true },
+      focalOpts: { src: '' }, // le foto stanno nel ripetitore: pad neutro
+      condition: { field: 'module', op: 'eq', value: 'strip' },
+    }),
 
     // ── Finiture di scena ──
     { type: 'separator', label: t('Finiture') },

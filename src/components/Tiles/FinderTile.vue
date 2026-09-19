@@ -38,6 +38,7 @@ import { borderColorOf } from '@/composables/useBoxModel';
 import { resolveColor, TOKENS, SHADOW } from '@/composables/oloTileDefaults';
 import { buildBgStyle } from '@/composables/useBackgroundStyle';
 import { radiusToCss } from '@/composables/useRadius';
+import { imageFrame } from '@/composables/useImageFrame';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -49,7 +50,9 @@ const defaults = {
     { option: 'Opzione B', title: 'Risultato B', text: 'Descrizione del risultato.', meta: '', cta_text: '', cta_url: '#', icon: '' },
     { option: 'Opzione C', title: 'Risultato C', text: 'Descrizione del risultato.', meta: '', cta_text: '', cta_url: '#', icon: '' },
   ],
-  zone_accent: '', zone_on: '#ffffff', card_bg: '', card_border: '', media_bg: '', object_position: 'center center', align: 'center',
+  zone_accent: '', zone_on: '#ffffff', card_bg: '', card_border: '', media_bg: '',
+  media_ratio: '190/240', media_ratio_custom: '190/240',
+  object_position: 'center center', align: 'center',
   default_index: '0', chip_bg: '', chip_radius: '999',
   card_radius: '16', card_padding: { top: 34, right: 38, bottom: 34, left: 38 },
   card_max_width: '680', tile_padding: { top: 0, right: 0, bottom: 0, left: 0 }, shadow: 'none',
@@ -72,6 +75,11 @@ const itemHasBg = (it) => !!(it && it.media_bg && it.media_bg.type && it.media_b
 const hasMedia = (it) => !!(it && ((it.image && String(it.image).trim()) || it.media_label || itemHasBg(it)));
 const mediaBg = computed(() => resolveColor(s.value.media_bg, 'var(--olo-color-surface-alt, #1e1e1e)'));
 const objPos = computed(() => (s.value.object_position || 'center center'));
+// Il rapporto viaggia come variabile CSS invece che come stile inline sul riquadro:
+// così la media query dei 600px può ancora sostituirlo con `auto` + altezza fissa,
+// che è la resa storica su telefono e non deve cambiare. Whitelist non passata →
+// si torna al 190/240 di sempre, mai un riquadro alto zero.
+const mediaAr = computed(() => imageFrame(s.value, 'media', { ratio: '190/240' }).contenitore.aspectRatio || '190/240');
 function mediaStyle(it) {
   // media_bg (sfondo/media completo) ha la sua background-position propria → non tocchiamo.
   if (itemHasBg(it)) return { backgroundSize: 'cover', backgroundPosition: 'center', ...buildBgStyle(it.media_bg) };
@@ -96,7 +104,7 @@ function padStr(v, fb) {
 
 const rootStyle = computed(() => {
   const st = {
-    '--fn-accent': accent.value, '--fn-on': on.value,
+    '--fn-accent': accent.value, '--fn-on': on.value, '--fn-media-ar': mediaAr.value,
     fontFamily: SANS, textAlign: center.value ? 'center' : 'left',
   };
   const tp = s.value.tile_padding || {};
@@ -151,7 +159,7 @@ function renderIcon(icon) {
 .ofn-h :deep(em) { font-style: italic; color: var(--fn-accent); }
 .ofn-chip:focus-visible { outline: 2px solid var(--fn-accent); outline-offset: 3px; }
 .ofn-res--media { display: flex; gap: 32px; align-items: center; }
-.ofn-media { width: 190px; flex: 0 0 auto; aspect-ratio: 190/240; border-radius: 2px; overflow: hidden; position: relative; }
+.ofn-media { width: 190px; flex: 0 0 auto; aspect-ratio: var(--fn-media-ar, 190/240); border-radius: 2px; overflow: hidden; position: relative; }
 .ofn-media__lbl { position: absolute; left: 12px; bottom: 10px; font-size: 10px; letter-spacing: .04em; text-transform: uppercase; color: rgba(255,255,255,.4); }
 .ofn-res__body { flex: 1; min-width: 0; }
 @media (max-width: 600px) { .ofn-res--media { flex-direction: column; } .ofn-media { width: 100%; aspect-ratio: auto; height: 240px; } }

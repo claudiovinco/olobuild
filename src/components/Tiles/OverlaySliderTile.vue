@@ -51,7 +51,10 @@ const props = defineProps({
 const defaults = {
   columns: '1',
   gap: 'default',
-  image_ratio: 'auto',
+  // '21/9' e non 'auto': e' il default dichiarato dal PHP (class-overlayslider-tile.php:20)
+  // e dal config. Con 'auto' il canvas disegnava la slide a 400px fissi mentre il sito la
+  // disegnava 21/9, su ogni template salvato prima che la chiave esistesse.
+  image_ratio: '21/9',
   image_height: '400',
   image_fit: 'cover',
   height: '400',

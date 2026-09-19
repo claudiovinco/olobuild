@@ -1,5 +1,6 @@
 import { t } from '@/i18n';
 import { withHover } from './_shared';
+import { ratioOptions, ADATTAMENTI } from './_imageFrame.js';
 
 const R = (n) => ({ tl: n, tr: n, br: n, bl: n, linked: true });
 const R24 = R(24), R18 = R(18);
@@ -50,6 +51,9 @@ export default {
     show_divider:        false,
     show_media:          false,
     media_aspect_ratio:  '4/3',
+    // 'cover' era cablato nei due renderer (PHP :193, InfoCardsTile.vue :13): il campo
+    // nasce con lo stesso valore, così le card già pubblicate non si muovono.
+    object_fit:          'cover',
     object_position:               'center center',
     media_radius:                  { ...R18 },
     media_radius_hover:            { ...R18 },
@@ -126,14 +130,29 @@ export default {
     withHover({ key: 'card_radius', label: t('Raggio card'), type: 'border-radius' }, { hoverKey: 'card_radius_hover', hoverDurationKey: 'card_radius_hover_duration' }),
 
     { type: 'separator', label: t('Media (immagine card)') },
-    { key: 'media_aspect_ratio', label: t('Aspect ratio'), type: 'select', options: [
-      { value: '16/9', label: '16 / 9' },
-      { value: '4/3',  label: '4 / 3' },
-      { value: '3/2',  label: '3 / 2' },
-      { value: '1/1',  label: t('1 / 1 (quadrato)') },
-      { value: '21/9', label: t('21 / 9 (ultra-wide)') },
-    ], condition: { field: 'show_media', op: '=', value: true } },
-    { key: 'object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true, contextKeys: { ratio: 'media_aspect_ratio' }, condition: { field: 'show_media', op: '=', value: true } },
+    // Elenco canonico: i 5 rapporti storici ('16/9','4/3','3/2','1/1','21/9') ci stanno
+    // tutti dentro, quindi niente `extra`. NIENTE voce automatica: il riquadro media non
+    // ha un'altezza propria (solo `aspect-ratio`, PHP :191 e mediaStyle nel .vue), senza
+    // ritaglio collasserebbe. La whitelist PHP $aspect_allow e' stata allargata di pari passo.
+    { key: 'media_aspect_ratio', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ auto: false }),
+      condition: { field: 'show_media', op: '=', value: true } },
+    { key: 'object_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI,
+      condition: { field: 'show_media', op: '=', value: true } },
+    // Il punto focale sposta qualcosa solo quando c'e' un ritaglio, e si nasconde
+    // SOLO con 'fill': con 'contain' lavora eccome (decide da che parte l'immagine si
+    // appoggia nelle bande vuote, e i due renderer lo emettono), e una card salvata
+    // prima che l'adattamento esistesse non ha affatto la chiave `object_fit` —
+    // l'inspector valuta le condizioni sui settings GREZZI, senza fondere i default,
+    // quindi con un elenco `in` il valore assente non combacerebbe con niente e il
+    // controllo sparirebbe per sempre.
+    // L'AND si scrive come ARRAY, l'unica forma che evaluateCondition() valuta.
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
+      contextKeys: { ratio: 'media_aspect_ratio', fit: 'object_fit' },
+      condition: [
+        { field: 'show_media', op: '=', value: true },
+        { field: 'object_fit', op: 'neq', value: 'fill' },
+      ] },
     withHover({ key: 'media_radius', label: t('Raggio media'), type: 'border-radius' }, { hoverKey: 'media_radius_hover', hoverDurationKey: 'media_radius_hover_duration' }),
 
     { type: 'separator', label: t('Tipografia titolo') },

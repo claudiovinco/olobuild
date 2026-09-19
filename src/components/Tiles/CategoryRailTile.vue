@@ -32,7 +32,7 @@ const defaults = {
     { image: '', title: 'Vintage', subtitle: '', link: '#' },
     { image: '', title: 'Stationery', subtitle: '', link: '#' },
   ],
-  card_width: 260, card_aspect: '4/5', gap: 16, media_bg: '',
+  card_width: 260, card_aspect: '4/5', card_aspect_custom: '4/5', gap: 16, media_bg: '',
   overlay_color: 'rgba(16,16,21,0.5)', title_color: '#ffffff', subtitle_color: 'rgba(255,255,255,0.8)',
   radius: 14, show_hint: true, hint_text: '← drag →', hint_color: '',
 
@@ -66,7 +66,14 @@ const items = computed(() => Array.isArray(s.value.items) ? s.value.items : []);
 const SERIF = "var(--olo-font-family-heading, 'Playfair Display',Georgia,serif)";
 const SANS = "var(--olo-font-family, 'Inter',-apple-system,sans-serif)";
 const w = computed(() => Math.max(140, Math.min(480, parseInt(s.value.card_width, 10) || 260)) + 'px');
-const asp = computed(() => String(s.value.card_aspect || '4/5').replace(/[^0-9/]/g, '') || '4/5');
+// Gemello esatto del filtro PHP: 'custom' pesca da card_aspect_custom, il punto è
+// ammesso (rapporti non interi) e quel che non è "W/H" torna al 4/5 storico — un
+// aspect-ratio invalido non degraderebbe la tessera, la azzererebbe.
+const asp = computed(() => {
+  const raw = String(s.value.card_aspect === 'custom' ? (s.value.card_aspect_custom || '') : (s.value.card_aspect || '4/5'));
+  const v = raw.replace(/[^0-9./]/g, '');
+  return /^\d+(?:\.\d+)?(?:\/\d+(?:\.\d+)?)?$/.test(v) ? v : '4/5';
+});
 const rad = computed(() => radiusToCss(s.value.radius, { fallback: '0' }));
 const mbg = computed(() => s.value.media_bg || 'var(--olo-color-surface-alt, #eceff3)');
 

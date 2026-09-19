@@ -1,5 +1,6 @@
 import { t } from '@/i18n';
 import { withHover } from './_shared';
+import { ratioOptions } from './_imageFrame.js';
 
 const R = (n) => ({ tl: n, tr: n, br: n, bl: n, linked: true });
 
@@ -216,13 +217,12 @@ export default {
     { key: 'tag_color', label: t('Colore testo'),    type: 'color' },
 
     { type: 'separator', label: t('Mockup card') },
-    { key: 'media_aspect_ratio', label: t('Aspect ratio'), type: 'select', options: [
-      { value: '16/9', label: '16 / 9' },
-      { value: '5/4',  label: '5 / 4' },
-      { value: '4/3',  label: '4 / 3' },
-      { value: '1/1',  label: t('1 / 1 (quadrato)') },
-      { value: '3/2',  label: '3 / 2' },
-    ]},
+    // Elenco canonico. Niente voce «Auto»: l'altezza del mockup NASCE da questo
+    // rapporto (il contenitore `.olo-stl__mockup` non ha né height né min-height
+    // propri, in nessuno dei due renderer), quindi senza rapporto collasserebbe.
+    // '5/4' non è canonico ma è il default storico della tile → resta in `extra`.
+    { key: 'media_aspect_ratio', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions({ auto: false, extra: ['5/4'] }) },
     { key: 'media_shadow', label: t('Ombra mockup'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
       { value: 'sm',   label: t('Leggera') },
@@ -230,7 +230,7 @@ export default {
       { value: 'lg',   label: t('Forte') },
     ]},
     withHover({ key: 'media_radius', label: t('Raggio mockup'), type: 'border-radius' }, { hoverKey: 'media_radius_hover', hoverDurationKey: 'media_radius_hover_duration' }),
-    { key: 'media_object_position', label: t('Posizione contenuto'), type: 'object-position', reveal: true, contextKeys: { ratio: 'media_aspect_ratio' } },
+    { key: 'media_object_position', label: t('Punto focale'), type: 'object-position', reveal: true, contextKeys: { ratio: 'media_aspect_ratio' } },
 
     { type: 'separator', label: t('Pre-title') },
     { key: 'pre_title_size',  label: t('Dimensione'), type: 'range', min: 9, max: 16, step: 1 },

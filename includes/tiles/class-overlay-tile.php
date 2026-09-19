@@ -12,6 +12,11 @@ class Olobuild_Overlay_Tile extends Olobuild_Tile_Base {
     protected $category = 'media';
     protected $defaults = [
         'image_url'       => '',
+        // Cornice dell'immagine: 'auto' non emette aspect-ratio e lascia comandare
+        // `height`, 'cover' è ciò che [uk-cover] mette già di suo sull'<img>.
+        'aspect_ratio'        => 'auto',
+        'aspect_ratio_custom' => '16/9',
+        'object_fit'          => 'cover',
         'object_position' => 'center center',
         'title'           => 'Titolo del progetto',
         'description'     => 'Una breve descrizione del progetto.',
@@ -65,6 +70,25 @@ class Olobuild_Overlay_Tile extends Olobuild_Tile_Base {
         if ( $obj_pos === '' ) {
             $obj_pos = 'center center';
         }
+        // La cornice: proporzioni sul contenitore, adattamento + focale sull'<img>.
+        // Le chiavi di questa tile non hanno prefisso (come nella tile Immagine),
+        // quindi si passa all'helper un alias con lo schema che si aspetta: cambia
+        // il nome in transito, non una chiave salvata.
+        $frame = Olobuild_Tile_Utils::image_frame(
+            [
+                'img_ratio'           => $s['aspect_ratio'] ?? 'auto',
+                'img_ratio_custom'    => $s['aspect_ratio_custom'] ?? '',
+                'img_fit'             => $s['object_fit'] ?? 'cover',
+                'img_object_position' => $obj_pos,
+            ],
+            'img',
+            [ 'ratio' => 'auto', 'fit' => 'cover' ]
+        );
+        // Altezza fissa e proporzioni non possono convivere: con width e height
+        // entrambe definite il browser ignora l'aspect-ratio. Finché il ritaglio è
+        // 'auto' — il default, e quindi tutte le pagine già pubblicate — esce la
+        // stessa `height:<n>px` di sempre.
+        $box_css = $frame['contenitore'] !== '' ? $frame['contenitore'] : 'height:' . (int) $h . 'px;';
         $effect = in_array( $s['hover_effect'], [ 'fade', 'slide-up', 'zoom' ], true ) ? $s['hover_effect'] : 'fade';
 
         $effect_map = [
@@ -85,9 +109,11 @@ class Olobuild_Overlay_Tile extends Olobuild_Tile_Base {
         ob_start();
         echo $link_open; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- anchor markup assembled above from fixed literals with esc_url()/esc_attr()'d values
         ?>
-        <div id="<?php echo esc_attr( $id ); ?>" class="olo-overlay uk-inline uk-transition-toggle" style="display:block;width:100%;box-sizing:border-box;border-radius:<?php echo esc_attr( $radius_css ); ?>;height:<?php echo (int) $h; ?>px;overflow:hidden;cursor:pointer;">
+        <div id="<?php echo esc_attr( $id ); ?>" class="olo-overlay uk-inline uk-transition-toggle" style="display:block;width:100%;box-sizing:border-box;border-radius:<?php echo esc_attr( $radius_css ); ?>;<?php echo esc_attr( $box_css ); ?>overflow:hidden;cursor:pointer;">
             <?php if ( ! empty( $s['image_url'] ) ) : ?>
-                <?php $img_extra = 'uk-cover style="object-position:' . esc_attr( $obj_pos ) . ';"'; ?>
+                <?php /* [uk-cover] applica già object-fit:cover e object-position:center: lo
+                         stile inline li sovrascrive, e coi default scrive esattamente quelli. */ ?>
+                <?php $img_extra = 'uk-cover style="' . esc_attr( $frame['immagine'] ) . '"'; ?>
                 <?php echo Olobuild_Tile_Utils::img_srcset( absint( $s['image_url_id'] ?? 0 ), $s['image_url'], $s['title'] ?? '', '', 'full', $img_extra ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <img> markup built by Olobuild_Tile_Utils::img_srcset() with esc_url()/esc_attr() internally; $img_extra contains uk-cover + esc_attr()'d object-position ?>
             <?php else : ?>
                 <div style="background:#1F2937;" uk-cover></div>

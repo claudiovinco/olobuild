@@ -59,6 +59,7 @@
 <script setup>
 import { t } from '@/i18n';
 import { computed } from 'vue';
+import { imageFrame } from '@/composables/useImageFrame';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -115,9 +116,16 @@ const imgStyle = computed(() => {
     justifyContent: 'center',
     overflow: 'hidden',
   };
-  if (s.value.image_ratio !== 'auto') {
-    st.aspectRatio = s.value.image_ratio;
+  // Stessa cornice del frontend, stessa whitelist: il canvas deve ritagliare
+  // com'è il sito anche per i rapporti appena aggiunti al select. Come nel PHP, una
+  // chiave vuota vale «mai scelto» → 16/9, non «nessun ritaglio».
+  const salvato = String(s.value.image_ratio ?? '').trim();
+  const { contenitore } = imageFrame({ image_ratio: salvato || '16/9' }, 'image', { ratio: '16/9' });
+  if (contenitore.aspectRatio) {
+    st.aspectRatio = contenitore.aspectRatio;
   } else {
+    // 'auto' qui non è «altezza naturale»: il riquadro da 160px è cablato nel
+    // renderer PHP da sempre, e il canvas lo ripete per non mentire.
     st.height = '160px';
   }
   return st;

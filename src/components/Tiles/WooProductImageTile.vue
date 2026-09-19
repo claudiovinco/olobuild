@@ -55,12 +55,19 @@ const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const wooActive = computed(() => true);
 
+// Gemella di $ratio_map nel renderer PHP: il rapporto diventa la percentuale di
+// padding-top che tiene aperto il riquadro (H/W x 100). Le prime cinque righe sono
+// quelle storiche e NON si ritoccano; le ultime quattro sono le voci nuove del select.
 const ratioMap = {
   '1-1': '100%',
   '4-3': '75%',
   '3-4': '133.33%',
   '3-2': '66.66%',
   '16-9': '56.25%',
+  '21-9': '42.86%',
+  '4-5': '125%',
+  '9-16': '177.78%',
+  '2-3': '150%',
   'auto': '0',
 };
 

@@ -42,6 +42,7 @@
 import { t } from '@/i18n';
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { SHADOW } from '@/composables/oloTileDefaults';
+import { imageFrame } from '@/composables/useImageFrame';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -60,6 +61,9 @@ const s = computed(() => ({
   handle_border: '3',
   line_width: '3',
   height: '400',
+  // 'auto' = nessun ritaglio: vale l'altezza in px, la resa storica della tile.
+  aspect_ratio: 'auto',
+  aspect_ratio_custom: '16/9',
   border_radius: '8',
   object_fit: 'cover',
   object_position: 'center center',
@@ -87,10 +91,13 @@ const shadowMap = SHADOW;
 
 const containerStyle = computed(() => {
   const bw = parseInt(s.value.card_border_width) || 0;
+  // Gemello del ramo PHP: con un rapporto scelto si emette aspect-ratio AL POSTO
+  // dell'altezza in px, mai insieme (l'altezza fissa vincerebbe sul rapporto).
+  const { contenitore } = imageFrame(s.value, 'aspect', { ratio: 'auto' });
   const st = {
     position: 'relative',
     overflow: 'hidden',
-    height: (parseInt(s.value.height) || 400) + 'px',
+    ...(contenitore.aspectRatio ? { aspectRatio: contenitore.aspectRatio } : { height: (parseInt(s.value.height) || 400) + 'px' }),
     borderRadius: (parseInt(s.value.border_radius) || 0) + 'px',
     cursor: isVert.value ? 'row-resize' : 'col-resize',
     userSelect: 'none',

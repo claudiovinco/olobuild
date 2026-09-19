@@ -30,7 +30,9 @@
         <div :style="gridStyle">
           <div v-for="room in rooms" :key="room.name" :style="{ border:'1px solid ' + TOKENS.border, borderRadius:'8px', overflow:'hidden' }">
             <div v-if="s.card_image !== false" :style="cardImgStyle">
-              <span class="olo-grid-ph" :style="{ width:'24px', height:'24px', color: TOKENS.textFaint }" v-html="imgIcon"></span>
+              <div :style="cardPhotoStyle">
+                <span class="olo-grid-ph" :style="{ width:'24px', height:'24px', color: TOKENS.textFaint }" v-html="imgIcon"></span>
+              </div>
             </div>
             <div style="padding:10px 12px">
               <div :style="{ fontSize:'13px', fontWeight:'700', color: TOKENS.text }">{{ room.name }}</div>
@@ -54,7 +56,10 @@ import { computed } from 'vue';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
 import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
-const defaults = { layout: 'map-left', map_height: '500', tile_layer: 'positron', marker_color: '', columns: '1', card_image: true };
+const defaults = { layout: 'map-left', map_height: '500', tile_layer: 'positron', marker_color: '', columns: '1', card_image: true,
+  // Gli stessi default del config (olo_room_grid.js): il mock deve partire da
+  // quello che il sito disegna, non da numeri suoi.
+  image_height: '160', image_aspect_ratio: '', image_object_fit: 'cover' };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
 // Pin token-first: brand primario se l'utente non sceglie un colore.
@@ -79,7 +84,43 @@ const pins = [
 const selStyle = { padding: '7px 10px', border: '1px solid ' + TOKENS.border, borderRadius: '8px', fontSize: '12px', flex: '1', minWidth: '120px', background: TOKENS.surface, color: TOKENS.text };
 const pillStyle = { padding: '4px 12px', borderRadius: '999px', fontSize: '11px', fontWeight: '500', background: TOKENS.surfaceAlt, color: TOKENS.textSoft, cursor: 'pointer', border: '1px solid transparent' };
 const activePill = { background: TOKENS.primary, color: TOKENS.onPrimary, borderColor: TOKENS.primary };
-const cardImgStyle = { height: '100px', background: TOKENS.surfaceAlt, display: 'flex', alignItems: 'center', justifyContent: 'center' };
+/* LA CORNICE DELL'IMMAGINE, anche nel mock.
+   Il segnaposto era alto 100px fissi e non leggeva né il rapporto né l'altezza:
+   «Proporzioni» e «Altezza immagine» si vedevano solo pubblicando. Qui si copia la
+   regola del renderer vero (olo-space, room-filters.js → buildMediaHtml): o
+   `aspect-ratio`, o `height`, mai tutti e due — ed è il rapporto a decidere. */
+const cardImgStyle = computed(() => {
+  const ratio = String(s.value.image_aspect_ratio || '').trim();
+  return {
+    // La voce automatica di questa tile vale STRINGA VUOTA, non 'auto'.
+    ...(ratio ? { aspectRatio: ratio.replace(/:/g, '/') }
+              : { height: (parseInt(s.value.image_height) || 160) + 'px' }),
+    background: TOKENS.surface,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  };
+});
+
+/* L'ADATTAMENTO nel mock: il rettangolo grigio è LA FOTO, il riquadro attorno è la
+   cornice. Nel canvas non esiste una foto vera (le sale sono finte), quindi l'unico
+   modo onesto di far vedere l'«Adattamento» è disegnare il segnaposto alla
+   dimensione che la foto avrebbe: 'cover' e 'fill' riempiono; 'none' pure, perché a
+   dimensione originale una foto è quasi sempre più grande della cornice e deborda;
+   'contain' e 'scale-down' la rimpiccioliscono e lasciano le bande a vista. */
+const cardPhotoStyle = computed(() => {
+  const fit = String(s.value.image_object_fit || 'cover');
+  const riempie = fit !== 'contain' && fit !== 'scale-down';
+  return {
+    width: riempie ? '100%' : '64%',
+    height: riempie ? '100%' : '64%',
+    background: TOKENS.surfaceAlt,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  };
+});
 const tagStyle = { fontSize: '9px', fontWeight: '600', color: TOKENS.primary, background: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 8%, transparent)', padding: '1px 6px', borderRadius: '3px' };
 
 const isHoriz = computed(() => s.value.layout === 'map-left' || s.value.layout === 'map-right');

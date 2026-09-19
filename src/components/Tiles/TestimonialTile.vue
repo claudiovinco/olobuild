@@ -67,6 +67,7 @@ const s = computed(() => ({
   author_position: 'bottom-left',
   avatar_size: '48',
   avatar_shape: 'circle',
+  avatar_object_position: 'center center',
   avatar_radius: '6',
   avatar_shadow: 'none',
   avatar_border_width: '0',
@@ -132,6 +133,9 @@ const avatarStyle = computed(() => {
     height: size,
     borderRadius: isSquare ? ((v => isNaN(v) ? 6 : v)(parseInt(s.value.avatar_radius))) + 'px' : '50%',
     objectFit: 'cover',
+    // Gemello della regola PHP `.olo-test-author img`: il ritaglio è quadrato e
+    // «riempi», qui si decide solo quale parte del volto resta dentro.
+    objectPosition: s.value.avatar_object_position || 'center center',
   };
   const shadow = shadowMap[s.value.avatar_shadow] || 'none';
   if (shadow !== 'none') st.boxShadow = shadow;

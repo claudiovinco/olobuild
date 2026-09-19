@@ -172,9 +172,16 @@ const subStyle = computed(() => ({ fontFamily: SANS, fontSize: '18px', lineHeigh
 const solidStyle = computed(() => ({ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '14px 30px', borderRadius: btnRad.value, fontFamily: SANS, fontSize: '13px', letterSpacing: '.14em', textTransform: 'uppercase', textDecoration: 'none', background: accent.value, color: accOn.value, border: 0 }));
 const outStyle = computed(() => ({ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '14px 30px', borderRadius: btnRad.value, fontFamily: SANS, fontSize: '13px', letterSpacing: '.14em', textTransform: 'uppercase', textDecoration: 'none', background: 'transparent', color: txt.value, border: '1px solid rgba(224,175,202,.42)' }));
 const stripStyle = computed(() => ({ position: 'relative', zIndex: 2, display: 'flex', gap: '14px', justifyContent: 'center', marginTop: 'clamp(40px,6vw,64px)', flexWrap: 'wrap', maxWidth: Math.max(mw.value, 1180) + 'px', marginLeft: 'auto', marginRight: 'auto', padding: '0 30px' }));
+// Gemello della whitelist PHP: se il valore non è un "W/H" si torna al 3/4
+// storico, così canvas e sito disegnano sempre la stessa tessera.
+const mediaRatio = computed(() => {
+  const r = String(s.value.media_ratio || '3/4').trim().replace(/:/g, '/');
+  return /^\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?$/.test(r) ? r.replace(/\s+/g, '') : '3/4';
+});
+
 function mediaStyle(it, i) {
   const st = {
-    position: 'relative', overflow: 'hidden', width: 'clamp(150px,22vw,240px)', aspectRatio: '3/4',
+    position: 'relative', overflow: 'hidden', width: 'clamp(150px,22vw,240px)', aspectRatio: mediaRatio.value,
     borderRadius: mediaRad.value, background: mbg.value,
     backgroundImage: 'repeating-linear-gradient(135deg, rgba(243,233,239,.05) 0 16px, transparent 16px 32px)',
     backgroundSize: 'cover', backgroundPosition: (s.value.object_position || 'center center'),

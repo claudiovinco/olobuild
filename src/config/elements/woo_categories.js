@@ -1,5 +1,6 @@
 
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { ratioOptions } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -96,12 +97,14 @@ export default {
     { key: 'columns_tablet', label: t('Colonne tablet'), type: 'range', min: 1, max: 4, step: 1 },
     { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 2, step: 1 },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 48, step: 4 },
-    { key: 'image_ratio', label: t('Proporzione immagine'), type: 'select', options: [
-      { value: '1-1', label: t('1:1 Quadrato') },
-      { value: '4-3', label: '4:3' },
-      { value: '3-4', label: t('3:4 Verticale') },
-      { value: '16-9', label: '16:9' },
-    ]},
+    // Elenco canonico col separatore TRATTINO, che è quello che le tile WooCommerce
+    // salvano da sempre ('16-9', non '16/9'): i valori già nei template restano
+    // identici. Niente voce «auto»: il riquadro immagine è alto solo grazie al
+    // padding-top percentuale (l'<img> è in position:absolute), senza rapporto
+    // collasserebbe a zero. Ogni voce qui ha la sua percentuale nelle due tabelle
+    // di conversione — PHP `$ratio_map`, Vue `ratioMap`: se se ne aggiunge una
+    // vanno allargate entrambe.
+    { key: 'image_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions({ sep: '-', auto: false }) },
     { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
       { value: 'none', label: t('Nessuno') },
       { value: 'zoom', label: t('Zoom') },

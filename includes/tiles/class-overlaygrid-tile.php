@@ -20,6 +20,8 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
         'columns_mobile'      => '1',
         'gap'                 => 'medium',
         'height'              => '320',
+        'image_ratio'         => 'auto',
+        'image_fit'           => 'cover',
         'match_height'        => true,
         'overlay_position'    => 'bottom',
         'overlay_horizontal'  => 'left',
@@ -105,9 +107,34 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
         $columns   = absint( $s['columns'] ) ?: 3;
         $cols_mob  = absint( $s['columns_mobile'] ) ?: 1;
         $height    = absint( $s['height'] ) ?: 300;
-        $obj_pos   = trim( (string) ( $s['object_position'] ?? 'center center' ) );
-        if ( $obj_pos === '' ) { $obj_pos = 'center center'; }
+        $obj_pos   = Olobuild_Tile_Utils::css_pos( $s, 'object_position' );
         $masonry   = ( ( $s['layout_mode'] ?? 'uniform' ) === 'masonry' );
+        // CORNICE DELLE IMMAGINI. Il punto focale di questa tile sta sulla chiave
+        // GLOBALE `object_position` (una per tutte le card) e non su
+        // `image_object_position`: si passa come default all'helper, così la chiave
+        // salvata resta quella di sempre e il CSS lo compone comunque in un posto solo.
+        // Default 'auto' + 'cover' = esattamente l'altezza fissa e l'object-fit che
+        // erano cablati qui: chi non tocca i due controlli non vede niente cambiare.
+        // Un adattamento vuoto o sconosciuto non e' «nessun adattamento», e' «mai
+        // scelto»: ripiega su 'cover', altrimenti l'immagine resterebbe senza object-fit.
+        $img_fit   = trim( (string) ( $s['image_fit'] ?? '' ) );
+        if ( ! in_array( $img_fit, [ 'cover', 'contain', 'fill', 'none', 'scale-down' ], true ) ) {
+            $img_fit = 'cover';
+        }
+        $img_frame = Olobuild_Tile_Utils::image_frame(
+            [
+                'image_ratio' => $s['image_ratio'] ?? 'auto',
+                'image_fit'   => $img_fit,
+            ],
+            'image',
+            [ 'ratio' => 'auto', 'fit' => 'cover', 'pos' => $obj_pos ]
+        );
+        // In Masonry l'altezza della cella la impone la griglia (`height:100% !important`
+        // più sotto): una proporzione qui verrebbe comunque ignorata dal browser, e
+        // toglierebbe l'altezza di ripiego. Meglio non emetterla proprio.
+        $img_box   = ( ! $masonry && $img_frame['contenitore'] !== '' )
+            ? $img_frame['contenitore']
+            : 'height: ' . (int) $height . 'px;';
         $position  = esc_attr( $s['overlay_position'] ?: 'bottom' );
         $style     = in_array( $s['overlay_style'], [ 'overlay-primary', 'overlay-default' ], true ) ? $s['overlay_style'] : 'overlay-primary';
 
@@ -197,9 +224,9 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
 
         ob_start();
         ?>
-        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() for every colour, absint()/intval()/floatval() for sizes, preg_match/in_array whitelists for weight and enums, fixed shadow map, build_border_radius_css()/build_wow_effects_css() internal helpers, internal wp_rand() uid. ?>
+        <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above: safe_color_css() for every colour, absint()/intval()/floatval() for sizes, preg_match/in_array whitelists for weight and enums, fixed shadow map, build_border_radius_css()/build_wow_effects_css()/Olobuild_Tile_Utils::image_frame() internal helpers (image_frame validates ratio, object-fit and focal point with its own whitelists), internal wp_rand() uid. ?>
         <style>
-            .<?php echo $uid; ?> .mos-og-img { transition: transform 0.5s ease, filter 0.5s ease; width: 100%; height: <?php echo (int) $height; ?>px; object-fit: cover; object-position: <?php echo esc_attr( $obj_pos ); ?>; }
+            .<?php echo $uid; ?> .mos-og-img { transition: transform 0.5s ease, filter 0.5s ease; width: 100%; <?php echo $img_box; ?> <?php echo $img_frame['immagine']; ?> }
             .<?php echo $uid; ?> > div > div > .uk-panel,
             .<?php echo $uid; ?> > div > div > a {
                 <?php if ( $item_radius_css ) : ?>border-radius: <?php echo $item_radius_css; ?>;<?php endif; ?>
@@ -331,13 +358,21 @@ class Olobuild_OverlayGrid_Tile extends Olobuild_Tile_Base {
                                     echo $this->render_hover_wrap( $og_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <img> HTML from Olobuild_Tile_Utils::img_srcset() and hover wrapper from render_hover_wrap(), both escape internally (esc_url/esc_attr).
                                     ?>
                                 <?php else : ?>
-                                    <div class="olo-og-ph" style="height:<?php echo (int) $height; ?>px;background:#1F2937;width:100%;"></div>
+                                    <?php // Il segnaposto sta al posto dell'immagine: segue la stessa
+                                          // cornice, altrimenti con una proporzione scelta le celle
+                                          // senza foto resterebbero alte quanto prima e sfalserebbero
+                                          // la griglia. ?>
+                                    <div class="olo-og-ph" style="<?php echo esc_attr( $img_box ); ?>background:#1F2937;width:100%;"></div>
                                 <?php endif; ?>
                             <?php else :
                                 // Card piena (text/icon/graphic): sfondo card + contenuto in alto.
                                 $card_bg_css = $this->safe_color_css( $item['card_bg'] ?? '' ) ?: '#0E1B2E';
                             ?>
-                                <div class="olo-og-card olo-og-card--<?php echo esc_attr( $card_type ); ?>" style="height:<?php echo (int) $height; ?>px;background:<?php echo esc_attr( $card_bg_css ); ?>;width:100%;">
+                                <?php // Anche le card non-immagine seguono la cornice: in una griglia
+                                      // mista, se solo le foto prendessero la proporzione le celle
+                                      // resterebbero di due altezze diverse. Col default 'auto' qui
+                                      // esce la stessa altezza fissa di prima. ?>
+                                <div class="olo-og-card olo-og-card--<?php echo esc_attr( $card_type ); ?>" style="<?php echo esc_attr( $img_box ); ?>background:<?php echo esc_attr( $card_bg_css ); ?>;width:100%;">
                                     <?php if ( $card_type === 'icon' && ! empty( $item['icon'] ) ) :
                                         $icon_clr = $this->safe_color_css( $item['icon_color'] ?? '' );
                                         $icon_attr = $icon_clr ? 'style="color:' . esc_attr( $icon_clr ) . ';"' : '';

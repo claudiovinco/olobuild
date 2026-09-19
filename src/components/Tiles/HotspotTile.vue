@@ -45,6 +45,9 @@ const props = defineProps({
 const defaults = {
   image: '',
   image_height: '400',
+  aspect_ratio: 'auto',
+  aspect_ratio_custom: '16/9',
+  object_fit: 'cover',
   object_position: 'center center',
   markers: [],
   marker_color: '',
@@ -59,21 +62,37 @@ const s = computed(() => ({ ...defaults, ...props.settings }));
 const markers = computed(() => Array.isArray(s.value.markers) ? s.value.markers : []);
 const markerSize = computed(() => Math.max(16, Math.min(40, parseInt(s.value.marker_size) || 24)));
 
+// Cornice: stesse chiavi piatte del PHP (aspect_ratio / object_fit / object_position)
+// e stessa whitelist, così canvas e sito ritagliano identico.
+const RATIO_OK = /^\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?$/;
+const frameRatio = computed(() => {
+  let r = String(s.value.aspect_ratio ?? 'auto').trim();
+  if (r === 'custom') r = String(s.value.aspect_ratio_custom ?? '').trim();
+  r = r.replace(/:/g, '/');
+  return (r && r !== 'auto' && RATIO_OK.test(r)) ? r.replace(/\s+/g, '') : '';
+});
+
 const imageStyle = computed(() => ({
   width: '100%',
   height: '100%',
-  objectFit: 'cover',
+  objectFit: s.value.object_fit || 'cover',
   objectPosition: s.value.object_position || 'center center',
   display: 'block',
 }));
 
-const containerStyle = computed(() => ({
-  position: 'relative',
-  width: '100%',
-  height: (parseInt(s.value.image_height) || 400) + 'px',
-  overflow: 'hidden',
-  borderRadius: '8px',
-}));
+const containerStyle = computed(() => {
+  const st = {
+    position: 'relative',
+    width: '100%',
+    overflow: 'hidden',
+    borderRadius: '8px',
+  };
+  // Con un rapporto scelto l'altezza deve cedere: due dimensioni definite
+  // renderebbero l'aspect-ratio inerte (gemello della regola PHP).
+  if (frameRatio.value) { st.aspectRatio = frameRatio.value; st.height = 'auto'; }
+  else st.height = (parseInt(s.value.image_height) || 400) + 'px';
+  return st;
+});
 
 function markerStyle(marker) {
   return {

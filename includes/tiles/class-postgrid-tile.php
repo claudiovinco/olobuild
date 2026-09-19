@@ -31,6 +31,12 @@ class Olobuild_PostGrid_Tile extends Olobuild_Tile_Base {
         'card_style'      => 'default',
         'card_primary_bg' => '',
         'image_height'    => '200',
+        // Cornice dell'immagine in evidenza. 'auto' = nessun ritaglio: resta in vigore
+        // l'altezza in px, la resa storica di questa griglia.
+        'image_ratio'           => 'auto',
+        'image_ratio_custom'    => '16/9',
+        'image_fit'             => 'cover',          // era cablato nel CSS qui sotto
+        'image_object_position' => 'center center',
         'image_radius'    => '0',
         'card_radius'     => '4',
         'corner_cut'      => false,
@@ -300,6 +306,10 @@ class Olobuild_PostGrid_Tile extends Olobuild_Tile_Base {
 
         $uid          = 'olo-postgrid-' . wp_rand( 10000, 99999 );
         $image_height = absint( $s['image_height'] ) ?: 200;
+        // Cornice: i default riproducono il CSS che c'era cablato (nessun rapporto +
+        // object-fit:cover). Con un rapporto scelto si emette aspect-ratio AL POSTO
+        // dell'altezza in px: insieme, l'altezza vincerebbe e il rapporto sparirebbe.
+        $img_frame    = Olobuild_Tile_Utils::image_frame( $s, 'image', [ 'ratio' => 'auto', 'fit' => 'cover' ] );
         $image_radius = $this->build_border_radius_css( $s["image_radius"] ?? 0 );
         $image_radius_hover_css = Olobuild_Tile_Utils::radius_force_css( $s['image_radius_hover'] ?? null );
         $card_radius  = $this->build_border_radius_css( $s["card_radius"] ?? 4 );
@@ -363,7 +373,11 @@ class Olobuild_PostGrid_Tile extends Olobuild_Tile_Base {
         ?>
         <?php // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS below is built exclusively from values sanitized above (safe_color_css/absint/floatval clamps/internal uid/helper builders). ?>
         <style>
-            .<?php echo $uid; ?> .olo-pg-img { transition: transform 0.5s ease, filter 0.5s ease, border-radius 400ms cubic-bezier(.4,0,.2,1); width: 100%; height: <?php echo (int) $image_height; ?>px; object-fit: cover; display: block; border-radius: <?php echo $image_radius; ?>; }
+            .<?php echo $uid; ?> .olo-pg-img { transition: transform 0.5s ease, filter 0.5s ease, border-radius 400ms cubic-bezier(.4,0,.2,1); width: 100%; <?php echo $img_frame['contenitore'] !== '' ? $img_frame['contenitore'] : 'height: ' . (int) $image_height . 'px;'; ?> <?php echo $img_frame['immagine']; ?> display: block; border-radius: <?php echo $image_radius; ?>; }
+            <?php /* L'immagine di hover sta nella stessa cornice della principale: la
+                      regola globale di frontend.css la inchioda a cover, qui la si
+                      riallinea al ritaglio scelto (coi default: identica a prima). */ ?>
+            .<?php echo $uid; ?> .olo-hover-media img, .<?php echo $uid; ?> .olo-hover-media video { <?php echo $img_frame['immagine']; ?> }
             .<?php echo $uid; ?> .olo-card-minimal__img { border-radius: <?php echo $image_radius; ?>; transition: border-radius 400ms cubic-bezier(.4,0,.2,1); }
             .<?php echo $uid; ?> .uk-card-media-top { border-radius: <?php echo $image_radius; ?>; overflow: hidden; transition: border-radius 400ms cubic-bezier(.4,0,.2,1); }
             .<?php echo $uid; ?> .uk-card { border-radius: <?php echo $card_radius; ?>; overflow: hidden; transition: border-radius 400ms cubic-bezier(.4,0,.2,1); }

@@ -1,5 +1,6 @@
 
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { ratioOptions } from './_imageFrame.js';
 import { t } from '@/i18n';
 
 /**
@@ -31,6 +32,11 @@ export default {
     image_position: 'top',
     image_width: '40',
     image_height: 'auto',
+    // 'auto' = nessun aspect-ratio nel CSS: l'altezza continua a essere quella di
+    // `image_height` (che a sua volta vale 'auto'). È il default OBBLIGATO, perché
+    // qualunque proporzione ritaglierebbe le immagini delle pagine già pubblicate.
+    aspect_ratio: 'auto',
+    aspect_ratio_custom: '16/9',
     image_fit: 'cover',
     object_position: 'center center',
     image_radius: '0',
@@ -75,7 +81,13 @@ export default {
       { value: 'left', label: t('Sinistra') },
       { value: 'right', label: t('Destra') },
     ]},
-    { key: 'image_height', label: t('Altezza immagine (px o auto)'), type: 'text' },
+    // L'avviso sta QUI, sul campo che diventa inerte, non solo su «Proporzioni»:
+    // le due cose vivono in schede diverse (questa è CONTENUTO, la proporzione è in
+    // STILE) e chi sta muovendo l'altezza non ha modo di leggere la descrizione
+    // dell'altro campo. Il renderer forza `height:auto` quando c'è una proporzione
+    // (class-content-tile.php, gemello in ContentTile.vue `imgStyle`).
+    { key: 'image_height', label: t('Altezza immagine (px o auto)'), type: 'text',
+      description: t('Ignorata quando in Stile è attiva una proporzione.') },
     { key: 'hover_image', label: t('Immagine hover'), type: 'image' },
     { key: 'hover_video', label: t('Video hover (mp4)'), type: 'media' },
 
@@ -159,13 +171,22 @@ export default {
     { type: 'separator', label: t('Immagine') },
     { key: 'image_width', label: t('Larghezza immagine'), type: 'range', min: 20, max: 80, step: 5,
       condition: { field: 'image_position', value: ['left', 'right'] } },
+    // La cornice mancante: la tile sapeva già come riempire (fit) e dove inquadrare
+    // (punto focale), ma non che FORMA dare al ritaglio. Chiavi `aspect_ratio` /
+    // `aspect_ratio_custom` come nella tile Immagine — qui il prefisso `image_` non si
+    // usa per i campi della cornice (vedi `object_position` qui sotto).
+    { key: 'aspect_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions({ custom: true }),
+      description: t('Con una proporzione attiva comanda lei: «Altezza immagine» viene ignorata.') },
+    { key: 'aspect_ratio_custom', label: t('Proporzioni personalizzate'), type: 'text',
+      placeholder: t('es. 5/4, 1.618'),
+      condition: { field: 'aspect_ratio', op: 'eq', value: 'custom' } },
     { key: 'image_fit', label: t('Adattamento immagine'), type: 'select', options: [
       { value: 'cover', label: t('Cover') },
       { value: 'contain', label: t('Contain') },
       { value: 'fill', label: t('Fill') },
     ]},
     { key: 'object_position', label: t('Punto focale'), type: 'object-position',
-      contextKeys: { src: 'image', fit: 'image_fit' } },
+      contextKeys: { src: 'image', fit: 'image_fit', ratio: 'aspect_ratio', ratioCustom: 'aspect_ratio_custom' } },
     withHover({ key: 'image_radius', label: t('Raggio'), type: 'border-radius' }),
     { key: 'image_border', label: t('Bordo immagine'), type: 'border',
       legacyKeys: { width: 'image_border_width', color: 'image_border_color' } },
