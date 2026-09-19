@@ -311,29 +311,20 @@ class Olobuild_Critical_CSS {
         $id     = $node['id'] ?? '';
         $type   = $node['type'] ?? '';
 
-        // Background
-        if ( ! empty( $style['bg'] ) ) {
-            $bg = $style['bg'];
-            if ( $id ) {
-                $selector = '#olo-' . esc_attr( $id );
-
-                if ( ! empty( $bg['color'] ) ) {
-                    if ( $bg['type'] === 'solid' ) {
-                        $css .= $selector . '{background-color:' . esc_attr( $bg['color'] ) . '}';
-                    }
-                }
-
-                if ( $bg['type'] === 'gradient' ) {
-                    $angle = intval( $bg['gradient_angle'] ?? 180 );
-                    $from  = esc_attr( $bg['gradient_from'] ?? '#fff' );
-                    $to    = esc_attr( $bg['gradient_to'] ?? '#000' );
-                    $css  .= $selector . '{background:linear-gradient(' . $angle . 'deg,' . $from . ',' . $to . ')}';
-                }
-
-                if ( $bg['type'] === 'image' ) {
-                    if ( ! empty( $bg['image_url'] ) ) {
-                        $css .= $selector . '{background-image:url(' . esc_url( $bg['image_url'] ) . ');background-size:cover;background-position:center}';
-                    }
+        // Background — delega all'UNICO costruttore di sfondi. Riscriverlo a mano
+        // qui significava divergere dalla resa vera: gradient a due soli colori
+        // (mai i multi-stop), immagine sempre cover/center, e nessuna traccia di
+        // trama, Aurora, Bagliori e CRT — il critical CSS dipingeva uno sfondo
+        // diverso da quello che sarebbe arrivato un istante dopo.
+        if ( ! empty( $style['bg'] ) && is_array( $style['bg'] ) && ! empty( $style['bg']['type'] ) && $id ) {
+            static $bg_builder = null;
+            if ( $bg_builder === null && class_exists( 'Olobuild_CSS_Builder' ) ) {
+                $bg_builder = new Olobuild_CSS_Builder();
+            }
+            if ( $bg_builder ) {
+                $bg_decl = $bg_builder->get_bg_inline_css( $style['bg'] );
+                if ( $bg_decl ) {
+                    $css .= '#olo-' . esc_attr( $id ) . '{' . rtrim( $bg_decl, '; ' ) . '}';
                 }
             }
         }

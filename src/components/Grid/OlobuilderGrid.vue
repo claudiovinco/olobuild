@@ -79,7 +79,7 @@
                   class="olo-row-block"
                   :class="{ 'olo-row-block--selected': builderStore.selectedTileId === row.id, 'olo-node-hidden-vp': isHiddenInViewport(row) }"
                   :data-tile-id="row.id"
-                  :style="{ ...(getNodeBg(row).type === 'solid' ? getNodeBgStyle(row) : {}), ...getNodeSpacingStyle(row), ...(hasBgImage(row) ? { overflow: 'clip' } : {}) }"
+                  :style="{ ...(hasInlineBg(row) ? getNodeBgStyle(row) : {}), ...getNodeSpacingStyle(row), ...(hasBgImage(row) ? { overflow: 'clip' } : {}) }"
                   v-olo-draggable="rowDraggable(row, section.id, rowIdx)"
                   v-olo-drop-target="rowDrop(row, section.id, rowIdx)"
                 >
@@ -348,7 +348,7 @@ import {
   isOloData,
 } from '@/composables/useDnD';
 import { useDnDStore } from '@/stores/dnd';
-import { resolveNodeBg, buildBgStyle, buildOverlayStyle } from '@/composables/useBackgroundStyle';
+import { resolveNodeBg, buildBgStyle, buildOverlayStyle, isInlineBg } from '@/composables/useBackgroundStyle';
 import { rv } from '@/composables/useResponsiveValue';
 import GridCell from './GridCell.vue';
 import ShapedividerTile from '@/components/Tiles/ShapedividerTile.vue';
@@ -565,7 +565,8 @@ function getSectionBodyStyle(section) {
  */
 function getSectionBlockStyle(section) {
   const bgType = getNodeBg(section).type;
-  const applyInline = bgType === 'solid' || (bgType === 'gallery' && !(getNodeBg(section).gallery_images?.length));
+  // Gallery senza immagini: resta il colore di ripiego, che è pur sempre inline.
+  const applyInline = hasInlineBg(section) || (bgType === 'gallery' && !(getNodeBg(section).gallery_images?.length));
   const base = { ...getSectionColorStyle(section), ...(applyInline ? getNodeBgStyle(section) : {}), ...getNodeSpacingStyle(section) };
   const w = section.settings?.width || 'default';
   if (w === 'fullbleed') {
@@ -597,6 +598,12 @@ function getNodeBg(node) {
 
 function getNodeBgStyle(node) {
   return buildBgStyle(getNodeBg(node));
+}
+
+// Sfondi senza asset (solid/trama/Aurora/Bagliori/CRT): vanno sul blocco stesso.
+// Il layer `.olo-bg-preview` serve solo a image/gradient/gallery.
+function hasInlineBg(node) {
+  return isInlineBg(getNodeBg(node));
 }
 
 function hasBgImage(node) {

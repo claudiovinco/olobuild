@@ -1719,6 +1719,40 @@ class Olobuild_Rest_Api {
             $inline_css = Olobuild_Style_System::instance()->generate_css();
         }
 
+        // I token del tema (--olo-*) sono emessi con selettore `.olo-template`: fuori
+        // da quel wrapper non esistono. Lo sfondo di pagina qui sotto finisce invece su
+        // html/body dell'iframe, dove un Aurora o dei Bagliori — che dei token vivono —
+        // si riducevano a una dichiarazione invalida, cioè a nessuno sfondo.
+        // Rispecchiamo le sole custom property sul :root dell'iframe, leggendole dal CSS
+        // appena generato invece di riscriverne l'elenco: così non possono divergere.
+        if ( $inline_css ) {
+            // sorgente `.olo-template` → destinazione fuori dal wrapper (anche in dark mode).
+            $mirror = [
+                '/^\.olo-template\s*\{([^}]*)\}/m'                 => ':root',
+                '/^html\.olo-dark-mode \.olo-template\s*\{([^}]*)\}/m' => 'html.olo-dark-mode',
+            ];
+            foreach ( $mirror as $pattern => $target ) {
+                if ( ! preg_match( $pattern, $inline_css, $m ) ) {
+                    continue;
+                }
+                // Si raccolgono le dichiarazioni una per una invece di spezzare sui ';':
+                // il blocco sorgente contiene righe di commento (/* Button tokens */,
+                // /* Global Color Palette */…) e con lo split il commento resta incollato
+                // alla dichiarazione che lo segue, che allora non comincia più per '--olo-'
+                // e veniva buttata via insieme a lui. Così sparivano dallo specchio
+                // --olo-btn-font-size, --olo-form-field-bg e il primo set tipografico.
+                $vars = '';
+                if ( preg_match_all( '/(--olo-[a-z0-9_-]+\s*:[^;]+)/i', $m[1], $decls ) ) {
+                    foreach ( $decls[1] as $decl ) {
+                        $vars .= trim( $decl ) . ';';
+                    }
+                }
+                if ( $vars !== '' ) {
+                    $inline_css .= "\n" . $target . ' { ' . $vars . " }\n";
+                }
+            }
+        }
+
         // Estendi inline_css con il page background della body zone, applicato a html+body
         // dell'iframe builder. Senza questo, il bg vive solo dentro `.olo-template` (che ha
         // max-width limitata) e i bordi laterali dell'iframe restano del colore di default

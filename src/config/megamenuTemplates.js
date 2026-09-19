@@ -21,11 +21,15 @@
 const R  = (tl, tr, br, bl) => ({ tl, tr: tr ?? tl, br: br ?? tl, bl: bl ?? (tr ?? tl) });        // border-radius
 const SP = (t, r, b, l)     => ({ top: t, right: r ?? t, bottom: b ?? t, left: l ?? r ?? t }); // spacing
 
-// Ruoli colore cliente (token globali) — alias leggibili
+// Ruoli colore cliente (token globali) — alias leggibili.
+// 'accent' e 'dark' non sono ruoli del pannello Colori: esistono solo se il
+// cliente crea lo swatch omonimo. Senza riserva un var() che non risolve non
+// lascia il colore precedente, invalida la dichiarazione — la barra restava
+// trasparente invece che scura. La riserva punta su un ruolo sempre emesso.
 const PRIMARY = 'var(--olo-color-primary)';
 const SECOND  = 'var(--olo-color-secondary)';
-const ACCENT  = 'var(--olo-color-accent)';
-const DARK    = 'var(--olo-color-dark)';
+const ACCENT  = 'var(--olo-color-accent, var(--olo-color-primary))';
+const DARK    = 'var(--olo-color-dark, var(--olo-color-secondary))';
 
 export const MEGAMENU_TEMPLATES = [
 

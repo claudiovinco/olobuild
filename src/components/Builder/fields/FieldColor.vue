@@ -134,7 +134,12 @@ const isGlobalActive = computed(() => {
  * Restituisce null se non e' un token.
  */
 function tokenParts(val) {
-  const m = /^var\(\s*--olo-color-([a-z0-9_-]+)\s*(?:,\s*([^)]+))?\)$/i.exec(String(val || '').trim());
+  // La riserva si prende con `(.+)` e non con `[^)]+`: dev'essere in grado di
+  // attraversare una parentesi, perche' una riserva puo' essere a sua volta un
+  // token — `var(--olo-color-accent, var(--olo-color-primary))`. Col vecchio
+  // gruppo la regex non combaciava affatto e il picker mostrava una pastiglia
+  // nera al posto del colore vero. `\)$` ancorato in fondo tiene la presa.
+  const m = /^var\(\s*--olo-color-([a-z0-9_-]+)\s*(?:,\s*(.+))?\)$/i.exec(String(val || '').trim());
   if (!m) return null;
   return { id: m[1].toLowerCase(), fallback: (m[2] || '').trim() };
 }

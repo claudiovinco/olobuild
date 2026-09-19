@@ -9,12 +9,12 @@
  * Resa: NON usa filter:blur() — la morbidezza è data dal falloff dei radial-gradient
  * (colore → trasparente con stop ampio). Colori token-first (ruoli cliente): se il
  * valore è var(--olo-color-*) l'alfa si applica con color-mix(); se è hex/rgba si
- * converte in rgba(), come in glowCSS.colorToCss.
+ * converte in rgba(), come in glowColorToCss() (glowCSS.js).
  *
  * Controllo dati (additivo, retrocompatibile):
  *   mesh_colors  array di colori (palette dei blob). Fallback: [mesh_c1, mesh_c2, mesh_c3].
  *   mesh_base    colore di fondo.
- *   mesh_count   1–6, quanti blob (ciclano la palette). Default = n° colori.
+ *   mesh_count   1–6, quanti blob (ciclano la palette). Chiave assente o vuota = n° colori.
  *   mesh_softness 0–100, morbidezza (stop del falloff). Default 70.
  *   mesh_intensity 0–100, opacità dei blob. Default 100.
  *   mesh_preset  disposizione dei blob (spread|boreale|corners|center|top). Default spread.
@@ -42,6 +42,45 @@ const MESH_POSITIONS = {
   top:     [ [20, 8], [50, 3], [80, 8], [35, 22], [66, 18], [50, 32] ],
 };
 
+/**
+ * Lettura di una manopola numerica. Regola UNICA per i due generativi (Aurora e
+ * Bagliori) e per i gemelli PHP, che devono copiarla alla lettera — gemella di
+ * numOpt() in glowCSS.js:
+ *   chiave assente · null · stringa vuota · valore non numerico = «non impostata»
+ *   → vale il default;  un numero vale sempre, **anche 0**, e a riportarlo
+ *   nell'intervallo pensa il clamp del chiamante, non questa funzione.
+ * Serve perché `?? def` non intercetta la stringa vuota e in PHP `intval('')` vale 0:
+ * era da quella asimmetria che con `mesh_count` vuoto il canvas disegnava un blob
+ * per colore e il frontend uno solo.
+ * `parseInt` tronca come `intval()`: "70.5" → 70 di qua e di là.
+ */
+function numOpt(value, fallback) {
+  // `typeof value === 'object'` copre array e oggetti, che il gemello PHP
+  // scarta con is_array(): senza, `parseInt([5])` leggeva 5 di qua e il
+  // frontend ripiegava sul default, e gli stessi dati davano due rese.
+  if (value === '' || value == null || typeof value === 'object') return fallback;
+  const n = parseInt(value, 10);
+  return Number.isNaN(n) ? fallback : n;
+}
+
+/**
+ * Un `var(--x)` NUDO dentro un layer di sfondo e' una mina: se quel token non e'
+ * definito, il var() non ripiega sul valore iniziale — rende INVALIDA l'intera
+ * dichiarazione `background-image`, e spariscono TUTTI i layer, non solo quello.
+ * E' quello che rendeva l'Aurora un rettangolo vuoto: il terzo colore di fabbrica
+ * e' `var(--olo-color-accent)`, ruolo che il renderer non stampa mai.
+ *
+ * Qui si aggiunge la riserva al volo, solo quando manca. Un token DEFINITO vince
+ * comunque sulla riserva, quindi nessun colore gia' funzionante cambia; e non si
+ * tocca ne' il valore salvato nel template ne' i token globali — cioe' i punti
+ * del plugin che scrivono di loro `var(--olo-color-accent, #f4a23b)` continuano a
+ * rendere la LORO riserva, come hanno sempre fatto.
+ */
+function conRiserva(v) {
+  const m = String(v).match(/^var\(\s*(--[A-Za-z0-9_-]+)\s*\)$/);
+  return m ? `var(${m[1]}, var(--olo-color-primary))` : v;
+}
+
 /** Converte hex|rgba|var(--token) + alfa (0-1) in un colore CSS valido.
  *  Speculare a glow_color_to_css() (PHP) e glowColorToCss() (glowCSS.js). */
 function meshColorToCss(input, alpha) {
@@ -49,7 +88,7 @@ function meshColorToCss(input, alpha) {
   const a = Math.max(0, Math.min(1, alpha));
   if (s.startsWith('var(') || s.startsWith('color-mix(')) {
     const pct = Math.round(a * 100);
-    return `color-mix(in srgb, ${s} ${pct}%, transparent)`;
+    return `color-mix(in srgb, ${conRiserva(s)} ${pct}%, transparent)`;
   }
   const m = s.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+))?\s*\)/);
   if (m) {
@@ -72,7 +111,11 @@ export function getMeshColors(bg = {}) {
   }
   const legacy = [bg.mesh_c1, bg.mesh_c2, bg.mesh_c3].filter((c) => c !== '' && c != null);
   if (legacy.length) return legacy;
-  return ['var(--olo-color-primary)', 'var(--olo-color-secondary)', 'var(--olo-color-accent)'];
+  // `primary` e `secondary` sono ruoli che il renderer stampa sempre; `accent` no
+  // (lo crea solo il generatore di palette, se il cliente lo sceglie). Un var() che
+  // non risolve e senza riserva non annulla la sua dichiarazione: annulla l'INTERA
+  // background-image, e spariscono tutti e tre i blob. Da qui la riserva esplicita.
+  return ['var(--olo-color-primary)', 'var(--olo-color-secondary)', 'var(--olo-color-accent, var(--olo-color-primary))'];
 }
 
 /**
@@ -83,9 +126,13 @@ export function getMeshCSS(bg = {}) {
   const colors = getMeshColors(bg);
   const base = bg.mesh_base || 'var(--olo-color-background, #0b0a0d)';
   const positions = MESH_POSITIONS[bg.mesh_preset] || MESH_POSITIONS.spread;
-  const count = Math.max(1, Math.min(6, parseInt(bg.mesh_count ?? colors.length) || colors.length));
-  const softness = Math.max(0, Math.min(100, bg.mesh_softness ?? 70));
-  const intensity = Math.max(0, Math.min(100, bg.mesh_intensity ?? 100)) / 100;
+  // Quante luci: chiave assente o vuota = «quanti sono i colori» (chi sceglie tre
+  // colori si aspetta tre blob). Un numero invece vale com'è ed entra nel clamp:
+  // 0 non è «non impostato», è sotto il minimo e diventa 1 — che è già quel che
+  // disegna il frontend, quindi nessuna pagina pubblicata si muove.
+  const count = Math.max(1, Math.min(6, numOpt(bg.mesh_count, colors.length)));
+  const softness = Math.max(0, Math.min(100, numOpt(bg.mesh_softness, 70)));
+  const intensity = Math.max(0, Math.min(100, numOpt(bg.mesh_intensity, 100))) / 100;
   const stop = Math.round(40 + softness * 0.5);   // 40..90
   const midpos = Math.round(stop * 0.45);
 
@@ -99,13 +146,16 @@ export function getMeshCSS(bg = {}) {
     layers.push(`radial-gradient(circle at ${x}% ${y}%, ${core} 0%, ${mid} ${midpos}%, ${fade} ${stop}%)`);
   }
 
+  // Qui i layer sono tutti e soli blob radiali: un valore unico di repeat/size vale
+  // per tutti e va bene. (Nei Bagliori no: lì c'è anche la grana, che è una texture
+  // da ripetere al suo passo, e le liste sono per layer.)
   const out = {
     backgroundColor: base,
     backgroundImage: layers.join(', '),
     backgroundRepeat: 'no-repeat',
   };
   if (bg.mesh_animate) {
-    const speed = Math.max(4, Math.min(60, parseInt(bg.mesh_speed ?? 18) || 18));
+    const speed = Math.max(4, Math.min(60, numOpt(bg.mesh_speed, 18)));
     out.backgroundSize = '160% 160%';
     out.animation = `olo-mesh-drift ${speed}s ease-in-out infinite alternate`;
   } else {

@@ -1,7 +1,8 @@
 /**
  * Background style condiviso — elimina duplicazione tra GridCell.vue e OlobuilderGrid.vue.
  *
- * Supporta: solid (con color_opacity), gradient, image, video (poster).
+ * Supporta: solid (con color_opacity), gradient, image, video (poster), gallery
+ * e i decorativi puramente CSS pattern / mesh (Aurora) / glow (Bagliori) / crt.
  *
  * Due modalità d'uso:
  *   1) Reactive (computed) — per GridCell dove il bg è un singolo tile reattivo
@@ -23,6 +24,19 @@ import { getCrtCSS } from '@/utils/crtCSS';
 // Regola HARD validata con utente — è la differenza tra "wrapper colorato enorme attorno
 // al pulsante piccolo" (rotto) e "pulsante visibile sul background della pagina" (corretto).
 export const ATOMIC_TILE_TYPES = new Set(['button', 'icon', 'divider', 'spacer', 'togglebtn', 'badge']);
+
+// Sfondi che vivono interamente nelle dichiarazioni CSS: nessun asset da caricare,
+// nessun layer da sovrapporre. Vanno applicati INLINE sul blocco stesso, come il
+// `solid`. Il layer separato `.olo-bg-preview` è pensato per i tipi con un asset
+// (image/gradient/gallery) e ha un proprio z-index: usarlo anche qui significava
+// che sezioni e righe con Aurora/Bagliori/Trama/CRT non disegnavano nulla.
+export const CSS_ONLY_BG_TYPES = new Set(['solid', 'pattern', 'mesh', 'glow', 'crt']);
+
+/** true se il bg del nodo va reso inline sul blocco (vedi CSS_ONLY_BG_TYPES). */
+export function isInlineBg(bgOrType) {
+  const type = typeof bgOrType === 'string' ? bgOrType : (bgOrType?.type ?? '');
+  return CSS_ONLY_BG_TYPES.has(type);
+}
 
 // ────────────────────────────────────────────
 // Funzioni imperative (usate anche internamente dai computed)
@@ -229,15 +243,11 @@ export function useBackgroundStyle(bgGetter) {
     };
   });
 
-  /** Style inline da applicare al div principale (solo solid e gradient; image va su layer separato) */
+  /** Style inline da applicare al div principale: i tipi senza asset (più il
+   *  gradient, che è CSS anch'esso); image/video/gallery vanno su layer separato. */
   const bgInlineStyle = computed(() => {
     const bg = effectiveBg.value;
-    if (bg.type === 'solid') return buildBgStyle(bg);
-    if (bg.type === 'gradient') return buildBgStyle(bg);
-    if (bg.type === 'pattern') return buildBgStyle(bg);
-    if (bg.type === 'glow') return buildBgStyle(bg);
-    if (bg.type === 'mesh') return buildBgStyle(bg);
-    if (bg.type === 'crt') return buildBgStyle(bg);
+    if (isInlineBg(bg) || bg.type === 'gradient') return buildBgStyle(bg);
     return {};
   });
 

@@ -17,12 +17,17 @@
     Accento = CHROME del builder (arancio fisso #e8622a via --olo-ui-accent),
     NON il primario tile. Il colore DEI contenuti (alone, base, pattern…) resta
     token-first (var(--olo-color-*)) tramite FieldColor.
+
+    ⚠️ Le ANTEPRIME (i riquadri .pv e le mattonelle della griglia) portano i token
+    del template aperto via `tokenStyle`: senza, leggerebbero i --olo-color-* del
+    CHROME — dove il primario è l'arancio dell'inspector e secondary/background
+    non esistono — e mostrerebbero un colore che non è quello del sito.
   -->
   <div class="olo-bg2">
 
     <!-- ───────── TIPO DI SFONDO — griglia swatch raggruppata ───────── -->
     <div class="subhead first"><span class="t2">{{ t('Tipo di sfondo') }}</span></div>
-    <div class="bgtypes">
+    <div class="bgtypes" :style="tokenStyle">
       <template v-for="(group, gi) in typeGroups" :key="group.cat">
         <div class="cat" :class="{ first: gi === 0 }">{{ t(group.cat) }}</div>
         <button
@@ -33,12 +38,12 @@
           :class="{ on: bg.type === it.value }"
           :aria-pressed="bg.type === it.value"
           :title="t(it.label)"
-          @click="updateField('type', it.value)"
+          @click="selectType(it.value)"
         >
           <span v-if="bg.type === it.value" class="ck">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
           </span>
-          <span class="sw-prev" :class="it.prev">
+          <span class="sw-prev" :class="it.prev" :style="typeTileStyle[it.value]">
             <span v-if="it.value === 'image'" class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg></span>
             <span v-else-if="it.value === 'video'" class="ico"><span class="play"></span></span>
             <span v-else-if="it.value === 'gallery'" class="ico"><span class="stack"><i></i><i></i><i></i></span></span>
@@ -60,11 +65,11 @@
           <span class="cl">{{ t('Colore') }}</span>
           <FieldColor :modelValue="bg.color || '#ffffff'" @update:modelValue="updateField('color', $event)" />
         </div>
-        <div class="pv" :style="{ background: solidPreview }"></div>
+        <div class="pv" :style="[tokenStyle, { background: solidPreview }]"></div>
       </div>
 
       <!-- Gradiente (FieldGradient ha già la sua preview interna) -->
-      <div v-else-if="bg.type === 'gradient'" class="type-body">
+      <div v-else-if="bg.type === 'gradient'" class="type-body" :style="tokenStyle">
         <FieldGradient :modelValue="gradientModel" @update:modelValue="onGradientUpdate" />
       </div>
 
@@ -251,11 +256,11 @@
         <!-- Colore base -->
         <div class="field">
           <span class="cl">{{ t('Colore base') }}</span>
-          <FieldColor :modelValue="bg.mesh_base || 'var(--olo-color-background)'" @update:modelValue="updateField('mesh_base', $event)" />
+          <FieldColor :modelValue="bg.mesh_base || 'var(--olo-color-background, #0b0a0d)'" @update:modelValue="updateField('mesh_base', $event)" />
         </div>
 
         <!-- Anteprima live -->
-        <div class="pv" :style="meshPreviewStyle"><span class="pv-tag">{{ t('anteprima live') }}</span></div>
+        <div class="pv" :style="[tokenStyle, meshPreviewStyle]"><span class="pv-tag">{{ t('anteprima live') }}</span></div>
 
         <!-- N° luci -->
         <div class="row">
@@ -290,7 +295,7 @@
             <FieldSelect ui="dropdown" :model-value="bg.pattern_type || 'dots'" :options="patternGroupOpts" :aria-label="t('Pattern')" @update:model-value="updateField('pattern_type', $event)" />
           </div>
         </div>
-        <div class="pv" :style="patternPreviewStyle"></div>
+        <div class="pv" :style="[tokenStyle, patternPreviewStyle]"></div>
         <div class="grid2">
           <div class="cell"><span class="cl">{{ t('Colore pattern') }}</span><FieldColor :modelValue="bg.pattern_color || '#000000'" @update:modelValue="updateField('pattern_color', $event)" /></div>
           <div class="cell"><span class="cl">{{ t('Colore sfondo') }}</span><FieldColor :modelValue="bg.pattern_bg_color || '#ffffff'" @update:modelValue="updateField('pattern_bg_color', $event)" /></div>
@@ -321,7 +326,7 @@
             <FieldSelect ui="dropdown" :model-value="bg.glow_preset || 'spread'" :options="glowPresets" @update:model-value="updateField('glow_preset', $event)" />
           </div>
         </div>
-        <div class="pv" :style="glowPreviewStyle"><span class="pv-tag">{{ t('anteprima live') }}</span></div>
+        <div class="pv" :style="[tokenStyle, glowPreviewStyle]"><span class="pv-tag">{{ t('anteprima live') }}</span></div>
         <div class="field">
           <span class="cl">{{ t('Colori alone') }}</span>
           <div v-for="(c, idx) in glowColors" :key="idx" class="mesh-color-row">
@@ -336,11 +341,11 @@
         </div>
         <div class="row">
           <span class="rowlab">{{ t('Intensità') }}</span>
-          <NumberScrubber class="ns-grow" :modelValue="bg.glow_intensity ?? 62" :min="10" :max="100" :step="2" :defaultValue="62" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Intensità')" @update:modelValue="commitInt('glow_intensity', $event, 62)" />
+          <NumberScrubber class="ns-grow" :modelValue="bg.glow_intensity ?? 55" :min="10" :max="100" :step="2" :defaultValue="55" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Intensità')" @update:modelValue="commitInt('glow_intensity', $event, 55)" />
         </div>
         <div class="row">
           <span class="rowlab">{{ t('Ampiezza') }}</span>
-          <NumberScrubber class="ns-grow" :modelValue="bg.glow_size ?? 78" :min="30" :max="120" :step="2" :defaultValue="78" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Ampiezza')" @update:modelValue="commitInt('glow_size', $event, 78)" />
+          <NumberScrubber class="ns-grow" :modelValue="bg.glow_size ?? 70" :min="30" :max="120" :step="2" :defaultValue="70" emitAs="number" unit="%" :sliderOnFocus="false" :ariaLabel="t('Ampiezza')" @update:modelValue="commitInt('glow_size', $event, 70)" />
         </div>
         <div class="tgl-row">
           <button type="button" class="tgl" :class="{ on: bg.glow_grain !== false }" :aria-pressed="bg.glow_grain !== false" @click="updateField('glow_grain', !(bg.glow_grain !== false))"><b></b></button>
@@ -374,12 +379,12 @@
         </div>
 
         <!-- Anteprima live -->
-        <div class="pv" :style="crtPreviewStyle"><span class="pv-tag">{{ t('anteprima live') }}</span></div>
+        <div class="pv" :style="[tokenStyle, crtPreviewStyle]"><span class="pv-tag">{{ t('anteprima live') }}</span></div>
 
         <!-- Colori -->
         <div class="grid2">
           <div class="cell"><span class="cl">{{ t('Colore linee') }}</span><FieldColor :modelValue="bg.crt_line_color || '#ffffff'" @update:modelValue="updateField('crt_line_color', $event)" /></div>
-          <div class="cell"><span class="cl">{{ t('Colore base') }}</span><FieldColor :modelValue="bg.crt_base || 'var(--olo-color-background)'" @update:modelValue="updateField('crt_base', $event)" /></div>
+          <div class="cell"><span class="cl">{{ t('Colore base') }}</span><FieldColor :modelValue="bg.crt_base || 'var(--olo-color-background, #0b0a0d)'" @update:modelValue="updateField('crt_base', $event)" /></div>
         </div>
 
         <!-- Scanline -->
@@ -444,6 +449,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { t } from '@/i18n';
+import { useStylesStore } from '@/stores/styles';
 import { useMediaPicker } from '@/composables/useMediaPicker';
 import { patternList, getPatternCSS } from '@/utils/patternCSS';
 import { getGlowCSS, getGlowColors, glowPresets } from '@/utils/glowCSS';
@@ -573,8 +579,13 @@ const defaultBg = {
   video_scale: 100,
   mesh_c1: 'var(--olo-color-primary)',
   mesh_c2: 'var(--olo-color-secondary)',
-  mesh_c3: 'var(--olo-color-accent)',
-  mesh_base: 'var(--olo-color-background)',
+  // Riserva dentro il var(): se il ruolo «accent» non è definito il terzo blob
+  // ripiega sul primario invece di far cadere TUTTO il background-image (un var()
+  // che non risolve invalida la dichiarazione intera, non solo il suo layer).
+  mesh_c3: 'var(--olo-color-accent, var(--olo-color-primary))',
+  // Stessa forma del generatore (meshCSS/build_mesh_css): senza la riserva il
+  // pannello disattivava il fondo previsto per i temi che non hanno «background».
+  mesh_base: 'var(--olo-color-background, #0b0a0d)',
   mesh_animate: false,
   mesh_speed: 18,
   mesh_preset: 'spread',
@@ -584,12 +595,19 @@ const defaultBg = {
   glow_color: 'var(--olo-color-primary)',
   glow_color2: '',
   glow_preset: 'spread',
-  glow_intensity: 62,
-  glow_size: 78,
+  // 55 e 70 sono i default dei DUE generatori (glowCSS.js e build_glow_css()):
+  // il pannello ripiegava su 62/78 e mostrava numeri che nessuno rendeva.
+  glow_intensity: 55,
+  glow_size: 70,
   glow_grain: true,
   glow_anim: 'none',
   glow_anim_speed: 6,
-  glow_anim_intensity: 46,
+  // glow_anim_intensity NON sta qui di proposito: i due renderer emettono le
+  // custom property del respiro SOLO se la chiave c'è, altrimenti valgono i
+  // valori scritti nei @keyframes. Metterla nei default la farebbe scrivere da
+  // updateField() su ogni sfondo già pubblicato al primo tocco del pannello,
+  // cambiando l'ampiezza del respiro senza che nessuno l'abbia chiesto. Il 46
+  // resta come valore del cursore: si salva solo se l'utente lo muove davvero.
   overlay_color: '#000000',
   overlay_opacity: 0,
   color_opacity: 100,
@@ -605,8 +623,36 @@ const defaultBg = {
 
 const bg = computed(() => ({ ...defaultBg, ...props.modelValue }));
 
+// ── I token del template sulle sole anteprime ────────────────────────────────
+// Il pannello vive nel documento del BUILDER, cioè FUORI da `.olo-template`:
+// qui `--olo-color-primary` è l'arancio del chrome e `--olo-color-secondary` /
+// `--olo-color-background` non esistono affatto. Per questo l'anteprima
+// dell'Aurora usciva vuota (un var() che non risolve invalida l'intera
+// dichiarazione) e quella dei Bagliori marrone. Ricopiamo allora le custom
+// property del template aperto — le stesse che BuilderCanvas inietta nel canvas —
+// SOLO sui riquadri d'anteprima: il resto del pannello resta chrome.
+let stylesStore = null;
+try { stylesStore = useStylesStore(); } catch (e) { stylesStore = null; }
+
+const tokenStyle = computed(() => {
+  const css = (stylesStore && stylesStore.cssVariables) || '';
+  const open = css.indexOf('.olo-template {');
+  if (open < 0) return {};
+  const end = css.indexOf('}', open);
+  const block = css.slice(open, end < 0 ? undefined : end);
+  const out = {};
+  // Solo i ruoli colore: sono gli unici che le anteprime leggono, e restano
+  // inerti su tutto ciò che non li usa.
+  const re = /(--olo-color-[\w-]+)\s*:\s*([^;]+);/g;
+  let m;
+  while ((m = re.exec(block)) !== null) out[m[1]] = m[2].trim();
+  return out;
+});
+
 // Tipi raggruppati per la griglia di swatch. `prev` = classe CSS della
 // mini-anteprima; i tipi "media" hanno un'icona interna (image/video/gallery).
+// I tipi GENERATIVI non hanno classe: la loro mattonella è generata dagli util
+// della resa (typeTileStyle), così non può promettere un effetto diverso.
 const typeGroups = [
   { cat: 'Colore', items: [
     { value: 'none',     label: 'Nessuno',      prev: 'p-none' },
@@ -614,10 +660,10 @@ const typeGroups = [
     { value: 'gradient', label: 'Gradiente',    prev: 'p-grad' },
   ] },
   { cat: 'Generativi', items: [
-    { value: 'mesh',    label: 'Aurora',        prev: 'p-aurora' },
-    { value: 'glow',    label: 'Bagliori',      prev: 'p-glow' },
-    { value: 'pattern', label: 'Pattern',       prev: 'p-pattern' },
-    { value: 'crt',     label: 'CRT scanline',  prev: 'p-crt' },
+    { value: 'mesh',    label: 'Aurora' },
+    { value: 'glow',    label: 'Bagliori' },
+    { value: 'pattern', label: 'Pattern' },
+    { value: 'crt',     label: 'CRT scanline' },
   ] },
   { cat: 'Media', items: [
     { value: 'image',   label: 'Immagine',      prev: 'p-img' },
@@ -627,6 +673,41 @@ const typeGroups = [
 ];
 const allTypes = typeGroups.flatMap((g) => g.items);
 const currentTypeLabel = computed(() => (allTypes.find((it) => it.value === bg.value.type) || {}).label || '');
+
+// ── Taratura degli sfondi NUOVI ──────────────────────────────────────────────
+// Scegliere un tipo scrive nel template tutti i default (vedi updateField), quindi
+// qui si può dare agli sfondi nuovi una taratura migliore SENZA muovere quelli
+// esistenti: il seme si applica solo quando il tipo cambia davvero e solo alle
+// chiavi non ancora salvate. Bagliori: a 70 l'alone riempie il riquadro come una
+// macchia piena, intorno a 46 si vede l'alone vero e proprio.
+const TYPE_SEEDS = {
+  glow: { glow_size: 46 },
+};
+
+// Mattonelle dei tipi generativi: stesso CSS della resa, sui valori che la scelta
+// del tipo scrive davvero (default + seme). Prima erano un disegno CSS a mano che
+// prometteva un altro effetto — e l'Aurora ci cablava dentro l'indaco #6366F1.
+const typeTileStyle = {
+  mesh:    getMeshCSS({}),
+  // Il default vero, non il seme: il seme si applica solo a uno sfondo che non
+  // ha mai avuto quella chiave, e basta un tocco qualsiasi nel pannello perche'
+  // la chiave ci sia. Una mattonella che promette 46 e poi da' 70 sarebbe di
+  // nuovo il difetto che stiamo togliendo.
+  glow:    getGlowCSS({}),
+  pattern: getPatternCSS('dots', '#000000', '#ffffff', 20, 0.5),
+  crt:     getCrtCSS({}),
+};
+
+/** Sceglie il tipo di sfondo. Ri-cliccare il tipo già attivo non riscrive nulla. */
+function selectType(value) {
+  if (value === bg.value.type) return;
+  const saved = props.modelValue || {};
+  const patch = {};
+  for (const [k, v] of Object.entries(TYPE_SEEDS[value] || {})) {
+    if (saved[k] === undefined || saved[k] === null || saved[k] === '') patch[k] = v;
+  }
+  emit('update:modelValue', { ...bg.value, ...patch, type: value });
+}
 
 // Pattern groups for FieldSelect (formato gruppi { group, options })
 const patternGroups = [
@@ -659,7 +740,7 @@ function writeMeshColors(arr) {
     mesh_colors: arr,
     mesh_c1: arr[0] || 'var(--olo-color-primary)',
     mesh_c2: arr[1] || 'var(--olo-color-secondary)',
-    mesh_c3: arr[2] || 'var(--olo-color-accent)',
+    mesh_c3: arr[2] || 'var(--olo-color-accent, var(--olo-color-primary))',
   });
 }
 function setMeshColor(idx, val) {
@@ -1046,25 +1127,15 @@ function updateParallaxData(newData) {
 }
 .bt .ck svg { width: 11px; height: 11px; }
 
-/* mini-anteprime dei tipi */
+/* mini-anteprime dei tipi — i GENERATIVI (aurora/bagliori/pattern/CRT) non stanno
+   più qui: il loro CSS lo fanno gli util della resa (typeTileStyle), così la
+   mattonella non può promettere un effetto che il generatore non fa. */
 .p-none { background: repeating-linear-gradient(45deg, #eef0f3 0 5px, #f9fafb 5px 10px); }
 .p-none::after { content: ""; position: absolute; width: 140%; height: 1.5px; background: #cdd2d9; transform: rotate(-30deg); }
 .p-solid { background: var(--olo-color-primary, #e1474f); }
-.p-grad { background: linear-gradient(118deg, var(--olo-color-primary, #e1474f) 0%, var(--olo-color-accent, #f4a23b) 100%); }
-.p-aurora {
-  background:
-    radial-gradient(circle at 18% 28%, color-mix(in srgb, var(--olo-color-primary, #e1474f) 85%, transparent), transparent 48%),
-    radial-gradient(circle at 82% 22%, rgba(99, 102, 241, 0.8), transparent 46%),
-    radial-gradient(circle at 62% 88%, color-mix(in srgb, var(--olo-color-accent, #f4a23b) 85%, transparent), transparent 50%),
-    var(--navy);
-}
-.p-glow {
-  background:
-    radial-gradient(120% 150% at 50% 132%, var(--olo-color-primary, #e1474f) 0%, color-mix(in srgb, var(--olo-color-primary, #e1474f) 28%, transparent) 30%, transparent 60%),
-    #0b0d12;
-}
-.p-pattern { background: radial-gradient(var(--olo-color-primary, #e1474f) 1.5px, transparent 1.7px) 0 0 / 9px 9px, #fff; }
-.p-crt { background: repeating-linear-gradient(0deg, #06140f 0 2px, rgba(56, 209, 127, 0.32) 2px 3px), #06140f; }
+/* Due ruoli DIVERSI: «accent» ora è definito (alias del primario), quindi la
+   vecchia coppia primario→accento disegnava una tinta piatta, non un gradiente. */
+.p-grad { background: linear-gradient(118deg, var(--olo-color-primary, #e1474f) 0%, var(--olo-color-secondary, #16263d) 100%); }
 .p-img { background: repeating-linear-gradient(45deg, #e7ebf0 0 8px, #dde3ea 8px 16px); }
 .p-video { background: var(--navy); }
 .p-gallery { background: #eef1f5; }
@@ -1082,8 +1153,8 @@ function updateParallaxData(newData) {
 }
 .p-gallery .stack { position: relative; width: 30px; height: 24px; }
 .p-gallery .stack i { position: absolute; width: 20px; height: 16px; border-radius: 3px; border: 1px solid #fff; }
-.p-gallery .stack i:nth-child(1) { left: 0; top: 5px; background: var(--olo-color-accent, #f4a23b); transform: rotate(-8deg); }
-.p-gallery .stack i:nth-child(2) { left: 5px; top: 2px; background: #6366f1; transform: rotate(4deg); }
+.p-gallery .stack i:nth-child(1) { left: 0; top: 5px; background: var(--olo-color-muted, #cbd5e1); transform: rotate(-8deg); }
+.p-gallery .stack i:nth-child(2) { left: 5px; top: 2px; background: var(--olo-color-secondary, #64748b); transform: rotate(4deg); }
 .p-gallery .stack i:nth-child(3) { left: 9px; top: 6px; background: var(--olo-color-primary, #e1474f); transform: rotate(-2deg); }
 
 /* ───────── corpo controlli per-tipo ───────── */
@@ -1267,6 +1338,8 @@ function updateParallaxData(newData) {
   position: relative;
   overflow: hidden;
 }
+/* L'etichetta ora galleggia anche su basi CHIARE (col token vero del template il
+   fondo dell'Aurora può essere bianco): l'ombra la tiene leggibile su entrambe. */
 .pv-tag {
   position: absolute;
   left: 9px;
@@ -1274,7 +1347,8 @@ function updateParallaxData(newData) {
   font: 600 9px inherit;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.62);
+  color: rgba(255, 255, 255, 0.78);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
   pointer-events: none;
 }
 

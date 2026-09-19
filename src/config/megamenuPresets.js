@@ -10,6 +10,10 @@
  * REGOLE rispettate:
  *  - Token-first: colori brand via var(--olo-color-*). Hex grezzi SOLO per
  *    superfici "scure decise" (bar dark) dove non esiste un ruolo cliente.
+ *    'accent' e 'dark' non sono ruoli del pannello Colori: esistono solo se il
+ *    cliente crea lo swatch omonimo. Senza riserva un var() che non risolve non
+ *    lascia il colore precedente, invalida la dichiarazione — la barra restava
+ *    trasparente invece che scura: di qui la riserva su un ruolo sempre emesso.
  *  - Chiavi invariate: usa esattamente i nomi salvati (nav_bg, text_color,
  *    active_color, hover_effect, font_weight, text_transform, letter_spacing,
  *    btn_radius {tl,tr,br,bl}, panel_open_animation, topbar_*, ecc.).
@@ -39,16 +43,16 @@ export const MEGAMENU_PRESETS = {
   'magazine-bold': {
     nav_bg: '#ffffff', active_color: 'var(--olo-color-primary)',
     layout: 'left', font_weight: '700', text_transform: 'uppercase', letter_spacing: '0.3',
-    hover_effect: 'double-line', btn_radius: R(0), btn_bg: 'var(--olo-color-dark)',
+    hover_effect: 'double-line', btn_radius: R(0), btn_bg: 'var(--olo-color-dark, var(--olo-color-secondary))',
     topbar_enabled: true, topbar_left_content: 'ticker', topbar_right_social: true,
     topbar_bg: 'var(--olo-color-primary)', topbar_text_color: '#ffffff', topbar_link_color: '#ffffff',
     panel_open_animation: 'slide-down', panel_border_top: '3',
   },
 
   'cinema-bar': {
-    nav_bg: '#12121a', text_color: '#e8e8ea', active_color: 'var(--olo-color-accent)',
+    nav_bg: '#12121a', text_color: '#e8e8ea', active_color: 'var(--olo-color-accent, var(--olo-color-primary))',
     layout: 'center', letter_spacing: '0.5',
-    hover_effect: 'highlight', btn_bg: 'var(--olo-color-accent)',
+    hover_effect: 'highlight', btn_bg: 'var(--olo-color-accent, var(--olo-color-primary))',
     panel_bg: '#15151f', panel_open_animation: 'scale-center', panel_shadow: 'lg',
   },
 
@@ -63,16 +67,16 @@ export const MEGAMENU_PRESETS = {
   'glass-bar': {
     // bar translucida → header_mode overlay + sticky che diventa solido on-scroll
     nav_bg: 'rgba(255,255,255,0.13)', text_color: '#ffffff', active_color: '#ffffff',
-    header_mode: 'overlay', sticky: true, sticky_bg: 'var(--olo-color-dark)',
+    header_mode: 'overlay', sticky: true, sticky_bg: 'var(--olo-color-dark, var(--olo-color-secondary))',
     layout: 'center', hover_effect: 'underline',
-    btn_bg: '#ffffff', btn_color: 'var(--olo-color-dark)', btn_radius: R(8),
+    btn_bg: '#ffffff', btn_color: 'var(--olo-color-dark, var(--olo-color-secondary))', btn_radius: R(8),
     panel_open_animation: 'fade', panel_shadow: 'lg',
   },
 
   'neon-strip': {
-    nav_bg: '#0b1220', text_color: '#c9d4e0', active_color: 'var(--olo-color-accent)',
+    nav_bg: '#0b1220', text_color: '#c9d4e0', active_color: 'var(--olo-color-accent, var(--olo-color-primary))',
     font_size: '14', hover_effect: 'glitch',
-    btn_bg: 'var(--olo-color-accent)', btn_radius: R(7),
+    btn_bg: 'var(--olo-color-accent, var(--olo-color-primary))', btn_radius: R(7),
     panel_bg: '#0e1726', panel_open_animation: 'blur', panel_border_top: '2',
   },
 
@@ -94,7 +98,7 @@ export const MEGAMENU_PRESETS = {
   },
 
   'sticker-tape': {
-    nav_bg: 'var(--olo-color-accent)', text_color: '#1a1a1a', active_color: '#111111',
+    nav_bg: 'var(--olo-color-accent, var(--olo-color-primary))', text_color: '#1a1a1a', active_color: '#111111',
     font_weight: '700', hover_effect: 'background',
     btn_bg: '#111111', btn_color: '#ffffff', btn_radius: R(999),
     panel_radius: R(14), panel_open_animation: 'scale-center',

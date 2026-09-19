@@ -603,10 +603,11 @@ abstract class Olobuild_Tile_Base {
      * di BackgroundControls.vue) per i tile che vogliono usare style.bg come
      * fallback al loro settings.bg_* legacy (es. iconbox, hero).
      *
-     * Gestisce solid/gradient/pattern (resi inline). I tipi image/video/gallery
-     * sono ignorati perché vengono già renderizzati a livello wrapper .olo-tile
-     * dal frontend renderer (uk-position-cover etc.) — replicare qui creerebbe
-     * duplicazioni visibili.
+     * Gestisce tutti gli sfondi che vivono nelle sole dichiarazioni CSS:
+     * solid/gradient/pattern e i decorativi mesh (Aurora), glow (Bagliori), crt.
+     * I tipi image/video/gallery sono ignorati perché vengono già renderizzati a
+     * livello wrapper .olo-tile dal frontend renderer (uk-position-cover etc.) —
+     * replicare qui creerebbe duplicazioni visibili.
      *
      * @param array $bg Oggetto style.bg con almeno 'type'.
      * @return string CSS inline (es. "background-color: #fff;") o '' se nessun bg.
@@ -618,9 +619,9 @@ abstract class Olobuild_Tile_Base {
         if ( ! class_exists( 'Olobuild_Css_Builder' ) ) {
             return '';
         }
-        // Solo solid/gradient/pattern qui: image/video/gallery vanno al wrapper.
+        // Solo gli sfondi senza asset: image/video/gallery vanno al wrapper.
         $type = $bg['type'];
-        if ( $type !== 'solid' && $type !== 'gradient' && $type !== 'pattern' ) {
+        if ( ! in_array( $type, [ 'solid', 'gradient', 'pattern', 'mesh', 'glow', 'crt' ], true ) ) {
             return '';
         }
         static $css_builder = null;

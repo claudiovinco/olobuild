@@ -170,10 +170,29 @@ trait Olobuild_Renderer_Structure_Trait {
         $this->collect_hover_css( $style, $css_id, false, $hover_css_rules );
         $this->collect_responsive_css( $style, $css_id, $advanced );
 
-        // Infinite animation
+        // Animazione continua — REGOLA con selettore, mai una dichiarazione inline:
+        // lo sfondo Aurora/Bagliori animato scrive a sua volta `animation:` inline
+        // (vedi $bg_css sopra), e due `animation` nello stesso attributo style non
+        // convivono: l'ultima cancella l'altra, in silenzio. È lo stesso motivo per
+        // cui l'element la emette come regola (class-frontend-renderer.php).
+        // Qui la chiave arriva da due posti: `settings` nelle sezioni storiche,
+        // `advanced` in quelle salvate dal pannello Avanzate.
         $inf_anim_css = $this->css->build_infinite_animation_css( $s, $css_id );
         if ( $inf_anim_css ) {
             $hover_css_rules[] = $inf_anim_css;
+        }
+        // La variante da `advanced` conserva il suo costruttore: là `infinite_speed`
+        // è in secondi (com'è etichettato nell'inspector), non sulla scala 1-10 —
+        // riusare l'altro cambierebbe la velocità delle sezioni già pubblicate.
+        $adv_anim_decl = $this->anim->build_inline_animation_css( $advanced );
+        if ( $adv_anim_decl ) {
+            // Stesso identico selettore della gemella build_infinite_animation_css()
+            // (class-css-builder.php): l'attributo id viene scritto GREZZO poche righe
+            // sopra, quindi ripulirlo solo qui faceva mancare il bersaglio a ogni
+            // sezione con un id che contiene uno spazio, un punto o un accento — e
+            // l'animazione spariva in silenzio.
+            $hover_css_rules[] = '#' . esc_attr( $css_id ) . '{' . $adv_anim_decl . '}'
+                . '@media(prefers-reduced-motion:reduce){#' . esc_attr( $css_id ) . '{animation:none}}';
         }
 
         // Custom CSS per sezione (campo settings.custom_css)
@@ -194,9 +213,8 @@ trait Olobuild_Renderer_Structure_Trait {
         $el_parallax_attr = $this->anim->build_element_parallax_attr( $advanced );
         $mouse_attrs = $this->anim->build_mouse_attrs( $advanced );
 
-        // Infinite animation & mask (inline style for elements)
-        $inf_anim_css = $this->anim->build_inline_animation_css( $advanced );
-        if ( $inf_anim_css ) $inline_styles[] = $inf_anim_css;
+        // Mask (inline style). L'animazione continua NON sta qui: è una regola con
+        // selettore, emessa sopra insieme alla gemella di `settings`.
         $mask_css = $this->anim->build_inline_mask_css( $advanced );
         if ( $mask_css ) $inline_styles[] = $mask_css;
 

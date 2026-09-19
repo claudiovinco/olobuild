@@ -183,15 +183,21 @@ class Olobuild_CSS_Builder {
     public function build_crt_css( $bg ) {
         $scan_pct = max( 0, min( 100, intval( $bg['crt_scanline_opacity'] ?? 50 ) ) );
         $scan_a   = round( ( $scan_pct / 100 ) * 0.5, 3 );
-        $gap      = max( 2, min( 12, intval( $bg['crt_scanline_gap'] ?? 3 ) ) );
+        // `?:` anche sullo 0, come il `|| 3` del gemello crtCSS.js: passo vuoto = 3px,
+        // non il minimo di 2 (con intval() secco le due rese davano passi diversi).
+        $gap      = max( 2, min( 12, intval( $bg['crt_scanline_gap'] ?? 3 ) ?: 3 ) );
         $vig_pct  = max( 0, min( 100, intval( $bg['crt_vignette'] ?? 55 ) ) );
-        $vig_a    = round( $vig_pct / 100, 3 );
+        // Tre decimali sempre: è il toFixed(3) del gemello. Stesso colore, stessa stringa.
+        $vig_a    = number_format( $vig_pct / 100, 3, '.', '' );
         $vig_stop = 70 - intval( round( ( $vig_pct / 100 ) * 30 ) );
         $curv     = max( 0, min( 100, intval( $bg['crt_curvature'] ?? 0 ) ) );
         $model    = $bg['crt_model'] ?? 'classic';
-        $base     = esc_attr( $bg['crt_base'] ?? 'var(--olo-color-background, #0b0a0d)' );
+        $base     = esc_attr( ( $bg['crt_base'] ?? '' ) ?: 'var(--olo-color-background, #0b0a0d)' );
         // Colore linee: default bianco → resa storica. Token/hex/rgba via glow_color_to_css.
-        $line     = $this->glow_color_to_css( $bg['crt_line_color'] ?? '#ffffff', $scan_a );
+        // Il ripiego si fa QUI, non dentro l'helper: quello parla la lingua dei bagliori
+        // e su valore vuoto risponderebbe col primario, cioè scanline rosse.
+        $line_col = ( $bg['crt_line_color'] ?? '' ) ?: '#ffffff';
+        $line     = $this->glow_color_to_css( $line_col, $scan_a );
 
         $imgs = []; $reps = []; $sizes = []; $poss = [];
 
@@ -218,12 +224,12 @@ class Olobuild_CSS_Builder {
         $anim = '';
         if ( ! empty( $bg['crt_flicker'] ) ) {
             // Barra luminosa (layer 1) che spazza top→bottom via olo-crt-flicker (content-safe).
-            $bar_col = $this->glow_color_to_css( $bg['crt_line_color'] ?? '#ffffff', 0.22 );
+            $bar_col = $this->glow_color_to_css( $line_col, 0.22 );
             array_unshift( $imgs, "linear-gradient(to bottom, transparent, {$bar_col}, transparent)" );
             array_unshift( $reps, 'no-repeat' );
             array_unshift( $sizes, '100% 18%' );
             array_unshift( $poss, '0 -25%' );
-            $sp   = max( 2, min( 12, intval( $bg['crt_flicker_speed'] ?? 6 ) ) );
+            $sp   = max( 2, min( 12, intval( $bg['crt_flicker_speed'] ?? 6 ) ?: 6 ) );
             $anim = '; animation: olo-crt-flicker ' . $sp . 's linear infinite';
         }
 
@@ -312,9 +318,15 @@ class Olobuild_CSS_Builder {
             }
         }
         if ( empty( $colors ) ) {
-            $colors = [ 'var(--olo-color-primary)', 'var(--olo-color-secondary)', 'var(--olo-color-accent)' ];
+            // Riserva dentro il var(): --olo-color-accent è un ruolo facoltativo, lo
+            // genera solo chi se lo sceglie dai colori globali. Senza riserva il terzo
+            // blob non risolve e — regola CSS, non capriccio — una sola dichiarazione
+            // invalida azzera TUTTO background-image: spariscono anche gli altri due.
+            $colors = [ 'var(--olo-color-primary)', 'var(--olo-color-secondary)', 'var(--olo-color-accent, var(--olo-color-primary))' ];
         }
-        $base = esc_attr( $bg['mesh_base'] ?? 'var(--olo-color-background, #0b0a0d)' );
+        // `??` per non far gridare PHP 8, `?:` per ripiegare anche sulla stringa vuota
+        // come il `||` del gemello JS: un fondo vuoto scartava l'intera dichiarazione.
+        $base = esc_attr( ( $bg['mesh_base'] ?? '' ) ?: 'var(--olo-color-background, #0b0a0d)' );
 
         // Posizioni [x,y] dei blob per disposizione; le prime 3 di "spread" = resa storica
         // (20/25, 80/30, 50/90) → nessuna regressione per gli aurora legacy.
@@ -330,9 +342,13 @@ class Olobuild_CSS_Builder {
         $pcount    = count( $positions );
         $ccount    = count( $colors );
 
-        $count     = max( 1, min( 6, isset( $bg['mesh_count'] ) ? intval( $bg['mesh_count'] ) : $ccount ) );
-        $softness  = max( 0, min( 100, intval( $bg['mesh_softness'] ?? 70 ) ) );
-        $intensity = max( 0, min( 100, intval( $bg['mesh_intensity'] ?? 100 ) ) ) / 100;
+        // «Quante luci»: chiave assente o vuota = una per colore (chi sceglie tre colori
+        // si aspetta tre blob). Un numero invece vale com'è ed entra nel clamp: 0 non è
+        // «non impostato», è sotto il minimo e diventa 1 — che è già quel che disegnava
+        // il frontend, quindi nessuna pagina pubblicata si muove. Stesso taglio del JS.
+        $count     = max( 1, min( 6, self::num_opt( $bg['mesh_count'] ?? null, $ccount ) ) );
+        $softness  = max( 0, min( 100, self::num_opt( $bg['mesh_softness'] ?? null, 70 ) ) );
+        $intensity = max( 0, min( 100, self::num_opt( $bg['mesh_intensity'] ?? null, 100 ) ) ) / 100;
         $stop      = (int) round( 40 + $softness * 0.5 );  // 40..90
         $midpos    = (int) round( $stop * 0.45 );
 
@@ -354,7 +370,7 @@ class Olobuild_CSS_Builder {
 
         if ( ! empty( $bg['mesh_animate'] ) ) {
             // background-size > 100% così c'è spazio per lo scorrimento del drift.
-            $speed = max( 4, min( 60, intval( $bg['mesh_speed'] ?? 18 ) ) );
+            $speed = max( 4, min( 60, self::num_opt( $bg['mesh_speed'] ?? null, 18 ) ) );
             $css  .= '; background-size: 160% 160%'
                    . '; animation: olo-mesh-drift ' . $speed . 's ease-in-out infinite alternate';
         } else {
@@ -362,6 +378,34 @@ class Olobuild_CSS_Builder {
         }
 
         return $css;
+    }
+
+    /**
+     * Lettura di una manopola numerica. Regola UNICA per i due generativi (Aurora e
+     * Bagliori), copiata alla lettera da numOpt() in glowCSS.js:
+     *   chiave assente · null · stringa vuota · valore non numerico = «non impostata»
+     *   → vale il default;  un numero vale sempre, **anche 0**, e a riportarlo
+     *   nell'intervallo pensa il clamp del chiamante, non questa funzione.
+     * Serve perché `?? $def` non intercetta la stringa vuota e `intval('')` vale 0:
+     * era da quell'asimmetria che canvas e frontend disegnavano numeri diversi (il
+     * canvas con la chiave vuota ripiegava sul default, il frontend sul minimo).
+     *
+     * @param mixed $value    valore letto dalla config.
+     * @param int   $fallback default da usare quando non è impostata.
+     * @return int
+     */
+    private static function num_opt( $value, $fallback ) {
+        if ( $value === '' || $value === null || is_bool( $value ) || is_array( $value ) ) {
+            return $fallback;
+        }
+        // Si prende la sola testa numerica, che è quel che fa parseInt(v, 10): "70px"
+        // → 70, "6.9" → 6, "abc" e ".5" → default. Non si usa intval(), che su "abc"
+        // risponderebbe 0 — un numero vero, non un «non impostato» — e su "1e3"
+        // leggerebbe l'esponente (1000) dove parseInt si ferma a 1.
+        if ( ! preg_match( '/^\s*[+-]?\d+/', (string) $value, $m ) ) {
+            return $fallback;
+        }
+        return (int) $m[0];
     }
 
     /** Palette aloni glow: glow_colors[] (nuovo) o legacy glow_color/glow_color2, fallback primario.
@@ -404,11 +448,13 @@ class Olobuild_CSS_Builder {
             'aurora'    => [ [ 30, 108, 1.3 ], [ 74, 116, 1.0 ] ],
         ];
 
-        $base      = $bg['glow_base'] ?: '#0b0d12';
+        // `??` per non far gridare PHP 8 quando la chiave manca, `?:` per tenere il
+        // ripiego anche su stringa vuota — è il `||` del gemello JS.
+        $base      = ( $bg['glow_base'] ?? '' ) ?: '#0b0d12';
         $colors    = $this->glow_colors( $bg );
         $preset    = $bg['glow_preset'] ?? 'spread';
-        $intensity = ( isset( $bg['glow_intensity'] ) ? intval( $bg['glow_intensity'] ) : 55 ) / 100;
-        $size_pct  = isset( $bg['glow_size'] ) ? intval( $bg['glow_size'] ) : 70;
+        $intensity = self::num_opt( $bg['glow_intensity'] ?? null, 55 ) / 100;
+        $size_pct  = self::num_opt( $bg['glow_size'] ?? null, 70 );
         $hotspots  = $hotspots_map[ $preset ] ?? $hotspots_map['spread'];
 
         $layers = [];
@@ -423,13 +469,25 @@ class Olobuild_CSS_Builder {
             $layers[] = "radial-gradient(circle at {$h[0]}% {$h[1]}%, {$core} 0%, {$mid} {$midpos}%, {$fade} {$stop}%)";
         }
 
-        if ( ! isset( $bg['glow_grain'] ) || $bg['glow_grain'] !== false ) {
-            $layers[] = $this->glow_grain_layer( 0.06 );
+        $halos     = count( $layers );
+        $has_grain = ( ! isset( $bg['glow_grain'] ) || $bg['glow_grain'] !== false );
+        if ( $has_grain ) {
+            // 0.03 e non 0.06: vedi la nota nel gemello src/utils/glowCSS.js.
+            $layers[] = $this->glow_grain_layer( 0.03 );
         }
+
+        // Un valore PER LAYER: gli aloni sono ancorati al box (cover, no-repeat), la
+        // grana è una texture da affiancare alla sua misura naturale (l'SVG è 140×140).
+        // Con un solo valore per tutti, la grana veniva stirata a tutto il riquadro:
+        // niente pulviscolo, solo una macchia sfocata.
+        $grain_size = $has_grain ? ', 140px 140px' : '';
+        $size_cover = implode( ', ', array_fill( 0, $halos, 'cover' ) ) . $grain_size;
+        $size_anim  = implode( ', ', array_fill( 0, $halos, '140% 140%' ) ) . $grain_size;
+        $repeats    = implode( ', ', array_fill( 0, $halos, 'no-repeat' ) ) . ( $has_grain ? ', repeat' : '' );
 
         $css = 'background-color:' . esc_attr( $base )
              . ';background-image:' . implode( ', ', $layers )
-             . ';background-repeat:no-repeat';
+             . ';background-repeat:' . $repeats;
 
         // Animazione bagliori (additive). Anima solo background-size/position → aloni
         // dinamici senza muovere il contenuto. Speculare a glowAnimStyle() in glowCSS.js;
@@ -444,35 +502,60 @@ class Olobuild_CSS_Builder {
         // Speculare a breatheVars() in glowCSS.js. Default 46 = valori storici (nessuna regressione).
         $breathe_vars = '';
         if ( in_array( $anim, [ 'pulse', 'vivo' ], true ) && isset( $bg['glow_anim_intensity'] ) && $bg['glow_anim_intensity'] !== '' ) {
-            $tt   = max( 0, min( 100, intval( $bg['glow_anim_intensity'] ) ) ) / 100;
+            $tt   = max( 0, min( 100, self::num_opt( $bg['glow_anim_intensity'], 0 ) ) ) / 100;
             $bmin = (int) round( 135 - $tt * 40 );
             $bmax = (int) round( 160 + $tt * 70 );
             $breathe_vars = ';--olo-glow-bs-min:' . $bmin . '%;--olo-glow-bs-max:' . $bmax . '%';
         }
         if ( isset( $combo_map[ $anim ] ) ) {
             // Preset combinato: due animazioni atomiche su durate diverse.
-            $sp   = max( 1, min( 10, isset( $bg['glow_anim_speed'] ) ? intval( $bg['glow_anim_speed'] ) : 6 ) );
+            $sp   = max( 1, min( 10, self::num_opt( $bg['glow_anim_speed'] ?? null, 6 ) ) );
             $dur  = max( 2, (int) round( ( 11 - $sp ) * 1.5 ) );
             $c    = $combo_map[ $anim ];
             $dur2 = max( 2, (int) round( $dur * $c['mult'] ) );
-            $css .= ';background-size:140% 140%;background-position:center' . $breathe_vars
+            $css .= ';background-size:' . $size_anim . ';background-position:center' . $breathe_vars
                   . ';animation:' . $c['size'] . ' ' . $dur . 's ' . $c['ease'] . ' infinite, '
                   . $c['pos'] . ' ' . $dur2 . 's ' . $c['ease'] . ' infinite';
         } elseif ( in_array( $anim, $valid_anim, true ) ) {
-            $sp  = max( 1, min( 10, isset( $bg['glow_anim_speed'] ) ? intval( $bg['glow_anim_speed'] ) : 6 ) );
+            $sp  = max( 1, min( 10, self::num_opt( $bg['glow_anim_speed'] ?? null, 6 ) ) );
             $dur = max( 2, (int) round( ( 11 - $sp ) * 1.5 ) );
             $ease_map = [ 'pulse' => 'ease-in-out', 'drift' => 'ease-in-out', 'wander' => 'ease-in-out', 'flicker' => 'steps(1,end)', 'scroll' => 'linear' ];
             $ease = $ease_map[ $anim ];
-            $css .= ';background-size:140% 140%;background-position:center' . $breathe_vars
+            $css .= ';background-size:' . $size_anim . ';background-position:center' . $breathe_vars
                   . ';animation:olo-glow-' . $anim . ' ' . $dur . 's ' . $ease . ' infinite';
             if ( $anim === 'scroll' ) {
                 $css .= ';animation-timeline:view()';
             }
         } else {
-            $css .= ';background-size:cover';
+            $css .= ';background-size:' . $size_cover;
         }
 
         return $css;
+    }
+
+    /**
+     * Riserva al volo per un `var(--x)` NUDO. Gemello di conRiserva() in
+     * src/utils/glowCSS.js e src/utils/meshCSS.js.
+     *
+     * Un var() senza riserva che non risolve non ripiega sul valore iniziale: rende
+     * INVALIDA l'intera dichiarazione `background-image`, e spariscono TUTTI i layer,
+     * non solo quello. E' quello che rendeva l'Aurora un rettangolo vuoto — il terzo
+     * colore di fabbrica e' `var(--olo-color-accent)`, ruolo che il renderer non
+     * stampa mai.
+     *
+     * Un token DEFINITO vince comunque sulla riserva: nessun colore gia' funzionante
+     * cambia. E non si tocca ne' il valore salvato nel template ne' i token globali,
+     * quindi i punti del plugin che scrivono di loro `var(--olo-color-accent, #f4a23b)`
+     * continuano a rendere la LORO riserva.
+     *
+     * @param string $v Valore colore.
+     * @return string Stesso valore, con la riserva se era un token nudo.
+     */
+    private function con_riserva( $v ) {
+        if ( preg_match( '/^var\(\s*(--[A-Za-z0-9_-]+)\s*\)$/', (string) $v, $m ) ) {
+            return 'var(' . $m[1] . ', var(--olo-color-primary))';
+        }
+        return (string) $v;
     }
 
     /**
@@ -481,11 +564,20 @@ class Olobuild_CSS_Builder {
      * Speculare a glowColorToCss() in glowCSS.js.
      */
     private function glow_color_to_css( $input, $alpha ) {
-        $s = trim( (string) ( $input ?: '#e1474f' ) );
+        // Nessun chiamante passa vuoto (glow_colors() filtra): la riserva è comunque
+        // il ruolo del cliente, mai un hex cablato.
+        $s = trim( (string) ( $input ?: 'var(--olo-color-primary)' ) );
         $alpha = max( 0, min( 1, (float) $alpha ) );
+        // Difesa: questa stringa finisce dentro un blocco <style>, dove esc_attr()
+        // non aiuta (le entità non vengono decodificate) e un '<' o un ';' potrebbe
+        // chiudere la regola o il blocco. Un colore non ha mai bisogno di quei
+        // caratteri: se ci sono, il valore non è un colore e si scarta.
+        if ( preg_match( '/[<>;{}]/', $s ) ) {
+            $s = 'var(--olo-color-primary)';
+        }
         if ( strpos( $s, 'var(' ) === 0 || strpos( $s, 'color-mix(' ) === 0 ) {
             $pct = (int) round( $alpha * 100 );
-            return "color-mix(in srgb, {$s} {$pct}%, transparent)";
+            return 'color-mix(in srgb, ' . $this->con_riserva( $s ) . " {$pct}%, transparent)";
         }
         if ( preg_match( '/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+))?\s*\)/', $s, $m ) ) {
             $r = (int) $m[1]; $g = (int) $m[2]; $b = (int) $m[3];
@@ -502,16 +594,21 @@ class Olobuild_CSS_Builder {
     }
 
     /** Grana film come layer SVG data-URI. Speculare a grainLayer() in glowCSS.js.
-     *  Usa lo stesso encoding di JS encodeURIComponent (le virgolette ' restano
-     *  letterali, '%23' diventa '%2523') così le 3 rese producono la stessa stringa. */
-    private function glow_grain_layer( $opacity = 0.06 ) {
+     *  Il riferimento al filtro si scrive `url(#n)`: è encode_uri_component() a
+     *  portarlo a `%23` dentro il data-URI, che è ciò che il browser deve leggere.
+     *  Scriverlo già encodato lo faceva encodare una seconda volta (`%2523`): il
+     *  filtro non risolveva, il <rect> restava NERO PIENO e — essendo l'ultimo layer,
+     *  quindi il più basso — copriva il colore base. Da qui i Bagliori tutti uguali
+     *  qualunque base si scegliesse. Le tre rese coincidevano, ma sulla stessa
+     *  stringa sbagliata: la parità va verificata sul risultato, non sul sorgente. */
+    private function glow_grain_layer( $opacity = 0.03 ) {
         // number_format senza trailing-zero forzati: JS produce es. "0.96" e "0.36".
         $o1 = rtrim( rtrim( number_format( $opacity * 16, 6, '.', '' ), '0' ), '.' );
         $o2 = rtrim( rtrim( number_format( $opacity * 6, 6, '.', '' ), '0' ), '.' );
         $svg = "<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'>"
              . "<filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' seed='4'/>"
              . "<feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 {$o1} -{$o2}'/></filter>"
-             . "<rect width='100%' height='100%' filter='url(%23n)'/></svg>";
+             . "<rect width='100%' height='100%' filter='url(#n)'/></svg>";
         return 'url("data:image/svg+xml,' . self::encode_uri_component( $svg ) . '")';
     }
 
