@@ -24,7 +24,6 @@ import { t } from '@/i18n';
  * (es. section.width = small/large/fullbleed, column.width_default = 1-1/1-2/...). Lasciarli
  * tutti visibili creava 3 controlli paralleli per la larghezza, di cui solo uno funzionava.
  */
-const STRUCTURAL_TYPES = new Set(['section', 'row', 'column', 'inner-columns']);
 
 export function styleFieldsBase(tileType) {
   return [

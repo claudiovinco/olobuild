@@ -69,12 +69,6 @@
               :tileStyle="tileStyle"
               @update="$emit('update', $event)"
             />
-            <StyleSpacingBp
-              v-else-if="field.type === 'spacing-bp'"
-              :field="field"
-              :tileStyle="tileStyle"
-              @update="$emit('update', $event)"
-            />
             <StyleShadowBlock
               v-else-if="field.type === 'shadow-block'"
               :field="field"
@@ -134,12 +128,6 @@
               :tileStyle="tileStyle"
               @update="$emit('update', $event)"
             />
-            <StyleSpacingBp
-              v-else-if="field.type === 'spacing-bp'"
-              :field="field"
-              :tileStyle="tileStyle"
-              @update="$emit('update', $event)"
-            />
             <StyleShadowBlock
               v-else-if="field.type === 'shadow-block'"
               :field="field"
@@ -182,7 +170,6 @@ import { computed } from 'vue';
 import { styleFieldsBase } from '@/config/elements/_styleFieldsBase.js';
 import CollapseSection from './CollapseSection.vue';
 import InspectorField from './InspectorField.vue';
-import StyleSpacingBp from './style-renderers/StyleSpacingBp.vue';
 import StyleBoxStack from './style-renderers/StyleBoxStack.vue';
 import StyleLayoutStack from './style-renderers/StyleLayoutStack.vue';
 import StyleEffectsStack from './style-renderers/StyleEffectsStack.vue';

@@ -578,7 +578,6 @@ import FieldToggle from './fields/FieldToggle.vue';
 import FieldColor from './fields/FieldColor.vue';
 import FieldRange from './fields/FieldRange.vue';
 import NumberScrubber from './fields/NumberScrubber.vue';
-import FieldSpacing from './fields/FieldSpacing.vue';
 import FieldBox from './fields/FieldBox.vue';
 import FieldBorder from './fields/FieldBorder.vue';
 import FieldObjectPosition from './fields/FieldObjectPosition.vue';

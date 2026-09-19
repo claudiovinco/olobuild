@@ -7,7 +7,7 @@
  * PERCHÉ ESISTE
  * -------------
  * L'obiettivo di uniformità è: «il padding si gestisce in UN SOLO modo in tutto
- * OloBuild» — cioè il controllo a 4 lati (FieldSpacing), ovunque. Ma le tile
+ * OloBuild» — cioè il controllo a 4 lati (FieldBox in modalità lati), ovunque. Ma le tile
  * storiche salvano due scalari (`tab_padding_y`, `tab_padding_x`) letti dai
  * renderer Vue/PHP. Migrare a mano dati + renderer di 250 tile in un colpo solo
  * sarebbe una rottura enorme.

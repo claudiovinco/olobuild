@@ -88,7 +88,7 @@ class Olobuild_Mobilebar_Tile extends Olobuild_Tile_Base {
         $this->render_css( $uid, $bp, $bar_h, $bar_bg, $bar_pad, $bar_shadow, $ham_color, $ham_size, $p_bg, $p_color, $p_active, $p_fs, $p_pad, $p_sep, $p_chev, $search_ic, $p_pad_css );
 
         // ─── HTML ───
-        $this->render_html( $uid, $logo_img, $logo_w, $logo_link, $ham_style, $search_on, $search_ph, $menu_id, $bar_h );
+        $this->render_html( $uid, $logo_img, $logo_w, $logo_link, $ham_style, $search_on, $search_ph, $menu_id, $bar_h, $root_pad_sides );
 
         // ─── JS ───
         $this->render_js( $uid, $bar_h );
@@ -458,7 +458,14 @@ class Olobuild_Mobilebar_Tile extends Olobuild_Tile_Base {
        HTML
        ═══════════════════════════════════════════ */
 
-    private function render_html( $uid, $logo_img, $logo_w, $logo_link, $ham_style, $search_on, $search_ph, $menu_id, $bar_h ) {
+    /**
+     * @param array $root_pad_sides Padding del contenitore, gia' normalizzato a 4 lati
+     *                              da spacing_sides(). Va PASSATO: e' calcolato in
+     *                              render() e questo e' un altro metodo — senza
+     *                              parametro qui dentro valeva null e array_sum()
+     *                              andava in errore fatale su ogni pagina con la barra.
+     */
+    private function render_html( $uid, $logo_img, $logo_w, $logo_link, $ham_style, $search_on, $search_ph, $menu_id, $bar_h, $root_pad_sides = [ 'top' => 0, 'right' => 0, 'bottom' => 0, 'left' => 0 ] ) {
         $current_url = trailingslashit( home_url( add_query_arg( [], false ) ) );
         $search_svg  = '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
         $chevron_svg = '<svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>';

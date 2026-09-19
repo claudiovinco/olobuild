@@ -140,6 +140,11 @@ trait Olobuild_Builder_Tiles_Trait {
         require_once OLOBUILD_PATH . 'includes/tiles/class-postgrid-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-proslider-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-popup-tile.php';
+        // Hidden pop e Reveal box: il config JS e il componente del canvas ci sono da
+        // sempre, quindi le due tile si possono aggiungere dal builder — ma il file PHP
+        // non veniva nemmeno incluso e sul sito non rendevano NIENTE.
+        require_once OLOBUILD_PATH . 'includes/tiles/class-hiddenpop-tile.php';
+        require_once OLOBUILD_PATH . 'includes/tiles/class-revealbox-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-megamenu-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-oloheader-tile.php';
         require_once OLOBUILD_PATH . 'includes/tiles/class-inner-columns-tile.php';
@@ -403,6 +408,8 @@ trait Olobuild_Builder_Tiles_Trait {
         $manager->register_tile( new Olobuild_PostGrid_Tile() );
         $manager->register_tile( new Olobuild_ProSlider_Tile() );
         $manager->register_tile( new Olobuild_Popup_Tile() );
+        $manager->register_tile( new Olobuild_Hiddenpop_Tile() );
+        $manager->register_tile( new Olobuild_Revealbox_Tile() );
         $manager->register_tile( new Olobuild_MegaMenu_Tile() );
         $manager->register_tile( new Olobuild_OloHeader_Tile() );
         $manager->register_tile( new Olobuild_InnerColumns_Tile() );

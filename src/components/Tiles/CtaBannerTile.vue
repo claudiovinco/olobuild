@@ -100,7 +100,7 @@ const subtitleStyle = computed(() => ({
   color: s.value.subtitle_color || '#9ca3af',
 }));
 
-// Padding bottoni: FieldSpacing 4 lati; le chiavi legacy cta_padding_y/x
+// Padding bottoni: controllo a 4 lati; le chiavi legacy cta_padding_y/x
 // (template salvati prima della 1.4.430) restano valide come fallback.
 const ctaPadCss = computed(() => toSpacingCss(props.settings.cta_padding, {
   legacy: { y: props.settings.cta_padding_y, x: props.settings.cta_padding_x },
