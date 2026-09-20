@@ -482,16 +482,27 @@ class Olobuild_CSS_Builder {
         // niente pulviscolo, solo una macchia sfocata.
         $grain_size = $has_grain ? ', 140px 140px' : '';
         $size_cover = implode( ', ', array_fill( 0, $halos, 'cover' ) ) . $grain_size;
-        $size_anim  = implode( ', ', array_fill( 0, $halos, '140% 140%' ) ) . $grain_size;
+        // Le @keyframes non toccano più background-size/position: animano
+        // --olo-glow-bs/bx/by, che qui finiscono nelle sole voci degli ALONI. La grana
+        // tiene i suoi 140px fermi al centro anche mentre gli aloni si muovono — prima
+        // la lista di un keyframe, lunga un valore, si riciclava su tutti i layer e la
+        // stirava sull'intero riquadro. Gemello: ANIM_ALONE_SIZE/POS in glowCSS.js.
+        $size_anim  = implode( ', ', array_fill( 0, $halos, 'var(--olo-glow-bs, 140%) var(--olo-glow-bs, 140%)' ) ) . $grain_size;
+        $pos_anim   = implode( ', ', array_fill( 0, $halos, 'var(--olo-glow-bx, 50%) var(--olo-glow-by, 50%)' ) ) . ( $has_grain ? ', 0 0' : '' );
+        // Valori di partenza: vanno scritti anche se le keyframe li rimpiazzano subito,
+        // perché dove @property non esiste una custom property non dichiarata è
+        // «guaranteed-invalid» e farebbe cadere tutta la background-size.
+        $anim_start = ';--olo-glow-bs:140%;--olo-glow-bx:50%;--olo-glow-by:50%';
         $repeats    = implode( ', ', array_fill( 0, $halos, 'no-repeat' ) ) . ( $has_grain ? ', repeat' : '' );
 
         $css = 'background-color:' . esc_attr( $base )
              . ';background-image:' . implode( ', ', $layers )
              . ';background-repeat:' . $repeats;
 
-        // Animazione bagliori (additive). Anima solo background-size/position → aloni
-        // dinamici senza muovere il contenuto. Speculare a glowAnimStyle() in glowCSS.js;
-        // @keyframes olo-glow-* in frontend.css. A riposo bg-size 140% per dare margine.
+        // Animazione bagliori (additive): gli aloni si muovono, il contenuto no.
+        // Speculare a glowAnimStyle() in glowCSS.js; @keyframes olo-glow-* in
+        // frontend.css, che animano --olo-glow-bs/bx/by. A riposo gli aloni stanno al
+        // 140%: e' il margine che lascia spazio al respiro senza scoprire i bordi.
         $anim = $bg['glow_anim'] ?? 'none';
         $combo_map = [
             'vivo'     => [ 'size' => 'olo-glow-size-breathe', 'pos' => 'olo-glow-pos-orbit', 'ease' => 'ease-in-out', 'mult' => 1.6 ],
@@ -513,7 +524,7 @@ class Olobuild_CSS_Builder {
             $dur  = max( 2, (int) round( ( 11 - $sp ) * 1.5 ) );
             $c    = $combo_map[ $anim ];
             $dur2 = max( 2, (int) round( $dur * $c['mult'] ) );
-            $css .= ';background-size:' . $size_anim . ';background-position:center' . $breathe_vars
+            $css .= ';background-size:' . $size_anim . ';background-position:' . $pos_anim . $anim_start . $breathe_vars
                   . ';animation:' . $c['size'] . ' ' . $dur . 's ' . $c['ease'] . ' infinite, '
                   . $c['pos'] . ' ' . $dur2 . 's ' . $c['ease'] . ' infinite';
         } elseif ( in_array( $anim, $valid_anim, true ) ) {
@@ -521,7 +532,7 @@ class Olobuild_CSS_Builder {
             $dur = max( 2, (int) round( ( 11 - $sp ) * 1.5 ) );
             $ease_map = [ 'pulse' => 'ease-in-out', 'drift' => 'ease-in-out', 'wander' => 'ease-in-out', 'flicker' => 'steps(1,end)', 'scroll' => 'linear' ];
             $ease = $ease_map[ $anim ];
-            $css .= ';background-size:' . $size_anim . ';background-position:center' . $breathe_vars
+            $css .= ';background-size:' . $size_anim . ';background-position:' . $pos_anim . $anim_start . $breathe_vars
                   . ';animation:olo-glow-' . $anim . ' ' . $dur . 's ' . $ease . ' infinite';
             if ( $anim === 'scroll' ) {
                 $css .= ';animation-timeline:view()';

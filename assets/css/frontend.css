@@ -33,65 +33,80 @@
 
 /* ========================================
    Glow / "Bagliori" — animazioni dello sfondo (bg.type = 'glow', glow_anim).
-   Animano SOLO background-size / background-position: gli aloni respirano,
-   derivano o sfarfallano SENZA muovere testo o immagini sopra. Costruite inline
-   da getGlowCSS()/build_glow_css() (a riposo: background-size:140% 140%).
+   Gli aloni respirano, derivano o sfarfallano SENZA muovere testo o immagini
+   sopra. Il resto dello stile lo costruisce inline getGlowCSS()/build_glow_css().
+   L'ampiezza del respiro di `pulse` e `size-breathe` la comandano
+   --olo-glow-bs-min/max (cursore «Intensità respiro»); i fallback scritti qui
+   tengono invariati i template che non li impostano.
    ======================================== */
-/* Pulse — respiro d'intensità: gli aloni si gonfiano e sgonfiano.
-   L'ampiezza è controllata da --olo-glow-bs-min/max (slider "Intensità respiro");
-   i fallback 120%/175% mantengono invariati i template che non li impostano. */
+/* I BAGLIORI SI ANIMANO SU TRE PROPRIETA' PROPRIE, non su background-size/position.
+   Motivo: la background-image dei Bagliori ha PIU' layer — uno o due aloni, secondo
+   la disposizione, e in fondo la grana film. Le liste di `background-size` e
+   `background-position` sono per layer, ma un @keyframes puo' dichiarare un valore
+   solo: CSS lo ricicla su TUTTI i layer, e la grana finiva stirata sull'intero
+   riquadro e trascinata insieme agli aloni, cioe' annullata.
+   Animando `--olo-glow-bs` / `--olo-glow-bx` / `--olo-glow-by` il moto tocca le sole
+   voci della lista che le leggono: il generatore le assegna agli aloni e lascia alla
+   grana i suoi 140px fissi.
+   Le @property servono a interpolare: una custom property NON registrata si anima a
+   scatti fra un keyframe e l'altro. Dove @property non esiste (Firefox < 128,
+   Safari < 16.4) il moto resta, a gradini; il generatore scrive comunque i valori di
+   partenza inline, quindi la dichiarazione non diventa mai invalida. */
+@property --olo-glow-bs { syntax: '<length-percentage>'; inherits: false; initial-value: 140%; }
+@property --olo-glow-bx { syntax: '<length-percentage>'; inherits: false; initial-value: 50%; }
+@property --olo-glow-by { syntax: '<length-percentage>'; inherits: false; initial-value: 50%; }
+
 @keyframes olo-glow-pulse {
-  0%,100% { background-size: var(--olo-glow-bs-min, 120%) var(--olo-glow-bs-min, 120%); }
-  50%     { background-size: var(--olo-glow-bs-max, 175%) var(--olo-glow-bs-max, 175%); }
+  0%,100% { --olo-glow-bs: var(--olo-glow-bs-min, 120%); }
+  50%     { --olo-glow-bs: var(--olo-glow-bs-max, 175%); }
 }
-/* Drift — deriva lenta della posizione, dimensione costante */
 @keyframes olo-glow-drift {
-  0%   { background-position: 50% 50%; }
-  25%  { background-position: 38% 42%; }
-  50%  { background-position: 60% 58%; }
-  75%  { background-position: 45% 62%; }
-  100% { background-position: 50% 50%; }
+  0%   { --olo-glow-bx: 50%; --olo-glow-by: 50%; }
+  25%  { --olo-glow-bx: 38%; --olo-glow-by: 42%; }
+  50%  { --olo-glow-bx: 60%; --olo-glow-by: 58%; }
+  75%  { --olo-glow-bx: 45%; --olo-glow-by: 62%; }
+  100% { --olo-glow-bx: 50%; --olo-glow-by: 50%; }
 }
-/* Wander — respiro + deriva combinati (più organico) */
 @keyframes olo-glow-wander {
-  0%   { background-size: 130% 130%; background-position: 42% 46%; }
-  50%  { background-size: 170% 170%; background-position: 60% 56%; }
-  100% { background-size: 130% 130%; background-position: 42% 46%; }
+  0%   { --olo-glow-bs: 130%; --olo-glow-bx: 42%; --olo-glow-by: 46%; }
+  50%  { --olo-glow-bs: 170%; --olo-glow-bx: 60%; --olo-glow-by: 56%; }
+  100% { --olo-glow-bs: 130%; --olo-glow-bx: 42%; --olo-glow-by: 46%; }
 }
-/* Flicker — micro-sfarfallio irregolare, tipo neon vivo (steps) */
 @keyframes olo-glow-flicker {
-  0%,100% { background-size: 150% 150%; }
-  20%     { background-size: 158% 158%; }
-  35%     { background-size: 142% 142%; }
-  55%     { background-size: 168% 168%; }
-  70%     { background-size: 146% 146%; }
-  85%     { background-size: 160% 160%; }
+  0%,100% { --olo-glow-bs: 150%; }
+  20%     { --olo-glow-bs: 158%; }
+  35%     { --olo-glow-bs: 142%; }
+  55%     { --olo-glow-bs: 168%; }
+  70%     { --olo-glow-bs: 146%; }
+  85%     { --olo-glow-bs: 160%; }
 }
-/* Scroll — stessa progressione del wander ma legata allo scroll (vedi sotto) */
 @keyframes olo-glow-scroll {
-  0%   { background-size: 120% 120%; background-position: 50% 30%; }
-  100% { background-size: 185% 185%; background-position: 50% 75%; }
+  0%   { --olo-glow-bs: 120%; --olo-glow-bx: 50%; --olo-glow-by: 30%; }
+  100% { --olo-glow-bs: 185%; --olo-glow-bx: 50%; --olo-glow-by: 75%; }
 }
-/* ── Preset COMBINATI: due animazioni atomiche (una su size, una su position)
-   montate su durate diverse → moto composito che non si ripete mai uguale.
-   Gli inline-style applicano `animation: <size-kf> Xs, <pos-kf> Ys`. ── */
-/* atomiche — solo background-size (ampiezza via --olo-glow-bs-min/max, fallback 125/180) */
 @keyframes olo-glow-size-breathe {
-  0%,100% { background-size: var(--olo-glow-bs-min, 125%) var(--olo-glow-bs-min, 125%); }
-  50%     { background-size: var(--olo-glow-bs-max, 180%) var(--olo-glow-bs-max, 180%); }
+  0%,100% { --olo-glow-bs: var(--olo-glow-bs-min, 125%); }
+  50%     { --olo-glow-bs: var(--olo-glow-bs-max, 180%); }
 }
-@keyframes olo-glow-size-throb   { 0%,100% { background-size: 150% 150%; } 18% { background-size: 162% 162%; } 37% { background-size: 140% 140%; } 60% { background-size: 172% 172%; } 80% { background-size: 146% 146%; } }
-/* atomiche — solo background-position */
+@keyframes olo-glow-size-throb {
+  0%,100% { --olo-glow-bs: 150%; }
+  18%     { --olo-glow-bs: 162%; }
+  37%     { --olo-glow-bs: 140%; }
+  60%     { --olo-glow-bs: 172%; }
+  80%     { --olo-glow-bs: 146%; }
+}
+/* atomiche - solo la posizione */
 @keyframes olo-glow-pos-orbit {
-  0%   { background-position: 38% 42%; }
-  25%  { background-position: 62% 38%; }
-  50%  { background-position: 64% 62%; }
-  75%  { background-position: 40% 60%; }
-  100% { background-position: 38% 42%; }
+  0%   { --olo-glow-bx: 38%; --olo-glow-by: 42%; }
+  25%  { --olo-glow-bx: 62%; --olo-glow-by: 38%; }
+  50%  { --olo-glow-bx: 64%; --olo-glow-by: 62%; }
+  75%  { --olo-glow-bx: 40%; --olo-glow-by: 60%; }
+  100% { --olo-glow-bx: 38%; --olo-glow-by: 42%; }
 }
 @keyframes olo-glow-pos-sway {
-  0%,100% { background-position: 44% 50%; }
-  50%     { background-position: 58% 52%; }
+  0%,100% { --olo-glow-bx: 44%; --olo-glow-by: 50%; }
+  50%     { --olo-glow-bx: 58%; --olo-glow-by: 52%; }
+}
 }
 /* Scroll-driven dove supportato (Chrome/Edge): la timeline segue l'ingresso/uscita
    dell'elemento dal viewport. Dove non supportato, resta il loop temporale inline. */

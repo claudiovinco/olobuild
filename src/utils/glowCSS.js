@@ -217,10 +217,17 @@ export function getGlowCSS(g = {}) {
   // mentre il sito li lasciava a `cover`.
   if (anim !== 'none' && (GLOW_ANIM_COMBO[anim] || GLOW_ANIM_EASING[anim])) {
     Object.assign(out, glowAnimStyle(anim, g.glow_anim_speed, g.glow_anim_intensity));
-    // glowAnimStyle non sa quanti layer ci sono: il margine per respiro/deriva
-    // riguarda gli aloni, la grana resta al suo passo anche da animata.
-    out.backgroundSize = hotspots.map(() => ANIM_BG_SIZE)
-      .concat(g.glow_grain !== false ? [GRAIN_TILE] : [])
+    // Le @keyframes non toccano piu' background-size/position: animano le tre
+    // proprieta' --olo-glow-bs/bx/by, che QUI vengono assegnate ai soli aloni.
+    // La grana tiene i suoi 140px fermi al centro anche mentre gli aloni si
+    // muovono — prima la lista dei keyframe, lunga un valore, si riciclava su
+    // tutti i layer e la stirava sull'intero riquadro.
+    const conGrana = g.glow_grain !== false;
+    out.backgroundSize = hotspots.map(() => ANIM_ALONE_SIZE)
+      .concat(conGrana ? [GRAIN_TILE] : [])
+      .join(', ');
+    out.backgroundPosition = hotspots.map(() => ANIM_ALONE_POS)
+      .concat(conGrana ? [GRAIN_POS] : [])
       .join(', ');
   }
   return out;
@@ -245,7 +252,14 @@ const GLOW_BREATHE_MODES = new Set(['pulse', 'vivo']);
 
 /** Dimensione a riposo degli aloni quando c'è un'animazione: il 40% in più del box
  *  è il margine dentro cui respirano e derivano senza scoprire gli angoli. */
-const ANIM_BG_SIZE = '140% 140%';
+// A riposo gli aloni stanno al 140%: e' il margine che lascia spazio al respiro
+// e alla deriva senza scoprire i bordi del riquadro.
+const ANIM_BG_SIZE_START = '140%';
+// Quello che finisce nelle liste per layer: gli aloni leggono le proprieta'
+// animate, la grana no.
+const ANIM_ALONE_SIZE = 'var(--olo-glow-bs, 140%) var(--olo-glow-bs, 140%)';
+const ANIM_ALONE_POS  = 'var(--olo-glow-bx, 50%) var(--olo-glow-by, 50%)';
+const GRAIN_POS       = '0 0';
 
 /**
  * Calcola le custom property --olo-glow-bs-min/max dall'Intensità (0-100).
@@ -279,10 +293,15 @@ function breatheVars(intensity) {
 export function glowAnimStyle(mode, speed, intensity) {
   const sp = Math.max(1, Math.min(10, numOpt(speed, 6)));
   const dur = Math.max(2, Math.round((11 - sp) * 1.5)); // speed 6 → ~7-8s
+  // I valori di PARTENZA delle tre proprieta' animate. Vanno scritti anche se le
+  // @keyframes li rimpiazzano subito: dove @property non esiste una custom
+  // property non dichiarata e' «guaranteed-invalid» e farebbe cadere l'intera
+  // background-size. Le liste per layer le compone getGlowCSS, che sa quanti
+  // aloni ci sono e se c'e' la grana.
   const css = {
-    // valore unico: chi conosce i layer (getGlowCSS) lo riscrive per layer.
-    backgroundSize: ANIM_BG_SIZE,
-    backgroundPosition: 'center',
+    '--olo-glow-bs': ANIM_BG_SIZE_START,
+    '--olo-glow-bx': '50%',
+    '--olo-glow-by': '50%',
   };
   // Ampiezza respiro (solo per le modalità che animano background-size)
   if (GLOW_BREATHE_MODES.has(mode) && intensity != null && intensity !== '') {
