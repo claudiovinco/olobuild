@@ -48,6 +48,24 @@ export default {
     show_progress: true,        // scrubbar in basso
     pause_on_reduced_motion: true, // reduced-motion → scroll orizzontale nativo (niente pin)
 
+    // ── Comandi di scorrimento ──
+    // La barra di scorrimento del browser era l'UNICO comando visibile del nastro:
+    // brutta, sempre accesa e muta (non dice quanti elementi ci sono). Ora di
+    // fabbrica è spenta e al suo posto ci sono comandi veri — frecce e pallini —
+    // che dicono anche DOVE sei e quanto manca.
+    arrows: 'tonde',            // none | tonde | vetro | minimale | quadrate | pillola
+    arrows_pos: 'dentro',       // dentro | fuori | sotto
+    arrows_size: 44,
+    arrows_bg: '',              // vuoto → superficie del tema
+    arrows_color: '',           // vuoto → testo del tema
+    indicators: 'pallini',      // none | pallini | trattini | numeri | linea
+    indicators_color: '',       // vuoto → testo del tema, attenuato
+    indicators_active_color: '', // vuoto → come la barra di progresso
+    show_scrollbar: false,      // barra nativa del browser sotto il nastro
+    edge_fade: true,            // sfumatura ai bordi: «continua oltre»
+    drag_scroll: true,          // trascina col mouse per scorrere
+    snap_strong: false,         // aggancio obbligatorio al centro dell'elemento
+
     // ── Testata (opzionale) ──
     heading: 'Scorri in orizzontale',
     kicker: 'scroll → orizzontale',
@@ -135,6 +153,37 @@ export default {
     { key: 'show_progress', label: t('Mostra barra di progresso'), type: 'toggle' },
     { key: 'pause_on_reduced_motion', label: t('Rispetta “riduci movimento”'), type: 'toggle',
       description: t('Con prefers-reduced-motion (o su mobile) la traccia diventa uno scroll orizzontale nativo, senza ancoraggio verticale. Consigliato attivo per accessibilità.') },
+
+    { type: 'separator', label: t('Comandi di scorrimento') },
+    { key: 'arrows', label: t('Frecce'), type: 'select', options: [
+      { value: 'none',     label: t('Nessuna') },
+      { value: 'tonde',    label: t('Tonde — cerchio pieno') },
+      { value: 'vetro',    label: t('Vetro — cerchio semitrasparente sfocato') },
+      { value: 'minimale', label: t('Minimale — solo il segno') },
+      { value: 'quadrate', label: t('Quadrate — riquadro come le card') },
+      { value: 'pillola',  label: t('Pillola — le due frecce affiancate') },
+    ], description: t('Un clic sposta il nastro di un elemento. La freccia si spegne da sola quando da quel lato non c\'è più corsa.') },
+    { key: 'arrows_pos', label: t('Posizione frecce'), type: 'select', options: [
+      { value: 'dentro', label: t('Dentro — sopra i bordi del nastro') },
+      { value: 'fuori',  label: t('Fuori — ai lati, nel margine') },
+      { value: 'sotto',  label: t('Sotto — accanto agli indicatori') },
+    ], condition: { field: 'arrows', op: 'neq', value: 'none' },
+      description: t('Sotto i 960px «fuori» rientra da sé sul nastro: nel margine stretto dei piccoli schermi non ci starebbe.') },
+    { key: 'indicators', label: t('Indicatori'), type: 'select', options: [
+      { value: 'none',      label: t('Nessuno') },
+      { value: 'pallini',   label: t('Pallini — uno per elemento, cliccabili') },
+      { value: 'trattini',  label: t('Trattini — uno per elemento, cliccabili') },
+      { value: 'numeri',    label: t('Numeri — 01 / 05') },
+      { value: 'linea',     label: t('Linea — avanzamento continuo') },
+    ], description: t('Pallini e trattini portano all\'elemento corrispondente; numeri e linea dicono soltanto a che punto sei.') },
+    { key: 'drag_scroll', label: t('Trascina per scorrere'), type: 'toggle',
+      description: t('Col mouse il nastro si trascina come una fotografia sul tavolo. Il touch usa già il suo scorrimento nativo e resta intatto.') },
+    { key: 'edge_fade', label: t('Sfumatura ai bordi'), type: 'toggle',
+      description: t('Gli elementi svaniscono sui bordi del nastro invece di essere tagliati di netto: si capisce a colpo d\'occhio che c\'è dell\'altro.') },
+    { key: 'snap_strong', label: t('Aggancio deciso agli elementi'), type: 'toggle',
+      description: t('Lo scorrimento si ferma sempre al centro di un elemento, mai a metà strada. Vale dove la fila si scorre da sé (mobile, «scorrimento libero», riduci movimento).') },
+    { key: 'show_scrollbar', label: t('Barra di scorrimento'), type: 'toggle',
+      description: t('La barra grigia del browser sotto il nastro. Spenta: al suo posto ci sono frecce e indicatori. Lo scorrimento con dito, trackpad e tastiera funziona comunque.') },
   ],
 
   styleFields: [
@@ -174,6 +223,27 @@ export default {
     { key: 'show_number', label: t('Mostra numero progressivo'), type: 'toggle' },
     { key: 'progress_color', label: t('Colore barra di progresso'), type: 'color',
       condition: { field: 'show_progress', op: 'eq', value: true } },
+
+    { type: 'separator', label: t('Comandi di scorrimento') },
+    { key: 'arrows_size', label: t('Dimensione frecce'), type: 'range', min: 28, max: 72, step: 2,
+      condition: { field: 'arrows', op: 'neq', value: 'none' } },
+    // `not-in` e non `in`: le condizioni si valutano sui settings GREZZI, senza
+    // i default. Nei template salvati prima di questi campi la chiave `arrows`
+    // non esiste, e `in` su una chiave assente è falso → il campo resterebbe
+    // nascosto mentre la tile disegna frecce «tonde» con il loro sfondo.
+    // Con `not-in` l'assenza equivale al default, che è appunto «tonde».
+    { key: 'arrows_bg', label: t('Sfondo frecce'), type: 'color',
+      condition: { field: 'arrows', op: 'not-in', value: [ 'none', 'minimale' ] },
+      description: t('Vuoto → superficie del tema. Lo stile «Vetro» lo rende semitrasparente da sé.') },
+    { key: 'arrows_color', label: t('Colore frecce'), type: 'color',
+      condition: { field: 'arrows', op: 'neq', value: 'none' },
+      description: t('Il segno dentro il pulsante. Vuoto → colore testo del tema (lo stile «Minimale», che sta sullo sfondo della sezione, eredita il colore della sezione).') },
+    { key: 'indicators_color', label: t('Colore indicatori'), type: 'color',
+      condition: { field: 'indicators', op: 'neq', value: 'none' },
+      description: t('Gli indicatori spenti. Vuoto → eredita il colore della sezione, attenuato: così si vedono sia su chiaro sia su scuro.') },
+    { key: 'indicators_active_color', label: t('Colore indicatore attivo'), type: 'color',
+      condition: { field: 'indicators', op: 'neq', value: 'none' },
+      description: t('Vuoto → lo stesso colore della barra di progresso.') },
 
     ...shadowField,
     ...borderFields(),
