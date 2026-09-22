@@ -25,7 +25,7 @@
           {{ t('Larghezza') }}
           <span v-if="bp !== 'desktop'" class="olo-ls-bp">{{ bpLabel }}</span>
         </span>
-        <FieldDimension :modelValue="dim('tile_width')" :placeholder="t('auto')"
+        <FieldDimension class="olo-ls-ctl" compact :modelValue="dim('tile_width')" :placeholder="t('auto')"
           :aria-label="t('Larghezza')" @update:modelValue="onDim('tile_width', $event)" />
       </div>
 
@@ -34,7 +34,7 @@
           {{ t('Larghezza massima') }}
           <span v-if="bp !== 'desktop'" class="olo-ls-bp">{{ bpLabel }}</span>
         </span>
-        <FieldDimension :modelValue="dim('tile_max_width')" :placeholder="t('nessuna')"
+        <FieldDimension class="olo-ls-ctl" compact :modelValue="dim('tile_max_width')" :placeholder="t('nessuna')"
           :aria-label="t('Larghezza massima')" @update:modelValue="onDim('tile_max_width', $event)" />
       </div>
     </template>
@@ -45,7 +45,7 @@
         {{ t('Altezza minima') }}
         <span v-if="bp !== 'desktop'" class="olo-ls-bp">{{ bpLabel }}</span>
       </span>
-      <FieldDimension :modelValue="dim('tile_min_height')" :placeholder="t('auto')"
+      <FieldDimension class="olo-ls-ctl" compact :modelValue="dim('tile_min_height')" :placeholder="t('auto')"
         :units="['px', 'vh', '%', 'em', 'rem']" :aria-label="t('Altezza minima')"
         @update:modelValue="onDim('tile_min_height', $event)" />
     </div>
@@ -179,7 +179,7 @@ const pvBoxStyle = computed(() => {
 .olo-laystack {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 9px;
 }
 
 /* Larghezza piena */
@@ -196,30 +196,35 @@ const pvBoxStyle = computed(() => {
   min-width: 0;
 }
 .olo-ls-name {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
-  color: #374151;
+  color: #6b7280;
 }
 .olo-ls-desc {
-  font-size: 12px;
-  color: #9ca3af;
-  line-height: 1.35;
+  font-size: 11px;
+  color: #b0b6bf;
+  line-height: 1.3;
 }
 
-/* campo dimensionale / overflow */
+/* campo dimensionale / overflow — etichetta a sinistra, controllo a destra:
+   la stessa riga compatta del resto dell'inspector (.olo-field-inline). */
 .olo-ls-field {
   display: flex;
-  flex-direction: column;
-  gap: 7px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
 }
 .olo-ls-lab {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
+  gap: 6px;
+  min-width: 0;
+  font-size: 12px;
   font-weight: 500;
-  color: #374151;
+  color: #6b7280;
 }
+.olo-ls-ctl { flex: 0 0 124px; }
 .olo-ls-bp {
   font-size: 10px;
   font-weight: 700;
@@ -233,9 +238,10 @@ const pvBoxStyle = computed(() => {
   position: relative;
   display: flex;
   align-items: center;
-  height: 38px;
+  flex: 0 0 148px;
+  height: 30px;
   border: 1px solid #e5e7eb;
-  border-radius: 9px;
+  border-radius: 7px;
   background: #fff;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
@@ -247,8 +253,8 @@ const pvBoxStyle = computed(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding-left: 11px;
-  color: #6b7280;
+  padding-left: 8px;
+  color: #9ca3af;
   flex-shrink: 0;
   pointer-events: none;
 }
@@ -264,23 +270,23 @@ const pvBoxStyle = computed(() => {
   border: none;
   border-radius: 0;
   background: transparent;
-  padding: 0 11px 0 9px;
-  font-size: 14px;
+  padding: 0 8px 0 7px;
+  font-size: 12px;
 }
 
 /* Anteprima vincoli */
 .olo-ls-preview {
   margin-top: 2px;
   border: 1px solid #eef0f3;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #f9fafb;
-  padding: 14px;
+  padding: 10px;
 }
 .olo-ls-pv-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 .olo-ls-pv-title {
   font-size: 10px;
@@ -306,11 +312,11 @@ const pvBoxStyle = computed(() => {
   border-radius: 8px;
   background-image: repeating-linear-gradient(45deg, #eef0f3 0 6px, transparent 6px 12px);
   border: 1px solid #eef0f3;
-  padding: 14px 10px;
+  padding: 9px 8px;
 }
 .olo-ls-pv-box {
   min-width: 90px;
-  height: 46px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -326,7 +332,7 @@ const pvBoxStyle = computed(() => {
   color: var(--olo-ui-accent, #e8622a);
 }
 .olo-ls-pv-foot {
-  margin-top: 10px;
+  margin-top: 7px;
   text-align: center;
   font-size: 11px;
   color: #9ca3af;

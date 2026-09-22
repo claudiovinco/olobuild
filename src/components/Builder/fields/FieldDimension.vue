@@ -5,7 +5,7 @@
     Il valore salvato resta una stringa come prima (chiavi tile_width / tile_max_width /
     tile_min_height invariate): cambia solo la UI di editing.
   -->
-  <div class="olo-dim" :class="{ 'is-focused': false }">
+  <div class="olo-dim" :class="{ 'olo-dim--compact': compact }">
     <input
       type="text"
       inputmode="decimal"
@@ -41,6 +41,8 @@ const props = defineProps({
   // testo grigio quando il campo è vuoto (es. "auto", "nessuna")
   placeholder: { type: String, default: 'auto' },
   ariaLabel: { type: String, default: '' },
+  // riga etichetta-a-sinistra: il controllo sta in 124px, non a tutta larghezza
+  compact: { type: Boolean, default: false },
 });
 const emit = defineEmits(['update:modelValue']);
 
@@ -126,4 +128,10 @@ function onUnit(u) {
   font-weight: 600;
   color: #6b7280;
 }
+
+/* variante compatta */
+.olo-dim--compact { height: 30px; border-radius: 7px; }
+.olo-dim--compact .olo-dim-num { padding: 0 8px; font-size: 12px; }
+.olo-dim--compact .olo-dim-unitwrap { width: 46px; }
+.olo-dim--compact .olo-dim-unit :deep(.fsel-trigger) { padding: 0 4px 0 7px; font-size: 11px; }
 </style>
