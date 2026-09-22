@@ -45,7 +45,6 @@
             <label class="gtp-field-label">{{ t('Peso') }}</label>
             <FieldSelect
               ui="dropdown"
-              theme="dark"
               :modelValue="set.weight"
               :options="weightOptions"
               @update:modelValue="updateField(index, 'weight', $event)"
@@ -57,7 +56,6 @@
             <label class="gtp-field-label">{{ t('Trasformazione') }}</label>
             <FieldSelect
               ui="dropdown"
-              theme="dark"
               :modelValue="set.transform"
               :options="transformOptions"
               @update:modelValue="updateField(index, 'transform', $event)"
@@ -236,13 +234,13 @@ watch(() => stylesStore.globalTypography, (newVal) => {
 .gtp-title {
   font-size: 13px;
   font-weight: 600;
-  color: #e5e7eb;
+  color: #1f2937;
   margin: 0 0 4px 0;
 }
 
 .gtp-desc {
   font-size: 11px;
-  color: #9ca3af;
+  color: #6b7280;
   margin: 0;
   line-height: 1.4;
 }
@@ -255,8 +253,8 @@ watch(() => stylesStore.globalTypography, (newVal) => {
 }
 
 .gtp-item {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid #374151;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
   border-radius: 6px;
   padding: 10px;
 }
@@ -282,19 +280,19 @@ watch(() => stylesStore.globalTypography, (newVal) => {
 
 .gtp-field-label {
   font-size: 10px;
-  color: #9ca3af;
+  color: #6b7280;
   width: 90px;
   flex-shrink: 0;
 }
 
 .gtp-input {
   width: 100%;
-  background: #111827;
-  border: 1px solid #374151;
+  background: #fff;
+  border: 1px solid #e5e7eb;
   border-radius: 4px;
   padding: 4px 6px;
   font-size: 11px;
-  color: #e5e7eb;
+  color: #1f2937;
   outline: none;
   font-family: inherit;
 }
@@ -325,7 +323,7 @@ watch(() => stylesStore.globalTypography, (newVal) => {
   font-size: 9px;
   color: #6b7280;
   font-family: monospace;
-  background: rgba(255, 255, 255, 0.04);
+  background: #f9fafb;
   padding: 1px 5px;
   border-radius: 3px;
 }
@@ -333,9 +331,9 @@ watch(() => stylesStore.globalTypography, (newVal) => {
 .gtp-preview {
   margin-top: 6px;
   padding: 6px 8px;
-  background: #1f2937;
+  background: #f3f4f6;
   border-radius: 4px;
-  color: #e5e7eb;
+  color: #1f2937;
   font-size: 14px;
 }
 
@@ -365,9 +363,9 @@ watch(() => stylesStore.globalTypography, (newVal) => {
   width: 100%;
   padding: 6px 0;
   background: none;
-  border: 1px dashed #4b5563;
+  border: 1px dashed #d1d5db;
   border-radius: 6px;
-  color: #9ca3af;
+  color: #6b7280;
   font-size: 11px;
   cursor: pointer;
   font-family: inherit;
@@ -376,7 +374,7 @@ watch(() => stylesStore.globalTypography, (newVal) => {
 
 .gtp-add:hover {
   border-color: var(--olo-ui-accent, #e8622a);
-  color: #e5e7eb;
+  color: #1f2937;
 }
 
 .gtp-actions {

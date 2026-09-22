@@ -67,6 +67,26 @@
             @update:modelValue="onFieldUpdate($event)"
           />
           <!-- fill (il controllo riempie la parte destra) -->
+          <!-- Stili tipografici globali: il select da solo elencava set che dal
+               builder non c'era modo di creare. Questo è il percorso INLINE:
+               il campo compatto passa di qui, non dal ramo generico più sotto. -->
+          <div v-else-if="field.type === 'select' && field.optionsSource === 'globalTypography'" class="mb-flex mb-gap-1 mb-items-center mb-flex-1 mb-min-w-0">
+            <FieldSelect
+              class="mb-flex-1 mb-min-w-0"
+              :modelValue="effectiveValue"
+              :options="resolvedOptions"
+              :ui="field.ui || 'auto'"
+              @update:modelValue="onFieldUpdate($event)"
+            />
+            <button
+              type="button"
+              class="olo-new-style-btn"
+              :title="t('Gestisci gli stili tipografici globali')"
+              @click="openTypography"
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
           <FieldSelect
             v-else-if="field.type === 'select'"
             :modelValue="effectiveValue"
@@ -184,6 +204,28 @@
         :modelValue="effectiveValue"
         @update:modelValue="onFieldUpdate($event)"
       />
+
+      <!-- Select degli stili tipografici globali: elencava set che dal builder
+           non c'era modo di creare. Accanto ora c'è il pulsante che apre il
+           pannello di gestione, senza passare da wp-admin. -->
+      <div v-else-if="field.type === 'select' && field.optionsSource === 'globalTypography'" class="mb-flex mb-gap-1 mb-items-center">
+        <FieldSelect
+          class="mb-flex-1 mb-min-w-0"
+          :modelValue="effectiveValue"
+          :options="resolvedOptions"
+          :ui="field.ui || 'auto'"
+          @update:modelValue="onFieldUpdate($event)"
+        />
+        <button
+          type="button"
+          class="olo-new-style-btn"
+          :title="t('Gestisci gli stili tipografici globali')"
+          @click="openTypography"
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>{{ t('Nuovo stile') }}</span>
+        </button>
+      </div>
 
       <FieldSelect
         v-else-if="field.type === 'select'"
@@ -438,9 +480,14 @@
         :label="field.label || 'Tipografia'"
         :responsiveKeys="field.responsiveKeys || ['size']"
         :letterSpacingUnit="field.letterSpacingUnit || 'px'"
+        :presetKey="field.presetKey || ''"
         :sizeMin="field.sizeMin"
         :sizeMax="field.sizeMax"
         :sizeStep="field.sizeStep"
+        :maxWidthUnit="field.maxWidthUnit || 'ch'"
+        :maxWidthMin="field.maxWidthMin"
+        :maxWidthMax="field.maxWidthMax"
+        :maxWidthStep="field.maxWidthStep"
         @update="$emit('update:settingKey', $event)"
       />
 
@@ -612,6 +659,9 @@ import FieldBackdropFilter from './fields/FieldBackdropFilter.vue';
 import FieldBorderLegacy from './fields/FieldBorderLegacy.vue';
 import FieldContentPopup from './fields/FieldContentPopup.vue';
 import BackgroundControls from './BackgroundControls.vue';
+import { useGlobalPanels } from '@/composables/useGlobalPanels';
+
+const { openTypography } = useGlobalPanels();
 
 const DYNAMIC_TYPES = ['text', 'textarea', 'editor', 'image', 'media'];
 
@@ -1157,6 +1207,32 @@ function onDynamicUpdate(dynamicUpdate, isRemove) {
 </script>
 
 <style scoped>
+/* Scorciatoia accanto al select degli stili tipografici globali */
+.olo-new-style-btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 30px;
+  padding: 0 8px;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #6b7280;
+  font-size: 11px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.olo-new-style-btn:hover {
+  border-color: var(--olo-ui-accent, #e8622a);
+  color: var(--olo-ui-accent, #e8622a);
+}
+.olo-new-style-btn:focus-visible {
+  outline: 2px solid var(--olo-ui-accent, #e8622a);
+  outline-offset: 1px;
+}
+
 /* Layout "controllo a destra del titolo".
    • .olo-field-inline      → compatto: label a sx, controllo piccolo a dx
    • .olo-field-inline-fill → il controllo riempie la parte destra (select/testo/…)

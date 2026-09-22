@@ -1374,6 +1374,18 @@
         :tileId="selectedTile.id"
         @close="showProSliderEditor = false"
       />
+
+      <!-- Stili tipografici globali: si aprono dal campo che li USA (il select
+           «Stile tipografico» e il globo del controllo tipografia), non solo da
+           wp-admin. Montato qui una volta sola per tutti i campi. -->
+      <Teleport to="body">
+        <div v-if="typographyOpen" class="olo-gpanel-backdrop" @click.self="closeTypography">
+          <div class="olo-gpanel" role="dialog" aria-modal="true">
+            <button type="button" class="olo-gpanel-close" :title="t('Chiudi')" @click="closeTypography">×</button>
+            <GlobalTypographyPanel />
+          </div>
+        </div>
+      </Teleport>
     </div>
   </transition>
 </template>
@@ -1401,9 +1413,14 @@ import FieldTransform from './fields/FieldTransform.vue';
 import ParallaxEditor from './ParallaxEditor.vue';
 import BezierPathEditor from './BezierPathEditor.vue';
 import ProSliderEditor from '../ProSlider/ProSliderEditor.vue';
+import GlobalTypographyPanel from './GlobalTypographyPanel.vue';
+import { useGlobalPanels } from '@/composables/useGlobalPanels';
 import HeightModeSelector from '../ProSlider/HeightModeSelector.vue';
 import { TILE_PRESETS, BASE_THEME_PRESETS } from '@/config/tilePresets';
 import { MEGAMENU_TEMPLATES } from '@/config/megamenuTemplates';
+
+// Pannello degli stili tipografici globali, aperto dai campi che li usano.
+const { typographyOpen, closeTypography } = useGlobalPanels();
 
 const elementParallaxProperties = [
   { key: 'x', label: 'Traslazione X', min: -1000, max: 1000, step: 10, unit: 'px' },
@@ -3137,6 +3154,44 @@ function updateDynamicItemMap(itemMap) {
   transform: translateX(100%);
   opacity: 0;
 }
+
+/* Modale dei pannelli globali (tipografia) — aperto dai campi che li usano */
+.olo-gpanel-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.olo-gpanel {
+  position: relative;
+  width: min(560px, 100%);
+  max-height: 86vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  padding: 20px;
+}
+.olo-gpanel-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #6b7280;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+.olo-gpanel-close:hover { background: #f3f4f6; color: #111827; }
+.olo-gpanel-close:focus-visible { outline: 2px solid var(--olo-ui-accent, #e8622a); outline-offset: 2px; }
 
 /* Inspector search */
 .insp-search {
