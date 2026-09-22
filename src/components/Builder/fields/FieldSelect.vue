@@ -155,13 +155,18 @@ async function openPop() {
   el?.focus({ preventScroll: true });
   scrollHighlightIntoView();
   window.addEventListener('resize', close, { once: true });
-  // Lo scroll dell'inspector lascerebbe il popup fixed orfano: chiudiamo.
+  // Lo scroll dell'inspector lascerebbe il popup fixed orfano: lo riportiamo
+  // sul trigger. Chiudere sarebbe sbagliato — un clic sul trigger puo far
+  // scorrere il contenitore per portarlo in vista, e il popup si chiuderebbe
+  // nello stesso istante in cui si apre.
   window.addEventListener('scroll', onAnyScroll, { capture: true });
 }
 
 function onAnyScroll(e) {
   if (popEl.value && popEl.value.contains(e.target)) return; // scroll interno ok
-  close(false);
+  const r = rootEl.value && rootEl.value.getBoundingClientRect();
+  if (!r || r.bottom < 0 || r.top > window.innerHeight) { close(false); return; }
+  position();
 }
 
 function close(refocus = true) {

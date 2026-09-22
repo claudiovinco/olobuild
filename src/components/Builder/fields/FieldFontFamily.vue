@@ -416,9 +416,14 @@ function loadGoogleFontsPreview() {
   }
 }
 
+// Lo scroll del contenitore lascerebbe la tendina fixed orfana: la riportiamo
+// sul trigger invece di chiuderla — un clic sul trigger puo far scorrere il
+// modale per portarlo in vista, e la tendina sparirebbe appena aperta.
 function chiudiSuScroll(e) {
   if (dropdownEl.value && e.target instanceof Node && dropdownEl.value.contains(e.target)) return;
-  open.value = false;
+  const r = rootEl.value && rootEl.value.getBoundingClientRect();
+  if (!r || r.bottom < 0 || r.top > window.innerHeight) { open.value = false; return; }
+  positionDropdown();
 }
 
 watch(open, async (val) => {
