@@ -104,6 +104,18 @@ class Olobuild_TextBlock_Tile extends Olobuild_Tile_Base {
             $style .= 'font-size:' . $fs . 'px;';
         }
 
+        // Minimo garantito del controllo tipografia: famiglia e peso accanto a
+        // corpo, interlinea e colore. Vengono DOPO il preset globale, cosi' la
+        // scelta sul singolo elemento vince sullo stile di tutta la tile.
+        $ff = $this->resolve_font_family( (string) ( $s['font_family'] ?? '' ) );
+        if ( $ff ) {
+            $style .= 'font-family:' . $ff . ';';
+        }
+        $fw = trim( (string) ( $s['font_weight'] ?? '' ) );
+        if ( $fw !== '' && preg_match( '/^(?:[1-9]00|normal|bold|lighter|bolder)$/', $fw ) ) {
+            $style .= 'font-weight:' . $fw . ';';
+        }
+
         $lh = $s['line_height'] ?? '';
         if ( is_numeric( $lh ) ) {
             $lh_val = (float) $lh;

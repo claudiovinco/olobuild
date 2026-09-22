@@ -35,7 +35,7 @@
 import { computed } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import { rv } from '@/composables/useResponsiveValue';
-import { SHADOW } from '@/composables/oloTileDefaults';
+import { SHADOW, resolveFontFamily } from '@/composables/oloTileDefaults';
 import { imageFrame } from '@/composables/useImageFrame';
 import { t } from '@/i18n';
 
@@ -105,12 +105,22 @@ const headingStyle = computed(() => {
   if (lh && lh > 0) st.lineHeight = lh;
   if (effectiveAlign.value) st.textAlign = effectiveAlign.value;
   if (s.value.heading_color) st.color = s.value.heading_color;
+  // Minimo garantito — gemello di class-content-tile.php. Il peso era `bold`
+  // fisso sulla classe del titolo: ora la scelta, quando c'e', lo scavalca.
+  const ff = resolveFontFamily(s.value.heading_font_family || '');
+  if (ff) st.fontFamily = ff;
+  if (s.value.heading_font_weight) st.fontWeight = s.value.heading_font_weight;
   return st;
 });
 
 const textStyle = computed(() => {
   const st = {};
   if (s.value.text_color) st.color = s.value.text_color;
+  const ff = resolveFontFamily(s.value.text_font_family || '');
+  if (ff) st.fontFamily = ff;
+  const fs = parseInt(s.value.text_font_size);
+  if (fs > 0) st.fontSize = fs + 'px';
+  if (s.value.text_font_weight) st.fontWeight = s.value.text_font_weight;
   return st;
 });
 

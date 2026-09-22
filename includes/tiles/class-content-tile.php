@@ -86,6 +86,13 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
         $txt_clr = $this->safe_color_css( $s['text_color'] ?? '' );
         $txt_style = '';
         if ( $txt_clr ) { $txt_style = 'color:' . $txt_clr . ';'; }
+        // Minimo garantito: il corpo testo aveva il solo colore.
+        $t_ff = $this->resolve_font_family( (string) ( $s['text_font_family'] ?? '' ) );
+        if ( $t_ff ) { $txt_style .= 'font-family:' . $t_ff . ';'; }
+        $t_fs = absint( $s['text_font_size'] ?? 0 );
+        if ( $t_fs > 0 ) { $txt_style .= 'font-size:' . $t_fs . 'px;'; }
+        $t_fw = trim( (string) ( $s['text_font_weight'] ?? '' ) );
+        if ( $t_fw !== '' && preg_match( '/^(?:[1-9]00|normal|bold|lighter|bolder)$/', $t_fw ) ) { $txt_style .= 'font-weight:' . $t_fw . ';'; }
 
         // Heading (plain text, no HTML)
         $heading_text = esc_html( wp_strip_all_tags( $s['heading'] ) );
@@ -103,7 +110,16 @@ class Olobuild_Content_Tile extends Olobuild_Tile_Base {
 
         // Heading gap only when there's actual text below
         $hd_gap = $has_text ? absint( $s['heading_gap'] ?? 8 ) : 0;
-        $hstyle = 'margin:0 0 ' . $hd_gap . 'px 0;font-weight:bold;font-size:' . $font_size . ';';
+        // Il peso era inchiodato a `bold`: un default della tile scritto inline,
+        // indistinguibile da una scelta dell'utente — e quindi impossibile da
+        // cambiare, sia dal controllo tipografia sia dallo stile globale.
+        $hd_fw = trim( (string) ( $s['heading_font_weight'] ?? '' ) );
+        if ( $hd_fw === '' || ! preg_match( '/^(?:[1-9]00|normal|bold|lighter|bolder)$/', $hd_fw ) ) {
+            $hd_fw = 'bold';
+        }
+        $hstyle = 'margin:0 0 ' . $hd_gap . 'px 0;font-weight:' . $hd_fw . ';font-size:' . $font_size . ';';
+        $hd_ff = $this->resolve_font_family( (string) ( $s['heading_font_family'] ?? '' ) );
+        if ( $hd_ff ) { $hstyle .= 'font-family:' . $hd_ff . ';'; }
         $hd_lh  = isset( $s['heading_line_height'] ) ? floatval( $s['heading_line_height'] ) : 0;
         if ( $hd_lh > 0 ) { $hstyle .= 'line-height:' . $hd_lh . ';'; }
         $allowed_align = [ 'left', 'center', 'right', 'justify' ];

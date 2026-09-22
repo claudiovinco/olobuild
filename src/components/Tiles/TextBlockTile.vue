@@ -11,6 +11,7 @@
 </template>
 
 <script setup>
+import { resolveFontFamily } from '@/composables/oloTileDefaults';
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -52,6 +53,11 @@ const contentStyle = computed(() => {
   if (fs > 0) style.fontSize = fs + 'px';
 
   if (s.value.line_height) style.lineHeight = s.value.line_height;
+
+  // Minimo garantito — gemello di class-text-block-tile.php.
+  const ff = resolveFontFamily(s.value.font_family || '');
+  if (ff) style.fontFamily = ff;
+  if (s.value.font_weight) style.fontWeight = s.value.font_weight;
 
   return style;
 });
