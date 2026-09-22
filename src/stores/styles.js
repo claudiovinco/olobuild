@@ -173,6 +173,31 @@ export const useStylesStore = defineStore('styles', {
 
       css += '}\n\n';
 
+      // Regole del preset tipografico — gemello di Olobuild_Style_System.
+      // La classe sul wrapper porta lo stile ai discendenti: l'eredita' da sola
+      // perdeva contro le regole del tema e il comando non faceva niente.
+      if (state.globalTypography && state.globalTypography.length > 0) {
+        css += '/* Preset tipografici - applicazione */\n';
+        for (const gt of state.globalTypography) {
+          if (!gt.id) continue;
+          const sel = `.olo-typo-${gt.id}.olo-typo-${gt.id}`;
+          css += `${sel},\n${sel} :is(h1,h2,h3,h4,h5,h6,p,li,a,span,em,i,blockquote,figcaption,label,dt,dd,td,button,input,textarea,select) {\n`;
+          css += `  font-family: var(--olo-font-${gt.id}-family, inherit);\n`;
+          css += `  font-weight: var(--olo-font-${gt.id}-weight, inherit);\n`;
+          css += `  text-transform: var(--olo-font-${gt.id}-transform, none);\n`;
+          css += `  line-height: var(--olo-font-${gt.id}-line-height, inherit);\n`;
+          css += `  letter-spacing: var(--olo-font-${gt.id}-letter-spacing, normal);\n`;
+          css += '}\n\n';
+          // Le tile scrivono la tipografia del titolo inline attraverso le
+          // variabili di ruolo: ridefinirle sul wrapper fa risolvere quella
+          // dichiarazione nel font del preset. Il ruolo mono resta fuori.
+          css += `${sel} {\n`;
+          css += `  --olo-font-family: var(--olo-font-${gt.id}-family, var(--olo-font-family));\n`;
+          css += `  --olo-font-family-heading: var(--olo-font-${gt.id}-family, var(--olo-font-family-heading));\n`;
+          css += '}\n\n';
+        }
+      }
+
       // UIkit overrides – bg WITHOUT !important so inline styles (custom bg) can win
       css += '.olo-template .uk-section-primary { background-color: var(--olo-color-primary); color: var(--olo-color-primary-contrast) !important; }\n';
       css += '.olo-template .uk-section-primary :where(a) { color: var(--olo-color-primary-contrast) !important; }\n';

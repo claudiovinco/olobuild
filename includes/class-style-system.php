@@ -830,6 +830,41 @@ class Olobuild_Style_System {
 
         $css .= "}\n\n";
 
+        // Regole del preset tipografico: la classe `olo-typo-<id>` sul wrapper di
+        // una tile porta lo stile ai suoi discendenti. Prima le cinque proprieta'
+        // stavano inline sul wrapper e scendevano per eredita', ma l'eredita' perde
+        // contro QUALSIASI regola che tocchi il figlio — e un titolo e' sempre preso
+        // da una regola del tema o di UIkit: si sceglieva uno stile e non cambiava
+        // niente. La classe e' ripetuta per alzare la specificita' sopra le regole
+        // del tema; i valori inline che la tile scrive per le proprieta' scelte
+        // dall'utente restano sopra a tutto. `strong`, `b` e `th` non sono
+        // nell'elenco: il loro grassetto e' semantico, non tipografia della tile.
+        if ( ! empty( $global_typo ) ) {
+            $css .= "/* Preset tipografici — applicazione */\n";
+            foreach ( $global_typo as $gt ) {
+                $id = sanitize_key( $gt['id'] ?? '' );
+                if ( ! $id ) continue;
+                $sel = ".olo-typo-{$id}.olo-typo-{$id}";
+                $css .= "{$sel},\n{$sel} :is(h1,h2,h3,h4,h5,h6,p,li,a,span,em,i,blockquote,figcaption,label,dt,dd,td,button,input,textarea,select) {\n";
+                $css .= "  font-family: var(--olo-font-{$id}-family, inherit);\n";
+                $css .= "  font-weight: var(--olo-font-{$id}-weight, inherit);\n";
+                $css .= "  text-transform: var(--olo-font-{$id}-transform, none);\n";
+                $css .= "  line-height: var(--olo-font-{$id}-line-height, inherit);\n";
+                $css .= "  letter-spacing: var(--olo-font-{$id}-letter-spacing, normal);\n";
+                $css .= "}\n\n";
+                // Le tile scrivono la tipografia del proprio titolo INLINE, e
+                // l'inline batte qualsiasi regola. Ma la scrivono attraverso le
+                // variabili di ruolo: ridefinendole qui sul wrapper, la
+                // dichiarazione inline della tile si risolve nel font del preset
+                // senza toccare duecento renderer. Il ruolo mono resta fuori: il
+                // codice deve restare monospaziato.
+                $css .= "{$sel} {\n";
+                $css .= "  --olo-font-family: var(--olo-font-{$id}-family, var(--olo-font-family));\n";
+                $css .= "  --olo-font-family-heading: var(--olo-font-{$id}-family, var(--olo-font-family-heading));\n";
+                $css .= "}\n\n";
+            }
+        }
+
         // UIkit overrides - Sections
         // background-color WITHOUT !important so inline styles (custom bg) can override
         // color WITH !important to ensure text contrast with section style

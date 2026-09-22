@@ -991,6 +991,8 @@ class Olobuild_Frontend_Renderer {
 
         // Build classes
         $classes = [ 'olo-frontend-tile' ];
+        $typo_class = $this->typo_preset_class( $settings );
+        if ( $typo_class ) $classes[] = $typo_class;
         if ( $shadow_class ) $classes[] = $shadow_class;
         if ( $is_fullwidth ) $classes[] = 'olo-tile-fullwidth';
         // Larghezza adattata al contenuto (Avanzate → Posizionamento): tile

@@ -162,6 +162,17 @@ trait Olobuild_Renderer_Css_Trait {
      *                                Row lo skippa perché il flex va al `<div uk-grid>` interno,
      *                                non al wrapper esterno.
      */
+    /**
+     * Classe del preset tipografico globale, o '' se la tile non ne usa uno.
+     * Le regole stanno in Olobuild_Style_System::generate_css() e colpiscono i
+     * DISCENDENTI del wrapper: l'eredita' da sola perdeva contro le regole del
+     * tema, e il comando non faceva niente.
+     */
+    protected function typo_preset_class( array $settings ) {
+        $preset = isset( $settings['typography_preset'] ) ? sanitize_key( (string) $settings['typography_preset'] ) : '';
+        return $preset === '' ? '' : 'olo-typo-' . $preset;
+    }
+
     private function apply_common_box_styles( array &$inline_styles, array $style, array $settings, array $advanced = [], array $opts = [] ) {
         $apply_box_shadow = $opts['apply_box_shadow'] ?? true;
         $apply_flex       = $opts['apply_flex'] ?? true;
@@ -176,18 +187,15 @@ trait Olobuild_Renderer_Css_Trait {
         if ( ! empty( $style['padding_left'] ) )   $inline_styles[] = 'padding-left: ' . intval( $style['padding_left'] ) . 'px';
 
         // Preset tipografico globale (Stili globali → Tipografia).
-        // 143 tile dichiarano `typography_preset` nel loro config ma solo 7 renderer
-        // lo leggevano: il controllo esisteva e non faceva niente. Applicato qui sul
-        // WRAPPER, le proprietà si ereditano a tutto il contenuto della tile e ogni
-        // valore esplicito della tile continua a vincere (inline sul figlio > eredità).
-        $typo_preset = isset( $settings['typography_preset'] ) ? sanitize_key( (string) $settings['typography_preset'] ) : '';
-        if ( $typo_preset !== '' ) {
-            $inline_styles[] = "font-family: var(--olo-font-{$typo_preset}-family, inherit)";
-            $inline_styles[] = "font-weight: var(--olo-font-{$typo_preset}-weight, inherit)";
-            $inline_styles[] = "text-transform: var(--olo-font-{$typo_preset}-transform, none)";
-            $inline_styles[] = "line-height: var(--olo-font-{$typo_preset}-line-height, inherit)";
-            $inline_styles[] = "letter-spacing: var(--olo-font-{$typo_preset}-letter-spacing, normal)";
-        }
+        // Prima le cinque proprietà finivano INLINE sul wrapper e scendevano per
+        // eredità: ma l'eredità perde contro qualsiasi regola che tocchi il figlio,
+        // e ogni titolo di ogni tile è già preso da una regola del tema o di UIkit.
+        // Risultato: si sceglieva uno stile e non cambiava niente. Ora il preset è
+        // una classe sul wrapper e le regole (in class-style-system) colpiscono i
+        // discendenti, restando sotto ai valori inline che la tile scrive per le
+        // proprietà scelte davvero dall'utente.
+        // La classe la aggiunge chi compone il wrapper: Olobuild_Frontend_Renderer
+        // per le tile, il telaio per sezione/riga/colonna (typo_preset_class()).
 
         // Border radius
         if ( ! empty( $style['border_radius'] ) )  $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );

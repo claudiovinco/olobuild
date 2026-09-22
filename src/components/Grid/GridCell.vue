@@ -261,6 +261,12 @@ const { effectiveBg, hasBgImage, hasOverlay, bgImageStyle, overlayStyle, bgInlin
 
 const cellClasses = computed(() => {
   const classes = ['olo-grid-cell'];
+  // Preset tipografico globale — gemello canvas di Olobuild_Frontend_Renderer:
+  // e' una CLASSE, non cinque proprieta' inline. Le regole (stores/styles.js,
+  // gemelle di class-style-system.php) colpiscono i discendenti, perche' per
+  // sola eredita' il preset perdeva contro ogni regola del tema.
+  const typoPreset = String(props.tile.settings?.typography_preset || '').replace(/[^a-z0-9_-]/gi, '');
+  if (typoPreset) classes.push('olo-typo-' + typoPreset);
   if (isSelected.value) classes.push('olo-grid-cell--selected');
   if (props.tile.style?.full_width) classes.push('olo-grid-cell--fullwidth');
   if (hasBgImage.value || hasOverlay.value) classes.push('olo-grid-cell--has-bg');
@@ -286,16 +292,6 @@ const cellStyle = computed(() => {
   const mode = builderStore.viewMode;
   const style = {};
 
-  // Preset tipografico globale — gemello canvas di apply_common_box_styles():
-  // le proprietà vanno sul wrapper e si ereditano al contenuto della tile.
-  const typoPreset = String(set.typography_preset || '').replace(/[^a-z0-9_-]/gi, '');
-  if (typoPreset) {
-    style.fontFamily = `var(--olo-font-${typoPreset}-family, inherit)`;
-    style.fontWeight = `var(--olo-font-${typoPreset}-weight, inherit)`;
-    style.textTransform = `var(--olo-font-${typoPreset}-transform, none)`;
-    style.lineHeight = `var(--olo-font-${typoPreset}-line-height, inherit)`;
-    style.letterSpacing = `var(--olo-font-${typoPreset}-letter-spacing, normal)`;
-  }
 
   // Ombra DELLA TILE — gemello canvas di render_element_node(). 54 tile montano
   // il controllo «Ombra» condiviso senza disegnarlo da nessuna parte: per quelle
