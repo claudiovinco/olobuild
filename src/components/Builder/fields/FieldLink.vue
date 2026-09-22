@@ -49,7 +49,7 @@
       v-if="open"
       ref="dropdownRef"
       class="mb-absolute mb-left-0 mb-right-0 mb-top-full mb-mt-1 mb-bg-white mb-border mb-border-gray-300 mb-rounded-lg mb-shadow-xl mb-overflow-hidden"
-      style="z-index:99999; min-width:280px"
+      style="z-index:100090; min-width:280px"
     >
       <!-- Header -->
       <div class="mb-px-3 mb-py-1.5 mb-border-b mb-border-gray-200 mb-flex mb-items-center mb-justify-between mb-bg-gray-50" style="font-size:10px">

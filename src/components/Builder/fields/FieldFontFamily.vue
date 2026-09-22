@@ -53,8 +53,20 @@
           </template>
 
           <!-- Set tipografici globali (GlobalTypographyPanel) -->
-          <template v-if="filteredTypoSets.length">
-            <div class="ff-group-label">{{ t('Set tipografici') }}</div>
+          <!-- L'intestazione esce anche a lista vuota: è l'unico punto da cui
+               si arriva a crearne uno. Non quando siamo GIÀ dentro il pannello. -->
+          <template v-if="filteredTypoSets.length || (!search && !typographyOpen)">
+            <div class="ff-group-label ff-group-label--action">
+              {{ t('Set tipografici') }}
+              <button
+                v-if="!typographyOpen"
+                type="button"
+                class="ff-new-set"
+                :title="t('Gestisci gli stili tipografici del sito')"
+                @click.stop="apriStiliGlobali"
+              >+</button>
+            </div>
+            <div v-if="!filteredTypoSets.length" class="ff-empty-hint">{{ t('Nessun set, per ora.') }}</div>
             <div
               v-for="set in filteredTypoSets"
               :key="'set-' + set.id"
@@ -141,6 +153,7 @@
 import { t } from '@/i18n';
 import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { useStylesStore } from '@/stores/styles';
+import { useGlobalPanels } from '@/composables/useGlobalPanels';
 import { useFocusTrap } from '@/composables/useFocusTrap';
 import { FONT_ROLE_VARS } from '@/composables/oloTileDefaults';
 
@@ -170,6 +183,12 @@ const LEGACY_LABELS = {
 const emit = defineEmits(['update:modelValue']);
 
 const stylesStore = useStylesStore();
+// I set tipografici si elencavano soltanto: da qui si aprono anche in modifica.
+const { openTypography, typographyOpen } = useGlobalPanels();
+function apriStiliGlobali() {
+  open.value = false;
+  openTypography();
+}
 const open = ref(false);
 const search = ref('');
 const rootEl = ref(null);
@@ -397,9 +416,16 @@ function loadGoogleFontsPreview() {
   }
 }
 
+function chiudiSuScroll(e) {
+  if (dropdownEl.value && e.target instanceof Node && dropdownEl.value.contains(e.target)) return;
+  open.value = false;
+}
+
 watch(open, async (val) => {
   if (val) {
     positionDropdown();
+    window.addEventListener('scroll', chiudiSuScroll, { capture: true });
+    window.addEventListener('resize', positionDropdown);
     loadGoogleFontsPreview();
     await loadCustomFonts();
     injectCustomFontFaces();
@@ -411,12 +437,16 @@ watch(open, async (val) => {
       });
     });
   } else {
+    window.removeEventListener('scroll', chiudiSuScroll, { capture: true });
+    window.removeEventListener('resize', positionDropdown);
     search.value = '';
     deactivateTrap();
   }
 });
 
 onBeforeUnmount(() => {
+  window.removeEventListener('scroll', chiudiSuScroll, { capture: true });
+  window.removeEventListener('resize', positionDropdown);
   if (previewLinkEl.value) {
     previewLinkEl.value.remove();
     previewLinkEl.value = null;
@@ -462,11 +492,11 @@ onBeforeUnmount(() => {
 .ff-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 99998;
+  z-index: 100080;
 }
 
 .ff-dropdown {
-  z-index: 99999;
+  z-index: 100090;
   background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
@@ -510,6 +540,30 @@ onBeforeUnmount(() => {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  color: #9CA3AF;
+}
+.ff-group-label--action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.ff-new-set {
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #6b7280;
+  border-radius: 4px;
+  width: 18px;
+  height: 18px;
+  line-height: 1;
+  font-size: 13px;
+  cursor: pointer;
+}
+.ff-new-set:hover { border-color: var(--olo-ui-accent, #e8622a); color: var(--olo-ui-accent, #e8622a); }
+.ff-new-set:focus-visible { outline: 2px solid var(--olo-ui-accent, #e8622a); outline-offset: 1px; }
+.ff-empty-hint {
+  padding: 2px 12px 6px;
+  font-size: 11px;
   color: #9CA3AF;
 }
 

@@ -3,6 +3,22 @@ import { contrastOn } from '@/composables/oloTileDefaults';
 
 const oloData = window.oloData || {};
 
+// Il valore di un set tipografico può essere un var() di ruolo, uno stack
+// web-safe o il nome di un solo font: virgolettare sempre trasformava le prime
+// due forme in un nome di font inesistente, e la famiglia non si applicava.
+function famigliaCss(family) {
+  const v = String(family || '').trim();
+  if (!v) return '';
+  if (v.startsWith('var(') || v.includes(',') || v.includes("'") || v.includes('"')) return v;
+  return `'${v}', sans-serif`;
+}
+
+// Gli helper restituiscono già l'unità: "0.5px" + "px" = dichiarazione scartata.
+function lunghezzaCss(v) {
+  const s = String(v ?? '0').trim() || '0';
+  return /^-?[\d.]+$/.test(s) ? s + 'px' : s;
+}
+
 function cssRadius(val, fallback = '4px') {
   if (typeof val === 'object' && val !== null) {
     return `${val.tl || 0}px ${val.tr || 0}px ${val.br || 0}px ${val.bl || 0}px`;
@@ -147,11 +163,11 @@ export const useStylesStore = defineStore('styles', {
         css += '  /* Global Typography Sets */\n';
         for (const gt of state.globalTypography) {
           if (!gt.id) continue;
-          if (gt.family) css += `  --olo-font-${gt.id}-family: '${gt.family}', sans-serif;\n`;
+          if (gt.family) css += `  --olo-font-${gt.id}-family: ${famigliaCss(gt.family)};\n`;
           css += `  --olo-font-${gt.id}-weight: ${gt.weight || '400'};\n`;
           css += `  --olo-font-${gt.id}-transform: ${gt.transform || 'none'};\n`;
           css += `  --olo-font-${gt.id}-line-height: ${gt.line_height || '1.5'};\n`;
-          css += `  --olo-font-${gt.id}-letter-spacing: ${gt.letter_spacing || '0'}px;\n`;
+          css += `  --olo-font-${gt.id}-letter-spacing: ${lunghezzaCss(gt.letter_spacing)};\n`;
         }
       }
 

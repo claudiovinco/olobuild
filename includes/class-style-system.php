@@ -810,12 +810,21 @@ class Olobuild_Style_System {
                 $letter_spacing = sanitize_text_field( $gt['letter_spacing'] ?? '0' );
 
                 if ( $family ) {
-                    $css .= "  --olo-font-{$id}-family: '{$family}', sans-serif;\n";
+                    // Il valore puo essere un var() di ruolo o uno stack web-safe:
+                    // virgolettarlo sempre ne faceva il nome di un font inesistente.
+                    $family_css = $family;
+                    if ( strpos( $family, 'var(' ) !== 0 && strpos( $family, ',' ) === false
+                        && strpos( $family, "'" ) === false && strpos( $family, '"' ) === false ) {
+                        $family_css = "'{$family}', sans-serif";
+                    }
+                    $css .= "  --olo-font-{$id}-family: {$family_css};\n";
                 }
                 $css .= "  --olo-font-{$id}-weight: {$weight};\n";
                 $css .= "  --olo-font-{$id}-transform: {$transform};\n";
                 $css .= "  --olo-font-{$id}-line-height: {$line_height};\n";
-                $css .= "  --olo-font-{$id}-letter-spacing: {$letter_spacing}px;\n";
+                // Gli helper restituiscono gia l'unita: "0.5px" + px = dichiarazione scartata.
+                $ls_css = preg_match( '/^-?[0-9.]+$/', $letter_spacing ) ? $letter_spacing . 'px' : $letter_spacing;
+                $css .= "  --olo-font-{$id}-letter-spacing: {$ls_css};\n";
             }
         }
 

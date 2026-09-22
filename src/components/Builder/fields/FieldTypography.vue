@@ -358,6 +358,14 @@
             <label class="typo-label">{{ t('Ombra testo') }}</label>
             <FieldSelect ui="dropdown" :model-value="values[keys.shadow] || ''" :options="SHADOW_OPTIONS" @update:model-value="emitKey(keys.shadow, $event)" />
           </div>
+
+          <!-- Gli stili del sito si raggiungono da OGNI punto in cui si parla di
+               tipografia, non solo dal select dei preset: qui dentro ci sono le
+               tile che il preset non ce l'hanno affatto. -->
+          <button type="button" class="typo-preset-new typo-preset-new--footer" @click="apriStiliGlobali">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            {{ t('Stili tipografici del sito') }}
+          </button>
         </div>
       </div>
     </Teleport>
@@ -544,11 +552,14 @@ function selectPreset(value) {
   presetOpen.value = false;
 }
 
-// Gli stili globali si creano dal builder, non solo da wp-admin.
-function newPreset() {
+// Gli stili globali si creano dal builder, non solo da wp-admin. Chiude
+// entrambi i popover: si arriva qui sia dal globo sia dal fondo della matita.
+function apriStiliGlobali() {
   presetOpen.value = false;
+  open.value = false;
   openTypography();
 }
+const newPreset = apriStiliGlobali;
 
 const globalPresets = computed(() => {
   const sets = stylesStore.globalTypography || [];
@@ -772,10 +783,10 @@ watch(presetOpen, (val) => {
 .typo-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 99998;
+  z-index: 100080;
 }
 .typo-pop {
-  z-index: 99999;
+  z-index: 100090;
   background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
@@ -992,6 +1003,16 @@ watch(presetOpen, (val) => {
   outline: 2px solid var(--olo-ui-accent, #e8622a);
   outline-offset: 1px;
 }
+/* In coda al popover: separato dai controlli da una riga sottile */
+.typo-preset-new--footer {
+  width: 100%;
+  margin-top: 4px;
+  padding-top: 10px;
+  border: 0;
+  border-top: 1px solid #f0f1f3;
+  border-radius: 0;
+}
+.typo-preset-new--footer:hover { background: transparent; }
 
 .typo-body::-webkit-scrollbar { width: 6px; }
 .typo-body::-webkit-scrollbar-track { background: transparent; }

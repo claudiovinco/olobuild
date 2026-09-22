@@ -144,6 +144,27 @@
                 @update:modelValue="updateField(index, field.key, $event)"
               />
 
+              <!-- stili tipografici globali: qui dentro vale la stessa regola
+                   dell'inspector — accanto alla scelta c'è come crearne uno -->
+              <div
+                v-else-if="field.type === 'select' && field.optionsSource === 'globalTypography'"
+                class="cie-typo-row"
+              >
+                <FieldSelect
+                  ui="dropdown"
+                  class="cie-typo-select"
+                  :modelValue="element[field.key] || ''"
+                  :options="resolveSelectOptions(field)"
+                  @update:modelValue="updateField(index, field.key, $event)"
+                />
+                <button
+                  type="button"
+                  class="cie-new-style"
+                  :title="t('Nuovo stile tipografico')"
+                  @click="openTypography"
+                >+</button>
+              </div>
+
               <!-- select (dropdown custom, popup nativo non stilizzabile) -->
               <FieldSelect
                 v-else-if="field.type === 'select'"
@@ -321,6 +342,8 @@ import iconsSvg from '../ProSlider/uikitIconsSvg.js';
 import { useMediaPicker } from '@/composables/useMediaPicker';
 import { isFieldVisible as sharedIsFieldVisible } from '@/utils/fieldCondition';
 import InspectorField from './InspectorField.vue';
+import { useStylesStore } from '@/stores/styles';
+import { useGlobalPanels } from '@/composables/useGlobalPanels';
 
 // Tipi resi NATIVAMENTE qui dentro (markup compatto pensato per la riga di un item).
 // Tutto il resto passa da InspectorField: così un controllo nuovo nasce disponibile
@@ -357,6 +380,9 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'update:dynamic-query', 'update:dynamic-item-map']);
 
+const stylesStore = useStylesStore();
+const { openTypography } = useGlobalPanels();
+
 const tileQuery = computed(() => props.dynamic?._query || {});
 const tileItemMap = computed(() => props.dynamic?._itemMap || {});
 const isDynamicQueryActive = computed(() => !!tileQuery.value?.enabled);
@@ -382,7 +408,10 @@ function resolveSelectOptions(field) {
     case 'widgetTemplates': return md.widgetTemplates || [{ value: 0, label: '— Nessun widget —' }];
     case 'wpPages':         return md.wpPages || [];
     case 'serviceList':     return [{ value: '', label: '— Tutti i servizi —' }, ...(md.serviceList || [])];
-    case 'globalTypography':return md.globalTypography || [];
+    case 'globalTypography':return [
+      { value: '', label: t('— Nessuno —') },
+      ...(stylesStore.globalTypography || []).map(gt => ({ value: gt.id, label: gt.label || gt.id })),
+    ];
     default:                return [];
   }
 }
@@ -698,6 +727,27 @@ function removeItem(index) {
 </script>
 
 <style scoped>
+.cie-typo-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+.cie-typo-select { flex: 1; min-width: 0; }
+.cie-new-style {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #6b7280;
+  border-radius: 4px;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+}
+.cie-new-style:hover { border-color: var(--olo-ui-accent, #e8622a); color: var(--olo-ui-accent, #e8622a); }
+.cie-new-style:focus-visible { outline: 2px solid var(--olo-ui-accent, #e8622a); outline-offset: 1px; }
 .cie-list {
   display: flex;
   flex-direction: column;

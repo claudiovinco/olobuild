@@ -194,7 +194,7 @@ function position() {
     width: `${popW}px`,
     top: openUp ? `${Math.round(r.top - popH - 4)}px` : `${Math.round(r.bottom + 4)}px`,
     maxHeight: '264px',
-    zIndex: 100000,
+    zIndex: 100090,
   };
 }
 
@@ -324,7 +324,7 @@ onBeforeUnmount(() => close(false));
 }
 .fsel-chev--open { transform: rotate(180deg); }
 
-.fsel-backdrop { position: fixed; inset: 0; z-index: 99999; }
+.fsel-backdrop { position: fixed; inset: 0; z-index: 100080; }
 .fsel-pop {
   background: #fff;
   border: 1px solid #e5e7eb;

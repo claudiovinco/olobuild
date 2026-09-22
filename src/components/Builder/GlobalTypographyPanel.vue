@@ -8,12 +8,13 @@
     <div class="gtp-list">
       <div
         v-for="(set, index) in localSets"
-        :key="set.id + '-' + index"
+        :key="set._uid"
         class="gtp-item"
       >
         <div class="gtp-item-header">
           <input
             type="text"
+            :ref="el => registraNome(set._uid, el)"
             :value="set.label"
             @input="updateField(index, 'label', $event.target.value)"
             :placeholder="t('Nome set')"
@@ -68,7 +69,7 @@
             <input
               type="text"
               :value="set.line_height"
-              @change="updateField(index, 'line_height', $event.target.value)"
+              @input="updateField(index, 'line_height', $event.target.value)"
               class="gtp-input gtp-input--small"
             />
           </div>
@@ -79,7 +80,7 @@
             <input
               type="text"
               :value="set.letter_spacing"
-              @change="updateField(index, 'letter_spacing', $event.target.value)"
+              @input="updateField(index, 'letter_spacing', $event.target.value)"
               class="gtp-input gtp-input--small"
             />
           </div>
@@ -94,11 +95,11 @@
         <div
           class="gtp-preview"
           :style="{
-            fontFamily: set.family ? (set.family + ', sans-serif') : 'inherit',
+            fontFamily: famigliaCss(set.family),
             fontWeight: set.weight,
             textTransform: set.transform === 'none' ? 'initial' : set.transform,
-            lineHeight: set.line_height,
-            letterSpacing: set.letter_spacing + 'px',
+            lineHeight: set.line_height || 'normal',
+            letterSpacing: set.letter_spacing === '' || set.letter_spacing == null ? 'normal' : set.letter_spacing + 'px',
           }"
         >
           {{ t('Anteprima del testo - Abc 123') }}
@@ -127,7 +128,7 @@
 
 <script setup>
 import { t } from '@/i18n';
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, nextTick } from 'vue';
 import { useStylesStore } from '@/stores/styles';
 import { useToast } from '@/composables/useToast.js';
 import FieldFontFamily from './fields/FieldFontFamily.vue';
@@ -156,60 +157,115 @@ const transformOptions = [
   { value: 'capitalize', label: 'Capitalizza' },
 ];
 
-// Local copy for editing
-const localSets = ref(JSON.parse(JSON.stringify(stylesStore.globalTypography || [])));
-
-// If the store has no sets yet, provide defaults
-if (localSets.value.length === 0) {
-  localSets.value = [
-    { id: 'heading', label: 'Titoli', family: 'Montserrat', weight: '700', transform: 'none', line_height: '1.3', letter_spacing: '0' },
-    { id: 'subheading', label: 'Sottotitoli', family: 'Montserrat', weight: '500', transform: 'none', line_height: '1.4', letter_spacing: '0.5' },
-    { id: 'body', label: 'Corpo testo', family: 'Open Sans', weight: '400', transform: 'none', line_height: '1.6', letter_spacing: '0' },
-    { id: 'small', label: 'Testo piccolo', family: 'Open Sans', weight: '400', transform: 'none', line_height: '1.5', letter_spacing: '0' },
-  ];
+// `_uid` NON si salva: serve solo come chiave stabile del v-for. Con la chiave
+// derivata dall'id — che si rigenera dal nome a ogni tasto — Vue smontava e
+// rimontava l'input e il focus si perdeva dopo una lettera sola.
+let contatoreUid = 0;
+function normalizza(sets, nuovi = false) {
+  return (sets || []).map((s) => ({
+    ...s,
+    _uid: 'u' + (++contatoreUid),
+    _nuovo: nuovi,
+  }));
 }
+
+const localSets = ref(normalizza(JSON.parse(JSON.stringify(stylesStore.globalTypography || []))));
 
 const isDirty = ref(false);
 const isSaving = computed(() => stylesStore.isSaving);
 
-function generateId(label) {
-  return label
+// Se il sito non ha ancora set, la lista parte con una proposta: sono set nuovi,
+// quindi il pulsante «Salva» deve essere attivo (altrimenti non si salvano mai).
+if (localSets.value.length === 0) {
+  localSets.value = normalizza([
+    { id: 'heading', label: 'Titoli', family: 'Montserrat', weight: '700', transform: 'none', line_height: '1.3', letter_spacing: '0' },
+    { id: 'subheading', label: 'Sottotitoli', family: 'Montserrat', weight: '500', transform: 'none', line_height: '1.4', letter_spacing: '0.5' },
+    { id: 'body', label: 'Corpo testo', family: 'Open Sans', weight: '400', transform: 'none', line_height: '1.6', letter_spacing: '0' },
+    { id: 'small', label: 'Testo piccolo', family: 'Open Sans', weight: '400', transform: 'none', line_height: '1.5', letter_spacing: '0' },
+  ], true);
+  isDirty.value = true;
+}
+
+// Il nome dei set appena aggiunti va messo a fuoco: si scrive subito.
+const campiNome = new Map();
+function registraNome(uid, el) {
+  if (el) campiNome.set(uid, el);
+  else campiNome.delete(uid);
+}
+
+function famigliaCss(family) {
+  if (!family) return 'inherit';
+  // I valori possono essere un var() di ruolo, uno stack web-safe o un nome
+  // singolo: la riserva si aggiunge solo all'ultimo caso.
+  if (family.includes(',') || family.startsWith('var(')) return family;
+  return family + ', sans-serif';
+}
+
+function slug(label) {
+  return String(label || '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')
-    || 'set-' + Date.now();
+    .replace(/^-|-$/g, '');
+}
+
+function idLibero(base, index) {
+  const radice = base || 'set';
+  let id = radice;
+  let n = 2;
+  while (localSets.value.some((s, i) => i !== index && s.id === id)) {
+    id = radice + '-' + (n++);
+  }
+  return id;
 }
 
 function updateField(index, field, value) {
   localSets.value[index][field] = value;
-  if (field === 'label') {
-    localSets.value[index].id = generateId(value);
+  // L'id è il nome della variabile CSS (--olo-font-<id>-family): rinominare un
+  // set già salvato lo staccherebbe dalle tile che lo usano. Si rigenera solo
+  // finché il set non è mai stato salvato.
+  if (field === 'label' && localSets.value[index]._nuovo) {
+    localSets.value[index].id = idLibero(slug(value), index);
   }
   isDirty.value = true;
 }
 
-function addSet() {
+async function addSet() {
   const n = localSets.value.length + 1;
-  localSets.value.push({
-    id: 'set-' + n,
+  const [set] = normalizza([{
+    id: '',
     label: 'Set ' + n,
     family: '',
     weight: '400',
     transform: 'none',
     line_height: '1.5',
     letter_spacing: '0',
-  });
+  }], true);
+  localSets.value.push(set);
+  localSets.value[localSets.value.length - 1].id = idLibero(slug(set.label), localSets.value.length - 1);
   isDirty.value = true;
+  await nextTick();
+  const el = campiNome.get(set._uid);
+  if (el) {
+    el.scrollIntoView({ block: 'nearest' });
+    el.focus();
+    el.select();
+  }
 }
 
 function removeSet(index) {
+  campiNome.delete(localSets.value[index]._uid);
   localSets.value.splice(index, 1);
   isDirty.value = true;
 }
 
 async function save() {
-  stylesStore.setGlobalTypography(JSON.parse(JSON.stringify(localSets.value)));
+  const puliti = localSets.value.map((s, i) => {
+    const { _uid, _nuovo, ...resto } = s;
+    return { ...resto, id: resto.id || idLibero(slug(resto.label), i) };
+  });
+  stylesStore.setGlobalTypography(JSON.parse(JSON.stringify(puliti)));
   await stylesStore.saveGlobalTypography();
+  localSets.value.forEach((s) => { s._nuovo = false; });
   isDirty.value = false;
   toast.success(t('Tipografia globale salvata'));
 }
@@ -217,7 +273,7 @@ async function save() {
 // Sync from store if it changes externally
 watch(() => stylesStore.globalTypography, (newVal) => {
   if (!isDirty.value) {
-    localSets.value = JSON.parse(JSON.stringify(newVal || []));
+    localSets.value = normalizza(JSON.parse(JSON.stringify(newVal || [])));
   }
 }, { deep: true });
 </script>
