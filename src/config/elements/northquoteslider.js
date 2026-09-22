@@ -15,6 +15,7 @@ export default {
   category: 'marketing',
 
   defaults: {
+    typography_preset: '',
     heading: 'Why enterprises and innovators choose Cohere',
     items: [
       {
@@ -79,6 +80,7 @@ export default {
     // La citazione ha dimensione E colore: stanno insieme nel controllo unico
     // (chiavi invariate). Gli altri testi hanno solo il colore e restano sotto.
     { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Quote'), responsiveKeys: [],
       keys: { size: 'quote_size', color: 'quote_color' }, sizeMin: 16, sizeMax: 48 },
 

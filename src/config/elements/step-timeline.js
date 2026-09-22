@@ -17,6 +17,7 @@ export default {
   category: 'layout',
 
   defaults: {
+    typography_preset: '',
     items: [
       {
         counter: '01',
@@ -200,6 +201,7 @@ export default {
     { key: 'timeline_margin_bottom', label: t('Margine timeline'), type: 'spacing', min: 0, max: 160 },
 
     { type: 'separator', label: t('Numero step') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Numero'), responsiveKeys: [], keys: { size: 'counter_size', weight: 'counter_weight', color: 'counter_color', italic: 'counter_italic', family: 'counter_font_family' }, sizeMin: 40, sizeMax: 200, sizeStep: 4 },
 
     { type: 'separator', label: t('Tag') },

@@ -18,6 +18,7 @@ export default {
   hidden: true,
 
   defaults: {
+    typography_preset: '',
     edition_text: 'Friday, 6 March 2026 · Milan',
     nameplate_text: 'The Dispatch',
     action1_text: 'Sign in',
@@ -85,6 +86,7 @@ export default {
     // Un controllo per elemento di testo, non un range per proprietà: stessa
     // forma di tutte le altre tile. Chiavi invariate.
     { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Nameplate'), responsiveKeys: [],
       keys: { size: 'nameplate_size' }, sizeMin: 24, sizeMax: 96 },
     { type: 'typography', label: t('Titolo'), responsiveKeys: [],

@@ -28,6 +28,7 @@ export default {
   category: 'layout',
 
   defaults: {
+    typography_preset: '',
     items: [
       { color: '#9a3b52', name: 'Rosewood',   sub: 'Cool · matte',  link_url: '' },
       { color: '#c77a6a', name: 'Terracotta',  sub: 'Warm · matte',  link_url: '' },
@@ -148,6 +149,7 @@ export default {
     { type: 'separator', label: t('Nome') },
     withHover({ key: 'name_color', label: t('Colore'), type: 'color' },
       { hoverKey: 'name_hover_color', hoverDurationKey: 'name_color_hover_duration', defaultDuration: 200 }),
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Nome'), responsiveKeys: [], keys: { size: 'name_size', uppercase: 'name_uppercase', family: 'name_font_family' }, sizeMin: 14, sizeMax: 56 },
 
     { type: 'separator', label: t('Sotto-etichetta') },

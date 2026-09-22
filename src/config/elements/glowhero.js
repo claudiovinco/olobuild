@@ -19,6 +19,7 @@ export default {
   hidden: true,
 
   defaults: {
+    typography_preset: '',
     eyebrow: 'Independent studio | Est. 2015 | Milan / everywhere',
     lines: [
       { text: 'Design with', mode: '' },
@@ -129,6 +130,7 @@ export default {
     { key: 'h_size_min', label: t('Dimensione min'), type: 'range', min: 20, max: 90, step: 1 },
     { key: 'h_size_vw', label: t('Dimensione fluida'), type: 'range', min: 4, max: 16, step: 0.5 },
     { key: 'h_size_max', label: t('Dimensione max'), type: 'range', min: 80, max: 240, step: 2 },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { lineHeight: 'h_line_height' } },
     { key: 'stroke_width', label: t('Spessore contorno outline'), type: 'range', min: 0, max: 5, step: 0.5 },
 

@@ -11,6 +11,7 @@ export default {
   category: 'layout',
 
   defaults: {
+    typography_preset: '',
     items: [
       { day: 'Lun — Gio', time: '12 — 23', note: 'Cucina fino alle 22' },
       { day: 'Ven — Sab', time: '12 — 24', note: 'Aperitivo dalle 18' },
@@ -66,6 +67,7 @@ export default {
 
     { type: 'separator', label: t('Giorno') },
     { key: 'mono_font_family', label: t('Font etichette (vuoto = mono del tema)'), type: 'font-family' },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Giorno'), responsiveKeys: [], keys: { size: 'day_size', color: 'day_color' }, sizeMin: 10, sizeMax: 18 },
 
     { type: 'separator', label: t('Orario') },

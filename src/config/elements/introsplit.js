@@ -21,6 +21,7 @@ export default {
   bgMigrate: { imageKey: 'media_image', imagePosKey: 'media_image_object_position' },
 
   defaults: {
+    typography_preset: '',
     eyebrow: 'One unit · since 1974',
     eyebrow_color: '',
     headline: 'A regional club with a',
@@ -154,6 +155,7 @@ export default {
     { key: 'badge_color', label: t('Badge testo (vuoto = contrasto primario)'), type: 'color' },
 
     { type: 'separator', label: t('Tipografia titolo') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { weight: 'headline_weight', size: 'headline_size', color: 'headline_color' }, sizeMin: 0, sizeMax: 120, sizeStep: 2 },
 
     { type: 'separator', label: t('Media') },

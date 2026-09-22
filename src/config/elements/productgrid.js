@@ -16,6 +16,7 @@ export default {
   category: 'media',
 
   defaults: {
+    typography_preset: '',
     source: 'custom',
     woo_category: '',
     woo_limit: 8,
@@ -225,6 +226,7 @@ export default {
 
     { type: 'separator', label: t('Testo') },
     { key: 'category_color', label: t('Categoria'), type: 'color' },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { family: 'title_font', size: 'title_size', color: 'title_color' }, sizeMin: 14, sizeMax: 32 },
     { key: 'price_color', label: t('Prezzo (accento)'), type: 'color' },
     { key: 'footer_color', label: t('Link finale — colore'), type: 'color' },

@@ -32,6 +32,7 @@ export default {
   ],
 
   defaults: {
+    typography_preset: '',
     media: { type: 'none' },
     top_media: { type: 'none' },
     bottom_media: { type: 'none' },
@@ -127,6 +128,7 @@ export default {
     { key: 'top_icon_color', label: t('Colore icona'), type: 'color',
       condition: { field: 'top_icon', operator: '!=', value: '' } },
     { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Zona Visibile'),
       responsiveKeys: ['size'],
       keys: {

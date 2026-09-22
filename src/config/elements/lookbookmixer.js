@@ -12,6 +12,7 @@ export default {
   category: 'layout',
 
   defaults: {
+    typography_preset: '',
     items: [
       { step: 'Cleanse', name: 'Rosewater Gel',   price: '24', color: '#f4c9d4' },
       { step: 'Cleanse', name: 'Clay Melt Balm',  price: '29', color: '#e3b778' },
@@ -79,6 +80,7 @@ export default {
     // Famiglia + colore del nome nello stesso controllo. Il prezzo ha SOLO il
     // colore, e un colore da solo non è tipografia: resta fra i colori.
     { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Nome / totale'), responsiveKeys: [],
       keys: { family: 'name_font_family', color: 'name_color' } },
     { type: 'typography', label: t('Etichette'), responsiveKeys: [],

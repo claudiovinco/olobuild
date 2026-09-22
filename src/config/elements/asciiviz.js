@@ -22,6 +22,7 @@ export default {
   icon: 'dashicons-format-audio',
   category: 'media',
   defaults: {
+    typography_preset: '',
     // ── Contenuto / player ──
     show_player: true,
     track_label: 'Ora in onda',
@@ -116,6 +117,7 @@ export default {
     { key: 'glow', label: t('Bagliore (glow px)'), type: 'range', min: 0, max: 30, step: 1 },
 
     { type: 'separator', label: t('Tipografia ASCII') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Caratteri'),
       keys: {
         size:          'font_size',

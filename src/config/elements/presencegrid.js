@@ -22,6 +22,7 @@ export default {
   icon: 'dashicons-groups',
   category: 'dynamic',
   defaults: {
+    typography_preset: '',
     preset: 'custom',
     bg: { type: 'none' },
 
@@ -183,6 +184,7 @@ export default {
     // Un controllo per elemento di testo: dimensione, peso e colore del nome
     // stanno insieme (i colori arrivavano dalla sezione «Card»). Chiavi invariate.
     { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Nome'), responsiveKeys: [],
       keys: { size: 'name_size', weight: 'name_weight', color: 'card_color' },
       sizeMin: 10, sizeMax: 24 },

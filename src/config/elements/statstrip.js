@@ -12,6 +12,7 @@ export default {
   category: 'layout',
 
   defaults: {
+    typography_preset: '',
     items: [
       { value: '500+', label: 'Progetti consegnati' },
       { value: '12', label: 'Anni di attività' },
@@ -69,6 +70,7 @@ export default {
     { key: 'divider_color', label: t('Colore linee'),          type: 'color' },
 
     { type: 'separator', label: t('Valore') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Valore'), responsiveKeys: ['size'], keys: { size: 'value_size', weight: 'value_weight', color: 'value_color', family: 'value_font_family' }, sizeMin: 20, sizeMax: 96 },
 
     { type: 'separator', label: t('Etichetta') },

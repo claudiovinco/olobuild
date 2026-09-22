@@ -17,6 +17,7 @@ export default {
   category: 'layout',
 
   defaults: {
+    typography_preset: '',
     container_bg:                       { type: 'solid', color: 'var(--olo-color-dark, #16263d)' },
     container_radius:                   { ...R24 },
     container_radius_hover:             { ...R24 },
@@ -156,6 +157,7 @@ export default {
     withHover({ key: 'media_radius', label: t('Raggio media'), type: 'border-radius' }, { hoverKey: 'media_radius_hover', hoverDurationKey: 'media_radius_hover_duration' }),
 
     { type: 'separator', label: t('Tipografia titolo') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'title_size', weight: 'title_weight', italic: 'title_italic', family: 'title_font_family' }, sizeMin: 18, sizeMax: 160, sizeStep: 2 },
 
     { type: 'separator', label: t('Dimensioni secondarie') },

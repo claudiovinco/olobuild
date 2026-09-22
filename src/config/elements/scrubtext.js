@@ -17,6 +17,7 @@ export default {
   category: 'text',
 
   defaults: {
+    typography_preset: '',
     text: 'Idee che si <em>vedono.</em><br/>Progetti che <em>funzionano.</em>',
     show_lead: true,
     lead: 'La mia consulenza parte da un\'analisi della situazione reale dell\'azienda — sfide e opportunità — per identificare le soluzioni più adatte. Poi le rendo visibili: strategia, web e media originali, in un unico filo conduttore.',
@@ -65,6 +66,7 @@ export default {
     // (scala da sé fra i due estremi) e la riga si misura in caratteri.
     // Chiavi invariate — i renderer Vue/PHP continuano a leggere le stesse.
     { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Testo manifesto'), responsiveKeys: [],
       keys: { fluidMin: 'size_min', fluidMax: 'size_max', maxWidth: 'max_width_ch', color: 'text_color' },
       sizeMin: 12, sizeMax: 200, maxWidthMin: 6, maxWidthMax: 60 },

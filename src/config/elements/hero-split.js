@@ -46,6 +46,7 @@ export default {
   category: 'layout',
 
   defaults: {
+    typography_preset: '',
     // Preset stilistico (rifiniture hero) — solo builder-side, il renderer non la legge.
     preset: 'custom',
 
@@ -254,6 +255,7 @@ export default {
     { key: 'eyebrow_dot_color', label: t('Colore pallino'),  type: 'color' },
 
     { type: 'separator', label: t('Tipografia headline') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Headline'),
       responsiveKeys: ['size'],
       keys: {

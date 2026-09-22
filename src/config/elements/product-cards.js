@@ -19,6 +19,7 @@ export default {
   category: 'layout',
 
   defaults: {
+    typography_preset: '',
     columns:  5,
     gap:      24,
 
@@ -122,6 +123,7 @@ export default {
     { key: 'top_aspect_ratio', label: t('Proporzioni'), type: 'select',
       options: ratioOptions({ auto: false }) },
     { key: 'top_padding', label: t('Padding'), type: 'spacing', min: 0, max: 80 },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'typography', label: t('Lettera'), responsiveKeys: [], keys: { size: 'letter_size', italic: 'letter_italic', family: 'letter_font_family' }, sizeMin: 40, sizeMax: 280, sizeStep: 4 },
     { key: 'logo_height',   label: t('Altezza logo'),       type: 'range', min: 16, max: 160, step: 2 },

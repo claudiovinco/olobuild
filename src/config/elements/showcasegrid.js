@@ -15,6 +15,7 @@ export default {
   category: 'media',
 
   defaults: {
+    typography_preset: '',
     items: [
       { image: '', media_label: "Men's squad", kicker: '3 squads', title: 'Men', link: '#' },
       { image: '', media_label: "Women's squad", kicker: '1 squad', title: 'Women', link: '#' },
@@ -124,6 +125,7 @@ export default {
     { type: 'separator', label: t('Colori') },
     { key: 'media_bg', label: t('Sfondo media'), type: 'color' },
     { key: 'veil_color', label: t('Velo (gradiente)'), type: 'color' },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Occhiello'), responsiveKeys: [], keys: { size: 'kicker_size', color: 'kicker_color' }, sizeMin: 8, sizeMax: 16 },
     { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'title_size', weight: 'title_weight', color: 'title_color', uppercase: 'title_uppercase' }, sizeMin: 14, sizeMax: 56 },
 

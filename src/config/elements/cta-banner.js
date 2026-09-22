@@ -15,6 +15,7 @@ export default {
   category: 'layout',
 
   defaults: {
+    typography_preset: '',
     headline:        'Il tuo primo sito OLObuild è online',
     headline_accent: 'oggi pomeriggio.',
     headline_accent_italic: true,
@@ -100,6 +101,7 @@ export default {
     withHover({ key: 'banner_radius', label: t('Raggio'), type: 'border-radius' }, { hoverKey: 'banner_radius_hover', hoverDurationKey: 'banner_radius_hover_duration' }),
 
     { type: 'separator', label: t('Headline stile') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'headline_size', weight: 'headline_weight', family: 'headline_font_family' }, sizeMin: 18, sizeMax: 80, sizeStep: 2 },
 

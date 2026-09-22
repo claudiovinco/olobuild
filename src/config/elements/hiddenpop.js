@@ -14,6 +14,7 @@ export default {
   icon: 'dashicons-flag',
   category: 'interactive',
   defaults: {
+    typography_preset: '',
     // Contenuto
     mode: 'simple',
     title: t('Titolo popup'),
@@ -196,6 +197,7 @@ export default {
     ], condition: { field: 'mode', op: 'eq', value: 'simple' } },
 
     { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'),
       responsiveKeys: ['size'],
       keys: {

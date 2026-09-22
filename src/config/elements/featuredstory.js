@@ -25,6 +25,7 @@ export default {
   bgMigrate: { imageKey: 'cover_image', imagePosKey: 'cover_image_object_position', target: 'media_cover' },
 
   defaults: {
+    typography_preset: '',
     // Content
     kicker_text: 'The Essay · Cities',
     headline_text: 'The slow return of the city night market',
@@ -138,6 +139,7 @@ export default {
     { key: 'cta_solid_text', label: t('CTA piena — testo'), type: 'color' },
 
     { type: 'separator', label: t('Font') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { family: 'heading_font' } },
     { type: 'typography', label: t('Titoli (serif)'), responsiveKeys: [], keys: { family: 'serif_font' } },
     { type: 'typography', label: t('Testo (sans)'), responsiveKeys: [], keys: { family: 'sans_font' } },

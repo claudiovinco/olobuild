@@ -13,6 +13,7 @@ export default {
   category: 'layout',
 
   defaults: {
+    typography_preset: '',
     items: [
       { number: '01', title: 'Listen', description: 'We start with your life, not your balance sheet.' },
       { number: '02', title: 'Plan', description: 'A clear strategy, modelled and stress-tested.' },
@@ -75,6 +76,7 @@ export default {
     ]},
     { key: 'number_bg', label: t('Sfondo/bordo cerchio'), type: 'color',
       condition: { field: 'number_style', operator: '!=', value: 'plain' } },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Numero'), responsiveKeys: [], keys: { size: 'number_size', family: 'number_font', weight: 'number_weight', color: 'number_color' }, sizeMin: 12, sizeMax: 96, sizeStep: 2 },
 
     { type: 'separator', label: t('Titolo') },

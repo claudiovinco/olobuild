@@ -39,6 +39,7 @@ export default {
   category: 'layout',
 
   defaults: {
+    typography_preset: '',
     // ── Comportamento pin/scroll ──
     behavior: 'pin',             // 'pin' (pagina ferma, fila guidata) | 'inline' (altezza contenuto)
     scroll_length: 3,            // × viewport (2–6): più alto = scroll più lungo/lento
@@ -191,6 +192,7 @@ export default {
 
     { key: 'kicker_color', label: t('Colore etichetta (kicker)'), type: 'color',
       description: t('Vuoto → come il titolo, attenuato.') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'heading_size', family: 'heading_font', color: 'heading_color' }, sizeMin: 20, sizeMax: 96, sizeStep: 2 },
 
     { type: 'separator', label: t('Aspetto elementi') },

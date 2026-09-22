@@ -19,6 +19,7 @@ export default {
   category: 'layout',
 
   defaults: {
+    typography_preset: '',
     eyebrow_show: true,
     eyebrow_text: 'PROVALO SUBITO',
     eyebrow_color: 'var(--olo-color-primary, #e1474f)',
@@ -88,6 +89,7 @@ export default {
     { key: 'eyebrow_dot_color', label: t('Colore pallino (se separatore = bullet)'), type: 'color' },
 
     { type: 'separator', label: t('Tipografia headline') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Headline'),
       responsiveKeys: ['size'],
       keys: {

@@ -13,6 +13,7 @@ export default {
   category: 'layout',
 
   defaults: {
+    typography_preset: '',
     items: [
       { image: '', media_label: 'Marisol — identity system', title: 'Marisol',      meta: "'26 — Brand",     description: 'A coastal hotel group, rebuilt around one mark and a lot of restraint.', link_url: '', tall: false },
       { image: '', media_label: 'Atlas Press — book covers', title: 'Atlas Press',   meta: "'25 — Editorial", description: "An independent publisher's new look, from spine to site.", link_url: '', tall: true },
@@ -90,6 +91,7 @@ export default {
       contextKeys: { ratio: 'media_aspect', fit: '(cover)' } },
 
     { type: 'separator', label: t('Titolo') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'title_size', weight: 'title_weight', color: 'title_color', family: 'title_font_family' }, sizeMin: 14, sizeMax: 48 },
 

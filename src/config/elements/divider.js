@@ -17,6 +17,7 @@ export default {
   // Default da FONTE UNICA (buildDefaults): style/width/thickness/color:''/
   // alignment/spacing(SPACE)/text/text_color:''/text_size/icon_emoji.
   defaults: {
+    typography_preset: '',
     ...buildDefaults('divider'),
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
@@ -57,6 +58,7 @@ export default {
     { key: 'spacing', label: t('Spaziatura'), type: 'range', min: 0, max: 80, step: 4 },
 
     { type: 'separator', label: t('Testo centrale') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Testo'), responsiveKeys: [], keys: { size: 'text_size', color: 'text_color' }, sizeMin: 10, sizeMax: 32 },
 
     ...borderFields(),

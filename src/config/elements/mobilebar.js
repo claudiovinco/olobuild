@@ -15,6 +15,7 @@ export default {
   category: 'navigation',
 
   defaults: {
+    typography_preset: '',
     breakpoint:          '1024',
     logo_image:          '',
     logo_width:          '120',
@@ -96,6 +97,7 @@ export default {
 
     // ── Tipografia ──
     { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Pannello'),
       responsiveKeys: ['size'],
       keys: {

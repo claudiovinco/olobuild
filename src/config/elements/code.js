@@ -12,6 +12,7 @@ export default {
   icon: 'dashicons-editor-code',
   category: 'text',
   defaults: {
+    typography_preset: '',
     code: 'console.log("Hello World");',
     language: 'javascript',
     show_line_numbers: false,
@@ -47,6 +48,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Codice'),
       responsiveKeys: ['size'],
       keys: {

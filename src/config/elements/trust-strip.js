@@ -14,6 +14,7 @@ export default {
   // Allineati alla fonte unica (PHP get_defaults via REST): colori vuoti =
   // token di sistema via resolveColor/safe_color_css (success, text, text-faint).
   defaults: {
+    typography_preset: '',
     items: [
       { icon: 'check', icon_color: '', text: 'Licenza <b>GPL-v3</b>' },
       { icon: 'check', icon_color: '', text: '<b>WCAG 2.2 AA</b>' },
@@ -95,6 +96,7 @@ export default {
     // colore del testo è `pill_text_color`, che vive nella sezione Pill:
     // così non resta mai un campo colore orfano fuori dal controllo.
     { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Testo'), responsiveKeys: [],
       keys: { family: 'font_family', size: 'text_size', color: 'text_color' },
       sizeMin: 10, sizeMax: 24,

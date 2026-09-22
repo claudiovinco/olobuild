@@ -12,6 +12,7 @@ export default {
   category: 'layout',
 
   defaults: {
+    typography_preset: '',
     items: [
       { number: '01', title: 'Marisol',      category: 'Brand identity', year: '2026', link_url: '' },
       { number: '02', title: 'Atlas Press',   category: 'Editorial · web', year: '2025', link_url: '' },
@@ -77,6 +78,7 @@ export default {
     { key: 'hover_indent',  label: t('Indentazione hover'), type: 'range', min: 0, max: 48, step: 2 },
 
     { type: 'separator', label: t('Titolo') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'), responsiveKeys: ['size'], keys: { size: 'title_size', weight: 'title_weight', color: 'title_color', family: 'title_font_family' }, sizeMin: 20, sizeMax: 72 },
 
     { type: 'separator', label: t('Meta (numero · categoria · anno)') },
