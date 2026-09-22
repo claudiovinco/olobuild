@@ -698,7 +698,7 @@ async function apiCall(endpoint, body) {
   const olo = getOloData();
   error.value = '';
 
-  const res = await fetch(olo.restUrl + '/ai/' + endpoint, {
+  const res = await fetch(olo.restUrl + 'ai/' + endpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

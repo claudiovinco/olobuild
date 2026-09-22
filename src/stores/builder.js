@@ -105,7 +105,7 @@ export const useBuilderStore = defineStore('builder', {
       const MAX_RETRIES = 2;
       for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
         try {
-          const res = await fetch(`${olo.restUrl}/templates/${id}`, {
+          const res = await fetch(`${olo.restUrl}templates/${id}`, {
             headers: { 'X-WP-Nonce': olo.nonce },
           });
           if (!res.ok) {
@@ -146,8 +146,8 @@ export const useBuilderStore = defineStore('builder', {
 
         const method = this.currentTemplate.id ? 'PUT' : 'POST';
         const url = this.currentTemplate.id
-          ? `${olo.restUrl}/templates/${this.currentTemplate.id}`
-          : `${olo.restUrl}/templates`;
+          ? `${olo.restUrl}templates/${this.currentTemplate.id}`
+          : `${olo.restUrl}templates`;
 
         const res = await fetch(url, {
           method,
@@ -209,7 +209,7 @@ export const useBuilderStore = defineStore('builder', {
           const footerId = olo.activeFooterId;
           if (headerId) {
             try {
-              const res = await fetch(`${olo.restUrl}/templates/${headerId}/render`, { headers: { 'X-WP-Nonce': olo.nonce } });
+              const res = await fetch(`${olo.restUrl}templates/${headerId}/render`, { headers: { 'X-WP-Nonce': olo.nonce } });
               if (res.ok) {
                 const data = await res.json();
                 this.previewHeaderContent = data.html || '';
@@ -220,7 +220,7 @@ export const useBuilderStore = defineStore('builder', {
           }
           if (footerId) {
             try {
-              const res = await fetch(`${olo.restUrl}/templates/${footerId}/render`, { headers: { 'X-WP-Nonce': olo.nonce } });
+              const res = await fetch(`${olo.restUrl}templates/${footerId}/render`, { headers: { 'X-WP-Nonce': olo.nonce } });
               if (res.ok) {
                 const data = await res.json();
                 this.previewFooterContent = data.html || '';
@@ -365,7 +365,7 @@ export const useBuilderStore = defineStore('builder', {
       // Load header template
       if (headerId > 0) {
         try {
-          const res = await fetch(`${olo.restUrl}/templates/${headerId}`, {
+          const res = await fetch(`${olo.restUrl}templates/${headerId}`, {
             headers: { 'X-WP-Nonce': olo.nonce },
           });
           if (res.ok) {
@@ -382,7 +382,7 @@ export const useBuilderStore = defineStore('builder', {
       // Load footer template
       if (footerId > 0) {
         try {
-          const res = await fetch(`${olo.restUrl}/templates/${footerId}`, {
+          const res = await fetch(`${olo.restUrl}templates/${footerId}`, {
             headers: { 'X-WP-Nonce': olo.nonce },
           });
           if (res.ok) {
@@ -420,8 +420,8 @@ export const useBuilderStore = defineStore('builder', {
         if (this.isDirty && this.currentTemplate) {
           const method = this.currentTemplate.id ? 'PUT' : 'POST';
           const url = this.currentTemplate.id
-            ? `${olo.restUrl}/templates/${this.currentTemplate.id}`
-            : `${olo.restUrl}/templates`;
+            ? `${olo.restUrl}templates/${this.currentTemplate.id}`
+            : `${olo.restUrl}templates`;
 
           const res = await fetch(url, {
             method,
@@ -447,7 +447,7 @@ export const useBuilderStore = defineStore('builder', {
 
         // Save header
         if (this.headerDirty && this.headerTemplate?.id) {
-          const res = await fetch(`${olo.restUrl}/templates/${this.headerTemplate.id}`, {
+          const res = await fetch(`${olo.restUrl}templates/${this.headerTemplate.id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -471,7 +471,7 @@ export const useBuilderStore = defineStore('builder', {
 
         // Save footer
         if (this.footerDirty && this.footerTemplate?.id) {
-          const res = await fetch(`${olo.restUrl}/templates/${this.footerTemplate.id}`, {
+          const res = await fetch(`${olo.restUrl}templates/${this.footerTemplate.id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',

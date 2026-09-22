@@ -716,7 +716,7 @@ function getSvgElements(tpl) {
 async function fetchTemplates() {
   loading.value = true;
   try {
-    const res = await fetch(`${oloData.restUrl}/template-library`, {
+    const res = await fetch(`${oloData.restUrl}template-library`, {
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
     if (res.ok) {
@@ -731,7 +731,7 @@ async function fetchTemplates() {
 
 async function insertTemplate(tpl, mode = 'append') {
   try {
-    const res = await fetch(`${oloData.restUrl}/template-library/${tpl.id}`, {
+    const res = await fetch(`${oloData.restUrl}template-library/${tpl.id}`, {
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
     if (!res.ok) throw new Error('Fetch failed');
@@ -832,7 +832,7 @@ async function doSave() {
   saving.value = true;
   try {
     const content = [cloneForSave(saveSection.value)];
-    const res = await fetch(`${oloData.restUrl}/template-library/save`, {
+    const res = await fetch(`${oloData.restUrl}template-library/save`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -876,7 +876,7 @@ async function doDelete() {
   if (!deleteTarget.value || deleting.value) return;
   deleting.value = true;
   try {
-    const res = await fetch(`${oloData.restUrl}/template-library/user/${deleteTarget.value.id}`, {
+    const res = await fetch(`${oloData.restUrl}template-library/user/${deleteTarget.value.id}`, {
       method: 'DELETE',
       headers: { 'X-WP-Nonce': oloData.nonce },
     });

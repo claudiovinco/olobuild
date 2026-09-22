@@ -98,7 +98,7 @@ export const useTilesStore = defineStore('tiles', {
 
     async fetchRegisteredTiles() {
       try {
-        const res = await fetch(`${oloData.restUrl}/tiles`, {
+        const res = await fetch(`${oloData.restUrl}tiles`, {
           headers: { 'X-WP-Nonce': oloData.nonce },
         });
         if (!res.ok) throw new Error('Failed to fetch tiles');
@@ -1083,7 +1083,7 @@ export const useTilesStore = defineStore('tiles', {
 
     async fetchGlobalWidgets() {
       try {
-        const res = await fetch(`${oloData.restUrl}/global-widgets`, {
+        const res = await fetch(`${oloData.restUrl}global-widgets`, {
           headers: { 'X-WP-Nonce': oloData.nonce },
         });
         if (!res.ok) throw new Error('Failed to fetch global widgets');
@@ -1106,7 +1106,7 @@ export const useTilesStore = defineStore('tiles', {
       const name = tile.settings?.heading || tile.settings?.title || tile.settings?.text || tile.type || 'Widget globale';
 
       try {
-        const res = await fetch(`${oloData.restUrl}/global-widgets`, {
+        const res = await fetch(`${oloData.restUrl}global-widgets`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -1138,7 +1138,7 @@ export const useTilesStore = defineStore('tiles', {
       delete tileData.global_id;
 
       try {
-        const res = await fetch(`${oloData.restUrl}/global-widgets/${globalId}`, {
+        const res = await fetch(`${oloData.restUrl}global-widgets/${globalId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -1183,7 +1183,7 @@ export const useTilesStore = defineStore('tiles', {
 
     async deleteGlobalWidget(globalId) {
       try {
-        const res = await fetch(`${oloData.restUrl}/global-widgets/${globalId}`, {
+        const res = await fetch(`${oloData.restUrl}global-widgets/${globalId}`, {
           method: 'DELETE',
           headers: { 'X-WP-Nonce': oloData.nonce },
         });

@@ -343,7 +343,7 @@ async function createAndOpenBuilder(typeOrObj = 'page') {
   }
 
   try {
-    const res = await fetch(`${oloData.restUrl}/templates`, {
+    const res = await fetch(`${oloData.restUrl}templates`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

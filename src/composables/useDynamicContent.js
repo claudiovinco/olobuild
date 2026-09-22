@@ -8,7 +8,7 @@ const sourcesLoading = ref(false);
 const sourcesData = ref(null);
 
 async function apiFetch(endpoint, options = {}) {
-  const url = `${oloData.restUrl}/${endpoint}`;
+  const url = `${oloData.restUrl}${endpoint}`;
   const res = await fetch(url, {
     headers: {
       'X-WP-Nonce': oloData.nonce,

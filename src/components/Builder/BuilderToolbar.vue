@@ -664,7 +664,7 @@ async function openA11y() {
   a11yLoading.value = true;
   try {
     const olo = window.oloData || {};
-    const res = await fetch(`${olo.restUrl}/contrast-check/${id}`, { headers: { 'X-WP-Nonce': olo.nonce } });
+    const res = await fetch(`${olo.restUrl}contrast-check/${id}`, { headers: { 'X-WP-Nonce': olo.nonce } });
     const data = await res.json();
     a11yIssues.value = Array.isArray(data.issues) ? data.issues : [];
     a11yScore.value = typeof data.score === 'number' ? data.score : null;
@@ -810,7 +810,7 @@ async function exportTemplate() {
   if (!tplId) return;
   try {
     const oloData = window.oloData || {};
-    const res = await fetch(`${oloData.restUrl}/templates/${tplId}/export`, {
+    const res = await fetch(`${oloData.restUrl}templates/${tplId}/export`, {
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
     if (!res.ok) throw new Error('Export failed');
@@ -839,7 +839,7 @@ function importTemplate() {
       const text = await file.text();
       const data = JSON.parse(text);
       const oloData = window.oloData || {};
-      const res = await fetch(`${oloData.restUrl}/templates/import`, {
+      const res = await fetch(`${oloData.restUrl}templates/import`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -919,13 +919,13 @@ async function toggleActivateHeader() {
 
   try {
     if (isActiveHeader.value) {
-      const res = await fetch(`${oloData.restUrl}/header/activate`, {
+      const res = await fetch(`${oloData.restUrl}header/activate`, {
         method: 'DELETE',
         headers: { 'X-WP-Nonce': oloData.nonce },
       });
       if (res.ok) activeHeaderId.value = 0;
     } else {
-      const res = await fetch(`${oloData.restUrl}/header/activate`, {
+      const res = await fetch(`${oloData.restUrl}header/activate`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -946,13 +946,13 @@ async function toggleActivateFooter() {
 
   try {
     if (isActiveFooter.value) {
-      const res = await fetch(`${oloData.restUrl}/footer/activate`, {
+      const res = await fetch(`${oloData.restUrl}footer/activate`, {
         method: 'DELETE',
         headers: { 'X-WP-Nonce': oloData.nonce },
       });
       if (res.ok) activeFooterId.value = 0;
     } else {
-      const res = await fetch(`${oloData.restUrl}/footer/activate`, {
+      const res = await fetch(`${oloData.restUrl}footer/activate`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -974,7 +974,7 @@ async function toggleActivateSingle() {
 
   try {
     if (isActiveSingle.value) {
-      const res = await fetch(`${oloData.restUrl}/single/activate`, {
+      const res = await fetch(`${oloData.restUrl}single/activate`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -988,7 +988,7 @@ async function toggleActivateSingle() {
         activeSingles.value = updated;
       }
     } else {
-      const res = await fetch(`${oloData.restUrl}/single/activate`, {
+      const res = await fetch(`${oloData.restUrl}single/activate`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

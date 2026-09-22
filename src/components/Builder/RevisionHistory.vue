@@ -39,7 +39,7 @@ async function fetchRevisions() {
   loading.value = true;
   try {
     const res = await fetch(
-      `${oloData.value.restUrl}/templates/${builderStore.currentTemplate.id}/revisions`,
+      `${oloData.value.restUrl}templates/${builderStore.currentTemplate.id}/revisions`,
       { headers: { 'X-WP-Nonce': oloData.value.nonce } }
     );
     if (!res.ok) throw new Error('Failed to fetch revisions');
@@ -146,7 +146,7 @@ async function restoreRevision(rev) {
 
   try {
     console.log('[Revision] Fetching revision', rev.id);
-    const url = `${oloData.value.restUrl}/revisions/${rev.id}`;
+    const url = `${oloData.value.restUrl}revisions/${rev.id}`;
     console.log('[Revision] URL:', url);
 
     const res = await fetch(url, {

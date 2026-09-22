@@ -344,7 +344,7 @@ function openBundleExport() {
 async function doBundleExport() {
   bundleLoading.value = true;
   try {
-    const res = await fetch(`${oloData.restUrl}/templates/export-bundle`, {
+    const res = await fetch(`${oloData.restUrl}templates/export-bundle`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': oloData.nonce },
       body: JSON.stringify({ ids: selectedIds.value, name: bundleName.value, description: bundleDesc.value }),
@@ -489,7 +489,7 @@ async function fetchTemplates() {
   loading.value = true;
   loadError.value = null;
   try {
-    const res = await fetch(`${oloData.restUrl}/templates?per_page=200`, {
+    const res = await fetch(`${oloData.restUrl}templates?per_page=200`, {
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
     if (!res.ok) {
@@ -552,7 +552,7 @@ function editTemplate(id) { emit('edit', id); }
 
 async function duplicateTemplate(id) {
   try {
-    const res = await fetch(`${oloData.restUrl}/templates/${id}/duplicate`, {
+    const res = await fetch(`${oloData.restUrl}templates/${id}/duplicate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': oloData.nonce },
     });
@@ -568,7 +568,7 @@ async function duplicateTemplate(id) {
 async function deleteTemplate(id, title) {
   if (!confirm(t('Eliminare') + ' "' + (title || t('Senza titolo')) + '"? ' + t('Questa azione non può essere annullata.'))) return;
   try {
-    const res = await fetch(`${oloData.restUrl}/templates/${id}`, {
+    const res = await fetch(`${oloData.restUrl}templates/${id}`, {
       method: 'DELETE',
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
@@ -594,7 +594,7 @@ async function confirmRename(tpl) {
   const newTitle = renameDraft.value.trim();
   if (!newTitle || newTitle === tpl.title) return;
   try {
-    const res = await fetch(`${oloData.restUrl}/templates/${tpl.id}`, {
+    const res = await fetch(`${oloData.restUrl}templates/${tpl.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': oloData.nonce },
       body: JSON.stringify({ title: newTitle }),
@@ -652,8 +652,8 @@ async function doExport() {
   exportLoading.value = true;
   try {
     const endpoint = exportIncludeMedia.value
-      ? `${oloData.restUrl}/export-template/${id}?include_media=1`
-      : `${oloData.restUrl}/templates/${id}/export`;
+      ? `${oloData.restUrl}export-template/${id}?include_media=1`
+      : `${oloData.restUrl}templates/${id}/export`;
     const res = await fetch(endpoint, { headers: { 'X-WP-Nonce': oloData.nonce } });
     if (!res.ok) throw new Error('Export failed');
     const data = await res.json();
@@ -691,8 +691,8 @@ async function handleImportFile(e) {
       return;
     }
     const endpoint = isBundle
-      ? `${oloData.restUrl}/templates/import-bundle`
-      : (isNew ? `${oloData.restUrl}/import-template` : `${oloData.restUrl}/templates/import`);
+      ? `${oloData.restUrl}templates/import-bundle`
+      : (isNew ? `${oloData.restUrl}import-template` : `${oloData.restUrl}templates/import`);
     const res = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': oloData.nonce },

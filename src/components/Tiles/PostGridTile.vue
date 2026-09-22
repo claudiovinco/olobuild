@@ -136,7 +136,7 @@ async function fetchPosts() {
 
   loading.value = true;
   try {
-    const url = `${oloData.restUrl}/postgrid-preview?${params}`;
+    const url = `${oloData.restUrl}postgrid-preview?${params}`;
     const res = await fetch(url, {
       headers: { 'X-WP-Nonce': oloData.nonce },
     });

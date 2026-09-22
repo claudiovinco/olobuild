@@ -25,10 +25,12 @@ function getOloData() {
  */
 export async function oloFetch(endpoint, options = {}) {
   const oloData = getOloData();
-  const baseUrl = (oloData.restUrl || '/wp-json/').replace(/\/$/, '');
-  const namespace = 'olobuild/v1';
+  // `restUrl` contiene GIÀ il namespace (…/wp-json/olobuild/v1/): riaggiungerlo
+  // produceva `…/olobuild/v1/olobuild/v1/templates`. Helper mai usato finora,
+  // quindi il difetto non si era mai visto.
+  const baseUrl = (oloData.restUrl || '/wp-json/olobuild/v1/').replace(/\/+$/, '');
 
-  let url = `${baseUrl}/${namespace}${endpoint}`;
+  let url = `${baseUrl}/${String(endpoint).replace(/^\/+/, '')}`;
 
   const method = (options.method || 'GET').toUpperCase();
 

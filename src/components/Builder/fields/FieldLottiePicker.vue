@@ -270,7 +270,7 @@ async function fetchAnimations(append = false) {
 
   try {
     const olo = window.oloData || {};
-    const res = await fetch(olo.restUrl + '/lottie/search', {
+    const res = await fetch(olo.restUrl + 'lottie/search', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

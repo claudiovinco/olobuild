@@ -85,7 +85,7 @@ export function useIframeBridge(iframeRef) {
       }
 
       console.log('[IframeBridge] POST /builder/render body.page_settings.page_bg:', body?.page_settings?.page_bg);
-      const res = await fetch(window.oloData.restUrl + '/builder/render', {
+      const res = await fetch(window.oloData.restUrl + 'builder/render', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
         body: JSON.stringify(body),
@@ -163,7 +163,7 @@ export function useIframeBridge(iframeRef) {
 
     patchInFlight = true;
     try {
-      const res = await fetch(olo.restUrl + '/builder/render-tile', {
+      const res = await fetch(olo.restUrl + 'builder/render-tile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': olo.nonce },
         body: JSON.stringify(body),
@@ -276,7 +276,7 @@ export function useIframeBridge(iframeRef) {
     if (zone === 'footer') body.footer_tiles = deepClone(zoneTiles);
     else body.header_tiles = deepClone(zoneTiles);
     try {
-      const res = await fetch(olo.restUrl + '/builder/render', {
+      const res = await fetch(olo.restUrl + 'builder/render', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': olo.nonce },
         body: JSON.stringify(body),

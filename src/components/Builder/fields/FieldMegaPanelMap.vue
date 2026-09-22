@@ -77,7 +77,7 @@ async function fetchMenuItems(menuId) {
   }
   loading.value = true;
   try {
-    const res = await fetch(`${oloData.restUrl}/menu-items/${menuId}`, {
+    const res = await fetch(`${oloData.restUrl}menu-items/${menuId}`, {
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
     if (res.ok) {
@@ -95,7 +95,7 @@ async function fetchMenuItems(menuId) {
 
 async function fetchMegapanelTemplates() {
   try {
-    const res = await fetch(`${oloData.restUrl}/templates?type=megapanel&status=published&per_page=100`, {
+    const res = await fetch(`${oloData.restUrl}templates?type=megapanel&status=published&per_page=100`, {
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
     if (res.ok) {

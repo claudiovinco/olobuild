@@ -25,7 +25,7 @@ async function importTheme(theme) {
 
   picker && picker.setBusy(true);
   try {
-    const res = await fetch(`${oloData.value.restUrl}/themes/${theme.id}/import`, {
+    const res = await fetch(`${oloData.value.restUrl}themes/${theme.id}/import`, {
       method: 'POST',
       headers: { 'X-WP-Nonce': oloData.value.nonce, 'Content-Type': 'application/json' },
       credentials: 'same-origin'
@@ -65,7 +65,7 @@ function open() {
     mode: 'modal',
     card: { action: 'import' },
     loadThemes: async () => {
-      const res = await fetch(`${oloData.value.restUrl}/themes`, {
+      const res = await fetch(`${oloData.value.restUrl}themes`, {
         headers: { 'X-WP-Nonce': oloData.value.nonce },
         credentials: 'same-origin'
       });

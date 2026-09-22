@@ -206,7 +206,7 @@ const nameInput = ref(null);
 async function fetchPresets() {
   loading.value = true;
   try {
-    const res = await fetch(`${oloData.restUrl}/design-presets`, {
+    const res = await fetch(`${oloData.restUrl}design-presets`, {
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
     if (res.ok) {
@@ -233,7 +233,7 @@ async function saveCurrentStyle() {
   const styleObj = JSON.parse(JSON.stringify(tile.style || {}));
 
   try {
-    const res = await fetch(`${oloData.restUrl}/design-presets`, {
+    const res = await fetch(`${oloData.restUrl}design-presets`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -278,7 +278,7 @@ async function savePresetName(presetId) {
     return;
   }
   try {
-    await fetch(`${oloData.restUrl}/design-presets/${presetId}`, {
+    await fetch(`${oloData.restUrl}design-presets/${presetId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -301,7 +301,7 @@ function confirmDelete(preset) {
 async function doDelete() {
   if (!deleteTarget.value) return;
   try {
-    await fetch(`${oloData.restUrl}/design-presets/${deleteTarget.value.id}`, {
+    await fetch(`${oloData.restUrl}design-presets/${deleteTarget.value.id}`, {
       method: 'DELETE',
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
@@ -341,7 +341,7 @@ function applyBuiltinPreset(bp) {
 // ── Fetch built-in presets ──
 async function fetchBuiltinPresets() {
   try {
-    const res = await fetch(`${oloData.restUrl}/design-presets/builtin`, {
+    const res = await fetch(`${oloData.restUrl}design-presets/builtin`, {
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
     if (res.ok) {

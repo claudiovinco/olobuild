@@ -151,7 +151,7 @@ function getOloData() {
 async function loadSettings() {
   const olo = getOloData();
   try {
-    const res = await fetch(olo.restUrl + '/ai/settings', {
+    const res = await fetch(olo.restUrl + 'ai/settings', {
       headers: { 'X-WP-Nonce': olo.nonce },
     });
     if (res.ok) {
@@ -172,7 +172,7 @@ async function saveSettings() {
   statusMessage.value = '';
   const olo = getOloData();
   try {
-    const res = await fetch(olo.restUrl + '/ai/settings', {
+    const res = await fetch(olo.restUrl + 'ai/settings', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -209,7 +209,7 @@ async function testConnection() {
 
   // Prima salva le impostazioni correnti
   try {
-    await fetch(olo.restUrl + '/ai/settings', {
+    await fetch(olo.restUrl + 'ai/settings', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -228,7 +228,7 @@ async function testConnection() {
 
   // Poi testa con una generazione breve
   try {
-    const res = await fetch(olo.restUrl + '/ai/generate-text', {
+    const res = await fetch(olo.restUrl + 'ai/generate-text', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

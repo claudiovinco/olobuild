@@ -1015,7 +1015,9 @@ class Olobuild_Builder {
         }
 
         wp_localize_script( 'olobuilder-js', 'oloData', [
-            'restUrl'        => esc_url_raw( rest_url( 'olobuild/v1' ) ),
+            // Con lo slash finale, come ovunque: la pagina builder era l'unica
+            // senza, e ogni `${oloData.restUrl}styles` diventava `v1styles` → 404.
+            'restUrl'        => esc_url_raw( rest_url( 'olobuild/v1/' ) ),
             'nonce'          => wp_create_nonce( 'wp_rest' ),
             'importsDisabled' => olobuild_imports_disabled(),
             'userId'         => get_current_user_id(),

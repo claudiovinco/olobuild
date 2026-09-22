@@ -120,7 +120,7 @@ async function fetchPreview(force = false) {
 
   try {
     const restUrl = (window.oloData?.restUrl || '/wp-json/olobuild/v1').replace(/\/$/, '');
-    const res = await fetch(restUrl + '/builder/render-tile', {
+    const res = await fetch(restUrl + 'builder/render-tile', {
       method:  'POST',
       headers: {
         'Content-Type': 'application/json',

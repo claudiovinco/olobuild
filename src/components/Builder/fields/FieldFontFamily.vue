@@ -188,7 +188,7 @@ const customFontsLoaded = ref(false);
 async function loadCustomFonts() {
   if (customFontsLoaded.value) return;
   try {
-    const res = await fetch(`${oloData.restUrl}/fonts`, {
+    const res = await fetch(`${oloData.restUrl}fonts`, {
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
     if (res.ok) {
