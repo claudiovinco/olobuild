@@ -27,10 +27,49 @@ export function fieldMatchesSearch(field, query) {
   if (!field || field.type === 'separator') return false;
   if (textMatches(field.label, query)) return true;
   if (typeof field.key === 'string' && field.key.toLowerCase().includes(query)) return true;
+  if (field.type === 'typography' && typographyTerms(field).some((term) => term.includes(query))) return true;
   if (Array.isArray(field.searchTerms)) {
     return field.searchTerms.some((term) => String(term).toLowerCase().includes(query));
   }
   return false;
+}
+
+/**
+ * Il controllo `typography` tiene le sue proprietà DENTRO un popover: la sua
+ * label dice a cosa si applica ("Titolo"), non cosa contiene. Senza questo,
+ * cercare «interlinea» o «peso» non troverebbe nulla in nessuna delle ~100 tile
+ * che lo montano. I termini si costruiscono sulle chiavi REALMENTE mappate —
+ * un controllo che non offre il colore non deve uscire cercando «colore» — e
+ * includono i nomi delle chiavi salvate, per chi cerca `lead_size`.
+ */
+const TYPO_TERMS = {
+  tag:           'tag html semantica titolo h1 h2 h3 paragrafo',
+  family:        'famiglia font carattere tipografia',
+  size:          'dimensione corpo grandezza testo px tipografia',
+  fluidMin:      'dimensione minima fluida scala clamp responsive',
+  fluidMax:      'dimensione massima fluida scala clamp responsive',
+  maxWidth:      'larghezza massima misura riga caratteri ch colonna',
+  weight:        'peso grassetto bold spessore',
+  lineHeight:    'interlinea altezza riga leading',
+  letterSpacing: 'spaziatura caratteri lettere tracking crenatura',
+  wordSpacing:   'spaziatura parole',
+  transform:     'trasformazione maiuscolo minuscolo capitalizza',
+  style:         'stile corsivo italic obliquo',
+  decoration:    'decorazione sottolineato barrato',
+  color:         'colore testo',
+  colorHover:    'colore testo hover',
+  shadow:        'ombra testo',
+};
+
+function typographyTerms(field) {
+  const out = [];
+  for (const [logical, key] of Object.entries(field.keys || {})) {
+    if (!key) continue;
+    if (TYPO_TERMS[logical]) out.push(TYPO_TERMS[logical]);
+    out.push(String(key).toLowerCase());
+  }
+  if (field.presetKey) out.push('preset stile tipografico globale');
+  return out;
 }
 
 /** Match della label di una sezione (separator): se matcha, l'intera sezione resta visibile. */

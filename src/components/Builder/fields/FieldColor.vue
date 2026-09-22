@@ -83,6 +83,7 @@
 import { t } from '@/i18n';
 import { computed, ref } from 'vue';
 import { useStylesStore } from '@/stores/styles';
+import { tokenParts, buildSwatchColors } from '@/utils/colorToken';
 
 const props = defineProps({
   modelValue: { type: String, default: '#000000' },
@@ -91,27 +92,10 @@ const emit = defineEmits(['update:modelValue']);
 
 const stylesStore = useStylesStore();
 
-// Ruoli del tema selezionabili come token, oltre ai globali custom.
-const ROLE_SWATCHES = [
-  { id: 'primary', label: 'Primary' }, { id: 'secondary', label: 'Secondary' },
-  { id: 'success', label: 'Success' }, { id: 'warning', label: 'Warning' },
-  { id: 'danger', label: 'Danger' }, { id: 'link', label: 'Link' },
-  { id: 'text', label: 'Testo' }, { id: 'background', label: 'Sfondo' },
-  { id: 'muted', label: 'Superficie' }, { id: 'border', label: 'Bordo' },
-];
-
 // Swatch mostrate: ruoli del tema (olo_styles.colors) + globali custom (accent, "+").
-const swatchColors = computed(() => {
-  const c = stylesStore.colors || {};
-  const roleIds = new Set(ROLE_SWATCHES.map(r => r.id));
-  const roles = ROLE_SWATCHES
-    .filter(r => c[r.id])
-    .map(r => ({ id: r.id, label: r.label, value: c[r.id], quick: false }));
-  const globals = (stylesStore.globalColors || [])
-    .filter(g => g && g.id && !roleIds.has(g.id))
-    .map(g => ({ id: g.id, label: g.label || g.id, value: g.value, quick: !!g.quick }));
-  return [...roles, ...globals];
-});
+// La lista e la lettura dei token stanno in @/utils/colorToken: le usa anche la
+// sintesi di FieldTypography, che deve dipingere lo stesso colore.
+const swatchColors = computed(() => buildSwatchColors(stylesStore));
 
 function resolveSwatch(id) {
   const sc = swatchColors.value.find(c => c.id === id);
@@ -126,23 +110,6 @@ const isGlobalActive = computed(() => {
   if (cur.startsWith('var(--olo-color-')) return true;
   return swatchColors.value.some(sc => sc.value?.toLowerCase() === cur);
 });
-
-/**
- * Scompone un token colore nelle sue due parti: l'id e l'eventuale RISERVA.
- *   var(--olo-color-dark)            -> { id: 'dark', fallback: '' }
- *   var(--olo-color-dark, #16263d)   -> { id: 'dark', fallback: '#16263d' }
- * Restituisce null se non e' un token.
- */
-function tokenParts(val) {
-  // La riserva si prende con `(.+)` e non con `[^)]+`: dev'essere in grado di
-  // attraversare una parentesi, perche' una riserva puo' essere a sua volta un
-  // token — `var(--olo-color-accent, var(--olo-color-primary))`. Col vecchio
-  // gruppo la regex non combaciava affatto e il picker mostrava una pastiglia
-  // nera al posto del colore vero. `\)$` ancorato in fondo tiene la presa.
-  const m = /^var\(\s*--olo-color-([a-z0-9_-]+)\s*(?:,\s*(.+))?\)$/i.exec(String(val || '').trim());
-  if (!m) return null;
-  return { id: m[1].toLowerCase(), fallback: (m[2] || '').trim() };
-}
 
 function isSwatchSelected(id) {
   const cur = (props.modelValue || '').toLowerCase();

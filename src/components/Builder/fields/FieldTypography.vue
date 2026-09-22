@@ -7,22 +7,37 @@
     di preset tipografici globali (quando presetKey è fornita).
 
     Props:
-      keys           { family?, size?, weight?, transform?, style?, decoration?,
-                       lineHeight?, letterSpacing?, wordSpacing?, color?, colorHover?, shadow? }
+      keys           { family?, size?, fluidMin?, fluidMax?, maxWidth?, weight?, transform?,
+                       style?, decoration?, lineHeight?, letterSpacing?, wordSpacing?,
+                       color?, colorHover?, shadow? }
+                     fluidMin/fluidMax → dimensione che scala da sola fra i due estremi
+                     (clamp): la tile che ce l'ha NON usa `size`.
+                     maxWidth → misura della riga, in caratteri (ch).
       values         oggetto con i valori correnti (indicizzati per chiave reale)
       label          etichetta del blocco (default: "Tipografia")
       presetKey      chiave dello store globale per il preset (opzionale).
                      Se presente, mostra l'icona globe accanto alla matita.
       responsiveKeys array di chiavi logiche ('size', 'lineHeight', 'letterSpacing'...)
                      che supportano i breakpoint (default: ['size'])
-      sizeMin/Max/Step
+      sizeMin/Max/Step       bound degli scrubber di dimensione (NON chiavi)
+      maxWidthMin/Max/Step   bound dello scrubber della misura di riga
+
+    Sotto l'etichetta compare la SINTESI dei valori attivi ("Titoli · 46px · 700 · 1.1"):
+    il popover risparmia spazio, la sintesi gli toglie l'unico difetto — non si vedeva
+    cosa c'era dentro senza aprirlo.
 
     Eventi:
       update         { key, value } — per ogni modifica (incluso responsive con suffisso _tablet/_mobile)
       reset          azzera tutte le chiavi tipografiche
   -->
   <div class="typo-wrap" ref="rootEl">
-    <label class="typo-row-label">{{ t(label) }}</label>
+    <div class="typo-id">
+      <label class="typo-row-label">{{ t(label) }}</label>
+      <span class="typo-summary" :class="{ 'typo-summary--empty': !summaryText }" :title="summaryTitle">
+        <span v-if="summaryColor" class="typo-summary-dot" :style="{ background: summaryColor }"></span>
+        {{ summaryText || t('predefinito') }}
+      </span>
+    </div>
     <div class="typo-actions">
       <button
         v-if="presetKey"
@@ -80,8 +95,14 @@
               <span class="typo-preset-name">{{ opt.label }}</span>
             </button>
             <div v-if="!globalPresets.length" class="typo-empty">
-              {{ t('Nessun preset globale definito. Vai a Stili globali → Tipografia.') }}
+              {{ t('Nessuno stile tipografico globale, per ora.') }}
             </div>
+            <!-- Prima qui c'era scritto «Vai a Stili globali → Tipografia»: un
+                 posto che nel builder non esiste. Ora il pannello si apre di qui. -->
+            <button type="button" class="typo-preset-new" @click="newPreset">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              {{ t('Nuovo stile') }}
+            </button>
           </div>
         </div>
       </div>
@@ -153,6 +174,59 @@
             </div>
           </div>
 
+          <!-- Dimensione fluida: scala da sola fra i due estremi (clamp) -->
+          <div v-if="keys.fluidMin || keys.fluidMax" class="typo-row">
+            <label class="typo-label">{{ t('Dimensione fluida') }}</label>
+            <div class="typo-fluid-row">
+              <div v-if="keys.fluidMin" class="typo-fluid-cell">
+                <NumberScrubber
+                  :modelValue="numberOr(values[keys.fluidMin], '')"
+                  :min="sizeMin" :max="sizeMax" :step="sizeStep"
+                  :defaultValue="sizeMin"
+                  emitAs="number"
+                  unit="px"
+                  :sliderOnFocus="false"
+                  :ariaLabel="t('Dimensione minima (px)')"
+                  @update:modelValue="emitKey(keys.fluidMin, $event)"
+                />
+                <span class="typo-sub">{{ t('minima') }}</span>
+              </div>
+              <div v-if="keys.fluidMax" class="typo-fluid-cell">
+                <NumberScrubber
+                  :modelValue="numberOr(values[keys.fluidMax], '')"
+                  :min="sizeMin" :max="sizeMax" :step="sizeStep"
+                  :defaultValue="sizeMax"
+                  emitAs="number"
+                  unit="px"
+                  :sliderOnFocus="false"
+                  :ariaLabel="t('Dimensione massima (px)')"
+                  @update:modelValue="emitKey(keys.fluidMax, $event)"
+                />
+                <span class="typo-sub">{{ t('massima') }}</span>
+              </div>
+            </div>
+            <p class="typo-hint">{{ t('Il testo scala da sé fra i due valori, secondo la larghezza dello schermo.') }}</p>
+          </div>
+
+          <!-- Misura della riga, in caratteri -->
+          <div v-if="keys.maxWidth" class="typo-row">
+            <label class="typo-label">{{ t('Larghezza massima') }}</label>
+            <div class="typo-range-row">
+              <NumberScrubber
+                class="typo-scrubber"
+                :modelValue="numberOr(values[keys.maxWidth], '')"
+                :min="maxWidthMin" :max="maxWidthMax" :step="maxWidthStep"
+                :defaultValue="maxWidthMax"
+                emitAs="number"
+                :unit="maxWidthUnit"
+                :sliderOnFocus="false"
+                :ariaLabel="t('Larghezza massima')"
+                @update:modelValue="emitKey(keys.maxWidth, $event)"
+              />
+            </div>
+            <p class="typo-hint">{{ t('In caratteri: quante lettere stanno su una riga prima di andare a capo.') }}</p>
+          </div>
+
           <!-- Peso -->
           <div v-if="keys.weight" class="typo-row">
             <label class="typo-label">{{ t('Peso') }}</label>
@@ -163,6 +237,17 @@
           <div v-if="keys.transform" class="typo-row">
             <label class="typo-label">{{ t('Trasformazione') }}</label>
             <FieldSelect ui="dropdown" :model-value="values[keys.transform] || ''" :options="TRANSFORM_OPTIONS" @update:model-value="emitKey(keys.transform, $event)" />
+          </div>
+
+          <!-- Maiuscolo / corsivo: le scorciatoie booleane che decine di tile
+               tengono al posto di transform/style. Il valore resta un bool. -->
+          <div v-if="keys.uppercase" class="typo-row typo-row--switch">
+            <label class="typo-label">{{ t('Maiuscolo') }}</label>
+            <FieldToggle :modelValue="!!values[keys.uppercase]" @update:modelValue="emitKey(keys.uppercase, $event)" />
+          </div>
+          <div v-if="keys.italic" class="typo-row typo-row--switch">
+            <label class="typo-label">{{ t('Corsivo') }}</label>
+            <FieldToggle :modelValue="!!values[keys.italic]" @update:modelValue="emitKey(keys.italic, $event)" />
           </div>
 
           <!-- Stile -->
@@ -283,9 +368,12 @@
 import { t } from '@/i18n';
 import { ref, reactive, computed, watch, nextTick } from 'vue';
 import { useStylesStore } from '@/stores/styles';
+import { resolveColorToken } from '@/utils/colorToken';
+import { useGlobalPanels } from '@/composables/useGlobalPanels';
 import FieldFontFamily from './FieldFontFamily.vue';
 import FieldColor from './FieldColor.vue';
 import FieldSelect from './FieldSelect.vue';
+import FieldToggle from './FieldToggle.vue';
 import NumberScrubber from './NumberScrubber.vue';
 
 // Opzioni dei select del popover. Label RAW: FieldSelect applica t() internamente.
@@ -356,6 +444,11 @@ const props = defineProps({
   sizeStep: { type: Number, default: 1 },
   // Unità per letter_spacing: 'px' (range -5..20) o 'em' (range 0..0.3)
   letterSpacingUnit: { type: String, default: 'px' },
+  // Misura della riga (keys.maxWidth): in caratteri per default
+  maxWidthUnit: { type: String, default: 'ch' },
+  maxWidthMin: { type: Number, default: 10 },
+  maxWidthMax: { type: Number, default: 100 },
+  maxWidthStep: { type: Number, default: 1 },
 });
 
 const lsRange = computed(() => {
@@ -366,6 +459,7 @@ const lsRange = computed(() => {
 const emit = defineEmits(['update', 'reset']);
 
 const stylesStore = useStylesStore();
+const { openTypography } = useGlobalPanels();
 const open = ref(false);
 const presetOpen = ref(false);
 const rootEl = ref(null);
@@ -420,7 +514,12 @@ function writeResp(baseKey, bp, value) {
 function numberOr(v, fallback) {
   if (v === undefined || v === null || v === '') return fallback;
   const n = Number(v);
-  return Number.isFinite(n) ? n : fallback;
+  if (Number.isFinite(n)) return n;
+  // Valori storici salvati CON unità da type:'unit' — "26px", "1.4rem".
+  // Senza questo ripiego una tile convertita al controllo mostrerebbe il campo
+  // vuoto al posto del suo valore vero.
+  const p = parseFloat(String(v));
+  return Number.isFinite(p) ? p : fallback;
 }
 
 function emitKey(key, value) {
@@ -445,6 +544,12 @@ function selectPreset(value) {
   presetOpen.value = false;
 }
 
+// Gli stili globali si creano dal builder, non solo da wp-admin.
+function newPreset() {
+  presetOpen.value = false;
+  openTypography();
+}
+
 const globalPresets = computed(() => {
   const sets = stylesStore.globalTypography || [];
   return sets.map(s => ({ value: s.id || s.slug || s.name, label: s.name || s.label || s.id }));
@@ -463,6 +568,114 @@ const hasAnyValue = computed(() => {
 
 const hasPresetValue = computed(() => {
   return !!props.presetKey && !!props.values?.[props.presetKey];
+});
+
+/* ── Sintesi sul trigger ─────────────────────────────────────────────────────
+   Il popover fa risparmiare spazio ma nasconde lo stato: senza aprirlo non
+   sapevi che il titolo era a 46px. Qui sotto le chiavi valorizzate diventano
+   una riga leggibile — "Titoli · 46px · 700 · 1.1" — troncata con ellipsis e
+   ripetuta per intero nel title. */
+
+const raw = (logicalKey) => {
+  const k = props.keys?.[logicalKey];
+  if (!k) return '';
+  const v = props.values?.[k];
+  return (v === undefined || v === null) ? '' : v;
+};
+const filled = (logicalKey) => {
+  const v = raw(logicalKey);
+  return v !== '' && v !== null && v !== undefined;
+};
+const optionLabel = (options, value) => {
+  const hit = options.find(o => o.value === value);
+  return hit ? t(hit.label) : '';
+};
+/**
+ * Numero + unità per la sintesi. L'unità va aggiunta SOLO al numero nudo: le
+ * chiavi che prima erano type:'unit' hanno in archivio stringhe come "26px", e
+ * concatenare lì produceva «26pxpx». Un valore non numerico ("auto") passa
+ * intatto, senza unità.
+ */
+const fmt = (v, unit = '') => {
+  const n = Number(v);
+  const p = Number.isFinite(n) ? n : parseFloat(String(v));
+  if (!Number.isFinite(p)) return String(v);
+  return (Math.round(p * 100) / 100) + unit;
+};
+
+// Le tre forme storiche del valore, tutte ancora in archivio:
+// 'heading' (legacy) · 'var(--olo-font-family-heading)' (token) · 'Georgia, serif' (stack).
+const FAMIGLIE_LEGACY = {
+  heading: 'Titoli', serif: 'Titoli', body: 'Testo', sans: 'Testo', mono: 'Mono',
+};
+
+// 'var(--olo-font-family-heading)' → "Titoli" · "Georgia, serif" → "Georgia"
+function familyLabel(value) {
+  const v = String(value || '').trim();
+  if (!v) return '';
+  if (FAMIGLIE_LEGACY[v.toLowerCase()]) return t(FAMIGLIE_LEGACY[v.toLowerCase()]);
+  if (v.startsWith('var(--olo-font-family-heading')) return t('Titoli');
+  if (v.startsWith('var(--olo-font-family-mono')) return t('Mono');
+  if (v.startsWith('var(--olo-font-family')) return t('Testo');
+  const custom = v.match(/^var\(--olo-font-([\w-]+)-family/);
+  if (custom) {
+    const id = custom[1];
+    const set = (stylesStore.globalTypography || []).find(s => s.id === id);
+    return set?.label || set?.name || id;
+  }
+  return v.split(',')[0].replace(/['"]/g, '').trim();
+}
+
+const summaryParts = computed(() => {
+  const out = [];
+
+  if (props.presetKey && props.values?.[props.presetKey]) {
+    const hit = globalPresets.value.find(p => p.value === props.values[props.presetKey]);
+    out.push(hit ? hit.label : String(props.values[props.presetKey]));
+  }
+  if (filled('tag')) out.push(String(raw('tag')).toUpperCase());
+  if (filled('family')) out.push(familyLabel(raw('family')));
+
+  // Dimensione: fluida (min–max) oppure fissa
+  if (filled('fluidMin') || filled('fluidMax')) {
+    const lo = filled('fluidMin') ? fmt(raw('fluidMin')) : '·';
+    const hi = filled('fluidMax') ? fmt(raw('fluidMax')) : '·';
+    out.push(`${lo}–${hi}px`);
+  } else if (filled('size')) {
+    out.push(fmt(raw('size'), 'px'));
+  }
+  if (filled('maxWidth')) out.push(fmt(raw('maxWidth'), props.maxWidthUnit));
+
+  if (filled('weight')) out.push(String(raw('weight')));
+  if (filled('lineHeight')) out.push(fmt(raw('lineHeight')));
+  if (filled('letterSpacing')) out.push(fmt(raw('letterSpacing'), props.letterSpacingUnit));
+  if (filled('wordSpacing')) out.push(fmt(raw('wordSpacing'), 'px') + ' ' + t('parole'));
+
+  // filled() PRIMA di optionLabel: ogni lista ha un'opzione con value ''
+  // etichettata «Predefinito», e senza la guardia la sintesi la stampava anche
+  // per chiavi che la tile non mappa affatto ("26–46px · 28ch · Predefinito ·
+  // Predefinito · Predefinito").
+  if (filled('transform') && raw('transform') !== 'none') out.push(optionLabel(TRANSFORM_OPTIONS, raw('transform')));
+  if (raw('uppercase') === true) out.push(t('MAIUSCOLO'));
+  if (raw('italic') === true) out.push(t('Corsivo'));
+  if (filled('style') && raw('style') !== 'normal') out.push(optionLabel(STYLE_OPTIONS, raw('style')));
+  if (filled('decoration') && raw('decoration') !== 'none') out.push(optionLabel(DECORATION_OPTIONS, raw('decoration')));
+  if (filled('shadow')) out.push(t('ombra'));
+
+  return out.filter(Boolean);
+});
+
+const summaryText = computed(() => summaryParts.value.join(' · '));
+
+// Il colore non entra nel testo: diventa un pallino davanti alla sintesi.
+// I token vanno risolti in JS — nel pannello di destra `var(--olo-color-*)`
+// non esiste, è definito dentro il canvas.
+const summaryColor = computed(() => resolveColorToken(raw('color'), stylesStore));
+
+const summaryTitle = computed(() => {
+  const parts = summaryParts.value.slice();
+  if (summaryColor.value) parts.push(t('colore') + ' ' + summaryColor.value);
+  return parts.length ? parts.join(' · ') : t('Nessuna proprietà impostata: eredita dal tema.');
 });
 
 function positionPop(el, target) {
@@ -494,11 +707,40 @@ watch(presetOpen, (val) => {
   justify-content: space-between;
   gap: 8px;
 }
+.typo-id {
+  flex: 1;
+  min-width: 0; /* senza questo l'ellipsis della sintesi non scatta mai */
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
 .typo-row-label {
   font-size: 12px;
   font-weight: 500;
   color: #9CA3AF;
-  flex: 1;
+}
+.typo-summary {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  line-height: 1.3;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.typo-summary--empty {
+  color: #c4c8d0;
+  font-style: italic;
+}
+.typo-summary-dot {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
 }
 .typo-actions {
   display: flex;
@@ -599,6 +841,11 @@ watch(presetOpen, (val) => {
   flex-direction: column;
   gap: 4px;
 }
+.typo-row--switch {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
 .typo-row-head {
   display: flex;
   align-items: center;
@@ -666,6 +913,30 @@ watch(presetOpen, (val) => {
 /* NumberScrubber riempie la riga (sostituisce slider flex:1 + valbox) */
 .typo-scrubber { flex: 1; min-width: 0; }
 
+/* Dimensione fluida: i due estremi affiancati, etichettati sotto */
+.typo-fluid-row {
+  display: flex;
+  gap: 8px;
+}
+.typo-fluid-cell {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.typo-sub {
+  font-size: 10px;
+  color: #9ca3af;
+  text-align: center;
+}
+.typo-hint {
+  margin: 2px 0 0;
+  font-size: 10px;
+  line-height: 1.35;
+  color: #9ca3af;
+}
+
 .typo-preset-list {
   display: flex;
   flex-direction: column;
@@ -697,6 +968,29 @@ watch(presetOpen, (val) => {
   color: #9ca3af;
   text-align: center;
   font-style: italic;
+}
+.typo-preset-new {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding: 7px 10px;
+  background: transparent;
+  border: 1px dashed #d1d5db;
+  border-radius: 6px;
+  color: #6b7280;
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.typo-preset-new:hover {
+  border-color: var(--olo-ui-accent, #e8622a);
+  color: var(--olo-ui-accent, #e8622a);
+}
+.typo-preset-new:focus-visible {
+  outline: 2px solid var(--olo-ui-accent, #e8622a);
+  outline-offset: 1px;
 }
 
 .typo-body::-webkit-scrollbar { width: 6px; }
