@@ -149,7 +149,7 @@
           <!-- Dimensione (responsive) -->
           <div v-if="keys.size" class="typo-row">
             <div class="typo-row-head">
-              <label class="typo-label">{{ t('Dimensione (px)') }}</label>
+              <label class="typo-label">{{ t('Dimensione') }}</label>
               <button
                 v-if="isResponsive('size')"
                 type="button"
@@ -319,7 +319,7 @@
 
           <!-- Spaziatura parole -->
           <div v-if="keys.wordSpacing" class="typo-row">
-            <label class="typo-label">{{ t('Spaziatura parole (px)') }}</label>
+            <label class="typo-label">{{ t('Spaziatura parole') }}</label>
             <div class="typo-range-row">
               <NumberScrubber
                 class="typo-scrubber"
@@ -460,8 +460,9 @@ const props = defineProps({
 });
 
 const lsRange = computed(() => {
-  if (props.letterSpacingUnit === 'em') return { min: 0, max: 0.3, step: 0.01, label: t('Spaziatura caratteri (em)') };
-  return { min: -5, max: 20, step: 0.1, label: t('Spaziatura caratteri (px)') };
+  // L'unita' la mostra lo scrubber: nell'etichetta sarebbe scritta due volte.
+  if (props.letterSpacingUnit === 'em') return { min: 0, max: 0.3, step: 0.01, label: t('Spaziatura caratteri') };
+  return { min: -5, max: 20, step: 0.1, label: t('Spaziatura caratteri') };
 });
 
 const emit = defineEmits(['update', 'reset']);
