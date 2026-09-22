@@ -60,17 +60,18 @@ export default {
     { type: 'separator', label: t('Colori') },
     { key: 'accent', label: t('Accento (parole <em>)'), type: 'color',
       description: t('Vuoto = primario del tema.') },
-    { key: 'text_color', label: t('Colore testo'), type: 'color',
-      description: t('Vuoto = colore testo del tema.') },
-    { key: 'lead_color', label: t('Colore lead'), type: 'color',
-      description: t('Vuoto = testo attenuato del tema.') },
 
+    // Tipografia nel controllo unico: la dimensione del manifesto è FLUIDA
+    // (scala da sé fra i due estremi) e la riga si misura in caratteri.
+    // Chiavi invariate — i renderer Vue/PHP continuano a leggere le stesse.
     { type: 'separator', label: t('Tipografia') },
-    { key: 'size_min', label: t('Dimensione minima'), type: 'number', min: 12, max: 120 },
-    { key: 'size_max', label: t('Dimensione massima'), type: 'number', min: 16, max: 200 },
-    { key: 'max_width_ch', label: t('Larghezza massima'), type: 'number', min: 6, max: 60 },
-    { key: 'lead_size', label: t('Dimensione lead'), type: 'number', min: 10, max: 32, step: 0.5 },
-    { key: 'lead_max_width_ch', label: t('Larghezza massima lead'), type: 'number', min: 20, max: 100 },
+    { type: 'typography', label: t('Testo manifesto'), responsiveKeys: [],
+      keys: { fluidMin: 'size_min', fluidMax: 'size_max', maxWidth: 'max_width_ch', color: 'text_color' },
+      sizeMin: 12, sizeMax: 200, maxWidthMin: 6, maxWidthMax: 60 },
+    { type: 'typography', label: t('Paragrafo lead'), responsiveKeys: [],
+      keys: { size: 'lead_size', maxWidth: 'lead_max_width_ch', color: 'lead_color' },
+      sizeMin: 10, sizeMax: 32, sizeStep: 0.5, maxWidthMin: 20, maxWidthMax: 100,
+      condition: { field: 'show_lead', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Sfondo') },
     { key: 'bg', label: t('Sfondo completo'), type: 'background', showParallax: false },

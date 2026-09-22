@@ -418,7 +418,7 @@ export default {
       { value: 'outline', label: t('Contorno') },
       { value: 'ghost',   label: t('Trasparente') },
     ]},
-    { key: 'cta_size',       label: t('Dimensione testo'), type: 'range', min: 12, max: 24, step: 1 },
+    { type: 'typography', label: t('Pulsante'), responsiveKeys: [], keys: { size: 'cta_size' }, sizeMin: 12, sizeMax: 24 },
     { key: 'cta_bg_color',   label: t('Colore sfondo'), type: 'color' },
     { key: 'cta_text_color', label: t('Colore testo'),  type: 'color' },
     withHover({ key: 'cta_radius', label: t('Raggio'), type: 'border-radius' }),

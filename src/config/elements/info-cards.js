@@ -156,23 +156,12 @@ export default {
     withHover({ key: 'media_radius', label: t('Raggio media'), type: 'border-radius' }, { hoverKey: 'media_radius_hover', hoverDurationKey: 'media_radius_hover_duration' }),
 
     { type: 'separator', label: t('Tipografia titolo') },
-    { key: 'title_font_family', label: t('Famiglia'), type: 'font-family' },
-    { key: 'title_size',   label: t('Dimensione'), type: 'range', min: 18, max: 160, step: 2 },
-    { key: 'title_weight', label: t('Peso'), type: 'select', options: [
-      { value: '300', label: t('300 — Light') },
-      { value: '400', label: t('400 — Regular') },
-      { value: '500', label: t('500 — Medium') },
-      { value: '600', label: t('600 — SemiBold') },
-      { value: '700', label: t('700 — Bold') },
-      { value: '800', label: t('800 — ExtraBold') },
-      { value: '900', label: t('900 — Black') },
-    ]},
-    { key: 'title_italic', label: t('Titolo in italico'), type: 'toggle' },
+    { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'title_size', weight: 'title_weight', italic: 'title_italic', family: 'title_font_family' }, sizeMin: 18, sizeMax: 160, sizeStep: 2 },
 
     { type: 'separator', label: t('Dimensioni secondarie') },
-    { key: 'counter_size',     label: t('Counter'),     type: 'range', min: 9, max: 22, step: 1 },
-    { key: 'description_size', label: t('Descrizione'), type: 'range', min: 11, max: 22, step: 1 },
-    { key: 'footer_size',      label: t('Footer'),      type: 'range', min: 9, max: 16, step: 1 },
+    { type: 'typography', label: t('Numero'), responsiveKeys: [], keys: { size: 'counter_size' }, sizeMin: 9, sizeMax: 22 },
+    { type: 'typography', label: t('Descrizione'), responsiveKeys: [], keys: { size: 'description_size' }, sizeMin: 11, sizeMax: 22 },
+    { type: 'typography', label: t('Piè di pagina'), responsiveKeys: [], keys: { size: 'footer_size' }, sizeMin: 9, sizeMax: 16 },
 
     { type: 'separator', label: t('Hover card') },
     { key: 'card_hover_effect', label: t('Effetto hover'), type: 'select', options: [

@@ -146,25 +146,21 @@ export default {
       { hoverKey: 'number_hover_color', hoverDurationKey: 'number_color_hover_duration', defaultDuration: 200 }),
 
     { type: 'separator', label: t('Nome') },
-    { key: 'name_font_family', label: t('Famiglia'), type: 'font-family' },
     withHover({ key: 'name_color', label: t('Colore'), type: 'color' },
       { hoverKey: 'name_hover_color', hoverDurationKey: 'name_color_hover_duration', defaultDuration: 200 }),
-    { key: 'name_size',  label: t('Dimensione'), type: 'range', min: 14, max: 56, step: 1 },
-    { key: 'name_uppercase', label: t('Maiuscolo'), type: 'toggle' },
+    { type: 'typography', label: t('Nome'), responsiveKeys: [], keys: { size: 'name_size', uppercase: 'name_uppercase', family: 'name_font_family' }, sizeMin: 14, sizeMax: 56 },
 
     { type: 'separator', label: t('Sotto-etichetta') },
     { key: 'mono_font_family', label: t('Font (vuoto = mono del tema)'), type: 'font-family' },
     withHover({ key: 'sub_color', label: t('Colore'), type: 'color' },
       { hoverKey: 'sub_hover_color', hoverDurationKey: 'sub_color_hover_duration', defaultDuration: 200 }),
-    { key: 'sub_size',      label: t('Dimensione'), type: 'range', min: 10, max: 18, step: 1 },
-    { key: 'sub_uppercase', label: t('Maiuscolo'),  type: 'toggle' },
+    { type: 'typography', label: t('Sottotitolo'), responsiveKeys: [], keys: { size: 'sub_size', uppercase: 'sub_uppercase' }, sizeMin: 10, sizeMax: 18 },
 
     { type: 'separator', label: t('Descrizione (colonna destra)') },
     withHover({ key: 'desc_color', label: t('Colore'), type: 'color',
       condition: { field: 'lead_mode', value: 'number' } },
       { hoverKey: 'desc_hover_color', hoverDurationKey: 'desc_color_hover_duration', defaultDuration: 200 }),
-    { key: 'desc_size',  label: t('Dimensione'), type: 'number', min: 10, max: 24,
-      condition: { field: 'lead_mode', value: 'number' } },
+    { type: 'typography', label: t('Descrizione'), responsiveKeys: [], keys: { size: 'desc_size' }, sizeMin: 10, sizeMax: 24, condition: { field: 'lead_mode', value: 'number' } },
 
     { type: 'separator', label: t('Righe') },
     // Nel layout numerato l'altezza della riga segue la scala fluida del blueprint

@@ -77,20 +77,11 @@ export default {
     { key: 'hover_indent',  label: t('Indentazione hover'), type: 'range', min: 0, max: 48, step: 2 },
 
     { type: 'separator', label: t('Titolo') },
-    { key: 'title_font_family', label: t('Famiglia titolo'), type: 'font-family' },
-    { key: 'title_color',  label: t('Colore'), type: 'color' },
-    { key: 'title_size',   label: t('Dimensione'), type: 'range', min: 20, max: 72, step: 1, responsive: true },
-    { key: 'title_weight', label: t('Peso'), type: 'select', options: [
-      { value: '400', label: t('400 — Regular') },
-      { value: '500', label: t('500 — Medium') },
-      { value: '600', label: t('600 — SemiBold') },
-      { value: '700', label: t('700 — Bold') },
-    ]},
+    { type: 'typography', label: t('Titolo'), responsiveKeys: ['size'], keys: { size: 'title_size', weight: 'title_weight', color: 'title_color', family: 'title_font_family' }, sizeMin: 20, sizeMax: 72 },
 
     { type: 'separator', label: t('Meta (numero · categoria · anno)') },
     { key: 'mono_font_family', label: t('Font meta (vuoto = mono del tema)'), type: 'font-family' },
-    { key: 'number_color',   label: t('Colore numero'),    type: 'color' },
-    { key: 'number_size',    label: t('Numero'),      type: 'range', min: 10, max: 20, step: 1 },
+    { type: 'typography', label: t('Numero'), responsiveKeys: [], keys: { size: 'number_size', color: 'number_color' }, sizeMin: 10, sizeMax: 20 },
     { key: 'category_color', label: t('Colore categoria'), type: 'color' },
     { key: 'category_size',  label: t('Categoria'),   type: 'range', min: 10, max: 18, step: 1 },
     { key: 'year_color',     label: t('Colore anno'),      type: 'color' },

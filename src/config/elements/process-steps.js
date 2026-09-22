@@ -73,28 +73,15 @@ export default {
       { value: 'circle', label: t('Cerchio pieno') },
       { value: 'outline', label: t('Cerchio bordato') },
     ]},
-    { key: 'number_color', label: t('Colore numero'), type: 'color' },
     { key: 'number_bg', label: t('Sfondo/bordo cerchio'), type: 'color',
       condition: { field: 'number_style', operator: '!=', value: 'plain' } },
-    { key: 'number_size', label: t('Dimensione'), type: 'range', min: 12, max: 96, step: 2 },
-    { key: 'number_font', label: t('Famiglia'), type: 'font-family' },
-    { key: 'number_weight', label: t('Peso'), type: 'select', options: [
-      { value: '300', label: '300' }, { value: '400', label: '400' }, { value: '500', label: '500' },
-      { value: '600', label: '600' }, { value: '700', label: '700' }, { value: '800', label: '800' },
-    ]},
+    { type: 'typography', label: t('Numero'), responsiveKeys: [], keys: { size: 'number_size', family: 'number_font', weight: 'number_weight', color: 'number_color' }, sizeMin: 12, sizeMax: 96, sizeStep: 2 },
 
     { type: 'separator', label: t('Titolo') },
-    { key: 'title_color', label: t('Colore titolo'), type: 'color' },
-    { key: 'title_size', label: t('Dimensione'), type: 'range', min: 14, max: 48, step: 1 },
-    { key: 'title_font', label: t('Famiglia'), type: 'font-family' },
-    { key: 'title_weight', label: t('Peso'), type: 'select', options: [
-      { value: '400', label: '400' }, { value: '500', label: '500' }, { value: '600', label: '600' },
-      { value: '700', label: '700' }, { value: '800', label: '800' },
-    ]},
+    { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'title_size', family: 'title_font', weight: 'title_weight', color: 'title_color' }, sizeMin: 14, sizeMax: 48 },
 
     { type: 'separator', label: t('Descrizione') },
-    { key: 'desc_color', label: t('Colore'), type: 'color' },
-    { key: 'desc_size', label: t('Dimensione'), type: 'range', min: 11, max: 22, step: 1 },
+    { type: 'typography', label: t('Descrizione'), responsiveKeys: [], keys: { size: 'desc_size', color: 'desc_color' }, sizeMin: 11, sizeMax: 22 },
 
     { type: 'separator', label: t('Card (opzionale)') },
     { key: 'card_bg', label: t('Sfondo card'), type: 'color' },

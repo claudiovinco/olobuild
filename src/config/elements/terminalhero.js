@@ -160,7 +160,7 @@ export default {
     { key: 'h_size_min', label: t('Dimensione min'), type: 'range', min: 20, max: 90, step: 1 },
     { key: 'h_size_vw', label: t('Dimensione fluida'), type: 'range', min: 2, max: 14, step: 0.5 },
     { key: 'h_size_max', label: t('Dimensione max'), type: 'range', min: 60, max: 200, step: 2 },
-    { key: 'h_line_height', label: t('Interlinea'), type: 'range', min: 0.8, max: 1.4, step: 0.01 },
+    { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { lineHeight: 'h_line_height' } },
 
     { type: 'separator', label: t('Typewriter') },
     { key: 'type_size_min', label: t('Dimensione min'), type: 'range', min: 14, max: 40, step: 1 },

@@ -82,9 +82,13 @@ export default {
       description: t('Vuoto = primario del tema.') },
     { key: 'rule_color', label: t('Colore righe sottili'), type: 'color' },
 
+    // Un controllo per elemento di testo, non un range per proprietà: stessa
+    // forma di tutte le altre tile. Chiavi invariate.
     { type: 'separator', label: t('Tipografia') },
-    { key: 'nameplate_size', label: t('Dimensione nameplate'), type: 'range', min: 24, max: 96, step: 1 },
-    { key: 'headline_size', label: t('Dimensione titolo'), type: 'range', min: 24, max: 96, step: 1 },
+    { type: 'typography', label: t('Nameplate'), responsiveKeys: [],
+      keys: { size: 'nameplate_size' }, sizeMin: 24, sizeMax: 96 },
+    { type: 'typography', label: t('Titolo'), responsiveKeys: [],
+      keys: { size: 'headline_size' }, sizeMin: 24, sizeMax: 96 },
 
     { type: 'separator', label: t('Spaziatura') },
     { key: 'pad_custom', label: t('Padding personalizzato (blocco articolo)'), type: 'toggle',

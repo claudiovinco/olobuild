@@ -69,17 +69,10 @@ export default {
     { key: 'divider_color', label: t('Colore linee'),          type: 'color' },
 
     { type: 'separator', label: t('Valore') },
-    { key: 'value_font_family', label: t('Famiglia'), type: 'font-family' },
-    { key: 'value_color',  label: t('Colore'),          type: 'color' },
-    { key: 'value_size',   label: t('Dimensione'), type: 'range', min: 20, max: 96, step: 1, responsive: true },
-    { key: 'value_weight', label: t('Peso'), type: 'select', options: [
-      { value: '400', label: '400' }, { value: '500', label: '500' }, { value: '600', label: '600' }, { value: '700', label: '700' }, { value: '800', label: '800' },
-    ]},
+    { type: 'typography', label: t('Valore'), responsiveKeys: ['size'], keys: { size: 'value_size', weight: 'value_weight', color: 'value_color', family: 'value_font_family' }, sizeMin: 20, sizeMax: 96 },
 
     { type: 'separator', label: t('Etichetta') },
     { key: 'mono_font_family', label: t('Font etichetta (vuoto = mono del tema)'), type: 'font-family' },
-    { key: 'label_color',     label: t('Colore'),          type: 'color' },
-    { key: 'label_size',      label: t('Dimensione'), type: 'range', min: 10, max: 22, step: 1 },
-    { key: 'label_uppercase', label: t('Maiuscolo'),       type: 'toggle' },
+    { type: 'typography', label: t('Etichetta'), responsiveKeys: [], keys: { size: 'label_size', color: 'label_color', uppercase: 'label_uppercase' }, sizeMin: 10, sizeMax: 22 },
   ],
 };

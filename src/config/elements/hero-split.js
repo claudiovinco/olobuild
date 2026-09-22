@@ -267,22 +267,21 @@ export default {
     { key: 'headline_align',       label: t('Allineamento'),    type: 'select', options: ALIGN_OPTIONS() },
 
     { type: 'separator', label: t('Sottotitolo stile') },
-    { key: 'subhead_color',     label: t('Colore'),             type: 'color' },
-    { key: 'subhead_size',      label: t('Dimensione'),    type: 'range', min: 12, max: 32, step: 1 },
+    { type: 'typography', label: t('Sottotitolo'), responsiveKeys: [], keys: { size: 'subhead_size', color: 'subhead_color' }, sizeMin: 12, sizeMax: 32 },
     { key: 'subhead_max_width', label: t('Larghezza max'), type: 'range', min: 200, max: 900, step: 10 },
     { key: 'subhead_align',     label: t('Allineamento'),       type: 'select', options: ALIGN_OPTIONS() },
 
     { type: 'separator', label: t('CTA primaria stile') },
     withHover({ key: 'cta1_bg',    label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta1_bg_hover' }),
     withHover({ key: 'cta1_color', label: t('Colore testo'), type: 'color' }, { hoverKey: 'cta1_color_hover' }),
-    { key: 'cta1_size', label: t('Dimensione'), type: 'range', min: 12, max: 22, step: 1 },
+    { type: 'typography', label: t('Pulsante 1'), responsiveKeys: [], keys: { size: 'cta1_size' }, sizeMin: 12, sizeMax: 22 },
     withHover({ key: 'cta1_radius', label: t('Raggio'), type: 'border-radius' }, { hoverKey: 'cta1_radius_hover', hoverDurationKey: 'cta1_radius_hover_duration' }),
 
     { type: 'separator', label: t('CTA secondaria stile') },
     withHover({ key: 'cta2_bg',     label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta2_bg_hover' }),
     withHover({ key: 'cta2_color',  label: t('Colore testo'), type: 'color' }, { hoverKey: 'cta2_color_hover' }),
     { key: 'cta2_border', label: t('Colore bordo'),    type: 'color' },
-    { key: 'cta2_size',   label: t('Dimensione'), type: 'range', min: 12, max: 22, step: 1 },
+    { type: 'typography', label: t('Pulsante 2'), responsiveKeys: [], keys: { size: 'cta2_size' }, sizeMin: 12, sizeMax: 22 },
     withHover({ key: 'cta2_radius', label: t('Raggio'), type: 'border-radius' }, { hoverKey: 'cta2_radius_hover', hoverDurationKey: 'cta2_radius_hover_duration' }),
 
     { type: 'separator', label: t('Showcase wrapper'), condition: { field: 'panel', op: 'eq', value: 'showcase' } },

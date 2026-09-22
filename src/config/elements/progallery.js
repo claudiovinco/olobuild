@@ -444,14 +444,7 @@ export default {
     ]},
     { key: 'hover_caption_bg', label: t('Sfondo didascalia'), type: 'color',
       show: s => s.hover_caption && s.hover_caption !== 'none' && s.hover_caption !== 'centered' },
-    { key: 'hover_caption_color', label: t('Colore testo didascalia'), type: 'color',
-      show: s => s.hover_caption && s.hover_caption !== 'none' },
-    { key: 'hover_caption_weight', label: t('Peso testo'), type: 'select', options: [
-      { value: '400', label: t('Normale') },
-      { value: '600', label: t('Semi-bold') },
-      { value: '700', label: t('Bold') },
-      { value: '900', label: t('Extra bold') },
-    ], show: s => s.hover_caption === 'centered' },
+    { type: 'typography', label: t('Didascalia (hover)'), responsiveKeys: [], keys: { weight: 'hover_caption_weight', color: 'hover_caption_color' } },
     { key: 'hover_frame_inset', label: t('Padding cornice'), type: 'spacing', max: 40,
       show: s => s.hover_caption === 'frame' },
 
@@ -527,8 +520,7 @@ export default {
     // ─── +N overlay ───
     { type: 'separator', label: 'Indicatore "+N"' },
     { key: 'more_bg', label: t('Sfondo overlay'), type: 'color' },
-    { key: 'more_color', label: t('Colore testo'), type: 'color' },
-    { key: 'more_size', label: t('Dimensione testo'), type: 'range', min: 16, max: 48, step: 2 },
+    { type: 'typography', label: t('Mostra altro'), responsiveKeys: [], keys: { size: 'more_size', color: 'more_color' }, sizeMin: 16, sizeMax: 48, sizeStep: 2 },
 
     // ─── Ombra & bordi ───
     ...shadowField,

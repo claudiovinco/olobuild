@@ -114,7 +114,7 @@ export default {
       contextKeys: { ratio: 'aspect', fit: 'object_fit' } },
 
     { type: 'separator', label: t('Raggio') },
-    
+
     // 4 angoli indipendenti. Default {0,0,0,0} → si usa il raggio legacy sopra (no-op).
     { key: 'card_radius', label: t('Raggio card'), type: 'border-radius', legacyKeys: { all: 'radius' } },
 
@@ -124,14 +124,8 @@ export default {
     { type: 'separator', label: t('Colori') },
     { key: 'media_bg', label: t('Sfondo media'), type: 'color' },
     { key: 'veil_color', label: t('Velo (gradiente)'), type: 'color' },
-    { key: 'kicker_color', label: t('Kicker (vuoto = accento tema)'), type: 'color' },
-    { key: 'kicker_size', label: t('Dim. kicker'), type: 'range', min: 8, max: 16, step: 1 },
-    { key: 'title_color', label: t('Titolo'), type: 'color' },
-    { key: 'title_size', label: t('Dim. titolo'), type: 'range', min: 14, max: 56, step: 1 },
-    { key: 'title_weight', label: t('Peso titolo'), type: 'select', options: [
-      { value: '400', label: '400' }, { value: '500', label: '500' }, { value: '600', label: '600' }, { value: '700', label: '700' }, { value: '900', label: '900' },
-    ]},
-    { key: 'title_uppercase', label: t('Titolo maiuscolo'), type: 'toggle' },
+    { type: 'typography', label: t('Occhiello'), responsiveKeys: [], keys: { size: 'kicker_size', color: 'kicker_color' }, sizeMin: 8, sizeMax: 16 },
+    { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'title_size', weight: 'title_weight', color: 'title_color', uppercase: 'title_uppercase' }, sizeMin: 14, sizeMax: 56 },
 
     { type: 'separator', label: t('Freccia') },
     { key: 'show_arrow', label: t('Mostra freccia'), type: 'toggle' },

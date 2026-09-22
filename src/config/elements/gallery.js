@@ -174,8 +174,7 @@ export default {
 
     { type: 'separator', label: 'Indicatore "+N"' },
     { key: 'more_bg', label: t('Sfondo overlay'), type: 'color' },
-    { key: 'more_color', label: t('Colore testo'), type: 'color' },
-    { key: 'more_size', label: t('Dimensione testo'), type: 'range', min: 16, max: 48, step: 2 },
+    { type: 'typography', label: t('Mostra altro'), responsiveKeys: [], keys: { size: 'more_size', color: 'more_color' }, sizeMin: 16, sizeMax: 48, sizeStep: 2 },
 
     { type: 'separator', label: t('Lightbox') },
     { key: 'lightbox_animation', label: t('Animazione lightbox'), type: 'select', options: [

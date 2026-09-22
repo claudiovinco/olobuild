@@ -73,12 +73,16 @@ export default {
     { key: 'slot_bg',     label: t('Sfondo slot'),     type: 'color' },
     { key: 'accent',      label: t('Accento'),         type: 'color' },
     { key: 'accent_ink',  label: t('Testo su accento'), type: 'color' },
-    { key: 'name_color',  label: t('Colore nome/totale'), type: 'color' },
     { key: 'price_color', label: t('Colore prezzo/sub'), type: 'color' },
     { key: 'line_color',  label: t('Colore bordi'),    type: 'color' },
 
+    // Famiglia + colore del nome nello stesso controllo. Il prezzo ha SOLO il
+    // colore, e un colore da solo non è tipografia: resta fra i colori.
     { type: 'separator', label: t('Tipografia') },
-    { key: 'name_font_family', label: t('Famiglia nome/totale'), type: 'font-family' },
-    { key: 'mono_font_family', label: t('Font etichette (vuoto = mono del tema)'), type: 'font-family' },
+    { type: 'typography', label: t('Nome / totale'), responsiveKeys: [],
+      keys: { family: 'name_font_family', color: 'name_color' } },
+    { type: 'typography', label: t('Etichette'), responsiveKeys: [],
+      keys: { family: 'mono_font_family' },
+      description: t('Vuoto = il monospace del tema.') },
   ],
 };

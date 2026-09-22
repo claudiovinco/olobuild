@@ -200,21 +200,10 @@ export default {
     { key: 'timeline_margin_bottom', label: t('Margine timeline'), type: 'spacing', min: 0, max: 160 },
 
     { type: 'separator', label: t('Numero step') },
-    { key: 'counter_font_family', label: t('Famiglia'), type: 'font-family' },
-    { key: 'counter_size',   label: t('Dimensione'), type: 'range', min: 40, max: 200, step: 4 },
-    { key: 'counter_color',  label: t('Colore'),          type: 'color' },
-    { key: 'counter_italic', label: t('Italico'),         type: 'toggle' },
-    { key: 'counter_weight', label: t('Peso'),            type: 'select', options: [
-      { value: '300', label: t('300 — Light') },
-      { value: '400', label: t('400 — Regular') },
-      { value: '500', label: t('500 — Medium') },
-      { value: '600', label: t('600 — SemiBold') },
-      { value: '700', label: t('700 — Bold') },
-    ]},
+    { type: 'typography', label: t('Numero'), responsiveKeys: [], keys: { size: 'counter_size', weight: 'counter_weight', color: 'counter_color', italic: 'counter_italic', family: 'counter_font_family' }, sizeMin: 40, sizeMax: 200, sizeStep: 4 },
 
     { type: 'separator', label: t('Tag') },
-    { key: 'tag_size',  label: t('Dimensione'), type: 'range', min: 10, max: 16, step: 1 },
-    { key: 'tag_color', label: t('Colore testo'),    type: 'color' },
+    { type: 'typography', label: t('Tag'), responsiveKeys: [], keys: { size: 'tag_size', color: 'tag_color' }, sizeMin: 10, sizeMax: 16 },
 
     { type: 'separator', label: t('Mockup card') },
     // Elenco canonico. Niente voce «Auto»: l'altezza del mockup NASCE da questo
@@ -233,32 +222,19 @@ export default {
     { key: 'media_object_position', label: t('Punto focale'), type: 'object-position', reveal: true, contextKeys: { ratio: 'media_aspect_ratio' } },
 
     { type: 'separator', label: t('Pre-title') },
-    { key: 'pre_title_size',  label: t('Dimensione'), type: 'range', min: 9, max: 16, step: 1 },
-    { key: 'pre_title_color', label: t('Colore'),          type: 'color' },
+    { type: 'typography', label: t('Pre-titolo'), responsiveKeys: [], keys: { size: 'pre_title_size', color: 'pre_title_color' }, sizeMin: 9, sizeMax: 16 },
 
     { type: 'separator', label: t('Titolo') },
-    { key: 'title_font_family', label: t('Famiglia'), type: 'font-family' },
-    { key: 'title_size',         label: t('Dimensione'), type: 'range', min: 18, max: 60, step: 2 },
-    { key: 'title_weight',       label: t('Peso'), type: 'select', options: [
-      { value: '300', label: t('300 — Light') },
-      { value: '400', label: t('400 — Regular') },
-      { value: '500', label: t('500 — Medium') },
-      { value: '600', label: t('600 — SemiBold') },
-      { value: '700', label: t('700 — Bold') },
-    ]},
-    { key: 'title_color',        label: t('Colore base'),   type: 'color' },
+    { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'title_size', weight: 'title_weight', color: 'title_color', family: 'title_font_family' }, sizeMin: 18, sizeMax: 60, sizeStep: 2 },
     { key: 'title_accent_color', label: t('Colore accent'), type: 'color' },
 
     { type: 'separator', label: t('Descrizione') },
-    { key: 'description_size',  label: t('Dimensione'), type: 'range', min: 11, max: 20, step: 1 },
-    { key: 'description_color', label: t('Colore'),          type: 'color' },
+    { type: 'typography', label: t('Descrizione'), responsiveKeys: [], keys: { size: 'description_size', color: 'description_color' }, sizeMin: 11, sizeMax: 20 },
 
     { type: 'separator', label: t('Footer metric') },
     { key: 'footer_icon', label: t('Icona'), type: 'icon' },
-    { key: 'footer_value_size',  label: t('Valore dimensione'), type: 'range', min: 12, max: 30, step: 1 },
-    { key: 'footer_value_color', label: t('Valore colore'),          type: 'color' },
-    { key: 'footer_label_size',  label: t('Label dimensione'),  type: 'range', min: 9, max: 14, step: 1 },
-    { key: 'footer_label_color', label: t('Label colore'),           type: 'color' },
+    { type: 'typography', label: t('Valore (piè)'), responsiveKeys: [], keys: { size: 'footer_value_size', color: 'footer_value_color' }, sizeMin: 12, sizeMax: 30 },
+    { type: 'typography', label: t('Etichetta (piè)'), responsiveKeys: [], keys: { size: 'footer_label_size', color: 'footer_label_color' }, sizeMin: 9, sizeMax: 14 },
 
     { type: 'separator', label: t('Separatori tra step') },
     { key: 'separator_color', label: t('Colore separatore'), type: 'color' },

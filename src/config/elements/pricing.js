@@ -232,7 +232,7 @@ export default {
     ]),
 
     { type: 'separator', label: t('Prezzo — Aspetto') },
-    { key: 'currency_size', label: t('Dimensione valuta'), type: 'range', min: 10, max: 40, step: 1 },
+    { type: 'typography', label: t('Valuta'), responsiveKeys: [], keys: { size: 'currency_size' }, sizeMin: 10, sizeMax: 40 },
 
     { type: 'separator', label: t('Funzionalità — Aspetto') },
     { key: 'check_style', label: t('Icona spunta'), type: 'select', options: [
@@ -253,7 +253,6 @@ export default {
     { key: 'cta_hover_text_color', label: t('Colore testo hover'), type: 'color' },
     { key: 'cta_border', label: t('Bordo CTA'), type: 'border',
       legacyKeys: { width: 'cta_border_width', color: 'cta_border_color' } },
-
 
     { key: 'cta_hover_effect', label: t('Animazione hover'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
@@ -287,7 +286,6 @@ export default {
       condition: { field: 'price_shape', operator: '!=', value: 'none' } },
     { key: 'price_shape_border', label: t('Bordo forma prezzo'), type: 'border',
       legacyKeys: { width: 'price_shape_border_width', color: 'price_shape_border_color' } },
-
 
     { key: 'price_shape_glow', label: t('Luce interna'), type: 'toggle',
       condition: { field: 'price_shape', operator: '!=', value: 'none' } },

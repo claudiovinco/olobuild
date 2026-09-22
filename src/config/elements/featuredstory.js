@@ -138,9 +138,9 @@ export default {
     { key: 'cta_solid_text', label: t('CTA piena — testo'), type: 'color' },
 
     { type: 'separator', label: t('Font') },
-    { key: 'heading_font', label: t('Font titolo (display serif)'), type: 'font-family' },
-    { key: 'serif_font', label: t('Font standfirst (serif)'), type: 'font-family' },
-    { key: 'sans_font', label: t('Font sans (kicker/firma/CTA)'), type: 'font-family' },
+    { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { family: 'heading_font' } },
+    { type: 'typography', label: t('Titoli (serif)'), responsiveKeys: [], keys: { family: 'serif_font' } },
+    { type: 'typography', label: t('Testo (sans)'), responsiveKeys: [], keys: { family: 'sans_font' } },
 
     { type: 'separator', label: t('Spaziatura') },
     { key: 'pad_custom', label: t('Padding sezione personalizzato'), type: 'toggle',

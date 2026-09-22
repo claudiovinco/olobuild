@@ -100,26 +100,19 @@ export default {
     withHover({ key: 'banner_radius', label: t('Raggio'), type: 'border-radius' }, { hoverKey: 'banner_radius_hover', hoverDurationKey: 'banner_radius_hover_duration' }),
 
     { type: 'separator', label: t('Headline stile') },
-    { key: 'headline_font_family', label: t('Famiglia'), type: 'font-family' },
-    { key: 'headline_size',   label: t('Dimensione'), type: 'range', min: 18, max: 80, step: 2 },
-    { key: 'headline_weight', label: t('Peso'), type: 'select', options: [
-      { value: '300', label: t('300 — Light') },
-      { value: '400', label: t('400 — Regular') },
-      { value: '500', label: t('500 — Medium') },
-      { value: '600', label: t('600 — SemiBold') },
-      { value: '700', label: t('700 — Bold') },
-    ]},
+
+    { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'headline_size', weight: 'headline_weight', family: 'headline_font_family' }, sizeMin: 18, sizeMax: 80, sizeStep: 2 },
+
     { key: 'text_color',   label: t('Colore base'),   type: 'color' },
     { key: 'accent_color', label: t('Colore accent'), type: 'color' },
 
     { type: 'separator', label: t('Sottotitolo stile') },
-    { key: 'subtitle_size',  label: t('Dimensione'), type: 'range', min: 11, max: 22, step: 1 },
-    { key: 'subtitle_color', label: t('Colore'),          type: 'color' },
+    { type: 'typography', label: t('Sottotitolo'), responsiveKeys: [], keys: { size: 'subtitle_size', color: 'subtitle_color' }, sizeMin: 11, sizeMax: 22 },
 
     { type: 'separator', label: t('CTA stile') },
     withHover({ key: 'cta_bg',    label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta_bg_hover' }),
     withHover({ key: 'cta_color', label: t('Colore testo'), type: 'color' }, { hoverKey: 'cta_color_hover' }),
-    { key: 'cta_size',      label: t('Dimensione testo'), type: 'range', min: 12, max: 22, step: 1 },
+    { type: 'typography', label: t('Pulsante'), responsiveKeys: [], keys: { size: 'cta_size' }, sizeMin: 12, sizeMax: 22 },
     { key: 'cta_padding',   label: t('Padding bottoni'), type: 'spacing', min: 0, max: 80 },
     withHover({ key: 'cta_radius', label: t('Raggio CTA'), type: 'border-radius' }, { hoverKey: 'cta_radius_hover', hoverDurationKey: 'cta_radius_hover_duration' }),
 

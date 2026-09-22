@@ -188,13 +188,10 @@ export default {
 
   styleFields: [
     { type: 'separator', label: t('Testata') },
-    { key: 'heading_color', label: t('Colore titolo'), type: 'color',
-      description: t('Vuoto → eredita dalla sezione. Con foto di sfondo scegli un colore leggibile (es. bianco).') },
+
     { key: 'kicker_color', label: t('Colore etichetta (kicker)'), type: 'color',
       description: t('Vuoto → come il titolo, attenuato.') },
-    { key: 'heading_size', label: t('Dimensione titolo'), type: 'range', min: 20, max: 96, step: 2,
-      description: t('Dimensione massima: sotto i grandi schermi scala da sola (clamp responsive).') },
-    { key: 'heading_font', label: t('Font titolo'), type: 'font-family' },
+    { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'heading_size', family: 'heading_font', color: 'heading_color' }, sizeMin: 20, sizeMax: 96, sizeStep: 2 },
 
     { type: 'separator', label: t('Aspetto elementi') },
     { key: 'item_width', label: t('Larghezza elemento'), type: 'range', min: 160, max: 720, step: 10, responsive: true },

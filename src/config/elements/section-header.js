@@ -101,10 +101,8 @@ export default {
     { key: 'headline_align', label: t('Allineamento'), type: 'select', options: ALIGN_OPTIONS() },
 
     { type: 'separator', label: t('Tagline stile') },
-    { key: 'tagline_text_color',    label: t('Colore testo principale'),     type: 'color' },
-    { key: 'tagline_text_size',     label: t('Dimensione testo'),       type: 'range', min: 12, max: 48, step: 1 },
-    { key: 'tagline_caption_color', label: t('Colore caption'),              type: 'color' },
-    { key: 'tagline_caption_size',  label: t('Dimensione caption'),     type: 'range', min: 9, max: 18, step: 1 },
+    { type: 'typography', label: t('Tagline'), responsiveKeys: [], keys: { size: 'tagline_text_size', color: 'tagline_text_color' }, sizeMin: 12, sizeMax: 48 },
+    { type: 'typography', label: t('Didascalia tagline'), responsiveKeys: [], keys: { size: 'tagline_caption_size', color: 'tagline_caption_color' }, sizeMin: 9, sizeMax: 18 },
 
     { type: 'separator', label: t('Composizione (headline / tagline)') },
     { key: 'layout', label: t('Modalità'), type: 'select', options: [

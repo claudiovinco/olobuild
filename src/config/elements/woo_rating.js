@@ -59,12 +59,11 @@ export default {
 
     { type: 'separator', label: t('Dimensioni') },
     { key: 'star_size', label: t('Dimensione stelle'), type: 'range', min: 12, max: 48, step: 2 },
-    { key: 'text_size', label: t('Dimensione testo'), type: 'range', min: 10, max: 24, step: 1 },
+    { type: 'typography', label: t('Testo'), responsiveKeys: [], keys: { size: 'text_size', color: 'text_color' }, sizeMin: 10, sizeMax: 24 },
 
     { type: 'separator', label: t('Colori') },
     { key: 'star_color', label: t('Colore stelle piene'), type: 'color' },
     { key: 'empty_star_color', label: t('Colore stelle vuote'), type: 'color' },
-    { key: 'text_color', label: t('Colore testo'), type: 'color' },
 
     ...borderFields(),
   ],

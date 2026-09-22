@@ -91,10 +91,18 @@ export default {
     ]},
     { key: 'separator_color', label: t('Colore separatore'), type: 'color', condition: { field: 'variant', operator: '!=', value: 'pill' } },
 
+    // Un controllo unico. Due dichiarazioni perché nella variante «pill» il
+    // colore del testo è `pill_text_color`, che vive nella sezione Pill:
+    // così non resta mai un campo colore orfano fuori dal controllo.
     { type: 'separator', label: t('Tipografia') },
-    { key: 'font_family', label: t('Famiglia'), type: 'font-family' },
-    { key: 'text_size',  label: t('Dimensione'),  type: 'range', min: 10, max: 24, step: 1 },
-    { key: 'text_color', label: t('Colore testo'),     type: 'color', condition: { field: 'variant', operator: '!=', value: 'pill' } },
+    { type: 'typography', label: t('Testo'), responsiveKeys: [],
+      keys: { family: 'font_family', size: 'text_size', color: 'text_color' },
+      sizeMin: 10, sizeMax: 24,
+      condition: { field: 'variant', operator: '!=', value: 'pill' } },
+    { type: 'typography', label: t('Testo'), responsiveKeys: [],
+      keys: { family: 'font_family', size: 'text_size' },
+      sizeMin: 10, sizeMax: 24,
+      condition: { field: 'variant', value: 'pill' } },
 
     { type: 'separator', label: t('Layout') },
     { key: 'align', label: t('Allineamento'), type: 'select', options: [

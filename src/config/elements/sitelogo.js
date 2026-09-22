@@ -106,10 +106,7 @@ export default {
     ]},
 
     { type: 'separator', label: t('Tagline') },
-    { key: 'tagline_color', label: t('Colore motto'), type: 'color',
-      condition: { field: 'show_tagline', value: true } },
-    { key: 'tagline_size', label: t('Dimensione motto'), type: 'range', min: 10, max: 24, step: 1,
-      condition: { field: 'show_tagline', value: true } },
+    { type: 'typography', label: t('Tagline'), responsiveKeys: [], keys: { size: 'tagline_size', color: 'tagline_color' }, sizeMin: 10, sizeMax: 24, condition: { field: 'show_tagline', value: true } },
 
     { type: 'separator', label: t('Effetti') },
     { key: 'hover_opacity', label: t('Opacità hover'), type: 'range', min: 20, max: 100, step: 5 },

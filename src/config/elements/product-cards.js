@@ -122,10 +122,10 @@ export default {
     { key: 'top_aspect_ratio', label: t('Proporzioni'), type: 'select',
       options: ratioOptions({ auto: false }) },
     { key: 'top_padding', label: t('Padding'), type: 'spacing', min: 0, max: 80 },
-    { key: 'letter_font_family', label: t('Famiglia lettera'), type: 'font-family' },
-    { key: 'letter_size',   label: t('Dimensione lettera'), type: 'range', min: 40, max: 280, step: 4 },
+
+    { type: 'typography', label: t('Lettera'), responsiveKeys: [], keys: { size: 'letter_size', italic: 'letter_italic', family: 'letter_font_family' }, sizeMin: 40, sizeMax: 280, sizeStep: 4 },
     { key: 'logo_height',   label: t('Altezza logo'),       type: 'range', min: 16, max: 160, step: 2 },
-    { key: 'letter_italic', label: t('Lettera in italico'),      type: 'toggle' },
+
     { key: 'letter_align', label: t('Allineamento lettera'), type: 'select', options: [
       { value: 'left',   label: t('Sinistra') },
       { value: 'center', label: t('Centrato') },
@@ -134,19 +134,12 @@ export default {
     { key: 'screenshot_label_color', label: t('Colore label outline'), type: 'color' },
 
     { type: 'separator', label: t('Metà bassa') },
-    { key: 'brand_size',           label: t('Brand label dimensione'), type: 'range', min: 10, max: 22, step: 1 },
-    { key: 'brand_letter_spacing', label: t('Brand letter-spacing'),   type: 'range', min: 0, max: 0.3, step: 0.01 },
-    { key: 'title_font_family', label: t('Titolo famiglia'), type: 'font-family' },
-    { key: 'title_size',   label: t('Titolo dimensione'), type: 'range', min: 16, max: 80, step: 2 },
-    { key: 'title_weight', label: t('Titolo peso'), type: 'select', options: [
-      { value: '300', label: t('300 — Light') },
-      { value: '400', label: t('400 — Regular') },
-      { value: '500', label: t('500 — Medium') },
-      { value: '600', label: t('600 — SemiBold') },
-      { value: '700', label: t('700 — Bold') },
-    ]},
-    { key: 'description_size', label: t('Descrizione dimensione'), type: 'range', min: 11, max: 22, step: 1 },
-    { key: 'cta_size',         label: t('CTA dimensione'),         type: 'range', min: 9,  max: 16, step: 1 },
+    { type: 'typography', label: t('Brand'), responsiveKeys: [], keys: { size: 'brand_size', letterSpacing: 'brand_letter_spacing' }, sizeMin: 10, sizeMax: 22 },
+
+    { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { size: 'title_size', weight: 'title_weight', family: 'title_font_family' }, sizeMin: 16, sizeMax: 80, sizeStep: 2 },
+
+    { type: 'typography', label: t('Descrizione'), responsiveKeys: [], keys: { size: 'description_size' }, sizeMin: 11, sizeMax: 22 },
+    { type: 'typography', label: t('Pulsante'), responsiveKeys: [], keys: { size: 'cta_size' }, sizeMin: 9, sizeMax: 16 },
 
     { type: 'separator', label: t('Hover card') },
     { key: 'card_hover_effect', label: t('Effetto hover'), type: 'select', options: [

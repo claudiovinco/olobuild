@@ -158,8 +158,6 @@ export default {
 
     { type: 'separator', label: t('Card') },
     { key: 'card_bg',    label: t('Sfondo card'),  type: 'color' },
-    { key: 'card_color', label: t('Colore nome'),  type: 'color' },
-    { key: 'role_color', label: t('Colore ruolo'), type: 'color' },
     withHover({ key: 'card_radius', label: t('Raggio card'), type: 'border-radius' },
       { hoverKey: 'card_radius_hover', hoverDurationKey: 'card_radius_hover_duration' }),
     { key: 'card_hover_effect', label: t('Effetto hover card'), type: 'select', options: [
@@ -182,15 +180,15 @@ export default {
     { key: 'offline_color', label: t('Colore offline'), type: 'color' },
     { key: 'dot_size', label: t('Dimensione pallino'), type: 'range', min: 6, max: 22, step: 1 },
 
+    // Un controllo per elemento di testo: dimensione, peso e colore del nome
+    // stanno insieme (i colori arrivavano dalla sezione «Card»). Chiavi invariate.
     { type: 'separator', label: t('Tipografia') },
-    { key: 'name_size', label: t('Dimensione nome'), type: 'range', min: 10, max: 24, step: 1 },
-    { key: 'name_weight', label: t('Peso nome'), type: 'select', options: [
-      { value: '400', label: t('400 — Regular') },
-      { value: '500', label: t('500 — Medium') },
-      { value: '600', label: t('600 — SemiBold') },
-      { value: '700', label: t('700 — Bold') },
-    ]},
-    { key: 'role_size', label: t('Dimensione ruolo'), type: 'range', min: 8, max: 16, step: 1 },
+    { type: 'typography', label: t('Nome'), responsiveKeys: [],
+      keys: { size: 'name_size', weight: 'name_weight', color: 'card_color' },
+      sizeMin: 10, sizeMax: 24 },
+    { type: 'typography', label: t('Ruolo'), responsiveKeys: [],
+      keys: { size: 'role_size', color: 'role_color' },
+      sizeMin: 8, sizeMax: 16 },
 
     { type: 'separator', label: t('Ticker — Aspetto'),
       condition: { field: 'show_ticker', op: 'eq', value: true } },

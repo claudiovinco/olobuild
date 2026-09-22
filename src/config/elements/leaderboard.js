@@ -132,8 +132,6 @@ export default {
 
     { type: 'separator', label: t('Colori') },
     { key: 'text_color',     label: t('Colore nome'), type: 'color' },
-    { key: 'role_color',     label: t('Colore ruolo'), type: 'color' },
-    { key: 'position_color', label: t('Colore posizione'), type: 'color' },
     { key: 'badge_bg',       label: t('Sfondo badge ruolo'), type: 'color',
       condition: { field: 'show_role', op: 'eq', value: true } },
     { key: 'badge_color',    label: t('Testo badge ruolo'), type: 'color',
@@ -151,8 +149,8 @@ export default {
       },
       sizeMin: 12, sizeMax: 32, sizeStep: 1,
     },
-    { key: 'role_size',     label: t('Dimensione ruolo'), type: 'range', min: 8, max: 18, step: 1 },
-    { key: 'position_size', label: t('Dimensione posizione'), type: 'range', min: 14, max: 40, step: 1 },
+    { type: 'typography', label: t('Ruolo'), responsiveKeys: [], keys: { size: 'role_size', color: 'role_color' }, sizeMin: 8, sizeMax: 18 },
+    { type: 'typography', label: t('Posizione'), responsiveKeys: [], keys: { size: 'position_size', color: 'position_color' }, sizeMin: 14, sizeMax: 40 },
 
     { type: 'separator', label: t('Aspetto') },
     withHover({ key: 'border_radius', label: t('Raggio riga'), type: 'border-radius' }),

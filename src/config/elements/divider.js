@@ -57,8 +57,7 @@ export default {
     { key: 'spacing', label: t('Spaziatura'), type: 'range', min: 0, max: 80, step: 4 },
 
     { type: 'separator', label: t('Testo centrale') },
-    { key: 'text_color', label: t('Colore testo'), type: 'color' },
-    { key: 'text_size', label: t('Dimensione testo'), type: 'range', min: 10, max: 32, step: 1 },
+    { type: 'typography', label: t('Testo'), responsiveKeys: [], keys: { size: 'text_size', color: 'text_color' }, sizeMin: 10, sizeMax: 32 },
 
     ...borderFields(),
   ],

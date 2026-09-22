@@ -79,15 +79,9 @@ export default {
     },
 
     { type: 'separator', label: t('Stile') },
-    { key: 'label_weight', label: t('Peso etichetta'), type: 'select', options: [
-      { value: '400', label: t('Normale') },
-      { value: '500', label: t('Medium') },
-      { value: '600', label: t('Semi-bold') },
-      { value: '700', label: t('Bold') },
-    ]},
+    { type: 'typography', label: t('Etichetta'), responsiveKeys: [], keys: { weight: 'label_weight', color: 'label_color' } },
 
     { type: 'separator', label: t('Colori') },
-    { key: 'label_color', label: t('Colore etichette'), type: 'color' },
     { key: 'link_color', label: t('Colore link'), type: 'color' },
     ...borderFields(),
   ],

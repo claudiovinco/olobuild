@@ -136,7 +136,7 @@ export default {
   styleFields: [
     { type: 'separator', label: t('Colori — testo') },
     { key: 'eyebrow_color', label: t('Occhiello (vuoto = secondario)'), type: 'color' },
-    { key: 'headline_color', label: t('Titolo'), type: 'color' },
+
     { key: 'accent_color', label: t('Parola accento (vuoto = secondario)'), type: 'color' },
     { key: 'lead_color', label: t('Testo'), type: 'color' },
 
@@ -154,10 +154,7 @@ export default {
     { key: 'badge_color', label: t('Badge testo (vuoto = contrasto primario)'), type: 'color' },
 
     { type: 'separator', label: t('Tipografia titolo') },
-    { key: 'headline_weight', label: t('Peso titolo'), type: 'select', options: [
-      { value: '400', label: '400' }, { value: '500', label: '500' }, { value: '600', label: '600' }, { value: '700', label: '700' }, { value: '900', label: '900' },
-    ]},
-    { key: 'headline_size', label: t('Dim. max titolo (px, 0 = auto)'), type: 'range', min: 0, max: 120, step: 2 },
+    { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { weight: 'headline_weight', size: 'headline_size', color: 'headline_color' }, sizeMin: 0, sizeMax: 120, sizeStep: 2 },
 
     { type: 'separator', label: t('Media') },
     // Le proporzioni sono quelle canoniche di _imageFrame, con due vincoli storici:

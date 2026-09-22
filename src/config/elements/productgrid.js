@@ -225,9 +225,7 @@ export default {
 
     { type: 'separator', label: t('Testo') },
     { key: 'category_color', label: t('Categoria'), type: 'color' },
-    { key: 'title_font', label: t('Font titolo'), type: 'font-family' },
-    { key: 'title_size', label: t('Dim. titolo'), type: 'range', min: 14, max: 32, step: 1 },
-    { key: 'title_color', label: t('Titolo'), type: 'color' },
+    { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { family: 'title_font', size: 'title_size', color: 'title_color' }, sizeMin: 14, sizeMax: 32 },
     { key: 'price_color', label: t('Prezzo (accento)'), type: 'color' },
     { key: 'footer_color', label: t('Link finale — colore'), type: 'color' },
 

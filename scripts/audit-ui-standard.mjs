@@ -126,6 +126,43 @@ const GLOSSARIO = [
   { nome: 'Durata',  key: /duration$/i },
 ];
 
+/**
+ * Una chiave è una proprietà TIPOGRAFICA quando ha un suffisso tipografico e il
+ * prefisso nomina un elemento di testo. `title_size` sì, `icon_size` no.
+ *
+ * I nomi degli elementi di testo sono quelli che le 250 tile usano davvero:
+ * l'elenco nasce dalla ricognizione, non dall'immaginazione. Chi ne aggiunge uno
+ * nuovo lo mette qui, così l'audit continua a vederlo.
+ */
+const TESTO = [
+  'title', 'titolo', 'heading', 'headline', 'subhead', 'subheading', 'subtitle', 'sub',
+  'text', 'label', 'quote', 'name', 'nameplate', 'role', 'desc', 'description', 'excerpt',
+  'kicker', 'eyebrow', 'caption', 'tagline', 'lead', 'standfirst', 'counter', 'number',
+  'value', 'price', 'currency', 'day', 'time', 'date', 'note', 'footer',
+  'position', 'brand', 'letter', 'cta', 'cta1', 'cta2', 'more', 'tag', 'meta', 'body',
+  'author', 'question', 'answer', 'stat', 'word', 'char', 'accent', 'serif',
+  'sans', 'mono', 'h', 'paragraph', 'p',
+];
+// ⚠️ Fuori di proposito: `handle` è la maniglia del confronto immagini e `step`
+// il passo di un asse — hanno una dimensione, non un carattere.
+// Suffissi che nominano una proprietà del CARATTERE (non la geometria di un box).
+const SUFFISSO_TIPO = /_(size|weight|transform|line_height|lineheight|letter_spacing|letterspacing|tracking|font)$/i;
+
+function proprietaTipografica(key) {
+  const k = String(key || '').toLowerCase();
+  const m = SUFFISSO_TIPO.exec(k);
+  if (!m) {
+    // Le due forme senza prefisso: `size_min`/`size_max` di una scala fluida.
+    return /^size_(min|max)$/.test(k);
+  }
+  const prefisso = k.slice(0, m.index);
+  if (!prefisso) return false;
+  // Il prefisso può essere composto (`footer_label_size`, `title_accent_size`):
+  // basta che l'ULTIMA parola, o la prima, nomini un elemento di testo.
+  const parti = prefisso.split('_').filter(Boolean);
+  return TESTO.includes(parti[parti.length - 1]) || TESTO.includes(parti[0]);
+}
+
 const RULES = [
   {
     id: 'padding-spacing',
@@ -154,8 +191,17 @@ const RULES = [
   {
     id: 'tipografia-unica',
     titolo: 'Le proprietà tipografiche stanno nel pannello type:\'typography\'',
-    match: (r) => /(font_size|font_weight|text_transform)$/i.test(r.key) && !/fallback/.test(r.key),
-    ok: () => false,
+    // La rete aveva le maglie larghe: catturava solo le chiavi che FINISCONO in
+    // font_size/font_weight/text_transform, e lasciava passare `title_size`,
+    // `quote_size`, `name_weight`, `size_min`… cioè la forma più diffusa.
+    // Ora il match è: suffisso tipografico + prefisso che nomina un ELEMENTO DI
+    // TESTO. Il prefisso conta davvero: `icon_size`, `avatar_size`, `dot_size`
+    // sono misure di oggetti, non tipografia, e non devono finire nel pannello.
+    match: (r) => proprietaTipografica(r.key) && !/fallback/.test(r.key) && !skip(r),
+    // Unica forma ammessa fuori dal pannello: un `*_size` che è una SCALA
+    // simbolica (Piccolo/Medio/Grande) e non una misura — lì non c'è nessun
+    // numero da scrubbare, è un preset del tema (content, overlaygrid, overlayslider).
+    ok: (r) => /_size$/.test(r.key) && r.type === 'select' && !/value:\s*'?\d/.test(r.body),
   },
   {
     id: 'font-family',

@@ -76,12 +76,14 @@ export default {
   ],
 
   styleFields: [
+    // La citazione ha dimensione E colore: stanno insieme nel controllo unico
+    // (chiavi invariate). Gli altri testi hanno solo il colore e restano sotto.
     { type: 'separator', label: t('Tipografia') },
-    { key: 'quote_size', label: t('Dimensione quote'), type: 'unit', units: ['px'], min: 16, max: 48 },
+    { type: 'typography', label: t('Quote'), responsiveKeys: [],
+      keys: { size: 'quote_size', color: 'quote_color' }, sizeMin: 16, sizeMax: 48 },
 
     { type: 'separator', label: t('Colori — testo') },
     { key: 'heading_color', label: t('Titolo'), type: 'color' },
-    { key: 'quote_color', label: t('Quote'), type: 'color' },
     { key: 'author_color', label: t('Autore'), type: 'color' },
     { key: 'role_color', label: t('Ruolo'), type: 'color' },
     { key: 'logo_color', label: t('Logo'), type: 'color' },
