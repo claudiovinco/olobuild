@@ -44,8 +44,13 @@
       <input
         type="text"
         :value="displayValue"
+        :title="modelValue || ''"
+        spellcheck="false"
+        @focus="scrivendo = true"
+        @blur="scrivendo = false"
         @change="onTextChange($event.target.value)"
         class="fc-hex-input"
+        :class="{ 'fc-hex-input--nome': !scrivendo && nomeToken }"
       />
       <button
         type="button"
@@ -83,7 +88,7 @@
 import { t } from '@/i18n';
 import { computed, ref } from 'vue';
 import { useStylesStore } from '@/stores/styles';
-import { tokenParts, buildSwatchColors } from '@/utils/colorToken';
+import { tokenParts, buildSwatchColors, tokenLabel } from '@/utils/colorToken';
 
 const props = defineProps({
   modelValue: { type: String, default: '#000000' },
@@ -191,7 +196,16 @@ const alphaPct = computed(() => {
   if (isGlobalVar.value) return 100;
   return Math.round(parsed.value.alpha * 100);
 });
-const displayValue = computed(() => props.modelValue || '#000000');
+// Un token scritto per esteso non ci sta e si legge a meta':
+// «var(--olo-color-muted-co…». Il nome del colore lo abbiamo gia' negli
+// swatch, quindi a riposo si mostra quello; il token completo resta nel
+// tooltip e torna nel campo appena lo si mette a fuoco, perche' li' si scrive.
+const scrivendo = ref(false);
+const nomeToken = computed(() => tokenLabel(props.modelValue, stylesStore));
+const displayValue = computed(() => {
+  if (!scrivendo.value && nomeToken.value) return nomeToken.value;
+  return props.modelValue || '#000000';
+});
 const previewColor = computed(() => {
   if (isGlobalVar.value) {
     return toOutput(parsed.value.hex, 1);
@@ -376,6 +390,10 @@ async function removeQuickColor(colorId) {
 .fc-swatch-inline::-webkit-color-swatch {
   border: none;
   border-radius: 3px;
+}
+.fc-hex-input--nome {
+  font-family: inherit;
+  letter-spacing: 0;
 }
 .fc-hex-input {
   flex: 1;

@@ -51,6 +51,20 @@ export function buildSwatchColors(stylesStore) {
 }
 
 /**
+ * Nome leggibile di un token: l'etichetta dello swatch se il colore è in
+ * palette, altrimenti l'id ripulito — «text-faint» vale «Text faint», che si
+ * legge, mentre `var(--olo-color-text-fai…` troncato non vuol dire niente.
+ */
+export function tokenLabel(val, stylesStore) {
+  const tk = tokenParts(val);
+  if (!tk) return '';
+  const hit = buildSwatchColors(stylesStore).find(s => s.id === tk.id);
+  if (hit) return hit.label;
+  const pulito = tk.id.replace(/[-_]+/g, ' ').trim();
+  return pulito.charAt(0).toUpperCase() + pulito.slice(1);
+}
+
+/**
  * Valore colore → stringa CSS dipingibile nell'inspector.
  * Un token non definito nella palette vale la sua riserva; se non ne ha,
  * torna '' — meglio nessun pallino che un pallino nero (il nero era il vecchio

@@ -359,6 +359,12 @@
             <FieldSelect ui="dropdown" :model-value="values[keys.shadow] || ''" :options="SHADOW_OPTIONS" @update:model-value="emitKey(keys.shadow, $event)" />
           </div>
 
+          <!-- Anteprima: il pannello elencava proprietà senza mai mostrare il
+               risultato, e per vederlo bisognava chiudere e guardare il canvas. -->
+          <div class="typo-preview" :style="stileAnteprima">
+            <span class="typo-preview-txt">{{ t('Aa — Testo di esempio') }}</span>
+          </div>
+
           <!-- Gli stili del sito si raggiungono da OGNI punto in cui si parla di
                tipografia, non solo dal select dei preset: qui dentro ci sono le
                tile che il preset non ce l'hanno affatto. -->
@@ -377,6 +383,7 @@ import { t } from '@/i18n';
 import { ref, reactive, computed, watch, nextTick } from 'vue';
 import { useStylesStore } from '@/stores/styles';
 import { resolveColorToken } from '@/utils/colorToken';
+import { resolveFontToken, assicuraFontPreview } from '@/utils/fontToken';
 import { useGlobalPanels } from '@/composables/useGlobalPanels';
 import FieldFontFamily from './FieldFontFamily.vue';
 import FieldColor from './FieldColor.vue';
@@ -683,6 +690,39 @@ const summaryText = computed(() => summaryParts.value.join(' · '));
 // I token vanno risolti in JS — nel pannello di destra `var(--olo-color-*)`
 // non esiste, è definito dentro il canvas.
 const summaryColor = computed(() => resolveColorToken(raw('color'), stylesStore));
+
+/**
+ * Stile dell'anteprima: le stesse proprietà che il controllo governa, risolte
+ * in valori dipingibili (i token `var(--olo-*)` vivono dentro il canvas e qui
+ * non risolvono). Il corpo è limitato: un titolo da 120px sfonderebbe il
+ * popover, e la misura esatta sta già scritta nello scrubber qui sopra.
+ */
+const ANTEPRIMA_MAX_PX = 34;
+const stileAnteprima = computed(() => {
+  const st = {};
+
+  const fam = resolveFontToken(raw('family'), stylesStore);
+  if (fam) { st.fontFamily = fam; assicuraFontPreview(fam); }
+
+  const corpo = parseFloat(String(raw('size') ?? raw('fluidMax') ?? ''));
+  if (Number.isFinite(corpo) && corpo > 0) st.fontSize = Math.min(corpo, ANTEPRIMA_MAX_PX) + 'px';
+
+  if (filled('weight')) st.fontWeight = raw('weight');
+  if (filled('lineHeight')) st.lineHeight = raw('lineHeight');
+  if (filled('transform')) st.textTransform = raw('transform');
+  if (raw('uppercase') === true) st.textTransform = 'uppercase';
+  if (filled('style')) st.fontStyle = raw('style');
+  if (raw('italic') === true) st.fontStyle = 'italic';
+  if (filled('decoration')) st.textDecoration = raw('decoration');
+
+  const ls = parseFloat(String(raw('letterSpacing') ?? ''));
+  if (Number.isFinite(ls)) st.letterSpacing = ls + (props.letterSpacingUnit || 'px');
+
+  const col = resolveColorToken(raw('color'), stylesStore);
+  if (col) st.color = col;
+
+  return st;
+});
 
 const summaryTitle = computed(() => {
   const parts = summaryParts.value.slice();
@@ -1005,6 +1045,20 @@ watch(presetOpen, (val) => {
   outline-offset: 1px;
 }
 /* In coda al popover: separato dai controlli da una riga sottile */
+.typo-preview {
+  margin: 8px 0 0;
+  padding: 10px 12px;
+  border-top: 1px solid #f1f2f4;
+  background: repeating-linear-gradient(45deg, #fafbfc 0 8px, #fff 8px 16px);
+  color: #1f2937;
+  overflow: hidden;
+}
+.typo-preview-txt {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .typo-preset-new--footer {
   width: 100%;
   margin-top: 4px;
