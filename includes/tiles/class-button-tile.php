@@ -69,7 +69,7 @@ class Olobuild_Button_Tile extends Olobuild_Tile_Base {
         return [];
     }
 
-    public function render( $settings ) {
+    public function render( $settings, $style = [] ) {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-btn-' . wp_rand( 10000, 99999 );
 
@@ -85,7 +85,13 @@ class Olobuild_Button_Tile extends Olobuild_Tile_Base {
         // Per type 'video' e 'gallery' aggiungiamo anche markup HTML dentro il button.
         $bg_creative_css  = '';
         $bg_creative_html = '';
-        $bg_obj = $s['bg'] ?? [ 'type' => 'none' ];
+        // Lo Sfondo del tab Stile (style.bg, lo stesso componente di tutte le
+        // tile) vive sul pulsante: il contenitore di una tile atomica resta
+        // trasparente. Prima veniva scartato e non compariva. settings.bg resta
+        // come ripiego per i pulsanti che l'avevano già.
+        $bg_obj = ( is_array( $style['bg'] ?? null ) && ( $style['bg']['type'] ?? 'none' ) !== 'none' )
+            ? $style['bg']
+            : ( $s['bg'] ?? [ 'type' => 'none' ] );
         if ( is_array( $bg_obj ) && ( $bg_obj['type'] ?? 'none' ) !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {
             $cssb = new Olobuild_CSS_Builder();
             $bg_creative_css = $cssb->get_bg_inline_css( $bg_obj );
@@ -94,6 +100,12 @@ class Olobuild_Button_Tile extends Olobuild_Tile_Base {
             }
             if ( method_exists( $cssb, 'get_bg_html_markup' ) ) {
                 $bg_creative_html = $cssb->get_bg_html_markup( $bg_obj );
+            }
+            // Sovrapposizione del componente Sfondo: sopra lo sfondo, sotto il testo (z-index 2).
+            $ov = intval( $bg_obj['overlay_opacity'] ?? 0 );
+            if ( $ov > 0 ) {
+                $ov_c = $this->safe_color_css( $bg_obj['overlay_color'] ?? '' ) ?: '#000000';
+                $bg_creative_html .= '<span aria-hidden="true" style="position:absolute;inset:0;z-index:1;pointer-events:none;background-color:' . esc_attr( $ov_c ) . ';opacity:' . ( min( 100, $ov ) / 100 ) . '"></span>';
             }
         }
 

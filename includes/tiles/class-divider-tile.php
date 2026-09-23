@@ -46,7 +46,7 @@ class Olobuild_Divider_Tile extends Olobuild_Tile_Base {
         ];
     }
 
-    public function render( $settings ) {
+    public function render( $settings, $style = [] ) {
         $s = wp_parse_args( $settings, $this->defaults );
 
         $w       = min( max( absint( $s['width'] ), 10 ), 100 );
@@ -66,7 +66,10 @@ class Olobuild_Divider_Tile extends Olobuild_Tile_Base {
                 $uid = 'olo-divider-' . wp_rand( 10000, 99999 );
 ob_start();
 
-        echo '<div class="olo-divider ' . esc_attr( $uid ) . '" style="' . esc_attr( $wrap_style ) . '">';
+        // Sfondo del tab Stile disegnato sul divisore (il contenitore resta trasparente).
+        $sfondo = $this->sfondo_elemento( $style, $uid );
+        echo '<div class="olo-divider ' . esc_attr( $uid ) . '" style="' . esc_attr( $wrap_style . $sfondo['css_con_livelli'] ) . '">';
+        echo $sfondo['markup']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- background layers built by sfondo_elemento() from Olobuild_CSS_Builder::get_bg_html_markup() (esc_url/esc_attr inside) and a safe_color_css()-whitelisted overlay
 
         if ( $has_center ) {
             $this->render_center( $s, $w, $thick, $style_type, $line_clr, $txt_clr, $txt_sz );

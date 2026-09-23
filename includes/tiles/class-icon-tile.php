@@ -46,7 +46,7 @@ class Olobuild_Icon_Tile extends Olobuild_Tile_Base {
         ];
     }
 
-    public function render( $settings ) {
+    public function render( $settings, $style = [] ) {
         $s = wp_parse_args( $settings, $this->defaults );
 
         $icon_name = esc_attr( $s['icon'] );
@@ -96,6 +96,8 @@ class Olobuild_Icon_Tile extends Olobuild_Tile_Base {
 
         /* --- hover animation --- */
         $uid = 'olo-icon-' . wp_rand( 10000, 99999 );
+        // Sfondo del tab Stile disegnato sull'icona (il contenitore resta trasparente).
+        $sfondo = $this->sfondo_elemento( $style, $uid );
         $anim_css = '';
         if ( $anim !== 'none' ) {
             $hover_transform = '';
@@ -127,7 +129,8 @@ class Olobuild_Icon_Tile extends Olobuild_Tile_Base {
         }
         ?>
         <div class="olo-icon uk-text-center <?php echo esc_attr( $uid ); ?>">
-            <span class="olo-icon-wrap" style="<?php echo $wrapper_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS assembled above from safe_color_css() whitelisted colours, intval()'d rotation, Olobuild_Tile_Utils::spacing_css() integer padding and fixed shape literals ?>">
+            <span class="olo-icon-wrap" style="<?php echo $wrapper_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- inline CSS assembled above from safe_color_css() whitelisted colours, intval()'d rotation, Olobuild_Tile_Utils::spacing_css() integer padding and fixed shape literals ?><?php echo $sfondo['has'] ? ';' . esc_attr( $sfondo['css_con_livelli'] ) : ''; ?>">
+            <?php echo $sfondo['markup']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- background layers built by sfondo_elemento() from Olobuild_CSS_Builder::get_bg_html_markup() (esc_url/esc_attr inside) and a safe_color_css()-whitelisted overlay ?>
             <?php if ( ! empty( $s['link_url'] ) ) : ?>
                 <a href="<?php echo esc_url( $s['link_url'] ); ?>"<?php echo $target; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed ' target="_blank" rel="noopener"' literal from the ternary above ?><?php echo $aria_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- aria-label assembled above with esc_attr() on the accessible name ?>>
                     <?php echo $this->render_icon_html( $icon_name, floatval( $ratio ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup built by Olobuild_Tile_Base::render_icon_html() with esc_attr()/sanitized SVG internally ?>

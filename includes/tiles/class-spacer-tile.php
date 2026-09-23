@@ -168,7 +168,7 @@ class Olobuild_Spacer_Tile extends Olobuild_Tile_Base {
         return ob_get_clean();
     }
 
-    public function render( $settings ) {
+    public function render( $settings, $style = [] ) {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-sp-' . wp_rand( 10000, 99999 );
 
@@ -187,6 +187,10 @@ class Olobuild_Spacer_Tile extends Olobuild_Tile_Base {
         } elseif ( ! empty( $s['bg_color'] ) ) {
             $bg_css = 'background-color: ' . ( $this->safe_color_css( $s['bg_color'] ) ) . ';';
         }
+        // Sfondo del tab Stile (lo stesso componente di tutte le tile): si disegna
+        // sullo spaziatore, dopo il suo sfondo proprio, e quindi lo sostituisce.
+        $sfondo = $this->sfondo_elemento( $style, $uid );
+        $bg_css .= $sfondo['css_con_livelli'];
 
         // Divider
         $show_divider = ! empty( $s['show_divider'] );
@@ -278,6 +282,7 @@ class Olobuild_Spacer_Tile extends Olobuild_Tile_Base {
         <?php // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
         <div class="olo-spacer <?php echo esc_attr( $uid ); ?>">
+            <?php echo $sfondo['markup']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- background layers built by sfondo_elemento() from Olobuild_CSS_Builder::get_bg_html_markup() (esc_url/esc_attr inside) and a safe_color_css()-whitelisted overlay ?>
             <?php echo $this->render_shape_block( $uid, $s, 'shape_top', 'top' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG markup built by render_shape_block() above from esc_attr()/esc_url()'d values and safe_color_css() colours ?>
 
             <?php if ( $show_divider ) : ?>

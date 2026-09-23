@@ -54,7 +54,7 @@
     <div v-if="conBlocchi && groupedSections.length" class="olo-sfr-blocco">
       <span class="olo-sfr-blocco-titolo">{{ t('Contenitore') }}</span>
       <span class="olo-sfr-blocco-nota">{{ atomica
-        ? t('Lo spazio attorno all\'elemento nella griglia: resta sempre trasparente, senza sfondo né cornice.')
+        ? t('Lo spazio attorno all\'elemento nella griglia resta trasparente: lo Sfondo qui sotto si disegna sull\'elemento.')
         : t('Il riquadro che contiene la tile nella griglia.') }}</span>
     </div>
     <!-- Wrapper style sections (universali — letti/scritti su tile.style) -->

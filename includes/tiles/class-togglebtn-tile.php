@@ -48,9 +48,11 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
         return [];
     }
 
-    public function render( $settings ) {
+    public function render( $settings, $style = [] ) {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-tb-' . wp_rand( 10000, 99999 );
+        // Sfondo del tab Stile disegnato sul pulsante (il contenitore resta trasparente).
+        $sfondo = $this->sfondo_elemento( $style, $uid );
 
         $target_id   = sanitize_html_class( $s['target_id'] );
         if ( empty( $target_id ) ) {
@@ -101,6 +103,7 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
                 align-items: center;
                 gap: 8px;
                 background: <?php echo $bg; ?>;
+                <?php echo $sfondo['css_con_livelli']; ?>
                 color: <?php echo $color; ?>;
                 font-size: <?php echo (int) $fsize; ?>px;
                 font-weight: <?php echo $fweight; ?>;
@@ -190,6 +193,7 @@ class Olobuild_ToggleBtn_Tile extends Olobuild_Tile_Base {
                 aria-controls="<?php echo esc_attr( $target_id ); ?>"
                 aria-expanded="<?php echo $is_open ? 'true' : 'false'; ?>"
             >
+                <?php echo $sfondo['markup']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- background layers built by sfondo_elemento() from Olobuild_CSS_Builder::get_bg_html_markup() (esc_url/esc_attr inside) and a safe_color_css()-whitelisted overlay ?>
                 <?php if ( $icon_pos === 'left' ) : ?>
                     <span class="olo-tb-icon olo-tb-icon-show" style="<?php echo $is_open ? 'display:none' : ''; ?>"><?php echo $icon_show; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded get_svg_icon() map ?></span>
                     <span class="olo-tb-icon olo-tb-icon-hide" style="<?php echo $is_open ? '' : 'display:none'; ?>"><?php echo $icon_hide; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG from the hardcoded get_svg_icon() map ?></span>

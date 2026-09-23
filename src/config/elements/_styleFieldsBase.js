@@ -28,11 +28,12 @@ import { t } from '@/i18n';
 
 export function styleFieldsBase(tileType) {
   // Tile ATOMICHE (badge, pulsante, icona, divisore, spaziatore, interruttore): il
-  // contenitore resta SEMPRE trasparente e senza cornice. Sfondo, raggio, bordo, effetti
-  // bordo, ombra e filtro sfondo si impostano sull'elemento, nella parte alta del tab;
-  // quelli del contenitore il renderer li scarta (stile_contenitore_atomico() in PHP,
-  // ATOMIC_TILE_TYPES nel canvas). Mostrarli voleva dire offrire controlli che non
-  // fanno niente: si sceglieva uno sfondo per il badge e non compariva.
+  // contenitore resta SEMPRE trasparente e senza cornice (regola HARD). Lo SFONDO è lo
+  // stesso componente di tutte le tile, nello stesso posto, con tutti i tipi: per le
+  // atomiche lo disegna l'ELEMENTO (sfondo_elemento() in Olobuild_Tile_Base), non il
+  // contenitore. Raggio, bordo, effetti bordo, ombra e filtro sfondo del contenitore
+  // invece non ci sono: l'elemento ha i suoi, e quelli il renderer li scarta
+  // (stile_contenitore_atomico()).
   const atomica = ATOMIC_TILE_TYPES.has(tileType);
   return [
     // ─── LAYOUT ─────────────────────────────────────────────────
@@ -57,11 +58,15 @@ export function styleFieldsBase(tileType) {
       ? ['margine', 'margin', 'padding', 'spaziatura', 'spacing']
       : ['margine', 'margin', 'padding', 'spaziatura', 'spacing', 'raggio', 'radius', 'bordo', 'border', 'angoli', 'arrotonda'] },
 
-    ...(atomica ? [] : [
-      // ─── SFONDO ─────────────────────────────────────────────────
-      { type: 'separator', label: t('Sfondo') },
-      { key: 'bg', label: t('Sfondo'), type: 'background', showParallax: true, searchTerms: ['background', 'sfondo', 'colore', 'immagine', 'gradiente', 'video', 'parallax'] },
+    // ─── SFONDO ─────────────────────────────────────────────────
+    // Uguale per tutte le tile. Sulle atomiche lo disegna l'elemento (la pillola,
+    // il pulsante…), e la riga sotto il componente lo dice.
+    { type: 'separator', label: t('Sfondo') },
+    { key: 'bg', label: t('Sfondo'), type: 'background', showParallax: true,
+      ...(atomica ? { description: t('Si applica all\'elemento: il contenitore di questa tile resta trasparente.') } : {}),
+      searchTerms: ['background', 'sfondo', 'colore', 'immagine', 'gradiente', 'video', 'parallax'] },
 
+    ...(atomica ? [] : [
       // ─── EFFETTI BORDO ──────────────────────────────────────────
       // Il CONTROLLO bordo (style.border / border_<bp> per-device / border_hover) ora vive
       // DENTRO il pannello "Spazi & Bordi" (box-stack), accanto a margine/padding/raggio.

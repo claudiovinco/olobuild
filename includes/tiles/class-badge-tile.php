@@ -135,6 +135,13 @@ class Olobuild_Badge_Tile extends Olobuild_Tile_Base {
             . 'letter-spacing:' . $ls . 'px;line-height:1;';
         $badge_css = $base_css . 'background:' . $bg . ';' . $bordo_di( $border ) . 'color:' . $color . ';';
 
+        // Sfondo (Stile → Sfondo, lo stesso componente di tutte le tile): si
+        // disegna sulla pillola e prende il posto dello sfondo della variante.
+        // Le pillole gemelle ne prendono la parte CSS; i livelli (video,
+        // galleria, sovrapposizione) stanno nella pillola principale.
+        $sfondo     = $this->sfondo_elemento( $style, $uid );
+        $badge_css .= $sfondo['css_con_livelli'];
+
         // Badge aggiuntivi (additivo): pill gemelle con colore per-item.
         $extras = [];
         foreach ( ( is_array( $s['extra_items'] ?? null ) ? $s['extra_items'] : [] ) as $it ) {
@@ -148,7 +155,7 @@ class Olobuild_Badge_Tile extends Olobuild_Tile_Base {
             if ( $it_txt_clr ) {
                 $iclr = $it_txt_clr;
             }
-            $extras[] = [ $it_text, $base_css . 'background:' . $ibg . ';' . $bordo_di( $ibrd ) . 'color:' . $iclr . ';' ];
+            $extras[] = [ $it_text, $base_css . 'background:' . $ibg . ';' . $bordo_di( $ibrd ) . 'color:' . $iclr . ';' . $sfondo['css'] ];
         }
         $wrap_extra = $extras ? 'flex-wrap:wrap;gap:8px;' : '';
 
@@ -173,6 +180,7 @@ class Olobuild_Badge_Tile extends Olobuild_Tile_Base {
         ?>
         <div class="olo-badge-wrap <?php echo esc_attr( $uid ); ?>" style="display:flex;justify-content:<?php echo esc_attr( $justify ); ?>;<?php echo esc_attr( $wrap_extra ); ?>">
             <span class="olo-badge" style="<?php echo esc_attr( $badge_css ); ?>">
+                <?php echo $sfondo['markup']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- background layers built by sfondo_elemento() from Olobuild_CSS_Builder::get_bg_html_markup() (esc_url/esc_attr inside) and a safe_color_css()-whitelisted overlay ?>
                 <?php echo $live_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed internal literal markup (live dot span) ?>
                 <?php echo $icon_before; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon HTML built by render_icon_html(), which sanitizes SVG internally (olobuild_sanitize_svg/wp_kses_post) ?>
                 <span class="olo-badge-text" data-olo-editable="text"><?php echo $text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_html()'d at assignment above ?></span>

@@ -414,8 +414,14 @@ const atomScarti = diff(atomPhp, atomJs);
     if (/ATOMIC_TILES?\s*=\s*new Set\(\[/.test(fs.readFileSync(p, 'utf8'))) atomScarti.push('copia locale: ' + path.relative(ROOT, p));
   }
 })(path.join(ROOT, 'src'));
+// Lo Sfondo è parte comune di tutte le tile: sulle atomiche lo disegna l'elemento,
+// quindi ogni renderer atomico deve leggerlo (sfondo_elemento() o style['bg']).
+for (const tipo of atomPhp || []) {
+  const php = phpPerTipo[tipo] || '';
+  if (!/sfondo_elemento\(|\$style\['bg'\]/.test(php)) atomScarti.push(tipo + ' (non disegna lo Sfondo sull\'elemento)');
+}
 violazioni['atomiche-elenco'] = atomScarti.map((x) => ({ file: 'elenco', type: '', key: String(x), label: '' }));
-RULES.push({ id: 'atomiche-elenco', titolo: 'Tile atomiche: elenco PHP = JS, e nel JS un solo elenco' });
+RULES.push({ id: 'atomiche-elenco', titolo: 'Tile atomiche: elenco PHP = JS, un solo elenco JS, e ognuna disegna lo Sfondo sull\'elemento' });
 
 // ─── controlli fantasma: offerti dall'inspector, mai letti dal renderer ─────
 // «Un controllo che non fa niente è peggio di un controllo che manca.» Cinque

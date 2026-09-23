@@ -416,6 +416,52 @@ abstract class Olobuild_Tile_Base {
      *                       del media (che deve essere position:relative; overflow:hidden).
      * Per i tipi solo-CSS markup è ''. $scope = classe univoca della tile (per lo scoping gallery).
      */
+    /**
+     * Sfondo dell'ELEMENTO di una tile atomica (badge, pulsante, icona, divisore,
+     * spaziatore, interruttore). È lo stesso componente Sfondo di tutte le tile
+     * (style.bg), con tutti i tipi, ma disegnato sull'elemento: il contenitore di
+     * una tile atomica resta trasparente (regola HARD validata: lo sfondo
+     * appartiene all'elemento, mai all'area attorno). Prima veniva scartato e
+     * basta — si sceglieva uno sfondo per il badge e non compariva.
+     * Tinta, gradiente, aurora, bagliori, pattern, CRT e immagine finiscono nello
+     * stile dell'elemento; video, galleria e sovrapposizione sono livelli in uno
+     * strato sotto il contenuto (z-index -1 dentro un contesto isolato).
+     *
+     * @param array  $style Stile del nodo (secondo argomento di render()).
+     * @param string $scope Classe univoca della tile (per la galleria).
+     * @return array{css:string,css_con_livelli:string,markup:string,has:bool}
+     *   css = dichiarazioni dello sfondo; css_con_livelli = le stesse più
+     *   position/isolation quando ci sono livelli; markup = livelli da
+     *   mettere come PRIMO figlio dell'elemento ('' se non servono).
+     */
+    protected function sfondo_elemento( $style, $scope ) {
+        $vuoto = [ 'css' => '', 'css_con_livelli' => '', 'markup' => '', 'has' => false ];
+        $bg    = ( is_array( $style ) && is_array( $style['bg'] ?? null ) ) ? $style['bg'] : null;
+        if ( ! $bg || ( $bg['type'] ?? 'none' ) === 'none' ) {
+            return $vuoto;
+        }
+        $p = $this->bg_media_parts( $bg, $scope . '-bg' );
+        $livelli = $p['markup'];
+        $op = intval( $bg['overlay_opacity'] ?? 0 );
+        if ( $op > 0 ) {
+            $oc = $this->safe_color_css( $bg['overlay_color'] ?? '' ) ?: '#000000';
+            $livelli .= '<span style="position:absolute;inset:0;background-color:' . esc_attr( $oc ) . ';opacity:' . ( min( 100, $op ) / 100 ) . '"></span>';
+        }
+        if ( ! $p['has'] && $livelli === '' ) {
+            return $vuoto;
+        }
+        $css = $p['css'] !== '' ? rtrim( trim( $p['css'] ), ';' ) . ';' : '';
+        $out = [ 'css' => $css, 'css_con_livelli' => $css, 'markup' => '', 'has' => true ];
+        if ( $livelli !== '' ) {
+            // Niente overflow:hidden sull'elemento: lo strato si ritaglia da sé
+            // (overflow + border-radius: inherit), e l'elemento può continuare a
+            // sbordare (l'onda del pallino «live», le forme dello spaziatore).
+            $out['css_con_livelli'] .= 'position:relative;isolation:isolate;';
+            $out['markup'] = '<span class="olo-el-bg" aria-hidden="true" style="position:absolute;inset:0;z-index:-1;overflow:hidden;border-radius:inherit;pointer-events:none">' . $livelli . '</span>';
+        }
+        return $out;
+    }
+
     protected function bg_media_parts( $bg, $scope = '' ) {
         $out = [ 'has' => false, 'css' => '', 'markup' => '' ];
         if ( is_array( $bg ) && ! empty( $bg['type'] ) && $bg['type'] !== 'none' && class_exists( 'Olobuild_CSS_Builder' ) ) {

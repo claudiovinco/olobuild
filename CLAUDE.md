@@ -94,9 +94,14 @@ padding/margine → `type:'spacing'` (4 lati) · raggio → `type:'border-radius
   colonne, gap). Tile a più parti (section header, card): una zona per parte (Occhiello, Titolo…),
   poi Disposizione.
 - **Tile atomiche** (badge, pulsante, icona, divisore, spaziatore, interruttore): contenitore sempre
-  trasparente → nell'inspector solo Layout, Spazi (margine/padding) ed Effetti senza ombra né filtro
-  sfondo; il PHP scarta il resto in ogni stato e dispositivo (`stile_contenitore_atomico()`). Elenco
-  unico: `ATOMIC_TILE_TYPES` (useBackgroundStyle.js) = `$ATOMIC_TILES` (audit `atomiche-elenco`).
+  trasparente → nell'inspector Layout, Spazi (margine/padding), **Sfondo** ed Effetti senza ombra né
+  filtro sfondo; il PHP scarta il resto in ogni stato e dispositivo (`stile_contenitore_atomico()`).
+  Elenco unico: `ATOMIC_TILE_TYPES` (useBackgroundStyle.js) = `$ATOMIC_TILES` (audit `atomiche-elenco`).
+- ⚠️⚠️ **Lo Sfondo è PARTE COMUNE di tutte le tile: MAI toglierlo, MAI ridurne i tipi.** Stesso
+  componente (BackgroundControls, tutti i tipi: tinta, gradiente, generativi, immagine, video,
+  galleria, sovrapposizione), stesso posto nel tab e nella barra. Se il contenitore non può
+  disegnarlo, lo disegna l'elemento: `sfondo_elemento()` in Olobuild_Tile_Base (livelli sotto il
+  contenuto). Errore del 23 set 2026: tolto alle atomiche perché «non agiva» — andava fatto agire.
 - **Niente controlli fantasma** (audit `fantasma-*`): menu «Stile» senza preset registrati, toggle
   Hover su chiavi mai lette, selettore del dispositivo su valori mai letti (in PHP:
   `css_per_dispositivo()` di Olobuild_Tile_Base), «Bordo» ed «Effetti testo» condivisi mai resi. Per
