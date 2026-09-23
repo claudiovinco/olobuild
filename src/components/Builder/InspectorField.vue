@@ -652,6 +652,7 @@ import DynamicFieldToggle from './DynamicFieldToggle.vue';
 import { useTilesStore } from '@/stores/tiles';
 import { useStylesStore } from '@/stores/styles';
 import { seedFromLegacy, legacyMirror, seedBorderFromColor } from '@/config/fieldLegacyBridge';
+import { borderIsSet } from '@/composables/useBoxModel';
 import { staccaUnita } from '@/utils/fieldLabel';
 import { t } from '@/i18n';
 
@@ -803,6 +804,8 @@ const hoverValue = computed(() => {
 const hasHoverValue = computed(() => {
   const v = hoverValue.value;
   if (v == null || v === '') return false;
+  // Bordo: `linked: true` e lo stile non dicono che l'hover sia impostato (lati o colore sì).
+  if (props.field.type === 'border') return borderIsSet(v);
   // For object-typed fields (border, border-radius, spacing) treat as set when any non-zero/non-empty member exists
   if (typeof v === 'object') {
     try {
@@ -998,7 +1001,25 @@ const fieldComponent = computed(() => {
 
 const effectiveValue = computed(() => {
   // Stato Hover attivo: il controllo principale mostra il valore hover (toggle Normale/Hover).
-  if (props.field.hoverable && hoverOpen.value) return hoverValue.value;
+  if (props.field.hoverable && hoverOpen.value) {
+    const h = hoverValue.value;
+    if (props.field.type === 'border') {
+      const base = normalValue();
+      const lati = base && typeof base === 'object' ? base : null;
+      // Hover nel formato storico (sola stringa colore, es. submit_hover_border_color):
+      // i lati e lo stile sono quelli del bordo normale, cambia solo il colore.
+      if (typeof h === 'string' && h !== '') return { ...(lati || seedBorderFromColor(h, props.field.legacyWidth ?? 1)), color: h };
+      // Hover non ancora impostato: si parte dal bordo normale. Da un bordo a zero,
+      // scegliere il solo colore salvava lati a 0 e in hover il bordo spariva.
+      if (!borderIsSet(h) && lati) return { ...lati, color: '' };
+    }
+    return h;
+  }
+  return normalValue();
+});
+
+// Valore dello stato Normale, con i ponti verso i formati storici.
+function normalValue() {
   const v = props.field.responsive ? respValue.value : props.modelValue;
   // Ponte legacy: un controllo composito (spacing/border-radius/border) montato su
   // una tile che salva ancora le chiavi piatte parte VUOTO. Invece di mostrare uno
@@ -1013,7 +1034,7 @@ const effectiveValue = computed(() => {
     if (seed !== undefined) return seed;
   }
   return v;
-});
+}
 // `hoverOpen`/`hoverKey`/`hoverValue` sono definiti più sotto (const): vengono usati qui solo
 // a runtime (computed lazy / handler), mai durante l'inizializzazione → nessun TDZ.
 

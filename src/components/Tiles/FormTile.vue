@@ -235,6 +235,7 @@
 <script setup>
 import { t } from '@/i18n';
 import { computed, ref } from 'vue';
+import { borderIsSet, toBorderStyle } from '@/composables/useBoxModel';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -481,10 +482,30 @@ const submitWrapStyle = computed(() => ({
   textAlign: s.value.submit_alignment || 'left',
 }));
 
+// Bordo pulsante: gemello di class-form-tile.php. Il controllo salva il bordo intero in
+// `submit_border`; le chiavi piatte restano la ricaduta dei template storici.
+const submitBorder = computed(() => {
+  const colore = s.value.submit_border_color || 'var(--olo-color-primary, #e1474f)';
+  const b = s.value.submit_border;
+  if (b && typeof b === 'object' && borderIsSet(b)) return { ...b, color: b.color || colore };
+  const w = parseInt(s.value.submit_border_width) || 0;
+  return { top: w, right: w, bottom: w, left: w, style: 'solid', color: colore };
+});
+
+// Hover: bordo intero dallo stato Hover del controllo, o la sola stringa colore dei template
+// storici. Un lato vuoto eredita dal bordo normale (come build_border_hover_props in PHP).
+const submitHoverBorder = computed(() => {
+  const base = submitBorder.value;
+  const raw = s.value.submit_hover_border_color;
+  const h = raw && typeof raw === 'object' ? raw : { color: raw || '' };
+  const lati = ['top', 'right', 'bottom', 'left'];
+  if (!h.color && !h.style && lati.every((k) => !(parseInt(h[k]) > 0))) return base;
+  const out = { style: h.style || base.style, color: h.color || base.color };
+  lati.forEach((k) => { out[k] = h[k] === undefined || h[k] === '' ? base[k] : Math.max(0, parseInt(h[k]) || 0); });
+  return out;
+});
+
 const submitStyle = computed(() => {
-  const bw = parseInt(s.value.submit_border_width) || 0;
-  const borderColor = bw > 0 ? (s.value.submit_border_color || 'var(--olo-color-primary, #e1474f)') : 'transparent';
-  const hoverBorderColor = bw > 0 && s.value.submit_hover_border_color ? s.value.submit_hover_border_color : borderColor;
   const ls = parseFloat(s.value.submit_letter_spacing) || 0;
   const tt = s.value.submit_text_transform || 'none';
 
@@ -499,12 +520,13 @@ const submitStyle = computed(() => {
     fontSize: (parseInt(s.value.submit_font_size) || 16) + 'px',
     fontWeight: s.value.submit_font_weight || '600',
     width: s.value.submit_full_width ? '100%' : 'auto',
-    border: bw > 0 ? bw + 'px solid ' + (submitHover.value ? hoverBorderColor : borderColor) : 'none',
+    border: 'none',
+    ...toBorderStyle(submitHover.value ? submitHoverBorder.value : submitBorder.value),
     letterSpacing: ls > 0 ? ls + 'px' : 'normal',
     textTransform: tt !== 'none' ? tt : 'none',
     fontFamily: fontStack(s.value.submit_font_family),
     cursor: 'pointer',
-    transition: 'background-color 0.2s ease, border-color 0.2s ease',
+    transition: `background-color 0.2s ease, border ${Math.max(50, parseInt(s.value.submit_border_hover_duration) || 200)}ms ease`,
     display: 'inline-flex',
     alignItems: 'center',
     gap: '8px',

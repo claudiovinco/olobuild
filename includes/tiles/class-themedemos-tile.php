@@ -55,7 +55,19 @@ class Olobuild_ThemeDemos_Tile extends Olobuild_Tile_Base {
         $acc  = $this->safe_color_css( $s['accent'] ?? '' ) ?: 'var(--olo-color-primary, #C6F24E)';
         $cbg  = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-muted, #101218)';
         $cbd  = Olobuild_Tile_Utils::border_color( $s['card_border_color'] ?? null, 'var(--olo-color-border, rgba(236,234,227,.10))' );
-        $cbdh = $this->safe_color_css( $s['card_border_hover_color'] ?? '' ) ?: 'color-mix(in srgb, var(--olo-color-text, #ECEAE3) 20%, transparent)';
+        // Hover del bordo: lo stato Hover del controllo salva un bordo intero, i template
+        // storici la sola stringa colore. Un lato vuoto resta quello del bordo normale.
+        $cbdh_raw = $s['card_border_hover_color'] ?? '';
+        $cbdh     = Olobuild_Tile_Utils::border_color( $cbdh_raw, 'color-mix(in srgb, var(--olo-color-text, #ECEAE3) 20%, transparent)' );
+        $cb_base  = $s['card_border_color'] ?? null;
+        $cb_base  = is_array( $cb_base ) && Olobuild_Tile_Utils::border_is_set( $cb_base )
+            ? array_merge( $cb_base, [ 'color' => $cbd ] )
+            : [ 'top' => 1, 'right' => 1, 'bottom' => 1, 'left' => 1, 'style' => 'solid', 'color' => $cbd ];
+        $cb_hover = is_array( $cbdh_raw ) ? array_merge( $cbdh_raw, [ 'color' => $cbdh ] ) : [ 'color' => $cbdh ];
+        if ( ! preg_match( '/^(solid|dashed|dotted|double|groove|ridge|inset|outset|none|hidden)?$/', (string) ( $cb_hover['style'] ?? '' ) ) ) {
+            $cb_hover['style'] = '';
+        }
+        $cb_hover_props = $this->build_border_hover_props( $cb_base, $cb_hover, absint( $s['card_border_color_hover_duration'] ?? 180 ) ?: 180 );
 
         $ph = intval( $s['preview_height'] );
         $ph = $ph > 0 ? max( 100, min( 320, $ph ) ) : 168;
@@ -91,8 +103,8 @@ class Olobuild_ThemeDemos_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .otd-row{display:flex;gap:<?php echo $gap; ?>px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:14px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;}
             .<?php echo $uid; ?> .otd-row::-webkit-scrollbar{height:6px;}
             .<?php echo $uid; ?> .otd-row::-webkit-scrollbar-thumb{background:<?php echo $cbdh; ?>;border-radius:3px;}
-            .<?php echo $uid; ?> .otd-card{flex:0 0 clamp(250px,28vw,320px);scroll-snap-align:start;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border_color'] ?? null, [ 'width' => 1, 'color' => $cbd ] ) ); ?>border-radius:12px;overflow:hidden;background:<?php echo $cbg; ?>;transition:transform .18s,border-color .18s;display:block;text-decoration:none;color:inherit;}
-            .<?php echo $uid; ?> .otd-card:hover{transform:translateY(-4px);border-color:<?php echo $cbdh; ?>;}
+            .<?php echo $uid; ?> .otd-card{flex:0 0 clamp(250px,28vw,320px);scroll-snap-align:start;<?php echo esc_attr( Olobuild_Tile_Utils::border_css( $s['card_border_color'] ?? null, [ 'width' => 1, 'color' => $cbd ] ) ); ?>border-radius:12px;overflow:hidden;background:<?php echo $cbg; ?>;transition:transform .18s,<?php echo $cb_hover_props['transition'] ?: 'border-color .18s'; ?>;display:block;text-decoration:none;color:inherit;}
+            .<?php echo $uid; ?> .otd-card:hover{transform:translateY(-4px);<?php echo $cb_hover_props['decls'] !== '' ? $cb_hover_props['decls'] : 'border-color:' . $cbdh . ';'; ?>}
             .<?php echo $uid; ?> .otd-card:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, <?php echo $acc; ?> 30%, transparent);}
             .<?php echo $uid; ?> .otd-pv{position:relative;height:<?php echo $ph; ?>px;background:var(--c-bg);padding:15px 16px 0;display:flex;flex-direction:column;overflow:hidden;}
             .<?php echo $uid; ?> .otd-logo{width:13px;height:13px;border-radius:4px;background:var(--c-acc);flex:none;}

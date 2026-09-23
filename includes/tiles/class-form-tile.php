@@ -177,9 +177,32 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
         $btn_fs      = absint( $s['submit_font_size'] ) ?: 16;
         $btn_fw      = absint( $s['submit_font_weight'] ) ?: 600;
         $btn_full    = ! empty( $s['submit_full_width'] );
-        $btn_bw      = absint( $s['submit_border_width'] );
-        $btn_bc      = $this->safe_color_css( $s['submit_border_color'] );
-        $btn_hbc     = $this->safe_color_css( $s['submit_hover_border_color'] );
+        // Bordo pulsante: il controllo salva il bordo intero in `submit_border` (lati, stile,
+        // colore) e il ponte ricopia spessore e colore nelle chiavi piatte storiche, che
+        // restano la ricaduta per i template salvati prima del controllo.
+        $btn_bc      = $this->safe_color_css( $s['submit_border_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $btn_border  = $s['submit_border'] ?? null;
+        if ( is_array( $btn_border ) && Olobuild_Tile_Utils::border_is_set( $btn_border ) ) {
+            $btn_border['color'] = $this->safe_color_css( $btn_border['color'] ?? '' ) ?: $btn_bc;
+        } else {
+            $btn_w      = absint( $s['submit_border_width'] );
+            $btn_border = [ 'top' => $btn_w, 'right' => $btn_w, 'bottom' => $btn_w, 'left' => $btn_w, 'style' => 'solid', 'color' => $btn_bc ];
+        }
+        $btn_border_css = Olobuild_Tile_Utils::border_css( $btn_border );
+        // Hover: bordo intero dallo stato Hover del controllo; nei template storici la sola
+        // stringa colore, e lati e stile restano quelli del bordo normale.
+        $btn_hb = $s['submit_hover_border_color'] ?? '';
+        $btn_hb = is_array( $btn_hb ) ? $btn_hb : [ 'color' => $btn_hb ];
+        $btn_hb['color'] = $this->safe_color_css( $btn_hb['color'] ?? '' );
+        if ( ! preg_match( '/^(solid|dashed|dotted|double|groove|ridge|inset|outset|none|hidden)?$/', (string) ( $btn_hb['style'] ?? '' ) ) ) {
+            $btn_hb['style'] = '';
+        }
+        $btn_hover_border = $this->build_border_hover_props( $btn_border, $btn_hb, absint( $s['submit_border_hover_duration'] ?? 200 ) ?: 200 );
+        // Senza bordo normale un «border:0px» in hover non disegnerebbe niente (colore storico
+        // senza spessore). CON bordo normale invece i lati a 0 lo tolgono in hover, come mostra il controllo.
+        if ( $btn_border_css === '' && strpos( $btn_hover_border['decls'], 'border:0px ' ) === 0 ) {
+            $btn_hover_border = [ 'decls' => '', 'transition' => '' ];
+        }
         $btn_ls      = floatval( $s['submit_letter_spacing'] );
         $btn_tt      = in_array( $s['submit_text_transform'], [ 'none', 'uppercase', 'lowercase', 'capitalize' ], true ) ? $s['submit_text_transform'] : 'none';
         $btn_icon    = sanitize_text_field( $s['submit_icon'] ?? '' );
@@ -322,8 +345,8 @@ class Olobuild_Form_Tile extends Olobuild_Tile_Base {
             .<?php echo $uid; ?> .uk-select:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px <?php echo $input_bg; ?> inset !important;-webkit-text-fill-color:<?php echo $input_color; ?> !important;transition:background-color 5000s ease-in-out 0s}
             .<?php echo $uid; ?> .uk-form-icon{color:<?php echo $input_color; ?>;opacity:0.5}
             .<?php echo $uid; ?> .uk-form-icon:hover{opacity:0.8}
-            .<?php echo $uid; ?> .olo-f-btn{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #e1474f)'; ?>;color:<?php echo $btn_color; ?>;<?php if ( $submit_ff ) : ?>font-family:<?php echo $submit_ff; ?>;<?php endif; ?><?php if ( $btn_bw > 0 ) : ?>border:<?php echo $btn_bw; ?>px solid <?php echo $btn_bc ?: 'var(--olo-color-primary, #e1474f)'; ?><?php else : ?>border:none<?php endif; ?>;border-radius:<?php echo $btn_radius; ?>;padding:<?php echo $btn_py; ?>px <?php echo $btn_px; ?>px;font-size:<?php echo $btn_fs; ?>px;font-weight:<?php echo $btn_fw; ?>;cursor:pointer;transition:background 0.2s ease,border-color 0.2s ease,transform 0.15s ease;display:inline-flex;align-items:center;gap:8px<?php if ( $btn_ls > 0 ) : ?>;letter-spacing:<?php echo $btn_ls; ?>px<?php endif; ?><?php if ( $btn_tt !== 'none' ) : ?>;text-transform:<?php echo $btn_tt; ?><?php endif; ?><?php if ( $btn_full ) : ?>;width:100%;justify-content:center<?php endif; ?>}
-            .<?php echo $uid; ?> .olo-f-btn:hover{background:<?php echo $btn_hover ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 85%, #000)'; ?><?php if ( $btn_bw > 0 && $btn_hbc ) : ?>;border-color:<?php echo $btn_hbc; ?><?php endif; ?><?php if ( $btn_radius_hover_css !== '' ) : ?>;border-radius:<?php echo $btn_radius_hover_css; ?> !important<?php endif; ?>}
+            .<?php echo $uid; ?> .olo-f-btn{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #e1474f)'; ?>;color:<?php echo $btn_color; ?>;<?php if ( $submit_ff ) : ?>font-family:<?php echo $submit_ff; ?>;<?php endif; ?>border:none<?php if ( $btn_border_css !== '' ) : ?>;<?php echo rtrim( $btn_border_css, ';' ); ?><?php endif; ?>;border-radius:<?php echo $btn_radius; ?>;padding:<?php echo $btn_py; ?>px <?php echo $btn_px; ?>px;font-size:<?php echo $btn_fs; ?>px;font-weight:<?php echo $btn_fw; ?>;cursor:pointer;transition:background 0.2s ease,<?php echo $btn_hover_border['transition'] ?: 'border-color 0.2s ease'; ?>,transform 0.15s ease;display:inline-flex;align-items:center;gap:8px<?php if ( $btn_ls > 0 ) : ?>;letter-spacing:<?php echo $btn_ls; ?>px<?php endif; ?><?php if ( $btn_tt !== 'none' ) : ?>;text-transform:<?php echo $btn_tt; ?><?php endif; ?><?php if ( $btn_full ) : ?>;width:100%;justify-content:center<?php endif; ?>}
+            .<?php echo $uid; ?> .olo-f-btn:hover{background:<?php echo $btn_hover ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 85%, #000)'; ?><?php if ( $btn_hover_border['decls'] !== '' ) : ?>;<?php echo rtrim( $btn_hover_border['decls'], ';' ); ?><?php endif; ?><?php if ( $btn_radius_hover_css !== '' ) : ?>;border-radius:<?php echo $btn_radius_hover_css; ?> !important<?php endif; ?>}
             .<?php echo $uid; ?> .olo-f-btn:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}
             .<?php echo $uid; ?> .olo-f-btn:active{transform:translateY(1px)}
             .<?php echo $uid; ?> .olo-f-btn:disabled{opacity:0.6;cursor:not-allowed}
