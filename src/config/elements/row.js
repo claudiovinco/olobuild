@@ -114,11 +114,6 @@ export default {
       { value: 'numbers',   label: t('Numerica (link)') },
       { value: 'load_more', label: t('Carica altri (bottone)') },
     ], condition: { field: 'loop_enabled', value: true } },
-    { key: 'loop_pagination_align', label: t('Allineamento'), type: 'select', options: [
-      { value: 'left',   label: t('Sinistra') },
-      { value: 'center', label: t('Centro') },
-      { value: 'right',  label: t('Destra') },
-    ], condition: { field: 'loop_pagination', op: 'neq', value: 'none' } },
     { key: 'loop_load_more_label', label: t('Etichetta bottone'), type: 'text', placeholder: t('Carica altri'),
       condition: { field: 'loop_pagination', value: 'load_more' } },
   ],
@@ -178,5 +173,11 @@ export default {
     ], condition: { field: 'layout_mode', value: 'grid' } },
 
     ...flexContainerFields,
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'loop_pagination_align', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left',   label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right',  label: t('Destra') },
+    ], condition: [{ field: 'loop_enabled', value: true }, { field: 'loop_pagination', op: 'neq', value: 'none' }] },
   ],
 };

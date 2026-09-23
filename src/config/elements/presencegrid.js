@@ -113,7 +113,6 @@ export default {
         { key: 'avatar', label: t('Avatar'), type: 'image' },
         { key: 'role',   label: t('Ruolo / rango (opzionale)'), type: 'text', placeholder: t('es. Diamante') },
         { key: 'online', label: t('Online'), type: 'toggle' },
-        { key: 'color',  label: t('Colore avatar (override)'), type: 'color' },
       ],
       description: t('Usato come elenco (sorgente Manuale) oppure come stato demo/placeholder quando query/endpoint non rispondono.'),
     },
@@ -124,10 +123,6 @@ export default {
     { key: 'offline_label', label: t('Etichetta "offline"'), type: 'text' },
 
     { type: 'separator', label: t('Layout') },
-    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 10, step: 1, responsive: true },
-    { key: 'columns_tablet', label: t('Colonne (tablet)'), type: 'range', min: 1, max: 8, step: 1 },
-    { key: 'columns_mobile', label: t('Colonne (mobile)'), type: 'range', min: 1, max: 6, step: 1 },
-    { key: 'gap', label: t('Gap card'), type: 'range', min: 0, max: 40, step: 2 },
     { key: 'show_ranks', label: t('Mostra ruolo / rango'), type: 'toggle' },
 
     { type: 'separator', label: t('Ticker attività (opzionale)') },
@@ -200,5 +195,14 @@ export default {
       condition: { field: 'show_ticker', op: 'eq', value: true } },
 
     ...borderFields(),
+    { type: 'separator', label: t('Membri') },
+    { key: 'members', type: 'content-items', label: t('Membri'), itemLabel: t('Membro'), etichettaDa: 'name', miniaturaDa: 'avatar', itemFields: [
+        { key: 'color',  label: t('Colore avatar (override)'), type: 'color' },
+    ] },
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 10, step: 1, responsive: true },
+    { key: 'columns_tablet', label: t('Colonne (tablet)'), type: 'range', min: 1, max: 8, step: 1 },
+    { key: 'columns_mobile', label: t('Colonne (mobile)'), type: 'range', min: 1, max: 6, step: 1 },
+    { key: 'gap', label: t('Gap card'), type: 'range', min: 0, max: 40, step: 2 },
   ],
 };

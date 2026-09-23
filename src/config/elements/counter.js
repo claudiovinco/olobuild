@@ -61,7 +61,6 @@ export default {
     { key: 'icon_emoji', label: t('Icona / Emoji'), type: 'icon' },
 
     { type: 'separator', label: t('Sfondo') },
-    { key: 'media_bg', label: t('Sfondo (immagine, video, gradiente, colore…)'), type: 'background', showParallax: false },
     { key: 'overlay', label: t('Overlay scuro sul media'), type: 'toggle' },
   ],
 
@@ -121,5 +120,7 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Sfondo') },
+    { key: 'media_bg', label: t('Sfondo (immagine, video, gradiente, colore…)'), type: 'background', showParallax: false },
   ],
 };

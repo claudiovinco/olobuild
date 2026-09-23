@@ -53,13 +53,6 @@ export default {
     { type: 'separator', label: t('Giocattoli') },
     { key: 'items', label: t('Oggetti'), type: 'content-items',
       itemFields: [
-        { key: 'shape', label: t('Forma'), type: 'select', options: [
-          { value: 'circle', label: t('Cerchio') },
-          { value: 'square', label: t('Quadrato') },
-          { value: 'star',   label: t('Stella') },
-        ]},
-        { key: 'color', label: t('Colore'), type: 'color' },
-        { key: 'radius', label: t('Raggio'), type: 'range', min: 16, max: 80, step: 2 },
         { key: 'glyph', label: t('Glifo (lettera/numero)'), type: 'text',
           description: t('Un carattere mostrato al centro. Ignorato se imposti un\'immagine.') },
         { key: 'image', label: t('Immagine (opzionale)'), type: 'image',
@@ -113,5 +106,15 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Giocattoli') },
+    { key: 'items', type: 'content-items', label: t('Oggetti'), itemLabel: 'Oggetto', etichettaDa: 'glyph', miniaturaDa: 'image', itemFields: [
+        { key: 'shape', label: t('Forma'), type: 'select', options: [
+          { value: 'circle', label: t('Cerchio') },
+          { value: 'square', label: t('Quadrato') },
+          { value: 'star',   label: t('Stella') },
+        ]},
+        { key: 'color', label: t('Colore'), type: 'color' },
+        { key: 'radius', label: t('Raggio'), type: 'range', min: 16, max: 80, step: 2 },
+    ] },
   ],
 };

@@ -106,12 +106,6 @@ export default {
     { key: 'modal_title', label: t('Titolo modale'), type: 'text' },
     { key: 'content', label: t('Contenuto'), type: 'textarea', supportsDynamic: true },
     { key: 'image', label: t('Immagine'), type: 'image', supportsDynamic: true },
-    { key: 'image_position', label: t('Posizione immagine'), type: 'select', options: [
-      { value: 'top', label: t('Sopra') },
-      { value: 'bottom', label: t('Sotto') },
-      { value: 'left', label: t('Sinistra') },
-      { value: 'right', label: t('Destra') },
-    ]},
     { key: 'template_id', label: t('Template'), type: 'select', optionsSource: 'templates' },
 
     { type: 'separator', label: t('Modale — Comportamento') },
@@ -292,5 +286,12 @@ export default {
     { key: 'modal_terminal_prompt', label: t('Prompt terminale (> + cursore)'), type: 'toggle' },
 
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'image_position', label: t('Posizione immagine'), type: 'select', options: [
+      { value: 'top', label: t('Sopra') },
+      { value: 'bottom', label: t('Sotto') },
+      { value: 'left', label: t('Sinistra') },
+      { value: 'right', label: t('Destra') },
+    ]},
   ],
 };

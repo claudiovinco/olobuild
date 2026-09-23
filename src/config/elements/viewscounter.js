@@ -40,11 +40,6 @@ export default {
     { key: 'show_label', label: t('Mostra etichetta'), type: 'toggle' },
     { key: 'number_format', label: t('Formato con separatore migliaia'), type: 'toggle' },
 
-    { type: 'separator', label: t('Layout') },
-    { key: 'layout', label: t('Layout'), type: 'select', options: [
-      { value: 'inline', label: t('In linea') },
-      { value: 'block', label: t('A blocchi') },
-    ]},
   ],
 
   styleFields: [
@@ -92,5 +87,10 @@ export default {
       condition: { field: 'show_icon', value: true } },
 
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'layout', label: t('Layout'), type: 'select', options: [
+      { value: 'inline', label: t('In linea') },
+      { value: 'block', label: t('A blocchi') },
+    ]},
   ],
 };

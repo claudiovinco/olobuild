@@ -89,11 +89,9 @@ export default {
         { type: 'separator', label: t('Testi') },
         { key: 'title',               label: t('Titolo'),                  type: 'text' },
         { key: 'title_accent',        label: t('Suffisso titolo'),         type: 'text' },
-        { key: 'title_accent_italic', label: t('Suffisso italico'),        type: 'toggle' },
         { key: 'description',         label: t('Descrizione'),             type: 'editor', mode: 'block' },
         { type: 'separator', label: t('Footer & Link') },
         { key: 'footer_text',         label: t('Footer testo'),            type: 'text' },
-        { key: 'footer_dot_color',    label: t('Footer pallino'),          type: 'color' },
         { key: 'link_url',            label: t('Link (opzionale)'),        type: 'link' },
         { key: 'link_text',           label: t('Testo CTA (es. Learn more)'), type: 'text' },
       ],
@@ -130,6 +128,10 @@ export default {
     { key: 'card_border',       label: t('Bordo (vuoto = nessuno)'), type: 'border', legacyWidth: 1 },
     withHover({ key: 'card_radius', label: t('Raggio card'), type: 'border-radius' }, { hoverKey: 'card_radius_hover', hoverDurationKey: 'card_radius_hover_duration' }),
 
+    { key: 'items', type: 'content-items', label: t('Cards'), itemLabel: t('Card'), etichettaDa: 'title', miniaturaDa: 'media_image', itemFields: [
+        { key: 'title_accent_italic', label: t('Suffisso italico'),        type: 'toggle' },
+        { key: 'footer_dot_color',    label: t('Footer pallino'),          type: 'color' },
+    ] },
     { type: 'separator', label: t('Media (immagine card)') },
     // Elenco canonico: i 5 rapporti storici ('16/9','4/3','3/2','1/1','21/9') ci stanno
     // tutti dentro, quindi niente `extra`. NIENTE voce automatica: il riquadro media non

@@ -40,11 +40,6 @@ export default {
     { key: 'show_percentage', label: t('Mostra percentuale'), type: 'toggle' },
     { key: 'inner_text', label: t('Testo interno (vuoto = percentuale)'), type: 'text' },
 
-    { type: 'separator', label: t('Layout') },
-    { key: 'layout', label: t('Layout'), type: 'select', options: [
-      { value: 'bar', label: t('Barra') },
-      { value: 'circle', label: t('Cerchio') },
-    ]},
 
     { type: 'separator', label: t('Animazione') },
     { key: 'animated', label: t('Animata'), type: 'toggle' },
@@ -87,5 +82,10 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'layout', label: t('Layout'), type: 'select', options: [
+      { value: 'bar', label: t('Barra') },
+      { value: 'circle', label: t('Cerchio') },
+    ]},
   ],
 };

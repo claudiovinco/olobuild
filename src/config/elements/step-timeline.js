@@ -153,7 +153,6 @@ export default {
       itemFields: [
         { key: 'counter',             label: t('Numero step'),           type: 'text' },
         { key: 'tag_text',            label: t('Tag testo'),             type: 'text' },
-        { key: 'tag_dot_color',       label: t('Tag pallino colore'),    type: 'color' },
         { key: 'media_type',          label: t('Tipo mockup'),           type: 'select', options: [
           { value: 'placeholder', label: t('Placeholder generico') },
           { value: 'terminal',    label: t('Terminal (testo mono)') },
@@ -162,14 +161,10 @@ export default {
         { key: 'media_label',         label: t('Header mockup (testo)'),    type: 'text' },
         { key: 'media_content',       label: t('Contenuto terminal (testo)'), type: 'textarea' },
         { key: 'media_image',         label: t('Immagine mockup'),       type: 'image' },
-        { key: 'media_bg',            label: t('Sfondo mockup'),         type: 'color' },
-        { key: 'media_color',         label: t('Colore accent mockup'),  type: 'color' },
         { key: 'pre_title',           label: t('Pre-title (mono uppercase)'), type: 'text' },
         { key: 'title',               label: t('Titolo (base)'),         type: 'text' },
         { key: 'title_accent',        label: t('Titolo (accent)'),       type: 'text' },
-        { key: 'title_accent_italic', label: t('Accent italico'),        type: 'toggle' },
         { key: 'title_after',         label: t('Titolo (dopo accent)'),  type: 'text' },
-        { key: 'title_after_italic',  label: t('"Dopo accent" italico'), type: 'toggle' },
         { key: 'description',         label: t('Descrizione'),           type: 'editor', mode: 'inline' },
         { key: 'footer_value',        label: t('Metric valore'),         type: 'text' },
         { key: 'footer_label',        label: t('Metric label'),          type: 'text' },
@@ -240,5 +235,13 @@ export default {
 
     { type: 'separator', label: t('Separatori tra step') },
     { key: 'separator_color', label: t('Colore separatore'), type: 'color' },
+    { type: 'separator', label: t('Step') },
+    { key: 'items', type: 'content-items', label: t('Step cards'), itemLabel: t('Step'), etichettaDa: 'title', miniaturaDa: 'media_image', itemFields: [
+        { key: 'tag_dot_color',       label: t('Tag pallino colore'),    type: 'color' },
+        { key: 'media_bg',            label: t('Sfondo mockup'),         type: 'color' },
+        { key: 'media_color',         label: t('Colore accent mockup'),  type: 'color' },
+        { key: 'title_accent_italic', label: t('Accent italico'),        type: 'toggle' },
+        { key: 'title_after_italic',  label: t('"Dopo accent" italico'), type: 'toggle' },
+    ] },
   ],
 };

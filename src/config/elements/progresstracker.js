@@ -60,10 +60,6 @@ export default {
     },
 
     { type: 'separator', label: t('Layout') },
-    { key: 'layout', label: t('Layout'), type: 'select', options: [
-      { value: 'horizontal', label: t('Orizzontale') },
-      { value: 'vertical', label: t('Verticale') },
-    ]},
     { key: 'show_numbers', label: t('Mostra numeri'), type: 'toggle' },
     { key: 'show_description', label: t('Mostra descrizione'), type: 'toggle' },
   ],
@@ -121,5 +117,10 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'layout', label: t('Layout'), type: 'select', options: [
+      { value: 'horizontal', label: t('Orizzontale') },
+      { value: 'vertical', label: t('Verticale') },
+    ]},
   ],
 };

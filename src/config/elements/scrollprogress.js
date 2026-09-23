@@ -23,10 +23,6 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'position', label: t('Posizione'), type: 'select', options: [
-      { value: 'top',    label: t('In alto') },
-      { value: 'bottom', label: t('In basso') },
-    ]},
     { key: 'show_percentage', label: t('Mostra percentuale'), type: 'toggle' },
   ],
 
@@ -38,5 +34,10 @@ export default {
     { key: 'percentage_color', label: t('Colore percentuale'), type: 'color',
       condition: { field: 'show_percentage', operator: '==', value: true } },
     { key: 'z_index', label: t('Z-index'), type: 'range', min: 100, max: 10000, step: 100 },
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'position', label: t('Posizione'), type: 'select', options: [
+      { value: 'top',    label: t('In alto') },
+      { value: 'bottom', label: t('In basso') },
+    ]},
   ],
 };

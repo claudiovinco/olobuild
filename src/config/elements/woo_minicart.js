@@ -37,11 +37,6 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'style', label: t('Stile'), type: 'select', options: [
-      { value: 'icon', label: t('Solo icona') },
-      { value: 'icon-text', label: t('Icona + testo') },
-      { value: 'text', label: t('Solo testo') },
-    ]},
     { key: 'icon', label: t('Icona'), type: 'select', options: [
       { value: 'cart', label: t('Carrello') },
       { value: 'bag', label: t('Borsa') },
@@ -70,6 +65,11 @@ export default {
       { value: 'tilt-3d',         label: t('3D Tilt') },
       { value: 'custom',          label: t('Personalizzato') },
     ] },
+    { key: 'style', label: t('Stile'), type: 'select', options: [
+      { value: 'icon', label: t('Solo icona') },
+      { value: 'icon-text', label: t('Icona + testo') },
+      { value: 'text', label: t('Solo testo') },
+    ]},
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Testo'),

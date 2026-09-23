@@ -64,8 +64,6 @@ export default {
         { key: 'text', label: t('Testo risultato'), type: 'textarea' },
       ],
     },
-    { type: 'separator', label: t('Layout') },
-    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 4, step: 1, responsive: true },
   ],
 
   styleFields: [
@@ -128,5 +126,7 @@ export default {
     { type: 'separator', label: t('Ombra') },
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 4, step: 1, responsive: true },
   ],
 };

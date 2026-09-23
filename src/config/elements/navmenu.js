@@ -91,11 +91,6 @@ export default {
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'menu_id', label: t('Menu WordPress'), type: 'select', optionsSource: 'wpMenus' },
-    { key: 'style', label: t('Tipo struttura'), type: 'select', options: [
-      { value: 'navbar', label: t('Navbar orizzontale') },
-      { value: 'vertical', label: t('Verticale') },
-      { value: 'subnav', label: t('Link Subnav') },
-    ]},
 
     { type: 'separator', label: t('Sotto-voci verticale') },
     { key: 'v_show_icons', label: t('Mostra icone'), type: 'toggle',
@@ -122,12 +117,6 @@ export default {
 
     { type: 'separator', label: t('Ricerca integrata') },
     { key: 'search_tile_id', label: t('Tile ricerca'), type: 'select', optionsSource: 'searchTiles' },
-    { key: 'search_position', label: t('Posizione'), type: 'select',
-      show: s => !!s.search_tile_id,
-      options: [
-        { value: 'before', label: t('Prima del menu (sinistra)') },
-        { value: 'after', label: t('Dopo il menu (destra)') },
-      ]},
 
     { type: 'separator', label: t('Mobile') },
     { key: 'mobile_toggle', label: t('Hamburger mobile'), type: 'toggle' },
@@ -159,6 +148,11 @@ export default {
       { value: 'right', label: t('Destra') },
     ]},
 
+    { key: 'style', label: t('Tipo struttura'), type: 'select', options: [
+      { value: 'navbar', label: t('Navbar orizzontale') },
+      { value: 'vertical', label: t('Verticale') },
+      { value: 'subnav', label: t('Link Subnav') },
+    ]},
     { type: 'separator', label: t('Aspetto verticale'),
       show: s => s.style === 'vertical' },
     { key: 'v_icon_style', label: t('Stile icona'), type: 'select',
@@ -319,5 +313,12 @@ export default {
     { key: 'hamburger_color', label: t('Colore trigger'), type: 'color' },
 
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'search_position', label: t('Posizione'), type: 'select',
+      show: s => !!s.search_tile_id,
+      options: [
+        { value: 'before', label: t('Prima del menu (sinistra)') },
+        { value: 'after', label: t('Dopo il menu (destra)') },
+      ]},
   ],
 };

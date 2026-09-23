@@ -37,11 +37,6 @@ export default {
       { value: '-', label: '-' },
       { value: '>>', label: t('>>') },
     ]},
-    { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
-      { value: 'left', label: t('Sinistra') },
-      { value: 'center', label: t('Centro') },
-      { value: 'right', label: t('Destra') },
-    ]},
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -76,5 +71,11 @@ export default {
     { type: 'separator', label: t('Stile') },
     { key: 'link_color', label: t('Colore link'), type: 'color' },
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+    ]},
   ],
 };

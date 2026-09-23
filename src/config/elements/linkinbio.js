@@ -61,11 +61,6 @@ export default {
         { key: 'url', label: t('URL'), type: 'link' },
         { key: 'icon', label: t('Icona (nome)'), type: 'icon' },
         { key: 'image_url', label: t('Immagine icona'), type: 'image' },
-        { key: 'style', label: t('Stile'), type: 'select', options: [
-          { value: 'filled', label: t('Pieno') },
-          { value: 'outline', label: t('Contorno') },
-          { value: 'minimal', label: t('Minimale') },
-        ]},
       ],
     },
     { type: 'separator', label: t('Profilo') },
@@ -145,5 +140,13 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Link') },
+    { key: 'items', type: 'content-items', label: t('Link'), etichettaDa: 'title', miniaturaDa: 'image_url', itemFields: [
+        { key: 'style', label: t('Stile'), type: 'select', options: [
+          { value: 'filled', label: t('Pieno') },
+          { value: 'outline', label: t('Contorno') },
+          { value: 'minimal', label: t('Minimale') },
+        ]},
+    ] },
   ],
 };

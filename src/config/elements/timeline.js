@@ -90,7 +90,6 @@ export default {
           { value: 'warning',   label: t('Avviso') },
           { value: 'info',      label: t('Info') },
         ]},
-        { key: 'icon_color', label: t('Colore override'), type: 'color' },
       ],
       newItemDefaults: { title: t('Nuovo evento'), tag: t('Tappa'), description: t('Descrizione evento.'), date: '', image: '', video: '', icon: 'star', category: 'primary', icon_color: '' },
       itemLabel: 'Evento',
@@ -113,10 +112,6 @@ export default {
       { value: 'dot',  label: t('Punto') },
       { value: 'num',  label: t('Numero') },
       { value: 'year', label: t('Anno') },
-    ]},
-    { key: 'tl_color', label: t('Colore'), type: 'select', options: [
-      { value: 'cat',  label: t('Per categoria') },
-      { value: 'mono', label: t('Mono (primario)') },
     ]},
 
     // ── Media / Densità ──
@@ -198,6 +193,10 @@ export default {
     { key: 'tl_node_size', label: t('Dimensione nodo (px · 0 = auto)'), type: 'range', min: 0, max: 64, step: 2 },
     { key: 'tl_node_border', label: t('Spessore bordo nodo (px · 0 = auto)'), type: 'range', min: 0, max: 6, step: 1 },
 
+    { key: 'tl_color', label: t('Colore'), type: 'select', options: [
+      { value: 'cat',  label: t('Per categoria') },
+      { value: 'mono', label: t('Mono (primario)') },
+    ]},
     // ── Card ──
     { type: 'separator', label: t('Personalizza · Card') },
     { key: 'tl_card_bg', label: t('Sfondo card'), type: 'color' },
@@ -251,5 +250,9 @@ export default {
     { key: 'tl_tag_color', label: t('Colore etichetta'), type: 'color' },
 
     ...borderFields(),
+    { type: 'separator', label: t('Eventi') },
+    { key: 'items', type: 'content-items', label: t('Eventi'), itemLabel: 'Evento', etichettaDa: 'title', miniaturaDa: 'image', itemFields: [
+        { key: 'icon_color', label: t('Colore override'), type: 'color' },
+    ] },
   ],
 };

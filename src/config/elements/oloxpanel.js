@@ -74,11 +74,6 @@ export default {
   },
 
   fields: [
-    { key: 'variant', label: t('Tipo di fermata'), type: 'select', options: [
-      { value: 'intro', label: t('Intro (fermata 0)') },
-      { value: 'product', label: t('Prodotto con minigioco') },
-      { value: 'outro', label: t('Finale (mad-lib)') },
-    ] },
     { key: 'label', label: t('Nome fermata (jump/tooltip)'), type: 'text' },
 
     { type: 'separator', label: t('Intro') },
@@ -100,11 +95,6 @@ export default {
       condition: { field: 'variant', op: 'eq', value: 'intro' } },
 
     { type: 'separator', label: t('Prodotto') },
-    { key: 'color', label: t('Colore'), type: 'select', options: [
-      { value: 'build', label: 'build' }, { value: 'booking', label: 'booking' },
-      { value: 'lang', label: 'lang' }, { value: 'secur', label: 'security' },
-      { value: 'tour', label: 'tour' }, { value: 'tutor', label: 'tutor' },
-    ], condition: { field: 'variant', op: 'eq', value: 'product' } },
     { key: 'logo', label: t('Logo prodotto'), type: 'image',
       condition: { field: 'variant', op: 'eq', value: 'product' } },
     { key: 'kicker', label: t('Kicker'), type: 'text',
@@ -142,11 +132,6 @@ export default {
       itemFields: [
         { key: 'label', label: t('Etichetta'), type: 'text' },
         { key: 'url', label: t('Link'), type: 'link' },
-        { key: 'color', label: t('Colore'), type: 'select', options: [
-          { value: 'build', label: 'build' }, { value: 'booking', label: 'booking' },
-          { value: 'lang', label: 'lang' }, { value: 'secur', label: 'security' },
-          { value: 'tour', label: 'tour' }, { value: 'tutor', label: 'tutor' },
-        ] },
       ],
       condition: { field: 'variant', op: 'eq', value: 'outro' } },
     { key: 'outro_fine', label: t('Riga finale'), type: 'text',
@@ -166,11 +151,6 @@ export default {
       itemFields: [
         { key: 'label', label: t('Etichetta'), type: 'text' },
         { key: 'value', label: t('Testo nella mail'), type: 'text' },
-        { key: 'color', label: t('Colore'), type: 'select', options: [
-          { value: 'build', label: 'build' }, { value: 'booking', label: 'booking' },
-          { value: 'lang', label: 'lang' }, { value: 'secur', label: 'security' },
-          { value: 'tour', label: 'tour' }, { value: 'tutor', label: 'tutor' },
-        ] },
       ],
       condition: { field: 'variant', op: 'eq', value: 'outro' } },
     { key: 'mad_pre_mail', label: t('Testo prima della mail'), type: 'text',
@@ -189,5 +169,32 @@ export default {
       condition: { field: 'variant', op: 'eq', value: 'outro' } },
   ],
 
-  styleFields: [],
+  styleFields: [    { type: 'separator', label: t('Aspetto') },
+    { key: 'variant', label: t('Tipo di fermata'), type: 'select', options: [
+      { value: 'intro', label: t('Intro (fermata 0)') },
+      { value: 'product', label: t('Prodotto con minigioco') },
+      { value: 'outro', label: t('Finale (mad-lib)') },
+    ] },
+    { type: 'separator', label: t('Prodotto') },
+    { key: 'color', label: t('Colore'), type: 'select', options: [
+      { value: 'build', label: 'build' }, { value: 'booking', label: 'booking' },
+      { value: 'lang', label: 'lang' }, { value: 'secur', label: 'security' },
+      { value: 'tour', label: 'tour' }, { value: 'tutor', label: 'tutor' },
+    ], condition: { field: 'variant', op: 'eq', value: 'product' } },
+    { type: 'separator', label: t('Finale') },
+    { key: 'outro_links', type: 'content-items', label: t('Link alle fermate'), itemLabel: t('Link'), etichettaDa: 'label', condition: { field: 'variant', op: 'eq', value: 'outro' }, itemFields: [
+        { key: 'color', label: t('Colore'), type: 'select', options: [
+          { value: 'build', label: 'build' }, { value: 'booking', label: 'booking' },
+          { value: 'lang', label: 'lang' }, { value: 'secur', label: 'security' },
+          { value: 'tour', label: 'tour' }, { value: 'tutor', label: 'tutor' },
+        ] },
+    ] },
+    { key: 'mad_picks', type: 'content-items', label: t('Sogni cliccabili'), itemLabel: t('Sogno'), etichettaDa: 'label', condition: { field: 'variant', op: 'eq', value: 'outro' }, itemFields: [
+        { key: 'color', label: t('Colore'), type: 'select', options: [
+          { value: 'build', label: 'build' }, { value: 'booking', label: 'booking' },
+          { value: 'lang', label: 'lang' }, { value: 'secur', label: 'security' },
+          { value: 'tour', label: 'tour' }, { value: 'tutor', label: 'tutor' },
+        ] },
+    ] },
+],
 };

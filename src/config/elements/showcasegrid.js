@@ -72,24 +72,8 @@ export default {
         { key: 'title', label: t('Titolo'), type: 'text' },
         { key: 'link', label: t('Link'), type: 'link' },
         { key: 'span', label: t('Colonne occupate (0 = uniforme; 1-12 = editoriale)'), type: 'range', min: 0, max: 12, step: 1 },
-        // Stesso concetto del select «Proporzioni» della tile, quindi stesso controllo:
-        // finché era un campo di testo libero si poteva scrivere «16:9» coi due punti e
-        // la regex dei renderer (`[^0-9.\/]`) lo riduceva a «169», card larghissima e
-        // nessun avviso. Nel select quell'errore non è possibile.
-        // ⚠ `autoValue: ''` è obbligatorio: la stringa vuota è il valore STORICO che
-        // significa «eredita dalla griglia» (ed è il default dell'item), e non si tocca.
-        // Niente condizione di visibilità: l'override per-item si accende quando ALMENO
-        // UNA card ha uno span (`$has_spans` in PHP, `hasSpans` nel canvas), non quando
-        // ce l'ha questa — una condizione su `span` di questo item lo nasconderebbe
-        // proprio nelle card a span 0 di una griglia editoriale, dove invece funziona.
-        // Lo dice la descrizione, che è la sede giusta per un cancello che sta altrove.
-        { key: 'aspect', label: t('Proporzioni'), type: 'select',
-          options: ratioOptions({ auto: true, autoValue: '', autoLabel: 'Come la griglia', extra: ['3/3.5'] }),
-          description: t('Vale solo in modalità editoriale, cioè quando almeno una card ha «Colonne occupate» maggiore di 0.') },
       ],
     },
-    { type: 'separator', label: t('Layout') },
-    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 4, step: 1, responsive: true },
   ],
 
   styleFields: [
@@ -141,5 +125,24 @@ export default {
     ...shadowField,
 
     ...borderFields(),
+    { type: 'separator', label: t('Card') },
+    { key: 'items', type: 'content-items', label: t('Voci'), itemLabel: t('Card'), etichettaDa: 'title', miniaturaDa: 'image', itemFields: [
+        // Stesso concetto del select «Proporzioni» della tile, quindi stesso controllo:
+        // finché era un campo di testo libero si poteva scrivere «16:9» coi due punti e
+        // la regex dei renderer (`[^0-9.\/]`) lo riduceva a «169», card larghissima e
+        // nessun avviso. Nel select quell'errore non è possibile.
+        // ⚠ `autoValue: ''` è obbligatorio: la stringa vuota è il valore STORICO che
+        // significa «eredita dalla griglia» (ed è il default dell'item), e non si tocca.
+        // Niente condizione di visibilità: l'override per-item si accende quando ALMENO
+        // UNA card ha uno span (`$has_spans` in PHP, `hasSpans` nel canvas), non quando
+        // ce l'ha questa — una condizione su `span` di questo item lo nasconderebbe
+        // proprio nelle card a span 0 di una griglia editoriale, dove invece funziona.
+        // Lo dice la descrizione, che è la sede giusta per un cancello che sta altrove.
+        { key: 'aspect', label: t('Proporzioni'), type: 'select',
+          options: ratioOptions({ auto: true, autoValue: '', autoLabel: 'Come la griglia', extra: ['3/3.5'] }),
+          description: t('Vale solo in modalità editoriale, cioè quando almeno una card ha «Colonne occupate» maggiore di 0.') },
+    ] },
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 4, step: 1, responsive: true },
   ],
 };

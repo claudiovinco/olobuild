@@ -40,13 +40,6 @@ export default {
     { key: 'text', label: t('Testo'), type: 'text' },
 
     { type: 'separator', label: t('Tracciato') },
-    { key: 'path_preset', label: t('Forma tracciato'), type: 'select', options: [
-      { value: 'arc', label: t('Arco') },
-      { value: 'wave', label: t('Onda') },
-      { value: 'circle', label: t('Cerchio') },
-      { value: 'spiral', label: t('Spirale') },
-      { value: 'custom', label: t('Personalizzato') },
-    ]},
     { key: 'custom_path', label: t('Percorso SVG (d)'), type: 'text', placeholder: t('M 0 50 Q 150 0 300 50'),
       condition: { field: 'path_preset', value: 'custom' } },
 
@@ -103,5 +96,13 @@ export default {
     },
 
     ...borderFields(),
+    { type: 'separator', label: t('Tracciato') },
+    { key: 'path_preset', label: t('Forma tracciato'), type: 'select', options: [
+      { value: 'arc', label: t('Arco') },
+      { value: 'wave', label: t('Onda') },
+      { value: 'circle', label: t('Cerchio') },
+      { value: 'spiral', label: t('Spirale') },
+      { value: 'custom', label: t('Personalizzato') },
+    ]},
   ],
 };

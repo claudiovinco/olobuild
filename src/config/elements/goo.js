@@ -97,19 +97,11 @@ export default {
 
     { type: 'separator', label: t('Palette') },
     { type: 'description', description: t('Lascia vuoti gli slot per usare i ruoli colore del tema. I colori impostati hanno la precedenza.') },
-    { key: 'color_1', label: t('Colore 1'), type: 'color' },
-    { key: 'color_2', label: t('Colore 2'), type: 'color' },
-    { key: 'color_3', label: t('Colore 3'), type: 'color' },
-    { key: 'color_4', label: t('Colore 4'), type: 'color' },
-    { key: 'color_5', label: t('Colore 5'), type: 'color' },
 
     { type: 'separator', label: t('Blob') },
     { key: 'blob_count', label: t('Numero blob'), type: 'range', min: 3, max: 8, step: 1 },
-    { key: 'blob_size_min', label: t('Dimensione minima'), type: 'range', min: 60, max: 500, step: 10 },
-    { key: 'blob_size_max', label: t('Dimensione massima'), type: 'range', min: 100, max: 700, step: 10 },
     { key: 'drift_speed', label: t('Velocità deriva'), type: 'range', min: 0, max: 1, step: 0.05,
       description: t('0 = blob fermi. La deriva è un movimento sinusoidale lento.') },
-    { key: 'layer_opacity', label: t('Opacità sfondo'), type: 'range', min: 20, max: 100, step: 5 },
 
     { type: 'separator', label: t('Goo') },
     { key: 'goo_strength', label: t('Intensità fusione'), type: 'range', min: 8, max: 28, step: 1,
@@ -118,13 +110,8 @@ export default {
     { key: 'follow_cursor', label: t('Blob che segue il cursore'), type: 'toggle',
       condition: { field: 'mode', op: 'eq', value: 'goo' },
       description: t('Un blob extra insegue il puntatore con easing. Disattivato su touch.') },
-    { key: 'cursor_blob_size', label: t('Dimensione blob cursore'), type: 'range', min: 100, max: 500, step: 10,
-      condition: { field: 'follow_cursor', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Aurora') },
-    { key: 'aurora_blur', label: t('Sfocatura'), type: 'range', min: 10, max: 140, step: 5,
-      condition: { field: 'mode', op: 'eq', value: 'aurora' },
-      description: t('Quanto sono morbidi gli aloni. In modalità Aurora i blob non si fondono: si sfocano e si miscelano.') },
     { key: 'blend_mode', label: t('Fusione colori (blend)'), type: 'select', options: [
       { value: 'normal',     label: t('Normale') },
       { value: 'screen',     label: t('Screen (schiarisce)') },
@@ -135,5 +122,22 @@ export default {
   ],
 
   // Decoratore a zero dimensioni: nessun controllo di layout/contenuto.
-  styleFields: [],
+  styleFields: [    { type: 'separator', label: t('Palette') },
+    { key: 'color_1', label: t('Colore 1'), type: 'color' },
+    { key: 'color_2', label: t('Colore 2'), type: 'color' },
+    { key: 'color_3', label: t('Colore 3'), type: 'color' },
+    { key: 'color_4', label: t('Colore 4'), type: 'color' },
+    { key: 'color_5', label: t('Colore 5'), type: 'color' },
+    { type: 'separator', label: t('Blob') },
+    { key: 'blob_size_min', label: t('Dimensione minima'), type: 'range', min: 60, max: 500, step: 10 },
+    { key: 'blob_size_max', label: t('Dimensione massima'), type: 'range', min: 100, max: 700, step: 10 },
+    { key: 'layer_opacity', label: t('Opacità sfondo'), type: 'range', min: 20, max: 100, step: 5 },
+    { type: 'separator', label: t('Goo') },
+    { key: 'cursor_blob_size', label: t('Dimensione blob cursore'), type: 'range', min: 100, max: 500, step: 10,
+      condition: { field: 'follow_cursor', op: 'eq', value: true } },
+    { type: 'separator', label: t('Aurora') },
+    { key: 'aurora_blur', label: t('Sfocatura'), type: 'range', min: 10, max: 140, step: 5,
+      condition: { field: 'mode', op: 'eq', value: 'aurora' },
+      description: t('Quanto sono morbidi gli aloni. In modalità Aurora i blob non si fondono: si sfocano e si miscelano.') },
+],
 };

@@ -2,7 +2,7 @@
   <div class="content-items-editor">
     <!-- Dynamic Query Panel -->
     <DynamicQueryPanel
-      v-if="supportsDynamic"
+      v-if="supportsDynamic && !strutturaFissa"
       :query="tileQuery"
       :itemFields="itemFields"
       :itemMap="tileItemMap"
@@ -28,19 +28,21 @@
         >
           <!-- Item header row -->
           <div class="cie-header" @click="toggleExpand(element.id)">
-            <span class="cie-grip" :title="t('Trascina per riordinare')">&#10303;</span>
+            <span v-if="!strutturaFissa" class="cie-grip" :title="t('Trascina per riordinare')">&#10303;</span>
             <span v-if="thumbField && element[thumbField]" class="cie-thumb">
               <img :src="element[thumbField]" alt="" class="cie-thumb-img" />
             </span>
             <span class="cie-title">{{ getItemLabel(element) }}</span>
             <div class="cie-actions">
               <button
+                v-if="!strutturaFissa"
                 type="button"
                 class="cie-btn"
                 :title="t('Duplica')"
                 @click.stop="duplicateItem(index)"
               >&#10697;</button>
               <button
+                v-if="!strutturaFissa"
                 type="button"
                 class="cie-btn cie-btn--delete"
                 :title="t('Elimina')"
@@ -264,7 +266,7 @@
       </template>
     </div>
 
-    <button v-if="!isDynamicQueryActive" type="button" class="cie-add" @click="addItem">{{ t('&#65291; Aggiungi') }} {{ itemLabel }}</button>
+    <button v-if="!isDynamicQueryActive && !strutturaFissa" type="button" class="cie-add" @click="addItem">{{ t('&#65291; Aggiungi') }} {{ itemLabel }}</button>
 
     <!-- Icon picker modal -->
     <IconPicker
@@ -377,6 +379,13 @@ const props = defineProps({
   tileSettings: { type: Object, default: () => ({}) },
   supportsDynamic: { type: Boolean, default: false },
   dynamic: { type: Object, default: () => ({}) },
+  // Tab Stile: le stesse voci del ripetitore del Contenuto, ma SOLO con i loro campi
+  // di stile (colore, corsivo…). Struttura fissa: niente aggiungi, duplica, elimina o
+  // riordina — le voci si gestiscono nel Contenuto. Nome e miniatura della voce vengono
+  // dai campi del Contenuto (etichettaDa / miniaturaDa), che qui non ci sono.
+  strutturaFissa: { type: Boolean, default: false },
+  etichettaDa: { type: String, default: '' },
+  miniaturaDa: { type: String, default: '' },
 });
 
 const emit = defineEmits(['update:modelValue', 'update:dynamic-query', 'update:dynamic-item-map']);
@@ -435,6 +444,7 @@ const { itemDraggable, itemDrop } = useListSort({
   handleSelector: '.cie-grip',
   ghostLabel: (index) => getItemLabel(localItems.value[index] || {}),
   onMove: (from, to) => {
+    if (props.strutturaFissa) return;
     const arr = localItems.value;
     const [moved] = arr.splice(from, 1);
     arr.splice(to, 0, moved);
@@ -444,12 +454,14 @@ const { itemDraggable, itemDrop } = useListSort({
 
 // Find first image field key for thumbnail preview in header
 const thumbField = computed(() => {
+  if (props.miniaturaDa) return props.miniaturaDa;
   const f = props.itemFields.find(f => f.type === 'image');
   return f ? f.key : null;
 });
 
 // Find first text-like field key for header label
 const labelField = computed(() => {
+  if (props.etichettaDa) return props.etichettaDa;
   const f = props.itemFields.find(f => ['text', 'editor', 'select'].includes(f.type));
   return f ? f.key : null;
 });

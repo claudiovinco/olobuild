@@ -93,7 +93,6 @@ export default {
         ]},
       ],
     },
-    { key: 'uppercase', label: t('Maiuscolo'), type: 'toggle' },
     { key: 'subhead', label: t('Sottotitolo'), type: 'textarea' },
 
     { type: 'separator', label: t('CTA') },
@@ -134,6 +133,7 @@ export default {
     { type: 'typography', label: t('Titolo'), responsiveKeys: [], keys: { lineHeight: 'h_line_height' } },
     { key: 'stroke_width', label: t('Spessore contorno outline'), type: 'range', min: 0, max: 5, step: 0.5 },
 
+    { key: 'uppercase', label: t('Maiuscolo'), type: 'toggle' },
     { type: 'separator', label: t('Glow radiale') },
     { key: 'glow_color', label: t('Colore glow'), type: 'color' },
     { key: 'glow_w', label: t('Larghezza glow'), type: 'range', min: 200, max: 1400, step: 20 },

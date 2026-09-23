@@ -62,16 +62,6 @@ export default {
     // ─── Posizionamento ───
     { type: 'separator', label: t('Posizionamento') },
     {
-      key: 'position',
-      label: t('Tipo posizione'),
-      type: 'select',
-      options: [
-        { value: 'fixed', label: t('Fisso (viewport)') },
-        { value: 'absolute', label: t('Assoluto (pagina)') },
-        { value: 'sticky', label: t('Appiccicoso') },
-      ],
-    },
-    {
       key: 'placement',
       label: t('Posizione'),
       type: 'select',
@@ -102,8 +92,6 @@ export default {
       condition: { field: 'placement', value: 'custom' } },
 
     { type: 'separator', label: t('Dimensioni') },
-    { key: 'width', label: t('Larghezza (px o %)'), type: 'text' },
-    { key: 'height', label: t('Altezza (vuoto = auto)'), type: 'text' },
     { key: 'z_index', label: t('Z-Index'), type: 'range', min: 1, max: 99999, step: 1 },
 
     // ─── Layout figli ───
@@ -115,18 +103,6 @@ export default {
       options: [
         { value: 'column', label: t('Verticale') },
         { value: 'row', label: t('Orizzontale') },
-      ],
-    },
-    { key: 'layout_gap', label: t('Gap figli'), type: 'range', min: 0, max: 40, step: 2 },
-    {
-      key: 'layout_align',
-      label: t('Allineamento figli'),
-      type: 'select',
-      options: [
-        { value: 'stretch', label: t('Estendi') },
-        { value: 'flex-start', label: t('Inizio') },
-        { value: 'center', label: t('Centro') },
-        { value: 'flex-end', label: t('Fine') },
       ],
     },
 
@@ -233,5 +209,31 @@ export default {
       condition: { field: 'trigger_mode', value: 'button' } },
 
     ...borderFields(),
+    { type: 'separator', label: t('Forma') },
+    { key: 'width', label: t('Larghezza (px o %)'), type: 'text' },
+    { key: 'height', label: t('Altezza (vuoto = auto)'), type: 'text' },
+    { type: 'separator', label: t('Disposizione') },
+    {
+      key: 'position',
+      label: t('Tipo posizione'),
+      type: 'select',
+      options: [
+        { value: 'fixed', label: t('Fisso (viewport)') },
+        { value: 'absolute', label: t('Assoluto (pagina)') },
+        { value: 'sticky', label: t('Appiccicoso') },
+      ],
+    },
+    { key: 'layout_gap', label: t('Gap figli'), type: 'range', min: 0, max: 40, step: 2 },
+    {
+      key: 'layout_align',
+      label: t('Allineamento figli'),
+      type: 'select',
+      options: [
+        { value: 'stretch', label: t('Estendi') },
+        { value: 'flex-start', label: t('Inizio') },
+        { value: 'center', label: t('Centro') },
+        { value: 'flex-end', label: t('Fine') },
+      ],
+    },
   ],
 };

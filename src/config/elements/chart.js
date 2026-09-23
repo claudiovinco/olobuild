@@ -135,9 +135,6 @@ export default {
       itemFields: [
         { key: 'label', label: t('Etichetta'), type: 'text' },
         { key: 'value', label: t('Valore'), type: 'number', step: 'any' },
-        { key: 'color', label: t('Colore sfondo'), type: 'color' },
-        { key: 'border', label: t('Bordo'), type: 'border',
-          legacyKeys: { width: 'border_width', color: 'border_color' } },
 
       ],
       newItemDefaults: { label: t('Nuovo'), value: '50', color: '#e1474f', border_color: '' },
@@ -149,19 +146,6 @@ export default {
     // ── Legenda (contenuto) ──
     { type: 'separator', label: t('Legenda') },
     { key: 'show_legend', label: t('Mostra legenda'), type: 'toggle' },
-    { key: 'legend_position', label: t('Posizione'), type: 'select', options: [
-      { value: 'top', label: t('Alto') },
-      { value: 'bottom', label: t('Basso') },
-      { value: 'left', label: t('Sinistra') },
-      { value: 'right', label: t('Destra') },
-    ], condition: { field: 'show_legend', value: true } },
-    { key: 'legend_align', label: t('Allineamento'), type: 'select', options: [
-      { value: 'start', label: t('Inizio') },
-      { value: 'center', label: t('Centro') },
-      { value: 'end', label: t('Fine') },
-    ], condition: { field: 'show_legend', value: true } },
-    { key: 'legend_point_style', label: t('Indicatore circolare'), type: 'toggle',
-      condition: { field: 'show_legend', value: true } },
 
     // ── Titolo (contenuto) ──
     { type: 'separator', label: t('Titolo') },
@@ -193,16 +177,6 @@ export default {
       { value: 'after', label: t('Dopo') },
       { value: 'middle', label: t('Centro') },
     ], condition: { field: 'chart_type', value: 'line' } },
-    { key: 'point_style', label: t('Stile punti'), type: 'select', options: [
-      { value: 'circle', label: t('Cerchio') },
-      { value: 'rect', label: t('Quadrato') },
-      { value: 'rectRounded', label: t('Quadrato arrotondato') },
-      { value: 'triangle', label: t('Triangolo') },
-      { value: 'star', label: t('Stella') },
-      { value: 'cross', label: t('Croce') },
-      { value: 'crossRot', label: t('Croce ruotata') },
-      { value: 'dash', label: t('Trattino') },
-    ], condition: { field: 'chart_type', op: 'in', value: ['line', 'radar'] } },
 
     // ── Griglia e assi (comportamento/labels) ──
     { type: 'separator', label: t('Griglia e assi') },
@@ -309,6 +283,19 @@ export default {
     { key: 'legend_padding', label: t('Padding'), type: 'spacing', max: 30,
       condition: { field: 'show_legend', value: true } },
 
+    { key: 'legend_position', label: t('Posizione'), type: 'select', options: [
+      { value: 'top', label: t('Alto') },
+      { value: 'bottom', label: t('Basso') },
+      { value: 'left', label: t('Sinistra') },
+      { value: 'right', label: t('Destra') },
+    ], condition: { field: 'show_legend', value: true } },
+    { key: 'legend_align', label: t('Allineamento'), type: 'select', options: [
+      { value: 'start', label: t('Inizio') },
+      { value: 'center', label: t('Centro') },
+      { value: 'end', label: t('Fine') },
+    ], condition: { field: 'show_legend', value: true } },
+    { key: 'legend_point_style', label: t('Indicatore circolare'), type: 'toggle',
+      condition: { field: 'show_legend', value: true } },
     // ── Titolo (stile) ──
     { type: 'separator', label: t('Titolo — stile') },
     { key: 'title_padding', label: t('Padding titolo'), type: 'spacing', max: 40,
@@ -342,6 +329,21 @@ export default {
     { key: 'doughnut_cutout', label: t('Taglio ciambella'), type: 'range', min: 10, max: 90, step: 5,
       condition: { field: 'chart_type', value: 'doughnut' } },
 
+    { key: 'items', type: 'content-items', label: t('Dati'), itemLabel: 'Dato', etichettaDa: 'label', itemFields: [
+        { key: 'color', label: t('Colore sfondo'), type: 'color' },
+        { key: 'border', label: t('Bordo'), type: 'border',
+          legacyKeys: { width: 'border_width', color: 'border_color' } },
+    ] },
+    { key: 'point_style', label: t('Stile punti'), type: 'select', options: [
+      { value: 'circle', label: t('Cerchio') },
+      { value: 'rect', label: t('Quadrato') },
+      { value: 'rectRounded', label: t('Quadrato arrotondato') },
+      { value: 'triangle', label: t('Triangolo') },
+      { value: 'star', label: t('Stella') },
+      { value: 'cross', label: t('Croce') },
+      { value: 'crossRot', label: t('Croce ruotata') },
+      { value: 'dash', label: t('Trattino') },
+    ], condition: { field: 'chart_type', op: 'in', value: ['line', 'radar'] } },
     // ── Griglia e assi (colori/dimensioni) ──
     { type: 'separator', label: t('Griglia e assi — colori') },
     { key: 'bg_color', label: t('Sfondo grafico'), type: 'color' },

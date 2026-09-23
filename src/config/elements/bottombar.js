@@ -33,11 +33,6 @@ export default {
   fields: [
     { key: 'content_html', label: t('Contenuto (HTML)'), type: 'textarea',
       hint: t('Testo e link della barra, es. credits del sito.') },
-    { key: 'align', label: t('Allineamento'), type: 'segmented', options: [
-      { value: 'left', label: t('Sinistra') },
-      { value: 'center', label: t('Centro') },
-      { value: 'right', label: t('Destra') },
-    ] },
     { key: 'hide_mobile', label: t('Nascondi su mobile'), type: 'toggle' },
   ],
 
@@ -61,5 +56,11 @@ export default {
     { key: 'border_color', label: t('Colore bordo'), type: 'color',
       condition: { field: 'border_top', operator: '==', value: true } },
     { key: 'z_index', label: t('Z-index'), type: 'range', min: 10, max: 9999, step: 1 },
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'align', label: t('Allineamento'), type: 'segmented', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+    ] },
   ],
 };

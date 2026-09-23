@@ -71,43 +71,12 @@ export default {
         { key: 'link', label: t('Link'), type: 'link' },
         { key: 'link_target', label: t('Apri in nuova scheda'), type: 'toggle' },
         { key: 'badge', label: t('Badge'), type: 'text' },
-        { key: 'badge_color', label: t('Colore badge'), type: 'color' },
         { key: 'icon', label: t('Icona'), type: 'icon' },
       ],
       newItemDefaults: { title: t('Nuovo elemento'), content: '', image: '', hover_image: '', hover_video: '', tag: 'all', link: '', link_target: false, badge: '', badge_color: '', icon: '' },
     },
-    { key: 'columns', label: t('Colonne'), type: 'select', responsive: true, options: [
-      { value: '1', label: '1' },
-      { value: '2', label: '2' },
-      { value: '3', label: '3' },
-      { value: '4', label: '4' },
-      { value: '5', label: '5' },
-      { value: '6', label: '6' },
-    ]},
-    { key: 'gap', label: t('Gap'), type: 'select', options: [
-      { value: 'collapse', label: t('Collassato') },
-      { value: 'small', label: t('Piccolo') },
-      { value: 'default', label: t('Predefinito') },
-      { value: 'medium', label: t('Medio') },
-      { value: 'large', label: t('Grande') },
-    ]},
-    { key: 'equal_height', label: t('Altezza uguale'), type: 'toggle' },
 
     { type: 'separator', label: t('Immagine') },
-    // Elenco canonico al posto delle sette voci scelte a occhio (mancavano 21:9, 4:5,
-    // 9:16). Nessuna tabella da allargare: sia il PHP sia il canvas scrivono
-    // `aspect-ratio:<valore>` così com'e', quindi ogni rapporto nuovo rende subito.
-    // 'auto' resta il default e continua a significare «usa Altezza immagine».
-    { key: 'image_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions() },
-    // Stesso discorso per l'adattamento: `object-fit` viene emesso tale e quale, quindi
-    // le due voci che mancavano ('none' e 'scale-down') funzionano senza altro lavoro.
-    { key: 'image_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
-    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
-      contextKeys: { fit: 'image_fit', ratio: 'image_ratio', ratioCustom: '' },
-      description: t('Punto focale globale: applicato a tutte le immagini della griglia.'),
-      // Con «Deforma per riempire» la foto viene stirata sui due assi: non resta
-      // niente fuori dall'inquadratura da spostare.
-      condition: { field: 'image_fit', op: 'neq', value: 'fill' } },
     { key: 'image_zoom', label: t('Zoom immagine al hover'), type: 'toggle' },
     { key: 'image_animation', label: t('Animazione continua immagine'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },
@@ -124,11 +93,6 @@ export default {
 
     { type: 'separator', label: t('Overlay') },
     { key: 'overlay_text', label: t('Testo su immagine'), type: 'toggle' },
-    { key: 'overlay_position', label: t('Posizione testo'), type: 'select', options: [
-      { value: 'bottom', label: t('In basso') },
-      { value: 'center', label: t('Centrato') },
-      { value: 'top', label: t('In alto') },
-    ], condition: { field: 'overlay_text', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Filtro') },
     { key: 'show_filter', label: t('Mostra filtro'), type: 'toggle' },
@@ -194,6 +158,20 @@ export default {
     { key: 'image_animation_speed', label: t('Velocità animazione'), type: 'range', min: 2, max: 20, step: 1,
       condition: { field: 'image_animation', operator: '!=', value: 'none' } },
 
+    // Elenco canonico al posto delle sette voci scelte a occhio (mancavano 21:9, 4:5,
+    // 9:16). Nessuna tabella da allargare: sia il PHP sia il canvas scrivono
+    // `aspect-ratio:<valore>` così com'e', quindi ogni rapporto nuovo rende subito.
+    // 'auto' resta il default e continua a significare «usa Altezza immagine».
+    { key: 'image_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions() },
+    // Stesso discorso per l'adattamento: `object-fit` viene emesso tale e quale, quindi
+    // le due voci che mancavano ('none' e 'scale-down') funzionano senza altro lavoro.
+    { key: 'image_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
+      contextKeys: { fit: 'image_fit', ratio: 'image_ratio', ratioCustom: '' },
+      description: t('Punto focale globale: applicato a tutte le immagini della griglia.'),
+      // Con «Deforma per riempire» la foto viene stirata sui due assi: non resta
+      // niente fuori dall'inquadratura da spostare.
+      condition: { field: 'image_fit', op: 'neq', value: 'fill' } },
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo'),
       responsiveKeys: [],
@@ -225,5 +203,31 @@ export default {
     ], condition: { field: 'show_filter', value: true } },
 
     ...shadowField,
+    { type: 'separator', label: t('Elementi') },
+    { key: 'items', type: 'content-items', label: t('Elementi'), etichettaDa: 'title', miniaturaDa: 'image', itemFields: [
+        { key: 'badge_color', label: t('Colore badge'), type: 'color' },
+    ] },
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'columns', label: t('Colonne'), type: 'select', responsive: true, options: [
+      { value: '1', label: '1' },
+      { value: '2', label: '2' },
+      { value: '3', label: '3' },
+      { value: '4', label: '4' },
+      { value: '5', label: '5' },
+      { value: '6', label: '6' },
+    ]},
+    { key: 'gap', label: t('Gap'), type: 'select', options: [
+      { value: 'collapse', label: t('Collassato') },
+      { value: 'small', label: t('Piccolo') },
+      { value: 'default', label: t('Predefinito') },
+      { value: 'medium', label: t('Medio') },
+      { value: 'large', label: t('Grande') },
+    ]},
+    { key: 'equal_height', label: t('Altezza uguale'), type: 'toggle' },
+    { key: 'overlay_position', label: t('Posizione testo'), type: 'select', options: [
+      { value: 'bottom', label: t('In basso') },
+      { value: 'center', label: t('Centrato') },
+      { value: 'top', label: t('In alto') },
+    ], condition: { field: 'overlay_text', op: 'eq', value: true } },
   ],
 };

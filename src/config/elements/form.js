@@ -153,14 +153,6 @@ export default {
         { key: 'icon', label: t('Icona campo'), type: 'icon',
           condition: { field: 'field_type', op: 'in', value: ['text', 'email', 'tel', 'url', 'number', 'date', 'time'] } },
         { key: 'required', label: t('Obbligatorio'), type: 'toggle' },
-        { key: 'width', label: t('Larghezza'), type: 'select', options: [
-          { value: '1-1', label: t('Intera (100%)') },
-          { value: '1-2', label: t('Metà (50%)') },
-          { value: '1-3', label: t('Un terzo (33%)') },
-          { value: '2-3', label: t('Due terzi (66%)') },
-          { value: '1-4', label: t('Un quarto (25%)') },
-          { value: '3-4', label: t('Tre quarti (75%)') },
-        ]},
         { key: 'options', label: t('Opzioni (una per riga)'), type: 'textarea',
           condition: { field: 'field_type', op: 'in', value: ['select', 'radio', 'checkbox'] } },
         { type: 'separator', label: t('Impostazioni tipo campo'),
@@ -232,20 +224,9 @@ export default {
       { value: 'left', label: t('Sinistra') },
       { value: 'right', label: t('Destra') },
     ], condition: { field: 'submit_icon', op: 'notEmpty' } },
-    { key: 'submit_alignment', label: t('Allineamento pulsante'), type: 'select', options: [
-      { value: 'left', label: t('Sinistra') },
-      { value: 'center', label: t('Centro') },
-      { value: 'right', label: t('Destra') },
-    ]},
-    { key: 'submit_full_width', label: t('Pulsante larghezza piena'), type: 'toggle' },
 
     { type: 'separator', label: t('Multi-step') },
     { key: 'enable_multistep', label: t('Form multi-step'), type: 'toggle' },
-    { key: 'step_style', label: t('Stile step'), type: 'select', options: [
-      { value: 'progress', label: t('Barra progresso') },
-      { value: 'numbers', label: t('Numeri') },
-      { value: 'dots', label: t('Pallini') },
-    ], condition: { field: 'enable_multistep', operator: '==', value: true } },
     { key: 'step_labels', label: t('Etichette step (una per riga)'), type: 'textarea',
       condition: { field: 'enable_multistep', operator: '==', value: true } },
 
@@ -404,6 +385,16 @@ export default {
     { key: 'input_placeholder_opacity', label: t('Opacità placeholder'), type: 'range', min: 0.2, max: 0.8, step: 0.05 },
     { key: 'gap', label: t('Gap campi'), type: 'range', min: 8, max: 32, step: 4 },
 
+    { key: 'fields', type: 'content-items', label: t('Campi del form'), itemLabel: 'Campo', etichettaDa: 'label', itemFields: [
+        { key: 'width', label: t('Larghezza'), type: 'select', options: [
+          { value: '1-1', label: t('Intera (100%)') },
+          { value: '1-2', label: t('Metà (50%)') },
+          { value: '1-3', label: t('Un terzo (33%)') },
+          { value: '2-3', label: t('Due terzi (66%)') },
+          { value: '1-4', label: t('Un quarto (25%)') },
+          { value: '3-4', label: t('Tre quarti (75%)') },
+        ]},
+    ] },
     { type: 'separator', label: t('Stile pulsante') },
     withHover({ key: 'submit_bg', label: t('Sfondo pulsante'), type: 'color' }, { hoverKey: 'submit_hover_bg' }),
     { key: 'submit_color', label: t('Colore testo pulsante'), type: 'color' },
@@ -420,12 +411,20 @@ export default {
       },
       sizeMin: 12, sizeMax: 22, sizeStep: 1,
     },
-    { key: 'submit_border', label: t('Bordo pulsante'), type: 'border',
-      legacyKeys: { width: 'submit_border_width', color: 'submit_border_color' } },
+    // Lo stato Hover del bordo salva un bordo intero nella chiave storica, che nei
+    // template esistenti è la sola stringa colore: il PHP accetta entrambi.
     withHover(
-      { hoverKey: 'submit_hover_border_color' }
+      { key: 'submit_border', label: t('Bordo pulsante'), type: 'border',
+        legacyKeys: { width: 'submit_border_width', color: 'submit_border_color' } },
+      { hoverKey: 'submit_hover_border_color', defaultDuration: 200 }
     ),
 
+    { key: 'submit_alignment', label: t('Allineamento pulsante'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+    ]},
+    { key: 'submit_full_width', label: t('Pulsante larghezza piena'), type: 'toggle' },
     { type: 'separator', label: t('Checkbox e Radio') },
     { key: 'check_accent_color', label: t('Colore accento (checked)'), type: 'color' },
     { key: 'check_bg', label: t('Sfondo'), type: 'color' },
@@ -434,5 +433,11 @@ export default {
     { key: 'check_label_gap', label: t('Gap etichetta'), type: 'range', min: 4, max: 16 },
 
     ...borderFields(),
+    { type: 'separator', label: t('Multi-step') },
+    { key: 'step_style', label: t('Stile step'), type: 'select', options: [
+      { value: 'progress', label: t('Barra progresso') },
+      { value: 'numbers', label: t('Numeri') },
+      { value: 'dots', label: t('Pallini') },
+    ], condition: { field: 'enable_multistep', operator: '==', value: true } },
   ],
 };

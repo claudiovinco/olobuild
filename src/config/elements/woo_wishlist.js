@@ -51,17 +51,8 @@ export default {
       { value: 'star', label: t('Stella') },
       { value: 'bookmark', label: t('Segnalibro') },
     ]},
-    { key: 'style', label: t('Stile'), type: 'select', options: [
-      { value: 'icon', label: t('Solo icona') },
-      { value: 'icon-text', label: t('Icona + testo') },
-      { value: 'button', label: t('Pulsante') },
-    ]},
     { key: 'show_count', label: t('Mostra conteggio'), type: 'toggle' },
 
-    { type: 'separator', label: t('Griglia wishlist') },
-    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1 },
-    { key: 'columns_tablet', label: t('Colonne tablet'), type: 'range', min: 1, max: 4, step: 1 },
-    { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 2, step: 1 },
 
     { type: 'separator', label: t('Elementi visibili') },
     { key: 'show_price', label: t('Mostra prezzo'), type: 'toggle' },
@@ -109,5 +100,15 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Pulsante wishlist') },
+    { key: 'style', label: t('Stile'), type: 'select', options: [
+      { value: 'icon', label: t('Solo icona') },
+      { value: 'icon-text', label: t('Icona + testo') },
+      { value: 'button', label: t('Pulsante') },
+    ]},
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1 },
+    { key: 'columns_tablet', label: t('Colonne tablet'), type: 'range', min: 1, max: 4, step: 1 },
+    { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 2, step: 1 },
   ],
 };

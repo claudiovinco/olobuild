@@ -140,63 +140,14 @@ export default {
       itemLabel: 'Progetto',
     },
 
-    { type: 'separator', label: t('Layout') },
-    { key: 'layout', label: t('Modalità layout'), type: 'select', options: [
-      { value: 'grid',           label: t('Griglia uniforme') },
-      { value: 'masonry',        label: t('Masonry classico') },
-      { value: 'masonry-pin',    label: t('Pinterest Masonry') },
-      { value: 'bento',          label: t('Bento asimmetrico') },
-      { value: 'magazine',       label: t('Magazine (1 large + thumbs)') },
-      { value: 'mosaic',         label: t('Mosaic art-direction') },
-      { value: 'split-index',    label: t('Split Index (lista + preview)') },
-      { value: 'carousel',       label: t('Carousel orizzontale') },
-      { value: 'polaroid',       label: t('Polaroid Wall') },
-      { value: 'postcard-stack', label: t('Postcard Stack 3D') },
-    ]},
-    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1,
-      condition: { field: 'layout', op: 'in', value: ['grid', 'masonry', 'masonry-pin', 'bento', 'mosaic', 'polaroid'] } },
-    // Proporzioni: l'elenco canonico condiviso. Il separatore resta il DUE PUNTI
-    // perché è quello che questa tile ha sempre salvato ('4:3') ed è la chiave con
-    // cui sono indicizzate le mappe rapporto→padding in PHP e nel canvas.
-    { key: 'image_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions({ sep: ':' }) },
-    // NESSUNA condizione sul rapporto, e non è una dimenticanza: qui l'adattamento
-    // non dipende dal rapporto ma dal LAYOUT, e le due cose non coincidono in
-    // nessuna delle due direzioni. Bento, magazine (prima card), mosaic e
-    // split-index ritagliano SEMPRE — anche con «Auto» — quindi una condizione
-    // `image_ratio neq auto` nasconderebbe un controllo che lì comanda davvero il
-    // CSS. Negli altri layout, dove l'immagine resta ad altezza naturale,
-    // l'object-fit viene emesso lo stesso dai due renderer: cover/contain/fill
-    // non cambiano nulla (la scatola ha già la proporzione della foto), mentre
-    // «Dimensione originale» e «Riduci se necessario» lavorano eccome.
-    { key: 'image_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
 
     { type: 'separator', label: t('Hover effect (comportamento)') },
-    { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
-      { value: 'none',          label: t('Nessuno') },
-      { value: 'zoom',          label: t('Zoom') },
-      { value: 'fade',          label: t('Dissolvenza') },
-      { value: 'slide-up',      label: t('Scorrimento dal basso') },
-      { value: 'overlay',       label: t('Overlay completo') },
-      { value: 'reveal-mask',   label: t('🪄 Reveal Mask (clip da centro)') },
-      { value: 'tilt-3d',       label: t('🪄 Tilt 3D Parallax') },
-      { value: 'color-splash',  label: t('🪄 Color Splash (B&W → color)') },
-      { value: 'glitch-rgb',    label: t('🪄 Glitch RGB') },
-      { value: 'cinemagraph',   label: t('🪄 Cinemagraph (zoom continuo)') },
-      { value: 'image-cycle',   label: t('🪄 Image Cycle (sequenza)') },
-      { value: 'caption-corner', label: t('🪄 Caption from Corner') },
-    ]},
     { key: 'caption_corner', label: t('Angolo caption'), type: 'select',
       condition: { field: 'hover_effect', value: 'caption-corner' }, options: [
       { value: 'bottom-left',  label: t('Basso sinistra') },
       { value: 'bottom-right', label: t('Basso destra') },
       { value: 'top-left',     label: t('Alto sinistra') },
       { value: 'top-right',    label: t('Alto destra') },
-    ]},
-    { key: 'caption_position', label: t('Posizione testo'), type: 'select', options: [
-      { value: 'below',   label: t('Sotto immagine') },
-      { value: 'overlay', label: t('Overlay (su hover)') },
-      { value: 'always',  label: t('Sempre visibile sopra') },
-      { value: 'diagonal', label: t('Diagonale (basso-sx)') },
     ]},
     { key: 'animation', label: t('Animazione filtro'), type: 'select', options: [
       { value: 'fade', label: t('Dissolvenza') },
@@ -273,6 +224,26 @@ export default {
     // sfalserebbe le proporzioni fra una card e l'altra.
     focalField('image', { key: 'object_position', src: '', ratio: 'image_ratio', fit: 'image_fit', label: t('Punto focale') }),
 
+    { key: 'layout', label: t('Modalità layout'), type: 'select', options: [
+      { value: 'grid',           label: t('Griglia uniforme') },
+      { value: 'masonry',        label: t('Masonry classico') },
+      { value: 'masonry-pin',    label: t('Pinterest Masonry') },
+      { value: 'bento',          label: t('Bento asimmetrico') },
+      { value: 'magazine',       label: t('Magazine (1 large + thumbs)') },
+      { value: 'mosaic',         label: t('Mosaic art-direction') },
+      { value: 'split-index',    label: t('Split Index (lista + preview)') },
+      { value: 'carousel',       label: t('Carousel orizzontale') },
+      { value: 'polaroid',       label: t('Polaroid Wall') },
+      { value: 'postcard-stack', label: t('Postcard Stack 3D') },
+    ]},
+    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1,
+      condition: { field: 'layout', op: 'in', value: ['grid', 'masonry', 'masonry-pin', 'bento', 'mosaic', 'polaroid'] } },
+    { key: 'caption_position', label: t('Posizione testo'), type: 'select', options: [
+      { value: 'below',   label: t('Sotto immagine') },
+      { value: 'overlay', label: t('Overlay (su hover)') },
+      { value: 'always',  label: t('Sempre visibile sopra') },
+      { value: 'diagonal', label: t('Diagonale (basso-sx)') },
+    ]},
     { type: 'separator', label: t('Carousel — aspetto') },
     { key: 'carousel_speed', label: t('Velocità (s per loop)'), type: 'range', min: 10, max: 120, step: 5,
       condition: { field: 'layout', value: 'carousel' } },
@@ -328,5 +299,35 @@ export default {
     ...shadowField,
     ...wowEffectsFields(),
     ...borderFields(),
+    { type: 'separator', label: t('Forma') },
+    // Proporzioni: l'elenco canonico condiviso. Il separatore resta il DUE PUNTI
+    // perché è quello che questa tile ha sempre salvato ('4:3') ed è la chiave con
+    // cui sono indicizzate le mappe rapporto→padding in PHP e nel canvas.
+    { key: 'image_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions({ sep: ':' }) },
+    // NESSUNA condizione sul rapporto, e non è una dimenticanza: qui l'adattamento
+    // non dipende dal rapporto ma dal LAYOUT, e le due cose non coincidono in
+    // nessuna delle due direzioni. Bento, magazine (prima card), mosaic e
+    // split-index ritagliano SEMPRE — anche con «Auto» — quindi una condizione
+    // `image_ratio neq auto` nasconderebbe un controllo che lì comanda davvero il
+    // CSS. Negli altri layout, dove l'immagine resta ad altezza naturale,
+    // l'object-fit viene emesso lo stesso dai due renderer: cover/contain/fill
+    // non cambiano nulla (la scatola ha già la proporzione della foto), mentre
+    // «Dimensione originale» e «Riduci se necessario» lavorano eccome.
+    { key: 'image_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
+    { type: 'separator', label: t('Hover effect') },
+    { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
+      { value: 'none',          label: t('Nessuno') },
+      { value: 'zoom',          label: t('Zoom') },
+      { value: 'fade',          label: t('Dissolvenza') },
+      { value: 'slide-up',      label: t('Scorrimento dal basso') },
+      { value: 'overlay',       label: t('Overlay completo') },
+      { value: 'reveal-mask',   label: t('🪄 Reveal Mask (clip da centro)') },
+      { value: 'tilt-3d',       label: t('🪄 Tilt 3D Parallax') },
+      { value: 'color-splash',  label: t('🪄 Color Splash (B&W → color)') },
+      { value: 'glitch-rgb',    label: t('🪄 Glitch RGB') },
+      { value: 'cinemagraph',   label: t('🪄 Cinemagraph (zoom continuo)') },
+      { value: 'image-cycle',   label: t('🪄 Image Cycle (sequenza)') },
+      { value: 'caption-corner', label: t('🪄 Caption from Corner') },
+    ]},
   ],
 };

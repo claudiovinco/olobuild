@@ -94,61 +94,10 @@ export default {
       newItemDefaults: { image: '', hover_image: '', hover_video: '', title: t('Nuova slide'), subtitle: '', link: '', ribbon: '', widget_template_id: 0 },
       itemLabel: 'Slide',
     },
-    { key: 'columns', label: t('Colonne'), type: 'select', responsive: true, options: [
-      { value: '1', label: t('1 colonna') },
-      { value: '2', label: t('2 colonne') },
-      { value: '3', label: t('3 colonne') },
-      { value: '4', label: t('4 colonne') },
-      { value: '5', label: t('5 colonne') },
-    ]},
 
-    { type: 'separator', label: t('Dimensioni slide') },
-    // Elenco canonico: la tile ne offriva 7 su 9 (mancavano 4:5 e 9:16). Valori
-    // salvati identici, con la barra: entrambi i renderer scrivono il rapporto
-    // tale e quale nel CSS, non c'è nessuna tabella da allargare.
-    { key: 'image_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions(),
-      description: t('Auto: usa altezza fissa. Altrimenti la larghezza determina l\'altezza') },
-    { key: 'image_height', label: t('Altezza fissa'), type: 'range', min: 150, max: 900, step: 10,
-      condition: { field: 'image_ratio', op: 'eq', value: 'auto' } },
-    { key: 'image_fit', label: t('Adattamento'), type: 'select', options: [
-      { value: 'cover', label: t('Copri (riempie e taglia)') },
-      { value: 'contain', label: t('Contieni (visibile interamente)') },
-      { value: 'fill', label: t('Riempi (deforma)') },
-    ]},
-    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
-      contextKeys: { fit: 'image_fit', ratio: 'image_ratio' } },
 
-    { type: 'separator', label: t('Overlay') },
-    { key: 'overlay_position', label: t('Posizione verticale'), type: 'select', options: [
-      { value: 'bottom', label: t('In basso') },
-      { value: 'top', label: t('In alto') },
-      { value: 'center', label: t('Centro') },
-      { value: 'cover', label: t('Copertura') },
-      { value: 'bottom-left', label: t('Basso-sinistra') },
-      { value: 'bottom-center', label: t('Basso-centro') },
-      { value: 'bottom-right', label: t('Basso-destra') },
-      { value: 'top-left', label: t('Alto-sinistra') },
-      { value: 'top-center', label: t('Alto-centro') },
-      { value: 'top-right', label: t('Alto-destra') },
-      { value: 'center-left', label: t('Centro-sinistra') },
-      { value: 'center-right', label: t('Centro-destra') },
-    ]},
-    { key: 'title_size', label: t('Dimensione titolo'), type: 'select', options: [
-      { value: 'h1', label: t('H1') },
-      { value: 'h2', label: t('H2') },
-      { value: 'h3', label: t('H3') },
-      { value: 'h4', label: t('H4') },
-    ]},
 
     { type: 'separator', label: t('Effetti hover (comportamento)') },
-    { key: 'hover_effect', label: t('Effetto immagine'), type: 'select', options: [
-      { value: 'none', label: t('Nessuno') },
-      { value: 'zoom', label: t('Zoom') },
-      { value: 'zoom-rotate', label: t('Zoom + rotazione') },
-      { value: 'brightness', label: t('Luminosità') },
-      { value: 'desaturate', label: t('Desatura → colore') },
-      { value: 'blur-in', label: t('Sfocatura → nitido') },
-    ]},
     { key: 'hover_overlay', label: t('Overlay'), type: 'select', options: [
       { value: 'always', label: t('Sempre visibile') },
       { value: 'fade', label: t('Fade in') },
@@ -165,11 +114,6 @@ export default {
     { key: 'cta_text', label: t('Testo CTA'), type: 'text',
       condition: { field: 'show_cta', op: 'eq', value: true } },
 
-    { type: 'separator', label: t('Ribbon') },
-    { key: 'ribbon_position', label: t('Posizione ribbon'), type: 'select', options: [
-      { value: 'top-left', label: t('Alto sinistra') },
-      { value: 'top-right', label: t('Alto destra') },
-    ]},
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -242,11 +186,52 @@ export default {
       { value: 'large', label: t('Grande') },
     ]},
 
+    { key: 'overlay_position', label: t('Posizione verticale'), type: 'select', options: [
+      { value: 'bottom', label: t('In basso') },
+      { value: 'top', label: t('In alto') },
+      { value: 'center', label: t('Centro') },
+      { value: 'cover', label: t('Copertura') },
+      { value: 'bottom-left', label: t('Basso-sinistra') },
+      { value: 'bottom-center', label: t('Basso-centro') },
+      { value: 'bottom-right', label: t('Basso-destra') },
+      { value: 'top-left', label: t('Alto-sinistra') },
+      { value: 'top-center', label: t('Alto-centro') },
+      { value: 'top-right', label: t('Alto-destra') },
+      { value: 'center-left', label: t('Centro-sinistra') },
+      { value: 'center-right', label: t('Centro-destra') },
+    ]},
+    { key: 'title_size', label: t('Dimensione titolo'), type: 'select', options: [
+      { value: 'h1', label: t('H1') },
+      { value: 'h2', label: t('H2') },
+      { value: 'h3', label: t('H3') },
+      { value: 'h4', label: t('H4') },
+    ]},
     { type: 'separator', label: t('Stile slide') },
     { key: 'slide_radius', label: t('Raggio slide'), type: 'border-radius' },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
     { key: 'overlay_gradient', label: t('Overlay gradiente (alto→basso)'), type: 'toggle' },
 
+    { key: 'columns', label: t('Colonne'), type: 'select', responsive: true, options: [
+      { value: '1', label: t('1 colonna') },
+      { value: '2', label: t('2 colonne') },
+      { value: '3', label: t('3 colonne') },
+      { value: '4', label: t('4 colonne') },
+      { value: '5', label: t('5 colonne') },
+    ]},
+    // Elenco canonico: la tile ne offriva 7 su 9 (mancavano 4:5 e 9:16). Valori
+    // salvati identici, con la barra: entrambi i renderer scrivono il rapporto
+    // tale e quale nel CSS, non c'è nessuna tabella da allargare.
+    { key: 'image_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions(),
+      description: t('Auto: usa altezza fissa. Altrimenti la larghezza determina l\'altezza') },
+    { key: 'image_height', label: t('Altezza fissa'), type: 'range', min: 150, max: 900, step: 10,
+      condition: { field: 'image_ratio', op: 'eq', value: 'auto' } },
+    { key: 'image_fit', label: t('Adattamento'), type: 'select', options: [
+      { value: 'cover', label: t('Copri (riempie e taglia)') },
+      { value: 'contain', label: t('Contieni (visibile interamente)') },
+      { value: 'fill', label: t('Riempi (deforma)') },
+    ]},
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position', reveal: true,
+      contextKeys: { fit: 'image_fit', ratio: 'image_ratio' } },
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo'),
       responsiveKeys: [],
@@ -284,5 +269,18 @@ export default {
     ...shadowField,
     ...wowEffectsFields(),
     ...borderFields(),
+    { key: 'ribbon_position', label: t('Posizione ribbon'), type: 'select', options: [
+      { value: 'top-left', label: t('Alto sinistra') },
+      { value: 'top-right', label: t('Alto destra') },
+    ]},
+    { type: 'separator', label: t('Effetti hover') },
+    { key: 'hover_effect', label: t('Effetto immagine'), type: 'select', options: [
+      { value: 'none', label: t('Nessuno') },
+      { value: 'zoom', label: t('Zoom') },
+      { value: 'zoom-rotate', label: t('Zoom + rotazione') },
+      { value: 'brightness', label: t('Luminosità') },
+      { value: 'desaturate', label: t('Desatura → colore') },
+      { value: 'blur-in', label: t('Sfocatura → nitido') },
+    ]},
   ],
 };

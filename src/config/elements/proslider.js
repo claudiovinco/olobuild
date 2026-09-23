@@ -356,7 +356,6 @@ export default {
     { key: 'showTabs', label: t('Tab'), type: 'toggle' },
 
     { type: 'separator', label: t('Parallax') },
-    { key: 'parallax', label: t('Parallax'), type: 'toggle' },
     { key: 'parallaxType', label: t('Tipo parallax'), type: 'select', options: [
       { value: 'mouse', label: t('Mouse') },
       { value: 'scroll', label: t('Scroll') },
@@ -446,6 +445,8 @@ export default {
       condition: { field: 'carousel', value: true } },
 
     ...borderFields(),
+    { type: 'separator', label: t('Parallax') },
+    { key: 'parallax', label: t('Parallax'), type: 'toggle' },
   ],
 
   // Helper esportati per l'editor

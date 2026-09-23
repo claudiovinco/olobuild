@@ -78,7 +78,6 @@ export default {
         { key: 'url', label: t('URL (opzionale)'), type: 'link', placeholder: t('https://...') },
         { key: 'logo', label: t('Logo (opzionale)'), type: 'image', description: t('Se valorizzato sostituisce il testo con il logo (loghi clienti)') },
         { key: 'badge', label: t('Badge (opzionale)'), type: 'text', placeholder: t('es. Novità') },
-        { key: 'badge_bg', label: t('Colore badge (override)'), type: 'color' },
         { key: 'icon', label: t('Icona (opzionale)'), type: 'icon' },
         { key: 'timestamp', label: t('Timestamp (opzionale)'), type: 'text', placeholder: t('es. 2h fa') },
       ],
@@ -96,10 +95,6 @@ export default {
     { key: 'show_label', label: t('Mostra etichetta'), type: 'toggle' },
     { key: 'label_text', label: t('Testo etichetta'), type: 'text', condition: { field: 'show_label', value: true } },
     { key: 'label_icon', label: t('Icona etichetta'), type: 'icon', condition: { field: 'show_label', value: true } },
-    { key: 'label_position', label: t('Posizione'), type: 'select', condition: { field: 'show_label', value: true }, options: [
-      { value: 'left', label: t('Sinistra') },
-      { value: 'right', label: t('Destra') },
-    ]},
 
     { type: 'separator', label: t('Animazione & comportamento') },
     { key: 'animation_type', label: t('Transizione tra notizie'), type: 'select', options: [
@@ -161,6 +156,10 @@ export default {
     ]},
     { key: 'label_bg', label: t('Sfondo etichetta'), type: 'color', condition: { field: 'show_label', value: true } },
 
+    { key: 'label_position', label: t('Posizione'), type: 'select', condition: { field: 'show_label', value: true }, options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'right', label: t('Destra') },
+    ]},
     { type: 'separator', label: t('Badge notizia') },
     { key: 'badge_bg', label: t('Sfondo badge'), type: 'color' },
 
@@ -223,5 +222,9 @@ export default {
     ]},
 
     ...borderFields(),
+    { type: 'separator', label: t('Notizie') },
+    { key: 'items', type: 'content-items', label: t('Notizie'), itemLabel: 'Notizia', etichettaDa: 'title', miniaturaDa: 'logo', itemFields: [
+        { key: 'badge_bg', label: t('Colore badge (override)'), type: 'color' },
+    ] },
   ],
 };

@@ -29,7 +29,20 @@
               @update:hoverValue="emitSetting($event.key, $event.value)"
               @update:responsiveValue="emitSetting($event.key, $event.value)"
               @update:settingKey="emitSetting($event.key, $event.value)"
-            />
+            >
+              <template #content-items>
+                <ContentItemsEditor
+                  :modelValue="vociDi(field)"
+                  :itemFields="field.itemFields || []"
+                  :itemLabel="field.itemLabel || 'Item'"
+                  :tileSettings="tileSettings"
+                  :strutturaFissa="true"
+                  :etichettaDa="field.etichettaDa || ''"
+                  :miniaturaDa="field.miniaturaDa || ''"
+                  @update:modelValue="emitSetting(field.key, $event)"
+                />
+              </template>
+            </InspectorField>
           </template>
         </div>
       </CollapseSection>
@@ -45,7 +58,20 @@
               @update:hoverValue="emitSetting($event.key, $event.value)"
               @update:responsiveValue="emitSetting($event.key, $event.value)"
               @update:settingKey="emitSetting($event.key, $event.value)"
-            />
+            >
+              <template #content-items>
+                <ContentItemsEditor
+                  :modelValue="vociDi(field)"
+                  :itemFields="field.itemFields || []"
+                  :itemLabel="field.itemLabel || 'Item'"
+                  :tileSettings="tileSettings"
+                  :strutturaFissa="true"
+                  :etichettaDa="field.etichettaDa || ''"
+                  :miniaturaDa="field.miniaturaDa || ''"
+                  @update:modelValue="emitSetting(field.key, $event)"
+                />
+              </template>
+            </InspectorField>
           </template>
         </div>
       </template>
@@ -189,6 +215,8 @@ import { computed } from 'vue';
 import { styleFieldsBase } from '@/config/elements/_styleFieldsBase.js';
 import CollapseSection from './CollapseSection.vue';
 import InspectorField from './InspectorField.vue';
+import ContentItemsEditor from './ContentItemsEditor.vue';
+import { getElementDefaults } from '@/config/elementRegistry';
 import StyleBoxStack from './style-renderers/StyleBoxStack.vue';
 import StyleLayoutStack from './style-renderers/StyleLayoutStack.vue';
 import StyleEffectsStack from './style-renderers/StyleEffectsStack.vue';
@@ -237,6 +265,16 @@ const props = defineProps({
   searchQuery:  { type: String, default: '' },
 });
 const emit = defineEmits(['update']);
+
+// Stile delle voci di un ripetitore: stesse voci del Contenuto. Se la tile non le ha
+// ancora salvate, si parte dai default del config — come fa il Contenuto
+// (ensureContentItems) — così un colore scelto qui non crea voci senza testo.
+function vociDi(field) {
+  const v = props.tileSettings?.[field.key];
+  if (Array.isArray(v)) return v;
+  const def = (getElementDefaults(props.tileType) || {})[field.key];
+  return Array.isArray(def) ? JSON.parse(JSON.stringify(def)) : [];
+}
 
 const searchQ      = computed(() => normalizeSearchQuery(props.searchQuery));
 const searchActive = computed(() => !!searchQ.value);

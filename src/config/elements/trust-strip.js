@@ -50,7 +50,6 @@ export default {
         { key: 'logo',       label: t('Logo (immagine — variante Pill)'), type: 'image' },
         { key: 'text',       label: t('Testo'), type: 'editor', mode: 'inline' },
         { key: 'badge',      label: t('Badge (variante Pill)'), type: 'text' },
-        { key: 'icon_color', label: t('Colore icona'), type: 'color' },
       ],
     },
   ],
@@ -106,6 +105,10 @@ export default {
       sizeMin: 10, sizeMax: 24,
       condition: { field: 'variant', value: 'pill' } },
 
+    { type: 'separator', label: t('Items') },
+    { key: 'items', type: 'content-items', label: t('Voci'), itemLabel: t('Voce'), etichettaDa: 'text', miniaturaDa: 'logo', itemFields: [
+        { key: 'icon_color', label: t('Colore icona'), type: 'color' },
+    ] },
     { type: 'separator', label: t('Layout') },
     { key: 'align', label: t('Allineamento'), type: 'select', options: [
       { value: 'left',          label: t('Sinistra') },

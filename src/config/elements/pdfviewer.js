@@ -65,10 +65,6 @@ export default {
       { value: '75', label: '75%' },
       { value: '50', label: '50%' },
     ]},
-    { key: 'theme', label: t('Tema'), type: 'select', options: [
-      { value: 'light', label: t('Chiaro') },
-      { value: 'dark', label: t('Scuro') },
-    ]},
 
     { type: 'separator', label: t('Controlli toolbar') },
     { key: 'show_toolbar', label: t('Mostra toolbar'), type: 'toggle' },
@@ -113,5 +109,9 @@ export default {
     { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
 
     ...borderFields(),
+    { key: 'theme', label: t('Tema'), type: 'select', options: [
+      { value: 'light', label: t('Chiaro') },
+      { value: 'dark', label: t('Scuro') },
+    ]},
   ],
 };

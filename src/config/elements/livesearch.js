@@ -79,7 +79,6 @@ export default {
 
     { type: 'separator', label: t('Risultati') },
     { key: 'max_results', label: t('Max risultati'), type: 'range', min: 3, max: 100, step: 1 },
-    { key: 'results_columns', label: t('Colonne risultati'), type: 'range', min: 1, max: 4, step: 1 },
     { key: 'show_all_url', label: 'Pagina "Vedi tutti"', type: 'select', optionsSource: 'wpPages' },
     { key: 'show_all_text', label: 'Testo "Vedi tutti"', type: 'text',
       show: s => !!s.show_all_url },
@@ -175,5 +174,7 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'results_columns', label: t('Colonne risultati'), type: 'range', min: 1, max: 4, step: 1 },
   ],
 };

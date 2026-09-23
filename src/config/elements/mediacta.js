@@ -78,15 +78,9 @@ export default {
       description: t('Stile etichetta tecnica: mono 12.5px, maiuscolo, colore accento.') },
     { key: 'headline', label: t('Titolo'), type: 'text' },
     { key: 'accent_text', label: t('Parola accento'), type: 'text' },
-    { key: 'accent_italic', label: t('Accento corsivo'), type: 'toggle' },
-    { key: 'uppercase', label: t('Maiuscolo'), type: 'toggle' },
     { key: 'subhead', label: t('Sottotitolo (opzionale)'), type: 'textarea' },
 
     { type: 'separator', label: t('CTA') },
-    { key: 'cta_style', label: t('Stile CTA primaria'), type: 'select', options: [
-      { value: 'button', label: t('Pulsante') },
-      { value: 'maillink', label: t('Link display') },
-    ]},
     { key: 'cta1_text', label: t('CTA 1 — testo'), type: 'text' },
     { key: 'cta1_url', label: t('CTA 1 — link'), type: 'link' },
     { key: 'cta2_text', label: t('CTA 2 — testo (opzionale)'), type: 'text' },
@@ -141,5 +135,13 @@ export default {
     { type: 'separator', label: t('Ombra') },
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Testo') },
+    { key: 'accent_italic', label: t('Accento corsivo'), type: 'toggle' },
+    { key: 'uppercase', label: t('Maiuscolo'), type: 'toggle' },
+    { type: 'separator', label: t('CTA') },
+    { key: 'cta_style', label: t('Stile CTA primaria'), type: 'select', options: [
+      { value: 'button', label: t('Pulsante') },
+      { value: 'maillink', label: t('Link display') },
+    ]},
   ],
 };

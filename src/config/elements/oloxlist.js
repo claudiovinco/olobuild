@@ -32,10 +32,6 @@ export default {
   },
 
   fields: [
-    { key: 'variant', label: t('Variante'), type: 'select', options: [
-      { value: 'flip', label: t('Flipboard (src ⇄ dst)') },
-      { value: 'url', label: t('SEO stream (pill URL)') },
-    ] },
     { type: 'separator', label: t('Testata') },
     { key: 'kicker', label: t('Kicker'), type: 'text' },
     { key: 'title_html', label: t('Titolo (HTML)'), type: 'textarea' },
@@ -61,5 +57,11 @@ export default {
       condition: { field: 'variant', op: 'eq', value: 'url' } },
   ],
 
-  styleFields: [ oloxAccentField() ],
+  styleFields: [ oloxAccentField(), 
+    { type: 'separator', label: t('Aspetto') },
+    { key: 'variant', label: t('Variante'), type: 'select', options: [
+      { value: 'flip', label: t('Flipboard (src ⇄ dst)') },
+      { value: 'url', label: t('SEO stream (pill URL)') },
+    ] },
+],
 };

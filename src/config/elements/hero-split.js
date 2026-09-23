@@ -164,14 +164,11 @@ export default {
       defaults: { text: 'Nuova riga', color: '#0f172a', italic: false },
       itemFields: [
         { key: 'text',   label: t('Testo'),     type: 'text' },
-        { key: 'italic', label: t('Italico'),   type: 'toggle' },
-        { key: 'color',  label: t('Colore'),    type: 'color' },
       ],
     },
 
     { type: 'separator', label: t('Sottotitolo') },
     { key: 'subhead',         label: t('Testo'),   type: 'editor', mode: 'inline' },
-    { key: 'subhead_italic',  label: t('Italico'), type: 'toggle' },
 
     { type: 'separator', label: t('CTA primaria') },
     { key: 'cta1_text',   label: t('Testo'),  type: 'text' },
@@ -190,7 +187,6 @@ export default {
       itemFields: [
         { key: 'value',       label: t('Valore'),        type: 'text' },
         { key: 'label',       label: t('Etichetta'),     type: 'text' },
-        { key: 'value_color', label: t('Colore valore'), type: 'color' },
       ],
     },
 
@@ -204,8 +200,6 @@ export default {
       show: (s) => ['media', 'audio'].includes(s.panel) },
     { key: 'panel_media_label', label: t('Etichetta placeholder'), type: 'text',
       show: (s) => ['media', 'audio'].includes(s.panel) },
-    { key: 'panel_aspect', label: t('Aspect ratio media (es. 4/5)'), type: 'text',
-      condition: { field: 'panel', op: 'eq', value: 'media' } },
     { key: 'panel_badge_number', label: t('Badge — numero/valore (vuoto = nascosto)'), type: 'text',
       condition: { field: 'panel', op: 'eq', value: 'media' } },
     { key: 'panel_badge_label', label: t('Badge — etichetta'), type: 'text',
@@ -226,9 +220,6 @@ export default {
       itemFields: [
         { key: 'number',     label: t('Numero'),       type: 'text' },
         { key: 'text',       label: t('Testo'),        type: 'text' },
-        { key: 'italic',     label: t('Italico'),      type: 'toggle' },
-        { key: 'text_color', label: t('Colore testo'), type: 'color' },
-        { key: 'bg',         label: t('Sfondo card'),  type: 'background', showParallax: false },
       ],
       condition: { field: 'panel', op: 'eq', value: 'showcase' },
     },
@@ -268,11 +259,16 @@ export default {
     },
     { key: 'headline_align',       label: t('Allineamento'),    type: 'select', options: ALIGN_OPTIONS() },
 
+    { key: 'headline_lines', type: 'content-items', label: t('Righe titolo'), itemLabel: t('Riga'), etichettaDa: 'text', itemFields: [
+        { key: 'italic', label: t('Corsivo'),   type: 'toggle' },
+        { key: 'color',  label: t('Colore'),    type: 'color' },
+    ] },
     { type: 'separator', label: t('Sottotitolo stile') },
     { type: 'typography', label: t('Sottotitolo'), responsiveKeys: [], keys: { size: 'subhead_size', color: 'subhead_color' }, sizeMin: 12, sizeMax: 32 },
     { key: 'subhead_max_width', label: t('Larghezza max'), type: 'range', min: 200, max: 900, step: 10 },
     { key: 'subhead_align',     label: t('Allineamento'),       type: 'select', options: ALIGN_OPTIONS() },
 
+    { key: 'subhead_italic',  label: t('Corsivo'), type: 'toggle' },
     { type: 'separator', label: t('CTA primaria stile') },
     withHover({ key: 'cta1_bg',    label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta1_bg_hover' }),
     withHover({ key: 'cta1_color', label: t('Colore testo'), type: 'color' }, { hoverKey: 'cta1_color_hover' }),
@@ -318,6 +314,19 @@ export default {
     ], description: t('Per animare il border-radius su hover usa il pannello hover del campo "Border radius card" qui sopra.'),
       condition: { field: 'panel', op: 'eq', value: 'showcase' } },
 
+    { type: 'separator', label: t('Statistiche') },
+    { key: 'stats', type: 'content-items', label: t('Voci'), itemLabel: t('Stat'), etichettaDa: 'label', itemFields: [
+        { key: 'value_color', label: t('Colore valore'), type: 'color' },
+    ] },
+    { type: 'separator', label: t('Pannello destro') },
+    { key: 'panel_aspect', label: t('Aspect ratio media (es. 4/5)'), type: 'text',
+      condition: { field: 'panel', op: 'eq', value: 'media' } },
+    { type: 'separator', label: t('Showcase') },
+    { key: 'showcase_items', type: 'content-items', label: t('Tile (grid 2x2)'), itemLabel: t('Tile'), etichettaDa: 'text', condition: [{ field: 'panel', op: 'eq', value: 'showcase' }, { field: 'panel', op: 'eq', value: 'showcase' }], itemFields: [
+        { key: 'italic',     label: t('Corsivo'),      type: 'toggle' },
+        { key: 'text_color', label: t('Colore testo'), type: 'color' },
+        { key: 'bg',         label: t('Sfondo card'),  type: 'background', showParallax: false },
+    ] },
     { type: 'separator', label: t('Layout colonne') },
     { key: 'split_ratio', label: t('Proporzione colonne'), type: 'select', options: [
       { value: '1fr 1fr',     label: '50 / 50' },

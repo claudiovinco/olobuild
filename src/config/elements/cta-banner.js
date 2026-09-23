@@ -71,7 +71,6 @@ export default {
     { type: 'separator', label: t('Headline') },
     { key: 'headline',               label: t('Testo base'),          type: 'text' },
     { key: 'headline_accent',        label: t('Testo accent'),        type: 'text' },
-    { key: 'headline_accent_italic', label: t('Accent in italico'),   type: 'toggle' },
 
     { type: 'separator', label: t('Sottotitolo') },
     { key: 'subtitle', label: t('Testo'), type: 'editor', mode: 'inline' },
@@ -108,6 +107,7 @@ export default {
     { key: 'text_color',   label: t('Colore base'),   type: 'color' },
     { key: 'accent_color', label: t('Colore accent'), type: 'color' },
 
+    { key: 'headline_accent_italic', label: t('Accent in italico'),   type: 'toggle' },
     { type: 'separator', label: t('Sottotitolo stile') },
     { type: 'typography', label: t('Sottotitolo'), responsiveKeys: [], keys: { size: 'subtitle_size', color: 'subtitle_color' }, sizeMin: 11, sizeMax: 22 },
 

@@ -37,10 +37,6 @@ export default {
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'show_gallery', label: t('Mostra miniature galleria'), type: 'toggle' },
-    { key: 'gallery_position', label: t('Posizione galleria'), type: 'select', options: [
-      { value: 'bottom', label: t('Sotto') },
-      { value: 'left', label: t('Sinistra') },
-    ]},
     { key: 'lightbox', label: t('Lightbox'), type: 'toggle' },
     { key: 'zoom_on_hover', label: t('Zoom al passaggio mouse'), type: 'toggle' },
   ],
@@ -75,6 +71,10 @@ export default {
       options: ratioOptions({ sep: '-', autoLabel: 'Auto (altezza naturale)' }) },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 
+    { key: 'gallery_position', label: t('Posizione galleria'), type: 'select', options: [
+      { value: 'bottom', label: t('Sotto') },
+      { value: 'left', label: t('Sinistra') },
+    ]},
     { type: 'separator', label: t('Miniature') },
     { key: 'thumb_size', label: t('Dimensione miniature'), type: 'range', min: 40, max: 120, step: 4 },
     { key: 'thumb_gap', label: t('Gap miniature'), type: 'range', min: 4, max: 16, step: 2 },

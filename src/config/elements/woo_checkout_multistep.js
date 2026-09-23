@@ -34,11 +34,6 @@ export default {
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'step_labels', label: t('Etichette step (virgola)'), type: 'text' },
-    { key: 'step_style', label: t('Stile step'), type: 'select', options: [
-      { value: 'progress', label: t('Barra progresso') },
-      { value: 'tabs', label: t('Tab') },
-      { value: 'numbered', label: t('Numeri') },
-    ]},
     { key: 'show_order_review', label: t('Mostra riepilogo ordine'), type: 'toggle' },
   ],
 
@@ -60,6 +55,11 @@ export default {
       { value: 'tilt-3d',         label: t('3D Tilt') },
       { value: 'custom',          label: t('Personalizzato') },
     ] },
+    { key: 'step_style', label: t('Stile step'), type: 'select', options: [
+      { value: 'progress', label: t('Barra progresso') },
+      { value: 'tabs', label: t('Tab') },
+      { value: 'numbered', label: t('Numeri') },
+    ]},
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Steps'),

@@ -25,10 +25,6 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'light_color', label: t('Colore luce di partenza'), type: 'color',
-      description: t('Vuoto = primario del tema. Le sezioni con "Colore luce" lo cambiano allo scroll.') },
-    { key: 'base_color', label: t('Fondo pagina (opzionale)'), type: 'color',
-      description: t('Colore pieno dietro la luce, per pagine con sezioni trasparenti.') },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -43,5 +39,10 @@ export default {
     { key: 'size', label: t('Ampiezza alone'), type: 'range', min: 40, max: 140, step: 5 },
     { key: 'intensity', label: t('Intensità'), type: 'range', min: 5, max: 70, step: 1 },
     { key: 'transition_ms', label: t('Velocità transizione'), type: 'range', min: 100, max: 2500, step: 100 },
+    { type: 'separator', label: t('Aspetto') },
+    { key: 'light_color', label: t('Colore luce di partenza'), type: 'color',
+      description: t('Vuoto = primario del tema. Le sezioni con "Colore luce" lo cambiano allo scroll.') },
+    { key: 'base_color', label: t('Fondo pagina (opzionale)'), type: 'color',
+      description: t('Colore pieno dietro la luce, per pagine con sezioni trasparenti.') },
   ],
 };

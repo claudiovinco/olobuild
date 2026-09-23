@@ -54,7 +54,6 @@ export default {
         { key: 'step',  label: t('Step (gruppo)'), type: 'text' },
         { key: 'name',  label: t('Nome'),          type: 'text' },
         { key: 'price', label: t('Prezzo (numero)'), type: 'number', min: 0, step: 0.01 },
-        { key: 'color', label: t('Colore pastiglia'), type: 'color' },
       ],
     },
 
@@ -86,5 +85,9 @@ export default {
     { type: 'typography', label: t('Etichette'), responsiveKeys: [],
       keys: { family: 'mono_font_family' },
       description: t('Vuoto = il monospace del tema.') },
+    { type: 'separator', label: t('Voci') },
+    { key: 'items', type: 'content-items', label: t('Voci'), itemLabel: t('Opzione'), etichettaDa: 'name', itemFields: [
+        { key: 'color', label: t('Colore pastiglia'), type: 'color' },
+    ] },
   ],
 };

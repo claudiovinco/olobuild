@@ -36,11 +36,6 @@ export default {
     { key: 'show_label', label: t('Mostra etichetta'), type: 'toggle' },
     { key: 'label_prev', label: t('Etichetta precedente'), type: 'text' },
     { key: 'label_next', label: t('Etichetta successivo'), type: 'text' },
-    { key: 'separator_style', label: t('Separatore'), type: 'select', options: [
-      { value: 'line', label: t('Linea') },
-      { value: 'dotted', label: t('Puntinato') },
-      { value: 'none', label: t('Nessuno') },
-    ]},
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -61,6 +56,11 @@ export default {
       { value: 'tilt-3d',         label: t('3D Tilt') },
       { value: 'custom',          label: t('Personalizzato') },
     ] },
+    { key: 'separator_style', label: t('Separatore'), type: 'select', options: [
+      { value: 'line', label: t('Linea') },
+      { value: 'dotted', label: t('Puntinato') },
+      { value: 'none', label: t('Nessuno') },
+    ]},
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Links'),

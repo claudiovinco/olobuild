@@ -74,10 +74,6 @@ export default {
       { value: '75', label: '75%' },
       { value: '50', label: '50%' },
     ]},
-    { key: 'theme', label: t('Tema'), type: 'select', options: [
-      { value: 'light', label: t('Chiaro') },
-      { value: 'dark', label: t('Scuro') },
-    ]},
 
     { type: 'separator', label: t('Controlli toolbar') },
     { key: 'show_toolbar', label: t('Mostra toolbar'), type: 'toggle' },
@@ -117,29 +113,10 @@ export default {
         { key: '_placer', label: t('Posiziona su PDF'), type: 'hotspot-position' },
         { key: 'x', label: t('Posizione X'), type: 'range', min: 0, max: 100, step: 0.5 },
         { key: 'y', label: t('Posizione Y'), type: 'range', min: 0, max: 100, step: 0.5 },
-        { key: 'color', label: t('Colore'), type: 'color' },
         { key: 'icon', label: t('Icona'), type: 'icon' },
         { key: 'title', label: t('Titolo'), type: 'text' },
         { key: 'description', label: t('Descrizione'), type: 'textarea' },
         { key: 'image_url', label: t('Immagine'), type: 'media' },
-        // Cornice dell'immagine del popover. Qui sta per HOTSPOT e non per tile
-        // perché i popover si aprono uno alla volta: non c'è una griglia da
-        // tenere allineata. Con «Auto» non si emette nulla e l'immagine resta ad
-        // altezza naturale, esattamente come prima di questo controllo.
-        { key: 'image_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions(),
-          condition: { field: 'image_url', op: 'notEmpty' } },
-        // ⚠️ La condizione è POSITIVA — «il rapporto c'è E non è Auto» — e non la
-        // forma breve `neq 'auto'`. Gli item di un repeater NON ricevono mai i
-        // default della tile (normalizeNodes() fonde solo quelli di livello tile,
-        // e `newItemDefaults` vale per gli hotspot creati da qui in avanti):
-        // su un hotspot salvato prima di questo sprint `image_ratio` è undefined,
-        // e `neq 'auto'` su undefined risulta VERO. I due controlli comparirebbero
-        // senza poter fare nulla, perché il runtime li legge solo dentro
-        // `if (hs.image_ratio)` (assets/js/olo-pdfpro.js) e il PHP manda '' quando
-        // il rapporto manca. Basta scegliere una proporzione per vederli apparire.
-        { key: 'image_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI,
-          condition: [{ field: 'image_url', op: 'notEmpty' }, { field: 'image_ratio', op: 'notEmpty' },
-            { field: 'image_ratio', op: 'neq', value: 'auto' }] },
         focalField('image_url', { label: t('Punto focale'), ratio: 'image_ratio', fit: 'image_fit',
           // Ultima clausola: con «Deforma per riempire» l'immagine copre tutta la
           // cornice e il CSS ignora object-position — il focale non avrebbe nulla
@@ -207,10 +184,35 @@ export default {
     { type: 'separator', label: t('Colori') },
     { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
 
+    { key: 'theme', label: t('Tema'), type: 'select', options: [
+      { value: 'light', label: t('Chiaro') },
+      { value: 'dark', label: t('Scuro') },
+    ]},
     { type: 'separator', label: t('Hotspot — stile') },
     { key: 'hotspot_color', label: t('Colore hotspot'), type: 'color' },
     { key: 'hotspot_size', label: t('Dimensione hotspot'), type: 'range', min: 8, max: 30, step: 1 },
 
     ...borderFields(),
+    { key: 'hotspots', type: 'content-items', label: t('Hotspot'), itemLabel: 'Hotspot', etichettaDa: 'title', miniaturaDa: 'image_url', itemFields: [
+        { key: 'color', label: t('Colore'), type: 'color' },
+        // Cornice dell'immagine del popover. Qui sta per HOTSPOT e non per tile
+        // perché i popover si aprono uno alla volta: non c'è una griglia da
+        // tenere allineata. Con «Auto» non si emette nulla e l'immagine resta ad
+        // altezza naturale, esattamente come prima di questo controllo.
+        { key: 'image_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions(),
+          condition: { field: 'image_url', op: 'notEmpty' } },
+        // ⚠️ La condizione è POSITIVA — «il rapporto c'è E non è Auto» — e non la
+        // forma breve `neq 'auto'`. Gli item di un repeater NON ricevono mai i
+        // default della tile (normalizeNodes() fonde solo quelli di livello tile,
+        // e `newItemDefaults` vale per gli hotspot creati da qui in avanti):
+        // su un hotspot salvato prima di questo sprint `image_ratio` è undefined,
+        // e `neq 'auto'` su undefined risulta VERO. I due controlli comparirebbero
+        // senza poter fare nulla, perché il runtime li legge solo dentro
+        // `if (hs.image_ratio)` (assets/js/olo-pdfpro.js) e il PHP manda '' quando
+        // il rapporto manca. Basta scegliere una proporzione per vederli apparire.
+        { key: 'image_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI,
+          condition: [{ field: 'image_url', op: 'notEmpty' }, { field: 'image_ratio', op: 'notEmpty' },
+            { field: 'image_ratio', op: 'neq', value: 'auto' }] },
+    ] },
   ],
 };

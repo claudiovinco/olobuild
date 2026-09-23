@@ -59,10 +59,6 @@ export default {
 
     { type: 'separator', label: t('Comportamento slider') },
     { key: 'start_position', label: t('Posizione iniziale'), type: 'range', min: 0, max: 100 },
-    { key: 'orientation', label: t('Orientamento'), type: 'select', options: [
-      { value: 'horizontal', label: t('Orizzontale') },
-      { value: 'vertical', label: t('Verticale') },
-    ]},
 
     { type: 'separator', label: t('Autoplay') },
     { key: 'autoplay', label: t('Passaggio automatico'), type: 'toggle' },
@@ -98,6 +94,10 @@ export default {
     { key: 'handle_border', label: t('Spessore bordo'), type: 'range', min: 1, max: 6 },
     { key: 'line_width', label: t('Spessore linea'), type: 'range', min: 1, max: 6 },
 
+    { key: 'orientation', label: t('Orientamento'), type: 'select', options: [
+      { value: 'horizontal', label: t('Orizzontale') },
+      { value: 'vertical', label: t('Verticale') },
+    ]},
     { type: 'separator', label: t('Card') },
     // Con un rapporto scelto l'Altezza non fa più niente, quindi sparisce. L'elenco
     // comprende vuoto/null/undefined perché le tile salvate PRIMA di questo campo non

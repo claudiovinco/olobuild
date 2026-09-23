@@ -55,13 +55,6 @@ export default {
     { key: 'show_sku', label: t('Mostra SKU'), type: 'toggle' },
     { key: 'show_categories', label: t('Mostra categorie'), type: 'toggle' },
 
-    { type: 'separator', label: t('Layout modale') },
-    { key: 'modal_size', label: t('Dimensione modale'), type: 'select', options: [
-      { value: '', label: t('Default') },
-      { value: 'small', label: t('Piccolo') },
-      { value: 'large', label: t('Grande') },
-      { value: 'full', label: t('Full width') },
-    ]},
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -122,5 +115,12 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Layout modale') },
+    { key: 'modal_size', label: t('Dimensione modale'), type: 'select', options: [
+      { value: '', label: t('Default') },
+      { value: 'small', label: t('Piccolo') },
+      { value: 'large', label: t('Grande') },
+      { value: 'full', label: t('Full width') },
+    ]},
   ],
 };

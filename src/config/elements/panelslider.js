@@ -121,37 +121,9 @@ export default {
       itemLabel: 'Card',
     },
 
-    // ────────── Layout (struttura) ──────────
-    { type: 'separator', label: t('Layout') },
-    { key: 'columns', label: t('Colonne'), type: 'select', responsive: true, options: [
-      { value: '1', label: t('1 colonna') },
-      { value: '2', label: t('2 colonne') },
-      { value: '3', label: t('3 colonne') },
-      { value: '4', label: t('4 colonne') },
-      { value: '5', label: t('5 colonne') },
-      { value: '6', label: t('6 colonne') },
-    ]},
-    { key: 'card_image_position', label: t('Posizione immagine'), type: 'select', options: [
-      { value: 'top',        label: t('In alto (default)') },
-      { value: 'bottom',     label: t('In basso') },
-      { value: 'bg',         label: t('Sfondo (testo sopra)') },
-      { value: 'side-left',  label: t('Lato sinistro') },
-      { value: 'side-right', label: t('Lato destro') },
-    ]},
 
     // ────────── Immagine (struttura/comportamento) ──────────
     { type: 'separator', label: t('Immagine') },
-    // Elenco canonico: la tile ne offriva 7 su 9 (mancavano 4:5 e 9:16). La voce
-    // automatica resta — qui non collassa nulla, perché senza proporzione subentra
-    // «Altezza fissa» (e il canvas ha comunque un minimo di 120px).
-    { key: 'image_ratio', label: t('Proporzioni'), type: 'select',
-      options: ratioOptions() },
-    { key: 'image_height', label: t('Altezza fissa'), type: 'range', min: 0, max: 500, step: 10,
-      condition: { field: 'image_ratio', op: 'eq', value: 'auto' } },
-    // Le tre voci storiche ('cover','contain','fill') sono le prime tre dell'elenco
-    // canonico: si aggiungono solo 'none' e 'scale-down', e la whitelist PHP
-    // (class-panelslider-tile.php) e' stata allargata di pari passo.
-    { key: 'image_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
     { key: 'image_zoom', label: t('Zoom al hover'), type: 'toggle' },
 
     // ────────── Hover behavior ──────────
@@ -233,6 +205,21 @@ export default {
     ]},
     { key: 'equal_height', label: t('Altezza card uniforme'), type: 'toggle' },
 
+    { key: 'columns', label: t('Colonne'), type: 'select', responsive: true, options: [
+      { value: '1', label: t('1 colonna') },
+      { value: '2', label: t('2 colonne') },
+      { value: '3', label: t('3 colonne') },
+      { value: '4', label: t('4 colonne') },
+      { value: '5', label: t('5 colonne') },
+      { value: '6', label: t('6 colonne') },
+    ]},
+    { key: 'card_image_position', label: t('Posizione immagine'), type: 'select', options: [
+      { value: 'top',        label: t('In alto (default)') },
+      { value: 'bottom',     label: t('In basso') },
+      { value: 'bg',         label: t('Sfondo (testo sopra)') },
+      { value: 'side-left',  label: t('Lato sinistro') },
+      { value: 'side-right', label: t('Lato destro') },
+    ]},
     // ────────── Stile Card ──────────
     { type: 'separator', label: t('Stile Card') },
     { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
@@ -271,6 +258,17 @@ export default {
       condition: { field: 'image_fit', op: 'neq', value: 'fill' },
       description: t('Punto focale comune a tutte le immagini delle card.') },
 
+    // Elenco canonico: la tile ne offriva 7 su 9 (mancavano 4:5 e 9:16). La voce
+    // automatica resta — qui non collassa nulla, perché senza proporzione subentra
+    // «Altezza fissa» (e il canvas ha comunque un minimo di 120px).
+    { key: 'image_ratio', label: t('Proporzioni'), type: 'select',
+      options: ratioOptions() },
+    { key: 'image_height', label: t('Altezza fissa'), type: 'range', min: 0, max: 500, step: 10,
+      condition: { field: 'image_ratio', op: 'eq', value: 'auto' } },
+    // Le tre voci storiche ('cover','contain','fill') sono le prime tre dell'elenco
+    // canonico: si aggiungono solo 'none' e 'scale-down', e la whitelist PHP
+    // (class-panelslider-tile.php) e' stata allargata di pari passo.
+    { key: 'image_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI },
     // ────────── Caption overlay (per overlay-caption preset) ──────────
     { type: 'separator', label: t('Caption overlay (testo su foto)'),
       condition: { field: 'card_image_position', op: 'eq', value: 'bg' } },

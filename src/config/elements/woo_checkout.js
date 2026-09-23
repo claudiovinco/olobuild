@@ -41,15 +41,6 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { type: 'separator', label: t('Layout') },
-    { key: 'layout', label: t('Layout'), type: 'select', options: [
-      { value: 'one_column', label: t('Una colonna') },
-      { value: 'two_columns', label: t('Due colonne') },
-    ]},
-    { key: 'form_style', label: t('Stile form'), type: 'select', options: [
-      { value: 'modern', label: t('Moderno') },
-      { value: 'classic', label: t('Classico') },
-    ]},
 
     { type: 'separator', label: t('Opzioni') },
     { key: 'show_order_notes', label: t('Mostra note ordine'), type: 'toggle' },
@@ -73,6 +64,10 @@ export default {
       { value: 'tilt-3d',         label: t('3D Tilt') },
       { value: 'custom',          label: t('Personalizzato') },
     ] },
+    { key: 'form_style', label: t('Stile form'), type: 'select', options: [
+      { value: 'modern', label: t('Moderno') },
+      { value: 'classic', label: t('Classico') },
+    ]},
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Headings'),
@@ -110,5 +105,10 @@ export default {
     { key: 'notice_bg', label: t('Avvisi WooCommerce — sfondo'), type: 'color' },
     { key: 'notice_text', label: t('Avvisi WooCommerce — testo'), type: 'color' },
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'layout', label: t('Layout'), type: 'select', options: [
+      { value: 'one_column', label: t('Una colonna') },
+      { value: 'two_columns', label: t('Due colonne') },
+    ]},
   ],
 };

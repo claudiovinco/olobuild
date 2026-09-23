@@ -55,12 +55,6 @@ export default {
         { key: 'title', label: t('Titolo'), type: 'text' },
         { key: 'description', label: t('Descrizione'), type: 'text' },
         { key: 'icon', label: t('Icona'), type: 'icon' },
-        { key: 'tooltip_position', label: t('Posizione tooltip'), type: 'select', options: [
-          { value: 'top', label: t('Sopra') },
-          { value: 'bottom', label: t('Sotto') },
-          { value: 'left', label: t('Sinistra') },
-          { value: 'right', label: t('Destra') },
-        ]},
       ],
       newItemDefaults: { pos_x: '50', pos_y: '50', title: t('Nuovo punto'), description: t('Descrizione.'), icon: 'pin', tooltip_position: 'top' },
       itemLabel: 'Marker',
@@ -118,6 +112,14 @@ export default {
     { key: 'marker_size', label: t('Dimensione marker'), type: 'range', min: 16, max: 40, step: 2 },
     { key: 'pulse_animation', label: t('Animazione pulse'), type: 'toggle' },
 
+    { key: 'markers', type: 'content-items', label: t('Marker'), itemLabel: 'Marker', etichettaDa: 'title', itemFields: [
+        { key: 'tooltip_position', label: t('Posizione tooltip'), type: 'select', options: [
+          { value: 'top', label: t('Sopra') },
+          { value: 'bottom', label: t('Sotto') },
+          { value: 'left', label: t('Sinistra') },
+          { value: 'right', label: t('Destra') },
+        ]},
+    ] },
     { type: 'separator', label: t('Stile tooltip') },
     { key: 'tooltip_bg', label: t('Sfondo tooltip'), type: 'color' },
     { key: 'tooltip_color', label: t('Colore testo tooltip'), type: 'color' },

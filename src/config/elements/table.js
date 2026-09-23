@@ -52,9 +52,7 @@ export default {
     { key: 'has_header', label: t('Riga intestazione'), type: 'toggle' },
     { key: 'striped', label: t('Righe alternate'), type: 'toggle' },
     { key: 'bordered', label: t('Con bordi'), type: 'toggle' },
-    { key: 'hover_effect', label: t('Effetto hover'), type: 'toggle' },
     { key: 'compact', label: t('Compatto'), type: 'toggle' },
-    { key: 'first_col_bold', label: t('Prima colonna in grassetto'), type: 'toggle' },
     { key: 'responsive_mode', label: t('Responsive'), type: 'select', options: [
       { value: 'scroll', label: t('Scroll orizzontale') },
       { value: 'stack', label: t('Stack verticale') },
@@ -78,6 +76,7 @@ export default {
       { value: 'tilt-card',        label: t('Tilt Card') },
       { value: 'custom',           label: t('Personalizzato') },
     ]},
+    { key: 'hover_effect', label: t('Effetto hover'), type: 'toggle' },
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Header'),
@@ -95,6 +94,7 @@ export default {
       sizeMin: 12, sizeMax: 60,
     },
 
+    { key: 'first_col_bold', label: t('Prima colonna in grassetto'), type: 'toggle' },
     { type: 'separator', label: t('Colori') },
     { key: 'header_bg', label: t('Sfondo intestazione'), type: 'color' },
     { key: 'border_color', label: t('Colore bordi'), type: 'color' },

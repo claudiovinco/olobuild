@@ -40,11 +40,6 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'layout', label: t('Layout'), type: 'select', options: [
-      { value: 'default', label: t('Default') },
-      { value: 'sidebar', label: t('Con sidebar') },
-      { value: 'tabs', label: t('Tab') },
-    ]},
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -86,5 +81,11 @@ export default {
     { key: 'button_bg', label: t('Sfondo pulsante'), type: 'color' },
     { key: 'button_color', label: t('Colore testo pulsante'), type: 'color' },
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'layout', label: t('Layout'), type: 'select', options: [
+      { value: 'default', label: t('Default') },
+      { value: 'sidebar', label: t('Con sidebar') },
+      { value: 'tabs', label: t('Tab') },
+    ]},
   ],
 };

@@ -58,10 +58,6 @@ export default {
   },
 
   fields: [
-    { key: 'countdown_style', label: t('Stile'), type: 'select', options: [
-      { value: 'custom', label: t('Personalizzato') },
-      { value: 'uikit', label: t('UIkit nativo') },
-    ]},
     { key: 'countdown_type', label: t('Tipo countdown'), type: 'select', options: [
       { value: 'date', label: t('Data fissa') },
       { value: 'evergreen', label: t('Evergreen (per visitatore)') },
@@ -125,6 +121,10 @@ export default {
     ]},
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
+    { key: 'countdown_style', label: t('Stile'), type: 'select', options: [
+      { value: 'custom', label: t('Personalizzato') },
+      { value: 'uikit', label: t('UIkit nativo') },
+    ]},
     { type: 'separator', label: t('Tipografia') },
     // Nel PHP i NUMERI ereditano `accent_color` (uk-countdown-number) e le ETICHETTE
     // `text_color` (ereditato dal wrapper .olo-countdown). Il mapping precedente era

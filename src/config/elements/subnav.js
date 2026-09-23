@@ -88,12 +88,6 @@ export default {
     { type: 'separator', label: t('Comportamento') },
     { key: 'divider', label: t('Separatore'), type: 'toggle' },
     { key: 'highlight_current', label: t('Evidenzia pagina corrente'), type: 'toggle' },
-    { key: 'active_style', label: t('Indicatore attivo'), type: 'select', options: [
-      { value: 'none', label: t('Nessuno') },
-      { value: 'underline', label: t('Sottolineatura') },
-      { value: 'background', label: t('Sfondo') },
-      { value: 'bold', label: t('Grassetto') },
-    ]},
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -116,6 +110,12 @@ export default {
     ] },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
+    { key: 'active_style', label: t('Indicatore attivo'), type: 'select', options: [
+      { value: 'none', label: t('Nessuno') },
+      { value: 'underline', label: t('Sottolineatura') },
+      { value: 'background', label: t('Sfondo') },
+      { value: 'bold', label: t('Grassetto') },
+    ]},
     { type: 'separator', label: t('Layout') },
     { key: 'style', label: t('Stile'), type: 'select', options: [
       { value: 'default', label: t('Predefinito') },

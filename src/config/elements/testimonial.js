@@ -81,12 +81,6 @@ export default {
     ]},
 
     { type: 'separator', label: t('Layout') },
-    { key: 'layout', label: t('Layout'), type: 'select', options: [
-      { value: 'single', label: t('Singola') },
-      { value: 'editorial', label: t('Editoriale (centrato: stelle · citazione serif · autore)') },
-      { value: 'carousel', label: t('Carousel') },
-      { value: 'grid', label: t('Griglia') },
-    ]},
     { key: 'autoplay', label: t('Autoplay'), type: 'toggle',
       condition: { field: 'layout', value: 'carousel' } },
     { key: 'autoplay_interval', label: t('Intervallo autoplay'), type: 'number', min: 1, max: 30,
@@ -97,8 +91,6 @@ export default {
       condition: { field: 'layout', value: 'carousel' } },
     { key: 'show_arrows', label: t('Mostra frecce'), type: 'toggle',
       condition: { field: 'layout', value: 'carousel' } },
-    { key: 'grid_columns', label: t('Colonne griglia'), type: 'range', min: 1, max: 4, step: 1,
-      condition: { field: 'layout', value: 'grid' } },
     { key: 'items', label: t('Testimonianze multiple'), type: 'content-items',
       condition: { field: 'layout', operator: '!=', value: 'single' },
       itemFields: [
@@ -216,5 +208,14 @@ export default {
 
     ...borderFields(),
     ...filterFields,
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'layout', label: t('Layout'), type: 'select', options: [
+      { value: 'single', label: t('Singola') },
+      { value: 'editorial', label: t('Editoriale (centrato: stelle · citazione serif · autore)') },
+      { value: 'carousel', label: t('Carousel') },
+      { value: 'grid', label: t('Griglia') },
+    ]},
+    { key: 'grid_columns', label: t('Colonne griglia'), type: 'range', min: 1, max: 4, step: 1,
+      condition: { field: 'layout', value: 'grid' } },
   ],
 };

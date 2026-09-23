@@ -57,8 +57,6 @@ export default {
     { type: 'separator', label: t('Scrub allo scroll') },
     { key: 'scroll_reveal', label: t('Accendi le parole allo scroll'), type: 'toggle',
       description: t('Le parole partono attenuate e si accendono con lo scorrimento. Disattivato automaticamente con prefers-reduced-motion.') },
-    { key: 'dim_opacity', label: t('Opacità parole spente'), type: 'number', min: 0, max: 100,
-      condition: { field: 'scroll_reveal', op: 'eq', value: true } },
   ],
 
   styleFields: [
@@ -90,5 +88,8 @@ export default {
     ...shadowField,
 
     ...borderFields(),
+    { type: 'separator', label: t('Scrub allo scroll') },
+    { key: 'dim_opacity', label: t('Opacità parole spente'), type: 'number', min: 0, max: 100,
+      condition: { field: 'scroll_reveal', op: 'eq', value: true } },
   ],
 };

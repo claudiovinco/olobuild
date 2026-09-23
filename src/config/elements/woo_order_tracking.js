@@ -34,10 +34,6 @@ export default {
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     { key: 'title', label: t('Titolo'), type: 'text' },
-    { key: 'form_style', label: t('Stile form'), type: 'select', options: [
-      { value: 'modern', label: t('Moderno') },
-      { value: 'classic', label: t('Classico') },
-    ]},
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -60,6 +56,10 @@ export default {
     ] },
     ...textEffectsFields([ { value: 'title', label: t('Solo Titolo') } ]),
 
+    { key: 'form_style', label: t('Stile form'), type: 'select', options: [
+      { value: 'modern', label: t('Moderno') },
+      { value: 'classic', label: t('Classico') },
+    ]},
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Label'),

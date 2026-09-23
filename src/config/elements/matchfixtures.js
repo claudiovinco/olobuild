@@ -65,17 +65,13 @@ export default {
         { key: 'league', label: t('Lega'), type: 'text' },
         { key: 'matchday', label: t('Giornata'), type: 'text' },
         { key: 'home_crest', label: t('Casa — sigla crest'), type: 'text' },
-        { key: 'home_crest_bg', label: t('Casa — colore crest'), type: 'color' },
         { key: 'home_name', label: t('Casa — nome'), type: 'text' },
         { key: 'away_crest', label: t('Ospite — sigla crest'), type: 'text' },
-        { key: 'away_crest_bg', label: t('Ospite — colore crest'), type: 'color' },
         { key: 'away_name', label: t('Ospite — nome'), type: 'text' },
         { key: 'score', label: t('Punteggio (vuoto = "vs")'), type: 'text' },
         { key: 'venue', label: t('Riga squadra / stato'), type: 'text' },
       ],
     },
-    { type: 'separator', label: t('Layout') },
-    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 4, step: 1, responsive: true },
   ],
 
   styleFields: [
@@ -108,5 +104,12 @@ export default {
     { type: 'separator', label: t('Ombra') },
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Partite') },
+    { key: 'items', type: 'content-items', label: t('Fixtures'), itemLabel: t('Partita'), etichettaDa: 'home_name', itemFields: [
+        { key: 'home_crest_bg', label: t('Casa — colore crest'), type: 'color' },
+        { key: 'away_crest_bg', label: t('Ospite — colore crest'), type: 'color' },
+    ] },
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 4, step: 1, responsive: true },
   ],
 };

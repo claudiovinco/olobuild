@@ -58,10 +58,6 @@ export default {
     { key: 'heading', label: t('Titolo'), type: 'textarea' },
     { key: 'accent_text', label: t('Testo accento'), type: 'text',
       description: t('Se compare nel titolo, la prima occorrenza viene colorata (es. il "." di clod.eu).') },
-    { key: 'accent_color', label: t('Colore accento'), type: 'color',
-      description: t('Vuoto = primario del tema.') },
-    { key: 'accent_italic', label: t('Accento in corsivo'), type: 'toggle',
-      condition: { field: 'accent_text', operator: '!=', value: '' } },
     { key: 'subtitle', label: t('Sottotitolo'), type: 'textarea' },
   ],
 
@@ -89,6 +85,8 @@ export default {
       { value: 'all', label: t('Tutti gli elementi testuali') },
     ]),
 
+    { key: 'accent_color', label: t('Colore accento'), type: 'color',
+      description: t('Vuoto = primario del tema.') },
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Titolo'),
@@ -127,6 +125,8 @@ export default {
       { value: 'justify', label: t('Giustificato') },
     ]},
 
+    { key: 'accent_italic', label: t('Accento in corsivo'), type: 'toggle',
+      condition: { field: 'accent_text', operator: '!=', value: '' } },
     { type: 'separator', label: t('Decorazione') },
     { key: 'decoration', label: t('Tipo'), type: 'select', options: [
       { value: 'none', label: t('Nessuna') },

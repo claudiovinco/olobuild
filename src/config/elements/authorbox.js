@@ -58,17 +58,6 @@ export default {
     { key: 'show_post_count', label: t('Mostra conteggio articoli'), type: 'toggle' },
     { key: 'show_website', label: t('Mostra sito web'), type: 'toggle' },
 
-    { type: 'separator', label: t('Layout') },
-    { key: 'layout', label: t('Layout'), type: 'select', options: [
-      { value: 'horizontal', label: t('Orizzontale') },
-      { value: 'vertical', label: t('Verticale') },
-    ]},
-    { key: 'text_align', label: t('Allineamento testo'), type: 'select', options: [
-      { value: 'left', label: t('Sinistra') },
-      { value: 'center', label: t('Centro') },
-      { value: 'right', label: t('Destra') },
-    ]},
-    { key: 'gap', label: t('Gap'), type: 'range', min: 8, max: 40, step: 4 },
   ],
 
   styleFields: [
@@ -149,5 +138,16 @@ export default {
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
 
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'layout', label: t('Layout'), type: 'select', options: [
+      { value: 'horizontal', label: t('Orizzontale') },
+      { value: 'vertical', label: t('Verticale') },
+    ]},
+    { key: 'text_align', label: t('Allineamento testo'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+    ]},
+    { key: 'gap', label: t('Gap'), type: 'range', min: 8, max: 40, step: 4 },
   ],
 };

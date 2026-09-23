@@ -149,15 +149,11 @@ export default {
       newItemDefaults: { label: 'Primario', color: '#e1474f' },
       itemFields: [
         { key: 'label', label: t('Etichetta'), type: 'text' },
-        { key: 'color', label: t('Colore'), type: 'color' },
       ],
       condition: { field: 'media_mode', op: 'eq', value: 'olomap' } },
     { key: 'map_duration', label: t('Durata ciclo camera'), type: 'number', min: 4, max: 120,
       condition: { field: 'media_mode', op: 'eq', value: 'olomap' } },
 
-    { type: 'separator', label: t('Movimento') },
-    { key: 'parallax_internal', label: t('Parallax interno (meta + media)'), type: 'toggle',
-      description: t('Leggero scorrimento differenziato allo scroll. Rispetta il reduced-motion.') },
   ],
 
   styleFields: [
@@ -192,5 +188,12 @@ export default {
     ...shadowField,
 
     ...borderFields(),
+    { type: 'separator', label: t('OLOmap') },
+    { key: 'map_tokens', type: 'content-items', label: t('Livello 4 — token colore'), itemLabel: t('Token'), etichettaDa: 'label', condition: { field: 'media_mode', op: 'eq', value: 'olomap' }, itemFields: [
+        { key: 'color', label: t('Colore'), type: 'color' },
+    ] },
+    { type: 'separator', label: t('Movimento') },
+    { key: 'parallax_internal', label: t('Parallax interno (meta + media)'), type: 'toggle',
+      description: t('Leggero scorrimento differenziato allo scroll. Rispetta il reduced-motion.') },
   ],
 };

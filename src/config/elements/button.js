@@ -56,16 +56,11 @@ export default {
   fields: [
     { key: 'text', label: t('Testo pulsante'), type: 'text' },
     { key: 'icon', label: t('Icona'), type: 'icon' },
-    { key: 'icon_position', label: t('Posizione icona'), type: 'select', options: [
-      { value: 'before', label: t('Prima del testo') },
-      { value: 'after', label: t('Dopo il testo') },
-    ]},
     { key: 'url', label: t('URL'), type: 'link' },
     { key: 'target', label: t('Apri in'), type: 'select', options: [
       { value: '_self', label: t('Stessa finestra') },
       { value: '_blank', label: t('Nuova scheda') },
     ]},
-    { key: 'full_width', label: t('Larghezza piena'), type: 'toggle' },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -97,6 +92,11 @@ export default {
 
     ...textEffectsFields([ { value: 'text', label: t('Solo Testo') } ]),
 
+    { key: 'icon_position', label: t('Posizione icona'), type: 'select', options: [
+      { value: 'before', label: t('Prima del testo') },
+      { value: 'after', label: t('Dopo il testo') },
+    ]},
+    { key: 'full_width', label: t('Larghezza piena'), type: 'toggle' },
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     // Dallo stile tipografico il pulsante prende famiglia e peso (e interlinea);

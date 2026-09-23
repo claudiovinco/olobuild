@@ -110,11 +110,6 @@ export default {
       defaults: { color: 'build', label: 'OLOprodotto', logo: '', kicker: 'Kicker', title_html: 'Titolo <em>em</em>', sub_html: 'Sottotitolo…', tags: 'tag 1|tag 2', cta_text: 'CTA', cta_url: '#', scene: 'wall', coord: 'coordinate · deco' },
       itemFields: [
         { key: 'label', label: t('Nome (jump/outro)'), type: 'text' },
-        { key: 'color', label: t('Colore'), type: 'select', options: [
-          { value: 'build', label: 'build' }, { value: 'booking', label: 'booking' },
-          { value: 'lang', label: 'lang' }, { value: 'secur', label: 'security' },
-          { value: 'tour', label: 'tour' }, { value: 'tutor', label: 'tutor' },
-        ] },
         { key: 'logo', label: t('Logo prodotto'), type: 'image' },
         { key: 'kicker', label: t('Kicker'), type: 'text' },
         { key: 'title_html', label: t('Titolo (HTML)'), type: 'text' },
@@ -147,11 +142,6 @@ export default {
       itemFields: [
         { key: 'label', label: t('Etichetta bottone'), type: 'text' },
         { key: 'value', label: t('Testo nella mail'), type: 'text' },
-        { key: 'color', label: t('Colore'), type: 'select', options: [
-          { value: 'build', label: 'build' }, { value: 'booking', label: 'booking' },
-          { value: 'lang', label: 'lang' }, { value: 'secur', label: 'security' },
-          { value: 'tour', label: 'tour' }, { value: 'tutor', label: 'tutor' },
-        ] },
       ] },
     { key: 'mad_pre_mail', label: t('Testo prima della mail'), type: 'text' },
     { key: 'mad_mail_ph', label: t('Placeholder mail'), type: 'text' },
@@ -167,5 +157,21 @@ export default {
     { key: 'hint_mobile2', label: t('Hint mobile — seconda parte'), type: 'text' },
   ],
 
-  styleFields: [],
+  styleFields: [    { type: 'separator', label: t('Fermate prodotto') },
+    { key: 'panels', type: 'content-items', label: t('Pannelli'), itemLabel: t('Pannello'), etichettaDa: 'label', miniaturaDa: 'logo', itemFields: [
+        { key: 'color', label: t('Colore'), type: 'select', options: [
+          { value: 'build', label: 'build' }, { value: 'booking', label: 'booking' },
+          { value: 'lang', label: 'lang' }, { value: 'secur', label: 'security' },
+          { value: 'tour', label: 'tour' }, { value: 'tutor', label: 'tutor' },
+        ] },
+    ] },
+    { type: 'separator', label: t('Finale') },
+    { key: 'mad_picks', type: 'content-items', label: t('Sogni cliccabili'), itemLabel: t('Sogno'), etichettaDa: 'label', itemFields: [
+        { key: 'color', label: t('Colore'), type: 'select', options: [
+          { value: 'build', label: 'build' }, { value: 'booking', label: 'booking' },
+          { value: 'lang', label: 'lang' }, { value: 'secur', label: 'security' },
+          { value: 'tour', label: 'tour' }, { value: 'tutor', label: 'tutor' },
+        ] },
+    ] },
+],
 };

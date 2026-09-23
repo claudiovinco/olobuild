@@ -140,7 +140,6 @@ export default {
     { type: 'separator', label: t('Brand') },
     { key: 'brand_logo',       label: t('Logo'),                 type: 'image' },
     { key: 'brand_logo_white', label: t('Logo bianco (barre scure)'), type: 'image' },
-    { key: 'brand_height',     label: t('Altezza logo'),    type: 'range', min: 14, max: 60, step: 1 },
     { key: 'brand_url',        label: t('Link logo'),            type: 'link' },
 
     { type: 'separator', label: t('Nav primaria') },
@@ -286,5 +285,7 @@ export default {
       { value: 'none',       label: t('Nessuna') },
     ]},
     { key: 'close_on_esc', label: t('Chiudi con Esc e click esterno'), type: 'toggle' },
+    { type: 'separator', label: t('Brand') },
+    { key: 'brand_height',     label: t('Altezza logo'),    type: 'range', min: 14, max: 60, step: 1 },
   ],
 };

@@ -25,11 +25,6 @@ export default {
   },
 
   fields: [
-    { key: 'variant', label: t('Variante'), type: 'select', options: [
-      { value: 'scan', label: t('Scanline che segue lo scroll (security)') },
-      { value: 'pano', label: t('Panorama 360° dietro la pagina (tour)') },
-      { value: 'xp', label: t('Barra XP fissa + toast (tutor)') },
-    ] },
     { key: 'deg_label', label: t('Etichetta gradi (pano)'), type: 'text',
       condition: { field: 'variant', op: 'eq', value: 'pano' } },
     { key: 'xp_label', label: t('Etichetta barra (xp)'), type: 'text',
@@ -42,5 +37,11 @@ export default {
       condition: { field: 'variant', op: 'eq', value: 'xp' } },
   ],
 
-  styleFields: [],
+  styleFields: [    { type: 'separator', label: t('Aspetto') },
+    { key: 'variant', label: t('Variante'), type: 'select', options: [
+      { value: 'scan', label: t('Scanline che segue lo scroll (security)') },
+      { value: 'pano', label: t('Panorama 360° dietro la pagina (tour)') },
+      { value: 'xp', label: t('Barra XP fissa + toast (tutor)') },
+    ] },
+],
 };

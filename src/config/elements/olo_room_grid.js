@@ -204,12 +204,6 @@ export default {
     // 2. Mappa
     // ═══════════════════════════════════════════
     { type: 'separator', label: t('Mappa') },
-    { key: 'layout', label: t('Posizione mappa'), type: 'select', options: [
-      { value: 'map-left', label: t('Mappa a sinistra') },
-      { value: 'map-right', label: t('Mappa a destra') },
-      { value: 'map-top', label: t('Mappa in alto') },
-      { value: 'cards-only', label: t('Nessuna mappa (solo card)') },
-    ]},
     { key: 'map_sticky', label: t('Mappa fissa durante lo scroll'), type: 'toggle',
       condition: { field: 'layout', operator: '!=', value: 'cards-only' } },
     { key: 'tile_layer', label: t('Stile mappa'), type: 'select', options: [
@@ -230,11 +224,6 @@ export default {
       { value: '4', label: '4' }, { value: '6', label: '6' },
       { value: '8', label: '8' }, { value: '12', label: '12' },
       { value: '16', label: '16' }, { value: '24', label: '24' },
-    ]},
-    { key: 'pagination_style', label: t('Stile navigazione'), type: 'select', options: [
-      { value: 'numbers', label: t('Numeri pagina') },
-      { value: 'arrows', label: t('Frecce avanti/indietro') },
-      { value: 'loadmore', label: t('Pulsante Carica altro') },
     ]},
 
     // ═══════════════════════════════════════════
@@ -289,6 +278,12 @@ export default {
     { key: 'marker_color', label: t('Colore pin'), type: 'color',
       condition: { field: 'layout', operator: '!=', value: 'cards-only' } },
 
+    { key: 'layout', label: t('Posizione mappa'), type: 'select', options: [
+      { value: 'map-left', label: t('Mappa a sinistra') },
+      { value: 'map-right', label: t('Mappa a destra') },
+      { value: 'map-top', label: t('Mappa in alto') },
+      { value: 'cards-only', label: t('Nessuna mappa (solo card)') },
+    ]},
     // ═══════════════════════════════════════════
     // Griglia
     // ═══════════════════════════════════════════
@@ -461,5 +456,11 @@ export default {
     { key: 'body_bg_opacity', label: t('Opacita sfondo'), type: 'range', min: 0, max: 100, step: 5,
       condition: { field: 'body_bg', operator: '!=', value: '' } },
     ...borderFields(),
+    { type: 'separator', label: t('Paginazione') },
+    { key: 'pagination_style', label: t('Stile navigazione'), type: 'select', options: [
+      { value: 'numbers', label: t('Numeri pagina') },
+      { value: 'arrows', label: t('Frecce avanti/indietro') },
+      { value: 'loadmore', label: t('Pulsante Carica altro') },
+    ]},
   ],
 };

@@ -70,7 +70,6 @@ export default {
   fields: [
     { key: 'kicker_text', label: t('Kicker (occhiello)'), type: 'text' },
     { key: 'headline_text', label: t('Titolo'), type: 'text' },
-    { key: 'uppercase', label: t('Maiuscolo'), type: 'toggle' },
 
     { type: 'separator', label: t('Meta / byline') },
     { key: 'meta_items', label: t('Voci meta'), type: 'content-items',
@@ -126,5 +125,7 @@ export default {
     ...shadowField,
 
     ...borderFields(),
+    { type: 'separator', label: t('Testo') },
+    { key: 'uppercase', label: t('Maiuscolo'), type: 'toggle' },
   ],
 };

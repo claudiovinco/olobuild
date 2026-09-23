@@ -41,7 +41,6 @@ export default {
       defaults: { name: 'Nuovo', color: '#cccccc' },
       itemFields: [
         { key: 'name', label: t('Nome'), type: 'text' },
-        { key: 'color', label: t('Colore'), type: 'color' },
       ],
     },
     { key: 'max', label: t('Max selezioni'), type: 'number' },
@@ -58,5 +57,9 @@ export default {
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
     ]},
+    { type: 'separator', label: t('Campioni') },
+    { key: 'items', type: 'content-items', label: t('Swatch'), itemLabel: t('Swatch'), etichettaDa: 'name', itemFields: [
+        { key: 'color', label: t('Colore'), type: 'color' },
+    ] },
   ],
 };

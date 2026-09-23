@@ -66,10 +66,6 @@ export default {
     { type: 'separator', label: t('Query') },
     { key: 'limit', label: t('Numero massimo prodotti'), type: 'range', min: 1, max: 12, step: 1 },
 
-    { type: 'separator', label: t('Colonne responsive') },
-    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1 },
-    { key: 'columns_tablet', label: t('Colonne tablet'), type: 'range', min: 1, max: 4, step: 1 },
-    { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 2, step: 1 },
 
     { type: 'separator', label: t('Elementi visibili') },
     { key: 'show_image', label: t('Mostra immagine'), type: 'toggle' },
@@ -122,6 +118,9 @@ export default {
       { value: 'shadow', label: t('Ombra') },
     ]},
 
+    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1 },
+    { key: 'columns_tablet', label: t('Colonne tablet'), type: 'range', min: 1, max: 4, step: 1 },
+    { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 2, step: 1 },
     { type: 'separator', label: t('Colori') },
     { key: 'heading_color', label: t('Colore intestazione'), type: 'color' },
     { key: 'title_color', label: t('Colore titolo'), type: 'color' },

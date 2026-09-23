@@ -109,6 +109,31 @@ padding/margine → `type:'spacing'` (4 lati) · raggio → `type:'border-radius
   trasparente → nell'inspector Layout, Spazi (margine/padding), **Sfondo** ed Effetti senza ombra né
   filtro sfondo; il PHP scarta il resto in ogni stato e dispositivo (`stile_contenitore_atomico()`).
   Elenco unico: `ATOMIC_TILE_TYPES` (useBackgroundStyle.js) = `$ATOMIC_TILES` (audit `atomiche-elenco`).
+- ⚠️⚠️ **Contenuto o Stile: ogni proprietà ha UNA casa** (utente, 23 set 2026: «il corsivo a volte
+  nel contenuto e a volte nello stile… UNIFORMA una volta per tutte»). **Contenuto** = cosa la
+  tile dice e mostra: testi, media principali (foto, video, copertina, «Sfondo / media»), link,
+  voci dei ripetitori, dati, comportamento (autoplay, trigger, «Comportamento…»), visibilità
+  («Mostra…»). **Stile** = come appare: colori, tipografia e corsivo/maiuscolo, sfondi veri
+  («Sfondo card», «Sfondo voce»), bordi, raggi, ombre, opacità, spazi, dimensioni, proporzioni,
+  colonne, allineamento, disposizione, varianti e preset visivi. Le **voci dei ripetitori**
+  tengono nel Contenuto solo ciò che dicono; il loro stile sta nello Stile in uno **specchio**
+  `{ key: '<stesso ripetitore>', type: 'content-items', etichettaDa, miniaturaDa, itemFields: [solo
+  stile] }` (StyleFieldsRenderer → ContentItemsEditor `strutturaFissa`: stesse voci, niente
+  aggiungi/elimina/riordina). Audit `stile-nel-contenuto` = 0 (eccezioni motivate in ESCLUSI_C).
+  **In quale zona dello Stile**: 1) quella della STESSA PARTE, se il suo nome è contenuto nel nome
+  della sezione di provenienza («Stile pulsante» ⊂ «Pulsante invio», «Legenda — stile» ⊂ «Legenda»)
+  — mai una seconda zona per la stessa parte; 2) allineamento/posizione/colonne/gap/layout → la
+  zona di disposizione che la tile ha già, se no «Disposizione» in fondo; 3) una sezione che
+  nomina una parte senza zona → zona con quel nome; 4) il resto per famiglia (Aspetto · Testo ·
+  Forma), riusando la zona della famiglia che la tile ha già.
+- ⚠️ **Le `condition` dei separatori NON le valuta nessun tab** (una sezione si vede se ha un campo
+  visibile): la condizione che deve nascondere i controlli va sui CAMPI (array = AND). Spostando
+  campi da una sezione condizionata la condizione si porta sul campo (map: `grid_columns` per modo).
+- **Bordo in hover**: lo stato Hover non ancora impostato parte dal bordo normale (InspectorField),
+  altrimenti scegliere il solo colore salvava lati a 0 e in hover il bordo spariva. Lati a 0 espliciti
+  = bordo tolto in hover (FieldBorder non ha lo stile «nessuno»). Le chiavi hover storiche salvate
+  come sola stringa colore (`submit_hover_border_color`, `card_border_hover_color`) accettano anche
+  il bordo intero: PHP `build_border_hover_props()` / `Olobuild_Tile_Utils::border_color()`.
 - ⚠️⚠️ **Lo Sfondo è PARTE COMUNE di tutte le tile: MAI toglierlo, MAI ridurne i tipi.** Stesso
   componente (BackgroundControls, tutti i tipi: tinta, gradiente, generativi, immagine, video,
   galleria, sovrapposizione), stesso posto nel tab e nella barra. Se il contenitore non può

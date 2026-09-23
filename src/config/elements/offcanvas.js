@@ -44,12 +44,6 @@ export default {
     { key: 'trigger_selector', label: t('Selettore CSS trigger esterno'), type: 'text' },
 
     { type: 'separator', label: t('Pannello — Comportamento') },
-    { key: 'position', label: t('Posizione'), type: 'select', options: [
-      { value: 'left', label: t('Sinistra') },
-      { value: 'right', label: t('Destra') },
-      { value: 'top', label: t('Alto') },
-      { value: 'bottom', label: t('Basso') },
-    ]},
     { key: 'transition', label: t('Transizione'), type: 'select', options: [
       { value: 'slide', label: t('Slide') },
       { value: 'push', label: t('Push') },
@@ -68,6 +62,12 @@ export default {
     { key: 'bg_color', label: t('Sfondo pannello'), type: 'color' },
     { key: 'text_color', label: t('Colore testo'), type: 'color' },
 
+    { key: 'position', label: t('Posizione'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'right', label: t('Destra') },
+      { value: 'top', label: t('Alto') },
+      { value: 'bottom', label: t('Basso') },
+    ]},
     { type: 'separator', label: t('Overlay — Aspetto') },
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color',
       condition: { field: 'overlay', value: true } },

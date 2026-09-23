@@ -39,11 +39,6 @@ export default {
   },
 
   fields: [
-    { key: 'style', label: t('Modalità'), type: 'select', options: [
-      { value: 'numbered', label: t('Solo numeri') },
-      { value: 'prev-next', label: t('Solo Prec/Succ') },
-      { value: 'both', label: t('Numeri + Prec/Succ') },
-    ]},
     { key: 'show_first_last', label: t('Mostra Primo/Ultimo'), type: 'toggle' },
     { key: 'prev_text', label: t('Testo Precedente'), type: 'text' },
     { key: 'next_text', label: t('Testo Successivo'), type: 'text' },
@@ -65,6 +60,11 @@ export default {
       { value: 'retro-terminal',  label: t('Retro Terminal') },
       { value: 'tilt-3d',         label: t('3D Tilt') },
       { value: 'custom',          label: t('Personalizzato') },
+    ]},
+    { key: 'style', label: t('Modalità'), type: 'select', options: [
+      { value: 'numbered', label: t('Solo numeri') },
+      { value: 'prev-next', label: t('Solo Prec/Succ') },
+      { value: 'both', label: t('Numeri + Prec/Succ') },
     ]},
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },

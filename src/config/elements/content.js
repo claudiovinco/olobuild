@@ -80,19 +80,6 @@ export default {
 
     { type: 'separator', label: t('Immagine') },
     { key: 'image', label: t('Immagine'), type: 'image' },
-    { key: 'image_position', label: t('Posizione immagine'), type: 'select', responsive: true, options: [
-      { value: 'top', label: t('Sopra') },
-      { value: 'bottom', label: t('Sotto') },
-      { value: 'left', label: t('Sinistra') },
-      { value: 'right', label: t('Destra') },
-    ]},
-    // L'avviso sta QUI, sul campo che diventa inerte, non solo su «Proporzioni»:
-    // le due cose vivono in schede diverse (questa è CONTENUTO, la proporzione è in
-    // STILE) e chi sta muovendo l'altezza non ha modo di leggere la descrizione
-    // dell'altro campo. Il renderer forza `height:auto` quando c'è una proporzione
-    // (class-content-tile.php, gemello in ContentTile.vue `imgStyle`).
-    { key: 'image_height', label: t('Altezza immagine (px o auto)'), type: 'text',
-      description: t('Ignorata quando in Stile è attiva una proporzione.') },
     { key: 'hover_image', label: t('Immagine hover'), type: 'image' },
     { key: 'hover_video', label: t('Video hover (mp4)'), type: 'media' },
 
@@ -217,6 +204,19 @@ export default {
       condition: { field: 'image_shadow', op: 'eq', value: 'custom' } },
     { key: 'image_gap', label: t('Gap immagine-testo'), type: 'range', min: 0, max: 60, step: 4 },
 
+    { key: 'image_position', label: t('Posizione immagine'), type: 'select', responsive: true, options: [
+      { value: 'top', label: t('Sopra') },
+      { value: 'bottom', label: t('Sotto') },
+      { value: 'left', label: t('Sinistra') },
+      { value: 'right', label: t('Destra') },
+    ]},
+    // L'avviso sta QUI, sul campo che diventa inerte, non solo su «Proporzioni»:
+    // le due cose vivono in schede diverse (questa è CONTENUTO, la proporzione è in
+    // STILE) e chi sta muovendo l'altezza non ha modo di leggere la descrizione
+    // dell'altro campo. Il renderer forza `height:auto` quando c'è una proporzione
+    // (class-content-tile.php, gemello in ContentTile.vue `imgStyle`).
+    { key: 'image_height', label: t('Altezza immagine (px o auto)'), type: 'text',
+      description: t('Ignorata quando in Stile è attiva una proporzione.') },
     { type: 'separator', label: t('Effetti hover') },
     { key: 'hover_effect', label: t('Effetto immagine'), type: 'select', options: [
       { value: 'none', label: t('Nessuno') },

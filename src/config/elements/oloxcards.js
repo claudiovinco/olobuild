@@ -42,14 +42,6 @@ export default {
     { key: 'head_center', label: t('Testata centrata'), type: 'toggle' },
     { key: 'anchor', label: t('Ancora (id sezione)'), type: 'text' },
     { type: 'separator', label: t('Card') },
-    { key: 'variant', label: t('Variante'), type: 'select', options: [
-      { value: 'brick', label: t('Mattoni con numero (build)') },
-      { value: 'ticket', label: t('Biglietti con strappo (booking)') },
-      { value: 'red', label: t('Schede classified (security)') },
-      { value: 'room', label: t('Stanze + corridoi (tour)') },
-      { value: 'hs', label: t('Hotspot con pallino (tour)') },
-      { value: 'dcard', label: t('Card scure generiche') },
-    ] },
     { key: 'items', label: t('Card'), type: 'content-items', itemLabel: t('Card'),
       defaults: { label: '', title: 'Titolo', text_html: 'Testo…', extra: '' },
       itemFields: [
@@ -67,5 +59,14 @@ export default {
   styleFields: [
     oloxAccentField(),
     { key: 'section_bg', label: t('Sfondo sezione (vuoto = trasparente)'), type: 'color' },
+    { type: 'separator', label: t('Card') },
+    { key: 'variant', label: t('Variante'), type: 'select', options: [
+      { value: 'brick', label: t('Mattoni con numero (build)') },
+      { value: 'ticket', label: t('Biglietti con strappo (booking)') },
+      { value: 'red', label: t('Schede classified (security)') },
+      { value: 'room', label: t('Stanze + corridoi (tour)') },
+      { value: 'hs', label: t('Hotspot con pallino (tour)') },
+      { value: 'dcard', label: t('Card scure generiche') },
+    ] },
   ],
 };

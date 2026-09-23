@@ -94,10 +94,6 @@ export default {
     { key: 'pagination', label: t('Paginazione'), type: 'toggle' },
 
     { type: 'separator', label: t('Modalita') },
-    { key: 'layout', label: t('Modalità'), type: 'select', options: [
-      { value: 'grid', label: t('Griglia') },
-      { value: 'carousel', label: t('Carosello') },
-    ]},
     { key: 'carousel_autoplay', label: t('Autoplay'), type: 'toggle',
       condition: { field: 'layout', value: 'carousel' } },
     { key: 'carousel_loop', label: t('Loop infinito'), type: 'toggle',
@@ -176,6 +172,10 @@ export default {
     { key: 'carousel_speed', label: t('Velocità'), type: 'range', min: 1000, max: 10000, step: 500,
       condition: { field: 'layout', value: 'carousel' } },
 
+    { key: 'layout', label: t('Modalità'), type: 'select', options: [
+      { value: 'grid', label: t('Griglia') },
+      { value: 'carousel', label: t('Carosello') },
+    ]},
     { type: 'separator', label: t('Colori') },
     { key: 'sale_color', label: t('Colore saldo'), type: 'color' },
     { key: 'button_bg', label: t('Sfondo pulsante'), type: 'color' },

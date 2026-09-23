@@ -47,16 +47,11 @@ export default {
         { key: 'icon', label: t('Icona'), type: 'icon' },
         { key: 'text', label: t('Testo'), type: 'text' },
         { key: 'link', label: t('Link'), type: 'link', placeholder: t('https://...') },
-        { key: 'color', label: t('Colore icona (override)'), type: 'color' },
       ],
       newItemDefaults: { icon: 'check', text: t('Nuova voce'), color: '', link: '' },
     },
 
     { type: 'separator', label: t('Layout') },
-    { key: 'layout', label: t('Orientamento'), type: 'select', options: [
-      { value: 'vertical', label: t('Verticale') },
-      { value: 'horizontal', label: t('Orizzontale') },
-    ]},
     { key: 'divider', label: t('Separatore tra voci'), type: 'toggle' },
   ],
 
@@ -110,6 +105,10 @@ export default {
       { value: 'justify', label: t('Giustificato') },
     ]},
 
+    { key: 'layout', label: t('Orientamento'), type: 'select', options: [
+      { value: 'vertical', label: t('Verticale') },
+      { value: 'horizontal', label: t('Orizzontale') },
+    ]},
     { type: 'separator', label: t('Spaziatura & separatore') },
     { key: 'gap', label: t('Gap voci'), type: 'range', min: 4, max: 32, step: 2 },
     { key: 'divider_color', label: t('Colore separatore'), type: 'color',
@@ -117,5 +116,9 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Voci lista') },
+    { key: 'items', type: 'content-items', label: t('Voci lista'), etichettaDa: 'text', itemFields: [
+        { key: 'color', label: t('Colore icona (override)'), type: 'color' },
+    ] },
   ],
 };

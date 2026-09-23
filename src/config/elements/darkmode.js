@@ -27,12 +27,6 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { type: 'separator', label: t('Stile') },
-    { key: 'style', label: t('Stile'), type: 'select', options: [
-      { value: 'toggle', label: t('Toggle switch') },
-      { value: 'icon', label: t('Icona singola') },
-      { value: 'button', label: t('Pulsante con testo') },
-    ]},
 
     { type: 'separator', label: t('Icone') },
     { key: 'light_icon', label: t('Icona luce'), type: 'icon' },
@@ -58,6 +52,11 @@ export default {
     { key: 'toggle_color', label: t('Colore toggle'), type: 'color' },
     { key: 'toggle_active_color', label: t('Colore toggle attivo'), type: 'color' },
 
+    { key: 'style', label: t('Stile'), type: 'select', options: [
+      { value: 'toggle', label: t('Toggle switch') },
+      { value: 'icon', label: t('Icona singola') },
+      { value: 'button', label: t('Pulsante con testo') },
+    ]},
     { type: 'separator', label: t('Transizione') },
     { key: 'transition_duration', label: t('Durata transizione'), type: 'range', min: 0, max: 1000, step: 50 },
   ],

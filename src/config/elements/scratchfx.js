@@ -76,22 +76,6 @@ export default {
     { type: 'separator', label: t('Contenuto sotto la copertura') },
     { key: 'image', label: t('Immagine premio'), type: 'image',
       description: t('Mostrata sotto la pellicola da grattare. Opzionale: puoi usare solo testo.') },
-    { key: 'object_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI,
-      condition: { field: 'image', op: 'neq', value: '' } },
-    // Il punto focale serve solo dove c'e' un ritaglio da spostare, e si nasconde
-    // SOLO con 'fill': con 'contain' lavora eccome (decide da che parte l'immagine si
-    // appoggia nelle bande vuote, e il renderer lo emette), e una tile salvata prima
-    // che l'adattamento esistesse non ha affatto la chiave `object_fit` — l'inspector
-    // valuta le condizioni sui settings GREZZI, senza fondere i default, quindi con un
-    // elenco `in` il valore assente non combacerebbe con niente e il controllo
-    // sparirebbe per sempre.
-    // L'AND si scrive come ARRAY, l'unica forma che evaluateCondition() valuta.
-    { key: 'object_position', label: t('Punto focale'), type: 'object-position',
-      contextKeys: { src: 'image', ratio: 'aspect', fit: 'object_fit' },
-      condition: [
-        { field: 'image', op: 'neq', value: '' },
-        { field: 'object_fit', op: 'neq', value: 'fill' },
-      ] },
     { key: 'prize_eyebrow', label: t('Sopra-titolo'), type: 'text' },
     { key: 'prize_title', label: t('Titolo premio'), type: 'text' },
     { key: 'prize_text', label: t('Descrizione'), type: 'textarea' },
@@ -126,6 +110,22 @@ export default {
     { key: 'cover_text_color', label: t('Colore testo stampigliato'), type: 'color',
       condition: { field: 'cover_text', op: 'neq', value: '' } },
 
+    { key: 'object_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI,
+      condition: { field: 'image', op: 'neq', value: '' } },
+    // Il punto focale serve solo dove c'e' un ritaglio da spostare, e si nasconde
+    // SOLO con 'fill': con 'contain' lavora eccome (decide da che parte l'immagine si
+    // appoggia nelle bande vuote, e il renderer lo emette), e una tile salvata prima
+    // che l'adattamento esistesse non ha affatto la chiave `object_fit` — l'inspector
+    // valuta le condizioni sui settings GREZZI, senza fondere i default, quindi con un
+    // elenco `in` il valore assente non combacerebbe con niente e il controllo
+    // sparirebbe per sempre.
+    // L'AND si scrive come ARRAY, l'unica forma che evaluateCondition() valuta.
+    { key: 'object_position', label: t('Punto focale'), type: 'object-position',
+      contextKeys: { src: 'image', ratio: 'aspect', fit: 'object_fit' },
+      condition: [
+        { field: 'image', op: 'neq', value: '' },
+        { field: 'object_fit', op: 'neq', value: 'fill' },
+      ] },
     { type: 'separator', label: t('Comportamento') },
     { key: 'brush_size', label: t('Dimensione pennello'), type: 'range', min: 10, max: 80, step: 2 },
     { key: 'reveal_threshold', label: t('Soglia auto-reveal'), type: 'range', min: 0, max: 100, step: 5,

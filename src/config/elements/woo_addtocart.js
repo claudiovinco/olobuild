@@ -47,10 +47,6 @@ export default {
       { value: 'bag', label: t('Borsa') },
       { value: 'plus', label: t('Piu') },
     ], condition: { field: 'show_icon', value: true } },
-    { key: 'quantity_style', label: t('Stile quantita'), type: 'select', options: [
-      { value: 'input', label: t('Campo numerico') },
-      { value: 'stepper', label: t('Stepper +/-') },
-    ], condition: { field: 'show_quantity', value: true } },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -73,6 +69,10 @@ export default {
     ] },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
+    { key: 'quantity_style', label: t('Stile quantita'), type: 'select', options: [
+      { value: 'input', label: t('Campo numerico') },
+      { value: 'stepper', label: t('Stepper +/-') },
+    ], condition: { field: 'show_quantity', value: true } },
     { type: 'separator', label: t('Pulsante') },
     { key: 'style', label: t('Stile'), type: 'select', options: [
       { value: 'filled', label: t('Pieno') },

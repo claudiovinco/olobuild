@@ -80,13 +80,6 @@ export default {
 
     // ── Layout (selezione + behavior) ──
     { type: 'separator', label: t('Layout') },
-    {
-      key: 'layout', label: t('Layout'), type: 'select', options: [
-        { value: 'grid', label: t('Griglia') },
-        { value: 'slider', label: t('Slider (frecce)') },
-        { value: 'marquee', label: t('Nastro scorrevole') },
-      ],
-    },
 
     // Slider options (behavior)
     { key: 'autoplay', label: t('Autoplay'), type: 'toggle', condition: { field: 'layout', value: 'slider' } },
@@ -176,6 +169,13 @@ export default {
     // Marquee speed
     { key: 'marquee_speed', label: t('Velocità scorrimento (sec)'), type: 'range', min: 10, max: 60, step: 5, condition: { field: 'layout', value: 'marquee' } },
 
+    {
+      key: 'layout', label: t('Layout'), type: 'select', options: [
+        { value: 'grid', label: t('Griglia') },
+        { value: 'slider', label: t('Slider (frecce)') },
+        { value: 'marquee', label: t('Nastro scorrevole') },
+      ],
+    },
     { type: 'separator', label: t('Intestazione') },
     {
       key: 'heading_align', label: t('Allineamento titolo'), type: 'select', options: [

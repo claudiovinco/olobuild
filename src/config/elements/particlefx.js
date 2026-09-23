@@ -91,7 +91,6 @@ export default {
     { key: 'count', label: t('Numero particelle'), type: 'range', min: 5, max: 300, step: 5,
       description: t('Su mobile il numero viene ridotto automaticamente per le prestazioni.') },
     { key: 'speed', label: t('Velocità'), type: 'range', min: 0.1, max: 4, step: 0.1 },
-    { key: 'size', label: t('Dimensione'), type: 'range', min: 1, max: 24, step: 1 },
     { key: 'wind', label: t('Vento (deriva orizzontale)'), type: 'range', min: 0, max: 3, step: 0.1 },
     { key: 'gravity', label: t('Gravità / spinta verticale'), type: 'range', min: 0, max: 3, step: 0.1,
       description: t('Petali/neve/coriandoli cadono; le bolle salgono; le stelle restano sospese.') },
@@ -142,5 +141,7 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Sistema particelle') },
+    { key: 'size', label: t('Dimensione'), type: 'range', min: 1, max: 24, step: 1 },
   ],
 };

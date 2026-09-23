@@ -497,6 +497,127 @@ RULES.push({ id: 'fantasma-bordo', titolo: 'Il controllo «Bordo» condiviso è 
 violazioni['fantasma-effetti-testo'] = fantasmi.effettiTesto;
 RULES.push({ id: 'fantasma-effetti-testo', titolo: 'Gli «Effetti testo» condivisi sono resi dal renderer' });
 
+// ─── stile nel Contenuto ─────────────────────────────────────────────────────
+// «Ogni cosa che tocca stile e colore sta nel tab Stile» (utente, 23 set 2026): il
+// corsivo e i colori stavano a volte nel Contenuto e a volte nello Stile. Nel Contenuto
+// (`fields`, anche nelle voci dei ripetitori) nessun controllo di stile: le voci hanno
+// il loro specchio nello Stile (content-items a struttura fissa, stesse chiavi).
+// Contenuto = cosa la tile dice e mostra (testi, media principali, link, voci, dati,
+// comportamento, visibilità). Stile = come appare (colori, tipografia e corsivo, sfondi,
+// bordi, raggi, ombre, spazi, dimensioni, disposizione, varianti).
+const TIPI_STILE_C = new Set(['color', 'typography', 'font-family', 'border', 'border-radius', 'box-shadow',
+  'text-shadow', 'background', 'gradient', 'css-filter', 'backdrop-filter', 'object-position', 'text-effects',
+  'spacing', 'shadow']);
+// chiavi che SEMBRANO stile ma sono contenuto o comportamento
+const ESCLUSI_C = new Set(['file_max_size', 'radius_default', 'fit_bounds', 'start_position', 'currency_position',
+  'image_size', 'thumbnail_size', 'img_size', 'thumb_size', 'text_effect_cursor_char', 'password_require_uppercase',
+  'y_step_size', 'direction']);
+// per tile: il valore È il contenuto (tipo di effetto, font in mostra, colonne della riga)
+const ESCLUSI_TILE_C = new Set(['particlefx:preset', 'variablespecimen:font_family', 'row:layout',
+  'inner-columns:layout', 'section:layout', 'column:layout']);
+const RE_STILE_C = [
+  /(^|_)(italic|bold|uppercase|underline|font_size|font_weight|letter_spacing|line_height|text_transform|tracking)(_|$)/,
+  /(^|_)(color|colour|colors|bg|tint|palette)(_|$)/,
+  /(^|_)(opacity|blur|glow|shadow|radius|border|gradient|parallax)(_|$)/,
+  /(^|_)(columns|cols|gap|align|alignment|justify|aspect_ratio|aspect|ratio|object_fit|height|width|max_width|min_height|equal_height|full_width)(_|$)/,
+  /(^|_)(size|size_min|size_max)$/,
+  /(^|_)(style|variant|skin|theme|preset|hover_effect|orientation|shape)$/,
+];
+const TIPI_PER_CHIAVE_C = new Set(['toggle', 'select', 'range', 'number', 'unit', 'text', 'segmented', 'radio', 'icon-select', '?']);
+function eStile(key, tipo, tile, etichette, labelCampo) {
+  if (ESCLUSI_C.has(key) || ESCLUSI_TILE_C.has(tile + ':' + key)) return false;
+  if (/comportament/i.test(labelCampo)) return false;
+  // «Sfondo voce», «Sfondo card» → stile; «Sfondo / media», «Copertina» → media principale
+  if (tipo === 'background') return /sfondo/i.test(etichette) && !/media/i.test(labelCampo);
+  if (TIPI_STILE_C.has(tipo)) return true;
+  if (!key) return false;
+  if (key === 'layout') return tipo === 'select' || tipo === 'segmented';
+  if (!TIPI_PER_CHIAVE_C.has(tipo)) return false;
+  if (/^(show|mostra|enable|use|has|hide|disable)_/.test(key)) return false;
+  if (/_text$|_label$|_title$|_url$|_link$/.test(key)) return false;
+  if (/position$/.test(key)) return tipo === 'select' || tipo === '?' || /object_position/.test(key);
+  if (/(^|_)fit$/.test(key)) return tipo === 'select';
+  return RE_STILE_C.some((re) => re.test(key));
+}
+function chiudiC(src, j) { // j su ( [ { → indice della chiusa corrispondente
+  let d = 0, str = null;
+  for (let k = j; k < src.length; k++) {
+    const c = src[k];
+    if (str) { if (c === BS) { k++; continue; } if (c === str) str = null; continue; }
+    if (c === "'" || c === '"' || c === '`') { str = c; continue; }
+    if (c === '/' && src[k + 1] === '/') { const e = src.indexOf('\n', k); k = e < 0 ? src.length : e; continue; }
+    if (c === '/' && src[k + 1] === '*') { const e = src.indexOf('*/', k + 2); k = e < 0 ? src.length : e + 1; continue; }
+    if ('([{'.includes(c)) d++;
+    else if (')]}'.includes(c)) { d--; if (d === 0) return k; }
+  }
+  return -1;
+}
+function elementiC(src, a, b) { // elementi di primo livello dell'array [a..b]
+  const out = [];
+  let j = a + 1;
+  while (j < b) {
+    const c = src[j];
+    if (/\s|,/.test(c)) { j++; continue; }
+    if (c === '/' && src[j + 1] === '/') { const e = src.indexOf('\n', j); j = e < 0 ? b : e + 1; continue; }
+    if (c === '/' && src[j + 1] === '*') { j = src.indexOf('*/', j + 2) + 2; continue; }
+    let e;
+    if (c === '{') e = chiudiC(src, j);
+    else {
+      let k = j, d = 0, str = null;
+      for (; k < b; k++) {
+        const ch = src[k];
+        if (str) { if (ch === BS) { k++; continue; } if (ch === str) str = null; continue; }
+        if (ch === "'" || ch === '"' || ch === '`') { str = ch; continue; }
+        if ('([{'.includes(ch)) d++; else if (')]}'.includes(ch)) d--; else if (ch === ',' && d === 0) break;
+      }
+      e = k - 1;
+    }
+    out.push({ s: j, corpo: src.slice(j, e + 1) });
+    j = e + 1;
+  }
+  return out;
+}
+function descriviC(corpo) {
+  const t = corpo.trim();
+  const obj = t.startsWith('{') ? t : (t.match(/^[A-Za-z_$][\w$]*\(\s*(\{[\s\S]*\})\s*(?:,[\s\S]*)?\)$/) || [])[1];
+  if (!obj) return null;
+  const lab = (obj.match(/[{,]\s*label:\s*(?:t\()?'((?:[^'\\]|\\.)*)'/) || [])[1] || '';
+  return { key: (obj.match(/[{,]\s*key:\s*'([^']+)'/) || [])[1] || '', tipo: (obj.match(/[{,]\s*type:\s*'([^']+)'/) || [])[1] || '?', lab, obj };
+}
+const stileNelContenuto = [];
+for (const f of fs.readdirSync(ELEMENTS).filter((x) => x.endsWith('.js') && !x.startsWith('_'))) {
+  const src = fs.readFileSync(path.join(ELEMENTS, f), 'utf8');
+  const tile = f.replace(/\.js$/, '');
+  const i = src.search(/\n {2}fields:\s*\[/);
+  if (i < 0) continue;
+  const a = src.indexOf('[', i), b = chiudiC(src, a);
+  let sezione = '';
+  for (const el of elementiC(src, a, b)) {
+    if (/^\.\.\.(shadowField|borderFields|borderEffectFields|textEffectsFields|typographyFields?|focalFields?|objectPositionField)\b/.test(el.corpo.trim())) {
+      stileNelContenuto.push({ file: tile, type: 'spread', key: el.corpo.trim().slice(3, 40), label: '' });
+      continue;
+    }
+    const d = descriviC(el.corpo);
+    if (!d) continue;
+    if (d.tipo === 'separator') { sezione = d.lab; continue; }
+    if (d.tipo === 'content-items') {
+      const m = d.obj.match(/itemFields:\s*\[/);
+      if (!m) continue;
+      const base = el.s + el.corpo.indexOf(d.obj) + m.index + m[0].length - 1;
+      for (const v of elementiC(src, base, chiudiC(src, base))) {
+        const dv = descriviC(v.corpo);
+        if (dv && dv.tipo !== 'separator' && eStile(dv.key, dv.tipo, tile, dv.lab, dv.lab)) {
+          stileNelContenuto.push({ file: tile, type: 'voce', key: d.key + '.' + dv.key, label: dv.lab });
+        }
+      }
+      continue;
+    }
+    if (eStile(d.key, d.tipo, tile, d.lab + ' ' + sezione, d.lab)) stileNelContenuto.push({ file: tile, type: d.tipo, key: d.key || '(' + d.tipo + ')', label: d.lab });
+  }
+}
+violazioni['stile-nel-contenuto'] = stileNelContenuto;
+RULES.push({ id: 'stile-nel-contenuto', titolo: 'Nessun controllo di stile o colore nel tab Contenuto (anche nelle voci dei ripetitori)' });
+
 // ─── confronto con la baseline ──────────────────────────────────────────────
 const args = process.argv.slice(2);
 const conteggi = Object.fromEntries(Object.entries(violazioni).map(([k, v]) => [k, v.length]));

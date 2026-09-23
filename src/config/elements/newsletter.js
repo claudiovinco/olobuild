@@ -114,11 +114,6 @@ export default {
       condition: { field: 'icon_type', value: 'image' } },
 
     { type: 'separator', label: t('Form') },
-    { key: 'layout', label: t('Layout'), type: 'select', options: [
-      { value: 'horizontal', label: t('Orizzontale (inline)') },
-      { value: 'vertical', label: t('Verticale (stacked)') },
-      { value: 'minimal', label: t('Minimal (solo email)') },
-    ]},
     { key: 'show_name', label: t('Mostra campo nome'), type: 'toggle' },
     { key: 'name_placeholder', label: t('Placeholder nome'), type: 'text',
       condition: { field: 'show_name', value: true } },
@@ -136,10 +131,6 @@ export default {
     { type: 'separator', label: t('Content Lock') },
     { key: 'content_lock', label: t('Blocca contenuto successivo'), type: 'toggle' },
     { key: 'lock_message', label: t('Messaggio blocco'), type: 'text',
-      condition: { field: 'content_lock', value: true } },
-    { key: 'lock_blur', label: t('Sfocatura contenuto'), type: 'range', min: 0, max: 20, step: 1,
-      condition: { field: 'content_lock', value: true } },
-    { key: 'lock_height', label: t('Altezza anteprima'), type: 'range', min: 50, max: 500, step: 10,
       condition: { field: 'content_lock', value: true } },
 
     { type: 'separator', label: t('Integrazione Email') },
@@ -275,5 +266,16 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Content Lock') },
+    { key: 'lock_blur', label: t('Sfocatura contenuto'), type: 'range', min: 0, max: 20, step: 1,
+      condition: { field: 'content_lock', value: true } },
+    { key: 'lock_height', label: t('Altezza anteprima'), type: 'range', min: 50, max: 500, step: 10,
+      condition: { field: 'content_lock', value: true } },
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'layout', label: t('Layout'), type: 'select', options: [
+      { value: 'horizontal', label: t('Orizzontale (inline)') },
+      { value: 'vertical', label: t('Verticale (stacked)') },
+      { value: 'minimal', label: t('Minimal (solo email)') },
+    ]},
   ],
 };

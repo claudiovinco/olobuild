@@ -52,13 +52,6 @@ export default {
     { key: 'typing_speed', label: t('Velocità digitazione'), type: 'range', min: 50, max: 300, step: 10 },
     { key: 'pause_time', label: t('Pausa tra parole'), type: 'range', min: 500, max: 5000, step: 100 },
 
-    { type: 'separator', label: t('Evidenziazione (se animation=highlight)') },
-    { key: 'highlight_style', label: t('Stile evidenziazione'), type: 'select', options: [
-      { value: 'underline', label: t('Sottolineatura') },
-      { value: 'background', label: t('Sfondo') },
-      { value: 'circle', label: t('Cerchio') },
-      { value: 'strikethrough', label: t('Barrato') },
-    ], condition: { field: 'animation', operator: '==', value: 'highlight' } },
   ],
 
   styleFields: [
@@ -108,5 +101,12 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Evidenziazione') },
+    { key: 'highlight_style', label: t('Stile evidenziazione'), type: 'select', options: [
+      { value: 'underline', label: t('Sottolineatura') },
+      { value: 'background', label: t('Sfondo') },
+      { value: 'circle', label: t('Cerchio') },
+      { value: 'strikethrough', label: t('Barrato') },
+    ], condition: { field: 'animation', operator: '==', value: 'highlight' } },
   ],
 };

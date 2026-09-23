@@ -34,7 +34,6 @@ export default {
       newItemDefaults: { label: '', color: '', url: '' },
       itemFields: [
         { key: 'label', label: t('Etichetta (tooltip)'), type: 'text' },
-        { key: 'color', label: t('Colore'), type: 'color' },
         { key: 'url', label: t('URL (pagine senza gruppo)'), type: 'link' },
       ] },
     { key: 'hide_without_group', label: t('Nascondi se la pagina non ha un gruppo Cover orizzontale'), type: 'toggle' },
@@ -50,5 +49,9 @@ export default {
     { key: 'dot_bg', label: t('Sfondo cerchio'), type: 'color' },
     { key: 'dot_color', label: t('Colore pallino (senza colore per-fermata)'), type: 'color' },
     { key: 'active_glow', label: t('Bagliore sul pallino attivo'), type: 'toggle' },
+    { type: 'separator', label: t('Fermate') },
+    { key: 'items', type: 'content-items', label: t('Fermate'), itemLabel: t('Fermata'), etichettaDa: 'label', itemFields: [
+        { key: 'color', label: t('Colore'), type: 'color' },
+    ] },
   ],
 };

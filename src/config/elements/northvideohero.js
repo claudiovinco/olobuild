@@ -88,8 +88,6 @@ export default {
       { value: 'media', label: t('Placeholder') },
       { value: 'none', label: t('Nessuno') },
     ] },
-    { key: 'media_bg', label: t('Sfondo hero (video, immagine, gradiente, colore…)'), type: 'background', showParallax: false,
-      condition: { field: 'mock_mode', op: 'eq', value: 'video' } },
     { key: 'show_controls', label: t('Mostra controlli player'), type: 'toggle',
       condition: { field: 'mock_mode', op: 'eq', value: 'video' } },
     { key: 'autoplay', label: t('Autoplay (muto)'), type: 'toggle',
@@ -135,5 +133,8 @@ export default {
     ...shadowField,
 
     ...borderFields(),
+    { type: 'separator', label: t('Mockup prodotto') },
+    { key: 'media_bg', label: t('Sfondo hero (video, immagine, gradiente, colore…)'), type: 'background', showParallax: false,
+      condition: { field: 'mock_mode', op: 'eq', value: 'video' } },
   ],
 };

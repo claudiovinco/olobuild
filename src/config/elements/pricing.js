@@ -158,7 +158,6 @@ export default {
       condition: { field: 'countdown_enabled', value: true } },
 
     { type: 'separator', label: t('Sfondo avanzato') },
-    { key: 'media_bg', label: t('Sfondo (immagine, video, gradiente, colore…)'), type: 'background', showParallax: false },
     { key: 'overlay', label: t('Overlay scuro sul media'), type: 'toggle' },
   ],
 
@@ -312,5 +311,7 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Sfondo avanzato') },
+    { key: 'media_bg', label: t('Sfondo (immagine, video, gradiente, colore…)'), type: 'background', showParallax: false },
   ],
 };

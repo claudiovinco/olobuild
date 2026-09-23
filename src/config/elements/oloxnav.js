@@ -54,11 +54,6 @@ export default {
       itemFields: [
         { key: 'label', label: t('Etichetta'), type: 'text' },
         { key: 'url', label: t('Link'), type: 'link' },
-        { key: 'color', label: t('Colore'), type: 'select', options: [
-          { value: 'build', label: 'build' }, { value: 'booking', label: 'booking' },
-          { value: 'lang', label: 'lang' }, { value: 'secur', label: 'security' },
-          { value: 'tour', label: 'tour' }, { value: 'tutor', label: 'tutor' }, { value: 'olo', label: 'olo' },
-        ] },
         { key: 'active', label: t('Attivo (pagina corrente)'), type: 'toggle' },
       ],
     },
@@ -84,5 +79,13 @@ export default {
 
   styleFields: [
     oloxAccentField(t('Accento (hover/attivo)')),
+    { type: 'separator', label: t('Link prodotti') },
+    { key: 'links', type: 'content-items', label: t('Link'), itemLabel: t('Link'), etichettaDa: 'label', itemFields: [
+        { key: 'color', label: t('Colore'), type: 'select', options: [
+          { value: 'build', label: 'build' }, { value: 'booking', label: 'booking' },
+          { value: 'lang', label: 'lang' }, { value: 'secur', label: 'security' },
+          { value: 'tour', label: 'tour' }, { value: 'tutor', label: 'tutor' }, { value: 'olo', label: 'olo' },
+        ] },
+    ] },
   ],
 };

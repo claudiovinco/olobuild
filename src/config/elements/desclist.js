@@ -57,11 +57,6 @@ export default {
     },
 
     { type: 'separator', label: t('Layout') },
-    { key: 'layout', label: t('Layout'), type: 'select', options: [
-      { value: 'stacked', label: t('Impilato') },
-      { value: 'inline', label: t('In linea') },
-      { value: 'grid', label: t('Griglia') },
-    ]},
     { key: 'show_icon', label: t('Mostra icona'), type: 'toggle' },
     { key: 'separator', label: t('Separatore tra voci'), type: 'toggle' },
     { key: 'striped', label: t('Righe alternate'), type: 'toggle' },
@@ -132,5 +127,11 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'layout', label: t('Layout'), type: 'select', options: [
+      { value: 'stacked', label: t('Impilato') },
+      { value: 'inline', label: t('In linea') },
+      { value: 'grid', label: t('Griglia') },
+    ]},
   ],
 };

@@ -98,18 +98,12 @@ export default {
     { key: 'reveal_amount', label: t('Scorrimento (px, 0 = auto)'), type: 'number', min: 0, max: 800, placeholder: t('auto'),
       condition: { field: 'reveal_effect', operator: 'in', value: ['slide-up', 'slide-down', 'slide-left', 'slide-right'] } },
 
-    { type: 'separator', label: t('Sfondo globale') },
-    { key: 'media', label: t('Sfondo entrambe le zone (immagine, video, gradiente…)'), type: 'background', showParallax: false },
 
-    { type: 'separator', label: t('Zona visibile — Sfondo') },
-    { key: 'top_media', label: t('Zona alta — sfondo (immagine, video, gradiente…)'), type: 'background', showParallax: false },
 
     { type: 'separator', label: t('Zona visibile — Contenuto') },
     { key: 'top_icon', label: t('Icona'), type: 'icon' },
     { key: 'top_content', label: t('Contenuto visibile'), type: 'richtext' },
 
-    { type: 'separator', label: t('Zona rivelata — Sfondo') },
-    { key: 'bottom_media', label: t('Zona bassa — sfondo (immagine, video, gradiente…)'), type: 'background', showParallax: false },
 
     { type: 'separator', label: t('Zona rivelata — Contenuto') },
     { key: 'bottom_icon', label: t('Icona'), type: 'icon' },
@@ -127,6 +121,7 @@ export default {
       condition: { field: 'top_icon', operator: '!=', value: '' } },
     { key: 'top_icon_color', label: t('Colore icona'), type: 'color',
       condition: { field: 'top_icon', operator: '!=', value: '' } },
+    { key: 'top_media', label: t('Zona alta — sfondo (immagine, video, gradiente…)'), type: 'background', showParallax: false },
     { type: 'separator', label: t('Tipografia') },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
     { type: 'typography', label: t('Zona Visibile'),
@@ -158,6 +153,7 @@ export default {
       condition: { field: 'bottom_icon', operator: '!=', value: '' } },
     { key: 'bottom_icon_color', label: t('Colore icona'), type: 'color',
       condition: { field: 'bottom_icon', operator: '!=', value: '' } },
+    { key: 'bottom_media', label: t('Zona bassa — sfondo (immagine, video, gradiente…)'), type: 'background', showParallax: false },
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Zona Rivelata'),
       responsiveKeys: [],
@@ -196,5 +192,7 @@ export default {
     { key: 'tile_padding', type: 'spacing', label: t('Padding') },
 
     ...borderFields(),
+    { type: 'separator', label: t('Sfondo globale') },
+    { key: 'media', label: t('Sfondo entrambe le zone (immagine, video, gradiente…)'), type: 'background', showParallax: false },
   ],
 };

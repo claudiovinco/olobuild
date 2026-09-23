@@ -62,8 +62,6 @@ export default {
 
     { type: 'separator', label: t('Effetto pennellata') },
     { key: 'smear_enabled', label: t('Attiva il paint smear (cursore)'), type: 'toggle' },
-    { key: 'smear_palette', label: t('Palette pigmenti (hex separati da virgola)'), type: 'text',
-      description: t('Colori delle pennellate lasciate dal cursore.') },
   ],
 
   styleFields: [
@@ -97,5 +95,8 @@ export default {
     ...shadowField,
 
     ...borderFields(),
+    { type: 'separator', label: t('Effetto pennellata') },
+    { key: 'smear_palette', label: t('Palette pigmenti (hex separati da virgola)'), type: 'text',
+      description: t('Colori delle pennellate lasciate dal cursore.') },
   ],
 };

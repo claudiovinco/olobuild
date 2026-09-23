@@ -172,21 +172,6 @@ export default {
     { key: 'search_keyword', label: t('Keyword ricerca preset'), type: 'text', placeholder: t('filtra per parola chiave') },
 
     { type: 'separator', label: t('Layout strutturale') },
-    { key: 'layout', label: t('Layout'), type: 'select', options: [
-      { value: 'grid',          label: t('Griglia') },
-      { value: 'list',          label: t('Lista') },
-      { value: 'list-rich',     label: t('Lista rich (thumb sx)') },
-      { value: 'carousel',      label: t('Carosello') },
-      { value: 'masonry',       label: t('Masonry') },
-      { value: 'magazine-trio', label: t('Magazine Trio (1+2)') },
-      { value: 'magazine-hero', label: t('Magazine Hero + Grid') },
-      { value: 'alternating',   label: t('Alternating slots') },
-      { value: 'bento',         label: t('Bento asimmetrico') },
-      { value: 'newspaper',     label: t('Newspaper columns') },
-      { value: 'timeline',      label: t('Timeline verticale') },
-      { value: 'ticker-strip',  label: t('Ticker strip (auto-scroll)') },
-      { value: 'stacked',       label: t('Stacked Cards (full width)') },
-    ]},
     { key: 'timeline_group_by', label: t('Raggruppa timeline per'), type: 'select', options: [
       { value: 'month', label: t('Mese') },
       { value: 'year',  label: t('Anno') },
@@ -274,6 +259,21 @@ export default {
     { key: 'image_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions({ sep: ':' }),
       condition: { field: 'show_image', op: 'eq', value: true } },
 
+    { key: 'layout', label: t('Layout'), type: 'select', options: [
+      { value: 'grid',          label: t('Griglia') },
+      { value: 'list',          label: t('Lista') },
+      { value: 'list-rich',     label: t('Lista rich (thumb sx)') },
+      { value: 'carousel',      label: t('Carosello') },
+      { value: 'masonry',       label: t('Masonry') },
+      { value: 'magazine-trio', label: t('Magazine Trio (1+2)') },
+      { value: 'magazine-hero', label: t('Magazine Hero + Grid') },
+      { value: 'alternating',   label: t('Alternating slots') },
+      { value: 'bento',         label: t('Bento asimmetrico') },
+      { value: 'newspaper',     label: t('Newspaper columns') },
+      { value: 'timeline',      label: t('Timeline verticale') },
+      { value: 'ticker-strip',  label: t('Ticker strip (auto-scroll)') },
+      { value: 'stacked',       label: t('Stacked Cards (full width)') },
+    ]},
     { type: 'separator', label: t('Hover card') },
     { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
       { value: 'none',           label: t('Nessuno') },

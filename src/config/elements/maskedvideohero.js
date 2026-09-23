@@ -55,7 +55,6 @@ export default {
     { key: 'tag_text', label: t('Pill (eyebrow)'), type: 'text' },
     { key: 'headline_text', label: t('Titolo'), type: 'text' },
     { key: 'accent_text', label: t('Parola accento (colore)'), type: 'text' },
-    { key: 'uppercase', label: t('Maiuscolo'), type: 'toggle' },
     { key: 'subhead', label: t('Sottotitolo'), type: 'textarea' },
 
     { type: 'separator', label: t('CTA') },
@@ -65,8 +64,6 @@ export default {
     { key: 'cta2_url', label: t('CTA 2 — link'), type: 'link' },
 
     { type: 'separator', label: t('Sfondo / media') },
-    { key: 'transparent_bg', label: t('Sfondo trasparente (no segnaposto)'), type: 'toggle',
-      description: t('Niente colore pannello né striscia segnaposto: si vede lo sfondo della sezione.') },
     { key: 'media_bg', label: t('Sfondo / media (immagine, video, gradiente, colore…)'), type: 'background', showParallax: false },
     { key: 'media_label', label: t('Etichetta placeholder'), type: 'text' },
     { key: 'watermark_text', label: t('Watermark (ghost)'), type: 'text' },
@@ -88,5 +85,10 @@ export default {
     { type: 'separator', label: t('Forma') },
     { key: 'arch', label: t('Bordo inferiore ad arco (maschera)'), type: 'toggle' },
     { key: 'min_height', label: t('Altezza minima'), type: 'range', min: 50, max: 100, step: 1 },
+    { type: 'separator', label: t('Testo') },
+    { key: 'uppercase', label: t('Maiuscolo'), type: 'toggle' },
+    { type: 'separator', label: t('Sfondo / media') },
+    { key: 'transparent_bg', label: t('Sfondo trasparente (no segnaposto)'), type: 'toggle',
+      description: t('Niente colore pannello né striscia segnaposto: si vede lo sfondo della sezione.') },
   ],
 };

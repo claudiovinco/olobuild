@@ -45,10 +45,6 @@ export default {
     { type: 'separator', label: t('Query') },
     { key: 'posts_per_page', label: t('Numero prodotti'), type: 'range', min: 1, max: 12, step: 1 },
 
-    { type: 'separator', label: t('Colonne responsive') },
-    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1 },
-    { key: 'columns_tablet', label: t('Colonne tablet'), type: 'range', min: 1, max: 4, step: 1 },
-    { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 2, step: 1 },
 
     { type: 'separator', label: t('Elementi visibili') },
     { key: 'show_image', label: t('Mostra immagine'), type: 'toggle' },
@@ -100,5 +96,8 @@ export default {
     ]},
 
     ...borderFields(),
+    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1 },
+    { key: 'columns_tablet', label: t('Colonne tablet'), type: 'range', min: 1, max: 4, step: 1 },
+    { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 2, step: 1 },
   ],
 };

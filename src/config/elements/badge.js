@@ -55,11 +55,6 @@ export default {
   fields: [
     { key: 'text', label: t('Testo'), type: 'text' },
     { key: 'icon', label: t('Icona (opzionale)'), type: 'icon' },
-    // Senza icona la posizione non ha niente da spostare.
-    { key: 'icon_position', label: t('Posizione icona'), type: 'select', options: [
-      { value: 'before', label: t('Prima del testo') },
-      { value: 'after', label: t('Dopo il testo') },
-    ], condition: { field: 'icon', op: 'notEmpty' } },
 
     { type: 'separator', label: t('Badge aggiuntivi') },
     { key: 'extra_items', label: t('Altre etichette'), type: 'content-items', itemLabel: t('Etichetta'),
@@ -67,17 +62,11 @@ export default {
       newItemDefaults: { text: '', color: '', text_color: '' },
       itemFields: [
         { key: 'text', label: t('Testo'), type: 'text' },
-        { key: 'color', label: t('Colore'), type: 'color' },
-        { key: 'text_color', label: t('Colore testo (vuoto = come il colore)'), type: 'color' },
       ] },
 
     { type: 'separator', label: t('Stato live') },
     { key: 'badge_live', label: t('Mostra pallino live'), type: 'toggle',
       description: t('Aggiunge un pallino con onda che pulsa, per indicatori "Online / In diretta".') },
-    { key: 'badge_live_color', label: t('Colore onda'), type: 'select', options: [
-      { value: 'success', label: t('Verde (online)') },
-      { value: 'primary', label: t('Primario (brand)') },
-    ], condition: { field: 'badge_live', op: 'eq', value: true } },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -131,11 +120,26 @@ export default {
     { key: 'padding', label: t('Padding'), type: 'spacing', min: 0, max: 60,
       legacyKeys: { y: 'padding_y', x: 'padding_x' } },
 
+    { type: 'separator', label: t('Badge aggiuntivi') },
+    { key: 'extra_items', type: 'content-items', label: t('Altre etichette'), itemLabel: t('Etichetta'), etichettaDa: 'text', itemFields: [
+        { key: 'color', label: t('Colore'), type: 'color' },
+        { key: 'text_color', label: t('Colore testo (vuoto = come il colore)'), type: 'color' },
+    ] },
+    { type: 'separator', label: t('Stato live') },
+    { key: 'badge_live_color', label: t('Colore onda'), type: 'select', options: [
+      { value: 'success', label: t('Verde (online)') },
+      { value: 'primary', label: t('Primario (brand)') },
+    ], condition: { field: 'badge_live', op: 'eq', value: true } },
     { type: 'separator', label: t('Disposizione') },
     { key: 'alignment', label: t('Allineamento'), type: 'select', responsive: true, options: [
       { value: 'left',   label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
       { value: 'right',  label: t('Destra') },
     ]},
+    // Senza icona la posizione non ha niente da spostare.
+    { key: 'icon_position', label: t('Posizione icona'), type: 'select', options: [
+      { value: 'before', label: t('Prima del testo') },
+      { value: 'after', label: t('Dopo il testo') },
+    ], condition: { field: 'icon', op: 'notEmpty' } },
   ],
 };

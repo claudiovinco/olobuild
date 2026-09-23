@@ -83,7 +83,6 @@ export default {
     { key: 'pause_hover', label: t('Pausa al passaggio mouse'), type: 'toggle' },
     { key: 'drag_scroll', label: t('Trascinabile (scorrimento libero)'), type: 'toggle',
       description: t('Il nastro si può trascinare con mouse o dito; al rilascio riprende a scorrere da solo. Il loop resta continuo.') },
-    { key: 'gap', label: t('Gap elementi'), type: 'range', min: 20, max: 120, step: 10 },
 
     { type: 'separator', label: t('Velocity Skew (reattivo allo scroll)') },
     { key: 'velocity_skew', label: t('Inclina con la velocità di scroll'), type: 'toggle',
@@ -178,6 +177,8 @@ export default {
     { key: 'border_color', label: t('Colore bordo'), type: 'color' },
 
     ...shadowField,
-    ...borderFields(),
+    ...borderFields(),,
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'gap', label: t('Gap elementi'), type: 'range', min: 20, max: 120, step: 10 },
   ],
 };

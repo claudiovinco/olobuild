@@ -151,50 +151,7 @@ export default {
       { value: 'classic', label: t('Classica') },
       { value: 'strip', label: t('Nastro') },
     ]},
-    { key: 'layout', label: t('Schema'), type: 'select', optionsFn: s => {
-      let family = s.layout_family || 'classic';
-      if (family === 'classic') {
-        const lay = s.layout || 'grid';
-        if (lay.startsWith('strip') || lay === 'filmstrip') family = 'strip';
-      }
-      if (family === 'strip') return [
-        { value: 'strip', label: t('Nastro') },
-        { value: 'strip_collage', label: t('Nastro collage') },
-        { value: 'strip_multi', label: t('Nastro multi-riga') },
-        { value: 'strip_marquee', label: t('Nastro automatico') },
-        { value: 'strip_split', label: t('Nastro doppio') },
-        { value: 'strip_coverflow', label: t('Coverflow 3D') },
-      ];
-      return [
-        { value: 'grid', label: t('Griglia') },
-        { value: 'justified', label: t('Giustificato') },
-        { value: 'masonry', label: t('Masonry') },
-        { value: 'scattered', label: t('Sparso') },
-        { value: 'collage', label: t('Collage') },
-        { value: 'mosaic', label: t('Mosaico') },
-        { value: 'honeycomb', label: t('Esagoni') },
-        { value: 'hexgrid', label: t('Esagoni incastro') },
-        { value: 'puzzle', label: t('Puzzle') },
-        { value: 'diagonal', label: t('Diagonale') },
-        { value: 'parallax', label: t('Parallasse') },
-        { value: 'drift', label: t('Deriva (multi-dir)') },
-        { value: 'cascade', label: t('Cascata (sovrapposti)') },
-        { value: 'metro', label: t('Metro (dimensioni miste)') },
-        { value: 'expand', label: t('Espandi (spotlight)') },
-      ];
-    }},
-    { key: 'puzzle_style', label: t('Stile puzzle'), type: 'select', options: [
-      { value: 'classic', label: t('Classico') },
-      { value: 'zigzag', label: t('Zigzag') },
-      { value: 'wave', label: t('Onda') },
-      { value: 'castle', label: t('Castello') },
-      { value: 'fir', label: t('Abeti') },
-    ], show: s => s.layout === 'puzzle' },
-    { key: 'columns', label: t('Colonne'), type: 'range', min: 2, max: 6, step: 1,
-      show: s => !(s.layout && s.layout.startsWith('strip')) },
     { key: 'rows', label: t('Righe visibili (0 = tutte)'), type: 'range', min: 0, max: 5, step: 1,
-      show: s => !(s.layout && s.layout.startsWith('strip')) },
-    { key: 'mobile_columns', label: t('Colonne mobile'), type: 'range', min: 1, max: 4, step: 1,
       show: s => !(s.layout && s.layout.startsWith('strip')) },
 
     // ─── Coverflow / Filmstrip behavior ───
@@ -267,6 +224,13 @@ export default {
     ]},
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
+    { key: 'puzzle_style', label: t('Stile puzzle'), type: 'select', options: [
+      { value: 'classic', label: t('Classico') },
+      { value: 'zigzag', label: t('Zigzag') },
+      { value: 'wave', label: t('Onda') },
+      { value: 'castle', label: t('Castello') },
+      { value: 'fir', label: t('Abeti') },
+    ], show: s => s.layout === 'puzzle' },
     // ─── Dimensioni visive ───
     { type: 'separator', label: t('Dimensioni') },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 24, step: 2 },
@@ -525,5 +489,42 @@ export default {
     // ─── Ombra & bordi ───
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'layout', label: t('Schema'), type: 'select', optionsFn: s => {
+      let family = s.layout_family || 'classic';
+      if (family === 'classic') {
+        const lay = s.layout || 'grid';
+        if (lay.startsWith('strip') || lay === 'filmstrip') family = 'strip';
+      }
+      if (family === 'strip') return [
+        { value: 'strip', label: t('Nastro') },
+        { value: 'strip_collage', label: t('Nastro collage') },
+        { value: 'strip_multi', label: t('Nastro multi-riga') },
+        { value: 'strip_marquee', label: t('Nastro automatico') },
+        { value: 'strip_split', label: t('Nastro doppio') },
+        { value: 'strip_coverflow', label: t('Coverflow 3D') },
+      ];
+      return [
+        { value: 'grid', label: t('Griglia') },
+        { value: 'justified', label: t('Giustificato') },
+        { value: 'masonry', label: t('Masonry') },
+        { value: 'scattered', label: t('Sparso') },
+        { value: 'collage', label: t('Collage') },
+        { value: 'mosaic', label: t('Mosaico') },
+        { value: 'honeycomb', label: t('Esagoni') },
+        { value: 'hexgrid', label: t('Esagoni incastro') },
+        { value: 'puzzle', label: t('Puzzle') },
+        { value: 'diagonal', label: t('Diagonale') },
+        { value: 'parallax', label: t('Parallasse') },
+        { value: 'drift', label: t('Deriva (multi-dir)') },
+        { value: 'cascade', label: t('Cascata (sovrapposti)') },
+        { value: 'metro', label: t('Metro (dimensioni miste)') },
+        { value: 'expand', label: t('Espandi (spotlight)') },
+      ];
+    }},
+    { key: 'columns', label: t('Colonne'), type: 'range', min: 2, max: 6, step: 1,
+      show: s => !(s.layout && s.layout.startsWith('strip')) },
+    { key: 'mobile_columns', label: t('Colonne mobile'), type: 'range', min: 1, max: 4, step: 1,
+      show: s => !(s.layout && s.layout.startsWith('strip')) },
   ],
 };

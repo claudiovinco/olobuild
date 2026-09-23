@@ -91,11 +91,6 @@ export default {
           description: t('Mostrata al centro del fotogramma quando manca il media.') },
         { key: 'name', label: t('Nome progetto'), type: 'text' },
         { key: 'tag', label: t('Tag (categoria)'), type: 'text' },
-        { key: 'size', label: t('Altezza'), type: 'select', options: [
-          { value: 'normal', label: t('Normale') },
-          { value: 'tall', label: t('Alto') },
-          { value: 'short', label: t('Basso') },
-        ]},
         { key: 'link', label: t('Link (opzionale)'), type: 'link' },
       ],
     },
@@ -142,5 +137,13 @@ export default {
     ...shadowField,
 
     ...borderFields(),
+    { type: 'separator', label: t('Fotogrammi') },
+    { key: 'items', type: 'content-items', label: t('Progetti'), itemLabel: t('Fotogramma'), etichettaDa: 'name', miniaturaDa: 'image', itemFields: [
+        { key: 'size', label: t('Altezza'), type: 'select', options: [
+          { value: 'normal', label: t('Normale') },
+          { value: 'tall', label: t('Alto') },
+          { value: 'short', label: t('Basso') },
+        ]},
+    ] },
   ],
 };

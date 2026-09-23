@@ -67,15 +67,6 @@ export default {
     ]},
     { key: 'show_count', label: t('Mostra conteggio'), type: 'toggle' },
 
-    { type: 'separator', label: t('Layout') },
-    { key: 'layout', label: t('Layout'), type: 'select', options: [
-      { value: 'cloud', label: t('Cloud (flex)') },
-      { value: 'list', label: t('Lista verticale') },
-      { value: 'grid', label: t('Griglia') },
-    ]},
-    { key: 'columns', label: t('Colonne (griglia)'), type: 'range', min: 2, max: 6, step: 1,
-      condition: { field: 'layout', operator: '==', value: 'grid' } },
-    { key: 'link_underline', label: t('Sottolineatura link'), type: 'toggle' },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -105,6 +96,13 @@ export default {
     { type: 'separator', label: t('Spaziatura layout') },
     { key: 'gap', label: t('Gap'), type: 'range', min: 0, max: 24, step: 2 },
 
+    { key: 'layout', label: t('Layout'), type: 'select', options: [
+      { value: 'cloud', label: t('Cloud (flex)') },
+      { value: 'list', label: t('Lista verticale') },
+      { value: 'grid', label: t('Griglia') },
+    ]},
+    { key: 'columns', label: t('Colonne (griglia)'), type: 'range', min: 2, max: 6, step: 1,
+      condition: { field: 'layout', operator: '==', value: 'grid' } },
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Tag'),
       keys: {
@@ -116,6 +114,7 @@ export default {
     { key: 'min_font', label: t('Dimensione min'), type: 'range', min: 8, max: 24, step: 1 },
     { key: 'max_font', label: t('Dimensione max'), type: 'range', min: 16, max: 60, step: 1 },
 
+    { key: 'link_underline', label: t('Sottolineatura link'), type: 'toggle' },
     { type: 'separator', label: t('Colori') },
     withHover({ key: 'background_color', label: t('Sfondo tag'),   type: 'color' }, { hoverKey: 'hover_background' }),
 

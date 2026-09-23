@@ -36,12 +36,6 @@ export default {
     { key: 'heading', label: t('Titolo'), type: 'text' },
     { key: 'intro', label: t('Introduzione'), type: 'textarea' },
     { key: 'panel_label', label: t('Etichetta pannello'), type: 'text' },
-    // Elenco canonico. Niente voce «Auto»: il pannello non contiene un'immagine,
-    // la sua altezza NASCE dalla proporzione — senza, collasserebbe a zero.
-    // 16/10 non è fra le canoniche ma è il default storico di questa tile: resta
-    // selezionabile via `extra`, altrimenti chi l'ha salvato non lo ritroverebbe.
-    { key: 'aspect_ratio', label: t('Proporzioni pannello'), type: 'select',
-      options: ratioOptions({ auto: false, extra: ['16/10'] }) },
 
     { type: 'separator', label: t('Marker') },
     { key: 'items', label: t('Punti'), type: 'content-items',
@@ -68,5 +62,12 @@ export default {
       { value: 'left', label: t('Sinistra') },
       { value: 'center', label: t('Centro') },
     ]},
+    { type: 'separator', label: t('Forma') },
+    // Elenco canonico. Niente voce «Auto»: il pannello non contiene un'immagine,
+    // la sua altezza NASCE dalla proporzione — senza, collasserebbe a zero.
+    // 16/10 non è fra le canoniche ma è il default storico di questa tile: resta
+    // selezionabile via `extra`, altrimenti chi l'ha salvato non lo ritroverebbe.
+    { key: 'aspect_ratio', label: t('Proporzioni pannello'), type: 'select',
+      options: ratioOptions({ auto: false, extra: ['16/10'] }) },
   ],
 };

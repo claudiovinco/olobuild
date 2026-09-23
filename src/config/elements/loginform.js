@@ -179,11 +179,6 @@ export default {
         { key: 'placeholder', label: t('Placeholder'), type: 'text' },
         { key: 'meta_key', label: t('Chiave user_meta'), type: 'text' },
         { key: 'required', label: t('Obbligatorio'), type: 'toggle' },
-        { key: 'width', label: t('Larghezza'), type: 'select', options: [
-          { value: '100', label: '100%' },
-          { value: '50', label: '50%' },
-          { value: '33', label: '33%' },
-        ]},
         { key: 'options', label: t('Opzioni (una per riga)'), type: 'textarea',
           condition: { field: 'field_type', operator: 'in', value: ['select', 'radio'] } },
       ],
@@ -256,5 +251,12 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { key: 'register_fields', type: 'content-items', label: t('Campi del form'), itemLabel: 'Campo', etichettaDa: 'label', condition: { field: 'mode', operator: '!=', value: 'login' }, itemFields: [
+        { key: 'width', label: t('Larghezza'), type: 'select', options: [
+          { value: '100', label: '100%' },
+          { value: '50', label: '50%' },
+          { value: '33', label: '33%' },
+        ]},
+    ] },
   ],
 };

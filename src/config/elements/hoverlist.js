@@ -90,15 +90,12 @@ export default {
       itemLabel: t('Voce'),
       newItemDefaults: { color: '#e79aa6', name: 'Nuova voce', sub: 'Etichetta', desc: '', number: '', image: '', link_url: '', row_bg: { type: 'none' } },
       itemFields: [
-        { key: 'color',    label: t('Colore pastiglia'), type: 'color' },
         { key: 'name',     label: t('Nome'),             type: 'text' },
         { key: 'sub',      label: t('Sotto-etichetta'),  type: 'text' },
         { key: 'desc',     label: t('Descrizione (colonna destra, layout numerato)'), type: 'text' },
         { key: 'number',   label: t('Numero (vuoto = automatico 01, 02…)'), type: 'text' },
         { key: 'image',    label: t('Immagine anteprima (peek)'), type: 'image' },
         { key: 'link_url', label: t('Link'),             type: 'link' },
-        { key: 'row_bg',   label: t('Sfondo voce'),      type: 'background',
-          description: t('Sfondo della riga: colore, gradiente o immagine. Vuoto = trasparente con evidenziazione standard al passaggio del mouse; una voce con sfondo proprio lo mantiene anche in hover.') },
       ],
     },
 
@@ -109,16 +106,6 @@ export default {
         { value: 'image', label: t('Immagine') },
         { value: 'monitor', label: t('Monitor regia') },
       ]},
-    { key: 'peek_width', label: t('Larghezza anteprima'), type: 'range', min: 100, max: 320, step: 10,
-      condition: { field: 'peek', value: true } },
-    // Elenco canonico. Niente voce automatica: il peek è uno <span> vuoto con la foto
-    // messa come background-image, quindi senza `aspect-ratio` il riquadro avrebbe
-    // altezza zero e l'anteprima sparirebbe. Il 16:11 non sta nel set canonico ma era
-    // una delle quattro voci offerte finora: resta selezionabile via `extra` per chi
-    // l'ha già salvato.
-    { key: 'peek_ratio', label: t('Proporzioni anteprima'), type: 'select',
-      condition: { field: 'peek', value: true },
-      options: ratioOptions({ auto: false, extra: ['16/11'] }) },
     // Il focale e' UNO per tutta la lista (src:'' → pad neutro): le anteprime devono
     // essere inquadrate allo stesso modo, altrimenti la lista "balla" al passaggio.
     focalField('image', { key: 'object_position', src: '', reveal: true,
@@ -178,5 +165,21 @@ export default {
     withHover({ key: 'line_color', label: t('Colore linee'), type: 'color' },
       { hoverKey: 'line_hover_color', hoverDurationKey: 'line_color_hover_duration', defaultDuration: 200 }),
     { type: 'description', description: t('Ogni controllo con il toggle Normale | Hover imposta anche la resa al passaggio del mouse, con la sua durata; lasciare vuoto lo stato Hover significa «invariato». Rientro vuoto = automatico (8 px con pastiglia, 4 px nel layout numerato, dove la riga segue una scala fluida di altezza). Una voce con sfondo proprio lo mantiene anche in hover.') },
+    { key: 'items', type: 'content-items', label: t('Voci'), itemLabel: t('Voce'), etichettaDa: 'name', miniaturaDa: 'image', itemFields: [
+        { key: 'color',    label: t('Colore pastiglia'), type: 'color' },
+        { key: 'row_bg',   label: t('Sfondo voce'),      type: 'background',
+          description: t('Sfondo della riga: colore, gradiente o immagine. Vuoto = trasparente con evidenziazione standard al passaggio del mouse; una voce con sfondo proprio lo mantiene anche in hover.') },
+    ] },
+    { type: 'separator', label: t('Anteprima al hover') },
+    { key: 'peek_width', label: t('Larghezza anteprima'), type: 'range', min: 100, max: 320, step: 10,
+      condition: { field: 'peek', value: true } },
+    // Elenco canonico. Niente voce automatica: il peek è uno <span> vuoto con la foto
+    // messa come background-image, quindi senza `aspect-ratio` il riquadro avrebbe
+    // altezza zero e l'anteprima sparirebbe. Il 16:11 non sta nel set canonico ma era
+    // una delle quattro voci offerte finora: resta selezionabile via `extra` per chi
+    // l'ha già salvato.
+    { key: 'peek_ratio', label: t('Proporzioni anteprima'), type: 'select',
+      condition: { field: 'peek', value: true },
+      options: ratioOptions({ auto: false, extra: ['16/11'] }) },
   ],
 };

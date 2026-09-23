@@ -27,10 +27,6 @@ export default {
   },
 
   fields: [
-    { key: 'variant', label: t('Variante'), type: 'select', options: [
-      { value: 'next', label: t('Next — prossima fermata') },
-      { value: 'follow', label: t('Follow — banner in arrivo') },
-    ] },
     { key: 'fk_text', label: t('Chip (follow)'), type: 'text',
       condition: { field: 'variant', op: 'eq', value: 'follow' } },
     { key: 'body_html', label: t('Testo con link (HTML)'), type: 'textarea',
@@ -43,5 +39,11 @@ export default {
       condition: { field: 'variant', op: 'eq', value: 'next' } },
   ],
 
-  styleFields: [ oloxAccentField() ],
+  styleFields: [ oloxAccentField(), 
+    { type: 'separator', label: t('Aspetto') },
+    { key: 'variant', label: t('Variante'), type: 'select', options: [
+      { value: 'next', label: t('Next — prossima fermata') },
+      { value: 'follow', label: t('Follow — banner in arrivo') },
+    ] },
+],
 };

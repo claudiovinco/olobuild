@@ -69,7 +69,6 @@ export default {
     { key: 'video_url', label: t('Video (MP4/WebM)'), type: 'media' },
     { key: 'video_poster', label: t('Immagine poster'), type: 'image' },
     focalField('video_poster', { key: 'object_position', reveal: true, label: t('Punto focale video') }),
-    { key: 'video_opacity', label: t('Opacità video'), type: 'range', min: 10, max: 100, step: 5 },
 
     { type: 'separator', label: t('Maschera') },
     { key: 'mask_mode', label: t('Modalità maschera'), type: 'select', options: [
@@ -104,18 +103,6 @@ export default {
       show: s => s.scroll_animate && s.scroll_scale },
     { key: 'scroll_scale_to', label: t('Scala finale'), type: 'range', min: 50, max: 1000, step: 25,
       show: s => s.scroll_animate && s.scroll_scale },
-    { key: 'scroll_opacity', label: t('Opacità'), type: 'toggle',
-      show: s => s.scroll_animate },
-    { key: 'scroll_opacity_from', label: t('Opacità iniziale'), type: 'range', min: 0, max: 100, step: 5,
-      show: s => s.scroll_animate && s.scroll_opacity },
-    { key: 'scroll_opacity_to', label: t('Opacità finale'), type: 'range', min: 0, max: 100, step: 5,
-      show: s => s.scroll_animate && s.scroll_opacity },
-    { key: 'scroll_blur', label: t('Sfocatura'), type: 'toggle',
-      show: s => s.scroll_animate },
-    { key: 'scroll_blur_from', label: t('Sfocatura iniziale'), type: 'range', min: 0, max: 30, step: 1,
-      show: s => s.scroll_animate && s.scroll_blur },
-    { key: 'scroll_blur_to', label: t('Sfocatura finale'), type: 'range', min: 0, max: 30, step: 1,
-      show: s => s.scroll_animate && s.scroll_blur },
   ],
 
   styleFields: [
@@ -182,5 +169,20 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Video') },
+    { key: 'video_opacity', label: t('Opacità video'), type: 'range', min: 10, max: 100, step: 5 },
+    { type: 'separator', label: t('Animazione Scroll') },
+    { key: 'scroll_opacity', label: t('Opacità'), type: 'toggle',
+      show: s => s.scroll_animate },
+    { key: 'scroll_opacity_from', label: t('Opacità iniziale'), type: 'range', min: 0, max: 100, step: 5,
+      show: s => s.scroll_animate && s.scroll_opacity },
+    { key: 'scroll_opacity_to', label: t('Opacità finale'), type: 'range', min: 0, max: 100, step: 5,
+      show: s => s.scroll_animate && s.scroll_opacity },
+    { key: 'scroll_blur', label: t('Sfocatura'), type: 'toggle',
+      show: s => s.scroll_animate },
+    { key: 'scroll_blur_from', label: t('Sfocatura iniziale'), type: 'range', min: 0, max: 30, step: 1,
+      show: s => s.scroll_animate && s.scroll_blur },
+    { key: 'scroll_blur_to', label: t('Sfocatura finale'), type: 'range', min: 0, max: 30, step: 1,
+      show: s => s.scroll_animate && s.scroll_blur },
   ],
 };

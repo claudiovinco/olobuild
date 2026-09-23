@@ -94,8 +94,6 @@ export default {
       condition: { field: 'show_listeners', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Griglia ASCII') },
-    { key: 'cols', label: t('Colonne'), type: 'range', min: 16, max: 160, step: 1,
-      description: t('Larghezza della griglia in caratteri.') },
     { key: 'rows', label: t('Righe'), type: 'range', min: 4, max: 32, step: 1,
       description: t('Altezza dell\'equalizzatore in righe.') },
     { key: 'ramp', label: t('Set di caratteri (dal vuoto al pieno)'), type: 'text',
@@ -127,6 +125,8 @@ export default {
       sizeMin: 6, sizeMax: 24, sizeStep: 1,
     },
 
+    { key: 'cols', label: t('Colonne'), type: 'range', min: 16, max: 160, step: 1,
+      description: t('Larghezza della griglia in caratteri.') },
     { type: 'separator', label: t('Contenitore') },
     { key: 'radius', label: t('Raggio'), type: 'border-radius' },
     { key: 'padding', label: t('Padding'), type: 'spacing', min: 0, max: 120 },

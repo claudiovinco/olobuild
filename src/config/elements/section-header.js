@@ -87,8 +87,6 @@ export default {
       defaults: { text: 'Nuova riga', color: 'var(--olo-color-dark, #16263d)', italic: false },
       itemFields: [
         { key: 'text',   label: t('Testo'),   type: 'text' },
-        { key: 'italic', label: t('Corsivo'), type: 'toggle' },
-        { key: 'color',  label: t('Colore'),  type: 'color' },
       ],
     },
 
@@ -140,6 +138,10 @@ export default {
       sizeMin: 16, sizeMax: 160, sizeStep: 2,
     },
 
+    { key: 'headline_lines', type: 'content-items', label: t('Righe del titolo'), itemLabel: t('Riga'), etichettaDa: 'text', itemFields: [
+        { key: 'italic', label: t('Corsivo'), type: 'toggle' },
+        { key: 'color',  label: t('Colore'),  type: 'color' },
+    ] },
     { type: 'separator', label: t('Sottotitolo') },
     { type: 'typography', label: t('Sottotitolo'), show: conSottotitolo, responsiveKeys: [],
       keys: {

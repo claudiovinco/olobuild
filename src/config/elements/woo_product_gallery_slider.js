@@ -55,11 +55,6 @@ export default {
 
     { type: 'separator', label: t('Miniature') },
     { key: 'show_thumbnails', label: t('Mostra miniature'), type: 'toggle' },
-    { key: 'thumbnail_position', label: t('Posizione miniature'), type: 'select', options: [
-      { value: 'bottom', label: t('Sotto') },
-      { value: 'left', label: t('Sinistra') },
-      { value: 'right', label: t('Destra') },
-    ]},
 
     { type: 'separator', label: t('Slider') },
     { key: 'transition', label: t('Transizione'), type: 'select', options: [
@@ -99,6 +94,11 @@ export default {
     { key: 'thumbnail_size', label: t('Dimensione miniature'), type: 'range', min: 40, max: 150, step: 5 },
     { key: 'thumbnail_gap', label: t('Gap miniature'), type: 'range', min: 0, max: 24, step: 2 },
 
+    { key: 'thumbnail_position', label: t('Posizione miniature'), type: 'select', options: [
+      { value: 'bottom', label: t('Sotto') },
+      { value: 'left', label: t('Sinistra') },
+      { value: 'right', label: t('Destra') },
+    ]},
     { type: 'separator', label: t('Slider') },
     { key: 'autoplay_speed', label: t('Velocita autoplay'), type: 'range', min: 1000, max: 10000, step: 500 },
 

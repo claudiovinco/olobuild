@@ -41,10 +41,6 @@ export default {
     { key: 'show_heading', label: t('Mostra titolo sezione'), type: 'toggle' },
     { key: 'title_text', label: t('Testo titolo'), type: 'text', condition: { field: 'show_heading', value: true } },
 
-    { type: 'separator', label: t('Colonne responsive') },
-    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1 },
-    { key: 'columns_tablet', label: t('Colonne tablet'), type: 'range', min: 1, max: 4, step: 1 },
-    { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 2, step: 1 },
 
     { type: 'separator', label: t('Elementi visibili') },
     { key: 'show_image', label: t('Mostra immagine'), type: 'toggle' },
@@ -80,6 +76,9 @@ export default {
       { value: 'border', label: t('Bordo') },
     ]},
 
+    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1 },
+    { key: 'columns_tablet', label: t('Colonne tablet'), type: 'range', min: 1, max: 4, step: 1 },
+    { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 2, step: 1 },
     { type: 'separator', label: t('Colori') },
     { key: 'title_color', label: t('Colore titolo'), type: 'color' },
     { key: 'price_color', label: t('Colore prezzo'), type: 'color' },

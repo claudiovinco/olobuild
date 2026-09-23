@@ -69,13 +69,7 @@ export default {
     { key: 'show_breadcrumbs', label: t('Mostra breadcrumbs'), type: 'toggle' },
     { key: 'breadcrumb_separator', label: t('Separatore'), type: 'text', show: s => s.show_breadcrumbs },
 
-    { type: 'separator', label: t('Sfondo') },
-    { key: 'media_bg', label: t('Sfondo (immagine, video, gradiente, colore…)'), type: 'background', showParallax: false },
-    { key: 'bg_parallax', label: t('Parallax'), type: 'toggle',
-      show: s => (s.media_bg && s.media_bg.type === 'image' && !!s.media_bg.image_url) || !!s.bg_image },
 
-    { type: 'separator', label: t('Bordo inferiore') },
-    { key: 'border_bottom', label: t('Bordo inferiore'), type: 'toggle' },
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -146,6 +140,9 @@ export default {
     { ...focalField('bg_image', { key: 'bg_position', fit: 'bg_size' }),
       show: s => !!s.bg_image && !(s.media_bg && s.media_bg.type && s.media_bg.type !== 'none') },
 
+    { key: 'media_bg', label: t('Sfondo (immagine, video, gradiente, colore…)'), type: 'background', showParallax: false },
+    { key: 'bg_parallax', label: t('Parallax'), type: 'toggle',
+      show: s => (s.media_bg && s.media_bg.type === 'image' && !!s.media_bg.image_url) || !!s.bg_image },
     { type: 'separator', label: t('Layout') },
     { key: 'min_height', label: t('Altezza minima'), type: 'range', min: 0, max: 600, step: 10 },
     { key: 'tile_padding', label: t('Padding'), type: 'spacing', max: 200 },
@@ -157,5 +154,6 @@ export default {
     ...textEffectsFields([ { value: 'subtitle', label: t('Solo Sottotitolo') } ]),
     ...shadowField,
     ...borderFields(),
+    { key: 'border_bottom', label: t('Bordo inferiore'), type: 'toggle' },
   ],
 };

@@ -86,29 +86,6 @@ export default {
       condition: { field: 'mode', op: 'eq', value: 'simple' } },
     { key: 'image', label: t('Immagine'), type: 'image',
       condition: { field: 'mode', op: 'eq', value: 'simple' } },
-    { key: 'image_position', label: t('Posizione immagine'), type: 'select', options: [
-      { value: 'top', label: t('Sopra') },
-      { value: 'bottom', label: t('Sotto') },
-      { value: 'left', label: t('Sinistra') },
-      { value: 'right', label: t('Destra') },
-    ], condition: { field: 'mode', op: 'eq', value: 'simple' } },
-    // Proporzioni: l'unico pezzo di cornice che mancava. L'adattamento resta cablato a
-    // «Riempi» come da sempre — offrirlo vorrebbe dire cambiare anche il caso sopra/sotto,
-    // che oggi NON ritaglia affatto.
-    { key: 'aspect_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions({ custom: true }),
-      description: t('«Auto» lascia la foto come oggi: intera sopra/sotto, alta quanto il testo di fianco.'),
-      condition: { field: 'mode', op: 'eq', value: 'simple' } },
-    { key: 'aspect_ratio_custom', label: t('Proporzioni personalizzate'), type: 'text',
-      placeholder: t('es. 5/4, 1.618'),
-      condition: [{ field: 'mode', op: 'eq', value: 'simple' }, { field: 'aspect_ratio', op: 'eq', value: 'custom' }] },
-    // Il punto focale non è più legato alla sola posizione laterale: con una proporzione
-    // scelta il ritaglio c'è anche sopra/sotto. Il valutatore di condizioni conosce solo
-    // l'AND (array), quindi una condizione «laterale OPPURE proporzione» non è esprimibile:
-    // meglio il campo sempre visibile che nascosto proprio quando servirebbe.
-    { key: 'object_position', label: t('Punto focale immagine'), type: 'object-position', reveal: true,
-      contextKeys: { src: 'image', ratio: 'aspect_ratio', ratioCustom: 'aspect_ratio_custom' },
-      description: t('Conta quando la foto viene ritagliata: di fianco al testo, o con una proporzione scelta.'),
-      condition: { field: 'mode', op: 'eq', value: 'simple' } },
     { key: 'template_id', label: t('Template'), type: 'select', optionsSource: 'templates',
       condition: { field: 'mode', op: 'eq', value: 'template' } },
 
@@ -144,16 +121,6 @@ export default {
     { key: 'key_sequence_confetti', label: t('Coriandoli alla scoperta'), type: 'toggle',
       description: t('Lancia un effetto coriandoli quando la sequenza viene completata.'),
       condition: { field: 'key_sequence', op: 'eq', value: true } },
-    // Palette coriandoli: 3 slot color picker (pattern goo.js color_1..color_5).
-    // Il PHP raccoglie i non-vuoti; se tutti vuoti fallback alla CSV legacy
-    // key_sequence_confetti_colors e poi alla palette brand.
-    { key: 'confetti_color_1', label: t('Colore coriandoli 1'), type: 'color',
-      description: t('Lascia vuoti gli slot per usare la palette del brand.'),
-      condition: { field: 'key_sequence_confetti', op: 'eq', value: true } },
-    { key: 'confetti_color_2', label: t('Colore coriandoli 2'), type: 'color',
-      condition: { field: 'key_sequence_confetti', op: 'eq', value: true } },
-    { key: 'confetti_color_3', label: t('Colore coriandoli 3'), type: 'color',
-      condition: { field: 'key_sequence_confetti', op: 'eq', value: true } },
 
     { type: 'separator', label: t('Frequenza') },
     { key: 'popup_frequency', label: t('Frequenza'), type: 'select', options: [
@@ -240,5 +207,41 @@ export default {
 
     { type: 'separator', label: t('Contenitore') },
     { key: 'tile_padding', type: 'spacing', label: t('Padding') },
+    { type: 'separator', label: t('Forma') },
+    // Proporzioni: l'unico pezzo di cornice che mancava. L'adattamento resta cablato a
+    // «Riempi» come da sempre — offrirlo vorrebbe dire cambiare anche il caso sopra/sotto,
+    // che oggi NON ritaglia affatto.
+    { key: 'aspect_ratio', label: t('Proporzioni'), type: 'select', options: ratioOptions({ custom: true }),
+      description: t('«Auto» lascia la foto come oggi: intera sopra/sotto, alta quanto il testo di fianco.'),
+      condition: { field: 'mode', op: 'eq', value: 'simple' } },
+    { key: 'aspect_ratio_custom', label: t('Proporzioni personalizzate'), type: 'text',
+      placeholder: t('es. 5/4, 1.618'),
+      condition: [{ field: 'mode', op: 'eq', value: 'simple' }, { field: 'aspect_ratio', op: 'eq', value: 'custom' }] },
+    // Il punto focale non è più legato alla sola posizione laterale: con una proporzione
+    // scelta il ritaglio c'è anche sopra/sotto. Il valutatore di condizioni conosce solo
+    // l'AND (array), quindi una condizione «laterale OPPURE proporzione» non è esprimibile:
+    // meglio il campo sempre visibile che nascosto proprio quando servirebbe.
+    { key: 'object_position', label: t('Punto focale immagine'), type: 'object-position', reveal: true,
+      contextKeys: { src: 'image', ratio: 'aspect_ratio', ratioCustom: 'aspect_ratio_custom' },
+      description: t('Conta quando la foto viene ritagliata: di fianco al testo, o con una proporzione scelta.'),
+      condition: { field: 'mode', op: 'eq', value: 'simple' } },
+    { type: 'separator', label: t('Sequenza di tasti') },
+    // Palette coriandoli: 3 slot color picker (pattern goo.js color_1..color_5).
+    // Il PHP raccoglie i non-vuoti; se tutti vuoti fallback alla CSV legacy
+    // key_sequence_confetti_colors e poi alla palette brand.
+    { key: 'confetti_color_1', label: t('Colore coriandoli 1'), type: 'color',
+      description: t('Lascia vuoti gli slot per usare la palette del brand.'),
+      condition: { field: 'key_sequence_confetti', op: 'eq', value: true } },
+    { key: 'confetti_color_2', label: t('Colore coriandoli 2'), type: 'color',
+      condition: { field: 'key_sequence_confetti', op: 'eq', value: true } },
+    { key: 'confetti_color_3', label: t('Colore coriandoli 3'), type: 'color',
+      condition: { field: 'key_sequence_confetti', op: 'eq', value: true } },
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'image_position', label: t('Posizione immagine'), type: 'select', options: [
+      { value: 'top', label: t('Sopra') },
+      { value: 'bottom', label: t('Sotto') },
+      { value: 'left', label: t('Sinistra') },
+      { value: 'right', label: t('Destra') },
+    ], condition: { field: 'mode', op: 'eq', value: 'simple' } },
   ],
 };

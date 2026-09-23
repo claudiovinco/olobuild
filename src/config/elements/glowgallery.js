@@ -79,7 +79,6 @@ export default {
       ],
     },
     { key: 'strip_offset', label: t('Offset verticale 2a tessera'), type: 'range', min: 0, max: 80, step: 2 },
-    { key: 'strip_radius', label: t('Raggio superiori'), type: 'range', min: 0, max: 300, step: 10 },
   ],
 
   styleFields: [
@@ -130,5 +129,7 @@ export default {
     { type: 'separator', label: t('Ombra') },
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Striscia gallery') },
+    { key: 'strip_radius', label: t('Raggio superiori'), type: 'range', min: 0, max: 300, step: 10 },
   ],
 };

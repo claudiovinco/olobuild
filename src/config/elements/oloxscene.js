@@ -74,12 +74,6 @@ export default {
       { value: 'hero-porthole', label: t('Showcase: oblò panoramico (tour)') },
       { value: 'hero-medal', label: t('Showcase: medaglia livello (tutor)') },
     ] },
-    { key: 'color', label: t('Colore accento'), type: 'select', options: [
-      { value: 'build', label: 'build' }, { value: 'booking', label: 'booking' },
-      { value: 'lang', label: 'lang' }, { value: 'secur', label: 'security' },
-      { value: 'tour', label: 'tour' }, { value: 'tutor', label: 'tutor' },
-      { value: 'olo', label: t('rosso OLO') },
-    ] },
     { key: 'coord', label: t('Coordinate deco (testo tecnico)'), type: 'text',
       condition: { field: 'scene', op: '!=', value: 'madlib' } },
     { key: 'show_deco', label: t('Decorazioni vettoriali'), type: 'toggle',
@@ -101,11 +95,6 @@ export default {
       itemFields: [
         { key: 'label', label: t('Etichetta'), type: 'text' },
         { key: 'value', label: t('Testo nella mail'), type: 'text' },
-        { key: 'color', label: t('Colore'), type: 'select', options: [
-          { value: 'build', label: 'build' }, { value: 'booking', label: 'booking' },
-          { value: 'lang', label: 'lang' }, { value: 'secur', label: 'security' },
-          { value: 'tour', label: 'tour' }, { value: 'tutor', label: 'tutor' },
-        ] },
       ],
       condition: { field: 'scene', op: 'eq', value: 'madlib' } },
     { key: 'mad_pre_mail', label: t('Testo prima della mail'), type: 'text',
@@ -165,5 +154,20 @@ export default {
       condition: { field: 'scene', op: 'eq', value: 'hero-medal' } },
   ],
 
-  styleFields: [],
+  styleFields: [    { type: 'separator', label: t('Aspetto') },
+    { key: 'color', label: t('Colore accento'), type: 'select', options: [
+      { value: 'build', label: 'build' }, { value: 'booking', label: 'booking' },
+      { value: 'lang', label: 'lang' }, { value: 'secur', label: 'security' },
+      { value: 'tour', label: 'tour' }, { value: 'tutor', label: 'tutor' },
+      { value: 'olo', label: t('rosso OLO') },
+    ] },
+    { type: 'separator', label: t('Mad-lib') },
+    { key: 'mad_picks', type: 'content-items', label: t('Sogni cliccabili'), itemLabel: t('Sogno'), etichettaDa: 'label', condition: { field: 'scene', op: 'eq', value: 'madlib' }, itemFields: [
+        { key: 'color', label: t('Colore'), type: 'select', options: [
+          { value: 'build', label: 'build' }, { value: 'booking', label: 'booking' },
+          { value: 'lang', label: 'lang' }, { value: 'secur', label: 'security' },
+          { value: 'tour', label: 'tour' }, { value: 'tutor', label: 'tutor' },
+        ] },
+    ] },
+],
 };

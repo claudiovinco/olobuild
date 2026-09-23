@@ -32,12 +32,6 @@ export default {
   },
 
   fields: [
-    { key: 'variant', label: t('Variante'), type: 'select', options: [
-      { value: 'counter', label: t('Contatore gigante centrato') },
-      { value: 'zerozero', label: t('0/0 + testo a fianco') },
-      { value: 'stamp', label: t('Pannello con timbro') },
-      { value: 'plain', label: t('Testata semplice + CTA') },
-    ] },
     { key: 'kicker', label: t('Kicker'), type: 'text' },
     { key: 'title_html', label: t('Titolo (HTML)'), type: 'textarea' },
     { key: 'body_html', label: t('Testo (HTML)'), type: 'textarea' },
@@ -58,5 +52,13 @@ export default {
       condition: { field: 'variant', op: 'eq', value: 'plain' } },
   ],
 
-  styleFields: [ oloxAccentField() ],
+  styleFields: [ oloxAccentField(), 
+    { type: 'separator', label: t('Aspetto') },
+    { key: 'variant', label: t('Variante'), type: 'select', options: [
+      { value: 'counter', label: t('Contatore gigante centrato') },
+      { value: 'zerozero', label: t('0/0 + testo a fianco') },
+      { value: 'stamp', label: t('Pannello con timbro') },
+      { value: 'plain', label: t('Testata semplice + CTA') },
+    ] },
+],
 };

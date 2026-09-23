@@ -157,9 +157,6 @@ export default {
     { key: 'filter_list', label: t('Chip filtro espliciti (CSV — vuoto = dalle categorie)'), type: 'text',
       condition: { field: 'show_filters', value: true }, placeholder: 'Filter, Espresso, Decaf' },
 
-    { type: 'separator', label: t('Layout') },
-    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 5, step: 1, responsive: true },
-    { key: 'gap', label: t('Gap card'), type: 'range', min: 8, max: 40, step: 2 },
   ],
 
   styleFields: [
@@ -243,6 +240,9 @@ export default {
     { type: 'separator', label: t('Ombra') },
     ...shadowField,
 
-    ...borderFields(),
+    ...borderFields(),,
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 5, step: 1, responsive: true },
+    { key: 'gap', label: t('Gap card'), type: 'range', min: 8, max: 40, step: 2 },
   ],
 };

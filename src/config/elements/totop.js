@@ -25,11 +25,6 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
-      { value: 'left', label: t('Sinistra') },
-      { value: 'center', label: t('Centro') },
-      { value: 'right', label: t('Destra') },
-    ]},
     { key: 'smooth', label: t('Scorrimento fluido'), type: 'toggle' },
   ],
 
@@ -41,5 +36,11 @@ export default {
     ]},
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+    ]},
   ],
 };

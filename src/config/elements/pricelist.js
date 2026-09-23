@@ -77,12 +77,6 @@ export default {
     { type: 'separator', label: t('Immagine') },
     { key: 'show_image', label: t('Mostra immagine'), type: 'toggle' },
 
-    // ── Layout ──
-    { type: 'separator', label: t('Layout') },
-    { key: 'price_position', label: t('Posizione prezzo'), type: 'select', options: [
-      { value: 'right', label: t('A destra') },
-      { value: 'below', label: t('Sotto il titolo') },
-    ]},
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -189,5 +183,10 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'price_position', label: t('Posizione prezzo'), type: 'select', options: [
+      { value: 'right', label: t('A destra') },
+      { value: 'below', label: t('Sotto il titolo') },
+    ]},
   ],
 };

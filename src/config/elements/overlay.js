@@ -70,11 +70,6 @@ export default {
       { value: '_self', label: t('Stessa finestra') },
       { value: '_blank', label: t('Nuova scheda') },
     ]},
-    { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
-      { value: 'fade', label: t('Fade') },
-      { value: 'slide-up', label: t('Slide Up') },
-      { value: 'zoom', label: t('Zoom') },
-    ]},
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -96,6 +91,11 @@ export default {
       { value: 'custom',          label: t('Personalizzato') },
     ] },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
+      { value: 'fade', label: t('Fade') },
+      { value: 'slide-up', label: t('Slide Up') },
+      { value: 'zoom', label: t('Zoom') },
+    ]},
     { type: 'separator', label: t('Aspetto') },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     // L'altezza fissa e le proporzioni sono alternative: con un aspect-ratio addosso

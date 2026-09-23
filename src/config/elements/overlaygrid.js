@@ -98,17 +98,8 @@ export default {
           condition: { field: 'card_type', op: 'eq', value: 'image' } },
         { key: 'icon', label: t('Icona'), type: 'icon',
           condition: { field: 'card_type', op: 'eq', value: 'icon' } },
-        { key: 'icon_color', label: t('Colore icona'), type: 'color',
-          condition: { field: 'card_type', op: 'eq', value: 'icon' } },
-        { key: 'card_bg', label: t('Sfondo card'), type: 'color',
-          condition: { field: 'card_type', op: 'in', value: ['text', 'icon', 'graphic'] },
-          description: t('Sfondo della card non-immagine. Vuoto = navy scuro.') },
         { key: 'title', label: t('Titolo'), type: 'text' },
-        { key: 'item_title_color', label: t('Colore titolo (override)'), type: 'color',
-          description: t('Vuoto = usa il colore globale impostato sotto.') },
         { key: 'subtitle', label: t('Sottotitolo'), type: 'text' },
-        { key: 'item_subtitle_color', label: t('Colore sottotitolo (override)'), type: 'color',
-          description: t('Vuoto = usa il colore globale impostato sotto.') },
         { key: 'body', label: t('Testo descrittivo'), type: 'textarea',
           condition: { field: 'card_type', op: 'in', value: ['text', 'icon', 'graphic'] },
           description: t('Paragrafo della card non-immagine (sotto al titolo).') },
@@ -121,50 +112,9 @@ export default {
       itemLabel: 'Elemento',
     },
 
-    { type: 'separator', label: t('Griglia') },
-    { key: 'columns', label: t('Colonne (desktop)'), type: 'select', options: [
-      { value: '1', label: '1' },
-      { value: '2', label: '2' },
-      { value: '3', label: '3' },
-      { value: '4', label: '4' },
-      { value: '5', label: '5' },
-    ]},
-    { key: 'columns_mobile', label: t('Colonne (mobile)'), type: 'select', options: [
-      { value: '1', label: '1' },
-      { value: '2', label: '2' },
-    ]},
 
-    { type: 'separator', label: t('Overlay') },
-    { key: 'overlay_position', label: t('Posizione'), type: 'select', options: [
-      { value: 'bottom', label: t('In basso') },
-      { value: 'top', label: t('In alto') },
-      { value: 'center', label: t('Centro') },
-      { value: 'cover', label: t('Copertura') },
-      { value: 'bottom-left', label: t('Basso-sinistra') },
-      { value: 'bottom-center', label: t('Basso-centro') },
-      { value: 'bottom-right', label: t('Basso-destra') },
-      { value: 'top-left', label: t('Alto-sinistra') },
-      { value: 'top-center', label: t('Alto-centro') },
-      { value: 'top-right', label: t('Alto-destra') },
-      { value: 'center-left', label: t('Centro-sinistra') },
-      { value: 'center-right', label: t('Centro-destra') },
-    ]},
-    { key: 'title_size', label: t('Dimensione titolo'), type: 'select', options: [
-      { value: 'h1', label: t('H1') },
-      { value: 'h2', label: t('H2') },
-      { value: 'h3', label: t('H3') },
-      { value: 'h4', label: t('H4') },
-    ]},
 
     { type: 'separator', label: t('Effetti hover (comportamento)') },
-    { key: 'hover_effect', label: t('Effetto immagine'), type: 'select', options: [
-      { value: 'none', label: t('Nessuno') },
-      { value: 'zoom', label: t('Zoom') },
-      { value: 'zoom-rotate', label: t('Zoom + rotazione') },
-      { value: 'brightness', label: t('Luminosità') },
-      { value: 'desaturate', label: t('Desatura → colore') },
-      { value: 'blur-in', label: t('Sfocatura → nitido') },
-    ]},
     { key: 'hover_overlay', label: t('Overlay'), type: 'select', options: [
       { value: 'always', label: t('Sempre visibile') },
       { value: 'fade', label: t('Fade in') },
@@ -179,11 +129,6 @@ export default {
     { key: 'cta_text', label: t('Testo CTA'), type: 'text',
       condition: { field: 'show_cta', op: 'eq', value: true } },
 
-    { type: 'separator', label: t('Ribbon') },
-    { key: 'ribbon_position', label: t('Posizione ribbon'), type: 'select', options: [
-      { value: 'top-left', label: t('Alto sinistra') },
-      { value: 'top-right', label: t('Alto destra') },
-    ]},
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -256,6 +201,17 @@ export default {
     { key: 'match_height', label: t('Altezza uniforme'), type: 'toggle',
       condition: { field: 'layout_mode', op: 'eq', value: 'uniform' } },
 
+    { key: 'columns', label: t('Colonne (desktop)'), type: 'select', options: [
+      { value: '1', label: '1' },
+      { value: '2', label: '2' },
+      { value: '3', label: '3' },
+      { value: '4', label: '4' },
+      { value: '5', label: '5' },
+    ]},
+    { key: 'columns_mobile', label: t('Colonne (mobile)'), type: 'select', options: [
+      { value: '1', label: '1' },
+      { value: '2', label: '2' },
+    ]},
     { type: 'separator', label: t('Overlay — aspetto') },
     { key: 'overlay_horizontal', label: t('Allineamento testo'), type: 'select', options: [
       { value: 'left', label: t('Sinistra') },
@@ -272,6 +228,26 @@ export default {
       { value: 'large', label: t('Grande') },
     ]},
 
+    { key: 'overlay_position', label: t('Posizione'), type: 'select', options: [
+      { value: 'bottom', label: t('In basso') },
+      { value: 'top', label: t('In alto') },
+      { value: 'center', label: t('Centro') },
+      { value: 'cover', label: t('Copertura') },
+      { value: 'bottom-left', label: t('Basso-sinistra') },
+      { value: 'bottom-center', label: t('Basso-centro') },
+      { value: 'bottom-right', label: t('Basso-destra') },
+      { value: 'top-left', label: t('Alto-sinistra') },
+      { value: 'top-center', label: t('Alto-centro') },
+      { value: 'top-right', label: t('Alto-destra') },
+      { value: 'center-left', label: t('Centro-sinistra') },
+      { value: 'center-right', label: t('Centro-destra') },
+    ]},
+    { key: 'title_size', label: t('Dimensione titolo'), type: 'select', options: [
+      { value: 'h1', label: t('H1') },
+      { value: 'h2', label: t('H2') },
+      { value: 'h3', label: t('H3') },
+      { value: 'h4', label: t('H4') },
+    ]},
     { type: 'separator', label: t('Stile elementi') },
     { key: 'item_radius', label: t('Raggio elementi'), type: 'border-radius' },
     // La chiave resta `object_position` (globale, non per-item): e' quella salvata nei
@@ -283,6 +259,17 @@ export default {
     { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
     { key: 'overlay_gradient', label: t('Overlay gradiente (alto→basso)'), type: 'toggle' },
 
+    { key: 'items', type: 'content-items', label: t('Elementi'), itemLabel: 'Elemento', etichettaDa: 'title', miniaturaDa: 'image', itemFields: [
+        { key: 'icon_color', label: t('Colore icona'), type: 'color',
+          condition: { field: 'card_type', op: 'eq', value: 'icon' } },
+        { key: 'card_bg', label: t('Sfondo card'), type: 'color',
+          condition: { field: 'card_type', op: 'in', value: ['text', 'icon', 'graphic'] },
+          description: t('Sfondo della card non-immagine. Vuoto = navy scuro.') },
+        { key: 'item_title_color', label: t('Colore titolo (override)'), type: 'color',
+          description: t('Vuoto = usa il colore globale impostato sotto.') },
+        { key: 'item_subtitle_color', label: t('Colore sottotitolo (override)'), type: 'color',
+          description: t('Vuoto = usa il colore globale impostato sotto.') },
+    ] },
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Titolo'),
       responsiveKeys: [],
@@ -320,5 +307,18 @@ export default {
     ...shadowField,
     ...wowEffectsFields(),
     ...borderFields(),
+    { key: 'ribbon_position', label: t('Posizione ribbon'), type: 'select', options: [
+      { value: 'top-left', label: t('Alto sinistra') },
+      { value: 'top-right', label: t('Alto destra') },
+    ]},
+    { type: 'separator', label: t('Effetti hover') },
+    { key: 'hover_effect', label: t('Effetto immagine'), type: 'select', options: [
+      { value: 'none', label: t('Nessuno') },
+      { value: 'zoom', label: t('Zoom') },
+      { value: 'zoom-rotate', label: t('Zoom + rotazione') },
+      { value: 'brightness', label: t('Luminosità') },
+      { value: 'desaturate', label: t('Desatura → colore') },
+      { value: 'blur-in', label: t('Sfocatura → nitido') },
+    ]},
   ],
 };

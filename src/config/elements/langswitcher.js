@@ -71,19 +71,6 @@ export default {
       condition: { field: 'lang_source', op: 'eq', value: 'manual' } },
 
     { type: 'separator', label: t('Stile contenuto') },
-    { key: 'style', label: t('Stile'), type: 'select', options: [
-      { value: 'flags', label: t('Bandiere') },
-      { value: 'flags_circle', label: t('Bandiere in cerchietto') },
-      { value: 'codes', label: t('Codici (IT/EN/DE)') },
-      { value: 'names', label: t('Nomi (Italiano/English)') },
-      { value: 'flags_text', label: t('Bandiere + codice') },
-    ]},
-    { key: 'layout', label: t('Layout'), type: 'select', options: [
-      { value: 'inline', label: t('Inline (dentro header/footer)') },
-      { value: 'dropdown', label: t('Dropdown') },
-      { value: 'tabs', label: t('Linguette fisse (bordo pagina)') },
-      { value: 'floating', label: t('Fluttuante (fisso su schermo)') },
-    ]},
     { key: 'compact', label: t('Compatto (extra piccolo)'), type: 'toggle' },
 
     { type: 'separator', label: t('Linguette / Fluttuante'), show: s => s.layout === 'tabs' || s.layout === 'floating' },
@@ -134,6 +121,13 @@ export default {
     ] },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
+    { key: 'style', label: t('Stile'), type: 'select', options: [
+      { value: 'flags', label: t('Bandiere') },
+      { value: 'flags_circle', label: t('Bandiere in cerchietto') },
+      { value: 'codes', label: t('Codici (IT/EN/DE)') },
+      { value: 'names', label: t('Nomi (Italiano/English)') },
+      { value: 'flags_text', label: t('Bandiere + codice') },
+    ]},
     { type: 'separator', label: t('Dimensioni linguette'), show: s => s.layout === 'tabs' },
     { key: 'tabs_offset', label: t('Distanza dal bordo'), type: 'range', min: 0, max: 200, step: 5,
       show: s => s.layout === 'tabs' },
@@ -172,5 +166,12 @@ export default {
     { key: 'border_color', label: t('Bordo'), type: 'color' },
     withHover({ key: 'border_radius', label: t('Raggio'), type: 'border-radius' }),
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'layout', label: t('Layout'), type: 'select', options: [
+      { value: 'inline', label: t('Inline (dentro header/footer)') },
+      { value: 'dropdown', label: t('Dropdown') },
+      { value: 'tabs', label: t('Linguette fisse (bordo pagina)') },
+      { value: 'floating', label: t('Fluttuante (fisso su schermo)') },
+    ]},
   ],
 };

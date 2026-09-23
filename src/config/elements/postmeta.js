@@ -72,16 +72,8 @@ export default {
       { value: 'Y-m-d', label: t('2026-03-05') },
       { value: 'd M Y', label: t('05 Mar 2026') },
     ], condition: { field: 'show_date', value: true } },
-    { key: 'layout', label: t('Layout'), type: 'select', options: [
-      { value: 'inline', label: t('In linea') },
-      { value: 'stacked', label: t('Impilato') },
-    ]},
     { key: 'separator', label: t('Separatore'), type: 'text',
       condition: { field: 'layout', value: 'inline' } },
-    { key: 'icon_style', label: t('Icone'), type: 'select', options: [
-      { value: 'none', label: t('Nessuna') },
-      { value: 'before', label: t('Prima del testo') },
-    ]},
 
     { type: 'separator', label: t('Link') },
     { key: 'author_link', label: t('Link autore'), type: 'toggle',
@@ -118,6 +110,10 @@ export default {
     { key: 'effect_speed', label: t('Velocità animazione (ms, 0 = default)'), type: 'range', min: 0, max: 5000, step: 100,
       condition: { field: 'preset', op: 'in', value: ['neon-cyber', 'gradient-glow', 'retro-terminal'] } },
 
+    { key: 'icon_style', label: t('Icone'), type: 'select', options: [
+      { value: 'none', label: t('Nessuna') },
+      { value: 'before', label: t('Prima del testo') },
+    ]},
     { type: 'separator', label: t('Spaziatura') },
     { key: 'item_gap', label: t('Gap elementi'), type: 'range', min: 0, max: 40, step: 2 },
 
@@ -167,5 +163,10 @@ export default {
 
     ...wowEffectsFields(),
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'layout', label: t('Layout'), type: 'select', options: [
+      { value: 'inline', label: t('In linea') },
+      { value: 'stacked', label: t('Impilato') },
+    ]},
   ],
 };

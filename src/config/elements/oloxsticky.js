@@ -41,10 +41,6 @@ export default {
   },
 
   fields: [
-    { key: 'variant', label: t('Variante'), type: 'select', options: [
-      { value: 'assembler', label: t('Assembler — il sito si monta (build)') },
-      { value: 'day', label: t('Giornata — agenda che si riempie (booking)') },
-    ] },
     { key: 'kicker', label: t('Kicker'), type: 'text' },
     { key: 'anchor', label: t('Ancora (id)'), type: 'text' },
     { type: 'separator', label: t('Assembler') },
@@ -77,5 +73,11 @@ export default {
       condition: { field: 'variant', op: 'eq', value: 'day' } },
   ],
 
-  styleFields: [ oloxAccentField() ],
+  styleFields: [ oloxAccentField(), 
+    { type: 'separator', label: t('Aspetto') },
+    { key: 'variant', label: t('Variante'), type: 'select', options: [
+      { value: 'assembler', label: t('Assembler — il sito si monta (build)') },
+      { value: 'day', label: t('Giornata — agenda che si riempie (booking)') },
+    ] },
+],
 };

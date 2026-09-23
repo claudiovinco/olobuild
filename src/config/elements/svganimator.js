@@ -94,13 +94,6 @@ export default {
     { key: 'replay_button_label', label: t('Testo pulsante'), type: 'text',
       condition: { field: 'replay_button', value: true } },
 
-    // ── LAYOUT (allineamento) ──
-    { type: 'separator', label: t('Allineamento') },
-    { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
-      { value: 'left', label: t('Sinistra') },
-      { value: 'center', label: t('Centro') },
-      { value: 'right', label: t('Destra') },
-    ]},
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -159,5 +152,10 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+    ]},
   ],
 };

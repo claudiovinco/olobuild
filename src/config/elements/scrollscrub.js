@@ -124,8 +124,6 @@ export default {
         { key: 'text',        label: t('Testo'),                         type: 'editor', mode: 'block' },
         { key: 'media',       label: t('Immagine'),                      type: 'image' },
         { key: 'media_label', label: t('Etichetta segnaposto immagine'), type: 'text' },
-        { key: 'color',       label: t('Colore sfondo elemento'),        type: 'color' },
-        { key: 'text_color',  label: t('Colore testo elemento'),         type: 'color' },
       ],
     },
 
@@ -141,11 +139,6 @@ export default {
     { key: 'scroll_length', label: t('Lunghezza scroll (× schermo)'), type: 'range', min: 2, max: 6, step: 0.5,
       condition: { field: 'behavior', op: 'neq', value: 'inline' },
       description: t('Quanto deve scendere la pagina per percorrere tutta la traccia. Più alto = scorrimento orizzontale più lento e lungo.') },
-    { key: 'align', label: t('Allineamento verticale'), type: 'select', options: [
-      { value: 'center', label: t('Centro') },
-      { value: 'start',  label: t('In alto') },
-    ]},
-    { key: 'gap', label: t('Gap elementi'), type: 'range', min: 0, max: 80, step: 2 },
     { key: 'easing', label: t('Curva di scorrimento'), type: 'select', options: [
       { value: 'linear',   label: t('Lineare (segue lo scroll)') },
       { value: 'ease',     label: t('Morbida (ease-in-out)') },
@@ -202,6 +195,10 @@ export default {
     { key: 'item_padding', label: t('Padding'), type: 'spacing', min: 0, max: 80,
       description: t('0 = immagine a tutto bordo con testo sovrapposto in basso.') },
 
+    { key: 'items', type: 'content-items', label: t('Elementi'), itemLabel: t('Elemento'), etichettaDa: 'title', miniaturaDa: 'media', itemFields: [
+        { key: 'color',       label: t('Colore sfondo elemento'),        type: 'color' },
+        { key: 'text_color',  label: t('Colore testo elemento'),         type: 'color' },
+    ] },
     { type: 'separator', label: t('Sovraimpressione (foto a tutto bordo)'), condition: { field: 'item_padding', op: 'eq', value: 0 } },
     { key: 'overlay_scrim_color', label: t('Colore sfumatura'), type: 'color',
       condition: { field: 'item_padding', op: 'eq', value: 0 } },
@@ -246,5 +243,11 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'align', label: t('Allineamento verticale'), type: 'select', options: [
+      { value: 'center', label: t('Centro') },
+      { value: 'start',  label: t('In alto') },
+    ]},
+    { key: 'gap', label: t('Gap elementi'), type: 'range', min: 0, max: 80, step: 2 },
   ],
 };

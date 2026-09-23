@@ -92,12 +92,6 @@ export default {
       newItemDefaults: { title: t('Nuovo pannello'), content: 'Contenuto del pannello.', image: '', video: '', icon: '', hover_image: '', widget_template_id: 0, children: [] },
       itemLabel: 'Pannello',
     },
-    // La cornice vale per TUTTE le immagini dei pannelli: una per pannello
-    // renderebbe i media di larghezza uguale ma altezza diversa.
-    { key: 'aspect_ratio', label: t('Proporzioni immagini'), type: 'select', options: ratioOptions(),
-      description: t('Con «Auto» l\'immagine tiene la sua altezza naturale.') },
-    { key: 'object_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI,
-      condition: { field: 'aspect_ratio', op: 'neq', value: 'auto' } },
     focalField('image', { key: 'object_position', src: '', reveal: true, ratio: 'aspect_ratio', fit: 'object_fit',
       label: t('Punto focale immagini'),
       // Senza ritaglio non c'è niente da spostare: il controllo resta nascosto
@@ -253,5 +247,11 @@ export default {
     ...shadowField,
     ...wowEffectsFields(),
     ...borderFields(),
+    // La cornice vale per TUTTE le immagini dei pannelli: una per pannello
+    // renderebbe i media di larghezza uguale ma altezza diversa.
+    { key: 'aspect_ratio', label: t('Proporzioni immagini'), type: 'select', options: ratioOptions(),
+      description: t('Con «Auto» l\'immagine tiene la sua altezza naturale.') },
+    { key: 'object_fit', label: t('Adattamento'), type: 'select', options: ADATTAMENTI,
+      condition: { field: 'aspect_ratio', op: 'neq', value: 'auto' } },
   ],
 };

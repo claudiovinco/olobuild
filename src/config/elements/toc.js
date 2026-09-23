@@ -51,11 +51,6 @@ export default {
       { value: '5', label: t('Fino a H5') },
       { value: '6', label: t('Fino a H6') },
     ]},
-    { key: 'list_style', label: t('Stile lista'), type: 'select', options: [
-      { value: 'numbered', label: t('Numerata') },
-      { value: 'bullets', label: t('Pallini') },
-      { value: 'none', label: t('Senza') },
-    ]},
 
     { type: 'separator', label: t('Comportamento') },
     { key: 'sticky', label: t('Sticky (fisso nello scroll)'), type: 'toggle' },
@@ -85,6 +80,11 @@ export default {
 
     ...textEffectsFields([ { value: 'title', label: t('Solo Titolo') } ]),
 
+    { key: 'list_style', label: t('Stile lista'), type: 'select', options: [
+      { value: 'numbered', label: t('Numerata') },
+      { value: 'bullets', label: t('Pallini') },
+      { value: 'none', label: t('Senza') },
+    ]},
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Indice'),
       responsiveKeys: [],

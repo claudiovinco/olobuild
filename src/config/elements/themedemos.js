@@ -48,9 +48,6 @@ export default {
         { key: 'name', label: t('Nome tema'), type: 'text' },
         { key: 'category', label: t('Categoria'), type: 'text' },
         { key: 'zone_label', label: t('Badge zona (in anteprima)'), type: 'text' },
-        { key: 'bg', label: t('Sfondo anteprima'), type: 'color' },
-        { key: 'ink', label: t('Colore titolo anteprima'), type: 'color' },
-        { key: 'accent', label: t('Accento anteprima (logo + bottone)'), type: 'color' },
         { key: 'font_label', label: t('Font del tema (nome esatto)'), type: 'text',
           description: t('Font dell\'anteprima: rappresenta il tema mostrato, non segue i ruoli del sito.') },
         { key: 'light', label: t('Anteprima chiara (badge scuro)'), type: 'toggle' },
@@ -70,7 +67,7 @@ export default {
     { key: 'card_bg', label: t('Sfondo card'), type: 'color',
       description: t('Vuoto = superficie attenuata del tema.') },
     withHover({ key: 'card_border_color', label: t('Bordo card'), type: 'border', legacyWidth: 1,
-      description: t('Vuoto = bordo del tema.') }, { hoverKey: 'card_border_hover_color' }),
+      description: t('Vuoto = bordo del tema.') }, { hoverKey: 'card_border_hover_color', defaultDuration: 180 }),
 
     { type: 'separator', label: t('Sfondo') },
     { key: 'bg', label: t('Sfondo completo'), type: 'background', showParallax: false },
@@ -79,5 +76,11 @@ export default {
     ...shadowField,
 
     ...borderFields(),
+    { type: 'separator', label: t('Temi') },
+    { key: 'items', type: 'content-items', label: t('Card demo'), itemLabel: t('Tema'), etichettaDa: 'name', itemFields: [
+        { key: 'bg', label: t('Sfondo anteprima'), type: 'color' },
+        { key: 'ink', label: t('Colore titolo anteprima'), type: 'color' },
+        { key: 'accent', label: t('Accento anteprima (logo + bottone)'), type: 'color' },
+    ] },
   ],
 };

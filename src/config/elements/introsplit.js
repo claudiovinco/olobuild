@@ -90,8 +90,6 @@ export default {
     { key: 'headline', label: t('Titolo'), type: 'text' },
     { key: 'accent', label: t('Parola accento'), type: 'text' },
     { key: 'headline_tail', label: t('Coda titolo (dopo accento)'), type: 'text' },
-    { key: 'accent_italic', label: t('Parola accento corsiva'), type: 'toggle' },
-    { key: 'uppercase', label: t('Maiuscolo'), type: 'toggle' },
     { key: 'lead', label: t('Testo'), type: 'textarea' },
     { key: 'signature', label: t('Firma (es. — Camille Aubry, Founder)'), type: 'text' },
 
@@ -108,18 +106,8 @@ export default {
     { type: 'separator', label: t('CTA') },
     { key: 'cta_text', label: t('Testo CTA'), type: 'text' },
     { key: 'cta_url', label: t('Link CTA'), type: 'link' },
-    { key: 'cta_style', label: t('Stile CTA'), type: 'select', options: [
-      { value: 'button', label: t('Bottone') },
-      { value: 'outline', label: t('Bottone outline') },
-      { value: 'underline', label: t('Link sottolineato') },
-    ]},
     { key: 'cta2_text', label: t('CTA 2 — Testo (vuoto = nessuno)'), type: 'text' },
     { key: 'cta2_url', label: t('CTA 2 — Link'), type: 'link' },
-    { key: 'cta2_style', label: t('CTA 2 — Stile'), type: 'select', options: [
-      { value: 'outline', label: t('Bottone outline') },
-      { value: 'button', label: t('Bottone') },
-      { value: 'underline', label: t('Link sottolineato') },
-    ]},
 
     { type: 'separator', label: t('Media + badge') },
     { key: 'media_bg', label: t('Sfondo / media (immagine, video, gradiente, colore…)'), type: 'background', showParallax: false },
@@ -127,10 +115,6 @@ export default {
     { key: 'media_light', label: t('Placeholder chiaro'), type: 'toggle' },
     { key: 'badge_number', label: t('Badge — numero'), type: 'text' },
     { key: 'badge_label', label: t('Badge — etichetta'), type: 'text' },
-    { key: 'media_position', label: t('Posizione media'), type: 'select', options: [
-      { value: 'right', label: t('Destra') },
-      { value: 'left', label: t('Sinistra') },
-    ]},
     { key: 'flush', label: t('Layout flush 50/50 (gap 0, media a tutta altezza)'), type: 'toggle' },
   ],
 
@@ -149,6 +133,16 @@ export default {
     { key: 'cta_bg', label: t('CTA sfondo (vuoto = testo del tema)'), type: 'color' },
     { key: 'cta_color', label: t('CTA testo'), type: 'color' },
 
+    { key: 'cta_style', label: t('Stile CTA'), type: 'select', options: [
+      { value: 'button', label: t('Bottone') },
+      { value: 'outline', label: t('Bottone outline') },
+      { value: 'underline', label: t('Link sottolineato') },
+    ]},
+    { key: 'cta2_style', label: t('CTA 2 — Stile'), type: 'select', options: [
+      { value: 'outline', label: t('Bottone outline') },
+      { value: 'button', label: t('Bottone') },
+      { value: 'underline', label: t('Link sottolineato') },
+    ]},
     { type: 'separator', label: t('Colori — pannello & badge') },
     { key: 'content_bg', label: t('Sfondo pannello testo'), type: 'color' },
     { key: 'badge_bg', label: t('Badge sfondo (vuoto = primario)'), type: 'color' },
@@ -171,6 +165,10 @@ export default {
     { key: 'media_blob', label: t('Blob decorativo dietro il media'), type: 'toggle' },
     { key: 'media_blob_color', label: t('Blob — colore (vuoto = primario)'), type: 'color', condition: { field: 'media_blob', value: true } },
 
+    { key: 'media_position', label: t('Posizione media'), type: 'select', options: [
+      { value: 'right', label: t('Destra') },
+      { value: 'left', label: t('Sinistra') },
+    ]},
     { type: 'separator', label: t('Spaziatura') },
     { key: 'pad_custom', label: t('Padding personalizzato'), type: 'toggle' },
     { key: 'content_padding', label: t('Padding contenitore'), type: 'spacing',
@@ -185,5 +183,8 @@ export default {
     { type: 'separator', label: t('Ombra') },
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Testo') },
+    { key: 'accent_italic', label: t('Parola accento corsiva'), type: 'toggle' },
+    { key: 'uppercase', label: t('Maiuscolo'), type: 'toggle' },
   ],
 };

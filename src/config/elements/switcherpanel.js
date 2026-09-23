@@ -112,20 +112,8 @@ export default {
     { type: 'separator', label: t('Hero') },
     { key: 'media_bg', type: 'background', showParallax: false,
       label: t('Hero (immagine, video, gradiente…)') },
-    { key: 'hero_height', label: t('Altezza hero'), type: 'range', min: 200, max: 800, step: 10 },
 
     { type: 'separator', label: t('Layout') },
-    { key: 'nav_position', label: t('Posizione navigazione'), type: 'select', options: [
-      { value: 'overlay',    label: t('Sopra hero (overlay)') },
-      { value: 'top',        label: t('Sopra il pannello') },
-      { value: 'bottom',     label: t('Sotto il pannello') },
-      { value: 'side-left',  label: t('Lato sinistro (verticale)') },
-      { value: 'side-right', label: t('Lato destro (verticale)') },
-    ]},
-    { key: 'image_position', label: t('Posizione immagine pannello'), type: 'select', options: [
-      { value: 'right', label: t('Destra') },
-      { value: 'left',  label: t('Sinistra') },
-    ]},
     { key: 'image_bleed', label: t('Immagine a filo bordo (full-bleed)'), type: 'toggle',
       description: t('L\'immagine raggiunge il bordo esterno del viewport (lato della posizione immagine).') },
 
@@ -189,6 +177,7 @@ export default {
     { key: 'hero_overlay_gradient', label: t('Overlay gradiente (alto→basso)'), type: 'toggle',
       condition: { field: 'nav_position', op: 'eq', value: 'overlay' } },
 
+    { key: 'hero_height', label: t('Altezza hero'), type: 'range', min: 200, max: 800, step: 10 },
     { type: 'separator', label: t('Pannello — Layout') },
     { key: 'panel_image_width', label: t('Larghezza immagine'), type: 'range', min: 25, max: 60, step: 1 },
     // Il valore salvato qui usa i DUE PUNTI ('16:9'): quattro template pubblicati su
@@ -223,6 +212,17 @@ export default {
     { key: 'panel_radius', label: t('Raggio pannello'), type: 'border-radius' },
     { key: 'panel_image_radius', label: t('Raggio immagine'), type: 'border-radius' },
 
+    { key: 'nav_position', label: t('Posizione navigazione'), type: 'select', options: [
+      { value: 'overlay',    label: t('Sopra hero (overlay)') },
+      { value: 'top',        label: t('Sopra il pannello') },
+      { value: 'bottom',     label: t('Sotto il pannello') },
+      { value: 'side-left',  label: t('Lato sinistro (verticale)') },
+      { value: 'side-right', label: t('Lato destro (verticale)') },
+    ]},
+    { key: 'image_position', label: t('Posizione immagine pannello'), type: 'select', options: [
+      { value: 'right', label: t('Destra') },
+      { value: 'left',  label: t('Sinistra') },
+    ]},
     { type: 'separator', label: t('Tipografia') },
     { type: 'typography', label: t('Voce nav'),
       responsiveKeys: [],

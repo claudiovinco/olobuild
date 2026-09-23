@@ -81,8 +81,6 @@ export default {
         { key: 'text',        label: t('Testo'),                 type: 'editor', mode: 'block' },
         { key: 'media',       label: t('Immagine'),              type: 'image' },
         { key: 'media_label', label: t('Etichetta segnaposto immagine'), type: 'text' },
-        { key: 'color',       label: t('Colore sfondo card'),    type: 'color' },
-        { key: 'text_color',  label: t('Colore testo card'),     type: 'color' },
       ],
     },
 
@@ -91,7 +89,6 @@ export default {
       description: t('Quota a cui la prima card si "incolla" durante lo scroll.') },
     { key: 'top_step', label: t('Scalino per card'), type: 'range', min: 0, max: 80, step: 2,
       description: t('Ogni card si ferma un po\' più in basso della precedente, così resta visibile un bordo della pila.') },
-    { key: 'card_gap', label: t('Gap card'), type: 'range', min: 0, max: 80, step: 2 },
     { key: 'scale_on_stack', label: t('Rimpicciolisci le card sotto la pila'), type: 'toggle',
       description: t('Le card già impilate si riducono leggermente per dare profondità. Rispetta prefers-reduced-motion.') },
     { key: 'scale_amount', label: t('Intensità rimpicciolimento'), type: 'range', min: 1, max: 12, step: 1,
@@ -113,6 +110,10 @@ export default {
       condition: { field: 'media_position', op: 'neq', value: 'none' },
       description: t('Punto focale globale di tutte le immagini delle card.') },
 
+    { key: 'cards', type: 'content-items', label: t('Card'), itemLabel: t('Card'), etichettaDa: 'title', miniaturaDa: 'media', itemFields: [
+        { key: 'color',       label: t('Colore sfondo card'),    type: 'color' },
+        { key: 'text_color',  label: t('Colore testo card'),     type: 'color' },
+    ] },
     { type: 'separator', label: t('Colori predefiniti') },
     { key: 'card_bg_default', label: t('Sfondo card (default)'), type: 'color',
       description: t('Usato per le card senza colore proprio. Vuoto → superficie del tema.') },
@@ -125,5 +126,7 @@ export default {
 
     ...shadowField,
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'card_gap', label: t('Gap card'), type: 'range', min: 0, max: 80, step: 2 },
   ],
 };

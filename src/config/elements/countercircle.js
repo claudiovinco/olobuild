@@ -42,11 +42,6 @@ export default {
     { key: 'suffix', label: t('Suffisso'), type: 'text' },
     { key: 'prefix', label: t('Prefisso'), type: 'text' },
     { key: 'title', label: t('Titolo'), type: 'text' },
-    { key: 'title_position', label: t('Posizione titolo'), type: 'select', options: [
-      { value: 'below', label: t('Sotto') },
-      { value: 'inside', label: t('Dentro') },
-      { value: 'above', label: t('Sopra') },
-    ]},
   ],
 
   styleFields: [
@@ -97,5 +92,11 @@ export default {
     { key: 'duration', label: t('Durata animazione'), type: 'range', min: 0, max: 5000, step: 100 },
 
     ...borderFields(),
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'title_position', label: t('Posizione titolo'), type: 'select', options: [
+      { value: 'below', label: t('Sotto') },
+      { value: 'inside', label: t('Dentro') },
+      { value: 'above', label: t('Sopra') },
+    ]},
   ],
 };

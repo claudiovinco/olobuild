@@ -32,22 +32,6 @@ export default {
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'shape', label: t('Forma'), type: 'select', options: [
-      { value: 'wave', label: t('Onda') },
-      { value: 'wave2', label: t('Onda doppia') },
-      { value: 'triangle', label: t('Triangolo') },
-      { value: 'tilt', label: t('Inclinato') },
-      { value: 'arrow', label: t('Freccia') },
-      { value: 'zigzag', label: t('Zigzag') },
-      { value: 'mountains', label: t('Montagne') },
-      { value: 'clouds', label: t('Nuvole') },
-      { value: 'drops', label: t('Gocce') },
-      { value: 'curve', label: t('Curva') },
-    ]},
-    { key: 'position', label: t('Posizione'), type: 'select', options: [
-      { value: 'top', label: t('Alto') },
-      { value: 'bottom', label: t('Basso') },
-    ]},
     { key: 'flip_horizontal', label: t('Specchia orizzontale'), type: 'toggle' },
     { key: 'flip_vertical', label: t('Specchia verticale'), type: 'toggle' },
   ],
@@ -63,5 +47,23 @@ export default {
     { key: 'responsive_height_tablet', label: t('Altezza tablet'), type: 'number', min: 10, max: 500 },
     { key: 'responsive_height_mobile', label: t('Altezza mobile'), type: 'number', min: 10, max: 500 },
     ...borderFields(),
+    { type: 'separator', label: t('Forma') },
+    { key: 'shape', label: t('Forma'), type: 'select', options: [
+      { value: 'wave', label: t('Onda') },
+      { value: 'wave2', label: t('Onda doppia') },
+      { value: 'triangle', label: t('Triangolo') },
+      { value: 'tilt', label: t('Inclinato') },
+      { value: 'arrow', label: t('Freccia') },
+      { value: 'zigzag', label: t('Zigzag') },
+      { value: 'mountains', label: t('Montagne') },
+      { value: 'clouds', label: t('Nuvole') },
+      { value: 'drops', label: t('Gocce') },
+      { value: 'curve', label: t('Curva') },
+    ]},
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'position', label: t('Posizione'), type: 'select', options: [
+      { value: 'top', label: t('Alto') },
+      { value: 'bottom', label: t('Basso') },
+    ]},
   ],
 };

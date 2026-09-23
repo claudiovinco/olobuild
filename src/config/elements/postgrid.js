@@ -155,23 +155,11 @@ export default {
 
     { type: 'separator', label: t('Link') },
     { key: 'link_text', label: t('Testo link'), type: 'text' },
-    { key: 'link_style', label: t('Stile link'), type: 'select', options: [
-      { value: 'button', label: t('Pulsante') },
-      { value: 'text', label: t('Link testuale') },
-      { value: 'card', label: t('Card cliccabile') },
-    ]},
 
     { type: 'separator', label: t('Paginazione') },
     { key: 'pagination', label: t('Abilita paginazione'), type: 'toggle' },
     { key: 'items_per_page', label: t('Articoli per pagina'), type: 'range', min: 2, max: 24, step: 1,
       condition: { field: 'pagination', value: true } },
-    { key: 'pagination_style', label: t('Stile paginazione'), type: 'select', options: [
-      { value: 'dots', label: t('Punti') },
-      { value: 'numbers', label: t('Numeri') },
-      { value: 'arrows', label: t('Frecce') },
-      { value: 'loadmore', label: t('Carica altri') },
-      { value: 'infinite', label: t('Scroll infinito') },
-    ], condition: { field: 'pagination', value: true } },
 
     { type: 'separator', label: t('Ribbon') },
     { key: 'ribbon_field', label: t('Contenuto'), type: 'select', options: [
@@ -379,5 +367,19 @@ export default {
       condition: { field: 'ribbon_field', value: '_olo_service_opening' } },
 
     ...borderFields(),
+    { type: 'separator', label: t('Link') },
+    { key: 'link_style', label: t('Stile link'), type: 'select', options: [
+      { value: 'button', label: t('Pulsante') },
+      { value: 'text', label: t('Link testuale') },
+      { value: 'card', label: t('Card cliccabile') },
+    ]},
+    { type: 'separator', label: t('Paginazione') },
+    { key: 'pagination_style', label: t('Stile paginazione'), type: 'select', options: [
+      { value: 'dots', label: t('Punti') },
+      { value: 'numbers', label: t('Numeri') },
+      { value: 'arrows', label: t('Frecce') },
+      { value: 'loadmore', label: t('Carica altri') },
+      { value: 'infinite', label: t('Scroll infinito') },
+    ], condition: { field: 'pagination', value: true } },
   ],
 };

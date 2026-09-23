@@ -39,17 +39,6 @@ export default {
       { value: 'custom', label: t('Testo personalizzato') },
     ]},
     { key: 'custom_text', label: t('Testo personalizzato'), type: 'text', condition: { field: 'badge_text', value: 'custom' } },
-    { key: 'badge_shape', label: t('Forma'), type: 'select', options: [
-      { value: 'circle', label: t('Cerchio') },
-      { value: 'pill', label: t('Pillola') },
-      { value: 'rectangle', label: t('Rettangolo') },
-    ]},
-    { key: 'position', label: t('Posizione'), type: 'select', options: [
-      { value: 'top-left', label: t('Alto sinistra') },
-      { value: 'top-right', label: t('Alto destra') },
-      { value: 'bottom-left', label: t('Basso sinistra') },
-      { value: 'bottom-right', label: t('Basso destra') },
-    ]},
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
@@ -86,5 +75,18 @@ export default {
     { type: 'separator', label: t('Colori') },
     { key: 'badge_bg', label: t('Sfondo badge'), type: 'color' },
     ...borderFields(),
+    { type: 'separator', label: t('Forma') },
+    { key: 'badge_shape', label: t('Forma'), type: 'select', options: [
+      { value: 'circle', label: t('Cerchio') },
+      { value: 'pill', label: t('Pillola') },
+      { value: 'rectangle', label: t('Rettangolo') },
+    ]},
+    { type: 'separator', label: t('Disposizione') },
+    { key: 'position', label: t('Posizione'), type: 'select', options: [
+      { value: 'top-left', label: t('Alto sinistra') },
+      { value: 'top-right', label: t('Alto destra') },
+      { value: 'bottom-left', label: t('Basso sinistra') },
+      { value: 'bottom-right', label: t('Basso destra') },
+    ]},
   ],
 };

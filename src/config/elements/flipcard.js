@@ -91,13 +91,11 @@ export default {
 
   fields: [
     { type: 'separator', label: t('Fronte — Contenuto') },
-    { key: 'front_media', label: t('Fronte — sfondo (immagine, video, gradiente…)'), type: 'background', showParallax: false },
     { key: 'front_icon', label: t('Icona'), type: 'icon' },
     { key: 'front_title', label: t('Titolo'), type: 'text' },
     { key: 'front_description', label: t('Descrizione'), type: 'textarea' },
 
     { type: 'separator', label: t('Retro — Contenuto') },
-    { key: 'back_media', label: t('Retro — sfondo (immagine, video, gradiente…)'), type: 'background', showParallax: false },
     { key: 'back_icon', label: t('Icona'), type: 'icon' },
     { key: 'back_title', label: t('Titolo'), type: 'text' },
     { key: 'back_description', label: t('Descrizione'), type: 'textarea' },
@@ -184,6 +182,7 @@ export default {
       { value: 'bottom', label: t('Basso') },
     ]},
 
+    { key: 'front_media', label: t('Fronte — sfondo (immagine, video, gradiente…)'), type: 'background', showParallax: false },
     { type: 'separator', label: t('Retro — Aspetto') },
     { key: 'back_icon_size', label: t('Dimensione icona'), type: 'range', min: 24, max: 80 },
     { key: 'back_icon_color', label: t('Colore icona'), type: 'color' },
@@ -213,6 +212,7 @@ export default {
       { value: 'bottom', label: t('Basso') },
     ]},
 
+    { key: 'back_media', label: t('Retro — sfondo (immagine, video, gradiente…)'), type: 'background', showParallax: false },
     { type: 'separator', label: t('Retro — Pulsante CTA') },
     { key: 'back_cta_bg', label: t('Colore sfondo CTA'), type: 'color' },
     withHover({ key: 'back_cta_radius', label: t('Raggio CTA'), type: 'border-radius' }),
